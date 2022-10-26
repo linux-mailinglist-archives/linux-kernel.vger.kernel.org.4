@@ -2,146 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 725C060E513
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9D160E517
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234263AbiJZP7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 11:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
+        id S234243AbiJZQAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 12:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234243AbiJZP7c (ORCPT
+        with ESMTP id S234295AbiJZP74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 11:59:32 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9864E4E5F;
-        Wed, 26 Oct 2022 08:59:21 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6FB3322007;
-        Wed, 26 Oct 2022 15:59:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1666799960; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vpcNESwvh0jNYi8JKRjPbHDwFtWStBG7/bwwW7nzM+4=;
-        b=BJvfGVSh3MdOszpAO8QwQ4r7kh2M2m20+lHpatc8odP/4LmOpemYfq2byjwOFulcH3WrMN
-        5TDJSojDmoAYV8I2Qp/3iL9jvj05lBaEA1S5LTVeOc6Bmjcaem6/gvPDNzNE+t1zftP2KW
-        882Ix1/GY8wnRhgA3rxq6sGgqorhpD4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4703B13A6E;
-        Wed, 26 Oct 2022 15:59:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ihPyDlhZWWM9MwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 26 Oct 2022 15:59:20 +0000
-Date:   Wed, 26 Oct 2022 17:59:19 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Waiman Long <longman@redhat.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Chen, Tim C" <tim.c.chen@intel.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>
-Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
-Message-ID: <Y1lZV6qHp3gIINGc@dhcp22.suse.cz>
-References: <20221026074343.6517-1-feng.tang@intel.com>
- <dc453287-015d-fd1c-fe7f-6ee45772d6aa@linux.ibm.com>
- <Y1jpDfwBQId3GkJC@feng-clx>
- <Y1j7tsj5M0Md/+Er@dhcp22.suse.cz>
- <Y1kl8VbPE0RYdyEB@feng-clx>
+        Wed, 26 Oct 2022 11:59:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F552A449
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:59:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666799983;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qgreuePZp+4AtHTNoAATRGXVf37qFz6VqTZ1TsIsSCk=;
+        b=B67Ui64x5q3x7RSkOesjOozZiCVPINYHtPt2+l55G8pXRj5t5Dl7jrh1F/JbgqN+BrcKdN
+        N7k0DPSUo8Rnjc42UF0mNM9pQmmq78OB9u9hxY9+ydXyu90kEyRm5e9Rbuu1Z2g2KHanqc
+        afw44j12x0mFv2HaSuqvofOm7yf8ksg=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-311-KwnlF-61N3WSE1q9gOnApg-1; Wed, 26 Oct 2022 11:59:41 -0400
+X-MC-Unique: KwnlF-61N3WSE1q9gOnApg-1
+Received: by mail-ej1-f72.google.com with SMTP id hp41-20020a1709073e2900b0078e07dbf280so4753067ejc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:59:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qgreuePZp+4AtHTNoAATRGXVf37qFz6VqTZ1TsIsSCk=;
+        b=it26AbCjKzjltTR+X1EfXZiHpckU8w/g6mEp7fDe8L61MpX8zsZl7eJP1j2sDHd344
+         l1IKn2UXozN4sF4GPhv6VOC93vbv0CiBkXUXcuh8sYTeqZt+Gk6HIFRpHgRJSQnmPvWk
+         UL6Y4vT9T3NuUBEgHWS4tmpYsgvTGBpC4CGjgp++Bx/Yu/HiIqxY5YNphxyjp6ppT6NN
+         rh6CR7f8rUJcq6jsyinuRI2Zfp77jqBCeKmlbInsoerdxjgz8swwmXlGKdpE+yN+RkBZ
+         Mv3ybp7jC58Lfiat1ReYkBLKdd4gKksXYpNDUTVokR6hy0roNIxvCD1In/XW8vRypf7Y
+         gA3A==
+X-Gm-Message-State: ACrzQf2PRsScbd5EvLhBW1+MNH5u0svqLuzpxmQNcQM9SST2FYfkoUT9
+        rb0Y+uKLzA2e8DfBrT5Ly1DGP7DlhqfE+VcqdeZmL+is3Aw0b6PaT+bV/sGtg4qOc4IvyewQTW8
+        fwYl4rSeCK5S5/+uMWWQXwEtd
+X-Received: by 2002:a17:907:6e18:b0:78d:b374:8989 with SMTP id sd24-20020a1709076e1800b0078db3748989mr37902973ejc.552.1666799980691;
+        Wed, 26 Oct 2022 08:59:40 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4nFY1b7F7PXIeIa9vbku1XcB89X6nlx28mnFIdln+HRp8pTaHGtsxr4DiRXOYLY2Ek4SMHlA==
+X-Received: by 2002:a17:907:6e18:b0:78d:b374:8989 with SMTP id sd24-20020a1709076e1800b0078db3748989mr37902957ejc.552.1666799980484;
+        Wed, 26 Oct 2022 08:59:40 -0700 (PDT)
+Received: from pollux.. ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id m19-20020a1709066d1300b0078d4c72e2cesm3119035ejr.44.2022.10.26.08.59.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 08:59:39 -0700 (PDT)
+From:   Danilo Krummrich <dakr@redhat.com>
+To:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
+        mripard@kernel.org, liviu.dudau@arm.com, brian.starkey@arm.com
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Danilo Krummrich <dakr@redhat.com>
+Subject: [PATCH drm-misc-next v3 0/5] drm/arm/malidp: use drm managed resources
+Date:   Wed, 26 Oct 2022 17:59:29 +0200
+Message-Id: <20221026155934.125294-1-dakr@redhat.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1kl8VbPE0RYdyEB@feng-clx>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 26-10-22 20:20:01, Feng Tang wrote:
-> On Wed, Oct 26, 2022 at 05:19:50PM +0800, Michal Hocko wrote:
-> > On Wed 26-10-22 16:00:13, Feng Tang wrote:
-> > > On Wed, Oct 26, 2022 at 03:49:48PM +0800, Aneesh Kumar K V wrote:
-> > > > On 10/26/22 1:13 PM, Feng Tang wrote:
-> > > > > In page reclaim path, memory could be demoted from faster memory tier
-> > > > > to slower memory tier. Currently, there is no check about cpuset's
-> > > > > memory policy, that even if the target demotion node is not allowd
-> > > > > by cpuset, the demotion will still happen, which breaks the cpuset
-> > > > > semantics.
-> > > > > 
-> > > > > So add cpuset policy check in the demotion path and skip demotion
-> > > > > if the demotion targets are not allowed by cpuset.
-> > > > > 
-> > > > 
-> > > > What about the vma policy or the task memory policy? Shouldn't we respect
-> > > > those memory policy restrictions while demoting the page? 
-> > >  
-> > > Good question! We have some basic patches to consider memory policy
-> > > in demotion path too, which are still under test, and will be posted
-> > > soon. And the basic idea is similar to this patch.
-> > 
-> > For that you need to consult each vma and it's owning task(s) and that
-> > to me sounds like something to be done in folio_check_references.
-> > Relying on memcg to get a cpuset cgroup is really ugly and not really
-> > 100% correct. Memory controller might be disabled and then you do not
-> > have your association anymore.
->  
-> You are right, for cpuset case, the solution depends on 'CONFIG_MEMCG=y',
-> and the bright side is most of distribution have it on.
+Hi,
 
-CONFIG_MEMCG=y is not sufficient. You would need to enable memcg
-controller during the runtime as well.
- 
-> > This all can get quite expensive so the primary question is, does the
-> > existing behavior generates any real issues or is this more of an
-> > correctness exercise? I mean it certainly is not great to demote to an
-> > incompatible numa node but are there any reasonable configurations when
-> > the demotion target node is explicitly excluded from memory
-> > policy/cpuset?
-> 
-> We haven't got customer report on this, but there are quite some customers
-> use cpuset to bind some specific memory nodes to a docker (You've helped
-> us solve a OOM issue in such cases), so I think it's practical to respect
-> the cpuset semantics as much as we can.
+This patch series converts the driver to use drm managed resources to prevent
+potential use-after-free issues on driver unbind/rebind and to get rid of the
+usage of deprecated APIs.
 
-Yes, it is definitely better to respect cpusets and all local memory
-policies. There is no dispute there. The thing is whether this is really
-worth it. How often would cpusets (or policies in general) go actively
-against demotion nodes (i.e. exclude those nodes from their allowes node
-mask)?
+Changes in v2:
+  - While protecting critical sections with drm_dev_{enter,exit} I forgot to
+    handle alternate return paths within the read-side critical sections, hence
+    fix them.
+  - Add a patch to remove explicit calls to drm_mode_config_cleanup() and switch
+    to drmm_mode_config_init() explicitly.
 
-I can imagine workloads which wouldn't like to get their memory demoted
-for some reason but wouldn't it be more practical to tell that
-explicitly (e.g. via prctl) rather than configuring cpusets/memory
-policies explicitly?
- 
-> Your concern about the expensive cost makes sense! Some raw ideas are:
-> * if the shrink_folio_list is called by kswapd, the folios come from
->   the same per-memcg lruvec, so only one check is enough
-> * if not from kswapd, like called form madvise or DAMON code, we can
->   save a memcg cache, and if the next folio's memcg is same as the
->   cache, we reuse its result. And due to the locality, the real
->   check is rarely performed.
+Changes in v3:
+  - Remove patches to protect platform device bound resources with
+    drm_dev_{enter,exit}, since this would leave the hardware enabled when
+    regularly unloading the driver e.g. via rmmod.
+    Instead do this in a later series, once we got drm_dev_unplug() in place
+    to deal with a regular driver shutdown.
 
-memcg is not the expensive part of the thing. You need to get from page
--> all vmas::vm_policy -> mm -> task::mempolicy
+Danilo Krummrich (5):
+  drm/arm/malidp: use drmm_* to allocate driver structures
+  drm/arm/malidp: replace drm->dev_private with drm_to_malidp()
+  drm/arm/malidp: crtc: use drmm_crtc_init_with_planes()
+  drm/arm/malidp: plane: use drm managed resources
+  drm/arm/malidp: remove calls to drm_mode_config_cleanup()
 
+ drivers/gpu/drm/arm/malidp_crtc.c   |  7 ++-
+ drivers/gpu/drm/arm/malidp_drv.c    | 69 +++++++++++------------------
+ drivers/gpu/drm/arm/malidp_drv.h    |  2 +
+ drivers/gpu/drm/arm/malidp_hw.c     | 10 ++---
+ drivers/gpu/drm/arm/malidp_mw.c     |  6 +--
+ drivers/gpu/drm/arm/malidp_planes.c | 32 ++++---------
+ 6 files changed, 48 insertions(+), 78 deletions(-)
+
+
+base-commit: e1e7bc481d49c3e3ada11029ce0d9b85a0a539d7
 -- 
-Michal Hocko
-SUSE Labs
+2.37.3
+
