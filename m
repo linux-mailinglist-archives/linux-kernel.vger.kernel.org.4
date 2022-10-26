@@ -2,128 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E30A60E929
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D6260E922
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234994AbiJZTl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 15:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
+        id S234474AbiJZTlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 15:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234997AbiJZTlp (ORCPT
+        with ESMTP id S234980AbiJZTl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 15:41:45 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9096CB4899;
-        Wed, 26 Oct 2022 12:41:41 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 51F781FD70;
-        Wed, 26 Oct 2022 19:41:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1666813300; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XaNif8Cw4uustU+ovZVF6G4VJf04B2ti3O7xS7XvquQ=;
-        b=SvwwGe9CaAHchGBB+YPr9VxpoHxmlfnVr7TipKs3dk5HkX9Grue8h8HlRthHi/TW7TYiKP
-        UMHcYfYadKHctOjGG4CHuqH/C7yx+5SDF233K7Z9gpkK0vC/n4wJJSg1LMCu70Xb0iKG5e
-        nzMxl+aZfgxraGQKjndTht2m+Rh78Ek=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0004013A77;
-        Wed, 26 Oct 2022 19:41:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id CLAALnGNWWNlFwAAMHmgww
-        (envelope-from <mpdesouza@suse.com>); Wed, 26 Oct 2022 19:41:37 +0000
-From:   Marcos Paulo de Souza <mpdesouza@suse.com>
-To:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
-Cc:     jpoimboe@redhat.com, joe.lawrence@redhat.com, pmladek@suse.com,
-        Marcos Paulo de Souza <mpdesouza@suse.com>
-Subject: [PATCH v2 2/4] livepatch/shadow: Separate code removing all shadow variables for a given id
-Date:   Wed, 26 Oct 2022 16:41:20 -0300
-Message-Id: <20221026194122.11761-3-mpdesouza@suse.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221026194122.11761-1-mpdesouza@suse.com>
-References: <20221026194122.11761-1-mpdesouza@suse.com>
+        Wed, 26 Oct 2022 15:41:27 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCBFB7EDA;
+        Wed, 26 Oct 2022 12:41:19 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-12c8312131fso21612780fac.4;
+        Wed, 26 Oct 2022 12:41:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TPHONoWIoiJZTFgcTi0/G6lMn83E2o6AmOqzxyIw2bs=;
+        b=wIH3a7zC8AuUkw0n38RRFk9KmPRnM7N5MBZWrpX5rMD1F/4tSN4w90JNS+Wf4Ae7LQ
+         4BrsPQJ6QEYde6sHMVnJ3+Jg+R9L5GpA4KRLtlod6FyEk5acHlc5RrfSGfKIa87dh78r
+         d1SRzbsw3hZeSK7GbXwXwgy4R7BykmpHuNF986GS5z9APiDqYPqCYozxlecToo2Pjicm
+         N5kjmJNCoU//25FFeYfmcpzK5fQSTimtZ6ztd4HxgaGpo0O+wlWxI1ommczng9pP7OC9
+         ostkJYBCVrXsVm0Xhr7Ew4BVUxbzoZs8tQDAFi8fXM3KZjWwQ4zzivOpMFw6vE168x4I
+         Fazg==
+X-Gm-Message-State: ACrzQf1MORvuvbhBBJbm1yLb5FfAKQkEanJxj6C+fMasO8KfdmAPoyR0
+        S2L00k3Kc84qntP6tjPqIQ==
+X-Google-Smtp-Source: AMsMyM4QwTUCtNMwN5OtnKfodKO29IN4opAIzj4qcr/bDuqdr1/vA0ZASc7FopWtKVyVaVnnMpIatA==
+X-Received: by 2002:a05:6870:f59e:b0:132:bcd:565f with SMTP id eh30-20020a056870f59e00b001320bcd565fmr3169738oab.254.1666813279179;
+        Wed, 26 Oct 2022 12:41:19 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y18-20020a056870429200b0010c727a3c79sm3630583oah.26.2022.10.26.12.41.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 12:41:18 -0700 (PDT)
+Received: (nullmailer pid 1046234 invoked by uid 1000);
+        Wed, 26 Oct 2022 19:41:20 -0000
+Date:   Wed, 26 Oct 2022 14:41:20 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mikhail Zhilkin <csharper2005@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        devicetree@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH V3 1/2] dt-bindings: mtd: partitions: support marking
+ rootfs partition
+Message-ID: <166681327937.1046171.12755634067676619192.robh@kernel.org>
+References: <20221022211318.32009-1-zajec5@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221022211318.32009-1-zajec5@gmail.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Petr Mladek <pmladek@suse.com>
+On Sat, 22 Oct 2022 23:13:17 +0200, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> Linux needs to know what to use as root device. On embedded devices with
+> flash the only common way to specify that is cmdline & root= parameter.
+> 
+> That solution works with U-Boot which is Linux & cmdline aware but isn't
+> available with all market bootloaders. Also that method is fragile:
+> 1. Requires specific probing order on multi-flash devices
+> 2. Uses hardcoded partitions indexes
+> 
+> A lot of devices use different partitioning methods. It may be
+> "fixed-partitions" or some dynamic partitioning (e.g. based on parts
+> table). For such cases allow "linux,rootfs" property to mark correct
+> flash partition.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+> V2: Use "linux,rootfs" as more accurate. Thanks Rob.
+> ---
+>  .../devicetree/bindings/mtd/partitions/fixed-partitions.yaml  | 1 +
+>  .../devicetree/bindings/mtd/partitions/partition.yaml         | 4 ++++
+>  2 files changed, 5 insertions(+)
+> 
 
-Allow to remove all shadow variables with already taken klp_shadow_lock.
-It will be needed to synchronize this with other operation during
-the garbage collection of shadow variables.
-
-It is a code refactoring without any functional changes.
-
-Signed-off-by: Petr Mladek <pmladek@suse.com>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
----
- Changes from v1:
- * Added my SoB (Josh)
-
- kernel/livepatch/shadow.c | 24 +++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
-
-diff --git a/kernel/livepatch/shadow.c b/kernel/livepatch/shadow.c
-index 81ad7cbbd124..aba44dcc0a88 100644
---- a/kernel/livepatch/shadow.c
-+++ b/kernel/livepatch/shadow.c
-@@ -283,6 +283,20 @@ void klp_shadow_free(void *obj, unsigned long id, klp_shadow_dtor_t dtor)
- }
- EXPORT_SYMBOL_GPL(klp_shadow_free);
- 
-+static void __klp_shadow_free_all(unsigned long id, klp_shadow_dtor_t dtor)
-+{
-+	struct klp_shadow *shadow;
-+	int i;
-+
-+	lockdep_assert_held(&klp_shadow_lock);
-+
-+	/* Delete all <*, id> from hash */
-+	hash_for_each(klp_shadow_hash, i, shadow, node) {
-+		if (klp_shadow_match(shadow, shadow->obj, id))
-+			klp_shadow_free_struct(shadow, dtor);
-+	}
-+}
-+
- /**
-  * klp_shadow_free_all() - detach and free all <_, id> shadow variables
-  * @id:		data identifier
-@@ -294,18 +308,10 @@ EXPORT_SYMBOL_GPL(klp_shadow_free);
-  */
- void klp_shadow_free_all(unsigned long id, klp_shadow_dtor_t dtor)
- {
--	struct klp_shadow *shadow;
- 	unsigned long flags;
--	int i;
- 
- 	spin_lock_irqsave(&klp_shadow_lock, flags);
--
--	/* Delete all <_, id> from hash */
--	hash_for_each(klp_shadow_hash, i, shadow, node) {
--		if (klp_shadow_match(shadow, shadow->obj, id))
--			klp_shadow_free_struct(shadow, dtor);
--	}
--
-+	__klp_shadow_free_all(id, dtor);
- 	spin_unlock_irqrestore(&klp_shadow_lock, flags);
- }
- EXPORT_SYMBOL_GPL(klp_shadow_free_all);
--- 
-2.37.3
-
+Reviewed-by: Rob Herring <robh@kernel.org>
