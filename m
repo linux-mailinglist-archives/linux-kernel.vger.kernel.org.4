@@ -2,166 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81CB60D98A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 05:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0158360D98E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 05:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232896AbiJZDED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 23:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
+        id S232902AbiJZDEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 23:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232865AbiJZDDL (ORCPT
+        with ESMTP id S229949AbiJZDDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 23:03:11 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A655D8274F;
-        Tue, 25 Oct 2022 20:03:06 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8Bxfdppo1hjPIUCAA--.10179S3;
-        Wed, 26 Oct 2022 11:03:05 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxPuBio1hjWR0FAA--.19405S4;
-        Wed, 26 Oct 2022 11:03:03 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v4 3/3] dt-bindings: clock: add loongson2 clock
-Date:   Wed, 26 Oct 2022 11:02:56 +0800
-Message-Id: <20221026030256.30512-3-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221026030256.30512-1-zhuyinbo@loongson.cn>
-References: <20221026030256.30512-1-zhuyinbo@loongson.cn>
+        Tue, 25 Oct 2022 23:03:50 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2561FCD2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 20:03:49 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id bj12so17740718ejb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 20:03:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y9ynIFAF3DcHSRiFihWBoNbJID3cgAU90Hgr+Zp14k8=;
+        b=YgAvV3fEXsz4gVdfGATDJcLEcI82bGyUBjf+c8tUEmHcN34J0NqyVcG0PbvSdLHn6p
+         8PcisaQh2U0G1AmHb116VM9ejHomfY6UPZk7LeRAD0lY3IBIkRmjj3xSb7mxPaAT8WRk
+         gWosfqjJdszBq2MLs4BVrQXVAMKVvZNFDCuMUD8I8+3V1F5A7OeBc9J914gOBfHAu4od
+         LRzZqVSZmg09WK85zRqjHPnKDbK0RGYlSRflXT5H33Y4zUH3X6RsixPKTBdw+nRC75VD
+         tUHd57CN0wlPZNmZVhBAilHDBFyjQ9+KJ9SIqVB6Z3oBn9OoDYiQ9sKX0qnQn8F52/xJ
+         +h3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y9ynIFAF3DcHSRiFihWBoNbJID3cgAU90Hgr+Zp14k8=;
+        b=zgnEdRghOoH+NVV9RhwS8+8ZIck4D1+z/0YKTuB0TpCz0FxfnViS9KnoYC6qIDyE7L
+         bxnozVOE8L4Xz9SiWN9iL5KxR46DyGyCh4853hcDWLnIFXJ+KlckM7siXBGkNahGzqq5
+         oXVWHNev5uwLSiNE6DP/Uw6lZ6nSC/gX7y/04JB85CC1ioVHHupfXOr1sp96Y/bu6fqa
+         WsUKZkP0Gkiv+fh7zL5OL/DiMAChs80tyMVfJba13QmKvtpaFR2JshYUDt7p6ZH8FwiU
+         FtLrNwEjd/UEo4hSUQQV0Ipfkf3lT3RaU4po/SZM+yRUawjlWYcCIBNbPpLIbOx6wuBs
+         3Bhw==
+X-Gm-Message-State: ACrzQf3+Nm0NAfG81YaxgQHep8uyEm3ILSQ+YTR6d2+h+n+PmhUEpAwV
+        wUY++cvNsPzRaEXEX53AwjIxQqb7hqE=
+X-Google-Smtp-Source: AMsMyM5BjNzJUZ8X+tJjbIq6WESS15PXp1ShFWF6a2WYtEdZoabupSiwikX42EGIj8ToVEzs03XjNw==
+X-Received: by 2002:a17:907:1c8a:b0:782:1a0d:3373 with SMTP id nb10-20020a1709071c8a00b007821a0d3373mr34125357ejc.135.1666753427946;
+        Tue, 25 Oct 2022 20:03:47 -0700 (PDT)
+Received: from ?IPV6:2003:c7:8f2a:b844:c952:3daa:e0a:40ba? (p200300c78f2ab844c9523daa0e0a40ba.dip0.t-ipconnect.de. [2003:c7:8f2a:b844:c952:3daa:e0a:40ba])
+        by smtp.gmail.com with ESMTPSA id j17-20020a17090623f100b0073dd7e586f9sm2245751ejg.193.2022.10.25.20.03.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 20:03:47 -0700 (PDT)
+Message-ID: <3c9bf2b6-1801-83eb-d4ce-418d34a31e07@gmail.com>
+Date:   Wed, 26 Oct 2022 05:03:46 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxPuBio1hjWR0FAA--.19405S4
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF47tF4kJw4fKFyfWF1kuFg_yoW5GrWrpF
-        nxC345GryIvF17Zws5Ka4xC3Z5Za1kCF17ZFnrAa42kr98G3W5XF17KryDZa9rAFy7Za9r
-        ZFyxCr4UCa18Cr7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x
-        0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_
-        Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
-        CTnIWIevJa73UjIFyTuYvjxU2iFxUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 03/17] staging: vt6655: changed variable name: pDevice
+Content-Language: en-US
+To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+References: <cover.1666740522.git.tanjubrunostar0@gmail.com>
+ <1f09760c8f6972b0e2b272060424b60a11166a0d.1666740522.git.tanjubrunostar0@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <1f09760c8f6972b0e2b272060424b60a11166a0d.1666740522.git.tanjubrunostar0@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the loongson2 clock binding with DT schema format using
-json-schema.
+On 10/26/22 01:36, Tanjuate Brunostar wrote:
+>      change variable names pDevice to meet the
+>      linux coding standard, as it says to avoid using camelCase naming
+>      style. Cought by checkpatch
+> 
+> Signed-off-by: Tanjuate Brunostar<tanjubrunostar0@gmail.com>
+> ---
+>   drivers/staging/vt6655/rxtx.c | 354 +++++++++++++++++-----------------
+>   1 file changed, 177 insertions(+), 177 deletions(-)
+> 
+> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+> index 8bb06b142748..3565f5608790 100644
+> --- a/drivers/staging/vt6655/rxtx.c
+> +++ b/drivers/staging/vt6655/rxtx.c
+> @@ -85,7 +85,7 @@ static const unsigned short w_fb_opt_1[2][5] = {
+>   #define DATADUR_A_F1    13
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/clock/loongson,ls2k-clk.yaml     | 63 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 64 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
 
-diff --git a/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
-new file mode 100644
-index 000000000000..6cc6e0755735
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/loongson,ls2k-clk.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson2 SoC Clock Control Module
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+description: |
-+  Loongson2 SoC clock control module is an integrated clock controller, which
-+  generates and supplies to all modules.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - loongson,ls2k-clk
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: 100m ref
-+
-+  clock-names:
-+    items:
-+      - const: ref_100m
-+
-+  '#clock-cells':
-+    const: 1
-+    description:
-+      The clock consumer should specify the desired clock by having the clock
-+      ID in its "clocks" phandle cell. See include/dt-bindings/clock/loongson,ls2k-clk.h
-+      for the full list of loongson2 SoC clock IDs.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - '#clock-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    ref_100m: clock-ref-100m {
-+        compatible = "fixed-clock";
-+        #clock-cells = <0>;
-+        clock-frequency = <100000000>;
-+        clock-output-names = "ref_100m";
-+    };
-+
-+    clk: clock-controller@1fe00480 {
-+        compatible = "loongson,ls2k-clk";
-+        reg = <0x1fe00480 0x58>;
-+        #clock-cells = <1>;
-+        clocks = <&ref_100m>;
-+        clock-names = "ref_100m";
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f01d60cd5c3b..f61a431ad8ca 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11911,6 +11911,7 @@ LOONGSON2 SOC SERIES CLOCK DRIVER
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-clk@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
- F:	drivers/clk/clk-loongson2.c
- F:	include/dt-bindings/clock/loongson,ls2k-clk.h
- 
--- 
-2.31.1
-
+WARNING: line length of 104 exceeds 100 columns
+#376: FILE: drivers/staging/vt6655/rxtx.c:496:
++									    p_device->byTopCCKBasicRate,
