@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D2160E002
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 13:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20A460E007
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 13:50:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233662AbiJZLuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 07:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
+        id S233565AbiJZLun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 07:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233565AbiJZLuJ (ORCPT
+        with ESMTP id S233532AbiJZLuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 07:50:09 -0400
+        Wed, 26 Oct 2022 07:50:18 -0400
 Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E80A71717;
-        Wed, 26 Oct 2022 04:50:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DDE69F43;
+        Wed, 26 Oct 2022 04:50:17 -0700 (PDT)
 Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id A92F5320069B;
-        Wed, 26 Oct 2022 07:50:03 -0400 (EDT)
+        by mailout.west.internal (Postfix) with ESMTP id D57123200920;
+        Wed, 26 Oct 2022 07:50:15 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 26 Oct 2022 07:50:04 -0400
+  by compute2.internal (MEProxy); Wed, 26 Oct 2022 07:50:17 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
          h=cc:cc:content-transfer-encoding:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1666785003; x=
-        1666871403; bh=DYhlWWuz7xHPrgJ+GpDPXYoT7+HSDhtE2eFMNMu+ZwI=; b=u
-        Do6XUZuNK1b3i2p+TtuHrNg/1S3tSDHVuXykIk0SmB8o+CUQhrUZDQ0zDkjVVxg7
-        Sl/sHP6w2M257+dwpLVygl/TanvZfSWDyfni6iLISDfJc8ALpv327uRyuQwX0Zc6
-        RPCDd3ZFTaaytpL4F3dkxCbjXTFwMjQQ1w81PERKz6YWOKxqE3kvcc/obCpG+U+V
-        HHJ29Nlt0MghlbrDuKCVW+95hOFMkeQJWTgXZR/D/UfdmC+gRna+YLvYmOIrqhmN
-        INdeqHhacepm92q8H7rpTNHyjfn3Lop+A3Qq2P/DqGb9mtGru6ENntVh5be/dbsH
-        UV5qhtwqOOGTI5M1aKjZg==
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1666785015; x=
+        1666871415; bh=1JPk0MpObCRGBh/PsXpo7zlYyOMqvhTBfteOa6rLuqs=; b=j
+        DHHl0rP08l5hV/1B4EVS6p45n/+GQvGNG68mmx8hSDE171K4dxchgvlffkiLAW6A
+        GtlgsX7MuZqnS4bqtONP5455PVs3avCcWWXep4idX4dT7MBMBLL+K+bQYmJjbSoT
+        D2M0tu6lI+80RD+FT9bj66TWV+16QvF+eWmk3SJXzVSZE34PGDe57vANPrPq9BDu
+        acBym+wxgQYIXMDmva2Jq9pOrvA7nRGF0cHYN8ZpwLj5bNuvrW0aoh0pkQpR8V45
+        0LOL9ZP6kTkTHe9FkCJ+R5NDWhlFteF7WqRxIiG2/Rh10HFVd1GIJxvvxKyj5DJE
+        qnOi2mbEzOMAsCH1ZWatg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1666785003; x=1666871403; bh=DYhlWWuz7xHPr
-        gJ+GpDPXYoT7+HSDhtE2eFMNMu+ZwI=; b=qrzgy+6oMJ8gzfJYFtM2OSTRa5o7j
-        A6t/KoUgS8B/qZpnT+eGY7YeDYZzaHEGW22oN7CfD/uwIMO23ASZ5cCwfuP3VQD9
-        uzCuLKu8hK7jsUlBEqWdC4xO4tivVnWghk2co+7uyHVwNc4W3fGeitkAOp+3SLMP
-        pS3r3Cay8Nk7D1m8qzXdvYWehOOAR849OrJdYUxN5Rg1D564/eljBK1dyn99hKzP
-        MwC8zjqxc5JbQaCWzPSNvAKVTEdoZgFykY2mOYRew4BvCnkdwZFAABtSXZZP5fDL
-        +ZTpkAvMcE++CIb3ACiApMNmWraa0thb3sH2puEoSnqQ/csofM8vsTdBQ==
-X-ME-Sender: <xms:6h5ZY770TCDsGcwSIZpoMYLxICCxJg9Q0vh0eWF8w-yhHNPrZczdYA>
-    <xme:6h5ZYw4FxY_Agz1jcaAnTC-TKmUfUCsiXYX5kbIIBpSW706vnhdKIVmtw0cZx70t1
-    mhsSlwdxhkdSZF8r0o>
-X-ME-Received: <xmr:6h5ZYycTtv0_FZd5dlxihEAUPH3jdyVt-5VV8cIRJ9t6ORzfZZfm0vqkGBomNG8ci_quoRUn8F58>
+        :x-sasl-enc; s=fm3; t=1666785015; x=1666871415; bh=1JPk0MpObCRGB
+        h/PsXpo7zlYyOMqvhTBfteOa6rLuqs=; b=UtTrie9ZUM2X3VisTWV0pnVUQRPGm
+        plFc044JhPC9UER0vioKS4w37iJcal52jU2M+wZc5XFPm1Qk0/nI6z32alVQw3Vx
+        3c+shG0Xo7mR/dtmfH3Qg/j+rwBXubM9t/5HGWMgHdCDgmT/sacQca/21y359/T3
+        7o80TorwMg3aHQqY+IEmclwJyjXdCep+G+e7ahKlt9W678+4T1Yggh1zFJ527WIR
+        sXedCpfbJza8iTxsFklOJP6VvUsvSy6IJ7fEQ6wVEcqGjNHylUbsEwFMdl3hzHDi
+        Rmk7YaeRk4o39hNJ1+yHCNf5iY+cQ9ofAMdyW8tE/jmYOBL1pUj9myzOA==
+X-ME-Sender: <xms:9x5ZYyKAD7HAGbW_4Jp74xm6098OSTVmsNBD4EfHlwapc_2rKaJIyA>
+    <xme:9x5ZY6I2BjQ2DGRShM2UVBwq4b-N__bzwfGH5jnNmgFgl-BpnJsOmZnqrs90aUzfO
+    XLIVinxCcXtgHlVOHU>
+X-ME-Received: <xmr:9x5ZYysnc4wt75FzhC9vzvNOw1kuUA3DL3BoOwhnPXd4lylcxN2TlyK0f0Cmy-nuFnRoYkeNBpsp>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtddvgdeghecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestdekre
     dtredttdenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgr
     ihhrsegrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeeitdefkeetle
     dvleevveeuueejffeugfeuvdetkeevjeejueetudeftefhgfehheenucevlhhushhtvghr
-    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlih
+    ufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlih
     hsthgrihhrvdefrdhmvg
-X-ME-Proxy: <xmx:6h5ZY8KdklrANt8pmljMukiubgdjKL0q8TlKpj3e2N6P8m22hGZegg>
-    <xmx:6h5ZY_I7RTH6ImjvfyJe22HxcYVzr1aUs1LWmox9HqedCzcUnuByxA>
-    <xmx:6h5ZY1yOVM5c8CPEtD8LA83iUaZfhfUta07XuTzvkEDi1t8BhJ1m-w>
-    <xmx:6x5ZY5Dni_d4ct_r8GMgD5d5-LxMIfOLKD4jyCm0ZWgk_3m5sEpINw>
+X-ME-Proxy: <xmx:9x5ZY3a7v-xrToc2nQX6ajFmQyogGRe0PPzIhyiMaqnG0PdpwEfx9w>
+    <xmx:9x5ZY5aZGnE9-dqijdJXxmvGyaMdCNNGr1_F2KZYplmpH8obunVoMQ>
+    <xmx:9x5ZYzDFfjlG8ghKBP2EwmwA60STNsZM5Dj3WYIJJ--Es8knD6KUsA>
+    <xmx:9x5ZY9RQnIq8m2FbAUy9W8rUAtncbJ_-S32iZZE4atSqAzWWj-N5iw>
 Feedback-ID: ifd214418:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 26 Oct 2022 07:49:53 -0400 (EDT)
+ 26 Oct 2022 07:50:05 -0400 (EDT)
 From:   Alistair Francis <alistair@alistair23.me>
 To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org
@@ -69,9 +69,9 @@ Cc:     krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org,
         robh+dt@kernel.org, dmitry.torokhov@gmail.com, shawnguo@kernel.org,
         rydberg@bitmath.org, alistair23@gmail.com, s.hauer@pengutronix.de,
         andreas@kemnade.info, Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v10 3/4] ARM: imx_v6_v7_defconfig: Enable the cyttsp5 touchscreen
-Date:   Wed, 26 Oct 2022 21:49:07 +1000
-Message-Id: <20221026114908.191472-4-alistair@alistair23.me>
+Subject: [PATCH v10 4/4] ARM: dts: imx7d-remarkable2: Enable the cyttsp5
+Date:   Wed, 26 Oct 2022 21:49:08 +1000
+Message-Id: <20221026114908.191472-5-alistair@alistair23.me>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221026114908.191472-1-alistair@alistair23.me>
 References: <20221026114908.191472-1-alistair@alistair23.me>
@@ -86,27 +86,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The imx6/7 based devices Remarkable 2, Kobo Clara HD, Kobo Libra H2O,
-Tolino Shine 3, Tolino Vision 5 all contain a Cypress TT2100
-touchscreen so enable the corresponding driver.
+Add support for the cyttsp5 touchscreen controller for the reMarkable 2.
 
 Signed-off-by: Alistair Francis <alistair@alistair23.me>
 ---
- arch/arm/configs/imx_v6_v7_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/imx7d-remarkable2.dts | 100 ++++++++++++++++++++++++
+ 1 file changed, 100 insertions(+)
 
-diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
-index 078d61b758a9..8665b192d83c 100644
---- a/arch/arm/configs/imx_v6_v7_defconfig
-+++ b/arch/arm/configs/imx_v6_v7_defconfig
-@@ -166,6 +166,7 @@ CONFIG_TOUCHSCREEN_ADS7846=y
- CONFIG_TOUCHSCREEN_AD7879=y
- CONFIG_TOUCHSCREEN_AD7879_I2C=y
- CONFIG_TOUCHSCREEN_ATMEL_MXT=y
-+CONFIG_TOUCHSCREEN_CYTTSP5=y
- CONFIG_TOUCHSCREEN_DA9052=y
- CONFIG_TOUCHSCREEN_EGALAX=y
- CONFIG_TOUCHSCREEN_GOODIX=y
+diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
+index a2a91bfdd98e..fea480af8e48 100644
+--- a/arch/arm/boot/dts/imx7d-remarkable2.dts
++++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
+@@ -8,6 +8,7 @@
+ /dts-v1/;
+ 
+ #include "imx7d.dtsi"
++#include <dt-bindings/input/linux-event-codes.h>
+ 
+ / {
+ 	model = "reMarkable 2.0";
+@@ -47,6 +48,18 @@ reg_digitizer: regulator-digitizer {
+ 		startup-delay-us = <100000>; /* 100 ms */
+ 	};
+ 
++	reg_touch: regulator-touch {
++		compatible = "regulator-fixed";
++		regulator-name = "VDD_3V3_TOUCH";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		pinctrl-names = "default", "sleep";
++		pinctrl-0 = <&pinctrl_touch_reg>;
++		pinctrl-1 = <&pinctrl_touch_reg>;
++		gpio = <&gpio1 11 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++	};
++
+ 	wifi_pwrseq: wifi_pwrseq {
+ 		compatible = "mmc-pwrseq-simple";
+ 		pinctrl-names = "default";
+@@ -84,6 +97,70 @@ wacom_digitizer: digitizer@9 {
+ 	};
+ };
+ 
++&i2c3 {
++	clock-frequency = <100000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c3>;
++	status = "okay";
++
++	tsc@24 {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		compatible = "cypress,tt21000";
++		reg = <0x24>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_touch>;
++		interrupt-parent = <&gpio1>;
++		interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
++		reset-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
++		vdd-supply = <&reg_touch>;
++		touchscreen-size-x = <880>;
++		touchscreen-size-y = <1280>;
++
++		button@0 {
++			reg = <0>;
++			linux,keycodes = <KEY_HOMEPAGE>;
++		};
++
++		button@1 {
++			reg = <1>;
++			linux,keycodes = <KEY_MENU>;
++		};
++
++		button@2 {
++			reg = <2>;
++			linux,keycodes = <KEY_BACK>;
++		};
++
++		button@3 {
++			reg = <3>;
++			linux,keycodes = <KEY_SEARCH>;
++		};
++
++		button@4 {
++			reg = <4>;
++			linux,keycodes = <KEY_VOLUMEDOWN>;
++		};
++
++		button@5 {
++			reg = <5>;
++			linux,keycodes = <KEY_VOLUMEUP>;
++		};
++
++		button@6 {
++			reg = <6>;
++			linux,keycodes = <KEY_CAMERA>;
++		};
++
++		button@7 {
++			reg = <7>;
++			linux,keycodes = <KEY_POWER>;
++		};
++	};
++};
++
+ &snvs_pwrkey {
+ 	status = "okay";
+ };
+@@ -177,6 +254,15 @@ MX7D_PAD_SAI1_TX_BCLK__GPIO6_IO13	0x14
+ 		>;
+ 	};
+ 
++	pinctrl_touch: touchgrp {
++		fsl,pins = <
++			/* CYTTSP interrupt */
++			MX7D_PAD_GPIO1_IO14__GPIO1_IO14		0x54
++			/* CYTTSP reset */
++			MX7D_PAD_GPIO1_IO13__GPIO1_IO13		0x04
++		>;
++	};
++
+ 	pinctrl_i2c1: i2c1grp {
+ 		fsl,pins = <
+ 			MX7D_PAD_I2C1_SDA__I2C1_SDA		0x4000007f
+@@ -184,6 +270,20 @@ MX7D_PAD_I2C1_SCL__I2C1_SCL		0x4000007f
+ 		>;
+ 	};
+ 
++	pinctrl_i2c3: i2c3grp {
++		fsl,pins = <
++			MX7D_PAD_I2C3_SDA__I2C3_SDA		0x4000007f
++			MX7D_PAD_I2C3_SCL__I2C3_SCL		0x4000007f
++		>;
++	};
++
++	pinctrl_touch_reg: touchreggrp {
++		fsl,pins = <
++			/* TOUCH_PWR_EN */
++			MX7D_PAD_GPIO1_IO11__GPIO1_IO11		0x14
++		>;
++	};
++
+ 	pinctrl_uart1: uart1grp {
+ 		fsl,pins = <
+ 			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
 -- 
 2.37.3
 
