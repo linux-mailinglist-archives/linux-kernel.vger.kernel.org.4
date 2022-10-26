@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E7A60E4FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B04E60E4FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiJZPs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 11:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57294 "EHLO
+        id S233160AbiJZPsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 11:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiJZPsY (ORCPT
+        with ESMTP id S233745AbiJZPsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 11:48:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056D0B44B5;
-        Wed, 26 Oct 2022 08:48:24 -0700 (PDT)
+        Wed, 26 Oct 2022 11:48:36 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D62B56D8;
+        Wed, 26 Oct 2022 08:48:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A287561F58;
-        Wed, 26 Oct 2022 15:48:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09066C433C1;
-        Wed, 26 Oct 2022 15:48:21 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 65A51CE231C;
+        Wed, 26 Oct 2022 15:48:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A217C433C1;
+        Wed, 26 Oct 2022 15:48:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666799303;
-        bh=1HSFtAPGOzdvwrfNsDe8arVdzJ63E2LnDE/GDXS52kk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gikfRXG+ErmX9Ajb3d95lQ6+XgRKuMazJOmyy6CEN9O49/iwymebWv/hpVSJBrNdU
-         lXMhOQh8RcwRyRJDMIUManzgGfmCpNVa7/BH5jHZyrEfq8lzr4DrAS6hj0RK1QrnLM
-         AkIabh3Iqt1Zmp+RwXGWRn07M6kPooL3IGvgeQWb+XzA4+ANwH9aGw2oZQpE3VVzcA
-         +1M2VCmdrMljNa0eShh73hfKlMhWHZk37DnawseyQxa7unUX9DXadMGFZ4/NSUy60X
-         DGPMLFgDrL6KyLWSPR4Ch1Ek4Kb2Z5JXx/mzKnL2++QFN8C9+z7lC+9PLn2z1fdHxC
-         I254KJHHBQyAA==
+        s=k20201202; t=1666799311;
+        bh=XOrn7EyGRuSgSXcm6qYGnOr4PubedOVQu+6MpHzXgFs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=O53RH0AjGrzKZF4s+foUOhUGu78JPNKuX/Z0XzptPMOTFPW88zU0A3ztjnemePJhX
+         Ph/tE198xk8FdclBBNsVEFwxyuSft17syrkroUAVFT32N3vBiP7NHp9yRnIELhvimB
+         3OfhnIGtV3IJIi3oxMdlt0PS3u8XtYXgQ6+yAvY1JOtJ+Py1d9jZT+hhcnwJxDC4gL
+         g+PSs2v7ZNmcjrhw6ksRU/EHyaZWxsOv44JjvRlCCeFHulQzENxH9YxPttS4nuVNhR
+         xglbqHWvAs+yISRy8yUpexA+RLBsVJuDrfYh0iutfSyXqppZsCA4EA0CkZVdU6hMdK
+         yYUYpwEes2L3w==
 From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Primiano Tucci <primiano@google.com>
-Subject: [PATCH v2 0/2] tracing/probes: Add 'symstr' type for probes
-Date:   Thu, 27 Oct 2022 00:48:19 +0900
-Message-Id: <166679929981.1528100.11309260111368557859.stgit@devnote3>
+Subject: [PATCH v2 1/2] tracing/probes: Add symstr type for dynamic events
+Date:   Thu, 27 Oct 2022 00:48:28 +0900
+Message-Id: <166679930847.1528100.4124308529180235965.stgit@devnote3>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
+In-Reply-To: <166679929981.1528100.11309260111368557859.stgit@devnote3>
+References: <166679929981.1528100.11309260111368557859.stgit@devnote3>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -55,39 +57,306 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Here is the 2nd version of the patches to add the 'symstr' type for
-kprobe/eprobe events.
-This version removes redundant strlen()[1/2] and fixes indentation
-[2/2].
+Add 'symstr' type for storing the kernel symbol as a string data
+instead of the symbol address. This allows us to filter the
+events by wildcard symbol name.
 
-This type converts given value into kernel symbol string and stores
-it as a dymanic symbol in the trace ring buffer entry. Thus, user who
-reads the raw ring buffer data doesn't need to resolve the symbol
-name afterwards.
+e.g.
+  # echo 'e:wqfunc workqueue.workqueue_execute_start symname=$function:symstr' >> dynamic_events
+  # cat events/eprobes/wqfunc/format
+  name: wqfunc
+  ID: 2110
+  format:
+  	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
+  	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
+  	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
+  	field:int common_pid;	offset:4;	size:4;	signed:1;
 
-This is similar to the existing 'symbol' type. The 'symbol' type
-stores the address value itself to the entry, it only *shows* the
-symbol name when it is printed.
+  	field:__data_loc char[] symname;	offset:8;	size:4;	signed:1;
 
-Thank you,
+  print fmt: " symname=\"%s\"", __get_str(symname)
 
+Note that there is already 'symbol' type which just change the
+print format (so it still stores the symbol address in the tracing
+ring buffer.) On the other hand, 'symstr' type stores the actual
+"symbol+offset/size" data as a string.
+
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
+ Changes in v2:
+  - Remove redundant strlen().
+---
+ Documentation/trace/kprobetrace.rst |    8 ++++--
+ kernel/trace/trace.c                |    2 +
+ kernel/trace/trace_probe.c          |   44 ++++++++++++++++++++++-----------
+ kernel/trace/trace_probe.h          |   16 ++++++++----
+ kernel/trace/trace_probe_tmpl.h     |   47 +++++++++++++++++++++++++++++++++--
+ 5 files changed, 91 insertions(+), 26 deletions(-)
 
-Masami Hiramatsu (Google) (2):
-      tracing/probes: Add symstr type for dynamic events
-      tracing/probes: Reject symbol/symstr type for uprobe
+diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kprobetrace.rst
+index 4274cc6a2f94..08a2a6a3782f 100644
+--- a/Documentation/trace/kprobetrace.rst
++++ b/Documentation/trace/kprobetrace.rst
+@@ -58,8 +58,8 @@ Synopsis of kprobe_events
+   NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
+   FETCHARG:TYPE : Set TYPE as the type of FETCHARG. Currently, basic types
+ 		  (u8/u16/u32/u64/s8/s16/s32/s64), hexadecimal types
+-		  (x8/x16/x32/x64), "string", "ustring" and bitfield
+-		  are supported.
++		  (x8/x16/x32/x64), "string", "ustring", "symbol", "symstr"
++                  and bitfield are supported.
+ 
+   (\*1) only for the probe on function entry (offs == 0).
+   (\*2) only for return probe.
+@@ -96,6 +96,10 @@ offset, and container-size (usually 32). The syntax is::
+ 
+ Symbol type('symbol') is an alias of u32 or u64 type (depends on BITS_PER_LONG)
+ which shows given pointer in "symbol+offset" style.
++On the other hand, symbol-string type ('symstr') converts the given address to
++"symbol+offset/symbolsize" style and stores it as a null-terminated string.
++With 'symstr' type, you can filter the event with wildcard pattern of the
++symbols, and you don't need to solve symbol name by yourself.
+ For $comm, the default type is "string"; any other type is invalid.
+ 
+ .. _user_mem_access:
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 47a44b055a1d..80aae336cc19 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -5608,7 +5608,7 @@ static const char readme_msg[] =
+ 	"\t           +|-[u]<offset>(<fetcharg>), \\imm-value, \\\"imm-string\"\n"
+ 	"\t     type: s8/16/32/64, u8/16/32/64, x8/16/32/64, string, symbol,\n"
+ 	"\t           b<bit-width>@<bit-offset>/<container-size>, ustring,\n"
+-	"\t           <type>\\[<array-size>\\]\n"
++	"\t           symstr, <type>\\[<array-size>\\]\n"
+ #ifdef CONFIG_HIST_TRIGGERS
+ 	"\t    field: <stype> <name>;\n"
+ 	"\t    stype: u8/u16/u32/u64, s8/s16/s32/s64, pid_t,\n"
+diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+index 36dff277de46..dfec4af857b4 100644
+--- a/kernel/trace/trace_probe.c
++++ b/kernel/trace/trace_probe.c
+@@ -76,9 +76,11 @@ const char PRINT_TYPE_FMT_NAME(string)[] = "\\\"%s\\\"";
+ /* Fetch type information table */
+ static const struct fetch_type probe_fetch_types[] = {
+ 	/* Special types */
+-	__ASSIGN_FETCH_TYPE("string", string, string, sizeof(u32), 1,
++	__ASSIGN_FETCH_TYPE("string", string, string, sizeof(u32), 1, 1,
+ 			    "__data_loc char[]"),
+-	__ASSIGN_FETCH_TYPE("ustring", string, string, sizeof(u32), 1,
++	__ASSIGN_FETCH_TYPE("ustring", string, string, sizeof(u32), 1, 1,
++			    "__data_loc char[]"),
++	__ASSIGN_FETCH_TYPE("symstr", string, string, sizeof(u32), 1, 1,
+ 			    "__data_loc char[]"),
+ 	/* Basic types */
+ 	ASSIGN_FETCH_TYPE(u8,  u8,  0),
+@@ -662,16 +664,26 @@ static int traceprobe_parse_probe_arg_body(const char *argv, ssize_t *size,
+ 
+ 	ret = -EINVAL;
+ 	/* Store operation */
+-	if (!strcmp(parg->type->name, "string") ||
+-	    !strcmp(parg->type->name, "ustring")) {
+-		if (code->op != FETCH_OP_DEREF && code->op != FETCH_OP_UDEREF &&
+-		    code->op != FETCH_OP_IMM && code->op != FETCH_OP_COMM &&
+-		    code->op != FETCH_OP_DATA && code->op != FETCH_OP_TP_ARG) {
+-			trace_probe_log_err(offset + (t ? (t - arg) : 0),
+-					    BAD_STRING);
+-			goto fail;
++	if (parg->type->is_string) {
++		if (!strcmp(parg->type->name, "symstr")) {
++			if (code->op != FETCH_OP_REG && code->op != FETCH_OP_STACK &&
++			    code->op != FETCH_OP_RETVAL && code->op != FETCH_OP_ARG &&
++			    code->op != FETCH_OP_DEREF && code->op != FETCH_OP_TP_ARG) {
++				trace_probe_log_err(offset + (t ? (t - arg) : 0),
++						    BAD_SYMSTRING);
++				goto fail;
++			}
++		} else {
++			if (code->op != FETCH_OP_DEREF && code->op != FETCH_OP_UDEREF &&
++			    code->op != FETCH_OP_IMM && code->op != FETCH_OP_COMM &&
++			    code->op != FETCH_OP_DATA && code->op != FETCH_OP_TP_ARG) {
++				trace_probe_log_err(offset + (t ? (t - arg) : 0),
++						    BAD_STRING);
++				goto fail;
++			}
+ 		}
+-		if ((code->op == FETCH_OP_IMM || code->op == FETCH_OP_COMM ||
++		if (!strcmp(parg->type->name, "symstr") ||
++		    (code->op == FETCH_OP_IMM || code->op == FETCH_OP_COMM ||
+ 		     code->op == FETCH_OP_DATA) || code->op == FETCH_OP_TP_ARG ||
+ 		     parg->count) {
+ 			/*
+@@ -679,6 +691,8 @@ static int traceprobe_parse_probe_arg_body(const char *argv, ssize_t *size,
+ 			 * must be kept, and if parg->count != 0, this is an
+ 			 * array of string pointers instead of string address
+ 			 * itself.
++			 * For the symstr, it doesn't need to dereference, thus
++			 * it just get the value.
+ 			 */
+ 			code++;
+ 			if (code->op != FETCH_OP_NOP) {
+@@ -690,6 +704,8 @@ static int traceprobe_parse_probe_arg_body(const char *argv, ssize_t *size,
+ 		if (!strcmp(parg->type->name, "ustring") ||
+ 		    code->op == FETCH_OP_UDEREF)
+ 			code->op = FETCH_OP_ST_USTRING;
++		else if (!strcmp(parg->type->name, "symstr"))
++			code->op = FETCH_OP_ST_SYMSTR;
+ 		else
+ 			code->op = FETCH_OP_ST_STRING;
+ 		code->size = parg->type->size;
+@@ -919,8 +935,7 @@ static int __set_print_fmt(struct trace_probe *tp, char *buf, int len,
+ 	for (i = 0; i < tp->nr_args; i++) {
+ 		parg = tp->args + i;
+ 		if (parg->count) {
+-			if ((strcmp(parg->type->name, "string") == 0) ||
+-			    (strcmp(parg->type->name, "ustring") == 0))
++			if (parg->type->is_string)
+ 				fmt = ", __get_str(%s[%d])";
+ 			else
+ 				fmt = ", REC->%s[%d]";
+@@ -928,8 +943,7 @@ static int __set_print_fmt(struct trace_probe *tp, char *buf, int len,
+ 				pos += snprintf(buf + pos, LEN_OR_ZERO,
+ 						fmt, parg->name, j);
+ 		} else {
+-			if ((strcmp(parg->type->name, "string") == 0) ||
+-			    (strcmp(parg->type->name, "ustring") == 0))
++			if (parg->type->is_string)
+ 				fmt = ", __get_str(%s)";
+ 			else
+ 				fmt = ", REC->%s";
+diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+index de38f1c03776..0838b74f403b 100644
+--- a/kernel/trace/trace_probe.h
++++ b/kernel/trace/trace_probe.h
+@@ -98,6 +98,7 @@ enum fetch_op {
+ 	FETCH_OP_ST_UMEM,	/* Mem: .offset, .size */
+ 	FETCH_OP_ST_STRING,	/* String: .offset, .size */
+ 	FETCH_OP_ST_USTRING,	/* User String: .offset, .size */
++	FETCH_OP_ST_SYMSTR,	/* Kernel Symbol String: .offset, .size */
+ 	// Stage 4 (modify) op
+ 	FETCH_OP_MOD_BF,	/* Bitfield: .basesize, .lshift, .rshift */
+ 	// Stage 5 (loop) op
+@@ -133,7 +134,8 @@ struct fetch_insn {
+ struct fetch_type {
+ 	const char		*name;		/* Name of type */
+ 	size_t			size;		/* Byte size of type */
+-	int			is_signed;	/* Signed flag */
++	bool			is_signed;	/* Signed flag */
++	bool			is_string;	/* String flag */
+ 	print_type_func_t	print;		/* Print functions */
+ 	const char		*fmt;		/* Format string */
+ 	const char		*fmttype;	/* Name in format file */
+@@ -177,16 +179,19 @@ DECLARE_BASIC_PRINT_TYPE_FUNC(symbol);
+ #define _ADDR_FETCH_TYPE(t) __ADDR_FETCH_TYPE(t)
+ #define ADDR_FETCH_TYPE _ADDR_FETCH_TYPE(BITS_PER_LONG)
+ 
+-#define __ASSIGN_FETCH_TYPE(_name, ptype, ftype, _size, sign, _fmttype)	\
+-	{.name = _name,				\
++#define __ASSIGN_FETCH_TYPE(_name, ptype, ftype, _size, sign, str, _fmttype)	\
++	{.name = _name,					\
+ 	 .size = _size,					\
+-	 .is_signed = sign,				\
++	 .is_signed = (bool)sign,			\
++	 .is_string = (bool)str,			\
+ 	 .print = PRINT_TYPE_FUNC_NAME(ptype),		\
+ 	 .fmt = PRINT_TYPE_FMT_NAME(ptype),		\
+ 	 .fmttype = _fmttype,				\
+ 	}
++
++/* Non string types can use these macros */
+ #define _ASSIGN_FETCH_TYPE(_name, ptype, ftype, _size, sign, _fmttype)	\
+-	__ASSIGN_FETCH_TYPE(_name, ptype, ftype, _size, sign, #_fmttype)
++	__ASSIGN_FETCH_TYPE(_name, ptype, ftype, _size, sign, 0, #_fmttype)
+ #define ASSIGN_FETCH_TYPE(ptype, ftype, sign)			\
+ 	_ASSIGN_FETCH_TYPE(#ptype, ptype, ftype, sizeof(ftype), sign, ptype)
+ 
+@@ -431,6 +436,7 @@ extern int traceprobe_define_arg_fields(struct trace_event_call *event_call,
+ 	C(ARRAY_TOO_BIG,	"Array number is too big"),		\
+ 	C(BAD_TYPE,		"Unknown type is specified"),		\
+ 	C(BAD_STRING,		"String accepts only memory argument"),	\
++	C(BAD_SYMSTRING,	"Symbol String doesn't accept data/userdata"),	\
+ 	C(BAD_BITFIELD,		"Invalid bitfield"),			\
+ 	C(ARG_NAME_TOO_LONG,	"Argument name is too long"),		\
+ 	C(NO_ARG_NAME,		"Argument name is not specified"),	\
+diff --git a/kernel/trace/trace_probe_tmpl.h b/kernel/trace/trace_probe_tmpl.h
+index b3bdb8ddb862..5cea672243f6 100644
+--- a/kernel/trace/trace_probe_tmpl.h
++++ b/kernel/trace/trace_probe_tmpl.h
+@@ -67,6 +67,37 @@ probe_mem_read(void *dest, void *src, size_t size);
+ static nokprobe_inline int
+ probe_mem_read_user(void *dest, void *src, size_t size);
+ 
++static nokprobe_inline int
++fetch_store_symstrlen(unsigned long addr)
++{
++	char namebuf[KSYM_SYMBOL_LEN];
++	int ret;
++
++	ret = sprint_symbol(namebuf, addr);
++	if (ret < 0)
++		return 0;
++
++	return ret + 1;
++}
++
++/*
++ * Fetch a null-terminated symbol string + offset. Caller MUST set *(u32 *)buf
++ * with max length and relative data location.
++ */
++static nokprobe_inline int
++fetch_store_symstring(unsigned long addr, void *dest, void *base)
++{
++	int maxlen = get_loc_len(*(u32 *)dest);
++	void *__dest;
++
++	if (unlikely(!maxlen))
++		return -ENOMEM;
++
++	__dest = get_loc_data(dest, base);
++
++	return sprint_symbol(__dest, addr);
++}
++
+ /* From the 2nd stage, routine is same */
+ static nokprobe_inline int
+ process_fetch_insn_bottom(struct fetch_insn *code, unsigned long val,
+@@ -99,16 +130,22 @@ process_fetch_insn_bottom(struct fetch_insn *code, unsigned long val,
+ stage3:
+ 	/* 3rd stage: store value to buffer */
+ 	if (unlikely(!dest)) {
+-		if (code->op == FETCH_OP_ST_STRING) {
++		switch (code->op) {
++		case FETCH_OP_ST_STRING:
+ 			ret = fetch_store_strlen(val + code->offset);
+ 			code++;
+ 			goto array;
+-		} else if (code->op == FETCH_OP_ST_USTRING) {
++		case FETCH_OP_ST_USTRING:
+ 			ret += fetch_store_strlen_user(val + code->offset);
+ 			code++;
+ 			goto array;
+-		} else
++		case FETCH_OP_ST_SYMSTR:
++			ret += fetch_store_symstrlen(val + code->offset);
++			code++;
++			goto array;
++		default:
+ 			return -EILSEQ;
++		}
+ 	}
+ 
+ 	switch (code->op) {
+@@ -129,6 +166,10 @@ process_fetch_insn_bottom(struct fetch_insn *code, unsigned long val,
+ 		loc = *(u32 *)dest;
+ 		ret = fetch_store_string_user(val + code->offset, dest, base);
+ 		break;
++	case FETCH_OP_ST_SYMSTR:
++		loc = *(u32 *)dest;
++		ret = fetch_store_symstring(val + code->offset, dest, base);
++		break;
+ 	default:
+ 		return -EILSEQ;
+ 	}
 
-
- Documentation/trace/kprobetrace.rst                |    8 ++
- kernel/trace/trace.c                               |    2 -
- kernel/trace/trace_probe.c                         |   65 +++++++++++++-------
- kernel/trace/trace_probe.h                         |   19 ++++--
- kernel/trace/trace_probe_tmpl.h                    |   47 ++++++++++++++
- kernel/trace/trace_uprobe.c                        |    3 +
- .../ftrace/test.d/kprobe/uprobe_syntax_errors.tc   |    5 ++
- 7 files changed, 113 insertions(+), 36 deletions(-)
-
---
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
