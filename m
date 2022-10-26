@@ -2,205 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F8660E788
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 20:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBF460E79F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 20:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234040AbiJZSjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 14:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
+        id S234320AbiJZSr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 14:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233963AbiJZSi7 (ORCPT
+        with ESMTP id S233783AbiJZSrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 14:38:59 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF11EA9C1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:38:58 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7b8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7b8:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4E5731EC06A7;
-        Wed, 26 Oct 2022 20:38:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1666809536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2gBQphS1nNInT9b5FidH50wFA5Vf1pdI/cx35jR9Ij8=;
-        b=dLvWpmWyzcgm2I6HSu6lf4m+rZPfSHxW13q8XfPsOvEiX8oLyLab15WUR3PCleEEGrtTwG
-        q0JxdrphENK7xb7LGCV6EkO9NA1j3Ci6bydIi1b8vlYy7vDEIqgtlYbUGwuP8JdvOqdq+n
-        obseAeMNFk1bncJ7g8ChfPxD6moAO8s=
-Date:   Wed, 26 Oct 2022 20:38:55 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Yinghai Lu <yinghai@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v2 01/10] x86/Kconfig: enable X86_X2APIC by default and
- improve help text
-Message-ID: <Y1l+v3uG7tSUZfd0@zn.tnic>
-References: <20220911084711.13694-1-mat.jonczyk@o2.pl>
- <20220911084711.13694-2-mat.jonczyk@o2.pl>
+        Wed, 26 Oct 2022 14:47:55 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150B1BB041
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:47:54 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id i12so12371122qvs.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:47:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ri/V70PuN7YE034eBVrKO+65hlxsDWHRaEAqsCWyzp0=;
+        b=W1vAJPTEgLgFYKZDmntaUewFXJRoS5SLYpwNKHQaxuRPhk16gmO8vKWHC/uwRfHyKW
+         nYZb73p9M8oASZmW82NdRcO6Hkf/qYD5F3GXc1h97z8RWjlaA7ncXdpBLCmVRPCKWpjS
+         WAGAUeO2XRxEnLGuaPCfRaClQZfyu1KtW2YDc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ri/V70PuN7YE034eBVrKO+65hlxsDWHRaEAqsCWyzp0=;
+        b=KDVaPuDoU4iS+B76fZ7OPnjPdOmXTJvcvknJulpjRg78Ir/jk58pUmwdIOOUaXgEkn
+         4w5JliDiLJGOnC3ZmWUkIPpd3BJriQkET1NwHlE/oM1iAwP0AXzhZi9O2LfIT7yaB3Lm
+         cKVi0u+tH7StJA8NHzPHFk26aC8WejxYQRZ9MiQqPdkCmfvOJERBtiCjavMgkh4BekbA
+         I2eUkDUJF0jE8IyhTAhCsfPSupWy055ZhYUmo1KHS3LrkhF9q3M8YK3KO8uJH7HxiOYV
+         IMhn3KeD+fLNPMSfEBDlY3JO1ZhFNBJoeIxifIZujYLIHPvQREcRF7OWAf1vqULFcuYH
+         SeWQ==
+X-Gm-Message-State: ACrzQf0QXAw7X8O+y5lIdZzj9kWgMOB8OOhbDDrpStklQBxo1a2Wl41n
+        h4LmhNoBLJKHgQI3PEeMTjCMO39VFBfzog==
+X-Google-Smtp-Source: AMsMyM45ADg/JADUaOvHbsPoKA4x1iAvFmAtXRovncZOdJNVbWzt3mvFmZyyd1qlmGNlFag/8qwF+Q==
+X-Received: by 2002:a05:6214:1d2e:b0:4b6:95ab:eb79 with SMTP id f14-20020a0562141d2e00b004b695abeb79mr32618200qvd.113.1666810073015;
+        Wed, 26 Oct 2022 11:47:53 -0700 (PDT)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
+        by smtp.gmail.com with ESMTPSA id m17-20020ae9e711000000b006ed61f18651sm4323655qka.16.2022.10.26.11.47.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 11:47:52 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-36ad4cf9132so128780057b3.6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:47:51 -0700 (PDT)
+X-Received: by 2002:a81:2544:0:b0:360:c270:15a1 with SMTP id
+ l65-20020a812544000000b00360c27015a1mr39348282ywl.67.1666810071636; Wed, 26
+ Oct 2022 11:47:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220911084711.13694-2-mat.jonczyk@o2.pl>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20221025231627.never.000-kees@kernel.org> <CAKwvOdkDaSQZ_e0hX0ggNqsWn+=0xyqMdbf6J+YW0-iZ=ewViQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdkDaSQZ_e0hX0ggNqsWn+=0xyqMdbf6J+YW0-iZ=ewViQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 26 Oct 2022 11:47:35 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whybqnsbCe=+xfxx3ncjg-JG5+GQAZ70M8WKeAnVrZd5Q@mail.gmail.com>
+Message-ID: <CAHk-=whybqnsbCe=+xfxx3ncjg-JG5+GQAZ70M8WKeAnVrZd5Q@mail.gmail.com>
+Subject: Re: [PATCH] fortify: Do not cast to "unsigned char"
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 11, 2022 at 10:47:02AM +0200, Mateusz Jończyk wrote:
-> As many current platforms (most modern Intel CPUs and QEMU) have x2APIC
-> present, enable CONFIG_X86_X2APIC by default as it gives performance
-> and functionality benefits.
+On Wed, Oct 26, 2022 at 11:26 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> If the intent of __p is to avoid repeated application of side effects
+> from the evaluation of the macro parameter p, this could also be:
 
-Can we do that without any detriment to older systems which don't have
-x2APIC?
+Not the only intent.
 
-It looks so from a quick look...
+The code also does
 
-> Additionally, if the BIOS has already
-> switched APIC to x2APIC mode, but CONFIG_X86_X2APIC is disabled, the
-> kernel will panic in arch/x86/kernel/apic/apic.c .
-> 
-> Also improve the help text, which was confusing and really did not
-> describe what the feature is about.
-> 
-> Help text references and discussion:
+        __builtin_constant_p(*__p))
 
-So I'm not sure this discussion should be part of the commit message.
+which basically checks for "is this a compile-time constant string"
+(yes, I realize that it only checks the first character, but it ends
+up being the same thing).
 
-You can put it under the "---" line of the patch though.
+That would fail horribly with __auto_type and people using "void *".
 
-> 
-> Both Intel [1] and AMD [3] spell the name as "x2APIC", not "x2apic".
-> 
-> "It allows faster access to the local APIC"
->         [2], chapter 2.1, page 15:
->         "More efficient MSR interface to access APIC registers."
-> 
-> "x2APIC was introduced in Intel CPUs around 2008":
->         I was unable to find specific information which Intel CPUs
->         support x2APIC. Wikipedia claims it was "introduced with the
->         Nehalem microarchitecture in November 2008", but I was not able
->         to confirm this independently. At least some Nehalem CPUs do not
->         support x2APIC [1].
-> 
->         The documentation [2] is dated June 2008. Linux kernel also
->         introduced x2APIC support in 2008, so the year seems to be
->         right.
-> 
-> "and in AMD EPYC CPUs in 2019":
->         [3], page 15:
->         "AMD introduced an x2APIC in our EPYC 7002 Series processors for
->         the first time."
-> 
-> "It is also frequently emulated in virtual machines, even when the host
-> CPU does not support it."
->         [1]
-> 
-> "If this configuration option is disabled, the kernel will not boot on
-> some platforms that have x2APIC enabled."
->         According to some BIOS documentation [4], the x2APIC may be
->         "disabled", "enabled", or "force enabled" on this system.
->         I think that "enabled" means "made available to the operating
->         system, but not already turned on" and "force enabled" means
->         "already switched to x2APIC mode when the OS boots". Only in the
->         latter mode a kernel without CONFIG_X86_X2APIC will panic in
->         validate_x2apic() in arch/x86/kernel/apic/apic.c .
-> 
-> 	QEMU 4.2.1 and my Intel HP laptop (bought in 2019) use the
-> 	"enabled" mode and the kernel does not panic.
-> 
-> [1] "Re: [Qemu-devel] [Question] why x2apic's set by default without host sup"
->         https://lists.gnu.org/archive/html/qemu-devel/2013-07/msg03527.html
-> 
-> [2] Intel® 64 Architecture x2APIC Specification,
->         ( https://www.naic.edu/~phil/software/intel/318148.pdf )
-> 
-> [3] Workload Tuning Guide for AMD EPYC ™ 7002 Series Processor Based
->         Servers Application Note,
->         https://developer.amd.com/wp-content/resources/56745_0.80.pdf
-> 
-> [4] UEFI System Utilities and Shell Command Mobile Help for HPE ProLiant
->         Gen10, ProLiant Gen10 Plus Servers and HPE Synergy:
->         Enabling or disabling Processor x2APIC Support
->         https://techlibrary.hpe.com/docs/iss/proliant-gen10-uefi/s_enable_disable_x2APIC_support.html
-> 
-> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: x86@kernel.org
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Yinghai Lu <yinghai@kernel.org>
-> Cc: Randy Dunlap <rdunlap@infradead.org>
-> 
-> ---
-> v2: language fixes by Mr Randy Dunlap, change option name
-> ---
->  arch/x86/Kconfig | 22 +++++++++++++++++-----
->  1 file changed, 17 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index f9920f1341c8..28133b5d3f12 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -440,15 +440,27 @@ config X86_FEATURE_NAMES
->  	  If in doubt, say Y.
->  
->  config X86_X2APIC
-> -	bool "Support x2apic"
-> +	bool "x2APIC interrupt controller architecture support"
+It is true that we could probably use __auto_type in a lot of other
+places where we currently use
 
-s/architecture //g
+        __typeof__(ptr) _p_ = (ptr)
 
-and below too. Keep it simple pls.
+but our "typeof" pattern is
 
->  	depends on X86_LOCAL_APIC && X86_64 && (IRQ_REMAP || HYPERVISOR_GUEST)
-> +	default y
->  	help
-> -	  This enables x2apic support on CPUs that have this feature.
-> +	  x2APIC is an interrupt controller architecture, a component of which
-> +	  (the local APIC) is present in the CPU. It allows faster access to
-> +	  the local APIC and supports a larger number of CPUs in the system
-> +	  than the predecessors.
->  
-> -	  This allows 32-bit apic IDs (so it can support very large systems),
-> -	  and accesses the local apic via MSRs not via mmio.
-> +	  x2APIC was introduced in Intel CPUs around 2008 and in AMD EPYC CPUs
-> +	  in 2019, but it can be disabled by the BIOS. It is also frequently
-> +	  emulated in virtual machines, even when the host CPU does not support
-> +	  it. Support in the CPU can be checked by executing
-> +		cat /proc/cpuinfo | grep x2apic
+ (a) much more common because of historical reasons
 
-or simply
+ (b) much more generic because it often uses a different ptr type (ie
+macros that have a value and a pointer, like "put_user()", the type
+comes from the pointer, but the initializer comes from the value, so
+"__auto_type" ends up being completely the wrong thing).
 
-$ grep x2apic /proc/cpuinfo
+We do have a couple of "__auto_type" uses, but because it can't
+replace our __typeof__ users in general anyway, I'm not convinced we
+should strive to make it hugely more common (even if the __auto_type
+model probably can replace a lot of them).
 
->  
-> -	  If you don't know what to do here, say N.
-> +	  If this configuration option is disabled, the kernel will not boot on
-> +	  some platforms that have x2APIC enabled.
-> +
-> +	  Say N if you know that your platform does not have x2APIC.
-
-Does it matter?
-
-If the platform doesn't support it, it'll fallback to APIC anyway.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+                  Linus
