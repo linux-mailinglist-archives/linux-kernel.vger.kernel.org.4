@@ -2,83 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9695860E5F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D3060E605
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234006AbiJZQ7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 12:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
+        id S234031AbiJZRB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 13:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234097AbiJZQ6z (ORCPT
+        with ESMTP id S234024AbiJZRBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 12:58:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9580AF1A8;
-        Wed, 26 Oct 2022 09:58:49 -0700 (PDT)
+        Wed, 26 Oct 2022 13:01:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672167D788;
+        Wed, 26 Oct 2022 10:01:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4618761FC9;
-        Wed, 26 Oct 2022 16:58:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A1AFC433C1;
-        Wed, 26 Oct 2022 16:58:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666803528;
-        bh=MxMNVBq6qCtDiZuSSRHMS4DNSCx1BT6mrpskQwkZdF4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tdX3s73UqQuJyp0qg2D8dDRFehu3TsIJuSq+SigPvbKYviY1zlgjgEw3YE6CFNkmO
-         AU9iJZ1xSEWJ6pjy4aPEq07F17ijONUWMmCgLN4SqpHFdhvXNA75N7BuRcMTfiLj+n
-         Wx6jbvQZiYBiiRkorWf3vQO4wVjbPAPp81he0ozg=
-Date:   Wed, 26 Oct 2022 18:58:46 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>
-Cc:     linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        jason@zx2c4.com, saeed.mirzamohammadi@oracle.com
-Subject: Re: [PATCH stable 0/5] Fix missing patches in stable
-Message-ID: <Y1lnRm9NZDhIFhwU@kroah.com>
-References: <20221017192006.36398-1-saeed.mirzamohammadi@oracle.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68A9FB82399;
+        Wed, 26 Oct 2022 17:01:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1822FC433D6;
+        Wed, 26 Oct 2022 17:01:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666803675;
+        bh=gZS5hX+uqYcqQ6nRgjv9ovuIvnnki7D052kUiDqQ88c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VHJBHhcB70RHtFk1nTaHHpZ2A7t3l89kOXaZGcbELoGJwVK5E5qGWNL0oJ3BO14ea
+         jEoGvDsjVsjuVQsejejpChRV54aFJol/gQjcwQCYgacj1Je860WaWNCh0h6JGs/SXg
+         TiC0r61nqnFAEnbLGI9cezvV8a8fpps98SOd21LpH5xr6LOKFSiKwmMjWpsqTtpIg1
+         RjaZJvuK+r5Pynlo038jZi4KrKfMhVB77AgOof4bZTDXDNCUNtBywyQH9jXUIh9jWF
+         FtYbdp809ZmUj2ak0l7qxS/kaPFyVOoAoK54vz+v8xmRDjbIyRX4qOdfwUZfwBo51m
+         SI4jFTrb5HDZw==
+Received: by mail-lj1-f169.google.com with SMTP id a15so18314742ljb.7;
+        Wed, 26 Oct 2022 10:01:14 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0PmAOojyOu/EIOjmXlUzBk5A/DED/fnrExcF5GI+dDoFgM+xPV
+        bui2SzWVyF0woH8NoLbNVecxje/3264jQbC1BLM=
+X-Google-Smtp-Source: AMsMyM5JOlFujIoCZrFt4KwYJSeO+5uA0LH8MkxYGMwqH0kzUiRu1b5caMySW44BA2teStC1faTZm2F2vgsmvsnvjAw=
+X-Received: by 2002:a05:651c:4d0:b0:26f:cd9b:419f with SMTP id
+ e16-20020a05651c04d000b0026fcd9b419fmr15919265lji.415.1666803673035; Wed, 26
+ Oct 2022 10:01:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221017192006.36398-1-saeed.mirzamohammadi@oracle.com>
+References: <YwgCrqutxmX0W72r@gmail.com> <Ywzr2d52ixYXUDWR@zx2c4.com>
+ <6ec9cdab-db5b-ab28-c92d-79c3812dd369@intel.com> <YyNmQ2bPvf3B3Xvo@arm.com>
+In-Reply-To: <YyNmQ2bPvf3B3Xvo@arm.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 26 Oct 2022 19:01:01 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFzSEH=_h6fXDutECwP8=J=q-OaAevOret-MZeTWd6OzQ@mail.gmail.com>
+Message-ID: <CAMj1kXFzSEH=_h6fXDutECwP8=J=q-OaAevOret-MZeTWd6OzQ@mail.gmail.com>
+Subject: Re: Should Linux set the new constant-time mode CPU flags?
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Eric Biggers <ebiggers@kernel.org>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Adam Langley <agl@google.com>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 12:20:01PM -0700, Saeed Mirzamohammadi wrote:
-> The following patches has been applied to 6.0 but only patch#2 below
-> has been applied to stable. This caused regression with nfs tests in
-> all stable releases.
-> 
-> This patchset backports patches 1 and 3-6 to stable.
-> 
-> 1. 868941b14441 fs: remove no_llseek
-> 2. 97ef77c52b78 fs: check FMODE_LSEEK to control internal pipe splicing
-> 3. 54ef7a47f67d vfio: do not set FMODE_LSEEK flag
-> 4. c9eb2d427c1c dma-buf: remove useless FMODE_LSEEK flag
-> 5. 4e3299eaddff fs: do not compare against ->llseek
-> 6. e7478158e137 fs: clear or set FMODE_LSEEK based on llseek function
-> 
-> For 5.10.y and 5.4.y only, a revert of patch#2 is already included.
-> Please apply patch#2, for 5.4.y and 5.10.y as well.
+On Thu, 15 Sept 2022 at 19:52, Catalin Marinas <catalin.marinas@arm.com> wrote:
+>
+> On Tue, Aug 30, 2022 at 07:25:29AM -0700, Dave Hansen wrote:
+> > On 8/29/22 09:39, Jason A. Donenfeld wrote:
+> > > On Thu, Aug 25, 2022 at 11:15:58PM +0000, Eric Biggers wrote:
+> > >> I'm wondering if people are aware of this issue, and whether anyone has any
+> > >> thoughts on whether/where the kernel should be setting these new CPU flags.
+> > >> There don't appear to have been any prior discussions about this.  (Thanks to
+> > > Maybe it should be set unconditionally now, until we figure out how to
+> > > make it more granular.
+> >
+> > Personally, I'm in this camp as well.  Let's be safe and set it by
+> > default.  There's also this tidbit in the Intel docs (and chopping out a
+> > bunch of the noise):
+> >
+> >       (On) processors based on microarchitectures before Ice Lake ...
+> >       the instructions listed here operate as if DOITM is enabled.
+> >
+> > IOW, setting DOITM=0 isn't going back to the stone age.  At worst, I'd
+> > guess that you're giving up some optimization that only shows up in very
+> > recent CPUs in the first place.
+> >
+> > If folks want DOITM=1 on their snazzy new CPUs, then they came come with
+> > performance data to demonstrate the gain they'll get from adding kernel
+> > code to get DOITM=1.  There are a range of ways we could handle it, all
+> > the way from adding a command-line parameter to per-task management.
+> >
+> > Anybody disagree?
+>
+> It's not my preferred option for arm64 but I admit the same reasoning
+> could equally apply to us. If some existing crypto libraries relied on
+> data independent timing for current CPUs but newer ones (with the DIT
+> feature) come up with more aggressive, data-dependent optimisations,
+> they may be caught off-guard. That said the ARM architecture spec never
+> promised any timing, that's a micro-architecture detail and not all
+> implementations are done by ARM Ltd. So I can't really tell what's out
+> there.
+>
+> So I guess knobs for finer grained control would do, at least a sysctl
+> (or cmdline) to turn it on/off globally and maybe a prctl() for user. We
+> don't necessarily need this on arm64 but if x86 adds one, we might as
+> well wire it up.
+>
 
-I am sorry, I really do not understand here.
+With all the effort spent on plugging timing leaks in the kernel over
+the past couple of years, not enabling this at EL1 seems silly, no?
+Why would we ever permit privileged code to exhibit data dependent
+timing variances?
 
-You list these commits in a specific order, yet the patches you send are
-in a different order.
-
-And they don't apply to 5.10 or older.
-
-Can you resend proper patch series, for each stable branch that you want
-these applied to, so that I can correctly queue them up?
-
-thanks,
-
-greg k-h
+As for a prctl() for user space - wouldn't it make more sense to
+enable this by default, and add a hwcap so user space can clear DIT
+directly if it feels the need to do so?
