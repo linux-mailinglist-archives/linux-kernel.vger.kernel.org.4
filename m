@@ -2,83 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E8C60E165
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E3060E168
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233642AbiJZNCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 09:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
+        id S233637AbiJZNDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233426AbiJZNCV (ORCPT
+        with ESMTP id S233433AbiJZNDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 09:02:21 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FC3F984A
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:02:19 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id j130so18709675ybj.9
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:02:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4glVzmWsTbBlCQmTnSNI123LuVL+ieI4yytV81hjliI=;
-        b=Oot5BrIF853TW65wZY1ze+RZRzXtGQpd3nFZPzVZfZQe9HC2K+KdVB467TVUjtYvka
-         KCFDSQXooBqHARrvM+AeFu2L+hCxBdiXUx5vXmsdiQyQsZYYp9RwZFkvIMEOcFF/V2WL
-         njyS+YjN2MqQgoZ8sm4jdIvJy8Bcsm3ZHAfpgjivgi9TirYHAi2Lgl+P2uw/e81O5lBz
-         tELCsbpw3TXe04r65ftHb1r5f841Pf6eQhrsCoZtQr3pDaOnvCzDQFb+0Tb4pe6uX0k2
-         PM1qAL0wZAMSezPxagjErjlcZxIg6s3ImDh1V6z8PwbE6UAJiI8wMqQRF+ALQJuYsNwP
-         Tk7Q==
+        Wed, 26 Oct 2022 09:03:15 -0400
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D6FDFC18
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:03:14 -0700 (PDT)
+Received: by mail-qk1-f182.google.com with SMTP id s17so10380190qkj.12
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:03:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4glVzmWsTbBlCQmTnSNI123LuVL+ieI4yytV81hjliI=;
-        b=JtGBQ/rK5NL36bb3b1N1bXgs1de/rPKsRqgo+mZtOQWBHAXrVud531gAuc8wDfdsyL
-         pqMWpa91E1NgkxJ3dsyzbIHZ2xS/8H2egrFxfiPAs3DL4f8xE93h4rh8hg7RMvMqDRTo
-         2k3a8Qu63UXqfiQxJ4TaV6J6n/FUnBiJNSAl0Rg3vRazi+bnu09gYmB4yo0RE0OGZRdd
-         Q+MxOEC9OrfMyCYLgcKJp6afVPG8C+IgnqNmxXcG/wXDnugXQjxrs2fLCqn5hshDK0+e
-         782CJia2W76huRUCgiDkZRzXy/ikt+0WNcQEBCuEHMdtVE/JZcdCyJzUD1jfuKS+zl7Z
-         jCwQ==
-X-Gm-Message-State: ACrzQf1s3+aRbBcGIM0sQScUHLsVnkiFlpZAHilt6dDW9nxfs7TvjHkI
-        7IEtn5hDFkhn9JTLEk5zMvj2OG9QbP2NH0e+mPc=
-X-Google-Smtp-Source: AMsMyM6qlz1dbMzPR1SAfePuUVwC4H/jq2ipBZgH0seGZQdGDKasj8QxPBivL0DK4NjUYtQQFygciaR3L8cvdUf+ssQ=
-X-Received: by 2002:a25:5f07:0:b0:6cb:70a7:359e with SMTP id
- t7-20020a255f07000000b006cb70a7359emr7895526ybb.110.1666789338724; Wed, 26
- Oct 2022 06:02:18 -0700 (PDT)
+        bh=03y6t+YKs/wRE9nSRW/h4fPn8pJSXetuChZYCPZewYM=;
+        b=1Y1bdRE+eiE6mQdxe95Lk+6Hv1d2JaKR5NUToKDRZXvrYWK6O4Uw5OFFIGbzQ7I5OD
+         ObDpnBZBSKF3NaYiQNY1tziq8GCcFyQWpoAGL87VRKUlVhg/50BaRJfotFDHYbEQp1Di
+         U8SSgoKs5XulJobazggydFC2EHpo2069X1KYPbb6BvwqkBionWf7Twz+QwSzltrycwZW
+         nlukW9hqqYDJmPngyphzYQCM7c01bnL3B8/DEkCB4dm0Act0+KGM7rcZHRqF6bf7AloY
+         H1o+Yy0xxCanCixgA1sUHARfRPmG7bVXWF3P58PbFO/uCrbdjxFB1J5nZR2kjVHJ2vJ5
+         RUSA==
+X-Gm-Message-State: ACrzQf22UYh/RiLbj76xZuftR5ycc40AWSMnYjljbjy2EDkd+1RpqI87
+        pXEYYpV5N7nUC3b//8LPpub8iBO0ezvguA==
+X-Google-Smtp-Source: AMsMyM508/d9srPed/QO+Nbv02x53SeWlPvWqWr0u18PgNYN2UeFCsqTMOi68c0yjQPps2VxwWygRw==
+X-Received: by 2002:a37:6084:0:b0:6f7:65e7:23f7 with SMTP id u126-20020a376084000000b006f765e723f7mr5978224qkb.223.1666789393461;
+        Wed, 26 Oct 2022 06:03:13 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id s10-20020a05620a29ca00b006eea4b5abcesm3885492qkp.89.2022.10.26.06.03.13
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 06:03:13 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-369426664f9so146167597b3.12
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:03:13 -0700 (PDT)
+X-Received: by 2002:a81:9c49:0:b0:34a:de:97b8 with SMTP id n9-20020a819c49000000b0034a00de97b8mr38941301ywa.384.1666789392975;
+ Wed, 26 Oct 2022 06:03:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221026083950.3712598-1-nunes.erico@gmail.com> <20221026093604.nuielehywjtxe2mn@vireshk-i7>
-In-Reply-To: <20221026093604.nuielehywjtxe2mn@vireshk-i7>
-From:   Erico Nunes <nunes.erico@gmail.com>
-Date:   Wed, 26 Oct 2022 15:02:06 +0200
-Message-ID: <CAK4VdL1HxrZmhsXg8JjsN=BYSYJawWxoyTu7gpaFyU9d7L-chw@mail.gmail.com>
-Subject: Re: [PATCH] drm/lima: Fix dev_pm_opp_set_config in case of missing regulator
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Qiang Yu <yuq825@gmail.com>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
+References: <20221026130051.1577286-1-Jason@zx2c4.com>
+In-Reply-To: <20221026130051.1577286-1-Jason@zx2c4.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 26 Oct 2022 15:03:00 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX1733OFFc1P1oGKD5Nef9GyiR0XYL0u+2XhMS5aNAGyA@mail.gmail.com>
+Message-ID: <CAMuHMdX1733OFFc1P1oGKD5Nef9GyiR0XYL0u+2XhMS5aNAGyA@mail.gmail.com>
+Subject: Re: [PATCH] m68k: mac_via: remove unused rbv_set_video_bpp()
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Oct 26, 2022 at 3:01 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> In examining rbv_set_video_bpp()'s improper usage of a non-explictly
+> signed char type, it turns out that the function is actually unused. So
+> remove it.
+>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-On Wed, Oct 26, 2022 at 11:36 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> You can directly call devm_pm_opp_set_clkname() and
-> devm_pm_opp_set_regulators(), like it was done before my patch, for
-> single configurations. So basically a simple revert of my commit, with
-> additional comments you added above.
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+i.e. will queue in the m68k for-v6.2 branch.
 
-Ok, I'll send a v2 with that.
+Gr{oetje,eeting}s,
 
-Thanks
+                        Geert
 
-Erico
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
