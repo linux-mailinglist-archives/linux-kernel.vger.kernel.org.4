@@ -2,67 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A0660E586
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5261860E589
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233638AbiJZQep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 12:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51648 "EHLO
+        id S233563AbiJZQgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 12:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232946AbiJZQen (ORCPT
+        with ESMTP id S233460AbiJZQgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 12:34:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAB32D1CF;
-        Wed, 26 Oct 2022 09:34:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2CEF8B82381;
-        Wed, 26 Oct 2022 16:34:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A4D8C433B5;
-        Wed, 26 Oct 2022 16:34:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666802078;
-        bh=0OyATpcFpMtfgLWCG8arPflGf4wLgAo29PwRBcaXU7s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rq4Mxi0kWqi0Mf0HO1Sk3X9j00MMjiOG5P1k57nofpBmBYYBaCEN33upwhoXThPIu
-         UGAM7fKsz41ESBlW61TjPC/44dX1Ur+8aBRoS7HcBTwyoZXFIp86AboZ/npjFjgJ9x
-         SO+abeadcBXvIxQe+RTsvyAi4WWpOGMwhYESo833sWWHgbV8JwN4OCysriP+C4hRl1
-         RDwX1C9+ro8LPN5InnwxBVFcMFMqk5X7YCjFAfofZTAG7JKCMf+mY2ekd4PlAIw1Sp
-         P1k9I4+QnEjhBt5N7CdBd+W0GEm3PuDn5GRjUR8Msy2KAxrR4hDn4vNrEF8W56TteL
-         PsvDdBFS4FCfg==
-Date:   Wed, 26 Oct 2022 10:34:35 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Dawei Li <set_pte_at@outlook.com>, axboe@kernel.dk, hch@lst.de,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] block: simplify blksize_bits() implementation
-Message-ID: <Y1lhmzQ9L2vxJzns@kbusch-mbp.dhcp.thefacebook.com>
-References: <TYCP286MB2323169D81A806A7C1F7FDF1CA309@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
- <30ea2fa3-0e4d-788b-b990-3bdb9e687377@acm.org>
+        Wed, 26 Oct 2022 12:36:52 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE74AC2A1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:36:50 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id hh9so10291318qtb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:36:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+O6n1+4Noo4lqABNPcNmHpEdPhT1c2lxt97PdSfadgg=;
+        b=lGZQfp2ouRZjOccXJJKrtcDtmvCxmhC4VwWrnGQrDqBqrTinjAK6oSLGGSKU6q8NI/
+         D7AkuJQCXxocXdMVUUSeCISSv0e3oMPgAZL3KbzSK3meS7rHCEBrqX0PmzNkRbv8v89v
+         p2vZwwfodQZ2d/Ts5lq/OXwA0sYsYzTHtHZGPWZ8JnhsLjaBOJpx7B+V4bfQFaeBKRSx
+         Hie6MX+Yvs4Fh9OaK2crkRH8Gs6ikBmlJF2vimFXoAvllkLUe6EIjzbI+1FOH+Pbzu9a
+         vb92LPjLoOnXkV122OYrqkjywxDS1AR/kcs0hysf7a0qogvWKgBwPNSSYV6YIwLCxcFY
+         8LEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+O6n1+4Noo4lqABNPcNmHpEdPhT1c2lxt97PdSfadgg=;
+        b=SyOvC7zucQydTeZEw3zAKnnsoAPlARAvgUEkX6oV8zwMFC2FMUbzQV8W7Kf7i04v5I
+         fm8iP7O5JuyO93IMXLxEYxQx9JJ2oVmBgnM1xmxEg9ZjyNyZgQee6OxIIErQish40MTl
+         7qXuK9TfX6p0+B0hf83RcZ4m8PsLD2hzybBe5KGTv+M26nRgGS/mPJOkWOpaN2Evxvhd
+         ZITg6WsZdrA3ZJsEc2XIA06qjpDN9tUtQO4/8+nXIm+2iBihTmlGxzKK6LWxfxnP/3Bj
+         nsWrQlaBmjQxV/6nCy44edGDaVvp/kZV2vihvg6SE4pca7isA4enFwBJTMUVlNy+qfKL
+         bfVQ==
+X-Gm-Message-State: ACrzQf0CH6fgsWWdgCfo31Am+N9N6E4MuPIawgVkZwTvp8mbf/7DVLat
+        wLuOS8XSBmk8/XKcGXLg+DCSDw==
+X-Google-Smtp-Source: AMsMyM4nmCswutT+FfSqr7WQOhGm2VmuDShqaCLJO01GoLr+2YAVnpGdHlAlEdTjGAKXzOyAH3aelw==
+X-Received: by 2002:a05:622a:5cb:b0:39c:fb06:5f6c with SMTP id d11-20020a05622a05cb00b0039cfb065f6cmr34629412qtb.474.1666802209719;
+        Wed, 26 Oct 2022 09:36:49 -0700 (PDT)
+Received: from krzk-bin.. ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id w8-20020a05620a424800b006b949afa980sm4161223qko.56.2022.10.26.09.36.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 09:36:48 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [RESEND PATCH] arm64: dts: qcom: sm6125: fix SDHCI CQE reg names
+Date:   Wed, 26 Oct 2022 12:36:46 -0400
+Message-Id: <20221026163646.37433-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <30ea2fa3-0e4d-788b-b990-3bdb9e687377@acm.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 09:29:21AM -0700, Bart Van Assche wrote:
-> On 10/26/22 08:14, Dawei Li wrote:
-> > Convert current looping-based implementation into bit operation,
-> > which can bring improvement for:
-> > 
-> > 1) bitops is more efficient for its arch-level optimization.
-> 
-> As far as I know blksize_bits() is not used in the hot path so performance
-> of this function is not critical.
+SM6125 comes with SDCC (SDHCI controller) v5, so the second range of
+registers is cqhci, not core.
 
-blksize_bits() is used on every IO going through iomap_dio_bio_iter(),
-though the usage there is completely unnecessary and can be removed.
+Fixes: cff4bbaf2a2d ("arm64: dts: qcom: Add support for SM6125")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+---
+
+Not tested on hardware, but no practical impact is expected, because
+supports-cqe is not defined.
+---
+ arch/arm64/boot/dts/qcom/sm6125.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+index af49a748e511..24ee7c0c1195 100644
+--- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+@@ -458,7 +458,7 @@ rpm_msg_ram: sram@45f0000 {
+ 		sdhc_1: mmc@4744000 {
+ 			compatible = "qcom,sm6125-sdhci", "qcom,sdhci-msm-v5";
+ 			reg = <0x04744000 0x1000>, <0x04745000 0x1000>;
+-			reg-names = "hc", "core";
++			reg-names = "hc", "cqhci";
+ 
+ 			interrupts = <GIC_SPI 348 IRQ_TYPE_LEVEL_HIGH>,
+ 				     <GIC_SPI 352 IRQ_TYPE_LEVEL_HIGH>;
+-- 
+2.34.1
+
