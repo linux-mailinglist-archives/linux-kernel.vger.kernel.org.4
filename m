@@ -2,76 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B173E60E590
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C546860E593
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232946AbiJZQnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 12:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
+        id S233607AbiJZQnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 12:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232773AbiJZQnI (ORCPT
+        with ESMTP id S232773AbiJZQnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 12:43:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD65DBCB5;
-        Wed, 26 Oct 2022 09:43:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D28FB82387;
-        Wed, 26 Oct 2022 16:43:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99B6EC433D6;
-        Wed, 26 Oct 2022 16:43:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666802585;
-        bh=6BdUDzrTWv7lQM9PT7jH50q2oQbyw0zx9UeXFuq2mys=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2WS3IOjYid/UHum4bQD1Wu+XM7qJnGfLhg0J+sy4guBg1vVqgJ40P48QPU3LKCj5a
-         1TzfbMZKQhom60prmAv8UvyA/xV33tsAfBwHmp3zXl26akfVNxFd7ifkmKTgMxHamG
-         dYA6VOX1SlFTZ9k930V/m3tlXdrXZG7lBgh0THp4=
-Date:   Wed, 26 Oct 2022 18:43:02 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     mdecandia@gmail.com
-Cc:     akpm@linux-foundation.org, bsegall@google.com, edumazet@google.com,
-        jbaron@akamai.com, khazhy@google.com, linux-kernel@vger.kernel.org,
-        r@hev.cc, rpenyaev@suse.de, shakeelb@google.com, stable@kernel.org,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        viro@zeniv.linux.org.uk
-Subject: Re: [PATCH 5.4 051/389] epoll: autoremove wakers even more
- aggressively
-Message-ID: <Y1ljluiq8Ojp4vdL@kroah.com>
-References: <20220823080117.738248512@linuxfoundation.org>
- <20221026160051.5340-1-mdecandia@gmail.com>
+        Wed, 26 Oct 2022 12:43:21 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4355573C35
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:43:20 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id e15so11847068qvo.4
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:43:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mzWvOz4xlS7L3D9T4rYd7JcZn+pzJHU2kPLw2mhBPuM=;
+        b=KOkEfP2xpRurEbYg+xQTVNwiZfGj3RiNZiEcehd4CgcqnnG4IFx3UKtOjlGSemDbPQ
+         0OnIs/LTiX2qwceK4CMeaxVEwrzkEfSRa8S7l5FS1SdMXA5GTBkMXY/24hwIPJXP2eQb
+         s3bYfXUbUpb65zOyBbZC0B7YfrgaMcFn6rz01Wc1k82pcL3/hBFEyLa01MUXlcQLmNZB
+         i1oIVykGn16gBLLLlq4lAx2i1M8SqQykQ2EfLg6o7i0OQOewgwOpuwUERwW74CSMc1X0
+         eO6iX0gjFeuplDPso9WHI8nrpFIr0kjWVwS1ldABtBxDnwKiGyR3MWaUN1UvUdbXdKFq
+         2EdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mzWvOz4xlS7L3D9T4rYd7JcZn+pzJHU2kPLw2mhBPuM=;
+        b=Utpus0f+/sxlh4gE5eE0Q0m78AL2yMaxvGPf4jhqIMCU3F2wTcC94efAfjSYz714Oc
+         uxQCYJGGyQwgnhZv9TQQ4tJ25fKa7EH9efxAimnDsBgxyDOmGhBcrB2MS/s4TNW2jEH+
+         An6tKkYm//XzdPtwt1wXYZ5xUPfhmugrQy6cbj/yhUTR2/61zhazvi14fhXxVqm7ShlN
+         xWFQlqy+5yefyGEb5dm38nDWs/cIeZ52z3T3Fbjnat0paFxsmiSPQNt7nMgMR4xTcJoz
+         DLK5GqKot+yyz6EZIcNqQjN/r4EbafnS+cD7KDJkjZavmhZjqGzWdvr8BRwGBqRjhKpt
+         bKfg==
+X-Gm-Message-State: ACrzQf0YgJmU63ZpAwKDi0IKdhhXiM/6b4zOfM6X0HRz4z8yAXoqq8gX
+        aCKrvGwLWcLHNN0l5eW6D41tXw==
+X-Google-Smtp-Source: AMsMyM4iAG3FrGgLa5u3fVo4ArWXqF/ECAWI08B9jzMkRd9NbPYsZvn6nwCH0MlU4TpX4OF79c3ACQ==
+X-Received: by 2002:a05:6214:d42:b0:4bb:75aa:7d7 with SMTP id 2-20020a0562140d4200b004bb75aa07d7mr13016281qvr.22.1666802599432;
+        Wed, 26 Oct 2022 09:43:19 -0700 (PDT)
+Received: from krzk-bin.. ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id j6-20020a37c246000000b006eed47a1a1esm3989938qkm.134.2022.10.26.09.43.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 09:43:18 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 0/3] arm64/slimbus/dt-bindings: convert to DT Schema, minor cleanups
+Date:   Wed, 26 Oct 2022 12:43:12 -0400
+Message-Id: <20221026164315.39038-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026160051.5340-1-mdecandia@gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 06:00:51PM +0200, mdecandia@gmail.com wrote:
-> 
-> Subject: [PATCH 5.4 051/389] epoll: autoremove wakers even more aggressively
-> 
-> Hi all,
-> I'm facing an hangup of runc command during startup of containers on Ubuntu 20.04,
-> just adding this patch to my updated linux kernel 5.4.210.
+Hi,
 
-I do not understand what you mean by this, sorry.
+Changes since v2
+================
+1. None, rebased and dropped applied patches.
 
-What kernel causes problems?
+Changes since v1
+================
+1. Fix commit title typo (Steev).
+2. Add Rb/Tb tags.
 
-What commit causes issues?
+Dependencies
+============
+No dependencies. Binding patches are independent from DTS.
 
-What commit fixed the issue?
+Best regards,
+Krzysztof
 
-confused,
+Krzysztof Kozlowski (3):
+  dt-bindings: slimbus: convert bus description to DT schema
+  dt-bindings: slimbus: qcom,slim: convert to DT schema
+  dt-bindings: slimbus: qcom,slim-ngd: convert to DT schema
 
-greg k-h
+ .../devicetree/bindings/slimbus/bus.txt       |  60 ---------
+ .../bindings/slimbus/qcom,slim-ngd.yaml       | 120 ++++++++++++++++++
+ .../bindings/slimbus/qcom,slim.yaml           |  86 +++++++++++++
+ .../bindings/slimbus/slim-ngd-qcom-ctrl.txt   |  84 ------------
+ .../bindings/slimbus/slim-qcom-ctrl.txt       |  39 ------
+ .../devicetree/bindings/slimbus/slimbus.yaml  |  95 ++++++++++++++
+ 6 files changed, 301 insertions(+), 183 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/slimbus/bus.txt
+ create mode 100644 Documentation/devicetree/bindings/slimbus/qcom,slim-ngd.yaml
+ create mode 100644 Documentation/devicetree/bindings/slimbus/qcom,slim.yaml
+ delete mode 100644 Documentation/devicetree/bindings/slimbus/slim-ngd-qcom-ctrl.txt
+ delete mode 100644 Documentation/devicetree/bindings/slimbus/slim-qcom-ctrl.txt
+ create mode 100644 Documentation/devicetree/bindings/slimbus/slimbus.yaml
+
+-- 
+2.34.1
+
