@@ -2,159 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA9C60E6D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7D360E6DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233757AbiJZRyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 13:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
+        id S234133AbiJZRy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 13:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233538AbiJZRyo (ORCPT
+        with ESMTP id S234250AbiJZRyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 13:54:44 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937E16399;
-        Wed, 26 Oct 2022 10:54:40 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id 16-20020a9d0490000000b0066938311495so2087314otm.4;
-        Wed, 26 Oct 2022 10:54:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zmbqUT3CmVbU0HzMpVAJyOgaDhVx3i4wGwXhoedlXNs=;
-        b=xRBLKsdXdOUu5CKFUhSceEQcNAZIrgHWHRzFWOqLTtyGZglh1RiKq7dv8tS80LmO8s
-         cf50hFlvo0L/y8qKPJBAUMH8mW9rFuMdwSji4SH1TcZyRQPPeR9+ViV0Em4EABW7ISbZ
-         6SOT4GGTHTMPiTkP1AwIEnH76fTCeYsGYRGQd+06/prlAAD2BIrvZhPn/4w9nnFCG0gb
-         ndS5B5pAMKEL/C3y/Cyczf6h+xBa5TNd517f19+9CufH8YlVig2JArfRzinwNAwp7Aoa
-         WoYUblYLSkCN5Du3h33x5PFsKUuMZnAop9A5+buzTKD0YhX9413QR8RSzeKrBXZQnbI6
-         Crcg==
-X-Gm-Message-State: ACrzQf34tJDUQ1Xw/Y+iqtCck4OMYEXlE7qNlT4ysO25aRXoKt3XiL4u
-        jckV6RygiPOa+mU0001HZQ==
-X-Google-Smtp-Source: AMsMyM7u/5xsmyjQ88MnSABwibsj9ORVBkFwkQ3aUNkf/hBMroiSAacuWdQE9wICk8HxIgRsWTUPqg==
-X-Received: by 2002:a05:6830:d02:b0:661:9466:dfc3 with SMTP id bu2-20020a0568300d0200b006619466dfc3mr22434647otb.333.1666806880150;
-        Wed, 26 Oct 2022 10:54:40 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n44-20020a056870972c00b0011f22e74d5fsm3405812oaq.20.2022.10.26.10.54.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 10:54:39 -0700 (PDT)
-Received: (nullmailer pid 820018 invoked by uid 1000);
-        Wed, 26 Oct 2022 17:54:41 -0000
-Date:   Wed, 26 Oct 2022 12:54:41 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Johan Hovold <johan@kernel.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 01/12] dt-bindings: display/msm: Add binding for
- SC8280XP MDSS
-Message-ID: <20221026175441.GA812056-robh@kernel.org>
-References: <20221026032624.30871-1-quic_bjorande@quicinc.com>
- <20221026032624.30871-2-quic_bjorande@quicinc.com>
+        Wed, 26 Oct 2022 13:54:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E444720365;
+        Wed, 26 Oct 2022 10:54:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AAB262018;
+        Wed, 26 Oct 2022 17:54:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07A17C4314E;
+        Wed, 26 Oct 2022 17:54:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666806891;
+        bh=1zMYOW4OGqV7CIj0igClXnh2UOdKvHi5CykJj1DT2RE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=XLqyn7YMuswnyGGt7j1DK4BhUt6nikzGyFyef7OeUi58Z3AN9F5DbDCp742WZVfBd
+         i7QPJC01uRsTKKPUjKl2NTUFWPV8Fu9iIxQfexwvM4nkL9xxOyDntWwWitUnoDYdmN
+         AFad8QNHSDUeY4+XEXJ4fe6vhBI+YPwt8PQO6K1lT1uXwX/GF/zZ62UV2S5c2L8dAI
+         fOK0o636grFSLxbw7IfslXrO2usd1JU9ZE6RFp8rx1SPsxEE9vxipkb4t9NuEpUPhz
+         pB8LijwQd7oWQn8Or2MBSsQ9/pMU2viz+xzkwUJ04jsg34XKonpx15lNI2fbbV+zRt
+         ZXwMI5XFOhlTg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        Da Xue <da@libre.computer>, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20221026-spicc-burst-delay-v1-0-1be5ffb7051a@linaro.org>
+References: <20221026-spicc-burst-delay-v1-0-1be5ffb7051a@linaro.org>
+Subject: Re: [PATCH] spi: meson-spicc: move wait completion in driver to take bursts delay in account
+Message-Id: <166680688974.833294.9389296907324181570.b4-ty@kernel.org>
+Date:   Wed, 26 Oct 2022 18:54:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026032624.30871-2-quic_bjorande@quicinc.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 08:26:13PM -0700, Bjorn Andersson wrote:
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+On Wed, 26 Oct 2022 09:58:28 +0200, Neil Armstrong wrote:
+> Some delay occurs between each bursts, thus the default delay is wrong
+> and a timeout will occur with big enough transfers.
 > 
-> Add binding for the display subsystem and display processing unit in the
-> Qualcomm SC8280XP platform.
+> The solution is to handle the timeout management in the driver and
+> add some delay for each bursts in the timeout calculation.
 > 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
 > 
-> Changes since v2:
-> - Cleaned up description and interconnect definitions
-> - Added opp-table
-> 
->  .../bindings/display/msm/dpu-sc8280xp.yaml    | 287 ++++++++++++++++++
->  1 file changed, 287 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/msm/dpu-sc8280xp.yaml
+> [...]
 
-Doesn't this need to be reworked to match Dmitry's restructuring?
+Applied to
 
-> 
-> diff --git a/Documentation/devicetree/bindings/display/msm/dpu-sc8280xp.yaml b/Documentation/devicetree/bindings/display/msm/dpu-sc8280xp.yaml
-> new file mode 100644
-> index 000000000000..24e7a1562fe7
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/msm/dpu-sc8280xp.yaml
-> @@ -0,0 +1,287 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/msm/dpu-sc8280xp.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Display Processing Unit for SC8280XP
-> +
-> +maintainers:
-> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
-> +
-> +description:
-> +  Device tree bindings for MSM Mobile Display Subsystem (MDSS) that encapsulates
-> +  sub-blocks like DPU display controller, DSI and DP interfaces etc.
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,sc8280xp-mdss
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  reg-names:
-> +    const: mdss
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Display AHB clock from gcc
-> +      - description: Display AHB clock from dispcc
-> +      - description: Display core clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: iface
-> +      - const: ahb
-> +      - const: core
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  interrupt-controller: true
-> +
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> +  "#address-cells": true
-> +
-> +  "#size-cells": true
+Thanks!
 
-enum: [ 1, 2 ]
+[1/1] spi: meson-spicc: move wait completion in driver to take bursts delay in account
+      commit: 04694e50020b62b10bd0d46ff9e9708a6e1c7eb3
 
-(Nothing else sets that)
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Rob
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
