@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD23C60E7E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:00:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ACBD60E80D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234520AbiJZTAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 15:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32866 "EHLO
+        id S234725AbiJZTBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 15:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234508AbiJZS7p (ORCPT
+        with ESMTP id S234577AbiJZTAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 14:59:45 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A168635A;
-        Wed, 26 Oct 2022 11:59:43 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QIt9cF024177;
+        Wed, 26 Oct 2022 15:00:31 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0D8E0B4;
+        Wed, 26 Oct 2022 11:59:49 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QIoq70016334;
         Wed, 26 Oct 2022 18:59:31 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=s8AeyNxlG4m1V3sItLwIvu4Xseke+3PLoybvHDWNrVU=;
- b=VBzYjVEhJ9PKN/3h/jMMcP54TWgVLl8jVqLowpPs8+CNiRmEn3BGA/CFzuf34gJ6Kl71
- Cn3FJxEfWEXJB1aF9MyOHieGJR/MuqxkP4dCGwMZt6HYtGcCclDafT2kxLJUk1o/KWIp
- /ghlzFt9QSgZhXIi5Oak+eL617oEdhlUTbzaAAAfjZZmCzWPtQ9Cmh9sII+nBbFT8WQe
- /YHrt2wiJYEym5FMUdY17TRJf1M6ZsRe0uDPA1WwVtqYp+R+vPijN69u+iB1UeW0WRkJ
- tc0vXsie1GzyohbuZlGf2Wl9zfUcCzIgwZkg9Xz2ChTDSGabpOoTErQQTqxivxJzpBLF OA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kfaj000nv-1
+ bh=GvXA7z5IQZxKRT0LbI1ydxR1t3A4IO5H0ORgws0t6KQ=;
+ b=LWigRgVUFpUgXbn5HQyi48NiKgnHvlDsi+dEDmoU4cCGJ8PGNR2lyR8i9tydjwywDhuV
+ pfVlkoKJ0+KWp7+390nNcjZsGeNtETprgKvGbgmIWUqkEEo76jP+UQip24epKqx6Ti7Q
+ 7ngVRuSF+oDvuLGETE6BfWvBE7OtG0iMaBsn/Ro3xdYvMzWZiYxY1MwoOqBH0jMjCKUj
+ 06jK7lII0xFg60bfsUfxzQDnZTzAPZn9Xf0bNIXwICboCf64QV3dvq+10U5w12ce/SCH
+ seTd8mN6Yzwl+NwnuZ2CRCJMtknRyJrcFsUTEYgwC25Th9J2N+FlWKmNn4qhma0b0AfI vQ== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kfah5r0px-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Wed, 26 Oct 2022 18:59:31 +0000
-Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29QIxTiQ006384
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29QIxUPm026330
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Oct 2022 18:59:29 GMT
+        Wed, 26 Oct 2022 18:59:30 GMT
 Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 26 Oct 2022 11:59:28 -0700
+ 15.2.986.29; Wed, 26 Oct 2022 11:59:29 -0700
 From:   Elliot Berman <quic_eberman@quicinc.com>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>
 CC:     Elliot Berman <quic_eberman@quicinc.com>,
         Murali Nalajala <quic_mnalajal@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
@@ -49,27 +50,25 @@ CC:     Elliot Berman <quic_eberman@quicinc.com>,
         Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
         Andy Gross <agross@kernel.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        "Mark Rutland" <mark.rutland@arm.com>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Marc Zyngier" <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
         Jonathan Corbet <corbet@lwn.net>,
-        "Will Deacon" <will@kernel.org>,
+        Will Deacon <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        "Arnd Bergmann" <arnd@arndb.de>,
+        Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Amol Maheshwari <amahesh@qti.qualcomm.com>,
         Kalle Valo <kvalo@kernel.org>, <devicetree@vger.kernel.org>,
         <linux-doc@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 06/21] virt: gunyah: Identify hypervisor version
-Date:   Wed, 26 Oct 2022 11:58:31 -0700
-Message-ID: <20221026185846.3983888-7-quic_eberman@quicinc.com>
+Subject: [PATCH v6 07/21] mailbox: Allow direct registration to a channel
+Date:   Wed, 26 Oct 2022 11:58:32 -0700
+Message-ID: <20221026185846.3983888-8-quic_eberman@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221026185846.3983888-1-quic_eberman@quicinc.com>
 References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
@@ -81,15 +80,16 @@ X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YyuZNreyNd4sgugA2VUIDJjT3wyDFKKe
-X-Proofpoint-ORIG-GUID: YyuZNreyNd4sgugA2VUIDJjT3wyDFKKe
+X-Proofpoint-ORIG-GUID: GvgNjlfWkYPmB8rLFvQsqtfqqgcI4t82
+X-Proofpoint-GUID: GvgNjlfWkYPmB8rLFvQsqtfqqgcI4t82
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-10-26_07,2022-10-26_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
- bulkscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=999
- malwarescore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2210260105
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 mlxscore=0 priorityscore=1501 lowpriorityscore=0
+ malwarescore=0 clxscore=1015 phishscore=0 spamscore=0 adultscore=0
+ bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2210260107
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -99,108 +99,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Export the version of Gunyah which is reported via the hyp_identify
-hypercall. Increments of the major API version indicate possibly
-backwards incompatible changes.
-
-Export the hypervisor identity so that Gunyah drivers can act according
-to the major API version.
+Support virtual mailbox controllers and clients which are not platform
+devices or come from the devicetree by allowing them to match client to
+channel via some other mechanism.
 
 Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- drivers/virt/Makefile        |  1 +
- drivers/virt/gunyah/Makefile |  1 +
- drivers/virt/gunyah/gunyah.c | 46 ++++++++++++++++++++++++++++++++++++
- include/linux/gunyah.h       |  6 +++++
- 4 files changed, 54 insertions(+)
- create mode 100644 drivers/virt/gunyah/Makefile
- create mode 100644 drivers/virt/gunyah/gunyah.c
+ drivers/mailbox/mailbox.c      | 96 ++++++++++++++++++++++++----------
+ include/linux/mailbox_client.h |  1 +
+ 2 files changed, 69 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/virt/Makefile b/drivers/virt/Makefile
-index 093674e05c40..10b87f934730 100644
---- a/drivers/virt/Makefile
-+++ b/drivers/virt/Makefile
-@@ -11,3 +11,4 @@ obj-$(CONFIG_NITRO_ENCLAVES)	+= nitro_enclaves/
- obj-$(CONFIG_ACRN_HSM)		+= acrn/
- obj-$(CONFIG_EFI_SECRET)	+= coco/efi_secret/
- obj-$(CONFIG_SEV_GUEST)		+= coco/sev-guest/
-+obj-$(CONFIG_GUNYAH)		+= gunyah/
-diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
-new file mode 100644
-index 000000000000..2ac4ee64b89d
---- /dev/null
-+++ b/drivers/virt/gunyah/Makefile
-@@ -0,0 +1 @@
-+obj-$(CONFIG_GUNYAH) += gunyah.o
-diff --git a/drivers/virt/gunyah/gunyah.c b/drivers/virt/gunyah/gunyah.c
-new file mode 100644
-index 000000000000..c34c9046fc08
---- /dev/null
-+++ b/drivers/virt/gunyah/gunyah.c
-@@ -0,0 +1,46 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#define pr_fmt(fmt) "gunyah: " fmt
-+
-+#include <linux/gunyah.h>
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/printk.h>
-+
-+struct gh_hypercall_hyp_identify_resp gunyah_api;
-+EXPORT_SYMBOL_GPL(gunyah_api);
-+
-+static const uint32_t gunyah_known_uuids[][4] = {
-+	{0x19bd54bd, 0x0b37571b, 0x946f609b, 0x54539de6}, /* QC_HYP (Qualcomm's build) */
-+	{0x673d5f14, 0x9265ce36, 0xa4535fdb, 0xc1d58fcd}, /* GUNYAH (open source build) */
-+};
-+
-+static int __init gunyah_init(void)
+diff --git a/drivers/mailbox/mailbox.c b/drivers/mailbox/mailbox.c
+index 4229b9b5da98..adf36c05fa43 100644
+--- a/drivers/mailbox/mailbox.c
++++ b/drivers/mailbox/mailbox.c
+@@ -317,6 +317,71 @@ int mbox_flush(struct mbox_chan *chan, unsigned long timeout)
+ }
+ EXPORT_SYMBOL_GPL(mbox_flush);
+ 
++static int __mbox_bind_client(struct mbox_chan *chan, struct mbox_client *cl)
 +{
-+	u32 uid[4];
-+	int i;
++	struct device *dev = cl->dev;
++	unsigned long flags;
++	int ret;
 +
-+	gh_hypercall_get_uid(uid);
++	if (chan->cl || !try_module_get(chan->mbox->dev->driver->owner)) {
++		dev_dbg(dev, "%s: mailbox not free\n", __func__);
++		return -EBUSY;
++	}
 +
-+	for (i = 0; i < ARRAY_SIZE(gunyah_known_uuids); i++)
-+		if (!memcmp(uid, gunyah_known_uuids[i], sizeof(uid)))
-+			break;
++	spin_lock_irqsave(&chan->lock, flags);
++	chan->msg_free = 0;
++	chan->msg_count = 0;
++	chan->active_req = NULL;
++	chan->cl = cl;
++	init_completion(&chan->tx_complete);
 +
-+	if (i == ARRAY_SIZE(gunyah_known_uuids))
-+		return -ENODEV;
++	if (chan->txdone_method	== TXDONE_BY_POLL && cl->knows_txdone)
++		chan->txdone_method = TXDONE_BY_ACK;
 +
-+	gh_hypercall_hyp_identify(&gunyah_api);
++	spin_unlock_irqrestore(&chan->lock, flags);
 +
-+	pr_info("Running under Gunyah hypervisor %llx/v%u\n",
-+		FIELD_GET(GH_API_INFO_VARIANT_MASK, gunyah_api.api_info),
-+		gh_api_version());
++	if (chan->mbox->ops->startup) {
++		ret = chan->mbox->ops->startup(chan);
++
++		if (ret) {
++			dev_err(dev, "Unable to startup the chan (%d)\n", ret);
++			mbox_free_channel(chan);
++			return ret;
++		}
++	}
 +
 +	return 0;
 +}
-+arch_initcall(gunyah_init);
 +
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Gunyah Hypervisor Driver");
-diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
-index 2765d2b40198..166156f69df9 100644
---- a/include/linux/gunyah.h
-+++ b/include/linux/gunyah.h
-@@ -92,6 +92,12 @@ struct gh_hypercall_hyp_identify_resp {
- 	u64 api_info;
- 	u64 flags[3];
- };
-+extern struct gh_hypercall_hyp_identify_resp gunyah_api;
-+
-+static inline u16 gh_api_version(void)
++/**
++ * mbox_bind_client - Request a mailbox channel.
++ * @chan: The mailbox channel to bind the client to.
++ * @cl: Identity of the client requesting the channel.
++ *
++ * The Client specifies its requirements and capabilities while asking for
++ * a mailbox channel. It can't be called from atomic context.
++ * The channel is exclusively allocated and can't be used by another
++ * client before the owner calls mbox_free_channel.
++ * After assignment, any packet received on this channel will be
++ * handed over to the client via the 'rx_callback'.
++ * The framework holds reference to the client, so the mbox_client
++ * structure shouldn't be modified until the mbox_free_channel returns.
++ *
++ * Return: 0 if the channel was assigned to the client successfully.
++ *         <0 for request failure.
++ */
++int mbox_bind_client(struct mbox_chan *chan, struct mbox_client *cl)
 +{
-+	return FIELD_GET(GH_API_INFO_API_VERSION_MASK, gunyah_api.api_info);
++	int ret;
++
++	mutex_lock(&con_mutex);
++	ret = __mbox_bind_client(chan, cl);
++	mutex_unlock(&con_mutex);
++
++	return ret;
 +}
++EXPORT_SYMBOL_GPL(mbox_bind_client);
++
+ /**
+  * mbox_request_channel - Request a mailbox channel.
+  * @cl: Identity of the client requesting the channel.
+@@ -340,7 +405,6 @@ struct mbox_chan *mbox_request_channel(struct mbox_client *cl, int index)
+ 	struct mbox_controller *mbox;
+ 	struct of_phandle_args spec;
+ 	struct mbox_chan *chan;
+-	unsigned long flags;
+ 	int ret;
  
- void gh_hypercall_get_uid(u32 uid[4]);
- void gh_hypercall_hyp_identify(struct gh_hypercall_hyp_identify_resp *hyp_identity);
+ 	if (!dev || !dev->of_node) {
+@@ -372,33 +436,9 @@ struct mbox_chan *mbox_request_channel(struct mbox_client *cl, int index)
+ 		return chan;
+ 	}
+ 
+-	if (chan->cl || !try_module_get(mbox->dev->driver->owner)) {
+-		dev_dbg(dev, "%s: mailbox not free\n", __func__);
+-		mutex_unlock(&con_mutex);
+-		return ERR_PTR(-EBUSY);
+-	}
+-
+-	spin_lock_irqsave(&chan->lock, flags);
+-	chan->msg_free = 0;
+-	chan->msg_count = 0;
+-	chan->active_req = NULL;
+-	chan->cl = cl;
+-	init_completion(&chan->tx_complete);
+-
+-	if (chan->txdone_method	== TXDONE_BY_POLL && cl->knows_txdone)
+-		chan->txdone_method = TXDONE_BY_ACK;
+-
+-	spin_unlock_irqrestore(&chan->lock, flags);
+-
+-	if (chan->mbox->ops->startup) {
+-		ret = chan->mbox->ops->startup(chan);
+-
+-		if (ret) {
+-			dev_err(dev, "Unable to startup the chan (%d)\n", ret);
+-			mbox_free_channel(chan);
+-			chan = ERR_PTR(ret);
+-		}
+-	}
++	ret = __mbox_bind_client(chan, cl);
++	if (ret)
++		chan = ERR_PTR(ret);
+ 
+ 	mutex_unlock(&con_mutex);
+ 	return chan;
+diff --git a/include/linux/mailbox_client.h b/include/linux/mailbox_client.h
+index 65229a45590f..734694912ef7 100644
+--- a/include/linux/mailbox_client.h
++++ b/include/linux/mailbox_client.h
+@@ -37,6 +37,7 @@ struct mbox_client {
+ 	void (*tx_done)(struct mbox_client *cl, void *mssg, int r);
+ };
+ 
++int mbox_bind_client(struct mbox_chan *chan, struct mbox_client *cl);
+ struct mbox_chan *mbox_request_channel_byname(struct mbox_client *cl,
+ 					      const char *name);
+ struct mbox_chan *mbox_request_channel(struct mbox_client *cl, int index);
 -- 
 2.25.1
 
