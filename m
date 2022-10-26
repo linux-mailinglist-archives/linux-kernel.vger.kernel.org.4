@@ -2,470 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 607C060E036
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D633160E03A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233670AbiJZMGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 08:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
+        id S233526AbiJZMGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 08:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233671AbiJZMGf (ORCPT
+        with ESMTP id S233673AbiJZMGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:06:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9346886F89;
-        Wed, 26 Oct 2022 05:06:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45E07B81CF1;
-        Wed, 26 Oct 2022 12:06:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A3CC43470;
-        Wed, 26 Oct 2022 12:06:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666785984;
-        bh=9/pt6cvIMT2kjajWWK1+2BhTygA31Z0Vhh+eUHAPOTA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KWFrAjy5183/rWYKbrwgcP92CnH/283qY8g6eeD8gohTUbGbRPtAWLz3d73vj3F0F
-         vfO/3qbzxnG7WaXWidxEE+aWJ6+Z3757QBESx1cVe0GW/rSiGem9VvFXgV59b/TSka
-         O2kYyF3su61GGtnf57t/wrSY+oiVNoNS4tR94RmGYtX4UFaxJAHwSOVHxXvhJTwbM+
-         oThtxco5EJJODLiZKs0T6PbBog2NmW4ahqPwh+TikGr635RjIItSCO+9M11eNW6UTV
-         m2O++kLVSy0GAIFxWXrn/e3Jw42O37vCi7lc+uPSBScRmUJbEyvAd1dP6EeDL0vP7k
-         tT2EEesr6UVbg==
-Received: by mail-ej1-f49.google.com with SMTP id y14so20578691ejd.9;
-        Wed, 26 Oct 2022 05:06:23 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0PADkb+gokQsrcUlginEiMkUqEBiVQIcUqViIkbrwQtgzf10tl
-        TZfq1Je1yymGPOk/H1Xm7yoGBHMYUFXhGfUQI50=
-X-Google-Smtp-Source: AMsMyM7+iuZhZY6uasj6Cgupw9IelO0e2oUQFge+5pjQybB95WR6cnGKXe0bFiluy58Iel9hWHQ2u6RbsigiSbG9AyY=
-X-Received: by 2002:a17:907:31c3:b0:770:852b:71a2 with SMTP id
- xf3-20020a17090731c300b00770852b71a2mr37312080ejb.557.1666785981981; Wed, 26
- Oct 2022 05:06:21 -0700 (PDT)
+        Wed, 26 Oct 2022 08:06:38 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CFC8E9A9
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 05:06:37 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id 13so20633003ejn.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 05:06:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AqAVGKJsGpAiDy8QH7vQCuUMfc+5BKxsR+DFSmRJpWo=;
+        b=XDmKR2Z7KTJnbUjGeC8zmqBt0V198AEmIzxVjLZBBIVqjc+O5gri3l4XhykXTAfV8u
+         vmAgUG4pNEciPdCyVOpgoteEN1gcSfQDBahjX6SkliA+Dz+P3qHnPhIZ+OleY/IBQnep
+         QO40c8bISPt8xTR9RCsBVtOG/obMhv9CXcXBs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AqAVGKJsGpAiDy8QH7vQCuUMfc+5BKxsR+DFSmRJpWo=;
+        b=aPIWKzu6ClY3P4xvxTa2TE2pQKhi9vcbhCLKo/i5YbEhVT84l2CHBMF4U7oaaXOCny
+         TLoEN6lyvgumHoEBst2OvxVALUU7tHKJWiwus+mBC2sDoUfOaJWXqoXhu0Tr+KhhZJIZ
+         /rcGSma9U8dDXZ1E0TAZOqmAGc2oEZj8XjxxQgUpbk2vlJSL2ot5kv66rHKeJ83grO1y
+         TpdKlwUSyhozL2lWnXoqyIh4lPUq9HFl0OqqNvGSFVTs1bEqDDNtRJYK1Vxh+1imIDiQ
+         q+ADqjKHQlH4hFizf5HeJ0sRUvWeXUVnALOdri9nTGeiYhtxCwHgEXo62/7YWDOjHdcz
+         WlcQ==
+X-Gm-Message-State: ACrzQf37zmhRjglBOKWTC/9z061TBd5MjYXgtZ8ZN6ezSyWqYm95rH9f
+        taEBSkO/4LlKiXbq18TZvKCqo1bmDtss/nm4
+X-Google-Smtp-Source: AMsMyM6pqwAq908Ifv/m8kcz/Hpbspm4mdhnPlreUe33TEqSOqF0j0v+5feOzeQ2AFKSCo+e3EQLIw==
+X-Received: by 2002:a17:907:3e85:b0:73d:60cc:5d06 with SMTP id hs5-20020a1709073e8500b0073d60cc5d06mr38359298ejc.722.1666785996191;
+        Wed, 26 Oct 2022 05:06:36 -0700 (PDT)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:b47a:bedd:2941:1e3f])
+        by smtp.gmail.com with ESMTPSA id y18-20020a17090668d200b0079e11b8e891sm2892546ejr.125.2022.10.26.05.06.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 05:06:35 -0700 (PDT)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 26 Oct 2022 14:06:08 +0200
+Subject: [PATCH v3 3/7] media: uvcvideo: Only call status ep if hw supports it
 MIME-Version: 1.0
-References: <20221026030256.30512-1-zhuyinbo@loongson.cn> <20221026030256.30512-2-zhuyinbo@loongson.cn>
-In-Reply-To: <20221026030256.30512-2-zhuyinbo@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 26 Oct 2022 20:06:08 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H76oz2hNGu06JkQGkVzPZW5u-MbcX3HuxCpMGXgBkahgw@mail.gmail.com>
-Message-ID: <CAAhV-H76oz2hNGu06JkQGkVzPZW5u-MbcX3HuxCpMGXgBkahgw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] clk: clk-loongson2: add clock controller driver support
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20220920-resend-powersave-v3-3-c47856d8757e@chromium.org>
+References: <20220920-resend-powersave-v3-0-c47856d8757e@chromium.org>
+In-Reply-To: <20220920-resend-powersave-v3-0-c47856d8757e@chromium.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Max Staudt <mstaudt@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org
+X-Mailer: b4 0.11.0-dev-d93f8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4446; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=F8pfFKADrjPOkMpJU6y1lLHTtr/oz5pvCH4FNibFbG8=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjWSLAurZv8vh+QEbWr0OdhYu2rsG6+WOCxbGXwS+m
+ ez176O+JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY1kiwAAKCRDRN9E+zzrEiF7tD/
+ 9ybn2voA0FAQGMcdiNEyxfLo+fjDkj1uSkmMHeoaYff48tRx0DaeQSsKFvyx+49aeafZK/t8ENhe3w
+ WDzbLNac8KSI4hm3dmnDIO6hW7XzPUFX0hBHeAwvd4+2EizI+Ygg4nnG6uShEuUv/Wj4ELtwHUiTYI
+ D+KrUErS4MTv5/x/Wyo7Ze4Uv+hv7IFr99slHLK+ObaGmSyJ8FWdp3OKadu0mNTKeiqHJgUpbWlT32
+ ODjIed2UZpL5A3JF4nG1DYhFPpAUxrA/xfsx3JM1wprfA2uVKJMdX9GcPaxBPaxEl8zW9NS0IiEW9p
+ a9Pr0I/qFX4swCzz2Pj3xX3IUAG7qacFt2zj5CK8tzduxJpsgzhOL7B+7Gj0CHZUDNNtD4DrAObXh/
+ mGnwIAY9O1p6MaqfhygTrYEQb3OpUufC4rbDDvO4J0Y7106rKZflHf/7AGLi98Pjn82qb4Ouh7HNaI
+ vYvE998QjUFRijxkqSGP+yP4W1FTsluiUTawzv9RmmG9KpjOAo3ak/nNH6j2J6WE+XswQ7EI0WWdAk
+ PBju0sU7WmVsJAxz7Ori1HbLY0pUTkWxo/VI2B373jPmYID2/5cIhj9nzWna1stHzGZicB3irin0Vm
+ zpjU6rcaRZPQtHJlKH09PCNb1Wy+D5uz6okKF120YbTC8kq5GLiYYkbcw4TQ==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yinbo,
+Instead of calling uvc_status_* regardless if the hw supports it or not,
+make all the calls conditional.
 
-On Wed, Oct 26, 2022 at 11:03 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
->
-> This driver provides support for clock controller on Loongson2 SoC
-> , the Loongson2 SoC uses a 100MHz clock as the PLL reference clock
-Use Loongson-2, including in commit message, Kconfig description and comments.
+This simplifies the locking during suspend/resume.
 
-> , there are five independent PLLs inside, each of which PLL can
-> provide up to three sets of frequency dependent clock outputs.
->
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
-> Change in v4:
->                 1. Fixup clock-names that replace "xxx-clk" with "xxx".
->
->  MAINTAINERS                  |   1 +
->  arch/loongarch/Kconfig       |   1 +
->  arch/loongarch/kernel/time.c |   3 +
->  drivers/clk/Kconfig          |   9 ++
->  drivers/clk/Makefile         |   1 +
->  drivers/clk/clk-loongson2.c  | 285 +++++++++++++++++++++++++++++++++++
->  6 files changed, 300 insertions(+)
->  create mode 100644 drivers/clk/clk-loongson2.c
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index b6aae412de9c..f01d60cd5c3b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11911,6 +11911,7 @@ LOONGSON2 SOC SERIES CLOCK DRIVER
->  M:     Yinbo Zhu <zhuyinbo@loongson.cn>
->  L:     linux-clk@vger.kernel.org
->  S:     Maintained
-> +F:     drivers/clk/clk-loongson2.c
->  F:     include/dt-bindings/clock/loongson,ls2k-clk.h
->
->  LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 26aeb1408e56..8b65f349cd6e 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -122,6 +122,7 @@ config LOONGARCH
->         select USE_PERCPU_NUMA_NODE_ID
->         select USER_STACKTRACE_SUPPORT
->         select ZONE_DMA32
-> +       select COMMON_CLK
->
->  config 32BIT
->         bool
-> diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.c
-> index 786735dcc8d6..09f20bc81798 100644
-> --- a/arch/loongarch/kernel/time.c
-> +++ b/arch/loongarch/kernel/time.c
-> @@ -12,6 +12,7 @@
->  #include <linux/kernel.h>
->  #include <linux/sched_clock.h>
->  #include <linux/spinlock.h>
-> +#include <linux/of_clk.h>
->
->  #include <asm/cpu-features.h>
->  #include <asm/loongarch.h>
-> @@ -214,6 +215,8 @@ int __init constant_clocksource_init(void)
->
->  void __init time_init(void)
->  {
-> +       of_clk_init(NULL);
-> +
->         if (!cpu_has_cpucfg)
->                 const_clock_freq = cpu_clock_freq;
->         else
-> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-> index 48f8f4221e21..88620f86373f 100644
-> --- a/drivers/clk/Kconfig
-> +++ b/drivers/clk/Kconfig
-> @@ -428,6 +428,15 @@ config COMMON_CLK_K210
->         help
->           Support for the Canaan Kendryte K210 RISC-V SoC clocks.
->
-> +config COMMON_CLK_LOONGSON2
-> +       bool "Clock driver for Loongson2 SoC"
-> +       depends on COMMON_CLK && OF
-> +       help
-> +         This driver provides support for Clock Controller that base on
-> +         Common Clock Framework Controller (CCF) on Loongson2 SoC.  The
-> +         Clock Controller can generates and supplies clock to various
-> +         peripherals within the SoC.
-> +
->  source "drivers/clk/actions/Kconfig"
->  source "drivers/clk/analogbits/Kconfig"
->  source "drivers/clk/baikal-t1/Kconfig"
-> diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-> index d5db170d38d2..8ccc7436052f 100644
-> --- a/drivers/clk/Makefile
-> +++ b/drivers/clk/Makefile
-> @@ -75,6 +75,7 @@ obj-$(CONFIG_COMMON_CLK_RS9_PCIE)     += clk-renesas-pcie.o
->  obj-$(CONFIG_COMMON_CLK_VC5)           += clk-versaclock5.o
->  obj-$(CONFIG_COMMON_CLK_WM831X)                += clk-wm831x.o
->  obj-$(CONFIG_COMMON_CLK_XGENE)         += clk-xgene.o
-> +obj-$(CONFIG_COMMON_CLK_LOONGSON2)     += clk-loongson2.o
->
->  # please keep this section sorted lexicographically by directory path name
->  obj-y                                  += actions/
-> diff --git a/drivers/clk/clk-loongson2.c b/drivers/clk/clk-loongson2.c
-> new file mode 100644
-> index 000000000000..359fede40112
-> --- /dev/null
-> +++ b/drivers/clk/clk-loongson2.c
-> @@ -0,0 +1,285 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
-> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
-Why 2023?
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-Huacai
-> + */
-> +
-> +#include <linux/clkdev.h>
-> +#include <linux/err.h>
-> +#include <linux/init.h>
-> +#include <linux/of.h>
-> +#include <linux/of_address.h>
-> +#include <dt-bindings/clock/loongson,ls2k-clk.h>
-> +#include <linux/clk-provider.h>
-> +#include <linux/slab.h>
-> +#include <linux/clk.h>
-> +
-> +#define LOONGSON2_PLL_MULT_SHIFT               32
-> +#define LOONGSON2_PLL_MULT_WIDTH               10
-> +#define LOONGSON2_PLL_DIV_SHIFT                        26
-> +#define LOONGSON2_PLL_DIV_WIDTH                        6
-> +#define LOONGSON2_APB_FREQSCALE_SHIFT          20
-> +#define LOONGSON2_APB_FREQSCALE_WIDTH          3
-> +#define LOONGSON2_USB_FREQSCALE_SHIFT          16
-> +#define LOONGSON2_USB_FREQSCALE_WIDTH          3
-> +#define LOONGSON2_SATA_FREQSCALE_SHIFT         12
-> +#define LOONGSON2_SATA_FREQSCALE_WIDTH         3
-> +
-> +void __iomem *loongson2_pll_base;
-> +static DEFINE_SPINLOCK(loongson2_clk_lock);
-> +static struct clk_hw **hws;
-> +static struct clk_hw_onecell_data *clk_hw_data;
-> +
-> +static struct clk_hw *loongson2_clk_register(struct device *dev,
-> +                                         const char *name,
-> +                                         const char *parent_name,
-> +                                         const struct clk_ops *ops,
-> +                                         unsigned long flags)
-> +{
-> +       int ret;
-> +       struct clk_hw *hw;
-> +       struct clk_init_data init;
-> +
-> +       /* allocate the divider */
-> +       hw = kzalloc(sizeof(*hw), GFP_KERNEL);
-> +       if (!hw)
-> +               return ERR_PTR(-ENOMEM);
-> +
-> +       init.name = name;
-> +       init.ops = ops;
-> +       init.flags = flags | CLK_IS_BASIC;
-> +       init.parent_names = (parent_name ? &parent_name : NULL);
-> +       init.num_parents = (parent_name ? 1 : 0);
-> +       hw->init = &init;
-> +
-> +       /* register the clock */
-> +       ret = clk_hw_register(dev, hw);
-> +       if (ret) {
-> +               kfree(hw);
-> +               hw = ERR_PTR(ret);
-> +       }
-> +
-> +       return hw;
-> +}
-> +
-> +static struct clk_hw *loongson2_clk_pll_register(const char *name,
-> +                               const char *parent, void __iomem *reg)
-> +{
-> +       u64 val;
-> +       u32 mult = 1, div = 1;
-> +
-> +       val = readq((void *)reg);
-> +
-> +       mult = (val >> LOONGSON2_PLL_MULT_SHIFT) &
-> +                       clk_div_mask(LOONGSON2_PLL_MULT_WIDTH);
-> +       div = (val >> LOONGSON2_PLL_DIV_SHIFT) &
-> +                       clk_div_mask(LOONGSON2_PLL_DIV_WIDTH);
-> +
-> +       return clk_hw_register_fixed_factor(NULL, name, parent,
-> +                               CLK_SET_RATE_PARENT, mult, div);
-> +}
-> +
-> +static unsigned long loongson2_apb_recalc_rate(struct clk_hw *hw,
-> +                                         unsigned long parent_rate)
-> +{
-> +       u64 val;
-> +       u32 mult;
-> +       unsigned long rate;
-> +
-> +       val = readq((void *)(loongson2_pll_base + 0x50));
-> +
-> +       mult = (val >> LOONGSON2_APB_FREQSCALE_SHIFT) &
-> +                       clk_div_mask(LOONGSON2_APB_FREQSCALE_WIDTH);
-> +
-> +       rate = parent_rate * (mult + 1);
-> +       do_div(rate, 8);
-> +
-> +       return rate;
-> +}
-> +
-> +static const struct clk_ops loongson2_apb_clk_ops = {
-> +       .recalc_rate = loongson2_apb_recalc_rate,
-> +};
-> +
-> +static unsigned long loongson2_usb_recalc_rate(struct clk_hw *hw,
-> +                                         unsigned long parent_rate)
-> +{
-> +       u64 val;
-> +       u32 mult;
-> +       unsigned long rate;
-> +
-> +       val = readq((void *)(loongson2_pll_base + 0x50));
-> +
-> +       mult = (val >> LOONGSON2_USB_FREQSCALE_SHIFT) &
-> +                       clk_div_mask(LOONGSON2_USB_FREQSCALE_WIDTH);
-> +
-> +       rate = parent_rate * (mult + 1);
-> +       do_div(rate, 8);
-> +
-> +       return rate;
-> +}
-> +
-> +static const struct clk_ops loongson2_usb_clk_ops = {
-> +       .recalc_rate = loongson2_usb_recalc_rate,
-> +};
-> +
-> +static unsigned long loongson2_sata_recalc_rate(struct clk_hw *hw,
-> +                                         unsigned long parent_rate)
-> +{
-> +       u64 val;
-> +       u32 mult;
-> +       unsigned long rate;
-> +
-> +       val = readq((void *)(loongson2_pll_base + 0x50));
-> +
-> +       mult = (val >> LOONGSON2_SATA_FREQSCALE_SHIFT) &
-> +                       clk_div_mask(LOONGSON2_SATA_FREQSCALE_WIDTH);
-> +
-> +       rate = parent_rate * (mult + 1);
-> +       do_div(rate, 8);
-> +
-> +       return rate;
-> +}
-> +
-> +static const struct clk_ops loongson2_sata_clk_ops = {
-> +       .recalc_rate = loongson2_sata_recalc_rate,
-> +};
-> +
-> +static void loongson2_check_clk_hws(struct clk_hw *clks[], unsigned int count)
-> +{
-> +       unsigned int i;
-> +
-> +       for (i = 0; i < count; i++)
-> +               if (IS_ERR(clks[i]))
-> +                       pr_err("Loongson2 clk %u: register failed with %ld\n"
-> +                               , i, PTR_ERR(clks[i]));
-> +}
-> +
-> +static struct clk_hw *loongson2_obtain_fixed_clk_hw(
-> +                                       struct device_node *np,
-> +                                       const char *name)
-> +{
-> +       struct clk *clk;
-> +
-> +       clk = of_clk_get_by_name(np, name);
-> +       if (IS_ERR(clk))
-> +               return ERR_PTR(-ENOENT);
-> +
-> +       return __clk_get_hw(clk);
-> +}
-> +
-> +static void __init loongson2_clocks_init(struct device_node *np)
-> +{
-> +       loongson2_pll_base = of_iomap(np, 0);
-> +
-> +       if (!loongson2_pll_base) {
-> +               pr_err("clk: unable to map loongson2 clk registers\n");
-> +               goto err;
-> +       }
-> +
-> +       clk_hw_data = kzalloc(struct_size(clk_hw_data, hws, LOONGSON2_CLK_END),
-> +                                       GFP_KERNEL);
-> +       if (WARN_ON(!clk_hw_data))
-> +               goto err;
-> +
-> +       clk_hw_data->num = LOONGSON2_CLK_END;
-> +       hws = clk_hw_data->hws;
-> +
-> +       hws[LOONGSON2_REF_100M] = loongson2_obtain_fixed_clk_hw(np,
-> +                                               "ref_100m");
-> +
-> +       hws[LOONGSON2_NODE_PLL] = loongson2_clk_pll_register("node_pll",
-> +                                               "ref_100m",
-> +                                               loongson2_pll_base);
-> +
-> +       hws[LOONGSON2_DDR_PLL] = loongson2_clk_pll_register("ddr_pll",
-> +                                               "ref_100m",
-> +                                               loongson2_pll_base + 0x10);
-> +
-> +       hws[LOONGSON2_DC_PLL] = loongson2_clk_pll_register("dc_pll",
-> +                                               "ref_100m",
-> +                                               loongson2_pll_base + 0x20);
-> +
-> +       hws[LOONGSON2_PIX0_PLL] = loongson2_clk_pll_register("pix0_pll",
-> +                                               "ref_100m",
-> +                                               loongson2_pll_base + 0x30);
-> +
-> +       hws[LOONGSON2_PIX1_PLL] = loongson2_clk_pll_register("pix1_pll",
-> +                                               "ref_100m",
-> +                                               loongson2_pll_base + 0x40);
-> +
-> +       hws[LOONGSON2_NODE_CLK] = clk_hw_register_divider(NULL, "node",
-> +                                               "node_pll", 0,
-> +                                               loongson2_pll_base + 0x8, 0,
-> +                                               6, CLK_DIVIDER_ONE_BASED,
-> +                                               &loongson2_clk_lock);
-> +
-> +       /*
-> +        * The hda clk divisor in the upper 32bits and the clk-prodiver
-> +        * layer code doesn't support 64bit io operation thus a conversion
-> +        * is required that subtract shift by 32 and add 4byte to the hda
-> +        * address
-> +        */
-> +       hws[LOONGSON2_HDA_CLK] = clk_hw_register_divider(NULL, "hda",
-> +                                               "ddr_pll", 0,
-> +                                               loongson2_pll_base + 0x22, 12,
-> +                                               7, CLK_DIVIDER_ONE_BASED,
-> +                                               &loongson2_clk_lock);
-> +
-> +       hws[LOONGSON2_GPU_CLK] = clk_hw_register_divider(NULL, "gpu",
-> +                                               "ddr_pll", 0,
-> +                                               loongson2_pll_base + 0x18, 22,
-> +                                               6, CLK_DIVIDER_ONE_BASED,
-> +                                               &loongson2_clk_lock);
-> +
-> +       hws[LOONGSON2_DDR_CLK] = clk_hw_register_divider(NULL, "ddr",
-> +                                               "ddr_pll", 0,
-> +                                               loongson2_pll_base + 0x18, 0,
-> +                                               6, CLK_DIVIDER_ONE_BASED,
-> +                                               &loongson2_clk_lock);
-> +
-> +       hws[LOONGSON2_GMAC_CLK] = clk_hw_register_divider(NULL, "gmac",
-> +                                               "dc_pll", 0,
-> +                                               loongson2_pll_base + 0x28, 22,
-> +                                               6, CLK_DIVIDER_ONE_BASED,
-> +                                               &loongson2_clk_lock);
-> +
-> +       hws[LOONGSON2_DC_CLK] = clk_hw_register_divider(NULL, "dc",
-> +                                               "dc_pll", 0,
-> +                                               loongson2_pll_base + 0x28, 0,
-> +                                               6, CLK_DIVIDER_ONE_BASED,
-> +                                               &loongson2_clk_lock);
-> +
-> +       hws[LOONGSON2_APB_CLK] = loongson2_clk_register(NULL, "apb",
-> +                                               "gmac",
-> +                                               &loongson2_apb_clk_ops, 0);
-> +
-> +       hws[LOONGSON2_USB_CLK] = loongson2_clk_register(NULL, "usb",
-> +                                               "gmac",
-> +                                               &loongson2_usb_clk_ops, 0);
-> +
-> +       hws[LOONGSON2_SATA_CLK] = loongson2_clk_register(NULL, "sata",
-> +                                               "gmac",
-> +                                               &loongson2_sata_clk_ops, 0);
-> +
-> +       hws[LOONGSON2_PIX0_CLK] = clk_hw_register_divider(NULL, "pix0",
-> +                                               "pix0_pll", 0,
-> +                                               loongson2_pll_base + 0x38, 0, 6,
-> +                                               CLK_DIVIDER_ONE_BASED,
-> +                                               &loongson2_clk_lock);
-> +
-> +       hws[LOONGSON2_PIX1_CLK] = clk_hw_register_divider(NULL, "pix1",
-> +                                               "pix1_pll", 0,
-> +                                               loongson2_pll_base + 0x48, 0, 6,
-> +                                               CLK_DIVIDER_ONE_BASED,
-> +                                               &loongson2_clk_lock);
-> +
-> +       loongson2_check_clk_hws(hws, LOONGSON2_CLK_END);
-> +
-> +       of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
-> +
-> +err:
-> +       iounmap(loongson2_pll_base);
-> +}
-> +
-> +CLK_OF_DECLARE(loongson2_clk, "loongson,ls2k-clk", loongson2_clocks_init);
-> --
-> 2.31.1
->
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index bd3716a359b0..ac87dee77f44 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -1837,7 +1837,8 @@ static void uvc_delete(struct kref *kref)
+ 	struct uvc_device *dev = container_of(kref, struct uvc_device, ref);
+ 	struct list_head *p, *n;
+ 
+-	uvc_status_cleanup(dev);
++	if (dev->int_ep)
++		uvc_status_cleanup(dev);
+ 	uvc_ctrl_cleanup_device(dev);
+ 
+ 	usb_put_intf(dev->intf);
+@@ -1898,7 +1899,8 @@ static void uvc_unregister_video(struct uvc_device *dev)
+ 		uvc_debugfs_cleanup_stream(stream);
+ 	}
+ 
+-	uvc_status_unregister(dev);
++	if (dev->int_ep)
++		uvc_status_unregister(dev);
+ 
+ 	if (dev->vdev.dev)
+ 		v4l2_device_unregister(&dev->vdev);
+@@ -2199,10 +2201,13 @@ static int uvc_probe(struct usb_interface *intf,
+ 	usb_set_intfdata(intf, dev);
+ 
+ 	/* Initialize the interrupt URB. */
+-	if ((ret = uvc_status_init(dev)) < 0) {
+-		dev_info(&dev->udev->dev,
+-			 "Unable to initialize the status endpoint (%d), status interrupt will not be supported.\n",
+-			 ret);
++	if (dev->int_ep) {
++		ret = uvc_status_init(dev);
++		if (ret < 0) {
++			dev_info(&dev->udev->dev,
++				 "Unable to initialize the status endpoint (%d), status interrupt will not be supported.\n",
++				 ret);
++		}
+ 	}
+ 
+ 	ret = uvc_gpio_init_irq(dev);
+@@ -2251,6 +2256,8 @@ static int uvc_suspend(struct usb_interface *intf, pm_message_t message)
+ 	/* Controls are cached on the fly so they don't need to be saved. */
+ 	if (intf->cur_altsetting->desc.bInterfaceSubClass ==
+ 	    UVC_SC_VIDEOCONTROL) {
++		if (!dev->int_ep)
++			return 0;
+ 		mutex_lock(&dev->lock);
+ 		if (dev->users)
+ 			uvc_status_stop(dev);
+@@ -2285,6 +2292,9 @@ static int __uvc_resume(struct usb_interface *intf, int reset)
+ 				return ret;
+ 		}
+ 
++		if (!dev->int_ep)
++			return ret;
++
+ 		mutex_lock(&dev->lock);
+ 		if (dev->users)
+ 			ret = uvc_status_start(dev, GFP_NOIO);
+diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
+index cb90aff344bc..627cf11066e7 100644
+--- a/drivers/media/usb/uvc/uvc_status.c
++++ b/drivers/media/usb/uvc/uvc_status.c
+@@ -277,7 +277,7 @@ int uvc_status_init(struct uvc_device *dev)
+ 	unsigned int pipe;
+ 	int interval;
+ 
+-	if (ep == NULL)
++	if (WARN_ON(!ep))
+ 		return 0;
+ 
+ 	uvc_input_init(dev);
+@@ -312,19 +312,23 @@ int uvc_status_init(struct uvc_device *dev)
+ 
+ void uvc_status_unregister(struct uvc_device *dev)
+ {
++	if (WARN_ON(!dev->int_ep))
++		return;
+ 	usb_kill_urb(dev->int_urb);
+ 	uvc_input_unregister(dev);
+ }
+ 
+ void uvc_status_cleanup(struct uvc_device *dev)
+ {
++	if (WARN_ON(!dev->int_ep))
++		return;
+ 	usb_free_urb(dev->int_urb);
+ 	kfree(dev->status);
+ }
+ 
+ int uvc_status_start(struct uvc_device *dev, gfp_t flags)
+ {
+-	if (dev->int_urb == NULL)
++	if (WARN_ON(!dev->int_ep) || !dev->int_urb)
+ 		return 0;
+ 
+ 	return usb_submit_urb(dev->int_urb, flags);
+@@ -332,5 +336,8 @@ int uvc_status_start(struct uvc_device *dev, gfp_t flags)
+ 
+ void uvc_status_stop(struct uvc_device *dev)
+ {
++	if (WARN_ON(!dev->int_ep) || !dev->int_urb)
++		return;
++
+ 	usb_kill_urb(dev->int_urb);
+ }
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index f5b0f1905962..77b687c46082 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -37,6 +37,9 @@ static int uvc_pm_get(struct uvc_streaming *stream)
+ 	if (ret)
+ 		return ret;
+ 
++	if (!stream->dev->int_ep)
++		return 0;
++
+ 	mutex_lock(&stream->dev->lock);
+ 	if (!stream->dev->users)
+ 		ret = uvc_status_start(stream->dev, GFP_KERNEL);
+@@ -52,6 +55,9 @@ static int uvc_pm_get(struct uvc_streaming *stream)
+ 
+ static void uvc_pm_put(struct uvc_streaming *stream)
+ {
++	if (!stream->dev->int_ep)
++		goto done;
++
+ 	mutex_lock(&stream->dev->lock);
+ 	if (WARN_ON(!stream->dev->users)) {
+ 		mutex_unlock(&stream->dev->lock);
+@@ -62,6 +68,7 @@ static void uvc_pm_put(struct uvc_streaming *stream)
+ 		uvc_status_stop(stream->dev);
+ 	mutex_unlock(&stream->dev->lock);
+ 
++done:
+ 	usb_autopm_put_interface(stream->dev->intf);
+ }
+ 
+
+-- 
+b4 0.11.0-dev-d93f8
