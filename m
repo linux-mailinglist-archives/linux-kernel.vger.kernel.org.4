@@ -2,127 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9DB60DCB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8672260DCB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233299AbiJZICl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 04:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
+        id S233360AbiJZICy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 04:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbiJZICi (ORCPT
+        with ESMTP id S233314AbiJZICv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 04:02:38 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2056.outbound.protection.outlook.com [40.107.105.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A806E9AFC7;
-        Wed, 26 Oct 2022 01:02:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GPPXJp4RLkc+W46IWI1AcjyGTWVRGVikJ4eDmT2XK0lU1F9F3pg1v8wAzmwm/bo4MPb5Nv08rMBvOzmDOILrnIYN1k8UvLj3S8bNQ4ZDHMfZN6NfeI/mD+zQVKPoShcqcZEp0PHeKJylFph1N27BbbwYDyHPR3YOqlFshUMOnKcQev5ecQ4gME6SW0SaRS1KvOZFTcHmAeok9fUjGN9/uaAB/vMP9n5bvSG4i1Fn67+4aR0iHMUlDs4oaGPfJ450raDpMs/3GGYYbu4+ubfUUUQdw2hw2Hig1KeU8QTyXF+3cGmHUqHPbFBhflFeeFg8NseVdiyuXFm4qwWVk/mk8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bSrHMR0xerv6lsliqQVy48NZ2Q382O4KkH17e63OROw=;
- b=b17QB5I93uS0zoVlaww3j8coFO5RMTzHDZl4zYnhdrT6YtoCnctR7uLUCGu04NhSLrBdJlqmKqfe7bMZPPbpyVnBn6AFEW4r/I4aH+0ZGMmKusE5Dx+AYqLh6DZ/yi9xp+JEJR3E77AZCT9XjQDzqwwv8HNCPPnyQdZRPacayqjbSZzBI2xFM9smzTHFzIkLM8sa1pEpQ+0mwr/nMqSnadBGadlH+9VC/nHpGZ48+Q81vjcRABLn9Y4krkCtf1hS0Yu8hMyJOHWJub85CYGDWcaI799CcDOWNoqS6g0JRJlu0s+GX4Zb8ac7QBlsnl/KUdrgIC1ARm1OzgbbLw+vpA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bSrHMR0xerv6lsliqQVy48NZ2Q382O4KkH17e63OROw=;
- b=4qKF+UswKesamqNii6ZZKZvcOQcvvoj7Nb91vd0W8yF5VIDhORmIl8Y99dJN7Pj8rMDc0iCyLu6M0W8QSmRpat3We0N02vRz5MX9aU/SOhWK7zZt1LGp+mV+vy2jVdHEUTf8vmfg1C3Tb6YNHBugV36tE0+6oUB4OSL3fB/DuQ0w8hyrd3nmi0UVh/fkdjYOm9t1T3gynVEXO9TGyLsCgyoc4KtujfKxpui4DuXRgfFlFEeGaf+Z9/Q9P+pcOHtk/3M1qt2fEx8XmtQZ0gFgF7NfT0sMa6HBMV/XaZQiFITCBdcovmgzpfbWsiXY8Xndj+U2ohVWlh7HX7pYZQjunQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by PAXPR04MB8846.eurprd04.prod.outlook.com (2603:10a6:102:20d::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Wed, 26 Oct
- 2022 08:02:35 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::1bf0:ae5a:ac96:5dea]) by VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::1bf0:ae5a:ac96:5dea%3]) with mapi id 15.20.5746.023; Wed, 26 Oct 2022
- 08:02:34 +0000
-Message-ID: <65ed2576-55a4-fbf1-010b-a51e92389062@suse.com>
-Date:   Wed, 26 Oct 2022 10:02:32 +0200
+        Wed, 26 Oct 2022 04:02:51 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43156A52E8
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 01:02:50 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id o4so16764617wrq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 01:02:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :references:cc:to:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=YyPwO7rl+gX39UNWAmiOxo6E2JYfZJtVX93jxGyGRgU=;
+        b=PuRDg6g8vE/Kmsy/HXW2aR4DBNamMoZxiJHU4GN0BUDeWEzc4IgxUwgy7Ixwjz4Ofw
+         8x3MXAzIIB3n1TmHVTwoTcdDMby6OcEsRQAmxt1/qpkoouMO71atWLSLm9ox614DP4Eu
+         x1lpKX834t/hf4dWr6qS8KhQgWWSxoxKQ1MUw+lJcx+pRJ6ayE7ig4zeUSub6t40aeMw
+         aArsBRynHmBpxkTCqYLCHORe/tqFJmciiSPRbm/jZ8grRTY78VSpj0dMhZfsDtlDLTSS
+         PIcMVWAHuqkSMu0ajNpolEaYdB/IqDFIUkZ6dM0z00AWTxdKduOtW5U8DHK9cxkw+M4z
+         mfrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :references:cc:to:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YyPwO7rl+gX39UNWAmiOxo6E2JYfZJtVX93jxGyGRgU=;
+        b=5Zp+Ndq64BTBQ3wIsbLgOJ2ROeFqNBbljWoYq09PMlMJpUbWF2qFor9+9TuOsYfSCO
+         Qnwf+lIHopM75RGti8ZuzJ39oJcm8oyzmfv6bKc8YBTY6T6iza2oeMZwKGojj8rakJCe
+         8hZQ+lLQfshnQmasC8Q4l104BM3bZu6biQzsUxkToegGZiBKRfuVRdlHoBwt4IFUZKp0
+         3baESx2T6OxksAK6lIiX8RcDPSg/aR0aOJA/6rFK0myKCjCf1uD2yMgbSPEhGatIQVaj
+         1sJSgtmydiF7YaqS2/I8JB9N8ImtRbyB0r7fI0UKVM7vVri274Zq7kaRv2yDxRms0G3r
+         IL8A==
+X-Gm-Message-State: ACrzQf0OgYAIeL3egdRAdxJGR32rmWF9A3aGkhrAO/HkNyTG6YXiqy5x
+        szkKH6xDvFDIQNzjAZTupkCSJQ==
+X-Google-Smtp-Source: AMsMyM66kvpQWFo5u0OfUq/T3nHMOYZKy3o5Z+LNI+SLBAqxTTBw+3OHccmEWCRwfakgmYIBIojMlA==
+X-Received: by 2002:a5d:5f03:0:b0:22f:8ad4:bd46 with SMTP id cl3-20020a5d5f03000000b0022f8ad4bd46mr27097794wrb.120.1666771368745;
+        Wed, 26 Oct 2022 01:02:48 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:ce41:a140:b67e:6c4b? ([2a01:e0a:982:cbb0:ce41:a140:b67e:6c4b])
+        by smtp.gmail.com with ESMTPSA id f12-20020a05600c4e8c00b003b95ed78275sm1201579wmq.20.2022.10.26.01.02.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 01:02:46 -0700 (PDT)
+Message-ID: <5d2ffeca-b41c-20b4-454b-703c39bbb29e@linaro.org>
+Date:   Wed, 26 Oct 2022 10:02:44 +0200
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 1/2] usb: serial: add support for CH348
-To:     Corentin LABBE <clabbe@baylibre.com>,
-        Oliver Neukum <oneukum@suse.com>
-Cc:     gregkh@linuxfoundation.org, johan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        neil.armstrong@linaro.org
-References: <20221021133758.1881904-1-clabbe@baylibre.com>
- <20221021133758.1881904-2-clabbe@baylibre.com>
- <135c51e3-56b6-cdf0-3499-cd354f43601d@suse.com> <Y1jlTP7HuH1FQbpk@Red>
+ Thunderbird/102.3.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCHv3] arm64: dts: meson: Enable active coling using gpio-fan
+ on Odroid N2/N2+
+To:     Anand Moon <linux.amoon@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Dan Johansen <strit@manjaro.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221022084737.1028-1-linux.amoon@gmail.com>
+ <CAFBinCBu_-0m9JeAr5kd-v7Z5LTi7w0WmmUYybW_kL4KJXXpOQ@mail.gmail.com>
+ <CANAwSgRzdD0FWg+z6hTFs7KvpsD64bChX-k0dPXJfACXZH2zbQ@mail.gmail.com>
+ <CAFBinCCNJiL-ZKRYesQAwys6bBMpYHJbUDK-Zi_VhGDVSvF7uQ@mail.gmail.com>
+ <CANAwSgTLTCA9=WvWXcR-40baauN3kAk2qx9k4FQOPCa1+_O0Yw@mail.gmail.com>
 Content-Language: en-US
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <Y1jlTP7HuH1FQbpk@Red>
+Organization: Linaro Developer Services
+In-Reply-To: <CANAwSgTLTCA9=WvWXcR-40baauN3kAk2qx9k4FQOPCa1+_O0Yw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0157.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a2::13) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|PAXPR04MB8846:EE_
-X-MS-Office365-Filtering-Correlation-Id: a456b9fa-0998-4a64-643d-08dab72870cf
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rm33PhIQEdwXaoIIKdrapdNjX/lR9bo9hIEuPuBPSqpRTLcA+u+toxjbKNq9aJfkbmNy63asdWz6oInZsRXhuYQ9s6H5QP3QKYeAUnmmEIgAm6gZUHACe5FsLcUgW145WHKGBZGKJ4HPwb3wIY5Vllaxw3GJDgJwvgwidkO/0wmcugow45wW0Lzm2G+x3t+3tZYriLeulAZo66AzWovLI3yJY0XSXn/prpB/1H5ZRKL14MtQyAlYbS7m33TV9jrNj5mr6iE8b1PirHgBqa5cSQWgYjX4rHmS9PcRTxdrgs5UwXBDn8Rc6WWSLTr49/ajw/Jcnr69S+7C9+PyPJnEl1LujSNUs9xo7fkQ/xUa+SSbJn2aYd8WJY2jkrollVRG38noKmkwCg35vF4kBtkF9zgEKU/q6kh07KQiZlZ6zPUvqz/zwSqqGKbzvmEf9U3xQmmUaKNzB6XB8GzEqE4UpQdJC9RAnKr4CB8ISttgTFSC22JuSF9fx/v2lbLxl6o+3p7Y91JrtCJLZEZAWKeBKdtlMFW+HWTQ3hwwqH+X7jzSm2eaJzhj2lOSgN5EhliT9ZXQJlduIlXf7F7SuKtL4f5DcT0+Q/GjKkYJkw5C0Teb6eU414LrCgYJP9joC8f5lLtHb5eT1ox5AScEEgUje+dZYjONUjFCRqlMRxon1O2h2+drRt+CMJgYcJwkzE1fIQBwvmOKNYwEvW3HfuYGErNRq19+TpMBTPfKzchBOe1Z2/J71Zu03ZaEHt27nDMyMh/JtpZ16/jyhw4n1LJ5VU4oL3Q+zVSWkwJIXRHp+T4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(39860400002)(376002)(396003)(366004)(136003)(451199015)(186003)(38100700002)(31686004)(41300700001)(316002)(5660300002)(4744005)(66476007)(8676002)(4326008)(66946007)(6512007)(66556008)(8936002)(6506007)(53546011)(2906002)(86362001)(2616005)(110136005)(31696002)(478600001)(6486002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WXdtUlNwRS9WZkdpOUlKNzBQVmdLL0o1dVR5a3RiN3dSajYwaHBDRGFCVnBP?=
- =?utf-8?B?bXJuTzA0elNwZk1DMHZCdTdqckpVYU81blMxamxuYkl5OHpOR2c0alo3a3FH?=
- =?utf-8?B?djhEUHFvOFludVJuOTZ1TGRIWkh0OGVadklQOFptc0NSbUpmVDRsdUYvZ2sy?=
- =?utf-8?B?UGhmdHNtWDBvbFVIMitxVVQvSlpEVDNkbW8yZmE2ZTVUUTZGMEljcjBFUHI1?=
- =?utf-8?B?amlkNnZ3bHc2L1ZqbC9YaTljS3ZUOUVaeEZrcmk3WXVjcGFsclN2ODdoOUdE?=
- =?utf-8?B?SG5TbzMvRlNrMmkzd0RzTGc0VVpOUlJGc25wK0o3Tzg3ckNkWHZHZzloYzk3?=
- =?utf-8?B?WStySUl2OEdZUjBiV05HRndGdTY2NFRJUmpITWFhNll1WmE1U0l1dkhFUzg0?=
- =?utf-8?B?ekZBUXo2czFvWUxEWWJWdzZhTHhhbFRjZklLQlZXNHRyWjhLV2dyYUxqdjZO?=
- =?utf-8?B?bE1DMW5ycTZBTVZvTXh5aDRaMDVmTE5wMVNJdXF5anB6RkE2NjFlNkQ4UHNT?=
- =?utf-8?B?cThEdWplZDZyY2VpN3EzaHNsTkpZRFZ2R1NXZFZybCtXWFpaOElraG9uS3ZX?=
- =?utf-8?B?OHdJV3QrcGhTa0J6UTUzSE4yRGtqWWQ5SHZhYjArOUh0aVRjcU9NbFpVNWFO?=
- =?utf-8?B?MzFRU3R3dW5lY2hIbDNDRXZGdGlwY0tLSWpCd25MRHNqN3RSeUNYSGJSL3Jn?=
- =?utf-8?B?VnhSaHlxM3pnT0RMVHgzVS9XL1dYNWhJUElsVzdjZUphZE13YzJEZjhNQzVI?=
- =?utf-8?B?V0JnS0l6VDBzcVBIRGNrem5WcWd0NGdacGg2YlR3aE9wcktLTDNHZ1VEM3Az?=
- =?utf-8?B?SG53d25rdFVxUXhpYkJ4cjFuQkpWY1hNTGg5L2ZMRGsxdGd6OWVNY3N0R3FM?=
- =?utf-8?B?RmpKUmVDK096UGpHWmtWdW9OY1JTYWpYT1ZvNVN3UkQxaG5DMThtcHUwQnYy?=
- =?utf-8?B?T004MXgwQmNXalJ5azlKRjZHMTZuM2R0QjRGc3VNMU5IY1BFQjNXWmhoRjZF?=
- =?utf-8?B?eWs1c1g2OUZyaHN6eXNtZmdZMitvK3RDZDUrekdwQjZpMW4yU2J1R3k4bE9X?=
- =?utf-8?B?WFp4Y2dDTXNaWXgxc09vaXR2WWNOQzFEdWZoL1hkbU1TcVphYUpDcWJhMHR1?=
- =?utf-8?B?cU9leFJ2a2Z6WVczOGZUYmswZWZSblRCK0NLL2owOVpiMDZjSVZONWMrQ1dx?=
- =?utf-8?B?ckkxL2NqRHUxYmVCM2l6R1k4NGhXdDJoUVNTd2tuVWl4dXpxOGJlcS9aY25V?=
- =?utf-8?B?SjJqMUNid0dYNWRRNXFxT0lUNUlndTNnakp1N0treGU5VUZkZ3VySU9PNXY4?=
- =?utf-8?B?Q21oc3FpdXVCWUh0OXJ3c2ZkTDJwNnZJRVFFK1JyMmxsZm9ydVk5VysvUzkx?=
- =?utf-8?B?UU1PSFpBdmRGUTYrMXJpRkpTaHYwMkhjd2k5Tzk2OTJ4N1FVU3k0YW1tNlN2?=
- =?utf-8?B?cFFlUzlVY2I1OXJIdG9YZkI4U2NRd3pHNWVGTlIxRnZvWHcvckJNVHQ3ZGFk?=
- =?utf-8?B?TXFuZmF1bHZnbmZpSXJ1RUVRbkhUdE51UGlkSmR1NGp0UDVtTDM0dG9QaGhJ?=
- =?utf-8?B?RXdXaEhyb0plYlo1TVBKUEdST2ZUUC9mazlrSTZrU080VmhWS09VRXZSSFhB?=
- =?utf-8?B?QWtick5ZZkRqM0lpRk9DdFZaV2l4ZUsrM3BRb2ZNODVjczl3MWtvdVNmTDA0?=
- =?utf-8?B?T25QSXk1RWNUQ28wZFM5UVJncXFFNmh2aHdUTk1vMTJ0bFkzZkhEaUxGRURH?=
- =?utf-8?B?clJ6TmN1U2JabUtEUjlmVitaQXh0bHhLakZOWko2UEc2U0g4WWdrb21sNFg2?=
- =?utf-8?B?SmgvR3k1YVNnY2F5YVlvK2lKL200dVByZS9PMmk0SHJFN2dLUk1jQkxDUjFw?=
- =?utf-8?B?N3RyVUJYQ3JFQm56QjZJSmVTMmtRaEdCTE8zY2U3d0ZuczQ0ZFV2clJYS3dj?=
- =?utf-8?B?SEpQcGdPUU9zd2hFOU5lWW9pVkNGczQxVmZxWkdKSGUzbDBnVitkcHN6QlVY?=
- =?utf-8?B?dTRxcjQ2OUYrSS91UVBuRGJBQmJaNmlCRktDYUFDZUNLTVNHc1NoeWJ0L0Rx?=
- =?utf-8?B?czZSYjZlMUx1S0R1STVlM3doR0tWaHJOd2ZEc0pZUy9VeC9HeWhibEZUa2pC?=
- =?utf-8?B?Vld3bE1VK2FRMlRxMUJjY3BWdlhFTnMzZi9zb1ZGTURHcGxMSFpDMXNkbnRT?=
- =?utf-8?Q?EVOtcyRW7O/k5JmtHiksx16yvSnaG+ficcaJlzbSZ7kP?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a456b9fa-0998-4a64-643d-08dab72870cf
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 08:02:34.6967
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yujjDh2ZMWHbR/oD3LJFY/O1/74uQ1xHXyuoL+hpyTye3BHW4aFToqQFDZEzdTYwBgJl0C6iXSKrwqrJ9Y6MAg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8846
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,URI_HEX autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,36 +89,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 26.10.22 09:44, Corentin LABBE wrote:
-
 Hi,
 
+On 25/10/2022 20:06, Anand Moon wrote:
+> Hi Martin,
+> 
+> On Sat, 22 Oct 2022 at 17:22, Martin Blumenstingl
+> <martin.blumenstingl@googlemail.com> wrote:
+>>
+>> Hi Anand,
+>>
+>> On Sat, Oct 22, 2022 at 1:27 PM Anand Moon <linux.amoon@gmail.com> wrote:
+>> [...]
+>>>>> @@ -1982,7 +1982,6 @@ pwm_ao_d_10_pins: pwm-ao-d-10 {
+>>>>>                                                  mux {
+>>>>>                                                          groups = "pwm_ao_d_10";
+>>>>>                                                          function = "pwm_ao_d";
+>>>>> -                                                       bias-disable;
+>>>> &pwm_ao_d_10_pins is not referenced anywhere so it seems that this
+>>>> change has no impact on controlling the fan on Odroid-N2(+).
+>>>> How did you test this change?
+>>>>
+>>> Ok I felt these changes affect the behavior of the pinctrl
+>>>
+>>>    * @PIN_CONFIG_BIAS_DISABLE: disable any pin bias on the pin, a
+>>>   *  transition from say pull-up to pull-down implies that you disable
+>>>   *  pull-up in the process, this setting disables all biasing.
+>>>
+>>> I mapped this is linked in pinctrl driver, pwm_ao_d_10_pins GPIOAO_10 see below
+>> Yes, I understand this part.
+>> My concern is: &pwm_ao_d_10_pins settings only become active when this
+>> node is actively referenced. You can even see it in your output
+>> below...
+>>
+>> [...]
+>>> pin 10 (GPIOAO_10): (MUX UNCLAIMED) aobus-banks:1958
+>> This shows that it's used as a GPIO. If the &pwm_ao_d_10_pins setting
+>> was used then it would show "function pwm_ao_d group pwm_ao_d_10"
+>> (similar to what GPIOE_1 shows in your output)
+>>
+>> If you want to know if a pull-up/down is enabled you can look at the output of:
+>> $ cat /sys/kernel/debug/pinctrl/ff800000.sys-ctrl\:pinctrl@14-pinctrl-meson/pinconf-pins
+>> (I'm sure this can also be retrieved from some userspace tools, but I
+>> don't know how)
+>>
+> 
+> I now switch using pwm-fan with the local changes I am able to link
+> pwm_ao_d_10_pins
+> but now the issue is fan keeps on spinning on boot-up and stays on.
+> 
+> I can manually turn on off by using
+> $ sudo gpioset gpiochip1 10=1   // fan on
+> $ sudo gpioset gpiochip1 10=0   // fan off
+
+By doing that actually override the PWM function of the pin and set it as a GPIO.
 
 > 
-> Thanks for your review, I will fix them all.
-
-I am happy to point out issues.
-
->> [..]
->>
->>> +
->>> +static int ch348_fixup_port_bulk_in(struct ch348 *ch348, struct usb_serial_port *port)
->>> +{
->>> +	int i;
->>> +
->>> +	/* Already Initialized */
->>> +	if (port->bulk_in_size) {
->>
->> BTW, shouldn't these be unsigned int?
+> It is not controlled by the thermal tip as expected.
+> I feel some configuration is missing in pwm-meson driver.
+> Any input for me?
 > 
-> I dont understand what you mean here.
+> $ sudo cat /sys/kernel/debug/pinctrl/ff800000.sys-ctrl\:pinctrl@14-pinctrl-meson/pinmux-pins
+> [sudo] password for alarm:
+> Pinmux settings per pin
+> Format: pin (name): mux_owner gpio_owner hog?
+> pin 0 (GPIOAO_0): ff803000.serial (GPIO UNCLAIMED) function uart_ao_a
+> group uart_ao_a_tx
+> pin 1 (GPIOAO_1): ff803000.serial (GPIO UNCLAIMED) function uart_ao_a
+> group uart_ao_a_rx
+> pin 2 (GPIOAO_2): (MUX UNCLAIMED) aobus-banks:1950
+> pin 3 (GPIOAO_3): (MUX UNCLAIMED) (GPIO UNCLAIMED)
+> pin 4 (GPIOAO_4): (MUX UNCLAIMED) (GPIO UNCLAIMED)
+> pin 5 (GPIOAO_5): ff808000.ir (GPIO UNCLAIMED) function
+> remote_ao_input group remote_ao_input
+> pin 6 (GPIOAO_6): (MUX UNCLAIMED) (GPIO UNCLAIMED)
+> pin 7 (GPIOAO_7): (MUX UNCLAIMED) (GPIO UNCLAIMED)
+> pin 8 (GPIOAO_8): (MUX UNCLAIMED) aobus-banks:1956
+> pin 9 (GPIOAO_9): (MUX UNCLAIMED) aobus-banks:1957
+> pin 10 (GPIOAO_10): ff807000.pwm (GPIO UNCLAIMED) function pwm_ao_d
+> group pwm_ao_d_10
+> pin 11 (GPIOAO_11): (MUX UNCLAIMED) aobus-banks:1959
+> pin 12 (GPIOE_0): (MUX UNCLAIMED) (GPIO UNCLAIMED)
+> pin 13 (GPIOE_1): ff802000.pwm (GPIO UNCLAIMED) function pwm_ao_d
+> group pwm_ao_d_e
+> pin 14 (GPIOE_2): ffd1b000.pwm (GPIO UNCLAIMED) function pwm_a_e group pwm_a_e
+> 
+> $ sudo cat /sys/kernel/debug/pwm
+> platform/ffd1b000.pwm, 2 PWM devices
+>   pwm-0   (regulator-vddcpu-a  ): requested enabled period: 1250 ns
+> duty: 838 ns polarity: normal
+>   pwm-1   ((null)              ): period: 0 ns duty: 0 ns polarity: normal
+> 
+> platform/ff807000.pwm, 2 PWM devices
+>   pwm-0   (pwm-fan             ): requested period: 1250 ns duty: 0 ns
+> polarity: normal
+>   pwm-1   ((null)              ): period: 0 ns duty: 0 ns polarity: normal
 
-bulk_in_size as a member of the structure is defined as int.
-As a size cannot meaningfully be negative and this takes no
-error reports, I was wondering whether it should be declared
-an unsigned integer for the sake of cleanliness.
+This should be on the pwm-1, hence the "pwm_AO_cd" name, "c" and "d" and the
+names of the outputs.
 
-	Regards
-		Oliver
+So you need to use 1 as first PWM phandle argument instead of 0.
+
+> 
+> platform/ff802000.pwm, 2 PWM devices
+>   pwm-0   ((null)              ): period: 0 ns duty: 0 ns polarity: normal
+>   pwm-1   (regulator-vddcpu-b  ): requested enabled period: 1250 ns
+> duty: 1213 ns polarity: normal
+> 
+> I could observe a change in duty when we have stress testing the CPU.
+
+Can you share the complete change you did here ?
+
+> 
+> Thanks
+> 
+> -Anand
+
+Neil
