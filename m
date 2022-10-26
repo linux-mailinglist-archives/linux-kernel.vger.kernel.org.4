@@ -2,121 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E3360DDA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C689260DDA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbiJZJCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 05:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S233035AbiJZJDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 05:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbiJZJCG (ORCPT
+        with ESMTP id S231341AbiJZJDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 05:02:06 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340D1923EE
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 02:02:03 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id fy4so19464729ejc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 02:02:03 -0700 (PDT)
+        Wed, 26 Oct 2022 05:03:22 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFC197D5C;
+        Wed, 26 Oct 2022 02:03:21 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 21so6401575edv.3;
+        Wed, 26 Oct 2022 02:03:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2AiRgJoL/WQguaTORVj2RUdC+41fuiOA89svDNGAFm0=;
-        b=fyp3rZs8LYK2nDycQqmsGkDkEe73cLXOI+E59kxTn23leCm0FDPivgGJ01akWf8bS0
-         bcU27SWYNz6/f01vubMz9ANCa/MYf2oRiK+ocQSdGzNFo1XHRK5RfalvYAdDBJFZP3RK
-         SXBLuN9hfI7ygC52xkxYtc9RBFbey95BDf0aw=
+        bh=gDNxtobUIfhtD2mKMmmLy/tXc7osg3CCVHX7FcrkmPc=;
+        b=T1yfzXvULUMP09Uf9fnUwN9VSCCe0NkyS2d0KwcTBHfrNUBabNh+WYyxzPa5VjyjaX
+         buKV34XWyOKSjK4VZnt0wHF/NskjZ6HAY5FEq4iSJKVuNmGvy9/7Tt/apwcHWDl2SWIg
+         0d84omawo5owLLuYtiZoPQKG/cmNoWZjdEdqFnRnE0NyGi/fawG5gKlMr6J6wTGPrCcf
+         Q0jiPT24y6oBY4j5KhI4nvpqidweOzWZMZs8jnrL94SPwwx6LASbCwRb2XbxW4fFvVzP
+         yNLKO1XXzM0fvJUBgf4ydxF69mHXve33jMLQdbkdQGINK/M0v1D7ZDhR/ePMM7E0Mc/F
+         aexQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2AiRgJoL/WQguaTORVj2RUdC+41fuiOA89svDNGAFm0=;
-        b=2cpK5oz6tTzveeAjy8HblqC3lnzHeBqECtnci58StY25slAx8aPZTQgKFpXtup75gA
-         Q13kP0igAx9GBi3ux4irxYTmZxTxmqLu5EV3uwrBhtyXAZy7zo7tDG28Y+bAZzQBJP0P
-         4J6Spt72T+bkYN+4cgjzX5+2O1wd1gLEJrhE3nXfZ6z4tP0AVdzplB3yz6DbApNtpMC9
-         8umXZngv8b5iMhJ926yvHDdyB8B9a57o15ItbL+rG6TiTsUSxXH32Qygwk8CkkUrqoTh
-         B8JxUta+zvqyynraJgLkhjItrYvM2WTB66rPA//qkCg9QTAErkT8cBVupVuSn8H53sPa
-         soqg==
-X-Gm-Message-State: ACrzQf15recEduEVwRkWwkZDheUmvvJQ4x2o+IK45rI75BljTMLN+Tzj
-        YqthXRGuyDMTLl2Y4oEuH18VRajmkh1bFM8wtclCWg==
-X-Google-Smtp-Source: AMsMyM7MACRplKV101kFt3pYqGwFpCDUHyDOAvHWrixNDP6N4LNCXc7xjiKav7fflMtMchZZAMBUGdXgY0TXgUIAreo=
-X-Received: by 2002:a17:907:62a1:b0:781:b320:90c0 with SMTP id
- nd33-20020a17090762a100b00781b32090c0mr34457876ejc.255.1666774921655; Wed, 26
- Oct 2022 02:02:01 -0700 (PDT)
+        bh=gDNxtobUIfhtD2mKMmmLy/tXc7osg3CCVHX7FcrkmPc=;
+        b=Oq5i359IdOzpOsz806LkRHnabNsymaPpjUupatliloseiT8m3UACbxhAXTnEnA0VeR
+         YxFnFhCbfQSdze8enYRmTWauQnigPF8hDPbIJ78qchXsAxJletwwSTMBsmmo3yIiP26X
+         iadVod9LcbjW1LRkp3Ws0f/Mb8PNQBf/6RG0G+fEoOf4vJ/15X+p1hKM/xH8oeJ2CtUL
+         IcSo8XAMwUzYGm9AuFPlHqhzvV9p1P3CA6gpWRjiDEc1piEeLGo0PdD8flnL5Y3NHE5l
+         hvJa3mA3rkwexAfBsfsen6siwe798PXV8rs+w/PFMvCZg71TN/zIW31r2BdLclB+UgfL
+         0LtA==
+X-Gm-Message-State: ACrzQf3gKrCRNeT3UyV15jM7ehMXG6z9nH4mt3M/V0j0AhjatEjkQ8Hi
+        aOSOMmKDiid7viFMIkO4Cn+XvSillMWF8+U6tFT4ZyBNjrow5A==
+X-Google-Smtp-Source: AMsMyM63ecp3AsNA5gtSQQOnUBmaKiZJgJwUkJ0dya0NyFNs+fEUvY9D0Kc75T5z+p3tVL+/4eMPjfsy4tniIWmi1g8=
+X-Received: by 2002:a05:6402:2552:b0:45d:ecf:b23 with SMTP id
+ l18-20020a056402255200b0045d0ecf0b23mr40194998edb.255.1666774999716; Wed, 26
+ Oct 2022 02:03:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAJfpegswSAeUdxHR1Z8jC_nQtUm7_mD=ZZC_LyQczaoJWTPe3g@mail.gmail.com>
- <20220929163944.195913-1-tycho@tycho.pizza> <CAJfpegtcHW8AwjfjDSm8Y7OXbesrw=ZpX-CMujJ=1Zz_Ly2FdQ@mail.gmail.com>
- <Yzb20Y4wHrqUZ93Z@tycho.pizza> <CAJfpegsZk+R2wmXo_358J6YrxLaWN7=VAUEUaGjF1Jveb+qKJQ@mail.gmail.com>
- <YzcU1IhHEa2oV0vo@tycho.pizza>
-In-Reply-To: <YzcU1IhHEa2oV0vo@tycho.pizza>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Wed, 26 Oct 2022 11:01:50 +0200
-Message-ID: <CAJfpegvrd2nsydG26stcmeEkdO1JLyeu69KrZs4dvVxXtoz42Q@mail.gmail.com>
-Subject: Re: [PATCH v2] fuse: In fuse_flush only wait if someone wants the
- return code
-To:     Tycho Andersen <tycho@tycho.pizza>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>, linux-kernel@vger.kernel.org,
-        fuse-devel@lists.sourceforge.net
+References: <20221026014227.162121-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221026014227.162121-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdVa28=84ZovtWazx0w=xWLDZioK0+CVnoE=NALjMewSkg@mail.gmail.com>
+In-Reply-To: <CAMuHMdVa28=84ZovtWazx0w=xWLDZioK0+CVnoE=NALjMewSkg@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 26 Oct 2022 10:02:53 +0100
+Message-ID: <CA+V-a8skHerzruXSnOm0bZLLk-O6e0pdh6nysXEFh5RJN-D3eA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] clk: renesas: r9a07g044: Add CRU_SYSCLK and
+ CRU_VCLK to no PM list
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sept 2022 at 18:10, Tycho Andersen <tycho@tycho.pizza> wrote:
+Hi Geert,
+
+THank you for the review.
+
+On Wed, Oct 26, 2022 at 8:58 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
-> On Fri, Sep 30, 2022 at 04:41:37PM +0200, Miklos Szeredi wrote:
-> > On Fri, 30 Sept 2022 at 16:01, Tycho Andersen <tycho@tycho.pizza> wrote:
-> > >
-> > > On Fri, Sep 30, 2022 at 03:35:16PM +0200, Miklos Szeredi wrote:
-> > > > On Thu, 29 Sept 2022 at 18:40, Tycho Andersen <tycho@tycho.pizza> wrote:
-> > > > >
-> > > > > If a fuse filesystem is mounted inside a container, there is a problem
-> > > > > during pid namespace destruction. The scenario is:
-> > > > >
-> > > > > 1. task (a thread in the fuse server, with a fuse file open) starts
-> > > > >    exiting, does exit_signals(), goes into fuse_flush() -> wait
-> > > >
-> > > > Can't the same happen through
-> > > >
-> > > >   fuse_flush -> fuse_sync_writes -> fuse_set_nowrite -> wait
-> > > >
-> > > > ?
-> > >
-> > > Looks like yes, though I haven't seen this in the wild, I guess
-> > > because there aren't multiple writers most of the time the user code
-> > > that causes this.
-> > >
-> > > I'm not exactly sure how to fix this. Reading through 3be5a52b30aa
-> > > ("fuse: support writable mmap"), we don't want to allow multiple
-> > > writes since that may do allocations, which could cause deadlocks. But
-> > > in this case we have no reliable way to wait (besides a busy loop, I
-> > > suppose).
-> > >
-> > > Maybe just a check for PF_EXITING and a pr_warn() with "echo 1 >
-> > > /sys/fs/fuse/connections/$N/abort" or something?
+> Hi Prabhakar,
+>
+> On Wed, Oct 26, 2022 at 3:42 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > >
-> > AFAICS it should be perfectly normal (and trivial to trigger) for an
-> > exiting process to have its dirty pages flushed through fuse_flush().
+> > CRU_SYSCLK and CRU_VCLK clocks need to be turned ON/OFF in particular
+> > sequence for the CRU block hence add these clocks to
+> > r9a07g044_no_pm_mod_clks[] array.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> > v1->v2
+> > * Dropped usage of DEF_NO_PM() macro
+> > * Added CRU_SYSCLK and CRU_VCLK to no PM list
+> > * Updated commit message
 >
-> Agreed.
+> Thanks for the update!
 >
-> > We could do that asynchronously as well, generally there are no
-> > promises about dirty pages being synced as part of the process exiting
-> > .  But ordering between dirty page flushing and sending the FUSE_FLUSH
-> > request should be kept.  Which needs more complexity, unfortunately.
+> > --- a/drivers/clk/renesas/r9a07g044-cpg.c
+> > +++ b/drivers/clk/renesas/r9a07g044-cpg.c
+> > @@ -412,6 +412,11 @@ static const unsigned int r9a07g044_crit_mod_clks[] __initconst = {
+> >         MOD_CLK_BASE + R9A07G044_DMAC_ACLK,
+> >  };
+> >
+> > +static const unsigned int r9a07g044_no_pm_mod_clks[] __initconst = {
 >
-> How can we wait in fuse_set_nowrite()? Or are you suggesting we just
-> do a fuse_flush_writepages() in the async part and hope for the best?
+> This cannot be __initconst, so please drop this keyword.
+>
+OK.
 
-I was thinking along the lines of calling schedule_work() in the
-exiting case to do the flush.
+> > +       MOD_CLK_BASE + R9A07G044_CRU_SYSCLK,
+> > +       MOD_CLK_BASE + R9A07G044_CRU_VCLK,
+> > +};
+>
+> I believe I haven't seen patches yet to add support for these clocks?
+> Perhaps these can be combined?
+>
+Ahh my bad, yes the patches have not been sent out for it, I'll
+combine this while adding the clocks.
 
-Thanks,
-Miklos
+Cheers,
+Prabhakar
