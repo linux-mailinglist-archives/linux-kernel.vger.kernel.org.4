@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4BE60E2DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC7560E2DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234138AbiJZOJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
+        id S234155AbiJZOJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 10:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234134AbiJZOJc (ORCPT
+        with ESMTP id S234134AbiJZOJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:09:32 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80AE826F8
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:09:23 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id a14so23749581wru.5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:09:23 -0700 (PDT)
+        Wed, 26 Oct 2022 10:09:54 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8447495FF;
+        Wed, 26 Oct 2022 07:09:51 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id bp11so25985763wrb.9;
+        Wed, 26 Oct 2022 07:09:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=L8c2OBjHn01HQbFbmOQb3O6qQFFydiS8u7n6jx35YlY=;
-        b=qwRhI5VTWmsnRfxZ7DbdXTibU24vXngyRrAWuofIV2aCxFVIgI4xjb+qw+MsmztG4a
-         PPeNPGgNlANWT3LweFGlcBqDrMPQ2hNnJUfMDhucRg9+ePUlxDSrQVG9e4fQ6F1TxNXX
-         4OG81ml7u3Di39zsp3QQlgnqFRK6Cqw9SYu54w0Oaa348xKf9LGRW2pnO4ZJs2Zv/XlX
-         KA7QS5Diz73Nee//0iiOQp/EyXQ8tlVFZnTlK+3jjYhgi4tboFnp4p/TXfIG9xqk9TIx
-         G4TsO7Yb5oPAk1Dq3QHYj3VOuekmW7bG3D5eXrhkCuqHYaefFJyZeP9kiOfqnokZPsxK
-         4eIg==
+        bh=A0A5lCHNs+XemKP+wCfeNjxojYMmlZBo7aDpwOfQPqo=;
+        b=JZgMKUonOdMuCuKZDP+3URj+3v2wDIoYv5Pa2BVRXlYZFfVz6cKn1NLTmMjkiinWr3
+         uLdRkqt9kU061ia+Ljg1/I/bjJe923cnr6bJixLiIeQV098o4sr5q/3XWAIIsulm4m42
+         UCUcm/WO5pZzDCLauz1F99+LicIxhzQyKgtA2UYDLds1j1FGxc8bnsb+V9thGgLtTccJ
+         IyeCMjtZ510gu9ij//HRqBV13ZQrdqKnwFyfGl2uY2fLnzxsXj4iXrLvNFSa3okysGat
+         a3JvYgKMy0cglLNtQrIDwGn+doGZ9qkwY7Njx9/g+DiFE1gOBHNETfu7hrwRxxP2uyzV
+         KKYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=L8c2OBjHn01HQbFbmOQb3O6qQFFydiS8u7n6jx35YlY=;
-        b=fFUOTk5wJ8+/Tfse56nmZQnuHmBrbTdGsD8271+11CtVxR+P9upeEiGAeZbjXLNyIc
-         J93E8F7RBH5C96KqVfZQ5fxzmH6QiJy/Pn0yxUBlHqq1dZXj2s83aGOUoVt3PkiEp4m5
-         p3Pxa3Ltm9NgJBwev50w+6rxWqrEdbEm/3wQIX06tzvvjt844HIXuEmpP1o7He3Y4bZT
-         PqZthwtlu/AHwSI3sHxkBeZmOA0xHtJMHCad+zApK7mavLLXUoLLoiIfMLaXdcY4fRUF
-         VC981V/VnWluUs6Ze6dZES+365jsjd2C1Dykqvi8lejOAP3rSXPO/mzRL8UFYz/hD9aV
-         SByA==
-X-Gm-Message-State: ACrzQf0YJdY0xBY8O76q+PkJS8k6psNFdPqouTzm2iNpiwcOplTRwbiY
-        67V84sDTKZWf31rxvh6hYD8DwA==
-X-Google-Smtp-Source: AMsMyM6ETs32F+QOHsj7Ve2nfzJcfZ6xrAV02hFQxKATw9rQbyAEas2dcjfFMX5fb3RKVQYVH12NoQ==
-X-Received: by 2002:a05:6000:1f01:b0:236:64ae:ad19 with SMTP id bv1-20020a0560001f0100b0023664aead19mr13560321wrb.523.1666793362047;
-        Wed, 26 Oct 2022 07:09:22 -0700 (PDT)
-Received: from nicolas-Precision-3551.home ([2001:861:5180:dcc0:5e38:f194:7686:c33])
-        by smtp.gmail.com with ESMTPSA id r29-20020adfa15d000000b002365f326037sm6760202wrr.63.2022.10.26.07.09.20
+        bh=A0A5lCHNs+XemKP+wCfeNjxojYMmlZBo7aDpwOfQPqo=;
+        b=JmW1Gri49+uPjG0hTB49jZyrFCwssibHxT/A3Ou11CISIF/A6W2k4tQflUEA98uuVd
+         b+sNrjPqy3mrmNUY8eM3W+0CB9cZG00+rg1l+pdU40kxcBGWqxNM2MlYilmYAYTNvbww
+         zoV1Vqz9aHei5xkO2rXPvCT9YOwu6NM+/HRwjogoU6bYzGZoMjI6SUxr4x3rHuWUYoAv
+         DjpYzluEKsV5UMptdSjDxBzjQ1zaPjNtWg3/+bzaia4+/YRM7tctTXdUMO9bMiLpAZTF
+         NmMjNc/wDa+oE24W9E0J0/JHdku8H45sf2zKPNExSJzIIo48RgkQXoFKvwD67kqxfY6x
+         p5kQ==
+X-Gm-Message-State: ACrzQf1YARWPCF485klS5JdmXPO1MRoTsF04Ku2R6i6MrB8yGMzd0aLb
+        JmH9XCuT5DMQr5Gn5m5gk1a1SpMn6YTOzlXh
+X-Google-Smtp-Source: AMsMyM5e2I3HYFKRA91Hd0GiA/4DA0e6uH64qo8Oyp9bN6TLPAWiiS/WrO04T101hFNzUeY8ZCKTpw==
+X-Received: by 2002:adf:e7c7:0:b0:236:6994:a0b4 with SMTP id e7-20020adfe7c7000000b002366994a0b4mr13855199wrn.610.1666793390286;
+        Wed, 26 Oct 2022 07:09:50 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id v12-20020a05600c15cc00b003c6cd82596esm1794363wmf.43.2022.10.26.07.09.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 07:09:21 -0700 (PDT)
-From:   Nicolas Frayer <nfrayer@baylibre.com>
-To:     lee@kernel.org, linux-kernel@vger.kernel.org
-Cc:     khilman@baylibre.com, glaroque@baylibre.com, nfrayer@baylibre.com
-Subject: [PATCH] mfd: palmas: add support of module build for Ti palmas chip
-Date:   Wed, 26 Oct 2022 16:09:11 +0200
-Message-Id: <20221026140911.204776-1-nfrayer@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 26 Oct 2022 07:09:49 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] bus: fsl-mc: fsl-mc-allocator: remove variable free_count
+Date:   Wed, 26 Oct 2022 15:09:49 +0100
+Message-Id: <20221026140949.3242258-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,29 +70,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume La Roque <glaroque@baylibre.com>
+Variable free_count is just being incremented and it's never used
+anywhere else. The variable and the increment are redundant so
+remove it.
 
-Modified Kconfig to enable module build support
-
-Signed-off-by: Guillaume La Roque <glaroque@baylibre.com>
-Signed-off-by: Nicolas Frayer <nfrayer@baylibre.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/mfd/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/bus/fsl-mc/fsl-mc-allocator.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 8b93856de432..e433663a655e 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -1499,7 +1499,7 @@ config MFD_OMAP_USB_HOST
- 	  OMAP USB Host drivers.
+diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c b/drivers/bus/fsl-mc/fsl-mc-allocator.c
+index dced427ca8ba..f1351237a9d5 100644
+--- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
++++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
+@@ -557,12 +557,9 @@ static void fsl_mc_cleanup_resource_pool(struct fsl_mc_device *mc_bus_dev,
+ 	struct fsl_mc_bus *mc_bus = to_fsl_mc_bus(mc_bus_dev);
+ 	struct fsl_mc_resource_pool *res_pool =
+ 					&mc_bus->resource_pools[pool_type];
+-	int free_count = 0;
  
- config MFD_PALMAS
--	bool "TI Palmas series chips"
-+	tristate "TI Palmas series chips"
- 	select MFD_CORE
- 	select REGMAP_I2C
- 	select REGMAP_IRQ
+-	list_for_each_entry_safe(resource, next, &res_pool->free_list, node) {
+-		free_count++;
++	list_for_each_entry_safe(resource, next, &res_pool->free_list, node)
+ 		devm_kfree(&mc_bus_dev->dev, resource);
+-	}
+ }
+ 
+ void fsl_mc_cleanup_all_resource_pools(struct fsl_mc_device *mc_bus_dev)
 -- 
-2.25.1
+2.37.3
 
