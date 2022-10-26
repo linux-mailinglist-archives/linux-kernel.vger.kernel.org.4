@@ -2,66 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0826A60DFEE
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 13:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE25260DFF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 13:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233672AbiJZLqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 07:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
+        id S233699AbiJZLrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 07:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233665AbiJZLpl (ORCPT
+        with ESMTP id S233587AbiJZLqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 07:45:41 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78AE631C3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 04:43:54 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 058641FD49;
-        Wed, 26 Oct 2022 11:43:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1666784633; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ys4xNvzZzoV6NhjjKTKeJNUpYb8jx3gdrJfys6MihAM=;
-        b=NODA1qYx5RkjBiNYo4GO2kvxMI5xRG3xzM/KhpGMqCv/GYJIS1Yo8gbAn/EcVNFzlGDjdg
-        DlMB7ZUKYhrkujn+O9OJNdnkmpmj1dfFHFV9H7e5r1ywfkzQv7rV2dfOFHck18/OqasOfo
-        RUwfyYIKagIRTAmr+5OS91UQ9zHYMbY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BEAE713A6E;
-        Wed, 26 Oct 2022 11:43:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id GZ70LHgdWWOEKQAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 26 Oct 2022 11:43:52 +0000
-Message-ID: <52410187-f277-a4a0-f369-9390d25a70f6@suse.com>
-Date:   Wed, 26 Oct 2022 13:43:52 +0200
+        Wed, 26 Oct 2022 07:46:33 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13374C613;
+        Wed, 26 Oct 2022 04:45:27 -0700 (PDT)
+X-UUID: 2ac84e4e357745dd93cb33e04406c6bc-20221026
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=9LC/FK6XWFOIUm1Lv8D9Fr/dapnZXyyTO4BlfBq5dRg=;
+        b=aYBrZgdhXMvYIp1bsCpYOyTraJHZTUgfD/5FzQtWgtpSXx6hAAk5i2V0v+2Q86OgglBK4Vcq23Rno35kLE/19aRN1XBDS0mNynvlg9hGGfxE7j2o7I9Y54PlRDV9RZnt2drs2MmlqCYIuDu/g3D6jw0VsNOO5ln0wi5sVv25/Sw=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:ba85b83b-2751-4653-8c34-78f8a5a7e86e,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:62cd327,CLOUDID:67b93527-9eb1-469f-b210-e32d06cfa36e,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 2ac84e4e357745dd93cb33e04406c6bc-20221026
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <haozhe.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 125040454; Wed, 26 Oct 2022 19:45:21 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 26 Oct 2022 19:45:19 +0800
+Received: from mcddlt001.gcn.mediatek.inc (10.19.240.15) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 26 Oct 2022 19:45:17 +0800
+Message-ID: <82a7acf3176c90d9bea773bb4ea365745c1a1971.camel@mediatek.com>
+Subject: Re: [PATCH] wwan: core: Support slicing in port TX flow of WWAN
+ subsystem
+From:   haozhe chang <haozhe.chang@mediatek.com>
+To:     Loic Poulain <loic.poulain@linaro.org>,
+        "chandrashekar.devegowda@intel.com" 
+        <chandrashekar.devegowda@intel.com>,
+        "linuxwwan@intel.com" <linuxwwan@intel.com>,
+        "chiranjeevi.rapolu@linux.intel.com" 
+        <chiranjeevi.rapolu@linux.intel.com>,
+        Haijun Liu =?UTF-8?Q?=28=E5=88=98=E6=B5=B7=E5=86=9B=29?= 
+        <haijun.liu@mediatek.com>,
+        "m.chetan.kumar@linux.intel.com" <m.chetan.kumar@linux.intel.com>,
+        "ricardo.martinez@linux.intel.com" <ricardo.martinez@linux.intel.com>,
+        "ryazanov.s.a@gmail.com" <ryazanov.s.a@gmail.com>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Lambert Wang =?UTF-8?Q?=28=E7=8E=8B=E4=BC=9F=29?= 
+        <Lambert.Wang@mediatek.com>,
+        "Xiayu Zhang =?UTF-8?Q?=28=E5=BC=A0=E5=A4=8F=E5=AE=87=29?=" 
+        <Xiayu.Zhang@mediatek.com>, <srv_heupstream@mediatek.com>
+Date:   Wed, 26 Oct 2022 19:45:17 +0800
+In-Reply-To: <CAMZdPi_XSWeTf-eP+O2ZXGXtn5yviEp=p1Q0rs_fG76UGf2FsQ@mail.gmail.com>
+References: <20221026011540.8499-1-haozhe.chang@mediatek.com>
+         <CAMZdPi_XSWeTf-eP+O2ZXGXtn5yviEp=p1Q0rs_fG76UGf2FsQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.1-2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4 07/16] x86/mtrr: split generic_set_all()
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20221004081023.32402-1-jgross@suse.com>
- <20221004081023.32402-8-jgross@suse.com> <Y1kOAUDYW7HpRvfl@zn.tnic>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <Y1kOAUDYW7HpRvfl@zn.tnic>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------40xD8u4HgTOwFnkBfPeRElUj"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,130 +83,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------40xD8u4HgTOwFnkBfPeRElUj
-Content-Type: multipart/mixed; boundary="------------kBD4300sd5ABaEpB20YFVWOG";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>
-Message-ID: <52410187-f277-a4a0-f369-9390d25a70f6@suse.com>
-Subject: Re: [PATCH v4 07/16] x86/mtrr: split generic_set_all()
-References: <20221004081023.32402-1-jgross@suse.com>
- <20221004081023.32402-8-jgross@suse.com> <Y1kOAUDYW7HpRvfl@zn.tnic>
-In-Reply-To: <Y1kOAUDYW7HpRvfl@zn.tnic>
-
---------------kBD4300sd5ABaEpB20YFVWOG
-Content-Type: multipart/mixed; boundary="------------XaXytphsQQ0uuBUCatGKR9hr"
-
---------------XaXytphsQQ0uuBUCatGKR9hr
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-T24gMjYuMTAuMjIgMTI6MzcsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVHVlLCBP
-Y3QgMDQsIDIwMjIgYXQgMTA6MTA6MTRBTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
-Cj4+IFNwbGl0IGdlbmVyaWNfc2V0X2FsbCgpIGludG8gbXVsdGlwbGUgcGFydHMsIHdoaWxl
-IG1vdmluZyB0aGUgbWFpbg0KPj4gZnVuY3Rpb24gYm9keSBpbnRvIGNhY2hlaW5mby5jLg0K
-Pj4NCj4+IFByZXBhcmUgdGhlIHN1cHBvcnQgb2YgUEFUIHdpdGhvdXQgbmVlZGluZyBNVFJS
-IHN1cHBvcnQgYnkNCj4+IG1vdmluZyB0aGUgbWFpbiBmdW5jdGlvbiBib2R5IG9mIGdlbmVy
-aWNfc2V0X2FsbCgpIGludG8gY2FjaGVpbmZvLmMNCj4+IHdoaWxlIHJlbmFtaW5nIGl0IHRv
-IGNhY2hlX2NwdV9pbml0KCkuIFRoZSBNVFJSIHNwZWNpZmljIHBhcnRzIGFyZQ0KPj4gbW92
-ZWQgaW50byBhIGRlZGljYXRlZCBzbWFsbCBmdW5jdGlvbiBjYWxsZWQgYnkgY2FjaGVfY3B1
-X2luaXQoKSBpbg0KPj4gb3JkZXIgdG8gbWFrZSBjYWNoZV9jcHVfaW5pdCgpIGFzIE1UUlIg
-YWdub3N0aWMgYXMgcG9zc2libGUuDQo+Pg0KPj4gVGhlIHNldHRpbmcgb2Ygc21wX2NoYW5n
-ZXNfbWFzayBpcyBtZXJnZWQgaW50byB0aGUgKG5ldykgZnVuY3Rpb24NCj4+IG10cnJfZ2Vu
-ZXJpY19zZXRfc3RhdGUoKSB1c2VkIHRvIGNhbGwgc2V0X210cnJfc3RhdGUoKS4gSXQgd2Fz
-DQo+PiBwcm9iYWJseSBzcGxpdCBpbiBhbmNpZW50IHRpbWVzLCBhcyBhdG9taWMgb3BlcmF0
-aW9ucyB3aGlsZSBydW5uaW5nDQo+PiB1bmNhY2hlZCBtaWdodCBiZSBxdWl0ZSBleHBlbnNp
-dmUsIGJ1dCBPVE9IIG9ubHkgc3lzdGVtcyB3aXRoIGENCj4+IGJyb2tlbiBCSU9TIHNob3Vs
-ZCBldmVyIHJlcXVpcmUgdG8gc2V0IGFueSBiaXQgaW4gc21wX2NoYW5nZXNfbWFzaywNCj4+
-IHNvIGp1c3QgaHVydGluZyB0aG9zZSBkZXZpY2VzIHdpdGggYSBwZW5hbHR5IG9mIGEgZmV3
-IG1pY3Jvc2Vjb25kcw0KPj4gZHVyaW5nIGJvb3Qgc2hvdWxkbid0IGJlIGEgcmVhbCBpc3N1
-ZS4NCj4gDQo+IFRoaXMgc3RpbGwgbmVlZHMgYWRkcmVzc2luZw0KPiANCj4gIlNvIHRoZSBj
-b21taXQgbWVzc2FnZSBzaG91bGQgbm90IHNheSB3aGF0IHlvdSdyZSBkb2luZyAtIHRoYXQg
-c2hvdWxkDQo+IGJlIHZpc2libGUgZnJvbSB0aGUgZGlmZiBpdHNlbGYuIEl0IHNob3VsZCB0
-YWxrIG1vcmUgYWJvdXQgdGhlICp3aHkqDQo+IHlvdSdyZSBkb2luZyBpdC4iDQo+IA0KDQpU
-aGUgcmVhc29uIGlzICJQcmVwYXJlIHRoZSBzdXBwb3J0IG9mIFBBVCB3aXRob3V0IG5lZWRp
-bmcgTVRSUiBzdXBwb3J0Ii4NCg0KRFlNIEkgc2hvdWxkIGp1c3QgcmVtb3ZlIHRoZSByZXN0
-IG9mIHRoZSBjb21taXQgbWVzc2FnZT8NCg0KDQpKdWVyZ2VuDQo=
---------------XaXytphsQQ0uuBUCatGKR9hr
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------XaXytphsQQ0uuBUCatGKR9hr--
-
---------------kBD4300sd5ABaEpB20YFVWOG--
-
---------------40xD8u4HgTOwFnkBfPeRElUj
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmNZHXgFAwAAAAAACgkQsN6d1ii/Ey9l
-KAgAmZACeS5E+b+pZQxZbTNDmNChwZCsXeKg8WC+/pNt2pTz/qQHc7gZ4pvlArdXV2U82O6n9rs6
-wElMnoPMF2+pIZKr9soEy8628qORATU3M4/JlhKrHb/F3hW7xLDkdrws1xFVtSkxpxB4gZemSsa6
-S7GzV2YcRqK3Q6xQSy1qjCvcxr56hmy1F/G+mx3SOYQiuVRxV/fDIRH0htTkwHAY+PFiTLNRCuU6
-Z0MZpMLo0wBqxUCJS6e26FAQShcjk9WHhbCcGk+an63a1Xhg+2uhKzr6zeru2g4wFNFLtkjrE4f0
-LBA75cyUuJs2pPqCmsCcf3olRzL5Ho7SLEH8m3rRsg==
-=8IMF
------END PGP SIGNATURE-----
-
---------------40xD8u4HgTOwFnkBfPeRElUj--
+On Wed, 2022-10-26 at 15:28 +0800, Loic Poulain wrote:
+> Hi Haozhe,
+> 
+> On Wed, 26 Oct 2022 at 03:16, <haozhe.chang@mediatek.com> wrote:
+> > 
+> > From: haozhe chang <haozhe.chang@mediatek.com>
+> > 
+> > wwan_port_fops_write inputs the SKB parameter to the TX callback of
+> > the WWAN device driver. However, the WWAN device (e.g., t7xx) may
+> > have an MTU less than the size of SKB, causing the TX buffer to be
+> > sliced and copied once more in the WWAN device driver.
+> 
+> The benefit of putting data in an skb is that it is easy to
+> manipulate, so not sure why there is an additional copy in the first
+> place. Isn't possible for the t7xx driver to consume the skb
+> progressively (without intermediate copy), according to its own MTU
+> limitation?
+> 
+t7xx driver needs to add metadata to the SKB head for each fragment, so
+the driver has to allocate a new buffer to copy data(skb_put_data) and
+insert metadata. 
+Providing the option to slice in common layer benefits varieties of
+devices with different DMA capabilities. The patch is also compatible
+with existing WWAN devices.
+> > 
+> > This patch implements the slicing in the WWAN subsystem and gives
+> > the WWAN devices driver the option to slice(by chunk) or not. By
+> > doing so, the additional memory copy is reduced.
+> > 
+> > Meanwhile, this patch gives WWAN devices driver the option to
+> > reserve
+> > headroom in SKB for the device-specific metadata.
+> > 
+> > Signed-off-by: haozhe chang <haozhe.chang@mediatek.com>
+> > ---
+> >  drivers/net/wwan/t7xx/t7xx_port_wwan.c | 41 ++++++++++++--------
+> > ---
+> >  drivers/net/wwan/wwan_core.c           | 45 ++++++++++++++++++--
+> > ------
+> >  include/linux/wwan.h                   |  5 ++-
+> >  3 files changed, 56 insertions(+), 35 deletions(-)
+> > 
+> > diff --git a/drivers/net/wwan/t7xx/t7xx_port_wwan.c
+> > b/drivers/net/wwan/t7xx/t7xx_port_wwan.c
+> > index 33931bfd78fd..5e8589582121 100644
+> > --- a/drivers/net/wwan/t7xx/t7xx_port_wwan.c
+> > +++ b/drivers/net/wwan/t7xx/t7xx_port_wwan.c
+> > @@ -54,13 +54,12 @@ static void t7xx_port_ctrl_stop(struct
+> > wwan_port *port)
+> >  static int t7xx_port_ctrl_tx(struct wwan_port *port, struct
+> > sk_buff *skb)
+> >  {
+> >         struct t7xx_port *port_private =
+> > wwan_port_get_drvdata(port);
+> > -       size_t len, offset, chunk_len = 0, txq_mtu = CLDMA_MTU;
+> >         const struct t7xx_port_conf *port_conf;
+> >         struct t7xx_fsm_ctl *ctl;
+> >         enum md_state md_state;
+> > +       int ret;
+> > 
+> > -       len = skb->len;
+> > -       if (!len || !port_private->chan_enable)
+> > +       if (!port_private->chan_enable)
+> >                 return -EINVAL;
+> > 
+> >         port_conf = port_private->port_conf;
+> > @@ -72,33 +71,33 @@ static int t7xx_port_ctrl_tx(struct wwan_port
+> > *port, struct sk_buff *skb)
+> >                 return -ENODEV;
+> >         }
+> > 
+> > -       for (offset = 0; offset < len; offset += chunk_len) {
+> > -               struct sk_buff *skb_ccci;
+> > -               int ret;
+> > -
+> > -               chunk_len = min(len - offset, txq_mtu -
+> > sizeof(struct ccci_header));
+> > -               skb_ccci = t7xx_port_alloc_skb(chunk_len);
+> > -               if (!skb_ccci)
+> > -                       return -ENOMEM;
+> > -
+> > -               skb_put_data(skb_ccci, skb->data + offset,
+> > chunk_len);
+> > -               ret = t7xx_port_send_skb(port_private, skb_ccci, 0,
+> > 0);
+> > -               if (ret) {
+> > -                       dev_kfree_skb_any(skb_ccci);
+> > -                       dev_err(port_private->dev, "Write error on
+> > %s port, %d\n",
+> > -                               port_conf->name, ret);
+> > -                       return ret;
+> > -               }
+> > +       ret = t7xx_port_send_skb(port_private, skb, 0, 0);
+> > +       if (ret) {
+> > +               dev_err(port_private->dev, "Write error on %s port,
+> > %d\n",
+> > +                       port_conf->name, ret);
+> > +               return ret;
+> >         }
+> > -
+> >         dev_kfree_skb(skb);
+> > +
+> >         return 0;
+> >  }
+> > 
+> > +static size_t t7xx_port_get_tx_rsvd_headroom(struct wwan_port
+> > *port)
+> > +{
+> > +       return sizeof(struct ccci_header);
+> > +}
+> > +
+> > +static size_t t7xx_port_get_tx_chunk_len(struct wwan_port *port)
+> > +{
+> > +       return CLDMA_MTU - sizeof(struct ccci_header);
+> > +}
+> > +
+> >  static const struct wwan_port_ops wwan_ops = {
+> >         .start = t7xx_port_ctrl_start,
+> >         .stop = t7xx_port_ctrl_stop,
+> >         .tx = t7xx_port_ctrl_tx,
+> > +       .get_tx_rsvd_headroom = t7xx_port_get_tx_rsvd_headroom,
+> 
+> Can't we have a simple 'skb_headroom' or 'needed_headroom' member
+> here?
+> 
+OK, I will change it in patch v2.
+> > +       .get_tx_chunk_len = t7xx_port_get_tx_chunk_len,
+> >  };
+> > 
