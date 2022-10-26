@@ -2,79 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 347CA60E3EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 603D660E3F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234271AbiJZO7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
+        id S234260AbiJZPAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 11:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234438AbiJZO7F (ORCPT
+        with ESMTP id S229726AbiJZPAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:59:05 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB7111DAB0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:59:02 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id j6so7200079qvn.12
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:59:02 -0700 (PDT)
+        Wed, 26 Oct 2022 11:00:06 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434DF2BB22;
+        Wed, 26 Oct 2022 08:00:03 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id r187so1912610oia.8;
+        Wed, 26 Oct 2022 08:00:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c1i1FqqhTDMT/ViyoRGQtHvVYN5J6E42giRNCRA4lx4=;
-        b=KUI1hfVo+/GVX7DDCCi+qpqLJPRK1tN4Qc/EZIsWOGStCjDHxiJySclNFggdVo94PE
-         xUwPRlW+hiTsz4VZVi6hTlG04KxKD3No19BLgtwSssZ1d+NDa0K4yjwcTO/PTgCUgZiy
-         Y5fva+fuqn8PZypd0HvfWsyU+xVbPjxXsKzXgA+PR7kSYb2Vb94ZC1COAZ1gsbxdb0LK
-         QDyEE40cg73n3Plwn8jQQ8l4yglT1bm0VG0ipxCSJSDfB7JMP/7hnS13dLWYnIhf/0dU
-         iYb5q/70U3KfZxjpoa+Zx8HyFg8wk5rLL55uffjQKck7ife0Ftn6ew+3AQBxsBWuqDyB
-         mBnQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=txXT/wKuP7e6vmu341lu5ocYQu6nOYOzPylEPZrz0ao=;
+        b=eUKReRdPe5/6Wf1hvfzbtzHbxaDKbWabbo7VhS5Mw0W4Oyb7vlrOoUuM1n4Ccjs41i
+         CnEVqPzAY3qS/QzZgNB9cilk2SC2d1QODWsOijmjWRqKtPEhBVJHlCT/madDQQ/Njsil
+         OC4yvePxJKytlrH/4z8aN62RcP556W9jOz7sedI12lhEvtPRE+9F1qmwjTj3bRj6pCfT
+         oV7UrOISfNJUtn74TjL/bBnq/8o5/KamvzmV+5yG0vtb/sfcBoBnmDjoZ9safWks4SsL
+         rUBPIGatBcJx3vffkAFxWztkVN4RD1PutoreQEZxIqwIJ/qD/B580LX8JaSjBRuRCEuA
+         EKJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c1i1FqqhTDMT/ViyoRGQtHvVYN5J6E42giRNCRA4lx4=;
-        b=W3RUPtkOHzJVdvQgwFuz1Kom1K5W280nhtHCaWcLrU+8Scmsp5B3Vxk8hEU4axv6Np
-         v3LIKszBpxxVKfFem6Nl4hpe/kQV1k4MHteXxBBO3njwUoYF2+mD3y/XNCNYPSwCfktM
-         km+Q+GrALezz4NTDwhLniGZvS6DvDVhv3rVgj2IOdTJp6fpbD1u3S+7zduc1Wm7vI9Y+
-         /QmcUV0nTJq9Au4ueyutvAilStx+olG5IRQkt4OOvi8e+BYxQDmjAyTsyyj4Kh48CEmf
-         JKyS592qoEXdRvki7QDZh8lqnT94W2F50ZT91WHhKsKPA3/ZYG0XJFhdhzLzaKufdpa0
-         2ujQ==
-X-Gm-Message-State: ACrzQf1C6tize64i/itnpEvWYyKp24ofe0mtpF1YlZvlkXWB7Sl4LNxt
-        sW5MOU4VDmjS/9newskjRBb/pg==
-X-Google-Smtp-Source: AMsMyM4gCvptG/75Ow/xn6cQNN0P4WSbVQ225JJytPyNeolHcy1BKvjyPYbEHG2aI4PsLRDa0dEm5g==
-X-Received: by 2002:ad4:5962:0:b0:4bb:6c2f:cbc2 with SMTP id eq2-20020ad45962000000b004bb6c2fcbc2mr14578666qvb.101.1666796341918;
-        Wed, 26 Oct 2022 07:59:01 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id b6-20020ac812c6000000b0039ccbf75f92sm3282983qtj.11.2022.10.26.07.58.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 07:59:01 -0700 (PDT)
-Message-ID: <133f27f4-d92c-ef8d-4fc9-32387518e4c0@linaro.org>
-Date:   Wed, 26 Oct 2022 10:58:59 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=txXT/wKuP7e6vmu341lu5ocYQu6nOYOzPylEPZrz0ao=;
+        b=SKBFJVpFug8/jZN9KAcS2bvYfdcqWuAownP1Y7m7DQ9ixV3HPHTbm1MQkf4CqoD10b
+         AeRHUmMVX2V+7ya5W9+UP3cMRWFDbsLtyxWuBSx05i7Ek7HcslKUT+tNwcXdsEOlWt4m
+         Ja/9jDiWoZle7+nqv3MTkXpcxYGlgxxVlsOdNn+CFyPHDTh6goIQolXdIk0FVsyccU0Z
+         Qf0qdJ3K/ajU8/Pjz2UYVbri9ZG2m/Up0Ql41ZLaQj0Q7vUvrnvEVWncV/Ag9KRJwFYl
+         ZSnYWUZwkHXnsO9MCeHbPHTQpN0olA9NpzFROkQSnjW4pcL1Da/BiajE8FeQ4OkuGuic
+         FGVA==
+X-Gm-Message-State: ACrzQf12ugGpx6EXA3yZBhBxa/8HDYidFttHwpLdeM+5rcKho3EmwVyD
+        6EnpJzMjgC0AL5t+vJVTcL8=
+X-Google-Smtp-Source: AMsMyM7Boz8EiNGrugjMh/1o3LveBg7F50E5TXO7Q+5hoDFb4+nzDkAPU6DBuPcT107b8EUDsqUkQA==
+X-Received: by 2002:a05:6808:23d4:b0:354:e81a:12a8 with SMTP id bq20-20020a05680823d400b00354e81a12a8mr2083674oib.78.1666796403179;
+        Wed, 26 Oct 2022 08:00:03 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w110-20020a9d3677000000b0066227572ee3sm2265814otb.52.2022.10.26.08.00.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 08:00:02 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 26 Oct 2022 08:00:01 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Quan Nguyen <quan@os.amperecomputing.com>
+Cc:     macro@orcam.me.uk, Lee Jones <lee@kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thu Nguyen <thu@os.amperecomputing.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        thang@os.amperecomputing.com
+Subject: Re: [PATCH v9 1/9] hwmon: smpro: Add Ampere's Altra smpro-hwmon
+ driver
+Message-ID: <20221026150001.GA2545504@roeck-us.net>
+References: <20220929094321.770125-1-quan@os.amperecomputing.com>
+ <20220929094321.770125-2-quan@os.amperecomputing.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v8 1/2] dt-bindings: fsl-imx-sdma: Convert imx sdma to DT
- schema
-Content-Language: en-US
-To:     Joy Zou <joy.zou@nxp.com>, vkoul@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com
-Cc:     shengjiu.wang@nxp.com, martink@posteo.de, dev@lynxeye.de,
-        alexander.stein@ew.tq-group.com, peng.fan@nxp.com, david@ixit.cz,
-        aford173@gmail.com, hongxing.zhu@nxp.com, linux-imx@nxp.com,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221025083609.2129260-1-joy.zou@nxp.com>
- <20221025083609.2129260-2-joy.zou@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221025083609.2129260-2-joy.zou@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929094321.770125-2-quan@os.amperecomputing.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,89 +91,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/10/2022 04:36, Joy Zou wrote:
-> Convert the i.MX SDMA binding to DT schema format using json-schema.
+On Thu, Sep 29, 2022 at 04:43:13PM +0700, Quan Nguyen wrote:
+> This commit adds support for Ampere SMpro hwmon driver. This driver
+> supports accessing various CPU sensors provided by the SMpro co-processor
+> including temperature, power, voltages, and current.
 > 
-> The compatibles fsl,imx31-to1-sdma, fsl,imx31-to2-sdma, fsl,imx35-to1-sdma
-> and fsl,imx35-to2-sdma are not used. So need to delete it. The compatibles
-> fsl,imx50-sdma, fsl,imx6sll-sdma and fsl,imx6sl-sdma are added. The
-> original binding don't list all compatible used.
-> 
-> In addition, add new peripheral types HDMI Audio.
-> 
-> Signed-off-by: Joy Zou <joy.zou@nxp.com>
-> ---
-> Changes in v8:
-> add the dma-controller quotes.
+> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Why adding quotes?
+I see that the mfd patch was accepted into the mfd subsystem,
+so I'll apply this and the next patch in the series to hwmon-next.
 
-> delete #dma-cells in required.
-> 
-> Changes in v6:
-> delete tag Acked-by from commit message.
-> 
-> Changes in v5:
-> modify the commit message fromat.
-> add additionalProperties, because delete the quotes in patch v4.
-> delete unevaluatedProperties due to similar to additionalProperties.
-> modification fsl,sdma-event-remap items and description.
-> 
-> Changes in v4:
-> modify the commit message.
-> delete the quotes in patch.
-> modify the compatible in patch.
-> delete maxitems and add items for clock-names property.
-> add iram property.
-> 
-> Changes in v3:
-> modify the commit message.
-> modify the filename.
-> modify the maintainer.
-> delete the unnecessary comment.
-> modify the compatible and run dt_binding_check and dtbs_check.
-> add clocks and clock-names property.
-> delete the reg description and add maxItems.
-> delete the interrupts description and add maxItems.
-> add ref for gpr property.
-> modify the fsl,sdma-event-remap ref type and add items.
-> delete consumer example.
-> 
-> Changes in v2:
-> convert imx sdma bindings to DT schema.
-> ---
->  .../devicetree/bindings/dma/fsl,imx-sdma.yaml | 149 ++++++++++++++++++
->  .../devicetree/bindings/dma/fsl-imx-sdma.txt  | 118 --------------
->  2 files changed, 149 insertions(+), 118 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/dma/fsl,imx-sdma.yaml
->  delete mode 100644 Documentation/devicetree/bindings/dma/fsl-imx-sdma.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/dma/fsl,imx-sdma.yaml b/Documentation/devicetree/bindings/dma/fsl,imx-sdma.yaml
-> new file mode 100644
-> index 000000000000..fe527d32cdb6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/dma/fsl,imx-sdma.yaml
-> @@ -0,0 +1,149 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/dma/fsl,imx-sdma.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Freescale Smart Direct Memory Access (SDMA) Controller for i.MX
-> +
-> +maintainers:
-> +  - Joy Zou <joy.zou@nxp.com>
-> +
-> +allOf:
-> +  - $ref: "dma-controller.yaml#"
-
-Drop quotes.
-
-> +
-> +properties:
-> +  compatible:
-
-Best regards,
-Krzysztof
-
+Thanks,
+Guenter
