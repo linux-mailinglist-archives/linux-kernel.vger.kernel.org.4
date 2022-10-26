@@ -2,160 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2AC360E6FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 20:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BCC60E705
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 20:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233772AbiJZSIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 14:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
+        id S234106AbiJZSL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 14:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233536AbiJZSIa (ORCPT
+        with ESMTP id S233986AbiJZSLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 14:08:30 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D2B9A9D4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:08:28 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7b8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7b8:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A1C4D1EC06A7;
-        Wed, 26 Oct 2022 20:08:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1666807706;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=GoDDP+xnbVQ4x7skEFOwsY4I4Z3qguLizOfgJeu8odg=;
-        b=C/6h2zxadK03BQiP92QBsVy+pue+mv7tPB/0IBZl3dZxIQH1gQSl61x6N5sAOOUgzWQCs8
-        WksbWYRJtrxk9LCeu3yQItTLkWBHU8kjnPdruFoOuAo978RgWC2rMGjdTQ3cb/TpdjqsMn
-        qjNAV4yuejOCVpC0OCcboxDHo77nmGY=
-Date:   Wed, 26 Oct 2022 20:08:22 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Julian Pidancet <julian.pidancet@oracle.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH] x86/alternative: Consistently patch SMP locks in vmlinux
- and modules
-Message-ID: <Y1l3lqPTNAcqwtRT@zn.tnic>
-References: <ed7a508717bb8bec6273c2740418f0dc2df9eeba.1661943721.git.julian.pidancet@oracle.com>
+        Wed, 26 Oct 2022 14:11:24 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824B084E5B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:11:17 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id l9so8685577qkk.11
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:11:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ITulc6XgqsqjNhbd41aCpior1CUyIgJHMI2V6YZSYqc=;
+        b=euOzt4OtQ6r2FoqktgoiitkA8qilHqWaety7Buy4Wc/kLai3+4S/yKJ+b8cr/78vie
+         65EAmm5Nk2Ou8O4UkVxUCQrdIYy4Jt0zqWrXA2jzp/FrxwIK4YXMEVDcaQQgF11XbHVL
+         dUvryBX9A+1fa9gOcaAoRkiAkEUCX4yINBJmM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ITulc6XgqsqjNhbd41aCpior1CUyIgJHMI2V6YZSYqc=;
+        b=OfjiFpDTUmHe0/+yygDQCQD4GncCNB4oI6QBlIeVKd55DgsPbaeAskMmXzO9XMA8s0
+         CWK6AOIE5F6FGbGh0gDKqPXQGUm+mnyp6ie/4iWX8dSeUxwOzp9SU+jTiw0WMR4yfASR
+         bamX28riSP1JQIcjYPlZrt+/AC7EtDkWsIBfAr569iV0LS90qx8y9Jibkhz2Jz1X4JyH
+         for0EgxWIvrZOHT7J8IIne3+91J5rkcGxK+2oK7Lc/+Tzvam8WpFSMN1bQhsIkDO2iwT
+         jxDEKw0og63z7COI+gmMms20/Nfycjx3C30tNzoJC9sbQPF3fuPlJuzs8RdrPcGqk0un
+         Ao/w==
+X-Gm-Message-State: ACrzQf30nus0QFMVJz23j8pIJEF5pCNOcIf2ZTpNODG2sd7zvmulymPr
+        j2pnAIMcGX4HeoVnT/R9S/tKKGJdKcmmkg==
+X-Google-Smtp-Source: AMsMyM5rNyXu8wKAwO3upQvkPSzhcBlviepfIndET5WY8/jH+issjVVToLr5W8ClWZf1aKtSDbeOpw==
+X-Received: by 2002:a05:620a:2627:b0:6b8:c8c3:78f9 with SMTP id z39-20020a05620a262700b006b8c8c378f9mr31400082qko.641.1666807876301;
+        Wed, 26 Oct 2022 11:11:16 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id fp9-20020a05622a508900b0039a08c0a594sm3481688qtb.82.2022.10.26.11.11.14
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 11:11:14 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id y72so19939557yby.13
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:11:14 -0700 (PDT)
+X-Received: by 2002:a5b:984:0:b0:6ca:9345:b2ee with SMTP id
+ c4-20020a5b0984000000b006ca9345b2eemr3573582ybq.362.1666807873800; Wed, 26
+ Oct 2022 11:11:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ed7a508717bb8bec6273c2740418f0dc2df9eeba.1661943721.git.julian.pidancet@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20221019162648.3557490-1-Jason@zx2c4.com> <CAHk-=whT+xyge9UjH+r6dt0FG-eUdrzu5hDMce_vC+n8uLam2A@mail.gmail.com>
+ <3a2fa7c1-2e31-0479-761f-9c189f8ed8c3@rasmusvillemoes.dk>
+In-Reply-To: <3a2fa7c1-2e31-0479-761f-9c189f8ed8c3@rasmusvillemoes.dk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 26 Oct 2022 11:10:57 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg9RNhvDyanUQnxa_xnir70TUiMgjhVhRWUuF5Ojj96Dw@mail.gmail.com>
+Message-ID: <CAHk-=wg9RNhvDyanUQnxa_xnir70TUiMgjhVhRWUuF5Ojj96Dw@mail.gmail.com>
+Subject: Re: make ctype ascii only? (was [PATCH] kbuild: treat char as always signed)
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 09:42:37AM +0200, Julian Pidancet wrote:
-> The alternatives_smp_module_add() function restricts patching of SMP
-> lock prefixes to the text address range passed as an argument.
-> 
-> For vmlinux, patching all the instructions located between the _text and
-> _etext symbols is allowed. That includes the .text section but also
-> other sections such as .text.hot and .text.unlikely.
-> 
-> As per the comment inside the 'struct smp_alt_module' definition, the
-> original purpose of this restriction is to avoid patching the init code
-> which may have been deallocated when the alternatives code run.
-> 
-> For modules, the current code only allows patching instructions located
-> inside the .text segment, excluding other sections such as .text.hot or
-> .text.unlikely, which may need patching.
+On Tue, Oct 25, 2022 at 5:10 PM Rasmus Villemoes
+<linux@rasmusvillemoes.dk> wrote:
+>
+> Only very tangentially related (because it has to do with chars...): Can
+> we switch our ctype to be ASCII only, just as it was back in the good'ol
+> mid 90s
 
-Is this something you noticed by inspection or is there a real failure
-behind it?
+Those US-ASCII days weren't really very "good" old days, but I forget
+why we did this (it's attributed to me, but that's from the
+pre-BK/pre-git days before we actually tracked things all that well,
+so..)
 
-> This change aims to make patching of the kernel core and modules more
+Anyway, I think anybody using ctype.h on 8-bit chars gets what they
+deserve, and I think Latin1 (or something close to it) is better than
+US-ASCII, in that it's at least the same as Unicode in the low 8
+chars.
 
-Avoid having "This patch" or "This commit" and so on, in the commit
-message. It is tautologically useless.
+So no, I'm disinclined to go back in time to what I think is an even
+worse situation. Latin1 isn't great, but it sure beats US-ASCII. And
+if you really want just US-ASII, then don't use the high bit, and make
+your disgusting 7-bit code be *explicitly* 7-bit.
 
-Also, do
+Now, if there are errors in that table wrt Latin1 / "first 256
+codepoints of Unicode" too, then we can fix those.
 
-$ git grep 'This patch' Documentation/process
+Not that anybody has apparently cared since 2.0.1 was released back in
+July of 1996 (btw, it's sad how none of the old linux git archive
+creations seem to have tried to import the dates, so you have to look
+those up separately)
 
-for more details.
+And if nobody has cared since 1996, I don't really think it matters.
 
-> consistent, by allowing all text sections of modules except .init.text
-> to be patched in module_finalize().
-> 
-> For that we use mod->core_layout.base/mod->core_layout.text_size as the
+But fundamentally, I think anybody calling US-ASCII "good" is either
+very very very confused, or is comparing it to EBCDIC.
 
-Please use passive voice in your commit message: no "we" or "I", etc,
-and describe your changes in imperative mood.
-
-Bottom line is: personal pronouns are ambiguous in text, especially with
-so many parties/companies/etc developing the kernel so let's avoid them
-please.
-
-> address range allowed to be patched, which include all the code sections
-> except the init code.
-> 
-> Signed-off-by: Julian Pidancet <julian.pidancet@oracle.com>
-> ---
-> Public tests: https://gist.github.com/jpidancet/1ee457623426f3e3902a28edaf2c80d0 
-
-Looks like you wrote a module to verify that :)
-
-> Related thread: https://marc.info/?t=130864398400006
-
-Aha, someone else noticed this inconsistency.
-
->  arch/x86/kernel/module.c | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-> index b1abf663417c..da22193eb5e0 100644
-> --- a/arch/x86/kernel/module.c
-> +++ b/arch/x86/kernel/module.c
-> @@ -251,14 +251,12 @@ int module_finalize(const Elf_Ehdr *hdr,
->  		    const Elf_Shdr *sechdrs,
->  		    struct module *me)
->  {
-> -	const Elf_Shdr *s, *text = NULL, *alt = NULL, *locks = NULL,
-> -		*para = NULL, *orc = NULL, *orc_ip = NULL,
-> -		*retpolines = NULL, *returns = NULL, *ibt_endbr = NULL;
-> +	const Elf_Shdr *s, *alt = NULL, *locks = NULL, *para = NULL,
-> +		*orc = NULL, *orc_ip = NULL, *retpolines = NULL,
-> +		*returns = NULL, *ibt_endbr = NULL;
->  	char *secstrings = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
->  
->  	for (s = sechdrs; s < sechdrs + hdr->e_shnum; s++) {
-> -		if (!strcmp(".text", secstrings + s->sh_name))
-> -			text = s;
->  		if (!strcmp(".altinstructions", secstrings + s->sh_name))
->  			alt = s;
->  		if (!strcmp(".smp_locks", secstrings + s->sh_name))
-> @@ -302,12 +300,13 @@ int module_finalize(const Elf_Ehdr *hdr,
->  		void *iseg = (void *)ibt_endbr->sh_addr;
->  		apply_ibt_endbr(iseg, iseg + ibt_endbr->sh_size);
->  	}
-> -	if (locks && text) {
-> +	if (locks) {
->  		void *lseg = (void *)locks->sh_addr;
-> -		void *tseg = (void *)text->sh_addr;
-> +		void *text = me->core_layout.base;
-> +		void *text_end = text + me->core_layout.text_size;
->  		alternatives_smp_module_add(me, me->name,
->  					    lseg, lseg + locks->sh_size,
-> -					    tseg, tseg + text->sh_size);
-> +					    text, text_end);
->  	}
->  
->  	if (orc && orc_ip)
-> -- 
-
-I don't see anything wrong with doing that on a quick glance...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+                 Linus
