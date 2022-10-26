@@ -2,40 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE7060E7D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 20:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D882A60E7FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:01:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234419AbiJZS7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 14:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
+        id S234712AbiJZTBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 15:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234387AbiJZS7d (ORCPT
+        with ESMTP id S234570AbiJZTAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 14:59:33 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8BD021A;
-        Wed, 26 Oct 2022 11:59:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1666810769; x=1698346769;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=G5g1jt93IzGiixrXKV9NRPTDWsTJFog4GjicE5N8xVA=;
-  b=QNLkyzTLtMCj3r2BF6N3SvGaSuLajfIcrLc8YzSxwxrse26BNJdr4nMI
-   HFhdpUv+cAjdAaTWK7zxqoWZ4TFvdrpFwICbwqrK9fpmN/9naXKPNFSkF
-   U7xmQCtZMLHGtCX5Eopc2lV4mr5Yyia+lLCQw76Z4ogIw0UVvEUQFd0C9
-   g=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 26 Oct 2022 11:59:27 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 11:59:27 -0700
+        Wed, 26 Oct 2022 15:00:12 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC84DF11;
+        Wed, 26 Oct 2022 11:59:48 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QIoin1008148;
+        Wed, 26 Oct 2022 18:59:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=qcppdkim1;
+ bh=yXlqNXMWAdjwAdJIaYWHWJwPCld5jvDJM7JbTJUhsTs=;
+ b=XylTMNvATBwOJYq+CsmQKTjrAPAXGmATZqTzMp6hMO89d75ybKQW826SLx0qFemAs68N
+ J2d74W/7sQxNzxu+hPMEP7ieF+7oEwAyz+O/cwgDf13QPtukDEuPkjF6gnmWNgJFaoY4
+ GHCe2puDj+ik5MpshQIQNBYv/UYyXl0xN3st/48BXJ//CvX/RBV9M5mCMYODDEOYtN5b
+ OyzThtnVPWiwVvQ5Lc+H5zdR92eT/Jmj91V3hN9cqXU2FLrqOAHPG3fGvCnvDHhLYJRf
+ mfpX6KsKGjf5KA8d42OEkzXApiazjvRzFtRyS+RVw9RtxG0mv2xw+C582f/Vd0KPKgJ4 xA== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kfahc80tr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 18:59:29 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29QIxSXU002207
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 18:59:28 GMT
 Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 26 Oct 2022 11:59:26 -0700
+ 15.2.986.29; Wed, 26 Oct 2022 11:59:27 -0700
 From:   Elliot Berman <quic_eberman@quicinc.com>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        "Sudeep Holla" <sudeep.holla@arm.com>
 CC:     Elliot Berman <quic_eberman@quicinc.com>,
         Murali Nalajala <quic_mnalajal@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
@@ -46,11 +54,8 @@ CC:     Elliot Berman <quic_eberman@quicinc.com>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Jassi Brar <jassisinghbrar@gmail.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
         Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Jonathan Corbet <corbet@lwn.net>,
         "Will Deacon" <will@kernel.org>,
@@ -62,9 +67,9 @@ CC:     Elliot Berman <quic_eberman@quicinc.com>,
         Kalle Valo <kvalo@kernel.org>, <devicetree@vger.kernel.org>,
         <linux-doc@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 03/21] gunyah: Common types and error codes for Gunyah hypercalls
-Date:   Wed, 26 Oct 2022 11:58:28 -0700
-Message-ID: <20221026185846.3983888-4-quic_eberman@quicinc.com>
+Subject: [PATCH v6 04/21] arm64: smccc: Include alternative-macros.h
+Date:   Wed, 26 Oct 2022 11:58:29 -0700
+Message-ID: <20221026185846.3983888-5-quic_eberman@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221026185846.3983888-1-quic_eberman@quicinc.com>
 References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
@@ -74,8 +79,20 @@ Content-Type: text/plain
 X-Originating-IP: [10.49.16.6]
 X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: _Q55uuQIiKBgsUhGIyxSRQA4xD-usOHi
+X-Proofpoint-GUID: _Q55uuQIiKBgsUhGIyxSRQA4xD-usOHi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-26_07,2022-10-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ priorityscore=1501 mlxlogscore=608 malwarescore=0 bulkscore=0 phishscore=0
+ spamscore=0 impostorscore=0 clxscore=1015 adultscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2210260107
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,108 +100,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add architecture-independent standard error codes, types, and macros for
-Gunyah hypercalls.
+Fix build error when CONFIG_ARM64_SVE is selected and
+asm/alternative-macros.h wasn't implicitly included by another header.
 
 Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- MAINTAINERS            |  1 +
- include/linux/gunyah.h | 74 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 75 insertions(+)
- create mode 100644 include/linux/gunyah.h
+ include/linux/arm-smccc.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1de8d00dacb2..5eec8618a087 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8942,6 +8942,7 @@ L:	linux-arm-msm@vger.kernel.org
- S:	Supported
- F:	Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
- F:	Documentation/virt/gunyah/
-+F:	include/linux/gunyah.h
+diff --git a/include/linux/arm-smccc.h b/include/linux/arm-smccc.h
+index 220c8c60e021..6a627cdbbdec 100644
+--- a/include/linux/arm-smccc.h
++++ b/include/linux/arm-smccc.h
+@@ -383,6 +383,7 @@ asmlinkage void __arm_smccc_hvc(unsigned long a0, unsigned long a1,
  
- HABANALABS PCI DRIVER
- M:	Oded Gabbay <ogabbay@kernel.org>
-diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
-new file mode 100644
-index 000000000000..824e20a11d27
---- /dev/null
-+++ b/include/linux/gunyah.h
-@@ -0,0 +1,74 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#ifndef _GUNYAH_H
-+#define _GUNYAH_H
-+
-+#include <linux/types.h>
-+#include <linux/errno.h>
-+
-+/* Common Gunyah macros */
-+#define GH_CAPID_INVAL	U64_MAX
-+#define GH_VMID_ROOT_VM	0xff
-+
-+#define GH_ERROR_OK			0
-+
-+#define GH_ERROR_UNIMPLEMENTED		-1
-+#define GH_ERROR_RETRY			-2
-+
-+#define GH_ERROR_ARG_INVAL		1
-+#define GH_ERROR_ARG_SIZE		2
-+#define GH_ERROR_ARG_ALIGN		3
-+
-+#define GH_ERROR_NOMEM			10
-+
-+#define GH_ERROR_ADDR_OVFL		20
-+#define GH_ERROR_ADDR_UNFL		21
-+#define GH_ERROR_ADDR_INVAL		22
-+
-+#define GH_ERROR_DENIED			30
-+#define GH_ERROR_BUSY			31
-+#define GH_ERROR_IDLE			32
-+
-+#define GH_ERROR_IRQ_BOUND		40
-+#define GH_ERROR_IRQ_UNBOUND		41
-+
-+#define GH_ERROR_CSPACE_CAP_NULL	50
-+#define GH_ERROR_CSPACE_CAP_REVOKED	51
-+#define GH_ERROR_CSPACE_WRONG_OBJ_TYPE	52
-+#define GH_ERROR_CSPACE_INSUF_RIGHTS	53
-+#define GH_ERROR_CSPACE_FULL		54
-+
-+#define GH_ERROR_MSGQUEUE_EMPTY		60
-+#define GH_ERROR_MSGQUEUE_FULL		61
-+
-+static inline int gh_remap_error(int gh_error)
-+{
-+	switch (gh_error) {
-+	case GH_ERROR_OK:
-+		return 0;
-+	case GH_ERROR_NOMEM:
-+		return -ENOMEM;
-+	case GH_ERROR_DENIED:
-+	case GH_ERROR_CSPACE_CAP_NULL:
-+	case GH_ERROR_CSPACE_CAP_REVOKED:
-+	case GH_ERROR_CSPACE_WRONG_OBJ_TYPE:
-+	case GH_ERROR_CSPACE_INSUF_RIGHTS:
-+	case GH_ERROR_CSPACE_FULL:
-+		return -EACCES;
-+	case GH_ERROR_BUSY:
-+	case GH_ERROR_IDLE:
-+		return -EBUSY;
-+	case GH_ERROR_IRQ_BOUND:
-+	case GH_ERROR_IRQ_UNBOUND:
-+	case GH_ERROR_MSGQUEUE_FULL:
-+	case GH_ERROR_MSGQUEUE_EMPTY:
-+		return -EPERM;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+#endif
+ /* nVHE hypervisor doesn't have a current thread so needs separate checks */
+ #if defined(CONFIG_ARM64_SVE) && !defined(__KVM_NVHE_HYPERVISOR__)
++#include <asm/alternative-macros.h>
+ 
+ #define SMCCC_SVE_CHECK ALTERNATIVE("nop \n",  "bl __arm_smccc_sve_check \n", \
+ 				    ARM64_SVE)
 -- 
 2.25.1
 
