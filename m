@@ -2,105 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E532C60DB58
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 08:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FAB60DB5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 08:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233186AbiJZGdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 02:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
+        id S233192AbiJZGdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 02:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233094AbiJZGdJ (ORCPT
+        with ESMTP id S233180AbiJZGdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 02:33:09 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD9EA99E6;
-        Tue, 25 Oct 2022 23:33:08 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id kt23so13116646ejc.7;
-        Tue, 25 Oct 2022 23:33:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mF6zW9SFm7uxaco2K2CDLfIGBcOnQunLUbLBgwIgUhQ=;
-        b=Mm1POrX6xfBCMRhZT8ReywaZqeVagLYUSYmV51+7FJE1cm8Zx9McyYfiGKFnfn6fUz
-         dfzUlLnVrsB4zqU0NAuFQ8udQ4ALm1QDYbTAm0odL18FxEi/FR028ecb5YKs/PfebjiO
-         8P59bm7H327h6mNW0I9O319E9RIKIT8URtSbQcA8H17PLcP20gIztMvafyPrKx8A1qGE
-         ccj383RGlmumOV2u7xoEH1iNQyjyYcZC5vbVEhI2NLrsyhHRtpDo2EQBl9Fbsqm+KDhe
-         c3Fa8uBIuEEzq+m6O+MMfxRRz8dcQ5X57C4EVQ4Qo/5H7GHsNSQwAE0tF/b/4l3B6xzu
-         fs1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mF6zW9SFm7uxaco2K2CDLfIGBcOnQunLUbLBgwIgUhQ=;
-        b=IMsHhkAaN9EJWfbHCIyBVejXiWTQVUjS3H7UBp7nImKxnYRli569A9ZMMikYKqYVRk
-         b9J02hM/yVAXkqnPU9QqC8emz01VLxh5J/rWMZkg87Xlt/MHhnZeNA+1KgaC3+Uoktqs
-         eg63B/gmi4jQL6L1DMDvpnvcVX2jMAy1FLVIaFDcfJK1KYiWA7hX3BC0KW1US6l026Vs
-         mJxdEZ3Ixbv+8XhnRyctHCiy4g3vKqd829jgZmdjrHt4oAIlKvrMxcXSa5WZ9RFEzUrG
-         iZpzi7Y0AzOogAlxxptaU9P7/xe1rFhKdcT59hI6vgOf4NwQXKOP2J8jPukla8Z9Ci3h
-         s5hg==
-X-Gm-Message-State: ACrzQf3rknddlG4n+IOeyyevXP5zRas0oldCZ1+38lfFh5HqEu58mM6X
-        R4nk8+gsq+2FcnNwZtOz9wc0m3TVzOZnujrLI9w=
-X-Google-Smtp-Source: AMsMyM4oc5nOTH7XG4W2jHl5OtAiTtPzLROA0gvIMgTLF94IX2MvxdnuX2LQkafB5AySBX6uWode2zjVpZJ3J/qMFww=
-X-Received: by 2002:a17:907:7b94:b0:731:1b11:c241 with SMTP id
- ne20-20020a1709077b9400b007311b11c241mr36870991ejc.676.1666765986787; Tue, 25
- Oct 2022 23:33:06 -0700 (PDT)
+        Wed, 26 Oct 2022 02:33:31 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C71FAC392;
+        Tue, 25 Oct 2022 23:33:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1666766000; x=1698302000;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YSQ0taVVnmjRJNC9c/piCsW0RLRL2qeZ0FLqsRlzPpU=;
+  b=MIL9DccK0p0AeRXcCnwZJsL2l/b5rwdDlsPcmdZqtSPYAVZBzlndmaJ+
+   v13bkkYbllStTkMxzf6wKvJ3HEH3x/MonwXAwcNqz1Fzw98ldWk6xtL/U
+   1CMAqZnDjF1u/2JX/y9sJENA30MEiUzvtsaZwKbHu1G2iQb/UTINnxTLF
+   a93LkwyV/TQVAhzhfWxJCktS5JtW2FuP/TrI/eIBIaSza9+vPL3oPXeb/
+   +j6viFTJdzu80TU+Be1tPhIwGc0SlOa5I5AVgGRnoDKcNRGdIX1Slzl1r
+   404Pv+diyIIuWRw1U9NpkqPRdCnBC0Jgu7OSF/SRXC3v1z3/zlBeeMPl8
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
+   d="scan'208";a="120386793"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Oct 2022 23:33:19 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 25 Oct 2022 23:33:18 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Tue, 25 Oct 2022 23:33:16 -0700
+Date:   Wed, 26 Oct 2022 07:33:02 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     <Padmarao.Begari@microchip.com>
+CC:     <conor@kernel.org>, <linux-riscv@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <paul.walmsley@sifive.com>,
+        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+        <linux-kernel@vger.kernel.org>, <Daire.McNamara@microchip.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [RFC] riscv: dts: microchip: add OPPs to mpfs
+Message-ID: <Y1jUnrzH9sCW/kIi@wendy>
+References: <20221024193647.1089769-1-conor@kernel.org>
+ <bf68f00675b5cbc6ba8099496ddb68ed20e84f05.camel@microchip.com>
 MIME-Version: 1.0
-References: <20221026025941.2621795-1-xukuohai@huaweicloud.com>
-In-Reply-To: <20221026025941.2621795-1-xukuohai@huaweicloud.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 25 Oct 2022 23:32:55 -0700
-Message-ID: <CAADnVQ+Pe73yjys+fjW1TBPscCmv6K9ur5bDPr2056ejwBBdZg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Fix a typo in comment for DFS algorithm
-To:     Xu Kuohai <xukuohai@huaweicloud.com>
-Cc:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <bf68f00675b5cbc6ba8099496ddb68ed20e84f05.camel@microchip.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 7:42 PM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
->
-> From: Xu Kuohai <xukuohai@huawei.com>
->
-> There is a typo in comment for DFS algorithm in bpf/verifier.c. The top
-> element should not be popped until all its neighbors have been checked.
-> Fix it.
->
-> Fixes: 475fb78fbf48 ("bpf: verifier (add branch/goto checks)")
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-> ---
->  kernel/bpf/verifier.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index b83a8d420520..96ba5ea6d1a6 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -10662,7 +10662,7 @@ static int check_return_code(struct bpf_verifier_env *env)
->   * 3      let S be a stack
->   * 4      S.push(v)
->   * 5      while S is not empty
-> - * 6            t <- S.pop()
-> + * 6            t <- S.top()
+On Wed, Oct 26, 2022 at 05:54:16AM +0000, Padmarao.Begari@microchip.com wrote:
+> Hi Conor,
+> > On Mon, 2022-10-24 at 20:36 +0100, Conor Dooley wrote:
+> > 
+> > From: Conor Dooley <conor.dooley@microchip.com>
+> > 
+> > The U-Boot dts for mpfs defines three OPPs which are missing from the
+> > Linux dts. For ease of synchronisation of the two, add the missing
+> > OPPs
+> > to the Linux dt too.
+> > 
+> > CC: Padmarao Begari <padmarao.begari@microchip.com>
+> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > ---
+> > 
+> > Hey Padmarao,
+> > I've been trying to pick off the bits that're different between the
+> > Linux
+> > & U-Boot dts. Do you remember why we added OPPs to the U-Boot dts but
+> > didn't propagate them elsewhere?
+> > 
+> 
+> Initially We added OPPs to the Linux dts for the CPU Frequency and
+> Voltage scaling while bringing up the Linux on an Emulation Platform
+> and the Icicle Kit for PolarFire SoC and same dts used for the U-Boot
+> but the U-Boot dts upstreamed first.
 
-Even with this fix the comment is not quite accurate.
-I wonder whether we should keep it or delete it completely.
-At least please use 'peek' instead of 'top'.
+Right. So do we know if they're even correct values for an actual
+PolarFire SoC?
+
+> >  arch/riscv/boot/dts/microchip/mpfs.dtsi | 23 +++++++++++++++++++++++
+> >  1 file changed, 23 insertions(+)
+> > 
+> > diff --git a/arch/riscv/boot/dts/microchip/mpfs.dtsi
+> > b/arch/riscv/boot/dts/microchip/mpfs.dtsi
+> > index 0a9bb84af438..9d9ff7174341 100644
+> > --- a/arch/riscv/boot/dts/microchip/mpfs.dtsi
+> > +++ b/arch/riscv/boot/dts/microchip/mpfs.dtsi
+> > @@ -23,6 +23,7 @@ cpu0: cpu@0 {
+> >                         reg = <0>;
+> >                         riscv,isa = "rv64imac";
+> >                         clocks = <&clkcfg CLK_CPU>;
+> > +                       operating-points-v2 = <&cluster0_opps>;
+> >                         status = "disabled";
+> > 
+> >                         cpu0_intc: interrupt-controller {
+> > @@ -51,6 +52,7 @@ cpu1: cpu@1 {
+> >                         clocks = <&clkcfg CLK_CPU>;
+> >                         tlb-split;
+> >                         next-level-cache = <&cctrllr>;
+> > +                       operating-points-v2 = <&cluster0_opps>;
+> >                         status = "okay";
+> > 
+> >                         cpu1_intc: interrupt-controller {
+> > @@ -79,6 +81,7 @@ cpu2: cpu@2 {
+> >                         clocks = <&clkcfg CLK_CPU>;
+> >                         tlb-split;
+> >                         next-level-cache = <&cctrllr>;
+> > +                       operating-points-v2 = <&cluster0_opps>;
+> >                         status = "okay";
+> > 
+> >                         cpu2_intc: interrupt-controller {
+> > @@ -107,6 +110,7 @@ cpu3: cpu@3 {
+> >                         clocks = <&clkcfg CLK_CPU>;
+> >                         tlb-split;
+> >                         next-level-cache = <&cctrllr>;
+> > +                       operating-points-v2 = <&cluster0_opps>;
+> >                         status = "okay";
+> > 
+> >                         cpu3_intc: interrupt-controller {
+> > @@ -136,6 +140,7 @@ cpu4: cpu@4 {
+> >                         tlb-split;
+> >                         next-level-cache = <&cctrllr>;
+> >                         status = "okay";
+> > +                       operating-points-v2 = <&cluster0_opps>;
+> >                         cpu4_intc: interrupt-controller {
+> >                                 #interrupt-cells = <1>;
+> >                                 compatible = "riscv,cpu-intc";
+> > @@ -166,6 +171,24 @@ core4 {
+> >                                 };
+> >                         };
+> >                 };
+> > +
+> > +               cluster0_opps: opp-table {
+> > +                       compatible = "operating-points-v2";
+> > +                       opp-shared;
+> > +
+> > +                       opp-600000000 {
+> > +                           opp-hz = /bits/ 64 <600000000>;
+> > +                           opp-microvolt = <1100000>;
+> > +                       };
+> > +                       opp-300000000 {
+> > +                           opp-hz = /bits/ 64 <300000000>;
+> > +                           opp-microvolt = <950000>;
+> > +                       };
+> > +                       opp-150000000 {
+> > +                           opp-hz = /bits/ 64 <150000000>;
+> > +                           opp-microvolt = <750000>;
+> > +                       };
+> > +               };
+> >         };
+> > 
+> >         refclk: mssrefclk {
+> > --
+> > 2.38.0
+> > 
