@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0535960E40E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC7560E410
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233513AbiJZPFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 11:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
+        id S234460AbiJZPFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 11:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234104AbiJZPFF (ORCPT
+        with ESMTP id S234448AbiJZPFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 11:05:05 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625E271BFC;
-        Wed, 26 Oct 2022 08:05:02 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-13bef14ea06so6596435fac.3;
-        Wed, 26 Oct 2022 08:05:02 -0700 (PDT)
+        Wed, 26 Oct 2022 11:05:18 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA58A7A9E
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:05:16 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id a5so10718451qkl.6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:05:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MZ7K9c/DhvA3ULMMun0jLi/og1DertsN4XABD8/KyjY=;
-        b=EYk28o/biKU2YVqqaYQpWv1EveGWLGPZ87M0sCOrsphee60eFxn4SI3TY+rZW4nGqj
-         lCigbB0P9z1A1E0+/e+IGWIcvBSuvDJS1iyptl93MVHuda3AEOoQG4WMsbH285U4o9bR
-         VryT/UVC1eP7/pzFHkIwoWsDt6seiiEIPjZzySUcgGK6zmxnc1z0C6IWDzB0J5scBRWz
-         Usb7co73sSqu/19GPpN7vIqe+lOoj/IcdPgIG9LJk3a9lGh76GpN9MQrT/5ADt2wdWRy
-         7bWDwbmcaGmB24oa37dJ9N6pU9oqDV3hM2a8zTY4Ag//EbPfm5JFWMNh49omycESMnQn
-         aiKg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X+Yian3XJfjwAtTtvdKaogB3HiRKzCGm7a/+W1PG+Bs=;
+        b=Ol7qYit5i8e0FB2o5UVEvowECPm2l3afA/NKhZBEFTqA3cRqK2OswutA/C8AYW2tQc
+         IDCbMbPg04VX0hxosA7JgNk5JLi58Yxv6iJ9Fr2viWNfMeqE6JN4d2D07kf5TSPKZjqb
+         rLl6b1MOzmRd+YKi+Wq3IkZ/OqzDiCFW7k4m+KbRmQkakweDhIjhGjsc+cnZXQTZf17o
+         5X490R3cQofow4QefVKFYCg77XoJuKhFqN2A8vCPsDuK1Hu736zRaae3CL7uN4u3SwYe
+         5kQepm1PShNfxh2p52i44FfFhwqw4Wt1+D3pFFoUzHF5z+w1gGygk4MEKBWhsfi36k6n
+         TE7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MZ7K9c/DhvA3ULMMun0jLi/og1DertsN4XABD8/KyjY=;
-        b=gw6xn5yaKj6hKefx7V9RREIKQEFH5HDdpjjIVL62t0Co+YZKt3MyBmpRDxp+pH29cF
-         LRYpm7QL9fuziWuu72naPaDdw9XCYZfSNlrxXIDt3QVoGHNp75Zikk2bqVl1oZOiMC2Y
-         62kU7DJV2WEprI+7A6NrhyZwkQdYRnq9u9nn678gv9xTC7V9BnCDdMH1njbQMJIPDDSq
-         e2iyAlUW19atu1qDdatlakehCe3R25uVw0UYhMFhET+N7Bah11Xp1xxMrj58Z/cQgMPt
-         5Wt4PTG4dvuWSPnzrhrDwYQzQv+T+WRHRpIqLi6MdRpxnaEVGGkmM2mjs2PLhPfZJ9n2
-         VhIQ==
-X-Gm-Message-State: ACrzQf1pPuYhlA+dmOSMI8wf66SYpH+dVooW5+6qAshoWEqBf02rtxzX
-        ZUAgW/OYoECaa0EdHFabXvvOAaMLLWM=
-X-Google-Smtp-Source: AMsMyM7j+pvR/AINPyg0/WuDkBDZdG1TX/POVx/pzR6NDVfhn03EqbpG1ODcDrEDTVnVovhjTzYTDw==
-X-Received: by 2002:a05:6870:5388:b0:132:dbd1:219e with SMTP id h8-20020a056870538800b00132dbd1219emr2436570oan.87.1666796701714;
-        Wed, 26 Oct 2022 08:05:01 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b20-20020a05687061d400b0013b1301ce42sm949003oah.47.2022.10.26.08.05.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 08:05:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 26 Oct 2022 08:05:00 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Aleksa Savic <savicaleksa83@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, leonard.anderweit@gmail.com,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (aquacomputer_d5next) Add support for
- temperature sensor offsets
-Message-ID: <20221026150500.GA2546211@roeck-us.net>
-References: <20221024151039.7222-1-savicaleksa83@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X+Yian3XJfjwAtTtvdKaogB3HiRKzCGm7a/+W1PG+Bs=;
+        b=05LuTYGhtJ6oqGsG+3QPtihTSTIz2kWp2f8I3UhG+50G3qpriPLD4JjHZkwZav8JZI
+         96y1AZsxP1a1nsfAT08d2V913nsGDL9iTuiyLlpN764QYfHEs+B4SHFeYctj4TYqvnRL
+         E1PgJHDcg+J33sxR7U/mwOO5eTJg9IW7M1mXWaig3rLh4XhOI/Ac0HEkjKhTDSbGaxM9
+         yO4oy6HfHlauTWHHSPOgteabVPs9gcRUlIeFFmtbzvO+IesYyqhtQbf9L2xewPLh4Neg
+         Zilnk+Wp7D0CeQm3GaEZHD6x+IKX51p6JTOGdZS39/1TkmjGHTRnwTlxQPACNfstHh5e
+         oOIQ==
+X-Gm-Message-State: ACrzQf1pgBU2vPX/7ITY7LGT0hMbvkiE/BKkk9+a7bOLuNTSq4fYLs1e
+        MHm8E6WLwfuLhnZoWaqyEYdASA==
+X-Google-Smtp-Source: AMsMyM6foj2gIjI2u8y7Jp2aKeXtSR0X0hJfnW9nxP5T5NjKIqKcVT7s6ReMcs7TNopkLjjkoQj4kQ==
+X-Received: by 2002:a05:620a:4398:b0:6ee:be9f:435c with SMTP id a24-20020a05620a439800b006eebe9f435cmr31093108qkp.35.1666796715759;
+        Wed, 26 Oct 2022 08:05:15 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id x22-20020a05620a0ed600b006b61b2cb1d2sm3944483qkm.46.2022.10.26.08.05.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 08:05:14 -0700 (PDT)
+Message-ID: <ac24732b-a7bd-59fb-4178-b225bc0b17c0@linaro.org>
+Date:   Wed, 26 Oct 2022 11:05:12 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024151039.7222-1-savicaleksa83@gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v1 2/2] dt-bindings: ASoC: simple-card: Add
+ system-clock-id property
+Content-Language: en-US
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, broonie@kernel.org,
+        lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, kuninori.morimoto.gx@renesas.com
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221022162742.21671-1-aidanmacdonald.0x0@gmail.com>
+ <20221022162742.21671-2-aidanmacdonald.0x0@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221022162742.21671-2-aidanmacdonald.0x0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,18 +79,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 05:10:39PM +0200, Aleksa Savic wrote:
-> Add support for reading and writing temperature sensor offsets
-> on the Aquacomputer D5 Next, Farbwerk 360, Octo and Quadro,
-> for which the needed offsets are known. Implemented by
-> Leonard Anderweit [1].
+On 22/10/2022 12:27, Aidan MacDonald wrote:
+> This is a new per-DAI property used to specify the clock ID argument
+> to snd_soc_dai_set_sysclk().
 > 
-> [1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/22
-> 
-> Originally-from: Leonard Anderweit <leonard.anderweit@gmail.com>
-> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/sound/simple-card.yaml | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 
-Applied to hwmon-next.
+My concerns were addressed, so:
 
-Thanks,
-Guenter
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
