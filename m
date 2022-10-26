@@ -2,82 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8966660E117
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBD8D60E118
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233774AbiJZMnX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 26 Oct 2022 08:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
+        id S233796AbiJZMoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 08:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233641AbiJZMnV (ORCPT
+        with ESMTP id S233884AbiJZMoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:43:21 -0400
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846071A21C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 05:43:20 -0700 (PDT)
-Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay06.hostedemail.com (Postfix) with ESMTP id 1DF2CAB653;
-        Wed, 26 Oct 2022 12:43:19 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id BBF7820024;
-        Wed, 26 Oct 2022 12:42:31 +0000 (UTC)
-Message-ID: <f56da5f58afe5d759d16c7bdf3f748b683dfef32.camel@perches.com>
-Subject: Re: [PATCH] maple_tree: Update copyright dates for test code
-From:   Joe Perches <joe@perches.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Date:   Wed, 26 Oct 2022 05:43:14 -0700
-In-Reply-To: <Y1hR/RNpXB8O1sqZ@casper.infradead.org>
-References: <20221025173709.2718725-1-Liam.Howlett@oracle.com>
-         <8d8a291b5237750827d6847b29efde5b750a28f7.camel@perches.com>
-         <20221025202305.pyzau7vzvkizqbir@revolver>
-         <870346348d7c70f3d2e72a3f1abbb216f19cfb89.camel@perches.com>
-         <Y1hR/RNpXB8O1sqZ@casper.infradead.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Wed, 26 Oct 2022 08:44:05 -0400
+Received: from sender4-pp-o95.zoho.com (sender4-pp-o95.zoho.com [136.143.188.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3834F95B2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 05:44:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1666788241; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=QN5FgsdNhFnCRS91LIc1akmaEeCbcgyHzXjErDezIqawzV0F+aaazgd79hi41Y73rHxyqkYU02iTRcsPBx4/aD06+yhV7AP9aKy50I8vJcU9nyfKjMQ3zk2DaIo1z3V+uSxsC2xT3nsbzNpDWe3+fg0FKWyn8xJmGGhlJHHYf/I=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1666788241; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=NhEnCBIWiWhW0byYC8XES1kb52GQs7ocwSW0WqCzYhU=; 
+        b=dky9QHdmNKDaZRvMGqvVSC0P9sT8h8h98WHNxHqJ6+4ioBbuCQc8z9Scgc7ymzcr3+vHTz/bLrxk1M9fOGSeg/Z20PZuHOx+dC+RgtEHWbvoR008mRrf9iL9bkpBlYQrD5wmFiT9NuJdiepvT110Jh15eKYLHZQbv9Rj2ICJHo4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=zohomail.com;
+        spf=pass  smtp.mailfrom=t4rmin@zohomail.com;
+        dmarc=pass header.from=<t4rmin@zohomail.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1666788241;
+        s=zm2022; d=zohomail.com; i=t4rmin@zohomail.com;
+        h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+        bh=NhEnCBIWiWhW0byYC8XES1kb52GQs7ocwSW0WqCzYhU=;
+        b=KREsLJTuBSGqOnc1o8WLJhi4ND33J/qKx8k2x3pg9Q/TQ8AyZFRSh4rXbc8tAcmT
+        GJ1JTXY/+F4PDQ6I600+rcppd5k9cmYs42bqlVUHlP7JTB6yvaAJky/DHlahGLUq6YC
+        DyoH9iVJooVktIgqsI5pU5IIQqSt1r2ckOFE2VEI=
+Received: from plymouth (103.47.132.12 [103.47.132.12]) by mx.zohomail.com
+        with SMTPS id 1666788239134352.55749610584144; Wed, 26 Oct 2022 05:43:59 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 19:43:51 +0700
+From:   Aaron Lawrence <t4rmin@zohomail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 6/6] staging: rtl8192e: rtllib_crypt_tkip: rewritten
+ comparison to NULL
+Message-ID: <ca33296630627020694f4b653580f689a8a3d1c7.1666787061.git.t4rmin@zohomail.com>
+References: <cover.1666787061.git.t4rmin@zohomail.com>
 MIME-Version: 1.0
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: BBF7820024
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Stat-Signature: 48aem6azbwwawz1xj5y8bp9zgtnwapai
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18f8ja1aq459jJZfQvn1y6RGbTKWSh8XZA=
-X-HE-Tag: 1666788151-926598
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1666787061.git.t4rmin@zohomail.com>
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-10-25 at 22:15 +0100, Matthew Wilcox wrote:
-> On Tue, Oct 25, 2022 at 01:40:19PM -0700, Joe Perches wrote:
-> > Copyright reassignment not specified in commit message.
-> 
-> It's not copyright reassignment.  Liam has been an employee of Oracle
-> for the entire duration.  It is fixing the copyright notice to be correct.
+Rewritten a comparison to NULL with a negation operator in
+accordance with the Linux kernel coding-style regulations. The fix
+was directly recommended by the checkpatch script.
 
-Perhaps.
+Signed-off-by: Aaron Lawrence <t4rmin@zohomail.com>
+---
+ drivers/staging/rtl8192e/rtllib_crypt_tkip.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But it would definitely be better if the subject and message matched
-the change.
-
-All the suggested commit subject and message states is
-
-> maple_tree: Update copyright dates for test code
-
-and
-
-> Add the span to the year of the development.
-
-The patch itself does not do that.
-
-On its face, it's reassigning copyright, not suggesting the original
-copyright owner was in error.
+diff --git a/drivers/staging/rtl8192e/rtllib_crypt_tkip.c b/drivers/staging/rtl8192e/rtllib_crypt_tkip.c
+index b8a52b9f9d07..9fdfcc017ee6 100644
+--- a/drivers/staging/rtl8192e/rtllib_crypt_tkip.c
++++ b/drivers/staging/rtl8192e/rtllib_crypt_tkip.c
+@@ -62,7 +62,7 @@ static void *rtllib_tkip_init(int key_idx)
+ 		return NULL;
+ 
+ 	priv = kzalloc(sizeof(*priv), GFP_ATOMIC);
+-	if (priv == NULL)
++	if (!priv)
+ 		goto fail;
+ 	priv->key_idx = key_idx;
+ 
+-- 
+2.38.1
 
