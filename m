@@ -2,187 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14CA660DA41
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 06:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34AE060DA4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 06:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbiJZE1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 00:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36738 "EHLO
+        id S232917AbiJZE3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 00:29:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbiJZE1l (ORCPT
+        with ESMTP id S232727AbiJZE3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 00:27:41 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170EEAA369
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 21:27:40 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id DD2585C01ED;
-        Wed, 26 Oct 2022 00:27:36 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 26 Oct 2022 00:27:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1666758456; x=
-        1666844856; bh=3lH7X8yQix97gdXSx419Xf6XqIsUcanr/0tYZOtCBXQ=; b=k
-        53R4LPhtAq8mWpwXfukg099EnLgbomR+II1CTaFdy4FV4fmIV9CXrX5898qSs6Y4
-        4oye0gEqBAsHxZVtGY97pFOf8Pj2njZRcS4bBLqcopEvE8e7Q6jUo9W0NIzPSJVP
-        73xppp0ZO62I9zXkJDU1pOcDmS7ZMbq/mMmKAcCo6li/lfGUP/bJWAStCiSFdPtv
-        C8Wrwk5qcninvlTQiSfHD0LBQzN2Fl9EZUG17c5FfpEEE6696HAQgkjvktTBiAVd
-        l/DcfT3XwZwTyBXDexvqEIefTWJiC5cYZMkaX3YBpnJDXP3BU0I2nKwSKloDTAof
-        c8+2jVaqJo2IBmlF3xuIw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666758456; x=
-        1666844856; bh=3lH7X8yQix97gdXSx419Xf6XqIsUcanr/0tYZOtCBXQ=; b=B
-        FaktF506oO+rrqnMuL38F7fRnNEos5n0Kx0myv5qP9F1cNm/+/vxbWsvSocrblMa
-        E4lKTSRlyHa8bEtFb+v6vvEeK7b68ee06Tzry6kyUkNDig+ybv16vA4+5qz9D/Kg
-        xSZUQnqtxu4wSVjm2o9/A5e8c97QyWhULHSDTLQQ+ryzz5BU91k1C7vjd8nqWYHr
-        h1IPD1+rxQBAGfSFZrQ6CAUYVSR+gsgbPtG1pg/w6m91lrMUwNgiUN75veqRpqWL
-        LXBJomPjw4O05/MRVSQBunblSdc/uAwdU6qGmpMh9Lln4vdHHPJUfW1UIKNmbIX8
-        RHrPBimDrHJlXmjnVisYw==
-X-ME-Sender: <xms:OLdYY01nsWJRFr_J4-yteTesznM5lGB_y76sn3L4Tka9Cmq8o34-MA>
-    <xme:OLdYY_FFSrGO9gJxkynggmHiJ_LPzQ7yvxTaYW9pDBwGj-7QfbkhTUmppJt8aqe9P
-    MtgoZcS1zzv8-YwZg>
-X-ME-Received: <xmr:OLdYY86lAqdKYRd0LX2kGrL8pdT1WXMWJicTTUIoBzRMUc7BXU_AcSisHVZB5R5kXGT5w1YIe9uAiqBlqz8OfLdEYYnB3x3v1hfhR8SQiDP3ARKak5CeU_pQOw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtddugdekiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfvvehfhffujggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepgeeikeeufedvvdeuteeivdeiffdtgfdtfeejgfetfeefgeffgfdv
-    ffehjedvueeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:OLdYY90Y4z_CWDyAJuFzytlxT3jelJ_gVhqmcWm8TZCQKKqmNyObYA>
-    <xmx:OLdYY3HoBwrd1PZNkkVmUrMLTkqBiHhLhIwBuRTDWppX2HOSih87iQ>
-    <xmx:OLdYY28aRicWn1arTx29L1kgO16El0PZU4XhJ1DMKcdztNSvz_SWgw>
-    <xmx:OLdYY845K8z3x_j0-iWPyWGBjlCnmVnl_4OQPlm88HMgAFyLjmqJwA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 26 Oct 2022 00:27:36 -0400 (EDT)
-Message-ID: <28f0b6b0-cc85-8406-c007-111d44fa06c2@sholland.org>
-Date:   Tue, 25 Oct 2022 23:27:35 -0500
+        Wed, 26 Oct 2022 00:29:41 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497921DA50
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 21:29:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666758579; x=1698294579;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=u9TceKqzHLlhB4IatNBntqkuLY4BzNLYIrl7QjpL5MM=;
+  b=apG4FeZNyruS/HzvmL14TrNK+Pyfnduf2Shqp+Heli4Ggq02DYHurwwo
+   P94OXR51diXF/OwAFTCSQDqVmhHexzmtvOxf7NP/EEwduTHN4Rd9w8K/I
+   NHfHcvG2RmbXTb2PGTnk8Pv8EzAqdZsj+1cIiCDUZ4XfCx0/KRDsG2vfJ
+   RG1+f1Tc+0LR4hKB8SrRZ+F8VBLoe/du9CnkLr2ubhWMU91Utb3JeFBMh
+   I9BFYyW0cSCmOr/Lui96PM2yyDjUBmP+i61mJnTxXFphzOMx3BQg+E9MV
+   dR55B58sdepZsSDDQpS2Zjc7OnYqOw/g+6xxLOThsRluyBwKxOzuwVNty
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="305470893"
+X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
+   d="scan'208";a="305470893"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 21:29:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="665155723"
+X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
+   d="scan'208";a="665155723"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 25 Oct 2022 21:29:37 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1onY2q-0006zq-3C;
+        Wed, 26 Oct 2022 04:29:36 +0000
+Date:   Wed, 26 Oct 2022 12:29:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 5eb443db589a4526b2bef750a998ce7f0dc9c87b
+Message-ID: <6358b796.Sh4DbMABTb2R+1RQ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Russell Currey <ruscur@russell.cc>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-References: <20220916050515.48842-1-samuel@sholland.org>
- <89049105-64fc-8d5b-d090-2841064786d1@csgroup.eu>
- <87h713leu8.fsf@mpe.ellerman.id.au>
- <01281a29-5dff-8868-a1c3-4c4978dca346@sholland.org>
- <ea1cf92d-a388-9f7d-1f86-38afedfeff1e@csgroup.eu>
-Content-Language: en-US
-From:   Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH] powerpc: Save AMR/IAMR when switching tasks
-In-Reply-To: <ea1cf92d-a388-9f7d-1f86-38afedfeff1e@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/21/22 00:17, Christophe Leroy wrote:
-> Le 21/09/2022 à 05:33, Samuel Holland a écrit :
->> On 9/19/22 07:37, Michael Ellerman wrote:
->>> Christophe Leroy <christophe.leroy@csgroup.eu> writes:
->>>> Le 16/09/2022 à 07:05, Samuel Holland a écrit :
->>>>> With CONFIG_PREEMPT=y (involuntary preemption enabled), it is possible
->>>>> to switch away from a task inside copy_{from,to}_user. This left the CPU
->>>>> with userspace access enabled until after the next IRQ or privilege
->>>>> level switch, when AMR/IAMR got reset to AMR_KU[AE]P_BLOCKED. Then, when
->>>>> switching back to the original task, the userspace access would fault:
->>>>
->>>> This is not supposed to happen. You never switch away from a task
->>>> magically. Task switch will always happen in an interrupt, that means
->>>> copy_{from,to}_user() get interrupted.
->>>
->>> Unfortunately this isn't true when CONFIG_PREEMPT=y.
->>>
->>> We can switch away without an interrupt via:
->>>    __copy_tofrom_user()
->>>      -> __copy_tofrom_user_power7()
->>>         -> exit_vmx_usercopy()
->>>            -> preempt_enable()
->>>               -> __preempt_schedule()
->>>                  -> preempt_schedule()
->>>                     -> preempt_schedule_common()
->>>                        -> __schedule()
->>>
->>> I do some boot tests with CONFIG_PREEMPT=y, but I realise now those are
->>> all on Power8, which is a bit of an oversight on my part.
->>>
->>> And clearly no one else tests it, until now :)
->>>
->>> I think the root of our problem is that our KUAP lock/unlock is at too
->>> high a level, ie. we do it in C around the low-level copy to/from.
->>>
->>> eg:
->>>
->>> static inline unsigned long
->>> raw_copy_to_user(void __user *to, const void *from, unsigned long n)
->>> {
->>> 	unsigned long ret;
->>>
->>> 	allow_write_to_user(to, n);
->>> 	ret = __copy_tofrom_user(to, (__force const void __user *)from, n);
->>> 	prevent_write_to_user(to, n);
->>> 	return ret;
->>> }
->>>
->>> There's a reason we did that, which is that we have various different
->>> KUAP methods on different platforms, not a simple instruction like other
->>> arches.
->>>
->>> But that means we have that exit_vmx_usercopy() being called deep in the
->>> guts of __copy_tofrom_user(), with KUAP disabled, and then we call into
->>> the preempt machinery and eventually schedule.
->>>
->>> I don't see an easy way to fix that "properly", it would be a big change
->>> to all platforms to push the KUAP save/restore down into the low level
->>> asm code.
->>>
->>> But I think the patch below does fix it, although it abuses things a
->>> little. Namely it only works because the 64s KUAP code can handle a
->>> double call to prevent, and doesn't need the addresses or size for the
->>> allow.
->>>
->>> Still I think it might be our best option for an easy fix.
->>>
->>> Samuel, can you try this on your system and check it works for you?
->>
->> It looks like your patch works. Thanks for the correct fix!
-> 
-> Instead of the patch from Michael, could you try by replacing 
-> preempt_enable() by preempt_enable_no_resched() in exit_vmx_usercopy() ?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 5eb443db589a4526b2bef750a998ce7f0dc9c87b  Merge branch into tip/master: 'x86/cache'
 
-I finally got a chance to test this, and the simpler fix of using
-preempt_enable_no_resched() works as well.
+elapsed time: 729m
 
->> I replaced my patch with the one below, and enabled
->> CONFIG_PPC_KUAP_DEBUG=y, and I was able to do several kernel builds
->> without any crashes or splats in dmesg.
-> 
-> Did you try CONFIG_PPC_KUAP_DEBUG without the patch ? Did it detect any 
-> problem ?
+configs tested: 63
+configs skipped: 2
 
-I believe I did at one point, and it did not detect anything.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Regards,
-Samuel
+gcc tested configs:
+arc                                 defconfig
+alpha                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+i386                                defconfig
+arc                  randconfig-r043-20221024
+x86_64                    rhel-8.3-kselftests
+riscv                randconfig-r042-20221024
+x86_64                          rhel-8.3-func
+arc                  randconfig-r043-20221023
+i386                 randconfig-a011-20221024
+i386                 randconfig-a014-20221024
+i386                             allyesconfig
+x86_64                           rhel-8.3-syz
+s390                 randconfig-r044-20221024
+i386                 randconfig-a013-20221024
+s390                                defconfig
+i386                 randconfig-a012-20221024
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+s390                             allmodconfig
+arm                                 defconfig
+x86_64                           rhel-8.3-kvm
+i386                 randconfig-a016-20221024
+ia64                             allmodconfig
+i386                 randconfig-a015-20221024
+x86_64                           allyesconfig
+x86_64               randconfig-a014-20221024
+m68k                             allyesconfig
+x86_64               randconfig-a013-20221024
+s390                             allyesconfig
+x86_64               randconfig-a012-20221024
+alpha                            allyesconfig
+x86_64               randconfig-a016-20221024
+powerpc                           allnoconfig
+x86_64               randconfig-a011-20221024
+m68k                             allmodconfig
+mips                             allyesconfig
+arc                              allyesconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a015-20221024
+sh                               allmodconfig
+arm                              allyesconfig
+arm64                            allyesconfig
 
+clang tested configs:
+hexagon              randconfig-r045-20221023
+hexagon              randconfig-r041-20221024
+riscv                randconfig-r042-20221023
+hexagon              randconfig-r045-20221024
+s390                 randconfig-r044-20221023
+hexagon              randconfig-r041-20221023
+x86_64               randconfig-a001-20221024
+x86_64               randconfig-a003-20221024
+x86_64               randconfig-a004-20221024
+x86_64               randconfig-a002-20221024
+i386                 randconfig-a004-20221024
+x86_64               randconfig-a005-20221024
+i386                 randconfig-a001-20221024
+i386                 randconfig-a002-20221024
+x86_64               randconfig-a006-20221024
+i386                 randconfig-a005-20221024
+i386                 randconfig-a003-20221024
+i386                 randconfig-a006-20221024
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
