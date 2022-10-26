@@ -2,228 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4BBE60DCEE
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF2C60DCF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233243AbiJZISz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 04:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
+        id S230057AbiJZITo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 04:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233256AbiJZISu (ORCPT
+        with ESMTP id S232752AbiJZITi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 04:18:50 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7889C7D6;
-        Wed, 26 Oct 2022 01:18:47 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BB742660283B;
-        Wed, 26 Oct 2022 09:18:44 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666772325;
-        bh=NYCXP6RyBtf3ScHpt1tBvUYys3xwjCxOteKAWeBtIPg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ou91Zpf3cGsseLbii8xWViLSeSsjqLIStMuD4Hcro5p0gSbeAFBPLfIhd7qr0YCgM
-         og6rB/s8syWWTz40ihoOKkG/XRNlh0Hj3GgScRIVz+zW3XWDuJsp7VeCwnN7fY9jor
-         KclpR6TWiNKvRydsdMIgI1HI9nX94vtqgzpE1nOJlCsYwJ5MgYXmr0oFS2nlMkp9+N
-         yHX5Lxmgf6LD+t4adseWCQjJOUHG89I4sBQ5vkqHP5gqLq6MdmMHbC6FwUDlDQ4KdP
-         OBaoCQB4evzQEkuCKDOmmIqA+EN93RWMIVuyFAxYjKQazybq4Hg5frHeMPK1GkA71O
-         4C2PQBUTIYBzw==
-Message-ID: <360a5f27-8abc-938c-04c7-13ea65b5a89f@collabora.com>
-Date:   Wed, 26 Oct 2022 10:18:41 +0200
+        Wed, 26 Oct 2022 04:19:38 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E56B1DF
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 01:19:34 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id t15so5538668edd.4
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 01:19:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sMtqbHlLZFpW7omrjtZXOBYfjn0MC+C+YnFrrsHdRjs=;
+        b=liFfOeY4hx0N4zrjBJD02ke1SJWVcrMthhaYNWmGXRub08CZSFDvJYeLsQd6GzQgqN
+         lKo1GDeIZRO+YrpUSOETHKq1DYlhwE94QNYBhsk0PAmcpFO7kIrCFx2XoeM5ldtsbsdq
+         CXxOCH7yTKPiun+V8cBiY8DHsNSTsV4rpWTurmFF0ZXsJAMGxSMsIHViF5ZY3D0zSxK4
+         4sP/5VwE5aKZ1r85tftPnMXqCuzY8+c7e2pKSoN18xmZKbKV6mqAPakOWvwaeotOf7tJ
+         sDOx6nzr9dN/mDxbiViCuFaHHXHaxAvYIVPVvG2C/OKujJeE8PRRng8Wxp11WDolUH+A
+         J4jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sMtqbHlLZFpW7omrjtZXOBYfjn0MC+C+YnFrrsHdRjs=;
+        b=n+U8Keh9gB5femF6kyYGPXKpTdkUSucSTisEyfjJ7QOskXYw5q4JC1yglZsnIRW3/P
+         ew5UgCCNcokqi/8M7qZPSLYoD8YyOwpTFF0zUHq0ILtW9Sp3HeU+Ii08WaClOQfBsHuz
+         r0ZsOeIRJUBACEaK43TpGSV4Umzf8ZFRX4c7/CUaLz4bCLqEonlTaYZWvLc0MUx8AKNM
+         tdKxMCRbNqcduYIU/m5zyVBDEFZQ5EJsZiXrai628yyYoajP6y1DIdenbZv8awELhKQX
+         yWq6l5Ja5hreHyEe4nwSjMGqQYsXXVnhM9cP4wa/UkTSRAnWTbvNHOnGxCbOFRSQB+n3
+         uU8w==
+X-Gm-Message-State: ACrzQf2QbTBHPRXj9yNGpl/9uROcTFuCD+4I4NvBjHLX4VpwbaMWJykS
+        3FFYMdlx7wAD1YA2tNptv3laO6Fx7uw3BdNn6u36CQ==
+X-Google-Smtp-Source: AMsMyM7SH3F529rlWhEoTHUIMUwS3tzdmcSUpPN3lQbCjmXF4Hv1H8UlF/bAfXad6TZ8Tt1UPReSD16WbYO5i6r8Nwc=
+X-Received: by 2002:aa7:d385:0:b0:461:8cd3:b38b with SMTP id
+ x5-20020aa7d385000000b004618cd3b38bmr18885323edq.172.1666772373091; Wed, 26
+ Oct 2022 01:19:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2 03/12] ASoC: mediatek: mt8188: support audsys clock
-To:     =?UTF-8?B?VHJldm9yIFd1ICjlkLPmlofoia8p?= <Trevor.Wu@mediatek.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "tiwai@suse.com" <tiwai@suse.com>,
-        "broonie@kernel.org" <broonie@kernel.org>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20221021082719.18325-1-trevor.wu@mediatek.com>
- <20221021082719.18325-4-trevor.wu@mediatek.com>
- <de66f0e3-7694-7315-c896-9211259a1a17@collabora.com>
- <776557c0fda5a538549ee0d4f4b7f482b0d69934.camel@mediatek.com>
- <473d67ed-198f-82c6-9f32-5827c1f8c852@collabora.com>
- <500f80b1ac84101af482bdfcb46671d523d51068.camel@mediatek.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <500f80b1ac84101af482bdfcb46671d523d51068.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20221021181016.14740-1-ansuelsmth@gmail.com> <CACRpkdbfvr1pkVb3XhBZLnmn7vy3XyzavwVjW_VmFKTdh3LABQ@mail.gmail.com>
+ <63531543.050a0220.b6bf5.284d@mx.google.com> <CACRpkdbOQq9hUT=d1QBDMmgLaJ1wZ=hd44ciMnjFVgpLCnK8Wg@mail.gmail.com>
+ <6357240c.170a0220.999b2.23d6@mx.google.com>
+In-Reply-To: <6357240c.170a0220.999b2.23d6@mx.google.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 26 Oct 2022 10:19:21 +0200
+Message-ID: <CACRpkdb4iqazgVerHCPU0VqZKYoB5kJeDSaL+ek67L=2Txem-A@mail.gmail.com>
+Subject: Re: [PATCH] ARM: mach-qcom: fix support for ipq806x
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Russell King <linux@armlinux.org.uk>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        John Crispin <john@phrozen.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 26/10/22 06:10, Trevor Wu (吳文良) ha scritto:
-> On Tue, 2022-10-25 at 12:18 +0200, AngeloGioacchino Del Regno wrote:
->> Il 21/10/22 11:58, Trevor Wu (吳文良) ha scritto:
->>> On Fri, 2022-10-21 at 10:41 +0200, AngeloGioacchino Del Regno
->>> wrote:
->>>> Il 21/10/22 10:27, Trevor Wu ha scritto:
->>>>> Add mt8188 audio cg clock control. Audio clock gates are
->>>>> registered
->>>>> to CCF
->>>>> for reference count and clock parent management.
->>>>>
->>>>> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
->>>>> ---
->>>>>     sound/soc/mediatek/mt8188/mt8188-audsys-clk.c | 206
->>>>> ++++++++++++++++++
->>>>>     sound/soc/mediatek/mt8188/mt8188-audsys-clk.h |  15 ++
->>>>>     .../soc/mediatek/mt8188/mt8188-audsys-clkid.h |  83 +++++++
->>>>>     3 files changed, 304 insertions(+)
->>>>>     create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-
->>>>> clk.c
->>>>>     create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-
->>>>> clk.h
->>>>>     create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-
->>>>> clkid.h
->>>>>
->>>>> diff --git a/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
->>>>> b/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
->>>>> new file mode 100644
->>>>> index 000000000000..1f294231d4c2
->>>>> --- /dev/null
->>>>> +++ b/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
->>>>> @@ -0,0 +1,206 @@
->>>>> +// SPDX-License-Identifier: GPL-2.0
->>>>> +/*
->>>>> + * mt8188-audsys-clk.c  --  MediaTek 8188 audsys clock control
->>>>> + *
->>>>> + * Copyright (c) 2022 MediaTek Inc.
->>>>> + * Author: Chun-Chia Chiu <chun-chia.chiu@mediatek.com>
->>>>> + */
->>>>> +
->>>>> +#include <linux/clk.h>
->>>>> +#include <linux/clk-provider.h>
->>>>> +#include <linux/clkdev.h>
->>>>> +#include "mt8188-afe-common.h"
->>>>> +#include "mt8188-audsys-clk.h"
->>>>> +#include "mt8188-audsys-clkid.h"
->>>>> +#include "mt8188-reg.h"
->>>>> +
->>>>> +struct afe_gate {
->>>>> +	int id;
->>>>> +	const char *name;
->>>>> +	const char *parent_name;
->>>>> +	int reg;
->>>>> +	u8 bit;
->>>>> +	const struct clk_ops *ops;
->>>>> +	unsigned long flags;
->>>>> +	u8 cg_flags;
->>>>> +};
->>>>> +
->>>>> +#define GATE_AFE_FLAGS(_id, _name, _parent, _reg, _bit,
->>>>> _flags,
->>>>> _cgflags) {\
->>>>> +		.id = _id,					
->>>>> \
->>>>> +		.name = _name,					
->>>>> \
->>>>> +		.parent_name = _parent,				
->>>>> \
->>>>> +		.reg = _reg,					
->>>>> \
->>>>> +		.bit = _bit,					
->>>>> \
->>>>> +		.flags = _flags,				
->>>>> \
->>>>> +		.cg_flags = _cgflags,				
->>>>> \
->>>>> +	}
->>>>> +
->>>>> +#define GATE_AFE(_id, _name, _parent, _reg, _bit)		
->>>>> \
->>>>> +	GATE_AFE_FLAGS(_id, _name, _parent, _reg, _bit,		
->>>>> \
->>>>> +		       CLK_SET_RATE_PARENT | CLK_IGNORE_UNUSED,
->>>>> CLK_GATE_SET_TO_DISABLE)
->>>>
->>>> Can you please explain what's the reason for CLK_IGNORE_UNUSED
->>>> here?
->>>> Maybe we can solve some issue that you're facing in a cleaner
->>>> way.
->>>>
->>>> Regards,
->>>> Angelo
->>>
->>> Hi Angelo,
->>>
->>> Because clk_disable_unused() calls clk_core_is_enabled(), register
->>> access happens in is_enabled() ops.
->>> At the moment, the power for register access is not enabled, so the
->>> register read results in CPU hang.
->>>
->>> That's why I added CLK_IGNORE_UNUSED here, but it can't resolve all
->>> issues. Actually, we met same problem when "cat
->>> /sys/kernel/debug/clk/clk_summary" is used. We are still suffering
->>> the
->>> problem.
->>>
->>> I'm not sure if I can implement clk ops by myself, and exclude the
->>> registration of is_enabled() ops.
->>>
->>
->> Is the power for register access enabled with a power domain?
->>
->> Check drivers/clk/clk.c, grep for core->rpm_enabled.
->>
->> If you enable runtime PM before registering the clocks, and you
->> register them
->> with the right struct device, the clock API will enable power for you
->> before
->> trying to read the clock enable status.
->>
->> Regards,
->> Angelo
->>
-> 
-> Hi Angelo,
-> 
-> I tried the way in MT8195, but it caused circular lock problem.
-> 
-> Because mtcmos depends on some clocks, clk_bulk_prepare_enable is also
-> used in scpsys_power_on()[1].
-> If the clock also depends on the power domain, this results in the
-> circular lock problem.
-> That's why I don't bind the power domain with these clocks.
-> 
+On Tue, Oct 25, 2022 at 1:47 AM Christian Marangi <ansuelsmth@gmail.com> wrote:
 
-This is not supposed to happen... can you please give me a (MT8195) patch to
-reproduce the issue that you're seeing?
+> bad news... yesterday I tested this binding and it's problematic. It
+> does work and the router correctly boot...
 
-I would like to investigate that to check if I can come up with a good solution.
+That's actually partly good news :D
 
-Thanks,
-Angelo
+> problem is that SMEM is
+> broken with such configuration... I assume with this binding, by the
+> system view ram starts from 0x42000000 instead of 0x40000000 and this
+> cause SMEM to fail probe with the error "SBL didn't init SMEM".
 
-> [1]
-> https://elixir.bootlin.com/linux/v6.1-rc2/source/drivers/soc/mediatek/mtk-pm-domains.c
-> 
-> Thanks,
-> Trevor
-> 
-> 
+We need to fix this.
 
+> This is the location of SMEM entry in ram
+>
+>                 smem: smem@41000000 {
+>                         compatible = "qcom,smem";
+>                         reg = <0x41000000 0x200000>;
+>                         no-map;
+>
+>                         hwlocks = <&sfpb_mutex 3>;
+>                 };
+(...)
+> Wonder if you have other ideas about this.
 
+So the problem is that the resource is outside of the system RAM?
 
+I don't understand why that triggers it since this is per definition not
+system RAM, it is SMEM after all. And it is no different in esssence
+from any memory mapped IO or other things that are outside of
+the system RAM.
+
+The SMEM node is special since it is created without children thanks
+to the hack in drivers/of/platform.c.
+
+Then the driver in drivers/soc/qcom/smem.c
+contains things like this:
+
+        rmem = of_reserved_mem_lookup(pdev->dev.of_node);
+        if (rmem) {
+                smem->regions[0].aux_base = rmem->base;
+                smem->regions[0].size = rmem->size;
+        } else {
+                /*
+                 * Fall back to the memory-region reference, if we're not a
+                 * reserved-memory node.
+                 */
+                ret = qcom_smem_resolve_mem(smem, "memory-region",
+&smem->regions[0]);
+                if (ret)
+                        return ret;
+        }
+
+However it is treated as memory-mapped IO later:
+
+        for (i = 1; i < num_regions; i++) {
+                smem->regions[i].virt_base = devm_ioremap_wc(&pdev->dev,
+
+smem->regions[i].aux_base,
+
+smem->regions[i].size);
+                if (!smem->regions[i].virt_base) {
+                        dev_err(&pdev->dev, "failed to remap %pa\n",
+&smem->regions[i].aux_base);
+                        return -ENOMEM;
+                }
+        }
+
+As a first hack I would check:
+
+1. Is it the of_reserved_mem_lookup() or qcom_smem_resolve_smem() stuff
+   in drivers/soc/qcom/smem.c that is failing?
+
+If yes then:
+
+2. Add a fallback path just using of_iomap(node) for aux_base and size
+  with some comment like /* smem is outside of the main memory map */
+  and see if that works.
+
+Yours,
+Linus Walleij
