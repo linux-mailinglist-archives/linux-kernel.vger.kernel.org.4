@@ -2,95 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F2060E5E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D282460E5E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233928AbiJZQ5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 12:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
+        id S233990AbiJZQ56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 12:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232740AbiJZQ5v (ORCPT
+        with ESMTP id S233471AbiJZQ5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 12:57:51 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BDB9AC11
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:57:50 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id f22so10371948qto.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:57:50 -0700 (PDT)
+        Wed, 26 Oct 2022 12:57:53 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E4795E69
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:57:51 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id m6so11030010qkm.4
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:57:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SMH8yy0K5bjEVyDE5fQG7VLZrpH6VjDBSTXM9KXwwlM=;
-        b=P81nZevgmYL2bPtSvUe4m5gPskkpK50V39SxUOLOClE4XtiMninGSwcah33MKucLTD
-         +xvtP0gw2lQxDx9tvWt+jiqT+W+CM8s60sszqToHUtwt1WdGfGabMTvVMQ9CkABVqQrV
-         aGXTkf+byIia/LBDKAU10K2IIJpy3RDBEEgttY/I5SCrkGpSootnZ6OY6l15Mn0j8PFW
-         1V1n66alusQoaQzWuIhYULr1Uipz84f+Xx3uGqMIs99wjVS7Xtna8QFLdtWU7dGbQB2T
-         0eXKPB2sZytkpbMZVbPDNaz+y9QtCER0trUT2au22M2Q50Wzx86qeGiH2tzeZBWSRv9O
-         zZEg==
+        bh=IYncI9iq1pDXu9ob3vX3woC79Xi+GcEdWFaiHxAv4cs=;
+        b=vjNd97uE6/lUxlklcedmQU5BK0kwqnrglytRWk/Mt0bakrpewIs8SuNh7nyx0F8XJu
+         WmfaLc3jjLEgW8kp682wv1/N2ZbOsHEjgXbRZ+P2aOV58FAmq3Duz+ySDldO/eFhL+jw
+         0+bgads4K/z1I/QFWnnpMzO6w1Fpu/0RjtelDnWjdLx2cyJpG2+uCD5r5c/pdo/t2WTA
+         Bpr6dGGQnRDw6FwOWl+KUiErf7OPqmpX+e0kdALO8YSEMl5O2AfVY6qxHMpky8w2+jnP
+         KqBetI4aH0Q441fwsdb4N/dG+mMuOYlAr75ACwjsC6KHVkZNNL6H1JJ1OoZfUSVPHN0c
+         CbgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SMH8yy0K5bjEVyDE5fQG7VLZrpH6VjDBSTXM9KXwwlM=;
-        b=AtYrxbBgBVFvY9tjhzdTsfNY+QNMihOR6Q1soPjXD6pU2nD4EqvUB/3iflNAaefU8B
-         eUWQAhbLSOwa8BJVmMufzHwJHsWmFl+5zjjqoo2Hwu5/YybjYpygaEipKrd/SfcZukxH
-         R/SuWOL4BKGqDqo8g2/9LcrpRTVPGaZg0jcVfFc/vFtFVhq4TDTpjYBebf+Is1CpVHPz
-         /+UoXHu2jeNIClVYy0/HvUVASVim4wvVUnZWv87fvoXpsdemhR6VPGwZDiAl8d71QhAv
-         Te5CRQkt8sUHUtQTuDivsZ8KKBHDIdPG6O3fgnU/Syr8WYB4IeveeFF58F/TanPHP04w
-         D3rw==
-X-Gm-Message-State: ACrzQf17RF0/ZzhQd4wrdYRqn/2E3WzBmv+58zVBRSqMGCkqXosB/uV0
-        jKsDG8yqQojB9x2WYZwb1KVFeQ==
-X-Google-Smtp-Source: AMsMyM52kSo4dwe98KsHb5B/S2GCroXLBYzzgP/n4SM7/4xO2UyexwU8NZBrIReXZn5PgBSiTxoyzg==
-X-Received: by 2002:a05:622a:2488:b0:3a4:ec00:2811 with SMTP id cn8-20020a05622a248800b003a4ec002811mr5170836qtb.487.1666803469255;
-        Wed, 26 Oct 2022 09:57:49 -0700 (PDT)
+        bh=IYncI9iq1pDXu9ob3vX3woC79Xi+GcEdWFaiHxAv4cs=;
+        b=bSVP33dP3ftgyg7HslLANxnALf88qkdYNx9Tmf2Hw+ZerJVd3a4mF1HgfRDU5aMQvD
+         LerX8/ern/b06fm0np0JgJ7zjZt1DVWC41M39GPGlkBOOa/q8Z1blxxeKN5FVmn6nQyL
+         Ka2NjVWaJrsYMqAIlO0yjl6BvowcQUu39/3AoABuuP4Qd6eXzOUDblsMXtrj7+T4qA2b
+         M7to02hYh5V2jtoot0/1NcmZkKmf9Qk8FWr2APnHvo4pKJyNRFm4JG6I8uBqbAZNS8Us
+         RPxEJi6zMC7ClNMyDuYaPEJkFWReSa7TnIVIhWyqeh50w+JMnVwGbq+HLL408LsZ/rOV
+         tZ/A==
+X-Gm-Message-State: ACrzQf2vB6IyVWk1cJdZ72kGAPQxOH7z83Uu6J2HBsgZWPT7zZU4dwHO
+        g189LNLBF9EmaV5ktzy2Kx5vAQ==
+X-Google-Smtp-Source: AMsMyM68uIT4uI/nLKrAReT2Gg8+sF1erjHZI4opwTnws2cuUsk5iOrGknrwZBZXk/BpXIiATitubA==
+X-Received: by 2002:a05:620a:24c3:b0:6ee:d4bb:e5b0 with SMTP id m3-20020a05620a24c300b006eed4bbe5b0mr31286865qkn.471.1666803471057;
+        Wed, 26 Oct 2022 09:57:51 -0700 (PDT)
 Received: from krzk-bin.. ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id g21-20020a05620a40d500b006ee8874f5fasm4360759qko.53.2022.10.26.09.57.47
+        by smtp.gmail.com with ESMTPSA id g21-20020a05620a40d500b006ee8874f5fasm4360759qko.53.2022.10.26.09.57.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 09:57:48 -0700 (PDT)
+        Wed, 26 Oct 2022 09:57:50 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Gregory Clement <gregory.clement@bootlin.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>
-Subject: Re: (subset) [PATCH 1/2] dt-bindings: pinctrl: qcom,msm8916: convert to dtschema
-Date:   Wed, 26 Oct 2022 12:57:40 -0400
-Message-Id: <166680346262.49767.13769629485836334119.b4-ty@linaro.org>
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH] ARM: dts: armada: correct indentation
+Date:   Wed, 26 Oct 2022 12:57:41 -0400
+Message-Id: <166680346261.49767.17898258491384283819.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221024002356.28261-1-krzysztof.kozlowski@linaro.org>
-References: <20221024002356.28261-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221002092008.69003-1-krzysztof.kozlowski@linaro.org>
+References: <20221002092008.69003-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 23 Oct 2022 20:23:55 -0400, Krzysztof Kozlowski wrote:
-> Convert Qualcomm MSM8916 pin controller bindings to DT schema.  Keep the
-> parsing of pin configuration subnodes consistent with other Qualcomm
-> schemas (children named with '-state' suffix, their children with
-> '-pins').
+On Sun, 2 Oct 2022 11:20:08 +0200, Krzysztof Kozlowski wrote:
+> Do not use spaces for indentation.
 > 
 > 
 
 Applied, thanks!
 
-[1/2] dt-bindings: pinctrl: qcom,msm8916: convert to dtschema
-      https://git.kernel.org/krzk/linux-dt/c/70af922b7f23bc03b89b3f80b679d11d5e7c2045
+[1/1] ARM: dts: armada: correct indentation
+      https://git.kernel.org/krzk/linux-dt/c/a7569f7d21e7a8b4196600672e25039fb58bf322
 
 Best regards,
 -- 
