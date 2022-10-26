@@ -2,95 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35C760E3B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9DF160E3B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233757AbiJZOsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56262 "EHLO
+        id S234071AbiJZOs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 10:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233476AbiJZOsJ (ORCPT
+        with ESMTP id S234031AbiJZOsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:48:09 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3B610453D
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:48:08 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id g16so10038916qtu.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:48:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SA6ximgWcrGZSfkvZWfqRf8tuzgvJWoN/vqehJP59VU=;
-        b=RtTPtYFpF5w43UVMWtnp7DEnyHgaiVZ0UMK6eWGdkYQh6L3F7cHnyN/kEVd//lj497
-         0tKl6hTAmP6O0CaCDCEtb/4yntNbcz+d4ZSnCzif+byGTMoW3Wh/wuwUxgnnd07drh8B
-         EQmdqAHkaGTMaQjKkeptNLM8PEb9AzOIp9F1ZiR/liZawEPETeCF/0Nqk6AixyslkjyV
-         v0mzMT91v6K77riQ6FoRynL5rLZzKAoqnsMYElw0OYooutxWUn0Crj2hLPlzsvnJ1Oe6
-         aXnIOzcc6SbzXSyBVwxue9MjYRTlfmJnNzzoq/am+LE2QfRDBsL4DAUtWCBpSwLspHcJ
-         /2HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SA6ximgWcrGZSfkvZWfqRf8tuzgvJWoN/vqehJP59VU=;
-        b=0x7qIbs81DMdE2Adpy2Gk6P/FddTFe8w8og96nmmuKrFuHiUnBIxJtaeoaEiJVpgil
-         xYDmjs1GqbjHWCrlGmcy8mbqbS8H/YExWMqvGUvQWjGiQaTkvti2wkmIx0SgzSdhuTWl
-         exoqPR0Fi9DtYLG00qKkQXIMpzr50teJ20qBrEwhxLUYiBNe8DHiHZuxWhD6TsFBeecq
-         sewIBa6bU/cILF9u2dFYCcmUGdFw+MTSp7Y3QCPu43xzmjcBVJ7a+TcZqOKFCeE6KKU+
-         JE9ZSC8k7AF/tmlhSJRANnolntKJT9A7JYrZbBIdiW+OznfqA8v+NNxxrL0bwqlSMk5k
-         l6Mw==
-X-Gm-Message-State: ACrzQf1xqHeaN1cGN99lXu3yc1ELhBzwCh2swOScSvwpWx4g5le8DWVW
-        HqPQ7wlT7DrJA2TU7rf2kGf8NQ==
-X-Google-Smtp-Source: AMsMyM4THSiBQRYKk+evU/FKD4ggXIlSbWrvj3lViuNxvJCQDML3AEw3bCcxkl7BfC5bsgeI+3eLKQ==
-X-Received: by 2002:a05:622a:248:b0:39c:dfcb:9b63 with SMTP id c8-20020a05622a024800b0039cdfcb9b63mr37872881qtx.234.1666795687836;
-        Wed, 26 Oct 2022 07:48:07 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id e10-20020a05622a110a00b0039cb9ef50b5sm3310931qty.26.2022.10.26.07.48.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 07:48:07 -0700 (PDT)
-Message-ID: <969635a9-ff58-d0a7-579d-0f3b4a208ea5@linaro.org>
-Date:   Wed, 26 Oct 2022 10:48:05 -0400
+        Wed, 26 Oct 2022 10:48:22 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDA8119BD7;
+        Wed, 26 Oct 2022 07:48:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666795701; x=1698331701;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fLSv77D7+BpnQGBb1c2MahawwzWfUMVmEmx2oaf4MA8=;
+  b=HR0eL3ha/r3V2+1C1pBXEDkLGaWQZViq8IAXMIegvFGAvJnYT4a8eEsh
+   /FAh6ZqYv67mnzvWUEXTSOPAlAnIxfSC1jgSdlGYQBuaAzrF3ek27v7t5
+   +Lra1jbqKS9sgZmX9IqITsFAKLD8bna6JEluoBcyCA7yZsuKznQz98Mny
+   1aVVtst0gzpo4wC8gMgGfqV//+sxZrdbqUmapzIW/caKY9sROcK0ZXj18
+   3cxbTVT2Umvu4ldwVZTdg4nBRV4eqUDushJEFrCdJNoW1/eoNahzbTTxS
+   tRRoH9Yvl2oOPhoJUjvmJ2fto4Fu8h+VtopshCJsrSjwRZQg1Uq62VKpa
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="287677707"
+X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
+   d="scan'208";a="287677707"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 07:48:19 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="609977863"
+X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
+   d="scan'208";a="609977863"
+Received: from gkammela-mobl.amr.corp.intel.com (HELO [10.251.31.245]) ([10.251.31.245])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 07:48:19 -0700
+Message-ID: <6fef55d0-5111-bde2-c4c2-8cb5b2794026@linux.intel.com>
+Date:   Wed, 26 Oct 2022 07:48:18 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Villager doesn't have NVME
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 2/2] platform/x86/intel: pmc/core: Add Raptor Lake
+ support to pmc core driver
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, irenic.rajneesh@gmail.com,
+        Srinivas Pandruvada <srinivas.pandruvada@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Box <david.e.box@intel.com>
+References: <20220912233307.409954-1-gayatri.kammela@linux.intel.com>
+ <20220912233307.409954-2-gayatri.kammela@linux.intel.com>
+ <3537fa63-9015-c63d-2321-a77062e24d6f@redhat.com>
+ <58855ea9-0d89-e17d-349a-657512068663@kernel.org>
+ <8957290c-9499-a399-3e4e-e0276caccd65@redhat.com>
 Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>, Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221025164915.1.I38e2545eda2b3bd3fef6b41c98f451e32851ae70@changeid>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221025164915.1.I38e2545eda2b3bd3fef6b41c98f451e32851ae70@changeid>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+From:   "Kammela, Gayatri" <gayatri.kammela@linux.intel.com>
+In-Reply-To: <8957290c-9499-a399-3e4e-e0276caccd65@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/10/2022 19:52, Douglas Anderson wrote:
-> The sc7280-herobrine-villager derivative doesn't have NVME enabled so
-> we shouldn't mark the PCIe nodes as "okay" since they're just for
-> boards that have NVME.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> 
 
+On 10/24/2022 2:46 AM, Hans de Goede wrote:
+> Hi,
+>
+> On 10/14/22 09:50, Jiri Slaby wrote:
+>> On 19. 09. 22, 13:41, Hans de Goede wrote:
+>>
+>>> On 9/13/22 00:33, Gayatri Kammela wrote:
+>>>> Add Raptor Lake client parts (both RPL and RPL_S) support to pmc core
+>>>> driver. Raptor Lake client parts reuse all the Alder Lake PCH IPs.
+>>>>
+>>>> Cc: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
+>>>> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>>>> Cc: David Box <david.e.box@intel.com>
+>>>> Acked-by: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>
+>>>> Acked-by: Hans de Goede <hdegoede@redhat.com>
+>>>> Signed-off-by: Gayatri Kammela <gayatri.kammela@linux.intel.com>
+>>>> ---
+>>>> Changes since v1:
+>>>> 1) Added a dependency patch- ea902bcc1943f7539200ec464de3f54335588774 :
+>>>>    "x86/cpu: Add new Raptor Lake CPU model number".
+>>>> 2) Rebased the above patch on v6.0-rc1 with "Acked-by" from Hans and
+>>>>    Rajneesh.
+>>> I still cannot take this, since patch 1/2 is *already merged* through
+>>> another tree, so me cherry-picking it leads to potential conflicts.
+>>>
+>>> As I have already explained twice you need to submit this upstream
+>>> throuh the same tree which has the original merge of patch 1/2.
+>> Hi, friendly ping: has this ever happened, Gayatri?
+> Since the necessary change are in 6.1-rc1 now, I have merged this
+> patch now and I'll include this in the pdx86 fixes pull-req which
+> I'm preparing for 6.1-rc3:
+>
+> Thank you for your patch, I've applied this patch to my review-hans
+> branch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+>
+> Note it will show up in my review-hans branch once I've pushed my
+> local branch there, which might take a while.
+>
+> Once I've run some tests on this branch the patches there will be
+> added to the platform-drivers-x86/for-next branch and eventually
+> will be included in the pdx86 pull-request to Linus for the next
+> merge-window.
+>
+> Regards,
+>
+> Hans
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+hi Hans,
 
-Best regards,
-Krzysztof
+Thank you for merging this patch. I was planning on sending this patch 
+to combine with other series as this could be dependency. Apologies for 
+my late reply. Thank you!
 
+>
