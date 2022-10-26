@@ -2,128 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A7560E32B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B5060E336
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234259AbiJZOUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
+        id S234278AbiJZOVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 10:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234033AbiJZOUL (ORCPT
+        with ESMTP id S233884AbiJZOU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:20:11 -0400
-Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1E5A2B18D;
-        Wed, 26 Oct 2022 07:20:09 -0700 (PDT)
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.ssi.bg (Proxmox) with ESMTP id 096A011B4C;
-        Wed, 26 Oct 2022 17:20:09 +0300 (EEST)
-Received: from ink.ssi.bg (unknown [193.238.174.40])
-        by mg.ssi.bg (Proxmox) with ESMTP id 9A79C11C8B;
-        Wed, 26 Oct 2022 17:20:07 +0300 (EEST)
-Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id C2DE83C07E1;
-        Wed, 26 Oct 2022 17:20:06 +0300 (EEST)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 29QEK3RO087932;
-        Wed, 26 Oct 2022 17:20:05 +0300
-Date:   Wed, 26 Oct 2022 17:20:03 +0300 (EEST)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-cc:     netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Simon Horman <horms@verge.net.au>, stable@vger.kernel.org
-Subject: Re: [PATCH] ipvs: use explicitly signed chars
-In-Reply-To: <20221026123216.1575440-1-Jason@zx2c4.com>
-Message-ID: <4cc36ff5-46fd-c2b3-3292-d6369337fec1@ssi.bg>
-References: <20221026123216.1575440-1-Jason@zx2c4.com>
+        Wed, 26 Oct 2022 10:20:59 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E5DFB71C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:20:59 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id s17so10574079qkj.12
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:20:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sy6g+vLLQvXjf5HeMT0nB82DeyV0IzT0a5m7Og326KA=;
+        b=kqWHgM0TtbYnT+VGk2G0985LVrw6573v0G8yLnv4MUbg6OJoAxvEI+1IYOutsyx7pR
+         Udq5eVMqzhxgVIM9RQsxVTJFy5Kxl+7HvEI3R50KgkV7ztvWJM5WH+t1pDJdqO12noVx
+         3OYPHEGHMosO/etTmHhC2BDSHgLvoUFqcOHWRj3747uqTzeYcdnQHeiUaYA9Ce1Mf4+X
+         Xbg4n/x1/D8jOo/Pu5vsIDDYuX32PZcHAGBrPIS3xnV5UTUgL8DZxqwr76MJS3XynSMt
+         og5jO19h5ngEGgG3ufHVn0b/LNl5GM5XcDplOEX546aTgEOi8w6/rQCEcMHt9dCBvc1d
+         mRGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sy6g+vLLQvXjf5HeMT0nB82DeyV0IzT0a5m7Og326KA=;
+        b=LEo0sQAydWAbefmdyVVA/kiBdZkzqBCIoH6h3kDR48XD6we2zXL8hHOMSjOWahYZaS
+         5+rI185d6WS716KLF23aFW64rlfs/F/RsYDSa7p0PQdB+yxrpnbKNKWcQaak9DoTkro9
+         +SNAd5PLrS+vsYNxWOmgq51kgiabhkz8nSaGCzQxFYw1pWCvDwdA3F//GUpHMxvHmung
+         brq2yvDjsskWuWQxWYfeZtsl8JuolCtogunDk4aI7AFZyj5o695hbL2I2KLvgPJpa3WG
+         bWECTK0WGlni5nr8Ql0qPxVzUEmqZTYkw0zMD6prsUokkeJOhYTYKiv4qnffjk+70qwX
+         8eSA==
+X-Gm-Message-State: ACrzQf2ZITGW+urZ7UpdHpys0Nm/So6y4Uqg7mWLLwjZ13kvTGIMAy3O
+        XFjyxtYPTn3TOzSh99aHvEvJ3g==
+X-Google-Smtp-Source: AMsMyM67z/vs5deHpQrLUuxUi9zO4BPnIquP5aPQgFh05WhAqMhT2FBusEI/KZzRvVoj0Y2kLD7l3A==
+X-Received: by 2002:a05:620a:796:b0:6ee:80b6:2eae with SMTP id 22-20020a05620a079600b006ee80b62eaemr30617333qka.17.1666794058191;
+        Wed, 26 Oct 2022 07:20:58 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id s10-20020a05620a29ca00b006eea4b5abcesm3988882qkp.89.2022.10.26.07.20.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 07:20:57 -0700 (PDT)
+Message-ID: <438f5df4-b076-4920-7bb3-095041c27eef@linaro.org>
+Date:   Wed, 26 Oct 2022 10:20:55 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v4 1/2] clocksource: loongson2_hpet: add hpet driver
+ support
+Content-Language: en-US
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yun Liu <liuyun@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        loongarch@lists.linux.dev
+References: <20221026035752.32681-1-zhuyinbo@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221026035752.32681-1-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-	Hello,
-
-On Wed, 26 Oct 2022, Jason A. Donenfeld wrote:
-
-> The `char` type with no explicit sign is sometimes signed and sometimes
-> unsigned. This code will break on platforms such as arm, where char is
-> unsigned. So mark it here as explicitly signed, so that the
-> todrop_counter decrement and subsequent comparison is correct.
+On 25/10/2022 23:57, Yinbo Zhu wrote:
+> HPET (High Precision Event Timer) defines a new set of timers, which
+> are used by the operating system to schedule threads, interrupt the
+> kernel and interrupt the multimedia timer server. The operating
+> system can assign different timers to different applications. By
+> configuration, each timer can generate interrupt independently.
 > 
-> Cc: Pablo Neira Ayuso <pablo@netfilter.org>
-> Cc: Julian Anastasov <ja@ssi.bg>
-> Cc: Simon Horman <horms@verge.net.au>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> The loongson2 HPET module includes a main count and three comparators
+> , all of which are 32 bits wide. Among the three comparators, only
 
-	Looks good to me for -next, thanks!
+No blank line before coma.
 
-Acked-by: Julian Anastasov <ja@ssi.bg>
-
+> one comparator supports periodic interrupt, all three comparators
+> support non periodic interrupts.
+> 
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 > ---
->  net/netfilter/ipvs/ip_vs_conn.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs_conn.c
-> index 8c04bb57dd6f..7c4866c04343 100644
-> --- a/net/netfilter/ipvs/ip_vs_conn.c
-> +++ b/net/netfilter/ipvs/ip_vs_conn.c
-> @@ -1249,40 +1249,40 @@ static const struct seq_operations ip_vs_conn_sync_seq_ops = {
->  	.next  = ip_vs_conn_seq_next,
->  	.stop  = ip_vs_conn_seq_stop,
->  	.show  = ip_vs_conn_sync_seq_show,
->  };
->  #endif
->  
->  
->  /* Randomly drop connection entries before running out of memory
->   * Can be used for DATA and CTL conns. For TPL conns there are exceptions:
->   * - traffic for services in OPS mode increases ct->in_pkts, so it is supported
->   * - traffic for services not in OPS mode does not increase ct->in_pkts in
->   * all cases, so it is not supported
->   */
->  static inline int todrop_entry(struct ip_vs_conn *cp)
->  {
->  	/*
->  	 * The drop rate array needs tuning for real environments.
->  	 * Called from timer bh only => no locking
->  	 */
-> -	static const char todrop_rate[9] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
-> -	static char todrop_counter[9] = {0};
-> +	static const signed char todrop_rate[9] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
-> +	static signed char todrop_counter[9] = {0};
->  	int i;
->  
->  	/* if the conn entry hasn't lasted for 60 seconds, don't drop it.
->  	   This will leave enough time for normal connection to get
->  	   through. */
->  	if (time_before(cp->timeout + jiffies, cp->timer.expires + 60*HZ))
->  		return 0;
->  
->  	/* Don't drop the entry if its number of incoming packets is not
->  	   located in [0, 8] */
->  	i = atomic_read(&cp->in_pkts);
->  	if (i > 8 || i < 0) return 0;
->  
->  	if (!todrop_rate[i]) return 0;
->  	if (--todrop_counter[i] > 0) return 0;
->  
->  	todrop_counter[i] = todrop_rate[i];
->  	return 1;
->  }
-> -- 
-> 2.38.1
+> Change in v4: 
+>                 1. Use common clock framework ops to gain apb clock.
+>                 2. This patch need rely on clock patch, which patchwork  
+>                    link was "https://patchwork.kernel.org/project/linux-clk/list/?series=688892".
 
-Regards
+Link to lore.
 
---
-Julian Anastasov <ja@ssi.bg>
+The point 2 should go to cover letter. It's easy to miss it.
+
+Best regards,
+Krzysztof
 
