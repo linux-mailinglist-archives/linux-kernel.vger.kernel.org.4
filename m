@@ -2,96 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 973D860EBF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 01:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A35EF60EBF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 01:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233295AbiJZXAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 19:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41244 "EHLO
+        id S234178AbiJZXBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 19:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234035AbiJZXAE (ORCPT
+        with ESMTP id S234113AbiJZXAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 19:00:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0F32A41A
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 15:59:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25B4B620ED
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 22:59:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92C01C433D6;
-        Wed, 26 Oct 2022 22:59:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666825196;
-        bh=QkoSP5dy50ivjFi2Kea4D2nh4Z8LDeoDCm4zKPAaAhQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ALm56epckyb/8rY95yBicPcsnjav4f+T26VCXKs6HLb5x+abgQaLlxHSCewgdBFgG
-         DmBDFTQbQf9i1yAAJ3O91Qqkmtsg/8OSKXdGQKyKltSzOsnCpg8zxq6HlYfMG8dPgU
-         ggiJ7kjnBJ2MbC3Ex0BlPUAk7UqDIdSEtzRR1mCHOclIQ6Qo6Q8pYa08iKBCWk8AIw
-         6XozkgTsCSvFP1spmNDTYeBgcoD1RYHGDW2RCX1rNsjrCq53tiZWQJt0Dntinf5tLC
-         Cinn0dXhLsNZo5uRyLGqgMXi1vmyF5iD7a3R90G1EueEexUPmekq+yzDc8fxlHisa0
-         E3iIL0zsIovBg==
-From:   SeongJae Park <sj@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH v2 12/12] mm/damon/{reclaim,lru_sort}: remove unnecessarily included headers
-Date:   Wed, 26 Oct 2022 22:59:43 +0000
-Message-Id: <20221026225943.100429-13-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221026225943.100429-1-sj@kernel.org>
-References: <20221026225943.100429-1-sj@kernel.org>
+        Wed, 26 Oct 2022 19:00:34 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50980317F3;
+        Wed, 26 Oct 2022 16:00:08 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id a13so44192741edj.0;
+        Wed, 26 Oct 2022 16:00:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Ww8Jx6MwPKHu8PJmJYn80kwAUAuLzjtG0hvl+VPoT7M=;
+        b=I3fm9YJEZN8vn/vYlXN9fSY8k4i77jAX52zOoYBBuPldBV1oZUwXuOvRRKrprh6aIs
+         9XgPQSBYSf5MkYEjF4m3St8lRpQkqlYZ5W5rXDzeor135zCDa3EtyZ1eiPqaRIcZDgXy
+         9KHMK3AStov4UfcuX3L4cYqw/Z/Pa1Ty6r5uzfdl5/t9SLr7Hji9DJBcxeoisTUdybZl
+         hBhqiq7ODzjdmpTwfVcA32aXit4rdv+Ws2XO9kH8lFn2XanPs7ZXfPKlLxhOn22yYYvE
+         M92dIhVxNN7oaWijPD8O3xtcn5HwZXm1y6SmUwjFUp6dRyYlyazwRqVg/gFQ5kl5UK91
+         bkvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ww8Jx6MwPKHu8PJmJYn80kwAUAuLzjtG0hvl+VPoT7M=;
+        b=TLqQUn8UNW/PaQamoSqhKcG5fqHpHAFnMB4/SOlxVxBxOlzL/F3X6DdV/jhzAisHTE
+         8guRcqmwA3KcGo19NwRTSJujWIL/IQAm2I//x1YZ8WYOcFypDa4Ymw6aDVDjK1Hc/3Bf
+         KlndGD27R/3gsk8mPdFrOJmbLYBvEXCkxE4j8ESqWQXNSmdHr8rKf0/lfawwZ1HJSb9R
+         SjOgTVVZSawR4TG+j13fvVDeXBvbKnBSwD3zVXl28w0YsR+QdBy1Ql46t3Z3DMV4B2B1
+         pbUzpl3c3XgkM3Ic7P1oHxeh3SLxHJaMS43rTG99rKgDnq0VH91H2VWLf2LPuF0jtrnd
+         gwLw==
+X-Gm-Message-State: ACrzQf0pBpUkzsq4zPkCHCJt4xv1V2RVAr98SSGh6byKa1nXMC1RT7RK
+        GmLgWUyuXeu8FjKBdBehruU=
+X-Google-Smtp-Source: AMsMyM7LfwC6hr00YFuS7OlQuq6QKPSmS3Rztqf9jg+nzCnwAq4lXLwpFOcej6U/S60SWkn3lWsQEA==
+X-Received: by 2002:a05:6402:3213:b0:461:dec8:336d with SMTP id g19-20020a056402321300b00461dec8336dmr15397238eda.221.1666825206604;
+        Wed, 26 Oct 2022 16:00:06 -0700 (PDT)
+Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id qh24-20020a170906ecb800b00782fbb7f5f7sm3563185ejb.113.2022.10.26.16.00.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 16:00:06 -0700 (PDT)
+Message-ID: <84f14b40-0804-9734-963a-31e200687a8d@gmail.com>
+Date:   Thu, 27 Oct 2022 01:00:05 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v1 2/3] ARM: dts: rockchip: rename "haoyu,hym8563" rtc nodes
+To:     heiko@sntech.de
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+References: <f7127f87-05fd-5e20-eb2d-a3fd04674229@gmail.com>
+Content-Language: en-US
+In-Reply-To: <f7127f87-05fd-5e20-eb2d-a3fd04674229@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some headers that 'reclaim.c' and 'lru_sort.c' are including are
-unnecessary now owing to previous cleanups and refactorings.  Remove
-those.
+The "haoyu,hym8563" RTC node names should be generic,
+so change them.
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 ---
- mm/damon/lru_sort.c | 2 --
- mm/damon/reclaim.c  | 2 --
- 2 files changed, 4 deletions(-)
+ arch/arm/boot/dts/rk3036-evb.dts            | 2 +-
+ arch/arm/boot/dts/rk3288-evb-act8846.dts    | 2 +-
+ arch/arm/boot/dts/rk3288-firefly-reload.dts | 2 +-
+ arch/arm/boot/dts/rk3288-firefly.dtsi       | 2 +-
+ arch/arm/boot/dts/rk3288-miqi.dts           | 2 +-
+ arch/arm/boot/dts/rk3288-rock2-square.dts   | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/mm/damon/lru_sort.c b/mm/damon/lru_sort.c
-index a1896c5acfe9..5c60163e556c 100644
---- a/mm/damon/lru_sort.c
-+++ b/mm/damon/lru_sort.c
-@@ -8,9 +8,7 @@
- #define pr_fmt(fmt) "damon-lru-sort: " fmt
- 
- #include <linux/damon.h>
--#include <linux/ioport.h>
- #include <linux/module.h>
--#include <linux/sched.h>
- #include <linux/workqueue.h>
- 
- #include "modules-common.h"
-diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
-index 3173f373435c..e14eb30c01f4 100644
---- a/mm/damon/reclaim.c
-+++ b/mm/damon/reclaim.c
-@@ -8,9 +8,7 @@
- #define pr_fmt(fmt) "damon-reclaim: " fmt
- 
- #include <linux/damon.h>
--#include <linux/ioport.h>
- #include <linux/module.h>
--#include <linux/sched.h>
- #include <linux/workqueue.h>
- 
- #include "modules-common.h"
--- 
-2.25.1
+diff --git a/arch/arm/boot/dts/rk3036-evb.dts b/arch/arm/boot/dts/rk3036-evb.dts
+index 9fd4d9db9..89b0927ce 100644
+--- a/arch/arm/boot/dts/rk3036-evb.dts
++++ b/arch/arm/boot/dts/rk3036-evb.dts
+@@ -35,7 +35,7 @@
+ &i2c1 {
+ 	status = "okay";
+
+-	hym8563: hym8563@51 {
++	hym8563: rtc@51 {
+ 		compatible = "haoyu,hym8563";
+ 		reg = <0x51>;
+ 		#clock-cells = <0>;
+diff --git a/arch/arm/boot/dts/rk3288-evb-act8846.dts b/arch/arm/boot/dts/rk3288-evb-act8846.dts
+index be695b8c1..8a635c243 100644
+--- a/arch/arm/boot/dts/rk3288-evb-act8846.dts
++++ b/arch/arm/boot/dts/rk3288-evb-act8846.dts
+@@ -54,7 +54,7 @@
+ 		vin-supply = <&vcc_sys>;
+ 	};
+
+-	hym8563@51 {
++	rtc@51 {
+ 		compatible = "haoyu,hym8563";
+ 		reg = <0x51>;
+
+diff --git a/arch/arm/boot/dts/rk3288-firefly-reload.dts b/arch/arm/boot/dts/rk3288-firefly-reload.dts
+index a5a082634..2b462bbca 100644
+--- a/arch/arm/boot/dts/rk3288-firefly-reload.dts
++++ b/arch/arm/boot/dts/rk3288-firefly-reload.dts
+@@ -197,7 +197,7 @@
+ };
+
+ &i2c0 {
+-	hym8563: hym8563@51 {
++	hym8563: rtc@51 {
+ 		compatible = "haoyu,hym8563";
+ 		reg = <0x51>;
+ 		#clock-cells = <0>;
+diff --git a/arch/arm/boot/dts/rk3288-firefly.dtsi b/arch/arm/boot/dts/rk3288-firefly.dtsi
+index 052afe554..9267857be 100644
+--- a/arch/arm/boot/dts/rk3288-firefly.dtsi
++++ b/arch/arm/boot/dts/rk3288-firefly.dtsi
+@@ -233,7 +233,7 @@
+ 		vin-supply = <&vcc_sys>;
+ 	};
+
+-	hym8563: hym8563@51 {
++	hym8563: rtc@51 {
+ 		compatible = "haoyu,hym8563";
+ 		reg = <0x51>;
+ 		#clock-cells = <0>;
+diff --git a/arch/arm/boot/dts/rk3288-miqi.dts b/arch/arm/boot/dts/rk3288-miqi.dts
+index 713f55e14..e3d5644f2 100644
+--- a/arch/arm/boot/dts/rk3288-miqi.dts
++++ b/arch/arm/boot/dts/rk3288-miqi.dts
+@@ -162,7 +162,7 @@
+ 		vin-supply = <&vcc_sys>;
+ 	};
+
+-	hym8563: hym8563@51 {
++	hym8563: rtc@51 {
+ 		compatible = "haoyu,hym8563";
+ 		reg = <0x51>;
+ 		#clock-cells = <0>;
+diff --git a/arch/arm/boot/dts/rk3288-rock2-square.dts b/arch/arm/boot/dts/rk3288-rock2-square.dts
+index 80e0f07c8..07a3a5275 100644
+--- a/arch/arm/boot/dts/rk3288-rock2-square.dts
++++ b/arch/arm/boot/dts/rk3288-rock2-square.dts
+@@ -165,7 +165,7 @@
+ };
+
+ &i2c0 {
+-	hym8563: hym8563@51 {
++	hym8563: rtc@51 {
+ 		compatible = "haoyu,hym8563";
+ 		reg = <0x51>;
+ 		#clock-cells = <0>;
+--
+2.20.1
 
