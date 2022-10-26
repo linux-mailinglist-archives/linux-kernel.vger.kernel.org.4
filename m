@@ -2,60 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA19A60EBAE
+	by mail.lfdr.de (Postfix) with ESMTP id 32E6E60EBAC
 	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 00:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiJZWmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 18:42:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
+        id S233692AbiJZWm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 18:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJZWmq (ORCPT
+        with ESMTP id S233542AbiJZWmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 18:42:46 -0400
+        Wed, 26 Oct 2022 18:42:51 -0400
 Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 584DD15FC9;
-        Wed, 26 Oct 2022 15:42:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 062DE1F9D5;
+        Wed, 26 Oct 2022 15:42:50 -0700 (PDT)
 Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 8C76C489A;
-        Thu, 27 Oct 2022 00:42:44 +0200 (CEST)
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 4B735489C;
+        Thu, 27 Oct 2022 00:42:49 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202205; t=1666824164;
-        bh=jNoxRVdm3VuLTQW8ZXbhrbrxzP5u0X1eFmEP42xyPEw=;
+        s=202205; t=1666824169;
+        bh=z+Ch54k+gmevbiInJZ+ZMJKFOWNNhIeKTNXpceivE7M=;
         h=Date:From:Cc:Subject:References:In-Reply-To:From;
-        b=Haqz2ZBzsh+Jl1+IFXYjMl5ZH9zqy6r2e9vFJ/0gASL2UmeLSV76EJGhSqdvsZCQC
-         tylCmVInrFF13IwmNkkeQUYX7SunAbTq+mkP5gJiYJd8wUJZkZjwG2NagF80f842TC
-         PhCyizqgHCE4F/i1Sy12+84rETqN7uWVBfKoiEAXGXdBrl4WAyp0nKEAjsno5Osl7f
-         HgfB94NpgOIGSaqFVqDLnCK9v5oKk+ZioSzh40y0mDxmah4ECxUrILygeSvCA3q0HP
-         /uF5hGjOu/a/lSKcSeRMGt3ooCRBdG24vnibiglDFeV4rJUTwnGWEuyu+YPdL9Gn9K
-         bTDkeB+1iWh5XcR2l1Umd2/zi8wSnNrFDtnIDcseWnxaAoAArdj5SVp7aADvFKoRAw
-         bt9704/LqzxScH+b52PUCPzVai1SbeamrfsI0Q8y1ea1eVfBY7l7BRx0DFw5DKpykm
-         41ZVdmmWpJNC+vfEd0Fifk1554D87zlggjrYSwArkKk9V5pWG+lJtsx+pXfXUPNbdd
-         NfEjiDsHAUfQoPWOQhYt9Nb3FEH+BZjlWQWYRuy9heJ9+IcLfMpYvcrCr0QDf8Ri3e
-         OSglN2vyNpph+KPYVJHMP9NTAtodk9boQ4hCA87krHpqL0sRKWQd6n1sPadXMbiLh2
-         QWLUCT7y7EYZ0A0MQkmAUsos=
-Date:   Thu, 27 Oct 2022 00:42:43 +0200
+        b=eInDpVGunEUvT6dYehv5m3C8ThSDrmXAle8/b0GhcaOXgnk8vOBUNu9XLZb8+pek+
+         kfdbYHXD6YjL29PPocHeAJlf72Q93tsvXtk++Mm0aOJh3VLtbSYPxD5vAkRjVvEISA
+         W6dwoMyhg/uj4PVn43oBdbDNZJ4zH39CJLjQiF/hVij0Mq9wrQs3JSyVF0dYU4lIqQ
+         9uP4CdzWQGvhkpvj0qBg2/LE0tKDEjkcIx1mYp3aY6t4Bo90fNr/TFzF0RkImh7jbg
+         zzW2hD6nRo4DezdHay25upYcBvroLH5ob4rGsWuXijYxriKyo88uCyGbBvMzBqq7/p
+         5e5lNipu/ItOeddN2EdDKYUvdwHyTOdkB9rtn+roh7K0ivwPftz9BeLaszEygqGwzK
+         E0Y7wEvdr1Kw2X8soctrl8sQHoSrsK4/qADBC7r1sKWudwn0CqQ+BiDVGiOATekxyy
+         /jt362ZP/qYm58AmF/4X9bmnLFspedhKOSvOtcVbgycFY6q/bIWoYAEGppF5AzJ6kl
+         8jE7Krr/5WnxpvtTAHRA5wYE/Qv4+oxU3VLD9JBV0W3Ku7jW4xHNGE/fxv7isAf7h3
+         hp/LETvRJpptE3Agk+qeft2GSVtkoxZgCDD8xT8yWqDLDjnykmJEtrJGkPs1nFN0LP
+         /0mpI/ZPHJZmMuBoXpOZNvhQ=
+Date:   Thu, 27 Oct 2022 00:42:48 +0200
 From:   =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
 Cc:     Jonathan Corbet <corbet@lwn.net>,
         Federico Vaga <federico.vaga@vaga.pv.it>,
         Alex Shi <alexs@kernel.org>,
         Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Jean-Paul Roubelat <jpr@f6fbb.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub =?utf-8?B?S2ljacWEc2tp?= <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Hu Haowen <src.res@email.cn>, Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-hams@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH 02/15] hamradio: yam: remove YAM_MAGIC
-Message-ID: <e12d4648a757b613a2ecf09886116900fba1c154.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
+        linux-doc-tw-discuss@lists.sourceforge.net
+Subject: [PATCH 03/15] pcmcia: synclink_cs: remove MGSLPC_MAGIC
+Message-ID: <c909c36218b0d4b5888b41f9af18e763a5b36dcf.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
 References: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6vptsdzoc53t6szb"
+        protocol="application/pgp-signature"; boundary="giavft5aq6szb66s"
 Content-Disposition: inline
 In-Reply-To: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
 User-Agent: NeoMutt/20220429
@@ -73,182 +70,185 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---6vptsdzoc53t6szb
+--giavft5aq6szb66s
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-This is checked inconsistently, only in contexts following directly
-=66rom the module init, and returns an error to userspace/ignores
-the condition entirely, rather than yielding remotely-useful diagnostics
+MGSLPC_PARANOIA_CHECK has never been defined automatically,
+and in the context of magic numbers as defined in magic-number.rst,
+"the tty layer should not need this"
 
-This is cruft, and we have better debugging tooling nowadays: kill it
+This is 100% dead cruft, and we have better debugging tooling nowadays:
+kill it
 
-Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
 Ref: https://lore.kernel.org/linux-doc/YyMlovoskUcHLEb7@kroah.com/
+Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
 ---
- Documentation/process/magic-number.rst                    | 1 -
- Documentation/translations/it_IT/process/magic-number.rst | 1 -
- Documentation/translations/zh_CN/process/magic-number.rst | 1 -
- Documentation/translations/zh_TW/process/magic-number.rst | 1 -
- drivers/net/hamradio/yam.c                                | 8 +-------
- 5 files changed, 1 insertion(+), 11 deletions(-)
+ Documentation/process/magic-number.rst                 |  1 -
+ .../translations/it_IT/process/magic-number.rst        |  1 -
+ .../translations/zh_CN/process/magic-number.rst        |  1 -
+ .../translations/zh_TW/process/magic-number.rst        |  1 -
+ drivers/char/pcmcia/synclink_cs.c                      | 10 ----------
+ 5 files changed, 14 deletions(-)
 
 diff --git a/Documentation/process/magic-number.rst b/Documentation/process=
 /magic-number.rst
-index 87353e0207c1..a4414b7e15aa 100644
+index a4414b7e15aa..18f8b1e3a993 100644
 --- a/Documentation/process/magic-number.rst
 +++ b/Documentation/process/magic-number.rst
-@@ -76,7 +76,6 @@ MGSLPC_MAGIC          0x5402           mgslpc_info       =
-       ``drivers/char/p
+@@ -72,7 +72,6 @@ PG_MAGIC              'P'              pg_{read,write}_hd=
+r      ``include/linux/
+ APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86=
+/kernel/apm_32.c``
+ FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
+linux/fs.h``
+ SLIP_MAGIC            0x5302           slip                     ``drivers/=
+net/slip.h``
+-MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
+char/pcmcia/synclink_cs.c``
  HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
 linux/hdlcdrv.h``
  KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
 s/include/asm/sn/klkernvars.h``
  CODA_MAGIC            0xC0DAC0DA       coda_file_info           ``fs/coda/=
 coda_fs_i.h``
--YAM_MAGIC             0xF10A7654       yam_port                 ``drivers/=
-net/hamradio/yam.c``
- CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
-scsi/arm/queue.c``
- QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
-scsi/arm/queue.c``
 diff --git a/Documentation/translations/it_IT/process/magic-number.rst b/Do=
 cumentation/translations/it_IT/process/magic-number.rst
-index a96712bd8a68..f51c5ef9d93f 100644
+index f51c5ef9d93f..827167b18f15 100644
 --- a/Documentation/translations/it_IT/process/magic-number.rst
 +++ b/Documentation/translations/it_IT/process/magic-number.rst
-@@ -82,7 +82,6 @@ MGSLPC_MAGIC          0x5402           mgslpc_info       =
-       ``drivers/char/p
+@@ -78,7 +78,6 @@ PG_MAGIC              'P'              pg_{read,write}_hd=
+r      ``include/linux/
+ APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86=
+/kernel/apm_32.c``
+ FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
+linux/fs.h``
+ SLIP_MAGIC            0x5302           slip                     ``drivers/=
+net/slip.h``
+-MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
+char/pcmcia/synclink_cs.c``
  HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
 linux/hdlcdrv.h``
  KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
 s/include/asm/sn/klkernvars.h``
  CODA_MAGIC            0xC0DAC0DA       coda_file_info           ``fs/coda/=
 coda_fs_i.h``
--YAM_MAGIC             0xF10A7654       yam_port                 ``drivers/=
-net/hamradio/yam.c``
- CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
-scsi/arm/queue.c``
- QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
-scsi/arm/queue.c``
 diff --git a/Documentation/translations/zh_CN/process/magic-number.rst b/Do=
 cumentation/translations/zh_CN/process/magic-number.rst
-index 44f3a29fce57..3b53bd67e41b 100644
+index 3b53bd67e41b..9553475e9867 100644
 --- a/Documentation/translations/zh_CN/process/magic-number.rst
 +++ b/Documentation/translations/zh_CN/process/magic-number.rst
-@@ -65,7 +65,6 @@ MGSLPC_MAGIC          0x5402           mgslpc_info       =
-       ``drivers/char/p
+@@ -61,7 +61,6 @@ PG_MAGIC              'P'              pg_{read,write}_hd=
+r      ``include/linux/
+ APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86=
+/kernel/apm_32.c``
+ FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
+linux/fs.h``
+ SLIP_MAGIC            0x5302           slip                     ``drivers/=
+net/slip.h``
+-MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
+char/pcmcia/synclink_cs.c``
  HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
 linux/hdlcdrv.h``
  KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
 s/include/asm/sn/klkernvars.h``
  CODA_MAGIC            0xC0DAC0DA       coda_file_info           ``fs/coda/=
 coda_fs_i.h``
--YAM_MAGIC             0xF10A7654       yam_port                 ``drivers/=
-net/hamradio/yam.c``
- CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
-scsi/arm/queue.c``
- QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
-scsi/arm/queue.c``
 diff --git a/Documentation/translations/zh_TW/process/magic-number.rst b/Do=
 cumentation/translations/zh_TW/process/magic-number.rst
-index 0fde3183e82a..7d176a87ec3c 100644
+index 7d176a87ec3c..8a64f56ae267 100644
 --- a/Documentation/translations/zh_TW/process/magic-number.rst
 +++ b/Documentation/translations/zh_TW/process/magic-number.rst
-@@ -68,7 +68,6 @@ MGSLPC_MAGIC          0x5402           mgslpc_info       =
-       ``drivers/char/p
+@@ -64,7 +64,6 @@ PG_MAGIC              'P'              pg_{read,write}_hd=
+r      ``include/linux/
+ APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86=
+/kernel/apm_32.c``
+ FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
+linux/fs.h``
+ SLIP_MAGIC            0x5302           slip                     ``drivers/=
+net/slip.h``
+-MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
+char/pcmcia/synclink_cs.c``
  HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
 linux/hdlcdrv.h``
  KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
 s/include/asm/sn/klkernvars.h``
  CODA_MAGIC            0xC0DAC0DA       coda_file_info           ``fs/coda/=
 coda_fs_i.h``
--YAM_MAGIC             0xF10A7654       yam_port                 ``drivers/=
-net/hamradio/yam.c``
- CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
-scsi/arm/queue.c``
- QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
-scsi/arm/queue.c``
-diff --git a/drivers/net/hamradio/yam.c b/drivers/net/hamradio/yam.c
-index 2ed2f836f09a..0f43411a6ca5 100644
---- a/drivers/net/hamradio/yam.c
-+++ b/drivers/net/hamradio/yam.c
-@@ -73,7 +73,6 @@ static const char yam_drvinfo[] __initconst =3D KERN_INFO=
- \
- #define YAM_1200	2
+diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/syncli=
+nk_cs.c
+index b2735be81ab2..262f087bfc01 100644
+--- a/drivers/char/pcmcia/synclink_cs.c
++++ b/drivers/char/pcmcia/synclink_cs.c
+@@ -137,7 +137,6 @@ struct _input_signal_events {
+ typedef struct _mgslpc_info {
+ 	struct tty_port		port;
+ 	void *if_ptr;	/* General purpose pointer (used by SPPP) */
+-	int			magic;
+ 	int			line;
 =20
- #define NR_PORTS	4
--#define YAM_MAGIC	0xF10A7654
+ 	struct mgsl_icount	icount;
+@@ -228,8 +227,6 @@ typedef struct _mgslpc_info {
 =20
- /* Transmitter states */
+ } MGSLPC_INFO;
 =20
-@@ -94,7 +93,6 @@ static const char yam_drvinfo[] __initconst =3D KERN_INFO=
- \
- #define DEFAULT_PERS	64			/* 0->255 */
-=20
- struct yam_port {
--	int magic;
- 	int bitrate;
- 	int baudrate;
- 	int iobase;
-@@ -604,7 +602,7 @@ static void yam_arbitrate(struct net_device *dev)
- {
- 	struct yam_port *yp =3D netdev_priv(dev);
-=20
--	if (yp->magic !=3D YAM_MAGIC || yp->tx_state !=3D TX_OFF ||
-+	if (yp->tx_state !=3D TX_OFF ||
- 	    skb_queue_empty(&yp->send_queue))
- 		return;
- 	/* tx_state is TX_OFF and there is data to send */
-@@ -930,9 +928,6 @@ static int yam_siocdevprivate(struct net_device *dev, s=
-truct ifreq *ifr, void __
- 	if (copy_from_user(&ioctl_cmd, data, sizeof(int)))
- 		return -EFAULT;
-=20
--	if (yp->magic !=3D YAM_MAGIC)
--		return -EINVAL;
+-#define MGSLPC_MAGIC 0x5402
 -
- 	if (!capable(CAP_NET_ADMIN))
- 		return -EPERM;
+ /*
+  * The size of the serial xmit buffer is 1 page, or 4096 bytes
+  */
+@@ -525,7 +522,6 @@ static int mgslpc_probe(struct pcmcia_device *link)
+ 		return -ENOMEM;
+ 	}
 =20
-@@ -1079,7 +1074,6 @@ static void yam_setup(struct net_device *dev)
+-	info->magic =3D MGSLPC_MAGIC;
+ 	tty_port_init(&info->port);
+ 	info->port.ops =3D &mgslpc_port_ops;
+ 	INIT_WORK(&info->task, bh_handler);
+@@ -652,8 +648,6 @@ static inline bool mgslpc_paranoia_check(MGSLPC_INFO *i=
+nfo,
+ 					char *name, const char *routine)
  {
- 	struct yam_port *yp =3D netdev_priv(dev);
+ #ifdef MGSLPC_PARANOIA_CHECK
+-	static const char *badmagic =3D
+-		"Warning: bad magic number for mgsl struct (%s) in %s\n";
+ 	static const char *badinfo =3D
+ 		"Warning: null mgslpc_info for (%s) in %s\n";
 =20
--	yp->magic =3D YAM_MAGIC;
- 	yp->bitrate =3D DEFAULT_BITRATE;
- 	yp->baudrate =3D DEFAULT_BITRATE * 2;
- 	yp->iobase =3D 0;
+@@ -661,10 +655,6 @@ static inline bool mgslpc_paranoia_check(MGSLPC_INFO *=
+info,
+ 		printk(badinfo, name, routine);
+ 		return true;
+ 	}
+-	if (info->magic !=3D MGSLPC_MAGIC) {
+-		printk(badmagic, name, routine);
+-		return true;
+-	}
+ #else
+ 	if (!info)
+ 		return true;
 --=20
 2.30.2
 
---6vptsdzoc53t6szb
+--giavft5aq6szb66s
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNZt+MACgkQvP0LAY0m
-WPHSjxAAqUOuJNgFbm6yxmZX4x3lfPDr7jH7/7TeA8dIiNd4xpe2deT4KjHFX5f5
-7B4gduLHp8p5uBxOct3tqVxWmR3WUZKQq74PHlkH9kzjQGqnXen7jiVtMhTOv7ly
-gfiOVXYFH6PNfjM8RnhIA705exsDq8s+wVF7ryRIjajPYBXQpPW3Szrhvym6z1NO
-f6Sw4WormDbYTBViSNhM6VW0+p/jZeICliVa/TcDtvD1Orsq7Ez4CNQs6GfcXf+S
-O7B0yx+tZaJJ2xWfooF7Zdi4Qs0SkIJbLmhJpW+o25DphP9oO5/qmgmG/iQhqqxE
-6BQRVM/IXOWFbrEqSJ6Ip97BkYgJlJjDFIINXmDVIjgo0K+DNRr7/HvmehJz7Kst
-XmHeAi9wK51y1a5DNxfKg/ZnzKvEHGqxPb+wv4VATtEPy3PzNbf3bDjHsy62uN3G
-WVgdWAFyM/asGOJl2YEWvRSkwgdaVm3VEP6+jMlpDeBnbi1CvPBSy6mtAv4Eu8pv
-ag91Xx7sZdWAGAFJWWXwZjs9xT8SqaM5A6RmPesaLJwU1DTpiyxlizVMZ0PXEpYK
-fT6lTove5vqUlgLvOOjWY+I2QBlhVWz5CluKAeuKCR4q0jEFxj39trnvN+biDpBZ
-fRotkeEq2cy3orDHiTgE2S1W+PIuQcihMsPzbomgBWnOq6XXHfU=
-=KfbL
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNZt+cACgkQvP0LAY0m
+WPGU2g//ealvvVdNSk/+j901xtE1Cn9QAl98lXslGQsYfilZkbInrouwago5FJ12
+w0A4HDWLv06lawk1BcZof2bpTkVK3oyLs/zy94ZwTi8WOC1HkKArulk0w4YHe0AE
+jt/tA+FMQAYzcMBdtkKfsQZ+YYNjyUCVWW4xHwak6/tndMEtEnnPuHQbWcRvi6Kw
+iyt3C28j3hnRq8ZkRmSnbNc1IHmuo/ULgROhn83SuX5OUnHIIRn8EoMvSg44CpUP
+3c1nJNjv3GW32/8EDumTFGKpGVFr6kqHqX8x8AZd+EpuVBaLuQ+LyxJs52ByE3lL
+q3CFT0VmsCVf8JMqXyqMbJl1oSo4EeF2RI494nsiR4vduDtWbr2lg6qqPfvzXl7C
+iECR1OfZ9svLjyQ3INqG1GL0Tw46P5HGkqtl+ScoAdDoxgsXKFyA+VhEoVlyII3n
+FBKaBDsv6J89fU5w+tdwnvl/dybLgUICigUCGQupyGpXFgf2ruCOGiBPPf3uXH4F
+V82MdEiTDXaihwbRN3K5kxoO4B4krANkjRmUlGlHtvtki6q/fMNs3/cby9+/WFjb
+mYpBBrPS0sG0+Abtf5s4qOhxvidFMv0gz1zHoqwQB9uR6awbNop5tIuiCorE/tsY
+VRVUBF3LeYei5ykJydNDratNNzzab4KgMNQX7FqCobk3VBCmOpg=
+=Eazf
 -----END PGP SIGNATURE-----
 
---6vptsdzoc53t6szb--
+--giavft5aq6szb66s--
