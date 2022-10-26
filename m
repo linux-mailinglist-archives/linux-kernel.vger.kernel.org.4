@@ -2,69 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B56E560E23A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:36:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4771960E243
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbiJZNg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 09:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
+        id S233512AbiJZNhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiJZNgV (ORCPT
+        with ESMTP id S233661AbiJZNgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 09:36:21 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB35604BC;
-        Wed, 26 Oct 2022 06:36:18 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4My8w31Cm1zHvCp;
-        Wed, 26 Oct 2022 21:36:03 +0800 (CST)
-Received: from [10.174.179.14] (10.174.179.14) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 26 Oct 2022 21:36:15 +0800
-Subject: Re: [PATCH -next v2] jbd2: use the correct print format
-To:     Bixuan Cui <cuibixuan@linux.alibaba.com>, <rostedt@goodmis.org>,
-        <mhiramat@kernel.org>, <bvanassche@acm.org>, <axboe@kernel.dk>,
-        <tytso@mit.edu>, <linux-kernel@vger.kernel.org>,
-        <linux-ext4@vger.kernel.org>
-References: <1665488024-95172-1-git-send-email-cuibixuan@linux.alibaba.com>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <60a7370a-0b7f-1f56-0fa4-08a96138b1cd@huawei.com>
-Date:   Wed, 26 Oct 2022 21:36:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Wed, 26 Oct 2022 09:36:49 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490E110B6A;
+        Wed, 26 Oct 2022 06:36:48 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QD0Rbe017465;
+        Wed, 26 Oct 2022 13:36:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=YAamzQAdZMeKFR38BmEO5b3be9I3tffsjuBsMPwhp90=;
+ b=h/6b5PJt0BswfXQelq1N2mTYiWCGumu6nfcx0HxU7cTQgibQgWagEv78F6P3BVKdMbBW
+ eBzZqPbqaN6O8dzVRXT6PinAJzVqImrS46BwZ4xndArlPvmr6TNw/PfdgtEfRVtytSXL
+ M49jte9+DzGrRwrkE/VWyrXJ/HeG1JR4H8stXTYXEuSMryjTPkZb5faeP017p9SNXpLK
+ I3yFqUwW2eTAZtbhVaXGOSLvJt5QnkzuBLgaTEv0t09QR5ih6TokPKcvxfWSLW/IlnB8
+ 8kaUrMTao/ImsQSOJG/TnPrkCATbavtVK3LZdQDVNHcr1FmoqDKlPnK7slwvT1WvCIvZ BQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kf5da9bwp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 13:36:47 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29QDaYPw021323;
+        Wed, 26 Oct 2022 13:36:47 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kf5da9bvy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 13:36:47 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29QDZsPk013672;
+        Wed, 26 Oct 2022 13:36:45 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma04wdc.us.ibm.com with ESMTP id 3kc859gc38-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 13:36:45 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com ([9.208.128.116])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29QDai4t9306748
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Oct 2022 13:36:45 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 40A9758060;
+        Wed, 26 Oct 2022 13:36:44 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9CEFA58056;
+        Wed, 26 Oct 2022 13:36:42 +0000 (GMT)
+Received: from [9.160.93.208] (unknown [9.160.93.208])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 26 Oct 2022 13:36:42 +0000 (GMT)
+Message-ID: <733949e2-1086-f012-aa39-e3b84feb2688@linux.ibm.com>
+Date:   Wed, 26 Oct 2022 09:36:42 -0400
 MIME-Version: 1.0
-In-Reply-To: <1665488024-95172-1-git-send-email-cuibixuan@linux.alibaba.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] KVM: s390: pci: Fix allocation size of aift kzdev
+ elements
 Content-Language: en-US
+To:     Rafael Mendonca <rafaelmendsr@gmail.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221026013234.960859-1-rafaelmendsr@gmail.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20221026013234.960859-1-rafaelmendsr@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.14]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Cv4TXOaUDfdvg_Be506w56CdFYzjyV_Z
+X-Proofpoint-GUID: vYWzyYMuyG9jVTSSu0NuyE58KC0HAZer
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-26_06,2022-10-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ mlxscore=0 priorityscore=1501 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 malwarescore=0 clxscore=1011 mlxlogscore=999
+ phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2210260076
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/25/22 9:32 PM, Rafael Mendonca wrote:
+> The 'kzdev' field of struct 'zpci_aift' is an array of pointers to
+> 'kvm_zdev' structs. Allocate the proper size accordingly.
+> 
+> Reported by Coccinelle:
+>   WARNING: Use correct pointer type argument for sizeof
+> 
+> Fixes: 98b1d33dac5f ("KVM: s390: pci: do initial setup for AEN interpretation")
+> Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
 
-On 2022/10/11 19:33, Bixuan Cui wrote:
-> The print format error was found when using ftrace event:
->      <...>-1406 [000] .... 23599442.895823: jbd2_end_commit: dev 252,8 transaction -1866216965 sync 0 head -1866217368
->      <...>-1406 [000] .... 23599442.896299: jbd2_start_commit: dev 252,8 transaction -1866216964 sync 0
-> 
-> Use the correct print format for transaction, head and tid.
-> 
-> Fixes: 879c5e6b7cb4 ('jbd2: convert instrumentation from markers to tracepoints')
-> Signed-off-by: Bixuan Cui<cuibixuan@linux.alibaba.com>
+Thanks for reporting & fixing.
+
+Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
+
 > ---
-> v1->v2: Make all the tid tracing consistent.
+>  arch/s390/kvm/pci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->   include/trace/events/jbd2.h | 44 ++++++++++++++++++++++----------------------
->   1 file changed, 22 insertions(+), 22 deletions(-)
+> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
+> index c50c1645c0ae..ded1af2ddae9 100644
+> --- a/arch/s390/kvm/pci.c
+> +++ b/arch/s390/kvm/pci.c
+> @@ -126,7 +126,7 @@ int kvm_s390_pci_aen_init(u8 nisc)
+>  		return -EPERM;
+>  
+>  	mutex_lock(&aift->aift_lock);
+> -	aift->kzdev = kcalloc(ZPCI_NR_DEVICES, sizeof(struct kvm_zdev),
+> +	aift->kzdev = kcalloc(ZPCI_NR_DEVICES, sizeof(struct kvm_zdev *),
+>  			      GFP_KERNEL);
+>  	if (!aift->kzdev) {
+>  		rc = -ENOMEM;
 
-Reviewed-by: Jason Yan <yanaijie@huawei.com>
