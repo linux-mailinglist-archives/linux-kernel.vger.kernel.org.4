@@ -2,166 +2,372 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A732060E4FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C637F60E4FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233816AbiJZPol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 11:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S233485AbiJZPoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 11:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233232AbiJZPof (ORCPT
+        with ESMTP id S232842AbiJZPob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 11:44:35 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AB1263A;
-        Wed, 26 Oct 2022 08:44:29 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 43EDD5C0161;
-        Wed, 26 Oct 2022 11:44:28 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 26 Oct 2022 11:44:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1666799068; x=1666885468; bh=faDhQ6w8KK
-        WL4bKQ9rSJWdVZALluEpOGbDu+CS6W134=; b=bJCPweOdBpkstkPFWbf/D07BrU
-        R3SOatPR23LHk5AKzFnHO8amSc2lVZFTTgCDb5gWKUsUeSXZuPL6gVmB1oHfBsTb
-        YuNLAzWUsXQqzxFljvScqSKm0dLYYOM5we1wLpGr32Y+LgJtbNlDMCJZ0xzmgJPM
-        Vy5m0bUyNzgy8ZyOQSNi4DJmPipEmP2G9MgYpiPPXVbjuSXmZLv5CKGJg38oJxVF
-        7tGm6vTAauefSkyAf0o3bZ24t8TsCPrhkY3qdEeDz+E7BRtjf4CkezVe5UOWictY
-        mdrHCTbHGIbgVXEueI6ry/CIi0LBPprUdgZlMtfE/gaCVikI0ycig2D0lt/A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666799068; x=1666885468; bh=faDhQ6w8KKWL4bKQ9rSJWdVZALlu
-        EpOGbDu+CS6W134=; b=Xf94Od4Nj5XW+sY4mCqe2rsU1vB80GQ9E7u5ebDZaLQy
-        kZpcoT3Mdyq4u4yLRbucUH2EPUQzN5nEp6V56i4kYINhFK7zLTHnbiyoDYm6ESpD
-        o0r/lE/6vKjZQ/L883gfhklS1RDNXls6FSJI9m4ftNxsmGncZT9Dlqka7JgzkcBx
-        alVCJ5Dom2t45VyeIs5v9V29a/ZBPte06OUmRqsWOX2rm0uYtMYjDCT44Hc0EPWh
-        34vgRzgGR9ErjinleHkoGxPhB3B8SNGbKRv1O+pbgiz4LGdju4yjDNCQbPj0dR7h
-        y6Io1OObx2xMQwsSpRdndxv2BZsZ6N8I4cvacw8OlA==
-X-ME-Sender: <xms:2lVZY7HMMOpjGbGw-sdE61klOyFAaZMiMgHnxidos00DrnO5eIhWcA>
-    <xme:2lVZY4VJ0AeC4hHZnoQiav7pOHh0OkZwKvbqmHBdgL5ShZIJ-Q2XR47vJqbHuWpwo
-    6rWoqZr-YLtJNHaC60>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtddvgdelvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:2lVZY9IjuYkH1KFmPo82bqPL1QOhCuC4dy1UeGZGHLwJF6Nf0l7T5g>
-    <xmx:2lVZY5FYfmCsoaloUFKm2ADsFKG39u9W--osI3RpzonAcxudTUfXPQ>
-    <xmx:2lVZYxXATTmd7yeMa_pQX3mczbljD9pOAuLmstZ07YLyMZ_JXeLhcw>
-    <xmx:3FVZYyXUwOKnlcord76CkyoA60vDsxWSihWUpAA6cP00r_GJNCWPzg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1CC91B60086; Wed, 26 Oct 2022 11:44:26 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
-Mime-Version: 1.0
-Message-Id: <d24a5273-1c66-4653-9730-4de31ffcf0e8@app.fastmail.com>
-In-Reply-To: <alpine.DEB.2.21.2210240054280.50489@angie.orcam.me.uk>
-References: <20220815071332.627393-1-yuzhao@google.com>
- <20220815071332.627393-9-yuzhao@google.com>
- <Y0go8wWtdcyH1+Ch@hirez.programming.kicks-ass.net>
- <CAOUHufa9+FTO3Pv-5jC-e3S5goPsUGu-5KcPVHa4bWb0X+d2ug@mail.gmail.com>
- <CAHk-=wj1rc2t5noMtVOgu8XXeTM4KiggEub9PdcexxeQrYPZvA@mail.gmail.com>
- <Y1FXpHdyvXjrjbLw@hirez.programming.kicks-ass.net>
- <CAHk-=whQchubuDpRGFabhmcZuzdt13OOF8wznXb+Dbi3GzBQhQ@mail.gmail.com>
- <Y1GZjPO+szk7X0wP@hirez.programming.kicks-ass.net>
- <CAHk-=wikUaRM5H_y1Bc+QyvGi40dKDL8fnCTyz7ECbwK7aHNPQ@mail.gmail.com>
- <Y1IUMDJFScAMrCS5@casper.infradead.org>
- <CAHk-=wjrpH1+6cQQjTO6p-96ndBMiOnNH098vhS2jLybxD+7gA@mail.gmail.com>
- <alpine.DEB.2.21.2210211911390.50489@angie.orcam.me.uk>
- <CAHk-=wgNZNNd4t004x0ehXm=DA+JmYY=0MgVNDXUtoV4ApyXvQ@mail.gmail.com>
- <alpine.DEB.2.21.2210240054280.50489@angie.orcam.me.uk>
-Date:   Wed, 26 Oct 2022 17:43:59 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     "Matthew Wilcox" <willy@infradead.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "Yu Zhao" <yuzhao@google.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Andi Kleen" <ak@linux.intel.com>,
-        "Aneesh Kumar" <aneesh.kumar@linux.ibm.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Hillf Danton" <hdanton@sina.com>, "Jens Axboe" <axboe@kernel.dk>,
-        "Johannes Weiner" <hannes@cmpxchg.org>,
-        "Jonathan Corbet" <corbet@lwn.net>, "Mel Gorman" <mgorman@suse.de>,
-        "Michael Larabel" <Michael@michaellarabel.com>,
-        "Michal Hocko" <mhocko@kernel.org>,
-        "Mike Rapoport" <rppt@kernel.org>, "Tejun Heo" <tj@kernel.org>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        "Will Deacon" <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, "Brian Geffon" <bgeffon@google.com>,
-        "Jan Alexander Steffens" <heftig@archlinux.org>,
-        "Oleksandr Natalenko" <oleksandr@natalenko.name>,
-        "Steven Barrett" <steven@liquorix.net>,
-        "Suleiman Souhlal" <suleiman@google.com>,
-        "Daniel Byrne" <djbyrne@mtu.edu>,
-        "Donald Carr" <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        "Konstantin Kharlamov" <Hi-Angel@yandex.ru>,
-        "Shuang Zhai" <szhai2@cs.rochester.edu>,
-        "Sofia Trinh" <sofia.trinh@edi.works>,
-        "Vaibhav Jain" <vaibhav@linux.ibm.com>
-Subject: Re: [PATCH v14 08/14] mm: multi-gen LRU: support page table walks
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 26 Oct 2022 11:44:31 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3DEFB737
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:44:24 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id g129so13565470pgc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:44:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=U9wY9lvgInKo/WrSw8ypKy3xK6f/RkOvyVDAnAK0+i4=;
+        b=ptsF/Q9yl4ERSWU6r8zn0gB8Y7cVyejUKQ3JViZR90yB4kv1HAXb4I0p7K11IHAqyL
+         qOKhPaPs8LwnB/+qGzrUyUb52tlBjV1dI69ymUbARlTZWlU2NcNP1GP6jaOD9grmZumg
+         ea/kDG2Kj4vCKm8T1/F5dB+koVarOKnvWPMLPd/kZYLUzMZfGJWIHrmSLnWHDABA0g90
+         w+hDWyYPRh6ifVD3FKvRwcc+j6aNKT71RxOTpWmGUwJA/IuWbf7T/8xbawZ7mYFAEqKu
+         cmMUFbP4PXuHWqAZk7RC+dqa9IEkhrUNi7fyJxCNgA2wakrkj9tk4SQ3YZNmLBG/+8Lr
+         RGTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U9wY9lvgInKo/WrSw8ypKy3xK6f/RkOvyVDAnAK0+i4=;
+        b=LUAipjzHnJV3uO+KFC/mzBRh+U8R1c5O5LF1dEehYgmHnlvJGqc2kMwUMO6QzefC2Y
+         n5fw+kORucKGSZ7yyRNJyctO/JtYBaR4E2LYpSPtK26mx68diIg5BrdIAxyXmxswQ2Iz
+         zt1wvZwqZBAm6vZeju7irrTLSMQjZk9xGgjoDSpIdXNDOBiWdJ/M2a/2IAeG4qIYSY7Y
+         w5lAsnw3ImLmvOBN/5a48wFY8MXsdP3tQXQbvy8m0j5m8OP8bmpV9s+x/82+KGy4778M
+         wj8VASoY4OhmcGM1M1UerWIUg7p+URIzxl7Juop9/1WC1wn+dCrYPFfF08w9Zt2mYKQS
+         W4kA==
+X-Gm-Message-State: ACrzQf2k/NghkakifMMPKtCZMM74cqR1HyfSQ0DY/IBOEtkT+vLWqHdq
+        9CuPPKCxY2IMf3W7kZQdd0xQ6g==
+X-Google-Smtp-Source: AMsMyM40hJjFGssxSMIkSkmzpRSBO6vjvUKmzM25hBUKnK393pVTsuNOXatA5iYRaBZK4IsDue2pzw==
+X-Received: by 2002:a65:5b0b:0:b0:462:da7a:1ded with SMTP id y11-20020a655b0b000000b00462da7a1dedmr21055408pgq.605.1666799063604;
+        Wed, 26 Oct 2022 08:44:23 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u4-20020a170902e80400b00178a9b193cfsm3071240plg.140.2022.10.26.08.44.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 08:44:23 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 15:44:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Wang, Wei W" <wei.w.wang@intel.com>
+Cc:     Vipin Sharma <vipinsh@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "andrew.jones@linux.dev" <andrew.jones@linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 5/5] KVM: selftests: Allowing running
+ dirty_log_perf_test on specific CPUs
+Message-ID: <Y1lV0l4uDjXdKpkL@google.com>
+References: <20221021211816.1525201-1-vipinsh@google.com>
+ <20221021211816.1525201-6-vipinsh@google.com>
+ <DS0PR11MB637351B52E5F8752E7DA16A4DC309@DS0PR11MB6373.namprd11.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DS0PR11MB637351B52E5F8752E7DA16A4DC309@DS0PR11MB6373.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022, at 18:28, Maciej W. Rozycki wrote:
-> On Sun, 23 Oct 2022, Linus Torvalds wrote:
->
->> In fact, I don't understand how current kernels work on an i486 at
->> all, since it looks like
->> 
->>   exit_to_user_mode_prepare ->
->>     arch_exit_to_user_mode_prepare
->> 
->> ends up having an unconditional 'rdtsc' instruction in it.
->> >
->  The fix here is obviously and trivially:
->
-> 	select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET if !M486SX && !M486
+On Wed, Oct 26, 2022, Wang, Wei W wrote:
+> On Saturday, October 22, 2022 5:18 AM, Vipin Sharma wrote:
+> > +static void pin_this_task_to_pcpu(uint32_t pcpu) {
+> > +	cpu_set_t mask;
+> > +	int r;
+> > +
+> > +	CPU_ZERO(&mask);
+> > +	CPU_SET(pcpu, &mask);
+> > +	r = sched_setaffinity(0, sizeof(mask), &mask);
+> > +	TEST_ASSERT(!r, "sched_setaffinity() failed for pCPU '%u'.\n", pcpu);
+> > +}
+> > +
+> >  static void *vcpu_thread_main(void *data)  {
+> > +	struct perf_test_vcpu_args *vcpu_args;
+> >  	struct vcpu_thread *vcpu = data;
+> > 
+> > +	vcpu_args = &perf_test_args.vcpu_args[vcpu->vcpu_idx];
+> > +
+> > +	if (perf_test_args.pin_vcpus)
+> > +		pin_this_task_to_pcpu(vcpu_args->pcpu);
+> > +
+> 
+> I think it would be better to do the thread pinning at the time when the
+> thread is created by providing a pthread_attr_t attr, e.g. :
+> 
+> pthread_attr_t attr;
+> 
+> CPU_SET(vcpu->pcpu, &cpu_set);
+> pthread_attr_setaffinity_np(&attr, sizeof(cpu_set_t), &cpu_set);
+> pthread_create(thread, attr,...);
+> 
+> Also, pinning a vCPU thread to a pCPU is a general operation
+> which other users would need. I think we could make it more general and
+> put it to kvm_util.
 
-I think that would be "if X86_TSC", otherwise you still include the
-TSC-less 586-class (5x86, 6x86, Elan, Winchip C6, MediaGX, ...)
+We could, but it taking advantage of the pinning functionality would require
+plumbing a command line option for every test, or alternatively adding partial
+command line parsing with a "hidden" global struct to kvm_selftest_init(), though
+handling error checking for a truly generic case would be a mess.  Either way,
+extending pinning to other tests would require non-trivial effort, and can be
+done on top of this series.
 
-> So what's the actual burden from keeping this support around?  Would my 
-> proposal to emulate CMPXCHG8B (and possibly RDTSC) in #UD handler help?
+That said, it's also trival to extract the pinning helpers to common code, and I
+can't think of any reason not to do that straightaway.
 
-That sounds worse to me than the current use of runtime alternatives
-for picking between cmpxchg8b_emu and the native instruction.
+Vipin, any objection to squashing the below diff with patch 5?
 
-For arm32, we have a combination of two other approaches:
+>  e.g. adding it to the helper function that I'm trying to create
 
-- On the oldest processors that never had SMP support (ARMv5 and
-  earlier), it is not possible to enable support for SMP at all.
-  Using a Kconfig 'depends on X86_CMPXCHG64' for CONFIG_SMP would
-  still allow building 486 kernels, but completely avoid the problem
-  of trying to make the same kernel work on later SMP machines.
+If we go this route in the future, we'd need to add a worker trampoline as the
+pinning needs to happen in the worker task itself to guarantee that the pinning
+takes effect before the worker does anything useful.  That should be very doable.
 
-- For the special case of early ARMv6 hardware that has 32-bit
-  atomics but not 64-bit ones, the kernel just falls back to
-  CONFIG_GENERIC_ATOMIC64 and no cmpxchg64(). The same should work
-  for an i486+SMP kernel. It's obviously slower, but most users
-  can trivially avoid this by either running an i686 SMP kernel
-  or an i486 UP kernel.
+I do like the idea of extending __vcpu_thread_create(), but we can do that once
+__vcpu_thread_create() lands to avoid further delaying this series.
 
-       Arnd
+---
+ .../selftests/kvm/dirty_log_perf_test.c       |  7 ++-
+ .../selftests/kvm/include/kvm_util_base.h     |  4 ++
+ .../selftests/kvm/include/perf_test_util.h    |  8 +--
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 54 ++++++++++++++++++
+ .../selftests/kvm/lib/perf_test_util.c        | 57 +------------------
+ 5 files changed, 68 insertions(+), 62 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+index 35504b36b126..a82fc51d57ca 100644
+--- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
++++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+@@ -471,8 +471,11 @@ int main(int argc, char *argv[])
+ 		}
+ 	}
+ 
+-	if (pcpu_list)
+-		perf_test_setup_pinning(pcpu_list, nr_vcpus);
++	if (pcpu_list) {
++		kvm_parse_vcpu_pinning(pcpu_list, perf_test_args.vcpu_to_pcpu,
++				       nr_vcpus);
++		perf_test_args.pin_vcpus = true;
++	}
+ 
+ 	TEST_ASSERT(p.iterations >= 2, "The test should have at least two iterations");
+ 
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index e42a09cd24a0..3bf2333ef95d 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -688,6 +688,10 @@ static inline struct kvm_vm *vm_create_with_one_vcpu(struct kvm_vcpu **vcpu,
+ 
+ struct kvm_vcpu *vm_recreate_with_one_vcpu(struct kvm_vm *vm);
+ 
++void kvm_pin_this_task_to_pcpu(uint32_t pcpu);
++void kvm_parse_vcpu_pinning(const char *pcpus_string, uint32_t vcpu_to_pcpu[],
++			    int nr_vcpus);
++
+ unsigned long vm_compute_max_gfn(struct kvm_vm *vm);
+ unsigned int vm_calc_num_guest_pages(enum vm_guest_mode mode, size_t size);
+ unsigned int vm_num_host_pages(enum vm_guest_mode mode, unsigned int num_guest_pages);
+diff --git a/tools/testing/selftests/kvm/include/perf_test_util.h b/tools/testing/selftests/kvm/include/perf_test_util.h
+index ccfe3b9dc6bd..85320e0640fc 100644
+--- a/tools/testing/selftests/kvm/include/perf_test_util.h
++++ b/tools/testing/selftests/kvm/include/perf_test_util.h
+@@ -27,8 +27,6 @@ struct perf_test_vcpu_args {
+ 	/* Only used by the host userspace part of the vCPU thread */
+ 	struct kvm_vcpu *vcpu;
+ 	int vcpu_idx;
+-	/* The pCPU to which this vCPU is pinned. Only valid if pin_vcpus is true. */
+-	uint32_t pcpu;
+ };
+ 
+ struct perf_test_args {
+@@ -43,8 +41,12 @@ struct perf_test_args {
+ 	bool nested;
+ 	/* True if all vCPUs are pinned to pCPUs */
+ 	bool pin_vcpus;
++	/* The vCPU=>pCPU pinning map. Only valid if pin_vcpus is true. */
++	uint32_t vcpu_to_pcpu[KVM_MAX_VCPUS];
+ 
+ 	struct perf_test_vcpu_args vcpu_args[KVM_MAX_VCPUS];
++
++
+ };
+ 
+ extern struct perf_test_args perf_test_args;
+@@ -64,6 +66,4 @@ void perf_test_guest_code(uint32_t vcpu_id);
+ uint64_t perf_test_nested_pages(int nr_vcpus);
+ void perf_test_setup_nested(struct kvm_vm *vm, int nr_vcpus, struct kvm_vcpu *vcpus[]);
+ 
+-void perf_test_setup_pinning(const char *pcpus_string, int nr_vcpus);
+-
+ #endif /* SELFTEST_KVM_PERF_TEST_UTIL_H */
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index f1cb1627161f..8292af9d7660 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -11,6 +11,7 @@
+ #include "processor.h"
+ 
+ #include <assert.h>
++#include <sched.h>
+ #include <sys/mman.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+@@ -443,6 +444,59 @@ struct kvm_vcpu *vm_recreate_with_one_vcpu(struct kvm_vm *vm)
+ 	return vm_vcpu_recreate(vm, 0);
+ }
+ 
++void kvm_pin_this_task_to_pcpu(uint32_t pcpu)
++{
++	cpu_set_t mask;
++	int r;
++
++	CPU_ZERO(&mask);
++	CPU_SET(pcpu, &mask);
++	r = sched_setaffinity(0, sizeof(mask), &mask);
++	TEST_ASSERT(!r, "sched_setaffinity() failed for pCPU '%u'.\n", pcpu);
++}
++
++static uint32_t parse_pcpu(const char *cpu_str, const cpu_set_t *allowed_mask)
++{
++	uint32_t pcpu = atoi_non_negative(cpu_str);
++
++	TEST_ASSERT(CPU_ISSET(pcpu, allowed_mask),
++		    "Not allowed to run on pCPU '%d', check cgroups?\n", pcpu);
++	return pcpu;
++}
++
++void kvm_parse_vcpu_pinning(const char *pcpus_string, uint32_t vcpu_to_pcpu[],
++			    int nr_vcpus)
++{
++	cpu_set_t allowed_mask;
++	char *cpu, *cpu_list;
++	char delim[2] = ",";
++	int i, r;
++
++	cpu_list = strdup(pcpus_string);
++	TEST_ASSERT(cpu_list, "strdup() allocation failed.\n");
++
++	r = sched_getaffinity(0, sizeof(allowed_mask), &allowed_mask);
++	TEST_ASSERT(!r, "sched_getaffinity() failed");
++
++	cpu = strtok(cpu_list, delim);
++
++	/* 1. Get all pcpus for vcpus. */
++	for (i = 0; i < nr_vcpus; i++) {
++		TEST_ASSERT(cpu, "pCPU not provided for vCPU '%d'\n", i);
++		vcpu_to_pcpu[i] = parse_pcpu(cpu, &allowed_mask);
++		cpu = strtok(NULL, delim);
++	}
++
++	/* 2. Check if the main worker needs to be pinned. */
++	if (cpu) {
++		kvm_pin_this_task_to_pcpu(parse_pcpu(cpu, &allowed_mask));
++		cpu = strtok(NULL, delim);
++	}
++
++	TEST_ASSERT(!cpu, "pCPU list contains trailing garbage characters '%s'", cpu);
++	free(cpu_list);
++}
++
+ /*
+  * Userspace Memory Region Find
+  *
+diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
+index 520d1f896d61..1d133007d7de 100644
+--- a/tools/testing/selftests/kvm/lib/perf_test_util.c
++++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
+@@ -5,7 +5,6 @@
+ #define _GNU_SOURCE
+ 
+ #include <inttypes.h>
+-#include <sched.h>
+ 
+ #include "kvm_util.h"
+ #include "perf_test_util.h"
+@@ -243,17 +242,6 @@ void __weak perf_test_setup_nested(struct kvm_vm *vm, int nr_vcpus, struct kvm_v
+ 	exit(KSFT_SKIP);
+ }
+ 
+-static void pin_this_task_to_pcpu(uint32_t pcpu)
+-{
+-	cpu_set_t mask;
+-	int r;
+-
+-	CPU_ZERO(&mask);
+-	CPU_SET(pcpu, &mask);
+-	r = sched_setaffinity(0, sizeof(mask), &mask);
+-	TEST_ASSERT(!r, "sched_setaffinity() failed for pCPU '%u'.\n", pcpu);
+-}
+-
+ static void *vcpu_thread_main(void *data)
+ {
+ 	struct perf_test_vcpu_args *vcpu_args;
+@@ -262,7 +250,7 @@ static void *vcpu_thread_main(void *data)
+ 	vcpu_args = &perf_test_args.vcpu_args[vcpu->vcpu_idx];
+ 
+ 	if (perf_test_args.pin_vcpus)
+-		pin_this_task_to_pcpu(vcpu_args->pcpu);
++		kvm_pin_this_task_to_pcpu(perf_test_args.vcpu_to_pcpu[vcpu->vcpu_idx]);
+ 
+ 	WRITE_ONCE(vcpu->running, true);
+ 
+@@ -312,46 +300,3 @@ void perf_test_join_vcpu_threads(int nr_vcpus)
+ 	for (i = 0; i < nr_vcpus; i++)
+ 		pthread_join(vcpu_threads[i].thread, NULL);
+ }
+-
+-static uint32_t parse_pcpu(const char *cpu_str, const cpu_set_t *allowed_mask)
+-{
+-	uint32_t pcpu = atoi_non_negative(cpu_str);
+-
+-	TEST_ASSERT(CPU_ISSET(pcpu, allowed_mask),
+-		    "Not allowed to run on pCPU '%d', check cgroups?\n", pcpu);
+-	return pcpu;
+-}
+-
+-void perf_test_setup_pinning(const char *pcpus_string, int nr_vcpus)
+-{
+-	cpu_set_t allowed_mask;
+-	char *cpu, *cpu_list;
+-	char delim[2] = ",";
+-	int i, r;
+-
+-	cpu_list = strdup(pcpus_string);
+-	TEST_ASSERT(cpu_list, "strdup() allocation failed.\n");
+-
+-	r = sched_getaffinity(0, sizeof(allowed_mask), &allowed_mask);
+-	TEST_ASSERT(!r, "sched_getaffinity() failed");
+-
+-	cpu = strtok(cpu_list, delim);
+-
+-	/* 1. Get all pcpus for vcpus. */
+-	for (i = 0; i < nr_vcpus; i++) {
+-		TEST_ASSERT(cpu, "pCPU not provided for vCPU '%d'\n", i);
+-		perf_test_args.vcpu_args[i].pcpu = parse_pcpu(cpu, &allowed_mask);
+-		cpu = strtok(NULL, delim);
+-	}
+-
+-	perf_test_args.pin_vcpus = true;
+-
+-	/* 2. Check if the main worker needs to be pinned. */
+-	if (cpu) {
+-		pin_this_task_to_pcpu(parse_pcpu(cpu, &allowed_mask));
+-		cpu = strtok(NULL, delim);
+-	}
+-
+-	TEST_ASSERT(!cpu, "pCPU list contains trailing garbage characters '%s'", cpu);
+-	free(cpu_list);
+-}
+
+base-commit: 076ac4ca97225d6b8698a9b066153b556e97be7c
+-- 
+
