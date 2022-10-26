@@ -2,96 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D6B60EB62
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 00:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D0860EB77
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 00:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233379AbiJZWCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 18:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
+        id S233283AbiJZWVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 18:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233165AbiJZWC3 (ORCPT
+        with ESMTP id S229880AbiJZWVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 18:02:29 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40412E984D
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 15:02:28 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id u11so12355013ljk.6
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 15:02:28 -0700 (PDT)
+        Wed, 26 Oct 2022 18:21:18 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB653C784B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 15:21:17 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d10so16929898pfh.6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 15:21:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vdgNzDxQTO6bdUosOm0eh7BG6o7NyvcQ+Csx9d4p3mU=;
-        b=hVGfulv077UBxsCtfjWKjttGMkhjPh4/Hf9rDhRbZDsum/itTcad9RTU1pC69hYnH4
-         9k1YuY9UxLIiVPXb3HwL3UPoWvKhihpgwxTEZ5ch2rFIzc2KDyTz1PXgYzEOoTIAxWji
-         0fcw9CBPwvkD7Cu/10sUAMuFJjZp52i9aJ9hD6THhpmT2E2bInxB89sJ1qw6GH7xMcBb
-         dkjH9kLpoPcLQlOyqka5xGNGAuLoz8+aa3SovNXgokAk4K8jhW/88cPvotghUpvcGFa3
-         BamcsNgnvR9P8Nsdd7EYxrLctpprENAiLlNtyDm9dgj0xUD1gsJ4EQB9bOkmGVAbO8Iy
-         aqDw==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hiWtZIzTaAaWrui3JWnnI5G6dQ2zJZsEty+ohQxMpns=;
+        b=OfbKt/PzCkx8IH9c77QDVQo4BZxO1smbjIc6p1seYFzQc/Jmz+l2dwvWdsgg93sXbe
+         G0cBYfuMoHM7Eclo0zK+LI27OVdHAyqPu4JT/YFk7E3LroH/YuLLtRCd69Ysfk8hqPCM
+         NLUJymZplAcl0//1WeGFnHMkXJpTbArx7JzU7augCV9h2E53y081ZNcu2OQfdd/1B5cc
+         3ZnC7goTnseZhW6PmLp1X0sgMJYGpHaJVupX2ETgcFQ5LGj2n0GigUKjmZoOReLbu+KI
+         l0UROuepyprod6MHAGWo1CNYJB6rf3D6On0NmlQuovUtZ7MqRdRj9DXpR2AR/Zs8XX1X
+         /3aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vdgNzDxQTO6bdUosOm0eh7BG6o7NyvcQ+Csx9d4p3mU=;
-        b=3G802x/pDGxJ1jbPxC/2olHUha2+6KcmyZjVx4vfq0T1k/aXg0ENKz6ha6ewrS2crF
-         3yfEW/pPD0inWO5V/mspIrzpRHzhegxzfsgkJBEfaHF/IVW+uwzZqz5Aw9ZuoaSWNLJo
-         cnbaqWbarBvDGL3TwlgimlvWEZlB1ocBTt/VmNPa8j33XXpd9g/TPUzPzrIkcEC5+XZu
-         PhQW9U0Z5ezUSc5iv9DaKZjldM3AnE69XL9bAw9xI5JBPxbFBTOJzuowrGHgjy+mYjr9
-         Zfp7yT2C7ZEpstXwUx8T51FS8RIqecfO6U/spVW9nGQ/MEWsKQn6VfLCulP2vNPsu/Fm
-         DSOg==
-X-Gm-Message-State: ACrzQf2GHqQg8mvRAfcivLQbYhU4Ae53BFY876jE6Wlij6iRjFHSx12y
-        ptwFL2I6q59O/ojIkK58iA4=
-X-Google-Smtp-Source: AMsMyM5+7FXwwLPlb9qIuDs7qKIPm1MbION3iWvH0DJZ+41PbaxEGy2+MUlPXsrTQOO45XWlwDc8OQ==
-X-Received: by 2002:a2e:9e43:0:b0:25d:d8e9:7b15 with SMTP id g3-20020a2e9e43000000b0025dd8e97b15mr17315108ljk.234.1666821746508;
-        Wed, 26 Oct 2022 15:02:26 -0700 (PDT)
-Received: from ?IPV6:2a02:a31a:a240:1700:c898:de98:30b3:a07? ([2a02:a31a:a240:1700:c898:de98:30b3:a07])
-        by smtp.googlemail.com with ESMTPSA id m17-20020a056512359100b004ac269b7792sm987675lfr.127.2022.10.26.15.02.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 15:02:26 -0700 (PDT)
-From:   Mateusz Kwiatkowski <kfyatek@gmail.com>
-X-Google-Original-From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
-Message-ID: <8d0eee22-50f5-5b0a-c1e6-c5f61dd5bbcd@gmail.com>
-Date:   Thu, 27 Oct 2022 00:02:24 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hiWtZIzTaAaWrui3JWnnI5G6dQ2zJZsEty+ohQxMpns=;
+        b=uaaQcY2QuNDoBLjBl9l2G7yaFOXJ+WG7uD3xHyVyK1U670oJ9nmRT3j1Cu110FSTbX
+         h8iJ5R9BPdJ1LUkxL7yQvcWsPHcyRgl1IEn8AYiGnuhfDGzzWHUxQM6YgFXXRZk82SfM
+         Qg1KSfGreM8H0QAcHS3at1u6XblPzN06uFUAKJE9Yu+wyMx60P+4d3mOJzBoBcyqF0Vw
+         TYHeKFztH40W2eTT+bUtw4Mf2+6FBBieTQSFRMAqHDCMTmwHRZvCq/Y009kB7lat5WEg
+         EGgliwLWD95mbH9OfNZTbYAUeDoVYyx3B+g2oriUMqq3p0lcWSHP9ExkjlSrLgTiDYFh
+         ti5w==
+X-Gm-Message-State: ACrzQf3Tx0ex/4eX2ZzTgvAdLY7xp/Ssib7vSCW+aGAhavN7hbEKorq/
+        IPBsWnGYFEd+oJkj+9JhAfcHWg==
+X-Google-Smtp-Source: AMsMyM5hrpil9ugkudCVguUFVraWGSpBWC+wjecNYCjY2aSXAER/OmLQ6T9zhYEnvxyShg7mp5oJVg==
+X-Received: by 2002:a62:874f:0:b0:56c:45eb:1ffa with SMTP id i76-20020a62874f000000b0056c45eb1ffamr6925806pfe.58.1666822877077;
+        Wed, 26 Oct 2022 15:21:17 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id m3-20020a63fd43000000b004393c5a8006sm3293275pgj.75.2022.10.26.15.21.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 15:21:16 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 22:21:13 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 44/46] KVM: selftests: evmcs_test: Introduce L2 TLB
+ flush test
+Message-ID: <Y1my2eHz7QWme42e@google.com>
+References: <20221021153521.1216911-1-vkuznets@redhat.com>
+ <20221021153521.1216911-45-vkuznets@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.0
-Subject: Re: [PATCH v6 16/23] drm/probe-helper: Provide a TV get_modes helper
-Content-Language: pl
-To:     maxime@cerno.tech, Karol Herbst <kherbst@redhat.com>,
-        Emma Anholt <emma@anholt.net>, Ben Skeggs <bskeggs@redhat.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>
-Cc:     linux-sunxi@lists.linux.dev, intel-gfx@lists.freedesktop.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org,
-        nouveau@lists.freedesktop.org, Hans de Goede <hdegoede@redhat.com>,
-        Dom Cobley <dom@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-References: <20220728-rpi-analog-tv-properties-v6-0-e7792734108f@cerno.tech>
- <20220728-rpi-analog-tv-properties-v6-16-e7792734108f@cerno.tech>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v6-16-e7792734108f@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221021153521.1216911-45-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,54 +80,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
-
-First of all, nice idea with the helper function that can be reused by different
-drivers. This is neat!
-
-But looking at this function, it feels a bit overcomplicated. You're creating
-the two modes, then checking which one is the default, then set the preferred
-one and possibly reorder them. Maybe it can be simplified somehow?
-
-Although when I tried to refactor it myself, I ended up with something that's
-not better at all. Maybe it needs to be complicated, after all :(
-
-Anyway, the current version seems to have a couple of bugs:
-
-> +	if (tv_mode_supported(connector, DRM_MODE_TV_MODE_PAL) ||
-> +	    tv_mode_supported(connector, DRM_MODE_TV_MODE_PAL_N) ||
-> +	    tv_mode_supported(connector, DRM_MODE_TV_MODE_SECAM)) {
-> +		mode = drm_mode_analog_pal_576i(connector->dev);
-> +		if (!mode)
-> +			return 0;
+On Fri, Oct 21, 2022, Vitaly Kuznetsov wrote:
+> @@ -48,6 +49,8 @@ static inline void rdmsr_gs_base(void)
+>  
+>  void l2_guest_code(void)
+>  {
+> +	u64 unused;
 > +
-> +		tv_modes[count++] = mode;
-> +	}
+>  	GUEST_SYNC(7);
+>  
+>  	GUEST_SYNC(8);
+> @@ -64,15 +67,33 @@ void l2_guest_code(void)
+>  	vmcall();
+>  	rdmsr_gs_base(); /* intercepted */
+>  
+> +	/* L2 TLB flush tests */
+> +	hyperv_hypercall(HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE | HV_HYPERCALL_FAST_BIT, 0x0,
+> +			 HV_FLUSH_ALL_VIRTUAL_ADDRESS_SPACES | HV_FLUSH_ALL_PROCESSORS);
+> +	rdmsr_fs_base();
+> +	/*
+> +	 * Note: hypercall status (RAX) is not preserved correctly by L1 after
+> +	 * synthetic vmexit, use unchecked version.
+> +	 */
+> +	__hyperv_hypercall(HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE | HV_HYPERCALL_FAST_BIT, 0x0,
+> +			   HV_FLUSH_ALL_VIRTUAL_ADDRESS_SPACES | HV_FLUSH_ALL_PROCESSORS,
+> +			   &unused);
+> +	/* Make sure we're not issuing Hyper-V TLB flush call again */
+> +	__asm__ __volatile__ ("mov $0xdeadbeef, %rcx");
 
-If the 480i mode has been created properly, but there's an error creating the
-576i one (we enter the if (!mode) clause), the 480i mode will leak.
+This needs a clobber.  It won't cause problems in the current code, but it will
+make someone really sad if they add more code after this.
 
-> +	if (count == 1) {
+Using %ecx instead of %rcx will also suffice, 32-bit accesses clear bits 63:32.
 
-You're handling the count == 1 case specially, but if count == 0, the rest of
-the code will assume that two modes exist and probably segfault in the process.
+Even better, if a "nop" isn't required to get the compiler to emit preamble, would
+be to load ECX through an input constraint, that way the compiler "knows" the value
+of ECX and can optimize for it (though it's extremely unlikely 0xdeadbeef will be
+a useful value).
 
-> +	ret = drm_object_property_get_default_value(&connector->base,
-> +						    dev->mode_config.tv_mode_property,
-> +						    &default_mode);
-> +	if (ret)
-> +		return 0;
-> +
-> +	if (cmdline->tv_mode_specified)
-> +		default_mode = cmdline->tv_mode;
+Actually, not setting RCX in vmcall() is a nasty bug waiting to happen, e.g. if
+RCX just happens to contain a value that gets routed to L0.
 
-In case of an error (ret != 0), the modes created so far in the tv_modes array
-will leak.
+Rather than handle this as a one-off, can you insert a prep patch to have the
+common vmcall() stuff RCX with a "safe" value?
 
-Also, I wonder if maybe the if (cmdline->tv_mode_specified) clause should go
-first? If we're going to use the default from cmdline, there's no point in even
-querying the property default value.
+Related side topic, rdmsr_{f,g}s_base() should also use input constraints, and
+should use a proper #define for the MSRs.  Also, why earth do those clobber all GPRs?
+Oooh, because they get routed to L1 and L1 doesn't preserve GPRs.
 
-Best regards,
-Mateusz Kwiatkowski
-
+Related side topic #2, KVM's kvm_xen_hypercall() is broken, it checks the wrong
+input register for 64-bit (checks RAX instead of RCX).  Not sure that's even a
+fixable bug though.
