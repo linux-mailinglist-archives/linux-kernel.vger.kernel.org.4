@@ -2,168 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D48E60E376
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3777660E380
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234347AbiJZOgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52458 "EHLO
+        id S234381AbiJZOiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 10:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234348AbiJZOgm (ORCPT
+        with ESMTP id S234358AbiJZOh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:36:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B424B0DF
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:36:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666794999;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RuQ473Ae4BWJHrbZgeWqzD+yGxNzK8Ar53dsUNjWpn4=;
-        b=aKs9H8iLObVx3yCLgeQm1UUUgjNA7T8XFainsf0tDzbW7tj88UXzcNvbmW/48j+0QAmVnx
-        xZnngoMc6VbiqImEcN/S+2IdOdlD5+tOQL+1UsdVnj4uLzvN750Arqkkqg1y+CpnpCqOkk
-        epOE0pUzhLtao5wlyZCcw6+utkTZkNE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-336-lH-Nv13GPUiXSAnlzXpOYA-1; Wed, 26 Oct 2022 10:36:34 -0400
-X-MC-Unique: lH-Nv13GPUiXSAnlzXpOYA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 26 Oct 2022 10:37:56 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63466BA25B;
+        Wed, 26 Oct 2022 07:37:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B39F43817A68;
-        Wed, 26 Oct 2022 14:36:33 +0000 (UTC)
-Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0AC6C2024CB7;
-        Wed, 26 Oct 2022 14:36:33 +0000 (UTC)
-Message-ID: <da533477-da08-88cb-1e76-46364f1a6151@redhat.com>
-Date:   Wed, 26 Oct 2022 10:36:32 -0400
+        by sin.source.kernel.org (Postfix) with ESMTPS id AC0E9CE2295;
+        Wed, 26 Oct 2022 14:37:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7462EC433C1;
+        Wed, 26 Oct 2022 14:37:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666795072;
+        bh=y2U35Pk+CmD/Ks0JVJ0GmzyJIulw6nH1nLCwcfBn04Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RuU5wBDipXRYa4nCxyKvqv0eTq2JoVlhhjn5FTT7ZmDJrG8uF2LJt1LAf/00IMyuO
+         BG8py7QRzsNGuuIE9EJScbHsBRmNbQCSiQ/YUqthNMOUTnnUj3LTKjUCbj7slPVU5u
+         xaFztWPUG8uKYghyJAWiJyNg+pqleuh0WkzIY9o0=
+Date:   Wed, 26 Oct 2022 16:37:49 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux@ew.tq-group.com
+Subject: Re: [RFC 1/5] misc: introduce notify-device driver
+Message-ID: <Y1lGPRvKMbNDs1iK@kroah.com>
+References: <cover.1666786471.git.matthias.schiffer@ew.tq-group.com>
+ <db30127ab4741d4e71b768881197f4791174f545.1666786471.git.matthias.schiffer@ew.tq-group.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
-Content-Language: en-US
-To:     Feng Tang <feng.tang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>, ying.huang@intel.com,
-        aneesh.kumar@linux.ibm.com, linux-mm@kvack.org,
-        cgroups@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, dave.hansen@intel.com,
-        tim.c.chen@intel.com, fengwei.yin@intel.com
-References: <20221026074343.6517-1-feng.tang@intel.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20221026074343.6517-1-feng.tang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <db30127ab4741d4e71b768881197f4791174f545.1666786471.git.matthias.schiffer@ew.tq-group.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/26/22 03:43, Feng Tang wrote:
-> In page reclaim path, memory could be demoted from faster memory tier
-> to slower memory tier. Currently, there is no check about cpuset's
-> memory policy, that even if the target demotion node is not allowd
-> by cpuset, the demotion will still happen, which breaks the cpuset
-> semantics.
->
-> So add cpuset policy check in the demotion path and skip demotion
-> if the demotion targets are not allowed by cpuset.
->
-> Signed-off-by: Feng Tang <feng.tang@intel.com>
+On Wed, Oct 26, 2022 at 03:15:30PM +0200, Matthias Schiffer wrote:
+> A notify-device is a synchronization facility that allows to query
+> "readiness" across drivers, without creating a direct dependency between
+> the driver modules. The notify-device can also be used to trigger deferred
+> probes.
+> 
+> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 > ---
-> Hi reviewers,
->
-> For easy bisectable, I combined the cpuset change and mm change
-> in one patch, if you prefer to separate them, I can turn it into
-> 2 patches.
->
-> Thanks,
-> Feng
->
->   include/linux/cpuset.h |  6 ++++++
->   kernel/cgroup/cpuset.c | 29 +++++++++++++++++++++++++++++
->   mm/vmscan.c            | 35 ++++++++++++++++++++++++++++++++---
->   3 files changed, 67 insertions(+), 3 deletions(-)
->
-> diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
-> index d58e0476ee8e..6fcce2bd2631 100644
-> --- a/include/linux/cpuset.h
-> +++ b/include/linux/cpuset.h
-> @@ -178,6 +178,8 @@ static inline void set_mems_allowed(nodemask_t nodemask)
->   	task_unlock(current);
->   }
->   
-> +extern void cpuset_get_allowed_mem_nodes(struct cgroup *cgroup,
-> +						nodemask_t *nmask);
->   #else /* !CONFIG_CPUSETS */
->   
->   static inline bool cpusets_enabled(void) { return false; }
-> @@ -299,6 +301,10 @@ static inline bool read_mems_allowed_retry(unsigned int seq)
->   	return false;
->   }
->   
-> +static inline void cpuset_get_allowed_mem_nodes(struct cgroup *cgroup,
-> +						nodemask_t *nmask)
+>  drivers/misc/Kconfig          |   4 ++
+>  drivers/misc/Makefile         |   1 +
+>  drivers/misc/notify-device.c  | 109 ++++++++++++++++++++++++++++++++++
+>  include/linux/notify-device.h |  33 ++++++++++
+>  4 files changed, 147 insertions(+)
+>  create mode 100644 drivers/misc/notify-device.c
+>  create mode 100644 include/linux/notify-device.h
+> 
+> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+> index 358ad56f6524..63559e9f854c 100644
+> --- a/drivers/misc/Kconfig
+> +++ b/drivers/misc/Kconfig
+> @@ -496,6 +496,10 @@ config VCPU_STALL_DETECTOR
+>  
+>  	  If you do not intend to run this kernel as a guest, say N.
+>  
+> +config NOTIFY_DEVICE
+> +	tristate "Notify device"
+> +	depends on OF
+> +
+>  source "drivers/misc/c2port/Kconfig"
+>  source "drivers/misc/eeprom/Kconfig"
+>  source "drivers/misc/cb710/Kconfig"
+> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+> index ac9b3e757ba1..1e8012112b43 100644
+> --- a/drivers/misc/Makefile
+> +++ b/drivers/misc/Makefile
+> @@ -62,3 +62,4 @@ obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
+>  obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
+>  obj-$(CONFIG_GP_PCI1XXXX)	+= mchp_pci1xxxx/
+>  obj-$(CONFIG_VCPU_STALL_DETECTOR)	+= vcpu_stall_detector.o
+> +obj-$(CONFIG_NOTIFY_DEVICE)	+= notify-device.o
+> diff --git a/drivers/misc/notify-device.c b/drivers/misc/notify-device.c
+> new file mode 100644
+> index 000000000000..42e0980394ea
+> --- /dev/null
+> +++ b/drivers/misc/notify-device.c
+> @@ -0,0 +1,109 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +#include <linux/device/class.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/notify-device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +
+> +static void notify_device_release(struct device *dev)
 > +{
-> +}
->   #endif /* !CONFIG_CPUSETS */
->   
->   #endif /* _LINUX_CPUSET_H */
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 3ea2e836e93e..cbb118c0502f 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -3750,6 +3750,35 @@ nodemask_t cpuset_mems_allowed(struct task_struct *tsk)
->   	return mask;
->   }
->   
-> +/*
-> + * Retrieve the allowed memory nodemask for a cgroup.
-> + *
-> + * Set *nmask to cpuset's effective allowed nodemask for cgroup v2,
-> + * and NODE_MASK_ALL (means no constraint) for cgroup v1 where there
-> + * is no guaranteed association from a cgroup to a cpuset.
-> + */
-> +void cpuset_get_allowed_mem_nodes(struct cgroup *cgroup, nodemask_t *nmask)
-> +{
-> +	struct cgroup_subsys_state *css;
-> +	struct cpuset *cs;
-> +
-> +	if (!is_in_v2_mode()) {
-> +		*nmask = NODE_MASK_ALL;
-> +		return;
-> +	}
-
-You are allowing all nodes to be used for cgroup v1. Is there a reason 
-why you ignore v1?
-
-> +
-> +	rcu_read_lock();
-> +	css = cgroup_e_css(cgroup, &cpuset_cgrp_subsys);
-> +	if (css) {
-> +		css_get(css);
-> +		cs = css_cs(css);
-> +		*nmask = cs->effective_mems;
-> +		css_put(css);
-> +	}
-Since you are holding an RCU read lock and copying out the whole 
-nodemask, you probably don't need to do a css_get/css_put pair.
-> +
-> +	rcu_read_unlock();
+> +	of_node_put(dev->of_node);
+> +	kfree(dev);
 > +}
 > +
-Cheers,
+> +static struct class notify_device_class = {
+> +	.name = "notify-device",
+> +	.owner = THIS_MODULE,
+> +	.dev_release = notify_device_release,
+> +};
+> +
+> +static struct platform_driver notify_device_driver = {
 
-Longman
+Ick, wait, this is NOT a platform device, nor driver, so it shouldn't be
+either here.  Worst case, it's a virtual device on the virtual bus.
 
+But why is this a class at all?  Classes are a representation of a type
+of device that userspace can see, how is this anything that userspace
+cares about?
+
+Doesn't the device link stuff handle all of this type of "when this
+device is done being probed, now I can" problems?  Why is a whole new
+thing needed?
+
+thanks,
+
+greg k-h
