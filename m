@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8384760ECBC
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 01:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DBE60ECBD
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 01:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233165AbiJZXsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 19:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36894 "EHLO
+        id S233983AbiJZXu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 19:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbiJZXsH (ORCPT
+        with ESMTP id S233884AbiJZXuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 19:48:07 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1C9DFB7B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 16:48:03 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id io19so10856448plb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 16:48:03 -0700 (PDT)
+        Wed, 26 Oct 2022 19:50:24 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A59A3B73F
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 16:50:22 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id o70so21144780yba.7
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 16:50:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RPJfgsW8GCds2stBYuWG1R4t2YUH8WTi/WK0qloe8kE=;
-        b=KzG4XSEb5Jtv47CxSQ6gk+IZdm3IW7ifGSeeW4BGFE2fg5cef4hqDoQ1OnrzDScvbg
-         TOj/pmVi1xpa9CqQG6ob4976nip0lumClaVr2UD0go+rMEI9MaG6oxkCAoQYHUgiDzq3
-         2LIpuVuXJ4XFxFjwdAKFtv7/kxXStClfHc//v3dElo3MXsyUkW0ae900P40p+F2XsO5S
-         fxrNmp0W6VzcvcGXu3IP3SH/hHTJQEOcKefvIdBodBVXYrbK/MxPqam21WFMM1kxRkWq
-         nmD5ytyINWO1SP1fwPKXGxunbVP2cQFyf+v1uuq3vDjQeRoMJu1xu3whY7kbXXCyt6AE
-         V8hg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CAlVcangjllWE4d/TKwBzq5t2wvRwgrX82tWmkgivY8=;
+        b=LP32NRkC6Hss/3NIEHMZ+M93o8oVa93//jhRrkZ8NJcHBVGrGpbDBS9Ejq/W8mHhdR
+         wqctEN6vFfZ/GbE2u1s6IzS9VWuxMsT0EaCdSP6RTwd9/eBfJ3lAKCwh7UhGugqF7l+q
+         6mUjjr9Q7cj0HssPcvA6kqS/n0CaMz8TDkXEQFzHH8VSoaCURhFWrbubbI9RUa/vbCXX
+         gK6pDBeNkxD5IXl4TIkDbklprADGB8mR8qfywdbRkvELXyKrOh5Qi+0+8tb/b79XNrzZ
+         lT7/T5i9CccO94gI4VMdV6TrbrvXwtrHZA+/cAGI8HPc5JB0qfcZXX8iSw4YLagAuwSO
+         8wAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RPJfgsW8GCds2stBYuWG1R4t2YUH8WTi/WK0qloe8kE=;
-        b=ncUOsiz//Gzj2lY5n76199Ouwjv6+Fm6Vwg0s3vwyB24xxreVIO70cadwz+n0xBPOV
-         OjNeFgDxF+6oGa6q0BSkpEiv445EfCx07AzjMoX8svNEYot1RkDKI4Qd45skJd4Bcytl
-         /HJqSkIWKgcbGO6KxxvSWWR7ahKy7ALyDPdMTLmKQ6P7InBY6IAt+OKMxGTcy0Yz0mwf
-         XqM4domAk6n8XN2zMrcs/30gmY/IighGEixbwqSwk3A05LRoEXUc+SGqPFmh81fleuip
-         vFFnJBurXmFax350LBszv9G5ynRYRoscnvxLnj0H2Vvh2hchEy63YP1h8yq4Fwf9OHGc
-         yN5g==
-X-Gm-Message-State: ACrzQf1bW+wEQGQCWFhZt6mOoFxTkdINojIwQ9ekqgsuhFmU1zxS54g+
-        ej/aAUNBSyqi/wMU2Z/kFe+HtQ==
-X-Google-Smtp-Source: AMsMyM7WEr0YvVBUWuAlikGUM4QCON1Ej19mMqqNzj/VFl/ik6ajbF1ptb1yGPUqvIyZHp4Rt3QjJQ==
-X-Received: by 2002:a17:90b:3b44:b0:213:34f7:facb with SMTP id ot4-20020a17090b3b4400b0021334f7facbmr7012672pjb.150.1666828083027;
-        Wed, 26 Oct 2022 16:48:03 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y194-20020a6264cb000000b0053e468a78a8sm3511127pfb.158.2022.10.26.16.48.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 16:48:02 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 23:47:59 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Wei Wang <wei.w.wang@intel.com>
-Cc:     pbonzini@redhat.com, dmatlack@google.com, vipinsh@google.com,
-        ajones@ventanamicro.com, eric.auger@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 01/18] KVM: selftests/kvm_util: use array of pointers
- to maintain vcpus in kvm_vm
-Message-ID: <Y1nHL5BUoWPqUtt9@google.com>
-References: <20221024113445.1022147-1-wei.w.wang@intel.com>
- <20221024113445.1022147-2-wei.w.wang@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CAlVcangjllWE4d/TKwBzq5t2wvRwgrX82tWmkgivY8=;
+        b=CCgwvpQxz1YjW0Qbmu2Xbw9BJSilJyFsl9x7e94/tJ0pwI+1V+d00y/0X57sesAjK3
+         kwnjCyIxqhn+UIiprnhGps0R/vBITC79ARewzLk2Z5EtVvWoOBaqXAEyH9a59a7viLEn
+         NKYFl7ATmcSgz8BAiD1Mms1BgATiatoHIa2o4Z8h3OEuMs83sHXOAFCiRdwd+IJDB1ph
+         Rfny6Z/1RXuJWgrn12vJU3sOQ4PSq/mhYWxGUHvJ6B+eMdgvg3H1qTS3smeUw9Eh4DBY
+         BbPIFkQvG4WURY6IVYRkriGrcGgJ+AMmlX+qIi7/2+OHwCz4Q1JOjxcIcgTSudoluezF
+         drBg==
+X-Gm-Message-State: ACrzQf2rNTbWdGsJBwjkU2q21zXBFjv0jrT0E6s7W6i7ZxdrZ1hXeESQ
+        vUL5cr2LMG7cHTjDQ1I/aOJpPStbXeZLFlM6yTRMiQ==
+X-Google-Smtp-Source: AMsMyM4czU6uYwVoNp6dsLDT0v7+1AaaSrOFTSC8XL2axVl5nfOHLcJW7UhxUB5s/qGWg8vf3exHj0FkEqsakZ39W8k=
+X-Received: by 2002:a25:3812:0:b0:6cb:446b:69fd with SMTP id
+ f18-20020a253812000000b006cb446b69fdmr13916888yba.59.1666828221080; Wed, 26
+ Oct 2022 16:50:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024113445.1022147-2-wei.w.wang@intel.com>
+References: <20221026233839.1934419-1-surenb@google.com>
+In-Reply-To: <20221026233839.1934419-1-surenb@google.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 26 Oct 2022 16:50:10 -0700
+Message-ID: <CAJuCfpHqEuGSOZptb1-F1kx72Zu+3Rpnqp0qvW0b4SCdyBqeLw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/1] psi: stop relying on timer_pending for poll_work rescheduling
+To:     peterz@infradead.org
+Cc:     hannes@cmpxchg.org, mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, matthias.bgg@gmail.com, minchan@google.com,
+        yt.chang@mediatek.com, wenju.xu@mediatek.com,
+        jonathan.jmchen@mediatek.com, show-hong.chen@mediatek.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -75,78 +74,235 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022, Wei Wang wrote:
-> Each vcpu has an id associated with it and is intrinsically faster
-> and easier to be referenced by indexing into an array with "vcpu->id",
-> compared to using a list of vcpus in the current implementation. Change
-> the vcpu list to an array of vcpu pointers. Users then don't need to
-> allocate such a vcpu array on their own, and instead, they can reuse
-> the one maintained in kvm_vm.
-> 
-> Signed-off-by: Wei Wang <wei.w.wang@intel.com>
+On Wed, Oct 26, 2022 at 4:38 PM Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> Psi polling mechanism is trying to minimize the number of wakeups to
+> run psi_poll_work and is currently relying on timer_pending() to detect
+> when this work is already scheduled. This provides a window of opportunity
+> for psi_group_change to schedule an immediate psi_poll_work after
+> poll_timer_fn got called but before psi_poll_work could reschedule itself.
+> Below is the depiction of this entire window:
+>
+> poll_timer_fn
+>   wake_up_interruptible(&group->poll_wait);
+>
+> psi_poll_worker
+>   wait_event_interruptible(group->poll_wait, ...)
+>   psi_poll_work
+>     psi_schedule_poll_work
+>       if (timer_pending(&group->poll_timer)) return;
+>       ...
+>       mod_timer(&group->poll_timer, jiffies + delay);
+>
+> Prior to 461daba06bdc we used to rely on poll_scheduled atomic which was
+> reset and set back inside psi_poll_work and therefore this race window
+> was much smaller.
+> The larger window causes increased number of wakeups and our partners
+> report visible power regression of ~10mA after applying 461daba06bdc.
+> Bring back the poll_scheduled atomic and make this race window even
+> narrower by resetting poll_scheduled only when we reach polling expiration
+> time. This does not completely eliminate the possibility of extra wakeups
+> caused by a race with psi_group_change however it will limit it to the
+> worst case scenario of one extra wakeup per every tracking window (0.5s
+> in the worst case).
+> This patch also ensures correct ordering between clearing poll_scheduled
+> flag and obtaining changed_states using memory barrier. Correct ordering
+> between updating changed_states and setting poll_scheduled is ensured by
+> atomic_xchg operation.
+> By tracing the number of immediate rescheduling attempts performed by
+> psi_group_change and the number of these attempts being blocked due to
+> psi monitor being already active, we can assess the effects of this change:
+>
+> Before the patch:
+>                                            Run#1    Run#2      Run#3
+> Immediate reschedules attempted:           684365   1385156    1261240
+> Immediate reschedules blocked:             682846   1381654    1258682
+> Immediate reschedules (delta):             1519     3502       2558
+> Immediate reschedules (% of attempted):    0.22%    0.25%      0.20%
+>
+> After the patch:
+>                                            Run#1    Run#2      Run#3
+> Immediate reschedules attempted:           882244   770298    426218
+> Immediate reschedules blocked:             881996   769796    426074
+> Immediate reschedules (delta):             248      502       144
+> Immediate reschedules (% of attempted):    0.03%    0.07%     0.03%
+>
+> The number of non-blocked immediate reschedules dropped from 0.22-0.25%
+> to 0.03-0.07%. The drop is attributed to the decrease in the race window
+> size and the fact that we allow this race only when psi monitors reach
+> polling window expiration time.
+>
+> Fixes: 461daba06bdc ("psi: eliminate kthread_worker from psi trigger scheduling mechanism")
+> Reported-by: Kathleen Chang <yt.chang@mediatek.com>
+> Reported-by: Wenju Xu <wenju.xu@mediatek.com>
+> Reported-by: Jonathan Chen <jonathan.jmchen@mediatek.com>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> Tested-by: SH Chen <show-hong.chen@mediatek.com>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 > ---
->  .../testing/selftests/kvm/include/kvm_util.h  |  4 +++
->  .../selftests/kvm/include/kvm_util_base.h     |  3 +-
->  tools/testing/selftests/kvm/lib/kvm_util.c    | 34 ++++++-------------
->  tools/testing/selftests/kvm/lib/x86_64/vmx.c  |  2 +-
->  4 files changed, 17 insertions(+), 26 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> index c9286811a4cb..5d5c8968fb06 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> @@ -10,4 +10,8 @@
->  #include "kvm_util_base.h"
->  #include "ucall_common.h"
->  
-> +#define vm_iterate_over_vcpus(vm, vcpu, i)				\
-
-vm_for_each_vcpu() is more aligned with existing KVM terminology.
-
-> +	for (i = 0, vcpu = vm->vcpus[0];				\
-> +		vcpu && i < KVM_MAX_VCPUS; vcpu = vm->vcpus[++i])
-
-I hate pointer arithmetic more than most people, but in this case it avoids the
-need to pass in 'i', which in turn cuts down on boilerplate and churn.
-
->  #endif /* SELFTEST_KVM_UTIL_H */
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index e42a09cd24a0..c90a9609b853 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> @@ -45,7 +45,6 @@ struct userspace_mem_region {
->  };
->  
->  struct kvm_vcpu {
-> -	struct list_head list;
->  	uint32_t id;
->  	int fd;
->  	struct kvm_vm *vm;
-> @@ -75,7 +74,6 @@ struct kvm_vm {
->  	unsigned int pa_bits;
->  	unsigned int va_bits;
->  	uint64_t max_gfn;
-> -	struct list_head vcpus;
->  	struct userspace_mem_regions regions;
->  	struct sparsebit *vpages_valid;
->  	struct sparsebit *vpages_mapped;
-> @@ -92,6 +90,7 @@ struct kvm_vm {
->  	int stats_fd;
->  	struct kvm_stats_header stats_header;
->  	struct kvm_stats_desc *stats_desc;
-> +	struct kvm_vcpu *vcpus[KVM_MAX_VCPUS];
-
-We can dynamically allocate the array without too much trouble, though I'm not
-sure it's worth shaving the few KiB of memory.  For __vm_create(), the number of
-vCPUs is known when the VM is created.  For vm_create_barebones(), we could do
-the simple thing of allocating KVM_MAX_VCPU.
-
-> @@ -534,6 +533,10 @@ __weak void vcpu_arch_free(struct kvm_vcpu *vcpu)
->  static void vm_vcpu_rm(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
+> Changes since v4 posted at
+> https://lore.kernel.org/all/20221010225744.101629-1-surenb@google.com/
+> - Added missing parameter in psi_schedule_poll_work() call used only when
+> CONFIG_IRQ_TIME_ACCOUNTING is enabled, reported by kernel test robot.
+>
+>  include/linux/psi_types.h |  1 +
+>  kernel/sched/psi.c        | 62 ++++++++++++++++++++++++++++++++-------
+>  2 files changed, 53 insertions(+), 10 deletions(-)
+>
+> diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+> index 6e4372735068..14a1ebb74e11 100644
+> --- a/include/linux/psi_types.h
+> +++ b/include/linux/psi_types.h
+> @@ -177,6 +177,7 @@ struct psi_group {
+>         struct timer_list poll_timer;
+>         wait_queue_head_t poll_wait;
+>         atomic_t poll_wakeup;
+> +       atomic_t poll_scheduled;
+>
+>         /* Protects data used by the monitor */
+>         struct mutex trigger_lock;
+> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> index dbaeac915895..19d05b5c8a55 100644
+> --- a/kernel/sched/psi.c
+> +++ b/kernel/sched/psi.c
+> @@ -189,6 +189,7 @@ static void group_init(struct psi_group *group)
+>         INIT_DELAYED_WORK(&group->avgs_work, psi_avgs_work);
+>         mutex_init(&group->avgs_lock);
+>         /* Init trigger-related members */
+> +       atomic_set(&group->poll_scheduled, 0);
+>         mutex_init(&group->trigger_lock);
+>         INIT_LIST_HEAD(&group->triggers);
+>         group->poll_min_period = U32_MAX;
+> @@ -580,18 +581,17 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+>         return now + group->poll_min_period;
+>  }
+>
+> -/* Schedule polling if it's not already scheduled. */
+> -static void psi_schedule_poll_work(struct psi_group *group, unsigned long delay)
+> +/* Schedule polling if it's not already scheduled or forced. */
+> +static void psi_schedule_poll_work(struct psi_group *group, unsigned long delay,
+> +                                  bool force)
 >  {
->  	int ret;
-> +	uint32_t vcpu_id = vcpu->id;
+>         struct task_struct *task;
+>
+>         /*
+> -        * Do not reschedule if already scheduled.
+> -        * Possible race with a timer scheduled after this check but before
+> -        * mod_timer below can be tolerated because group->polling_next_update
+> -        * will keep updates on schedule.
+> +        * atomic_xchg should be called even when !force to provide a
+> +        * full memory barrier (see the comment inside psi_poll_work).
+>          */
+> -       if (timer_pending(&group->poll_timer))
+> +       if (atomic_xchg(&group->poll_scheduled, 1) && !force)
+>                 return;
+>
+>         rcu_read_lock();
+> @@ -603,12 +603,15 @@ static void psi_schedule_poll_work(struct psi_group *group, unsigned long delay)
+>          */
+>         if (likely(task))
+>                 mod_timer(&group->poll_timer, jiffies + delay);
+> +       else
+> +               atomic_set(&group->poll_scheduled, 0);
+>
+>         rcu_read_unlock();
+>  }
+>
+>  static void psi_poll_work(struct psi_group *group)
+>  {
+> +       bool force_reschedule = false;
+>         u32 changed_states;
+>         u64 now;
+>
+> @@ -616,6 +619,43 @@ static void psi_poll_work(struct psi_group *group)
+>
+>         now = sched_clock();
+>
+> +       if (now > group->polling_until) {
+> +               /*
+> +                * We are either about to start or might stop polling if no
+> +                * state change was recorded. Resetting poll_scheduled leaves
+> +                * a small window for psi_group_change to sneak in and schedule
+> +                * an immegiate poll_work before we get to rescheduling. One
+> +                * potential extra wakeup at the end of the polling window
+> +                * should be negligible and polling_next_update still keeps
+> +                * updates correctly on schedule.
+> +                */
+> +               atomic_set(&group->poll_scheduled, 0);
+> +               /*
+> +                * A task change can race with the poll worker that is supposed to
+> +                * report on it. To avoid missing events, ensure ordering between
+> +                * poll_scheduled and the task state accesses, such that if the poll
+> +                * worker misses the state update, the task change is guaranteed to
+> +                * reschedule the poll worker:
+> +                *
+> +                * poll worker:
+> +                *   atomic_set(poll_scheduled, 0)
+> +                *   smp_mb()
+> +                *   LOAD states
+> +                *
+> +                * task change:
+> +                *   STORE states
+> +                *   if atomic_xchg(poll_scheduled, 1) == 0:
+> +                *     schedule poll worker
+> +                *
+> +                * The atomic_xchg() implies a full barrier.
+> +                */
+> +               smp_mb();
+> +       } else {
+> +               /* Polling window is not over, keep rescheduling */
+> +               force_reschedule = true;
+> +       }
 > +
-> +	TEST_ASSERT(!!vm->vcpus[vcpu_id], "vCPU%d wasn't added\n", vcpu_id);
+> +
+>         collect_percpu_times(group, PSI_POLL, &changed_states);
+>
+>         if (changed_states & group->poll_states) {
+> @@ -641,7 +681,8 @@ static void psi_poll_work(struct psi_group *group)
+>                 group->polling_next_update = update_triggers(group, now);
+>
+>         psi_schedule_poll_work(group,
+> -               nsecs_to_jiffies(group->polling_next_update - now) + 1);
+> +               nsecs_to_jiffies(group->polling_next_update - now) + 1,
+> +               force_reschedule);
+>
+>  out:
+>         mutex_unlock(&group->trigger_lock);
+> @@ -802,7 +843,7 @@ static void psi_group_change(struct psi_group *group, int cpu,
+>         write_seqcount_end(&groupc->seq);
+>
+>         if (state_mask & group->poll_states)
+> -               psi_schedule_poll_work(group, 1);
+> +               psi_schedule_poll_work(group, 1, false);
+>
+>         if (wake_clock && !delayed_work_pending(&group->avgs_work))
+>                 schedule_delayed_work(&group->avgs_work, PSI_FREQ);
+> @@ -956,7 +997,7 @@ void psi_account_irqtime(struct task_struct *task, u32 delta)
+>                 write_seqcount_end(&groupc->seq);
+>
+>                 if (group->poll_states & (1 << PSI_IRQ_FULL))
+> -                       psi_schedule_poll_work(group, 1);
+> +                       psi_schedule_poll_work(group, 1, false);
 
-This is unecessary, there's one caller and it's iterating over the array of vCPUs.
+Previous patch was missing the above one-line change. I missed that
+because I didn't test CONFIG_IRQ_TIME_ACCOUNTING=y configuration. The
+older version of this patch didn't have it because this function
+invocation code is relatively new (added on 08/25/22 by 52b1364ba0b1
+"sched/psi: Add PSI_IRQ to track IRQ/SOFTIRQ pressure").
+Peter, please try picking up this one. Hopefully I didn't miss
+anything else this time...
+
+>         } while ((group = group->parent));
+>  }
+>  #endif
+> @@ -1342,6 +1383,7 @@ void psi_trigger_destroy(struct psi_trigger *t)
+>                  * can no longer be found through group->poll_task.
+>                  */
+>                 kthread_stop(task_to_destroy);
+> +               atomic_set(&group->poll_scheduled, 0);
+>         }
+>         kfree(t);
+>  }
+> --
+> 2.38.1.273.g43a17bfeac-goog
+>
