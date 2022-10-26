@@ -2,70 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 637FD60E96B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:45:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 284F560E974
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235148AbiJZTp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 15:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
+        id S235149AbiJZTp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 15:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235139AbiJZTon (ORCPT
+        with ESMTP id S234623AbiJZTp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 15:44:43 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7537B119BFC;
-        Wed, 26 Oct 2022 12:44:00 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5so3193306wmo.1;
-        Wed, 26 Oct 2022 12:44:00 -0700 (PDT)
+        Wed, 26 Oct 2022 15:45:27 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591BABDF;
+        Wed, 26 Oct 2022 12:44:25 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id o2so11459413qkk.10;
+        Wed, 26 Oct 2022 12:44:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tgTbY0wb7NEE8wsfRVlRc/ObdS/WC2z2i1h/J+MWlCI=;
-        b=KY7cMPd1GFfcrGv0PtiHQ5CIfXDiI+sstPxdDLC0fKy9ZpCkfKTaukI07g1MBrNmVA
-         zL77VTcV1eiCDazbQjF8hfvixA5jyXmPdIl6gJNgatTKiCOVq1IiLMVEjDlFQcxp9f+h
-         Mw5VTwQ4zBarNl911bm/OChOqRHUH6l5cvtcqO/eErY8TeudrfdCiYhAUFADRTsRHH/r
-         8l8NxMwp6+PoKWUV2eKqZ9ZmQNj1HNXOB70qziXt9gVT1uvhJMfgfaEN+uv4hYwy8Ni1
-         PzRlDSBmUxYZhjJvVZhKB4Vy4haShFsol9Gy8MeNj7Udp9BMEaF7Usip/JLL1o3bi3CC
-         H/5g==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dnvZiw2WHlbiV6rtq4uxOyMMllagNobakugUz2ZgehE=;
+        b=o6Lyliz+cHj5CwoPEbDKB5//UBUnW5mETMUBebJXJiEcENviQqX8xprlIJpOuseBo9
+         LphgGvnhNQazWO44sHY++gjF94Q8D9BXhaNnAkmY8Sx6bpY6QVrVWKXBUN6wIuM+O8MY
+         GOnFjyZIMSt2rVHxTdSMxwtmvEN/r0PDfrNEaRmXZYNZ4QVuEJ53mZSm+8yvLT3mORcT
+         zeJ3dJvaT428pxmoAIUG1ezkc5JvCIfhk49d03KtTW3IQikeIGjhy97IHtR2m8wJnz7i
+         LLjhwEd/bhc6ygcI0B8PZNCSACzBDyLfO6BWGqbvbylrqcllSBF0hQGtHkN8sehDYsqR
+         NsBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tgTbY0wb7NEE8wsfRVlRc/ObdS/WC2z2i1h/J+MWlCI=;
-        b=4tli4QnkRi8MQuFELRdII8TouQFPe5hCdRqzH5ROcD8FU/o8IUXK84V/1VCKqLKfH0
-         258XHVRdkUEXqWHv0N7nbOvgjNg1fX/mtHSDMx1RGjxYVoatdPKw0L/f7W4NVgPiPgRv
-         BW34k802pxeXPgE9OTGrLojaJFzItZ11kBlLedgZKo5SrO0/VmUHycyoGzNPWPi7myj4
-         O4UYP3maaT2VQWA6fn4pBHUaFXLMJMxYXkM9GrUMzbFrlzsEO+6hu3bMYort+uaIFIjc
-         zgn6WdYdYoFHT0dHcENUeswxuUGZrfbWqrOZazvhIjMLddzoXIoIYxgo+xtWi4V7+3w/
-         YNZg==
-X-Gm-Message-State: ACrzQf33E6HAvJN236fwVAPaAzxcjRZCA3WnMiDKbxwlJMiizk33M03p
-        Y2dlSWeejKFjz9/4C9R1zZw=
-X-Google-Smtp-Source: AMsMyM7Ilr1r8KPJxosCeQz1/nn4rtexXjzOkrLF8BsmDihsFZPMCGK61eqqOXZToHLPYQwpcNjG2A==
-X-Received: by 2002:a05:600c:4e8f:b0:3c9:9657:9c0a with SMTP id f15-20020a05600c4e8f00b003c996579c0amr3725394wmq.157.1666813438756;
-        Wed, 26 Oct 2022 12:43:58 -0700 (PDT)
-Received: from localhost (188.28.0.84.threembb.co.uk. [188.28.0.84])
-        by smtp.gmail.com with ESMTPSA id n5-20020a05600c304500b003a84375d0d1sm2492662wmh.44.2022.10.26.12.43.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 12:43:58 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     paul@crapouillou.net, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     zhouyu@wanyeetech.com, linux-mips@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] clk: ingenic: Minor cosmetic fixups for X1000
-Date:   Wed, 26 Oct 2022 20:43:45 +0100
-Message-Id: <20221026194345.243007-7-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20221026194345.243007-1-aidanmacdonald.0x0@gmail.com>
-References: <20221026194345.243007-1-aidanmacdonald.0x0@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dnvZiw2WHlbiV6rtq4uxOyMMllagNobakugUz2ZgehE=;
+        b=DKAriCawDZ0odVcemslwxRZZ97OVEcgfdI7Tv6TkVI0BdPRg4tXnITX/3ov5WDmwz0
+         WLL0L9RSJJElh9YL0RwnjBRm+D78Wqf/R8JoCxFZlvCJtze0gqnerCvMKVB4v1ZQMMRl
+         orH71RIc6JWxEHMuZ242/yk/bHAXjejps/QQdGzEaCF478qwIKL4zWda4HnIUfsHQWIS
+         pVM6nYcV8RqA4erC9v1OxFLGVJNsdo33U+OsrYJK9CPoHstE0kbsyGH0+SGO47Gu3AZr
+         wpbkAIGowj3DtDIPV9oLhT7u04OHBh7QOOXKO1MPO6ymTd5J1ZR2Ek1o6zXnyYvi+IL/
+         p+7w==
+X-Gm-Message-State: ACrzQf1docAmf1fAttxT9y7ts7tCVyNe1WkWSTGZXGs0DFo/q72SyV+W
+        wp31QxoVgS3EwLekE+5XcAw=
+X-Google-Smtp-Source: AMsMyM5mlLuhBFfErgRaoGdE6r5zGqEHLx9kZ0sXPdssBtYw01bbc46PqQnsEQZBs+w+E3qFai3HGg==
+X-Received: by 2002:a05:620a:1367:b0:6ee:c35c:fa46 with SMTP id d7-20020a05620a136700b006eec35cfa46mr31727298qkl.169.1666813464393;
+        Wed, 26 Oct 2022 12:44:24 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id j15-20020a05620a288f00b006f9c2be0b4bsm661541qkp.135.2022.10.26.12.44.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 12:44:23 -0700 (PDT)
+Message-ID: <84028e30-22c1-10bf-f444-d3ac8429a003@gmail.com>
+Date:   Wed, 26 Oct 2022 12:44:14 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4 1/7] mmc: cqhci: Provide helper for resetting both
+ SDHCI and CQHCI
+Content-Language: en-US
+To:     Brian Norris <briannorris@chromium.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>, linux-mmc@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        stable@vger.kernel.org
+References: <20221026194209.3758834-1-briannorris@chromium.org>
+ <20221026124150.v4.1.Ie85faa09432bfe1b0890d8c24ff95e17f3097317@changeid>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221026124150.v4.1.Ie85faa09432bfe1b0890d8c24ff95e17f3097317@changeid>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,209 +98,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove redundant -1 entries from the parents array and fix
-a couple indentation / whitespace issues.
+On 10/26/22 12:42, Brian Norris wrote:
+> Several SDHCI drivers need to deactivate command queueing in their reset
+> hook (see sdhci_cqhci_reset() / sdhci-pci-core.c, for example), and
+> several more are coming.
+> 
+> Those reset implementations have some small subtleties (e.g., ordering
+> of initialization of SDHCI vs. CQHCI might leave us resetting with a
+> NULL ->cqe_private), and are often identical across different host
+> drivers.
+> 
+> We also don't want to force a dependency between SDHCI and CQHCI, or
+> vice versa; non-SDHCI drivers use CQHCI, and SDHCI drivers might support
+> command queueing through some other means.
+> 
+> So, implement a small helper, to avoid repeating the same mistakes in
+> different drivers. Simply stick it in a header, because it's so small it
+> doesn't deserve its own module right now, and inlining to each driver is
+> pretty reasonable.
+> 
+> This is marked for -stable, as it is an important prerequisite patch for
+> several SDHCI controller bugfixes that follow.
+> 
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
----
- drivers/clk/ingenic/x1000-cgu.c | 49 ++++++++++++++++-----------------
- 1 file changed, 24 insertions(+), 25 deletions(-)
-
-diff --git a/drivers/clk/ingenic/x1000-cgu.c b/drivers/clk/ingenic/x1000-cgu.c
-index 95d5e3a44cee..feb03eed4fe8 100644
---- a/drivers/clk/ingenic/x1000-cgu.c
-+++ b/drivers/clk/ingenic/x1000-cgu.c
-@@ -216,7 +216,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_APLL] = {
- 		"apll", CGU_CLK_PLL,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.pll = {
- 			.reg = CGU_REG_APLL,
- 			.rate_multiplier = 1,
-@@ -239,7 +239,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_MPLL] = {
- 		"mpll", CGU_CLK_PLL,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.pll = {
- 			.reg = CGU_REG_MPLL,
- 			.rate_multiplier = 1,
-@@ -289,7 +289,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 		 * system; mark it critical.
- 		 */
- 		.flags = CLK_IS_CRITICAL,
--		.parents = { X1000_CLK_CPUMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_CPUMUX },
- 		.div = { CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1 },
- 		.gate = { CGU_REG_CLKGR, 30 },
- 	},
-@@ -301,7 +301,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 		 * disabling it or any parent clocks will hang the system.
- 		 */
- 		.flags = CLK_IS_CRITICAL,
--		.parents = { X1000_CLK_CPUMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_CPUMUX },
- 		.div = { CGU_REG_CPCCR, 4, 1, 4, 22, -1, -1 },
- 	},
- 
-@@ -320,13 +320,13 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_AHB2] = {
- 		"ahb2", CGU_CLK_DIV,
--		.parents = { X1000_CLK_AHB2PMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_AHB2PMUX },
- 		.div = { CGU_REG_CPCCR, 12, 1, 4, 20, -1, -1 },
- 	},
- 
- 	[X1000_CLK_PCLK] = {
- 		"pclk", CGU_CLK_DIV | CGU_CLK_GATE,
--		.parents = { X1000_CLK_AHB2PMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_AHB2PMUX },
- 		.div = { CGU_REG_CPCCR, 16, 1, 4, 20, -1, -1 },
- 		.gate = { CGU_REG_CLKGR, 28 },
- 	},
-@@ -393,13 +393,13 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_MSCMUX] = {
- 		"msc_mux", CGU_CLK_MUX,
--		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL},
-+		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL },
- 		.mux = { CGU_REG_MSC0CDR, 31, 1 },
- 	},
- 
- 	[X1000_CLK_MSC0] = {
- 		"msc0", CGU_CLK_DIV | CGU_CLK_GATE,
--		.parents = { X1000_CLK_MSCMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_MSCMUX },
- 		.div = { CGU_REG_MSC0CDR, 0, 2, 8, 29, 28, 27 },
- 		.gate = { CGU_REG_CLKGR, 4 },
- 	},
-@@ -413,8 +413,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_OTG] = {
- 		"otg", CGU_CLK_DIV | CGU_CLK_GATE | CGU_CLK_MUX,
--		.parents = { X1000_CLK_EXCLK, -1,
--					 X1000_CLK_APLL, X1000_CLK_MPLL },
-+		.parents = { X1000_CLK_EXCLK, -1, X1000_CLK_APLL, X1000_CLK_MPLL },
- 		.mux = { CGU_REG_USBCDR, 30, 2 },
- 		.div = { CGU_REG_USBCDR, 0, 1, 8, 29, 28, 27 },
- 		.gate = { CGU_REG_CLKGR, 3 },
-@@ -422,7 +421,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_SSIPLL] = {
- 		"ssi_pll", CGU_CLK_MUX | CGU_CLK_DIV,
--		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL, -1, -1 },
-+		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL },
- 		.mux = { CGU_REG_SSICDR, 31, 1 },
- 		.div = { CGU_REG_SSICDR, 0, 1, 8, 29, 28, 27 },
- 	},
-@@ -435,7 +434,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_SSIMUX] = {
- 		"ssi_mux", CGU_CLK_MUX,
--		.parents = { X1000_CLK_EXCLK, X1000_CLK_SSIPLL_DIV2, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK, X1000_CLK_SSIPLL_DIV2 },
- 		.mux = { CGU_REG_SSICDR, 30, 1 },
- 	},
- 
-@@ -456,37 +455,37 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_EMC] = {
- 		"emc", CGU_CLK_GATE,
--		.parents = { X1000_CLK_AHB2, -1, -1, -1 },
-+		.parents = { X1000_CLK_AHB2 },
- 		.gate = { CGU_REG_CLKGR, 0 },
- 	},
- 
- 	[X1000_CLK_EFUSE] = {
- 		"efuse", CGU_CLK_GATE,
--		.parents = { X1000_CLK_AHB2, -1, -1, -1 },
-+		.parents = { X1000_CLK_AHB2 },
- 		.gate = { CGU_REG_CLKGR, 1 },
- 	},
- 
- 	[X1000_CLK_SFC] = {
- 		"sfc", CGU_CLK_GATE,
--		.parents = { X1000_CLK_SSIPLL, -1, -1, -1 },
-+		.parents = { X1000_CLK_SSIPLL },
- 		.gate = { CGU_REG_CLKGR, 2 },
- 	},
- 
- 	[X1000_CLK_I2C0] = {
- 		"i2c0", CGU_CLK_GATE,
--		.parents = { X1000_CLK_PCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_PCLK },
- 		.gate = { CGU_REG_CLKGR, 7 },
- 	},
- 
- 	[X1000_CLK_I2C1] = {
- 		"i2c1", CGU_CLK_GATE,
--		.parents = { X1000_CLK_PCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_PCLK },
- 		.gate = { CGU_REG_CLKGR, 8 },
- 	},
- 
- 	[X1000_CLK_I2C2] = {
- 		"i2c2", CGU_CLK_GATE,
--		.parents = { X1000_CLK_PCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_PCLK },
- 		.gate = { CGU_REG_CLKGR, 9 },
- 	},
- 
-@@ -498,43 +497,43 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_UART0] = {
- 		"uart0", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.gate = { CGU_REG_CLKGR, 14 },
- 	},
- 
- 	[X1000_CLK_UART1] = {
- 		"uart1", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK},
- 		.gate = { CGU_REG_CLKGR, 15 },
- 	},
- 
- 	[X1000_CLK_UART2] = {
- 		"uart2", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.gate = { CGU_REG_CLKGR, 16 },
- 	},
- 
- 	[X1000_CLK_TCU] = {
- 		"tcu", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.gate = { CGU_REG_CLKGR, 18 },
- 	},
- 
- 	[X1000_CLK_SSI] = {
- 		"ssi", CGU_CLK_GATE,
--		.parents = { X1000_CLK_SSIMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_SSIMUX },
- 		.gate = { CGU_REG_CLKGR, 19 },
- 	},
- 
- 	[X1000_CLK_OST] = {
- 		"ost", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.gate = { CGU_REG_CLKGR, 20 },
- 	},
- 
- 	[X1000_CLK_PDMA] = {
- 		"pdma", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.gate = { CGU_REG_CLKGR, 21 },
- 	},
- };
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.38.1
+Florian
 
