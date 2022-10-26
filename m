@@ -2,69 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB42D60ECA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 01:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2546560ECAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 01:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234062AbiJZXcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 19:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
+        id S229880AbiJZXeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 19:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbiJZXco (ORCPT
+        with ESMTP id S233956AbiJZXeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 19:32:44 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82164844C7
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 16:32:42 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id y4so15787449plb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 16:32:42 -0700 (PDT)
+        Wed, 26 Oct 2022 19:34:18 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DD9814FE
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 16:34:17 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 3-20020a17090a0f8300b00212d5cd4e5eso4424051pjz.4
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 16:34:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ASNvt3YZA5URmImi9I7VajS1ONgiR7V+0imqEJ2tB40=;
-        b=XXryU3Ajq0S/F4oMRkJQBOKdhp1zaWHobjAl9lt0O36OllcL/sZ9ErbE53FngsRRTI
-         sPyH1gT2vnTcZQdDu5/XuNbKZFEQj3GHT59S/kjkcRGr2Ulo5fFfFwjGKJn8cF3QTGZr
-         xK8TB+5QI28xW+uIaA80GBIA/O2GkzVcHJxsY=
+        bh=WHqryD6cMC+3zqeZeO7lYyd2QloacqtkfBr0fI6grmc=;
+        b=nQ41viT2g0De13xPdgk5ju/55UrOhJOrOAd09W0a1kjOrMdzj8A5pN+IICti6BBJ6l
+         068JN8gtfBWCAmxyeCM51MA01qbeun/Ztk93SsGFes0MiOKKqeOssnM1gVJ5eSVKWOuD
+         WoPRXyIiYcRXfoz7dOTG6oIhj6kkUVVHVeIDHtqD5aQ9PzVByz40aBo9JeGGVVlFEgXV
+         BoBJRkdNJbkkaWme/TyELBSk7uiH8ldd5zHn5R3ni+CLfnjp1JA5tnWyEXzUMwjRe362
+         0zPowfJGW1i5hDjdNFyO/VmGDpfrhZbd/HkqodM+ZCHg0SfC4EJ3Emkt2T0/sdtI9sNA
+         sNyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ASNvt3YZA5URmImi9I7VajS1ONgiR7V+0imqEJ2tB40=;
-        b=esP9jAcP1593HwamCSU7C7nbAE5BaGfRaoefScsJrpgd5A36GY11Ka6Sz/2yvsXNT5
-         9tMUk7BaaPkZy4tZiG5sU1Zr4v1meGIToyUHBidmpYKr40BJKZ9zplf3uGPEpofLo+20
-         lfuZoWlMD0vQvv9SRSuf+vGS9Y96TFUAyKxlM45kYcz32WmuS5MU37C0EJDckuKEaay3
-         Zs6DW3iYBUS99fq22qorVVKOI2HuF7hPFMXiSGpAFSAHi8T0IMOUxlBwM4XjoERBW0+7
-         4F3/+BpnLl6Qt+HjBycqA1G80CKq0SAC3iRL5JWsAmlHLtUZPod9ySHPldW5YNDZKLUI
-         TvGg==
-X-Gm-Message-State: ACrzQf0b1QwUuHC8McPXjIiJp5JsGlz3p2oZLDkkf6+0vERdLIX5vTvM
-        OAhHO+E4Ns82m0Ugy9ORuvGXxQ==
-X-Google-Smtp-Source: AMsMyM5qsJkhUxULmVA6vqhL3AmD4D9tOiA7Gqkmft5jpW1wq0i2LYxDuO2aVrBlPHgOLrKj94F8vA==
-X-Received: by 2002:a17:902:b101:b0:186:7067:3ea3 with SMTP id q1-20020a170902b10100b0018670673ea3mr33618100plr.59.1666827161964;
-        Wed, 26 Oct 2022 16:32:41 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y76-20020a62644f000000b0056bc1a41209sm3514145pfb.33.2022.10.26.16.32.41
+        bh=WHqryD6cMC+3zqeZeO7lYyd2QloacqtkfBr0fI6grmc=;
+        b=qCJ5rH8ANnnqGXTnvWCT6jYR9J9WhqRKW1AomFldl5b1TRODnvPkoMU3NG/uRCnN4k
+         tlsriqdRct2iwVO4U6zwiZTHfHjlJMbf/nvGtZZU5m3o+Zx6PNjl45sQiljzGJgGnRr3
+         thK0FZX7lm3fPRjG4fQJYm2PP0Ls/Ev8kMszuufJKqIgCldTnY6NtXLxByK030lk+iv2
+         b980Vht+lKAD0Tpe+nC7/5rj+xNhr/cFQfq/JC1AVhsvpzAbRytaHomJ4oMkUEC0of/+
+         uqVVASO1Z/UjnmayNoVpxtvTWDA+tSp7U0GxmOS3046pSVAKwk8Sd1eHwWw1253mRMbS
+         uDkg==
+X-Gm-Message-State: ACrzQf1MtKo4b9ezhV4d+8EYXCOYsvbbWiZUpcGAQYiSK0yTgKC580O5
+        NECHNr53ek5Cs40gHvHP8q8mbw==
+X-Google-Smtp-Source: AMsMyM6A4viqn0P2RzahNA3q4fXm/zmHo+qmtwMHPSonDJgHT8CbzIAdvPy/G8rEklSHnDhCaAcJ3A==
+X-Received: by 2002:a17:902:f78b:b0:17f:9c94:b247 with SMTP id q11-20020a170902f78b00b0017f9c94b247mr44871459pln.137.1666827256789;
+        Wed, 26 Oct 2022 16:34:16 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id x15-20020a1709027c0f00b00186748fe6ccsm3405981pll.214.2022.10.26.16.34.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 16:32:41 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 16:32:40 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Trond Myklebust <trond.myklebust@hammerspace.com>
-Cc:     kernel test robot <yujie.liu@intel.com>,
-        Anna Schumaker <anna@kernel.org>, linux-nfs@vger.kernel.org,
-        Dave Jones <davej@codemonkey.org.uk>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] NFS: Avoid memcpy() run-time warning for struct
- sockaddr overflows
-Message-ID: <202210261631.DE7E4761E@keescook>
-References: <20221017043107.never.457-kees@kernel.org>
+        Wed, 26 Oct 2022 16:34:16 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 23:34:13 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] KVM: VMX: Resurrect vmcs_conf sanitization for
+ KVM-on-Hyper-V
+Message-ID: <Y1nD9QKqa1A1j7t+@google.com>
+References: <20221018101000.934413-1-vkuznets@redhat.com>
+ <20221018101000.934413-5-vkuznets@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221017043107.never.457-kees@kernel.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+In-Reply-To: <20221018101000.934413-5-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,31 +77,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 16, 2022 at 09:36:50PM -0700, Kees Cook wrote:
-> The 'nfs_server' and 'mount_server' structures include a union of
-> 'struct sockaddr' (with the older 16 bytes max address size) and
-> 'struct sockaddr_storage' which is large enough to hold all the
-> supported sa_family types (128 bytes max size). The runtime memcpy()
-> buffer overflow checker is seeing attempts to write beyond the 16
-> bytes as an overflow, but the actual expected size is that of 'struct
-> sockaddr_storage'. Plumb the use of 'struct sockaddr_storage' more
-> completely through-out NFS, which results in adjusting the memcpy()
-> buffers to the correct union members. Avoids this false positive run-time
-> warning under CONFIG_FORTIFY_SOURCE:
-> 
->   memcpy: detected field-spanning write (size 28) of single field "&ctx->nfs_server.address" at fs/nfs/namespace.c:178 (size 16)
-> 
-> Reported-by: kernel test robot <yujie.liu@intel.com>
-> Link: https://lore.kernel.org/all/202210110948.26b43120-yujie.liu@intel.com
-> Cc: Trond Myklebust <trond.myklebust@hammerspace.com>
-> Cc: Anna Schumaker <anna@kernel.org>
+On Tue, Oct 18, 2022, Vitaly Kuznetsov wrote:
+> @@ -362,6 +364,7 @@ uint16_t nested_get_evmcs_version(struct kvm_vcpu *vcpu)
+>  
+>  enum evmcs_revision {
+>  	EVMCSv1_LEGACY,
+> +	EVMCSv1_STRICT,
 
-Friendly ping -- this needs to land in v6.1 to avoid these warnings.
-Should I carry this in the hardening tree instead?
+"strict" isn't really the right word, this is more like "raw" or "unfiltered",
+because unless I'm misunderstanding the intent, this will always track KVM's
+bleeding edge, i.e. everything that KVM can possibly enable.
 
-Thanks!
+And in that case, we can avoid bikeshedding the name becase bouncing through
+evmcs_supported_ctrls is unnecessary, just use the #defines directly.  And then
+you can just fold the one (or two) #defines from patch 3 into this path.
 
--Kees
+> @@ -511,6 +525,52 @@ int nested_evmcs_check_controls(struct vmcs12 *vmcs12)
+>  	return 0;
+>  }
+>  
+> +#if IS_ENABLED(CONFIG_HYPERV)
+> +/*
+> + * KVM on Hyper-V always uses the newest known eVMCSv1 revision, the assumption
+> + * is: in case a feature has corresponding fields in eVMCS described and it was
+> + * exposed in VMX feature MSRs, KVM is free to use it. Warn if KVM meets a
+> + * feature which has no corresponding eVMCS field, this likely means that KVM
+> + * needs to be updated.
+> + */
+> +#define evmcs_check_vmcs_conf32(field, ctrl)					\
+> +	{									\
+> +		u32 supported, unsupported32;					\
+> +										\
+> +		supported = evmcs_get_supported_ctls(ctrl, EVMCSv1_STRICT);	\
+> +		unsupported32 = vmcs_conf->field & ~supported;			\
+> +		if (unsupported32) {						\
+> +			pr_warn_once(#field " unsupported with eVMCS: 0x%x\n",	\
+> +				     unsupported32);				\
+> +			vmcs_conf->field &= supported;				\
+> +		}								\
+> +	}
+> +
+> +#define evmcs_check_vmcs_conf64(field, ctrl)					\
+> +	{									\
+> +		u32 supported;							\
+> +		u64 unsupported64;						\
 
+Channeling my inner Morpheus: Stop trying to use macros and use macros!  :-D
+
+---
+ arch/x86/kvm/vmx/evmcs.c | 34 ++++++++++++++++++++++++++++++++++
+ arch/x86/kvm/vmx/evmcs.h |  2 ++
+ arch/x86/kvm/vmx/vmx.c   |  5 +++++
+ 3 files changed, 41 insertions(+)
+
+diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
+index 337783675731..f7f8eafeecf7 100644
+--- a/arch/x86/kvm/vmx/evmcs.c
++++ b/arch/x86/kvm/vmx/evmcs.c
+@@ -1,5 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
++#define pr_fmt(fmt) "kvm/hyper-v: " fmt
++
+ #include <linux/errno.h>
+ #include <linux/smp.h>
+ 
+@@ -507,6 +509,38 @@ int nested_evmcs_check_controls(struct vmcs12 *vmcs12)
+ 	return 0;
+ }
+ 
++#if IS_ENABLED(CONFIG_HYPERV)
++/*
++ * KVM on Hyper-V always uses the newest known eVMCSv1 revision, the assumption
++ * is: in case a feature has corresponding fields in eVMCS described and it was
++ * exposed in VMX feature MSRs, KVM is free to use it. Warn if KVM meets a
++ * feature which has no corresponding eVMCS field, this likely means that KVM
++ * needs to be updated.
++ */
++#define evmcs_check_vmcs_conf(field, ctrl)				\
++do {									\
++	typeof(vmcs_conf->field) unsupported;				\
++									\
++	unsupported = vmcs_conf->field & EVMCS1_UNSUPPORTED_ ## ctrl;	\
++	if (unsupported) {						\
++		pr_warn_once(#field " unsupported with eVMCS: 0x%llx\n",\
++			     (u64)unsupported);				\
++		vmcs_conf->field &= ~unsupported;			\
++	}								\
++}									\
++while (0)
++
++__init void evmcs_sanitize_exec_ctrls(struct vmcs_config *vmcs_conf)
++{
++	evmcs_check_vmcs_conf(cpu_based_exec_ctrl, EXEC_CTRL);
++	evmcs_check_vmcs_conf(pin_based_exec_ctrl, PINCTRL);
++	evmcs_check_vmcs_conf(cpu_based_2nd_exec_ctrl, 2NDEXEC);
++	evmcs_check_vmcs_conf(cpu_based_3rd_exec_ctrl, 3RDEXEC);
++	evmcs_check_vmcs_conf(vmentry_ctrl, VMENTRY_CTRL);
++	evmcs_check_vmcs_conf(vmexit_ctrl, VMEXIT_CTRL);
++}
++#endif
++
+ int nested_enable_evmcs(struct kvm_vcpu *vcpu,
+ 			uint16_t *vmcs_version)
+ {
+diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
+index 6f746ef3c038..bc795c6e9059 100644
+--- a/arch/x86/kvm/vmx/evmcs.h
++++ b/arch/x86/kvm/vmx/evmcs.h
+@@ -58,6 +58,7 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
+ 	 SECONDARY_EXEC_SHADOW_VMCS |					\
+ 	 SECONDARY_EXEC_TSC_SCALING |					\
+ 	 SECONDARY_EXEC_PAUSE_LOOP_EXITING)
++#define EVMCS1_UNSUPPORTED_3RDEXEC (~0ULL)
+ #define EVMCS1_UNSUPPORTED_VMEXIT_CTRL					\
+ 	(VM_EXIT_SAVE_VMX_PREEMPTION_TIMER)
+ #define EVMCS1_UNSUPPORTED_VMENTRY_CTRL (0)
+@@ -209,6 +210,7 @@ static inline void evmcs_load(u64 phys_addr)
+ 	vp_ap->enlighten_vmentry = 1;
+ }
+ 
++__init void evmcs_sanitize_exec_ctrls(struct vmcs_config *vmcs_conf);
+ #else /* !IS_ENABLED(CONFIG_HYPERV) */
+ static __always_inline void evmcs_write64(unsigned long field, u64 value) {}
+ static inline void evmcs_write32(unsigned long field, u32 value) {}
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 9dba04b6b019..7fd21b1fae1d 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -2720,6 +2720,11 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+ 	vmcs_conf->vmentry_ctrl        = _vmentry_control;
+ 	vmcs_conf->misc	= misc_msr;
+ 
++#if IS_ENABLED(CONFIG_HYPERV)
++	if (enlightened_vmcs)
++		evmcs_sanitize_exec_ctrls(vmcs_conf);
++#endif
++
+ 	return 0;
+ }
+ 
+
+base-commit: 5b6b6bcc0ef138b55fdd17dc8f9d43dfd26f8bd7
 -- 
-Kees Cook
