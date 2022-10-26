@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 060F660E950
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC4D60E952
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235081AbiJZTns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 15:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39352 "EHLO
+        id S235104AbiJZToB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 15:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235034AbiJZTnA (ORCPT
+        with ESMTP id S233628AbiJZTnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 15:43:00 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF207108256
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 12:42:42 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id f23so15202682plr.6
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 12:42:42 -0700 (PDT)
+        Wed, 26 Oct 2022 15:43:12 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC654D03A6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 12:42:45 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id j12so15198591plj.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 12:42:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uFvAy1Yx9bF2vsbUT1HqGJtHQU9f7u8fB33iw92Qf8Q=;
-        b=oKBbVUwj0ewG2ZP2F3fTEFFC5mwv4W+c9kZCqjl7JXd4iDbGJEY0AoQ8UYLEbFN5Ra
-         0x7RjJ30MNig+oRb1brPsUeEwBwRiuFhggpgiWrCKI86pV0GVPWln+FXhDLy0iIYorOi
-         D2M5OJERgyDjOH1XHcjM7eR7XT3klUoE64Go4=
+        bh=Oi/ns2/+lR1+ddU/1Ugq5i2XZ8iCGI8EoPh2M4YhQ8o=;
+        b=ne3Bjzj3/Xp33Sha2f/cKqGXdoH6Vyr5pOV6EuuqvioSpyWEaWuiHEeTUPPxMmITZy
+         AjpY81WAkjUG4NkFO4CzRkknSFFYVH/HDZGTHQ2cTgwST8YhakPg/9CIkJjqjV7sWNZ6
+         sRvl6FHFKEQGE626YqbWeD7+B8j5Ajygbqwxg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uFvAy1Yx9bF2vsbUT1HqGJtHQU9f7u8fB33iw92Qf8Q=;
-        b=NIELn19pzNK2aJnXCqTArl60az+mRrne8fRkYjP9lFVdqa1Sw42h6oV5JsbZy2f3dB
-         MyuGYodi33OImsoNFuEiWMgWKeTVnO4U2AHcL/d3sqFPiXL0OEwWO4PceOJ+zE3rJ+6y
-         b9TEdBe+6jOCh47p8yjR7fhFKnwG5JUFOAm2bSp+8xuhaMe/h56a4b0J28RXnzqIvqFg
-         wa76j9NpC1qHRVwdYH4AFsUFCro/vLIV9QOtDFNvZyFu/bQGT3Z/tRlf7WDCV2m4G0JC
-         zLU0AfwoMXdS4yZkS1C/8e4W+XIkVPwdXlkog3maHm6F0tc2OKh0qywsksYJVXu6sb16
-         5Z3Q==
-X-Gm-Message-State: ACrzQf009WvLbvGmasRht7j/8gkR1Rhrq74//zKReV6/wPdU5cYajk62
-        HxRF7jFNiQ5rh0aj758nKFq5Tw==
-X-Google-Smtp-Source: AMsMyM6/nAg3Qf2+rzXxGPfXINpJPMqGo03+LmGleFJ+vpTt0n0E2kkRProcj1N0J8vVNAWQ1Pjecg==
-X-Received: by 2002:a17:90b:4a02:b0:213:63e7:d0b1 with SMTP id kk2-20020a17090b4a0200b0021363e7d0b1mr2659334pjb.208.1666813362670;
-        Wed, 26 Oct 2022 12:42:42 -0700 (PDT)
+        bh=Oi/ns2/+lR1+ddU/1Ugq5i2XZ8iCGI8EoPh2M4YhQ8o=;
+        b=3rXTmFwUjS87scbJhkzhUxR4xxtukSlGtqldLIA2Y1pm1ScWHYnP3FGrQgjpTVjtNT
+         bq6G8bUNejlJ11PSOgA6PzaVCf4sN8UsYQ0oGXv2+eQzxtrpVIO6GtwlH0B7XtRZyLNr
+         nUciPGkH5TrDn2fiYktXDPqoSC+cMPQge1j4rrl/daokIRXzuk+T5Dp1iL6yuc1/r9Yc
+         WkyBK3QLhRMmfMN5IX1sX9nTP2Gkx4Gf85QiZv+/R5IgHqZxlmI5FlHZ2Bvu+kDYlR+w
+         q4iaB0e3Gjt+FcLt7yqTVfJUPsYWz1ADaOHqSn/RvOmBVZ5AxqEB5bZ0xgbcU0eHVPta
+         DvfQ==
+X-Gm-Message-State: ACrzQf1yg5UozlDbzwrz74tz4dxEmT3z7F2icgYCWJAV4m5TTAkL5OYH
+        7Wcv7gUyBWPOetZ0Nt9ygxE4eQ==
+X-Google-Smtp-Source: AMsMyM7hg0m4kzScSycnp+0BSaCf1uWcEtsyIxRBE+hmz2jWWj4BkNcDgMFKByjg4dC+wFw/YCfYnQ==
+X-Received: by 2002:a17:902:da84:b0:186:dd94:bbed with SMTP id j4-20020a170902da8400b00186dd94bbedmr4430426plx.20.1666813365417;
+        Wed, 26 Oct 2022 12:42:45 -0700 (PDT)
 Received: from localhost ([2620:15c:9d:2:c9e3:74f3:6b2b:135])
-        by smtp.gmail.com with UTF8SMTPSA id p5-20020a17090ac00500b0020ae09e9724sm1424933pjt.53.2022.10.26.12.42.40
+        by smtp.gmail.com with UTF8SMTPSA id b3-20020a170903228300b00186b55e3cd6sm3293223plh.133.2022.10.26.12.42.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 12:42:42 -0700 (PDT)
+        Wed, 26 Oct 2022 12:42:45 -0700 (PDT)
 From:   Brian Norris <briannorris@chromium.org>
 To:     Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     Shawn Guo <shawnguo@kernel.org>, linux-mmc@vger.kernel.org,
@@ -72,9 +72,9 @@ Cc:     Shawn Guo <shawnguo@kernel.org>, linux-mmc@vger.kernel.org,
         Haibo Chen <haibo.chen@nxp.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Brian Norris <briannorris@chromium.org>
-Subject: [PATCH v4 6/7] mmc: sdhci_am654: Fix SDHCI_RESET_ALL for CQHCI
-Date:   Wed, 26 Oct 2022 12:42:08 -0700
-Message-Id: <20221026124150.v4.6.I35ca9d6220ba48304438b992a76647ca8e5b126f@changeid>
+Subject: [PATCH v4 7/7] mmc: sdhci-*: Convert drivers to new sdhci_and_cqhci_reset()
+Date:   Wed, 26 Oct 2022 12:42:09 -0700
+Message-Id: <20221026124150.v4.7.Ia91f031f5f770af7bd2ff3e28b398f277606d970@changeid>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
 In-Reply-To: <20221026194209.3758834-1-briannorris@chromium.org>
 References: <20221026194209.3758834-1-briannorris@chromium.org>
@@ -82,88 +82,146 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- [[ NOTE: this is completely untested by the author, but included solely
-    because, as noted in commit df57d73276b8 ("mmc: sdhci-pci: Fix
-    SDHCI_RESET_ALL for CQHCI for Intel GLK-based controllers"), "other
-    drivers using CQHCI might benefit from a similar change, if they
-    also have CQHCI reset by SDHCI_RESET_ALL." We've now seen the same
-    bug on at least MSM, Arasan, and Intel hardware. ]]
+An earlier patch ("mmc: cqhci: Provide helper for resetting both SDHCI
+and CQHCI") does these operations for us.
 
-SDHCI_RESET_ALL resets will reset the hardware CQE state, but we aren't
-tracking that properly in software. When out of sync, we may trigger
-various timeouts.
+I keep these as a separate patch, since the earlier patch is a
+prerequisite to some important bugfixes that need to be backported via
+linux-stable.
 
-It's not typical to perform resets while CQE is enabled, but this may
-occur in some suspend or error recovery scenarios.
-
-Include this fix by way of the new sdhci_and_cqhci_reset() helper.
-
-This patch depends on (and should not compile without) the patch
-entitled "mmc: cqhci: Provide helper for resetting both SDHCI and
-CQHCI".
-
-Fixes: f545702b74f9 ("mmc: sdhci_am654: Add Support for Command Queuing Engine to J721E")
 Signed-off-by: Brian Norris <briannorris@chromium.org>
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 ---
 
 Changes in v4:
- - Also fix sdhci_am654_ops, sdhci_j721e_8bit_ops
- - Add dependency notes
- - Drop bouncing Faiz Abbas <faiz_abbas@ti.com> address
+ - Add Adrian's Ack
 
 Changes in v3:
- - Use new SDHCI+CQHCI helper
+ - Rewrite to new helper, patch sdhci-msm too
 
- drivers/mmc/host/sdhci_am654.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Changes in v2:
+ - Factor out ->cqe_private helpers
 
-diff --git a/drivers/mmc/host/sdhci_am654.c b/drivers/mmc/host/sdhci_am654.c
-index 8f1023480e12..c2333c7acac9 100644
---- a/drivers/mmc/host/sdhci_am654.c
-+++ b/drivers/mmc/host/sdhci_am654.c
-@@ -15,6 +15,7 @@
- #include <linux/sys_soc.h>
+ drivers/mmc/host/sdhci-msm.c      | 10 ++--------
+ drivers/mmc/host/sdhci-pci-core.c | 11 ++---------
+ drivers/mmc/host/sdhci-pci-gli.c  | 11 ++---------
+ 3 files changed, 6 insertions(+), 26 deletions(-)
+
+diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
+index 3a091a387ecb..03f76384ab3f 100644
+--- a/drivers/mmc/host/sdhci-msm.c
++++ b/drivers/mmc/host/sdhci-msm.c
+@@ -19,6 +19,7 @@
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/reset.h>
  
- #include "cqhci.h"
 +#include "sdhci-cqhci.h"
  #include "sdhci-pltfm.h"
+ #include "cqhci.h"
  
- /* CTL_CFG Registers */
-@@ -378,7 +379,7 @@ static void sdhci_am654_reset(struct sdhci_host *host, u8 mask)
- 	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
- 	struct sdhci_am654_data *sdhci_am654 = sdhci_pltfm_priv(pltfm_host);
+@@ -2304,13 +2305,6 @@ static void sdhci_msm_set_regulator_caps(struct sdhci_msm_host *msm_host)
+ 	pr_debug("%s: supported caps: 0x%08x\n", mmc_hostname(mmc), caps);
+ }
  
+-static void sdhci_msm_reset(struct sdhci_host *host, u8 mask)
+-{
+-	if ((host->mmc->caps2 & MMC_CAP2_CQE) && (mask & SDHCI_RESET_ALL))
+-		cqhci_deactivate(host->mmc);
 -	sdhci_reset(host, mask);
-+	sdhci_and_cqhci_reset(host, mask);
+-}
+-
+ static int sdhci_msm_register_vreg(struct sdhci_msm_host *msm_host)
+ {
+ 	int ret;
+@@ -2450,7 +2444,7 @@ static const struct of_device_id sdhci_msm_dt_match[] = {
+ MODULE_DEVICE_TABLE(of, sdhci_msm_dt_match);
  
- 	if (sdhci_am654->quirks & SDHCI_AM654_QUIRK_FORCE_CDTEST) {
- 		ctrl = sdhci_readb(host, SDHCI_HOST_CONTROL);
-@@ -464,7 +465,7 @@ static struct sdhci_ops sdhci_am654_ops = {
- 	.set_clock = sdhci_am654_set_clock,
- 	.write_b = sdhci_am654_write_b,
- 	.irq = sdhci_am654_cqhci_irq,
--	.reset = sdhci_reset,
+ static const struct sdhci_ops sdhci_msm_ops = {
+-	.reset = sdhci_msm_reset,
 +	.reset = sdhci_and_cqhci_reset,
- };
+ 	.set_clock = sdhci_msm_set_clock,
+ 	.get_min_clock = sdhci_msm_get_min_clock,
+ 	.get_max_clock = sdhci_msm_get_max_clock,
+diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
+index 169b84761041..cc039155b5c7 100644
+--- a/drivers/mmc/host/sdhci-pci-core.c
++++ b/drivers/mmc/host/sdhci-pci-core.c
+@@ -38,6 +38,7 @@
+ #include "cqhci.h"
  
- static const struct sdhci_pltfm_data sdhci_am654_pdata = {
-@@ -494,7 +495,7 @@ static struct sdhci_ops sdhci_j721e_8bit_ops = {
- 	.set_clock = sdhci_am654_set_clock,
- 	.write_b = sdhci_am654_write_b,
- 	.irq = sdhci_am654_cqhci_irq,
--	.reset = sdhci_reset,
-+	.reset = sdhci_and_cqhci_reset,
- };
+ #include "sdhci.h"
++#include "sdhci-cqhci.h"
+ #include "sdhci-pci.h"
  
- static const struct sdhci_pltfm_data sdhci_j721e_8bit_pdata = {
+ static void sdhci_pci_hw_reset(struct sdhci_host *host);
+@@ -234,14 +235,6 @@ static void sdhci_pci_dumpregs(struct mmc_host *mmc)
+ 	sdhci_dumpregs(mmc_priv(mmc));
+ }
+ 
+-static void sdhci_cqhci_reset(struct sdhci_host *host, u8 mask)
+-{
+-	if ((host->mmc->caps2 & MMC_CAP2_CQE) && (mask & SDHCI_RESET_ALL) &&
+-	    host->mmc->cqe_private)
+-		cqhci_deactivate(host->mmc);
+-	sdhci_reset(host, mask);
+-}
+-
+ /*****************************************************************************\
+  *                                                                           *
+  * Hardware specific quirk handling                                          *
+@@ -703,7 +696,7 @@ static const struct sdhci_ops sdhci_intel_glk_ops = {
+ 	.set_power		= sdhci_intel_set_power,
+ 	.enable_dma		= sdhci_pci_enable_dma,
+ 	.set_bus_width		= sdhci_set_bus_width,
+-	.reset			= sdhci_cqhci_reset,
++	.reset			= sdhci_and_cqhci_reset,
+ 	.set_uhs_signaling	= sdhci_intel_set_uhs_signaling,
+ 	.hw_reset		= sdhci_pci_hw_reset,
+ 	.irq			= sdhci_cqhci_irq,
+diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
+index 4d509f656188..633a8ee8f8c5 100644
+--- a/drivers/mmc/host/sdhci-pci-gli.c
++++ b/drivers/mmc/host/sdhci-pci-gli.c
+@@ -15,6 +15,7 @@
+ #include <linux/of.h>
+ #include <linux/iopoll.h>
+ #include "sdhci.h"
++#include "sdhci-cqhci.h"
+ #include "sdhci-pci.h"
+ #include "cqhci.h"
+ 
+@@ -922,14 +923,6 @@ static int gl9763e_add_host(struct sdhci_pci_slot *slot)
+ 	return ret;
+ }
+ 
+-static void sdhci_gl9763e_reset(struct sdhci_host *host, u8 mask)
+-{
+-	if ((host->mmc->caps2 & MMC_CAP2_CQE) && (mask & SDHCI_RESET_ALL) &&
+-	    host->mmc->cqe_private)
+-		cqhci_deactivate(host->mmc);
+-	sdhci_reset(host, mask);
+-}
+-
+ static void gli_set_gl9763e(struct sdhci_pci_slot *slot)
+ {
+ 	struct pci_dev *pdev = slot->chip->pdev;
+@@ -1136,7 +1129,7 @@ static const struct sdhci_ops sdhci_gl9763e_ops = {
+ 	.set_clock		= sdhci_set_clock,
+ 	.enable_dma		= sdhci_pci_enable_dma,
+ 	.set_bus_width		= sdhci_set_bus_width,
+-	.reset			= sdhci_gl9763e_reset,
++	.reset			= sdhci_and_cqhci_reset,
+ 	.set_uhs_signaling	= sdhci_set_gl9763e_signaling,
+ 	.voltage_switch		= sdhci_gli_voltage_switch,
+ 	.irq                    = sdhci_gl9763e_cqhci_irq,
 -- 
 2.38.0.135.g90850a2211-goog
 
