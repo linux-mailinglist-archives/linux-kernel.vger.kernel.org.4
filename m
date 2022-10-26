@@ -2,78 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35BCC60E705
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 20:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24C7160E702
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 20:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234106AbiJZSL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 14:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
+        id S233942AbiJZSLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 14:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233986AbiJZSLY (ORCPT
+        with ESMTP id S233802AbiJZSLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 14:11:24 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824B084E5B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:11:17 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id l9so8685577qkk.11
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:11:17 -0700 (PDT)
+        Wed, 26 Oct 2022 14:11:13 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9DF83F1F
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:11:11 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id 192so9019282pfx.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:11:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ITulc6XgqsqjNhbd41aCpior1CUyIgJHMI2V6YZSYqc=;
-        b=euOzt4OtQ6r2FoqktgoiitkA8qilHqWaety7Buy4Wc/kLai3+4S/yKJ+b8cr/78vie
-         65EAmm5Nk2Ou8O4UkVxUCQrdIYy4Jt0zqWrXA2jzp/FrxwIK4YXMEVDcaQQgF11XbHVL
-         dUvryBX9A+1fa9gOcaAoRkiAkEUCX4yINBJmM=
+        bh=g7Wi8bTCvfeNU3sTUIqYkMJtWG9DEMZ1nSFdktscQLY=;
+        b=i5hnjp0g6IKy9vbZyM/vQYFA7gfnU/DQtDDTINPcYQOo46VEbmSgN/Wcl1aohtlcc7
+         jCZK+fQUpaZiFuiRQ0CgdxioIhEcpQH4S0PfJ9+aAv8M5SU2rP3faX/Y6rL7jCPTSCO7
+         i6oTesmeL2kGUpfpKn6/ykcXfoKTUeddy7LSgpA+EOlJiNi8/QAE9roQT9DNgtDvMfk5
+         9wgARWg0YjUvjWMBbCBlPW2sAW6VrTv4UuOBCOZhxdTZFXSfyTfRkwX+2haPof/r61pu
+         xr9IL5RByxp/LnWkm4J79g1bBvF+yF0IPtY7CpGltf0902RQaIhufw+lli9y1hyJAr9a
+         yioA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ITulc6XgqsqjNhbd41aCpior1CUyIgJHMI2V6YZSYqc=;
-        b=OfjiFpDTUmHe0/+yygDQCQD4GncCNB4oI6QBlIeVKd55DgsPbaeAskMmXzO9XMA8s0
-         CWK6AOIE5F6FGbGh0gDKqPXQGUm+mnyp6ie/4iWX8dSeUxwOzp9SU+jTiw0WMR4yfASR
-         bamX28riSP1JQIcjYPlZrt+/AC7EtDkWsIBfAr569iV0LS90qx8y9Jibkhz2Jz1X4JyH
-         for0EgxWIvrZOHT7J8IIne3+91J5rkcGxK+2oK7Lc/+Tzvam8WpFSMN1bQhsIkDO2iwT
-         jxDEKw0og63z7COI+gmMms20/Nfycjx3C30tNzoJC9sbQPF3fuPlJuzs8RdrPcGqk0un
-         Ao/w==
-X-Gm-Message-State: ACrzQf30nus0QFMVJz23j8pIJEF5pCNOcIf2ZTpNODG2sd7zvmulymPr
-        j2pnAIMcGX4HeoVnT/R9S/tKKGJdKcmmkg==
-X-Google-Smtp-Source: AMsMyM5rNyXu8wKAwO3upQvkPSzhcBlviepfIndET5WY8/jH+issjVVToLr5W8ClWZf1aKtSDbeOpw==
-X-Received: by 2002:a05:620a:2627:b0:6b8:c8c3:78f9 with SMTP id z39-20020a05620a262700b006b8c8c378f9mr31400082qko.641.1666807876301;
-        Wed, 26 Oct 2022 11:11:16 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id fp9-20020a05622a508900b0039a08c0a594sm3481688qtb.82.2022.10.26.11.11.14
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 11:11:14 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id y72so19939557yby.13
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:11:14 -0700 (PDT)
-X-Received: by 2002:a5b:984:0:b0:6ca:9345:b2ee with SMTP id
- c4-20020a5b0984000000b006ca9345b2eemr3573582ybq.362.1666807873800; Wed, 26
- Oct 2022 11:11:13 -0700 (PDT)
+        bh=g7Wi8bTCvfeNU3sTUIqYkMJtWG9DEMZ1nSFdktscQLY=;
+        b=Vc4XlI9G1XoplR6i0u6a5r1bZfd4cmLrwcpT8embfwd1e58x/f/orjAkfSe0arHMei
+         VZKBNqrUxldUbI2f9YnQ70SprI7jiknBWpr+VUhIYpZLCO1X1CYgYM69zNrujC6iYb83
+         9nyfBzNoETSuT4WOqY6Qq2xqgJQyAhQbCgB0YKuechEW2j4qtx6GqNN+SPeK/+u+E5qK
+         bMG/QHggAdC6OLA9yCKSKVHw6zKnsXtwOCbxIgb2N6YGbThZZaJHJqhTBgU4aatiFTcv
+         ICeJfHj+UnLEunoXPk/vt/z/SaaBbNuHla+D4UgHYSsYdTdlouAN2RKUUcD/hsjqfrnD
+         pP/g==
+X-Gm-Message-State: ACrzQf2auo73N2OadCDXdpGjRa8lhZShrvgZrmPlVsJUXvI0ASieIwn2
+        hUpFTa0ACpkneIobqrtwAhyTkSP0fIcS2AoRaWE=
+X-Google-Smtp-Source: AMsMyM76wzsg5/k2aM8/sc3UVRubuR/qvSA+/5aaMC1a9DW7CgTvtQ0uvygXw5LLq5oUthGBrGnsMk+3DEIWGCt2zBo=
+X-Received: by 2002:a65:45c1:0:b0:461:5855:8d86 with SMTP id
+ m1-20020a6545c1000000b0046158558d86mr38036109pgr.436.1666807871181; Wed, 26
+ Oct 2022 11:11:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221019162648.3557490-1-Jason@zx2c4.com> <CAHk-=whT+xyge9UjH+r6dt0FG-eUdrzu5hDMce_vC+n8uLam2A@mail.gmail.com>
- <3a2fa7c1-2e31-0479-761f-9c189f8ed8c3@rasmusvillemoes.dk>
-In-Reply-To: <3a2fa7c1-2e31-0479-761f-9c189f8ed8c3@rasmusvillemoes.dk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 26 Oct 2022 11:10:57 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg9RNhvDyanUQnxa_xnir70TUiMgjhVhRWUuF5Ojj96Dw@mail.gmail.com>
-Message-ID: <CAHk-=wg9RNhvDyanUQnxa_xnir70TUiMgjhVhRWUuF5Ojj96Dw@mail.gmail.com>
-Subject: Re: make ctype ascii only? (was [PATCH] kbuild: treat char as always signed)
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20221026044524.54793-1-gautammenghani201@gmail.com>
+In-Reply-To: <20221026044524.54793-1-gautammenghani201@gmail.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Wed, 26 Oct 2022 11:10:58 -0700
+Message-ID: <CAHbLzkq_6tGYfmd-f8Gg-YSLoLXtdFmpxVCUof90B=YA4X7SAA@mail.gmail.com>
+Subject: Re: [PATCH] mm/khugepaged: Refactor mm_khugepaged_scan_file
+ tracepoint to remove filename from function call
+To:     Gautam Menghani <gautammenghani201@gmail.com>
+Cc:     akpm@linux-foundation.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, zokeefe@google.com, david@redhat.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,39 +69,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 5:10 PM Rasmus Villemoes
-<linux@rasmusvillemoes.dk> wrote:
+On Tue, Oct 25, 2022 at 9:45 PM Gautam Menghani
+<gautammenghani201@gmail.com> wrote:
 >
-> Only very tangentially related (because it has to do with chars...): Can
-> we switch our ctype to be ASCII only, just as it was back in the good'ol
-> mid 90s
+> Refactor the mm_khugepaged_scan_file tracepoint to move filename
+> dereference to the tracepoint definition, for maintaing consistency with
+> other tracepoints[1].
+>
+> [1]:lore.kernel.org/lkml/20221024111621.3ba17e2c@gandalf.local.home/
+>
+> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
 
-Those US-ASCII days weren't really very "good" old days, but I forget
-why we did this (it's attributed to me, but that's from the
-pre-BK/pre-git days before we actually tracked things all that well,
-so..)
+Reviewed-by: Yang Shi <shy828301@gmail.com>
 
-Anyway, I think anybody using ctype.h on 8-bit chars gets what they
-deserve, and I think Latin1 (or something close to it) is better than
-US-ASCII, in that it's at least the same as Unicode in the low 8
-chars.
-
-So no, I'm disinclined to go back in time to what I think is an even
-worse situation. Latin1 isn't great, but it sure beats US-ASCII. And
-if you really want just US-ASII, then don't use the high bit, and make
-your disgusting 7-bit code be *explicitly* 7-bit.
-
-Now, if there are errors in that table wrt Latin1 / "first 256
-codepoints of Unicode" too, then we can fix those.
-
-Not that anybody has apparently cared since 2.0.1 was released back in
-July of 1996 (btw, it's sad how none of the old linux git archive
-creations seem to have tried to import the dates, so you have to look
-those up separately)
-
-And if nobody has cared since 1996, I don't really think it matters.
-
-But fundamentally, I think anybody calling US-ASCII "good" is either
-very very very confused, or is comparing it to EBCDIC.
-
-                 Linus
+> ---
+>  include/trace/events/huge_memory.h | 8 ++++----
+>  mm/khugepaged.c                    | 3 +--
+>  2 files changed, 5 insertions(+), 6 deletions(-)
+>
+> diff --git a/include/trace/events/huge_memory.h b/include/trace/events/huge_memory.h
+> index 935af4947917..760455dfa860 100644
+> --- a/include/trace/events/huge_memory.h
+> +++ b/include/trace/events/huge_memory.h
+> @@ -171,15 +171,15 @@ TRACE_EVENT(mm_collapse_huge_page_swapin,
+>
+>  TRACE_EVENT(mm_khugepaged_scan_file,
+>
+> -       TP_PROTO(struct mm_struct *mm, struct page *page, const char *filename,
+> +       TP_PROTO(struct mm_struct *mm, struct page *page, struct file *file,
+>                  int present, int swap, int result),
+>
+> -       TP_ARGS(mm, page, filename, present, swap, result),
+> +       TP_ARGS(mm, page, file, present, swap, result),
+>
+>         TP_STRUCT__entry(
+>                 __field(struct mm_struct *, mm)
+>                 __field(unsigned long, pfn)
+> -               __string(filename, filename)
+> +               __string(filename, file->f_path.dentry->d_iname)
+>                 __field(int, present)
+>                 __field(int, swap)
+>                 __field(int, result)
+> @@ -188,7 +188,7 @@ TRACE_EVENT(mm_khugepaged_scan_file,
+>         TP_fast_assign(
+>                 __entry->mm = mm;
+>                 __entry->pfn = page ? page_to_pfn(page) : -1;
+> -               __assign_str(filename, filename);
+> +               __assign_str(filename, file->f_path.dentry->d_iname);
+>                 __entry->present = present;
+>                 __entry->swap = swap;
+>                 __entry->result = result;
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index 4734315f7940..9808a899f9f7 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -2157,8 +2157,7 @@ static int hpage_collapse_scan_file(struct mm_struct *mm, unsigned long addr,
+>                 }
+>         }
+>
+> -       trace_mm_khugepaged_scan_file(mm, page, file->f_path.dentry->d_iname,
+> -                                     present, swap, result);
+> +       trace_mm_khugepaged_scan_file(mm, page, file, present, swap, result);
+>         return result;
+>  }
+>  #else
+> --
+> 2.34.1
+>
