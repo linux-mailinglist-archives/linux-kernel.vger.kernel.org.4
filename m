@@ -2,177 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF47960DEBA
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 12:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB5E60DEBC
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 12:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233121AbiJZKPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 06:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
+        id S233301AbiJZKQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 06:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233111AbiJZKPj (ORCPT
+        with ESMTP id S231681AbiJZKQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 06:15:39 -0400
-Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9291C40E31;
-        Wed, 26 Oct 2022 03:15:33 -0700 (PDT)
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.ssi.bg (Proxmox) with ESMTP id 7750B1102D;
-        Wed, 26 Oct 2022 13:15:31 +0300 (EEST)
-Received: from ink.ssi.bg (unknown [193.238.174.40])
-        by mg.ssi.bg (Proxmox) with ESMTP id 56210111A8;
-        Wed, 26 Oct 2022 13:15:29 +0300 (EEST)
-Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id 3440E3C07D9;
-        Wed, 26 Oct 2022 13:15:29 +0300 (EEST)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 29QAFR91036797;
-        Wed, 26 Oct 2022 13:15:28 +0300
-Date:   Wed, 26 Oct 2022 13:15:27 +0300 (EEST)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     Ziyang Xuan <william.xuanziyang@huawei.com>
-cc:     netdev@vger.kernel.org, linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] ipv4: fix source address and gateway mismatch under
- multiple default gateways
-In-Reply-To: <20221026032017.3675060-1-william.xuanziyang@huawei.com>
-Message-ID: <5e0249d-b6e1-44fa-147b-e2af65e56f64@ssi.bg>
-References: <20221026032017.3675060-1-william.xuanziyang@huawei.com>
+        Wed, 26 Oct 2022 06:16:48 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA65D96A34;
+        Wed, 26 Oct 2022 03:16:45 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7b8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7b8:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 571331EC06BD;
+        Wed, 26 Oct 2022 12:16:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1666779404;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=32lViV1T2aJNqB+oSRggBjYtDWk37Vg810HhWUdPSsQ=;
+        b=XefaXYHSuOOPRbUkdwU0FbBVFOKhAsVHgA7koFNasvaBBYz37sF7Coc6H0Glc5MKO/CWcG
+        n7Vx+Ac/G8eholChB1H6UNLdidD4d0ps7HgWhG6D8h9/kHljkExpHnqW5j+Ovmm9bl6fg6
+        TYvtP8BpWNquO6Vok/iQXS0ZFTL9tRU=
+Date:   Wed, 26 Oct 2022 12:16:40 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tony.luck@intel.com, x86@kernel.org,
+        Smita.KoralahalliChannabasappa@amd.com, mpatocka@redhat.com
+Subject: Re: [PATCH] x86/MCE/AMD: Decrement threshold_bank refcount when
+ removing threshold blocks
+Message-ID: <Y1kJCHBtatohj/JK@zn.tnic>
+References: <20220614174346.3648305-1-yazen.ghannam@amd.com>
+ <Yql9TqFtebd2h9Z9@kroah.com>
+ <Yqnj88FPkZ6kBU7k@yaz-fattaah>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yqnj88FPkZ6kBU7k@yaz-fattaah>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-	Hello,
-
-On Wed, 26 Oct 2022, Ziyang Xuan wrote:
-
-> We found a problem that source address doesn't match with selected gateway
-> under multiple default gateways. The reproducer is as following:
+On Wed, Jun 15, 2022 at 01:51:47PM +0000, Yazen Ghannam wrote:
+> Yes, I believe that's true based on code inspection. But I'm not aware of any
+> reported issues in this area before the commit listed above. So I decided to
+> switch the Fixes tag from what I had before (shown below). I can switch it
+> back if you think that's best.
 > 
-> Setup in client as following:
-> 
-> $ ip link add link eth2 dev eth2.71 type vlan id 71
-> $ ip link add link eth2 dev eth2.72 type vlan id 72
-> $ ip addr add 192.168.71.41/24 dev eth2.71
-> $ ip addr add 192.168.72.41/24 dev eth2.72
-> $ ip link set eth2.71 up
-> $ ip link set eth2.72 up
-> $ route add -net default gw 192.168.71.1 dev eth2.71
-> $ route add -net default gw 192.168.72.1 dev eth2.72
+> Fixes: 019f34fccfd5 ("x86, MCE, AMD: Move shared bank to node descriptor")
 
-	Second route goes to first position due to the
-prepend operation for the route add command. That is
-why 192.168.72.41 is selected.
+Yeah, that is probably the culprit. I finally got to this and am able to
+repro on my F10h box.
 
-> Add a nameserver configuration in the following file:
-> $ cat /etc/resolv.conf
-> nameserver 8.8.8.8
-> 
-> Setup in peer server as following:
-> 
-> $ ip link add link eth2 dev eth2.71 type vlan id 71
-> $ ip link add link eth2 dev eth2.72 type vlan id 72
-> $ ip addr add 192.168.71.1/24 dev eth2.71
-> $ ip addr add 192.168.72.1/24 dev eth2.72
-> $ ip link set eth2.71 up
-> $ ip link set eth2.72 up
-> 
-> Use the following command trigger DNS packet in client:
-> $ ping www.baidu.com
-> 
-> Capture packets with tcpdump in client when ping:
-> $ tcpdump -i eth2 -vne
-> ...
-> 20:30:22.996044 52:54:00:20:23:a9 > 52:54:00:d2:4f:e3, ethertype 802.1Q (0x8100), length 77: vlan 71, p 0, ethertype IPv4, (tos 0x0, ttl 64, id 25407, offset 0, flags [DF], proto UDP (17), length 59)
->     192.168.72.41.42666 > 8.8.8.8.domain: 58562+ A? www.baidu.com. (31)
-> ...
-> 
-> We get the problem that IPv4 saddr "192.168.72.41" do not match with
-> selected VLAN device "eth2.71".
+Here's what I think the fix should be, Greg, please check this
+for no-nos, especially for doing a kobject_put() on the parent in
+remove_shared_bank_kobjects(). But that is basically the reverse
+operation of the kobject_add() I'm doing when sharing the bank, more to
+that below.
 
-	The problem could be that source address is selected
-once and later used as source address in following routing lookups.
+I wonder why we see this now - maybe the kobject reference counting got
+changed since then...
 
-	And your routing rules do not express the restriction that
-both addresses can not be used for specific route. If you have
-such restriction which is common, you should use source-specific routes:
+Anyway, thoughts?
 
-1. ip rule to consider table main only for link routes,
-no default routes here
+---
+From: Borislav Petkov <bp@suse.de>
 
-ip rule add prio 10 table main
+x86/MCE/AMD: Correctly drop shared bank references
 
-2. source-specific routes:
+Old AMD machines have a shared MCA bank 4 which reports northbridge
+error types. That bank has a bunch of controls which are exposed this
+way in sysfs on CPU0:
 
-ip rule add prio 20 from 192.168.71.0/24 table 20
-ip route append default via 192.168.71.1 dev eth2.71 src 192.168.71.41 table 20
-ip rule add prio 30 from 192.168.72.0/24 table 30
-ip route append default via 192.168.72.1 dev eth2.72 src 192.168.72.41 table 30
+  /sys/devices/system/machinecheck/machinecheck0/northbridge/
+  ├── dram
+  │   ├── error_count
+  │   ├── interrupt_enable
+  │   └── threshold_limit
+  ├── ht_links
+  │   ├── error_count
+  │   ├── interrupt_enable
+  │   └── threshold_limit
+  └── l3_cache
+      ├── error_count
+      ├── interrupt_enable
+      └── threshold_limit
 
-3. Store default alternative routes not in table main:
-ip rule add prio 200 table 200
-ip route append default via 192.168.71.1 dev eth2.71 src 192.168.71.41 table 200
-ip route append default via 192.168.72.1 dev eth2.72 src 192.168.72.41 table 200
+In order to expose the exact same controls - the bank is shared
+between all CPUs - threshold_create_bank() reuses the bank pointer and
+kobject_add()s it to the parent of the other CPUs:
 
-	Above routes should work even without specifying prefsrc.
+  mce: threshold_create_bank: CPU1, yes, use it, kref: 4, parent_kref: 3, name: northbridge
+  mce: threshold_create_bank: CPU1, inc cpus: 2, bank ref: 4
+  mce: __threshold_add_blocks: entry, kobj: 0xffff888100adb218, parent: 0xffff888100c10c00 ref: 1, parent_kref: 4, name: dram
+  mce: __threshold_add_blocks: misc,  kobj: 0xffff888100adb418, parent: 0xffff888100c10c00,  kref: 1, parent_kref: 6, name: l3_cache
+  mce: __threshold_add_blocks: misc,  kobj: 0xffff888100adb318, parent: 0xffff888100c10c00,  kref: 1, parent_kref: 7, name: ht_links
+  ...
 
-	As result, table 200 is used only for routing lookups
-without specific source address, usually for first packet in
-connection, next packets should hit tables 20/30.
+kobject_add() does a kobject_get() on the parent for each sysfs file it
+adds.
 
-	You can check https://ja.ssi.bg/dgd-usage.txt for such
-examples, see under 2. Alternative routes and dead gateway detection
+Therefore, in order to unwind the same setup work when the CPU goes
+offline and the bank *references* only are being removed - the other
+CPUs still share it - do a kobject_put() on the parent.
 
-> In above scenario, the process does __ip_route_output_key() twice in
-> ip_route_connect(), the two processes have chosen different default gateway,
-> and the last choice is not the best.
-> 
-> Add flowi4->saddr and fib_nh_common->nhc_gw.ipv4 matching consideration in
-> fib_select_default() to fix that.
+Rename things more properly while at it and add comments.
 
-	Other setups may not have such restriction, they can
-prefer any gateway in reachable state no matter the saddr.
+Signed-off-by: Borislav Petkov <bp@suse.de>
 
-> Fixes: 19baf839ff4a ("[IPV4]: Add LC-Trie FIB lookup algorithm.")
-> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
-> ---
->  net/ipv4/fib_semantics.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/net/ipv4/fib_semantics.c b/net/ipv4/fib_semantics.c
-> index e9a7f70a54df..8bd94875a009 100644
-> --- a/net/ipv4/fib_semantics.c
-> +++ b/net/ipv4/fib_semantics.c
-> @@ -2046,6 +2046,7 @@ static void fib_select_default(const struct flowi4 *flp, struct fib_result *res)
->  	int order = -1, last_idx = -1;
->  	struct fib_alias *fa, *fa1 = NULL;
->  	u32 last_prio = res->fi->fib_priority;
-> +	u8 prefix, max_prefix = 0;
->  	dscp_t last_dscp = 0;
->  
->  	hlist_for_each_entry_rcu(fa, fa_head, fa_list) {
-> @@ -2078,6 +2079,11 @@ static void fib_select_default(const struct flowi4 *flp, struct fib_result *res)
->  		if (!nhc->nhc_gw_family || nhc->nhc_scope != RT_SCOPE_LINK)
->  			continue;
->  
-> +		prefix = __ffs(flp->saddr ^ nhc->nhc_gw.ipv4);
-> +		if (prefix < max_prefix)
-> +			continue;
-> +		max_prefix = max_t(u8, prefix, max_prefix);
-> +
->  		fib_alias_accessed(fa);
->  
->  		if (!fi) {
-> -- 
-> 2.25.1
+---
 
-Regards
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index 1c87501e0fa3..b2bdee9e0bae 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -1241,31 +1241,40 @@ static void threshold_block_release(struct kobject *kobj)
+ 	kfree(to_block(kobj));
+ }
+ 
++/*
++ * Drop refcounts and delete list heads in order to free the memory.
++ */
+ static void deallocate_threshold_blocks(struct threshold_bank *bank)
+ {
++	struct list_head *head = &bank->blocks->miscj;
+ 	struct threshold_block *pos, *tmp;
+ 
+-	list_for_each_entry_safe(pos, tmp, &bank->blocks->miscj, miscj) {
+-		list_del(&pos->miscj);
++	list_for_each_entry_safe(pos, tmp, head, miscj) {
+ 		kobject_put(&pos->kobj);
++		list_del(&pos->miscj);
+ 	}
+ 
+ 	kobject_put(&bank->blocks->kobj);
+ }
+ 
+-static void __threshold_remove_blocks(struct threshold_bank *b)
++/*
++ * Only put the parent kobject of each block. The inverse of  kobject_add()
++ * above in threshold_create_bank().
++ */
++static void remove_shared_bank_kobjects(struct threshold_bank *bank)
+ {
+-	struct threshold_block *pos = NULL;
+-	struct threshold_block *tmp = NULL;
++	struct list_head *head = &bank->blocks->miscj;
++	struct threshold_block *pos, *tmp;
+ 
+-	kobject_del(b->kobj);
++	list_for_each_entry_safe(pos, tmp, head, miscj)
++		kobject_put(pos->kobj.parent);
+ 
+-	list_for_each_entry_safe(pos, tmp, &b->blocks->miscj, miscj)
+-		kobject_del(&pos->kobj);
++	kobject_put(bank->kobj);
+ }
+ 
+ static void threshold_remove_bank(struct threshold_bank *bank)
+ {
++	int cpu = smp_processor_id();
+ 	struct amd_northbridge *nb;
+ 
+ 	if (!bank->blocks)
+@@ -1275,14 +1284,14 @@ static void threshold_remove_bank(struct threshold_bank *bank)
+ 		goto out_dealloc;
+ 
+ 	if (!refcount_dec_and_test(&bank->cpus)) {
+-		__threshold_remove_blocks(bank);
++		remove_shared_bank_kobjects(bank);
+ 		return;
+ 	} else {
+ 		/*
+ 		 * The last CPU on this node using the shared bank is going
+ 		 * away, remove that bank now.
+ 		 */
+-		nb = node_to_amd_nb(topology_die_id(smp_processor_id()));
++		nb = node_to_amd_nb(topology_die_id(cpu));
+ 		nb->bank4 = NULL;
+ 	}
+ 
 
---
-Julian Anastasov <ja@ssi.bg>
+-- 
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
