@@ -2,186 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB4E60EAF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 23:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A9160EAF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 23:52:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233545AbiJZVvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 17:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40132 "EHLO
+        id S233565AbiJZVwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 17:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233551AbiJZVvl (ORCPT
+        with ESMTP id S233548AbiJZVwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 17:51:41 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9744197EE5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 14:51:38 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id r83so2959228oih.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 14:51:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EPlffG47xJTu/eCD1FI0MkLZITbqaPUGdqLyBsrHEsQ=;
-        b=pQ3NtFajmDVuyFwcZCucRfU67xVNr9BztJT2DtYdIksFSYe4tA87UHPCfYmn76nQTa
-         6Z0KMQUreGgCQVKDQLSgUC/FWku4QYzk2ivLlrRXT7EGUbbjwIBucQ4RTVvLD82QARHZ
-         oxMjCgwB/lR69W+ma5Xuoq+mP3NN0oVqoUgLpkJID7xvAAlF+O3M+ypOaFQOyZs6wtdx
-         4633ZPoltaxwMhCdbgRyWRYx4M2C9pVy8biqdYppAToF8P08gq8GfOSNxK0WfxXZY5W2
-         y2pvHMO6/vukkbT+GVaoYVQSBHaTibplPq0kEQol9Cpqx/llivPk5SNy94rIM9EAcjZD
-         4kjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EPlffG47xJTu/eCD1FI0MkLZITbqaPUGdqLyBsrHEsQ=;
-        b=p5dntifcRnPX17QPowZJEBQXTiQn3pEVNxQmaRo389IuWSgOvQ7dV4RBSGpNAGEQRh
-         OCAm6ygGM3DvFqgOa47utcpmIUKySNkCBvsSRg4Bs+HfQ1QgLkxkTF3s21L0im3545xF
-         efs7jy+dqD+HHFJchF8qsOF1+dg0rfyKgiz5FBphqgnCWI1O6sx2cZe2wfPYSqH4sDcH
-         xb+fu51acsJX0WmbOGaGLDdASQWWI9eIdq8MtPcX/QKXBOOcOq068m6xQ3OeJ9vJPuc0
-         /b5Cc1Q5C8iylhdALBZYZuOTH3vG7j/QznggDuhMoLmhRYN1njpzoiaptTUj/bjXk5jC
-         y3ZQ==
-X-Gm-Message-State: ACrzQf0f8evUHdfUdIn/Rf8Tm16KOMmnVjx5n0MO5E0mKAzaELVsW4rB
-        tsu5x76RdRkU9xxfNexYiWI7tg==
-X-Google-Smtp-Source: AMsMyM5kHy58Uc7tCzACZk/sYsLCjau2lYMY7FceCP3xGE+duN3aFlkIn1ckVQxeuiJFcDufNQ6qEw==
-X-Received: by 2002:aca:1108:0:b0:359:aeef:505a with SMTP id 8-20020aca1108000000b00359aeef505amr2303122oir.288.1666821097743;
-        Wed, 26 Oct 2022 14:51:37 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id n203-20020aca40d4000000b00354978180d8sm2499375oia.22.2022.10.26.14.51.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 14:51:36 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 14:51:16 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Yuanzheng Song <songyuanzheng@huawei.com>
-cc:     akpm@linux-foundation.org, gregkh@linuxfoundation.org,
-        peterx@redhat.com, david@redhat.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH STABLE 5.10] mm/memory: add non-anonymous page check in
- the copy_present_page()
-In-Reply-To: <20221024094911.3054769-1-songyuanzheng@huawei.com>
-Message-ID: <3823471f-6dda-256e-e082-718879c05449@google.com>
-References: <20221024094911.3054769-1-songyuanzheng@huawei.com>
+        Wed, 26 Oct 2022 17:52:30 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2078.outbound.protection.outlook.com [40.107.220.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A3896203;
+        Wed, 26 Oct 2022 14:52:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SnLyDVCV4Uzpx0ZOGK2qvQlvcpXatmvJ4YraPtEAeCr4gr02TaS8FoeScc1sFSPE6JzBg4m7K9qMeOKtVVCjXGMF7UlnKUBFrJPnregMwX8fJjU9pv567aOwkJyb6g6MNUSRHtkKO0e6jm0/joaSG/I/N6V6zVNVaP7sNNEp40fqekghdeTm06oPenEBY5XwoAldt9uWBT36zIFBHZ9c79gx0ws23Xlqz/NUerQtp0BXVFfRmp/zczg+lfYlwcd7oBxnfZB0unm4vR4qy8ryJE+qd1DiW+s2KH2zzIWKBvTh7l4UH2d3Q9FpwEbhSk/EibqEqM5iwHOw6J6d2+ejCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BtpT16z2IwOhfNjfbroj61fDbyDNuGPcQZ74E21akNE=;
+ b=aww8TsQxKIkFhEsCr5jl7op1slU8tV6FSgRjadJtUJwm9CvMiGFXPKJsPATwlfaMPLG7SBcJmL2hn8gQpyjoyhJqhJCuLVII38FoD4CZBtQZv2DBA2wpCUyb3ofpH8DQURCneA93F6YPvpfLZTZO39u0CBPaTfS28oOFDwcEd87Fe+poJOr1X6ofc6xzwyM68+YjbLOmYCmB6rFRpcXkWGF6g/IuEIZny8//hgEZ0rV85m0mNSf0XovqtQ6u7WBg1hsAvoNH3wfTeI31t0JxqG4ZP+3ZYuN2dxIVr4f1ds5yXCbKMS8Bjp66gNGNcYSoNQgpbOMx4v7afyuNBBmvYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BtpT16z2IwOhfNjfbroj61fDbyDNuGPcQZ74E21akNE=;
+ b=SmBvG6Nx4SunMR/08wojnnP73trx0CB0pqxIE3U3zO+YeCL4M/cDOmwkk+kTmH5qZ4b221Ww3Gw9HkVk2tFe/J8az921vQStAcRMgaJOh5dLzQjyoJ5mGGhWNzubsw/5XfzROjl/8QrrH/c2N1gch1UGgtnDgLXtLVsh7PuR0wA=
+Received: from DM6PR18CA0016.namprd18.prod.outlook.com (2603:10b6:5:15b::29)
+ by DM4PR12MB5963.namprd12.prod.outlook.com (2603:10b6:8:6a::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5723.29; Wed, 26 Oct 2022 21:52:26 +0000
+Received: from DM6NAM11FT107.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:15b:cafe::a4) by DM6PR18CA0016.outlook.office365.com
+ (2603:10b6:5:15b::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21 via Frontend
+ Transport; Wed, 26 Oct 2022 21:52:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT107.mail.protection.outlook.com (10.13.172.142) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5746.16 via Frontend Transport; Wed, 26 Oct 2022 21:52:26 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 26 Oct
+ 2022 16:52:25 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <mario.limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Len Brown" <lenb@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>
+CC:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mehta Sanju <Sanju.Mehta@amd.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        <linux-acpi@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4] PCI/ACPI: PCI/ACPI: Validate devices with power resources support D3
+Date:   Wed, 26 Oct 2022 16:52:37 -0500
+Message-ID: <20221026215237.18556-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT107:EE_|DM4PR12MB5963:EE_
+X-MS-Office365-Filtering-Correlation-Id: a3ff3ea2-1662-4c39-757c-08dab79c5f4a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: m4NLf5u8Y/Z2OSmTsdtDQAY1W1pwL41EipaRMRkiacbtdmfCql0LcsVaPbhl3dSh/IzqITwKUBuZEkzfjFWOIbe27XL5APqeG0S+K2CpkjzRnE0KjtLWjobAjyTC4+trT5wG7d1EAETQCFmLbjH8gdwZta16K0NyFrD96Wo1D+MhORPWqUBkRgYfmoMfxmc127a5U6SWHmYymTNvq3yxlJ8macrxWehZUC3A7qMIV9Jih2imj+je78XSXXP1ssH+NjVqhPtASzcgLKfcs0CTVIklC3T9PnBqcy1s7lGxEj0yU+8tJY9yFMAc3ojbNectxzPFHp8Tn9X78oRKrRItl8X9h9diCpkmTQCbXvnrKyALo2hqFtpek6VAZR0GPF7E7e41w0aUIbr6iRNvtb2X5HSqVvNcdC4qDnR5CDfRiNM6LPnvjnDOw5zgZVy14Q7PSLMUVsQXgmEVr6dnDpMK5WJEkceVrY8C36gC7Q9euIa2FCzaKTNtPbEtTtrrdMwDPummCTnlOHz+2bvLiZuMeUE+enrjzyZg0gX1pSkECyY5u5kG1i+CG1uEuaWfA+7JKPsW0Hfltf2qyKzBstTJKgMUBbNmQ0J1m/mmPQUmg00jt0biDxEDxRUS0HFw22AjGGwqWq7kCsLDY4AVfAHBNOYrjLFWbypaoy0hvGHxtQJDI1jEDCYPEjWSWsqpcIJdU0V93QIKgE+sIKfj3KZBh2sn9c/YnHi3okJ5ZlinDpqA/2j2sGEzekfoD5ikzwxtLfM/ePnLciwwRMuBUG2TplbjuQ69J/dBPKjVhxkMSu43dymO/H203OfptkErWjAQpPOiOG1K4RQAH4lAoCN5OaYf5U/apwjEQwwAAjLOvcsk51/xTjtwTCTTck58MmNh
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(376002)(39860400002)(136003)(451199015)(46966006)(40470700004)(36840700001)(16526019)(83380400001)(316002)(336012)(8676002)(54906003)(186003)(86362001)(15650500001)(36756003)(110136005)(40460700003)(44832011)(7696005)(426003)(8936002)(70206006)(2906002)(66574015)(5660300002)(40480700001)(70586007)(19627235002)(2616005)(26005)(1076003)(6666004)(47076005)(41300700001)(82740400003)(82310400005)(4326008)(36860700001)(81166007)(356005)(966005)(478600001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 21:52:26.7061
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3ff3ea2-1662-4c39-757c-08dab79c5f4a
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT107.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5963
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED,URI_TRY_3LD
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Oct 2022, Yuanzheng Song wrote:
+Firmware typically advertises that ACPI devices that represent PCIe
+devices can support D3 by a combination of the value returned by
+_S0W as well as the HotPlugSupportInD3 _DSD [1].
 
-> The vma->anon_vma of the child process may be NULL because
-> the entire vma does not contain anonymous pages. In this
-> case, a BUG will occur when the copy_present_page() passes
-> a copy of a non-anonymous page of that vma to the
-> page_add_new_anon_rmap() to set up new anonymous rmap.
-> 
-> ------------[ cut here ]------------
-> kernel BUG at mm/rmap.c:1044!
-> Internal error: Oops - BUG: 0 [#1] SMP
-> Modules linked in:
-> CPU: 2 PID: 3617 Comm: test Not tainted 5.10.149 #1
-> Hardware name: linux,dummy-virt (DT)
-> pstate: 80000005 (Nzcv daif -PAN -UAO -TCO BTYPE=--)
-> pc : __page_set_anon_rmap+0xbc/0xf8
-> lr : __page_set_anon_rmap+0xbc/0xf8
-> sp : ffff800014c1b870
-> x29: ffff800014c1b870 x28: 0000000000000001
-> x27: 0000000010100073 x26: ffff1d65c517baa8
-> x25: ffff1d65cab0f000 x24: ffff1d65c416d800
-> x23: ffff1d65cab5f248 x22: 0000000020000000
-> x21: 0000000000000001 x20: 0000000000000000
-> x19: fffffe75970023c0 x18: 0000000000000000
-> x17: 0000000000000000 x16: 0000000000000000
-> x15: 0000000000000000 x14: 0000000000000000
-> x13: 0000000000000000 x12: 0000000000000000
-> x11: 0000000000000000 x10: 0000000000000000
-> x9 : ffffc3096d5fb858 x8 : 0000000000000000
-> x7 : 0000000000000011 x6 : ffff5a5c9089c000
-> x5 : 0000000000020000 x4 : ffff5a5c9089c000
-> x3 : ffffc3096d200000 x2 : ffffc3096e8d0000
-> x1 : ffff1d65ca3da740 x0 : 0000000000000000
-> Call trace:
->  __page_set_anon_rmap+0xbc/0xf8
->  page_add_new_anon_rmap+0x1e0/0x390
->  copy_pte_range+0xd00/0x1248
->  copy_page_range+0x39c/0x620
->  dup_mmap+0x2e0/0x5a8
->  dup_mm+0x78/0x140
->  copy_process+0x918/0x1a20
->  kernel_clone+0xac/0x638
->  __do_sys_clone+0x78/0xb0
->  __arm64_sys_clone+0x30/0x40
->  el0_svc_common.constprop.0+0xb0/0x308
->  do_el0_svc+0x48/0xb8
->  el0_svc+0x24/0x38
->  el0_sync_handler+0x160/0x168
->  el0_sync+0x180/0x1c0
-> Code: 97f8ff85 f9400294 17ffffeb 97f8ff82 (d4210000)
-> ---[ end trace a972347688dc9bd4 ]---
-> Kernel panic - not syncing: Oops - BUG: Fatal exception
-> SMP: stopping secondary CPUs
-> Kernel Offset: 0x43095d200000 from 0xffff800010000000
-> PHYS_OFFSET: 0xffffe29a80000000
-> CPU features: 0x08200022,61806082
-> Memory Limit: none
-> ---[ end Kernel panic - not syncing: Oops - BUG: Fatal exception ]---
-> 
-> This problem has been fixed by the fb3d824d1a46
-> ("mm/rmap: split page_dup_rmap() into page_dup_file_rmap() and page_try_dup_anon_rmap()"),
-> but still exists in the linux-5.10.y branch.
-> 
-> This patch is not applicable to this version because
-> of the large version differences. Therefore, fix it by
-> adding non-anonymous page check in the copy_present_page().
-> 
-> Fixes: 70e806e4e645 ("mm: Do early cow for pinned pages during fork() for ptes")
-> Signed-off-by: Yuanzheng Song <songyuanzheng@huawei.com>
+`acpi_pci_bridge_d3` looks for this combination but also contains
+an assumption that if an ACPI device contains power resources the PCIe
+device it's associated with can support D3.  This was introduced
+from commit c6e331312ebf ("PCI/ACPI: Whitelist hotplug ports for
+D3 if power managed by ACPI").
 
-It's a good point, but this patch should not go into any stable release
-without an explicit Ack from either Peter Xu or David Hildenbrand.
+Some firmware configurations for "AMD Pink Sardine" do not support
+wake from D3 in _S0W for the ACPI device representing the PCIe root
+port used for tunneling. The PCIe device will still be opted into
+runtime PM in the kernel [2] because of the logic within
+`acpi_pci_bridge_d3`. This currently happens because the ACPI
+device contains power resources.
 
-To my eye, it's simply avoiding the issue, rather than fixing
-it properly; and even if the issue is so rare, and fixing properly
-too difficult or inefficent (a cached anon_vma?), that a workaround
-is good enough, it still looks like the wrong workaround (checking
-dst_vma->anon_vma instead of PageAnon seems more to the point, and
-less lenient).
+When the thunderbolt driver is loaded two device links are created:
+* USB4 router <-> PCIe root port for tunneling
+* USB4 router <-> XHCI PCIe device
 
-But my eye on COW is very poor nowadays, and I may be plain wrong.
+These device links are created because the ACPI devices declare the
+`usb4-host-interface` _DSD [3]. For both links the USB4 router is the
+supplier and these other devices are the consumers.
+Here is a demonstration of this topology that occurs:
 
-Hugh
+|
+├─ 00:03.1
+|       | "PCIe root port used for tunneling"
+|       | ACPI Path: \_SB_.PCI0.GP11
+|       | ACPI Power Resources: Yes
+|       | ACPI _S0W return value: 0
+|       | Device Links: supplier:pci:0000:c4:00.5
+|       └─ PCIe Power state: D0
+└─ 00:08.3
+        | ACPI Path: \_SB_.PCI0.GP19
+        ├─ PCIe Power state: D0
+        ├─ c4:00.3
+        |       | "XHCI PCIe device used for tunneling"
+        |       | ACPI Path: \_SB_.PCI0.GP19.XHC3
+        |       | ACPI Power Resources: Yes
+        |       | ACPI _S0W return value: 4
+        |       | Device Links: supplier:pci:0000:c4:00.5
+        |       └─ PCIe Power state: D3cold
+        └─ c4:00.5
+                | "USB4 Router"
+                | ACPI Path: \_SB_.PCI0.GP19.NHI0
+                | ACPI Power Resources: Yes
+                | ACPI _S0W return value: 4
+                | Device Links: consumer:pci:0000:00:03.1 consumer:pci:0000:c4:00.3
+                └─ PCIe Power state: D3cold
 
-> ---
->  mm/memory.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index cc50fa0f4590..45973fd97be8 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -823,6 +823,17 @@ copy_present_page(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma
->  	if (likely(!page_maybe_dma_pinned(page)))
->  		return 1;
->  
-> +	/*
-> +	 * The vma->anon_vma of the child process may be NULL
-> +	 * because the entire vma does not contain anonymous pages.
-> +	 * A BUG will occur when the copy_present_page() passes
-> +	 * a copy of a non-anonymous page of that vma to the
-> +	 * page_add_new_anon_rmap() to set up new anonymous rmap.
-> +	 * Return 1 if the page is not an anonymous page.
-> +	*/
-> +	if (!PageAnon(page))
-> +		return 1;
-> +
->  	new_page = *prealloc;
->  	if (!new_page)
->  		return -EAGAIN;
-> -- 
-> 2.25.1
+Currently runtime PM is allowed for all of these devices.  This means that
+when all consumers are idle long enough, they will enter their deepest allowed
+sleep state. Once all consumers are in their deepest allowed sleep state the
+suppliers will enter the deepest sleep state as well.
+
+* The PCIe root port for tunneling doesn't support waking from D3hot or
+  D3cold so it stays in D0.
+* The XHCI PCIe device supports wakeup from D3cold so it goes to D3cold.
+* Both consumers are in their deepest state and the USB4 router supports
+  wakeup from D3cold, so it goes into this state.
+
+The expectation is the USB4 router should have also remained in D0 since
+the PCIe root port for tunneling remained in D0 and a device link exists
+between the two devices.
+
+Instead of making the assertion that the device can support D3 (and thus
+runtime PM) solely from the presence of ACPI power resources, move the check
+to later on in the function, which will have validated that the ACPI device
+supports wake from D3hot or D3cold.
+
+This fix prevents the USB4 router being put into D3 when the firmware
+says that ACPI device representing the PCIe root port for tunneling can't
+handle it while still allowing ACPI devices that don't have the
+HotplugSupportInD3 _DSD to also enter D3 if they have power resources that
+can wake from D3.
+
+Link: https://learn.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-pcie-root-ports-supporting-hot-plug-in-d3 [1]
+Link: https://github.com/torvalds/linux/blob/v6.1-rc1/drivers/pci/pcie/portdrv_pci.c#L126 [2]
+Link: https://github.com/torvalds/linux/blob/v6.1-rc1/drivers/thunderbolt/acpi.c#L29 [3]
+Fixes: dff6139015dc6 ("PCI/ACPI: Allow D3 only if Root Port can signal and wake from D3")
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+v3->v4:
+ * Pick up tags
+ * Add more details to the commit message
+v2->v3:
+ * Reword commit message
+v1->v2:
+ * Just return value of acpi_pci_power_manageable (Rafael)
+ * Remove extra word in commit message
+---
+ drivers/pci/pci-acpi.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+index a46fec776ad77..8c6aec50dd471 100644
+--- a/drivers/pci/pci-acpi.c
++++ b/drivers/pci/pci-acpi.c
+@@ -984,10 +984,6 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
+ 	if (acpi_pci_disabled || !dev->is_hotplug_bridge)
+ 		return false;
+ 
+-	/* Assume D3 support if the bridge is power-manageable by ACPI. */
+-	if (acpi_pci_power_manageable(dev))
+-		return true;
+-
+ 	rpdev = pcie_find_root_port(dev);
+ 	if (!rpdev)
+ 		return false;
+@@ -1023,7 +1019,8 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
+ 	    obj->integer.value == 1)
+ 		return true;
+ 
+-	return false;
++	/* Assume D3 support if the bridge is power-manageable by ACPI. */
++	return acpi_pci_power_manageable(dev);
+ }
+ 
+ int acpi_pci_set_power_state(struct pci_dev *dev, pci_power_t state)
+-- 
+2.34.1
+
