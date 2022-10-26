@@ -2,117 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C9060E2A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4E460E2A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232528AbiJZNxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 09:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
+        id S234097AbiJZNxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234069AbiJZNwL (ORCPT
+        with ESMTP id S233957AbiJZNwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 09:52:11 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7174110693B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:52:08 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so1646987wmb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:52:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=r6vbNsa2eLap4ns5f+FVzjJUNvmUKrnMf3TrYs7N5b8=;
-        b=WO+G3icBGCRcaMhVI1/GdlooZ49H5FQYwsViSL3DAvFOS8vB5/wOWnZOqR7OhDo9zT
-         PkdFY8vmyNGEqZInbZ9vPVhUIaWZkdY6WQFqyMRRtCzhPU95KGvuo8OGMsm6+1ty4BEs
-         awbYncV8BOAmY0O772wKpZqBv6DdgHGU4IiunWLaGNUwFit6BT9uqTSGo+LWPjJ6Lgqf
-         I4OtBkme9Mys08eQGD/w3JM6pjU87qyVEzRis1V1Wngjxk4KtO94dG63mxF+GjkDlZoT
-         JT2VQsVrf8qhh7ABalixMLMG2Hjg+M1TuselYfEW7H8ELH6I+4VVowZmaPeHpmzWLgw+
-         YQuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r6vbNsa2eLap4ns5f+FVzjJUNvmUKrnMf3TrYs7N5b8=;
-        b=WjP7PDvYogCA3dMTKLiws6OFVjNdtLrlewsSZRwlucetYgP64A4OjNnJfMVm7KcMSX
-         h3Isg+jDAnx3dVwnXoS0R8rjohH+8+HNrI+rUS+tL4ifrcoDKEJGcbODhQAKs0V2a0Az
-         HOaW88GNqVTeBCy+TScB7oRWMv1rH9/exnIyaAJG/2AEk+pmNPexhLYotx+iGQxzPayN
-         qMsc6zNYXlymIpMioDRrueeuU9Q6OSU+HbfZhbqgL3XJJhN8cRNcgjuhdOnOVpw2mHUp
-         4Jw/6Z9Qon5Hr1wfOwCrdEPtwHXsf2kOuagJpHLAg/YaylQJ8jEPSKIf0VNbVqe7Gkpj
-         7oEQ==
-X-Gm-Message-State: ACrzQf2aKJTU8C0I7RKL061ToH9Xya7iw075HBVzduXxkxwT98HHWyEb
-        nXMXvAXXYE30+4e+8yQ/3RGIW6EbZPUPqA==
-X-Google-Smtp-Source: AMsMyM5PI8dFGSbXQd/vYi9TfqFNTgrunruofUiIdTvGhqcuOOErFVL6bRBaf8Ox/Ovh+zKR3UYfIQ==
-X-Received: by 2002:a05:600c:46ce:b0:3c6:f243:8d74 with SMTP id q14-20020a05600c46ce00b003c6f2438d74mr2600379wmo.166.1666792326702;
-        Wed, 26 Oct 2022 06:52:06 -0700 (PDT)
-Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b4d7:0:e68:932d:8865:32dc])
-        by smtp.gmail.com with ESMTPSA id h5-20020a05600c2ca500b003b435c41103sm2663346wmc.0.2022.10.26.06.52.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 06:52:06 -0700 (PDT)
-From:   Usama Arif <usama.arif@bytedance.com>
-To:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        mingo@redhat.com, will@kernel.org, longman@redhat.com,
-        yanfei.xu@windriver.com
-Cc:     fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        Usama Arif <usama.arif@bytedance.com>
-Subject: [PATCH] kernel/locking: Fix spelling mistake "task_strcut" -> "task_struct"
-Date:   Wed, 26 Oct 2022 14:51:50 +0100
-Message-Id: <20221026135150.2210119-1-usama.arif@bytedance.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 26 Oct 2022 09:52:41 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9484F107ABF;
+        Wed, 26 Oct 2022 06:52:18 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id BC11E5C00B2;
+        Wed, 26 Oct 2022 09:52:17 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 26 Oct 2022 09:52:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1666792337; x=1666878737; bh=RKb3JKVHP8
+        tdzTHQi2dg6DBpxBDezcjBmxhlPuMoABU=; b=InNLBB2R+RRoTTQRJV28pqenb+
+        bcGAyLgT6DioT8GP9+7Tku2mYdbGHfQeeinOt8bEva+GCDYOrzYCdA4F27vmlzL7
+        t1O19PDbB5iX6zrT9b+bnHtvbjimqTBSy1bcIaxucHlmHHx8oBzHxdc4oJakjY3L
+        vkyAfWXAQU/Kq75XAmfX3cfcFAgJiViOQsRT1EWsPFMZHNhVBasW4dGTT0Yrb7uK
+        XkbvUbNPGqwcbImicFybIEBWy9UzFb5j03Db2ZG2hrd4Yn7MvyNZ1IrFPPuwAD5X
+        zocRZR6uX/kDxSFiwLVzwPdsLa+d46Ebq6Tqok3awsa0mtXtQ5h5by/m3kaw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666792337; x=1666878737; bh=RKb3JKVHP8tdzTHQi2dg6DBpxBDe
+        zcjBmxhlPuMoABU=; b=MPYJtOADYhYr1Vja+m1ZxET6e1qkDeE/++z1ygOvs5wi
+        hiWyWrsV3UrbQbrxzW8+yc+g8OjNvPEzeyIi1zAecVIcMjbXpUeNFK5TBHf2h5KX
+        napgwNk4k6gE4VBJDFf2dZjHQvklqOvrCJ+Stm8bS5/Ps8lyxQDe7PRpKIrD0cPk
+        ZDaHDO8440WiEfI8tCXxRCgq/2bPGj4oO+cNHFyMLaksUs288RBOtluE60pywJvt
+        ZknZxzIsZShZG4i+yuqEmCOOyOUUl9k9kdAbjFCRtWs4Ro3MdSYZLmuU9XXXQ59a
+        k4edBaVsd/vb8Piv4ll/ClujB2BLUTw4KgOcvvV3tg==
+X-ME-Sender: <xms:kTtZY9JZ9TiQa-dpELOcOFDJEs19l4UD8WySqEfB-bY9veekKv7ojA>
+    <xme:kTtZY5IGuOATEmgR03enp4vE_TmUdqpusymQetwDM8eW6WL3Wpz1hnrisZ4VAA1D4
+    v_cTo14BFPe4QqMPFw>
+X-ME-Received: <xmr:kTtZY1tQOqYlu7d8IGWUf-sgrzFxpABjS7npRXd76TuI468QfFZPSKMdFLr40TR0rs56snydSdATvW-mYvTZYwOVKEeZfgF2_Z0b43ym36_pUA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtddvgdejtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhfffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpehmrgigihhm
+    vgestggvrhhnohdrthgvtghhnecuggftrfgrthhtvghrnheptdejvedthfdvieeuteefue
+    evffdtgedtuedtjedvueejveeuteefueeugfdtudehnecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:kTtZY-ZkzW3pvBh0CwZu0_V0MQk3VG_w_JKNPKjsdeROxqhWmn9dTw>
+    <xmx:kTtZY0ZeZv1pYbApem-tt-Mcl7aq5eLTtU-0q_p5kx5VdUCmrwPE8Q>
+    <xmx:kTtZYyCkt_qC2YhtxhoMIBsNOuXpt-Bs1_0IfI9ZyD7wG25sF9r6gA>
+    <xmx:kTtZY6MFWmpjsISNacYeDsuG9b0DMl9Tx7x8n_lOVKwv_admvJ2xeQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 26 Oct 2022 09:52:17 -0400 (EDT)
+From:   maxime@cerno.tech
+Date:   Wed, 26 Oct 2022 15:52:15 +0200
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH 4/4] clk: Warn if we register a mux without determine_rate
+Message-ID: <20221026135215.nqndtcb2unxqwwux@houat>
+References: <20221018-clk-range-checks-fixes-v1-0-f3ef80518140@cerno.tech>
+ <20221018-clk-range-checks-fixes-v1-4-f3ef80518140@cerno.tech>
+ <20221026020800.38AC8C433C1@smtp.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2hk6tkezha7y2a7h"
+Content-Disposition: inline
+In-Reply-To: <20221026020800.38AC8C433C1@smtp.kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These are in mutex and rwsem code.
 
-Signed-off-by: Usama Arif <usama.arif@bytedance.com>
----
- kernel/locking/mutex.c | 4 ++--
- kernel/locking/rwsem.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+--2hk6tkezha7y2a7h
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
-index d973fe6041bf..fe7335fb63d4 100644
---- a/kernel/locking/mutex.c
-+++ b/kernel/locking/mutex.c
-@@ -362,7 +362,7 @@ bool mutex_spin_on_owner(struct mutex *lock, struct task_struct *owner,
- 		 * checking lock->owner still matches owner. And we already
- 		 * disabled preemption which is equal to the RCU read-side
- 		 * crital section in optimistic spinning code. Thus the
--		 * task_strcut structure won't go away during the spinning
-+		 * task_struct structure won't go away during the spinning
- 		 * period
- 		 */
- 		barrier();
-@@ -401,7 +401,7 @@ static inline int mutex_can_spin_on_owner(struct mutex *lock)
- 
- 	/*
- 	 * We already disabled preemption which is equal to the RCU read-side
--	 * crital section in optimistic spinning code. Thus the task_strcut
-+	 * crital section in optimistic spinning code. Thus the task_struct
- 	 * structure won't go away during the spinning period.
- 	 */
- 	owner = __mutex_owner(lock);
-diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-index 44873594de03..bb87d28c011c 100644
---- a/kernel/locking/rwsem.c
-+++ b/kernel/locking/rwsem.c
-@@ -720,7 +720,7 @@ static inline bool rwsem_can_spin_on_owner(struct rw_semaphore *sem)
- 	preempt_disable();
- 	/*
- 	 * Disable preemption is equal to the RCU read-side crital section,
--	 * thus the task_strcut structure won't go away.
-+	 * thus the task_struct structure won't go away.
- 	 */
- 	owner = rwsem_owner_flags(sem, &flags);
- 	/*
--- 
-2.25.1
+Hi,
 
+On Tue, Oct 25, 2022 at 07:07:58PM -0700, Stephen Boyd wrote:
+> Quoting Maxime Ripard (2022-10-18 06:52:59)
+> > The determine_rate hook allows to select the proper parent and its rate
+> > for a given clock configuration. On another hand, set_parent is there to
+> > change the parent of a mux.
+> >=20
+> > Some clocks provide a set_parent hook but don't implement
+> > determine_rate. In such a case, set_parent is pretty much useless since
+> > the clock framework will always assume the current parent is to be used,
+> > and we will thus never change it.
+> >=20
+> > This situation can be solved in two ways:
+> >   - either we don't need to change the parent, and we thus shouldn't
+> >     implement set_parent;
+> >   - or we don't want to change the parent, in this case we should set
+> >     CLK_SET_RATE_NO_REPARENT;
+> >   - or we're missing a determine_rate implementation.
+> >=20
+> > The latter is probably just an oversight from the driver's author, and
+> > we should thus raise their awareness about the fact that the current
+> > state of the driver is confusing.
+>=20
+> There is another case which is a leaf clk that is a mux where you only
+> expect clk_set_parent() to be used, and not clk_set_rate(). This use
+> case is odd though, so I'm not sure how much we care.
+>=20
+> >=20
+> > It's not clear at this point how many drivers are affected though, so
+> > let's make it a warning instead of an error for now.
+> >=20
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> > ---
+> >  drivers/clk/clk.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >=20
+> > diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> > index 57b83665e5c3..11c41d987ff4 100644
+> > --- a/drivers/clk/clk.c
+> > +++ b/drivers/clk/clk.c
+> > @@ -3700,6 +3700,11 @@ static int __clk_core_init(struct clk_core *core)
+> >                 goto out;
+> >         }
+> > =20
+> > +       /* TODO: Promote to an error */
+>=20
+> The documentation should be updated in this patch (see the table of
+> hardware characteristics in Documentation/driver-api/clk.rst).
+>=20
+> > +       if (core->ops->set_parent && !core->ops->determine_rate)
+> > +               pr_warn("%s: %s must implement .set_parent & .determine=
+_rate\n",
+>=20
+> You can grep for it:
+>=20
+>  $ git grep -W 'struct clk_ops .*=3D'
+
+TIL about -W. It's awesome, thanks
+
+> but I'm fairly certain a coccinelle script can detect most of these
+> because clk_ops are usually statically defined (although not always).
+>=20
+> Either way I already see that 'owl_comp_div_ops' will trigger this
+> warning. And 'at91sam9x5_smd_ops' looks even more likely. Given that I'm
+> not super keen on applying this patch.
+
+It's the reason why I didn't return an error at first, I wanted to
+report that it's invalid and let to drivers the chance to be fixed
+still.
+
+Should I take your above comment as you'd rather have the affected
+drivers fixed in this patch and we then return an error, or is it that
+you don't want that patch at all?
+
+Maxime
+
+--2hk6tkezha7y2a7h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY1k7jwAKCRDj7w1vZxhR
+xf1jAQDGrQExtcQimUytmP89Y4KieiUjk5eWKtH+Tc60q99DIQD/XOKsfZo7EMit
+QwCGZzOoO70UzhoKF8IZvt0ilYs/Hw4=
+=MBW4
+-----END PGP SIGNATURE-----
+
+--2hk6tkezha7y2a7h--
