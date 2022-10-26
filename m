@@ -2,112 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B6C60DAC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 07:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A353B60DAD0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 07:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232896AbiJZFzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 01:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
+        id S232988AbiJZF6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 01:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232902AbiJZFzK (ORCPT
+        with ESMTP id S231877AbiJZF6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 01:55:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DD6437E2;
-        Tue, 25 Oct 2022 22:55:09 -0700 (PDT)
+        Wed, 26 Oct 2022 01:58:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303BAB448C;
+        Tue, 25 Oct 2022 22:58:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52AB761CE4;
-        Wed, 26 Oct 2022 05:55:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22E7CC433C1;
-        Wed, 26 Oct 2022 05:55:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666763708;
-        bh=8+rM/FGEitKFjhRuQ68f+Jw14IctZ4UiyrnOLxUonQI=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB7BBB81F42;
+        Wed, 26 Oct 2022 05:58:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C149C433D6;
+        Wed, 26 Oct 2022 05:58:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666763894;
+        bh=qkTBdkFOelF82FnEM+JQO4iw9eRJY7E7oDovtc9IK8s=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FrL4SIAO04f3nBCO0CEqmO+q7EsH1h8pKudxFveiVihCQOKSsoArGN5pjUad+g9hE
-         nGj33BGhdjox442rjmejzq14qeWsGaX9k8g/+lYWXRy74Pmk7XFRYSJaw063z3/qzM
-         s9XQEqmCsQ7TnSCFaWKzAKVvK9wXa8KtuFdThXBE=
-Date:   Wed, 26 Oct 2022 07:56:01 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     casey.schaufler@intel.com, paul@paul-moore.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        keescook@chromium.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        mic@digikod.net
-Subject: Re: [PATCH v1 1/8] LSM: Identify modules by more than name
-Message-ID: <Y1jL8ZiCO+a7n8Wz@kroah.com>
-References: <20221025184519.13231-1-casey@schaufler-ca.com>
- <20221025184519.13231-2-casey@schaufler-ca.com>
+        b=M5XfY1QAPlc0Gfw+g2HL7WK/o3K1P6RKDIgB6Zt4Y/jnO/TpwLD07S0W4LHot9I4H
+         UEPKl7ksDPdFBo1VFrBqA3hGscUUcquKaUVxtYrJR357Sbk9HaDmEgDSdYy/0GBnEK
+         c19TA7g6qfXPHRBEQ86nNaIG7WQAsEKe97utT4rqpjUtq69D1ZVocEBszE6By30Oak
+         7ZW+0AbiJ607WlMr3BMqD+bCWWTHNvWCEfZ7SUUzYbMM6agLlQRlCYwN7PcGyAMScB
+         dK+LESkigPpv9uYPBQxsa2itnl6j0Jz9DbawPyyB22gCc/bXvrgyrkDpj2PJWPXUKY
+         k3/qVFEfClfDA==
+Date:   Wed, 26 Oct 2022 08:58:10 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Arumugam Kolappan <aru.kolappan@oracle.com>
+Cc:     jgg@ziepe.ca, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, manjunath.b.patil@oracle.com,
+        rama.nichanamatlu@oracle.com
+Subject: Re: [PATCH  1/1] net/mlx5: update debug log level for remote access
+ error syndromes
+Message-ID: <Y1jMcm/GIO8JMlWQ@unreal>
+References: <1666689721-30424-1-git-send-email-aru.kolappan@oracle.com>
+ <Y1jKHcBdcUnluIdU@unreal>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221025184519.13231-2-casey@schaufler-ca.com>
+In-Reply-To: <Y1jKHcBdcUnluIdU@unreal>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 11:45:12AM -0700, Casey Schaufler wrote:
-> Create a struct lsm_id to contain identifying information
-> about Linux Security Modules (LSMs). At inception this contains
-> a single member, which is the name of the module. Change the
-> security_add_hooks() interface to use this structure. Change
-> the individual modules to maintain their own struct lsm_id and
-> pass it to security_add_hooks().
-> 
-> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> ---
->  include/linux/lsm_hooks.h    | 11 +++++++++--
->  security/apparmor/lsm.c      |  6 +++++-
->  security/bpf/hooks.c         | 11 ++++++++++-
->  security/commoncap.c         |  6 +++++-
->  security/landlock/cred.c     |  2 +-
->  security/landlock/fs.c       |  2 +-
->  security/landlock/ptrace.c   |  2 +-
->  security/landlock/setup.c    |  4 ++++
->  security/landlock/setup.h    |  1 +
->  security/loadpin/loadpin.c   |  7 ++++++-
->  security/lockdown/lockdown.c |  6 +++++-
->  security/safesetid/lsm.c     |  7 ++++++-
->  security/security.c          | 12 ++++++------
->  security/selinux/hooks.c     |  7 ++++++-
->  security/smack/smack_lsm.c   |  6 +++++-
->  security/tomoyo/tomoyo.c     |  7 ++++++-
->  security/yama/yama_lsm.c     |  6 +++++-
->  17 files changed, 82 insertions(+), 21 deletions(-)
-> 
-> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> index 4ec80b96c22e..e383e468f742 100644
-> --- a/include/linux/lsm_hooks.h
-> +++ b/include/linux/lsm_hooks.h
-> @@ -1602,6 +1602,13 @@ struct security_hook_heads {
->  	#undef LSM_HOOK
->  } __randomize_layout;
->  
-> +/*
-> + * Information that identifies a security module.
-> + */
-> +struct lsm_id {
-> +	const char	*lsm;		/* Name of the LSM */
+On Wed, Oct 26, 2022 at 08:48:13AM +0300, Leon Romanovsky wrote:
+> On Tue, Oct 25, 2022 at 02:22:01AM -0700, Arumugam Kolappan wrote:
+> > The mlx5 driver dumps the entire CQE buffer by default for few syndromes.
+> > Some syndromes are expected due to the application behavior [ex:
+> > MLX5_CQE_SYNDROME_REMOTE_ACCESS_ERR, MLX5_CQE_SYNDROME_REMOTE_OP_ERR and
+> > MLX5_CQE_SYNDROME_LOCAL_PROT_ERR]. Hence, for these syndromes, the patch
+> > converts the log level from KERN_WARNING to KERN_DEBUG. This enables the
+> > application to get the CQE buffer dump by changing to KERN_DEBUG level
+> > as and when needed.
+> > 
+> > Suggested-by: Leon Romanovsky <leon@kernel.org>
+> > Signed-off-by: Arumugam Kolappan <aru.kolappan@oracle.com>
+> > ---
+> >  drivers/infiniband/hw/mlx5/cq.c | 30 ++++++++++++++++++++++--------
+> >  1 file changed, 22 insertions(+), 8 deletions(-)
 
-Based on the "unsigned vs. signed char" discussion happening on lkml
-right now, this should really be "u8".
+And more general comments:
+1. Patch title is "RDMA/mlx5: Update ...." and not "net/mlx5: updated ..."
+2. No need 1/1 notation for single patch
+3. [PATCH ...] is better to include target [PATCH rdma-next ...]
 
-Also, can you use kerneldoc formatting so that the field name is not
-after the variable, but above it in the comment, so that the kernel doc
-tools will properly pick it up?
-
-And what is going to guarantee the uniqueness of this string?
-
-thanks,
-
-greg k-h
+Thanks
