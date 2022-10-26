@@ -2,69 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4A660E63E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7883B60E642
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234043AbiJZRO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 13:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33780 "EHLO
+        id S233408AbiJZRPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 13:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233330AbiJZROw (ORCPT
+        with ESMTP id S233330AbiJZRO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 13:14:52 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4778513EA9
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 10:14:49 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id y14so23171977ejd.9
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 10:14:49 -0700 (PDT)
+        Wed, 26 Oct 2022 13:14:57 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AAF1FF87;
+        Wed, 26 Oct 2022 10:14:56 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id q9so23352202ejd.0;
+        Wed, 26 Oct 2022 10:14:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FRxHoxm6P1RvhdSeOwNej3/a2XKscd0zPEdZFSfHcAM=;
-        b=fz5My3zIF5XGZhEoSzEVFDLGy9W8SAMCYayn36lNzsdTEetRLrOGWRE0KK72DXBjcB
-         WF5v1NCWW97wXQx+n5jTNHG6VdRsSmaKekLetVYqPe/vPeFvqdnLslrO9DpFb7U6dCHv
-         Tty1PsNwXDbNr3B+mgyJ92nHDEUkhv2fG9hlgKHXVifi91eVXIg22cjnAyAzuJOWxoYW
-         6441COwsIGhicA+ZgODplc2V4XGxhdlabztlCGBNOGZITC7tqHhKPYa4z7yeHfXgQpLO
-         NjMNHR8fP8lsaTblgYpxxwYbj/y3o/gvZtP0kN32dT5OA4jB+67JYpkZBTMXoysYSONo
-         TrNw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O7Uq/pQUrQ8lWGAvdsML2QRJXkhRAJ7jb1k78eXBkjc=;
+        b=XmtB/I9B2JsjTl60PkZS9UQX3NscJXUohsT7wLW2hJT13cQJ8tKpC/rceopBnXyH5Q
+         cPiKSv60DWT5gX7+Eci2ZUs72tYNMyROm09dU45xdP2wKq5srL98E2fCrDoe/ABRFRA+
+         fdmd52uIj+cab9PLFq+sy1EMA96PvqdHWt8mFLNueVKzWo0meo6qkXYzlwEcJaUJzE8j
+         l1kYAc5IEi2Zd1o9O1UCeiELMQvXIuM+G7Kg1YzKqSMePdf8YigsgAetsL16p+4y3xj9
+         pzviHyN0QGoBTzevHkQQcdAXqAtohWJ1uAAXRaXB2SZ+YNKkAoi+Fhk4VAJGUBDPVBgR
+         m+ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FRxHoxm6P1RvhdSeOwNej3/a2XKscd0zPEdZFSfHcAM=;
-        b=UCxIJTwLS6OauznCfB+gYL1c/03YY8+ckAaCR2Zd1sTEMr8pffqnjaO2O4m39t4/eI
-         IyWUaWYedwZjUD/ffyil3L6Ie2I+K1BT/QZk/ury67RDCkAYucEMdbgaOerjAAD02Uz8
-         taROcp0ZRoElNNLIDRY8QrIvHMXpU/gI6UGq+zAu7ysTdlDakUbGCOYOOtkRnoztl41J
-         ECuHMHGWzlEMeg0WmaXvPdJ21x+SJIbn1WNWqRZ/HObIipskCwZ8Z2wO+U+u+V1KJ80A
-         lPEZEmnhNMNDq6qTOIobIpGlV0re0ECAtc/E+5Fra0la+dYv/FFzKehn83VclOtQDdmh
-         oLtQ==
-X-Gm-Message-State: ACrzQf00KSRTCC3q+PKJnF+XfzXKeZOPEDhE3fe5XFyNQJ7f+Ten2w08
-        pSlTx0oiBoKDcOtdcAfsGdg=
-X-Google-Smtp-Source: AMsMyM6TgIXHjE8NpfTm6poMbr7co6qgf/WZMc46uMXEicr4AWS5WGVgfcxr6lLz/y58qzTitxtKZw==
-X-Received: by 2002:a17:907:7633:b0:7ad:85ee:c66d with SMTP id jy19-20020a170907763300b007ad85eec66dmr1477367ejc.730.1666804487769;
-        Wed, 26 Oct 2022 10:14:47 -0700 (PDT)
-Received: from nam-dell (ip-217-105-46-178.ip.prioritytelecom.net. [217.105.46.178])
-        by smtp.gmail.com with ESMTPSA id b16-20020aa7cd10000000b00461bacee867sm3796683edw.25.2022.10.26.10.14.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 10:14:47 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 19:14:34 +0200
-From:   Nam Cao <namcaov@gmail.com>
-To:     UMWARI JOVIAL <umwarijovial@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Subject: Re: [PATCH] Fixed[ERROR:trailing whitespace and braces around scalar
- initializer]
-Message-ID: <20221026171430.GA5592@nam-dell>
-References: <20221026132838.GA44037@rdm>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O7Uq/pQUrQ8lWGAvdsML2QRJXkhRAJ7jb1k78eXBkjc=;
+        b=n++Ww7fRjVDHOx/we9Act3y6xg1HwRXhEY8bRFhmWMcWh/2wl9r8aGYeEy27H3Akmh
+         3Qd3LmZ1MR5DDkdzG+yMZtrmdbRQ9WTuG471Jpt8vMbUUQwkoL2UL81lylDaOX5eG8BS
+         Z+KHb7mfBr0Cxh5MXiBZMGiQAqQD2w3BEiwC+T2TQRw9MD9VgsaesMmSjVhP1ocMCNPn
+         dr2xyZ1E/aeGQbBI9lQCfn4KBQmWlKg0dVjIkTLzROU43DOEOmRwz+YMBE2ZQGrDaMvX
+         uaWixh/f/B0CD6166dbc4Hkwqc1mP9zjFTU0pRy05wXjV21KJLk1HE8MBFHJR9nQi+AM
+         /zrQ==
+X-Gm-Message-State: ACrzQf0dk6yeHGHEAmKrEmm9zuEa4hN0wQ3OFmbCm/M8ZxUcqPiJ1VJh
+        fz0b8kLrCdfBynQR5ymrYrCJbO8vp+IQNWk4EQs=
+X-Google-Smtp-Source: AMsMyM671db/GWfHZCF4vGkJJMD4q2kSbwii5WSEc54uNdOcI6hmZZ5pu70IMRLXjnYrdo2I3EEIHE3wwIHOMDroRlc=
+X-Received: by 2002:a17:907:6e93:b0:78d:dff1:71e3 with SMTP id
+ sh19-20020a1709076e9300b0078ddff171e3mr36873551ejc.94.1666804494588; Wed, 26
+ Oct 2022 10:14:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026132838.GA44037@rdm>
+References: <20221021164626.3729012-1-roberto.sassu@huaweicloud.com>
+ <CAADnVQJHDboosqTy5LTHJtJaWJCWn9rv09jmd_sMgeV_OVQjGg@mail.gmail.com>
+ <d7a17e482b7bbf945c92443b45de73f56afea08a.camel@huaweicloud.com>
+ <bb7a5986f3d25706269d0fec9906ea73c174b808.camel@huaweicloud.com>
+ <CAADnVQL1a2pPAJqzj6oUwupxxfaW38KQswzppAZeZPzmTFhjMg@mail.gmail.com>
+ <98353f6c82d3dabdb0d434d7ecf0bfc5295015ad.camel@huaweicloud.com>
+ <ffbdcfbe-0c63-2ced-62e3-a7248b7a24f0@schaufler-ca.com> <CAADnVQLAXsZRNytPHG0KhYKar3K+=7bq2KPQG77VFOKbnTPHmg@mail.gmail.com>
+ <34357c96-fe58-ffe5-e464-4bded8f119d5@huaweicloud.com>
+In-Reply-To: <34357c96-fe58-ffe5-e464-4bded8f119d5@huaweicloud.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 26 Oct 2022 10:14:43 -0700
+Message-ID: <CAADnVQKD5e9vKsSo1TPeBm5hr6j4GzQeHqRURoBJyB++VOwHCw@mail.gmail.com>
+Subject: Re: [RFC][PATCH] bpf: Check xattr name/value pair from bpf_lsm_inode_init_security()
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        nicolas.bouchinet@clip-os.org, Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,37 +83,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 04:28:38PM +0300, UMWARI JOVIAL wrote:
-> Using the checkpatch.pl script, found the below errors and  fixed
-> ERROR: trailing whitespace
-> CHECK: Please don't use multiple blank lines
-> warning: braces around scalar initializer
-> 
-> Signed-off-by: UMWARI JOVIAL <umwarijovial@gmail.com>
-> ---
->  drivers/staging/most/dim2/dim2.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/staging/most/dim2/dim2.c b/drivers/staging/most/dim2/dim2.c
-> index 7a5f80e637a0..28259ce05024 100644
-> --- a/drivers/staging/most/dim2/dim2.c
-> +++ b/drivers/staging/most/dim2/dim2.c
-> @@ -987,7 +987,6 @@ static int rcar_gen2_enable(struct platform_device *pdev)
->  		writel(0x04, dev->io_base + 0x600);
->  	}
->  
-> -
->  	/* BBCR = 0b11 */
->  	writel(0x03, dev->io_base + 0x500);
->  	writel(0x0002FF02, dev->io_base + 0x508);
-> @@ -1084,7 +1083,6 @@ static const struct of_device_id dim2_of_match[] = {
->  	{
->  		.compatible = "xlnx,axi4-os62420_6pin-1.00.a",
->  	},
-> -	{},
+On Wed, Oct 26, 2022 at 1:42 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> On 10/26/2022 8:37 AM, Alexei Starovoitov wrote:
+> > On Tue, Oct 25, 2022 at 7:58 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> >>
+> >> On 10/25/2022 12:43 AM, Roberto Sassu wrote:
+> >>> On Mon, 2022-10-24 at 19:13 -0700, Alexei Starovoitov wrote:
+> >>>> I'm looking at security_inode_init_security() and it is indeed messy.
+> >>>> Per file system initxattrs callback that processes kmalloc-ed
+> >>>> strings.
+> >>>> Yikes.
+> >>>>
+> >>>> In the short term we should denylist inode_init_security hook to
+> >>>> disallow attaching bpf-lsm there. set/getxattr should be done
+> >>>> through kfuncs instead of such kmalloc-a-string hack.
+> >>> Inode_init_security is an example. It could be that the other hooks are
+> >>> affected too. What happens if they get arbitrary positive values too?
+> >>
+> >> TL;DR - Things will go cattywampus.
+> >>
+> >> The LSM infrastructure is an interface that has "grown organically",
+> >> and isn't necessarily consistent in what it requires of the security
+> >> module implementations. There are cases where it assumes that the
+> >> security module hooks are well behaved, as you've discovered. I have
+> >> no small amount of fear that someone is going to provide an eBPF
+> >> program for security_secid_to_secctx(). There has been an assumption,
+> >> oft stated, that all security modules are going to be reviewed as
+> >> part of the upstream process. The review process ought to catch hooks
+> >> that return unacceptable values. Alas, we've lost that with BPF.
+> >>
+> >> It would take a(nother) major overhaul of the LSM infrastructure to
+> >> make it safe against hooks that are not well behaved. From what I have
+> >> seen so far it wouldn't be easy/convenient/performant to do it in the
+> >> BPF security module either. I personally think that BPF needs to
+> >> ensure that the eBPF implementations don't return inappropriate values,
+> >> but I understand why that is problematic.
+> >
+> > That's an accurate statement. Thank you.
+> >
+> > Going back to the original question...
+> > We fix bugs when we discover them.
+> > Regardless of the subsystem they belong to.
+> > No finger pointing.
+>
+> I'm concerned about the following situation:
+>
+> struct <something> *function()
+> {
+>
+>         ret = security_*();
+>         if (ret)
+>                 return ERR_PTR(ret);
+>
+> }
+>
+> int caller()
+> {
+>         ptr = function()
+>         if (IS_ERR(ptr)
+>                 goto out;
+>
+>         <use of invalid pointer>
+> }
+>
+> I quickly found an occurrence of this:
+>
+> static int lookup_one_common()
+> {
+>
+> [...]
+>
+>         return inode_permission();
+> }
+>
+> struct dentry *try_lookup_one_len()
+> {
+>
+> [...]
+>
+>          err = lookup_one_common(&init_user_ns, name, base, len, &this);
+>          if (err)
+>                  return ERR_PTR(err);
+>
+>
+> Unfortunately, attaching to inode_permission causes the kernel
+> to crash immediately (it does not happen with negative return
+> values).
+>
+> So, I think the fix should be broader, and not limited to the
+> inode_init_security hook. Will try to see how it can be fixed.
 
-I'm no expert, but this looks like a null terminator and probably
-should not be removed.
-
-Best regards,
-Nam
+I see. Let's restrict bpf-lsm return values to IS_ERR_VALUE.
+Trivial verifier change.
