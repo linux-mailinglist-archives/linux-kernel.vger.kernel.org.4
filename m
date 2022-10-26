@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC5460E674
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DD2760E676
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233698AbiJZR3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 13:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41144 "EHLO
+        id S234125AbiJZR3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 13:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231696AbiJZR3O (ORCPT
+        with ESMTP id S231164AbiJZR3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 26 Oct 2022 13:29:14 -0400
 Received: from mellanox.co.il (mail-il-dmz.mellanox.com [193.47.165.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C33471011A1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C342E1011B0
         for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 10:29:11 -0700 (PDT)
 Received: from Internal Mail-Server by MTLPINE1 (envelope-from asmaa@mellanox.com)
         with SMTP; 26 Oct 2022 20:29:06 +0300
 Received: from bu-vnc02.mtbu.labs.mlnx (bu-vnc02.mtbu.labs.mlnx [10.15.2.65])
-        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id 29QHSwx1015427;
-        Wed, 26 Oct 2022 13:28:58 -0400
+        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id 29QHSxgY015430;
+        Wed, 26 Oct 2022 13:28:59 -0400
 Received: (from asmaa@localhost)
-        by bu-vnc02.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id 29QHSwhJ027360;
-        Wed, 26 Oct 2022 13:28:58 -0400
+        by bu-vnc02.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id 29QHSx2W027361;
+        Wed, 26 Oct 2022 13:28:59 -0400
 From:   Asmaa Mnebhi <asmaa@nvidia.com>
 To:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
         bgolaszewski@baylibre.com, linux-acpi@vger.kernel.org
 Cc:     Asmaa Mnebhi <asmaa@nvidia.com>
-Subject: [PATCH v1 1/2] Support NVIDIA BlueField-3 GPIO controller
-Date:   Wed, 26 Oct 2022 13:28:42 -0400
-Message-Id: <20221026172843.27236-2-asmaa@nvidia.com>
+Subject: [PATCH v1 2/2] Support NVIDIA BlueField-3 pinctrl driver
+Date:   Wed, 26 Oct 2022 13:28:43 -0400
+Message-Id: <20221026172843.27236-3-asmaa@nvidia.com>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20221026172843.27236-1-asmaa@nvidia.com>
 References: <20221026172843.27236-1-asmaa@nvidia.com>
@@ -45,59 +45,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for the BlueField-3 SoC GPIO driver
-which allows:
-- setting certain GPIOs as interrupts from other dependent drivers
-- ability to manipulate certain GPIO values from user space
-
-BlueField-3 has 56 GPIOs but the user is allowed to change only some
-of them into GPIO mode. Use valid_mask to make it impossible to alter
-the rest of the GPIOs.
+This patch adds support to the BlueField-3 SoC pin controller.
+It allows muxing individual GPIOs to switch from the default
+hardware mode to software controlled mode.
 
 Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
 ---
- drivers/gpio/Kconfig       |   7 +
- drivers/gpio/Makefile      |   1 +
- drivers/gpio/gpio-mlxbf3.c | 314 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 322 insertions(+)
- create mode 100644 drivers/gpio/gpio-mlxbf3.c
+ drivers/pinctrl/Kconfig         |   9 +
+ drivers/pinctrl/Makefile        |   1 +
+ drivers/pinctrl/pinctrl-mlxbf.c | 353 ++++++++++++++++++++++++++++++++
+ 3 files changed, 363 insertions(+)
+ create mode 100644 drivers/pinctrl/pinctrl-mlxbf.c
 
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index a01af1180616..3e51c2a0455a 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -1532,6 +1532,13 @@ config GPIO_MLXBF2
- 	help
- 	  Say Y here if you want GPIO support on Mellanox BlueField 2 SoC.
+diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+index f71fefff400f..caeef68cf51e 100644
+--- a/drivers/pinctrl/Kconfig
++++ b/drivers/pinctrl/Kconfig
+@@ -512,6 +512,15 @@ config PINCTRL_ZYNQMP
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called pinctrl-zynqmp.
  
-+config GPIO_MLXBF3
-+	tristate "Mellanox BlueField 3 SoC GPIO"
-+	depends on (MELLANOX_PLATFORM && ARM64 && ACPI) || (64BIT && COMPILE_TEST)
-+	select GPIO_GENERIC
++config PINCTRL_MLXBF
++	tristate "NVIDIA BlueField-3 SoC Pinctrl driver"
++	depends on (MELLANOX_PLATFORM && ARM64 && ACPI)
++	select PINMUX
++	select GPIOLIB
++	select GPIOLIB_IRQCHIP
 +	help
-+	  Say Y here if you want GPIO support on Mellanox BlueField 3 SoC.
++	  This selects the pinctrl driver for BlueField-3 SoCs.
 +
- config GPIO_ML_IOH
- 	tristate "OKI SEMICONDUCTOR ML7213 IOH GPIO support"
- 	depends on X86 || COMPILE_TEST
-diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-index 29e3beb6548c..c5e86fd24d2c 100644
---- a/drivers/gpio/Makefile
-+++ b/drivers/gpio/Makefile
-@@ -98,6 +98,7 @@ obj-$(CONFIG_GPIO_MERRIFIELD)		+= gpio-merrifield.o
- obj-$(CONFIG_GPIO_ML_IOH)		+= gpio-ml-ioh.o
- obj-$(CONFIG_GPIO_MLXBF)		+= gpio-mlxbf.o
- obj-$(CONFIG_GPIO_MLXBF2)		+= gpio-mlxbf2.o
-+obj-$(CONFIG_GPIO_MLXBF3)		+= gpio-mlxbf3.o
- obj-$(CONFIG_GPIO_MM_LANTIQ)		+= gpio-mm-lantiq.o
- obj-$(CONFIG_GPIO_MOCKUP)		+= gpio-mockup.o
- obj-$(CONFIG_GPIO_MOXTET)		+= gpio-moxtet.o
-diff --git a/drivers/gpio/gpio-mlxbf3.c b/drivers/gpio/gpio-mlxbf3.c
+ source "drivers/pinctrl/actions/Kconfig"
+ source "drivers/pinctrl/aspeed/Kconfig"
+ source "drivers/pinctrl/bcm/Kconfig"
+diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
+index 89bfa01b5231..e4497078146e 100644
+--- a/drivers/pinctrl/Makefile
++++ b/drivers/pinctrl/Makefile
+@@ -35,6 +35,7 @@ obj-$(CONFIG_PINCTRL_MCP23S08_I2C)	+= pinctrl-mcp23s08_i2c.o
+ obj-$(CONFIG_PINCTRL_MCP23S08_SPI)	+= pinctrl-mcp23s08_spi.o
+ obj-$(CONFIG_PINCTRL_MCP23S08)	+= pinctrl-mcp23s08.o
+ obj-$(CONFIG_PINCTRL_MICROCHIP_SGPIO)	+= pinctrl-microchip-sgpio.o
++obj-$(CONFIG_PINCTRL_MLXBF)	+= pinctrl-mlxbf.o
+ obj-$(CONFIG_PINCTRL_OCELOT)	+= pinctrl-ocelot.o
+ obj-$(CONFIG_PINCTRL_OXNAS)	+= pinctrl-oxnas.o
+ obj-$(CONFIG_PINCTRL_PALMAS)	+= pinctrl-palmas.o
+diff --git a/drivers/pinctrl/pinctrl-mlxbf.c b/drivers/pinctrl/pinctrl-mlxbf.c
 new file mode 100644
-index 000000000000..8517bbaf6f87
+index 000000000000..6304a66f0290
 --- /dev/null
-+++ b/drivers/gpio/gpio-mlxbf3.c
-@@ -0,0 +1,314 @@
++++ b/drivers/pinctrl/pinctrl-mlxbf.c
+@@ -0,0 +1,353 @@
 +// SPDX-License-Identifier: GPL-2.0-only or BSD-3-Clause
 +
 +/*
@@ -105,311 +102,350 @@ index 000000000000..8517bbaf6f87
 + */
 +
 +#include <linux/acpi.h>
-+#include <linux/bitfield.h>
-+#include <linux/bitops.h>
-+#include <linux/device.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/ioport.h>
-+#include <linux/kernel.h>
-+#include <linux/mod_devicetable.h>
++#include <linux/err.h>
 +#include <linux/module.h>
 +#include <linux/platform_device.h>
-+#include <linux/pm.h>
-+#include <linux/resource.h>
-+#include <linux/spinlock.h>
-+#include <linux/types.h>
++#include <linux/property.h>
++#include <linux/regmap.h>
++#include <linux/slab.h>
++#include <linux/gpio.h>
 +
-+/*
-+ * There are 2 YU GPIO blocks:
-+ * gpio[0]: HOST_GPIO0->HOST_GPIO31
-+ * gpio[1]: HOST_GPIO32->HOST_GPIO55
-+ */
-+#define MLXBF3_GPIO_MAX_PINS_PER_BLOCK 32
++#include <linux/pinctrl/machine.h>
++#include <linux/pinctrl/pinctrl.h>
++#include <linux/pinctrl/pinmux.h>
++#include <linux/pinctrl/pinconf.h>
++#include <linux/pinctrl/pinconf-generic.h>
 +
-+/*
-+ * fw_gpio[x] block registers and their offset
-+ */
-+#define YU_GPIO_FW_OUTPUT_ENABLE_SET	0x04
-+#define YU_GPIO_FW_DATA_OUT_SET		0x08
-+#define YU_GPIO_FW_OUTPUT_ENABLE_CLEAR	0x18
-+#define YU_GPIO_FW_DATA_OUT_CLEAR	0x1c
-+#define YU_GPIO_CAUSE_RISE_EN		0x28
-+#define YU_GPIO_CAUSE_FALL_EN		0x2c
-+#define YU_GPIO_READ_DATA_IN		0x30
++#include "core.h"
 +
-+#define YU_GPIO_CAUSE_OR_CAUSE_EVTEN0	0x00
-+#define YU_GPIO_CAUSE_OR_EVTEN0		0x14
-+#define YU_GPIO_CAUSE_OR_CLRCAUSE	0x18
++#define MLXBF_GPIO0_FW_CONTROL_SET   0
++#define MLXBF_GPIO0_FW_CONTROL_CLEAR 0x14
++#define MLXBF_GPIO1_FW_CONTROL_SET   0x80
++#define MLXBF_GPIO1_FW_CONTROL_CLEAR 0x94
 +
-+struct mlxbf3_gpio_context {
-+	struct gpio_chip gc;
-+	struct irq_chip irq_chip;
++#define MLXBF_NGPIOS_GPIO0    32
 +
-+	/* YU GPIO blocks address */
-+	void __iomem *gpio_io;
-+
-+	/* YU GPIO cause block address */
-+	void __iomem *gpio_cause_io;
-+
-+	/* Mask of valid gpios that can be accessed by software */
-+	unsigned int valid_mask;
++enum {
++	MLXBF_GPIO_HW_MODE,
++	MLXBF_GPIO_SW_MODE
 +};
 +
-+static int mlxbf3_gpio_direction_input(struct gpio_chip *chip,
-+				       unsigned int offset)
++struct mlxbf_pinctrl {
++	void __iomem *base;
++	struct device *dev;
++	struct pinctrl_dev *pctl;
++	struct pinctrl_gpio_range gpio_range;
++};
++
++#define MLXBF_GPIO_RANGE(_id, _pinbase, _gpiobase, _npins)	\
++	{							\
++		.name = "mlxbf_gpio_range",			\
++		.id = _id,					\
++		.base = _gpiobase,				\
++		.pin_base = _pinbase,				\
++		.npins = _npins,				\
++	}
++
++static struct pinctrl_gpio_range mlxbf_pinctrl_gpio_ranges[] = {
++	MLXBF_GPIO_RANGE(0, 0,  480, 32),
++	MLXBF_GPIO_RANGE(1,  32, 456, 24),
++};
++
++static const struct pinctrl_pin_desc mlxbf_pins[] = {
++	PINCTRL_PIN(0, "gpio0"),
++	PINCTRL_PIN(1, "gpio1"),
++	PINCTRL_PIN(2, "gpio2"),
++	PINCTRL_PIN(3, "gpio3"),
++	PINCTRL_PIN(4, "gpio4"),
++	PINCTRL_PIN(5, "gpio5"),
++	PINCTRL_PIN(6, "gpio6"),
++	PINCTRL_PIN(7, "gpio7"),
++	PINCTRL_PIN(8, "gpio8"),
++	PINCTRL_PIN(9, "gpio9"),
++	PINCTRL_PIN(10, "gpio10"),
++	PINCTRL_PIN(11, "gpio11"),
++	PINCTRL_PIN(12, "gpio12"),
++	PINCTRL_PIN(13, "gpio13"),
++	PINCTRL_PIN(14, "gpio14"),
++	PINCTRL_PIN(15, "gpio15"),
++	PINCTRL_PIN(16, "gpio16"),
++	PINCTRL_PIN(17, "gpio17"),
++	PINCTRL_PIN(18, "gpio18"),
++	PINCTRL_PIN(19, "gpio19"),
++	PINCTRL_PIN(20, "gpio20"),
++	PINCTRL_PIN(21, "gpio21"),
++	PINCTRL_PIN(22, "gpio22"),
++	PINCTRL_PIN(23, "gpio23"),
++	PINCTRL_PIN(24, "gpio24"),
++	PINCTRL_PIN(25, "gpio25"),
++	PINCTRL_PIN(26, "gpio26"),
++	PINCTRL_PIN(27, "gpio27"),
++	PINCTRL_PIN(28, "gpio28"),
++	PINCTRL_PIN(29, "gpio29"),
++	PINCTRL_PIN(30, "gpio30"),
++	PINCTRL_PIN(31, "gpio31"),
++	PINCTRL_PIN(32, "gpio32"),
++	PINCTRL_PIN(33, "gpio33"),
++	PINCTRL_PIN(34, "gpio34"),
++	PINCTRL_PIN(35, "gpio35"),
++	PINCTRL_PIN(36, "gpio36"),
++	PINCTRL_PIN(37, "gpio37"),
++	PINCTRL_PIN(38, "gpio38"),
++	PINCTRL_PIN(39, "gpio39"),
++	PINCTRL_PIN(40, "gpio40"),
++	PINCTRL_PIN(41, "gpio41"),
++	PINCTRL_PIN(42, "gpio42"),
++	PINCTRL_PIN(43, "gpio43"),
++	PINCTRL_PIN(44, "gpio44"),
++	PINCTRL_PIN(45, "gpio45"),
++	PINCTRL_PIN(46, "gpio46"),
++	PINCTRL_PIN(47, "gpio47"),
++	PINCTRL_PIN(48, "gpio48"),
++	PINCTRL_PIN(49, "gpio49"),
++	PINCTRL_PIN(50, "gpio50"),
++	PINCTRL_PIN(51, "gpio51"),
++	PINCTRL_PIN(52, "gpio52"),
++	PINCTRL_PIN(53, "gpio53"),
++	PINCTRL_PIN(54, "gpio54"),
++	PINCTRL_PIN(55, "gpio55"),
++};
++
++/*
++ * All single-pin functions can be mapped to any GPIO, however pinmux applies
++ * functions to pin groups and only those groups declared as supporting that
++ * function. To make this work we must put each pin in its own dummy group so
++ * that the functions can be described as applying to all pins.
++ * We use the same name as in the datasheet.
++ */
++static const char * const mlxbf_pinctrl_single_group_names[] = {
++	"gpio0", "gpio1",  "gpio2",  "gpio3",  "gpio4",  "gpio5",  "gpio6",
++	"gpio7", "gpio8",  "gpio9",  "gpio10", "gpio11", "gpio12", "gpio13",
++	"gpio14", "gpio15", "gpio16", "gpio17", "gpio18", "gpio19", "gpio20",
++	"gpio21", "gpio22", "gpio23", "gpio24", "gpio25", "gpio26", "gpio27",
++	"gpio28", "gpio29", "gpio30", "gpio31", "gpio32", "gpio33", "gpio34",
++	"gpio35", "gpio36", "gpio37", "gpio38", "gpio39", "gpio40", "gpio41",
++	"gpio42", "gpio43", "gpio44", "gpio45", "gpio46", "gpio47", "gpio48",
++	"gpio49", "gpio50", "gpio51", "gpio52", "gpio53", "gpio54", "gpio55"
++};
++
++/* Set of pin numbers for single-pin groups */
++static const unsigned int mlxbf_pinctrl_single_group_pins[] = {
++	0,  1,  2,  3,  4,  5,  6,
++	7,  8,  9, 10, 11, 12, 13,
++	14, 15, 16, 17, 18, 19, 20,
++	21, 22, 23, 24, 25, 26, 27,
++	28, 29, 30, 31, 32, 33, 34,
++	35, 36, 37, 38, 39, 40, 41,
++	42, 43, 44, 45, 46, 47, 48,
++	49, 50, 51, 52, 53, 54, 55,
++};
++
++static int mlxbf_get_groups_count(struct pinctrl_dev *pctldev)
 +{
-+	struct mlxbf3_gpio_context *gs = gpiochip_get_data(chip);
-+	unsigned long flags;
++	/* Number single-pin groups */
++	return ARRAY_SIZE(mlxbf_pinctrl_single_group_pins);
++}
 +
-+	spin_lock_irqsave(&gs->gc.bgpio_lock, flags);
++static const char *mlxbf_get_group_name(struct pinctrl_dev *pctldev,
++					 unsigned int selector)
++{
++	return mlxbf_pinctrl_single_group_names[selector];
++}
 +
-+	/* Write-only register */
-+	writel(BIT(offset), gs->gpio_io + YU_GPIO_FW_OUTPUT_ENABLE_CLEAR);
-+
-+	spin_unlock_irqrestore(&gs->gc.bgpio_lock, flags);
++static int mlxbf_get_group_pins(struct pinctrl_dev *pctldev,
++				 unsigned int selector,
++				 const unsigned int **pins,
++				 unsigned int *num_pins)
++{
++	/* return the dummy group for a single pin */
++	*pins = &mlxbf_pinctrl_single_group_pins[selector];
++	*num_pins = 1;
 +
 +	return 0;
 +}
 +
-+static int mlxbf3_gpio_direction_output(struct gpio_chip *chip,
-+					unsigned int offset,
-+					int value)
++static const struct pinctrl_ops mlxbf_pinctrl_group_ops = {
++	.get_groups_count = mlxbf_get_groups_count,
++	.get_group_name = mlxbf_get_group_name,
++	.get_group_pins = mlxbf_get_group_pins,
++};
++
++static const char * const mlxbf_gpiofunc_group_names[] = { "swctrl" };
++static const char * const mlxbf_hwfunc_group_names[]   = { "hwctrl" };
++
++/*
++ * Only 2 functions are supported which apply to all pins:
++ * 1) Possible default hardware functionality
++ * 2) Software controlled GPIO
++ */
++static const struct {
++	const char *name;
++	const char * const *group_names;
++} mlxbf_pmx_funcs[] = {
++	{
++		.name = "hwfunc",
++		.group_names = mlxbf_hwfunc_group_names
++	},
++	{
++		.name = "gpiofunc",
++		.group_names = mlxbf_gpiofunc_group_names
++	},
++};
++
++static int mlxbf_pmx_get_funcs_count(struct pinctrl_dev *pctldev)
 +{
-+	struct mlxbf3_gpio_context *gs = gpiochip_get_data(chip);
-+	unsigned long flags;
++	return ARRAY_SIZE(mlxbf_pmx_funcs);
++}
 +
-+	spin_lock_irqsave(&gs->gc.bgpio_lock, flags);
++static const char *mlxbf_pmx_get_func_name(struct pinctrl_dev *pctldev,
++					   unsigned int selector)
++{
++	return mlxbf_pmx_funcs[selector].name;
++}
 +
-+	writel(BIT(offset), gs->gpio_io + YU_GPIO_FW_OUTPUT_ENABLE_SET);
++static int mlxbf_pmx_get_groups(struct pinctrl_dev *pctldev,
++				 unsigned int selector,
++				 const char * const **groups,
++				 unsigned int * const num_groups)
++{
++	*groups = mlxbf_pmx_funcs[selector].group_names;
++	/* The function where "software has control over a GPIO" is available to all gpio pins */
++	*num_groups = ARRAY_SIZE(mlxbf_pinctrl_single_group_pins);
 +
-+	if (value)
-+		writel(BIT(offset), gs->gpio_io + YU_GPIO_FW_DATA_OUT_SET);
++	return 0;
++}
++
++static int mlxbf_pmx_set(struct pinctrl_dev *pctldev,
++			      unsigned int selector,
++			      unsigned int group)
++{
++	struct mlxbf_pinctrl *priv = pinctrl_dev_get_drvdata(pctldev);
++
++	if (selector == MLXBF_GPIO_HW_MODE) {
++		if (group < MLXBF_NGPIOS_GPIO0)
++			writel(BIT(group), priv->base + MLXBF_GPIO0_FW_CONTROL_CLEAR);
++		else
++			writel(BIT(group % MLXBF_NGPIOS_GPIO0), priv->base + MLXBF_GPIO1_FW_CONTROL_CLEAR);
++	}
++
++	if (selector == MLXBF_GPIO_SW_MODE) {
++		if (group < MLXBF_NGPIOS_GPIO0)
++			writel(BIT(group), priv->base + MLXBF_GPIO0_FW_CONTROL_SET);
++		else
++			writel(BIT(group % MLXBF_NGPIOS_GPIO0), priv->base + MLXBF_GPIO1_FW_CONTROL_SET);
++	}
++
++	return 0;
++}
++
++static int mlxbf_gpio_request_enable(struct pinctrl_dev *pctldev,
++				     struct pinctrl_gpio_range *range,
++				     unsigned int offset)
++{
++	struct mlxbf_pinctrl *priv = pinctrl_dev_get_drvdata(pctldev);
++
++	if (offset < MLXBF_NGPIOS_GPIO0)
++		writel(BIT(offset), priv->base + MLXBF_GPIO0_FW_CONTROL_SET);
 +	else
-+		writel(BIT(offset), gs->gpio_io + YU_GPIO_FW_DATA_OUT_CLEAR);
-+
-+	spin_unlock_irqrestore(&gs->gc.bgpio_lock, flags);
++		writel(BIT(offset % MLXBF_NGPIOS_GPIO0), priv->base + MLXBF_GPIO1_FW_CONTROL_SET);
 +
 +	return 0;
 +}
 +
-+static void mlxbf3_gpio_irq_enable(struct irq_data *irqd)
++static void mlxbf_gpio_disable_free(struct pinctrl_dev *pctldev,
++				    struct pinctrl_gpio_range *range,
++				    unsigned int offset)
 +{
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(irqd);
-+	struct mlxbf3_gpio_context *gs = gpiochip_get_data(gc);
-+	int offset = irqd_to_hwirq(irqd);
-+	unsigned long flags;
-+	u32 val;
++	struct mlxbf_pinctrl *priv = pinctrl_dev_get_drvdata(pctldev);
 +
-+	spin_lock_irqsave(&gs->gc.bgpio_lock, flags);
-+	writel(BIT(offset), gs->gpio_cause_io + YU_GPIO_CAUSE_OR_CLRCAUSE);
++	/* disable GPIO functionality by giving control back to hardware */
++	if (offset < MLXBF_NGPIOS_GPIO0)
++		writel(BIT(offset), priv->base + MLXBF_GPIO0_FW_CONTROL_CLEAR);
++	else
++		writel(BIT(offset % MLXBF_NGPIOS_GPIO0), priv->base + MLXBF_GPIO1_FW_CONTROL_CLEAR);
 +
-+	val = readl(gs->gpio_cause_io + YU_GPIO_CAUSE_OR_EVTEN0);
-+	val |= BIT(offset);
-+	writel(val, gs->gpio_cause_io + YU_GPIO_CAUSE_OR_EVTEN0);
-+	spin_unlock_irqrestore(&gs->gc.bgpio_lock, flags);
 +}
 +
-+static void mlxbf3_gpio_irq_disable(struct irq_data *irqd)
-+{
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(irqd);
-+	struct mlxbf3_gpio_context *gs = gpiochip_get_data(gc);
-+	int offset = irqd_to_hwirq(irqd);
-+	unsigned long flags;
-+	u32 val;
++static const struct pinmux_ops mlxbf_pmx_ops = {
++	.get_functions_count = mlxbf_pmx_get_funcs_count,
++	.get_function_name = mlxbf_pmx_get_func_name,
++	.get_function_groups = mlxbf_pmx_get_groups,
++	.set_mux = mlxbf_pmx_set,
++	.gpio_request_enable = mlxbf_gpio_request_enable,
++	.gpio_disable_free = mlxbf_gpio_disable_free,
++};
 +
-+	spin_lock_irqsave(&gs->gc.bgpio_lock, flags);
-+	val = readl(gs->gpio_cause_io + YU_GPIO_CAUSE_OR_EVTEN0);
-+	val &= ~BIT(offset);
-+	writel(val, gs->gpio_cause_io + YU_GPIO_CAUSE_OR_EVTEN0);
-+	spin_unlock_irqrestore(&gs->gc.bgpio_lock, flags);
-+}
++static struct pinctrl_desc mlxbf_pin_desc = {
++	.name = "pinctrl-mlxbf",
++	.pins = mlxbf_pins,
++	.npins = ARRAY_SIZE(mlxbf_pins),
++	.pctlops = &mlxbf_pinctrl_group_ops,
++	.pmxops = &mlxbf_pmx_ops,
++	.owner = THIS_MODULE,
++};
 +
-+static irqreturn_t mlxbf3_gpio_irq_handler(int irq, void *ptr)
-+{
-+	struct mlxbf3_gpio_context *gs = ptr;
-+	struct gpio_chip *gc = &gs->gc;
-+	unsigned long pending;
-+	u32 level;
-+
-+	pending = readl(gs->gpio_cause_io + YU_GPIO_CAUSE_OR_CAUSE_EVTEN0);
-+	writel(pending, gs->gpio_cause_io + YU_GPIO_CAUSE_OR_CLRCAUSE);
-+
-+	for_each_set_bit(level, &pending, gc->ngpio)
-+		generic_handle_irq(irq_find_mapping(gc->irq.domain, level));
-+
-+	return IRQ_RETVAL(pending);
-+}
-+
-+static int
-+mlxbf3_gpio_irq_set_type(struct irq_data *irqd, unsigned int type)
-+{
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(irqd);
-+	struct mlxbf3_gpio_context *gs = gpiochip_get_data(gc);
-+	int offset = irqd_to_hwirq(irqd);
-+	unsigned long flags;
-+	bool fall = false;
-+	bool rise = false;
-+	u32 val;
-+
-+	switch (type & IRQ_TYPE_SENSE_MASK) {
-+	case IRQ_TYPE_EDGE_BOTH:
-+		fall = true;
-+		rise = true;
-+		break;
-+	case IRQ_TYPE_EDGE_RISING:
-+		rise = true;
-+		break;
-+	case IRQ_TYPE_EDGE_FALLING:
-+		fall = true;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	spin_lock_irqsave(&gs->gc.bgpio_lock, flags);
-+	if (fall) {
-+		val = readl(gs->gpio_io + YU_GPIO_CAUSE_FALL_EN);
-+		val |= BIT(offset);
-+		writel(val, gs->gpio_io + YU_GPIO_CAUSE_FALL_EN);
-+	}
-+
-+	if (rise) {
-+		val = readl(gs->gpio_io + YU_GPIO_CAUSE_RISE_EN);
-+		val |= BIT(offset);
-+		writel(val, gs->gpio_io + YU_GPIO_CAUSE_RISE_EN);
-+	}
-+	spin_unlock_irqrestore(&gs->gc.bgpio_lock, flags);
-+
-+	return 0;
-+}
-+
-+static int mlxbf3_gpio_init_valid_mask(struct gpio_chip *gc,
-+				       unsigned long *valid_mask,
-+				       unsigned int ngpios)
-+{
-+	struct mlxbf3_gpio_context *gs = gpiochip_get_data(gc);
-+
-+	*valid_mask = gs->valid_mask;
-+
-+	return 0;
-+}
-+
-+/* BlueField-3 GPIO driver initialization routine. */
-+static int
-+mlxbf3_gpio_probe(struct platform_device *pdev)
++static int mlxbf_pinctrl_probe(struct platform_device *pdev)
 +{
 +	struct device *dev = &pdev->dev;
-+	struct mlxbf3_gpio_context *gs;
-+	unsigned int npins, valid_mask;
-+	struct gpio_irq_chip *girq;
-+	struct gpio_chip *gc;
++	struct mlxbf_pinctrl *priv;
 +	struct resource *res;
-+	const char *name;
-+	int ret, irq;
++	int ret;
 +
-+	name = dev_name(dev);
++	BUILD_BUG_ON(ARRAY_SIZE(mlxbf_pinctrl_single_group_names) !=
++		     ARRAY_SIZE(mlxbf_pinctrl_single_group_pins));
 +
-+	gs = devm_kzalloc(dev, sizeof(*gs), GFP_KERNEL);
-+	if (!gs)
++	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
 +		return -ENOMEM;
++
++	priv->dev = &pdev->dev;
 +
 +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 +	if (!res)
 +		return -ENODEV;
 +
-+	/* Resource shared with pinctrl driver */
-+	gs->gpio_io = devm_ioremap(dev, res->start, resource_size(res));
-+	if (!gs->gpio_io)
++	priv->base = devm_ioremap(dev, res->start, resource_size(res));
++	if (!priv->base)
 +		return -ENOMEM;
 +
-+	/* YU GPIO block address */
-+	gs->gpio_cause_io = devm_platform_ioremap_resource(pdev, 1);
-+	if (IS_ERR(gs->gpio_cause_io))
-+		return PTR_ERR(gs->gpio_cause_io);
-+
-+	if (device_property_read_u32(dev, "npins", &npins))
-+		npins = MLXBF3_GPIO_MAX_PINS_PER_BLOCK;
-+
-+	if (device_property_read_u32(dev, "valid_mask", &valid_mask))
-+		valid_mask = 0x0;
-+
-+	gs->valid_mask = valid_mask;
-+
-+	gc = &gs->gc;
-+
-+	ret = bgpio_init(gc, dev, 4,
-+			gs->gpio_io + YU_GPIO_READ_DATA_IN,
-+			gs->gpio_io + YU_GPIO_FW_DATA_OUT_SET,
-+			gs->gpio_io + YU_GPIO_FW_DATA_OUT_CLEAR,
-+			NULL, NULL, 0);
-+
-+	gc->direction_output = mlxbf3_gpio_direction_output;
-+	gc->direction_input = mlxbf3_gpio_direction_input;
-+	gc->request = gpiochip_generic_request;
-+	gc->free = gpiochip_generic_free;
-+	gc->init_valid_mask = mlxbf3_gpio_init_valid_mask;
-+
-+	gc->ngpio = npins;
-+	gc->owner = THIS_MODULE;
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq >= 0) {
-+		gs->irq_chip.name = name;
-+		gs->irq_chip.irq_set_type = mlxbf3_gpio_irq_set_type;
-+		gs->irq_chip.irq_enable = mlxbf3_gpio_irq_enable;
-+		gs->irq_chip.irq_disable = mlxbf3_gpio_irq_disable;
-+
-+		girq = &gs->gc.irq;
-+		girq->chip = &gs->irq_chip;
-+		girq->handler = handle_simple_irq;
-+		girq->default_type = IRQ_TYPE_NONE;
-+		/* This will let us handle the parent IRQ in the driver */
-+		girq->num_parents = 0;
-+		girq->parents = NULL;
-+		girq->parent_handler = NULL;
-+
-+		/*
-+		 * Directly request the irq here instead of passing
-+		 * a flow-handler because the irq is shared.
-+		 */
-+		ret = devm_request_irq(dev, irq, mlxbf3_gpio_irq_handler,
-+				       IRQF_SHARED, name, gs);
-+		if (ret) {
-+			dev_err(dev, "failed to request IRQ");
-+			return ret;
-+		}
-+	}
-+
-+	platform_set_drvdata(pdev, gs);
-+
-+	ret = devm_gpiochip_add_data(dev, &gs->gc, gs);
++	ret = devm_pinctrl_register_and_init(priv->dev,
++					     &mlxbf_pin_desc,
++					     priv,
++					     &priv->pctl);
 +	if (ret) {
-+		dev_err(dev, "Failed adding memory mapped gpiochip\n");
++		dev_err(priv->dev, "Failed pinctrl register (%d)\n", ret);
 +		return ret;
 +	}
++
++	ret = pinctrl_enable(priv->pctl);
++	if (ret) {
++		dev_err(priv->dev, "Failed to enable pinctrl (%d)\n", ret);
++		return ret;
++	}
++
++	pinctrl_add_gpio_range(priv->pctl, &mlxbf_pinctrl_gpio_ranges[0]);
++	pinctrl_add_gpio_range(priv->pctl, &mlxbf_pinctrl_gpio_ranges[1]);
 +
 +	return 0;
 +}
 +
-+static const struct acpi_device_id __maybe_unused mlxbf3_gpio_acpi_match[] = {
-+	{ "MLNXBF33", 0 },
++static const struct acpi_device_id mlxbf_pinctrl_acpi_ids[] = {
++	{ "MLNXBF34", 0 },
 +	{},
 +};
-+MODULE_DEVICE_TABLE(acpi, mlxbf3_gpio_acpi_match);
++MODULE_DEVICE_TABLE(acpi, mlxbf_pinctrl_acpi_ids);
 +
-+static struct platform_driver mlxbf3_gpio_driver = {
++static struct platform_driver mlxbf_pinctrl_driver = {
 +	.driver = {
-+		.name = "mlxbf3_gpio",
-+		.acpi_match_table = mlxbf3_gpio_acpi_match,
++		.name = "pinctrl-mlxbf",
++		.acpi_match_table = mlxbf_pinctrl_acpi_ids,
 +	},
-+	.probe    = mlxbf3_gpio_probe,
++	.probe = mlxbf_pinctrl_probe,
 +};
 +
-+module_platform_driver(mlxbf3_gpio_driver);
++module_platform_driver(mlxbf_pinctrl_driver);
 +
-+MODULE_DESCRIPTION("NVIDIA BlueField-3 GPIO Driver");
++MODULE_DESCRIPTION("NVIDIA pinctrl driver");
 +MODULE_AUTHOR("Asmaa Mnebhi <asmaa@nvidia.com>");
 +MODULE_LICENSE("Dual BSD/GPL");
 -- 
