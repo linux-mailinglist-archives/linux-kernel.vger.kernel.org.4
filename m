@@ -2,121 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8F360E291
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F4660E265
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234068AbiJZNt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 09:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
+        id S233629AbiJZNon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234103AbiJZNtF (ORCPT
+        with ESMTP id S233481AbiJZNoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 09:49:05 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B3B105CCA
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:48:58 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso3731616pjn.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:48:58 -0700 (PDT)
+        Wed, 26 Oct 2022 09:44:34 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A8EF20
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:44:29 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id r6-20020a1c4406000000b003cf4d389c41so568362wma.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:44:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AKFRv0zM9kMluPQ3+hHI7EIzkLtxGEc8lwOlSBqM7+8=;
-        b=RPvo9GZ9F6TwIw7A0fjA6QSO9W3jcPv50/4lWroYKxeuCqonf/4q/oMdH6lzyQjbkR
-         lcnpvxPLCNsCxJgGc34bD7+VVsaPhHFSMd26Go+hj1TtvQFd4s6yxPzn0BK8PUGFAFVj
-         rrDI/HWdcXi90GzguqjpqrQsWonoNZR4iLg0m0IypxjIPcoRig5a2Sb1XFSBxMZ5EaW8
-         KqIajKKdXwH8UhjdkhHpocjl8bOAMvozKyOozJ3U0Ux8rh8BlK5WRraxays1gWVtFnCt
-         GvkCrX2lsF+ctvRabev0+wy3UJlze/MesBoJ2zpUb03SVjHKFRruOD3qHhLA1Ej/L+Rv
-         NzEA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OyA2qrkg2v5gkKnTd58IzjBTBTzDkYj25MMbNU3XjYc=;
+        b=PYo5iL75nUpNGpmxlciuKA348rtZZuLdjrL1B4w+c7/EPMYhKKgUhijwgww3YySE38
+         fwxmJXw9uKBZbl+Ax/lNSAXWVp1S/spgRhHvw4NUox0VME97nISx2q9j0xN1GWLOvT22
+         wP8HSDeUg6/09OGyeoHV0ps4aBM9iTgeurbT2K8YX1l0/uluh/lZnuyuGKbV1vZLQvbW
+         cjBpPW3McN7Qsz2xZi15FN3egWorioScfwIC/+2sOytrGGkk0Fb6YQOwcvkBKXg0P6ay
+         W+y1pFgdhVGWSER+WAJNCTSNeQVIXyAGqkVlJYO91eYxiT2tkYYw2C/plJ3aFgGhoj76
+         m3DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AKFRv0zM9kMluPQ3+hHI7EIzkLtxGEc8lwOlSBqM7+8=;
-        b=7LJVF87rHSmqT51oApw08Tlh6yir7MJvFCpAahzz1VHupSSCk/zbco2SWqA7xxAdLW
-         CbD4LYL8y5LT4/v5OruAq9WLqaIcc12c+V2KXFXP/fxSKMb+AkNbb2RM7DeORLp1k3Qf
-         5SkgmwSrDu34m4C+asoRkSK/HZcKZ01QOL5+QH+O87xgSb2fbMA3U0BE9RogR0hon5/R
-         k4xKWIuljTO67vybhmAppdZC7v+05ItU+ixU6vZxBtaFYFjJTcYz87NydMB93U2npofH
-         /ue4PB6PKPclVCjlu3xyi5wCVNUtK83lc7WiYELpRg+PvJsn9RJBF8t8KYWKMYOo1U3p
-         1k7Q==
-X-Gm-Message-State: ACrzQf3cmwo/LIQULTLn9zyswKGGekRfgFU4QCRypaEKKXaS1XSjufKl
-        UBnubQB1wc5uiLdpSL3kD8cVwidboZRGMw==
-X-Google-Smtp-Source: AMsMyM4Iwzkt6Srcrk4gx6gtg+JjdQxqOxgx2b6dNxZl9uzmX1WjFH0HKC1etqmNAoTPp+5pkSjkug==
-X-Received: by 2002:a17:903:1207:b0:185:4042:23d2 with SMTP id l7-20020a170903120700b00185404223d2mr43403332plh.143.1666792127247;
-        Wed, 26 Oct 2022 06:48:47 -0700 (PDT)
-Received: from localhost ([135.180.227.132])
-        by smtp.gmail.com with ESMTPSA id i129-20020a639d87000000b0046ae5cfc3d5sm2790473pgd.61.2022.10.26.06.48.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 06:48:46 -0700 (PDT)
-In-Reply-To: <20221008145437.491-1-jszhang@kernel.org>
-References: <20221008145437.491-1-jszhang@kernel.org>
-Subject: Re: [PATCH v2] riscv: jump_label: mark arguments as const to satisfy asm constraints
-Message-Id: <166679181922.18979.10448305327462266940.b4-ty@rivosinc.com>
-Date:   Wed, 26 Oct 2022 06:43:39 -0700
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OyA2qrkg2v5gkKnTd58IzjBTBTzDkYj25MMbNU3XjYc=;
+        b=3gaP/s+27Fv5+49vxRrshZ3Z6yrbe4wgn0ok+/jdX5eU73rAbg+W89e8ArxEBz2nRa
+         WNG1DDAfMi65GMgck91BH20k//MP4m8Khwpgkv2B+yUIvAErzb4X/I3v2o/nxx/ucSqC
+         bvJO8ec2f1rTsB7LPJz//2X+HtQ8f3Vskk5jikAgeCzXWF4STKne1qkH6KL/pWHM5nE4
+         IcfHokS5Z6K2o83KmVRJEIvz0e3rwfFbOQVYbqvFKL+jS41ApJDBtogR9bbrBPV+S4/H
+         7jlzNJrWr71ZDMxSLNVjiTtQ0uWpb9Hh6DFZMivX74TgZldn7yBOaa4EWKUWegkSf0jg
+         f1Mw==
+X-Gm-Message-State: ACrzQf2knwuK5AnTHU2t3UkWPSETmcpMh2pZqRoLUNcDS4CV3Za/QZjP
+        qgsuANlP9mainx9x0XbXZhg6WgAXRklZom7f
+X-Google-Smtp-Source: AMsMyM68ArWQVEvwrzZgCqaiRtXg0TuUH5ba+A9oWWptJ1v9Fv5Od9sxwjpzL9nWVfIweRuZps4fWA==
+X-Received: by 2002:a05:600c:5252:b0:3c6:f478:96db with SMTP id fc18-20020a05600c525200b003c6f47896dbmr2595614wmb.116.1666791868141;
+        Wed, 26 Oct 2022 06:44:28 -0700 (PDT)
+Received: from [192.168.1.115] ([185.126.107.38])
+        by smtp.gmail.com with ESMTPSA id l36-20020a05600c08a400b003c65c9a36dfsm1752806wmp.48.2022.10.26.06.44.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 06:44:27 -0700 (PDT)
+Message-ID: <3eb9b612-e765-7ad0-aed8-a50e28677e9c@linaro.org>
+Date:   Wed, 26 Oct 2022 15:44:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-36ce3
-Cc:     linux-riscv@lists.infradead.org,
-        Samuel Holland <samuel@sholland.org>, llvm@lists.linux.dev,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Tom Rix <trix@redhat.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.0
+Subject: Re: [PATCH V13 4/4] LoongArch: Enable
+ ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@kernel.org>, Guo Ren <guoren@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jason Baron <jbaron@akamai.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+References: <20221024070105.306280-1-chenhuacai@loongson.cn>
+ <20221024070105.306280-5-chenhuacai@loongson.cn>
+ <CAJF2gTSN3zzvgAdiM8rYc3EGFxR4JJnHSh12mvsfUOQsqRRvkg@mail.gmail.com>
+ <CAAhV-H40fcUW3jwGZXpPNjbpizXb85zytCpKGHvEGwoRpG3c0Q@mail.gmail.com>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <CAAhV-H40fcUW3jwGZXpPNjbpizXb85zytCpKGHvEGwoRpG3c0Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 8 Oct 2022 22:54:37 +0800, Jisheng Zhang wrote:
-> Samuel reported that the static branch usage in cpu_relax() breaks
-> building with CONFIG_CC_OPTIMIZE_FOR_SIZE:
+On 26/10/22 14:59, Huacai Chen wrote:
+> On Mon, Oct 24, 2022 at 4:04 PM Guo Ren <guoren@kernel.org> wrote:
+>> On Mon, Oct 24, 2022 at 3:05 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+>>>
+>>> From: Feiyang Chen <chenfeiyang@loongson.cn>
+>>>
+>>> The feature of minimizing overhead of struct page associated with each
+>>> HugeTLB page is implemented on x86_64. However, the infrastructure of
+>>> this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
+>>> OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
+>>>
+>>> To avoid the following build error on LoongArch we should include linux/
+>>> static_key.h in page-flags.h. This is straightforward but the build
+>>> error is implicitly a LoongArch-specific problem, because ARM64 and X86
+>>> have already include static_key.h from their arch-specific core headers.
+
+>>> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+>>> index 0b0ae5084e60..1aafdc73e399 100644
+>>> --- a/include/linux/page-flags.h
+>>> +++ b/include/linux/page-flags.h
+>>> @@ -9,6 +9,7 @@
+>>>   #include <linux/types.h>
+>>>   #include <linux/bug.h>
+>>>   #include <linux/mmdebug.h>
+>>> +#include <linux/static_key.h>
+>> Em... riscv needn't this.
+
+Would guarding the header suffice and make riscv OK with this patch?
+
+  #ifdef CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+  #include <linux/static_key.h>
+  #endif
+
+> I found that after 36d4b36b69590fed99356a4426c940a25 (" lib/nodemask:
+> inline next_node_in() and node_random()"), build errors have gone. But
+> I think this is just an accident. Because that commit adds random.h
+> inclusion in nodemask.h, then asm-offsets.c --> sched.h --> nodemask.h
+> --> random.h --> once.h --> jump_label.h. If one day this chain is
+> adjusted, then build errors come again.
 > 
-> In file included from <command-line>:
-> ./arch/riscv/include/asm/jump_label.h: In function 'cpu_relax':
-> ././include/linux/compiler_types.h:285:33: warning: 'asm' operand 0
-> probably does not match constraints
->   285 | #define asm_volatile_goto(x...) asm goto(x)
->       |                                 ^~~
-> ./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro
-> 'asm_volatile_goto'
->    41 |         asm_volatile_goto(
->       |         ^~~~~~~~~~~~~~~~~
-> ././include/linux/compiler_types.h:285:33: error: impossible constraint
-> in 'asm'
->   285 | #define asm_volatile_goto(x...) asm goto(x)
->       |                                 ^~~
-> ./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro
-> 'asm_volatile_goto'
->    41 |         asm_volatile_goto(
->       |         ^~~~~~~~~~~~~~~~~
-> make[1]: *** [scripts/Makefile.build:249:
-> arch/riscv/kernel/vdso/vgettimeofday.o] Error 1
-> make: *** [arch/riscv/Makefile:128: vdso_prepare] Error 2
+> On the other hand, page-flags.h is obviously using some static_key
+> macros, including static_key.h is straightforward for building.
 > 
-> [...]
-
-Applied, thanks!
-
-[1/1] riscv: jump_label: mark arguments as const to satisfy asm constraints
-      commit: 89fd4a1df829187d4d35f6a520cc531de622e6f0
-
-Best regards,
--- 
-Palmer Dabbelt <palmer@rivosinc.com>
+> Huacai
