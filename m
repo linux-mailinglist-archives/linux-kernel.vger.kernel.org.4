@@ -2,209 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8A660D87A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 02:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 729AE60D87F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 02:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232274AbiJZAd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 20:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59728 "EHLO
+        id S232289AbiJZAgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 20:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiJZAdy (ORCPT
+        with ESMTP id S230307AbiJZAgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 20:33:54 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27BDBE09F7;
-        Tue, 25 Oct 2022 17:33:53 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id sc25so17125685ejc.12;
-        Tue, 25 Oct 2022 17:33:53 -0700 (PDT)
+        Tue, 25 Oct 2022 20:36:46 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54819ABD42
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 17:36:44 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id q9-20020a17090a178900b00212fe7c6bbeso644159pja.4
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 17:36:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4aaWjS4eNJQCSflTPbOyiWS6X5z8XgwuVIyZ0zSHeyw=;
-        b=SHvn6WzuKVF3LpTc/NiE0K7REkU1D+t31ewuYJJDe9vO/IGeR++UK4sJcY4JVfs9P9
-         4tn09MZgZ3umnJxr4I+8KrPkdfBjzNlProITgLufKqnsbp3aQXbC6NCLogOHJwEaxxpe
-         F0uTxKwYT/9nv3v/A7EnOX3iUNOz1GTG1WkEckuAy9wjtbw6hTYgTF7EmnEoh0LtbDra
-         HtVOmE4LVAhvpzeT/16Q6YbPl7I0uMDCskC+koYA7ExOwxG5iseAxtKwolV0o1bWHMx2
-         1KVMFGreiyq9AWLWBaAX2FabnXniRUVJ4LX4Tu9gMNf7bnBVox+SZbflXSSzaODyJqbN
-         MYDA==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7ailGgiiFtHdwB/nG3A6RiLx4EUpdrg50HC30U8xGLo=;
+        b=U4atFBeXIc700OXYSkV+KwBvVmXl3d+nTjYQtI8gEOUrvetsC8P04b8H0OQorM6Ux0
+         kX7YLqRHhSemkPbJJy5yb43nmMPLVgzMfdLYIazdQb7zhbJqp2v/xUjx0Is9qieVh1vp
+         6QObeDiWZp2fM8N9aJp+esZK9bHSWbPbawhqw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4aaWjS4eNJQCSflTPbOyiWS6X5z8XgwuVIyZ0zSHeyw=;
-        b=Aaff+Hr30eXlESwQUUTC/gPJj1Y5Hx6g/JxIlgsbj1Zn53oYNUTMKnQI6CVq7kectC
-         R5SU+6EzD4RpJsKRMfuQ5I7llNBEfg5pOX2FkhECb54W0lZ3CVIVZOO2+MToFsEO84Pk
-         7tXMRCAsHu4GOljRxtGiYzTLabEZbGus32yWL0zW+R4ZZPFMuGDpOI9xktVBedEn04U4
-         CWdWpEY/3V1vmBvMQuLGj+YSF8YzSvrZOj+xIpe5MBxs9vUbxr7AiJoRd73s9LAvQKzE
-         Z69vQKeNpDv51S82Z6DxmdcVPvVDrRg2XF9DA4GbRjj5SbwXtbsyUBbwRWMSPJ5frbdK
-         lB8Q==
-X-Gm-Message-State: ACrzQf29EMM+3e3U+NSYc2J2jWGpmuwj/D/vd0MZEWqnaIengahmEuqz
-        CII4KVchsTSL+d+aE0N95dZizpWj+YtUEcMcZOrN3dYVCHk=
-X-Google-Smtp-Source: AMsMyM41fHmvE/tw4iklmaAb+tsqtyxfNYyQRmCSC3l1Ydpw8H0fd4O6opPaTD2iDYsaKwcpryWF6XN0IFp4SXx9s9g=
-X-Received: by 2002:a17:906:c14f:b0:793:30e1:96be with SMTP id
- dp15-20020a170906c14f00b0079330e196bemr29985809ejc.447.1666744431536; Tue, 25
- Oct 2022 17:33:51 -0700 (PDT)
+        bh=7ailGgiiFtHdwB/nG3A6RiLx4EUpdrg50HC30U8xGLo=;
+        b=oZ2l80WLJjCrEN3g7J3s/MDPkcwlu6PiSZimtx5qquBdcrYQ7WMtikppW6Y1N1J7h7
+         t7nsL3fHJcJxjEaiJjCGwgMV483cOtenoRo3Rim2tAnzc8fp6OcXNNL+BmdKD3j+fdFT
+         lMjJeBc/Q1uF+DzdkCiQ7wg1WqD8BwNld73qs1jBg6KJZaSRFRrox1OOJwM1D2CqUEUX
+         zimAcUiMTPoj8w9YWDHKjqPS1DVBS68lBPNo774JRTKCtqE6h1N99TvLE1Qs8MD/U/zA
+         Nc7Pc8p03Fje5WBMrSGzfeu1HK/WFYYo75FTyR6/KpM7BVjKqeBB3LteuRp+VPf4dpqM
+         vURQ==
+X-Gm-Message-State: ACrzQf3pEfIobymPdqAAetCxe7JvqcRPtG0mH9DeSaqdMLyTej2ke8Y2
+        IGf3xK2aFPyZZrlQarnUWHL2Cw==
+X-Google-Smtp-Source: AMsMyM6Y+OvWlp/mwC5JS0gAzw3xPKQzyO5Z2SGnJvfeHCyIr2nQ08DmZhECrHf5yBL7lUzZdHDvVQ==
+X-Received: by 2002:a17:902:e5c6:b0:185:4bbd:17ce with SMTP id u6-20020a170902e5c600b001854bbd17cemr42003936plf.132.1666744603759;
+        Tue, 25 Oct 2022 17:36:43 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:11a:201:c1b0:de11:3d5e:16c0])
+        by smtp.gmail.com with ESMTPSA id ik29-20020a170902ab1d00b001868ba9a867sm1717405plb.303.2022.10.25.17.36.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 17:36:43 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+        Guenter Roeck <groeck@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Craig Hesling <hesling@chromium.org>,
+        Tom Hughes <tomhughes@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH v7 0/2] dt-bindings: cros-ec: Update for fingerprint devices
+Date:   Tue, 25 Oct 2022 17:36:39 -0700
+Message-Id: <20221026003641.2688765-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
 MIME-Version: 1.0
-References: <20220929185119.335273-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220929185119.335273-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdXR+Nsyd0EkNeBvUOpm+qPNUDMZedfY0wErESi5x2Z9JA@mail.gmail.com>
-In-Reply-To: <CAMuHMdXR+Nsyd0EkNeBvUOpm+qPNUDMZedfY0wErESi5x2Z9JA@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 26 Oct 2022 01:33:24 +0100
-Message-ID: <CA+V-a8ujJR-Ca4QRgiosPfaEmscFKERHySUL9xpzr794x5EzmQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] clk: renesas: rzg2l: Don't assume all CPG_MOD clocks
- support PM
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+This patch series introduces a DT binding for chromeos fingerprint
+devices. The first patch tightens up the existing cros-ec binding and
+the second patch introduces the fingerprint binding. As there aren't any
+driver patches this can go directly through the chrome platform
+tree or the dt-binding tree or the mfd tree. I sent it to the binding
+maintainers in hopes it can go there directly but it doesn't really
+matter.
 
-Thank you for the review.
+Changes from v6 (https://lore.kernel.org/r/20220614195144.2794796-1-swboyd@chromium.org):
+ * Put back into the same cros-ec binding file again
+ * Gave up trying to make it use additionalProperties: false and added a
+   comment instead
+ * Made symmetric for the spi and rpmsg case
 
-On Tue, Oct 25, 2022 at 9:56 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Thu, Sep 29, 2022 at 8:51 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > There are cases where not all CPG_MOD clocks should be assumed to support
-> > PM. For example on the CRU block there is a particular sequence that needs
-> > to be followed to initialize the CSI-2 D-PHY in which individual clocks
-> > need to be turned ON/OFF, due to which Runtime PM support wasn't used by
-> > the CRU CSI-2 driver.
-> >
-> > This patch adds support to allow indicating if PM is supported by the
-> > CPG_MOD clocks. A new macro is DEF_NO_PM() is added which sets the no_pm
-> > flag in struct rzg2l_mod_clk and when the driver uses Runtime PM support
-> > no_pm flag is checked to see if the clk needs to included as part of
-> > Runtime PM.
-> >
-> > CPG_MOD clocks with no_pm flag set need to be individually turned ON/OFF
-> > depending on the requirement of the driver.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > RFC->v1
-> > * Added no_pm_mod_clks and num_no_pm_mod_clks members as part of
-> >   struct rzg2l_cpg_priv
->
-> Thanks for your patch!
->
-> > --- a/drivers/clk/renesas/rzg2l-cpg.c
-> > +++ b/drivers/clk/renesas/rzg2l-cpg.c
-> > @@ -108,12 +108,16 @@ struct rzg2l_cpg_priv {
-> >         unsigned int num_mod_clks;
-> >         unsigned int num_resets;
-> >         unsigned int last_dt_core_clk;
-> > +       int *no_pm_mod_clks;
-> > +       unsigned int num_no_pm_mod_clks;
-> >
-> >         const struct rzg2l_cpg_info *info;
-> >
-> >         struct rzg2l_pll5_mux_dsi_div_param mux_dsi_div_params;
-> >  };
-> >
-> > +static struct rzg2l_cpg_priv *rzg2l_cpg_priv;
->
-> I think you can do without this, by moving the currently separately
-> allocated struct generic_pm_domain into struct rzg2l_cpg_priv,
-> and using container_of() on the currently unused pointer passed to
-> rzg2l_cpg_attach_dev().
->
-Agreed.
+Changes from v5 (https://lore.kernel.org/r/20220512013921.164637-1-swboyd@chromium.org):
+ * Split out to different binding file again, while using 'select'
+ * Fixed examples to have required interrupts property for cros-ec-spi
 
-> Note to self: get rid of the cpg_mssr_clk_domain static pointer in
-> the CPG/MSSR driver.
->
-> > +
-> >  static void rzg2l_cpg_del_clk_provider(void *data)
-> >  {
-> >         of_clk_del_provider(data);
-> > @@ -1225,16 +1229,24 @@ static int rzg2l_cpg_reset_controller_register(struct rzg2l_cpg_priv *priv)
-> >
-> >  static bool rzg2l_cpg_is_pm_clk(const struct of_phandle_args *clkspec)
-> >  {
-> > +       struct rzg2l_cpg_priv *priv = rzg2l_cpg_priv;
-> > +       const struct rzg2l_cpg_info *info = priv->info;
->
-> info is used only once, expand user below?
->
-With the below change suggested info will be used more than once
-(3-times), so I'll keep it.
+Changes from v4 (https://lore.kernel.org/r/20220321191100.1993-1-swboyd@chromium.org):
+ * Drop last patch that implemented driver logic
+ * Drop second to last patch because it's not really needed until
+   compatible is used.
+ * Rolled cros-ec-spi into cros-ec-fp compatible to get all the pieces
 
-> > +       unsigned int id;
-> > +       unsigned int i;
-> > +
-> >         if (clkspec->args_count != 2)
-> >                 return false;
-> >
-> > -       switch (clkspec->args[0]) {
-> > -       case CPG_MOD:
-> > -               return true;
-> > -
-> > -       default:
-> > +       if (clkspec->args[0] != CPG_MOD)
-> >                 return false;
-> > +
-> > +       id = clkspec->args[1] + info->num_total_core_clks;
-> > +       for (i = 0; i < priv->num_no_pm_mod_clks; i++) {
-> > +               if (priv->no_pm_mod_clks[i] == id)
-> > +                       return false;
-> >         }
-> > +
-> > +       return true;
-> >  }
-> >
-> >  static int rzg2l_cpg_attach_dev(struct generic_pm_domain *unused, struct device *dev)
->
-> > @@ -1366,8 +1379,26 @@ static int __init rzg2l_cpg_probe(struct platform_device *pdev)
-> >         for (i = 0; i < info->num_core_clks; i++)
-> >                 rzg2l_cpg_register_core_clk(&info->core_clks[i], info, priv);
-> >
-> > -       for (i = 0; i < info->num_mod_clks; i++)
-> > +       priv->num_no_pm_mod_clks = 0;
-> > +       for (i = 0; i < info->num_mod_clks; i++) {
-> > +               if (info->mod_clks[i].no_pm)
-> > +                       priv->num_no_pm_mod_clks++;
-> > +       }
-> > +
-> > +       if (priv->num_no_pm_mod_clks && info->num_mod_clks) {
-> > +               priv->no_pm_mod_clks =
-> > +                               devm_kmalloc_array(dev, priv->num_no_pm_mod_clks,
-> > +                                                  sizeof(info->mod_clks[0].id),
-> > +                                                  GFP_KERNEL);
-> > +               if (!priv->no_pm_mod_clks)
-> > +                       return -ENOMEM;
-> > +       }
-> > +
-> > +       for (i = 0, j = 0; i < info->num_mod_clks; i++) {
-> > +               if (info->mod_clks[i].no_pm)
-> > +                       priv->no_pm_mod_clks[j++] = info->mod_clks[i].id;
-> >                 rzg2l_cpg_register_mod_clk(&info->mod_clks[i], info, priv);
-> > +       }
->
-> Alternatively, you could have a separate rzg2l_cpg_info.no_pm_clks[]
-> array, like .crit_mod_clks[], and do the counting etc. at compile-time.
->
-Agreed.
+Changes from v3 (https://lore.kernel.org/r/20220318015451.2869388-1-swboyd@chromium.org):
+ * Drop spi_device_id because it isn't used
+ * Dropped struct members for gpios
+ * Picked up tags
 
-Cheers,
-Prabhakar
+Changes from v2 (https://lore.kernel.org/r/20220317005814.2496302-1-swboyd@chromium.org):
+ * Dropped cros-ec spi dt properties that aren't of use right now
+ * Picked up tags
+
+Changes from v1 (https://lore.kernel.org/r/20220314232214.4183078-1-swboyd@chromium.org):
+ * Properly do the boot sequence
+ * Add a message that we're booting and delaying a while
+ * Fix typo in commit text
+ * Change binding to not spell out reset-gpios and indicate that boot0
+   is about asserting boot mode
+ * Split device id to different patch as it's a different topic from
+   booting
+
+
+Stephen Boyd (2):
+  dt-bindings: cros-ec: Reorganize and enforce property availability
+  dt-bindings: cros-ec: Add ChromeOS fingerprint binding
+
+ .../bindings/chrome/google,cros-ec-typec.yaml |   1 +
+ .../chrome/google,cros-kbd-led-backlight.yaml |   1 +
+ .../bindings/extcon/extcon-usbc-cros-ec.yaml  |   1 +
+ .../i2c/google,cros-ec-i2c-tunnel.yaml        |   1 +
+ .../bindings/mfd/google,cros-ec.yaml          | 103 +++++++++++++++---
+ .../bindings/pwm/google,cros-ec-pwm.yaml      |   1 +
+ .../regulator/google,cros-ec-regulator.yaml   |   1 +
+ .../bindings/sound/google,cros-ec-codec.yaml  |   1 +
+ 8 files changed, 97 insertions(+), 13 deletions(-)
+
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: <devicetree@vger.kernel.org>
+Cc: <chrome-platform@lists.linux.dev>
+Cc: Guenter Roeck <groeck@chromium.org>
+Cc: Douglas Anderson <dianders@chromium.org>
+Cc: Craig Hesling <hesling@chromium.org>
+Cc: Tom Hughes <tomhughes@chromium.org>
+Cc: Alexandru M Stan <amstan@chromium.org>
+Cc: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Matthias Kaehlcke <mka@chromium.org>
+Cc: Benson Leung <bleung@chromium.org>
+Cc: Lee Jones <lee.jones@linaro.org>
+
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+-- 
+https://chromeos.dev
+
