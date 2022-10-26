@@ -2,103 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE8B60EBCE
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 00:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6455060EBD3
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 00:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233517AbiJZWrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 18:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
+        id S233473AbiJZWrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 18:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233683AbiJZWqz (ORCPT
+        with ESMTP id S233420AbiJZWrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 18:46:55 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6A614FD0C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 15:45:57 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id z6so3321521qtv.5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 15:45:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=C6Inx+2mnGbd87syi22INdQZv7d9rvjsHpIiLrtgoFk=;
-        b=qhzYBGmPJLhr8FTtHtDHTDfF6FveUlj/50ukcwNWiL09tfLEQeDT1eJ6yHVlePX8De
-         1JAhpVZfHM0OLzPnJPCofWMmbnDTLgLAvMNkRlSOU7rrHj1GfmEK/n//wSoZRkYyXDPB
-         vQIXxP8bH3s5+rCid+nhpK+2TFBuAOti2UTot4o5v5dQWw5naEw6+ZTOF8dvwRo+142u
-         uB9nh7tFjtqRHK6iuexCz8w/BSBtPm6wQfycyjHmvbNEyQSmyu7PcYM2OKbz7UpnDxoH
-         Q3wvsiStSf/uu+ttt+YzftSb1X/p8ujRRudK7Q3ksTNs7BAb0DSgLFkGyXAnBgIHk5+G
-         3mJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C6Inx+2mnGbd87syi22INdQZv7d9rvjsHpIiLrtgoFk=;
-        b=zcEPm4nff44NJuYXSXLqaiWoZbm0tTlIEZFTyQ2UAtunMnAYCCZSEuiL1Zphv4ueWi
-         ayPhUBIP7U9ijoXKm6ifiO1y2x37+XxcvydTGcRzi7zD4/T1Lk+QoSOsHSBHrPazKxFp
-         +iUb6O7U26upH+cmPHU5PDfHrbUIcua/aeT07sklkOLTrytTyxmTqXc7qmdpmzzKRlBu
-         0hm8qEYmbEdyd7FRVN8OR0L1KVZmaq2TNk0GPBFTq4B6wB2vpXRctRCKok9psO92188V
-         MXVgwhLMl1SkDyO9aJJPK22q2xhhPqCljwR3TSZrIB/QGUGbGn5lbEuQ5yCArQ8bIvj2
-         Ez8w==
-X-Gm-Message-State: ACrzQf2TXS3pskHu85U9lnaLrBxlC6c0YfJAkz/CcBqxNywZcu3E15/S
-        sbXJsDtDxTDtKAKPI5C6tSdmJsMDtvrR9A==
-X-Google-Smtp-Source: AMsMyM7MvMhCDWgRBDgUrZo7cfyQBcnISZuDPBui6lKaPU83fxccaA7gUQsXIT2f5HaUidS9r3icag==
-X-Received: by 2002:a05:622a:284:b0:39c:cbec:e1f0 with SMTP id z4-20020a05622a028400b0039ccbece1f0mr38410506qtw.451.1666824340718;
-        Wed, 26 Oct 2022 15:45:40 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id ff12-20020a05622a4d8c00b0039cb5c9dbacsm3895060qtb.22.2022.10.26.15.45.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 15:45:39 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     justinpopo6@gmail.com, Florian Fainelli <f.fainelli@gmail.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        linux-phy@lists.infradead.org (open list:GENERIC PHY FRAMEWORK)
-Subject: [PATCH] phy: phy-brcm-usb: Utilize platform_get_irq_byname_optional()
-Date:   Wed, 26 Oct 2022 15:44:49 -0700
-Message-Id: <20221026224450.2958762-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 26 Oct 2022 18:47:36 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5226E5208C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 15:47:22 -0700 (PDT)
+Received: from dimapc.. (109-252-112-196.nat.spd-mgts.ru [109.252.112.196])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 83AC766025FA;
+        Wed, 26 Oct 2022 23:47:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666824440;
+        bh=uz0L9V/MufGQfPQFvGuBTw01sGpXsDlYGwsQzODExM4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dwpZi68zeMshEPYyX1trG3cZXPZISoztx6rQP8i8XauKBPRc25VG8T5418gG6SAKH
+         FmDbd9+KkcM2gfqZQHuzjOUbgfd6N1iHXHdM9HxgLAb46oCoqdWZf6B1z8LKfe7YMd
+         tkIoG/tfprrlkNOJUiCbZu4NdSAwG1+yfVYIVX5khzWPqF6a1pbk3NKodlIri/nS0K
+         SZErMHh3ihpgO0OiPIH2r0ILp4PxsmdFDqk7kpszBYu+D4aZ+GDigDJvVZqbgQiHOj
+         xOXasHa4fFtJ1d3t+JdMTyvDTvN2pY0WrIji4HsFm7zmC0cysrfbs89kaSQUkWO0im
+         Z34Na5XVxVhUQ==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, noralf@tronnes.org,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/2] Fixes for dma-buf locking issues found by Smatch
+Date:   Thu, 27 Oct 2022 01:46:38 +0300
+Message-Id: <20221026224640.7542-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The wake-up interrupt lines are entirely optional, avoid printing
-messages that interrupts were not found by switching to the _optional
-variant.
+Hello,
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/phy/broadcom/phy-brcm-usb.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Here are the two patches fixing minor problems introduced by my
+"dma-buf locking convention" series. Thanks to Dan Carpenter who
+checked linux-next with Smatch and reported the found issues!
 
-diff --git a/drivers/phy/broadcom/phy-brcm-usb.c b/drivers/phy/broadcom/phy-brcm-usb.c
-index 2cb3779fcdf8..fbf454b206f2 100644
---- a/drivers/phy/broadcom/phy-brcm-usb.c
-+++ b/drivers/phy/broadcom/phy-brcm-usb.c
-@@ -445,9 +445,9 @@ static int brcm_usb_phy_dvr_init(struct platform_device *pdev,
- 		priv->suspend_clk = NULL;
- 	}
- 
--	priv->wake_irq = platform_get_irq_byname(pdev, "wake");
-+	priv->wake_irq = platform_get_irq_byname_optional(pdev, "wake");
- 	if (priv->wake_irq < 0)
--		priv->wake_irq = platform_get_irq_byname(pdev, "wakeup");
-+		priv->wake_irq = platform_get_irq_byname_optional(pdev, "wakeup");
- 	if (priv->wake_irq >= 0) {
- 		err = devm_request_irq(dev, priv->wake_irq,
- 				       brcm_usb_phy_wake_isr, 0,
+Please review/ack, I'll apply the patches to misc-next afterwards.
+
+Thanks!
+
+Dmitry Osipenko (2):
+  dma-buf: Make locking consistent in dma_buf_detach()
+  drm/gem: Check whether object is NULL in drm_gem_vunmap()
+
+ drivers/dma-buf/dma-buf.c | 3 ++-
+ drivers/gpu/drm/drm_gem.c | 9 ++++++---
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
 -- 
-2.25.1
+2.37.3
 
