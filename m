@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2904460E836
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2417460E839
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234823AbiJZTDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 15:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
+        id S234831AbiJZTDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 15:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234703AbiJZTDC (ORCPT
+        with ESMTP id S233788AbiJZTDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 15:03:02 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A2E11DA82;
-        Wed, 26 Oct 2022 12:01:17 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id t25so18503018ejb.8;
-        Wed, 26 Oct 2022 12:01:17 -0700 (PDT)
+        Wed, 26 Oct 2022 15:03:11 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71861213FC;
+        Wed, 26 Oct 2022 12:01:19 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 21so9182689edv.3;
+        Wed, 26 Oct 2022 12:01:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e2j3t4nzz6tQaWHbnOlMhCLHOCykeeAlsKmfrUyBz6w=;
-        b=NCpLWkzFShB30f3P4o1tkFIZDJmYS508r1ad45rK4svollxncCgIHEQUWA8f6gmsQS
-         x/kvSEEv+3qply4jnOvgfRkJRVnoktjgmZRHyioHo6MvsvZSZMRZgXrnwhglg5EhhIlj
-         rXzyDcPYWJ6AJ1SOD/isCJ548FTqbKy62e74QH1WQfJlxFdJ78YFeKkuBVnx2WoAFBDz
-         X5UDHT+Z3wgsGOt+YYky8KRbTQs7PeAaXPavQryBu52IBVRjXn5WhhPpqysUDDS1NMA9
-         kkZ+1sBSUNHcxUFBmcOVMKrZhdQBea/JOgdJRwSPiNuUU/dPhpwbF2Ih+aFZoUnoUJAy
-         MS3Q==
+        bh=oFFOZJ/VadBNjE26xEB3SXj8jNBR5pKnqYBmJKPPaoI=;
+        b=VVUaU8P58x2uWpriSK+QJTdSu6sPvez31gYpX8vt5AcwLa8R1dGZK0SGG8OVQvbpU3
+         LDvLtme+1it9dkDEASp+iphuJ/pWpbJw+MN+k+JftJ/9EApWzCuBHqjWgWyPeogiQbzB
+         BtHiK0JjO8WMXviLW1RvGXGMFzaG5XdpHp+w1MeP4nFueM8uRA/HjJvlyhj4Ul2JWNaE
+         ho7x+AcvCGPAO+Rl809Dlz1HMTj2tGnGKvjES5NevbmJyXf8ZXI/Iro5yYn3zJPa2c32
+         pLyBnnz51hzLiwlmp2BdpC7rlLVfZlSqcaIgFEa/ah4Y/nGqDXl+mGV1SqC46I8iegrs
+         qGwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=e2j3t4nzz6tQaWHbnOlMhCLHOCykeeAlsKmfrUyBz6w=;
-        b=Mx50uqLjhzaFSl6UUev9hdOMPaWvxeBQu9DxEt5HDRDcvpT1umiULnPcmJ3bwMRKCC
-         P6nvfUUSDXdC1IVGx6RrCDYoMhee1LFZ4vtfzCVQjzq9tud3iS6GmS5WitcpetH+fXNu
-         W2wAytpKdEzTSmjKew8Ertuq8adqwb4H5GVwY2r0IAqSFpQFAahz63CkInFryVJpctGo
-         f+ej6o9hdr8Qih+f4zId2EsPRHOBpM6pNPzsanmXpITJlT4SFpSV80KK96K3J3BK9MWe
-         cX5pZpI4z543F71exLL5pP74b5yDpmVQIN72G2TLWkpbR0sugT9rdUPDe89JBBPdbuXA
-         5xVw==
-X-Gm-Message-State: ACrzQf12PZ520TUtqucNmFIrUg2tS5vldlAaQ4BPR9tq1HxomZRMHPgS
-        c9UkgNQOTt4KftcYQP+zVkHfKZV91uOtOQ==
-X-Google-Smtp-Source: AMsMyM5HXhmxF3z1Ji/B3FGA4nTMPZdTtf+/Xe7/UxuKO3cTq/ZyVGtipPEM14naxXtubzd/iW5evw==
-X-Received: by 2002:a17:907:74a:b0:77e:9455:b4e3 with SMTP id xc10-20020a170907074a00b0077e9455b4e3mr39556945ejb.471.1666810875816;
-        Wed, 26 Oct 2022 12:01:15 -0700 (PDT)
+        bh=oFFOZJ/VadBNjE26xEB3SXj8jNBR5pKnqYBmJKPPaoI=;
+        b=eo1aAaLir/aF9VjJ6WsdMLxaAfnhkWKPOHX17c3bbkvMmWbATeSBMlZdhPLl0WEGwA
+         6PdukPMt0hvcn7JlfHVRjBffk5RyZtsk+rXUIPY+JEo6Z3c/eU8Uy1nIUzpMKW2ekpqF
+         RFORYMmYI7uxobgSxgfyufB7G9Fdj+sM6mOmapo2h1OYTFP7UwKlRCIhkKKnkP6aCpWX
+         W4bG24LYRiyZpgc6Yl1yjndGjwGJW9umvtpE3BZ/tq6XYrofqpkrLc1d+P0kP3+EEK/M
+         HAyENkKJsDaLY+PXn7H5kkBwwtWEv9Wsb1cEnD4oRdBwLj+fT6RyT5/ojVN5TiOZFEmd
+         UOkg==
+X-Gm-Message-State: ACrzQf3Nx/pmSH8CxO4Q3cJdj6Qtwice0WGjkNMck/U3xZTl3UuyrpXt
+        p1ssjxHvfChDcRA9tOK85BLAth0bCVBl5A==
+X-Google-Smtp-Source: AMsMyM4TTmpDq0EIr1Nameij72nB33a84SDhB5xmTXiBFKWJ1JC1fEcF66fKvCvi1MbsSdEl0RSKZg==
+X-Received: by 2002:a05:6402:274c:b0:461:9921:60cf with SMTP id z12-20020a056402274c00b00461992160cfmr20464459edd.353.1666810877183;
+        Wed, 26 Oct 2022 12:01:17 -0700 (PDT)
 Received: from eray-Lenovo-Z50-70.. ([188.132.247.187])
-        by smtp.googlemail.com with ESMTPSA id r18-20020a1709063d7200b0076ff600bf2csm3342945ejf.63.2022.10.26.12.01.14
+        by smtp.googlemail.com with ESMTPSA id r18-20020a1709063d7200b0076ff600bf2csm3342945ejf.63.2022.10.26.12.01.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 12:01:15 -0700 (PDT)
+        Wed, 26 Oct 2022 12:01:16 -0700 (PDT)
 From:   =?UTF-8?q?Eray=20Or=C3=A7unus?= <erayorcunus@gmail.com>
 To:     platform-driver-x86@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
@@ -57,9 +57,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
         benjamin.tissoires@redhat.com, dmitry.torokhov@gmail.com,
         hdegoede@redhat.com, mgross@linux.intel.com,
         =?UTF-8?q?Eray=20Or=C3=A7unus?= <erayorcunus@gmail.com>
-Subject: [PATCH 5/6] platform/x86: ideapad-laptop: Expose camera_power only if supported
-Date:   Wed, 26 Oct 2022 22:01:05 +0300
-Message-Id: <20221026190106.28441-6-erayorcunus@gmail.com>
+Subject: [PATCH 6/6] platform/x86: ideapad-laptop: Keyboard backlight support for more IdeaPads
+Date:   Wed, 26 Oct 2022 22:01:06 +0300
+Message-Id: <20221026190106.28441-7-erayorcunus@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221026190106.28441-1-erayorcunus@gmail.com>
 References: <20221026190106.28441-1-erayorcunus@gmail.com>
@@ -76,110 +76,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IdeaPads dropped support for VPCCMD_W_CAMERA somewhere between 2014-2016,
-none of the IdeaPads produced after that I tested supports it. Fortunately
-I found a way to check it; if the DSDT has camera device(s) defined, it
-shouldn't have working VPCCMD_W_CAMERA, thus camera_power shouldn't be
-exposed to sysfs. To accomplish this, walk the ACPI namespace in
-ideapad_check_features and check the devices starting with "CAM".
-Tested on 520-15IKB and Legion Y520, which successfully didn't expose
-the camera_power attribute.
+IdeaPads with HALS_KBD_BL_SUPPORT_BIT have full keyboard light support,
+and they send an event via ACPI on light state change. Whereas some
+IdeaPads that don't have this bit set, i.e. 520-15ikb, 330-17ich and
+5 (15), don't send an event, yet they still support switching keyboard
+light via KBLO object on DSDT. Detect these IdeaPads with searching for
+KBLO object, set their kbd_bl_partial to true and register led device
+for them. Tested on 520-15ikb.
 
-Link: https://www.spinics.net/lists/platform-driver-x86/msg26147.html
 Signed-off-by: Eray Orçunus <erayorcunus@gmail.com>
 ---
- drivers/platform/x86/ideapad-laptop.c | 53 ++++++++++++++++++++++++++-
- 1 file changed, 52 insertions(+), 1 deletion(-)
+ drivers/platform/x86/ideapad-laptop.c | 79 ++++++++++++++++++++++++---
+ 1 file changed, 70 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/platform/x86/ideapad-laptop.c b/drivers/platform/x86/ideapad-laptop.c
-index f3d4f2beda07..65eea2e65bbe 100644
+index 65eea2e65bbe..c30bbe0ca156 100644
 --- a/drivers/platform/x86/ideapad-laptop.c
 +++ b/drivers/platform/x86/ideapad-laptop.c
 @@ -149,6 +149,7 @@ struct ideapad_private {
  		bool fn_lock              : 1;
  		bool hw_rfkill_switch     : 1;
  		bool kbd_bl               : 1;
-+		bool cam_ctrl_via_ec      : 1;
++		bool kbd_bl_partial       : 1;
+ 		bool cam_ctrl_via_ec      : 1;
  		bool touchpad_ctrl_via_ec : 1;
  		bool usb_charging         : 1;
- 	} features;
-@@ -163,6 +164,26 @@ static bool no_bt_rfkill;
- module_param(no_bt_rfkill, bool, 0444);
- MODULE_PARM_DESC(no_bt_rfkill, "No rfkill for bluetooth.");
+@@ -157,6 +158,9 @@ struct ideapad_private {
+ 		bool initialized;
+ 		struct led_classdev led;
+ 		unsigned int last_brightness;
++		/* Below are used only if kbd_bl_partial is set */
++		acpi_handle lfcm_mutex;
++		acpi_handle kblo_obj;
+ 	} kbd_bl;
+ };
  
-+static char *cam_device_prefix = "CAM";
-+
-+static acpi_status acpi_find_device_callback(acpi_handle handle, u32 level,
-+					     void *context, void **return_value)
-+{
-+	char buffer[8];
-+	struct acpi_buffer ret_buf;
-+
-+	ret_buf.length = sizeof(buffer);
-+	ret_buf.pointer = buffer;
-+
-+	if (ACPI_SUCCESS(acpi_get_name(handle, ACPI_SINGLE_NAME, &ret_buf)))
-+		if (strncmp(ret_buf.pointer, context, strlen(context)) == 0) {
-+			*return_value = handle;
-+			return AE_CTRL_TERMINATE;
-+		}
-+
-+	return AE_OK;
-+}
+@@ -1302,19 +1306,52 @@ static void ideapad_backlight_notify_brightness(struct ideapad_private *priv)
+ 		backlight_force_update(priv->blightdev, BACKLIGHT_UPDATE_HOTKEY);
+ }
+ 
++#define IDEAPAD_ACPI_MUTEX_TIMEOUT 1500
 +
  /*
-  * ACPI Helpers
+  * keyboard backlight
   */
-@@ -675,7 +696,7 @@ static umode_t ideapad_is_visible(struct kobject *kobj,
- 	bool supported = true;
- 
- 	if (attr == &dev_attr_camera_power.attr)
--		supported = test_bit(CFG_CAP_CAM_BIT, &priv->cfg);
-+		supported = priv->features.cam_ctrl_via_ec;
- 	else if (attr == &dev_attr_conservation_mode.attr)
- 		supported = priv->features.conservation_mode;
- 	else if (attr == &dev_attr_fan_mode.attr)
-@@ -1523,10 +1544,40 @@ static const struct dmi_system_id hw_rfkill_list[] = {
- static void ideapad_check_features(struct ideapad_private *priv)
+ static int ideapad_kbd_bl_brightness_get(struct ideapad_private *priv)
  {
- 	acpi_handle handle = priv->adev->handle;
-+	acpi_handle pci_handle;
-+	acpi_handle temp_handle = NULL;
- 	unsigned long val;
+-	unsigned long hals;
++	unsigned long ret_val;
+ 	int err;
 +	acpi_status status;
  
- 	priv->features.hw_rfkill_switch = dmi_check_system(hw_rfkill_list);
- 
+-	err = eval_hals(priv->adev->handle, &hals);
 +	/*
-+	 * Some IdeaPads have camera switch via EC (mostly older ones),
-+	 * some don't. Fortunately we know that if DSDT contains device
-+	 * object for the camera, camera isn't switchable via EC.
-+	 * So, let's walk the namespace and try to find CAM* object.
-+	 * If we can't find it, set cam_ctrl_via_ec to true.
++	 * Some IdeaPads with partially implemented keyboard lights don't give
++	 * us the light state on HALS_KBD_BL_STATE_BIT in the return value of HALS,
++	 * i.e. 5 (15) and 330-17ich. Fortunately we know how to gather it.
++	 * Even if it won't work, we will still give HALS a try, because
++	 * some IdeaPads with kbd_bl_partial, i.e. 520-15ikb,
++	 * correctly sets HALS_KBD_BL_STATE_BIT in HALS return value.
 +	 */
 +
-+	priv->features.cam_ctrl_via_ec = false;
++	if (priv->features.kbd_bl_partial &&
++	    priv->kbd_bl.lfcm_mutex != NULL && priv->kbd_bl.kblo_obj != NULL) {
 +
-+	if (test_bit(CFG_CAP_CAM_BIT, &priv->cfg)) {
-+		status = acpi_get_handle(handle, "^^^", &pci_handle);
++		status = acpi_acquire_mutex(priv->kbd_bl.lfcm_mutex, NULL,
++					    IDEAPAD_ACPI_MUTEX_TIMEOUT);
++
 +		if (ACPI_SUCCESS(status)) {
-+			status = acpi_walk_namespace(ACPI_TYPE_DEVICE, pci_handle,
-+						     ACPI_UINT32_MAX,
-+						     acpi_find_device_callback,
-+						     NULL, cam_device_prefix,
-+						     &temp_handle);
++			err = eval_int(priv->kbd_bl.kblo_obj, NULL, &ret_val);
 +
-+			if (ACPI_SUCCESS(status) && temp_handle == NULL)
-+				priv->features.cam_ctrl_via_ec = true;
++			status = acpi_release_mutex(priv->kbd_bl.lfcm_mutex, NULL);
++			if (ACPI_FAILURE(status))
++				dev_err(&priv->platform_device->dev,
++					"Failed to release LFCM mutex");
 +
-+		} else
-+			dev_warn(&priv->platform_device->dev,
-+				"Could not find PCI* node in the namespace\n");
++			if (err)
++				return err;
++
++			return !!ret_val;
++		}
 +	}
 +
- 	/* Most ideapads with ELAN0634 touchpad don't use EC touchpad switch */
- 	priv->features.touchpad_ctrl_via_ec = !acpi_dev_present("ELAN0634", NULL, -1);
++	err = eval_hals(priv->adev->handle, &ret_val);
+ 	if (err)
+ 		return err;
  
+-	return !!test_bit(HALS_KBD_BL_STATE_BIT, &hals);
++	return !!test_bit(HALS_KBD_BL_STATE_BIT, &ret_val);
+ }
+ 
+ static enum led_brightness ideapad_kbd_bl_led_cdev_brightness_get(struct led_classdev *led_cdev)
+@@ -1331,7 +1368,8 @@ static int ideapad_kbd_bl_brightness_set(struct ideapad_private *priv, unsigned
+ 	if (err)
+ 		return err;
+ 
+-	priv->kbd_bl.last_brightness = brightness;
++	if (!priv->features.kbd_bl_partial)
++		priv->kbd_bl.last_brightness = brightness;
+ 
+ 	return 0;
+ }
+@@ -1351,6 +1389,9 @@ static void ideapad_kbd_bl_notify(struct ideapad_private *priv)
+ 	if (!priv->kbd_bl.initialized)
+ 		return;
+ 
++	if (priv->features.kbd_bl_partial)
++		return;
++
+ 	brightness = ideapad_kbd_bl_brightness_get(priv);
+ 	if (brightness < 0)
+ 		return;
+@@ -1373,17 +1414,20 @@ static int ideapad_kbd_bl_init(struct ideapad_private *priv)
+ 	if (WARN_ON(priv->kbd_bl.initialized))
+ 		return -EEXIST;
+ 
+-	brightness = ideapad_kbd_bl_brightness_get(priv);
+-	if (brightness < 0)
+-		return brightness;
++	/* IdeaPads with kbd_bl_partial don't have keyboard backlight event */
++	if (!priv->features.kbd_bl_partial) {
++		brightness = ideapad_kbd_bl_brightness_get(priv);
++		if (brightness < 0)
++			return brightness;
+ 
+-	priv->kbd_bl.last_brightness = brightness;
++		priv->kbd_bl.last_brightness         = brightness;
++		priv->kbd_bl.led.flags               = LED_BRIGHT_HW_CHANGED;
++	}
+ 
+ 	priv->kbd_bl.led.name                    = "platform::" LED_FUNCTION_KBD_BACKLIGHT;
+ 	priv->kbd_bl.led.max_brightness          = 1;
+ 	priv->kbd_bl.led.brightness_get          = ideapad_kbd_bl_led_cdev_brightness_get;
+ 	priv->kbd_bl.led.brightness_set_blocking = ideapad_kbd_bl_led_cdev_brightness_set;
+-	priv->kbd_bl.led.flags                   = LED_BRIGHT_HW_CHANGED;
+ 
+ 	err = led_classdev_register(&priv->platform_device->dev, &priv->kbd_bl.led);
+ 	if (err)
+@@ -1595,8 +1639,25 @@ static void ideapad_check_features(struct ideapad_private *priv)
+ 			if (test_bit(HALS_FNLOCK_SUPPORT_BIT, &val))
+ 				priv->features.fn_lock = true;
+ 
++			/*
++			 * IdeaPads with HALS_KBD_BL_SUPPORT_BIT have full keyboard
++			 * light support, and they send an event via ACPI on light
++			 * state change. Whereas some IdeaPads, at least 520-15ikb
++			 * and 5 (15), don't send an event, yet they still have
++			 * KBLO object. In this case, set kbd_bl_partial to true
++			 * and cache the LFCM mutex, it might be useful while
++			 * getting the brightness.
++			 */
++
+ 			if (test_bit(HALS_KBD_BL_SUPPORT_BIT, &val))
+ 				priv->features.kbd_bl = true;
++			else if (ACPI_SUCCESS(acpi_get_handle(handle, "^KBLO",
++							      &priv->kbd_bl.kblo_obj))) {
++				priv->features.kbd_bl = true;
++				priv->features.kbd_bl_partial = true;
++				(void)acpi_get_handle(handle, "^LFCM",
++						      &priv->kbd_bl.lfcm_mutex);
++			}
+ 
+ 			if (test_bit(HALS_USB_CHARGING_SUPPORT_BIT, &val))
+ 				priv->features.usb_charging = true;
 -- 
 2.34.1
 
