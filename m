@@ -2,137 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C7160E702
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 20:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48D460E70B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 20:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233942AbiJZSLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 14:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
+        id S233848AbiJZSOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 14:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233802AbiJZSLN (ORCPT
+        with ESMTP id S234000AbiJZSOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 14:11:13 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9DF83F1F
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:11:11 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id 192so9019282pfx.5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:11:11 -0700 (PDT)
+        Wed, 26 Oct 2022 14:14:03 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74AECAD987
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:14:01 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id x15so12265248qvp.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:14:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=g7Wi8bTCvfeNU3sTUIqYkMJtWG9DEMZ1nSFdktscQLY=;
-        b=i5hnjp0g6IKy9vbZyM/vQYFA7gfnU/DQtDDTINPcYQOo46VEbmSgN/Wcl1aohtlcc7
-         jCZK+fQUpaZiFuiRQ0CgdxioIhEcpQH4S0PfJ9+aAv8M5SU2rP3faX/Y6rL7jCPTSCO7
-         i6oTesmeL2kGUpfpKn6/ykcXfoKTUeddy7LSgpA+EOlJiNi8/QAE9roQT9DNgtDvMfk5
-         9wgARWg0YjUvjWMBbCBlPW2sAW6VrTv4UuOBCOZhxdTZFXSfyTfRkwX+2haPof/r61pu
-         xr9IL5RByxp/LnWkm4J79g1bBvF+yF0IPtY7CpGltf0902RQaIhufw+lli9y1hyJAr9a
-         yioA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=euZ0kBBCpAPq2o8o5kLMLvRDLb511ZyIjxtr+z8U4AU=;
+        b=JFIQznT+VayHy813HE35wzoCULmXeSGZsYdxBB0KdX/u4Pc+Q9vAOH6PseCmf/9PuI
+         7poinWgz1maFdbtXcp6votEdiJvQ0a83Lz+d6BM+WtbDYQT9gw2DmpU+cO2P6zCNmKwS
+         agTJ0yKxHnOdOaHIL8vTKPpNIBlq84Mr8BtcXjs3zyrl1VcAnKpH7/+DiWsedJqeVl8d
+         h36gxPEmS1hKeiotvGihliL/0qMcq6jMjQdguwbgcyglBKw7sH91Vl4IQ6C7mDfYiz9Y
+         aY2HKQhMbiSFSzOYyZts2DpqNW1w3DvLJPC+jgsv2s/eLwODhoi+FwrPs3YDk6F4E/81
+         2QkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g7Wi8bTCvfeNU3sTUIqYkMJtWG9DEMZ1nSFdktscQLY=;
-        b=Vc4XlI9G1XoplR6i0u6a5r1bZfd4cmLrwcpT8embfwd1e58x/f/orjAkfSe0arHMei
-         VZKBNqrUxldUbI2f9YnQ70SprI7jiknBWpr+VUhIYpZLCO1X1CYgYM69zNrujC6iYb83
-         9nyfBzNoETSuT4WOqY6Qq2xqgJQyAhQbCgB0YKuechEW2j4qtx6GqNN+SPeK/+u+E5qK
-         bMG/QHggAdC6OLA9yCKSKVHw6zKnsXtwOCbxIgb2N6YGbThZZaJHJqhTBgU4aatiFTcv
-         ICeJfHj+UnLEunoXPk/vt/z/SaaBbNuHla+D4UgHYSsYdTdlouAN2RKUUcD/hsjqfrnD
-         pP/g==
-X-Gm-Message-State: ACrzQf2auo73N2OadCDXdpGjRa8lhZShrvgZrmPlVsJUXvI0ASieIwn2
-        hUpFTa0ACpkneIobqrtwAhyTkSP0fIcS2AoRaWE=
-X-Google-Smtp-Source: AMsMyM76wzsg5/k2aM8/sc3UVRubuR/qvSA+/5aaMC1a9DW7CgTvtQ0uvygXw5LLq5oUthGBrGnsMk+3DEIWGCt2zBo=
-X-Received: by 2002:a65:45c1:0:b0:461:5855:8d86 with SMTP id
- m1-20020a6545c1000000b0046158558d86mr38036109pgr.436.1666807871181; Wed, 26
- Oct 2022 11:11:11 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=euZ0kBBCpAPq2o8o5kLMLvRDLb511ZyIjxtr+z8U4AU=;
+        b=jUnJTOwoGYjuf8pfMyt5nt+8QXnBhBWZHl24Mr7EWJsYrvrXyawSADOBQEXXhJemYp
+         +OZ0Yhm0uvKBsdGN+X3pJli5PricGSqSoDiw7uXw039efDeomQGtskdp+9qwcO7leUAV
+         AJXSHAzAeZs680uCrcw6QYBuWngXSVGErcuDD/QYL8b98VacgsE/7P33MnNrVL0ER7T7
+         k6zFqvMMHG8zNP7bw51wR9Clu5DJMuBp2nHvcWeEOIrZWE9/rmwOnzBwO3rDas2LntdZ
+         ProFzZCays9w8EG23WlbfOXa2zlMD+R0iM7JOElylyio+er7UXHcnD9Q2UZxpQL+X3nO
+         tV2A==
+X-Gm-Message-State: ACrzQf2uKLHE6nsj31K7PHOnbPDmce/526uSJdCqhDv3UAoMWfRII8/V
+        P7H/F+GnYk5eSpzcrBb1MT35zA==
+X-Google-Smtp-Source: AMsMyM76BykD9PyEu+Dx7/PEElgAS1+kldlvdT8ESxptB6jpdmKm3iSesHHTQG42Y0t3JnNgw6YzRA==
+X-Received: by 2002:a05:6214:e6f:b0:4b3:f41c:a59 with SMTP id jz15-20020a0562140e6f00b004b3f41c0a59mr37424438qvb.59.1666808040577;
+        Wed, 26 Oct 2022 11:14:00 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id f12-20020a05622a114c00b0039cde2cd510sm3574544qty.28.2022.10.26.11.13.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 11:13:59 -0700 (PDT)
+Message-ID: <3cc78884-79f1-0f08-e555-9b46f46d54f5@linaro.org>
+Date:   Wed, 26 Oct 2022 14:13:57 -0400
 MIME-Version: 1.0
-References: <20221026044524.54793-1-gautammenghani201@gmail.com>
-In-Reply-To: <20221026044524.54793-1-gautammenghani201@gmail.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 26 Oct 2022 11:10:58 -0700
-Message-ID: <CAHbLzkq_6tGYfmd-f8Gg-YSLoLXtdFmpxVCUof90B=YA4X7SAA@mail.gmail.com>
-Subject: Re: [PATCH] mm/khugepaged: Refactor mm_khugepaged_scan_file
- tracepoint to remove filename from function call
-To:     Gautam Menghani <gautammenghani201@gmail.com>
-Cc:     akpm@linux-foundation.org, rostedt@goodmis.org,
-        mhiramat@kernel.org, zokeefe@google.com, david@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] arm: dts: imx: e60k02: Add touchscreen
+Content-Language: en-US
+To:     Andreas Kemnade <andreas@kemnade.info>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Alistair Francis <alistair@alistair23.me>
+References: <20221026173015.1172816-1-andreas@kemnade.info>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221026173015.1172816-1-andreas@kemnade.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 9:45 PM Gautam Menghani
-<gautammenghani201@gmail.com> wrote:
->
-> Refactor the mm_khugepaged_scan_file tracepoint to move filename
-> dereference to the tracepoint definition, for maintaing consistency with
-> other tracepoints[1].
->
-> [1]:lore.kernel.org/lkml/20221024111621.3ba17e2c@gandalf.local.home/
->
-> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
-
-Reviewed-by: Yang Shi <shy828301@gmail.com>
-
+On 26/10/2022 13:30, Andreas Kemnade wrote:
+> Add the touchscreen now, since the driver is available.
+> 
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
 > ---
->  include/trace/events/huge_memory.h | 8 ++++----
->  mm/khugepaged.c                    | 3 +--
->  2 files changed, 5 insertions(+), 6 deletions(-)
->
-> diff --git a/include/trace/events/huge_memory.h b/include/trace/events/huge_memory.h
-> index 935af4947917..760455dfa860 100644
-> --- a/include/trace/events/huge_memory.h
-> +++ b/include/trace/events/huge_memory.h
-> @@ -171,15 +171,15 @@ TRACE_EVENT(mm_collapse_huge_page_swapin,
->
->  TRACE_EVENT(mm_khugepaged_scan_file,
->
-> -       TP_PROTO(struct mm_struct *mm, struct page *page, const char *filename,
-> +       TP_PROTO(struct mm_struct *mm, struct page *page, struct file *file,
->                  int present, int swap, int result),
->
-> -       TP_ARGS(mm, page, filename, present, swap, result),
-> +       TP_ARGS(mm, page, file, present, swap, result),
->
->         TP_STRUCT__entry(
->                 __field(struct mm_struct *, mm)
->                 __field(unsigned long, pfn)
-> -               __string(filename, filename)
-> +               __string(filename, file->f_path.dentry->d_iname)
->                 __field(int, present)
->                 __field(int, swap)
->                 __field(int, result)
-> @@ -188,7 +188,7 @@ TRACE_EVENT(mm_khugepaged_scan_file,
->         TP_fast_assign(
->                 __entry->mm = mm;
->                 __entry->pfn = page ? page_to_pfn(page) : -1;
-> -               __assign_str(filename, filename);
-> +               __assign_str(filename, file->f_path.dentry->d_iname);
->                 __entry->present = present;
->                 __entry->swap = swap;
->                 __entry->result = result;
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 4734315f7940..9808a899f9f7 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -2157,8 +2157,7 @@ static int hpage_collapse_scan_file(struct mm_struct *mm, unsigned long addr,
->                 }
->         }
->
-> -       trace_mm_khugepaged_scan_file(mm, page, file->f_path.dentry->d_iname,
-> -                                     present, swap, result);
-> +       trace_mm_khugepaged_scan_file(mm, page, file, present, swap, result);
->         return result;
->  }
->  #else
-> --
-> 2.34.1
->
+> runtime/dtbs_check depends
+> https://lore.kernel.org/linux-devicetree/20221026114908.191472-1-alistair@alistair23.me/T/#t
+>  arch/arm/boot/dts/e60k02.dtsi              | 12 +++++++++++-
+>  arch/arm/boot/dts/imx6sl-tolino-shine3.dts | 14 ++++++++++++++
+>  arch/arm/boot/dts/imx6sll-kobo-clarahd.dts | 14 ++++++++++++++
+>  3 files changed, 39 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/e60k02.dtsi b/arch/arm/boot/dts/e60k02.dtsi
+> index 935e2359f8df..4f36cc181a52 100644
+> --- a/arch/arm/boot/dts/e60k02.dtsi
+> +++ b/arch/arm/boot/dts/e60k02.dtsi
+> @@ -104,7 +104,17 @@ &i2c2 {
+>  	clock-frequency = <100000>;
+>  	status = "okay";
+>  
+> -	/* TODO: CYTTSP5 touch controller at 0x24 */
+> +	touchscreen@24 {
+> +		compatible = "cypress,tt21000";
+> +		reg = <0x24>;
+> +		pinctrl-names = "default","sleep";
+> +		pinctrl-0 = <&pinctrl_cyttsp5_gpio>;
+> +		pinctrl-1 = <&pinctrl_cyttsp5_gpio_sleep>;
+> +		interrupt-parent = <&gpio5>;
+> +		interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
+> +		reset-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
+> +		vdd-supply = <&ldo5_reg>;
+> +	};
+>  
+>  	/* TODO: TPS65185 PMIC for E Ink at 0x68 */
+>  
+> diff --git a/arch/arm/boot/dts/imx6sl-tolino-shine3.dts b/arch/arm/boot/dts/imx6sl-tolino-shine3.dts
+> index e3f1e8d79528..82d9ed91df92 100644
+> --- a/arch/arm/boot/dts/imx6sl-tolino-shine3.dts
+> +++ b/arch/arm/boot/dts/imx6sl-tolino-shine3.dts
+> @@ -52,6 +52,20 @@ &iomuxc {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&pinctrl_hog>;
+>  
+> +	pinctrl_cyttsp5_gpio: cyttsp5_gpio_grp {
+
+No underscores in node names.
+
+Best regards,
+Krzysztof
+
