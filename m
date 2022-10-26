@@ -2,106 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE65B60DF09
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 12:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B4560DF0C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 12:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231903AbiJZKuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 06:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
+        id S233244AbiJZKvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 06:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiJZKuh (ORCPT
+        with ESMTP id S233188AbiJZKvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 06:50:37 -0400
-Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A9CC419A4;
-        Wed, 26 Oct 2022 03:50:35 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 12:50:28 +0200
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Michael Lilja <michael.lilja@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
-Subject: Re: [PATCH] Periodically flow expire from flow offload tables
-Message-ID: <Y1kQ9FhrwxCKIdoe@salvia>
-References: <20221023171658.69761-1-michael.lilja@gmail.com>
- <Y1fC5K0EalIYuB7Y@salvia>
- <381FF5B6-4FEF-45E9-92D6-6FE927A5CC2D@gmail.com>
- <Y1fd+DEPZ8xM2x5B@salvia>
- <F754AC3A-D89A-4CF7-97AE-CA59B18A758E@gmail.com>
+        Wed, 26 Oct 2022 06:51:20 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B6CF24F64A
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 03:51:17 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.32])
+        by gateway (Coremail) with SMTP id _____8Axz7ckEVljtZkCAA--.5178S3;
+        Wed, 26 Oct 2022 18:51:16 +0800 (CST)
+Received: from [10.20.42.32] (unknown [10.20.42.32])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxmFckEVlj8kwFAA--.1514S3;
+        Wed, 26 Oct 2022 18:51:16 +0800 (CST)
+Subject: Re: [PATCH] LoongArch: Fix memsection size
+To:     WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+References: <20221026075638.9396-1-lvjianmin@loongson.cn>
+ <edb4002c-3325-53b2-de79-ad4033b363f7@xen0n.name>
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+Message-ID: <8196d0ab-8564-b858-32ba-1768c0c31732@loongson.cn>
+Date:   Wed, 26 Oct 2022 18:51:16 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <edb4002c-3325-53b2-de79-ad4033b363f7@xen0n.name>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <F754AC3A-D89A-4CF7-97AE-CA59B18A758E@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8BxmFckEVlj8kwFAA--.1514S3
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxWrWxKFyrCF47ZF48ZFWDurg_yoW5Kry5pF
+        1Ikr1SkrWDArn7Ar40ya15WFyYka1ru3yUGF98A34DCw13WF1vyr42y3ya9F9rXw4xAay2
+        qFZ8Xws7ZayUAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bxAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
+        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
+        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1l
+        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42
+        xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
+        GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI4
+        8JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4U
+        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I
+        8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j8yCJUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Tue, Oct 25, 2022 at 03:32:51PM +0200, Michael Lilja wrote:
-> Hi, 
+
+On 2022/10/26 下午5:21, WANG Xuerui wrote:
+> On 2022/10/26 15:56, Jianmin Lv wrote:
+>> On LoongArch, the physical address space ranging from 0 to 0xfffffff is
+>> always memory, which is in the low half of the memsection range from 0 to
+>> 0x1fffffff with 512M memsection size, and the high half will be a hole 
+>> with
+>> invalid memory pages.
 > 
-> Thanks for the optimisation suggestions, my nft is a rough
-> conversion from iptables, I will look into using maps.
+> The description is incorrect. For systems with less than 512MiB of 
+> memory for example, I believe not every address from 0x0 to 0x0fff_ffff 
+> is valid; 
+
+As far as I know, almost all designs use  0x0 to 0x0fff_ffff as memory 
+even with 512M because it's difficult to set cpu to support a 
+combination with memory and non-memory for 0x0 to 0x0fff_ffff.
+
+> and regarding the latter part of the sentence, what you mean 
+> by "invalid memory pages"...
 > 
-> The ingress chain will work fine for SW OFFLOAD but HW OFFLOAD is
-> not solved by this, at least what I see is that once a flow is
-> offloaded to HW the driver doesn’t see the packets?
->
-> If I use the ingress chain I guess I don’t have access to ‘ct mark’
-> yet? I could think of a use-case where schedules should only some
-> ‘flow type’: meta mask != 0x12340000/16 meta day “Tuesday" meta hour
-> >= "06:00" meta hour < "07:00" drop 
+If with 512M memsection size, for the memsection from 0 to 0x1fffffff, 
+low half (0 to 0xfffffff) is valid memory, and high half(0x10000000 to 
+0x1fffffff ) is I/O registers (of chipsets and cpu), so high half is not 
+memory, I think it's better to change *with invalid memory pages* to 
+*which is not memory.*
+
+>>
+>> This situation may cause some issues. For example, the range of 
+>> 0x10000000
+>> to 0x1fffffff is io registers, which will be considered as valid 
+>> memory range
+>> since which is in the memsection of range of 0 to 0x1fffffff. During S3
 > 
-> I have more advanced rules that check the ct mark and will need to
-> drop if mark == something. These mark == something rules are applied
-> ‘runtime’ and flowables doesn’t seem to be flushed on nft load,
-> which is also a reason for my ‘flow retire’ from the tables.
+> ... turns out to be totally valid, only of the I/O kind. (This might be 
+> a case of Chinglish that is actually conveying the incorrect meaning to 
+> unaware readers.)
+> 
 
-It should be also possible to notify the flowtable that the ruleset
-has been updated. That won't cover the meta day, hour, time scenario
-though. I think both mechanism (the 'retire' feature you propose) and
-ruleset update notifications are complementary each other and they
-would be good to have.
+The whole range of the 512M memsection will be totally valid by 
+pfn_valid(), and let me try reduce the example description. :)
 
-> So my overall goal is to receive packets, mark them with a value
-> depending on 'flow type' and then for the flows that are allowed to
-> be forwarded offload them to the ingress flow table for either HW or
-> SW offload. Once in a while I will change the verdict of a ‘flow
-> type’ and will need that to apply for all existing flows and future
-> flows, besides the fixed schedules, and it should work both for SW
-> OFFLOAD and HW OFFLOAD.
->
-> I only have the M7621 device to play with for HW OFFLOAD, but it
-> works fine with my patch.
 
-Thanks for explaining.
+>> sleep and resume, these io registers will be saved and restored as 
+>> valid memory
+>> page (pfn_valid() of common version considers that all pages in a 
+>> memsection
+>> are valid), which will cause exception, especially when restoring 
+>> during resume.
+>>
+>> We can use 256M size for memsection of LoongArch, or use the way as 
+>> ARM64 to
+>> walk through all memory memblock to check if a mem pfn is valid which 
+>> maybe
+>> lower performance. For simplicity, this patch just use the former way.
+> 
+> And the rest of the commit message is, unfortunately, a bit too verbose 
+> and hard to understand in general. I have to look at the actual change 
+> (luckily, a one-liner in this case) to confirm my understanding.
+> 
+> I think your intent is just to *avoid stepping into IO memory region 
+> during suspend/resume by reducing the section size order by one*. 
 
-My suggestions are:
+Yes.
 
-- Add support for this in the flowtable netlink interface (instead of
-  sysctl), I'm going to post a patch to add support for setting the
-  flowtable size, it can be used as reference to expose this new
-  'retire' feature.
 
-- flow_offload_teardown() already unsets the IPS_OFFLOAD bit, so
-  probably your patch can follow that path too (instead of clearing
-  IPS_OFFLOAD_BIT from flow_offload_del).
+> Try reducing the verbosity of the commit message in v2?
 
-static void nf_flow_offload_gc_step(struct nf_flowtable *flow_table,
-                                    struct flow_offload *flow, void *data)
-{
-        if (nf_flow_has_expired(flow) ||
-            nf_ct_is_dying(flow->ct))
-                flow_offload_teardown(flow);
+Ok, let me try. :)
+
+> I can't proofread and edit every commit due to limited time, so you have to practice and 
+> improve your writing skills after all. I'll review that piece of text 
+> afterwards. :)
+> 
+Ok, thanks.
+
+>>
+>> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+>>
+>> diff --git a/arch/loongarch/include/asm/sparsemem.h 
+>> b/arch/loongarch/include/asm/sparsemem.h
+>> index 3d18cdf1b069..05903b40a625 100644
+>> --- a/arch/loongarch/include/asm/sparsemem.h
+>> +++ b/arch/loongarch/include/asm/sparsemem.h
+>> @@ -8,7 +8,7 @@
+>>    * SECTION_SIZE_BITS        2^N: how big each section will be
+>>    * MAX_PHYSMEM_BITS        2^N: how much memory we can have in that 
+>> space
+>>    */
+>> -#define SECTION_SIZE_BITS    29 /* 2^29 = Largest Huge Page Size */
+>> +#define SECTION_SIZE_BITS    28
+>>   #define MAX_PHYSMEM_BITS    48
+>>   #endif /* CONFIG_SPARSEMEM */
+> 
+> The change is trivial indeed but I'm not immediately giving the R-b.
+> 
+
