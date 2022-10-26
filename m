@@ -2,70 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9DF160E3B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C34160E3B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234071AbiJZOs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
+        id S234108AbiJZOsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 10:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234031AbiJZOsW (ORCPT
+        with ESMTP id S234042AbiJZOsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:48:22 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDA8119BD7;
+        Wed, 26 Oct 2022 10:48:25 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3AD111D9BD;
+        Wed, 26 Oct 2022 07:48:23 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id bg9-20020a05600c3c8900b003bf249616b0so1758491wmb.3;
+        Wed, 26 Oct 2022 07:48:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :references:from:to:cc:subject:date:message-id:reply-to;
+        bh=+0mLvxSPXOxhgnQzcFMi44GsxzESgWZ7ht0/PY/f89Q=;
+        b=EizPam+fpHG85pFQytUCkvubWoOhztt1iDv7VIlV0p3BBuAKUvT9hosMERDmg/DVSX
+         rGgPIUdwttDbqz65VTg+selFcbgULI2Ugxc4PXlZRe19qetJZFv0GbuGVRjxj6YB8Wkt
+         olkVowxyzveNPp5DDAnfgIZXT1+1GTWoNsW6J6pLq8787yhJ4/tGI/syWZ3M95EUWw/I
+         t3LwED8PUSp9hmsR30iIzkeLkgwgBWWJXqKq1TmYj/U2sui2cmX614eukMR8mLViyKe8
+         mefhw2zImZlMn06SPxWgCKWJUWFbvaJQbJHChdLqJF+KWeQKyqFTg/bDxRZdukQVfduJ
+         TsGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :references:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+0mLvxSPXOxhgnQzcFMi44GsxzESgWZ7ht0/PY/f89Q=;
+        b=5xVWHEmSfxDZhJjfUP5FftjDBuP1ibeb2i/55WJ03K1an6yoeIcJS5NeZWF/W1lrep
+         HsqY1LpkpGLfj53eqqDyiXKw7Pa27Gac8TzmDF/qR4WBYUzjijYQNXpv4hHb/eCjC4ze
+         rBVXHF+6D6e2CMKXmbPfl7MXcmRot6lZjiSWAsVpuCGOwZYFOuQjil/3AOJ+9/12aTlK
+         lHjI+6g1TVFXXmxzs8fJdYwaZABOmjaT43gRh1iKiBD7+u0TJT5+c0a0qltCsZ0W1rwg
+         G8v44/hAXuYX8vVVaEEusmhwCUVptGMoUvekndbcTId8jqJ6h3ey7yejGE7ER0EyrDIq
+         jY9g==
+X-Gm-Message-State: ACrzQf3TbX7H8CzuUxx5bETKVIONa2PioPCMHihKYFAlRTuDOiWDAcuI
+        Z1H6Ultrx2B0SHP7DcWaOWzbcL8TDoXOug==
+X-Google-Smtp-Source: AMsMyM7/vD0TkY3/qBDwvfDXp6IepRYUm5MsPEZ2Jot0Pj+rXJATGYpR57v7l1I9iMk6NOBsUPoGMg==
+X-Received: by 2002:a05:600c:35cf:b0:3c6:e957:b403 with SMTP id r15-20020a05600c35cf00b003c6e957b403mr2893717wmq.162.1666795702227;
+        Wed, 26 Oct 2022 07:48:22 -0700 (PDT)
+Received: from localhost (94.197.44.200.threembb.co.uk. [94.197.44.200])
+        by smtp.gmail.com with ESMTPSA id l3-20020adfa383000000b002366eb01e07sm5455698wrb.114.2022.10.26.07.48.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 26 Oct 2022 07:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666795701; x=1698331701;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fLSv77D7+BpnQGBb1c2MahawwzWfUMVmEmx2oaf4MA8=;
-  b=HR0eL3ha/r3V2+1C1pBXEDkLGaWQZViq8IAXMIegvFGAvJnYT4a8eEsh
-   /FAh6ZqYv67mnzvWUEXTSOPAlAnIxfSC1jgSdlGYQBuaAzrF3ek27v7t5
-   +Lra1jbqKS9sgZmX9IqITsFAKLD8bna6JEluoBcyCA7yZsuKznQz98Mny
-   1aVVtst0gzpo4wC8gMgGfqV//+sxZrdbqUmapzIW/caKY9sROcK0ZXj18
-   3cxbTVT2Umvu4ldwVZTdg4nBRV4eqUDushJEFrCdJNoW1/eoNahzbTTxS
-   tRRoH9Yvl2oOPhoJUjvmJ2fto4Fu8h+VtopshCJsrSjwRZQg1Uq62VKpa
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="287677707"
-X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="287677707"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 07:48:19 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="609977863"
-X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="609977863"
-Received: from gkammela-mobl.amr.corp.intel.com (HELO [10.251.31.245]) ([10.251.31.245])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 07:48:19 -0700
-Message-ID: <6fef55d0-5111-bde2-c4c2-8cb5b2794026@linux.intel.com>
-Date:   Wed, 26 Oct 2022 07:48:18 -0700
+References: <20221022162742.21671-1-aidanmacdonald.0x0@gmail.com>
+ <20221022162742.21671-2-aidanmacdonald.0x0@gmail.com>
+ <ef6a326b-5c61-988b-2ec2-cd8e233e5d28@linaro.org>
+ <GMvEU8xVTkjIoQ518XWAaLkhldSZHlk7@localhost>
+ <4ef59d94-d045-55fc-d531-c84e7edb8333@linaro.org>
+ <hXRpArckbrXUelDdaJ3Y2SErmKiuycXt@localhost>
+ <66c1a100-922e-4a33-e80c-fc80866acf03@linaro.org>
+ <jZCUALhj8PoqVkuWdtLf8LnPAj1wDakF@localhost>
+ <38205667-d36f-e7a9-21b0-2e8597a662ff@linaro.org>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     broonie@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        kuninori.morimoto.gx@renesas.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] dt-bindings: ASoC: simple-card: Add
+ system-clock-id property
+In-reply-to: <38205667-d36f-e7a9-21b0-2e8597a662ff@linaro.org>
+Date:   Wed, 26 Oct 2022 15:48:21 +0100
+Message-ID: <qNdQQJRLFWJ6gNfwM73oJ8EH56Y5nWgd@localhost>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 2/2] platform/x86/intel: pmc/core: Add Raptor Lake
- support to pmc core driver
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, irenic.rajneesh@gmail.com,
-        Srinivas Pandruvada <srinivas.pandruvada@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Box <david.e.box@intel.com>
-References: <20220912233307.409954-1-gayatri.kammela@linux.intel.com>
- <20220912233307.409954-2-gayatri.kammela@linux.intel.com>
- <3537fa63-9015-c63d-2321-a77062e24d6f@redhat.com>
- <58855ea9-0d89-e17d-349a-657512068663@kernel.org>
- <8957290c-9499-a399-3e4e-e0276caccd65@redhat.com>
-Content-Language: en-US
-From:   "Kammela, Gayatri" <gayatri.kammela@linux.intel.com>
-In-Reply-To: <8957290c-9499-a399-3e4e-e0276caccd65@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,58 +83,26 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 10/24/2022 2:46 AM, Hans de Goede wrote:
-> Hi,
->
-> On 10/14/22 09:50, Jiri Slaby wrote:
->> On 19. 09. 22, 13:41, Hans de Goede wrote:
->>
->>> On 9/13/22 00:33, Gayatri Kammela wrote:
->>>> Add Raptor Lake client parts (both RPL and RPL_S) support to pmc core
->>>> driver. Raptor Lake client parts reuse all the Alder Lake PCH IPs.
->>>>
->>>> Cc: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
->>>> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->>>> Cc: David Box <david.e.box@intel.com>
->>>> Acked-by: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>
->>>> Acked-by: Hans de Goede <hdegoede@redhat.com>
->>>> Signed-off-by: Gayatri Kammela <gayatri.kammela@linux.intel.com>
->>>> ---
->>>> Changes since v1:
->>>> 1) Added a dependency patch- ea902bcc1943f7539200ec464de3f54335588774 :
->>>>    "x86/cpu: Add new Raptor Lake CPU model number".
->>>> 2) Rebased the above patch on v6.0-rc1 with "Acked-by" from Hans and
->>>>    Rajneesh.
->>> I still cannot take this, since patch 1/2 is *already merged* through
->>> another tree, so me cherry-picking it leads to potential conflicts.
->>>
->>> As I have already explained twice you need to submit this upstream
->>> throuh the same tree which has the original merge of patch 1/2.
->> Hi, friendly ping: has this ever happened, Gayatri?
-> Since the necessary change are in 6.1-rc1 now, I have merged this
-> patch now and I'll include this in the pdx86 fixes pull-req which
-> I'm preparing for 6.1-rc3:
->
-> Thank you for your patch, I've applied this patch to my review-hans
-> branch:
-> https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
->
-> Note it will show up in my review-hans branch once I've pushed my
-> local branch there, which might take a while.
->
-> Once I've run some tests on this branch the patches there will be
-> added to the platform-drivers-x86/for-next branch and eventually
-> will be included in the pdx86 pull-request to Linus for the next
-> merge-window.
->
-> Regards,
->
-> Hans
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
 
-hi Hans,
+> And the remaining piece I don't get is that these are not bindings for
+> codec, but for sound audio card. You want to set "system-clock-id"
+> property for audio card, while putting clock from codec, which will be
+> used to pass back to the codec... so it is a property of the codec, not
+> of the audio card. IOW, NAU8821_CLK_* does not configure here the clock
+> of the system, but only, only clock of the codec.
 
-Thank you for merging this patch. I was planning on sending this patch 
-to combine with other series as this could be dependency. Apologies for 
-my late reply. Thank you!
+The system clock is controlled at the DAI level, it's specific to one
+DAI on one component. The simple-card device node has sub-nodes for the
+DAI links, and each DAI link node has sub-nodes for the DAIs within the
+link. "system-clock-id" is a property on the DAI nodes, so it's not a
+card-level property, just one part of the overall card definition.
 
->
+Since the clock ID is something defined by the codec it would naturally
+be a value defined by the codec, but the *configuration* of the codec is
+part of the sound card because it depends on how everything is connected
+together. If you used the same codec in a different machine it would
+have a different configuration.
+
+Regards,
+Aidan
