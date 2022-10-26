@@ -2,105 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554D160DD20
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8DF60DD21
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233077AbiJZIfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 04:35:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46190 "EHLO
+        id S229904AbiJZIgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 04:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232201AbiJZIfu (ORCPT
+        with ESMTP id S233256AbiJZIgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 04:35:50 -0400
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA62C495D9;
-        Wed, 26 Oct 2022 01:35:49 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id x2so13019568edd.2;
-        Wed, 26 Oct 2022 01:35:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uv8qawsUmOo9AuZfM+lS+beTuCiP1fY4EhSrh4sMsbA=;
-        b=vPF7/tlggAM5jdGNkqDhR2dzXan+uocBI0LKT0KZvQNjCfcsvuLe+gsQiDYre9kEVS
-         DUO4WNXTLm5C/+6byyOntdJp0+XPIvpt8bCw+bDwnDqbp2DWq5cco4ziv1/XpZtxontB
-         P6hn0zRmJELO00fosmaNQCKkvRjo14mFZKvdCk6IYXKHKFRMoTJfiI+4iXTFRJ+bmC10
-         1PfyLS1M+QbdBPx2/oxwVW1c8zXPHy9Gxq7KUUc7Uis7RIiqFxrUaJXyvGeSyetjWwp6
-         G/pM+apoFi6kk5RTHhufVGqE1hnfQrcHTvqqCPT8aL57NAya313HfUGaXH/KOL0bwckt
-         UYyA==
-X-Gm-Message-State: ACrzQf3w3H7h9XYL8ih5O/hTkbzK2E7CfAah4heaMVjKD4kpczWmGqhR
-        Ka3MLD2++JRk2nqrua+y21D0LAi6nBoS7A==
-X-Google-Smtp-Source: AMsMyM6sYc1fzwDQEo78SRf3saoHjQrC3Im6izpMePi1f3csy9SgYa/9YKgx5nnQLNM/TWm+3ViDOg==
-X-Received: by 2002:a05:6402:550c:b0:443:7d15:d57f with SMTP id fi12-20020a056402550c00b004437d15d57fmr40034782edb.147.1666773347643;
-        Wed, 26 Oct 2022 01:35:47 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id k14-20020a170906158e00b0078bfff89de4sm2620566ejd.58.2022.10.26.01.35.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 01:35:47 -0700 (PDT)
-Message-ID: <2008526a-e0ca-7e67-cff6-b540d62e58c7@kernel.org>
-Date:   Wed, 26 Oct 2022 10:35:45 +0200
+        Wed, 26 Oct 2022 04:36:08 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A15D4A801
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 01:36:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A25A23A;
+        Wed, 26 Oct 2022 01:36:08 -0700 (PDT)
+Received: from [10.163.37.85] (unknown [10.163.37.85])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A5B563F792;
+        Wed, 26 Oct 2022 01:35:58 -0700 (PDT)
+Message-ID: <3c545133-71aa-9a8d-8a13-09186c4fa767@arm.com>
+Date:   Wed, 26 Oct 2022 14:06:00 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
+ Thunderbird/102.2.2
+Subject: Re: [PATCH -next 1/1] mm: hugetlb_vmemmap: Fix WARN_ON in
+ vmemmap_remap_pte
 Content-Language: en-US
-To:     Michael Matz <matz@suse.de>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
-        Borislav Petkov <bpetkov@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-References: <20220924181915.3251186-1-masahiroy@kernel.org>
- <20220924181915.3251186-7-masahiroy@kernel.org>
- <ea468b86-abb7-bb2b-1e0a-4c8959d23f1c@kernel.org>
- <alpine.LSU.2.20.2210251210140.29399@wotan.suse.de>
-From:   Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v3 6/7] kbuild: use obj-y instead extra-y for objects
- placed at the head
-In-Reply-To: <alpine.LSU.2.20.2210251210140.29399@wotan.suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Muchun Song <muchun.song@linux.dev>
+Cc:     Wupeng Ma <mawupeng1@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>, catalin.marinas@arm.com,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kernel@vger.kernel.org
+References: <20221025014215.3466904-1-mawupeng1@huawei.com>
+ <614E3E83-1EAB-4C39-AF9C-83C0CCF26218@linux.dev>
+ <35dd51eb-c266-f221-298a-21309c17971a@arm.com>
+ <3D6FDA43-A812-4907-B9C8-C2B25567DBBC@linux.dev>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <3D6FDA43-A812-4907-B9C8-C2B25567DBBC@linux.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25. 10. 22, 14:26, Michael Matz wrote:
->> Ideas, comments? I'll send the attachment as a PATCH later (if there are
->> no better suggestions).
+
+
+On 10/26/22 12:31, Muchun Song wrote:
 > 
-> This will work.  An alternative way would be to explicitly name the input
-> file in the section commands, without renaming the section:
 > 
-> @@ -126,6 +126,7 @@ SECTIONS
->                  _text = .;
->                  _stext = .;
->                  /* bootstrapping code */
-> +               KEEP(vmlinux.a:head64.o(.head.text))
->                  HEAD_TEXT
->                  TEXT_TEXT
+>> On Oct 26, 2022, at 13:06, Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+>>
+>>
+>>
+>> On 10/25/22 12:06, Muchun Song wrote:
+>>>
+>>>
+>>>> On Oct 25, 2022, at 09:42, Wupeng Ma <mawupeng1@huawei.com> wrote:
+>>>>
+>>>> From: Ma Wupeng <mawupeng1@huawei.com>
+>>>>
+>>>> Commit f41f2ed43ca5 ("mm: hugetlb: free the vmemmap pages associated with
+>>>> each HugeTLB page") add vmemmap_remap_pte to remap the tail pages as
+>>>> read-only to catch illegal write operation to the tail page.
+>>>>
+>>>> However this will lead to WARN_ON in arm64 in __check_racy_pte_update()
+>>>
+>>> Thanks for your finding this issue.
+>>>
+>>>> since this may lead to dirty state cleaned. This check is introduced by
+>>>> commit 2f4b829c625e ("arm64: Add support for hardware updates of the
+>>>> access and dirty pte bits") and the initial check is as follow:
+>>>>
+>>>> BUG_ON(pte_write(*ptep) && !pte_dirty(pte));
+>>>>
+>>>> Since we do need to mark this pte as read-only to catch illegal write
+>>>> operation to the tail pages, use set_pte  to replace set_pte_at to bypass
+>>>> this check.
+>>>
+>>> In theory, the waring does not affect anything since the tail vmemmap
+>>> pages are supposed to be read-only. So, skipping this check for vmemmap
+>>
+>> Tails vmemmap pages are supposed to be read-only, in practice but their
+>> backing pages do have pte_write() enabled. Otherwise the VM_WARN_ONCE()
+>> warning would not have triggered.
 > 
-> But I guess not all arch's name their must-be-first file head64.o (or even
-> have such requirement), so that's probably still arch-dependend and hence
-> not inherently better than your way.
+> Right.
+> 
+>>
+>>        VM_WARN_ONCE(pte_write(old_pte) && !pte_dirty(pte),
+>>                     "%s: racy dirty state clearing: 0x%016llx -> 0x%016llx",
+>>                     __func__, pte_val(old_pte), pte_val(pte));
+>>
+>> Also, is not it true that the pte being remapped into a different page
+>> as read only, than what it had originally (which will be freed up) i.e 
+>> the PFN in 'old_pte' and 'pte' will be different. Hence is there still
+> 
+> Right.
+> 
+>> a possibility for a race condition even when the PFN changes ?
+> 
+> Sorry, I didn't get this question. Did you mean the PTE is changed from
+> new (pte) to the old one (old_pte) by the hardware because of the update
+> of dirty bit when a concurrent write operation to the tail vmemmap page?
 
-The downside of this is that it doesn't make sure the function 
-(startup_64()) is the first one. When someone sticks something before 
-it, it breaks again. But leaving the decision up to the x86 maintainers ;).
-
-Re. other archs, I have absolutely no idea (haven't looked into that at 
-all).
-
-thanks,
--- 
-js
-
+No, but is not vmemmap_remap_pte() reuses walk->reuse_page for all remaining
+tails pages ? Is not there a PFN change, along with access permission change
+involved in this remapping process ?
