@@ -2,138 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D73A360E64B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3E460E656
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiJZRSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 13:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
+        id S233449AbiJZRVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 13:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiJZRSJ (ORCPT
+        with ESMTP id S231926AbiJZRVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 13:18:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E28844EA
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 10:18:08 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1onk1s-0003AO-MF; Wed, 26 Oct 2022 19:17:24 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1onk1p-0005PJ-NT; Wed, 26 Oct 2022 19:17:21 +0200
-Date:   Wed, 26 Oct 2022 19:17:21 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Shawn Tu <shawnx.tu@intel.com>, devicetree@vger.kernel.org,
-        Jacopo Mondi <jacopo@jmondi.org>, linux-kernel@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH v3 8/9] media: i2c: ov5645: Don't return early on
- failures for s_stream(0)
-Message-ID: <20221026171721.4nfvhamguwnrw6zf@pengutronix.de>
-References: <20221026130658.45601-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221026130658.45601-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Wed, 26 Oct 2022 13:21:12 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A90789CFB;
+        Wed, 26 Oct 2022 10:21:08 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id u11so11098596ljk.6;
+        Wed, 26 Oct 2022 10:21:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Qov2Dgocew9BtpnUJ5VUmlVYXRxNX8vQVfGrG02GkcQ=;
+        b=X3dzyRxqhsdwAc893GNV5bM99VeFzQr/hfBD2ZXUmtDwa47o6KHKpCU9XL3ZOhpAuz
+         L7fkt6pqQ7lkvPQJZWoEhsHzCCFW/zCEh3neh75gsB+DXzy0l/01ZjPZXsF9rKi2KLEg
+         sgF68ZldYP8okSWAjX3Ap6hldXl8MmoUpkbkUNSytTbnZ8pyXV/fLJ5qsNStmt7mwqAI
+         7N8lB1grfvcrxxx7LCqwOSB7VrrFkW3Hh3vWcm9wiJ9Y+p+duIGI0PuESS8XNm02Gsf5
+         RpXHqKR789dRNT8mVDDXgbri3QBUIXEn9iyPnZkOMoUVKT+Iyip3N23joNQ6y2dQ6uSA
+         KePQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qov2Dgocew9BtpnUJ5VUmlVYXRxNX8vQVfGrG02GkcQ=;
+        b=catrZFTtUtMIQ/5dlu6ePVNbX2SopOVBRTZHAj2kef+tQ2HXnng/FWo3EIOTEn2bVe
+         eXODbuxTa1iYbqEbg1+A7WpB40sxkkNyv3PFvn0m77/onGhg6hKBGzOQ56Jfcru7+Sx/
+         aRm51rc/TpOuz80dg8vim5nEY1O3mglNTdgfYgTJGUGpKwQMGqpU1Q3EFJSUwUXVU4OV
+         KmTLBIoKdz6Ckf3TImAVQp7kLrnM6TNpjlidFm1arRZZKWI80BrulBH4MgzJCAtQDAdM
+         V+lmxDR3IqcZ0BvD0uu35HIKCYsPVn+rrwXP1dMUfTsJ62Wcalq7mKOHlbvAycZ8cQ10
+         SSNQ==
+X-Gm-Message-State: ACrzQf0smbL81r/sdXycV9iT6yFV9zPWObWGpPQ6myqsjmd7b0+iU24L
+        3sARR/gXL8QmzEEjXrqzviaNnXeZKbFgig==
+X-Google-Smtp-Source: AMsMyM7r5UycrzF6zRC7iMfR9iLY/mWsA/sgIm6t5TrSBaJ7e8698VUzdzKpu3A8ciL6PcBQTS0oOA==
+X-Received: by 2002:a05:651c:502:b0:26f:de48:7df3 with SMTP id o2-20020a05651c050200b0026fde487df3mr16115621ljp.93.1666804866634;
+        Wed, 26 Oct 2022 10:21:06 -0700 (PDT)
+Received: from [10.0.0.100] (host-185-69-38-8.kaisa-laajakaista.fi. [185.69.38.8])
+        by smtp.gmail.com with ESMTPSA id i5-20020a2ea365000000b0025e00e0116esm1008641ljn.128.2022.10.26.10.21.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 10:21:05 -0700 (PDT)
+Message-ID: <ad965dad-ced7-4f10-13fb-2d30e058f428@gmail.com>
+Date:   Wed, 26 Oct 2022 20:21:53 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026130658.45601-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] dmaengine: ti: edma: Remove the unused function
+ edma_and()
+Content-Language: en-US
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+References: <20221018083820.25297-1-jiapeng.chong@linux.alibaba.com>
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+In-Reply-To: <20221018083820.25297-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
 
-thanks for the patch, please see below my comments.
 
-On 22-10-26, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On 18/10/2022 11:38, Jiapeng Chong wrote:
+> The function edma_and() is defined in the edma.c file, but not called
+> elsewhere, so remove this unused function.
 > 
-> Make sure we dont stop the code flow in case of errors while stopping
-> the stream and return the error code of the first error case if any.
+> drivers/dma/ti/edma.c:321:20: warning: unused function 'edma_and'.
+
+0f4c5b29e333 dmaengine: ti: edma: Remove some unused functions
+dropped edma_param_and() but left the edma_and() behind...
+
+Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+
 > 
-> v4l2-core takes care of warning the user so no need to add a warning
-> message in the driver.
-> 
-> Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2430
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 > ---
-> v2->v3
-> * Now propagating the first error code in case of failure.
+>   drivers/dma/ti/edma.c | 8 --------
+>   1 file changed, 8 deletions(-)
 > 
-> v1->v2
-> * New patch
-> ---
->  drivers/media/i2c/ov5645.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
-> index eea3067ddc8b..5702a55607fc 100644
-> --- a/drivers/media/i2c/ov5645.c
-> +++ b/drivers/media/i2c/ov5645.c
-> @@ -996,17 +996,22 @@ static int ov5645_s_stream(struct v4l2_subdev *subdev, int enable)
->  		if (ret < 0)
->  			goto err_rpm_put;
->  	} else {
-> +		int stream_off_ret = 0;
-> +
->  		ret = ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x40);
+> diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
+> index fa06d7e6d8e3..9ea91c640c32 100644
+> --- a/drivers/dma/ti/edma.c
+> +++ b/drivers/dma/ti/edma.c
+> @@ -318,14 +318,6 @@ static inline void edma_modify(struct edma_cc *ecc, int offset, unsigned and,
+>   	edma_write(ecc, offset, val);
+>   }
+>   
+> -static inline void edma_and(struct edma_cc *ecc, int offset, unsigned and)
+> -{
+> -	unsigned val = edma_read(ecc, offset);
+> -
+> -	val &= and;
+> -	edma_write(ecc, offset, val);
+> -}
+> -
+>   static inline void edma_or(struct edma_cc *ecc, int offset, unsigned or)
+>   {
+>   	unsigned val = edma_read(ecc, offset);
 
-If this write failed..
-
->  		if (ret < 0)
-> -			return ret;
-> +			stream_off_ret = ret;
->  
->  		ret = ov5645_write_reg(ov5645, OV5645_SYSTEM_CTRL0,
->  				       OV5645_SYSTEM_CTRL0_STOP);
-
-why should this write be successful?
-
-Regards,
-  Marco
-
-> -		if (ret < 0)
-> -			return ret;
-> +		if (ret < 0 && !stream_off_ret)
-> +			stream_off_ret = ret;
->  
->  		pm_runtime_mark_last_busy(ov5645->dev);
->  		pm_runtime_put_autosuspend(ov5645->dev);
-> +
-> +		if (stream_off_ret)
-> +			return stream_off_ret;
->  	}
->  
->  	return 0;
-> -- 
-> 2.25.1
-> 
-> 
-> 
+-- 
+Péter
