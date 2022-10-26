@@ -2,111 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB5E60E85B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0DD60E86F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234111AbiJZTHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 15:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
+        id S234649AbiJZTID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 15:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234808AbiJZTHU (ORCPT
+        with ESMTP id S233669AbiJZTHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 15:07:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B42CE36;
-        Wed, 26 Oct 2022 12:04:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D5B062033;
-        Wed, 26 Oct 2022 19:04:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2740C433D6;
-        Wed, 26 Oct 2022 19:04:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666811075;
-        bh=U+R8INu9G+SgFDxjAisYOYC9BdZ7qdOXy8lBhXyOEwE=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=rI4nDtKHjUysmmUGj09yG6xS8huuOsMAGRr1z4i7boXV2jOUSegFC8c0jzlnnklBh
-         QZghP+s7yItJfFxeBtKdiDnojkqHThYxwjwpUt3SVs++c8/ZG+1I6PzLSZ5+xuIycQ
-         X8FPkkip5XZyWzrtQaZbTrucYseGGhEeyyOHt3pWuL92WyBxIed6Jx/2+0uY2jUiKT
-         AI/0YlNxPWu/pleo0PxcyuhgVSONw2Q9l1auUZVo3Z7fyrBzqjGhQKHfx+iminrKCL
-         5HoJKBhWNXVAV3Mf4CiFoJJcFyau3SH6zwcDzuCoijKASZpM1Jt2KAgha7K3h7FE6j
-         9rpimXL2LU/qQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     paul@crapouillou.net, lgirdwood@gmail.com, tiwai@suse.com,
-        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, perex@perex.cz
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        zhouyu@wanyeetech.com, linux-mips@vger.kernel.org
-In-Reply-To: <20221023143328.160866-1-aidanmacdonald.0x0@gmail.com>
-References: <20221023143328.160866-1-aidanmacdonald.0x0@gmail.com>
-Subject: Re: [PATCH v6 0/9] ASoC: cleanups and improvements for jz4740-i2s
-Message-Id: <166681107350.960840.12779879137607542680.b4-ty@kernel.org>
-Date:   Wed, 26 Oct 2022 20:04:33 +0100
+        Wed, 26 Oct 2022 15:07:34 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A2A192A4;
+        Wed, 26 Oct 2022 12:05:08 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QIppis017921;
+        Wed, 26 Oct 2022 19:04:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=OnbNAszLwwpNV9bgl3vGZhpAqeYHTnVxF7CmwEswKjs=;
+ b=fbEF5vv5YCT85jjj5UXAcCfQiRwni0qxqAVN8OFBwMq2xcuEqDejQIss/H5zCantaqm4
+ IpeyTLBXz7qp5UmKuJzpVTI2BtxbnP6T01DaUC+Tj/vGeKn7+eEe4f6pSAhdyFHLKEeP
+ friLnqbbrOIqlJs9bNUdeS2dgQfiIBuHHL56MmZy+1TcIES/+570H1QPUzaf+Hc1brRM
+ Xyy61mTH7WESOttN2sG1VGWLkh42ytKbcJqPyCZgTmU0VKGJMzz9El32ghfIHra186si
+ 8fKqtavShf0jVrbhasuRBHbDkGkM/MFBiYHRGngEexP7sq7NOnLJmZhZc6594+1zcs5g vw== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kfaj001fh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 19:04:53 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29QJ4qHO013943
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 19:04:52 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Wed, 26 Oct 2022 12:04:52 -0700
+From:   Melody Olvera <quic_molvera@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+CC:     Taniya Das <quic_tdas@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Melody Olvera <quic_molvera@quicinc.com>
+Subject: [PATCH v3 0/5] clk: qcom: Add clocks for the QDU1000 and QRU1000 SoCs
+Date:   Wed, 26 Oct 2022 12:04:36 -0700
+Message-ID: <20221026190441.4002212-1-quic_molvera@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: nqAXesLAyoSbdTqmIEzlarqXGy1ShAY5
+X-Proofpoint-ORIG-GUID: nqAXesLAyoSbdTqmIEzlarqXGy1ShAY5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-26_07,2022-10-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
+ bulkscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=839
+ malwarescore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2210260107
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 23 Oct 2022 15:33:19 +0100, Aidan MacDonald wrote:
-> This series is a preparatory cleanup of the jz4740-i2s driver before
-> adding support for a new SoC. The two improvements are lifting
-> unnecessary restrictions on sample rates and formats -- the existing
-> ones appear to be derived from the limitations of the JZ4740's internal
-> codec and don't reflect the actual capabilities of the I2S controller.
-> 
-> I'm unable to test the series on any JZ47xx SoCs, but I have tested
-> on an X1000 (which is the SoC I'll be adding in a followup series).
-> 
-> [...]
+This series adds the GCC, RPMh, and PDC clock support required for the
+QDU1000 and QRU1000 SoCs along with the devicetree bindings for them.
 
-Applied to
+The Qualcomm Technologies, Inc. Distributed Unit 1000 and Radio Unit
+1000 are new SoCs meant for enabling Open RAN solutions. See more at
+https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/qualcomm_5g_ran_platforms_product_brief.pdf
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+This patchset is based on the YAML conversion patch [1] submitted already.
 
-Thanks!
+[1] https://lore.kernel.org/r/20220103074348.6039-1-luca.weiss@fairphone.com
 
-[1/9] ASoC: jz4740-i2s: Handle independent FIFO flush bits
-      commit: 8b3a9ad86239f80ed569e23c3954a311f66481d6
-[2/9] ASoC: jz4740-i2s: Convert to regmap API
-      commit: cf375e693252f4e8ecb6256af631ff381381a3dd
-[3/9] ASoC: jz4740-i2s: Simplify using regmap fields
-      commit: 0fddb4bce669fd255f6ffade6905da5c8ed3e254
-[4/9] ASoC: jz4740-i2s: Use FIELD_PREP() macros in hw_params callback
-      commit: b355ebebb17c438b90c3d339f38a79559f7259df
-[5/9] ASoC: jz4740-i2s: Align macro values and sort includes
-      commit: dacc06b812f46e0d4cfdda98134a8b5d64375341
-[6/9] ASoC: jz4740-i2s: Support S20_LE and S24_LE sample formats
-      commit: 7abd01cfc5428581b21099eb629d88e76a47b67a
-[7/9] ASoC: jz4740-i2s: Support continuous sample rate
-      commit: 84a914349ba2634e8db6b0815f100697d878d033
-[8/9] ASoC: jz4740-i2s: Move component functions near the component driver
-      commit: 165afe6b66aafaafc95484ac2f0f09f78d62386b
-[9/9] ASoC: jz4740-i2s: Refactor DAI probe/remove ops as component ops
-      commit: 4e02fd6207474ef2d882b8620f4c3db9a02d4ddd
+Changes from v2:
+- Revised dt-bindings
+- Removed qru compat strings
+- Updated some clocks to use clk_branch ops instead of clk_branch2 and HALT_ENABLE
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Melody Olvera (4):
+  dt-bindings: clock: Add QDU1000 and QRU1000 GCC clock bindings
+  dt-bindings: clock: Add RPMHCC bindings for QDU1000 and QRU1000
+  clk: qcom: Add support for QDU1000 and QRU1000 RPMh clocks
+  dt-bindings: qcom,pdc: Introduce pdc bindings for QDU1000 and QRU1000
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Taniya Das (1):
+  clk: qcom: Add QDU1000 and QRU1000 GCC support
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+ .../bindings/clock/qcom,gcc-qdu1000.yaml      |   77 +
+ .../bindings/clock/qcom,rpmhcc.yaml           |    1 +
+ .../interrupt-controller/qcom,pdc.yaml        |    1 +
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/clk-rpmh.c                   |   13 +
+ drivers/clk/qcom/gcc-qdu1000.c                | 2645 +++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-qdu1000.h  |  170 ++
+ 8 files changed, 2916 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-qdu1000.yaml
+ create mode 100644 drivers/clk/qcom/gcc-qdu1000.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-qdu1000.h
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
 
-Thanks,
-Mark
+base-commit: 60eac8672b5b6061ec07499c0f1b79f6d94311ce
+-- 
+2.25.1
+
