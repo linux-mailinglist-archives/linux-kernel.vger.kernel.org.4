@@ -2,127 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4BC60E2BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D907360E2BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233820AbiJZN5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 09:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45916 "EHLO
+        id S234167AbiJZN5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234119AbiJZN4h (ORCPT
+        with ESMTP id S234130AbiJZN4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 09:56:37 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4949C7CF
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:55:46 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id h18so366171ilq.9
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:55:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DT+ZdZw/Szp/XdP/+oiq277VJfumCyFlUwKrWAITL5M=;
-        b=bu/77+GejM0UeaYIkx2rGntTb76sV9tGUzQpjFzvBZHz2/2ipFD58QIDV44evyQOdt
-         EletwUT1AOpR1HGXYb5Ec21T7H7wsnvR0Akz6ccL2Nj3e+VAWHFVPcIhgTraeAuNrJI0
-         CpD+dQn811Gl84vZvuxH+C8Sf9wA2FRRz2+oNBCVPu5EiJZlOKvUCfD3bdYs0ig48oD+
-         8ON98bgr9OnrWfGxjSyOS/fv+VG9eWctHfHq+pnUM156rQTQGoBfBKObdFuId7zfqk83
-         ii0h5tBGU0DLkt8hErsBUgQzrD0h2H68/UwZ66zk7cZJVEcFPps4/CahxRNNa2QYQP1D
-         ovSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DT+ZdZw/Szp/XdP/+oiq277VJfumCyFlUwKrWAITL5M=;
-        b=UdbzlWx7tLLrgvoFEShtwNf/7qfkhCMm1aNOKE8ESGQOZAn2MCJ29xNkokJo22ue65
-         k+8MjZ77e6i7tnIT9aPSfk0kKvf4rj+/pN+EYgmDaLVm6SVobzLsvNm0XURknx+B/IID
-         +iGd4hBgRUH+Es6pIB9O+WLz2MkQeJfLKaxPo60CqCAourVwwPRyEZ3auGjyx0Kvvs+T
-         fkvfk1IJLrp5ti+wNufMGj8wZMyN0sk10SYogIkm7gPDqHhTJCBk/Nq2dWjb3SbIQVza
-         NppxsiS/Xu+7FynVg8t/d97iROFyuNg51CrK3oSuR5q4Ht8iO2m8R0vZSa/6fsSH0LTW
-         F0wA==
-X-Gm-Message-State: ACrzQf2pTjSyppauDnsxPg86uPeQ6QHwCoJlFJjPy2vPYAvuhvPktr5e
-        UWiXXvU3ZyPKu+zs/VuVcXK5BXHHGR23e/17Jps3TQ==
-X-Google-Smtp-Source: AMsMyM7LtMJZ7peDhco+LS7h3Vnr3vLAVqU6EymZQQvnw9EwQvwgCXvC+HA4HxCF5rWdCWjsuzdq9+EpdZ6B4UYJ7S8=
-X-Received: by 2002:a92:4449:0:b0:2de:95f1:8b80 with SMTP id
- a9-20020a924449000000b002de95f18b80mr26741891ilm.232.1666792545449; Wed, 26
- Oct 2022 06:55:45 -0700 (PDT)
+        Wed, 26 Oct 2022 09:56:52 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA3FAE7E;
+        Wed, 26 Oct 2022 06:56:08 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4My9FX0YKtzmVKW;
+        Wed, 26 Oct 2022 21:51:12 +0800 (CST)
+Received: from [10.174.179.14] (10.174.179.14) by
+ canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 26 Oct 2022 21:56:05 +0800
+Subject: Re: [PATCH v3 1/4] ext4: fix bug_on in __es_tree_search caused by bad
+ quota inode
+To:     Baokun Li <libaokun1@huawei.com>, <linux-ext4@vger.kernel.org>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
+        <ritesh.list@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>, <yukuai3@huawei.com>,
+        <linux-fsdevel@vger.kernel.org>
+References: <20221026042310.3839669-1-libaokun1@huawei.com>
+ <20221026042310.3839669-2-libaokun1@huawei.com>
+From:   Jason Yan <yanaijie@huawei.com>
+Message-ID: <29ef2ea7-7c90-a0ed-fdee-7bdc74f9f2d3@huawei.com>
+Date:   Wed, 26 Oct 2022 21:56:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-References: <20220925143908.10846-1-vincent.guittot@linaro.org>
- <20220925143908.10846-8-vincent.guittot@linaro.org> <CA+q576OoP6Ebax8aGM234JRf+WOJFEwChs25qB9M_rt7+r1wuA@mail.gmail.com>
- <CAKfTPtAh30v=XoJPvAeFxu274CDW0uf2UY4Z8ySJz123ko5xgw@mail.gmail.com>
- <CA+q576Po0bskXfBP3EXUGG9jFLAP66iH6EamXfPUg9LC6qQyCg@mail.gmail.com>
- <20221012152130.GA20993@vingu-book> <9d06c9ce-d4b3-23a8-9f9c-c1054de1aeb5@arm.com>
-In-Reply-To: <9d06c9ce-d4b3-23a8-9f9c-c1054de1aeb5@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 26 Oct 2022 15:55:34 +0200
-Message-ID: <CAKfTPtD1L3ii8VFnZHdaZm=BKz-tSw+cuu7s9U-s9zo14mpPRQ@mail.gmail.com>
-Subject: Re: [PATCH v5 7/7] sched/fair: Add latency list
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Youssef Esmat <youssefesmat@chromium.org>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org,
-        parth@linux.ibm.com, qais.yousef@arm.com, chris.hyser@oracle.com,
-        valentin.schneider@arm.com, patrick.bellasi@matbug.net,
-        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
-        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
-        joshdon@google.com, timj@gnu.org, joel@joelfernandes.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221026042310.3839669-2-libaokun1@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.14]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Oct 2022 at 12:44, Dietmar Eggemann <dietmar.eggemann@arm.com> w=
-rote:
->
-> On 12/10/2022 17:21, Vincent Guittot wrote:
-> > Le mardi 11 oct. 2022 =C3=AF=C2=BF=C2=BD 18:54:27 (-0500), Youssef Esma=
-t a =C3=AF=C2=BF=C2=BDcrit :
-> >> Hi Vincent,
-> >>
-> >> On Tue, Oct 11, 2022 at 12:10 PM Vincent Guittot
-> >> <vincent.guittot@linaro.org> wrote:
->
-> [...]
->
-> > @@ -10894,12 +10898,17 @@ static int cpu_idle_write_s64(struct cgroup_s=
-ubsys_state *css,
-> >  static s64 cpu_latency_nice_read_s64(struct cgroup_subsys_state *css,
-> >                                   struct cftype *cft)
-> >  {
-> > +     unsigned long period =3D sysctl_sched_latency;
-> >       int last_delta =3D INT_MAX;
-> >       int prio, delta;
-> >       s64 weight;
-> >
-> > +     if (sched_feat(GENTLE_FAIR_SLEEPERS))
-> > +             period >>=3D 1;
-> > +
-> >       weight =3D css_tg(css)->latency_offset * NICE_LATENCY_WEIGHT_MAX;
-> > -     weight =3D div_s64(weight, sysctl_sched_latency);
-> > +     period =3D sysctl_sched_latency;
->
-> Looks like this line is wrong here, period has been set already for
-> GENTLE_FAIR_SLEEPERS and !GENTLE_FAIR_SLEEPERS?
 
-Yes, I have factorized this in a function and the new version that I'm
-preparing so The formula is not duplicated with the risk of error like
-above
+On 2022/10/26 12:23, Baokun Li wrote:
+> We got a issue as fllows:
+> ==================================================================
+>   kernel BUG at fs/ext4/extents_status.c:202!
+>   invalid opcode: 0000 [#1] PREEMPT SMP
+>   CPU: 1 PID: 810 Comm: mount Not tainted 6.1.0-rc1-next-g9631525255e3 #352
+>   RIP: 0010:__es_tree_search.isra.0+0xb8/0xe0
+>   RSP: 0018:ffffc90001227900 EFLAGS: 00010202
+>   RAX: 0000000000000000 RBX: 0000000077512a0f RCX: 0000000000000000
+>   RDX: 0000000000000002 RSI: 0000000000002a10 RDI: ffff8881004cd0c8
+>   RBP: ffff888177512ac8 R08: 47ffffffffffffff R09: 0000000000000001
+>   R10: 0000000000000001 R11: 00000000000679af R12: 0000000000002a10
+>   R13: ffff888177512d88 R14: 0000000077512a10 R15: 0000000000000000
+>   FS: 00007f4bd76dbc40(0000)GS:ffff88842fd00000(0000)knlGS:0000000000000000
+>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>   CR2: 00005653bf993cf8 CR3: 000000017bfdf000 CR4: 00000000000006e0
+>   DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>   DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>   Call Trace:
+>    <TASK>
+>    ext4_es_cache_extent+0xe2/0x210
+>    ext4_cache_extents+0xd2/0x110
+>    ext4_find_extent+0x5d5/0x8c0
+>    ext4_ext_map_blocks+0x9c/0x1d30
+>    ext4_map_blocks+0x431/0xa50
+>    ext4_getblk+0x82/0x340
+>    ext4_bread+0x14/0x110
+>    ext4_quota_read+0xf0/0x180
+>    v2_read_header+0x24/0x90
+>    v2_check_quota_file+0x2f/0xa0
+>    dquot_load_quota_sb+0x26c/0x760
+>    dquot_load_quota_inode+0xa5/0x190
+>    ext4_enable_quotas+0x14c/0x300
+>    __ext4_fill_super+0x31cc/0x32c0
+>    ext4_fill_super+0x115/0x2d0
+>    get_tree_bdev+0x1d2/0x360
+>    ext4_get_tree+0x19/0x30
+>    vfs_get_tree+0x26/0xe0
+>    path_mount+0x81d/0xfc0
+>    do_mount+0x8d/0xc0
+>    __x64_sys_mount+0xc0/0x160
+>    do_syscall_64+0x35/0x80
+>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>    </TASK>
+> ==================================================================
+> 
+> Above issue may happen as follows:
+> -------------------------------------
+> ext4_fill_super
+>   ext4_orphan_cleanup
+>    ext4_enable_quotas
+>     ext4_quota_enable
+>      ext4_iget --> get error inode <5>
+>       ext4_ext_check_inode --> Wrong imode makes it escape inspection
+>       make_bad_inode(inode) --> EXT4_BOOT_LOADER_INO set imode
+>      dquot_load_quota_inode
+>       vfs_setup_quota_inode --> check pass
+>       dquot_load_quota_sb
+>        v2_check_quota_file
+>         v2_read_header
+>          ext4_quota_read
+>           ext4_bread
+>            ext4_getblk
+>             ext4_map_blocks
+>              ext4_ext_map_blocks
+>               ext4_find_extent
+>                ext4_cache_extents
+>                 ext4_es_cache_extent
+>                  __es_tree_search.isra.0
+>                   ext4_es_end --> Wrong extents trigger BUG_ON
+> 
+> In the above issue, s_usr_quota_inum is set to 5, but inode<5> contains
+> incorrect imode and disordered extents. Because 5 is EXT4_BOOT_LOADER_INO,
+> the ext4_ext_check_inode check in the ext4_iget function can be bypassed,
+> finally, the extents that are not checked trigger the BUG_ON in the
+> __es_tree_search function. To solve this issue, check whether the inode is
+> bad_inode in vfs_setup_quota_inode().
+> 
+> Signed-off-by: Baokun Li<libaokun1@huawei.com>
+> ---
+>   fs/quota/dquot.c | 2 ++
+>   1 file changed, 2 insertions(+)
 
->
-> > +     weight =3D div_s64(weight, period);
-> >
-> >       /* Find the closest nice value to the current weight */
-> >       for (prio =3D 0; prio < ARRAY_SIZE(sched_latency_to_weight); prio=
-++) {
->
-> [...]
->
+Looks good,
+Reviewed-by: Jason Yan <yanaijie@huawei.com>
