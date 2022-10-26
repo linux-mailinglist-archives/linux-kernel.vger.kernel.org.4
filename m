@@ -2,147 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08BF760E1FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4DC660E1FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233734AbiJZNUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 09:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S233167AbiJZNVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233544AbiJZNTK (ORCPT
+        with ESMTP id S233914AbiJZNVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 09:19:10 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A22101E20;
-        Wed, 26 Oct 2022 06:19:08 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 4F337580628;
-        Wed, 26 Oct 2022 09:19:08 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 26 Oct 2022 09:19:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1666790348; x=
-        1666797548; bh=TLywN80PBRSGp1V7EoHZWP5yAlnJT7LvlPlsl/LopeQ=; b=K
-        vVDUGuAsJPAAANUw0L3cfSLaL0YauHgYtmYc0AS93jMRR0vR7LJK6ZLI7GRKZOI9
-        fuItjjJjuN2nXfwcNRBj6LkLopSrSR4Vsgo5zNsW9Hg44Hbbg0e2CDGuL137jLOU
-        in1TX3SqB19cvK8OemEI5L1jbpVzACsZ14Lsh/0k3PbuTkB95KB17d9n1fkrQjet
-        cC6vNM4CFUINvoyCXRUWVCjjfnTJNleaDE6CTiMHAyaXGT1M6Q+f6fRv8+Sm1qQ2
-        JZ6fprP670ZY+Hn0yfs//e60xOGVpoihlnyuXlPxXDeDJz1kcIvH8N8iX4tM2gFD
-        cTums7LqLTRtPF0I8ga4Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666790348; x=
-        1666797548; bh=TLywN80PBRSGp1V7EoHZWP5yAlnJT7LvlPlsl/LopeQ=; b=g
-        nqT2+3XrQg7c1oXRlXRozHMxTPHBtzzY48/WaveMrAqb+rf+NKkq6GXF99J4Z4d8
-        NFH3a1H62sr3c66YKAllmytzEX5asgq4EJTYyr1HnNvIs6GYX9Eg1lvwcL6YlW4n
-        fH4QHUZvLvY9JEqyRX7r3AKN0IgqEYbBi4ITvIlOuHG+/+aV96TTPg76zaYMQoD2
-        qnWFLQm87K0HkFZUNTtzdXKRp09epdU7L0HfpxHJ5LhZQC5YFAZDWZdan97odszT
-        cRt+iSYbmVeOtZ3z0YUK3fkO9MC3nJX2MXiM470AdjO1ClKDgVA2UmkXAV4Nzf2W
-        K7tF29+Z3F59iMFqo2h4w==
-X-ME-Sender: <xms:zDNZYwbB5KuZxyDwgCvn09QgKtpHKi7czyPmMqquerm3DsilwYqnrw>
-    <xme:zDNZY7avTyMqOdQWiSeSR9lT_mxVRUzS7R--NTODVx3pOKD5nzZrs2FxXszrcVTIr
-    WRb8AvwrIb_RAk61uI>
-X-ME-Received: <xmr:zDNZY6-s82eYgbV9EzNTao8zBQO_HsocZfiPTamCkNU1nBAAJGCg8_0205RkSXvsUAa7MPkkuCnXmlHy42snQjN-FBfneMPh3aZG3_7r5t4KAQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtddvgdeifecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhfffugggtgffkfhgjvfevofesthekredtredtjeenucfhrhhomhepmhgrgihi
-    mhgvsegtvghrnhhordhtvggthhenucggtffrrghtthgvrhhnpeelleejkeejgfekteduhe
-    euteevleeukeekleeukefgfeeghfeguedvheeuudfhheenucffohhmrghinhepkhgvrhhn
-    vghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:zDNZY6osHWh7DAww5nzAO_5atbiIVTNYILrLKvpAVNMOJxA5I5KMoQ>
-    <xmx:zDNZY7qEiF-cZybRD1F7IQUQUNmA8x5Ec8soH-_wVd0M_7srDxvyuA>
-    <xmx:zDNZY4Q7vnxubaozxFFpyTOgqqlt-PKRLBMzwI79OBfmS3waekzcOg>
-    <xmx:zDNZY2_NygNhVavNOzOSsAN3IzsOsqigd-LZfHn4chKInD_hgOn9CA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 26 Oct 2022 09:19:07 -0400 (EDT)
-From:   maxime@cerno.tech
-Date:   Wed, 26 Oct 2022 15:17:39 +0200
-Subject: [PATCH 2/2] ARM: dts: bcm2835-rpi: Use firmware clocks for display
+        Wed, 26 Oct 2022 09:21:34 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A05D7B7A6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:20:44 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id m2so9990466pjr.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:20:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vTJtDcKCzm+jxcTMpjvVR3+lgYBiwIQNYP+cqOJzgwI=;
+        b=nwONDDCrf87pEAToQfsQ2TDMlnRvjovexwXk8PXMC34Iix1wraRwmcBkYM1hjXi3+E
+         /SIqgCroxG7m3K7s55njxuAn2SvT1QpmUekAZ00C9yVRYfmJHdJIhweQCzcvAsFnsMNQ
+         UUv1FBQ+CRLI5ZKudnqYRGD/q+9acy2Phqw5HXo5V4G9WXuqJ3TBI9vB+VmAqd2jLtVP
+         h8tsZsz7UgxmP8GXyPy2BFzL6sGd6kw0uM3TK1CjrVkCJIylc88Vqt0niRBR4lvdVQwc
+         cessoCfudM4DSddxMtcT5IuQCmMhjIeccgGOirfEKnP/pLCDnKWgCGLL2oKv7gQetFdY
+         Wrcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vTJtDcKCzm+jxcTMpjvVR3+lgYBiwIQNYP+cqOJzgwI=;
+        b=QcDZ2nlyO/pW9ssBEY+aSiqT0sYuVY/dUeYpDJ6X83pmCtZi0dSq4Dl2juGrEzQwCf
+         +ZIh/79YCt15B19Wg4UZLKrWGVQOWaj7/VbM6azGuaYl8AKELf0RGUl1Ta+rkT124LKm
+         hQNRRj9sr/WogKO3Xz0MNDwKHTT/jUC89GNvw3sZuHdvZMZaw29I88qyE95HfGnkYYnz
+         TDsZtwTTHtjJvKnEkaCa7pwHttxAWJS2ZpYXEF3cdOugbIGK+6kg2GnNaW3/wd/23MIF
+         hGAeV6oR1RYPHu3k3KEFnHefTCTg07puvOJ2hwkOaBr5a50KYW0C7J/xx17w5KMmESOu
+         llfg==
+X-Gm-Message-State: ACrzQf2E9Kv4sAJ+lFH0mhxfI3aVV0klOQW8+kko2S3VReQl/Os3u0jF
+        DKBhtzEkW4rY6fbT5vXaxLk=
+X-Google-Smtp-Source: AMsMyM69xhZxgKyfjn+sFTG7xtAteBalwuiy+sxSOBBtcjCpmMwTIhnf/V7w21lJBOCC+O/JkJOqZA==
+X-Received: by 2002:a17:902:f68c:b0:186:dfca:a444 with SMTP id l12-20020a170902f68c00b00186dfcaa444mr2184514plg.151.1666790444124;
+        Wed, 26 Oct 2022 06:20:44 -0700 (PDT)
+Received: from localhost.localdomain ([221.226.144.218])
+        by smtp.gmail.com with ESMTPSA id v12-20020a170902b7cc00b00186b04776b0sm2880131plz.118.2022.10.26.06.20.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 06:20:43 -0700 (PDT)
+From:   Song Shuai <suagrfillet@gmail.com>
+To:     rostedt@goodmis.org, mingo@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Song Shuai <suagrfillet@gmail.com>
+Subject: [PATCH] ftrace: avoid replacing the list func with itself
+Date:   Wed, 26 Oct 2022 21:20:39 +0800
+Message-Id: <20221026132039.2236233-1-suagrfillet@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20221026-rpi-display-fw-clk-v1-2-5c29b7a3d8b0@cerno.tech>
-References: <20221026-rpi-display-fw-clk-v1-0-5c29b7a3d8b0@cerno.tech>
-In-Reply-To: <20221026-rpi-display-fw-clk-v1-0-5c29b7a3d8b0@cerno.tech>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-rpi-kernel@lists.infradead.org,
-        Maxime Ripard <maxime@cerno.tech>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, Dom Cobley <dom@raspberrypi.com>
-X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1272; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=4odMoAG1abpvun5lAxsDv4lzD0ztevxrOrt8+5rnofY=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMmRxsWTjk13zmBZW8H69PDa7m1b02PbOSd69C1l72R/FlIi
- sehMRykLgxgXg6yYIkuMsPmSuFOzXney8c2DmcPKBDKEgYtTACai7MPwz+DaYQMXi/+7X/f3b1cTYp
- zUd67cz/nhpzMR/msvxDVuvcnw3+uj/BL1phwl/b5EbqGu05xqe8MV4vdmfz+zZOGk7nWzGQE=
-X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We've experienced a number of issues around the cohabitation between the
-"real" clock driver in Linux and the one backed by the firmware.
+The list func (ftrace_ops_list_func) will be patched first
+before the transition between old and new calls are set,
+which fixed the race described in this commit `59338f75`.
 
-One solution around this is to follow what the RaspberryPi foundation
-in its downstream clock, which is also what we've been doing on the
-RaspberryPi4: to use the clocks exposed by the firmware.
+While ftrace_trace_function changes from the list func to a
+ftrace_ops func, like unregistering the klp_ops to leave the only
+global_ops in ftrace_ops_list, the ftrace_[regs]_call will be
+replaced with the list func although it already exists. So there
+should be a condition to avoid this.
 
-Link: https://lore.kernel.org/linux-clk/20221021140505.kjmw5x4s6qhnrfif@houat/
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+This patch backups saved_ftrace_func by saved_ftrace_func_old
+which will be compared with the list func before trying to patch it.
+
+Signed-off-by: Song Shuai <suagrfillet@gmail.com>
 ---
- arch/arm/boot/dts/bcm2835-rpi-common.dtsi | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ kernel/trace/ftrace.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/bcm2835-rpi-common.dtsi b/arch/arm/boot/dts/bcm2835-rpi-common.dtsi
-index 8a55b6cded59..4e7b4a592da7 100644
---- a/arch/arm/boot/dts/bcm2835-rpi-common.dtsi
-+++ b/arch/arm/boot/dts/bcm2835-rpi-common.dtsi
-@@ -7,6 +7,23 @@
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index bc921a3f7ea8..56b1a42e1937 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -2755,6 +2755,8 @@ void __weak ftrace_arch_code_modify_post_process(void)
+ {
+ }
  
- #include <dt-bindings/power/raspberrypi-power.h>
++static ftrace_func_t saved_ftrace_func_old;
++
+ void ftrace_modify_all_code(int command)
+ {
+ 	int update = command & FTRACE_UPDATE_TRACE_FUNC;
+@@ -2774,7 +2776,7 @@ void ftrace_modify_all_code(int command)
+ 	 * to make sure the ops are having the right functions
+ 	 * traced.
+ 	 */
+-	if (update) {
++	if (update && saved_ftrace_func_old != ftrace_ops_list_func) {
+ 		err = ftrace_update_ftrace_func(ftrace_ops_list_func);
+ 		if (FTRACE_WARN_ON(err))
+ 			return;
+@@ -2918,6 +2920,7 @@ static void ftrace_trampoline_free(struct ftrace_ops *ops)
+ static void ftrace_startup_enable(int command)
+ {
+ 	if (saved_ftrace_func != ftrace_trace_function) {
++		saved_ftrace_func_old = saved_ftrace_func;
+ 		saved_ftrace_func = ftrace_trace_function;
+ 		command |= FTRACE_UPDATE_TRACE_FUNC;
+ 	}
+@@ -3007,6 +3010,7 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
+ 	ops->flags &= ~FTRACE_OPS_FL_ENABLED;
  
-+&firmware {
-+	firmware_clocks: clocks {
-+		compatible = "raspberrypi,firmware-clocks";
-+		#clock-cells = <1>;
-+	};
-+};
-+
-+&hdmi {
-+	clocks = <&firmware_clocks 9>,
-+		 <&firmware_clocks 13>;
-+	clock-names = "pixel", "hdmi";
-+};
-+
- &v3d {
- 	power-domains = <&power RPI_POWER_DOMAIN_V3D>;
- };
-+
-+&vec {
-+	clocks = <&firmware_clocks 15>;
-+};
-
+ 	if (saved_ftrace_func != ftrace_trace_function) {
++		saved_ftrace_func_old = saved_ftrace_func;
+ 		saved_ftrace_func = ftrace_trace_function;
+ 		command |= FTRACE_UPDATE_TRACE_FUNC;
+ 	}
+@@ -8321,6 +8325,7 @@ static void ftrace_startup_sysctl(void)
+ 
+ 	/* Force update next time */
+ 	saved_ftrace_func = NULL;
++	saved_ftrace_func_old = NULL;
+ 	/* ftrace_start_up is true if we want ftrace running */
+ 	if (ftrace_start_up) {
+ 		command = FTRACE_UPDATE_CALLS;
 -- 
-b4 0.10.1
+2.20.1
+
