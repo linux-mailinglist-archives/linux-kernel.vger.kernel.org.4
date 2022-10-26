@@ -2,52 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D160860E15A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CEFA60E15B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233990AbiJZM76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 08:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45824 "EHLO
+        id S233282AbiJZNAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233536AbiJZM7s (ORCPT
+        with ESMTP id S233982AbiJZM74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:59:48 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7349E43E47;
-        Wed, 26 Oct 2022 05:59:45 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1666789184;
+        Wed, 26 Oct 2022 08:59:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6920643E58
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 05:59:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05FFA61E96
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 12:59:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4207CC433D6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 12:59:54 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="DLgX3jZd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666789192;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=JEXCwcL4yA1K3Y47Iqqcz8pSDkWfBCZZDPiFGEg6k2I=;
-        b=lGvB7wHDqO+EvDwWoGbWe2nCqnCGq9KLljcFU9kxm0IChXbRGa6Y8nerjIFbCWQ5M0LVe2
-        i102yqnNhPM/mgF5fcvrxegR0qZzQcC86wtrWSngcL3aawNZpvNm6bHOTGhzmMlGzPlDhF
-        TcuTOWcsEET2sAeUesUbLzN7m6y1Dr4=
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     cai.huoqing@linux.dev
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Bin Chen <bin.chen@corigine.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Peter Chen <peter.chen@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] net: hinic: Add control command support for VF PMD driver in DPDK
-Date:   Wed, 26 Oct 2022 20:59:11 +0800
-Message-Id: <20221026125922.34080-2-cai.huoqing@linux.dev>
-In-Reply-To: <20221026125922.34080-1-cai.huoqing@linux.dev>
-References: <20221026125922.34080-1-cai.huoqing@linux.dev>
+        bh=Itg5PIT908DcDJYjrtj5/+x2CN8xk7dORlOQetDKB5I=;
+        b=DLgX3jZdTRzMYG2lUM3gPV1NpPNtTWegSeyxjUBlyT5KE03qxmqkEjinZY4Y3aG3iSF45Y
+        5gZ89ugpK8G+jrcGP3muOE4WEE8Akce74H4834HwmUlUa60KsMCfPlEMM9P19pRjwxhIgo
+        gJNJ75EEEuGgqUu7wIYUs3MTEgl5ub0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id db1f1119 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Wed, 26 Oct 2022 12:59:52 +0000 (UTC)
+Received: by mail-vk1-f180.google.com with SMTP id b81so7830788vkf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 05:59:52 -0700 (PDT)
+X-Gm-Message-State: ACrzQf01xbD1L+OGfRfOUQpN+bHPEl801twZsGrog11bD7mpw9TeKjS3
+        ju9Cfig893AjuCSpDpQl82OjeJ3C3y1+auVVvqo=
+X-Google-Smtp-Source: AMsMyM4hmCilci0NpT6nnnz/tl6mCn4lcZRY6JAcWAgmMUNmUbisWrKbaoQoVteERfwjTlJmtZsahWRTK0i5+TkK+D0=
+X-Received: by 2002:a1f:ecc6:0:b0:3aa:a785:5e2f with SMTP id
+ k189-20020a1fecc6000000b003aaa7855e2fmr23442428vkh.6.1666789191833; Wed, 26
+ Oct 2022 05:59:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        TO_EQ_FM_DIRECT_MX,UPPERCASE_50_75,URIBL_BLOCKED autolearn=no
+References: <20221026124801.1576326-1-Jason@zx2c4.com> <CAMuHMdXdR34JX3+=m8vuw=k_kOxT1jq3sGsW6yh_h9aFH+BP4A@mail.gmail.com>
+In-Reply-To: <CAMuHMdXdR34JX3+=m8vuw=k_kOxT1jq3sGsW6yh_h9aFH+BP4A@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 26 Oct 2022 14:59:40 +0200
+X-Gmail-Original-Message-ID: <CAHmME9oGomHncF1c=LDXow=JwRQwieP0ohA=s9Y0jnzVhjE8YQ@mail.gmail.com>
+Message-ID: <CAHmME9oGomHncF1c=LDXow=JwRQwieP0ohA=s9Y0jnzVhjE8YQ@mail.gmail.com>
+Subject: Re: [PATCH] m68k: mac_via: use explicitly signed char
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,179 +65,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HINIC has a mailbox for PF-VF communication and the VF driver
-could send port control command to PF driver via mailbox.
+On Wed, Oct 26, 2022 at 2:57 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Jason,
+>
+> On Wed, Oct 26, 2022 at 2:48 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > The `val` variable is set to -1 and compared against < 0, which means
+> > it's assumed to be signed. However, soon char is to become unsigned
+> > tree-wide. So explicitly mark `val` as signed to that it keeps working
+> > the same way.
+> >
+> > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > ---
+> > Geert - Linus asked me to consolidate all of the unsigned-char fixups in
+> > one tree. So, unless you plan on taking this for 6.1, I'll queue it up
+> > in that tree for 6.2, following your ack. -Jason
+>
+> Thanks for your patch!
+>
+> > --- a/arch/m68k/include/asm/mac_via.h
+> > +++ b/arch/m68k/include/asm/mac_via.h
+> > @@ -269,7 +269,7 @@ extern int via2_scsi_drq_pending(void);
+> >
+> >  static inline int rbv_set_video_bpp(int bpp)
+> >  {
+> > -       char val = (bpp==1)?0:(bpp==2)?1:(bpp==4)?2:(bpp==8)?3:-1;
+> > +       signed char val = (bpp==1)?0:(bpp==2)?1:(bpp==4)?2:(bpp==8)?3:-1;
+> >         if (!rbv_present || val<0) return -1;
+> >         via2[rMonP] = (via2[rMonP] & ~RBV_DEPTH) | val;
+> >         return 0;
+>
+> LGTM, although this could just use "int" instead.
+>
+> Upon closer look, this function is not used, and seems to have never
+> been used before.  Please just remove it instead.
 
-The control command only can be set to register in PF,
-so add support in PF driver for VF PMD driver control
-command when VF PMD driver work with linux PF driver.
+Hah! Nice catch. Okay, will send you a removal patch (for you to take).
 
-Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
----
- .../net/ethernet/huawei/hinic/hinic_hw_dev.h  | 64 +++++++++++++++++++
- .../net/ethernet/huawei/hinic/hinic_sriov.c   | 18 ++++++
- 2 files changed, 82 insertions(+)
-
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.h b/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.h
-index abffd967a791..4f561e4e849a 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.h
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.h
-@@ -53,11 +53,15 @@ enum hinic_port_cmd {
- 
- 	HINIC_PORT_CMD_SET_PFC = 0x5,
- 
-+	HINIC_PORT_CMD_SET_ETS = 0x7,
-+	HINIC_PORT_CMD_GET_ETS = 0x8,
-+
- 	HINIC_PORT_CMD_SET_MAC = 0x9,
- 	HINIC_PORT_CMD_GET_MAC = 0xA,
- 	HINIC_PORT_CMD_DEL_MAC = 0xB,
- 
- 	HINIC_PORT_CMD_SET_RX_MODE = 0xC,
-+	HINIC_PORT_CMD_SET_ANTI_ATTACK_RATE = 0xD,
- 
- 	HINIC_PORT_CMD_GET_PAUSE_INFO = 0x14,
- 	HINIC_PORT_CMD_SET_PAUSE_INFO = 0x15,
-@@ -81,6 +85,7 @@ enum hinic_port_cmd {
- 	HINIC_PORT_CMD_GET_RSS_TEMPLATE_INDIR_TBL = 0x25,
- 
- 	HINIC_PORT_CMD_SET_PORT_STATE = 0x29,
-+	HINIC_PORT_CMD_GET_PORT_STATE = 0x30,
- 
- 	HINIC_PORT_CMD_SET_RSS_TEMPLATE_TBL = 0x2B,
- 	HINIC_PORT_CMD_GET_RSS_TEMPLATE_TBL = 0x2C,
-@@ -97,17 +102,29 @@ enum hinic_port_cmd {
- 
- 	HINIC_PORT_CMD_RSS_CFG = 0x42,
- 
-+	HINIC_PORT_CMD_GET_PHY_TYPE = 0x44,
-+
- 	HINIC_PORT_CMD_FWCTXT_INIT = 0x45,
- 
- 	HINIC_PORT_CMD_GET_LOOPBACK_MODE = 0x48,
- 	HINIC_PORT_CMD_SET_LOOPBACK_MODE = 0x49,
- 
-+	HINIC_PORT_CMD_GET_JUMBO_FRAME_SIZE = 0x4A,
-+	HINIC_PORT_CMD_SET_JUMBO_FRAME_SIZE = 0x4B,
-+
- 	HINIC_PORT_CMD_ENABLE_SPOOFCHK = 0x4E,
- 
- 	HINIC_PORT_CMD_GET_MGMT_VERSION = 0x58,
- 
-+	HINIC_PORT_CMD_GET_PORT_TYPE = 0x5B,
-+
- 	HINIC_PORT_CMD_SET_FUNC_STATE = 0x5D,
- 
-+	HINIC_PORT_CMD_GET_PORT_ID_BY_FUNC_ID = 0x5E,
-+
-+	HINIC_PORT_CMD_GET_DMA_CS = 0x64,
-+	HINIC_PORT_CMD_SET_DMA_CS = 0x65,
-+
- 	HINIC_PORT_CMD_GET_GLOBAL_QPN = 0x66,
- 
- 	HINIC_PORT_CMD_SET_VF_RATE = 0x69,
-@@ -121,25 +138,72 @@ enum hinic_port_cmd {
- 
- 	HINIC_PORT_CMD_SET_RQ_IQ_MAP = 0x73,
- 
-+	HINIC_PORT_CMD_SET_PFC_THD = 0x75,
-+
- 	HINIC_PORT_CMD_LINK_STATUS_REPORT = 0xA0,
- 
-+	HINIC_PORT_CMD_SET_LOSSLESS_ETH	= 0xA3,
-+
- 	HINIC_PORT_CMD_UPDATE_MAC = 0xA4,
- 
- 	HINIC_PORT_CMD_GET_CAP = 0xAA,
- 
-+	HINIC_PORT_CMD_UP_TC_ADD_FLOW = 0xAF,
-+	HINIC_PORT_CMD_UP_TC_DEL_FLOW = 0xB0,
-+	HINIC_PORT_CMD_UP_TC_GET_FLOW = 0xB1,
-+
-+	HINIC_PORT_CMD_UP_TC_FLUSH_TCAM = 0xB2,
-+
-+	HINIC_PORT_CMD_UP_TC_CTRL_TCAM_BLOCK = 0xB3,
-+
-+	HINIC_PORT_CMD_UP_TC_ENABLE = 0xB4,
-+
-+	HINIC_PORT_CMD_UP_TC_GET_TCAM_BLOCK = 0xB5,
-+
-+	HINIC_PORT_CMD_SET_IPSU_MAC = 0xCB,
-+	HINIC_PORT_CMD_GET_IPSU_MAC = 0xCC,
-+
-+	HINIC_PORT_CMD_SET_XSFP_STATUS = 0xD4,
- 	HINIC_PORT_CMD_GET_LINK_MODE = 0xD9,
- 
- 	HINIC_PORT_CMD_SET_SPEED = 0xDA,
- 
- 	HINIC_PORT_CMD_SET_AUTONEG = 0xDB,
- 
-+	HINIC_PORT_CMD_CLEAR_QP_RES = 0xDD,
-+
-+	HINIC_PORT_CMD_SET_SUPER_CQE = 0xDE,
-+
-+	HINIC_PORT_CMD_SET_VF_COS = 0xDF,
-+	HINIC_PORT_CMD_GET_VF_COS = 0xE1,
-+
-+	HINIC_PORT_CMD_CABLE_PLUG_EVENT	= 0xE5,
-+
-+	HINIC_PORT_CMD_LINK_ERR_EVENT = 0xE6,
-+
-+	HINIC_PORT_CMD_SET_COS_UP_MAP = 0xE8,
-+
-+	HINIC_PORT_CMD_RESET_LINK_CFG = 0xEB,
-+
- 	HINIC_PORT_CMD_GET_STD_SFP_INFO = 0xF0,
- 
-+	HINIC_PORT_CMD_FORCE_PKT_DROP = 0xF3,
-+
- 	HINIC_PORT_CMD_SET_LRO_TIMER = 0xF4,
- 
-+	HINIC_PORT_CMD_SET_VHD_CFG = 0xF7,
-+
-+	HINIC_PORT_CMD_SET_LINK_FOLLOW = 0xF8,
-+
- 	HINIC_PORT_CMD_SET_VF_MAX_MIN_RATE = 0xF9,
- 
- 	HINIC_PORT_CMD_GET_SFP_ABS = 0xFB,
-+
-+	HINIC_PORT_CMD_Q_FILTER	= 0xFC,
-+
-+	HINIC_PORT_CMD_TCAM_FILTER = 0xFE,
-+
-+	HINIC_PORT_CMD_SET_VLAN_FILTER = 0xFF
- };
- 
- /* cmd of mgmt CPU message for HILINK module */
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_sriov.c b/drivers/net/ethernet/huawei/hinic/hinic_sriov.c
-index a5f08b969e3f..bba41994dee6 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_sriov.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_sriov.c
-@@ -489,6 +489,24 @@ static struct vf_cmd_check_handle nic_cmd_support_vf[] = {
- 	{HINIC_PORT_CMD_UPDATE_MAC, hinic_mbox_check_func_id_8B},
- 	{HINIC_PORT_CMD_GET_CAP, hinic_mbox_check_func_id_8B},
- 	{HINIC_PORT_CMD_GET_LINK_MODE, hinic_mbox_check_func_id_8B},
-+	{HINIC_PORT_CMD_GET_VF_COS, NULL},
-+	{HINIC_PORT_CMD_SET_VHD_CFG, hinic_mbox_check_func_id_8B},
-+	{HINIC_PORT_CMD_SET_VLAN_FILTER, hinic_mbox_check_func_id_8B},
-+	{HINIC_PORT_CMD_Q_FILTER, hinic_mbox_check_func_id_8B},
-+	{HINIC_PORT_CMD_TCAM_FILTER, NULL},
-+	{HINIC_PORT_CMD_UP_TC_ADD_FLOW, NULL},
-+	{HINIC_PORT_CMD_UP_TC_DEL_FLOW, NULL},
-+	{HINIC_PORT_CMD_UP_TC_FLUSH_TCAM, hinic_mbox_check_func_id_8B},
-+	{HINIC_PORT_CMD_UP_TC_CTRL_TCAM_BLOCK, hinic_mbox_check_func_id_8B},
-+	{HINIC_PORT_CMD_UP_TC_ENABLE, hinic_mbox_check_func_id_8B},
-+	{HINIC_PORT_CMD_CABLE_PLUG_EVENT, NULL},
-+	{HINIC_PORT_CMD_LINK_ERR_EVENT, NULL},
-+	{HINIC_PORT_CMD_SET_PORT_STATE, hinic_mbox_check_func_id_8B},
-+	{HINIC_PORT_CMD_SET_ETS, NULL},
-+	{HINIC_PORT_CMD_SET_ANTI_ATTACK_RATE, NULL},
-+	{HINIC_PORT_CMD_RESET_LINK_CFG, hinic_mbox_check_func_id_8B},
-+	{HINIC_PORT_CMD_SET_LINK_FOLLOW, NULL},
-+	{HINIC_PORT_CMD_CLEAR_QP_RES, NULL},
- };
- 
- #define CHECK_IPSU_15BIT	0X8000
--- 
-2.25.1
-
+Jason
