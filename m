@@ -2,108 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1BA60DC85
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 201B160DC91
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233167AbiJZHve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 03:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40084 "EHLO
+        id S233357AbiJZHxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 03:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233367AbiJZHvZ (ORCPT
+        with ESMTP id S232944AbiJZHxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 03:51:25 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7729F75A
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 00:51:22 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id bs21so9055112wrb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 00:51:22 -0700 (PDT)
+        Wed, 26 Oct 2022 03:53:02 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87AF372682;
+        Wed, 26 Oct 2022 00:53:01 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id t10-20020a17090a4e4a00b0020af4bcae10so1420802pjl.3;
+        Wed, 26 Oct 2022 00:53:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bJlF3tCG/wZxfdmf6SsZBHKBsQhIMrnOBLhbvVajAzQ=;
-        b=g6J1B0IXFXFrkkf5tBJrRM6YbOxziAOMjTYfcmakcbBQKGxe+IY/BAqM1f2Tx6qz3+
-         wJ0HO9VUdVMwi+3JsVax681xQmTidsb7E/PzKK4S90Gfv08nxsPGwXKkxUd/ZGwXQlUr
-         B+U+2P7NIj28rTz8q31J6zN7r/x5Q7lfNLJsbK01tY8f1/aFZ/PdI2GvIHRtVBJd3WyL
-         rmoaUydIirszyuPwPRyy7l9TiWVnvlezQ02M7dvKO0MhXSxUB99GUkUXHqRVr2STEcVw
-         NpXSYxBRFTnUGN4BVjaXaEEVuePxTAfyi75YYjo5LftE6C3BEZ41uKPTy5UeR0lgy2e9
-         1+0Q==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3X0WtYDknfUWiKBqsKZQOjyWjaRF3bZQgdQNY8pZSH8=;
+        b=KZzdgBhnIn90K48dq5HDXj4rTIVmzuQLciBfV00Z2ViwqHEU54eaXYhgnT4RpvhD51
+         7IiYdRGA6QFUwyOp4+JFOh4TgAjJ6RlEPw+ZdHOo4ib4IejoG7YHjiaJUW5VyczwXnEX
+         VAySvxnPKFhj4QOPEsUL9doFZ+/OUuXT54MiQcx3m/yBJLhj/kCp1TJBR7J8BPZZUjb1
+         TGj/IfG/2rZ1fuh/t0K8G8bBjI8c41WzISAA4RKrNIFE7tM4wEQXWMXVp+HjBUs7axq+
+         Eqwz3DXsL5kzbCLcfU00s7YPggzfgS0ptLDNA3eUbmi/DwNH7MG+ISCIhkC6itLwc6ny
+         fx0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bJlF3tCG/wZxfdmf6SsZBHKBsQhIMrnOBLhbvVajAzQ=;
-        b=KRIgj3yC7z6RVpFiyFurS+cstorz/fiGDaSHm4wUi6AGch+9mEpAz5uW1N8iLirKg3
-         HmV6qeka2VS5gmKul5wlJuKE0pbhUYxfX+iFpk3xZn5SlzLialTXOMnPZPcf4qIwBDKK
-         SXVO437OEujyFugbWrDOyWdT+wL7r3r/pq+fXjYjNUNeZcwU+xs2uaILe9/vS2WUCOaP
-         xSd9qUJdcoPtUViuQhpBgZc61R8iCzEhseEe4i7o3G2sJVRX52FpDDTxlC50sH4Qpw2P
-         a06is2V32VmEcF2t52iEbMTHHtlKXZx8pU9lgFtyiDVgLVg/ZBfcnit24t3cOBg4/aVf
-         zaBQ==
-X-Gm-Message-State: ACrzQf1vgwNRT+0QS4xLn1aXjsuw6BfX3u0TnWNs96uroWPofdRi8qT0
-        0wyfYh5Lj+rCotxiKJLKaZ882vhA3ho1xCAyOlkLlA==
-X-Google-Smtp-Source: AMsMyM5BijXAGUfA6IW8XHWvQvpR8GY5/DhxGpgMLozZpcTUF96lK1Z7arSkMRJ6Y0RRd6cfJh+dq7df0GQb31M/Nt4=
-X-Received: by 2002:a05:6000:885:b0:236:547e:438e with SMTP id
- ca5-20020a056000088500b00236547e438emr17388165wrb.183.1666770680801; Wed, 26
- Oct 2022 00:51:20 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3X0WtYDknfUWiKBqsKZQOjyWjaRF3bZQgdQNY8pZSH8=;
+        b=UQMEw2DdlLeQ7zbyL9isVYZeAjNmIec4dVJJpK22P6z1olEDcn46YNj5X0xHcdLyd/
+         fbHpOZ8Xogsix2Aw8p3ORrJ9zu7u2eQVaDZNzpv3Nj1wRi2pFTqbX3uuRfGm0A9qMlTh
+         eBmIWX7DFiqI5pSEUO6aFuCIAsb1KNjJSN9tUm8ge2smVjkGikWNupHswZute6IIcABO
+         Ijlv8VT4duu14kjRPsLUl4fLlfE9Kmiikds7h5Q/g0kDKk1cCYR/owGsSzVvZJlsY2r+
+         zHDuxljzkIxqcg3OYcLpHiM9VAZPa80mjJaEjndgCEciP3U/lrwwZrK5Ir5i+6frQoEQ
+         hjSQ==
+X-Gm-Message-State: ACrzQf2zwBbOxpRORPdWbTcUGRkwjM2QcVuqfG3iyTNo36rTPDGt4U2f
+        tAwF/AemRHKG9KKchWLTv4c=
+X-Google-Smtp-Source: AMsMyM5xVAMU1kMGz/ewSxutFsEIJCY7IwNN0i49n54YQP+l/4FFuY3xdjm5UdoiEaYAEZfJKpufxA==
+X-Received: by 2002:a17:902:d2c1:b0:186:9e90:6ad with SMTP id n1-20020a170902d2c100b001869e9006admr17036131plc.2.1666770781025;
+        Wed, 26 Oct 2022 00:53:01 -0700 (PDT)
+Received: from debian.me (subs09b-223-255-225-233.three.co.id. [223.255.225.233])
+        by smtp.gmail.com with ESMTPSA id b5-20020a170902d50500b00186985198a4sm2335620plg.169.2022.10.26.00.52.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 00:53:00 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 1A341101C72; Wed, 26 Oct 2022 14:52:54 +0700 (WIB)
+Date:   Wed, 26 Oct 2022 14:52:54 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Xu Kuohai <xukuohai@huaweicloud.com>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH bpf-next] bpf: Fix a typo in comment for DFS algorithm
+Message-ID: <Y1jnVvcqVF8GanWZ@debian.me>
+References: <20221026025941.2621795-1-xukuohai@huaweicloud.com>
+ <CAADnVQ+Pe73yjys+fjW1TBPscCmv6K9ur5bDPr2056ejwBBdZg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221026020200.29222-1-zhaoping.shu@mediatek.com>
-In-Reply-To: <20221026020200.29222-1-zhaoping.shu@mediatek.com>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Wed, 26 Oct 2022 09:50:44 +0200
-Message-ID: <CAMZdPi-bAw293XWBQL0wZS-nO_COD=ZOBduBVicof87HyEmS3w@mail.gmail.com>
-Subject: Re: [PATCH net v1] net: wwan: iosm: fix memory leak in ipc_wwan_dellink
-To:     "zhaoping.shu" <zhaoping.shu@mediatek.com>
-Cc:     m.chetan.kumar@intel.com, linuxwwan@intel.com,
-        ryazanov.s.a@gmail.com, johannes@sipsolutions.net,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, srv_heupstream@mediatek.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        haijun.liu@mediatek.com, xiayu.zhang@mediatek.com,
-        lambert.wang@mediatek.com, "hw . he" <hw.he@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="47eVnAhvGpnp4nSH"
+Content-Disposition: inline
+In-Reply-To: <CAADnVQ+Pe73yjys+fjW1TBPscCmv6K9ur5bDPr2056ejwBBdZg@mail.gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhaoping,
 
-On Wed, 26 Oct 2022 at 04:02, zhaoping.shu <zhaoping.shu@mediatek.com> wrote:
->
-> From: hw.he <hw.he@mediatek.com>
->
-> IOSM driver registers network device without setting the
-> needs_free_netdev flag, and does NOT call free_netdev() when
-> unregisters network device, which causes a memory leak.
->
-> This patch sets needs_free_netdev to true when registers
-> network device, which makes netdev subsystem call free_netdev()
-> automatically after unregister_netdevice().
->
-> Signed-off-by: hw.he <hw.he@mediatek.com>
-> Signed-off-by: zhaoping.shu <zhaoping.shu@mediatek.com>
+--47eVnAhvGpnp4nSH
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Could you please add a corresponding 'fixes' tag.
+On Tue, Oct 25, 2022 at 11:32:55PM -0700, Alexei Starovoitov wrote:
+> On Tue, Oct 25, 2022 at 7:42 PM Xu Kuohai <xukuohai@huaweicloud.com> wrot=
+e:
+> >
+> > From: Xu Kuohai <xukuohai@huawei.com>
+> >
+> > There is a typo in comment for DFS algorithm in bpf/verifier.c. The top
+> > element should not be popped until all its neighbors have been checked.
+> > Fix it.
+> >
+> > Fixes: 475fb78fbf48 ("bpf: verifier (add branch/goto checks)")
+> > Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> > ---
+> >  kernel/bpf/verifier.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index b83a8d420520..96ba5ea6d1a6 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -10662,7 +10662,7 @@ static int check_return_code(struct bpf_verifie=
+r_env *env)
+> >   * 3      let S be a stack
+> >   * 4      S.push(v)
+> >   * 5      while S is not empty
+> > - * 6            t <- S.pop()
+> > + * 6            t <- S.top()
+>=20
+> Even with this fix the comment is not quite accurate.
+> I wonder whether we should keep it or delete it completely.
+> At least please use 'peek' instead of 'top'.
 
-> ---
->  drivers/net/wwan/iosm/iosm_ipc_wwan.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/net/wwan/iosm/iosm_ipc_wwan.c b/drivers/net/wwan/iosm/iosm_ipc_wwan.c
-> index 2f1f8b5d5b59..0108d8d01ff2 100644
-> --- a/drivers/net/wwan/iosm/iosm_ipc_wwan.c
-> +++ b/drivers/net/wwan/iosm/iosm_ipc_wwan.c
-> @@ -168,6 +168,7 @@ static void ipc_wwan_setup(struct net_device *iosm_dev)
->         iosm_dev->max_mtu = ETH_MAX_MTU;
->
->         iosm_dev->flags = IFF_POINTOPOINT | IFF_NOARP;
-> +       iosm_dev->needs_free_netdev = true;
+I think the comment should be in words (like other code comments in the
+kernel) instead.
 
-Look like we have the same problem in mhi_wwan_mbim driver, would you
-be able to submit a change for it as well?
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--47eVnAhvGpnp4nSH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY1jnUAAKCRD2uYlJVVFO
+oyu9AQCeNlPJ7ghAPXOlIl89E68coYAZwcHC9wJLcKB6bCk8twD+Oo5a/j8Z1hNp
+w3yE0p8rAlWX1EWftpLrD2DebbOD3g0=
+=WY7J
+-----END PGP SIGNATURE-----
+
+--47eVnAhvGpnp4nSH--
