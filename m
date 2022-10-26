@@ -2,175 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF12860DF59
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 13:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B75B60DF54
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 13:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233301AbiJZLRE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 26 Oct 2022 07:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
+        id S230522AbiJZLQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 07:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233210AbiJZLRB (ORCPT
+        with ESMTP id S231903AbiJZLQw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 07:17:01 -0400
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A319185B;
-        Wed, 26 Oct 2022 04:17:00 -0700 (PDT)
-Received: by mail-qk1-f181.google.com with SMTP id o2so10198615qkk.10;
-        Wed, 26 Oct 2022 04:17:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Bkc8jxMr2p6wy1sRq7AUIm9TzPToZYJ54wpY7zhIe7M=;
-        b=okIQpk88CukLyRLQlj6tQCb9S9y0qYVOkSH/Bq5gsQKgW4Y71LxCUd2RloCIUIYkUv
-         KkHZd+jT12ttmDZF0iMbG7pvjx99gWVp2K5xJLTEPXOcEU0gLckfRkUVBR+EM03ljEfE
-         yaVGufqC2mClaLwh2HsqXvyn2CIddOJeTFe9C7UWHmBdo8PpvxnKNWnIGefTpTDNaZMR
-         Us5JPvlIRrgliFYZzAgDRuGgooe61hQMdGtHUMsZaYYMSBh/UPfL0hBfttR3gL9AnRot
-         WjMyGMcTIofz5S1818qYac9EhCjnLrtc4zkMtxcCr6elE2H1/3E7WbvYN/tAp4nyuzdO
-         2/Xw==
-X-Gm-Message-State: ACrzQf0p36iWrOR3gg+sBskbfs+BIJaxPTFY4RskIsEwqdVfVvXT4vPs
-        RR/ij3ZzBTZTd5PZVIffBUCIDeetpjmc4lvtKeE3LoIq
-X-Google-Smtp-Source: AMsMyM6fUqqeJOG0uDJp7tM0ShfTGW7AHW/hrkgyrqrWJCztj5e71zwgscXRycTffepa26BPFVd9UIcmMujBH9yxuVY=
-X-Received: by 2002:a05:620a:d89:b0:6cf:c98b:744c with SMTP id
- q9-20020a05620a0d8900b006cfc98b744cmr29776452qkl.443.1666783019193; Wed, 26
- Oct 2022 04:16:59 -0700 (PDT)
+        Wed, 26 Oct 2022 07:16:52 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567515B9F3;
+        Wed, 26 Oct 2022 04:16:50 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4My5mx69nQzmWY9;
+        Wed, 26 Oct 2022 19:14:41 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgCHlugeF1ljB87mAA--.3468S3;
+        Wed, 26 Oct 2022 19:16:48 +0800 (CST)
+Subject: Re: [PATCH -nect RFC v2 0/2] block: fix uaf in bd_link_disk_holder()
+To:     Yu Kuai <yukuai1@huaweicloud.com>, Christoph Hellwig <hch@lst.de>
+Cc:     axboe@kernel.dk, willy@infradead.org, kch@nvidia.com,
+        martin.petersen@oracle.com, johannes.thumshirn@wdc.com,
+        ming.lei@redhat.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20221020132049.3947415-1-yukuai3@huawei.com>
+ <20221020164712.GA14773@lst.de>
+ <0ad09045-1012-e86b-41f2-a88d02e8f1ed@huaweicloud.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <11d1397b-a1a1-5e8a-0443-183a3222c7c8@huaweicloud.com>
+Date:   Wed, 26 Oct 2022 19:16:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20221025221054.12377-1-mario.limonciello@amd.com>
-In-Reply-To: <20221025221054.12377-1-mario.limonciello@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 26 Oct 2022 13:16:45 +0200
-Message-ID: <CAJZ5v0iy6WwujE6kwJ2i=A4Cjmvnvi9UgovNp_NzW759MZ-7Aw@mail.gmail.com>
-Subject: Re: [PATCH v3] PCI/ACPI: PCI/ACPI: Validate devices with power
- resources support D3
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mehta Sanju <Sanju.Mehta@amd.com>,
-        Lukas Wunner <lukas@wunner.de>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <0ad09045-1012-e86b-41f2-a88d02e8f1ed@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCHlugeF1ljB87mAA--.3468S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYg7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2js
+        IEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE
+        5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeV
+        CFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxG
+        xcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrw
+        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
+        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
+        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
+        x2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267
+        AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 12:10 AM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> Firmware typically advertises that PCIe devices can support D3
-> by a combination of the value returned by _S0W as well as the
-> HotPlugSupportInD3 _DSD.
->
-> `acpi_pci_bridge_d3` looks for this combination but also contains
-> an assumption that if a device contains power resources it can support
-> D3.  This was introduced from commit c6e331312ebf ("PCI/ACPI: Whitelist
-> hotplug ports for D3 if power managed by ACPI").
->
-> On some firmware configurations for "AMD Pink Sardine" D3 is not
-> supported for wake in _S0W for the PCIe root port for tunneling.
-> However the device will still be opted into runtime PM since
-> `acpi_pci_bridge_d3` returns since the ACPI device contains power
-> resources.
->
-> When the thunderbolt driver is loaded a device link between the USB4
-> router and the PCIe root port for tunneling is created where the PCIe
-> root port for tunneling is the consumer and the USB4 router is the
-> supplier.  Here is a demonstration of this topology that occurs:
->
-> ├─ 0000:00:03.1
-> |       | ACPI Path: \_SB_.PCI0.GP11 (Supports "0" in _S0W)
-> |       | Device Links: supplier:pci:0000:c4:00.5
-> |       └─ D0 (Runtime PM enabled)
-> ├─ 0000:00:04.1
-> |       | ACPI Path: \_SB_.PCI0.GP12 (Supports "0" in _S0W)
-> |       | Device Links: supplier:pci:0000:c4:00.6
-> |       └─ D0 (Runtime PM enabled)
-> ├─ 0000:00:08.3
-> |       | ACPI Path: \_SB_.PCI0.GP19
-> |       ├─ D0 (Runtime PM disabled)
-> |       ├─ 0000:c4:00.3
-> |       |       | ACPI Path: \_SB_.PCI0.GP19.XHC3
-> |       |       | Device Links: supplier:pci:0000:c4:00.5
-> |       |       └─ D3cold (Runtime PM enabled)
-> |       ├─ 0000:c4:00.4
-> |       |       | ACPI Path: \_SB_.PCI0.GP19.XHC4
-> |       |       | Device Links: supplier:pci:0000:c4:00.6
-> |       |       └─ D3cold (Runtime PM enabled)
-> |       ├─ 0000:c4:00.5
-> |       |       | ACPI Path: \_SB_.PCI0.GP19.NHI0 (Supports "4" in _S0W)
-> |       |       | Device Links: consumer:pci:0000:00:03.1 consumer:pci:0000:c4:00.3
-> |       |       └─ D3cold (Runtime PM enabled)
-> |       └─ 0000:c4:00.6
-> |               | ACPI Path: \_SB_.PCI0.GP19.NHI1 (Supports "4" in _S0W)
-> |               | Device Links: consumer:pci:0000:c4:00.4 consumer:pci:0000:00:04.1
-> |               └─ D3cold (Runtime PM enabled)
->
-> Allowing the PCIe root port for tunneling to go into runtime PM (even if
-> it doesn't support D3) allows the USB4 router to also go into runtime PM.
-> The PCIe root port for tunneling stays in D0 but is in runtime PM. Due to
-> the device link the USB4 router transitions to D3cold when this happens.
->
-> The expectation is the USB4 router should have also remained in D0 since
-> the PCIe root port for tunneling remained in D0.
->
-> Instead of making this assertion from the power resources check
-> immediately, move the check to later on, which will have validated
-> that the device supports wake from D3hot or D3cold.
->
-> This fix prevents the USB4 router going into D3 when the firmware says that
-> the PCIe root port for tunneling can't handle it while still allowing
-> system that don't have the HotplugSupportInD3 _DSD to also enter D3 if they
-> have power resources that can wake from D3.
->
-> Fixes: dff6139015dc6 ("PCI/ACPI: Allow D3 only if Root Port can signal and wake from D3")
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Hi, Christoph
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+在 2022/10/21 11:15, Yu Kuai 写道:
+> Hi,
+> 
+> 在 2022/10/21 0:47, Christoph Hellwig 写道:
+>> As mentioned before I don't think we should make this even more
+>> crufty in the block layer.  See the series I just sent to move it int
+>> dm.
+> 
+> It seems we had some misunderstanding, the problem I tried to fix here
+> should not just related to dm, but all the caller of
+> bd_link_disk_holder().
 
-> ---
-> v2->v3:
->  * Reword commit message
-> v1->v2:
->  * Just return value of acpi_pci_power_manageable (Rafael)
->  * Remove extra word in commit message
-> ---
->  drivers/pci/pci-acpi.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-> index a46fec776ad77..8c6aec50dd471 100644
-> --- a/drivers/pci/pci-acpi.c
-> +++ b/drivers/pci/pci-acpi.c
-> @@ -984,10 +984,6 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
->         if (acpi_pci_disabled || !dev->is_hotplug_bridge)
->                 return false;
->
-> -       /* Assume D3 support if the bridge is power-manageable by ACPI. */
-> -       if (acpi_pci_power_manageable(dev))
-> -               return true;
-> -
->         rpdev = pcie_find_root_port(dev);
->         if (!rpdev)
->                 return false;
-> @@ -1023,7 +1019,8 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
->             obj->integer.value == 1)
->                 return true;
->
-> -       return false;
-> +       /* Assume D3 support if the bridge is power-manageable by ACPI. */
-> +       return acpi_pci_power_manageable(dev);
->  }
->
->  int acpi_pci_set_power_state(struct pci_dev *dev, pci_power_t state)
-> --
-> 2.34.1
->
+Any suggestions about how to fix this problem?
+
+Thanks,
+Kuai
+> 
+> Thanks,
+> Kuai
+>>
+>> .
+>>
+> 
+> .
+> 
+
