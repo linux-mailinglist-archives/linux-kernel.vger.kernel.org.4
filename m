@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2944260E51B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF4160E524
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234329AbiJZQAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 12:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
+        id S234478AbiJZQAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 12:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234369AbiJZQAO (ORCPT
+        with ESMTP id S234383AbiJZQAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 12:00:14 -0400
+        Wed, 26 Oct 2022 12:00:18 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5851147B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:59:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E184215FFE
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:59:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666799994;
+        s=mimecast20190719; t=1666799998;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zds5b/EQDqkx7Pyf1ZJFBZj3XHxRFNCLAcjtw1LYg8w=;
-        b=BAtebcG8RQcZMHwNp/HF9717vUaX+IdbxEKCLaUO/CSbjm0MhSNOW4sb+gewH1qzxx0UFi
-        7wWzG9mPOWCi4K/+RgzY1VSG0QeyoWNvRsoATjZ413VSK+eq8SVVUl2ShL0sv+se+7GaEw
-        5Y1VwG0vrWWQ7WOi8OyqJ36+2l7Ijh0=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=gpNq1qUZhKiifLu+KM9SiJRwdNZ6qs1ZpRyRyQhvDJU=;
+        b=cQMsX/2TwhWlGCivL3TmNA3IAgeEXgqy83LsR47BA/O7JzhkgMyuRh72+TAmphXMfP5uZ0
+        c+6MCE+t1ZBs1+2IGrkoBHovNW7ew48BppEDnv74s3VodbseSzlic0CN6QvMlU0SGYQY0G
+        z5qHG4RMS7bg/hOY9xElUhBe/yt0Dfk=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-275-GLbyE5sMPpKGcr9nkHilYg-1; Wed, 26 Oct 2022 11:59:52 -0400
-X-MC-Unique: GLbyE5sMPpKGcr9nkHilYg-1
-Received: by mail-ej1-f69.google.com with SMTP id qw17-20020a1709066a1100b0078e25b6a52fso4789978ejc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:59:52 -0700 (PDT)
+ us-mta-177-cBkUlQwhPc-NlAnxL9-JFw-1; Wed, 26 Oct 2022 11:59:56 -0400
+X-MC-Unique: cBkUlQwhPc-NlAnxL9-JFw-1
+Received: by mail-ej1-f72.google.com with SMTP id qk31-20020a1709077f9f00b00791a3e02c80so4853157ejc.21
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:59:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zds5b/EQDqkx7Pyf1ZJFBZj3XHxRFNCLAcjtw1LYg8w=;
-        b=hteLIvOa7tkFyDCMRB+sNhoIvzZzIbbJiKIq31lPccGtrmVCGtoXuI81Nu40WHWjoV
-         teewp2eoVoMucLL2WY8WsV/ZM6nfSQDabwh552P60Bo0qkjJjlftgr0hOBTzenCPHVYC
-         B14wq2dnKCx5BVsNbA5ggbpkNSwT5GvRKjifJUk+naeKRpDiZsPNcw4sSbzzvzUJb+wp
-         mKKwdDGfn4GSsMRYswtdQLLccIfiVNrwaGNcxBvNrC0+v/QzvEHTorpOJtEa/XZW9Iuo
-         c3oY8KCEe8X1768krnym1a16xZUWuz4gtiynzgKGgORwo6A7uafaemydIvxJdP1T0aYx
-         YOaw==
-X-Gm-Message-State: ACrzQf3t8AGVR5OpMRW4Bph05D5Z3q16RGilOMg25X+dHJOmO1AO+U2j
-        l7Qz6eeQNKtulbheMbHhdYOtqi62J2OosHN5U0gHgN/myc0ilnMlceKW+E7NqsSPtP+T6HGgfem
-        QNRduzNoq/IgWJ4gPFCeF9ACw
-X-Received: by 2002:a17:907:7f25:b0:7aa:acf9:c07e with SMTP id qf37-20020a1709077f2500b007aaacf9c07emr11861163ejc.280.1666799991737;
-        Wed, 26 Oct 2022 08:59:51 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7WRefB+4uZiJzq4JmOLaBwL3ie2XJ4MVLpXX9v2tYlWPKvm20oby9JWTOy7syw9NVzzMm8tQ==
-X-Received: by 2002:a17:907:7f25:b0:7aa:acf9:c07e with SMTP id qf37-20020a1709077f2500b007aaacf9c07emr11861142ejc.280.1666799991498;
-        Wed, 26 Oct 2022 08:59:51 -0700 (PDT)
+        bh=gpNq1qUZhKiifLu+KM9SiJRwdNZ6qs1ZpRyRyQhvDJU=;
+        b=HN6CFFMctbSvd1KaLYLA6fzbAVx9G8ZOW+9tc7sf1mTSpWHh+LL1KAQhmSixyrOerI
+         P3W0O/sYicWmzuTHskdj+CLK7y5NrqBFRZjj3T0rOZGtjJkfCjPtbc8sxGHqiRxVWcMN
+         niy2H9BFG3k24lWIGSh5JGmJPpZAQzRuM9mb0pQV6vZBZSvEGKen5gZcSiIBL2ifOwLv
+         TaIWBHsNTdAG3W+ScZ3DmkKogwmWCAbHrVvqSfJoa+Byb11tJB7npw3wsmwA/zWByJc9
+         WfVFOTnodZ723l/d7cXrKdtbxH5HrZIAE3q5fIkOhTYw+ecDCZAQJXMb3dBoYcQQabrm
+         YyFw==
+X-Gm-Message-State: ACrzQf0YsIs5v4kQ471a72yb76EMlIT2z/4MQl2LGVKUiDEZZdLPRStT
+        Dl1BBbZgikKeyrVt6TVScvaMNlCHgFfnjx+mdv++Er/h7rkyUYKlFO7sKm4EroTSnic8tA0cBFY
+        I5I/ZWdWgL+IXMoVYUEXcsQpm
+X-Received: by 2002:a17:907:7da5:b0:78e:2c3b:55a2 with SMTP id oz37-20020a1709077da500b0078e2c3b55a2mr37640213ejc.96.1666799995807;
+        Wed, 26 Oct 2022 08:59:55 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5YrSAyisghiztcgWJNOopJzEmf3XBSlrRm9MEdt4PsEo1LmsNW0ikCNzTUPDQnoeFLY5vctg==
+X-Received: by 2002:a17:907:7da5:b0:78e:2c3b:55a2 with SMTP id oz37-20020a1709077da500b0078e2c3b55a2mr37640195ejc.96.1666799995600;
+        Wed, 26 Oct 2022 08:59:55 -0700 (PDT)
 Received: from pollux.. ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id b8-20020aa7d488000000b00461a6997c5dsm3708285edr.83.2022.10.26.08.59.50
+        by smtp.gmail.com with ESMTPSA id a1-20020a1709064a4100b00730bfe6adc4sm3202386ejv.37.2022.10.26.08.59.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 08:59:50 -0700 (PDT)
+        Wed, 26 Oct 2022 08:59:55 -0700 (PDT)
 From:   Danilo Krummrich <dakr@redhat.com>
 To:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
         mripard@kernel.org, liviu.dudau@arm.com, brian.starkey@arm.com
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH drm-misc-next v3 3/5] drm/arm/malidp: crtc: use drmm_crtc_init_with_planes()
-Date:   Wed, 26 Oct 2022 17:59:32 +0200
-Message-Id: <20221026155934.125294-4-dakr@redhat.com>
+Subject: [PATCH drm-misc-next v3 4/5] drm/arm/malidp: plane: use drm managed resources
+Date:   Wed, 26 Oct 2022 17:59:33 +0200
+Message-Id: <20221026155934.125294-5-dakr@redhat.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221026155934.125294-1-dakr@redhat.com>
 References: <20221026155934.125294-1-dakr@redhat.com>
@@ -79,37 +79,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use drmm_crtc_init_with_planes() instead of drm_crtc_init_with_planes()
-to get rid of the explicit destroy hook in struct drm_plane_funcs.
+Use drm managed resource allocation (drmm_universal_plane_alloc()) in
+order to get rid of the explicit destroy hook in struct drm_plane_funcs.
 
 Signed-off-by: Danilo Krummrich <dakr@redhat.com>
 ---
- drivers/gpu/drm/arm/malidp_crtc.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/arm/malidp_planes.c | 28 +++++++---------------------
+ 1 file changed, 7 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/gpu/drm/arm/malidp_crtc.c b/drivers/gpu/drm/arm/malidp_crtc.c
-index 34ad7e1cd2b8..dc01c43f6193 100644
---- a/drivers/gpu/drm/arm/malidp_crtc.c
-+++ b/drivers/gpu/drm/arm/malidp_crtc.c
-@@ -514,7 +514,6 @@ static void malidp_crtc_disable_vblank(struct drm_crtc *crtc)
- }
+diff --git a/drivers/gpu/drm/arm/malidp_planes.c b/drivers/gpu/drm/arm/malidp_planes.c
+index 815d9199752f..34547edf1ee3 100644
+--- a/drivers/gpu/drm/arm/malidp_planes.c
++++ b/drivers/gpu/drm/arm/malidp_planes.c
+@@ -68,14 +68,6 @@
+ /* readahead for partial-frame prefetch */
+ #define MALIDP_MMU_PREFETCH_READAHEAD		8
  
- static const struct drm_crtc_funcs malidp_crtc_funcs = {
--	.destroy = drm_crtc_cleanup,
- 	.set_config = drm_atomic_helper_set_config,
- 	.page_flip = drm_atomic_helper_page_flip,
- 	.reset = malidp_crtc_reset,
-@@ -548,8 +547,8 @@ int malidp_crtc_init(struct drm_device *drm)
- 		return -EINVAL;
- 	}
+-static void malidp_de_plane_destroy(struct drm_plane *plane)
+-{
+-	struct malidp_plane *mp = to_malidp_plane(plane);
+-
+-	drm_plane_cleanup(plane);
+-	kfree(mp);
+-}
+-
+ /*
+  * Replicate what the default ->reset hook does: free the state pointer and
+  * allocate a new empty object. We just need enough space to store
+@@ -260,7 +252,6 @@ static bool malidp_format_mod_supported_per_plane(struct drm_plane *plane,
+ static const struct drm_plane_funcs malidp_de_plane_funcs = {
+ 	.update_plane = drm_atomic_helper_update_plane,
+ 	.disable_plane = drm_atomic_helper_disable_plane,
+-	.destroy = malidp_de_plane_destroy,
+ 	.reset = malidp_plane_reset,
+ 	.atomic_duplicate_state = malidp_duplicate_plane_state,
+ 	.atomic_destroy_state = malidp_destroy_plane_state,
+@@ -972,12 +963,6 @@ int malidp_de_planes_init(struct drm_device *drm)
+ 	for (i = 0; i < map->n_layers; i++) {
+ 		u8 id = map->layers[i].id;
  
--	ret = drm_crtc_init_with_planes(drm, &malidp->crtc, primary, NULL,
--					&malidp_crtc_funcs, NULL);
-+	ret = drmm_crtc_init_with_planes(drm, &malidp->crtc, primary, NULL,
-+					 &malidp_crtc_funcs, NULL);
- 	if (ret)
- 		return ret;
+-		plane = kzalloc(sizeof(*plane), GFP_KERNEL);
+-		if (!plane) {
+-			ret = -ENOMEM;
+-			goto cleanup;
+-		}
+-
+ 		/* build the list of DRM supported formats based on the map */
+ 		for (n = 0, j = 0;  j < map->n_pixel_formats; j++) {
+ 			if ((map->pixel_formats[j].layer & id) == id)
+@@ -990,13 +975,14 @@ int malidp_de_planes_init(struct drm_device *drm)
+ 		/*
+ 		 * All the layers except smart layer supports AFBC modifiers.
+ 		 */
+-		ret = drm_universal_plane_init(drm, &plane->base, crtcs,
+-				&malidp_de_plane_funcs, formats, n,
+-				(id == DE_SMART) ? linear_only_modifiers : modifiers,
+-				plane_type, NULL);
+-
+-		if (ret < 0)
++		plane = drmm_universal_plane_alloc(drm, struct malidp_plane, base,
++						   crtcs, &malidp_de_plane_funcs, formats, n,
++						   (id == DE_SMART) ? linear_only_modifiers :
++						   modifiers, plane_type, NULL);
++		if (IS_ERR(plane)) {
++			ret = PTR_ERR(plane);
+ 			goto cleanup;
++		}
  
+ 		drm_plane_helper_add(&plane->base,
+ 				     &malidp_de_plane_helper_funcs);
 -- 
 2.37.3
 
