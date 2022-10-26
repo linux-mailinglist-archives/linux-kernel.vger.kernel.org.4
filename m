@@ -2,199 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F2360DE50
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A180E60DE4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233468AbiJZJiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 05:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
+        id S233497AbiJZJhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 05:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233454AbiJZJiC (ORCPT
+        with ESMTP id S233417AbiJZJhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 05:38:02 -0400
-Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F91BEAF4;
-        Wed, 26 Oct 2022 02:37:31 -0700 (PDT)
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29Q0SG1Q002302;
-        Wed, 26 Oct 2022 02:37:21 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=proofpoint;
- bh=G1cBCdwClRAfQNHEw6stJyXzDuc9Rv4hqoZ8Gl306AM=;
- b=ooO1vib10S2RKCRjVpTKOU4Owrc4x6lz0X/BwU0FVn+1tRXLw9fGPHOmpStDVcCSeZtK
- b4aX9YI6BiqhbfyFaiIzxzX9+F7x6fQXArsIxKx5s0IyWfyf1osnZmO7Brwdq8gys1PN
- nWNF6fxqYvGbh1G+DYAjW93naiAnTGpSyT3OrhnIg9EUte5Mwy1t0ttgCoXvEVGAKBtE
- P3TSoQ8bnXy0jye+DgVhmWWx5FyUX9YxhKZNvsH9CA52VGXu3i5cdp9rBxhvU3X17aWO
- ZTzaVO6QYsic16TdIZKHHmqsLBy0+jFLiUpSIO7NVyhU0v9DAeIP8SVj/HSz8XaDMfi9 mw== 
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2043.outbound.protection.outlook.com [104.47.51.43])
-        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3kcc42js07-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Oct 2022 02:37:21 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XoC7tH3ClLNXfSrWG98iJ0c9t4Qw/Fg923QJOoIYJnqxtmkWUKr38DLcakeTelRnYHs28ms4IGbEp68vdSNiXMucj1WRsguUfEoElYAqCWXKVukQsW8Z+YynP4rqiQqpzpW6sPx8InsQ1vmsF2bKuPrKArWTKfyewznmtqjxm2BP9+dPETJ5wAfpA3ayJYCegQpoebGwPdyDPLjqgjoeCQTH+15oJkS0K68Z28rjmrJHKRdz/pdFnD9zW9kmxead6hAAMCwshZjiP/UYNvnBX5uD1DilmBC8zMPiNtkWWhBbSA9bRsT+Pm3VbMpMD2/RG3mz9ds/ME/hZJlvhMQlxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G1cBCdwClRAfQNHEw6stJyXzDuc9Rv4hqoZ8Gl306AM=;
- b=MZwySUER4/82cg8H1vmNqu56RdOUmj76Wt0I/Zx488rssPralXxUJWkb4S0FtGQ9n6FbkNmm1oZbhJ0J9YXrkN0zcQocfI/OpxTGADm95ASHRK0BBidTEa9XuhR0Hebw/078opIfmyUIPgB5Hs+8BmDcUO4wlj9DmS444T0Cu1U8GuJeUB5GAsaTa0If9IPEzCZVG8AmbjoXvqaHxZWnPA6LJxzdtR45rm67L4D8lJpaJBsX45CdNB98IQana0MW3cpd7QRj6YVIKHPWK00WuueLc0oTECCS2ghbUjsZ7CuFCNOKRquxLKrEKXL6dGSa4PFJW4z58Rvc4gASMnLrKA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 158.140.1.148) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G1cBCdwClRAfQNHEw6stJyXzDuc9Rv4hqoZ8Gl306AM=;
- b=MWiy0HAxE0hARL2u3MQXq39x4lkQ++SmNc/sKtYsFgIPDW3bplZOrHpLRN3id0FsZtkJ4xT8yilXAv/eX2gt7zHJfqm43w98vgGibg+0Bm/PdtLfwA/925rv8iXrPAU38bWwvdYplXWjX1V/DbGimxCI5vpG4BjS8nm78OUjNzc=
-Received: from DM6PR21CA0008.namprd21.prod.outlook.com (2603:10b6:5:174::18)
- by MN2PR07MB5822.namprd07.prod.outlook.com (2603:10b6:208:106::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Wed, 26 Oct
- 2022 09:37:18 +0000
-Received: from DM6NAM12FT073.eop-nam12.prod.protection.outlook.com
- (2603:10b6:5:174:cafe::46) by DM6PR21CA0008.outlook.office365.com
- (2603:10b6:5:174::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.8 via Frontend
- Transport; Wed, 26 Oct 2022 09:37:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.148)
- smtp.mailfrom=cadence.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=cadence.com;
-Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 158.140.1.148 as permitted sender) receiver=protection.outlook.com;
- client-ip=158.140.1.148; helo=sjmaillnx2.cadence.com; pr=C
-Received: from sjmaillnx2.cadence.com (158.140.1.148) by
- DM6NAM12FT073.mail.protection.outlook.com (10.13.179.18) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5769.12 via Frontend Transport; Wed, 26 Oct 2022 09:37:18 +0000
-Received: from maileu5.global.cadence.com (eudvw-maileu5.cadence.com [10.160.110.202])
-        by sjmaillnx2.cadence.com (8.14.4/8.14.4) with ESMTP id 29Q9bGkY013561
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Oct 2022 02:37:17 -0700
-Received: from maileu5.global.cadence.com (10.160.110.202) by
- maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 26 Oct 2022 11:37:15 +0200
-Received: from eu-cn01.cadence.com (10.160.89.184) by
- maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24 via Frontend Transport; Wed, 26 Oct 2022 11:37:15 +0200
-Received: from eu-cn01.cadence.com (localhost.localdomain [127.0.0.1])
-        by eu-cn01.cadence.com (8.14.7/8.14.7) with ESMTP id 29Q9bFPk449928;
-        Wed, 26 Oct 2022 05:37:15 -0400
-Received: (from pawell@localhost)
-        by eu-cn01.cadence.com (8.14.7/8.14.7/Submit) id 29Q9bF9E449925;
-        Wed, 26 Oct 2022 05:37:15 -0400
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     <peter.chen@kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>, <stable@vger.kernel.org>
-Subject: [PATCH] usb: cdnsp: Fix issue with Clear Feature Halt Endpoint
-Date:   Wed, 26 Oct 2022 05:37:10 -0400
-Message-ID: <20221026093710.449809-1-pawell@cadence.com>
-X-Mailer: git-send-email 2.30.0
+        Wed, 26 Oct 2022 05:37:37 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580C5BC78C;
+        Wed, 26 Oct 2022 02:37:17 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8446360010;
+        Wed, 26 Oct 2022 09:37:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1666777035;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4O7WbxTl92ukABCViXrkm449xOwu9xVNaNk5r6fPFbU=;
+        b=cSCo38xueLYMZhwUZWF6NRobYJjQ7N5WiuauFIULU0ldBKRvTZZQJXYhA7ADM2KcXC5VpQ
+        YxsDYixZbmv9LysGSzRHsbC7Kgkzozu/bduWBtMpk+gLTIk+WK4ivFNi7kh1JisFCtGL2T
+        vqX8gOOfwXT6nKwFHnw6gCiUfokfy/P/L/vZVgoptYJ8AX15MZbx4CEiqWoJx3tJoIQXMl
+        iR+whqG86BTFRhZZpR5aAQo/bmmN3Ei1Zm66jTHu8fSWfubSvI1oVlqxpcdb/VM1pR3Qwi
+        0j7VaEGJfy7jzL6cj73GodJS0XT2i+/KmLtybKqoqPrWR/UUfaqBnuf+YWLfwQ==
+Date:   Wed, 26 Oct 2022 11:37:11 +0200
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     Sean Anderson <seanga2@gmail.com>
+Cc:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v3 3/5] net: pcs: add new PCS driver for altera
+ TSE PCS
+Message-ID: <20221026113711.2b740c7a@pc-8.home>
+In-Reply-To: <68b3dfbf-9bab-2554-254e-bffd280ba97e@gmail.com>
+References: <20220901143543.416977-1-maxime.chevallier@bootlin.com>
+        <20220901143543.416977-4-maxime.chevallier@bootlin.com>
+        <68b3dfbf-9bab-2554-254e-bffd280ba97e@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-CrossPremisesHeadersFilteredBySendConnector: maileu5.global.cadence.com
-X-OrganizationHeadersPreserved: maileu5.global.cadence.com
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM12FT073:EE_|MN2PR07MB5822:EE_
-X-MS-Office365-Filtering-Correlation-Id: 20cf906c-d901-418f-ed4b-08dab735ac99
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SEcT2/gPVZ0cbuI7oaMdDksWWcPDQ4wwj6Lz63oWELRLP8eqXnmnQJE9fAVjvYKSqXhkLBN0R+4NPiC3TVsu6beVnHfJwFVt7JtLrRgrm0/1tsnPi/d+N2voDpKwGUUVvPna5qqSmCtnu2YV8fJXY0t4AJMoakcDTNf8GwJe2noQRMZGMkPmWCr5E2QWcEeWOXJXfzCQIM88T7lbIELyxifLmbwbfhkF5M+L8AGaoePwBASXY1v+7C7d4TTec4lftdhCioQk9PbBLS9cOPtg3JpWn/Qjzzt7AGJDUBkn64lDIOoV5Pola/I5uXuJe1xDzPhCSyb6K14I12o8WAGg9NrcwFEqNMLz7UtYhPPJd0RGJ7ts/EOxDU8MbbKdeigCrBBZO2ACh0VxJX9Pdwa/aqNdk68OF1P21DBJUGE8Ztgh676e+it3kCkGQFkl9VcpqlbSP5fLki4jPeNZigQILV8D1TsBZXJwy+VSD5mix5sYLLwJN2LVugQT6P+YDbrh1DX6CJEUnvw+l/YDDWiL1cw1F9csVf81kvjU/nqpjSp5x3vUrgVkAWRBu+eaS9aN0OZC7oDo6aywkP71i3PuCIwE7Biy/hoV2Dg0AroPzrFC+BS2s7u0xZHGKmZOcNoLtTntlQ6LNMJJ5cI3jqwYs1ybzhT9lAeB2tNtdD3mhcJSxF0jodrbE2qBMe7H+DDsN9GXK79ZioeNz3btQw7X4GaQLnG0JYtQ2b8xHtF45zLK+1k9P4gjB6S1K5n3HcUf9wPAQoWLatjVshh4DugIkw==
-X-Forefront-Antispam-Report: CIP:158.140.1.148;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx2.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(396003)(39860400002)(346002)(36092001)(451199015)(40470700004)(46966006)(36840700001)(82740400003)(40460700003)(86362001)(7636003)(356005)(36756003)(316002)(54906003)(6916009)(42186006)(4326008)(70586007)(8676002)(70206006)(41300700001)(83380400001)(426003)(8936002)(5660300002)(478600001)(47076005)(2906002)(40480700001)(36860700001)(1076003)(186003)(6666004)(2616005)(336012)(26005)(82310400005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 09:37:18.2171
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 20cf906c-d901-418f-ed4b-08dab735ac99
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.148];Helo=[sjmaillnx2.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM12FT073.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR07MB5822
-X-Proofpoint-ORIG-GUID: Z0ZBkRAp_AJOEs8BQfXHC4IUz5JnLv3s
-X-Proofpoint-GUID: Z0ZBkRAp_AJOEs8BQfXHC4IUz5JnLv3s
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-26_05,2022-10-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 clxscore=1015
- adultscore=0 impostorscore=0 priorityscore=1501 suspectscore=0
- mlxlogscore=470 mlxscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0
- malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2210260053
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During handling Clear Halt Endpoint Feature request driver invokes
-Reset Endpoint command. Because this command has some issue with
-transition endpoint from Running to Idle state the driver must
-stop the endpoint by using Stop Endpoint command.
+Hello Sean,
 
-cc: <stable@vger.kernel.org>
-Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
----
- drivers/usb/cdns3/cdnsp-gadget.c | 12 ++++--------
- drivers/usb/cdns3/cdnsp-ring.c   |  3 ++-
- 2 files changed, 6 insertions(+), 9 deletions(-)
+On Sun, 9 Oct 2022 01:38:15 -0400
+Sean Anderson <seanga2@gmail.com> wrote:
 
-diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
-index e2e7d16f43f4..0576f9b0e4aa 100644
---- a/drivers/usb/cdns3/cdnsp-gadget.c
-+++ b/drivers/usb/cdns3/cdnsp-gadget.c
-@@ -600,11 +600,11 @@ int cdnsp_halt_endpoint(struct cdnsp_device *pdev,
- 
- 	trace_cdnsp_ep_halt(value ? "Set" : "Clear");
- 
--	if (value) {
--		ret = cdnsp_cmd_stop_ep(pdev, pep);
--		if (ret)
--			return ret;
-+	ret = cdnsp_cmd_stop_ep(pdev, pep);
-+	if (ret)
-+		return ret;
- 
-+	if (value) {
- 		if (GET_EP_CTX_STATE(pep->out_ctx) == EP_STATE_STOPPED) {
- 			cdnsp_queue_halt_endpoint(pdev, pep->idx);
- 			cdnsp_ring_cmd_db(pdev);
-@@ -613,10 +613,6 @@ int cdnsp_halt_endpoint(struct cdnsp_device *pdev,
- 
- 		pep->ep_state |= EP_HALTED;
- 	} else {
--		/*
--		 * In device mode driver can call reset endpoint command
--		 * from any endpoint state.
--		 */
- 		cdnsp_queue_reset_ep(pdev, pep->idx);
- 		cdnsp_ring_cmd_db(pdev);
- 		ret = cdnsp_wait_for_cmd_compl(pdev);
-diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-index 25e5e51cf5a2..aa79bce89d8a 100644
---- a/drivers/usb/cdns3/cdnsp-ring.c
-+++ b/drivers/usb/cdns3/cdnsp-ring.c
-@@ -2081,7 +2081,8 @@ int cdnsp_cmd_stop_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep)
- 	u32 ep_state = GET_EP_CTX_STATE(pep->out_ctx);
- 	int ret = 0;
- 
--	if (ep_state == EP_STATE_STOPPED || ep_state == EP_STATE_DISABLED) {
-+	if (ep_state == EP_STATE_STOPPED || ep_state == EP_STATE_DISABLED ||
-+	    ep_state == EP_STATE_HALTED) {
- 		trace_cdnsp_ep_stopped_or_disabled(pep->out_ctx);
- 		goto ep_stopped;
- 	}
--- 
-2.25.1
+
+> > +#define   SGMII_PCS_LINK_TIMER_REG(x)		(0x12 + (x))  
+> 
+> Not used.
+
+Right, I'll remove that in a followup patch
+
+> > +#define SGMII_PCS_LINK_TIMER_1	0x13
+> > +#define SGMII_PCS_IF_MODE	0x14
+> > +#define   PCS_IF_MODE_SGMII_ENA		BIT(0)
+> > +#define   PCS_IF_MODE_USE_SGMII_AN	BIT(1)
+> > +#define   PCS_IF_MODE_SGMI_SPEED_MASK	GENMASK(3, 2)
+> > +#define   PCS_IF_MODE_SGMI_SPEED_10	(0 << 2)
+> > +#define   PCS_IF_MODE_SGMI_SPEED_100	(1 << 2)
+> > +#define   PCS_IF_MODE_SGMI_SPEED_1000	(2 << 2)  
+> 
+> You can use FIELD_PREP if you're so inclined. I assume SGMI is from
+> the datasheet.
+
+Will do ! thanks :)
+
+> > +#define   PCS_IF_MODE_SGMI_HALF_DUPLEX	BIT(4)
+> > +#define   PCS_IF_MODE_SGMI_PHY_AN	BIT(5)
+> > +#define SGMII_PCS_DIS_READ_TO	0x15
+> > +#define SGMII_PCS_READ_TO	0x16
+> > +#define SGMII_PCS_SW_RESET_TIMEOUT 100 /* usecs */
+> > +
+> > +struct altera_tse_pcs {
+> > +	struct phylink_pcs pcs;
+> > +	void __iomem *base;
+> > +	int reg_width;
+> > +};
+> > +
+> > +static struct altera_tse_pcs *phylink_pcs_to_tse_pcs(struct
+> > phylink_pcs *pcs) +{
+> > +	return container_of(pcs, struct altera_tse_pcs, pcs);
+> > +}
+> > +
+> > +static u16 tse_pcs_read(struct altera_tse_pcs *tse_pcs, int regnum)
+> > +{
+> > +	if (tse_pcs->reg_width == 4)
+> > +		return readl(tse_pcs->base + regnum * 4);
+> > +	else
+> > +		return readw(tse_pcs->base + regnum * 2);
+> > +}
+> > +
+> > +static void tse_pcs_write(struct altera_tse_pcs *tse_pcs, int
+> > regnum,
+> > +			  u16 value)
+> > +{
+> > +	if (tse_pcs->reg_width == 4)
+> > +		writel(value, tse_pcs->base + regnum * 4);
+> > +	else
+> > +		writew(value, tse_pcs->base + regnum * 2);
+> > +}
+> > +
+> > +static int tse_pcs_reset(struct altera_tse_pcs *tse_pcs)
+> > +{
+> > +	int i = 0;
+> > +	u16 bmcr;
+> > +
+> > +	/* Reset PCS block */
+> > +	bmcr = tse_pcs_read(tse_pcs, MII_BMCR);
+> > +	bmcr |= BMCR_RESET;
+> > +	tse_pcs_write(tse_pcs, MII_BMCR, bmcr);
+> > +
+> > +	for (i = 0; i < SGMII_PCS_SW_RESET_TIMEOUT; i++) {
+> > +		if (!(tse_pcs_read(tse_pcs, MII_BMCR) &
+> > BMCR_RESET))
+> > +			return 0;
+> > +		udelay(1);
+> > +	}  
+> 
+> read_poll_timeout?
+
+Oh yeah definitely, I didn't know about this helper.
+
+> > +
+> > +	return -ETIMEDOUT;
+> > +}
+> > +
+> > +static int alt_tse_pcs_validate(struct phylink_pcs *pcs,
+> > +				unsigned long *supported,
+> > +				const struct phylink_link_state
+> > *state) +{
+> > +	if (state->interface == PHY_INTERFACE_MODE_SGMII ||
+> > +	    state->interface == PHY_INTERFACE_MODE_1000BASEX)
+> > +		return 1;
+> > +
+> > +	return -EINVAL;
+> > +}
+> > +
+> > +static int alt_tse_pcs_config(struct phylink_pcs *pcs, unsigned
+> > int mode,
+> > +			      phy_interface_t interface,
+> > +			      const unsigned long *advertising,
+> > +			      bool permit_pause_to_mac)
+> > +{
+> > +	struct altera_tse_pcs *tse_pcs =
+> > phylink_pcs_to_tse_pcs(pcs);
+> > +	u32 ctrl, if_mode;
+> > +
+> > +	ctrl = tse_pcs_read(tse_pcs, MII_BMCR);
+> > +	if_mode = tse_pcs_read(tse_pcs, SGMII_PCS_IF_MODE);
+> > +
+> > +	/* Set link timer to 1.6ms, as per the MegaCore Function
+> > User Guide */
+> > +	tse_pcs_write(tse_pcs, SGMII_PCS_LINK_TIMER_0, 0x0D40);
+> > +	tse_pcs_write(tse_pcs, SGMII_PCS_LINK_TIMER_1, 0x03);  
+> 
+> Shouldn't this be different for SGMII vs 1000BASE-X?
+
+I've dug a bit and indeed you're right. The value of 1.6ms works for
+SGMII, but for 1000BaseX it should be set to 10ms. I'll send a fix for
+this too.
+
+> > +
+> > +	if (interface == PHY_INTERFACE_MODE_SGMII) {
+> > +		if_mode |= PCS_IF_MODE_USE_SGMII_AN |
+> > PCS_IF_MODE_SGMII_ENA;  
+> 
+> I think PCS_IF_MODE_USE_SGMII_AN should be cleared if
+> mode=MLO_AN_FIXED.
+
+Correct.
+
+> > +	} else if (interface == PHY_INTERFACE_MODE_1000BASEX) {
+> > +		if_mode &= ~(PCS_IF_MODE_USE_SGMII_AN |
+> > PCS_IF_MODE_SGMII_ENA);
+> > +		if_mode |= PCS_IF_MODE_SGMI_SPEED_1000;  
+> 
+> I don't think you need to set this for 1000BASE-X.
+
+You're correct too.
+
+> > +	}
+> > +
+> > +	ctrl |= (BMCR_SPEED1000 | BMCR_FULLDPLX | BMCR_ANENABLE);  
+> 
+> BMCR_FULLDPLX is read-only, so you don't have to set it. Same for the
+> speed.
+
+Thanks, that's true
+
+> > +
+> > +	tse_pcs_write(tse_pcs, MII_BMCR, ctrl);
+> > +	tse_pcs_write(tse_pcs, SGMII_PCS_IF_MODE, if_mode);
+> > +
+> > +	return tse_pcs_reset(tse_pcs);
+> > +}
+> > +
+> > +static void alt_tse_pcs_get_state(struct phylink_pcs *pcs,
+> > +				  struct phylink_link_state *state)
+> > +{
+> > +	struct altera_tse_pcs *tse_pcs =
+> > phylink_pcs_to_tse_pcs(pcs);
+> > +	u16 bmsr, lpa;
+> > +
+> > +	bmsr = tse_pcs_read(tse_pcs, MII_BMSR);
+> > +	lpa = tse_pcs_read(tse_pcs, MII_LPA);
+> > +
+> > +	phylink_mii_c22_pcs_decode_state(state, bmsr, lpa);
+> > +}
+> > +
+> > +static void alt_tse_pcs_an_restart(struct phylink_pcs *pcs)
+> > +{
+> > +	struct altera_tse_pcs *tse_pcs =
+> > phylink_pcs_to_tse_pcs(pcs);
+> > +	u16 bmcr;
+> > +
+> > +	bmcr = tse_pcs_read(tse_pcs, MII_BMCR);
+> > +	bmcr |= BMCR_ANRESTART;
+> > +	tse_pcs_write(tse_pcs, MII_BMCR, bmcr);
+> > +
+> > +	/* This PCS seems to require a soft reset to re-sync the
+> > AN logic */
+> > +	tse_pcs_reset(tse_pcs);  
+> 
+> This is kinda strange since c22 phys are supposed to reset the other
+> registers to default values when BMCR_RESET is written. Good thing
+> this is a PCS...
+
+Indeed. This soft reset will not affect the register configuration, it
+will only reset all internal state machines.
+
+The datasheet actually recommends performing a reset after any
+configuration change...
+
+That's one thing with this IP, it tries to re-use the C22 register
+layout but it's not fully consistent with it...
+
+> > +}
+> > +
+> > +static const struct phylink_pcs_ops alt_tse_pcs_ops = {
+> > +	.pcs_validate = alt_tse_pcs_validate,
+> > +	.pcs_get_state = alt_tse_pcs_get_state,
+> > +	.pcs_config = alt_tse_pcs_config,
+> > +	.pcs_an_restart = alt_tse_pcs_an_restart,
+> > +};  
+> 
+> Don't you need link_up to set the speed/duplex for MLO_AN_FIXED?
+
+I'll give it a test and confirm it
+
+> > +
+> > +struct phylink_pcs *alt_tse_pcs_create(struct net_device *ndev,
+> > +				       void __iomem *pcs_base, int
+> > reg_width) +{
+> > +	struct altera_tse_pcs *tse_pcs;
+> > +
+> > +	if (reg_width != 4 && reg_width != 2)
+> > +		return ERR_PTR(-EINVAL);
+> > +
+> > +	tse_pcs = devm_kzalloc(&ndev->dev, sizeof(*tse_pcs),
+> > GFP_KERNEL);
+> > +	if (!tse_pcs)
+> > +		return ERR_PTR(-ENOMEM);
+> > +
+> > +	tse_pcs->pcs.ops = &alt_tse_pcs_ops;
+> > +	tse_pcs->base = pcs_base;
+> > +	tse_pcs->reg_width = reg_width;
+> > +
+> > +	return &tse_pcs->pcs;
+> > +}
+> > +EXPORT_SYMBOL_GPL(alt_tse_pcs_create);
+> > diff --git a/include/linux/pcs-altera-tse.h
+> > b/include/linux/pcs-altera-tse.h new file mode 100644
+> > index 000000000000..92ab9f08e835
+> > --- /dev/null
+> > +++ b/include/linux/pcs-altera-tse.h
+> > @@ -0,0 +1,17 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (C) 2022 Bootlin
+> > + *
+> > + * Maxime Chevallier <maxime.chevallier@bootlin.com>
+> > + */
+> > +
+> > +#ifndef __LINUX_PCS_ALTERA_TSE_H
+> > +#define __LINUX_PCS_ALTERA_TSE_H
+> > +
+> > +struct phylink_pcs;
+> > +struct net_device;
+> > +
+> > +struct phylink_pcs *alt_tse_pcs_create(struct net_device *ndev,
+> > +				       void __iomem *pcs_base, int
+> > reg_width); +
+> > +#endif /* __LINUX_PCS_ALTERA_TSE_H */  
+> 
+> --Sean
+
+Thanks a lot for the review ! I'll do a round of tests with the
+comments and send follow-up patches.
+
+Best regards,
+
+Maxime
 
