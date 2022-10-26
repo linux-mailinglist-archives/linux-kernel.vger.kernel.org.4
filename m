@@ -2,144 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A7060DB69
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 08:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF41860DB6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 08:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233193AbiJZGh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 02:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
+        id S232740AbiJZGiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 02:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiJZGh4 (ORCPT
+        with ESMTP id S229995AbiJZGiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 02:37:56 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A66278BE1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 23:37:54 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29Q4QRpI012957;
-        Wed, 26 Oct 2022 06:37:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=zjqpFk3QhBLhN2OLYfCxFIG8Rs3NeBpSFf4AMt/hDyQ=;
- b=sotq9X3vOiUkyNcBx1bzRLJkNeidAWQwz3KlDyhuMq9WPcKX9U/q/oscmAepPehfjcwm
- g7eBgBNg336qjO3iRY9DTnCUshQDHknQDbf2w2UlNHvGzQyTo6rrsHUMYstxlANi9Zs3
- V8vhU5R8Fh6EE+5ZTkAzFfiymz63yxxYIxQ2bpxrKWmjabb2FjRwgsHW/pPnWpJh4zIY
- Y5EfQcPj7TeWy+GxdofLI65qq57K8EYpU4e8QmVV3OIP6s4DNTJq81bE2qxSrCb2EvOh
- G7a/HMJ+vTYasLnybjbh0GhP44RF4zn8g2W0z/WkNXJfITgClhLtvPXXIDPKyjgQI3Ws Fg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kecrrvg9s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Oct 2022 06:37:13 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29Q6bD6j025332;
-        Wed, 26 Oct 2022 06:37:13 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kecrrvg88-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Oct 2022 06:37:13 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29Q6aBEo014393;
-        Wed, 26 Oct 2022 06:37:11 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04fra.de.ibm.com with ESMTP id 3kc859nqk9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Oct 2022 06:37:10 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29Q6b7uW50856238
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Oct 2022 06:37:07 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6FAB75204F;
-        Wed, 26 Oct 2022 06:37:07 +0000 (GMT)
-Received: from li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com (unknown [9.43.83.232])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id BF73652051;
-        Wed, 26 Oct 2022 06:37:04 +0000 (GMT)
-Date:   Wed, 26 Oct 2022 12:07:01 +0530
-From:   Vishal Chourasia <vishalc@linux.vnet.ibm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        vincent.guittot@linaro.org, vschneid@redhat.com,
-        srikar@linux.vnet.ibm.com, sshegde@linux.ibm.com,
-        linuxppc-dev@lists.ozlabs.org, ritesh.list@gmail.com,
-        aneesh.kumar@linux.ibm.com
-Subject: Re: sched/debug: CPU hotplug operation suffers in a large cpu systems
-Message-ID: <Y1jVjX9FUuUilcjA@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
-References: <Y01UWQL2y2r69sBX@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
- <Y01kc4g9CVmoyOxj@hirez.programming.kicks-ass.net>
- <Y01sk3l8yCMvhvYm@kroah.com>
- <Y06B0pr8hpwzxEzI@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
- <Y06ISBWhJflnV+NI@kroah.com>
+        Wed, 26 Oct 2022 02:38:02 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B9778BE1;
+        Tue, 25 Oct 2022 23:38:01 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id t25so13164108ejb.8;
+        Tue, 25 Oct 2022 23:38:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mx8fYuOqE4Fz7MoTG2qyzZeL72DVY10BTmV8q9Mc57w=;
+        b=qHrL7FKIzMARVP4gCZGtCYP08mU2Xgs4Znav05N95RRQvkbRXbQF61MJZY96Q7WP/F
+         PWoN3+fpTvoAPWT65Uyqim26UaP8B6LfsZtTfWdCU7iLytxgLzcnb4igksIT7QZ63oZJ
+         Vlrlyxo1RC4LpvygdZyzmKnEkymjdjkwbcBMqF7MX8OOLslunSPukQWeBsGRHL+6QRaP
+         Gl9hoVbkGXIolT8N8QoHjwTe7TKPha9HyqpFdaIaHQ9pqMxaoSxBf3OZxHGXjYO+QKBk
+         8QCxxjRWCmzjerQAe0aH8NBo19nPtyIFLm8/1uhQpLw2ng6P8F0nRHz8I2flGllpOQYf
+         BcVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Mx8fYuOqE4Fz7MoTG2qyzZeL72DVY10BTmV8q9Mc57w=;
+        b=hXlJ7XzjruRa94wvdR8J9cBkfmRbAKKs+jGTEqpAHPAYFlKKGKWoYjCb2stoUdf8I6
+         t0dRF80n9NVi6pnrXGWiJZgpgjWiFwoJh7eeRX9k24L24istYrmmgkiSsGbDlfSDDL8V
+         6fKDr5MSUtUhjVEeVuNo9XBVHh+YBImVoKK1Ntek+zvXQ8cUwmLvut+IuL0wvs4AH0GC
+         get9FtZQEio2y5NUTWkgiFT5EphSAPARwHn/INTi93lJ5Ls5ElUepael6XDz6Pmbfz/F
+         FhlIl78cvq6JcDVPQTJYVj8VuXSm2akvh3komNtK/Ob9EfZx2HuKcGUSfKSUq+rzT4bP
+         sG1g==
+X-Gm-Message-State: ACrzQf2C3apmnbEgnKOLsRE3m5xLJ8A2BV9vSWvNUUK5/qs2e4XMkXRL
+        8W61TKzexHw+ftPhJt1MtR3F/RM5PiWrpJXbE9Q=
+X-Google-Smtp-Source: AMsMyM4Wnn4932Ytv91Nrg1zHGI8MgLVZC+Ngl65IwrEw5f7VTg8YZr0RLz02wh9lfIB4mbydGN7lFZ10h6BzWe7zMM=
+X-Received: by 2002:a17:906:fe45:b0:788:15a5:7495 with SMTP id
+ wz5-20020a170906fe4500b0078815a57495mr36566308ejb.633.1666766233858; Tue, 25
+ Oct 2022 23:37:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="I2m5MahwrhQT1ZfY"
-Content-Disposition: inline
-In-Reply-To: <Y06ISBWhJflnV+NI@kroah.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: i05jl_7bqzAhbNoG_v2njMD6cr85LGGT
-X-Proofpoint-ORIG-GUID: h1h0AVWCZPZFMSJZLfCmn_frSss_BgXv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-26_02,2022-10-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 phishscore=0 impostorscore=0 spamscore=0 clxscore=1015
- mlxscore=0 lowpriorityscore=0 bulkscore=0 adultscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210260036
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221021164626.3729012-1-roberto.sassu@huaweicloud.com>
+ <CAADnVQJHDboosqTy5LTHJtJaWJCWn9rv09jmd_sMgeV_OVQjGg@mail.gmail.com>
+ <d7a17e482b7bbf945c92443b45de73f56afea08a.camel@huaweicloud.com>
+ <bb7a5986f3d25706269d0fec9906ea73c174b808.camel@huaweicloud.com>
+ <CAADnVQL1a2pPAJqzj6oUwupxxfaW38KQswzppAZeZPzmTFhjMg@mail.gmail.com>
+ <98353f6c82d3dabdb0d434d7ecf0bfc5295015ad.camel@huaweicloud.com> <ffbdcfbe-0c63-2ced-62e3-a7248b7a24f0@schaufler-ca.com>
+In-Reply-To: <ffbdcfbe-0c63-2ced-62e3-a7248b7a24f0@schaufler-ca.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 25 Oct 2022 23:37:02 -0700
+Message-ID: <CAADnVQLAXsZRNytPHG0KhYKar3K+=7bq2KPQG77VFOKbnTPHmg@mail.gmail.com>
+Subject: Re: [RFC][PATCH] bpf: Check xattr name/value pair from bpf_lsm_inode_init_security()
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        nicolas.bouchinet@clip-os.org, Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Oct 25, 2022 at 7:58 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>
+> On 10/25/2022 12:43 AM, Roberto Sassu wrote:
+> > On Mon, 2022-10-24 at 19:13 -0700, Alexei Starovoitov wrote:
+> >> I'm looking at security_inode_init_security() and it is indeed messy.
+> >> Per file system initxattrs callback that processes kmalloc-ed
+> >> strings.
+> >> Yikes.
+> >>
+> >> In the short term we should denylist inode_init_security hook to
+> >> disallow attaching bpf-lsm there. set/getxattr should be done
+> >> through kfuncs instead of such kmalloc-a-string hack.
+> > Inode_init_security is an example. It could be that the other hooks are
+> > affected too. What happens if they get arbitrary positive values too?
+>
+> TL;DR - Things will go cattywampus.
+>
+> The LSM infrastructure is an interface that has "grown organically",
+> and isn't necessarily consistent in what it requires of the security
+> module implementations. There are cases where it assumes that the
+> security module hooks are well behaved, as you've discovered. I have
+> no small amount of fear that someone is going to provide an eBPF
+> program for security_secid_to_secctx(). There has been an assumption,
+> oft stated, that all security modules are going to be reviewed as
+> part of the upstream process. The review process ought to catch hooks
+> that return unacceptable values. Alas, we've lost that with BPF.
+>
+> It would take a(nother) major overhaul of the LSM infrastructure to
+> make it safe against hooks that are not well behaved. From what I have
+> seen so far it wouldn't be easy/convenient/performant to do it in the
+> BPF security module either. I personally think that BPF needs to
+> ensure that the eBPF implementations don't return inappropriate values,
+> but I understand why that is problematic.
 
---I2m5MahwrhQT1ZfY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That's an accurate statement. Thank you.
 
-On Tue, Oct 18, 2022 at 01:04:40PM +0200, Greg Kroah-Hartman wrote:
-
-> Why do you need to?  What tools require these debugfs files to be
-> present?
-
-We are not entirely sure what applications (if any) might be using this int=
-erface.
-
-> And if you only have 7-8 files per CPU, that does not seem like a lot of
-> files overall (14000-16000)?  If you only offline 1 cpu, how is removing
-> 7 or 8 files a bottleneck?  Do you really offline 1999 cpus for a 2k
-> system?
-
-It's 7-8 files per domain per cpu, so, in a system with approx 2k cpus and =
-five
-domains, the total file count goes above 70k-80k files. And, when we offlin=
-e 1
-CPU, the entire directory is rebuilt, resulting in creation of all the files
-again.
-
-Thanks
-
--- vishal.c=20
-
-
---I2m5MahwrhQT1ZfY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEyetz6oh8pzQ87ZNz8y5vG2Pik+wFAmNY1Y0ACgkQ8y5vG2Pi
-k+zzpAf/VpaRfD7CirnN6qZ6dlymniwiDt7AqbDneQ2GpIwCM9zoXPjc2SanAfBS
-j3JBmfZVPGDgBecigPGlDv4SPKH58k+Ws3ca5nsMXxZ2vQGmHTAEfRiAcolT6HDh
-J1EFP/HgT0cZsbyedIbRUdoF1BGwNMnFKm04Ud7nHqPlxCJPHrxVI5kEafvH4bQM
-kS6jv2Q/KexruSHaG32/AZpDxjiJ6zr2LN7slTzg4jxeKYDru4g7hl3H9ECbuDvV
-GF/ZEdVXai1LAegTdQNK1laJMxsXHAHnjBhiuqO5L3vc8ulTcmQTw6TKeC895p56
-KeYnC6XuaetZEvuNF+VajhNuv7w+dw==
-=+7+s
------END PGP SIGNATURE-----
-
---I2m5MahwrhQT1ZfY--
-
+Going back to the original question...
+We fix bugs when we discover them.
+Regardless of the subsystem they belong to.
+No finger pointing.
