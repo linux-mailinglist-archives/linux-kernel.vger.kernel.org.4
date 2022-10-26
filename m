@@ -2,88 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A30160E857
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB5E60E85B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234840AbiJZTG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 15:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
+        id S234111AbiJZTHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 15:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234528AbiJZTGh (ORCPT
+        with ESMTP id S234808AbiJZTHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 15:06:37 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113AF141383;
-        Wed, 26 Oct 2022 12:03:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=r3Pfzq8iLf21/gz3vKU7KH69j7rAkB4oAHyVkIHhiQY=; b=xF+2rcJB7udh+J+Ag+JT79VckR
-        5/aeywQviRtPSnZ1ya9NT5lSAPGHHA9rhIJHo+Mt4EvVqNvp16GSByh4l3YA9wr8mnJzJlGr0jCNb
-        uc39VCS4doPpfNlfEzYYzd4AJkxMzm2sl++QAN6ALwLoz4CuzlvQH4V9bO9UxEPW/Mha+7kDNixxS
-        aIPz0NPwzTOrk56hw0Un20+nzgGcVR3U7I5bS7KX7GDsvt+tKFrYomWjZehL+775+fzIPKyCRurCd
-        l8ddecgsWb6qqaZy2vUq7BcVpJtQHOeWC3pdyvillVYqjLFfj8sFJnT2gwkfY8rwDK6pv0ikz65Js
-        jjZd+1yQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1onlge-00Aer3-5w; Wed, 26 Oct 2022 19:03:36 +0000
-Date:   Wed, 26 Oct 2022 12:03:36 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-modules@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH v7 00/11] kallsyms: Optimizes the performance of lookup
- symbols
-Message-ID: <Y1mEiIvbld4SX1lx@bombadil.infradead.org>
-References: <20221017064950.2038-1-thunder.leizhen@huawei.com>
- <Y0/nEngJF6bbINEx@bombadil.infradead.org>
- <ad9e51c6-f77d-d9e9-9c13-42fcbbde7147@huawei.com>
- <Y1gisUFzgt1D1Jle@bombadil.infradead.org>
- <77f1c8f0-5e67-0e57-9285-15ba613044fb@huawei.com>
+        Wed, 26 Oct 2022 15:07:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B42CE36;
+        Wed, 26 Oct 2022 12:04:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D5B062033;
+        Wed, 26 Oct 2022 19:04:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2740C433D6;
+        Wed, 26 Oct 2022 19:04:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666811075;
+        bh=U+R8INu9G+SgFDxjAisYOYC9BdZ7qdOXy8lBhXyOEwE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=rI4nDtKHjUysmmUGj09yG6xS8huuOsMAGRr1z4i7boXV2jOUSegFC8c0jzlnnklBh
+         QZghP+s7yItJfFxeBtKdiDnojkqHThYxwjwpUt3SVs++c8/ZG+1I6PzLSZ5+xuIycQ
+         X8FPkkip5XZyWzrtQaZbTrucYseGGhEeyyOHt3pWuL92WyBxIed6Jx/2+0uY2jUiKT
+         AI/0YlNxPWu/pleo0PxcyuhgVSONw2Q9l1auUZVo3Z7fyrBzqjGhQKHfx+iminrKCL
+         5HoJKBhWNXVAV3Mf4CiFoJJcFyau3SH6zwcDzuCoijKASZpM1Jt2KAgha7K3h7FE6j
+         9rpimXL2LU/qQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     paul@crapouillou.net, lgirdwood@gmail.com, tiwai@suse.com,
+        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, perex@perex.cz
+Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        zhouyu@wanyeetech.com, linux-mips@vger.kernel.org
+In-Reply-To: <20221023143328.160866-1-aidanmacdonald.0x0@gmail.com>
+References: <20221023143328.160866-1-aidanmacdonald.0x0@gmail.com>
+Subject: Re: [PATCH v6 0/9] ASoC: cleanups and improvements for jz4740-i2s
+Message-Id: <166681107350.960840.12779879137607542680.b4-ty@kernel.org>
+Date:   Wed, 26 Oct 2022 20:04:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <77f1c8f0-5e67-0e57-9285-15ba613044fb@huawei.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 02:44:36PM +0800, Leizhen (ThunderTown) wrote:
-> On 2022/10/26 1:53, Luis Chamberlain wrote:
-> > This answers how we don't use a hash table, the question was *should* we
-> > use one?
+On Sun, 23 Oct 2022 15:33:19 +0100, Aidan MacDonald wrote:
+> This series is a preparatory cleanup of the jz4740-i2s driver before
+> adding support for a new SoC. The two improvements are lifting
+> unnecessary restrictions on sample rates and formats -- the existing
+> ones appear to be derived from the limitations of the JZ4740's internal
+> codec and don't reflect the actual capabilities of the I2S controller.
 > 
-> I'm not the original author, and I can only answer now based on my understanding. Maybe
-> the original author didn't think of the hash method, or he has weighed it out.
+> I'm unable to test the series on any JZ47xx SoCs, but I have tested
+> on an X1000 (which is the SoC I'll be adding in a followup series).
 > 
-> Hash is a good solution if only performance is required and memory overhead is not
-> considered. Using hash will increase the memory size by up to "4 * kallsyms_num_syms +
-> 4 * ARRAY_SIZE(hashtable)" bytes, kallsyms_num_syms is about 1-2 million.
-> 
-> Because I don't know what hash algorithm will be used, the cost of generating the
-> hash value corresponding to the symbol name is unknown now. But I think it's gonna
-> be small. But it definitely needs a simpler algorithm, the tool needs to implement
-> the same hash algorithm.
+> [...]
 
-For instance, you can look at evaluating if alloc_large_system_hash() would help.
+Applied to
 
-  Luis
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/9] ASoC: jz4740-i2s: Handle independent FIFO flush bits
+      commit: 8b3a9ad86239f80ed569e23c3954a311f66481d6
+[2/9] ASoC: jz4740-i2s: Convert to regmap API
+      commit: cf375e693252f4e8ecb6256af631ff381381a3dd
+[3/9] ASoC: jz4740-i2s: Simplify using regmap fields
+      commit: 0fddb4bce669fd255f6ffade6905da5c8ed3e254
+[4/9] ASoC: jz4740-i2s: Use FIELD_PREP() macros in hw_params callback
+      commit: b355ebebb17c438b90c3d339f38a79559f7259df
+[5/9] ASoC: jz4740-i2s: Align macro values and sort includes
+      commit: dacc06b812f46e0d4cfdda98134a8b5d64375341
+[6/9] ASoC: jz4740-i2s: Support S20_LE and S24_LE sample formats
+      commit: 7abd01cfc5428581b21099eb629d88e76a47b67a
+[7/9] ASoC: jz4740-i2s: Support continuous sample rate
+      commit: 84a914349ba2634e8db6b0815f100697d878d033
+[8/9] ASoC: jz4740-i2s: Move component functions near the component driver
+      commit: 165afe6b66aafaafc95484ac2f0f09f78d62386b
+[9/9] ASoC: jz4740-i2s: Refactor DAI probe/remove ops as component ops
+      commit: 4e02fd6207474ef2d882b8620f4c3db9a02d4ddd
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
