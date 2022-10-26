@@ -2,83 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0174F60E0D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA5260E0DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233479AbiJZMhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 08:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
+        id S233555AbiJZMi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 08:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232903AbiJZMhk (ORCPT
+        with ESMTP id S233155AbiJZMiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:37:40 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8258D221
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 05:37:40 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id h8-20020a056e021b8800b002f9c2e31750so13216333ili.1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 05:37:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=giEKpFCOAGFhFBssx0rXv7faluMBkRAJIt7vP3gQfcg=;
-        b=LqQ0wncKKxaP16AzfvdKTIr+3svJOsl93RD/NGx/f/g+/Cj6UA+Ic0p5BH5K8IFu/7
-         cHdK3JWUpVrLGE0Rtk+Dha4mjz9ihq9vA59kD2IYoxY3Pyhk2WVXNi0sI7yg+Vtn7zWW
-         stpBBNOWhkBEfLNY35oMXFxWWPS+7wPkAXqwVbilehv9uDXf48evKYFFtrPfOfFYbyG6
-         Xi0taSJCB0O4n6BSoYl20Lk6+6gZh5ZrpjAzCPrZQE9xd7maegyHY7dhRGjGuwzl42UG
-         i3MeEO95CsONbDCB/llxIEVHA5cudqAUSA9xlwJAXITD4P1yz3Y0k/AaUJB3SIYx/pys
-         cDLg==
-X-Gm-Message-State: ACrzQf3hJNPFBWGHr0ooLgQ17dZBzRcGrppbxaRXqNAlerbynLDxFRnD
-        X1AG4gFU4IwYJd31PKbFAmNVwPYrg+y+o/Dq9j21s7fbbFOV
-X-Google-Smtp-Source: AMsMyM5r7dsZdVt160YC5BPbjclJeotonvfTb9M6Y/9MqlbnqBdLkqd+gbWuZkwuxllvLriR5DttATdFDSwT+4VCwqbBOV/tsBmF
+        Wed, 26 Oct 2022 08:38:24 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874C9E77BA;
+        Wed, 26 Oct 2022 05:38:23 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7b8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7b8:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2F30D1EC032C;
+        Wed, 26 Oct 2022 14:38:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1666787902;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=BtYmqcK/SwOYOEYDhCGjtxRMVVKq17QV489dr1/AD1M=;
+        b=lEwKBM09qULzmxQO2ikbgRg6mJ3EW+0X+KTzylFl9gQtwqNOnN/yMGy78QI1TRyP00RAel
+        BMKbfOYAfuT86yO+qyTY3oDq+cuXF69gqIg2B04owPENSD6n1jPXTsd1lcQgIbrPLdhmPN
+        NX67SR7dha7rQ/vroVkuI1ADWpUcUfg=
+Date:   Wed, 26 Oct 2022 14:38:18 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     bjorn.andersson@linaro.org, mchehab@kernel.org,
+        james.morse@arm.com, rric@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_tsoni@quicinc.com
+Subject: Re: [PATCH v2 3/3] MAINTAINERS: Add myself as the maintainer for
+ qcom_edac driver
+Message-ID: <Y1kqOqhQeGkfoQnp@zn.tnic>
+References: <20220812060602.7672-1-manivannan.sadhasivam@linaro.org>
+ <20220812060602.7672-4-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:170d:b0:2fc:3e76:b262 with SMTP id
- u13-20020a056e02170d00b002fc3e76b262mr26506480ill.152.1666787859573; Wed, 26
- Oct 2022 05:37:39 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 05:37:39 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000049382505ebef4a0c@google.com>
-Subject: [syzbot] riscv/fixes build error
-From:   syzbot <syzbot+9d8dc6c2d48bbc419bb4@syzkaller.appspotmail.com>
-To:     anup@brainfault.org, aou@eecs.berkeley.edu, atishp@atishpatra.org,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220812060602.7672-4-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Aug 12, 2022 at 11:36:02AM +0530, Manivannan Sadhasivam wrote:
+> The current maintainers have left Qualcomm and their email addresses were
+> bouncing. Since I couldn't get hold of them now, I'm volunteering myself
+> to maintain this driver.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  MAINTAINERS | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 
-syzbot found the following issue on:
+Applied, thanks.
 
-HEAD commit:    9abf2313adc1 Linux 6.1-rc1
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
-console output: https://syzkaller.appspot.com/x/log.txt?x=152b6b6a880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9631ed0b9757aaab
-dashboard link: https://syzkaller.appspot.com/bug?extid=9d8dc6c2d48bbc419bb4
-compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: riscv64
+-- 
+Regards/Gruss,
+    Boris.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9d8dc6c2d48bbc419bb4@syzkaller.appspotmail.com
-
-arch/riscv/kvm/vcpu.c:269: undefined reference to `riscv_cbom_block_size'
-riscv64-linux-gnu-ld: arch/riscv/kvm/vcpu.c:269: undefined reference to `riscv_cbom_block_size'
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+https://people.kernel.org/tglx/notes-about-netiquette
