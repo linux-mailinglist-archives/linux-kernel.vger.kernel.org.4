@@ -2,87 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77C460E90A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4D9F60E90E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234898AbiJZTdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 15:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
+        id S234347AbiJZTga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 15:36:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiJZTdZ (ORCPT
+        with ESMTP id S234170AbiJZTg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 15:33:25 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0358197EFD
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 12:33:22 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id io19so10221324plb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 12:33:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jGjEp8J6XveduvHsdvLy4QcugylDX5h7FyuVeFj9/ag=;
-        b=bIJBCxmZ8BtTAakelkNL7MAnGlWTzIee1l87zbz64oAh2qKROAwI8gemqHkXLx8oA6
-         /tkgzX7RYgja7idwCJDgCr3u2YnDsw1Rad4YVTWE6psgL4ux4GLoC/BbArA+0gE/EXHa
-         GedtvmLeWsTzHHz+g0qYCPVjHpSV2bY4c0jRkHHKlV0pDj61mqSFnel7Qn4Fm325L3zV
-         Wb/kPJRMYwopVsA2LH9ibigkenj+uIx7wTy/di5tqLY5os65c0+WIf3Nj/vIi4YIytJU
-         W3n93LiGaMKjfxnfoWKDV/cu6D/qFmRCi9g6hI2wkOiyVsiOVfdrLOg4n1dBaAIhZFQ2
-         MOpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jGjEp8J6XveduvHsdvLy4QcugylDX5h7FyuVeFj9/ag=;
-        b=eJk+0JxVTmtRc+LbRsxzrGibmC+XYGSWz2/00tMT9UGuwf2Hs5PmjGrZJPtd71Lyed
-         TnF9WH/BUEt9c5HZsJnVCWlhgjYoINMgsTXh8vIGQxgTRELt2aXIvPZdP1WDdqq94MmS
-         /hcLf7K1erNSBPAsGv9+05FuFvWViEZuMZmYa0nW/4IJRGqaJxaLFkTHthigJciSVHAC
-         kEgcfYX/gLOYsFTgA6Mh+nxmsCp62qrZTsFaen63B+PBKxmHpadEDz/3RJ2bjVEhnFaR
-         Zq8Y9GXfdo0VJNar+rl1rrbvsi1DZF4OlqBdT0WUXFbKpPAa3223aaYmjudJGRkNc8fd
-         tSsA==
-X-Gm-Message-State: ACrzQf3LpCf2Ia7VQfzw29I2HO8uS1DeassR4wUXjf+CZeNhXkuixhu/
-        sRoXV7qLlp+tni6j52j6nNF1IQ==
-X-Google-Smtp-Source: AMsMyM7kHvUr3Qu7IQj9UH9RHXNJjhGQaQQRIsOwCYdGUP1vF01EPed/asqBzDnhBz4p7Ixb3tcQjw==
-X-Received: by 2002:a17:90b:4d0d:b0:1fb:a86d:e752 with SMTP id mw13-20020a17090b4d0d00b001fba86de752mr5948777pjb.120.1666812801340;
-        Wed, 26 Oct 2022 12:33:21 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y4-20020a17090a390400b00212735c8898sm1429389pjb.30.2022.10.26.12.33.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 12:33:20 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 19:33:17 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        kvm@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Hyper-V VTLs, permission bitmaps and userspace exits (was Re:
- [PATCH 0/4] KVM: API to block and resume all running vcpus in a vm)
-Message-ID: <Y1mLfRRKcF5OWZTG@google.com>
-References: <20221022154819.1823133-1-eesposit@redhat.com>
- <a2e16531-5522-a334-40a1-2b0e17663800@linux.ibm.com>
- <2701ce67-bfff-8c0c-4450-7c4a281419de@redhat.com>
- <384b2622-8d7f-ce02-1452-84a86e3a5697@linux.ibm.com>
- <Y1cVfECAAfmp5XqA@google.com>
- <5a26c107-9ab5-60ee-0e9c-a9955dfe313d@redhat.com>
- <Y1gG/W/q/VIydpMu@google.com>
- <02c910bb-3ea0-fa84-7a1c-92fb9e8b03de@redhat.com>
- <Y1hsHjPuZfrREulV@google.com>
- <d3e2dd2b-9520-32ef-6785-94164a834adf@redhat.com>
+        Wed, 26 Oct 2022 15:36:27 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2087.outbound.protection.outlook.com [40.107.101.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF9678BF0;
+        Wed, 26 Oct 2022 12:36:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KroJjuioC+YCpbYNY41cid3uDFD8/8jchze2UeFf3zOJaLd1nagxdrwyrYZigCDi38yfka5YcQfiF4lLWV1jFoMGDBbcWnP8fk0sn3PZ71kbzbwJ+HWDhq5mhqyY5I8c4K0k2Q49tLQpbCivH5Qb0Cwn4xN8/UpgBwluv2Xoz2YTxQKoKS1W+37TcEK2uGgufvoety3Wfj/vNnO+3arYh6nR5DShF6Zvqf9S2fVxX+k1v3OMS2qQN9B+rAUPceEd5ujKsT8KbY0TwF7VexQB3orHcllgYsmROLwXv9g3w7geUlU2lwz8enRcaR2joP6ij+AzdzyJLvn2nr6qbyjKeA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=W2wr31c3ejz3qiAt1nKKJU4Il/w7/UqjFk8ScF1Tsmg=;
+ b=bif9isBv9J+1W+8JTEH6i3BOlzDXBHV9/f1hiYBC9vndF25O1fZGLoxF97++3O2s3UIakYDamvAMispLrk93Eb4yE6MpPMMdQFoANczY8/DPRj3vWGVz4i7/UySfxywIZyoI11aYDDiDX7oqnWsJ0TEMtBN2nKuY5q+B7sqenrhemT2837fWyoRnwDmMvi8kq/O9WropZkfRmXlXHZLpSRUy8WUDK7JeU3V0lPmQfjWGMOpJjIuDYansdv1cIbxEa1imueKoS9VH5+PHIBOqataOXUYOhFwr4s498Eh/M6pdrHhA54iCKzd2yVH81/fSfMWH5vCIfFSrGZke666ctA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W2wr31c3ejz3qiAt1nKKJU4Il/w7/UqjFk8ScF1Tsmg=;
+ b=HQunJx/WahdXJAaDrVzUA/GRZeLlIwae2s5NpQbPVJhlpcTnRbEmUhmyx3wbNdfjplqoWATOs9WYk+nkt6TBEwnY5DkjXly5jjsIfyTWuej2s6MbYkt/HyNPlMBjfeRu5S/zvZHkRtRsRUKcRFXPKiAQh5iApvSkQ9+gL6vuXb0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
+ by SJ0PR12MB7067.namprd12.prod.outlook.com (2603:10b6:a03:4ae::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.35; Wed, 26 Oct
+ 2022 19:36:21 +0000
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::2d5:77ac:6d39:e57b]) by MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::2d5:77ac:6d39:e57b%9]) with mapi id 15.20.5746.028; Wed, 26 Oct 2022
+ 19:36:21 +0000
+Message-ID: <a6349e6d-6733-66be-87d0-a10fc1480305@amd.com>
+Date:   Wed, 26 Oct 2022 14:36:16 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Reply-To: babu.moger@amd.com
+Subject: Re: [PATCH v7 07/12] x86/resctrl: Add sysfs interface to read
+ mbm_total_bytes event configuration
+Content-Language: en-US
+To:     Reinette Chatre <reinette.chatre@intel.com>, corbet@lwn.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de
+Cc:     fenghua.yu@intel.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
+        quic_neeraju@quicinc.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
+        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
+        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
+        jmattson@google.com, daniel.sneddon@linux.intel.com,
+        sandipan.das@amd.com, tony.luck@intel.com, james.morse@arm.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bagasdotme@gmail.com, eranian@google.com
+References: <166604543832.5345.9696970469830919982.stgit@bmoger-ubuntu>
+ <166604561380.5345.17668177010598977321.stgit@bmoger-ubuntu>
+ <0065fe9d-80d4-2e8a-afbb-d150df2ee78b@intel.com>
+From:   "Moger, Babu" <babu.moger@amd.com>
+In-Reply-To: <0065fe9d-80d4-2e8a-afbb-d150df2ee78b@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR03CA0060.namprd03.prod.outlook.com
+ (2603:10b6:610:b3::35) To MW3PR12MB4553.namprd12.prod.outlook.com
+ (2603:10b6:303:2c::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d3e2dd2b-9520-32ef-6785-94164a834adf@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW3PR12MB4553:EE_|SJ0PR12MB7067:EE_
+X-MS-Office365-Filtering-Correlation-Id: 12a8db5e-4576-47d3-13fd-08dab7895bfe
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /D6o+rEV5aug3FGW4h5HN+XRI43jVKirtzGsiLPsm9BhpaeD7hQdbMQUq6eptdN3ZXlgKCAh37lOJpysdyUBjunvI788bsOjmdpcl3iQ7sOmCD33CVMtTxA2l3Vz9H+y8rFIxg0oIe43muojg71yGprB/obBhQyggyWJCkkLHK3ce7bMVadTcRkXJPDPpyBNC9xmAoLE2YgCh9MZZDMjEIuAou6dJbg1yUIHIpVeP1BJQiPdoGvNSRXpYusGg4iLIacX64gjC0Ka/tyNv/HDKtipPUjhoPXT0GX5hmQOiGViNEeMIN6xz/6GE1OANVQXI0hpyhsRiQwAfcAR6vCbT49f/k1wd2calN/fz/dE0zwScN/tEOgLaSCAzvYDVCqxJ9MBrJVFaPg+9bnI7e3EepIZ4S7f1un15FyD3xc6TVObpkFZNacesFrv7Hx9ZjLXZaH94+E1Z2y6xsrjgz4KPotFbp48YfkZNudqjhMt1CmzQFF6xnIm89Jh+Y3f1362U2QUtKRFtnntHSPtB94o7BgCNavReRYvk6gYOlxjqu3LmfoAl6dI/NJpzCm//nI+EdIs/dqLSorxsfmONTzlxN961Cl/Ptf9IWgH4L3TRpv4vO11k7C1Ws7VRoIcF3J8P11LebnN/KVDeCI+3Q0Bb8op5ZmbsZMuzzudTQ1Y6jYEi2birf9N7F+DxB7HgHZJEY5d3Kkql9BDCKTyVoYjbj/cwQUBVAhGy/qD6XtKyfYtfXg1RuNNfxh3/Zp1oZ1uvaadsgOR49vb7Z0dapWz8C1hNLsQlJ0JRQJSh4rxvas=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(376002)(346002)(366004)(396003)(451199015)(66946007)(5660300002)(4326008)(6666004)(36756003)(8676002)(7416002)(8936002)(2906002)(41300700001)(3450700001)(316002)(6506007)(478600001)(66556008)(2616005)(31686004)(26005)(6486002)(6512007)(31696002)(53546011)(66476007)(38100700002)(83380400001)(186003)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VWY4WENvZHBGU2lTclVyN2d4QlM3OUtMSzVpejhFUWJTeXJqa1dScEpkMmgz?=
+ =?utf-8?B?cVg0RkpqSklpM2pTMklqMzhURHpQRlRBL3NDWHBab08xK05sVHZuMUNXZkhl?=
+ =?utf-8?B?eHJkK3FjcElobnZkV250TWIrR3R0VlRvWEY4Rmdtd3ZkeGdScXZ4MjBkSDRH?=
+ =?utf-8?B?UFBQOVVEU21hZFQvRHluakpuTE5Bd2t0VHU3cGFOZEFvT2ZERDcyV1BUbHU2?=
+ =?utf-8?B?dzJCMW5FcWVLUTN0aFM0a0lnT0J4aHFpMzhiYXJCdzNYVmp3eUxiUEFISThM?=
+ =?utf-8?B?cjAyUWhwbldSVElXTnF6R1RIYktJb1JwNVNLcWV1Z0p1NDN1SFRra1pMaW51?=
+ =?utf-8?B?bk1xdDhSckgwYUdUbUJZWlMwTmN4S1BIVlVlYldPWUpKclZvNm1HRyszOFBQ?=
+ =?utf-8?B?YjB1SHYyQVh2d01GMHY2MjBoeDQ1Mk9wZ2tyNHhlY0ZzQWpEL2dFdUhLd3Rw?=
+ =?utf-8?B?UVZLbHdwRjBqaW9NSzNBbVVQeFVLZEVheTNleW5nSjc3QlhxbHM5alZrWWl3?=
+ =?utf-8?B?b1dRbXB0MUkybXA5cmxPVEZVbVhoK2RhakVDVlJJYi8rY0Q2TkJHa1J5VXNF?=
+ =?utf-8?B?UktyNTgweUt1ZHV1bjFNYmcvZmpSRkZhWndLQTFMT05JVkdaK1Z3cUtwRnp2?=
+ =?utf-8?B?NnZOWHg4YndKNC8wZ2FNeW9VSDRaVkZXQy9TcFhxdlYvcGxEcFhYQ0NWalZr?=
+ =?utf-8?B?MDVFTXE3RTVYaU9iMnRMdWFyQUQ4WXhWT21UNzR0ZjBsWUdTWkZwTkN6aTdN?=
+ =?utf-8?B?ci8zQzBBblFxMU52K0FDM21QdGo4UUlWUmNYL1MvVnRTTWt4TWE5UTNnUjZh?=
+ =?utf-8?B?UXgzK2ViYlAyK09PQ2cyN2NaSWRDcHJCVXBtSTUwZzk5bzVHeTVQTW95NndG?=
+ =?utf-8?B?Q3VFL2loc2xXdXdzRGdoUGhLcVYxcjhiTTg2cnpXMlI0NkwxSm9BcHNkZmxH?=
+ =?utf-8?B?bWdudzZ0NVlMU1VPRkhZaWI1cWZ1SUxsOE9vSEtBdTdzcEZRN2poYWpKQkVv?=
+ =?utf-8?B?N3dJdnM2cWxCVW8raEc1WWE3cm1NVjRqejFkdEpwZWpMTUkwbm53SnR3WGxo?=
+ =?utf-8?B?Wk9YRjVzRXRKZzhJdFZJaS9hcEpLMEEzVGV6WU1QcVBOcHBCYmxpbTh0alVy?=
+ =?utf-8?B?NzFPZUczR2dJb0VwTTE0cWJNbU82S29vWEZXN1Y2dUpoR3B4UkxBMmZHU1lM?=
+ =?utf-8?B?bzMyNkFJcC90bGp6RGlKM2hqQXd6NHQrZzd0YkszYXJpSmNkb1MzZWJjTkxZ?=
+ =?utf-8?B?amp0NzRrUng1V3NkOWpiZTM5aTdBY2RzZ3JVU2hYbE0rU2ZGbHNBQzRybmtp?=
+ =?utf-8?B?YWQxN05sQ2V4Z2ZlcnZkMHJvMm1DS0R1ZHR6Z1MrajFpdE5lY2FmVHNvek15?=
+ =?utf-8?B?VlRkcEpOekpJVGZsR1QzYzN3OUQ4bVVnbGc1YkxtSzBTNm8zM01aWGhtaHkv?=
+ =?utf-8?B?Q3RwQVpNRFVkNTBQZzh1MVBQWWNvcDllU01kYkV5RzJ6eUJSTFJRaHVJVUdX?=
+ =?utf-8?B?OWR3Z0pVS29ZWWlxUlJieTd1ajZjcmg3YnlGMEZLRUlicTkvSWtML2lZYVJJ?=
+ =?utf-8?B?WnNjL2F2S285MWtaTHJhRnBlbmNlMmwwK2pCcEI2ZlVhNzZhSnZYd3VxQmtO?=
+ =?utf-8?B?VGVXeVcyVkQ5eGtTTWc0MzlKRVpnMUN6YVBSVGJFbXZMYUlEcFRLaWprN0lz?=
+ =?utf-8?B?QVdEZjQwenpNS25RclVYZE83ZHNBbWFOTGRYbUtqMitmWHBQODFRcFRvRXdG?=
+ =?utf-8?B?S1k0aTBlc3MyMlk4eG1RWFhJNDdqbHY3YlBUNEIrdWpJQk83SStEeEs0NElm?=
+ =?utf-8?B?dFF1eWsyemh3ZW93c0syOTBlQmI4cE1mbkFmcHRpK0tpVGg0d2ZiZWdGUjN6?=
+ =?utf-8?B?Qk9JN0N1eHZ3emJaL2JmNUhJUHFtUk1uUmxuV294d05abUFrR0Jac1dWYitR?=
+ =?utf-8?B?elNaaHZDZXZCdUg5d3ByeTJmdDhieXl1M0tPSjlPTFNDdnJOT2UwMmZpT1li?=
+ =?utf-8?B?SUhiaitLQjkxYXk3d1RqbGZRbDM3UEo1ZU5telE4YUdFb3pJRmNTS2JpR1Q5?=
+ =?utf-8?B?c3V2bHU1dXhEWi8vM1lpSXp1ZVJlZG0zSXZqRFNSZ1dVUjgzQW9mRGFZL0ZI?=
+ =?utf-8?Q?PAOvhCJ0udNn9DsuuFqBy5n8C?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12a8db5e-4576-47d3-13fd-08dab7895bfe
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 19:36:21.1251
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: muxL0R50gTt8hjgKiRuCohlMQD/9j85CqQv44f3ojJCfoUVrZbZ+sTiNdLsV7XM+
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7067
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,84 +137,213 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022, Paolo Bonzini wrote:
-> On 10/26/22 01:07, Sean Christopherson wrote:
-> > > >     - to stop anything else in the system that consumes KVM memslots, e.g. KVM GT
-> > > 
-> > > Is this true if you only look at the KVM_GET_DIRTY_LOG case and consider it
-> > > a guest bug to access the memory (i.e. ignore the strange read-only changes
-> > > which only happen at boot, and which I agree are QEMU-specific)?
-> > 
-> > Yes?  I don't know exactly what "the KVM_GET_DIRTY_LOG case" is.
-> 
-> It is not possible to atomically read the dirty bitmap and delete a memslot.
-> When you delete a memslot, the bitmap is gone.  In this case however memory
-> accesses to the deleted memslot are a guest bug, so stopping KVM-GT would
-> not be necessary.
+Hi Reinette,
 
-If accesses to the deleted memslot are a guest bug, why do you care about pausing
-vCPUs?  I don't mean to be beligerent, I'm genuinely confused.
+On 10/25/22 18:47, Reinette Chatre wrote:
+> Hi Babu,
+>
+> On 10/17/2022 3:26 PM, Babu Moger wrote:
+>> The current event configuration can be viewed by the user by reading
+>> the configuration file /sys/fs/resctrl/info/L3_MON/mbm_total_config.
+>> The event configuration settings are domain specific and will affect all
+>> the CPUs in the domain.
+>>
+>> Following are the types of events supported:
+>> ====  ===========================================================
+>> Bits   Description
+>> ====  ===========================================================
+>> 6      Dirty Victims from the QOS domain to all types of memory
+>> 5      Reads to slow memory in the non-local NUMA domain
+>> 4      Reads to slow memory in the local NUMA domain
+>> 3      Non-temporal writes to non-local NUMA domain
+>> 2      Non-temporal writes to local NUMA domain
+>> 1      Reads to memory in the non-local NUMA domain
+>> 0      Reads to memory in the local NUMA domain
+>> ====  ===========================================================
+>>
+>> By default, the mbm_total_bytes configuration is set to 0x7f to count
+>> all the event types.
+>>
+>> For example:
+>>     $cat /sys/fs/resctrl/info/L3_MON/mbm_total_config
+>>     0=0x7f;1=0x7f;2=0x7f;3=0x7f
+>>
+>>     In this case, the event mbm_total_bytes is currently configured
+>>     with 0x7f on domains 0 to 3.
+>>
+>> Signed-off-by: Babu Moger <babu.moger@amd.com>
+>> ---
+>>  arch/x86/kernel/cpu/resctrl/core.c     |    3 +
+>>  arch/x86/kernel/cpu/resctrl/internal.h |    2 +
+>>  arch/x86/kernel/cpu/resctrl/rdtgroup.c |   76 ++++++++++++++++++++++++++++++++
+>>  3 files changed, 81 insertions(+)
+>>
+>> diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+>> index 46813b1c50c2..758c5d7553a4 100644
+>> --- a/arch/x86/kernel/cpu/resctrl/core.c
+>> +++ b/arch/x86/kernel/cpu/resctrl/core.c
+>> @@ -826,6 +826,9 @@ static __init bool get_rdt_mon_resources(void)
+>>  	if (!rdt_mon_features)
+>>  		return false;
+>>  
+>> +	if (mon_configurable)
+>> +		mbm_config_rftype_init();
+>> +
+> Please move this to be within rdt_get_mon_l3_config().
+Sure.
+>
+>>  	return !rdt_get_mon_l3_config(r, mon_configurable);
+>>  }
+>>  
+>> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
+>> index b458f768f30c..326a1b582f38 100644
+>> --- a/arch/x86/kernel/cpu/resctrl/internal.h
+>> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
+>> @@ -15,6 +15,7 @@
+>>  #define MSR_IA32_MBA_THRTL_BASE		0xd50
+>>  #define MSR_IA32_MBA_BW_BASE		0xc0000200
+>>  #define MSR_IA32_SMBA_BW_BASE		0xc0000280
+>> +#define MSR_IA32_EVT_CFG_BASE		0xc0000400
+>>  
+>>  #define MSR_IA32_QM_CTR			0x0c8e
+>>  #define MSR_IA32_QM_EVTSEL		0x0c8d
+>> @@ -541,5 +542,6 @@ bool has_busy_rmid(struct rdt_resource *r, struct rdt_domain *d);
+>>  void __check_limbo(struct rdt_domain *d, bool force_free);
+>>  void rdt_domain_reconfigure_cdp(struct rdt_resource *r);
+>>  void __init thread_throttle_mode_init(void);
+>> +void __init mbm_config_rftype_init(void);
+>>  
+>>  #endif /* _ASM_X86_RESCTRL_INTERNAL_H */
+>> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+>> index 5f0ef1bf4c78..0982845594d0 100644
+>> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+>> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+>> @@ -1423,6 +1423,67 @@ static int rdtgroup_size_show(struct kernfs_open_file *of,
+>>  	return ret;
+>>  }
+>>  
+>> +struct mon_config_info {
+>> +	u32 evtid;
+>> +	u32 mon_config;
+>> +};
+>> +
+>> +static void mon_event_config_read(void *info)
+>> +{
+>> +	struct mon_config_info *mon_info = info;
+>> +	u32 h, msr_index;
+>> +
+>> +	switch (mon_info->evtid) {
+>> +	case QOS_L3_MBM_TOTAL_EVENT_ID:
+>> +		msr_index = 0;
+>> +		break;
+>> +	case QOS_L3_MBM_LOCAL_EVENT_ID:
+>> +		msr_index = 1;
+>> +		break;
+>> +	default:
+>> +		/* Not expected to come here */
+>> +		return;
+>> +	}
+>> +
+>> +	rdmsr(MSR_IA32_EVT_CFG_BASE + msr_index, mon_info->mon_config, h);
+>> +}
+>> +
+>> +static void mondata_config_read(struct rdt_domain *d, struct mon_config_info *mon_info)
+>> +{
+>> +	smp_call_function_any(&d->cpu_mask, mon_event_config_read, mon_info, 1);
+>> +}
+>> +
+>> +static int mbm_config_show(struct seq_file *s, struct rdt_resource *r, u32 evtid)
+>> +{
+>> +	struct mon_config_info mon_info = {0};
+>> +	struct rdt_domain *dom;
+>> +	bool sep = false;
+>> +
+>> +	list_for_each_entry(dom, &r->domains, list) {
+> This is done with no protection ... I do not see anything preventing last CPU of
+> a domain going offline around this time taking this domain with it while this code
+> still tries to access its members.
+>
+> I think all of this needs protection with rdtgroup_mutex.
+Yes. I agree. Will change it.
+>
+>> +		if (sep)
+>> +			seq_puts(s, ";");
+>> +
+>> +		mon_info.evtid = evtid;
+>> +		mondata_config_read(dom, &mon_info);
+>> +
+>> +		seq_printf(s, "%d=0x%02x", dom->id, mon_info.mon_config);
+> It does not seem robust to me to use printf field width to manage the data
+> returned from hardware. At this time bits 0 - 6 are supported by hardware ...
+> what happens if hardware starts using bit 7 for something? 
+> It seems to me that the mask introduced later needs to be pulled here to
+> ensure that only the valid bits are handled.
+Ok. Sure.
+>
+>> +		sep = true;
+>> +	}
+>> +	seq_puts(s, "\n");
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int mbm_total_config_show(struct kernfs_open_file *of,
+>> +				 struct seq_file *seq, void *v)
+>> +{
+>> +	struct rdt_resource *r = of->kn->parent->priv;
+>> +
+>> +	mbm_config_show(seq, r, QOS_L3_MBM_TOTAL_EVENT_ID);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>  /* rdtgroup information files for one cache resource. */
+>>  static struct rftype res_common_files[] = {
+>>  	{
+>> @@ -1521,6 +1582,12 @@ static struct rftype res_common_files[] = {
+>>  		.seq_show	= max_threshold_occ_show,
+>>  		.fflags		= RF_MON_INFO | RFTYPE_RES_CACHE,
+>>  	},
+>> +	{
+>> +		.name		= "mbm_total_config",
+>> +		.mode		= 0644,
+>> +		.kf_ops		= &rdtgroup_kf_single_ops,
+>> +		.seq_show	= mbm_total_config_show,
+>> +	},
+> Please only make mode writable when there is support for it.
 
-> So while I'm being slowly convinced that QEMU should find a way to pause its
-> vCPUs around memslot changes, I'm not sure that pausing everything is needed
-> in general.
-> 
-> > > > And because of the nature of KVM, to support this API on all architectures, KVM
-> > > > needs to make change on all architectures, whereas userspace should be able to
-> > > > implement a generic solution.
-> > > 
-> > > Yes, I agree that this is essentially just a more efficient kill().
-> > > Emanuele, perhaps you can put together a patch to x86/vmexit.c in
-> > > kvm-unit-tests, where CPU0 keeps changing memslots and the other CPUs are in
-> > > a for(;;) busy wait, to measure the various ways to do it?
-> > 
-> > I'm a bit confused.  Is the goal of this to simplify QEMU, dedup VMM code, provide
-> > a more performant solution, something else entirely?
-> 
-> Well, a bit of all of them and perhaps that's the problem.  And while the
-> issues at hand *are* self-inflicted wounds on part of QEMU, it seems to me
-> that the underlying issues are general.
-> 
-> For example, Alex Graf and I looked back at your proposal of a userspace
-> exit for "bad" accesses to memory, wondering if it could help with Hyper-V
-> VTLs too.  To recap, the "higher privileged" code at VTL1 can set up VM-wide
-> restrictions on access to some pages through a hypercall
-> (HvModifyVtlProtectionMask).  After the hypercall, VTL0 would not be able to
-> access those pages.  The hypercall would be handled in userspace and would
-> invoke a KVM_SET_MEMORY_REGION_PERM ioctl to restrict the RWX permissions,
-> and this ioctl would set up a VM-wide permission bitmap that would be used
-> when building page tables.
-> 
-> Using such a bitmap instead of memslots makes it possible to cause userspace
-> vmexits on VTL mapping violations with efficient data structures.  And it
-> would also be possible to use this mechanism around KVM_GET_DIRTY_LOG, to
-> read the KVM dirty bitmap just before removing a memslot.
+Ok.
 
-What exactly is the behavior you're trying to achieve for KVM_GET_DIRTY_LOG => delete?
-If KVM provides KVM_EXIT_MEMORY_FAULT, can you not achieve the desired behavior by
-doing mprotect(PROT_NONE) => KVM_GET_DIRTY_LOG => delete?  If PROT_NONE causes the
-memory to be freed, won't mprotect(PROT_READ) do what you want even without
-KVM_EXIT_MEMORY_FAULT?
+Thanks
 
-> However, external accesses to the regions (ITS, Xen, KVM-GT, non KVM_RUN
-> ioctls) would not be blocked, due to the lack of a way to report the exit.
+Babu
 
-Aren't all of those out of scope?  E.g. in a very hypothetical world where XEN's
-event channel is being used with VTLs, if VTL1 makes the event channel inaccessible,
-that's a guest and/or userspace configuration issue and the guest is hosed no matter
-what KVM does.  Ditto for these case where KVM-GT's buffer is blocked.  I'm guessing
-the ITS is similar?
+>
+>>  	{
+>>  		.name		= "cpus",
+>>  		.mode		= 0644,
+>> @@ -1627,6 +1694,15 @@ void __init thread_throttle_mode_init(void)
+>>  	rft->fflags = RF_CTRL_INFO | RFTYPE_RES_MB;
+>>  }
+>>  
+>> +void __init mbm_config_rftype_init(void)
+>> +{
+>> +	struct rftype *rft;
+>> +
+>> +	rft = rdtgroup_get_rftype_by_name("mbm_total_config");
+>> +	if (rft)
+>> +		rft->fflags = RF_MON_INFO | RFTYPE_RES_CACHE;
+>> +}
+>> +
+>>  /**
+>>   * rdtgroup_kn_mode_restrict - Restrict user access to named resctrl file
+>>   * @r: The resource group with which the file is associated.
+>>
+>>
+>
+> Reinette
 
-> The intersection of these features with VTLs should be very small (sometimes
-> zero since VTLs are x86 only), but the ioctls would be a problem so I'm
-> wondering what your thoughts are on this.
+-- 
+Thanks
+Babu Moger
 
-How do the ioctls() map to VTLs?  I.e. are they considered VTL0, VTL1, out-of-band?
-
-> Also, while the exit API could be the same, it is not clear to me that the
-> permission bitmap would be a good match for entirely "void" memslots used to
-> work around non-atomic memslot changes.  So for now let's leave this aside
-> and only consider the KVM_GET_DIRTY_LOG case.
-
-As above, can't userspace just mprotect() the entire memslot to prevent writes
-between getting the dirty log and deleting the memslot?
