@@ -2,124 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8BB660EABD
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 23:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE9C60EABF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 23:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbiJZVRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 17:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49466 "EHLO
+        id S233099AbiJZVSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 17:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiJZVRe (ORCPT
+        with ESMTP id S229904AbiJZVSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 17:17:34 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2042.outbound.protection.outlook.com [40.107.105.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1EA1213F1;
-        Wed, 26 Oct 2022 14:17:32 -0700 (PDT)
+        Wed, 26 Oct 2022 17:18:16 -0400
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2080.outbound.protection.outlook.com [40.92.103.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE6C10CFBC;
+        Wed, 26 Oct 2022 14:18:15 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n/tIdr8r5pgRqlf+2IrrJMA/g9HXH1EjFgpdORTXHKmMcgKa352m02yZrn7c5LbT2S2hVXVISJutCvaRPl+Ds90IVnHdXSwxrpDxM4nY0qdJ3JZWEUJnGBsgIiIrB7MMDcXjNTeEtASns38ctgv/YwyUmUJ6SCmQM6EiOfL/4yxQ06ipmVnKtMGjQahLrUb8g5566f63okNOa8FdBxc2uTPS59uM/v61WHc5VNfHAHAWayMuiFA5beX1Vp7KDSdarwjA+6aKNJT5K0fPxtErE0Iq1wgEXWMyhhdrwz5LMiMqs2xuMC3PAedw0H0kaVw0XTKqEH/s0aDilM1q0mMsmA==
+ b=KRcj8ls7sCH6GQXTFBZWtLOpDH8IxUJXoPyqvXlr1BqsuEJNv8EUw6XnnhZjMYROVKqzki67FJZIg3r+gWE2UT5qXMryhpDxni2IWGIHavYzWKrbTIE0dqyhjZKFLIxILGVsC2kGeR9Gk+9Nd8eVj1DJDguArw/1YOLAKG0a7he1Z0d4ALuJLfKHnwUhLRMFSlLhkdYeRf+bOvLYmeFK00R+2l1uSjNW+MB1Q90syyFX+5gawQYGRmqjKsVR+rK+2jA9eI6gr82exbkIs6Euhlts3V9XC6LupDLQtwfC9Uk+Kecl3C9D44HNFu3v/fYoEfqOiiKFskM0yFhc55i8eg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qA94CNmBNyt/SwZncdpnb+psbFj0Um7gimfLo5i1oV0=;
- b=SbeQy+uijgm7Mh3GiXnWjd11s3wrq3rmGb3gW7rlDrF8yHAS+nrvjsVDvxXEboAjUUHCCR27hi9FXnRanB8E+1i/FKsB630LqeewELFm4+BybLm7O8OsDlQC9poXMZcGzokPU+4nDoxiN+XZlvWNJeiCv6nEp8vW6R6grPiCDjaZVHMYqI0/rm6duV5kPDttUDRS3iK58iH4o+A4JmHjxMcNtwVCSP015rmrESsEhEAX+1kkCyhbN3nMUCl53lrp+T20XJTlqIXnOgEuhYxqPcDPXdT+lROU09w22Ctnk0sn7Q8w+Y3l2LT/Cis5MvJW1bnV+dwebZhFrJUpOAmWVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ bh=IcpO60ngSJpMUkE2p6hTvbZzYnJFeV01eJ6YL4YQflE=;
+ b=dGyJaXfxLfRzkDq5CEQV2yZPxMibvo2B07XRMZP7eKAgcsyuu+XdbcX3DCqjr/1nM4v3sb0/y+uxjpjrfB4INDUiIhkLUk7I9k4OQ+Q8BuTYiKK34S0onoWpmc7dFCmnDq7mRjbvHrHaqipJFImbV/0QXiLu1BoUxHKoFdk+rAefmExGACDLtcJqJOc3BXPRUgc3r6ZWaBfiB5m1o9L0UdAf5V8TxECx98q36lpvt+0+Rs/ty5EZEvZ4okJEWD6W35J1NbVPCVU6KAe8ngIHPDcn2r9p39uEcZVv0Yq5uuo0LeKu09Ma+RFBu7KZwM2sK1fKhmXDXOaSv9CkK0c95Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qA94CNmBNyt/SwZncdpnb+psbFj0Um7gimfLo5i1oV0=;
- b=nuXSkRf09hYofrM6zmlayMTs4QdkTmmUuGMn2L/oTnpvUXHo3mKxZ5kiSWGqXbozuhsA0/hGth5gRPS5ggOtBfERkX2189iO3Euf8f4gq5EjzjeM6dbp72T9y3IIGRbHChBf9qHHp2iguHYgzGp86YQdW5hS16xPDE9twHHYujFDjWmz2+XPx/YiZbivQwddsbnD7oYRyNW51DNpOj/oGKA5rM+tO28PZOJxzYfnhgVNnkUsAYQ6U2QjxYRYF5InuhRfbTRHJCFAUTod9u8Wo1SH0Esn0Dd3YHHIkm8QllOL06MtwVt+CMcVx9yA6s4ldghcRkMo5GIwsYQMceIMZA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
- by PA4PR03MB8245.eurprd03.prod.outlook.com (2603:10a6:102:26e::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Wed, 26 Oct
- 2022 21:17:29 +0000
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::447d:3157:60b0:ded8]) by DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::447d:3157:60b0:ded8%7]) with mapi id 15.20.5746.028; Wed, 26 Oct 2022
- 21:17:29 +0000
-Message-ID: <8c82d111-7799-3ec9-4354-8c2344c15a6c@seco.com>
-Date:   Wed, 26 Oct 2022 17:17:26 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] rtc: abx80x: Don't warn about oscillator failure after
- PoR
+ bh=IcpO60ngSJpMUkE2p6hTvbZzYnJFeV01eJ6YL4YQflE=;
+ b=HKqTDgiL5iOi6k6Jt5gYclqFr9fjgpgvYFRqDI3fZfeYRgRcr0bh/4EQ5RepyLY38qUTc6zBJ2X4RF72hmgI2ar/wCZChOVEgFlByDsPFNoubkdcBboduBE70t9B9mOv/9kZ29exfy9XwyNC/ijGuE5DMrpirQzpkJL5wHkdvbH9ztzb73C9oa5VtjMlfLA70ksZFecLY0Mh2ArIOT5/H6G+VJA/knEUn18OWBfJghFU1ZozN6tHXMli01AolQAnsllowhmNXNdkfMyNmHZ7VUJGJgw7gSFbAAwF3BiWy4b2urpYnJ6FjBug7tjIpQuMpfD1gGfIdq4v7Ty++YRKAw==
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
+ MA0PR01MB7284.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:38::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5746.28; Wed, 26 Oct 2022 21:18:06 +0000
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::3dc1:f6bc:49e4:b294]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::3dc1:f6bc:49e4:b294%9]) with mapi id 15.20.5746.028; Wed, 26 Oct 2022
+ 21:18:06 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+CC:     "matthew.garrett@nebula.com" <matthew.garrett@nebula.com>,
+        "jk@ozlabs.org" <jk@ozlabs.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>
+Subject: Re: [REGRESSION] Failure to write the NVRAM variables starting from
+ kernel 6.0 on T2 Macs
+Thread-Topic: [REGRESSION] Failure to write the NVRAM variables starting from
+ kernel 6.0 on T2 Macs
+Thread-Index: AQHY4/Chn/t4Wu6acU6x14mE2JkbVq4WOgwAgAr+4AA=
+Date:   Wed, 26 Oct 2022 21:18:06 +0000
+Message-ID: <E48DD0F8-D9C5-4BD2-87A9-CFF0C22D0447@live.com>
+References: <23DC077F-69DF-402C-A940-2E7EEABF2D97@live.com>
+ <CAMj1kXG03-0AdM_ROf2UhH-N2Z52v7ox_emSQw=y5p3sMeTrMA@mail.gmail.com>
+In-Reply-To: <CAMj1kXG03-0AdM_ROf2UhH-N2Z52v7ox_emSQw=y5p3sMeTrMA@mail.gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Sean Anderson <sean.anderson@seco.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221007163712.2193966-1-sean.anderson@seco.com>
- <Y0B2pNv8otKkLs1D@mail.local> <a7c4fdc6-a704-31dd-d596-daa484328024@seco.com>
-In-Reply-To: <a7c4fdc6-a704-31dd-d596-daa484328024@seco.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR18CA0025.namprd18.prod.outlook.com
- (2603:10b6:208:23c::30) To DB7PR03MB4972.eurprd03.prod.outlook.com
- (2603:10a6:10:7d::22)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [l18NDBQ5YC21gsgqo8EIuZXwRVRHnpsK]
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|MA0PR01MB7284:EE_
+x-ms-office365-filtering-correlation-id: 4d605792-8494-41fe-aad9-08dab7979318
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ctUKUg7MSi7sAFKk82cu8P3PxGYSp064ygqp7KcdFYPci6ExBsSxTTLFu3VSt4y6XiJ/sCu2BuXS4jFZKAQB1GLibVJraSSVzI1f5NGPEy+chLMftu9tDJ1RIaAn5J+Yy/D98pvliAzi3PO8EtrxnJKQ8o5+SGFcVKbJ3lTjbQ0+q1O/4GrkfUhZZUia4Z7WUJ+JMBJ2+OQ72uV+gV0zAIQvBY+IvxHUJ736RvYxD6MUCUL1Ip6DA+ah7QJvktLiZlXjK+J0ZFrg4eEbFrbnc+BzuCiAt/mHah/gzWgIG6re1yTNo3s3M1vFnoOouNOAnFkQiNdv8mi/Q2nIvTWHh2n97jeaYGjktUTsjsZtD913+Uhb6sbza8/swlo+Lulqj8rsNqSZ35PlilRgSyIvSiXZD63Qxsb1R+QTTxG5xNEC7W7N163K95BLnOtz9IEq8OOi86bqmlXW4B0vdHTWVgxuPL8NxFaOdxw13pzYw6B9aA/TKp9q0e4nvMAHFYEna7KAmNjJOPt50s8M1OY5QJkyvIOQ0CBR0/DFvcC8PO62FxiVB9kdBDUyi0OoNCNPyDfkb0BF8+bOwQaOvtaG0P2v7yluxCeN9c3DlevYz/D3BKwZ3fPUbtulVxpd7VvhZvNdqmPzsPEdUr+4thlCpKcX/3cT3KuI+cS5/SmPuXcKQxehTOG0E1wQDKsagBzF
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?EBbjmEhSo2QFZzu6OBImx5uXPYnDL4YKcN543dhyScbo2v1WEMmBDg9oeKA9?=
+ =?us-ascii?Q?z+tBeZX2Pw9c9fX63N1Y0/JmLeTubVASBnCI4qBkbPgQmMg8ltj4+0wtagox?=
+ =?us-ascii?Q?IlfJBiVIYQm4X/OuDAPJ5nno/eGVR8R02biC3eB6hJkywpmz/f7MAF0KfTYQ?=
+ =?us-ascii?Q?/0+1pgi3Oyrzj2zS/GIbl4gnWpo+EOsofVyaIueQDQbcni2dRmBQOqBqo8j+?=
+ =?us-ascii?Q?DDr6CaGacC4SmZFrZ6AVAgxnfflw9XGNOy61lh4ZUt6kpQfG17CGFg7cCBNY?=
+ =?us-ascii?Q?nuJZCu/3k+DCEFYsZVNrpQ53Igww+mEyrzXbY1mCqtyGGxKKOo5MSLb7fLq4?=
+ =?us-ascii?Q?DSJkQQtUlPSqdOwTkashGTxs3dxkm5PENhaykiVQOZXoAeMlNbwDHdPa+AxS?=
+ =?us-ascii?Q?Fwx6B1rTRVVUSYsV6bQYeP0B6SyVloh3+6Bner75CeQXOcYWQHL+EvUNbuRd?=
+ =?us-ascii?Q?WMfXX52gyckIBAtUvrKAzwvKaYNMtw+zJNjmA0ZALNTaRcB7xvp4djgdNf21?=
+ =?us-ascii?Q?/Tsze/XsWuij7tEjSkDWLP28rkGN9EfklgX1lZdILYDaBaTDDOcZNpHw7OJo?=
+ =?us-ascii?Q?5U9SgibUfQRC+VFYdRgPRk6J7skD3EjH5QFKwcZ2lAJ82NYg6oA8/ZD+O1j+?=
+ =?us-ascii?Q?J0+J6SqwO29iOBZ6r+Y+x5Ij2E661mLlU6Zc+pB41heruKpb9UivGggxjiyM?=
+ =?us-ascii?Q?FOe8ONbK+e2/V6EO6bFlgjr8qHdZgy1OiHVdtx+Jw74qh1as1Apn92aT/8nv?=
+ =?us-ascii?Q?1SCAFYhVK7K5MTfwMOQTemyE4922kNyCHqo0fLXLCH7puPC4koNzec2iiXLA?=
+ =?us-ascii?Q?Cu9XuqDYEQ+PtXJrcUhcMAcjByILqnio+IKMeBAzDbm5kabIkM1J+7nfUePV?=
+ =?us-ascii?Q?4yBo+SbUQhidTd01gkcbeumIlGmw+nPBMMDMCwHpD2Np9vHG5Ii/3lulSzQN?=
+ =?us-ascii?Q?YvoA8M5yHffWxl3L3aSrn6Xepdf+hUktvLyjt1XtDV9nRsSZ0Fzqkvzr2zk4?=
+ =?us-ascii?Q?Votdtu/UMagg5oehlV8zdA0WmKUAwEufJwqxOXZaqI8nfNWtzCaVwYAo4lOd?=
+ =?us-ascii?Q?1kX2NTTNbTcMU4j+lwbLFShxIyc2LN8uVwKFuMRAObddPqeZkpRko56FMMLX?=
+ =?us-ascii?Q?HIPm8m4w9RSycDO2mKyyH/W7AP780FyqgHLr+stQV58jZVKIANkpP5q0QM6L?=
+ =?us-ascii?Q?3ekLlgQEPotHv58x4ytrJLxu7MslGL1Ko/40kaTTPBogM+Xnx01KfTQfhCaj?=
+ =?us-ascii?Q?CmkOPjzTEa1fGDTHzpgCuW1Sai5QfG8MxWWXX6I+HA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <E10AC3FF92DC0F4292FA7B31F181922C@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB7PR03MB4972:EE_|PA4PR03MB8245:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6bdecda5-dbd9-40c2-2465-08dab7977d42
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EXenD3fhJVeLAnBPXuFDdzTR+jbyE5VkAuERBO1YePq7EXaHj5GPLNXGo09XLMxdXY0+O7r9jl4z9HqL3AXQcsh8bAykg1udCGxj1zGLwWNeRD/b4MQUi13dIUNXG3z6teqN7SWR3P5UFa2bbMxjmJ8fBcsTV8CpOGovotPCf7NqngXiI5AIuJVyCunxOQytsFhxg9n4xY64/goSGzFvEKE+lOXSBJaD61KFOxXIX3yiob+lXRHtu9uC3xcziydqPCvSdvJEuOXDf1vhxQC8q39Mdhv2UZBadzeM2jeEgCWxCEJUc2R76xnLc/C+JVPCXCsYMR5OtmpnP+Gz/eKKEnf5x0oM8UwwMNVZm5kKfg4Tzufxl1E1jTV0VW3IwbCxYNZriNaJTLtg/rq6ATDo2W4wke3OQjsYNh01Yp77l237TmNJ/ORmB8LXpvjKjA7TcmDeV7AMsK2XrtGTkrzAqOoKWyOEqatAYo/XYoBJHpAturFWc+919j5c8uar9XXTlVsqhEYVI7yfWe39itjDpWeeo4USRRvGbZXI/yzIuLxPxOr0yOvYhK7loWs7hTxAIs6djXrzdkcAfOzhQhATSTiHUhD0g74dqoQ3SppXcbL942tYtsGpjlugYCqM4KPs2oQFPrDIbhYl9yAKJp3c6HTbO/Fs9YzeysgE4yepiavASaG5gT54JzyRQ9T7hHg2t/rEF34tQpLWYIpxhvoM89uDgZCyCgcEvQ33HhtiocNMBktpZltZ5gb7Ab5Y0lrGx5SKLqTMOY2oHrxIoHSPv6KMMHhgRgBR2q1D4gbL4aa4dCNXqVAOevzNzqakNyn6YHnYka8X9U09hbNuY3C8ocRWqHagMbe9J9pmXlZQoe/rAgMsv9YZrOzJeYAn1gdU
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(136003)(346002)(366004)(396003)(39850400004)(451199015)(31696002)(53546011)(52116002)(36756003)(316002)(41300700001)(83380400001)(186003)(26005)(6512007)(8936002)(5660300002)(6916009)(2906002)(8676002)(6486002)(4326008)(31686004)(86362001)(38350700002)(6506007)(38100700002)(2616005)(66476007)(44832011)(478600001)(66946007)(66556008)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aUhieEdSZmN1TnpOQTlXQkZ5d2hCVCtjUHpwUE5kSnVzMzh4VkZjSitJWXVE?=
- =?utf-8?B?aGlyQy9veTBoMUJIZW5ic1FqS3pKMC9BajFsYVVOWlljcVNJaWszMDZiQnht?=
- =?utf-8?B?cVdhczlGN0tTVk1IK0F1ZjNSN2VGUmowQ0NTUHJac0xXVkZIblhYYmVtWFNC?=
- =?utf-8?B?WXFteThTRzZUM242T01YQVRkZ3F2TkpPN3FsaVhFY2tCWWd4WVJqUWsycXY3?=
- =?utf-8?B?TENMZFlXU1BvTzJJUUpBTmZTTE1xZThvWmVYbmtEcFNEN04rbVUyUGxaaXUy?=
- =?utf-8?B?dU5YbnhrdXpqMUx5cS9vWVErYXFuMFpqamM5UEJ6SDNidmwzVnM4WmovZFhu?=
- =?utf-8?B?SnNSdGpzd2NTRXFERlZ5cUtuYzFQQTcyNFJrdjFYcTREMXpURFZCaVNRY0VP?=
- =?utf-8?B?c0t1R0lCTjI0M0N6cS9wMTdFWWRYUThpUk5KUVFEQzZqZWVUcEx2UzdjcFAx?=
- =?utf-8?B?WGNzSnV5bmhkZkFsKzA1QkI3dGhoUC9kRE5zdko3ZjNyWlJrRTE1bndMQWhy?=
- =?utf-8?B?OUhvd016dnVpT0p1VGtMUGxXcTRmRzYwanBWSmN2M0t0TndkbldjaHo5c1lM?=
- =?utf-8?B?VVVJQlhQN2FDTE1QalIxU3d2UTZvZTFIUzY1VG13RndwRkdMVU5INDhNMmpn?=
- =?utf-8?B?MFRtb0lDZ0xLZllQUTdJY0h5WExJS1dKWjAvQ3NLVHlFOHU4SHlMa3BJVElh?=
- =?utf-8?B?Y1IwU0FTeExSRDBDNExuTEszR3dicVVDeFVvd0FLUFNWTStJZ2lpNWJZQmYx?=
- =?utf-8?B?VWV4Z3RxMktUaDZTUUkxbTY3RWNxYkQ0ZzNsNXU0S3VnKy9ERTl5aGRhQzZQ?=
- =?utf-8?B?cEgrWkFjUDBsNldqOTFPRzVORlFObW9DOHF0djN1d1pYUTFtSHhkOE5uMXQr?=
- =?utf-8?B?RHQzQ3VDMU92N2lYa3RFWFRad0QwaFRybUNaREwvTWZlNDNsampIbldDdmpt?=
- =?utf-8?B?b3N6dkhXbUt5dU9QZUpIdUJaWEE4cnd1OVA3VGh4RHZZa0tQdEUzRUtuSlJh?=
- =?utf-8?B?WTBFRlhBWExVYU0xZ3djb0ZqQmh1amRCdG40cldiUVFnTFViRU5TVnhpUnhH?=
- =?utf-8?B?T3JSdHVQN29teHRmS1ZRVkpLZHF6dkFkUmVsYVpINTZjMVFlQkRpaDBUdmR3?=
- =?utf-8?B?Uk5NOFYxQzNsVUJickZpYnhwUXZDTm94YXI0UCtSeEJvc3M4VHFzV1NlbFhO?=
- =?utf-8?B?ZUxxQXJ1d3Y0dDE1c2x4ZnpiWmtjV2l1NW55TjdwSjQ3MU9ROEtsNGtTN1k0?=
- =?utf-8?B?akROSU9VL3E0WThaRzk3WWM2TmsrR2lIT3VERGh3T3ZsejZFOE5FVythOU82?=
- =?utf-8?B?Qmc4V3BMSHAyajJJUXlCdnJZRDJQdGkrYmlNMGxaKzJ4V3RWOE5VUkNyNjQy?=
- =?utf-8?B?N29tamk4bms3bmZZbjMwdHBacTBCa04yZWNkcVM1bTg3WWs5Y2NOVkw1Rklu?=
- =?utf-8?B?Mk9NbjBQN1lpZkxQMnZRdXlvdTJMWjFRV1hEUGNVdGRXQ2VqUWVoMnJ5UE9q?=
- =?utf-8?B?OUF1OFBxYnhPeXlncDNpOWl2MXJPbWxVTkYwbGErREZjT0VQdGh0TndqQnA3?=
- =?utf-8?B?cmxwV0JOMFBFQ1ZMWkxWZWdYQUFXMGV0VmtjR0FjamxoU3VwSElXRVQ4eWhG?=
- =?utf-8?B?L09tNnZXc3ZaZzdiWXIxZk1EYW9sVmpuUGkrbVVLQnk3Rmh3ak5pcUFuUi9X?=
- =?utf-8?B?d1hJVTlrNHZCM25tMFB6bGcvc1BqZTh4NCtJMVhLenJ2UXRWSzlxVWZMQ1Ju?=
- =?utf-8?B?bDN5RVJyZXhud0JwK2tBQUpYakNNdGVCZ0Nuend5QTMzL1lOZmVuVzZMN2xK?=
- =?utf-8?B?djh5bEp6MUtROUZBaFc2V2c0c3IwZmg4L212Z2FRNC80TlF5YnpXMTFPMkkr?=
- =?utf-8?B?S1U2YVhuR01oRFdTVDlNK01rOWJ4d0FGQjR5ajZLTHNoYUt6a1lPRHVuRE1P?=
- =?utf-8?B?Z0hmcGFZRTVlOXR4bUQ2NFpMN2UzNmhreUdpbXpDWndlTm9WdTgzcEU2MitT?=
- =?utf-8?B?UUdkQUZad2paS1RNdkdES0hBR2xxK0VGbDMyc1FOYk4ycDNGZ3FmNDBFQmhs?=
- =?utf-8?B?UWlsR0t5VnNHT0JqbGhpNWJNRk5ZaFI2NDJYcWlDTllRa0o3V0lFRnpPYVlV?=
- =?utf-8?B?dm9LTis3QUtVYzBKSmNEUU1ielFNRHpRRGFKSmptaHNIRzJ5TDZLcDFuOEpu?=
- =?utf-8?B?VWc9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6bdecda5-dbd9-40c2-2465-08dab7977d42
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 21:17:29.7340
+X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4d605792-8494-41fe-aad9-08dab7979318
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2022 21:18:06.1846
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M/w/dQL08hj7plZTHcRN7ncavQD0fRADB1Od2Oahw0eb77H3q8Xh9nUcD43ImkllgWvQCr7lRgQXP+loxOwypw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR03MB8245
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA0PR01MB7284
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -127,118 +112,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexandre,
+Hi Ard
 
-On 10/7/22 15:05, Sean Anderson wrote:
-> 
-> 
-> On 10/7/22 2:57 PM, Alexandre Belloni wrote:
->> Hi,
->> 
->> On 07/10/2022 12:37:12-0400, Sean Anderson wrote:
->>> According to the datasheet, the "oscillator failure" bit is set
->>> 
->>> > ...on a power on reset, when both the system and battery voltages have
->>> > dropped below acceptable levels. It is also set if an Oscillator Failure
->>> > occurs....
->>> 
->>> From testing, this bit is also set if a software reset is initiated.
->>> 
->>> This bit has a confusing name; it really tells us whether the time data
->>> is valid. We clear it when writing the time. If it is still set, that
->>> means there is a persistent issue (such as an oscillator failure),
->>> instead of a transient one (such as power loss).
->>> 
->>> Because there are several other reasons which might cause this bit
->>> to be set (including booting for the first time or a battery failure),
->>> do not warn about oscillator failures willy-nilly. This may cause system
->>> integrators to waste time looking into the wrong line of investigation.
->>> 
->>> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
->>> ---
->>> 
->>>  drivers/rtc/rtc-abx80x.c | 17 ++++++++++++++++-
->>>  1 file changed, 16 insertions(+), 1 deletion(-)
->>> 
->>> diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
->>> index 9b0138d07232..1eb752e4e39d 100644
->>> --- a/drivers/rtc/rtc-abx80x.c
->>> +++ b/drivers/rtc/rtc-abx80x.c
->>> @@ -115,6 +115,7 @@ struct abx80x_priv {
->>>  	struct rtc_device *rtc;
->>>  	struct i2c_client *client;
->>>  	struct watchdog_device wdog;
->>> +	bool wrote_time;
->>>  };
->>>  
->>>  static int abx80x_write_config_key(struct i2c_client *client, u8 key)
->>> @@ -167,6 +168,7 @@ static int abx80x_enable_trickle_charger(struct i2c_client *client,
->>>  static int abx80x_rtc_read_time(struct device *dev, struct rtc_time *tm)
->>>  {
->>>  	struct i2c_client *client = to_i2c_client(dev);
->>> +	struct abx80x_priv *priv = i2c_get_clientdata(client);
->>>  	unsigned char buf[8];
->>>  	int err, flags, rc_mode = 0;
->>>  
->>> @@ -181,7 +183,18 @@ static int abx80x_rtc_read_time(struct device *dev, struct rtc_time *tm)
->>>  			return flags;
->>>  
->>>  		if (flags & ABX8XX_OSS_OF) {
->>> -			dev_err(dev, "Oscillator failure, data is invalid.\n");
->> 
->> Simply remove the line.
-> 
-> I think it's important to warn the user if the oscillator actually fails
-> so they can e.g. replace the crystal. Additionally, this can help debug
-> failed batteries, since you will see "Time data invalid" in the boot log.
+Just a friendly reminder to get updates on the patch you asked me to test, =
+as it seems to fix my issue.
 
-Have you considered my reply?
+> Thanks for the report. I did identify an issue in some refactoring
+> work of the efivars layer that went into 6.0
+>=20
+> Can you please check whether the change below fixes the issue for you?
+>=20
+> diff --git a/drivers/firmware/efi/vars.c b/drivers/firmware/efi/vars.c
+> index dd74d2ad3184..35edba93cf14 100644
+> --- a/drivers/firmware/efi/vars.c
+> +++ b/drivers/firmware/efi/vars.c
+> @@ -209,7 +209,7 @@ efivar_set_variable_blocking(efi_char16_t *name,
+> efi_guid_t *vendor,
+>        if (data_size > 0) {
+>                status =3D check_var_size(attr, data_size +
+>                                              ucs2_strsize(name, 1024));
+> -               if (status !=3D EFI_SUCCESS)
+> +               if (status !=3D EFI_SUCCESS && status !=3D EFI_UNSUPPORTE=
+D)
+>                        return status;
+>        }
+>        return __efivars->ops->set_variable(name, vendor, attr,
+> data_size, data);
+> @@ -242,7 +242,7 @@ efi_status_t
+> efivar_set_variable_locked(efi_char16_t *name, efi_guid_t *vendor,
+>        if (data_size > 0) {
+>                status =3D check_var_size_nonblocking(attr, data_size +
+>=20
+> ucs2_strsize(name, 1024));
+> -               if (status !=3D EFI_SUCCESS)
+> +               if (status !=3D EFI_SUCCESS && status !=3D EFI_UNSUPPORTE=
+D)
+>                        return status;
+>        }
+>        return setvar(name, vendor, attr, data_size, data);
 
-I'd also like to note that 
-
-drivers/rtc/rtc-ds1672.c
-drivers/rtc/rtc-pcf*.c
-drivers/rtc/rtc-rs5c*.c
-drivers/rtc/rtc-sc27xx.c
-
-all produce some kind of message if they detect a power loss or oscillator failure.
-
---Sean
-
-
->>> +			/*
->>> +			 * The OF bit can be set either because of a reset
->>> +			 * (PoR/Software reset) or because of an oscillator
->>> +			 * failure. Effectively, it indicates that the stored
->>> +			 * time is invalid. When we write the time, we clear
->>> +			 * this bit. If it stays set, then this indicates an
->>> +			 * oscillator failure.
->>> +			 */
->>> +			if (priv->wrote_time)
->>> +				dev_err(dev, "Oscillator failure\n");
->>> +			else
->>> +				dev_info(dev, "Time data invalid\n");
->>>  			return -EINVAL;
->>>  		}
->>>  	}
->>> @@ -207,6 +220,7 @@ static int abx80x_rtc_read_time(struct device *dev, struct rtc_time *tm)
->>>  static int abx80x_rtc_set_time(struct device *dev, struct rtc_time *tm)
->>>  {
->>>  	struct i2c_client *client = to_i2c_client(dev);
->>> +	struct abx80x_priv *priv = i2c_get_clientdata(client);
->>>  	unsigned char buf[8];
->>>  	int err, flags;
->>>  
->>> @@ -240,6 +254,7 @@ static int abx80x_rtc_set_time(struct device *dev, struct rtc_time *tm)
->>>  		dev_err(&client->dev, "Unable to write oscillator status register\n");
->>>  		return err;
->>>  	}
->>> +	priv->wrote_time = true;
->>>  
->>>  	return 0;
->>>  }
->>> -- 
->>> 2.35.1.1320.gc452695387.dirty
->>> 
->> 
-
+Regards
+Aditya=
