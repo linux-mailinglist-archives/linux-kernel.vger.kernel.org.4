@@ -2,80 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFFBC60E3C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 660A460E3CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234212AbiJZOwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40562 "EHLO
+        id S234391AbiJZOyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 10:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234196AbiJZOwM (ORCPT
+        with ESMTP id S230522AbiJZOx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:52:12 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BD1BBF25
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:52:11 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id x26so771262qki.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:52:11 -0700 (PDT)
+        Wed, 26 Oct 2022 10:53:58 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55B9BBF25;
+        Wed, 26 Oct 2022 07:53:57 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-13bd2aea61bso9546777fac.0;
+        Wed, 26 Oct 2022 07:53:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XFsg3VaRlU5pxW1lEeoGciN3HKmsr7ycQpb1StDHLVw=;
-        b=MzkwyRDaO5uwuyV/+Bp4E+fFxXDr4H7nfO6+Ud+q4PAz7gED00dODWJLXSB9bRUwse
-         oYB/seLhzgYTA5/wyVjpPRTESprDJbZjPTO8ku75xXfW9nWe7keVEmNDGbWLawoGLryd
-         VzpB1NCGlEu/gR7OO1A3q30qqFY8rg72mTIA7pNVUaUr+lUUK/UlZcpusg3gWXGcXziP
-         LSWZJFjQdILda4SkKdrF/90vwuTYoZUoScqGMTZu9RXdxA2ZPlYzR2CK4k8/tMpoAY4q
-         9BajPohCBtDejb1fU8E3DD48mTrxF2ad0vHHVnxclgsMf4Q/SUaY4nNEZ5epceO6Dks9
-         1W3A==
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Nk9mWz0Lc07+mKRswe0gqSMa42Dcin935f+9F0ZCrw=;
+        b=YZGfdyr+VFY30gxUawfKWb5y493oI5OXeBa4RJNoYSgcl2BPynKtklJpO10bSnOHZ1
+         QYSbDfk+SLuZRRZEC2Ts7zvEyV/pTqA9t0X3SR8A2+lUr0tVpE91BMNHH9U63cyPH9JW
+         Fkme6yjeSg9GC4Yi3fcJy2MM7Y+PIz9xFghZcI8LfWEt6KeK5DgXoxcbYCInMZPUQdfq
+         tjKlQTSo1h7CotoYzfWaySISJZm0oXgXdlqiZxOssnlLEe135vzgW6e6y76HE/D45jH3
+         qJ901z3VTP7im/oq/XdGja9NeMCub9C78itvQvIN5rgEslZFwIueTATQIto1537CjymO
+         hvlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XFsg3VaRlU5pxW1lEeoGciN3HKmsr7ycQpb1StDHLVw=;
-        b=xxRTJEKUkzQ3BzJQ79UqrqILoqBx916lH2TsahXcUA+0wrE2dO4gii4lKeKqBpnM8A
-         n0B9Lw+0QgDnUSzUhQc8Luce5T01gyq9EOLoI+o1ZtSVtVHwIw7YGI0i6dMaALKJJmCV
-         3Xs2OCOjVF7jnZzGRFk4kWGtvQZJUGTLbvtYYipJEze1vSjYBrx5/jzRZzGYwqnhgR9K
-         W4vdhm00L6tLixoaJFzLo23DdhdSTcq9GTikVof7GoNrnm/7dqBYSI+hHgvocNLeXD98
-         vm4YDlz6C6TFqLiXTWhgLnzfnUQk600R4RXwg0rsmHHMRXfK+xyOXD1CfCHhbzOiXIsa
-         NyKA==
-X-Gm-Message-State: ACrzQf3S4yAojINDRAQAmoP09aTok+kOLOYXFkHx1MEla57IMHW4eNE+
-        0c4kuI1qXeiOmVEwl4wVjcyWQEt1KiC1/w==
-X-Google-Smtp-Source: AMsMyM43VlfW1crv7c4yz+ryVkPmd6YzMvdZxoS70WyqIwWL8Ks7MzDBd2DCfQtH33HOzeOZ/FPsmg==
-X-Received: by 2002:a05:620a:4081:b0:6ee:80ab:25b6 with SMTP id f1-20020a05620a408100b006ee80ab25b6mr31494872qko.517.1666795930463;
-        Wed, 26 Oct 2022 07:52:10 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id w25-20020a05622a191900b0035bafecff78sm638447qtc.74.2022.10.26.07.52.08
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0Nk9mWz0Lc07+mKRswe0gqSMa42Dcin935f+9F0ZCrw=;
+        b=L3mGNS354g6j7re4EfBQ87bOA5TGD2PHwcgGcq+4StDL3HkLvtjol+NgCw5t++ByAS
+         Msc+pS9vQF8phKtE/bxLC1fK4QxVDaJzE87guCNN3mOh93VG7umG5uujiWarUFl8vTRe
+         Tq51puwwyBoSaeJFJ/PjJgodBff/ob3BxV5+RzTg3VXyqLDtFYXpauDI/I5ZPYwk3K12
+         HPyWZfQ2siX/4cJu9lKhVeuvZDaGocZOoWYNzGJWAK3K3yzWixK3NH9s3s89irUZ5oaX
+         RM+W+augavGh54gXuDxEwpx6z0tRIpMy9NB/NcLWTvNbsUUnQlqcR54zOvhH4ScWHZ9y
+         YN1Q==
+X-Gm-Message-State: ACrzQf3kgOB85yj7mA5++M3o8O4qpCFZ/pFHx9AJLH0WcGoVbO63QiE+
+        Hxq/oC9UsKuRZKw7yx9+IbU=
+X-Google-Smtp-Source: AMsMyM4vDWuLjuvsrFnCW6vUX3lLIR1t9k6ZkMtbDYa/on8aTVs0k3wShNBfsVpYDpKDVPUk2XRPGQ==
+X-Received: by 2002:a05:6870:312a:b0:132:9c83:353b with SMTP id v42-20020a056870312a00b001329c83353bmr2314047oaa.65.1666796037111;
+        Wed, 26 Oct 2022 07:53:57 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d22-20020a4ad356000000b004805e9e9f3dsm2246828oos.1.2022.10.26.07.53.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 07:52:09 -0700 (PDT)
-Message-ID: <94b3dda4-5674-8166-f3aa-f3d943e44581@linaro.org>
-Date:   Wed, 26 Oct 2022 10:52:07 -0400
+        Wed, 26 Oct 2022 07:53:56 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ef7858ae-0236-0f04-ba5a-7302ecb6162e@roeck-us.net>
+Date:   Wed, 26 Oct 2022 07:53:54 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 3/4] ASoC: dt-bindings: rockchip: i2s-tdm: Add RK3588
- compatible
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 1/2] drivers: rtc: add max313xx series rtc driver
 Content-Language: en-US
-To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-rockchip@lists.infradead.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20221025124132.399729-1-frattaroli.nicolas@gmail.com>
- <20221025124132.399729-4-frattaroli.nicolas@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221025124132.399729-4-frattaroli.nicolas@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, jdelvare@suse.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+References: <20221026131124.289-1-Ibrahim.Tilki@analog.com>
+ <20221026131124.289-2-Ibrahim.Tilki@analog.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20221026131124.289-2-Ibrahim.Tilki@analog.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,14 +82,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/10/2022 08:41, Nicolas Frattaroli wrote:
-> This adds the compatible string for the RK3588 SoC.
+On 10/26/22 06:11, Ibrahim Tilki wrote:
+> Adding support for Analog Devices MAX313XX series RTCs.
 > 
-> Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
 
+Nit below, otherwise for hwmon:
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Best regards,
-Krzysztof
+> ---
+[ ... ]
+> +
+> +	if (max313xx->chip->temp_reg) {
+> +		hwmon = devm_hwmon_device_register_with_info(dev, client->name,
+> +							     max313xx,
+> +							     &max313xx_chip_info,
+> +							     NULL);
+> +		if (IS_ERR(hwmon))
+> +			dev_warn(dev, "cannot register hwmon device: %li\n",
+> +				 PTR_ERR(hwmon));
+
+You could use %pe here and just pass hwmon as parameter.
+
+> +	}
+> +
+> +	return max313xx_trickle_charger_setup(dev);
+> +}
+
 
