@@ -2,98 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F25FD60E02D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 789AC60E051
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233504AbiJZMF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 08:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42658 "EHLO
+        id S233524AbiJZMI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 08:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233629AbiJZMF1 (ORCPT
+        with ESMTP id S233807AbiJZMIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:05:27 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02F532AB4;
-        Wed, 26 Oct 2022 05:05:24 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4My6nM39hRz15M7B;
-        Wed, 26 Oct 2022 20:00:07 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 26 Oct 2022 20:04:59 +0800
-Message-ID: <de950ed1-9ec8-e5e7-146a-91fc78b49c58@huawei.com>
-Date:   Wed, 26 Oct 2022 20:04:59 +0800
+        Wed, 26 Oct 2022 08:08:00 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47498DED13;
+        Wed, 26 Oct 2022 05:07:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=B/Gu8lEakeE0xZHUuCf+CKOgyX/EB7IG70Xl2GMpx+4=; b=tVG/8D65+b6EPoGSurRmyoakPV
+        k/z/kQVzFoO6BOAhXTAiYYKN12ad/IH+vJaD+fvSYYOFW81JmqxoRjYhDEiWPAK57JOK8HlPGn7wG
+        qf0CYIasYqAaMpVTdPUIIRb1kYgLgpkbDzAelOz0d0KvV68XH3hIfLdsnRK65bU1BwL8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1onf9x-000cVd-SM; Wed, 26 Oct 2022 14:05:25 +0200
+Date:   Wed, 26 Oct 2022 14:05:25 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     Sean Anderson <seanga2@gmail.com>, davem@davemloft.net,
+        Rob Herring <robh+dt@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v3 3/5] net: pcs: add new PCS driver for altera
+ TSE PCS
+Message-ID: <Y1kihVfwglzOD2uE@lunn.ch>
+References: <20220901143543.416977-1-maxime.chevallier@bootlin.com>
+ <20220901143543.416977-4-maxime.chevallier@bootlin.com>
+ <68b3dfbf-9bab-2554-254e-bffd280ba97e@gmail.com>
+ <20221026113711.2b740c7a@pc-8.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next] bpf: Fix a typo in comment for DFS algorithm
-Content-Language: en-US
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Xu Kuohai <xukuohai@huaweicloud.com>
-CC:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>
-References: <20221026025941.2621795-1-xukuohai@huaweicloud.com>
- <CAADnVQ+Pe73yjys+fjW1TBPscCmv6K9ur5bDPr2056ejwBBdZg@mail.gmail.com>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <CAADnVQ+Pe73yjys+fjW1TBPscCmv6K9ur5bDPr2056ejwBBdZg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221026113711.2b740c7a@pc-8.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/26/2022 2:32 PM, Alexei Starovoitov wrote:
-> On Tue, Oct 25, 2022 at 7:42 PM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
->>
->> From: Xu Kuohai <xukuohai@huawei.com>
->>
->> There is a typo in comment for DFS algorithm in bpf/verifier.c. The top
->> element should not be popped until all its neighbors have been checked.
->> Fix it.
->>
->> Fixes: 475fb78fbf48 ("bpf: verifier (add branch/goto checks)")
->> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->> ---
->>   kernel/bpf/verifier.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index b83a8d420520..96ba5ea6d1a6 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -10662,7 +10662,7 @@ static int check_return_code(struct bpf_verifier_env *env)
->>    * 3      let S be a stack
->>    * 4      S.push(v)
->>    * 5      while S is not empty
->> - * 6            t <- S.pop()
->> + * 6            t <- S.top()
+> > > +	/* This PCS seems to require a soft reset to re-sync the
+> > > AN logic */
+> > > +	tse_pcs_reset(tse_pcs);  
+> > 
+> > This is kinda strange since c22 phys are supposed to reset the other
+> > registers to default values when BMCR_RESET is written. Good thing
+> > this is a PCS...
 > 
-> Even with this fix the comment is not quite accurate.
-> I wonder whether we should keep it or delete it completely.
+> Indeed. This soft reset will not affect the register configuration, it
+> will only reset all internal state machines.
+> 
+> The datasheet actually recommends performing a reset after any
+> configuration change...
 
-The comment describes the non-recursive DFS algorithm used by the C code.
-Although it does not describe the full details, it helps us to understand
-the code, so I think it should be kept.
+The Marvell PHYs work like this. Many of its registers won't take
+effect until you do a soft reset. I think the thinking behind this is
+that changing many registers is disruptive to the link and slow. It
+takes over a second to perform auto-neg etc. So ideally you want to
+make all your register changes, and then trigger them into operation.
+And a soft reset is this trigger.
 
-> At least please use 'peek' instead of 'top'.
-
-OK.
+    Andrew
