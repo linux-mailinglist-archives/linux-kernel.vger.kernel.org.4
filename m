@@ -2,161 +2,381 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B4560DF0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 12:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 261D060DF0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 12:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233244AbiJZKvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 06:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41966 "EHLO
+        id S233344AbiJZKwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 06:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbiJZKvU (ORCPT
+        with ESMTP id S233287AbiJZKwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 06:51:20 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B6CF24F64A
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 03:51:17 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.32])
-        by gateway (Coremail) with SMTP id _____8Axz7ckEVljtZkCAA--.5178S3;
-        Wed, 26 Oct 2022 18:51:16 +0800 (CST)
-Received: from [10.20.42.32] (unknown [10.20.42.32])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxmFckEVlj8kwFAA--.1514S3;
-        Wed, 26 Oct 2022 18:51:16 +0800 (CST)
-Subject: Re: [PATCH] LoongArch: Fix memsection size
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
-References: <20221026075638.9396-1-lvjianmin@loongson.cn>
- <edb4002c-3325-53b2-de79-ad4033b363f7@xen0n.name>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <8196d0ab-8564-b858-32ba-1768c0c31732@loongson.cn>
-Date:   Wed, 26 Oct 2022 18:51:16 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 26 Oct 2022 06:52:04 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E797AB07;
+        Wed, 26 Oct 2022 03:52:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BDCBA1F8F2;
+        Wed, 26 Oct 2022 10:52:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1666781521; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I/9MxA2nqtLvv/nblRFcqLSboC1NnO6//9e0dIi9iYc=;
+        b=RDCaxEY2acAri4nKcAhwRUXcR2iCcjcCDJ4ZI0i9g+gJHDecJLvtJg84fpnXHBnJSklPEY
+        NNgXaIOiftwsAYaoQIvsTBRYX/TRN5IIM/z2cn2oZWmQGGKAgvUorVEcJ2Hr1MTdh/6gLp
+        2qOwuXsLOWwTtfyrtrDZX7bAS6UYfD0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1666781521;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I/9MxA2nqtLvv/nblRFcqLSboC1NnO6//9e0dIi9iYc=;
+        b=a3dWpX/91tksGkMbHJiSgA49VmOd31hY9VJ8WN/nN8LmWV2gmcj4Nim5QFheIVWCdlV6RU
+        gsKvO5SDUHFIXfCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6B6EF13A77;
+        Wed, 26 Oct 2022 10:52:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id C1neGFERWWNkDgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 26 Oct 2022 10:52:01 +0000
+Message-ID: <521ecc3f-c45a-74bb-9c2b-2d6284589e15@suse.cz>
+Date:   Wed, 26 Oct 2022 12:52:01 +0200
 MIME-Version: 1.0
-In-Reply-To: <edb4002c-3325-53b2-de79-ad4033b363f7@xen0n.name>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: amusing SLUB compaction bug when CC_OPTIMIZE_FOR_SIZE
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxmFckEVlj8kwFAA--.1514S3
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWrWxKFyrCF47ZF48ZFWDurg_yoW5Kry5pF
-        1Ikr1SkrWDArn7Ar40ya15WFyYka1ru3yUGF98A34DCw13WF1vyr42y3ya9F9rXw4xAay2
-        qFZ8Xws7ZayUAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bxAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
-        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42
-        xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
-        GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI4
-        8JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4U
-        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I
-        8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j8yCJUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Vlastimil Babka <vbabka@suse.cz>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Laight <David.Laight@aculab.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        rcu@vger.kernel.org, "Paul E . McKenney" <paulmck@kernel.org>
+References: <ea96c78c-e1dc-1364-e91-51909f82388b@google.com>
+ <YzPgTtFzpKEfwPbK@hyeyoo> <YzRQvoVsnJzsauwb@google.com>
+ <35502bdd-1a78-dea1-6ac3-6ff1bcc073fa@suse.cz>
+ <ff905c1e-5eb3-eaf8-46de-38f189c0b7a5@google.com>
+ <de71b83a-c82c-4785-ef5a-3db4f17bbc8d@suse.cz>
+ <bcecece-f7ce-221d-1674-da3d5ab3fef@google.com> <YzkmErHFyYW3awRn@hyeyoo>
+ <YzsVM8eToHUeTP75@casper.infradead.org>
+ <7dddca4c-bc36-2cf0-de1c-a770bef9e1b7@suse.cz> <Y1fpABCR3/Vs/u0H@hyeyoo>
+ <ad3fae63-984b-3a4e-4bfc-a09db0ad35b0@suse.cz>
+In-Reply-To: <ad3fae63-984b-3a4e-4bfc-a09db0ad35b0@suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/10/26 下午5:21, WANG Xuerui wrote:
-> On 2022/10/26 15:56, Jianmin Lv wrote:
->> On LoongArch, the physical address space ranging from 0 to 0xfffffff is
->> always memory, which is in the low half of the memsection range from 0 to
->> 0x1fffffff with 512M memsection size, and the high half will be a hole 
->> with
->> invalid memory pages.
+On 10/25/22 16:08, Vlastimil Babka wrote:
+> On 10/25/22 15:47, Hyeonggon Yoo wrote:
+>> On Mon, Oct 24, 2022 at 04:35:04PM +0200, Vlastimil Babka wrote:
+>> 
+>> [,,,]
+>> 
+>>> diff --git a/mm/slab.c b/mm/slab.c
+>>> index 59c8e28f7b6a..219beb48588e 100644
+>>> --- a/mm/slab.c
+>>> +++ b/mm/slab.c
+>>> @@ -1370,6 +1370,8 @@ static struct slab *kmem_getpages(struct kmem_cache *cachep, gfp_t flags,
+>>>  
+>>>  	account_slab(slab, cachep->gfporder, cachep, flags);
+>>>  	__folio_set_slab(folio);
+>>> +	/* Make the flag visible before any changes to folio->mapping */
+>>> +	smp_wmb();
+>>>  	/* Record if ALLOC_NO_WATERMARKS was set when allocating the slab */
+>>>  	if (sk_memalloc_socks() && page_is_pfmemalloc(folio_page(folio, 0)))
+>>>  		slab_set_pfmemalloc(slab);
+>>> @@ -1387,9 +1389,11 @@ static void kmem_freepages(struct kmem_cache *cachep, struct slab *slab)
+>>>  
+>>>  	BUG_ON(!folio_test_slab(folio));
+>>>  	__slab_clear_pfmemalloc(slab);
+>>> -	__folio_clear_slab(folio);
+>>>  	page_mapcount_reset(folio_page(folio, 0));
+>>>  	folio->mapping = NULL;
+>>> +	/* Make the mapping reset visible before clearing the flag */
+>>> +	smp_wmb();
+>>> +	__folio_clear_slab(folio);
+>>>  
+>>>  	if (current->reclaim_state)
+>>>  		current->reclaim_state->reclaimed_slab += 1 << order;
+>>> diff --git a/mm/slub.c b/mm/slub.c
+>>> index 157527d7101b..6dc17cb915c5 100644
+>>> --- a/mm/slub.c
+>>> +++ b/mm/slub.c
+>>> @@ -1800,6 +1800,8 @@ static inline struct slab *alloc_slab_page(gfp_t flags, int node,
+>>>  
+>>>  	slab = folio_slab(folio);
+>>>  	__folio_set_slab(folio);
+>>> +	/* Make the flag visible before any changes to folio->mapping */
+>>> +	smp_wmb();
+>>>  	if (page_is_pfmemalloc(folio_page(folio, 0)))
+>>>  		slab_set_pfmemalloc(slab);
+>>>  
+>>> @@ -2008,8 +2010,10 @@ static void __free_slab(struct kmem_cache *s, struct slab *slab)
+>>>  	}
+>>>  
+>>>  	__slab_clear_pfmemalloc(slab);
+>>> -	__folio_clear_slab(folio);
+>>>  	folio->mapping = NULL;
+>>> +	/* Make the mapping reset visible before clearing the flag */
+>>> +	smp_wmb();
+>>> +	__folio_clear_slab(folio);
+>>>  	if (current->reclaim_state)
+>>>  		current->reclaim_state->reclaimed_slab += pages;
+>>>  	unaccount_slab(slab, order, s);
+>>> -- 
+>>> 2.38.0
+>> 
+>> Do we need to try this with memory barriers before frozen refcount lands in?
 > 
-> The description is incorrect. For systems with less than 512MiB of 
-> memory for example, I believe not every address from 0x0 to 0x0fff_ffff 
-> is valid; 
-
-As far as I know, almost all designs use  0x0 to 0x0fff_ffff as memory 
-even with 512M because it's difficult to set cpu to support a 
-combination with memory and non-memory for 0x0 to 0x0fff_ffff.
-
-> and regarding the latter part of the sentence, what you mean 
-> by "invalid memory pages"...
+> There was IIRC an unresolved issue with frozen refcount tripping the page
+> isolation code so I didn't want to be depending on that.
 > 
-If with 512M memsection size, for the memsection from 0 to 0x1fffffff, 
-low half (0 to 0xfffffff) is valid memory, and high half(0x10000000 to 
-0x1fffffff ) is I/O registers (of chipsets and cpu), so high half is not 
-memory, I think it's better to change *with invalid memory pages* to 
-*which is not memory.*
-
->>
->> This situation may cause some issues. For example, the range of 
->> 0x10000000
->> to 0x1fffffff is io registers, which will be considered as valid 
->> memory range
->> since which is in the memsection of range of 0 to 0x1fffffff. During S3
+>> It's quite complicated and IIUC there is a still theoretical race:
+>> 
+>> At isolate_movable_page:        At slab alloc:                          At slab free:
+>>                                 folio = alloc_pages(flags, order)
+>> 
+>> folio_try_get()
+>> folio_test_slab() == false
+>>                                 __folio_set_slab(folio)
+>>                                 smp_wmb()
+>> 
+>>                                                                         call_rcu(&slab->rcu_head, rcu_free_slab);
+>> 
+>> 
+>> smp_rmb()
+>> __folio_test_movable() == true
+>> 
+>>                                                                         folio->mapping = NULL;
+>>                                                                         smp_wmb()
+>>                                                                         __folio_clear_slab(folio);
+>> smp_rmb()
+>> folio_test_slab() == false
+>> 
+>> folio_trylock()
 > 
-> ... turns out to be totally valid, only of the I/O kind. (This might be 
-> a case of Chinglish that is actually conveying the incorrect meaning to 
-> unaware readers.)
+> There's also between above and below:
 > 
-
-The whole range of the 512M memsection will be totally valid by 
-pfn_valid(), and let me try reduce the example description. :)
-
-
->> sleep and resume, these io registers will be saved and restored as 
->> valid memory
->> page (pfn_valid() of common version considers that all pages in a 
->> memsection
->> are valid), which will cause exception, especially when restoring 
->> during resume.
->>
->> We can use 256M size for memsection of LoongArch, or use the way as 
->> ARM64 to
->> walk through all memory memblock to check if a mem pfn is valid which 
->> maybe
->> lower performance. For simplicity, this patch just use the former way.
+> if (!PageMovable(page) || PageIsolated(page))
+> 	goto out_no_isolated;
 > 
-> And the rest of the commit message is, unfortunately, a bit too verbose 
-> and hard to understand in general. I have to look at the actual change 
-> (luckily, a one-liner in this case) to confirm my understanding.
+> mops = page_movable_ops(page);
 > 
-> I think your intent is just to *avoid stepping into IO memory region 
-> during suspend/resume by reducing the section size order by one*. 
-
-Yes.
-
-
-> Try reducing the verbosity of the commit message in v2?
-
-Ok, let me try. :)
-
-> I can't proofread and edit every commit due to limited time, so you have to practice and 
-> improve your writing skills after all. I'll review that piece of text 
-> afterwards. :)
+> If we put another smp_rmb() before the PageMovable test, could that have
+> helped? It would assure we observe the folio->mapping = NULL; from the "slab
+> free" side?
 > 
-Ok, thanks.
+> But yeah, it's getting ridiculous. Maybe there's a simpler way to check two
+> bits in two different bytes atomically. Or maybe it's just an impossible
+> task, I feel I just dunno computers at this point.
 
->>
->> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
->>
->> diff --git a/arch/loongarch/include/asm/sparsemem.h 
->> b/arch/loongarch/include/asm/sparsemem.h
->> index 3d18cdf1b069..05903b40a625 100644
->> --- a/arch/loongarch/include/asm/sparsemem.h
->> +++ b/arch/loongarch/include/asm/sparsemem.h
->> @@ -8,7 +8,7 @@
->>    * SECTION_SIZE_BITS        2^N: how big each section will be
->>    * MAX_PHYSMEM_BITS        2^N: how much memory we can have in that 
->> space
->>    */
->> -#define SECTION_SIZE_BITS    29 /* 2^29 = Largest Huge Page Size */
->> +#define SECTION_SIZE_BITS    28
->>   #define MAX_PHYSMEM_BITS    48
->>   #endif /* CONFIG_SPARSEMEM */
-> 
-> The change is trivial indeed but I'm not immediately giving the R-b.
-> 
+After more thought, I think I just made a mistake by doing two
+folio_test_slab() tests around a single __folio_test_movable(). What I was
+supposed to do was two __folio_test_movable() tests around a single
+folio_test_slab()... I hope. That should take care of your scenario, or do
+you see another one? Thanks.
+
+----8----
+From 5ca1c10f6411d73ad579b58d4fa10326bf77cf0a Mon Sep 17 00:00:00 2001
+From: Matthew Wilcox <willy@infradead.org>
+Date: Mon, 24 Oct 2022 16:11:27 +0200
+Subject: [PATCH] mm/migrate: make isolate_movable_page() skip slab pages
+
+In the next commit we want to rearrange struct slab fields to allow a
+larger rcu_head. Afterwards, the page->mapping field will overlap
+with SLUB's "struct list_head slab_list", where the value of prev
+pointer can become LIST_POISON2, which is 0x122 + POISON_POINTER_DELTA.
+Unfortunately the bit 1 being set can confuse PageMovable() to be a
+false positive and cause a GPF as reported by lkp [1].
+
+I think the real problem here is that isolate_movable_page() is
+insufficiently paranoid.  Looking at the gyrations that GUP and the
+page cache do to convince themselves that the page they got really is
+the page they wanted, there are a few missing pieces (eg checking that
+you actually got a refcount on _this_ page and not some random other
+page you were temporarily part of a compound page with).
+
+This patch does three things:
+
+ - Turns one of the comments into English.  There are some others
+   which I'm still scratching my head over.
+ - Uses a folio to help distinguish which operations are being done
+   to the head vs the specific page (this is somewhat an abuse of the
+   folio concept, but it's acceptable)
+ - Add the aforementioned check that we're actually operating on the
+   page that we think we want to be.
+ - Add a check that the folio isn't secretly a slab.
+
+We could put the slab check in PageMapping and call it after taking
+the folio lock, but that seems pointless.  It's the acquisition of
+the refcount which stabilises the slab flag, not holding the lock.
+
+[ vbabka@suse.cz: add memory barriers to SLAB and SLUB's page allocation
+  and freeing, and their counterparts to isolate_movable_page(), to make
+  the checks for folio_test_slab() and __folio_test_movable() SMP safe ]
+
+[1] https://lore.kernel.org/all/208c1757-5edd-fd42-67d4-1940cc43b50f@intel.com/
+
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+---
+ mm/migrate.c | 40 ++++++++++++++++++++++++++++------------
+ mm/slab.c    |  6 +++++-
+ mm/slub.c    |  6 +++++-
+ 3 files changed, 38 insertions(+), 14 deletions(-)
+
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 1379e1912772..f0f58e42c1d4 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -60,6 +60,7 @@
+ 
+ int isolate_movable_page(struct page *page, isolate_mode_t mode)
+ {
++	struct folio *folio = page_folio(page);
+ 	const struct movable_operations *mops;
+ 
+ 	/*
+@@ -71,16 +72,31 @@ int isolate_movable_page(struct page *page, isolate_mode_t mode)
+ 	 * the put_page() at the end of this block will take care of
+ 	 * release this page, thus avoiding a nasty leakage.
+ 	 */
+-	if (unlikely(!get_page_unless_zero(page)))
++	if (unlikely(!folio_try_get(folio)))
+ 		goto out;
+ 
++	/* Recheck the page is still part of the folio we just got */
++	if (unlikely(page_folio(page) != folio))
++		goto out_put;
++
+ 	/*
+-	 * Check PageMovable before holding a PG_lock because page's owner
+-	 * assumes anybody doesn't touch PG_lock of newly allocated page
+-	 * so unconditionally grabbing the lock ruins page's owner side.
++	 * Check movable flag before taking the folio lock because
++	 * we use non-atomic bitops on newly allocated page flags so
++	 * unconditionally grabbing the lock ruins page's owner side.
++	 * Make sure we don't have a slab folio here as its usage of the
++	 * mapping field can cause a false positive movable flag.
+ 	 */
+-	if (unlikely(!__PageMovable(page)))
+-		goto out_putpage;
++	if (unlikely(!__folio_test_movable(folio)))
++		goto out_put;
++	/* Pairs with smp_wmb() in slab allocation, e.g. SLUB's alloc_slab_page() */
++	smp_rmb();
++	if (unlikely(folio_test_slab(folio)))
++		goto out_put;
++	/* Pairs with smp_wmb() in slab freeing, e.g. SLUB's __free_slab() */
++	smp_rmb();
++	if (unlikely(!__folio_test_movable(folio)))
++		goto out_put;
++
+ 	/*
+ 	 * As movable pages are not isolated from LRU lists, concurrent
+ 	 * compaction threads can race against page migration functions
+@@ -92,8 +108,8 @@ int isolate_movable_page(struct page *page, isolate_mode_t mode)
+ 	 * lets be sure we have the page lock
+ 	 * before proceeding with the movable page isolation steps.
+ 	 */
+-	if (unlikely(!trylock_page(page)))
+-		goto out_putpage;
++	if (unlikely(!folio_trylock(folio)))
++		goto out_put;
+ 
+ 	if (!PageMovable(page) || PageIsolated(page))
+ 		goto out_no_isolated;
+@@ -107,14 +123,14 @@ int isolate_movable_page(struct page *page, isolate_mode_t mode)
+ 	/* Driver shouldn't use PG_isolated bit of page->flags */
+ 	WARN_ON_ONCE(PageIsolated(page));
+ 	SetPageIsolated(page);
+-	unlock_page(page);
++	folio_unlock(folio);
+ 
+ 	return 0;
+ 
+ out_no_isolated:
+-	unlock_page(page);
+-out_putpage:
+-	put_page(page);
++	folio_unlock(folio);
++out_put:
++	folio_put(folio);
+ out:
+ 	return -EBUSY;
+ }
+diff --git a/mm/slab.c b/mm/slab.c
+index 59c8e28f7b6a..219beb48588e 100644
+--- a/mm/slab.c
++++ b/mm/slab.c
+@@ -1370,6 +1370,8 @@ static struct slab *kmem_getpages(struct kmem_cache *cachep, gfp_t flags,
+ 
+ 	account_slab(slab, cachep->gfporder, cachep, flags);
+ 	__folio_set_slab(folio);
++	/* Make the flag visible before any changes to folio->mapping */
++	smp_wmb();
+ 	/* Record if ALLOC_NO_WATERMARKS was set when allocating the slab */
+ 	if (sk_memalloc_socks() && page_is_pfmemalloc(folio_page(folio, 0)))
+ 		slab_set_pfmemalloc(slab);
+@@ -1387,9 +1389,11 @@ static void kmem_freepages(struct kmem_cache *cachep, struct slab *slab)
+ 
+ 	BUG_ON(!folio_test_slab(folio));
+ 	__slab_clear_pfmemalloc(slab);
+-	__folio_clear_slab(folio);
+ 	page_mapcount_reset(folio_page(folio, 0));
+ 	folio->mapping = NULL;
++	/* Make the mapping reset visible before clearing the flag */
++	smp_wmb();
++	__folio_clear_slab(folio);
+ 
+ 	if (current->reclaim_state)
+ 		current->reclaim_state->reclaimed_slab += 1 << order;
+diff --git a/mm/slub.c b/mm/slub.c
+index 99ba865afc4a..5e6519d5169c 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -1800,6 +1800,8 @@ static inline struct slab *alloc_slab_page(gfp_t flags, int node,
+ 
+ 	slab = folio_slab(folio);
+ 	__folio_set_slab(folio);
++	/* Make the flag visible before any changes to folio->mapping */
++	smp_wmb();
+ 	if (page_is_pfmemalloc(folio_page(folio, 0)))
+ 		slab_set_pfmemalloc(slab);
+ 
+@@ -2000,8 +2002,10 @@ static void __free_slab(struct kmem_cache *s, struct slab *slab)
+ 	int pages = 1 << order;
+ 
+ 	__slab_clear_pfmemalloc(slab);
+-	__folio_clear_slab(folio);
+ 	folio->mapping = NULL;
++	/* Make the mapping reset visible before clearing the flag */
++	smp_wmb();
++	__folio_clear_slab(folio);
+ 	if (current->reclaim_state)
+ 		current->reclaim_state->reclaimed_slab += pages;
+ 	unaccount_slab(slab, order, s);
+-- 
+2.38.0
+
 
