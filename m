@@ -2,156 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F6A60DAA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 07:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7D960DAAE
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 07:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232958AbiJZFhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 01:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
+        id S232589AbiJZFjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 01:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232954AbiJZFhB (ORCPT
+        with ESMTP id S231649AbiJZFjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 01:37:01 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3949AA367;
-        Tue, 25 Oct 2022 22:37:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666762620; x=1698298620;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=11SS/CZdUJPAXR40E/mqXfwrhgxwSRXMWxOyR2uE4/k=;
-  b=gOww/MH8rPLAbc3EMqAZvTlQYKvEPTGoU3J7Hs7McenDsNfCUbvWTXtO
-   VBvFuQarzMuivAAaLBikAPhI81UPmZ8Ui12iR40X3Ib9f9Z1STuYh5KRv
-   RmqHQ3CsX1yxVDQ+gq/Rkb4c/cYtVjE4dduqvPjirGfxYUB9S/5HfJXZd
-   ExRzexxhe9ElowvmNxz8iwrQLw158+SLDCHK29uzRiYJYl1eFENu5t/z1
-   vxSZBT0/yb1m3iJWDss+9wj9bTTUsJsuoauWgW3cIAZgEo0rpVXdPQtrW
-   hBUJnR0YMe7D6TKrayjd1HB10GqBIX8eiEuadSUZZSmw+K8YHXyjyvP+2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="372074095"
-X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
-   d="scan'208";a="372074095"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 22:36:59 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="609830410"
-X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
-   d="scan'208";a="609830410"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.53.127])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 22:36:53 -0700
-Message-ID: <7db0a98e-36c8-afee-5b0d-16b836ac8de0@intel.com>
-Date:   Wed, 26 Oct 2022 08:36:48 +0300
+        Wed, 26 Oct 2022 01:39:45 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD084C744;
+        Tue, 25 Oct 2022 22:39:37 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 29Q5dMRY019467;
+        Wed, 26 Oct 2022 07:39:22 +0200
+Date:   Wed, 26 Oct 2022 07:39:22 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/nolibc: add 7 tests for memcmp()
+Message-ID: <20221026053922.GA19206@1wt.eu>
+References: <20221021060340.7515-1-w@1wt.eu>
+ <20221021155645.GK5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221021170134.GB8420@1wt.eu>
+ <20221021170738.GM5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221021172026.GC8420@1wt.eu>
+ <20221021180040.GN5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221022112228.GB30596@1wt.eu>
+ <20221024155357.GZ5600@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.0
-Subject: Re: [PATCH v3 6/7] mmc: sdhci_am654: Fix SDHCI_RESET_ALL for CQHCI
-To:     Brian Norris <briannorris@chromium.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        linux-mmc@vger.kernel.org, Al Cooper <alcooperx@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-arm-msm@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Faiz Abbas <faiz_abbas@ti.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-References: <20221024175501.2265400-1-briannorris@chromium.org>
- <20221024105229.v3.6.I35ca9d6220ba48304438b992a76647ca8e5b126f@changeid>
- <5b91c0eb-52aa-8431-c286-81b7feae84ce@intel.com>
- <Y1hY57vkkOhybwE1@google.com>
- <6268199c-78ca-8f55-0377-c14bb0299443@gmail.com>
- <Y1higmSUMLsxvXyq@google.com>
-Content-Language: en-US
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <Y1higmSUMLsxvXyq@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024155357.GZ5600@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/10/22 01:26, Brian Norris wrote:
-> On Tue, Oct 25, 2022 at 02:53:46PM -0700, Florian Fainelli wrote:
->> On 10/25/22 14:45, Brian Norris wrote:
->>> On Tue, Oct 25, 2022 at 04:10:44PM +0300, Adrian Hunter wrote:
->>>> On 24/10/22 20:55, Brian Norris wrote:
->>>>> diff --git a/drivers/mmc/host/sdhci_am654.c b/drivers/mmc/host/sdhci_am654.c
->>>>> index 8f1023480e12..6a282c7a221e 100644
->>>>> --- a/drivers/mmc/host/sdhci_am654.c
->>>>> +++ b/drivers/mmc/host/sdhci_am654.c
->>>
->>>>> @@ -378,7 +379,7 @@ static void sdhci_am654_reset(struct sdhci_host *host, u8 mask)
->>>>>   	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
->>>>>   	struct sdhci_am654_data *sdhci_am654 = sdhci_pltfm_priv(pltfm_host);
->>>>> -	sdhci_reset(host, mask);
->>>>> +	sdhci_and_cqhci_reset(host, mask);
->>>>>   	if (sdhci_am654->quirks & SDHCI_AM654_QUIRK_FORCE_CDTEST) {
->>>>>   		ctrl = sdhci_readb(host, SDHCI_HOST_CONTROL);
->>>>
->>>> What about sdhci_reset in sdhci_am654_ops ?
->>>
->>> Oops, I think you caught a big fallacy in some of my patches: I assumed
->>> there was a single reset() implementation in a given driver (an unwise
->>> assumption, I realize). I see at least sdhci-brcmstb.c also has several
->>> variant ops that call sdhci_reset(), and I should probably convert them
->>> too.
+Hi Paul,
 
-I checked and found only sdhci_am654_ops
-
->>
->> You got it right for sdhci-brcmstb.c because "supports-cqe" which gates the
->> enabling of CQE can only be found with the "brcm,bcm7216-sdhci" compatible
->> which implies using brcmstb_reset().
+On Mon, Oct 24, 2022 at 08:53:57AM -0700, Paul E. McKenney wrote:
+> > Will keep thinking about it and hopefully propose a patch to make the
+> > tests easier to use before we're too far in the 6.1 release.
 > 
-> I don't see any in-tree device trees for these chips (which is OK), and
-> that's not what the Documentation/ says, and AFAICT nothing in the
-> driver is limiting other variants from specifying the "supports-cqe"
-> flag in their (out-of-tree) device tree. The closest thing I see is that
-> an *example* in brcm,sdhci-brcmstb.yaml shows "supports-cqe" only on
-> brcm,bcm7216-sdhci -- but an example is not a binding agreement. Am I
-> missing something?
-
-It was mentioned in the patch from the Fixes tag.
-
+> Another possibility is to have a separate developers' and maintainers'
+> option.  Linus and I do "make whatever" for some value of "whatever"
+> that builds from scratch, doing whatever cleaning that might be required.
+> Developers use targets that are faster but have the possibility of false
+> positives and false negatives.
 > 
-> Now of course, you probably know behind the scenes that there are no
-> other sdhci-brcmstb-relevant controllers that "support cqe", but AFAICT
-> I have no way of knowing that a priori. The driver and bindings give
-> (too much?) flexibility.
+> But maybe you have something better in mind.
 > 
-> Poking around, I think the only other one I might have missed would be
-> gl9763e in sdhci-pci-gli.c. That also calls cqhci_init() but is
-> otherwise relying on the default sdhci_pci_ops. So I'd either have to
+> > Thanks for keeping the conversation flowing, that helps me!
+> 
+> Looking forward to seeing what you come up with!
 
-It uses sdhci_gl9763e_ops not the default sdhci_pci_ops.  It looks OK
-to me.
+I could finally figure what was taking time in the installation process.
+Interestingly, it's "make headers", which is not redone without a "make
+clean" at the kernel level. The "make headers_install" only takes a few
+hundred milliseconds, so issuing a systematic "make clean" in the nolibc
+test dir only takes ~800ms here to perform a full rebuild, which is totally
+acceptable to me.
 
-> change the common sdhci_pci_ops, or else start a new copy/paste/modify
-> 'struct sdhci_ops' for it... This really does start to get messy when
-> poking around on drivers I can't test. As in, it shouldn't be harmful
-> to change most sdhci_reset() to sdhci_and_cqhci_reset() (as long as they
-> aren't using some other CQE implementation), but the more invasive it
-> gets (say, rewriting a bunch of other ops), the easier it is to get
-> something wrong.
+Thus what I've done is to mark the sysroot target as .phony and start it
+with a removal of the current include dir so that we systematically rebuild
+it. Now there's no such risk of running a test against an earlier version
+anymore, and there are no "make clean" to worry about anymore either.
+That looks much better to me!
 
-AFAICS it was just sdhci_am654_ops
+And I could confirm that just issuing:
 
+  $ time make -j8 -C tools/testing/selftests/nolibc run
+
+after reverting Rasmus' fix led me to this pretty quickly:
+
+  ...
+  Kernel: arch/x86/boot/bzImage is ready  (#3)
+  make[1]: Leaving directory '/k'
+  15 memcmp_20_e0 = 64                    [FAIL]
+  16 memcmp_e0_20 = -64                   [FAIL]
+  See all results in /k/tools/testing/selftests/nolibc/run.out
+  make: Leaving directory '/k/tools/testing/selftests/nolibc'
+
+  real    0m14.538s
+  user    0m27.828s
+  sys     0m4.576s
+
+No more false positives nor false negatives anymore. I'm sending you
+the patch separately.
+
+Thanks for the discussion, the solution is way better now!
+Willy
