@@ -2,124 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E0860DC9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D958360DC28
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233145AbiJZH4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 03:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
+        id S233139AbiJZHev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 03:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbiJZH4h (ORCPT
+        with ESMTP id S232489AbiJZHer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 03:56:37 -0400
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C719C2FF;
-        Wed, 26 Oct 2022 00:56:36 -0700 (PDT)
-Received: by mail-qt1-f177.google.com with SMTP id w29so2264168qtv.9;
-        Wed, 26 Oct 2022 00:56:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JZv0EQODj9uEccYLjpbGQ7puG1gOLqeceGxoxO6cEYU=;
-        b=setqzUmYHRSiYre5/T+0kgNI3iXoE9iWKxpsJz875KxymiWnntPWgKRZ9rwbcTNUN+
-         qf142g5K0RV1vCxF4WBeQH/oNaDasDsl5RUxFON5MN+c5zTmk0poD8kz/U2d30Tgfq0j
-         Ev3nPjCQT5vD/sE31WMpPJeREVdXChUVh4WOsXucDRa8scdMIXYf5IPngJxLyMVtTtW0
-         E53lXsrBdo0RJd4Qjxvc6mmAWZk4tLuHENYqn7fzXg0Q4O1m7VUoS6y/haUHlylUjda4
-         bfgyJItFGEWb2IYE+VPvJpeZs1CoqsqjP2TrwhMbg8c0fjaa1zw71lwKLwHzNVvRnpNh
-         67nw==
-X-Gm-Message-State: ACrzQf1n7BL0OKK8asZAE+iCEEENuZg2gKW/yD+FjacK+Ty+pGCAbJ5A
-        cDe+Xk8X6xAEpFwenHvR5j1kUMTUiFXTrA==
-X-Google-Smtp-Source: AMsMyM4j/Gy1QEfODnznT78OG8URXlMN9UDpoy5OilRFBh/GUR2BXUSkR3qbn90gFSPWlac65RnCqQ==
-X-Received: by 2002:ac8:7f8c:0:b0:39c:db49:29cc with SMTP id z12-20020ac87f8c000000b0039cdb4929ccmr35462246qtj.224.1666770995508;
-        Wed, 26 Oct 2022 00:56:35 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id e14-20020ac85dce000000b0039764587192sm2764782qtx.57.2022.10.26.00.56.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 00:56:35 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-35befab86a4so139401637b3.8;
-        Wed, 26 Oct 2022 00:56:35 -0700 (PDT)
-X-Received: by 2002:a81:9c49:0:b0:34a:de:97b8 with SMTP id n9-20020a819c49000000b0034a00de97b8mr37831330ywa.384.1666770994803;
- Wed, 26 Oct 2022 00:56:34 -0700 (PDT)
+        Wed, 26 Oct 2022 03:34:47 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B718DFF3;
+        Wed, 26 Oct 2022 00:34:42 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4My0rF53QRz6T6mt;
+        Wed, 26 Oct 2022 15:32:13 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP4 (Coremail) with SMTP id gCh0CgCntOYO41hjqLzeAA--.4330S4;
+        Wed, 26 Oct 2022 15:34:40 +0800 (CST)
+From:   Ye Bin <yebin@huaweicloud.com>
+To:     axboe@kernel.dk, rostedt@goodmis.org, mhiramat@kernel.org,
+        linux-block@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Ye Bin <yebin10@huawei.com>
+Subject: [PATCH] blktrace:use '__blk_trace_remove' helper in 'blk_trace_remove_queue'
+Date:   Wed, 26 Oct 2022 15:56:31 +0800
+Message-Id: <20221026075631.682100-1-yebin@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20221026014227.162121-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221026014227.162121-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221026014227.162121-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 26 Oct 2022 09:56:22 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVg1sFH1gAqo3yf5-m7edfHFO0VM63n=FmDQHhJqSpHyg@mail.gmail.com>
-Message-ID: <CAMuHMdVg1sFH1gAqo3yf5-m7edfHFO0VM63n=FmDQHhJqSpHyg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] clk: renesas: rzg2l: Don't assume all CPG_MOD
- clocks support PM
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCntOYO41hjqLzeAA--.4330S4
+X-Coremail-Antispam: 1UD129KBjvdXoWrKw1ktFykWry3XF45Xr4ruFg_yoWDJFc_ZF
+        yUW3Wxtr43Cr90qr4fAFsIq3Wqq34jvFyFya45tFW5A3ZrXrn8G3ZxZwsIgrZ09r4kWa4U
+        Jry3t34UGF1YyjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbr8YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_JFC_Wr1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+        AF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
+        IxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WF
+        yUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
+        CTnIWIevJa73UjIFyTuYvjxUOyCJDUUUU
+X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+From: Ye Bin <yebin10@huawei.com>
 
-On Wed, Oct 26, 2022 at 3:42 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> There are cases where not all CPG_MOD clocks should be assumed to support
-> PM. For example on the CRU block there is a particular sequence that needs
-> to be followed to initialize the CSI-2 D-PHY in which individual clocks
-> need to be turned ON/OFF, due to which Runtime PM support wasn't used by
-> the CRU CSI-2 driver.
->
-> This patch adds support to allow indicating if PM is not supported by the
-> CPG_MOD clocks. Two new members no_pm_mod_clks and num_no_pm_mod_clks are
-> added to struct rzg2l_cpg_info so that MOD clocks which do not support PM
-> can be passed by no_pm_mod_clks[] array and when the driver uses Runtime
-> PM support the clk ID is matched against the no_pm_mod_clks[] array to see
-> if the clk is needed to be included as part of Runtime PM.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v1->v2
-> * Dropped DEF_NO_PM() macro
-> * Added genpd member to struct rzg2l_cpg_priv
-> * Added no_pm_mod_clks and num_no_pm_mod_clks members
->   to struct rzg2l_cpg_info
-> * Updated commit message
+After '60a9bb9048f9' and 'dcd1a59c62dc' commit 'blk_trace_remove_queue' is do
+the same job with '__blk_trace_remove', so just call '__blk_trace_remove'.
 
-Thanks for the update!
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ kernel/trace/blktrace.c | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
 
-> --- a/drivers/clk/renesas/rzg2l-cpg.c
-> +++ b/drivers/clk/renesas/rzg2l-cpg.c
+diff --git a/kernel/trace/blktrace.c b/kernel/trace/blktrace.c
+index a995ea1ef849..115ae18e479d 100644
+--- a/kernel/trace/blktrace.c
++++ b/kernel/trace/blktrace.c
+@@ -1609,19 +1609,7 @@ device_initcall(init_blk_tracer);
+ 
+ static int blk_trace_remove_queue(struct request_queue *q)
+ {
+-	struct blk_trace *bt;
+-
+-	bt = rcu_replace_pointer(q->blk_trace, NULL,
+-				 lockdep_is_held(&q->debugfs_mutex));
+-	if (bt == NULL)
+-		return -EINVAL;
+-
+-	blk_trace_stop(bt);
+-
+-	put_probe_ref();
+-	synchronize_rcu();
+-	blk_trace_free(q, bt);
+-	return 0;
++	return __blk_trace_remove(q);
+ }
+ 
+ /*
+-- 
+2.31.1
 
->
->  static int rzg2l_cpg_attach_dev(struct generic_pm_domain *unused, struct device *dev)
-
-Time to rename "unused" to "domain" ;-)
-
->  {
-> +       struct rzg2l_cpg_priv *priv = container_of(unused, struct rzg2l_cpg_priv, genpd);
-
-I can fix that while applying...
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
