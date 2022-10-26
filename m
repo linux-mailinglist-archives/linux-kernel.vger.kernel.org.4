@@ -2,139 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C71760D8EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 03:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E7F60D8ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 03:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbiJZBmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 21:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46962 "EHLO
+        id S232489AbiJZBo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 21:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232489AbiJZBmm (ORCPT
+        with ESMTP id S231628AbiJZBoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 21:42:42 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A91DDA31;
-        Tue, 25 Oct 2022 18:42:41 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id bp11so23424428wrb.9;
-        Tue, 25 Oct 2022 18:42:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A1/Z+bzCI9wjYKSK20rnTwDEGDaX79Rtyi9JzBJPbm0=;
-        b=mAHlfJ9Guh2YsP1komhXJAkwwQmdr7O1L3+uDTme/wyogeFHW9Js1IuCBzYeZ+80y3
-         9eeklVyYaknONCB1JHlK7w+t+tbQisp0coMTJRUD4g4MhAH4DDp8oFLUh3W1HpPgtmSB
-         CNzZNf45haMvswfvWH58TItRXEhSTwNcwhctr80tc6W4tvVbyFCPnJ6oD2rvwC4e2MQg
-         8iN397FY/c1ZcHkxn5QQvKgEDIyiCulSxGiTnjG2tzfoSOF48/83YsuUrtUaNSAmVODd
-         HvVDBMUzVcViuL0xVbLUZGevbn+zTG+mSt2ty7iJo7sEviA86OwPc1tKbYx5praa2ePI
-         nVLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A1/Z+bzCI9wjYKSK20rnTwDEGDaX79Rtyi9JzBJPbm0=;
-        b=sIMbDLrKxi95ei/mlzPp66J1+vRy+Sec2zL1jSGwJlVtmHdkWu6uQC5clqa+OVDV/R
-         Tw1Um5r3Xhyk4U/BqWUwb4j/QE21KdCI4B1ckPNfQzY4KefztzwuXEBQjv7lEPkeNf8Y
-         sL1AQ7pegeOUu0xsvCd4RSMwecz24JfLCBRvFdQSEMv9XZtXidVwtXhPWMG07Mxxas1W
-         eoBrWkHPndR5UtbgvUCo6UYEO7I3yFLYLEQBNMqNGA8kCjZRXa2gSHyd49TB7m9NgmWA
-         6x9V78GCcgjY0whu50Cjbr0orukj+XSPqDoFrB7A0hR+v/3K1pLp01UrUA7skeEeBbQq
-         R2pg==
-X-Gm-Message-State: ACrzQf1agZEqBoqLfxfxlwRgpoSuEf9oamn7ibV98aPBpdTGngg9vSU/
-        eEEEcdzmS+F296L3jqAR8ozXsmOdT4FuMolS
-X-Google-Smtp-Source: AMsMyM4KM8+DoBKREl6JDpQMRv0uaqwGTNvjAJq0TeZE+Bfhr4NRr9VssmKk7aIu7B345f7JkocVzQ==
-X-Received: by 2002:a05:6000:15c8:b0:236:812d:d3e5 with SMTP id y8-20020a05600015c800b00236812dd3e5mr3878070wry.303.1666748560438;
-        Tue, 25 Oct 2022 18:42:40 -0700 (PDT)
-Received: from prasmi.home ([2a00:23c8:2501:c701:1d2a:d2a2:361e:a475])
-        by smtp.gmail.com with ESMTPSA id x12-20020adff0cc000000b00236733f0f98sm3688956wro.107.2022.10.25.18.42.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 18:42:39 -0700 (PDT)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2 2/2] clk: renesas: r9a07g044: Add CRU_SYSCLK and CRU_VCLK to no PM list
-Date:   Wed, 26 Oct 2022 02:42:27 +0100
-Message-Id: <20221026014227.162121-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221026014227.162121-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20221026014227.162121-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Tue, 25 Oct 2022 21:44:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50020DED02
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 18:44:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666748662;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0dBwPisoLvc36FK8QiBJFlUXPREVTjgSq7b7Ap6qvWM=;
+        b=UzVz5/3EPkfVueShUPNHYewdWuefg/202Vk8LG6eKV289t6kujPcneuYrxd6bW2/sPRjqe
+        CyabRZxS8pGqvubRGwTAZSXSYBqF6DasYynbpUL06O3C3EdPqlb7sPpOAotsNZBnaRakq1
+        c2OOINi2BhCTTG+O8fHKoDM4AWqMfHA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-212-gtPx5h9vM1SI6ktIT9DBzA-1; Tue, 25 Oct 2022 21:44:18 -0400
+X-MC-Unique: gtPx5h9vM1SI6ktIT9DBzA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7CFFB1C05EA1;
+        Wed, 26 Oct 2022 01:44:17 +0000 (UTC)
+Received: from [10.22.8.133] (unknown [10.22.8.133])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 223ECC15BAB;
+        Wed, 26 Oct 2022 01:44:16 +0000 (UTC)
+Message-ID: <5d834f7a-dc62-308c-1017-1fb92c0efc62@redhat.com>
+Date:   Tue, 25 Oct 2022 21:44:15 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v3 2/5] locking/rwsem: Limit # of null owner retries for
+ handoff writer
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
+        Hillf Danton <hdanton@sina.com>,
+        Mukesh Ojha <quic_mojha@quicinc.com>,
+        =?UTF-8?B?VGluZzExIFdhbmcg546L5am3?= <wangting11@xiaomi.com>
+References: <20221017211356.333862-1-longman@redhat.com>
+ <20221017211356.333862-3-longman@redhat.com>
+ <Y1aTpYba1Wwly48+@hirez.programming.kicks-ass.net>
+ <980d882c-01b8-2ce1-663f-41a8a337f350@redhat.com>
+ <Y1fG7nQxiLyKIhQ6@hirez.programming.kicks-ass.net>
+ <Y1fNJZ9SALWlmoon@hirez.programming.kicks-ass.net>
+ <d67740dc-d608-4b1a-0889-b9861153fdf3@redhat.com>
+ <Y1hDqerj3MjgmDTT@hirez.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Y1hDqerj3MjgmDTT@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On 10/25/22 16:14, Peter Zijlstra wrote:
+> On Tue, Oct 25, 2022 at 03:55:09PM -0400, Waiman Long wrote:
+>
+>> That is quite a number of changes spread over many different functions. That
+>> is the kind of changes that may make it harder to backport to stable
+>> releases.
+> Yeah; don't care. it's the right thing to do. It also doesn't need to be
+> reverted since it's a sane and good property for lock-ops to have.
 
-CRU_SYSCLK and CRU_VCLK clocks need to be turned ON/OFF in particular
-sequence for the CRU block hence add these clocks to
-r9a07g044_no_pm_mod_clks[] array.
+I am sorry to confuse you. What I am saying is the original patch 2 of 
+the series, not what you have proposed. I am fine about disabling 
+preemption while running in the core rwsem code.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-v1->v2
-* Dropped usage of DEF_NO_PM() macro
-* Added CRU_SYSCLK and CRU_VCLK to no PM list
-* Updated commit message
+As a counter proposal, I will suggest modifying patch 2 to disable 
+preemption for the reader rwsem code as the writer code already have 
+preemption disabled in the most critical parts. Then I add another patch 
+to complete the writer side conversion for symmetry. Are you OK with that?
 
-RFC->v1
-* No change
----
- drivers/clk/renesas/r9a07g044-cpg.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/drivers/clk/renesas/r9a07g044-cpg.c b/drivers/clk/renesas/r9a07g044-cpg.c
-index f5550fccb029..f923b7b3cfca 100644
---- a/drivers/clk/renesas/r9a07g044-cpg.c
-+++ b/drivers/clk/renesas/r9a07g044-cpg.c
-@@ -412,6 +412,11 @@ static const unsigned int r9a07g044_crit_mod_clks[] __initconst = {
- 	MOD_CLK_BASE + R9A07G044_DMAC_ACLK,
- };
- 
-+static const unsigned int r9a07g044_no_pm_mod_clks[] __initconst = {
-+	MOD_CLK_BASE + R9A07G044_CRU_SYSCLK,
-+	MOD_CLK_BASE + R9A07G044_CRU_VCLK,
-+};
-+
- #ifdef CONFIG_CLK_R9A07G044
- const struct rzg2l_cpg_info r9a07g044_cpg_info = {
- 	/* Core Clocks */
-@@ -429,6 +434,10 @@ const struct rzg2l_cpg_info r9a07g044_cpg_info = {
- 	.num_mod_clks = ARRAY_SIZE(mod_clks.common),
- 	.num_hw_mod_clks = R9A07G044_TSU_PCLK + 1,
- 
-+	/* No PM Module Clocks */
-+	.no_pm_mod_clks = r9a07g044_no_pm_mod_clks,
-+	.num_no_pm_mod_clks = ARRAY_SIZE(r9a07g044_no_pm_mod_clks),
-+
- 	/* Resets */
- 	.resets = r9a07g044_resets,
- 	.num_resets = R9A07G044_TSU_PRESETN + 1, /* Last reset ID + 1 */
-@@ -454,6 +463,10 @@ const struct rzg2l_cpg_info r9a07g054_cpg_info = {
- 	.num_mod_clks = ARRAY_SIZE(mod_clks.common) + ARRAY_SIZE(mod_clks.drp),
- 	.num_hw_mod_clks = R9A07G054_STPAI_ACLK_DRP + 1,
- 
-+	/* No PM Module Clocks */
-+	.no_pm_mod_clks = r9a07g044_no_pm_mod_clks,
-+	.num_no_pm_mod_clks = ARRAY_SIZE(r9a07g044_no_pm_mod_clks),
-+
- 	/* Resets */
- 	.resets = r9a07g044_resets,
- 	.num_resets = R9A07G054_STPAI_ARESETN + 1, /* Last reset ID + 1 */
--- 
-2.25.1
+Cheers,
+Longman
 
