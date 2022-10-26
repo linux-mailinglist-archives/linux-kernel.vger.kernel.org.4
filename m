@@ -2,123 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5395060DAF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 08:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA3560DAF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 08:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233027AbiJZGJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 02:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43692 "EHLO
+        id S232528AbiJZGKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 02:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233088AbiJZGI6 (ORCPT
+        with ESMTP id S229995AbiJZGKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 02:08:58 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443AE5924D
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 23:08:57 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id f37so26582804lfv.8
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 23:08:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=AQkFYRMFfXcuqnRcd5m+fYI759MoxQcwxUzEDkbo1SE=;
-        b=weuKcUHywG8ZesBbFANZ9FB0o9RqWvSCMP2tlTH+iTy81QUj/HHOydfK9fF46TXkVV
-         hn0aoQM/4wY04vxz/lHIFwW8KpuP1rJROqiGCoCmlxHUCgJybETGbvNzcdvbbq2kTfBd
-         FUwTqq+1dctUt2C/B72NWmH5BBJNErQ4i29z+/Sbn1dokL3edOjfqUuRiySRiQYSfMwS
-         ewLEzfs3QpAwPY+THp+zKuWET4/axtn4NnR+16aBdXfrXHu0QlXEgqKETc3e38lCzt7l
-         vL2ktf2IbcZbzjQNXA75f3nNvrX8hcm1dDgtZb1vAY+11heBsAfYwhdXvb1ebsRQvR8G
-         RpOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AQkFYRMFfXcuqnRcd5m+fYI759MoxQcwxUzEDkbo1SE=;
-        b=wRPPwij0U/3tBorN3+XwFsxd8sSYl9Z5FhxN8P4N7Nn2gu9dBNyNLd4FoHg7dDnpUB
-         uN5KfGmHuIh10WrSG59Ec7XqDeA4AgGdMTXGc7ZASvw+It0qZ5MEM2mX5kWvVJDqrzZO
-         ZXdwlUnHsSclN2Vsd6dyYTwXA3UP6qwnoQBOI5QiZcgWspqvvSKOwpB+cn0DDJTK5+cO
-         BqQTET1OX3xqDxy/GUeIaX2RWWbWxlzgZhCUj5r1baK2aOLqEuGgdGWHYm2saFRTVTda
-         XYxqNZ19OMaww71GmO/SnoSVrhBUGcaSfrI3QPz/012fU0CB34+It9yXBkmTYPeLPpM6
-         gIzQ==
-X-Gm-Message-State: ACrzQf3cJtKbYK/yhmq15V+OLsk9C1v2S+NnrBT2Q59sNKPIrDwhr48B
-        rXZH34++HL2S9PaiaAmEWuT5Jw==
-X-Google-Smtp-Source: AMsMyM7aBlusqzl2oZMMOP75nbW9SLTYRVvCS1Z9KkDA0+hM7L4qVTHgav6Vj9SBZUpunCdpnGWYEA==
-X-Received: by 2002:a05:6512:108a:b0:4a2:7ec0:2fb7 with SMTP id j10-20020a056512108a00b004a27ec02fb7mr17134312lfg.553.1666764535618;
-        Tue, 25 Oct 2022 23:08:55 -0700 (PDT)
-Received: from [127.0.0.1] (85-76-42-158-nat.elisa-mobile.fi. [85.76.42.158])
-        by smtp.gmail.com with ESMTPSA id e11-20020a05651236cb00b0048af3c090f8sm726299lfs.13.2022.10.25.23.08.54
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 25 Oct 2022 23:08:55 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 09:08:49 +0300
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-CC:     Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Johan Hovold <johan@kernel.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 09/12] drm/msm/dp: HPD handling relates to next_bridge
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20221026032624.30871-10-quic_bjorande@quicinc.com>
-References: <20221026032624.30871-1-quic_bjorande@quicinc.com> <20221026032624.30871-10-quic_bjorande@quicinc.com>
-Message-ID: <5974CB5A-699F-4768-9DAA-FAE507CFAD53@linaro.org>
+        Wed, 26 Oct 2022 02:10:21 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD83E2DAA6;
+        Tue, 25 Oct 2022 23:10:17 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mxz1Q0J98zHtv1;
+        Wed, 26 Oct 2022 14:10:02 +0800 (CST)
+Received: from kwepemm600004.china.huawei.com (7.193.23.242) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 26 Oct 2022 14:10:14 +0800
+Received: from [10.67.103.231] (10.67.103.231) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 26 Oct 2022 14:10:14 +0800
+Message-ID: <6d00d240-0c86-d593-6efe-44fec21421a8@huawei.com>
+Date:   Wed, 26 Oct 2022 14:10:13 +0800
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [RFC] ACPI: PCC: Support shared interrupt for multiple subspaces
+To:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <rafael@kernel.org>, <sudeep.holla@arm.com>,
+        <rafael.j.wysocki@intel.com>, <wanghuiqiang@huawei.com>,
+        <huangdaode@huawei.com>, <tanxiaofei@huawei.com>,
+        Loc Ho <lho@apm.com>, Hoan Tran <hotran@apm.com>
+References: <20221016034043.52227-1-lihuisong@huawei.com>
+From:   "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <20221016034043.52227-1-lihuisong@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.231]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Kindly ping.
 
-
-On 26 October 2022 06:26:21 EEST, Bjorn Andersson <quic_bjorande@quicinc=
-=2Ecom> wrote:
->From: Bjorn Andersson <bjorn=2Eandersson@linaro=2Eorg>
+在 2022/10/16 11:40, Huisong Li 写道:
+> As ACPI protocol descripted, if interrupts are level, a GSIV may
+> be shared by multiple subspaces, but each one must have unique
+> platform interrupt ack preserve and ack set masks. Therefore, need
+> set to shared interrupt for types that can distinguish interrupt
+> response channel if platform interrupt mode is level triggered.
 >
->The DisplayPort controller's internal HPD interrupt handling is used for
->cases where the HPD signal is connected to a GPIO which is pinmuxed into
->the DisplayPort controller=2E
+> The distinguishing point isn't definitely command complete register.
+> Because the two status values of command complete indicate that
+> there is no interrupt in a subspace('1' means subspace is free for
+> use, and '0' means platform is processing the command). On the whole,
+> the platform interrupt ack register is more suitable for this role.
+> As ACPI protocol said, If the subspace does support interrupts, and
+> these are level, this register must be supplied. And is used to clear
+> the interrupt by using a read, modify, write sequence. This register
+> is a 'WR' register, the bit corresponding to the subspace is '1' when
+> the command is completed, or is '0'.
 >
->Most of the logic for enabling and disabling the HPD-related interrupts
->is conditioned on the presence of an EDP panel, but more generically
->designs that has a downstream drm_bridge (next_bridge) could use this to
->handle the HPD interrupts, instead of the internal mechanism=2E
+> Therefore, register shared interrupt for multiple subspaces if support
+> platform interrupt ack register and interrupts are level, and read the
+> ack register to ensure the idle or unfinished command channels to
+> quickly return IRQ_NONE.
 >
->So replace the current is_edp-based guards with a check for the presence
->of next_bridge=2E
-
-This does not sound correct=2E The next bridge might be a dummy bridge, no=
-t supporting the hpd=2E Please change this to use the enable_hpd()/disable_=
-hpd() callbacks=2E This way the drm_bridge_connector framework will make su=
-re to enable hpd handling for the bridge that is actually supposed to gener=
-ate hpd events=2E
-
-
+> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+> ---
+>   drivers/mailbox/pcc.c | 27 +++++++++++++++++++++++++--
+>   1 file changed, 25 insertions(+), 2 deletions(-)
 >
->Signed-off-by: Bjorn Andersson <bjorn=2Eandersson@linaro=2Eorg>
->Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc=2Ecom>
->---
->
->Changes since v2:
->- None
-
-
---=20
-With best wishes
-Dmitry
+> diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
+> index 3c2bc0ca454c..86c6cc44c73d 100644
+> --- a/drivers/mailbox/pcc.c
+> +++ b/drivers/mailbox/pcc.c
+> @@ -100,6 +100,7 @@ struct pcc_chan_info {
+>   	struct pcc_chan_reg cmd_update;
+>   	struct pcc_chan_reg error;
+>   	int plat_irq;
+> +	u8 plat_irq_trigger;
+>   };
+>   
+>   #define to_pcc_chan_info(c) container_of(c, struct pcc_chan_info, chan)
+> @@ -236,6 +237,15 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
+>   	int ret;
+>   
+>   	pchan = chan->con_priv;
+> +	ret = pcc_chan_reg_read(&pchan->plat_irq_ack, &val);
+> +	if (ret)
+> +		return IRQ_NONE;
+> +	/* Irq ack GAS exist and check if this interrupt has the channel. */
+> +	if (pchan->plat_irq_ack.gas) {
+> +		val &= pchan->plat_irq_ack.set_mask;
+> +		if (val == 0)
+> +			return IRQ_NONE;
+> +	}
+>   
+>   	ret = pcc_chan_reg_read(&pchan->cmd_complete, &val);
+>   	if (ret)
+> @@ -309,10 +319,21 @@ pcc_mbox_request_channel(struct mbox_client *cl, int subspace_id)
+>   	spin_unlock_irqrestore(&chan->lock, flags);
+>   
+>   	if (pchan->plat_irq > 0) {
+> +		unsigned long irqflags;
+>   		int rc;
+>   
+> -		rc = devm_request_irq(dev, pchan->plat_irq, pcc_mbox_irq, 0,
+> -				      MBOX_IRQ_NAME, chan);
+> +		/*
+> +		 * As ACPI protocol descripted, if interrupts are level, a GSIV
+> +		 * may be shared by multiple subspaces.
+> +		 * Therefore, register shared interrupt for multiple subspaces
+> +		 * if support platform interrupt ack register and interrupts
+> +		 * are level.
+> +		 */
+> +		irqflags = (pchan->plat_irq_ack.gas &&
+> +			    pchan->plat_irq_trigger == ACPI_LEVEL_SENSITIVE) ?
+> +			    IRQF_SHARED : 0;
+> +		rc = devm_request_irq(dev, pchan->plat_irq, pcc_mbox_irq,
+> +				      irqflags, MBOX_IRQ_NAME, chan);
+>   		if (unlikely(rc)) {
+>   			dev_err(dev, "failed to register PCC interrupt %d\n",
+>   				pchan->plat_irq);
+> @@ -457,6 +478,8 @@ static int pcc_parse_subspace_irq(struct pcc_chan_info *pchan,
+>   		       pcct_ss->platform_interrupt);
+>   		return -EINVAL;
+>   	}
+> +	pchan->plat_irq_trigger = (pcct_ss->flags & ACPI_PCCT_INTERRUPT_MODE) ?
+> +				ACPI_EDGE_SENSITIVE : ACPI_LEVEL_SENSITIVE;
+>   
+>   	if (pcct_ss->header.type == ACPI_PCCT_TYPE_HW_REDUCED_SUBSPACE_TYPE2) {
+>   		struct acpi_pcct_hw_reduced_type2 *pcct2_ss = (void *)pcct_ss;
