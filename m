@@ -2,89 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56917610199
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 992F761019D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236605AbiJ0T1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 15:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
+        id S235859AbiJ0T1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 15:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236592AbiJ0T1a (ORCPT
+        with ESMTP id S236617AbiJ0T1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 15:27:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFA578239
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:27:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78BA3B827D4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 19:27:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83FD8C433D7;
-        Thu, 27 Oct 2022 19:27:25 +0000 (UTC)
-Date:   Thu, 27 Oct 2022 15:27:40 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [RFC][PATCH v2 00/31] timers: Use del_timer_shutdown() before
- freeing timers
-Message-ID: <20221027152740.532ff26f@gandalf.local.home>
-In-Reply-To: <20221027152058.5f75cfd1@gandalf.local.home>
-References: <20221027150525.753064657@goodmis.org>
-        <f62e19bb-497a-8cf6-93aa-d654d7850356@roeck-us.net>
-        <20221027152058.5f75cfd1@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 27 Oct 2022 15:27:49 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836BA78239;
+        Thu, 27 Oct 2022 12:27:47 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id AFC081C09E0; Thu, 27 Oct 2022 21:27:44 +0200 (CEST)
+Date:   Thu, 27 Oct 2022 21:27:44 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Subject: Re: [PATCH 5.10 00/79] 5.10.151-rc1 review
+Message-ID: <20221027192744.GC11819@duo.ucw.cz>
+References: <20221027165054.270676357@linuxfoundation.org>
+ <8617f970-2a72-799b-530d-3a5bb07822a6@roeck-us.net>
+ <Y1rbQqkdeliRrQPF@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="S1BNGpv0yoYahz37"
+Content-Disposition: inline
+In-Reply-To: <Y1rbQqkdeliRrQPF@kroah.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Oct 2022 15:20:58 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> > (many more of those)
-> > ...
-> > [   16.329989]  timer_fixup_free+0x40/0x54  
-> 
-> Ah, I see the issue here. Looks like the timer_fixup_free() is calling
-> itself and crashing.
-> 
-> Let me take a look into that. I didn't touch the fixup code, and there
-> could be an assumption there that it's behaving with the old approach.
+--S1BNGpv0yoYahz37
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Can you add this and see if it makes this issue go away?
+On Thu 2022-10-27 21:25:54, Greg Kroah-Hartman wrote:
+> On Thu, Oct 27, 2022 at 11:10:18AM -0700, Guenter Roeck wrote:
+> > On 10/27/22 09:55, Greg Kroah-Hartman wrote:
+> > > This is the start of the stable review cycle for the 5.10.151 release.
+> > > There are 79 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, plea=
+se
+> > > let me know.
+> > >=20
+> > > Responses should be made by Sat, 29 Oct 2022 16:50:35 +0000.
+> > > Anything received after that time might be too late.
+> > >=20
+> >=20
+> > Building arm64:allmodconfig ... failed
+> > --------------
+> > Error log:
+> > /bin/sh: scripts/pahole-flags.sh: Permission denied
+> >=20
+> > Indeed:
+> >=20
+> > $ ls -l scripts/pahole-flags.sh
+> > -rw-rw-r-- 1 groeck groeck 530 Oct 27 11:08 scripts/pahole-flags.sh
+> >=20
+> > Compared to upstream:
+> >=20
+> > -rwxrwxr-x 1 groeck groeck 585 Oct 20 11:31 scripts/pahole-flags.sh
+>=20
+> Yeah, this is going to be an odd one.  I have to do this by hand as
+> quilt and git quilt-import doesn't like setting the mode bit.
+>=20
+> I wonder if I should just make a single-commit release with this file in
+> it, set to the proper permission, to get past this hurdle.  I'll think
+> about it in the morning...
 
--- Steve
+Alternatively you can modify the caller to do /bin/sh /scripts/... so
+it does not need a +x bit...
 
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 1d17552b3ede..7305c65ad0eb 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -691,7 +691,7 @@ static bool timer_fixup_init(void *addr, enum debug_obj_state state)
- 
- 	switch (state) {
- 	case ODEBUG_STATE_ACTIVE:
--		del_timer_sync(timer);
-+		del_timer_shutdown(timer);
- 		debug_object_init(timer, &timer_debug_descr);
- 		return true;
- 	default:
-@@ -737,7 +737,7 @@ static bool timer_fixup_free(void *addr, enum debug_obj_state state)
- 
- 	switch (state) {
- 	case ODEBUG_STATE_ACTIVE:
--		del_timer_sync(timer);
-+		del_timer_shutdown(timer);
- 		debug_object_free(timer, &timer_debug_descr);
- 		return true;
- 	default:
+Best regards,
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--S1BNGpv0yoYahz37
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY1rbsAAKCRAw5/Bqldv6
+8j+YAJ9a4BEX10NyqTP/T8FIS9rRBaq2egCdEJkKzVlbQ4jVzPaa5B/kcn8n3Ps=
+=br6g
+-----END PGP SIGNATURE-----
+
+--S1BNGpv0yoYahz37--
