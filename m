@@ -2,70 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12B160F0DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 09:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077A960F0DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 09:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233849AbiJ0HAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 03:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
+        id S234021AbiJ0HBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 03:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234358AbiJ0HAa (ORCPT
+        with ESMTP id S234336AbiJ0HBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 03:00:30 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3AF33A3D
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 00:00:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7ONSnDwssyimQ1wbQ0j4sfEGVf60dOnxOHN014BCHMQ=; b=O4mSys/wKo4nGb3F+n5xDszyQ8
-        rxCBeIe961Hmo3EYRP9/19tSAffVrPZcC4NtmUt14YeiwT6E9Os/LO4e8omF5w3ulDCHXNvBvmQb8
-        9vxRX62uh76C4uM6ULFuynoqhBLKVoxw+7hr3i/WWtgmY1B3Ml1MnxuhHQsZgaUv9UXUTM+28Ipjz
-        z/de4cBxlDiMfjswXHCytDBfK/W2RBSkx1VpTV8sKSVPFHP+9d8haxTwWvcG0KX4wWGBgP08SZUHA
-        JU5KEYSegsLuNwaqRN+YUzptbE7b8WuBxZHWExbM4leAnDAvW/YiRXab5JOo6muggyuR9yjWZSM2Q
-        2K9wZiiA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1onwri-006nFa-Nj; Thu, 27 Oct 2022 06:59:47 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 66F1930010B;
-        Thu, 27 Oct 2022 08:59:45 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4FE192C450364; Thu, 27 Oct 2022 08:59:45 +0200 (CEST)
-Date:   Thu, 27 Oct 2022 08:59:45 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     rostedt@goodmis.org, dave.hansen@intel.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        keescook@chromium.org, seanjc@google.com
-Subject: Re: [PATCH 0/5] x86/ftrace: Cure boot time W+X mapping
-Message-ID: <Y1osYVoLrpCabNrR@hirez.programming.kicks-ass.net>
-References: <20221025200656.951281799@infradead.org>
- <CAHk-=wjBn=jThQ4drqgorDQFR3i2QUi9PeOG1tH2uWVkN8+6mQ@mail.gmail.com>
- <Y1jek64pXOsougmz@hirez.programming.kicks-ass.net>
- <CAHk-=wjaoB+9pJ1ouLbKuqgadqDxdhyCHi0rO-u-5bOi1qUv=w@mail.gmail.com>
+        Thu, 27 Oct 2022 03:01:49 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2085.outbound.protection.outlook.com [40.107.102.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC9CA3466
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 00:01:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XmEEmWGOlevrLvrE9+y15TSPRQxtqT4vWEqTG0yChTErD8WsUADixXJriJLN66reIKa6r/UOVDrVa3wXNZw6RC1fRuYu1qLoCMRMXNpTjATlUDN6K9VFYxdCjaseDR91j+khFVVOiqZ5Iibx+vCa2gVXnKv+yadJTW1QJlyebtCkei6Yc9L6FsNdtn/bLeq2sq68auQcDrPqOHkU8e33btkk0M/CZGVgaRpxvzQmWsU6otTVqliX1xszjBEhf0W5af9Q3IbLt90b+Q6vsVpa4jif80bNU/hm5bIz5MhYGpo0yAMVlNnWseddkGARgQtKrefM5Fc/oVX2zQldnmN0YQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9dCYG/9B1oDVmYEmxGrNGijWQ1zedUIBIA1vzuKNg1A=;
+ b=C0+c0uqUF8Wq/dIRumdpSTU6kE8fSaqrHBbt87JhG56gdSwHi7mHZJYbkkZi8v3/8lLC7uD8ZIRAezZ4CtNKkvgmnVHjPl2+O8NVq3J/3vh5SCuO5J9amMDQhpp2oZl9yCw6XfpTyVhix615K5D/WvVU1m5Bi+fGPeLGDsBp3ZirbbXbG3+MYt4PeGmUpcAp7Pg9m2cdSH5Wg0NrHAx4A0KFCXZazss9Mxj7BkrIkBj9XLKBtLCKb3wNNPcqYJnmZWPzhE3QW95oOyj38tko96ZSUGNQdptaVx9P85PMHNH5LKe1QmnM7ncNHG7KYiV+9UyaLWCS65HHeb5daGgL+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9dCYG/9B1oDVmYEmxGrNGijWQ1zedUIBIA1vzuKNg1A=;
+ b=dN5pumAHfeQb+KDtdoejQLe08LcVt3C1tYw9VibzTJcNBjVR6xJ9bEz0M5b9PswAlwxLt3j90GEWaQsCnTnaacoEFKGrJ1UrwCFJJlzBHT5eENvvundOcUsiP93T5/10J4N/1PBn+C+azxyt1U2bfv0O7qc3PaA5UKXIgHL2hYc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
+ DM4PR12MB5231.namprd12.prod.outlook.com (2603:10b6:5:39b::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5746.28; Thu, 27 Oct 2022 07:01:46 +0000
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::d309:77d2:93d8:2425]) by DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::d309:77d2:93d8:2425%7]) with mapi id 15.20.5746.028; Thu, 27 Oct 2022
+ 07:01:45 +0000
+Message-ID: <69e672a5-a68e-7bad-fc49-4281c1c6039d@amd.com>
+Date:   Thu, 27 Oct 2022 03:01:43 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Content-Language: en-CA
+From:   Luben Tuikov <luben.tuikov@amd.com>
+To:     Alex Deucher <alexdeucher@gmail.com>,
+        brolerliew <brolerliew@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20221025061846.447975-1-brolerliew@gmail.com>
+ <CADnq5_NweAo-7snRLkidNkOizu7Ft+7GgXCS2Rnv1oxmRFb_RQ@mail.gmail.com>
+ <a70dcda0-6723-38f6-efeb-e8edb16dab55@amd.com>
+Subject: Re: [PATCH] drm/scheduler: set current_entity to next when remove
+ from rq
+In-Reply-To: <a70dcda0-6723-38f6-efeb-e8edb16dab55@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT3PR01CA0143.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:83::28) To DM6PR12MB3370.namprd12.prod.outlook.com
+ (2603:10b6:5:38::25)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjaoB+9pJ1ouLbKuqgadqDxdhyCHi0rO-u-5bOi1qUv=w@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|DM4PR12MB5231:EE_
+X-MS-Office365-Filtering-Correlation-Id: bd305be2-0da4-4ad6-0ae2-08dab7e91c40
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: B8DFv8P0M9Z08Mv+eljejqdOkdTDj0dGI1QZ5xdn8RIeG6qDtiF4sXBeIhq6pthWtMsXBaVHzrRMcFZdjPmZoCCZcXb8TYlqcRYui4iJ/YNMkaYXiK2DnpXGfsvKqHTLDwuP/4c+Iv55NcT2Lh1WVLXgjns9VRXX4Mm0Kab5DbXUPJWtld+zosExL4PF7h9QMh8WDxclUkMAM/0CANMFCVpk17Lz3obOBHDFg4XbuNET+zdyvWWmpGUlTukgDrciJ4+IbNFis+RSpe9927zRZraw0jTr7fNQi+2+8p0xeIVXI4yr/P1yISEIHO5OdZGb2KuJLGpHMpvWkm2USQRhc6WK6a1lqB4avYX7HHfbinmRVHnfMsOi8YErId1U32gRL4Bbhgcl6jly3OG8Y23++3dqSQMmhZrrcrM/og0crZO+uD/5tHK9SVC+BXPBh6ooJeaWDOoHOVk9CcEBcxzHvEkKv11a0bUdiSB5+VlAMhUxjmgls1Ktm0lby9ww7rzaxFtLigen58xW6tm8wwNMG4zOuN7lBStZN9A/MH7GRQ2QN5dqdtDjywWqpYoiXDBz4usz2s7CbDwZfS+aqTSAPpxECtiyhirIfqy7XutdaOg51RW+IOjnz3TORAVK14HeL0m7CoYOzOvQOIxCz5MQJUcnvB0R0a+6sIWK0+P7xQs4oO+BJ2wYt3XJepRcFTsGoIVzGrQ9tnqZRy4G4zmSnCqu10gLMWw7hov2XwsZzaeAiuWFC0tm7Gv9MAo53sy2xZdmF3qtNIR7f4mp2wVaCqhXl+KlxHjcZVxRlaIdcd8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(39860400002)(366004)(136003)(396003)(451199015)(316002)(31696002)(83380400001)(4001150100001)(6512007)(110136005)(53546011)(5660300002)(8936002)(4326008)(66946007)(41300700001)(26005)(66476007)(8676002)(44832011)(6506007)(86362001)(66556008)(2616005)(36756003)(6486002)(31686004)(186003)(38100700002)(478600001)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SThtMFBUY3A1SG9KNFphWjVVWEFVSmxQQVZiY2I0NGl5QmlEakVPTGFiMFZp?=
+ =?utf-8?B?N3NZZkx6L0JNWWYxRXQwa29ZVXdZQXIxZSs3Nm5zUmgwTFlKb2lTTEVYdUpS?=
+ =?utf-8?B?NVRRcnpQU1JVQStuSTV6VEFXZkJxZzJSZFYveEtWVnBUWTMwWkw3ZmNXWjVT?=
+ =?utf-8?B?Q01QQVFKZWQvN05PcDJmcmZkVExhQUFrYjFxaFY0dGg0RWlyTGg3Q1RvNk03?=
+ =?utf-8?B?MXE2V2Jzc2J6STBiSzNMa2NZajRVazdHWHhDcUcxQkJQMmxFbHNmZHYwZUYw?=
+ =?utf-8?B?ei9PNGw4b0tyVkxQTTMrbVA3YTVOTjM5dWZDNUxicHhlYTQ2eHdPajFvRllq?=
+ =?utf-8?B?MEJkcUdaUWtmTG00TEZHcEU0eXhyWlo5ZEpzWXZhMFNHVVZRMWFQOFNNUFRt?=
+ =?utf-8?B?NTkycHFsMFphWkNweDJTWlFGTUx1L0t1L0FnR2czYWxUeE9oOTVkcWQybVBt?=
+ =?utf-8?B?ZTdWeUlSNUY3YWFHRUJGTEZLZC9GdGFPM3B6UGtPdENJVUFYK0lqQy9VUnBv?=
+ =?utf-8?B?Q1YvTjNOL1JSd3hPcjdhczdRTkp0dTdxRmpVT0dpbnFiMGlncHEvMktSRjJh?=
+ =?utf-8?B?dFh0ZERUYWtEUXRKdTVlWmpzNjhDYXp6cDhTQWdwcW4ydHhJSlpERFNJYlkr?=
+ =?utf-8?B?SGN6Z3pIRHVCUis2SmpkcVRoUEpzWThoVlphYStra3RwWnBKbnFqK2pPTVNx?=
+ =?utf-8?B?NjVVZnFwYWtRWUVNd1VYdHBCdVlyY2xCdGFULy9KUXpSSTZiaVJhand4b0U5?=
+ =?utf-8?B?Rmw2cEhFWDBGZDFkVE9hQXg3em9IOXdzTmt3TGl3Z2gxYTJzUy8vVElMWXdq?=
+ =?utf-8?B?eTAramwxM1Fpdy9wNUZvR0tsWWV2MHpBV2crdlNtaktkUG9BcTdOdUp6MFNW?=
+ =?utf-8?B?T0lnSXNaQ3VJamR3ZTZ5NFJ6NTVOUTJKODJyOEZuSjIzV24rcStGQmNuTUlF?=
+ =?utf-8?B?dU9MbWc2UW9TR0Q3ZlhUeFdiMTJ4eFZYMzdxYjBCajBrUGlvS0cyNTNhK2d2?=
+ =?utf-8?B?Z2xkR0NnRkplbW1OYmYybG0xZVN0TnZlZVZTSnpnRVlhZ29vUHZYRTRiTWth?=
+ =?utf-8?B?eFdIdkNLR1lZYkN4cDkvNGFJV09paGRKOWREWExlMjJDOFByejRjWlRrazkw?=
+ =?utf-8?B?YlVyNVhOY1k4UDFTUXVyaTk4RUxzcFpnUTZtQklGam00Z0hScEowZXJUOTZY?=
+ =?utf-8?B?LzhNalZtRlVtVDZvNXBNOWlZdjMvMDBPQmIxRzYzSTRFOHljN29IcFEyTXFQ?=
+ =?utf-8?B?YkhIbUg1U0V2QS90dVhrRklNRk1UbFVVZDRkWXF2R3NnY2txa1MycmY0Z0h5?=
+ =?utf-8?B?ZDdMZ0VNMjU1S3Bta0dnMFJWRFF3Y0Znc0tSL2N2bFlhb3FnNUhReHdCajg0?=
+ =?utf-8?B?MWRWTS9VVjA1cTVubUZkb3FiSDRmMEt3U3ZyUXh5ZmF2OFh2NG1IK3JkMG1C?=
+ =?utf-8?B?UFFSOGdvN0dsaDIzUWRCM1lwYXU5TEdGYzhzbERHcFRIZ201QTF2QVp0Qzht?=
+ =?utf-8?B?blJBTExVeUwrSEJpcUdzNjdTUU5Wa1FHdzlZRW1DeHZ1bWtFd2ZwcnZ5enh2?=
+ =?utf-8?B?K0Jpb2lIb1dSN1NpRElhR01TWVpOdkZ2dyswNG5jSnBqYUlEMy80OXZRc2Yv?=
+ =?utf-8?B?OTNoN01tRzVxcXhlM1JJd1NteDFUUU1HVmJZeEl5NjNIVGkrYXFoSFpxVkMv?=
+ =?utf-8?B?dTBZTHV0dDdRRVNldTdsYlZzU2FwU2JzRE1OaENSS3FhbnVmanFRd0RuN1Va?=
+ =?utf-8?B?aVQ1SlVYS1FJaDE1bks1RlgvRDBYTFg4UmJuTzl0OFA3R2Z1clJsZ2U2cVE3?=
+ =?utf-8?B?b2RjYThqcWpBNzBNczIwN09qNmg1U1hXd1FBVkVpdWVZM2Q4UzZrUWx1c253?=
+ =?utf-8?B?Um1KbDlLcmkxK0FWWUlnWFRvb2M0bFRmdGpPSG82VDNKQ3VJS3I1WFJsZWtI?=
+ =?utf-8?B?U2tBenBFK2Z6QlJmWTd0RmtkQTkzVXZKU1hLQTdSRURNNmNkSi9lZm5ERmcz?=
+ =?utf-8?B?MS9Ickk2K0I1MVBvbHlxY1ZpMjR0R1BzYVh6Qk96VHF1bVlGeVhuK0F2Zjkw?=
+ =?utf-8?B?MHVkUENZWk50Mk9XWWZXM2xNK2NBNFNLWFhDV0dveG15V3BFUVhiTFZNSDhV?=
+ =?utf-8?Q?lHxIfWcQuV9q3d1UfCM3+8oFE?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bd305be2-0da4-4ad6-0ae2-08dab7e91c40
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 07:01:45.9162
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KZRY67aPTXy9lK419C04JLJGCMQNtdjcw4N5JYBwjoPDFC/FrkXJC57GI/88+60a
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5231
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 10:59:29AM -0700, Linus Torvalds wrote:
+On 2022-10-25 13:50, Luben Tuikov wrote:
+> Looking...
+> 
+> Regards,
+> Luben
+> 
+> On 2022-10-25 09:35, Alex Deucher wrote:
+>> + Luben
+>>
+>> On Tue, Oct 25, 2022 at 2:55 AM brolerliew <brolerliew@gmail.com> wrote:
+>>>
+>>> When entity move from one rq to another, current_entity will be set to NULL
+>>> if it is the moving entity. This make entities close to rq head got
+>>> selected more frequently, especially when doing load balance between
+>>> multiple drm_gpu_scheduler.
+>>>
+>>> Make current_entity to next when removing from rq.
+>>>
+>>> Signed-off-by: brolerliew <brolerliew@gmail.com>
+>>> ---
+>>>  drivers/gpu/drm/scheduler/sched_main.c | 5 +++--
+>>>  1 file changed, 3 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+>>> index 2fab218d7082..00b22cc50f08 100644
+>>> --- a/drivers/gpu/drm/scheduler/sched_main.c
+>>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+>>> @@ -168,10 +168,11 @@ void drm_sched_rq_remove_entity(struct drm_sched_rq *rq,
+>>>         spin_lock(&rq->lock);
+>>>
+>>>         atomic_dec(rq->sched->score);
+>>> -       list_del_init(&entity->list);
+>>>
+>>>         if (rq->current_entity == entity)
+>>> -               rq->current_entity = NULL;
+>>> +               rq->current_entity = list_next_entry(entity, list);
+>>> +
+>>> +       list_del_init(&entity->list);
+>>>
+>>>         if (drm_sched_policy == DRM_SCHED_POLICY_FIFO)
+>>>                 drm_sched_rq_remove_fifo_locked(entity);
+>>> --
+>>> 2.34.1
+>>>
+> 
 
-> Maybe you meant to do that, and this patch was just prep-work for the
-> arch code being the second stage?
+Looks good. I'll pick it up into some other changes I've in tow, and repost
+along with my changes, as they're somewhat related.
 
-Yeah; also, since this is cross arch, we need a fallback. Anyway;
-robots hated on me for missing a few includes. I'll go prod at this
-more.
+Regards,
+Luben
+
