@@ -2,54 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A83D60F7D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5890E60F7D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235347AbiJ0Mp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56098 "EHLO
+        id S235781AbiJ0Mqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235770AbiJ0Mpo (ORCPT
+        with ESMTP id S235767AbiJ0Mqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:45:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1394F1A4;
-        Thu, 27 Oct 2022 05:45:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A19CB825F5;
-        Thu, 27 Oct 2022 12:45:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9655C433D7;
-        Thu, 27 Oct 2022 12:45:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666874736;
-        bh=RJKE7M5dZC88TU9qJJxzSW1KS6RBxmQrxZKkbCKINqs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ppi3eYjvIw8KrDaLRQqt5z6jJzhffW6A/u0hioVzzjv7VSgO/YkDPFM6S06U6iPGt
-         hU89/Fxk85aAQjzbOo0h0zNyEG99aRKPagbBQqQmiUCGhF5TpFdIYzvrp6uKFQR/pG
-         wbEyHkZ6M7LMAvLx7EPa8bs66vMFrXwuwkDKl9WnOu8S0q2SSsUIJbM6AlwWJ4qJYW
-         9JQMeFdIaNJWmJWrlPPlX1qN2KckAuNPfO8+uwxSoJEZze8jchMp22Aq9iJ2NICglo
-         8OMSMzHm2EsvylOJND9jar8gqDG+nANIALHFyJMIWF9Mf+pm10zBnbFHACu3rXAUFL
-         i7528wNKbuDPA==
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     robh@kernel.org, Vidya Sagar <vidyas@nvidia.com>,
-        gustavo.pimentel@synopsys.com, jingoohan1@gmail.com,
-        bhelgaas@google.com, kw@linux.com
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>, sagar.tv@gmail.com,
-        mmaddireddy@nvidia.com, linux-pci@vger.kernel.org,
-        kthota@nvidia.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V1 0/2] Disable PTM for endpoint mode
-Date:   Thu, 27 Oct 2022 14:45:28 +0200
-Message-Id: <166687471266.840928.362042718229372032.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220919143340.4527-1-vidyas@nvidia.com>
-References: <20220919143340.4527-1-vidyas@nvidia.com>
+        Thu, 27 Oct 2022 08:46:32 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC11C97F6
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:46:31 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id f8so749922qkg.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:46:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iLWIFJ61KTvk1h38Frs3TC3TSHJ2QOFTnp6zMPLI/+I=;
+        b=bAtEYEDuiP+0dE9YH0zh3Twa1GNhE/bYPvc7qdUChMfJ0UkTMZ8R8F+u09cejlTxCK
+         3xkoQP510XkYGtKmlbPWtii27mmosmOfd79+LaI/ecU/fFIpjMqVD2UKlpdJDOfPPCmi
+         mlxutkL6/LrFuMsYH3aLizU1nMUwYOJHy/3EhT3XPaJ7kJ+duOc4EGlqH8hdEecgztW9
+         mhEIYB1M47wfTZmsP4LxdrboCOnTUXgfitw5HIjaBdgOLdFqvDq6JFgtdUIKgSUcw+D6
+         aWTHv/f69tZv0vopupoSbe9/Y3nmhteCEOGcg9mHS/1lHjUBDXPxk+z+LSB+lUuSbED/
+         joAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iLWIFJ61KTvk1h38Frs3TC3TSHJ2QOFTnp6zMPLI/+I=;
+        b=vzMM3DykjRG1My359wMHDybsu3FsvJK3axPmwmyGcUKXmouQaR/eTp3UVTzAnBpNil
+         GHR7ljhF0rAFoqpTAo8iVgYc50mLup+4CTe4OJ4rHLJPKwN/x1AmSsEYK2oDNnwgJdgN
+         LDg0LAo7l2vS6+Cb9+REFmIzKKH33mI9txf4TI6KB4n8vr13DvLIyMjq9Wv1fy3ARi48
+         EIwtyyagBfDQSrOupT8+ifKM2jepoftOKe6rJW4vPEFpWhGPXTeczZBPQhzAYeSJrSQJ
+         99ksbri4C9Mvy1yNGKAYMSij46CHfrl20DriqHM2z7prvW0xsdOILf1OljDX7fln84u9
+         dlrg==
+X-Gm-Message-State: ACrzQf1Lq9l67pC2cjBsIXNrO3O531VBQPxmWl8Ni9BOp4iOjM9M50al
+        I52J0MfFzOEdVKN6fXZMG0aTVA==
+X-Google-Smtp-Source: AMsMyM4fC/T/b/VpCuYYB88TAAL0TjNeBxrrJLylS1QScUfck2OJ7U/fGdAnSaZ1eNjXUKzNIBE9Ng==
+X-Received: by 2002:a05:620a:4245:b0:6d7:6d51:f66e with SMTP id w5-20020a05620a424500b006d76d51f66emr33806295qko.617.1666874790292;
+        Thu, 27 Oct 2022 05:46:30 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id n14-20020a05620a294e00b006eed094dcdasm912535qkp.70.2022.10.27.05.46.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 05:46:29 -0700 (PDT)
+Message-ID: <a7f75d47-30e7-d076-a9fd-baa57688bbf7@linaro.org>
+Date:   Thu, 27 Oct 2022 08:46:27 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [RFC net-next 1/2] dt-bindings: net: dsa: add bindings for GSW
+ Series switches
+Content-Language: en-US
+To:     Camel Guo <camelg@axis.com>, Camel Guo <Camel.Guo@axis.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>, kernel <kernel@axis.com>
+References: <20221025135243.4038706-1-camel.guo@axis.com>
+ <20221025135243.4038706-2-camel.guo@axis.com>
+ <16aac887-232a-7141-cc65-eab19c532592@linaro.org>
+ <d0179725-0730-5826-caa4-228469d3bad4@axis.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <d0179725-0730-5826-caa4-228469d3bad4@axis.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,23 +91,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Sep 2022 20:03:38 +0530, Vidya Sagar wrote:
-> This patch series contains patches to disable PTM for endpoint mode
-> as the PCIe compliance tool requires the PTM be disabled for the endpoint
-> mode.
+On 27/10/2022 02:34, Camel Guo wrote:
+> On 10/25/22 16:27, Krzysztof Kozlowski wrote:
+>  > On 25/10/2022 09:52, Camel Guo wrote:
+>  >> Add documentation and an example for Maxlinear's GSW Series Ethernet
+>  >> switches.
+>  >>
+>  >> Signed-off-by: Camel Guo <camel.guo@axis.com>
+>  >> ---
+>  >>  .../devicetree/bindings/net/dsa/mxl,gsw.yaml  | 140 ++++++++++++++++++
+>  >>  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+>  >>  MAINTAINERS                                   |   6 +
+>  >>  3 files changed, 148 insertions(+)
+>  >>  create mode 100644 
+> Documentation/devicetree/bindings/net/dsa/mxl,gsw.yaml
+>  >>
+>  >> diff --git a/Documentation/devicetree/bindings/net/dsa/mxl,gsw.yaml 
+> b/Documentation/devicetree/bindings/net/dsa/mxl,gsw.yaml
+>  >> new file mode 100644
+>  >> index 000000000000..8e124b7ec58c
+>  >> --- /dev/null
+>  >> +++ b/Documentation/devicetree/bindings/net/dsa/mxl,gsw.yaml
+>  >
+>  > Filename based on compatible, so mxl,gsw145-mdio.yaml. But see below.
 > 
-> Vidya Sagar (2):
->   PCI: Add PCI_PTM_CAP_RES macro
->   PCI: designware-ep: Disable PTM capabilities for EP mode
+> I hope in future more gsw1xx chips (e.g: GSW150, GSW120) can be added
+> and more management modes (e.g: uart, spi) can be supported. 
+
+Maybe you will add support, maybe not. If these compatibles were
+mentioned now, would be different topic, but there are not.
+
+> So I think
+> maybe mxl.gsw.yaml is more generic. Otherwise maybe in future someone
+> has to add files like mxl,gsw150-uart.yaml, mxl,gsw120-spi.yaml
+
+No, they can be added here, with or without renaming the file.
+
 > 
-> [...]
+>  >
+>  >> @@ -0,0 +1,140 @@
+>  >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>  >> +%YAML 1.2
+>  >> +---
+>  >> +$id: http://devicetree.org/schemas/net/dsa/mxl,gsw.yaml#
+>  > <http://devicetree.org/schemas/net/dsa/mxl,gsw.yaml#>
+>  >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  > <http://devicetree.org/meta-schemas/core.yaml#>
+>  >> +
+>  >> +title: Maxlinear GSW Series Switch Device Tree Bindings
+>  >
+>  > Drop "Device Tree Bindings"
+> 
+> Ack. will do in v2
+> 
+>  >
+>  >> +
+>  >> +allOf:
+>  >> +  - $ref: dsa.yaml#
+>  >> +
+>  >> +maintainers:
+>  >> +  - Camel Guo <camel.guo@axis.com>
+>  >> +
+>  >> +description:
+>  >> +  The Maxlinear's GSW Series Ethernet Switch is a highly 
+> integrated, low-power,
+>  >> +  non-blocking Gigabit Ethernet Switch.
+>  >> +
+>  >> +properties:
+>  >> +  compatible:
+>  >> +    oneOf:
+>  >
+>  > You do not have multiple choices, so no need for oneOf >
+> 
+> Currently that is true. But according to the datasheet of gsw1xx, it
+> could be easily to expand to other gsw1xx chips and other management
+> interfaces (e.g: spi, uart). If so, we could add something like:
+> mxl,gsw145-spi
+> mxl,gsw150-mdio
 
-Applied to pci/dwc, thanks!
 
-[1/2] PCI: Add PCI_PTM_CAP_RES macro
-      https://git.kernel.org/lpieralisi/pci/c/e32e1e26c409
-[2/2] PCI: designware-ep: Disable PTM capabilities for EP mode
-      https://git.kernel.org/lpieralisi/pci/c/442ae919e6ca
+So expand it now... Anyway enum allows you to add new types, so why why
+oneOf?
 
-Thanks,
-Lorenzo
+> ...
+> 
+> 
+>  >> +      - enum:
+>  >> +          - mxl,gsw145-mdio
+>  >
+>  > Why "mdio" suffix?
+> 
+> Inspired by others dsa chips.
+> lan9303.txt:  - "smsc,lan9303-mdio" for mdio managed mode
+> lantiq-gswip.txt:- compatible   : "lantiq,xrx200-mdio" for the MDIO bus
+> inside the GSWIP
+> nxp,sja1105.yaml:                  - nxp,sja1110-base-t1-mdio
+
+As I replied to Andrew, this is discouraged.
+
+Best regards,
+Krzysztof
+
