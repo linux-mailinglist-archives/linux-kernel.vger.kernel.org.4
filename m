@@ -2,134 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA3560F3D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D816460F3DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbiJ0JjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 05:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
+        id S234560AbiJ0Jkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 05:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233600AbiJ0JjO (ORCPT
+        with ESMTP id S233687AbiJ0Jkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 05:39:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0EB786CE;
-        Thu, 27 Oct 2022 02:39:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 27 Oct 2022 05:40:40 -0400
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0764DB67
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:40:33 -0700 (PDT)
+Received: from [192.168.31.208] (unknown [194.29.137.22])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0EAE0B8255A;
-        Thu, 27 Oct 2022 09:39:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 032D4C433D6;
-        Thu, 27 Oct 2022 09:39:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666863549;
-        bh=v+g7pRKxDyhhfF+WuOK6H0OrXUtvUEoGhM5OK8fa3kY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jq+V9llT5CXJFTjov0+0v9i74yYRTIbvZFh9oFHComZQkdc0qVMQO5YL8t4qaiNkU
-         mPOXvS4Sl+AvQimGl+u0/jVpQCAgqciwPlMr+Z0fwXhYtZtwdutDJ/S753AUyyw3eo
-         rr9XaXTe85cufXENy7927rR8JvLoCLsakXnbGGC/LlrauGMXI+Dl8Rsz1ygy162Ewt
-         SqRRkwDOVe/bzqfA522oCTwBUKaCG+ekCMtr8vV1SNueB9MGgr1so1oDjroDaY1r6C
-         UsFhb42pIYzNJSkk6TsVF1Zn0nTnVtII0/uH1QORF07Qvj4cDklndDd0I8Loamm6is
-         IWHC+UdDR4kbA==
-Date:   Thu, 27 Oct 2022 11:39:02 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thierry Reding <treding@nvidia.com>,
-        PCI <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Krishna Thota <kthota@nvidia.com>,
-        Manikanta Maddireddy <mmaddireddy@nvidia.com>,
-        sagar.tv@gmail.com
-Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
- logging
-Message-ID: <Y1pRtoLdWsDONsok@lpieralisi>
-References: <b1c243b0-2e6e-3254-eff0-a5276020a320@nvidia.com>
- <20220913200746.GA619956@bhelgaas>
- <20220914062411.GD16459@workstation>
- <CAL_JsqLbr4O_BHb8s-Px4S0OOY23qhFkN32cKBctc_BFakSBzA@mail.gmail.com>
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id B95E420184;
+        Thu, 27 Oct 2022 11:40:28 +0200 (CEST)
+Message-ID: <9ced2822-a9d2-2e59-fe40-6c6f690be487@somainline.org>
+Date:   Thu, 27 Oct 2022 11:40:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqLbr4O_BHb8s-Px4S0OOY23qhFkN32cKBctc_BFakSBzA@mail.gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.0
+Subject: Re: [PATCH 7/7] arm64: dts: mediatek: Add support for MT6795 Sony
+ Xperia M5 smartphone
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, robh+dt@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        chaotian.jing@mediatek.com, ulf.hansson@linaro.org,
+        matthias.bgg@gmail.com, hsinyi@chromium.org,
+        nfraprado@collabora.com, allen-kh.cheng@mediatek.com,
+        fparent@baylibre.com, sam.shih@mediatek.com,
+        sean.wang@mediatek.com, long.cheng@mediatek.com,
+        wenbin.mei@mediatek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20220729104441.39177-1-angelogioacchino.delregno@collabora.com>
+ <20220729104441.39177-8-angelogioacchino.delregno@collabora.com>
+ <a8fa9e22-8c3f-60b2-a0db-01cfd5c37765@somainline.org>
+ <17139e24-d33c-8240-cd4a-d87fb3b29276@collabora.com>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <17139e24-d33c-8240-cd4a-d87fb3b29276@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 09:16:27AM -0500, Rob Herring wrote:
-> On Wed, Sep 14, 2022 at 1:24 AM Manivannan Sadhasivam
-> <manivannan.sadhasivam@linaro.org> wrote:
-> >
-> > On Tue, Sep 13, 2022 at 03:07:46PM -0500, Bjorn Helgaas wrote:
-> > > On Tue, Sep 13, 2022 at 06:00:30PM +0100, Jon Hunter wrote:
-> > > > On 13/09/2022 17:51, Manivannan Sadhasivam wrote:
-> > > > > On Tue, Sep 13, 2022 at 03:42:37PM +0530, Vidya Sagar wrote:
-> > > > > > Some of the platforms (like Tegra194 and Tegra234) have open slots and
-> > > > > > not having an endpoint connected to the slot is not an error.
-> > > > > > So, changing the macro from dev_err to dev_info to log the event.
-> > > > >
-> > > > > But the link up not happening is an actual error and -ETIMEDOUT is being
-> > > > > returned. So I don't think the log severity should be changed.
-> > > >
-> > > > Yes it is an error in the sense it is a timeout, but reporting an error
-> > > > because nothing is attached to a PCI slot seems a bit noisy. Please note
-> > > > that a similar change was made by the following commit and it also seems
-> > > > appropriate here ...
-> > > >
-> > > > commit 4b16a8227907118e011fb396022da671a52b2272
-> > > > Author: Manikanta Maddireddy <mmaddireddy@nvidia.com>
-> > > > Date:   Tue Jun 18 23:32:06 2019 +0530
-> > > >
-> > > >     PCI: tegra: Change link retry log level to debug
-> > > >
-> > > >
-> > > > BTW, we check for error messages in the dmesg output and this is a new error
-> > > > seen as of Linux v6.0 and so this was flagged in a test. We can ignore the
-> > > > error, but in this case it seem more appropriate to make this a info or
-> > > > debug level print.
-> > >
-> > > Can you tell whether there's a device present, e.g., via Slot Status
-> > > Presence Detect?  If there's nothing in the slot, I don't know why we
-> > > would print anything at all.  If a card is present but there's no
-> > > link, that's probably worthy of dev_info() or even dev_err().
-> > >
-> >
-> > I don't think all form factors allow for the PRSNT pin to be wired up,
-> > so we cannot know if the device is actually present in the slot or not all
-> > the time. Maybe we should do if the form factor supports it?
-> >
-> > > I guess if you can tell the slot is empty, there's no point in even
-> > > trying to start the link, so you could avoid both the message and the
-> > > timeout by not even calling dw_pcie_wait_for_link().
-> >
-> > Right. There is an overhead of waiting for ~1ms during boot.
-> 
-> Async probe should mitigate that, right? Saravana is working toward
-> making that the default instead of opt in, but you could opt in now.
 
-I read this as "trying to bring the link up is mandatory because
-we can't detect an empty slot, therefore ~1ms delay during boot
-is unavoidable" and on that Rob's suggestion applies.
+On 27/10/2022 11:28, AngeloGioacchino Del Regno wrote:
+> Il 29/07/22 14:00, Konrad Dybcio ha scritto:
+>>
+>>
+>> On 29.07.2022 12:44, AngeloGioacchino Del Regno wrote:
+>>> Add a basic support for the Sony Xperia M5 (codename "Holly")
+>>> smartphone, powered by a MediaTek Helio X10 SoC.
+>>>
+>>> This achieves a console boot.
+>>>
+>>> Signed-off-by: AngeloGioacchino Del Regno 
+>>> <angelogioacchino.delregno@collabora.com>
+>
+> Hello Konrad,
+> First of all, I'm sorry for the very late reply.
+>
+>>> ---
+>>>   arch/arm64/boot/dts/mediatek/Makefile         |  1 +
+>>>   .../dts/mediatek/mt6795-sony-xperia-m5.dts    | 90 
+>>> +++++++++++++++++++
+>>>   2 files changed, 91 insertions(+)
+>>>   create mode 100644 
+>>> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
+>>>
+>>> diff --git a/arch/arm64/boot/dts/mediatek/Makefile 
+>>> b/arch/arm64/boot/dts/mediatek/Makefile
+>>> index af362a085a02..72fd683c9264 100644
+>>> --- a/arch/arm64/boot/dts/mediatek/Makefile
+>>> +++ b/arch/arm64/boot/dts/mediatek/Makefile
+>>> @@ -3,6 +3,7 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt2712-evb.dtb
+>>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6755-evb.dtb
+>>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6779-evb.dtb
+>>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6795-evb.dtb
+>>> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt6795-sony-xperia-m5.dtb
+>> -holly.dtb?
+>>
+>
+> I prefer using the commercial name to identify the device.
+> "Holly" is the smartphone project codename and that is mentioned 
+> almost nowhere:
+> the aim here is to enhance readability as to make it immediately 
+> understandable
+> that this devicetree is for the Xperia M5 device.
 
-Just to understand where this thread is going. The suggestion
-above does not change the aim of this patch, that seems reasonable
-to me and it makes sense even if/when what Rob is suggesting is
-implemented.
+Ok, sounds good.
 
-Is that correct ?
 
-Thanks,
-Lorenzo
+>
+>>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-evb.dtb
+>>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-x20-dev.dtb
+>>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
+>>> diff --git a/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts 
+>>> b/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
+>>> new file mode 100644
+>>> index 000000000000..94d011c4126c
+>>> --- /dev/null
+>>> +++ b/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
+>>> @@ -0,0 +1,90 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>> +/*
+>>> + * Copyright (c) 2022, Collabora Ltd
+>>> + * Author: AngeloGioacchino Del Regno 
+>>> <angelogioacchino.delregno@collabora.com>
+>>> + */
+>>> +
+>>> +/dts-v1/;
+>>> +#include "mt6795.dtsi"
+>>> +
+>>> +#include <dt-bindings/gpio/gpio.h>
+>> Looks unused.
+>>
+>
+> Right, I'll remove that in v2.
+>
+>>> +
+>>> +/ {
+>>> +    model = "Sony Xperia M5";
+>>> +    compatible = "sony,xperia-m5", "mediatek,mt6795";
+>> sony,holly?
+>>
+>
+> I'm sorry, but I can't understand the sense of adding that compatible 
+> string to
+> the mix. To the kernel, it doesn't mean anything - and we already have 
+> another
+> string advertising the specific machine, which is "sony,xperia-m5".
+
+I was suggesting replacing xperia-m5 with holly, but since we agreed on 
+keeping
+
+m5 in the dtb name, I suppose it's fine for this one to stay too.
+
+
+>
+> Of course, there is no Xperia M5 with a different SoC and, even if 
+> there was a
+> xperia-m5 with a different SoC, we anyway have both a machine 
+> compatible and a
+> SoC compatible in here, so that would still not pose any issue.
+>
+>>> +    chassis-type = "handset";
+>>> +
+>>> +    aliases {
+>>> +        mmc0 = &mmc0;
+>>> +        mmc1 = &mmc1;
+>>> +        serial0 = &uart0;
+>>> +        serial1 = &uart1;
+>>> +    };
+>>> +
+>>> +    memory@40000000 {
+>>> +        device_type = "memory";
+>>> +        reg = <0 0x40000000 0 0x1E800000>;
+>> Lowercase hex in size. Also, doesn't the bootloader fill it in?
+>>
+>
+> Updating the device to the latest software version will give you a 
+> bootloader
+> that fills that in, but the first-ever software release contains one 
+> that will
+> not do that in particular conditions (fastboot boot).
+
+Ugh. If only vendors tested their software before shipping it to users..
+
+I think it's worth to adding a comment mentioning that, though.
+
+
+>
+>>> +    };
+>>> +
+>>> +    reserved_memory: reserved-memory {
+>>> +        #address-cells = <2>;
+>>> +        #size-cells = <2>;
+>>> +        ranges;
+>>> +
+>>> +        /* 128 KiB reserved for ARM Trusted Firmware (BL31) */
+>> Is that true for all devices with this SoC, or..? If so, it may be worth
+>> moving this into mt6795.dtsi.
+>>
+>>> +        bl31_secmon_reserved: secmon@43000000 {
+>> memory@, everywhere. Use labels to name the nodes.
+>>
+>
+> I'm afraid that's not possible, as the bootloader is reading the 
+> devicetree
+> and requires these nodes to follow this naming.
+
+Wow that's bad.. probably deserves a comment to prevent 'cleanups' 
+breaking this.
+
+
+Konrad
+
+>
+>>> +            no-map;
+>> reg goes first.
+>
+> Will fix in v2.
+>
+> Best regards,
+> Angelo
+>
+>
