@@ -2,106 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1135060EF88
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 07:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BACE60EF8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 07:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233881AbiJ0FeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 01:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
+        id S233280AbiJ0Fho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 01:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiJ0FeX (ORCPT
+        with ESMTP id S229743AbiJ0Fhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 01:34:23 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DE497D65
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 22:34:21 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id r18so244007pgr.12
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 22:34:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ac/dPXfdapcJi6R++ywswTtoxteB6ZZ2SeSnB/OESj8=;
-        b=ExryRHGS58d0xSXrGRgUqru2wfTVzxXR3VRekqMuVbOPiqaslNUEpqI+m7WuvJDyq8
-         0r49s21EiIK0nS5bsQgiBMChfXYKV7mCRCRBkb6/emmvZlbzLSMsfMtC6qFhclwL9zg3
-         nm8o6FfN+ts/Hrruvi53sWfnzJFQDBKaeDRKQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ac/dPXfdapcJi6R++ywswTtoxteB6ZZ2SeSnB/OESj8=;
-        b=L6cn/ce3R9ZdHcTu7NwdqD+X7ScdPY/XqgEKHq6z3wsr1yAmnBMSmerlDi1MBND0HJ
-         WBqd+HIYwivC1uYDTzrBeiMZArKAYV6d2TzAwAVQZAxwdc5UqoMGalXXooalTgUritTy
-         puRi9qWACAieLKH/DEMXCHjXyox+Cv0514ToGFL6n7gJV1f5AIiiZSWEpP03fzwm2tUD
-         Dpzx73MeKD3YMr5u2ecX5fjbVphnQwgZ0/9Wt8eNH5yeKGmnPqsiafJAXlIiYn/1lAMz
-         hPNpJy8uTl3X+ZrfcnD05Iged64bqmaUnvsvTFzI6MaQiFs1ekObvkhzYSZtxx3GMxx3
-         okkg==
-X-Gm-Message-State: ACrzQf1wxOxcJvL0zkFiQ0SiDDbgZjzzS6KXV8HKj0ysBpKXTU0Bn1h2
-        iw0o70aL3Oa39uH/6ANxxEKP7g==
-X-Google-Smtp-Source: AMsMyM4IRJfSWcHdgMX+5M2VG7pQG8tnNKBJxJwoLxbBdkq5EUKumYJM9SAARxYwMi3qa0P41Hho7A==
-X-Received: by 2002:a63:2a8b:0:b0:46e:9fda:2171 with SMTP id q133-20020a632a8b000000b0046e9fda2171mr31209479pgq.106.1666848861019;
-        Wed, 26 Oct 2022 22:34:21 -0700 (PDT)
-Received: from rekanorman3.syd.corp.google.com ([2401:fa00:9:14:b007:7d32:6096:a655])
-        by smtp.gmail.com with ESMTPSA id w23-20020a1709026f1700b0017e232b6724sm278540plk.69.2022.10.26.22.34.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 22:34:20 -0700 (PDT)
-From:   Reka Norman <rekanorman@chromium.org>
-To:     Mathias Nyman <mathias.nyman@intel.com>
-Cc:     Reka Norman <rekanorman@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH] xhci: Apply XHCI_RESET_TO_DEFAULT quirk to ADL-N
-Date:   Thu, 27 Oct 2022 16:34:07 +1100
-Message-Id: <20221027053407.421783-1-rekanorman@chromium.org>
-X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
+        Thu, 27 Oct 2022 01:37:40 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D63615A955;
+        Wed, 26 Oct 2022 22:37:37 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1onvaA-00010u-Qi; Thu, 27 Oct 2022 07:37:34 +0200
+Message-ID: <fdca8918-730c-c36d-a3ca-4c95f16d1e8e@leemhuis.info>
+Date:   Thu, 27 Oct 2022 07:37:34 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [Regression] Bug 216613 - Sound stopped working with v6.0.3 on
+ Lenovo T14 Gen2i: ASoC: error at snd_soc_component_probe
+Content-Language: en-US, de-DE
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     alsa-devel@alsa-project.org,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, Takashi Iwai <tiwai@suse.de>
+References: <2c028797-b313-be93-7b1e-8d838e694948@leemhuis.info>
+ <f34cafd4-f224-ad10-6962-e8f6c709cb39@leemhuis.info>
+ <3f207f82-e177-c833-b2b0-ca9e64a6e9a7@linux.intel.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <3f207f82-e177-c833-b2b0-ca9e64a6e9a7@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1666849058;76a7e5dd;
+X-HE-SMSGID: 1onvaA-00010u-Qi
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ADL-N systems have the same issue as ADL-P, where a large boot firmware
-delay is seen if USB ports are left in U3 at shutdown. So apply the
-XHCI_RESET_TO_DEFAULT quirk to ADL-N as well.
+[CCing Takashi in case he is interested in this and/or wants to make my
+life as regression tracker a little easier in the future]
 
-This patch depends on "xhci: Add quirk to reset host back to default
-state at shutdown".
+On 26.10.22 22:41, Pierre-Louis Bossart wrote:
+> On 10/26/22 07:08, Thorsten Leemhuis wrote:
+>> On 22.10.22 08:35, Thorsten Leemhuis wrote:
+>>>
+>>> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+>>> kernel developer don't keep an eye on it, I decided to forward it by
+>>> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216613 :
+>>>
+>>>> After upgrade kernel from 6.0.2 to 6.0.3 on Lenovo T14 Gen2i, sound stopped working.
+>>>> dmesg:
+>>>>
+>>>> paź 21 21:11:45 kernel: snd_hda_codec_hdmi ehdaudio0D2: failed to create hda codec -12
+>>>> paź 21 21:11:45 kernel: snd_hda_codec_hdmi ehdaudio0D2: ASoC: error at snd_soc_component_probe on ehdaudio0D2: -12
+>>>> paź 21 21:11:45 kernel: skl_hda_dsp_generic skl_hda_dsp_generic: ASoC: failed to instantiate card -12
+>>>>
+>>
+>> #regzbot introduced: 7494e2e6c55ed19
+>> #regzbot fixed-by: 02356311982b
+> 
+> Revert on its way:
+> https://lore.kernel.org/r/20221024143931.15722-1-tiwai@suse.de
 
-Signed-off-by: Reka Norman <rekanorman@chromium.org>
----
+Thx, in fact it was already merged:
 
- drivers/usb/host/xhci-pci.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-6.0.y&id=02356311982bbb117310a27985fa8938e82c0b6e
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 7bccbe50bab15..f98cf30a3c1a5 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -59,6 +59,7 @@
- #define PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI		0x9a13
- #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI		0x51ed
-+#define PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_PCH_XHCI	0x54ed
- 
- #define PCI_DEVICE_ID_AMD_RENOIR_XHCI			0x1639
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
-@@ -246,7 +247,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 		xhci->quirks |= XHCI_MISSING_CAS;
- 
- 	if (pdev->vendor == PCI_VENDOR_ID_INTEL &&
--	    pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI)
-+	    (pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_PCH_XHCI))
- 		xhci->quirks |= XHCI_RESET_TO_DEFAULT;
- 
- 	if (pdev->vendor == PCI_VENDOR_ID_INTEL &&
--- 
-2.38.0.135.g90850a2211-goog
+That "#regzbot fixed-by: 02356311982b" above told my regression tracking
+bot about the commit. I sadly had to do that manually, as Takashi used
+the non-standard "BugLink" tag to link to the report, which Linus
+doesn't want:
 
+https://lore.kernel.org/all/CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com/
+
+To quote: ```please stop making up random tags that make no sense. Just
+use "Link:"```
+
+Maybe regzbot nevertheless should resolve a tracked regression as
+resolved, if it sees BugLink to a tracked regression. But I think the
+real solution is: checkpatch.pl should complain.
+
+Ciao, Thorsten
