@@ -2,176 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C7460EEDC
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 05:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA0160EEE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 06:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234383AbiJ0D5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 23:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
+        id S233785AbiJ0EEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 00:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbiJ0D5M (ORCPT
+        with ESMTP id S230330AbiJ0EEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 23:57:12 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D397B99393;
-        Wed, 26 Oct 2022 20:57:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dcZjiUIE6GgUb/4UBrr55GR4AOyLybUUyCryI8vgHri8wvfmmxAvV43orQcl81H91OQH2YtL9t7nJ85wmOkYJgWSz53bZSpc70X2UaSgd3N5sJJpvq+UQQHvsr7AUZW9k9IYAp+ML4C1NMlUnGTiiLni7Rh+GfDe1E7oh7edPeDCYlnKQ6fvZoCoUYQvGKUxqHgPNkUG4lUaAd5DhC7tT0MQ9hNABIXIkXjkaiMHZIbLi8E3Muk6EZKziAWn/7iyUPx/UH/cwkh7fRNXQcePgoaPwt8yZoK1rBhTiBYIE3orrz/ogAX6/54urX4bmum1XSzq80Sk/xoCHjn9Mlu1eg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9TytjepmL2F7eN6Ky07gjGB40djEGj1r/Jd5FWBgwU4=;
- b=edYid3zNRs3t2HBlLjpKrCvFLWvkV8g/n6zBO/8GgPDn9RhcDh9GvNYhNP73diCXwiSRcRA36BPsmdmVL3HddRX4GcQB77fz2mMwq5TM0TjaNHwlZqLdDBoyM73ntMrfuRVfh591RxWy1HBFT19npCcQROatLYdQcQlj6PQOKJGQrcCWaOxA96pyxYBYMrGLelL93Wq0SG97kPCKEh7oOSRqITU0Y1bYipIWkB+RWfrB/hhSjf0Eyt71//Ad903ag9SrJNM7QHSPAYMnc6z26Vr8OEbNkRu3pK0noZsLpDpT0Sz6bh6GBrkY63iwcRvHksqJfNmvHt39PkU8B43Kbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+        Thu, 27 Oct 2022 00:04:41 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CA7B2B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 21:04:25 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1322d768ba7so462985fac.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 21:04:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9TytjepmL2F7eN6Ky07gjGB40djEGj1r/Jd5FWBgwU4=;
- b=XJUusFkUGSkb6KfuUbNuqVVfVgDhJ/SO9iXzdfO+AMdD1kjHNqyGebwqUO/iwhkKOmJoWxgOOqBrmsts7AZVIMgSSRkxjYPn1VM0NGm7teEnkOV/COYcVYnObgpkJh6jHb7JsXlYfu6V0imeroT1XHy39Uh86R9WSsh84DxL2h8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by SJ0PR10MB5631.namprd10.prod.outlook.com
- (2603:10b6:a03:3e1::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Thu, 27 Oct
- 2022 03:57:09 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::8eaf:edf0:dbd3:d492]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::8eaf:edf0:dbd3:d492%5]) with mapi id 15.20.5746.028; Thu, 27 Oct 2022
- 03:57:09 +0000
-Date:   Wed, 26 Oct 2022 20:57:02 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        =?utf-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>
-Subject: Re: [PATCH v1 net-next 7/7] dt-bindings: net: mscc,vsc7514-switch:
- utilize generic ethernet-switch.yaml
-Message-ID: <Y1oBjtQeZlzwMfoD@euler>
-References: <20221025050355.3979380-1-colin.foster@in-advantage.com>
- <20221025050355.3979380-8-colin.foster@in-advantage.com>
- <20221026174704.GA809642-robh@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026174704.GA809642-robh@kernel.org>
-X-ClientProxiedBy: MW4PR04CA0051.namprd04.prod.outlook.com
- (2603:10b6:303:6a::26) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=O4zxOHr5pL/tZbv/Lney9NNoy+V8TXoApZzVW+UpE9c=;
+        b=djdp3vBObrtKXk5iR2I5mQ+gUxa3qFdrLVOfoGTRZRKq0CjbUBqUL47z3HYzO5ZEvS
+         xUP1b7enKhRqRrp9dPgJSFx0sBgq1QzRSBLZ/PvFJrNtaaWNkd4MxBHUHpf/FBxYBHEn
+         tvO6HWb7/j3VZ2LClPg+V9COXkNFTcAi0L3LHy96UTepRVVwmc+NpZuuEIRdbqNbPdTF
+         rSgGpzGBj0vrOz9t85G5yvbSfrPMejBFPNCX3i34fArLuTe8xDissBOe4KZm/0he5yB4
+         y44Dvn/DvwnXa5zEKJgnNjqMf+50N4Zj+pQIVq3klkWlzE+pO/ZyNQO2hXSeVoww78s4
+         FjMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O4zxOHr5pL/tZbv/Lney9NNoy+V8TXoApZzVW+UpE9c=;
+        b=bK19EHPmCjf2N/igPkkkYoy+NTeabaMIReUQMTT7d9BrDq+VFsWMXqpYTFKvUUwr9D
+         W39/++NptVFhX+CPCoM5/vLVZbq/8T6UY7MyOugZmBaYY7aPlSI5CGfTAMonOsPfIQGn
+         XeUr+hLY98MXwX+BZj/6i0VowGyc91pc9n6m0ebLWuozR28vaXd7SbfIMnvB00abPaz/
+         rLHU54XEW91Bzs4LG+zUCHLVnw9MC9XMkCowxrRtyc1goVdJtst8+oi5BxJBx0N7zAUP
+         fGpCE52HCxP0Jkf1MNtVtTbHVs/S9L+1lJcKw8Nb/1RizartYiMTf3My5j5lJXGKNJbA
+         /Aqg==
+X-Gm-Message-State: ACrzQf0cLjlEqdxEfdNZEcKXNZ+GwTvUUzz4rAJ8orD9FO8C5Ln+5Ek+
+        kjHSonueDiClX9spZlG1vLU=
+X-Google-Smtp-Source: AMsMyM7jk2gdeNDOiu2o8p6WCnnUCNOLAYix7ph4jJIVEGB/+VOj7vRGrGyD1yt/IGRHpLJ+hzO0FA==
+X-Received: by 2002:a05:6870:2052:b0:132:7b2:2fe6 with SMTP id l18-20020a056870205200b0013207b22fe6mr4473033oad.98.1666843464841;
+        Wed, 26 Oct 2022 21:04:24 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r5-20020aca5d05000000b0035956747d07sm44594oib.17.2022.10.26.21.04.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 21:04:24 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <9330bab0-1fbf-95a7-8d97-af522762f470@roeck-us.net>
+Date:   Wed, 26 Oct 2022 21:04:22 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|SJ0PR10MB5631:EE_
-X-MS-Office365-Filtering-Correlation-Id: e61922c1-d781-48b6-1db8-08dab7cf4fd3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Qim9Kwp76gpsKgz+nKTepvfNALzH+1KNTzdZYW6NIbk1iCpQFzhXaMSacx7TVNA6qGycTaEZuEdOwOcfLG3upt53eV4dmzquOnFcN8lWoWPQOuWb8vMVCqWE+OWhAWsZR904WAnvDMGquTJt6U5K3i0HPQZr9fVLAZW3Wo9Iyo6mEgLBSTJO9YMkiWE8QUjim+1CNX39DzAlpdhMBdJS8rbojFRVDQOdwCsj27JlPKLUXCtzaTti2LavrNtCNHHbx8p1hlvbpUl9Ozw8XFi1XT8tQEbyoY6ERo15NGJXTk1tjJY78U19lplDSgUntjxBU7HlkNIFq9OPtHthFwDn/ZwmW+dW3bhGTlRsEIvPh++cQ/9iTzibKDjcbsP80V3M2hpKWNeo1fmYadH1l21SGkRjc/0Sjhv9tQaLtdTo3f7ySp0RZPof+SZ4Xz7iJGpQscsfue/nCV2CHTJa7a1UUWKPDA+4SRDLOtQT2XcKU+xRKkju/fpqJKoRLkFJoalTga0vFLEcHBbUUowIUUa2kwWpXPkrTCbDloDqKph01x9dbFujgROinhICtNXUvQnoj6qvjh0zPKmgPEnzZQJU4HNlx+2Brom4xzpcsFFynI20wrK3sTEV9iAnTftfq8DxOqcsueA3+HhLMyi2BOM8dRI2LQEmlzMrykluDOqQeMX+qHWaZ2NVeTI60qa1RKxmgrDp2gFAuol13uulsnBcbr1JW1bqwzfRCrcoBR2z5H4PlFssh1tGHZuDnqoA70qtm6gIqvYuCZWJtTrOHZOh5uDidkyjc/roP9EFS2+E1O308LirjXuZ2Neld6bYFoFE
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(376002)(366004)(396003)(346002)(39840400004)(136003)(451199015)(86362001)(2906002)(44832011)(38100700002)(186003)(83380400001)(6506007)(4326008)(316002)(6486002)(6512007)(6666004)(26005)(66476007)(9686003)(6916009)(54906003)(8676002)(66946007)(66556008)(5660300002)(41300700001)(33716001)(8936002)(7416002)(478600001)(41533002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3mrh1udW5gb2LUvNBbAJ1ggPglZMsXt4vZLKwKUPczkrP0W9V4++b1SaAqp2?=
- =?us-ascii?Q?Gj9GI2LAp75YfS0xdyxl9ojT5RMW62VGdtTkXCKCsm6Ep6bRU+eJh8T7Bkeg?=
- =?us-ascii?Q?suMVAvUmzaZGK0XY64fPNo6jb6IGExmV+q8acZEy+HXXQjFdQ5uFAoNWV0+U?=
- =?us-ascii?Q?QjhtqwFzKaaax2QuIBNsTHsgByPBnfc1iLz5Os2Ip/nToxxeXlAwc81cLGjW?=
- =?us-ascii?Q?TAYaD4nUq5fi8eG7rTmiIRCFYTHdYhNZut+B9y3HKEzZW+jv+r7gQak324Vo?=
- =?us-ascii?Q?kSP5BlvEuFadfGejaO7bJvmfUG4J/JvycjF5/+tCXksiVB87Y2UsJRdOPIy9?=
- =?us-ascii?Q?kikB7pDby+c2ri7nx3gvMm+lWAZOYUeXmPEntDjvSc8NKoSlh474beENwpan?=
- =?us-ascii?Q?9aF7ej5JiPNcj9Df9P66XOZJmdSh6P3mEnBdcRVeVcrFV8N5/320wBmXLKJd?=
- =?us-ascii?Q?gBpnixcYGTRHNmV8RfURnvUqkPo5vtUsdA+DfwKfW7v2G0Zfa4NfbymSZLyN?=
- =?us-ascii?Q?hbypj3UF85j5safJ+tC2pTFTTfIVs+0nGXHJjCbcWC+TbfG2mpw//ioLKu/o?=
- =?us-ascii?Q?2jVyCqzOwxSURSPzEaYWevhi9G+ikU3ZakeyAfncaNdAT/XV+/HfZyJp7pXX?=
- =?us-ascii?Q?bnFcF4RD44BH7TGAkAYZSAvW/zmYj1Q6R1xSVuvnx4QzBF08EjdL39+3EzN3?=
- =?us-ascii?Q?+PdKPadAt9AvAPVB9Ntn6KvVWVR69oldQeKR1tazRZ4/9G0+5LWNLdbVaLCz?=
- =?us-ascii?Q?dB0uvL+k1hjiDLgSzOebk2T6uWYRZd1VoWsQEQEITNxQB9WZYQh4L1POR1i4?=
- =?us-ascii?Q?JLYYRvjPvrKwKDA6Wsk2vTZ1+UeA82qiOHy09rI+8P5rC4dzExR2KOofcbxg?=
- =?us-ascii?Q?gtIJYZGgGIRajJuiSYoqUeAaVO/2tVUnTFRSZQwH49qcsRSs25xoAvZ7l+xL?=
- =?us-ascii?Q?Eo5k7j5kpyxSHhVXWOki7Wcda/wwWaM7JSOlB3K7j5C0fHi9dcPmrQqBLHkp?=
- =?us-ascii?Q?I2DySD4GBNKfXXPYuTP00GvjgnbZrGgLA6KXYzixTjVf7fzcoDQjXfA9eMIk?=
- =?us-ascii?Q?nH+u/5GGzeAMxEpRNpenfl26An2GqW16UAdlxqtvLcBbvrS0CZijSNNZnp1B?=
- =?us-ascii?Q?bCwWo7i5MZHwSGgMysEGhcuGcD4C6e/ES3Ky3DfVvAGXU4aQw9PDcg1kGj5i?=
- =?us-ascii?Q?5m+puriguDyqCJR9LPvvepn6esJv90975uZyKRMSKHlDVejyCMP8K5sjP1UQ?=
- =?us-ascii?Q?AYe3ghr4hxMr1VKavwgrwuAAsb93+ZVrGgpVQzreI3jwxncyrV3Q6JxoWrL7?=
- =?us-ascii?Q?4hgOEfGR6ID47OpDQYWM6frUBED1073cBRIAEeFSQyri2KS+PS7tRmo0hnnZ?=
- =?us-ascii?Q?uFgKpY7/Mwrp+1BBZ3UDozhVQ88/v0tCyfuL9l6XMl6C/cdtGS4oG+TqDYPN?=
- =?us-ascii?Q?ru9/mpG0ucuNnm9dbVodsVbM/qecIR45u4mIAtVW/7QBZz56WO+TaHn6maX0?=
- =?us-ascii?Q?8TGAiPsc+uSRUY67TY6Gc1x7BvbimAFIw7C+Ao9mwcHT1wMXQ72iXbAF4BOX?=
- =?us-ascii?Q?aNYWPeB69sY/BlBIxLfifq+L9pm5mQ7xU0uzdeasfF6LlnS8cNZJyzaozUA9?=
- =?us-ascii?Q?JaSk5DeoJor6biUgWv5/SxY=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e61922c1-d781-48b6-1db8-08dab7cf4fd3
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 03:57:09.2473
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +aqkp3kNrPyO1Ga3d2WbblIq+AEMaDPoea3ZWhQwNYcadxmP8eABXjTb3DIx0jQn20tJ4s+YKO9wBtbWk+JqU+3BmqMTvGe5guFPchZTkBo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB5631
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] ALSA: Use del_timer_sync() before freeing timer
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
+References: <20221026231236.6834b551@gandalf.local.home>
+Content-Language: en-US
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20221026231236.6834b551@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 12:47:04PM -0500, Rob Herring wrote:
-> On Mon, Oct 24, 2022 at 10:03:55PM -0700, Colin Foster wrote:
-> > Several bindings for ethernet switches are available for non-dsa switches
-> > by way of ethernet-switch.yaml. Remove these duplicate entries and utilize
-> > the common bindings for the VSC7514.
-> > 
-> > Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> > Suggested-by: Vladimir Oltean <olteanv@gmail.com>
-> > ---
-> >  .../bindings/net/mscc,vsc7514-switch.yaml     | 36 +------------------
-> >  1 file changed, 1 insertion(+), 35 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml b/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
-> > index ee0a504bdb24..1703bd46c3ca 100644
-> > --- a/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
-> > +++ b/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
-> > @@ -19,11 +19,8 @@ description: |
-> >    packet extraction/injection.
-> >  
-> >  properties:
-> > -  $nodename:
-> > -    pattern: "^switch@[0-9a-f]+$"
-> > -
-> >    compatible:
-> > -    const: mscc,vsc7514-switch
-> > +    $ref: ethernet-switch.yaml#
+On 10/26/22 20:12, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > 
-> ??? 'compatible' is a node?
-
-I need to look more into this. The compatible string should remain
-mscc,vsc7514-switch, but I think the pattern properties should
-probably be updated to "^(ethernet-)switch@[0-9a-f]+$" to match
-ethernet-switch.yaml.
-
-I didn't think the ethernet-switch.yaml could be at the top level for
-the 7514, but I must have been mistaken. Either way - not under
-compatible as you're pointing out. Much appreciated.
-
+> The current code for freeing the emux timer is extremely dangerous:
 > 
-> Rob
+>    CPU0				CPU1
+>    ----				----
+> snd_emux_timer_callback()
+> 			    snd_emux_free()
+> 			      spin_lock(&emu->voice_lock)
+> 			      del_timer(&emu->tlist); <-- returns immediately
+> 			      spin_unlock(&emu->voice_lock);
+> 			      [..]
+> 			      kfree(emu);
+> 
+>    spin_lock(&emu->voice_lock);
+> 
+>   [BOOM!]
+> 
+> Instead just use del_timer_sync() which will wait for the timer to finish
+> before continuing. No need to check if the timer is active or not when
+> doing so.
+> 
+> This doesn't fix the race of a possible re-arming of the timer, but at
+> least it won't use the data that has just been freed.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>   sound/synth/emux/emux.c | 5 +----
+>   1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/sound/synth/emux/emux.c b/sound/synth/emux/emux.c
+> index 5ed8e36d2e04..a2ee78809cfb 100644
+> --- a/sound/synth/emux/emux.c
+> +++ b/sound/synth/emux/emux.c
+> @@ -131,10 +131,7 @@ int snd_emux_free(struct snd_emux *emu)
+>   	if (! emu)
+>   		return -EINVAL;
+>   
+> -	spin_lock_irqsave(&emu->voice_lock, flags);
+> -	if (emu->timer_active)
+> -		del_timer(&emu->tlist);
+> -	spin_unlock_irqrestore(&emu->voice_lock, flags);
+> +	del_timer_sync(&emu->tlist);
+>   
+>   	snd_emux_proc_free(emu);
+>   	snd_emux_delete_virmidi(emu);
+
