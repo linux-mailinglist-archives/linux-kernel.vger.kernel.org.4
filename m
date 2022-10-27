@@ -2,104 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD46E60F448
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC6560F4CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235153AbiJ0KBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 06:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
+        id S234667AbiJ0KVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 06:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235039AbiJ0KAf (ORCPT
+        with ESMTP id S233548AbiJ0KV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 06:00:35 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CA5DD3A6;
-        Thu, 27 Oct 2022 03:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666864812; x=1698400812;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fJPCFTV8MpF6btptcz/BJUn1rRYOmr6pkto3N3fNH+w=;
-  b=espbAOe/VK/OuqYKfXdARkFUuJjbBmlKz6uBipnUZ3106njesWzYF+PP
-   KaBrzQ6RODPm4ro47uEpH0eU3Z2CL8DrektXHFutfIRSa4cBhekantubr
-   WB6VfJrzY0kNN8OnV16zehRuvBhe7xaxI6AjXAS+anTCkw/E730n1aBFg
-   WpdvJRq+QRMiPYFjUWTvzdA/oOXVjZfHEzGJLIj1cFsUUDBbmYebhjG8k
-   bYG4v6Ee6IPao9sOK0DETn5qJeN43S1y7rJfYfltG6hQ1ZHB+kLLt0u0K
-   5ZRFtgcas5XDGl5b4taMzw3dKnrO9EUBuHEDbOYSHGr0wa/IXK9oFHYyz
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="394498356"
-X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
-   d="scan'208";a="394498356"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 03:00:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="583498473"
-X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
-   d="scan'208";a="583498473"
-Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.132])
-  by orsmga003.jf.intel.com with ESMTP; 27 Oct 2022 03:00:08 -0700
-Date:   Thu, 27 Oct 2022 18:05:48 +0800
-From:   Zhao Liu <zhao1.liu@linux.intel.com>
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        =?iso-8859-1?Q?Dexuan=A0Cui?= <decui@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?iso-8859-1?Q?Ira=A0Weiny=A0?= <ira.weiny@intel.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>
-Subject: Re: [PATCH v2] x86/hyperv: Remove BUG_ON() for kmap_local_page()
-Message-ID: <Y1pX/BGRgceJcEE9@liuzhao-OptiPlex-7080>
-References: <20221020083820.2341088-1-zhao1.liu@linux.intel.com>
- <Y1lPfphHVRn2e4I5@liuwe-devbox-debian-v2>
+        Thu, 27 Oct 2022 06:21:26 -0400
+X-Greylist: delayed 1529 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Oct 2022 03:21:22 PDT
+Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7B9A3F53;
+        Thu, 27 Oct 2022 03:21:19 -0700 (PDT)
+Received: from cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net ([86.15.83.122] helo=[192.168.0.17])
+        by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+        id 1onzbq-000Jzi-LI; Thu, 27 Oct 2022 10:55:35 +0100
+Message-ID: <6bba0876-3002-0614-5aeb-c4cf901938ca@codethink.co.uk>
+Date:   Thu, 27 Oct 2022 10:55:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1lPfphHVRn2e4I5@liuwe-devbox-debian-v2>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
+ logging
+Content-Language: en-GB
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Bjorn Helgaas <helgaas@kernel.org>, lpieralisi@kernel.org
+Cc:     Vidya Sagar <vidyas@nvidia.com>, jingoohan1@gmail.com,
+        gustavo.pimentel@synopsys.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, treding@nvidia.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <20221018164329.GA3808783@bhelgaas>
+ <8670e757-7275-57eb-3f5c-0a21ba354e37@nvidia.com>
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+Organization: Codethink Limited.
+In-Reply-To: <8670e757-7275-57eb-3f5c-0a21ba354e37@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 03:17:18PM +0000, Wei Liu wrote:
-> Date: Wed, 26 Oct 2022 15:17:18 +0000
-> From: Wei Liu <wei.liu@kernel.org>
-> Subject: Re: [PATCH v2] x86/hyperv: Remove BUG_ON() for kmap_local_page()
+On 26/10/2022 12:39, Jon Hunter wrote:
+> Hi Lorenzo,
 > 
-> On Thu, Oct 20, 2022 at 04:38:20PM +0800, Zhao Liu wrote:
-> > From: Zhao Liu <zhao1.liu@intel.com>
-> > 
-> > The commit 154fb14df7a3c ("x86/hyperv: Replace kmap() with
-> > kmap_local_page()") keeps the BUG_ON() to check if kmap_local_page()
-> > fails.
-> > 
-> > But in fact, kmap_local_page() always returns a valid kernel address
-> > and won't return NULL here. It will BUG on its own if it fails. [1]
-> > 
-> > So directly use memcpy_to_page() which creates local mapping to copy.
-> > 
-> > [1]: https://lore.kernel.org/lkml/YztFEyUA48et0yTt@iweiny-mobl/
-> > 
-> > Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> > Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> > Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
+> On 18/10/2022 17:43, Bjorn Helgaas wrote:
+>> On Tue, Oct 18, 2022 at 07:21:54AM +0100, Jon Hunter wrote:
+>>> Hi Bjorn,
+>>>
+>>> On 13/09/2022 11:12, Vidya Sagar wrote:
+>>>> Some of the platforms (like Tegra194 and Tegra234) have open slots and
+>>>> not having an endpoint connected to the slot is not an error.
+>>>> So, changing the macro from dev_err to dev_info to log the event.
+>>>>
+>>>> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+>>>> ---
+>>>>    drivers/pci/controller/dwc/pcie-designware.c | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/pci/controller/dwc/pcie-designware.c 
+>>>> b/drivers/pci/controller/dwc/pcie-designware.c
+>>>> index 650a7f22f9d0..25154555aa7a 100644
+>>>> --- a/drivers/pci/controller/dwc/pcie-designware.c
+>>>> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+>>>> @@ -456,7 +456,7 @@ int dw_pcie_wait_for_link(struct dw_pcie *pci)
+>>>>        }
+>>>>        if (retries >= LINK_WAIT_MAX_RETRIES) {
+>>>> -        dev_err(pci->dev, "Phy link never came up\n");
+>>>> +        dev_info(pci->dev, "Phy link never came up\n");
+>>>>            return -ETIMEDOUT;
+>>>>        }
+>>>
+>>>
+>>> Are you OK to take this change?
+>>
+>> When this came up, Lorenzo was in the middle of a big move and I was
+>> covering for him while he was unavailable.  But he's back, and I'm
+>> sure he will resolve this soon.
+>>
+>> Personally I'm OK either way.
+>>
+>> Bjorn
 > 
-> Applied to hyperv-fixes. Thanks.
+> 
+> Can we come to a conclusion on this?
+> 
+> We have tests that fail when errors/warning messages are reported. We 
+> can choose to ignore these errors, but given that this is not an error 
+> in this case, we were thinking it is better to make it informational.
 
-Sorry Wei, I appology for not deleting unused variables, which caused
-the next tree break. Do I need to send another v3 to make up for my
-carelessness?
+Is there any hardware presence detect available to just avoid even
+trying to bring a link up on an disconnected port?
 
-Zhao
+
+-- 
+Ben Dooks				http://www.codethink.co.uk/
+Senior Engineer				Codethink - Providing Genius
+
+https://www.codethink.co.uk/privacy.html
+
