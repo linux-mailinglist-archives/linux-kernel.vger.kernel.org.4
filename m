@@ -2,178 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C9060FA30
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 16:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C726760FA32
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 16:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236170AbiJ0OMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 10:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
+        id S236173AbiJ0OM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 10:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235974AbiJ0OMH (ORCPT
+        with ESMTP id S236086AbiJ0OMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 10:12:07 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4008E187DE8
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 07:12:06 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id r3so2173898yba.5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 07:12:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pLdHfFfhX3cy94Z9ezJ5AxH6EUHLGwMeg9He6JWlo1o=;
-        b=nF9DpgPE8ci2mTLmX0a3p7+qoPSiWnxUgg2EohZNshIAvRtxd7TENeOXVBzzc0iluq
-         HqoXiS+4SFTKAJ/wKSELayYiLI1UA7dBWjG/3tgy96jLRaftFL7QlrUSZXcefN0PjtZh
-         YNCQrS6b7Vb5Oo6cWIq1Z+MX9SVRQm94zpvTQnim7x8dzFXeblTcRZpY+7M4ff2391PI
-         hDtV1VfWaSY60Bvv6P1wdDdqccm+HvuvlXtrj3jWa/oEA9hFdINefaHvm9GaDA97t3eu
-         AojbYo9XArQO5Kfi0c4wyYhXs3DgX97tnR1tG5gjyfQ7ZF0h3SiY21LUnHEpDmxedhdw
-         cG4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pLdHfFfhX3cy94Z9ezJ5AxH6EUHLGwMeg9He6JWlo1o=;
-        b=f2H/FnCQ2E1IkN5Ot26LGpxTqkalYur1I14lIe5Kk2dl6dvYw8t2y1iLizHuW5ORR3
-         ptG9ndMuSbkXtW4TjAZY7IwSaMEKW/C+taizNqAS6DGRFjRzq+W9hdo1PM+AUGDkxsp3
-         FsKdyJB6purPBMDu8c7EnMvhSFPzJpxlyBJyblwleht/KtkL98pGaWFc4FzSPLmvfzzy
-         SEd1R3gPhujqMfAfy+d61VClYrDjfnQ6tETEGb+tjtSt/A6sK7LSxqQhlgvAascQLNlZ
-         Yl6+pY3SIxbYXb7uI3yr8nKs3QYp8Hdsyo0WTQKQb7JJhP90uDkUXPxIIVyCQPixWOiT
-         ksTg==
-X-Gm-Message-State: ACrzQf1Ki8leWuDF9GsWVGsX8GiDuWVtvmJJigq7cukC4uoUQRGK2MMC
-        xDoqzgpI/mwCwnVUtUU6h86XMUnH9mZZplXRDa9ecw==
-X-Google-Smtp-Source: AMsMyM5B6q5bggkExf5dg36Mc+GckGxJQ3TV8DeKZhTXD6qE02K3LSqznh5N0lehQYKvMjRJV7L+CtQrqHgKmL/1llA=
-X-Received: by 2002:a25:7a01:0:b0:6b0:820:dd44 with SMTP id
- v1-20020a257a01000000b006b00820dd44mr41272285ybc.387.1666879925152; Thu, 27
- Oct 2022 07:12:05 -0700 (PDT)
+        Thu, 27 Oct 2022 10:12:23 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB76188126;
+        Thu, 27 Oct 2022 07:12:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 39BD81F8E5;
+        Thu, 27 Oct 2022 14:12:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1666879941; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mzF42QiADSZnG99tcpDz7gLuyZ5mZmZCYmF9rOEeZYk=;
+        b=uxYkV5xl6B663kP7ZdeTPzb0hl3IUjY44LwZRcOiPPzJFLBsunJ/QutQDGRIT5To98wFNJ
+        f80g/cwAD/3sPhYJhdTrLQlDFowbB0R0jis/Nu0abiCSkW2wqQlKMzA9M29O+puiVfymAA
+        NG55yFAeKUi2bMZtRBWqLawiVSi3Pic=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1666879941;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mzF42QiADSZnG99tcpDz7gLuyZ5mZmZCYmF9rOEeZYk=;
+        b=0iwueQcdzhPOBn8ttPcRDLAupHh1paW5QsoaVmITeAh1O6xlcuY5D2K080pyRjC4gOXzHL
+        v+Uym/my+DNEhxBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0C05E13357;
+        Thu, 27 Oct 2022 14:12:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xLxyAcWRWmPRBwAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Thu, 27 Oct 2022 14:12:21 +0000
+Date:   Thu, 27 Oct 2022 16:12:19 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <wsa@kernel.org>
+Subject: Re: [PATCH v2] i2c: piix4: Fix adapter not be removed in
+ piix4_remove()
+Message-ID: <20221027161219.1840104a@endymion.delvare>
+In-Reply-To: <20221027121353.181695-1-chenzhongjin@huawei.com>
+References: <20221027121353.181695-1-chenzhongjin@huawei.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <20220907015618.2140679-1-william.xuanziyang@huawei.com>
- <CANn89iKPmDXvPzw9tYpiqHH7LegAgTb14fAiAqH8vAxZ3KsryA@mail.gmail.com>
- <efc3708e-47d8-b3e8-08a9-40031d11b8ff@huawei.com> <800a1c4eead00b97947e4b289ae49d2858e9f99e.camel@redhat.com>
-In-Reply-To: <800a1c4eead00b97947e4b289ae49d2858e9f99e.camel@redhat.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 27 Oct 2022 07:11:54 -0700
-Message-ID: <CANn89iLcJhA4XGWb-NE0CQg8emKTXVRxDySTNKxnw37eP9M6BQ@mail.gmail.com>
-Subject: Re: [PATCH net] net: tun: limit first seg size to avoid oversized linearization
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Petar Penkov <peterpenkov96@gmail.com>,
-        Mahesh Bandewar <maheshb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 3:31 AM Paolo Abeni <pabeni@redhat.com> wrote:
->
-> On Tue, 2022-09-13 at 20:07 +0800, Ziyang Xuan (William) wrote:
-> > > On Tue, Sep 6, 2022 at 6:56 PM Ziyang Xuan
-> > > <william.xuanziyang@huawei.com> wrote:
-> > > >
-> > > > Recently, we found a syzkaller problem as following:
-> > > >
-> > > > ========================================================
-> > > > WARNING: CPU: 1 PID: 17965 at mm/page_alloc.c:5295
-> > > > __alloc_pages+0x1308/0x16c4 mm/page_alloc.c:5295
-> > > > ...
-> > > > Call trace:
-> > > >  __alloc_pages+0x1308/0x16c4 mm/page_alloc.c:5295
-> > > >  __alloc_pages_node include/linux/gfp.h:550 [inline]
-> > > >  alloc_pages_node include/linux/gfp.h:564 [inline]
-> > > >  kmalloc_large_node+0x94/0x350 mm/slub.c:4038
-> > > >  __kmalloc_node_track_caller+0x620/0x8e4 mm/slub.c:4545
-> > > >  __kmalloc_reserve.constprop.0+0x1e4/0x2b0 net/core/skbuff.c:151
-> > > >  pskb_expand_head+0x130/0x8b0 net/core/skbuff.c:1654
-> > > >  __skb_grow include/linux/skbuff.h:2779 [inline]
-> > > >  tun_napi_alloc_frags+0x144/0x610 drivers/net/tun.c:1477
-> > > >  tun_get_user+0x31c/0x2010 drivers/net/tun.c:1835
-> > > >  tun_chr_write_iter+0x98/0x100 drivers/net/tun.c:2036
-> > > >
-> > > > It is because the first seg size of the iov_iter from user space
-> > > > is
-> > > > very big, it is 2147479538 which is bigger than the threshold
-> > > > value
-> > > > for bail out early in __alloc_pages(). And skb->pfmemalloc is
-> > > > true,
-> > > > __kmalloc_reserve() would use pfmemalloc reserves without
-> > > > __GFP_NOWARN
-> > > > flag. Thus we got a warning.
-> > > >
-> > > > I noticed that non-first segs size are required less than
-> > > > PAGE_SIZE in
-> > > > tun_napi_alloc_frags(). The first seg should not be a special
-> > > > case, and
-> > > > oversized linearization is also unreasonable. Limit the first seg
-> > > > size to
-> > > > PAGE_SIZE to avoid oversized linearization.
-> > > >
-> > > > Fixes: 90e33d459407 ("tun: enable napi_gro_frags() for TUN/TAP
-> > > > driver")
-> > > > Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
-> > > > ---
-> > > >  drivers/net/tun.c | 5 ++---
-> > > >  1 file changed, 2 insertions(+), 3 deletions(-)
-> > > >
-> > > > diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> > > > index 259b2b84b2b3..7db515f94667 100644
-> > > > --- a/drivers/net/tun.c
-> > > > +++ b/drivers/net/tun.c
-> > > > @@ -1454,12 +1454,12 @@ static struct sk_buff
-> > > > *tun_napi_alloc_frags(struct tun_file *tfile,
-> > > >                                             size_t len,
-> > > >                                             const struct iov_iter
-> > > > *it)
-> > > >  {
-> > > > +       size_t linear = iov_iter_single_seg_count(it);
-> > > >         struct sk_buff *skb;
-> > > > -       size_t linear;
-> > > >         int err;
-> > > >         int i;
-> > > >
-> > > > -       if (it->nr_segs > MAX_SKB_FRAGS + 1)
-> > > > +       if (it->nr_segs > MAX_SKB_FRAGS + 1 || linear >
-> > > > PAGE_SIZE)
-> > > >                 return ERR_PTR(-EMSGSIZE);
-> > > >
-> > >
-> > > This does not look good to me.
-> > >
-> > > Some drivers allocate 9KB+ for 9000 MTU, in a single allocation,
-> > > because the hardware is not SG capable in RX.
-> >
-> > So, do you mean that it does not matter and keep current status, or
-> > give a bigger size but PAGE_SIZE (usually 4KB size)?
-> >
-> > Would like to hear your advice.
->
-> I'm guessing that what Eric is suggesting here is to use a bigger limit
-> for 'linear'. Possibly ETH_MAX_MTU could fit. @Eric, fell free to
-> correct me :)
->
+On Thu, 27 Oct 2022 20:13:53 +0800, Chen Zhongjin wrote:
+> In piix4_probe(), the piix4 adapter will be registered in:
+> 
+>    piix4_probe()
+>      piix4_add_adapters_sb800() / piix4_add_adapter()
+>        i2c_add_adapter()
+> 
+> Based on the probed device type, piix4_add_adapters_sb800() or single
+> piix4_add_adapter() will be called.
+> For the former case, piix4_adapter_count is set as the number of adapters,
+> while for antoher case it is not set and kept default *zero*.
+> 
+> When piix4 is removed, piix4_remove() removes the adapters added in
+> piix4_probe(), basing on the piix4_adapter_count value.
+> Because the count is zero for the single adapter case, the adapter won't
+> be removed and makes the sources allocated for adapter leaked, such as
+> the i2c client and device.
+> 
+> These sources can still be accessed by i2c or bus and cause problems.
+> An easily reproduced case is that if a new adapter is registered, i2c
+> will get the leaked adapter and try to call smbus_algorithm, which was
+> already freed:
+> 
+> Triggered by: rmmod i2c_piix4 && modprobe max31730
+> 
+>  BUG: unable to handle page fault for address: ffffffffc053d860
+>  #PF: supervisor read access in kernel mode
+>  #PF: error_code(0x0000) - not-present page
+>  Oops: 0000 [#1] PREEMPT SMP KASAN
+>  CPU: 0 PID: 3752 Comm: modprobe Tainted: G
+>  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+>  RIP: 0010:i2c_default_probe (drivers/i2c/i2c-core-base.c:2259) i2c_core
+>  RSP: 0018:ffff888107477710 EFLAGS: 00000246
+>  ...
+>  <TASK>
+>   i2c_detect (drivers/i2c/i2c-core-base.c:2302) i2c_core
+>   __process_new_driver (drivers/i2c/i2c-core-base.c:1336) i2c_core
+>   bus_for_each_dev (drivers/base/bus.c:301)
+>   i2c_for_each_dev (drivers/i2c/i2c-core-base.c:1823) i2c_core
+>   i2c_register_driver (drivers/i2c/i2c-core-base.c:1861) i2c_core
+>   do_one_initcall (init/main.c:1296)
+>   do_init_module (kernel/module/main.c:2455)
+>   ...
+>  </TASK>
+>  ---[ end trace 0000000000000000 ]---
+> 
+> Fix this problem by correctly set piix4_adapter_count as 1 for the
+> single adapter so it can be normally removed.
+> 
+> Fixes: 528d53a1592b ("i2c: piix4: Fix probing of reserved ports on AMD Family 16h Model 30h")
+> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> ---
+> v1 -> v2:
+> Set piix4_adapter_count as 1 rather than increase it and slightly fix
+> the commit message.
+> ---
+>  drivers/i2c/busses/i2c-piix4.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
+> index 39cb1b7bb865..809fbd014cd6 100644
+> --- a/drivers/i2c/busses/i2c-piix4.c
+> +++ b/drivers/i2c/busses/i2c-piix4.c
+> @@ -1080,6 +1080,7 @@ static int piix4_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  					   "", &piix4_main_adapters[0]);
+>  		if (retval < 0)
+>  			return retval;
+> +		piix4_adapter_count = 1;
+>  	}
+>  
+>  	/* Check for auxiliary SMBus on some AMD chipsets */
 
-Something like that, yes. We need to be careful when approaching 64K limit,
-because of possible u16 fields overflows.
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
-We just got another patch in GRO layer, just because tun has not been fixed yet.
+I believe this qualifies for stable trees, so:
 
+Cc: stable@vger.kernel.org
 
-
-> Thanks!
->
-> Paolo
->
+Thanks,
+-- 
+Jean Delvare
+SUSE L3 Support
