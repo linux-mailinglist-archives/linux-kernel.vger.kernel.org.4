@@ -2,168 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C323360F052
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 08:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E460060F04C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 08:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234697AbiJ0Gbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 02:31:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
+        id S234641AbiJ0Gbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 02:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234041AbiJ0GbR (ORCPT
+        with ESMTP id S234623AbiJ0GbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 02:31:17 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70603164BFE
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 23:31:09 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id f5-20020a17090a4a8500b002131bb59d61so5065782pjh.1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 23:31:09 -0700 (PDT)
+        Thu, 27 Oct 2022 02:31:12 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6171D16252D;
+        Wed, 26 Oct 2022 23:31:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=henhCPd8lraNCdDJWnoPIO23RxmIlqkGqlJr0QeoFWY=;
-        b=WE/Xq3QwBPWoeDATpRNcL8M/G3ZKU2pYBLzvWJrmuGUvxW0GUAe1AmVjKmfKMgSzLb
-         PUSSfPAITJLPvPEgGfkFysS0VwoZe9bMHVTM/0n+Hs36qUa6lJVsNBu7SP8MaR27ujgA
-         WccP0bqYy2igcJ7O0h6IquokzIsz/GUepMurdUx6TzHcvD1nTkZ1F7RhOILXqM9oiSVl
-         k4kCu4S2qzetpkIh4iVSMzzbQz8ZfmRwr2e3eCDtkDPNLFJUpzJdE1BWXkHx8UZjFAxg
-         E7ghOFIcBGZX8rXlWcg9bEG8c4h5vM7jLsHQTrKjHwfpD+Q/ZUBUQcRpcycoB2Nvs22F
-         eSvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=henhCPd8lraNCdDJWnoPIO23RxmIlqkGqlJr0QeoFWY=;
-        b=EXJ5aAjqV+PElTPDEzZRe1lVXmQWFqheJLHh4QNzrj1CF4iMWJJzUKSPxqzX56PDi7
-         9ZBHcYfhX6Z99asxGwMccdNRq5Evt2yU3Ct0dIPYEDhK4BHak5wFXBWPPlgq66hL7HEi
-         sO411U1eTm3vHrt3zOQmO5lXQQcj+WpsgkaKQrLO5Dz3C1jmkxmd9iSzbgwMO87flULF
-         vxYD6zKmK6VfN3WGypp8hMHSFktep53HitabkooSeh9nBPVnFMQ6qbazFGV7RDQAsB3q
-         dgIT7sGBvWHHjkoUqDkQ3EhXzk56ZXN0psyzJyn5IB1xpt/EA4p4ZIDlTw0vsVy/G+iZ
-         JETQ==
-X-Gm-Message-State: ACrzQf2JjJUdSVtNoJLzKWuDmz4usukhhE2V9+8tJOVkMuu0++bjiCwy
-        TSmMKNjj00037QCy3dXz/ias
-X-Google-Smtp-Source: AMsMyM6r5m8xHEeOyHEYSqVROVYNLWpCgVzv+sw9X1/TV9wpB2SPnM0rPpLNuEnIbWYMni4dN3ycNg==
-X-Received: by 2002:a17:902:8bc3:b0:178:8563:8e42 with SMTP id r3-20020a1709028bc300b0017885638e42mr47814600plo.0.1666852268489;
-        Wed, 26 Oct 2022 23:31:08 -0700 (PDT)
-Received: from localhost.localdomain ([117.193.208.123])
-        by smtp.gmail.com with ESMTPSA id i126-20020a626d84000000b00561d79f1064sm446041pfc.57.2022.10.26.23.31.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 23:31:07 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     andersson@kernel.org
-Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
-        quic_jprakash@quicinc.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 11/11] arm64: dts: qcom: sc8280xp-x13s: Add PM8280_{1/2} ADC_TM5 channels
-Date:   Thu, 27 Oct 2022 12:00:06 +0530
-Message-Id: <20221027063006.9056-12-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221027063006.9056-1-manivannan.sadhasivam@linaro.org>
-References: <20221027063006.9056-1-manivannan.sadhasivam@linaro.org>
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1666852262; x=1698388262;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=nKoamIA8wUbcHKiEZbUCm28Kcvfx9jQu3oj0e+ov70w=;
+  b=OPDu8juHpHnDd/pt7n8p0UAlLfv9Cg6HLfbfl71duI+LHKCrZNe0Ncae
+   qepcC6u1IMPvbugmFrKio7jxPce4ub2thNJ9sWzU1qftTbHQgYlmJbJkk
+   TnJwBpsP8ZAcqO+LTsoGDm3gUMSN8RD/680j4uA+v7etWFWOX3SYyEQ2r
+   Odi8HsMCb5vuKcGJD94ZfYw9loyQlZf/YhMQ58viFeoOcQ2Tt9z1OflqX
+   Uka7yboQUhYjvRjL18AiEvPuw4IvINudidvbQqZi3UzYZMybzXAURtlhP
+   I14GOwV5jiLbkF39T2WC4CppXmRWfrH+EEMJA9PiWmy7UYk493g/CUkSf
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,215,1661810400"; 
+   d="scan'208";a="27000477"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 27 Oct 2022 08:30:59 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 27 Oct 2022 08:30:59 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 27 Oct 2022 08:30:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1666852259; x=1698388259;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=nKoamIA8wUbcHKiEZbUCm28Kcvfx9jQu3oj0e+ov70w=;
+  b=dpIIzne24/4fXnib6g1gT+ey5C/OoEqngXd1aR2YkOU0IHVlxqpp7OXs
+   yT2zeGmojx28bg8zPPvsGlXiq9VzPGzni4TBMwOfah6GcncGF/TScU1b8
+   BMNzjTGaO9OvmhV4kGpyWQaUErtrpVTD4x07E+ZrvOvXajEc23aawZxCj
+   siefY6PUEkTk+r9gmP2UVe73LglBU94T1EIntbLNNmo7dFw65bxEEvjZg
+   cG/K7QmAw0Jb1Obosr/rcV68YWMSaafIAoUWHTojve+E5bj9zN1fFBoDj
+   5w5mIYQmxc4zxMIF198p1jof5HGRd/0d3CQmujumurqwAe85qmN868sVl
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,215,1661810400"; 
+   d="scan'208";a="27000476"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 27 Oct 2022 08:30:59 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 5B39E280056;
+        Thu, 27 Oct 2022 08:30:59 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     shengjiu.wang@gmail.com
+Cc:     abelvesa@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, marex@denx.de,
+        Shengjiu Wang <shengjiu.wang@nxp.com>
+Subject: Re: [PATCH v2 2/2] clk: imx8mp: Add audio shared gate
+Date:   Thu, 27 Oct 2022 08:30:55 +0200
+Message-ID: <12087191.O9o76ZdvQC@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <1666834442-5609-2-git-send-email-shengjiu.wang@nxp.com>
+References: <1666834442-5609-1-git-send-email-shengjiu.wang@nxp.com> <1666834442-5609-2-git-send-email-shengjiu.wang@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add ADC_TM5 channels of PM8280_{1/2} for monitoring the temperatures from
-external thermistors connected to AMUX pins. The temperture measurements
-are collected from the PMK8280's VADC channels that expose the
-mesasurements from slave PMICs PM8280_{1/2}.
+Am Donnerstag, 27. Oktober 2022, 03:34:02 CEST schrieb Shengjiu Wang:
+> From: Abel Vesa <abel.vesa@nxp.com>
+> 
+> According to the RM, the CCGR101 is shared for the following root clocks:
+> - AUDIO_AHB_CLK_ROOT
+> - AUDIO_AXI_CLK_ROOT
+> - SAI1_CLK_ROOT
+> - SAI2_CLK_ROOT
+> - SAI3_CLK_ROOT
+> - SAI5_CLK_ROOT
+> - SAI6_CLK_ROOT
+> - SAI7_CLK_ROOT
+> - PDM_CLK_ROOT
+> 
+> And correct clock MX8MP_CLK_AUDIO_ROOT to be IMX8MP_CLK_AUDIO_AHB_ROOT.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+> ---
+> changes in v2:
+> - split dt-binding to separate patch
+> 
+>  drivers/clk/imx/clk-imx8mp.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
+> index 652ae58c2735..0ae3bc7bf8a1 100644
+> --- a/drivers/clk/imx/clk-imx8mp.c
+> +++ b/drivers/clk/imx/clk-imx8mp.c
+> @@ -17,6 +17,7 @@
+> 
+>  static u32 share_count_nand;
+>  static u32 share_count_media;
+> +static u32 share_count_audio;
+> 
+>  static const char * const pll_ref_sels[] = { "osc_24m", "dummy", "dummy",
+> "dummy", }; static const char * const audio_pll1_bypass_sels[] =
+> {"audio_pll1", "audio_pll1_ref_sel", }; @@ -699,7 +700,15 @@ static int
+> imx8mp_clocks_probe(struct platform_device *pdev) hws[IMX8MP_CLK_HDMI_ROOT]
+> = imx_clk_hw_gate4("hdmi_root_clk", "hdmi_axi", ccm_base + 0x45f0, 0);
+> hws[IMX8MP_CLK_TSENSOR_ROOT] = imx_clk_hw_gate4("tsensor_root_clk",
+> "ipg_root", ccm_base + 0x4620, 0); hws[IMX8MP_CLK_VPU_ROOT] =
+> imx_clk_hw_gate4("vpu_root_clk", "vpu_bus", ccm_base + 0x4630, 0);
+> -	hws[IMX8MP_CLK_AUDIO_ROOT] = imx_clk_hw_gate4("audio_root_clk",
+> "audio_ahb", ccm_base + 0x4650, 0); +	hws[IMX8MP_CLK_AUDIO_AHB_ROOT] =
+> imx_clk_hw_gate2_shared2("audio_ahb_root", "audio_ahb", ccm_base + 0x4650,
+> 0, &share_count_audio); +	hws[IMX8MP_CLK_AUDIO_AXI_ROOT] =
+> imx_clk_hw_gate2_shared2("audio_axi_root", "audio_axi", ccm_base + 0x4650,
+> 0, &share_count_audio); +	hws[IMX8MP_CLK_SAI1_ROOT] =
+> imx_clk_hw_gate2_shared2("sai1_root", "sai1", ccm_base + 0x4650, 0,
+> &share_count_audio); +	hws[IMX8MP_CLK_SAI2_ROOT] =
+> imx_clk_hw_gate2_shared2("sai2_root", "sai2", ccm_base + 0x4650, 0,
+> &share_count_audio); +	hws[IMX8MP_CLK_SAI3_ROOT] =
+> imx_clk_hw_gate2_shared2("sai3_root", "sai3", ccm_base + 0x4650, 0,
+> &share_count_audio); +	hws[IMX8MP_CLK_SAI5_ROOT] =
+> imx_clk_hw_gate2_shared2("sai5_root", "sai5", ccm_base + 0x4650, 0,
+> &share_count_audio); +	hws[IMX8MP_CLK_SAI6_ROOT] =
+> imx_clk_hw_gate2_shared2("sai6_root", "sai6", ccm_base + 0x4650, 0,
+> &share_count_audio); +	hws[IMX8MP_CLK_SAI7_ROOT] =
+> imx_clk_hw_gate2_shared2("sai7_root", "sai7", ccm_base + 0x4650, 0,
+> &share_count_audio); +	hws[IMX8MP_CLK_PDM_ROOT] =
+> imx_clk_hw_gate2_shared2("pdm_root", "pdm", ccm_base + 0x4650, 0,
+> &share_count_audio);
+> 
+>  	hws[IMX8MP_CLK_ARM] = imx_clk_hw_cpu("arm", "arm_a53_core",
+>  					     
+hws[IMX8MP_CLK_A53_CORE]->clk,
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 68 +++++++++++++++++++
- 1 file changed, 68 insertions(+)
+Now IMX8MP_CLK_AUDIO_ROOT is unused. Should it be removed? Or should the 
+rename be done in a separate commit before this one?
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-index babf594384f2..fe6b75551ab9 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-@@ -259,6 +259,74 @@ pmr735a-die-temp@403 {
- 	};
- };
- 
-+&pmk8280_adc_tm {
-+	status = "okay";
-+
-+	sys-therm1@0 {
-+		reg = <0>;
-+		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM1_100K_PU(1)>;
-+		qcom,avg-samples = <2>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time-us = <200>;
-+	};
-+
-+	sys-therm2@1 {
-+		reg = <1>;
-+		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM2_100K_PU(1)>;
-+		qcom,avg-samples = <2>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time-us = <200>;
-+	};
-+
-+	sys-therm3@2 {
-+		reg = <2>;
-+		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM3_100K_PU(1)>;
-+		qcom,avg-samples = <2>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time-us = <200>;
-+	};
-+
-+	sys-therm4@3 {
-+		reg = <3>;
-+		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM4_100K_PU(1)>;
-+		qcom,avg-samples = <2>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time-us = <200>;
-+	};
-+
-+	sys-therm5@4 {
-+		reg = <4>;
-+		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM1_100K_PU(3)>;
-+		qcom,avg-samples = <2>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time-us = <200>;
-+	};
-+
-+	sys-therm6@5 {
-+		reg = <5>;
-+		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM2_100K_PU(3)>;
-+		qcom,avg-samples = <2>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time-us = <200>;
-+	};
-+
-+	sys-therm7@6 {
-+		reg = <6>;
-+		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM3_100K_PU(3)>;
-+		qcom,avg-samples = <2>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time-us = <200>;
-+	};
-+
-+	sys-therm8@7 {
-+		reg = <7>;
-+		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM4_100K_PU(3)>;
-+		qcom,avg-samples = <2>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time-us = <200>;
-+	};
-+};
-+
- &qup0 {
- 	status = "okay";
- };
--- 
-2.25.1
+Best regards,
+Alexander
+
+
 
