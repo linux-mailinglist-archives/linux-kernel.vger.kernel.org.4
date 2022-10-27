@@ -2,160 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3690E60F892
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A5360F883
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235776AbiJ0NKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 09:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
+        id S235976AbiJ0NJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 09:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236017AbiJ0NJt (ORCPT
+        with ESMTP id S235641AbiJ0NI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 09:09:49 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2057.outbound.protection.outlook.com [40.107.21.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D3E1BE83;
-        Thu, 27 Oct 2022 06:09:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EQttXIq0mmlLbj9g1d2xDtLcAKTCXXIi76Pj7aXO7dofEvMhUHF0RMXnQ6TT6ZOD5RKJl102ysbnLuIFyz4JDuXzcc1YoPzWGwaS9/ovDP82y2fyvk4iRFhem2ZiQHyLXqL0AWUPGXpeM7s4PRYAR8O23EwVh3qcTeoTbTwFJU/Bc6H9JvIRaAxT36OHYYb8XRV0W5Z6g442lOdqC+4SU04Stz2fmYhVqxgErEv7qjweZqmKGClE28uTM+a2kDztUjnUBp9eogVs9Bc3cj2IE/dQpX9eEPjZ9bRzqUdx03rowf1h6/rDpNOWGfIv7D89djYFSHBXvcsFvQEzqlHV1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=51WfmV3RvovoancdvUSZfJs+kVNsfjP6ZLXw2Wo0G2o=;
- b=bsJc6C/Cjp/b7stPecdsrmFghL6jH4zIoXtuqptUza03O3AsESyaUu7p8ztUTIqgJBe6/svAGR7tGCBcXG6DpzOBFTdnX1EkDJ3vX2iPusexhlYxXUUg3t+TpmPqbbDbi+s0cfM1xxY5MdPlmfeMqWEovI/sEfbRUo7/ne57yVb2kZc/C8jrDWKKC4xeoQBUkMiCw1vH8MkD+BXSr+s8jeuHi2Q6N91VlqCay+7fOdl+wcQdLt2vjq823nZSPf4v+smbKJB1JVKcf0SU6Lj11dhAFmMer00LOrSaTYrkeeY0VnUncz25gmw13XQNHWUT4hkdNxY2YXKZk346gcqT9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=51WfmV3RvovoancdvUSZfJs+kVNsfjP6ZLXw2Wo0G2o=;
- b=DP3H1y0gqk7PyIdvgk487h7eeMTpajVsmw2rYV/gTO9YFD0x3awFehUJuwUcrCo9XTFjk7/CYsVNsHDfDYRWq7btKF1+sLtX/MRDFoffXsMG6QnPuaEZjAZ4eHHRzvHq1sUOWnpvB0B9RrrQLr30S+fQ12VISN4mkxdw6AaFC8A=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9185.eurprd04.prod.outlook.com (2603:10a6:102:231::11)
- by AM7PR04MB6807.eurprd04.prod.outlook.com (2603:10a6:20b:104::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Thu, 27 Oct
- 2022 13:09:40 +0000
-Received: from PAXPR04MB9185.eurprd04.prod.outlook.com
- ([fe80::b1ab:dd4f:9237:d9f8]) by PAXPR04MB9185.eurprd04.prod.outlook.com
- ([fe80::b1ab:dd4f:9237:d9f8%3]) with mapi id 15.20.5769.014; Thu, 27 Oct 2022
- 13:09:39 +0000
-From:   Shenwei Wang <shenwei.wang@nxp.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        imx@lists.linux.dev
-Subject: [PATCH v4 0/5] gpio: add suspend/resume support for i.mx8x SoCs
-Date:   Thu, 27 Oct 2022 08:08:54 -0500
-Message-Id: <20221027130859.1444412-1-shenwei.wang@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BY3PR10CA0012.namprd10.prod.outlook.com
- (2603:10b6:a03:255::17) To PAXPR04MB9185.eurprd04.prod.outlook.com
- (2603:10a6:102:231::11)
+        Thu, 27 Oct 2022 09:08:56 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39901793A7
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:08:55 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A908421BB8;
+        Thu, 27 Oct 2022 13:08:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1666876134; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K/Yhcp3BRAe+TUlSIZuPkdOAfuzDLT+iTdrW+amplZI=;
+        b=Xnaxdd95z7IMRprPeIHRTK4gWu7CsTm/SqcYEbAYDwiwmdA8d+FEoCFtcWP3wWEEeB5i/f
+        OO52JA7TUEg9pFmBAvdB8cAysEj7EzXajLvtfy16N/BSRcWSgFuV5iWRFCg4GUu3hGM95V
+        OTYF5GiCUJtAYfbtplL2NAsplg5P8wE=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 70284134CA;
+        Thu, 27 Oct 2022 13:08:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bJfwGeaCWmONYAAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 27 Oct 2022 13:08:54 +0000
+Message-ID: <bdf0b33f-b332-1597-3922-2ff4fa768929@suse.com>
+Date:   Thu, 27 Oct 2022 15:08:54 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9185:EE_|AM7PR04MB6807:EE_
-X-MS-Office365-Filtering-Correlation-Id: 00fcc593-91fe-4cbc-a5fc-08dab81c814c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XzPwaMZkkTfNPiZ7fqZ7GbzR7FJ57iFeJb1j3CJ2B/r1sNJ+JhhyvaCmi5TW/y0rjmy4KTMetHQYOWakKsbzJZRnvoy0U399MoWtsAbUQT1jwIOjREKv2MWBUooAx/vsl9vcZhKRP05Lij8cY4JpsO6E60tc5+XAzZ0Lb+saV4ynSQefA6/2ZstNQ5V2jU4tvkHJ60uqkX3BUW+JLYBIR5kuxAx1iysVvnQLDhVAb/u99XAJ45SdYZbZBlKjhlY2c/r2V2NmHuj0k/MGTa9djuknI3ZwnvcvWSK9Y1GE/iOsj4E+VzdevZyWAceIRj5VwiP/8Hm5OX83k057ZwxygVaLxNVPspZHdeDYBGdXKyzWkFSNO4zKh9pRYPu0v4Zh5eSFrLiC4FfdcjJQyNMVoKkI4yKOgWgp0Qv/ER4045epJoEjdD7fYVj82bh7zgasBavTYJc2rL0SAbNiZJvwBpkCr7mJylzJKl+Um88H1r/wyrywFDQi2teakRQ4bCalUBVShJ+Q7pkTsGZL4+yVSx7U5GKCv5icfdDajI2TtXvQ7j0WhM787zJJMJY8mMMLPMx1ncu6SOR/dwVRb9Sg943UvwpzH5YAVC/RTn5kco8DIQLWOX+ts3tfZ5ZJh13x51WDhRFhtvJu6WHquOFGtFUvJz/lt0IImSUD9NT1CCmR5iqZvKAfTUORIOr2pQxE5erKEawgQFu4UFAbtywxRICQI0yr8s62Qg98sueGbQ+mgUmtswpNHXqW5y5ndfi9
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(6029001)(4636009)(136003)(376002)(396003)(39860400002)(366004)(346002)(451199015)(55236004)(1076003)(6512007)(26005)(52116002)(6666004)(83380400001)(6506007)(478600001)(186003)(15650500001)(2616005)(44832011)(2906002)(6636002)(5660300002)(54906003)(8676002)(110136005)(6486002)(316002)(41300700001)(66556008)(7416002)(66946007)(66476007)(4326008)(8936002)(36756003)(86362001)(38350700002)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vZ9AHKgk9O6DgaLVwI6ERaEmFFKQIL8SmdB1r7u5Aumex5tJhIc9oOBIN97J?=
- =?us-ascii?Q?jOJhSU7qC0GLK8A37V/uTJQ2+KWq4G1qh4j6LPdm5W8h5La3Y/yIzDIBS0/a?=
- =?us-ascii?Q?d9y3UdJWd4YhXPY+nhgzf2o4BrqNE1Q0yURZRvHSax9kLkeKp3Ul+hzYAap8?=
- =?us-ascii?Q?ClpTomJ61eiQXYRM2lxl8xZsgIuMgB3WHugsQ3+ClgfEogv/KW+I83sp1DRF?=
- =?us-ascii?Q?/TeZR0icWxUwYETcnUD6buZxSkQTTJVnLlfLD9D/fadyfgXLu7FkFXYDukP5?=
- =?us-ascii?Q?qbYH8vRziPR87AdWOwdbGdf1F11+DaXN1smBoF5yX7pI3Iu9D6bOj28Xqg2e?=
- =?us-ascii?Q?AyM0Md6md25qxJjoLDWInTV209yXD9wAzjddYgdUMnwvAu82OJESQ1htciMm?=
- =?us-ascii?Q?kzKT7wlOx/Ia6znGVGa93ElO9X3iFJBc1Qdj34A+URhdX7b2ePdI8rGVyM2m?=
- =?us-ascii?Q?y/iRiA+IXayTB8so8lk8nRON+tuuOL1fXRAyvt1Ne1FhhTvnVR0dFpOFDKHy?=
- =?us-ascii?Q?hbrI+qGoljkUlu2Ua8ckM6wkZ5OQezCuBI0rLACslmaDSpJLnhnhvRsoY8uf?=
- =?us-ascii?Q?YY25nH8SLfMOT/DfZFL2KrDqN2AruM5BLQaS+Emg/J4C1pfdqrEYuUtzleJ+?=
- =?us-ascii?Q?jO9H/Lge+2O3gaK0l7qjA2x2XQQVMUZMc3DyWQzRTJTDWEAC59kDgM8WTy2j?=
- =?us-ascii?Q?sjOqZO9inx0OPUwZHCJLVQiDUY7HUUp3Uo6Z3a/Lp0sdzIR2uV06cJV9+XIt?=
- =?us-ascii?Q?yQ7PRy4EpwujxR4cxsh6uWBIcUGGPhi4mgC+stVUlrB/3BwoE+5I4VYQOgNi?=
- =?us-ascii?Q?oGpDlyPJ5TSZ6SNixgq8Hk4OIap2OygU4j83LyIsEWQppA993Moh8hlzMcgW?=
- =?us-ascii?Q?DWRp4P4LsmfT6XCIufccSUp7kQkNYuqAvneZGYO9b7IZ+ksS3RiAx1sdwIWL?=
- =?us-ascii?Q?/LdJlqZChnqqgMCpyyTfDLNgbQUEVGOd4GN19Sor7C43QT3lECeZhK7RnSFT?=
- =?us-ascii?Q?c/pjzL/SdlxlHIbgkkBoEMsGGHu1nbo1UTfhFvTCFDDEXVe7vwgjreRvA2sT?=
- =?us-ascii?Q?IJErFbSDFQxvSRoaLXvAzol0/QZGyzK2ek9LYGgSTK1nJX23mKdsCIQySTr8?=
- =?us-ascii?Q?+7QIwU3z+1ztaM+EFIrkKG9bWAbFAJAnV0ApXAz/IFlMTmypDLeqRBkZcpxy?=
- =?us-ascii?Q?7aNQJkwnvDzM5x2Fr2pGOoq1kDSJG1VfTba3U3+pR9aCMhIyleferfvaHUxz?=
- =?us-ascii?Q?bRj0r3q3Lh7xyNZksAGFtPU4/G6jIfJNY+1p8oojCszkLNul97IFgRYwlI00?=
- =?us-ascii?Q?We/OhY+cUwhoKnKNlpMZe5H4TyEhZh+35xdrgPluuxDd3hqRoxa/lWQkJheI?=
- =?us-ascii?Q?oJ2SXj7t5Hsf4WlJCjzQl2lCD46785eeXBnOtPHlRIGWYIIKetoOaX7WEs0j?=
- =?us-ascii?Q?HtfrfVRF+HmxNXlWWh9s+WS171XYmQ+fUGGdgT5lX46pCFfGHQPfCYhBjYfe?=
- =?us-ascii?Q?HwV/Hqgsc99cKg/YFRej9lEwA/OFkRU9R64QkK4CCBn1zN7e5HJWYucioQSk?=
- =?us-ascii?Q?ugX0cZovNnfn5UOwizmMLMuSh8JNJRl1WZjdT7FN?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00fcc593-91fe-4cbc-a5fc-08dab81c814c
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9185.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 13:09:39.7818
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Q3ZPLMkni9A6//9UYDUIX3P7sHO5iP4Qp33xiQU7WI3M1tWnfHpd0afopUiF0MKJKu4QVNZB8WbX3mgPNK/UEA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6807
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4 11/16] x86/mtrr: let cache_aps_delayed_init replace
+ mtrr_aps_delayed_init
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20221004081023.32402-1-jgross@suse.com>
+ <20221004081023.32402-12-jgross@suse.com> <Y1p2+4W+tydH4peD@zn.tnic>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <Y1p2+4W+tydH4peD@zn.tnic>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------EFk36EcWhVtEafcFrw2nGxEF"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On i.MX8QM/QXP/DXL SoCs, even a GPIO is selected as the wakeup source,
-the GPIO block will be powered off when system enters into suspend
-state. This can greatly reduce the power consumption of suspend state
-because the whole partition can be shutdown. This is called PAD wakeup
-feature on i.MX8x platform.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------EFk36EcWhVtEafcFrw2nGxEF
+Content-Type: multipart/mixed; boundary="------------uKZVDM2fvmJwd9TTDSAn7hUH";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <bdf0b33f-b332-1597-3922-2ff4fa768929@suse.com>
+Subject: Re: [PATCH v4 11/16] x86/mtrr: let cache_aps_delayed_init replace
+ mtrr_aps_delayed_init
+References: <20221004081023.32402-1-jgross@suse.com>
+ <20221004081023.32402-12-jgross@suse.com> <Y1p2+4W+tydH4peD@zn.tnic>
+In-Reply-To: <Y1p2+4W+tydH4peD@zn.tnic>
 
-This series of patches enable this wakeup feature on i.MX8QM/QXP/DXL
-platforms.
+--------------uKZVDM2fvmJwd9TTDSAn7hUH
+Content-Type: multipart/mixed; boundary="------------PFP3hquqNMqa5zuVXRBFcv06"
 
-Changes in v4:
- - fixed the format issues reported by Peng Fan.
- - change the return type of mxc_gpio_generic_config, and limit the
-   suspend/resume behavior changes only on i.MX8QM/QXP/DXL platform.
+--------------PFP3hquqNMqa5zuVXRBFcv06
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Changes in v3:
- - According to the feedback from Linus Walleij, the wakeup feature is
-   moved to pinctrl driver, and the array of gpio-pin mapping is moved
-   to gpio device node and initialized via gpio-ranges property.
+T24gMjcuMTAuMjIgMTQ6MTgsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVHVlLCBP
+Y3QgMDQsIDIwMjIgYXQgMTA6MTA6MThBTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
+Cj4+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L2NhY2hlaW5mby5jIGIvYXJj
+aC94ODYva2VybmVsL2NwdS9jYWNoZWluZm8uYw0KPj4gaW5kZXggNDliNjBhNDI3ZmM5Li4z
+MzBhYTQxMmJlNjMgMTAwNjQ0DQo+PiAtLS0gYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L2NhY2hl
+aW5mby5jDQo+PiArKysgYi9hcmNoL3g4Ni9rZXJuZWwvY3B1L2NhY2hlaW5mby5jDQo+PiBA
+QCAtMTEzNywzICsxMTM3LDEwIEBAIHZvaWQgY2FjaGVfY3B1X2luaXQodm9pZCkNCj4+ICAg
+CWNhY2hlX2VuYWJsZSgpOw0KPj4gICAJbG9jYWxfaXJxX3Jlc3RvcmUoZmxhZ3MpOw0KPj4g
+ICB9DQo+PiArDQo+PiArYm9vbCBjYWNoZV9hcHNfZGVsYXllZF9pbml0Ow0KPiANCj4gV2h5
+IGlzbid0IHRoYXQgc3RhdGljIGFuZCBvbmx5IHRoZSBhY2Nlc3NvcnMgc2V0IGl0IG9yIGNs
+ZWFyIGl0Pw0KPiANCj4+ICt2b2lkIHNldF9jYWNoZV9hcHNfZGVsYXllZF9pbml0KHZvaWQp
+DQo+PiArew0KPj4gKwljYWNoZV9hcHNfZGVsYXllZF9pbml0ID0gdHJ1ZTsNCj4+ICt9DQo+
+IA0KPiBPdGhlcndpc2UsIHRoZXJlJ3Mgbm8gcG9pbnQgZm9yIHRoaXMgdGhpbmcuDQoNCkht
+bSwgcmlnaHQuDQoNCkknbGwgYWRkIGEgZ2V0X2NhY2hlX2Fwc19kZWxheWVkX2luaXQoKSBh
+Y2Nlc3Nvci4NCg0KDQpKdWVyZ2VuDQo=
+--------------PFP3hquqNMqa5zuVXRBFcv06
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-Shenwei Wang (5):
-  arm64: dts: imx8dxl-ss-lsio: add gpio-ranges property
-  arm64: dts: imx8qm-ss-lsio: add gpio-ranges property
-  arm64: dts: imx8qxp-ss-lsio: add gpio-ranges property
-  pinctrl: freescale: add pad wakeup config
-  gpio: mxc: enable pad wakeup on i.MX8x platforms
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
- .../boot/dts/freescale/imx8dxl-ss-lsio.dtsi   | 41 +++++++++
- .../boot/dts/freescale/imx8qm-ss-lsio.dtsi    | 38 ++++++++
- .../boot/dts/freescale/imx8qxp-ss-lsio.dtsi   | 25 +++++
- drivers/gpio/gpio-mxc.c                       | 92 ++++++++++++++++++-
- drivers/pinctrl/freescale/pinctrl-scu.c       | 30 ++++++
- 5 files changed, 225 insertions(+), 1 deletion(-)
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
---
-2.34.1
+--------------PFP3hquqNMqa5zuVXRBFcv06--
 
+--------------uKZVDM2fvmJwd9TTDSAn7hUH--
+
+--------------EFk36EcWhVtEafcFrw2nGxEF
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmNaguYFAwAAAAAACgkQsN6d1ii/Ey9d
+vgf/QG+j047I21Nb6OaQmXEYXOnxwLuJQ6DQ1ngUWg9vqSp/4Okl5zKUSeAJMdCo3VAMKnd/4VGq
+fNKO40gnvSzJSkRSoY8XaaR8V6zpDKNsUOmTrbGzH/JpPGZD0Cv9icekjwAdcDgy3YK6646OWzwi
+iF/WjzOhBy44SdzpO0J84hF2W0Idm42Pp7RPFAN8YIwyWgsk5iEF5YJRzGM8a2YL8Fbf2RpA+c/8
+Wd0B2bZ60+m1f5Yhi10ianfz7G5RG4DBeWUaKD6WKhRoWyd15wHmhvTJEAzIuoedyiHpyycr0YUP
+LKMDxqOOl9akQ7q2smx0gmojqzrdvG7O1TsxsvYs4A==
+=fBZH
+-----END PGP SIGNATURE-----
+
+--------------EFk36EcWhVtEafcFrw2nGxEF--
