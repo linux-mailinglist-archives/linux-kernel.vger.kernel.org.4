@@ -2,195 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9413A60EEE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 06:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0104A60EEE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 06:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234335AbiJ0EFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 00:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
+        id S234411AbiJ0EGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 00:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232906AbiJ0EFe (ORCPT
+        with ESMTP id S234041AbiJ0EGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 00:05:34 -0400
-Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D2976175A
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 21:05:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=hToTL
-        1YXyd99vlYdAIvfJ1lzlYkibJvP8auH8qTvXJM=; b=Mld/Ujl6JPVy2/Lr7AsEe
-        zz3Wn2X987bsXRgBjDzXhzZlr1zlDAZeZhbiwuyn31DzYfji/ItfEQxRoZwzsHF0
-        7r5kCrV9KEzUwjf8gganbYNx6kUALZChCKv1TCSDJvHUGX92I6v31kHtEtYrVPPv
-        FA6QRlSVzpGM6nv9k/AjW8=
-Received: from localhost.localdomain (unknown [111.206.145.21])
-        by smtp2 (Coremail) with SMTP id GtxpCgBHuM1vA1pjIBc6pA--.31475S2;
-        Thu, 27 Oct 2022 12:05:04 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     gregkh@linuxfoundation.org
-Cc:     zhengyejian1@huawei.com, dimitri.sivanich@hpe.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        alex000young@gmail.com, security@kernel.org, sivanich@hpe.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH v5] misc: sgi-gru: fix use-after-free error in  gru_set_context_option, gru_fault and gru_handle_user_call_os
-Date:   Thu, 27 Oct 2022 12:04:55 +0800
-Message-Id: <20221027040455.115035-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 27 Oct 2022 00:06:19 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2113.outbound.protection.outlook.com [40.107.102.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48925BB3B6;
+        Wed, 26 Oct 2022 21:06:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=K0+S3aJf9Bi3F9NZV8m7EuFWI83eBjhFClpmWIcSLzGUvHBjdoi1Il0dueuJ6mFJIfFlGKwZrmHzeX9HClDNkIULImgtdPlfV+cpaUXI35XfKWRZqkBEZ9hawTUk5PcRu506JcELYh2Jw9R/jvy7Lp7LdztegqguongtvJueAzriQMRXPba2fiYklfLt0IoXV12H5XZ8OQmv8NV2/kvo49c36q1HVFJRh3inqMmvt2wK6bwrsUKQ0bJI9akRlc+BAi9NDDrXuZBgp9LwB4Few+BRLKq98ak933ZTDQKV0dWVMAESxtQxdBgCt2VsN5IY6tFqzhG4lP9Wksz1j5kGMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=r09eI3XPeddwrj/RKSU0E+lq8KdETTRgZ5nuzTEgFWc=;
+ b=luPenzcKyxAf2hJTuKZqTyX0yalxsAJlb46KOfZLODoccPDzSoLNFvZpBVwn2FMxdwut8hOGs2Q1KI+N2ReDEzu4zf4WY8DnZtXPYZ4iDZoLvklcgtzLUFR1P4AKfXPpDH4ohtVRbW85aKo/+GhmGuaNyfZZdYG+hDz/J579sfAHy1ECCKlUd+4WJi/AosSizvj2ygDKKeH5v3oMmpFoqEkD9g+IOJVKPf6iim9KAqZRzukD9yXadvabDd2GK/VHU8tGLwN7ZA4uaAc24RO8GodN3tyivdEYffHaswHb9wGcFjjjYWjQ68OLWiL8HA4vnegJJRoay9jsH8Gg0Dm3kw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r09eI3XPeddwrj/RKSU0E+lq8KdETTRgZ5nuzTEgFWc=;
+ b=P5A8UyBFGaKz73TVyKt9GrlzOBUPVgpUSg+5/uwxG1W/fspBLyBoAGanDmOsiyeC7Raroj/IaMt2oUr0qyx5++ZXTgX9c95p2SqXwKUMXT5ARjBaoti3vLexUz2phKH7eEMCYm7XYmVhb7a3F4/P0eg5c6Ubey91K2Bawy6wT/4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by BL3PR10MB6138.namprd10.prod.outlook.com
+ (2603:10b6:208:3b9::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Thu, 27 Oct
+ 2022 04:06:13 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::8eaf:edf0:dbd3:d492]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::8eaf:edf0:dbd3:d492%5]) with mapi id 15.20.5746.028; Thu, 27 Oct 2022
+ 04:06:13 +0000
+Date:   Wed, 26 Oct 2022 21:06:08 -0700
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        =?utf-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH v1 net-next 6/7] dt-bindings: net: add generic
+ ethernet-switch-port binding
+Message-ID: <Y1oDsKfRKHC1Mok9@euler>
+References: <20221025050355.3979380-1-colin.foster@in-advantage.com>
+ <20221025050355.3979380-7-colin.foster@in-advantage.com>
+ <20221026174421.GA794561-robh@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221026174421.GA794561-robh@kernel.org>
+X-ClientProxiedBy: BYAPR05CA0103.namprd05.prod.outlook.com
+ (2603:10b6:a03:e0::44) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GtxpCgBHuM1vA1pjIBc6pA--.31475S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGr4xtF4UKFy3AryxAw4fZrb_yoWrKr43pa
-        1jg348urW3XF4Y9rs7ta1kXFW3Ca48JFW5Gr9rJ34F9w4rAFs8C34DJas0qr4DZrW0qF4a
-        yr4rtFnI93Z0gaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi-J55UUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbCqRSnU10DhX4-bgAAs9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|BL3PR10MB6138:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1ee4f566-e50d-471c-c269-08dab7d0966a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OYAgI84CndWvVU3B4MmcXbMuf1h4Xx8exuxq3gblrloIPcLTfb8GU0GGHU6a523Jb4KVbkGVRt7r+b+VIRlWJDYKFg7A9o6ra4/Baqc+YuZHAN64cjHU+SpJT1VUhhCi6sYGOQbeKh11jCHGqrkUhTM5U8OHmlKwnMHasMWAODshLUDrcTwnmMpO+pEWYUOOhMJQH6qsy1YaU2Tsr5r+wuZ5+eVGdOyL22tFk0+gSWKDSvyjToWg1Xi+szg0A5iY0Kx0WQdveo+Sfnvh8uzlp/5Fq7xXfjp9YUNjq55Mbmui6Kdpw9/ZGPnUsqpkXyk4KJGyhP6dTO+1E0tWLu9mAw4JIJtl73LNdnU9qPyL3exmBvgDuH70/MOhZMdrnfpwbtTqeL4jWBbZ1oqolf7gchylogH1FBIupP9pdecCPdL3VEdjIIJCGzWpfSpRLKxqYNAQRDDbNPq8iRbnOTEpkTMoK4vuPET6YIBiy2ifq5V6PfZ+OMYLBY0Sjd0PZAB473lJKyUpGVH/D5NxRM1cmI8iMlYZnBhGADgYlcbGdEjyt6KNI2vB2yPFexVwCZPaz+nCFFIfnKTQsVq1p7aScOiRc3RwRGVV1Hr9/kuY/WNitZnJU+RBJejFUsdFqZzYXYV6OolqGNhq1Ik25hiSF6PS8m0DZT1hCdFO9kmNi3ELEmkCSI8Czy/2BF1Eu6vhlN4mGCGe7goaEzInWE1n7nQQrYu0k0iSL3QHfIEBfn1V3iyW0zIChIP946Z+bjNOYeH9TDhv8AaGCwN9ffCap0SmHTO8x7nj6ZsH1sfbjoQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(136003)(346002)(376002)(396003)(39840400004)(451199015)(6512007)(66946007)(83380400001)(186003)(44832011)(38100700002)(5660300002)(2906002)(7416002)(4326008)(6666004)(6506007)(6486002)(26005)(86362001)(316002)(9686003)(66476007)(66556008)(54906003)(33716001)(478600001)(8936002)(41300700001)(8676002)(6916009)(966005)(41533002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XAJd07R2z0whrU2wi6PSvHz+fn8emWYsvL9wRwfUa3NXjOB6M3MHdyiAZDdN?=
+ =?us-ascii?Q?n6Wd3otWcaklP3uXIRyXQ5yzGsI8arxV9IE7nzWj+rBGkX2CX1y+UF6itMU8?=
+ =?us-ascii?Q?aJ4IdQyHUucVFAxCFVGVDupSUTEYmw4sFPig2U+NsGfchXj0+vgJgzn4SRDc?=
+ =?us-ascii?Q?2V6I0G4Sge/6hMzvYQxbOrD3tTe7HvqzozVr6h502z/5MBdRHtb/pWz5x5AQ?=
+ =?us-ascii?Q?ofCST+tvVRVkcisphT6vEtYoiakCIlfnerLMgwknV8rsvY8Y0PWAOocXtRY7?=
+ =?us-ascii?Q?uECWENxdlReu6IF5D75WUTD+nTzE6fJXk3iKWAwDcdetj43Vd3lpzO9UgS9a?=
+ =?us-ascii?Q?FnUtvDNKqeUKQoo2jipPfI6Jn9mwAm6LCuNHzX+ZjTJkltn9CuqZgoy1IfX/?=
+ =?us-ascii?Q?vG35xsx8yVbtSX0XGDGYp5qoQfd8k8hB9lRsbvk6JwSKizdwWonKKV86+Feb?=
+ =?us-ascii?Q?UalfxtVsKNe/DA42rEIaHUZOvjKzx15CqyGN+2TDLen2bzPLbE9j1ystZgpL?=
+ =?us-ascii?Q?F6om4+JwHXHut5WarQeXH0J1YX3F/ihKzDOAn3OHvMcGq+uF4kP+7La8bD0e?=
+ =?us-ascii?Q?idVrmAERhCax4UQghvC40cVJNzToZEWFCAfFt0Ik6eYHpJLTNlybN9TwC7HU?=
+ =?us-ascii?Q?nlLHcLkCQE9xWOcP/5LzITPe6Flwjwg7PYqqaRYZIJpQeQMAuNgvrteEF203?=
+ =?us-ascii?Q?5bRm9GYu0u88u0wss4FLy2fmODTIr9P+LjqrJWYpXmfD0Q8naT2O2JszgWQV?=
+ =?us-ascii?Q?gGx4tRUl7fONexMtr4UD5Yklsdx9w4r144+Y6E8v98YB9l+dH+THr+E4beCn?=
+ =?us-ascii?Q?ajgNk9udIZ9YocacKZsfraIcr24qjq3KU8hmGM258D3TfFkNBG8lSiFcAd++?=
+ =?us-ascii?Q?ErAZmgSgbISys71KIuFCwBJsONOjzrfHNB3RdBBj2gP3YMdgThUwOaMs+r2R?=
+ =?us-ascii?Q?HJCrkQUsfJTxA+h9ZiJZsyErrCMLurz4UvXRQEJmGdcnzDhpeWiEg8+X4ZeB?=
+ =?us-ascii?Q?w1M+mXcB0DuSlpotHVLCAUfxttAZb+toUtQwNyAcHREgsaFi5EEDQw8FvzKq?=
+ =?us-ascii?Q?5OagfkcMUwhBjscCvl4DYULnBY/ny05VGhX4zwCVRvRPT1UHjnevEfJh+sPb?=
+ =?us-ascii?Q?ENmLjLVFzld9CqrMcQunjQAqu7slU/lID36hsYJCH0HPi77+782R64Cf45uN?=
+ =?us-ascii?Q?TMF/DoF/JzscxR6X581HeRZvAY8h/JE4oR0K11cfZEMpHy3cOVagRdMRNmV+?=
+ =?us-ascii?Q?m1Z+8OuzJ1vU2u+KFMn+VJQuasKJkWZFNKYn46rLOdPCG5IFPR2k0Y44fb08?=
+ =?us-ascii?Q?QmDPt7czvimtNz3iM2E5VmYsDXnTvQT9pz1gvye4zuc3M17hXmmCD4nB7dIw?=
+ =?us-ascii?Q?RYvOBVpmXUvbYUNGLeiijbDJPLTaNC/HyIWuyOTym7C1PcqITwwGjVyuyuzF?=
+ =?us-ascii?Q?HeMDFm1XYHefjZmLlAhMfL/YQaj7ewVLtsSLbnD0JFQ8hh+rtrnv23Ae7Aia?=
+ =?us-ascii?Q?7Ue/wLcCHxF5aiLJIDGuEAqAmkZvsyOVUJxUPEGusWfUsrZkJDQBkKGAbNeb?=
+ =?us-ascii?Q?EZbP0MHF/dytb+sv8G1OXhepttDMGaMSTDY07xnjXeo/TwBM1Zj0nOazXw2n?=
+ =?us-ascii?Q?CfW829WNHtF0942IM+L656E=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ee4f566-e50d-471c-c269-08dab7d0966a
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 04:06:13.4599
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JQEFHzdZQqgl7a107pewH+9AG88HuU+2OucNVqk6Lt3zIyLzZNf2+i98KzNbWLbDfzI+32PaPJzhuUxnSioOqPE0GNzPaIy5xxUTHT9+rIg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR10MB6138
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gts may be freed in gru_check_chiplet_assignment.
-The caller still use it after that, UAF happens.
+On Wed, Oct 26, 2022 at 12:44:21PM -0500, Rob Herring wrote:
+> On Mon, Oct 24, 2022 at 10:03:54PM -0700, Colin Foster wrote:
+> > The dsa-port.yaml binding had several references that can be common to all
+> > ethernet ports, not just dsa-specific ones. Break out the generic bindings
+> > to ethernet-switch-port.yaml they can be used by non-dsa drivers.
+> > 
+> > Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> > Suggested-by: Vladimir Oltean <olteanv@gmail.com>
+> > ---
+> >  .../devicetree/bindings/net/dsa/dsa-port.yaml | 26 +----------
+> >  .../bindings/net/ethernet-switch-port.yaml    | 44 +++++++++++++++++++
+> >  .../bindings/net/ethernet-switch.yaml         |  4 +-
+> >  MAINTAINERS                                   |  1 +
+> >  4 files changed, 50 insertions(+), 25 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/net/ethernet-switch-port.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml b/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
+> > index 10ad7e71097b..c5144e733511 100644
+> > --- a/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
+> > +++ b/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
+> > @@ -4,7 +4,7 @@
+> >  $id: http://devicetree.org/schemas/net/dsa/dsa-port.yaml#
+> >  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> >  
+> > -title: Ethernet Switch port Device Tree Bindings
+> > +title: DSA Switch port Device Tree Bindings
+> >  
+> >  maintainers:
+> >    - Andrew Lunn <andrew@lunn.ch>
+> > @@ -15,12 +15,9 @@ description:
+> >    Ethernet switch port Description
+> >  
+> >  allOf:
+> > -  - $ref: /schemas/net/ethernet-controller.yaml#
+> > +  - $ref: /schemas/net/ethernet-switch-port.yaml#
+> >  
+> >  properties:
+> > -  reg:
+> > -    description: Port number
+> > -
+> >    label:
+> >      description:
+> >        Describes the label associated with this port, which will become
+> > @@ -57,25 +54,6 @@ properties:
+> >        - rtl8_4t
+> >        - seville
+> >  
+> > -  phy-handle: true
+> > -
+> > -  phy-mode: true
+> > -
+> > -  fixed-link: true
+> > -
+> > -  mac-address: true
+> > -
+> > -  sfp: true
+> > -
+> > -  managed: true
+> > -
+> > -  rx-internal-delay-ps: true
+> > -
+> > -  tx-internal-delay-ps: true
+> > -
+> > -required:
+> > -  - reg
+> > -
+> >  # CPU and DSA ports must have phylink-compatible link descriptions
+> >  if:
+> >    oneOf:
+> > diff --git a/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml b/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml
+> > new file mode 100644
+> > index 000000000000..cb1e5e12bf0a
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml
+> > @@ -0,0 +1,44 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/net/ethernet-switch-port.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Ethernet Switch port Device Tree Bindings
+> > +
+> > +maintainers:
+> > +  - Andrew Lunn <andrew@lunn.ch>
+> > +  - Florian Fainelli <f.fainelli@gmail.com>
+> > +  - Vivien Didelot <vivien.didelot@gmail.com>
+> > +
+> > +description:
+> > +  Ethernet switch port Description
+> > +
+> > +$ref: ethernet-controller.yaml#
+> > +
+> > +properties:
+> > +  reg:
+> > +    description: Port number
+> > +
+> > +  phy-handle: true
+> > +
+> > +  phy-mode: true
+> > +
+> > +  fixed-link: true
+> > +
+> > +  mac-address: true
+> > +
+> > +  sfp: true
+> > +
+> > +  managed: true
+> > +
+> > +  rx-internal-delay-ps: true
+> > +
+> > +  tx-internal-delay-ps: true
+> > +
+> > +required:
+> > +  - reg
+> > +
+> > +additionalProperties: true
+> > +
+> > +...
+> > diff --git a/Documentation/devicetree/bindings/net/ethernet-switch.yaml b/Documentation/devicetree/bindings/net/ethernet-switch.yaml
+> > index fbaac536673d..f698857619da 100644
+> > --- a/Documentation/devicetree/bindings/net/ethernet-switch.yaml
+> > +++ b/Documentation/devicetree/bindings/net/ethernet-switch.yaml
+> > @@ -36,7 +36,9 @@ patternProperties:
+> >          type: object
+> >          description: Ethernet switch ports
+> >  
+> > -        $ref: /schemas/net/dsa/dsa-port.yaml#
+> > +        allOf:
+> > +          - $ref: /schemas/net/dsa/dsa-port.yaml#
+> > +          - $ref: ethernet-switch-port.yaml#
+> 
+> dsa-port.yaml references ethernet-switch-port.yaml, so you shouldn't 
+> need both here.
+> 
+> I imagine what you were trying to do here was say it is either one of 
+> these, not both. I don't think this is going work for the same reasons I 
+> mentioned with unevaluatedProperties.
 
-Fix it by introducing a return value to see if it's in error path or not.
-Free the gts in caller if gru_check_chiplet_assignment check failed.
+Oh, that was definitely a mistake for me to reference
+ethernet-switch-port.yaml. And that was exactly requested of me when
+Vladimir helped guide me down this path:
 
-Fixes: 55484c45dbec ("gru: allow users to specify gru chiplet 2")
-Reported-by: Zheng Wang <hackerzheng666@gmail.com>
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
-v5:
-- fix logical issue and remove unnecessary variable suggested by Dimitri Sivanich
+"""
+6. The ethernet-switch.yaml will have "$ref: ethernet-switch-port.yaml#"
+   and "$ref: dsa-port.yaml". The dsa-port.yaml schema will *not* have
+   "$ref: ethernet-switch-port.yaml#", just its custom additions.
+   I'm not 100% on this, but I think there will be a problem if:
+   - dsa.yaml references ethernet-switch.yaml
+     - ethernet-switch.yaml references ethernet-switch-port.yaml
+   - dsa.yaml also references dsa-port.yaml
+     - dsa-port.yaml references ethernet-switch-port.yaml
+   because ethernet-switch-port.yaml will be referenced twice. Again,
+   not sure if this is a problem. If it isn't, things can be simpler,
+   just make dsa-port.yaml reference ethernet-switch-port.yaml, and skip
+   steps 2 and 3 since dsa-port.yaml containing just the DSA specifics
+   is no longer problematic.
+"""
 
-v4:
-- use VM_FAULT_NOPAGE as failure code in gru_fault and -EINVAL in other functions suggested by Yejian
+I might have been testing to see if this was necessary and since I
+didn't notice any dt_binding_check errors this might have slipped into
+the patch set. But my intent was to reference both here and remove the
+reference in dsa-port.yaml.
 
-v3:
-- add preempt_enable and use VM_FAULT_NOPAGE as failure code suggested by Yejian
-
-v2:
-- commit message changes suggested by Greg
-
-v1: https://lore.kernel.org/lkml/CAJedcCzY72jqgF-pCPtx66vXXwdPn-KMagZnqrxcpWw1NxTLaA@mail.gmail.com/
----
- drivers/misc/sgi-gru/grufault.c  | 14 ++++++++++++--
- drivers/misc/sgi-gru/grumain.c   | 17 +++++++++++++----
- drivers/misc/sgi-gru/grutables.h |  2 +-
- 3 files changed, 26 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
-index d7ef61e602ed..bdd515d33225 100644
---- a/drivers/misc/sgi-gru/grufault.c
-+++ b/drivers/misc/sgi-gru/grufault.c
-@@ -656,7 +656,9 @@ int gru_handle_user_call_os(unsigned long cb)
- 	if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
- 		goto exit;
- 
--	gru_check_context_placement(gts);
-+	ret = gru_check_context_placement(gts);
-+	if (ret)
-+		goto err;
- 
- 	/*
- 	 * CCH may contain stale data if ts_force_cch_reload is set.
-@@ -677,6 +679,10 @@ int gru_handle_user_call_os(unsigned long cb)
- exit:
- 	gru_unlock_gts(gts);
- 	return ret;
-+err:
-+	gru_unlock_gts(gts);
-+	gru_unload_context(gts, 1);
-+	return -EINVAL;
- }
- 
- /*
-@@ -874,7 +880,11 @@ int gru_set_context_option(unsigned long arg)
- 		} else {
- 			gts->ts_user_blade_id = req.val1;
- 			gts->ts_user_chiplet_id = req.val0;
--			gru_check_context_placement(gts);
-+			if (gru_check_context_placement(gts)) {
-+				gru_unlock_gts(gts);
-+				gru_unload_context(gts, 1);
-+				return -EINVAL;
-+			}
- 		}
- 		break;
- 	case sco_gseg_owner:
-diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
-index 9afda47efbf2..8c9f7055068d 100644
---- a/drivers/misc/sgi-gru/grumain.c
-+++ b/drivers/misc/sgi-gru/grumain.c
-@@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct gru_state *gru,
-  * chiplet. Misassignment can occur if the process migrates to a different
-  * blade or if the user changes the selected blade/chiplet.
-  */
--void gru_check_context_placement(struct gru_thread_state *gts)
-+int gru_check_context_placement(struct gru_thread_state *gts)
- {
- 	struct gru_state *gru;
-+	int ret = 0;
- 
- 	/*
- 	 * If the current task is the context owner, verify that the
-@@ -727,14 +728,16 @@ void gru_check_context_placement(struct gru_thread_state *gts)
- 	 */
- 	gru = gts->ts_gru;
- 	if (!gru || gts->ts_tgid_owner != current->tgid)
--		return;
-+		return ret;
- 
- 	if (!gru_check_chiplet_assignment(gru, gts)) {
- 		STAT(check_context_unload);
--		gru_unload_context(gts, 1);
-+		ret = -EINVAL;
- 	} else if (gru_retarget_intr(gts)) {
- 		STAT(check_context_retarget_intr);
- 	}
-+
-+	return ret;
- }
- 
- 
-@@ -919,6 +922,7 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
- 	struct gru_thread_state *gts;
- 	unsigned long paddr, vaddr;
- 	unsigned long expires;
-+	int ret;
- 
- 	vaddr = vmf->address;
- 	gru_dbg(grudev, "vma %p, vaddr 0x%lx (0x%lx)\n",
-@@ -934,7 +938,12 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
- 	mutex_lock(&gts->ts_ctxlock);
- 	preempt_disable();
- 
--	gru_check_context_placement(gts);
-+	if (gru_check_context_placement(gts)) {
-+		preempt_enable();
-+		mutex_unlock(&gts->ts_ctxlock);
-+		gru_unload_context(gts, 1);
-+		return VM_FAULT_NOPAGE;
-+	}
- 
- 	if (!gts->ts_gru) {
- 		STAT(load_user_context);
-diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
-index 5efc869fe59a..f4a5a787685f 100644
---- a/drivers/misc/sgi-gru/grutables.h
-+++ b/drivers/misc/sgi-gru/grutables.h
-@@ -632,7 +632,7 @@ extern int gru_user_flush_tlb(unsigned long arg);
- extern int gru_user_unload_context(unsigned long arg);
- extern int gru_get_exception_detail(unsigned long arg);
- extern int gru_set_context_option(unsigned long address);
--extern void gru_check_context_placement(struct gru_thread_state *gts);
-+extern int gru_check_context_placement(struct gru_thread_state *gts);
- extern int gru_cpu_fault_map_id(void);
- extern struct vm_area_struct *gru_find_vma(unsigned long vaddr);
- extern void gru_flush_all_tlb(struct gru_state *gru);
--- 
-2.25.1
-
+> 
+> Rob
