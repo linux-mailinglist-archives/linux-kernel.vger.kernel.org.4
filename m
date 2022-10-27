@@ -2,198 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFAE660FF2E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3DE60FF30
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235690AbiJ0RRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 13:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
+        id S234911AbiJ0RRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 13:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236130AbiJ0RRC (ORCPT
+        with ESMTP id S235534AbiJ0RRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 13:17:02 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1D6156255
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 10:17:00 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id 192so2233086pfx.5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 10:17:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zdjZv+IKq3ph1Ix4iiZ0nwCvy/5pBmnplSSKFf+POLY=;
-        b=d9zSKpi6p0S91Q2V9qhJecbmYDzE3jyitR8boIIFcMct2U70ShHQqESa0PsTBoJLJm
-         NjaIsFEk48yDlE3Ff88ENDHTlIxwERU9suxrHpciJg+SqYYEqWAg3m6D+TBWXiQRTZmW
-         N85YdsfwBgByfbMeTO4G5aDzml9FEWJft9S6qkKvxRuyiDanjRdPVZUH1v0H3+gclbge
-         aVbzdMhjEr+rksU8vO22yn+26hNJJQulcKX7L8N0PMHf41raEJ6kGIJFBrW81T6sl1UK
-         M/xSY6XTN7tWqRoyvGdJdgz1tHRArwOWtGrIVxw0kFV8qahSE7e7Yf/JIBGN6RxVKDsr
-         Ae/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zdjZv+IKq3ph1Ix4iiZ0nwCvy/5pBmnplSSKFf+POLY=;
-        b=NhuqHQN6zYzhGecCv1eZUAWkO8cnZLcqUfayzTzHOn6UfgwDy3hvta/APv12ejJa3D
-         qBTs0TyS8WFM+RrzAD0bXD4hi9xa/AgC4CI6l5nF1Sts6tig4lvrGPrbefd6E/13zCUE
-         zw64s0HUv8Bd1+H//7IySov8p8LBPEXp7Qc7xEU3dy8WRkDqgFJvMFIha09dqvLZDXm4
-         Gfrgds1WQ7mtZfiGBrxK1u+FHUzlYRCqBRRPBee0wVpnwEGamhW38MEmXrbwGT/J6jx0
-         avPaWBUHOpV12gKi1XF6YRGvYoNWd67a+r28lG2ZpNWF2FWDhonNvCoIMLE7VjbJEamZ
-         M6nQ==
-X-Gm-Message-State: ACrzQf3hShgWi0SKSRm7rsUhB1zainGR25mbIwHJHiV02LmENolSwmVy
-        u7NI+RzR1WrWZXT4/ZEO4KlJyXZivSVFb1JonbhVuA==
-X-Google-Smtp-Source: AMsMyM6C9FJi+RflmEyBNbFkvocpaOXOyAPTOIKqKeqwRQY+mzuqgIZaY9ryX4bLqiFfUG3kcd5vd1AhDTKJjw3033E=
-X-Received: by 2002:a63:2cd2:0:b0:41c:5901:67d8 with SMTP id
- s201-20020a632cd2000000b0041c590167d8mr42895576pgs.365.1666891019459; Thu, 27
- Oct 2022 10:16:59 -0700 (PDT)
+        Thu, 27 Oct 2022 13:17:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D4017A96F;
+        Thu, 27 Oct 2022 10:17:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 94F58B82716;
+        Thu, 27 Oct 2022 17:17:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B35EC433D6;
+        Thu, 27 Oct 2022 17:17:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666891040;
+        bh=vEnsvlXaU7b0fHU1VrvjtPlhLZuHphl4v98hbaO4yy8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZEJPi/0hLjM5COTd1em2C7YnF2aORocoSHMJlEhm793j04R/hn0JJd5m6HUZmIGPJ
+         j3IEUZCp/lqmwhg2ewZqRsl2ImftohJ85ZZfWZVlkVtwF9ct84NO1YhTtirNiA208y
+         KcmXJctu91dgx1F/EGIYaqEMCLs7NfZ/nbHxK831gl2SRV6tax/Oiyy+8n38Hf68jM
+         ySjO/sIXbdfH6mIdZPoNv8ptjISVn3IlT13hxOncSuLQOS62Q0z/DFWX366yD11hFH
+         GNynlQD7YiwZD/ln/JtaNjl0Iq7Wmsd5y93ae+4+QqmQdFQwf3mydSOjrHslRdUAzG
+         OVGU3sQp9R7VA==
+Date:   Thu, 27 Oct 2022 18:17:14 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL for v6.1-rc3] media fixes
+Message-ID: <20221027181714.3d12aba5@sal.lan>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20221024210953.1572998-1-gwan-gyeong.mun@intel.com>
- <87mt9kppb6.wl-ashutosh.dixit@intel.com> <Y1ercgaqQwfqt42U@ashyti-mobl2.lan>
- <87ilk7pwrw.wl-ashutosh.dixit@intel.com> <Y1h8yn4QHI3aBlCe@ashyti-mobl2.lan>
- <CAKwvOdkpQvk31zbipLDPXfsDZ8FpGHs9t-+9JfFQO85Bs4h=wg@mail.gmail.com> <877d0lxl6s.wl-ashutosh.dixit@intel.com>
-In-Reply-To: <877d0lxl6s.wl-ashutosh.dixit@intel.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 27 Oct 2022 10:16:47 -0700
-Message-ID: <CAKwvOdmVJn8HvfF9WTnOAc+HsdJ4c1Tdck8E7Caky7AoCq4ZTA@mail.gmail.com>
-Subject: Re: [PATCH] drm/i915/hwmon: Fix a build error used with clang compiler
-To:     "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
-Cc:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-        anshuman.gupta@intel.com, intel-gfx@lists.freedesktop.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Andi Shyti <andi.shyti@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 9:53 AM Dixit, Ashutosh
-<ashutosh.dixit@intel.com> wrote:
->
-> On Thu, 27 Oct 2022 09:35:24 -0700, Nick Desaulniers wrote:
-> >
->
-> Hi Nick,
->
-> > On Tue, Oct 25, 2022 at 5:18 PM Andi Shyti <andi.shyti@linux.intel.com> wrote:
-> > >
-> > > Hi Ashutosh,
-> > >
-> > > > But I'd wait to hear from clang/llvm folks first.
-> > >
-> > > Yeah! Looking forward to getting some ideas :)
-> >
-> > Gwan-gyeong, which tree and set of configs are necessary to reproduce
-> > the observed warning?
-> >
-> > Warnings are treated as errors, so I don't want this breaking our CI.
->
-> The following or equivalent should do it:
->
-> git clone https://anongit.freedesktop.org/git/drm/drm-tip
-> git checkout drm-tip
->
-> Kernel config:
-> CONFIG_DRM_I915=m
-> CONFIG_HWMON=y
->
-> Files:
-> drivers/gpu/drm/i915/i915_hwmon.c/.h
->
-> Thanks for taking a look.
+Hi Linus,
 
-Thanks, I can repro now.
+Please pull from:
+  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.1-3
 
-I haven't detangled the macro soup, but I noticed:
+For a bunch of patches addressing issues at the vivid driver and adding
+new checks at V4L2 to validate the input parameters from some ioctls.
 
-1. FIELD_PREP is defined in include/linux/bitfield.h which has the
-following comment:
- 18  * Mask must be a compilation time constant.
+Regards,
+Mauro
 
-2. hwm_field_scale_and_write only has one callsite.
+The following changes since commit 247f34f7b80357943234f93f247a1ae6b6c3a740:
 
-The following patch works:
+  Linux 6.1-rc2 (2022-10-23 15:27:33 -0700)
 
-```
-diff --git a/drivers/gpu/drm/i915/i915_hwmon.c
-b/drivers/gpu/drm/i915/i915_hwmon.c
-index 9e9781493025..6ac29d90b92a 100644
---- a/drivers/gpu/drm/i915/i915_hwmon.c
-+++ b/drivers/gpu/drm/i915/i915_hwmon.c
-@@ -101,7 +101,7 @@ hwm_field_read_and_scale(struct hwm_drvdata *ddat,
-i915_reg_t rgadr,
+are available in the Git repository at:
 
- static void
- hwm_field_scale_and_write(struct hwm_drvdata *ddat, i915_reg_t rgadr,
--                         u32 field_msk, int nshift,
-+                         int nshift,
-                          unsigned int scale_factor, long lval)
- {
-        u32 nval;
-@@ -111,8 +111,8 @@ hwm_field_scale_and_write(struct hwm_drvdata
-*ddat, i915_reg_t rgadr,
-        /* Computation in 64-bits to avoid overflow. Round to nearest. */
-        nval = DIV_ROUND_CLOSEST_ULL((u64)lval << nshift, scale_factor);
+  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.1-3
 
--       bits_to_clear = field_msk;
--       bits_to_set = FIELD_PREP(field_msk, nval);
-+       bits_to_clear = PKG_PWR_LIM_1;
-+       bits_to_set = FIELD_PREP(PKG_PWR_LIM_1, nval);
+for you to fetch changes up to de547896aac606a00435a219757a940ece142bf0:
 
-        hwm_locked_with_pm_intel_uncore_rmw(ddat, rgadr,
-                                            bits_to_clear, bits_to_set);
-@@ -406,7 +406,6 @@ hwm_power_write(struct hwm_drvdata *ddat, u32
-attr, int chan, long val)
-        case hwmon_power_max:
-                hwm_field_scale_and_write(ddat,
-                                          hwmon->rg.pkg_rapl_limit,
--                                         PKG_PWR_LIM_1,
-                                          hwmon->scl_shift_power,
-                                          SF_POWER, val);
-                return 0;
-```
-Though I'm not sure if you're planning to add further callsites of
-hwm_field_scale_and_write with different field_masks?
+  media: vivid.rst: loop_video is set on the capture devnode (2022-10-25 16:43:54 +0100)
 
-Alternatively, (without the above diff),
+----------------------------------------------------------------
+media fixes for v6.1-rc3
 
-```
-diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
-index c9be1657f03d..6f40f12bcf89 100644
---- a/include/linux/bitfield.h
-+++ b/include/linux/bitfield.h
-@@ -8,6 +8,7 @@
- #define _LINUX_BITFIELD_H
+----------------------------------------------------------------
+Hans Verkuil (8):
+      media: vivid: s_fbuf: add more sanity checks
+      media: vivid: dev->bitmap_cap wasn't freed in all cases
+      media: v4l2-dv-timings: add sanity checks for blanking values
+      media: videodev2.h: V4L2_DV_BT_BLANKING_HEIGHT should check 'interlaced'
+      media: vivid: fix control handler mutex deadlock
+      media: vivid: drop GFP_DMA32
+      media: vivid: set num_in/outputs to 0 if not supported
+      media: vivid.rst: loop_video is set on the capture devnode
 
- #include <linux/build_bug.h>
-+#include <linux/const.h>
- #include <asm/byteorder.h>
+ Documentation/admin-guide/media/vivid.rst        |  2 +-
+ drivers/media/test-drivers/vivid/vivid-core.c    | 38 +++++++++++++++++++++---
+ drivers/media/test-drivers/vivid/vivid-core.h    |  2 ++
+ drivers/media/test-drivers/vivid/vivid-osd.c     |  2 +-
+ drivers/media/test-drivers/vivid/vivid-vid-cap.c | 35 ++++++++++++++++++----
+ drivers/media/v4l2-core/v4l2-dv-timings.c        | 14 +++++++++
+ include/uapi/linux/videodev2.h                   |  3 +-
+ 7 files changed, 83 insertions(+), 13 deletions(-)
 
- /*
-@@ -62,7 +63,7 @@
-
- #define __BF_FIELD_CHECK(_mask, _reg, _val, _pfx)                      \
-        ({                                                              \
--               BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
-+               BUILD_BUG_ON_MSG(!__is_constexpr(_mask),                \
-                                 _pfx "mask is not constant");          \
-                BUILD_BUG_ON_MSG((_mask) == 0, _pfx "mask is zero");    \
-                BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
-```
-will produce:
-error: call to __compiletime_assert_407 declared with 'error'
-attribute: FIELD_PREP: mask is not constant
-
-I haven't tested if that change is also feasible (on top of fixing
-this specific instance), but I think it might help avoid more of these
-subtleties wrt. __builtin_constant_p that depende heavily on compiler,
-compiler version, optimization level.
--- 
-Thanks,
-~Nick Desaulniers
