@@ -2,177 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0988960ED8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 03:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EEE060ED92
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 03:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233924AbiJ0Bnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 21:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52356 "EHLO
+        id S233956AbiJ0Bpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 21:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233648AbiJ0Bn3 (ORCPT
+        with ESMTP id S233516AbiJ0Bps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 21:43:29 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF64C12B36F
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 18:43:27 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id z24so183859ljn.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 18:43:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tbk0eEYbnn7UKEVn0VjxKM1ZNInMpSiFCIPCtUXFOvs=;
-        b=vcuEklMwyzYukZhXgOEh3NEm2Y2yZpbE0LQpHdGh6ef/G/JA5hh4MOdbOtCXt2HIez
-         N4efK9tWJruDjEfO7wdMeQGUlPR0aZxqq+A7QySZgCJwHnN8UgMK8M6cK+zhfvVEsgPB
-         6Au7w+PZgloWRtYIORIzvH/fQV0XKsXGe6qOkDNtmekbGDTjW30ZUYXFHsBO6uEtunk8
-         u9By8xMiIfnkI35rw2zP10T1RGbNczd7Aie6P65nEjGBC98vkNTdjhGcc9x/7eiz6+xd
-         brNmpfHoVTPQdUpjYUSuujMNaErYgMsI6V+Kf37Rx/6vAVxcj5X3uTwaAxPGU7PMZEaG
-         PXxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tbk0eEYbnn7UKEVn0VjxKM1ZNInMpSiFCIPCtUXFOvs=;
-        b=VjCBufDE2lHcgwTKyIj97h0NgFd1KSu/EZTTmQTCQ7SNF6VcLTvOqPWUjc+Q8xh3Jj
-         YR4FLawWAmVuqtJQlObcvoPu4iM8h2BzjNJ+7OmX8juBwC/u0NarcMTpuGQ5BxCo4Nc5
-         kfHYiXfpAP9wD13yhlPrKeqWUYJlqRdYzplHJlUdyfltp7AVnkCaLEDrOXraTkFGD6Dq
-         IAEVEGDmYznCmPd4+4DzcUuRMl1WdPEsloppdXUxZ5enPvBf0xCuxcUS1ELJpP7QHLyq
-         epano10QgLaz4Qw5f58vxyp0KcimWh15tS1bQP5BJCu4nlIcDJq9FqTezXNgkAVVyeHl
-         ku7g==
-X-Gm-Message-State: ACrzQf0bJJEz6IBCes8SZDftZ//824dXyY77QnqK6E8BfhGXHAqaSNWj
-        eoOQJZOEjL7xaED6qwW9TXvnyJgWAk2B9FPRCD/f8g==
-X-Google-Smtp-Source: AMsMyM5clIdvVzDYgyLVmEepWcsuZSR1iy0Hq+hnVqzut780N0uW5jW40yCDD3lXn6vo7uZGtKTCO9CXsMk7cAngM3A=
-X-Received: by 2002:a2e:8881:0:b0:255:7790:25e6 with SMTP id
- k1-20020a2e8881000000b00255779025e6mr17440388lji.525.1666835006300; Wed, 26
- Oct 2022 18:43:26 -0700 (PDT)
+        Wed, 26 Oct 2022 21:45:48 -0400
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8602D87FBD
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 18:45:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1666835146; x=1698371146;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=wTrycu0yCLepbRsKzvRQe2YDaN2RazwoDNx7Z2eFFXQ=;
+  b=d0APt8O/ooapVxIpX6YDZWh8j2dko1ljjmGP0v+JBP3B8eUbGzNMznG0
+   waM8jOb+9gyaqjVtLfGZwYXsZ3AYgP6m6vnblc2OQxgsP2/FEfqKdlCbT
+   YsD7H/hlmaz+uUdys0vcOuMSIJhmxEf1rY0ua37pHmNPC0dTZiYmv331i
+   5eQHDoWxogrDk0hyzmFAaFZ2mGxT/iXC6JnVKwsX0O6xpn/M2hZRcKKZG
+   qKBBk+tfDmFa0uqHyYmKsMZ+z+hnrlr+9kKv82d4l7dYQBNZf6SO+kSTy
+   QHEpnHdXgnKiQlXGb2uU+GFaQ5eStVMmFRMAVbTmpVOEF5IzSvcORkGr3
+   g==;
+X-IronPort-AV: E=Sophos;i="5.95,215,1661788800"; 
+   d="scan'208";a="215193089"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 27 Oct 2022 09:45:45 +0800
+IronPort-SDR: HSKzHvf4UdrXlLW2bQt/Ro0RLgepC9tkS+F5ReWqEcjmQK5rD7N2op9K/+d7RMRYbWGaU4DP21
+ Ieoa8rXW1chvpuSdZw/rdtlX1y6RwRp+h56hTfmyyxlNwdTGygVF02jfCHB6hgru3CqkIYv4Jb
+ pcUq15YwjGXYZyp6CdeWbNlr3XswCVplulYWqdqiDY84TuAaigjsOF9OKJ6NYrvMkG62LCHT7H
+ hyqXTzakaPppN45TKNF8wZy2aoKTHE0T9qrM2+c0uJkkVDN/QJZyqGEhbsEZ+R3Bgr0TJcIIKU
+ uKOmniZA7Xmh9RVPqh0UBjWr
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Oct 2022 17:59:24 -0700
+IronPort-SDR: aGKLwKbzIJykTV6Vi2L59I3ibj3Xo2wKfoqzbaXeOropZaJec7EFGifk6v2Br2EjJ8Rz4prXfa
+ QxppudyC4RMEs7tR9tgDZiieIutM73lQUdRxPJMSyu3wFDpy77Fb8rdM5WpmJNLwfoqWp2yKZt
+ HmerA4mZQnQqUy0/taH6DMQ5Gwf51mjrnOsFRiQ/DPD9xOufGahqf0XK4dyVNfXpP9mSY4rBa7
+ Tzyfdylkq7RBzrMtoLDVbKP5sksE2F74lJuBtL4V/h3agEqwm4i7OHMypI9VF1b1PmeNYeiQYL
+ sA8=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Oct 2022 18:45:46 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MyT6066zgz1RwvT
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 18:45:44 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1666835144; x=1669427145; bh=wTrycu0yCLepbRsKzvRQe2YDaN2RazwoDNx
+        7Z2eFFXQ=; b=UpLrDs9sVInQKlWTLoLfnOQ+0dhvoQYaQverJO4vdaQHAHX+qhe
+        sQeco+XPG+zViYPdGV6FHRHGrdSh2DmL7ENKOP5L6emFNZpQVjYFa/itofTmGN3L
+        gVi5+YqqNao2npFYa3OgknSziBJLS2xcrX+8D80jA64Jeu+fuKCWWJoz6hPBkdYK
+        Njs7mit8Wnhs9oGklwBDbYOEaQ0kzclqYzKmBs1sViurJA33kb6jEshGvt3Y74cW
+        dziXyeVieq36r9hrXynIK4Il+LL1riQohHKIqvHrbVbnbFijXKZaTSf3FpFDQ4WP
+        B9Piuh5k6MzYZp0OKSvtgIaAKpIAkkYHOuQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 0_YTOXhTtS0r for <linux-kernel@vger.kernel.org>;
+        Wed, 26 Oct 2022 18:45:44 -0700 (PDT)
+Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MyT5x4Xzwz1RvLy;
+        Wed, 26 Oct 2022 18:45:41 -0700 (PDT)
+Message-ID: <08fdb698-0df3-7bc8-e6af-7d13cc96acfa@opensource.wdc.com>
+Date:   Thu, 27 Oct 2022 10:45:40 +0900
 MIME-Version: 1.0
-References: <20220922092357.123732-1-mie@igel.co.jp> <20221025142143.GA109941@thinkpad>
- <HE1PR0401MB233126D2C7410EC5F6C3976488319@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-In-Reply-To: <HE1PR0401MB233126D2C7410EC5F6C3976488319@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-From:   Shunsuke Mie <mie@igel.co.jp>
-Date:   Thu, 27 Oct 2022 10:43:15 +0900
-Message-ID: <CANXvt5qjnbZMzFJt8kBtQz6FHc_QQYw7=fZp8kK87mZ-t75z+g@mail.gmail.com>
-Subject: Re: [EXT] Re: [PATCH v2] PCI: endpoint: pci-epf-{,v}ntb: fix a check
- for no epc alignment constraint
-To:     Frank Li <frank.li@nxp.com>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "ntb@lists.linux.dev" <ntb@lists.linux.dev>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH RFC v3 2/7] ata: libata-scsi: Add
+ ata_internal_queuecommand()
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, hare@suse.de, bvanassche@acm.org,
+        hch@lst.de, ming.lei@redhat.com, niklas.cassel@wdc.com
+Cc:     axboe@kernel.dk, jinpu.wang@cloud.ionos.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linuxarm@huawei.com
+References: <1666693976-181094-1-git-send-email-john.garry@huawei.com>
+ <1666693976-181094-3-git-send-email-john.garry@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <1666693976-181094-3-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frank,
+On 10/25/22 19:32, John Garry wrote:
+> Add callback to queue reserved commands - call it "internal" as this is
+> what libata uses.
+> 
+> Also add it to the base ATA SHT.
+> 
+> Signed-off-by: John Garry <john.garry@huawei.com>
+> ---
+>  drivers/ata/libata-scsi.c | 14 ++++++++++++++
+>  include/linux/libata.h    |  5 ++++-
+>  2 files changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+> index 30d7c90b0c35..0d6f37d80137 100644
+> --- a/drivers/ata/libata-scsi.c
+> +++ b/drivers/ata/libata-scsi.c
+> @@ -1118,6 +1118,20 @@ int ata_scsi_dev_config(struct scsi_device *sdev, struct ata_device *dev)
+>  	return 0;
+>  }
+>  
+> +int ata_internal_queuecommand(struct Scsi_Host *shost, struct scsi_cmnd *scmd)
+> +{
+> +	struct ata_port *ap;
+> +	int res;
+> +
+> +	ap = ata_shost_to_port(shost);
 
-2022=E5=B9=B410=E6=9C=8826=E6=97=A5(=E6=B0=B4) 1:07 Frank Li <frank.li@nxp.=
-com>:
->
->
->
-> > -----Original Message-----
-> > From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > Sent: Tuesday, October 25, 2022 9:22 AM
-> > To: Shunsuke Mie <mie@igel.co.jp>
-> > Cc: Jon Mason <jdmason@kudzu.us>; Dave Jiang <dave.jiang@intel.com>;
-> > Allen Hubbe <allenbh@gmail.com>; Kishon Vijay Abraham I
-> > <kishon@ti.com>; Lorenzo Pieralisi <lpieralisi@kernel.org>; Krzysztof
-> > Wilczy=C5=84ski <kw@linux.com>; Bjorn Helgaas <bhelgaas@google.com>;
-> > ntb@lists.linux.dev; linux-pci@vger.kernel.org; linux-kernel@vger.kerne=
-l.org
-> > Subject: [EXT] Re: [PATCH v2] PCI: endpoint: pci-epf-{,v}ntb: fix a che=
-ck for no
-> > epc alignment constraint
-> >
-> > Caution: EXT Email
-> >
-> > On Thu, Sep 22, 2022 at 06:23:57PM +0900, Shunsuke Mie wrote:
-> > > Some PCI endpoint controllers have no alignment constraints, and the
-> > > epc_features->align becomes 0. In this case, IS_ALIGNED() in
->
-> [Frank Li] why not set epc_features->align 1
-> no alignment constraints should mean align to byte.
-It is one of the solutions too I think. But in that case,  we need to
-write epc_features->align =3D 1 to all epc drivers, dwc, qcom, rcar,
-tegra, and etc.
+You can have this initialization together with the ap declaration.
 
-I think that my change is better.
+> +	spin_lock_irq(ap->lock);
+> +	res = ata_sas_queuecmd(scmd, ap);
+> +	spin_unlock_irq(ap->lock);
+> +
+> +	return res;
+> +}
+> +EXPORT_SYMBOL_GPL(ata_internal_queuecommand);
 
-> > > epf_ntb_config_spad_bar_alloc() doesn't work well. Check for this bef=
-ore
-> > > IS_ALIGNED().
-> > >
-> > > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> >
-> > Reviewed-by: Manivannan Sadhasivam
-> > <manivannan.sadhasivam@linaro.org>
-> >
-> > Thanks,
-> > Mani
-> >
-> > > ---
-> > > Changes in v2:
-> > > * Fix the commit message in phrasings and words.
-> > > ---
-> > > ---
-> > >  drivers/pci/endpoint/functions/pci-epf-ntb.c  | 2 +-
-> > >  drivers/pci/endpoint/functions/pci-epf-vntb.c | 2 +-
-> > >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> > b/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> > > index 9a00448c7e61..f74155ee8d72 100644
-> > > --- a/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> > > +++ b/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> > > @@ -1021,7 +1021,7 @@ static int epf_ntb_config_spad_bar_alloc(struct
-> > epf_ntb *ntb,
-> > >       peer_size =3D peer_epc_features->bar_fixed_size[peer_barno];
-> > >
-> > >       /* Check if epc_features is populated incorrectly */
-> > > -     if ((!IS_ALIGNED(size, align)))
-> > > +     if (align && (!IS_ALIGNED(size, align)))
-> > >               return -EINVAL;
-> > >
-> > >       spad_count =3D ntb->spad_count;
-> > > diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > index 0ea85e1d292e..5e346c0a0f05 100644
-> > > --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > @@ -418,7 +418,7 @@ static int epf_ntb_config_spad_bar_alloc(struct
-> > epf_ntb *ntb)
-> > >       size =3D epc_features->bar_fixed_size[barno];
-> > >       align =3D epc_features->align;
-> > >
-> > > -     if ((!IS_ALIGNED(size, align)))
-> > > +     if (align && !IS_ALIGNED(size, align))
-> > >               return -EINVAL;
-> > >
-> > >       spad_count =3D ntb->spad_count;
-> > > --
-> > > 2.17.1
-> > >
-> >
-> > --
-> > =E0=AE=AE=E0=AE=A3=E0=AE=BF=E0=AE=B5=E0=AE=A3=E0=AF=8D=E0=AE=A3=E0=AE=
-=A9=E0=AF=8D =E0=AE=9A=E0=AE=A4=E0=AE=BE=E0=AE=9A=E0=AE=BF=E0=AE=B5=E0=AE=
-=AE=E0=AF=8D
+I am officially lost here. Do not see why this function is needed...
 
-Best,
-Shunsuke
+> +
+>  /**
+>   *	ata_scsi_slave_config - Set SCSI device attributes
+>   *	@sdev: SCSI device to examine
+> diff --git a/include/linux/libata.h b/include/linux/libata.h
+> index 8938b584520f..f09c5dca16ce 100644
+> --- a/include/linux/libata.h
+> +++ b/include/linux/libata.h
+> @@ -1141,6 +1141,8 @@ extern int ata_std_bios_param(struct scsi_device *sdev,
+>  			      sector_t capacity, int geom[]);
+>  extern void ata_scsi_unlock_native_capacity(struct scsi_device *sdev);
+>  extern int ata_scsi_slave_config(struct scsi_device *sdev);
+> +extern int ata_internal_queuecommand(struct Scsi_Host *shost,
+> +				struct scsi_cmnd *scmd);
+>  extern void ata_scsi_slave_destroy(struct scsi_device *sdev);
+>  extern int ata_scsi_change_queue_depth(struct scsi_device *sdev,
+>  				       int queue_depth);
+> @@ -1391,7 +1393,8 @@ extern const struct attribute_group *ata_common_sdev_groups[];
+>  	.slave_destroy		= ata_scsi_slave_destroy,	\
+>  	.bios_param		= ata_std_bios_param,		\
+>  	.unlock_native_capacity	= ata_scsi_unlock_native_capacity,\
+> -	.max_sectors		= ATA_MAX_SECTORS_LBA48
+> +	.max_sectors		= ATA_MAX_SECTORS_LBA48,\
+> +	.reserved_queuecommand = ata_internal_queuecommand
+>  
+>  #define ATA_SUBBASE_SHT(drv_name)				\
+>  	__ATA_BASE_SHT(drv_name),				\
+
+-- 
+Damien Le Moal
+Western Digital Research
+
