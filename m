@@ -2,97 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B40610478
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 339BD61047C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236992AbiJ0Vcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 17:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
+        id S236138AbiJ0VdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 17:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235514AbiJ0Vcj (ORCPT
+        with ESMTP id S235514AbiJ0VdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 17:32:39 -0400
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EC66C126
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 14:32:38 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 21:32:24 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1666906356; x=1667165556;
-        bh=y8VadYs6trzDqNdreMr2m0RjqduX0bvbUVP70tUtncI=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=VI1qHMFNbMDcQLOps0FfTUHG23xrAgQ+o2A3EC8ncdDsmEcxgBOH1o1bZw3swGQTm
-         G+2dKqsBPJ/8pGyXJA53PX3Jg2FDzAB+TC+91i6Ob6pHX5lLTg5J07q8IjYLP2dUv2
-         xYiMY+OTwVYc0/qS6r0OGtyrY7zn4p9oEglaP+FS7couaVKwvmZVG9WpqscIeqxWnZ
-         D61RhQlWmXKmMUsAwVMQVKDDJLL4JASi+GQFYQWMWZvwbPF8l8F6AEvThHZDkIhq+f
-         9d0D2AL8uYqn0RdaQq/QrnP/bbw98K9Zp2uBEbYJ0unS/2q1FJVNCv43H36Q8Zpbfg
-         6yhXopvIpWAmQ==
-To:     =?utf-8?Q?Jos=C3=A9_Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com, spbnick@gmail.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mia Kanashi <chad@redpilled.dev>,
-        Andreas Grosse <andig.mail@t-online.de>
-Subject: Re: [PATCH] HID: uclogic: Add support for XP-PEN Deco LW
-Message-ID: <2m7M7XFEGHGOu6Le-GK_9kDuuA3BltmE1I17zDsok382TFmgO2oDamLv7cWcXjYLdzdgwQli7Qe98xoe0tuVc4bg7sRbFG2LFZ6iYn0s3Fk=@protonmail.com>
-In-Reply-To: <20221027211021.230325-1-jose.exposito89@gmail.com>
-References: <20221027211021.230325-1-jose.exposito89@gmail.com>
-Feedback-ID: 20568564:user:proton
+        Thu, 27 Oct 2022 17:33:19 -0400
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B3DC6A520;
+        Thu, 27 Oct 2022 14:33:19 -0700 (PDT)
+Received: by mail-pj1-f44.google.com with SMTP id l6so2923446pjj.0;
+        Thu, 27 Oct 2022 14:33:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wjYDd+AjqtK1fAhzqo1MyWUPaoispfMqozNlwB2bOZk=;
+        b=FCYJobNNCUhcaer/UCGF4hzDFc/JiFQpf//y95HRmw3XyIpylpUWC71hsHr4WG1yEb
+         i0ORT0OC26PSuMzgeN2+Cv3U2fYhJGshy6HIpHjyz78F58FGlH3bCESE8KGKs54S+9na
+         r1CmyT9y4efrvvI0QI4P3H0mcPPbc5wXshuqEJcfrYDK5L3UgDjDJ9v0Dg5ZIttailXV
+         sRMo94adcuhc526DzAqdt6sJyl6RMpjFsLnEqKm/TNdtFbJnwaxgCby8rkM40i88FFDw
+         VmoowlWTxd3vmwKs0d4qMhhhVrJ+lETBJlDZR42NXb3DUu9yowVaAlFhJ3Z/gSNblntW
+         2ZaA==
+X-Gm-Message-State: ACrzQf2uWkI4Ae1lqXJPhBGKG85oAFoV/2AO4FU/eU/q4rESwr/xpfd9
+        9IdTwbAauPmzMyBj7N2WlY0=
+X-Google-Smtp-Source: AMsMyM7qGz52m/OQbEcFWzGhVdXAgPxigNC8c9DDXXU6wane0zG5CUVpGsjPVvG8bZAdVWCzI9e/ZA==
+X-Received: by 2002:a17:90b:380e:b0:213:8cf1:2ab6 with SMTP id mq14-20020a17090b380e00b002138cf12ab6mr156956pjb.217.1666906398644;
+        Thu, 27 Oct 2022 14:33:18 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:bc2b:ff19:1b02:257b? ([2620:15c:211:201:bc2b:ff19:1b02:257b])
+        by smtp.gmail.com with ESMTPSA id t8-20020a1709027fc800b00179eb1576bbsm1600410plb.190.2022.10.27.14.33.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 14:33:17 -0700 (PDT)
+Message-ID: <800cb947-7337-d35e-c4fb-87ea302265d0@acm.org>
+Date:   Thu, 27 Oct 2022 14:33:15 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v3 05/17] ufs: core: mcq: Introduce Multi Circular Queue
+Content-Language: en-US
+To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        stanley.chu@mediatek.com, eddie.huang@mediatek.com,
+        daejun7.park@samsung.com, avri.altman@wdc.com, mani@kernel.org,
+        beanhuo@micron.com, quic_richardp@quicinc.com,
+        linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1666288432.git.quic_asutoshd@quicinc.com>
+ <22246916a139954e931cda8eb0990bcbf105ddc2.1666288432.git.quic_asutoshd@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <22246916a139954e931cda8eb0990bcbf105ddc2.1666288432.git.quic_asutoshd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On 10/20/22 11:03, Asutosh Das wrote:
+> Introduce multi-circular queue (MCQ) which has been added
+> in UFSHC v4.0 standard in addition to the Single Doorbell mode.
+> The MCQ mode supports multiple submission and completion queues.
+> Add support to configure the number of queues.
 
+Introduce -> Add support for?
 
-2022. okt=C3=B3ber 27., cs=C3=BCt=C3=B6rt=C3=B6k 23:10 keltez=C3=A9ssel, Jo=
-s=C3=A9 Exp=C3=B3sito =C3=ADrta:
-
-> [...]
-> +/**
-> + * uclogic_params_ugee_v2_has_battery() - check whether a UGEE v2 device=
- has
-> + * battery or not.
-> + * @hdev:=09The HID device of the tablet interface.
-> + *
-> + * Returns:
-> + *=09True if the device has battery, false otherwise.
-> + */
-> +static bool uclogic_params_ugee_v2_has_battery(struct hid_device *hdev)
+> +static int ufshcd_alloc_mcq(struct ufs_hba *hba)
 > +{
-> +=09/* The XP-PEN Deco LW vendor, product and version are identical to th=
-e
-> +=09 * Deco L. The only difference reported by their firmware is the prod=
-uct
-> +=09 * name. Add a quirk to support battery reporting on the wireless
-> +=09 * version.
-> +=09 */
-> +=09if (hdev->vendor =3D=3D USB_VENDOR_ID_UGEE &&
-> +=09    hdev->product =3D=3D USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO_L) {
-> +=09=09struct usb_device *udev =3D hid_to_usb_dev(hdev);
-> +=09=09const char *lw_name =3D "Deco LW";
+> +	int ret;
 > +
-> +=09=09if (strncmp(udev->product, lw_name, strlen(lw_name)) =3D=3D 0)
-
-Please use `strstarts()` here instead.
-
-
-> +=09=09=09return true;
-> +=09}
+> +	ret = ufshcd_mcq_init(hba);
 > +
-> +=09return false;
+> +	return ret;
 > +}
-> [...]
 
+Although a later patch will modify the above function, please change the 
+function body into the following in this patch:
 
-Regards,
-Barnab=C3=A1s P=C5=91cze
+         return ufshcd_mcq_init(hba);
+
+Otherwise this patch looks good to me.
+
+Thanks,
+
+Bart.
