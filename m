@@ -2,134 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE6F610557
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5242B61055C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234871AbiJ0WH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 18:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
+        id S234971AbiJ0WIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 18:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234808AbiJ0WHx (ORCPT
+        with ESMTP id S234810AbiJ0WIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 18:07:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE16CA02DF;
-        Thu, 27 Oct 2022 15:07:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89540B8280C;
-        Thu, 27 Oct 2022 22:07:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08E2AC433D6;
-        Thu, 27 Oct 2022 22:07:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666908468;
-        bh=k2RYOuO9/8oDvtMKq2XpY8XMP11wPC4mHof/KaWGSq0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=j4ndRFlVZZpSzK7r7b6nn+gW2F3zeKyR9btgzIPERFrN1L2beNgpk88Rf6XrCAB9A
-         KuHaQG2GV/9jVbB9ktaI+TDKJIw33rbv8oZDIVVozE5OiZGfs6Nc/WKk8E5IEWTbnd
-         JP9qrJobgg6CXZsvnGY6dPtZ2rm0FT1DYBr9NCWy7i5YLypmRQwy5mLLJB8HMRFeO0
-         7ozX5atIyN4Eh56l4TUPErFtPnIekEsO3qqv2nqKhLysNt0RTV1vvzjijtuv1nnAfK
-         xpVz03WtsZeJpY5usoDahWUvINY2EPw+forccz6Y7PwGvhXylo8cEpm78KEjGowgwk
-         0uc7fSdDoXxRw==
-Date:   Thu, 27 Oct 2022 17:07:46 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     LeoLiu-oc <LeoLiu-oc@zhaoxin.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, james.morse@arm.com,
-        tony.luck@intel.com, bp@alien8.de, robert.moore@intel.com,
-        ying.huang@intel.com, rdunlap@infradead.org, bhelgaas@google.com,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devel@acpica.org,
-        CobeChen@zhaoxin.com, TonyWWang@zhaoxin.com, ErosZhang@zhaoxin.com
-Subject: Re: [PATCH 1/5] ACPI/APEI: Add apei_hest_parse_aer()
-Message-ID: <20221027220746.GA844491@bhelgaas>
+        Thu, 27 Oct 2022 18:08:17 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D195A2204;
+        Thu, 27 Oct 2022 15:08:14 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id r14so5216523edc.7;
+        Thu, 27 Oct 2022 15:08:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=r9RELUveKiUS67KqsZJxwv+GhPKYSZmmNpqGyp3KeL0=;
+        b=JfXFlJ4wCnFvi9jr1lx+vzRzL6wNpHsAjP9ImZnD7o4RBGnGK2q+Hkr1AfP8BCQ9Em
+         ClHUmPJP2mw+Jv3BwJXHu6/WlG1YnKxhdbpWzIIvAY5/f9Vxpo+eZyR9J2P450gcz8d1
+         ZC0/nutQ/zH7Y66UzyXySNTXBIJautFH3rHTDUUKyL6h8tPUGGZe1HOupswJUrG2WXWh
+         +9GBIBs7lmr8PJ9X8My5e7ss2akjSuXDKad86M5NIahpuIZGpF+4dt+j5j1ukAM1P/2k
+         hXW1Ih6c/LqiyAWoQITdGwfnPwsd65hnISqhXdmzfZ1XLNvFKrTDl6KQGSY4zv9DIe2f
+         JDtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r9RELUveKiUS67KqsZJxwv+GhPKYSZmmNpqGyp3KeL0=;
+        b=zrm/S1VMhZBxZrDfMZ6Y4EHEOtv5jh91kreKJnWuiOF7uypO939+YZnCE5JrD5ot5E
+         deQQyf4ymnEv9SiQ242aLSrhZSEwaReuIJVI9qPLPruAQ7xbXTKuQCyEdwOVF+1dXujU
+         NmUu+KAv2Eps7XtqcZKV5CkbwCk64Gyk+SvSk2kQIbmmx5CsxVrVl8GDMm0tYLom7eYy
+         8UBW/MXS7KwHbrpgMouvuQepB8UCOOfsBbas5QB0FsnxpSNdV6L5GIl25C2Y2x80YTHJ
+         exZb7678MMTWgxvjcXIlQ29/1/8GLLvMew7FIDeRRh2vBlFPMELJRsSLAu1A2xchZsBT
+         Y/mg==
+X-Gm-Message-State: ACrzQf170zEhJ9SiMNexqH+jdE46TQciUakJwLDxWyLjvbzvsAIOJcwA
+        G8QiywNWspmQ1ncR8zRXUgdnMI95hj+Nh3BffiM=
+X-Google-Smtp-Source: AMsMyM7WF/u9jCTtkVgKvkXWMMsUAzTmGbv2jIoDElJSEwL95CQMTNB+W2XiN6KO+oglta/8KUl11BElPtkjS3OhWbc=
+X-Received: by 2002:aa7:d80a:0:b0:462:2c1c:8716 with SMTP id
+ v10-20020aa7d80a000000b004622c1c8716mr13941343edq.185.1666908492601; Thu, 27
+ Oct 2022 15:08:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221027031518.2855743-1-LeoLiu-oc@zhaoxin.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220921084302.43631-1-yangyicong@huawei.com> <20220921084302.43631-3-yangyicong@huawei.com>
+ <168eac93-a6ee-0b2e-12bb-4222eff24561@arm.com> <8e391962-4e3a-5a56-64b4-78e8637e3b8c@huawei.com>
+ <CAGsJ_4z=dZbrAUD9jczT08S3qi_ep-h+EK35UfayVk1S+Cnp2A@mail.gmail.com> <ecd161db-b290-7997-a81e-a0a00bd1c599@arm.com>
+In-Reply-To: <ecd161db-b290-7997-a81e-a0a00bd1c599@arm.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Fri, 28 Oct 2022 11:07:58 +1300
+Message-ID: <CAGsJ_4x0KhEjm5a9jhtS+YK1AT49u3sHnp2rHZVSuTGZp4nKzA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] arm64: support batched/deferred tlb shootdown
+ during page reclamation
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Yicong Yang <yangyicong@huawei.com>, yangyicong@hisilicon.com,
+        corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, darren@os.amperecomputing.com,
+        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
+        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-mm@kvack.org, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, akpm@linux-foundation.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        wangkefeng.wang@huawei.com, xhao@linux.alibaba.com,
+        prime.zeng@hisilicon.com, Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>,
+        catalin.marinas@arm.com, will@kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 11:15:18AM +0800, LeoLiu-oc wrote:
-> From: leoliu-oc <leoliu-oc@zhaoxin.com>
-> 
-> apei_hest_parse_aer() is used to parse and record the PCI Express AER
-> Structure in the HEST Table.
-> 
-> Signed-off-by: leoliu-oc <leoliu-oc@zhaoxin.com>
-> ---
->  drivers/acpi/apei/hest.c | 119 ++++++++++++++++++++++++++++++++++++++-
->  include/acpi/actbl1.h    |  69 +++++++++++++++++++++++
->  include/acpi/apei.h      |   7 +++
->  3 files changed, 194 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/acpi/apei/hest.c b/drivers/acpi/apei/hest.c
-> index 6aef1ee5e1bd..0bfdc18758f5 100644
-> --- a/drivers/acpi/apei/hest.c
-> +++ b/drivers/acpi/apei/hest.c
-> @@ -25,6 +25,7 @@
->  #include <linux/platform_device.h>
->  #include <acpi/apei.h>
->  #include <acpi/ghes.h>
-> +#include <linux/pci.h>
->  
->  #include "apei-internal.h"
->  
-> @@ -86,7 +87,48 @@ static int hest_esrc_len(struct acpi_hest_header *hest_hdr)
->  	return len;
->  };
->  
-> -typedef int (*apei_hest_func_t)(struct acpi_hest_header *hest_hdr, void *data);
-> +static inline bool hest_source_is_pcie_aer(struct acpi_hest_header *hest_hdr)
+On Thu, Oct 27, 2022 at 11:42 PM Anshuman Khandual
+<anshuman.khandual@arm.com> wrote:
+>
+>
+>
+> On 9/28/22 05:53, Barry Song wrote:
+> > On Tue, Sep 27, 2022 at 10:15 PM Yicong Yang <yangyicong@huawei.com> wrote:
+> >>
+> >> On 2022/9/27 14:16, Anshuman Khandual wrote:
+> >>> [...]
+> >>>
+> >>> On 9/21/22 14:13, Yicong Yang wrote:
+> >>>> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
+> >>>> +{
+> >>>> +    /* for small systems with small number of CPUs, TLB shootdown is cheap */
+> >>>> +    if (num_online_cpus() <= 4)
+> >>>
+> >>> It would be great to have some more inputs from others, whether 4 (which should
+> >>> to be codified into a macro e.g ARM64_NR_CPU_DEFERRED_TLB, or something similar)
+> >>> is optimal for an wide range of arm64 platforms.
+> >>>
+> >
+> > I have tested it on a 4-cpus and 8-cpus machine. but i have no machine
+> > with 5,6,7
+> > cores.
+> > I saw improvement on 8-cpus machines and I found 4-cpus machines don't need
+> > this patch.
+> >
+> > so it seems safe to have
+> > if (num_online_cpus()  < 8)
+> >
+> >>
+> >> Do you prefer this macro to be static or make it configurable through kconfig then
+> >> different platforms can make choice based on their own situations? It maybe hard to
+> >> test on all the arm64 platforms.
+> >
+> > Maybe we can have this default enabled on machines with 8 and more cpus and
+> > provide a tlbflush_batched = on or off to allow users enable or
+> > disable it according
+> > to their hardware and products. Similar example: rodata=on or off.
+>
+> No, sounds bit excessive. Kernel command line options should not be added
+> for every possible run time switch options.
+>
+> >
+> > Hi Anshuman, Will,  Catalin, Andrew,
+> > what do you think about this approach?
+> >
+> > BTW, haoxin mentioned another important user scenarios for tlb bach on arm64:
+> > https://lore.kernel.org/lkml/393d6318-aa38-01ed-6ad8-f9eac89bf0fc@linux.alibaba.com/
+> >
+> > I do believe we need it based on the expensive cost of tlb shootdown in arm64
+> > even by hardware broadcast.
+>
+> Alright, for now could we enable ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH selectively
+> with CONFIG_EXPERT and for num_online_cpus()  > 8 ?
 
-Drop "inline" here and below.  This is not a performance path, so it's
-more clutter than it's worth.
+Sounds good to me. It is a good start to bring up tlb batched flush in
+ARM64. Later on, we
+might want to see it in both memory reclamation and migration.
 
-> +static inline bool hest_match_pci(struct acpi_hest_header *hest_hdr,
-> +		struct acpi_hest_aer_common *p, struct pci_dev *pci)
-> +{
-> +	if (hest_match_type(hest_hdr, pci))
-> +		return(hest_match_pci_devfn(p, pci));
-
-No need for parens around hest_match_pci_devfn().
-
-> +	else
-
-You can drop the else, too.
-
-> +		return false;
-> +}
-
-> + * apei_hest_parse_aer - Find the AER structure in the HEST Table and
-> + * match it with the PCI device.
-> + *
-> + * @hest_hdr: To save the acpi aer error source in hest table
-> + *
-> + * Return 1 if the pci dev matched with the acpi aer error source in
-> + * hest table, else return 0.
-
-In comments and commit logs,
-
-  s/pci/PCI/
-  s/aer/AER/
-  s/acpi/ACPI/
-  s/hest/HEST/
-  s/HEST Table/HEST/ (since the "T" in "HEST" stands for "Table")
-
-> +/* HEST Sub-structure for PCIE EndPoint Structure (6) */
-
-PCIe Root Port, if I'm following this correctly.
-
-> +/* HEST Sub-structure for PCIE EndPoint Structure (7) */
-
-PCIe Endpoint.
-
-> +/* HEST Sub-structure for PCIE/PCI Bridge Structure (8) */
-
-PCIe/PCI-X Bridge
+Thanks
+Barry
