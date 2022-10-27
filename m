@@ -2,110 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2DDA60FF50
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C02B60FF5C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235951AbiJ0Ra3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 13:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
+        id S235866AbiJ0Rdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 13:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235840AbiJ0RaS (ORCPT
+        with ESMTP id S235840AbiJ0Rdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 13:30:18 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF6F45F4C
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 10:30:14 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id i3so2249714pfc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 10:30:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i90u/Uf2jYE0+hrCgqCAgN0GAbxmncytTIkPhq3S0qI=;
-        b=EI6URPO1CuEaiVYhCgdKTi96gCaG7jguowcRqg1P4rQc2aXOhQRYoviwLuauhrW/rj
-         IvfRngDCHxTCiVsKVGfU8yxjZxb0ta+useELLhjLfbgD1/HxloRXBMfNVokd2n6b7Sad
-         nEk9LSxHfnHkooXNe2eHo083I7ypbpTaIBbgJ8BoiZhynYGFQMcjo7hFAjToVlD1Rz0D
-         jeVspwwn5FV+spWcYEbo4AMNpX4vAj7y6zldSJY1GKiV+B48TcqBMTwvlTUXnusjvPTu
-         ddhsnX1lhWxk/GmTwLYaWztZ25qT60u4w2PiGxETjmwnTcrao6EmIeN6WKqHhmTsFC2J
-         dH4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i90u/Uf2jYE0+hrCgqCAgN0GAbxmncytTIkPhq3S0qI=;
-        b=LYLZz3uproCCZpntVMtH2S51hewWz0Kk1tep8XTB5XoyfcY2P2TlTpHHol/S5kFeAS
-         u5ixMhBJNXv0ggVYC8EkcUFF5XUcOqzySTCXzGHt2Nob28XgukGMyNyDOQsnYGRqghVn
-         776tAHYiBHoCPniHrdt5oYxZnDj3+GzjNNVaUU1S2Z/pYh8Qq5RVwzFzdi+NT1tQSUQz
-         pwzkWbJb6Ot7SYOsCB9PFN7L5lNqICg02X0cKoqRfMGoJjGMseQoUChmAWTvK/KLEsQy
-         Li4H/8L87gni8oTLzb7h3jwqrhjMHigmHKD7iJHWJux0kROIhdI4QRsEeHBaIFlkyvQM
-         FIwg==
-X-Gm-Message-State: ACrzQf05ULwbys22yxLq+B/WZPKoTQS0lDEl8UmfXOdIEohK3XE02sAo
-        DmGUXOmhzv8zODAZYAMygpI=
-X-Google-Smtp-Source: AMsMyM7jC2bcEuLwv2GZWzC1z7PmlNL6h5cLDonNo2ECQ5++cNinRUGeyy5ddU/iI8MIv/Wupb/9cQ==
-X-Received: by 2002:a65:4508:0:b0:43c:e3c6:d1c2 with SMTP id n8-20020a654508000000b0043ce3c6d1c2mr42555256pgq.582.1666891814045;
-        Thu, 27 Oct 2022 10:30:14 -0700 (PDT)
-Received: from smtpclient.apple ([66.170.99.95])
-        by smtp.gmail.com with ESMTPSA id t2-20020aa79462000000b0056c063dd4cfsm1429687pfq.66.2022.10.27.10.30.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 Oct 2022 10:30:13 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH 01/13] mm: Update ptep_get_lockless()s comment
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <Y1oy7+TnTkelR89U@hirez.programming.kicks-ass.net>
-Date:   Thu, 27 Oct 2022 10:30:11 -0700
-Cc:     Jann Horn <jannh@google.com>, John Hubbard <jhubbard@nvidia.com>,
-        X86 ML <x86@kernel.org>, Matthew Wilcox <willy@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        jroedel@suse.de, ubizjak@gmail.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <1701B847-EE00-474A-ACF2-C4051884F8F1@gmail.com>
-References: <20221022111403.531902164@infradead.org>
- <20221022114424.515572025@infradead.org>
- <2c800ed1-d17a-def4-39e1-09281ee78d05@nvidia.com>
- <Y1ZGNwUEdm15W6Xz@hirez.programming.kicks-ass.net>
- <CAG48ez3fG=WnvbiE5mJaD66_gJj_hohnV8CqBG9eNdjd7pJW3A@mail.gmail.com>
- <Y1fsYwshJ93FT21r@hirez.programming.kicks-ass.net>
- <CAG48ez3VE+3dVdUMK+Pg_942gR+h_TCcSaFxGwCbNfh3W+mfOA@mail.gmail.com>
- <Y1f7YvKuwOl1XEwU@hirez.programming.kicks-ass.net>
- <A3677D1D-3631-4E57-8C5C-6C202B47700C@gmail.com>
- <Y1oy7+TnTkelR89U@hirez.programming.kicks-ass.net>
-To:     Peter Zijlstra <peterz@infradead.org>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 27 Oct 2022 13:33:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9631B1A5B14;
+        Thu, 27 Oct 2022 10:33:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BDCD623EE;
+        Thu, 27 Oct 2022 17:33:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A984C433D6;
+        Thu, 27 Oct 2022 17:33:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666892014;
+        bh=BBHv33+chmEyNHv+Pk6YM7Pyhqw3FDPg1OaGwMb+nyM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=tpC19FAWsvWJ2eM7xJXNAD5qX2RE19UofMYyMOroxWixHgsAfQ2SO25WnCsGrRBMs
+         3B78CC+KkOig8tM7Xh9gRao/F+E0SuJkeU5dbBj1+7vJPbfvfFXYLPBmVcqzEpkfJg
+         hfmH6hoLjLfaxbIB6G3AIyF/8q8FrbnyOIx5pCuhxKjZdpjpOb/J4/1QAt3J7VAmFR
+         dskfCeoyR8iW+nilgOYxFLkOsjpa9wX7QOnwoBDrcl4BghsnoiCumo7KGwpqutE3O2
+         soOyG+9ur5ZB+l3qJr5LLLDUALI75UfvEa8UA0MvoUIZajZYhrZns26b2ozH1HqMus
+         6a6AZQdSbvuxA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 227E95C0A59; Thu, 27 Oct 2022 10:33:34 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 10:33:34 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] rcu: Add RCU stall diagnosis information
+Message-ID: <20221027173334.GB5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221022124525.2080-1-thunder.leizhen@huawei.com>
+ <20221022124525.2080-4-thunder.leizhen@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221022124525.2080-4-thunder.leizhen@huawei.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Oct 27, 2022, at 12:27 AM, Peter Zijlstra <peterz@infradead.org> =
-wrote:
+On Sat, Oct 22, 2022 at 08:45:25PM +0800, Zhen Lei wrote:
+> In some extreme cases, such as the I/O pressure test, the CPU usage may
+> be 100%, causing RCU stall. In this case, the printed information about
+> current is not useful. Displays the number and usage of hard interrupts,
+> soft interrupts, and context switches that are generated within half of
+> the CPU stall timeout, can help us make a general judgment. In other
+> cases, we can preliminarily determine whether an infinite loop occurs
+> when local_irq, local_bh or preempt is disabled.
+> 
+> For example:
+> rcu: INFO: rcu_preempt self-detected stall on CPU
+> rcu:     0-....: (1250 ticks this GP) <omitted>
+> rcu:          hardirqs   softirqs   csw/system
+> rcu:  number:      624         45            0
+> rcu: cputime:       69          1         2425   ==> 2500(ms)
+> 
+> The example above shows that the number of hard and soft interrupts is
+> small, there is zero context switching, and the system takes up a lot of
+> time. We can quickly conclude that the current task is infinitely looped
+> with preempt_disable().
+> 
+> The impact on system performance is negligible because snapshot is
+> recorded only one time after 1/2 CPU stall timeout.
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  kernel/rcu/tree.c       | 16 ++++++++++++++++
+>  kernel/rcu/tree.h       | 11 +++++++++++
+>  kernel/rcu/tree_stall.h | 28 ++++++++++++++++++++++++++++
+>  3 files changed, 55 insertions(+)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 6bb8e72bc8151ef..56c49a3117e7a81 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -931,6 +931,22 @@ static int rcu_implicit_dynticks_qs(struct rcu_data *rdp)
+>  			rdp->rcu_iw_gp_seq = rnp->gp_seq;
+>  			irq_work_queue_on(&rdp->rcu_iw, rdp->cpu);
+>  		}
+> +
+> +		if (rdp->snap_record.gp_seq != rdp->gp_seq) {
+> +			u64 *cpustat;
+> +			struct rcu_snap_record *r;
+> +
+> +			cpustat = kcpustat_cpu(rdp->cpu).cpustat;
+> +
+> +			r = &rdp->snap_record;
+> +			r->cputime_irq     = cpustat[CPUTIME_IRQ];
+> +			r->cputime_softirq = cpustat[CPUTIME_SOFTIRQ];
+> +			r->cputime_system  = cpustat[CPUTIME_SYSTEM];
+> +			r->nr_hardirqs = kstat_cpu_irqs_sum(rdp->cpu);
+> +			r->nr_softirqs = kstat_cpu_softirqs_sum(rdp->cpu);
+> +			r->nr_csw = nr_context_switches_cpu(rdp->cpu);
+> +			r->gp_seq = rdp->gp_seq;
 
->> One alternative may be using mm_tlb_flush_pending() when setting a =
-new PTE
->> to check for pending flushes and flushing the TLB if that is the =
-case. This
->> is somewhat similar to what ptep_clear_flush() does. Anyhow, I guess =
-this
->> might induce some overheads. As noted before, it is possible to track
->> pending TLB flushes in VMA/page-table granularity, with different =
-tradeoffs
->> of overheads.
->=20
-> Right; I just don't believe in VMAs for this, they're *waaay* to big.
+This needs to be optional.  Yes, it is normally rarely executed, but
+people who don't want the additional information should not pay the
+price for it.
 
-Well, I did it for VMA in an RFC only because I was pushed. I thought =
-and do
-think that page-table granularity is the right one.=
+> +		}
+>  	}
+>  
+>  	return 0;
+> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+> index d4a97e40ea9c3e2..fb3121d15cca6f8 100644
+> --- a/kernel/rcu/tree.h
+> +++ b/kernel/rcu/tree.h
+> @@ -158,6 +158,16 @@ union rcu_noqs {
+>  	u16 s; /* Set of bits, aggregate OR here. */
+>  };
+>  
+> +struct rcu_snap_record {
+> +	unsigned long	gp_seq;
+> +	u64		cputime_irq;
+> +	u64		cputime_softirq;
+> +	u64		cputime_system;
+> +	unsigned int	nr_hardirqs;
+> +	unsigned int	nr_softirqs;
+> +	unsigned long long nr_csw;
+> +};
+
+Please add a comment saying what this is and what it is used for.
+
+> +
+>  /* Per-CPU data for read-copy update. */
+>  struct rcu_data {
+>  	/* 1) quiescent-state and grace-period handling : */
+> @@ -262,6 +272,7 @@ struct rcu_data {
+>  	short rcu_onl_gp_flags;		/* ->gp_flags at last online. */
+>  	unsigned long last_fqs_resched;	/* Time of last rcu_resched(). */
+>  	unsigned long last_sched_clock;	/* Jiffies of last rcu_sched_clock_irq(). */
+> +	struct rcu_snap_record snap_record;
+
+And here as well, please.
+
+>  	int cpu;
+>  };
+> diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
+> index 5653560573e22d6..f8c9d0284d116a8 100644
+> --- a/kernel/rcu/tree_stall.h
+> +++ b/kernel/rcu/tree_stall.h
+> @@ -428,6 +428,32 @@ static bool rcu_is_rcuc_kthread_starving(struct rcu_data *rdp, unsigned long *jp
+>  	return j > 2 * HZ;
+>  }
+>  
+> +static void print_cpu_stat_info(int cpu)
+> +{
+> +	u64 *cpustat;
+> +	unsigned long half_timeout;
+> +	struct rcu_snap_record *r;
+
+Let's please follow convention and call it "rsrp" rather than just "r".
+
+> +	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
+> +
+> +	r = &rdp->snap_record;
+> +	if (r->gp_seq != rdp->gp_seq)
+> +		return;
+> +
+> +	cpustat = kcpustat_cpu(cpu).cpustat;
+> +	half_timeout = rcu_jiffies_till_stall_check() / 2;
+> +
+> +	pr_err("         hardirqs   softirqs   csw/system\n");
+> +	pr_err(" number: %8d %10d %12lld\n",
+> +		kstat_cpu_irqs_sum(cpu) - r->nr_hardirqs,
+> +		kstat_cpu_softirqs_sum(cpu) - r->nr_softirqs,
+> +		nr_context_switches_cpu(cpu) - r->nr_csw);
+> +	pr_err("cputime: %8lld %10lld %12lld   ==> %lld(ms)\n",
+> +		div_u64(cpustat[CPUTIME_IRQ] - r->cputime_irq, NSEC_PER_MSEC),
+> +		div_u64(cpustat[CPUTIME_SOFTIRQ] - r->cputime_softirq, NSEC_PER_MSEC),
+> +		div_u64(cpustat[CPUTIME_SYSTEM] - r->cputime_system, NSEC_PER_MSEC),
+> +		jiffies64_to_msecs(half_timeout));
+> +}
+> +
+>  /*
+>   * Print out diagnostic information for the specified stalled CPU.
+>   *
+> @@ -484,6 +510,8 @@ static void print_cpu_stall_info(int cpu)
+>  	       data_race(rcu_state.n_force_qs) - rcu_state.n_force_qs_gpstart,
+>  	       rcuc_starved ? buf : "",
+>  	       falsepositive ? " (false positive?)" : "");
+> +
+> +	print_cpu_stat_info(cpu);
+
+Again, please make this conditional.  One way to do that is with a
+Kconfig option.  Another is with a kernel boot parameter, as is done
+wtih module_param() elsewhere in tree_stall.h.  Or if the parsing needs
+to be fancy (it shouldn't) using kernel_param_ops as is done in tree.c.
+Distros tend to like kernel boot parameters, while people dealing with
+large numbers of devices tend to like Kconfig options.  Choose wisely.  ;-)
+
+Please make this initially default-off.  If enough people enable it for
+long enough, we can later switch it to default-on and maybe even later
+to unconditional.  But let's start carefully.
+
+							Thanx, Paul
+
+>  }
+>  
+>  /* Complain about starvation of grace-period kthread.  */
+> -- 
+> 2.25.1
+> 
