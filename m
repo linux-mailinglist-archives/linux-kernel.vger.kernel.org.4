@@ -2,90 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 765D260F8E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0E760F8E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236065AbiJ0NSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 09:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
+        id S236114AbiJ0NSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 09:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235932AbiJ0NS2 (ORCPT
+        with ESMTP id S236069AbiJ0NSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 09:18:28 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE728E9B7
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:18:27 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id h24so1037976qta.7
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:18:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p8HRX97UNjnxVgBS5sb2gwlQVmR3Rfqi4QFT7aLxAp8=;
-        b=G+fHHuoEclB6ktgK5Fz+/I9mjHhDrXnhqXzrY76v3D/qLVYIs/uf/l+Pt31fZltxxr
-         NIrxDhoXGlVPc6FyB/2pPFaavjvPjBPJbGW4HG80jsVe59fJObJjZ1HaJpMjEje3aZex
-         YlzBLygOUv1PoO4u6pta29ps5wgkIu4Ol7Wz0JCy4gtBdv+Or+PO5ChWzorjR9nSBpPW
-         F+7uegtQapGw/SgnmCGBJZwkFSSbjBfUwe4XM6RFUumjzexF0M9WI0E1PUSsyQSDvpeZ
-         T2C2qE0Zh4hvTu2Nr9aoS+SJaSsIvNORyD8VGbYfqpsIXqk3GLVRhBqWqu0uJwhb6cD6
-         CYVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p8HRX97UNjnxVgBS5sb2gwlQVmR3Rfqi4QFT7aLxAp8=;
-        b=p4vGNcKAybfzkzoAfXiGO96YVyYPzvbYchcNDkMHyoRwwsGDQjsuHxgM5wPMXkc349
-         7tfSqpFszOemxtV869m/2yui2UmbU1KGHEzhdieZcU25Yt0fq4HDewI4YF0D0v97ihIg
-         iq2uX/gFKcgvpydr5ncucAwXb6RahfprVovRzSBm3SuI6xcjHqYshb44dztpApEP0bZW
-         Sdel3GKCPqbhRqK4pEJdHelAbSWQB16g1KdtCF4Ns4Zx2dRIVkdX2Dw5BYhkFGeqbwDp
-         Cm0tY8QEVIKu6fT/S6WtpNXyVsqQbYtQTWWQumBDEL2tY9NzWJCJg408HIz96q3S3sB0
-         Mo/A==
-X-Gm-Message-State: ACrzQf3z/DCcXWvpll3tS5DOgNjrvrLnMJ8Eu8t+saY3h4bdV2ABJ0Vf
-        /KY6F8RsDOVitiv6UdkIrAoRGg==
-X-Google-Smtp-Source: AMsMyM5u0dBib0JoY8XTTVnb9mEdepIp6NJHhMBv+ApptRYrDOk3nqILBuWDtRM9vT0wyllWBo5/NA==
-X-Received: by 2002:ac8:5f52:0:b0:39c:cb1c:9310 with SMTP id y18-20020ac85f52000000b0039ccb1c9310mr41093121qta.177.1666876706632;
-        Thu, 27 Oct 2022 06:18:26 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id w7-20020ac84d07000000b0039d02911555sm841430qtv.78.2022.10.27.06.18.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 06:18:26 -0700 (PDT)
-Message-ID: <f143c59d-b24a-3ae5-d685-b1f61bf8b4f3@linaro.org>
-Date:   Thu, 27 Oct 2022 09:18:25 -0400
+        Thu, 27 Oct 2022 09:18:38 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7188E9B7;
+        Thu, 27 Oct 2022 06:18:32 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5619FC000C;
+        Thu, 27 Oct 2022 13:18:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1666876710;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uqF5CDn38yx/3Kjsiob6zhNia5VejsygoU+CPgjinFI=;
+        b=cJB3cGS02+Hu+GcXYQ4LKwvNNiuEon/LwyvVz7WhKFkBGOV2vkQIRi5IEw9Yjl2HlhvI0Z
+        dyXW3IkwQezIw9bkXBbrS8dPwC/9zW8G7dNAeFHf8a0PG4dhvqXw9yB1ihVQ3/szoKtwxG
+        48tWs+QUk0I2FeySavoqxJC0PX8oGc/PgjADbgbXijYVoB4cA3yEmGWyMvmOsXFSn8MA5n
+        Mg5IZvqIp5ab4RapF0UsQ4VImW/Hm6ppjLqtFKKBtrcUYlrM+ochPl9cAXyHiWdaNsxKiA
+        SazdG7BORiSbCUavr5D/i+dKHCKLtnR8JJj/e3Hir2ZEZ+bmXNFkfm2KtYn8fQ==
+Date:   Thu, 27 Oct 2022 15:18:25 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Vadym Kochan <vadym.kochan@plvision.eu>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Elad Nachman <enachman@marvell.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH v5 1/2] dt-bindings: mtd: marvell-nand: Convert to YAML
+ DT scheme
+Message-ID: <20221027151825.166a9255@xps-13>
+In-Reply-To: <10581088-e4ff-76db-3c9b-42a7a9c118ee@linaro.org>
+References: <20221026134545.7146-1-vadym.kochan@plvision.eu>
+        <20221026134545.7146-2-vadym.kochan@plvision.eu>
+        <33f04b06-dc00-b7ce-6a24-2282608b40dc@linaro.org>
+        <VI1P190MB0317C739E2D39427CD2A771D95309@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+        <10581088-e4ff-76db-3c9b-42a7a9c118ee@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH net-next v2] nfc: s3fwrn5: use
- devm_clk_get_optional_enabled() helper
-Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <Y1o0ahD+AisRA+Qk@google.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y1o0ahD+AisRA+Qk@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/10/2022 03:34, Dmitry Torokhov wrote:
-> Because we enable the clock immediately after acquiring it in probe,
-> we can combine the 2 operations and use devm_clk_get_optional_enabled()
-> helper.
-> 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
-> 
+Hi Vadym,
 
+> >>> +patternProperties:
+> >>> +  "^nand@[0-3]$":
+> >>> +    type: object
+> >>> +    properties:
+> >>> +      reg:
+> >>> +        minimum: 0
+> >>> +        maximum: 3
+> >>> +
+> >>> +      nand-rb:
+> >>> +        minimum: 0
+> >>> +        maximum: 1
+> >>> +
+> >>> +      nand-ecc-strength:
+> >>> +        enum: [1, 4, 8]
+> >>> +
+> >>> +      nand-on-flash-bbt: true
+> >>> +
+> >>> +      nand-ecc-mode: true
+> >>> +
+> >>> +      nand-ecc-algo:
+> >>> +        description: |
+> >>> +          This property is essentially useful when not using hardwar=
+e ECC.
+> >>> +          Howerver, it may be added when using hardware ECC for clar=
+ification
+> >>> +          but will be ignored by the driver because ECC mode is chos=
+en depending
+> >>> +          on the page size and the strength required by the NAND chi=
+p.
+> >>> +          This value may be overwritten with nand-ecc-strength prope=
+rty.
+> >>> +
+> >>> +      nand-ecc-step-size:
+> >>> +        description: |
+> >>> +          Marvell's NAND flash controller does use fixed strength
+> >>> +          (1-bit for Hamming, 16-bit for BCH), so the actual step si=
+ze
+> >>> +          will shrink or grow in order to fit the required strength.
+> >>> +          Step sizes are not completely random for all and follow ce=
+rtain
+> >>> +          patterns described in AN-379, "Marvell SoC NFC ECC".
+> >>> +
+> >>> +      label:
+> >>> +        $ref: /schemas/types.yaml#/definitions/string
+> >>> +
+> >>> +      partitions:
+> >>> +        type: object =20
+> >>
+> >> That's not what I asked for. Like four times I asked you to add here
+> >> unevaluatedProperties: false and I never said that ref to partition.ya=
+ml
+> >> should be removed and you... instead remove that ref.
+> >>
+> >> You need to define here children and specify their ref.
+> >>
+> >> You must use unevaluatedProperties: false here. So this is fifth time I
+> >> am writing this feedback.
+> >>
+> >> =20
+> >=20
+> > It is a bit confusing that it is needed to define "partitions" and "lab=
+el" rules particulary
+> > in this nand controller instead of some common place like nand-chip.yam=
+l, these properties
+> > are common also for the other nand controllers. =20
+>=20
+> No one speaks about label, I never commented about label, I think...
+>=20
+> If you think the property is really generic and every NAND controller
+> bindings implement it, then feel free to include them there, in a
+> separate patch. It sounds sensible, but I did not check other bindings.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+FYI, label is already defined in mtd/mtd.yaml.
 
-Best regards,
-Krzysztof
+Partitions do not need to be defined in your binding, just don't put
+any in your example and you'll be fine. These partitions are either
+static and may be described in the DT (see
+mtd/partition/partition.yaml) or there is some dynamic discovery
+involved and a proper parser shall be referenced (parsers have their
+own binding).
 
+Cheers,
+Miqu=C3=A8l
