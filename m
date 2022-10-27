@@ -2,103 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECF261068F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 01:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B0D6610694
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 01:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235114AbiJ0XzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 19:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60046 "EHLO
+        id S235472AbiJ0X5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 19:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235081AbiJ0XzD (ORCPT
+        with ESMTP id S233598AbiJ0X5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 19:55:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664512B196
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 16:54:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F1D9B82146
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:54:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 129A2C433D7;
-        Thu, 27 Oct 2022 23:54:54 +0000 (UTC)
-Date:   Thu, 27 Oct 2022 19:55:09 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [RFC][PATCH v2 00/31] timers: Use del_timer_shutdown() before
- freeing timers
-Message-ID: <20221027195509.6fb3793c@gandalf.local.home>
-In-Reply-To: <20221027232442.GA279073@roeck-us.net>
-References: <20221027150525.753064657@goodmis.org>
-        <20221027222404.GA3123386@roeck-us.net>
-        <20221027185859.1087d3ca@gandalf.local.home>
-        <20221027232442.GA279073@roeck-us.net>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 27 Oct 2022 19:57:08 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0761E6D9F3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 16:57:08 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id io19so3342445plb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 16:57:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tGKV5Nf2Jk21aZWVInuk/RjQUQoK1agLdBbsQYHrFSs=;
+        b=TtOfdFq6WSn2lVr0vT05rhzYptg2X0aGPNyp4uNbF94m23GOhBllZAUd+rvHT8hGH8
+         UMwMDmzD1OjSBtDesYg+Z7wUr1R28QjARLcCkcPf5WmND44BcHGt3CchBD8pEvkUIA8r
+         aC8JE3YlPdI2hbWbtLnUI8xIPS7Ti2PAt+h58=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tGKV5Nf2Jk21aZWVInuk/RjQUQoK1agLdBbsQYHrFSs=;
+        b=Mdp6w2Teun9MFJOH90zxQDNCM2U3VmCQVYVkeBpi1lf+hl5BpTySvgxM8Hr2DwcwIC
+         yUHE58Fi7FwSPiGaCi+gBN+Y4gLpMWfZ8cigyaT27KwBdTKbrF3VL2YsxR1N8Y+Rb/eN
+         Aa3mxTW5tWmKy4RchpV7Wp6ZIqv0DEpHxGDbc1VksSz7eM2Gra9trjs29kjPXHQdmuBQ
+         zta9ObN7ksIHDozeTZ4gBVFFOzNBbuxFBeF20uOptCgUy7r7P+46MMLvXQBhx3tkFjip
+         m+nC0uwegAPWzzDbT6sKK+xQka16H0wf7I2lb8M9a6xxVsxUSK9FIKEB1EVvvyfh97z1
+         yZNQ==
+X-Gm-Message-State: ACrzQf0/8LWSrw7NNVzSd8z+cpO9YgO8Ph/LEqwgXxfOYZKsH3HYtW0f
+        hZZxsEw8q57BVzkTT7aQ9MHyuzxsoF3Kttus+HpEoA==
+X-Google-Smtp-Source: AMsMyM7Cuh6/VCUCIFkfdMLO8/hwS5Bcx50734KVdtKHu/QUAwsdU3j00obpsgvgGjHOSGIAAdZPH096GjGM7ani0/4=
+X-Received: by 2002:a17:902:c40f:b0:186:b221:f378 with SMTP id
+ k15-20020a170902c40f00b00186b221f378mr21282556plk.69.1666915027545; Thu, 27
+ Oct 2022 16:57:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221027053407.421783-1-rekanorman@chromium.org> <Y1ohUyZJItFh3xDs@kroah.com>
+In-Reply-To: <Y1ohUyZJItFh3xDs@kroah.com>
+From:   Reka Norman <rekanorman@chromium.org>
+Date:   Fri, 28 Oct 2022 10:56:56 +1100
+Message-ID: <CAEmPcwtZt0RoksByW0OnkNsBiPJ-wHqzR9nuZEwAn3d2m=fyOA@mail.gmail.com>
+Subject: Re: [PATCH] xhci: Apply XHCI_RESET_TO_DEFAULT quirk to ADL-N
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Oct 2022 16:24:42 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
+On Thu, Oct 27, 2022 at 5:11 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Oct 27, 2022 at 04:34:07PM +1100, Reka Norman wrote:
+> > ADL-N systems have the same issue as ADL-P, where a large boot firmware
+> > delay is seen if USB ports are left in U3 at shutdown. So apply the
+> > XHCI_RESET_TO_DEFAULT quirk to ADL-N as well.
+> >
+> > This patch depends on "xhci: Add quirk to reset host back to default
+> > state at shutdown".
+>
+> What is the git commit id of that change?
 
-> > This is probably just missing a switch to shutdown.
-> >   
-> Wild shot, and I don't really know what I am doing,
-> but I'll try
-> 
-> iff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
-> index e71b3b43927c..6c1cb4a219f0 100644
-> --- a/block/blk-sysfs.c
-> +++ b/block/blk-sysfs.c
-> @@ -767,6 +767,8 @@ static void blk_release_queue(struct kobject *kobj)
-> 
->         might_sleep();
-> 
-> +       del_timer_shutdown(&q->timeout);
-> +
->         percpu_ref_exit(&q->q_usage_counter);
-> 
->         if (q->poll_stat)
+It hasn't been merged in mainline yet, only in the xhci tree:
+https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?id=feb0b04b09c82589af65c84398b7d3fefaa7b7ac&head=for-usb-linus
+Should I add the commit id from there? Or add the lore link?
 
-Or perhaps this:
+>
+> And is this needed in stable kernels?  If so, how far back?
 
--- Steve
+Sorry, I'm not sure how to answer that properly.
+It looks like most ADL-N support was added starting from 5.16.
+The issue it fixes is a ~20s boot delay in the specific case of booting from S5.
+It probably makes sense for it to go wherever the ADL-P patch goes.
 
-diff --git a/block/blk-core.c b/block/blk-core.c
-index 17667159482e..69b1daa2e91a 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -227,7 +227,7 @@ const char *blk_status_to_str(blk_status_t status)
-  */
- void blk_sync_queue(struct request_queue *q)
- {
--	del_timer_sync(&q->timeout);
-+	del_timer_shutdown(&q->timeout);
- 	cancel_work_sync(&q->timeout_work);
- }
- EXPORT_SYMBOL(blk_sync_queue);
-diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
-index e71b3b43927c..12a1e46536ed 100644
---- a/block/blk-sysfs.c
-+++ b/block/blk-sysfs.c
-@@ -769,6 +769,8 @@ static void blk_release_queue(struct kobject *kobj)
- 
- 	percpu_ref_exit(&q->q_usage_counter);
- 
-+	blk_sync_queue(q);
-+
- 	if (q->poll_stat)
- 		blk_stat_remove_callback(q, q->poll_cb);
- 	blk_stat_free_callback(q->poll_cb);
+>
+> thanks,
+>
+> greg k-h
