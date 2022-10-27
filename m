@@ -2,117 +2,374 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C948460F712
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C785760F716
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234989AbiJ0MV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
+        id S235227AbiJ0MWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230441AbiJ0MVY (ORCPT
+        with ESMTP id S233961AbiJ0MWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:21:24 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE105B7A9;
-        Thu, 27 Oct 2022 05:21:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=xsGtsidvxvyfqpXeJMajzF00+EPlnmxjEEENNgRqwIk=; b=yS
-        W4WeALI5A3+voHv6z2AQ8Y9fgHothwYySsklSOPalHOwZNxrzi+to4nwrBqhWaNqkGA3DWEmqXoc+
-        dLyubpCvgqSvCCp7xNrffQJ4nxkD8KqU7LY3HApCL4xWaL33Qv+lsc2E1KVFA4BKSLRRRP+/8hgb/
-        g943WZpoDIWXurI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oo1sJ-000hio-7p; Thu, 27 Oct 2022 14:20:43 +0200
-Date:   Thu, 27 Oct 2022 14:20:43 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Camel Guo <camelg@axis.com>
-Cc:     Camel Guo <Camel.Guo@axis.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>, kernel <kernel@axis.com>
-Subject: Re: [RFC net-next 2/2] net: dsa: Add driver for Maxlinear GSW1XX
- switch
-Message-ID: <Y1p3m9lEMuJg1pUe@lunn.ch>
-References: <20221025135243.4038706-1-camel.guo@axis.com>
- <20221025135243.4038706-3-camel.guo@axis.com>
- <Y1f4bIavgSv0OWi0@lunn.ch>
- <a04fc8bd-e18e-c300-8300-7cba8fe33557@axis.com>
+        Thu, 27 Oct 2022 08:22:40 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506E713331B;
+        Thu, 27 Oct 2022 05:22:38 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id r14so2491905lfm.2;
+        Thu, 27 Oct 2022 05:22:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BUAJ0Yam9jB8cnIc3GMtzCrzsgz9qeznvvkKrNOb2Xc=;
+        b=Iew6zV4bUfWoOG82RXzL4Q7bT5nNSzi7RXlJEueKTqk3CXDXdmN6Nbuzt/KRecnGDP
+         eKrro8H+7BCLObPdprd54Pz8xEhd1eMorc6TuhDxpP7Ajri5dm6li6Zj/Gp3HfoRlgbK
+         giaMIejtfzloOicaqe7KCLIqDB9k/yUk7biAovkh/v7eadyO+5GRLZwXJyVnkKb8r5Wq
+         QfjSRmNIwQnCPNf8tQdBz9pIsUE+JJH26slpsKIqgXKq/xdBdPwrRsz/DvC+QctYJ2Ud
+         7pxYPXdedNNIjE608PQYffTRShEoTUgGBRbitJI9d3W57Ceobd8hWQ7Q34fB9CwYu+iX
+         N/CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BUAJ0Yam9jB8cnIc3GMtzCrzsgz9qeznvvkKrNOb2Xc=;
+        b=XB+Q/Vq89VH0p2IZFedrRnkxIdOVjq6aBfSQ2+DP/ZIkwFpWiufAY/4qpWDr0LGP45
+         3ls5oVGOiBKxw1/PfNnGGe6FO7pa/8IbSghNAEWAlSuLLwr5GeOODv1+ydbygk5MegaN
+         FEdmYbvcekwUVqO+QXe8D5tHJUgwx4ppteZySFrfs0bCUlUSBbRF6wIbTYGJZTWcGZEn
+         c3AJwB4kT4sbG1cfsYVQCAAkDONAHuvsa1yGNql3XmjAfCHKWq17wxFMMWbVaQG2W7Ez
+         8Ri//KxjU25owT2uJyjBkWI704b+ZXv4+/T+pMDuikJtf5NAX/YPp7sFSNmxhGEQcr9E
+         6GhQ==
+X-Gm-Message-State: ACrzQf0FViFoYY14bZIyyiGpvg4DDc6wdEZJi7le4M9OPyF5T5805ezG
+        J8XOQGTyK4oYiATblADMdTI=
+X-Google-Smtp-Source: AMsMyM6v95gActdOgMoaBJ6tPrmCSQZVBmd+VuWknz2siOdZJ3Br9C0Ey9SbfKc0Dy/10CiDW2QFWg==
+X-Received: by 2002:ac2:5ca7:0:b0:4af:b896:8841 with SMTP id e7-20020ac25ca7000000b004afb8968841mr2479342lfq.349.1666873356402;
+        Thu, 27 Oct 2022 05:22:36 -0700 (PDT)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id j23-20020a2e3c17000000b0026fb4458c5fsm210448lja.44.2022.10.27.05.22.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 05:22:36 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 15:22:22 +0300
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Hector Martin <marcan@marcan.st>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, asahi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] drm/simpledrm: Only advertise formats that are
+ supported
+Message-ID: <20221027152222.60e84e79@eldfell>
+In-Reply-To: <fa4efcfd-91b6-dc76-2e5c-eed538bccff3@suse.de>
+References: <20221027101327.16678-1-marcan@marcan.st>
+        <fa4efcfd-91b6-dc76-2e5c-eed538bccff3@suse.de>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a04fc8bd-e18e-c300-8300-7cba8fe33557@axis.com>
+Content-Type: multipart/signed; boundary="Sig_/fHYiBmgng1laXpPX_HJNlOb";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >> +}
-> >> +
-> >> +static int gsw1xx_mdio_wr(struct mii_bus *bus, int addr, int reg, u16 val)
-> >> +{
-> >> +     struct gsw1xx_priv *priv = bus->priv;
-> >> +     int err;
-> >
-> > Please check for C45 and return -EOPNOTSUPP.
-> 
-> Maybe not need. According to the datasheet of gsw145 "The interface uses the
-> serial protocol defined by IEEE 802.3, clause 22.",  I think it is enough to
-> add "ds->slave_mii_bus->probe_capabilities = MDIOBUS_C22" into gsw1xx_mdio. It
-> probe_capabilities is static and never changes.
+--Sig_/fHYiBmgng1laXpPX_HJNlOb
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-probe_capabilities only limits probing the bus when it is
-registered. It does not prevent C45 transfers from being requested by
-PHY drivers. And there are some funky PHY drivers which mix C22 and
-C45. They can probe via C22 and then use C45. So it is much better to
-check and return an error if requested to do something which the
-hardware cannot do. Also, if you don't check, and convert a C45
-request into a C22 request, you often end up with really odd accesses,
-depending on the hardware, reads could become writes, etc.
+On Thu, 27 Oct 2022 13:08:24 +0200
+Thomas Zimmermann <tzimmermann@suse.de> wrote:
 
-> > I noticed there is no tagging protocol defined. How are frames
-> > direction out a specific port?
-> 
-> Yes, this chip supports Special Tags which should be enabled, but unfortunately
-> I have no make it work.
+> Hi
+>=20
+> Am 27.10.22 um 12:13 schrieb Hector Martin:
+> > Until now, simpledrm unconditionally advertised all formats that can be
+> > supported natively as conversions. However, we don't actually have a
+> > full conversion matrix of helpers. Although the list is arguably
+> > provided to userspace in precedence order, userspace can pick something
+> > out-of-order (and thus break when it shouldn't), or simply only support
+> > a format that is unsupported (and thus think it can work, which results
+> > in the appearance of a hang as FB blits fail later on, instead of the
+> > initialization error you'd expect in this case).
+> >=20
+> > Split up the format table into separate ones for each required subset,
+> > and then pick one based on the native format. Also remove the
+> > native<->conversion overlap check from the helper (which doesn't make
+> > sense any more, since the native format is advertised anyway and this
+> > way RGB565/RGB888 can share a format table), and instead print the same
+> > message in simpledrm when the native format is not one for which we have
+> > conversions at all.
+> >=20
+> > This fixes a real user regression where the ?RGB2101010 support commit
+> > started advertising it unconditionally where not supported, and KWin
+> > decided to start to use it over the native format, but also the fixes
+> > the spurious RGB565/RGB888 formats which have been wrongly
+> > unconditionally advertised since the dawn of simpledrm.
+> >=20
+> > Note: this patch is merged because splitting it into two patches, one
+> > for the helper and one for simpledrm, would regress at the midpoint
+> > regardless of the order. If simpledrm is changed first, that would break
+> > working conversions to RGB565/RGB888 (since those share a table that
+> > does not include the native formats). If the helper is changed first, it
+> > would start spuriously advertising all conversion formats when the
+> > native format doesn't have any supported conversions at all.
+> >=20
+> > Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
+> > Fixes: 6ea966fca084 ("drm/simpledrm: Add [AX]RGB2101010 formats")
+> > Fixes: 11e8f5fd223b ("drm: Add simpledrm driver")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Hector Martin <marcan@marcan.st>
+> > ---
+> >   drivers/gpu/drm/drm_format_helper.c | 15 -------
+> >   drivers/gpu/drm/tiny/simpledrm.c    | 62 +++++++++++++++++++++++++---=
+- =20
+>=20
+> We currently have two DRM drivers that call drm_fb_build_fourcc_list():=20
+> simpledrm and ofdrm. I've been very careful to keep the format selection=
+=20
+> in sync between them. (That's the reason why the helper exists at all.)=20
+> If the drivers start to use different logic, it will only become more=20
+> chaotic.
+>=20
+> The format array of ofdrm is at [1]. At a minimum, ofdrm should get the=20
+> same fix as simpledrm.
+>=20
+> [1]=20
+> https://cgit.freedesktop.org/drm/drm-tip/tree/drivers/gpu/drm/tiny/ofdrm.=
+c#n760
 
-You need to make this work. You added support to set the port spanning
-tree status. But that makes no sense if you cannot send/receive bridge
-PDUs out specific ports, etc.
+Hi Thomas,
 
-> The chip in my dev board works in self-start, managed switch mode. So far, it
-> works fine on this board.
-> 
-> >
-> > I've also not yet looked at the overlap with lantiq_gswip.c.
-> 
-> The version of GSWIP changes and also the management interface of
-> it is memory-mapped io. I tried to use the same logic in my gsw145 chip
-> (with mdio interface update), lots of parts (e.g: fdb, vlan) don't work
-> at all.
+yes, the principle applies to all drivers except VKMS: do not emulate
+anything in software unless it must be done to prevent kernel
+regressions on specific hardware.
 
-There has been past attempts at a driver for this hardware and it was
-argued that they are sufficiently different that a new driver was
-needed. As i said, i've not compared the code yet, so i cannot comment
-on that yet.
+ofdrm should indeed do the same.
 
-   Andrew
+> >   2 files changed, 55 insertions(+), 22 deletions(-)
+> >=20
+> > diff --git a/drivers/gpu/drm/drm_format_helper.c b/drivers/gpu/drm/drm_=
+format_helper.c
+> > index e2f76621453c..c60c13f3a872 100644
+> > --- a/drivers/gpu/drm/drm_format_helper.c
+> > +++ b/drivers/gpu/drm/drm_format_helper.c
+> > @@ -864,20 +864,6 @@ size_t drm_fb_build_fourcc_list(struct drm_device =
+*dev,
+> >   		++fourccs;
+> >   	}
+> >  =20
+> > -	/*
+> > -	 * The plane's atomic_update helper converts the framebuffer's color =
+format
+> > -	 * to a native format when copying to device memory.
+> > -	 *
+> > -	 * If there is not a single format supported by both, device and
+> > -	 * driver, the native formats are likely not supported by the convers=
+ion
+> > -	 * helpers. Therefore *only* support the native formats and add a
+> > -	 * conversion helper ASAP.
+> > -	 */
+> > -	if (!found_native) {
+> > -		drm_warn(dev, "Format conversion helpers required to add extra forma=
+ts.\n");
+> > -		goto out;
+> > -	}
+> > -
+> >   	/*
+> >   	 * The extra formats, emulated by the driver, go second.
+> >   	 */
+> > @@ -898,7 +884,6 @@ size_t drm_fb_build_fourcc_list(struct drm_device *=
+dev,
+> >   		++fourccs;
+> >   	}
+> >  =20
+> > -out:
+> >   	return fourccs - fourccs_out;
+> >   }
+> >   EXPORT_SYMBOL(drm_fb_build_fourcc_list);
+> > diff --git a/drivers/gpu/drm/tiny/simpledrm.c b/drivers/gpu/drm/tiny/si=
+mpledrm.c
+> > index 18489779fb8a..1257411f3d44 100644
+> > --- a/drivers/gpu/drm/tiny/simpledrm.c
+> > +++ b/drivers/gpu/drm/tiny/simpledrm.c
+> > @@ -446,22 +446,48 @@ static int simpledrm_device_init_regulators(struc=
+t simpledrm_device *sdev)
+> >    */
+> >  =20
+> >   /*
+> > - * Support all formats of simplefb and maybe more; in order
+> > - * of preference. The display's update function will do any
+> > + * Support the subset of formats that we have conversion helpers for,
+> > + * in order of preference. The display's update function will do any
+> >    * conversion necessary.
+> >    *
+> >    * TODO: Add blit helpers for remaining formats and uncomment
+> >    *       constants.
+> >    */
+> > -static const uint32_t simpledrm_primary_plane_formats[] =3D {
+> > +
+> > +/*
+> > + * Supported conversions to RGB565 and RGB888:
+> > + *   from [AX]RGB8888
+> > + */
+> > +static const uint32_t simpledrm_primary_plane_formats_base[] =3D {
+> > +	DRM_FORMAT_XRGB8888,
+> > +	DRM_FORMAT_ARGB8888,
+> > +};
+> > +
+> > +/*
+> > + * Supported conversions to [AX]RGB8888:
+> > + *   A/X variants (no-op)
+> > + *   from RGB565
+> > + *   from RGB888
+> > + */
+> > +static const uint32_t simpledrm_primary_plane_formats_xrgb8888[] =3D {
+> >   	DRM_FORMAT_XRGB8888,
+> >   	DRM_FORMAT_ARGB8888,
+> > +	DRM_FORMAT_RGB888,
+> >   	DRM_FORMAT_RGB565,
+> >   	//DRM_FORMAT_XRGB1555,
+> >   	//DRM_FORMAT_ARGB1555,
+> > -	DRM_FORMAT_RGB888,
+> > +};
+> > +
+> > +/*
+> > + * Supported conversions to [AX]RGB2101010:
+> > + *   A/X variants (no-op)
+> > + *   from [AX]RGB8888
+> > + */
+> > +static const uint32_t simpledrm_primary_plane_formats_xrgb2101010[] =
+=3D {
+> >   	DRM_FORMAT_XRGB2101010,
+> >   	DRM_FORMAT_ARGB2101010,
+> > +	DRM_FORMAT_XRGB8888,
+> > +	DRM_FORMAT_ARGB8888,
+> >   };
+> >  =20
+> >   static const uint64_t simpledrm_primary_plane_format_modifiers[] =3D {
+> > @@ -642,7 +668,8 @@ static struct simpledrm_device *simpledrm_device_cr=
+eate(struct drm_driver *drv,
+> >   	struct drm_encoder *encoder;
+> >   	struct drm_connector *connector;
+> >   	unsigned long max_width, max_height;
+> > -	size_t nformats;
+> > +	const uint32_t *conv_formats;
+> > +	size_t conv_nformats, nformats;
+> >   	int ret;
+> >  =20
+> >   	sdev =3D devm_drm_dev_alloc(&pdev->dev, drv, struct simpledrm_device=
+, dev);
+> > @@ -755,10 +782,31 @@ static struct simpledrm_device *simpledrm_device_=
+create(struct drm_driver *drv,
+> >   	dev->mode_config.funcs =3D &simpledrm_mode_config_funcs;
+> >  =20
+> >   	/* Primary plane */
+> > +	switch (format->format) { =20
+>=20
+> I trust you when you say that <native>->XRGB8888 is not enough. But=20
+> although I've read your replies, I still don't understand why this=20
+> switch is necessary.
+>=20
+> Why don't we call drm_fb_build_fourcc_list() with the native=20
+> format/formats and let it append a number of formats, such as adding=20
+> XRGB888, adding ARGB8888 if necessary, adding ARGB2101010 if necessary.=20
+> Each with a elaborate comment why and which userspace needs the format. (=
+?)
+
+Something like
+
+uint32_t conv_formats[] =3D {
+	DRM_FORMAT_XRGB8888, /* expected by old userspace */
+	DRM_FORMAT_ARGB8888, /* historically exposed and working */
+	0,
+	0,
+	0,
+};
+size_t conv_nformats =3D 2;
+
+if (native_format =3D=3D DRM_FORMAT_XRGB2101010)
+	conv_formats[conv_nformats++] =3D DRM_FORMAT_ARGB2101010; /* historically =
+exposed and working */
+
+if (native_format =3D=3D DRM_FORMAT_XRGB8888) {
+	conv_formats[conv_nformats++] =3D DRM_FORMAT_RGB565; /* historically expos=
+ed and working */
+	conv_formats[conv_nformats++] =3D DRM_FORMAT_RGB888; /* historically expos=
+ed and working */
+}
+
+maybe?
+
+
+
+Thanks,
+pq
+
+
+>=20
+> Best regards
+> Thomas
+>=20
+> > +	case DRM_FORMAT_RGB565:
+> > +	case DRM_FORMAT_RGB888:
+> > +		conv_formats =3D simpledrm_primary_plane_formats_base;
+> > +		conv_nformats =3D ARRAY_SIZE(simpledrm_primary_plane_formats_base);
+> > +		break;
+> > +	case DRM_FORMAT_XRGB8888:
+> > +	case DRM_FORMAT_ARGB8888:
+> > +		conv_formats =3D simpledrm_primary_plane_formats_xrgb8888;
+> > +		conv_nformats =3D ARRAY_SIZE(simpledrm_primary_plane_formats_xrgb888=
+8);
+> > +		break;
+> > +	case DRM_FORMAT_XRGB2101010:
+> > +	case DRM_FORMAT_ARGB2101010:
+> > +		conv_formats =3D simpledrm_primary_plane_formats_xrgb2101010;
+> > +		conv_nformats =3D ARRAY_SIZE(simpledrm_primary_plane_formats_xrgb210=
+1010);
+> > +		break;
+> > +	default:
+> > +		conv_formats =3D NULL;
+> > +		conv_nformats =3D 0;
+> > +		drm_warn(dev, "Format conversion helpers required to add extra forma=
+ts.\n");
+> > +		break;
+> > +	}
+> >  =20
+> >   	nformats =3D drm_fb_build_fourcc_list(dev, &format->format, 1,
+> > -					    simpledrm_primary_plane_formats,
+> > -					    ARRAY_SIZE(simpledrm_primary_plane_formats),
+> > +					    conv_formats, conv_nformats,
+> >   					    sdev->formats, ARRAY_SIZE(sdev->formats));
+> >  =20
+> >   	primary_plane =3D &sdev->primary_plane; =20
+>=20
+
+
+--Sig_/fHYiBmgng1laXpPX_HJNlOb
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmNad/4ACgkQI1/ltBGq
+qqca0g/9EZyE+t5iKJlNHZ6Y1NNpMUiw49okIWFGtCG6k/uw/ckIZRvr6xBAHlRP
+6RFviElFG06LIqcvWYUjlgvgfJ9ZumkUEkMcfJ0nEf4Kr4pAh7bpka8rIn0z7J7p
+ivGTWih+445MuR6e4ngycCFhF5X6VDyUQM3gzVZWwKS2LNBRNAHa+bNhJ0AyE30t
+o1SNuB6u1PRKfAQuQt7cfpYWOLJr4Q4r70fJRAFRrxpXD068DINAt4KXoQOF5wDB
+jfN5f9J33Fi9bdcgjYfJs6q0fP0a5CNn1VPIFO/5GrhJKGXNv/i+DKduelPljtc0
+ti0C2nHKWYlGPlMNlH9YOjbmWK1zyqBXVGZ3hYD1J3jVpKp3Bz1mwOHE62Ir8RIc
+6m8ZXz9AwuvqQ60Rfr/DgBpTmmBMOZjalnNvxgBVW7Qeqfq3OIP6KpfaGvnHvyUi
+9Z/gtZXeA1OwzczhtSkqvU4BnPGknzzZCu4Uox76L8CoAlM/zGD7Es7JFSLABr+O
+XuYb+fOypXrE+F1/6us0qrAmRbK/ckh2T7vhp3POCcby8bzGqiY6jSjw3q4laGDe
+OcSfgN54jbbfhAXGEkOB9ys4hZvr/UWGd4MQzPo4+xsFynirk5jrLZUM7c6bxrwr
+XffUbVJBvJ2XW6foOIBAOgQ08GPTryz1kTxakV56DU2m0MICG7w=
+=MTtI
+-----END PGP SIGNATURE-----
+
+--Sig_/fHYiBmgng1laXpPX_HJNlOb--
