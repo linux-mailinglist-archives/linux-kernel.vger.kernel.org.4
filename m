@@ -2,117 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C0D60EED1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 05:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8387760EED5
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 05:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234137AbiJ0Dss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 23:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
+        id S234225AbiJ0Dwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 23:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234111AbiJ0Dsl (ORCPT
+        with ESMTP id S233987AbiJ0Dwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 23:48:41 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1C914FD36
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 20:48:39 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id x3so298764qtj.12
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 20:48:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EZV13YUXJ1X5nZogU6EZCbAdVT5BnrOM5RZdjfgWMN4=;
-        b=aqRMJbOWWinhxG70OgZg11E1vL4+rhlfxogLDPQ26WObUaNoFwMHkDJKBUbJQT0hbD
-         gchjDm5eHgagifJFx7DVNDl7vjB7Wcs3eDn6Mcob4aEFXayGA0aaukwWQBqNuRk6rCvV
-         LyoWSXvABofmzdyOgsVKR+lOpVdmLsU08q5R1AYWW0jgHuJl5WMW0jy87Fe/QCGI3ayy
-         iXdHdAEorxByR+hq6LusC2MlamGRRdC0FhMs14syJ86tPl+bZGbvSy+C+78A7FJYrWgs
-         P4AGFxoX74qLfJ7DlywYJXlyAdm3DEfa9nhRgpkcI/0vOLNmgcHSg44lhzWSqTDIhIoZ
-         YoJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EZV13YUXJ1X5nZogU6EZCbAdVT5BnrOM5RZdjfgWMN4=;
-        b=e7rwyQqKpGOIXQ7Oczn/vffx+FIcJeY0xOUK7A77n7L85GuDbahBIIhAPCQw9WLbPq
-         OCJVa46+Dt81ko7sGDj4A6r7cLkqQimxO6qv6VrjAi18FUuuxzHc9i+xE5s+TMCYbXDs
-         UZgX9iC21MZ9lxg4bNTTfIm1qYCq4KxLdoK8ezmK9/wGtFv+wjnf2SDkikKiQ97W3bFv
-         QCmFmpHtbZbTAOc86LY6wrS9ESOcId8vV+uX9yhnJ2L4NcnBReuM4BAOjncGOZi+9Nno
-         2Tpg0biKft5kt0/MSWIZH0lpbfH5hShqCJef3YKEo1RHyoDb7hMwQRKjQjZo0hVaqceU
-         SPvw==
-X-Gm-Message-State: ACrzQf0NxiCrC+1MMwGT6pJ1ZelOOVoEM3sxsgo9It5yHt/3Z/WStd9K
-        2uk1iJKf8UeTQpZeLApk5KRPsl1wA3psjHeTfT0=
-X-Google-Smtp-Source: AMsMyM4fE/kjKW/5+tczi48te8MykEZ0ZF8HtYlOzTN0mhjMOAwlotf6o1yRIHW8uRefUfR/T4TIyiu6lLsPZ4TPHn0=
-X-Received: by 2002:a05:622a:170c:b0:39c:c8c4:71f5 with SMTP id
- h12-20020a05622a170c00b0039cc8c471f5mr40194028qtk.595.1666842518527; Wed, 26
- Oct 2022 20:48:38 -0700 (PDT)
+        Wed, 26 Oct 2022 23:52:46 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBC4D8A7D7;
+        Wed, 26 Oct 2022 20:52:44 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8CxjdqLAFpjv8QCAA--.10763S3;
+        Thu, 27 Oct 2022 11:52:43 +0800 (CST)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxJleEAFpjbZEFAA--.2104S2;
+        Thu, 27 Oct 2022 11:52:37 +0800 (CST)
+Subject: Re: [PATCH v2 2/2] dt-bindings: soc: add loongson2 guts
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        zhuyinbo@loongson.cn, Arnd Bergmann <arnd@arndb.de>,
+        Hector Martin <marcan@marcan.st>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Brian Norris <briannorris@chromium.org>,
+        Sven Peter <sven@svenpeter.dev>, loongarch@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221025035128.21068-1-zhuyinbo@loongson.cn>
+ <20221025035128.21068-2-zhuyinbo@loongson.cn>
+ <7c67c721-685a-fa0e-ab4b-41b7de3ea0a0@linaro.org>
+ <52de60bd-8aa5-a461-9bca-ce8e6f82ead8@loongson.cn>
+ <ae7cf416-f7b9-2316-5bb2-0043651ed0fd@linaro.org>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <7bd6db22-210b-d8ff-7476-b2e38dc7c683@loongson.cn>
+Date:   Thu, 27 Oct 2022 11:52:36 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <20221019031445.901570-1-zyytlz.wz@163.com> <20221019140043.GD18792@hpe.com>
-In-Reply-To: <20221019140043.GD18792@hpe.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Thu, 27 Oct 2022 11:48:27 +0800
-Message-ID: <CAJedcCzDz6zEn2c2fb10DsJGGw1H1RWC98Fsr+x3sF5e-E43Sg@mail.gmail.com>
-Subject: Re: [PATCH v4] misc: sgi-gru: fix use-after-free error in
- gru_set_context_option, gru_fault and gru_handle_user_call_os
-To:     Dimitri Sivanich <sivanich@hpe.com>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, gregkh@linuxfoundation.org,
-        zhengyejian1@huawei.com, dimitri.sivanich@hpe.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, alex000young@gmail.com,
-        security@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ae7cf416-f7b9-2316-5bb2-0043651ed0fd@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxJleEAFpjbZEFAA--.2104S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3Jw45Ww4DKrW8GrW5ur45KFg_yoW7XF4fpF
+        4xCFWDKFW8Jr129wsIq3W8AF4a9as7A3WUWrnrG3429Fyq9a4ftwsxKr98uF18JryxXFW2
+        vFWjg3yS9F4DAFJanT9S1TB71UUUUbJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jw0_GFyle2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
+        v26r1q6r43MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jsWrXUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dimitri Sivanich <sivanich@hpe.com> =E4=BA=8E2022=E5=B9=B410=E6=9C=8819=E6=
-=97=A5=E5=91=A8=E4=B8=89 22:00=E5=86=99=E9=81=93=EF=BC=9A
 
-> In gru_set_context_option(), you are calling gru_unload_context() for all
-> non-zero 'ret' values, but there are other instances where non-zero 'ret'
-> values are being set that should not call gru_unload_context().  Maybe do
-> this instead:
->                         if (gru_check_context_placement(gts)) {
->                                 gru_unlock_gts(gts);
->                                 gru_unload_context(gts, 1);
->                                 return -EINVAL;
->                         }
->
-> >               }
-> >               break;
-> >       case sco_gseg_owner:
 
-Yes, that's correct. I'll fix it later.
+在 2022/10/26 下午10:10, Krzysztof Kozlowski 写道:
+> On 26/10/2022 03:22, Yinbo Zhu wrote:
+>>
+>>
+>> 在 2022/10/26 上午3:40, Krzysztof Kozlowski 写道:
+>>> On 24/10/2022 23:51, Yinbo Zhu wrote:
+>>>> Add the loongson2 soc guts driver binding with DT schema format
+>>>> using json-schema.
+>>>>
+>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>> ---
+>>>>    .../soc/loongson/loongson,ls2k-guts.yaml      | 37 +++++++++++++++++++
+>>>
+>>> Looks like wrong location, although difficult to judge because you did
+>>> not describe the hardware at all. If this is chipinfo-like device, then
+>>> Documentation/devicetree/bindings/hwinfo/.
+yes it is a chipinfo/socinfo device, I will following your advice.
+>> My guts driver is refer fsl platform. It was was to manage and access
+>> global utilities register block for SoC and it was only used in SoC
+>> platform. when driver need use Soc ops to do some function the this
+>> driver was needed.  the dcfg (device config) was a function in guts
+>> (global utilities) block.
+> 
+> I can barely understand it.
+My description is about chipinfo/socinfo definition. and I have a look
+/bindings/hwinfo/, I think move binding file to hwinfo that is okay for me.
 
-> > @@ -727,14 +728,16 @@ void gru_check_context_placement(struct gru_threa=
-d_state *gts)
-> >        */
-> >       gru =3D gts->ts_gru;
+Documentation/devicetree/bindings/hwinfo/ti,k3-socinfo.yaml
 
-> > -     gru_check_context_placement(gts);
-> > +     ret =3D gru_check_context_placement(gts);
-> > +     if (ret) {
->
-> One suggestion, there is now no need to declare 'ret'.  Do this instead:
->         if (gru_check_context_placement(gts)) {
->
-> > +             preempt_enable();
-> > +             mutex_unlock(&gts->ts_ctxlock);
-> > +             gru_unload_context(gts, 1);
-> > +             return VM_FAULT_NOPAGE;
-> > +     }
-> >
-> >       if (!gts->ts_gru) {
-> >               STAT(load_user_context);
+> 
+>> For these type of driver, other platforms were initially placed on
+>> Documentation/devicetree/bindings/arm/   if it is arm/arm64
+>> architecture. Later, move it to the soc directory.
+>>
+>> Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-dcfg.yaml
+> 
+> How is this related? This is Layerscape, not Loongson2. Describe the
+> hardware you are adding bindings for.
+The driver functions/type are the same, the driver was register a struct 
+soc_device_attribute by soc_device_register then other peripheral driver
+can call SoC ops, such as soc_device_match.
 
-Get it! Thanks agagin for your advice :)
+then layerscape guts module bindings are placed in
+Documentation/devicetree/bindings/soc/, the loongson guts module 
+bindings was follow that layerscape and are placed in
+Documentation/devicetree/bindings/soc/
 
-Regards,
-Zheng Wang
+In a words,  It is a question about where the binding file should be 
+placed.  I think move binding file to hwinfo that is okay for me.
+> 
+>>
+>> So, do you still think it is inappropriate to place it in the soc dir?
+>>>
+>>>
+>>>>    MAINTAINERS                                   |  1 +
+>>>>    2 files changed, 38 insertions(+)
+>>>>    create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..2502f8aeb74d
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
+>>>> @@ -0,0 +1,37 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-guts.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: Loongson2 GUTS driver.
+>>>
+>>> Drop "driver." unless you refer to some hardware (like motor driver?).
+>> this need refer hardware soc datasheet to gain soc register (global
+>> utilities register block ).
+>> so keep "driver" string that whether was more appropriate?
+> 
+> What? I cannot parse it.
+> 
+> Did you understand my comment? If yes, please point to Wikipedia article
+> explaining this "Driver" you refer to.
+I will remove the "driver" string.
+> 
+> 
+>>>
+>>>> +
+>>>> +maintainers:
+>>>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>> +
+>>>> +description: |
+>>>> +  GUTS driver was to manage and access global utilities block. Initially
+>>>
+>>> Drop "driver" and describe instead what is GUTS, including its acronym,
+>>>
+>>>> +  only reading SVR and registering soc device are supported.
+>>>
+>>> Entire sentence describe Linux driver - drop it. Instead describe the
+>>> device, the hardware.
+>>>
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    const: loongson,ls2k-guts
+>>>> +
+>>>> +  reg:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  little-endian: true
+>>>> +
+>>>> +required:
+>>>> +  - compatible
+>>>> +  - reg
+>>>> +
+>>>> +additionalProperties: false
+>>>> +
+>>>> +examples:
+>>>> +  - |
+>>>> +    guts: guts@1fe00000 {
+>>>
+>>> Node names should be generic.
+>> dcfg/scfg (device cfg/ soc cfg)was the key function of guts (global
+>> utilities) block. and guts name I was refer fsl soc driver.
+>> "drivers/soc/fsl/guts.c"
+>> this binding file was follows of fsl guts.
+>> Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-dcfg.yaml
+>> Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-scfg.yaml
+>>
+>> or, I was use scfg as node name, Do you think it's appropriate?
+> 
+> No, these are not generic node names.
+I was refer "ti,k3-socinfo.yaml",  Do you think it's appropriate that 
+socinfo as node name?
+> 
+>>
+>>
+>>> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+> 
+> Best regards,
+> Krzysztof
+> 
+
