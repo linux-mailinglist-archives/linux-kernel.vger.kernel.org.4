@@ -2,310 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B88F610268
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5347561026F
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236593AbiJ0UKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 16:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
+        id S235892AbiJ0UL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 16:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236477AbiJ0UKU (ORCPT
+        with ESMTP id S236928AbiJ0ULE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 16:10:20 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0982D746
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:10:18 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1666901416;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=OIqcZRUcgxs1qDADU8Zu6W54GU95YqrDSNAf8mGexD8=;
-        b=MLRzYvvqmtPTt9XY6I6RkLN6jN4QxLSLzM/wvr5P1IMcuEDFWNep8vChlHwqmTWaDNp9/9
-        jKI/BWTyFEuKGJeaE5DxT63CWij1UrQQEcCguR+dW/3ib0nR9i1tnqeAyKnpVHGxBCNKim
-        m4OkpWJ8z1uJWKYSckFDh3HkhuTAGwc=
-From:   andrey.konovalov@linux.dev
-To:     Marco Elver <elver@google.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH] kasan: allow sampling page_alloc allocations for HW_TAGS
-Date:   Thu, 27 Oct 2022 22:10:09 +0200
-Message-Id: <c124467c401e9d44dd35a36fdae1c48e4e505e9e.1666901317.git.andreyknvl@google.com>
+        Thu, 27 Oct 2022 16:11:04 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D829B5FF64
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:11:00 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id r14so4540551lfm.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:11:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=F8BavPFOAHXNO09BgfP4Q2HsQ7g6wEbyxvWgdnFD/5M=;
+        b=JYpuyDLHs1elyZB84rUPtDpDc5Tze8rcHtDcDwg/aI7hO7sQ8JQlwLEHu98tyKxDgN
+         rIZfEi5JJBP8HF5VB/RVwFkeHAKDWnnnnoHuJZb712KspOk/EBCLqqkJz952PIy4paUU
+         +dn2WjDUcLoBHJ2U/g0ApXim9ursB0p+DIKGzfJ8iAucmxqbNhiPzlzzvI20GaadVPNs
+         GcwL9Ty/zFL+FvPFQn5pkgboDchWUhd8qRM9Hz8SuHXmyMr2fuRqK9B9MLwV7jitP9mb
+         SkJkw4DHYBfajlzc9Lp67LRfyNpoTgEvUuO/o0t2Zd+qyLdL/V7pL9Q/UVU4xX4N6mAM
+         ig1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F8BavPFOAHXNO09BgfP4Q2HsQ7g6wEbyxvWgdnFD/5M=;
+        b=3P4BiBqTUusAPNvh5fQ9ykSuxkLOzVJKevdWJj8KWNuqgp4AMtcb9HuZsbi199XHRl
+         On/ydJxShkXhj39WYKDS89l1QepTajzN0AC39Bk3jqrVUKsGyD2jDZLBQ1OisFkB5uRd
+         q3r27QIwFJ5mCdzDc+JcGJPPP5RHetfqSgYqh4Sncfwkr/94bZMVCkahVJkQNPQjosgA
+         PqjoWMhDxuBCeP1pUWLfcSvBDTFSzGfNU9c1b2DDiR7is/Cy0IMbbcN0D+MxHxge3GtZ
+         fvFR56vhC1n5gwpPNuMEE3zsrx2UTBEmNUDXYmQCaxI7/rSZcv9Nkb8vq+vUt+5B7r3Y
+         qT/Q==
+X-Gm-Message-State: ACrzQf2Q+cgkEs/tuiMKnuphYl2/otzCrCBOc/zQVnegkZ3fdRZllXQO
+        PQsO8Q5qa7jQ5ambGvraEj+WIU5o5b8KrkOuZSTRBw==
+X-Google-Smtp-Source: AMsMyM4sMrItvaOQO4fUwqfRraRoLkSUR2YnOzX3N/94ueko/879dyN5xzHvi6zcExL6kGcJG7OyK6IJBQcQHnFNYeA=
+X-Received: by 2002:a05:6512:2a91:b0:4a4:69aa:9160 with SMTP id
+ dt17-20020a0565122a9100b004a469aa9160mr20269872lfb.313.1666901458915; Thu, 27
+ Oct 2022 13:10:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221027150558.722062-1-pgonda@google.com> <20221027150558.722062-2-pgonda@google.com>
+ <10e7e8df-69ba-c1bc-1f94-c77fe64774ab@amd.com>
+In-Reply-To: <10e7e8df-69ba-c1bc-1f94-c77fe64774ab@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Thu, 27 Oct 2022 14:10:47 -0600
+Message-ID: <CAMkAt6qzW0oW=2Mvq0uO+ccwRyYcRAkDoF47mH4hMET5wASzsQ@mail.gmail.com>
+Subject: Re: [PATCH V3 1/2] virt: sev: Prevent IV reuse in SNP guest driver
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Dionna Glaze <dionnaglaze@google.com>,
+        Borislav Petkov <bp@suse.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Marc Orr <marcorr@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Ashish Kalra <Ashish.Kalra@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
+On Thu, Oct 27, 2022 at 12:06 PM Tom Lendacky <thomas.lendacky@amd.com> wrote:
+>
+> On 10/27/22 10:05, Peter Gonda wrote:
+> > The ASP and an SNP guest use a series of AES-GCM keys called VMPCKs to
+> > communicate securely with each other. The IV to this scheme is a
+> > sequence number that both the ASP and the guest track. Currently this
+> > sequence number in a guest request must exactly match the sequence
+> > number tracked by the ASP. This means that if the guest sees an error
+> > from the host during a request it can only retry that exact request or
+> > disable the VMPCK to prevent an IV reuse. AES-GCM cannot tolerate IV
+> > reuse see:
+> > https://csrc.nist.gov/csrc/media/projects/block-cipher-techniques/documents/bcm/comments/800-38-series-drafts/gcm/joux_comments.pdf
+> >
+> > To handle userspace querying the cert_data length. Instead of requesting
+> > the cert length from userspace use the size of the drivers allocated
+> > shared buffer. Then copy that buffer to userspace, or give userspace an
+> > error depending on the size of the buffer given by userspace.
+> >
+> > Fixes: fce96cf044308 ("virt: Add SEV-SNP guest driver")
+> > Signed-off-by: Peter Gonda <pgonda@google.com>
+> > Reported-by: Peter Gonda <pgonda@google.com>
+> > Reviewed-by: Dionna Glaze <dionnaglaze@google.com>
+> > Cc: Borislav Petkov <bp@suse.de>
+> > Cc: Tom Lendacky <thomas.lendacky@amd.com>
+> > Cc: Michael Roth <michael.roth@amd.com>
+> > Cc: Haowen Bai <baihaowen@meizu.com>
+> > Cc: Yang Yingliang <yangyingliang@huawei.com>
+> > Cc: Marc Orr <marcorr@google.com>
+> > Cc: David Rientjes <rientjes@google.com>
+> > Cc: Ashish Kalra <Ashish.Kalra@amd.com>
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: kvm@vger.kernel.org
+> > ---
+> >   drivers/virt/coco/sev-guest/sev-guest.c | 93 ++++++++++++++++---------
+> >   1 file changed, 62 insertions(+), 31 deletions(-)
+> >
+> > diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
+> > index f422f9c58ba7..8c54ea84bc57 100644
+> > --- a/drivers/virt/coco/sev-guest/sev-guest.c
+> > +++ b/drivers/virt/coco/sev-guest/sev-guest.c
+> > @@ -41,7 +41,7 @@ struct snp_guest_dev {
+> >       struct device *dev;
+> >       struct miscdevice misc;
+> >
+> > -     void *certs_data;
+> > +     u8 (*certs_data)[SEV_FW_BLOB_MAX_SIZE];
+> >       struct snp_guest_crypto *crypto;
+> >       struct snp_guest_msg *request, *response;
+> >       struct snp_secrets_page_layout *layout;
+> > @@ -67,8 +67,27 @@ static bool is_vmpck_empty(struct snp_guest_dev *snp_dev)
+> >       return true;
+> >   }
+> >
+> > +/*
+> > + * If we receive an error from the host or ASP we have two options. We can
+> > + * either retry the exact same encrypted request or we can discontinue using the
+> > + * VMPCK.
+> > + *
+> > + * This is because in the current encryption scheme GHCB v2 uses AES-GCM to
+> > + * encrypt the requests. The IV for this scheme is the sequence number. GCM
+> > + * cannot tolerate IV reuse.
+> > + *
+> > + * The ASP FW v1.51 only increments the sequence numbers on a successful
+> > + * guest<->ASP back and forth and only accepts messages at its exact sequence
+> > + * number.
+> > + *
+> > + * So if we were to reuse the sequence number the encryption scheme is
+> > + * vulnerable. If we encrypt the sequence number for a fresh IV the ASP will
+> > + * reject our request.
+> > + */
+> >   static void snp_disable_vmpck(struct snp_guest_dev *snp_dev)
+> >   {
+> > +     dev_alert(snp_dev->dev, "Disabling vmpck_id: %d to prevent IV reuse.\n",
+> > +               vmpck_id);
+> >       memzero_explicit(snp_dev->vmpck, VMPCK_KEY_LEN);
+> >       snp_dev->vmpck = NULL;
+> >   }
+> > @@ -326,29 +345,29 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+> >       if (fw_err)
+> >               *fw_err = err;
+> >
+> > -     if (rc)
+> > -             return rc;
+> > +     if (rc) {
+> > +             dev_alert(snp_dev->dev,
+> > +                       "Detected error from ASP request. rc: %d, fw_err: %llu\n",
+> > +                       rc, *fw_err);
+> > +             goto disable_vmpck;
+> > +     }
+>
+> Realize that snp_issue_guest_request() will return -EIO in the case that
+> the returned SW_EXITINFO2 value is SNP_GUEST_REQ_INVALID_LEN. So all the
+> work you do below in get_ext_report() doesn't matter because you end up
+> disabling the key here.
+>
+> So maybe this patch should be split up and parts of it added to the second
+> patch (but that patch seems like it would still hit this issue because
+> -EIO is still returned.
+>
 
-Add a new boot parameter called kasan.page_alloc.sample, which makes
-Hardware Tag-Based KASAN tag only every Nth page_alloc allocation.
+Ack I see that. My testing didn't catch this since I realized I didn't
+actually load any certificate data into the host. After doing so my
+testing catches this bug.
 
-As Hardware Tag-Based KASAN is intended to be used in production, its
-performance impact is crucial. As page_alloc allocations tend to be big,
-tagging and checking all such allocations introduces a significant
-slowdown in some testing scenarios. The new flag allows to alleviate
-that slowdown.
-
-Enabling page_alloc sampling has a downside: KASAN will miss bad accesses
-to a page_alloc allocation that has not been tagged.
-
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- Documentation/dev-tools/kasan.rst |  4 +++
- include/linux/kasan.h             |  7 ++---
- mm/kasan/common.c                 |  9 +++++--
- mm/kasan/hw_tags.c                | 26 +++++++++++++++++++
- mm/kasan/kasan.h                  | 15 +++++++++++
- mm/page_alloc.c                   | 43 +++++++++++++++++++++----------
- 6 files changed, 85 insertions(+), 19 deletions(-)
-
-diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/kasan.rst
-index 5c93ab915049..bd97301845ef 100644
---- a/Documentation/dev-tools/kasan.rst
-+++ b/Documentation/dev-tools/kasan.rst
-@@ -140,6 +140,10 @@ disabling KASAN altogether or controlling its features:
- - ``kasan.vmalloc=off`` or ``=on`` disables or enables tagging of vmalloc
-   allocations (default: ``on``).
- 
-+- ``kasan.page_alloc.sample=<sampling frequency>`` makes KASAN tag only
-+  every Nth page_alloc allocation, where N is the value of the parameter
-+  (default: ``1``).
-+
- Error reports
- ~~~~~~~~~~~~~
- 
-diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-index d811b3d7d2a1..d45d45dfd007 100644
---- a/include/linux/kasan.h
-+++ b/include/linux/kasan.h
-@@ -120,12 +120,13 @@ static __always_inline void kasan_poison_pages(struct page *page,
- 		__kasan_poison_pages(page, order, init);
- }
- 
--void __kasan_unpoison_pages(struct page *page, unsigned int order, bool init);
--static __always_inline void kasan_unpoison_pages(struct page *page,
-+bool __kasan_unpoison_pages(struct page *page, unsigned int order, bool init);
-+static __always_inline bool kasan_unpoison_pages(struct page *page,
- 						 unsigned int order, bool init)
- {
- 	if (kasan_enabled())
--		__kasan_unpoison_pages(page, order, init);
-+		return __kasan_unpoison_pages(page, order, init);
-+	return false;
- }
- 
- void __kasan_cache_create_kmalloc(struct kmem_cache *cache);
-diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-index 833bf2cfd2a3..1f30080a7a4c 100644
---- a/mm/kasan/common.c
-+++ b/mm/kasan/common.c
-@@ -95,19 +95,24 @@ asmlinkage void kasan_unpoison_task_stack_below(const void *watermark)
- }
- #endif /* CONFIG_KASAN_STACK */
- 
--void __kasan_unpoison_pages(struct page *page, unsigned int order, bool init)
-+bool __kasan_unpoison_pages(struct page *page, unsigned int order, bool init)
- {
- 	u8 tag;
- 	unsigned long i;
- 
- 	if (unlikely(PageHighMem(page)))
--		return;
-+		return false;
-+
-+	if (!kasan_sample_page_alloc())
-+		return false;
- 
- 	tag = kasan_random_tag();
- 	kasan_unpoison(set_tag(page_address(page), tag),
- 		       PAGE_SIZE << order, init);
- 	for (i = 0; i < (1 << order); i++)
- 		page_kasan_tag_set(page + i, tag);
-+
-+	return true;
- }
- 
- void __kasan_poison_pages(struct page *page, unsigned int order, bool init)
-diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
-index b22c4f461cb0..aa3b5a080297 100644
---- a/mm/kasan/hw_tags.c
-+++ b/mm/kasan/hw_tags.c
-@@ -59,6 +59,11 @@ EXPORT_SYMBOL_GPL(kasan_mode);
- /* Whether to enable vmalloc tagging. */
- DEFINE_STATIC_KEY_TRUE(kasan_flag_vmalloc);
- 
-+/* Frequency of page_alloc allocation poisoning. */
-+unsigned long kasan_page_alloc_sample = 1;
-+
-+DEFINE_PER_CPU(unsigned long, kasan_page_alloc_count);
-+
- /* kasan=off/on */
- static int __init early_kasan_flag(char *arg)
- {
-@@ -122,6 +127,27 @@ static inline const char *kasan_mode_info(void)
- 		return "sync";
- }
- 
-+/* kasan.page_alloc.sample=<sampling frequency> */
-+static int __init early_kasan_flag_page_alloc_sample(char *arg)
-+{
-+	int rv;
-+
-+	if (!arg)
-+		return -EINVAL;
-+
-+	rv = kstrtoul(arg, 0, &kasan_page_alloc_sample);
-+	if (rv)
-+		return rv;
-+
-+	if (!kasan_page_alloc_sample) {
-+		kasan_page_alloc_sample = 1;
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+early_param("kasan.page_alloc.sample", early_kasan_flag_page_alloc_sample);
-+
- /*
-  * kasan_init_hw_tags_cpu() is called for each CPU.
-  * Not marked as __init as a CPU can be hot-plugged after boot.
-diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index abbcc1b0eec5..ee67eb35f4a7 100644
---- a/mm/kasan/kasan.h
-+++ b/mm/kasan/kasan.h
-@@ -42,6 +42,9 @@ enum kasan_mode {
- 
- extern enum kasan_mode kasan_mode __ro_after_init;
- 
-+extern unsigned long kasan_page_alloc_sample;
-+DECLARE_PER_CPU(unsigned long, kasan_page_alloc_count);
-+
- static inline bool kasan_vmalloc_enabled(void)
- {
- 	return static_branch_likely(&kasan_flag_vmalloc);
-@@ -57,6 +60,13 @@ static inline bool kasan_sync_fault_possible(void)
- 	return kasan_mode == KASAN_MODE_SYNC || kasan_mode == KASAN_MODE_ASYMM;
- }
- 
-+static inline bool kasan_sample_page_alloc(void)
-+{
-+	unsigned long *count = this_cpu_ptr(&kasan_page_alloc_count);
-+
-+	return (*count)++ % kasan_page_alloc_sample == 0;
-+}
-+
- #else /* CONFIG_KASAN_HW_TAGS */
- 
- static inline bool kasan_async_fault_possible(void)
-@@ -69,6 +79,11 @@ static inline bool kasan_sync_fault_possible(void)
- 	return true;
- }
- 
-+static inline bool kasan_sample_page_alloc(void)
-+{
-+	return true;
-+}
-+
- #endif /* CONFIG_KASAN_HW_TAGS */
- 
- #ifdef CONFIG_KASAN_GENERIC
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index b5a6c815ae28..0b36456aedfb 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1366,6 +1366,8 @@ static int free_tail_pages_check(struct page *head_page, struct page *page)
-  *    see the comment next to it.
-  * 3. Skipping poisoning is requested via __GFP_SKIP_KASAN_POISON,
-  *    see the comment next to it.
-+ * 4. The allocation is excluded from being checked due to sampling,
-+ *    see the call to kasan_unpoison_pages.
-  *
-  * Poisoning pages during deferred memory init will greatly lengthen the
-  * process and cause problem in large memory systems as the deferred pages
-@@ -2475,7 +2477,8 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
- {
- 	bool init = !want_init_on_free() && want_init_on_alloc(gfp_flags) &&
- 			!should_skip_init(gfp_flags);
--	bool init_tags = init && (gfp_flags & __GFP_ZEROTAGS);
-+	bool zero_tags = init && (gfp_flags & __GFP_ZEROTAGS);
-+	bool reset_tags = !zero_tags;
- 	int i;
- 
- 	set_page_private(page, 0);
-@@ -2498,30 +2501,42 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
- 	 */
- 
- 	/*
--	 * If memory tags should be zeroed (which happens only when memory
--	 * should be initialized as well).
-+	 * If memory tags should be zeroed
-+	 * (which happens only when memory should be initialized as well).
- 	 */
--	if (init_tags) {
-+	if (zero_tags) {
- 		/* Initialize both memory and tags. */
- 		for (i = 0; i != 1 << order; ++i)
- 			tag_clear_highpage(page + i);
- 
--		/* Note that memory is already initialized by the loop above. */
-+		/* Take note that memory was initialized by the loop above. */
- 		init = false;
- 	}
- 	if (!should_skip_kasan_unpoison(gfp_flags)) {
--		/* Unpoison shadow memory or set memory tags. */
--		kasan_unpoison_pages(page, order, init);
--
--		/* Note that memory is already initialized by KASAN. */
--		if (kasan_has_integrated_init())
--			init = false;
--	} else {
--		/* Ensure page_address() dereferencing does not fault. */
-+		/* Try unpoisoning (or setting tags) and initializing memory. */
-+		if (kasan_unpoison_pages(page, order, init)) {
-+			/* Take note that memory was initialized by KASAN. */
-+			if (kasan_has_integrated_init())
-+				init = false;
-+			/* Take note that memory tags were set by KASAN. */
-+			reset_tags = false;
-+		} else {
-+			/*
-+			 * KASAN decided to exclude this allocation from being
-+			 * poisoned due to sampling. Skip poisoning as well.
-+			 */
-+			SetPageSkipKASanPoison(page);
-+		}
-+	}
-+	/*
-+	 * If memory tags have not been set, reset the page tags to ensure
-+	 * page_address() dereferencing does not fault.
-+	 */
-+	if (reset_tags) {
- 		for (i = 0; i != 1 << order; ++i)
- 			page_kasan_tag_reset(page + i);
- 	}
--	/* If memory is still not initialized, do it now. */
-+	/* If memory is still not initialized, initialize it now. */
- 	if (init)
- 		kernel_init_pages(page, 1 << order);
- 	/* Propagate __GFP_SKIP_KASAN_POISON to page flags. */
--- 
-2.25.1
-
+I agree with Dionna's comments on 2/2. My suggestion would be to keep
+the constraint that either handle_guest_request() leaves the sequence
+number in a good state or disables the VMPCK. After seeing her V4
+series I suggest we take this patch and follow up on the certificate
+querying with the further changes to snp_issue_guest_request().
+Thoughts?
