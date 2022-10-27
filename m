@@ -2,103 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FEA160FBD1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B702860FBCC
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235384AbiJ0PXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 11:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
+        id S236059AbiJ0PXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 11:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233598AbiJ0PXt (ORCPT
+        with ESMTP id S235384AbiJ0PW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 11:23:49 -0400
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555AEDF7;
-        Thu, 27 Oct 2022 08:23:48 -0700 (PDT)
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 29RFNSUV029228;
-        Fri, 28 Oct 2022 00:23:29 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 29RFNSUV029228
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1666884209;
-        bh=HjLGoO2Lx7YPNTEAxUvyEaIlq5YG6EkDHPtsprtiT7I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=aPdjIOqpBkiHzkUOVTu14o+cPcX1PAObAUWiBaZ6Hg8hV+W69uzlJQrfc6M3GiKTc
-         5lr3mV/rHUpvPk8EpnlN+aXUVY9Z2i3KWeZIt8IuFjM+a9uN09y41Ck77p5Nkrxw1B
-         h95APxgtK5I1ZETGWpc9Zag/ToYA7pxc44Qsck7oCPWibq0DmYCYsIQ4A+3CnkufxY
-         1FHYes6YbFpspM+0A7ejbqTug56JjRStejKdY6EFsFnXpT8J9SWzxv11Db0pxwCkKE
-         eN2AygK60ItpMDPj+2ppZFA5kdCCj1WHwZTAa9VPOK2zGbopxaAtSPqWuFG+MMc0Wk
-         Kt8jtSZEG0Qeg==
-X-Nifty-SrcIP: [209.85.167.182]
-Received: by mail-oi1-f182.google.com with SMTP id g130so2464313oia.13;
-        Thu, 27 Oct 2022 08:23:29 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3Y0+dtpDLBpVn9lhzZ3Wl7Jvj2urjtsrlEcghTOYDsrG6saC4F
-        Wi68jPrB7cIfWkD21OtXKyQiRo72AH0Von1qubg=
-X-Google-Smtp-Source: AMsMyM55SfsxUPxo2+u9BifUZK+zhiiFLFNtywbJ+DyCvRXcbN69GQohaAVX409azX6IWdYzzR/mFvVjEliwsnDLNEA=
-X-Received: by 2002:a05:6808:1b85:b0:34d:8ce1:d5b0 with SMTP id
- cj5-20020a0568081b8500b0034d8ce1d5b0mr5133057oib.194.1666884207979; Thu, 27
- Oct 2022 08:23:27 -0700 (PDT)
+        Thu, 27 Oct 2022 11:22:58 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FDADA8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:22:57 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id n18so1571245qvt.11
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:22:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:to:from:date:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Hu8teaCMlPYTjOnrG0NiGe0Q3Jj8nxpIHrZvb7hsUZY=;
+        b=NAxKMS8me1V4RbzOLdYqMcn0/WLx8xABPe3sRwtPTAt3neyoYKPTBrotl26e9jJfNj
+         OReLFvlVgXr3NWH1gxgUsU/Pkq2JQTXVdpLX+6DTLiGFVeQzfIaoDMXCEqpOC5UgHvox
+         1f463fK37nOqbDmbxRE+//ji9Wqpy4TTAZOFFpXur+6IgWa4H9azXAInbjKtnb944Pu3
+         RuDgBfm4Xw+gdvYr+NnsAaTBDHG2CWsqxK5+vhrJTCfdTQh/JeSkLc4wEvAzC572CEv0
+         p2r5Rh6CsUcr1JuKo9LHveMQ+Dd/zpWsItcr5n32/HjhcbadTexu6kQMHqltnZ/gCty0
+         MODQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:to:from:date:sender:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Hu8teaCMlPYTjOnrG0NiGe0Q3Jj8nxpIHrZvb7hsUZY=;
+        b=50qpSFEUPGZ+OPdlFXKtUL20DhIHS4yhbKbX4EPEgbOHqVbg9z8SxcLgWR+B88pEcx
+         K9G/MrFBkoZjH2+6SahZsKAmex65rIk2XrMUyo0+lL2s2xvPlS69zQyGbhIj6rDWZCh0
+         p0W3ZK/gvB8zfXK3VKwS0XG9RedF24biyEjQOufz6ML6X/L4FtUASbNIT5n8+t1jJaYW
+         gO80msxNzxTWDoQ9YdEC2j3vqcCe7fdFNR2QWe0wbJztJhkit6XzN50aSKR0ATqr6q5A
+         MA4G6NxB0J7LABMoncjiQysiMoQN/paQoRTqbRVglKDlcLOG1eDFGFDK3xXL6u5CIR1+
+         mBnA==
+X-Gm-Message-State: ACrzQf1ndmJga5n4/268obmq7aIrxQ9LNGCe9vt1HoLI11AFt/62iW/i
+        haeN9fVAsSHsUFokwtZbbjOQw+m5gQ==
+X-Google-Smtp-Source: AMsMyM7z8odXC+oerCw4Hn3frKFCNHqLivZ/LAQX9TvC5UEUiQ8d+cALNG27lPFFRRWqq6GCXAYWyQ==
+X-Received: by 2002:ad4:5c8c:0:b0:4b9:436:de75 with SMTP id o12-20020ad45c8c000000b004b90436de75mr32203291qvh.73.1666884176825;
+        Thu, 27 Oct 2022 08:22:56 -0700 (PDT)
+Received: from serve.minyard.net ([47.184.147.45])
+        by smtp.gmail.com with ESMTPSA id n16-20020ac85a10000000b0039cc82a319asm997273qta.76.2022.10.27.08.22.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 08:22:56 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:2cd9:e696:a60f:3003])
+        by serve.minyard.net (Postfix) with ESMTPSA id 342EC1800BD;
+        Thu, 27 Oct 2022 15:22:55 +0000 (UTC)
+Date:   Thu, 27 Oct 2022 10:22:54 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        openipmi-developer@lists.sourceforge.net
+Subject: Re: [RFC][PATCH v2 10/31] timers: ipmi: Use del_timer_shutdown()
+ before freeing timer
+Message-ID: <Y1qiTjLWG8u2eDPh@minyard.net>
+Reply-To: minyard@acm.org
+References: <20221027150525.753064657@goodmis.org>
+ <20221027150926.969147187@goodmis.org>
+ <Y1qhrqfF87gnyiCE@minyard.net>
 MIME-Version: 1.0
-References: <20221025201744.1155260-1-willmcvicker@google.com> <20221025201744.1155260-2-willmcvicker@google.com>
-In-Reply-To: <20221025201744.1155260-2-willmcvicker@google.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 28 Oct 2022 00:22:51 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQUcig1aY-vFKSOAF1MKknDC7DDfsJnNDvgC918PGWR+A@mail.gmail.com>
-Message-ID: <CAK7LNAQUcig1aY-vFKSOAF1MKknDC7DDfsJnNDvgC918PGWR+A@mail.gmail.com>
-Subject: Re: [PATCH v1] kbuild: fix typo in modpost
-To:     Will McVicker <willmcvicker@google.com>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        kernel-team@android.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1qhrqfF87gnyiCE@minyard.net>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 5:18 AM Will McVicker <willmcvicker@google.com> wrote:
->
-> Commit f73edc8951b2 ("kbuild: unify two modpost invocations") introduced
-> a typo (moudle.symvers-if-present) which results in the kernel's
-> Module.symvers to not be included as a prerequisite for
-> $(KBUILD_EXTMOD)/Module.symvers. Fix the typo to restore the intended
-> functionality.
->
-> Signed-off-by: Will McVicker <willmcvicker@google.com>
+On Thu, Oct 27, 2022 at 10:20:15AM -0500, Corey Minyard wrote:
+> On Thu, Oct 27, 2022 at 11:05:35AM -0400, Steven Rostedt wrote:
+> > From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> > 
+> > Before a timer is freed, del_timer_shutdown() must be called.
+> 
+> Thanks, this is in my queue, or:
+> 
+> Acked-by: Corey Minyard <cminyard@mvista.com>
+> 
+> if you prefer that.
 
-Applied to linux-kbuild/fixes.
-Thanks!
+Well, del_timer_shutdown() isn't there yet, so I guess the Ack is what
+you need.
 
+-corey
 
-> ---
->  scripts/Makefile.modpost | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> base-commit: 1a2dcbdde82e3a5f1db9b2f4c48aa1aeba534fb2
->
-> diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-> index 8489a3402eb8..e41dee64d429 100644
-> --- a/scripts/Makefile.modpost
-> +++ b/scripts/Makefile.modpost
-> @@ -122,7 +122,7 @@ quiet_cmd_modpost = MODPOST $@
->         sed 's/ko$$/o/' $(or $(modorder-if-needed), /dev/null) | $(MODPOST) $(modpost-args) -T - $(vmlinux.o-if-present)
->
->  targets += $(output-symdump)
-> -$(output-symdump): $(modorder-if-needed) $(vmlinux.o-if-present) $(moudle.symvers-if-present) $(MODPOST) FORCE
-> +$(output-symdump): $(modorder-if-needed) $(vmlinux.o-if-present) $(module.symvers-if-present) $(MODPOST) FORCE
->         $(call if_changed,modpost)
->
->  __modpost: $(output-symdump)
-> --
-> 2.38.0.135.g90850a2211-goog
->
-
-
--- 
-Best Regards
-Masahiro Yamada
+> 
+> -corey
+> 
+> > 
+> > Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
+> > 
+> > Cc: Corey Minyard <minyard@acm.org>
+> > Cc: openipmi-developer@lists.sourceforge.net
+> > Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> > ---
+> >  drivers/char/ipmi/ipmi_msghandler.c | 2 +-
+> >  drivers/char/ipmi/ipmi_ssif.c       | 4 ++--
+> >  2 files changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
+> > index 49a1707693c9..b577f66f3ca6 100644
+> > --- a/drivers/char/ipmi/ipmi_msghandler.c
+> > +++ b/drivers/char/ipmi/ipmi_msghandler.c
+> > @@ -5540,7 +5540,7 @@ static void __exit cleanup_ipmi(void)
+> >  		 * here.
+> >  		 */
+> >  		atomic_set(&stop_operation, 1);
+> > -		del_timer_sync(&ipmi_timer);
+> > +		del_timer_shutdown(&ipmi_timer);
+> >  
+> >  		initialized = false;
+> >  
+> > diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
+> > index e1072809fe31..bb4df879a5ab 100644
+> > --- a/drivers/char/ipmi/ipmi_ssif.c
+> > +++ b/drivers/char/ipmi/ipmi_ssif.c
+> > @@ -1273,8 +1273,8 @@ static void shutdown_ssif(void *send_info)
+> >  		schedule_timeout(1);
+> >  
+> >  	ssif_info->stopping = true;
+> > -	del_timer_sync(&ssif_info->watch_timer);
+> > -	del_timer_sync(&ssif_info->retry_timer);
+> > +	del_timer_shutdown(&ssif_info->watch_timer);
+> > +	del_timer_shutdown(&ssif_info->retry_timer);
+> >  	if (ssif_info->thread) {
+> >  		complete(&ssif_info->wake_thread);
+> >  		kthread_stop(ssif_info->thread);
+> > -- 
+> > 2.35.1
