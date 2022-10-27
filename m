@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74FA460ECEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 02:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C6A60ECF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 02:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233803AbiJ0ASt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 20:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
+        id S229691AbiJ0AWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 20:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233810AbiJ0ASr (ORCPT
+        with ESMTP id S233280AbiJ0AWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 20:18:47 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32C5D7E13
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 17:18:46 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 3-20020a17090a0f8300b00212d5cd4e5eso4542048pjz.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 17:18:46 -0700 (PDT)
+        Wed, 26 Oct 2022 20:22:13 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E22589CF8
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 17:22:11 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id g24so10879398plq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 17:22:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cpmTL2/1PYTa7BDsc47ElXf8nd6yERw7dn9uBkHqT3w=;
-        b=h9ZMKebnOz8F+gVPqZtPQA4/OR1eSgCKAhOz7BgjYHy2b1k3kaDig+Kf5VV+F73SER
-         6XXJvvWwbagaFrEhyyFOzX7I41+vwarVAMdhYiP/zs8bfkRiQWQ4vC2veioa7iDalEVg
-         /hQ88wxQ5AxEGW7kmVwMy61Fj5ag6fPo1eXVlsuyAC8Hg4Bd/R/aaYWy3VzrApCOC9Vg
-         scwX0nAS9Li+NDeNMdWFtSssK+uVGF00iuS+UXitn/v65ydVXfuTAog1rGySG9WtJq0C
-         0NwelsHcdxMT046T8+M4qNNjJQ+emId8WGmEprAIeR4D4gDmMLQ3DefJU9MJQwUJKkxj
-         49GQ==
+        bh=gL9fkvyetCV1Bo4juUosdq663yh2iF/xfOUblLWF8b0=;
+        b=X+ikZz4N8iSORkePbs8KKFAw6/SMc/hBT2Lp36JJJ9UwFAzIffLIbQZ89F7LV1p1Es
+         Zwqb3/KV5EErGZLwLu6c+d55aFsXqcoXQ7a+03+6PNGJECdsNz5S+m6877qEgGMYqedE
+         9WIbZYu2ZX1eM0ljenU9obLoqtcxafobLUhMzly6BMH18guetLEQ6iJWn56UEIilIl6g
+         KNt/vS94GXjd2tOjWW20jZbB0j79EOQCAxyu6HsBfRZZPD8YuogjVZT4n73cYJJXKWWg
+         PXJ9eQZshqBs2Uh83w+L1EXalXzlZfQFQkBsikDbhHssZFWCg7crwx8gt8YpnJZNPfD1
+         pIJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cpmTL2/1PYTa7BDsc47ElXf8nd6yERw7dn9uBkHqT3w=;
-        b=uP0Xo4ZdHkdImV1DrzbpBGdJMRPQaLDWisDt/5paqSmVjF0Nn0jqt1zoih+ozIDJ2k
-         9RprVNLjJcEiE8bNv6/TEIpJRKTFN4DqTpusdyW5gkS57SvJAy4qOV8zBbhA2U6t9RX/
-         OhPRluTgMKhtWzMtTG1/jIr4D7qCitF02KJHVkOmcyc9lBZEdklSSWaJkxE1yLyO3HUB
-         5Uw5oMQXhtSFhhmiqtBbV4NfXufkdUzEuh1PItJmnjMNHsxMVKjpGckmdGxJ8HAJ6eS7
-         KxW1TbZwBWUd49RxvC4DbwOloz/V95a1l1QnvvTv3xzNk5N/3Ucz+vZhSzm734SnCZYq
-         8q2Q==
-X-Gm-Message-State: ACrzQf0tO8dx18U1vc3xgpXDYG8pd7Dyx2anuN9RjWdKJuOCY+Rd9xtK
-        SZGtzy1tc6PJCEhtEz+bWFs5LQ==
-X-Google-Smtp-Source: AMsMyM5WlRdF3qzud38gBCnKr84xPcEWAgItCljrGlZxtsu2PkOGl1Nb/5E15rrjbPEUaZEdJI8dAw==
-X-Received: by 2002:a17:90b:3ec4:b0:20d:93bc:32fb with SMTP id rm4-20020a17090b3ec400b0020d93bc32fbmr6985861pjb.124.1666829926200;
-        Wed, 26 Oct 2022 17:18:46 -0700 (PDT)
+        bh=gL9fkvyetCV1Bo4juUosdq663yh2iF/xfOUblLWF8b0=;
+        b=thtS2QZ+7gfbIXXcAxyk/d9iZ4SYPhykKowqSMgKaSLiEqMctM6hOODrU3wJN+Kx+o
+         5v6HuQGhchJvTrmV5XhAI4rn+jEJz+V/7jpoSu2AROKkDcrgtaUpxP/RK5uBRSsvxxxy
+         6+eH3QCo19XImOwQZL9kiLhiKUVmLUItfXJc58ENNiaWWGO9uppRu9x90q7RJGGIvGxy
+         3Vy3NpZ7OOHia9TGSQiudWADe95Q2GrvGLUL8T/RvcEqLhwl+JpPsGu07IP+4bCY94IJ
+         F+iAYZhb0rRxFE3+xGbJpJ1fo0OqvLJXEuBOcMXEmmYSyrTipwdkQP2zmMfndoLpbPoU
+         /mcA==
+X-Gm-Message-State: ACrzQf0/4ZqLNRCIfo/+QAFzBqi21jJ8RO2CuGrwjn3IiH5wvBKtKqUR
+        i4W+8oxpGlRrSvidWGjIvKd8UQ==
+X-Google-Smtp-Source: AMsMyM6CD/Y7haI/KExpKQwtJ210I7ZMQY9GjXxFShh03utqVHZJ37k1rcflFBfWHz+H6N05MVxMcQ==
+X-Received: by 2002:a17:902:e752:b0:186:9efb:71f3 with SMTP id p18-20020a170902e75200b001869efb71f3mr20644688plf.153.1666830130438;
+        Wed, 26 Oct 2022 17:22:10 -0700 (PDT)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id p3-20020a170902e74300b00186b06963f9sm3468101plf.180.2022.10.26.17.18.45
+        by smtp.gmail.com with ESMTPSA id d8-20020a170902654800b001788ccecbf5sm3472832pln.31.2022.10.26.17.22.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 17:18:45 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 00:18:42 +0000
+        Wed, 26 Oct 2022 17:22:09 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 00:22:06 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Wei Wang <wei.w.wang@intel.com>
 Cc:     pbonzini@redhat.com, dmatlack@google.com, vipinsh@google.com,
         ajones@ventanamicro.com, eric.auger@redhat.com,
         kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 12/18] KVM: selftests/rseq_test: name the migration
- thread and some cleanup
-Message-ID: <Y1nOYihuurZKi5XL@google.com>
+Subject: Re: [PATCH v1 18/18] KVM: selftests/kvm_create_max_vcpus: check
+ KVM_MAX_VCPUS
+Message-ID: <Y1nPLpybEYWh+Znu@google.com>
 References: <20221024113445.1022147-1-wei.w.wang@intel.com>
- <20221024113445.1022147-13-wei.w.wang@intel.com>
+ <20221024113445.1022147-19-wei.w.wang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221024113445.1022147-13-wei.w.wang@intel.com>
+In-Reply-To: <20221024113445.1022147-19-wei.w.wang@intel.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -76,19 +76,8 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Mon, Oct 24, 2022, Wei Wang wrote:
-> @@ -272,7 +271,8 @@ int main(int argc, char *argv[])
->  	TEST_ASSERT(i > (NR_TASK_MIGRATIONS / 2),
->  		    "Only performed %d KVM_RUNs, task stalled too much?\n", i);
->  
-> -	pthread_join(migration_thread, NULL);
-> +	r = pthread_join(migration_thread, NULL);
-> +	TEST_ASSERT(r == 0, "failed to join the migration thread");
+> If the KVM side max vcpu number is larger than the one supported by the
+> userspace selftests, adjust the max number.
 
-!r is the preferred style.
-
->  
->  	kvm_vm_free(vm);
->  
-> -- 
-> 2.27.0
-> 
+No, this defeats the purpose of the test.  "create max vCPUs" means "create the
+maximum number allowed by KVM", not "create the arbitrary max supported by selftests".
