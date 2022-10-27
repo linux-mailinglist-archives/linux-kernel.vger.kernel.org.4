@@ -2,199 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D728B60F246
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DEC60F24D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234499AbiJ0IYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 04:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
+        id S234765AbiJ0I0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 04:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234043AbiJ0IYj (ORCPT
+        with ESMTP id S234235AbiJ0I0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 04:24:39 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20605.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::605])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84609167F3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:24:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g9NYA1/6LiT/FwGJ9iQKxDNzRJzabCa+Sk0RqpsANJy4fAoqolcQDKCLHF59k8ZgNpLlCAIMId6OupLTM8IuDko/qhr9/OH/S0kkxD7dAcLR9MNxgnZXt6562g1deCtBNnG4AzsLifcwo5gPD1KDG1T1vGwZaxPLbphO+J/bQje5UnjmCypBMHmSUu4s4JQ3qmWGpSRqFwHmXy6WMaYt4svn34kQYmdC1XyJCWKuvUixNm/cthhssytaAc6YCoLlIgb8J2ePop+/hoqZCgni4ZeyzWj3bq3X7bkNcLWvNycmjDvvqUvRUetfwcTVC8nnKrJ1gKUSCGLFonVnTuP+aA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ssW8B9K6q7hhnxObzL5N+R5XSnPF1TYDgCy/b9JvuvQ=;
- b=L8JFYugAHMNTirSKETBodAMJXkOTFtMLWPsVfxQY4A2jNcxgYSQBIvlz+5zxdZtEiZQcrchG0FtB4rLEZJutW82WksBIOQgZa/zqAEPfslfHpHUuaViaEYQQONYvbRyIM0lmO7y01GCDFsDdFrMTPhyxT7xIWHIdAWnwJAGwpsP6pGFZVOkyKdDy6WaWeOpn8IlKuYbh7HhjTnAce7XLbp5AfEIDPEFJKJ8Uzs+a8MgMM4x+NcShhh0BE/YSQqfnLc97WqZlw4hInw2LChlv3UmNBfyXPz3E+XCv9+MBJWAMogyY7yCh6tKRFIT7v+qsVS+b9tB+fHFT38qZ/b9f+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ssW8B9K6q7hhnxObzL5N+R5XSnPF1TYDgCy/b9JvuvQ=;
- b=DberEgoy33jq7/FlpKCm9Kl5oRkIvEJpwCYabbVss4xJC+C/S2bexBAtZKGu6UlMA+vwxiPztjkx9R2yeeDq8xb90my1IWV2w7L4xwC2aFfsccaUp+D1jlBC8w9gBwXKzUE+9FQFO91t/fm0RbKtq/tM1LjZQ3+iFGj7VHuvu5o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
- DS7PR12MB5790.namprd12.prod.outlook.com (2603:10b6:8:75::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5746.28; Thu, 27 Oct 2022 08:24:36 +0000
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::d309:77d2:93d8:2425]) by DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::d309:77d2:93d8:2425%7]) with mapi id 15.20.5746.028; Thu, 27 Oct 2022
- 08:24:36 +0000
-Message-ID: <5bc35aea-466b-bd09-563e-f3e32796b83b@amd.com>
-Date:   Thu, 27 Oct 2022 04:24:27 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] drm/scheduler: set current_entity to next when remove
- from rq
-Content-Language: en-CA
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        brolerliew <brolerliew@gmail.com>
-Cc:     Alex Deucher <alexdeucher@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20221025061846.447975-1-brolerliew@gmail.com>
- <CADnq5_NweAo-7snRLkidNkOizu7Ft+7GgXCS2Rnv1oxmRFb_RQ@mail.gmail.com>
- <a70dcda0-6723-38f6-efeb-e8edb16dab55@amd.com>
- <69e672a5-a68e-7bad-fc49-4281c1c6039d@amd.com>
- <9774ddd6-60d9-245c-77ac-59951c13b263@amd.com>
- <ac73b553-9173-4ac5-ef16-a95b8a8cd4f9@amd.com>
-From:   Luben Tuikov <luben.tuikov@amd.com>
-In-Reply-To: <ac73b553-9173-4ac5-ef16-a95b8a8cd4f9@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT4P288CA0071.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:b01:d2::23) To DM6PR12MB3370.namprd12.prod.outlook.com
- (2603:10b6:5:38::25)
+        Thu, 27 Oct 2022 04:26:11 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC853DBF7;
+        Thu, 27 Oct 2022 01:26:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=cyV55dw90naYEG3Ap/95NF6dsAJTLZCPc38XNt8Lu6M=; b=Q9XTqCBIN4KYQwVI2HKkTOpyIH
+        MtUhXT9sX7JdpWWiR7/DghIpuoDT3twXkAIZdk+H70/bBpllZVXM/esCO55OiUzrJ1/IYLVMG+qxb
+        44gxAshQa2/kmfAeIsqJruK+844SBmKCR5W80iN/g0CP9QorEWoD40IDRGasr/UiJ8lNX5O0tLjjp
+        xbNiupxI83d/e/aSDEfPHSAui6OAeVKM52Qm922YTPRP3Er1Vobw59g0/iGcIrSTuf8UjOkHghXK1
+        hAfPfjoa+6kcXxYRGceGregLTDwSeYqH9chbGiJQD8UCJD/y8VgN6SBGNRbLXOLmGwi4pzqkp7N50
+        cWG7MDIw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1onyCu-000312-IG; Thu, 27 Oct 2022 08:25:44 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A1E4930035C;
+        Thu, 27 Oct 2022 10:25:37 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8C8E120125B3B; Thu, 27 Oct 2022 10:25:37 +0200 (CEST)
+Date:   Thu, 27 Oct 2022 10:25:37 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        kajoljain <kjain@linux.ibm.com>, acme@kernel.org,
+        jolsa@kernel.org, namhyung@kernel.org, eranian@google.com,
+        irogers@google.com, jmario@redhat.com, leo.yan@linaro.org,
+        alisaidi@amazon.com, ak@linux.intel.com,
+        dave.hansen@linux.intel.com, hpa@zytor.com, mingo@redhat.com,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        tglx@linutronix.de, bp@alien8.de, x86@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
+        santosh.shukla@amd.com
+Subject: Re: [PATCH v3 01/15] perf/mem: Introduce
+ PERF_MEM_LVLNUM_{EXTN_MEM|IO}
+Message-ID: <Y1pAgRHpV294J0Kw@hirez.programming.kicks-ass.net>
+References: <20220928095805.596-1-ravi.bangoria@amd.com>
+ <20220928095805.596-2-ravi.bangoria@amd.com>
+ <bf4ec1cb-49a4-f5cd-8fd0-c70b287180c0@linux.ibm.com>
+ <a36ffee0-b0d5-5941-8d98-cc8e9b100a50@amd.com>
+ <88c920de-5af6-c7b0-d6a8-6c365491dd3e@linux.intel.com>
+ <f6268268-b4e9-9ed6-0453-65792644d953@amd.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|DS7PR12MB5790:EE_
-X-MS-Office365-Filtering-Correlation-Id: fd5d5188-8570-4ed9-202f-08dab7f4aec9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: K7vv5U56jBknHm59fuif6UIbYAXGgT4Sx59VKfwfa2FSp5rmrt1Luh7lURkODPe1zJHvkQ/OCFIQtnq6BkffbJtMcRoyd0R+wSNuLP7WsCjIjowJHbEOWPe+KcSojkBj/toVowkwWMZHpukcDlfnM1mBalEWz8eV1vuFrW+SN+V+3H/GnkIdxZJ1Xdlm4YtnJ+1qEYohVhp+0JegqQOBfwYKYMDjq8ttH4F9ccQLzZ3plJAcW52WcN/NXMu3qeJnmr9oqWoQ457tHnBOPZIFyZwhVPD+pdfamOpVJObg94AHz4p5/k3/tPuwsa1crPA6ji5mgPJ/3zY4EE/ThNoXKqSy6P+QWPm2+XksvkggN5DwB6OLkG3keFx7bsdtqGoifBBZI1bo+0IAISnuNt0GXdZtJuzebI6pcmeIC6jZGLnXCdTAX04QHlQN6nvTnTDo6z0584eW8A0NJV9p4NgrvJugV3vOTYw0WDa46FbJJzdPKnwoqwcGbLLNWcWP66UlRc7ITVuaYRMd/0utBm3tRhiJPLa7rjcVrZ4Kwt1phRkTG3429LcHnBPEYM1wfcE1AqRmM4eV/XsuvjcDKYHt+hnQ0TXyqC8yKIsBiKaz1n/EjojkQyp3BriWx2AIJ8W/xLk5V07UrL1mCp/u4ghpnyZGyJw1pepWArH8AQxp73vT8sf2LzUlELpt8wxN+YhxS9abz4xG/xajs4HrVzvw7zMoiml6QKyfKPmFDCYZqlSM2IdGNe29hU/ZXBsiE/wbGC/IvJjC0sdPGPUFkSELIm3vrXZ2Ucj5Tmgq0XKY3uU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(376002)(396003)(39860400002)(346002)(451199015)(83380400001)(316002)(110136005)(8936002)(6512007)(31696002)(6506007)(478600001)(38100700002)(6486002)(86362001)(66574015)(36756003)(53546011)(26005)(41300700001)(6666004)(44832011)(5660300002)(31686004)(2906002)(4326008)(8676002)(66946007)(4001150100001)(66556008)(66476007)(186003)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aTAwRGxvSDRicnh4M3pDMUgxVC95Zm8raitSdGxhd3o3UXhYMldlOEpsd2Vm?=
- =?utf-8?B?UG9uT3EwQkViZmlWMVIwZHltZ0NESkdkWjRQei9NRnUrWXlaOFRKZzNUSHQ0?=
- =?utf-8?B?MVVXU1BiTHFSSGxSYWUzM29IL2ZqbVpDRzAyY0REcWEvL2c3dkdzd0JkMjNO?=
- =?utf-8?B?S090NmsrUzhBbWs4RUFRRDZjajJCb0FhVmk5cU92RUNhSEZyMmpISkpyQXNH?=
- =?utf-8?B?Zkc4TXN1MDNpWndrVG9MOFpJd0I3ZkowVEI5SkNDN1pVYUU4QlhDRXB6NmpT?=
- =?utf-8?B?SkloSzZpTFRJN0l6bktWLzQ4a25ib2h0TVFDWWU0NVE3YlBMRGsyMXZnbDJl?=
- =?utf-8?B?MzNqM0N2NWc1cmd3RlNFOHpUYmYrSDRJOWt6UStndFNHWTUvMUJyQmlLR0Iy?=
- =?utf-8?B?Z0wyY0VYNTFBU1pEeFVhYXU1bTc5RFg3RXIwMUZwTjhvcittTUZKM0p3dnVw?=
- =?utf-8?B?ZzVGU245VGRHVGl2R3NoQk9YZUJrM1krSG0wa1V0Um9NTEVsbG5ncE5wU29W?=
- =?utf-8?B?dmJCdE1RZVVFT3hGVDRmUXFaNjZYM0p5R0FCbHp6ZzZISFIra0hVM0w3b3hQ?=
- =?utf-8?B?bjRPM09aR1U4WmZmQUE4QmxXOS9pNmlQaDRQa0dJMG1qQ2RJeEgrQWxhS29F?=
- =?utf-8?B?dXpHWjlRZjJ3U2VOUUprdDRHTndIT1M5UU1rR25TLzFhaXlKUEVkdGl2blN3?=
- =?utf-8?B?bTI4NWFGUHZMcG00OHZLRW5CbDUrckNnWlptZk5rL3VVS1Y2OGRJNGhranRs?=
- =?utf-8?B?dmpocEhTR29qaTJobS8vZTJtMjY1QkhacmFucjNVbC9VS0l0VFdMdFR5ZzZZ?=
- =?utf-8?B?WERuem1nUys0dU9zT1FacjcrNVYwMHRaTjdRNXJKSWNZZ0h1b1ZwbXNoaXVr?=
- =?utf-8?B?d0FwbUZDQXNvUDJZVjI1MGtML1NLbVlIU05lYXRHbUhRdHVxRUhTK0lEMmhT?=
- =?utf-8?B?S1A1TVNlWDRVei9qRU9MOXA2dzI0VDdrQVl4YzRhdUF6SnVYcW5RdlI2eUN3?=
- =?utf-8?B?bWtNNng5amszQ2Z0dHhoNUMvM1FLZkJPQ2hUY3ZLZkthdHBuUUNrdThja3d6?=
- =?utf-8?B?cmg4TzZuTmZTOG9pejhqMU5nY1k2dFlzcU9rWGdKNHh3UUZqUzlVMGJ5aW1V?=
- =?utf-8?B?OTJrQ3k4NUJ2R084LzJMbHJ5M3JWVDQ4WDgrbFNZU2I5UTNxZG9DWGtzcWp1?=
- =?utf-8?B?Y0MzYUQ2ZS9zNW1vR2VnNTN0bGdma1BNVGgxdlFmOXUxUkF4aUo1bTQyKytp?=
- =?utf-8?B?Z01ZRUZXei9mRlNUbUE2eWRLUzVVSVgrMHlvajRiRFRnRG83cm1jdU9vYjZ6?=
- =?utf-8?B?NGFZREpTejBVWUJOYld5SUtQZlg1Mnh1YWN6bnNzWXNkYzFjS3gxdklrVGRa?=
- =?utf-8?B?ckZXY1pBYklIdEVGai9nYmxwTytsMy9UQUsvVzRXeUdraGNyWmlWSTM5VU5S?=
- =?utf-8?B?K05GaThJYS8ydTNpUDJ3NWhEK0tEK2xTNFVobDdxODhWa29BOWFlYXd1bHNR?=
- =?utf-8?B?WkV1R1RDeC9sRkJTTGF1eG53d3F4Rm9YaHdpZkFiUTdvN1B4ZlBZKzlzZFRt?=
- =?utf-8?B?K0tuR2JSM1kra1hYbU1CYllhQzRzY2RoQXVRYWJwNGsyWDFBakZuZUwxWmJN?=
- =?utf-8?B?ZXdhUHhIR1pQSGhBQ1Q5Q2p0NXR4ZDArU1J6Lzl1azFJN1graVFveXVrbGk5?=
- =?utf-8?B?anhpNWhuRzROamIydG41QjFLSGZnaGxDeHdjSGp5aWE0YTRra3g3ZEw5ZU1z?=
- =?utf-8?B?MWhoSDhMMVRjNkpzaWQ0UWhad1pZZDJxNGk1WmxoSXcvRU5rOFg5K0VnOXNE?=
- =?utf-8?B?dTRDcWFTT2NNMWNkem9tbDZJK3RGb1dSSjZZMlpVN0JiQ052U2dxN2Z6ZVF6?=
- =?utf-8?B?eXNhRFIyRFdjcnlZQXFOdXVzZlVOUmFEZTNkRjE5eHNrQVZaUTdENzd6a0xj?=
- =?utf-8?B?b3BhRDdRcVdORHN5S0hWd0VJN09UbHFhVjhXRFNYclhYS0pYOTBCZlk5V1VI?=
- =?utf-8?B?S2ovSFVxSC9jQVJpeTV3VFgyaE50L05YY2ZZOUV2SDRMdzlLODdWTDUwVEdn?=
- =?utf-8?B?ckx5MW4rc1BJSUh0NjlDWVNsQ2t6UjJ3Z3ZzUHJJeCtCREZKemwyUXhxSzJ5?=
- =?utf-8?Q?yXE3fs1tpeTqrQ0pf0M1fezoz?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd5d5188-8570-4ed9-202f-08dab7f4aec9
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 08:24:36.0072
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HYSHjLW+/CI+R2OhyhJdSeOIWfpMKOgonwm6vihpIWGFOTBV7cnOUN5By8OY9IBu
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5790
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f6268268-b4e9-9ed6-0453-65792644d953@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-27 04:19, Christian König wrote:
-> Am 27.10.22 um 10:07 schrieb Luben Tuikov:
->> On 2022-10-27 03:01, Luben Tuikov wrote:
->>> On 2022-10-25 13:50, Luben Tuikov wrote:
->>>> Looking...
->>>>
->>>> Regards,
->>>> Luben
->>>>
->>>> On 2022-10-25 09:35, Alex Deucher wrote:
->>>>> + Luben
->>>>>
->>>>> On Tue, Oct 25, 2022 at 2:55 AM brolerliew <brolerliew@gmail.com> wrote:
->>>>>> When entity move from one rq to another, current_entity will be set to NULL
->>>>>> if it is the moving entity. This make entities close to rq head got
->>>>>> selected more frequently, especially when doing load balance between
->>>>>> multiple drm_gpu_scheduler.
->>>>>>
->>>>>> Make current_entity to next when removing from rq.
->>>>>>
->>>>>> Signed-off-by: brolerliew <brolerliew@gmail.com>
->>>>>> ---
->>>>>>   drivers/gpu/drm/scheduler/sched_main.c | 5 +++--
->>>>>>   1 file changed, 3 insertions(+), 2 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
->>>>>> index 2fab218d7082..00b22cc50f08 100644
->>>>>> --- a/drivers/gpu/drm/scheduler/sched_main.c
->>>>>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
->>>>>> @@ -168,10 +168,11 @@ void drm_sched_rq_remove_entity(struct drm_sched_rq *rq,
->>>>>>          spin_lock(&rq->lock);
->>>>>>
->>>>>>          atomic_dec(rq->sched->score);
->>>>>> -       list_del_init(&entity->list);
->>>>>>
->>>>>>          if (rq->current_entity == entity)
->>>>>> -               rq->current_entity = NULL;
->>>>>> +               rq->current_entity = list_next_entry(entity, list);
->>>>>> +
->>>>>> +       list_del_init(&entity->list);
->>>>>>
->>>>>>          if (drm_sched_policy == DRM_SCHED_POLICY_FIFO)
->>>>>>                  drm_sched_rq_remove_fifo_locked(entity);
->>>>>> --
->>>>>> 2.34.1
->>>>>>
->>> Looks good. I'll pick it up into some other changes I've in tow, and repost
->>> along with my changes, as they're somewhat related.
->> Actually, the more I look at it, the more I think that we do want to set
->> rq->current_entity to NULL in that function, in order to pick the next best entity
->> (or scheduler for that matter), the next time around. See sched_entity.c,
->> and drm_sched_rq_select_entity() where we start evaluating from the _next_
->> entity.
->>
->> So, it is best to leave it to set it to NULL, for now.
+On Sat, Oct 01, 2022 at 12:07:40PM +0530, Ravi Bangoria wrote:
+
+> From 5deb2055e2b5b0a61403f2d5f4e5a784b14a65e3 Mon Sep 17 00:00:00 2001
+> From: Ravi Bangoria <ravi.bangoria@amd.com>
+> Date: Sat, 1 Oct 2022 11:37:05 +0530
+> Subject: [PATCH] perf/mem: Rename PERF_MEM_LVLNUM_EXTN_MEM to
+>  PERF_MEM_LVLNUM_CXL
 > 
-> Apart from that this patch here could cause a crash when the entity is 
-> the last one in the list.
+> PERF_MEM_LVLNUM_EXTN_MEM was introduced to cover CXL devices but it's
+> bit ambiguous name and also not generic enough to cover cxl.cache and
+> cxl.io devices. Rename it to PERF_MEM_LVLNUM_CXL to be more specific.
 > 
-> In this case current current_entity would be set to an incorrect upcast 
-> of the head of the list.
+> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
 
-Absolutely. I saw that, but in rejecting the patch, I didn't feel the need to mention it.
+Thanks!
 
-Thanks for looking into this.
-
-Regards,
-Luben
-
+> ---
+>  arch/x86/events/amd/ibs.c       | 2 +-
+>  include/uapi/linux/perf_event.h | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+> index 3271735f0070..4cb710efbdd9 100644
+> --- a/arch/x86/events/amd/ibs.c
+> +++ b/arch/x86/events/amd/ibs.c
+> @@ -801,7 +801,7 @@ static void perf_ibs_get_mem_lvl(union ibs_op_data2 *op_data2,
+>  	/* Extension Memory */
+>  	if (ibs_caps & IBS_CAPS_ZEN4 &&
+>  	    ibs_data_src == IBS_DATA_SRC_EXT_EXT_MEM) {
+> -		data_src->mem_lvl_num = PERF_MEM_LVLNUM_EXTN_MEM;
+> +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_CXL;
+>  		if (op_data2->rmt_node) {
+>  			data_src->mem_remote = PERF_MEM_REMOTE_REMOTE;
+>  			/* IBS doesn't provide Remote socket detail */
+> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+> index 85be78e0e7f6..eb1090604d53 100644
+> --- a/include/uapi/linux/perf_event.h
+> +++ b/include/uapi/linux/perf_event.h
+> @@ -1337,7 +1337,7 @@ union perf_mem_data_src {
+>  #define PERF_MEM_LVLNUM_L3	0x03 /* L3 */
+>  #define PERF_MEM_LVLNUM_L4	0x04 /* L4 */
+>  /* 5-0x8 available */
+> -#define PERF_MEM_LVLNUM_EXTN_MEM 0x09 /* Extension memory */
+> +#define PERF_MEM_LVLNUM_CXL	0x09 /* CXL */
+>  #define PERF_MEM_LVLNUM_IO	0x0a /* I/O */
+>  #define PERF_MEM_LVLNUM_ANY_CACHE 0x0b /* Any cache */
+>  #define PERF_MEM_LVLNUM_LFB	0x0c /* LFB */
+> -- 
+> 2.31.1
