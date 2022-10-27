@@ -2,87 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7A660FB2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6FC60FB2B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235486AbiJ0PHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 11:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54236 "EHLO
+        id S235736AbiJ0PIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 11:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233473AbiJ0PHk (ORCPT
+        with ESMTP id S235132AbiJ0PIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 11:07:40 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714A03385B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:07:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666883259; x=1698419259;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hFJGyiNNIKdLDLBnmVaJ+YaAFm78hWdHX//CEF60vOk=;
-  b=KWN3pVWqUmQoIQ9WCWfrxOB1E73Bzy5vlNH+8weLEZFmhYnAfRkCSKwo
-   bprF8pdxwfI+5Khl/A2qq72K6Ko9sQ5BUB95L+OguBNVChIFvhnYemoWJ
-   qPiXGTTAGGwHGM7MjQu7vJbc79Tp0g0cz/x1O0J76+2/Mi8Lo9VEF3Lz4
-   KlIgudsLNXL9eCiBDQmfU1IN62UtIhaZZLNTPbfBn7g3LWYT04NGV+LPW
-   SacySkuQZObxOClKkfef+lsvr1foM/bTbnkggv6kKZ8GgXDwJ/o5Kqiga
-   qiQFW5K+R+S/NtKfTbZyO+ucoyNzXEqUMgeFCgz8LSqscnB2akgZ9qwzP
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="295657806"
-X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
-   d="scan'208";a="295657806"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 08:07:38 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="695840635"
-X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
-   d="scan'208";a="695840635"
-Received: from vstelter-mobl.amr.corp.intel.com (HELO [10.212.214.108]) ([10.212.214.108])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 08:07:37 -0700
-Message-ID: <94f56ba4-2ee1-581b-36b9-98d59a978354@intel.com>
-Date:   Thu, 27 Oct 2022 08:07:36 -0700
+        Thu, 27 Oct 2022 11:08:02 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671841849BD
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:07:57 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id ay12so658133qtb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:07:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IIQ4zBFEMq401B7LHco+BoD5rdpZ5Deu1R9Bn5hW7DQ=;
+        b=7Ihsof3XsnlOurWNXvNfkJmwVJTfwnhJqhSKxV+DO+L6B3Tu/kqnAq9TVYZ0Duxf3M
+         W6Td+3HG86QI9uHlG1WT4lBz7n5Hi+2LDaCPaMcqoAdOVJqEYcsJCUef4MylfmzhXlDc
+         eC2w4CBAXy8ttJZMXMHJx6fxvJ1TbafKgtkk0pxH3GiPfyJeVocRes+egtLPyPkq31RO
+         4ktx9h4emk4aPCwALiSHRAUqNAQlnxAZnBy5kOi2CF8YvliiLajdG8mGMuNWxe1k70WB
+         2r9rJWDKgl0zVfELj6C2YoJAb0AiFdpBaFpHjB4HRcfS91KHRJsaVwXrlCAlTR4W9jN+
+         FUEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IIQ4zBFEMq401B7LHco+BoD5rdpZ5Deu1R9Bn5hW7DQ=;
+        b=sr5yPMEwC1pSq5+9N0gx+1kpNT5AwIvz4x660eQ5vMhVCNDTYHgJ7On23wnZqudYU0
+         Pfv0PaWi2iBSuVVVhUsetUNuuY7gNuximMwUWFvVi/hBo2CDtVnu0dUPHDGL91U53Hv6
+         hBAfiuDiE7S2Mj3oRO7PVYT6l85Drv80N4EYigAEup22faYNuPZHjzHtU+sUnZGfPESR
+         lm61AlTJ+JithSFpqoom8p2P6lWGMAWatxKdmYwr2lZ1esDkBPMDVUgduhDA3NPiUw6O
+         wjm6NGMPGtGps64dygLMq+/4lUSH/b68Ajann8MNpMaYCrjKDGe+n9b+OPWqh4n1J4hV
+         3+WQ==
+X-Gm-Message-State: ACrzQf3bCRX7MxdtPDeuGTHrbD/I2qz/dvSXwTq1Hr9J2FLPRezViIWM
+        B0YoeIHRlhqaqkegByfacelX0g==
+X-Google-Smtp-Source: AMsMyM41MUratBwSfmaBQZiJgUc6R+Z5LNxo3ebXzmvLT/wPQbTT7UxQqNW99RHZzOGPEn1wVa1fQw==
+X-Received: by 2002:a05:622a:50e:b0:3a4:e734:409e with SMTP id l14-20020a05622a050e00b003a4e734409emr10328431qtx.497.1666883276551;
+        Thu, 27 Oct 2022 08:07:56 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::25f1])
+        by smtp.gmail.com with ESMTPSA id q68-20020a378e47000000b006b929a56a2bsm1163569qkd.3.2022.10.27.08.07.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 08:07:56 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 11:07:56 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Rik van Riel <riel@surriel.com>, Chris Mason <clm@meta.com>,
+        David Hildenbrand <david@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        James Houghton <jthoughton@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [BUG] hugetlbfs_no_page vs MADV_DONTNEED race leading to SIGBUS
+Message-ID: <Y1qezB09SaZy9pRS@cmpxchg.org>
+References: <215d225585ff3c5ea90c64e6c9bdff04ab548156.camel@surriel.com>
+ <Y1mMw2mt0my0qVqP@monkey>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 01/10] x86/Kconfig: enable X86_X2APIC by default and
- improve help text
-Content-Language: en-US
-To:     "Elliott, Robert (Servers)" <elliott@hpe.com>,
-        =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Yinghai Lu <yinghai@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20220911084711.13694-1-mat.jonczyk@o2.pl>
- <20220911084711.13694-2-mat.jonczyk@o2.pl>
- <MW5PR84MB18424DF86AE0D9B60994A38BAB339@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <MW5PR84MB18424DF86AE0D9B60994A38BAB339@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1mMw2mt0my0qVqP@monkey>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/27/22 07:45, Elliott, Robert (Servers) wrote:
->>  config X86_X2APIC
->> -	bool "Support x2apic"
->> +	bool "x2APIC interrupt controller architecture support"
->>  	depends on X86_LOCAL_APIC && X86_64 && (IRQ_REMAP ||
->> HYPERVISOR_GUEST)
->> +	default y
-> Could this option be added to
-> 	arch/x86/configs/x86_64_defconfig
+On Wed, Oct 26, 2022 at 12:38:43PM -0700, Mike Kravetz wrote:
+> On 10/25/22 16:37, Rik van Riel wrote:
+> > What are the reasonable alternatives here?
+> > 
+> > Should we see if anybody can come up with a simple solution
+> > to the problem, or would it be better to just disable
+> > MADV_DONTNEED on hugetlbfs for now?
 > 
-> so defconfig builds don't crash on current platforms?
+> Here is one thought (perhaps crazy).  Do not allow MADV_DONTNEED on
+> hugetlb mappings.  This would help with the library code passed hugetlb
+> mapping.  For the use cases where MADV_DONTNEED on hugetlb is desirable,
+> create ?MADV_DONTNEED_HUGETLB? that only operates on hugetlb mappings.
+> In this way the caller must be aware they are operating on a hugetlb
+> mapping.
 
-Sounds reasonable.  Care to send a patch?
+What could also work is implementing mlock() for hugetlb, and having
+MADV_DONTNEED respect it.
 
+That would allow libraries/general-purpose allocators to continue
+using MADV_DONTNEED without being aware of the underlying memory
+situation. Whoever is responsible for setting up the memory pool could
+just mlock() - or not, if hugetlb overcommit is enabled - and the GP
+allocator would do the right thing in both scenarios.
+
+[ Our setup code is actually already calling mlock() on the hugetlb
+  ranges. We never wanted DONTNEED to free hugetlb pages - it just
+  happened to work so far because DONTNEED wasn't implemented for
+  them. If both DONTNEED and mlock() were implemented, we'd be good. ]
+
+Johannes
