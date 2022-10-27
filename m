@@ -2,143 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE31760F5C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD3960F5CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234745AbiJ0Kxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 06:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
+        id S234833AbiJ0LAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 07:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234219AbiJ0Kxo (ORCPT
+        with ESMTP id S234862AbiJ0K7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 06:53:44 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D104814C5;
-        Thu, 27 Oct 2022 03:53:43 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 9FFB83FA55;
-        Thu, 27 Oct 2022 10:53:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1666868021; bh=zNucYYy3VjQEKj8yZ2eMFXotjkia9Wx2c/L4/Yd59Cw=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=XPMvFFGZxXBxIN71ObjM//Ar4Dh3+gqxeI0kTomnuAigiYJ33GQYyPc9RzqOz/QHI
-         XC8w9nq07gKNA48XdHIBeY2KfHEYlPa8CMp3c7kDt74Z7GhEUk6BT6SdFehuG1HcMh
-         pKD1jCyqTNg3e1ByL1uAtbgg/sMy/C5s7Yum+UEEpKGJlLa6Qi+1n2WLeHH+P1tsV5
-         RRpHtQrWhPDQ9xU03P16DNICh9PSlUWBAWhS4dkkaI1z5P/JMRWaZ3UJCPHAWUgk3m
-         9iBGeYLZXMyB4X9hgNqbPg8NmudpLOZTUBm8Y24YaQ1KMoz3x/7hoNO+/Ii+paycN8
-         MmvpObuEXERZQ==
-Message-ID: <cfe65da9-497d-b825-7332-874b6e87c087@marcan.st>
-Date:   Thu, 27 Oct 2022 19:53:35 +0900
+        Thu, 27 Oct 2022 06:59:54 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798A54F6B6
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:59:51 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9so1049846pll.7
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:59:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hlaoocS4MZnDHm38p7D1UovyrWTozjBn8G/40n9AuA8=;
+        b=QJSiT2HKg5jD6mBZnvsY7HHtyFz2Td3oi6rU4UGF3pg+NfJNR6EXeurVFyTNbTAvOE
+         UQ2fEtgLr1opfzi36d9LbmnhQYyBgVhnTJL1a48i7V0Ix9sZRbBs6LhXuUK5yo49n6Kw
+         LwNoKDb2eJkSMKjuidW182+Mi/Q9lJZTsvliKtAIBBtd4V+ACi9sW7K6EmuO93exDaB1
+         94OPyMnhz//b4ILi/eInpA3dlmaPRgkUN5IhV3jNMJN1KDAqU2I+/MkiYlfeW7wzfXJA
+         TQbl1o7Qm68LfnFMOZVA/NVp73YsFCKnvzUTl+Vf+qZhZADNCYaEe1yETSfY4UOA949p
+         iwqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hlaoocS4MZnDHm38p7D1UovyrWTozjBn8G/40n9AuA8=;
+        b=4YPPVh9cBnKXdLxUSTtiraEiDOfE6GicvlDflAX5RyDOEEzL/tviWmYIaQjxHBQOCJ
+         tB2sZi90Cm/M9TrJaCwlDbaooUS5Vwebm9RBVUf/ifo4IJz/WriCd3JxqtQjfqX3UTWP
+         viPqEJeHoFOJkvOUTyYk4JQC8jM/166IaJalXtqfpV+eOR6UCDrZqk3HAOebLJZArk+D
+         JVUYkgoGeCHqATzTN9a81H7tqwiSftFitYwcfxYa7kJlzBdCs7iLfex8ACOBlWJ/6TJ3
+         rc3TWh5kue6gJP4PlvFJtH+5au0gqgF6iU0TBwU6YJxH5/ciKuMQVvqOU8ZvLPQUxGSV
+         hVbA==
+X-Gm-Message-State: ACrzQf1nF7Vo6mwCW5T8J1qcI4Iutv++0SGBDd2W5olcuByjGG5Bqp7n
+        NOIkIAkQQox1NImIOgfuTkqqf8uU9r6jcusY2qYD3g==
+X-Google-Smtp-Source: AMsMyM6brKXTwhz+LlKZ5dmUXqSeN0EF6c7z6wBZGb9qzrSsXWlYKaBI1+6azdsMk7oe2imayfPugvSTnzc3mF/EwEQ=
+X-Received: by 2002:a17:903:246:b0:179:96b5:1ad2 with SMTP id
+ j6-20020a170903024600b0017996b51ad2mr48234592plh.37.1666868390941; Thu, 27
+ Oct 2022 03:59:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Pekka Paalanen <pekka.paalanen@collabora.com>,
-        dri-devel@lists.freedesktop.org, asahi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20221027101327.16678-1-marcan@marcan.st>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH] drm/simpledrm: Only advertise formats that are supported
-In-Reply-To: <20221027101327.16678-1-marcan@marcan.st>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20221026135445.8004-1-johan+linaro@kernel.org>
+In-Reply-To: <20221026135445.8004-1-johan+linaro@kernel.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 27 Oct 2022 12:59:14 +0200
+Message-ID: <CAPDyKFo0JJQ-vwU2Ht7OKM3REQ6ehxTWhZD4Nibpz=rWgmfM2A@mail.gmail.com>
+Subject: Re: [PATCH v2] firmware/psci: demote suspend-mode warning to info level
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/10/2022 19.13, Hector Martin wrote:
-> Until now, simpledrm unconditionally advertised all formats that can be
-> supported natively as conversions. However, we don't actually have a
-> full conversion matrix of helpers. Although the list is arguably
-> provided to userspace in precedence order, userspace can pick something
-> out-of-order (and thus break when it shouldn't), or simply only support
-> a format that is unsupported (and thus think it can work, which results
-> in the appearance of a hang as FB blits fail later on, instead of the
-> initialization error you'd expect in this case).
-> 
-> Split up the format table into separate ones for each required subset,
-> and then pick one based on the native format. Also remove the
-> native<->conversion overlap check from the helper (which doesn't make
-> sense any more, since the native format is advertised anyway and this
-> way RGB565/RGB888 can share a format table), and instead print the same
-> message in simpledrm when the native format is not one for which we have
-> conversions at all.
-> 
-> This fixes a real user regression where the ?RGB2101010 support commit
-> started advertising it unconditionally where not supported, and KWin
-> decided to start to use it over the native format, but also the fixes
-> the spurious RGB565/RGB888 formats which have been wrongly
-> unconditionally advertised since the dawn of simpledrm.
-> 
-> Note: this patch is merged because splitting it into two patches, one
-> for the helper and one for simpledrm, would regress at the midpoint
-> regardless of the order. If simpledrm is changed first, that would break
-> working conversions to RGB565/RGB888 (since those share a table that
-> does not include the native formats). If the helper is changed first, it
-> would start spuriously advertising all conversion formats when the
-> native format doesn't have any supported conversions at all.
-> 
-> Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
-> Fixes: 6ea966fca084 ("drm/simpledrm: Add [AX]RGB2101010 formats")
-> Fixes: 11e8f5fd223b ("drm: Add simpledrm driver")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+On Wed, 26 Oct 2022 at 15:57, Johan Hovold <johan+linaro@kernel.org> wrote:
+>
+> On some Qualcomm platforms, like SC8280XP, the attempt to set PC mode
+> during boot fails with PSCI_RET_DENIED and since commit 998fcd001feb
+> ("firmware/psci: Print a warning if PSCI doesn't accept PC mode") this
+> is now logged at warning level:
+>
+>         psci: failed to set PC mode: -3
+>
+> As there is nothing users can do about the firmware behaving this way,
+> demote the warning to info level and clearly mark it as a firmware bug:
+>
+>         psci: [Firmware Bug]: failed to set PC mode: -3
+>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+
+Using the info level seems like a good compromise to me! So,
+
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
+
 > ---
->  drivers/gpu/drm/drm_format_helper.c | 15 -------
->  drivers/gpu/drm/tiny/simpledrm.c    | 62 +++++++++++++++++++++++++----
->  2 files changed, 55 insertions(+), 22 deletions(-)
-> 
-
-To answer some issues that came up on IRC:
-
-Q: Why not move this logic / the tables to the helper?
-A: Because simpledrm is the only user so far, and this patch is Cc:
-stable because we have an actual regression that broke KDE. I'm going
-for the minimal patch that keeps everything that worked to this day
-working, and stops advertising things that never worked, no more, no
-less. Future refactoring can always happen later (and is probably a good
-idea when other drivers start using the helper).
-
-Q: XRGB8888 is supposed to be the only canonical format. Why not just
-drop everything but conversions to/from XRGB8888?
-A: Because that would regress things that work today, and could break
-existing userspace on some platforms. That may be a good idea, but I
-think we should fix the bugs first, and leave the discussion of whether
-we want to actually remove existing functionality for later.
-
-Q: Why not just add a conversion from XRGB2101010 to XRGB8888?
-A: Because that would only fix KDE, and would make it slower vs. not
-advertising XRGB2101010 at all (double conversions, plus kernel
-conversion can be slower). Plus, it doesn't make any sense as it only
-fills in one entry in the conversion matrix. If we wanted to actually
-fill out the conversion matrix, and thus support everything simpledrm
-has advertised to day correctly, we would need helpers for:
-
-rgb565->rgb888
-rgb888->rgb565
-rgb565->xrgb2101010
-rgb888->xrgb2101010
-xrgb2101010->rgb565
-xrgb2101010->rgb888
-xrgb2101010->xrgb8888
-
-That seems like overkill and unlikely to actually help anyone, it'd just
-give userspace more options to shoot itself in the foot with a
-sub-optimal format choice. And it's a pile of code.
-
-- Hector
+>  drivers/firmware/psci/psci.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> index e7bcfca4159f..f8fa32f0a130 100644
+> --- a/drivers/firmware/psci/psci.c
+> +++ b/drivers/firmware/psci/psci.c
+> @@ -165,7 +165,8 @@ int psci_set_osi_mode(bool enable)
+>
+>         err = invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE, suspend_mode, 0, 0);
+>         if (err < 0)
+> -               pr_warn("failed to set %s mode: %d\n", enable ? "OSI" : "PC", err);
+> +               pr_info(FW_BUG "failed to set %s mode: %d\n",
+> +                               enable ? "OSI" : "PC", err);
+>         return psci_to_linux_errno(err);
+>  }
+>
+> --
+> 2.37.3
+>
