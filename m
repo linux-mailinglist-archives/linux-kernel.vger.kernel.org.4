@@ -2,90 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E8E60EDAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 03:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBB560EDB0
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 03:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233301AbiJ0B60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 21:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
+        id S233506AbiJ0B64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 21:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232906AbiJ0B6X (ORCPT
+        with ESMTP id S233244AbiJ0B6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 21:58:23 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB49FC696C;
-        Wed, 26 Oct 2022 18:58:22 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id d6so32633878lfs.10;
-        Wed, 26 Oct 2022 18:58:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YUBvSu1EPKGGj8YAJE8gLQSl9rqE7fM4DdBH8Q7Bw7Q=;
-        b=pvME4I84cn1XJQ5p6l7SJJEf0uPYiW83t0IVH3kbWOaz+gAexqa0X2WCk1mZ5oNHTU
-         cyO5/zGi7j5s1E6md6jKVkpQRjibwxztTjUwJsgmjyPSeLAa/IphID+dr18V+KbR7ykT
-         JvWKxHSktlxo438oZAGWcvskgMpHH6LsTZJq7sHBzI1xMQ1SZSkrLKamHTdE0oj842yW
-         nRZW+ZZwquawCZ6fVJf/UJSuFaJJ36q65HXr3DZ9YumGFM43dHvmbB7V7SWmNiwD/dtj
-         E4kwKXHH51zCqQcX+7di78JU2eB+P7ijAP/uXdvd/MoA27jukTaQaCU563bvyVajF04R
-         jwEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YUBvSu1EPKGGj8YAJE8gLQSl9rqE7fM4DdBH8Q7Bw7Q=;
-        b=V3PJEtRbcyoYioGbT0YiABA9S0/WRzfRy2OkUGKE8hl9vyG5TdivQGSAOcojvJcjv1
-         k9o+8pW8LrWj8pQNGwgvbjoTRvDrQyJdT7BXHUEUBj90mkqfmFekHzCRtk25x8BEYpwr
-         YkHCh493nT/G7Mjj+kNV+UKulkvxnvV6vz943u0iSYgm9bpbypNsYT2VKylN4mj5eXqn
-         l4REExaJa7gQnGd2u4Jw8EWqnvamk/NAHIBH+CWdwRqR6ytaORAdWfxY1WBI7NL1ez4l
-         1l68LBvOClXZFsNXFxPwmP5azoe109haKtDlcGhbulpRAosW3Swc7Dx7g11maM+V7uMl
-         G87Q==
-X-Gm-Message-State: ACrzQf3eThwn+NbSV7/DoUYiXKLZvJL6cxk7bBSxjJabnuX6iyEFazru
-        Qzof7fYUGcrZsEj7RGquAq9iV+cXFuve6dcovXYeqgpX
-X-Google-Smtp-Source: AMsMyM6MFLtSG/ts72VF60PMQt/hu/SbxM21N/wzV+hea1yL8LYpVM7gYMOxEJ6T8V4MaKVqB0HaLr0jHkVmWbfr85Y=
-X-Received: by 2002:a19:660a:0:b0:4aa:9a70:bcca with SMTP id
- a10-20020a19660a000000b004aa9a70bccamr7654347lfc.520.1666835901152; Wed, 26
- Oct 2022 18:58:21 -0700 (PDT)
+        Wed, 26 Oct 2022 21:58:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB689C696C;
+        Wed, 26 Oct 2022 18:58:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B63CB8248E;
+        Thu, 27 Oct 2022 01:58:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D448C433D6;
+        Thu, 27 Oct 2022 01:58:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666835930;
+        bh=7XhdauFWmszF7qH8F0omcebe1A7UMyRAwOUOW2AS3dc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CED3jK+ZPtWwB7wTRjdVm/OSrbwnVVIOeWLJ+vD+0MMV2wyvLtq8gRgHeE+CA0QB0
+         bNsdyqlGcLYyL6lbqdwC8YWx6yvjrFNzxpofNIM9t7PuMg7IKiGa6OFkqdfEG0AMFm
+         oSZ98AQjfIjO+nijtAi2DQHwAWXkAR41NQrZnGer0s5l3256WvxzGeXj1EhsqhZK9X
+         uqfkxxLNWm7C22fN0m926Tol7qdGDrS4D7dGkYzBK+OEml/7g6Ta+/swo9Dch/1U2M
+         Yk0O+0w7mnIU8fnXNy6k2oYIrZXpBbwK50/srC5yzL7fC5uD6d85t39RfDOdUsmKiu
+         BYun4RlHCjPxA==
+Date:   Wed, 26 Oct 2022 20:58:46 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Johan Hovold <johan@kernel.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 09/12] drm/msm/dp: HPD handling relates to next_bridge
+Message-ID: <20221027015846.5gsmlinx4iwyjvui@builder.lan>
+References: <20221026032624.30871-1-quic_bjorande@quicinc.com>
+ <20221026032624.30871-10-quic_bjorande@quicinc.com>
+ <5974CB5A-699F-4768-9DAA-FAE507CFAD53@linaro.org>
 MIME-Version: 1.0
-References: <1665725448-31439-1-git-send-email-zhaoyang.huang@unisoc.com>
- <Y0lSChlclGPkwTeA@casper.infradead.org> <CAGWkznG=_A-3A8JCJEoWXVcx+LUNH=gvXjLpZZs0cRX4dhUJfQ@mail.gmail.com>
- <Y017BeC64GDb3Kg7@casper.infradead.org> <CAGWkznEdtGPPZkHrq6Y_+XLL37w12aC8XN8R_Q-vhq48rFhkSA@mail.gmail.com>
- <Y04Y3RNq6D2T9rVw@casper.infradead.org> <20221018223042.GJ2703033@dread.disaster.area>
- <20221019011636.GM2703033@dread.disaster.area> <20221019044734.GN2703033@dread.disaster.area>
- <CAGWkznEGMg293S7jOmZ7G-UhEBg6rQZhTd6ffhjoDgoFGvhFNw@mail.gmail.com> <Y1mPPq6mc/C7pNhM@casper.infradead.org>
-In-Reply-To: <Y1mPPq6mc/C7pNhM@casper.infradead.org>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Thu, 27 Oct 2022 09:57:52 +0800
-Message-ID: <CAGWkznFknrZZok96EvR72UUZq3Tjb-tKvezU4GwK4D2uc0K+kA@mail.gmail.com>
-Subject: Re: [RFC PATCH] mm: move xa forward when run across zombie page
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        steve.kang@unisoc.com, baocong.liu@unisoc.com,
-        linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5974CB5A-699F-4768-9DAA-FAE507CFAD53@linaro.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 3:49 AM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Wed, Oct 19, 2022 at 01:48:37PM +0800, Zhaoyang Huang wrote:
-> > hint from my side. The original problem I raised is under v5.15 where
-> > there is no folio yet.
->
-> I really wish you'd stop dropping hints and give all of the information
-> you have so I can try to figure this out withouot sending individual
-> emails for every little piece.
->
-> Do you have CONFIG_READ_ONLY_THP_FOR_FS=y in your .config?
-No, it is not configured. f2fs only use 4KB pages and blocks
->
+On Wed, Oct 26, 2022 at 09:08:49AM +0300, Dmitry Baryshkov wrote:
+> 
+> 
+> On 26 October 2022 06:26:21 EEST, Bjorn Andersson <quic_bjorande@quicinc.com> wrote:
+> >From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> >
+> >The DisplayPort controller's internal HPD interrupt handling is used for
+> >cases where the HPD signal is connected to a GPIO which is pinmuxed into
+> >the DisplayPort controller.
+> >
+> >Most of the logic for enabling and disabling the HPD-related interrupts
+> >is conditioned on the presence of an EDP panel, but more generically
+> >designs that has a downstream drm_bridge (next_bridge) could use this to
+> >handle the HPD interrupts, instead of the internal mechanism.
+> >
+> >So replace the current is_edp-based guards with a check for the presence
+> >of next_bridge.
+> 
+> This does not sound correct. The next bridge might be a dummy bridge,
+> not supporting the hpd.
+
+I only considered checking for the Chrome case, where the output isn't
+modelled and we have to rely on the internal HPD logic. Checking that
+next_bridge is present and will deliver us hpd events sounds somewhat
+reasonable.
+
+But if I understand the code correctly, panel-edp isn't handing us hpd
+events - and we still don't want the internal HPD logic to trigger. So I
+presume I would need to check that this isn't a EDP controller and that
+we're going to get external HPD events?
+
+If so, clean you please give me some pointer on how to check if
+next_bridge will provide us with hpd signaling or not?
+
+
+PS. Which dummy bridge do you have in mind?
+
+> Please change this to use the enable_hpd()/disable_hpd() callbacks.
+> This way the drm_bridge_connector framework will make sure to enable
+> hpd handling for the bridge that is actually supposed to generate hpd
+> events.
+> 
+
+The drm_bridge_connector_init() call in dp_drm_connector_init() does
+this for us already.
+
+Regards,
+Bjorn
+
+> 
+> >
+> >Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> >Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> >---
+> >
+> >Changes since v2:
+> >- None
+> 
+> 
+> -- 
+> With best wishes
+> Dmitry
