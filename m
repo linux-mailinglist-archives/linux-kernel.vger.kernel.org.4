@@ -2,181 +2,496 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033F061028D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1FB610290
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236907AbiJ0UTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 16:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
+        id S236921AbiJ0UTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 16:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236919AbiJ0USz (ORCPT
+        with ESMTP id S236902AbiJ0UTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 16:18:55 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911428BBBA
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:18:54 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id q9so8006077ejd.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:18:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hTysIpFYJUBcMNr4EXsnhkk3sI9WXgWzp1PfMF4nyjI=;
-        b=gXA3qq29nbOOdmaipimOP8hH3HbXGON2sEJhSqFqHOP2UR3GYqBX0PT0iPyjO/vQFb
-         VKzPYAa339CnKE/c3mVCI8ZOQBz+roooGBnWcL8Vcl+cdm6xu63GJEIzefCaJnWQ7/hO
-         zEVu/lUM8dWeLcFATuPzZJD39xQD94u7DKENUy7MWKUooNuavM2O+WkOlLNKSF4p9Ew2
-         c2vyByEoxPhPfVogBFaQ3Gz+dBNXVmCWrdA3KA/On71JksD89UiPFjUurunCCdKM0W34
-         DXS5soPr/XR6KFTQMj9ZVxH7Gh9fVsfQmLUZlvNjoXoSTvpVRl0uRRQHF7XKsT2jD6Ja
-         dTPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hTysIpFYJUBcMNr4EXsnhkk3sI9WXgWzp1PfMF4nyjI=;
-        b=wi6+HyxgHfIFVlfO2ed1oURf/bXJt7f/IuTD5uZWa1juX4eRm5U434sqY91M+ogBiO
-         OggK4c5wrbV0csjDs3BSjdh8QVnc6o12AD12bN4vTQbr2Vr1q3mDzIU4oSxSFd1o94WE
-         BhTbJ0wSEzm4MwtKaKvZX0dVBsIVsH+/qg2IOnZKBxl3nPfFX8B4/Tiueq0Cs+0TQHH4
-         PAwa8BG4HpZUmUzpxw2cisis5Rfz7uEjxiOCs2Q3k5WvFF8JaV6ZipKgOU3uJFbEitAG
-         SqmbsJAxYhC+xXP+I9+WEsPcZl4SYv11lXlzNXbJRqXUYFvzSBHIGNOw0oNBqetpx6nO
-         7xiA==
-X-Gm-Message-State: ACrzQf3KCjnqjZ5Nso8c5v9g5OiZ+9BRjn3XtpsPPtlMI6dvxSXIYJJo
-        mDY5NqOScj1MNF3wOm4zyZ4StM2tijaK3RmUs2D6yGREM2qchA==
-X-Google-Smtp-Source: AMsMyM4LuHYwu1QXak/PczA7sZ7KKhhZa+59ickhkj3ZFoyjGOI3bvjOa7qThDjnVu4ebZBi3e8SqMMhRiByT32DZfw=
-X-Received: by 2002:a17:907:6d84:b0:78d:f2b0:14c8 with SMTP id
- sb4-20020a1709076d8400b0078df2b014c8mr42793569ejc.749.1666901933009; Thu, 27
- Oct 2022 13:18:53 -0700 (PDT)
+        Thu, 27 Oct 2022 16:19:35 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16057EAF;
+        Thu, 27 Oct 2022 13:19:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B728ACE264D;
+        Thu, 27 Oct 2022 20:19:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CF06C433C1;
+        Thu, 27 Oct 2022 20:19:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666901962;
+        bh=2fHzLHju2IVVdLWhO6yxdcHHSpVSQQY/5AYUPzGDacE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HYn6+d+PBGBnxo8vg8Ctk2REyKJSUpe9JKo0KgpyMNNlAi3KhtiDF6tQgw3b+njY7
+         Gxge0vlEHXO5V3HsRWIhSuSpA4ysZqGAfq9/6lA1dmm54FmZTVR8yRtFEINWJ7IAoe
+         HokSRKHiRiEw2H0OnO0izDxT3MSdVrPBeJKdaysxMPbT4Y+mpMpsUQ3+bhP3ezJLUT
+         GFolbDvqZBsekntiiGqMiyqU4gL7G3oZsQFQmXUA9KdR/b2JAPnSnBMhnY+ON3xXrO
+         UXtT32E0/aYAcZZSutE190K+os/ZGACHqMVlFs6g+5CqjrShXFGTzllrCfGblPO21P
+         QsTA7E3IezPFA==
+Date:   Thu, 27 Oct 2022 15:19:19 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v2 3/6] zd1201: Avoid clashing function prototypes
+Message-ID: <973dea1fc38ee4df0a6ff6d07b3a3966be781316.1666894751.git.gustavoars@kernel.org>
+References: <cover.1666894751.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-References: <20220930170058.2645213-1-tzukui@google.com> <5be617ad-0652-642f-aff8-7b7734f33973@redhat.com>
-In-Reply-To: <5be617ad-0652-642f-aff8-7b7734f33973@redhat.com>
-From:   Ryan Huang <tzukui@google.com>
-Date:   Thu, 27 Oct 2022 13:18:41 -0700
-Message-ID: <CA+Jga0JauDYSwwL0dTTVkUyXrWQo=H2LAPwgF7yprNKJvZY5rA@mail.gmail.com>
-Subject: Re: [PATCH] lockdep: Allow tuning tracing keys constant.
-To:     Waiman Long <longman@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1666894751.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for the late reply.
+When built with Control Flow Integrity, function prototypes between
+caller and function declaration must match. These mismatches are visible
+at compile time with the new -Wcast-function-type-strict in Clang[1].
 
-Our use case is we will create workqueue for each ptr in one device abc
-(Rename to abc here without leaking any information)
+Fix a total of 30 warnings like these:
 
-  ptr->wq = alloc_workqueue("abc_x_%d_y_%d_ptr_%d", WQ_HIGHPRI, 1, x, y, ptr);
+../drivers/net/wireless/zydas/zd1201.c:1560:2: warning: cast from 'int (*)(struct net_device *, struct iw_request_info *, struct iw_freq *, char *)' to 'iw_handler' (aka 'int (*)(struct net_device *, struct iw_request_info *, union iwreq_data *, char *)') converts to incompatible function type [-Wcast-function-type-strict]
+        (iw_handler) zd1201_set_freq,           /* SIOCSIWFREQ */
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-where x is 0~7, y is 0~127, ptr is 0~4, and we have a maximum of 8 devices.
-So there is a maximum 8x128x5x8=40960 workqueue.
-I found the lockdep key is filled with
+The zd1201 Wireless Extension handler callbacks (iw_handler) use a
+union for the data argument. Actually use the union and perform explicit
+member selection in the function body instead of having a function
+prototype mismatch.There are no resulting binary differences
+before/after changes.
 
-  register_lock_class: nr_lock_classes=2498, name=_rs.lock
-  register_lock_class: nr_lock_classes=2499, name=semaphore->lock
-  register_lock_class: nr_lock_classes=2500,
-name=(wq_completion)abc_x_0_y_0_ptr_1
-  register_lock_class: nr_lock_classes=2501,
-name=(work_completion)(&wp->write_work)
-  register_lock_class: nr_lock_classes=2502,
-name=(wq_completion)abc_x_0_y_0_ptr_2
-  register_lock_class: nr_lock_classes=2503,
-name=(wq_completion)abc_x_0_y_0_ptr_3
-  ...
-  register_lock_class: nr_lock_classes=8189,
-name=(wq_completion)abc_x_0_y_110_ptr_2
-  register_lock_class: nr_lock_classes=8190,
-name=(wq_completion)abc_x_0_y_110_ptr_3
-  register_lock_class: nr_lock_classes=8191,
-name=(wq_completion)abc_x_0_y_110_ptr_4
-  register_lock_class: nr_lock_classes=8192,
-name=(wq_completion)abc_x_0_y_110_ptr_5
+Link: https://github.com/KSPP/linux/issues/233
+Link: https://reviews.llvm.org/D134831 [1]
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+Changes in v2:
+ - Revert changes in zd1201_private_handler[].
 
-It seems when we queue_work on one workqueue, it will occupy one lock
-class. That's why 8k is not enough for our use case.
+v1:
+ - Link: https://lore.kernel.org/linux-hardening/b16526a7a35638224990d265db21c8b450b67545.1666038048.git.gustavoars@kernel.org/
 
-Regarding my patch, I just move the hard code value into config.
-Increasing the value just increase one byte for the held_lock structure,
-and 48 bytes for task_struct structure (around 6 u64 variables) in DEBUG
-mode.
+ drivers/net/wireless/zydas/zd1201.c | 162 ++++++++++++++--------------
+ 1 file changed, 83 insertions(+), 79 deletions(-)
 
-Let me know if you have a better way!
+diff --git a/drivers/net/wireless/zydas/zd1201.c b/drivers/net/wireless/zydas/zd1201.c
+index 82bc0d44212e..f761ebe7acfc 100644
+--- a/drivers/net/wireless/zydas/zd1201.c
++++ b/drivers/net/wireless/zydas/zd1201.c
+@@ -886,7 +886,7 @@ static void zd1201_set_multicast(struct net_device *dev)
+ }
+ 
+ static int zd1201_config_commit(struct net_device *dev, 
+-    struct iw_request_info *info, struct iw_point *data, char *essid)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *essid)
+ {
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 
+@@ -894,15 +894,16 @@ static int zd1201_config_commit(struct net_device *dev,
+ }
+ 
+ static int zd1201_get_name(struct net_device *dev,
+-    struct iw_request_info *info, char *name, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
+-	strcpy(name, "IEEE 802.11b");
++	strcpy(wrqu->name, "IEEE 802.11b");
+ 	return 0;
+ }
+ 
+ static int zd1201_set_freq(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_freq *freq, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_freq *freq = &wrqu->freq;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	short channel = 0;
+ 	int err;
+@@ -922,8 +923,9 @@ static int zd1201_set_freq(struct net_device *dev,
+ }
+ 
+ static int zd1201_get_freq(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_freq *freq, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_freq *freq = &wrqu->freq;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	short channel;
+ 	int err;
+@@ -938,8 +940,9 @@ static int zd1201_get_freq(struct net_device *dev,
+ }
+ 
+ static int zd1201_set_mode(struct net_device *dev,
+-    struct iw_request_info *info, __u32 *mode, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
++	__u32 *mode = &wrqu->mode;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	short porttype, monitor = 0;
+ 	unsigned char buffer[IW_ESSID_MAX_SIZE+2];
+@@ -1001,8 +1004,9 @@ static int zd1201_set_mode(struct net_device *dev,
+ }
+ 
+ static int zd1201_get_mode(struct net_device *dev,
+-    struct iw_request_info *info, __u32 *mode, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
++	__u32 *mode = &wrqu->mode;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	short porttype;
+ 	int err;
+@@ -1038,8 +1042,9 @@ static int zd1201_get_mode(struct net_device *dev,
+ }
+ 
+ static int zd1201_get_range(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_point *wrq, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_point *wrq = &wrqu->data;
+ 	struct iw_range *range = (struct iw_range *)extra;
+ 
+ 	wrq->length = sizeof(struct iw_range);
+@@ -1077,8 +1082,9 @@ static int zd1201_get_range(struct net_device *dev,
+  *	the stats after asking the bssid.
+  */
+ static int zd1201_get_wap(struct net_device *dev,
+-    struct iw_request_info *info, struct sockaddr *ap_addr, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
++	struct sockaddr *ap_addr = &wrqu->ap_addr;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	unsigned char buffer[6];
+ 
+@@ -1098,15 +1104,16 @@ static int zd1201_get_wap(struct net_device *dev,
+ }
+ 
+ static int zd1201_set_scan(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_point *srq, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
+ 	/* We do everything in get_scan */
+ 	return 0;
+ }
+ 
+ static int zd1201_get_scan(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_point *srq, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_point *srq = &wrqu->data;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	int err, i, j, enabled_save;
+ 	struct iw_event iwe;
+@@ -1197,8 +1204,9 @@ static int zd1201_get_scan(struct net_device *dev,
+ }
+ 
+ static int zd1201_set_essid(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_point *data, char *essid)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *essid)
+ {
++	struct iw_point *data = &wrqu->data;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 
+ 	if (data->length > IW_ESSID_MAX_SIZE)
+@@ -1212,8 +1220,9 @@ static int zd1201_set_essid(struct net_device *dev,
+ }
+ 
+ static int zd1201_get_essid(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_point *data, char *essid)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *essid)
+ {
++	struct iw_point *data = &wrqu->data;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 
+ 	memcpy(essid, zd->essid, zd->essidlen);
+@@ -1224,8 +1233,9 @@ static int zd1201_get_essid(struct net_device *dev,
+ }
+ 
+ static int zd1201_get_nick(struct net_device *dev, struct iw_request_info *info,
+-    struct iw_point *data, char *nick)
++	union iwreq_data *wrqu, char *nick)
+ {
++	struct iw_point *data = &wrqu->data;
+ 	strcpy(nick, "zd1201");
+ 	data->flags = 1;
+ 	data->length = strlen(nick);
+@@ -1233,8 +1243,9 @@ static int zd1201_get_nick(struct net_device *dev, struct iw_request_info *info,
+ }
+ 
+ static int zd1201_set_rate(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_param *rrq, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *rrq = &wrqu->bitrate;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	short rate;
+ 	int err;
+@@ -1266,8 +1277,9 @@ static int zd1201_set_rate(struct net_device *dev,
+ }
+ 
+ static int zd1201_get_rate(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_param *rrq, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *rrq = &wrqu->bitrate;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	short rate;
+ 	int err;
+@@ -1299,8 +1311,9 @@ static int zd1201_get_rate(struct net_device *dev,
+ }
+ 
+ static int zd1201_set_rts(struct net_device *dev, struct iw_request_info *info,
+-    struct iw_param *rts, char *extra)
++	union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *rts = &wrqu->rts;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	int err;
+ 	short val = rts->value;
+@@ -1319,8 +1332,9 @@ static int zd1201_set_rts(struct net_device *dev, struct iw_request_info *info,
+ }
+ 
+ static int zd1201_get_rts(struct net_device *dev, struct iw_request_info *info,
+-    struct iw_param *rts, char *extra)
++	union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *rts = &wrqu->rts;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	short rtst;
+ 	int err;
+@@ -1336,8 +1350,9 @@ static int zd1201_get_rts(struct net_device *dev, struct iw_request_info *info,
+ }
+ 
+ static int zd1201_set_frag(struct net_device *dev, struct iw_request_info *info,
+-    struct iw_param *frag, char *extra)
++	union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *frag = &wrqu->frag;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	int err;
+ 	short val = frag->value;
+@@ -1357,8 +1372,9 @@ static int zd1201_set_frag(struct net_device *dev, struct iw_request_info *info,
+ }
+ 
+ static int zd1201_get_frag(struct net_device *dev, struct iw_request_info *info,
+-    struct iw_param *frag, char *extra)
++	union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *frag = &wrqu->frag;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	short fragt;
+ 	int err;
+@@ -1374,20 +1390,21 @@ static int zd1201_get_frag(struct net_device *dev, struct iw_request_info *info,
+ }
+ 
+ static int zd1201_set_retry(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_param *rrq, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
+ 	return 0;
+ }
+ 
+ static int zd1201_get_retry(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_param *rrq, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
+ 	return 0;
+ }
+ 
+ static int zd1201_set_encode(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_point *erq, char *key)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *key)
+ {
++	struct iw_point *erq = &wrqu->encoding;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	short i;
+ 	int err, rid;
+@@ -1443,8 +1460,9 @@ static int zd1201_set_encode(struct net_device *dev,
+ }
+ 
+ static int zd1201_get_encode(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_point *erq, char *key)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *key)
+ {
++	struct iw_point *erq = &wrqu->encoding;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	short i;
+ 	int err;
+@@ -1476,8 +1494,9 @@ static int zd1201_get_encode(struct net_device *dev,
+ }
+ 
+ static int zd1201_set_power(struct net_device *dev, 
+-    struct iw_request_info *info, struct iw_param *vwrq, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *vwrq = &wrqu->power;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	short enabled, duration, level;
+ 	int err;
+@@ -1515,8 +1534,9 @@ static int zd1201_set_power(struct net_device *dev,
+ }
+ 
+ static int zd1201_get_power(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_param *vwrq, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *vwrq = &wrqu->power;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	short enabled, level, duration;
+ 	int err;
+@@ -1553,57 +1573,37 @@ static int zd1201_get_power(struct net_device *dev,
+ 
+ static const iw_handler zd1201_iw_handler[] =
+ {
+-	(iw_handler) zd1201_config_commit,	/* SIOCSIWCOMMIT */
+-	(iw_handler) zd1201_get_name,    	/* SIOCGIWNAME */
+-	(iw_handler) NULL,			/* SIOCSIWNWID */
+-	(iw_handler) NULL,			/* SIOCGIWNWID */
+-	(iw_handler) zd1201_set_freq,		/* SIOCSIWFREQ */
+-	(iw_handler) zd1201_get_freq,		/* SIOCGIWFREQ */
+-	(iw_handler) zd1201_set_mode,		/* SIOCSIWMODE */
+-	(iw_handler) zd1201_get_mode,		/* SIOCGIWMODE */
+-	(iw_handler) NULL,                  	/* SIOCSIWSENS */
+-	(iw_handler) NULL,           		/* SIOCGIWSENS */
+-	(iw_handler) NULL,			/* SIOCSIWRANGE */
+-	(iw_handler) zd1201_get_range,           /* SIOCGIWRANGE */
+-	(iw_handler) NULL,			/* SIOCSIWPRIV */
+-	(iw_handler) NULL,			/* SIOCGIWPRIV */
+-	(iw_handler) NULL,			/* SIOCSIWSTATS */
+-	(iw_handler) NULL,			/* SIOCGIWSTATS */
+-	(iw_handler) NULL,			/* SIOCSIWSPY */
+-	(iw_handler) NULL,			/* SIOCGIWSPY */
+-	(iw_handler) NULL,			/* -- hole -- */
+-	(iw_handler) NULL,			/* -- hole -- */
+-	(iw_handler) NULL/*zd1201_set_wap*/,		/* SIOCSIWAP */
+-	(iw_handler) zd1201_get_wap,		/* SIOCGIWAP */
+-	(iw_handler) NULL,			/* -- hole -- */
+-	(iw_handler) NULL,       		/* SIOCGIWAPLIST */
+-	(iw_handler) zd1201_set_scan,		/* SIOCSIWSCAN */
+-	(iw_handler) zd1201_get_scan,		/* SIOCGIWSCAN */
+-	(iw_handler) zd1201_set_essid,		/* SIOCSIWESSID */
+-	(iw_handler) zd1201_get_essid,		/* SIOCGIWESSID */
+-	(iw_handler) NULL,         		/* SIOCSIWNICKN */
+-	(iw_handler) zd1201_get_nick, 		/* SIOCGIWNICKN */
+-	(iw_handler) NULL,			/* -- hole -- */
+-	(iw_handler) NULL,			/* -- hole -- */
+-	(iw_handler) zd1201_set_rate,		/* SIOCSIWRATE */
+-	(iw_handler) zd1201_get_rate,		/* SIOCGIWRATE */
+-	(iw_handler) zd1201_set_rts,		/* SIOCSIWRTS */
+-	(iw_handler) zd1201_get_rts,		/* SIOCGIWRTS */
+-	(iw_handler) zd1201_set_frag,		/* SIOCSIWFRAG */
+-	(iw_handler) zd1201_get_frag,		/* SIOCGIWFRAG */
+-	(iw_handler) NULL,         		/* SIOCSIWTXPOW */
+-	(iw_handler) NULL,          		/* SIOCGIWTXPOW */
+-	(iw_handler) zd1201_set_retry,		/* SIOCSIWRETRY */
+-	(iw_handler) zd1201_get_retry,		/* SIOCGIWRETRY */
+-	(iw_handler) zd1201_set_encode,		/* SIOCSIWENCODE */
+-	(iw_handler) zd1201_get_encode,		/* SIOCGIWENCODE */
+-	(iw_handler) zd1201_set_power,		/* SIOCSIWPOWER */
+-	(iw_handler) zd1201_get_power,		/* SIOCGIWPOWER */
++	IW_HANDLER(SIOCSIWCOMMIT,	zd1201_config_commit),
++	IW_HANDLER(SIOCGIWNAME,		zd1201_get_name),
++	IW_HANDLER(SIOCSIWFREQ,		zd1201_set_freq),
++	IW_HANDLER(SIOCGIWFREQ,		zd1201_get_freq),
++	IW_HANDLER(SIOCSIWMODE,		zd1201_set_mode),
++	IW_HANDLER(SIOCGIWMODE,		zd1201_get_mode),
++	IW_HANDLER(SIOCGIWRANGE,	zd1201_get_range),
++	IW_HANDLER(SIOCGIWAP,		zd1201_get_wap),
++	IW_HANDLER(SIOCSIWSCAN,		zd1201_set_scan),
++	IW_HANDLER(SIOCGIWSCAN,		zd1201_get_scan),
++	IW_HANDLER(SIOCSIWESSID,	zd1201_set_essid),
++	IW_HANDLER(SIOCGIWESSID,	zd1201_get_essid),
++	IW_HANDLER(SIOCGIWNICKN,	zd1201_get_nick),
++	IW_HANDLER(SIOCSIWRATE,		zd1201_set_rate),
++	IW_HANDLER(SIOCGIWRATE,		zd1201_get_rate),
++	IW_HANDLER(SIOCSIWRTS,		zd1201_set_rts),
++	IW_HANDLER(SIOCGIWRTS,		zd1201_get_rts),
++	IW_HANDLER(SIOCSIWFRAG,		zd1201_set_frag),
++	IW_HANDLER(SIOCGIWFRAG,		zd1201_get_frag),
++	IW_HANDLER(SIOCSIWRETRY,	zd1201_set_retry),
++	IW_HANDLER(SIOCGIWRETRY,	zd1201_get_retry),
++	IW_HANDLER(SIOCSIWENCODE,	zd1201_set_encode),
++	IW_HANDLER(SIOCGIWENCODE,	zd1201_get_encode),
++	IW_HANDLER(SIOCSIWPOWER,	zd1201_set_power),
++	IW_HANDLER(SIOCGIWPOWER,	zd1201_get_power),
+ };
+ 
+ static int zd1201_set_hostauth(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_param *rrq, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *rrq = &wrqu->param;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 
+ 	if (!zd->ap)
+@@ -1613,8 +1613,9 @@ static int zd1201_set_hostauth(struct net_device *dev,
+ }
+ 
+ static int zd1201_get_hostauth(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_param *rrq, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *rrq = &wrqu->param;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	short hostauth;
+ 	int err;
+@@ -1632,8 +1633,9 @@ static int zd1201_get_hostauth(struct net_device *dev,
+ }
+ 
+ static int zd1201_auth_sta(struct net_device *dev,
+-    struct iw_request_info *info, struct sockaddr *sta, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
++	struct sockaddr *sta = &wrqu->ap_addr;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	unsigned char buffer[10];
+ 
+@@ -1648,8 +1650,9 @@ static int zd1201_auth_sta(struct net_device *dev,
+ }
+ 
+ static int zd1201_set_maxassoc(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_param *rrq, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *rrq = &wrqu->param;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 
+ 	if (!zd->ap)
+@@ -1659,8 +1662,9 @@ static int zd1201_set_maxassoc(struct net_device *dev,
+ }
+ 
+ static int zd1201_get_maxassoc(struct net_device *dev,
+-    struct iw_request_info *info, struct iw_param *rrq, char *extra)
++	struct iw_request_info *info, union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *rrq = &wrqu->param;
+ 	struct zd1201 *zd = netdev_priv(dev);
+ 	short maxassoc;
+ 	int err;
+@@ -1703,8 +1707,8 @@ static const struct iw_handler_def zd1201_iw_handlers = {
+ 	.num_standard 		= ARRAY_SIZE(zd1201_iw_handler),
+ 	.num_private 		= ARRAY_SIZE(zd1201_private_handler),
+ 	.num_private_args 	= ARRAY_SIZE(zd1201_private_args),
+-	.standard 		= (iw_handler *)zd1201_iw_handler,
+-	.private 		= (iw_handler *)zd1201_private_handler,
++	.standard		= zd1201_iw_handler,
++	.private		= zd1201_private_handler,
+ 	.private_args 		= (struct iw_priv_args *) zd1201_private_args,
+ 	.get_wireless_stats	= zd1201_get_wireless_stats,
+ };
+-- 
+2.34.1
 
-Thanks
-Ryan
-
-
-On Fri, Sep 30, 2022 at 10:34 AM Waiman Long <longman@redhat.com> wrote:
->
->
-> On 9/30/22 13:00, Ryan Huang wrote:
-> > Tetsuo Handa made a change for tuning lockdep tracing capacity constants
-> > [1]. He created following tracing config constants:
-> >    - LOCKDEP_BITS
-> >    - LOCKDEP_CHAINS_BITS
-> >    - LOCKDEP_STACK_TRACE_BITS
-> > However there is a missing one for LOCKDEP_KEYS_BITS. We can see this is
-> > also hitting the upper limits in [2].
-> >
-> > [1] https://github.com/torvalds/linux/commit/5dc33592e95534dc8455ce3e9baaaf3dae0fff82
-> > [2] https://syzkaller.appspot.com/bug?id=df466e1151a7e45dd880d8c7033f1ad48acebfb4
-> >
-> > Fixes: 5dc33592e955 ("lockdep: Allow tuning tracing capacity constants.")
-> > Signed-off-by: Ryan Huang <tzukui@google.com>
-> > ---
-> >   include/linux/lockdep.h | 2 +-
-> >   lib/Kconfig.debug       | 8 ++++++++
-> >   2 files changed, 9 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-> > index 1f1099dac3f05..3bb1740296559 100644
-> > --- a/include/linux/lockdep.h
-> > +++ b/include/linux/lockdep.h
-> > @@ -82,7 +82,7 @@ struct lock_chain {
-> >       u64                             chain_key;
-> >   };
-> >
-> > -#define MAX_LOCKDEP_KEYS_BITS                13
-> > +#define MAX_LOCKDEP_KEYS_BITS                CONFIG_LOCKDEP_KEYS_BITS
-> >   #define MAX_LOCKDEP_KEYS            (1UL << MAX_LOCKDEP_KEYS_BITS)
-> >   #define INITIAL_CHAIN_KEY           -1
-> >
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index d3e5f36bb01e0..d15024bd14f1d 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -1398,6 +1398,14 @@ config LOCKDEP_CHAINS_BITS
-> >       help
-> >         Try increasing this value if you hit "BUG: MAX_LOCKDEP_CHAINS too low!" message.
-> >
-> > +config LOCKDEP_KEYS_BITS
-> > +     int "Bitsize for MAX_LOCKDEP_KEYS"
-> > +     depends on LOCKDEP && !LOCKDEP_SMALL
-> > +     range 10 30
-> > +     default 13
-> > +     help
-> > +       Try increasing this value if you hit "BUG: MAX_LOCKDEP_KEYS too low!" message.
-> > +
-> >   config LOCKDEP_STACK_TRACE_BITS
-> >       int "Bitsize for MAX_STACK_TRACE_ENTRIES"
-> >       depends on LOCKDEP && !LOCKDEP_SMALL
->
-> The lockdep key is embedded in a bit field within the held_lock
-> structure to utilize all the 32 bits of an integer. Changing its size
-> will require adjusting other bit fields or expand the bit field size
-> from 32 bits to 64 bits. 13 bits allows up to 8k unique lock classes.
-> Unless there is good evidence that we are going to run out of that, we
-> shouldn't change it.
->
-> Thanks,
-> Longman
->
