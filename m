@@ -2,168 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EEB460FCFB
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D2660FCFF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236599AbiJ0QXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 12:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
+        id S236602AbiJ0QYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 12:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236666AbiJ0QWv (ORCPT
+        with ESMTP id S236415AbiJ0QY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 12:22:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E111A8505;
-        Thu, 27 Oct 2022 09:21:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6167CB826FC;
-        Thu, 27 Oct 2022 16:20:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5497C433D6;
-        Thu, 27 Oct 2022 16:20:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666887647;
-        bh=TOUqKmgEkAaTeK7T8K0JzVzaY6XgBGR/nI/YoSk8f8A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JiCaQQHRv2vDjm0fmPDW615OPN0zDbLG7r5aetEdobj4aEP9ci8Bc0pvOREce2oSZ
-         zZHWrVNgzAPTRP7c9z8GCOq+ZbSHQm7ecyoW52jJFWHm1UxZeDIAIxOHQGjf2euFZF
-         aymc3x8q+qGFbOkfjKW+hf8SnOW7J8luy8UwvXUBBlC7LVJ9mvhwr9Xk9LeQe3VCed
-         g/FgQuUZF02td0BPmGB1lv07foEGH4IeW4nb/C75aNFxnebrsn97fBZaFZ/58bAjsU
-         7NVnXrWUH/lCsX3TACuWOo0Ags7/t7Jj0+Yuxkbx/iwBQIYAKt3kRRyDF8zjfkcTkL
-         xEHxoIS/ipaWQ==
-Date:   Thu, 27 Oct 2022 09:20:46 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Yujie Liu <yujie.liu@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        fengwei.yin@intel.com, ying.huang@intel.com,
-        fstests@vger.kernel.org, linux-xfs@vger.kernel.org
-Subject: Re: [tip:x86/core] [kallsyms] f138918162:
- WARNING:CPU:#PID:#at_fs/xfs/xfs_message.c:#xfs_buf_alert_ratelimited.cold-#[xfs]
-Message-ID: <Y1qv3ku6ULHy8hOF@magnolia>
-References: <202210241614.2ae4c1f5-yujie.liu@intel.com>
- <Y1kDEmLeRA2UGeF8@hirez.programming.kicks-ass.net>
- <Y1kiuTIYobR4nexS@hirez.programming.kicks-ass.net>
- <Y1nobODPLUjcteJ0@yujie-X299>
- <2543dfb1-d9dc-0888-dbea-e420a19d732c@intel.com>
+        Thu, 27 Oct 2022 12:24:26 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-eastusazon11020023.outbound.protection.outlook.com [52.101.51.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1A913F0F;
+        Thu, 27 Oct 2022 09:23:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YFE3KyqrVwnQ2lSvhXQ4Rq/NScFBWc9bAsNu8Y9Xf+loaSzBtXBve9B2xKlk67g/rgu27wtAbyeCee22vQJ1DmlTf1on6LI2SBaKdWc+KRJBoq7PaCt++QscIEP9q7MGply6R9BC7Ic0Dddoyph5Od85FtK2LPHaGa4KCMJGuoLOOLJoPVXmu7GKOzqwFhYgGbAz9D4SwWSymvbOzZSNkkuuMHhY5gkl08U0QMpwSQELYkduHqOghTrGJ4ZeiNmLpB2l8vxktWixYSV+M+LVVE3K00tyVvO/QL7HEjRAX26Bs/OesC/KIXwHehRNSWDXkZ3gJxfgvaFY+XMyW+gVAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=u0j6HheXjPjnSuH+TV1OrRcMqCBRr4+Q5CdTL2s1jOQ=;
+ b=nNdUUCINAOVrNzm16kRSzhUXx9yOkjp1/2QA2+Xrj6/FzjLyfWML9XUbfp1InfL4LX7vq0nQalC8Sq9ovlGlsP6s6z7K+jdWCcsydbZXRIYT1+FiBodbp8fyk/108e1NdYQmnoGH8D38xIb5YtFuzjWHfSVnACKmh9db52SbQE+6qp2nYpefadixNDebsC/AVVu4VIfgQ5yKB+wJny/kYNX5mhItcMXIfaWr5B1CM/g2zbjEC+jrdVI8ka5W+OqZSUkxMb7lE8yVoFXrS7TF2cWWzIcofGsDSqEQZ4VMowZpznW0lzo/g4pljok66KDpuEsxcsJJ7Bh0xPbvNZYO6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u0j6HheXjPjnSuH+TV1OrRcMqCBRr4+Q5CdTL2s1jOQ=;
+ b=elsJWIT/vXJ3yRk92A1G63HGEY2vDO9cn2Zx4EiPupyNTBVERun4RnDwJkmPyn9KslzssStjjPxI3ziL7ZWlnADZeErxavvRZzpo2IUDw9oGLYJiZhYz9hUwRiD3BqahzXCM8b/nqw76dMCdUp+taqM1RMdHZVVMxeZCDSTmWU0=
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
+ by DM4PR21MB3248.namprd21.prod.outlook.com (2603:10b6:8:68::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.9; Thu, 27 Oct
+ 2022 16:22:53 +0000
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::600e:e49e:869e:4c2f]) by SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::600e:e49e:869e:4c2f%5]) with mapi id 15.20.5791.008; Thu, 27 Oct 2022
+ 16:22:53 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "quic_jhugo@quicinc.com" <quic_jhugo@quicinc.com>,
+        "quic_carlv@quicinc.com" <quic_carlv@quicinc.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "helgaas@kernel.org" <helgaas@kernel.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
+        Boqun Feng <Boqun.Feng@microsoft.com>
+Subject: RE: [PATCH v2] PCI: hv: Only reuse existing IRTE allocation for
+ Multi-MSI
+Thread-Topic: [PATCH v2] PCI: hv: Only reuse existing IRTE allocation for
+ Multi-MSI
+Thread-Index: AQHY6AEkY2TDPPxGMUaLzNKIsTJo9a4faSzAgACBzzA=
+Date:   Thu, 27 Oct 2022 16:22:53 +0000
+Message-ID: <SA1PR21MB13357BE81A7B7DDB47BF6FADBF339@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <20221024233342.22758-1-decui@microsoft.com>
+ <BYAPR21MB16883E16789C7F8DBC965CCDD7319@BYAPR21MB1688.namprd21.prod.outlook.com>
+In-Reply-To: <BYAPR21MB16883E16789C7F8DBC965CCDD7319@BYAPR21MB1688.namprd21.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=5d66bf82-f0a4-4933-b4a0-1e42373af77b;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-10-25T18:07:06Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|DM4PR21MB3248:EE_
+x-ms-office365-filtering-correlation-id: 6bfc4a62-8f00-4b61-dcf5-08dab8377ffc
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: pi++Ln9Klsz6o21y/ftFXPfqAa2FvxtjabIF5BD0+qMVHnAIonL6gJAWHn23p6+ak0RS0qyx0bMf30kgjp7PhLl2O9zDAR2KFuVMR9uuw4/XG9XYpsYi3adCMoZrN+eScLwTj3adHHiioBo1FDf42TUmGDxuaQ0SsXgCi7vXXZ5EAwHLR6bMUp0Oe5Tjcds8aH5YzXa4Lf3qsw7e5VBA7+xH+nwMCZ06f9BhSipzrU7cv6vdodQZWjoQtUdseOHCyVOzMdkEQ11B/AIe7veai52jxLrncUz6i+sKZlyVa0NbUI2xanrtKeKFn445GqP+lOGhS7rSBmSsJMHk864owskazHNCzpibfM4b5j+BlEFaODFeOgiD4kJO3hl5BSbg+z2o5Ff0peinGHyoHKDqf2ZxjA59H5hqTSwMyHIoCBOE472isGzm270gdBGWAmOWoga6EtpqN1iwODzG38xWnfOjCo2oL3pkZ7xJZOpYvS7bSeNWGespMQiaK/SFrMfZiC0okfaFt/Bu9sE2Xt16AL3Q0hlqBrHawkEhnvFUbI700grvuZ6FDP+4ret3eE3EPRkvdpCwJ2pz4Ffcgw0ngLBU1l2j/5xImnsBNBdTEiYQ74UMcXAJUn9yHNLet9Iv9peySwjAjzSmT+ZL6tNF02YnwJIXeqai5mTAUmjCbw4zOoGLkbw9W6eRzZ/a/FCGyCojlDYNCSSdVSIjYGmuoFOp6YVeHiaYJj7Da17L9+LVjrvmQctN+fuw+rWF87WhDFaEFipIOWvY88xHTgFu8XfF5VcHElNRI4HITUDGrjuQkN/1xgRHaTqC6IJSlB9JCUb9S3Gr0syRgAzAwAc+uQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(366004)(346002)(136003)(376002)(451199015)(66556008)(66476007)(6506007)(7696005)(66446008)(8676002)(66946007)(33656002)(64756008)(76116006)(110136005)(6636002)(82950400001)(316002)(10290500003)(83380400001)(82960400001)(8990500004)(38100700002)(921005)(122000001)(8936002)(52536014)(26005)(55016003)(5660300002)(9686003)(86362001)(41300700001)(2906002)(38070700005)(7416002)(186003)(71200400001)(478600001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5v2XiQj1J/QRUo5fWOAkQP1OHiyKREmThiSo6388dymcTPxDO/ipVLLUHMBI?=
+ =?us-ascii?Q?rbR6METm3QXMieqRdDAqQ2d450AS6kKK5C8e47gU96d8YzlkSQXCvx+TIPdO?=
+ =?us-ascii?Q?rBhYNsHmWcC6Ce/MWuncucgb0mjqgZLbbmVJ6QYTtZURYNm+LkjF+K2v0UA8?=
+ =?us-ascii?Q?ev/e9AlsQG4lkRLNEHjeHVxuVGSCMvqaZe1TIvgIUatDyBM+SU90HY/npdZs?=
+ =?us-ascii?Q?fbuORonmdeS7MF+UhrGKOAZW/nFM9lxbo6aqWuyTprEJZw9JqwcbTXiLTU3M?=
+ =?us-ascii?Q?pqopdDsaj5TJqnD10/A6A7Ek40Dw5JkAJ0YuYNdoiSfqcTXsdrRqZhxq7EpA?=
+ =?us-ascii?Q?uEXo1k/eSE08epMvC/vOieplOOzzOiXdX8LgicW0mhzlLu59FM69NQ80bPA4?=
+ =?us-ascii?Q?apTms/a0iDBSLBQnMLpceWcmWUTeIM4BRRsrdAnEwTQQGVT3iGyJJrsko/jW?=
+ =?us-ascii?Q?rXRRDd3wIj9Tq7Vo+uKVRnEYtKZGtMI33/W5c12KIJU5iKdduWT3os7ZYkox?=
+ =?us-ascii?Q?SoFvmyfrXSJN6B1Gwar7DsqaH+sMX6WzF4r4Vcm9PcFRKVo5nrsLX8+JMARx?=
+ =?us-ascii?Q?8PQAHOmXo+ct1epxfpCLzQLMblSh5pZ3KAbuYODX7nf6h1Yx50/pp0MYswfF?=
+ =?us-ascii?Q?VgKhAiqI+Jp+I0PRkbiWTCuTsKfCwT9WesqHJO16X+Jkv2NV2fwFixjhUDeY?=
+ =?us-ascii?Q?W32baBGWyUrpZMQgJvYnJDdwII5AxxmsGdVwyuoTFm8OO4EYFF88vapiaggL?=
+ =?us-ascii?Q?99T3F0EKPFGnxEzWful8m+cXng6KgrfItI1eDikWkp8ZBkHUL96bBeA8oNC/?=
+ =?us-ascii?Q?yCfnWFeFsD8gvtHRt2auEoT+v6TtClFIghvLHweIyLfhfctJJ8lwd606WHv+?=
+ =?us-ascii?Q?T5ECxeJASs0E4anmDFurUEpPTa1T94LLm3NaHem/DBwOomEMogrZsaXrIN3F?=
+ =?us-ascii?Q?oKa3IHXQqL0OZQuY63KaZ8iZyeDWSMVb4jRNO53wZIsDnCv1Dlh64RRJ3nl9?=
+ =?us-ascii?Q?5FjrkvCiaPvpM4ekDLALRFcl/zZRsKXypc6z1kyY3ccyFX4Ta5ymQ0dlA+uf?=
+ =?us-ascii?Q?EMmo5q+xGsJXm0jHtOnESlz5ClXsSctMaPluH2qsp85Q74aVK4VSh+MiJUgw?=
+ =?us-ascii?Q?Jov3d30PYskSR4tM4obSHIXKaya4/iJ70zQaUaQ6dUfCI/8SsvyfqIuwV3ws?=
+ =?us-ascii?Q?AItHunEHr2Xhq1afSFC50uHGahU4rcoM9SuhfKNJMYYe2WwOAX6T5qXLCfvT?=
+ =?us-ascii?Q?0o3wb5OciGBnfdVqVOs2kh/Ej+hmcpeCjOpwN6R/6Qp783wnjGnY/LX56zeV?=
+ =?us-ascii?Q?vc2xZ3J8xpqV50hFm2G9Mhi+QmY95xjlzMy+aU15bH/064J6BfN0PXpoplg8?=
+ =?us-ascii?Q?Rq5gOAttdBhyQt1L9+6VS3lnXOgxhEZoeWeChpJOaK1THyyThj+GX92Qhltc?=
+ =?us-ascii?Q?/IJC/Y8UOnRvtFtQWUXHZRdU3xptC7XXk6EpWLlwpFM1Eyaqnq0e4gAKzVho?=
+ =?us-ascii?Q?H9Br2Ziz0WkavbkahaDHt6oBtf7pBQ4Mvhk+KDfQT/1tds4EvxZ3mXHUe/Cr?=
+ =?us-ascii?Q?WIlnmooXAyUjhDQUzyO/5Q75zUF4aYDwwkiIU9iu?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2543dfb1-d9dc-0888-dbea-e420a19d732c@intel.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6bfc4a62-8f00-4b61-dcf5-08dab8377ffc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Oct 2022 16:22:53.5868
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cYakQAur7XeDMl5N2SLP+ukHtGl14HGOh9BfowZH9Jw0cDWtrVZRO7lGVHa1jKHpbc1vxMlfeVIQrU12cRBK3w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR21MB3248
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 10:24:51AM +0800, Yujie Liu wrote:
-> On 10/27/2022 10:09, Yujie Liu wrote:
-> > On Wed, Oct 26, 2022 at 02:06:17PM +0200, Peter Zijlstra wrote:
-> > > On Wed, Oct 26, 2022 at 11:51:14AM +0200, Peter Zijlstra wrote:
-> > > > On Wed, Oct 26, 2022 at 05:10:28PM +0800, kernel test robot wrote:
-> > > > > Hi Peter,
-> > > > > 
-> > > > > For below patch, we couldn't find any connection between the code
-> > > > > change of kallsyms and xfstests testcase, but we got very stable test
-> > > > > results. We tested commit f1389181622a and its parent commit
-> > > > > 7825451fa4dc for 12 runs each, parent was 100% good while this commit
-> > > > > was 100% bad, so we still send out this report FYI though we don't have
-> > > > > clear clue of the root cause. Please check the details below if
-> > > > > interested in further investigation. Thanks.
-> > > > 
-> > > > *groan* I'll go have a poke.
-> > > > 
-> > > > Also; I've had these patches in my queue.git for over a month now and
-> > > > this is the first report, how comes?
-> > 
-> > Hi Peter,
-> > 
-> > Sorry about late report. We did catch this problem on
-> > call-depth-tracking branch of queue.git in Semtember, but we used to
-> > think it may be a false alarm since we cannot connect the code change
-> > with xfstests, so didn't report at that time. After merged to x86 tip,
-> > we did more tests and reviewed this problem with more developers, and
-> > sent out the report finally.
-> > 
-> > > dmesg starts at 42 seconds, you don't happen to have a complete one?
-> > 
-> > Sorry for the incomplete dmesg. Please check if attached kmsg.xz helps?
-> > The time may vary a little since it is captured from another run.
-> > Thanks.
-> > 
-> > Not sure if this has anything to do with xfs or testcases, so add
-> > xfs folks to consult.
-> > 
-> > Hi xfs folks,
-> > 
-> > Could you please help check the original report at
-> > https://lore.kernel.org/r/202210241508.2e203c3d-yujie.liu@intel.com
-> > to see if can find any clue for the problem? Thanks.
-> 
-> Sorry, wrong link. Should be:
-> 
-> https://lore.kernel.org/all/202210241614.2ae4c1f5-yujie.liu@intel.com/
+> From: Michael Kelley (LINUX) <mikelley@microsoft.com>
+> Sent: Tuesday, October 25, 2022 11:18 AM
+> > ...
+> > -static u32 hv_compose_msi_req_v2(
+> > -	struct pci_create_interrupt2 *int_pkt, const struct cpumask *affinity=
+,
+> > -	u32 slot, u8 vector, u8 vector_count)
+> > +/*
+> > + * Make sure the dummy vCPU values for multi-MSI don't all point to vC=
+PU0.
+> > + */
+> > +static int hv_compose_multi_msi_req_get_cpu(void)
+> >  {
+> > +	static DEFINE_SPINLOCK(multi_msi_cpu_lock);
+> > +
+> > +	/* -1 means starting with CPU 0 */
+> > +	static int cpu_next =3D -1;
+> > +
+> > +	unsigned long flags;
+> >  	int cpu;
+> >
+> > +	spin_lock_irqsave(&multi_msi_cpu_lock, flags);
+> > +
+> > +	cpu_next =3D cpumask_next_wrap(cpu_next, cpu_online_mask,
+> nr_cpu_ids,
+> > +				     false);
+>=20
+> I have a modest concern about using cpu_online_mask.  The CPUs in this
+> mask
+> can change if a CPU is taken online or offline in Linux. I don't think th=
+ere's
+> a requirement to pick on an online CPU, especially since if we pick a CPU=
+ that's
+> online now, it might not be online later.  Using cpu_present_mask would b=
+e
+> more correct.  That's the CPUs that are present in the VM, which won't
+> change
+> over time since Hyper-V doesn't hot-add or hot-remove CPUs in a VM.
+>=20
+> A similar concern applies to hv_compose_msi_req_get_cpu().
+>=20
+> Michael
 
-xfs/439 corrupts the log and checks that log recovery will notice the
-corruption and abort the mount.
+Here cpu_online_mask is better than cpu_present_mask.
+It doesn't matter an online target CPU becomes offline later, because when
+the CPU is brought offline, the kernel should automatically migrate the
+interrupt to a different online CPU.
 
-Excerpted dmesg from the link above:
+hv_compose_multi_msi_req_get_cpu() is called when a PCI devic driver's
+.probe() function is called, and the .probe() is called from the context
+of pci_call_probe(), where CPU hotplug is temporarily disabled/enabled, so
+here cpu_online_mask should not be an issue.
 
-[   75.708690][ T3668] ------------[ cut here ]------------
-[   75.714041][ T3668] WARNING: CPU: 1 PID: 3668 at fs/xfs/xfs_message.c:104 xfs_buf_alert_ratelimited.cold-0x7/0x45 [xfs]
-[   75.779828][ T3668] CPU: 1 PID: 3668 Comm: mount Not tainted 6.1.0-rc1-00053-gf1389181622a #1
-[   75.788389][ T3668] Hardware name: Hewlett-Packard HP Pro 3340 MT/17A1, BIOS 8.07 01/24/2013
-[   75.796864][ T3668] RIP: 0010:xfs_buf_alert_ratelimited.cold-0x7/0x45 [xfs]
-[ 75.898077][ T3668] xlog_find_verify_log_record (fs/xfs/xfs_log_recover.c:431) xfs
-[ 75.910856][ T3668] xlog_find_head (fs/xfs/xfs_log_recover.c:705) xfs
-[ 75.925847][ T3668] xlog_find_tail (fs/xfs/xfs_log_recover.c:1256) xfs
-[ 75.951249][ T3668] xlog_recover (fs/xfs/xfs_log_recover.c:3355) xfs
-[ 75.961324][ T3668] xfs_log_mount (fs/xfs/xfs_log.c:739) xfs
-[ 75.966486][ T3668] xfs_mountfs (fs/xfs/xfs_mount.c:805 (discriminator 4)) xfs
-[ 75.998070][ T3668] xfs_fs_fill_super (fs/xfs/xfs_super.c:1666) xfs
+Thanks,
+Dexuan
 
-So yes, this is xlog_find_verify_log_record behaving as intended:
-
-		if (i < start_blk) {
-			/* valid log record not found */
-			xfs_warn(log->l_mp,
-		"Log inconsistent (didn't find previous header)");
-			ASSERT(0);  <------------------ here
-			error = -EFSCORRUPTED;
-			goto out;
-		}
-
-However, I noticed that the callsite in the WARNING: message has changed
-from the usual 'asswarn' (which is the caller of WARN_ON) to
-'xfs_buf_alert_ratelimited', which seems totally wrong since XFS log
-recovery doesn't touch xfs_buf objects at all.
-
-The reason this turned into a fstests regression is that xfs/439 uses
-_filter_assert_dmesg to check for warnings in dmesg that are not the
-result of an ASSERT failing (common/rc in fstests):
-
-	# We generate assert related WARNINGs on purpose and make sure
-	# test doesn't fail because of these warnings. This is a helper
-	# for _check_dmesg() to filter out them.
-	_filter_assert_dmesg()
-	{
-		local warn1="WARNING:.*fs/xfs/xfs_message\.c:.*asswarn.*"
-		local warn2="WARNING:.*fs/xfs/xfs_message\.c:.*assfail.*"
-		sed -e "s#$warn1#Intentional warnings in asswarn#" \
-		    -e "s#$warn2#Intentional warnings in assfail#"
-	}
-
-As for why that commit reports the wrong caller ... I don't know.  The
-function name and line number are correct.
-
---D
-
-> 
-> --
-> Best Regards,
-> Yujie
