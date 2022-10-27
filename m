@@ -2,112 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2FF60F5A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5475660F686
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235079AbiJ0KpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 06:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
+        id S235386AbiJ0Luz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 07:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235236AbiJ0KpJ (ORCPT
+        with ESMTP id S229670AbiJ0Luw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 06:45:09 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742B81AF2F;
-        Thu, 27 Oct 2022 03:44:57 -0700 (PDT)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Myj3s1HcrzHvP5;
-        Thu, 27 Oct 2022 18:44:41 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by kwepemi500015.china.huawei.com
- (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 27 Oct
- 2022 18:44:54 +0800
-From:   Lu Wei <luwei32@huawei.com>
-To:     <edumazet@google.com>, <davem@davemloft.net>,
-        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <xemul@parallels.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <ovzxemul@gmail.com>, <ptikhomirov@virtuozzo.com>,
-        <den@virtuozzo.com>
-Subject: [PATCH net v2] tcp: reset tp->sacked_out when sack is enabled
-Date:   Thu, 27 Oct 2022 19:49:30 +0800
-Message-ID: <20221027114930.137735-1-luwei32@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 27 Oct 2022 07:50:52 -0400
+Received: from m12-15.163.com (m12-15.163.com [220.181.12.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0CA66B159
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 04:50:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=pL/rs
+        MZcAfjalFQs06h+m85GbtUtZ1JtImfRSdcQ5Tc=; b=bCBQUDPX+M4Wz7QdrrkJg
+        3HXYUNIa6mhOtu2vsv9Q7gzXuEoDuF/0/WyS+pxV/udAY4i9uYEEoSWgS78yhMIU
+        nMORtnUESeMTGJYPaJxQ8dTem1QFZEMq/P+qdxbFop3wseCXvGvqkCDdQ8nkanmY
+        XSquLeW7W3yzRAswWXc5hI=
+Received: from jbd-ThinkPad-X1-Nano-Gen-1.. (unknown [223.104.68.105])
+        by smtp11 (Coremail) with SMTP id D8CowACHiFR4cFpjPTZ_CQ--.21952S2;
+        Thu, 27 Oct 2022 19:50:17 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     bhelgaas@google.com
+Cc:     linux-pci@vger.kernel.or, linux-kernel@vger.kernel.org,
+        Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] PCI: Add vendor ID for Quectel and Cinterion
+Date:   Thu, 27 Oct 2022 19:50:05 +0800
+Message-Id: <20221027115005.5051-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500015.china.huawei.com (7.221.188.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: D8CowACHiFR4cFpjPTZ_CQ--.21952S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtF1kXFWDKr13Jryktw1UWrg_yoWfWrg_Aw
+        n7Waykur45uF1xtw4kZ345ZwnIk3s2vFnIvFZYkrs5uas0kFW5C3s7Gr97Xa4F9a1qkr15
+        Jan2g34Iv3WYkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRKfOz7UUUUU==
+X-Originating-IP: [223.104.68.105]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiMBmnZFWBzUxOwgAAsz
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If setsockopt with option name of TCP_REPAIR_OPTIONS and opt_code
-of TCPOPT_SACK_PERM is called to enable sack after data is sent
-and before data is acked, it will trigger a warning in function
-tcp_verify_left_out() as follows:
+In MHI driver, there are some companies product still
+do not have their own PCI vendor macro. So we add it
+here to make the code neat. Ref ID could be found in
+link https://pcisig.com/membership/member-companies.
 
-============================================
-WARNING: CPU: 8 PID: 0 at net/ipv4/tcp_input.c:2132
-tcp_timeout_mark_lost+0x154/0x160
-tcp_enter_loss+0x2b/0x290
-tcp_retransmit_timer+0x50b/0x640
-tcp_write_timer_handler+0x1c8/0x340
-tcp_write_timer+0xe5/0x140
-call_timer_fn+0x3a/0x1b0
-__run_timers.part.0+0x1bf/0x2d0
-run_timer_softirq+0x43/0xb0
-__do_softirq+0xfd/0x373
-__irq_exit_rcu+0xf6/0x140
-
-This warning occurs in several steps:
-Step1. If sack is not enabled, when server receives dup-ack,
-       it calls tcp_add_reno_sack() to increase tp->sacked_out.
-
-Step2. Setsockopt() is called to enable sack
-
-Step3. The retransmit timer expires, it calls tcp_timeout_mark_lost()
-       to increase tp->lost_out but not clear tp->sacked_out because
-       sack is enabled and tcp_is_reno() is false.
-
-So tp->left_out is increased repeatly in Step1 and Step3 and it is
-greater than tp->packets_out and trigger the warning. In function
-tcp_timeout_mark_lost(), tp->sacked_out will be cleared if Step2 not
-happen and the warning will not be triggered. As suggested by Denis
-and Eric, TCP_REPAIR_OPTIONS should be prohibited if data was already
-sent.
-
-socket-tcp tests in CRIU has been tested as follows:
-$ sudo ./test/zdtm.py run -t zdtm/static/socket-tcp*  --keep-going \
-       --ignore-taint
-
-socket-tcp* represent all socket-tcp tests in test/zdtm/static/.
-
-Fixes: b139ba4e90dc ("tcp: Repair connection-time negotiated parameters")
-Signed-off-by: Lu Wei <luwei32@huawei.com>
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
 ---
- net/ipv4/tcp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/pci_ids.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index ef14efa1fb70..ef876e70f7fe 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3647,7 +3647,7 @@ int do_tcp_setsockopt(struct sock *sk, int level, int optname,
- 	case TCP_REPAIR_OPTIONS:
- 		if (!tp->repair)
- 			err = -EINVAL;
--		else if (sk->sk_state == TCP_ESTABLISHED)
-+		else if (sk->sk_state == TCP_ESTABLISHED && !tp->packets_out)
- 			err = tcp_repair_options_est(sk, optval, optlen);
- 		else
- 			err = -EPERM;
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index b362d90eb9b0..e3bfea06b90e 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -172,6 +172,10 @@
+ #define PCI_DEVICE_ID_BERKOM_A4T		0xffa4
+ #define PCI_DEVICE_ID_BERKOM_SCITEL_QUADRO	0xffa8
+ 
++#define PCI_VENDOR_ID_CINTERION		0x1269
++
++#define PCI_VENDOR_ID_QUECTEL		0x1eac
++
+ #define PCI_VENDOR_ID_COMPAQ		0x0e11
+ #define PCI_DEVICE_ID_COMPAQ_TOKENRING	0x0508
+ #define PCI_DEVICE_ID_COMPAQ_TACHYON	0xa0fc
 -- 
-2.31.1
+2.34.1
 
