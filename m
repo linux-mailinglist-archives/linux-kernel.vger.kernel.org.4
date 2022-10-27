@@ -2,205 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DD960F50C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7161260F510
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235431AbiJ0K2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 06:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
+        id S235474AbiJ0K2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 06:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234470AbiJ0K1q (ORCPT
+        with ESMTP id S230441AbiJ0K1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 06:27:46 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA7222508
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:27:44 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id p8so1802264lfu.11
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:27:44 -0700 (PDT)
+        Thu, 27 Oct 2022 06:27:48 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338C4E0981
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:27:47 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id v1so1369472wrt.11
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:27:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ht1qDbWjn1s/Tw8Yqm0aVlTSVNxYRnuUWU/s2QqT7o4=;
-        b=i9fpSLzo5jMs1+PlsjmjCMb+bkUFi0v3Bacdvscp0fuYHO+3FGaxuBdH9ct3K7RBFW
-         GOHO2JyUIW1XW5jN40lUo04IVtr6sii/DKrSh0WfspjvZb3qBHVd8hHkcE/+pQE5KgUT
-         S2C3X4NjLiLtUUo2sU1/2YrB8+0hbHtyswI86zJlvJsldbkJ1TcRW77xj3Ekpg2FTn5F
-         yLbrMrtYI7k8BF9mLNKwdIJf3ttus48z491adWnKD4QvBxh4IYkD7eHihmuxCq7D5Fig
-         oDQgpPvQAoHoFBnco6A5aUUG8BlMm3axdurIL1eFAQNWMO59iSALUb8xpG0lZ7hWTkgh
-         HBow==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8PzGOU3cHi3C/xmeEh0jzvedpAW9sTnCtCJCz/dvKXw=;
+        b=kmV7eRAwmX8oQYf73+tBJXu8eVBs3MEay0gi6/jZolwjNmntD04cdJrbfmVKBYB+CV
+         r9lpGwwm2qZhvgMLWHLMc2LbSjONA7zBfHof42h3Ri4DgnMaRT06/ORl+SYOupi+jfdP
+         4m+yh8AiGtfzvWMiqzIGXu1hDGRWKy/qPaNZ2a9CYqZjyAFczd+78pW0rX+32BrYBmf3
+         ql+5TjspKrIkVn79k35TiRprdY9j5r22rErgkm0pksOT7htanoBuY+mnodh+ZgAutGrL
+         zYj4tjKGrjebdTjxzsvzUNrAo/7IXblaM3iPc8u3iq6SuS2wChxQDx9Lvi87SLE7HZEp
+         f+qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ht1qDbWjn1s/Tw8Yqm0aVlTSVNxYRnuUWU/s2QqT7o4=;
-        b=jiMVGjKSgsF3MUR9wq3dxBdN3tKtVFAJkKsnBruJLue76WdR2iu4FEkdskjvJEMhUB
-         hFB5SNTLrT7sgNPG5921OTUft4z9Zse6pW2V/TPz/RACLO2n4EEIu3a9fCrlX9hv8pAg
-         gIgY64EjFUjRdUZEtzOhp4afAwiv4Wlm2Y3i3oQpvRwOn5tcpB906rlzDB+rkKTFWKWh
-         NDm6bGMkl56FikITs00nVWbdudshAO/fifBe7+X5NeXfVG6kASkd26xT5ouIPlP3dgiX
-         qMfqQDaC0izOgYcv39sWAoZo/D66LVzfA9vlvnGwJRr8j69KbYv3uGJiEOQpeFiQJdC7
-         E98w==
-X-Gm-Message-State: ACrzQf3EJlNxYzr0YQczzjdBqKx145Uoa/rSfFQyxa3lDwBhhFR7p8HE
-        hyOz0sOO0qkawI/GjS1BlZzlIN3XWtKEgOiIHCg97A==
-X-Google-Smtp-Source: AMsMyM7ZrmnFdb+RDiq0D6Ba0YwSUUNSHZjttBJh/zpOd85NYIAHkkRHyIoh13rneHkuGCKm3HEm2TuLmTrwb52teuM=
-X-Received: by 2002:a05:6512:3f8b:b0:492:d1ed:5587 with SMTP id
- x11-20020a0565123f8b00b00492d1ed5587mr19119426lfa.355.1666866462514; Thu, 27
- Oct 2022 03:27:42 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8PzGOU3cHi3C/xmeEh0jzvedpAW9sTnCtCJCz/dvKXw=;
+        b=kU1kB53aTk1UFe8YiumCuP7bhkOJvqM5gi+YKB0Yg08zsJDOjVjjViaKQma8UJ96Gn
+         sHHPaAviH/b/l3YtbvnPiKZknHTkywTFwMA7dO2uzmHBFj0pqalrvi93v511YPmiRFbe
+         xllegd4C8T38065obDwdkT6jVV7g0qQl57wk6vHM0jkYMjquoc6F8dj0wooxo9otWxAe
+         EZPtTVGBlC94PbJeNhBy6ThssRQ03ihq6Qn3zyGVp/2FyxMvCHiiyO4fpQVVvCWgb4qS
+         kqW1XGUYZzNA26IBpeOzu622zt88uUkK9c9n1ikDzviMLMSwdsnw4/I7NCED7fmbAo2M
+         RN3A==
+X-Gm-Message-State: ACrzQf3cA/rrhaYyDDTZsowRSg02AfLgopck97AqpSg6VkE+FCO7VQXM
+        jPTrrPcXsMljmV4w+CPBeD069O5VaktADA==
+X-Google-Smtp-Source: AMsMyM4oW1eAyDqgv6Txm8fwAyZp2AlhsWI2Ho4+c1Tv2pcgZRqCElLkiMSTBdHOgDUCMidAwPNocQ==
+X-Received: by 2002:a5d:5988:0:b0:236:6e28:a493 with SMTP id n8-20020a5d5988000000b002366e28a493mr14754569wri.66.1666866465783;
+        Thu, 27 Oct 2022 03:27:45 -0700 (PDT)
+Received: from localhost.localdomain ([5.133.47.210])
+        by smtp.gmail.com with ESMTPSA id fc7-20020a05600c524700b003b505d26776sm5088674wmb.5.2022.10.27.03.27.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 03:27:44 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     lgirdwood@gmail.com, bgoswami@quicinc.com, perex@perex.cz,
+        tiwai@suse.com, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH v3 5/9] ASoC: qdsp6: audioreach: simplify module_list sz calculation
+Date:   Thu, 27 Oct 2022 11:27:06 +0100
+Message-Id: <20221027102710.21407-6-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20221027102710.21407-1-srinivas.kandagatla@linaro.org>
+References: <20221027102710.21407-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com> <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
-In-Reply-To: <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Thu, 27 Oct 2022 11:27:05 +0100
-Message-ID: <CA+EHjTxzLDAW=MyfKFcL2cGQimw3bdVYePUgRw+=1+AbCQouUQ@mail.gmail.com>
-Subject: Re: [PATCH v9 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Simplify module_list size calculation by doing inside modules loop.
 
-On Tue, Oct 25, 2022 at 4:19 PM Chao Peng <chao.p.peng@linux.intel.com> wrote:
->
-> This new KVM exit allows userspace to handle memory-related errors. It
-> indicates an error happens in KVM at guest memory range [gpa, gpa+size).
-> The flags includes additional information for userspace to handle the
-> error. Currently bit 0 is defined as 'private memory' where '1'
-> indicates error happens due to private memory access and '0' indicates
-> error happens due to shared memory access.
->
-> When private memory is enabled, this new exit will be used for KVM to
-> exit to userspace for shared <-> private memory conversion in memory
-> encryption usage. In such usage, typically there are two kind of memory
-> conversions:
->   - explicit conversion: happens when guest explicitly calls into KVM
->     to map a range (as private or shared), KVM then exits to userspace
->     to perform the map/unmap operations.
->   - implicit conversion: happens in KVM page fault handler where KVM
->     exits to userspace for an implicit conversion when the page is in a
->     different state than requested (private or shared).
->
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> ---
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ sound/soc/qcom/qdsp6/audioreach.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-Reviewed-by: Fuad Tabba <tabba@google.com>
+diff --git a/sound/soc/qcom/qdsp6/audioreach.c b/sound/soc/qcom/qdsp6/audioreach.c
+index 0015ec89d90b..87a3fd1f8107 100644
+--- a/sound/soc/qcom/qdsp6/audioreach.c
++++ b/sound/soc/qcom/qdsp6/audioreach.c
+@@ -430,7 +430,6 @@ void *audioreach_alloc_graph_pkt(struct q6apm *apm, struct audioreach_graph_info
+ 	struct audioreach_sub_graph *sgs;
+ 	struct apm_mod_list_obj *mlobj;
+ 	struct list_head *sg_list;
+-	int num_modules_per_list;
+ 	int num_connections = 0;
+ 	int num_containers = 0;
+ 	int num_sub_graphs = 0;
+@@ -451,6 +450,9 @@ void *audioreach_alloc_graph_pkt(struct q6apm *apm, struct audioreach_graph_info
+ 		list_for_each_entry(container, &sgs->container_list, node) {
+ 			num_containers++;
+ 			num_modules += container->num_modules;
++			ml_sz = ml_sz + sizeof(struct apm_module_list_params) +
++				APM_MOD_LIST_OBJ_PSIZE(mlobj, container->num_modules);
++
+ 			list_for_each_entry(module, &container->modules_list, node) {
+ 				if (module->src_mod_inst_id)
+ 					num_connections++;
+@@ -459,11 +461,11 @@ void *audioreach_alloc_graph_pkt(struct q6apm *apm, struct audioreach_graph_info
+ 	}
+ 
+ 	num_modules_list = num_containers;
+-	num_modules_per_list = num_modules/num_containers;
+ 	sg_sz = APM_SUB_GRAPH_PSIZE(sg_params, num_sub_graphs);
+ 	cont_sz = APM_CONTAINER_PSIZE(cont_params, num_containers);
+-	ml_sz =	ALIGN(sizeof(struct apm_module_list_params) +
+-		num_modules_list * APM_MOD_LIST_OBJ_PSIZE(mlobj,  num_modules_per_list), 8);
++
++	ml_sz = ALIGN(ml_sz, 8);
++
+ 	mp_sz = APM_MOD_PROP_PSIZE(mprop, num_modules);
+ 	mc_sz =	APM_MOD_CONN_PSIZE(mcon, num_connections);
+ 
+-- 
+2.21.0
 
-I have tested the V8 version of this patch on arm64/qemu, and
-considering this hasn't changed:
-Tested-by: Fuad Tabba <tabba@google.com>
-
-Cheers,
-/fuad
-
-
-
->  Documentation/virt/kvm/api.rst | 23 +++++++++++++++++++++++
->  include/uapi/linux/kvm.h       |  9 +++++++++
->  2 files changed, 32 insertions(+)
->
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index f3fa75649a78..975688912b8c 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -6537,6 +6537,29 @@ array field represents return values. The userspace should update the return
->  values of SBI call before resuming the VCPU. For more details on RISC-V SBI
->  spec refer, https://github.com/riscv/riscv-sbi-doc.
->
-> +::
-> +
-> +               /* KVM_EXIT_MEMORY_FAULT */
-> +               struct {
-> +  #define KVM_MEMORY_EXIT_FLAG_PRIVATE (1 << 0)
-> +                       __u32 flags;
-> +                       __u32 padding;
-> +                       __u64 gpa;
-> +                       __u64 size;
-> +               } memory;
-> +
-> +If exit reason is KVM_EXIT_MEMORY_FAULT then it indicates that the VCPU has
-> +encountered a memory error which is not handled by KVM kernel module and
-> +userspace may choose to handle it. The 'flags' field indicates the memory
-> +properties of the exit.
-> +
-> + - KVM_MEMORY_EXIT_FLAG_PRIVATE - indicates the memory error is caused by
-> +   private memory access when the bit is set. Otherwise the memory error is
-> +   caused by shared memory access when the bit is clear.
-> +
-> +'gpa' and 'size' indicate the memory range the error occurs at. The userspace
-> +may handle the error and return to KVM to retry the previous memory access.
-> +
->  ::
->
->      /* KVM_EXIT_NOTIFY */
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index f1ae45c10c94..fa60b032a405 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -300,6 +300,7 @@ struct kvm_xen_exit {
->  #define KVM_EXIT_RISCV_SBI        35
->  #define KVM_EXIT_RISCV_CSR        36
->  #define KVM_EXIT_NOTIFY           37
-> +#define KVM_EXIT_MEMORY_FAULT     38
->
->  /* For KVM_EXIT_INTERNAL_ERROR */
->  /* Emulate instruction failed. */
-> @@ -538,6 +539,14 @@ struct kvm_run {
->  #define KVM_NOTIFY_CONTEXT_INVALID     (1 << 0)
->                         __u32 flags;
->                 } notify;
-> +               /* KVM_EXIT_MEMORY_FAULT */
-> +               struct {
-> +#define KVM_MEMORY_EXIT_FLAG_PRIVATE   (1 << 0)
-> +                       __u32 flags;
-> +                       __u32 padding;
-> +                       __u64 gpa;
-> +                       __u64 size;
-> +               } memory;
->                 /* Fix the size of the union. */
->                 char padding[256];
->         };
-> --
-> 2.25.1
->
