@@ -2,170 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A09C61053F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCFE661054A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234219AbiJ0WAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 18:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50870 "EHLO
+        id S234820AbiJ0WBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 18:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233747AbiJ0WAe (ORCPT
+        with ESMTP id S234800AbiJ0WBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 18:00:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B817539E
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 15:00:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E25526251A
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 22:00:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1908AC433D6;
-        Thu, 27 Oct 2022 22:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666908032;
-        bh=FZ3JmBL7SiyPSruD0iHXcZmWmgHniHy0HHBvw5Er4VA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rPf/PMHF94BvAurwGGpgiZj4QFtHZWbhA8kjGYZu4qMcF/nV/zvYGw02b5ozQJDPP
-         noJyuCpuDmPwNAhsotE2yEs2qymyOUX+5fNvOyiqpnCn8SruKYW/PTvL+7ROlPeQOA
-         /Sytn20T+RrtbdFNA5OiDhe3rdsqEcwlKlVJ8cgYvbjc3dRsn5sRrpx1KnZKX6RAeF
-         fzYeY8ymbKQcYCAhiBBDSBAKViGVNDrOTYsOKFvQTZmYs1Vq8QSjC0XZ7+Ch/jAyH/
-         SX1WdaFv/O1Cd+KY9fw+1f4zUVnKIat/WrUpQR/SDy+ASjttQYdb4OVcwnUmxPzaxJ
-         qfiHSvpFarpHQ==
-Date:   Thu, 27 Oct 2022 23:00:27 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        Conor Dooley <conor.dooley@microchip.com>, daolu@rivosinc.com,
-        heiko@sntech.de, guoren@kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 0/2] (attempt to) Fix RISC-V toolchain extension support
- detection
-Message-ID: <Y1r/e2iECt72m60/@spud>
-References: <Y1k9W6+EXgiL60uq@spud>
- <mhng-99b62de8-5b5c-48f7-bd01-bca2a5a26064@palmer-ri-x1c9a>
+        Thu, 27 Oct 2022 18:01:23 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAF49E688;
+        Thu, 27 Oct 2022 15:00:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666908060; x=1698444060;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fujCfldGBPIDZRrZhsgY+3RvDLnevLWFmVpeF8wnuOo=;
+  b=aFT3EVIWxlGtAs6snjxocbyCOqULwuuxpkcWu9D8j2dXtQecjvO9bkG6
+   BURWLTRRjLKB1MZ9hxzy/GqtRSOKYcvDmm+F+hyHaCgMORkKetI25wyoV
+   jfg6IthJAwW5x3HnNWgx1cw+DVKusfdAurgGI1oTcszDOhNIoATbZjMqg
+   aROsSb/rcdME6XK1ePLPKRrRJdbboWI1KBclAaByExvX0WbGewMVBI5Io
+   XYygRXrLh1TH8KwHBDPqgtVkqSVCVwNno3LHKWOkdNTyl4VyhnYWkLR1+
+   deAukGLztTWzmKKfHzCroux8W4XzRewft9KVShpRpgz6qOBydFWNtKRkP
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="394665997"
+X-IronPort-AV: E=Sophos;i="5.95,219,1661842800"; 
+   d="scan'208";a="394665997"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 15:00:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="635071032"
+X-IronPort-AV: E=Sophos;i="5.95,219,1661842800"; 
+   d="scan'208";a="635071032"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga007.fm.intel.com with ESMTP; 27 Oct 2022 15:00:58 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, rafael@kernel.org,
+        len.brown@intel.com
+Cc:     peterz@infradead.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] x86: intel_epb: Set Alder Lake N and Raptor Lake P normal EPB
+Date:   Thu, 27 Oct 2022 15:00:56 -0700
+Message-Id: <20221027220056.1534264-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <mhng-99b62de8-5b5c-48f7-bd01-bca2a5a26064@palmer-ri-x1c9a>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 02:32:16PM -0700, Palmer Dabbelt wrote:
-> On Wed, 26 Oct 2022 06:59:55 PDT (-0700), Conor Dooley wrote:
-> > On Wed, Oct 26, 2022 at 06:48:32AM -0700, Palmer Dabbelt wrote:
-> > > On Thu, 06 Oct 2022 10:35:19 PDT (-0700), Conor Dooley wrote:
-> > > > From: Conor Dooley <conor.dooley@microchip.com>
-> > > >
-> > > > Hey,
-> > > > This came up due to a report from Kevin @ kernel-ci, who had been
-> > > > running a mixed configuration of GNU binutils and clang. Their compiler
-> > > > was relatively recent & supports Zicbom but binutils @ 2.35.2 did not.
-> > > >
-> > > > Our current checks for extension support only cover the compiler, but it
-> > > > appears to me that we need to check both the compiler & linker support
-> > > > in case of "pot-luck" configurations that mix different versions of
-> > > > LD,AS,CC etc.
-> > > >
-> > > > Linker support does not seem possible to actually check, since the ISA
-> > > > string is emitted into the object files - so I put in version checks for
-> > > > that. The checks have gotten a bit ugly since 32 & 64 bit support need
-> > > > to be checked independently but ahh well.
-> > > >
-> > > > As I was going, I fell into the trap of there being duplicated checks
-> > > > for CC support in both the Makefile and Kconfig, so as part of renaming
-> > > > the Kconfig symbol to TOOLCHAIN_HAS_FOO, I dropped the extra checks in
-> > > > the Makefile. This has the added advantage of the TOOLCHAIN_HAS_FOO
-> > > > symbol for Zihintpause appearing in .config.
-> > > >
-> > > > I pushed out a version of this that specificly checked for assember
-> > > > support for LKP to test & it looked /okay/ - but I did some more testing
-> > > > today and realised that this is redudant & have since dropped the as
-> > > > check.
-> > > >
-> > > > I tested locally with a fair few different combinations, to try and
-> > > > cover each of AS, LD, CC missing support for the extension.
-> > > >
-> > > > The one that I am left wondering about is Zicsr/Zifencei. Our Makefile
-> > > > has:
-> > > >
-> > > > > # Newer binutils versions default to ISA spec version 20191213 which moves some
-> > > > > # instructions from the I extension to the Zicsr and Zifencei extensions.
-> > > > > toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
-> > > > > riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
-> > > >
-> > > > I'd like to also move that one to Kconfig rather than the Makefile so
-> > > > that, again, it shows up in .config etc. But as Zicsr/Zifencei do not
-> > > > appear to be emitted into the object files it's not a fix and can be a
-> > > > follow-on patch if my approach here is not entirely off-the-wall.
-> > > 
-> > > This is actually a different case: for Zicbom and Zihintpause the
-> > > instructions were added to the toolchain at the same time the extensions
-> > > were, for Zifencei and Zicsr the toolchain had the instructions before the
-> > > extension was defined (as they were in previous base ISAs).  So the
-> > > assembler always supports "fence.i", it's just a question of whether it also
-> > > needs another extension in march.
-> > 
-> > Yeah, that one isn't going to break the build. If the extra bit isn't
-> > emitted then the old linker doesn't care. Was more for whether we wanted
-> > it to be consistent with a symbol for everything that we can check
-> > easily after the fact.
-> > 
-> > > I'm not opposed to adding a Kconfig for it, but it's a slightly different
-> > > thing and I'm not sure the Kconfig really helps any because none of the
-> > > kernel sources need to understand the "the assembler doesn't support the
-> > > 'fence.i' instruction" case.
-> > 
-> > tbh beyond the OCD thing about being consistent I don't really care :)
-> > 
-> > > > I am not 100% on the LD/LLD versions that I picked, I went off of a
-> > > > `git branch -a --contains` of the first commits I found that with
-> > > > mention of the extension. Please scream if I got it wrong, I'm not
-> > > > overly familar with where to find this sort of info for the toolchains.
-> > > 
-> > > This LD version check is for the ISA string mismatches between objects?
-> > > IIRC we stopped failing on those in 2.38, from that point on we just guess
-> > > at a mix and allow linking anyway (largely because of that fence.i stuff).
-> > 
-> > idk, I wouldn't say "mismatches between objects". The
-> > _zicbom_zihintpause ends up in the object files and the linker doesnt
-> > understand that and aborts. The version checks are so that we don't
-> > emitt that string into object files where our linker doesn't support
-> > them. It only really matters for people that've got some sort of heavily
-> > mixed setup of things - which includes some CIs like Kernel CI.
-> 
-> As of 87fdd7ac09b ("RISC-V: Stop reporting warnings for mismatched extension
-> versions"), we should be just ignoring these at link time -- unless I mixed
-> something up and we're still getting errors, in which case we should fix
-> binutils (and then make the check for whatever version that is).
-> 
-> Do you have an example of a link that's failing?  I attempted to construct
-> one in the test suite, but not sure if I'm just missing something...
+Intel processors support additional software hint called EPB ("Energy
+Performance Bias") to guide the hardware heuristic of power management
+features to favor increasing dynamic performance or conserve energy
+consumption.
 
-Following some discussion on IRC, settling for 2.38 as the gating
-version for Zicbom as logic was added there to stop erroring at all for
-unrecognised isa strings in objects as per Palmer's suggestion.
+Since this EPB hint is processor specific, the same value of hint can
+result in different behavior across generations of processors.
 
-Tested 2.38 w/:
-CONFIG_CC_IS_GCC=y
-CONFIG_GCC_VERSION=120100
-CONFIG_CLANG_VERSION=0
-CONFIG_AS_IS_GNU=y
-CONFIG_AS_VERSION=23900
-CONFIG_LD_IS_BFD=y
-CONFIG_LD_VERSION=23800
-CONFIG_LLD_VERSION=0
+commit 4ecc933b7d1f ("x86: intel_epb: Allow model specific normal EPB
+value")' introduced capability to update the default power up EPB
+based on the CPU model and updated the default EPB to 7 for Alder Lake
+mobile CPUs.
 
-and it does link properly. Folding in a 23800 instead of 23900 seems
-fair enough to me.
+The same change is required for other Alder Lake-N and Raptor Lake-P
+mobile CPUs as the current default of 6 results in higher uncore power
+consumption. This increase in power is related to memory clock
+frequency setting based on the EPB value.
 
-Thanks,
-Conor.
+Depending on the EPB the minimum memory frequency is set by the
+firmware. At EPB = 7, the minimum memory frequency is 1/4th compared to
+EPB = 6. This results in significant power saving for idle and
+semi-idle workload on a Chrome platform.
+
+For example Change in power and performance from EPB change from 6 to 7
+on Alder Lake-N:
+
+Workload    Performance diff (%)    power diff
+----------------------------------------------------
+VP9 FHD30	0 (FPS)		-218 mw
+Google meet	0 (FPS)		-385 mw
+
+This 200+ mw power saving is very significant for mobile platform for
+battery life and thermal reasons.
+
+But as the workload demands more memory bandwidth, the memory frequency
+will be increased very fast. There is no power savings for such busy
+workloads.
+
+For example:
+
+Workload		Performance diff (%) from EPB 6 to 7
+-------------------------------------------------------
+Speedometer 2.0		-0.8
+WebGL Aquarium 10K
+Fish    		-0.5
+Unity 3D 2018		0.2
+WebXPRT3		-0.5
+
+There are run to run variations for performance scores for
+such busy workloads. So the difference is not significant.
+
+Add a new define ENERGY_PERF_BIAS_NORMAL_POWERSAVE for EPB 7
+and use it for Alder Lake-N and Raptor Lake-P mobile CPUs.
+
+This modification is done originally by
+Jeremy Compostella <jeremy.compostella@intel.com>.
+
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ arch/x86/include/asm/msr-index.h | 1 +
+ arch/x86/kernel/cpu/intel_epb.c  | 7 ++++++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 10ac52705892..a3eb4d3e70b8 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -796,6 +796,7 @@
+ #define ENERGY_PERF_BIAS_PERFORMANCE		0
+ #define ENERGY_PERF_BIAS_BALANCE_PERFORMANCE	4
+ #define ENERGY_PERF_BIAS_NORMAL			6
++#define ENERGY_PERF_BIAS_NORMAL_POWERSAVE	7
+ #define ENERGY_PERF_BIAS_BALANCE_POWERSAVE	8
+ #define ENERGY_PERF_BIAS_POWERSAVE		15
+ 
+diff --git a/arch/x86/kernel/cpu/intel_epb.c b/arch/x86/kernel/cpu/intel_epb.c
+index fbaf12e43f41..3b8476158236 100644
+--- a/arch/x86/kernel/cpu/intel_epb.c
++++ b/arch/x86/kernel/cpu/intel_epb.c
+@@ -204,7 +204,12 @@ static int intel_epb_offline(unsigned int cpu)
+ }
+ 
+ static const struct x86_cpu_id intel_epb_normal[] = {
+-	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, 7),
++	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,
++				   ENERGY_PERF_BIAS_NORMAL_POWERSAVE),
++	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,
++				   ENERGY_PERF_BIAS_NORMAL_POWERSAVE),
++	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,
++				   ENERGY_PERF_BIAS_NORMAL_POWERSAVE),
+ 	{}
+ };
+ 
+-- 
+2.31.1
 
