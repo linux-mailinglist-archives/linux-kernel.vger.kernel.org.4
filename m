@@ -2,80 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C9C60F309
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4291A60F312
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233283AbiJ0I7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 04:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
+        id S235225AbiJ0JAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 05:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233946AbiJ0I7Q (ORCPT
+        with ESMTP id S235146AbiJ0I7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 04:59:16 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836F3160208
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:59:15 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id m6-20020a17090a5a4600b00212f8dffec9so882943pji.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:59:15 -0700 (PDT)
+        Thu, 27 Oct 2022 04:59:50 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0196395
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:59:40 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id j4so1497845lfk.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:59:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KU8QUlmyL8K+kL2JWwcrY9MKfup5fHZG57Xenhinxbw=;
-        b=KSYKzgO5bo3EHVAA36BTCInDIsYnBhnaVYPX+l79AEiJNHcUstKm85vMi+JzUs58uT
-         KFiUXNGJ/611sUUzd3msbLK+C1jVwIw2PS9/nrxVQfwcoUCRYCxr3+ziWgsz9dXszTBS
-         tJbRKzhe9vifba5gzjAE1VvW0iWAcxeEAKjsU6oOaZ8fhMAAfBmIDTBhl6t5XrM8r8cq
-         zuErgoZ02sCkHxrTHNTz0VTnQapSoABy8hdOQCvFGV1OG0O+uvpVqcVXZ820awkYLViW
-         cBcJbRq54zdVXKarPITq8c5P8AvJZ8F8Zv5sAliAdwQ/A2dYlQIKgZ59yjixxLsdAyVl
-         /+VQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KG4wo9fiZVv4ZjhZHrMbGipKRmoFDP+ogMvv6qwzqFg=;
+        b=P+O5B8GnyTxoSpaOPC17mwnIoShRXeOoCDsw1bT/ApIrr+KS4BfB/L0/a39HzGgVcG
+         qIaBE4MeUtsxEd8kzx9ht1YsEBZfYmHvPRmKB9NYuG74rXqgXJXEvLQICu6QL9QXEqHo
+         46XJkrBBqkeCKiP021H6GGtM8tJgqDqPpPhW0sC07h/CQNc6lZsc+RFAJ2DhIeD52osW
+         8BTwHhRY3ADblzu3Mz8mzgdKPCljNcpM/4iDkuBXg6lgAuFiKe40CsybEWhltOiTHRd1
+         irf/n0o2pAZV3BOMG+IfhtMxQMOwAlDUWnAAplvP5uwfwgtbycXGWJe+IphAueufMc7z
+         lF3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KU8QUlmyL8K+kL2JWwcrY9MKfup5fHZG57Xenhinxbw=;
-        b=4FNt+IpdIKNB290E5tQCJog6QNvHpUG+KNFDGOvKnrqheUsq572+9SMaXn4A2t8+Nk
-         OBoTkB1JKPZ3a9y6g5ybjccy/JmwoIokpZk+sNEqlJnwKaWwTucsTBul0LvEAL0mfWiZ
-         hiDWQb7AfCCeiXtalz1b+pN0Cqr7Blg8Qouqk7BhE6vRAqmgyuBEWSPlhe9pi5uZ9cyn
-         7TPnY1LJoTY46A7Lm9x0VdSN8/DEyj5k3GndnAJTCr3ECD8FSwi6elUWLTYk3V3ncP1Z
-         qgGdff/XuJN+4+E0euLguoBAHdCQPTiaiq0ydlSV2Thvstj1YBr9vLl9eHWLykZzjU0l
-         X/kQ==
-X-Gm-Message-State: ACrzQf2l+D6nOXC4sOJL7+HNePF0nD9qT9xhnpVxdAN+ckgY6qsJ0nP0
-        hVlYNnKQiiYCF+SxxDeIUfQ=
-X-Google-Smtp-Source: AMsMyM66ukX1ctNL2P50qsKqcWsCvPccrwS7iSlv8cUwHi9AKQis3RBSWyzfcOhwA1zmjNtdfZSwmw==
-X-Received: by 2002:a17:902:dac5:b0:186:a687:e082 with SMTP id q5-20020a170902dac500b00186a687e082mr20920145plx.84.1666861155009;
-        Thu, 27 Oct 2022 01:59:15 -0700 (PDT)
-Received: from mail.google.com (122-58-209-93-fibre.sparkbb.co.nz. [122.58.209.93])
-        by smtp.gmail.com with ESMTPSA id 23-20020a631357000000b0046f1e8cb30dsm635717pgt.26.2022.10.27.01.59.07
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KG4wo9fiZVv4ZjhZHrMbGipKRmoFDP+ogMvv6qwzqFg=;
+        b=DAUCqLWzvBySfxlR7WrdlUUQg3ZoG5Bpmw4fTeVvHK8tez1ad5FXwcnrCpaYCJ6iXe
+         b1j5pTkHtT0S4dRuRMNlVwCH5sPjSrLG6L4Tv79bPYpD/c1YkjUxfW5/ko3bcoqdnRhK
+         AaEPrXz9R/1IFM4TzKdiqoD2+6G9Vi2VqF6176aB2kaURgrEKHrk0e+O2qjtsEwIbu3j
+         IqnCdwMdM5TynUPit5jUWiMmi6wFyenMQZ+OPzdrcb2p2FWsUKJstWXFYXyWbrLVFPFe
+         qGDb12yAra0FiFMQ5LYaNLDQ20HNO2FlKhC6HwPVdqHVs7E3UUUdbdC9aYeydNzi3ERu
+         TiiA==
+X-Gm-Message-State: ACrzQf1jKKwVAKtgRz0G9ZesJvhs2vfSC+EIuEgG8j8mzYNWLlhkbHZ9
+        UsdpusudY0fvGVhrwrgMPVKVj6elwEp8Lw==
+X-Google-Smtp-Source: AMsMyM6p21nKIC2hpXzRwSwBAzm7cAThEGXtqFAr5EtWF3nrwwDNuAW9++Sv/wrB+9wg2FFi+zi/YA==
+X-Received: by 2002:a19:6456:0:b0:4a9:e691:921d with SMTP id b22-20020a196456000000b004a9e691921dmr9970485lfj.299.1666861178224;
+        Thu, 27 Oct 2022 01:59:38 -0700 (PDT)
+Received: from elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net ([20.240.130.248])
+        by smtp.googlemail.com with ESMTPSA id m3-20020a056512114300b004a050ddc4ecsm109892lfg.125.2022.10.27.01.59.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 01:59:14 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 21:59:04 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>, Likun Gao <Likun.Gao@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Victor Zhao <Victor.Zhao@amd.com>,
-        Jack Xiao <Jack.Xiao@amd.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Evan Quan <evan.quan@amd.com>,
-        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
-        Isabella Basso <isabbasso@riseup.net>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] [next] drm/amdgpu: clean up unused constants, macros and
- includes
-Message-ID: <Y1pIWKbPi1GtPfE9@mail.google.com>
+        Thu, 27 Oct 2022 01:59:37 -0700 (PDT)
+From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        outreachy@lists.linux.dev,
+        Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+Subject: [PATCH v5 3/6] staging: vt6655: refactor code in s_uFillDataHead
+Date:   Thu, 27 Oct 2022 08:59:05 +0000
+Message-Id: <a2e720d63f4e71dc9b37cf3440831e696c7e2fd1.1666849707.git.tanjubrunostar0@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1666849707.git.tanjubrunostar0@gmail.com>
+References: <cover.1666849707.git.tanjubrunostar0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,51 +73,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove include directives in which header is already included via
-another header (atombios.h -> atom.h). Remove unused constants and
-macros.
+refactor long lines of code in the function: s_uFillDataHead
 
-Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu.h              | 3 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_atomfirmware.c | 1 -
- 2 files changed, 4 deletions(-)
+ drivers/staging/vt6655/rxtx.c | 97 ++++++++++++++++++++++++-----------
+ 1 file changed, 67 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-index 0e6ddf05c23c..dc55e60c2e4a 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-@@ -245,10 +245,8 @@ extern int amdgpu_vcnfw_log;
- #define AMDGPU_VM_MAX_NUM_CTX			4096
- #define AMDGPU_SG_THRESHOLD			(256*1024*1024)
- #define AMDGPU_DEFAULT_GTT_SIZE_MB		3072ULL /* 3GB by default */
--#define AMDGPU_WAIT_IDLE_TIMEOUT_IN_MS	        3000
- #define AMDGPU_MAX_USEC_TIMEOUT			100000	/* 100 ms */
- #define AMDGPU_FENCE_JIFFIES_TIMEOUT		(HZ / 2)
--#define AMDGPU_DEBUGFS_MAX_COMPONENTS		32
- #define AMDGPUFB_CONN_LIMIT			4
- #define AMDGPU_BIOS_NUM_SCRATCH			16
+diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+index 8e56a7ee8035..7b6571ba7c36 100644
+--- a/drivers/staging/vt6655/rxtx.c
++++ b/drivers/staging/vt6655/rxtx.c
+@@ -481,19 +481,28 @@ static __le16 s_uFillDataHead(struct vnt_private *pDevice,
+ 			} else {
+ 				/* Get Duration and TimeStamp */
+ 				buf->duration_a =
+-					cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A, cbFrameLength,
+-									    byPktType, wCurrentRate, bNeedAck, uFragIdx,
+-									    cbLastFragmentSize, uMACfragNum,
++					cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A,
++									    cbFrameLength,
++									    byPktType,
++									    wCurrentRate, bNeedAck,
++									    uFragIdx,
++									    cbLastFragmentSize,
++									    uMACfragNum,
+ 									    byFBOption));
+ 				buf->duration_b =
+-					cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_B, cbFrameLength,
+-									    PK_TYPE_11B, pDevice->byTopCCKBasicRate,
+-									    bNeedAck, uFragIdx, cbLastFragmentSize,
+-									    uMACfragNum, byFBOption));
++					cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_B,
++									    cbFrameLength,
++									    PK_TYPE_11B,
++									    pDevice->byTopCCKBasicRate,
++									    bNeedAck, uFragIdx,
++									    cbLastFragmentSize,
++									    uMACfragNum,
++									    byFBOption));
+ 			}
  
-@@ -1227,7 +1225,6 @@ int emu_soc_asic_init(struct amdgpu_device *adev);
- #define amdgpu_asic_set_vce_clocks(adev, ev, ec) (adev)->asic_funcs->set_vce_clocks((adev), (ev), (ec))
- #define amdgpu_get_pcie_lanes(adev) (adev)->asic_funcs->get_pcie_lanes((adev))
- #define amdgpu_set_pcie_lanes(adev, l) (adev)->asic_funcs->set_pcie_lanes((adev), (l))
--#define amdgpu_asic_get_gpu_clock_counter(adev) (adev)->asic_funcs->get_gpu_clock_counter((adev))
- #define amdgpu_asic_read_disabled_bios(adev) (adev)->asic_funcs->read_disabled_bios((adev))
- #define amdgpu_asic_read_bios_from_rom(adev, b, l) (adev)->asic_funcs->read_bios_from_rom((adev), (b), (l))
- #define amdgpu_asic_read_register(adev, se, sh, offset, v)((adev)->asic_funcs->read_register((adev), (se), (sh), (offset), (v)))
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_atomfirmware.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_atomfirmware.c
-index b81b77a9efa6..0c3448dc4951 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_atomfirmware.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_atomfirmware.c
-@@ -26,7 +26,6 @@
- #include "atomfirmware.h"
- #include "amdgpu_atomfirmware.h"
- #include "atom.h"
--#include "atombios.h"
- #include "soc15_hw_ip.h"
+ 			buf->time_stamp_off_a = vnt_time_stamp_off(pDevice, wCurrentRate);
+-			buf->time_stamp_off_b = vnt_time_stamp_off(pDevice, pDevice->byTopCCKBasicRate);
++			buf->time_stamp_off_b = vnt_time_stamp_off(pDevice,
++								   pDevice->byTopCCKBasicRate);
  
- union firmware_info {
+ 			return buf->duration_a;
+ 		}
+@@ -506,14 +515,29 @@ static __le16 s_uFillDataHead(struct vnt_private *pDevice,
+ 				  pDevice->byTopCCKBasicRate,
+ 				  PK_TYPE_11B, &buf->b);
+ 		/* Get Duration and TimeStamp */
+-		buf->duration_a = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A, cbFrameLength, byPktType,
+-								      wCurrentRate, bNeedAck, uFragIdx, cbLastFragmentSize, uMACfragNum, byFBOption));
+-		buf->duration_b = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_B, cbFrameLength, PK_TYPE_11B,
+-								       pDevice->byTopCCKBasicRate, bNeedAck, uFragIdx, cbLastFragmentSize, uMACfragNum, byFBOption));
+-		buf->duration_a_f0 = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A_F0, cbFrameLength, byPktType,
+-									  wCurrentRate, bNeedAck, uFragIdx, cbLastFragmentSize, uMACfragNum, byFBOption));
+-		buf->duration_a_f1 = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A_F1, cbFrameLength, byPktType,
+-									 wCurrentRate, bNeedAck, uFragIdx, cbLastFragmentSize, uMACfragNum, byFBOption));
++		buf->duration_a = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A,
++								      cbFrameLength, byPktType,
++								      wCurrentRate, bNeedAck,
++								      uFragIdx, cbLastFragmentSize,
++								      uMACfragNum, byFBOption));
++		buf->duration_b = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_B,
++								      cbFrameLength, PK_TYPE_11B,
++								      pDevice->byTopCCKBasicRate,
++								      bNeedAck, uFragIdx,
++								      cbLastFragmentSize,
++								      uMACfragNum, byFBOption));
++		buf->duration_a_f0 = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A_F0,
++									 cbFrameLength, byPktType,
++									 wCurrentRate, bNeedAck,
++									 uFragIdx,
++									 cbLastFragmentSize,
++									 uMACfragNum, byFBOption));
++		buf->duration_a_f1 = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A_F1,
++									 cbFrameLength, byPktType,
++									 wCurrentRate, bNeedAck,
++									 uFragIdx,
++									 cbLastFragmentSize,
++									 uMACfragNum, byFBOption));
+ 
+ 		buf->time_stamp_off_a = vnt_time_stamp_off(pDevice, wCurrentRate);
+ 		buf->time_stamp_off_b = vnt_time_stamp_off(pDevice, pDevice->byTopCCKBasicRate);
+@@ -531,12 +555,24 @@ static __le16 s_uFillDataHead(struct vnt_private *pDevice,
+ 					  byPktType, &buf->a);
+ 
+ 			/* Get Duration and TimeStampOff */
+-			buf->duration = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A, cbFrameLength, byPktType,
+-									    wCurrentRate, bNeedAck, uFragIdx, cbLastFragmentSize, uMACfragNum, byFBOption));
+-			buf->duration_f0 = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A_F0, cbFrameLength, byPktType,
+-									       wCurrentRate, bNeedAck, uFragIdx, cbLastFragmentSize, uMACfragNum, byFBOption));
+-			buf->duration_f1 = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A_F1, cbFrameLength, byPktType,
+-										wCurrentRate, bNeedAck, uFragIdx, cbLastFragmentSize, uMACfragNum, byFBOption));
++			buf->duration =
++				cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A,
++								    cbFrameLength, byPktType,
++								    wCurrentRate, bNeedAck,
++								    uFragIdx, cbLastFragmentSize,
++								    uMACfragNum, byFBOption));
++			buf->duration_f0 =
++				cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A_F0,
++								    cbFrameLength, byPktType,
++								    wCurrentRate, bNeedAck,
++								    uFragIdx, cbLastFragmentSize,
++								    uMACfragNum, byFBOption));
++			buf->duration_f1 =
++				cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A_F1,
++								    cbFrameLength, byPktType,
++								    wCurrentRate, bNeedAck,
++								    uFragIdx, cbLastFragmentSize,
++								    uMACfragNum, byFBOption));
+ 			buf->time_stamp_off = vnt_time_stamp_off(pDevice, wCurrentRate);
+ 			return buf->duration;
+ 		}
+@@ -552,10 +588,11 @@ static __le16 s_uFillDataHead(struct vnt_private *pDevice,
+ 		} else {
+ 			/* Get Duration and TimeStampOff */
+ 			buf->duration =
+-				cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A, cbFrameLength, byPktType,
+-								    wCurrentRate, bNeedAck, uFragIdx,
+-								    cbLastFragmentSize, uMACfragNum,
+-								    byFBOption));
++				cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A,
++								    cbFrameLength, byPktType,
++								    wCurrentRate, bNeedAck,
++								    uFragIdx, cbLastFragmentSize,
++								    uMACfragNum, byFBOption));
+ 		}
+ 
+ 		buf->time_stamp_off = vnt_time_stamp_off(pDevice, wCurrentRate);
+@@ -573,10 +610,10 @@ static __le16 s_uFillDataHead(struct vnt_private *pDevice,
+ 	} else {
+ 		/* Get Duration and TimeStampOff */
+ 		buf->duration =
+-			cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_B, cbFrameLength, byPktType,
+-							    wCurrentRate, bNeedAck, uFragIdx,
+-							    cbLastFragmentSize, uMACfragNum,
+-							    byFBOption));
++			cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_B, cbFrameLength,
++							    byPktType, wCurrentRate, bNeedAck,
++							    uFragIdx, cbLastFragmentSize,
++							    uMACfragNum, byFBOption));
+ 	}
+ 
+ 	buf->time_stamp_off = vnt_time_stamp_off(pDevice, wCurrentRate);
 -- 
-2.37.3
+2.34.1
 
