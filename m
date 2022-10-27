@@ -2,117 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DDD260F7B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A17860F7BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235720AbiJ0Mne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50582 "EHLO
+        id S235759AbiJ0Mnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235725AbiJ0MnZ (ORCPT
+        with ESMTP id S234140AbiJ0Mnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:43:25 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FF2160EC1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:43:24 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id b25so736775qkk.7
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:43:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wgI6HG8FQ8TV0CSUErQizBzICht7movStGCeNSKfSsU=;
-        b=BCm5z5Oq1brMVlg64USQxbVgmqnBPy3tEgE/tNxGsERJTQ4SusNunpXmUgZffDBJan
-         E3vjmQ+hwz8qwct4uJL5laOZc6vUxq0HmBwrWQsWtj1cBrHaXVEFb1m6ruPc+b80wWAM
-         TWcBP5mz+lL584fVN9rCPvDXwzt6YSNiLJFdPQ1UiVSKs9ZBVi74o/jUvGmpQMxYRpE6
-         riC9kl99qp3oHrZHfBjFhdcAaKdQkqyf38nh/aDeDULTUtuEyFFTmNAWeZafEj6mXSmv
-         oM2vMgiUP4VzIh+VcWj4Luj3BloTZtVa5Nn+W7DhxXDlgGmgbOoGgiFvsSuQb2caiWog
-         JuqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wgI6HG8FQ8TV0CSUErQizBzICht7movStGCeNSKfSsU=;
-        b=CRYSJDR8vFkM5JZc+5XpPTq1sh8XJmRZQ5uswomf6Cs8ZoHhq27AXoIOyky8zV67lK
-         v4wqJgL256BVfgpsV2SHW2umwiMv6U+CQoO1F3FGGtJXSot3cMlRrB371iscynboJ1K3
-         rDbbM4eBO4FXWffYyOkd/0HCVauV71cWQiBqULXQOwfZVKq0MX8bZBuu+ICNShIrrwjG
-         DO+g9E+/bZH5+wZDutlbhRBzOp9NrjDDxzvZw0IFzkNyvArJtuDy0DNUO4LT91owy0E5
-         qid+tyAdoFo1tUO7rF/q3eRtNK7XsVfvt6RXUc1+F7CIIXlqaCdGt0TLPkZwCa6jNOh1
-         v2Dg==
-X-Gm-Message-State: ACrzQf05EcfQ9hZF9xgJCsUYvuCkINNUWnw6wnUetxZGZyRyAjYc/O8D
-        HbNaZ7ddSTVlpHFtZfpMF2uqOA==
-X-Google-Smtp-Source: AMsMyM7rtq2ZKBo6fZyLQxT3jX6HgF4Wq/x3EeirSE37uYvQzziEhRLXw0DIWaMvgGLwjU0T5TKKpA==
-X-Received: by 2002:a05:620a:370c:b0:6ee:cece:c779 with SMTP id de12-20020a05620a370c00b006eececec779mr32768327qkb.727.1666874603351;
-        Thu, 27 Oct 2022 05:43:23 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id f18-20020a05620a409200b006cbe3be300esm916562qko.12.2022.10.27.05.43.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 05:43:22 -0700 (PDT)
-Message-ID: <68f6d58e-8b7a-1032-4a3d-c4c74b82d111@linaro.org>
-Date:   Thu, 27 Oct 2022 08:43:20 -0400
+        Thu, 27 Oct 2022 08:43:37 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E63167253;
+        Thu, 27 Oct 2022 05:43:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1666874613; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=um9/OS7dgazyiG2HSas0gGeFZisZOzGn8RMAzZOsWsE=;
+        b=RnY+S9citCYf4A1np5gWktC9TFg+p1PTiWCzc4L9VgWrDK0wCyGOeUtjz/W+XiJVmQvfUB
+        Y0fVCq9MlCnU0MI/Tj/ardWiCClOhsrAUoibplJyQdgy059cNaQNfd7+tYH/s9y5QoUJOj
+        xNPUiRUPpe6ZtQBUpW8e89k8yLnLlHc=
+Date:   Thu, 27 Oct 2022 13:43:23 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 5/6] clk: ingenic: Add X1000 audio clocks
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, zhouyu@wanyeetech.com,
+        linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <BOWEKR.6I1HK0CSJNAT@crapouillou.net>
+In-Reply-To: <20221026194345.243007-6-aidanmacdonald.0x0@gmail.com>
+References: <20221026194345.243007-1-aidanmacdonald.0x0@gmail.com>
+        <20221026194345.243007-6-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v4 06/11] dt-bindings: input: qcom,pm8921-pwrkey: convert
- to dt-schema
-To:     neil.armstrong@linaro.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andy Gross <agross@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
- <20220928-mdm9615-dt-schema-fixes-v4-6-dac2dfaac703@linaro.org>
- <Y1o5hYAnBuf1akJ9@google.com>
- <e8f53c8a-2842-9e6e-75bd-e099db3fe6f3@linaro.org>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <e8f53c8a-2842-9e6e-75bd-e099db3fe6f3@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/10/2022 08:39, Neil Armstrong wrote:
-> Hi,
-> 
-> On 27/10/2022 09:55, Dmitry Torokhov wrote:
->> On Fri, Oct 21, 2022 at 11:06:42AM +0200, Neil Armstrong wrote:
->>> Convert input/qcom,pm8xxx-pwrkey.txt to YAML, and take in account that
->>> the PM8921 pwrkey compatible is used as fallback for the PM8018 pwrkey.
->>>
->>> Reviewed-by: Rob Herring <robh@kernel.org>
->>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->>
->> Should I merge this through my tree or you want all these changes to go
->> together through some particular tree?
-> 
-> I have no preference,
-> Krzysztof will you take it and prepare a branch to Bjorn ?
+Hi Aidan,
 
-No, I did not plan on doing it.
+Le mer. 26 oct. 2022 =E0 20:43:44 +0100, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+> The X1000's CGU supplies the I2S system clock to the AIC module
+> and ultimately the audio codec, represented by the "i2s" clock.
+> It is a simple mux which can either pass through EXCLK or a PLL
+> multiplied by a fractional divider (the "i2s_pll" clock).
+>=20
+> The AIC contains a separate 1/N divider controlled by the I2S
+> driver, which generates the bit clock from the system clock.
+> The frame clock is always fixed to 1/64th of the bit clock.
+>=20
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 
-Dmitry,
-Please grab it (assuming there are no dependencies).
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 
-Best regards,
-Krzysztof
+Cheers,
+-Paul
+
+> ---
+> v1 -> v2:
+> * Fix I2SCDR1 refresh to ensure the register is properly initialized
+>   and we don't rely on the reset value. Since the I2SDIV_D field can
+>   be automatically calculated by the hardware we don't need to provide
+>   it, writing 0 triggers the auto calculation.
+> * Remove redundant -1 entries from parent clocks.
+>=20
+>  drivers/clk/ingenic/x1000-cgu.c | 70=20
+> +++++++++++++++++++++++++++++++++
+>  1 file changed, 70 insertions(+)
+>=20
+> diff --git a/drivers/clk/ingenic/x1000-cgu.c=20
+> b/drivers/clk/ingenic/x1000-cgu.c
+> index b2ce3fb83f54..95d5e3a44cee 100644
+> --- a/drivers/clk/ingenic/x1000-cgu.c
+> +++ b/drivers/clk/ingenic/x1000-cgu.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/delay.h>
+>  #include <linux/io.h>
+>  #include <linux/of.h>
+> +#include <linux/rational.h>
+>=20
+>  #include <dt-bindings/clock/ingenic,x1000-cgu.h>
+>=20
+> @@ -168,6 +169,38 @@ static const struct clk_ops x1000_otg_phy_ops =3D {
+>  	.is_enabled	=3D x1000_usb_phy_is_enabled,
+>  };
+>=20
+> +static void
+> +x1000_i2spll_calc_m_n_od(const struct ingenic_cgu_pll_info *pll_info,
+> +			 unsigned long rate, unsigned long parent_rate,
+> +			 unsigned int *pm, unsigned int *pn, unsigned int *pod)
+> +{
+> +	const unsigned long m_max =3D GENMASK(pll_info->m_bits - 1, 0);
+> +	const unsigned long n_max =3D GENMASK(pll_info->n_bits - 1, 0);
+> +	unsigned long m, n;
+> +
+> +	rational_best_approximation(rate, parent_rate, m_max, n_max, &m,=20
+> &n);
+> +
+> +	/* n should not be less than 2*m */
+> +	if (n < 2 * m)
+> +		n =3D 2 * m;
+> +
+> +	*pm =3D m;
+> +	*pn =3D n;
+> +	*pod =3D 1;
+> +}
+> +
+> +static void
+> +x1000_i2spll_set_rate_hook(const struct ingenic_cgu_pll_info=20
+> *pll_info,
+> +			   unsigned long rate, unsigned long parent_rate)
+> +{
+> +	/*
+> +	 * Writing 0 causes I2SCDR1.I2SDIV_D to be automatically=20
+> recalculated
+> +	 * based on the current value of I2SCDR.I2SDIV_N, which is needed=20
+> for
+> +	 * the divider to function correctly.
+> +	 */
+> +	writel(0, cgu->base + CGU_REG_I2SCDR1);
+> +}
+> +
+>  static const s8 pll_od_encoding[8] =3D {
+>  	0x0, 0x1, -1, 0x2, -1, -1, -1, 0x3,
+>  };
+> @@ -319,6 +352,37 @@ static const struct ingenic_cgu_clk_info=20
+> x1000_cgu_clocks[] =3D {
+>  		.gate =3D { CGU_REG_CLKGR, 25 },
+>  	},
+>=20
+> +	[X1000_CLK_I2SPLLMUX] =3D {
+> +		"i2s_pll_mux", CGU_CLK_MUX,
+> +		.parents =3D { X1000_CLK_SCLKA, X1000_CLK_MPLL },
+> +		.mux =3D { CGU_REG_I2SCDR, 31, 1 },
+> +	},
+> +
+> +	[X1000_CLK_I2SPLL] =3D {
+> +		"i2s_pll", CGU_CLK_PLL,
+> +		.parents =3D { X1000_CLK_I2SPLLMUX },
+> +		.pll =3D {
+> +			.reg =3D CGU_REG_I2SCDR,
+> +			.rate_multiplier =3D 1,
+> +			.m_shift =3D 13,
+> +			.m_bits =3D 9,
+> +			.n_shift =3D 0,
+> +			.n_bits =3D 13,
+> +			.calc_m_n_od =3D x1000_i2spll_calc_m_n_od,
+> +			.set_rate_hook =3D x1000_i2spll_set_rate_hook,
+> +		},
+> +	},
+> +
+> +	[X1000_CLK_I2S] =3D {
+> +		"i2s", CGU_CLK_MUX,
+> +		.parents =3D { X1000_CLK_EXCLK, -1, -1, X1000_CLK_I2SPLL },
+> +		/*
+> +		 * NOTE: the mux is at bit 30; bit 29 enables the M/N divider.
+> +		 * Therefore, the divider is disabled when EXCLK is selected.
+> +		 */
+> +		.mux =3D { CGU_REG_I2SCDR, 29, 2 },
+> +	},
+> +
+>  	[X1000_CLK_LCD] =3D {
+>  		"lcd", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
+>  		.parents =3D { X1000_CLK_SCLKA, X1000_CLK_MPLL },
+> @@ -426,6 +490,12 @@ static const struct ingenic_cgu_clk_info=20
+> x1000_cgu_clocks[] =3D {
+>  		.gate =3D { CGU_REG_CLKGR, 9 },
+>  	},
+>=20
+> +	[X1000_CLK_AIC] =3D {
+> +		"aic", CGU_CLK_GATE,
+> +		.parents =3D { X1000_CLK_EXCLK },
+> +		.gate =3D { CGU_REG_CLKGR, 11 },
+> +	},
+> +
+>  	[X1000_CLK_UART0] =3D {
+>  		"uart0", CGU_CLK_GATE,
+>  		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
+> --
+> 2.38.1
+>=20
+
 
