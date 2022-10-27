@@ -2,158 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFE661054A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB52A61054D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234820AbiJ0WBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 18:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54470 "EHLO
+        id S234619AbiJ0WCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 18:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234800AbiJ0WBX (ORCPT
+        with ESMTP id S234434AbiJ0WBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 18:01:23 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAF49E688;
-        Thu, 27 Oct 2022 15:00:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666908060; x=1698444060;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=fujCfldGBPIDZRrZhsgY+3RvDLnevLWFmVpeF8wnuOo=;
-  b=aFT3EVIWxlGtAs6snjxocbyCOqULwuuxpkcWu9D8j2dXtQecjvO9bkG6
-   BURWLTRRjLKB1MZ9hxzy/GqtRSOKYcvDmm+F+hyHaCgMORkKetI25wyoV
-   jfg6IthJAwW5x3HnNWgx1cw+DVKusfdAurgGI1oTcszDOhNIoATbZjMqg
-   aROsSb/rcdME6XK1ePLPKRrRJdbboWI1KBclAaByExvX0WbGewMVBI5Io
-   XYygRXrLh1TH8KwHBDPqgtVkqSVCVwNno3LHKWOkdNTyl4VyhnYWkLR1+
-   deAukGLztTWzmKKfHzCroux8W4XzRewft9KVShpRpgz6qOBydFWNtKRkP
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="394665997"
-X-IronPort-AV: E=Sophos;i="5.95,219,1661842800"; 
-   d="scan'208";a="394665997"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 15:00:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="635071032"
-X-IronPort-AV: E=Sophos;i="5.95,219,1661842800"; 
-   d="scan'208";a="635071032"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga007.fm.intel.com with ESMTP; 27 Oct 2022 15:00:58 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, rafael@kernel.org,
-        len.brown@intel.com
-Cc:     peterz@infradead.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] x86: intel_epb: Set Alder Lake N and Raptor Lake P normal EPB
-Date:   Thu, 27 Oct 2022 15:00:56 -0700
-Message-Id: <20221027220056.1534264-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 27 Oct 2022 18:01:52 -0400
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07BC6A026D;
+        Thu, 27 Oct 2022 15:01:51 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id i3so3061775pfc.11;
+        Thu, 27 Oct 2022 15:01:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xuf2rYc4skGV/brVADA47UOE0bGVgDUQN7KLwp1HwW8=;
+        b=7T4uVmhQp+b2sCm0RWNy1Hj3WdJXv0flFD94q7W+1M5Tu4pqfSqcDzXtIBiqGJCtQ3
+         /Sr4U2Sy/c3Ju77DVPLCh8tHncmCgpglm8KlWUWQbfV0kOaTx4eqfA5JubVI7aGc5Az4
+         rympNxY7GRIETFxzG6/YIRoEQPh1NV1Ylz6h6VuAZ3Nz/CdNRhMx6VSrxslnWcECEjwu
+         xsW80CmOKMv9hNt3Y5bv1yXWIr9qLxjkUHHGfWrKZwnc67MTDTkhNVfiSkOj1BC5q3vC
+         4bxbQ4NK1faQ0x8g2MMbmXv7Zy7uanjeg6ktSMbrDoAZdIdtDQVFPTICweZRiprQdI6R
+         4XsQ==
+X-Gm-Message-State: ACrzQf1df9x2fu+EL65r28aKyHTl41Y9p5zkDorUzogQ4RSAsTjaOMqA
+        ho8nexxrCUcejbdeiCPGNJo=
+X-Google-Smtp-Source: AMsMyM63yLidIP4PV9Xc0SANp2ydp+HPviTsYt2HnMrs+WOCV8sF4IDlYE+H12U1KYsKv+/Xo3fhZg==
+X-Received: by 2002:a63:480e:0:b0:46e:b96c:4f89 with SMTP id v14-20020a63480e000000b0046eb96c4f89mr30330659pga.201.1666908110449;
+        Thu, 27 Oct 2022 15:01:50 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:bc2b:ff19:1b02:257b? ([2620:15c:211:201:bc2b:ff19:1b02:257b])
+        by smtp.gmail.com with ESMTPSA id i7-20020a170902c94700b00181e55d02dcsm1675471pla.139.2022.10.27.15.01.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 15:01:49 -0700 (PDT)
+Message-ID: <8113c37b-9917-b5f2-87c8-cb76f59c69da@acm.org>
+Date:   Thu, 27 Oct 2022 15:01:46 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v3 09/17] ufs: core: mcq: Configure operation and runtime
+ interface
+Content-Language: en-US
+To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        stanley.chu@mediatek.com, eddie.huang@mediatek.com,
+        daejun7.park@samsung.com, avri.altman@wdc.com, mani@kernel.org,
+        beanhuo@micron.com, quic_richardp@quicinc.com,
+        linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1666288432.git.quic_asutoshd@quicinc.com>
+ <84a13c45fa8edc375b3342a5b9b35fc097208bab.1666288432.git.quic_asutoshd@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <84a13c45fa8edc375b3342a5b9b35fc097208bab.1666288432.git.quic_asutoshd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Intel processors support additional software hint called EPB ("Energy
-Performance Bias") to guide the hardware heuristic of power management
-features to favor increasing dynamic performance or conserve energy
-consumption.
+On 10/20/22 11:03, Asutosh Das wrote:
+> +/**
+> + * ufshcd_mcq_config_mac - Set the #Max Activ Cmds.
+> + * @hba - per adpater instance
 
-Since this EPB hint is processor specific, the same value of hint can
-result in different behavior across generations of processors.
+adpater -> adapter
 
-commit 4ecc933b7d1f ("x86: intel_epb: Allow model specific normal EPB
-value")' introduced capability to update the default power up EPB
-based on the CPU model and updated the default EPB to 7 for Alder Lake
-mobile CPUs.
+> + * @max_active_cmds - maximum # of active commands to the device at any time.
+> + *
+> + * The controller wouldn't send more than the max_active_cmds to the device at
+> + * any time.
+> + */
 
-The same change is required for other Alder Lake-N and Raptor Lake-P
-mobile CPUs as the current default of 6 results in higher uncore power
-consumption. This increase in power is related to memory clock
-frequency setting based on the EPB value.
+wouldn't -> won't
 
-Depending on the EPB the minimum memory frequency is set by the
-firmware. At EPB = 7, the minimum memory frequency is 1/4th compared to
-EPB = 6. This results in significant power saving for idle and
-semi-idle workload on a Chrome platform.
+> +#define MCQ_CFG_n(r, i) \
+> +	((r) + MCQ_QCFG_SIZE * (i))
 
-For example Change in power and performance from EPB change from 6 to 7
-on Alder Lake-N:
+No need to spread this macro over two lines.
 
-Workload    Performance diff (%)    power diff
-----------------------------------------------------
-VP9 FHD30	0 (FPS)		-218 mw
-Google meet	0 (FPS)		-385 mw
+Otherwise this patch looks good to me.
 
-This 200+ mw power saving is very significant for mobile platform for
-battery life and thermal reasons.
-
-But as the workload demands more memory bandwidth, the memory frequency
-will be increased very fast. There is no power savings for such busy
-workloads.
-
-For example:
-
-Workload		Performance diff (%) from EPB 6 to 7
--------------------------------------------------------
-Speedometer 2.0		-0.8
-WebGL Aquarium 10K
-Fish    		-0.5
-Unity 3D 2018		0.2
-WebXPRT3		-0.5
-
-There are run to run variations for performance scores for
-such busy workloads. So the difference is not significant.
-
-Add a new define ENERGY_PERF_BIAS_NORMAL_POWERSAVE for EPB 7
-and use it for Alder Lake-N and Raptor Lake-P mobile CPUs.
-
-This modification is done originally by
-Jeremy Compostella <jeremy.compostella@intel.com>.
-
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- arch/x86/include/asm/msr-index.h | 1 +
- arch/x86/kernel/cpu/intel_epb.c  | 7 ++++++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index 10ac52705892..a3eb4d3e70b8 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -796,6 +796,7 @@
- #define ENERGY_PERF_BIAS_PERFORMANCE		0
- #define ENERGY_PERF_BIAS_BALANCE_PERFORMANCE	4
- #define ENERGY_PERF_BIAS_NORMAL			6
-+#define ENERGY_PERF_BIAS_NORMAL_POWERSAVE	7
- #define ENERGY_PERF_BIAS_BALANCE_POWERSAVE	8
- #define ENERGY_PERF_BIAS_POWERSAVE		15
- 
-diff --git a/arch/x86/kernel/cpu/intel_epb.c b/arch/x86/kernel/cpu/intel_epb.c
-index fbaf12e43f41..3b8476158236 100644
---- a/arch/x86/kernel/cpu/intel_epb.c
-+++ b/arch/x86/kernel/cpu/intel_epb.c
-@@ -204,7 +204,12 @@ static int intel_epb_offline(unsigned int cpu)
- }
- 
- static const struct x86_cpu_id intel_epb_normal[] = {
--	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, 7),
-+	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,
-+				   ENERGY_PERF_BIAS_NORMAL_POWERSAVE),
-+	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,
-+				   ENERGY_PERF_BIAS_NORMAL_POWERSAVE),
-+	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,
-+				   ENERGY_PERF_BIAS_NORMAL_POWERSAVE),
- 	{}
- };
- 
--- 
-2.31.1
-
+Bart.
