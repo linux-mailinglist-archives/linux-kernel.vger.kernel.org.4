@@ -2,132 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7248260ED03
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 02:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BAD860ED05
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 02:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233512AbiJ0AbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 20:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
+        id S233809AbiJ0AcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 20:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiJ0Aa7 (ORCPT
+        with ESMTP id S229456AbiJ0AcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 20:30:59 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D73910452A
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 17:30:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1666830658; x=1698366658;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=uNlqtDf6jWpkFPA0E2cg8BhVIpvaDxbPOBiNnbpCpcg=;
-  b=WqJLOftIWd/flCHR/a+l8ASrHfKo/Jd+OqJSooPLKyN4QSSS/KobvPJv
-   QH+Q9jVBZ3QFytyOP+0S/BuSfNRrX6aF2aAW5XQ5ah7CYxKOa3buTZtgz
-   4uRVeZPCCHHktY0ShWKvYFiIBjORXRASJ/Ezzr2ITgL5zHQKz94Oux2OY
-   7XcktkiKqizInoZkTmIiC8NMxyWPz13FqZUCDuNj1xF0RF9Yk62aAg/qy
-   jOMz5jRzRqUOd38M088I2qNL1WwZTQv+czR1jnbL2g40hgMsdUMw/Bvar
-   IZG6WNxMqeiOBKiNkLkdu7vuSg37BYyanz6jKnIt+91Pg6Wz/o4mGmQOv
-   g==;
-X-IronPort-AV: E=Sophos;i="5.95,215,1661788800"; 
-   d="scan'208";a="219994892"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 27 Oct 2022 08:30:57 +0800
-IronPort-SDR: /5xjH2xzZOuaS4i6wS+aQbz2Ael3EQG5YeICI38nsRO8P6IsufQ8uEkn+lXfmVdRiIQ/E1zMnn
- +7Ze9WbbHBEqnOZ9pGHj/oQYuhtp4QcubmpMy2Tg/zBX1+279a3y2v81dBR8SSHWDSePKQRflL
- 5gtInonZrCf0KFfftrA0h2d1LLa8TI6SZ9q3nyLYG+uzlnNcb7e6BW02JxuWSfxVbIWW9PoHgi
- 3l9Vn+1U2H/poVWkhyZQj6O73cYtJoJ/NJjKCkzxJQ0lWLrBQM3Yx5tPsjuTpRPELfTKkkDUAw
- tj0a2lmZx1Qn5eOAzG03aU5P
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Oct 2022 16:50:18 -0700
-IronPort-SDR: LzAdDNRHO6tAxoUU5Eb2rQeGNrOfnmuWhdo7QITEj1fWZLS/+C595UeQHTjIBgPBd6KltiHKFO
- 3U8YJlHNDTHdOAzgDOmcDavepJfTxs5y0+6LeL0aeLkrxXNpRbZJa9koL1BTg4YWyTIjHGYd+w
- j2vU7FQ56yRSA1caBKfdzXhQyUFCdMicik16wCMiqlGloGikq8Vi/lV3deiC73tZcBJ/W2ky14
- ee7cNff2J7oaNB7iD8yCxMXiY/1Ms0xrglHE0UsfCi+1Rjn52FkiDG+6f/y+hgQXGwdUwN5gHm
- 87g=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Oct 2022 17:30:57 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MyRRh5gQFz1Rwt8
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 17:30:56 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:content-language:references:to
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1666830656; x=1669422657; bh=uNlqtDf6jWpkFPA0E2cg8BhVIpvaDxbPOBi
-        NnbpCpcg=; b=EmJz53YhIuBHiIY3ei1U3aKKp940WjQ2V8n2aGWzEOVHOXFqHw+
-        F+ST5FDSsRDf5L6i6vnb56UxNGUkqU5bqF0npHqh2syqrURlAp5dNeVdz8WfJzHv
-        yZKT8K4Szth/Yp6izNkT8Sqy3XLYUdRf5HbE3BrSKbh9eQ9buWeRriAeS7k2mIwE
-        LWZUmyOW7mYs1YMANChRgWtVEDPxMDmHxC0acD6sytZWi44GrxMeF0FsxaQQA/lh
-        iMzZztxhXOGYhU1iW2s29QrvpcaltA50LpMjc+ciNuoPWzuVRdRunJg5iaMczK2m
-        8TcCQHE+UIIHIUNPnFO8mBoZuRUSaEmnAbg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id i3UA6536VBrp for <linux-kernel@vger.kernel.org>;
-        Wed, 26 Oct 2022 17:30:56 -0700 (PDT)
-Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MyRRf6Xd1z1RvLy;
-        Wed, 26 Oct 2022 17:30:54 -0700 (PDT)
-Message-ID: <23b7b1f7-94c1-9c01-e1c8-c0a30a4aa06d@opensource.wdc.com>
-Date:   Thu, 27 Oct 2022 09:30:52 +0900
+        Wed, 26 Oct 2022 20:32:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E623132249
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 17:32:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666830735;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LMKewoUAt79Xc4gzp2ylHJXZ8WKiI9xisq9uY0Ul/yQ=;
+        b=L0722b97xmdxzudBWpDmelAJy8K+vfmT/vvZt+ufpNwwrPki5NIvZMDnXLVUxIFvOM0JRE
+        ynsXlCkKZipneqEjqdhyfIRCECdP8o110c6JitHVsdp68A+/Z73iRrfk2UP7LsxOo02Ub3
+        aQ4tTRFJkyO1hW3sDS94dg5jjTPfABk=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-110--Te8o8jGP-uY60XrLuoZ6w-1; Wed, 26 Oct 2022 20:32:11 -0400
+X-MC-Unique: -Te8o8jGP-uY60XrLuoZ6w-1
+Received: by mail-io1-f71.google.com with SMTP id r197-20020a6b8fce000000b006c3fc33424dso70584iod.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 17:32:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LMKewoUAt79Xc4gzp2ylHJXZ8WKiI9xisq9uY0Ul/yQ=;
+        b=RcBt4pjHtR2qiWi0Su57WV/btEiCPN8WAB3rLiC6O4kp6zSJz0n3MExkHVmlrYcksL
+         vNNXOcfe/28eXch0qFwJJtUzg2Lq6jUyZQiRE7m/ExPwf7EmLHmL/guNMLS6gy1KMXnN
+         GHQSL25GXFLSu7KmPFLejFCLcaqldErH6D8va6afbXXlVd3SpoCJDksaVNiV6eiA3pEg
+         s9OEZPy44jdVJoOXu+bQY/3y09JAaNSDWWg1FY0MtJ4F5L1xqCV4RL+lidpjurBI/UAI
+         D2EXt7irBTeN8lNaXUM+fnoHjQHXZcUoZwmzI3D98iYC+Wpb8j+eX2nipafU5cOQzg7l
+         Cbtw==
+X-Gm-Message-State: ACrzQf0jXz46nUSOvWFTQOMk9yzK3RoprkdshmRE9cFQtSOqbULx70bv
+        aL6flLWWH0wMJKs+S5UUPYIk6/iqgNn4k7yCk9XH/hdY/dSFX93aZgIySijwRCeR/x5EOyeyjnk
+        9xevijECWEEClFuaYj+zwrbtt
+X-Received: by 2002:a05:6602:4191:b0:68a:144c:82dd with SMTP id bx17-20020a056602419100b0068a144c82ddmr3368884iob.33.1666830730420;
+        Wed, 26 Oct 2022 17:32:10 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM51bORvzjwQH2dqSHTTF6NkqFxjIWb4x+zF9nY4N7wW9vflHq5T25kEe1IpxUnSj9WcGpCyow==
+X-Received: by 2002:a05:6602:4191:b0:68a:144c:82dd with SMTP id bx17-20020a056602419100b0068a144c82ddmr3368861iob.33.1666830730119;
+        Wed, 26 Oct 2022 17:32:10 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id h14-20020a056e021b8e00b0030061b6d93bsm1029016ili.20.2022.10.26.17.32.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 17:32:09 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 20:32:08 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Yuanzheng Song <songyuanzheng@huawei.com>,
+        akpm@linux-foundation.org, gregkh@linuxfoundation.org,
+        david@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH STABLE 5.10] mm/memory: add non-anonymous page check in
+ the copy_present_page()
+Message-ID: <Y1nRiJ1LYB62uInn@x1n>
+References: <20221024094911.3054769-1-songyuanzheng@huawei.com>
+ <3823471f-6dda-256e-e082-718879c05449@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] scsi: pm8001: Drop !task check in pm8001_abort_task()
-To:     John Garry <john.garry@huawei.com>, jinpu.wang@cloud.ionos.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1666781764-123090-1-git-send-email-john.garry@huawei.com>
-Content-Language: en-US
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <1666781764-123090-1-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3823471f-6dda-256e-e082-718879c05449@google.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/26/22 19:56, John Garry wrote:
-> In commit 0b639decf651 ("scsi: pm8001: Modify task abort handling for SATA
-> task"), code was introduced to dereference "task" pointer in
-> pm8001_abort_task(). However there was a pre-existing later check for
-> "!task", which spooked the kernel test robot.
-> 
-> Function pm8001_abort_task() should never be passed NULL for "task"
-> pointer, so remove that check. Also remove the "unlikely" hint, as this is
-> not fastpath code.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> 
-> diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
-> index 2359e827c9e6..e5673c774f66 100644
-> --- a/drivers/scsi/pm8001/pm8001_sas.c
-> +++ b/drivers/scsi/pm8001/pm8001_sas.c
-> @@ -979,7 +979,7 @@ int pm8001_abort_task(struct sas_task *task)
->  	u32 phy_id, port_id;
->  	struct sas_task_slow slow_task;
->  
-> -	if (unlikely(!task || !task->lldd_task || !task->dev))
-> +	if (!task->lldd_task || !task->dev)
->  		return TMF_RESP_FUNC_FAILED;
->  
->  	dev = task->dev;
+Hi, Yuanzheng,
 
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+On Wed, Oct 26, 2022 at 02:51:16PM -0700, Hugh Dickins wrote:
+> On Mon, 24 Oct 2022, Yuanzheng Song wrote:
+> 
+> > The vma->anon_vma of the child process may be NULL because
+> > the entire vma does not contain anonymous pages. In this
+> > case, a BUG will occur when the copy_present_page() passes
+> > a copy of a non-anonymous page of that vma to the
+> > page_add_new_anon_rmap() to set up new anonymous rmap.
+> > 
+> > ------------[ cut here ]------------
+> > kernel BUG at mm/rmap.c:1044!
+> > Internal error: Oops - BUG: 0 [#1] SMP
+> > Modules linked in:
+> > CPU: 2 PID: 3617 Comm: test Not tainted 5.10.149 #1
+> > Hardware name: linux,dummy-virt (DT)
+> > pstate: 80000005 (Nzcv daif -PAN -UAO -TCO BTYPE=--)
+> > pc : __page_set_anon_rmap+0xbc/0xf8
+> > lr : __page_set_anon_rmap+0xbc/0xf8
+> > sp : ffff800014c1b870
+> > x29: ffff800014c1b870 x28: 0000000000000001
+> > x27: 0000000010100073 x26: ffff1d65c517baa8
+> > x25: ffff1d65cab0f000 x24: ffff1d65c416d800
+> > x23: ffff1d65cab5f248 x22: 0000000020000000
+> > x21: 0000000000000001 x20: 0000000000000000
+> > x19: fffffe75970023c0 x18: 0000000000000000
+> > x17: 0000000000000000 x16: 0000000000000000
+> > x15: 0000000000000000 x14: 0000000000000000
+> > x13: 0000000000000000 x12: 0000000000000000
+> > x11: 0000000000000000 x10: 0000000000000000
+> > x9 : ffffc3096d5fb858 x8 : 0000000000000000
+> > x7 : 0000000000000011 x6 : ffff5a5c9089c000
+> > x5 : 0000000000020000 x4 : ffff5a5c9089c000
+> > x3 : ffffc3096d200000 x2 : ffffc3096e8d0000
+> > x1 : ffff1d65ca3da740 x0 : 0000000000000000
+> > Call trace:
+> >  __page_set_anon_rmap+0xbc/0xf8
+> >  page_add_new_anon_rmap+0x1e0/0x390
+> >  copy_pte_range+0xd00/0x1248
+> >  copy_page_range+0x39c/0x620
+> >  dup_mmap+0x2e0/0x5a8
+> >  dup_mm+0x78/0x140
+> >  copy_process+0x918/0x1a20
+> >  kernel_clone+0xac/0x638
+> >  __do_sys_clone+0x78/0xb0
+> >  __arm64_sys_clone+0x30/0x40
+> >  el0_svc_common.constprop.0+0xb0/0x308
+> >  do_el0_svc+0x48/0xb8
+> >  el0_svc+0x24/0x38
+> >  el0_sync_handler+0x160/0x168
+> >  el0_sync+0x180/0x1c0
+> > Code: 97f8ff85 f9400294 17ffffeb 97f8ff82 (d4210000)
+> > ---[ end trace a972347688dc9bd4 ]---
+> > Kernel panic - not syncing: Oops - BUG: Fatal exception
+> > SMP: stopping secondary CPUs
+> > Kernel Offset: 0x43095d200000 from 0xffff800010000000
+> > PHYS_OFFSET: 0xffffe29a80000000
+> > CPU features: 0x08200022,61806082
+> > Memory Limit: none
+> > ---[ end Kernel panic - not syncing: Oops - BUG: Fatal exception ]---
+> > 
+> > This problem has been fixed by the fb3d824d1a46
+> > ("mm/rmap: split page_dup_rmap() into page_dup_file_rmap() and page_try_dup_anon_rmap()"),
+> > but still exists in the linux-5.10.y branch.
+> > 
+> > This patch is not applicable to this version because
+> > of the large version differences. Therefore, fix it by
+> > adding non-anonymous page check in the copy_present_page().
+> > 
+> > Fixes: 70e806e4e645 ("mm: Do early cow for pinned pages during fork() for ptes")
+> > Signed-off-by: Yuanzheng Song <songyuanzheng@huawei.com>
+> 
+> It's a good point, but this patch should not go into any stable release
+> without an explicit Ack from either Peter Xu or David Hildenbrand.
+> 
+> To my eye, it's simply avoiding the issue, rather than fixing
+> it properly; and even if the issue is so rare, and fixing properly
+> too difficult or inefficent (a cached anon_vma?), that a workaround
+> is good enough, it still looks like the wrong workaround (checking
+> dst_vma->anon_vma instead of PageAnon seems more to the point, and
+> less lenient).
+
+Sorry to have missed this patch. I agree with Hugh that this patch may not
+really fix the issue.
+
+IIUC it's the case where the vma is privately mapping a file.  Some shared
+pages got pinned, and here we're trying to trigger the CoW assuming it's
+anonymous page but it's not.
+
+The pin should be RO - if it was a write pin, CoW should have happened on
+the page cache and there should be an anonymous page, and anon_vma should
+be there, no issue should happen.  Only if with RO pin, we won't trigger
+CoW, we won't have any anonymous page, we won't have anon_vma, hence the
+panic.
+
+The thing is if the page is RO pinned, skip copying it (as what was done in
+this patch) is not correct either, because e.g. a follow up write after
+fork() from the parent will trigger CoW and the dma RO page that was pinned
+will be inconsistent to the page in pgtable anymore, I think.
+
+IIUC the correct fix is what David worked on with unshare - when RO pin the
+page cache we should have triggered CoR already before fork().  But as you
+mentioned, that's too much change for stable.
+
+So besides this workaround which seems feasible to at least not panic the
+system (Hugh: I can't quickly tell what'll be the difference here to check
+dst anon_vma or PageAnon, they all seem to work?  I could have missed
+something for sure..), the other workaround is teach the user app to switch
+to use RW pin for any DMA pages even if RO, so that it'll always guarantee
+page coherence even with the old kernel, and afaict that's what RDMA relied
+on for years.  I don't know an easy way to make old kernel work with RO pin
+solidly if without the unsharing logic.
+
+Thanks,
 
 -- 
-Damien Le Moal
-Western Digital Research
+Peter Xu
 
