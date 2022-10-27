@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E54B160F315
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FDD60F308
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235215AbiJ0JA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 05:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
+        id S235064AbiJ0I7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 04:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235175AbiJ0I74 (ORCPT
+        with ESMTP id S234169AbiJ0I7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 04:59:56 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B126472
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:59:48 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id j14so1343028ljh.12
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:59:48 -0700 (PDT)
+        Thu, 27 Oct 2022 04:59:14 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B9A15F92C;
+        Thu, 27 Oct 2022 01:59:13 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id i21so1528998edj.10;
+        Thu, 27 Oct 2022 01:59:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qUjB/LIeIaF8ms/g2Nbld44QrRlq9IWMpRhgl/Fq6KI=;
-        b=mN+1LIDT5vDMW/ShpLbbDHpC+fiaS9l3nCxioAbusITEXCAtPf0+N2AZPmOL0jGYV9
-         rQu1BaAIAPnRSkNUZ59WFz9B641SKJIrpFCndQsU2zCKw83/doKOG4ekf+Y0ITxWN9s6
-         XnOZ6f/wxkdcGRTFcEkvRcGyXO8zDcemSaxysgxOFLHFZNDYLwqzBGLqVFeTHcDAZ1Kn
-         4JsPM74P6YbrJF3iKfxGc85DCI2yYAhyS0DPaG4BHp+Cz4oPCq4vO9N4cDpuWRWgDFI5
-         /ah++J+zQhX6Mcv6/Co46F/adIzsNn3KE+aKpRN9px98EOfDjHnhbFjKu/7Ol93oGag7
-         xthA==
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=w0IUbPjMCAB9XHK86X/OlsKfO5IDtTUMHXt/Hq4ivA4=;
+        b=o0B61ERuf4hfAzCZx6I1fqmQcdEvElx1DFTbZTG2WwCVKN5GCfwIQw+2c1H1YFhb8S
+         l0i0NyzWyJ9V6EuuQJ4rxjJJOxJbYLiA54MMRqqYOGnf97Ecbfzr6/r7u3ALMnvH8gZU
+         95/AQk+fg26STzBaraQfnGpe5jLXteJ9oNGPDxoRfmISlSobdZTAoIrSP/xt8rfN383J
+         HUz0rxyUmh0lAIhRytzv3VQXbQXCRV0TmL0Grt4zW0U1wLlI+RGRANIo59vlysMBtKdW
+         N1jInSqzzJD/xbCfXAQMoT2befDCkf/6HwVNg21skF5J0k5jEKxi75M2pZIdNpjDfx3s
+         S3ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qUjB/LIeIaF8ms/g2Nbld44QrRlq9IWMpRhgl/Fq6KI=;
-        b=KYyCyVsph2P3mdr37nDPR2w7+syGuIDZaFfu35s8iYw/eY2h4t1GWjq9SMS6iZakmF
-         2yV7JQYTx7V5D9F0iR9SGwixCNG1/0vhOTMPjfyRLld48CUSHFZq1DlhsNgLVPwFxGSi
-         USjg4/y4K6V78RqJsur1oEgmipTqb6fYOkiwxn/I4tkOIQwGsm0SrchFFYYOA8r1Aag6
-         MI2YczZcs0WoE1kh0bR2zDQUzeqC1G9tEbRzUbx2QEApHknqAvr1ug71Vsgrc0MZM3Ej
-         u4hdYa7ZMkLvqNwwsipGhEj6T35f4+MJgIJkK+E/n1hsHmRDBuxpqoLMBFsM1iRrLsAm
-         LIdg==
-X-Gm-Message-State: ACrzQf0LRRNTLVP3BXchBUi5tYHz8Nwq5Qpl654tA6iCreBDCM4qtn7/
-        2I/XekrCcqnwdQdhjndBVq4ZZs6cha9ZyA==
-X-Google-Smtp-Source: AMsMyM4O6OnRs6NBwdf82JkF9Yf4ck1Fjz7SURZ/X8gXAfue/gtLJ5n0I1CZMjEvceLRWYng2Xi9xw==
-X-Received: by 2002:a2e:8e28:0:b0:277:11fe:f9b5 with SMTP id r8-20020a2e8e28000000b0027711fef9b5mr6026403ljk.463.1666861186512;
-        Thu, 27 Oct 2022 01:59:46 -0700 (PDT)
-Received: from elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net ([20.240.130.248])
-        by smtp.googlemail.com with ESMTPSA id m3-20020a056512114300b004a050ddc4ecsm109892lfg.125.2022.10.27.01.59.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 01:59:46 -0700 (PDT)
-From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        outreachy@lists.linux.dev,
-        Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-Subject: [PATCH v5 6/6] staging: vt6655: refactor code to avoid a line ending in '('
-Date:   Thu, 27 Oct 2022 08:59:08 +0000
-Message-Id: <43693eef6afe24973ed28f8b26e2d5117f5d35f1.1666849707.git.tanjubrunostar0@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1666849707.git.tanjubrunostar0@gmail.com>
-References: <cover.1666849707.git.tanjubrunostar0@gmail.com>
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w0IUbPjMCAB9XHK86X/OlsKfO5IDtTUMHXt/Hq4ivA4=;
+        b=TY9zSv9AGsVCWCvvVK/3oGWJpAIj80OsKLoVYvu5HL+mY1ncndrZeui59Xm7ppNgpt
+         ji1uJiRVtOdvu6jndedXFTeoQWB/YCV9nzHagfrlZF86VcevlBtz6F4iO0PEpyDSQ3H8
+         FHJD++MQhFZnMz6iLakJUcb5xBA5HH8r3dJr/2Lm1X1iWWY0uR/GxoGHAncsZbsNDY96
+         qKmOK/AnwtqnLa/YjLfif+Pjv3fq+UjLOcWXC66N3FA5JBI2uM1LsQL12P7XkWwvM9h6
+         +I0X4rC4OuTPYrf75Kfu93IHL5eNwe7S70vDDKSDvgNkhrpglCDsBBlpZMK9vk5yNMmZ
+         K8dw==
+X-Gm-Message-State: ACrzQf2bSoEe3RBgCQ4Rixi2t7aPZ02dlFXky3GYP/svhXh38Ceu3xpN
+        8AFlXdLWVCnla7LJ9hWLV3Y=
+X-Google-Smtp-Source: AMsMyM4BMxqD5i3Nq+gejbtjgCLeW2p17a0i+1GyKoe/S0UBNMWJpCO0m4d2J8f0tJgtDJ1tx1L5ag==
+X-Received: by 2002:aa7:c58a:0:b0:461:fc07:a821 with SMTP id g10-20020aa7c58a000000b00461fc07a821mr14744879edq.19.1666861152049;
+        Thu, 27 Oct 2022 01:59:12 -0700 (PDT)
+Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id v13-20020a50d08d000000b0046146c730easm607498edd.75.2022.10.27.01.59.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 01:59:11 -0700 (PDT)
+Message-ID: <e9764253-8ce8-150b-4820-41f03f845469@gmail.com>
+Date:   Thu, 27 Oct 2022 10:59:10 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v1 2/2] arm64: dts: rockchip: fix ir-receiver node names
+To:     heiko@sntech.de
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+References: <ea5af279-f44c-afea-023d-bb37f5a0d58d@gmail.com>
+Content-Language: en-US
+In-Reply-To: <ea5af279-f44c-afea-023d-bb37f5a0d58d@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,65 +77,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-join unnecessary split lines to avoid them ending in '('
+Fix ir-receiver node names on Rockchip boards,
+so that they match with regex: '^ir(-receiver)?(@[a-f0-9]+)?$'
 
-Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 ---
- drivers/staging/vt6655/rxtx.c | 20 +++++++++-----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3308-roc-cc.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-index 6a4fcb16b674..d585435520b3 100644
---- a/drivers/staging/vt6655/rxtx.c
-+++ b/drivers/staging/vt6655/rxtx.c
-@@ -1118,7 +1118,7 @@ static unsigned int s_cbFillTxBufHead(struct vnt_private *pDevice,
- 				pMICHDR = (struct vnt_mic_hdr *)(pbyTxBufferAddr + wTxBufSize +
- 								 sizeof(struct vnt_rrv_time_cts));
- 				pvRTS = NULL;
--				pvCTS = (void *) (pbyTxBufferAddr + wTxBufSize +
-+				pvCTS = (void *)(pbyTxBufferAddr + wTxBufSize +
- 						  sizeof(struct vnt_rrv_time_cts) + cbMICHDR);
- 				pvTxDataHd = (void *)(pbyTxBufferAddr + wTxBufSize +
- 						      sizeof(struct vnt_rrv_time_cts) + cbMICHDR +
-@@ -1296,10 +1296,8 @@ static void vnt_fill_txkey(struct ieee80211_hdr *hdr, u8 *key_buffer,
- 		ether_addr_copy(mic_hdr->addr2, hdr->addr2);
- 		ether_addr_copy(mic_hdr->addr3, hdr->addr3);
- 
--		mic_hdr->frame_control = cpu_to_le16(
--			le16_to_cpu(hdr->frame_control) & 0xc78f);
--		mic_hdr->seq_ctrl = cpu_to_le16(
--				le16_to_cpu(hdr->seq_ctrl) & 0xf);
-+		mic_hdr->frame_control = cpu_to_le16(le16_to_cpu(hdr->frame_control) & 0xc78f);
-+		mic_hdr->seq_ctrl = cpu_to_le16(le16_to_cpu(hdr->seq_ctrl) & 0xf);
- 
- 		if (ieee80211_has_a4(hdr->frame_control))
- 			ether_addr_copy(mic_hdr->addr4, hdr->addr4);
-@@ -1470,9 +1468,9 @@ static int vnt_beacon_xmit(struct vnt_private *priv,
- 
- 		/* Get Duration and TimeStampOff */
- 		short_head->duration =
--			cpu_to_le16((u16)s_uGetDataDuration(priv, DATADUR_B,
--				    frame_size, PK_TYPE_11A, current_rate,
--				    false, 0, 0, 1, AUTO_FB_NONE));
-+			cpu_to_le16((u16)s_uGetDataDuration(priv, DATADUR_B, frame_size,
-+							    PK_TYPE_11A, current_rate, false,
-+							    0, 0, 1, AUTO_FB_NONE));
- 
- 		short_head->time_stamp_off =
- 				vnt_time_stamp_off(priv, current_rate);
-@@ -1486,9 +1484,9 @@ static int vnt_beacon_xmit(struct vnt_private *priv,
- 
- 		/* Get Duration and TimeStampOff */
- 		short_head->duration =
--			cpu_to_le16((u16)s_uGetDataDuration(priv, DATADUR_B,
--				    frame_size, PK_TYPE_11B, current_rate,
--				    false, 0, 0, 1, AUTO_FB_NONE));
-+			cpu_to_le16((u16)s_uGetDataDuration(priv, DATADUR_B, frame_size,
-+							    PK_TYPE_11B, current_rate, false,
-+							    0, 0, 1, AUTO_FB_NONE));
- 
- 		short_head->time_stamp_off =
- 			vnt_time_stamp_off(priv, current_rate);
--- 
-2.34.1
+diff --git a/arch/arm64/boot/dts/rockchip/rk3308-roc-cc.dts b/arch/arm64/boot/dts/rockchip/rk3308-roc-cc.dts
+index ea6820902..7ea481677 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3308-roc-cc.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3308-roc-cc.dts
+@@ -19,7 +19,7 @@
+ 		stdout-path = "serial2:1500000n8";
+ 	};
+
+-	ir_rx {
++	ir-receiver {
+ 		compatible = "gpio-ir-receiver";
+ 		gpios = <&gpio0 RK_PC0 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+--
+2.20.1
 
