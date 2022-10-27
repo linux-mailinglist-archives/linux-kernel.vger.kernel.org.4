@@ -2,75 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC53A60F202
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5425660F208
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234753AbiJ0IQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 04:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
+        id S234867AbiJ0IQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 04:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234677AbiJ0IP4 (ORCPT
+        with ESMTP id S233187AbiJ0IQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 04:15:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE68537FA;
-        Thu, 27 Oct 2022 01:15:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EEF7621EA;
-        Thu, 27 Oct 2022 08:15:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1DBEC433D6;
-        Thu, 27 Oct 2022 08:15:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666858554;
-        bh=N+KAGYM62QTPT5UqFTX5Pm3IpggH83LeQWT2jAiJ9Rc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qacvEILjY0gdHgj4LIe9hQCZf3N7LfI382BuHRdTeAKZPFuWMptPTPxFbTAokN6XT
-         fejAzuQXK9OeTf3ggXwpsrXYZtZUjgxFqWDzNUlEpmSnoizTiHqwssjJ3CpsyDN787
-         A0a1zZ61i+ZUzoTyJKO+Lg4wx0MQudRMuQyR7/hf8whmFt6YX8mZZ64N49xMHtEXWj
-         Q6TheD9xAw7ISzPJp+dleyxGDSuZGgCwjybmn4tE4NIgLlXVhZ1IDJJzXBOVKIIN9Y
-         RaLrNTq28PqVCe8T7V4fVLQy6+YZPe+sht2N5uApqsSowPKi7XxjVI6lkYU97AV6Re
-         cE68xe1HlgEPA==
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     robh@kernel.org, jingoohan1@gmail.com,
-        Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
-        kw@linux.com, gustavo.pimentel@synopsys.com
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V2] PCI: dwc: Fix n_fts[] array overrun
-Date:   Thu, 27 Oct 2022 10:15:48 +0200
-Message-Id: <166685852840.815518.9765633266103182046.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220926111923.22487-1-vidyas@nvidia.com>
-References: <20220919143123.28250-1-vidyas@nvidia.com> <20220926111923.22487-1-vidyas@nvidia.com>
+        Thu, 27 Oct 2022 04:16:42 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFEC31F9C
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:16:40 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id n7so698577plp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:16:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kGQVxG2SU95XA9M7f0IhXRn42lf+Qr3tm/YzKnG6hUc=;
+        b=aiJWnRGbv2p+GLTzTdckX1EybobOwf4N9yfGhVZmM3o/rzjeyHxSQ8OfCCf2MlOb7Y
+         ep1xtYsiIPSdK7nOW+W+JK4EQ5uhmxcXT7TblAfNN8oouZzqH8pvyCNNQhNolPM0yiZ9
+         dqs3zMSoYB2hREDOFY5362dSTEBUsPcVAInkLe0PVnDz5JuGPLFvvmz7/gHDL+FRg9hi
+         ErOZVE2XSjZx1BBpWJ+/nKCC6b5GohK28UbcbsffW0Qub85pGDEzji8Cx6OjvD/Am6kf
+         ZqYaIbr/yzPxIAW53LtbdPmHJMjI7b3jPFBLSDHbPfLwhNERCU1gnrVmPwy5fVB/M6Uy
+         sJPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kGQVxG2SU95XA9M7f0IhXRn42lf+Qr3tm/YzKnG6hUc=;
+        b=X4mx0Ov+CrWeE+wsqnII4KgfhnJ2/cwo3ehOiFkzZ+TqfugIQXEiZqyNmrFLs4xEOV
+         hnsC1PY13JJAo0GoroZyZNSYND14XAOswizI7jzBO0N49AEt1mQknmkjND5NkcttIkH4
+         uCkn0yZ+NUQ3xoXF9RnSeCC2MQgoybXJob2v87zIkRFoU4lW7Y4r5A2MZa8p6Y3QtVIV
+         YUuNJhK+LgTWa5zEZiO632mPHH3+CUz1Sp1TrZwUvsQqon6PRiLOjC0NEkfZ1+eqYaSJ
+         EOyvbWctCwVB0VquoRB9/2cjBEZbcraCFv8kVdkGwWKBcjEGWbAuPrqmg+jU8B1BsBF1
+         oaAA==
+X-Gm-Message-State: ACrzQf1rO7eooaqQMljGjYxuRYm9+y4H6HvuRph5C9AyWgGNRv8GPF1s
+        JyyF9W+mpcXJwAcEjLS2RtGowQ==
+X-Google-Smtp-Source: AMsMyM7At92WPZo/4KMNfDuck2RPQ94GOJyzQ7Yekm8aJYRbDk1PrhtLFWNol83rKPglpiXPDVrVQQ==
+X-Received: by 2002:a17:902:e5c6:b0:185:4bbd:17ce with SMTP id u6-20020a170902e5c600b001854bbd17cemr49174140plf.132.1666858600265;
+        Thu, 27 Oct 2022 01:16:40 -0700 (PDT)
+Received: from YGFVJ29LDD.bytedance.net ([139.177.225.225])
+        by smtp.gmail.com with ESMTPSA id w72-20020a62824b000000b00560e5da42d5sm632972pfd.201.2022.10.27.01.16.36
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 27 Oct 2022 01:16:39 -0700 (PDT)
+From:   Chuyi Zhou <zhouchuyi@bytedance.com>
+To:     peterz@infradead.org, juri.lelli@redhat.com, mingo@redhat.com,
+        vincent.guittot@linaro.org
+Cc:     linux-kernel@vger.kernel.org, joshdon@google.com,
+        Chuyi Zhou <zhouchuyi@bytedance.com>
+Subject: [PATCH] sched/fair: favor non-idle group in tick preemption
+Date:   Thu, 27 Oct 2022 16:16:30 +0800
+Message-Id: <20221027081630.34081-1-zhouchuyi@bytedance.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Sep 2022 16:49:23 +0530, Vidya Sagar wrote:
-> commit aeaa0bfe89654 ("PCI: dwc: Move N_FTS setup to common setup")
-> incorrectly uses pci->link_gen in deriving the index to the
-> n_fts[] array also introducing the issue of accessing beyond the
-> boundaries of array for greater than Gen-2 speeds. This change fixes
-> that issue.
-> 
-> 
-> [...]
+The non-idle se dominates competition vs the idle se when they
+are belong to the same group. We ensure that idle groups would not
+preempt non-idle group in wakeup preemption(see check_preempt_wakeup()).
+However, this can happen in tick preemption, since check_preempt_tick()
+dose not check current/se is idle or not. This patch adds this check.
 
-Applied to pci/dwc, thanks!
+Signed-off-by: Chuyi Zhou <zhouchuyi@bytedance.com>
+---
+ kernel/sched/fair.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-[1/1] PCI: dwc: Fix n_fts[] array overrun
-      https://git.kernel.org/lpieralisi/pci/c/66110361281b
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index e4a0b8bd941c..f3324b8753b3 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -4750,6 +4750,7 @@ static void
+ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+ {
+ 	unsigned long ideal_runtime, delta_exec;
++	int cse_is_idle, pse_is_idle;
+ 	struct sched_entity *se;
+ 	s64 delta;
+ 
+@@ -4779,8 +4780,17 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+ 	if (delta < 0)
+ 		return;
+ 
+-	if (delta > ideal_runtime)
++	if (delta > ideal_runtime) {
++		/*
++		 * Favor non-idle group even in tick preemption
++		 */
++		cse_is_idle = se_is_idle(curr);
++		pse_is_idle = se_is_idle(se);
++		if (unlikely(!cse_is_idle && pse_is_idle))
++			return;
++
+ 		resched_curr(rq_of(cfs_rq));
++	}
+ }
+ 
+ static void
+-- 
+2.20.1
 
-Thanks,
-Lorenzo
