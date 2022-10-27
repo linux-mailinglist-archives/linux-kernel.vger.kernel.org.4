@@ -2,86 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5607D60EDF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 04:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4861160EDFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 04:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233473AbiJ0CfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 22:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44416 "EHLO
+        id S233166AbiJ0Cjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 22:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233040AbiJ0CfF (ORCPT
+        with ESMTP id S233554AbiJ0Cji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 22:35:05 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7C2D1AF34;
-        Wed, 26 Oct 2022 19:35:02 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 29R2YunU026375;
-        Thu, 27 Oct 2022 04:34:56 +0200
-Date:   Thu, 27 Oct 2022 04:34:56 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/nolibc: always rebuild the sysroot when
- running a test
-Message-ID: <20221027023456.GA26215@1wt.eu>
-References: <20221026054508.19634-1-w@1wt.eu>
- <20221026164825.GN5600@paulmck-ThinkPad-P17-Gen-1>
- <20221026195902.GB24197@1wt.eu>
- <20221026204138.GQ5600@paulmck-ThinkPad-P17-Gen-1>
+        Wed, 26 Oct 2022 22:39:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 237ADB3F;
+        Wed, 26 Oct 2022 19:39:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E2B623A;
+        Wed, 26 Oct 2022 19:39:35 -0700 (PDT)
+Received: from a077893.blr.arm.com (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BC7363F792;
+        Wed, 26 Oct 2022 19:39:25 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        catalin.marinas@arm.com, will@kernel.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mark Rutland <mark.rutland@arm.com>, linux-doc@vger.kernel.org
+Subject: [PATCH 0/2] arm64: errata: Workaround Cortex-A715 errata #2645198
+Date:   Thu, 27 Oct 2022 08:09:13 +0530
+Message-Id: <20221027023915.1318100-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026204138.GQ5600@paulmck-ThinkPad-P17-Gen-1>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 01:41:38PM -0700, Paul E. McKenney wrote:
-> > > I have queued this.  I expect to push this into the next merge window,
-> > > thus avoiding the need to document the need for "make clean" in my
-> > > pull request.  ;-)
-> > 
-> > Stupid question, is it really worth postponing it, considering that
-> > we've just introduced this series right now ? I mean, if the current
-> > usage is confusing, it's probably better to propose the fix before
-> > 6.1-final ? It's not a new feature here but rather a fix for a recently
-> > introduced one, thus I think it could be part of the next fix series.
-> > Rest assured I don't want to put a mess into your patch workflow, just
-> > asking :-)
-> 
-> You lost me here.
+This series adds Cortex-A715 partnumber and workarounds the errata #2645198
+which gets triggered when an userspace page mapping permission changes from
+executable to non-executable, corrupting both ESR_EL1/FAR_EL1 registers
+when an instruction abort is taken.
 
-Ah sorry!
+This series applies on v6.1-rc1.
 
-> My intent is to push these nolicb patches into the upcoming v6.2
-> merge window:
-> 
-> 2318a710bffbd tools/nolibc: Fix missing strlen() definition and infinite loop with gcc-12
-> 6937b8de8f1c3 tools/nolibc/string: Fix memcmp() implementation
-> e1bbfe393c900 selftests/nolibc: Add 7 tests for memcmp()
-> 3f2c1c45a3a9a selftests/nolibc: Always rebuild the sysroot when running a test
-> 
-> I didn't see the problem until I queued the third patch (e1bbfe393c900),
-> and it is still in -rcu, not in v6.1.
-> 
-> What am I missing here?
+The errata description can be found here.
 
-I thought that since some of them are fixes, they would be pushed during
-6.1-rc so that we don't release 6.1 with known defects. For example Rasmus'
-fix for memcmp() or the strlen() fix would IMHO make sense for this
-release since we're aware of the bugs and we have the fixes. The 3rd one
-is indeed an addition and in no way a fix and it can easily wait for 6.2.
-The 4th one is more of a usability fix but I agree that for this last one
-it's debatable, I was mostly seeing this as a possiility to avoid causing
-needless confusion.
+https://developer.arm.com/documentation/SDEN2148827/1000/?lang=en
 
-Hoping this clarifies my initial question.
+Cc: Catalin Marinas <catalin.marinas@arm.com> 
+Cc: Will Deacon <will@kernel.org>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: James Morse <james.morse@arm.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Mark Rutland <mark.rutland@arm.com> 
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
 
-Thanks,
-Willy
+Anshuman Khandual (2):
+  arm64: Add Cortex-715 CPU part definition
+  arm64: errata: Workaround possible Cortex-A715 [ESR|FAR]_ELx corruption
+
+ Documentation/arm64/silicon-errata.rst |  2 ++
+ arch/arm64/Kconfig                     | 16 +++++++++++
+ arch/arm64/include/asm/cputype.h       |  2 ++
+ arch/arm64/include/asm/hugetlb.h       |  9 +++++++
+ arch/arm64/include/asm/pgtable.h       | 24 +++++++++++++++++
+ arch/arm64/kernel/cpu_errata.c         |  7 +++++
+ arch/arm64/mm/hugetlbpage.c            | 37 ++++++++++++++++++++++++++
+ arch/arm64/tools/cpucaps               |  1 +
+ 8 files changed, 98 insertions(+)
+
+-- 
+2.25.1
+
