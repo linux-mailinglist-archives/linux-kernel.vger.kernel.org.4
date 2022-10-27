@@ -2,142 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2146060F6AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2F660F683
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235476AbiJ0MCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
+        id S235379AbiJ0Lu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 07:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235271AbiJ0MCJ (ORCPT
+        with ESMTP id S234111AbiJ0Lu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:02:09 -0400
-Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBC079684;
-        Thu, 27 Oct 2022 05:02:07 -0700 (PDT)
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id AB86B7FC01;
-        Thu, 27 Oct 2022 12:02:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1666872124;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MtpMGCF+iBRpVLWgZ5Ofi84bzkswm5lge9Z3x2eJ++g=;
-        b=cGaSQswDbxqhSBVj5pDq2GqhsfWTvLHXYYkMfnzUtzDu9qQoJIAheeOJh6kvSpEf5GvfRG
-        yRGEyPPCKVdpWf1B+kLxd0W9HSAJYK3NXUHVB/UXVrRGK19eRMFPdAp2TDyRAJrxZA4/mG
-        PbyYULxDaGdOHhPFJ1IGHC4xcjeMA0QplsS66eLO39jSdLEjsA2Zfgar8lFMkwj6RRssS7
-        WLUOcZngyyy5D2hJe4t1LhQrRm+4Ofop0TJ6lZWko/2wplsv9yIzIFYLYBhtes4EMzg4nM
-        CFzFh2tBjwghTEY1OzCuUpw850fnEkoZ26nkvczAP3RB+X5CfnZRv2jHEMHE/g==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        David Howells <dhowells@redhat.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-nfs@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] cred: Do not default to init_cred in prepare_kernel_cred()
-In-Reply-To: <20221026232943.never.775-kees@kernel.org>
-References: <20221026232943.never.775-kees@kernel.org>
-Date:   Thu, 27 Oct 2022 09:03:08 -0300
-Message-ID: <87bkpxh3sz.fsf@cjr.nz>
+        Thu, 27 Oct 2022 07:50:26 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6368A63353;
+        Thu, 27 Oct 2022 04:50:24 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MykQ000pQzmVVQ;
+        Thu, 27 Oct 2022 19:45:27 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 27 Oct 2022 19:50:22 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 27 Oct
+ 2022 19:50:22 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH] media: vivid: fix compose size exceed boundary
+Date:   Thu, 27 Oct 2022 20:38:55 +0800
+Message-ID: <20221027123855.1054059-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
+syzkaller found a bug:
 
-> A common exploit pattern for ROP attacks is to abuse prepare_kernel_cred()
-> in order to construct escalated privileges[1]. Instead of providing a
-> short-hand argument (NULL) to the "daemon" argument to indicate using
-> init_cred as the base cred, require that "daemon" is always set to
-> an actual task. Replace all existing callers that were passing NULL
-> with &init_task.
->
-> Future attacks will need to have sufficiently powerful read/write
-> primitives to have found an appropriately privileged task and written it
-> to the ROP stack as an argument to succeed, which is similarly difficult
-> to the prior effort needed to escalate privileges before struct cred
-> existed: locate the current cred and overwrite the uid member.
->
-> This has the added benefit of meaning that prepare_kernel_cred() can no
-> longer exceed the privileges of the init task, which may have changed from
-> the original init_cred (e.g. dropping capabilities from the bounding set).
->
-> [1] https://google.com/search?q=3Dcommit_creds(prepare_kernel_cred(0))
->
-> Cc: "Eric W. Biederman" <ebiederm@xmission.com>
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Russ Weight <russell.h.weight@intel.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Steve French <sfrench@samba.org>
-> Cc: Paulo Alcantara <pc@cjr.nz>
-> Cc: Ronnie Sahlberg <lsahlber@redhat.com>
-> Cc: Shyam Prasad N <sprasad@microsoft.com>
-> Cc: Tom Talpey <tom@talpey.com>
-> Cc: Namjae Jeon <linkinjeon@kernel.org>
-> Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-> Cc: Trond Myklebust <trond.myklebust@hammerspace.com>
-> Cc: Anna Schumaker <anna@kernel.org>
-> Cc: Chuck Lever <chuck.lever@oracle.com>
-> Cc: Jeff Layton <jlayton@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: "Michal Koutn=C3=BD" <mkoutny@suse.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: linux-cifs@vger.kernel.org
-> Cc: samba-technical@lists.samba.org
-> Cc: linux-nfs@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  drivers/base/firmware_loader/main.c    |  2 +-
->  fs/cifs/cifs_spnego.c                  |  2 +-
->  fs/cifs/cifsacl.c                      |  2 +-
->  fs/ksmbd/smb_common.c                  |  2 +-
->  fs/nfs/flexfilelayout/flexfilelayout.c |  4 ++--
->  fs/nfs/nfs4idmap.c                     |  2 +-
->  fs/nfsd/nfs4callback.c                 |  2 +-
->  kernel/cred.c                          | 15 +++++++--------
->  net/dns_resolver/dns_key.c             |  2 +-
->  9 files changed, 16 insertions(+), 17 deletions(-)
+ BUG: unable to handle page fault for address: ffffc9000a3b1000
+ #PF: supervisor write access in kernel mode
+ #PF: error_code(0x0002) - not-present page
+ PGD 100000067 P4D 100000067 PUD 10015f067 PMD 1121ca067 PTE 0
+ Oops: 0002 [#1] PREEMPT SMP
+ CPU: 0 PID: 23489 Comm: vivid-000-vid-c Not tainted 6.1.0-rc1+ #512
+ Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+ RIP: 0010:memcpy_erms+0x6/0x10
+[...]
+ Call Trace:
+  <TASK>
+  ? tpg_fill_plane_buffer+0x856/0x15b0
+  vivid_fillbuff+0x8ac/0x1110
+  vivid_thread_vid_cap_tick+0x361/0xc90
+  vivid_thread_vid_cap+0x21a/0x3a0
+  kthread+0x143/0x180
+  ret_from_fork+0x1f/0x30
+  </TASK>
 
-Acked-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+This is because we forget to check boundary after adjust compose->height
+int V4L2_SEL_TGT_CROP case. Add v4l2_rect_map_inside() to fix this problem
+for this case.
+
+Fixes: ef834f7836ec ("vivid: add the video capture and output parts")
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+---
+ drivers/media/test-drivers/vivid/vivid-vid-cap.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/media/test-drivers/vivid/vivid-vid-cap.c b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+index 86b158eeb2d8..b0cee26b9089 100644
+--- a/drivers/media/test-drivers/vivid/vivid-vid-cap.c
++++ b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+@@ -957,6 +957,7 @@ int vivid_vid_cap_s_selection(struct file *file, void *fh, struct v4l2_selection
+ 			if (dev->has_compose_cap) {
+ 				v4l2_rect_set_min_size(compose, &min_rect);
+ 				v4l2_rect_set_max_size(compose, &max_rect);
++				v4l2_rect_map_inside(compose, &fmt);
+ 			}
+ 			dev->fmt_cap_rect = fmt;
+ 			tpg_s_buf_height(&dev->tpg, fmt.height);
+-- 
+2.25.1
+
