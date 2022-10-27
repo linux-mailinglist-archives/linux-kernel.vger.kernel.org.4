@@ -2,111 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3364460F6B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2146060F6AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235498AbiJ0MCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
+        id S235476AbiJ0MCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235465AbiJ0MCU (ORCPT
+        with ESMTP id S235271AbiJ0MCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:02:20 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0442A7A779;
-        Thu, 27 Oct 2022 05:02:20 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id m15so2258384edb.13;
-        Thu, 27 Oct 2022 05:02:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nae3MTaQSLKYtpB9ujJglOZE8cA0/GC19l2/IFTBBNc=;
-        b=DBs6mLPPobcb3ZQ9TGha9oXMaB+EXK6Bf4FwHAy1XNUBiSwzxRAHTw7ec+jcTYB41N
-         PmUi7EQy4fwD1oo7GPcHR/LmK8IM9DEqT94ekRQCbdLwDST8LWjjOV33ZyILzkOWi8E9
-         CeqrQTeqqmXZt4G44iwRhCvOF3xqte9n2utdWvjfA9tmWH5dRFnK+EutKMY3yoqXg0TA
-         spPEaUWYMTpm1HfWuM1LoustamNC6SPkL/0BIQIWmOIkhk5ZEizN0w76K0KSPYk5F1i5
-         m2vE2w5ROP3tntMvj8w5wei75d2bOOcMGY1SFC7NzgnYJlgADqc+U2zNfS59GbAyOTaM
-         H+/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nae3MTaQSLKYtpB9ujJglOZE8cA0/GC19l2/IFTBBNc=;
-        b=E2Y/EaOsMS96TD4rnyKhqenchrzg4uCIcHAmofvBFpPlQjLsgShkyB+GEyf18bQVlI
-         vArTjwoAZiO6wMbOgLOYoDv+ZyzHna3cQIHECZD3VdfR0uaiC6PngNcg/CVuS1ZX2j7d
-         ip1WFl4q/iO60Ju7Rb/THwRCo/Z9KVBLpqH1l2DGCMlE/POuDBK2A8ivwSjnlpC3MgyJ
-         Sk9aIxyz6/wonMWJomjYs+AeaynbaAWPH7an7maeNxPmlGP5e6GVqMKMHT8NnWV9h0hz
-         VM7b3f2+G1ZELI55aj5D2q37nroskYPXxJtkOeMpj0YDUrEy8S9miuViIuzzBoZkNByE
-         xxIg==
-X-Gm-Message-State: ACrzQf1UcxpC7ltpsdL7V/L97PzMk2WJRh+i+O/3CiwDewS5qLvp2qMy
-        Awy7xs515Eal8vAgnaQzHOUibR+qxNjEk6SMc9gzMkK468sTRu+4
-X-Google-Smtp-Source: AMsMyM4EvkA5Xahm06ht/ZKpqzZTCPn07pdZDlFCtL/quOxAJxUSAVS95eNwvCzgaTflYdChjCVVftaeGqRq2wsDWDY=
-X-Received: by 2002:a05:6402:26cf:b0:45d:48d7:928e with SMTP id
- x15-20020a05640226cf00b0045d48d7928emr43709300edd.275.1666872138527; Thu, 27
- Oct 2022 05:02:18 -0700 (PDT)
+        Thu, 27 Oct 2022 08:02:09 -0400
+Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBC079684;
+        Thu, 27 Oct 2022 05:02:07 -0700 (PDT)
+Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pc)
+        by mx.cjr.nz (Postfix) with ESMTPSA id AB86B7FC01;
+        Thu, 27 Oct 2022 12:02:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
+        t=1666872124;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MtpMGCF+iBRpVLWgZ5Ofi84bzkswm5lge9Z3x2eJ++g=;
+        b=cGaSQswDbxqhSBVj5pDq2GqhsfWTvLHXYYkMfnzUtzDu9qQoJIAheeOJh6kvSpEf5GvfRG
+        yRGEyPPCKVdpWf1B+kLxd0W9HSAJYK3NXUHVB/UXVrRGK19eRMFPdAp2TDyRAJrxZA4/mG
+        PbyYULxDaGdOHhPFJ1IGHC4xcjeMA0QplsS66eLO39jSdLEjsA2Zfgar8lFMkwj6RRssS7
+        WLUOcZngyyy5D2hJe4t1LhQrRm+4Ofop0TJ6lZWko/2wplsv9yIzIFYLYBhtes4EMzg4nM
+        CFzFh2tBjwghTEY1OzCuUpw850fnEkoZ26nkvczAP3RB+X5CfnZRv2jHEMHE/g==
+From:   Paulo Alcantara <pc@cjr.nz>
+To:     Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        David Howells <dhowells@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steve French <sfrench@samba.org>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-nfs@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] cred: Do not default to init_cred in prepare_kernel_cred()
+In-Reply-To: <20221026232943.never.775-kees@kernel.org>
+References: <20221026232943.never.775-kees@kernel.org>
+Date:   Thu, 27 Oct 2022 09:03:08 -0300
+Message-ID: <87bkpxh3sz.fsf@cjr.nz>
 MIME-Version: 1.0
-References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221014183459.181567-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <Y1pphVPw0J97AmW4@paasikivi.fi.intel.com>
-In-Reply-To: <Y1pphVPw0J97AmW4@paasikivi.fi.intel.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 27 Oct 2022 13:01:52 +0100
-Message-ID: <CA+V-a8szaPjwumrBgOT9gzMKBjY7hk0zfP8RgzUUDfY+BAsogA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] media: i2c: ov5645: Use runtime PM
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sakari,
+Kees Cook <keescook@chromium.org> writes:
 
-On Thu, Oct 27, 2022 at 12:20 PM Sakari Ailus
-<sakari.ailus@linux.intel.com> wrote:
+> A common exploit pattern for ROP attacks is to abuse prepare_kernel_cred()
+> in order to construct escalated privileges[1]. Instead of providing a
+> short-hand argument (NULL) to the "daemon" argument to indicate using
+> init_cred as the base cred, require that "daemon" is always set to
+> an actual task. Replace all existing callers that were passing NULL
+> with &init_task.
 >
-> Hi Prabhakar,
+> Future attacks will need to have sufficiently powerful read/write
+> primitives to have found an appropriately privileged task and written it
+> to the ROP stack as an argument to succeed, which is similarly difficult
+> to the prior effort needed to escalate privileges before struct cred
+> existed: locate the current cred and overwrite the uid member.
 >
-> One more comment.
+> This has the added benefit of meaning that prepare_kernel_cred() can no
+> longer exceed the privileges of the init task, which may have changed from
+> the original init_cred (e.g. dropping capabilities from the bounding set).
 >
-> On Fri, Oct 14, 2022 at 07:34:56PM +0100, Prabhakar wrote:
-> > @@ -1209,12 +1190,16 @@ static int ov5645_probe(struct i2c_client *client)
-> >
-> >       dev_info(dev, "OV5645 detected at address 0x%02x\n", client->addr);
-> >
-> > +     pm_runtime_set_active(dev);
-> > +     pm_runtime_get_noresume(dev);
-> > +     pm_runtime_enable(dev);
+> [1] https://google.com/search?q=3Dcommit_creds(prepare_kernel_cred(0))
 >
-> You won't gain anything by eanbling runtime PM here. Just move it to the
-> end of the function before the rest of the calls. Error handling becomes
-> more simple.
->
-If I move the above calls below I get the below warning:
+> Cc: "Eric W. Biederman" <ebiederm@xmission.com>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Russ Weight <russell.h.weight@intel.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Steve French <sfrench@samba.org>
+> Cc: Paulo Alcantara <pc@cjr.nz>
+> Cc: Ronnie Sahlberg <lsahlber@redhat.com>
+> Cc: Shyam Prasad N <sprasad@microsoft.com>
+> Cc: Tom Talpey <tom@talpey.com>
+> Cc: Namjae Jeon <linkinjeon@kernel.org>
+> Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+> Cc: Trond Myklebust <trond.myklebust@hammerspace.com>
+> Cc: Anna Schumaker <anna@kernel.org>
+> Cc: Chuck Lever <chuck.lever@oracle.com>
+> Cc: Jeff Layton <jlayton@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: "Michal Koutn=C3=BD" <mkoutny@suse.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: linux-cifs@vger.kernel.org
+> Cc: samba-technical@lists.samba.org
+> Cc: linux-nfs@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  drivers/base/firmware_loader/main.c    |  2 +-
+>  fs/cifs/cifs_spnego.c                  |  2 +-
+>  fs/cifs/cifsacl.c                      |  2 +-
+>  fs/ksmbd/smb_common.c                  |  2 +-
+>  fs/nfs/flexfilelayout/flexfilelayout.c |  4 ++--
+>  fs/nfs/nfs4idmap.c                     |  2 +-
+>  fs/nfsd/nfs4callback.c                 |  2 +-
+>  kernel/cred.c                          | 15 +++++++--------
+>  net/dns_resolver/dns_key.c             |  2 +-
+>  9 files changed, 16 insertions(+), 17 deletions(-)
 
-[    2.633386] ov5645 0-003c: Runtime PM usage count underflow!
-
-This is because of the last patch which moves ov5645_entity_init_cfg()
-before registering the subdev. ov5645_entity_init_cfg() calls s_ctrl
-due to which we are seeing the above message. Please let me know how
-to proceed on this.
-
-Cheers,
-Prabhakar
+Acked-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
