@@ -2,102 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1C260F0EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 09:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E1560F0F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 09:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233974AbiJ0HK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 03:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51714 "EHLO
+        id S234515AbiJ0HLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 03:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233506AbiJ0HKx (ORCPT
+        with ESMTP id S233506AbiJ0HLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 03:10:53 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC93635C2;
-        Thu, 27 Oct 2022 00:10:31 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B54DA22131;
-        Thu, 27 Oct 2022 07:10:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1666854629; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QCPTXBtSuvGJ41I50Ajt8waPylXnOrME9Qo8riEvBNs=;
-        b=XV2ShTSF4yMp1EabKplEgz+GtFZweYHSKQhHbBajveqkzRHYsGy8eq+D0MRC6mXFe20ADN
-        TtCHe5UXI87D9NRXQWAii9m1kRipuCxXtgYrSAL8Egtf/cHPgQjj5R2D5kZwrQ/tlwGxBk
-        hRiLB37+QpZjrTyXUkMZD7LMu/NYpAg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9765F13357;
-        Thu, 27 Oct 2022 07:10:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zaWXGOUuWmOLHQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 27 Oct 2022 07:10:29 +0000
-Date:   Thu, 27 Oct 2022 09:10:28 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Feng Tang <feng.tang@intel.com>,
-        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Waiman Long <longman@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Chen, Tim C" <tim.c.chen@intel.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>
-Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
-Message-ID: <Y1ou5DGHrEsKnhri@dhcp22.suse.cz>
-References: <20221026074343.6517-1-feng.tang@intel.com>
- <dc453287-015d-fd1c-fe7f-6ee45772d6aa@linux.ibm.com>
- <Y1jpDfwBQId3GkJC@feng-clx>
- <Y1j7tsj5M0Md/+Er@dhcp22.suse.cz>
- <Y1kl8VbPE0RYdyEB@feng-clx>
- <Y1lZV6qHp3gIINGc@dhcp22.suse.cz>
- <87wn8lkbk5.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Thu, 27 Oct 2022 03:11:19 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0F1719B7;
+        Thu, 27 Oct 2022 00:11:16 -0700 (PDT)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MycCv6s1gz15MC0;
+        Thu, 27 Oct 2022 15:06:19 +0800 (CST)
+Received: from [10.40.188.234] (10.40.188.234) by
+ kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 27 Oct 2022 15:11:13 +0800
+Subject: Re: [PATCH v11 3/9] iov_iter: introduce
+ iov_iter_get_pages_[alloc_]flags()
+To:     Logan Gunthorpe <logang@deltatee.com>,
+        <linux-kernel@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
+        <linux-block@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-mm@kvack.org>
+CC:     Christoph Hellwig <hch@lst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Stephen Bates <sbates@raithlin.com>
+References: <20221021174116.7200-1-logang@deltatee.com>
+ <20221021174116.7200-4-logang@deltatee.com>
+From:   Jay Fang <f.fangjian@huawei.com>
+Message-ID: <c73c426f-d9f5-2f17-bb88-b72792103703@huawei.com>
+Date:   Thu, 27 Oct 2022 15:11:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87wn8lkbk5.fsf@yhuang6-desk2.ccr.corp.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221021174116.7200-4-logang@deltatee.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.40.188.234]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500015.china.huawei.com (7.221.188.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 27-10-22 14:47:22, Huang, Ying wrote:
-> Michal Hocko <mhocko@suse.com> writes:
-[...]
-> > I can imagine workloads which wouldn't like to get their memory demoted
-> > for some reason but wouldn't it be more practical to tell that
-> > explicitly (e.g. via prctl) rather than configuring cpusets/memory
-> > policies explicitly?
+On 2022/10/22 1:41, Logan Gunthorpe wrote:
+> Add iov_iter_get_pages_flags() and iov_iter_get_pages_alloc_flags()
+> which take a flags argument that is passed to get_user_pages_fast().
 > 
-> If my understanding were correct, prctl() configures the process or
-> thread.
+> This is so that FOLL_PCI_P2PDMA can be passed when appropriate.
+> 
+> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  include/linux/uio.h |  6 ++++++
+>  lib/iov_iter.c      | 32 ++++++++++++++++++++++++--------
+>  2 files changed, 30 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/uio.h b/include/linux/uio.h
+> index 2e3134b14ffd..9ede533ce64c 100644
+> --- a/include/linux/uio.h
+> +++ b/include/linux/uio.h
+> @@ -247,8 +247,14 @@ void iov_iter_pipe(struct iov_iter *i, unsigned int direction, struct pipe_inode
+>  void iov_iter_discard(struct iov_iter *i, unsigned int direction, size_t count);
+>  void iov_iter_xarray(struct iov_iter *i, unsigned int direction, struct xarray *xarray,
+>  		     loff_t start, size_t count);
+> +ssize_t iov_iter_get_pages(struct iov_iter *i, struct page **pages,
+> +		size_t maxsize, unsigned maxpages, size_t *start,
+> +		unsigned gup_flags);
+>  ssize_t iov_iter_get_pages2(struct iov_iter *i, struct page **pages,
+>  			size_t maxsize, unsigned maxpages, size_t *start);
+> +ssize_t iov_iter_get_pages_alloc(struct iov_iter *i,
+> +		struct page ***pages, size_t maxsize, size_t *start,
+> +		unsigned gup_flags);
+>  ssize_t iov_iter_get_pages_alloc2(struct iov_iter *i, struct page ***pages,
+>  			size_t maxsize, size_t *start);
+>  int iov_iter_npages(const struct iov_iter *i, int maxpages);
+> diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+> index c3ca28ca68a6..53efad017f3c 100644
+> --- a/lib/iov_iter.c
+> +++ b/lib/iov_iter.c
+> @@ -1430,7 +1430,8 @@ static struct page *first_bvec_segment(const struct iov_iter *i,
+>  
+>  static ssize_t __iov_iter_get_pages_alloc(struct iov_iter *i,
+>  		   struct page ***pages, size_t maxsize,
+> -		   unsigned int maxpages, size_t *start)
+> +		   unsigned int maxpages, size_t *start,
+> +		   unsigned int gup_flags)
 
-Not necessarily. There are properties which are per adddress space like
-PR_[GS]ET_THP_DISABLE. This could be very similar.
+Hi,
+found some checkpatch warnings, like this:
+WARNING: Prefer 'unsigned int' to bare use of 'unsigned'
+#50: FILE: lib/iov_iter.c:1497:
++		   size_t *start, unsigned gup_flags)
 
-> How can we get process/thread configuration at demotion time?
+>  {
+>  	unsigned int n;
+>  
+> @@ -1442,7 +1443,6 @@ static ssize_t __iov_iter_get_pages_alloc(struct iov_iter *i,
+>  		maxsize = MAX_RW_COUNT;
+>  
+>  	if (likely(user_backed_iter(i))) {
+> -		unsigned int gup_flags = 0;
+>  		unsigned long addr;
+>  		int res;
+>  
+> @@ -1492,33 +1492,49 @@ static ssize_t __iov_iter_get_pages_alloc(struct iov_iter *i,
+>  	return -EFAULT;
+>  }
+>  
+> -ssize_t iov_iter_get_pages2(struct iov_iter *i,
+> +ssize_t iov_iter_get_pages(struct iov_iter *i,
+>  		   struct page **pages, size_t maxsize, unsigned maxpages,
+> -		   size_t *start)
+> +		   size_t *start, unsigned gup_flags)
+>  {
+>  	if (!maxpages)
+>  		return 0;
+>  	BUG_ON(!pages);
+>  
+> -	return __iov_iter_get_pages_alloc(i, &pages, maxsize, maxpages, start);
+> +	return __iov_iter_get_pages_alloc(i, &pages, maxsize, maxpages,
+> +					  start, gup_flags);
+> +}
+> +EXPORT_SYMBOL_GPL(iov_iter_get_pages);
+> +
+> +ssize_t iov_iter_get_pages2(struct iov_iter *i, struct page **pages,
+> +		size_t maxsize, unsigned maxpages, size_t *start)
+> +{
+> +	return iov_iter_get_pages(i, pages, maxsize, maxpages, start, 0);
+>  }
+>  EXPORT_SYMBOL(iov_iter_get_pages2);
+>  
+> -ssize_t iov_iter_get_pages_alloc2(struct iov_iter *i,
+> +ssize_t iov_iter_get_pages_alloc(struct iov_iter *i,
+>  		   struct page ***pages, size_t maxsize,
+> -		   size_t *start)
+> +		   size_t *start, unsigned gup_flags)
+>  {
+>  	ssize_t len;
+>  
+>  	*pages = NULL;
+>  
+> -	len = __iov_iter_get_pages_alloc(i, pages, maxsize, ~0U, start);
+> +	len = __iov_iter_get_pages_alloc(i, pages, maxsize, ~0U, start,
+> +					 gup_flags);
+>  	if (len <= 0) {
+>  		kvfree(*pages);
+>  		*pages = NULL;
+>  	}
+>  	return len;
+>  }
+> +EXPORT_SYMBOL_GPL(iov_iter_get_pages_alloc);
+> +
+> +ssize_t iov_iter_get_pages_alloc2(struct iov_iter *i,
+> +		struct page ***pages, size_t maxsize, size_t *start)
+> +{
+> +	return iov_iter_get_pages_alloc(i, pages, maxsize, start, 0);
+> +}
+>  EXPORT_SYMBOL(iov_iter_get_pages_alloc2);
+>  
+>  size_t csum_and_copy_from_iter(void *addr, size_t bytes, __wsum *csum,
+> 
 
-As already pointed out in previous emails. You could hook into
-folio_check_references path, more specifically folio_referenced_one
-where you have all that you need already - all vmas mapping the page and
-then it is trivial to get the corresponding vm_mm. If at least one of
-them has the flag set then the demotion is not allowed (essentially the
-same model as VM_LOCKED).
--- 
-Michal Hocko
-SUSE Labs
