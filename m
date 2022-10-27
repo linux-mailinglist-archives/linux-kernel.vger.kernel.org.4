@@ -2,143 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45CB60F5F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141C160F5F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234881AbiJ0LLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 07:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
+        id S233565AbiJ0LM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 07:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234654AbiJ0LLI (ORCPT
+        with ESMTP id S233497AbiJ0LMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 07:11:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10FAEB745
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 04:11:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666869065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6APNafLLA+imf3ZZufYd09e2sEpve5dGjR8p/6jEYek=;
-        b=KgGXc8D1o14J9yJmPObpEB/iKT79gq14AuMV/ltrEAUaEWQ7l8Pur475YODn07ibn3rl2c
-        Yis/oTjezSqaXJXoUIZiAoVqivcxoUHw35pHBPai3V7aRIBRkwd6ygpK7b5amYejYM/IEh
-        gGhU2MVy7eC6Lugc2asxPPZOIVrcZgI=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-197-wM9_lmycOwOEw9jgapR40w-1; Thu, 27 Oct 2022 07:11:04 -0400
-X-MC-Unique: wM9_lmycOwOEw9jgapR40w-1
-Received: by mail-wr1-f72.google.com with SMTP id d10-20020adfa34a000000b00236616a168bso276255wrb.18
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 04:11:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6APNafLLA+imf3ZZufYd09e2sEpve5dGjR8p/6jEYek=;
-        b=Jxe5rcMs/+zyMmhkR8sdYGeCwrO+MZTFKp1k1LcIpeWHN8UTL1ShQsgOWNT8CqPzWl
-         xPjMVBBXTnmMrinxp5g7OW674P4Zv8RETV+APnpYJyzHqRjmXMs6sDMUHMbbTvxq0wzF
-         JHrJwdshuKFYpaEHQbIXGAVviHun7cawOTRPDTBV663fbPeryBItTrvXYwUyDe8Npybn
-         z6VGhizS1m84a1f1FmGlkBceu/FeNCxXd7NnmrvKQ3KqAJyPVMDBsSl1m6OuMWMOR2DR
-         +WGwTVB1guhoGSEUHKxYNeff8bOoNXg10hTllSVX9KQpvRIulcaTcJzIz4hVM1ZXMZG1
-         ikwA==
-X-Gm-Message-State: ACrzQf3O8f3p5vVZ3jiqn+51IpdfIEe60+tJDHe2Hx8t5iSdcBztMIY2
-        /0pi0us+Sez6OuiJ0UhDLAptjWcqUj9msUz4d3nacVOF2FF8kW3fc1L20ycyG13j6LGkIHB4AAq
-        Pc5TjUdSheS1ap0P/SQ7PQf3h
-X-Received: by 2002:a1c:4c03:0:b0:3c4:c76:9fe3 with SMTP id z3-20020a1c4c03000000b003c40c769fe3mr5395472wmf.13.1666869063038;
-        Thu, 27 Oct 2022 04:11:03 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM73kqNaS7sGCd/YUTv8vTGhDVD6sEdwP2TF/RRFw2YnikAPKqbKY6aKZp9KXqr0ePtDxcimaA==
-X-Received: by 2002:a1c:4c03:0:b0:3c4:c76:9fe3 with SMTP id z3-20020a1c4c03000000b003c40c769fe3mr5395457wmf.13.1666869062767;
-        Thu, 27 Oct 2022 04:11:02 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id m8-20020a05600c3b0800b003c6edc05159sm4398554wms.1.2022.10.27.04.11.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 04:11:02 -0700 (PDT)
-Message-ID: <afad5f40-03ef-1380-9bfe-03bbaaed47a9@redhat.com>
-Date:   Thu, 27 Oct 2022 13:11:01 +0200
+        Thu, 27 Oct 2022 07:12:54 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2BB6EEA81
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 04:12:51 -0700 (PDT)
+Received: from loongson.cn (unknown [111.9.175.10])
+        by gateway (Coremail) with SMTP id _____8AxDdmxZ1pjKN4CAA--.10939S3;
+        Thu, 27 Oct 2022 19:12:49 +0800 (CST)
+Received: from localhost.localdomain (unknown [111.9.175.10])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxXuCuZ1pjOdQFAA--.20808S2;
+        Thu, 27 Oct 2022 19:12:47 +0800 (CST)
+From:   Jinyang He <hejinyang@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Oleg Nesterov <oleg@redhat.com>
+Cc:     Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, WANG Xuerui <git@xen0n.name>
+Subject: [PATCH v3] LoongArch: Remove unused kernel stack padding
+Date:   Thu, 27 Oct 2022 19:11:49 +0800
+Message-Id: <20221027111149.27414-1-hejinyang@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v2 03/16] KVM: x86: Always use non-compat
- vcpu_runstate_info size for gfn=>pfn cache
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Luczaj <mhal@rbox.co>,
-        David Woodhouse <dwmw2@infradead.org>
-References: <20221013211234.1318131-1-seanjc@google.com>
- <20221013211234.1318131-4-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20221013211234.1318131-4-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxXuCuZ1pjOdQFAA--.20808S2
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxJF4fJryxJryDCFWfWF13CFg_yoWrWFyfpF
+        9rAw1DGr4jkF1vyryDtws8ZryDJwnrKw12ga13ta4rCrnFqF1rXryxAryDXFyYqa95Kw40
+        gFyfKwsIqa15J3JanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b7xYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AI
+        xVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64
+        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm
+        72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I
+        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
+        GVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
+        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0
+        rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r
+        4UYxBIdaVFxhVjvjDU0xZFpf9x07j1WlkUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/13/22 23:12, Sean Christopherson wrote:
-> Always use the size of Xen's non-compat vcpu_runstate_info struct when
-> checking that the GPA+size doesn't cross a page boundary.  Conceptually,
-> using the current mode is more correct, but KVM isn't consistent with
-> itself as kvm_xen_vcpu_set_attr() unconditionally uses the "full" size
-> when activating the cache.  More importantly, prior to the introduction
-> of the gfn_to_pfn_cache, KVM _always_ used the full size, i.e. allowing
-> the guest (userspace?) to use a poorly aligned GPA in 32-bit mode but not
-> 64-bit mode is more of a bug than a feature, and fixing the bug doesn't
-> break KVM's historical ABI.
+The current LoongArch kernel stack is padded as if obeying the
+MIPS o32 calling convention, signifying the port's MIPS lineage
+but no longer making sense. Remove the padding for clarity.
 
-I'd rather not introduce additional restrictions in KVM, mostly because 
-it's actually easy to avoid this patch by instead enforcing that 
-attributes are set in a sensible order:
+Link: https://lore.kernel.org/loongarch/1662130897-13156-1-git-send-email-hejinyang@loongson.cn/
+Reviewed-by: WANG Xuerui <git@xen0n.name>
+Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+---
+v2: Remove TOP_OF_KERNEL_STACK_PADDING
+    Remove 'init stack pointer' in head.S
+v3: Improve commit message suggested by Xuerui
+    Add Reviewed-by tags
 
-- long mode cannot be changed after the shared info page is enabled 
-(which makes sense because the shared info page also has a compat version)
+ arch/loongarch/include/asm/processor.h | 2 +-
+ arch/loongarch/include/asm/ptrace.h    | 2 +-
+ arch/loongarch/kernel/head.S           | 3 +--
+ arch/loongarch/kernel/process.c        | 4 ++--
+ arch/loongarch/kernel/switch.S         | 2 +-
+ 5 files changed, 6 insertions(+), 7 deletions(-)
 
-- the caches must be activated after the shared info page (which 
-enforces that the vCPU attributes are set after the VM attributes)
-
-This is technically a userspace API break, but nobody is really using 
-this API outside Amazon so...  Patches coming after I finish testing.
-
-Paolo
-
-
-> Always using the non-compat size will allow for future gfn_to_pfn_cache
-> clenups as this is (was) the only case where KVM uses a different size at
-> check()+refresh() than at activate().  E.g. the length/size of the cache
-> can be made immutable and dropped from check()+refresh(), which yields a
-> cleaner set of APIs and avoids potential bugs that could occur if check()
-> where invoked with a different size than refresh().
-> 
-> Fixes: a795cd43c5b5 ("KVM: x86/xen: Use gfn_to_pfn_cache for runstate area")
-> Cc: David Woodhouse <dwmw2@infradead.org>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/x86/kvm/xen.c | 5 +----
->   1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-> index b2be60c6efa4..9e79ef2cca99 100644
-> --- a/arch/x86/kvm/xen.c
-> +++ b/arch/x86/kvm/xen.c
-> @@ -212,10 +212,7 @@ void kvm_xen_update_runstate_guest(struct kvm_vcpu *v, int state)
->   	if (!vx->runstate_cache.active)
->   		return;
->   
-> -	if (IS_ENABLED(CONFIG_64BIT) && v->kvm->arch.xen.long_mode)
-> -		user_len = sizeof(struct vcpu_runstate_info);
-> -	else
-> -		user_len = sizeof(struct compat_vcpu_runstate_info);
-> +	user_len = sizeof(struct vcpu_runstate_info);
->   
->   	read_lock_irqsave(&gpc->lock, flags);
->   	while (!kvm_gfn_to_pfn_cache_check(v->kvm, gpc, gpc->gpa,
+diff --git a/arch/loongarch/include/asm/processor.h b/arch/loongarch/include/asm/processor.h
+index 6954dc5d24e9..7184f1dc61f2 100644
+--- a/arch/loongarch/include/asm/processor.h
++++ b/arch/loongarch/include/asm/processor.h
+@@ -191,7 +191,7 @@ static inline void flush_thread(void)
+ unsigned long __get_wchan(struct task_struct *p);
+ 
+ #define __KSTK_TOS(tsk) ((unsigned long)task_stack_page(tsk) + \
+-			 THREAD_SIZE - 32 - sizeof(struct pt_regs))
++			 THREAD_SIZE - sizeof(struct pt_regs))
+ #define task_pt_regs(tsk) ((struct pt_regs *)__KSTK_TOS(tsk))
+ #define KSTK_EIP(tsk) (task_pt_regs(tsk)->csr_era)
+ #define KSTK_ESP(tsk) (task_pt_regs(tsk)->regs[3])
+diff --git a/arch/loongarch/include/asm/ptrace.h b/arch/loongarch/include/asm/ptrace.h
+index 7437b9366c3b..59c4608de91d 100644
+--- a/arch/loongarch/include/asm/ptrace.h
++++ b/arch/loongarch/include/asm/ptrace.h
+@@ -133,7 +133,7 @@ static inline void die_if_kernel(const char *str, struct pt_regs *regs)
+ #define current_pt_regs()						\
+ ({									\
+ 	unsigned long sp = (unsigned long)__builtin_frame_address(0);	\
+-	(struct pt_regs *)((sp | (THREAD_SIZE - 1)) + 1 - 32) - 1;	\
++	(struct pt_regs *)((sp | (THREAD_SIZE - 1)) + 1) - 1;		\
+ })
+ 
+ /* Helpers for working with the user stack pointer */
+diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
+index 97425779ce9f..84970e266658 100644
+--- a/arch/loongarch/kernel/head.S
++++ b/arch/loongarch/kernel/head.S
+@@ -84,10 +84,9 @@ SYM_CODE_START(kernel_entry)			# kernel entry point
+ 
+ 	la.pcrel	tp, init_thread_union
+ 	/* Set the SP after an empty pt_regs.  */
+-	PTR_LI		sp, (_THREAD_SIZE - 32 - PT_SIZE)
++	PTR_LI		sp, (_THREAD_SIZE - PT_SIZE)
+ 	PTR_ADD		sp, sp, tp
+ 	set_saved_sp	sp, t0, t1
+-	PTR_ADDI	sp, sp, -4 * SZREG	# init stack pointer
+ 
+ 	bl		start_kernel
+ 	ASM_BUG()
+diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
+index 1256e3582475..2526b68f1c0f 100644
+--- a/arch/loongarch/kernel/process.c
++++ b/arch/loongarch/kernel/process.c
+@@ -129,7 +129,7 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+ 	unsigned long clone_flags = args->flags;
+ 	struct pt_regs *childregs, *regs = current_pt_regs();
+ 
+-	childksp = (unsigned long)task_stack_page(p) + THREAD_SIZE - 32;
++	childksp = (unsigned long)task_stack_page(p) + THREAD_SIZE;
+ 
+ 	/* set up new TSS. */
+ 	childregs = (struct pt_regs *) childksp - 1;
+@@ -236,7 +236,7 @@ bool in_task_stack(unsigned long stack, struct task_struct *task,
+ 			struct stack_info *info)
+ {
+ 	unsigned long begin = (unsigned long)task_stack_page(task);
+-	unsigned long end = begin + THREAD_SIZE - 32;
++	unsigned long end = begin + THREAD_SIZE;
+ 
+ 	if (stack < begin || stack >= end)
+ 		return false;
+diff --git a/arch/loongarch/kernel/switch.S b/arch/loongarch/kernel/switch.S
+index 43ebbc3990f7..202a163cb32f 100644
+--- a/arch/loongarch/kernel/switch.S
++++ b/arch/loongarch/kernel/switch.S
+@@ -26,7 +26,7 @@ SYM_FUNC_START(__switch_to)
+ 	move	tp, a2
+ 	cpu_restore_nonscratch a1
+ 
+-	li.w		t0, _THREAD_SIZE - 32
++	li.w		t0, _THREAD_SIZE
+ 	PTR_ADD		t0, t0, tp
+ 	set_saved_sp	t0, t1, t2
+ 
+-- 
+2.34.3
 
