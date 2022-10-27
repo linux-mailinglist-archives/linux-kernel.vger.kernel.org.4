@@ -2,73 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 222BF610253
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF76610258
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236904AbiJ0UDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 16:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
+        id S236476AbiJ0UFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 16:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236832AbiJ0UD3 (ORCPT
+        with ESMTP id S236674AbiJ0UE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 16:03:29 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D49564E1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:03:28 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id i5-20020a1c3b05000000b003cf47dcd316so4964454wma.4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:03:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5VjJAp0N2+61Oxh2IMIlFv8RGCM+I8VCYCw/pBRRGl4=;
-        b=rDS5vXypkzMWqdwalT/qT+2EkHrOMl5WdG+1xqXQ95n/JeHKDOdgvcQYLdiBx7vVic
-         q/9lvXpSW6KPOVLNXmUGPHDImAVmHe+vI8ruMWy0Dhf2/qMN6AFwsiabdxfLHw5EXNM5
-         SxAYtXcCmWxpHa+uyH79lp9JestzjrPfR8k+JX/ppBCfUSfgBFHrSY/4tdGbU/OsBCg2
-         yELITCt4Q43G3BFRwibHoG8pv3nFxcow2sWte7mD52ZFBUc7/H2lF9P7kqN/irY4aY8S
-         gG2h1su2qka2iMZUr7bJ1vGZd5u0Xvl3c2r6EMowplLAmYDrBARvdXrkBZRH7lhdGZ7i
-         jVMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5VjJAp0N2+61Oxh2IMIlFv8RGCM+I8VCYCw/pBRRGl4=;
-        b=UWxlZT6nv+Bv4wRq2w2m44/UfKhf0oHYyzGr2Z4Oss0XaZw7gO+Q/P6F2Xi3s8lToW
-         Vvqru5OqdEWbLdOIorXESejq+eQscYNhE+GpGC7wZztX5pyJr5dLvuinNjXL1f9aBzhm
-         J62XdIEziCipLgwlbnF4VtykN/XcYm4ETfsxhUxjGv1uwaQ13NjUaUEojwxQHjoAx8SH
-         14+1+GLFRSMIyFIzZx0RUARCK0vfNbcHRjhzH12sCHBlpQf8DDCi+UEA/trmBfV+yASY
-         03JMeKJhKPACTm3KdtdQnPBf4dIYP+ZZl57HuF8Otib8sDu+/MJm/4vru0VXfgmrIqOk
-         64DA==
-X-Gm-Message-State: ACrzQf0Jua+v6EYtfx/One+XP9QN6/RymELPk9fjpPxntTJmMcgSIcte
-        5nDkaXLnPyPMXLtjciskOzJHpIYAmwxQLZRptMJF3g==
-X-Google-Smtp-Source: AMsMyM5pAaws2hi59KHD9u3VHAH4ISacGKoFe/jGcaPZMrcw5Mdnz9NoAiQcbpPYG/5E11g7KmXZkBv4iUy9Oo6f1QE=
-X-Received: by 2002:a05:600c:3b11:b0:3c6:c02d:babb with SMTP id
- m17-20020a05600c3b1100b003c6c02dbabbmr7040071wms.69.1666901006407; Thu, 27
- Oct 2022 13:03:26 -0700 (PDT)
+        Thu, 27 Oct 2022 16:04:57 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76C7122BCA;
+        Thu, 27 Oct 2022 13:04:54 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3D6E423A;
+        Thu, 27 Oct 2022 13:05:00 -0700 (PDT)
+Received: from [10.57.7.15] (unknown [10.57.7.15])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6766E3F445;
+        Thu, 27 Oct 2022 13:04:52 -0700 (PDT)
+Message-ID: <f799f67c-c9e9-c702-8457-db8da78500c9@arm.com>
+Date:   Thu, 27 Oct 2022 21:04:50 +0100
 MIME-Version: 1.0
-References: <20221021211816.1525201-1-vipinsh@google.com> <20221021211816.1525201-6-vipinsh@google.com>
- <DS0PR11MB637351B52E5F8752E7DA16A4DC309@DS0PR11MB6373.namprd11.prod.outlook.com>
- <Y1lV0l4uDjXdKpkL@google.com> <DS0PR11MB6373E6CA4DDFFD47B64CB719DC339@DS0PR11MB6373.namprd11.prod.outlook.com>
- <Y1qqIgVdZi7qSUD0@google.com>
-In-Reply-To: <Y1qqIgVdZi7qSUD0@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Thu, 27 Oct 2022 13:02:49 -0700
-Message-ID: <CAHVum0edLWu0fGMgs7n2v2Fu-XW5mXtAsJ2dtkWD=ZadbRi+hw@mail.gmail.com>
-Subject: Re: [PATCH v6 5/5] KVM: selftests: Allowing running
- dirty_log_perf_test on specific CPUs
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Wang, Wei W" <wei.w.wang@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "andrew.jones@linux.dev" <andrew.jones@linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional
+ util-awareness
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     daniel.lezcano@linaro.org, Dietmar.Eggemann@arm.com,
+        dsmythies@telus.net, yu.chen.surf@gmail.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>
+References: <20221003144914.160547-1-kajetan.puchalski@arm.com>
+ <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com>
+ <Y0fymW5LOoIHstE2@e126311.manchester.arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <Y0fymW5LOoIHstE2@e126311.manchester.arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,44 +50,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 8:56 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Thu, Oct 27, 2022, Wang, Wei W wrote:
-> > On Wednesday, October 26, 2022 11:44 PM, Sean Christopherson wrote:
-> > > If we go this route in the future, we'd need to add a worker trampoline as the
-> > > pinning needs to happen in the worker task itself to guarantee that the pinning
-> > > takes effect before the worker does anything useful.  That should be very
-> > > doable.
-> >
-> > The alternative way is the one I shared before, using this:
-> >
-> > /* Thread created with attribute ATTR will be limited to run only on
-> >    the processors represented in CPUSET.  */
-> > extern int pthread_attr_setaffinity_np (pthread_attr_t *__attr,
-> >                                  size_t __cpusetsize,
-> >                                  const cpu_set_t *__cpuset)
-> >
-> > Basically, the thread is created on the pCPU as user specified.
-> > I think this is better than "creating the thread on an arbitrary pCPU
-> > and then pinning it to the user specified pCPU in the thread's start routine".
->
-> Ah, yeah, that's better.
->
+Hi Rafael,
 
-pthread_create() will internally call sched_setaffinity() syscall
-after creation of a thread on a random CPU. So, from the performance
-side there is not much difference between the two approaches.
+On 10/13/22 12:12, Kajetan Puchalski wrote:
+> On Wed, Oct 12, 2022 at 08:50:39PM +0200, Rafael J. Wysocki wrote:
+>> On Mon, Oct 3, 2022 at 4:50 PM Kajetan Puchalski
+>> <kajetan.puchalski@arm.com> wrote:
+>>>
+>>> Hi,
+>>>
+>>> At the moment, all the available idle governors operate mainly based on their own past performance
+>>
+>> Not true, at least for the menu and teo governors that use the
+>> information on the distribution of CPU wakeups that is available to
+>> them and try to predict the next idle duration with the help of it.
+>> This has a little to do with their performance.
+> 
+> You're right of course, I should have written "their own past
+> correctness" as that's what I was referring to. I just meant that for
+> instance with TEO the initial timer-based choice is only adjusted using
+> the governor's own metrics and not any information from anywhere else in
+> the system.
+> 
 
-However, we will still need pin_this_task_to_pcpu()/sched_affinity()
-to move the main thread to a specific pCPU, therefore, I am thinking
-of keeping the current approach unless there is a strong objection to
-it.
+[snip]
 
-> > Probably we also don't need "bool pin_vcpus".
->
-> Yeah, but for selftests shaving bytes is not exactly top priority, and having a
-> dedicated flag avoids the need for magic numbers.  If Vipin had used -1, I'd
-> probably be fine with that, but I'm also totally fine using a dedicated flag too.
->
+Would it be possible to consider a new small and simple idle governor
+which is better suited for those other workloads and platforms?
+Kajetan has such one and can send to the LKML, so you could have a look.
 
-Same, it is not performance critical in this case to add a magical -1.
+I have sent some detailed explanation about this to Doug in this
+thread (don't want to duplicate it).
+
+It looks like it would be hard to meet both worlds' requirements.
+
+Regards,
+Lukasz
