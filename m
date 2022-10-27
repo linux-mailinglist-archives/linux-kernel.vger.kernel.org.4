@@ -2,200 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BCB160F215
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0071F60F217
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234768AbiJ0ITd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 04:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
+        id S234890AbiJ0ITn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 04:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233974AbiJ0ITa (ORCPT
+        with ESMTP id S234863AbiJ0ITg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 04:19:30 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2073.outbound.protection.outlook.com [40.107.244.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A951DF53
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:19:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CdRmMDdt06fbfKjky77RRjbsO74dr8FFiO9S9riKypGm+G6KCfDPrGaXYvrc4yyyu785aoQnVAbgymBIspVojSZBr97Hatzb6096UC2L3LpDRSApibyrUhUvGJTY3CjL7g26t7/PU2nr4MlzpoW183mm8k4Q0oocEpbIp5gZQhI97iC0Vrpxh5pJyTY5xJ1sybi+RPLzplU/5gsEq85lERir59n7i/wyCEr81YUpktLXS4Nemoo4XlQwxcKI7JZZVmGuwc1vEjmFYkaM53zosfmzU2gGSJtMbCkfJ0OK8Z9VGoyt/VRU4EpJHXt717ytjOIriXpkEBSiSCpxf5eF2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BfwiBORJW7jlMaH36LLWkCk/NaZzDuoUsnjQicX1YeY=;
- b=FcRJdIlXCOO3dozumSFns8cMXWJjKI+VKpSacrLyd2PNVP/SfvBCVNEq/olHLVigZFYYR0v1tKEeYAvUjR3TgGjCWIjn6TIyG2RJyWynv1kPyEQdXFGe3Wx0oMGekRjbAVH44KuJqKgCF6aD0yohbdzR0R3xzclSGLJ3LwIwZj1mvBKoLvCfrEymxdxF7Ws/VKLPovY/jauOWY/SAw7RJMTC23S8KhhN7okqwanTHIU4BS3nCBgWym0lWy5Wxi90sI3+t9YGXvyOcCxgV8uUcwgn11F1A4ayy9KJHTrpltHXsbSXiXQ+5cvRH4SZd9NyTrsEKvuLzHAGFDJEW+/bWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BfwiBORJW7jlMaH36LLWkCk/NaZzDuoUsnjQicX1YeY=;
- b=1G459hqojVRJOJfJHhFZT98lSJEVF9FuqppGK9i+JDX52gA1fm3ts8iSe0Sk8hASsWtkG7zfGU/0/NAxLeXVPMF2bYTY90v3DMPD9L4aGDwQP/78pa6JB3JEcumgExht/ADHta84RGlsUVKMHBr98VzVBbxgnXqF5z1hPLRUc6k=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by CY8PR12MB7753.namprd12.prod.outlook.com (2603:10b6:930:85::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34; Thu, 27 Oct
- 2022 08:19:26 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::a350:f29a:f287:7279]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::a350:f29a:f287:7279%4]) with mapi id 15.20.5746.023; Thu, 27 Oct 2022
- 08:19:25 +0000
-Message-ID: <ac73b553-9173-4ac5-ef16-a95b8a8cd4f9@amd.com>
-Date:   Thu, 27 Oct 2022 10:19:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm/scheduler: set current_entity to next when remove
- from rq
-Content-Language: en-US
-To:     Luben Tuikov <luben.tuikov@amd.com>,
-        brolerliew <brolerliew@gmail.com>
-Cc:     Alex Deucher <alexdeucher@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20221025061846.447975-1-brolerliew@gmail.com>
- <CADnq5_NweAo-7snRLkidNkOizu7Ft+7GgXCS2Rnv1oxmRFb_RQ@mail.gmail.com>
- <a70dcda0-6723-38f6-efeb-e8edb16dab55@amd.com>
- <69e672a5-a68e-7bad-fc49-4281c1c6039d@amd.com>
- <9774ddd6-60d9-245c-77ac-59951c13b263@amd.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <9774ddd6-60d9-245c-77ac-59951c13b263@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0037.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:4a::21) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Thu, 27 Oct 2022 04:19:36 -0400
+Received: from mail.wantstofly.org (hmm.wantstofly.org [213.239.204.108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4620B866
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:19:32 -0700 (PDT)
+Received: by mail.wantstofly.org (Postfix, from userid 1000)
+        id 5D2EF7F527; Thu, 27 Oct 2022 11:19:30 +0300 (EEST)
+Date:   Thu, 27 Oct 2022 11:19:30 +0300
+From:   Lennert Buytenhek <buytenh@wantstofly.org>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     David Woodhouse <dwmw2@infradead.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Scarlett Gourley <scarlett@arista.com>,
+        James Sewart <jamessewart@arista.com>,
+        Jack O'Sullivan <jack@arista.com>
+Subject: Re: [PATCH,RFC] iommu/vt-d: Convert dmar_fault IRQ to a threaded IRQ
+Message-ID: <Y1o/EhV+XLgA9s2r@wantstofly.org>
+References: <Y1eZbXKdJDoS8loC@wantstofly.org>
+ <028e2c63-939b-af31-88b9-b479b41ce67c@linux.intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|CY8PR12MB7753:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6d446150-a456-47f6-1efc-08dab7f3f5cc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kmkgpNqwkUGoE5xZ090XU3ecuxPMNxbPTOXkIwsEdtiG1HPqhzF3rJyZza81AoOQb0UrWQvNUQMet0pMn5tlCFJD3OH84on2zIfiX8u74znQJ13/KgsY5onq/Kf0Ing6ASag0ELkyXZ++JYmTin35PTouUwdzQk9zZxsFQPG+hErznLbPNU7XjPHiqaBmOC1NgrYevLaAH08xsY6KVRFhQV8AG0bxL3kPE25WiP0i7IR7Sas25saQZdxZbdreXpkcAGEU7KENtdzx/kDZJn0ZukN58AczaXNLSQWHYlWFzkcj8hTDWQl5cvJA/ypZD8DSqMMg/rZEDVhGuQvYz3C6Y9TdvWF8JxfK2+DovO+Fw04nC1i0ThOgplw2p/c8xNc1TN+QmndwmxWL464cZ5M7hy0Qbtro4bA4jCQdPzWlZVPh8pmOZ/22HkZauSsrT2ukohipHbRg2eJ3rEYB/zL2uN3pJh/9h7DOqLjkg0P+Un278kC8ZsQqal3t4yGGZc4lG4rXWImFKArvvdxdO2IrSkhAkL/PUqFVskOmO21pxPt+iwWqUgy0htwicsBQ4Npq5N/5TmsZ8QVFzQzb12BRZaEJjjat+qbJ4WQyrrJttsnmFdEiNyi9kHy2CGGfZV+QfpttFi4eqqiVbxoRdfAdSxDVHiAQSav2d+p3nSn/n7eCoY6JYHALgoBvc9ta+8qdyrBYZqdE7HqCGJO0o1z9KdnUODEKK6zTKWTNlixdxo4iRIsbE0VYhN8KxUb7Yat1eFh9XP33jBTMoDjErP25jozBvnPOl3cDg9uCiw9SDM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(346002)(366004)(376002)(39860400002)(451199015)(316002)(2906002)(186003)(4001150100001)(478600001)(6486002)(66476007)(66556008)(4326008)(8936002)(2616005)(26005)(110136005)(66946007)(31686004)(6506007)(31696002)(36756003)(6666004)(6512007)(41300700001)(53546011)(8676002)(86362001)(38100700002)(83380400001)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z0lhR2NYdUlYNGR0T3VCN1l0d2o5SGZnenlyRFJNdTgvZ1hNb0xRT3lobXFt?=
- =?utf-8?B?Ly8wZUd5ZTFtR2cxNllvQTZTNWhUc1BVeElIL05EdmZuU3VlTzhzQTFGbnJZ?=
- =?utf-8?B?ZnlUUEJxV2xFeE55aHRXTHhtUXdrUzNweWU4eXV2clZUNnI4SWh5TWFTMUNC?=
- =?utf-8?B?UzBZNU1JSkUvU0dETUNvak0wLzlhb2FlRDA1QXp4K0pDMHE4Q09ReGNYWEds?=
- =?utf-8?B?Um81MzRWMzhrdHdPZE5RWG41Tm9uSC9KWlg0c2x2MVlzckdUNFNUeGdMUzRy?=
- =?utf-8?B?T3hoMUt2U0cyQkN6b2hlV2lrSkFXbVFlclZhTG00eFhrS3F0U0VYOVcrNG1Y?=
- =?utf-8?B?M3BwWUE0RFlrRzQ4UE9VUU55WmxDN0lvUkRYdmxXYUhKYW5BYVVZd2dRYXNq?=
- =?utf-8?B?VDljQUhWdEJoc1dFTDQyZGJiMXMrUDZ2ODYzREYvNzB2aEtsZ1AyQzlYZytV?=
- =?utf-8?B?MkhmcG5TT0t3UHdPZXVEcnR4SSt2Vk9yT0thTG16MDRhV0VyZG04MVR4ejFF?=
- =?utf-8?B?WWdzU29EMUgvOTRrNlJVTXplejhUTTJjWjJRc0N0cmFIQS9HQ1hwL0xSdUM1?=
- =?utf-8?B?QWVWU1FiREdYYTdpOFpJTEJqQ2JVcFB0VS96Yi9EaXpMNkcva3p4ZE9EQ3U1?=
- =?utf-8?B?cU1WdzFXS2VBMjhCbjdocHZ0ME1QWnY5OE9QSERTM0dnODFXWjgxT0NqVEN1?=
- =?utf-8?B?Q2tpcmt1Y3FJbFNOMmxiTW5JL0NIaVBEMTdINjIvYTFxYWxFdys4RmZDek5P?=
- =?utf-8?B?b0UrZ1JWbTVEODJ2ajlSdGRpcWxONm93L3RNcXNVQ0ZYNTMzbm5WMUtrNjRs?=
- =?utf-8?B?dTZkcW9sNnBzZUNLazN5bXVVYk9kSVRZK0tBV2o1V09kZ0QycW9EZ1BIVUNa?=
- =?utf-8?B?ZWNENHJsVG5MekVKa05PK2hFT3R0SWlyU2J1aFpTOUJEZytueXJub2pIVTZq?=
- =?utf-8?B?NXJlV3VTckRGOWZST0RhYTYyUlZBQVBxRS9SSDhvQ2JOWDhEZHkweW5sMFR6?=
- =?utf-8?B?NEU5d3BpS01wQzk4NzA2aXhRUHhmU3I5Y2E5N1RwRkhDREVOQStvd0YrYmVI?=
- =?utf-8?B?UGd6cHJqSDNlRjR3WXhYQVkrZko1cWVhanRpSnhESmkweVpTMmRRUndDaDNR?=
- =?utf-8?B?OHIwWTljbG02ZjRsNUZoWnJKZGNBdTBIaWRJZXRoS1RUbDdOanM5eWN4cXpZ?=
- =?utf-8?B?bmIxd2Z5N0xVbXYyR1hZaURVME4rTmo1dnZtc0piSnZSTEswTDgwVWJORWlD?=
- =?utf-8?B?TUJUclNFZGc5azFwUkx6UHpxZmt1TzFHcGhEMFRTdEwwYi9lcG9DUjk0QTRy?=
- =?utf-8?B?NkJTMkxweUwvZDVRc0gzcUsweGV1TlFEZHVxQjhIclpsUkplQlZYclBPNDZ6?=
- =?utf-8?B?Ymxuc0RnaWNMQUQwZFhnelIxbEorcFJaVXA5cEk0MFljVGpZQU9NYnd0YTdy?=
- =?utf-8?B?U0g1emRMeFF4NEhQVnBlTlhLUWllUGExaE5aeVpVQnlDQ2pyM09xNy9rUEdR?=
- =?utf-8?B?M1VLSUhpTFZqdWJBU2Ivd2tMak82dWJLRk85YjRUZDhZNTZwcmQzaHNuS1k4?=
- =?utf-8?B?cmd3ZXlaQ2dlb0dnYm1zSzJOVllhRG5yWG1rRlB4ZVNzNW5ES1FQSExEbGVX?=
- =?utf-8?B?NUFJSy91WTVpU2lseUM3aC94TGpFV1E3Wk1td3BzUDI2bk80K081K1VIc1M3?=
- =?utf-8?B?bmM0cUxyT2s1cU53d3dMOUJzeVJvNG01aHRSbU1XaElPQ0VSUTVsMmNLQmZB?=
- =?utf-8?B?QitVQzhOQmJIN3RSc0d0SHBiL0szSUFXbXhsL2d2Nm1ncG9pOTIvRllPdmdo?=
- =?utf-8?B?MmNyQjRqSmxiRlFzalAzazQ4RDVoSGp4Z251K2tYWVhhWkQzT0Q3RDN1aWl2?=
- =?utf-8?B?aU1wRHlxaVdsZ3hSdWZ3Qm1CUVR0MWVjeUdBMkdiK1g3QjlmSmJZN1I2OHlt?=
- =?utf-8?B?Sm1tUjVhaHFmRkdCMjFPbEdPN0hYUVNmWUxyVU1Id3JDanVCNUxmL2VDUWx4?=
- =?utf-8?B?ZmtuYzMyNVBWS29XLzZMckI0NVhhQWpNUzVVTTNSRXkvaldDZ3RBZGhDR1lk?=
- =?utf-8?B?ajR6UDdDT3ozdE40cWttY1JmS29pV1QwcEpkRmF6SkVtdEthUStodE9UK2RQ?=
- =?utf-8?Q?NpBrEB/fAXG4Et+Vc4mO4BBcV?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d446150-a456-47f6-1efc-08dab7f3f5cc
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 08:19:25.7577
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +2XXZzwpqdBLE6pBhT18db151qy2uBlq9cTxfrF+SQRyUzWmji2igHIR5y4nNPjN
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7753
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <028e2c63-939b-af31-88b9-b479b41ce67c@linux.intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 27.10.22 um 10:07 schrieb Luben Tuikov:
-> On 2022-10-27 03:01, Luben Tuikov wrote:
->> On 2022-10-25 13:50, Luben Tuikov wrote:
->>> Looking...
->>>
->>> Regards,
->>> Luben
->>>
->>> On 2022-10-25 09:35, Alex Deucher wrote:
->>>> + Luben
->>>>
->>>> On Tue, Oct 25, 2022 at 2:55 AM brolerliew <brolerliew@gmail.com> wrote:
->>>>> When entity move from one rq to another, current_entity will be set to NULL
->>>>> if it is the moving entity. This make entities close to rq head got
->>>>> selected more frequently, especially when doing load balance between
->>>>> multiple drm_gpu_scheduler.
->>>>>
->>>>> Make current_entity to next when removing from rq.
->>>>>
->>>>> Signed-off-by: brolerliew <brolerliew@gmail.com>
->>>>> ---
->>>>>   drivers/gpu/drm/scheduler/sched_main.c | 5 +++--
->>>>>   1 file changed, 3 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
->>>>> index 2fab218d7082..00b22cc50f08 100644
->>>>> --- a/drivers/gpu/drm/scheduler/sched_main.c
->>>>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
->>>>> @@ -168,10 +168,11 @@ void drm_sched_rq_remove_entity(struct drm_sched_rq *rq,
->>>>>          spin_lock(&rq->lock);
->>>>>
->>>>>          atomic_dec(rq->sched->score);
->>>>> -       list_del_init(&entity->list);
->>>>>
->>>>>          if (rq->current_entity == entity)
->>>>> -               rq->current_entity = NULL;
->>>>> +               rq->current_entity = list_next_entry(entity, list);
->>>>> +
->>>>> +       list_del_init(&entity->list);
->>>>>
->>>>>          if (drm_sched_policy == DRM_SCHED_POLICY_FIFO)
->>>>>                  drm_sched_rq_remove_fifo_locked(entity);
->>>>> --
->>>>> 2.34.1
->>>>>
->> Looks good. I'll pick it up into some other changes I've in tow, and repost
->> along with my changes, as they're somewhat related.
-> Actually, the more I look at it, the more I think that we do want to set
-> rq->current_entity to NULL in that function, in order to pick the next best entity
-> (or scheduler for that matter), the next time around. See sched_entity.c,
-> and drm_sched_rq_select_entity() where we start evaluating from the _next_
-> entity.
->
-> So, it is best to leave it to set it to NULL, for now.
+On Wed, Oct 26, 2022 at 10:10:29AM +0800, Baolu Lu wrote:
 
-Apart from that this patch here could cause a crash when the entity is 
-the last one in the list.
+> > Under a high enough I/O page fault load, the dmar_fault hardirq handler
+> > can end up starving other tasks that wanted to run on the CPU that the
+> > IRQ is being routed to.  On an i7-6700 CPU this seems to happen at
+> > around 2.5 million I/O page faults per second, and at a fraction of
+> > that rate on some of the lower-end CPUs that we use.
+> > 
+> > An I/O page fault rate of 2.5 million per second may seem like a very
+> > high number, but when we get an I/O page fault for every cache line
+> > touched by a DMA operation, this I/O page fault rate can be the result
+> > of a confused PCIe device DMAing to RAM at 2.5 * 64 = 160 MB/sec, which
+> > is not an unlikely rate to be DMAing things to RAM at.  And, in fact,
+> > when we do see PCIe devices getting confused like this, this sort of
+> > I/O page fault rate is not uncommon.
+> > 
+> > A peripheral device continuously DMAing to RAM at 160 MB/s is
+> > inarguably a bug, either in the kernel driver for the device or in the
+> > firmware for the device, and should be fixed there, but it's the sort
+> > of bug that iommu/vt-d could be handling better than it currently does,
+> > and there is a fairly simple way to achieve that.
+> > 
+> > This patch changes the dmar_fault IRQ handler to be a threaded IRQ
+> > handler.  This is a pretty minimal code change, and comes with the
+> > advantage that Intel IOMMU I/O page fault handling work is now subject
+> > to RT throttling, which allows it to be kept under control using the
+> > sched_rt_period_us / sched_rt_runtime_us parameters.
+> 
+> Thanks for the patch! I like it, but also have some concerns.
 
-In this case current current_entity would be set to an incorrect upcast 
-of the head of the list.
+Thanks for having a look!
 
-Regards,
-Christian.
 
->
-> Regards,
-> Luben
->
+> If you look at the commit history, you will find that the opposite
+> change took place 10+ years ago.
+> 
+> commit 477694e71113fd0694b6bb0bcc2d006b8ac62691
+> Author: Thomas Gleixner <tglx@linutronix.de>
+> Date:   Tue Jul 19 16:25:42 2011 +0200
+> 
+>     x86, iommu: Mark DMAR IRQ as non-threaded
+> 
+>     Mark this lowlevel IRQ handler as non-threaded. This prevents a boot
+>     crash when "threadirqs" is on the kernel commandline. Also the
+>     interrupt handler is handling hardware critical events which should
+>     not be delayed into a thread.
+> 
+>     Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+>     Cc: stable@kernel.org
+>     Signed-off-by: Ingo Molnar <mingo@kernel.org>
+> 
+> I am not sure whether the "boot crash" mentioned above is due to that
+> "trying to setup a threaded IRQ handler before kthreadd is started".
 
+On v6.1-rc you also get a boot crash if you force the dmar_fault IRQ
+to be a threaded IRQ without moving the IRQ registration out of the
+start_kernel() -> x86_late_time_init() -> apic_intr_mode_init() ->
+apic_bsp_setup() -> irq_remap_enable_fault_handling() ->
+enable_drhd_fault_handling() path.  The crash seen on v3.0 when forcing
+the dmar_fault IRQ to be a threaded IRQ may have been due to the same
+reason, but I'm not sure how this may have worked in 2011. :-)
+
+I'm not sure I agree with the "the interrupt handler is handling
+hardware critical events which should not be delayed into a thread"
+part of this commit message.  All that dmar_fault does is log
+translation faults to the console, and I don't think that anything
+will break if that gets delayed for a while.
+
+
+> > iommu/amd already uses a threaded IRQ handler for its I/O page fault
+> > reporting, and so it already has this advantage.
+> > 
+> > When IRQ remapping is enabled, iommu/vt-d will try to set up its
+> > dmar_fault IRQ handler from start_kernel() -> x86_late_time_init()
+> > -> apic_intr_mode_init() -> apic_bsp_setup() ->
+> > irq_remap_enable_fault_handling() -> enable_drhd_fault_handling(),
+> > which happens before kthreadd is started, and trying to set up a
+> > threaded IRQ handler this early on will oops.  However, there
+> > doesn't seem to be a reason why iommu/vt-d needs to set up its fault
+> > reporting IRQ handler this early, and if we remove the IRQ setup code
+> > from enable_drhd_fault_handling(), the IRQ will be registered instead
+> > from pci_iommu_init() -> intel_iommu_init() -> init_dmars(), which
+> > seems to work just fine.
+> 
+> At present, we cannot do so. Because the VT-d interrupt remapping and
+> DMA remapping can be independently enabled. In another words, it's a
+> possible case where interrupt remapping is enabled while DMA remapping
+> is not.
+
+Is there a way I can test this easily?
+
+I think we should be able to handle the "interrupt remapping enabled
+but DMA remapping disabled" case in the same way, by registering the
+dmar_fault IRQ sometime after kthreadd has been started.  I don't think
+the dmar_fault handler performs any function that is critical for the
+operation of the IOMMU, and I think that we can defer setting it up
+until whenever is convenient.
+
+Thank you!
+
+
+> > Suggested-by: Scarlett Gourley <scarlett@arista.com>
+> > Suggested-by: James Sewart <jamessewart@arista.com>
+> > Suggested-by: Jack O'Sullivan <jack@arista.com>
+> > Signed-off-by: Lennert Buytenhek <buytenh@arista.com>
+> > ---
+> >   drivers/iommu/intel/dmar.c | 27 ++-------------------------
+> >   1 file changed, 2 insertions(+), 25 deletions(-)
+> > 
+> > diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
+> > index 5a8f780e7ffd..d0871fe9d04d 100644
+> > --- a/drivers/iommu/intel/dmar.c
+> > +++ b/drivers/iommu/intel/dmar.c
+> > @@ -2043,7 +2043,8 @@ int dmar_set_interrupt(struct intel_iommu *iommu)
+> >   		return -EINVAL;
+> >   	}
+> > -	ret = request_irq(irq, dmar_fault, IRQF_NO_THREAD, iommu->name, iommu);
+> > +	ret = request_threaded_irq(irq, NULL, dmar_fault, IRQF_ONESHOT,
+> > +				   iommu->name, iommu);
+> >   	if (ret)
+> >   		pr_err("Can't request irq\n");
+> >   	return ret;
+> > @@ -2051,30 +2052,6 @@ int dmar_set_interrupt(struct intel_iommu *iommu)
+> >   int __init enable_drhd_fault_handling(void)
+> >   {
+> > -	struct dmar_drhd_unit *drhd;
+> > -	struct intel_iommu *iommu;
+> > -
+> > -	/*
+> > -	 * Enable fault control interrupt.
+> > -	 */
+> > -	for_each_iommu(iommu, drhd) {
+> > -		u32 fault_status;
+> > -		int ret = dmar_set_interrupt(iommu);
+> > -
+> > -		if (ret) {
+> > -			pr_err("DRHD %Lx: failed to enable fault, interrupt, ret %d\n",
+> > -			       (unsigned long long)drhd->reg_base_addr, ret);
+> > -			return -1;
+> > -		}
+> > -
+> > -		/*
+> > -		 * Clear any previous faults.
+> > -		 */
+> > -		dmar_fault(iommu->irq, iommu);
+> > -		fault_status = readl(iommu->reg + DMAR_FSTS_REG);
+> > -		writel(fault_status, iommu->reg + DMAR_FSTS_REG);
+> > -	}
+> > -
+> >   	return 0;
+> >   }
