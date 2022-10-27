@@ -2,101 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A883F60FD9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D30C60FEAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236124AbiJ0Q4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 12:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
+        id S237006AbiJ0RHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 13:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236249AbiJ0Q4S (ORCPT
+        with ESMTP id S237018AbiJ0RHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 12:56:18 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286F917A02A
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:56:14 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id h185so2056703pgc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:56:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R53WK2VMBi999TWTmmW7DP/C36/3TjYtBesfKsubmBI=;
-        b=BN2fRaT/LM2Tn120Q3WjdWpDuJcEnDEKyc/+xL2D0uLq3p2tznv75V/u9RlG/IzA16
-         3A/u5tl93bXlEWIj5VYM68d0GJkGqeckmkChLDIrgJM7cNBwD+d6TA6Dc+wKSeKoyItI
-         cAAkd00zsgmsZOKUBU778IDDP8t6iwHd7AQM5TUX2FpxyRrd+5kduoNor1bJaQjRJq5t
-         z7ojCH82/Ok6xHMtBtDQZs54lI7lMq24kpVq1nfWwErhTEo7ohgu+RrkW4IBHH4ks9/5
-         HPWZr1RmwABEOwbCxpUEQ5arV8gDwwfkRrSXzvnfzTBpTgKB5trEXNRNGK5lV0LPVv4K
-         D1/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R53WK2VMBi999TWTmmW7DP/C36/3TjYtBesfKsubmBI=;
-        b=gylh3/5HRinCTFKjeS8dYzegBf5KA0DG2apQAn9UKvHvpOn5U87FTbsIl3fIj5dTYK
-         Bidn899Qid8cjqVm/wCizWM35rXbOKg/8yhM+wmlBgaBFAWUVvjk7NWxNnFHna+XZbck
-         NC/oBKyGBYMTMzh7dTI98WMDj/hRyhZQ5nW5uW1Qo5n3enmlVaWnJ/nJEnNfN5q2XwhO
-         f3QDqzp5/5ZlGtS/ZZfZr2DU9iU44AmwDrVmMl7Rgva77o7ZAROKhuiW/ssQcYXvXGIi
-         FPoxVWoE+KHO47/mllhqPcA3ESFt6GJ2fiLVEa+Vr24KRp5Qs2ApHKrN8oKjhjh8a4U6
-         x58w==
-X-Gm-Message-State: ACrzQf0J+CQgHQt452DddxKq8zqP6o3gSUneefWISelLtFYFx7baTJvN
-        24lc0d9yztYvjpDEHJcPqoXnuw==
-X-Google-Smtp-Source: AMsMyM5rw2WyE82KgSud6t706admcPOeHNOoMBoT75zlOCAH8PlcfvdQnB7viaau/GMnM8pJAF6EzA==
-X-Received: by 2002:a63:fb09:0:b0:43c:b1c6:b335 with SMTP id o9-20020a63fb09000000b0043cb1c6b335mr43524190pgh.276.1666889774120;
-        Thu, 27 Oct 2022 09:56:14 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id i63-20020a62c142000000b0053e62b6fd22sm1377251pfg.126.2022.10.27.09.56.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 09:56:13 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 16:56:10 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Luczaj <mhal@rbox.co>,
-        David Woodhouse <dwmw2@infradead.org>
-Subject: Re: [PATCH v2 03/16] KVM: x86: Always use non-compat
- vcpu_runstate_info size for gfn=>pfn cache
-Message-ID: <Y1q4KkVQLpuZSX+V@google.com>
-References: <20221013211234.1318131-1-seanjc@google.com>
- <20221013211234.1318131-4-seanjc@google.com>
- <afad5f40-03ef-1380-9bfe-03bbaaed47a9@redhat.com>
- <Y1qZagwM0dMBjYhe@google.com>
+        Thu, 27 Oct 2022 13:07:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7627219C06E;
+        Thu, 27 Oct 2022 10:07:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15CCF623F7;
+        Thu, 27 Oct 2022 17:07:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE921C433C1;
+        Thu, 27 Oct 2022 17:07:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666890427;
+        bh=KnqdBqXpwjnoczNNin28/Qu7T5+d3J3wqw/aPVgwV5I=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=M6gkwDRq0ZzW/1wjsK67lKou40T33TVnreVpyu07Srkg2xJGTGA9FB1KrmtyIVOKA
+         rSp0/RiFPQ9T5igRiiYFZ8Xe5FTQNSX1hJC+/r83GuFjNS8SlzrZ6GXEtmSWuDpSLR
+         f/xEYcoJCYAy853/om+k78fumLtbSSuciB4dmKDQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 67/79] fcntl: make F_GETOWN(EX) return 0 on dead owner task
+Date:   Thu, 27 Oct 2022 18:56:17 +0200
+Message-Id: <20221027165056.588648208@linuxfoundation.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221027165054.270676357@linuxfoundation.org>
+References: <20221027165054.270676357@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1qZagwM0dMBjYhe@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022, Sean Christopherson wrote:
-> On Thu, Oct 27, 2022, Paolo Bonzini wrote:
-> > On 10/13/22 23:12, Sean Christopherson wrote:
-> > > Always use the size of Xen's non-compat vcpu_runstate_info struct when
-> > > checking that the GPA+size doesn't cross a page boundary.  Conceptually,
-> > > using the current mode is more correct, but KVM isn't consistent with
-> > > itself as kvm_xen_vcpu_set_attr() unconditionally uses the "full" size
-> > > when activating the cache.  More importantly, prior to the introduction
-> > > of the gfn_to_pfn_cache, KVM _always_ used the full size, i.e. allowing
-> > > the guest (userspace?) to use a poorly aligned GPA in 32-bit mode but not
-> > > 64-bit mode is more of a bug than a feature, and fixing the bug doesn't
-> > > break KVM's historical ABI.
-> > 
-> > I'd rather not introduce additional restrictions in KVM,
-> 
-> But KVM already has this restriction.  "struct vcpu_info" is always checked for
-> the non-compat size, and as above, "struct vcpu_runstate_info" is checked for the
-> non-compat size during its initialization.
+From: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
 
-Ah, I forgot those are the same size:
+[ Upstream commit cc4a3f885e8f2bc3c86a265972e94fef32d68f67 ]
 
-		BUILD_BUG_ON(sizeof(struct vcpu_info) !=
-			     sizeof(struct compat_vcpu_info));
+Currently there is no way to differentiate the file with alive owner
+from the file with dead owner but pid of the owner reused. That's why
+CRIU can't actually know if it needs to restore file owner or not,
+because if it restores owner but actual owner was dead, this can
+introduce unexpected signals to the "false"-owner (which reused the
+pid).
+
+Let's change the api, so that F_GETOWN(EX) returns 0 in case actual
+owner is dead already. This comports with the POSIX spec, which
+states that a PID of 0 indicates that no signal will be sent.
+
+Cc: Jeff Layton <jlayton@kernel.org>
+Cc: "J. Bruce Fields" <bfields@fieldses.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Cyrill Gorcunov <gorcunov@gmail.com>
+Cc: Andrei Vagin <avagin@gmail.com>
+Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+Stable-dep-of: f671a691e299 ("fcntl: fix potential deadlocks for &fown_struct.lock")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/fcntl.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/fs/fcntl.c b/fs/fcntl.c
+index 71b43538fa44..5a56351f1fc3 100644
+--- a/fs/fcntl.c
++++ b/fs/fcntl.c
+@@ -148,11 +148,15 @@ void f_delown(struct file *filp)
+ 
+ pid_t f_getown(struct file *filp)
+ {
+-	pid_t pid;
++	pid_t pid = 0;
+ 	read_lock(&filp->f_owner.lock);
+-	pid = pid_vnr(filp->f_owner.pid);
+-	if (filp->f_owner.pid_type == PIDTYPE_PGID)
+-		pid = -pid;
++	rcu_read_lock();
++	if (pid_task(filp->f_owner.pid, filp->f_owner.pid_type)) {
++		pid = pid_vnr(filp->f_owner.pid);
++		if (filp->f_owner.pid_type == PIDTYPE_PGID)
++			pid = -pid;
++	}
++	rcu_read_unlock();
+ 	read_unlock(&filp->f_owner.lock);
+ 	return pid;
+ }
+@@ -200,11 +204,14 @@ static int f_setown_ex(struct file *filp, unsigned long arg)
+ static int f_getown_ex(struct file *filp, unsigned long arg)
+ {
+ 	struct f_owner_ex __user *owner_p = (void __user *)arg;
+-	struct f_owner_ex owner;
++	struct f_owner_ex owner = {};
+ 	int ret = 0;
+ 
+ 	read_lock(&filp->f_owner.lock);
+-	owner.pid = pid_vnr(filp->f_owner.pid);
++	rcu_read_lock();
++	if (pid_task(filp->f_owner.pid, filp->f_owner.pid_type))
++		owner.pid = pid_vnr(filp->f_owner.pid);
++	rcu_read_unlock();
+ 	switch (filp->f_owner.pid_type) {
+ 	case PIDTYPE_PID:
+ 		owner.type = F_OWNER_TID;
+-- 
+2.35.1
+
+
+
