@@ -2,122 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 470A161002B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 20:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84FE461002E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 20:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235626AbiJ0S0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 14:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
+        id S235730AbiJ0S16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 14:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235874AbiJ0S0e (ORCPT
+        with ESMTP id S235729AbiJ0S13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 14:26:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59F74DB65;
-        Thu, 27 Oct 2022 11:26:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF2BDB824BC;
-        Thu, 27 Oct 2022 18:26:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FFB9C433D6;
-        Thu, 27 Oct 2022 18:26:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666895190;
-        bh=wma9TzoIDA+DTOwALcOueK9AiE1EyfWmz+CoJNPRnH0=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=jNT56GMvod5SPSxbUukNY+ZqvN66AYjBCtQLdWwe2wnXat0J100nPxOdMLu5ZrJaS
-         D2iNz5X9jlcJq7XsmyA/SF1jar5yzAWrJSZuheYMP/Z04n9FtKWNt6qbiJgV3GKWmY
-         29NoMigCwJ+L/yfnn1fmTtQpBXZCtKu0gbDEdyD6+lp5iXvPSjTsK2UKUmMghzZYxN
-         BxM3BQ6sR6nLV7y8lRFGXJ1gS+NnRdnp0wKELm3GA6YrqfV9042XyA00boiHf49ve7
-         TtTUglzyiZZGV5kvZmnMZ727AUC0EuDHBZlBCfRoWqQv4ygugYuLsiSRvSfsa/NL+s
-         qlonCLkq99x+A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 0419B5C0A59; Thu, 27 Oct 2022 11:26:30 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 11:26:29 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/nolibc: always rebuild the sysroot when
- running a test
-Message-ID: <20221027182629.GF5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221026054508.19634-1-w@1wt.eu>
- <20221026164825.GN5600@paulmck-ThinkPad-P17-Gen-1>
- <20221026195902.GB24197@1wt.eu>
- <20221026204138.GQ5600@paulmck-ThinkPad-P17-Gen-1>
- <20221027023456.GA26215@1wt.eu>
- <20221027170453.GA5600@paulmck-ThinkPad-P17-Gen-1>
- <20221027171307.GA30081@1wt.eu>
+        Thu, 27 Oct 2022 14:27:29 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F156C96C
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 11:27:27 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id o70so3244214yba.7
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 11:27:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YkJRbeGgCZ6+aMV/WWBwtp3wD8MemKx2tm5yGavxfGs=;
+        b=exIXHtdRfzzsFRcp4FGWpq1DR6KLkeXjaQaTyKUdQ4f4sosd+iXNOq3j73Dg0cZoxM
+         p1t1ekHRKjr4sh7Gp9G4Mz92tFIq/yhByogz5OMhL+iVMwuLX4SgyN69cOBEaAZxW//j
+         BlmyS40kXaXJvZPeoQCJ/u5DN/r0U+45qYkz+IZItOKKW8S/Y07ooZYpzl5XkItHYIRZ
+         9LygTaawMypWQf4GJbhWp6I8vrPk44YaSBDUwlkildjWblqyXVSSKMSj7kOqV1ZUBqKt
+         Bo83E8OzkmVACCE5OSD87R76OnrgmasUeZL74EEHgW68EhmQIudY3vNdqy5a8vYEg26K
+         yN1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YkJRbeGgCZ6+aMV/WWBwtp3wD8MemKx2tm5yGavxfGs=;
+        b=g4/O3hcLk/FIdHvwCWSk/U6AOOefFQQydxi2wn9JSH6lJIIiIggpBVd8LzaoLrITln
+         dzEAEjYdJJk5yXmLP+ywmNK2ZXCUj9LHAe5tlkeN7SzdVIKfzpw+vWJW1VKF9zOy+4TB
+         Qlc4HezzGqaxdWXqlwM+kTjoXQWMb5aUbA/PoEvQUjs9LB32MDtf5RKWTSgrUXocX3I1
+         H29erJFnGXdHao5BOtKUz4RV+cjCWK672B09ZV8htv+qcH00/bgZGiBWVnUa6Ru7Sloy
+         MfafZ319nTroKGo1fwnJMv1FcP5ZKnhwn1m3lMIFNAg0gKDCaYz+VWDKbPxBm/8wM+UR
+         2I3w==
+X-Gm-Message-State: ACrzQf1dd94imTSgwDEu4FUrChStXGT3JCSQBqxlng6V4F7W9mvglrLs
+        dgon+pW8y/21hOzUbIHkJegQUt7gi/ttRLW4Am6Ynw==
+X-Google-Smtp-Source: AMsMyM6O+LHzKzlgQsz+mKKGATNtn6T0dtBZB5DMyNFEPw8k9BzX0+L51VgYG8H7AWbW2yhNb/EIaj2sX5Kkc0PfnvA=
+X-Received: by 2002:a25:e80d:0:b0:6cb:a59c:541b with SMTP id
+ k13-20020a25e80d000000b006cba59c541bmr8461132ybd.388.1666895246845; Thu, 27
+ Oct 2022 11:27:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221027171307.GA30081@1wt.eu>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221025221755.3810809-1-glider@google.com> <Y1j+Tt9mnMDU0zO+@hirez.programming.kicks-ass.net>
+ <CAG_fn=XDeghFBGXT37Mc-ky-8NaPaMmCLdo3Par=xh92Fk_CAQ@mail.gmail.com> <Y1o72704bVK0FgCr@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y1o72704bVK0FgCr@hirez.programming.kicks-ass.net>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 27 Oct 2022 11:26:50 -0700
+Message-ID: <CAG_fn=XESk1PPqbAVDqMdGbRwyvLvLQrm2hybr2cXaaYjfZEKA@mail.gmail.com>
+Subject: Re: [PATCH] x86/uaccess: instrument copy_from_user_nmi()
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Marco Elver <elver@google.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 07:13:08PM +0200, Willy Tarreau wrote:
-> On Thu, Oct 27, 2022 at 10:04:53AM -0700, Paul E. McKenney wrote:
-> > > > My intent is to push these nolicb patches into the upcoming v6.2
-> > > > merge window:
-> > > > 
-> > > > 2318a710bffbd tools/nolibc: Fix missing strlen() definition and infinite loop with gcc-12
-> > > > 6937b8de8f1c3 tools/nolibc/string: Fix memcmp() implementation
-> > > > e1bbfe393c900 selftests/nolibc: Add 7 tests for memcmp()
-> > > > 3f2c1c45a3a9a selftests/nolibc: Always rebuild the sysroot when running a test
-> > > > 
-> > > > I didn't see the problem until I queued the third patch (e1bbfe393c900),
-> > > > and it is still in -rcu, not in v6.1.
-> > > > 
-> > > > What am I missing here?
-> > > 
-> > > I thought that since some of them are fixes, they would be pushed during
-> > > 6.1-rc so that we don't release 6.1 with known defects. For example Rasmus'
-> > > fix for memcmp() or the strlen() fix would IMHO make sense for this
-> > > release since we're aware of the bugs and we have the fixes. The 3rd one
-> > > is indeed an addition and in no way a fix and it can easily wait for 6.2.
-> > > The 4th one is more of a usability fix but I agree that for this last one
-> > > it's debatable, I was mostly seeing this as a possiility to avoid causing
-> > > needless confusion.
-> > > 
-> > > Hoping this clarifies my initial question.
-> > 
-> > Very much so, thank you!
-> > 
-> > I was not considering the bug fixed by the first two patches to be
-> > serious, my mistake, apologies for my misclassification.
-> 
-> No worries, I wasn't probably clear upfront about the purpose.
-> 
-> > Given that background, I would rebase these two, test them, and send
-> > off a pull request, probably early next week.
-> > 
-> > 2318a710bffbd tools/nolibc: Fix missing strlen() definition and infinite loop with gcc-12
-> > 6937b8de8f1c3 tools/nolibc/string: Fix memcmp() implementation
-> 
-> Perfect, thank you!
-> 
-> > I would push the other two commits into the upcoming merge window.
-> 
-> OK!
-> 
-> > Or might the discussion between you and Rasmus result in changes to
-> > either of those first two commits?  If so, I should of course wait for
-> > that discussion to resolve.
-> 
-> We'll see, but in any case it would just be a minor detail, but I'll
-> give you a quick response so that you don't have to deal with multiple
-> versions of the patch, we all know that it's painful.
+On Thu, Oct 27, 2022 at 1:05 AM Peter Zijlstra <peterz@infradead.org> wrote=
+:
+>
+> On Wed, Oct 26, 2022 at 11:38:53AM -0700, Alexander Potapenko wrote:
+> > A bigger issue from the NMI perspective is probably
+> > having __msan_poison_alloca() inserted in every non-noinstr kernel
+> > function, because that hook may acquire the stackdepot lock.
+>
+> *urgghhh* that's broken, that must not be. There is a *TON* of NMI
+> functions that are non-noinstr.
 
-If I don't hear otherwise from you by the end of tomorrow (Friday),
-Pacific Time, I will rebase those two patches in preparation for sending
-a pull request for the regression.  I will of course run the pull-message
-text past you before sending the pull request.
+__msan_poison_alloca() is guarded by kmsan_in_runtime(), which is
+currently implemented as:
 
-							Thanx, Paul
+  static __always_inline bool kmsan_in_runtime(void)
+  {
+          if ((hardirq_count() >> HARDIRQ_SHIFT) > 1)
+                  return true;
+          return kmsan_get_context()->kmsan_in_runtime;
+  }
+
+I think the easiest way to fix the NMI situation would be adding "if
+in_nmi() return true"?
+
+Currently that will render kmsan_unpoison_memory() useless in NMI
+context, but I think we don't need a check for kmsan_in_runtime()
+there, because unpoisoning is self-contained and normally does not
+recurse (guess we can tolerate a pr_err() on the rare assertion
+violation path?)
+
+> What's worse, it seems to do a memory allocation as well, and that's out
+> the window with PREEMPT_RT where you can't do even GFP_ATOMIC from
+> regular IRQ context.
+
+Yes, there's a lazy call to alloc_pages() in lib/stackdepot.c that is
+done when we run out of storage space.
+It would be a pity to ignore everything that is happening inside
+regular IRQs (by making kmsan_in_runtime() bail out on in_irq()) - I
+think we occasionally see errors from there, e.g.
+https://syzkaller.appspot.com/bug?id=3D233563e79a8e00f86412eb3d2fb4eb1f425e=
+70c3
+We could make stackdepot avoid allocating memory in IRQs/NMIs and hope
+that calls to __msan_poison_alloca() from regular contexts keep up
+with draining the storage from interrupts.
+Another option would be to preallocate a very big chunk of memory for
+stackdepot and never do allocations again.
+
+These tricks won't however save us from acquiring depot_lock from
+lib/stackdepot.c every time we want to create a new origin.
+But that should not be a problem by itself, because we always do
+kmsan_enter_runtime() before accessing the stack depot - i.e. it won't
+be taken recursively.
+
+Given that PREEMPT_RT is not the default at the moment, shall we make
+KMSAN incompatible with it for the time being?
+
+> That function is wholly unacceptable to be added to every kernel
+> function.
+>
+
+
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
