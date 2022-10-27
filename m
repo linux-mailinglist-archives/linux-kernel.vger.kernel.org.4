@@ -2,187 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 217A66101ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B446101EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236623AbiJ0Tnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 15:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58706 "EHLO
+        id S236563AbiJ0Tn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 15:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236423AbiJ0Tni (ORCPT
+        with ESMTP id S236423AbiJ0Tnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 15:43:38 -0400
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1680580BD8;
-        Thu, 27 Oct 2022 12:43:37 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 19:43:29 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1666899814; x=1667159014;
-        bh=ecgD3ocjBEk+64IIiypXst5XSaocPXz3+0qtVTaMWVI=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=cMLCdIjgewQmJOSr9cpH7ECdKF4NZgyINOCz1RjriHSVAx+XP9spIUfAdYfmsBJBM
-         /vBC5lxVAeeKro4izPbktEgGmat9nEoSBbzD8kXpG2RWINpK8kx2DTQkku1DPPapYc
-         GnQ6PDkNO8TUO0aKPDbDWgU8V1c5uiS88Yduwk7aNInKS7JysqyXo35XsjXcPKKX1s
-         GdzXZ8XrSHZKKv0I5FYOd+/acVfhcW94XNV4DCfIgdQMcsLR77RNujCT/eaTELMbfi
-         mEdfObfstqCzwie8K3UNMxHobTBlMGzjDYwQkXXRZ9G6BIquAFpI2BUsmJuADmxS8A
-         0AImlSC+vTHTA==
-To:     =?utf-8?Q?Eray_Or=C3=A7unus?= <erayorcunus@gmail.com>
-From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org, ike.pan@canonical.com,
-        jikos@kernel.org, benjamin.tissoires@redhat.com,
-        dmitry.torokhov@gmail.com, hdegoede@redhat.com,
-        mgross@linux.intel.com
-Subject: Re: [PATCH 5/6] platform/x86: ideapad-laptop: Expose camera_power only if supported
-Message-ID: <NVuCQsVF6HONw3-eRplxrMgWlvEu6AwKlrXqouYOw1FSFucZ9oprZoUeXzBCsrdzFStLjWP4DSl9wOXTe1pS19MZovS9fDmmtVuRD_prCvQ=@protonmail.com>
-In-Reply-To: <20221026190106.28441-6-erayorcunus@gmail.com>
-References: <20221026190106.28441-1-erayorcunus@gmail.com> <20221026190106.28441-6-erayorcunus@gmail.com>
-Feedback-ID: 20568564:user:proton
+        Thu, 27 Oct 2022 15:43:47 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97B680516
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:43:46 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id x13so2359399qvn.6
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:43:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MK3yOE9pIq7JHkRZwQR/zciky0lrTlCe6u4dRS7btwI=;
+        b=wjlJ0VkwPuAfmg3CW8O14Rz3pG2p4iq+qpritNMiyxTT0EYfCjO4kkqS+MqY6VHsYq
+         6l3JUTmn1M/k3ZqqRDMgynXNEMHxkCgIw1NiqAX+TWhgqNYk15h5zO+4FLFjf6Zx6c9A
+         IpP1Lr7QMNxhuVhOCLrD9ucnaOAJ/eSzTSKtEpa787Af38As15dHXfTEoDASY5bFRidX
+         RPkqQJcThBsXXI+vza1s9X71+WmjkxtVIolrN5j5MpnClToJGH5mTkyKh8nJhTKH1hf6
+         L6dmpDkKq+DjdB5civ79d08DE84CWR5DkvgEbxuQ9VdMrywb78lB5krvF+UgYd123WmT
+         V8+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MK3yOE9pIq7JHkRZwQR/zciky0lrTlCe6u4dRS7btwI=;
+        b=WhZSQVDAkdsz2GGlVyOLqt5d9x+9f0Uc7OSlFdLoOi1C9UqNe2iu/6r0y0WdmnoXET
+         bjxgzggX3hFlXhE0jNBjdtYBgmq27Y61GQV/MvhvsuR1hXMPsf6FtpdBGpihVj9bCHX5
+         iyHqM9TidCzsRm/4/J85YDv4s3nUsnf2h3hD3YGe6Q8mKEPqOYXSGaFkSi/sZbjldPu9
+         OhjeG0PZPWzKHFKbaLJQYZRUm7rtX+lCeCwuzodnIWsePrEx1NVwBh2O0lQUxGUZ4K0U
+         raY1DODhZFiL6V1virlgelYE9ObeoGJZkZqJakSo5IoFRU/2YYnhetvALc/a9yakXqVG
+         Zh2w==
+X-Gm-Message-State: ACrzQf0o56br9JNecIYtVq3R5EK3XnjMkWjVjm/L784UooiV4dPrfwFV
+        39IsQ5AJ+acZXb/dd3HoDW3gtQ==
+X-Google-Smtp-Source: AMsMyM5Lp0W//oZxCFeHBdp+E82reM9g6Ux2PnIzsmr9Y5GOCi9DaxUpYh3kmyxYVUMh23jq7NwohQ==
+X-Received: by 2002:a05:6214:2487:b0:4af:a6f9:ace3 with SMTP id gi7-20020a056214248700b004afa6f9ace3mr42252486qvb.78.1666899825892;
+        Thu, 27 Oct 2022 12:43:45 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id x4-20020a05620a258400b006bc192d277csm1571419qko.10.2022.10.27.12.43.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 12:43:45 -0700 (PDT)
+Message-ID: <6fbb01f0-d0d2-bb06-a160-2f8f91ac68ca@linaro.org>
+Date:   Thu, 27 Oct 2022 15:43:43 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v1 3/4] ARM: dts: rockchip: add rk3128.dtsi
+Content-Language: en-US
+To:     Johan Jonker <jbx6244@gmail.com>, kever.yang@rock-chips.com,
+        heiko@sntech.de
+Cc:     sjg@chromium.org, philipp.tomsich@vrull.eu,
+        zhangqing@rock-chips.com, hjc@rock-chips.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+References: <da1252eb-85e9-bdb8-0542-207173523523@gmail.com>
+ <674b875a-0dfa-eff2-5018-eafed851707f@gmail.com>
+ <f45a4dcb-12e6-9a72-dbb3-7ec198ff2b1d@linaro.org>
+ <2dc46681-894d-4521-bfa7-3e9209691e0a@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2dc46681-894d-4521-bfa7-3e9209691e0a@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On 27/10/2022 13:53, Johan Jonker wrote:
+> Hi Krzysztof, Kever, Heiko and others,
+> 
+> On 10/27/22 16:58, Krzysztof Kozlowski wrote:
+>> On 26/10/2022 20:53, Johan Jonker wrote:
+>>> Add basic rk3128 support.
+>>>
+>>
+>> Thank you for your patch. There is something to discuss/improve.
+> 
+> Thank you for your review.
+> 
+> Some more questions/comments below.
+> 
+>>
+>>> +#include <dt-bindings/clock/rk3128-cru.h>
+>>> +#include <dt-bindings/gpio/gpio.h>
+>>> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+>>> +#include <dt-bindings/interrupt-controller/irq.h>
+>>> +#include <dt-bindings/pinctrl/rockchip.h>
+>>> +
+>>> +/ {
+>>> +	compatible = "rockchip,rk3128";
+>>> +	interrupt-parent = <&gic>;
+>>> +	#address-cells = <1>;
+>>> +	#size-cells = <1>;
+>>> +
+>>> +	aliases {
+>>> +		gpio0 = &gpio0;
+>>> +		gpio1 = &gpio1;
+>>> +		gpio2 = &gpio2;
+>>> +		gpio3 = &gpio3;
+> 
+> Is gpio OK here?
 
+Could be, but let me rephrase it - why do you need aliases in DTSI? What
+do these aliases represent?
 
-2022. okt=C3=B3ber 26., szerda 21:01 keltez=C3=A9ssel, Eray Or=C3=A7unus =
-=C3=ADrta:
+The SoC pieces (nodes in DTSI) do not rely on aliases.
 
-> IdeaPads dropped support for VPCCMD_W_CAMERA somewhere between 2014-2016,
-> none of the IdeaPads produced after that I tested supports it. Fortunatel=
-y
-> I found a way to check it; if the DSDT has camera device(s) defined, it
-> shouldn't have working VPCCMD_W_CAMERA, thus camera_power shouldn't be
-> exposed to sysfs. To accomplish this, walk the ACPI namespace in
-> ideapad_check_features and check the devices starting with "CAM".
-> Tested on 520-15IKB and Legion Y520, which successfully didn't expose
-> the camera_power attribute.
->=20
-> Link: https://www.spinics.net/lists/platform-driver-x86/msg26147.html
-> Signed-off-by: Eray Or=C3=A7unus <erayorcunus@gmail.com>
-> ---
->  drivers/platform/x86/ideapad-laptop.c | 53 ++++++++++++++++++++++++++-
->  1 file changed, 52 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/platform/x86/ideapad-laptop.c b/drivers/platform/x86=
-/ideapad-laptop.c
-> index f3d4f2beda07..65eea2e65bbe 100644
-> --- a/drivers/platform/x86/ideapad-laptop.c
-> +++ b/drivers/platform/x86/ideapad-laptop.c
-> @@ -149,6 +149,7 @@ struct ideapad_private {
->  =09=09bool fn_lock              : 1;
->  =09=09bool hw_rfkill_switch     : 1;
->  =09=09bool kbd_bl               : 1;
-> +=09=09bool cam_ctrl_via_ec      : 1;
->  =09=09bool touchpad_ctrl_via_ec : 1;
->  =09=09bool usb_charging         : 1;
->  =09} features;
-> @@ -163,6 +164,26 @@ static bool no_bt_rfkill;
->  module_param(no_bt_rfkill, bool, 0444);
->  MODULE_PARM_DESC(no_bt_rfkill, "No rfkill for bluetooth.");
->=20
-> +static char *cam_device_prefix =3D "CAM";
-> +
-> +static acpi_status acpi_find_device_callback(acpi_handle handle, u32 lev=
-el,
-> +=09=09=09=09=09     void *context, void **return_value)
-> +{
-> +=09char buffer[8];
-> +=09struct acpi_buffer ret_buf;
-> +
-> +=09ret_buf.length =3D sizeof(buffer);
-> +=09ret_buf.pointer =3D buffer;
-> +
-> +=09if (ACPI_SUCCESS(acpi_get_name(handle, ACPI_SINGLE_NAME, &ret_buf)))
-> +=09=09if (strncmp(ret_buf.pointer, context, strlen(context)) =3D=3D 0) {
+> 
+>>> +		i2c0 = &i2c0;
+>>> +		i2c1 = &i2c1;
+>>> +		i2c2 = &i2c2;
+>>> +		i2c3 = &i2c3;
+>>> +		spi0 = &spi0;
+>>> +		serial0 = &uart0;
+>>> +		serial1 = &uart1;
+>>> +		serial2 = &uart2;
+>>
+>> Bus aliases are board specific and represent what is actually available
+>> on headers/pins etc. These do not belong to SoC DTSI.
+> 
+> I just follow current Rockchip DT common practice.
+> 
+> Do we need to change all Rockchip boards?
+> Would like to hear from Heiko what's the plan here?
+> Syncing to U-boot is already a mess...
 
-Please use `strstarts()` here. Is there any reason why you decided not to
-simply "inline" the "CAM" string here (or even in the function call)?
+Heiko might have his own preference which then over-rules my
+recommendation here. But in general this applies to all boards, so other
+boards could be fixed as well. Different point is whether it is actually
+worth fixing them...
 
+> 
+> So far only instructions/changes and discussion about mmc nodes.
+> 
+> Can Rockchip specific rules be publicized in a central place? 
+> 
+> ===
+> mmc aliases on reg order, availability and without number gap.
+> ===
+> 
+> Heiko's sort rules:
+> 
+> compatible
+> reg
+> interrupts
+> [alphabetical]
+> status [if needed]
 
-> +=09=09=09*return_value =3D handle;
-> +=09=09=09return AE_CTRL_TERMINATE;
-> +=09=09}
-> +
-> +=09return AE_OK;
-> +}
-> +
->  /*
->   * ACPI Helpers
->   */
-> @@ -675,7 +696,7 @@ static umode_t ideapad_is_visible(struct kobject *kob=
-j,
->  =09bool supported =3D true;
->=20
->  =09if (attr =3D=3D &dev_attr_camera_power.attr)
-> -=09=09supported =3D test_bit(CFG_CAP_CAM_BIT, &priv->cfg);
-> +=09=09supported =3D priv->features.cam_ctrl_via_ec;
->  =09else if (attr =3D=3D &dev_attr_conservation_mode.attr)
->  =09=09supported =3D priv->features.conservation_mode;
->  =09else if (attr =3D=3D &dev_attr_fan_mode.attr)
-> @@ -1523,10 +1544,40 @@ static const struct dmi_system_id hw_rfkill_list[=
-] =3D {
->  static void ideapad_check_features(struct ideapad_private *priv)
->  {
->  =09acpi_handle handle =3D priv->adev->handle;
-> +=09acpi_handle pci_handle;
-> +=09acpi_handle temp_handle =3D NULL;
->  =09unsigned long val;
-> +=09acpi_status status;
+I don't know what does it mean. Do you discuss with my comment? Wasn't
+my comment exactly like this?
 
-It is a small thing, but I believe it is best to define these variables
-in the block of that `if` since they are not used outside of it.
+> 
+> ===
+> My incomplete list:
+> 
+> For nodes:
+> If exists on top: model, compatible and chosen.
+> Sort things without reg alphabetical first,
+> then sort the rest by reg address.
+> 
+> Inside nodes:
+> If exists on top: compatible, reg and interrupts.
+> In alphabetical order the required properties.
+> Then in alphabetical order the other properties.
+> And as last things that start with '#' in alphabetical order.
+> Add status below all other properties for soc internal components with
+> any board-specifics.
+> Keep an empty line between properties and nodes.
+> 
+> Exceptions:
+> Sort pinctrl-0 above pinctrl-names, so it stays in line with clock-names
+> and dma-names.
+> Sort simple-audio-card,name above other simple-audio-card properties.
+> Sort regulator-name above other regulator properties.
+> Sort regulator-min-microvolt above regulator-max-microvolt.
 
+Is there a question to me?
 
->=20
->  =09priv->features.hw_rfkill_switch =3D dmi_check_system(hw_rfkill_list);
->=20
-> +=09/*
-> +=09 * Some IdeaPads have camera switch via EC (mostly older ones),
-> +=09 * some don't. Fortunately we know that if DSDT contains device
-> +=09 * object for the camera, camera isn't switchable via EC.
-> +=09 * So, let's walk the namespace and try to find CAM* object.
-> +=09 * If we can't find it, set cam_ctrl_via_ec to true.
-> +=09 */
-> +
-> +=09priv->features.cam_ctrl_via_ec =3D false;
-> +
-> +=09if (test_bit(CFG_CAP_CAM_BIT, &priv->cfg)) {
-> +=09=09status =3D acpi_get_handle(handle, "^^^", &pci_handle);
-> +=09=09if (ACPI_SUCCESS(status)) {
-> +=09=09=09status =3D acpi_walk_namespace(ACPI_TYPE_DEVICE, pci_handle,
-> +=09=09=09=09=09=09     ACPI_UINT32_MAX,
-> +=09=09=09=09=09=09     acpi_find_device_callback,
-> +=09=09=09=09=09=09     NULL, cam_device_prefix,
-> +=09=09=09=09=09=09     &temp_handle);
-> +
-> +=09=09=09if (ACPI_SUCCESS(status) && temp_handle =3D=3D NULL)
-> +=09=09=09=09priv->features.cam_ctrl_via_ec =3D true;
-> +
-> +=09=09} else
-> +=09=09=09dev_warn(&priv->platform_device->dev,
-> +=09=09=09=09"Could not find PCI* node in the namespace\n");
-> +=09}
-> +
->  =09/* Most ideapads with ELAN0634 touchpad don't use EC touchpad switch =
-*/
->  =09priv->features.touchpad_ctrl_via_ec =3D !acpi_dev_present("ELAN0634",=
- NULL, -1);
->=20
-> --
-> 2.34.1
->=20
+> 
+>>
+>>> +	};
+>>> +
+>>> +	arm-pmu {
+>>> +		compatible = "arm,cortex-a7-pmu";
+>>> +		interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>,
+>>> +			     <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
+>>> +			     <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>,
+>>> +			     <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
+>>> +		interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>;
+>>> +	};
+>>> +
+>>> +	cpus {
+>>> +		#address-cells = <1>;
+>>> +		#size-cells = <0>;
+>>> +
+>>> +		cpu0: cpu@f00 {
+>>> +			device_type = "cpu";
+>>> +			compatible = "arm,cortex-a7";
+>>> +			reg = <0xf00>;
+>>> +			clock-latency = <40000>;
+>>> +			clocks = <&cru ARMCLK>;
+> 
+>>> +			operating-points = <
+>>> +				/* KHz    uV */
+>>> +				 816000 1000000
+>>> +			>;
+>>
+>> Why not operating-points-v2?
+> 
+> rk3128 doesn't have a tsadc.
 
+And this is related to operating-points-v2?
 
-Regards,
-Barnab=C3=A1s P=C5=91cze
+> As long as this thermal stuff is not implemented with drivers and regulators I would prefer to keep it basic in the DT for now.
+> Just keep things simple for now till someone with hardware can fix that.
+> 
+> https://github.com/rockchip-linux/kernel/blob/develop-4.4/arch/arm/boot/dts/rk312x.dtsi#L315
+> 
+> 	tsadc: tsadc {
+> 		compatible = "rockchip,rk3126-tsadc-virtual";
+> 		nvmem-cells = <&cpu_leakage>;
+> 		nvmem-cell-names = "cpu_leakage";
+> 		#thermal-sensor-cells = <1>;
+> 		status = "disabled";
+> 	};
+
+>>
+>>> +			#cooling-cells = <2>; /* min followed by max */
+>>> +		};
+>>> +
+>>> +		cpu1: cpu@f01 {
+>>> +			device_type = "cpu";
+>>> +			compatible = "arm,cortex-a7";
+>>> +			reg = <0xf01>;
+>>> +		};
+>>> +
+>>> +		cpu2: cpu@f02 {
+>>> +			device_type = "cpu";
+>>> +			compatible = "arm,cortex-a7";
+>>> +			reg = <0xf02>;
+>>> +		};
+>>> +
+>>> +		cpu3: cpu@f03 {
+>>> +			device_type = "cpu";
+>>> +			compatible = "arm,cortex-a7";
+>>> +			reg = <0xf03>;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	timer {
+> 
+>>> +		compatible = "arm,armv7-timer";
+> 
+> Original 2 interrupts:
+
+I have no clue what do you refer now.
+
+I did not comment here, so I guess nothing more to me?
+
+>>> +		usb2phy: usb2phy@17c {
+>>
+> 
+>> Node names should be generic.
+>> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+> 
+> You are absolutely correct. Except for Rockchip usb2phy nodes ....
+> #phy-cells is located in a sub node, so we keep as it is... ;)
+
+How phy-cells are related?
+
+> 
+> dt-bindings: phy: rename phy nodename in phy-rockchip-inno-usb2.yaml 
+> https://lore.kernel.org/all/20210601164800.7670-2-jbx6244@gmail.com/
+
+You mean parent device bindings expect usb2phy? If so, then it's fine.
+
+Best regards,
+Krzysztof
+
