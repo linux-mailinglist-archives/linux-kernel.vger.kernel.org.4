@@ -2,98 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44DCC60F68C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F77D60F689
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235405AbiJ0Lws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 07:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
+        id S235398AbiJ0Lvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 07:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234933AbiJ0Lwp (ORCPT
+        with ESMTP id S229670AbiJ0Lvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 07:52:45 -0400
-X-Greylist: delayed 61 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Oct 2022 04:52:43 PDT
-Received: from mailrelay1-1.pub.mailoutpod1-cph3.one.com (mailrelay1-1.pub.mailoutpod1-cph3.one.com [46.30.210.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1A0A3B54
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 04:52:43 -0700 (PDT)
-Received: from mailrelay2.pub.mailoutpod2-cph3.one.com (mailrelay2.pub.mailoutpod2-cph3.one.com [104.37.34.7])
-        by mailrelay1.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPS
-        id b7a39daf-55ed-11ed-a6d5-d0431ea8a283;
-        Thu, 27 Oct 2022 11:51:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=berginkonsult.se; s=rsa1;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
-         from;
-        bh=JC/HHWF4gaghp1JRdLxc59f6ipPtlD2CyXsBq4Sp1Sk=;
-        b=FL7ERPP2jG+w/KDqVlq8iIsOMXYp5+kwuyX/Hy4PTBFQFqsMPBLjdz/JjcAJhAlIB9a2xo3CwJUxN
-         +rZ6rKRUDIZrf1o6mS7OHL8pcGn/23WFSJqKYaN/gp4ppfXo51QuvBEgtmIepDtBbD54TFoBRa8dRp
-         HtERZnucLABLL/BpO8igalzhBQ44nntPsY5Ss3hVAJBbVjggwbuTGUd2xSmEgOevimZfqBVbKq63Eb
-         Gg06emRF9cgjsw9o2FnWxUWgCqGM0DE5FQ+qiWpaN1xgZQaXauzgQ/sN4FiLww0ONFTHxkLmDoKqKj
-         l2xr0alXxA2OA2ldcEUxfvQQfKAd4Cg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=berginkonsult.se; s=ed1;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
-         from;
-        bh=JC/HHWF4gaghp1JRdLxc59f6ipPtlD2CyXsBq4Sp1Sk=;
-        b=3VKMLIL+XpEr8iGvmz0W5KovJn1ZtaEUXk0s0Gz0lL4KcY9W57xEqlCrOOtV6uNk/C+ynDwQ3NLSh
-         j1pe7nFBQ==
-X-HalOne-ID: b46a7e99-55ed-11ed-9b66-335755252108
-Received: from pbergin-7420.. (ua-213-113-159-147.bbcust.telenor.se [213.113.159.147])
-        by mailrelay2 (Halon) with ESMTPSA
-        id b46a7e99-55ed-11ed-9b66-335755252108;
-        Thu, 27 Oct 2022 11:51:38 +0000 (UTC)
-From:   Peter Bergin <peter@berginkonsult.se>
-To:     james.schulman@cirrus.com, david.rhodes@cirrus.com,
-        tanureal@opensource.cirrus.com, rf@opensource.cirrus.com
-Cc:     Peter Bergin <peter@berginkonsult.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoc: cs42xx8-i2c.c: add module device table for of
-Date:   Thu, 27 Oct 2022 13:50:56 +0200
-Message-Id: <20221027115057.442925-1-peter@berginkonsult.se>
+        Thu, 27 Oct 2022 07:51:36 -0400
+Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B2E3A3B54;
+        Thu, 27 Oct 2022 04:51:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=pL/rs
+        MZcAfjalFQs06h+m85GbtUtZ1JtImfRSdcQ5Tc=; b=Y65k7xgF1Ja0/tkXTW+eB
+        tvmb8vLsWT7SfJmTq5qcg+B6CJ3dpQBmxVgXcVC+6R7J/fWyMDBh1hHBs7VzzGZp
+        rYhA0vnXFqlzngAzrKvwNDkbirPW4GJ52uePYqLUdY+du0HgVn/CiqCLG78LpvhP
+        nPenkUufz+Ea+cGCOzTd30=
+Received: from jbd-ThinkPad-X1-Nano-Gen-1.. (unknown [223.104.68.105])
+        by smtp7 (Coremail) with SMTP id C8CowADn7G29cFpjxAdLOQ--.44181S2;
+        Thu, 27 Oct 2022 19:51:26 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     bhelgaas@google.com
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] PCI: Add vendor ID for Quectel and Cinterion
+Date:   Thu, 27 Oct 2022 19:51:23 +0800
+Message-Id: <20221027115123.5326-1-slark_xiao@163.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: C8CowADn7G29cFpjxAdLOQ--.44181S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtF1kXFWDKr13Jryktw1UWrg_yoWfWrg_Aw
+        n7Waykur45uF1xtw4kZ345ZwnIk3s2vFnIvFZYkrs5uas0kFW5C3s7Gr97Xa4F9a1qkr15
+        Jan2g34Iv3WYkjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRKdgWPUUUUU==
+X-Originating-IP: [223.104.68.105]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiRx6nZFc7ZFT0ZQAAsX
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When trying to connect the device with the driver through of
-it is not working. The of_device_id is defined in cs42xx8.c
-but is not correctly included in cs42xx8-i2c.c. Also add the
-matching table for of in the i2c file.
+In MHI driver, there are some companies product still
+do not have their own PCI vendor macro. So we add it
+here to make the code neat. Ref ID could be found in
+link https://pcisig.com/membership/member-companies.
 
-Signed-off-by: Peter Bergin <peter@berginkonsult.se>
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
 ---
- sound/soc/codecs/cs42xx8-i2c.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ include/linux/pci_ids.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/sound/soc/codecs/cs42xx8-i2c.c b/sound/soc/codecs/cs42xx8-i2c.c
-index cb06a06d48b0..6e8ee28d01f8 100644
---- a/sound/soc/codecs/cs42xx8-i2c.c
-+++ b/sound/soc/codecs/cs42xx8-i2c.c
-@@ -37,6 +37,13 @@ static int cs42xx8_i2c_remove(struct i2c_client *i2c)
- 	return 0;
- }
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index b362d90eb9b0..e3bfea06b90e 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -172,6 +172,10 @@
+ #define PCI_DEVICE_ID_BERKOM_A4T		0xffa4
+ #define PCI_DEVICE_ID_BERKOM_SCITEL_QUADRO	0xffa8
  
-+const struct of_device_id cs42xx8_of_match[] = {
-+	{ .compatible = "cirrus,cs42448", .data = &cs42448_data, },
-+	{ .compatible = "cirrus,cs42888", .data = &cs42888_data, },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, cs42xx8_of_match);
++#define PCI_VENDOR_ID_CINTERION		0x1269
 +
- static struct i2c_device_id cs42xx8_i2c_id[] = {
- 	{"cs42448", (kernel_ulong_t)&cs42448_data},
- 	{"cs42888", (kernel_ulong_t)&cs42888_data},
++#define PCI_VENDOR_ID_QUECTEL		0x1eac
++
+ #define PCI_VENDOR_ID_COMPAQ		0x0e11
+ #define PCI_DEVICE_ID_COMPAQ_TOKENRING	0x0508
+ #define PCI_DEVICE_ID_COMPAQ_TACHYON	0xa0fc
 -- 
 2.34.1
 
