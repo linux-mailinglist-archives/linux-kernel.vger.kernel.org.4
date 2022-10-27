@@ -2,116 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4611060F13C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 09:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C57760F141
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 09:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234196AbiJ0Hjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 03:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
+        id S233978AbiJ0Hk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 03:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234596AbiJ0Hjt (ORCPT
+        with ESMTP id S233479AbiJ0HkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 03:39:49 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4622F2A250;
-        Thu, 27 Oct 2022 00:39:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666856388; x=1698392388;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=jweFWZMSXgqQ6tBTe/QKSoQxmkPbv29fClDdATqJ80E=;
-  b=BdCDXRUb2vVUxO8Smrn4RhyqAaRdb0nRBKtrpMdJ0pJMtGoMcnehdKCL
-   voaHKd6tLGBvIk9y9oqpBBntTI8GTf+VdueqLSmpj+nbQlESqqrpMthoJ
-   F1h8TRNsl5Qpm3011kaBG8oS5KT1dCjI8njVvIG3ercfnFqmom3cYGT8x
-   s7qSumZG6eVdoOgx4IIafpp4MHEQnvuoXdXBCWLVWQL5WlE0azcJEDeJ6
-   SjXwb28ZTEqCFstvMzy2iCPwrnN8Y0JZ4sc3obp49JTfTJKHzcSQLE8zJ
-   tm3+qV9T2D2YkBTDVNek/3RBtFRQ7ILpRZXtVMn++XspCVfS/lmDv0uRA
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="308148216"
-X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
-   d="scan'208";a="308148216"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 00:39:47 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="737573783"
-X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
-   d="scan'208";a="737573783"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 00:39:44 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Feng Tang <feng.tang@intel.com>,
-        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Waiman Long <longman@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Chen, Tim C" <tim.c.chen@intel.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>
-Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
-References: <20221026074343.6517-1-feng.tang@intel.com>
-        <dc453287-015d-fd1c-fe7f-6ee45772d6aa@linux.ibm.com>
-        <Y1jpDfwBQId3GkJC@feng-clx> <Y1j7tsj5M0Md/+Er@dhcp22.suse.cz>
-        <Y1kl8VbPE0RYdyEB@feng-clx> <Y1lZV6qHp3gIINGc@dhcp22.suse.cz>
-        <87wn8lkbk5.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <Y1ou5DGHrEsKnhri@dhcp22.suse.cz>
-Date:   Thu, 27 Oct 2022 15:39:00 +0800
-In-Reply-To: <Y1ou5DGHrEsKnhri@dhcp22.suse.cz> (Michal Hocko's message of
-        "Thu, 27 Oct 2022 09:10:28 +0200")
-Message-ID: <87o7txk963.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 27 Oct 2022 03:40:18 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37425B736;
+        Thu, 27 Oct 2022 00:40:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=WeAqYAlGi+kEYNzyBRGlHbqeKaz93VUTt4bhAgr9Nn0=; b=wHMmICK3IxqwUDQReNzmRo7UOY
+        QIwzNPTXDyvG43iG7w1Bm1Szg8Z8UX0KIx6mouZ7hQR5O657NHBhm8wWjeLPFLChjhnkZy1szYxqX
+        p0Cp5rmKyNb1XmWR9Dm+jJNsps4XUF+FoXIq2rTWlEpaPv1tQaYccc2DaxGVzUTbLQHA374MWzKoy
+        MX2MOIuGTp83DOjpDkdQUr+hz4xT707PF1tcnIjO6kLvFh66uj+6C2TI4yDq9vnPtzDZHlZaWkCS9
+        Kq0hRA/lZN9WFGQa2vkmGrL4+oOKbhEfj6Pff0PdO0Jtmg9ie29YuCk0gM7dWSqadO30xG2QYOhUw
+        aHhgiYRA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1onxUY-0001Nk-Ee; Thu, 27 Oct 2022 07:39:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D0481300322;
+        Thu, 27 Oct 2022 09:39:48 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id AAAB32012B90F; Thu, 27 Oct 2022 09:39:48 +0200 (CEST)
+Date:   Thu, 27 Oct 2022 09:39:48 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>, rjw@rjwysocki.net,
+        oleg@redhat.com, mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        ebiederm@xmission.com, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        tj@kernel.org, linux-pm@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org
+Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
+Message-ID: <Y1o1xMMtcyNVd2H3@hirez.programming.kicks-ass.net>
+References: <20220822111816.760285417@infradead.org>
+ <20220822114649.055452969@infradead.org>
+ <Y1LVYaPCCP3BBS4g@intel.com>
+ <Y1drd2gzxUJWdz5F@intel.com>
+ <Y1e/Kd+1UQqeSwzY@hirez.programming.kicks-ass.net>
+ <Y1kMv1GpKwOSIt8f@intel.com>
+ <Y1kdRNNfUeAU+FNl@hirez.programming.kicks-ass.net>
+ <Y1od8VwCa9mjkiLl@chenyu5-mobl1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1od8VwCa9mjkiLl@chenyu5-mobl1>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Michal Hocko <mhocko@suse.com> writes:
+On Thu, Oct 27, 2022 at 01:58:09PM +0800, Chen Yu wrote:
 
-> On Thu 27-10-22 14:47:22, Huang, Ying wrote:
->> Michal Hocko <mhocko@suse.com> writes:
-> [...]
->> > I can imagine workloads which wouldn't like to get their memory demoted
->> > for some reason but wouldn't it be more practical to tell that
->> > explicitly (e.g. via prctl) rather than configuring cpusets/memory
->> > policies explicitly?
->> 
->> If my understanding were correct, prctl() configures the process or
->> thread.
->
-> Not necessarily. There are properties which are per adddress space like
-> PR_[GS]ET_THP_DISABLE. This could be very similar.
->
->> How can we get process/thread configuration at demotion time?
->
-> As already pointed out in previous emails. You could hook into
-> folio_check_references path, more specifically folio_referenced_one
-> where you have all that you need already - all vmas mapping the page and
-> then it is trivial to get the corresponding vm_mm. If at least one of
-> them has the flag set then the demotion is not allowed (essentially the
-> same model as VM_LOCKED).
+> > It's a very narrow race between schedule() and task_call_func().
+> > 
+> >   CPU0						CPU1
+> > 
+> >   __schedule()
+> >     rq_lock();
+> >     prev_state = READ_ONCE(prev->__state);
+> >     if (... && prev_state) {
+> >       deactivate_tasl(rq, prev, ...)
+> >         prev->on_rq = 0;
+> > 
+> > 						task_call_func()
+> > 						  raw_spin_lock_irqsave(p->pi_lock);
+> > 						  state = READ_ONCE(p->__state);
+> > 						  smp_rmb();
+> > 						  if (... || p->on_rq) // false!!!
+> > 						    rq = __task_rq_lock()
+> > 
+> > 						  ret = func();
+> > 
+> >     next = pick_next_task();
+> >     rq = context_switch(prev, next)
+> >       prepare_lock_switch()
+> >         spin_release(&__rq_lockp(rq)->dep_map...)
+> > 
+> > 
+> > 
+> > So while the task is on it's way out, it still holds rq->lock for a
+> > little while, and right then task_call_func() comes in and figures it
+> > doesn't need rq->lock anymore (because the task is already dequeued --
+> > but still running there) and then the __set_task_frozen() thing observes
+> > it's holding rq->lock and yells murder.
+> > 
+> > Could you please give the below a spin?
+> > 
+> > ---
+> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > index cb2aa2b54c7a..f519f44cd4c7 100644
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -4200,6 +4200,37 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
+> >  	return success;
+> >  }
+> >  
+> > +static bool __task_needs_rq_lock(struct task_struct *p)
+> > +{
+> > +	unsigned int state = READ_ONCE(p->__state);
+> > +
+> > +	/*
+> > +	 * Since pi->lock blocks try_to_wake_up(), we don't need rq->lock when
+> > +	 * the task is blocked. Make sure to check @state since ttwu() can drop
+> > +	 * locks at the end, see ttwu_queue_wakelist().
+> > +	 */
+> > +	if (state == TASK_RUNNING || state == TASK_WAKING)
+> > +		return true;
+> > +
+> > +	/*
+> > +	 * Ensure we load p->on_rq after p->__state, otherwise it would be
+> > +	 * possible to, falsely, observe p->on_rq == 0.
+> > +	 *
+> > +	 * See try_to_wake_up() for a longer comment.
+> > +	 */
+> > +	smp_rmb();
+> > +	if (p->on_rq)
+> > +		return true;
+> > +
+> > +#ifdef CONFIG_SMP
+> > +	smp_rmb();
+> > +	if (p->on_cpu)
+> > +		return true;
+> > +#endif
+> Should we also add p->on_cpu check to return 0 in __set_task_frozen()?
+> Otherwise it might still warn that p is holding the lock?
 
-Got it!  Thanks for detailed explanation.
-
-One bit may be not sufficient.  For example, if we want to avoid or
-control cross-socket demotion and still allow demoting to slow memory
-nodes in local socket, we need to specify a node mask to exclude some
-NUMA nodes from demotion targets.
-
-From overhead point of view, this appears similar as that of VMA/task
-memory policy?  We can make mm->owner available for memory tiers
-(CONFIG_NUMA && CONFIG_MIGRATION).  The advantage is that we don't need
-to introduce new ABI.  I guess users may prefer to use `numactl` than a
-new ABI?
-
-Best Regards,
-Huang, Ying
+With this, I don't think __set_task_frozen() should ever see
+'p->on_cpu && !p->on_rq'. By forcing task_call_func() to acquire
+rq->lock that window is closed. That is, this window only exits in
+__schedule() while it holds rq->lock, since we're now serializing
+against that, we should no longer observe it.
