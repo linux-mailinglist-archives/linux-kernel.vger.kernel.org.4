@@ -2,231 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0009360FD0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D93B860FD0E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236236AbiJ0Q04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 12:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55144 "EHLO
+        id S236583AbiJ0Q24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 12:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235213AbiJ0Q0y (ORCPT
+        with ESMTP id S235213AbiJ0Q2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 12:26:54 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10499A449;
-        Thu, 27 Oct 2022 09:26:52 -0700 (PDT)
-Received: from mercury (dyndsl-091-096-035-205.ewe-ip-backbone.de [91.96.35.205])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 27 Oct 2022 12:28:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C188238442;
+        Thu, 27 Oct 2022 09:28:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id ED58D6602395;
-        Thu, 27 Oct 2022 17:26:50 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666888011;
-        bh=4mcg24t9AjJNzQ806Gbikq/czDGpzAU9xHPk2spH4KI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F6qskPNbfIp5J5LYfBzEocQDyMIYQRpbjRzm8pWGOvNgLoRHSN1Uq6nPsIxs59Pvh
-         GNCau0kov+9zLKz08poBrrYzSYdCPVfeFxIQAPSR8K7yya3C5Pi6+kk0UJWSFRlzBq
-         Lah90qDwyULFaEyA+9s6idK9Vmc5DpuMVwO9rNmIeYtlxP5KPdSUpjCqTd1v+Ui4jF
-         w7BQcZazoB/xp5Sv0+Xjvn5vyAKC2WdHMQznPlM0nNpjpczfQnE29u4LDKLFFXzaX4
-         JpM13Eowk3Ud5e+qoBOo7wj9xkpDJYHtwomGDH2A4bKZuXn6B5cOS3n0IZyVjszjNn
-         2lOSdYz4NdAZQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 64F7D10607E8; Thu, 27 Oct 2022 18:26:48 +0200 (CEST)
-Date:   Thu, 27 Oct 2022 18:26:48 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH 1/1] dt-bindings: rtc: convert hym8563 bindings to
- json-schema
-Message-ID: <20221027162648.mowz2lefcajv3s2q@mercury.elektranox.org>
-References: <20221021170605.85163-1-sebastian.reichel@collabora.com>
- <a5db8a34-acd0-e262-36f0-0b904468bd1f@linaro.org>
- <20221024185049.GA2034297-robh@kernel.org>
- <20221024220559.dddihmq4xg55h26w@mercury.elektranox.org>
- <1a9e1bfb-0437-fcd9-8d41-a1e07aced0e3@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D36F623D0;
+        Thu, 27 Oct 2022 16:28:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B6FCC433C1;
+        Thu, 27 Oct 2022 16:28:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666888132;
+        bh=LtAbTc4oHjsc7CsB0RZFmCgJaDHyi66KNVvcsO+tF64=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dFAXjWPhTBNepjo+WzLlzFG3D5UjZlHgWEEbarhq/a31lrVSDOT7ryrgHXUbXJAYd
+         ixOMMJsbagIxDOsHrkWrmJXg26V/MJNmYpk+GANFjjh+9Ekf1tm5Oyu/e+K0uvlyqR
+         fs34N4xpVjUTSIj0PuhbRSuHqPQFEOAFy27gVqNSRqCS/Jtkn2nhFGiidFq+Hps1JY
+         wBnUFa8sJax9y68bCUHljiUk38r34azGZ2kPlyRVf8mI59mneAvPQtGnhwbm2J2GCa
+         p/Fd7roSVzCf1w9i2To3dyO9im8SMh7+btZZLXQ8vvIy3UXmHr3ZRrDbNbfU5r21TV
+         ILd4153NyQ/1g==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH v2] kbuild: fix SIGPIPE error message for AR=gcc-ar and AR=llvm-ar
+Date:   Fri, 28 Oct 2022 01:28:39 +0900
+Message-Id: <20221027162839.410720-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="i5gncsormhwaemm6"
-Content-Disposition: inline
-In-Reply-To: <1a9e1bfb-0437-fcd9-8d41-a1e07aced0e3@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Jiri Slaby reported that building the kernel with AR=gcc-ar shows:
+  /usr/bin/ar terminated with signal 13 [Broken pipe]
 
---i5gncsormhwaemm6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Nathan Chancellor reported the latest AR=llvm-ar shows
+  error: write on a pipe with no reader
 
-Hi,
+The latter occurs since LLVM commit 51b557adc131 ("Add an error message
+to the default SIGPIPE handler").
 
-On Thu, Oct 27, 2022 at 06:11:19PM +0200, Johan Jonker wrote:
-> On 10/25/22 00:05, Sebastian Reichel wrote:
-> > On Mon, Oct 24, 2022 at 01:50:49PM -0500, Rob Herring wrote:
-> >> On Fri, Oct 21, 2022 at 07:59:26PM -0400, Krzysztof Kozlowski wrote:
-> >>> On 21/10/2022 13:06, Sebastian Reichel wrote:
-> >>>> Convert RTC binding for Haoyu Microelectronics HYM8563 to Device Tree
-> >>>> Schema format.
-> >>>>
-> >>>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> >>>> ---
-> >>>>  .../devicetree/bindings/rtc/haoyu,hym8563.txt | 30 ----------
-> >>>>  .../bindings/rtc/haoyu,hym8563.yaml           | 55 ++++++++++++++++=
-+++
-> >>>>  2 files changed, 55 insertions(+), 30 deletions(-)
-> >>>>  delete mode 100644 Documentation/devicetree/bindings/rtc/haoyu,hym8=
-563.txt
-> >>>>  create mode 100644 Documentation/devicetree/bindings/rtc/haoyu,hym8=
-563.yaml
-> >>>>
-> >>>> diff --git a/Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt=
- b/Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt
-> >>>> deleted file mode 100644
-> >>>> index a8934fe2ab4c..000000000000
-> >>>> --- a/Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt
-> >>>> +++ /dev/null
-> >>>> @@ -1,30 +0,0 @@
-> >>>> -Haoyu Microelectronics HYM8563 Real Time Clock
-> >>>> -
-> >>>> -The HYM8563 provides basic rtc and alarm functionality
-> >>>> -as well as a clock output of up to 32kHz.
-> >>>> -
-> >>>> -Required properties:
-> >>>> -- compatible: should be: "haoyu,hym8563"
-> >>>> -- reg: i2c address
-> >>>> -- #clock-cells: the value should be 0
-> >>>> -
-> >>>> -Optional properties:
-> >>>> -- clock-output-names: From common clock binding
-> >>>> -- interrupts: rtc alarm/event interrupt
-> >>>> -
-> >>>> -Example:
-> >>>> -
-> >>>> -hym8563: hym8563@51 {
-> >>>> -	compatible =3D "haoyu,hym8563";
-> >>>> -	reg =3D <0x51>;
-> >>>> -
-> >>>> -	interrupts =3D <13 IRQ_TYPE_EDGE_FALLING>;
-> >>>> -
-> >>>> -	#clock-cells =3D <0>;
-> >>>> -};
-> >>>> -
-> >>>> -device {
-> >>>> -...
-> >>>> -	clocks =3D <&hym8563>;
-> >>>> -...
-> >>>> -};
-> >>>> diff --git a/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yam=
-l b/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
-> >>>> new file mode 100644
-> >>>> index 000000000000..b0b6126b12dd
-> >>>> --- /dev/null
-> >>>> +++ b/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
-> >>>> @@ -0,0 +1,55 @@
-> >>>> +# SPDX-License-Identifier: GPL-2.0
-> >>>
-> >>> Dual license please. I don't think you copied any content from origin=
-al
-> >>> bindings... unless the example?
-> >>>
-> >>>> +%YAML 1.2
-> >>>> +---
-> >>>> +$id: http://devicetree.org/schemas/rtc/haoyu,hym8563.yaml#
-> >>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>>> +
-> >>>> +title: Haoyu Microelectronics HYM8563 RTC
-> >>>> +
-> >>>> +maintainers:
-> >>>> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
-> >>>> +
-> >>>> +properties:
-> >>>> +  compatible:
-> >>>> +    const: haoyu,hym8563
-> >>>> +
-> >>>> +  reg:
-> >>>> +    maxItems: 1
-> >>>> +
-> >>>> +  interrupts:
-> >>>> +    maxItems: 1
-> >>>> +
-> >>>> +  "#clock-cells":
-> >>>> +    const: 0
-> >>>> +
-> >>>> +  clock-output-names:
-> >>>> +    description: From common clock binding to override the default =
-output clock name.
-> >>>
-> >>> You need maxItems for this.
-> >>>
-> >>>> +
-> >>>> +  wakeup-source:
-> >>>> +    description: Enables wake up of host system on alarm.
-> >>>> +
-> >>>> +allOf:
-> >>>> +  - $ref: rtc.yaml
-> >>>> +
-> >>>> +unevaluatedProperties: false
-> >>>> +
-> >>>
->=20
-> >>> Would be great if you could also correct DTS using these bindings (see
-> >>> warning from Rob).
-> >>
-> >> It looked to me like 'clock-frequency' should be added to the schema.
-> >=20
-> > I've sent PATCHv2, which removes clock-frequency from all hym8563
-> > users. My reasoning is, that the old txt binding does not describe
-> > it and the current Linux driver does not handle it as far as I can
-> > see.
->=20
-> Didn't note you were doing a conversion as well...
-> From my abandonment patch serie
->=20
->   clock-frequency:
->     enum: [1, 32, 1024, 32768]
->=20
-> The data sheet shows that it can generate 4 different frequencies.
-> Rockchip mostly uses 32768, but that doesn't mean someone else is
-> not alowed to set what he/she prefers.
+The resulting vmlinux is correct, but it is better to silence it.
 
-As far as I can tell 32768 has been cargo copied by everyone, but
-the driver is not parsing this at all and I would expect the clock
-API to be used for requesting a specific frequency.
+'head -n1' exits after reading the first line, so the pipe is closed.
 
--- Sebastian
+Use 'sed -n 1p' to eat the stream till the end.
 
---i5gncsormhwaemm6
-Content-Type: application/pgp-signature; name="signature.asc"
+Fixes: 321648455061 ("kbuild: use obj-y instead extra-y for objects placed at the head")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1651
+Reported-by: Jiri Slaby <jirislaby@kernel.org>
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+---
 
------BEGIN PGP SIGNATURE-----
+Changes in v2:
+  - Update commit description to mention llvm-ar
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNasT8ACgkQ2O7X88g7
-+poQUw//bQfdjxGXbjRBq+lN70cB2SjuiDFxd1XPTJL6y/FKW62jsNJFy3E/urDl
-stP6I+dxmcc0OOflL8MkliHFR9+DD3Brfv8hmRexfhL/nTauQ+jeV2b6QEe7NFcS
-QbC4EgRPUn+4mgJMDVel6ZNllBPXJwnw3bjx/bYDOSdi+tQMvIw38qkZ5v+2Aw8W
-nWw0USHSLoUBHg1Lon6Sx5A/H2BSFpg+xNH8A9ufNei4u6wjT1cGvRVgS3chtfX+
-VD/QIeYt34ubJI7X+Y+xGeJJ1+yFPVyhNAS6TqQePrJrsTbt7eXmnjhtg8QsnVYO
-GgDVp3DiWceC/CVXH3zSXsWk13pemDQUr+lXd9olSOsB6a1PDrHck72aaKXpk2UF
-00Ytx3KjHToYLaKbmLZrHDFP/0RfxCoMuSkaeKbzImt51VLzz9Sx6oWA8OfEfpss
-YopFtMG2JE1fghtP3LpPAiLi2UNihBvGJ4uxER1q7yVILLoEPc1PpdN1tp+DTqGL
-bTQbZvnz/LzJBdr1I4nhKGgssrr2aWthejbQQbjdNi+7SfjDf9K5RpwzRg0qQiOC
-s/0TtOe0JqiqXM15p+MjXH6Nz2/GgLCi78NvZjFLvoYs6IGoqBbSlakgG5TvOeEZ
-QLfydVH9Fd8NtshY9yBqm1fiZKpngWer8BbB5zjRUtIzo1LxqIM=
-=lqdc
------END PGP SIGNATURE-----
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---i5gncsormhwaemm6--
+diff --git a/Makefile b/Makefile
+index e90bb2b38607..e9e7eff906a5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1218,7 +1218,7 @@ quiet_cmd_ar_vmlinux.a = AR      $@
+       cmd_ar_vmlinux.a = \
+ 	rm -f $@; \
+ 	$(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
+-	$(AR) mPiT $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
++	$(AR) mPiT $$($(AR) t $@ | sed -n 1p) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
+ 
+ targets += vmlinux.a
+ vmlinux.a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt autoksyms_recursive FORCE
+-- 
+2.34.1
+
