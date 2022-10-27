@@ -2,101 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3DE60FF30
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD98560FF39
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234911AbiJ0RRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 13:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36734 "EHLO
+        id S234425AbiJ0RUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 13:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235534AbiJ0RRX (ORCPT
+        with ESMTP id S233619AbiJ0RUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 13:17:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D4017A96F;
-        Thu, 27 Oct 2022 10:17:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94F58B82716;
-        Thu, 27 Oct 2022 17:17:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B35EC433D6;
-        Thu, 27 Oct 2022 17:17:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666891040;
-        bh=vEnsvlXaU7b0fHU1VrvjtPlhLZuHphl4v98hbaO4yy8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ZEJPi/0hLjM5COTd1em2C7YnF2aORocoSHMJlEhm793j04R/hn0JJd5m6HUZmIGPJ
-         j3IEUZCp/lqmwhg2ewZqRsl2ImftohJ85ZZfWZVlkVtwF9ct84NO1YhTtirNiA208y
-         KcmXJctu91dgx1F/EGIYaqEMCLs7NfZ/nbHxK831gl2SRV6tax/Oiyy+8n38Hf68jM
-         ySjO/sIXbdfH6mIdZPoNv8ptjISVn3IlT13hxOncSuLQOS62Q0z/DFWX366yD11hFH
-         GNynlQD7YiwZD/ln/JtaNjl0Iq7Wmsd5y93ae+4+QqmQdFQwf3mydSOjrHslRdUAzG
-         OVGU3sQp9R7VA==
-Date:   Thu, 27 Oct 2022 18:17:14 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL for v6.1-rc3] media fixes
-Message-ID: <20221027181714.3d12aba5@sal.lan>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Thu, 27 Oct 2022 13:20:01 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23EEC303D0;
+        Thu, 27 Oct 2022 10:19:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666891197; x=1698427197;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uLUbt4+uG5KMwbCnM+TCrogE8RgHzw0WgZnOBwJ7M2U=;
+  b=h//Q2r+EbsDa/1M0DJeKCIebSBUG13lleQocZE4TFly41rFeRNfuv2h7
+   C9dR6AqDnKievhQhONXUst+bvoTAIMQ0J3bGm1zeCsxaM1CM68T0lBu2H
+   9Cx4o8b/MSvQZ8oFlPU9T9jYcCMC6Fwc9cyFX4IVMPrT3hlgjybzMUNwI
+   reQ9ZmUY1GzdyENHOaH0oTYt4ofh6cR3jQGxe164wi0OxAJHF7+poqwan
+   j9zc50X9todebTbGnin4S5VpbYT4WjaOZ0IJ8/FHKzl5+s1CVmFUgNIfL
+   Q4PwiQxlnp+g6S6DaFge/WfPRFHKXah2liorXJEh+pG05xqrpoZBzgVzN
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="309984236"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="309984236"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 10:19:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="634988307"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="634988307"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga007.fm.intel.com with ESMTP; 27 Oct 2022 10:19:54 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] cpufreq: intel_pstate: Allow EPP 0x80 setting by the firmware
+Date:   Thu, 27 Oct 2022 10:19:47 -0700
+Message-Id: <20221027171947.1465343-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+With the
+"commit 3d13058ed2a6 ("cpufreq: intel_pstate: Use firmware default EPP")"
+the firmware can set an EPP, which driver will not overwrite. But the
+driver has a valid range check for:
+0x40 > firmware epp < 0x80.
+Hence firmware can't specify EPP of 0x80.
 
-Please pull from:
-  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.1-3
+If the firmware didn't specify in the valid range, the driver has a
+hard coded EPP of 102. But some Chrome hardware vendors don't want
+this overwrite and wants to boot with chipset default EPP of 0x80 as
+this improves battery life.
 
-For a bunch of patches addressing issues at the vivid driver and adding
-new checks at V4L2 to validate the input parameters from some ioctls.
+In this case they want to have capability to specify EPP of 0x80 via
+the firmware. This require the valid range to include 0x80 also.
+But here the valid range can't be simply extended to include 0x80 as
+this is the chipset default EPP. Even without any firmware specifying
+EPP, the chipset will always boot with EPP of 0x80.
 
-Regards,
-Mauro
+To make sure that firmware specified EPP of 0x80 and not by the
+chipset default, it will require additional check to make sure HWP
+was enabled by the firmware before boot. Only way the firmware can
+update EPP, is to enable HWP and update EPP via MSR_HWP_REQUEST.
 
-The following changes since commit 247f34f7b80357943234f93f247a1ae6b6c3a740:
+This driver already checks, if the HWP is enabled by the firmware.
+Use the same flag and extend valid range to include 0x80.
 
-  Linux 6.1-rc2 (2022-10-23 15:27:33 -0700)
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ drivers/cpufreq/intel_pstate.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.1-3
-
-for you to fetch changes up to de547896aac606a00435a219757a940ece142bf0:
-
-  media: vivid.rst: loop_video is set on the capture devnode (2022-10-25 16:43:54 +0100)
-
-----------------------------------------------------------------
-media fixes for v6.1-rc3
-
-----------------------------------------------------------------
-Hans Verkuil (8):
-      media: vivid: s_fbuf: add more sanity checks
-      media: vivid: dev->bitmap_cap wasn't freed in all cases
-      media: v4l2-dv-timings: add sanity checks for blanking values
-      media: videodev2.h: V4L2_DV_BT_BLANKING_HEIGHT should check 'interlaced'
-      media: vivid: fix control handler mutex deadlock
-      media: vivid: drop GFP_DMA32
-      media: vivid: set num_in/outputs to 0 if not supported
-      media: vivid.rst: loop_video is set on the capture devnode
-
- Documentation/admin-guide/media/vivid.rst        |  2 +-
- drivers/media/test-drivers/vivid/vivid-core.c    | 38 +++++++++++++++++++++---
- drivers/media/test-drivers/vivid/vivid-core.h    |  2 ++
- drivers/media/test-drivers/vivid/vivid-osd.c     |  2 +-
- drivers/media/test-drivers/vivid/vivid-vid-cap.c | 35 ++++++++++++++++++----
- drivers/media/v4l2-core/v4l2-dv-timings.c        | 14 +++++++++
- include/uapi/linux/videodev2.h                   |  3 +-
- 7 files changed, 83 insertions(+), 13 deletions(-)
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index fc3ebeb0bbe5..c41875abd8be 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -297,6 +297,7 @@ static int hwp_active __read_mostly;
+ static int hwp_mode_bdw __read_mostly;
+ static bool per_cpu_limits __read_mostly;
+ static bool hwp_boost __read_mostly;
++static bool hwp_forced __read_mostly;
+ 
+ static struct cpufreq_driver *intel_pstate_driver __read_mostly;
+ 
+@@ -1705,12 +1706,12 @@ static void intel_pstate_update_epp_defaults(struct cpudata *cpudata)
+ 		return;
+ 
+ 	/*
+-	 * If powerup EPP is something other than chipset default 0x80 and
+-	 * - is more performance oriented than 0x80 (default balance_perf EPP)
++	 * If the EPP is set by firmware, which means that firmware enabled HWP
++	 * - Is equal or less than 0x80 (default balance_perf EPP)
+ 	 * - But less performance oriented than performance EPP
+ 	 *   then use this as new balance_perf EPP.
+ 	 */
+-	if (cpudata->epp_default < HWP_EPP_BALANCE_PERFORMANCE &&
++	if (hwp_forced && cpudata->epp_default <= HWP_EPP_BALANCE_PERFORMANCE &&
+ 	    cpudata->epp_default > HWP_EPP_PERFORMANCE) {
+ 		epp_values[EPP_INDEX_BALANCE_PERFORMANCE] = cpudata->epp_default;
+ 		return;
+@@ -3423,7 +3424,7 @@ static int __init intel_pstate_init(void)
+ 
+ 	id = x86_match_cpu(hwp_support_ids);
+ 	if (id) {
+-		bool hwp_forced = intel_pstate_hwp_is_enabled();
++		hwp_forced = intel_pstate_hwp_is_enabled();
+ 
+ 		if (hwp_forced)
+ 			pr_info("HWP enabled by BIOS\n");
+-- 
+2.31.1
 
