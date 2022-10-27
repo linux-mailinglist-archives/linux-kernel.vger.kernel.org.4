@@ -2,228 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18D060F6E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1D160F6F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235301AbiJ0MMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40710 "EHLO
+        id S234915AbiJ0MRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232844AbiJ0MMa (ORCPT
+        with ESMTP id S234375AbiJ0MRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:12:30 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1C05106A79
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:12:28 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 34ADB23A;
-        Thu, 27 Oct 2022 05:12:34 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.1.184])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DDBA03F7B4;
-        Thu, 27 Oct 2022 05:12:25 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 13:12:16 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Kees Cook <keescook@chromium.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Adam Langley <agl@google.com>,
-        James Morse <james.morse@arm.com>
-Subject: Re: [RFC PATCH] arm64: Enable data independent timing (DIT) in the
- kernel
-Message-ID: <Y1p1oKCE+paB8JUK@FVFF77S0Q05N>
-References: <20221027112741.1678057-1-ardb@kernel.org>
+        Thu, 27 Oct 2022 08:17:18 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B0C9FFC;
+        Thu, 27 Oct 2022 05:17:17 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Myl2g4VQ3zpW3F;
+        Thu, 27 Oct 2022 20:13:47 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 27 Oct 2022 20:17:14 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 27 Oct 2022 20:17:14 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+CC:     <jdelvare@suse.com>, <wsa@kernel.org>, <chenzhongjin@huawei.com>
+Subject: [PATCH v2] i2c: piix4: Fix adapter not be removed in piix4_remove()
+Date:   Thu, 27 Oct 2022 20:13:53 +0800
+Message-ID: <20221027121353.181695-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221027112741.1678057-1-ardb@kernel.org>
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 01:27:41PM +0200, Ard Biesheuvel wrote:
-> The ARM architecture revision v8.4 introduces a data independent timing
-> control (DIT) which can be set at any exception level, and instructs the
-> CPU to avoid optimizations that may result in a correlation between the
-> execution time of certain instructions and the value of the data they
-> operate on.
-> 
-> The DIT bit is part of PSTATE, and is therefore context switched as
-> usual, given that it becomes part of the saved program state (SPSR) when
-> taking an exception. We have also defined a hwcap for DIT, and so user
-> space can discover already whether or nor DIT is available. This means
-> that, as far as user space is concerned, DIT is wired up and fully
-> functional.
-> 
-> In the kernel, however, we never bothered with DIT: we disable at it
-> boot (i.e., INIT_PSTATE_EL1 has DIT cleared) and ignore the fact that we
-> might run with DIT enabled if user space happened to set it.
+In piix4_probe(), the piix4 adapter will be registered in:
 
-FWIW, I did raise this with some architects a while back, and the thinking at
-the time was that implementations were likely to have data independent timing
-regardless of the value of the DIT bit, and so manipulating this at exception
-entry was busy work with no actual gain (especially if we had to handle
-mismatched big.LITTLE systems).
+   piix4_probe()
+     piix4_add_adapters_sb800() / piix4_add_adapter()
+       i2c_add_adapter()
 
-Since then, I have become aware of some possible implementation choices which
-would consider the bit (though I have no idea if anyone is building such
-implementations).
+Based on the probed device type, piix4_add_adapters_sb800() or single
+piix4_add_adapter() will be called.
+For the former case, piix4_adapter_count is set as the number of adapters,
+while for antoher case it is not set and kept default *zero*.
 
-> Given that running privileged code with DIT disabled on a CPU that
-> implements support for it may result in a side channel that exposes
-> privileged data to unprivileged user space processes,
+When piix4 is removed, piix4_remove() removes the adapters added in
+piix4_probe(), basing on the piix4_adapter_count value.
+Because the count is zero for the single adapter case, the adapter won't
+be removed and makes the sources allocated for adapter leaked, such as
+the i2c client and device.
 
-I appreciate this is a simple way to rule out issues of that sort, but I think
-the "may" in that sentence is doing a lot of work, since:
+These sources can still be accessed by i2c or bus and cause problems.
+An easily reproduced case is that if a new adapter is registered, i2c
+will get the leaked adapter and try to call smbus_algorithm, which was
+already freed:
 
-* IIUC, we don't have a specific case in mind that we're concerned about. I can
-  believe that we think all the crypto code we intend to be constant time is
-  theoretically affected.
+Triggered by: rmmod i2c_piix4 && modprobe max31730
 
-* IIUC we haven't gone an audited all constant-time code to check it doesn't
-  happen to use instructions with data-dependent-timing. So there might be more
-  work to do atop this to ensure theoretical correctness.
+ BUG: unable to handle page fault for address: ffffffffc053d860
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0000) - not-present page
+ Oops: 0000 [#1] PREEMPT SMP KASAN
+ CPU: 0 PID: 3752 Comm: modprobe Tainted: G
+ Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+ RIP: 0010:i2c_default_probe (drivers/i2c/i2c-core-base.c:2259) i2c_core
+ RSP: 0018:ffff888107477710 EFLAGS: 00000246
+ ...
+ <TASK>
+  i2c_detect (drivers/i2c/i2c-core-base.c:2302) i2c_core
+  __process_new_driver (drivers/i2c/i2c-core-base.c:1336) i2c_core
+  bus_for_each_dev (drivers/base/bus.c:301)
+  i2c_for_each_dev (drivers/i2c/i2c-core-base.c:1823) i2c_core
+  i2c_register_driver (drivers/i2c/i2c-core-base.c:1861) i2c_core
+  do_one_initcall (init/main.c:1296)
+  do_init_module (kernel/module/main.c:2455)
+  ...
+ </TASK>
+ ---[ end trace 0000000000000000 ]---
 
-* AFAIK there are no contemporary implementations where the DIT is both
-  implemented and it being clear results in data-dependent-timing. i.e. we have
-  nothing to actually test on.
+Fix this problem by correctly set piix4_adapter_count as 1 for the
+single adapter so it can be normally removed.
+
+Fixes: 528d53a1592b ("i2c: piix4: Fix probing of reserved ports on AMD Family 16h Model 30h")
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+v1 -> v2:
+Set piix4_adapter_count as 1 rather than increase it and slightly fix
+the commit message.
+---
+ drivers/i2c/busses/i2c-piix4.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
+index 39cb1b7bb865..809fbd014cd6 100644
+--- a/drivers/i2c/busses/i2c-piix4.c
++++ b/drivers/i2c/busses/i2c-piix4.c
+@@ -1080,6 +1080,7 @@ static int piix4_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 					   "", &piix4_main_adapters[0]);
+ 		if (retval < 0)
+ 			return retval;
++		piix4_adapter_count = 1;
+ 	}
  
-Given that, it would be nice if we could make this a bit clearer, e.g. state
-that this is currently a belt-and-braces approach for theoretical cases, rather
-than an extant side-channel today (as far as we're aware).
+ 	/* Check for auxiliary SMBus on some AMD chipsets */
+-- 
+2.17.1
 
-> let's enable DIT while running in the kernel if supported by all CPUs.
-
-FWIW, I think it's reasonable to do this when all CPUs have DIT.
-
-I have a slight fear that (as above) if there are future CPUs which do consider
-DIT, there's presumably a noticeable performance difference (or the CPU would
-just provide data-independent-timing regardless), but I'm not sure if that's
-just something we have to live with or could punt on until we notice such
-cases.
-
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Eric Biggers <ebiggers@kernel.org>
-> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Cc: Adam Langley <agl@google.com>
-> Link: https://lore.kernel.org/all/YwgCrqutxmX0W72r@gmail.com/
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  arch/arm64/include/asm/sysreg.h |  3 +++
->  arch/arm64/kernel/cpufeature.c  | 16 ++++++++++++++++
->  arch/arm64/kernel/entry.S       |  3 +++
->  arch/arm64/tools/cpucaps        |  1 +
->  4 files changed, 23 insertions(+)
-
-Don't we also need to touch __cpu_suspend_exit() in arch/am64/kernel/suspend.c?
-I'm assuming so given that has __uaccess_enable_hw_pan() today.
-
-Presumably we'd also care about this in KVM hyp code?
-
-> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-> index 7d301700d1a9..18e065f5130c 100644
-> --- a/arch/arm64/include/asm/sysreg.h
-> +++ b/arch/arm64/include/asm/sysreg.h
-> @@ -94,15 +94,18 @@
->  #define PSTATE_PAN			pstate_field(0, 4)
->  #define PSTATE_UAO			pstate_field(0, 3)
->  #define PSTATE_SSBS			pstate_field(3, 1)
-> +#define PSTATE_DIT			pstate_field(3, 2)
->  #define PSTATE_TCO			pstate_field(3, 4)
->  
->  #define SET_PSTATE_PAN(x)		__emit_inst(0xd500401f | PSTATE_PAN | ((!!x) << PSTATE_Imm_shift))
->  #define SET_PSTATE_UAO(x)		__emit_inst(0xd500401f | PSTATE_UAO | ((!!x) << PSTATE_Imm_shift))
->  #define SET_PSTATE_SSBS(x)		__emit_inst(0xd500401f | PSTATE_SSBS | ((!!x) << PSTATE_Imm_shift))
-> +#define SET_PSTATE_DIT(x)		__emit_inst(0xd500401f | PSTATE_DIT | ((!!x) << PSTATE_Imm_shift))
->  #define SET_PSTATE_TCO(x)		__emit_inst(0xd500401f | PSTATE_TCO | ((!!x) << PSTATE_Imm_shift))
->  
->  #define set_pstate_pan(x)		asm volatile(SET_PSTATE_PAN(x))
->  #define set_pstate_uao(x)		asm volatile(SET_PSTATE_UAO(x))
-> +#define set_pstate_dit(x)		asm volatile(SET_PSTATE_DIT(x))
->  #define set_pstate_ssbs(x)		asm volatile(SET_PSTATE_SSBS(x))
->  
->  #define __SYS_BARRIER_INSN(CRm, op2, Rt) \
-> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-> index 6062454a9067..273a74df24fe 100644
-> --- a/arch/arm64/kernel/cpufeature.c
-> +++ b/arch/arm64/kernel/cpufeature.c
-> @@ -2077,6 +2077,11 @@ static void cpu_trap_el0_impdef(const struct arm64_cpu_capabilities *__unused)
->  	sysreg_clear_set(sctlr_el1, 0, SCTLR_EL1_TIDCP);
->  }
->  
-> +static void cpu_enable_dit(const struct arm64_cpu_capabilities *__unused)
-> +{
-> +	set_pstate_dit(1);
-> +}
-
-I think this wants the same treatment as PAN, i.e.
-WARN_ON_ONCE(in_interrupt()); with a comment about PSTATE being discareded upon
-ERET.
-
-Thanks,
-Mark.
-
-> +
->  /* Internal helper functions to match cpu capability type */
->  static bool
->  cpucap_late_cpu_optional(const struct arm64_cpu_capabilities *cap)
-> @@ -2640,6 +2645,17 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
->  		.matches = has_cpuid_feature,
->  		.cpu_enable = cpu_trap_el0_impdef,
->  	},
-> +	{
-> +		.desc = "Data independent timing control (DIT)",
-> +		.capability = ARM64_HAS_DIT,
-> +		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
-> +		.matches = has_cpuid_feature,
-> +		.sys_reg = SYS_ID_AA64PFR0_EL1,
-> +		.field_pos = ID_AA64PFR0_EL1_DIT_SHIFT,
-> +		.field_width = 4,
-> +		.min_field_value = 1,
-> +		.cpu_enable = cpu_enable_dit,
-> +	},
->  	{},
->  };
->  
-> diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-> index e28137d64b76..229b505e6366 100644
-> --- a/arch/arm64/kernel/entry.S
-> +++ b/arch/arm64/kernel/entry.S
-> @@ -197,6 +197,9 @@ alternative_cb_end
->  	.endm
->  
->  	.macro	kernel_entry, el, regsize = 64
-> +	.if	\el == 0
-> +	ALTERNATIVE(nop, SET_PSTATE_DIT(1), ARM64_HAS_DIT)
-> +	.endif
->  	.if	\regsize == 32
->  	mov	w0, w0				// zero upper 32 bits of x0
->  	.endif
-> diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
-> index f1c0347ec31a..a86ee376920a 100644
-> --- a/arch/arm64/tools/cpucaps
-> +++ b/arch/arm64/tools/cpucaps
-> @@ -20,6 +20,7 @@ HAS_CNP
->  HAS_CRC32
->  HAS_DCPODP
->  HAS_DCPOP
-> +HAS_DIT
->  HAS_E0PD
->  HAS_ECV
->  HAS_EPAN
-> -- 
-> 2.35.1
-> 
