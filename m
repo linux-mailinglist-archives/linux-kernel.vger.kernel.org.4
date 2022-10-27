@@ -2,217 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB1060FB9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A7C60FB9E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236482AbiJ0PRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 11:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
+        id S235678AbiJ0PRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 11:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236430AbiJ0PQw (ORCPT
+        with ESMTP id S236329AbiJ0PRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 11:16:52 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CAE19A23D
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:12:35 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso1720247pjc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:12:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Mp2QfpZmO5rJfMt8DbZa9LapRBZkl3HjpYw0dHrk4ws=;
-        b=ohViZ2E6eRNBzkcum8lv+yv3Xb9PIK0nq6PHrcKNIfEc1x0MYgivtpDV47ZMF8QrG2
-         WVYqtv3yx+RfaK+A3AlGqMVIkjg7GQVOkl5fQVhLNoaIRqfLj04BcdC50DzcQe16F/8y
-         pHTHrAvOj9QShRVlzh/elVuIHQGRWFlcirF+gIxXYzSrNEOf1lHJ9hp53xFy5W8tkf7x
-         aWiSmGDnz1dflJ7yaKybf4mOhk6+TIpuBLUP1PCwRAWAKLBGnsgDy58U6xQ5mgui4Zku
-         ptWePwzoa0Tjfw8Tp3vfOBOCUPTveVEIbBguvcQVPeWHztGXeqhoJiHiAHfy+Dq4HU1a
-         hfUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mp2QfpZmO5rJfMt8DbZa9LapRBZkl3HjpYw0dHrk4ws=;
-        b=PLx+o25a8GV+0CoKH3SoIlzP08697MAcAd34cwkCDCyloSxmwFcizd8yheM1bnoEGr
-         2P+HIRCW8VxJdGCmqsXYVWqImOfGRTTi9FYpFhqPDr0NvtOUxaQf2ApvcBDa7vxaa5Vy
-         BaKaXdcQ5ha6rDkk2B1BzReCvehsBKyBg9rBNtVsOF/Yybker7jvCrvYrdQ4PIV2tzyJ
-         xGc43+NuAKzQNAurnHlp8njZQckDJHUwW4JCbD1Oy+50r9wJfcWUahoYiDM4VqKQwLNa
-         WcfLYZUouGqMFB32nlnaG4nhLc/IeNXZElhXwf80NOAoYiX6cUyNu+D4oLopUBl9zd0n
-         QlAg==
-X-Gm-Message-State: ACrzQf3FrmvyajPURaC1boOFtPbcVDmQfy8xHjW9kEJj9A807P2MakjE
-        pjoWklcm8sxyff99hQrWbMCY
-X-Google-Smtp-Source: AMsMyM7p+CRAKYs3BLseZhuWYJPr3tw47zQjRvSghbwJ0WT3ylRlT2ERiQZE/mS9iAjuNGTZh6WjUA==
-X-Received: by 2002:a17:90a:e38b:b0:212:d42a:c0a9 with SMTP id b11-20020a17090ae38b00b00212d42ac0a9mr10566845pjz.179.1666883547265;
-        Thu, 27 Oct 2022 08:12:27 -0700 (PDT)
-Received: from thinkpad ([117.202.186.162])
-        by smtp.gmail.com with ESMTPSA id d9-20020a621d09000000b005289a50e4c2sm1287181pfd.23.2022.10.27.08.12.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 08:12:26 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 20:42:20 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Frank Li <frank.li@nxp.com>
-Cc:     Shunsuke Mie <mie@igel.co.jp>, Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "ntb@lists.linux.dev" <ntb@lists.linux.dev>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [EXT] Re: [PATCH v2] PCI: endpoint: pci-epf-{,v}ntb: fix a check
- for no epc alignment constraint
-Message-ID: <20221027151220.GC76627@thinkpad>
-References: <20220922092357.123732-1-mie@igel.co.jp>
- <20221025142143.GA109941@thinkpad>
- <HE1PR0401MB233126D2C7410EC5F6C3976488319@HE1PR0401MB2331.eurprd04.prod.outlook.com>
- <CANXvt5qjnbZMzFJt8kBtQz6FHc_QQYw7=fZp8kK87mZ-t75z+g@mail.gmail.com>
- <HE1PR0401MB23319EE329D62420919740C688339@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+        Thu, 27 Oct 2022 11:17:14 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC341A045B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:12:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666883568; x=1698419568;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8A/YviDx8iqyRdDwX9h7ESPZbhw7TVDZ5xd3lzXfDHw=;
+  b=doCXullkCOXOr9qTAW9rIbVAnRT92MNHgvkWQpP2ly5OM9Zcics75aou
+   zrn8G2Diq8mramiz+a9ExhN848uKK3fU12qA3K1AAm4zOPFBnVQE4jK1c
+   AfMl+DqcDBtWLmMUGmGJqljzd7pY0fpGYctpnl+JOsPl8nFzAFQV2s+KP
+   gkZ8YAO+8V3nMgWdAlKvIOSc2R71zjqENdliHrQL1bTQPcfajyBbqcZs+
+   awirFzruYlS7myqB9zdzp1/62ck2V5j92jM/Kc3pRDwiK+Ic7hL1Olcat
+   GXe03xgwq6LCFtJc/RWEQaVUk9Un2CLZWuKUlzvQK3ORY20tVek476fXb
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="287965967"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="287965967"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 08:12:29 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="701378321"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="701378321"
+Received: from vstelter-mobl.amr.corp.intel.com (HELO [10.212.214.108]) ([10.212.214.108])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 08:12:28 -0700
+Message-ID: <864b4fbe-4462-9962-7afd-9140d5165cdb@intel.com>
+Date:   Thu, 27 Oct 2022 08:12:26 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <HE1PR0401MB23319EE329D62420919740C688339@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [tip:x86/mm] [x86/mm] 1248fb6a82:
+ Kernel_panic-not_syncing:kasan_populate_pmd:Failed_to_allocate_page
+Content-Language: en-US
+To:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        kernel test robot <yujie.liu@intel.com>
+Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Seth Jenkins <sethjenkins@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        kasan-dev@googlegroups.com, "Yin, Fengwei" <fengwei.yin@intel.com>
+References: <202210241508.2e203c3d-yujie.liu@intel.com>
+ <Y1e7kgKweck6S954@hirez.programming.kicks-ass.net>
+ <278cc353-6289-19e8-f7a9-0acd70bc8e11@gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <278cc353-6289-19e8-f7a9-0acd70bc8e11@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 02:35:56PM +0000, Frank Li wrote:
+On 10/25/22 08:39, Andrey Ryabinin wrote:
+> KASAN tries to allocate shadow memory for the whole cpu entry area.
+> The size is CPU_ENTRY_AREA_MAP_SIZE/8 and this is obviously fails after your patch.
+> The fix this might be something like this:
 > 
-> 
-> > -----Original Message-----
-> > From: Shunsuke Mie <mie@igel.co.jp>
-> > Sent: Wednesday, October 26, 2022 8:43 PM
-> > To: Frank Li <frank.li@nxp.com>
-> > Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>; Jon
-> > Mason <jdmason@kudzu.us>; Dave Jiang <dave.jiang@intel.com>; Allen
-> > Hubbe <allenbh@gmail.com>; Kishon Vijay Abraham I <kishon@ti.com>;
-> > Lorenzo Pieralisi <lpieralisi@kernel.org>; Krzysztof Wilczyński
-> > <kw@linux.com>; Bjorn Helgaas <bhelgaas@google.com>;
-> > ntb@lists.linux.dev; linux-pci@vger.kernel.org; linux-kernel@vger.kernel.org
-> > Subject: Re: [EXT] Re: [PATCH v2] PCI: endpoint: pci-epf-{,v}ntb: fix a check for
-> > no epc alignment constraint
-> > 
-> > Caution: EXT Email
-> > 
-> > Hi Frank,
-> > 
-> > 2022年10月26日(水) 1:07 Frank Li <frank.li@nxp.com>:
-> > >
-> > >
-> > >
-> > > > -----Original Message-----
-> > > > From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > > Sent: Tuesday, October 25, 2022 9:22 AM
-> > > > To: Shunsuke Mie <mie@igel.co.jp>
-> > > > Cc: Jon Mason <jdmason@kudzu.us>; Dave Jiang <dave.jiang@intel.com>;
-> > > > Allen Hubbe <allenbh@gmail.com>; Kishon Vijay Abraham I
-> > > > <kishon@ti.com>; Lorenzo Pieralisi <lpieralisi@kernel.org>; Krzysztof
-> > > > Wilczyński <kw@linux.com>; Bjorn Helgaas <bhelgaas@google.com>;
-> > > > ntb@lists.linux.dev; linux-pci@vger.kernel.org; linux-
-> > kernel@vger.kernel.org
-> > > > Subject: [EXT] Re: [PATCH v2] PCI: endpoint: pci-epf-{,v}ntb: fix a check for
-> > no
-> > > > epc alignment constraint
-> > > >
-> > > > Caution: EXT Email
-> > > >
-> > > > On Thu, Sep 22, 2022 at 06:23:57PM +0900, Shunsuke Mie wrote:
-> > > > > Some PCI endpoint controllers have no alignment constraints, and the
-> > > > > epc_features->align becomes 0. In this case, IS_ALIGNED() in
-> > >
-> > > [Frank Li] why not set epc_features->align 1
-> > > no alignment constraints should mean align to byte.
-> > It is one of the solutions too I think. But in that case,  we need to
-> > write epc_features->align = 1 to all epc drivers, dwc, qcom, rcar,
-> > tegra, and etc.
-> > 
-> > I think that my change is better.
-> 
-> I think it should be based on what original term defined. 
-> It should be fixed at where make mistake. 
-> 
+> ---
+>  arch/x86/include/asm/kasan.h |  2 ++
+>  arch/x86/mm/cpu_entry_area.c |  3 +++
+>  arch/x86/mm/kasan_init_64.c  | 16 +++++++++++++---
+>  3 files changed, 18 insertions(+), 3 deletions(-)
 
-1byte is the default alignment that drivers can assume, why do you want drivers
-to set them explicitly when they do not want any special alignment?
+Andrey, if you have a minute, could you send this as a real patch, with
+a SoB?
 
-I think this patch is fine.
-
-Thanks,
-Mani
-
-> Are there other place use align == 0 means no alignment in kernel? 
-> 
-> > 
-> > > > > epf_ntb_config_spad_bar_alloc() doesn't work well. Check for this
-> > before
-> > > > > IS_ALIGNED().
-> > > > >
-> > > > > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> > > >
-> > > > Reviewed-by: Manivannan Sadhasivam
-> > > > <manivannan.sadhasivam@linaro.org>
-> > > >
-> > > > Thanks,
-> > > > Mani
-> > > >
-> > > > > ---
-> > > > > Changes in v2:
-> > > > > * Fix the commit message in phrasings and words.
-> > > > > ---
-> > > > > ---
-> > > > >  drivers/pci/endpoint/functions/pci-epf-ntb.c  | 2 +-
-> > > > >  drivers/pci/endpoint/functions/pci-epf-vntb.c | 2 +-
-> > > > >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> > > > b/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> > > > > index 9a00448c7e61..f74155ee8d72 100644
-> > > > > --- a/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> > > > > +++ b/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> > > > > @@ -1021,7 +1021,7 @@ static int
-> > epf_ntb_config_spad_bar_alloc(struct
-> > > > epf_ntb *ntb,
-> > > > >       peer_size = peer_epc_features->bar_fixed_size[peer_barno];
-> > > > >
-> > > > >       /* Check if epc_features is populated incorrectly */
-> > > > > -     if ((!IS_ALIGNED(size, align)))
-> > > > > +     if (align && (!IS_ALIGNED(size, align)))
-> > > > >               return -EINVAL;
-> > > > >
-> > > > >       spad_count = ntb->spad_count;
-> > > > > diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > > b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > > > index 0ea85e1d292e..5e346c0a0f05 100644
-> > > > > --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > > > +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > > > @@ -418,7 +418,7 @@ static int epf_ntb_config_spad_bar_alloc(struct
-> > > > epf_ntb *ntb)
-> > > > >       size = epc_features->bar_fixed_size[barno];
-> > > > >       align = epc_features->align;
-> > > > >
-> > > > > -     if ((!IS_ALIGNED(size, align)))
-> > > > > +     if (align && !IS_ALIGNED(size, align))
-> > > > >               return -EINVAL;
-> > > > >
-> > > > >       spad_count = ntb->spad_count;
-> > > > > --
-> > > > > 2.17.1
-> > > > >
-> > > >
-> > > > --
-> > > > மணிவண்ணன் சதாசிவம்
-> > 
-> > Best,
-> > Shunsuke
-
--- 
-மணிவண்ணன் சதாசிவம்
+Alternatively, do you have any issues if we add your SoB and apply it?
