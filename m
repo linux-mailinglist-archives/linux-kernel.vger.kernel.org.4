@@ -2,86 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE5E360FB8E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 130EF60FB58
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236129AbiJ0PMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 11:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
+        id S236241AbiJ0PJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 11:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236188AbiJ0PJV (ORCPT
+        with ESMTP id S235991AbiJ0PIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 11:09:21 -0400
-Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [IPv6:2620:100:9001:583::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6541E18F925
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:09:20 -0700 (PDT)
-Received: from pps.filterd (m0050095.ppops.net [127.0.0.1])
-        by m0050095.ppops.net-00190b01. (8.17.1.5/8.17.1.5) with ESMTP id 29REAqMV008104;
-        Thu, 27 Oct 2022 16:08:20 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=jan2016.eng;
- bh=h4lND8L7nF8jQSiuXHvwarM3PypjNGIv6eeSvOJK9Xc=;
- b=WI1sr5VyksXvBeCZiuQvHynoUgIvJ8arwsnOScd2R1Cy8hD2FJjGzA2CbJctUmDI1aBt
- Qk/eTkHTCLRbUgK6KW8gHgXZ2asZKdOCSMNbaIDldll4yl99Nr901x4zbS0hnbSxhoU4
- 1rl3y+Ye4FoGzQ0CK2mI+Q8gTT3Kz5KW0v4YU7AOlfThbhg0PpPsXVaEiEgTpIlXbIgN
- PBCyNVmLOiHqt8UCdPuiYECX4fVk0SXxYzmHtLTOrOZzdq1/KzaYrAuhpHTS/sd3vtJb
- f3aF7AQ36RKi66wgEwZ2K8A+0LUh17YQ1A1kr5XY5HbF069FllZb7CFq4ULBXdIIWDhf pA== 
-Received: from prod-mail-ppoint7 (a72-247-45-33.deploy.static.akamaitechnologies.com [72.247.45.33] (may be forged))
-        by m0050095.ppops.net-00190b01. (PPS) with ESMTPS id 3kfb8p84nx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Oct 2022 16:08:19 +0100
-Received: from pps.filterd (prod-mail-ppoint7.akamai.com [127.0.0.1])
-        by prod-mail-ppoint7.akamai.com (8.17.1.5/8.17.1.5) with ESMTP id 29RDDmRu005239;
-        Thu, 27 Oct 2022 11:08:18 -0400
-Received: from prod-mail-relay19.dfw02.corp.akamai.com ([172.27.165.173])
-        by prod-mail-ppoint7.akamai.com (PPS) with ESMTP id 3kfaq1mk0q-1;
-        Thu, 27 Oct 2022 11:08:17 -0400
-Received: from [0.0.0.0] (prod-ssh-gw01.bos01.corp.akamai.com [172.27.119.138])
-        by prod-mail-relay19.dfw02.corp.akamai.com (Postfix) with ESMTP id E582360293;
-        Thu, 27 Oct 2022 15:08:16 +0000 (GMT)
-Message-ID: <c1807585-f6c8-c05d-bc20-c6a540e59814@akamai.com>
-Date:   Thu, 27 Oct 2022 11:08:16 -0400
+        Thu, 27 Oct 2022 11:08:45 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9069618F247;
+        Thu, 27 Oct 2022 08:08:44 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id CBA39320094A;
+        Thu, 27 Oct 2022 11:08:42 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Thu, 27 Oct 2022 11:08:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1666883322; x=
+        1666969722; bh=7hTRJUbc0mXpmE+XscfGSeRmmeMAJ2mNf4rMDCdGLeA=; b=H
+        6M/QY4AJ6FD9hk8sNv6u1fx6saodbMQd9yuetA/4x1YkEeF+mVZs/xeGXVoQhfOl
+        PZlGd0zG+liaB7GpHUceLPhXeKGnnE+c+L59GHjlO8HfFV2mKCSSLc4QZwvf85yh
+        cn/wWTAMhjAzjG3xyP4xXzPWkcpJWiwUttIn7mQiG1js9F+mlziq4roRidZQ2r4k
+        DhQa/YeivzptizBW54jICrw/01swl/EClvhPH0dHs3B/67h8s46W/KTbigMV0bm5
+        yCdsc/nK6X+HNHclMEFOqaa0yPwn37V8T1jWlkHNQrtE+RwfiLdA/YoLbym+vRwM
+        ffH+xa8MQR0LQNw+0ZoEw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1666883322; x=1666969722; bh=7hTRJUbc0mXpm
+        E+XscfGSeRmmeMAJ2mNf4rMDCdGLeA=; b=nm1vhYWpwpx14TzKIFieQAEHpg3K3
+        vLWS85FLGz9487o7zlDr6+rnAHRZKhaQfM+kAkWG/p4klp+k2k7qY9vP3cv4CvZg
+        hWqoE8tnJoMJ9FvhImjxZIn4ySPNvq6XcaAg1Boex0P5BuaDqejXQfbrQqvZ7F6O
+        FIpDtGYzAVv68opc2WXKFnkQNFdSIB4BYSU5iCYofzui9n3cJy7c9ti51msgKmuC
+        KR5QPlpreRDGVb1A6DIgD7SyZNjdXXTJLNOfQCQ23kJYav8lGJhKeh3cOupuv2Zc
+        XKoaZDXmg6lIywpTyxIuAXyWSo7SVbUBG8axXYSiypW2/jEjfgDoU3qlw==
+X-ME-Sender: <xms:-p5aYwwpmbwC8efATp67goDE5fsilSK8b_n_Chu33lGWb479CJOmNg>
+    <xme:-p5aY0ReHW_57CxKWm4-y2xNtVK9iE1Zb7QjxleYZbPsQQvni4wGo18Ash5QfUDDt
+    DyJQvssCsnNbMkkvK8>
+X-ME-Received: <xmr:-p5aYyWTQojd_GJj7__NfoWvD7ZuA3dt5uZYiZgpZ8gHk_PCCaZ-EVImsnfyX_g3ApaSeVBPUqh4fxwOmXucvpMSrkYtWGW2uNhWSOSpJpDxXkdXiej9GPQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeggdekfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcu
+    rfgvthgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvg
+    hrnhephfeufffgffegtdefhfefueejfefghfelkeetuddvffeigeffuedvjeegudelieel
+    necuffhomhgrihhnpeguvghvihgtvghtrhgvvgdrohhrghenucevlhhushhtvghrufhiii
+    gvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhesshhvvghnphgvthgvrhdr
+    uggvvh
+X-ME-Proxy: <xmx:-p5aY-hQi9UDoqOCslkWB2nJPyDKS_VUDGNKudlynBXdHhzrG4ftWQ>
+    <xmx:-p5aYyCnJRk8kOBq5_sJRvX0mE5L0TA8tg6st1m9TBwtpCaL04zeug>
+    <xmx:-p5aY_KEldsUFvqjySL3YplYs8T23x938-_ybQyxApLLbdmbEQ74Yw>
+    <xmx:-p5aY62BnsNRet642LOhE83w-jmpP4A6TBg9OBJCp0X-lJsttQvKhA>
+Feedback-ID: i51094778:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 27 Oct 2022 11:08:39 -0400 (EDT)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        asahi@lists.linux.dev, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v4 2/7] dt-bindings: net: Add Broadcom BCM4377 family PCIe Bluetooth
+Date:   Thu, 27 Oct 2022 17:08:17 +0200
+Message-Id: <20221027150822.26120-3-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+In-Reply-To: <20221027150822.26120-1-sven@svenpeter.dev>
+References: <20221027150822.26120-1-sven@svenpeter.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [Intel-gfx] [PATCH v7 0/9] dyndbg: drm.debug adaptation
-Content-Language: en-US
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     Jim Cromie <jim.cromie@gmail.com>, daniel.vetter@ffwll.ch,
-        intel-gfx@lists.freedesktop.org, linux@rasmusvillemoes.dk,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        seanpaul@chromium.org, dri-devel@lists.freedesktop.org,
-        joe@perches.com, intel-gvt-dev@lists.freedesktop.org
-References: <20220912052852.1123868-1-jim.cromie@gmail.com>
- <Yy7/6oTBW2lqVSK1@kroah.com> <Y1Fyuh12g/gt3Izn@intel.com>
- <87a65pfsbq.fsf@intel.com>
-From:   Jason Baron <jbaron@akamai.com>
-In-Reply-To: <87a65pfsbq.fsf@intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-27_07,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 mlxscore=0
- malwarescore=0 bulkscore=0 mlxlogscore=999 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2210270082
-X-Proofpoint-ORIG-GUID: JKKURTnn4jQ6E0EgMWxXuBHamgEYkVRY
-X-Proofpoint-GUID: JKKURTnn4jQ6E0EgMWxXuBHamgEYkVRY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-27_07,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 suspectscore=0
- adultscore=0 bulkscore=0 priorityscore=1501 mlxscore=0 clxscore=1011
- impostorscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2210270082
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,47 +98,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+These chips are combined Wi-Fi/Bluetooth radios which expose a
+PCI subfunction for the Bluetooth part.
+They are found in Apple machines such as the x86 models with the T2
+chip or the arm64 models with the M1 or M2 chips.
 
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../net/bluetooth/brcm,bcm4377-bluetooth.yaml | 81 +++++++++++++++++++
+ MAINTAINERS                                   |  1 +
+ 2 files changed, 82 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/bluetooth/brcm,bcm4377-bluetooth.yaml
 
-On 10/21/22 05:18, Jani Nikula wrote:
-> On Thu, 20 Oct 2022, Ville Syrjälä <ville.syrjala@linux.intel.com> wrote:
->> On Sat, Sep 24, 2022 at 03:02:34PM +0200, Greg KH wrote:
->>> On Sun, Sep 11, 2022 at 11:28:43PM -0600, Jim Cromie wrote:
->>>> hi Greg, Dan, Jason, DRM-folk,
->>>>
->>>> heres follow-up to V6:
->>>>   rebased on driver-core/driver-core-next for -v6 applied bits (thanks)
->>>>   rework drm_debug_enabled{_raw,_instrumented,} per Dan.
->>>>
->>>> It excludes:
->>>>   nouveau parts (immature)
->>>>   tracefs parts (I missed --to=Steve on v6)
->>>>   split _ddebug_site and de-duplicate experiment (way unready)
->>>>
->>>> IOW, its the remaining commits of V6 on which Dan gave his Reviewed-by.
->>>>
->>>> If these are good to apply, I'll rebase and repost the rest separately.
->>>
->>> All now queued up, thanks.
->>
->> This stuff broke i915 debugs. When I first load i915 no debug prints are
->> produced. If I then go fiddle around in /sys/module/drm/parameters/debug
->> the debug prints start to suddenly work.
-> 
-> Wait what? I always assumed the default behaviour would stay the same,
-> which is usually how we roll. It's a regression in my books. We've got a
-> CI farm that's not very helpful in terms of dmesg logging right now
-> because of this.
-> 
-> BR,
-> Jani.
-> 
-> 
+diff --git a/Documentation/devicetree/bindings/net/bluetooth/brcm,bcm4377-bluetooth.yaml b/Documentation/devicetree/bindings/net/bluetooth/brcm,bcm4377-bluetooth.yaml
+new file mode 100644
+index 000000000000..37cb39a3a62e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/bluetooth/brcm,bcm4377-bluetooth.yaml
+@@ -0,0 +1,81 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/bluetooth/brcm,bcm4377-bluetooth.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Broadcom BCM4377 family PCIe Bluetooth Chips
++
++maintainers:
++  - Sven Peter <sven@svenpeter.dev>
++
++description:
++  This binding describes Broadcom BCM4377 family PCIe-attached bluetooth chips
++  usually found in Apple machines. The Wi-Fi part of the chip is described in
++  bindings/net/wireless/brcm,bcm4329-fmac.yaml.
++
++allOf:
++  - $ref: bluetooth-controller.yaml#
++
++properties:
++  compatible:
++    enum:
++      - pci14e4,5fa0 # BCM4377
++      - pci14e4,5f69 # BCM4378
++      - pci14e4,5f71 # BCM4387
++
++  reg:
++    maxItems: 1
++
++  brcm,board-type:
++    $ref: /schemas/types.yaml#/definitions/string
++    description: Board type of the Bluetooth chip. This is used to decouple
++      the overall system board from the Bluetooth module and used to construct
++      firmware and calibration data filenames.
++      On Apple platforms, this should be the Apple module-instance codename
++      prefixed by "apple,", e.g. "apple,atlantisb".
++    pattern: '^apple,.*'
++
++  brcm,taurus-cal-blob:
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    description: A per-device calibration blob for the Bluetooth radio. This
++      should be filled in by the bootloader from platform configuration
++      data, if necessary, and will be uploaded to the device.
++      This blob is used if the chip stepping of the Bluetooth module does not
++      support beamforming.
++
++  brcm,taurus-bf-cal-blob:
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    description: A per-device calibration blob for the Bluetooth radio. This
++      should be filled in by the bootloader from platform configuration
++      data, if necessary, and will be uploaded to the device.
++      This blob is used if the chip stepping of the Bluetooth module supports
++      beamforming.
++
++  local-bd-address: true
++
++required:
++  - compatible
++  - reg
++  - local-bd-address
++  - brcm,board-type
++
++additionalProperties: false
++
++examples:
++  - |
++    pcie@a0000000 {
++      #address-cells = <3>;
++      #size-cells = <2>;
++      reg = <0xa0000000 0x1000000>;
++      device_type = "pci";
++      ranges = <0x43000000 0x6 0xa0000000 0xa0000000 0x0 0x20000000>;
++
++      bluetooth@0,1 {
++        compatible = "pci14e4,5f69";
++        reg = <0x100 0x0 0x0 0x0 0x0>;
++        brcm,board-type = "apple,honshu";
++        /* To be filled by the bootloader */
++        local-bd-address = [00 00 00 00 00 00];
++      };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cf0f18502372..ca45551220f5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1903,6 +1903,7 @@ F:	Documentation/devicetree/bindings/interrupt-controller/apple,*
+ F:	Documentation/devicetree/bindings/iommu/apple,dart.yaml
+ F:	Documentation/devicetree/bindings/iommu/apple,sart.yaml
+ F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
++F:	Documentation/devicetree/bindings/net/bluetooth/brcm,bcm4377-bluetooth.yaml
+ F:	Documentation/devicetree/bindings/nvme/apple,nvme-ans.yaml
+ F:	Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
+ F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+-- 
+2.25.1
 
-That doesn't sound good - so you are saying that prior to this change some
-of the drm debugs were default enabled. But now you have to manually enable
-them?
-
-Thanks,
-
--Jason
