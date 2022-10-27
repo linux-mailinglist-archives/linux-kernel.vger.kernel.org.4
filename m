@@ -2,60 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43BEB60FD1C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5B360FD20
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236548AbiJ0Qcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 12:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
+        id S236608AbiJ0Qcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 12:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234812AbiJ0Qcb (ORCPT
+        with ESMTP id S235710AbiJ0Qcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 12:32:31 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73FC9DF89;
-        Thu, 27 Oct 2022 09:32:27 -0700 (PDT)
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 29RGW5Bt010706;
-        Fri, 28 Oct 2022 01:32:06 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 29RGW5Bt010706
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1666888326;
-        bh=52K3j4S01m6w/RfZ2ZmouebwYkbBAw9HS00T9luyzUs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NbAQ6FXkO9En0C8Gi1ej9gn1bbEKRjuN0OQjeGqMUuzE5jS3YnzHhYwjEOWhQq3/s
-         RmqVCqFFTjGudrH2pQ5zuXFfSv14UPIzRRUKsUc0oBEGGymUH9RPkmwkSspuCBW25I
-         Ppvtyeb23nVGhJqIke+KIMGPKX19bvDYrLvPyrJYyqJiLXx9nJCOCEjsrf4ubq+VLJ
-         x3VTyjvJ1l5a8cCd5Y7jnPHGbjZdHAXXSxn5TC65QAm5ODb3sZEofiZ/ulw9WRIXsj
-         S7QkqPg+cVVx7f+K/fOhJ5936Sz+kHAZLZ//VFcQv3+TA7eugy0eWbq1in57rzd9WU
-         D7soZ/NNpmeAQ==
-X-Nifty-SrcIP: [209.85.160.44]
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1322d768ba7so2792724fac.5;
-        Thu, 27 Oct 2022 09:32:06 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0tBy5riaiPOJ6YBDg7wijXoMUD3o7pxueJbOyqd/7aFcsmFLiR
-        GDV9Lj0TUuPYe8ccekFN8tF2hrhFc1I1tsLzOMY=
-X-Google-Smtp-Source: AMsMyM5HtJWKYTji479rNEYH9axJJybHQHD8bBb7XeWPXWObEmy8J9YLvBHRuppp2rRV0aIxNwePrqHWrwGH8t/5cqE=
-X-Received: by 2002:a05:6870:7027:b0:13b:a5b7:165a with SMTP id
- u39-20020a056870702700b0013ba5b7165amr5974579oae.194.1666888325338; Thu, 27
- Oct 2022 09:32:05 -0700 (PDT)
+        Thu, 27 Oct 2022 12:32:35 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E342A2329;
+        Thu, 27 Oct 2022 09:32:35 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id sc25so6167806ejc.12;
+        Thu, 27 Oct 2022 09:32:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=w2sKi/FidnzYYF/kqFgrvTbVLAOpdPoKmkW/OsJ1VX8=;
+        b=gtPuHpSebI19NwQMNWbQe8LxqWpp6NFl/9GH5Bm46HkvTKTCbtk21yXDGOvu80s8lr
+         6u5Zu683zpxmECsFY9YQ+iU3o5+enrd64/R5BjWOkc5aDNLm0+vIGMskyIjovXFYB/w8
+         IAinKBt+BuZiSsCOcYo7tmmlyn6RCHg7J1zP4U6foSWGFZl+hwQ62w6CCVT0ZP7ZrHmD
+         Q3t3LsriE9hPM/9BY/c05qnlJUWYmSUpCPZTLbRO7QwnfaFc8C+ZSoOrbQxtN5+2MrfV
+         t/viBOCzXW3m6zjv/hjxE7Bj6T1e3kI1/uBof3wT5+mpYTVrWVFs6PRQJKJorNBTdliC
+         jYDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w2sKi/FidnzYYF/kqFgrvTbVLAOpdPoKmkW/OsJ1VX8=;
+        b=SM9S3XYvfd09kMexyoLlGTaagWSOwsFhyCwAW+5p8xQaWakczllno0ERxnzX9ztibb
+         MqYfosrXmqo6pNfEd/Bwmg5TSVweChvWVB+HMUN7pSIH/6h5i/5iWeMoXCDOKlXjvAeT
+         75OvV5e4aKmoldm1/MTFBx1LrUiqGIdpoKoqMxxK3+WxiUZnjB1ZikvUBILhE56Dm6+M
+         2mTvmIuMHuhs3HDnBs/CTixCVccI8OPSeG1kkl+GjHCc2A9h13sGwKkvEwPrfnjH4ffG
+         DGGY/RpEFDZ7N+665DXycpYWhJRA5yrXkImFLt//C+Tm0ivcDS61raqB4qh0/qZca/dL
+         XQIw==
+X-Gm-Message-State: ACrzQf2IqSA+4CRj9co6KDXUv83gFNWHuljJgA0oB53wx/QrNpMmPeJf
+        v0P+nVAaraOqOn3PtXgzA7yX0iW52eqplEQlG+I=
+X-Google-Smtp-Source: AMsMyM4V+7IoJvMBh0mBGyLz2zWjBHflEVIcET8cYEbJ4bG9f9Kpd2oWTwRMkvQx+yEO5EVKgPey5PCUtEQewG3PWaU=
+X-Received: by 2002:a17:907:b1c:b0:797:983a:7d97 with SMTP id
+ h28-20020a1709070b1c00b00797983a7d97mr35628022ejl.267.1666888353496; Thu, 27
+ Oct 2022 09:32:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221023195257.175946-1-masahiroy@kernel.org> <CAKwvOd=pimEoN_OvyefPiTTsOdzo+Xda1gJrYg8+jAE5GA0rqA@mail.gmail.com>
-In-Reply-To: <CAKwvOd=pimEoN_OvyefPiTTsOdzo+Xda1gJrYg8+jAE5GA0rqA@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 28 Oct 2022 01:31:29 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAS5nvQDYD8jqazng2_CwuuZMGE2FyLFF73iW1_Vp6DWgw@mail.gmail.com>
-Message-ID: <CAK7LNAS5nvQDYD8jqazng2_CwuuZMGE2FyLFF73iW1_Vp6DWgw@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: fix 'Broken pipe' message for AR=gcc-ar
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-kbuild@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>, eng.stk@sapo.pt
+References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221014183459.181567-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Y1pphVPw0J97AmW4@paasikivi.fi.intel.com> <CA+V-a8szaPjwumrBgOT9gzMKBjY7hk0zfP8RgzUUDfY+BAsogA@mail.gmail.com>
+ <Y1p91+XxPCB9NWwh@paasikivi.fi.intel.com>
+In-Reply-To: <Y1p91+XxPCB9NWwh@paasikivi.fi.intel.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 27 Oct 2022 17:32:07 +0100
+Message-ID: <CA+V-a8uhYymEVg7jdLVGNLsVD3=O1mk-_NVERu00W+gsv-7QXg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] media: i2c: ov5645: Use runtime PM
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,45 +79,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 4:15 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+Hi Sakari,
+
+On Thu, Oct 27, 2022 at 1:47 PM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
 >
-> On Sun, Oct 23, 2022 at 12:53 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> Hi Prabhakar,
+>
+> On Thu, Oct 27, 2022 at 01:01:52PM +0100, Lad, Prabhakar wrote:
+> > Hi Sakari,
 > >
-> > Since commit 321648455061 ("kbuild: use obj-y instead extra-y for
-> > objects placed at the head"), 'make AR=gcc-ar' shows the following
-> > message:
+> > On Thu, Oct 27, 2022 at 12:20 PM Sakari Ailus
+> > <sakari.ailus@linux.intel.com> wrote:
+> > >
+> > > Hi Prabhakar,
+> > >
+> > > One more comment.
+> > >
+> > > On Fri, Oct 14, 2022 at 07:34:56PM +0100, Prabhakar wrote:
+> > > > @@ -1209,12 +1190,16 @@ static int ov5645_probe(struct i2c_client *client)
+> > > >
+> > > >       dev_info(dev, "OV5645 detected at address 0x%02x\n", client->addr);
+> > > >
+> > > > +     pm_runtime_set_active(dev);
+> > > > +     pm_runtime_get_noresume(dev);
+> > > > +     pm_runtime_enable(dev);
+> > >
+> > > You won't gain anything by eanbling runtime PM here. Just move it to the
+> > > end of the function before the rest of the calls. Error handling becomes
+> > > more simple.
+> > >
+> > If I move the above calls below I get the below warning:
 > >
-> >   /usr/bin/ar terminated with signal 13 [Broken pipe]
+> > [    2.633386] ov5645 0-003c: Runtime PM usage count underflow!
+> >
+> > This is because of the last patch which moves ov5645_entity_init_cfg()
+> > before registering the subdev. ov5645_entity_init_cfg() calls s_ctrl
+> > due to which we are seeing the above message. Please let me know how
+> > to proceed on this.
 >
-> Not just AR=gcc-ar, but also AR=llvm-ar:
+> Ah. Yes, this is a problem with the usage pattern of
+> pm_runtime_get_if_in_use(). But please don't change that.
 >
-> error: write on a pipe with no reader
+> You can still move enabling runtime PM later in the function.
 >
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1651
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+Agreed, the final version looks like below:
+
+    pm_runtime_set_active(dev);
+    pm_runtime_get_noresume(dev);
+
+    ov5645_entity_init_cfg(&ov5645->sd, NULL);
+
+    ret = v4l2_async_register_subdev(&ov5645->sd);
+    if (ret < 0) {
+        dev_err(dev, "could not register v4l2 device\n");
+        goto err_pm_runtime;
+    }
+
+    pm_runtime_set_autosuspend_delay(dev, 1000);
+    pm_runtime_use_autosuspend(dev);
+    pm_runtime_enable(dev);
 
 
-
-Thank you.
-
-I updated the commit description, and sent v2.
-
-https://lore.kernel.org/linux-kbuild/20221027162839.410720-1-masahiroy@kernel.org/T/#u
-
-
-> Note that due to
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8017ce50641c303b9b5d96f3c10229ecfd770a70
-> we should send a backport to stable like:
-> https://github.com/engstk/op8/commit/6f2688e3eb4ec06b276e541640d4f06364b68442
-
-
-Maybe, we can backport 8017ce50641c30 itself,
-but I am not sure if it is cleanly applicable.
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+Cheers,
+Prabhakar
