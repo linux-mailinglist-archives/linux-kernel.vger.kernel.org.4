@@ -2,73 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C6FC60FB2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB3060FB36
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235736AbiJ0PIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 11:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
+        id S235945AbiJ0PIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 11:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235132AbiJ0PIC (ORCPT
+        with ESMTP id S235875AbiJ0PIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 11:08:02 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671841849BD
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:07:57 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id ay12so658133qtb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:07:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IIQ4zBFEMq401B7LHco+BoD5rdpZ5Deu1R9Bn5hW7DQ=;
-        b=7Ihsof3XsnlOurWNXvNfkJmwVJTfwnhJqhSKxV+DO+L6B3Tu/kqnAq9TVYZ0Duxf3M
-         W6Td+3HG86QI9uHlG1WT4lBz7n5Hi+2LDaCPaMcqoAdOVJqEYcsJCUef4MylfmzhXlDc
-         eC2w4CBAXy8ttJZMXMHJx6fxvJ1TbafKgtkk0pxH3GiPfyJeVocRes+egtLPyPkq31RO
-         4ktx9h4emk4aPCwALiSHRAUqNAQlnxAZnBy5kOi2CF8YvliiLajdG8mGMuNWxe1k70WB
-         2r9rJWDKgl0zVfELj6C2YoJAb0AiFdpBaFpHjB4HRcfS91KHRJsaVwXrlCAlTR4W9jN+
-         FUEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IIQ4zBFEMq401B7LHco+BoD5rdpZ5Deu1R9Bn5hW7DQ=;
-        b=sr5yPMEwC1pSq5+9N0gx+1kpNT5AwIvz4x660eQ5vMhVCNDTYHgJ7On23wnZqudYU0
-         Pfv0PaWi2iBSuVVVhUsetUNuuY7gNuximMwUWFvVi/hBo2CDtVnu0dUPHDGL91U53Hv6
-         hBAfiuDiE7S2Mj3oRO7PVYT6l85Drv80N4EYigAEup22faYNuPZHjzHtU+sUnZGfPESR
-         lm61AlTJ+JithSFpqoom8p2P6lWGMAWatxKdmYwr2lZ1esDkBPMDVUgduhDA3NPiUw6O
-         wjm6NGMPGtGps64dygLMq+/4lUSH/b68Ajann8MNpMaYCrjKDGe+n9b+OPWqh4n1J4hV
-         3+WQ==
-X-Gm-Message-State: ACrzQf3bCRX7MxdtPDeuGTHrbD/I2qz/dvSXwTq1Hr9J2FLPRezViIWM
-        B0YoeIHRlhqaqkegByfacelX0g==
-X-Google-Smtp-Source: AMsMyM41MUratBwSfmaBQZiJgUc6R+Z5LNxo3ebXzmvLT/wPQbTT7UxQqNW99RHZzOGPEn1wVa1fQw==
-X-Received: by 2002:a05:622a:50e:b0:3a4:e734:409e with SMTP id l14-20020a05622a050e00b003a4e734409emr10328431qtx.497.1666883276551;
-        Thu, 27 Oct 2022 08:07:56 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::25f1])
-        by smtp.gmail.com with ESMTPSA id q68-20020a378e47000000b006b929a56a2bsm1163569qkd.3.2022.10.27.08.07.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 08:07:56 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 11:07:56 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Rik van Riel <riel@surriel.com>, Chris Mason <clm@meta.com>,
-        David Hildenbrand <david@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        James Houghton <jthoughton@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [BUG] hugetlbfs_no_page vs MADV_DONTNEED race leading to SIGBUS
-Message-ID: <Y1qezB09SaZy9pRS@cmpxchg.org>
-References: <215d225585ff3c5ea90c64e6c9bdff04ab548156.camel@surriel.com>
- <Y1mMw2mt0my0qVqP@monkey>
+        Thu, 27 Oct 2022 11:08:37 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C006718F0E9;
+        Thu, 27 Oct 2022 08:08:33 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id D77B232007F9;
+        Thu, 27 Oct 2022 11:08:31 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 27 Oct 2022 11:08:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1666883311; x=1666969711; bh=vC4EJLdx4T
+        Hqc58ycxGM/foR8da3d1iXJ0tw75QGCxM=; b=P4Y9IkypgiQFH2P4QbCJdfibEw
+        sym3gHqN0WnfXFlua3ywxKU52tv24gAQHkiBixMnfw8O+W9aRZHCXe+NgH5g0I6w
+        RWa9HTZinjcSImobmPGJXvFIWa18gv7y/iEyClKj3VHav3S5ZcrGcDEf3rLPZJ//
+        wKMIpJkgQL8xlLh5z9R84M+jKIWVezwXQFCo18xfC3X7u4PODu4C5X0IjghdxXW0
+        qPUAFwuR0WEUEEyNvcCBsgNaojSpm+1a0QpdioYRmypCTYbw1Erz2V3nL0/PiY4t
+        n44/QY75bwlCLRt7PTrEREx/b07a2B3IeqO7E5c+0jspMtPLNShQ03RVBwqA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1666883311; x=1666969711; bh=vC4EJLdx4THqc58ycxGM/foR8da3d1iXJ0t
+        w75QGCxM=; b=oTLERddpI5B6yecHwlVQA4APnAUOMqQTVdRSHvmsFIOJ2QJZxBd
+        aXJVIVQW4yCr5CBYu3FuhOknknE5lVWe8gDOOySWUOfE+n2pQHBNoGY7S+CjEiTF
+        BB+T/l4sKsFjMoK+hNDpZoAowH64wP/2FtAsHgDrIXr6M74DYqcvDFaBROmST33Z
+        K9R+27oGvA4FyA0Nj3ZnkxXqvx/VmVTb7gPCwRqw4aih8fwuEj0iO9xt8r44w/nj
+        /TM4l7eRpFK8shYF04EJkghdYn6MW+TlF445rh8rMFHFgFDcocn1EqKpsLcCPjYI
+        KmGCdO1r64hFBpkY4rVuV9O/K66hUu+q/fA==
+X-ME-Sender: <xms:7J5aYzCqjdEffKZIPz13VojvXF_6sCIbJsRnS6H3hdw1VFwdjz3rhA>
+    <xme:7J5aY5iybkyXc-yxoyHq017XEKq6ZiSzCBSN2hBAjmwIGGoXoMk7wAVWCreyfcQfF
+    7lz3ZZJAII7awgXLgk>
+X-ME-Received: <xmr:7J5aY-nyFmsyJiUAlZJYLd7nZeBJOd2-5gUA42WHjppRctgZq-2ABZdKXI8fdsFMp43TQmKdWLM0IAJwsBii3L_NDpOgGXjA96TgqHd3eR5iU2NZm_Ex5DA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeggdekfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
+    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
+    epgfegudffudelfeeugedtjeeugeehueffudevveegveektdfhueehueeufeelheevnecu
+    ffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:7J5aY1wvsnjLBTpLMsc0RV8XRxk7GH_KepDE6MBwFsT8cw2WDEbsOg>
+    <xmx:7J5aY4SWfiduWwA0ZDOJE0FFIXCBs69wp05dckwxQpal57ThwBNZFA>
+    <xmx:7J5aY4ZKt0ZEhfPTP234B8wk734AVsdjrovLVS-mU5JpDOg2hF54-A>
+    <xmx:755aYxC3KxmlMAQPPW8-jSRVEAoBEvKxKueYodMNG4luFOZ0nUqUuQ>
+Feedback-ID: i51094778:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 27 Oct 2022 11:08:26 -0400 (EDT)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        asahi@lists.linux.dev, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/7] Broadcom/Apple Bluetooth driver for Apple Silicon
+Date:   Thu, 27 Oct 2022 17:08:15 +0200
+Message-Id: <20221027150822.26120-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1mMw2mt0my0qVqP@monkey>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,33 +93,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 12:38:43PM -0700, Mike Kravetz wrote:
-> On 10/25/22 16:37, Rik van Riel wrote:
-> > What are the reasonable alternatives here?
-> > 
-> > Should we see if anybody can come up with a simple solution
-> > to the problem, or would it be better to just disable
-> > MADV_DONTNEED on hugetlbfs for now?
-> 
-> Here is one thought (perhaps crazy).  Do not allow MADV_DONTNEED on
-> hugetlb mappings.  This would help with the library code passed hugetlb
-> mapping.  For the use cases where MADV_DONTNEED on hugetlb is desirable,
-> create ?MADV_DONTNEED_HUGETLB? that only operates on hugetlb mappings.
-> In this way the caller must be aware they are operating on a hugetlb
-> mapping.
+Hi,
 
-What could also work is implementing mlock() for hugetlb, and having
-MADV_DONTNEED respect it.
+v1: https://lore.kernel.org/asahi/20220801103633.27772-1-sven@svenpeter.dev/
+v2: https://lore.kernel.org/asahi/20220907170935.11757-1-sven@svenpeter.dev/
+v3: https://lore.kernel.org/asahi/20220919164834.62739-1-sven@svenpeter.dev/
 
-That would allow libraries/general-purpose allocators to continue
-using MADV_DONTNEED without being aware of the underlying memory
-situation. Whoever is responsible for setting up the memory pool could
-just mlock() - or not, if hugetlb overcommit is enabled - and the GP
-allocator would do the right thing in both scenarios.
+Here's v4 of the Apple/Broadcom Bluetooth series. Not many changes this
+time: I rebased on 6.1, added Rob's r-b tags and fixed bcm4377_send_ptb
+for newer firmware versions where that command claims to fail but is
+still sent by macOS.
 
-[ Our setup code is actually already calling mlock() on the hugetlb
-  ranges. We never wanted DONTNEED to free hugetlb pages - it just
-  happened to work so far because DONTNEED wasn't implemented for
-  them. If both DONTNEED and mlock() were implemented, we'd be good. ]
 
-Johannes
+Best,
+
+
+Sven
+
+Sven Peter (7):
+  dt-bindings: net: Add generic Bluetooth controller
+  dt-bindings: net: Add Broadcom BCM4377 family PCIe Bluetooth
+  arm64: dts: apple: t8103: Add Bluetooth controller
+  Bluetooth: hci_event: Ignore reserved bits in LE Extended Adv Report
+  Bluetooth: Add quirk to disable extended scanning
+  Bluetooth: Add quirk to disable MWS Transport Configuration
+  Bluetooth: hci_bcm4377: Add new driver for BCM4377 PCIe boards
+
+ .../devicetree/bindings/net/bluetooth.txt     |    5 -
+ .../net/bluetooth/bluetooth-controller.yaml   |   29 +
+ .../net/bluetooth/brcm,bcm4377-bluetooth.yaml |   81 +
+ .../{ => bluetooth}/qualcomm-bluetooth.yaml   |    6 +-
+ .../bindings/soc/qcom/qcom,wcnss.yaml         |    8 +-
+ MAINTAINERS                                   |    2 +
+ arch/arm64/boot/dts/apple/t8103-j274.dts      |    4 +
+ arch/arm64/boot/dts/apple/t8103-j293.dts      |    4 +
+ arch/arm64/boot/dts/apple/t8103-j313.dts      |    4 +
+ arch/arm64/boot/dts/apple/t8103-j456.dts      |    4 +
+ arch/arm64/boot/dts/apple/t8103-j457.dts      |    4 +
+ arch/arm64/boot/dts/apple/t8103-jxxx.dtsi     |    8 +
+ drivers/bluetooth/Kconfig                     |   12 +
+ drivers/bluetooth/Makefile                    |    1 +
+ drivers/bluetooth/hci_bcm4377.c               | 2514 +++++++++++++++++
+ include/net/bluetooth/hci.h                   |   21 +
+ include/net/bluetooth/hci_core.h              |    4 +-
+ net/bluetooth/hci_event.c                     |    2 +-
+ net/bluetooth/hci_sync.c                      |    2 +
+ 19 files changed, 2700 insertions(+), 15 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/net/bluetooth.txt
+ create mode 100644 Documentation/devicetree/bindings/net/bluetooth/bluetooth-controller.yaml
+ create mode 100644 Documentation/devicetree/bindings/net/bluetooth/brcm,bcm4377-bluetooth.yaml
+ rename Documentation/devicetree/bindings/net/{ => bluetooth}/qualcomm-bluetooth.yaml (96%)
+ create mode 100644 drivers/bluetooth/hci_bcm4377.c
+
+-- 
+2.25.1
+
