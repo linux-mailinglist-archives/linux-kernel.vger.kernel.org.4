@@ -2,247 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1F660F3B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B14660F3AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234640AbiJ0JaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 05:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
+        id S234938AbiJ0J2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 05:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234985AbiJ0J3o (ORCPT
+        with ESMTP id S229379AbiJ0J2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 05:29:44 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852D8B48A
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:29:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=PZvHoRnYLkmlxJjyek8hLDrtaYqtEqTyI6XZhXt7/Jk=; b=NRT8TsHhHmJXeBEeGB/xo3YHig
-        aiHGaiZnT1HEwqIalZqrgZTFO+iFDJhwS42V7jGAXUUeViKhGEmcUQJLJkb7ND8qGa9OqKOjqb9Gl
-        GDyJwpULNDuLYIar7LqL0046DKDnWsaVvGFpHBGT5w/EfbTPo1PP7RXtRPwsy7jrh389saYNc2STx
-        jyVSG3Y2M1if+AskXZ+NRvUHNxIU/M4SFRDn9d+/cgCZa3if70TRLGYe+0xDzjaPCMj++6jf5GPrV
-        l9vuKE9uff9hyR5B2CHDuzweXYD4M56albzMFTW4LuvC8XDNoqY4BKbUlq0Y/mtcDebsR7RbpHcD3
-        AOAqe+cw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1onzCd-006p4L-2m; Thu, 27 Oct 2022 09:29:31 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+        Thu, 27 Oct 2022 05:28:43 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50187645EC;
+        Thu, 27 Oct 2022 02:28:40 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 910FB300454;
-        Thu, 27 Oct 2022 11:29:30 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 7C0652C450476; Thu, 27 Oct 2022 11:29:30 +0200 (CEST)
-Message-ID: <20221027092842.765195516@infradead.org>
-User-Agent: quilt/0.66
-Date:   Thu, 27 Oct 2022 11:28:16 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH 4/4] x86/cfi: Add boot time hash randomization
-References: <20221027092812.185993858@infradead.org>
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1DEDF66028C6;
+        Thu, 27 Oct 2022 10:28:37 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666862918;
+        bh=nkLiBVCq8vH0MrkVPppLESgMJQN4ENcJIlUdfoTlX3k=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JsMoHSUWjscrjyRcFEI09Vb+4I/iVUwYCNIqSiZu+oYKGyjoBrY7wvwzODTgQvqZS
+         BlkdJnP40hCu6Tt/QcsgC3cMajtRroAE92NvvfSyOQKCCTktYbir0tpMvb4enWVfRb
+         mK1/rhmf6Y34WoMMwqO0JZylDWfZmjec7cO8hgEmc/WEWjL3eodJ59VV7itMzn6CXV
+         XNEsXqiTQGsbzlA175jU0rxY7ImPIEP2BmyzuqEpwkr5xRQ341ftPUKbp3gCdCJLsI
+         1lAsHrnRiJyFajpjqFSQRwFgu0KT9fpQBrT1CVjUgm8aweV39YBZUUeeogZR5Azr1s
+         9h+2YP9BaiCZQ==
+Message-ID: <17139e24-d33c-8240-cd4a-d87fb3b29276@collabora.com>
+Date:   Thu, 27 Oct 2022 11:28:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 7/7] arm64: dts: mediatek: Add support for MT6795 Sony
+ Xperia M5 smartphone
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>, robh+dt@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        chaotian.jing@mediatek.com, ulf.hansson@linaro.org,
+        matthias.bgg@gmail.com, hsinyi@chromium.org,
+        nfraprado@collabora.com, allen-kh.cheng@mediatek.com,
+        fparent@baylibre.com, sam.shih@mediatek.com,
+        sean.wang@mediatek.com, long.cheng@mediatek.com,
+        wenbin.mei@mediatek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20220729104441.39177-1-angelogioacchino.delregno@collabora.com>
+ <20220729104441.39177-8-angelogioacchino.delregno@collabora.com>
+ <a8fa9e22-8c3f-60b2-a0db-01cfd5c37765@somainline.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <a8fa9e22-8c3f-60b2-a0db-01cfd5c37765@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to avoid known hashes (from knowing the boot image),
-randomize the CFI hashes with a per-boot random seed.
+Il 29/07/22 14:00, Konrad Dybcio ha scritto:
+> 
+> 
+> On 29.07.2022 12:44, AngeloGioacchino Del Regno wrote:
+>> Add a basic support for the Sony Xperia M5 (codename "Holly")
+>> smartphone, powered by a MediaTek Helio X10 SoC.
+>>
+>> This achieves a console boot.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Suggested-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/kernel/alternative.c |  120 +++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 108 insertions(+), 12 deletions(-)
+Hello Konrad,
+First of all, I'm sorry for the very late reply.
 
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -711,6 +711,24 @@ enum cfi_mode {
- };
- 
- static enum cfi_mode cfi_mode __ro_after_init = CFI_DEFAULT;
-+static bool cfi_rand __ro_after_init = true;
-+static u32  cfi_seed __ro_after_init;
-+
-+/*
-+ * Re-hash the CFI hash with a boot-time seed while making sure the result is
-+ * not a valid ENDBR instruction.
-+ */
-+static u32 cfi_rehash(u32 hash)
-+{
-+	hash ^= cfi_seed;
-+	while (unlikely(is_endbr(hash) || is_endbr(-hash))) {
-+		bool lsb = hash & 1;
-+		hash >>= 1;
-+		if (lsb)
-+			hash ^= 0x80200003;
-+	}
-+	return hash;
-+}
- 
- static __init int cfi_parse_cmdline(char *str)
- {
-@@ -728,10 +746,13 @@ static __init int cfi_parse_cmdline(char
- 			cfi_mode = CFI_DEFAULT;
- 		} else if (!strcmp(str, "off")) {
- 			cfi_mode = CFI_OFF;
-+			cfi_rand = false;
- 		} else if (!strcmp(str, "kcfi")) {
- 			cfi_mode = CFI_KCFI;
- 		} else if (!strcmp(str, "fineibt")) {
- 			cfi_mode = CFI_FINEIBT;
-+		} else if (!strcmp(str, "norand")) {
-+			cfi_rand = false;
- 		} else {
- 			pr_err("Ignoring unknown cfi option (%s).", str);
- 		}
-@@ -856,7 +877,50 @@ static int cfi_disable_callers(s32 *star
- 	return 0;
- }
- 
-+static int cfi_enable_callers(s32 *start, s32 *end)
-+{
-+	/*
-+	 * Re-enable kCFI, undo what cfi_disable_callers() did.
-+	 */
-+	const u8 mov[] = { 0x41, 0xba };
-+	s32 *s;
-+
-+	for (s = start; s < end; s++) {
-+		void *addr = (void *)s + *s;
-+		u32 hash;
-+
-+		addr -= fineibt_caller_size;
-+		hash = decode_caller_hash(addr);
-+		if (!hash) /* nocfi callers */
-+			continue;
-+
-+		text_poke_early(addr, mov, 2);
-+	}
-+
-+	return 0;
-+}
-+
- /* .cfi_sites */
-+static int cfi_rand_preamble(s32 *start, s32 *end)
-+{
-+	s32 *s;
-+
-+	for (s = start; s < end; s++) {
-+		void *addr = (void *)s + *s;
-+		u32 hash;
-+
-+		hash = decode_preamble_hash(addr);
-+		if (WARN(!hash, "no CFI hash found at: %pS %px %*ph\n",
-+			 addr, addr, 5, addr))
-+			return -EINVAL;
-+
-+		hash = cfi_rehash(hash);
-+		text_poke_early(addr + 1, &hash, 4);
-+	}
-+
-+	return 0;
-+}
-+
- static int cfi_rewrite_preamble(s32 *start, s32 *end)
- {
- 	s32 *s;
-@@ -879,6 +943,25 @@ static int cfi_rewrite_preamble(s32 *sta
- }
- 
- /* .retpoline_sites */
-+static int cfi_rand_callers(s32 *start, s32 *end)
-+{
-+	s32 *s;
-+
-+	for (s = start; s < end; s++) {
-+		void *addr = (void *)s + *s;
-+		u32 hash;
-+
-+		addr -= fineibt_caller_size;
-+		hash = decode_caller_hash(addr);
-+		if (hash) {
-+			hash = -cfi_rehash(hash);
-+			text_poke_early(addr + 2, &hash, 4);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int cfi_rewrite_callers(s32 *start, s32 *end)
- {
- 	s32 *s;
-@@ -915,31 +998,44 @@ static void __apply_fineibt(s32 *start_r
- 			cfi_mode = CFI_FINEIBT;
- 	}
- 
--	switch (cfi_mode) {
--	case CFI_OFF:
--		ret = cfi_disable_callers(start_retpoline, end_retpoline);
-+	/*
-+	 * Rewrite the callers to not use the __cfi_ stubs, such that we might
-+	 * rewrite them. This disables all CFI. If this succeeds but any of the
-+	 * later stages fails, we're without CFI.
-+	 */
-+	ret = cfi_disable_callers(start_retpoline, end_retpoline);
-+	if (ret)
-+		goto err;
-+
-+	if (cfi_rand) {
-+		if (builtin)
-+			cfi_seed = get_random_u32();
-+
-+		ret = cfi_rand_preamble(start_cfi, end_cfi);
- 		if (ret)
- 			goto err;
- 
-+		ret = cfi_rand_callers(start_retpoline, end_retpoline);
-+		if (ret)
-+			goto err;
-+	}
-+
-+	switch (cfi_mode) {
-+	case CFI_OFF:
- 		if (builtin)
- 			pr_info("Disabling CFI\n");
- 		return;
- 
- 	case CFI_KCFI:
-+		ret = cfi_enable_callers(start_retpoline, end_retpoline);
-+		if (ret)
-+			goto err;
-+
- 		if (builtin)
- 			pr_info("Using kCFI\n");
- 		return;
- 
- 	case CFI_FINEIBT:
--		/*
--		 * Rewrite the callers to not use the __cfi_ stubs, such that we might
--		 * rewrite them. This disables all CFI. If this succeeds but any of the
--		 * later stages fails, we're without CFI.
--		 */
--		ret = cfi_disable_callers(start_retpoline, end_retpoline);
--		if (ret)
--			goto err;
--
- 		ret = cfi_rewrite_preamble(start_cfi, end_cfi);
- 		if (ret)
- 			goto err;
+>> ---
+>>   arch/arm64/boot/dts/mediatek/Makefile         |  1 +
+>>   .../dts/mediatek/mt6795-sony-xperia-m5.dts    | 90 +++++++++++++++++++
+>>   2 files changed, 91 insertions(+)
+>>   create mode 100644 arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
+>>
+>> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
+>> index af362a085a02..72fd683c9264 100644
+>> --- a/arch/arm64/boot/dts/mediatek/Makefile
+>> +++ b/arch/arm64/boot/dts/mediatek/Makefile
+>> @@ -3,6 +3,7 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt2712-evb.dtb
+>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6755-evb.dtb
+>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6779-evb.dtb
+>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6795-evb.dtb
+>> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt6795-sony-xperia-m5.dtb
+> -holly.dtb?
+> 
+
+I prefer using the commercial name to identify the device.
+"Holly" is the smartphone project codename and that is mentioned almost nowhere:
+the aim here is to enhance readability as to make it immediately understandable
+that this devicetree is for the Xperia M5 device.
+
+>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-evb.dtb
+>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-x20-dev.dtb
+>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
+>> diff --git a/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts b/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
+>> new file mode 100644
+>> index 000000000000..94d011c4126c
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
+>> @@ -0,0 +1,90 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (c) 2022, Collabora Ltd
+>> + * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> + */
+>> +
+>> +/dts-v1/;
+>> +#include "mt6795.dtsi"
+>> +
+>> +#include <dt-bindings/gpio/gpio.h>
+> Looks unused.
+> 
+
+Right, I'll remove that in v2.
+
+>> +
+>> +/ {
+>> +	model = "Sony Xperia M5";
+>> +	compatible = "sony,xperia-m5", "mediatek,mt6795";
+> sony,holly?
+> 
+
+I'm sorry, but I can't understand the sense of adding that compatible string to
+the mix. To the kernel, it doesn't mean anything - and we already have another
+string advertising the specific machine, which is "sony,xperia-m5".
+
+Of course, there is no Xperia M5 with a different SoC and, even if there was a
+xperia-m5 with a different SoC, we anyway have both a machine compatible and a
+SoC compatible in here, so that would still not pose any issue.
+
+>> +	chassis-type = "handset";
+>> +
+>> +	aliases {
+>> +		mmc0 = &mmc0;
+>> +		mmc1 = &mmc1;
+>> +		serial0 = &uart0;
+>> +		serial1 = &uart1;
+>> +	};
+>> +
+>> +	memory@40000000 {
+>> +		device_type = "memory";
+>> +		reg = <0 0x40000000 0 0x1E800000>;
+> Lowercase hex in size. Also, doesn't the bootloader fill it in?
+> 
+
+Updating the device to the latest software version will give you a bootloader
+that fills that in, but the first-ever software release contains one that will
+not do that in particular conditions (fastboot boot).
+
+>> +	};
+>> +
+>> +	reserved_memory: reserved-memory {
+>> +		#address-cells = <2>;
+>> +		#size-cells = <2>;
+>> +		ranges;
+>> +
+>> +		/* 128 KiB reserved for ARM Trusted Firmware (BL31) */
+> Is that true for all devices with this SoC, or..? If so, it may be worth
+> moving this into mt6795.dtsi.
+> 
+>> +		bl31_secmon_reserved: secmon@43000000 {
+> memory@, everywhere. Use labels to name the nodes.
+> 
+
+I'm afraid that's not possible, as the bootloader is reading the devicetree
+and requires these nodes to follow this naming.
+
+>> +			no-map;
+> reg goes first.
+
+Will fix in v2.
+
+Best regards,
+Angelo
 
 
