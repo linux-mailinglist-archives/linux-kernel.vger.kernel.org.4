@@ -2,119 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE2660F560
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B95560F566
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234967AbiJ0KfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 06:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
+        id S234885AbiJ0Kh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 06:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235459AbiJ0KfF (ORCPT
+        with ESMTP id S233403AbiJ0KhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 06:35:05 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBB2101F6
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:35:01 -0700 (PDT)
-Received: from [192.168.2.208] (109-252-112-196.nat.spd-mgts.ru [109.252.112.196])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2B1A966028CF;
-        Thu, 27 Oct 2022 11:34:59 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666866900;
-        bh=B42Mjq5Xz6ezZDdiM34GBP0U3MZxhlYaL9Mqx4TnvWc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BMSNB4CyHeqKWHd1Vu4K+jL9R8vKCa8B9/8qfUi0oVBXR+M03p1Q4eYSv/QCfOmmk
-         2bIwl4496z5xJxBDhYKpZUP6GEJIOEdr5k8RJD8ptzaIxE/IJzcm5hvpNwGhYfD2iW
-         a9pS/QrBVAYJOW9T1Audi9jUDp1oDzGfZyxHDQh5LJSvHc6DTDNogxBh2D5yWvcjcG
-         nzH0KhhEOGnIk64OEXHXVjrcMf9wmhtLUyZQaGKcR4VD2L6PQZca7YGACDhm1JWmKK
-         u2nWFzOjqi5WkzjkQJivYBMQ4/VbTdPEgUUYVY8LPqzX+xiPn1iwsMpa5RuGHS1YkR
-         l40SyhNQid90Q==
-Message-ID: <46e22491-5891-cd24-850e-699fadb284ee@collabora.com>
-Date:   Thu, 27 Oct 2022 13:34:56 +0300
+        Thu, 27 Oct 2022 06:37:23 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C273E760
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:37:22 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oo0GH-0007ZP-7c; Thu, 27 Oct 2022 12:37:21 +0200
+Message-ID: <f380d104-456b-2c1e-87c4-0afe1868889e@leemhuis.info>
+Date:   Thu, 27 Oct 2022 12:37:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v1 1/2] dma-buf: Make locking consistent in
- dma_buf_detach()
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, noralf@tronnes.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221026224640.7542-1-dmitry.osipenko@collabora.com>
- <20221026224640.7542-2-dmitry.osipenko@collabora.com>
- <01f62e6c-a40b-42e4-6cb0-338bd268b0a5@amd.com>
-Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <01f62e6c-a40b-42e4-6cb0-338bd268b0a5@amd.com>
+ Thunderbird/102.4.0
+Subject: Re: [regression] Bug 216426 - USB-C port is incorrectly reporting
+ that it's powered when Dell XPS 15-9500 is unplugged #forregzbot
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <f28e3bdf-2add-574a-cf0a-5d0253ea708a@leemhuis.info>
+ <ead18940-4e8b-f5c1-f1ac-16040b4bcddc@leemhuis.info>
+ <c8d18046-0e43-0c2c-6ae6-92fe16163f4e@leemhuis.info>
+In-Reply-To: <c8d18046-0e43-0c2c-6ae6-92fe16163f4e@leemhuis.info>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1666867043;3c50bf0c;
+X-HE-SMSGID: 1oo0GH-0007ZP-7c
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/27/22 09:13, Christian König wrote:
-> Am 27.10.22 um 00:46 schrieb Dmitry Osipenko:
->> The dma_buf_detach() locks attach->dmabuf->resv and then unlocks
->> dmabuf->resv, which could be a two different locks from a static
->> code checker perspective. In particular this triggers Smatch to
->> report the "double unlock" error. Make the locking pointers consistent.
->>
->> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
->> Link: https://lore.kernel.org/dri-devel/Y1fLfsccW3AS%2Fo+%2F@kili/
->> Fixes: 809d9c72c2f8 ("dma-buf: Move dma_buf_attach() to dynamic
->> locking specification")
->> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+[Note: this mail is primarily send for documentation purposes and/or for
+regzbot, my Linux kernel regression tracking bot. That's why I removed
+most or all folks from the list of recipients, but left any that looked
+like a mailing lists. These mails usually contain '#forregzbot' in the
+subject, to make them easy to spot and filter out.]
+
+On 30.09.22 13:20, Thorsten Leemhuis wrote:
+> On 26.09.22 16:25, Thorsten Leemhuis wrote:
+>> On 01.09.22 11:07, Thorsten Leemhuis wrote:
+>>> https://bugzilla.kernel.org/show_bug.cgi?id=216426
+>>>
+>>>>  Mattia Orlandi 2022-08-29 17:04:21 UTC
+>>>>
+>>>> System
+>>>> ------
+>>>> - Dell XPS 15 9500
+>>>> - 5.19.4 kernel
+>>>>
+>>>> Problem description
+>>>> -------------------
+>>>> Whenever I plug and then unplug my laptop from AC power using the USB-C port, the system thinks it is still plugged in (i.e., the KDE applet reports "Plugged in but still discharging").
+>>>> If I check in Dell's BIOS, it correctly reports when the power supply is plugged/unplugged; `acpi -V` also correctly shows `Adapter 0: off-line`.
+>>>>
+>>>> On the other hand, `upower -d` incorrectly reports `/org/freedesktop/UPower/devices/line_power_ucsi_source_psy_USBC000o002` as `online: yes`.
+>>>> Moreover, `journalctl` reports `ucsi_acpi USBC000:00: ucsi_handle_connector_change: GET_CONNECTOR_STATUS failed (-110)`.
+>>>>
+>>>> I'm testing the LTS kernel (5.15.63) and the issue does not occur, so I assume it's a regression bug, possibly introduced in kernel 5.18 (I tried downgrading the kernel to version 5.18.16 and the issue was already present).
+>>>
+>>> See the ticket for more details. Apologies if I forwarded it to the
+>>> wrong folks, I cover a lot of ground and thus sometimes get things
+>>> wrong. :-/
+>>>
+>>> BTW, I'd also like to add the report to the list of tracked regressions
+>>> to ensure it's doesn't fall through the cracks in the end:
+>>>
+>>> #regzbot introduced: v5.15..v5.18
+>>> https://bugzilla.kernel.org/show_bug.cgi?id=216426
+>>> #regzbot ignore-activity
+>> #regzbot introduced: f7090e0ef360d674f0
 > 
-> It would be even cleaner if we completely drop the dmabuf parameter for
-> the function and just use the inside the attachment.
+> Looks like nobody yet check if the problem happens with mainline, so
+> let's stick to the backport for now:
 > 
-> Anyway patch is Reviewed-by: Christian König <christian.koenig@amd.com>
-> for now, wider cleanups can come later on.
+> #regzbot introduced: 0fbb5ce2f4267
 
-I had the same thought about dropping the dmabuf parameter.
-
-Looking at this patch again, perhaps a better dmabuf sanity-check will be:
-
-- 	if (WARN_ON(!dmabuf || !attach))
-+ 	if (WARN_ON(!dmabuf || !attach || dmabuf != attach->dmabuf))
-
-I'll switch to this version in v2, if there are no objections.
-
-> 
->> ---
->>   drivers/dma-buf/dma-buf.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
->> index c40d72d318fd..6e33ef4fde34 100644
->> --- a/drivers/dma-buf/dma-buf.c
->> +++ b/drivers/dma-buf/dma-buf.c
->> @@ -998,9 +998,10 @@ void dma_buf_detach(struct dma_buf *dmabuf,
->> struct dma_buf_attachment *attach)
->>       if (WARN_ON(!dmabuf || !attach))
->>           return;
->>   -    dma_resv_lock(attach->dmabuf->resv, NULL);
->> +    dma_resv_lock(dmabuf->resv, NULL);
->>         if (attach->sgt) {
->> +        WARN_ON(dmabuf != attach->dmabuf);
->>             __unmap_dma_buf(attach, attach->sgt, attach->dir);
->>   
-> 
-
--- 
-Best regards,
-Dmitry
-
+#regzbot invalid: not a regression, likely something related to hardware
+or firmware https://bugzilla.kernel.org/show_bug.cgi?id=216426#c22
