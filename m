@@ -2,114 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857576104F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 297B3610504
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237156AbiJ0V7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 17:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
+        id S234291AbiJ0WAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 18:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237086AbiJ0V7f (ORCPT
+        with ESMTP id S237192AbiJ0WAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 17:59:35 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D925F26E2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 14:59:31 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id w10so2738556qvr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 14:59:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q7ugP0tq/kTqwapqa/g5RjNpPzZRDaE9uddOPhLuISc=;
-        b=o7sW47GHzXAoiD2j6H6QFu/7GUf/pA0/oDdbcm6+sZ9bOmjpAo/qB24B0IowZvt9P+
-         uEs+wbUUSlkmnLlVdNkn65fxdk5zBa5isbU+FAL+wpT+pO1YhGTdX2/pgOan1gvHNCPl
-         9qVN6T8ALdciWQ3Oo6k2+p55TKJ4AkaLgvxO0mveT+TCFzB/fAyxkViEbfJuupiToNIT
-         NQQWZo2QRbvY79zCmS+btF6flLLVtGFS+nGdVlM9nxoJw0C4oyKnyiBlDa+GMxDYAbRT
-         Yl7yiRraviHFOwYRsvBF8ogkgaSuOEtsuk8P1O7ywuqYPLFqDn6QWUmaDLBhaxsQL30e
-         +N2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q7ugP0tq/kTqwapqa/g5RjNpPzZRDaE9uddOPhLuISc=;
-        b=gl7vCIa2n+MWsncX8SK0SM+htYoWZtU+kR1Qlkp5yb0SslfsJgKASlamw1Dj05/85K
-         mCD3nAmXXjG9u+52oD9JF6L1Fb1KOKtOQyLZIa+znLc2fFoiUZwcyIhdAvrc9/heweOq
-         bLdMA7tD4p66c2pDqwiRxbewELxO3pgAfWVSihjneZVsXYyHqBDhtclWMeZzF4pKfQVY
-         IO+EvRHBvGahkrx398o4PxmFsfgwfgXkG2RZ4R4t8VJ0+L7EvZSrr5yCZW3QbTtxPjhf
-         pgL8TFW1mPmp7Tbn8can6DdHEvyqVSPax3a2MPeTT73PC0D+qFgEwqxTPj/7bgbi5TTC
-         kwFw==
-X-Gm-Message-State: ACrzQf1yKqhnRjkvbTVuum655BTGXXDpUZvQ49Gq7lblbSfoet2pWJwe
-        1PW8kfA9c3ahk4XVmHM+N5jxMw==
-X-Google-Smtp-Source: AMsMyM4FZ19Rf+aeDh57uIFiQqlt84X/FMAN2OviCklU/tLpK688yp4VPjiM2ZG3IyKbfArb+7ea7Q==
-X-Received: by 2002:a05:6214:20a7:b0:4bb:9359:8368 with SMTP id 7-20020a05621420a700b004bb93598368mr10237414qvd.122.1666907971077;
-        Thu, 27 Oct 2022 14:59:31 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id k10-20020a05620a414a00b006be8713f742sm1794489qko.38.2022.10.27.14.59.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 14:59:30 -0700 (PDT)
-Message-ID: <2c8c4642-8aee-3da3-7698-5e08b4c5894d@linaro.org>
-Date:   Thu, 27 Oct 2022 17:59:28 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v3 1/5] dt-bindings: clock: Add QDU1000 and QRU1000 GCC
- clock bindings
-Content-Language: en-US
-To:     Melody Olvera <quic_molvera@quicinc.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Taniya Das <quic_tdas@quicinc.com>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        Thu, 27 Oct 2022 18:00:05 -0400
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4AC1E73F;
+        Thu, 27 Oct 2022 14:59:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666907978; bh=K6jkaIWLjM8amIf1/3sGKi76LC/AewW04KWQY65UKW4=;
+        h=X-EA-Auth:Date:From:To:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=EhiA4AHsTTAS+Eve+c+tPPzPBk4XEFkyguh14hRkAHRwMxzOpas4XNSLmKADx553e
+         V+VlYpHUhA6fWSZ/Fr4XnDjrbbpIKpWNXpgr/so07YXy4YIdA6TI+fsCEpAh51pXTW
+         ebmS/OTl3eEmGDu4/n4N3QIX6oXueJi1rfywKEKg=
+Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
+        via [213.182.55.206]
+        Thu, 27 Oct 2022 23:59:38 +0200 (CEST)
+X-EA-Auth: gPds8du2GN4EigpVxAh6zYgunt9VQITGmwhvWpkx/yxVDikGFU9mBoo7as8yKS+di+ACDryNiOD5yTMHezgeh8p9CD8AOADG
+Date:   Fri, 28 Oct 2022 03:29:32 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     outreachy@lists.linux.dev, Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-iio@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-References: <20221026190441.4002212-1-quic_molvera@quicinc.com>
- <20221026190441.4002212-2-quic_molvera@quicinc.com>
- <e5009a33-1f71-1fe3-3a06-98bba031fdf0@linaro.org>
- <20221027182449.366AEC433D6@smtp.kernel.org>
- <cb9a2732-0904-4a2b-61a5-a6d65cad58ae@linaro.org>
- <a5e8c70a-3358-513b-c8a5-7a7903f6ea42@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a5e8c70a-3358-513b-c8a5-7a7903f6ea42@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH v2] staging: iio: frequency: ad9834: Use div64_ul instead of
+ do_div
+Message-ID: <Y1r/RAk83Csk2L3E@ubunlion>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/10/2022 17:28, Melody Olvera wrote:
+do_div() does a 64-by-32 division. Here the divisor is an unsigned long
+which on some platforms is 64 bit wide. So use div64_ul instead of do_div
+to avoid a possible truncation. Issue identified using the
+coccicheck tool.
 
->>>>> +      - description: Board XO source
->>>>> +      - description: Sleep clock source
->>>>> +      - description: PCIE 0 Pipe clock source
->>>>> +      - description: PCIE 0 Phy Auxiliary clock source
->>>>> +      - description: USB3 Phy wrapper pipe clock source
->>>>> +    minItems: 2
->>>> Why the clocks are optional?
->>> They should not be optional. They're always there.
->> Just to be sure - I refer to last three clocks here as indicated by
->> minItems:2.
->>
->> DTS does not define them, so something here is not complete or correct.
->>
-> DT is incomplete; I don't have that in my current patchset. Will add later when PCIE and
-> USB nodes are complete.
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
 
-Bindings should be complete as much as possible, therefore please define
-in the DTS stub clocks (fixed clocks) to fill these with a TODO notes.
+Changes in v2:
+   1. No functional change.
+      Include outreachy mailing list on the to list
 
-Best regards,
-Krzysztof
+ drivers/staging/iio/frequency/ad9834.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/staging/iio/frequency/ad9834.c b/drivers/staging/iio/frequency/ad9834.c
+index 285df0e489a6..3917a76e7976 100644
+--- a/drivers/staging/iio/frequency/ad9834.c
++++ b/drivers/staging/iio/frequency/ad9834.c
+@@ -102,8 +102,7 @@ static unsigned int ad9834_calc_freqreg(unsigned long mclk, unsigned long fout)
+ {
+ 	unsigned long long freqreg = (u64)fout * (u64)BIT(AD9834_FREQ_BITS);
+
+-	do_div(freqreg, mclk);
+-	return freqreg;
++	return div64_ul(freqreg, mclk);
+ }
+
+ static int ad9834_write_frequency(struct ad9834_state *st,
+--
+2.34.1
+
+
 
