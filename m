@@ -2,254 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDE060EDFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 04:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8C260EE04
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 04:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233551AbiJ0Cjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 22:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54440 "EHLO
+        id S233790AbiJ0CmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 22:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233668AbiJ0Cjk (ORCPT
+        with ESMTP id S233600AbiJ0CmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 22:39:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDE0F1A811;
-        Wed, 26 Oct 2022 19:39:37 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 088D21042;
-        Wed, 26 Oct 2022 19:39:44 -0700 (PDT)
-Received: from a077893.blr.arm.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0F8D63F792;
-        Wed, 26 Oct 2022 19:39:33 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        catalin.marinas@arm.com, will@kernel.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mark Rutland <mark.rutland@arm.com>, linux-doc@vger.kernel.org
-Subject: [PATCH 2/2] arm64: errata: Workaround possible Cortex-A715 [ESR|FAR]_ELx corruption
-Date:   Thu, 27 Oct 2022 08:09:15 +0530
-Message-Id: <20221027023915.1318100-3-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221027023915.1318100-1-anshuman.khandual@arm.com>
-References: <20221027023915.1318100-1-anshuman.khandual@arm.com>
+        Wed, 26 Oct 2022 22:42:11 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7F9C7053
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 19:42:08 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id p141so302496iod.6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 19:42:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iaUe+pLIKuotMJ39OMLbcGSkpKsSa+oUY7YZScLgavs=;
+        b=CCXUQWWKXkpgZJCxRkBX+IrdD+rb4aVaV7rSqSAB16iGSKWGRuBjROfW/aMB/z0XYj
+         BfqpPRN8uuhiQQX0u7biU43mTr1AbZFm5GM2xSZ2hKGKzHD8D3a+VS4yDtDyyQI1Zg/V
+         2CL8XxP1t6HcwyY7+7DdafDks3ESa7ls6B4nSRtX2dlOtZ6TvgeY1/EqBHiKDWJPBAhr
+         2HNY7pEr97+4VJgUHA/gIWi03yj4W1c3gegOW7ArepjuzwXZue4WJ/WwLBPYbTA4BZ/h
+         VhTE8WcnyswGp4OHdIKyatj/bo+ez3Rl5Cob9gfsXenB4QjM/XycKD6Qj2jo4M4GmsnA
+         2avw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iaUe+pLIKuotMJ39OMLbcGSkpKsSa+oUY7YZScLgavs=;
+        b=rmYvcyC9BdEuDVh3DHz24jjCvLpB7v/03e39HMIuveN0vlIKKCfWZ/VEUxACnqslWF
+         99PrOSWhe/9k3+Mbnw43aq3uUjTcw9UIiMGuACe4MXWP5U2uwYPuB9ROTaD6wJF06TGX
+         YnSItL6tpd54zg+2Jw1UHcixHjo3IiK/e5BjxQ9ST4r1mziEUIe7PFlHeVlCsl2WLZpn
+         tNdCkTp2K1gfCyObWQHOdMc4bhH6htM8SPOlv3eHG9tKrGfChZmGPkbwcFML/GFaf+XT
+         w0CvY8DCNZCd2di1HjHb5YXKjFNY+4cEwe1NPXyPaeeOLWTsj0Qkj17YJR+Ob9wh2qNK
+         xVLg==
+X-Gm-Message-State: ACrzQf0pA61uxJEYrtFZtlQibU5b4y2b60k4wp2cswUBb3VqwFiWpZdK
+        2AOP7s6WuyJinoPfPpyxIMsBhxGZtvwMprXv8pTPpd4LscY=
+X-Google-Smtp-Source: AMsMyM7FUi9zjuaTuV+X2Qo0ESkxvnwWjKQvo/6yRCs963VpBh21BQkoHXBb1hn9z6pyJhFDk7SIZ4fnza8JpLTEeaA=
+X-Received: by 2002:a05:6638:1450:b0:363:7052:9c30 with SMTP id
+ l16-20020a056638145000b0036370529c30mr29897076jad.53.1666838516973; Wed, 26
+ Oct 2022 19:41:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221025170519.314511-1-hannes@cmpxchg.org> <CAHbLzkoXzbHRJxb9DkjGkKQ8TAO08ctvz7wvjyPA8Gy2Skm+2g@mail.gmail.com>
+ <Y1hM6sMRpBGUPRyo@cmpxchg.org> <CAHbLzkpaoN37camSLYVDU7p9AXzQjYcvHnWm3K87iwae-YyZiQ@mail.gmail.com>
+ <Y1lvJBnVx1Fv5WHz@cmpxchg.org> <CAHbLzkqQ=6U3uerEkypsCHnmsXerEZi5erMSYK-kp8-vJNk89Q@mail.gmail.com>
+In-Reply-To: <CAHbLzkqQ=6U3uerEkypsCHnmsXerEZi5erMSYK-kp8-vJNk89Q@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Wed, 26 Oct 2022 19:41:21 -0700
+Message-ID: <CAJD7tkb5y9oqgVauVPiS0KbiL2Wnsu7jhK7Q44oUBZzBXwKUYA@mail.gmail.com>
+Subject: Re: [PATCH] mm: vmscan: split khugepaged stats from direct reclaim stats
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Eric Bergen <ebergen@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a Cortex-A715 cpu sees a page mapping permissions change from executable
-to non-executable, it may corrupt the ESR_ELx and FAR_ELx registers, on the
-next instruction abort caused by permission fault.
+On Wed, Oct 26, 2022 at 1:51 PM Yang Shi <shy828301@gmail.com> wrote:
+>
+> On Wed, Oct 26, 2022 at 10:32 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> >
+> > On Tue, Oct 25, 2022 at 02:53:01PM -0700, Yang Shi wrote:
+> > > On Tue, Oct 25, 2022 at 1:54 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> > > >
+> > > > On Tue, Oct 25, 2022 at 12:40:15PM -0700, Yang Shi wrote:
+> > > > > On Tue, Oct 25, 2022 at 10:05 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> > > > > >
+> > > > > > Direct reclaim stats are useful for identifying a potential source for
+> > > > > > application latency, as well as spotting issues with kswapd. However,
+> > > > > > khugepaged currently distorts the picture: as a kernel thread it
+> > > > > > doesn't impose allocation latencies on userspace, and it explicitly
+> > > > > > opts out of kswapd reclaim. Its activity showing up in the direct
+> > > > > > reclaim stats is misleading. Counting it as kswapd reclaim could also
+> > > > > > cause confusion when trying to understand actual kswapd behavior.
+> > > > > >
+> > > > > > Break out khugepaged from the direct reclaim counters into new
+> > > > > > pgsteal_khugepaged, pgdemote_khugepaged, pgscan_khugepaged counters.
+> > > > > >
+> > > > > > Test with a huge executable (CONFIG_READ_ONLY_THP_FOR_FS):
+> > > > > >
+> > > > > > pgsteal_kswapd 1342185
+> > > > > > pgsteal_direct 0
+> > > > > > pgsteal_khugepaged 3623
+> > > > > > pgscan_kswapd 1345025
+> > > > > > pgscan_direct 0
+> > > > > > pgscan_khugepaged 3623
+> > > > >
+> > > > > There are other kernel threads or works may allocate memory then
+> > > > > trigger memory reclaim, there may be similar problems for them and
+> > > > > someone may try to add a new stat. So how's about we make the stats
+> > > > > more general, for example, call it "pg{steal|scan}_kthread"?
+> > > >
+> > > > I'm not convinved that's a good idea.
+> > > >
+> > > > Can you generally say that userspace isn't indirectly waiting for one
+> > > > of those allocating threads? With khugepaged, we know.
+> > >
+> > > AFAIK, ksm may do slab allocation with __GFP_DIRECT_RECLAIM.
+> >
+> > Right, but ksm also uses __GFP_KSWAPD_RECLAIM. So while userspace
+> > isn't directly waiting for ksm, when ksm enters direct reclaim it's
+> > because kswapd failed. This is of interest to kernel developers.
+> > Userspace will likely see direct reclaim in that scenario as well, so
+> > the ksm direct reclaim counts aren't liable to confuse users.
+> >
+> > Khugepaged on the other hand will *always* reclaim directly, even if
+> > there is no memory pressure or kswapd failure. The direct reclaim
+> > counts there are misleading to both developers and users.
+> >
+> > What it really should be is pgscan_nokswapd_nouserprocesswaiting, but
+> > that just seems kind of long ;-)
+> >
+> > I'm also not sure anybody but khugepaged is doing direct reclaim
+> > without kswapd reclaim. It seems unlikely we'll get more of those.
+>
+> IIUC you actually don't care about how many direct reclaim are
+> triggered by khugepaged, but you would like to separate the direct
+> reclaim stats between that are triggered directly by userspace
+> actions, which may stall userspace, and that aren't, which don't stall
+> userspace. If so it doesn't sound that important to distinguish
+> whether the direct reclaim are triggered by khugepaged or other kernel
+> threads even though other kthreads are not liable to confuse users
+> IMHO.
 
-Only user-space does executable to non-executable permission transition via
-mprotect() system call which calls ptep_modify_prot_start() and ptep_modify
-_prot_commit() helpers, while changing the page mapping. The platform code
-can override these helpers via __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION.
+My 2c, if we care about direct reclaim as in reclaim that may stall
+user space application allocations, then there are other reclaim
+contexts that may pollute the direct reclaim stats. For instance,
+proactive reclaim, or reclaim done by writing a limit lower than the
+current usage to memory.max or memory.high, as they are not done in
+the context of the application allocating memory.
 
-Work around the problem via doing a break-before-make TLB invalidation, for
-all executable user space mappings, that go through mprotect() system call.
-This overrides ptep_modify_prot_start() and ptep_modify_prot_commit(), via
-defining HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION on the platform thus giving
-an opportunity to intercept user space exec mappings, and do the necessary
-TLB invalidation. Similar interceptions are also implemented for HugeTLB.
+At Google, we have some internal direct reclaim memcg statistics, and
+the way we handle this is by passing a flag from such contexts to
+try_to_free_mem_cgroup_pages() in the reclaim_options arg. This flag
+is echod into a scan_struct bit, which we then use to filter out
+direct reclaim operations that actually cause latencies in user space
+allocations.
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Mark Rutland <mark.rutland@arm.com> 
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-doc@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- Documentation/arm64/silicon-errata.rst |  2 ++
- arch/arm64/Kconfig                     | 16 +++++++++++
- arch/arm64/include/asm/hugetlb.h       |  9 +++++++
- arch/arm64/include/asm/pgtable.h       | 24 +++++++++++++++++
- arch/arm64/kernel/cpu_errata.c         |  7 +++++
- arch/arm64/mm/hugetlbpage.c            | 37 ++++++++++++++++++++++++++
- arch/arm64/tools/cpucaps               |  1 +
- 7 files changed, 96 insertions(+)
+Perhaps something similar might be more generic here? I am not sure
+what context khugepaged reclaims memory from, but I think it's not a
+memcg context, so maybe we want to generalize the reclaim_options arg
+to try_to_free_pages() or whatever interface khugepaged uses to free
+memory.
 
-diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
-index 808ade4cc008..ec5f889d7681 100644
---- a/Documentation/arm64/silicon-errata.rst
-+++ b/Documentation/arm64/silicon-errata.rst
-@@ -120,6 +120,8 @@ stable kernels.
- +----------------+-----------------+-----------------+-----------------------------+
- | ARM            | Cortex-A710     | #2224489        | ARM64_ERRATUM_2224489       |
- +----------------+-----------------+-----------------+-----------------------------+
-+| ARM            | Cortex-A715     | #2645198        | ARM64_ERRATUM_2645198       |
-++----------------+-----------------+-----------------+-----------------------------+
- | ARM            | Cortex-X2       | #2119858        | ARM64_ERRATUM_2119858       |
- +----------------+-----------------+-----------------+-----------------------------+
- | ARM            | Cortex-X2       | #2224489        | ARM64_ERRATUM_2224489       |
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 505c8a1ccbe0..56c3381e9d94 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -964,6 +964,22 @@ config ARM64_ERRATUM_2457168
- 
- 	  If unsure, say Y.
- 
-+config ARM64_ERRATUM_2645198
-+	bool "Cortex-A715: 2645198: Workaround possible [ESR|FAR]_ELx corruption"
-+	default y
-+	help
-+	  This option adds the workaround for ARM Cortex-A715 erratum 2645198.
-+
-+	  If a Cortex-A715 cpu sees a page mapping permissions change from executable
-+	  to non-executable, it may corrupt the ESR_ELx and FAR_ELx registers on the
-+	  next instruction abort caused by permission fault.
-+
-+	  Only user-space does executable to non-executable permission transition via
-+	  mprotect() system call. Workaround the problem by doing a break-before-make
-+	  TLB invalidation, for all changes to executable user space mappings.
-+
-+	  If unsure, say Y.
-+
- config CAVIUM_ERRATUM_22375
- 	bool "Cavium erratum 22375, 24313"
- 	default y
-diff --git a/arch/arm64/include/asm/hugetlb.h b/arch/arm64/include/asm/hugetlb.h
-index d20f5da2d76f..6a4a1ab8eb23 100644
---- a/arch/arm64/include/asm/hugetlb.h
-+++ b/arch/arm64/include/asm/hugetlb.h
-@@ -49,6 +49,15 @@ extern pte_t huge_ptep_get(pte_t *ptep);
- 
- void __init arm64_hugetlb_cma_reserve(void);
- 
-+#define huge_ptep_modify_prot_start huge_ptep_modify_prot_start
-+extern pte_t huge_ptep_modify_prot_start(struct vm_area_struct *vma,
-+					 unsigned long addr, pte_t *ptep);
-+
-+#define huge_ptep_modify_prot_commit huge_ptep_modify_prot_commit
-+extern void huge_ptep_modify_prot_commit(struct vm_area_struct *vma,
-+					 unsigned long addr, pte_t *ptep,
-+					 pte_t old_pte, pte_t new_pte);
-+
- #include <asm-generic/hugetlb.h>
- 
- #endif /* __ASM_HUGETLB_H */
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 71a1af42f0e8..c4c021277f20 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -1095,7 +1095,31 @@ static inline bool pud_sect_supported(void)
- 	return PAGE_SIZE == SZ_4K;
- }
- 
-+#define __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION
-+static inline pte_t ptep_modify_prot_start(struct vm_area_struct *vma,
-+					   unsigned long addr,
-+					   pte_t *ptep)
-+{
-+	pte_t pte = ptep_get_and_clear(vma->vm_mm, addr, ptep);
- 
-+	if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198)) {
-+		/*
-+		 * Break-before-make (BBM) is required for all user space mappings
-+		 * when the permission changes from executable to non-executable
-+		 * in cases where cpu is affected with errata #2645198.
-+		 */
-+		if (pte_user_exec(pte) && cpus_have_const_cap(ARM64_WORKAROUND_2645198))
-+			__flush_tlb_range(vma, addr, addr + PAGE_SIZE, PAGE_SIZE, false, 3);
-+	}
-+	return pte;
-+}
-+
-+static inline void ptep_modify_prot_commit(struct vm_area_struct *vma,
-+					   unsigned long addr,
-+					   pte_t *ptep, pte_t old_pte, pte_t pte)
-+{
-+	__set_pte_at(vma->vm_mm, addr, ptep, pte);
-+}
- #endif /* !__ASSEMBLY__ */
- 
- #endif /* __ASM_PGTABLE_H */
-diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
-index 89ac00084f38..307faa2b4395 100644
---- a/arch/arm64/kernel/cpu_errata.c
-+++ b/arch/arm64/kernel/cpu_errata.c
-@@ -661,6 +661,13 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
- 		CAP_MIDR_RANGE_LIST(trbe_write_out_of_range_cpus),
- 	},
- #endif
-+#ifdef CONFIG_ARM64_ERRATUM_2645198
-+	{
-+		.desc = "ARM erratum 2645198",
-+		.capability = ARM64_WORKAROUND_2645198,
-+		ERRATA_MIDR_ALL_VERSIONS(MIDR_CORTEX_A715)
-+	},
-+#endif
- #ifdef CONFIG_ARM64_ERRATUM_2077057
- 	{
- 		.desc = "ARM erratum 2077057",
-diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-index 35e9a468d13e..8cdcb3a34c27 100644
---- a/arch/arm64/mm/hugetlbpage.c
-+++ b/arch/arm64/mm/hugetlbpage.c
-@@ -559,3 +559,40 @@ bool __init arch_hugetlb_valid_size(unsigned long size)
- {
- 	return __hugetlb_valid_size(size);
- }
-+
-+pte_t huge_ptep_modify_prot_start(struct vm_area_struct *vma,
-+				  unsigned long addr, pte_t *ptep)
-+{
-+	pte_t pte = huge_ptep_get_and_clear(vma->vm_mm, addr, ptep);
-+
-+	if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198)) {
-+		/*
-+		 * Break-before-make (BBM) is required for all user space mappings
-+		 * when the permission changes from executable to non-executable
-+		 * in cases where cpu is affected with errata #2645198.
-+		 */
-+		if (pte_user_exec(pte) && cpus_have_const_cap(ARM64_WORKAROUND_2645198)) {
-+			size_t pgsize = page_size(pte_page(pte));
-+			int level = 3;
-+
-+			if (pgsize == PUD_SIZE)
-+				level = 1;
-+			else if ((pgsize == PMD_SIZE) || (pgsize == CONT_PMD_SIZE))
-+				level = 2;
-+			else if (pgsize == CONT_PTE_SIZE)
-+				level = 3;
-+			else
-+				pr_warn("%s: unrecognized huge page size 0x%lx\n",
-+					__func__, pgsize);
-+			__flush_tlb_range(vma, addr, addr + pgsize, pgsize, false, level);
-+		}
-+	}
-+	return pte;
-+}
-+
-+void huge_ptep_modify_prot_commit(struct vm_area_struct *vma,
-+				  unsigned long addr, pte_t *ptep,
-+				  pte_t old_pte, pte_t pte)
-+{
-+	set_huge_pte_at(vma->vm_mm, addr, ptep, pte);
-+}
-diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
-index f1c0347ec31a..2274d836fcfe 100644
---- a/arch/arm64/tools/cpucaps
-+++ b/arch/arm64/tools/cpucaps
-@@ -70,6 +70,7 @@ WORKAROUND_2038923
- WORKAROUND_2064142
- WORKAROUND_2077057
- WORKAROUND_2457168
-+WORKAROUND_2645198
- WORKAROUND_2658417
- WORKAROUND_TRBE_OVERWRITE_FILL_MODE
- WORKAROUND_TSB_FLUSH_FAILURE
--- 
-2.25.1
-
+>
+> >
+> > > Some device mapper drivers may do heavy lift in the work queue, for
+> > > example, dm-crypt, particularly for writing.
+> >
+> > Userspace will wait for those through dirty throttling. We'd want to
+>
+> Not guaranteed.
+>
+> Anyway I just thought pgscan_khugepaged might be more confusing for
+> the users even the developers who are not familiar with
+> THP/khugepaged.
+>
+> > know about kswapd failures in that case - again, without them being
+> > muddied by khugepaged.
+> >
+> > > > And those other allocations are usually ___GFP_KSWAPD_RECLAIM, so if
+> > > > they do direct reclaim, we'd probably want to know that kswapd is
+> > > > failing to keep up (doubly so if userspace is waiting). In a shared
+> > > > kthread counter, khugepaged would again muddy the waters.
+>
