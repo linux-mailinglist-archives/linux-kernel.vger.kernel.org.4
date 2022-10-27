@@ -2,118 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3549F61015C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BB2610161
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235169AbiJ0TQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 15:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
+        id S236391AbiJ0TQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 15:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236103AbiJ0TQH (ORCPT
+        with ESMTP id S236374AbiJ0TQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 15:16:07 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD305A836;
-        Thu, 27 Oct 2022 12:16:06 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-13bd19c3b68so3473497fac.7;
-        Thu, 27 Oct 2022 12:16:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eCsVCuaf2go92u0eYyN6AvJOsvbg6jhQcYiOWielii4=;
-        b=R0iWBH+HPjJ0SQdZ84Mt4uYE+Bta4bVdd1ncs9eqbfofJpPePa6XG9quwkgAuVwy0n
-         kB2rMYQldd1ASFbzPIjghjc19QKB+Vk6xcyLhtzYrIMNQvXD/77YpqD6RoZjUUukcCjm
-         xyG49dB/CLPB1z4W2WwNKBt6boRPtkSTiCNdFuWGWGhenpBeV96nMIUFmI73pjcLv/Jv
-         34hU2DEiJa/Qrg6SRcSoXY5w+BZ8/Ug3vUoSbZDO+2POPYkVhIUs5WxTbDTjTP1plMb7
-         6JGV1JLbFGJFK6kgHRaaYBhxkbbXAKZTB2A8hq1M5BY6EOHWSfHJp1LalMvxbEM4cPTM
-         LKEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eCsVCuaf2go92u0eYyN6AvJOsvbg6jhQcYiOWielii4=;
-        b=o6IXg7inFIaaF9M96y4uu8GRbLK9NXULWGPL1gGvfo/gTqV05mCuX7vdVdXuDOYh0D
-         tH0VxJDtvoi2hF6WtikfC1mfvpGBZigeUUqBKUxAlyAvBfqj7sDZyRFoAEqI4WbHGUiK
-         9PVLH0tKGtH9sYgcPn+n5wjtsknEKCbZn4oFuNWpaWhpCl8fg30UDVi2dYieYFI5Pep9
-         vrWiP0K1XvB3RyRxktH9gdMccktwyW8iTUeQzllK9q6vKWt/ryx1Sowio2FwwU6mXkTh
-         uQhF78ck5vHMyVv74WlSf/VGskUBMXDYu1A8enzsDuDMyUS6KtjErWTm+DphIOAmjK/f
-         d2TA==
-X-Gm-Message-State: ACrzQf10eYL24FxQ7eGzxddEjx1slsdUBT7yVc0QRvo1veGYeoNlo5CA
-        lgpnDlqeTkjwgG4gBXB/H9ZzZRjKzmEzVmrYz1w=
-X-Google-Smtp-Source: AMsMyM7KbsFtvsVIc+R5gFeE/Bsyup166H3kNtBbyj/N9Fb0PKl2TLQArY/Nxb5G1+poimNKiwOW0RK3b4L6fD2AFEA=
-X-Received: by 2002:a05:6870:c182:b0:12a:e54e:c6e8 with SMTP id
- h2-20020a056870c18200b0012ae54ec6e8mr6423090oad.207.1666898165661; Thu, 27
- Oct 2022 12:16:05 -0700 (PDT)
+        Thu, 27 Oct 2022 15:16:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8637772EDB;
+        Thu, 27 Oct 2022 12:16:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2672762486;
+        Thu, 27 Oct 2022 19:16:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 209CFC4314B;
+        Thu, 27 Oct 2022 19:16:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666898206;
+        bh=0FOUDtQQL42lE45KflCMkrX8g3yyb7/p/49sMzexo9U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Pk4iIsApYuq/PVHx2kx9WyUUsO83ow1XiisTenNMn5vip3e6ObhN6NiyWP6QDb2uf
+         w/QJWzsx5pdcnvZiy3ZqNGy0hkzr/fiQDGKL1QAka83OqI/1OLJslcPff3V51bWR0Z
+         cWBR9mxRla+lpB4Cmb+EGTg5TkCxBEyyAnU6HhoCKDbnH0ef+KZtX4HmZOd4wN5B4K
+         7TxCq+kmKjASkGzJQQA99tVeaS3cvPT38piLod5P777eZj9N07utXtaoUXcTxg27b7
+         /rhHp41lxJfg+oIepGu2cgzFdSJMx7GpSr8gXL1YBsO04bdK96fsrxTsFIRrHTaVWk
+         X1V8txzdvMz5Q==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH -next] pinctrl: qcom: Include bitfield.h in pinctrl-lpass-lpi.c
+Date:   Thu, 27 Oct 2022 12:16:25 -0700
+Message-Id: <20221027191625.1738204-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221022180455.never.023-kees@kernel.org> <CA+fCnZcj_Hq1NQv1L2U7+A8quqj+4kA=8A7LwOWz5eYNQFra+A@mail.gmail.com>
- <202210271212.EB69EF1@keescook>
-In-Reply-To: <202210271212.EB69EF1@keescook>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Thu, 27 Oct 2022 21:15:54 +0200
-Message-ID: <CA+fCnZeTO_eQjSqysoToKCqUhsXc8jL93TdE8W9Fh+xrbUiFtg@mail.gmail.com>
-Subject: Re: [PATCH] mm: Make ksize() a reporting-only function
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-mm@kvack.org, kasan-dev@googlegroups.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 9:13 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Thu, Oct 27, 2022 at 09:05:45PM +0200, Andrey Konovalov wrote:
-> > On Sat, Oct 22, 2022 at 8:08 PM Kees Cook <keescook@chromium.org> wrote:
-> > [...]
-> > > -/* Check that ksize() makes the whole object accessible. */
-> > > +/* Check that ksize() does NOT unpoison whole object. */
-> > >  static void ksize_unpoisons_memory(struct kunit *test)
-> > >  {
-> > >         char *ptr;
-> > > @@ -791,15 +791,17 @@ static void ksize_unpoisons_memory(struct kunit *test)
-> > >
-> > >         ptr = kmalloc(size, GFP_KERNEL);
-> > >         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
-> > > +
-> > >         real_size = ksize(ptr);
-> > > +       KUNIT_EXPECT_GT(test, real_size, size);
-> > >
-> > >         OPTIMIZER_HIDE_VAR(ptr);
-> > >
-> > >         /* This access shouldn't trigger a KASAN report. */
-> > > -       ptr[size] = 'x';
-> > > +       ptr[size - 1] = 'x';
-> > >
-> > >         /* This one must. */
-> > > -       KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)ptr)[real_size]);
-> > > +       KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)ptr)[real_size - 1]);
-> >
-> > How about also accessing ptr[size] here? It would allow for a more
-> > precise checking of the in-object redzone.
->
-> Sure! Probably both ptr[size] and ptr[real_size -1], yes?
+When building ARCH=arm allmodconfig, the following error occurs:
 
-Yes, sounds good. Thank you!
+  drivers/pinctrl/qcom/pinctrl-lpass-lpi.c: In function ‘lpi_gpio_set_mux’:
+  drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:102:9: error: implicit declaration of function ‘u32p_replace_bits’ [-Werror=implicit-function-declaration]
+    102 |         u32p_replace_bits(&val, i, LPI_GPIO_FUNCTION_MASK);
+        |         ^~~~~~~~~~~~~~~~~
+  drivers/pinctrl/qcom/pinctrl-lpass-lpi.c: In function ‘lpi_config_get’:
+  drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:127:16: error: implicit declaration of function ‘FIELD_GET’ [-Werror=implicit-function-declaration]
+    127 |         pull = FIELD_GET(LPI_GPIO_PULL_MASK, ctl_reg);
+        |                ^~~~~~~~~
+  drivers/pinctrl/qcom/pinctrl-lpass-lpi.c: In function ‘lpi_config_set’:
+  drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:233:23: error: implicit declaration of function ‘u32_encode_bits’ [-Werror=implicit-function-declaration]
+    233 |                 val = u32_encode_bits(value ? 1 : 0, LPI_GPIO_VALUE_OUT_MASK);
+        |                       ^~~~~~~~~~~~~~~
+  cc1: all warnings being treated as errors
+
+bitfield.h was included via pinctrl-lpass-lpi.h but another change
+removed that include to restrict what was being included. Add bitfield.h
+back to pinctrl-lpass-lpi.c, as it is needed there.
+
+Fixes: aa9430f8a6de ("pinctrl: qcom: Add missing header(s)")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/pinctrl/qcom/pinctrl-lpass-lpi.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
+index d5cfa91e2eff..3dc670faa59e 100644
+--- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
++++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
+@@ -4,6 +4,7 @@
+  * Copyright (c) 2020 Linaro Ltd.
+  */
+ 
++#include <linux/bitfield.h>
+ #include <linux/clk.h>
+ #include <linux/gpio/driver.h>
+ #include <linux/module.h>
+
+base-commit: 76f3768132eab2c26c9d67022b452358adc28b2c
+-- 
+2.38.1
+
