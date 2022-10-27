@@ -2,91 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51C5460F7E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1663F60F7E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235808AbiJ0Mrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
+        id S235813AbiJ0Mss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235799AbiJ0Mrg (ORCPT
+        with ESMTP id S235796AbiJ0Msq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:47:36 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BF23168E76
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:47:35 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.32])
-        by gateway (Coremail) with SMTP id _____8AxzNjlfVpjA+ICAA--.11073S3;
-        Thu, 27 Oct 2022 20:47:34 +0800 (CST)
-Received: from loongson-pc.loongson.cn (unknown [10.20.42.32])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxV1fkfVpjFdwFAA--.2819S2;
-        Thu, 27 Oct 2022 20:47:33 +0800 (CST)
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
-Subject: [PATCH V2] LoongArch: Fix memsection size
-Date:   Thu, 27 Oct 2022 20:47:32 +0800
-Message-Id: <20221027124732.20837-1-lvjianmin@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        Thu, 27 Oct 2022 08:48:46 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0825A16DC14
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:48:45 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id x15so1147813qvp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:48:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ivr3WQ9zDX9Y22oat/ojEdcP2jI5Jp64wFrkCI45QPU=;
+        b=X9+Dqqb+6eCq2gOlGFQdxBEM9fMVjIiMtkhbinWXMgvolMLdOEAZ0uhDT8nZLOuSJw
+         y2/iEMvLvOsW7qfalSwQGdCtUXAoXilBM8hGiKGl2ykX/DvUEm7lURDB9/iZKV5RYFgU
+         09mQ0X0ygNe4d2S9QaKbAoFjOBZDYDCLv8rWGOYzZhigpaJeXc0kYA7ab6CMBo88GYW1
+         crqToUC6YK3UyhyEmQgvQhc5LLCWWuZXptSUxGtgc+Wij+HVrSvoHghx27RJ0a6owXb1
+         5kIV6oGOSHeeRpnm74+qO3qMln5n2TpSgXYQFYaAPKQdRgoi4To/Y+dQosDl/L/dsmPf
+         m2BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ivr3WQ9zDX9Y22oat/ojEdcP2jI5Jp64wFrkCI45QPU=;
+        b=QCBKpHBWT+a+PRv6w8C7BRFsff2DisEMD8KVivvZ9RwuEwlxmFT67VY5M4RpA1TXDx
+         b6YjRVb7T43jsk/zbewRFzJMBD9XZ6JJEcHO7BEjmSGQYukYWADdAa3oqqWqaoKb3ZK9
+         VAv0omacrfDI1yooj60HZmc89MYHbs9Pezw2fi8TTmNGgbaTxJwuhlByJGdNs7ZRXlri
+         6ih/9VQyRY4AoQL5l0GXjFU9vKd0nlZSKuXTboRTdTyOIJJ7M8PUqr5a+isKQWUVzMjL
+         xmcZ/+j6jINcYtxxqetLMk3GfM0wI6RC2mCCo6NPqZEGcg/7OUVROiRfEAKXxmegGjLX
+         JVYQ==
+X-Gm-Message-State: ACrzQf0t7SxfB2ybQSQ+YoWXej89k6UU4/5zNMrGESJHAzgPHfWZ9gK3
+        QlxyMzjw6FoQC2gS8diPM4+img==
+X-Google-Smtp-Source: AMsMyM6NYajlewJo1rx9NQm0NgImM/f60WhI72FLmeO1JCXGB5Br56/FA9bm1X0JwH+22uADv73HRw==
+X-Received: by 2002:a0c:979a:0:b0:4b7:4a8c:a80d with SMTP id l26-20020a0c979a000000b004b74a8ca80dmr34679342qvd.42.1666874924180;
+        Thu, 27 Oct 2022 05:48:44 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id u14-20020a05622a17ce00b0039bde72b14asm777902qtk.92.2022.10.27.05.48.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 05:48:43 -0700 (PDT)
+Message-ID: <b353f6a2-57ab-0b70-e23e-77753fe6d767@linaro.org>
+Date:   Thu, 27 Oct 2022 08:48:41 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [RFC net-next 2/2] net: dsa: Add driver for Maxlinear GSW1XX
+ switch
+Content-Language: en-US
+To:     Camel Guo <camelg@axis.com>, Camel Guo <Camel.Guo@axis.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>, kernel <kernel@axis.com>
+References: <20221025135243.4038706-1-camel.guo@axis.com>
+ <20221025135243.4038706-3-camel.guo@axis.com>
+ <d942c724-4520-4a7b-8c36-704032c68a36@linaro.org>
+ <55da4718-4422-745a-8880-95adc8e0abd9@axis.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <55da4718-4422-745a-8880-95adc8e0abd9@axis.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxV1fkfVpjFdwFAA--.2819S2
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7ZrWxXFy8ArWDuw15uF1xZrb_yoW8Gr1xpF
-        929r95Krs8Wa1xur48t345Cry5Kan5u342qF98Z34UAr43Wrs2yr4qywsrZF97Jw48ArWI
-        qFsxXws3ZF98A3DanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b38YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
-        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280
-        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28Icx
-        kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E
-        5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAV
-        WUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY
-        1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
-        0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU
-        74lkDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On LoongArch, the physical address (0 - 0xfff_ffff) is always memory, which
-is in the low half of the memsection (0 - 0x1fff_ffff) with 512M size, and
-the high half will be a hole which is not memory but I/O registers (of cpu
-and chipset).
+On 27/10/2022 02:35, Camel Guo wrote:
+utdown(priv->ds);
+>  >> +
+>  >> +     dev_set_drvdata(priv->dev, NULL);
+>  >> +}
+>  >> +EXPORT_SYMBOL(gsw1xx_shutdown);
+>  >
+>  > 1. EXPORT_SYMBOL_GPL
+> 
+> Will update in v2
+> 
+>  > 2. Why do you do it in the first place? It's one driver, no need for
+>  > building two modules. Same applies to other places.
+> 
+> All stuff in drivers/net/dsa/gsw1xx_core.c is supposed to be generic and
+> totally independent of the actual management interface (mdio, spi, uart,
+> maybe memory-mapped IO). This way, I think the gsw1xx_core.ko can be 
+> reused in
+> gsw1xx_spi.ko, gsw1xx_uart.ko and so on.
+> 
+> I don't how similar the chips that lantiq_gswip.c supports are due to
+> no datasheet. If not too much, maybe someone the gsw1xx_core.ko can also
+> be reused in lantiq_gswip as well.
 
-This situation may cause some issues. For example, during S3, these I/O registers
-will be saved and restored as valid memory pages (pfn_valid() of common version
-returns true for the whole memsection) which will cause exception, especially
-on resume.
+Keep the files separate but there is no need to make two modules and
+exprt this. Your patch should stand on its own, not prepare for some
+imaginary future work which might or might not bring more modules.
 
-To avoid exceptions, we can use 256M memsection size, or use the way as ARM64 to
-walk through all memory memblock to check if a mem pfn is valid which maybe
-lower performance. For simplicity, this patch just use the former way.
+Once these future modules appear, it will be easy to change existing
+file to a module.
 
-Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-
-diff --git a/arch/loongarch/include/asm/sparsemem.h b/arch/loongarch/include/asm/sparsemem.h
-index 3d18cdf1b069..05903b40a625 100644
---- a/arch/loongarch/include/asm/sparsemem.h
-+++ b/arch/loongarch/include/asm/sparsemem.h
-@@ -8,7 +8,7 @@
-  * SECTION_SIZE_BITS		2^N: how big each section will be
-  * MAX_PHYSMEM_BITS		2^N: how much memory we can have in that space
-  */
--#define SECTION_SIZE_BITS	29 /* 2^29 = Largest Huge Page Size */
-+#define SECTION_SIZE_BITS	28
- #define MAX_PHYSMEM_BITS	48
- 
- #endif /* CONFIG_SPARSEMEM */
--- 
-2.31.1
+Best regards,
+Krzysztof
 
