@@ -2,59 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C0960FA71
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 16:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D67E60FA81
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 16:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234672AbiJ0Ocz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 10:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
+        id S235543AbiJ0Ogp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 10:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234367AbiJ0Ocw (ORCPT
+        with ESMTP id S235484AbiJ0Ogk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 10:32:52 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0418179988;
-        Thu, 27 Oct 2022 07:32:51 -0700 (PDT)
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 29REWQkr000621;
-        Thu, 27 Oct 2022 23:32:27 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 29REWQkr000621
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1666881147;
-        bh=4HDEXnWr6VYARBxhtIHHxyW+0nXTxgQlhNlzoM6U/Ls=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cEMOUuGRx0CiM5dMBySppPWAb4vz2zKfDBSxF4AaxelQ/VZgyeTz6mR356DZvwGBa
-         L3NaQm+ysBspNbVVKOWPlMn6/0PplDiKBUg3GhXYU9BkTbi9sxuUvk+WElbubd1YOi
-         6028JqJm4ULcqhRMu4AUwjYsrRn6JIMdWzOkXjn8DxDUQKF7HG3/ATh3bomtk47REf
-         m7hLWNKkhA6XpXQlCfgMQ7jK9Llyk/WehKgjD9RTCQR05P/9gNZ5CLsh/Zru2hgSKa
-         IQY1BoGcyNjwcLK1yJ8gNdAWs8XQaojSQ/fGnWHkP/z2b6KgRHhBQguArRzJlutDt9
-         KRp0rWdr3qVDg==
-X-Nifty-SrcIP: [209.85.167.169]
-Received: by mail-oi1-f169.google.com with SMTP id s125so1777921oib.6;
-        Thu, 27 Oct 2022 07:32:26 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3RFApk6ytHKf8GM4ti80xAt1WjrVgWChO2/16kJOSKQ07DGf1X
-        yDZHGVj8Luy9fxOZCaqAR5JW3/dTgw0AK7YNZAE=
-X-Google-Smtp-Source: AMsMyM4tqsHTbHWe+6yz0cnG9uKVuvy2JEqtwziNTOAmy0shG5LX1mgNgc+M3G+YmcTGs8ePnEbYIasezCTtPb52hqI=
-X-Received: by 2002:aca:bbd4:0:b0:353:f167:6fd3 with SMTP id
- l203-20020acabbd4000000b00353f1676fd3mr5067095oif.287.1666881145769; Thu, 27
- Oct 2022 07:32:25 -0700 (PDT)
+        Thu, 27 Oct 2022 10:36:40 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5E8189827;
+        Thu, 27 Oct 2022 07:36:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666881399; x=1698417399;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=eevl7ITna1hMKAHJnc1Xawqrv3pRigvhaJzPJ4rONVQ=;
+  b=MxK9JRmSRzZ6mAARTVY23+U1PtGFR8meZrVNJ5eXeOlNcN07A223FkzJ
+   d96eqq00h7aWwvr8JovZ57OWh0HiA6aL7QxaIYnaOQFKAdqM5Pws2clL4
+   Rbbli4EK6tKv3x9S+Rb1VkwQXY2cHDP/bgU0Ijr1cP+pN2BOECTU6/O5g
+   6D6uMZUYZ6t7VfbIl7yI4YH87+r8AF61Fo2swC/f5MXEOn1ggoiSNCUtp
+   F1mjiIkpYxr8uiI6SqixWuq92nRVfp2u0nXjIW+j0X+VukXZyeiKjouou
+   jX+BsezupsoJSDfeWiVg1apUVCXh3b02qOKCmZi03tkabQsZhUSB2yHRY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="394553993"
+X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
+   d="scan'208";a="394553993"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 07:32:05 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="634926260"
+X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
+   d="scan'208";a="634926260"
+Received: from rgrilak-mobl.ger.corp.intel.com (HELO [10.213.238.72]) ([10.213.238.72])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 07:32:02 -0700
+Message-ID: <908129fa-3ddc-0f62-18df-e318dc760955@linux.intel.com>
+Date:   Thu, 27 Oct 2022 15:32:00 +0100
 MIME-Version: 1.0
-References: <20221024212144.2852069-1-glider@google.com> <20221024212144.2852069-3-glider@google.com>
-In-Reply-To: <20221024212144.2852069-3-glider@google.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 27 Oct 2022 23:31:49 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARfKkiNSUfZAqDQd15O8NAhpX13dHDuGn3OPL_b_F_92g@mail.gmail.com>
-Message-ID: <CAK7LNARfKkiNSUfZAqDQd15O8NAhpX13dHDuGn3OPL_b_F_92g@mail.gmail.com>
-Subject: Re: [PATCH 3/5] Kconfig.debug: disable CONFIG_FRAME_WARN for KMSAN by default
-To:     Alexander Potapenko <glider@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [RFC 00/17] DRM scheduling cgroup controller
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Intel-gfx@lists.freedesktop.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Rob Clark <robdclark@chromium.org>,
+        =?UTF-8?Q?St=c3=a9phane_Marchesin?= <marcheu@chromium.org>,
+        "T . J . Mercier" <tjmercier@google.com>, Kenny.Ho@amd.com,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Brian Welty <brian.welty@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+References: <20221019173254.3361334-1-tvrtko.ursulin@linux.intel.com>
+ <Y1BFziiJdBzsIJWH@slm.duckdns.org>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <Y1BFziiJdBzsIJWH@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,62 +74,204 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 6:22 AM Alexander Potapenko <glider@google.com> wrote:
->
-> KMSAN adds a lot of instrumentation to the code, which results in
-> increased stack usage (up to 2048 bytes and more in some cases).
-> It's hard to predict how big the stack frames can be, so we disable
-> the warnings for KMSAN instead.
->
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: linux-kbuild@vger.kernel.org
-> Link: https://github.com/google/kmsan/issues/89
-> Signed-off-by: Alexander Potapenko <glider@google.com>
-> ---
->  lib/Kconfig.debug | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 3fc7abffc7aa2..29280072dc0e4 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -400,8 +400,9 @@ config FRAME_WARN
->         default 1536 if (!64BIT && XTENSA)
->         default 1024 if !64BIT
->         default 2048 if 64BIT
-> +       default 0 if KMSAN
 
+Hi Tejun,
 
+On 19/10/2022 19:45, Tejun Heo wrote:
+> Hello,
+> 
+> On Wed, Oct 19, 2022 at 06:32:37PM +0100, Tvrtko Ursulin wrote:
+> ...
+>> DRM static priority interface files
+>> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>
+>>    drm.priority_levels
+>> 	One of:
+>> 	 1) And integer representing the minimum number of discrete priority
+>> 	    levels for the whole group.
+>> 	    Optionally followed by an asterisk ('*') indicating some DRM clients
+>> 	    in the group support more than the minimum number.
+>> 	 2) '0'- indicating one or more DRM clients in the group has no support
+>> 	    for static priority control.
+>> 	 3) 'n/a' - when there are no DRM clients in the configured group.
+>>
+>>    drm.priority
+>> 	A read-write integer between -10000 and 10000 (inclusive) representing
+>> 	an abstract static priority level.
+>>
+>>    drm.effective_priority
+>> 	Read only integer showing the current effective priority level for the
+>> 	group. Effective meaning taking into account the chain of inherited
+> 
+>>From interface POV, this is a lot worse than the second proposal and I'd
+> really like to avoid this. Even if we go with mapping user priority
+> configuration to per-driver priorities, I'd much prefer if the interface
+> presented to user is weight based and let each driver try to match the
+> resulting hierarchical weight (ie. the absolute proportion a given cgroup
+> should have at the point in time) as best as they can rather than exposing
+> opaque priority numbers to userspace whose meaning isn't defined at all.
 
-This is wrong.
+I actually somewhat agree here and this proposal was mainly motivated by 
+my desire to come up with *something* which would allow similar 
+_external_ control as it exists in the CPU and IO world (nice/ionice).
 
-Kconfig picks up the first default entry which has
-true 'if' condition.
+Because currently priority of GPU workloads cannot be controlled from 
+the outside at all. And especially if we consider pipelines composed of 
+stages where part of the processing is done on the CPU and part on the 
+GPU (or AI/VPU accelerator), then I think it would be really useful to 
+be able to do so.
 
+To this effect I proposed connecting CPU nice with GPU priority, same as 
+it is connected for IO priority (so only if it hasn't been explicitly 
+changed away from the defaults), but at that point I was getting 
+feedback nudging me into direction of cgroups.
 
-Since (!64BIT || 64BIT) covers all the possible cases,
-this patch is just adding dead code.
+Looking at what's available in cgroups world now, I have spotted the 
+blkio.prio.class control. For my current use case (lower GPU scheduling 
+of background/unfocused windows) that would also work. Even if starting 
+with just two possible values - 'no-change' and 'idle' (to follow the IO 
+controller naming).
 
+How would you view that as a proposal? It would be a bit tougher "sell" 
+to the DRM community, perhaps, given that many drivers do have 
+scheduling priority, but the concept of scheduling class is not really 
+there. Nevertheless a concept of normal-vs-background could be plausible 
+in my mind. It could be easily implemented by using the priority 
+controls available in many drivers.
 
+>> DRM scheduling soft limits interface files
+>> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>
+>>    drm.weight
+>> 	Standard cgroup weight based control [1, 10000] used to configure the
+>> 	relative distributing of GPU time between the sibling groups.
+> 
+> Please take a look at io.weight. This can follow the same convention to
+> express both global and per-device weights.
+> 
+>>    drm.period_us
+>> 	An integer representing the period with which the controller should look
+>> 	at the GPU usage by the group and potentially send the over/under budget
+>> 	signal.
+>> 	Value of zero (defaul) disables the soft limit checking.
+> 
+> Can we not do period_us or at least make it a per-driver tuning parameter
+> exposed as module param? Weight, users can easily understand and configure.
+> period_us is a lot more an implementation detail. If we want to express the
+> trade-off between latency and bandwidth at the interface, we prolly should
+> encode the latency requirement in a more canonical way but let's leave that
+> for the future.
 
+Yes agreed - for the moment (while RFC) it is handy for me to have it 
+controllable per group. But I agree a kernel global (modparam) should be 
+sufficient in the final solution.
 
+> 
+>>    drm.budget_supported
+>> 	One of:
+>> 	 1) 'yes' - when all DRM clients in the group support the functionality.
+>> 	 2) 'no' - when at least one of the DRM clients does not support the
+>> 		   functionality.
+>> 	 3) 'n/a' - when there are no DRM clients in the group.
+> 
+> Yeah, I'm not sure about this. This isn't a per-cgroup property to begin
+> with and I'm not sure 'no' meaning at least one device not supporting is
+> intuitive. The distinction between 'no' and 'n/a' is kinda weird too. Please
+> drop this.
 
+The idea actually is for this to be per-cgroup and potentially change 
+dynamically. It implements the concept of "observability", how I have, 
+perhaps clumsily, named it.
 
+This is because we can have a mix of DRM file descriptors in a cgroup, 
+not all of which support the proposed functionality. So I wanted to have 
+something by which the administrator can observe the status of the group.
 
->         help
-> -         Tell gcc to warn at build time for stack frames larger than this.
-> +         Tell the compiler to warn at build time for stack frames larger than this.
->           Setting this too low will cause a lot of warnings.
->           Setting it to 0 disables the warning.
->
-> --
-> 2.38.0.135.g90850a2211-goog
->
+For instance seeing some clients do not support the feature could be 
+signal that things have been misconfigured, or that appeal needs to be 
+made for driver X to start supporting the feature. Seeing a "no" there 
+in other words is a signal that budgeting may not really work as 
+expected and needs to be investigated.
 
+> Another basic interface question. Is everyone happy with the drm prefix or
+> should it be something like gpu? Also, in the future, if there's a consensus
+> around how to control gpu memory, what prefix would that take?
 
--- 
-Best Regards
-Masahiro Yamada
+Given the current effort to bring in AI/VPU/ML accelerator devices under 
+the DRM umbrella I think drm prefix is okay. At least some of those 
+devices (the ones I looked at) will accept the same concepts of 
+scheduling and memory allocation as well.
+
+And for memory specifically, I don't see why the drm prefix would not work.
+
+But yeah, I echo the calls for wider feedback. Given how drm cgroup 
+controller has been on a wish list for ages I have to say I expected a 
+bit more interest. :)
+
+>> The second proposal is a little bit more advanced in concept and also a little
+>> bit less finished. Interesting thing is that it builds upon the per client GPU
+>> utilisation work which landed recently for a few drivers. So my thinking is that
+>> in principle, an intersect of drivers which support both that and some sort of
+>> priority scheduling control, could also in theory support this.
+>>
+>> Another really interesting angle for this controller is that it mimics the same
+>> control menthod used by the CPU scheduler. That is the proportional/weight based
+>> GPU time budgeting. Which makes it easy to configure and does not need a new
+>> mental model.
+>>
+>> However, as the introduction mentions, GPUs are much more heterogenous and
+>> therefore the controller uses very "soft" wording as to what it promises. The
+>> general statement is that it can define budgets, notify clients when they are
+>> over them, and let individual drivers implement best effort handling of those
+>> conditions.
+>>
+>> Delegation of duties in the implementation goes likes this:
+>>
+>>   * DRM cgroup controller implements the control files and the scanning loop.
+>>   * DRM core is required to track all DRM clients belonging to processes so it
+>>     can answer when asked how much GPU time is a process using.
+>>   * DRM core also provides a call back which the controller will call when a
+>>     certain process is over budget.
+>>   * Individual drivers need to implement two similar hooks, but which work for
+>>     a single DRM client. Over budget callback and GPU utilisation query.
+>>
+>> What I have demonstrated in practice is that when wired to i915, in a really
+>> primitive way where the over-budget condition simply lowers the scheduling
+>> priority, the concept can be almost equally effective as the static priority
+>> control. I say almost because the design where budget control depends on the
+>> periodic usage scanning has a fundamental delay, so responsiveness will depend
+>> on the scanning period, which may or may not be a problem for a particular use
+>> case.
+>>
+>> The unfinished part is the GPU budgeting split which currently does not
+>> propagate unused bandwith to children, neither can share it with siblings. But
+>> this is not due fundamental reasons, just to avoid spending too much time on it
+>> too early.
+> 
+> Rather than doing it hierarchically on the spot, it's usually a lot cheaper
+> and easier to calculate the flattened hierarchical weight per leaf cgroup
+> and divide the bandwidth according to the eventual portions. For an example,
+> please take a look at block/blk-iocost.c.
+
+This seems exactly what I had in mind (but haven't implemented it yet). 
+So in this RFC I have budget splitting per group where each tree level 
+adds up to "100%" and the thing which I have not implemented is 
+"borrowing" or yielding (how blk-iocost.c calls it, or donating) unused 
+budgets to siblings.
+
+I am very happy to hear my idea is the right one and someone already 
+implemented it. Thanks for this pointer!
+
+> I don't know much about the drm driver side, so can't comment much on it but
+> I do really like the idea of having the core implementation determining who
+> should get how much and then letting each driver enforce the target. That
+> seems a lot more robust and generic than trying to somehow coax and expose
+> per-driver priority implementations directly.
+
+Thanks, and thanks for having a detailed read and providing great 
+feedback so far!
+
+Regards,
+
+Tvrtko
+
