@@ -2,159 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16CBB60F956
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2097260F972
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236244AbiJ0Nj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 09:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
+        id S236269AbiJ0Nme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 09:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236238AbiJ0Njz (ORCPT
+        with ESMTP id S236253AbiJ0Nmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 09:39:55 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2BA12AEE
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:39:53 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id f205so2044634yba.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:39:53 -0700 (PDT)
+        Thu, 27 Oct 2022 09:42:31 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC371826D1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:42:30 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id a5so879881qkl.6
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:42:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=T7RxfUpE+B/HYJd5zuMNI1CVQxXADlNT94gOnJfbWU8=;
-        b=Mj/q7HNYsLLDCbO1NTCyj3g6/R8aSY3UUT/VO+0/Kv48WUGGEsM9f7fNdc3ZN49w6k
-         OduPhKZAxfdbbNIzfzJc+G/RceTUjpH/M+x3W2VgMyuSZDnpx4yI2+aYQrD3fD2DfBlR
-         GY3ggAswiGb11ShtenAInjlIxA664H6r8g0YyIumF0vHp5072mlQe3F8r8ON4KVIeZv+
-         W95DZDD1WCFP0OCqqbGJhxnsk3DPVotETTC1G5EhEU/0lel2iRvSHD0QhUrIaqnkxnTX
-         8zMhfIbuqvW7+U+Y0Wc2C6eUiX+G43fTDhJIZO2oFhjEGrSeXFIjp+2Se4l2U6vx2/h0
-         QbtA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wM4Vw2+6axRvXSbyEhTxGQ1M8jgYDY7F1JmeCqi4DtA=;
+        b=Qfmd16a8rPHB6gP9KngqB+MAJCh40aoEVl+VKG4LpOIsMyTMaJ6kekLbXfGHrYzmHh
+         KP7sZEmrYaQ1YbQmwiphZcVbt41l5UarqZdInVDlS68bXkj5d7nhTshuUWSj+G6QG5mG
+         KLIqEEExuoPrM6DYxSsdUosuaPcGKko102+WOCVQjFnND6Sdk+Bu1IFmYdCym3i8SBsq
+         /UGu0KmViUYC68f1T1aFCvBIIIGsZKsGnny8W8IFbVCC59KDbKps8lzJafe8vieLSsBf
+         GcELwM40nNCymCIr9DTqE8+EfP9CJavpm1s5zuq9IHWnL6+dzwXjAoogWOiblGBnUzJY
+         bEMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T7RxfUpE+B/HYJd5zuMNI1CVQxXADlNT94gOnJfbWU8=;
-        b=110KIjt1YsHBc28BJMr/+ASrPBQ7kuU9+DGc+VFOqShKyfcYK6aZHjo44CZdhEtgG1
-         Qt7rqvLrUpE6Kpm4N22XNdjDPD9wVJ0XLQqkTRLZtMs0Q5/i9mzkKw9OeOtHwJupy4AZ
-         veME0yQViV/twPfqWu4fb/NWeUg8bkjVvkgqBCNwDZYYW4SeglJeQt6/kZZ6Bd0M7FTa
-         kKwyrvlAMJlLezbup6XaNvcom4TTHd5my9omv1NxMwnjV8TnklI/4I/2VyRm8w2HKJTx
-         wVahV+RqEaqVfAmBC+HlVXME8bNE8zhohGam5I683Wdc/UY9rZCbtdfSlFmXl3cGSy5S
-         hPVA==
-X-Gm-Message-State: ACrzQf1+W/sbAdl8owG0qNRqPoqLE44cTWxz8GnAOUAECN163a9b5hVs
-        Wk0SUcX2l6ugxK1J+DoTKbTSnTrNiayDwt/EohoaSq5KkNI=
-X-Google-Smtp-Source: AMsMyM7FaeVUsOl4ZXpzdSIIGTvEVJeq7ijb6oQekn41n7jUMVcDFH424GiYBNtVIxFyKBB8e/h5UlmX6izq4gYKueY=
-X-Received: by 2002:a25:6647:0:b0:6cb:8601:238a with SMTP id
- z7-20020a256647000000b006cb8601238amr11408366ybm.598.1666877992173; Thu, 27
- Oct 2022 06:39:52 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wM4Vw2+6axRvXSbyEhTxGQ1M8jgYDY7F1JmeCqi4DtA=;
+        b=bbglFYUPI9UcU6EONBPWsQVkpS+3HeCzUpg9NI/qLEKq7w3194hANvwVyR8I+AIWMD
+         WkFav4/8Q6DLuZ04aHUQ60Yv0gNDLB29XcE4fuyUOPt0yC6gPhE8Wq4Y9ZEmg7AcQqlc
+         ZE1KSL6hRmCjcfBTypr80/O0YdHYdf0jQR3xaxXt7Xb3hx1XZKUJmgNhTXs4Q0Pqc+/a
+         Zw8xyPyoLglstusBOIREjZFrxTaR1+zFakomfA4lqr7UF614yaCJy5VrVNCZ/RfJ+EIz
+         Gu/QXbYRFvpOFPSp3rQ/1NgdD6gO/p3cOuizBbdKELi4K8GqKUawZh+CFg2x64J8EQ1N
+         Petw==
+X-Gm-Message-State: ACrzQf0eT6a2BZCHrZru9WwayQylDPNACggzMTejli/YPG7Bgx7kbgNc
+        eifcGKC4vT/tg1upNWFg+qAYGw==
+X-Google-Smtp-Source: AMsMyM44mwyfkNK9FKOzm1Oey82nDiu8X5Aw1J4Tb80n2Y//lc1hB0Auwc45uma1QaXmEIeuuzdP9A==
+X-Received: by 2002:a37:98c2:0:b0:6f8:6a62:a195 with SMTP id a185-20020a3798c2000000b006f86a62a195mr8265251qke.245.1666878150053;
+        Thu, 27 Oct 2022 06:42:30 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id q11-20020a37f70b000000b006ce0733caebsm995698qkj.14.2022.10.27.06.42.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 06:42:29 -0700 (PDT)
+Message-ID: <9092152a-35c9-1f80-8674-ea4124a1bb36@linaro.org>
+Date:   Thu, 27 Oct 2022 09:42:27 -0400
 MIME-Version: 1.0
-References: <20221027102449.926410-1-william.xuanziyang@huawei.com>
- <CANn89iJkKJ3-b8vncrxgawWTtaLphYERhVma7+1qgdSEXn8tiQ@mail.gmail.com> <8523b754-992d-0d72-ecd1-4f076e57ebde@huawei.com>
-In-Reply-To: <8523b754-992d-0d72-ecd1-4f076e57ebde@huawei.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 27 Oct 2022 06:39:41 -0700
-Message-ID: <CANn89i+FYGkR5_-C3wp7GdpW=JT8V5LELwMNcHg9Gt6=e877JA@mail.gmail.com>
-Subject: Re: [PATCH net] ipv6/gro: fix an out of bounds memory bug in ipv6_gro_receive()
-To:     "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, herbert@gondor.apana.org.au
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 01/19] dt-bindings: ARM: MediaTek: Add new document
+ bindings of MT8188 clock
+Content-Language: en-US
+To:     "Garmin.Chang" <Garmin.Chang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20221024094254.29218-1-Garmin.Chang@mediatek.com>
+ <20221024094254.29218-2-Garmin.Chang@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221024094254.29218-2-Garmin.Chang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 6:01 AM Ziyang Xuan (William)
-<william.xuanziyang@huawei.com> wrote:
->
-> > On Thu, Oct 27, 2022 at 3:25 AM Ziyang Xuan
-> > <william.xuanziyang@huawei.com> wrote:
-> >>
-> >> IPv6 packets without NEXTHDR_NONE extension header can make continuous
-> >> __skb_pull() until pskb_may_pull() failed in ipv6_gso_pull_exthdrs().
-> >> That results in a big value of skb_gro_offset(), and after __skb_push()
-> >> in ipv6_gro_receive(), skb->data will less than skb->head, an out of
-> >> bounds memory bug occurs. That will trigger the problem as following:
-> >>
-> >> ==================================================================
-> >> BUG: KASAN: use-after-free in eth_type_trans+0x100/0x260
-> >> ...
-> >> Call trace:
-> >>  dump_backtrace+0xd8/0x130
-> >>  show_stack+0x1c/0x50
-> >>  dump_stack_lvl+0x64/0x7c
-> >>  print_address_description.constprop.0+0xbc/0x2e8
-> >>  print_report+0x100/0x1e4
-> >>  kasan_report+0x80/0x120
-> >>  __asan_load8+0x78/0xa0
-> >>  eth_type_trans+0x100/0x260
-> >
-> > Crash happens from eth_type_trans() , this should happen before
-> > ipv6_gro_receive() ?
-> >
-> > It seems your patch is unrelated.
-> >
-> > Please provide a repro.
->
-> C repro put in attachment.
+On 24/10/2022 05:42, Garmin.Chang wrote:
+> Add the new binding documentation for system clock
+> and functional clock on MediaTek MT8188.
+> 
+> Signed-off-by: Garmin.Chang <Garmin.Chang@mediatek.com>
+> ---
+>  .../arm/mediatek/mediatek,mt8188-clock.yaml   |  70 ++
+>  .../mediatek/mediatek,mt8188-sys-clock.yaml   |  55 ++
+>  .../dt-bindings/clock/mediatek,mt8188-clk.h   | 733 ++++++++++++++++++
+>  3 files changed, 858 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-clock.yaml
+>  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-sys-clock.yaml
+>  create mode 100644 include/dt-bindings/clock/mediatek,mt8188-clk.h
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-clock.yaml
+> new file mode 100644
+> index 000000000000..49dc681e6601
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-clock.yaml
+> @@ -0,0 +1,70 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt8188-clock.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek Functional Clock Controller for MT8188
+> +
+> +maintainers:
+> +  - Garmin Chang <garmin.chang@mediatek.com>
+> +
+> +description: |
+> +  The clock architecture in MediaTek like below
+> +  PLLs -->
+> +          dividers -->
+> +                      muxes
+> +                           -->
+> +                              clock gate
+> +
+> +  The devices provide clock gate control in different IP blocks.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt8188-adsp_audio26m
 
-This seems to be a bug in tun device.
+No underscores in compatibles.
 
-Please take more time to root cause this issue, instead of adding work
-arounds all over the place.
+> +      - mediatek,mt8188-imp_iic_wrap_c
+> +      - mediatek,mt8188-imp_iic_wrap_en
+> +      - mediatek,mt8188-imp_iic_wrap_w
+> +      - mediatek,mt8188-mfgcfg
+> +      - mediatek,mt8188-vppsys0
+> +      - mediatek,mt8188-wpesys
+> +      - mediatek,mt8188-wpesys_vpp0
+> +      - mediatek,mt8188-vppsys1
+> +      - mediatek,mt8188-imgsys
+> +      - mediatek,mt8188-imgsys_wpe1
+> +      - mediatek,mt8188-imgsys_wpe2
+> +      - mediatek,mt8188-imgsys_wpe3
+> +      - mediatek,mt8188-imgsys1_dip_top
+> +      - mediatek,mt8188-imgsys1_dip_nr
+> +      - mediatek,mt8188-ipesys
+> +      - mediatek,mt8188-camsys
+> +      - mediatek,mt8188-camsys_rawa
+> +      - mediatek,mt8188-camsys_yuva
+> +      - mediatek,mt8188-camsys_rawb
+> +      - mediatek,mt8188-camsys_yuvb
+> +      - mediatek,mt8188-ccusys
+> +      - mediatek,mt8188-vdecsys_soc
+> +      - mediatek,mt8188-vdecsys
+> +      - mediatek,mt8188-vencsys
 
-Thanks.
+Blank line here
 
->
-> >
-> >
-> >>  napi_gro_frags+0x164/0x550
-> >>  tun_get_user+0xda4/0x1270
-> >>  tun_chr_write_iter+0x74/0x130
-> >>  do_iter_readv_writev+0x130/0x1ec
-> >>  do_iter_write+0xbc/0x1e0
-> >>  vfs_writev+0x13c/0x26c
-> >>
-> >> Add comparison between skb->data - skb_gro_offset() and skb->head
-> >> and exception handler before __skb_push() to fix the bug.
-> >>
-> >> Fixes: 86911732d399 ("gro: Avoid copying headers of unmerged packets")
-> >> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
-> >> ---
-> >>  net/ipv6/ip6_offload.c | 4 ++++
-> >>  1 file changed, 4 insertions(+)
-> >>
-> >> diff --git a/net/ipv6/ip6_offload.c b/net/ipv6/ip6_offload.c
-> >> index 3ee345672849..6659ccf25387 100644
-> >> --- a/net/ipv6/ip6_offload.c
-> >> +++ b/net/ipv6/ip6_offload.c
-> >> @@ -237,6 +237,10 @@ INDIRECT_CALLABLE_SCOPE struct sk_buff *ipv6_gro_receive(struct list_head *head,
-> >>                 proto = ipv6_gso_pull_exthdrs(skb, proto);
-> >>                 skb_gro_pull(skb, -skb_transport_offset(skb));
-> >>                 skb_reset_transport_header(skb);
-> >> +               if (unlikely(skb_headroom(skb) < skb_gro_offset(skb))) {
-> >
-> > This makes no sense to me.
-> >
-> > If there is a bug, it should be fixed earlier.
->
-> Maybe it is good to validate IPv6 packet earlier in ipv6_gro_receive() or more earlier?
->
-> >
-> >> +                       kfree_skb(skb);
-> >> +                       return ERR_PTR(-EINPROGRESS);
-> >> +               }
-> >>                 __skb_push(skb, skb_gro_offset(skb));
-> >>
-> >>                 ops = rcu_dereference(inet6_offloads[proto]);
-> >> --
-> >> 2.25.1
-> >>
-> > .
-> >
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#clock-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    imp_iic_wrap_c: clock-controller@11283000 {
+
+Drop the label, not used,
+
+> +        compatible = "mediatek,mt8188-imp_iic_wrap_c";
+> +        reg = <0x11283000 0x1000>;
+> +        #clock-cells = <1>;
+> +    };
+> +
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-sys-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-sys-clock.yaml
+> new file mode 100644
+> index 000000000000..35962b3746e1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-sys-clock.yaml
+> @@ -0,0 +1,55 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt8188-sys-clock.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek System Clock Controller for MT8188
+> +
+> +maintainers:
+> +  - Garmin Chang <garmin.chang@mediatek.com>
+> +
+> +description: |
+> +  The clock architecture in MediaTek like below
+> +  PLLs -->
+> +          dividers -->
+> +                      muxes
+> +                           -->
+> +                              clock gate
+> +
+> +  The apmixedsys provides most of PLLs which generated from SoC 26m.
+> +  The topckgen provides dividers and muxes which provide the clock source to other IP blocks.
+> +  The infracfg_ao provides clock gate in peripheral and infrastructure IP blocks.
+> +  The mcusys provides mux control to select the clock source in AP MCU.
+> +  The device nodes also provide the system control capacity for configuration.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - mediatek,mt8188-topckgen
+> +          - mediatek,mt8188-infracfg_ao
+
+Same comment.
+
+> +          - mediatek,mt8188-apmixedsys
+> +          - mediatek,mt8188-pericfg_ao
+> +      - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#clock-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    topckgen: syscon@10000000 {
+
+Drop label.
+
+> +        compatible = "mediatek,mt8188-topckgen", "syscon";
+> +        reg = <0x10000000 0x1000>;
+> +        #clock-cells = <1>;
+Best regards,
+Krzysztof
+
