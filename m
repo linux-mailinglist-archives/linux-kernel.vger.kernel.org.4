@@ -2,74 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AD460F363
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB3460F356
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235417AbiJ0JNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 05:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38888 "EHLO
+        id S235404AbiJ0JME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 05:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235369AbiJ0JMm (ORCPT
+        with ESMTP id S235347AbiJ0JLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 05:12:42 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B318516EA0B;
-        Thu, 27 Oct 2022 02:11:29 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id m15so1562928edb.13;
-        Thu, 27 Oct 2022 02:11:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+xthR7hB3kKLruuTcFbR1YysN8z3ovY1NUbF6DHK+Xg=;
-        b=ISeBsdRWo/8o3QohdUiKOGMoe1FxmOsFK/eTCX4gD4oKKE1zwSYGIYz+vhx4BDGBam
-         LdOGGaJChSY63d6aKLzivrpa6Sab2BSyaDpLcZU2qchUUNV9djhPkulZMPGDWSQsxdbq
-         1xmOQd97TBVP80cMTF76gzIXmJxQvEbXjefOeNxbZow2wcq1ZzeNYQklsg9verCdfqsI
-         vxmImTyL9cgjV51et0faljDJlni9cQyYP38slG3WdBTSeWw4Srn2duILUuavJ3S1CG4m
-         MOPBBZcQLwbSp0hADrCb82z1gZlV7w5jTX/1laZEKe24lcnCd8B1JFKkxLmk54u8YPa4
-         mqkg==
+        Thu, 27 Oct 2022 05:11:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8872140E04
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:10:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666861840;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ziau/u6EFDYrbkB/0U+jFJAy6/VcVCK6XBP9il5+IKo=;
+        b=DR5zuXHf5QYQzPYnaLGXt8eE8oU7NfyR9QZxMvMVwhJuA7xwH/EZj0ElS7pRNsptcEFkeu
+        e8JSGMnmc/lnJg6iqUJEWGsUMIAVat7/2FcnYJhRcSqpDtDF6bH0JFo9+Mm0LJrSPHvsgb
+        MmUgl5J7hAXmZ1k2btfJ5I15MkVZFPM=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-631-m41V0twtOKWg0wuLqEwFJg-1; Thu, 27 Oct 2022 05:10:39 -0400
+X-MC-Unique: m41V0twtOKWg0wuLqEwFJg-1
+Received: by mail-lj1-f200.google.com with SMTP id v9-20020a2e9909000000b002770921b281so422972lji.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:10:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+xthR7hB3kKLruuTcFbR1YysN8z3ovY1NUbF6DHK+Xg=;
-        b=XPwtnPZyxDOzpB2mTNcEyM45KrGa19pDIiVBQ88pxa8eYDuruloNh/8sin+G2i+ZK4
-         HI3iilcy/Nszi2ZePOlIaeuf4hTBne6H0TicTQ2sECHE293EN1AgzjGdi2fIyHVRZbrp
-         Mm4+tYhMiQFVDHJ4jMCdznVj88sEJb8RXCkWJlx59E9r8l8/dE2EgcQ1GsgHWpD+fHmb
-         3UaH4ERZhyHzaJXbzn3SevqsUP56LMplBzucwsdHIatW1LaH3BlUJHSYE52FJB1lbQy1
-         pdgFwE0p0x5Q2wKzCkV3xDXHLkMTjugbbh/anVJWDM+PEB2jjRtKUHO49QHHwJwFnIK4
-         dvRQ==
-X-Gm-Message-State: ACrzQf3Ks4qu+oILTkg+TAnB/UttCWVLoqrF9x7vvLDvhTnS69jCcyuR
-        YvB8xrjP3nlQnsF0FL/4GTI=
-X-Google-Smtp-Source: AMsMyM5F0ir2W9XAtcxtdFqezqdYd1sOksNsF8XVQQkaDMgCmjnZy4WvQICVtLKo3tA7l+1TPjudAA==
-X-Received: by 2002:aa7:c054:0:b0:453:98c6:f6c4 with SMTP id k20-20020aa7c054000000b0045398c6f6c4mr44381847edo.2.1666861888005;
-        Thu, 27 Oct 2022 02:11:28 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id o12-20020a50c90c000000b0044bfdbd8a33sm617276edh.88.2022.10.27.02.11.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 02:11:26 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 11:11:24 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Prathamesh Shete <pshete@nvidia.com>, iommu@lists.linux.dev,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu: Always define struct iommu_fwspec
-Message-ID: <Y1pLPHER+Pq+cRvc@orome>
-References: <20221018105149.820062-1-thierry.reding@gmail.com>
- <CAPDyKFopppohLJ7ptnQxpBHzMLh2SZObarQRC0bJyTwE=nky4w@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ziau/u6EFDYrbkB/0U+jFJAy6/VcVCK6XBP9il5+IKo=;
+        b=5wCmGmxsDuawhWVpZm36bECRp9xAHpIlmHapGK4gzmLQ3Z9pi9ApGXtWXUEIkIKS/U
+         M4JfBoZxQr5nYziiU9kgm+7aGgOqJzrMlUyXYEgeOsfhfWuG4UOWHFYp4Vis1WhMG1yZ
+         3C3QjP69ImOkwyX5nlWRh7vb6YDMSbvVFxpROBwLyzfpaZrk5WY77iW5CBOW9VC+TcTT
+         QANThfoX60u62GMjZqTVbtNmoXOARn11qjr4Lrnhi0JUaH4caHFLhhH3BPw6dgerr9a1
+         xivLIHwjyeFFfFNGzudZwHwGrziU9qwM6NMXKFWU5Et9ZM/Zk+8B/vvid3Q1D38A/lHr
+         +NLA==
+X-Gm-Message-State: ACrzQf1kYEyP4bM8ugvugb6AMKfPJ0ReG9e7E5xqozF0hTHmzM0CcwnB
+        ucv0o5WSjx+6RP3m8POgFRrLwEt60gESLx2QMqV7I1XOuzXwkJR4xCS6Hb4JhJLrPYRpwGN5H/K
+        htAhBm9QL+c4TuBzm7mRI2JckvYEvghKOQBligQ4k
+X-Received: by 2002:ac2:47e1:0:b0:4af:5088:9576 with SMTP id b1-20020ac247e1000000b004af50889576mr2998558lfp.468.1666861837592;
+        Thu, 27 Oct 2022 02:10:37 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4fIV6ydQRgmrMVyIU2r9H0oB18YXsVEUdlFYjrQuSfS2ucEUJhllLqj68fs6nzyLA4Vj6RKPmXnDYesOOZKOo=
+X-Received: by 2002:ac2:47e1:0:b0:4af:5088:9576 with SMTP id
+ b1-20020ac247e1000000b004af50889576mr2998542lfp.468.1666861837363; Thu, 27
+ Oct 2022 02:10:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="e3c57vVo3DT2FWCa"
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFopppohLJ7ptnQxpBHzMLh2SZObarQRC0bJyTwE=nky4w@mail.gmail.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221025093458.457089-1-benjamin.tissoires@redhat.com>
+ <20221025093458.457089-3-benjamin.tissoires@redhat.com> <20221025225219.i3pi7ewue6xqeig4@macbook-pro-4.dhcp.thefacebook.com>
+In-Reply-To: <20221025225219.i3pi7ewue6xqeig4@macbook-pro-4.dhcp.thefacebook.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Thu, 27 Oct 2022 10:11:31 +0100
+Message-ID: <CAO-hwJ+WWO-GhzX-eaoGtF8+5Mw-QOVREWYmtm-VNBF5NGC22g@mail.gmail.com>
+Subject: Re: [PATCH hid v11 02/14] HID: initial BPF implementation
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,151 +80,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---e3c57vVo3DT2FWCa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Oct 20, 2022 at 01:32:41PM +0200, Ulf Hansson wrote:
-> On Tue, 18 Oct 2022 at 12:51, Thierry Reding <thierry.reding@gmail.com> w=
-rote:
-> >
-> > From: Thierry Reding <treding@nvidia.com>
-> >
-> > In order to fully make use of the !IOMMU_API stub functions, make the
-> > struct iommu_fwspec always available so that users of the stubs can keep
-> > using the structure's internals without causing compile failures.
-> >
-> > Signed-off-by: Thierry Reding <treding@nvidia.com>
->=20
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
->=20
-> > ---
-> > Hi Joerg,
-> >
-> > this is a rebased patch extracted from an ancient series that never
-> > ended up getting applied:
-> >
-> >         https://lore.kernel.org/all/20191209120005.2254786-3-thierry.re=
-ding@gmail.com/
-> >
-> > You had already acked this particular patch, so maybe you can pick this
-> > up. I've seen at least two discussions where this was brought up again,
-> > so I figured it'd be worth sending this out again because it can help
-> > remove a number of #ifdef blocks throughout the kernel.
->=20
-> Yes, this would certainly help to improve the code. To me, it looks
-> like the current stub functions, like dev_iommu_fwspec_get() for
-> example, aren't really useful without $subject patch.
->=20
-> Note that, I have a pending patch for mmc that would benefit from
-> this. To prevent me from delaying that, an easy way forward, assuming
-> there are no objections of course, would be to send this for 6.1-rc.
-
-Adding Prathamesh for visibility. Another alternative would be to
-prepend this to Prathamesh's series with an Acked-by from Joerg.
-
-Joerg, any preference on how to move forward with this?
-
-Thierry
-
->=20
-> >
-> >  include/linux/iommu.h | 39 +++++++++++++++++++--------------------
-> >  1 file changed, 19 insertions(+), 20 deletions(-)
-> >
-> > diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> > index a325532aeab5..e3295c45d18f 100644
-> > --- a/include/linux/iommu.h
-> > +++ b/include/linux/iommu.h
-> > @@ -173,6 +173,25 @@ enum iommu_dev_features {
-> >
-> >  #define IOMMU_PASID_INVALID    (-1U)
-> >
-> > +/**
-> > + * struct iommu_fwspec - per-device IOMMU instance data
-> > + * @ops: ops for this device's IOMMU
-> > + * @iommu_fwnode: firmware handle for this device's IOMMU
-> > + * @flags: IOMMU_FWSPEC_* flags
-> > + * @num_ids: number of associated device IDs
-> > + * @ids: IDs which this device may present to the IOMMU
+On Tue, Oct 25, 2022 at 11:52 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Tue, Oct 25, 2022 at 11:34:46AM +0200, Benjamin Tissoires wrote:
+> >  include/linux/hid.h                           |   5 +
+> >  include/linux/hid_bpf.h                       | 102 +++
+> >  include/uapi/linux/hid_bpf.h                  |  25 +
+> >  tools/include/uapi/linux/hid.h                |  62 ++
+> >  tools/include/uapi/linux/hid_bpf.h            |  25 +
+>
+> ...
+>
+> > +++ b/include/linux/hid_bpf.h
+> > @@ -0,0 +1,102 @@
+> > +/* SPDX-License-Identifier: GPL-2.0+ */
+> > +
+> > +#ifndef __HID_BPF_H
+> > +#define __HID_BPF_H
+> > +
+> > +#include <linux/spinlock.h>
+> > +#include <uapi/linux/hid.h>
+> > +#include <uapi/linux/hid_bpf.h>
+> > +
+> > +struct hid_device;
+> > +
+> > +/*
+> > + * The following is the HID BPF API.
+> > + *
+> > + * It should be treated as UAPI, so extra care is required
+> > + * when making change to this file.
 > > + */
-> > +struct iommu_fwspec {
-> > +       const struct iommu_ops  *ops;
-> > +       struct fwnode_handle    *iommu_fwnode;
-> > +       u32                     flags;
-> > +       unsigned int            num_ids;
-> > +       u32                     ids[];
+>
+> I thought at the maintainer summit we discussed that it shouldn't be
+> treated as uapi. There is no need to draw this line right now.
+> If the whole concept turns out to be useful and api is stable
+> then promote it.
+
+I'd still like to keep the kfunc API explicitly marked as "danger
+zone". I want to let contributors know that changing this part has an
+impact on the existing available bpf programs that are out of the tree
+(the HID firewall for instance might be out of the tree).
+
+I'll reword it to not mark it as uapi though.
+
+>
+> > +++ b/include/uapi/linux/hid_bpf.h
+> > @@ -0,0 +1,25 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> > +
+> > +#ifndef _UAPI_HID_BPF_H
+> > +#define _UAPI_HID_BPF_H
+> > +
+> > +#include <linux/const.h>
+> > +#include <linux/hid.h>
+> > +
+> > +/**
+> > + * enum hid_bpf_attach_flags - flags used when attaching a HIF-BPF program
+> > + *
+> > + * @HID_BPF_FLAG_NONE: no specific flag is used, the kernel choses where to
+> > + *                     insert the program
+> > + * @HID_BPF_FLAG_INSERT_HEAD: insert the given program before any other program
+> > + *                            currently attached to the device. This doesn't
+> > + *                            guarantee that this program will always be first
+> > + * @HID_BPF_FLAG_MAX: sentinel value, not to be used by the callers
+> > + */
+> > +enum hid_bpf_attach_flags {
+> > +     HID_BPF_FLAG_NONE = 0,
+> > +     HID_BPF_FLAG_INSERT_HEAD = _BITUL(0),
+> > +     HID_BPF_FLAG_MAX,
 > > +};
 > > +
-> > +/* ATS is supported */
-> > +#define IOMMU_FWSPEC_PCI_RC_ATS                        (1 << 0)
-> > +
-> >  #ifdef CONFIG_IOMMU_API
-> >
-> >  /**
-> > @@ -598,25 +617,6 @@ extern struct iommu_group *generic_device_group(st=
-ruct device *dev);
-> >  /* FSL-MC device grouping function */
-> >  struct iommu_group *fsl_mc_device_group(struct device *dev);
-> >
-> > -/**
-> > - * struct iommu_fwspec - per-device IOMMU instance data
-> > - * @ops: ops for this device's IOMMU
-> > - * @iommu_fwnode: firmware handle for this device's IOMMU
-> > - * @flags: IOMMU_FWSPEC_* flags
-> > - * @num_ids: number of associated device IDs
-> > - * @ids: IDs which this device may present to the IOMMU
-> > - */
-> > -struct iommu_fwspec {
-> > -       const struct iommu_ops  *ops;
-> > -       struct fwnode_handle    *iommu_fwnode;
-> > -       u32                     flags;
-> > -       unsigned int            num_ids;
-> > -       u32                     ids[];
-> > -};
-> > -
-> > -/* ATS is supported */
-> > -#define IOMMU_FWSPEC_PCI_RC_ATS                        (1 << 0)
-> > -
-> >  /**
-> >   * struct iommu_sva - handle to a device-mm bond
-> >   */
-> > @@ -680,7 +680,6 @@ bool iommu_group_dma_owner_claimed(struct iommu_gro=
-up *group);
-> >
-> >  struct iommu_ops {};
-> >  struct iommu_group {};
-> > -struct iommu_fwspec {};
-> >  struct iommu_device {};
-> >  struct iommu_fault_param {};
-> >  struct iommu_iotlb_gather {};
-> > --
-> > 2.37.3
-> >
->=20
-> Kind regards
-> Uffe
+> > +#endif /* _UAPI_HID_BPF_H */
+>
+> Not sure what is the purpose of this uapi file.
+> Since it's enum the progs can get it from vmlinux.h.
 
---e3c57vVo3DT2FWCa
-Content-Type: application/pgp-signature; name="signature.asc"
+Good point. It can easily go into the non uapi hid_bpf.h
 
------BEGIN PGP SIGNATURE-----
+>
+> > diff --git a/tools/include/uapi/linux/hid.h b/tools/include/uapi/linux/hid.h
+> > new file mode 100644
+> > index 000000000000..3e63bea3b3e2
+> > --- /dev/null
+> > +++ b/tools/include/uapi/linux/hid.h
+> > @@ -0,0 +1,62 @@
+> > +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+> > +/*
+> > + *  Copyright (c) 1999 Andreas Gal
+> > + *  Copyright (c) 2000-2001 Vojtech Pavlik
+> > + *  Copyright (c) 2006-2007 Jiri Kosina
+> > + */
+> > +#ifndef _UAPI__HID_H
+> > +#define _UAPI__HID_H
+>
+> This is a copy of include/uapi/linux/hid.h ?
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNaSzkACgkQ3SOs138+
-s6FOpg/+J4Dp7U85QdWkE9egyBiaNU6fizWwIQM/Zivy6ZrcPCcr6hqi4k7kSz+4
-7pmMS4BxAi/cVxvHKhVYptnK15+9fDJsp5Y5STE7idEjOCWENvUFi4/DlwtZ0Q/e
-Uq6oU8t5LpvXoM7jg/PIJ0s/sBjzHMEhLNutCkq4stC7aj28k5OqX4c+/t6j+kbx
-TUFuu2g4ypjKzhxNxsnWC3iRPXNovrjfoS0dLo4hAwgpZWsiutEaEim9DxWtSELe
-ASf8Z02vSxbvn9ikgu6hMAUvL1KW5P1j6Kklji2ZkYqX3a3sTYATnXsHEe+BFvhw
-biBuzYLJ07fDsMqMdwGZEgbqeaKGUw9S9YzxAXtvK3yfSgTk+zS0u1hz6hmsYIiQ
-8cIaYciPVvEKbMgCQzMoPYymf49+8fASPJBnw59NT5SDlq+j6o+e5Bji7VgsOqDl
-4Mrwb/VPJguFYFozt0KQQDXtp2fHSZCYjkPJxvRy01NUMbaIVNB+eRX5lBcyeFqy
-w5PPZrJZjFN0znMpwSOTjCinwFxlrFFL9k0CMk6xgPihsxbDnGUKimL/cKFAWeXG
-FvpSqRRyV/QaI9rKKB4wvN4DOUqFQbEKy7/P70h5T2nxYIUhktqxWKsZKQ/hTvps
-yEF8pEPDbEilgNkz4RKy0b3lUhA+d+KptH6nv4HdgnrBzsG7smA=
-=rRso
------END PGP SIGNATURE-----
+Yes it is
 
---e3c57vVo3DT2FWCa--
+> Probably should be a separate commit to make it obvious.
+>
+
+I'll need to assess why I needed that. I think it was related to the
+selftests, but now that they are in selftests/hid, I can probably have
+a special include in the Makefile to not have to duplicate the file at
+all.
+
+Thanks for the review :)
+
+Cheers,
+Benjamin
+
