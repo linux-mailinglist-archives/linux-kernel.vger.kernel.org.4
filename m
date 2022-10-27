@@ -2,252 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2097260F972
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BB760F975
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236269AbiJ0Nme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 09:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
+        id S235896AbiJ0Nmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 09:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236253AbiJ0Nmb (ORCPT
+        with ESMTP id S236274AbiJ0Nmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 09:42:31 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC371826D1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:42:30 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id a5so879881qkl.6
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:42:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wM4Vw2+6axRvXSbyEhTxGQ1M8jgYDY7F1JmeCqi4DtA=;
-        b=Qfmd16a8rPHB6gP9KngqB+MAJCh40aoEVl+VKG4LpOIsMyTMaJ6kekLbXfGHrYzmHh
-         KP7sZEmrYaQ1YbQmwiphZcVbt41l5UarqZdInVDlS68bXkj5d7nhTshuUWSj+G6QG5mG
-         KLIqEEExuoPrM6DYxSsdUosuaPcGKko102+WOCVQjFnND6Sdk+Bu1IFmYdCym3i8SBsq
-         /UGu0KmViUYC68f1T1aFCvBIIIGsZKsGnny8W8IFbVCC59KDbKps8lzJafe8vieLSsBf
-         GcELwM40nNCymCIr9DTqE8+EfP9CJavpm1s5zuq9IHWnL6+dzwXjAoogWOiblGBnUzJY
-         bEMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wM4Vw2+6axRvXSbyEhTxGQ1M8jgYDY7F1JmeCqi4DtA=;
-        b=bbglFYUPI9UcU6EONBPWsQVkpS+3HeCzUpg9NI/qLEKq7w3194hANvwVyR8I+AIWMD
-         WkFav4/8Q6DLuZ04aHUQ60Yv0gNDLB29XcE4fuyUOPt0yC6gPhE8Wq4Y9ZEmg7AcQqlc
-         ZE1KSL6hRmCjcfBTypr80/O0YdHYdf0jQR3xaxXt7Xb3hx1XZKUJmgNhTXs4Q0Pqc+/a
-         Zw8xyPyoLglstusBOIREjZFrxTaR1+zFakomfA4lqr7UF614yaCJy5VrVNCZ/RfJ+EIz
-         Gu/QXbYRFvpOFPSp3rQ/1NgdD6gO/p3cOuizBbdKELi4K8GqKUawZh+CFg2x64J8EQ1N
-         Petw==
-X-Gm-Message-State: ACrzQf0eT6a2BZCHrZru9WwayQylDPNACggzMTejli/YPG7Bgx7kbgNc
-        eifcGKC4vT/tg1upNWFg+qAYGw==
-X-Google-Smtp-Source: AMsMyM44mwyfkNK9FKOzm1Oey82nDiu8X5Aw1J4Tb80n2Y//lc1hB0Auwc45uma1QaXmEIeuuzdP9A==
-X-Received: by 2002:a37:98c2:0:b0:6f8:6a62:a195 with SMTP id a185-20020a3798c2000000b006f86a62a195mr8265251qke.245.1666878150053;
-        Thu, 27 Oct 2022 06:42:30 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id q11-20020a37f70b000000b006ce0733caebsm995698qkj.14.2022.10.27.06.42.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 06:42:29 -0700 (PDT)
-Message-ID: <9092152a-35c9-1f80-8674-ea4124a1bb36@linaro.org>
-Date:   Thu, 27 Oct 2022 09:42:27 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 01/19] dt-bindings: ARM: MediaTek: Add new document
- bindings of MT8188 clock
+        Thu, 27 Oct 2022 09:42:36 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-centralusazon11023016.outbound.protection.outlook.com [52.101.64.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAAC1826F5;
+        Thu, 27 Oct 2022 06:42:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y+eNH+/Qs6l+jN+Gcn+LKjWw6M7Pul13GyCS/675RTTzNCJUyjst2MYIw64D3BYtJAlgVlUOm5RPqgeDJMOvM93TjJaTAqZroJw9U81MXVGHiXaqE11+aV26sCCtniSs8tpH/M93ZULbCYgqZaUR+R/GEmjkrm0XNPm+Tr8K6CXEFYRUYtuULtUpJ4PUX/r7yo+5/Lj03NL4ZTkmhj1EKxaA+ThdxI4MqJevgcLxIGp0xHM3w5FLVRuZ0IFQiILv4SMuABsxtgwhg1ZhSTCbjyKI+3IMyFXdMNiRpRx2Rfa52oklF4Ip/iNRUKV7K7gbnCdBsl2FxyiqZZVFYI0acA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wYbqfum4UACg6Lc7Q63KXGKfDeoo+l1HqyfMeesO9L0=;
+ b=mQLvFl++XNfxxaudNLJQV2oZKtFqXShPlGIoGM1ACYTlyTs+QU67YIfQpzxJmmpP2W42VnzyY4Jnkaa05Si3r2Y/njW3Y2gb/FEYaJWASXeKnNLK75wH4OeUa9Dw+XwLdsY2FL77ux/DI0l1HjfIYRBJxC9uWiUC2eeXzewLboe/D84aW55Ioq3ohDCc1UvFw+NT1TDBQT0YZDIjFCZCSg7CIHJYN1nymdF2OugnQahz+QuPqBAoX5ttjkoSVezAUiQaRptJXHjOgPsg3BZASKtqvEijy254lvyygSyTBRBAxcRicsk9q+hEOWA5sOsOVJKje+bOi8bMShTSPX76sw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wYbqfum4UACg6Lc7Q63KXGKfDeoo+l1HqyfMeesO9L0=;
+ b=DUM3hQz/Gf2gSikqCPu4zVy0dPdtS3tY2YKUYJOiT3QwCggvUgVM+gbMwkqtQ1W3vUDm4JKPi+OedxrUfivaw0N0sRlxIP4fHxgT75LoU2Emdy/cxnFxdkMQs3/nmLiIXaXInBfGyh3yyH0GT/zf4ZN67HkspPe7YvdSizKwJCU=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by SA1PR21MB3809.namprd21.prod.outlook.com (2603:10b6:806:2b5::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.9; Thu, 27 Oct
+ 2022 13:42:31 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::f565:80ed:8070:474b]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::f565:80ed:8070:474b%8]) with mapi id 15.20.5791.008; Thu, 27 Oct 2022
+ 13:42:31 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+CC:     "stanislav.kinsburskiy@gmail.com" <stanislav.kinsburskiy@gmail.com>,
+        "kumarpraveen@linux.microsoft.com" <kumarpraveen@linux.microsoft.com>,
+        "mail@anirudhrb.com" <mail@anirudhrb.com>
+Subject: RE: [PATCH v2 1/2] clocksource/drivers/hyperv: add data structure for
+ reference TSC MSR
+Thread-Topic: [PATCH v2 1/2] clocksource/drivers/hyperv: add data structure
+ for reference TSC MSR
+Thread-Index: AQHY6erhWJkiLKLdokahKR7tbQL5tK4iP8/Q
+Date:   Thu, 27 Oct 2022 13:42:31 +0000
+Message-ID: <BYAPR21MB1688E0040710DF040BB7FCCDD7339@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <20221027095729.1676394-1-anrayabh@linux.microsoft.com>
+ <20221027095729.1676394-2-anrayabh@linux.microsoft.com>
+In-Reply-To: <20221027095729.1676394-2-anrayabh@linux.microsoft.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     "Garmin.Chang" <Garmin.Chang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20221024094254.29218-1-Garmin.Chang@mediatek.com>
- <20221024094254.29218-2-Garmin.Chang@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221024094254.29218-2-Garmin.Chang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=7807c19b-bbc9-4867-b28c-415332ac85e7;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-10-27T13:41:31Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|SA1PR21MB3809:EE_
+x-ms-office365-filtering-correlation-id: e2ea3bad-dbc6-4ade-59c6-08dab82118a5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: O+G5okJZ/cHLkheH2A9Qa3wytqiZVLigBgyBjcoJccM2XznmO4ScbPk/h0woYonVzDyjE5NYMN6+XBOfctXPaaq/2PQjbPa8WXBYMkWwmE8rE2sWO3LuoStT4FgfXsm9u/Pfeh/7FKxg7+Aj8+4dybFR7AptjqGUd6Y+OC6tne2NUCQeZlYnlE3na1F61bMXRSwCC4cc4Y7Kb/jvzhZyd4O4XoLU/zthaW1zSpypgWDmbp5IDTj5XZkY2+DU6XxCJ9JsQZkLdTj+mqDR6OTxoKsFD5sg+vg9t51uCVxxUxRYMRwH95Lkeu3A3CjtdX4v7SCzoPVguErZeWoP/afxcIT2C3LqKDu/s4SZA4Lfn2oCod1R8Ii/5PSGNzFfdba64P8uL+Y2aM1m8J3Jmu06AQBTP9vAzEU9kW3pBjEGKvR1T3uaWKqoY4/JBSX2p3nZYiRRXcIpjTOTJ/JWgEEdBNmipPQ09B1KSTXDBfC+XCmal9LvEOnIYIwXqNePZUZS8bs17fnlpIMKwaXTbrhaobZDAYZPx/uY55JEj4DMJMiET1qrBLAi8w+SRPYxijiwubYVGHDEvT0FEUCOqwOqBqG023UDp0dRgGFCAnlIcotS/8ITAohcL1yUcg7aRm0uqfwsLFxVrGVs55OeK6IWQE+GSCpOoBHGnKE4If1VfYs29EsaX27Y0EY5qBCLIxC5xf6Ngst6dmRUBuJfTdDNiIPooVdUnpiMAkOrsIpuxQVPqXS8E6khgBCpeSXVbacgWRrNs0yImm45+b0GgNcqcOkKeMyhUs54RrAyrpCpbtIaKsoHAfp24iRd7/iep9YZRwAA1/Ge0As4Yf4mw7sZIQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(136003)(376002)(346002)(396003)(451199015)(33656002)(2906002)(8990500004)(64756008)(66446008)(66476007)(66556008)(38070700005)(921005)(38100700002)(122000001)(7416002)(5660300002)(110136005)(52536014)(41300700001)(54906003)(8936002)(316002)(71200400001)(66946007)(55016003)(10290500003)(4326008)(8676002)(76116006)(83380400001)(9686003)(26005)(478600001)(6506007)(82950400001)(82960400001)(7696005)(186003)(86362001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ZtjPG5ipPEvLYQAcPhh8Xr6E5RoIW6UrLMusGGnt1BUEP+txSzVFlc13nkG8?=
+ =?us-ascii?Q?NCgyDAS3W1WZAQN1SDxTafdKLVd13af3hStfhLHvwZ/o0YBXEF978dXsIL1D?=
+ =?us-ascii?Q?1MtEbXfhK0pBHrbu20x9uakP0uF5XLQhHoc8W82Y7ol4i8eTsqKmCIyjgd4A?=
+ =?us-ascii?Q?ZXQjii7Slen9NS8e+0MEc1rHK5SBMB6srJ9IA2wL2nTAkwUMLs2OPTosNrB2?=
+ =?us-ascii?Q?lTPOzOaDNVrFFmS3NUe4kTVhst87dOXnPGSFZ2an9csLvpfuKebXEFF+2CFd?=
+ =?us-ascii?Q?atTzkq4u+KirhFfYV5GhCD58ByhjHPV4SzYNSd7n57Gc5+wWAAWFEiGfkKgO?=
+ =?us-ascii?Q?YCnjoAKMeSPJMU5Ilh2BoMknc5nUYk5iHnHDo0nxKdcyf4ZoC5AB2qZVTZgA?=
+ =?us-ascii?Q?4IC4U2tGUbzhq0lPlBsQrdz0rFFUzp2OKSjOkbY8HZvz7c9sTPSNMQH2qS7Q?=
+ =?us-ascii?Q?Sp2JgGabxF6KJXi5raLsy2bFUE6VpEPVlMVfN9i3cufEsVUgAcILK7W/UpsL?=
+ =?us-ascii?Q?K1lPoqrmnA2/WHJ0bHzEbmO4qXZm0fNpAS4Idh/fk+2Yxtx6gA57o0Q+SUGb?=
+ =?us-ascii?Q?4BEEtaimANKUCZmngDcO2MQWbdK+wJm41YTXbJDR8Sr+wcGLcNXd7HPN3yKg?=
+ =?us-ascii?Q?B2NIK1L2+RNl4bBaWv1k2q36FIA9dGD3wpfhrSyiykAQUuSIWcS0cr9wgk6C?=
+ =?us-ascii?Q?kZrAZh4F2w5qI0ncm39HZhQXVbSmbaEYnFVmsLU1Rj7MVgQYOfc66t/TjSMh?=
+ =?us-ascii?Q?TMvuPnMe/yj5OigDKRIvNMRR6PtdXtbZN3qiR48wVzt6/gEFUL1wQK1apeOt?=
+ =?us-ascii?Q?J6QLpKfqmt/sflRyeOUYyWHNUUOV9NGhOyyZxlrS+aKbMbJEceqnZRts/uWX?=
+ =?us-ascii?Q?wYrVOwfIHfx/Ma7XvDdUls22PhmdtN7yMJCWQAVek26VhJeXwUob7qh8c1d8?=
+ =?us-ascii?Q?dbojj97cGu++1t7duKcG3K5/wlw8znsPPGQoqY6HEqc3fUn4rcsrlPCv0zF0?=
+ =?us-ascii?Q?WuHyS/bsKO+PLIelT67iS6SX7KQI2Zq2owLlS0ZG/6Z0KjyjkT6Zl421mpdZ?=
+ =?us-ascii?Q?1u9xQMHKuMH9yUyYWdW/ARJSadijtXCos/onb2tlUKYDnLtvb1dOZNU6YOWB?=
+ =?us-ascii?Q?AOca5FUU9uGCf22XODBKl1tyqbOdXSk4bIrLWqEEPBnMprqu4v12KyQaZvHb?=
+ =?us-ascii?Q?QaEi6QpUW0eQ28YKP3agyYOYNgrc/ICvtSR6W13M3j2LbUzkT1GEcODDEt26?=
+ =?us-ascii?Q?IC6ZORJKXsgeRKrM02ZE/uabP4KI/ZEZiStEPfbaUgZkv317+R7MthtqGodr?=
+ =?us-ascii?Q?nD/SlwH5oQcq/bAGVYExPvh6S7xygpPetoXbf5BJ2F7hITwOvYpN6qNjR0ql?=
+ =?us-ascii?Q?+qyMk2oZemzx8/p4FyAteN4t9zQnp/kPTUZucZu+u9I5AiPyjGLfbOmhrJQ8?=
+ =?us-ascii?Q?zN0KU2C2YQwmnzPWckEadh60XsB7D8/XEGlk/jkOg+yGPgvWu9KFjNV4s9FI?=
+ =?us-ascii?Q?wCUbyALygMD/bB4lbcrZ8jvx/WpHXh/Al2xsY7SMlqjRjwTxh49YTVtbSUjc?=
+ =?us-ascii?Q?+LG/aQX9tHEx6Xv2OAJbqatv/mVibnj0HKVZJeWRSXgzP8K82mTML4LinsRC?=
+ =?us-ascii?Q?7w=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e2ea3bad-dbc6-4ade-59c6-08dab82118a5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Oct 2022 13:42:31.2798
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: j9Ce+eTBa2lln1LjjjZQxuVTBQcjvstlz7Je65MJMRPkRtGC+dBKQsG/R36ISPkIYU3cOOhLlBni7F0NzK27FGuhrci3K6K+z2RUd2bH904=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR21MB3809
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/10/2022 05:42, Garmin.Chang wrote:
-> Add the new binding documentation for system clock
-> and functional clock on MediaTek MT8188.
-> 
-> Signed-off-by: Garmin.Chang <Garmin.Chang@mediatek.com>
+From: Anirudh Rayabharam <anrayabh@linux.microsoft.com> Sent: Thursday, Oct=
+ober 27, 2022 2:57 AM
+>=20
+> Add a data structure to represent the reference TSC MSR similar to
+> other MSRs. This simplifies the code for updating the MSR.
+>=20
+> Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
 > ---
->  .../arm/mediatek/mediatek,mt8188-clock.yaml   |  70 ++
->  .../mediatek/mediatek,mt8188-sys-clock.yaml   |  55 ++
->  .../dt-bindings/clock/mediatek,mt8188-clk.h   | 733 ++++++++++++++++++
->  3 files changed, 858 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-clock.yaml
->  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-sys-clock.yaml
->  create mode 100644 include/dt-bindings/clock/mediatek,mt8188-clk.h
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-clock.yaml
-> new file mode 100644
-> index 000000000000..49dc681e6601
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-clock.yaml
-> @@ -0,0 +1,70 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt8188-clock.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  drivers/clocksource/hyperv_timer.c | 28 ++++++++++++++--------------
+>  include/asm-generic/hyperv-tlfs.h  |  9 +++++++++
+>  2 files changed, 23 insertions(+), 14 deletions(-)
+>=20
+> diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyp=
+erv_timer.c
+> index bb47610bbd1c..11332c82d1af 100644
+> --- a/drivers/clocksource/hyperv_timer.c
+> +++ b/drivers/clocksource/hyperv_timer.c
+> @@ -395,25 +395,25 @@ static u64 notrace read_hv_sched_clock_tsc(void)
+>=20
+>  static void suspend_hv_clock_tsc(struct clocksource *arg)
+>  {
+> -	u64 tsc_msr;
+> +	union hv_reference_tsc_msr tsc_msr;
+>=20
+>  	/* Disable the TSC page */
+> -	tsc_msr =3D hv_get_register(HV_REGISTER_REFERENCE_TSC);
+> -	tsc_msr &=3D ~BIT_ULL(0);
+> -	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
+> +	tsc_msr.as_uint64 =3D hv_get_register(HV_REGISTER_REFERENCE_TSC);
+> +	tsc_msr.enable =3D 0;
+> +	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+>  }
+>=20
+>=20
+>  static void resume_hv_clock_tsc(struct clocksource *arg)
+>  {
+>  	phys_addr_t phys_addr =3D virt_to_phys(&tsc_pg);
+> -	u64 tsc_msr;
+> +	union hv_reference_tsc_msr tsc_msr;
+>=20
+>  	/* Re-enable the TSC page */
+> -	tsc_msr =3D hv_get_register(HV_REGISTER_REFERENCE_TSC);
+> -	tsc_msr &=3D GENMASK_ULL(11, 0);
+> -	tsc_msr |=3D BIT_ULL(0) | (u64)phys_addr;
+> -	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
+> +	tsc_msr.as_uint64 =3D hv_get_register(HV_REGISTER_REFERENCE_TSC);
+> +	tsc_msr.enable =3D 1;
+> +	tsc_msr.pfn =3D __phys_to_pfn(phys_addr);
+> +	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+>  }
+>=20
+>  #ifdef HAVE_VDSO_CLOCKMODE_HVCLOCK
+> @@ -495,7 +495,7 @@ static __always_inline void hv_setup_sched_clock(void
+> *sched_clock) {}
+>=20
+>  static bool __init hv_init_tsc_clocksource(void)
+>  {
+> -	u64		tsc_msr;
+> +	union hv_reference_tsc_msr tsc_msr;
+>  	phys_addr_t	phys_addr;
+>=20
+>  	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
+> @@ -530,10 +530,10 @@ static bool __init hv_init_tsc_clocksource(void)
+>  	 * (which already has at least the low 12 bits set to zero since
+>  	 * it is page aligned). Also set the "enable" bit, which is bit 0.
+>  	 */
+> -	tsc_msr =3D hv_get_register(HV_REGISTER_REFERENCE_TSC);
+> -	tsc_msr &=3D GENMASK_ULL(11, 0);
+> -	tsc_msr =3D tsc_msr | 0x1 | (u64)phys_addr;
+> -	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
+> +	tsc_msr.as_uint64 =3D hv_get_register(HV_REGISTER_REFERENCE_TSC);
+> +	tsc_msr.enable =3D 1;
+> +	tsc_msr.pfn =3D __phys_to_pfn(phys_addr);
+> +	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+>=20
+>  	clocksource_register_hz(&hyperv_cs_tsc, NSEC_PER_SEC/100);
+>=20
+> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hype=
+rv-tlfs.h
+> index fdce7a4cfc6f..b17c6eeb9afa 100644
+> --- a/include/asm-generic/hyperv-tlfs.h
+> +++ b/include/asm-generic/hyperv-tlfs.h
+> @@ -102,6 +102,15 @@ struct ms_hyperv_tsc_page {
+>  	volatile s64 tsc_offset;
+>  } __packed;
+>=20
+> +union hv_reference_tsc_msr {
+> +	u64 as_uint64;
+> +	struct {
+> +		u64 enable:1;
+> +		u64 reserved:11;
+> +		u64 pfn:52;
+> +	} __packed;
+> +};
 > +
-> +title: MediaTek Functional Clock Controller for MT8188
-> +
-> +maintainers:
-> +  - Garmin Chang <garmin.chang@mediatek.com>
-> +
-> +description: |
-> +  The clock architecture in MediaTek like below
-> +  PLLs -->
-> +          dividers -->
-> +                      muxes
-> +                           -->
-> +                              clock gate
-> +
-> +  The devices provide clock gate control in different IP blocks.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt8188-adsp_audio26m
+>  /*
+>   * The guest OS needs to register the guest ID with the hypervisor.
+>   * The guest ID is a 64 bit entity and the structure of this ID is
+> --
+> 2.34.1
 
-No underscores in compatibles.
-
-> +      - mediatek,mt8188-imp_iic_wrap_c
-> +      - mediatek,mt8188-imp_iic_wrap_en
-> +      - mediatek,mt8188-imp_iic_wrap_w
-> +      - mediatek,mt8188-mfgcfg
-> +      - mediatek,mt8188-vppsys0
-> +      - mediatek,mt8188-wpesys
-> +      - mediatek,mt8188-wpesys_vpp0
-> +      - mediatek,mt8188-vppsys1
-> +      - mediatek,mt8188-imgsys
-> +      - mediatek,mt8188-imgsys_wpe1
-> +      - mediatek,mt8188-imgsys_wpe2
-> +      - mediatek,mt8188-imgsys_wpe3
-> +      - mediatek,mt8188-imgsys1_dip_top
-> +      - mediatek,mt8188-imgsys1_dip_nr
-> +      - mediatek,mt8188-ipesys
-> +      - mediatek,mt8188-camsys
-> +      - mediatek,mt8188-camsys_rawa
-> +      - mediatek,mt8188-camsys_yuva
-> +      - mediatek,mt8188-camsys_rawb
-> +      - mediatek,mt8188-camsys_yuvb
-> +      - mediatek,mt8188-ccusys
-> +      - mediatek,mt8188-vdecsys_soc
-> +      - mediatek,mt8188-vdecsys
-> +      - mediatek,mt8188-vencsys
-
-Blank line here
-
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#clock-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    imp_iic_wrap_c: clock-controller@11283000 {
-
-Drop the label, not used,
-
-> +        compatible = "mediatek,mt8188-imp_iic_wrap_c";
-> +        reg = <0x11283000 0x1000>;
-> +        #clock-cells = <1>;
-> +    };
-> +
-> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-sys-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-sys-clock.yaml
-> new file mode 100644
-> index 000000000000..35962b3746e1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-sys-clock.yaml
-> @@ -0,0 +1,55 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt8188-sys-clock.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek System Clock Controller for MT8188
-> +
-> +maintainers:
-> +  - Garmin Chang <garmin.chang@mediatek.com>
-> +
-> +description: |
-> +  The clock architecture in MediaTek like below
-> +  PLLs -->
-> +          dividers -->
-> +                      muxes
-> +                           -->
-> +                              clock gate
-> +
-> +  The apmixedsys provides most of PLLs which generated from SoC 26m.
-> +  The topckgen provides dividers and muxes which provide the clock source to other IP blocks.
-> +  The infracfg_ao provides clock gate in peripheral and infrastructure IP blocks.
-> +  The mcusys provides mux control to select the clock source in AP MCU.
-> +  The device nodes also provide the system control capacity for configuration.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - mediatek,mt8188-topckgen
-> +          - mediatek,mt8188-infracfg_ao
-
-Same comment.
-
-> +          - mediatek,mt8188-apmixedsys
-> +          - mediatek,mt8188-pericfg_ao
-> +      - const: syscon
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#clock-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    topckgen: syscon@10000000 {
-
-Drop label.
-
-> +        compatible = "mediatek,mt8188-topckgen", "syscon";
-> +        reg = <0x10000000 0x1000>;
-> +        #clock-cells = <1>;
-Best regards,
-Krzysztof
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 
