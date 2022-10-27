@@ -2,187 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A84761061D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 01:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00362610622
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 01:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235724AbiJ0XHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 19:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
+        id S235270AbiJ0XIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 19:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235546AbiJ0XHZ (ORCPT
+        with ESMTP id S234803AbiJ0XIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 19:07:25 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9528FD5E
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 16:07:24 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id 192so3251973pfx.5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 16:07:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r7ZwQDjmVNpyM8eGvcKf07ueI+SDPbraRsgxG6I2tAA=;
-        b=WisfFTtx21I3yqt1Nw+D22CSWrVOJmj7hFRDeeNpMuh+d9TYXw1VuJ49uIHY7FDFLf
-         QwNjrKCjuMdoT0p+T6bSTq8jqPodRhe10wL6RwRkSS4M3+ewLLesWmMJnSd3teIhxL+N
-         zDbAru2xMUit2cvozy+Ra1M8Srys3eY/J78hs7ltUjNshk31fVWeiNBctB4sD5s1A7xD
-         D319ddMvV7NzwR0LxPDQR9gp7jBJQHiM+Hzb4odFWCvVOgn0tgYnv6o7UFMPVAEmwjcV
-         6+9Cm28Nd3IeXH6kUDaNcHaKUdnt5WOV1rG7gig5Cdw2uZWmT28LRAIHHzz9fCgtXhbm
-         bexA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r7ZwQDjmVNpyM8eGvcKf07ueI+SDPbraRsgxG6I2tAA=;
-        b=0ycJvr9jjUpHZT4KBKvq9dyfdoz+BC3JatwvUPx3CxXh0fvjPB+YPoAh2WC/Rr6s2q
-         Zn+5yRspATQiRTqfzHl30UC1Uvk5dY4untcVorTZUa1XVf83p4l76SlViuT9htSo4JYa
-         RSE80SrDK/Nx4fGauJgnc4tK+Vs019yxEkeBDuokyBeth+fmY7Ave5W/4MxwA/a7bCDe
-         ywiR1ICFdgn/no5SWPM/UX+MHSV9qpaszkYt46BbzYjZq3wDtUnAMGaD1VO5BMEIsA1+
-         7g3cGrGJWM/HNyVUh+X6I9XvqXFBQSpIGasOnrpZ6HoCkkwkEpLc3Gx2LyNNMo7y8cDi
-         mNOQ==
-X-Gm-Message-State: ACrzQf3nNx7+KGr1mXKhOcbp7EJ+w02ct4MB5ZHv0OQUm+oMfzHBPng0
-        KDYZvK0/UxbYAVJ5FG0JIZBRHQ==
-X-Google-Smtp-Source: AMsMyM4lCRpo1/qoPrU+4TKGZmkjoDHiZs2bxqR+mCtLWFWFfk6AdJihtpcbgbgxmAwz131aJaiFcw==
-X-Received: by 2002:a05:6a00:2342:b0:56b:e64c:e065 with SMTP id j2-20020a056a00234200b0056be64ce065mr21562480pfj.32.1666912044311;
-        Thu, 27 Oct 2022 16:07:24 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id f4-20020a62db04000000b00560cdb3784bsm1665664pfg.60.2022.10.27.16.07.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 16:07:23 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 16:07:23 -0700 (PDT)
-X-Google-Original-Date: Thu, 27 Oct 2022 15:45:24 PDT (-0700)
-Subject:     Re: [PATCH] Revert "clocksource/drivers/riscv: Events are stopped during CPU suspend"
-In-Reply-To: <20221023185444.678573-1-conor@kernel.org>
-CC:     daniel.lezcano@linaro.org, tglx@linutronix.de,
-        Conor Dooley <conor.dooley@microchip.com>, samuel@sholland.org,
-        aou@eecs.berkeley.edu, atishp@atishpatra.org, dmitriy@oss-tech.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor Dooley <conor@kernel.org>
-Message-ID: <mhng-57a8ff91-b9b1-4667-96be-3f8fed25dcc6@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 27 Oct 2022 19:08:52 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62CA78FD4A
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 16:08:51 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 4729E92009D; Fri, 28 Oct 2022 01:08:18 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 3E4F792009B;
+        Fri, 28 Oct 2022 00:08:18 +0100 (BST)
+Date:   Fri, 28 Oct 2022 00:08:18 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Arnd Bergmann <arnd@arndb.de>
+cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Subject: Re: [PATCH v14 08/14] mm: multi-gen LRU: support page table walks
+In-Reply-To: <d24a5273-1c66-4653-9730-4de31ffcf0e8@app.fastmail.com>
+Message-ID: <alpine.DEB.2.21.2210272332590.3199@angie.orcam.me.uk>
+References: <20220815071332.627393-1-yuzhao@google.com> <20220815071332.627393-9-yuzhao@google.com> <Y0go8wWtdcyH1+Ch@hirez.programming.kicks-ass.net> <CAOUHufa9+FTO3Pv-5jC-e3S5goPsUGu-5KcPVHa4bWb0X+d2ug@mail.gmail.com> <CAHk-=wj1rc2t5noMtVOgu8XXeTM4KiggEub9PdcexxeQrYPZvA@mail.gmail.com>
+ <Y1FXpHdyvXjrjbLw@hirez.programming.kicks-ass.net> <CAHk-=whQchubuDpRGFabhmcZuzdt13OOF8wznXb+Dbi3GzBQhQ@mail.gmail.com> <Y1GZjPO+szk7X0wP@hirez.programming.kicks-ass.net> <CAHk-=wikUaRM5H_y1Bc+QyvGi40dKDL8fnCTyz7ECbwK7aHNPQ@mail.gmail.com>
+ <Y1IUMDJFScAMrCS5@casper.infradead.org> <CAHk-=wjrpH1+6cQQjTO6p-96ndBMiOnNH098vhS2jLybxD+7gA@mail.gmail.com> <alpine.DEB.2.21.2210211911390.50489@angie.orcam.me.uk> <CAHk-=wgNZNNd4t004x0ehXm=DA+JmYY=0MgVNDXUtoV4ApyXvQ@mail.gmail.com>
+ <alpine.DEB.2.21.2210240054280.50489@angie.orcam.me.uk> <d24a5273-1c66-4653-9730-4de31ffcf0e8@app.fastmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 23 Oct 2022 11:54:44 PDT (-0700), Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> This reverts commit 232ccac1bd9b5bfe73895f527c08623e7fa0752d.
-> If an AXI read to the PCIe controller on PolarFire SoC times out, the
-> system will stall, with an expected:
-> 	 io scheduler mq-deadline registered
-> 	 io scheduler kyber registered
-> 	 microchip-pcie 2000000000.pcie: host bridge /soc/pcie@2000000000 ranges:
-> 	 microchip-pcie 2000000000.pcie:      MEM 0x2008000000..0x2087ffffff -> 0x0008000000
-> 	 microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	 microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	 microchip-pcie 2000000000.pcie: axi read request error
-> 	 microchip-pcie 2000000000.pcie: axi read timeout
-> 	 microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	 microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	 microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	 microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	 microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	 microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	 Freeing initrd memory: 7336K
-> 	 mc_event_handler: 667402 callbacks suppressed
-> 	 microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	 microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	 microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	 microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	 microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	 microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	 microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	 microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	 microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	 microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	 mc_event_handler: 666588 callbacks suppressed
-> <truncated>
-> 	microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	mc_event_handler: 666748 callbacks suppressed
-> 	microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-> 	rcu: 	0-...0: (1 GPs behind) idle=19f/1/0x4000000000000002 softirq=34/36 fqs=2626
-> 		(detected by 1, t=5256 jiffies, g=-1151, q=1143 ncpus=4)
-> 	Task dump for CPU 0:
-> 	task:swapper/0       state:R  running task     stack:    0 pid:    1 ppid:     0 flags:0x00000008
-> 	Call Trace:
-> 	mc_event_handler: 666648 callbacks suppressed
->
->  With this patch applied, the system just locks up without RCU stalling:
-> 	io scheduler mq-deadline registered
-> 	io scheduler kyber registered
-> 	microchip-pcie 2000000000.pcie: host bridge /soc/pcie@2000000000 ranges:
-> 	microchip-pcie 2000000000.pcie:      MEM 0x2008000000..0x2087ffffff -> 0x0008000000
-> 	microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	microchip-pcie 2000000000.pcie: axi read request error
-> 	microchip-pcie 2000000000.pcie: axi read timeout
-> 	microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
-> 	microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
-> 	Freeing initrd memory: 7332K
->
-> Link: https://lore.kernel.org/linux-riscv/YzYTNQRxLr7Q9JR0@spud/
-> Fixes: 232ccac1bd9b ("clocksource/drivers/riscv: Events are stopped during CPU suspend")
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> I don't really want to post a revert, but it's been nearly a month since
-> I posted about my issue initially & 2 weeks without a reply to Palmer's
-> comments.
-> CC: samuel@sholland.org
-> CC: aou@eecs.berkeley.edu
-> CC: atishp@atishpatra.org
-> CC: daniel.lezcano@linaro.org
-> CC: dmitriy@oss-tech.org
-> CC: linux-kernel@vger.kernel.org
-> CC: linux-riscv@lists.infradead.org
-> CC: palmer@dabbelt.com
-> CC: paul.walmsley@sifive.com
-> CC: tglx@linutronix.de
-> ---
->  drivers/clocksource/timer-riscv.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
-> index 969a552da8d2..a0d66fabf073 100644
-> --- a/drivers/clocksource/timer-riscv.c
-> +++ b/drivers/clocksource/timer-riscv.c
-> @@ -51,7 +51,7 @@ static int riscv_clock_next_event(unsigned long delta,
->  static unsigned int riscv_clock_event_irq;
->  static DEFINE_PER_CPU(struct clock_event_device, riscv_clock_event) = {
->  	.name			= "riscv_timer_clockevent",
-> -	.features		= CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_FEAT_C3STOP,
-> +	.features		= CLOCK_EVT_FEAT_ONESHOT,
->  	.rating			= 100,
->  	.set_next_event		= riscv_clock_next_event,
->  };
+On Wed, 26 Oct 2022, Arnd Bergmann wrote:
 
-There's some discussion on that linked patch and we don't really have a 
-fix yet, but IMO we're better off reverting this as it breaks the common 
-case and it's not clear this is even a sane way to fix the bug.
+> >> In fact, I don't understand how current kernels work on an i486 at
+> >> all, since it looks like
+> >> 
+> >>   exit_to_user_mode_prepare ->
+> >>     arch_exit_to_user_mode_prepare
+> >> 
+> >> ends up having an unconditional 'rdtsc' instruction in it.
+> >> >
+> >  The fix here is obviously and trivially:
+> >
+> > 	select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET if !M486SX && !M486
+> 
+> I think that would be "if X86_TSC", otherwise you still include the
+> TSC-less 586-class (5x86, 6x86, Elan, Winchip C6, MediaGX, ...)
 
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+ Right, I tend to forget about these more exotic chips from the 1990s era.  
+I'll run some verification and come up with the actual fix in the next 
+several days.
+
+> > So what's the actual burden from keeping this support around?  Would my 
+> > proposal to emulate CMPXCHG8B (and possibly RDTSC) in #UD handler help?
+> 
+> That sounds worse to me than the current use of runtime alternatives
+> for picking between cmpxchg8b_emu and the native instruction.
+
+ Why is that so?  Because of the trap-and-emulate technique?  It's been 
+around since forever and specified in some processor ISAs even, where some 
+machine instructions are explicitly allowed to be omitted from actual 
+hardware and delegated to OS emulation without making affected hardware 
+non-compliant.  VAX had it back from 1970s and RISC-V has it now.  We've 
+been using it to retrofit operations ourselves, though maybe not with the 
+x86 arch.
+
+ Or is it because of the complex address decoding x86 requires?  Well, I 
+have actually realised we do have it already, in the x87 CR0.EM emulator.  
+While IEEE-754 exceptions can make use of the address of the operand 
+recorded in the FPU environment full emulation requires decoding by hand.
+
+> For arm32, we have a combination of two other approaches:
+> 
+> - On the oldest processors that never had SMP support (ARMv5 and
+>   earlier), it is not possible to enable support for SMP at all.
+>   Using a Kconfig 'depends on X86_CMPXCHG64' for CONFIG_SMP would
+>   still allow building 486 kernels, but completely avoid the problem
+>   of trying to make the same kernel work on later SMP machines.
+
+ That would be fine with me of course.
+
+> - For the special case of early ARMv6 hardware that has 32-bit
+>   atomics but not 64-bit ones, the kernel just falls back to
+>   CONFIG_GENERIC_ATOMIC64 and no cmpxchg64(). The same should work
+>   for an i486+SMP kernel. It's obviously slower, but most users
+>   can trivially avoid this by either running an i686 SMP kernel
+>   or an i486 UP kernel.
+
+ You meant an M586TSC+ SMP kernel presumably (I have such a machine), but 
+otherwise I'd be fine with such an approach too.
+
+ So it looks to me like we have at least three options to keep 486 alive,
+two of which seem fairly straightforward to deploy and maintain long-term.  
+I like your last proposal the most, FWIW.  Do we have a consensus here?
+
+  Maciej
