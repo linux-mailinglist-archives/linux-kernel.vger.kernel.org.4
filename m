@@ -2,123 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5099860F675
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BAF960F679
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235264AbiJ0Lqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 07:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
+        id S235339AbiJ0LsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 07:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234664AbiJ0Lqb (ORCPT
+        with ESMTP id S234664AbiJ0LsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 07:46:31 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F069A57BCF;
-        Thu, 27 Oct 2022 04:46:29 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7cb329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7cb:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5E8211EC05DD;
-        Thu, 27 Oct 2022 13:46:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1666871188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=70WD3mKzdGoHmhK5moaB/k6Uf9rZZRmGn5dGSO3eq/s=;
-        b=qJeclvGdAvnulcRu52rAc1S+0jkFbyWONDuF7mG17QnXwJAvcji53ofqzEWuX3094Xln14
-        tK+5oyYm3q9IU2hENTiIDBC1lQ0tOnAD/6romLeKZnaDoFRVkl4rvYFlDquH1jpOtUCz0u
-        lDCixK7X9oNdQFAIcqHNRYXgQg9i/I0=
-Date:   Thu, 27 Oct 2022 13:46:24 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH] x86/MCE/AMD: Clear DFR errors found in THR handler
-Message-ID: <Y1pvkIJ/Uipxolqy@zn.tnic>
-References: <20220621155943.33623-1-yazen.ghannam@amd.com>
+        Thu, 27 Oct 2022 07:48:18 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADB55851F
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 04:48:14 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id bp11so1718359wrb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 04:48:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R42RojmRq4zRc2qoWo071bNzbgLKUBvyZz6AeJFc7EU=;
+        b=wBunsa6VUQ0hJ5y0LmUYP6d+PBiC5O2xuJ2H6K0dQS8BmCLaCNDUfCmNCfJgF2y4Jt
+         3f4DqIWhRIQ5oNVHNjxtpRd93D87SybKiZUEZBNlDBJTkxKDJloEUEUkwxoscwRHLlPS
+         oalspQgNVXJlOSQ1F2pOoc6GqzfGUI2dlLBNAdY2ZN+tYPbfq4xTS5QCGYDo6J1pU9ha
+         surevtxCRRsIUEa2tbNLA8lWl2pZUc8aiqPiGB9LmR2F8sAd2IZcJPiyd7zfvBsa6NLU
+         uV3/8vu5rG6E7d95NoGM1ZXP0DUNVQ724i48YARqttPT4rFgjmt3dm5Hk/Y1ay9YCHtk
+         rjMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R42RojmRq4zRc2qoWo071bNzbgLKUBvyZz6AeJFc7EU=;
+        b=sOiOALz/XYsBBmHX9w++s8lijVjex5+1QCSWJF+uf5eQt6NIXG5d+7cuefOfVFMuDp
+         0Dw4lYY/xPUKvWcSSwVEeF/9tU/lhI6n3bG3viX3qETkEOJDVcJgy1+lA5BRTJTe3hX3
+         BRmO2VCdRMV8oq4y6HAyQLJmJwg9sKY6+mc8pBCrws6CC0Ayb5FPaqFUnk6PD+eH0NSx
+         eayB2IYdpEqM5aBtfblUvWPl5xiyYh5SFFnRmHcx7k5z7tlHy5fIStHk3NpEPif5jTpO
+         DRyf044RFyA2OEZAvavW9SnC1oaSbGlZ+A6BV7G7rL1Ne5gfCfvPE34/Fa3R99DJhRn0
+         6KjQ==
+X-Gm-Message-State: ACrzQf3/hljk9AjVb+REckRBCGWYL/k/zj3hCPxOxW+2VDreV7kwQqwW
+        x66L3EQ+tmT9aJIctxooddzuLQ==
+X-Google-Smtp-Source: AMsMyM44o5az+ftHI1eUglivxRIwCzyx+vdVtkBbLWHRpfg4EtEfocLMTKpLwOLTgeoa+mzvwNPYIw==
+X-Received: by 2002:a5d:52cd:0:b0:236:57d0:8245 with SMTP id r13-20020a5d52cd000000b0023657d08245mr19746347wrv.152.1666871293206;
+        Thu, 27 Oct 2022 04:48:13 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id g7-20020a05600c4ec700b003c6f8d30e40sm4965699wmq.31.2022.10.27.04.48.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 04:48:12 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        David Airlie <airlied@gmail.com>,
+        Pin-yen Lin <treapking@chromium.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Robert Foss <robert.foss@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20221027032149.2739912-1-treapking@chromium.org>
+References: <20221027032149.2739912-1-treapking@chromium.org>
+Subject: Re: [PATCH] drm/bridge: it6505: Fix return value check for pm_runtime_get_sync
+Message-Id: <166687129194.255790.5379007139658764602.b4-ty@linaro.org>
+Date:   Thu, 27 Oct 2022 13:48:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220621155943.33623-1-yazen.ghannam@amd.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 03:59:43PM +0000, Yazen Ghannam wrote:
-> AMD's MCA Thresholding feature counts errors of all severites not just
-> correctable errors. If a deferred error causes the threshold limit to be
-> reached (it was the error that caused the overflow), then both a
-> deferred error interrupt and a thresholding interrupt will be triggered.
-> 
-> The order of the interrupts is not guaranteed. If the threshold
-> interrupt handler is executed first, then it will clear MCA_STATUS for
-> the error. It will not check or clear MCA_DESTAT which also holds a copy
-> of the deferred error. When the deferred error interrupt handler runs it
-> will not find an error in MCA_STATUS, but it will find the error in
-> MCA_DESTAT. This will cause two errors to be logged.
-> 
-> Check for deferred errors when handling a threshold interrupt. If a bank
-> contains a deferred error, then clear the bank's MCA_DESTAT register.
-> 
-> Define a new helper function to do the deferred error check and clearing
-> of MCA_DESTAT.
-> 
-> Fixes: 37d43acfd79f ("x86/mce/AMD: Redo error logging from APIC LVT interrupt handlers")
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> Cc: stable@vger.kernel.org
-> ---
->  arch/x86/kernel/cpu/mce/amd.c | 37 +++++++++++++++++++++++------------
->  1 file changed, 24 insertions(+), 13 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-> index 1c87501e0fa3..ab1145cf8328 100644
-> --- a/arch/x86/kernel/cpu/mce/amd.c
-> +++ b/arch/x86/kernel/cpu/mce/amd.c
-> @@ -788,6 +788,28 @@ _log_error_bank(unsigned int bank, u32 msr_stat, u32 msr_addr, u64 misc)
->  	return status & MCI_STATUS_DEFERRED;
->  }
->  
-> +static bool _log_error_deferred(unsigned int bank, u32 misc)
-> +{
-> +	bool defrd;
-> +
-> +	defrd = _log_error_bank(bank, mca_msr_reg(bank, MCA_STATUS),
-> +				mca_msr_reg(bank, MCA_ADDR), misc);
-> +
-> +	if (!defrd)
-> +		return false;
+Hi,
 
-I've zapped that defrd variable:
+On Thu, 27 Oct 2022 11:21:49 +0800, Pin-yen Lin wrote:
+> `pm_runtime_get_sync` may return 1 on success. Fix the `if` statement
+> here to make the code less confusing, even though additional calls to
+> `it6505_poweron` doesn't break anything when it's already powered.
+> 
+> This was reported by Dan Carpenter <dan.carpenter@oracle.com> in
+> https://lore.kernel.org/all/Y1fMCs6VnxbDcB41@kili/
+> 
+> [...]
 
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index ab1145cf8328..6ae7edea3270 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -790,12 +790,8 @@ _log_error_bank(unsigned int bank, u32 msr_stat, u32 msr_addr, u64 misc)
- 
- static bool _log_error_deferred(unsigned int bank, u32 misc)
- {
--	bool defrd;
--
--	defrd = _log_error_bank(bank, mca_msr_reg(bank, MCA_STATUS),
--				mca_msr_reg(bank, MCA_ADDR), misc);
--
--	if (!defrd)
-+	if (!_log_error_bank(bank, mca_msr_reg(bank, MCA_STATUS),
-+			     mca_msr_reg(bank, MCA_ADDR), misc))
- 		return false;
- 
- 	/*
+Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
+
+[1/1] drm/bridge: it6505: Fix return value check for pm_runtime_get_sync
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=3e4a21a29dd924995f1135cd50e8b7e0d023729c
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Neil
