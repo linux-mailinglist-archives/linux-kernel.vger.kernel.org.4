@@ -2,156 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D5261041C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF47610420
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236817AbiJ0VLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 17:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43122 "EHLO
+        id S236969AbiJ0VL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 17:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235481AbiJ0VLO (ORCPT
+        with ESMTP id S236867AbiJ0VLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 17:11:14 -0400
+        Thu, 27 Oct 2022 17:11:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96BA764B;
-        Thu, 27 Oct 2022 14:07:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1ACB6438;
+        Thu, 27 Oct 2022 14:08:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09096624EC;
-        Thu, 27 Oct 2022 21:07:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB0E0C433D6;
-        Thu, 27 Oct 2022 21:07:40 +0000 (UTC)
-Date:   Thu, 27 Oct 2022 17:07:55 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mirko Lindner <mlindner@marvell.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net
-Subject: Re: [RFC][PATCH v2 19/31] timers: net: Use del_timer_shutdown()
- before freeing timer
-Message-ID: <20221027170755.40ee4059@gandalf.local.home>
-In-Reply-To: <20221027163453.383bbf8e@gandalf.local.home>
-References: <20221027150525.753064657@goodmis.org>
-        <20221027150928.780676863@goodmis.org>
-        <20221027155513.60b211e2@gandalf.local.home>
-        <CAHk-=wjAjW2P5To82+CAM0Rx8RexQBHPTVZBWBPHyEPGm37oFA@mail.gmail.com>
-        <20221027163453.383bbf8e@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BC8D624F2;
+        Thu, 27 Oct 2022 21:08:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5A08C433B5;
+        Thu, 27 Oct 2022 21:08:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666904932;
+        bh=1bD/o+EvHYQU7AxSdFfSU7vvTCAjilQyIgQusXQCCZs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n2K29aSfnlUJaHzBZtWjNZJs52CNGuRO+vuRHFfPKBK87r1hS7vEUmRhqi4CJAd7h
+         geyjCY0cvQasohWzcIFkvgf3rkHkJazBUQhKDwFo7alZgCJ5gG3DO1kbtMEJBxNAkQ
+         VGa1r/RMsnqQpVckEEij+nr4/5POF8TFfmBUBRDPsAPpddw1i4C4z8affO3xyhJI2n
+         fEBroZZXeBOwwRkq6X1rsBNXQt7rrutdZ2tC/Es/An4sgPuw3SZgcqwU0wBIblTma+
+         oAPAZMgNc7IEWqW1KJr6GDIqqmeny4y6Q4/ZsQMcjguL4wOqZk5q5eUE1UjdoSe4Y9
+         jWwVAUNuNJfHg==
+Date:   Thu, 27 Oct 2022 14:08:52 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     "ruansy.fnst@fujitsu.com" <ruansy.fnst@fujitsu.com>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
+        "Yasunori Gotou (Fujitsu)" <y-goto@fujitsu.com>,
+        Brian Foster <bfoster@redhat.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "zwisler@kernel.org" <zwisler@kernel.org>,
+        Jeff Moyer <jmoyer@redhat.com>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "toshi.kani@hpe.com" <toshi.kani@hpe.com>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH] xfs: fail dax mount if reflink is enabled on a partition
+Message-ID: <Y1rzZN0wgLcie47z@magnolia>
+References: <Yzt6eWLuX/RTjmjj@magnolia>
+ <f196bcab-6aa2-6313-8a7c-f8ab409621b7@fujitsu.com>
+ <Yzx64zGt2kTiDYaP@magnolia>
+ <6a83a56e-addc-f3c4-2357-9589a49bf582@fujitsu.com>
+ <Y1NRNtToQTjs0Dbd@magnolia>
+ <20221023220018.GX3600936@dread.disaster.area>
+ <OSBPR01MB2920CA997DDE891C06776279F42E9@OSBPR01MB2920.jpnprd01.prod.outlook.com>
+ <20221024053109.GY3600936@dread.disaster.area>
+ <dd00529c-d3ef-40e3-9dea-834c5203e3df@fujitsu.com>
+ <Y1gjQ4wNZr3ve2+K@magnolia>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y1gjQ4wNZr3ve2+K@magnolia>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Oct 2022 16:34:53 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+[add tytso to cc since he asked about "How do you actually /get/ fsdax
+mode these days?" this morning]
 
-> What about del_timer_try_shutdown(), that if it removes the timer, it sets
-> the function to NULL (making it equivalent to a successful shutdown),
-> otherwise it does nothing. Allowing the the timer to be rearmed.
+On Tue, Oct 25, 2022 at 10:56:19AM -0700, Darrick J. Wong wrote:
+> On Tue, Oct 25, 2022 at 02:26:50PM +0000, ruansy.fnst@fujitsu.com wrote:
+> > 
+> > 
+> > 在 2022/10/24 13:31, Dave Chinner 写道:
+> > > On Mon, Oct 24, 2022 at 03:17:52AM +0000, ruansy.fnst@fujitsu.com wrote:
+> > >> 在 2022/10/24 6:00, Dave Chinner 写道:
+> > >>> On Fri, Oct 21, 2022 at 07:11:02PM -0700, Darrick J. Wong wrote:
+> > >>>> On Thu, Oct 20, 2022 at 10:17:45PM +0800, Yang, Xiao/杨 晓 wrote:
+> > >>>>> In addition, I don't like your idea about the test change because it will
+> > >>>>> make generic/470 become the special test for XFS. Do you know if we can fix
+> > >>>>> the issue by changing the test in another way? blkdiscard -z can fix the
+> > >>>>> issue because it does zero-fill rather than discard on the block device.
+> > >>>>> However, blkdiscard -z will take a lot of time when the block device is
+> > >>>>> large.
+> > >>>>
+> > >>>> Well we /could/ just do that too, but that will suck if you have 2TB of
+> > >>>> pmem. ;)
+> > >>>>
+> > >>>> Maybe as an alternative path we could just create a very small
+> > >>>> filesystem on the pmem and then blkdiscard -z it?
+> > >>>>
+> > >>>> That said -- does persistent memory actually have a future?  Intel
+> > >>>> scuttled the entire Optane product, cxl.mem sounds like expansion
+> > >>>> chassis full of DRAM, and fsdax is horribly broken in 6.0 (weird kernel
+> > >>>> asserts everywhere) and 6.1 (every time I run fstests now I see massive
+> > >>>> data corruption).
+> > >>>
+> > >>> Yup, I see the same thing. fsdax was a train wreck in 6.0 - broken
+> > >>> on both ext4 and XFS. Now that I run a quick check on 6.1-rc1, I
+> > >>> don't think that has changed at all - I still see lots of kernel
+> > >>> warnings, data corruption and "XFS_IOC_CLONE_RANGE: Invalid
+> > >>> argument" errors.
+> > >>
+> > >> Firstly, I think the "XFS_IOC_CLONE_RANGE: Invalid argument" error is
+> > >> caused by the restrictions which prevent reflink work together with DAX:
+> > >>
+> > >> a. fs/xfs/xfs_ioctl.c:1141
+> > >> /* Don't allow us to set DAX mode for a reflinked file for now. */
+> > >> if ((fa->fsx_xflags & FS_XFLAG_DAX) && xfs_is_reflink_inode(ip))
+> > >>          return -EINVAL;
+> > >>
+> > >> b. fs/xfs/xfs_iops.c:1174
+> > >> /* Only supported on non-reflinked files. */
+> > >> if (xfs_is_reflink_inode(ip))
+> > >>          return false;
+> > >>
+> > >> These restrictions were removed in "drop experimental warning" patch[1].
+> > >>    I think they should be separated from that patch.
+> > >>
+> > >> [1]
+> > >> https://lore.kernel.org/linux-xfs/1663234002-17-1-git-send-email-ruansy.fnst@fujitsu.com/
+> > >>
+> > >>
+> > >> Secondly, how the data corruption happened?
+> > > 
+> > > No idea - i"m just reporting that lots of fsx tests failed with data
+> > > corruptions. I haven't had time to look at why, I'm still trying to
+> > > sort out the fix for a different data corruption...
+> > > 
+> > >> Or which case failed?
+> > > 
+> > > *lots* of them failed with kernel warnings with reflink turned off:
+> > > 
+> > > SECTION       -- xfs_dax_noreflink
+> > > =========================
+> > > Failures: generic/051 generic/068 generic/075 generic/083
+> > > generic/112 generic/127 generic/198 generic/231 generic/247
+> > > generic/269 generic/270 generic/340 generic/344 generic/388
+> > > generic/461 generic/471 generic/476 generic/519 generic/561 xfs/011
+> > > xfs/013 xfs/073 xfs/297 xfs/305 xfs/517 xfs/538
+> > > Failed 26 of 1079 tests
+> > > 
+> > > All of those except xfs/073 and generic/471 are failures due to
+> > > warnings found in dmesg.
+> > > 
+> > > With reflink enabled, I terminated the run after g/075, g/091, g/112
+> > > and generic/127 reported fsx data corruptions and g/051, g/068,
+> > > g/075 and g/083 had reported kernel warnings in dmesg.
+> > > 
+> > >> Could
+> > >> you give me more info (such as mkfs options, xfstests configs)?
+> > > 
+> > > They are exactly the same as last time I reported these problems.
+> > > 
+> > > For the "no reflink" test issues:
+> > > 
+> > > mkfs options are "-m reflink=0,rmapbt=1", mount options "-o
+> > > dax=always" for both filesytems.  Config output at start of test
+> > > run:
+> > > 
+> > > SECTION       -- xfs_dax_noreflink
+> > > FSTYP         -- xfs (debug)
+> > > PLATFORM      -- Linux/x86_64 test3 6.1.0-rc1-dgc+ #1615 SMP PREEMPT_DYNAMIC Wed Oct 19 12:24:16 AEDT 2022
+> > > MKFS_OPTIONS  -- -f -m reflink=0,rmapbt=1 /dev/pmem1
+> > > MOUNT_OPTIONS -- -o dax=always -o context=system_u:object_r:root_t:s0 /dev/pmem1 /mnt/scratch
+> > > 
+> > > pmem devices are a pair of fake 8GB pmem regions set up by kernel
+> > > CLI via "memmap=8G!15G,8G!24G". I don't have anything special set up
+> > > - the kernel config is kept minimal for these VMs - and the only
+> > > kernel debug option I have turned on for these specific test runs is
+> > > CONFIG_XFS_DEBUG=y.
+> > 
+> > Thanks for the detailed info.  But, in my environment (and my 
+> > colleagues', and our real server with DCPMM) these failure cases (you 
+> > mentioned above, in dax+non_reflink mode, with same test options) cannot 
+> > reproduce.
+> > 
+> > Here's our test environment info:
+> >   - Ruan's env: fedora 36(v6.0-rc1) on kvm,pmem 2x4G:file backended
+> >   - Yang's env: fedora 35(v6.1-rc1) on kvm,pmem 2x1G:memmap=1G!1G,1G!2G
+> >   - Server's  : Ubuntu 20.04(v6.0-rc1) real machine,pmem 2x4G:real DCPMM
+> > 
+> > (To quickly confirm the difference, I just ran the failed 26 cases you 
+> > mentioned above.)  Except for generic/471 and generic/519, which failed 
+> > even when dax is off, the rest passed.
+> > 
+> > 
+> > We don't want fsdax to be truned off.  Right now, I think the most 
+> > important thing is solving the failed cases in dax+non_reflink mode. 
+> > So, firstly, I have to reproduce those failures.  Is there any thing 
+> > wrong with my test environments?  I konw you are using 'memmap=XXG!YYG' to 
+> > simulate pmem.  So, (to Darrick) could you show me your config of dev 
+> > environment and the 'testcloud'(I am guessing it's a server with real 
+> > nvdimm just like ours)?
 > 
-> I think this would work in this case.
+> Nope.  Since the announcement of pmem as a product, I have had 15
+> minutes of acces to one preproduction prototype server with actual
+> optane DIMMs in them.
+> 
+> I have /never/ had access to real hardware to test any of this, so it's
+> all configured via libvirt to simulate pmem in qemu:
+> https://lore.kernel.org/linux-xfs/YzXsavOWMSuwTBEC@magnolia/
+> 
+> /run/mtrdisk/[gh].mem are both regular files on a tmpfs filesystem:
+> 
+> $ grep mtrdisk /proc/mounts
+> none /run/mtrdisk tmpfs rw,relatime,size=82894848k,inode64 0 0
+> 
+> $ ls -la /run/mtrdisk/[gh].mem
+> -rw-r--r-- 1 libvirt-qemu kvm 10739515392 Oct 24 18:09 /run/mtrdisk/g.mem
+> -rw-r--r-- 1 libvirt-qemu kvm 10739515392 Oct 24 19:28 /run/mtrdisk/h.mem
 
-Guenter,
+Also forgot to mention that the VM with the fake pmem attached has a
+script to do:
 
-Can you apply this patch on top of the series, and see if it makes the
-warning go away?
+ndctl create-namespace --mode fsdax --map dev -e namespace0.0 -f
+ndctl create-namespace --mode fsdax --map dev -e namespace1.0 -f
 
-diff --git a/include/linux/timer.h b/include/linux/timer.h
-index d4d90149d015..e3c5f4bdd526 100644
---- a/include/linux/timer.h
-+++ b/include/linux/timer.h
-@@ -184,12 +184,23 @@ static inline int timer_pending(const struct timer_list * timer)
- 	return !hlist_unhashed_lockless(&timer->entry);
- }
- 
-+extern int __del_timer(struct timer_list * timer, bool free);
-+
- extern void add_timer_on(struct timer_list *timer, int cpu);
--extern int del_timer(struct timer_list * timer);
- extern int mod_timer(struct timer_list *timer, unsigned long expires);
- extern int mod_timer_pending(struct timer_list *timer, unsigned long expires);
- extern int timer_reduce(struct timer_list *timer, unsigned long expires);
- 
-+static inline int del_timer_try_shutdown(struct timer_list *timer)
-+{
-+	return __del_timer(timer, true);
-+}
-+
-+static inline int del_timer(struct timer_list *timer)
-+{
-+	return __del_timer(timer, false);
-+}
-+
- /*
-  * The jiffies value which is added to now, when there is no timer
-  * in the timer wheel:
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 7305c65ad0eb..073031cb3bb9 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -1255,7 +1255,7 @@ EXPORT_SYMBOL_GPL(add_timer_on);
-  * (ie. del_timer() of an inactive timer returns 0, del_timer() of an
-  * active timer returns 1.)
-  */
--int del_timer(struct timer_list *timer)
-+int __del_timer(struct timer_list *timer, bool free)
- {
- 	struct timer_base *base;
- 	unsigned long flags;
-@@ -1266,12 +1266,16 @@ int del_timer(struct timer_list *timer)
- 	if (timer_pending(timer)) {
- 		base = lock_timer_base(timer, &flags);
- 		ret = detach_if_pending(timer, base, true);
-+		if (free && ret) {
-+			timer->function = NULL;
-+			debug_timer_deactivate(timer);
-+		}
- 		raw_spin_unlock_irqrestore(&base->lock, flags);
- 	}
- 
- 	return ret;
- }
--EXPORT_SYMBOL(del_timer);
-+EXPORT_SYMBOL(__del_timer);
- 
- static int __try_to_del_timer_sync(struct timer_list *timer, bool free)
- {
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 10cc84379d75..23a97442a0a6 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -3345,7 +3345,7 @@ EXPORT_SYMBOL(sk_reset_timer);
- 
- void sk_stop_timer(struct sock *sk, struct timer_list* timer)
- {
--	if (del_timer(timer))
-+	if (del_timer_try_shutdown(timer))
- 		__sock_put(sk);
- }
- EXPORT_SYMBOL(sk_stop_timer);
+Every time the pmem device gets recreated, because apparently that's the
+only way to get S_DAX mode nowadays?
+
+--D
+
+> --D
+> 
+> > 
+> > 
+> > (I just found I only tested on 4G and smaller pmem device.  I'll try the 
+> > test on 8G pmem)
+> > 
+> > > 
+> > > THe only difference between the noreflink and reflink runs is that I
+> > > drop the "-m reflink=0" mkfs parameter. Otherwise they are identical
+> > > and the errors I reported are from back-to-back fstests runs without
+> > > rebooting the VM....
+> > > 
+> > > -Dave.
+> > 
+> > 
+> > --
+> > Thanks,
+> > Ruan.
