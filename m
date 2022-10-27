@@ -2,109 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28FFE60F209
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0196760F210
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234642AbiJ0IQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 04:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58788 "EHLO
+        id S234886AbiJ0ISX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 04:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233815AbiJ0IQm (ORCPT
+        with ESMTP id S233187AbiJ0ISU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 04:16:42 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF87EE09;
-        Thu, 27 Oct 2022 01:16:40 -0700 (PDT)
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MydlM3sYhz67DWp;
-        Thu, 27 Oct 2022 16:15:11 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 10:16:38 +0200
-Received: from [10.195.32.169] (10.195.32.169) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 09:16:37 +0100
-Message-ID: <72234b96-b3b5-606c-cf82-95e6ee86550d@huawei.com>
-Date:   Thu, 27 Oct 2022 09:16:37 +0100
+        Thu, 27 Oct 2022 04:18:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B411F7093
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:18:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666858699;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H+zjgwfHgHFBXNtS1dcXbFjT5C6bNkpnBbMlxremMWY=;
+        b=MUD+cnXr1io+bYdM9O2s0fJAlr36/AHyR4VkbQzkAMj8CRI77Dsllkjy95KbPbEkq4kA4Z
+        hB+Mscw/e5p/FCu/E+9aiF/KvpWAIODSR4641AIm18G4rMcayBloBQa3QcTaJFxnLms7KA
+        ckb0yr5e9Zi5otQ+HC2ocajC5P2b7XY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-241-B_t6IKkFMoezjuISql9Rjg-1; Thu, 27 Oct 2022 04:18:17 -0400
+X-MC-Unique: B_t6IKkFMoezjuISql9Rjg-1
+Received: by mail-wm1-f70.google.com with SMTP id f1-20020a1cc901000000b003cf475763b6so263282wmb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:18:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H+zjgwfHgHFBXNtS1dcXbFjT5C6bNkpnBbMlxremMWY=;
+        b=Q4venSBYC+q0cX8bG0TyLF+Yj53ovq9Pj6/2hMCD9p49qyLUpP9PxfuB93DlfsiRj2
+         wOA5IRTJTqx6VPUa+271ZMqq/veuWLMV1Cir/rl18MRjgdxf5HdMtajMYZY9CuHMolX7
+         gXyaDsPkOlvL4YOLM4q73AhXCW95oWa+3GcBxoaLUl/9O0widtEPMIYYvEKsd1sklZcF
+         LaH2GyZr6PCJShGSs9ka4kh9nN6vpz0wbp3rgerh1BFraBqxFjUEsMR5JDWTUPvklSmo
+         iQTprxADDQ/BcthK8Ba+eEj0gvxic85o+W+qgk85yWiJit1wX/Ol9Nsk7Z5wxQFmmShU
+         dBMw==
+X-Gm-Message-State: ACrzQf2d5LA7Eu1Y5oD1io7QLzAmlY1h+bhR91aHtyGhoybVeUMaqR9m
+        6O2Yh/irSxN3UP4y5GreHae1/Cj2K4R5K8jjCHteFBZrf5/5OZ5u5UKnKaIVrLdl/Vhltx1u9SL
+        6VXI13sPEOUI75WgXYEMm3kawCUduQ51oDgs/Ho6ihyTBEYGAcpOo8Zx/fI1pvEFG9JyVD4jmNf
+        M7
+X-Received: by 2002:adf:ebcf:0:b0:22c:9eb4:d6f6 with SMTP id v15-20020adfebcf000000b0022c9eb4d6f6mr31409136wrn.251.1666858696623;
+        Thu, 27 Oct 2022 01:18:16 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4CgeyUAU3EZlndfaRTAGP3JWCxEXgwxeBo73X8Vdko0Rf33SSC2AqFidTXI1tyqPqoddOuig==
+X-Received: by 2002:adf:ebcf:0:b0:22c:9eb4:d6f6 with SMTP id v15-20020adfebcf000000b0022c9eb4d6f6mr31409114wrn.251.1666858696314;
+        Thu, 27 Oct 2022 01:18:16 -0700 (PDT)
+Received: from ovpn-194-52.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id k1-20020a05600c1c8100b003b4fe03c881sm4208779wms.48.2022.10.27.01.18.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 01:18:15 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 13/46] KVM: x86: Prepare kvm_hv_flush_tlb() to
+ handle L2's GPAs
+In-Reply-To: <Y1m0HCMgwJen/NnU@google.com>
+References: <20221021153521.1216911-1-vkuznets@redhat.com>
+ <20221021153521.1216911-14-vkuznets@redhat.com>
+ <Y1m0HCMgwJen/NnU@google.com>
+Date:   Thu, 27 Oct 2022 10:18:14 +0200
+Message-ID: <87ilk5u1bt.fsf@ovpn-194-52.brq.redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH RFC v3 03/22] scsi: core: Implement reserved command
- handling
-To:     Hannes Reinecke <hare@suse.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <axboe@kernel.dk>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <jinpu.wang@cloud.ionos.com>,
-        <bvanassche@acm.org>, <hch@lst.de>, <ming.lei@redhat.com>,
-        <niklas.cassel@wdc.com>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <linuxarm@huawei.com>
-References: <1666693096-180008-1-git-send-email-john.garry@huawei.com>
- <1666693096-180008-4-git-send-email-john.garry@huawei.com>
- <cd5df8e0-03d1-8f22-0367-eb7c76bc70e7@opensource.wdc.com>
- <5db88114-559b-970a-0437-9acdacb47f8b@suse.de>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <5db88114-559b-970a-0437-9acdacb47f8b@suse.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.195.32.169]
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/10/2022 08:51, Hannes Reinecke wrote:
->>>
->>> Signed-off-by: Hannes Reinecke <hare@suse.de>
->>> #jpg: Set tag_set->queue_depth = shost->can_queue, and not
->>> = shost->can_queue + shost->nr_reserved_cmds;
->>> Signed-off-by: John Garry <john.garry@huawei.com>
->>> ---
->>>   drivers/scsi/hosts.c     |  3 +++
->>>   drivers/scsi/scsi_lib.c  |  2 ++
->>>   include/scsi/scsi_host.h | 15 ++++++++++++++-
->>>   3 files changed, 19 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
->>> index 12346e2297fd..db89afc37bc9 100644
->>> --- a/drivers/scsi/hosts.c
->>> +++ b/drivers/scsi/hosts.c
->>> @@ -489,6 +489,9 @@ struct Scsi_Host *scsi_host_alloc(struct 
->>> scsi_host_template *sht, int privsize)
->>>       if (sht->virt_boundary_mask)
->>>           shost->virt_boundary_mask = sht->virt_boundary_mask;
->>> +    if (sht->nr_reserved_cmds)
->>> +        shost->nr_reserved_cmds = sht->nr_reserved_cmds;
->>> +
->>
->> Nit: the if is not really necessary I think. But it does not hurt.
->>
-> Yes, we do.
-> Not all HBAs are able to figure out the number of reserved commands 
-> upfront; some modify that based on the PCI device used etc.
-> So I'd keep it for now.
+Sean Christopherson <seanjc@google.com> writes:
 
-I think logically Damien is right as in the shost alloc 
-shost->nr_reserved_cmds is initially zero, so:
+> On Fri, Oct 21, 2022, Vitaly Kuznetsov wrote:
+>> To handle L2 TLB flush requests, KVM needs to translate the specified
+>> L2 GPA to L1 GPA to read hypercall arguments from there.
+>> 
+>> No functional change as KVM doesn't handle VMCALL/VMMCALL from L2 yet.
+>> 
+>> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+>> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> ---
+>>  arch/x86/kvm/hyperv.c | 7 +++++++
+>>  1 file changed, 7 insertions(+)
+>> 
+>> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+>> index fca9c51891f5..df1efb821eb0 100644
+>> --- a/arch/x86/kvm/hyperv.c
+>> +++ b/arch/x86/kvm/hyperv.c
+>> @@ -23,6 +23,7 @@
+>>  #include "ioapic.h"
+>>  #include "cpuid.h"
+>>  #include "hyperv.h"
+>> +#include "mmu.h"
+>>  #include "xen.h"
+>>  
+>>  #include <linux/cpu.h>
+>> @@ -1908,6 +1909,12 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>>  	 */
+>>  	BUILD_BUG_ON(KVM_HV_MAX_SPARSE_VCPU_SET_BITS > 64);
+>>  
+>> +	if (!hc->fast && is_guest_mode(vcpu)) {
+>
+> Please add a comment explaining why only "slow" hypercalls need to translate the
+> GPA from L2=>L1.
+>
+> With a comment (and assuming this isn't a bug),
 
-if (sht->nr_reserved_cmds)
-        shost->nr_reserved_cmds = sht->nr_reserved_cmds;
+This is intended,
 
-is same as simply:
+For "slow" hypercalls 'hc->ingpa' is the GPA (or an 'nGPA' -- thus the
+patch) in guest memory where hypercall parameters are placed, kvm reads
+them with kvm_read_guest() later. For "fast" hypercalls 'ingpa' is a
+misnomer as it is not an address but the first parameter (in the 'tlb
+flush' case it's 'address space id' which we currently don't
+analyze). We may want to add a union in 'struct kvm_hv_hcall' to make
+this explicit.
 
-	shost->nr_reserved_cmds = sht->nr_reserved_cmds;
+The comment I'm thinking of would be:
 
-However I am just copying the coding style.
+"
+/*
+ * 'Slow' hypercall's first parameter is the address in guest's memory where
+ * hypercall parameters are placed. This is either a GPA or a nested GPA when
+ * KVM is handling the call from L2 ('direct' TLB flush), translate the address
+ * here so the memory can be uniformly read with kvm_read_guest().
+ */
+"
 
-Thanks,
-John
+>
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+>
+
+-- 
+Vitaly
+
