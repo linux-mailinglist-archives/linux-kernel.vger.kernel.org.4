@@ -2,106 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D86761036B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E560610387
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237203AbiJ0Uwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 16:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42868 "EHLO
+        id S236150AbiJ0U5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 16:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236658AbiJ0Uvx (ORCPT
+        with ESMTP id S236948AbiJ0U4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 16:51:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5B261137
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:45:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90F0F624E0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 20:44:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0051BC4FF0A;
-        Thu, 27 Oct 2022 20:44:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1666903475;
-        bh=eSie5cxyhFgYqzyXxlt/yaovtCT91qgoQ7QxhgbrCRA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cwgeAse8AScdR/vozj93GckLyLgrV217HBziNU9X3Uavagf8OmVJvdNpRYjIR979v
-         fnLJGoonLANrwPU4fEb5qkH+t/YUNePk9kk0Z+X/FEgOhzr4fbbu1L+fqXjQeaSdjX
-         ZbcDFIrWNEbpTq+AJVXaMoT+xObDtj+dad+lE5BI=
-Date:   Thu, 27 Oct 2022 13:44:33 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     andrey.konovalov@linux.dev
-Cc:     Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: Re: [PATCH] kasan: allow sampling page_alloc allocations for
- HW_TAGS
-Message-Id: <20221027134433.61c0d75246cc68455ea6dfd2@linux-foundation.org>
-In-Reply-To: <c124467c401e9d44dd35a36fdae1c48e4e505e9e.1666901317.git.andreyknvl@google.com>
-References: <c124467c401e9d44dd35a36fdae1c48e4e505e9e.1666901317.git.andreyknvl@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 27 Oct 2022 16:56:47 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1FFAD998
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:49:12 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id e15so2549676qvo.4
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:49:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oSQGNRMEvUKfx6go8ULfblA0p1pLNMVNwBSwzmOAVIQ=;
+        b=KiOYl6oYgVWmVt5yfOwXFbg2uqh6VMRSaNrvgwmuxSGJROVhF0gOA1n6rrYx8VRW6R
+         VVZ63rmL9pY6OoKE9oUm6undU4L2Zw1Drahl+CZCyz+M4M06l6JRo9sMPUn+pAaD9PiI
+         Dk7dgLCKUTOIMkWDgv7w/+2Fdi4C07XO5WJgA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oSQGNRMEvUKfx6go8ULfblA0p1pLNMVNwBSwzmOAVIQ=;
+        b=zZd3W1UlGl2+JerD+IkDtUPsV+lUL+Nikz7JWvVph35hAVR40xCOQXyFEA9odrlTTX
+         i9TQ/ZhwqESzTlcVJ8Oz1hDi6430fPc7xjYRWYmurUd3VerJrDZRlv2pSzMVTCo2u6hd
+         +cCSJQzcSc+umU69uZVGlQ5eAhryN0j+mN4yV2kSJNjHd1AFkZTa8IX6FI2kO22UldYs
+         L90Lu+DJmdOYflkQ/AOytZQg4zuUlJYsdPFtWl9TtAIGKcoZ2V7l/a2Dx21LpBoyW+Ww
+         EtvaE7kcYV5cXA6sLYAFtgjkWpZZH/ju6eFNZPi7NFHmeXiBNTsjKWRqJCSQQI74HEJV
+         Fo0g==
+X-Gm-Message-State: ACrzQf0hKmKjZwas1QmSvq3pGI6MG2SOT4Xd/Bg/L9TKEfIpn9PE2cO5
+        36E62MQBahXnQ6ps2bS3MsiZQsDnJdLTOQ==
+X-Google-Smtp-Source: AMsMyM7b7Zl1KpyuskWCgwwAwgkbfT3pXO/6GVevcV8AevfRKoHCwpCC0yAwbHVwYEAUxgqOvrhQJQ==
+X-Received: by 2002:a0c:f04e:0:b0:4bb:61d9:d7b5 with SMTP id b14-20020a0cf04e000000b004bb61d9d7b5mr24218434qvl.10.1666903751852;
+        Thu, 27 Oct 2022 13:49:11 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id bs15-20020a05620a470f00b006ec09d7d357sm1658822qkb.47.2022.10.27.13.49.11
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 13:49:11 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id z192so3841049yba.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:49:11 -0700 (PDT)
+X-Received: by 2002:a05:6902:124f:b0:66e:e3da:487e with SMTP id
+ t15-20020a056902124f00b0066ee3da487emr49547816ybu.310.1666903751005; Thu, 27
+ Oct 2022 13:49:11 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221027150525.753064657@goodmis.org> <20221027150928.780676863@goodmis.org>
+ <20221027155513.60b211e2@gandalf.local.home> <CAHk-=wjAjW2P5To82+CAM0Rx8RexQBHPTVZBWBPHyEPGm37oFA@mail.gmail.com>
+ <20221027163453.383bbf8e@gandalf.local.home>
+In-Reply-To: <20221027163453.383bbf8e@gandalf.local.home>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 27 Oct 2022 13:48:54 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whoS+krLU7JNe=hMp2VOcwdcCdTXhdV8qqKoViwzzJWfA@mail.gmail.com>
+Message-ID: <CAHk-=whoS+krLU7JNe=hMp2VOcwdcCdTXhdV8qqKoViwzzJWfA@mail.gmail.com>
+Subject: Re: [RFC][PATCH v2 19/31] timers: net: Use del_timer_shutdown()
+ before freeing timer
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mirko Lindner <mlindner@marvell.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Oct 2022 22:10:09 +0200 andrey.konovalov@linux.dev wrote:
+On Thu, Oct 27, 2022 at 1:34 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> What about del_timer_try_shutdown(), that if it removes the timer, it sets
+> the function to NULL (making it equivalent to a successful shutdown),
+> otherwise it does nothing. Allowing the the timer to be rearmed.
 
-> From: Andrey Konovalov <andreyknvl@google.com>
-> 
-> Add a new boot parameter called kasan.page_alloc.sample, which makes
-> Hardware Tag-Based KASAN tag only every Nth page_alloc allocation.
-> 
-> As Hardware Tag-Based KASAN is intended to be used in production, its
-> performance impact is crucial. As page_alloc allocations tend to be big,
-> tagging and checking all such allocations introduces a significant
-> slowdown in some testing scenarios. The new flag allows to alleviate
-> that slowdown.
-> 
-> Enabling page_alloc sampling has a downside: KASAN will miss bad accesses
-> to a page_alloc allocation that has not been tagged.
-> 
+Sounds sane to me and should work, but as mentioned, I think the
+networking people need to say "yeah" too.
 
-The Documentation:
+And maybe that function can also disallow any future re-arming even
+for the case where the timer couldn't be actively removed.
 
-> --- a/Documentation/dev-tools/kasan.rst
-> +++ b/Documentation/dev-tools/kasan.rst
-> @@ -140,6 +140,10 @@ disabling KASAN altogether or controlling its features:
->  - ``kasan.vmalloc=off`` or ``=on`` disables or enables tagging of vmalloc
->    allocations (default: ``on``).
->  
-> +- ``kasan.page_alloc.sample=<sampling frequency>`` makes KASAN tag only
-> +  every Nth page_alloc allocation, where N is the value of the parameter
-> +  (default: ``1``).
-> +
+So any *currently* active timer wouldn't be waited for (either because
+locking may make that a deadlock situation, or simply due to
+performance issues), but at least it would guarantee that no new timer
+activations can happen.
 
-explains what this does but not why it does it.
+Because I do like the whole notion of "timer has been shutdown and
+cannot be used as a timer any more without re-initializing it" being a
+real state - even for a timer that may be "currently in flight".
 
-Let's tell people that this is here to mitigate the performance overhead.
+So this all sounds very worthwhile to me, but I'm not surprised that
+we have code that then knows about all the subtleties of "del_timer()
+might still have a running timer" and actually take advantage of it
+(where "advantage" is likely more of a "deal with the complexities"
+rather than anything really positive ;)
 
-And how is this performance impact observed?  The kernel just gets
-overall slower?
+And those existing subtle users might want particular semantics to at
+least make said complexities easier.
 
-If someone gets a KASAN report using this mitigation, should their next
-step be to set kasan.page_alloc.sample back to 1 and rerun, in order to
-get a more accurate report before reporting it upstream?  I'm thinking
-"no"?
-
-Finally, it would be helpful if the changelog were to give us some
-sense of the magnitude of the impact with kasan.page_alloc.sample=1. 
-Does the kernel get 3x slower?  50x?
+               Linus
