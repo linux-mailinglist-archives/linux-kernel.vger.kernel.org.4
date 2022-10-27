@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E238C6105E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B58AB610603
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235345AbiJ0Wrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 18:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55682 "EHLO
+        id S235465AbiJ0WzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 18:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233884AbiJ0Wrn (ORCPT
+        with ESMTP id S234947AbiJ0WzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 18:47:43 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB584B40CD
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 15:47:42 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id x15so2865764qvp.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 15:47:42 -0700 (PDT)
+        Thu, 27 Oct 2022 18:55:07 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BC16687C
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 15:54:57 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so2900329pjd.4
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 15:54:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=P1b8oympTfiO5TpKLj1JFWX96ZUFWry0jri1TDuGUJw=;
-        b=dKRAMe+29hBEeu4pcNPqMQuwfm1C9LFmGijhVMgs6k5kzS+c+ajk9Hd1hcV0PG1Lpg
-         lB2/0lxwurEEC5qanUyWLDtdVfIkCfZy+u9Fv6YW0dbmuedk+74aKAJZZb5dCKTinRpm
-         ClHsPY1arZ0X7nc3I5qzoUA37X+EbwTyHvwhYRagBvYHOLh3V52lNBHm8hev+EpPSu3P
-         Qc1XB8geHerIlmRzYgbVHks9jQdn1RqG7S4WmMIyzwHVdYSO4d1nb1rJl3OIEXgWrcAQ
-         bYGw/FKEuR07JkZPgRxlxGpBxc0MRPmKI3tzEcp/YlDiCROEJ4qecuW1qP9PdTnOSWHi
-         wJzA==
+        bh=SqwgVQZrZUOPGCiOP1E8r7GyYT54IzHA4/wQSu9imzU=;
+        b=dAgnHky8fBV9dfZplRCyg9mPbzzLEW96lJydXmBspGcabsqRKKFRDitHDlswpGAQaq
+         YxxhCuJ1zxsOQt2xWdsFVNwWjV1fieZjVTO9so4nRj9uh1TAN+FwPMJGuWLwh6GWyTop
+         0wZiEDTbB4ZALndEZayZtG4PXqlJGKzria0OL92rfdS8m4L7Zpr9laIMQslZXmq9Wmil
+         D4HQVh6QhdWvKIFhDIX4hkHHWP1YCvvIKJnZEsjan4I2lv05En9tBCb8IWRbjUfsZQko
+         YC8GhUYbj950fDRZjuKQ5gO69TFemAIISJzT+UDNLIp2WjA+Hwpo/V+ck/BWBgB/iSht
+         pnTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=P1b8oympTfiO5TpKLj1JFWX96ZUFWry0jri1TDuGUJw=;
-        b=6ebHCYnhRbyLDI3YPTd7jVGjSHQ5jgHSkqB7oeLxL2OSrD5IXkFmGESttUv2IRT5C9
-         0ah2vCXJbjpQyzb2Wywx2lmz6O5HT6D7TcpaLKUvY4oCWpPbQRmdFJ1yivK8bYiFeA7R
-         hHtWwCe8BHSuIIfXDJe1nqLN6V/JPR8MfQuPBxQEtB1Bx1qjzKVCW4BNeSE5WQuR7R/D
-         b8m/mqKuMWJcNU4nAifqISWWbh0ZLQGfFK7RM60Hnb/kVabW+le+8a6w55J4eIDMipfe
-         0U1cqn6eAIJ2prmdBXdmGF0EOFU//zFe7D26H2osO5XIEVRxvDxTfp2AtNZ+pt2TRK5V
-         B1eQ==
-X-Gm-Message-State: ACrzQf3cYYSO7werRRnhubm4by2i3CT80WqiVVBNxp/foeWiVokLf899
-        G7T7w0IWnTBAFLb6LdOlyngeSEG9EJizOw==
-X-Google-Smtp-Source: AMsMyM7Lbh+oRroquOz8WxsGFr52SUAIAOy7Z6N9sFljMKihOjOuiEfSU1EyPV7ogiGNbb0AXJMlIA==
-X-Received: by 2002:a17:902:d70e:b0:178:2d9d:ba7b with SMTP id w14-20020a170902d70e00b001782d9dba7bmr51985646ply.90.1666910851508;
-        Thu, 27 Oct 2022 15:47:31 -0700 (PDT)
+        bh=SqwgVQZrZUOPGCiOP1E8r7GyYT54IzHA4/wQSu9imzU=;
+        b=av6F13DK/Q+prK8u5MjxgboEtN103q1puyEWa2qzLbjn8RDzlJvXReCh+KsxbB7fiB
+         SEmy1D2/8JBxk7wzU5IavWQ20RvIjF5zPG3n7yngtvFLbkD3y4I/xK/oF03xR1IZNsKG
+         gRd1cZTMDaGfYvp8aIlShQdLfYmEYWrnNNO6Bb3RzakTVTi0n3oGBSpN1/ccrlLo1ruo
+         9KV4K20CfMjb1XN2KziaqaU1Ep0dKVzgPXkI+Lric/0Gd70taC6fbqQhJlAGqIgESZvH
+         w88VGUOIiAFOtLIgwFf9D15JieMXoNPBa48iuzm9mTynmpwtsMynqI1nKOlhQ7kCMC87
+         uxbQ==
+X-Gm-Message-State: ACrzQf1Ln9WNc86MFJpwxVv7ePp6GCk4vXzq1PkPnSkZckWMZws6GW0C
+        +XmCdwxsNuVdS/lDCj1bI8fdtQ==
+X-Google-Smtp-Source: AMsMyM562TQTUWbVA62QyB9jvEsewPE++Q0y2tf+d9dzvU8/8Ka/IQcQJy9/4l9DfZdJng4UIlxERQ==
+X-Received: by 2002:a17:902:b210:b0:17d:c3ca:4a4f with SMTP id t16-20020a170902b21000b0017dc3ca4a4fmr50441906plr.33.1666911296617;
+        Thu, 27 Oct 2022 15:54:56 -0700 (PDT)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id nh6-20020a17090b364600b002135fdfa995sm2501962pjb.25.2022.10.27.15.47.31
+        by smtp.gmail.com with ESMTPSA id i7-20020a17090332c700b001867851536dsm1684566plr.236.2022.10.27.15.54.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 15:47:31 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 22:47:27 +0000
+        Thu, 27 Oct 2022 15:54:56 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 22:54:52 +0000
 From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>
-Subject: Re: [PATCH v2 2/3] KVM: x86/svm/pmu: Add AMD PerfMonV2 support
-Message-ID: <Y1sKf/PgwHwtAibK@google.com>
-References: <20220919093453.71737-1-likexu@tencent.com>
- <20220919093453.71737-3-likexu@tencent.com>
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     Rong Tao <rongtao@cestc.cn>, Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kvm: vmenter: Use tabs instead of spaces for indentation
+Message-ID: <Y1sMPJvZDj6hGvih@google.com>
+References: <tencent_768ACEEBE1E803E29F4191906956D065B806@qq.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220919093453.71737-3-likexu@tencent.com>
+In-Reply-To: <tencent_768ACEEBE1E803E29F4191906956D065B806@qq.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,68 +76,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022, Like Xu wrote:
-> @@ -162,20 +179,43 @@ static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
->  {
->  	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
-> +	struct kvm_cpuid_entry2 *entry;
-> +	union cpuid_0x80000022_ebx ebx;
->  
-> -	if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE))
-> -		pmu->nr_arch_gp_counters = AMD64_NUM_COUNTERS_CORE;
-> -	else
-> -		pmu->nr_arch_gp_counters = AMD64_NUM_COUNTERS;
-> +	pmu->version = 1;
-> +	if (kvm_pmu_cap.version > 1) {
-> +		pmu->version = min_t(unsigned int, 2, kvm_pmu_cap.version);
+"KVM: VMX:" for the shortlog.
 
-This is wrong, it forces the guest PMU verson to match the max version supported
-by KVM.  E.g. if userspace wants to expose v1 for whatever reason, pmu->version
-will still end up 2+.
+On Fri, Oct 21, 2022, Rong Tao wrote:
+> From: Rong Tao <rongtao@cestc.cn>
+> 
+> Code indentation should use tabs where possible and miss a '*'.
+> 
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+> ---
 
-> +		entry = kvm_find_cpuid_entry_index(vcpu, 0x80000022, 0);
-> +		if (entry) {
-> +			ebx.full = entry->ebx;
-> +			pmu->nr_arch_gp_counters = min3((unsigned int)ebx.split.num_core_pmc,
-> +							(unsigned int)kvm_pmu_cap.num_counters_gp,
-> +							(unsigned int)KVM_AMD_PMC_MAX_GENERIC);
-
-This is technically wrong, the number of counters is supposed to be valid if and
-only if v2 is supported.  On a related topic, does KVM explode if userspace
-specifies a bogus PMU version on Intel?  I don't see any sanity checks there...
-
-With a proper feature flag
-
-	pmu->version = 1;
-	if (kvm_cpu_has(X86_FEATURE_AMD_PMU_V2) &&
-	    guest_cpuid_has(X86_FEATURE_AMD_PMU_V2)) {
-		pmu->version = 2;
-
-		entry = kvm_find_cpuid_entry_index(vcpu, 0x80000022, 0);
-		if (entry) {
-			...
-
-Though technically the "if (entry)" check is unnecesary.
-
-> +		}
-> +	}
-> +
-> +	/* Commitment to minimal PMCs, regardless of CPUID.80000022 */
-> +	if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE)) {
-
-Unnecessary braces.
-
-> +		pmu->nr_arch_gp_counters = max_t(unsigned int,
-> +						 pmu->nr_arch_gp_counters,
-> +						 AMD64_NUM_COUNTERS_CORE);
-
-What happens if userspace sets X86_FEATURE_PERFCTR_CORE when its not supported?
-E.g. will KVM be coerced into taking a #GP on a non-existent counter?
-
-
-> +	} else {
-> +		pmu->nr_arch_gp_counters = max_t(unsigned int,
-> +						 pmu->nr_arch_gp_counters,
-> +						 AMD64_NUM_COUNTERS);
-> +	}
+Reviewed-by: Sean Christopherson <seanjc@google.com>
