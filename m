@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD496101CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 823776101D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236560AbiJ0TiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 15:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
+        id S236642AbiJ0TjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 15:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234965AbiJ0TiU (ORCPT
+        with ESMTP id S236317AbiJ0TjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 15:38:20 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8A57B1D7
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:38:19 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id d18-20020a05683025d200b00661c6f1b6a4so1700024otu.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:38:19 -0700 (PDT)
+        Thu, 27 Oct 2022 15:39:21 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086447B28D;
+        Thu, 27 Oct 2022 12:39:21 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id y67so3589996oiy.1;
+        Thu, 27 Oct 2022 12:39:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=KLlLU6NZcsKagq1M5FJ/dI4gXr9LiGhnPtgl7MOrrrU=;
-        b=R/ShnnTJHwGXouQScqwLtgkI6CMuvzdUDVOgHcopbjmRgeRUfVwWoFjt9l/OLqU2cR
-         6BbRRFoX31iPyIvm4tL+BF0oBoTwGcozaw16uZE3GNYef1k+odSpQeKRqX5OXNKdlZto
-         +Y/3oYjr2BVOWoJWxULKcSjzoPjAQU+PEN4qUmqKeM3uRNXPpo+5eoH3E5IcnLdg/uaG
-         LdeBFdyXMGMGWHHVFrAqG4fMtgOcUjVrKSQiG4zLTiIBie2w3hXD7bD4mtPaLD0rBv0a
-         l9OoaQ3J1trpMqdVKv6g5GXSdqmZsbK9sKbMUsIRTegPy7KK6a9B6DndYQBcSFgYdqKc
-         5ilg==
+        bh=8jwK9QIbaZv9L9bXEMtfjn0o2VcUm4h8mq9atKinzE0=;
+        b=QGfqsRhhriRrYkimz0kwNd3ZYjQZ6qLGHUHQCEFRfLHYCaKm+fbeALdH8ve8Z1qv1m
+         KS6IN4xUE8KURKJ8QGRkxSFMmTmKLfZU3YZ2njhtukzrMoPhpV34CKKaZ992vDXWD/Ku
+         ybi6Ld7N0nPdBYfUU6oIiFlF6WVWz+l3Mq4wg7LffooJO/LuflbkO7/PSnB2dzqKfDOC
+         yGiJd5wuWhPnpLf4Suf5UwT9HpratcbO7j03aXkeLuf55PYlM5I8wdjNgLQP3YHamajB
+         1bxCncTxxQGiQhOkYbBhYnI4hrYcjUcvrszhpfMhMh2lzklOr4jYHvS04EC/Qd2rHILF
+         zZ+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KLlLU6NZcsKagq1M5FJ/dI4gXr9LiGhnPtgl7MOrrrU=;
-        b=6xUkHNW1RkvJXtUI9uf1p4WcCnSwqrVDnMIljq4zqgsx9nKZpoFe+uqiVh14XFtlAv
-         aqAGf4MIXLYuYK79K8pPP0Bh4HLERSNe/g2ayX1VUHeDsGw5qRqwk0rNfD2LSs0S2AlV
-         y0e2U0hSOKaOtGhsLrdJf7zscSejRUpos051Mlzu3p2XAL89hZtlg56+eHhSiHbXpdik
-         4TK87s0pjb1Bg7NMy2/M2Lc0cbNk3Zhmvpev2sKvsC9mnA0utiXhRPZNqJNVluRVJS46
-         WG23it6hz+10FpSDCoK1PJId5q2lEfueQ+NyfNTXszyMk8c7f1ajZcR41ATn4HNJ93ky
-         RBBA==
-X-Gm-Message-State: ACrzQf0PDQRUxPWNlaUAEBUulOIPEgMLLUCBVDYlyGzYihV4vEmeDhtY
-        s2u9mK23+XH+fBy4KWhKwHQ=
-X-Google-Smtp-Source: AMsMyM5b/eoRWJB6TKvKyqrLHoxthHogogb4L5ggBLYx3LjJ77Og8qwzuXSwUKGgEicHexhtCdI5oQ==
-X-Received: by 2002:a9d:5e8e:0:b0:65a:275c:7979 with SMTP id f14-20020a9d5e8e000000b0065a275c7979mr25727684otl.3.1666899499229;
-        Thu, 27 Oct 2022 12:38:19 -0700 (PDT)
+        bh=8jwK9QIbaZv9L9bXEMtfjn0o2VcUm4h8mq9atKinzE0=;
+        b=JRShDXz5HEBNUv6EA4M7w3OCZUVTox9onp/am2KNiZUUUwap155nw4BM62hF1UiMYn
+         aaDivxUYyVtGZA5QAIFvSiu1UoJ6/1JLEsa9mrjj5HWI/lqFz2P6QlXA15O8ONd6hWsy
+         yKr+wxLxm6BZnt+bEREE3/bkdWaIVoTnvp+719EB8b2PlyAlnhccMWVcbkcx46+kDXQ/
+         7ETAQzIDmsTksUUJpfVlC/axVnWBBN7LydjabmbEO4X6Odau+y8euTl0Z+8i5cPa6ATG
+         c3PVWNuvdE6AI7D65AF+tlVp4XEotwIXnsfUe8SW7NYoLt28TzflFJ0yPUgQTIp+K13x
+         0uPA==
+X-Gm-Message-State: ACrzQf2cfVWL8GpOrm2+WRF78mQNOCdiCVrJC1gq9YPxAZdAV4V6w/L2
+        ymTkgzvA3P0Lt1bAwhKtF44=
+X-Google-Smtp-Source: AMsMyM4FhtTV+6SA8WknxYIyWCoKqeADbRghLK1Px/Fo/Ifb+KL+A1Ub83qByqfetNlub9kv6GTiqg==
+X-Received: by 2002:a05:6808:1789:b0:355:231d:54b0 with SMTP id bg9-20020a056808178900b00355231d54b0mr5944376oib.241.1666899560420;
+        Thu, 27 Oct 2022 12:39:20 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b8-20020a9d4788000000b00666a5b5d20fsm860766otf.32.2022.10.27.12.38.17
+        by smtp.gmail.com with ESMTPSA id fq39-20020a0568710b2700b0011d02a3fa63sm1029659oab.14.2022.10.27.12.39.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 12:38:18 -0700 (PDT)
+        Thu, 27 Oct 2022 12:39:19 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c12e3c4d-b5a4-1f83-73a8-ff115e8bd369@roeck-us.net>
-Date:   Thu, 27 Oct 2022 12:38:16 -0700
+Message-ID: <ffeb2d7f-cfc6-887a-5751-d58545171526@roeck-us.net>
+Date:   Thu, 27 Oct 2022 12:39:17 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [RFC][PATCH v2 00/31] timers: Use del_timer_shutdown() before
- freeing timers
+Subject: Re: [PATCH 5.10 00/79] 5.10.151-rc1 review
 Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>
-References: <20221027150525.753064657@goodmis.org>
- <f62e19bb-497a-8cf6-93aa-d654d7850356@roeck-us.net>
- <20221027152058.5f75cfd1@gandalf.local.home>
- <20221027152740.532ff26f@gandalf.local.home>
+To:     Pavel Machek <pavel@denx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+References: <20221027165054.270676357@linuxfoundation.org>
+ <8617f970-2a72-799b-530d-3a5bb07822a6@roeck-us.net>
+ <Y1rbQqkdeliRrQPF@kroah.com> <20221027192744.GC11819@duo.ucw.cz>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20221027152740.532ff26f@gandalf.local.home>
+In-Reply-To: <20221027192744.GC11819@duo.ucw.cz>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,60 +85,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/27/22 12:27, Steven Rostedt wrote:
-> On Thu, 27 Oct 2022 15:20:58 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
->>> (many more of those)
->>> ...
->>> [   16.329989]  timer_fixup_free+0x40/0x54
+On 10/27/22 12:27, Pavel Machek wrote:
+> On Thu 2022-10-27 21:25:54, Greg Kroah-Hartman wrote:
+>> On Thu, Oct 27, 2022 at 11:10:18AM -0700, Guenter Roeck wrote:
+>>> On 10/27/22 09:55, Greg Kroah-Hartman wrote:
+>>>> This is the start of the stable review cycle for the 5.10.151 release.
+>>>> There are 79 patches in this series, all will be posted as a response
+>>>> to this one.  If anyone has any issues with these being applied, please
+>>>> let me know.
+>>>>
+>>>> Responses should be made by Sat, 29 Oct 2022 16:50:35 +0000.
+>>>> Anything received after that time might be too late.
+>>>>
+>>>
+>>> Building arm64:allmodconfig ... failed
+>>> --------------
+>>> Error log:
+>>> /bin/sh: scripts/pahole-flags.sh: Permission denied
+>>>
+>>> Indeed:
+>>>
+>>> $ ls -l scripts/pahole-flags.sh
+>>> -rw-rw-r-- 1 groeck groeck 530 Oct 27 11:08 scripts/pahole-flags.sh
+>>>
+>>> Compared to upstream:
+>>>
+>>> -rwxrwxr-x 1 groeck groeck 585 Oct 20 11:31 scripts/pahole-flags.sh
 >>
->> Ah, I see the issue here. Looks like the timer_fixup_free() is calling
->> itself and crashing.
+>> Yeah, this is going to be an odd one.  I have to do this by hand as
+>> quilt and git quilt-import doesn't like setting the mode bit.
 >>
->> Let me take a look into that. I didn't touch the fixup code, and there
->> could be an assumption there that it's behaving with the old approach.
+>> I wonder if I should just make a single-commit release with this file in
+>> it, set to the proper permission, to get past this hurdle.  I'll think
+>> about it in the morning...
 > 
-> Can you add this and see if it makes this issue go away?
+> Alternatively you can modify the caller to do /bin/sh /scripts/... so
+> it does not need a +x bit...
 > 
 
-Yes, that fixes the crash. However, it still reports
+That should be done in mainline, though.
 
-[   12.235054] ------------[ cut here ]------------
-[   12.235240] ODEBUG: free active (active state 0) object type: timer_list hint: tcp_write_timer+0x0/0x190
-[   12.237331] WARNING: CPU: 0 PID: 310 at lib/debugobjects.c:502 debug_print_object+0xb8/0x100
-...
-[   12.255251] Call trace:
-[   12.255305]  debug_print_object+0xb8/0x100
-[   12.255385]  __debug_check_no_obj_freed+0x1d0/0x25c
-[   12.255474]  debug_check_no_obj_freed+0x20/0x90
-[   12.255555]  slab_free_freelist_hook.constprop.0+0xac/0x1b0
-[   12.255650]  kmem_cache_free+0x1ac/0x500
-[   12.255728]  __sk_destruct+0x140/0x2a0
-[   12.255805]  sk_destruct+0x54/0x64
-[   12.255877]  __sk_free+0x74/0x120
-[   12.255944]  sk_free+0x64/0x8c
-[   12.256009]  tcp_close+0x94/0xc0
-[   12.256076]  inet_release+0x50/0xb0
-[   12.256145]  __sock_release+0x44/0xbc
-[   12.256219]  sock_close+0x18/0x30
-[   12.256292]  __fput+0x84/0x270
-[   12.256361]  ____fput+0x10/0x20
-[   12.256426]  task_work_run+0x88/0xf0
-[   12.256499]  do_exit+0x334/0xafc
-[   12.256566]  do_group_exit+0x34/0x90
-[   12.256634]  __arm64_sys_exit_group+0x18/0x20
-[   12.256713]  invoke_syscall+0x48/0x114
-[   12.256789]  el0_svc_common.constprop.0+0x60/0x11c
-[   12.256874]  do_el0_svc+0x30/0xd0
-[   12.256943]  el0_svc+0x48/0xc0
-[   12.257008]  el0t_64_sync_handler+0xbc/0x13c
-[   12.257086]  el0t_64_sync+0x18c/0x190
-
-Is that a real problem or a false positive ? I didn't see that
-without your patch series (which of course might be the whole point
-of the series).
-
-Thanks,
 Guenter
+
 
