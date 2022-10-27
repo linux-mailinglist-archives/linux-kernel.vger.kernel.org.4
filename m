@@ -2,79 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D565E610034
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 20:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CF8610037
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 20:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235793AbiJ0S2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 14:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
+        id S236140AbiJ0S3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 14:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236399AbiJ0S2c (ORCPT
+        with ESMTP id S234021AbiJ0S3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 14:28:32 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58157A522
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 11:28:31 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id l28so1848166qtv.4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 11:28:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wEdZOEYjrllCAot2dTAA4KX0CdNoEXMJ9BmzaOuDVdI=;
-        b=T/yx4PJ4RHQPFV86A2BeP473agGj/WJk6zWc5l56IseidOqLDSaXwuFZkIocHU533Q
-         Yqz3muzZsTyk8+MlpD0cvUoOsFqBfxZMuROtUtg57iTtb/5PSYiTdWosU7yAfnitmzIM
-         28RHz7CU3/A6B1cqE3d5MA8RJ7WNWOjaLOxLI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wEdZOEYjrllCAot2dTAA4KX0CdNoEXMJ9BmzaOuDVdI=;
-        b=4v4nP6mVrgAe2kPhP7FHJm2x1LyO1k+nWQIf8kjvRfhkDPI2U6EZD/G/393RAmn3yd
-         jvABZ3aEcgsTFurU+FJnSM9u+tlnHaIKk0HIoc7UZkVS+Kvh6rIkwisGwZvhvsXf1RzB
-         lAv8kaL8MFilLgL9kdUae2U0igipfj2DoCt5dLj96TtLzeZorXsc1KgXrCo/FFNgm9sS
-         +rjBcthZ3rt8TUCrT8Z5+aY3mvc66csN3XN4GSiZNrV7OpFRjx38SFLu2RtvkrJGKzD5
-         mLb46RYSa65NaxIz9p18QPpqYpXvClJ6yEyX1NWvjY2MP85VpIvgnouZxl9gyNBTq7xA
-         6lsw==
-X-Gm-Message-State: ACrzQf3E++2U7wSZpprsSLylI/cmAWsW0Gyin98zej5ikMi15ITNaWHR
-        kpaRGYrExTZO2ebUuQVCC1uV/zkTa4bjdQ==
-X-Google-Smtp-Source: AMsMyM4+XEqvd9diGVGchZ+8ndfoZBTjiYGIxXppdbGMC5B3A+pEb8i7Td0XngQFC326siR8vWgdOg==
-X-Received: by 2002:ac8:5706:0:b0:39d:322:7c36 with SMTP id 6-20020ac85706000000b0039d03227c36mr36921791qtw.632.1666895300491;
-        Thu, 27 Oct 2022 11:28:20 -0700 (PDT)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id s12-20020a05622a1a8c00b003a4cda52c95sm1251080qtc.63.2022.10.27.11.28.18
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 11:28:18 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id 63so3254243ybq.4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 11:28:18 -0700 (PDT)
-X-Received: by 2002:a5b:984:0:b0:6ca:9345:b2ee with SMTP id
- c4-20020a5b0984000000b006ca9345b2eemr8266384ybq.362.1666895298062; Thu, 27
- Oct 2022 11:28:18 -0700 (PDT)
+        Thu, 27 Oct 2022 14:29:43 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2057.outbound.protection.outlook.com [40.107.21.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BD4C768;
+        Thu, 27 Oct 2022 11:29:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CyH7plKIQlf+GnxqjP4RfgWq81C4DjwgJt9JLSQYUzfBUM9dvOSAyIyR6C2crJaaThvZhh+4BIoSQIhENBeE5ehTmi5/qYg64MmJNf1+eR9B1Y55ZAfU7gH9/O7DXSSI0V/Zxw5WV7eneEOo3bv/yau5yiIZg+no2VEKWuuWSsyHgFLxeLIocE6cuiMm5kabWxDgmVTY7H4XURx+g9ghZaDkmPNatwWNxh9v9y9LSA75FhX3VC8nhpScYV9epig251OT+XALZfgF6gIm+sMAYWOhf02GKldmnV8uF8AI9kyYTUgzopHWob/fP4rRseSQKEdBquIh0vvrIOGG5BRTbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ihiGnBIueeJ9Sag9uUBaUdYr5cQlvQ/iTuIqUS/g/HU=;
+ b=Ev+s0cTHcXFJ5oLxgh/Re+qS3G5RyukKyJG/rrLegyW2z/zPVVSfcDR6D6Ukl5nNN5irGJL8uKRP40zkOa7xRKpK4lWgAJWKCN/9WqKiEnJyN/P9rVUEDLr/DLkvKHCHE+RdHXshsJHDcjck2HHaSznDPSVg301Syd39bUZX5hPEzTcq70CeE9O86bTJyd4fw+ad21xpRr+eL0Un7g6L3VzD6FD2DIetGeh2tdjWNjzcVk26biN2WXwVoVXMkne8WBx9RDk/SGcmYDeJqrDtAQePIRR0Dlf6wuMcHNa5WCRmIrRZbZOzqYQ0C+VZXNLjMjN183GKzM7yBgCYY75eGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ihiGnBIueeJ9Sag9uUBaUdYr5cQlvQ/iTuIqUS/g/HU=;
+ b=nQQCxxHs9HvRw5WO+HHhaJlJteXOZjLJXY9iHGhjISJoI4HdRGR0CkvI8sxPqisMGRTwmA+ctd6SQuHCzw7AEa2VcwV8dOBfNRQELURRCawMJXd5r9ica9kpwGn4WK8uXflFf+KPCNpyDujrx+pC0Z64DmsvxhNgEqMgZBLpiiE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by AM8PR04MB7345.eurprd04.prod.outlook.com (2603:10a6:20b:1c5::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.14; Thu, 27 Oct
+ 2022 18:29:37 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::6710:c5fd:bc88:2035]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::6710:c5fd:bc88:2035%6]) with mapi id 15.20.5746.028; Thu, 27 Oct 2022
+ 18:29:37 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 net] net: enetc: survive memory pressure without crashing
+Date:   Thu, 27 Oct 2022 21:29:25 +0300
+Message-Id: <20221027182925.3256653-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: AM4PR0101CA0080.eurprd01.prod.exchangelabs.com
+ (2603:10a6:200:41::48) To VI1PR04MB5136.eurprd04.prod.outlook.com
+ (2603:10a6:803:55::19)
 MIME-Version: 1.0
-References: <20221019162648.3557490-1-Jason@zx2c4.com> <CAHk-=whT+xyge9UjH+r6dt0FG-eUdrzu5hDMce_vC+n8uLam2A@mail.gmail.com>
- <3a2fa7c1-2e31-0479-761f-9c189f8ed8c3@rasmusvillemoes.dk> <CAHk-=wg9RNhvDyanUQnxa_xnir70TUiMgjhVhRWUuF5Ojj96Dw@mail.gmail.com>
- <915a104b-0e70-dfb8-3c85-54fd1e5e63e5@rasmusvillemoes.dk>
-In-Reply-To: <915a104b-0e70-dfb8-3c85-54fd1e5e63e5@rasmusvillemoes.dk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 27 Oct 2022 11:28:02 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgadqCK7xAOzCdDHa7CQWC1z3df6a-pHQaF73ZjSZ58wg@mail.gmail.com>
-Message-ID: <CAHk-=wgadqCK7xAOzCdDHa7CQWC1z3df6a-pHQaF73ZjSZ58wg@mail.gmail.com>
-Subject: Re: make ctype ascii only? (was [PATCH] kbuild: treat char as always signed)
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|AM8PR04MB7345:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9f7c9e97-beac-4af7-ae22-08dab8493448
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UibTu9Zrf82GBZFuS1leOz0V1ChxuQ43qg+nXApvZXCoGu/L4h5mb4/nwMpShXktr0jQm4+JTAB5A2VjQ1QBYJyk1YcsK/MmxV7pmkyT3zzoaLPOkkmMctE/QPKAx5eiqm9Nmjsj757Vx5OsqCvFRMlOhfwSo78eLMQAfJwenJhayS5AJ0s2W0NLtgpn+Vjv+tqwZMS3ZxyH/MlRnoPsxRUyEpKE/OA9xZZQGSHvBn59Nfr3LGIxAdy55Rrc5mfzlmcUVnxYyRMkiqz8pjXz1Y2YrvwwQN0rjXiswepy3sv1Rd2I2CpdKUQxe3FmhMtvXmzuu/ealRGpQ+slu4k1ja+lxAPDjzl89eRGgTk4WsFlGgUT3LpMuBWxVzlmi+mewuHd0Nqbqlc2RrbH+RyiPvDT4TYvmSE41ALroLukzWxDdtWotQfeNxTzQtCMeiKfXDMAFd3cM4BAtJr9ufXij5eOvsCo5Sfgpb/zEmZzXLwh4gUPNQ2VLoSi2r4W2WeZo8jNlhCgHIQT8JORXrW7g7JiuGVSpUdBLYshhbKZ5fsQAvZsNzGuvgyUund0S5lM10JwNXOVPL/X6WDJORaxRJ+jwrcgOvDy3bsYyBzCwogSzoCqdYdibfPoRl5ogab9aqEXVmwlu3zLrmThRPYGLwlIV+PLitIUxdMi1G36VI6xu6KIZCBAl/44UfSvNyd3+A7C6/IZwrI+/SbR1h67sId7pFmhPyDhyTKMhwK1Yft7f4WnySTp2udeKJTZQ51RGaXvy4UN84nY/ITnwAL8c8TGB6lJsnEs5lJ82PuyB5osIR9U4mBKedd8wCjvEVGmTbNYPlkzaHPHgF8TUwgr4A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(136003)(346002)(39860400002)(376002)(451199015)(6506007)(6666004)(36756003)(52116002)(6916009)(4326008)(2906002)(66476007)(66556008)(66946007)(54906003)(316002)(8676002)(1076003)(83380400001)(2616005)(186003)(86362001)(26005)(6512007)(44832011)(5660300002)(41300700001)(8936002)(478600001)(6486002)(966005)(38350700002)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?b3br/43uhy1KMWtKY5R3XfN4AHS8t/jDkQaSwMHvJeLZh5fr7HbbABS0i6QJ?=
+ =?us-ascii?Q?ZuahRHiv01b8HmPORlREbnFOoA6Re8vr68rJOe6eGY1Jx3K7zxvIev/ZW4Gu?=
+ =?us-ascii?Q?/V/T3gRJo5eUtWw0U9y+5rkdMxBmChmYNO8YUJRngykhvHMk3sboiqI/IxoX?=
+ =?us-ascii?Q?sQSOTPAmRGlKC7Z34baDKQfgkzeUFYT63gqd6WrxVmymR9HX5eAETZarZjHj?=
+ =?us-ascii?Q?dQ5NisA0RzHwSzb3NfaEyvpBAsYOenFHOfgtYuMI9DZFrCM16n1o6ZKbstcL?=
+ =?us-ascii?Q?UgCfUG15kVrRmnFARVHg7IarVR72cY3KOzogh3DivLk1jJ1grqwGi52bIpVS?=
+ =?us-ascii?Q?vK3X1ErLLjxtJI/XfvyggfN5G4eLUoL6Fm506VSQ/lEfMF3XyiQZ7RVlpEpF?=
+ =?us-ascii?Q?lF3bpqFGSJRWC6qouOlj7xHYbeQPNwXX3YaxlJSE0OqCTbc0lekttINdkR2T?=
+ =?us-ascii?Q?l9w+NQo+02pyHuITmq4FQ5pwRZKpa0Jr4MNwktWgzW8o0cO3sJ1mR1XfG8p/?=
+ =?us-ascii?Q?YOegSodOIwDtiC4gx/ltG13sGLgwQcfYUetiN2qHAGm9g/M7KOp1stxPMpKe?=
+ =?us-ascii?Q?Jb1vfwT4KAWTQ2LGffenGnTDbFw6oczMAt72UssNEaHwaX22w0TXfEEfa3sO?=
+ =?us-ascii?Q?O/aVhC3Wxp7tOElO0qldhJ9tFRXUwjDCLpVM6ammW64/ExiPgGgzs/WLKyLK?=
+ =?us-ascii?Q?6536CO6nIlCkhGJxrK7v9HjwxBgNpiihd/7S97q2jplyjM6B/+oAPneUlTA+?=
+ =?us-ascii?Q?FeCmT3scsmXvBWf4eT7Y5wcfdHeLQOrKbQKo8mLtXZmbQr9CctnVgfPBlwBF?=
+ =?us-ascii?Q?g+F+6Gcs56kN4L05G/6J3zDzTyrsG9BFh9qkZG1039D0rwKwUM43fBiFtZ7v?=
+ =?us-ascii?Q?XdQEmDXWvszVw0946y3tIBzM9x1w0cKl/Lgi745AY5c4CEzRzcd8+U6jYz+A?=
+ =?us-ascii?Q?bnkIIIctPt6H7UPKQved95EPCNCsFvrVStP8ETJWpIF01FeiCaF972QXJW+B?=
+ =?us-ascii?Q?ZhNVFoW1wjzMPtEgbeDLP8DIubbP94bkcG8lXxc1KF5a87eiGiZU4OZLcHc2?=
+ =?us-ascii?Q?D3suhVoD9Zw51OZfxHmtQhYf4nksMq9agjCqq+W1bl4d3e5YeXxYeC51t41S?=
+ =?us-ascii?Q?l3kukQp/CaZBnJueN76S/tOB54XrMXOqh1O0jDmUhPNIgJf/OaJ7j9SzBZjQ?=
+ =?us-ascii?Q?4HwNroD6Q4VKrpoBq1mkaU1DsjGqN/oBm1l+YpC6C4XaNqf6xJ/2nTMvQmz0?=
+ =?us-ascii?Q?yA1YF2x34ZtT0/7XdeZnqaGLm4512CqXfWQ07sUiweO3cxhZOwUDm8zT+agP?=
+ =?us-ascii?Q?Lw1gIAXkjS0+vrJFyrt6awzMY5zBcCh0/IwgX4eAE7WVSpUfvCWNzZ02orh2?=
+ =?us-ascii?Q?jIfNM7zD/G5PwD0eNfd+O6R32oHf8c4jv2YO2IJjGCyPNcVpIwpjNUdIRhzC?=
+ =?us-ascii?Q?4OpTTo6JdpLAlWzjrnBJKO25xDcUYO1Tco1nkiXXEgwyGIsYyHaXlN7kzcI1?=
+ =?us-ascii?Q?rrNWJQeFQ8rE/CrHNmLldIFQ6L6UV0H06ANIBoXD+DfuCoMcZYBYq2pOC5BS?=
+ =?us-ascii?Q?HW3sCBs5jmhzts7AX7lxjEWASBhz28bLfMjuWus8NdH4moxlb3Yu4Q8bRVTC?=
+ =?us-ascii?Q?GA=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f7c9e97-beac-4af7-ae22-08dab8493448
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 18:29:37.7835
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZhlVNsSCI07GIz1lukTk3Bs2vqJNK9fr0uTbQApyoVUoYeWD4u6p/RokGgTalIsazIYWYEQsmRrmzbWO4Qye6A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7345
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,52 +116,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 12:59 AM Rasmus Villemoes
-<linux@rasmusvillemoes.dk> wrote:
->
-> AFAICT, the differences are:
->
-> - 0xaa (FEMININE ORDINAL INDICATOR), 0xb5 (MICRO SIGN), 0xba (FEMININE
-> ORDINAL INDICATOR) should be lower (hence alpha and alnum), not punct.
->
-> - depending a little on just exactly what one wants latin1 to mean, but
-> if it does mean "first 256 codepoints of Unicode", 0x80-0x9f should be cntrl
->
-> - for some reason at least glibc seems to classify 0xa0 as punctuation
-> and not space (hence also as isgraph)
->
-> - 0xdf and 0xff are correctly classified as lower, but since they don't
-> have upper-case versions (at least not any that are representable in
-> latin1), correct toupper() behaviour is to return them unchanged, but we
-> just subtract 0x20, so 0xff becomes 0xdf which isn't isupper() and 0xdf
-> becomes something that isn't even isalpha().
+Under memory pressure, enetc_refill_rx_ring() may fail, and when called
+during the enetc_open() -> enetc_setup_rxbdr() procedure, this is not
+checked for.
 
-Heh.
+An extreme case of memory pressure will result in exactly zero buffers
+being allocated for the RX ring, and in such a case it is expected that
+hardware drops all RX packets due to lack of buffers.
 
-Honestly, I don't think we should care at all.
+This does not happen, because the reset-default value of the consumer
+and produces index is 0, and this makes the ENETC think that all buffers
+have been initialized and that it owns them (when in reality none were).
 
-For the byte range 128-255, anybody who uses ctype on them gets what
-they get. In the kernel, the most likely use of it is for 'isprint()',
-and if those care, they can (and some do) use 'isascii()' in addition.
+The hardware guide explains this best:
 
-I don't know if you realize, but the kernel already says "screw libc",
-and makes all the isxyz() things just cast the argument to 'unsigned
-char', and doesn't care about EOF.
+| Configure the receive ring producer index register RBaPIR with a value
+| of 0. The producer index is initially configured by software but owned
+| by hardware after the ring has been enabled. Hardware increments the
+| index when a frame is received which may consume one or more BDs.
+| Hardware is not allowed to increment the producer index to match the
+| consumer index since it is used to indicate an empty condition. The ring
+| can hold at most RBLENR[LENGTH]-1 received BDs.
+|
+| Configure the receive ring consumer index register RBaCIR. The
+| consumer index is owned by software and updated during operation of the
+| of the BD ring by software, to indicate that any receive data occupied
+| in the BD has been processed and it has been prepared for new data.
+| - If consumer index and producer index are initialized to the same
+|   value, it indicates that all BDs in the ring have been prepared and
+|   hardware owns all of the entries.
+| - If consumer index is initialized to producer index plus N, it would
+|   indicate N BDs have been prepared. Note that hardware cannot start if
+|   only a single buffer is prepared due to the restrictions described in
+|   (2).
+| - Software may write consumer index to match producer index anytime
+|   while the ring is operational to indicate all received BDs prior have
+|   been processed and new BDs prepared for hardware.
 
-And for the rest, let's just call it the "kernel locale", and just
-admit that the kernel locale is entirely historical.
+Normally, the value of rx_ring->rcir (consumer index) is brought in sync
+with the rx_ring->next_to_use software index, but this only happens if
+page allocation ever succeeded.
 
-Boom - problem solved, and it's entirely standards conformant (apart
-possibly from the EOF case, I think that is marked as a "lower case
-character" right now ;)
+When PI==CI==0, the hardware appears to receive frames and write them to
+DMA address 0x0 (?!), then set the READY bit in the BD.
 
-Looking through
+The enetc_clean_rx_ring() function (and its XDP derivative) is naturally
+not prepared to handle such a condition. It will attempt to process
+those frames using the rx_swbd structure associated with index i of the
+RX ring, but that structure is not fully initialized (enetc_new_page()
+does all of that). So what happens next is undefined behavior.
 
-    https://pubs.opengroup.org/onlinepubs/9699919799/
+To operate using no buffer, we must initialize the CI to PI + 1, which
+will block the hardware from advancing the CI any further, and drop
+everything.
 
-I'm not actually seeing anything that says that we don't do *exactly*
-what the standard requires.
+The issue was seen while adding support for zero-copy AF_XDP sockets,
+where buffer memory comes from user space, which can even decide to
+supply no buffers at all (example: "xdpsock --txonly"). However, the bug
+is present also with the network stack code, even though it would take a
+very determined person to trigger a page allocation failure at the
+perfect time (a series of ifup/ifdown under memory pressure should
+eventually reproduce it given enough retries).
 
-You thinking that the kernel locale is US-ASCII is just wrong.
+Fixes: d4fd0404c1c9 ("enetc: Introduce basic PF and VF ENETC ethernet drivers")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Reviewed-by: Claudiu Manoil <claudiu.manoil@nxp.com>
+---
+v2->v3:
+- Jakub points out that dma_alloc_coherent() returns zeroized memory, so
+  v1 was completely wrong and v2 contained an unnecessary change. Remove
+  the changes made to enetc_dma_alloc_bdr() and rewrite the commit
+  message with this in mind.
+v1->v2:
+- also add an initial value for the RX ring consumer index, to be used
+  when page allocation fails
+- update the commit message
+- deliberately not pick up Claudiu's review tag due to the above changes
 
-              Linus
+v1 at:
+https://patchwork.kernel.org/project/netdevbpf/patch/20221024172049.4187400-1-vladimir.oltean@nxp.com/
+v2 at:
+https://patchwork.kernel.org/project/netdevbpf/patch/20221026121330.2042989-1-vladimir.oltean@nxp.com/
+
+ drivers/net/ethernet/freescale/enetc/enetc.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/net/ethernet/freescale/enetc/enetc.c b/drivers/net/ethernet/freescale/enetc/enetc.c
+index 54bc92fc6bf0..f8c06c3f9464 100644
+--- a/drivers/net/ethernet/freescale/enetc/enetc.c
++++ b/drivers/net/ethernet/freescale/enetc/enetc.c
+@@ -2090,7 +2090,12 @@ static void enetc_setup_rxbdr(struct enetc_hw *hw, struct enetc_bdr *rx_ring)
+ 	else
+ 		enetc_rxbdr_wr(hw, idx, ENETC_RBBSR, ENETC_RXB_DMA_SIZE);
+ 
++	/* Also prepare the consumer index in case page allocation never
++	 * succeeds. In that case, hardware will never advance producer index
++	 * to match consumer index, and will drop all frames.
++	 */
+ 	enetc_rxbdr_wr(hw, idx, ENETC_RBPIR, 0);
++	enetc_rxbdr_wr(hw, idx, ENETC_RBCIR, 1);
+ 
+ 	/* enable Rx ints by setting pkt thr to 1 */
+ 	enetc_rxbdr_wr(hw, idx, ENETC_RBICR0, ENETC_RBICR0_ICEN | 0x1);
+-- 
+2.34.1
+
