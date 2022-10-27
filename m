@@ -2,149 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A8760F647
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7EB60F660
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234689AbiJ0Leb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 07:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
+        id S234974AbiJ0LlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 07:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233867AbiJ0Le3 (ORCPT
+        with ESMTP id S234428AbiJ0LlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 07:34:29 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB512AE
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 04:34:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666870466; x=1698406466;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=flCRs9jw0HAjMIFvnZCYTgvhKf7rP5DZDjYxa1HnfSE=;
-  b=UHI+yI3q1i6NwMAKhKy24AJTSw7gNOpDRK2OUWqdGqw2iJPMTys6KQEu
-   d/BsgceTW3kLF16m8XWz+aSYAJrlKvx/cSnVGrzlvaJv6tAzra0qzIaub
-   XiQLuLGu+7VZRQUjMqxtytdABxZch6KReSzJbWKLN1iivqyNBClQdhRLN
-   uQDwZBmBQriFU7Ih6o5FURxvOEM+qTPYKYSrkcB4LGqbOh3jAnFES0hpK
-   tLqm/O2EHIj+CHRFCnX5C/bATTu23r57kO8ve6Umcs+Ach0ISgHWSWYJo
-   uBlkeuAsvnvHphojrxJsAeqYgDDYCY4Ruk8Fs0WUqAzd+E8/LCzffUXxW
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="309289877"
-X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
-   d="scan'208";a="309289877"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 04:34:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="583524315"
-X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
-   d="scan'208";a="583524315"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 27 Oct 2022 04:34:21 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oo19Q-0008jJ-1r;
-        Thu, 27 Oct 2022 11:34:20 +0000
-Date:   Thu, 27 Oct 2022 19:33:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 1c382012d3fc642907b0dd1c729e0f38d6f8fb21
-Message-ID: <635a6c8f.4nUDNT4Uh7UC28TZ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 27 Oct 2022 07:41:20 -0400
+X-Greylist: delayed 242 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Oct 2022 04:41:19 PDT
+Received: from out203-205-221-231.mail.qq.com (out203-205-221-231.mail.qq.com [203.205.221.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95196CD2E;
+        Thu, 27 Oct 2022 04:41:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1666870876;
+        bh=kq2dkLdtlAFSXtPcRBGcoOgLscYYb762vapxdZuQxtY=;
+        h=From:To:Cc:Subject:Date;
+        b=C4dzwzBj2PhL7Uf5vehDltmOxapHBzlFV8o/EDjAXbrHmxvXktRz8vL0Fe9QkcUFl
+         K0zM3nTLk6B/WjqZVbdUpAG8/Je1mLngopGLi73n2GfDiq5BCBIuTai7tcgeCRkGLT
+         5lkSP7UClzM5sC77mjXSKof0DiHe5o16VM+5H+5w=
+Received: from localhost.localdomain ([2408:8406:7921:e168:31:95d9:81c3:8f7a])
+        by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
+        id 873AA247; Thu, 27 Oct 2022 19:33:51 +0800
+X-QQ-mid: xmsmtpt1666870431tz61axw4g
+Message-ID: <tencent_EE3E19F80ACD66955D26A878BC768CFA210A@qq.com>
+X-QQ-XMAILINFO: M7uElAZZZMmFu5KDsmeZ/hj057vsdXmD9fbgbJsbI3L+ZJAKzeY6635AhyTWCr
+         wEWttLcQ5MnRQGTlFR+XfvpCjETgBctsPVgaKiJqlagYt3ex61y7p5GXLTexiKyv7MdsdpF80Wfp
+         jtr97YlABnP0c3MgB6SlNr4G5/kdyMeXXVbeM9MwEngaCCH9sm9KJGNQ49aRbVmfxhkteXY1+qWC
+         Rqa8YoL4U2MJKsj6cVRIHUz1yHdXxIlsixPptxJOSf1AIn+18qfftN/YKw0Nv53pLQdU94xRCASd
+         JLq9k7YqXaf/RtS6DWpgtc+CNuKLA96Yu47t9nPgsJDjV+O3aEYPRfaILly+n+mlAuHCf3knPkbM
+         u6XYR9x9SOigUTIxt0zS3vcJa2TqO3CfwWQGRztFeI6Ar4batnN/auU/8c1TflJQ47L9tNV+sqw5
+         2ZiSX3pkTF+pKGVJN2vrdYjjwEpIKuH/YZ+bNT9VXOGLb7JFDUzTftKY+T8+EB/Wzbr6gkTcAr+U
+         ZlS+JH22M6Gp/OsPBpPg35hZmQ9izNKGZ/v7z6uMJoaLj8E1Gs8Z53V8ntJE4NZFZvVCuWxaBNYi
+         3SRboncW0r6IBW6egthE2iQp1G9iinZSj5qINyOSHxOZprwhDDScOUzBzaQX78e5Tu5YK3YP+5LB
+         uGkIbGGV5UROnwUQ3w9zzPPSVqhpk+gjQkfyaOUeGz7p/feD6h+ni2Mxh445aMCWPaugoGykIJzP
+         6CBUOnlXDO7lFeLYzrfhf8xdDx6g5HghkAeXzEeCxNBl0PJPjaCkDWxa7cPm8dbpcE4Nj0F2WdCM
+         eY4KuSbqr5W24h06bRNyzbYjg9zTPEfPmZ+UsLhRoWBdgQ2/bjnvfj4iBGbsSexksGf2QQaIrdmZ
+         TeyoN5a3zj3QhmH2/qQWCtBNkFyeWXDVn2CFevj61noj62ScnhS6VCkz8bFoNNoAXLIh4vaIZuRo
+         5kslU9Yu1Q4pzWUzC6WYKF3+RErSk6
+From:   Rong Tao <rtoax@foxmail.com>
+Cc:     Rong Tao <rongtao@cestc.cn>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
+        Tools)),
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH bpf-next] selftests/bpf: Fix strncpy() fortify warning
+Date:   Thu, 27 Oct 2022 19:33:50 +0800
+X-OQ-MSGID: <20221027113350.40173-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 1c382012d3fc642907b0dd1c729e0f38d6f8fb21  rcu: Refactor kvfree_call_rcu() and high-level helpers
+From: Rong Tao <rongtao@cestc.cn>
 
-elapsed time: 1022m
+Compile samples/bpf, error:
+$ cd samples/bpf
+$ make
+...
+In function ‘__enable_controllers’:
+samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:80:17: warning: ‘strncpy’ specified bound 4097 equals destination size [-Wstringop-truncation]
+   80 |                 strncpy(enable, controllers, sizeof(enable));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-configs tested: 66
-configs skipped: 2
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ tools/testing/selftests/bpf/cgroup_helpers.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-i386                          randconfig-a001
-s390                             allyesconfig
-i386                          randconfig-a003
-powerpc                           allnoconfig
-x86_64                              defconfig
-powerpc                          allmodconfig
-riscv                randconfig-r042-20221026
-i386                          randconfig-a005
-i386                                defconfig
-mips                             allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a013
-sh                               allmodconfig
-x86_64                          rhel-8.3-func
-x86_64                        randconfig-a011
-i386                          randconfig-a014
-x86_64                        randconfig-a002
-arm                                 defconfig
-arc                  randconfig-r043-20221026
-x86_64                               rhel-8.3
-ia64                             allmodconfig
-s390                 randconfig-r044-20221026
-x86_64                           rhel-8.3-syz
-x86_64                           allyesconfig
-i386                          randconfig-a012
-x86_64                    rhel-8.3-kselftests
-x86_64                        randconfig-a006
-i386                          randconfig-a016
-arm64                            allyesconfig
-x86_64                        randconfig-a015
-arm                              allyesconfig
-i386                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-x86_64                           rhel-8.3-kvm
-x86_64                         rhel-8.3-kunit
-m68k                       m5249evb_defconfig
-parisc                generic-32bit_defconfig
-arm                          pxa910_defconfig
-powerpc                    amigaone_defconfig
-sh                           se7724_defconfig
-sh                          rsk7201_defconfig
-i386                          randconfig-c001
-
-clang tested configs:
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a013
-i386                          randconfig-a006
-x86_64                        randconfig-a005
-x86_64                        randconfig-a016
-x86_64                        randconfig-a001
-hexagon              randconfig-r045-20221026
-i386                          randconfig-a011
-hexagon              randconfig-r041-20221026
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-i386                          randconfig-a015
-x86_64                        randconfig-a003
-x86_64                        randconfig-k001
-
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index e914cc45b766..a70e873b267e 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -77,7 +77,7 @@ static int __enable_controllers(const char *cgroup_path, const char *controllers
+ 		enable[len] = 0;
+ 		close(fd);
+ 	} else {
+-		strncpy(enable, controllers, sizeof(enable));
++		strncpy(enable, controllers, sizeof(enable) - 1);
+ 	}
+ 
+ 	snprintf(path, sizeof(path), "%s/cgroup.subtree_control", cgroup_path);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.31.1
+
