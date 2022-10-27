@@ -2,478 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A07B610187
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF624610188
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236628AbiJ0TUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 15:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45576 "EHLO
+        id S236584AbiJ0TVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 15:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236557AbiJ0TUj (ORCPT
+        with ESMTP id S236606AbiJ0TUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 15:20:39 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6526B635C8;
-        Thu, 27 Oct 2022 12:20:38 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id y14so7475730ejd.9;
-        Thu, 27 Oct 2022 12:20:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NZZkI/kASXBUAcQgkP50+OVmHva+6OSmVw+aQO/dR9s=;
-        b=HOsxt6jOJsDey1dTjg10dLsA4heOgwyRDHEdIR2S9E/tVVEcBuPoMnT/IjR6cQNsZy
-         Vn92CirdwAMfOECP1qdkh4fCffs9mQ+OLeJMROJyZfMpMqDVoznfGPX2lbqsiVCMomQc
-         du+g9XBl5f4G3XW51WAArbTQfaRk6KRjA1ubggcY3mspCXhBY1QXndEPRc5DJjgAueiF
-         W+bIz+vs8l1T/Mtg6EK0jsxpTuKAgq4RkbRuV3+ymY18TDPgW0ETFsXNStDBEUY/vf8r
-         8WqMU0H2YMc5usLffLABZOwdiFGnspF92hlItS42a05YLRr42b6aLn+ZgsmiLLKyOR2j
-         W7pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NZZkI/kASXBUAcQgkP50+OVmHva+6OSmVw+aQO/dR9s=;
-        b=2V9fPzuRVfS2ixgwy/Po6HGmC7/Cf3XNnlEI9WyJ5spt1HQYPmc7PTt1UPmCcss4c1
-         IGQgfPgEoy8LqAhScuuzKUpfWEjdMkl4d2qoyYHxrsGAsur/nxA09q7Ui8pmKFgQ6jzA
-         rZhSHrccDiXxiACrnniSrD6L3t1wXdRf+rUe+G+cxJqYMA9Pf/u2cR3v3EBQw/pHvdJ5
-         ba+IVmbeDAmjqSBcvq9dzTTGWoxEftLKWdGDPoS/PnB/dfiehjDnd7mbAxH6ZHMNpqhU
-         7v0z5exfGL+hC93c+KW82qvs+0C3QaFpxKaS3dVM5pssmg/U09XUSUAqyzWI51sgDGMU
-         AsxQ==
-X-Gm-Message-State: ACrzQf0Bt70cXGnBevmMDiQxGtWDrkRxYvozTptJL3jaxtpR2lionCAk
-        A+v95i1yNe78uJbwqeGrFD4=
-X-Google-Smtp-Source: AMsMyM64haKEp31j6KuN6/a4culwFjPkB2WLyybbvo+Y+8mQDLmNWTs9+T+Ar6iIE4DtE0j3C/PCNw==
-X-Received: by 2002:a17:906:7621:b0:750:c4a3:8fcd with SMTP id c1-20020a170906762100b00750c4a38fcdmr45429722ejn.180.1666898436937;
-        Thu, 27 Oct 2022 12:20:36 -0700 (PDT)
-Received: from hp-power-15.localdomain (mm-238-32-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.32.238])
-        by smtp.gmail.com with ESMTPSA id w18-20020a1709067c9200b007acc5a42e77sm1187006ejo.88.2022.10.27.12.20.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 12:20:36 -0700 (PDT)
-From:   Siarhei Volkau <lis8215@gmail.com>
-Cc:     Siarhei Volkau <lis8215@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH v6 3/3] clk: Add Ingenic JZ4755 CGU driver
-Date:   Thu, 27 Oct 2022 22:20:23 +0300
-Message-Id: <20221027192024.484320-4-lis8215@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221027192024.484320-1-lis8215@gmail.com>
-References: <20221027192024.484320-1-lis8215@gmail.com>
+        Thu, 27 Oct 2022 15:20:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D854D753B6
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:20:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75C7C62493
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 19:20:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 314FDC433C1;
+        Thu, 27 Oct 2022 19:20:44 +0000 (UTC)
+Date:   Thu, 27 Oct 2022 15:20:58 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [RFC][PATCH v2 00/31] timers: Use del_timer_shutdown() before
+ freeing timers
+Message-ID: <20221027152058.5f75cfd1@gandalf.local.home>
+In-Reply-To: <f62e19bb-497a-8cf6-93aa-d654d7850356@roeck-us.net>
+References: <20221027150525.753064657@goodmis.org>
+        <f62e19bb-497a-8cf6-93aa-d654d7850356@roeck-us.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the clocks provided by the CGU in the Ingenic JZ4755
-SoC.
+On Thu, 27 Oct 2022 11:58:59 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
----
- drivers/clk/ingenic/Kconfig      |  10 +
- drivers/clk/ingenic/Makefile     |   1 +
- drivers/clk/ingenic/jz4755-cgu.c | 346 +++++++++++++++++++++++++++++++
- 3 files changed, 357 insertions(+)
- create mode 100644 drivers/clk/ingenic/jz4755-cgu.c
+> On 10/27/22 08:05, Steven Rostedt wrote:
+> > Back in April, I posted an RFC patch set to help mitigate a common issue
+> > where a timer gets armed just before it is freed, and when the timer
+> > goes off, it crashes in the timer code without any evidence of who the
+> > culprit was. I got side tracked and never finished up on that patch set.
+> > Since this type of crash is still our #1 crash we are seeing in the field,
+> > it has become a priority again to finish it.
+> > 
+> > This is v2 of that patch set. Thomas Gleixner posted an untested version
+> > that makes timer->function NULL as the flag that it is shutdown. I took that
+> > code, tested it (fixed it up), added more comments, and changed the
+> > name to del_timer_shutdown() as Linus had asked. I also converted it to use
+> > WARN_ON_ONCE() instead of just WARN_ON() as Linus asked for that too.
+> >   
+> 
+> I rebased the series on top of v6.1-rc2 and gave it a try. Unfortunately it
+> blows up in my face, first with
+> 
+> [   16.212535] ------------[ cut here ]------------
+> [   16.212887] ODEBUG: free active (active state 0) object type: timer_list hint: tcp_write_timer+0x0/0x190
+> [   16.213725] WARNING: CPU: 0 PID: 310 at lib/debugobjects.c:502 debug_print_object+0xb8/0x100
+> 
+> which, of course, might be real, but after a couple of those I get
+> 
+> [   16.325257] Insufficient stack space to handle exception!
+> [   16.325326] ESR: 0x0000000096000047 -- DABT (current EL)
+> [   16.325355] FAR: 0xffff800008677fe0
+> [   16.325366] Task stack:     [0xffff800008678000..0xffff80000867c000]
+> [   16.325376] IRQ stack:      [0xffff800008000000..0xffff800008004000]
+> [   16.325387] Overflow stack: [0xffff51e19feab300..0xffff51e19feac300]
+> [   16.325406] CPU: 0 PID: 310 Comm: telnet Tainted: G        W        N 6.1.0-rc2-00032-g895257c4037a #1
+> [   16.325425] Hardware name: linux,dummy-virt (DT)
+> [   16.325434] pstate: 400000c5 (nZcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   16.325450] pc : mark_lock+0x4/0x620
+> [   16.325482] lr : __lock_acquire+0x3e8/0x1950
+> [   16.325493] sp : ffff800008678090
+> [   16.325499] x29: ffff800008678090 x28: ffff51e18651ccc0 x27: ffffc690a5583000
+> [   16.325530] x26: ffff51e18651d590 x25: 0000000000000001 x24: 0000000000000001
+> [   16.325552] x23: 0000000000000001 x22: 0000000000000028 x21: ffff51e18651d568
+> [   16.325571] x20: ffffc690a61b5710 x19: 0000000000000000 x18: ffffffffffffffff
+> [   16.325589] x17: 6e6968207473696c x16: 5f72656d6974203a x15: 6570797420746365
+> [   16.325608] x14: 6a626f2029302065 x13: ffffc690a55a78c0 x12: 00000000000c02e7
+> [   16.325626] x11: 0000000030fa562e x10: ffffc690a5a9f208 x9 : ffffc690a5a9f200
+> [   16.325645] x8 : ffff51e18651ccc0 x7 : 0000000000000000 x6 : 000000000002e9fa
+> [   16.325663] x5 : 0000000000000028 x4 : 0000000000000002 x3 : 00000000000c0003
+> [   16.325681] x2 : 0000000000000008 x1 : ffff51e18651d590 x0 : ffff51e18651ccc0
+> [   16.325902] Kernel panic - not syncing: kernel stack overflow
+> [   16.325992] CPU: 0 PID: 310 Comm: telnet Tainted: G        W        N 6.1.0-rc2-00032-g895257c4037a #1
+> [   16.326008] Hardware name: linux,dummy-virt (DT)
+> [   16.326026] Call trace:
+> [   16.326031]  dump_backtrace.part.0+0xe0/0xf0
+> [   16.326048]  show_stack+0x18/0x40
+> [   16.326058]  dump_stack_lvl+0x9c/0xd8
+> [   16.326073]  dump_stack+0x18/0x34
+> [   16.326083]  panic+0x194/0x38c
+> [   16.326093]  nmi_panic+0xac/0xb0
+> [   16.326103]  panic_bad_stack+0x104/0x124
+> [   16.326113]  handle_bad_stack+0x34/0xe0
+> [   16.326124]  __bad_stack+0x78/0x7c
+> [   16.326134]  mark_lock+0x4/0x620
+> [   16.326144]  lock_acquire.part.0+0xf0/0x26c
+> [   16.326155]  lock_acquire+0x68/0x84
+> [   16.326166]  _raw_spin_lock_irqsave+0x70/0x150
+> [   16.326178]  debug_object_assert_init+0xa0/0x1a4
+> [   16.326193]  __try_to_del_timer_sync+0x40/0xdc
+> [   16.326207]  __del_timer_sync+0xa4/0x100
+> [   16.326218]  timer_fixup_free+0x2c/0x54
+> [   16.326229]  debug_object_free.part.0+0x188/0x1b0
+> ...
+> (many more of those)
+> ...
+> [   16.329989]  timer_fixup_free+0x40/0x54
 
-diff --git a/drivers/clk/ingenic/Kconfig b/drivers/clk/ingenic/Kconfig
-index 898f1bc47..f80ac4f29 100644
---- a/drivers/clk/ingenic/Kconfig
-+++ b/drivers/clk/ingenic/Kconfig
-@@ -15,6 +15,16 @@ config INGENIC_CGU_JZ4740
- 
- 	  If building for a JZ4740 SoC, you want to say Y here.
- 
-+config INGENIC_CGU_JZ4755
-+	bool "Ingenic JZ4755 CGU driver"
-+	default MACH_JZ4755
-+	select INGENIC_CGU_COMMON
-+	help
-+	  Support the clocks provided by the CGU hardware on Ingenic JZ4755
-+	  and compatible SoCs.
-+
-+	  If building for a JZ4755 SoC, you want to say Y here.
-+
- config INGENIC_CGU_JZ4725B
- 	bool "Ingenic JZ4725B CGU driver"
- 	default MACH_JZ4725B
-diff --git a/drivers/clk/ingenic/Makefile b/drivers/clk/ingenic/Makefile
-index 9edfaf461..81d8e23c2 100644
---- a/drivers/clk/ingenic/Makefile
-+++ b/drivers/clk/ingenic/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_INGENIC_CGU_COMMON)	+= cgu.o pm.o
- obj-$(CONFIG_INGENIC_CGU_JZ4740)	+= jz4740-cgu.o
-+obj-$(CONFIG_INGENIC_CGU_JZ4755)	+= jz4755-cgu.o
- obj-$(CONFIG_INGENIC_CGU_JZ4725B)	+= jz4725b-cgu.o
- obj-$(CONFIG_INGENIC_CGU_JZ4760)	+= jz4760-cgu.o
- obj-$(CONFIG_INGENIC_CGU_JZ4770)	+= jz4770-cgu.o
-diff --git a/drivers/clk/ingenic/jz4755-cgu.c b/drivers/clk/ingenic/jz4755-cgu.c
-new file mode 100644
-index 000000000..d2eb3ae0c
---- /dev/null
-+++ b/drivers/clk/ingenic/jz4755-cgu.c
-@@ -0,0 +1,346 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Ingenic JZ4755 SoC CGU driver
-+ * Heavily based on JZ4725b CGU driver
-+ *
-+ * Copyright (C) 2022 Siarhei Volkau
-+ * Author: Siarhei Volkau <lis8215@gmail.com>
-+ */
-+
-+#include <linux/clk-provider.h>
-+#include <linux/delay.h>
-+#include <linux/of.h>
-+
-+#include <dt-bindings/clock/ingenic,jz4755-cgu.h>
-+
-+#include "cgu.h"
-+#include "pm.h"
-+
-+/* CGU register offsets */
-+#define CGU_REG_CPCCR		0x00
-+#define CGU_REG_LCR		0x04
-+#define CGU_REG_CPPCR		0x10
-+#define CGU_REG_CLKGR		0x20
-+#define CGU_REG_OPCR		0x24
-+#define CGU_REG_I2SCDR		0x60
-+#define CGU_REG_LPCDR		0x64
-+#define CGU_REG_MSCCDR		0x68
-+#define CGU_REG_SSICDR		0x74
-+#define CGU_REG_CIMCDR		0x7C
-+
-+/* bits within the LCR register */
-+#define LCR_SLEEP		BIT(0)
-+
-+static struct ingenic_cgu *cgu;
-+
-+static const s8 pll_od_encoding[4] = {
-+	0x0, 0x1, -1, 0x3,
-+};
-+
-+static const u8 jz4755_cgu_cpccr_div_table[] = {
-+	1, 2, 3, 4, 6, 8,
-+};
-+
-+static const u8 jz4755_cgu_pll_half_div_table[] = {
-+	2, 1,
-+};
-+
-+static const struct ingenic_cgu_clk_info jz4755_cgu_clocks[] = {
-+
-+	/* External clocks */
-+
-+	[JZ4755_CLK_EXT] = { "ext", CGU_CLK_EXT },
-+	[JZ4755_CLK_OSC32K] = { "osc32k", CGU_CLK_EXT },
-+
-+	[JZ4755_CLK_PLL] = {
-+		"pll", CGU_CLK_PLL,
-+		.parents = { JZ4755_CLK_EXT, },
-+		.pll = {
-+			.reg = CGU_REG_CPPCR,
-+			.rate_multiplier = 1,
-+			.m_shift = 23,
-+			.m_bits = 9,
-+			.m_offset = 2,
-+			.n_shift = 18,
-+			.n_bits = 5,
-+			.n_offset = 2,
-+			.od_shift = 16,
-+			.od_bits = 2,
-+			.od_max = 4,
-+			.od_encoding = pll_od_encoding,
-+			.stable_bit = 10,
-+			.bypass_reg = CGU_REG_CPPCR,
-+			.bypass_bit = 9,
-+			.enable_bit = 8,
-+		},
-+	},
-+
-+	/* Muxes & dividers */
-+
-+	[JZ4755_CLK_PLL_HALF] = {
-+		"pll half", CGU_CLK_DIV,
-+		.parents = { JZ4755_CLK_PLL, },
-+		.div = {
-+			CGU_REG_CPCCR, 21, 1, 1, -1, -1, -1, 0,
-+			jz4755_cgu_pll_half_div_table,
-+		},
-+	},
-+
-+	[JZ4755_CLK_EXT_HALF] = {
-+		"ext half", CGU_CLK_DIV,
-+		.parents = { JZ4755_CLK_EXT, },
-+		.div = {
-+			CGU_REG_CPCCR, 30, 1, 1, -1, -1, -1, 0,
-+			NULL,
-+		},
-+	},
-+
-+	[JZ4755_CLK_CCLK] = {
-+		"cclk", CGU_CLK_DIV,
-+		.parents = { JZ4755_CLK_PLL, },
-+		.div = {
-+			CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1, 0,
-+			jz4755_cgu_cpccr_div_table,
-+		},
-+	},
-+
-+	[JZ4755_CLK_H0CLK] = {
-+		"hclk", CGU_CLK_DIV,
-+		.parents = { JZ4755_CLK_PLL, },
-+		.div = {
-+			CGU_REG_CPCCR, 4, 1, 4, 22, -1, -1, 0,
-+			jz4755_cgu_cpccr_div_table,
-+		},
-+	},
-+
-+	[JZ4755_CLK_PCLK] = {
-+		"pclk", CGU_CLK_DIV,
-+		.parents = { JZ4755_CLK_PLL, },
-+		.div = {
-+			CGU_REG_CPCCR, 8, 1, 4, 22, -1, -1, 0,
-+			jz4755_cgu_cpccr_div_table,
-+		},
-+	},
-+
-+	[JZ4755_CLK_MCLK] = {
-+		"mclk", CGU_CLK_DIV,
-+		.parents = { JZ4755_CLK_PLL, },
-+		.div = {
-+			CGU_REG_CPCCR, 12, 1, 4, 22, -1, -1, 0,
-+			jz4755_cgu_cpccr_div_table,
-+		},
-+	},
-+
-+	[JZ4755_CLK_H1CLK] = {
-+		"h1clk", CGU_CLK_DIV,
-+		.parents = { JZ4755_CLK_PLL, },
-+		.div = {
-+			CGU_REG_CPCCR, 16, 1, 4, 22, -1, -1, 0,
-+			jz4755_cgu_cpccr_div_table,
-+		},
-+	},
-+
-+	[JZ4755_CLK_UDC] = {
-+		"udc", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_EXT_HALF, JZ4755_CLK_PLL_HALF, },
-+		.mux = { CGU_REG_CPCCR, 29, 1 },
-+		.div = { CGU_REG_CPCCR, 23, 1, 6, -1, -1, -1 },
-+		.gate = { CGU_REG_CLKGR, 10 },
-+	},
-+
-+	[JZ4755_CLK_LCD] = {
-+		"lcd", CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_PLL_HALF, },
-+		.div = { CGU_REG_LPCDR, 0, 1, 11, -1, -1, -1 },
-+		.gate = { CGU_REG_CLKGR, 9 },
-+	},
-+
-+	[JZ4755_CLK_MMC] = {
-+		"mmc", CGU_CLK_DIV,
-+		.parents = { JZ4755_CLK_PLL_HALF, },
-+		.div = { CGU_REG_MSCCDR, 0, 1, 5, -1, -1, -1 },
-+	},
-+
-+	[JZ4755_CLK_I2S] = {
-+		"i2s", CGU_CLK_MUX | CGU_CLK_DIV,
-+		.parents = { JZ4755_CLK_EXT_HALF, JZ4755_CLK_PLL_HALF, },
-+		.mux = { CGU_REG_CPCCR, 31, 1 },
-+		.div = { CGU_REG_I2SCDR, 0, 1, 9, -1, -1, -1 },
-+	},
-+
-+	[JZ4755_CLK_SPI] = {
-+		"spi", CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_PLL_HALF, },
-+		.div = { CGU_REG_SSICDR, 0, 1, 4, -1, -1, -1 },
-+		.gate = { CGU_REG_CLKGR, 4 },
-+	},
-+
-+	[JZ4755_CLK_TVE] = {
-+		"tve", CGU_CLK_MUX | CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_LCD, JZ4755_CLK_EXT, },
-+		.mux = { CGU_REG_LPCDR, 31, 1 },
-+		.gate = { CGU_REG_CLKGR, 18 },
-+	},
-+
-+	[JZ4755_CLK_RTC] = {
-+		"rtc", CGU_CLK_MUX | CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_EXT512, JZ4755_CLK_OSC32K, },
-+		.mux = { CGU_REG_OPCR, 2, 1},
-+		.gate = { CGU_REG_CLKGR, 2 },
-+	},
-+
-+	[JZ4755_CLK_CIM] = {
-+		"cim", CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_PLL_HALF, },
-+		.div = { CGU_REG_CIMCDR, 0, 1, 8, -1, -1, -1 },
-+		.gate = { CGU_REG_CLKGR, 8 },
-+	},
-+
-+	/* Gate-only clocks */
-+
-+	[JZ4755_CLK_UART0] = {
-+		"uart0", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_EXT_HALF, },
-+		.gate = { CGU_REG_CLKGR, 0 },
-+	},
-+
-+	[JZ4755_CLK_UART1] = {
-+		"uart1", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_EXT_HALF, },
-+		.gate = { CGU_REG_CLKGR, 14 },
-+	},
-+
-+	[JZ4755_CLK_UART2] = {
-+		"uart2", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_EXT_HALF, },
-+		.gate = { CGU_REG_CLKGR, 15 },
-+	},
-+
-+	[JZ4755_CLK_ADC] = {
-+		"adc", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_EXT_HALF, },
-+		.gate = { CGU_REG_CLKGR, 7 },
-+	},
-+
-+	[JZ4755_CLK_AIC] = {
-+		"aic", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_EXT_HALF, },
-+		.gate = { CGU_REG_CLKGR, 5 },
-+	},
-+
-+	[JZ4755_CLK_I2C] = {
-+		"i2c", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_EXT_HALF, },
-+		.gate = { CGU_REG_CLKGR, 3 },
-+	},
-+
-+	[JZ4755_CLK_BCH] = {
-+		"bch", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_H1CLK, },
-+		.gate = { CGU_REG_CLKGR, 11 },
-+	},
-+
-+	[JZ4755_CLK_TCU] = {
-+		"tcu", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_EXT, },
-+		.gate = { CGU_REG_CLKGR, 1 },
-+	},
-+
-+	[JZ4755_CLK_DMA] = {
-+		"dma", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_PCLK, },
-+		.gate = { CGU_REG_CLKGR, 12 },
-+	},
-+
-+	[JZ4755_CLK_MMC0] = {
-+		"mmc0", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_MMC, },
-+		.gate = { CGU_REG_CLKGR, 6 },
-+	},
-+
-+	[JZ4755_CLK_MMC1] = {
-+		"mmc1", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_MMC, },
-+		.gate = { CGU_REG_CLKGR, 16 },
-+	},
-+
-+	[JZ4755_CLK_AUX_CPU] = {
-+		"aux_cpu", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_H1CLK, },
-+		.gate = { CGU_REG_CLKGR, 24 },
-+	},
-+
-+	[JZ4755_CLK_AHB1] = {
-+		"ahb1", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_H1CLK, },
-+		.gate = { CGU_REG_CLKGR, 23 },
-+	},
-+
-+	[JZ4755_CLK_IDCT] = {
-+		"idct", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_H1CLK, },
-+		.gate = { CGU_REG_CLKGR, 22 },
-+	},
-+
-+	[JZ4755_CLK_DB] = {
-+		"db", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_H1CLK, },
-+		.gate = { CGU_REG_CLKGR, 21 },
-+	},
-+
-+	[JZ4755_CLK_ME] = {
-+		"me", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_H1CLK, },
-+		.gate = { CGU_REG_CLKGR, 20 },
-+	},
-+
-+	[JZ4755_CLK_MC] = {
-+		"mc", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_H1CLK, },
-+		.gate = { CGU_REG_CLKGR, 19 },
-+	},
-+
-+	[JZ4755_CLK_TSSI] = {
-+		"tssi", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_EXT_HALF/* not sure */, },
-+		.gate = { CGU_REG_CLKGR, 17 },
-+	},
-+
-+	[JZ4755_CLK_IPU] = {
-+		"ipu", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_PLL_HALF/* not sure */, },
-+		.gate = { CGU_REG_CLKGR, 13 },
-+	},
-+
-+	[JZ4755_CLK_EXT512] = {
-+		"ext/512", CGU_CLK_FIXDIV,
-+		.parents = { JZ4755_CLK_EXT, },
-+
-+		.fixdiv = { 512 },
-+	},
-+
-+	[JZ4755_CLK_UDC_PHY] = {
-+		"udc_phy", CGU_CLK_GATE,
-+		.parents = { JZ4755_CLK_EXT_HALF, },
-+		.gate = { CGU_REG_OPCR, 6, true },
-+	},
-+};
-+
-+static void __init jz4755_cgu_init(struct device_node *np)
-+{
-+	int retval;
-+
-+	cgu = ingenic_cgu_new(jz4755_cgu_clocks,
-+			      ARRAY_SIZE(jz4755_cgu_clocks), np);
-+	if (!cgu) {
-+		pr_err("%s: failed to initialise CGU\n", __func__);
-+		return;
-+	}
-+
-+	retval = ingenic_cgu_register_clocks(cgu);
-+	if (retval)
-+		pr_err("%s: failed to register CGU Clocks\n", __func__);
-+
-+	ingenic_cgu_register_syscore_ops(cgu);
-+}
-+CLK_OF_DECLARE_DRIVER(jz4755_cgu, "ingenic,jz4755-cgu", jz4755_cgu_init);
--- 
-2.36.1
+Ah, I see the issue here. Looks like the timer_fixup_free() is calling
+itself and crashing.
+
+Let me take a look into that. I didn't touch the fixup code, and there
+could be an assumption there that it's behaving with the old approach.
+
+-- Steve
+
+
+> [   16.329996]  __debug_check_no_obj_freed+0x1ec/0x25c
+> [   16.330003]  debug_check_no_obj_freed+0x20/0x90
+> [   16.330009]  slab_free_freelist_hook.constprop.0+0xac/0x1b0
+> [   16.330019]  kmem_cache_free+0x1ac/0x500
+> [   16.330026]  __sk_destruct+0x140/0x2a0
+> [   16.330035]  sk_destruct+0x54/0x64
+> [   16.330042]  __sk_free+0x74/0x120
+> [   16.330048]  sk_free+0x64/0x8c
+> [   16.330055]  tcp_close+0x94/0xc0
+> [   16.330064]  inet_release+0x50/0xb0
+> [   16.330071]  __sock_release+0x44/0xbc
+> [   16.330076]  sock_close+0x18/0x30
+> [   16.330081]  __fput+0x84/0x270
+> [   16.330088]  ____fput+0x10/0x20
+> [   16.330094]  task_work_run+0x88/0xf0
+> [   16.330102]  do_exit+0x334/0xafc
+> [   16.330108]  do_group_exit+0x34/0x90
+> [   16.330115]  __arm64_sys_exit_group+0x18/0x20
+> [   16.330121]  invoke_syscall+0x48/0x114
+> [   16.330133]  el0_svc_common.constprop.0+0x60/0x11c
+> [   16.330146]  do_el0_svc+0x30/0xd0
+> [   16.330157]  el0_svc+0x48/0xc0
+> [   16.330170]  el0t_64_sync_handler+0xbc/0x13c
+> [   16.330179]  el0t_64_sync+0x18c/0x190
+> [   16.330645] Kernel Offset: 0x46909ae00000 from 0xffff800008000000
+> [   16.330664] PHYS_OFFSET: 0xffffae1ec0000000
+> [   16.330686] CPU features: 0x22000,2033c080,0000421b
+> [   16.330752] Memory Limit: none
+> 
+> This is with arm64_defconfig plus various debug options.
+> Running the same test with v6.0.4 produces no errors, and neither
+> does running it with v6.1-rc2-105-gb229b6ca5abb (current mainline).
+> 
+> Guenter
 
