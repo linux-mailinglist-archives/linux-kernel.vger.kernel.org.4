@@ -2,275 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079FD60FCAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C6E560FCAD
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236393AbiJ0QJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 12:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
+        id S236396AbiJ0QKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 12:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236380AbiJ0QJl (ORCPT
+        with ESMTP id S236401AbiJ0QKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 12:09:41 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1876342
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:09:39 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so6905221pjc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:09:39 -0700 (PDT)
+        Thu, 27 Oct 2022 12:10:12 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FA5646E
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:10:08 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id bs14so3375793ljb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:10:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=cs6Se82l4PDsSj9I2mLI3f+GZ/GJF+Opr2Jjis5B+58=;
-        b=gr/x3Rmw+ft/dWHSYXxVElM0ozip0qNvQoiaAb7SE3U23IY75AgH/lPJDcqT0638Ts
-         KreY/MOQbHmTECj/j0eOSRu2dYoVj8QWWkrdhhF0zwCgqMm4Vb2P+VSLd/ZOEOdLpvPw
-         N3cXmnt7x8itiPJ83eQQdCPR102fH5oJvdYV8Km7l48+hRK+ZiJbHT9YL9biHiH4gRGG
-         pNRa2Dwd5DMHE8olSf37Q54BHys2n/JF58TJC1E34xWi6p61LXWrt4NXDGqzBv19Vj3f
-         zw0eE/aO+D6k3bNTuYNBx5y+1k1QHVXR5642U/tDnaMj5t4/CuDfFZOvDrUnIfcDLroJ
-         Yl+w==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TE3cF0mw0pliGS33L8WCWsjoAKodOQ0aEEbBLS35gEA=;
+        b=LSTO3MG8PFUwo1K2U5EbkAGHDC/vgeZ5jlbNGqOwlTeHizDaVhrLMl563UdOJ26Dmu
+         xMRXXmEtRGIqJNdZ6hzrKdpWJ5W+UWC2tnCsfgGMEdEPuosXM1yXqz7Y18PI4blAx1QO
+         /IoZQme5G7D/HQuU9/FvQgpYT60EkFcscIJf5DydD3OhIfbx3/XOkBOTsiHRetyrjgMK
+         VfGx/chzBa1HeMgqhCy37no8LI3Fa22UKh1TnwJc5LaotWJSYFxvt/0xY8NygtTgz5Cq
+         P5ojPM/TsAU3fKo2W2cCra8JfxjJvPMOGkvIkWMHN/AH3ikSQ1Rh3aIG8buAdOeZPCpe
+         lGeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cs6Se82l4PDsSj9I2mLI3f+GZ/GJF+Opr2Jjis5B+58=;
-        b=W41CuTc1Sjim0exs1DOYHgfrTE7Wopr9MaRPX+ESjSt2H1d6G1z9FxAktipmpPjZ7V
-         F2KQKtuyl90ZSiVDnDdl78DecCCHvVWupgXO6gNQEmWtnhUAcQzVDf5cw74vQ5nTz7Rf
-         SiI+mcV9g+WpRKQVxfimJ61pMB661mYN8nuaaVYqgBgx78vYzfXVIedl0MCSwqGqK+J2
-         /1pYGLZLEFpXHwuQzPkINf+5IFtxRHfkl51kLvYWbUMeg6oteO1AwCGIVqTccYLHiTMP
-         McARMMeYtePJI2/3jOFwDdMEhLODrhYZwoaBfc2i1h00R6pf+TxQ78xeXm7nDkAksDA6
-         u2dg==
-X-Gm-Message-State: ACrzQf0cplNS4WOysGfzPBchTIXYNul1xwmL7POGG3zasOJpKAk9u2PE
-        +yeFtavJeG9JQvGZZjm7SITp
-X-Google-Smtp-Source: AMsMyM53JceTu9c/G4onEt7iCb9cuuRM2cwy18Blh80zUk9iUEs6nhRalt+MMq6PmBPGozyinxPUNQ==
-X-Received: by 2002:a17:902:f684:b0:17f:95cc:af8 with SMTP id l4-20020a170902f68400b0017f95cc0af8mr50148643plg.91.1666886979301;
-        Thu, 27 Oct 2022 09:09:39 -0700 (PDT)
-Received: from thinkpad ([117.202.186.162])
-        by smtp.gmail.com with ESMTPSA id d1-20020a170902cec100b0018661d627d7sm1410039plg.59.2022.10.27.09.09.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 09:09:38 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 21:39:32 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Frank Li <frank.li@nxp.com>
-Cc:     Shunsuke Mie <mie@igel.co.jp>, Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>, kishon@kernel.org,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "ntb@lists.linux.dev" <ntb@lists.linux.dev>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [EXT] Re: [PATCH v2] PCI: endpoint: pci-epf-{,v}ntb: fix a check
- for no epc alignment constraint
-Message-ID: <20221027160932.GD76627@thinkpad>
-References: <20220922092357.123732-1-mie@igel.co.jp>
- <20221025142143.GA109941@thinkpad>
- <HE1PR0401MB233126D2C7410EC5F6C3976488319@HE1PR0401MB2331.eurprd04.prod.outlook.com>
- <CANXvt5qjnbZMzFJt8kBtQz6FHc_QQYw7=fZp8kK87mZ-t75z+g@mail.gmail.com>
- <HE1PR0401MB23319EE329D62420919740C688339@HE1PR0401MB2331.eurprd04.prod.outlook.com>
- <20221027151220.GC76627@thinkpad>
- <HE1PR0401MB233111DEC8F76341029183F188339@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TE3cF0mw0pliGS33L8WCWsjoAKodOQ0aEEbBLS35gEA=;
+        b=qkgxjtbIfDJ3tX4Wjs/Pj1w1optI/vJWtdy2MrZZBw2d6VSPrpOtij2kRmbiZ3wp2z
+         6T9/xF9dELpOsL6L0pfK848mpjbCrMNHLIfp4Wlwvf+Vnc0IyY8iMP3rYJOgaPwlfiZ5
+         /G7iNQGHPoHc8k0LUbJuSDqqIRfBWfXm8xauHnqk+a1jgzZf4qHZD3LluXEFnWwedyRV
+         +QZTBk9vtpiTbbFAxR+WiRU6kkDFFXSGzarQumcz6r9hK02do0B5+LoK5jQTobQ5xvkY
+         EU2Zma6eDJ/hmEX9tq+bBRuEselHyO1ARFfKmWG3fZ403xe0AAt2qXP5BVRTiC99xTd5
+         Db5Q==
+X-Gm-Message-State: ACrzQf3zgij5CT1BK+7BhPWyHW+Eqifv8qR6/fVlNCTpJjtmPhKLma90
+        Z/rpMqK36oI1Jiwu0t6EnLbRBo+V/CvisY8EvrbiaQ==
+X-Google-Smtp-Source: AMsMyM573hFTMp8fbXvHmeFaiLrHKhsXKKdjfRDRu7xeSmu35yi+JAD4ZXBGoG20oSgYIDqjO6wfGKdiPppXmhhlz/w=
+X-Received: by 2002:a2e:58e:0:b0:277:9f5:3538 with SMTP id 136-20020a2e058e000000b0027709f53538mr8446535ljf.445.1666887006729;
+ Thu, 27 Oct 2022 09:10:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <HE1PR0401MB233111DEC8F76341029183F188339@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221024224657.2917482-1-dionnaglaze@google.com> <20221024224657.2917482-3-dionnaglaze@google.com>
+In-Reply-To: <20221024224657.2917482-3-dionnaglaze@google.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Thu, 27 Oct 2022 10:09:55 -0600
+Message-ID: <CAMkAt6qFiF2J+eBu0kv77yJyLbiKjs5cjsa4Qg6zVeR1AKuy3A@mail.gmail.com>
+Subject: Re: [PATCH v4 2/4] x86/sev: Change snp_guest_issue_request's fw_err
+To:     Dionna Glaze <dionnaglaze@google.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Added Kishon's new email address and removed the old one]
+On Mon, Oct 24, 2022 at 4:47 PM Dionna Glaze <dionnaglaze@google.com> wrote:
+>
+> The GHCB specification declares that the firmware error value for a
+> guest request will be stored in the lower 32 bits of EXIT_INFO_2.
+> The upper 32 bits are for the VMM's own error code. The fw_err argument
+> is thus a misnomer, and callers will need access to all 64 bits.
+>
+> The type of unsigned long also causes problems, since sw_exit_info2 is
+> u64 (unsigned long long) vs the argument's previous unsigned long*.
+> The signature change requires the follow-up change to
+> drivers/virt/coco/sev-guest to use the new expected type in order to
+> compile.
+>
+> The firmware might not even be called, so we bookend the call with the
+> no firmware call error and clearing the error.
+>
+> Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Joerg Roedel <jroedel@suse.de>
+> Cc: Peter Gonda <pgonda@google.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+>
+> Fixes: d5af44dde546 ("x86/sev: Provide support for SNP guest request NAEs")
+> Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+> ---
+>  arch/x86/include/asm/sev.h |  4 ++--
+>  arch/x86/kernel/sev.c      | 10 ++++++----
+>  2 files changed, 8 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+> index ebc271bb6d8e..8ebd78b6a57c 100644
+> --- a/arch/x86/include/asm/sev.h
+> +++ b/arch/x86/include/asm/sev.h
+> @@ -196,7 +196,7 @@ void snp_set_memory_private(unsigned long vaddr, unsigned int npages);
+>  void snp_set_wakeup_secondary_cpu(void);
+>  bool snp_init(struct boot_params *bp);
+>  void __init __noreturn snp_abort(void);
+> -int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err);
+> +int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, u64 *exitinfo2);
+>  #else
+>  static inline void sev_es_ist_enter(struct pt_regs *regs) { }
+>  static inline void sev_es_ist_exit(void) { }
+> @@ -217,7 +217,7 @@ static inline void snp_set_wakeup_secondary_cpu(void) { }
+>  static inline bool snp_init(struct boot_params *bp) { return false; }
+>  static inline void snp_abort(void) { }
+>  static inline int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input,
+> -                                         unsigned long *fw_err)
+> +                                         u64 *exitinfo2)
+>  {
+>         return -ENOTTY;
+>  }
 
-On Thu, Oct 27, 2022 at 03:34:11PM +0000, Frank Li wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > Sent: Thursday, October 27, 2022 10:12 AM
-> > To: Frank Li <frank.li@nxp.com>
-> > Cc: Shunsuke Mie <mie@igel.co.jp>; Jon Mason <jdmason@kudzu.us>; Dave
-> > Jiang <dave.jiang@intel.com>; Allen Hubbe <allenbh@gmail.com>; Kishon
-> > Vijay Abraham I <kishon@ti.com>; Lorenzo Pieralisi <lpieralisi@kernel.org>;
-> > Krzysztof Wilczyński <kw@linux.com>; Bjorn Helgaas
-> > <bhelgaas@google.com>; ntb@lists.linux.dev; linux-pci@vger.kernel.org;
-> > linux-kernel@vger.kernel.org
-> > Subject: Re: [EXT] Re: [PATCH v2] PCI: endpoint: pci-epf-{,v}ntb: fix a check for
-> > no epc alignment constraint
-> > 
-> > Caution: EXT Email
-> > 
-> > On Thu, Oct 27, 2022 at 02:35:56PM +0000, Frank Li wrote:
-> > >
-> > >
-> > > > -----Original Message-----
-> > > > From: Shunsuke Mie <mie@igel.co.jp>
-> > > > Sent: Wednesday, October 26, 2022 8:43 PM
-> > > > To: Frank Li <frank.li@nxp.com>
-> > > > Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>; Jon
-> > > > Mason <jdmason@kudzu.us>; Dave Jiang <dave.jiang@intel.com>; Allen
-> > > > Hubbe <allenbh@gmail.com>; Kishon Vijay Abraham I <kishon@ti.com>;
-> > > > Lorenzo Pieralisi <lpieralisi@kernel.org>; Krzysztof Wilczyński
-> > > > <kw@linux.com>; Bjorn Helgaas <bhelgaas@google.com>;
-> > > > ntb@lists.linux.dev; linux-pci@vger.kernel.org; linux-
-> > kernel@vger.kernel.org
-> > > > Subject: Re: [EXT] Re: [PATCH v2] PCI: endpoint: pci-epf-{,v}ntb: fix a check
-> > for
-> > > > no epc alignment constraint
-> > > >
-> > > > Caution: EXT Email
-> > > >
-> > > > Hi Frank,
-> > > >
-> > > > 2022年10月26日(水) 1:07 Frank Li <frank.li@nxp.com>:
-> > > > >
-> > > > >
-> > > > >
-> > > > > > -----Original Message-----
-> > > > > > From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > > > > Sent: Tuesday, October 25, 2022 9:22 AM
-> > > > > > To: Shunsuke Mie <mie@igel.co.jp>
-> > > > > > Cc: Jon Mason <jdmason@kudzu.us>; Dave Jiang
-> > <dave.jiang@intel.com>;
-> > > > > > Allen Hubbe <allenbh@gmail.com>; Kishon Vijay Abraham I
-> > > > > > <kishon@ti.com>; Lorenzo Pieralisi <lpieralisi@kernel.org>; Krzysztof
-> > > > > > Wilczyński <kw@linux.com>; Bjorn Helgaas <bhelgaas@google.com>;
-> > > > > > ntb@lists.linux.dev; linux-pci@vger.kernel.org; linux-
-> > > > kernel@vger.kernel.org
-> > > > > > Subject: [EXT] Re: [PATCH v2] PCI: endpoint: pci-epf-{,v}ntb: fix a check
-> > for
-> > > > no
-> > > > > > epc alignment constraint
-> > > > > >
-> > > > > > Caution: EXT Email
-> > > > > >
-> > > > > > On Thu, Sep 22, 2022 at 06:23:57PM +0900, Shunsuke Mie wrote:
-> > > > > > > Some PCI endpoint controllers have no alignment constraints, and
-> > the
-> > > > > > > epc_features->align becomes 0. In this case, IS_ALIGNED() in
-> > > > >
-> > > > > [Frank Li] why not set epc_features->align 1
-> > > > > no alignment constraints should mean align to byte.
-> > > > It is one of the solutions too I think. But in that case,  we need to
-> > > > write epc_features->align = 1 to all epc drivers, dwc, qcom, rcar,
-> > > > tegra, and etc.
-> > > >
-> > > > I think that my change is better.
-> > >
-> > > I think it should be based on what original term defined.
-> > > It should be fixed at where make mistake.
-> > >
-> > 
-> > 1byte is the default alignment that drivers can assume, why do you want
-> > drivers
-> > to set them explicitly when they do not want any special alignment?
-> 
-> What's definition of not alignment by align variable?
-> Using both 0 and 1 as no alignment is not good enough. 
-> 
-> I grep whole kernel driver directory, not one use 
-> 	If (align && IS_ALIGNED(x, align))  statement.    
-
-I can see multiple hits:
-
-lib/ubsan.c
-drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
-drivers/gpu/drm/i915/i915_vma.c
-drivers/nvdimm/pfn_devs.c
-drivers/misc/pci_endpoint_test.c
-
-But in most of the places, the alignment is guaranteed to be set by the client
-drivers because they might be read from the hardware register or fixed for an
-IP. But in this case, I don't think we should _force_ the drivers to set
-alignment to 1 (default) if they don't really care about it.
-
-Thanks,
-Mani
-
-> 
-> There are a common convention, align is 2^n
-> 
-> 
-> > 
-> > I think this patch is fine.
-> > 
-> > Thanks,
-> > Mani
-> > 
-> > > Are there other place use align == 0 means no alignment in kernel?
-> > >
-> > > >
-> > > > > > > epf_ntb_config_spad_bar_alloc() doesn't work well. Check for this
-> > > > before
-> > > > > > > IS_ALIGNED().
-> > > > > > >
-> > > > > > > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> > > > > >
-> > > > > > Reviewed-by: Manivannan Sadhasivam
-> > > > > > <manivannan.sadhasivam@linaro.org>
-> > > > > >
-> > > > > > Thanks,
-> > > > > > Mani
-> > > > > >
-> > > > > > > ---
-> > > > > > > Changes in v2:
-> > > > > > > * Fix the commit message in phrasings and words.
-> > > > > > > ---
-> > > > > > > ---
-> > > > > > >  drivers/pci/endpoint/functions/pci-epf-ntb.c  | 2 +-
-> > > > > > >  drivers/pci/endpoint/functions/pci-epf-vntb.c | 2 +-
-> > > > > > >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> > > > > > b/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> > > > > > > index 9a00448c7e61..f74155ee8d72 100644
-> > > > > > > --- a/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> > > > > > > +++ b/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> > > > > > > @@ -1021,7 +1021,7 @@ static int
-> > > > epf_ntb_config_spad_bar_alloc(struct
-> > > > > > epf_ntb *ntb,
-> > > > > > >       peer_size = peer_epc_features->bar_fixed_size[peer_barno];
-> > > > > > >
-> > > > > > >       /* Check if epc_features is populated incorrectly */
-> > > > > > > -     if ((!IS_ALIGNED(size, align)))
-> > > > > > > +     if (align && (!IS_ALIGNED(size, align)))
-> > > > > > >               return -EINVAL;
-> > > > > > >
-> > > > > > >       spad_count = ntb->spad_count;
-> > > > > > > diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > > > > b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > > > > > index 0ea85e1d292e..5e346c0a0f05 100644
-> > > > > > > --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > > > > > +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > > > > > @@ -418,7 +418,7 @@ static int
-> > epf_ntb_config_spad_bar_alloc(struct
-> > > > > > epf_ntb *ntb)
-> > > > > > >       size = epc_features->bar_fixed_size[barno];
-> > > > > > >       align = epc_features->align;
-> > > > > > >
-> > > > > > > -     if ((!IS_ALIGNED(size, align)))
-> > > > > > > +     if (align && !IS_ALIGNED(size, align))
-> > > > > > >               return -EINVAL;
-> > > > > > >
-> > > > > > >       spad_count = ntb->spad_count;
-> > > > > > > --
-> > > > > > > 2.17.1
-> > > > > > >
-> > > > > >
-> > > > > > --
-> > > > > > மணிவண்ணன் சதாசிவம்
-> > > >
-> > > > Best,
-> > > > Shunsuke
-> > 
-> > --
-> > மணிவண்ணன் சதாசிவம்
-
--- 
-மணிவண்ணன் சதாசிவம்
+In another thread Borislav suggested we edit snp_issue_guest_request()
+to take a parameter struct pointer instead of a long list of args.
+Should we use the opportunity to do this instead of making this list
+longer?
