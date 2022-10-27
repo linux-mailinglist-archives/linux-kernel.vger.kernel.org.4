@@ -2,99 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 366B7610487
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB70610489
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235854AbiJ0Vg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 17:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
+        id S236545AbiJ0VhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 17:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236191AbiJ0VgZ (ORCPT
+        with ESMTP id S235481AbiJ0VhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 17:36:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB1F5F113;
-        Thu, 27 Oct 2022 14:36:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC086624EC;
-        Thu, 27 Oct 2022 21:36:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00638C433D6;
-        Thu, 27 Oct 2022 21:36:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666906583;
-        bh=d+99Qklp1XvLTs5hzjLB/CTz9UM6Vp6GAr9OOIx8fNY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=KC66wXZdXYcDgawaSO+aUS27v4e+yS1UvhLRjbeCDLDfEMLfg+pdBqzvstCPxGY4J
-         yWHwLfUgNMj1ommkw2Sxymy1hLEvLDgIHEcjKB6FQJUVFeKLqLdtddCxVcplG7wXwA
-         aH8+5VsPOfiqPHOfpVEB13uqNDXnuCv7pGAhYZR1CR5o3LjsYZfRL+dt4a1FqevkOY
-         v5vpsfW5kKSMZFSGC7MCQTDSiAbGUncz5dnFwrHcWwGp0sv0EGs1I1YXoVGGo7U/fP
-         NzmunzziJR1YI6b+7ldr25Gs5o95nHmV02oXhUZ1JhPZRX7zeNsFosbzh5CLldySCP
-         ghkFW/BXcKO3g==
-Date:   Thu, 27 Oct 2022 16:36:20 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux1394-devel@lists.sourceforge.net, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v2] firewire: ohci: convert to generic power management
-Message-ID: <20221027213620.GA842366@bhelgaas>
+        Thu, 27 Oct 2022 17:37:20 -0400
+Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB86972B44
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 14:37:19 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 21:37:07 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1666906638; x=1667165838;
+        bh=qOqRsISaPy8WRtmUNjqUH5CrgfQe9GLu6VNSH2AUc/s=;
+        h=Date:To:From:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+        b=FUFE/3cT8xKN0tQFmfifVFz88b0tVnn05nOWRJz6RMFuyIVoScOMtmZcjMgtziie4
+         MxG9YxlRRA1UA+hY94Ssevq51eqIh46gUNcIsadtfzTYTsZVlHpC7fLesKciU6Zt2+
+         xelEeKGl8MdkBdbMX89Cy5JKxYobSOmElEEIlc/nwZZS87l+SX1csliEIg+0w1GaKL
+         J/1bfTYwGQMKqorT/0kqwHcIrELVnln3hr54KNYGaKfGqAGOfjWnUUtGA+5GRn+Wna
+         wVDAEsyeFhjQgXgEVvxCh3jGB27z5s4QceGInX2XjKV0RTHO5sWb+OgCtp2YY6UGkZ
+         ZNYW9gCkxy3YQ==
+To:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Subject: [PATCH v1] timerqueue: use rb_entry_safe() in timerqueue_getnext()
+Message-ID: <20221027212506.3745164-1-pobrn@protonmail.com>
+Feedback-ID: 20568564:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221027060342.GA444@wunner.de>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 08:03:42AM +0200, Lukas Wunner wrote:
-> On Tue, Oct 25, 2022 at 04:25:21PM -0500, Bjorn Helgaas wrote:
-> > N.B. This changes the order of pmac_ohci_off() and pmac_ohci_on().
-> > Previously, pmac_ohci_off() was called *after* pci_save_state() and
-> > pci_set_power_state(), and this change calls it *before*.
-> > 
-> > Similarly, pmac_ohci_on() was previously called *before*
-> > pci_set_power_state() and pci_restore_state() and this change calls it
-> > *after*.
-> 
-> Seems likely the ordering change may break things.
-> 
-> pmac_ohci_on/off() toggles PMAC_FTR_1394_ENABLE, which is defined as:
-> 
->  * enable/disable the firewire cell of an uninorth ASIC.
-> 
-> It sounds like it will cut power to the firewire controller and I'd
-> expect that pci_save_state() will then not be able to access config
-> space.
+When `timerqueue_getnext()` is called on an empty timerqueue
+the returned rb_node pointer will be NULL. Using `rb_entry()`
+on a potentially NULL pointer will only - coincidentally - work
+if the offset of the rb_node member is 0. This is currently the
+case for `timerqueue_node`, but should this ever change,
+`timerqueue_getnext()` will no longer work correctly on empty
+timerqueues. To avoid this, switch to using `rb_entry_safe()`.
 
-Yeah, definitely a risk, so I won't merge this myself since I have no
-insight or way to test it.
+Signed-off-by: Barnab=C3=A1s P=C5=91cze <pobrn@protonmail.com>
+---
+ include/linux/timerqueue.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> The only way to make this work is to define a struct dev_pm_domain
-> whose ->suspend_noirq callback first invokes the pci_bus_type
-> ->suspend_noirq callback and then cuts power to the firewire cell
-> by calling pmac_ohci_off().
-> 
-> I've done something like this for Thunderbolt power management on
-> x86 Macs a few years back but didn't get around to upstream it so far:
-> 
-> https://github.com/l1k/linux/commit/4db7f0b1f5c9
+diff --git a/include/linux/timerqueue.h b/include/linux/timerqueue.h
+index 93884086f392..adc80e29168e 100644
+--- a/include/linux/timerqueue.h
++++ b/include/linux/timerqueue.h
+@@ -35,7 +35,7 @@ struct timerqueue_node *timerqueue_getnext(struct timerqu=
+eue_head *head)
+ {
+ =09struct rb_node *leftmost =3D rb_first_cached(&head->rb_root);
 
-Wow, that's some impressive reverse engineering and work!
+-=09return rb_entry(leftmost, struct timerqueue_node, node);
++=09return rb_entry_safe(leftmost, struct timerqueue_node, node);
+ }
 
-We're not quite there yet, but if we ever get to the point where this
-driver is the only thing preventing us from removing the PCI legacy PM
-hooks, I think I'd be inclined to just sacrifice PM completely for
-this driver.  I can't really see putting in the kind of work you did
-for Thunderbolt.
+ static inline void timerqueue_init(struct timerqueue_node *node)
+--
+2.38.1
 
-Bjorn
+
