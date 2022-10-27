@@ -2,122 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4DEC60F24D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 513E160F24A
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234765AbiJ0I0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 04:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53180 "EHLO
+        id S234524AbiJ0IZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 04:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234235AbiJ0I0L (ORCPT
+        with ESMTP id S232844AbiJ0IZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 04:26:11 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC853DBF7;
-        Thu, 27 Oct 2022 01:26:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=cyV55dw90naYEG3Ap/95NF6dsAJTLZCPc38XNt8Lu6M=; b=Q9XTqCBIN4KYQwVI2HKkTOpyIH
-        MtUhXT9sX7JdpWWiR7/DghIpuoDT3twXkAIZdk+H70/bBpllZVXM/esCO55OiUzrJ1/IYLVMG+qxb
-        44gxAshQa2/kmfAeIsqJruK+844SBmKCR5W80iN/g0CP9QorEWoD40IDRGasr/UiJ8lNX5O0tLjjp
-        xbNiupxI83d/e/aSDEfPHSAui6OAeVKM52Qm922YTPRP3Er1Vobw59g0/iGcIrSTuf8UjOkHghXK1
-        hAfPfjoa+6kcXxYRGceGregLTDwSeYqH9chbGiJQD8UCJD/y8VgN6SBGNRbLXOLmGwi4pzqkp7N50
-        cWG7MDIw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1onyCu-000312-IG; Thu, 27 Oct 2022 08:25:44 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A1E4930035C;
-        Thu, 27 Oct 2022 10:25:37 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8C8E120125B3B; Thu, 27 Oct 2022 10:25:37 +0200 (CEST)
-Date:   Thu, 27 Oct 2022 10:25:37 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     "Liang, Kan" <kan.liang@linux.intel.com>,
-        kajoljain <kjain@linux.ibm.com>, acme@kernel.org,
-        jolsa@kernel.org, namhyung@kernel.org, eranian@google.com,
-        irogers@google.com, jmario@redhat.com, leo.yan@linaro.org,
-        alisaidi@amazon.com, ak@linux.intel.com,
-        dave.hansen@linux.intel.com, hpa@zytor.com, mingo@redhat.com,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        tglx@linutronix.de, bp@alien8.de, x86@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com
-Subject: Re: [PATCH v3 01/15] perf/mem: Introduce
- PERF_MEM_LVLNUM_{EXTN_MEM|IO}
-Message-ID: <Y1pAgRHpV294J0Kw@hirez.programming.kicks-ass.net>
-References: <20220928095805.596-1-ravi.bangoria@amd.com>
- <20220928095805.596-2-ravi.bangoria@amd.com>
- <bf4ec1cb-49a4-f5cd-8fd0-c70b287180c0@linux.ibm.com>
- <a36ffee0-b0d5-5941-8d98-cc8e9b100a50@amd.com>
- <88c920de-5af6-c7b0-d6a8-6c365491dd3e@linux.intel.com>
- <f6268268-b4e9-9ed6-0453-65792644d953@amd.com>
+        Thu, 27 Oct 2022 04:25:46 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCE83F1C7;
+        Thu, 27 Oct 2022 01:25:44 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DFA1066028BE;
+        Thu, 27 Oct 2022 09:25:42 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666859143;
+        bh=/YidnNINzPW5vZDb/pa0jpw8YDaXO7CEUDNd8zcAIYA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CzQgNRVc/yB6bXgQzIRqdr2PZWskO8Gm9x5NCkX+XC5HRzEcJbDe8uf4WroOTVfdk
+         JtdlmD6xcXhn5lHuYUbVKo9RbAaeqBFudlChVquwQQn2hh3KGfJHc86e+igEui4V8b
+         Vj8botpKBnxvgRImzcd2pNlDJwATLCDJkIx71v0Wk5sKualwJ4i8zbxrC0YCqcrxuk
+         yE9daXe1GRNQY9Bj9fW0M7edZwMymnPMaZ8i6YR6SMpRDAQy7bsL1mtbmJZvHXT9dF
+         djLA/u6cb+qN4Jrf5s2jkT5xN46+hjApXcuxUujJ3NiEQIb6z9yv9PiwVZBq6wghDG
+         gcV959ZS9J5jg==
+Message-ID: <cb050482-cf6e-829e-7fd4-cfcde72c545b@collabora.com>
+Date:   Thu, 27 Oct 2022 10:25:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f6268268-b4e9-9ed6-0453-65792644d953@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 08/19] clk: mediatek: Add MT8188 imgsys clock support
+Content-Language: en-US
+To:     "Garmin.Chang" <Garmin.Chang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20221024094254.29218-1-Garmin.Chang@mediatek.com>
+ <20221024094254.29218-9-Garmin.Chang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221024094254.29218-9-Garmin.Chang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 01, 2022 at 12:07:40PM +0530, Ravi Bangoria wrote:
-
-> From 5deb2055e2b5b0a61403f2d5f4e5a784b14a65e3 Mon Sep 17 00:00:00 2001
-> From: Ravi Bangoria <ravi.bangoria@amd.com>
-> Date: Sat, 1 Oct 2022 11:37:05 +0530
-> Subject: [PATCH] perf/mem: Rename PERF_MEM_LVLNUM_EXTN_MEM to
->  PERF_MEM_LVLNUM_CXL
+Il 24/10/22 11:42, Garmin.Chang ha scritto:
+> Add MT8188 imgsys clock controllers which provide clock gate
+> control for image IP blocks.
 > 
-> PERF_MEM_LVLNUM_EXTN_MEM was introduced to cover CXL devices but it's
-> bit ambiguous name and also not generic enough to cover cxl.cache and
-> cxl.io devices. Rename it to PERF_MEM_LVLNUM_CXL to be more specific.
-> 
-> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
-
-Thanks!
-
+> Signed-off-by: Garmin.Chang <Garmin.Chang@mediatek.com>
 > ---
->  arch/x86/events/amd/ibs.c       | 2 +-
->  include/uapi/linux/perf_event.h | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>   drivers/clk/mediatek/Makefile         |   2 +-
+>   drivers/clk/mediatek/clk-mt8188-img.c | 124 ++++++++++++++++++++++++++
+>   2 files changed, 125 insertions(+), 1 deletion(-)
+>   create mode 100644 drivers/clk/mediatek/clk-mt8188-img.c
 > 
-> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-> index 3271735f0070..4cb710efbdd9 100644
-> --- a/arch/x86/events/amd/ibs.c
-> +++ b/arch/x86/events/amd/ibs.c
-> @@ -801,7 +801,7 @@ static void perf_ibs_get_mem_lvl(union ibs_op_data2 *op_data2,
->  	/* Extension Memory */
->  	if (ibs_caps & IBS_CAPS_ZEN4 &&
->  	    ibs_data_src == IBS_DATA_SRC_EXT_EXT_MEM) {
-> -		data_src->mem_lvl_num = PERF_MEM_LVLNUM_EXTN_MEM;
-> +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_CXL;
->  		if (op_data2->rmt_node) {
->  			data_src->mem_remote = PERF_MEM_REMOTE_REMOTE;
->  			/* IBS doesn't provide Remote socket detail */
-> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-> index 85be78e0e7f6..eb1090604d53 100644
-> --- a/include/uapi/linux/perf_event.h
-> +++ b/include/uapi/linux/perf_event.h
-> @@ -1337,7 +1337,7 @@ union perf_mem_data_src {
->  #define PERF_MEM_LVLNUM_L3	0x03 /* L3 */
->  #define PERF_MEM_LVLNUM_L4	0x04 /* L4 */
->  /* 5-0x8 available */
-> -#define PERF_MEM_LVLNUM_EXTN_MEM 0x09 /* Extension memory */
-> +#define PERF_MEM_LVLNUM_CXL	0x09 /* CXL */
->  #define PERF_MEM_LVLNUM_IO	0x0a /* I/O */
->  #define PERF_MEM_LVLNUM_ANY_CACHE 0x0b /* Any cache */
->  #define PERF_MEM_LVLNUM_LFB	0x0c /* LFB */
-> -- 
-> 2.31.1
+> diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
+> index bd0a2aa5b6fa..242b49bafa9e 100644
+> --- a/drivers/clk/mediatek/Makefile
+> +++ b/drivers/clk/mediatek/Makefile
+> @@ -84,7 +84,7 @@ obj-$(CONFIG_COMMON_CLK_MT8186) += clk-mt8186-mcu.o clk-mt8186-topckgen.o clk-mt
+>   				   clk-mt8186-cam.o clk-mt8186-mdp.o clk-mt8186-ipe.o
+>   obj-$(CONFIG_COMMON_CLK_MT8188) += clk-mt8188-apmixedsys.o clk-mt8188-topckgen.o \
+>   				   clk-mt8188-peri_ao.o clk-mt8188-infra_ao.o \
+> -				   clk-mt8188-cam.o clk-mt8188-ccu.o
+> +				   clk-mt8188-cam.o clk-mt8188-ccu.o clk-mt8188-img.o
+>   obj-$(CONFIG_COMMON_CLK_MT8192) += clk-mt8192.o
+>   obj-$(CONFIG_COMMON_CLK_MT8192_AUDSYS) += clk-mt8192-aud.o
+>   obj-$(CONFIG_COMMON_CLK_MT8192_CAMSYS) += clk-mt8192-cam.o
+> diff --git a/drivers/clk/mediatek/clk-mt8188-img.c b/drivers/clk/mediatek/clk-mt8188-img.c
+> new file mode 100644
+> index 000000000000..00f3bbf4d502
+> --- /dev/null
+> +++ b/drivers/clk/mediatek/clk-mt8188-img.c
+> @@ -0,0 +1,124 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +//
+> +// Copyright (c) 2022 MediaTek Inc.
+> +// Author: Garmin Chang <garmin.chang@mediatek.com>
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/platform_device.h>
+> +#include <dt-bindings/clock/mediatek,mt8188-clk.h>
+> +
+> +#include "clk-gate.h"
+> +#include "clk-mtk.h"
+> +
+> +static const struct mtk_gate_regs imgsys_cg_regs = {
+> +	.set_ofs = 0x4,
+> +	.clr_ofs = 0x8,
+> +	.sta_ofs = 0x0,
+> +};
+> +
+> +#define GATE_IMGSYS(_id, _name, _parent, _shift)			\
+> +	GATE_MTK(_id, _name, _parent, &imgsys_cg_regs, _shift, &mtk_clk_gate_ops_setclr)
+> +
+> +static const struct mtk_gate imgsys_main_clks[] = {
+> +	GATE_IMGSYS(CLK_IMGSYS_MAIN_LARB9, "imgsys_main_larb9", "top_img", 0),
+> +	GATE_IMGSYS(CLK_IMGSYS_MAIN_TRAW0, "imgsys_main_traw0", "top_img", 1),
+> +	GATE_IMGSYS(CLK_IMGSYS_MAIN_TRAW1, "imgsys_main_traw1", "top_img", 2),
+> +	GATE_IMGSYS(CLK_IMGSYS_MAIN_VCORE_GALS, "imgsys_main_vcore_gals", "top_img", 3),
+> +	GATE_IMGSYS(CLK_IMGSYS_MAIN_DIP0, "imgsys_main_dip0", "top_img", 8),
+> +	GATE_IMGSYS(CLK_IMGSYS_MAIN_WPE0, "imgsys_main_wpe0", "top_img", 9),
+> +	GATE_IMGSYS(CLK_IMGSYS_MAIN_IPE, "imgsys_main_ipe", "top_img", 10),
+> +	GATE_IMGSYS(CLK_IMGSYS_MAIN_WPE1, "imgsys_main_wpe1", "top_img", 12),
+> +	GATE_IMGSYS(CLK_IMGSYS_MAIN_WPE2, "imgsys_main_wpe2", "top_img", 13),
+> +	GATE_IMGSYS(CLK_IMGSYS_MAIN_GALS, "imgsys_main_gals", "top_img", 31),
+> +};
+> +
+> +static const struct mtk_gate imgsys_wpe1_clks[] = {
+> +	GATE_IMGSYS(CLK_IMGSYS_WPE1_LARB11, "imgsys_wpe1_larb11", "top_img", 0),
+> +	GATE_IMGSYS(CLK_IMGSYS_WPE1, "imgsys_wpe1", "top_img", 1),
+> +};
+> +
+> +static const struct mtk_gate imgsys_wpe2_clks[] = {
+> +	GATE_IMGSYS(CLK_IMGSYS_WPE2_LARB11, "imgsys_wpe2_larb11", "top_img", 0),
+> +	GATE_IMGSYS(CLK_IMGSYS_WPE2, "imgsys_wpe2", "top_img", 1),
+> +};
+> +
+> +static const struct mtk_gate imgsys_wpe3_clks[] = {
+> +	GATE_IMGSYS(CLK_IMGSYS_WPE3_LARB11, "imgsys_wpe3_larb11", "top_img", 0),
+> +	GATE_IMGSYS(CLK_IMGSYS_WPE3, "imgsys_wpe3", "top_img", 1),
+> +};
+> +
+> +static const struct mtk_gate imgsys1_dip_top_clks[] = {
+> +	GATE_IMGSYS(CLK_IMGSYS1_DIP_TOP_LARB10, "imgsys1_dip_larb10", "top_img", 0),
+> +	GATE_IMGSYS(CLK_IMGSYS1_DIP_TOP_DIP_TOP, "imgsys1_dip_dip_top", "top_img", 1),
+> +};
+> +
+> +static const struct mtk_gate imgsys1_dip_nr_clks[] = {
+> +	GATE_IMGSYS(CLK_IMGSYS1_DIP_NR_LARB15, "imgsys1_dip_nr_larb15", "top_img", 0),
+> +	GATE_IMGSYS(CLK_IMGSYS1_DIP_NR_DIP_NR, "imgsys1_dip_nr_dip_nr", "top_img", 1),
+> +};
+> +
+> +static const struct mtk_clk_desc imgsys_main_desc = {
+> +	.clks = imgsys_main_clks,
+> +	.num_clks = ARRAY_SIZE(imgsys_main_clks),
+> +};
+> +
+> +static const struct mtk_clk_desc imgsys_wpe1_desc = {
+> +	.clks = imgsys_wpe1_clks,
+> +	.num_clks = ARRAY_SIZE(imgsys_wpe1_clks),
+> +};
+> +
+> +static const struct mtk_clk_desc imgsys_wpe2_desc = {
+> +	.clks = imgsys_wpe2_clks,
+> +	.num_clks = ARRAY_SIZE(imgsys_wpe2_clks),
+> +};
+> +
+> +static const struct mtk_clk_desc imgsys_wpe3_desc = {
+> +	.clks = imgsys_wpe3_clks,
+> +	.num_clks = ARRAY_SIZE(imgsys_wpe3_clks),
+> +};
+> +
+> +static const struct mtk_clk_desc imgsys1_dip_top_desc = {
+> +	.clks = imgsys1_dip_top_clks,
+> +	.num_clks = ARRAY_SIZE(imgsys1_dip_top_clks),
+> +};
+> +
+> +static const struct mtk_clk_desc imgsys1_dip_nr_desc = {
+> +	.clks = imgsys1_dip_nr_clks,
+> +	.num_clks = ARRAY_SIZE(imgsys1_dip_nr_clks),
+> +};
+> +
+> +static const struct of_device_id of_match_clk_mt8188_imgsys_main[] = {
+> +	{
+> +		.compatible = "mediatek,mt8188-imgsys",
+> +		.data = &imgsys_main_desc,
+> +	}, {
+> +		.compatible = "mediatek,mt8188-imgsys_wpe1",
+
+I know that this was done in other clock drivers as well, but can we please
+stop using underscores in devicetree compatibles?
+That makes them look more consistent with the rest of the DT.
+
+"mediatek,mt8188-imgsys-wpe1", as an example, would look a bit better.
+
+P.S.: Please do the same on all of the other drivers that you are introducing
+       with this series.
+
+Thanks,
+Angelo
