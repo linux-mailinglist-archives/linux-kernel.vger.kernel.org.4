@@ -2,130 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C516360F1CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5F760F1D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233187AbiJ0IFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 04:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
+        id S234908AbiJ0IGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 04:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233800AbiJ0IF1 (ORCPT
+        with ESMTP id S234877AbiJ0IGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 04:05:27 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D339038454
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:05:24 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id m2so804375pjr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:05:24 -0700 (PDT)
+        Thu, 27 Oct 2022 04:06:13 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248C4ABD72;
+        Thu, 27 Oct 2022 01:06:12 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id y69so1381551ede.5;
+        Thu, 27 Oct 2022 01:06:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sql+Rr6DrOQzxcxiEzDTWhDssE9ABXcq2lRpWcbPbWI=;
-        b=wmtMoHhM7uspTGMQFmqR0TSsTvi8olpJcfGv3QmnI7VkoQppvutu22gulZguTxBaqo
-         bp1A19eJq1XK0NXfSKyjkwDK/9iLZBcdcLLIBOKLU48su51D27MLsTyxHGnB9j/+sVCq
-         1Ak+9bn8icFC3cm69+GS5lvuiNmJrcOYXF77IfwsNcz+PIHtXDt6KMBYLvGznmaIDJir
-         eviCsgEuD2znZrRvWvNAoikvJ4aFxr4USltgUeZfo22RHof/R3w4+ylSH2TeBm4YMLyX
-         BzevUk5vw/7L7ulOExe2mLo9DvSTPL+DDxFBucivfIOYTILwDp2RK/YdfJWERD58/oI7
-         2HXQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=7ZnInTEdE6m53x3YlPmddOdHI+B78CP4lWnvW8zAy/0=;
+        b=ijWZqBV+oMnTpDEG9zR9caw+iwlaX7CYJw2Embia1jt1NznC/HIaMuLgihBh63YR8P
+         FduJhc5Du/rWyhH+BEO76Q0gLyyDvi1UMpTRrnc35G7zBKq7Ld+Ub0T3CTb9B2n7fiJs
+         8cmBHpZSHKGgeD86hRzLZIT1Io1Nl7i1AVRR5zAmfnNz8JNQo1lAKiYFuw7bUJv+7BuI
+         ynuwL9UP2+apZ+yumVbT7VHZIV+UIFwB4kgJ/xAR59IRrxhX3vLoG99cuGcA8dD949ZO
+         xZVQE6n4Wn8yLon3vDh6CkrhbO7QldJN2Uu2dBHxM95NhI7M5pYv4asW0bZhNxXgl1Da
+         c92Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sql+Rr6DrOQzxcxiEzDTWhDssE9ABXcq2lRpWcbPbWI=;
-        b=YEs8PmNebYXp/OSs1iwXxrEZ8XQuIDw+FdYDUNoR0T6YTiBwZbtR9x7ZmURUaH3w+K
-         bcV3o3FTnQCPoi11I9y7sUmS6csyVbcqbDmPm/kIi7M6UrL6tR06+vv5VYqaLIjIH/R8
-         NueE11SbyFq7KYMZSU1kj0f/95KPgA+ySzoIil40xbxsc/8kQ4y6Tnf8gYgQ0UapFdv2
-         Hk6ECsQtmG/JaSZbe8FkIEFp9tptWlRwNm3Icuc5CKv2mJlQ6Ip5QF2U/5QYVVYQS7U+
-         BgppIrhW1drkwuJA624ELhWwmRtf0ECji56k5wETSEVfOQKuHMoEALfuV2TuVLtXG6LL
-         6fyw==
-X-Gm-Message-State: ACrzQf081Y81E8dojQJng89/6gDUFdLgFVafGARFSO/g4tBuGujcL9QW
-        vsBGZZXCpanKnGGiKSjyHQmOnw==
-X-Google-Smtp-Source: AMsMyM71ps0bazOq0Z7yGgKMJqS6PEa1XhxiHHFqdfKJA1fG9M1vZM01GCryVNs97C/2vDe4jz/jwQ==
-X-Received: by 2002:a17:902:ea02:b0:181:f8d2:1c2b with SMTP id s2-20020a170902ea0200b00181f8d21c2bmr49049802plg.107.1666857924316;
-        Thu, 27 Oct 2022 01:05:24 -0700 (PDT)
-Received: from localhost ([122.172.87.26])
-        by smtp.gmail.com with ESMTPSA id q34-20020a635062000000b0044ba7b39c2asm531976pgl.60.2022.10.27.01.05.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 01:05:23 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 13:35:19 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Erico Nunes <nunes.erico@gmail.com>
-Cc:     Qiang Yu <yuq825@gmail.com>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] drm/lima: Fix opp clkname setting in case of missing
- regulator
-Message-ID: <20221027080519.lfpduyt7jcwh3b4k@vireshk-i7>
-References: <20221027073200.3885839-1-nunes.erico@gmail.com>
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7ZnInTEdE6m53x3YlPmddOdHI+B78CP4lWnvW8zAy/0=;
+        b=G2VMBoPgX0FUcscM6IRzTGhqvrtOym7SH/rywvV9QvGcN3NudmpRjl9TeoOg/gPHbY
+         WttHTpde60CYfG8ioO1UTDjUtAJ/JUXcKVDrh5O108ohGyoVqHZX/AQykwkhIPiafKKH
+         cQ6H2mis04j2e0eiHunvZaLhn8w/5C1B8YEHyvuwKuvBauTFdNz8j3lmQHBW4aM27oDN
+         OvCilbdB4H8F7XhS8g+VCpH+e3LHC0Wm80jFLsqyTNVehpa+Pb6unb99C3jv/Xhq/YZh
+         le0RcnIDMD9VyWWiJK79TkHfm1DEmWefiRqe4gXHElliQNZekY+VYVCZTV8H4KWx6qUi
+         Sriw==
+X-Gm-Message-State: ACrzQf2MvwjnYZKguLEuj4sFZ9ZFXrBDHH2ITBOCk/Nxh36C1muKh/ut
+        H+vWB3UtPN3c40u2bdP0VY+86blQNnpEug==
+X-Google-Smtp-Source: AMsMyM4GNhYQ44BzzIvPmqQwZphjKeseK6QEYBIGacPvv2evfrqgADiS5B1uSs32fGLhIFLBWpMg/A==
+X-Received: by 2002:a17:907:9611:b0:78d:bb06:90a3 with SMTP id gb17-20020a170907961100b0078dbb0690a3mr41222667ejc.233.1666857959802;
+        Thu, 27 Oct 2022 01:05:59 -0700 (PDT)
+Received: from [109.186.183.118] (109-186-183-118.bb.netvision.net.il. [109.186.183.118])
+        by smtp.gmail.com with ESMTPSA id h3-20020a50ed83000000b00451319a43dasm570872edr.2.2022.10.27.01.05.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 01:05:59 -0700 (PDT)
+Message-ID: <ba308dcf-ed07-e0c6-4992-9b609e0d7626@gmail.com>
+Date:   Thu, 27 Oct 2022 11:05:21 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221027073200.3885839-1-nunes.erico@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+From:   Eli Billauer <eli.billauer@gmail.com>
+Subject: Re: [PATCH] char: xillybus: Prevent use-after-free due to race
+ condition
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        imv4bel@gmail.com
+References: <2e5cbdfe-f6cd-d24f-9785-55176af6c975@gmail.com>
+ <Y1lL+dVsJo2zu3Gy@rowland.harvard.edu>
+Content-Language: en-US
+In-Reply-To: <Y1lL+dVsJo2zu3Gy@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27-10-22, 09:32, Erico Nunes wrote:
-> Commit d8c32d3971e4 ("drm/lima: Migrate to dev_pm_opp_set_config()")
-> introduced a regression as it may undo the clk_names setting in case
-> the optional regulator is missing. This resulted in test and performance
-> regressions with lima.
-> 
-> Restore the old behavior where clk_names is set separately so it is not
-> undone in case of a missing optional regulator.
-> 
-> Fixes: d8c32d3971e4 ("drm/lima: Migrate to dev_pm_opp_set_config()")
-> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-> ---
-> v2: revert back to using devm_pm_opp_set_clkname and
-> devm_pm_opp_set_regulators
-> ---
->  drivers/gpu/drm/lima/lima_devfreq.c | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/lima/lima_devfreq.c b/drivers/gpu/drm/lima/lima_devfreq.c
-> index 011be7ff51e1..bc8fb4e38d0a 100644
-> --- a/drivers/gpu/drm/lima/lima_devfreq.c
-> +++ b/drivers/gpu/drm/lima/lima_devfreq.c
-> @@ -112,11 +112,6 @@ int lima_devfreq_init(struct lima_device *ldev)
->  	unsigned long cur_freq;
->  	int ret;
->  	const char *regulator_names[] = { "mali", NULL };
-> -	const char *clk_names[] = { "core", NULL };
-> -	struct dev_pm_opp_config config = {
-> -		.regulator_names = regulator_names,
-> -		.clk_names = clk_names,
-> -	};
->  
->  	if (!device_property_present(dev, "operating-points-v2"))
->  		/* Optional, continue without devfreq */
-> @@ -124,7 +119,15 @@ int lima_devfreq_init(struct lima_device *ldev)
->  
->  	spin_lock_init(&ldevfreq->lock);
->  
-> -	ret = devm_pm_opp_set_config(dev, &config);
-> +	/*
-> +	 * clkname is set separately so it is not affected by the optional
-> +	 * regulator setting which may return error.
-> +	 */
-> +	ret = devm_pm_opp_set_clkname(dev, "core");
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = devm_pm_opp_set_regulators(dev, regulator_names);
->  	if (ret) {
->  		/* Continue if the optional regulator is missing */
->  		if (ret != -ENODEV)
+Hello Alan,
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+On 26/10/2022 18:02, Alan Stern wrote:
+> On Wed, Oct 26, 2022 at 11:52:40AM +0300, Eli Billauer wrote:
+>> To fix this, xillybus_find_inode() supplies the pointer to the mutex that
+>> it has locked (when returning success), so xillyusb_open() releases this
+>> mutex only after obtaining the mutex that is specific to a device file.
+>> This ensures that xillyusb_disconnect() won't release anything that is in
+>> use.
+> 
+> The standard way of handling this problem is different from this.  The
+> driver defines a private mutex, and it ensures that any routine calling
+> *_find_inode() holds the mutex.  It also ensures that the mutex is held
+> while a new device is being registered and while a device is being
+> removed.
 
--- 
-viresh
+Thanks, I'm going to follow that advice in my v2 patch.
+
+> 
+> Even that won't fix all the synchronization problems.  A process can
+> open a device, and then after the device has been removed the process
+> can still try to access the device.  The driver needs to ensure that
+> such accesses are not allowed.
+
+Indeed. For that purpose, the relevant struct has a kref_counter, and an 
+error flag that indicates a removal among others, along with mutexes. 
+The problem is the time gap from the moment that the struct has been 
+found by xillybus_find_inode() until it has been secured with the kref.
+
+A new mutex is going to solve that.
+
+Regards,
+   Eli
