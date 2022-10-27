@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95FB860F731
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726F260F734
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235067AbiJ0M1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39008 "EHLO
+        id S235655AbiJ0M1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235557AbiJ0M0n (ORCPT
+        with ESMTP id S235599AbiJ0M0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:26:43 -0400
+        Thu, 27 Oct 2022 08:26:45 -0400
 Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43D9134AB3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:26:42 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id y143so461056iof.9
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:26:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770C0144E18
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:26:44 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id y143so461115iof.9
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:26:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PANmuigY2dyK4ROc5rs4Gly3suQYhUI4Jvo2R9OvA2c=;
-        b=CNIPTfja4d7m0UUvAc898mJLSi8nuvTEtwk390CUT8LLOZ1Yvw6rMwssAbUQFEmB83
-         AAw/OYfkSg+b5It3jiavbaVjKPJ0VxHdydf4Hhueu2M7P+4oLvjAhR4ulNs4E5JQZNmO
-         uTAtYpTZPKgwt4wJDjtzIAWZSaBYSTmslPpv47BzwfOekUMR5BhdZUj6C4sTCqkv/c1v
-         gN6Qc9qFT0qpNKM5yEgRvsZrTXd729hp6tYoReRAuibU+gujlXUbdWW9IKJpvzvoYb+L
-         fQy1m6utqPHp+d/BceLWEMvQzR6AphefF06vF4AoXgzIpg4+mckq3xlpgN7de5E8680J
-         FGlg==
+        bh=Lh1EaQjT2Reomce8kVVBzGzrDBNIcwVObojZzaiEYwI=;
+        b=Aoj+E+2QqQ3GfZknmX8bjYVVjTqTknVXBgtukTrN+IiQ4/sLUoSqr3DsM1gal3O6XR
+         T6eGVNVcmHM0fV8NukcOgwGlPAyFjHwg3rKS7u+oR+8W5ouHPrWhVuzBeYc0iZrFrkH7
+         +JYmZ27IfImAqHzt9l/Z1YdogztdX0IwCtYmf70OfcXy4DrvnC4ExQwaSDdr4XOqOdCc
+         2uaUcxDg0OL7MSfaVGw7hOXCj/7KnPeVs0i16HOhpubwiJfSgGoF57+OZsmjKIuDZ+rU
+         G+chfM0GPoN4ff1z1ufcy60NQNv2BGgNoKS3KQZMvyjwk7SUH3qKX3/qsrQLiM4NJYxS
+         C+AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PANmuigY2dyK4ROc5rs4Gly3suQYhUI4Jvo2R9OvA2c=;
-        b=q8hwSKSVjNdPhDZY/6rm4U7HnySzYo1JAzBXJ3u/TKvOTyMVGJ62LyRkNVL+kU4n+P
-         bVsHhT/Qpm2SS5jAwx1gqZ65BJmgYEadcF75yk2612TAw1OZhzFPaBdPrzhSMe2NMvmx
-         b/oukfD9whSUtj3FBvnEEen6azI8YJGBmWF5jXqRRPCU3U8GGWWxipiGkhEz3AbYhd8M
-         6uVSJI72101qaAN4Y2AnqNt33IIBtG1TxAElKAO++BZJeFfmF3qrxMrvmN9CazT/J1Zs
-         ByAHXc5Po9/sFyj/WKWA/bQ64IjqpmNZNgQDKgTK4ddjrYNvLjXpX+8lm9YUw7tOgRFc
-         PpSA==
-X-Gm-Message-State: ACrzQf0QV2/ISNSPl4JCxC/4koRMKrWQhnoQrE629mdH2XQWZLrz5xYU
-        PZxYM9KYp4nCC/iuriMsZDyePg==
-X-Google-Smtp-Source: AMsMyM7948ncau+MksGbU5iwfardCsWRE6DiqjByPQPSPYOlju6O4NNT+XrwmwJHOTge3Q4AeyB9bg==
-X-Received: by 2002:a02:c90a:0:b0:363:2b87:887c with SMTP id t10-20020a02c90a000000b003632b87887cmr31914891jao.72.1666873602491;
-        Thu, 27 Oct 2022 05:26:42 -0700 (PDT)
+        bh=Lh1EaQjT2Reomce8kVVBzGzrDBNIcwVObojZzaiEYwI=;
+        b=i34CdbNvTEfUsEtlqtgQpAV6uRD+NDYEFzjsAiCYeKiNY5REoObgVlqIL+EItWZsDE
+         y0G0s6C/2txUi2x/cyQ1ghSGAze18bkYb+fOatD466TAT1TzW4zIdhOd+/JbsjoukpmE
+         8w96ylYQ8W8afEpp8OrRXqVjFJEA85VbAQp3LCp4cGl8SAj5Rnx5lKmVnI4Rf2muMTq7
+         JhDugEhZqDyhKlqYBvuw4BAxiCuKjBm/uzuFruemrpsvLFI7lKhWfcgbybpgfU26TbC5
+         z61KfO+uViaevnf/9Dl3qI5j5Kfd0FoAX/tag0kTjuwLr7nDUTPezYdTTpTN2M5h/Wz6
+         NxVg==
+X-Gm-Message-State: ACrzQf0HPmo5HM1fyGbJgFgJ9e7q6Om7tcFbAcwtuwWCrLrh2kqnDq0g
+        hd7SuQ4ca2oRpTIpJMAbbEs+OQ==
+X-Google-Smtp-Source: AMsMyM4fqCIVwfpp8JR3l3QjHc6SdWOigd6nFRNkyDpODhBKAwdNTUDyeG0MwO/3SIaj4r7JmL+ILw==
+X-Received: by 2002:a05:6638:14cf:b0:365:c889:4285 with SMTP id l15-20020a05663814cf00b00365c8894285mr29372852jak.312.1666873604012;
+        Thu, 27 Oct 2022 05:26:44 -0700 (PDT)
 Received: from localhost.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id w24-20020a05663800d800b003566ff0eb13sm526528jao.34.2022.10.27.05.26.41
+        by smtp.gmail.com with ESMTPSA id w24-20020a05663800d800b003566ff0eb13sm526528jao.34.2022.10.27.05.26.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 05:26:41 -0700 (PDT)
+        Thu, 27 Oct 2022 05:26:43 -0700 (PDT)
 From:   Alex Elder <elder@linaro.org>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com
@@ -58,9 +58,9 @@ Cc:     mka@chromium.org, evgreen@chromium.org, andersson@kernel.org,
         quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
         elder@kernel.org, netdev@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 4/7] net: ipa: more completely check endpoint validity
-Date:   Thu, 27 Oct 2022 07:26:29 -0500
-Message-Id: <20221027122632.488694-5-elder@linaro.org>
+Subject: [PATCH net-next 5/7] net: ipa: refactor endpoint loops
+Date:   Thu, 27 Oct 2022 07:26:30 -0500
+Message-Id: <20221027122632.488694-6-elder@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221027122632.488694-1-elder@linaro.org>
 References: <20221027122632.488694-1-elder@linaro.org>
@@ -75,126 +75,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ensure all defined TX endpoints are in the range [0, CONS_PIPES) and
-defined RX endpoints are within [PROD_LOWEST, PROD_LOWEST+PROD_PIPES).
-
-Modify the way local variables are used to make the checks easier
-to understand.  Check for each endpoint being in valid range in the
-loop, and drop the logical-AND check of initialized against
-unavailable IDs.
+Change two functions that iterate over all endpoints to use while
+loops, using "endpoint_id" as the index variables in both spots.
 
 Signed-off-by: Alex Elder <elder@linaro.org>
 ---
- drivers/net/ipa/ipa_endpoint.c | 67 +++++++++++++++++++---------------
- 1 file changed, 37 insertions(+), 30 deletions(-)
+ drivers/net/ipa/ipa_endpoint.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.c
-index 093e11ec7c2d1..6fc3cc6379fb0 100644
+index 6fc3cc6379fb0..740b2e4e0c50a 100644
 --- a/drivers/net/ipa/ipa_endpoint.c
 +++ b/drivers/net/ipa/ipa_endpoint.c
-@@ -1843,14 +1843,13 @@ int ipa_endpoint_config(struct ipa *ipa)
- 	struct device *dev = &ipa->pdev->dev;
- 	const struct ipa_reg *reg;
- 	u32 initialized;
-+	u32 tx_count;
-+	u32 rx_count;
- 	u32 rx_base;
--	u32 rx_mask;
--	u32 tx_mask;
--	int ret = 0;
--	u32 max;
-+	u32 limit;
- 	u32 val;
+@@ -426,10 +426,10 @@ ipa_endpoint_program_suspend(struct ipa_endpoint *endpoint, bool enable)
+  */
+ void ipa_endpoint_modem_pause_all(struct ipa *ipa, bool enable)
+ {
+-	u32 endpoint_id;
++	u32 endpoint_id = 0;
  
--	/* Prior to IPAv3.5, the FLAVOR_0 register was not supported.
-+	/* Prior to IPA v3.5, the FLAVOR_0 register was not supported.
- 	 * Furthermore, the endpoints were not grouped such that TX
- 	 * endpoint numbers started with 0 and RX endpoints had numbers
- 	 * higher than all TX endpoints, so we can't do the simple
-@@ -1866,33 +1865,25 @@ int ipa_endpoint_config(struct ipa *ipa)
- 	}
+-	for (endpoint_id = 0; endpoint_id < IPA_ENDPOINT_MAX; endpoint_id++) {
+-		struct ipa_endpoint *endpoint = &ipa->endpoint[endpoint_id];
++	while (endpoint_id < IPA_ENDPOINT_MAX) {
++		struct ipa_endpoint *endpoint = &ipa->endpoint[endpoint_id++];
  
- 	/* Find out about the endpoints supplied by the hardware, and ensure
--	 * the highest one doesn't exceed the number we support.
-+	 * the highest one doesn't exceed the number supported by software.
- 	 */
- 	reg = ipa_reg(ipa, FLAVOR_0);
- 	val = ioread32(ipa->reg_virt + ipa_reg_offset(reg));
+ 		if (endpoint->ee_id != GSI_EE_MODEM)
+ 			continue;
+@@ -1008,10 +1008,10 @@ static void ipa_endpoint_init_hol_block_disable(struct ipa_endpoint *endpoint)
  
--	/* Our RX is an IPA producer */
-+	/* Our RX is an IPA producer; our TX is an IPA consumer. */
-+	tx_count = ipa_reg_decode(reg, MAX_CONS_PIPES, val);
-+	rx_count = ipa_reg_decode(reg, MAX_PROD_PIPES, val);
- 	rx_base = ipa_reg_decode(reg, PROD_LOWEST, val);
--	max = rx_base + ipa_reg_decode(reg, MAX_PROD_PIPES, val);
--	if (max > IPA_ENDPOINT_MAX) {
--		dev_err(dev, "too many endpoints (%u > %u)\n",
--			max, IPA_ENDPOINT_MAX);
-+
-+	limit = rx_base + rx_count;
-+	if (limit > IPA_ENDPOINT_MAX) {
-+		dev_err(dev, "too many endpoints, %u > %u\n",
-+			limit, IPA_ENDPOINT_MAX);
- 		return -EINVAL;
- 	}
--	rx_mask = GENMASK(max - 1, rx_base);
+ void ipa_endpoint_modem_hol_block_clear_all(struct ipa *ipa)
+ {
+-	u32 i;
++	u32 endpoint_id = 0;
  
--	/* Our TX is an IPA consumer */
--	max = ipa_reg_decode(reg, MAX_CONS_PIPES, val);
--	tx_mask = GENMASK(max - 1, 0);
--
--	ipa->available = rx_mask | tx_mask;
--
--	/* Check for initialized endpoints not supported by the hardware */
--	if (ipa->initialized & ~ipa->available) {
--		dev_err(dev, "unavailable endpoint id(s) 0x%08x\n",
--			ipa->initialized & ~ipa->available);
--		ret = -EINVAL;		/* Report other errors too */
--	}
-+	/* Mark all supported RX and TX endpoints as available */
-+	ipa->available = GENMASK(limit - 1, rx_base) | GENMASK(tx_count - 1, 0);
+-	for (i = 0; i < IPA_ENDPOINT_MAX; i++) {
+-		struct ipa_endpoint *endpoint = &ipa->endpoint[i];
++	while (endpoint_id < IPA_ENDPOINT_MAX) {
++		struct ipa_endpoint *endpoint = &ipa->endpoint[endpoint_id++];
  
- 	initialized = ipa->initialized;
- 	while (initialized) {
-@@ -1901,16 +1892,32 @@ int ipa_endpoint_config(struct ipa *ipa)
- 
- 		initialized ^= BIT(endpoint_id);
- 
--		/* Make sure it's pointing in the right direction */
--		endpoint = &ipa->endpoint[endpoint_id];
--		if ((endpoint_id < rx_base) != endpoint->toward_ipa) {
--			dev_err(dev, "endpoint id %u wrong direction\n",
-+		if (endpoint_id >= limit) {
-+			dev_err(dev, "invalid endpoint id, %u > %u\n",
-+				endpoint_id, limit - 1);
-+			return -EINVAL;
-+		}
-+
-+		if (!(BIT(endpoint_id) & ipa->available)) {
-+			dev_err(dev, "unavailable endpoint id %u\n",
- 				endpoint_id);
--			ret = -EINVAL;
-+			return -EINVAL;
- 		}
-+
-+		/* Make sure it's pointing in the right direction */
-+		endpoint = &ipa->endpoint[endpoint_id];
-+		if (endpoint->toward_ipa) {
-+			if (endpoint_id < tx_count)
-+				continue;
-+		} else if (endpoint_id >= rx_base) {
-+			continue;
-+		}
-+
-+		dev_err(dev, "endpoint id %u wrong direction\n", endpoint_id);
-+		return -EINVAL;
- 	}
- 
--	return ret;
-+	return 0;
- }
- 
- void ipa_endpoint_deconfig(struct ipa *ipa)
+ 		if (endpoint->toward_ipa || endpoint->ee_id != GSI_EE_MODEM)
+ 			continue;
 -- 
 2.34.1
 
