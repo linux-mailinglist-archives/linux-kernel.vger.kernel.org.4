@@ -2,296 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B446101EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2E46101F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236563AbiJ0Tn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 15:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
+        id S236617AbiJ0TpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 15:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236423AbiJ0Tnr (ORCPT
+        with ESMTP id S236363AbiJ0To7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 15:43:47 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97B680516
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:43:46 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id x13so2359399qvn.6
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:43:46 -0700 (PDT)
+        Thu, 27 Oct 2022 15:44:59 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE342315F
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:44:58 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id i7so3601385oif.4
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:44:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MK3yOE9pIq7JHkRZwQR/zciky0lrTlCe6u4dRS7btwI=;
-        b=wjlJ0VkwPuAfmg3CW8O14Rz3pG2p4iq+qpritNMiyxTT0EYfCjO4kkqS+MqY6VHsYq
-         6l3JUTmn1M/k3ZqqRDMgynXNEMHxkCgIw1NiqAX+TWhgqNYk15h5zO+4FLFjf6Zx6c9A
-         IpP1Lr7QMNxhuVhOCLrD9ucnaOAJ/eSzTSKtEpa787Af38As15dHXfTEoDASY5bFRidX
-         RPkqQJcThBsXXI+vza1s9X71+WmjkxtVIolrN5j5MpnClToJGH5mTkyKh8nJhTKH1hf6
-         L6dmpDkKq+DjdB5civ79d08DE84CWR5DkvgEbxuQ9VdMrywb78lB5krvF+UgYd123WmT
-         V8+A==
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=bkWNJkhoPjdxy3msNlSE5uhqnXnU/IZYE+785Ej5bZA=;
+        b=k2Rc21j4zG+ZEqmj+OPwYesCt4FEkjUGkSV6C94zNFUtSg3qEc6MJeOQDgc4s4mMnH
+         8pfPePeiNZHSxEjt2vw4V0vpbFux1UU2rlhhzI0GiP5xO2Acch/0z1EfaV92ioZdG7b9
+         l6PL/cHJ88PlyJZRKnM4yDA+yj565svy0wtVx9dhLuFrY73M7EScgQdLnUbov+vmBpm9
+         KA/1BOegbypqs69E8NA1KanVI+xzdYorwTgKsZjxxpbxAyRNiafVACdR7dTI/0k/Sil6
+         ZcHakMVpPBGl6KkNgU1KV6DOvZhrjor3p/YlIgIkeSNUa8U6hh1FBYJvwTAdtVUcdsRc
+         P8jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MK3yOE9pIq7JHkRZwQR/zciky0lrTlCe6u4dRS7btwI=;
-        b=WhZSQVDAkdsz2GGlVyOLqt5d9x+9f0Uc7OSlFdLoOi1C9UqNe2iu/6r0y0WdmnoXET
-         bjxgzggX3hFlXhE0jNBjdtYBgmq27Y61GQV/MvhvsuR1hXMPsf6FtpdBGpihVj9bCHX5
-         iyHqM9TidCzsRm/4/J85YDv4s3nUsnf2h3hD3YGe6Q8mKEPqOYXSGaFkSi/sZbjldPu9
-         OhjeG0PZPWzKHFKbaLJQYZRUm7rtX+lCeCwuzodnIWsePrEx1NVwBh2O0lQUxGUZ4K0U
-         raY1DODhZFiL6V1virlgelYE9ObeoGJZkZqJakSo5IoFRU/2YYnhetvALc/a9yakXqVG
-         Zh2w==
-X-Gm-Message-State: ACrzQf0o56br9JNecIYtVq3R5EK3XnjMkWjVjm/L784UooiV4dPrfwFV
-        39IsQ5AJ+acZXb/dd3HoDW3gtQ==
-X-Google-Smtp-Source: AMsMyM5Lp0W//oZxCFeHBdp+E82reM9g6Ux2PnIzsmr9Y5GOCi9DaxUpYh3kmyxYVUMh23jq7NwohQ==
-X-Received: by 2002:a05:6214:2487:b0:4af:a6f9:ace3 with SMTP id gi7-20020a056214248700b004afa6f9ace3mr42252486qvb.78.1666899825892;
-        Thu, 27 Oct 2022 12:43:45 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id x4-20020a05620a258400b006bc192d277csm1571419qko.10.2022.10.27.12.43.43
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bkWNJkhoPjdxy3msNlSE5uhqnXnU/IZYE+785Ej5bZA=;
+        b=HvQdhDRbGju3tXyimyqvLQcUKWtrnukbxfO3HyHt/FDZC92+r9SDsGLdm/CYLm2vGF
+         YrLTl7+eUS/8iInWaxhcHCq1lfnYVANL2Kz3KFMDWmwmGSDr32K30QtPS33pIEWJpfjF
+         +fE9wWNLAv74W7nMQNdf3wlyM2A81lL+gRDyEUAWJxXEBRcd8GuyV9uLXrQu2BfeLiHW
+         Z0gKWtR3xp5DHhqF/Iq+PZKgPFr4hqEulhsttmj9W7yHrPsWkf41vn5YKWR5TO+RBIR/
+         wvznaBPocDESxr8ewhei2BGO+mD0UzFMs45IE5w6ru8nhDZkDxvYAcaUZDU+s7FEL8ig
+         Cwog==
+X-Gm-Message-State: ACrzQf3EHNux6vHTDNr47ra+R4DsHmhjEsASxqOjKzLyTX6ijgdeLUSh
+        llZtuHSIwlrj5NEiw/2q0Pw=
+X-Google-Smtp-Source: AMsMyM5riIors1bPC2D1LEmR5lK8J3h4c6Lbl9fAM80jm+IBUKIrkyxlXkkqGDS9j7iFyrVwiHsajw==
+X-Received: by 2002:a05:6808:199d:b0:355:1b7d:3fef with SMTP id bj29-20020a056808199d00b003551b7d3fefmr5676656oib.288.1666899897907;
+        Thu, 27 Oct 2022 12:44:57 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e18-20020a05680809b200b00359a9663053sm765441oig.4.2022.10.27.12.44.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 12:43:45 -0700 (PDT)
-Message-ID: <6fbb01f0-d0d2-bb06-a160-2f8f91ac68ca@linaro.org>
-Date:   Thu, 27 Oct 2022 15:43:43 -0400
+        Thu, 27 Oct 2022 12:44:57 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <2c994811-e481-d0e3-3e0b-c2a8ac456464@roeck-us.net>
+Date:   Thu, 27 Oct 2022 12:44:56 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v1 3/4] ARM: dts: rockchip: add rk3128.dtsi
+ Thunderbird/102.2.2
+Subject: Re: [RFC][PATCH v2 00/31] timers: Use del_timer_shutdown() before
+ freeing timers
 Content-Language: en-US
-To:     Johan Jonker <jbx6244@gmail.com>, kever.yang@rock-chips.com,
-        heiko@sntech.de
-Cc:     sjg@chromium.org, philipp.tomsich@vrull.eu,
-        zhangqing@rock-chips.com, hjc@rock-chips.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-References: <da1252eb-85e9-bdb8-0542-207173523523@gmail.com>
- <674b875a-0dfa-eff2-5018-eafed851707f@gmail.com>
- <f45a4dcb-12e6-9a72-dbb3-7ec198ff2b1d@linaro.org>
- <2dc46681-894d-4521-bfa7-3e9209691e0a@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <2dc46681-894d-4521-bfa7-3e9209691e0a@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>
+References: <20221027150525.753064657@goodmis.org>
+ <f62e19bb-497a-8cf6-93aa-d654d7850356@roeck-us.net>
+ <20221027150237.4e69ba27@gandalf.local.home>
+ <CAHk-=wiXk3jrhzjkYgC=a7F1+oFY2wNmxeMDTza10maGU2-i4Q@mail.gmail.com>
+ <20221027151650.77d7e4de@gandalf.local.home>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20221027151650.77d7e4de@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/10/2022 13:53, Johan Jonker wrote:
-> Hi Krzysztof, Kever, Heiko and others,
+On 10/27/22 12:16, Steven Rostedt wrote:
+> On Thu, 27 Oct 2022 12:11:43 -0700
+> Linus Torvalds <torvalds@linux-foundation.org> wrote:
 > 
-> On 10/27/22 16:58, Krzysztof Kozlowski wrote:
->> On 26/10/2022 20:53, Johan Jonker wrote:
->>> Add basic rk3128 support.
+>> On Thu, Oct 27, 2022 at 12:02 PM Steven Rostedt <rostedt@goodmis.org> wrote:
 >>>
+>>> So it works on current stable and current mainline? Does that mean we need
+>>> to worry about this?
 >>
->> Thank you for your patch. There is something to discuss/improve.
-> 
-> Thank you for your review.
-> 
-> Some more questions/comments below.
-> 
+>> No, I think Guenter is saying that current mainline *without* the
+>> patches works fine.
 >>
->>> +#include <dt-bindings/clock/rk3128-cru.h>
->>> +#include <dt-bindings/gpio/gpio.h>
->>> +#include <dt-bindings/interrupt-controller/arm-gic.h>
->>> +#include <dt-bindings/interrupt-controller/irq.h>
->>> +#include <dt-bindings/pinctrl/rockchip.h>
->>> +
->>> +/ {
->>> +	compatible = "rockchip,rk3128";
->>> +	interrupt-parent = <&gic>;
->>> +	#address-cells = <1>;
->>> +	#size-cells = <1>;
->>> +
->>> +	aliases {
->>> +		gpio0 = &gpio0;
->>> +		gpio1 = &gpio1;
->>> +		gpio2 = &gpio2;
->>> +		gpio3 = &gpio3;
-> 
-> Is gpio OK here?
-
-Could be, but let me rephrase it - why do you need aliases in DTSI? What
-do these aliases represent?
-
-The SoC pieces (nodes in DTSI) do not rely on aliases.
-
-> 
->>> +		i2c0 = &i2c0;
->>> +		i2c1 = &i2c1;
->>> +		i2c2 = &i2c2;
->>> +		i2c3 = &i2c3;
->>> +		spi0 = &spi0;
->>> +		serial0 = &uart0;
->>> +		serial1 = &uart1;
->>> +		serial2 = &uart2;
+>> But v6.1-rc2 (which is quite close to that current mainline) *with*
+>> the patches blows up.
 >>
->> Bus aliases are board specific and represent what is actually available
->> on headers/pins etc. These do not belong to SoC DTSI.
-> 
-> I just follow current Rockchip DT common practice.
-> 
-> Do we need to change all Rockchip boards?
-> Would like to hear from Heiko what's the plan here?
-> Syncing to U-boot is already a mess...
-
-Heiko might have his own preference which then over-rules my
-recommendation here. But in general this applies to all boards, so other
-boards could be fixed as well. Different point is whether it is actually
-worth fixing them...
-
-> 
-> So far only instructions/changes and discussion about mmc nodes.
-> 
-> Can Rockchip specific rules be publicized in a central place? 
-> 
-> ===
-> mmc aliases on reg order, availability and without number gap.
-> ===
-> 
-> Heiko's sort rules:
-> 
-> compatible
-> reg
-> interrupts
-> [alphabetical]
-> status [if needed]
-
-I don't know what does it mean. Do you discuss with my comment? Wasn't
-my comment exactly like this?
-
-> 
-> ===
-> My incomplete list:
-> 
-> For nodes:
-> If exists on top: model, compatible and chosen.
-> Sort things without reg alphabetical first,
-> then sort the rest by reg address.
-> 
-> Inside nodes:
-> If exists on top: compatible, reg and interrupts.
-> In alphabetical order the required properties.
-> Then in alphabetical order the other properties.
-> And as last things that start with '#' in alphabetical order.
-> Add status below all other properties for soc internal components with
-> any board-specifics.
-> Keep an empty line between properties and nodes.
-> 
-> Exceptions:
-> Sort pinctrl-0 above pinctrl-names, so it stays in line with clock-names
-> and dma-names.
-> Sort simple-audio-card,name above other simple-audio-card properties.
-> Sort regulator-name above other regulator properties.
-> Sort regulator-min-microvolt above regulator-max-microvolt.
-
-Is there a question to me?
-
-> 
->>
->>> +	};
->>> +
->>> +	arm-pmu {
->>> +		compatible = "arm,cortex-a7-pmu";
->>> +		interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>,
->>> +			     <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
->>> +			     <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>,
->>> +			     <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
->>> +		interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>;
->>> +	};
->>> +
->>> +	cpus {
->>> +		#address-cells = <1>;
->>> +		#size-cells = <0>;
->>> +
->>> +		cpu0: cpu@f00 {
->>> +			device_type = "cpu";
->>> +			compatible = "arm,cortex-a7";
->>> +			reg = <0xf00>;
->>> +			clock-latency = <40000>;
->>> +			clocks = <&cru ARMCLK>;
-> 
->>> +			operating-points = <
->>> +				/* KHz    uV */
->>> +				 816000 1000000
->>> +			>;
->>
->> Why not operating-points-v2?
-> 
-> rk3128 doesn't have a tsadc.
-
-And this is related to operating-points-v2?
-
-> As long as this thermal stuff is not implemented with drivers and regulators I would prefer to keep it basic in the DT for now.
-> Just keep things simple for now till someone with hardware can fix that.
-> 
-> https://github.com/rockchip-linux/kernel/blob/develop-4.4/arch/arm/boot/dts/rk312x.dtsi#L315
-> 
-> 	tsadc: tsadc {
-> 		compatible = "rockchip,rk3126-tsadc-virtual";
-> 		nvmem-cells = <&cpu_leakage>;
-> 		nvmem-cell-names = "cpu_leakage";
-> 		#thermal-sensor-cells = <1>;
-> 		status = "disabled";
-> 	};
-
->>
->>> +			#cooling-cells = <2>; /* min followed by max */
->>> +		};
->>> +
->>> +		cpu1: cpu@f01 {
->>> +			device_type = "cpu";
->>> +			compatible = "arm,cortex-a7";
->>> +			reg = <0xf01>;
->>> +		};
->>> +
->>> +		cpu2: cpu@f02 {
->>> +			device_type = "cpu";
->>> +			compatible = "arm,cortex-a7";
->>> +			reg = <0xf02>;
->>> +		};
->>> +
->>> +		cpu3: cpu@f03 {
->>> +			device_type = "cpu";
->>> +			compatible = "arm,cortex-a7";
->>> +			reg = <0xf03>;
->>> +		};
->>> +	};
->>> +
->>> +	timer {
-> 
->>> +		compatible = "arm,armv7-timer";
-> 
-> Original 2 interrupts:
-
-I have no clue what do you refer now.
-
-I did not comment here, so I guess nothing more to me?
-
->>> +		usb2phy: usb2phy@17c {
+>> So it's almost certainly the patches that break. There are no
+>> appreciable timer changes in those 105 commits (there's some added
+>> irq_work_sync but that looks very unlikely to be related.
 >>
 > 
->> Node names should be generic.
->> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+> Got it. I'll need to setup an arm64 VM to see if I can reproduce it.
 > 
-> You are absolutely correct. Except for Rockchip usb2phy nodes ....
-> #phy-cells is located in a sub node, so we keep as it is... ;)
 
-How phy-cells are related?
+Try http://server.roeck-us.net/qemu/aarch64/
 
-> 
-> dt-bindings: phy: rename phy nodename in phy-rockchip-inno-usb2.yaml 
-> https://lore.kernel.org/all/20210601164800.7670-2-jbx6244@gmail.com/
-
-You mean parent device bindings expect usb2phy? If so, then it's fine.
-
-Best regards,
-Krzysztof
+Guenter
 
