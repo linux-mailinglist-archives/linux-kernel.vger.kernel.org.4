@@ -2,164 +2,962 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599A5610288
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D2B610286
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236889AbiJ0USG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 16:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
+        id S236770AbiJ0UR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 16:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236842AbiJ0USB (ORCPT
+        with ESMTP id S235512AbiJ0URy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 16:18:01 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B5A8C00C;
-        Thu, 27 Oct 2022 13:17:59 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id a13so4827014edj.0;
-        Thu, 27 Oct 2022 13:17:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=d+819bBKV2/hQ0v9OQ2O/TeAoWwLXmcETC4PNPsgypA=;
-        b=BunQq78l9VTK1Voqc+Y0JwFPL/g8lhX4GKaIX1Z11ETFNhjfapo0cCtRFr77xIQbDC
-         tRyPdhJGzGYK1svZWGPAzfeqzogBi1sy9ARqB/BjAmAyJTgYfPaYfjEAYVM1uvOkxJar
-         djulsWBPVbPRs+MinE7gkmWtI/5+B+3x0LQEgB4mHLmzLaAn+Uiwd3R9NJmrRwkqV045
-         S9HhTTgndJcAQGgmr00gT0wkN4hH4u+bDushJZiS3+0PmMROXi7F+h7xCkkQV6NWXLF0
-         8yyx1zlA8+lcDSGn8hOD5Kmt7NVtdWJwsSNNX5v7EL9xW8BwLjsqJI0aqxopgONpAcZ/
-         Bwhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=d+819bBKV2/hQ0v9OQ2O/TeAoWwLXmcETC4PNPsgypA=;
-        b=cKQ3w0YG5SdjNl0QtRuVcRjT0eIoraGBfOo114XEL+4zETzp9WztbJzNr5ar6EZDqN
-         fUsIrKElZLIegG6kEVpffBlUud6/H26MGCxvKqteRmvlguiry5i9V+X+4j5EUdbDuQIO
-         cUQPUeEzF4r3+S/ZATAOdk43Zq71goalMSql0rlAqGMMcMlz0WJxRnaGtctAU9eMBRZx
-         hFRKCjkYRRP57UL4KLX0U0kqum8j+XA5zKu70gGdpQuAFYGRGLnhOhRDOLhiU11p3gXk
-         lX/esju7+YXKeBidzJYeT5Rl9RKkwQx2yPtexjKkDvHzgOn0j+zAWtW1KpfaYjh3NTWt
-         wmBg==
-X-Gm-Message-State: ACrzQf3Ure5Fc8yDwwHaU3cMkxjB9HLuaVryrDAISrh75QFHsEa0wMC8
-        SthJDv2Ghc+qIfl/I3jY5zYtUKeoYY8eJogJcC8=
-X-Google-Smtp-Source: AMsMyM6eH2mwjYQw1tS7MVUj0crMJ4qrvuCQ4XWYhSMgrG7m4Sm0LRtAyG2yx1NsvtjdiEGG8Eh+++3zhE5+OLL9h60=
-X-Received: by 2002:a05:6402:3890:b0:45c:2b5:b622 with SMTP id
- fd16-20020a056402389000b0045c02b5b622mr48258784edb.69.1666901878347; Thu, 27
- Oct 2022 13:17:58 -0700 (PDT)
+        Thu, 27 Oct 2022 16:17:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440C78B2E5;
+        Thu, 27 Oct 2022 13:17:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6D85624C5;
+        Thu, 27 Oct 2022 20:17:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FE88C433C1;
+        Thu, 27 Oct 2022 20:17:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666901871;
+        bh=VM0tlSKiIKeOhG7eIT1OEBGDCE/4ChvxBt9vnM46iUQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sqpgNeieVXGyafofwV6GdaNLSQuswsWqsVRdbvJ+nCqK7H/5mrO902K/2H6Nd8CrU
+         Rmxltto3SOWO7L7na5/VqHvXmFyzTdNJnJfuP1BG1V7dLz0qdxIbWma1ricHbPIfin
+         yDkmRpYFzt1BztfpLIgnTndVrnRb6RoX4bqNn8RqY6BnCJ50OOqBjj+nJUBdlTCONB
+         f/acBK+YOC2DqAQkcuhq27+PjofmaL+fC4e2MJc3A7sVGUXJYahM/xJ7DAUwJZ3Q93
+         c06yFneouXbPlhUODssJ+kzyvuC8RoFBPADJggK8DTWvduh5UAvHQkWw3Z3O2oM5GN
+         ObtPBrF0oiPjA==
+Date:   Thu, 27 Oct 2022 15:17:47 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Stanislav Yakovlev <stas.yakovlev@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v2 1/6] cfg80211: Avoid clashing function prototypes
+Message-ID: <c8239f5813dec6e5cfb554ca92b1783a18ac5537.1666894751.git.gustavoars@kernel.org>
+References: <cover.1666894751.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-References: <20220919143340.4527-1-vidyas@nvidia.com> <20220919143340.4527-3-vidyas@nvidia.com>
- <Y1psU2P4uqD2rUub@lpieralisi>
-In-Reply-To: <Y1psU2P4uqD2rUub@lpieralisi>
-From:   Han Jingoo <jingoohan1@gmail.com>
-Date:   Thu, 27 Oct 2022 13:17:46 -0700
-Message-ID: <CAPOBaE4AZCbvvfdxvOTMsRU65yWL-3-zHb4Ki0+UgYkuRQEgzA@mail.gmail.com>
-Subject: Re: [PATCH V1 2/2] PCI: designware-ep: Disable PTM capabilities for
- EP mode
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Vidya Sagar <vidyas@nvidia.com>, gustavo.pimentel@synopsys.com,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1666894751.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 Lorenzo Pieralisi <lpieralisi@kernel.org> wrote:
->
-> On Mon, Sep 19, 2022 at 08:03:40PM +0530, Vidya Sagar wrote:
-> > Dual mode DesignWare PCIe IP has PTM capability enabled (if supported) even
-> > in the EP mode. The PCIe compliance for the EP mode expects PTM
-> > capabilities (ROOT_CAPABLE, RES_CAPABLE, CLK_GRAN) be disabled.
-> > Hence disable PTM for the EP mode.
->
-> "PCIe compliance" - what is this referring to ?
+When built with Control Flow Integrity, function prototypes between
+caller and function declaration must match. These mismatches are visible
+at compile time with the new -Wcast-function-type-strict in Clang[1].
 
-Hi Lorenzo,
+Fix a total of 63 warnings like these:
 
-You can refer to the following link:
-https://pcisig.com/developers/compliance-program
+drivers/net/wireless/intersil/orinoco/wext.c:1379:27: warning: cast from 'int (*)(struct net_device *, struct iw_request_info *, struct iw_param *, char *)' to 'iw_handler' (aka 'int (*)(struct net_device *, struct iw_request_info *, union iwreq_data *, char *)') converts to incompatible function type [-Wcast-function-type-strict]
+        IW_HANDLER(SIOCGIWPOWER,        (iw_handler)orinoco_ioctl_getpower),
+                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-PCIe compliance means 'PCIe Compliance test "Compliance tests allow
-for product testing against PCI-SIG test modules". Usually, USB specs
-and PCIe specs define compliance tests where product manufacturers
-need to pass specific test procedures. For example, in USB cases,
-USB.org says that "To qualify for the right to display the certified USB logo
-in conjunction with a product, the product must pass USB-IF compliance
-testing for product quality."
+../net/wireless/wext-compat.c:1607:33: warning: cast from 'int (*)(struct net_device *, struct iw_request_info *, struct iw_point *, char *)' to 'iw_handler' (aka 'int (*)(struct net_device *, struct iw_request_info *, union iwreq_data *, char *)') converts to incompatible function type [-Wcast-function-type-strict]
+        [IW_IOCTL_IDX(SIOCSIWGENIE)]    = (iw_handler) cfg80211_wext_siwgenie,
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To Vidiya,
-If my understanding is not correct, please let us know what you intended.
+../drivers/net/wireless/intersil/orinoco/wext.c:1390:27: error: incompatible function pointer types initializing 'const iw_handler' (aka 'int (*const)(struct net_device *, struct iw_request_info *, union iwreq_data *, char *)') with an expression of type 'int (struct net_device *, struct iw_request_info *, struct iw_param *, char *)' [-Wincompatible-function-pointer-types]
+        IW_HANDLER(SIOCGIWRETRY,        cfg80211_wext_giwretry),
+                                        ^~~~~~~~~~~~~~~~~~~~~~
 
->
-> Was this reported to Synopsys ?
+The cfg80211 Wireless Extension handler callbacks (iw_handler) use a
+union for the data argument. Actually use the union and perform explicit
+member selection in the function body instead of having a function
+prototype mismatch. There are no resulting binary differences
+before/after changes.
 
-To Vidiya,
-Would you confirm that?
+Link: https://github.com/KSPP/linux/issues/234
+Link: https://reviews.llvm.org/D134831 [1]
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+Changes in v2:
+ - Squash previous patches 1, 2 and 3 into a single patch cfg80211.
+ - Revert changes in orinoco_private_handler[].
+ - Use IW_HANDLER in cfg80211_handlers instead of open-coded
+	[IW_IOCTL_IDX(SIOCGIWRETRY)]    = cfg80211_wext_giwretry, ...
 
-Thank you.
+v1:
+ - Link: https://lore.kernel.org/linux-hardening/291de76bc7cd5c21dc2f2471382ab0caaf625b22.1666038048.git.gustavoars@kernel.org/
 
-Best regards,
-Jingoo Han
->
-> Thanks,
-> Lorenzo
->
-> > Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> > ---
-> >  .../pci/controller/dwc/pcie-designware-ep.c   | 19 ++++++++++++++++++-
-> >  1 file changed, 18 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > index 7e9529ae3824..dc3057b18f36 100644
-> > --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > @@ -646,7 +646,7 @@ int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
-> >       struct dw_pcie_ep_func *ep_func;
-> >       struct device *dev = pci->dev;
-> >       struct pci_epc *epc = ep->epc;
-> > -     unsigned int offset;
-> > +     unsigned int offset, ptm_cap_base;
-> >       unsigned int nbars;
-> >       u8 hdr_type;
-> >       u8 func_no;
-> > @@ -698,6 +698,7 @@ int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
-> >       }
-> >
-> >       offset = dw_pcie_ep_find_ext_capability(pci, PCI_EXT_CAP_ID_REBAR);
-> > +     ptm_cap_base = dw_pcie_ep_find_ext_capability(pci, PCI_EXT_CAP_ID_PTM);
-> >
-> >       dw_pcie_dbi_ro_wr_en(pci);
-> >
-> > @@ -710,6 +711,22 @@ int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
-> >                       dw_pcie_writel_dbi(pci, offset + PCI_REBAR_CAP, 0x0);
-> >       }
-> >
-> > +     /*
-> > +      * PTM responder capability can be disabled only after disabling
-> > +      * PTM root capability.
-> > +      */
-> > +     if (ptm_cap_base) {
-> > +             dw_pcie_dbi_ro_wr_en(pci);
-> > +             reg = dw_pcie_readl_dbi(pci, ptm_cap_base + PCI_PTM_CAP);
-> > +             reg &= ~PCI_PTM_CAP_ROOT;
-> > +             dw_pcie_writel_dbi(pci, ptm_cap_base + PCI_PTM_CAP, reg);
-> > +
-> > +             reg = dw_pcie_readl_dbi(pci, ptm_cap_base + PCI_PTM_CAP);
-> > +             reg &= ~(PCI_PTM_CAP_RES | PCI_PTM_GRANULARITY_MASK);
-> > +             dw_pcie_writel_dbi(pci, ptm_cap_base + PCI_PTM_CAP, reg);
-> > +             dw_pcie_dbi_ro_wr_dis(pci);
-> > +     }
-> > +
-> >       dw_pcie_setup(pci);
-> >       dw_pcie_dbi_ro_wr_dis(pci);
-> >
-> > --
-> > 2.17.1
-> >
+ drivers/net/wireless/intel/ipw2x00/ipw2200.c |   2 +-
+ drivers/net/wireless/intersil/orinoco/wext.c | 113 +++++++-----
+ include/net/cfg80211-wext.h                  |  20 +--
+ net/wireless/scan.c                          |   3 +-
+ net/wireless/wext-compat.c                   | 180 +++++++++----------
+ net/wireless/wext-compat.h                   |   8 +-
+ net/wireless/wext-sme.c                      |   5 +-
+ 7 files changed, 166 insertions(+), 165 deletions(-)
+
+diff --git a/drivers/net/wireless/intel/ipw2x00/ipw2200.c b/drivers/net/wireless/intel/ipw2x00/ipw2200.c
+index 5b483de18c81..3158f91b18d5 100644
+--- a/drivers/net/wireless/intel/ipw2x00/ipw2200.c
++++ b/drivers/net/wireless/intel/ipw2x00/ipw2200.c
+@@ -9870,7 +9870,7 @@ static int ipw_wx_sw_reset(struct net_device *dev,
+ 
+ /* Rebase the WE IOCTLs to zero for the handler array */
+ static iw_handler ipw_wx_handlers[] = {
+-	IW_HANDLER(SIOCGIWNAME, (iw_handler)cfg80211_wext_giwname),
++	IW_HANDLER(SIOCGIWNAME, cfg80211_wext_giwname),
+ 	IW_HANDLER(SIOCSIWFREQ, ipw_wx_set_freq),
+ 	IW_HANDLER(SIOCGIWFREQ, ipw_wx_get_freq),
+ 	IW_HANDLER(SIOCSIWMODE, ipw_wx_set_mode),
+diff --git a/drivers/net/wireless/intersil/orinoco/wext.c b/drivers/net/wireless/intersil/orinoco/wext.c
+index 4a01260027bc..d79d72af32a5 100644
+--- a/drivers/net/wireless/intersil/orinoco/wext.c
++++ b/drivers/net/wireless/intersil/orinoco/wext.c
+@@ -154,9 +154,10 @@ static struct iw_statistics *orinoco_get_wireless_stats(struct net_device *dev)
+ 
+ static int orinoco_ioctl_setwap(struct net_device *dev,
+ 				struct iw_request_info *info,
+-				struct sockaddr *ap_addr,
++				union iwreq_data *wrqu,
+ 				char *extra)
+ {
++	struct sockaddr *ap_addr = &wrqu->ap_addr;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int err = -EINPROGRESS;		/* Call commit handler */
+ 	unsigned long flags;
+@@ -213,9 +214,10 @@ static int orinoco_ioctl_setwap(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getwap(struct net_device *dev,
+ 				struct iw_request_info *info,
+-				struct sockaddr *ap_addr,
++				union iwreq_data *wrqu,
+ 				char *extra)
+ {
++	struct sockaddr *ap_addr = &wrqu->ap_addr;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 
+ 	int err = 0;
+@@ -234,9 +236,10 @@ static int orinoco_ioctl_getwap(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setiwencode(struct net_device *dev,
+ 				     struct iw_request_info *info,
+-				     struct iw_point *erq,
++				     union iwreq_data *wrqu,
+ 				     char *keybuf)
+ {
++	struct iw_point *erq = &wrqu->encoding;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int index = (erq->flags & IW_ENCODE_INDEX) - 1;
+ 	int setindex = priv->tx_key;
+@@ -325,9 +328,10 @@ static int orinoco_ioctl_setiwencode(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getiwencode(struct net_device *dev,
+ 				     struct iw_request_info *info,
+-				     struct iw_point *erq,
++				     union iwreq_data *wrqu,
+ 				     char *keybuf)
+ {
++	struct iw_point *erq = &wrqu->encoding;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int index = (erq->flags & IW_ENCODE_INDEX) - 1;
+ 	unsigned long flags;
+@@ -361,9 +365,10 @@ static int orinoco_ioctl_getiwencode(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setessid(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  struct iw_point *erq,
++				  union iwreq_data *wrqu,
+ 				  char *essidbuf)
+ {
++	struct iw_point *erq = &wrqu->essid;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	unsigned long flags;
+ 
+@@ -392,9 +397,10 @@ static int orinoco_ioctl_setessid(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getessid(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  struct iw_point *erq,
++				  union iwreq_data *wrqu,
+ 				  char *essidbuf)
+ {
++	struct iw_point *erq = &wrqu->essid;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int active;
+ 	int err = 0;
+@@ -420,9 +426,10 @@ static int orinoco_ioctl_getessid(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setfreq(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_freq *frq,
++				 union iwreq_data *wrqu,
+ 				 char *extra)
+ {
++	struct iw_freq *frq = &wrqu->freq;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int chan = -1;
+ 	unsigned long flags;
+@@ -469,9 +476,10 @@ static int orinoco_ioctl_setfreq(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getfreq(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_freq *frq,
++				 union iwreq_data *wrqu,
+ 				 char *extra)
+ {
++	struct iw_freq *frq = &wrqu->freq;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int tmp;
+ 
+@@ -488,9 +496,10 @@ static int orinoco_ioctl_getfreq(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getsens(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_param *srq,
++				 union iwreq_data *wrqu,
+ 				 char *extra)
+ {
++	struct iw_param *srq = &wrqu->sens;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	struct hermes *hw = &priv->hw;
+ 	u16 val;
+@@ -517,9 +526,10 @@ static int orinoco_ioctl_getsens(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setsens(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_param *srq,
++				 union iwreq_data *wrqu,
+ 				 char *extra)
+ {
++	struct iw_param *srq = &wrqu->sens;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int val = srq->value;
+ 	unsigned long flags;
+@@ -540,9 +550,10 @@ static int orinoco_ioctl_setsens(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setrate(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_param *rrq,
++				 union iwreq_data *wrqu,
+ 				 char *extra)
+ {
++	struct iw_param *rrq = &wrqu->bitrate;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int ratemode;
+ 	int bitrate; /* 100s of kilobits */
+@@ -574,9 +585,10 @@ static int orinoco_ioctl_setrate(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getrate(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_param *rrq,
++				 union iwreq_data *wrqu,
+ 				 char *extra)
+ {
++	struct iw_param *rrq = &wrqu->bitrate;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int err = 0;
+ 	int bitrate, automatic;
+@@ -610,9 +622,10 @@ static int orinoco_ioctl_getrate(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setpower(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  struct iw_param *prq,
++				  union iwreq_data *wrqu,
+ 				  char *extra)
+ {
++	struct iw_param *prq = &wrqu->power;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	int err = -EINPROGRESS;		/* Call commit handler */
+ 	unsigned long flags;
+@@ -664,9 +677,10 @@ static int orinoco_ioctl_setpower(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getpower(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  struct iw_param *prq,
++				  union iwreq_data *wrqu,
+ 				  char *extra)
+ {
++	struct iw_param *prq = &wrqu->power;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	struct hermes *hw = &priv->hw;
+ 	int err = 0;
+@@ -1097,7 +1111,7 @@ static int orinoco_ioctl_set_mlme(struct net_device *dev,
+ 
+ static int orinoco_ioctl_reset(struct net_device *dev,
+ 			       struct iw_request_info *info,
+-			       void *wrqu,
++			       union iwreq_data *wrqu,
+ 			       char *extra)
+ {
+ 	struct orinoco_private *priv = ndev_priv(dev);
+@@ -1121,7 +1135,7 @@ static int orinoco_ioctl_reset(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setibssport(struct net_device *dev,
+ 				     struct iw_request_info *info,
+-				     void *wrqu,
++				     union iwreq_data *wrqu,
+ 				     char *extra)
+ 
+ {
+@@ -1143,7 +1157,7 @@ static int orinoco_ioctl_setibssport(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getibssport(struct net_device *dev,
+ 				     struct iw_request_info *info,
+-				     void *wrqu,
++				     union iwreq_data *wrqu,
+ 				     char *extra)
+ {
+ 	struct orinoco_private *priv = ndev_priv(dev);
+@@ -1155,7 +1169,7 @@ static int orinoco_ioctl_getibssport(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setport3(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  void *wrqu,
++				  union iwreq_data *wrqu,
+ 				  char *extra)
+ {
+ 	struct orinoco_private *priv = ndev_priv(dev);
+@@ -1201,7 +1215,7 @@ static int orinoco_ioctl_setport3(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getport3(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  void *wrqu,
++				  union iwreq_data *wrqu,
+ 				  char *extra)
+ {
+ 	struct orinoco_private *priv = ndev_priv(dev);
+@@ -1213,7 +1227,7 @@ static int orinoco_ioctl_getport3(struct net_device *dev,
+ 
+ static int orinoco_ioctl_setpreamble(struct net_device *dev,
+ 				     struct iw_request_info *info,
+-				     void *wrqu,
++				     union iwreq_data *wrqu,
+ 				     char *extra)
+ {
+ 	struct orinoco_private *priv = ndev_priv(dev);
+@@ -1245,7 +1259,7 @@ static int orinoco_ioctl_setpreamble(struct net_device *dev,
+ 
+ static int orinoco_ioctl_getpreamble(struct net_device *dev,
+ 				     struct iw_request_info *info,
+-				     void *wrqu,
++				     union iwreq_data *wrqu,
+ 				     char *extra)
+ {
+ 	struct orinoco_private *priv = ndev_priv(dev);
+@@ -1265,9 +1279,10 @@ static int orinoco_ioctl_getpreamble(struct net_device *dev,
+  * For Wireless Tools 25 and 26 append "dummy" are the end. */
+ static int orinoco_ioctl_getrid(struct net_device *dev,
+ 				struct iw_request_info *info,
+-				struct iw_point *data,
++				union iwreq_data *wrqu,
+ 				char *extra)
+ {
++	struct iw_point *data = &wrqu->data;
+ 	struct orinoco_private *priv = ndev_priv(dev);
+ 	struct hermes *hw = &priv->hw;
+ 	int rid = data->flags;
+@@ -1303,7 +1318,7 @@ static int orinoco_ioctl_getrid(struct net_device *dev,
+ /* Commit handler, called after set operations */
+ static int orinoco_ioctl_commit(struct net_device *dev,
+ 				struct iw_request_info *info,
+-				void *wrqu,
++				union iwreq_data *wrqu,
+ 				char *extra)
+ {
+ 	struct orinoco_private *priv = ndev_priv(dev);
+@@ -1347,36 +1362,36 @@ static const struct iw_priv_args orinoco_privtab[] = {
+  */
+ 
+ static const iw_handler	orinoco_handler[] = {
+-	IW_HANDLER(SIOCSIWCOMMIT,	(iw_handler)orinoco_ioctl_commit),
+-	IW_HANDLER(SIOCGIWNAME,		(iw_handler)cfg80211_wext_giwname),
+-	IW_HANDLER(SIOCSIWFREQ,		(iw_handler)orinoco_ioctl_setfreq),
+-	IW_HANDLER(SIOCGIWFREQ,		(iw_handler)orinoco_ioctl_getfreq),
+-	IW_HANDLER(SIOCSIWMODE,		(iw_handler)cfg80211_wext_siwmode),
+-	IW_HANDLER(SIOCGIWMODE,		(iw_handler)cfg80211_wext_giwmode),
+-	IW_HANDLER(SIOCSIWSENS,		(iw_handler)orinoco_ioctl_setsens),
+-	IW_HANDLER(SIOCGIWSENS,		(iw_handler)orinoco_ioctl_getsens),
+-	IW_HANDLER(SIOCGIWRANGE,	(iw_handler)cfg80211_wext_giwrange),
++	IW_HANDLER(SIOCSIWCOMMIT,	orinoco_ioctl_commit),
++	IW_HANDLER(SIOCGIWNAME,		cfg80211_wext_giwname),
++	IW_HANDLER(SIOCSIWFREQ,		orinoco_ioctl_setfreq),
++	IW_HANDLER(SIOCGIWFREQ,		orinoco_ioctl_getfreq),
++	IW_HANDLER(SIOCSIWMODE,		cfg80211_wext_siwmode),
++	IW_HANDLER(SIOCGIWMODE,		cfg80211_wext_giwmode),
++	IW_HANDLER(SIOCSIWSENS,		orinoco_ioctl_setsens),
++	IW_HANDLER(SIOCGIWSENS,		orinoco_ioctl_getsens),
++	IW_HANDLER(SIOCGIWRANGE,	cfg80211_wext_giwrange),
+ 	IW_HANDLER(SIOCSIWSPY,		iw_handler_set_spy),
+ 	IW_HANDLER(SIOCGIWSPY,		iw_handler_get_spy),
+ 	IW_HANDLER(SIOCSIWTHRSPY,	iw_handler_set_thrspy),
+ 	IW_HANDLER(SIOCGIWTHRSPY,	iw_handler_get_thrspy),
+-	IW_HANDLER(SIOCSIWAP,		(iw_handler)orinoco_ioctl_setwap),
+-	IW_HANDLER(SIOCGIWAP,		(iw_handler)orinoco_ioctl_getwap),
+-	IW_HANDLER(SIOCSIWSCAN,		(iw_handler)cfg80211_wext_siwscan),
+-	IW_HANDLER(SIOCGIWSCAN,		(iw_handler)cfg80211_wext_giwscan),
+-	IW_HANDLER(SIOCSIWESSID,	(iw_handler)orinoco_ioctl_setessid),
+-	IW_HANDLER(SIOCGIWESSID,	(iw_handler)orinoco_ioctl_getessid),
+-	IW_HANDLER(SIOCSIWRATE,		(iw_handler)orinoco_ioctl_setrate),
+-	IW_HANDLER(SIOCGIWRATE,		(iw_handler)orinoco_ioctl_getrate),
+-	IW_HANDLER(SIOCSIWRTS,		(iw_handler)cfg80211_wext_siwrts),
+-	IW_HANDLER(SIOCGIWRTS,		(iw_handler)cfg80211_wext_giwrts),
+-	IW_HANDLER(SIOCSIWFRAG,		(iw_handler)cfg80211_wext_siwfrag),
+-	IW_HANDLER(SIOCGIWFRAG,		(iw_handler)cfg80211_wext_giwfrag),
+-	IW_HANDLER(SIOCGIWRETRY,	(iw_handler)cfg80211_wext_giwretry),
+-	IW_HANDLER(SIOCSIWENCODE,	(iw_handler)orinoco_ioctl_setiwencode),
+-	IW_HANDLER(SIOCGIWENCODE,	(iw_handler)orinoco_ioctl_getiwencode),
+-	IW_HANDLER(SIOCSIWPOWER,	(iw_handler)orinoco_ioctl_setpower),
+-	IW_HANDLER(SIOCGIWPOWER,	(iw_handler)orinoco_ioctl_getpower),
++	IW_HANDLER(SIOCSIWAP,		orinoco_ioctl_setwap),
++	IW_HANDLER(SIOCGIWAP,		orinoco_ioctl_getwap),
++	IW_HANDLER(SIOCSIWSCAN,		cfg80211_wext_siwscan),
++	IW_HANDLER(SIOCGIWSCAN,		cfg80211_wext_giwscan),
++	IW_HANDLER(SIOCSIWESSID,	orinoco_ioctl_setessid),
++	IW_HANDLER(SIOCGIWESSID,	orinoco_ioctl_getessid),
++	IW_HANDLER(SIOCSIWRATE,		orinoco_ioctl_setrate),
++	IW_HANDLER(SIOCGIWRATE,		orinoco_ioctl_getrate),
++	IW_HANDLER(SIOCSIWRTS,		cfg80211_wext_siwrts),
++	IW_HANDLER(SIOCGIWRTS,		cfg80211_wext_giwrts),
++	IW_HANDLER(SIOCSIWFRAG,		cfg80211_wext_siwfrag),
++	IW_HANDLER(SIOCGIWFRAG,		cfg80211_wext_giwfrag),
++	IW_HANDLER(SIOCGIWRETRY,	cfg80211_wext_giwretry),
++	IW_HANDLER(SIOCSIWENCODE,	orinoco_ioctl_setiwencode),
++	IW_HANDLER(SIOCGIWENCODE,	orinoco_ioctl_getiwencode),
++	IW_HANDLER(SIOCSIWPOWER,	orinoco_ioctl_setpower),
++	IW_HANDLER(SIOCGIWPOWER,	orinoco_ioctl_getpower),
+ 	IW_HANDLER(SIOCSIWGENIE,	orinoco_ioctl_set_genie),
+ 	IW_HANDLER(SIOCGIWGENIE,	orinoco_ioctl_get_genie),
+ 	IW_HANDLER(SIOCSIWMLME,		orinoco_ioctl_set_mlme),
+diff --git a/include/net/cfg80211-wext.h b/include/net/cfg80211-wext.h
+index ad77caf2ffde..0ee36d97e068 100644
+--- a/include/net/cfg80211-wext.h
++++ b/include/net/cfg80211-wext.h
+@@ -19,34 +19,34 @@
+  */
+ int cfg80211_wext_giwname(struct net_device *dev,
+ 			  struct iw_request_info *info,
+-			  char *name, char *extra);
++			  union iwreq_data *wrqu, char *extra);
+ int cfg80211_wext_siwmode(struct net_device *dev, struct iw_request_info *info,
+-			  u32 *mode, char *extra);
++			  union iwreq_data *wrqu, char *extra);
+ int cfg80211_wext_giwmode(struct net_device *dev, struct iw_request_info *info,
+-			  u32 *mode, char *extra);
++			  union iwreq_data *wrqu, char *extra);
+ int cfg80211_wext_siwscan(struct net_device *dev,
+ 			  struct iw_request_info *info,
+ 			  union iwreq_data *wrqu, char *extra);
+ int cfg80211_wext_giwscan(struct net_device *dev,
+ 			  struct iw_request_info *info,
+-			  struct iw_point *data, char *extra);
++			  union iwreq_data *wrqu, char *extra);
+ int cfg80211_wext_giwrange(struct net_device *dev,
+ 			   struct iw_request_info *info,
+-			   struct iw_point *data, char *extra);
++			   union iwreq_data *wrqu, char *extra);
+ int cfg80211_wext_siwrts(struct net_device *dev,
+ 			 struct iw_request_info *info,
+-			 struct iw_param *rts, char *extra);
++			 union iwreq_data *wrqu, char *extra);
+ int cfg80211_wext_giwrts(struct net_device *dev,
+ 			 struct iw_request_info *info,
+-			 struct iw_param *rts, char *extra);
++			 union iwreq_data *wrqu, char *extra);
+ int cfg80211_wext_siwfrag(struct net_device *dev,
+ 			  struct iw_request_info *info,
+-			  struct iw_param *frag, char *extra);
++			  union iwreq_data *wrqu, char *extra);
+ int cfg80211_wext_giwfrag(struct net_device *dev,
+ 			  struct iw_request_info *info,
+-			  struct iw_param *frag, char *extra);
++			  union iwreq_data *wrqu, char *extra);
+ int cfg80211_wext_giwretry(struct net_device *dev,
+ 			   struct iw_request_info *info,
+-			   struct iw_param *retry, char *extra);
++			   union iwreq_data *wrqu, char *extra);
+ 
+ #endif /* __NET_CFG80211_WEXT_H */
+diff --git a/net/wireless/scan.c b/net/wireless/scan.c
+index 806a5f1330ff..853619bc0f1a 100644
+--- a/net/wireless/scan.c
++++ b/net/wireless/scan.c
+@@ -3229,8 +3229,9 @@ static int ieee80211_scan_results(struct cfg80211_registered_device *rdev,
+ 
+ int cfg80211_wext_giwscan(struct net_device *dev,
+ 			  struct iw_request_info *info,
+-			  struct iw_point *data, char *extra)
++			  union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_point *data = &wrqu->data;
+ 	struct cfg80211_registered_device *rdev;
+ 	int res;
+ 
+diff --git a/net/wireless/wext-compat.c b/net/wireless/wext-compat.c
+index ddf340bfa07a..8a24dfca75af 100644
+--- a/net/wireless/wext-compat.c
++++ b/net/wireless/wext-compat.c
+@@ -25,16 +25,17 @@
+ 
+ int cfg80211_wext_giwname(struct net_device *dev,
+ 			  struct iw_request_info *info,
+-			  char *name, char *extra)
++			  union iwreq_data *wrqu, char *extra)
+ {
+-	strcpy(name, "IEEE 802.11");
++	strcpy(wrqu->name, "IEEE 802.11");
+ 	return 0;
+ }
+ EXPORT_WEXT_HANDLER(cfg80211_wext_giwname);
+ 
+ int cfg80211_wext_siwmode(struct net_device *dev, struct iw_request_info *info,
+-			  u32 *mode, char *extra)
++			  union iwreq_data *wrqu, char *extra)
+ {
++	__u32 *mode = &wrqu->mode;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct cfg80211_registered_device *rdev;
+ 	struct vif_params vifparams;
+@@ -71,8 +72,9 @@ int cfg80211_wext_siwmode(struct net_device *dev, struct iw_request_info *info,
+ EXPORT_WEXT_HANDLER(cfg80211_wext_siwmode);
+ 
+ int cfg80211_wext_giwmode(struct net_device *dev, struct iw_request_info *info,
+-			  u32 *mode, char *extra)
++			  union iwreq_data *wrqu, char *extra)
+ {
++	__u32 *mode = &wrqu->mode;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 
+ 	if (!wdev)
+@@ -108,8 +110,9 @@ EXPORT_WEXT_HANDLER(cfg80211_wext_giwmode);
+ 
+ int cfg80211_wext_giwrange(struct net_device *dev,
+ 			   struct iw_request_info *info,
+-			   struct iw_point *data, char *extra)
++			   union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_point *data = &wrqu->data;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct iw_range *range = (struct iw_range *) extra;
+ 	enum nl80211_band band;
+@@ -251,8 +254,9 @@ int cfg80211_wext_freq(struct iw_freq *freq)
+ 
+ int cfg80211_wext_siwrts(struct net_device *dev,
+ 			 struct iw_request_info *info,
+-			 struct iw_param *rts, char *extra)
++			 union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *rts = &wrqu->rts;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+ 	u32 orts = wdev->wiphy->rts_threshold;
+@@ -281,8 +285,9 @@ EXPORT_WEXT_HANDLER(cfg80211_wext_siwrts);
+ 
+ int cfg80211_wext_giwrts(struct net_device *dev,
+ 			 struct iw_request_info *info,
+-			 struct iw_param *rts, char *extra)
++			 union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *rts = &wrqu->rts;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 
+ 	rts->value = wdev->wiphy->rts_threshold;
+@@ -295,8 +300,9 @@ EXPORT_WEXT_HANDLER(cfg80211_wext_giwrts);
+ 
+ int cfg80211_wext_siwfrag(struct net_device *dev,
+ 			  struct iw_request_info *info,
+-			  struct iw_param *frag, char *extra)
++			  union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *frag = &wrqu->frag;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+ 	u32 ofrag = wdev->wiphy->frag_threshold;
+@@ -325,8 +331,9 @@ EXPORT_WEXT_HANDLER(cfg80211_wext_siwfrag);
+ 
+ int cfg80211_wext_giwfrag(struct net_device *dev,
+ 			  struct iw_request_info *info,
+-			  struct iw_param *frag, char *extra)
++			  union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *frag = &wrqu->frag;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 
+ 	frag->value = wdev->wiphy->frag_threshold;
+@@ -339,8 +346,9 @@ EXPORT_WEXT_HANDLER(cfg80211_wext_giwfrag);
+ 
+ static int cfg80211_wext_siwretry(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  struct iw_param *retry, char *extra)
++				  union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *retry = &wrqu->retry;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+ 	u32 changed = 0;
+@@ -378,8 +386,9 @@ static int cfg80211_wext_siwretry(struct net_device *dev,
+ 
+ int cfg80211_wext_giwretry(struct net_device *dev,
+ 			   struct iw_request_info *info,
+-			   struct iw_param *retry, char *extra)
++			   union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *retry = &wrqu->retry;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 
+ 	retry->disabled = 0;
+@@ -588,8 +597,9 @@ static int cfg80211_set_encryption(struct cfg80211_registered_device *rdev,
+ 
+ static int cfg80211_wext_siwencode(struct net_device *dev,
+ 				   struct iw_request_info *info,
+-				   struct iw_point *erq, char *keybuf)
++				   union iwreq_data *wrqu, char *keybuf)
+ {
++	struct iw_point *erq = &wrqu->encoding;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+ 	int idx, err;
+@@ -664,8 +674,9 @@ static int cfg80211_wext_siwencode(struct net_device *dev,
+ 
+ static int cfg80211_wext_siwencodeext(struct net_device *dev,
+ 				      struct iw_request_info *info,
+-				      struct iw_point *erq, char *extra)
++				      union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_point *erq = &wrqu->encoding;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+ 	struct iw_encode_ext *ext = (struct iw_encode_ext *) extra;
+@@ -767,8 +778,9 @@ static int cfg80211_wext_siwencodeext(struct net_device *dev,
+ 
+ static int cfg80211_wext_giwencode(struct net_device *dev,
+ 				   struct iw_request_info *info,
+-				   struct iw_point *erq, char *keybuf)
++				   union iwreq_data *wrqu, char *keybuf)
+ {
++	struct iw_point *erq = &wrqu->encoding;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	int idx;
+ 
+@@ -804,8 +816,9 @@ static int cfg80211_wext_giwencode(struct net_device *dev,
+ 
+ static int cfg80211_wext_siwfreq(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_freq *wextfreq, char *extra)
++				 union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_freq *wextfreq = &wrqu->freq;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+ 	struct cfg80211_chan_def chandef = {
+@@ -870,8 +883,9 @@ static int cfg80211_wext_siwfreq(struct net_device *dev,
+ 
+ static int cfg80211_wext_giwfreq(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_freq *freq, char *extra)
++				 union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_freq *freq = &wrqu->freq;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+ 	struct cfg80211_chan_def chandef = {};
+@@ -1147,8 +1161,9 @@ static int cfg80211_set_key_mgt(struct wireless_dev *wdev, u32 key_mgt)
+ 
+ static int cfg80211_wext_siwauth(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_param *data, char *extra)
++				 union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *data = &wrqu->param;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 
+ 	if (wdev->iftype != NL80211_IFTYPE_STATION)
+@@ -1180,7 +1195,7 @@ static int cfg80211_wext_siwauth(struct net_device *dev,
+ 
+ static int cfg80211_wext_giwauth(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_param *data, char *extra)
++				 union iwreq_data *wrqu, char *extra)
+ {
+ 	/* XXX: what do we need? */
+ 
+@@ -1189,8 +1204,9 @@ static int cfg80211_wext_giwauth(struct net_device *dev,
+ 
+ static int cfg80211_wext_siwpower(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  struct iw_param *wrq, char *extra)
++				  union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *wrq = &wrqu->power;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+ 	bool ps;
+@@ -1238,8 +1254,9 @@ static int cfg80211_wext_siwpower(struct net_device *dev,
+ 
+ static int cfg80211_wext_giwpower(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  struct iw_param *wrq, char *extra)
++				  union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *wrq = &wrqu->power;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 
+ 	wrq->disabled = !wdev->ps;
+@@ -1249,8 +1266,9 @@ static int cfg80211_wext_giwpower(struct net_device *dev,
+ 
+ static int cfg80211_wext_siwrate(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_param *rate, char *extra)
++				 union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *rate = &wrqu->bitrate;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+ 	struct cfg80211_bitrate_mask mask;
+@@ -1307,8 +1325,9 @@ static int cfg80211_wext_siwrate(struct net_device *dev,
+ 
+ static int cfg80211_wext_giwrate(struct net_device *dev,
+ 				 struct iw_request_info *info,
+-				 struct iw_param *rate, char *extra)
++				 union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_param *rate = &wrqu->bitrate;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+ 	struct station_info sinfo = {};
+@@ -1430,8 +1449,9 @@ static struct iw_statistics *cfg80211_wireless_stats(struct net_device *dev)
+ 
+ static int cfg80211_wext_siwap(struct net_device *dev,
+ 			       struct iw_request_info *info,
+-			       struct sockaddr *ap_addr, char *extra)
++			       union iwreq_data *wrqu, char *extra)
+ {
++	struct sockaddr *ap_addr = &wrqu->ap_addr;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+ 	int ret;
+@@ -1455,8 +1475,9 @@ static int cfg80211_wext_siwap(struct net_device *dev,
+ 
+ static int cfg80211_wext_giwap(struct net_device *dev,
+ 			       struct iw_request_info *info,
+-			       struct sockaddr *ap_addr, char *extra)
++			       union iwreq_data *wrqu, char *extra)
+ {
++	struct sockaddr *ap_addr = &wrqu->ap_addr;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+ 	int ret;
+@@ -1480,8 +1501,9 @@ static int cfg80211_wext_giwap(struct net_device *dev,
+ 
+ static int cfg80211_wext_siwessid(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  struct iw_point *data, char *ssid)
++				  union iwreq_data *wrqu, char *ssid)
+ {
++	struct iw_point *data = &wrqu->data;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+ 	int ret;
+@@ -1505,8 +1527,9 @@ static int cfg80211_wext_siwessid(struct net_device *dev,
+ 
+ static int cfg80211_wext_giwessid(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  struct iw_point *data, char *ssid)
++				  union iwreq_data *wrqu, char *ssid)
+ {
++	struct iw_point *data = &wrqu->data;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+ 	int ret;
+@@ -1533,7 +1556,7 @@ static int cfg80211_wext_giwessid(struct net_device *dev,
+ 
+ static int cfg80211_wext_siwpmksa(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  struct iw_point *data, char *extra)
++				  union iwreq_data *wrqu, char *extra)
+ {
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+@@ -1584,78 +1607,39 @@ static int cfg80211_wext_siwpmksa(struct net_device *dev,
+ 	return ret;
+ }
+ 
+-#define DEFINE_WEXT_COMPAT_STUB(func, type)			\
+-	static int __ ## func(struct net_device *dev,		\
+-			      struct iw_request_info *info,	\
+-			      union iwreq_data *wrqu,		\
+-			      char *extra)			\
+-	{							\
+-		return func(dev, info, (type *)wrqu, extra);	\
+-	}
+-
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_giwname, char)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_siwfreq, struct iw_freq)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_giwfreq, struct iw_freq)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_siwmode, u32)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_giwmode, u32)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_giwrange, struct iw_point)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_siwap, struct sockaddr)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_giwap, struct sockaddr)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_siwmlme, struct iw_point)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_giwscan, struct iw_point)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_siwessid, struct iw_point)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_giwessid, struct iw_point)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_siwrate, struct iw_param)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_giwrate, struct iw_param)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_siwrts, struct iw_param)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_giwrts, struct iw_param)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_siwfrag, struct iw_param)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_giwfrag, struct iw_param)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_siwretry, struct iw_param)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_giwretry, struct iw_param)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_siwencode, struct iw_point)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_giwencode, struct iw_point)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_giwpower, struct iw_param)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_siwpower, struct iw_param)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_siwgenie, struct iw_point)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_giwauth, struct iw_param)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_siwauth, struct iw_param)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_siwencodeext, struct iw_point)
+-DEFINE_WEXT_COMPAT_STUB(cfg80211_wext_siwpmksa, struct iw_point)
+-
+ static const iw_handler cfg80211_handlers[] = {
+-	[IW_IOCTL_IDX(SIOCGIWNAME)]	= __cfg80211_wext_giwname,
+-	[IW_IOCTL_IDX(SIOCSIWFREQ)]	= __cfg80211_wext_siwfreq,
+-	[IW_IOCTL_IDX(SIOCGIWFREQ)]	= __cfg80211_wext_giwfreq,
+-	[IW_IOCTL_IDX(SIOCSIWMODE)]	= __cfg80211_wext_siwmode,
+-	[IW_IOCTL_IDX(SIOCGIWMODE)]	= __cfg80211_wext_giwmode,
+-	[IW_IOCTL_IDX(SIOCGIWRANGE)]	= __cfg80211_wext_giwrange,
+-	[IW_IOCTL_IDX(SIOCSIWAP)]	= __cfg80211_wext_siwap,
+-	[IW_IOCTL_IDX(SIOCGIWAP)]	= __cfg80211_wext_giwap,
+-	[IW_IOCTL_IDX(SIOCSIWMLME)]	= __cfg80211_wext_siwmlme,
+-	[IW_IOCTL_IDX(SIOCSIWSCAN)]	= cfg80211_wext_siwscan,
+-	[IW_IOCTL_IDX(SIOCGIWSCAN)]	= __cfg80211_wext_giwscan,
+-	[IW_IOCTL_IDX(SIOCSIWESSID)]	= __cfg80211_wext_siwessid,
+-	[IW_IOCTL_IDX(SIOCGIWESSID)]	= __cfg80211_wext_giwessid,
+-	[IW_IOCTL_IDX(SIOCSIWRATE)]	= __cfg80211_wext_siwrate,
+-	[IW_IOCTL_IDX(SIOCGIWRATE)]	= __cfg80211_wext_giwrate,
+-	[IW_IOCTL_IDX(SIOCSIWRTS)]	= __cfg80211_wext_siwrts,
+-	[IW_IOCTL_IDX(SIOCGIWRTS)]	= __cfg80211_wext_giwrts,
+-	[IW_IOCTL_IDX(SIOCSIWFRAG)]	= __cfg80211_wext_siwfrag,
+-	[IW_IOCTL_IDX(SIOCGIWFRAG)]	= __cfg80211_wext_giwfrag,
+-	[IW_IOCTL_IDX(SIOCSIWTXPOW)]	= cfg80211_wext_siwtxpower,
+-	[IW_IOCTL_IDX(SIOCGIWTXPOW)]	= cfg80211_wext_giwtxpower,
+-	[IW_IOCTL_IDX(SIOCSIWRETRY)]	= __cfg80211_wext_siwretry,
+-	[IW_IOCTL_IDX(SIOCGIWRETRY)]	= __cfg80211_wext_giwretry,
+-	[IW_IOCTL_IDX(SIOCSIWENCODE)]	= __cfg80211_wext_siwencode,
+-	[IW_IOCTL_IDX(SIOCGIWENCODE)]	= __cfg80211_wext_giwencode,
+-	[IW_IOCTL_IDX(SIOCSIWPOWER)]	= __cfg80211_wext_siwpower,
+-	[IW_IOCTL_IDX(SIOCGIWPOWER)]	= __cfg80211_wext_giwpower,
+-	[IW_IOCTL_IDX(SIOCSIWGENIE)]	= __cfg80211_wext_siwgenie,
+-	[IW_IOCTL_IDX(SIOCSIWAUTH)]	= __cfg80211_wext_siwauth,
+-	[IW_IOCTL_IDX(SIOCGIWAUTH)]	= __cfg80211_wext_giwauth,
+-	[IW_IOCTL_IDX(SIOCSIWENCODEEXT)]= __cfg80211_wext_siwencodeext,
+-	[IW_IOCTL_IDX(SIOCSIWPMKSA)]	= __cfg80211_wext_siwpmksa,
++	IW_HANDLER(SIOCGIWNAME,		cfg80211_wext_giwname),
++	IW_HANDLER(SIOCSIWFREQ,		cfg80211_wext_siwfreq),
++	IW_HANDLER(SIOCGIWFREQ,		cfg80211_wext_giwfreq),
++	IW_HANDLER(SIOCSIWMODE,		cfg80211_wext_siwmode),
++	IW_HANDLER(SIOCGIWMODE,		cfg80211_wext_giwmode),
++	IW_HANDLER(SIOCGIWRANGE,	cfg80211_wext_giwrange),
++	IW_HANDLER(SIOCSIWAP,		cfg80211_wext_siwap),
++	IW_HANDLER(SIOCGIWAP,		cfg80211_wext_giwap),
++	IW_HANDLER(SIOCSIWMLME,		cfg80211_wext_siwmlme),
++	IW_HANDLER(SIOCSIWSCAN,		cfg80211_wext_siwscan),
++	IW_HANDLER(SIOCGIWSCAN,		cfg80211_wext_giwscan),
++	IW_HANDLER(SIOCSIWESSID,	cfg80211_wext_siwessid),
++	IW_HANDLER(SIOCGIWESSID,	cfg80211_wext_giwessid),
++	IW_HANDLER(SIOCSIWRATE,		cfg80211_wext_siwrate),
++	IW_HANDLER(SIOCGIWRATE,		cfg80211_wext_giwrate),
++	IW_HANDLER(SIOCSIWRTS,		cfg80211_wext_siwrts),
++	IW_HANDLER(SIOCGIWRTS,		cfg80211_wext_giwrts),
++	IW_HANDLER(SIOCSIWFRAG,		cfg80211_wext_siwfrag),
++	IW_HANDLER(SIOCGIWFRAG,		cfg80211_wext_giwfrag),
++	IW_HANDLER(SIOCSIWTXPOW,	cfg80211_wext_siwtxpower),
++	IW_HANDLER(SIOCGIWTXPOW,	cfg80211_wext_giwtxpower),
++	IW_HANDLER(SIOCSIWRETRY,	cfg80211_wext_siwretry),
++	IW_HANDLER(SIOCGIWRETRY,	cfg80211_wext_giwretry),
++	IW_HANDLER(SIOCSIWENCODE,	cfg80211_wext_siwencode),
++	IW_HANDLER(SIOCGIWENCODE,	cfg80211_wext_giwencode),
++	IW_HANDLER(SIOCSIWPOWER,	cfg80211_wext_siwpower),
++	IW_HANDLER(SIOCGIWPOWER,	cfg80211_wext_giwpower),
++	IW_HANDLER(SIOCSIWGENIE,	cfg80211_wext_siwgenie),
++	IW_HANDLER(SIOCSIWAUTH,		cfg80211_wext_siwauth),
++	IW_HANDLER(SIOCGIWAUTH,		cfg80211_wext_giwauth),
++	IW_HANDLER(SIOCSIWENCODEEXT,	cfg80211_wext_siwencodeext),
++	IW_HANDLER(SIOCSIWPMKSA,	cfg80211_wext_siwpmksa),
+ };
+ 
+ const struct iw_handler_def cfg80211_wext_handler = {
+diff --git a/net/wireless/wext-compat.h b/net/wireless/wext-compat.h
+index 8d3cc1552e2f..c02eb789e676 100644
+--- a/net/wireless/wext-compat.h
++++ b/net/wireless/wext-compat.h
+@@ -13,7 +13,7 @@
+ 
+ int cfg80211_ibss_wext_siwfreq(struct net_device *dev,
+ 			       struct iw_request_info *info,
+-			       struct iw_freq *freq, char *extra);
++			       struct iw_freq *wextfreq, char *extra);
+ int cfg80211_ibss_wext_giwfreq(struct net_device *dev,
+ 			       struct iw_request_info *info,
+ 			       struct iw_freq *freq, char *extra);
+@@ -32,7 +32,7 @@ int cfg80211_ibss_wext_giwessid(struct net_device *dev,
+ 
+ int cfg80211_mgd_wext_siwfreq(struct net_device *dev,
+ 			      struct iw_request_info *info,
+-			      struct iw_freq *freq, char *extra);
++			      struct iw_freq *wextfreq, char *extra);
+ int cfg80211_mgd_wext_giwfreq(struct net_device *dev,
+ 			      struct iw_request_info *info,
+ 			      struct iw_freq *freq, char *extra);
+@@ -51,10 +51,10 @@ int cfg80211_mgd_wext_giwessid(struct net_device *dev,
+ 
+ int cfg80211_wext_siwmlme(struct net_device *dev,
+ 			  struct iw_request_info *info,
+-			  struct iw_point *data, char *extra);
++			  union iwreq_data *wrqu, char *extra);
+ int cfg80211_wext_siwgenie(struct net_device *dev,
+ 			   struct iw_request_info *info,
+-			   struct iw_point *data, char *extra);
++			   union iwreq_data *wrqu, char *extra);
+ 
+ 
+ int cfg80211_wext_freq(struct iw_freq *freq);
+diff --git a/net/wireless/wext-sme.c b/net/wireless/wext-sme.c
+index 68f45afc352d..191c6d98c700 100644
+--- a/net/wireless/wext-sme.c
++++ b/net/wireless/wext-sme.c
+@@ -324,8 +324,9 @@ int cfg80211_mgd_wext_giwap(struct net_device *dev,
+ 
+ int cfg80211_wext_siwgenie(struct net_device *dev,
+ 			   struct iw_request_info *info,
+-			   struct iw_point *data, char *extra)
++			   union iwreq_data *wrqu, char *extra)
+ {
++	struct iw_point *data = &wrqu->data;
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wdev->wiphy);
+ 	u8 *ie = extra;
+@@ -374,7 +375,7 @@ int cfg80211_wext_siwgenie(struct net_device *dev,
+ 
+ int cfg80211_wext_siwmlme(struct net_device *dev,
+ 			  struct iw_request_info *info,
+-			  struct iw_point *data, char *extra)
++			  union iwreq_data *wrqu, char *extra)
+ {
+ 	struct wireless_dev *wdev = dev->ieee80211_ptr;
+ 	struct iw_mlme *mlme = (struct iw_mlme *)extra;
+-- 
+2.34.1
+
