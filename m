@@ -2,100 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5553160F1A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 09:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FFC60F1A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 09:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbiJ0H4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 03:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
+        id S234548AbiJ0H41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 03:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234150AbiJ0Hz6 (ORCPT
+        with ESMTP id S234147AbiJ0H4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 03:55:58 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42C28D220;
-        Thu, 27 Oct 2022 00:55:54 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id w189so743220pfw.4;
-        Thu, 27 Oct 2022 00:55:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OJAEKndr3m6wkfHwUrnC0w/oTWY26XXJ7PxMYSqorLA=;
-        b=F0KKv+ad3qoKlO1BO7vEexO8niWP4K3suGfjq2soz7HeZjjCp+RCqX69vAAE4H0l3G
-         JjRa2lEKbrZ87cgPlqasGGxBPQOV1Sb8CRg9wJZh4wtTWP7jZXV1ogOeNLWzVibP7s/O
-         8TdEh2sP0bsFR/CyDsJD8HrOnHaVsRFRtTCC5nnaaT9e7CJChFvkkoTr9i1lZbImstoP
-         w0F8fNhT6nkeLNW9cHUP7qt7bPkGjWc6p9Jtq+twr0JcBEZA0Cw5H86toRxrWoYjt3za
-         Mpyme/IvITrGdk2wRYtxyTI5B3S3ayYvYMnimGqEQX/8wJT43/6Jkq5hh2MvMOHuhwTU
-         pf8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OJAEKndr3m6wkfHwUrnC0w/oTWY26XXJ7PxMYSqorLA=;
-        b=dBvRN1/AJeuG8esA3uWSPZCmix8na1RNrTpbFxHQYJHCjwTEoACG3Ft8QHc7LwQWul
-         R49DbnYcZlgmpvZNdyJUxCWDuzbM2uy/eRfPUfsqLhueIMcJrh4BHmgzoocu0L8lFX0K
-         iuOohWZxdt/ASS/y1/a0rLJfQeHO54576dfDmqMp49af3dxM1c0OXtY9yT79XH7OsCQq
-         Jg4Jmp+IRyadsTHqBq2CLwjfJh/RW/Q3DhGBd0Wg6HngoUr4mCeUcvVTvE3WWoHJYuFR
-         wUaywvjZ/SoG8NVLTQ+OKy2OljD5rVcbp3TQzE+mGqS32wFCHRqs1hHnV4cQRxrRUnX2
-         dS1w==
-X-Gm-Message-State: ACrzQf3Xt1LKrS9Lhezy68yqsUdW4/72cF8kkReSrAw2Fkt+kPjv8LI4
-        b2V9G3VGGrI2LirB2A37RUA=
-X-Google-Smtp-Source: AMsMyM4RuXf3SFWGHbEF/qs8moP9zk6bojXHDwIAw0jrPBotzHFLCqlixCAZlEmHMoAsFj6N/fwnpw==
-X-Received: by 2002:a63:4307:0:b0:464:a24d:8201 with SMTP id q7-20020a634307000000b00464a24d8201mr41524700pga.116.1666857353905;
-        Thu, 27 Oct 2022 00:55:53 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:99d6:ae15:f9aa:1819])
-        by smtp.gmail.com with ESMTPSA id s24-20020a170902b19800b0017b264a2d4asm588191plr.44.2022.10.27.00.55.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 00:55:53 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 00:55:49 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andy Gross <agross@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 06/11] dt-bindings: input: qcom,pm8921-pwrkey: convert
- to dt-schema
-Message-ID: <Y1o5hYAnBuf1akJ9@google.com>
-References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
- <20220928-mdm9615-dt-schema-fixes-v4-6-dac2dfaac703@linaro.org>
+        Thu, 27 Oct 2022 03:56:23 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C8C9E0D7
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 00:56:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5zl7dX9EpgclanizFHawlSrlLA7C4BACktFiPWCWkC8=; b=nNGgWCX7M5YzzPx3DVqPxLB9mU
+        1SjuwIUu9yfPOXdnRw+UXWI6ixnnrH9Sbx9kyBsgOryzdr/R7NIZiKQro9Bj5trZLGpayUNaP4tuJ
+        F2Fn5JH2br9ur5uK+C5cgtFgKrXU4mxMKTfcF06Kabo3I6IE2MCF/y+YanrJh7I6zwoINlPvDB6hR
+        L471+706a+9QITtPGdt7zPiP6OfjHfBf66r6jgoSwqgu9JexsNa9y3YuMWP9mIqtpp8MFqswovchD
+        MaiEx9C9Eb5W5MGGuuU07yIvPHc6mD0cnFOdmziYqxDL5uZx/GVCj4662SmwraTmKt4Fl9O4QsqSe
+        CWBuLegw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1onxk5-006nz0-3O; Thu, 27 Oct 2022 07:55:59 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1242830029C;
+        Thu, 27 Oct 2022 09:55:56 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id F0D152012B90F; Thu, 27 Oct 2022 09:55:55 +0200 (CEST)
+Date:   Thu, 27 Oct 2022 09:55:55 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Yajun Deng <yajun.deng@linux.dev>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched/fair: Remove max_vruntime() and min_vruntime()
+Message-ID: <Y1o5i1Trk2aRZY4q@hirez.programming.kicks-ass.net>
+References: <20221027015351.2511149-1-yajun.deng@linux.dev>
+ <Y1o5ILxBd9erW5zR@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v4-6-dac2dfaac703@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y1o5ILxBd9erW5zR@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 11:06:42AM +0200, Neil Armstrong wrote:
-> Convert input/qcom,pm8xxx-pwrkey.txt to YAML, and take in account that
-> the PM8921 pwrkey compatible is used as fallback for the PM8018 pwrkey.
+On Thu, Oct 27, 2022 at 09:54:09AM +0200, Peter Zijlstra wrote:
+> On Thu, Oct 27, 2022 at 09:53:51AM +0800, Yajun Deng wrote:
+> > There is no need to write max_vruntime() and min_vruntime() functions,
+> > we can use max_t() and min_t() instead.
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Here; I did your homework for you:
+> 
+> /* max.c */
+> #include <stdio.h>
+> #include <stdint.h>
+> #include <stdlib.h>
+> 
+> typedef unsigned long long u64;
+> typedef unsigned long long s64;
 
-Should I merge this through my tree or you want all these changes to go
-together through some particular tree?
+This should obviously be just 'long long', but the result doesn't
+change.
 
-Thanks.
+/me goes goes get more wake-up juice.
 
--- 
-Dmitry
+> 
+> static u64 max_vruntime(u64 max_vruntime, u64 vruntime)
+> {
+> 	s64 delta = (s64)(vruntime - max_vruntime);
+> 	if (delta > 0)
+> 		max_vruntime = vruntime;
+> 	return max_vruntime;
+> }
+> 
+> static u64 max(u64 a, u64 b)
+> {
+> 	return a > b ? a : b;
+> }
+> 
+> int main(int argc, char **argv)
+> {
+> 	u64 a, b;
+> 
+> 	if (argc < 3)
+> 		return 0;
+> 
+> 	a = strtoll(argv[1], NULL, 10);
+> 	b = strtoll(argv[2], NULL, 10);
+> 	printf("         max(%lu, %lu) = %lu\n", a, b, max(a,b));
+> 	printf("max_vruntime(%lu, %lu) = %lu\n", a, b, max_vruntime(a,b));
+> 
+> 	return 0;
+> }
+> 
+> $ ./max -1 0
+>          max(18446744073709551615, 0) = 18446744073709551615
+> max_vruntime(18446744073709551615, 0) = 0
