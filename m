@@ -2,142 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C0D60ECD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 02:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F5860ECDA
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 02:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233898AbiJ0AHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 20:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
+        id S233968AbiJ0AJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 20:09:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233561AbiJ0AHK (ORCPT
+        with ESMTP id S233561AbiJ0AJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 20:07:10 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BEB56B82;
-        Wed, 26 Oct 2022 17:07:07 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MyQw55XbCz4x1V;
-        Thu, 27 Oct 2022 11:07:01 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1666829223;
-        bh=4QLpjDwz9lbeON7XUEXcSe5KN/9yirIHZlEgdXPZBD8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EgNJ8GpfX1rKI52H2eFRT4bGosFA3zxRujm3ps+HCtB1yQkMFG+7+OAt/Cx4xma9m
-         IMnSAWo0khEKCc7ufsvBbDi/jeWY0U7oOTtoDV/0mTiTyTaXgzwCDqqo/IHyxgtxbl
-         RLpKEnwSGY/fLtiY6HgpW9Uaeh0gsporRZ0f0FMhUkZJ2VSpq6hf8gJAypW+gJmaW7
-         fRK4S/XCH3PHlVtYvHeONZCxj1OPWZG/ZfBEP69aEB4LEfK5zCjD0kYiGb3NEFnSgp
-         64d5g7o8Rsj6WEM82T9pgH2X/7YtX/hYzpLss4YRYx3f0Mo1YUCKBVMegyGik4KhW2
-         1izZzaWfqBApA==
-Date:   Thu, 27 Oct 2022 11:07:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>
-Subject: linux-next: manual merge of the tip tree with the bpf-next tree
-Message-ID: <20221027110700.110214a9@canb.auug.org.au>
+        Wed, 26 Oct 2022 20:09:46 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA1D1A20B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 17:09:43 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id s196so16678883pgs.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 17:09:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wTlBrCwJCiqm4qgW+Kqhp/t9YirXcw72f/o9+Q65cAk=;
+        b=PJUdMX7rqK8ojWNaObFA0K+NUSzbhkq2m4qukO0HXsNoPPD3vgXn18Xduwu+q10KZq
+         wFSdN/ZkCjhc9neFlTJ7xf8VDXOf0XzW6X+h6JGge3Jupke4f2bd6rZMuyboykWhXBi5
+         6c09TF4QraBddkzJxCcZIP87ZtjSYHfE78yaYxQTXC+4Kwcies8PmMKkCpqNgcKr+B+u
+         F+GFOTz4c2tZ7vy+miBoAfia+XCnYTXpcW+wiQ2y4NQAPVkONhVF2dMNAxFwDGk+Z/d+
+         dq5f6PVEjR9R4zkFHLw8kr6+c6teQz4CZhGLRz9RKFhlVFatHBiq2g/tAzG7xF5xTHHK
+         k3sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wTlBrCwJCiqm4qgW+Kqhp/t9YirXcw72f/o9+Q65cAk=;
+        b=TUleVunN69KIFsrPiWF3hgZVXQcDsmNOZHByGMGvHT86LvcdR4Fb0aXY73xsQva/kB
+         QSG8EvEMXBvj59jOytMZtUN7pubyoxVYNIaoBFJnX/y/vY+RwjhBFodknErV24jnHQJU
+         Im/tIFqq2NYeNjWqDKi2qiTDdKMuFi9u1QRgavwcnD7P7x5uD+tlEGdjiIZktW/FH91F
+         1Y1iuUxAFz48872J/0lesZ+k02oCrVm5k2wAD6wenAqgkTZlgEp52PyjFudyQ5MUR4oF
+         htbEF11Q3YWXr51sDxZxD44nqE7Sch4KecNeSuw0J4U2dtXmtMPSCGp43e/DY2ykm3+z
+         elLA==
+X-Gm-Message-State: ACrzQf1tOkve5R/Owv3dtBjjG9Pq1G2BxXYHhgBQomlL9Qk2M/XmxEnV
+        fln0VkzDX++qehz8WbOzTk3FpA==
+X-Google-Smtp-Source: AMsMyM7dnb8oQgpA8KuYsV3JG5P6fLYeKC/AhK7EE2xTFrF/m+jhFnTTpZnjyRnFquteWADRb8Ao2w==
+X-Received: by 2002:a05:6a02:113:b0:43f:3554:ff9c with SMTP id bg19-20020a056a02011300b0043f3554ff9cmr12446892pgb.578.1666829383137;
+        Wed, 26 Oct 2022 17:09:43 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id q11-20020a170902f34b00b00177324a7862sm3456406ple.45.2022.10.26.17.09.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 17:09:42 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 00:09:38 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Wei Wang <wei.w.wang@intel.com>
+Cc:     pbonzini@redhat.com, dmatlack@google.com, vipinsh@google.com,
+        ajones@ventanamicro.com, eric.auger@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 03/18] KVM: selftests/kvm_util: helper functions for
+ vcpus and threads
+Message-ID: <Y1nMQp11RKTDX7HX@google.com>
+References: <20221024113445.1022147-1-wei.w.wang@intel.com>
+ <20221024113445.1022147-4-wei.w.wang@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/knOGfgQCZ2MjfFsf6J2hAw+";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024113445.1022147-4-wei.w.wang@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/knOGfgQCZ2MjfFsf6J2hAw+
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Oct 24, 2022, Wei Wang wrote:
+> @@ -14,4 +15,23 @@
+>  	for (i = 0, vcpu = vm->vcpus[0];				\
+>  		vcpu && i < KVM_MAX_VCPUS; vcpu = vm->vcpus[++i])
+>  
+> +void __pthread_create_with_name(pthread_t *thread, const pthread_attr_t *attr,
 
-Hi all,
+Can these return pthread_t instead of taking them as a param and have a "void"
+return?  I'm pretty sure pthread_t is an integer type in most implementations,
+i.e. can be cheaply copied by value.
 
-Today's linux-next merge of the tip tree got a conflict in:
+> +			void *(*start_routine)(void *), void *arg, char *name);
 
-  arch/x86/net/bpf_jit_comp.c
+Add a typedef for the payload, both to make it harder to screw up, and to make the
+code more readable.  Does pthread really not provide one already?
 
-between commit:
+> +void pthread_create_with_name(pthread_t *thread,
+> +			void *(*start_routine)(void *), void *arg, char *name);
 
-  271de525e1d7 ("bpf: Remove prog->active check for bpf_lsm and bpf_iter")
+Align params, e.g.
 
-from the bpf-next tree and commit:
+void pthread_create_with_name(pthread_t *thread, void *(*start_routine)(void *),
+			      void *arg, char *name);
 
-  b2e9dfe54be4 ("x86/bpf: Emit call depth accounting if required")
+Poking out past the 80 char soft limit is much preferable to arbitrary indentation.
+Please fix this in all patches.
+  
+>  struct userspace_mem_regions {
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 1f69f5ca8356..ba3e774087fb 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -2006,3 +2006,175 @@ void __vm_get_stat(struct kvm_vm *vm, const char *stat_name, uint64_t *data,
+>  		break;
+>  	}
+>  }
+> +
+> +/*
+> + * Create a named thread with user's attribute
+> + *
+> + * Input Args:
+> + *   attr - the attribute of the thread to create
+> + *   start_routine - the routine to run in the thread context
+> + *   arg - the argument passed to start_routine
+> + *   name - the name of the thread
+> + *
+> + * Output Args:
+> + *   thread - the thread to be created
+> + *
+> + * Create a thread with a user specified name.
+> + */
 
-from the tip tree.
+Please don't add function comments, we're opportunistically removing the existing
+boilerplate ones as we go.  Most of the comments, like this one, add very little
+value as it's pretty obvious what the function does and what the params are.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+> +void __pthread_create_with_name(pthread_t *thread, const pthread_attr_t *attr,
+> +			void *(*start_routine)(void *), void *arg, char *name)
+> +{
+> +	int r;
+> +
+> +	r = pthread_create(thread, NULL, start_routine, arg);
+> +	TEST_ASSERT(!r, "thread(%s) creation failed, r = %d", name, r);
 
---=20
-Cheers,
-Stephen Rothwell
+Assuming 'r' is an errno, pretty print its name with strerror().
 
-diff --cc arch/x86/net/bpf_jit_comp.c
-index cec5195602bc,f46b62029d91..000000000000
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@@ -11,8 -11,8 +11,9 @@@
-  #include <linux/bpf.h>
-  #include <linux/memory.h>
-  #include <linux/sort.h>
- +#include <linux/init.h>
-  #include <asm/extable.h>
-+ #include <asm/ftrace.h>
-  #include <asm/set_memory.h>
-  #include <asm/nospec-branch.h>
-  #include <asm/text-patching.h>
-@@@ -1930,7 -1869,7 +1948,7 @@@ static int invoke_bpf_prog(const struc
-  	/* arg2: lea rsi, [rbp - ctx_cookie_off] */
-  	EMIT4(0x48, 0x8D, 0x75, -run_ctx_off);
- =20
-- 	if (emit_call(&prog, bpf_trampoline_enter(p), prog))
- -	if (emit_rsb_call(&prog, enter, prog))
-++	if (emit_rsb_call(&prog, bpf_trampoline_enter(p), prog))
-  		return -EINVAL;
-  	/* remember prog start time returned by __bpf_prog_enter */
-  	emit_mov_reg(&prog, true, BPF_REG_6, BPF_REG_0);
-@@@ -1975,7 -1914,7 +1993,7 @@@
-  	emit_mov_reg(&prog, true, BPF_REG_2, BPF_REG_6);
-  	/* arg3: lea rdx, [rbp - run_ctx_off] */
-  	EMIT4(0x48, 0x8D, 0x55, -run_ctx_off);
-- 	if (emit_call(&prog, bpf_trampoline_exit(p), prog))
- -	if (emit_rsb_call(&prog, exit, prog))
-++	if (emit_rsb_call(&prog, bpf_trampoline_exit(p), prog))
-  		return -EINVAL;
- =20
-  	*pprog =3D prog;
+> +	r = pthread_setname_np(*thread, name);
+> +	TEST_ASSERT(!r, "thread(%s) setting name failed, r = %d", name, r);
 
---Sig_/knOGfgQCZ2MjfFsf6J2hAw+
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Same here.
 
------BEGIN PGP SIGNATURE-----
+> +}
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNZy6QACgkQAVBC80lX
-0Gxevwf8CHIR8+j2ijmBofaIwzb1hGRLnPeHCMnC2SOJBOp1I3urnq1yLvpgiZ3y
-fU1/tILbfeYBK/p1m0zx9lGORzoRp+fiCummqi+Cq14Pl+kbapW281p29A6IpRsK
-ztYSNG2K21XIxLx8AT4DpS1Pv54OxgelReIzp95nkZY+k3cBCCHbZVBzI1uQ/E2Q
-ssPOuAvnRTaPzmUsJSxWN/tHeMEjbvSeJBzhqjxOQ72q+ZEilCPPps92A3UycARy
-0an9nXQgpBYIKtMhqcusB6ko5045oQIuAyf882xhOAVCSpr2QEuzc8RIlw9JfaeL
-hEomNmxJUasby0Ww6rr6dNz5w3wmtQ==
-=5vz9
------END PGP SIGNATURE-----
+...
 
---Sig_/knOGfgQCZ2MjfFsf6J2hAw+--
+> +void vm_vcpu_threads_create(struct kvm_vm *vm,
+> +		void *(*start_routine)(void *), uint32_t private_data_size)
+
+I vote (very strongly) to not deal with allocating private data.  The private data
+isn't strictly related to threads, and the vast majority of callers don't need
+private data, i.e. the param is dead weight in most cases.
+
+And unless I'm missing something, it's trivial to move to a separate helper,
+though honestly even that seems like overkill.
+
+Wait, looking further, it already is a separate helper...  Forcing a bunch of
+callers to specify '0' just to eliminate one function call in a handful of cases
+is not a good tradeoff.
+
+> +void vm_vcpu_threads_private_data_alloc(struct kvm_vm *vm, uint32_t data_size)
+
+As above, this isn't strictly related to threads, e.g. vm_alloc_vcpu_private_data()
+
+> +{
+> +	struct kvm_vcpu *vcpu;
+> +	int i;
+> +
+> +	vm_iterate_over_vcpus(vm, vcpu, i) {
+> +		vcpu->private_data = calloc(1, data_size);
+> +		TEST_ASSERT(vcpu->private_data, "%s: failed", __func__);
+> +	}
+> +}
+> -- 
+> 2.27.0
+> 
