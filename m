@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FAFB610294
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C23F610295
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236937AbiJ0UUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 16:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53482 "EHLO
+        id S236946AbiJ0UU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 16:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236922AbiJ0UUR (ORCPT
+        with ESMTP id S236919AbiJ0UUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 16:20:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F83058DC3;
-        Thu, 27 Oct 2022 13:20:14 -0700 (PDT)
+        Thu, 27 Oct 2022 16:20:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97F758B41;
+        Thu, 27 Oct 2022 13:20:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E22B1B827D2;
-        Thu, 27 Oct 2022 20:20:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FF2EC433D6;
-        Thu, 27 Oct 2022 20:20:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9F4CCB827DA;
+        Thu, 27 Oct 2022 20:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 31D21C433D6;
+        Thu, 27 Oct 2022 20:20:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666902011;
-        bh=fXwRHTvifHzVJQC9PQl9RAw4GNfvERxStej/VR97D0E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YexniPzdsXEEYe1MbjnKlRTE5h0EyFev8VAXjj8Td/8u1YVUZIlWAlxFDnbE45LxX
-         HvKnsSvVep4bZCOUrbCb+mxrN4bDN2qEInarEEdMEhSklVmdzjjNsQvBH+xhYrh5vy
-         ytO2TcSxdio7Qc7WAjoUiEFZlWX5NqH2g8OdWhvABUToBh6XAWF/LKDttUa2sgVQC/
-         +CNpU+ZKt84c9XZuGD60dgo9XgqmOxN6FPxSRLROJ8vBnXBQDNNvA6GxpidWnKyNfL
-         VAjAfJFuxzbaY3C3i5ENDomLEm+Bo9HlCZWkA8QZVlhK6JMkf3/gxb+OXD4c7PI8yA
-         6ULeqYFu6YGBw==
-Date:   Thu, 27 Oct 2022 15:20:07 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v2 4/6] airo: Avoid clashing function prototypes
-Message-ID: <f125e61a737480c6e11005ea08684baea11e1b97.1666894751.git.gustavoars@kernel.org>
-References: <cover.1666894751.git.gustavoars@kernel.org>
+        s=k20201202; t=1666902016;
+        bh=ZClBDKmSul2J6eBYrXVa+3TTlcpda/c3o4gbuzfL+VY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=uP3C+yZWGEXZlt2NhZK7YjnytxLQTZ0y3sqJJlMfJ1tJQqGdDgk7O9atxEJ5tQkaj
+         hnIx+EKC7lf83UvvEqweZGNi9knp4BJ90DzEUkQzPbCObjoLCCTOgiPYLiiRfoZeVo
+         U/RqK3eK2NZ4IT9RfQ+bX86Zyu4qycqHWYmYw1lYEbR0kiK8pis4cTyifGGnmyyoW1
+         VPHOspUpVRXJgf8orOFKMD+biNWtgQgG+9LaP0Rt4KawbzyrEuL71mOv1PUSSq6a91
+         LsaY9b9vtW7bbd/wZzlyEb5qECPQOg2QqhDCzGaCudXRrx5BT4LbRItdavv/sY9bhx
+         NTKpwsLBcSzVQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0FC55C73FFC;
+        Thu, 27 Oct 2022 20:20:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1666894751.git.gustavoars@kernel.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2] bpf: Fix a typo in comment for DFS algorithm
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166690201606.3710.8435915135914904961.git-patchwork-notify@kernel.org>
+Date:   Thu, 27 Oct 2022 20:20:16 +0000
+References: <20221027034458.2925218-1-xukuohai@huaweicloud.com>
+In-Reply-To: <20221027034458.2925218-1-xukuohai@huaweicloud.com>
+To:     Xu Kuohai <xukuohai@huaweicloud.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,558 +59,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When built with Control Flow Integrity, function prototypes between
-caller and function declaration must match. These mismatches are visible
-at compile time with the new -Wcast-function-type-strict in Clang[1].
+Hello:
 
-Fix a total of 32 warnings like these:
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-../drivers/net/wireless/cisco/airo.c:7570:2: warning: cast from 'int (*)(struct net_device *, struct iw_request_info *, void *, char *)' to 'iw_handler' (aka 'int (*)(struct net_device *, struct iw_request_info *, union iwreq_data *, char *)') converts to incompatible function type [-Wcast-function-type-strict]
-        (iw_handler) airo_config_commit,        /* SIOCSIWCOMMIT */
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On Wed, 26 Oct 2022 23:44:58 -0400 you wrote:
+> From: Xu Kuohai <xukuohai@huawei.com>
+> 
+> There is a typo in comment for DFS algorithm in bpf/verifier.c. The top
+> element should not be popped until all its neighbors have been checked.
+> Fix it.
+> 
+> Fixes: 475fb78fbf48 ("bpf: verifier (add branch/goto checks)")
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> 
+> [...]
 
-The airo Wireless Extension handler callbacks (iw_handler) use a
-union for the data argument. Actually use the union and perform explicit
-member selection in the function body instead of having a function
-prototype mismatch. There are no resulting binary differences
-before/after changes.
+Here is the summary with links:
+  - [bpf-next,v2] bpf: Fix a typo in comment for DFS algorithm
+    https://git.kernel.org/bpf/bpf-next/c/b6d207999c35
 
-Link: https://github.com/KSPP/linux/issues/236
-Link: https://reviews.llvm.org/D134831 [1]
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
-Changes in v2:
- - Add RB tag from Kees.
-
-v1:
- - Link: https://lore.kernel.org/linux-hardening/ab0047382e6fd20c694e4ca14de8ca2c2a0e19d0.1666038048.git.gustavoars@kernel.org/
-
- drivers/net/wireless/cisco/airo.c | 204 ++++++++++++++++--------------
- 1 file changed, 108 insertions(+), 96 deletions(-)
-
-diff --git a/drivers/net/wireless/cisco/airo.c b/drivers/net/wireless/cisco/airo.c
-index 10daef81c355..cfa8d3f53482 100644
---- a/drivers/net/wireless/cisco/airo.c
-+++ b/drivers/net/wireless/cisco/airo.c
-@@ -4807,7 +4807,8 @@ static int get_dec_u16(char *buffer, int *start, int limit)
- }
- 
- static int airo_config_commit(struct net_device *dev,
--			      struct iw_request_info *info, void *zwrq,
-+			      struct iw_request_info *info,
-+			      union iwreq_data *wrqu,
- 			      char *extra);
- 
- static inline int sniffing_mode(struct airo_info *ai)
-@@ -5804,10 +5805,10 @@ static int airo_get_quality (StatusRid *status_rid, CapabilityRid *cap_rid)
-  */
- static int airo_get_name(struct net_device *dev,
- 			 struct iw_request_info *info,
--			 char *cwrq,
-+			 union iwreq_data *cwrq,
- 			 char *extra)
- {
--	strcpy(cwrq, "IEEE 802.11-DS");
-+	strcpy(cwrq->name, "IEEE 802.11-DS");
- 	return 0;
- }
- 
-@@ -5817,9 +5818,10 @@ static int airo_get_name(struct net_device *dev,
-  */
- static int airo_set_freq(struct net_device *dev,
- 			 struct iw_request_info *info,
--			 struct iw_freq *fwrq,
-+			 union iwreq_data *wrqu,
- 			 char *extra)
- {
-+	struct iw_freq *fwrq = &wrqu->freq;
- 	struct airo_info *local = dev->ml_priv;
- 	int rc = -EINPROGRESS;		/* Call commit handler */
- 
-@@ -5858,9 +5860,10 @@ static int airo_set_freq(struct net_device *dev,
-  */
- static int airo_get_freq(struct net_device *dev,
- 			 struct iw_request_info *info,
--			 struct iw_freq *fwrq,
-+			 union iwreq_data *wrqu,
- 			 char *extra)
- {
-+	struct iw_freq *fwrq = &wrqu->freq;
- 	struct airo_info *local = dev->ml_priv;
- 	StatusRid status_rid;		/* Card status info */
- 	int ch;
-@@ -5890,9 +5893,10 @@ static int airo_get_freq(struct net_device *dev,
-  */
- static int airo_set_essid(struct net_device *dev,
- 			  struct iw_request_info *info,
--			  struct iw_point *dwrq,
-+			  union iwreq_data *wrqu,
- 			  char *extra)
- {
-+	struct iw_point *dwrq = &wrqu->essid;
- 	struct airo_info *local = dev->ml_priv;
- 	SsidRid SSID_rid;		/* SSIDs */
- 
-@@ -5935,9 +5939,10 @@ static int airo_set_essid(struct net_device *dev,
-  */
- static int airo_get_essid(struct net_device *dev,
- 			  struct iw_request_info *info,
--			  struct iw_point *dwrq,
-+			  union iwreq_data *wrqu,
- 			  char *extra)
- {
-+	struct iw_point *dwrq = &wrqu->essid;
- 	struct airo_info *local = dev->ml_priv;
- 	StatusRid status_rid;		/* Card status info */
- 
-@@ -5963,9 +5968,10 @@ static int airo_get_essid(struct net_device *dev,
-  */
- static int airo_set_wap(struct net_device *dev,
- 			struct iw_request_info *info,
--			struct sockaddr *awrq,
-+			union iwreq_data *wrqu,
- 			char *extra)
- {
-+	struct sockaddr *awrq = &wrqu->ap_addr;
- 	struct airo_info *local = dev->ml_priv;
- 	Cmd cmd;
- 	Resp rsp;
-@@ -5998,9 +6004,10 @@ static int airo_set_wap(struct net_device *dev,
-  */
- static int airo_get_wap(struct net_device *dev,
- 			struct iw_request_info *info,
--			struct sockaddr *awrq,
-+			union iwreq_data *wrqu,
- 			char *extra)
- {
-+	struct sockaddr *awrq = &wrqu->ap_addr;
- 	struct airo_info *local = dev->ml_priv;
- 	StatusRid status_rid;		/* Card status info */
- 
-@@ -6019,9 +6026,10 @@ static int airo_get_wap(struct net_device *dev,
-  */
- static int airo_set_nick(struct net_device *dev,
- 			 struct iw_request_info *info,
--			 struct iw_point *dwrq,
-+			 union iwreq_data *wrqu,
- 			 char *extra)
- {
-+	struct iw_point *dwrq = &wrqu->data;
- 	struct airo_info *local = dev->ml_priv;
- 
- 	/* Check the size of the string */
-@@ -6042,9 +6050,10 @@ static int airo_set_nick(struct net_device *dev,
-  */
- static int airo_get_nick(struct net_device *dev,
- 			 struct iw_request_info *info,
--			 struct iw_point *dwrq,
-+			 union iwreq_data *wrqu,
- 			 char *extra)
- {
-+	struct iw_point *dwrq = &wrqu->data;
- 	struct airo_info *local = dev->ml_priv;
- 
- 	readConfigRid(local, 1);
-@@ -6061,9 +6070,10 @@ static int airo_get_nick(struct net_device *dev,
-  */
- static int airo_set_rate(struct net_device *dev,
- 			 struct iw_request_info *info,
--			 struct iw_param *vwrq,
-+			 union iwreq_data *wrqu,
- 			 char *extra)
- {
-+	struct iw_param *vwrq = &wrqu->bitrate;
- 	struct airo_info *local = dev->ml_priv;
- 	CapabilityRid cap_rid;		/* Card capability info */
- 	u8	brate = 0;
-@@ -6131,9 +6141,10 @@ static int airo_set_rate(struct net_device *dev,
-  */
- static int airo_get_rate(struct net_device *dev,
- 			 struct iw_request_info *info,
--			 struct iw_param *vwrq,
-+			 union iwreq_data *wrqu,
- 			 char *extra)
- {
-+	struct iw_param *vwrq = &wrqu->bitrate;
- 	struct airo_info *local = dev->ml_priv;
- 	StatusRid status_rid;		/* Card status info */
- 
-@@ -6153,9 +6164,10 @@ static int airo_get_rate(struct net_device *dev,
-  */
- static int airo_set_rts(struct net_device *dev,
- 			struct iw_request_info *info,
--			struct iw_param *vwrq,
-+			union iwreq_data *wrqu,
- 			char *extra)
- {
-+	struct iw_param *vwrq = &wrqu->rts;
- 	struct airo_info *local = dev->ml_priv;
- 	int rthr = vwrq->value;
- 
-@@ -6177,9 +6189,10 @@ static int airo_set_rts(struct net_device *dev,
-  */
- static int airo_get_rts(struct net_device *dev,
- 			struct iw_request_info *info,
--			struct iw_param *vwrq,
-+			union iwreq_data *wrqu,
- 			char *extra)
- {
-+	struct iw_param *vwrq = &wrqu->rts;
- 	struct airo_info *local = dev->ml_priv;
- 
- 	readConfigRid(local, 1);
-@@ -6196,9 +6209,9 @@ static int airo_get_rts(struct net_device *dev,
-  */
- static int airo_set_frag(struct net_device *dev,
- 			 struct iw_request_info *info,
--			 struct iw_param *vwrq,
--			 char *extra)
-+			 union iwreq_data *wrqu, char *extra)
- {
-+	struct iw_param *vwrq = &wrqu->frag;
- 	struct airo_info *local = dev->ml_priv;
- 	int fthr = vwrq->value;
- 
-@@ -6221,9 +6234,10 @@ static int airo_set_frag(struct net_device *dev,
-  */
- static int airo_get_frag(struct net_device *dev,
- 			 struct iw_request_info *info,
--			 struct iw_param *vwrq,
-+			 union iwreq_data *wrqu,
- 			 char *extra)
- {
-+	struct iw_param *vwrq = &wrqu->frag;
- 	struct airo_info *local = dev->ml_priv;
- 
- 	readConfigRid(local, 1);
-@@ -6240,9 +6254,10 @@ static int airo_get_frag(struct net_device *dev,
-  */
- static int airo_set_mode(struct net_device *dev,
- 			 struct iw_request_info *info,
--			 __u32 *uwrq,
-+			 union iwreq_data *uwrq,
- 			 char *extra)
- {
-+	__u32 mode = uwrq->mode;
- 	struct airo_info *local = dev->ml_priv;
- 	int reset = 0;
- 
-@@ -6250,7 +6265,7 @@ static int airo_set_mode(struct net_device *dev,
- 	if (sniffing_mode(local))
- 		reset = 1;
- 
--	switch(*uwrq) {
-+	switch (mode) {
- 		case IW_MODE_ADHOC:
- 			local->config.opmode &= ~MODE_CFG_MASK;
- 			local->config.opmode |= MODE_STA_IBSS;
-@@ -6303,7 +6318,7 @@ static int airo_set_mode(struct net_device *dev,
-  */
- static int airo_get_mode(struct net_device *dev,
- 			 struct iw_request_info *info,
--			 __u32 *uwrq,
-+			 union iwreq_data *uwrq,
- 			 char *extra)
- {
- 	struct airo_info *local = dev->ml_priv;
-@@ -6312,16 +6327,16 @@ static int airo_get_mode(struct net_device *dev,
- 	/* If not managed, assume it's ad-hoc */
- 	switch (local->config.opmode & MODE_CFG_MASK) {
- 		case MODE_STA_ESS:
--			*uwrq = IW_MODE_INFRA;
-+			uwrq->mode = IW_MODE_INFRA;
- 			break;
- 		case MODE_AP:
--			*uwrq = IW_MODE_MASTER;
-+			uwrq->mode = IW_MODE_MASTER;
- 			break;
- 		case MODE_AP_RPTR:
--			*uwrq = IW_MODE_REPEAT;
-+			uwrq->mode = IW_MODE_REPEAT;
- 			break;
- 		default:
--			*uwrq = IW_MODE_ADHOC;
-+			uwrq->mode = IW_MODE_ADHOC;
- 	}
- 
- 	return 0;
-@@ -6338,9 +6353,10 @@ static inline int valid_index(struct airo_info *ai, int index)
-  */
- static int airo_set_encode(struct net_device *dev,
- 			   struct iw_request_info *info,
--			   struct iw_point *dwrq,
-+			   union iwreq_data *wrqu,
- 			   char *extra)
- {
-+	struct iw_point *dwrq = &wrqu->encoding;
- 	struct airo_info *local = dev->ml_priv;
- 	int perm = (dwrq->flags & IW_ENCODE_TEMP ? 0 : 1);
- 	__le16 currentAuthType = local->config.authType;
-@@ -6437,9 +6453,10 @@ static int airo_set_encode(struct net_device *dev,
-  */
- static int airo_get_encode(struct net_device *dev,
- 			   struct iw_request_info *info,
--			   struct iw_point *dwrq,
-+			   union iwreq_data *wrqu,
- 			   char *extra)
- {
-+	struct iw_point *dwrq = &wrqu->encoding;
- 	struct airo_info *local = dev->ml_priv;
- 	int index = (dwrq->flags & IW_ENCODE_INDEX) - 1;
- 	int wep_key_len;
-@@ -6784,9 +6801,10 @@ static int airo_get_auth(struct net_device *dev,
-  */
- static int airo_set_txpow(struct net_device *dev,
- 			  struct iw_request_info *info,
--			  struct iw_param *vwrq,
-+			  union iwreq_data *wrqu,
- 			  char *extra)
- {
-+	struct iw_param *vwrq = &wrqu->txpower;
- 	struct airo_info *local = dev->ml_priv;
- 	CapabilityRid cap_rid;		/* Card capability info */
- 	int i;
-@@ -6821,9 +6839,10 @@ static int airo_set_txpow(struct net_device *dev,
-  */
- static int airo_get_txpow(struct net_device *dev,
- 			  struct iw_request_info *info,
--			  struct iw_param *vwrq,
-+			  union iwreq_data *wrqu,
- 			  char *extra)
- {
-+	struct iw_param *vwrq = &wrqu->txpower;
- 	struct airo_info *local = dev->ml_priv;
- 
- 	readConfigRid(local, 1);
-@@ -6841,9 +6860,10 @@ static int airo_get_txpow(struct net_device *dev,
-  */
- static int airo_set_retry(struct net_device *dev,
- 			  struct iw_request_info *info,
--			  struct iw_param *vwrq,
-+			  union iwreq_data *wrqu,
- 			  char *extra)
- {
-+	struct iw_param *vwrq = &wrqu->retry;
- 	struct airo_info *local = dev->ml_priv;
- 	int rc = -EINVAL;
- 
-@@ -6879,9 +6899,10 @@ static int airo_set_retry(struct net_device *dev,
-  */
- static int airo_get_retry(struct net_device *dev,
- 			  struct iw_request_info *info,
--			  struct iw_param *vwrq,
-+			  union iwreq_data *wrqu,
- 			  char *extra)
- {
-+	struct iw_param *vwrq = &wrqu->retry;
- 	struct airo_info *local = dev->ml_priv;
- 
- 	vwrq->disabled = 0;      /* Can't be disabled */
-@@ -6910,9 +6931,10 @@ static int airo_get_retry(struct net_device *dev,
-  */
- static int airo_get_range(struct net_device *dev,
- 			  struct iw_request_info *info,
--			  struct iw_point *dwrq,
-+			  union iwreq_data *wrqu,
- 			  char *extra)
- {
-+	struct iw_point *dwrq = &wrqu->data;
- 	struct airo_info *local = dev->ml_priv;
- 	struct iw_range *range = (struct iw_range *) extra;
- 	CapabilityRid cap_rid;		/* Card capability info */
-@@ -7036,9 +7058,9 @@ static int airo_get_range(struct net_device *dev,
-  */
- static int airo_set_power(struct net_device *dev,
- 			  struct iw_request_info *info,
--			  struct iw_param *vwrq,
--			  char *extra)
-+			  union iwreq_data *wrqu, char *extra)
- {
-+	struct iw_param *vwrq = &wrqu->power;
- 	struct airo_info *local = dev->ml_priv;
- 
- 	readConfigRid(local, 1);
-@@ -7094,9 +7116,10 @@ static int airo_set_power(struct net_device *dev,
-  */
- static int airo_get_power(struct net_device *dev,
- 			  struct iw_request_info *info,
--			  struct iw_param *vwrq,
-+			  union iwreq_data *wrqu,
- 			  char *extra)
- {
-+	struct iw_param *vwrq = &wrqu->power;
- 	struct airo_info *local = dev->ml_priv;
- 	__le16 mode;
- 
-@@ -7125,9 +7148,10 @@ static int airo_get_power(struct net_device *dev,
-  */
- static int airo_set_sens(struct net_device *dev,
- 			 struct iw_request_info *info,
--			 struct iw_param *vwrq,
-+			 union iwreq_data *wrqu,
- 			 char *extra)
- {
-+	struct iw_param *vwrq = &wrqu->sens;
- 	struct airo_info *local = dev->ml_priv;
- 
- 	readConfigRid(local, 1);
-@@ -7144,9 +7168,10 @@ static int airo_set_sens(struct net_device *dev,
-  */
- static int airo_get_sens(struct net_device *dev,
- 			 struct iw_request_info *info,
--			 struct iw_param *vwrq,
-+			 union iwreq_data *wrqu,
- 			 char *extra)
- {
-+	struct iw_param *vwrq = &wrqu->sens;
- 	struct airo_info *local = dev->ml_priv;
- 
- 	readConfigRid(local, 1);
-@@ -7164,9 +7189,10 @@ static int airo_get_sens(struct net_device *dev,
-  */
- static int airo_get_aplist(struct net_device *dev,
- 			   struct iw_request_info *info,
--			   struct iw_point *dwrq,
-+			   union iwreq_data *wrqu,
- 			   char *extra)
- {
-+	struct iw_point *dwrq = &wrqu->data;
- 	struct airo_info *local = dev->ml_priv;
- 	struct sockaddr *address = (struct sockaddr *) extra;
- 	struct iw_quality *qual;
-@@ -7242,7 +7268,7 @@ static int airo_get_aplist(struct net_device *dev,
-  */
- static int airo_set_scan(struct net_device *dev,
- 			 struct iw_request_info *info,
--			 struct iw_point *dwrq,
-+			 union iwreq_data *wrqu,
- 			 char *extra)
- {
- 	struct airo_info *ai = dev->ml_priv;
-@@ -7473,9 +7499,10 @@ static inline char *airo_translate_scan(struct net_device *dev,
-  */
- static int airo_get_scan(struct net_device *dev,
- 			 struct iw_request_info *info,
--			 struct iw_point *dwrq,
-+			 union iwreq_data *wrqu,
- 			 char *extra)
- {
-+	struct iw_point *dwrq = &wrqu->data;
- 	struct airo_info *ai = dev->ml_priv;
- 	BSSListElement *net;
- 	int err = 0;
-@@ -7517,7 +7544,7 @@ static int airo_get_scan(struct net_device *dev,
-  */
- static int airo_config_commit(struct net_device *dev,
- 			      struct iw_request_info *info,	/* NULL */
--			      void *zwrq,			/* NULL */
-+			      union iwreq_data *wrqu,		/* NULL */
- 			      char *extra)			/* NULL */
- {
- 	struct airo_info *local = dev->ml_priv;
-@@ -7567,61 +7594,46 @@ static const struct iw_priv_args airo_private_args[] = {
- 
- static const iw_handler		airo_handler[] =
- {
--	(iw_handler) airo_config_commit,	/* SIOCSIWCOMMIT */
--	(iw_handler) airo_get_name,		/* SIOCGIWNAME */
--	(iw_handler) NULL,			/* SIOCSIWNWID */
--	(iw_handler) NULL,			/* SIOCGIWNWID */
--	(iw_handler) airo_set_freq,		/* SIOCSIWFREQ */
--	(iw_handler) airo_get_freq,		/* SIOCGIWFREQ */
--	(iw_handler) airo_set_mode,		/* SIOCSIWMODE */
--	(iw_handler) airo_get_mode,		/* SIOCGIWMODE */
--	(iw_handler) airo_set_sens,		/* SIOCSIWSENS */
--	(iw_handler) airo_get_sens,		/* SIOCGIWSENS */
--	(iw_handler) NULL,			/* SIOCSIWRANGE */
--	(iw_handler) airo_get_range,		/* SIOCGIWRANGE */
--	(iw_handler) NULL,			/* SIOCSIWPRIV */
--	(iw_handler) NULL,			/* SIOCGIWPRIV */
--	(iw_handler) NULL,			/* SIOCSIWSTATS */
--	(iw_handler) NULL,			/* SIOCGIWSTATS */
--	iw_handler_set_spy,			/* SIOCSIWSPY */
--	iw_handler_get_spy,			/* SIOCGIWSPY */
--	iw_handler_set_thrspy,			/* SIOCSIWTHRSPY */
--	iw_handler_get_thrspy,			/* SIOCGIWTHRSPY */
--	(iw_handler) airo_set_wap,		/* SIOCSIWAP */
--	(iw_handler) airo_get_wap,		/* SIOCGIWAP */
--	(iw_handler) NULL,			/* -- hole -- */
--	(iw_handler) airo_get_aplist,		/* SIOCGIWAPLIST */
--	(iw_handler) airo_set_scan,		/* SIOCSIWSCAN */
--	(iw_handler) airo_get_scan,		/* SIOCGIWSCAN */
--	(iw_handler) airo_set_essid,		/* SIOCSIWESSID */
--	(iw_handler) airo_get_essid,		/* SIOCGIWESSID */
--	(iw_handler) airo_set_nick,		/* SIOCSIWNICKN */
--	(iw_handler) airo_get_nick,		/* SIOCGIWNICKN */
--	(iw_handler) NULL,			/* -- hole -- */
--	(iw_handler) NULL,			/* -- hole -- */
--	(iw_handler) airo_set_rate,		/* SIOCSIWRATE */
--	(iw_handler) airo_get_rate,		/* SIOCGIWRATE */
--	(iw_handler) airo_set_rts,		/* SIOCSIWRTS */
--	(iw_handler) airo_get_rts,		/* SIOCGIWRTS */
--	(iw_handler) airo_set_frag,		/* SIOCSIWFRAG */
--	(iw_handler) airo_get_frag,		/* SIOCGIWFRAG */
--	(iw_handler) airo_set_txpow,		/* SIOCSIWTXPOW */
--	(iw_handler) airo_get_txpow,		/* SIOCGIWTXPOW */
--	(iw_handler) airo_set_retry,		/* SIOCSIWRETRY */
--	(iw_handler) airo_get_retry,		/* SIOCGIWRETRY */
--	(iw_handler) airo_set_encode,		/* SIOCSIWENCODE */
--	(iw_handler) airo_get_encode,		/* SIOCGIWENCODE */
--	(iw_handler) airo_set_power,		/* SIOCSIWPOWER */
--	(iw_handler) airo_get_power,		/* SIOCGIWPOWER */
--	(iw_handler) NULL,			/* -- hole -- */
--	(iw_handler) NULL,			/* -- hole -- */
--	(iw_handler) NULL,			/* SIOCSIWGENIE */
--	(iw_handler) NULL,			/* SIOCGIWGENIE */
--	(iw_handler) airo_set_auth,		/* SIOCSIWAUTH */
--	(iw_handler) airo_get_auth,		/* SIOCGIWAUTH */
--	(iw_handler) airo_set_encodeext,	/* SIOCSIWENCODEEXT */
--	(iw_handler) airo_get_encodeext,	/* SIOCGIWENCODEEXT */
--	(iw_handler) NULL,			/* SIOCSIWPMKSA */
-+	IW_HANDLER(SIOCSIWCOMMIT,	airo_config_commit),
-+	IW_HANDLER(SIOCGIWNAME,		airo_get_name),
-+	IW_HANDLER(SIOCSIWFREQ,		airo_set_freq),
-+	IW_HANDLER(SIOCGIWFREQ,		airo_get_freq),
-+	IW_HANDLER(SIOCSIWMODE,		airo_set_mode),
-+	IW_HANDLER(SIOCGIWMODE,		airo_get_mode),
-+	IW_HANDLER(SIOCSIWSENS,		airo_set_sens),
-+	IW_HANDLER(SIOCGIWSENS,		airo_get_sens),
-+	IW_HANDLER(SIOCGIWRANGE,	airo_get_range),
-+	IW_HANDLER(SIOCSIWSPY,		iw_handler_set_spy),
-+	IW_HANDLER(SIOCGIWSPY,		iw_handler_get_spy),
-+	IW_HANDLER(SIOCSIWTHRSPY,	iw_handler_set_thrspy),
-+	IW_HANDLER(SIOCGIWTHRSPY,	iw_handler_get_thrspy),
-+	IW_HANDLER(SIOCSIWAP,		airo_set_wap),
-+	IW_HANDLER(SIOCGIWAP,		airo_get_wap),
-+	IW_HANDLER(SIOCGIWAPLIST,	airo_get_aplist),
-+	IW_HANDLER(SIOCSIWSCAN,		airo_set_scan),
-+	IW_HANDLER(SIOCGIWSCAN,		airo_get_scan),
-+	IW_HANDLER(SIOCSIWESSID,	airo_set_essid),
-+	IW_HANDLER(SIOCGIWESSID,	airo_get_essid),
-+	IW_HANDLER(SIOCSIWNICKN,	airo_set_nick),
-+	IW_HANDLER(SIOCGIWNICKN,	airo_get_nick),
-+	IW_HANDLER(SIOCSIWRATE,		airo_set_rate),
-+	IW_HANDLER(SIOCGIWRATE,		airo_get_rate),
-+	IW_HANDLER(SIOCSIWRTS,		airo_set_rts),
-+	IW_HANDLER(SIOCGIWRTS,		airo_get_rts),
-+	IW_HANDLER(SIOCSIWFRAG,		airo_set_frag),
-+	IW_HANDLER(SIOCGIWFRAG,		airo_get_frag),
-+	IW_HANDLER(SIOCSIWTXPOW,	airo_set_txpow),
-+	IW_HANDLER(SIOCGIWTXPOW,	airo_get_txpow),
-+	IW_HANDLER(SIOCSIWRETRY,	airo_set_retry),
-+	IW_HANDLER(SIOCGIWRETRY,	airo_get_retry),
-+	IW_HANDLER(SIOCSIWENCODE,	airo_set_encode),
-+	IW_HANDLER(SIOCGIWENCODE,	airo_get_encode),
-+	IW_HANDLER(SIOCSIWPOWER,	airo_set_power),
-+	IW_HANDLER(SIOCGIWPOWER,	airo_get_power),
-+	IW_HANDLER(SIOCSIWAUTH,		airo_set_auth),
-+	IW_HANDLER(SIOCGIWAUTH,		airo_get_auth),
-+	IW_HANDLER(SIOCSIWENCODEEXT,	airo_set_encodeext),
-+	IW_HANDLER(SIOCGIWENCODEEXT,	airo_get_encodeext),
- };
- 
- /* Note : don't describe AIROIDIFC and AIROOLDIDIFC in here.
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
