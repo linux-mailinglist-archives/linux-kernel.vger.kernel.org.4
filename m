@@ -2,121 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2485B60F5DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FCBA60F5E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235202AbiJ0LEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 07:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
+        id S234753AbiJ0LFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 07:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233971AbiJ0LEe (ORCPT
+        with ESMTP id S233971AbiJ0LFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 07:04:34 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511FF5F4D;
-        Thu, 27 Oct 2022 04:04:33 -0700 (PDT)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MyjVT4VnbzHv0F;
-        Thu, 27 Oct 2022 19:04:17 +0800 (CST)
-Received: from [10.174.178.171] (10.174.178.171) by
- kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 19:04:30 +0800
-Subject: Re: [PATCH net v2] tcp: reset tp->sacked_out when sack is enabled
-From:   "luwei (O)" <luwei32@huawei.com>
-To:     <edumazet@google.com>, <davem@davemloft.net>,
-        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <xemul@parallels.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <ovzxemul@gmail.com>, <ptikhomirov@virtuozzo.com>,
-        <den@virtuozzo.com>
-References: <20221027114930.137735-1-luwei32@huawei.com>
-Message-ID: <a4a6186e-e5e7-f9e9-3ba9-b9b8a9a1f37e@huawei.com>
-Date:   Thu, 27 Oct 2022 19:04:29 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Thu, 27 Oct 2022 07:05:50 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D503DD886
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 04:05:49 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso1105316pjc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 04:05:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=XEwRhdQJcdc4xZoLtd367feLEMlETLt1yb2FFn/p5XA=;
+        b=YP/O5W/XhBIROQVWOlPHb/VksUkA9NLH4PIHnj1VW/THheH22UE4AFCOq/aM/RsZpt
+         ldzum9OUFrBGbRAwl8jeCOaw7knYL7AEWs158PnAf27trfSec3WI/JeZrGmc887v/WwV
+         KqhdVy8rlClRc0To4fOfeHMCofppIYlmVTD4qlE4CwNF0S3ptrOOci9HQPZCwLC1vCw4
+         V4qRpKaCW5O8VTsk+/6xfFbd6/1VRGRbE59vjLMnUg65qC7FPrjI3m5VVtiAR47i6CvJ
+         8nog5gjiQbUslWsZZOsmBDeSG5KDPjbIG2lVeJbSBQjkvcqtJC8UYkUuh2R1c2Eeydzn
+         GQQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XEwRhdQJcdc4xZoLtd367feLEMlETLt1yb2FFn/p5XA=;
+        b=GOIVQrfgofx6RjMb68H0q2LCklk3eUqjj1gxGpG6SSgwSGklBNiMTPNoCuHQAlCyqt
+         jTzKHngn4wJk7v6HXUnFMUoDycIo4hOcFAmZX0OYD6o1BEjRJa2QyvgYX922Y/j7DRRt
+         pvD8AaxzdgrZxuh2/qrZl3lM4XxKBJNOlGevnv1l/iT/rlu1rfsthi50xbz5npbjAIa1
+         sBgtnz7LN+Y50hEwqpz1HROLbzSKqPXT00jvovkeAolK5DjCzmZqbxCQAEp/NEpCbMG5
+         ik4VNFKDSpe9SAASUtHF1P8lv5t2LA9MM8f/djEWwxQSSHvjtuvpmyS7jzn4oPXK5hHX
+         pIGQ==
+X-Gm-Message-State: ACrzQf2+l/4RGn8/WfaAYA5QFBB1BaIwB/jPT15trRyEC2+HIuWCm9WY
+        sivBz4r7VzfPWkU75RU4+wL9
+X-Google-Smtp-Source: AMsMyM7kzSGbqXsxZ1bo/hrYc02Ge8C4ogqMxcjTXdPJQ+1Awiz3BfhKLShVOsvOX7HAavrf04IveQ==
+X-Received: by 2002:a17:902:ebc4:b0:186:b32c:4ce5 with SMTP id p4-20020a170902ebc400b00186b32c4ce5mr17564012plg.74.1666868748462;
+        Thu, 27 Oct 2022 04:05:48 -0700 (PDT)
+Received: from thinkpad ([117.202.186.162])
+        by smtp.gmail.com with ESMTPSA id iz15-20020a170902ef8f00b00186a1b243basm916705plb.226.2022.10.27.04.05.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 04:05:47 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 16:35:40 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Ben Dooks <ben.dooks@codethink.co.uk>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        Bjorn Helgaas <helgaas@kernel.org>, lpieralisi@kernel.org,
+        Vidya Sagar <vidyas@nvidia.com>, jingoohan1@gmail.com,
+        gustavo.pimentel@synopsys.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, treding@nvidia.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
+ logging
+Message-ID: <20221027110540.GB76627@thinkpad>
+References: <20221018164329.GA3808783@bhelgaas>
+ <8670e757-7275-57eb-3f5c-0a21ba354e37@nvidia.com>
+ <6bba0876-3002-0614-5aeb-c4cf901938ca@codethink.co.uk>
 MIME-Version: 1.0
-In-Reply-To: <20221027114930.137735-1-luwei32@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.171]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500015.china.huawei.com (7.221.188.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <6bba0876-3002-0614-5aeb-c4cf901938ca@codethink.co.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-please ignore this patch�� I forgot to change the title
+On Thu, Oct 27, 2022 at 10:55:34AM +0100, Ben Dooks wrote:
+> On 26/10/2022 12:39, Jon Hunter wrote:
+> > Hi Lorenzo,
+> > 
+> > On 18/10/2022 17:43, Bjorn Helgaas wrote:
+> > > On Tue, Oct 18, 2022 at 07:21:54AM +0100, Jon Hunter wrote:
+> > > > Hi Bjorn,
+> > > > 
+> > > > On 13/09/2022 11:12, Vidya Sagar wrote:
+> > > > > Some of the platforms (like Tegra194 and Tegra234) have open slots and
+> > > > > not having an endpoint connected to the slot is not an error.
+> > > > > So, changing the macro from dev_err to dev_info to log the event.
+> > > > > 
+> > > > > Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+> > > > > ---
+> > > > >    drivers/pci/controller/dwc/pcie-designware.c | 2 +-
+> > > > >    1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > 
+> > > > > diff --git a/drivers/pci/controller/dwc/pcie-designware.c
+> > > > > b/drivers/pci/controller/dwc/pcie-designware.c
+> > > > > index 650a7f22f9d0..25154555aa7a 100644
+> > > > > --- a/drivers/pci/controller/dwc/pcie-designware.c
+> > > > > +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> > > > > @@ -456,7 +456,7 @@ int dw_pcie_wait_for_link(struct dw_pcie *pci)
+> > > > >        }
+> > > > >        if (retries >= LINK_WAIT_MAX_RETRIES) {
+> > > > > -        dev_err(pci->dev, "Phy link never came up\n");
+> > > > > +        dev_info(pci->dev, "Phy link never came up\n");
+> > > > >            return -ETIMEDOUT;
+> > > > >        }
+> > > > 
+> > > > 
+> > > > Are you OK to take this change?
+> > > 
+> > > When this came up, Lorenzo was in the middle of a big move and I was
+> > > covering for him while he was unavailable.  But he's back, and I'm
+> > > sure he will resolve this soon.
+> > > 
+> > > Personally I'm OK either way.
+> > > 
+> > > Bjorn
+> > 
+> > 
+> > Can we come to a conclusion on this?
+> > 
+> > We have tests that fail when errors/warning messages are reported. We
+> > can choose to ignore these errors, but given that this is not an error
+> > in this case, we were thinking it is better to make it informational.
+> 
+> Is there any hardware presence detect available to just avoid even
+> trying to bring a link up on an disconnected port?
+> 
 
-�� 2022/10/27 7:49 PM, Lu Wei д��:
-> If setsockopt with option name of TCP_REPAIR_OPTIONS and opt_code
-> of TCPOPT_SACK_PERM is called to enable sack after data is sent
-> and before data is acked, it will trigger a warning in function
-> tcp_verify_left_out() as follows:
->
-> ============================================
-> WARNING: CPU: 8 PID: 0 at net/ipv4/tcp_input.c:2132
-> tcp_timeout_mark_lost+0x154/0x160
-> tcp_enter_loss+0x2b/0x290
-> tcp_retransmit_timer+0x50b/0x640
-> tcp_write_timer_handler+0x1c8/0x340
-> tcp_write_timer+0xe5/0x140
-> call_timer_fn+0x3a/0x1b0
-> __run_timers.part.0+0x1bf/0x2d0
-> run_timer_softirq+0x43/0xb0
-> __do_softirq+0xfd/0x373
-> __irq_exit_rcu+0xf6/0x140
->
-> This warning occurs in several steps:
-> Step1. If sack is not enabled, when server receives dup-ack,
->         it calls tcp_add_reno_sack() to increase tp->sacked_out.
->
-> Step2. Setsockopt() is called to enable sack
->
-> Step3. The retransmit timer expires, it calls tcp_timeout_mark_lost()
->         to increase tp->lost_out but not clear tp->sacked_out because
->         sack is enabled and tcp_is_reno() is false.
->
-> So tp->left_out is increased repeatly in Step1 and Step3 and it is
-> greater than tp->packets_out and trigger the warning. In function
-> tcp_timeout_mark_lost(), tp->sacked_out will be cleared if Step2 not
-> happen and the warning will not be triggered. As suggested by Denis
-> and Eric, TCP_REPAIR_OPTIONS should be prohibited if data was already
-> sent.
->
-> socket-tcp tests in CRIU has been tested as follows:
-> $ sudo ./test/zdtm.py run -t zdtm/static/socket-tcp*  --keep-going \
->         --ignore-taint
->
-> socket-tcp* represent all socket-tcp tests in test/zdtm/static/.
->
-> Fixes: b139ba4e90dc ("tcp: Repair connection-time negotiated parameters")
-> Signed-off-by: Lu Wei <luwei32@huawei.com>
-> ---
->   net/ipv4/tcp.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> index ef14efa1fb70..ef876e70f7fe 100644
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
-> @@ -3647,7 +3647,7 @@ int do_tcp_setsockopt(struct sock *sk, int level, int optname,
->   	case TCP_REPAIR_OPTIONS:
->   		if (!tp->repair)
->   			err = -EINVAL;
-> -		else if (sk->sk_state == TCP_ESTABLISHED)
-> +		else if (sk->sk_state == TCP_ESTABLISHED && !tp->packets_out)
->   			err = tcp_repair_options_est(sk, optval, optlen);
->   		else
->   			err = -EPERM;
+PRSNT pin is not available on all form factors sadly.
+
+Thanks,
+Mani
+
+> 
+> -- 
+> Ben Dooks				http://www.codethink.co.uk/
+> Senior Engineer				Codethink - Providing Genius
+> 
+> https://www.codethink.co.uk/privacy.html
+> 
 
 -- 
-Best Regards,
-Lu Wei
-
+மணிவண்ணன் சதாசிவம்
