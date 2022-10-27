@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE9A60FB83
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F335A60FB8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236474AbiJ0PLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 11:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56830 "EHLO
+        id S236335AbiJ0PLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 11:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236088AbiJ0PJS (ORCPT
+        with ESMTP id S236132AbiJ0PJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 27 Oct 2022 11:09:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE38E18F937
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:09:15 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C9418E73F;
+        Thu, 27 Oct 2022 08:09:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C300C623C1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 15:09:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E617C433D7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63A02623A7;
+        Thu, 27 Oct 2022 15:09:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D64C0C433D6;
         Thu, 27 Oct 2022 15:09:15 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1oo4Ve-00Bvhr-2p;
-        Thu, 27 Oct 2022 11:09:30 -0400
-Message-ID: <20221027150930.702028779@goodmis.org>
+        id 1oo4Vf-00BviQ-0B;
+        Thu, 27 Oct 2022 11:09:31 -0400
+Message-ID: <20221027150930.891623466@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Thu, 27 Oct 2022 11:05:54 -0400
+Date:   Thu, 27 Oct 2022 11:05:55 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Stephen Boyd <sboyd@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Austin Kim <austin.kim@lge.com>,
-        alsa-devel@alsa-project.org
-Subject: [RFC][PATCH v2 29/31] timers: ALSA: Use del_timer_shutdown() before freeing timer
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-edac@vger.kernel.org
+Subject: [RFC][PATCH v2 30/31] timers: x86/mce: Use __init_timer() for resetting timers
 References: <20221027150525.753064657@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,45 +54,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Before a timer is freed, del_timer_shutdown() must be called.
+DEBUG_OBJECTS_TIMERS is now checking if a timer is ever enqueued, and if
+so, it must call del_timer_shutdown() before freeing, otherwise
+debug objects will trigger. This requires that once a timer is initialized
+(and initialized for debug objects) it must not be re-initialized using
+timer_setup(), as that will call the debug objects initialization code
+again and trigger a bug if it was ever used.
+
+As the mce reinitializes its timers on CPU hotplug, it must use
+__init_timer() instead of timer_setup(), which will only initialize the
+debug objects once.
 
 Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
 
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.com>
-Cc: Austin Kim <austin.kim@lge.com>
-Cc: alsa-devel@alsa-project.org
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: linux-edac@vger.kernel.org
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- sound/i2c/other/ak4117.c | 2 +-
- sound/synth/emux/emux.c  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/kernel/cpu/mce/core.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/sound/i2c/other/ak4117.c b/sound/i2c/other/ak4117.c
-index 1bc43e927d82..5269ab7321a4 100644
---- a/sound/i2c/other/ak4117.c
-+++ b/sound/i2c/other/ak4117.c
-@@ -47,7 +47,7 @@ static void reg_dump(struct ak4117 *ak4117)
- 
- static void snd_ak4117_free(struct ak4117 *chip)
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 2c8ec5c71712..d2653c7d40b3 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -2051,14 +2051,24 @@ static void __mcheck_cpu_setup_timer(void)
  {
--	del_timer_sync(&chip->timer);
-+	del_timer_shutdown(&chip->timer);
- 	kfree(chip);
+ 	struct timer_list *t = this_cpu_ptr(&mce_timer);
+ 
+-	timer_setup(t, mce_timer_fn, TIMER_PINNED);
++	/*
++	 * timer_setup() may only be used on a timer for the
++	 * first time it is initialized. This resets the
++	 * timer on CPU hotplug, so use __init_timer() instead.
++	 */
++	__init_timer(t, mce_timer_fn, TIMER_PINNED);
  }
  
-diff --git a/sound/synth/emux/emux.c b/sound/synth/emux/emux.c
-index a870759d179e..a43025f466bb 100644
---- a/sound/synth/emux/emux.c
-+++ b/sound/synth/emux/emux.c
-@@ -129,7 +129,7 @@ int snd_emux_free(struct snd_emux *emu)
- 	if (! emu)
- 		return -EINVAL;
+ static void __mcheck_cpu_init_timer(void)
+ {
+ 	struct timer_list *t = this_cpu_ptr(&mce_timer);
  
--	del_timer_sync(&emu->tlist);
-+	del_timer_shutdown(&emu->tlist);
+-	timer_setup(t, mce_timer_fn, TIMER_PINNED);
++	/*
++	 * timer_setup() may only be used on a timer for the
++	 * first time it is initialized. This resets the
++	 * timer on CPU hotplug, so use __init_timer() instead.
++	 */
++	__init_timer(t, mce_timer_fn, TIMER_PINNED);
+ 	mce_start_timer(t);
+ }
  
- 	snd_emux_proc_free(emu);
- 	snd_emux_delete_virmidi(emu);
 -- 
 2.35.1
