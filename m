@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9595860EF00
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 06:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A94A560EF01
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 06:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233987AbiJ0E1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 00:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
+        id S233827AbiJ0E11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 00:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234127AbiJ0E1O (ORCPT
+        with ESMTP id S234187AbiJ0E1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 00:27:14 -0400
+        Thu, 27 Oct 2022 00:27:16 -0400
 Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3657713C1D7
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 21:27:07 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id t10-20020a17090a4e4a00b0020af4bcae10so342208pjl.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 21:27:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2282140E5F
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 21:27:09 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so5088118pjc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 21:27:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZXAqqjDk6mAz2KU4pc8JUXu1b5D+3y6f+8lsfEOMErU=;
-        b=WngvKc8vcBYMk1kZ5arHHYitYLIPzMf9lvgsPMzCnmgpIOkw/9/8hqJ7boohJPjK84
-         1/GpQJvSc9hWAZAbj89XueIUHcvodWbahm+jty7rdLIhluMQy7c2Agh3CZZ8EztEsHT5
-         xkqhhdRhVa3ztF3+mmlNK9my9cEQZaqSq6j54=
+        bh=J+4diO4tSVOFVgnXFSt8zIWx9H1y7/ENZOnwMcOSb2Q=;
+        b=cn9fO+L4ylQungziAbx0awEs0vb/rKJImh058JzWlfF+li8hh8QOCkIy7ev44qIVZl
+         k59U8YOl63gc23DdX2UTbPMidbjb9WxTXcI/kNjWCc7ayygy6Erb5iJfC4lOgp4O1d0O
+         /G3x/L16VlMAa5SzTaoytD/pyczoCa/jU8X3g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZXAqqjDk6mAz2KU4pc8JUXu1b5D+3y6f+8lsfEOMErU=;
-        b=cBZh5Az70za53V893hJIEZXHO0W9C8oHBLOdgKF5AquJ56jurOGoxbY5hdRsYviMdE
-         6YxLBeeVDnR3mOoeLPYwIHwFnJuGT0Hm8/CjsYaJovHZpiFdeuUQ9uYwkwq94L6Ox9Bj
-         3qQMErI3ovidTjWyMA+G4aO2S0XcF7c83SmkTGFTLffQKzRMkZIx540IdxJw3h0STe2r
-         XHJoqinVbSu5L79dZbRo3KQew4g0XOS2MhRpID2B3VQhs5GYvyGOdJfYCh7AqE/hZi1a
-         wNoSGVGF0krdBzMYauyY3I2VbsN5JIfidbIvCUlok/46Gy9H3PYshbe7qpk5stj2PQ5C
-         Q8AA==
-X-Gm-Message-State: ACrzQf3auyyZTZnLpATr9B1JwOk2MIJFN64VNDsfMWQJmWZzGAsXIhCx
-        +6PwkKAeu+bREGwG9LvpxZzL1Q==
-X-Google-Smtp-Source: AMsMyM7PNp0OP2QcmW90+E2XrzDzR0wbvfLWMoR4FKeUYoOPqf84Z//D7HEkMOLtbVS2Ygqpvg0hAA==
-X-Received: by 2002:a17:90b:1b0b:b0:20d:7c31:e75d with SMTP id nu11-20020a17090b1b0b00b0020d7c31e75dmr7711106pjb.101.1666844826902;
-        Wed, 26 Oct 2022 21:27:06 -0700 (PDT)
+        bh=J+4diO4tSVOFVgnXFSt8zIWx9H1y7/ENZOnwMcOSb2Q=;
+        b=Fi3K0M0GAxGrqWwpCX/HEV0E0cTpRQ1Xoo+e44qfOIqTowgg+LqlyWwYhe+sbiRvtj
+         Q5bjbRZDRoK8SVCNZ4r2tqMUB3Wr1EFfuBENV6ESi/OmtOwCeOlObh4s8V9usxT6xGbu
+         f9klD52ISJpXa5sJy59ddqehJjqZxp+3VPeF/fAHww4g3Z0WDLc93mSzpb4UpeQkuZK6
+         v3vW/yy6YSdD0Yuq9kG4aQpXEem5Zbs2+vUqhJ9ixLiCFQRNkjHu3oZ7T8/w9WPJPlDO
+         5JW7e4pzU+cQ5+LVR4TMSm5zeM7SoW+aHRoc5KfEpLVTCy1BDk5AdCEFRQcrZmFkn4Bw
+         SKVA==
+X-Gm-Message-State: ACrzQf2ss4YY0WT9VTBArd0IcRaojXAQnaObCQbl2/aknGpjlQVnZuIF
+        QBMs2m0bhsz3ggUC/bytI+2H2Q==
+X-Google-Smtp-Source: AMsMyM7v1jym/Cfi8DjTcdl/L23EwROOmnJ6NDSPAaf1P/bpFyCsr1yAR0pZjfjcTePtikPBXXdinQ==
+X-Received: by 2002:a17:90b:3b4c:b0:213:f05:6a8 with SMTP id ot12-20020a17090b3b4c00b002130f0506a8mr7907854pjb.108.1666844829155;
+        Wed, 26 Oct 2022 21:27:09 -0700 (PDT)
 Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:30f2:4501:65fa:df12])
-        by smtp.gmail.com with ESMTPSA id w23-20020aa79557000000b00565c8634e55sm203140pfq.135.2022.10.26.21.27.05
+        by smtp.gmail.com with ESMTPSA id w23-20020aa79557000000b00565c8634e55sm203140pfq.135.2022.10.26.21.27.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 21:27:06 -0700 (PDT)
+        Wed, 26 Oct 2022 21:27:08 -0700 (PDT)
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Minchan Kim <minchan@kernel.org>
 Cc:     Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCHv3 4/9] zsmalloc: make huge class watermark zs_pool member
-Date:   Thu, 27 Oct 2022 13:26:46 +0900
-Message-Id: <20221027042651.234524-5-senozhatsky@chromium.org>
+Subject: [PATCHv3 5/9] zram: huge size watermark cannot be global
+Date:   Thu, 27 Oct 2022 13:26:47 +0900
+Message-Id: <20221027042651.234524-6-senozhatsky@chromium.org>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
 In-Reply-To: <20221027042651.234524-1-senozhatsky@chromium.org>
 References: <20221027042651.234524-1-senozhatsky@chromium.org>
@@ -69,65 +69,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We will permit per-pool configuration of pages per-zspage value,
-which changes characteristics of the classes and moves around
-huge class size watermark. Thus huge class size needs to be
-a per-pool variable.
+ZRAM will pass pool specific limit on number of pages
+per-zspages which will affect pool's characteristics.
+Namely huge size class watermark value. Move huge_class_size
+to struct zram, because this value now can be unique to the
+pool (zram device).
 
 Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
- mm/zsmalloc.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/block/zram/zram_drv.c | 13 +++----------
+ drivers/block/zram/zram_drv.h |  5 +++++
+ 2 files changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index d4f68fba746b..cab8080e2fc6 100644
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -178,7 +178,6 @@ static struct dentry *zs_stat_root;
-  * (see: fix_fullness_group())
-  */
- static const int fullness_threshold_frac = 4;
+diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+index fd31beb6491a..90b0c66bbd5b 100644
+--- a/drivers/block/zram/zram_drv.c
++++ b/drivers/block/zram/zram_drv.c
+@@ -50,12 +50,6 @@ static const char *default_comp_algs[ZRAM_MAX_ZCOMPS] = {
+ 
+ /* Module params (documentation at end) */
+ static unsigned int num_devices = 1;
+-/*
+- * Pages that compress to sizes equals or greater than this are stored
+- * uncompressed in memory.
+- */
 -static size_t huge_class_size;
+-
+ static const struct block_device_operations zram_devops;
  
- struct size_class {
- 	spinlock_t lock;
-@@ -227,6 +226,7 @@ struct zs_pool {
+ static void zram_free_page(struct zram *zram, size_t index);
+@@ -1259,8 +1253,7 @@ static bool zram_meta_alloc(struct zram *zram, u64 disksize)
+ 		return false;
+ 	}
  
- 	u32 num_size_classes;
- 	u32 min_alloc_size;
-+	size_t huge_class_size;
- 
- 	struct zs_pool_stats stats;
- 
-@@ -1350,7 +1350,7 @@ EXPORT_SYMBOL_GPL(zs_unmap_object);
-  */
- size_t zs_huge_class_size(struct zs_pool *pool)
- {
--	return huge_class_size;
-+	return pool->huge_class_size;
+-	if (!huge_class_size)
+-		huge_class_size = zs_huge_class_size(zram->mem_pool);
++	zram->huge_class_size = zs_huge_class_size(zram->mem_pool);
+ 	return true;
  }
- EXPORT_SYMBOL_GPL(zs_huge_class_size);
  
-@@ -2264,8 +2264,8 @@ struct zs_pool *zs_create_pool(const char *name)
- 		 * endup in the huge class.
- 		 */
- 		if (pages_per_zspage != 1 && objs_per_zspage != 1 &&
--				!huge_class_size) {
--			huge_class_size = size;
-+				!pool->huge_class_size) {
-+			pool->huge_class_size = size;
- 			/*
- 			 * The object uses ZS_HANDLE_SIZE bytes to store the
- 			 * handle. We need to subtract it, because zs_malloc()
-@@ -2275,7 +2275,7 @@ struct zs_pool *zs_create_pool(const char *name)
- 			 * class because it grows by ZS_HANDLE_SIZE extra bytes
- 			 * right before class lookup.
- 			 */
--			huge_class_size -= (ZS_HANDLE_SIZE - 1);
-+			pool->huge_class_size -= (ZS_HANDLE_SIZE - 1);
- 		}
+@@ -1488,7 +1481,7 @@ static int __zram_bvec_write(struct zram *zram, struct bio_vec *bvec,
+ 		return ret;
+ 	}
  
- 		/*
+-	if (comp_len >= huge_class_size)
++	if (comp_len >= zram->huge_class_size)
+ 		comp_len = PAGE_SIZE;
+ 	/*
+ 	 * handle allocation has 2 paths:
+@@ -1665,7 +1658,7 @@ static int zram_recompress(struct zram *zram, u32 index, struct page *page,
+ 	 * in a way that will save us memory. Mark the object so that we
+ 	 * don't attempt to re-compress it again (RECOMP_SKIP).
+ 	 */
+-	if (comp_len_next >= huge_class_size ||
++	if (comp_len_next >= zram->huge_class_size ||
+ 	    comp_len_next >= comp_len_prev ||
+ 	    class_index_next >= class_index_prev ||
+ 	    ret) {
+diff --git a/drivers/block/zram/zram_drv.h b/drivers/block/zram/zram_drv.h
+index 09b9ceb5dfa3..9d6fcfdf7aa7 100644
+--- a/drivers/block/zram/zram_drv.h
++++ b/drivers/block/zram/zram_drv.h
+@@ -120,6 +120,11 @@ struct zram {
+ 	 */
+ 	u64 disksize;	/* bytes */
+ 	const char *comp_algs[ZRAM_MAX_ZCOMPS];
++	/*
++	 * Pages that compress to sizes equal or greater than this are stored
++	 * uncompressed in memory.
++	 */
++	size_t huge_class_size;
+ 	/*
+ 	 * zram is claimed so open request will be failed
+ 	 */
 -- 
 2.38.0.135.g90850a2211-goog
 
