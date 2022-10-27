@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CEF860F3B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FC160F3B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235346AbiJ0JaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 05:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35230 "EHLO
+        id S234552AbiJ0JaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 05:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235112AbiJ0J3o (ORCPT
+        with ESMTP id S235015AbiJ0J3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 27 Oct 2022 05:29:44 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE53CBE04
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD571B866
         for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:29:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=m3y/33VRA8YmYNWMBo8ucrhq6F3FIEDO+TdLyfnXiGY=; b=Uo+3pNiNZMTO6marCHPFB5wWQd
-        3CTnuygzl0nDmtDGduUzOHAuoVgM7/c5Ho4xTkkuknDsjoBqV+ah9Tf8BN5v1dvgMpAtMgO5Eeatm
-        KI3lNjZqGnFriRY50OTsscWKSMj7ujfWaHfX5OOor5q10dpzfRh2l/Zadx6jNID2YNQdcAFYbRwin
-        UynN/NMGfzGZXVbPHDtOvGjI80xuRcx5ydO049QYNvjsPnFWC6iEbJTg9gB9/qKUy7EI/+mszfU0s
-        h/ID0obxM82mORZ6VPhbNtMwqlxcaIgLz7jMC3rNVzW9WbNX0VXXUvvhcNHszNOldZKGJCX5mlwJu
-        yYr5EXOg==;
+        bh=vAQwSFuGwqx04mJjqCuHpC9VhBTtgDgSbSkN0/TPFU4=; b=XEGecbCNpEF5d5h1y/I1BeKWho
+        4ZO1769+2IMfHIyXLdUZLhEvbFYxTVQ5rDM6brI+McCX+xabG5iQ0MPM5K9W7CTXwlZUXBTz7Mjek
+        eFmnsPRBm5sdLukARARiYoiwOV2ZOSBWn1Tk38brlIH23u5Uq5yEri7ZonWzFObhkERMbauvt0Ywu
+        c+y+Q2aCZqZqHq8V5MLD48qilK1t98oe+Ro6AD8ntwOp9GHxk90+1PgKHFcZYiF/CSwleHzKpA0TR
+        Pr9oVyknfSfUD6QDGfg4GMCSmfIQtXQyjcw30V4k+ROmO2n0sfu51A3nUEAqxERT9f14O7+8QyZBI
+        yOpQ2ITg==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1onzCd-006p4M-3I; Thu, 27 Oct 2022 09:29:31 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1onzCi-0005SA-EL; Thu, 27 Oct 2022 09:29:36 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8A439300322;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8F61930041D;
         Thu, 27 Oct 2022 11:29:30 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 716B12C450474; Thu, 27 Oct 2022 11:29:30 +0200 (CEST)
-Message-ID: <20221027092842.634714496@infradead.org>
+        id 7724E2C450395; Thu, 27 Oct 2022 11:29:30 +0200 (CEST)
+Message-ID: <20221027092842.699804264@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 27 Oct 2022 11:28:14 +0200
+Date:   Thu, 27 Oct 2022 11:28:15 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
@@ -47,7 +47,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         Joao Moreira <joao@overdrivepizza.com>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH 2/4] x86/ibt: Implement FineIBT
+Subject: [PATCH 3/4] x86/cfi: Boot time selection of CFI scheme
 References: <20221027092812.185993858@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,534 +60,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement an alternative CFI scheme that merges both the fine-grained
-nature of kCFI but also takes full advantage of the coarse grained
-hardware CFI as provided by IBT.
+Add the "cfi=" boot parameter to allow people to select a CFI scheme
+at boot time. Mostly useful for development / debugging.
 
-To contrast:
-
-  kCFI is a pure software CFI scheme and relies on being able to read
-text -- specifically the instruction *before* the target symbol, and
-does the hash validation *before* doing the call (otherwise control
-flow is compromised already).
-
-  FineIBT is a software and hardware hybrid scheme; by ensuring every
-branch target starts with a hash validation it is possible to place
-the hash validation after the branch. This has several advantages:
-
-   o the (hash) load is avoided; no memop; no RX requirement.
-
-   o IBT WAIT-FOR-ENDBR state is a speculation stop; by placing
-     the hash validation in the immediate instruction after
-     the branch target there is a minimal speculation window
-     and the whole is a viable defence against SpectreBHB.
-
-   o Kees feels obliged to mention it is slightly more vulnerable
-     when the attacker can write code.
-
-Obviously this patch relies on kCFI, but additionally it also relies
-on the padding from the call-depth-tracking patches. It uses this
-padding to place the hash-validation while the call-sites are
-re-written to modify the indirect target to be 16 bytes in front of
-the original target, thus hitting this new preamble.
-
-Notably, there is no hardware that needs call-depth-tracking (Skylake)
-and supports IBT (Tigerlake and onwards).
-
-Suggested-by: Joao Moreira (Intel) <joao@overdrivepizza.com>
+Requested-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/um/kernel/um_arch.c           |    5 
- arch/x86/Kconfig                   |   12 +
- arch/x86/Makefile                  |    2 
- arch/x86/include/asm/alternative.h |    2 
- arch/x86/include/asm/linkage.h     |    6 
- arch/x86/kernel/alternative.c      |  253 +++++++++++++++++++++++++++++++++++--
- arch/x86/kernel/cpu/common.c       |    1 
- arch/x86/kernel/module.c           |   20 ++
- arch/x86/kernel/vmlinux.lds.S      |    9 +
- include/linux/bpf.h                |    2 
- scripts/Makefile.lib               |    1 
- 11 files changed, 293 insertions(+), 20 deletions(-)
+ arch/x86/kernel/alternative.c |  103 +++++++++++++++++++++++++++++++++---------
+ 1 file changed, 83 insertions(+), 20 deletions(-)
 
---- a/arch/um/kernel/um_arch.c
-+++ b/arch/um/kernel/um_arch.c
-@@ -444,6 +444,11 @@ void apply_returns(s32 *start, s32 *end)
- {
- }
- 
-+void apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
-+		   s32 *start_cfi, s32 *end_cfi)
-+{
-+}
-+
- void apply_alternatives(struct alt_instr *start, struct alt_instr *end)
- {
- }
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -2463,13 +2463,23 @@ config FUNCTION_PADDING_BYTES
- 	default FUNCTION_PADDING_CFI if CFI_CLANG
- 	default FUNCTION_ALIGNMENT
- 
-+config CALL_PADDING
-+	def_bool n
-+	depends on CC_HAS_ENTRY_PADDING && OBJTOOL
-+	select FUNCTION_ALIGNMENT_16B
-+
-+config FINEIBT
-+	def_bool y
-+	depends on X86_KERNEL_IBT && CFI_CLANG && RETPOLINE
-+	select CALL_PADDING
-+
- config HAVE_CALL_THUNKS
- 	def_bool y
- 	depends on CC_HAS_ENTRY_PADDING && RETHUNK && OBJTOOL
- 
- config CALL_THUNKS
- 	def_bool n
--	select FUNCTION_ALIGNMENT_16B
-+	select CALL_PADDING
- 
- menuconfig SPECULATION_MITIGATIONS
- 	bool "Mitigations for speculative execution vulnerabilities"
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -208,7 +208,7 @@ ifdef CONFIG_SLS
-   KBUILD_CFLAGS += -mharden-sls=all
- endif
- 
--ifdef CONFIG_CALL_THUNKS
-+ifdef CONFIG_CALL_PADDING
- PADDING_CFLAGS := -fpatchable-function-entry=$(CONFIG_FUNCTION_PADDING_BYTES),$(CONFIG_FUNCTION_PADDING_BYTES)
- KBUILD_CFLAGS += $(PADDING_CFLAGS)
- export PADDING_CFLAGS
---- a/arch/x86/include/asm/alternative.h
-+++ b/arch/x86/include/asm/alternative.h
-@@ -78,6 +78,8 @@ extern void apply_alternatives(struct al
- extern void apply_retpolines(s32 *start, s32 *end);
- extern void apply_returns(s32 *start, s32 *end);
- extern void apply_ibt_endbr(s32 *start, s32 *end);
-+extern void apply_fineibt(s32 *start_retpoline, s32 *end_retpoine,
-+			  s32 *start_cfi, s32 *end_cfi);
- 
- struct module;
- struct paravirt_patch_site;
---- a/arch/x86/include/asm/linkage.h
-+++ b/arch/x86/include/asm/linkage.h
-@@ -15,7 +15,7 @@
- #define __ALIGN		.balign CONFIG_FUNCTION_ALIGNMENT, 0x90;
- #define __ALIGN_STR	__stringify(__ALIGN)
- 
--#if defined(CONFIG_CALL_THUNKS) && !defined(__DISABLE_EXPORTS) && !defined(BUILD_VDSO)
-+#if defined(CONFIG_CALL_PADDING) && !defined(__DISABLE_EXPORTS) && !defined(BUILD_VDSO)
- #define FUNCTION_PADDING	.skip CONFIG_FUNCTION_ALIGNMENT, 0x90;
- #else
- #define FUNCTION_PADDING
-@@ -57,7 +57,7 @@
- #endif /* __ASSEMBLY__ */
- 
- /*
-- * Depending on -fpatchable-function-entry=N,N usage (CONFIG_CALL_THUNKS) the
-+ * Depending on -fpatchable-function-entry=N,N usage (CONFIG_CALL_PADDING) the
-  * CFI symbol layout changes.
-  *
-  * Without CALL_THUNKS:
-@@ -81,7 +81,7 @@
-  * In both cases the whole thing is FUNCTION_ALIGNMENT aligned and sized.
-  */
- 
--#ifdef CONFIG_CALL_THUNKS
-+#ifdef CONFIG_CALL_PADDING
- #define CFI_PRE_PADDING
- #define CFI_POST_PADDING	.skip	CONFIG_FUNCTION_PADDING_BYTES, 0x90;
- #else
 --- a/arch/x86/kernel/alternative.c
 +++ b/arch/x86/kernel/alternative.c
-@@ -116,6 +116,7 @@ static void __init_or_module add_nops(vo
+@@ -702,6 +702,47 @@ void __init_or_module noinline apply_ibt
+ #endif /* CONFIG_X86_KERNEL_IBT */
  
- extern s32 __retpoline_sites[], __retpoline_sites_end[];
- extern s32 __return_sites[], __return_sites_end[];
-+extern s32 __cfi_sites[], __cfi_sites_end[];
- extern s32 __ibt_endbr_seal[], __ibt_endbr_seal_end[];
- extern struct alt_instr __alt_instructions[], __alt_instructions_end[];
- extern s32 __smp_locks[], __smp_locks_end[];
-@@ -656,6 +657,28 @@ void __init_or_module noinline apply_ret
- 
- #ifdef CONFIG_X86_KERNEL_IBT
- 
-+static void poison_endbr(void *addr, bool warn)
+ #ifdef CONFIG_FINEIBT
++
++enum cfi_mode {
++	CFI_DEFAULT,
++	CFI_OFF,
++	CFI_KCFI,
++	CFI_FINEIBT,
++};
++
++static enum cfi_mode cfi_mode __ro_after_init = CFI_DEFAULT;
++
++static __init int cfi_parse_cmdline(char *str)
 +{
-+	u32 endbr, poison = gen_endbr_poison();
++	if (!str)
++		return -EINVAL;
 +
-+	if (WARN_ON_ONCE(get_kernel_nofault(endbr, addr)))
-+		return;
++	while (str) {
++		char *next = strchr(str, ',');
++		if (next) {
++			*next = 0;
++			next++;
++		}
 +
-+	if (!is_endbr(endbr)) {
-+		WARN_ON_ONCE(warn);
-+		return;
++		if (!strcmp(str, "auto")) {
++			cfi_mode = CFI_DEFAULT;
++		} else if (!strcmp(str, "off")) {
++			cfi_mode = CFI_OFF;
++		} else if (!strcmp(str, "kcfi")) {
++			cfi_mode = CFI_KCFI;
++		} else if (!strcmp(str, "fineibt")) {
++			cfi_mode = CFI_FINEIBT;
++		} else {
++			pr_err("Ignoring unknown cfi option (%s).", str);
++		}
++
++		str = next;
 +	}
 +
-+	DPRINTK("ENDBR at: %pS (%px)", addr, addr);
-+
-+	/*
-+	 * When we have IBT, the lack of ENDBR will trigger #CP
-+	 */
-+	DUMP_BYTES(((u8*)addr), 4, "%px: orig: ", addr);
-+	DUMP_BYTES(((u8*)&poison), 4, "%px: repl: ", addr);
-+	text_poke_early(addr, &poison, 4);
++	return 0;
 +}
++early_param("cfi", cfi_parse_cmdline);
 +
  /*
-  * Generated by: objtool --ibt
-  */
-@@ -664,31 +687,232 @@ void __init_or_module noinline apply_ibt
- 	s32 *s;
- 
- 	for (s = start; s < end; s++) {
--		u32 endbr, poison = gen_endbr_poison();
- 		void *addr = (void *)s + *s;
- 
--		if (WARN_ON_ONCE(get_kernel_nofault(endbr, addr)))
--			continue;
-+		poison_endbr(addr, true);
-+		if (IS_ENABLED(CONFIG_FINEIBT))
-+			poison_endbr(addr - 16, false);
-+	}
-+}
-+
-+#else
-+
-+void __init_or_module noinline apply_ibt_endbr(s32 *start, s32 *end) { }
-+
-+#endif /* CONFIG_X86_KERNEL_IBT */
-+
-+#ifdef CONFIG_FINEIBT
-+/*
-+ * kCFI						FineIBT
-+ *
-+ * __cfi_\func:					__cfi_\func:
-+ *	movl   $0x12345678,%eax		// 5	     endbr64			// 4
-+ *	nop					     subl   $0x12345678,%r10d   // 7
-+ *	nop					     jz     1f			// 2
-+ *	nop					     ud2			// 2
-+ *	nop					1:   nop			// 1
-+ *	nop
-+ *	nop
-+ *	nop
-+ *	nop
-+ *	nop
-+ *	nop
-+ *	nop
-+ *
-+ *
-+ * caller:					caller:
-+ *	movl	$(-0x12345678),%r10d	 // 6	     movl   $0x12345678,%r10d	// 6
-+ *	addl	$-15(%r11),%r10d	 // 4	     sub    $16,%r11		// 4
-+ *	je	1f			 // 2	     nop4			// 4
-+ *	ud2				 // 2
-+ * 1:	call	__x86_indirect_thunk_r11 // 5	     call   *%r11; nop2;	// 5
-+ *
-+ */
-+
-+asm(	".pushsection .rodata			\n"
-+	"fineibt_preamble_start:		\n"
-+	"	endbr64				\n"
-+	"	subl	$0x12345678, %r10d	\n"
-+	"	je	fineibt_preamble_end	\n"
-+	"	ud2				\n"
-+	"	nop				\n"
-+	"fineibt_preamble_end:			\n"
-+	".popsection\n"
-+);
-+
-+extern u8 fineibt_preamble_start[];
-+extern u8 fineibt_preamble_end[];
-+
-+#define fineibt_preamble_size (fineibt_preamble_end - fineibt_preamble_start)
-+#define fineibt_preamble_hash 7
-+
-+asm(	".pushsection .rodata			\n"
-+	"fineibt_caller_start:			\n"
-+	"	movl	$0x12345678, %r10d	\n"
-+	"	sub	$16, %r11		\n"
-+	ASM_NOP4
-+	"fineibt_caller_end:			\n"
-+	".popsection				\n"
-+);
-+
-+extern u8 fineibt_caller_start[];
-+extern u8 fineibt_caller_end[];
-+
-+#define fineibt_caller_size (fineibt_caller_end - fineibt_caller_start)
-+#define fineibt_caller_hash 2
-+
-+#define fineibt_caller_jmp (fineibt_caller_size - 2)
-+
-+static u32 decode_preamble_hash(void *addr)
-+{
-+	u8 *p = addr;
-+
-+	/* b8 78 56 34 12          mov    $0x12345678,%eax */
-+	if (p[0] == 0xb8)
-+		return *(u32 *)(addr + 1);
-+
-+	return 0; /* invalid hash value */
-+}
-+
-+static u32 decode_caller_hash(void *addr)
-+{
-+	u8 *p = addr;
-+
-+	/* 41 ba 78 56 34 12       mov    $0x12345678,%r10d */
-+	if (p[0] == 0x41 && p[1] == 0xba)
-+		return -*(u32 *)(addr + 2);
-+
-+	/* e8 0c 78 56 34 12	   jmp.d8  +12 */
-+	if (p[0] == JMP8_INSN_OPCODE && p[1] == fineibt_caller_jmp)
-+		return -*(u32 *)(addr + 2);
-+
-+	return 0; /* invalid hash value */
-+}
-+
-+/* .retpoline_sites */
-+static int cfi_disable_callers(s32 *start, s32 *end)
-+{
-+	/*
-+	 * Disable kCFI by patching in a JMP.d8, this leaves the hash immediate
-+	 * in tact for later usage. Also see decode_caller_hash() and
-+	 * cfi_rewrite_callers().
-+	 */
-+	const u8 jmp[] = { JMP8_INSN_OPCODE, fineibt_caller_jmp };
-+	s32 *s;
- 
--		if (WARN_ON_ONCE(!is_endbr(endbr)))
-+	for (s = start; s < end; s++) {
-+		void *addr = (void *)s + *s;
-+		u32 hash;
-+
-+		addr -= fineibt_caller_size;
-+		hash = decode_caller_hash(addr);
-+		if (!hash) /* nocfi callers */
- 			continue;
- 
--		DPRINTK("ENDBR at: %pS (%px)", addr, addr);
-+		text_poke_early(addr, jmp, 2);
-+	}
- 
--		/*
--		 * When we have IBT, the lack of ENDBR will trigger #CP
--		 */
--		DUMP_BYTES(((u8*)addr), 4, "%px: orig: ", addr);
--		DUMP_BYTES(((u8*)&poison), 4, "%px: repl: ", addr);
--		text_poke_early(addr, &poison, 4);
-+	return 0;
-+}
-+
-+/* .cfi_sites */
-+static int cfi_rewrite_preamble(s32 *start, s32 *end)
-+{
-+	s32 *s;
-+
-+	for (s = start; s < end; s++) {
-+		void *addr = (void *)s + *s;
-+		u32 hash;
-+
-+		hash = decode_preamble_hash(addr);
-+		if (WARN(!hash, "no CFI hash found at: %pS %px %*ph\n",
-+			 addr, addr, 5, addr))
-+			return -EINVAL;
-+
-+		text_poke_early(addr, fineibt_preamble_start, fineibt_preamble_size);
-+		WARN_ON(*(u32 *)(addr + fineibt_preamble_hash) != 0x12345678);
-+		text_poke_early(addr + fineibt_preamble_hash, &hash, 4);
- 	}
-+
-+	return 0;
-+}
-+
-+/* .retpoline_sites */
-+static int cfi_rewrite_callers(s32 *start, s32 *end)
-+{
-+	s32 *s;
-+
-+	for (s = start; s < end; s++) {
-+		void *addr = (void *)s + *s;
-+		u32 hash;
-+
-+		addr -= fineibt_caller_size;
-+		hash = decode_caller_hash(addr);
-+		if (hash) {
-+			text_poke_early(addr, fineibt_caller_start, fineibt_caller_size);
-+			WARN_ON(*(u32 *)(addr + fineibt_caller_hash) != 0x12345678);
-+			text_poke_early(addr + fineibt_caller_hash, &hash, 4);
-+		}
-+		/* rely on apply_retpolines() */
-+	}
-+
-+	return 0;
-+}
-+
-+static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
-+			    s32 *start_cfi, s32 *end_cfi, bool builtin)
-+{
-+	int ret;
-+
-+	if (WARN_ONCE(fineibt_preamble_size != 16,
-+		      "FineIBT preamble wrong size: %ld", fineibt_preamble_size))
-+		return;
-+
-+	if (!HAS_KERNEL_IBT || !cpu_feature_enabled(X86_FEATURE_IBT))
-+		return;
-+
-+	/*
-+	 * Rewrite the callers to not use the __cfi_ stubs, such that we might
-+	 * rewrite them. This disables all CFI. If this succeeds but any of the
-+	 * later stages fails, we're without CFI.
-+	 */
-+	ret = cfi_disable_callers(start_retpoline, end_retpoline);
-+	if (ret)
-+		goto err;
-+
-+	ret = cfi_rewrite_preamble(start_cfi, end_cfi);
-+	if (ret)
-+		goto err;
-+
-+	ret = cfi_rewrite_callers(start_retpoline, end_retpoline);
-+	if (ret)
-+		goto err;
-+
-+	if (builtin)
-+		pr_info("Using FineIBT CFI\n");
-+
-+	return;
-+
-+err:
-+	pr_err("Something went horribly wrong trying to rewrite the CFI implementation.\n");
- }
- 
- #else
- 
--void __init_or_module noinline apply_ibt_endbr(s32 *start, s32 *end) { }
-+static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
-+			    s32 *start_cfi, s32 *end_cfi, bool builtin)
-+{
-+}
- 
--#endif /* CONFIG_X86_KERNEL_IBT */
-+#endif
-+
-+void apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
-+		   s32 *start_cfi, s32 *end_cfi)
-+{
-+	return __apply_fineibt(start_retpoline, end_retpoline,
-+			       start_cfi, end_cfi,
-+			       /* .builtin = */ false);
-+}
- 
- #ifdef CONFIG_SMP
- static void alternatives_smp_lock(const s32 *start, const s32 *end,
-@@ -996,6 +1220,9 @@ void __init alternative_instructions(voi
- 	 */
- 	apply_paravirt(__parainstructions, __parainstructions_end);
- 
-+	__apply_fineibt(__retpoline_sites, __retpoline_sites_end,
-+			__cfi_sites, __cfi_sites_end, true);
-+
- 	/*
- 	 * Rewrite the retpolines, must be done before alternatives since
- 	 * those can rewrite the retpoline thunks.
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -609,6 +609,7 @@ static __always_inline void setup_cet(st
- 
- 	if (!ibt_selftest()) {
- 		pr_err("IBT selftest: Failed!\n");
-+		wrmsrl(MSR_IA32_S_CET, 0);
- 		setup_clear_cpu_cap(X86_FEATURE_IBT);
+  * kCFI						FineIBT
+  *
+@@ -868,30 +909,52 @@ static void __apply_fineibt(s32 *start_r
+ 		      "FineIBT preamble wrong size: %ld", fineibt_preamble_size))
  		return;
- 	}
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -255,7 +255,7 @@ int module_finalize(const Elf_Ehdr *hdr,
- 	const Elf_Shdr *s, *text = NULL, *alt = NULL, *locks = NULL,
- 		*para = NULL, *orc = NULL, *orc_ip = NULL,
- 		*retpolines = NULL, *returns = NULL, *ibt_endbr = NULL,
--		*calls = NULL;
-+		*calls = NULL, *cfi = NULL;
- 	char *secstrings = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
  
- 	for (s = sechdrs; s < sechdrs + hdr->e_shnum; s++) {
-@@ -277,6 +277,8 @@ int module_finalize(const Elf_Ehdr *hdr,
- 			returns = s;
- 		if (!strcmp(".call_sites", secstrings + s->sh_name))
- 			calls = s;
-+		if (!strcmp(".cfi_sites", secstrings + s->sh_name))
-+			cfi = s;
- 		if (!strcmp(".ibt_endbr_seal", secstrings + s->sh_name))
- 			ibt_endbr = s;
- 	}
-@@ -289,6 +291,22 @@ int module_finalize(const Elf_Ehdr *hdr,
- 		void *pseg = (void *)para->sh_addr;
- 		apply_paravirt(pseg, pseg + para->sh_size);
- 	}
-+	if (retpolines || cfi) {
-+		void *rseg = NULL, *cseg = NULL;
-+		unsigned int rsize = 0, csize = 0;
-+
-+		if (retpolines) {
-+			rseg = (void *)retpolines->sh_addr;
-+			rsize = retpolines->sh_size;
-+		}
-+
-+		if (cfi) {
-+			cseg = (void *)cfi->sh_addr;
-+			csize = cfi->sh_size;
-+		}
-+
-+		apply_fineibt(rseg, rseg + rsize, cseg, cseg + csize);
+-	if (!HAS_KERNEL_IBT || !cpu_feature_enabled(X86_FEATURE_IBT))
++	if (cfi_mode == CFI_DEFAULT) {
++		cfi_mode = CFI_KCFI;
++		if (HAS_KERNEL_IBT && cpu_feature_enabled(X86_FEATURE_IBT))
++			cfi_mode = CFI_FINEIBT;
 +	}
- 	if (retpolines) {
- 		void *rseg = (void *)retpolines->sh_addr;
- 		apply_retpolines(rseg, rseg + retpolines->sh_size);
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -309,6 +309,15 @@ SECTIONS
- 	}
- #endif
- 
-+#ifdef CONFIG_FINEIBT
-+	. = ALIGN(8);
-+	.cfi_sites : AT(ADDR(.cfi_sites) - LOAD_OFFSET) {
-+		__cfi_sites = .;
-+		*(.cfi_sites)
-+		__cfi_sites_end = .;
-+	}
-+#endif
 +
- 	/*
- 	 * struct alt_inst entries. From the header (alternative.h):
- 	 * "Alternative instructions for different CPU types or capabilities"
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -984,7 +984,7 @@ int arch_prepare_bpf_dispatcher(void *im
- }
++	switch (cfi_mode) {
++	case CFI_OFF:
++		ret = cfi_disable_callers(start_retpoline, end_retpoline);
++		if (ret)
++			goto err;
++
++		if (builtin)
++			pr_info("Disabling CFI\n");
+ 		return;
  
- #ifdef CONFIG_X86_64
--#ifdef CONFIG_CALL_THUNKS
-+#ifdef CONFIG_CALL_PADDING
- #define BPF_DISPATCHER_ATTRIBUTES __attribute__((patchable_function_entry(5+CONFIG_FUNCTION_PADDING_BYTES,CONFIG_FUNCTION_PADDING_BYTES)))
- #else
- #define BPF_DISPATCHER_ATTRIBUTES __attribute__((patchable_function_entry(5)))
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -256,6 +256,7 @@ objtool-args-$(CONFIG_HAVE_JUMP_LABEL_HA
- objtool-args-$(CONFIG_HAVE_NOINSTR_HACK)		+= --hacks=noinstr
- objtool-args-$(CONFIG_CALL_DEPTH_TRACKING)		+= --hacks=skylake
- objtool-args-$(CONFIG_X86_KERNEL_IBT)			+= --ibt
-+objtool-args-$(CONFIG_FINEIBT)                          += --cfi
- objtool-args-$(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL)	+= --mcount
- objtool-args-$(CONFIG_UNWINDER_ORC)			+= --orc
- objtool-args-$(CONFIG_RETPOLINE)			+= --retpoline
+-	/*
+-	 * Rewrite the callers to not use the __cfi_ stubs, such that we might
+-	 * rewrite them. This disables all CFI. If this succeeds but any of the
+-	 * later stages fails, we're without CFI.
+-	 */
+-	ret = cfi_disable_callers(start_retpoline, end_retpoline);
+-	if (ret)
+-		goto err;
+-
+-	ret = cfi_rewrite_preamble(start_cfi, end_cfi);
+-	if (ret)
+-		goto err;
+-
+-	ret = cfi_rewrite_callers(start_retpoline, end_retpoline);
+-	if (ret)
+-		goto err;
++	case CFI_KCFI:
++		if (builtin)
++			pr_info("Using kCFI\n");
++		return;
+ 
+-	if (builtin)
+-		pr_info("Using FineIBT CFI\n");
++	case CFI_FINEIBT:
++		/*
++		 * Rewrite the callers to not use the __cfi_ stubs, such that we might
++		 * rewrite them. This disables all CFI. If this succeeds but any of the
++		 * later stages fails, we're without CFI.
++		 */
++		ret = cfi_disable_callers(start_retpoline, end_retpoline);
++		if (ret)
++			goto err;
++
++		ret = cfi_rewrite_preamble(start_cfi, end_cfi);
++		if (ret)
++			goto err;
++
++		ret = cfi_rewrite_callers(start_retpoline, end_retpoline);
++		if (ret)
++			goto err;
+ 
+-	return;
++		if (builtin)
++			pr_info("Using FineIBT CFI\n");
++		return;
++
++	default:
++		break;
++	}
+ 
+ err:
+ 	pr_err("Something went horribly wrong trying to rewrite the CFI implementation.\n");
 
 
