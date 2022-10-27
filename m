@@ -2,108 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F5660EF56
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 07:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE1D60EF59
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 07:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234335AbiJ0FMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 01:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34280 "EHLO
+        id S233669AbiJ0FOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 01:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233379AbiJ0FMq (ORCPT
+        with ESMTP id S233244AbiJ0FOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 01:12:46 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463151581B6
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 22:12:44 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id hh9so383401qtb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 22:12:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CmDiMYe/I0ri6Zj03hdpur3rJrgB7k+DhMOzSt5LxUI=;
-        b=hM2tehQXR8rhpVF9g+WAkkYLHO2gza5eLp8A5C/rbyeAH+vIL+0k9xuLSF+aoysY0p
-         IV1nDGd1W14gsvEe5BwPL4dUnIhQCffmmyoeMjIojAuiHXiHb+Ie5vwStIIBxDhNXewv
-         /dltDWdPmrIJFQIVGWMHCocFEs0VnC/F9cURrfBBLE0LJlpgsCtACKSzUMBUYEZAI1sC
-         6gwir6oqL+FXUXdWdrErNn2TE/QivqIgFJNw3nTSb/oyj/nkLCBNgtRKdyOawG3jRc7P
-         3mpr8LC0Om5GHXwU7pticVUP/D2vnWd5uetBTwlf0SG8WY88g06v2iVV2BcZMezV/Ss5
-         34mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CmDiMYe/I0ri6Zj03hdpur3rJrgB7k+DhMOzSt5LxUI=;
-        b=XdSIPXimKwlp7hS0IvLcVKIhhsihrX/56QjXfbBvhUqdhqgmP8bZeDnFav3jekedsS
-         XFeAF+UnfI+XHmRL+j70Q/Sq2iXhRRmBA1fVuxM4n4rWOTlxV8VkPn0OvVlQkep9o1dV
-         AYc4lKZgoDHmi1/PfhshO1SgwSyNSPWxye9M9VL+nb7e6BTzx6hydrwO0tRmXMRDNson
-         H374ijrsozbUo58p1ghRVLotLfPKfFocPh5vG+7xrwrSWRPFs5DPnCg3HJnRSZ7VZhZq
-         UwM9HJsf7yvGavQZH6KYW6lyNPskRixCd7qskXv1SMC7EPe46bLadGEw6dEHiXD+a6W0
-         hyJw==
-X-Gm-Message-State: ACrzQf3cs+z28jwzzvjuoSUrSv0cUJ6HAJiAycWzJ/AC67H4nKW2KR2H
-        x0EYfn89CNeL9VDFwgkTwGPCNdN/UISSsi78rrY1hcUy
-X-Google-Smtp-Source: AMsMyM6aQPkWUzrcH5QcYJv7YBwmqFe1zX9SZ+R2FvqFrLBshlWiO4t1EvfUkMpXDGj/dS+trwAoMo7XaSKAjTAviUE=
-X-Received: by 2002:a05:622a:164f:b0:3a4:f141:92fa with SMTP id
- y15-20020a05622a164f00b003a4f14192famr4761116qtj.447.1666847563200; Wed, 26
- Oct 2022 22:12:43 -0700 (PDT)
+        Thu, 27 Oct 2022 01:14:21 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F24153834;
+        Wed, 26 Oct 2022 22:14:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666847660; x=1698383660;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=9d3aFGAFLQAxiFqVF47lE8CevVy7cGqVqRyit2lkJRE=;
+  b=HMUMKMk4KDmrqMCgMZ2t/RRDDgqvprvtDyQEgCseYaZPN9FvfcreHNWB
+   7Z3ekID+vzuxLKEHBAiBpxIDCcT7iis0UsjCsPtVvTaK4AoICY4b3ol7Y
+   TE8acTs5K+rUD6NbwjfMRfX/Mj3Q30ZEdZ7GEbzUmlu2NXnogKPpHgd0+
+   sMuOyM8iTHYn3NSqQrPhuAXkNvKjf+s4sswcj9utLpUJs4a1gHiaIoMAU
+   M7I2JI5QATodhCBc5SYsgQvvNV8Dy8Q7KNZCKQ16GUxHlYhQNxbzuVP/x
+   PtoFM7INzOkZPn0aybZM94bWLn4L8ur7IxaQRT5SU7IazL/dTdI/bt6kK
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="291434272"
+X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
+   d="scan'208";a="291434272"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 22:14:19 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="774858075"
+X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
+   d="scan'208";a="774858075"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 22:14:15 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Waiman Long <longman@redhat.com>, <aneesh.kumar@linux.ibm.com>,
+        <linux-mm@kvack.org>, <cgroups@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dave.hansen@intel.com>,
+        <tim.c.chen@intel.com>, <fengwei.yin@intel.com>
+Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
+References: <20221026074343.6517-1-feng.tang@intel.com>
+Date:   Thu, 27 Oct 2022 13:13:30 +0800
+In-Reply-To: <20221026074343.6517-1-feng.tang@intel.com> (Feng Tang's message
+        of "Wed, 26 Oct 2022 15:43:43 +0800")
+Message-ID: <878rl1luh1.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <Yz8rIxV7bVCcfZb0@kroah.com> <20221007013708.1946061-1-zyytlz.wz@163.com>
- <CAPM=9ty0+ouf+rQWhM=9XSKFOA2zxKfa00MsNBvwrQGPQm2uPQ@mail.gmail.com> <CAJedcCwxioxr+4TBTdrEjAZh97J3oroSHSgax+bxSNRXCBvkRg@mail.gmail.com>
-In-Reply-To: <CAJedcCwxioxr+4TBTdrEjAZh97J3oroSHSgax+bxSNRXCBvkRg@mail.gmail.com>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Thu, 27 Oct 2022 15:12:31 +1000
-Message-ID: <CAPM=9twhAL+c8mOLmidY_tEhEKwCh-CTjfs5yryOk8oGjMxuug@mail.gmail.com>
-Subject: Re: [PATCH v3] drm/i915/gvt: fix double free bug in split_2MB_gtt_entry
-To:     Zheng Hacker <hackerzheng666@gmail.com>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, gregkh@linuxfoundation.org,
-        alex000young@gmail.com, security@kernel.org, airlied@linux.ie,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, 1002992920@qq.com,
-        intel-gvt-dev@lists.freedesktop.org, zhi.a.wang@intel.com,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Oct 2022 at 13:26, Zheng Hacker <hackerzheng666@gmail.com> wrote=
-:
->
-> Dave Airlie <airlied@gmail.com> =E4=BA=8E2022=E5=B9=B410=E6=9C=8827=E6=97=
-=A5=E5=91=A8=E5=9B=9B 08:01=E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > On Fri, 7 Oct 2022 at 11:38, Zheng Wang <zyytlz.wz@163.com> wrote:
-> > >
-> > > If intel_gvt_dma_map_guest_page failed, it will call
-> > > ppgtt_invalidate_spt, which will finally free the spt.
-> > > But the caller does not notice that, it will free spt again in error =
-path.
-> > >
-> > > Fix this by spliting invalidate and free in ppgtt_invalidate_spt.
-> > > Only free spt when in good case.
-> > >
-> > > Reported-by: Zheng Wang <hackerzheng666@gmail.com>
-> > > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> >
-> > Has this landed in a tree yet, since it's a possible CVE, might be
-> > good to merge it somewhere.
-> >
-> > Dave.
-> >
->
-> Hi Dave,
->
-> This patched hasn't been merged yet. Could you please help with this?
+Feng Tang <feng.tang@intel.com> writes:
 
-I'll add some more people who can probably look at it.
+> In page reclaim path, memory could be demoted from faster memory tier
+> to slower memory tier. Currently, there is no check about cpuset's
+> memory policy, that even if the target demotion node is not allowd
+> by cpuset, the demotion will still happen, which breaks the cpuset
+> semantics.
+>
+> So add cpuset policy check in the demotion path and skip demotion
+> if the demotion targets are not allowed by cpuset.
+>
+> Signed-off-by: Feng Tang <feng.tang@intel.com>
+> ---
+> Hi reviewers,
+>
+> For easy bisectable, I combined the cpuset change and mm change
+> in one patch, if you prefer to separate them, I can turn it into
+> 2 patches.
+>
+> Thanks,
+> Feng
+>
+>  include/linux/cpuset.h |  6 ++++++
+>  kernel/cgroup/cpuset.c | 29 +++++++++++++++++++++++++++++
+>  mm/vmscan.c            | 35 ++++++++++++++++++++++++++++++++---
+>  3 files changed, 67 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
+> index d58e0476ee8e..6fcce2bd2631 100644
+> --- a/include/linux/cpuset.h
+> +++ b/include/linux/cpuset.h
+> @@ -178,6 +178,8 @@ static inline void set_mems_allowed(nodemask_t nodemask)
+>  	task_unlock(current);
+>  }
+>  
+> +extern void cpuset_get_allowed_mem_nodes(struct cgroup *cgroup,
+> +						nodemask_t *nmask);
+>  #else /* !CONFIG_CPUSETS */
+>  
+>  static inline bool cpusets_enabled(void) { return false; }
+> @@ -299,6 +301,10 @@ static inline bool read_mems_allowed_retry(unsigned int seq)
+>  	return false;
+>  }
+>  
+> +static inline void cpuset_get_allowed_mem_nodes(struct cgroup *cgroup,
+> +						nodemask_t *nmask)
+> +{
+> +}
+>  #endif /* !CONFIG_CPUSETS */
+>  
+>  #endif /* _LINUX_CPUSET_H */
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 3ea2e836e93e..cbb118c0502f 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -3750,6 +3750,35 @@ nodemask_t cpuset_mems_allowed(struct task_struct *tsk)
+>  	return mask;
+>  }
+>  
+> +/*
+> + * Retrieve the allowed memory nodemask for a cgroup.
+> + *
+> + * Set *nmask to cpuset's effective allowed nodemask for cgroup v2,
+> + * and NODE_MASK_ALL (means no constraint) for cgroup v1 where there
+> + * is no guaranteed association from a cgroup to a cpuset.
+> + */
+> +void cpuset_get_allowed_mem_nodes(struct cgroup *cgroup, nodemask_t *nmask)
+> +{
+> +	struct cgroup_subsys_state *css;
+> +	struct cpuset *cs;
+> +
+> +	if (!is_in_v2_mode()) {
+> +		*nmask = NODE_MASK_ALL;
+> +		return;
+> +	}
+> +
+> +	rcu_read_lock();
+> +	css = cgroup_e_css(cgroup, &cpuset_cgrp_subsys);
+> +	if (css) {
+> +		css_get(css);
+> +		cs = css_cs(css);
+> +		*nmask = cs->effective_mems;
+> +		css_put(css);
+> +	}
+> +
+> +	rcu_read_unlock();
+> +}
+> +
+>  /**
+>   * cpuset_nodemask_valid_mems_allowed - check nodemask vs. current mems_allowed
+>   * @nodemask: the nodemask to be checked
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 18f6497994ec..c205d98283bc 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -1537,9 +1537,21 @@ static struct page *alloc_demote_page(struct page *page, unsigned long private)
+>  {
+>  	struct page *target_page;
+>  	nodemask_t *allowed_mask;
+> -	struct migration_target_control *mtc;
+> +	struct migration_target_control *mtc = (void *)private;
+>  
+> -	mtc = (struct migration_target_control *)private;
 
-Dave.
+I think we should avoid (void *) conversion here.
+
+> +#if IS_ENABLED(CONFIG_MEMCG) && IS_ENABLED(CONFIG_CPUSETS)
+> +	struct mem_cgroup *memcg;
+> +	nodemask_t cpuset_nmask;
+> +
+> +	memcg = page_memcg(page);
+> +	cpuset_get_allowed_mem_nodes(memcg->css.cgroup, &cpuset_nmask);
+> +
+> +	if (!node_isset(mtc->nid, cpuset_nmask)) {
+> +		if (mtc->nmask)
+> +			nodes_and(*mtc->nmask, *mtc->nmask, cpuset_nmask);
+> +		return alloc_migration_target(page, (unsigned long)mtc);
+> +	}
+
+If node_isset(mtc->nid, cpuset_nmask) == true, we should keep the
+original 2 steps allocation and apply nodes_and() on node mask.
+
+> +#endif
+>  
+>  	allowed_mask = mtc->nmask;
+>  	/*
+> @@ -1649,6 +1661,7 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
+>  		enum folio_references references = FOLIOREF_RECLAIM;
+>  		bool dirty, writeback;
+>  		unsigned int nr_pages;
+> +		bool skip_this_demotion = false;
+>  
+>  		cond_resched();
+>  
+> @@ -1658,6 +1671,22 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
+>  		if (!folio_trylock(folio))
+>  			goto keep;
+>  
+> +#if IS_ENABLED(CONFIG_MEMCG) && IS_ENABLED(CONFIG_CPUSETS)
+> +		if (do_demote_pass) {
+> +			struct mem_cgroup *memcg;
+> +			nodemask_t nmask, nmask1;
+> +
+> +			node_get_allowed_targets(pgdat, &nmask);
+
+pgdat will not change in the loop, so we can move this out of the loop?
+
+> +			memcg = folio_memcg(folio);
+> +			if (memcg)
+> +				cpuset_get_allowed_mem_nodes(memcg->css.cgroup,
+> +								&nmask1);
+> +
+> +			if (!nodes_intersects(nmask, nmask1))
+> +				skip_this_demotion = true;
+> +		}
+
+If nodes_intersects() == true, we will call
+cpuset_get_allowed_mem_nodes() twice.  Better to pass the intersecting
+mask to demote_folio_list()?
+
+> +#endif
+> +
+>  		VM_BUG_ON_FOLIO(folio_test_active(folio), folio);
+>  
+>  		nr_pages = folio_nr_pages(folio);
+> @@ -1799,7 +1828,7 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
+>  		 * Before reclaiming the folio, try to relocate
+>  		 * its contents to another node.
+>  		 */
+> -		if (do_demote_pass &&
+> +		if (do_demote_pass && !skip_this_demotion &&
+>  		    (thp_migration_supported() || !folio_test_large(folio))) {
+>  			list_add(&folio->lru, &demote_folios);
+>  			folio_unlock(folio);
+
+Best Regards,
+Huang, Ying
