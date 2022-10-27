@@ -2,98 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2AF60FF3A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 894BB60FF3C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235195AbiJ0RUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 13:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
+        id S233619AbiJ0RU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 13:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233619AbiJ0RUk (ORCPT
+        with ESMTP id S235003AbiJ0RUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 13:20:40 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD73BFF224;
-        Thu, 27 Oct 2022 10:20:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=13CSR5SLPkPzpOSCAc49kTBJVPes/WepABZjQ1sDdeI=; b=F29jWpxaiIdY/S9C+hHbIdCff7
-        v1FJXG/DuCbJv6uAi8CKaR8XpXdG1w3m99vPaViJpREZ6g/nPvKHj6mdBbHMkBXZmpzJdulQTmk1D
-        tC0A2jm6PnBamEG4Zd9fkQZGZXxpt9MSwuIxWsmjksDq9lCO1qwK/bifU3dfHkZs5EsJYjYa6WZ8/
-        Z8bVgztCbRiY8HWqx//I8W77VRd3TjlzEhPRy6W/0jc3YsYLMy0WiRN9eeY8HRKXZDpzJo3/8tOnL
-        GpssH8K/yLtHzq9wsPGaIzOOwV7JQArKPuSwExsZq9TslnX24WXBs+CjwkCKgPZTD9JPyYLvpvnia
-        kLnihmZw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oo6YP-000RU3-GC; Thu, 27 Oct 2022 17:20:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9C4C530008D;
-        Thu, 27 Oct 2022 19:20:23 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7BC142C450532; Thu, 27 Oct 2022 19:20:23 +0200 (CEST)
-Date:   Thu, 27 Oct 2022 19:20:23 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        broonie@kernel.org, acme@kernel.org,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Vince Weaver <vincent.weaver@maine.edu>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        kristina.martsenko@arm.com
-Subject: Re: [PATCH v2 1/1] perf arm64: Send pointer auth masks to ring buffer
-Message-ID: <Y1q914IVy6XgE1xq@hirez.programming.kicks-ass.net>
-References: <20221020101921.1219533-1-james.clark@arm.com>
- <20221020101921.1219533-2-james.clark@arm.com>
- <Y1F8DUWaWhlh/phL@hirez.programming.kicks-ass.net>
- <4e50b890-0588-1551-fb7c-6cd8191d1054@arm.com>
+        Thu, 27 Oct 2022 13:20:50 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83AE51826DB;
+        Thu, 27 Oct 2022 10:20:48 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 29RHKfeK031409;
+        Thu, 27 Oct 2022 19:20:41 +0200
+Date:   Thu, 27 Oct 2022 19:20:41 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/nolibc: add 7 tests for memcmp()
+Message-ID: <20221027172041.GB30081@1wt.eu>
+References: <20221021170134.GB8420@1wt.eu>
+ <20221021170738.GM5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221021172026.GC8420@1wt.eu>
+ <20221021180040.GN5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221022112228.GB30596@1wt.eu>
+ <20221024155357.GZ5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221026053922.GA19206@1wt.eu>
+ <a5233381-4081-afce-07b5-72d653eeeefb@rasmusvillemoes.dk>
+ <20221026195224.GA24197@1wt.eu>
+ <0b8feeb2-6ec6-d2af-8aa7-0bf34e7ab4b2@rasmusvillemoes.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4e50b890-0588-1551-fb7c-6cd8191d1054@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0b8feeb2-6ec6-d2af-8aa7-0bf34e7ab4b2@rasmusvillemoes.dk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 04:28:12PM +0100, James Clark wrote:
+Hi Rasmus,
 
-> > Why do we want the same mask repeated over and over with each sample;
-> > should this not be part of the address space (side-band) data?
+On Thu, Oct 27, 2022 at 11:09:55AM +0200, Rasmus Villemoes wrote:
+> >> While you're at it, may I suggest also adding a few test cases where the
+> >> buffers differ by 128, e.g. 0x0 v 0x80 and 0x40 v 0xc0.
+> > 
+> > I initially thought about it but changed my mind for +/- 0xc0 that
+> > covered the same cases in my opinion. Do you have a particular error
+> > case in mind that would be caught by this one that the other one does
+> > not catch ?
 > 
-> You are probably right that it could be done that way. The reason that
-> we did it this way was to be consistent with ptrace feature [1] where it
-> is delivered to userspace on a per-process basis. And there is also a
-> prctl for the enabled key types [2] which can be changed dynamically.
-> Particularly for the last reason is why it was done per sample.
+> Not really, but in a sense the opposite: for the +/- 0xc0 case, both
+> ways of comparison will give the wrong sign because -192 becomes +64 and
+> vice versa. For +/- 0x80, one way of doing the comparison will
+> "accidentally" produce the right answer, and I thought that might also
+> be a little interesting.
+
+OK, initially I thought you were trying to make the comparison return a
+match when there is none. I now see better what you mean there.
+
+> > I'm fine for proposing a respin of the patch to improve
+> > it if it brings some value,
 > 
-> Having said that, the enabled keys field is not used by perf, only the
-> mask is used, so I can drop the per sample data until enabled keys is
-> needed, which may be never.
-> 
-> I'm going to assume that perf shouldn't use ptrace because of
-> permissions and conflicts with debuggers, so I could put the mask
-> somewhere like PERF_RECORD_FORK instead of per sample.
+> It's your call, you can respin, do an incremental patch, or just ignore
+> me :)
 
-Yeah, or create an new RECORD type which you can also send around at
-prctl() time.
+I would like to propose you something. Till now I'm the only one having
+added tests to this file, and I'm still lacking feedback on the usability.
+I would very much appreciate it if you could try to add this test case
+yourself on top of existing ones (those present in Paul's rcu/next branch
+here:
+https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/ ).
 
-The only thing that's needed on top of that is exposing the mask
-somewhere in /proc for existing tasks; which is what perf also uses to
-syntesize RECORD_MMAP events on startup etc..
+Then your criticism of what you would find unclear, unconvenient, poorly
+thought, unintuitive etc, and of course suggestions, would be welcome.
+That doesn't mean I'd have a quick solution of course but the more eyes
+there at the early stages, the better so that it becomes friendly to use
+for other contributors. If you don't want to, that's no big deal, but if
+you do I'll really appreciate it.
 
+Thank you,
+Willy
