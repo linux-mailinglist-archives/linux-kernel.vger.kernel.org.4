@@ -2,141 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0C560F526
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4538A60F53D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235455AbiJ0KaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 06:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58264 "EHLO
+        id S235485AbiJ0Kbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 06:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235028AbiJ0K36 (ORCPT
+        with ESMTP id S233403AbiJ0KbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 06:29:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6139E13F8D
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:29:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666866583;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j5JXrVLSkFVjgCWLE6WTZNlJEm+FHDGGhWaBYEuOMJE=;
-        b=YSSAvG6HIeYDaOYX/UAOdQcr6EqCHjOJM8sb97TGgx6SECKIBOm4dNcbtA7Rqf46PDUA9y
-        gjjXX3P12OXMDZ86EeyXWDTr52j/g0ZlFJqNdPXhYmRdY6q1VD7xpD61pessNjXzm5+LZw
-        6npJCiz08G93JS3/SAufyYShPj4ol0w=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-133-8-Tj0Hi1NBinHee72DFc4g-1; Thu, 27 Oct 2022 06:29:42 -0400
-X-MC-Unique: 8-Tj0Hi1NBinHee72DFc4g-1
-Received: by mail-wm1-f69.google.com with SMTP id f1-20020a1cc901000000b003cf475763b6so384280wmb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:29:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j5JXrVLSkFVjgCWLE6WTZNlJEm+FHDGGhWaBYEuOMJE=;
-        b=R+2c9ODW2ySBPwLFYSeTaZQ6EWvl4o7HjBB6r1CRc7Y+3I4p+xFXXW5VWW+uxyST1p
-         2AQ2JAe1ZNSxtXgToR9I5vIJoVgR+9PoPVibSUKf4840zBfFp7meVdfrQ1lxX4hP6/nE
-         6LjSCHhXlETlRPNysbGdxE+ETiEBOcd6qS6fOJTSzL4HeqYZZmJ/vpMduN3Cba/JERhD
-         JO8Qh723c0jMCm4XZsMVWkOMDt2gGiBEhqUBGdpGpDD7PBxpBLgZl5erfn12bQNGSZxs
-         lwIx326tiVFDsVnVvKthdFm7fjsEIOklk8Mptsb/pBm3kdTVDyms/BzxDao69d4bqJFW
-         2UsA==
-X-Gm-Message-State: ACrzQf1S7pOpU8/dbmLPGTYg3iOAfvFTv0Wwg0WYRkvFaCS9EP/7AfSj
-        1S+if7DtG9WmkHUiL4B0zKJsoL0GnmIK5CsDJZA4Lm9XsPPyZq1ejq99OpyHeBYkhflAoPLbyZG
-        G2MEMAFm1ohfZ+ByOFD1KmPfd
-X-Received: by 2002:a05:6000:1885:b0:22e:7851:b257 with SMTP id a5-20020a056000188500b0022e7851b257mr31136914wri.418.1666866581170;
-        Thu, 27 Oct 2022 03:29:41 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4jsuwxcZ0RljYNheoTZjdhHHk6MtyshB1R5fyZlAA3UHjMYotV2R4AlZjLiMgWxLsRid3x8w==
-X-Received: by 2002:a05:6000:1885:b0:22e:7851:b257 with SMTP id a5-20020a056000188500b0022e7851b257mr31136890wri.418.1666866580826;
-        Thu, 27 Oct 2022 03:29:40 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id n4-20020a056000170400b002302dc43d77sm845574wrc.115.2022.10.27.03.29.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 03:29:39 -0700 (PDT)
-Message-ID: <4d421aec-e151-7761-58c7-032c3168d5f2@redhat.com>
-Date:   Thu, 27 Oct 2022 12:29:38 +0200
+        Thu, 27 Oct 2022 06:31:24 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C51275D9
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:31:17 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29RAT8Zw017735;
+        Thu, 27 Oct 2022 10:31:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=Gj6424IstWIBa5OAtWCYyoPzHMT5fhzmDPT5zQ+kSXY=;
+ b=SGOTgvgoQ7N+LnVvO1KyrWfTAm7ImV5WtdGGAbhgMYDNZ4IPMa7ezREzlxme6O93zMHd
+ k6tho13FaxO3ljr68OvXyw+kHIPBVJKL2jd2uX/yMaMWd9nyFvYv4zVtHSmcfZo9H/AM
+ DhmNcq6hV+qwrEnl7LoqVxqAA7uJPmThUM0SP1l/VcbqpTaHIEmuW2Hm9jNhN98Frbpr
+ pPyJAQk8toEzxif7QSzFEbLv3Bj2RwER1jgFS9MJESRpqGvXKFfwo7Ex9WjM3RfxfXer
+ tKVkYVgWQ0cjHjQKNWIesXbspaceZFoPBSJZd3myoNo0qm82xHHbxe5qOYojQyfQb5fF 4A== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kfahvsnny-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Oct 2022 10:31:03 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29RAV2NZ026305
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Oct 2022 10:31:02 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Thu, 27 Oct 2022 03:30:59 -0700
+Date:   Thu, 27 Oct 2022 16:00:55 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+CC:     Mukesh Ojha <quic_mojha@quicinc.com>, <jaegeuk@kernel.org>,
+        <chao@kernel.org>, <mhiramat@kernel.org>,
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] f2fs: fix the msg data type
+Message-ID: <20221027103055.GB18823@hu-pkondeti-hyd.qualcomm.com>
+References: <1666861961-12924-1-git-send-email-quic_mojha@quicinc.com>
+ <1666861961-12924-2-git-send-email-quic_mojha@quicinc.com>
+ <20221027101702.GA18823@hu-pkondeti-hyd.qualcomm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] KVM: vmx/nested: avoid blindly setting
- SECONDARY_EXEC_ENCLS_EXITING when sgx is enabled
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Cc:     kvm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Bandan Das <bsd@redhat.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20221025123749.2201649-1-eesposit@redhat.com>
- <Y1gbAA0JVo9g3joi@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Y1gbAA0JVo9g3joi@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221027101702.GA18823@hu-pkondeti-hyd.qualcomm.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: bgQqJMOi-67EqHUBpImvwTipRzC0CKN6
+X-Proofpoint-GUID: bgQqJMOi-67EqHUBpImvwTipRzC0CKN6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-27_05,2022-10-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ impostorscore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=999
+ spamscore=0 phishscore=0 bulkscore=0 malwarescore=0 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2210270057
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/25/22 19:21, Sean Christopherson wrote:
-> Shortlog scope is still wrong, should be "KVM: nVMX:"
+On Thu, Oct 27, 2022 at 03:47:02PM +0530, Pavan Kondeti wrote:
+> On Thu, Oct 27, 2022 at 02:42:41PM +0530, Mukesh Ojha wrote:
+> > Data type of msg in f2fs_write_checkpoint trace should
+> > be const char * instead of char *.
+> > 
+> > Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> > ---
+> >  include/trace/events/f2fs.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
+> > index ff57e7f..7fbfce4 100644
+> > --- a/include/trace/events/f2fs.h
+> > +++ b/include/trace/events/f2fs.h
+> > @@ -1404,7 +1404,7 @@ TRACE_EVENT(f2fs_readpages,
+> >  
+> >  TRACE_EVENT(f2fs_write_checkpoint,
+> >  
+> > -	TP_PROTO(struct super_block *sb, int reason, char *msg),
+> > +	TP_PROTO(struct super_block *sb, int reason, const char *msg),
+> >  
+> >  	TP_ARGS(sb, reason, msg),
+> >  
+> LGTM. one minor comment.
 > 
-> The shortlog is also somewhat is misleading/confusing, as it's not at all obvious
-> that "sgx enabled" means "KVM's sgx_module param is enabled" and not "SGX is enabled
-> in the system".
+> Declare it const char pointer in the trace point structure also.
 > 
-> E.g.
+> diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
+> index 11f6b71..22960e6 100644
+> --- a/include/trace/events/f2fs.h
+> +++ b/include/trace/events/f2fs.h
+> @@ -1429,7 +1429,7 @@ TRACE_EVENT(f2fs_write_checkpoint,
+>  	TP_STRUCT__entry(
+>  		__field(dev_t,	dev)
+>  		__field(int,	reason)
+> -		__field(char *,	msg)
+> +		__field(const char *,	msg)
+>  	),
+>  
+>  	TP_fast_assign(
 > 
->    KVM: nVMX: Advertise ENCLS_EXITING to L1 iff SGX is fully supported
+Never mind, I saw your other patch which makes it a string. Actually, we don't
+need a string here as all the invocations (currently) are from ro strings like
+below 
 
-Queued with this commit message:
+trace_f2fs_write_checkpoint(sbi->sb, cpc->reason, "start block_ops");
+trace_f2fs_write_checkpoint(sbi->sb, cpc->reason, "finish block_ops");
+trace_f2fs_write_checkpoint(sbi->sb, cpc->reason, "finish checkpoint");
 
----
-KVM: VMX: fully disable SGX if SECONDARY_EXEC_ENCLS_EXITING unavailable
-
-Clear enable_sgx if ENCLS-exiting is not supported, i.e. if SGX cannot be
-virtualized.  When KVM is loaded, adjust_vmx_controls checks that the
-bit is available before enabling the feature; however, other parts of the
-code check enable_sgx and not clearing the variable caused two different
-bugs, mostly affecting nested virtualization scenarios.
-
-First, because enable_sgx remained true, SECONDARY_EXEC_ENCLS_EXITING
-would be marked available in the capability MSR that are accessed by a
-nested hypervisor.  KVM would then propagate the control from vmcs12
-to vmcs02 even if it isn't supported by the processor, thus causing an
-unexpected VM-Fail (exit code 0x7) in L1.
-
-Second, vmx_set_cpu_caps() would not clear the SGX bits when hardware
-support is unavailable.  This is a much less problematic bug as it only
-happens if SGX is soft-disabled (available in the processor but hidden
-in CPUID) or if SGX is supported for bare metal but not in the VMCS
-(will never happen when running on bare metal, but can theoertically
-happen when running in a VM).
-
-Last but not least, this ensures that module params in sysfs reflect
-KVM's actual configuration.
-
-RHBZ: https://bugzilla.redhat.com/show_bug.cgi?id=2127128
-Fixes: 72add915fbd5 ("KVM: VMX: Enable SGX virtualization for SGX1, SGX2 and LC")
-Cc: stable@vger.kernel.org
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Suggested-by: Bandan Das <bsd@redhat.com>
-Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Message-Id: <20221025123749.2201649-1-eesposit@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
-
-The bug is strictly speaking not in nVMX, although that's where most
-of the symptoms surface.
-
-Paolo
-
+Thanks,
+Pavan
