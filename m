@@ -2,80 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2AE561048D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBE8610490
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236582AbiJ0ViJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 17:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
+        id S235842AbiJ0Vih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 17:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235273AbiJ0ViG (ORCPT
+        with ESMTP id S229998AbiJ0Vif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 17:38:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3CD72B44;
-        Thu, 27 Oct 2022 14:38:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 574B06251D;
-        Thu, 27 Oct 2022 21:38:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A50F1C433D6;
-        Thu, 27 Oct 2022 21:38:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666906684;
-        bh=ix0PYNSgySxYrk2hW53SOaFo1wchmy/qngotI3mQ60k=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=FlFwi1il3n7gBMxfgVrNJHlUjGgX+AciY8MIdiEaGdPowUVvmFaqwoDIdAAvUyz8r
-         Tf8gYxd+LhXstF12EuFWTGB0ocYBgB9ijMpNhxE+Lg8u2bDSWAxU0Ceq7l9lOl471Z
-         jJqG0ETuCxQEOXFJo6y5V/QH8jc59WscPn0XIq5/tjtflucFgwi7KuafLLqD5mamM8
-         KzK1i7ALvc86YY3YPBmDq1Vbbsp9RZcg1bJRRXBtfwZ4ucwfSRidwnKjBpbTbZ8Nw/
-         NNGQkPO7Rjcfti+FnIFSa8bsb/LpgkxPlHA3iaKF3koqB4JOovkbQS5FaoWd8AB2BM
-         vV2vEqjWpfZ9g==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 27 Oct 2022 17:38:35 -0400
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84AD72EF2;
+        Thu, 27 Oct 2022 14:38:34 -0700 (PDT)
+Received: by mail-pg1-f177.google.com with SMTP id s196so2930891pgs.3;
+        Thu, 27 Oct 2022 14:38:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+fu+AE2w/NjkXk0KKy23RtcVXcub0gQ9rE9WPHcfx1Q=;
+        b=jBU3PnFHTDSeBgavLo37H6csyVXAcZF4XsSXO9JhiZ3RTVFgRPR3JzfHwUuLDdTlwY
+         NbvdHsybDyft6bN7K4jC4WH4G2uPCYV7jcdhS+rg+Q5pIpQRDyvzSU0hmU7kySHg1Mml
+         QGzYK3qG1AWnFZnXwTS0KZH4jwe11IRek1w8XNLVqs1YqtSifrv5qepcQdPXFLFIW9c3
+         XNntbngsWFnHNvSi79wfcCNKd9ycEemHvz17Q2leJ/NQNxIC3MtH/kkDjAXMZoUY+64Q
+         gYWx7chMT8ooPZAlHvVSDjcdwYCxT1crtKkepMA706Ecu9rMtOxHwb8pYV4VT2MxUsWS
+         TbRA==
+X-Gm-Message-State: ACrzQf2ZRz6m7+AqcXOtYcNx5PPcaGXmTKViDLio6mOxfXyAbzFQnmOD
+        R8UU0SJm5vuprjf4qI7OQN7w8s/fLMo=
+X-Google-Smtp-Source: AMsMyM4nU0xhIGSaZ7xuFhJD16Ppb/dYzKOYcXSfAYOwmA+buJNGVWyimemJMks3bOFam6I+8Qn5/A==
+X-Received: by 2002:a63:6a85:0:b0:43b:d845:f67d with SMTP id f127-20020a636a85000000b0043bd845f67dmr42692485pgc.349.1666906714042;
+        Thu, 27 Oct 2022 14:38:34 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:bc2b:ff19:1b02:257b? ([2620:15c:211:201:bc2b:ff19:1b02:257b])
+        by smtp.gmail.com with ESMTPSA id q9-20020a63d609000000b004405c6eb962sm1494780pgg.4.2022.10.27.14.38.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 14:38:33 -0700 (PDT)
+Message-ID: <18ef5dff-141c-7d23-6930-8bd5a9871e3e@acm.org>
+Date:   Thu, 27 Oct 2022 14:38:31 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <eeb3e06d-316a-1ff8-b4b8-c257fa03a206@quicinc.com>
-References: <20221026190441.4002212-1-quic_molvera@quicinc.com> <20221026190441.4002212-6-quic_molvera@quicinc.com> <20221027182240.E9FA0C433D6@smtp.kernel.org> <eeb3e06d-316a-1ff8-b4b8-c257fa03a206@quicinc.com>
-Subject: Re: [PATCH v3 5/5] dt-bindings: qcom,pdc: Introduce pdc bindings for QDU1000 and QRU1000
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Taniya Das <quic_tdas@quicinc.com>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Date:   Thu, 27 Oct 2022 14:38:02 -0700
-User-Agent: alot/0.10
-Message-Id: <20221027213804.A50F1C433D6@smtp.kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v3 08/17] ufs: core: mcq: Allocate memory for mcq mode
+Content-Language: en-US
+To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        stanley.chu@mediatek.com, eddie.huang@mediatek.com,
+        daejun7.park@samsung.com, avri.altman@wdc.com, mani@kernel.org,
+        beanhuo@micron.com, quic_richardp@quicinc.com,
+        linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1666288432.git.quic_asutoshd@quicinc.com>
+ <054ec088877bd4b421f2e9cb2b0fd8c4e058af11.1666288432.git.quic_asutoshd@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <054ec088877bd4b421f2e9cb2b0fd8c4e058af11.1666288432.git.quic_asutoshd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Melody Olvera (2022-10-27 14:31:08)
->=20
->=20
-> On 10/27/2022 11:22 AM, Stephen Boyd wrote:
-> > Quoting Melody Olvera (2022-10-26 12:04:41)
-> >> Add compatible fields for QDU1000 and QRU1000 pdcs.
-> >>
-> >> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-> >> ---
-> > Is there a reason why this patch continues to be included in what is
-> > otherwise a clk driver patch series? Can this patch be sent separately
-> > from the clk patches (and not Cced to clk maintainers/list) in the
-> > future?
-> Sure thing. On reflection, this belongs with the misc support patches.
->=20
+On 10/20/22 11:03, Asutosh Das wrote:
+>   int ufshcd_mcq_init(struct ufs_hba *hba)
+>   {
+> -	int ret;
+> +	int ret, i;
+> +	struct ufs_hw_queue *hwq;
 
-Thanks!
+Although this is not a strict rule, most kernel developers these days 
+order declarations from longer to shorter ("reverse Christmas tree").
+
+> +	/* The very first HW queue is to serve device command */
+
+is to serve -> serves
+command -> commands
+
+Otherwise this patch looks good to me.
+
+Thanks,
+
+Bart.
