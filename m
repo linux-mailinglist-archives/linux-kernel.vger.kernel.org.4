@@ -2,102 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFEA960F799
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB47660F7A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235712AbiJ0MkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
+        id S234729AbiJ0MlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235262AbiJ0MkS (ORCPT
+        with ESMTP id S235731AbiJ0Mkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:40:18 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594ED24952;
-        Thu, 27 Oct 2022 05:40:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666874415; x=1698410415;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=gCO0Gi7jBp04JaT6Hozi8Zx3cpn252rR5ReZxqs5hCY=;
-  b=KOM1BCNT7d0j35P3H9WmFQhEc6CWmXUKKJUkrS1fwuf7fImwaTeDIGXe
-   /+s4HuW6q/RkYY8TYpH8kpSjree/rSwdRrr+brrDQI3xa0TeyL33FRZHk
-   S/H2g3iRpnLgxBHNa3pvXitg72pi03jSQQhZajfzV/LtVNwEidqrV49fS
-   mFXso0ny0KjL0u0NSd9Wv3dYIk4B9HElbARz0O6lMUhkUqR0MnQzepFBK
-   Vws2wBmzoY+1zFwNywDQE7MROZwDUgGpDSRbhnBucfKf3BC0xRm1mzGUj
-   v3FSIiXTf34zevm34qx88v8i1G3J1GR3CCOXnjW/XB1ITQBCWlbh+ULr6
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="309907166"
-X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
-   d="scan'208";a="309907166"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 05:40:14 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="632392902"
-X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
-   d="scan'208";a="632392902"
-Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.251.5.115]) ([10.251.5.115])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 05:40:14 -0700
-Message-ID: <85531c8e-e708-c76a-2d66-30ad7a3f8471@linux.intel.com>
-Date:   Thu, 27 Oct 2022 05:40:13 -0700
+        Thu, 27 Oct 2022 08:40:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29BDE50FAF
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:40:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1F43622CE
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:40:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C13C433C1;
+        Thu, 27 Oct 2022 12:40:37 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LkTirsK8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666874436;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pj9a76Gy5EIhvCgh1tn+VtUpUQsCC06v3G1EotgJVMo=;
+        b=LkTirsK8nmkzFwQL0kKsg47ZKNB1kGianxNTTV0XlcMhv3oFXN4E9GwBAO5Z/MviCdXvVh
+        J1bpLikrl1KoUR86EsLopow+WagD0UVWMMYmpZAXpgzlvu5v8igNbCtkeML1nCtpvAogGC
+        WzLLRTcssPa6c/TnUdoggNsU8VAMl1A=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 51af9fd4 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 27 Oct 2022 12:40:35 +0000 (UTC)
+Date:   Thu, 27 Oct 2022 14:40:14 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Adam Langley <agl@google.com>,
+        James Morse <james.morse@arm.com>
+Subject: Re: [RFC PATCH] arm64: Enable data independent timing (DIT) in the
+ kernel
+Message-ID: <Y1p8LjXoAjPkWdL+@zx2c4.com>
+References: <20221027112741.1678057-1-ardb@kernel.org>
+ <Y1p1oKCE+paB8JUK@FVFF77S0Q05N>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v6 16/21] x86/virt/tdx: Reserve TDX module global KeyID
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
-        dave.hansen@intel.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com,
-        tony.luck@intel.com, peterz@infradead.org,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-References: <cover.1666824663.git.kai.huang@intel.com>
- <7558961d3dff6311c7872f57ac5bd6727f21e140.1666824663.git.kai.huang@intel.com>
-From:   Andi Kleen <ak@linux.intel.com>
-In-Reply-To: <7558961d3dff6311c7872f57ac5bd6727f21e140.1666824663.git.kai.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y1p1oKCE+paB8JUK@FVFF77S0Q05N>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Oct 27, 2022 at 01:12:16PM +0100, Mark Rutland wrote:
+> I appreciate this is a simple way to rule out issues of that sort, but I think
+> the "may" in that sentence is doing a lot of work, since:
+> 
+> * IIUC, we don't have a specific case in mind that we're concerned about. I can
+>   believe that we think all the crypto code we intend to be constant time is
+>   theoretically affected.
+> 
+> * IIUC we haven't gone an audited all constant-time code to check it doesn't
+>   happen to use instructions with data-dependent-timing. So there might be more
+>   work to do atop this to ensure theoretical correctness.
+> 
+> * AFAIK there are no contemporary implementations where the DIT is both
+>   implemented and it being clear results in data-dependent-timing. i.e. we have
+>   nothing to actually test on.
+>  
+> I have a slight fear that (as above) if there are future CPUs which do consider
+> DIT, there's presumably a noticeable performance difference (or the CPU would
+> just provide data-independent-timing regardless), but I'm not sure if that's
+> just something we have to live with or could punt on until we notice such
+> cases.
 
-On 10/26/2022 4:16 PM, Kai Huang wrote:
-> TDX module initialization requires to use one TDX private KeyID as the
-> global KeyID to protect the TDX module metadata.  The global KeyID is
-> configured to the TDX module along with TDMRs.
->
-> Just reserve the first TDX private KeyID as the global KeyID.  Keep the
-> global KeyID as a static variable as KVM will need to use it too.
->
-> Reviewed-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
-> ---
->   arch/x86/virt/vmx/tdx/tdx.c | 9 +++++++++
->   1 file changed, 9 insertions(+)
->
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index 5d74ada072ca..0820ba781f97 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -62,6 +62,9 @@ static struct tdsysinfo_struct tdx_sysinfo;
->   static struct cmr_info tdx_cmr_array[MAX_CMRS] __aligned(CMR_INFO_ARRAY_ALIGNMENT);
->   static int tdx_cmr_num;
->   
-> +/* TDX module global KeyID.  Used in TDH.SYS.CONFIG ABI. */
-> +static u32 tdx_global_keyid;
+You're heading on a road to disaster reasoning like that.
 
+You wrote, "we don't have a specific case in mind that we're concerned
+about", but actually, all you can say here is that you're not personally
+aware of a specific case in mind to be concerned about. As somebody who
+actually works on this code, I do have specific cases I'm worried about,
+and I know there are certain assumptions I've made about various coding
+patterns being CT, resulting in various instructions that I assume to be
+CT, which is something I tend to check by hand, while others have entire
+frameworks to automatically verify this kind of thing. In other words,
+one man's theory is another man's practice.
 
-Comment how this is serialized (or doesn't need it)
+Then you write that there aren't any contemporary instructions where
+this matters, but you fear they could come up in the future. Okay, good,
+that's a perspective we can both share. The logical thing to do about
+that would be Ard's patch here. However, you then conclude something
+vague about performance and suggest punting this down the road. I guess
+this makes sense to you because you don't think timing attacks are real
+anyway. You're entitled to your opinion, of course, but I don't think
+it's a popular one, and it certainly is contrary to that of most
+implementers of the concerned code.
 
+On the contrary, we should be proactive in ensuring the kernel remains
+a suitable environment for CT code, preventing the problem *before* it
+happens, rather than having to deal with vulnerability response down the
+road, "punt[ing]" it, as you said. And perhaps if we handle this now,
+CPU designers also won't feel like they can get away with silly
+performance gains at the cost of CT instructions.
 
-
+Jason
