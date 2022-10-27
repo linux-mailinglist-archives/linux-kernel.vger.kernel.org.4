@@ -2,113 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EECF60EEFB
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 06:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDBE560EEFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 06:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233801AbiJ0EZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 00:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
+        id S233884AbiJ0E1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 00:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiJ0EZg (ORCPT
+        with ESMTP id S229691AbiJ0E06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 00:25:36 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5D132B9D;
-        Wed, 26 Oct 2022 21:25:00 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0VT9cxpK_1666844688;
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VT9cxpK_1666844688)
-          by smtp.aliyun-inc.com;
-          Thu, 27 Oct 2022 12:24:51 +0800
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-To:     rafael@kernel.org, lenb@kernel.org, james.morse@arm.com,
-        tony.luck@intel.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        jarkko@kernel.org, naoya.horiguchi@nec.com, linmiaohe@huawei.com,
-        akpm@linux-foundation.org
-Cc:     stable@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cuibixuan@linux.alibaba.com,
-        baolin.wang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
-        xueshuai@linux.alibaba.com
-Subject: [PATCH] ACPI: APEI: set memory failure flags as MF_ACTION_REQUIRED on action required events
-Date:   Thu, 27 Oct 2022 12:24:45 +0800
-Message-Id: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 27 Oct 2022 00:26:58 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82535DBE42
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 21:26:57 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id m2so398898pjr.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 21:26:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sLpRMNQkYbVj6lyrmRrOxuuwmgiytFPuZn2IVFPntgM=;
+        b=h0chSoTr9LjZO+zENyYG/Z5Q+FKzIaov9HQFxUG64gBu+2GKz2R/9u3u7+0MU7R0wt
+         vlHlWa+fYEWocbNl7x13wdFDgrbF00lwqinD3Zy6lyfAqx3xQPrUO/ffW5tSXdn0Ca8O
+         Yyvq6cq3UbLn/hUgrAJYeuLOza1Wv9SvmKomk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sLpRMNQkYbVj6lyrmRrOxuuwmgiytFPuZn2IVFPntgM=;
+        b=mCbGOQHoVx7oQSZCv+vaWumge8HJP0R4y49eap8x3yNVzNvn2lGsk0+HCpKqKUNmMD
+         or2voWJalCs2YbnsDN1OuZcVSWH/4klWIIUth3RCOg+GAW9CkKKmRMWKiw6xRzE74Gj9
+         VILvkT+7wvyL81JuVUgyTfUn9h7+je2C50J2xyfIM+F1g51Rrh1gt2akGTe9WorKxmla
+         oK5ph55R1eOHArywKOKcrh/ZQRcbpZMF1/9UTmqb6BCATSpqPZB/uXZyzVi8qoMrnDA5
+         GD4UaAO4gVnpVx8Opgmk2NzWtmdD+MOsG205ppCEiZKJl7TE/KqGMPIeyvhtrQOIPKeQ
+         YKrA==
+X-Gm-Message-State: ACrzQf33dYTtVyKtH/D8Wfv7wVIymDtK0zEFjTn8+O/tvAtiEi2IjGLX
+        sariJCyD2wO+Sqv0fgkEtHDX0Q==
+X-Google-Smtp-Source: AMsMyM7ej7d6DvNI5V90T+YskrHYFramiQG9gIeKgZ32QfvvxlFWmQ4IoOb5JP8QfhN8qhwkK7U9EQ==
+X-Received: by 2002:a17:902:848c:b0:17a:b4c0:a02b with SMTP id c12-20020a170902848c00b0017ab4c0a02bmr47126465plo.122.1666844816979;
+        Wed, 26 Oct 2022 21:26:56 -0700 (PDT)
+Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:30f2:4501:65fa:df12])
+        by smtp.gmail.com with ESMTPSA id w23-20020aa79557000000b00565c8634e55sm203140pfq.135.2022.10.26.21.26.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 21:26:56 -0700 (PDT)
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Minchan Kim <minchan@kernel.org>
+Cc:     Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [PATCHv3 0/9] zsmalloc/zram: configurable zspage size
+Date:   Thu, 27 Oct 2022 13:26:42 +0900
+Message-Id: <20221027042651.234524-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two major types of uncorrected error (UC) :
+	Hello,
 
-- Action Required: The error is detected and the processor already consumes the
-  memory. OS requires to take action (for example, offline failure page/kill
-  failure thread) to recover this uncorrectable error.
+	Some use-cases and/or data patterns may benefit from
+larger zspages. Currently the limit on the number of physical
+pages that are linked into a zspage is hardcoded to 4. Higher
+limit changes key characteristics of a number of the size
+classes, improving compactness of the pool and redusing the
+amount of memory zsmalloc pool uses. More on this in 0001
+commit message.
 
-- Action Optional: The error is detected out of processor execution context.
-  Some data in the memory are corrupted. But the data have not been consumed.
-  OS is optional to take action to recover this uncorrectable error.
+v3:
+-- Removed lots of text from 0001 commit message. Now it's shorter
+   and simpler.
 
-For X86 platforms, we can easily distinguish between these two types
-based on the MCA Bank. While for arm64 platform, the memory failure
-flags for all UCs which severity are GHES_SEV_RECOVERABLE are set as 0,
-a.k.a, Action Optional now.
+v2:
+-- Cherry picked a patch from Alexey (minor code tweaks to move
+   it ahead of this series)
+-- zsmalloc does not require anymore pages-per-zspage limit to be a
+   pow of 2 value, and overall doesn't use "order" any longer
+-- zram does not require "zspage order" (pow of 2) value anymore
+   and instead accepts an integer in [1,16] range
+-- There is no global huge_class_size in zsmalloc anymore.
+   huge_class_size is per-pool, since it depends on pager-per-zspage,
+   which can be different for different pools.
+-- There is no global huge_class_size in zram anymore. It should
+   be per-pool (per-device).
+-- Updated documentation
+-- Fixed documentation htmldocs warning (Stephen)
+-- Dropped get_pages_per_zspage() patch
+-- Renamed zram sysfs knob (device attribute)
+-- Re-worked "synthetic test" section in the first commit: more numbers,
+   objects distribution analysis, etc.
 
-If UC is detected by a background scrubber, it is obviously an Action
-Optional error.  For other errors, we should conservatively regard them
-as Action Required.
 
-cper_sec_mem_err::error_type identifies the type of error that occurred
-if CPER_MEM_VALID_ERROR_TYPE is set. So, set memory failure flags as 0
-for Scrub Uncorrected Error (type 14). Otherwise, set memory failure
-flags as MF_ACTION_REQUIRED.
 
-Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
----
- drivers/acpi/apei/ghes.c | 10 ++++++++--
- include/linux/cper.h     |  3 +++
- 2 files changed, 11 insertions(+), 2 deletions(-)
+Alexey Romanov (1):
+  zram: add size class equals check into recompression
 
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index 80ad530583c9..6c03059cbfc6 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -474,8 +474,14 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
- 	if (sec_sev == GHES_SEV_CORRECTED &&
- 	    (gdata->flags & CPER_SEC_ERROR_THRESHOLD_EXCEEDED))
- 		flags = MF_SOFT_OFFLINE;
--	if (sev == GHES_SEV_RECOVERABLE && sec_sev == GHES_SEV_RECOVERABLE)
--		flags = 0;
-+	if (sev == GHES_SEV_RECOVERABLE && sec_sev == GHES_SEV_RECOVERABLE) {
-+		if (mem_err->validation_bits & CPER_MEM_VALID_ERROR_TYPE)
-+			flags = mem_err->error_type == CPER_MEM_SCRUB_UC ?
-+					0 :
-+					MF_ACTION_REQUIRED;
-+		else
-+			flags = MF_ACTION_REQUIRED;
-+	}
- 
- 	if (flags != -1)
- 		return ghes_do_memory_failure(mem_err->physical_addr, flags);
-diff --git a/include/linux/cper.h b/include/linux/cper.h
-index eacb7dd7b3af..b77ab7636614 100644
---- a/include/linux/cper.h
-+++ b/include/linux/cper.h
-@@ -235,6 +235,9 @@ enum {
- #define CPER_MEM_VALID_BANK_ADDRESS		0x100000
- #define CPER_MEM_VALID_CHIP_ID			0x200000
- 
-+#define CPER_MEM_SCRUB_CE			13
-+#define CPER_MEM_SCRUB_UC			14
-+
- #define CPER_MEM_EXT_ROW_MASK			0x3
- #define CPER_MEM_EXT_ROW_SHIFT			16
- 
+Sergey Senozhatsky (8):
+  zsmalloc: turn zspage order into runtime variable
+  zsmalloc: move away from page order defines
+  zsmalloc: make huge class watermark zs_pool member
+  zram: huge size watermark cannot be global
+  zsmalloc: pass limit on pages per-zspage to zs_create_pool()
+  zram: add pages_per_pool_page device attribute
+  Documentation: document zram pages_per_pool_page attribute
+  zsmalloc: break out of loop when found perfect zspage order
+
+ Documentation/admin-guide/blockdev/zram.rst |  38 +++++--
+ drivers/block/zram/zram_drv.c               |  63 +++++++++--
+ drivers/block/zram/zram_drv.h               |   7 ++
+ include/linux/zsmalloc.h                    |  14 ++-
+ mm/zsmalloc.c                               | 114 +++++++++++++-------
+ 5 files changed, 178 insertions(+), 58 deletions(-)
+
 -- 
-2.20.1.9.gb50a0d7
+2.38.0.135.g90850a2211-goog
 
