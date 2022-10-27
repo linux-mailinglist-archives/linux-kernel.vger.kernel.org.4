@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D586260F7F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A687A60F7F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235858AbiJ0Mtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235857AbiJ0MtW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S235856AbiJ0MtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 27 Oct 2022 08:49:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C4E16EA05;
-        Thu, 27 Oct 2022 05:49:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84AA3622B7;
-        Thu, 27 Oct 2022 12:49:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE7EEC4347C;
-        Thu, 27 Oct 2022 12:49:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666874960;
-        bh=ayJrA1JTyWdSi5OrotRFQzWnZgKlqWS2GTryuNv9C3g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TENQaZ0qX8wT35paDg5nMw/zzqDcDEv6gQ/cVQgdGrgSOg6rcYgV82zB7lSd+aKWc
-         +im2fBZ6iDwS66vc3HKhmIPvDnkBzPWzAuPyrSgWZBgy+bdveHDvSvE1AQKBXXIAxh
-         LUksZbDLfpInJJ/P1SCJwJjBmGBzqyoa1xU2sRP3wdoDXnDJs6eHXezpsQxybLNmeU
-         UkuSpNW5BkYyHlEmTO/b46g/KZ5ZjdzER4j5ojkKYDlkhFith0OED+wB31MqxveAac
-         +bZnYuUAxtnuisxPxgDeKsNxiT++anokNcEa5KmETwhByjekKjuO5E86WulWhhVDMz
-         k5alL+wp+TuZA==
-Received: by mail-ej1-f50.google.com with SMTP id d26so4192081eje.10;
-        Thu, 27 Oct 2022 05:49:20 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0pDxChIFEtAvC/WZ3EEahn+EtgW9rpk/4q0OpJTdikcALW6bH3
-        yqOInllefgdhJAOfHqxnQkn60/aygSTMf52XZ2U=
-X-Google-Smtp-Source: AMsMyM4y/u9sWFlXV8p8VaH9Xlg1ipNTnnAKSXBRsvzTB2BIHk4F2a4+XmGNyWABLqhGPAldl4sABjzRtQ5+fY6VgnY=
-X-Received: by 2002:a17:907:3ea2:b0:7ad:86f9:7b15 with SMTP id
- hs34-20020a1709073ea200b007ad86f97b15mr4488706ejc.272.1666874959084; Thu, 27
- Oct 2022 05:49:19 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235337AbiJ0MtR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Oct 2022 08:49:17 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C2416F414
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:49:15 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id n14so913072wmq.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:49:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q36OlMnP3Ys/6ybhANV3Apdof3npa1Vh+Mgsx1pBVWU=;
+        b=OQyezL4cGU1S6Th8YVxCSmmKg8MDodYMD5HBV7ElzJz4DtRh+iegPU5J4dVfdCItuH
+         dH97BHd68JdE3Jo/G/zHfYvNNSReIHiHCRWAFXj8kofujxZxdQnVrTmj28ukfotkS3MN
+         HCvGo5DIIw9WZcsyGtfu66qsxa1g6nBLzRhprzhByHv8I7+eMkYkxlU1B5D3xq3I4KOf
+         /28vnmmORF0AvfXt4fvhe9ftj7JGy12h86+fvleBteEpTJrSSCwPNZW1SuahFhQyjGJu
+         Cv4MvPWxyx1NHB3qoqVJeBCgSm0DwTbCnQCRHfUpV2PaPjloUpfwAxtiC3iz5FqnGXB7
+         6YrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q36OlMnP3Ys/6ybhANV3Apdof3npa1Vh+Mgsx1pBVWU=;
+        b=W0NmwS8YlvRC7CRLw8fMhAlggkhunQVyZ1NE6OeMEYD0eQ5RFXXt5j0oyd6iLFUHUy
+         cJyc168DRlRRenKpL0yuHNlMsPGu/eAyUmPASEToJm06TH2NwG6bkbGVE9CV5LOjkG6P
+         D4R7ZGLzLDpMK/XZIgv7d1y9YAm7VaoMR48S14UDYsWr76n2iPlPQkggeY3mcPXDQDNN
+         koV+osQyZzfe8z9+sVeTxGUrfr9vSxGr/HKj+1B1zP3BmBYTY5wphH8KDTdWAIopCaBY
+         POFb76BdCvbHtYFDpfvs6tzazu7MEG54mHBi6MC/EiFQ2BuPqpq0/DqPjxPBaODhL0Yx
+         mAWw==
+X-Gm-Message-State: ACrzQf0/r8N8/WOvAz8vzR7bGYqJyEXlWyWbOCHI/gX2adQMTU2P7Hc2
+        qz1xAfawN+NGuvUArfCItWydhQ==
+X-Google-Smtp-Source: AMsMyM7H83+TH22aHNQ6HRVyJaoDi39AW5Sf28cYzigPPM7qK21FcZrwDuemt/vdFqzRpl+/R7UhNg==
+X-Received: by 2002:a05:600c:4f45:b0:3c7:176b:2505 with SMTP id m5-20020a05600c4f4500b003c7176b2505mr5771448wmq.185.1666874954196;
+        Thu, 27 Oct 2022 05:49:14 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:898:f380:1cb7:f7ba:a36e:de10? ([2a01:e0a:898:f380:1cb7:f7ba:a36e:de10])
+        by smtp.gmail.com with ESMTPSA id bg33-20020a05600c3ca100b003b49bd61b19sm4977299wmb.15.2022.10.27.05.49.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 05:49:13 -0700 (PDT)
+Message-ID: <18ae0876-2d37-cde9-183f-894dfcdf4be9@linaro.org>
+Date:   Thu, 27 Oct 2022 14:49:12 +0200
 MIME-Version: 1.0
-References: <20221024070105.306280-1-chenhuacai@loongson.cn>
- <20221024070105.306280-5-chenhuacai@loongson.cn> <CAJF2gTSN3zzvgAdiM8rYc3EGFxR4JJnHSh12mvsfUOQsqRRvkg@mail.gmail.com>
- <CAAhV-H40fcUW3jwGZXpPNjbpizXb85zytCpKGHvEGwoRpG3c0Q@mail.gmail.com> <3eb9b612-e765-7ad0-aed8-a50e28677e9c@linaro.org>
-In-Reply-To: <3eb9b612-e765-7ad0-aed8-a50e28677e9c@linaro.org>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Thu, 27 Oct 2022 20:49:07 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7uTTaSqrYwhvy78CAVmAJi_jJ4BipgfOW6LV5vYm8=NQ@mail.gmail.com>
-Message-ID: <CAAhV-H7uTTaSqrYwhvy78CAVmAJi_jJ4BipgfOW6LV5vYm8=NQ@mail.gmail.com>
-Subject: Re: [PATCH V13 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-To:     =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
-Cc:     Guo Ren <guoren@kernel.org>, Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+From:   neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCHv3] arm64: dts: meson: Enable active coling using gpio-fan
+ on Odroid N2/N2+
+Content-Language: en-US
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Dan Johansen <strit@manjaro.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221022084737.1028-1-linux.amoon@gmail.com>
+ <CAFBinCBu_-0m9JeAr5kd-v7Z5LTi7w0WmmUYybW_kL4KJXXpOQ@mail.gmail.com>
+ <CANAwSgRzdD0FWg+z6hTFs7KvpsD64bChX-k0dPXJfACXZH2zbQ@mail.gmail.com>
+ <CAFBinCCNJiL-ZKRYesQAwys6bBMpYHJbUDK-Zi_VhGDVSvF7uQ@mail.gmail.com>
+ <CANAwSgTLTCA9=WvWXcR-40baauN3kAk2qx9k4FQOPCa1+_O0Yw@mail.gmail.com>
+ <5d2ffeca-b41c-20b4-454b-703c39bbb29e@linaro.org>
+ <CANAwSgR1CN=Gho6NGMoM1bH92KyeGqoAphmT6NqtnL=+3Zg_jQ@mail.gmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <CANAwSgR1CN=Gho6NGMoM1bH92KyeGqoAphmT6NqtnL=+3Zg_jQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,60 +90,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 9:44 PM Philippe Mathieu-Daud=C3=A9
-<philmd@linaro.org> wrote:
->
-> On 26/10/22 14:59, Huacai Chen wrote:
-> > On Mon, Oct 24, 2022 at 4:04 PM Guo Ren <guoren@kernel.org> wrote:
-> >> On Mon, Oct 24, 2022 at 3:05 PM Huacai Chen <chenhuacai@loongson.cn> w=
-rote:
-> >>>
-> >>> From: Feiyang Chen <chenfeiyang@loongson.cn>
-> >>>
-> >>> The feature of minimizing overhead of struct page associated with eac=
-h
-> >>> HugeTLB page is implemented on x86_64. However, the infrastructure of
-> >>> this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
-> >>> OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
-> >>>
-> >>> To avoid the following build error on LoongArch we should include lin=
-ux/
-> >>> static_key.h in page-flags.h. This is straightforward but the build
-> >>> error is implicitly a LoongArch-specific problem, because ARM64 and X=
-86
-> >>> have already include static_key.h from their arch-specific core heade=
-rs.
->
-> >>> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-> >>> index 0b0ae5084e60..1aafdc73e399 100644
-> >>> --- a/include/linux/page-flags.h
-> >>> +++ b/include/linux/page-flags.h
-> >>> @@ -9,6 +9,7 @@
-> >>>   #include <linux/types.h>
-> >>>   #include <linux/bug.h>
-> >>>   #include <linux/mmdebug.h>
-> >>> +#include <linux/static_key.h>
-> >> Em... riscv needn't this.
->
-> Would guarding the header suffice and make riscv OK with this patch?
-Emm, since LoongArch has no build errors due to an accident now, I
-will send a new version without static_key.h inclusion. If one day the
-build error comes back, we can send a separate patch to fix it.
+Hi,
 
-Huacai
->
->   #ifdef CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
->   #include <linux/static_key.h>
->   #endif
->
-> > I found that after 36d4b36b69590fed99356a4426c940a25 (" lib/nodemask:
-> > inline next_node_in() and node_random()"), build errors have gone. But
-> > I think this is just an accident. Because that commit adds random.h
-> > inclusion in nodemask.h, then asm-offsets.c --> sched.h --> nodemask.h
-> > --> random.h --> once.h --> jump_label.h. If one day this chain is
-> > adjusted, then build errors come again.
-> >
-> > On the other hand, page-flags.h is obviously using some static_key
-> > macros, including static_key.h is straightforward for building.
-> >
-> > Huacai
+On 26/10/2022 18:02, Anand Moon wrote:
+> Hi Neil,
+
+<snip>
+
+> 
+> When I try to use pwm_AO_cd,,
+> Either one of the PWM binds will fail to get the following error.
+> 
+>   &pwm_AO_cd {
+> -       pinctrl-0 = <&pwm_ao_d_e_pins>;
+> +       pinctrl-0 = <&pwm_ao_d_e_pins>, <&pwm_ao_d_10_pins>;
+>          pinctrl-names = "default";
+>          clocks = <&xtal>;
+>          clock-names = "clkin1";
+> 
+> [    3.941700] pwm-regulator regulator-vddcpu-b: error -EBUSY: Failed to get PWM
+> [    3.943198] pwm-regulator: probe of regulator-vddcpu-b failed with error -16
+> 
+> [    3.956356] pwm-fan pwm-fan: error -EBUSY: Could not get PWM
+> [    3.956396] pwm-fan: probe of pwm-fan failed with error -16
+
+Yeah because PWM "D" is already used by the "pwm_AO_ab" controller, so you can't use it for the FAN.
+
+> 
+> Below are my changes with  pwm_AO_ab
+> ---------------------------------------------------------------------------------------------
+> alarm@odroid-n2:~/linux-amlogic-5.y-devel$ git diff
+> arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
+> b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
+> index fd3fa82e4c33..d038ba1e2453 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
+> @@ -39,6 +39,14 @@ emmc_pwrseq: emmc-pwrseq {
+>                  reset-gpios = <&gpio BOOT_12 GPIO_ACTIVE_LOW>;
+>          };
+> 
+> +       fan: pwm-fan {
+> +               compatible = "pwm-fan";
+> +               pwms = <&pwm_AO_ab 1 1250 0>;
+
+Here you use the "B" PWM signal, not the D.
+
+> +               fan-supply = <&vcc_5v>;
+> +               #cooling-cells = <2>;
+> +               cooling-levels = <0 100 170 230>;
+> +       };
+> +
+>          leds {
+
+<snip>
+
+> 
+> +&pwm_AO_ab {
+> +       pinctrl-0 = <&pwm_ao_d_10_pins>;
+
+The "pwm_AO_ab" controller only controls the PWM "A" & "B signals, not the "D" !
+
+This basically enables the PWM "D" pin function to GPIOAO_10, it doesn't assign it to the "pwm_AO_ab" controller.
+
+So by enabling this pinctrl, it will duplicate the pwm_ao_d_e_pins signal to pwm_ao_d_10_pins, this is why the FAN spins non-stop.
+
+> +       pinctrl-names = "default";
+> +       clocks = <&xtal>;
+> +       clock-names = "clkin1";
+> +       status = "okay";
+> +};
+> +
+>   &pwm_AO_cd {
+>          pinctrl-0 = <&pwm_ao_d_e_pins>;
+>          pinctrl-names = "default";
+> -------------------------------------------------------------------------------------------
+>>>
+>>> Thanks
+>>>
+>>> -Anand
+>>
+>> Neil
+
+Neil
