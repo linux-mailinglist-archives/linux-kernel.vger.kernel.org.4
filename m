@@ -2,80 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D44E60F749
+	by mail.lfdr.de (Postfix) with ESMTP id 1B17660F747
 	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234752AbiJ0Ma7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
+        id S235669AbiJ0MbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235037AbiJ0Mav (ORCPT
+        with ESMTP id S234137AbiJ0Ma7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:30:51 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4104F1BF;
-        Thu, 27 Oct 2022 05:30:48 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 70A851F894;
-        Thu, 27 Oct 2022 12:30:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1666873847;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oZtW6t7qpMz2Q3EC1RBI6cmBWiP4lX9451/oMgLPiJU=;
-        b=rv/nIuFO1Fs5yVeG1jNQcXmR0iEf8REDZc9NGJW4hN2Ap5fHG408/qaBXrfbuC/UO6bWhZ
-        T1M6MeOD6RzSXYklRZKlVcbKXowpY/OLhYj84fXkRcExvGE3vl0Hwh+wuqbhSCTR726Llj
-        lOlSSWB0WZCxKzxUuy7PQuY4ae6oJ7c=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1666873847;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oZtW6t7qpMz2Q3EC1RBI6cmBWiP4lX9451/oMgLPiJU=;
-        b=vQ4RqDVcnBLYGPnJzlnfSI/Ab90eVLtfMlRh4fLQX0vrvH39Sw1j9qSZnzufquHpcVnEnX
-        bd4scyc+onsSLaAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3DFD0134CA;
-        Thu, 27 Oct 2022 12:30:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Ycs2Dvd5WmMwSQAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Thu, 27 Oct 2022 12:30:47 +0000
-Date:   Thu, 27 Oct 2022 14:30:32 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH 2/2] btrfs: Fix kernel-doc
-Message-ID: <20221027123032.GT5824@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <20221027062014.54543-1-jiapeng.chong@linux.alibaba.com>
+        Thu, 27 Oct 2022 08:30:59 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC2E48CAC;
+        Thu, 27 Oct 2022 05:30:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666873858; x=1698409858;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=J/jDCmg2q7bhm09TkkUUe1KdpjACywa3pCPoHGip/fs=;
+  b=V1BL38SH9cvADCEzGGjZ/lafIR1WmC8Kf4HgKeRM3mqhuX0c5CHwlRQj
+   VPZgQ07cQ8mhvOVAcpOi2r7lX5QRXNiX9lHKIzBWmXWhGcZs/8q5Rr/s0
+   RTmD/8O4Sy7pLqvJ5uOEmiHZ4NGdhBWkyt4qaF5LL/XZRFzw5U9EF7pAT
+   924HTglJGUOtDW5QxobPs+NV2Cd6IALUdtYagFS/GSspwTfZ7f+TyIX2S
+   V6yfVc0sPfpvEwFXOoxvADoXRmD0kzk9cV0Gsp61UZESRNmXOom14E9jf
+   h2TqgfPh5zF4GZi4hcv1AyWAuJtA4r5VG9gkLgJ+FEIxHWolo6K5IevuL
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="372421538"
+X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
+   d="scan'208";a="372421538"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 05:30:58 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="774974858"
+X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
+   d="scan'208";a="774974858"
+Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.251.5.115]) ([10.251.5.115])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 05:30:56 -0700
+Message-ID: <d114ae48-8ba5-a639-f220-b60f2cac67d2@linux.intel.com>
+Date:   Thu, 27 Oct 2022 05:30:51 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221027062014.54543-1-jiapeng.chong@linux.alibaba.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v6 19/21] x86/virt/tdx: Initialize all TDMRs
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
+        dave.hansen@intel.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com,
+        tony.luck@intel.com, peterz@infradead.org,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+References: <cover.1666824663.git.kai.huang@intel.com>
+ <c78e41604f5c5274da3d5a9a01632abfad0926a5.1666824663.git.kai.huang@intel.com>
+Content-Language: en-US
+From:   Andi Kleen <ak@linux.intel.com>
+In-Reply-To: <c78e41604f5c5274da3d5a9a01632abfad0926a5.1666824663.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 02:20:13PM +0800, Jiapeng Chong wrote:
-> No functional modification involved.
-> 
-> fs/btrfs/ordered-data.c:169: warning: expecting prototype for Add an ordered extent to the per(). Prototype was for btrfs_add_ordered_extent() instead.
 
-Thanks, I've sent patch that fixes all the kdoc formatting so we don't
-get any more warnings.
+> +		next = out.rdx;
+> +		/* Allow scheduling when needed */
+> +		if (need_resched())
+> +			cond_resched();
+
+cond_resched already includes the need_resched check. That is why it is 
+called cond_
+
+
