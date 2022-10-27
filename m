@@ -2,343 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9235F60EF43
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 06:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635CA60EF48
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 07:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234268AbiJ0E7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 00:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        id S234282AbiJ0FDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 01:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234259AbiJ0E7D (ORCPT
+        with ESMTP id S234272AbiJ0FDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 00:59:03 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E45915819A;
-        Wed, 26 Oct 2022 21:59:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666846741; x=1698382741;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=VIboXZAzPOAyqYw2WVL+sf/zfuy9m8FGbkzVfNiyFOo=;
-  b=Nukh5lyMS4N81XwHuDdamTBBB+XJcSeLXUj52fLhSCkpTcGE9RvVDgDb
-   5JFsSZYcG26G4XJORIS4mjIWtG3IfAx9vh9IQP3iBb5Ftsm8DNQh2QQMx
-   nOdA3a6Z1hSZpCo61jSJ7BU5VaDlNAkub1sZtUatV928aQoRVj0t6r+aw
-   XwsnUqLKl5BPsdtx0wEy5XRighr4dvz/5aWBEGCOtKq7GBDdrJP0XWFpL
-   kh0R+BgYD3COtEgWPUznvyPUzQriMaDHXmdsXjhzk6bGa17VNQ2nJ7C7X
-   eG+dqGnst5wQaTXyQ35EvVl0gG4J6CpMAeBjkVBilkCJvoRxYj0SffV+a
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="295538600"
-X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="295538600"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 21:59:01 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="774854441"
-X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="774854441"
-Received: from holmeskx-mobl.amr.corp.intel.com (HELO [10.209.105.249]) ([10.209.105.249])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 21:59:00 -0700
-Message-ID: <f00d1a76-d066-2a03-d5e9-d445a8307e85@linux.intel.com>
-Date:   Wed, 26 Oct 2022 21:58:59 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH 1/5] ACPI/APEI: Add apei_hest_parse_aer()
-Content-Language: en-US
-To:     LeoLiu-oc <LeoLiu-oc@zhaoxin.com>, rafael@kernel.org,
-        lenb@kernel.org, james.morse@arm.com, tony.luck@intel.com,
-        bp@alien8.de, robert.moore@intel.com, ying.huang@intel.com,
-        rdunlap@infradead.org, bhelgaas@google.com,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devel@acpica.org
-Cc:     CobeChen@zhaoxin.com, TonyWWang@zhaoxin.com, ErosZhang@zhaoxin.com
-References: <20221027031518.2855743-1-LeoLiu-oc@zhaoxin.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20221027031518.2855743-1-LeoLiu-oc@zhaoxin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 27 Oct 2022 01:03:01 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A48157452
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 22:03:00 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id g129so203493pgc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 22:03:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eFiEViH1pmz7CSziqwdr/K8qMtJRaQVlUIY1JyGa0HI=;
+        b=GaeWuyn0Y1l2/rp+z3jcUlS98ZQnSqI3XVznWzalbixnQFJnFyqd2wpy2PLIaJK+ct
+         q2yn0oEtQg3SCXvbCCpOE/r7fq9T9vPCbtBmVTz82KO6WEUdmNRPYk+QUEH0PDlgSbkt
+         o9fP8jyFOrXaqQf6XPSqcbatE1OCnCTTe50I8BTGSo1TIqFfl5ICTeUSPS56JTwkfs2M
+         Jg4e1qPN+JvxmXyUh44bAkeCoJ1B797BUiFLkyREcM2dXsQrN2tuwHqC4x1Lkcvu4NDd
+         5zyK1mFmAqLojKKnC4EJhqhl13DEccGeC/1EeMb/C3DEzjtZYmk3B5ofk7Ar6vFi38gi
+         xN4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eFiEViH1pmz7CSziqwdr/K8qMtJRaQVlUIY1JyGa0HI=;
+        b=JmEkDasOcaejS5ld5JysWJBij7FdkZG0yXufoEwdJPL1Ra7lbNeGZpHdSUmMlC7lKm
+         lJxRDkMQ4mQmdfUCPQJwMpHWydgE7spLN2TBNOmvtR78+q4htuX3obOjczEJ3q1d937R
+         sJO7CloF6mPpWdf0u9eAzCQxXagXodureQAWB+mIcfI8b1gonO2OYUR3nnkFOFz1kocm
+         w+wbSEw7f1WxainpAE+/rQM5HmuMV9RO8tLLMw0vuVoNYymG/aS9H9mSfvP4C3QAMXiB
+         k+wS3BmYRw9MzmpiXNwOrnkyFdiQhAV0moXfnUxh4/jyq6/8qScMlhySJ2TfRodhIIpt
+         Dlvw==
+X-Gm-Message-State: ACrzQf3CXvJoyIqxLirr3aOqOcGeWjyKduSqn7ACDmIhyhqToSSocPP7
+        0RZ9hs9pSDjitIjg5/Y6vLxTBw==
+X-Google-Smtp-Source: AMsMyM5dkgtlTYHOqsvTwbjfn4tuJhkiZCsTozcFbzD9oiklIBw3USJnQzUOe+bEWvy//QAuJJce5Q==
+X-Received: by 2002:a63:4753:0:b0:462:b3f0:a984 with SMTP id w19-20020a634753000000b00462b3f0a984mr39380873pgk.501.1666846980192;
+        Wed, 26 Oct 2022 22:03:00 -0700 (PDT)
+Received: from localhost ([135.180.227.132])
+        by smtp.gmail.com with ESMTPSA id u144-20020a627996000000b0056bdc3f5b29sm256869pfc.186.2022.10.26.22.02.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 22:02:59 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 22:02:59 -0700 (PDT)
+X-Google-Original-Date: Wed, 26 Oct 2022 20:26:02 PDT (-0700)
+Subject:     Re: [PATCH v6 0/2] riscv_pmu_sbi: add support for PMU variant on T-Head C9xx cores
+In-Reply-To: <20221011231841.2951264-1-heiko@sntech.de>
+CC:     atishp@atishpatra.org, anup@brainfault.org,
+        Will Deacon <will@kernel.org>, mark.rutland@arm.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Conor.Dooley@microchip.com,
+        samuel@sholland.org, heiko@sntech.de
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     heiko@sntech.de
+Message-ID: <mhng-0bf8c154-76ce-4cd3-bfdb-ffd8a4670600@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 11 Oct 2022 16:18:39 PDT (-0700), heiko@sntech.de wrote:
+> The PMU on T-Head C9xx cores is quite similar to the SSCOFPMF extension
+> but not completely identical, so this series
 
+The rest of that sentance got dropped, so I put in
 
-On 10/26/22 8:15 PM, LeoLiu-oc wrote:
-> From: leoliu-oc <leoliu-oc@zhaoxin.com>
-> 
-> apei_hest_parse_aer() is used to parse and record the PCI Express AER
-> Structure in the HEST Table.
-> 
-> Signed-off-by: leoliu-oc <leoliu-oc@zhaoxin.com>
+    The PMU on T-Head C9xx cores is quite similar to the SSCOFPMF extension
+    but not completely identical, so this series adds a T-Head PMU errata
+    that handlen the differences.
 
-Does this code compile? It looks like there are some compile time issues.
+but LMK if you had a better version, it's still early so I don't mind 
+swapping it around.
 
-> ---
->  drivers/acpi/apei/hest.c | 119 ++++++++++++++++++++++++++++++++++++++-
->  include/acpi/actbl1.h    |  69 +++++++++++++++++++++++
->  include/acpi/apei.h      |   7 +++
->  3 files changed, 194 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/acpi/apei/hest.c b/drivers/acpi/apei/hest.c
-> index 6aef1ee5e1bd..0bfdc18758f5 100644
-> --- a/drivers/acpi/apei/hest.c
-> +++ b/drivers/acpi/apei/hest.c
-> @@ -25,6 +25,7 @@
->  #include <linux/platform_device.h>
->  #include <acpi/apei.h>
->  #include <acpi/ghes.h>
-> +#include <linux/pci.h>
->  
->  #include "apei-internal.h"
->  
-> @@ -86,7 +87,48 @@ static int hest_esrc_len(struct acpi_hest_header *hest_hdr)
->  	return len;
->  };
->  
-> -typedef int (*apei_hest_func_t)(struct acpi_hest_header *hest_hdr, void *data);
+b4 also got kind of confused here so I had to merge suff manually.
 
-You are still using apei_hest_func_t. Why remove it?
-
-> +static inline bool hest_source_is_pcie_aer(struct acpi_hest_header *hest_hdr)
-> +{
-> +	if (hest_hdr->type == ACPI_HEST_TYPE_AER_ROOT_PORT ||
-> +		hest_hdr->type == ACPI_HEST_TYPE_AER_ENDPOINT ||
-> +		hest_hdr->type == ACPI_HEST_TYPE_AER_BRIDGE)
-> +		return true;
-> +	return false;
-> +}
-> +
-> +static inline bool hest_match_type(struct acpi_hest_header *hest_hdr,
-> +				struct pci_dev *dev)
-> +{
-> +	u16 hest_type = hest_hdr->type;
-> +	u8 pcie_type = pci_pcie_type(dev);
-> +
-> +	if ((hest_type == ACPI_HEST_TYPE_AER_ROOT_PORT &&
-> +		pcie_type == PCI_EXP_TYPE_ROOT_PORT) ||
-> +		(hest_type == ACPI_HEST_TYPE_AER_ENDPOINT &&
-> +		pcie_type == PCI_EXP_TYPE_ENDPOINT) ||
-> +		(hest_type == ACPI_HEST_TYPE_AER_BRIDGE &&
-> +		(pcie_type == PCI_EXP_TYPE_PCI_BRIDGE || pcie_type == PCI_EXP_TYPE_PCIE_BRIDGE)))
-> +		return true;
-> +	return false;
-> +}
-> +
-> +static inline bool hest_match_pci_devfn(struct acpi_hest_aer_common *p,
-> +		struct pci_dev *pci)
-> +{
-> +	return	ACPI_HEST_SEGMENT(p->bus) == pci_domain_nr(pci->bus) &&
-> +			ACPI_HEST_BUS(p->bus)     == pci->bus->number &&
-> +			p->device                 == PCI_SLOT(pci->devfn) &&
-> +			p->function               == PCI_FUNC(pci->devfn);
-> +}
-> +
-> +static inline bool hest_match_pci(struct acpi_hest_header *hest_hdr,
-> +		struct acpi_hest_aer_common *p, struct pci_dev *pci)
-> +{
-> +	if (hest_match_type(hest_hdr, pci))
-> +		return(hest_match_pci_devfn(p, pci));
-
-I think it is return hest_match_pci_devfn(p, pci);
-
-> +	else
-> +		return false;
-> +}
->  
->  static int apei_hest_parse(apei_hest_func_t func, void *data)
->  {
-> @@ -124,6 +166,81 @@ static int apei_hest_parse(apei_hest_func_t func, void *data)
->  	return 0;
->  }
->  
-> +/*
-> + * apei_hest_parse_aer - Find the AER structure in the HEST Table and
-> + * match it with the PCI device.
-> + *
-> + * @hest_hdr: To save the acpi aer error source in hest table
-> + *
-> + * Return 1 if the pci dev matched with the acpi aer error source in
-> + * hest table, else return 0.
-> + */
-> +int apei_hest_parse_aer(struct acpi_hest_header *hest_hdr, void *data)
-> +{
-> +	struct acpi_hest_parse_aer_info *info = data;
-> +	struct acpi_hest_aer_endpoint *acpi_hest_aer_endpoint = NULL;
-> +	struct acpi_hest_aer_root_port *acpi_hest_aer_root_port = NULL;
-> +	struct acpi_hest_aer_for_bridge *acpi_hest_aer_for_bridge = NULL;
-> +
-> +	if (!hest_source_is_pcie_aer(hest_hdr))
-> +		return 0;
-> +
-> +	if (hest_hdr->type == ACPI_HEST_TYPE_AER_ROOT_PORT) {
-> +		acpi_hest_aer_root_port = (struct acpi_hest_aer_root_port *)(hest_hdr + 1);
-> +		if (acpi_hest_aer_root_port->flags & ACPI_HEST_GLOBAL) {
-> +			if (hest_match_type(hest_hdr, info->pci_dev)) {
-> +				info->acpi_hest_aer_root_port = acpi_hest_aer_root_port;
-> +				info->hest_matched_with_dev = 1;
-> +			} else
-> +				info->hest_matched_with_dev = 0;
-> +		} else {
-> +			if (hest_match_pci(hest_hdr,
-> +					(struct acpi_hest_aer_common *)acpi_hest_aer_root_port,
-> +					info->pci_dev)) {
-> +				info->acpi_hest_aer_root_port = acpi_hest_aer_root_port;
-> +				info->hest_matched_with_dev = 1;
-> +			} else
-> +				info->hest_matched_with_dev = 0;
-> +		}
-> +	} else if (hest_hdr->type == ACPI_HEST_TYPE_AER_ENDPOINT) {
-> +		acpi_hest_aer_endpoint = (struct acpi_hest_aer_endpoint *)(hest_hdr + 1);
-> +		if (acpi_hest_aer_endpoint->flags & ACPI_HEST_GLOBAL) {
-> +			if (hest_match_type(hest_hdr, info->pci_dev)) {
-> +				info->acpi_hest_aer_endpoint = acpi_hest_aer_endpoint;
-> +				info->hest_matched_with_dev = 1;
-> +			} else
-> +				info->hest_matched_with_dev = 0;
-> +		} else {
-> +			if (hest_match_pci(hest_hdr,
-> +					(struct acpi_hest_aer_common *)acpi_hest_aer_endpoint,
-> +					info->pci_dev)) {
-> +				info->acpi_hest_aer_endpoint = acpi_hest_aer_endpoint;
-> +				info->hest_matched_with_dev = 1;
-> +			} else
-> +				info->hest_matched_with_dev = 0;
-> +		}
-> +	} else if (hest_hdr->type == ACPI_HEST_TYPE_AER_BRIDGE) {
-> +		acpi_hest_aer_for_bridge =
-> +			(struct acpi_hest_aer_for_bridge *)(hest_hdr + 1);
-> +		if (acpi_hest_aer_for_bridge->flags & ACPI_HEST_GLOBAL) {
-> +			if (hest_match_type(hest_hdr, info->pci_dev)) {
-> +				info->acpi_hest_aer_for_bridge = acpi_hest_aer_for_bridge;
-> +				info->hest_matched_with_dev = 1;
-> +			} else
-> +				info->hest_matched_with_dev = 0;
-> +		} else {
-> +			if (hest_match_pci(hest_hdr,
-> +					(struct acpi_hest_aer_common *)acpi_hest_aer_for_bridge,
-> +					info->pci_dev)) {
-> +				info->acpi_hest_aer_for_bridge = acpi_hest_aer_for_bridge;
-> +				info->hest_matched_with_dev = 1;
-> +			} else
-> +				info->hest_matched_with_dev = 0;
-> +		}
-> +	}
-> +	return info->hest_matched_with_dev;
-> +}
-> +
->  /*
->   * Check if firmware advertises firmware first mode. We need FF bit to be set
->   * along with a set of MC banks which work in FF mode.
-> diff --git a/include/acpi/actbl1.h b/include/acpi/actbl1.h
-> index 15c78678c5d3..7f52035512b2 100644
-> --- a/include/acpi/actbl1.h
-> +++ b/include/acpi/actbl1.h
-> @@ -1385,6 +1385,75 @@ struct acpi_hest_aer_bridge {
->  	u32 advanced_capabilities2;
->  };
->  
-> +struct acpi_hest_parse_aer_info {
-> +	struct pci_dev *pci_dev;
-> +	int hest_matched_with_dev;
-> +	struct acpi_hest_aer_endpoint *acpi_hest_aer_endpoint;
-> +	struct acpi_hest_aer_root_port *acpi_hest_aer_root_port;
-> +	struct acpi_hest_aer_for_bridge *acpi_hest_aer_for_bridge;
-> +};
-> +
-> +/* HEST Sub-structure for PCIE EndPoint Structure (6) */
-> +
-> +struct acpi_hest_aer_root_port {
-> +	u16 reserved1;
-> +	u8 flags;
-> +	u8 enabled;
-> +	u32 records_to_preallocate;
-> +	u32 max_sections_per_record;
-> +	u32 bus;		/* Bus and Segment numbers */
-> +	u16 device;
-> +	u16 function;
-> +	u16 device_control;
-> +	u16 reserved2;
-> +	u32 uncorrectable_mask;
-> +	u32 uncorrectable_severity;
-> +	u32 correctable_mask;
-> +	u32 advanced_capabilities;
-> +	u32 root_error_command;
-> +};
-> +
-> +/* HEST Sub-structure for PCIE EndPoint Structure (7) */
-> +
-> +struct acpi_hest_aer_endpoint {
-> +	u16 reserved1;
-> +	u8 flags;
-> +	u8 enabled;
-> +	u32 records_to_preallocate;
-> +	u32 max_sections_per_record;
-> +	u32 bus;		/* Bus and Segment numbers */
-> +	u16 device;
-> +	u16 function;
-> +	u16 device_control;
-> +	u16 reserved2;
-> +	u32 uncorrectable_mask;
-> +	u32 uncorrectable_severity;
-> +	u32 correctable_mask;
-> +	u32 advanced_capabilities;
-> +};
-> +
-> +/* HEST Sub-structure for PCIE/PCI Bridge Structure (8) */
-> +
-> +struct acpi_hest_aer_for_bridge {
-> +	u16 reserved1;
-> +	u8 flags;
-> +	u8 enabled;
-> +	u32 records_to_preallocate;
-> +	u32 max_sections_per_record;
-> +	u32 bus;
-> +	u16 device;
-> +	u16 function;
-> +	u16 device_control;
-> +	u16 reserved2;
-> +	u32 uncorrectable_mask;
-> +	u32 uncorrectable_severity;
-> +	u32 correctable_mask;
-> +	u32 advanced_capabilities;
-> +	u32 uncorrectable_mask2;
-> +	u32 uncorrectable_severity2;
-> +	u32 advanced_capabilities2;
-> +};
-> +
->  /* 9: Generic Hardware Error Source */
->  
->  struct acpi_hest_generic {
-> diff --git a/include/acpi/apei.h b/include/acpi/apei.h
-> index dc60f7db5524..8a0b2b9edbaf 100644
-> --- a/include/acpi/apei.h
-> +++ b/include/acpi/apei.h
-> @@ -33,10 +33,17 @@ void __init acpi_ghes_init(void);
->  static inline void acpi_ghes_init(void) { }
->  #endif
->  
-> +typedef int (*apei_hest_func_t)(struct acpi_hest_header *hest_hdr, void *data);
-> +
->  #ifdef CONFIG_ACPI_APEI
->  void __init acpi_hest_init(void);
-> +int apei_hest_parse_aer(struct acpi_hest_header *hest_hdr, void *data);
->  #else
->  static inline void acpi_hest_init(void) { }
-> +static inline int apei_hest_parse_aer(struct acpi_hest_header *hest_hdr, void *data)
-> +{
-> +	return -EINVAL;
-> +}
->  #endif
->  
->  int erst_write(const struct cper_record_header *record);
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+> changes in v6:
+> - follow Anup's suggestion and hook into the (pending) cpuinfo patch [2]
+>   instead of modifying the core sbi_get_* functions
+>
+> changes in v5:
+> - add received Reviews
+> - fix sbi caching wrt. negative values (Drew)
+> - add comment about specific c9xx arch- and imp-ids (Conor)
+>
+> changes in v4:
+> - add new patch to cache sbi mvendor, march and mimp-ids (Atish)
+> - errata dependencies in one line (Conor)
+> - make driver detection conditional on CONFIG_ERRATA_THEAD_PMU too (Atish)
+>
+> changes in v3:
+> - improve commit message (Atish, Conor)
+> - IS_ENABLED and BIT() in errata probe (Conor)
+>
+> The change depends on my cpufeature/t-head errata probe cleanup series [1].
+>
+>
+> changes in v2:
+> - use alternatives for the CSR access
+> - make the irq num selection a bit nicer
+>
+> There is of course a matching opensbi-part whose most recent implementation
+> can be found on [0].
+>
+>
+> [0] https://patchwork.ozlabs.org/project/opensbi/cover/20221004164227.1381825-1-heiko@sntech.de
+> [1] https://lore.kernel.org/all/20220905111027.2463297-1-heiko@sntech.de/
+> [2] https://lore.kernel.org/r/20220727043829.151794-1-apatel@ventanamicro.com
+>
+> Heiko Stuebner (2):
+>   RISC-V: Cache SBI vendor values
+>   drivers/perf: riscv_pmu_sbi: add support for PMU variant on T-Head
+>     C9xx cores
+>
+>  arch/riscv/Kconfig.erratas           | 13 +++++++++++
+>  arch/riscv/errata/thead/errata.c     | 19 ++++++++++++++++
+>  arch/riscv/include/asm/errata_list.h | 16 ++++++++++++-
+>  arch/riscv/include/asm/sbi.h         |  5 ++++
+>  arch/riscv/kernel/cpu.c              | 30 +++++++++++++++++++++---
+>  drivers/perf/riscv_pmu_sbi.c         | 34 ++++++++++++++++++++--------
+>  6 files changed, 103 insertions(+), 14 deletions(-)
