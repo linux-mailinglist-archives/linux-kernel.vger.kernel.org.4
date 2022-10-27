@@ -2,105 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8980160FD81
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B91160FD87
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236784AbiJ0Qus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 12:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
+        id S236274AbiJ0QxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 12:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236692AbiJ0QuH (ORCPT
+        with ESMTP id S235396AbiJ0Qwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 12:50:07 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793D271993
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:50:01 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id ud5so6397056ejc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:50:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=27thMH6kbiBYeHImVpD7suGwEm5dpzCEVU9319M7znE=;
-        b=LR5ylFn+fuISymwTB00xHZ6t3I/9VqmosSnSmVnG+w+wni69hiZfzUtKio5rU1epqQ
-         PKwl26tatzAMYRrFcU1ArEm9elaSOfVYxYBaGAWAwJBeUH6o3WbL+H1eChTNMnckRwoz
-         YLpPwxWkmTWPIxMH08r77/N86vm90ow8+Nhsduxhz4JqYgwq6ENfqc6awtMqNKOHO+6V
-         APUEvq4dtPgK6eeZbttohwccXcC/kku6WwdXXlVR1ixzeDn8iQsKFSwKwl3AdZMJa2ue
-         mqr0ytlrq4EJhLDIncsbdsYhTXeS7S5MImB0/owkhV2qBAOaNUPPhxO/Xwo4qnZHWMA+
-         JDVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=27thMH6kbiBYeHImVpD7suGwEm5dpzCEVU9319M7znE=;
-        b=wxoIuwLhWsgP17PcRPEHqYIbHiv4qzBbi1yvydM49JgGsT2KUJkoJ4EVKGOk4diYUX
-         3ctK4mzSWtYrKv4sQ1oWVZ8klGoT1BIXDKA1/rpq7h/SrzIWoGL/Ri2TFIElGaLCBre/
-         FMoq9/RN+MLFzrpPr2wdlA465U9P6C1Vi6GB0RY8sMhdtk7liOszFWaptd8im+6z9yPT
-         GBQcGtlMVrACmfQ1UIzX71R5A9GuEwowhgWH5KGaiDaUKyZY+PQ94MCyzVLs1IR3I5Xc
-         aB1ZZdeWB62n5FqZnS89qgx6XC00Tg09shDDmA4G11kUnqj82AHvXObEC+TwVzia+F0R
-         n4Fw==
-X-Gm-Message-State: ACrzQf3sFWQ0Czyn0/ja574fmMRriQDgtVvty4eKz1AZySaeqsBxKvn+
-        gLgd1JUuUiAE92MaFBvZZRC6jsUlxgKn+hpfZq0=
-X-Google-Smtp-Source: AMsMyM58LmKYkZC59FJWd+D3WjBzjSxLpn7tvaAGnZjFQMskGI5vXH3qrtVsby1unS0KOziaRirmP2zfJqz42OjuNno=
-X-Received: by 2002:a17:906:da85:b0:741:40a7:d08d with SMTP id
- xh5-20020a170906da8500b0074140a7d08dmr45198589ejb.263.1666889399497; Thu, 27
- Oct 2022 09:49:59 -0700 (PDT)
+        Thu, 27 Oct 2022 12:52:49 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F4D19D88C;
+        Thu, 27 Oct 2022 09:51:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HICjCe/T3KktXFKRv+wo+yHgKZxC3DJ5boYWFpCcesE=; b=ibo+HdQTm3+r0wK7uqOdAST2le
+        gsw90CiCXIlAGkIzYEC7A+1vAxYVvC2H0hZ10bgepKdLD3/JvHNjHYDSLBj6+IMEOO2t04AEf1jU5
+        lu5U0nhrME+intT5DAO17p3zcr7TRGet6GnYJ2BJhLU/oAH8PbQD7ZdsHHdw75fDQWPxqDqypniA2
+        fTj5J2gsP69L25Yrd0GAmXLnost182Tc7hcAyZJFAw3ovutFVUEzk+DjqTdznsdJ2E+BrW0AIFxFL
+        kvXKgp74xWaP05RzSk/0hHsCaffJDUb4wbrqJOGF1vL51uheP2Y1gdQ8hpRXL7tUPBTLBx0Q9kbfO
+        u8asqKmQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oo662-006uvv-BB; Thu, 27 Oct 2022 16:51:10 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5D75330008D;
+        Thu, 27 Oct 2022 18:51:09 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 374FA2C64658F; Thu, 27 Oct 2022 18:51:09 +0200 (CEST)
+Date:   Thu, 27 Oct 2022 18:51:09 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Yujie Liu <yujie.liu@intel.com>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        fengwei.yin@intel.com, ying.huang@intel.com,
+        fstests@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [tip:x86/core] [kallsyms] f138918162:
+ WARNING:CPU:#PID:#at_fs/xfs/xfs_message.c:#xfs_buf_alert_ratelimited.cold-#[xfs]
+Message-ID: <Y1q2/fdvXI67MRch@hirez.programming.kicks-ass.net>
+References: <202210241614.2ae4c1f5-yujie.liu@intel.com>
+ <Y1kDEmLeRA2UGeF8@hirez.programming.kicks-ass.net>
+ <Y1kiuTIYobR4nexS@hirez.programming.kicks-ass.net>
+ <Y1nobODPLUjcteJ0@yujie-X299>
+ <2543dfb1-d9dc-0888-dbea-e420a19d732c@intel.com>
+ <Y1qv3ku6ULHy8hOF@magnolia>
 MIME-Version: 1.0
-References: <20221026224450.2958762-1-f.fainelli@gmail.com>
-In-Reply-To: <20221026224450.2958762-1-f.fainelli@gmail.com>
-From:   Justin Chen <justinpopo6@gmail.com>
-Date:   Thu, 27 Oct 2022 09:49:48 -0700
-Message-ID: <CAJx26kWS6+FPjpe125817f7Rf6LiXHBPJ2AfM_1Sj7BwK09Fug@mail.gmail.com>
-Subject: Re: [PATCH] phy: phy-brcm-usb: Utilize platform_get_irq_byname_optional()
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Al Cooper <alcooperx@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1qv3ku6ULHy8hOF@magnolia>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 3:45 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
->
-> The wake-up interrupt lines are entirely optional, avoid printing
-> messages that interrupts were not found by switching to the _optional
-> variant.
->
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Acked-by: Justin Chen <justinpopo6@gmail.com>
+> However, I noticed that the callsite in the WARNING: message has changed
+> from the usual 'asswarn' (which is the caller of WARN_ON) to
+> 'xfs_buf_alert_ratelimited', which seems totally wrong since XFS log
+> recovery doesn't touch xfs_buf objects at all.
 
-> ---
->  drivers/phy/broadcom/phy-brcm-usb.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/phy/broadcom/phy-brcm-usb.c b/drivers/phy/broadcom/phy-brcm-usb.c
-> index 2cb3779fcdf8..fbf454b206f2 100644
-> --- a/drivers/phy/broadcom/phy-brcm-usb.c
-> +++ b/drivers/phy/broadcom/phy-brcm-usb.c
-> @@ -445,9 +445,9 @@ static int brcm_usb_phy_dvr_init(struct platform_device *pdev,
->                 priv->suspend_clk = NULL;
->         }
->
-> -       priv->wake_irq = platform_get_irq_byname(pdev, "wake");
-> +       priv->wake_irq = platform_get_irq_byname_optional(pdev, "wake");
->         if (priv->wake_irq < 0)
-> -               priv->wake_irq = platform_get_irq_byname(pdev, "wakeup");
-> +               priv->wake_irq = platform_get_irq_byname_optional(pdev, "wakeup");
->         if (priv->wake_irq >= 0) {
->                 err = devm_request_irq(dev, priv->wake_irq,
->                                        brcm_usb_phy_wake_isr, 0,
-> --
-> 2.25.1
->
+Yeah; and I've meanwhile found more cases where it goes sideways.
+
+I'll revert this patch and try an alternative approach. I'll post
+patches tomorrow or something.
+
+Sorry about this.
