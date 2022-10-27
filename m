@@ -2,75 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19EF2610482
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E87D610484
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236707AbiJ0VfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 17:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
+        id S236900AbiJ0Vf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 17:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234920AbiJ0VfR (ORCPT
+        with ESMTP id S236852AbiJ0Vft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 17:35:17 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446744D82D
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 14:35:15 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id j12so2996458plj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 14:35:15 -0700 (PDT)
+        Thu, 27 Oct 2022 17:35:49 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2548E664CC
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 14:35:45 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id p8so4912968lfu.11
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 14:35:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hZuaGAdrg4Zn30PXTyZCS8qx4FnpSCInWNY0DH7XPtE=;
-        b=M4b4iw6Pkw/LQx43MykJaL78g7GlCHpRIbBIQjYSokoF44EFh8ZaKShvOX35BjdLA7
-         Htdx4oHHTt1dFs6mKdPetaGpJRwlgjjxBjMYmV4YTVbIMjhTkANqYI8LVzXXR/ARlCRn
-         wZvRMVFPAvk/kB2ozSGrMXRdmnfrRWqf8GIlcDg9np2DhK8jagxGpuqUn1uvyLLljDjY
-         Y7wtPE55klwPKsBF8iC2ycLJZU2zEvURThUmZzrz//3e4KJGTU/FLKSXutnbh0XvOUp1
-         BI2ITt5jZjVCrcmbmHXwd75100Qfie0xxz/yNUEKd/ZHHCvxjJfXAniCw0jTUUYhpjTI
-         E5Cg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DLMSX5xAv8Of0i26zhWYF6rLIZWMK34svw6mTWTkhA0=;
+        b=k76nKuwuAv2/FX6e0asrhgtq+Zaezq8dDXRxUYPw8WXy0lRzqXw4z/udSZSBZDsEOL
+         vNMGvR7jVzQZs6khH+kl+Gm3M8aACk2+j2Yk/CNCpWdIMpDTL/ITB2i2LUjIM/IOmbdE
+         bl0AXFMLe0pldjS1m7pj8IXCry1oLJKX3P8/CbZGGbUr0fihMvuXSG0b9cHQidZ24qBh
+         e+u0BKUFkMJ/pTjL+0RvHEQFQzMpTbZREXQds8rzhufKhspiyGlDef6jEwuG3pwfPIER
+         hc3oZdh5gbGEZhddyIg/EXeLacbfHAtgBU8ngguLXLnfHv601Y6x+54cSblsjYjqNBNg
+         1iNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hZuaGAdrg4Zn30PXTyZCS8qx4FnpSCInWNY0DH7XPtE=;
-        b=v78OdtCIC7Y6TQVGAvMC1Tp3VVmnCDWFtrXmWPZ5xdhLoTy0gxzeEuXZfBjKTJOf1P
-         uSH/JZ/i/3rmsB7FdytOVJxlh2MRoZZeNe593sOu0hfYytVC8ZmcOFeF4bcEgrT8dDEt
-         9L60cIx961NFHsLSjkAl/4Pn7jVtfszM4FocmKQgvtPyxc2xwiA4qzRavfmxJzs+lJlJ
-         72xuSsgaBC9lRxZ90HMmeXwew48Tia3lXVMkTOspOArDpu5ja4ym/mFjq/nCVFLW4Dzz
-         2LOBANQHi+RAxldU7DIli7qm7du8P37qCHQLoiFc6qpcekxNsKqQBtyt7r2XvHjt+UGd
-         l0ig==
-X-Gm-Message-State: ACrzQf3SzJz/h40XM+BkDRj0yjoXXZ/+ZHO4wg6dmdrDf8Rrt8KGDIo0
-        n1Q8GrlRUHjcJwanCTkkOkC+qop05LmJMQ==
-X-Google-Smtp-Source: AMsMyM5rNnDPjF75/c8CBp5jT4380C7pR7Xnv9l6XJvr0WmH2sVYgmiIXY+UmtJg8/4kbOnTWiZWGA==
-X-Received: by 2002:a17:90b:110c:b0:205:cfeb:cfb with SMTP id gi12-20020a17090b110c00b00205cfeb0cfbmr12531822pjb.75.1666906514595;
-        Thu, 27 Oct 2022 14:35:14 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id r9-20020a17090a0ac900b0020d48bc6661sm3059076pje.31.2022.10.27.14.35.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 14:35:14 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 21:35:10 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] KVM: nVMX: Invert 'unsupported by eVMCSv1' check
-Message-ID: <Y1r5jpRxJeDMac6T@google.com>
-References: <20221018101000.934413-1-vkuznets@redhat.com>
- <20221018101000.934413-3-vkuznets@redhat.com>
- <Y1nAThjeMlMFFrAi@google.com>
- <87a65htt6m.fsf@ovpn-194-52.brq.redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DLMSX5xAv8Of0i26zhWYF6rLIZWMK34svw6mTWTkhA0=;
+        b=vXBW4mnfX+3WK37kE56yy10DDLtaekXT8ERJzWY6MRWCrq4N48mnKLXtK1UxF4vH2j
+         rn6STysJTlciM/UDzIBXo+2GWdzJQj6/N2v0KmLQxq0QjjV4C+oQ7E5TfQOOpbuAqNLp
+         X+MkRqr7UB0ZGMvTYA3RnSSwG8ppKhxSzxd9OzUor231GtbSqJIGzY5zJ+raMGLTu5KM
+         kvJJ5j0F18nf5TUvOfuSILmnB3FRZISb8Q/dAvUJBOGOhDjaqjojxm/XjVAaCf1+b1g3
+         LMMmUlFrJG7i0Jk4CUVMrqH+83hmzFHxgmVUKwUo6Sz+b9IdUZjDcXZY+MAv/DWgarcQ
+         KP3w==
+X-Gm-Message-State: ACrzQf3IkOM6OLqE1EUJ8EQ/1UWOsRkEJBcjzlosU0nZCwPKEmjOryVI
+        V0DZppyFa/RKJEudf+RF/VY=
+X-Google-Smtp-Source: AMsMyM6Qs3AoWb6vrKWJ9H8UiVK9vcnmwQDjZpxxZN6/65eM9FeASSG+D+Mg8/KCEPpsrXgl3XJovA==
+X-Received: by 2002:a05:6512:2983:b0:4a0:5745:f7ca with SMTP id du3-20020a056512298300b004a05745f7camr21096993lfb.116.1666906543496;
+        Thu, 27 Oct 2022 14:35:43 -0700 (PDT)
+Received: from [192.168.31.203] ([5.19.98.172])
+        by smtp.gmail.com with ESMTPSA id d3-20020a056512368300b00492ce573726sm318308lfs.47.2022.10.27.14.35.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 14:35:43 -0700 (PDT)
+Message-ID: <1c3209e7-a184-22f7-096c-874a2f77ce55@gmail.com>
+Date:   Fri, 28 Oct 2022 00:35:44 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87a65htt6m.fsf@ovpn-194-52.brq.redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [tip:x86/mm] [x86/mm] 1248fb6a82:
+ Kernel_panic-not_syncing:kasan_populate_pmd:Failed_to_allocate_page
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        kernel test robot <yujie.liu@intel.com>
+Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Seth Jenkins <sethjenkins@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        kasan-dev@googlegroups.com, "Yin, Fengwei" <fengwei.yin@intel.com>
+References: <202210241508.2e203c3d-yujie.liu@intel.com>
+ <Y1e7kgKweck6S954@hirez.programming.kicks-ass.net>
+ <278cc353-6289-19e8-f7a9-0acd70bc8e11@gmail.com>
+ <864b4fbe-4462-9962-7afd-9140d5165cdb@intel.com>
+Content-Language: en-US
+From:   Andrey Ryabinin <ryabinin.a.a@gmail.com>
+In-Reply-To: <864b4fbe-4462-9962-7afd-9140d5165cdb@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,38 +89,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022, Vitaly Kuznetsov wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> 
-> > On Tue, Oct 18, 2022, Vitaly Kuznetsov wrote:
-> >> When a new feature gets implemented in KVM, EVMCS1_UNSUPPORTED_* defines
-> >> need to be adjusted to avoid the situation when the feature is exposed
-> >> to the guest but there's no corresponding eVMCS field[s] for it. This
-> >> is not obvious and fragile.
-> >
-> > Eh, either way is fragile, the only difference is what goes wrong when it breaks.
-> >
-> > At the risk of making this overly verbose, what about requiring developers to
-> > explicitly define whether or not a new control is support?  E.g. keep the
-> > EVMCS1_UNSUPPORTED_* and then add compile-time assertions to verify that every
-> > feature that is REQUIRED | OPTIONAL is SUPPORTED | UNSUPPORTED.
-> >
-> > That way the eVMCS "supported" controls don't need to include the ALWAYSON
-> > controls, and anytime someone adds a new control, they'll have to stop and think
-> > about eVMCS.
-> 
-> Is this a good thing or a bad one? :-) I'm not against being extra
-> verbose but adding a new feature to EVMCS1_SUPPORTED_* (even when there
-> is a corresponding field) requires testing or a
-> evmcs_has_perf_global_ctrl()-like story may happen and such testing
-> would require access to Windows/Hyper-V images. This sounds like an
-> extra burden for contributors. IMO it's OK if new features are
-> mechanically added to EVMCS1_UNSUPPORTED_* on the grounds that it
-> wasn't tested but then it's not much different from "unsupported by
-> default" (my approach). So I'm on the fence here.
 
-Yeah, I was hoping the compile-time asserts would buy us full protection, i.e. I
-was hoping to avoid the sanitization, but I don't see a way to handle the case
-where Hyper-V starts advertising a feature that was previously unsupported :-(
 
-I'm a-ok going with SUPPORTED only, I'm on the fence too.
+On 10/27/22 18:12, Dave Hansen wrote:
+> On 10/25/22 08:39, Andrey Ryabinin wrote:
+>> KASAN tries to allocate shadow memory for the whole cpu entry area.
+>> The size is CPU_ENTRY_AREA_MAP_SIZE/8 and this is obviously fails after your patch.
+>> The fix this might be something like this:
+>>
+>> ---
+>>  arch/x86/include/asm/kasan.h |  2 ++
+>>  arch/x86/mm/cpu_entry_area.c |  3 +++
+>>  arch/x86/mm/kasan_init_64.c  | 16 +++++++++++++---
+>>  3 files changed, 18 insertions(+), 3 deletions(-)
+> 
+> Andrey, if you have a minute, could you send this as a real patch, with
+> a SoB?
+
+Done, It slightly different because there was a bug in vaddr->nid calculation.
