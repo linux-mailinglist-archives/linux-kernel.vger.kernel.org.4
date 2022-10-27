@@ -2,123 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E95660F642
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A61060F644
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235194AbiJ0Lcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 07:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34188 "EHLO
+        id S235339AbiJ0LdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 07:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233884AbiJ0Lcn (ORCPT
+        with ESMTP id S235341AbiJ0LdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 07:32:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3726F114DDF;
-        Thu, 27 Oct 2022 04:32:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 27 Oct 2022 07:33:01 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8B61211D9
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 04:32:59 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C826562291;
-        Thu, 27 Oct 2022 11:32:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7DE0C43144;
-        Thu, 27 Oct 2022 11:32:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666870362;
-        bh=mSWAsUxDE3EBIXC90iH0VJmw8rHTYfLTHhgMsJ9b89k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G3rtT6gxMwHkn7ceFPoQ6Rbt+N3JvKSIlAx9Ao0WyQKtxKzgWm7sZVv11gtXlV9y4
-         +Rxhz8JNqKpEQeT75r4Y/TxvvL6j7Ud9Jd7kau9n1vEjU9e6ww/9bnxBlcAaRpk+w1
-         g/LUWU7sbGZJ5vW+Zp6IHYCsTH24Vvqlb8mu3Anh8jFuj68OnkKiCEtGfk9d4UcJTK
-         bcHXRzWfvcBR0WFQYcL5g7+VcfYY39TJeAvk/gfIp7odA2dIW/MUO0235nXzo0aIOc
-         qeXr00yEb/LFrlut40cefr4EIrTXQXQLVJyFkAKug1xwzwHgQafLJnSqm4prvUZ/rJ
-         DnfoXBmVKTc7w==
-Date:   Thu, 27 Oct 2022 13:32:35 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     jingoohan1@gmail.com, gustavo.pimentel@synopsys.com,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V1 2/2] PCI: designware-ep: Disable PTM capabilities for
- EP mode
-Message-ID: <Y1psU2P4uqD2rUub@lpieralisi>
-References: <20220919143340.4527-1-vidyas@nvidia.com>
- <20220919143340.4527-3-vidyas@nvidia.com>
+        by mail.3ffe.de (Postfix) with ESMTPSA id 7E33E1B40;
+        Thu, 27 Oct 2022 13:32:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1666870376;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=86Syqd89b1/HCshZzD+et9Bo2opsZhhVIvgaLhrsOcI=;
+        b=mvJXS1/G8NnG3D8HvhI7aMBDN2AXxviQSZavm7F0DzocELCt0oHdv4/KtBG5eJQ7oGQuHa
+        gmQ4L6B6yEJJ2fneIa9NrNWrDt4jgLaN3G0cIMq56FyxznBTnb78gxVtlUeHys9Pu8q3FD
+        uty1ze5E+RFo9Wcx1tZrZWGBVkLQhp/nPJdxWgSddvpdP3TgpUHll5nFJlAWiBXIdZikHj
+        dmotv999hjgrG09N0X8YkS72kyk1hm2Cw8+06a5oocyBcFw8qyHa/m8WJ+fRWS/rZTsNN/
+        PoMnKhHxwRZ7l6SX4CAWBpRxS6xlhfYycrSjpwtw6/yDINY7LmShYi3ud4N+dQ==
+From:   Michael Walle <michael@walle.cc>
+To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Heiko Thiery <heiko.thiery@gmail.com>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH] Revert "arm64: dts: ls1028a: sl28: use ocelot-8021q tagging by default"
+Date:   Thu, 27 Oct 2022 13:32:48 +0200
+Message-Id: <20221027113248.420216-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919143340.4527-3-vidyas@nvidia.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam: Yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 08:03:40PM +0530, Vidya Sagar wrote:
-> Dual mode DesignWare PCIe IP has PTM capability enabled (if supported) even
-> in the EP mode. The PCIe compliance for the EP mode expects PTM
-> capabilities (ROOT_CAPABLE, RES_CAPABLE, CLK_GRAN) be disabled.
-> Hence disable PTM for the EP mode.
+This reverts commit be0b178c50c37a666d54f435da71cf9f008362a0.
 
-"PCIe compliance" - what is this referring to ?
+This commit will break networking on the sl28 boards if the tagger is
+not compiled into the kernel. If a non-default tagger is used, the
+kernel doesn't do a request_module(). Fixing that is also not that
+trivial because the tagger modules are loaded by ids, not by name.
+Thus for now, just revert to the default tagger until that is fixed.
 
-Was this reported to Synopsys ?
+Fixes: be0b178c50c3 ("arm64: dts: ls1028a: sl28: use ocelot-8021q tagging by default")
+Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+Vladimir, I'm not sure how to fix that one. Adding aliases to the tagger
+modules? Something like "MODULE_ALIAS("dsa_tag-ocelot-8021q");" and then do
+a request_module() in dsa_find_tagger_by_name(), too?
 
-Thanks,
-Lorenzo
+ .../arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts | 8 --------
+ 1 file changed, 8 deletions(-)
 
-> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> ---
->  .../pci/controller/dwc/pcie-designware-ep.c   | 19 ++++++++++++++++++-
->  1 file changed, 18 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> index 7e9529ae3824..dc3057b18f36 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> @@ -646,7 +646,7 @@ int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
->  	struct dw_pcie_ep_func *ep_func;
->  	struct device *dev = pci->dev;
->  	struct pci_epc *epc = ep->epc;
-> -	unsigned int offset;
-> +	unsigned int offset, ptm_cap_base;
->  	unsigned int nbars;
->  	u8 hdr_type;
->  	u8 func_no;
-> @@ -698,6 +698,7 @@ int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
->  	}
->  
->  	offset = dw_pcie_ep_find_ext_capability(pci, PCI_EXT_CAP_ID_REBAR);
-> +	ptm_cap_base = dw_pcie_ep_find_ext_capability(pci, PCI_EXT_CAP_ID_PTM);
->  
->  	dw_pcie_dbi_ro_wr_en(pci);
->  
-> @@ -710,6 +711,22 @@ int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
->  			dw_pcie_writel_dbi(pci, offset + PCI_REBAR_CAP, 0x0);
->  	}
->  
-> +	/*
-> +	 * PTM responder capability can be disabled only after disabling
-> +	 * PTM root capability.
-> +	 */
-> +	if (ptm_cap_base) {
-> +		dw_pcie_dbi_ro_wr_en(pci);
-> +		reg = dw_pcie_readl_dbi(pci, ptm_cap_base + PCI_PTM_CAP);
-> +		reg &= ~PCI_PTM_CAP_ROOT;
-> +		dw_pcie_writel_dbi(pci, ptm_cap_base + PCI_PTM_CAP, reg);
-> +
-> +		reg = dw_pcie_readl_dbi(pci, ptm_cap_base + PCI_PTM_CAP);
-> +		reg &= ~(PCI_PTM_CAP_RES | PCI_PTM_GRANULARITY_MASK);
-> +		dw_pcie_writel_dbi(pci, ptm_cap_base + PCI_PTM_CAP, reg);
-> +		dw_pcie_dbi_ro_wr_dis(pci);
-> +	}
-> +
->  	dw_pcie_setup(pci);
->  	dw_pcie_dbi_ro_wr_dis(pci);
->  
-> -- 
-> 2.17.1
-> 
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
+index 72429b37a8b4..771c50c7f50a 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
+@@ -324,14 +324,6 @@ &lpuart1 {
+ 	status = "okay";
+ };
+ 
+-&mscc_felix_port4 {
+-	dsa-tag-protocol = "ocelot-8021q";
+-};
+-
+-&mscc_felix_port5 {
+-	dsa-tag-protocol = "ocelot-8021q";
+-};
+-
+ &usb0 {
+ 	status = "okay";
+ };
+-- 
+2.30.2
+
