@@ -2,282 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650FC61024E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 222BF610253
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236830AbiJ0UDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 16:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
+        id S236904AbiJ0UDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 16:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236058AbiJ0UDG (ORCPT
+        with ESMTP id S236832AbiJ0UD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 16:03:06 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB8A25EB9;
-        Thu, 27 Oct 2022 13:03:04 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oo95T-0002xa-Eb; Thu, 27 Oct 2022 22:02:47 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Johan Jonker <jbx6244@gmail.com>, kever.yang@rock-chips.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     sjg@chromium.org, philipp.tomsich@vrull.eu,
-        zhangqing@rock-chips.com, hjc@rock-chips.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v1 3/4] ARM: dts: rockchip: add rk3128.dtsi
-Date:   Thu, 27 Oct 2022 22:02:46 +0200
-Message-ID: <22076018.EfDdHjke4D@diego>
-In-Reply-To: <6fbb01f0-d0d2-bb06-a160-2f8f91ac68ca@linaro.org>
-References: <da1252eb-85e9-bdb8-0542-207173523523@gmail.com> <2dc46681-894d-4521-bfa7-3e9209691e0a@gmail.com> <6fbb01f0-d0d2-bb06-a160-2f8f91ac68ca@linaro.org>
+        Thu, 27 Oct 2022 16:03:29 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D49564E1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:03:28 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id i5-20020a1c3b05000000b003cf47dcd316so4964454wma.4
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:03:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5VjJAp0N2+61Oxh2IMIlFv8RGCM+I8VCYCw/pBRRGl4=;
+        b=rDS5vXypkzMWqdwalT/qT+2EkHrOMl5WdG+1xqXQ95n/JeHKDOdgvcQYLdiBx7vVic
+         q/9lvXpSW6KPOVLNXmUGPHDImAVmHe+vI8ruMWy0Dhf2/qMN6AFwsiabdxfLHw5EXNM5
+         SxAYtXcCmWxpHa+uyH79lp9JestzjrPfR8k+JX/ppBCfUSfgBFHrSY/4tdGbU/OsBCg2
+         yELITCt4Q43G3BFRwibHoG8pv3nFxcow2sWte7mD52ZFBUc7/H2lF9P7kqN/irY4aY8S
+         gG2h1su2qka2iMZUr7bJ1vGZd5u0Xvl3c2r6EMowplLAmYDrBARvdXrkBZRH7lhdGZ7i
+         jVMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5VjJAp0N2+61Oxh2IMIlFv8RGCM+I8VCYCw/pBRRGl4=;
+        b=UWxlZT6nv+Bv4wRq2w2m44/UfKhf0oHYyzGr2Z4Oss0XaZw7gO+Q/P6F2Xi3s8lToW
+         Vvqru5OqdEWbLdOIorXESejq+eQscYNhE+GpGC7wZztX5pyJr5dLvuinNjXL1f9aBzhm
+         J62XdIEziCipLgwlbnF4VtykN/XcYm4ETfsxhUxjGv1uwaQ13NjUaUEojwxQHjoAx8SH
+         14+1+GLFRSMIyFIzZx0RUARCK0vfNbcHRjhzH12sCHBlpQf8DDCi+UEA/trmBfV+yASY
+         03JMeKJhKPACTm3KdtdQnPBf4dIYP+ZZl57HuF8Otib8sDu+/MJm/4vru0VXfgmrIqOk
+         64DA==
+X-Gm-Message-State: ACrzQf0Jua+v6EYtfx/One+XP9QN6/RymELPk9fjpPxntTJmMcgSIcte
+        5nDkaXLnPyPMXLtjciskOzJHpIYAmwxQLZRptMJF3g==
+X-Google-Smtp-Source: AMsMyM5pAaws2hi59KHD9u3VHAH4ISacGKoFe/jGcaPZMrcw5Mdnz9NoAiQcbpPYG/5E11g7KmXZkBv4iUy9Oo6f1QE=
+X-Received: by 2002:a05:600c:3b11:b0:3c6:c02d:babb with SMTP id
+ m17-20020a05600c3b1100b003c6c02dbabbmr7040071wms.69.1666901006407; Thu, 27
+ Oct 2022 13:03:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+References: <20221021211816.1525201-1-vipinsh@google.com> <20221021211816.1525201-6-vipinsh@google.com>
+ <DS0PR11MB637351B52E5F8752E7DA16A4DC309@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <Y1lV0l4uDjXdKpkL@google.com> <DS0PR11MB6373E6CA4DDFFD47B64CB719DC339@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <Y1qqIgVdZi7qSUD0@google.com>
+In-Reply-To: <Y1qqIgVdZi7qSUD0@google.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Thu, 27 Oct 2022 13:02:49 -0700
+Message-ID: <CAHVum0edLWu0fGMgs7n2v2Fu-XW5mXtAsJ2dtkWD=ZadbRi+hw@mail.gmail.com>
+Subject: Re: [PATCH v6 5/5] KVM: selftests: Allowing running
+ dirty_log_perf_test on specific CPUs
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     "Wang, Wei W" <wei.w.wang@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "andrew.jones@linux.dev" <andrew.jones@linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, 27. Oktober 2022, 21:43:43 CEST schrieb Krzysztof Kozlowski:
-> On 27/10/2022 13:53, Johan Jonker wrote:
-> > Hi Krzysztof, Kever, Heiko and others,
-> > 
-> > On 10/27/22 16:58, Krzysztof Kozlowski wrote:
-> >> On 26/10/2022 20:53, Johan Jonker wrote:
-> >>> Add basic rk3128 support.
-> >>>
-> >>
-> >> Thank you for your patch. There is something to discuss/improve.
-> > 
-> > Thank you for your review.
-> > 
-> > Some more questions/comments below.
-> > 
-> >>
-> >>> +#include <dt-bindings/clock/rk3128-cru.h>
-> >>> +#include <dt-bindings/gpio/gpio.h>
-> >>> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> >>> +#include <dt-bindings/interrupt-controller/irq.h>
-> >>> +#include <dt-bindings/pinctrl/rockchip.h>
-> >>> +
-> >>> +/ {
-> >>> +	compatible = "rockchip,rk3128";
-> >>> +	interrupt-parent = <&gic>;
-> >>> +	#address-cells = <1>;
-> >>> +	#size-cells = <1>;
-> >>> +
-> >>> +	aliases {
-> >>> +		gpio0 = &gpio0;
-> >>> +		gpio1 = &gpio1;
-> >>> +		gpio2 = &gpio2;
-> >>> +		gpio3 = &gpio3;
-> > 
-> > Is gpio OK here?
-> 
-> Could be, but let me rephrase it - why do you need aliases in DTSI? What
-> do these aliases represent?
-> 
-> The SoC pieces (nodes in DTSI) do not rely on aliases.
+On Thu, Oct 27, 2022 at 8:56 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Thu, Oct 27, 2022, Wang, Wei W wrote:
+> > On Wednesday, October 26, 2022 11:44 PM, Sean Christopherson wrote:
+> > > If we go this route in the future, we'd need to add a worker trampoline as the
+> > > pinning needs to happen in the worker task itself to guarantee that the pinning
+> > > takes effect before the worker does anything useful.  That should be very
+> > > doable.
+> >
+> > The alternative way is the one I shared before, using this:
+> >
+> > /* Thread created with attribute ATTR will be limited to run only on
+> >    the processors represented in CPUSET.  */
+> > extern int pthread_attr_setaffinity_np (pthread_attr_t *__attr,
+> >                                  size_t __cpusetsize,
+> >                                  const cpu_set_t *__cpuset)
+> >
+> > Basically, the thread is created on the pCPU as user specified.
+> > I think this is better than "creating the thread on an arbitrary pCPU
+> > and then pinning it to the user specified pCPU in the thread's start routine".
+>
+> Ah, yeah, that's better.
+>
 
-Subsystems use the aliases for numbering their instances.
-So the i2c0 alias causes the i2c bus getting the number 0 in the operating
-system as well - making it i2c0 there too.
+pthread_create() will internally call sched_setaffinity() syscall
+after creation of a thread on a random CPU. So, from the performance
+side there is not much difference between the two approaches.
 
+However, we will still need pin_this_task_to_pcpu()/sched_affinity()
+to move the main thread to a specific pCPU, therefore, I am thinking
+of keeping the current approach unless there is a strong objection to
+it.
 
-> >>> +		i2c0 = &i2c0;
-> >>> +		i2c1 = &i2c1;
-> >>> +		i2c2 = &i2c2;
-> >>> +		i2c3 = &i2c3;
-> >>> +		spi0 = &spi0;
-> >>> +		serial0 = &uart0;
-> >>> +		serial1 = &uart1;
-> >>> +		serial2 = &uart2;
-> >>
-> >> Bus aliases are board specific and represent what is actually available
-> >> on headers/pins etc. These do not belong to SoC DTSI.
-> > 
-> > I just follow current Rockchip DT common practice.
-> > 
-> > Do we need to change all Rockchip boards?
-> > Would like to hear from Heiko what's the plan here?
-> > Syncing to U-boot is already a mess...
-> 
-> Heiko might have his own preference which then over-rules my
-> recommendation here. But in general this applies to all boards, so other
-> boards could be fixed as well. Different point is whether it is actually
-> worth fixing them...
+> > Probably we also don't need "bool pin_vcpus".
+>
+> Yeah, but for selftests shaving bytes is not exactly top priority, and having a
+> dedicated flag avoids the need for magic numbers.  If Vipin had used -1, I'd
+> probably be fine with that, but I'm also totally fine using a dedicated flag too.
+>
 
-I remember only parts of the discussion for the previous socs. Back then
-Arnd was advocating mainly for moving the mmc aliases to boards.
-
-As the aliases in general also determine the naming of the bus instance,
-I'm very much in favor of having the hardware-i2c5 being named i2c5
-in all cases ;-) . Having these hardware busses getting random numbers
-really calls for chaos.
-
-So I'd really like us to continue the way we arrived at with the previous
-socs now :-)
-
-Heiko
-
-
-> > So far only instructions/changes and discussion about mmc nodes.
-> > 
-> > Can Rockchip specific rules be publicized in a central place? 
-> > 
-> > ===
-> > mmc aliases on reg order, availability and without number gap.
-> > ===
-> > 
-> > Heiko's sort rules:
-> > 
-> > compatible
-> > reg
-> > interrupts
-> > [alphabetical]
-> > status [if needed]
-> 
-> I don't know what does it mean. Do you discuss with my comment? Wasn't
-> my comment exactly like this?
-> 
-> > 
-> > ===
-> > My incomplete list:
-> > 
-> > For nodes:
-> > If exists on top: model, compatible and chosen.
-> > Sort things without reg alphabetical first,
-> > then sort the rest by reg address.
-> > 
-> > Inside nodes:
-> > If exists on top: compatible, reg and interrupts.
-> > In alphabetical order the required properties.
-> > Then in alphabetical order the other properties.
-> > And as last things that start with '#' in alphabetical order.
-> > Add status below all other properties for soc internal components with
-> > any board-specifics.
-> > Keep an empty line between properties and nodes.
-> > 
-> > Exceptions:
-> > Sort pinctrl-0 above pinctrl-names, so it stays in line with clock-names
-> > and dma-names.
-> > Sort simple-audio-card,name above other simple-audio-card properties.
-> > Sort regulator-name above other regulator properties.
-> > Sort regulator-min-microvolt above regulator-max-microvolt.
-> 
-> Is there a question to me?
-> 
-> > 
-> >>
-> >>> +	};
-> >>> +
-> >>> +	arm-pmu {
-> >>> +		compatible = "arm,cortex-a7-pmu";
-> >>> +		interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>,
-> >>> +			     <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
-> >>> +			     <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>,
-> >>> +			     <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
-> >>> +		interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>;
-> >>> +	};
-> >>> +
-> >>> +	cpus {
-> >>> +		#address-cells = <1>;
-> >>> +		#size-cells = <0>;
-> >>> +
-> >>> +		cpu0: cpu@f00 {
-> >>> +			device_type = "cpu";
-> >>> +			compatible = "arm,cortex-a7";
-> >>> +			reg = <0xf00>;
-> >>> +			clock-latency = <40000>;
-> >>> +			clocks = <&cru ARMCLK>;
-> > 
-> >>> +			operating-points = <
-> >>> +				/* KHz    uV */
-> >>> +				 816000 1000000
-> >>> +			>;
-> >>
-> >> Why not operating-points-v2?
-> > 
-> > rk3128 doesn't have a tsadc.
-> 
-> And this is related to operating-points-v2?
-> 
-> > As long as this thermal stuff is not implemented with drivers and regulators I would prefer to keep it basic in the DT for now.
-> > Just keep things simple for now till someone with hardware can fix that.
-> > 
-> > https://github.com/rockchip-linux/kernel/blob/develop-4.4/arch/arm/boot/dts/rk312x.dtsi#L315
-> > 
-> > 	tsadc: tsadc {
-> > 		compatible = "rockchip,rk3126-tsadc-virtual";
-> > 		nvmem-cells = <&cpu_leakage>;
-> > 		nvmem-cell-names = "cpu_leakage";
-> > 		#thermal-sensor-cells = <1>;
-> > 		status = "disabled";
-> > 	};
-> 
-> >>
-> >>> +			#cooling-cells = <2>; /* min followed by max */
-> >>> +		};
-> >>> +
-> >>> +		cpu1: cpu@f01 {
-> >>> +			device_type = "cpu";
-> >>> +			compatible = "arm,cortex-a7";
-> >>> +			reg = <0xf01>;
-> >>> +		};
-> >>> +
-> >>> +		cpu2: cpu@f02 {
-> >>> +			device_type = "cpu";
-> >>> +			compatible = "arm,cortex-a7";
-> >>> +			reg = <0xf02>;
-> >>> +		};
-> >>> +
-> >>> +		cpu3: cpu@f03 {
-> >>> +			device_type = "cpu";
-> >>> +			compatible = "arm,cortex-a7";
-> >>> +			reg = <0xf03>;
-> >>> +		};
-> >>> +	};
-> >>> +
-> >>> +	timer {
-> > 
-> >>> +		compatible = "arm,armv7-timer";
-> > 
-> > Original 2 interrupts:
-> 
-> I have no clue what do you refer now.
-> 
-> I did not comment here, so I guess nothing more to me?
-> 
-> >>> +		usb2phy: usb2phy@17c {
-> >>
-> > 
-> >> Node names should be generic.
-> >> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-> > 
-> > You are absolutely correct. Except for Rockchip usb2phy nodes ....
-> > #phy-cells is located in a sub node, so we keep as it is... ;)
-> 
-> How phy-cells are related?
-> 
-> > 
-> > dt-bindings: phy: rename phy nodename in phy-rockchip-inno-usb2.yaml 
-> > https://lore.kernel.org/all/20210601164800.7670-2-jbx6244@gmail.com/
-> 
-> You mean parent device bindings expect usb2phy? If so, then it's fine.
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
-
-
-
-
+Same, it is not performance critical in this case to add a magical -1.
