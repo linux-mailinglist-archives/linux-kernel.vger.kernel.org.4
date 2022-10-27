@@ -2,112 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5F760F1D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5F960F1D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234908AbiJ0IGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 04:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
+        id S234742AbiJ0IG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 04:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234877AbiJ0IGN (ORCPT
+        with ESMTP id S233896AbiJ0IGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 04:06:13 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248C4ABD72;
-        Thu, 27 Oct 2022 01:06:12 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id y69so1381551ede.5;
-        Thu, 27 Oct 2022 01:06:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7ZnInTEdE6m53x3YlPmddOdHI+B78CP4lWnvW8zAy/0=;
-        b=ijWZqBV+oMnTpDEG9zR9caw+iwlaX7CYJw2Embia1jt1NznC/HIaMuLgihBh63YR8P
-         FduJhc5Du/rWyhH+BEO76Q0gLyyDvi1UMpTRrnc35G7zBKq7Ld+Ub0T3CTb9B2n7fiJs
-         8cmBHpZSHKGgeD86hRzLZIT1Io1Nl7i1AVRR5zAmfnNz8JNQo1lAKiYFuw7bUJv+7BuI
-         ynuwL9UP2+apZ+yumVbT7VHZIV+UIFwB4kgJ/xAR59IRrxhX3vLoG99cuGcA8dD949ZO
-         xZVQE6n4Wn8yLon3vDh6CkrhbO7QldJN2Uu2dBHxM95NhI7M5pYv4asW0bZhNxXgl1Da
-         c92Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7ZnInTEdE6m53x3YlPmddOdHI+B78CP4lWnvW8zAy/0=;
-        b=G2VMBoPgX0FUcscM6IRzTGhqvrtOym7SH/rywvV9QvGcN3NudmpRjl9TeoOg/gPHbY
-         WttHTpde60CYfG8ioO1UTDjUtAJ/JUXcKVDrh5O108ohGyoVqHZX/AQykwkhIPiafKKH
-         cQ6H2mis04j2e0eiHunvZaLhn8w/5C1B8YEHyvuwKuvBauTFdNz8j3lmQHBW4aM27oDN
-         OvCilbdB4H8F7XhS8g+VCpH+e3LHC0Wm80jFLsqyTNVehpa+Pb6unb99C3jv/Xhq/YZh
-         le0RcnIDMD9VyWWiJK79TkHfm1DEmWefiRqe4gXHElliQNZekY+VYVCZTV8H4KWx6qUi
-         Sriw==
-X-Gm-Message-State: ACrzQf2MvwjnYZKguLEuj4sFZ9ZFXrBDHH2ITBOCk/Nxh36C1muKh/ut
-        H+vWB3UtPN3c40u2bdP0VY+86blQNnpEug==
-X-Google-Smtp-Source: AMsMyM4GNhYQ44BzzIvPmqQwZphjKeseK6QEYBIGacPvv2evfrqgADiS5B1uSs32fGLhIFLBWpMg/A==
-X-Received: by 2002:a17:907:9611:b0:78d:bb06:90a3 with SMTP id gb17-20020a170907961100b0078dbb0690a3mr41222667ejc.233.1666857959802;
-        Thu, 27 Oct 2022 01:05:59 -0700 (PDT)
-Received: from [109.186.183.118] (109-186-183-118.bb.netvision.net.il. [109.186.183.118])
-        by smtp.gmail.com with ESMTPSA id h3-20020a50ed83000000b00451319a43dasm570872edr.2.2022.10.27.01.05.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 01:05:59 -0700 (PDT)
-Message-ID: <ba308dcf-ed07-e0c6-4992-9b609e0d7626@gmail.com>
-Date:   Thu, 27 Oct 2022 11:05:21 +0300
+        Thu, 27 Oct 2022 04:06:07 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED90367B7
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:06:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+zECNnKHvQf1A6kHuAwhB50ffkPqGeMPvlWKtaCiAiE=; b=YPLisVZwst9EFxI0gcuUY+NUOK
+        NRYAPfyNsuUDhRh2Vc9/2DiifXwycOGdA1g7mRfVdeglLv3Ck3LYNb45dW0S1PjHpT1kTmAwaFD8a
+        dmTJcENucPuyQ4gwgGt6ALvgRQm21WR7yjhtH7REW4fASRpkZMaXAPciocqgVAnijJXl0o+eLNm6T
+        55UQYf15xXrcXSr6Edj2x+eutqAK3aMV8lEVqcCeZz2oQiFNJFbI6upWpMIV3+Gww+qlob+XR43j9
+        doFyX+Kevribl8RQt/zYE8vDgdyPbNikz7Sy7zX5ie6UFIgne6j1TtMvWhCeqB+eTPEcxQul4UC95
+        bOKk7gKw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1onxth-0002LC-Ff; Thu, 27 Oct 2022 08:05:53 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3473930029C;
+        Thu, 27 Oct 2022 10:05:47 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1A6DD2012B90F; Thu, 27 Oct 2022 10:05:47 +0200 (CEST)
+Date:   Thu, 27 Oct 2022 10:05:47 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Marco Elver <elver@google.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>, x86@kernel.org
+Subject: Re: [PATCH] x86/uaccess: instrument copy_from_user_nmi()
+Message-ID: <Y1o72704bVK0FgCr@hirez.programming.kicks-ass.net>
+References: <20221025221755.3810809-1-glider@google.com>
+ <Y1j+Tt9mnMDU0zO+@hirez.programming.kicks-ass.net>
+ <CAG_fn=XDeghFBGXT37Mc-ky-8NaPaMmCLdo3Par=xh92Fk_CAQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-From:   Eli Billauer <eli.billauer@gmail.com>
-Subject: Re: [PATCH] char: xillybus: Prevent use-after-free due to race
- condition
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        imv4bel@gmail.com
-References: <2e5cbdfe-f6cd-d24f-9785-55176af6c975@gmail.com>
- <Y1lL+dVsJo2zu3Gy@rowland.harvard.edu>
-Content-Language: en-US
-In-Reply-To: <Y1lL+dVsJo2zu3Gy@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG_fn=XDeghFBGXT37Mc-ky-8NaPaMmCLdo3Par=xh92Fk_CAQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Alan,
+On Wed, Oct 26, 2022 at 11:38:53AM -0700, Alexander Potapenko wrote:
+> A bigger issue from the NMI perspective is probably
+> having __msan_poison_alloca() inserted in every non-noinstr kernel
+> function, because that hook may acquire the stackdepot lock.
 
-On 26/10/2022 18:02, Alan Stern wrote:
-> On Wed, Oct 26, 2022 at 11:52:40AM +0300, Eli Billauer wrote:
->> To fix this, xillybus_find_inode() supplies the pointer to the mutex that
->> it has locked (when returning success), so xillyusb_open() releases this
->> mutex only after obtaining the mutex that is specific to a device file.
->> This ensures that xillyusb_disconnect() won't release anything that is in
->> use.
-> 
-> The standard way of handling this problem is different from this.  The
-> driver defines a private mutex, and it ensures that any routine calling
-> *_find_inode() holds the mutex.  It also ensures that the mutex is held
-> while a new device is being registered and while a device is being
-> removed.
+*urgghhh* that's broken, that must not be. There is a *TON* of NMI
+functions that are non-noinstr.
 
-Thanks, I'm going to follow that advice in my v2 patch.
+What's worse, it seems to do a memory allocation as well, and that's out
+the window with PREEMPT_RT where you can't do even GFP_ATOMIC from
+regular IRQ context.
 
-> 
-> Even that won't fix all the synchronization problems.  A process can
-> open a device, and then after the device has been removed the process
-> can still try to access the device.  The driver needs to ensure that
-> such accesses are not allowed.
+That function is wholly unacceptable to be added to every kernel
+function.
 
-Indeed. For that purpose, the relevant struct has a kref_counter, and an 
-error flag that indicates a removal among others, along with mutexes. 
-The problem is the time gap from the moment that the struct has been 
-found by xillybus_find_inode() until it has been secured with the kref.
-
-A new mutex is going to solve that.
-
-Regards,
-   Eli
