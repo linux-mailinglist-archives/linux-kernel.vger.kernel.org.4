@@ -2,137 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D696F61040F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A107E61041A
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236384AbiJ0VLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 17:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
+        id S229683AbiJ0VL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 17:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237249AbiJ0VLO (ORCPT
+        with ESMTP id S236018AbiJ0VLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 17:11:14 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E4727CCC;
-        Thu, 27 Oct 2022 14:07:32 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29RL7FoY029726;
-        Thu, 27 Oct 2022 16:07:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666904835;
-        bh=GLCwhrH7P9GnX6pP57UFeRv4PvNoKDR2Duko3cA8iBg=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=NfbCkeguhYq4U6KJaoKEiLWUDDo5KMhVSGC2vOt4jhl5b0d8khwBed0x+35e7V3u1
-         ibhBdbA+F03F0LP82Nd4mqWycSfMsEieh0uEQ5yor+7T2jTSk2HqQk+ZjKlEqjvPjE
-         0PLtoiZgH00V3GJUxfCvecw2hd8yBZefG8l39Zzo=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29RL7Fjr002219
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 27 Oct 2022 16:07:15 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 27
- Oct 2022 16:07:14 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Thu, 27 Oct 2022 16:07:15 -0500
-Received: from [10.250.35.234] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29RL7EDS090916;
-        Thu, 27 Oct 2022 16:07:14 -0500
-Message-ID: <a4688f2d-0a0f-dffc-92cc-4fa50938d0d8@ti.com>
-Date:   Thu, 27 Oct 2022 16:07:14 -0500
+        Thu, 27 Oct 2022 17:11:10 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2912A83F2C;
+        Thu, 27 Oct 2022 14:07:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 71D05CE2869;
+        Thu, 27 Oct 2022 21:07:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94B34C433D6;
+        Thu, 27 Oct 2022 21:07:05 +0000 (UTC)
+Date:   Thu, 27 Oct 2022 17:07:20 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mirko Lindner <mlindner@marvell.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net
+Subject: Re: [RFC][PATCH v2 19/31] timers: net: Use del_timer_shutdown()
+ before freeing timer
+Message-ID: <20221027170720.31497319@gandalf.local.home>
+In-Reply-To: <CAHk-=whoS+krLU7JNe=hMp2VOcwdcCdTXhdV8qqKoViwzzJWfA@mail.gmail.com>
+References: <20221027150525.753064657@goodmis.org>
+        <20221027150928.780676863@goodmis.org>
+        <20221027155513.60b211e2@gandalf.local.home>
+        <CAHk-=wjAjW2P5To82+CAM0Rx8RexQBHPTVZBWBPHyEPGm37oFA@mail.gmail.com>
+        <20221027163453.383bbf8e@gandalf.local.home>
+        <CAHk-=whoS+krLU7JNe=hMp2VOcwdcCdTXhdV8qqKoViwzzJWfA@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 2/9] ARM: dts: nspire: Use syscon-reboot to handle
- restart
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Daniel Tang <dt.tangr@gmail.com>,
-        Fabian Vogt <fabian@ritter-vogt.de>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221027181337.8651-1-afd@ti.com>
- <20221027181337.8651-3-afd@ti.com>
- <050f3d65-5720-9c97-1930-bc458c4c2fb8@linaro.org>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <050f3d65-5720-9c97-1930-bc458c4c2fb8@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/27/22 2:33 PM, Krzysztof Kozlowski wrote:
-> On 27/10/2022 14:13, Andrew Davis wrote:
->> Writing this bit can be handled by the syscon-reboot driver.
->> Add this node to DT.
->>
->> Signed-off-by: Andrew Davis <afd@ti.com>
->> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->> Tested-by: Fabian Vogt <fabian@ritter-vogt.de>
->> Reviewed-by: Fabian Vogt <fabian@ritter-vogt.de>
->> ---
->>   arch/arm/boot/dts/nspire.dtsi | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/arch/arm/boot/dts/nspire.dtsi b/arch/arm/boot/dts/nspire.dtsi
->> index bb240e6a3a6f..48fbc9d533c3 100644
->> --- a/arch/arm/boot/dts/nspire.dtsi
->> +++ b/arch/arm/boot/dts/nspire.dtsi
->> @@ -172,7 +172,14 @@ rtc: rtc@90090000 {
->>   			};
->>   
->>   			misc: misc@900a0000 {
->> +				compatible = "ti,nspire-misc", "syscon", "simple-mfd";
+On Thu, 27 Oct 2022 13:48:54 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
+
+> On Thu, Oct 27, 2022 at 1:34 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > What about del_timer_try_shutdown(), that if it removes the timer, it sets
+> > the function to NULL (making it equivalent to a successful shutdown),
+> > otherwise it does nothing. Allowing the the timer to be rearmed.  
 > 
-> You have syscon and simple-mfd, but bindings in patch #1 say only syscon.
+> Sounds sane to me and should work, but as mentioned, I think the
+> networking people need to say "yeah" too.
 > 
+> And maybe that function can also disallow any future re-arming even
+> for the case where the timer couldn't be actively removed.
 
-I'm not following, are you just saying my wording in the patch message just
-wasn't complete?
+Well, I think this current use case will break if we prevent the timer from
+being rearmed or run again if it's not found. But as you said, the
+networking folks need to confirm or deny it.
 
-Or are you saying something more about nodes that are both syscon and simple-mfd?
-In that case, having both syscon and simple-mfd seems rather common, looks like
-you added the rule for it[0].
+The fact that it does the sock_put() when it removes the timer makes me
+think that it can be called again, and we shouldn't prevent that from
+happening.
 
-Thinking on this, they almost represent the same thing. simple-mfd says "my child
-nodes should be considered devices", why do we need that? Couldn't we simply state
-that "syscon" node's children are always devices, I mean what else could they be,
-syscon is an MFD after all (and lives in drivers/mfd/).
-
-"syscon" often just says, others can use the registers within this node, so as a
-different option, make "syscon" a property of "simple-mfd" nodes. I'm seeing all
-these examples of devices that should have been children of the "syscon" device,
-but instead use
-
-regmap = <&x>;
-syscon = <&x>;
-
-or similar and put the device node out somewhere random. And in those cases,
-wouldn't it have been more correct to use the normal "reg" and "regions" to
-define the registers belonging to the child node/device?..
-
-Thanks,
-Andrew
-
-[0] https://lore.kernel.org/all/20220817142246.828762-5-krzysztof.kozlowski@linaro.org/
+The debug code will let us know too, as it only "frees" it for freeing if
+it deactivated the timer and shut it down.
 
 > 
-> Best regards,
-> Krzysztof
+> So any *currently* active timer wouldn't be waited for (either because
+> locking may make that a deadlock situation, or simply due to
+> performance issues), but at least it would guarantee that no new timer
+> activations can happen.
 > 
+> Because I do like the whole notion of "timer has been shutdown and
+> cannot be used as a timer any more without re-initializing it" being a
+> real state - even for a timer that may be "currently in flight".
+> 
+> So this all sounds very worthwhile to me, but I'm not surprised that
+> we have code that then knows about all the subtleties of "del_timer()
+> might still have a running timer" and actually take advantage of it
+> (where "advantage" is likely more of a "deal with the complexities"
+> rather than anything really positive ;)
+
+Good to hear. This has been a thorn in our side as we keep hitting these
+crashes in the timer code that look like a timer was freed before it
+triggered.
+
+> 
+> And those existing subtle users might want particular semantics to at
+> least make said complexities easier.
+> 
+
+Yeah, as someone told me recently, "If you let them play long enough without
+setting out the rules, they will take advantage of everything and it will be
+extremely hard to get them back in order".
+
+-- Steve
+
