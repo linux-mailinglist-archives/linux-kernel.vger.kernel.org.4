@@ -2,172 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D6E60EF79
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 07:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1274660EF84
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 07:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233956AbiJ0F1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 01:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
+        id S233473AbiJ0FbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 01:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiJ0F1O (ORCPT
+        with ESMTP id S229379AbiJ0FbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 01:27:14 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2061.outbound.protection.outlook.com [40.107.220.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F1015A32F;
-        Wed, 26 Oct 2022 22:27:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZJ9srAZ6ORKkm1vI7P4Oy3A2fXOXJlm+Mz8e4YHfYnBhwyitMVo5Pfydyq0I3s3Oqu2X6CXeW05A7H7m7H3xY7Gl/5T/LNal/bXj+88+po9g2HlOm4PEZIzjXMlTNZBRZw8z3pgSgpcGxucp1MIQxlEQWH32VoI6Eak76UjIkPDlRRK4cQv+EHn6AI8GML6aK5k3SQ0rxW+dtPHqn5kK2OXX8kfCo6Att1HtyQr3nt56YS1nvrzVapqJTIN+5roUktQovfrmC4RFKYFE7M1a4lIX3znXWVdR2hAjgSelNJaMJbonhMXw2KV+GqQUt8s1TkX7/jGa5HhKB/O29szaDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WxpVqRrbQX2vXuNsDMd262iijiw3r66biyRCkfVIHyk=;
- b=N1FJdUhZFy7LE4dXP6vP3vVs8nB1JMbP4+y1hbuYc4/wjSoTG0B0dvXP/ebq+Iet6IGesRvmakmkVmEH7zuH2vq1YY+uG0RMoJ0OkaeLRuaAqZ6UewGs04F0fb6eHDgQlPjW74v9fKYbFvIDDp8dhtwVnv0nr1fDwu8eRX6YGoe3MORqBneaSnpfXoDOVyNrnauMlsim7qmQVGkecwFITLvcvpC58LrYDnTgUPzokJ3ZJTN/A7cREvJXxuLDUnPC4JHfnExy9v1JJ0+iwWGmR4Vni0axCOmqJEVQi2ube/1nY6JPEKfRUZjFrvS52H2WdC1kucZp1CeACNxJBjrspw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WxpVqRrbQX2vXuNsDMd262iijiw3r66biyRCkfVIHyk=;
- b=sDlD4i3rpiPmFToP/FUJBg2MAGHMeY+AZo3pRjSNYysu6opZPMWqSD05snyj7bQbwh9XRKdqsDuqhrfnkMXE2zL4prAbBMXlJTbPKS3Ch6AMdSvf3R+TNV2RgXWZWAYiMgYguoELyKrhLDX498wipmbQYRAe4gcqbfAAVjeTmwc=
-Received: from BN7PR02CA0030.namprd02.prod.outlook.com (2603:10b6:408:20::43)
- by SN7PR12MB6768.namprd12.prod.outlook.com (2603:10b6:806:268::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.25; Thu, 27 Oct
- 2022 05:27:11 +0000
-Received: from BN8NAM11FT115.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:20:cafe::e7) by BN7PR02CA0030.outlook.office365.com
- (2603:10b6:408:20::43) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.29 via Frontend
- Transport; Thu, 27 Oct 2022 05:27:11 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT115.mail.protection.outlook.com (10.13.177.151) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5746.16 via Frontend Transport; Thu, 27 Oct 2022 05:27:11 +0000
-Received: from aiemdee.1.ozlabs.ru (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 27 Oct
- 2022 00:26:57 -0500
-From:   Alexey Kardashevskiy <aik@amd.com>
-To:     <kvm@vger.kernel.org>
-CC:     Alexey Kardashevskiy <aik@amd.com>, <linux-kernel@vger.kernel.org>,
-        <iommu@lists.linux.dev>, Ashish Kalra <ashish.kalra@amd.com>,
-        Pankaj Gupta <pankaj.gupta@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH kernel] x86/swiotlb/amd: Half the size if allocation failed
-Date:   Thu, 27 Oct 2022 16:26:07 +1100
-Message-ID: <20221027052607.260234-1-aik@amd.com>
-X-Mailer: git-send-email 2.37.3
+        Thu, 27 Oct 2022 01:31:11 -0400
+Received: from out199-12.us.a.mail.aliyun.com (out199-12.us.a.mail.aliyun.com [47.90.199.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F71D15A8FE;
+        Wed, 26 Oct 2022 22:31:09 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VTA1yNm_1666848664;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VTA1yNm_1666848664)
+          by smtp.aliyun-inc.com;
+          Thu, 27 Oct 2022 13:31:05 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     miklos@szeredi.hu
+Cc:     linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] ovl: Remove duplicated include in inode.c
+Date:   Thu, 27 Oct 2022 13:31:03 +0800
+Message-Id: <20221027053103.123173-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT115:EE_|SN7PR12MB6768:EE_
-X-MS-Office365-Filtering-Correlation-Id: a41ba58c-7a8d-409c-4d8c-08dab7dbe639
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Xi5uS5xgtzxV7Voi1Js4DS1E2fKZd6buCbl/GW8IyIxep5zzGLTdX+PMnabfofFG6fOdqFY9lp4Gdu/oHYFggMe0Cg16fDrUwdxCLdBVKyW8B12Xe7OTClBUHYkE1hs6sCgycVgxgRAoqP1tpPzIdR/rRo+tKIWgpEX4FI3o/DA8xh7hJGu4rhjUjP/LzSwmSUHNRta6i0MdYNuQhBR4wA/dR9tb54KPzu/M3TFPNkP2KXsZ4UqxkSfYM1sO8IF3oE0yOznRo4YUCtQf8Y59Zbfd4XE+K96Ulm5BKvCqEyqfACkFLj69x5knfJAgCfRTqDyz6Y+iPmnjfyhfL929+/C3flb0dsCwlMCMFWF/nYZus1HIlUWUQsIrQ4CGqivC8Edj0ti77tf3TM2FJoLhuH3rmI3thmS1ee1CMGH9PlNOeQ9GC233me9R+IBZDqd2J/ExiN1cy3HxL8/iTLv5VwmjxuIqTbE9QSsvG2u7nSSdCqHL4SlPOdeZ9ghSxHEXKOHPvSmwoloE+JA/ufezINKnis8s5DCUHOmiX1+gCimQLBeWu62KqHhYLeG7IXzXe7wmTbJs93SxkSdLLO8dDivyba5QN/qi2hLW2dZ0fcsw+VAt7OZjLDThswMeDIQkBJH7A6DP5n8yG3pKpY+SwdkbGanfq+PmZXzbT+Vx6f4xfnpfscDaJlF6eQ04V/ehmxB3eXSgyvUlY08vku4glvp9fJZFDFK/D4do6fthmg/yTK3RsWdW0dD2hmKd4lwY77grnDX3q2dgPoFerCLGv6zBR50WiPZR9NTZh9UssscMHjRcDLJxfB6n6qmd3AWL
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(136003)(346002)(396003)(451199015)(46966006)(40470700004)(36840700001)(2906002)(82740400003)(54906003)(47076005)(81166007)(5660300002)(41300700001)(8936002)(8676002)(70206006)(316002)(70586007)(4326008)(6916009)(336012)(40460700003)(83380400001)(426003)(1076003)(186003)(2616005)(36756003)(478600001)(82310400005)(40480700001)(36860700001)(26005)(356005)(6666004)(16526019)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 05:27:11.4113
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a41ba58c-7a8d-409c-4d8c-08dab7dbe639
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT115.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6768
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At the moment the AMD encrypted platform reserves 6% of RAM for SWIOTLB
-or 1GB, whichever is less. However it is possible that there is no block
-big enough in the low memory which make SWIOTLB allocation fail and
-the kernel continues without DMA. In such case a VM hangs on DMA.
+./fs/overlayfs/inode.c: linux/posix_acl.h is included more than once.
 
-This divides the size in half and tries again reusing the existing
-remapping logic.
-
-This updates default_nslabs on successful allocation which looks like
-an oversight as not doing so should have broken callers of
-swiotlb_size_or_default().
-
-Signed-off-by: Alexey Kardashevskiy <aik@amd.com>
---
-
-I hit the problem with
-QEMU's "-m 16819M" where SWIOTLB was adjusted to
-0x7e200 == 1,058,013,184 (slightly less than 1GB) while
-0x7e180 still worked.
-
-With guest errors enabled, there are many unassigned accesses from
-virtio.
-
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2599
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- kernel/dma/swiotlb.c | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
+ fs/overlayfs/inode.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-index 339a990554e7..d28c294320fd 100644
---- a/kernel/dma/swiotlb.c
-+++ b/kernel/dma/swiotlb.c
-@@ -338,21 +338,27 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
- 	else
- 		tlb = memblock_alloc_low(bytes, PAGE_SIZE);
- 	if (!tlb) {
--		pr_warn("%s: failed to allocate tlb structure\n", __func__);
--		return;
--	}
--
--	if (remap && remap(tlb, nslabs) < 0) {
-+		pr_warn("%s: Failed to allocate %zu bytes tlb structure\n",
-+			__func__, bytes);
-+	} else if (remap && remap(tlb, nslabs) < 0) {
- 		memblock_free(tlb, PAGE_ALIGN(bytes));
-+		tlb = NULL;
-+		pr_warn("%s: Failed to remap %zu bytes\n", __func__, bytes);
-+	}
+diff --git a/fs/overlayfs/inode.c b/fs/overlayfs/inode.c
+index 77a77fd7a77b..d52bcdad4e5b 100644
+--- a/fs/overlayfs/inode.c
++++ b/fs/overlayfs/inode.c
+@@ -14,7 +14,6 @@
+ #include <linux/fileattr.h>
+ #include <linux/security.h>
+ #include <linux/namei.h>
+-#include <linux/posix_acl.h>
+ #include <linux/posix_acl_xattr.h>
+ #include "overlayfs.h"
  
-+	if (!tlb) {
- 		nslabs = ALIGN(nslabs >> 1, IO_TLB_SEGSIZE);
- 		if (nslabs >= IO_TLB_MIN_SLABS)
- 			goto retry;
--
--		pr_warn("%s: Failed to remap %zu bytes\n", __func__, bytes);
- 		return;
- 	}
- 
-+	if (default_nslabs != nslabs) {
-+		pr_info("SWIOTLB bounce buffer size adjusted %lu -> %lu slabs",
-+			default_nslabs, nslabs);
-+		default_nslabs = nslabs;
-+	}
-+
- 	alloc_size = PAGE_ALIGN(array_size(sizeof(*mem->slots), nslabs));
- 	mem->slots = memblock_alloc(alloc_size, PAGE_SIZE);
- 	if (!mem->slots) {
 -- 
-2.37.3
+2.20.1.7.g153144c
 
