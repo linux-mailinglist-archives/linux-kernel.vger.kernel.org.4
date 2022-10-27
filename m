@@ -2,115 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B4F60F6E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E18D060F6E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234740AbiJ0MLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40098 "EHLO
+        id S235301AbiJ0MMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232844AbiJ0MLs (ORCPT
+        with ESMTP id S232844AbiJ0MMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:11:48 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104B4D0CE6
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:11:47 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id z14so1818908wrn.7
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:11:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=w3b8progjf6nTjlRNKVhfA6lVwhcFNvYGUFDNCKIgOA=;
-        b=hzJqchdz1nxotUABi97SVc6OkYYXbmXSBzNSLO4BfJWSlQ4E/TmdwAKsz5Y2AD2OYC
-         tuKmAdi7p9QjnjlY0bKS/VQzsLIb9FARhep7ETn0SVYxRexqgpn9jhEyusubgxgaL1dy
-         1fpOJUmwJlblJ+qKKfUHeBPhe8sCps2EGGtrTaoAT78+ZJhJRhePoMFPsqplGwCFABm6
-         x9guCDmak8TBfzmnyofI7noqI9/yBqNquKt+lzSBkye+s+bRcIDx0iuza+OA4qpaawMJ
-         ujGVCW3rJCAwVV9H6MieBouzPIbJyJgMpSpVtRRqi0X3RdzANId093CK5DhTMukf5s9M
-         UMzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w3b8progjf6nTjlRNKVhfA6lVwhcFNvYGUFDNCKIgOA=;
-        b=wCahtvJ1LtkJfwtnSOQiiIhpChYvxZrgAqt9YokKz828bXhebBZuc2VKIEIXRe5Bcv
-         6xEn1q6z/hx8hSD46vt5DdScwc6pmVdYjSWMFPLcPVQqlOZM6h1NqFZU7H1gMN/XChKa
-         Zw25XeRVUm9VDxkrclYl1LOcqOfcgg5p3L4Kyv5VefSP4PVQIKptNL7pVM+C6u9cdG/u
-         DU9HP2IaNJTFcSXDl/eN7nOhEIjzZlbMiifuZGj9CQ+2DB50PYspuLC+TwnmrqXPAsDD
-         CkirCF1PWkDsNBb+mzJNGyWn5bH2bbFqwEPLfZCZxSAwF5hW6e6dnmhv0Qgf5obSTMBc
-         iqZA==
-X-Gm-Message-State: ACrzQf10OIo/pu3iSa1SW4Dkqi59OP3o1NKplGj5dRDXNiwY6lStjcLR
-        d6t48Ydn4zw94fYtCgBYDeilWw==
-X-Google-Smtp-Source: AMsMyM5rJoSQ6ICEDwXJ+doDHBP8h+Yz7A7uzCo72oHXSiDM3V7WEN6+2va2BAcuQ3qE+wUjWjLM7A==
-X-Received: by 2002:a5d:4944:0:b0:236:7f32:1ad5 with SMTP id r4-20020a5d4944000000b002367f321ad5mr8985028wrs.377.1666872705548;
-        Thu, 27 Oct 2022 05:11:45 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id bw28-20020a0560001f9c00b0022cd27bc8c1sm1414312wrb.9.2022.10.27.05.11.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 05:11:45 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 27 Oct 2022 14:11:43 +0200
-Subject: [PATCH] spi: meson-spicc: fix do_div build error on non-arm64
+        Thu, 27 Oct 2022 08:12:30 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1C05106A79
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:12:28 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 34ADB23A;
+        Thu, 27 Oct 2022 05:12:34 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.1.184])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DDBA03F7B4;
+        Thu, 27 Oct 2022 05:12:25 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 13:12:16 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        Kees Cook <keescook@chromium.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Adam Langley <agl@google.com>,
+        James Morse <james.morse@arm.com>
+Subject: Re: [RFC PATCH] arm64: Enable data independent timing (DIT) in the
+ kernel
+Message-ID: <Y1p1oKCE+paB8JUK@FVFF77S0Q05N>
+References: <20221027112741.1678057-1-ardb@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221027-b4-spicc-burst-delay-fix-v1-0-5a6e9a88e54c@linaro.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org
-X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221027112741.1678057-1-ardb@kernel.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes :
-error: passing argument 1 of '__div64_32' from incompatible pointer type
+On Thu, Oct 27, 2022 at 01:27:41PM +0200, Ard Biesheuvel wrote:
+> The ARM architecture revision v8.4 introduces a data independent timing
+> control (DIT) which can be set at any exception level, and instructs the
+> CPU to avoid optimizations that may result in a correlation between the
+> execution time of certain instructions and the value of the data they
+> operate on.
+> 
+> The DIT bit is part of PSTATE, and is therefore context switched as
+> usual, given that it becomes part of the saved program state (SPSR) when
+> taking an exception. We have also defined a hwcap for DIT, and so user
+> space can discover already whether or nor DIT is available. This means
+> that, as far as user space is concerned, DIT is wired up and fully
+> functional.
+> 
+> In the kernel, however, we never bothered with DIT: we disable at it
+> boot (i.e., INIT_PSTATE_EL1 has DIT cleared) and ignore the fact that we
+> might run with DIT enabled if user space happened to set it.
 
-By passing an uint64_t as first variable to do_div().
+FWIW, I did raise this with some architects a while back, and the thinking at
+the time was that implementations were likely to have data independent timing
+regardless of the value of the DIT bit, and so manipulating this at exception
+entry was busy work with no actual gain (especially if we had to handle
+mismatched big.LITTLE systems).
 
-Fixes: 04694e50020b ("spi: meson-spicc: move wait completion in driver to take bursts delay in account")
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
-To: Neil Armstrong <narmstrong@baylibre.com>
-To: Kevin Hilman <khilman@baylibre.com>
-To: Jerome Brunet <jbrunet@baylibre.com>
-To: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: linux-spi@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-amlogic@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
----
- drivers/spi/spi-meson-spicc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Since then, I have become aware of some possible implementation choices which
+would consider the bit (though I have no idea if anyone is building such
+implementations).
 
-diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
-index 52bffab18329..1b4195c54ee2 100644
---- a/drivers/spi/spi-meson-spicc.c
-+++ b/drivers/spi/spi-meson-spicc.c
-@@ -387,7 +387,7 @@ static int meson_spicc_transfer_one(struct spi_master *master,
- 				    struct spi_transfer *xfer)
- {
- 	struct meson_spicc_device *spicc = spi_master_get_devdata(master);
--	unsigned long timeout;
-+	uint64_t timeout;
+> Given that running privileged code with DIT disabled on a CPU that
+> implements support for it may result in a side channel that exposes
+> privileged data to unprivileged user space processes,
+
+I appreciate this is a simple way to rule out issues of that sort, but I think
+the "may" in that sentence is doing a lot of work, since:
+
+* IIUC, we don't have a specific case in mind that we're concerned about. I can
+  believe that we think all the crypto code we intend to be constant time is
+  theoretically affected.
+
+* IIUC we haven't gone an audited all constant-time code to check it doesn't
+  happen to use instructions with data-dependent-timing. So there might be more
+  work to do atop this to ensure theoretical correctness.
+
+* AFAIK there are no contemporary implementations where the DIT is both
+  implemented and it being clear results in data-dependent-timing. i.e. we have
+  nothing to actually test on.
  
- 	/* Store current transfer */
- 	spicc->xfer = xfer;
+Given that, it would be nice if we could make this a bit clearer, e.g. state
+that this is currently a belt-and-braces approach for theoretical cases, rather
+than an extant side-channel today (as far as we're aware).
 
----
-base-commit: 574f97ab96d6b153407161746bc127564e998b4f
-change-id: 20221027-b4-spicc-burst-delay-fix-a03004454876
+> let's enable DIT while running in the kernel if supported by all CPUs.
 
-Best regards,
--- 
-Neil Armstrong <neil.armstrong@linaro.org>
+FWIW, I think it's reasonable to do this when all CPUs have DIT.
+
+I have a slight fear that (as above) if there are future CPUs which do consider
+DIT, there's presumably a noticeable performance difference (or the CPU would
+just provide data-independent-timing regardless), but I'm not sure if that's
+just something we have to live with or could punt on until we notice such
+cases.
+
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Eric Biggers <ebiggers@kernel.org>
+> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: Adam Langley <agl@google.com>
+> Link: https://lore.kernel.org/all/YwgCrqutxmX0W72r@gmail.com/
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  arch/arm64/include/asm/sysreg.h |  3 +++
+>  arch/arm64/kernel/cpufeature.c  | 16 ++++++++++++++++
+>  arch/arm64/kernel/entry.S       |  3 +++
+>  arch/arm64/tools/cpucaps        |  1 +
+>  4 files changed, 23 insertions(+)
+
+Don't we also need to touch __cpu_suspend_exit() in arch/am64/kernel/suspend.c?
+I'm assuming so given that has __uaccess_enable_hw_pan() today.
+
+Presumably we'd also care about this in KVM hyp code?
+
+> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+> index 7d301700d1a9..18e065f5130c 100644
+> --- a/arch/arm64/include/asm/sysreg.h
+> +++ b/arch/arm64/include/asm/sysreg.h
+> @@ -94,15 +94,18 @@
+>  #define PSTATE_PAN			pstate_field(0, 4)
+>  #define PSTATE_UAO			pstate_field(0, 3)
+>  #define PSTATE_SSBS			pstate_field(3, 1)
+> +#define PSTATE_DIT			pstate_field(3, 2)
+>  #define PSTATE_TCO			pstate_field(3, 4)
+>  
+>  #define SET_PSTATE_PAN(x)		__emit_inst(0xd500401f | PSTATE_PAN | ((!!x) << PSTATE_Imm_shift))
+>  #define SET_PSTATE_UAO(x)		__emit_inst(0xd500401f | PSTATE_UAO | ((!!x) << PSTATE_Imm_shift))
+>  #define SET_PSTATE_SSBS(x)		__emit_inst(0xd500401f | PSTATE_SSBS | ((!!x) << PSTATE_Imm_shift))
+> +#define SET_PSTATE_DIT(x)		__emit_inst(0xd500401f | PSTATE_DIT | ((!!x) << PSTATE_Imm_shift))
+>  #define SET_PSTATE_TCO(x)		__emit_inst(0xd500401f | PSTATE_TCO | ((!!x) << PSTATE_Imm_shift))
+>  
+>  #define set_pstate_pan(x)		asm volatile(SET_PSTATE_PAN(x))
+>  #define set_pstate_uao(x)		asm volatile(SET_PSTATE_UAO(x))
+> +#define set_pstate_dit(x)		asm volatile(SET_PSTATE_DIT(x))
+>  #define set_pstate_ssbs(x)		asm volatile(SET_PSTATE_SSBS(x))
+>  
+>  #define __SYS_BARRIER_INSN(CRm, op2, Rt) \
+> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> index 6062454a9067..273a74df24fe 100644
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@ -2077,6 +2077,11 @@ static void cpu_trap_el0_impdef(const struct arm64_cpu_capabilities *__unused)
+>  	sysreg_clear_set(sctlr_el1, 0, SCTLR_EL1_TIDCP);
+>  }
+>  
+> +static void cpu_enable_dit(const struct arm64_cpu_capabilities *__unused)
+> +{
+> +	set_pstate_dit(1);
+> +}
+
+I think this wants the same treatment as PAN, i.e.
+WARN_ON_ONCE(in_interrupt()); with a comment about PSTATE being discareded upon
+ERET.
+
+Thanks,
+Mark.
+
+> +
+>  /* Internal helper functions to match cpu capability type */
+>  static bool
+>  cpucap_late_cpu_optional(const struct arm64_cpu_capabilities *cap)
+> @@ -2640,6 +2645,17 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+>  		.matches = has_cpuid_feature,
+>  		.cpu_enable = cpu_trap_el0_impdef,
+>  	},
+> +	{
+> +		.desc = "Data independent timing control (DIT)",
+> +		.capability = ARM64_HAS_DIT,
+> +		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+> +		.matches = has_cpuid_feature,
+> +		.sys_reg = SYS_ID_AA64PFR0_EL1,
+> +		.field_pos = ID_AA64PFR0_EL1_DIT_SHIFT,
+> +		.field_width = 4,
+> +		.min_field_value = 1,
+> +		.cpu_enable = cpu_enable_dit,
+> +	},
+>  	{},
+>  };
+>  
+> diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
+> index e28137d64b76..229b505e6366 100644
+> --- a/arch/arm64/kernel/entry.S
+> +++ b/arch/arm64/kernel/entry.S
+> @@ -197,6 +197,9 @@ alternative_cb_end
+>  	.endm
+>  
+>  	.macro	kernel_entry, el, regsize = 64
+> +	.if	\el == 0
+> +	ALTERNATIVE(nop, SET_PSTATE_DIT(1), ARM64_HAS_DIT)
+> +	.endif
+>  	.if	\regsize == 32
+>  	mov	w0, w0				// zero upper 32 bits of x0
+>  	.endif
+> diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
+> index f1c0347ec31a..a86ee376920a 100644
+> --- a/arch/arm64/tools/cpucaps
+> +++ b/arch/arm64/tools/cpucaps
+> @@ -20,6 +20,7 @@ HAS_CNP
+>  HAS_CRC32
+>  HAS_DCPODP
+>  HAS_DCPOP
+> +HAS_DIT
+>  HAS_E0PD
+>  HAS_ECV
+>  HAS_EPAN
+> -- 
+> 2.35.1
+> 
