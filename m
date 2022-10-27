@@ -2,161 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9059860FD52
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C721860FD57
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235975AbiJ0Qmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 12:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38874 "EHLO
+        id S235467AbiJ0Qpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 12:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233668AbiJ0Qmd (ORCPT
+        with ESMTP id S234219AbiJ0Qpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 12:42:33 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13FF32A9A
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:42:32 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-36cbcda2157so20744247b3.11
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:42:32 -0700 (PDT)
+        Thu, 27 Oct 2022 12:45:42 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1D374CEF
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:45:41 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id o8so1832119qvw.5
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:45:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FrpT7jDzvIdd9Y+I9KcU+R/FrIS418eDQ+csIqtnsLY=;
-        b=bCUbZ0x6v07vNmPZXYNcBG5Ey/ryv5OToKooQuXyplODjf24p5tWQ75jkhjBZV7gT3
-         oEsD+bBMYkbuXg+M/p6MAapBGs3r/Rv0wzvDTNq9Bn4+xNbDhY8Px2jjU0edEBq+nvST
-         x6BxxX1ldzDvoynXqS/GXEnx2xgZbkC/ItOOUZTXPwE4M0X5LFkw02oW2vsxWgjrnVoq
-         Tx4W7yBmJ5iJmJvREIW10dyHlLQBy6BZEYS3ZAm8QLKkvwtyUhONMH++0PRzFF+0ENdo
-         b0cU2ASNHKh1+zWAMkz396EQEz8QufIJTCgaOF7SOhfzH9SSkxcjCXYR+oiS5AzSJI9U
-         QBcQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o8E7f+pbai6yNionn/RucFtJANfu+mS+MIa2K7Eho/8=;
+        b=z7vJkI3Sc3woYN3W1CoV94ELnbBfBwnApLU5+2VLwFinpR5/nT4L711ilpekqYgNcC
+         ukQAnfFpt0DZ3pNmN1snpxXrKx/mt0z/leChy5W2pSjYibqelOFNWafYk5FZW1EBdIBU
+         ieAJUANrvOPu06uXKZewj3T4bfK/EJ4Wg+bHUO53SOr1dZkOa4n5/fh7iyqInnn0rw7A
+         ZUPYTMp0iiMt3VQNO7I2KOboAamniF7cM4HtugId3udr0Bvog/ezITI2vEc30/djD6IM
+         WOfg0HP9hne7Pc+0MsIyhW89Y1m1D9/7x5mRE0wsZHsJs6u7C8yHSTBzDTTHFQ5UYBSx
+         Yw3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FrpT7jDzvIdd9Y+I9KcU+R/FrIS418eDQ+csIqtnsLY=;
-        b=7Ckjs1/tdCU1pcOkiz/dFB0sybdt/n59EPUB2nwJEsdxbPscJZ9T5m06E70OXIqlhD
-         DtOl8yTQub7xjtkzGvzhUHk2MzYU9vM/0cBls1HbMHIbDWFJnBSmqdkNr3wdaqOcyokA
-         9Fby0WS4h/HGDihb07rPv2gExt/nA4wYIOq0UzFpzk+Se3hEw0s84OETxKzJ39NXdnPA
-         3rCH7tCZTlg3Y4l7krVnut+5vZQBwmjnXJN4xeqTijBWmz0McvwMzDDYmmI/dwdged7G
-         E1DG4wQ1x8rh6B57j4bl2VgdDbJqHtwhfMRlL3OJk7Ktv1/wUF2AYSHZjdINPLWKEJaA
-         skyQ==
-X-Gm-Message-State: ACrzQf3AaJjr/PTQxDZum3UeN0ZGp1b9oI/e5wTtw6RBpJXH0PFN14rX
-        CPMpj1mAXhb8iC/+hlRq2sQf6vUUhXD4AldUOR4r4A==
-X-Google-Smtp-Source: AMsMyM4nDk2ORHx8hkcRQTC3kyPEB7IQDB/Q/0FuOAjTdfivEShbqfFkgF/S7EodPoMvamKbzlOi/TcLzOmgp2Y17zk=
-X-Received: by 2002:a0d:c901:0:b0:351:b348:542f with SMTP id
- l1-20020a0dc901000000b00351b348542fmr45367421ywd.144.1666888951720; Thu, 27
- Oct 2022 09:42:31 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o8E7f+pbai6yNionn/RucFtJANfu+mS+MIa2K7Eho/8=;
+        b=Wvo9DlGGXSYV6OB9PJbNcTMNlBikhl2Nz+FfB0kWMuO4XtdW7PfaFNe9fEF9QFtxE5
+         877J4JoKr1l5KD1bGocsOOQcUtyZYJEvLmtqPcMIro9w8HvXRi8IGLGa8sZpo/celkVY
+         TMZegibFs4YR6ad9bzWzGluCYVboogOXtRxlsMh1SIbVJWlZdj6FfDopemJAYnD7G2y5
+         S0Go6MzuBKErMiWL6bHgqJfvMK+QhLQA8YbSHqxzkQIMRzNxQBgGcYa3r1F1OTKBJo6Y
+         oW1XyMkilYCxUw+uiQtXgrm891YpVyYfqS9fdDGAVabw3hKXSl4xjXGaCnYKsVGk/LjE
+         l1GQ==
+X-Gm-Message-State: ACrzQf0OcBFJGloEY7zau5RLLViq1rkxvfs43b1N4Wejl56yLPxgy3WD
+        FDLXF0Ub8yc/hrJvDgDGR62/DQ==
+X-Google-Smtp-Source: AMsMyM57a6LQobl39EIHUvYv9F9ueqjvF0NgC33FdCUUNQFRFn6DRCQ8utqMeylgbUFbcEJxjucwNQ==
+X-Received: by 2002:a05:6214:2aa4:b0:4b3:fcfb:6479 with SMTP id js4-20020a0562142aa400b004b3fcfb6479mr42265023qvb.127.1666889141013;
+        Thu, 27 Oct 2022 09:45:41 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id bq33-20020a05620a46a100b006bb366779a4sm1293337qkb.6.2022.10.27.09.45.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 09:45:40 -0700 (PDT)
+Message-ID: <f1f514d3-cab5-9502-02f6-0a1b84067eab@linaro.org>
+Date:   Thu, 27 Oct 2022 12:45:38 -0400
 MIME-Version: 1.0
-References: <20221024212144.2852069-1-glider@google.com> <20221024212144.2852069-3-glider@google.com>
- <CAK7LNARfKkiNSUfZAqDQd15O8NAhpX13dHDuGn3OPL_b_F_92g@mail.gmail.com>
-In-Reply-To: <CAK7LNARfKkiNSUfZAqDQd15O8NAhpX13dHDuGn3OPL_b_F_92g@mail.gmail.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 27 Oct 2022 09:41:54 -0700
-Message-ID: <CAG_fn=WWiOvPRnw1ao-UPavY-U7rLFLa_a6b-k2noHKLunN+Yw@mail.gmail.com>
-Subject: Re: [PATCH 3/5] Kconfig.debug: disable CONFIG_FRAME_WARN for KMSAN by default
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 1/3] ASoC: dt-bindings: fsl,sai: Add compatible string for
+ i.MX93 platform
+Content-Language: en-US
+To:     Chancel Liu <chancel.liu@nxp.com>, lgirdwood@gmail.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shengjiu.wang@gmail.com,
+        Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
+        linuxppc-dev@lists.ozlabs.org
+References: <20221027060311.2549711-1-chancel.liu@nxp.com>
+ <20221027060311.2549711-2-chancel.liu@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221027060311.2549711-2-chancel.liu@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 7:33 AM Masahiro Yamada <masahiroy@kernel.org> wrot=
-e:
->
-> On Tue, Oct 25, 2022 at 6:22 AM Alexander Potapenko <glider@google.com> w=
-rote:
-> >
-> > KMSAN adds a lot of instrumentation to the code, which results in
-> > increased stack usage (up to 2048 bytes and more in some cases).
-> > It's hard to predict how big the stack frames can be, so we disable
-> > the warnings for KMSAN instead.
-> >
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Cc: Masahiro Yamada <masahiroy@kernel.org>
-> > Cc: Nick Desaulniers <ndesaulniers@google.com>
-> > Cc: linux-kbuild@vger.kernel.org
-> > Link: https://github.com/google/kmsan/issues/89
-> > Signed-off-by: Alexander Potapenko <glider@google.com>
-> > ---
-> >  lib/Kconfig.debug | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index 3fc7abffc7aa2..29280072dc0e4 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -400,8 +400,9 @@ config FRAME_WARN
-> >         default 1536 if (!64BIT && XTENSA)
-> >         default 1024 if !64BIT
-> >         default 2048 if 64BIT
-> > +       default 0 if KMSAN
->
->
->
-> This is wrong.
->
-> Kconfig picks up the first default entry which has
-> true 'if' condition.
->
->
-> Since (!64BIT || 64BIT) covers all the possible cases,
-> this patch is just adding dead code.
->
-Thanks for clarifying!
-What we actually need is to forcefully disable CONFIG_FRAME_WARN under
-KMSAN, but adding constructs like "select FRAME_WARN 0" or "select
-FRAME_WARN=3D0" doesn't work, right?
-
-I'll move "default 0 if KMSAN" to the beginning of FRAME_WARN declaration t=
-hen.
-
->
->
->
->
->
-> >         help
-> > -         Tell gcc to warn at build time for stack frames larger than t=
-his.
-> > +         Tell the compiler to warn at build time for stack frames larg=
-er than this.
-> >           Setting this too low will cause a lot of warnings.
-> >           Setting it to 0 disables the warning.
-> >
-> > --
-> > 2.38.0.135.g90850a2211-goog
-> >
->
->
-> --
-> Best Regards
-> Masahiro Yamada
+On 27/10/2022 02:03, Chancel Liu wrote:
+> Add compatible string "fsl,imx93-sai" for i.MX93 platform
+> 
+> Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/sound/fsl,sai.yaml | 1 +
 
 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
---=20
-Alexander Potapenko
-Software Engineer
+Best regards,
+Krzysztof
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
