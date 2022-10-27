@@ -2,649 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6A860FFA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED6960FFB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 20:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235850AbiJ0R7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 13:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44772 "EHLO
+        id S236371AbiJ0SBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 14:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235700AbiJ0R7I (ORCPT
+        with ESMTP id S236191AbiJ0SBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 13:59:08 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31101781C4;
-        Thu, 27 Oct 2022 10:59:05 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id b1e4d3273bfb39a8; Thu, 27 Oct 2022 19:59:02 +0200
-Received: from kreacher.localnet (unknown [213.134.169.45])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 1E03066D838;
-        Thu, 27 Oct 2022 19:59:02 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>
-Subject: [PATCH 11/11] ACPICA: Finish support for the CDAT table
-Date:   Thu, 27 Oct 2022 19:58:36 +0200
-Message-ID: <2537172.Lt9SDvczpP@kreacher>
-In-Reply-To: <4756726.GXAFRqVoOG@kreacher>
-References: <4756726.GXAFRqVoOG@kreacher>
+        Thu, 27 Oct 2022 14:01:00 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528F41EAC8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 10:59:46 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id g24so2343803plq.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 10:59:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=k9IjDL5JWPlrnxsJJxEdunDpxxIPr2PnubjnaqSEwb4=;
+        b=fAXRGsXO9T0rVErFQRaqRc9PON2BHW/sPR0NJalJ9Jad8TFOi63lfrXx+Qr4g1y/rt
+         8Um/s2hFWMnq0ZYlnODum3Ka6hps+k8EUMiUNDK8VeFZO5W1onzj6pn7P1r6f4KkvvyR
+         JKfdeir7oAydSoXS4iEfaZRC4CqREkrS8n1lTV5J9r3z/QG228gGvrc2BfpSvqCrF4tN
+         fwS5PoHK6fUA96ivKQVZgK5MLvEIAXEQTFhn0HN+iYL18SI0aX3N7j4YS4mtBuC3fp3R
+         iElh2Fo36Oj0islcASQPO2huArN8fvJJH4gkYDnV+GSF+D0gP+D4WRWkyxfWUnqfgQFL
+         6LyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k9IjDL5JWPlrnxsJJxEdunDpxxIPr2PnubjnaqSEwb4=;
+        b=Ru3r3q1z25XhyOLN+UcFU6Kjy9dDWGQVYjTQLMqIz65FAEc0P++P/CwG2tZhCl2Rfu
+         SL1kl2euj5Tn1uGsf2d8Ogt9lKNz2HCWw2OE0uJiKeYDjPiWkhYovIVC15mFmgLZEEFU
+         lxcPoTIBZRE3z3J9J8A9dP8AIhHMZCjCQPKHaLPbelXf/+tHkH0tf+BsBemjslzwbrQc
+         EuiOhODLKp7JrU+yrHL15Wulne3AIh2hdbsXpWxU6WrbhGXpi1OQPIQPZk657BzW9pEW
+         dCmWdoCjwIng4GbHDhbBHl0XFhCU6ZIHuOm6oivGkPbAmyaYFwqFjmmABhYThRuF6mLO
+         ZOnw==
+X-Gm-Message-State: ACrzQf1QZpepwIKRHcsFE6CzJ19AmjMHm0N7OIhHuxmtmobq1gGJUCQI
+        uvoLQLUTZbSKsp8WA1A0QVwzlw==
+X-Google-Smtp-Source: AMsMyM51ndGRH8GQDhjsXKGE6fXDuBR48obKHClQus7mENGt9nZN2K6NGCLN9rN699E6OeBjC+xpQg==
+X-Received: by 2002:a17:90b:384a:b0:213:2907:a528 with SMTP id nl10-20020a17090b384a00b002132907a528mr11393920pjb.183.1666893586206;
+        Thu, 27 Oct 2022 10:59:46 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id n5-20020a170902e54500b00186f0f59c85sm1116689plf.235.2022.10.27.10.59.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 10:59:45 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 17:59:42 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Gonda <pgonda@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marcorr@google.com, michael.roth@amd.com, thomas.lendacky@amd.com,
+        joro@8bytes.org, mizhang@google.com, pbonzini@redhat.com,
+        andrew.jones@linux.dev
+Subject: Re: [V4 6/8] KVM: selftests: add library for creating/interacting
+ with SEV guests
+Message-ID: <Y1rHDlDskvSacLNp@google.com>
+References: <20220829171021.701198-1-pgonda@google.com>
+ <20220829171021.701198-7-pgonda@google.com>
+ <Yz8dpB5+RFjEhA3n@google.com>
+ <CAMkAt6oZQc4jqF7FOXOKkpbP3c4NXxPumVVjX9gXwPCh-zbtYg@mail.gmail.com>
+ <Y02ZLFcDQbX6lP9z@google.com>
+ <CAMkAt6q0g5Ua=PwLXa2oA4zCQUaHuEQ3pTXycD61HU6-dtQ5Gg@mail.gmail.com>
+ <Y028WrU3pmEQqWDq@google.com>
+ <CAMkAt6pvT15teuYWjz7r1vmUP5McDp76qjxQ26_oeg5mTnv5NA@mail.gmail.com>
+ <Y1AnHwVtOFShRxQD@google.com>
+ <CAMkAt6rP7KbgUqmK+aiooSLfvRrMsRmp99cL0YWKBwpOJZc82A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.169.45
-X-CLIENT-HOSTNAME: 213.134.169.45
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeggdduudejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepledtieekkeekveeikeetgffgteeuteefjeevjeegudelvdduheeiuedvieehieevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudeiledrgeehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeiledrgeehpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMkAt6rP7KbgUqmK+aiooSLfvRrMsRmp99cL0YWKBwpOJZc82A@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bob Moore <robert.moore@intel.com>
+On Thu, Oct 27, 2022, Peter Gonda wrote:
+> On Wed, Oct 19, 2022 at 10:34 AM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Tue, Oct 18, 2022, Peter Gonda wrote:
+> > > On Mon, Oct 17, 2022 at 2:34 PM Sean Christopherson <seanjc@google.com> wrote:
+> > > >
+> > > > On Mon, Oct 17, 2022, Peter Gonda wrote:
+> > > > > I think this means we don't need to add VM_MODE_PXXV48_4K_SEV since we
+> > > > > can set up the c-bit from inside of vm_sev_create_*(), thoughts?
+> > > >
+> > > > Configuring the C-bit inside vm_sev_create_*() won't work (at least not well).
+> > > > The C-bit needs to be known before kvm_vm_elf_load(), i.e. can't be handled after
+> > > > __vm_create(), and needs to be tracked inside the VM, i.e. can't be handled before
+> > > > __vm_create().
+> > > >
+> > > > The proposed kvm_init_vm_address_properties() seems like the best fit since the
+> > > > C-bit (and TDX's S-bit) is stolen from GPA space, i.e. directly affects the other
+> > > > values computed in that path.
+> > > >
+> > > > As for the kvm_vm_arch allocation ugliness, when we talked off-list I didn't
+> > > > consider the need to allocate in kvm_init_vm_address_properties().  That's quite
+> > > > gross, especially since the pointer will be larger than the thing being allocated.
+> > > >
+> > > > With that in mind, adding .../include/<arch>/kvm_util.h so that "struct kvm_vm_arch"
+> > > > can be defined and referenced directly doesn't seem so bad.  Having to stub in the
+> > > > struct for the other architectures is annoying, but not the end of the world.
+> > >
+> > > I'll make "struct kvm_vm_arch" a non pointer member, so adding
+> > > /include/<arch>/kvm_util.h files.
+> > >
+> > > But I think we do not need VM_MODE_PXXV48_4K_SEV, see:
+> >
+> > I really don't want to open code __vm_create() with a slight tweak.  E.g. the
+> > below code will be broken by Ricardo's series to add memslot0 is moved out of
+> > ____vm_create()[1], and kinda sorta be broken again by Vishal's series to add an
+> > arch hook to __vm_create()[2].
+> >
+> > AFAICT, there is no requirement that KVM_SEV_INIT be called before computing the
+> > C-Bit, the only requirement is that KVM_SEV_INIT is called before adding vCPUs.
+> >
+> > [1] https://lore.kernel.org/all/20221017195834.2295901-8-ricarkol@google.com
+> > [2] https://lore.kernel.org/all/YzsC4ibDqGh5qaP9@google.com
+> 
+> Oh I misunderstood your suggestion above.
+> 
+> I should make KVM_SEV_INIT happen from kvm_arch_vm_post_create().  Add
+> VM_MODE_PXXV48_4K_SEV for c-bit setting inside of
+> kvm_init_vm_address_properties().
+> 
+> Inside of vm_sev_create_with_one_vcpu() I use
+> __vm_create_with_vcpus(), then call KVM_SEV_LAUNCH_FINISH.
+> 
+> Is that correct?
 
-ACPICA commit 8ac4e5116f59d6f9ba2fbeb9ce22ab58237a278f
-
-Finish support for the CDAT table, in both the data table compiler and
-the disassembler.
-
-Link: https://github.com/acpica/acpica/commit/8ac4e511
-Signed-off-by: Bob Moore <robert.moore@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/acpica/Makefile             |    1 
- drivers/acpi/acpica/acglobal.h           |    1 
- drivers/acpi/acpica/actables.h           |    5 
- drivers/acpi/acpica/acutils.h            |   13 ++
- drivers/acpi/acpica/tbdata.c             |    2 
- drivers/acpi/acpica/tbfadt.c             |    2 
- drivers/acpi/acpica/tbprint.c            |   77 --------------
- drivers/acpi/acpica/tbutils.c            |    2 
- drivers/acpi/acpica/tbxfroot.c           |    4 
- drivers/acpi/acpica/utcksum.c            |  170 +++++++++++++++++++++++++++++++
- include/acpi/actbl1.h                    |  116 ++++++++++++++++++++-
- include/acpi/actbl2.h                    |    2 
- tools/power/acpi/tools/acpidump/apdump.c |    4 
- 13 files changed, 311 insertions(+), 88 deletions(-)
-
-Index: linux-pm/drivers/acpi/acpica/acglobal.h
-===================================================================
---- linux-pm.orig/drivers/acpi/acpica/acglobal.h
-+++ linux-pm/drivers/acpi/acpica/acglobal.h
-@@ -24,6 +24,7 @@ ACPI_GLOBAL(struct acpi_table_list, acpi
- 
- ACPI_GLOBAL(struct acpi_table_header *, acpi_gbl_DSDT);
- ACPI_GLOBAL(struct acpi_table_header, acpi_gbl_original_dsdt_header);
-+ACPI_INIT_GLOBAL(char *, acpi_gbl_CDAT, NULL);
- ACPI_INIT_GLOBAL(u32, acpi_gbl_dsdt_index, ACPI_INVALID_TABLE_INDEX);
- ACPI_INIT_GLOBAL(u32, acpi_gbl_facs_index, ACPI_INVALID_TABLE_INDEX);
- ACPI_INIT_GLOBAL(u32, acpi_gbl_xfacs_index, ACPI_INVALID_TABLE_INDEX);
-Index: linux-pm/drivers/acpi/acpica/actables.h
-===================================================================
---- linux-pm.orig/drivers/acpi/acpica/actables.h
-+++ linux-pm/drivers/acpi/acpica/actables.h
-@@ -124,11 +124,6 @@ void
- acpi_tb_print_table_header(acpi_physical_address address,
- 			   struct acpi_table_header *header);
- 
--u8 acpi_tb_checksum(u8 *buffer, u32 length);
--
--acpi_status
--acpi_tb_verify_checksum(struct acpi_table_header *table, u32 length);
--
- void acpi_tb_check_dsdt_header(void);
- 
- struct acpi_table_header *acpi_tb_copy_dsdt(u32 table_index);
-Index: linux-pm/drivers/acpi/acpica/acutils.h
-===================================================================
---- linux-pm.orig/drivers/acpi/acpica/acutils.h
-+++ linux-pm/drivers/acpi/acpica/acutils.h
-@@ -159,6 +159,19 @@ u8 acpi_ut_valid_name_char(char characte
- void acpi_ut_check_and_repair_ascii(u8 *name, char *repaired_name, u32 count);
- 
- /*
-+ * utcksum - Checksum utilities
-+ */
-+u8 acpi_ut_generate_checksum(void *table, u32 length, u8 original_checksum);
-+
-+u8 acpi_ut_checksum(u8 *buffer, u32 length);
-+
-+acpi_status
-+acpi_ut_verify_cdat_checksum(struct acpi_table_cdat *cdat_table, u32 length);
-+
-+acpi_status
-+acpi_ut_verify_checksum(struct acpi_table_header *table, u32 length);
-+
-+/*
-  * utnonansi - Non-ANSI C library functions
-  */
- void acpi_ut_strupr(char *src_string);
-Index: linux-pm/drivers/acpi/acpica/tbdata.c
-===================================================================
---- linux-pm.orig/drivers/acpi/acpica/tbdata.c
-+++ linux-pm/drivers/acpi/acpica/tbdata.c
-@@ -522,7 +522,7 @@ acpi_tb_verify_temp_table(struct acpi_ta
- 		/* Verify the checksum */
- 
- 		status =
--		    acpi_tb_verify_checksum(table_desc->pointer,
-+		    acpi_ut_verify_checksum(table_desc->pointer,
- 					    table_desc->length);
- 		if (ACPI_FAILURE(status)) {
- 			ACPI_EXCEPTION((AE_INFO, AE_NO_MEMORY,
-Index: linux-pm/drivers/acpi/acpica/tbfadt.c
-===================================================================
---- linux-pm.orig/drivers/acpi/acpica/tbfadt.c
-+++ linux-pm/drivers/acpi/acpica/tbfadt.c
-@@ -298,7 +298,7 @@ void acpi_tb_parse_fadt(void)
- 	 * Validate the FADT checksum before we copy the table. Ignore
- 	 * checksum error as we want to try to get the DSDT and FACS.
- 	 */
--	(void)acpi_tb_verify_checksum(table, length);
-+	(void)acpi_ut_verify_checksum(table, length);
- 
- 	/* Create a local copy of the FADT in common ACPI 2.0+ format */
- 
-Index: linux-pm/drivers/acpi/acpica/tbprint.c
-===================================================================
---- linux-pm.orig/drivers/acpi/acpica/tbprint.c
-+++ linux-pm/drivers/acpi/acpica/tbprint.c
-@@ -10,6 +10,7 @@
- #include <acpi/acpi.h>
- #include "accommon.h"
- #include "actables.h"
-+#include "acutils.h"
- 
- #define _COMPONENT          ACPI_TABLES
- ACPI_MODULE_NAME("tbprint")
-@@ -39,7 +40,7 @@ static void acpi_tb_fix_string(char *str
- {
- 
- 	while (length && *string) {
--		if (!isprint((int)*string)) {
-+		if (!isprint((int)(u8)*string)) {
- 			*string = '?';
- 		}
- 
-@@ -135,77 +136,3 @@ acpi_tb_print_table_header(acpi_physical
- 			   local_header.asl_compiler_revision));
- 	}
- }
--
--/*******************************************************************************
-- *
-- * FUNCTION:    acpi_tb_validate_checksum
-- *
-- * PARAMETERS:  table               - ACPI table to verify
-- *              length              - Length of entire table
-- *
-- * RETURN:      Status
-- *
-- * DESCRIPTION: Verifies that the table checksums to zero. Optionally returns
-- *              exception on bad checksum.
-- *
-- ******************************************************************************/
--
--acpi_status acpi_tb_verify_checksum(struct acpi_table_header *table, u32 length)
--{
--	u8 checksum;
--
--	/*
--	 * FACS/S3PT:
--	 * They are the odd tables, have no standard ACPI header and no checksum
--	 */
--
--	if (ACPI_COMPARE_NAMESEG(table->signature, ACPI_SIG_S3PT) ||
--	    ACPI_COMPARE_NAMESEG(table->signature, ACPI_SIG_FACS)) {
--		return (AE_OK);
--	}
--
--	/* Compute the checksum on the table */
--
--	checksum = acpi_tb_checksum(ACPI_CAST_PTR(u8, table), length);
--
--	/* Checksum ok? (should be zero) */
--
--	if (checksum) {
--		ACPI_BIOS_WARNING((AE_INFO,
--				   "Incorrect checksum in table [%4.4s] - 0x%2.2X, "
--				   "should be 0x%2.2X",
--				   table->signature, table->checksum,
--				   (u8)(table->checksum - checksum)));
--
--#if (ACPI_CHECKSUM_ABORT)
--		return (AE_BAD_CHECKSUM);
--#endif
--	}
--
--	return (AE_OK);
--}
--
--/*******************************************************************************
-- *
-- * FUNCTION:    acpi_tb_checksum
-- *
-- * PARAMETERS:  buffer          - Pointer to memory region to be checked
-- *              length          - Length of this memory region
-- *
-- * RETURN:      Checksum (u8)
-- *
-- * DESCRIPTION: Calculates circular checksum of memory region.
-- *
-- ******************************************************************************/
--
--u8 acpi_tb_checksum(u8 *buffer, u32 length)
--{
--	u8 sum = 0;
--	u8 *end = buffer + length;
--
--	while (buffer < end) {
--		sum = (u8)(sum + *(buffer++));
--	}
--
--	return (sum);
--}
-Index: linux-pm/drivers/acpi/acpica/tbutils.c
-===================================================================
---- linux-pm.orig/drivers/acpi/acpica/tbutils.c
-+++ linux-pm/drivers/acpi/acpica/tbutils.c
-@@ -299,7 +299,7 @@ acpi_tb_parse_root_table(acpi_physical_a
- 
- 	/* Validate the root table checksum */
- 
--	status = acpi_tb_verify_checksum(table, length);
-+	status = acpi_ut_verify_checksum(table, length);
- 	if (ACPI_FAILURE(status)) {
- 		acpi_os_unmap_memory(table, length);
- 		return_ACPI_STATUS(status);
-Index: linux-pm/drivers/acpi/acpica/tbxfroot.c
-===================================================================
---- linux-pm.orig/drivers/acpi/acpica/tbxfroot.c
-+++ linux-pm/drivers/acpi/acpica/tbxfroot.c
-@@ -74,14 +74,14 @@ acpi_status acpi_tb_validate_rsdp(struct
- 
- 	/* Check the standard checksum */
- 
--	if (acpi_tb_checksum((u8 *) rsdp, ACPI_RSDP_CHECKSUM_LENGTH) != 0) {
-+	if (acpi_ut_checksum((u8 *)rsdp, ACPI_RSDP_CHECKSUM_LENGTH) != 0) {
- 		return (AE_BAD_CHECKSUM);
- 	}
- 
- 	/* Check extended checksum if table version >= 2 */
- 
- 	if ((rsdp->revision >= 2) &&
--	    (acpi_tb_checksum((u8 *) rsdp, ACPI_RSDP_XCHECKSUM_LENGTH) != 0)) {
-+	    (acpi_ut_checksum((u8 *)rsdp, ACPI_RSDP_XCHECKSUM_LENGTH) != 0)) {
- 		return (AE_BAD_CHECKSUM);
- 	}
- 
-Index: linux-pm/drivers/acpi/acpica/utcksum.c
-===================================================================
---- /dev/null
-+++ linux-pm/drivers/acpi/acpica/utcksum.c
-@@ -0,0 +1,170 @@
-+// SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0
-+/******************************************************************************
-+ *
-+ * Module Name: utcksum - Support generating table checksums
-+ *
-+ * Copyright (C) 2000 - 2022, Intel Corp.
-+ *
-+ *****************************************************************************/
-+
-+#include <acpi/acpi.h>
-+#include "accommon.h"
-+#include "acutils.h"
-+
-+/* This module used for application-level code only */
-+
-+#define _COMPONENT          ACPI_CA_DISASSEMBLER
-+ACPI_MODULE_NAME("utcksum")
-+
-+/*******************************************************************************
-+ *
-+ * FUNCTION:    acpi_ut_verify_checksum
-+ *
-+ * PARAMETERS:  table               - ACPI table to verify
-+ *              length              - Length of entire table
-+ *
-+ * RETURN:      Status
-+ *
-+ * DESCRIPTION: Verifies that the table checksums to zero. Optionally returns
-+ *              exception on bad checksum.
-+ *              Note: We don't have to check for a CDAT here, since CDAT is
-+ *              not in the RSDT/XSDT, and the CDAT table is never installed
-+ *              via ACPICA.
-+ *
-+ ******************************************************************************/
-+acpi_status acpi_ut_verify_checksum(struct acpi_table_header *table, u32 length)
-+{
-+	u8 checksum;
-+
-+	/*
-+	 * FACS/S3PT:
-+	 * They are the odd tables, have no standard ACPI header and no checksum
-+	 */
-+	if (ACPI_COMPARE_NAMESEG(table->signature, ACPI_SIG_S3PT) ||
-+	    ACPI_COMPARE_NAMESEG(table->signature, ACPI_SIG_FACS)) {
-+		return (AE_OK);
-+	}
-+
-+	/* Compute the checksum on the table */
-+
-+	length = table->length;
-+	checksum =
-+	    acpi_ut_generate_checksum(ACPI_CAST_PTR(u8, table), length,
-+				      table->checksum);
-+
-+	/* Computed checksum matches table? */
-+
-+	if (checksum != table->checksum) {
-+		ACPI_BIOS_WARNING((AE_INFO,
-+				   "Incorrect checksum in table [%4.4s] - 0x%2.2X, "
-+				   "should be 0x%2.2X",
-+				   table->signature, table->checksum,
-+				   table->checksum - checksum));
-+
-+#if (ACPI_CHECKSUM_ABORT)
-+		return (AE_BAD_CHECKSUM);
-+#endif
-+	}
-+
-+	return (AE_OK);
-+}
-+
-+/*******************************************************************************
-+ *
-+ * FUNCTION:    acpi_ut_verify_cdat_checksum
-+ *
-+ * PARAMETERS:  table               - CDAT ACPI table to verify
-+ *              length              - Length of entire table
-+ *
-+ * RETURN:      Status
-+ *
-+ * DESCRIPTION: Verifies that the CDAT table checksums to zero. Optionally
-+ *              returns an exception on bad checksum.
-+ *
-+ ******************************************************************************/
-+
-+acpi_status
-+acpi_ut_verify_cdat_checksum(struct acpi_table_cdat *cdat_table, u32 length)
-+{
-+	u8 checksum;
-+
-+	/* Compute the checksum on the table */
-+
-+	checksum = acpi_ut_generate_checksum(ACPI_CAST_PTR(u8, cdat_table),
-+					     cdat_table->length,
-+					     cdat_table->checksum);
-+
-+	/* Computed checksum matches table? */
-+
-+	if (checksum != cdat_table->checksum) {
-+		ACPI_BIOS_WARNING((AE_INFO,
-+				   "Incorrect checksum in table [%4.4s] - 0x%2.2X, "
-+				   "should be 0x%2.2X",
-+				   acpi_gbl_CDAT, cdat_table->checksum,
-+				   checksum));
-+
-+#if (ACPI_CHECKSUM_ABORT)
-+		return (AE_BAD_CHECKSUM);
-+#endif
-+	}
-+
-+	cdat_table->checksum = checksum;
-+	return (AE_OK);
-+}
-+
-+/*******************************************************************************
-+ *
-+ * FUNCTION:    acpi_ut_generate_checksum
-+ *
-+ * PARAMETERS:  table               - Pointer to table to be checksummed
-+ *              length              - Length of the table
-+ *              original_checksum   - Value of the checksum field
-+ *
-+ * RETURN:      8 bit checksum of buffer
-+ *
-+ * DESCRIPTION: Computes an 8 bit checksum of the table.
-+ *
-+ ******************************************************************************/
-+
-+u8 acpi_ut_generate_checksum(void *table, u32 length, u8 original_checksum)
-+{
-+	u8 checksum;
-+
-+	/* Sum the entire table as-is */
-+
-+	checksum = acpi_ut_checksum((u8 *)table, length);
-+
-+	/* Subtract off the existing checksum value in the table */
-+
-+	checksum = (u8)(checksum - original_checksum);
-+
-+	/* Compute and return the final checksum */
-+
-+	checksum = (u8)(0 - checksum);
-+	return (checksum);
-+}
-+
-+/*******************************************************************************
-+ *
-+ * FUNCTION:    acpi_ut_checksum
-+ *
-+ * PARAMETERS:  buffer          - Pointer to memory region to be checked
-+ *              length          - Length of this memory region
-+ *
-+ * RETURN:      Checksum (u8)
-+ *
-+ * DESCRIPTION: Calculates circular checksum of memory region.
-+ *
-+ ******************************************************************************/
-+
-+u8 acpi_ut_checksum(u8 *buffer, u32 length)
-+{
-+	u8 sum = 0;
-+	u8 *end = buffer + length;
-+
-+	while (buffer < end) {
-+		sum = (u8)(sum + *(buffer++));
-+	}
-+
-+	return (sum);
-+}
-Index: linux-pm/include/acpi/actbl1.h
-===================================================================
---- linux-pm.orig/include/acpi/actbl1.h
-+++ linux-pm/include/acpi/actbl1.h
-@@ -45,6 +45,7 @@
- #define ACPI_SIG_HMAT           "HMAT"	/* Heterogeneous Memory Attributes Table */
- #define ACPI_SIG_HPET           "HPET"	/* High Precision Event Timer table */
- #define ACPI_SIG_IBFT           "IBFT"	/* iSCSI Boot Firmware Table */
-+#define ACPI_SIG_MSCT           "MSCT"	/* Maximum System Characteristics Table */
- 
- #define ACPI_SIG_S3PT           "S3PT"	/* S3 Performance (sub)Table */
- #define ACPI_SIG_PCCS           "PCC"	/* PCC Shared Memory Region */
-@@ -305,10 +306,123 @@ struct acpi_table_boot {
- 
- /*******************************************************************************
-  *
-+ * CDAT - Coherent Device Attribute Table
-+ *        Version 1
-+ *
-+ * Conforms to the "Coherent Device Attribute Table (CDAT) Specification
-+ " (Revision 1.01, October 2020.)
-+ *
-+ ******************************************************************************/
-+
-+struct acpi_table_cdat {
-+	u32 length;		/* Length of table in bytes, including this header */
-+	u8 revision;		/* ACPI Specification minor version number */
-+	u8 checksum;		/* To make sum of entire table == 0 */
-+	u8 reserved[6];
-+	u32 sequence;		/* Used to detect runtime CDAT table changes */
-+};
-+
-+/* CDAT common subtable header */
-+
-+struct acpi_cdat_header {
-+	u8 type;
-+	u8 reserved;
-+	u16 length;
-+};
-+
-+/* Values for Type field above */
-+
-+enum acpi_cdat_type {
-+	ACPI_CDAT_TYPE_DSMAS = 0,
-+	ACPI_CDAT_TYPE_DSLBIS = 1,
-+	ACPI_CDAT_TYPE_DSMSCIS = 2,
-+	ACPI_CDAT_TYPE_DSIS = 3,
-+	ACPI_CDAT_TYPE_DSEMTS = 4,
-+	ACPI_CDAT_TYPE_SSLBIS = 5,
-+	ACPI_CDAT_TYPE_RESERVED = 6	/* 6 through 0xFF are reserved */
-+};
-+
-+/* Subtable 0: Device Scoped Memory Affinity Structure (DSMAS) */
-+
-+struct acpi_cadt_dsmas {
-+	u8 dsmad_handle;
-+	u8 flags;
-+	u16 reserved;
-+	u64 dpa_base_address;
-+	u64 dpa_length;
-+};
-+
-+/* Flags for subtable above */
-+
-+#define ACPI_CEDT_DSMAS_NON_VOLATILE        (1 << 2)
-+
-+/* Subtable 1: Device scoped Latency and Bandwidth Information Structure (DSLBIS) */
-+
-+struct acpi_cdat_dslbis {
-+	u8 handle;
-+	u8 flags;		/* If Handle matches a DSMAS handle, the definition of this field matches
-+				 * Flags field in HMAT System Locality Latency */
-+	u8 data_type;
-+	u8 reserved;
-+	u64 entry_base_unit;
-+	u16 entry[3];
-+	u16 reserved2;
-+};
-+
-+/* Subtable 2: Device Scoped Memory Side Cache Information Structure (DSMSCIS) */
-+
-+struct acpi_cdat_dsmscis {
-+	u8 dsmas_handle;
-+	u8 reserved[3];
-+	u64 side_cache_size;
-+	u32 cache_attributes;
-+};
-+
-+/* Subtable 3: Device Scoped Initiator Structure (DSIS) */
-+
-+struct acpi_cdat_dsis {
-+	u8 flags;
-+	u8 handle;
-+	u16 reserved;
-+};
-+
-+/* Flags for above subtable */
-+
-+#define ACPI_CDAT_DSIS_MEM_ATTACHED         (1 << 0)
-+
-+/* Subtable 4: Device Scoped EFI Memory Type Structure (DSEMTS) */
-+
-+struct acpi_cdat_dsemts {
-+	u8 dsmas_handle;
-+	u8 memory_type;
-+	u16 reserved;
-+	u64 dpa_offset;
-+	u64 range_length;
-+};
-+
-+/* Subtable 5: Switch Scoped Latency and Bandwidth Information Structure (SSLBIS) */
-+
-+struct acpi_cdat_sslbis {
-+	u8 data_type;
-+	u8 reserved[3];
-+	u64 entry_base_unit;
-+};
-+
-+/* Sub-subtable for above, sslbe_entries field */
-+
-+struct acpi_cdat_sslbe {
-+	u16 portx_id;
-+	u16 porty_id;
-+	u16 latency_or_bandwidth;
-+	u16 reserved;
-+};
-+
-+/*******************************************************************************
-+ *
-  * CEDT - CXL Early Discovery Table
-  *        Version 1
-  *
-- * Conforms to the "CXL Early Discovery Table" (CXL 2.0)
-+ * Conforms to the "CXL Early Discovery Table" (CXL 2.0, October 2020)
-  *
-  ******************************************************************************/
- 
-Index: linux-pm/include/acpi/actbl2.h
-===================================================================
---- linux-pm.orig/include/acpi/actbl2.h
-+++ linux-pm/include/acpi/actbl2.h
-@@ -28,6 +28,7 @@
- #define ACPI_SIG_APMT           "APMT"	/* Arm Performance Monitoring Unit table */
- #define ACPI_SIG_BDAT           "BDAT"	/* BIOS Data ACPI Table */
- #define ACPI_SIG_CCEL           "CCEL"	/* CC Event Log Table */
-+#define ACPI_SIG_CDAT           "CDAT"	/* Coherent Device Attribute Table */
- #define ACPI_SIG_IORT           "IORT"	/* IO Remapping Table */
- #define ACPI_SIG_IVRS           "IVRS"	/* I/O Virtualization Reporting Structure */
- #define ACPI_SIG_LPIT           "LPIT"	/* Low Power Idle Table */
-@@ -35,7 +36,6 @@
- #define ACPI_SIG_MCFG           "MCFG"	/* PCI Memory Mapped Configuration table */
- #define ACPI_SIG_MCHI           "MCHI"	/* Management Controller Host Interface table */
- #define ACPI_SIG_MPST           "MPST"	/* Memory Power State Table */
--#define ACPI_SIG_MSCT           "MSCT"	/* Maximum System Characteristics Table */
- #define ACPI_SIG_MSDM           "MSDM"	/* Microsoft Data Management Table */
- #define ACPI_SIG_NFIT           "NFIT"	/* NVDIMM Firmware Interface Table */
- #define ACPI_SIG_NHLT           "NHLT"	/* Non HD Audio Link Table */
-Index: linux-pm/tools/power/acpi/tools/acpidump/apdump.c
-===================================================================
---- linux-pm.orig/tools/power/acpi/tools/acpidump/apdump.c
-+++ linux-pm/tools/power/acpi/tools/acpidump/apdump.c
-@@ -78,7 +78,9 @@ u8 ap_is_valid_checksum(struct acpi_tabl
- 		rsdp = ACPI_CAST_PTR(struct acpi_table_rsdp, table);
- 		status = acpi_tb_validate_rsdp(rsdp);
- 	} else {
--		status = acpi_tb_verify_checksum(table, table->length);
-+		/* We don't have to check for a CDAT here, since CDAT is not in the RSDT/XSDT */
-+
-+		status = acpi_ut_verify_checksum(table, table->length);
- 	}
- 
- 	if (ACPI_FAILURE(status)) {
-Index: linux-pm/drivers/acpi/acpica/Makefile
-===================================================================
---- linux-pm.orig/drivers/acpi/acpica/Makefile
-+++ linux-pm/drivers/acpi/acpica/Makefile
-@@ -155,6 +155,7 @@ acpi-y +=		\
- 	utalloc.o	\
- 	utascii.o	\
- 	utbuffer.o	\
-+	utcksum.o	\
- 	utcopy.o	\
- 	utexcep.o	\
- 	utdebug.o	\
-
-
-
+Yep, I'm pretty sure that was what I was thinking.
