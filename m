@@ -2,195 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0071F60F217
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 261F060F21B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234890AbiJ0ITn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 04:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
+        id S234656AbiJ0IU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 04:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234863AbiJ0ITg (ORCPT
+        with ESMTP id S234598AbiJ0IUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 04:19:36 -0400
-Received: from mail.wantstofly.org (hmm.wantstofly.org [213.239.204.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4620B866
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:19:32 -0700 (PDT)
-Received: by mail.wantstofly.org (Postfix, from userid 1000)
-        id 5D2EF7F527; Thu, 27 Oct 2022 11:19:30 +0300 (EEST)
-Date:   Thu, 27 Oct 2022 11:19:30 +0300
-From:   Lennert Buytenhek <buytenh@wantstofly.org>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Scarlett Gourley <scarlett@arista.com>,
-        James Sewart <jamessewart@arista.com>,
-        Jack O'Sullivan <jack@arista.com>
-Subject: Re: [PATCH,RFC] iommu/vt-d: Convert dmar_fault IRQ to a threaded IRQ
-Message-ID: <Y1o/EhV+XLgA9s2r@wantstofly.org>
-References: <Y1eZbXKdJDoS8loC@wantstofly.org>
- <028e2c63-939b-af31-88b9-b479b41ce67c@linux.intel.com>
+        Thu, 27 Oct 2022 04:20:23 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538AD3687F;
+        Thu, 27 Oct 2022 01:20:20 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id o4so898092wrq.6;
+        Thu, 27 Oct 2022 01:20:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bZhAkeTE+r3qGSdf1uyZlVySOESrVW6Y6fLcnPw4YAY=;
+        b=DiIQNYyGrONs6G2AQZr+dH+U4Jsn1FBRy0IMRIDZ7JwnXFYfQfDx2nvhwWlwRS3BAO
+         eBm+2xhvAhNAoD9cFxe/7H3bUDw4fOg6AGfRjMk//F9lvQWnNzxR/R2TLWJBjnfXlOkT
+         Qb5EOia6u6jGmzYO8Gim9Lll50kq5jv/zaC7dWh1yrQeuRJ35ifdQC95/5K1tBCKLyCB
+         CDsKBeJl/YhXGwRk5QSzOibqNb4MmhBoeWN6FNofhaMmfSDYYkCgq8Yy0scM3zhYWMkk
+         PvwANTuSx6fd+fJALVH0vCJ6Gv0/pcaCdqW+cPCOCcI15EI2hNghLYUb17kALwkndbcw
+         c0UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bZhAkeTE+r3qGSdf1uyZlVySOESrVW6Y6fLcnPw4YAY=;
+        b=qgxnMUhIQMEc55Z9+Ma4Xnoot5Ghi1ZfK3Ss3/W48FOmDSno380O4syQaqEeKlcgE2
+         Y4/i68wjzGmL2AA+WqIyE4la1oHvbA1DeDzaN8/tbTWn+ge6IK3l0MtY0QKz0KYZyljA
+         ybovRnp4nO8SyyeIMWfXYebe9bire7+Awsyf8awSgthvBxbavVxiRV0eBsNQoGCGG24S
+         P+hecNk1cB26FSuruqADoiiaoQqtsvkw8qws3AMDTvxenQQVeVDRFzeoRHLKJ004w7Ba
+         6innEr7IPjYp/KtRUf80IpeBrKcFviTfDXLgGXROH/5bh/dACv9q7YtY/WW4Y2I0MOO+
+         kTOg==
+X-Gm-Message-State: ACrzQf2Xd30/Pv1YFwsUW3wn08osxn/yH4GTr00kbKJcKT9Uqbpiy1K5
+        +O3sV25aejavZHZEjWq9quY=
+X-Google-Smtp-Source: AMsMyM4fwrpf2P3XzwJoDzmjqVVVomWWxMoIdN49K5425D5uKFtKQmYX6UoderE+s+rzfRIQjOZtKg==
+X-Received: by 2002:a05:6000:10d1:b0:236:755b:e038 with SMTP id b17-20020a05600010d100b00236755be038mr12072900wrx.153.1666858818700;
+        Thu, 27 Oct 2022 01:20:18 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id l17-20020a5d6751000000b00236488f62d6sm519681wrw.79.2022.10.27.01.20.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 01:20:18 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] selftests/watchdog: Fix spelling mistake "Temeprature" -> "Temperature"
+Date:   Thu, 27 Oct 2022 09:20:17 +0100
+Message-Id: <20221027082017.3255055-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <028e2c63-939b-af31-88b9-b479b41ce67c@linux.intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 10:10:29AM +0800, Baolu Lu wrote:
+There is a spelling mistake in a print statement. Fix it.
 
-> > Under a high enough I/O page fault load, the dmar_fault hardirq handler
-> > can end up starving other tasks that wanted to run on the CPU that the
-> > IRQ is being routed to.  On an i7-6700 CPU this seems to happen at
-> > around 2.5 million I/O page faults per second, and at a fraction of
-> > that rate on some of the lower-end CPUs that we use.
-> > 
-> > An I/O page fault rate of 2.5 million per second may seem like a very
-> > high number, but when we get an I/O page fault for every cache line
-> > touched by a DMA operation, this I/O page fault rate can be the result
-> > of a confused PCIe device DMAing to RAM at 2.5 * 64 = 160 MB/sec, which
-> > is not an unlikely rate to be DMAing things to RAM at.  And, in fact,
-> > when we do see PCIe devices getting confused like this, this sort of
-> > I/O page fault rate is not uncommon.
-> > 
-> > A peripheral device continuously DMAing to RAM at 160 MB/s is
-> > inarguably a bug, either in the kernel driver for the device or in the
-> > firmware for the device, and should be fixed there, but it's the sort
-> > of bug that iommu/vt-d could be handling better than it currently does,
-> > and there is a fairly simple way to achieve that.
-> > 
-> > This patch changes the dmar_fault IRQ handler to be a threaded IRQ
-> > handler.  This is a pretty minimal code change, and comes with the
-> > advantage that Intel IOMMU I/O page fault handling work is now subject
-> > to RT throttling, which allows it to be kept under control using the
-> > sched_rt_period_us / sched_rt_runtime_us parameters.
-> 
-> Thanks for the patch! I like it, but also have some concerns.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/testing/selftests/watchdog/watchdog-test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for having a look!
+diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
+index fb3ca67785c2..bc71cbca0dde 100644
+--- a/tools/testing/selftests/watchdog/watchdog-test.c
++++ b/tools/testing/selftests/watchdog/watchdog-test.c
+@@ -260,7 +260,7 @@ int main(int argc, char *argv[])
+ 			if (ret)
+ 				printf("WDIOC_GETTEMP: '%s'\n", strerror(errno));
+ 			else
+-				printf("Temeprature: %d\n", temperature);
++				printf("Temperature %d\n", temperature);
+ 
+ 			break;
+ 		case 't':
+-- 
+2.37.3
 
-
-> If you look at the commit history, you will find that the opposite
-> change took place 10+ years ago.
-> 
-> commit 477694e71113fd0694b6bb0bcc2d006b8ac62691
-> Author: Thomas Gleixner <tglx@linutronix.de>
-> Date:   Tue Jul 19 16:25:42 2011 +0200
-> 
->     x86, iommu: Mark DMAR IRQ as non-threaded
-> 
->     Mark this lowlevel IRQ handler as non-threaded. This prevents a boot
->     crash when "threadirqs" is on the kernel commandline. Also the
->     interrupt handler is handling hardware critical events which should
->     not be delayed into a thread.
-> 
->     Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
->     Cc: stable@kernel.org
->     Signed-off-by: Ingo Molnar <mingo@kernel.org>
-> 
-> I am not sure whether the "boot crash" mentioned above is due to that
-> "trying to setup a threaded IRQ handler before kthreadd is started".
-
-On v6.1-rc you also get a boot crash if you force the dmar_fault IRQ
-to be a threaded IRQ without moving the IRQ registration out of the
-start_kernel() -> x86_late_time_init() -> apic_intr_mode_init() ->
-apic_bsp_setup() -> irq_remap_enable_fault_handling() ->
-enable_drhd_fault_handling() path.  The crash seen on v3.0 when forcing
-the dmar_fault IRQ to be a threaded IRQ may have been due to the same
-reason, but I'm not sure how this may have worked in 2011. :-)
-
-I'm not sure I agree with the "the interrupt handler is handling
-hardware critical events which should not be delayed into a thread"
-part of this commit message.  All that dmar_fault does is log
-translation faults to the console, and I don't think that anything
-will break if that gets delayed for a while.
-
-
-> > iommu/amd already uses a threaded IRQ handler for its I/O page fault
-> > reporting, and so it already has this advantage.
-> > 
-> > When IRQ remapping is enabled, iommu/vt-d will try to set up its
-> > dmar_fault IRQ handler from start_kernel() -> x86_late_time_init()
-> > -> apic_intr_mode_init() -> apic_bsp_setup() ->
-> > irq_remap_enable_fault_handling() -> enable_drhd_fault_handling(),
-> > which happens before kthreadd is started, and trying to set up a
-> > threaded IRQ handler this early on will oops.  However, there
-> > doesn't seem to be a reason why iommu/vt-d needs to set up its fault
-> > reporting IRQ handler this early, and if we remove the IRQ setup code
-> > from enable_drhd_fault_handling(), the IRQ will be registered instead
-> > from pci_iommu_init() -> intel_iommu_init() -> init_dmars(), which
-> > seems to work just fine.
-> 
-> At present, we cannot do so. Because the VT-d interrupt remapping and
-> DMA remapping can be independently enabled. In another words, it's a
-> possible case where interrupt remapping is enabled while DMA remapping
-> is not.
-
-Is there a way I can test this easily?
-
-I think we should be able to handle the "interrupt remapping enabled
-but DMA remapping disabled" case in the same way, by registering the
-dmar_fault IRQ sometime after kthreadd has been started.  I don't think
-the dmar_fault handler performs any function that is critical for the
-operation of the IOMMU, and I think that we can defer setting it up
-until whenever is convenient.
-
-Thank you!
-
-
-> > Suggested-by: Scarlett Gourley <scarlett@arista.com>
-> > Suggested-by: James Sewart <jamessewart@arista.com>
-> > Suggested-by: Jack O'Sullivan <jack@arista.com>
-> > Signed-off-by: Lennert Buytenhek <buytenh@arista.com>
-> > ---
-> >   drivers/iommu/intel/dmar.c | 27 ++-------------------------
-> >   1 file changed, 2 insertions(+), 25 deletions(-)
-> > 
-> > diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
-> > index 5a8f780e7ffd..d0871fe9d04d 100644
-> > --- a/drivers/iommu/intel/dmar.c
-> > +++ b/drivers/iommu/intel/dmar.c
-> > @@ -2043,7 +2043,8 @@ int dmar_set_interrupt(struct intel_iommu *iommu)
-> >   		return -EINVAL;
-> >   	}
-> > -	ret = request_irq(irq, dmar_fault, IRQF_NO_THREAD, iommu->name, iommu);
-> > +	ret = request_threaded_irq(irq, NULL, dmar_fault, IRQF_ONESHOT,
-> > +				   iommu->name, iommu);
-> >   	if (ret)
-> >   		pr_err("Can't request irq\n");
-> >   	return ret;
-> > @@ -2051,30 +2052,6 @@ int dmar_set_interrupt(struct intel_iommu *iommu)
-> >   int __init enable_drhd_fault_handling(void)
-> >   {
-> > -	struct dmar_drhd_unit *drhd;
-> > -	struct intel_iommu *iommu;
-> > -
-> > -	/*
-> > -	 * Enable fault control interrupt.
-> > -	 */
-> > -	for_each_iommu(iommu, drhd) {
-> > -		u32 fault_status;
-> > -		int ret = dmar_set_interrupt(iommu);
-> > -
-> > -		if (ret) {
-> > -			pr_err("DRHD %Lx: failed to enable fault, interrupt, ret %d\n",
-> > -			       (unsigned long long)drhd->reg_base_addr, ret);
-> > -			return -1;
-> > -		}
-> > -
-> > -		/*
-> > -		 * Clear any previous faults.
-> > -		 */
-> > -		dmar_fault(iommu->irq, iommu);
-> > -		fault_status = readl(iommu->reg + DMAR_FSTS_REG);
-> > -		writel(fault_status, iommu->reg + DMAR_FSTS_REG);
-> > -	}
-> > -
-> >   	return 0;
-> >   }
