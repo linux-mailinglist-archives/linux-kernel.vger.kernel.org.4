@@ -2,166 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C16360F78E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C078960F792
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235575AbiJ0Mjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        id S235492AbiJ0Mjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234187AbiJ0Mjd (ORCPT
+        with ESMTP id S235478AbiJ0Mjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:39:33 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB290B96;
-        Thu, 27 Oct 2022 05:39:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666874367; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WR5K0m6TzrIk+W7bMl6dNmiiAvPAp408dGMPPaArrQ4=;
-        b=nCtlFDdVeFO7zDJ33FvNXl/SeHA+vzg3q8v4tMaIzA0qh1fmwQXdG+9Ip4hWy/IwX2H7Np
-        gZDJS2HZOI/KAnodi0vTEvu+NMGNpj1N8pAipg4/xKsL8zmQnnCZj3426k/7XZ9Y3LkQqV
-        R9FHbE7biQjHE3pggpUJ/YzilsgWKms=
-Date:   Thu, 27 Oct 2022 13:39:17 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 2/6] clk: ingenic: Make PLL clock enable_bit and
- stable_bit optional
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, zhouyu@wanyeetech.com,
-        linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <HHWEKR.W3ZGGGZ709H01@crapouillou.net>
-In-Reply-To: <20221026194345.243007-3-aidanmacdonald.0x0@gmail.com>
-References: <20221026194345.243007-1-aidanmacdonald.0x0@gmail.com>
-        <20221026194345.243007-3-aidanmacdonald.0x0@gmail.com>
+        Thu, 27 Oct 2022 08:39:35 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD8A55B0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:39:33 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id y16so1911921wrt.12
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:39:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=IQYjFvDXhbXoMSg3iLP8iixElFcJJq871depMmLi0sA=;
+        b=tKuqhGzVH3uIi4Y08h0Jp1YREHQrrdGZlRj5vLVcqSofvi4XhmxK5HpuH+JnkInma0
+         +tZqlwThXus4uDQjzvKwQH9rW9oCNxv0rpHbJAtSn1DFpFbazbC4vJzlOr19+BBE5ZWa
+         JcWaG4V8BFk7my9mGY9A/Za9TPyKi2p2oinZhE06G2O10HGfNfAY/XYqI3LMOoyZKkfi
+         v3NGPvCpkbQ8npQc9u8TwKgWO+udOYk3Ll2i5JBZsSucRIW597ne9dfStIwkgtto17FJ
+         UcPmbQTcEP02z03tkw/vxc1zyt+ZyahXEZnOY/yxQbGqVGHzbpl205bqfgJWf1Aqdepa
+         mLqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IQYjFvDXhbXoMSg3iLP8iixElFcJJq871depMmLi0sA=;
+        b=oRFIOlIOVDg62pR0psoWGynW48M+LqF3I9nOsXTX19y0ba3X8zZyjtH0+94l0t61m5
+         6x+tUwOQu6aNADyhMbYdkp166L6//ykjG4yrxHnhOshwx1PToFFjrAxXrNAmMX0olVkv
+         UFWmxERg+t2PtMPwEZSdNIH+RGxbmibRCvu8ifTUxrfkAsTubi4RF0Uo/kFh/mb8ekAc
+         FR9NCx95Wn0/640EeOLoof0OOjIXxtAg+EF07DxENcDvIG2RlLkktVNH/THWbicgKnll
+         6qJyo+/4BDTDYMr6w6Zw5k46ZyTslWm7/QvPeRofFyR2JftpQYD+AAf+ceTEaLXjZImj
+         gobQ==
+X-Gm-Message-State: ACrzQf1BOLRKGUHZIY2jr3p9y/Y9fHWyBkofHfq3vOIwWE1cvab0nfMj
+        uWgYNAa/l+uaZXqKLDtE8YvRGg==
+X-Google-Smtp-Source: AMsMyM5Cg9WCqUALY8m5StEnnOM0cPmGUujCLKConaYI90HOnBQn0GgQVa6cWEOdGz5Lmyqng1Q7Pw==
+X-Received: by 2002:a5d:4302:0:b0:232:ce6b:40c0 with SMTP id h2-20020a5d4302000000b00232ce6b40c0mr31388788wrq.415.1666874372397;
+        Thu, 27 Oct 2022 05:39:32 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:898:f380:1cb7:f7ba:a36e:de10? ([2a01:e0a:898:f380:1cb7:f7ba:a36e:de10])
+        by smtp.gmail.com with ESMTPSA id m1-20020a1c2601000000b003cf47556f21sm4665594wmm.2.2022.10.27.05.39.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 05:39:32 -0700 (PDT)
+Message-ID: <e8f53c8a-2842-9e6e-75bd-e099db3fe6f3@linaro.org>
+Date:   Thu, 27 Oct 2022 14:39:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v4 06/11] dt-bindings: input: qcom,pm8921-pwrkey: convert
+ to dt-schema
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andy Gross <agross@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
+ <20220928-mdm9615-dt-schema-fixes-v4-6-dac2dfaac703@linaro.org>
+ <Y1o5hYAnBuf1akJ9@google.com>
+Content-Language: en-US
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+Reply-To: neil.armstrong@linaro.org
+In-Reply-To: <Y1o5hYAnBuf1akJ9@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aidan,
+Hi,
 
-Le mer. 26 oct. 2022 =E0 20:43:41 +0100, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> When the enable bit is undefined, the clock is assumed to be always
-> on and enable/disable is a no-op. When the stable bit is undefined,
-> the PLL stable check is a no-op.
->=20
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+On 27/10/2022 09:55, Dmitry Torokhov wrote:
+> On Fri, Oct 21, 2022 at 11:06:42AM +0200, Neil Armstrong wrote:
+>> Convert input/qcom,pm8xxx-pwrkey.txt to YAML, and take in account that
+>> the PM8921 pwrkey compatible is used as fallback for the PM8018 pwrkey.
+>>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> 
+> Should I merge this through my tree or you want all these changes to go
+> together through some particular tree?
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+I have no preference,
+Krzysztof will you take it and prepare a branch to Bjorn ?
 
-Cheers,
--Paul
+> 
+> Thanks.
+> 
 
-> ---
->  drivers/clk/ingenic/cgu.c | 14 +++++++++++++-
->  drivers/clk/ingenic/cgu.h | 10 ++++++----
->  2 files changed, 19 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
-> index 3481129114b1..aea01b6b2764 100644
-> --- a/drivers/clk/ingenic/cgu.c
-> +++ b/drivers/clk/ingenic/cgu.c
-> @@ -189,6 +189,9 @@ static inline int ingenic_pll_check_stable(struct=20
-> ingenic_cgu *cgu,
->  {
->  	u32 ctl;
->=20
-> +	if (pll_info->stable_bit < 0)
-> +		return 0;
-> +
->  	return readl_poll_timeout(cgu->base + pll_info->reg, ctl,
->  				  ctl & BIT(pll_info->stable_bit),
->  				  0, 100 * USEC_PER_MSEC);
-> @@ -230,7 +233,7 @@ ingenic_pll_set_rate(struct clk_hw *hw, unsigned=20
-> long req_rate,
->  	writel(ctl, cgu->base + pll_info->reg);
->=20
->  	/* If the PLL is enabled, verify that it's stable */
-> -	if (ctl & BIT(pll_info->enable_bit))
-> +	if (pll_info->enable_bit >=3D 0 && (ctl & BIT(pll_info->enable_bit)))
->  		ret =3D ingenic_pll_check_stable(cgu, pll_info);
->=20
->  	spin_unlock_irqrestore(&cgu->lock, flags);
-> @@ -248,6 +251,9 @@ static int ingenic_pll_enable(struct clk_hw *hw)
->  	int ret;
->  	u32 ctl;
->=20
-> +	if (pll_info->enable_bit < 0)
-> +		return 0;
-> +
->  	spin_lock_irqsave(&cgu->lock, flags);
->  	if (pll_info->bypass_bit >=3D 0) {
->  		ctl =3D readl(cgu->base + pll_info->bypass_reg);
-> @@ -278,6 +284,9 @@ static void ingenic_pll_disable(struct clk_hw *hw)
->  	unsigned long flags;
->  	u32 ctl;
->=20
-> +	if (pll_info->enable_bit < 0)
-> +		return;
-> +
->  	spin_lock_irqsave(&cgu->lock, flags);
->  	ctl =3D readl(cgu->base + pll_info->reg);
->=20
-> @@ -295,6 +304,9 @@ static int ingenic_pll_is_enabled(struct clk_hw=20
-> *hw)
->  	const struct ingenic_cgu_pll_info *pll_info =3D &clk_info->pll;
->  	u32 ctl;
->=20
-> +	if (pll_info->enable_bit < 0)
-> +		return true;
-> +
->  	ctl =3D readl(cgu->base + pll_info->reg);
->=20
->  	return !!(ctl & BIT(pll_info->enable_bit));
-> diff --git a/drivers/clk/ingenic/cgu.h b/drivers/clk/ingenic/cgu.h
-> index 567142b584bb..a5e44ca7f969 100644
-> --- a/drivers/clk/ingenic/cgu.h
-> +++ b/drivers/clk/ingenic/cgu.h
-> @@ -42,8 +42,10 @@
->   * @bypass_reg: the offset of the bypass control register within the=20
-> CGU
->   * @bypass_bit: the index of the bypass bit in the PLL control=20
-> register, or
->   *              -1 if there is no bypass bit
-> - * @enable_bit: the index of the enable bit in the PLL control=20
-> register
-> - * @stable_bit: the index of the stable bit in the PLL control=20
-> register
-> + * @enable_bit: the index of the enable bit in the PLL control=20
-> register, or
-> + *		-1 if there is no enable bit (ie, the PLL is always on)
-> + * @stable_bit: the index of the stable bit in the PLL control=20
-> register, or
-> + *		-1 if there is no stable bit
->   */
->  struct ingenic_cgu_pll_info {
->  	unsigned reg;
-> @@ -54,8 +56,8 @@ struct ingenic_cgu_pll_info {
->  	u8 od_shift, od_bits, od_max;
->  	unsigned bypass_reg;
->  	s8 bypass_bit;
-> -	u8 enable_bit;
-> -	u8 stable_bit;
-> +	s8 enable_bit;
-> +	s8 stable_bit;
->  	void (*calc_m_n_od)(const struct ingenic_cgu_pll_info *pll_info,
->  			    unsigned long rate, unsigned long parent_rate,
->  			    unsigned int *m, unsigned int *n, unsigned int *od);
-> --
-> 2.38.1
->=20
-
-
+Neil
