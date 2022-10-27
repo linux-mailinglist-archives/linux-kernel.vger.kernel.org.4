@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6519660ED78
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 03:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0471760ED7E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 03:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233801AbiJ0BfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 21:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
+        id S233881AbiJ0BhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 21:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiJ0BfK (ORCPT
+        with ESMTP id S233121AbiJ0Bg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 21:35:10 -0400
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F3428709
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 18:34:52 -0700 (PDT)
+        Wed, 26 Oct 2022 21:36:58 -0400
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCEEFA99D3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 18:36:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1666834493; x=1698370493;
+  t=1666834617; x=1698370617;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=Mfvs68MMxP21OfOV+MNKT20Qml7kPOHQBwE5n8aakKc=;
-  b=mriBwUf/3HaqgX4O6pdGp5HdC+JdKwZREChsb0UBS2H8tn8Ra43KrN6C
-   /afKKUvUmNNhBRiWXPjJotCDv7zf84pC5by446SfVDXDEMI/1AaW5sUB2
-   JxDj6tIw1Y5T0i5e/VxdlSQLKkv54F5NrOEe/ZFkRq8yu9TfOWqzLB6SN
-   PBSGKVWMhBYHb8Q66yF/qdRvHMFI/P+OBY/hHamEC+n7erT37wSIg70fE
-   fAHNyUFS0mIpfiwTa1Qi6bQxbM/2XT3xchYqLh16xDJ7oUj5Z4PeYkuie
-   lWDPPDOVKa+Su0OZ7BfmMdx6PDgLLF4cC75TfH9/GIeUmTbhpF4dukCnC
-   Q==;
+  bh=sq4g7qBu0DoY8hGu57diZ9l3dIgGjNUmrelClq2zu+8=;
+  b=bHi4U+Q0idYng+a1UVfe6UeQs07Hx2uCs4RpcM+tsXRgnfafMk1bqxGB
+   3KO+Snpl9kHsS0qGC9cyxOuSZvyX7GKD5Bg5vXzEgonmOPJPWrmnykOtv
+   3G2wUG9W1ls5rxHJmUqU9x0AaJOq1PvQw7jym1m7L89uK00rXqlWEymD1
+   MqG9rww1os4+tRwmVjWJLyijMQ5t6hsHOcd4AmpXFekVnsbuHjCglGga4
+   lhfslVhGAqDMCpLRb/duWV6aSWLlcVMuV+4jT9gsq6zApHk4naRQ5ep6N
+   vcy9QOrhuy+RPYMr32QwoU2D0rhJZT8EouT8vv9U7FITu+lBTM0z0rigJ
+   g==;
 X-IronPort-AV: E=Sophos;i="5.95,215,1661788800"; 
-   d="scan'208";a="326938342"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 27 Oct 2022 09:34:52 +0800
-IronPort-SDR: uNDZJUEzPZAYUqTar8b0tu7GukkOKoTounId5Nw5VnvUI8jS51Xu97fjq3SKEVBsWthlhdR2js
- XgYNziQg+5p5mpK6HaCn9gbSPKBhn3ifn4hE0DgR9xtwo8UlOtGpRJPCGu/2BYjaphX/F3o6b2
- 20jMC3H3XOr1P9CnXdrQMTz13eJ7r3lC6nrtwIjxC4mSPaVrKUK33eS2l9c/4d1xvcK+/xdbcA
- YxMiDKJsARmy35FXhBj/Y/k+s/tB+WGUUp7v7kMhb4P8D+8b6dGkYcx/IOOOZLFp3v7ljIaI/A
- NcIGLD4R/RALmgOKYh3o7q15
+   d="scan'208";a="215192578"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 27 Oct 2022 09:36:54 +0800
+IronPort-SDR: onTyzA6HCqrmixycB6oMIxpEJlIAkr8W2U/jVDdWIJ7z/ghBXUPEEntQn4NWtqWEFQ11IMoJK2
+ MR/SJJzmPcb1TDB4tIoyJqeYCLm+/Qir8kDS0nT/WZcuzZo1uQGXhLk9EoqnS5vGP33CoD57Yg
+ GTfTi+9qPrSauge9LDndkdVCA7snT4td7oJ+YEIvfX9cLqFSE0mTTbuDNdZmCO0qfH8Q3bqNDs
+ afgZPfMWgHrTLRN/4fZ7sN9SwEFQbRwdSCFXFb4FrpyVCLnF5K3JEVsN3bIjqQXb+WhCRPclmF
+ LyxV6qeTQ8pXOo4Tj6zTd20D
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Oct 2022 17:54:11 -0700
-IronPort-SDR: ut11/m/eocTXrXJ6FSpD0oqr8CykIZ/nDaeO/bdA3S25ACARSLsfk2/HwCHUs9jTAr7jn2FpMK
- JbBBfiHbeGhOs+3CNfgPQrUXPPXkSDE2eYOX/b3hpUSQE55G3UJeNU/zm+HtITlWHnla39AguG
- V0/S9Rg+t6JNyHg1rmqui7Iqg/imraAd8p0kL0TDOwKKCvLUPFjrYWxgIDgx2/4iiPukCBgwFS
- VeVI8N6v8Vw0W5j9o31fuPpKm/X7DG6eOMM/8aAQ+Sho7Afkrld+hEip4qniYf3v9L2o+fyrsy
- ipo=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Oct 2022 17:50:33 -0700
+IronPort-SDR: qhuyvkrYj5BtCen1i8DbgSsq0HmKivT53awl82LAPJCPB9gltKX6GmdtAtoDC9lsSQBhAB8vnV
+ 3hp9/v9Fbv0x62j7Mpk+QtOM+CP49m5XGVaVsB+S9cwZMcN1LkiO8ezQll3D8cJhAoA7IlZpnh
+ 0EX6uHoWuvO+tWZcf3VzJwZ+NLSp0UKp44v3awvV5OBnZILPVVaWR5z3Zz/bu2ceLd1ksaUXIP
+ S6RWEPSLnigDtFCnZWFEZwcOuVKwmQqKx2yK8AtbSszuVdf4Xa2s51ZjXS7X7R09ysqJUJlJz/
+ eZ8=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Oct 2022 18:34:50 -0700
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Oct 2022 18:36:54 -0700
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MySsN6sm2z1Rx15
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 18:34:48 -0700 (PDT)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MySvn24Lxz1RwvL
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 18:36:53 -0700 (PDT)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)"
         header.d=opensource.wdc.com
@@ -57,28 +57,27 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
         opensource.wdc.com; h=content-transfer-encoding:content-type
         :in-reply-to:organization:from:references:to:content-language
         :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1666834487; x=1669426488; bh=Mfvs68MMxP21OfOV+MNKT20Qml7kPOHQBwE
-        5n8aakKc=; b=NJa8xT5UzqO5+O30ifNYx3LY4Jt7KdV/eDg25EZRBy0mgXCqHi5
-        oFxp66raECNTbrvQtzrHYSrM5oOrNC1Pz9tuluAu/1UU4F68oBs5cVi76vBydr7x
-        +wIBs0gfPwngDiBpLzzyhOduehzRrGYI/VZDe+mUHROFGKWI2iFXU3ZUaUcjco+k
-        fq6tVSlvZcVtG/P4E+obckSYjJXGvXBVxXD1lldssoMjsMQCzJGzEyGV43E8z27C
-        GU5JXqNBAtuwwNo0b8h4Jd4Y5MJ13fJn1oPaRVROfMLhfJx4ezPwEGTvStIxOxl7
-        9JziKPSZyyfqNa+9/h1QTOgED3pO3s/0GkA==
+        1666834612; x=1669426613; bh=sq4g7qBu0DoY8hGu57diZ9l3dIgGjNUmrel
+        Clq2zu+8=; b=hHKByuN7jJ3kJ8VarRuRDOg8E30rEAoQmPqOyi/qfPI0YdsXvfZ
+        Xs6QdmqKsqkKJkfJoPF2pUMVshHllaUIoujaTPemQ8rgNZYdQdgmyB9bM0VWI1/X
+        VXt4gX3vBSlghWq1yadaNLNh1h9Oz8esd40KVt0/xVaDB8CVTVfy54rpmCzmZ7Mc
+        v6tDddnwGxlFNclWR7mxIBoVvpF3dZbwR0v6PWKGT8KqKukFThOn1Jn99576NLJN
+        T1uVvWd9g2GUimRTAi+qsOI66tt4J+BtA9xEmjEclLpC2CXzDqyM+jLadx3WzUCP
+        l+UOdH/LtPDyzm7v8fGuGnpYZ200JKEAazg==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
         by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id HpAr-jXD1JuV for <linux-kernel@vger.kernel.org>;
-        Wed, 26 Oct 2022 18:34:47 -0700 (PDT)
+        with ESMTP id HSYiPg8lpjNE for <linux-kernel@vger.kernel.org>;
+        Wed, 26 Oct 2022 18:36:52 -0700 (PDT)
 Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MySsK2k8Kz1RvLy;
-        Wed, 26 Oct 2022 18:34:45 -0700 (PDT)
-Message-ID: <6c0a4a75-786a-c946-57f2-c511bd765bcc@opensource.wdc.com>
-Date:   Thu, 27 Oct 2022 10:34:43 +0900
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MySvj2yczz1RvLy;
+        Wed, 26 Oct 2022 18:36:49 -0700 (PDT)
+Message-ID: <9376e947-ba53-2fb9-a0af-8435d58347c1@opensource.wdc.com>
+Date:   Thu, 27 Oct 2022 10:36:48 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
-Subject: Re: [PATCH RFC v3 16/22] ata: libata-scsi: Allocate sdev early in
- port probe
+Subject: Re: [PATCH RFC v3 18/22] scsi: libsas: Queue SMP commands as requests
 Content-Language: en-US
 To:     John Garry <john.garry@huawei.com>, axboe@kernel.dk,
         jejb@linux.ibm.com, martin.petersen@oracle.com,
@@ -88,10 +87,10 @@ Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
         linuxarm@huawei.com
 References: <1666693096-180008-1-git-send-email-john.garry@huawei.com>
- <1666693096-180008-17-git-send-email-john.garry@huawei.com>
+ <1666693096-180008-19-git-send-email-john.garry@huawei.com>
 From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Organization: Western Digital Research
-In-Reply-To: <1666693096-180008-17-git-send-email-john.garry@huawei.com>
+In-Reply-To: <1666693096-180008-19-git-send-email-john.garry@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -105,102 +104,140 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 10/25/22 19:18, John Garry wrote:
-> Currently the per-ata device sdev is allocated as part of the scsi target
-> scan, which is after the ata port probe.
+> Send SMP commands through the block layer so that each command gets a
+> unique tag associated.
 > 
-> However it is useful to have the sdev available in the port probe. As an
-> example of an advantage, if the request queue is available in the probe
-> (which it would be if the sdev is available), then it is possible to use
-> a SCSI cmnd for ATA internal commands. The benefit of this is then we can
-> put the ATA qc structure in the SCSI cmnd private data. It will also be
-> useful if we want to send ATA internal commands as requests.
-> 
-> Export scsi_target_reap() so that it can be used to put the extra
-> reference we get when allocating the sdev.
+> Function sas_task_complete_internal() is what the LLDD calls to signal
+> that the CQ is complete and this calls into the SCSI midlayer. And then
+> sas_blk_end_sync_rq() is called when the request completes.
 > 
 > Signed-off-by: John Garry <john.garry@huawei.com>
 > ---
->  drivers/ata/libata-eh.c   |  1 +
->  drivers/ata/libata-scsi.c | 23 +++++++++--------------
->  drivers/scsi/scsi_scan.c  |  1 +
->  3 files changed, 11 insertions(+), 14 deletions(-)
+>  drivers/scsi/libsas/sas_expander.c  | 23 ++++++++---------------
+>  drivers/scsi/libsas/sas_init.c      |  3 +++
+>  drivers/scsi/libsas/sas_internal.h  |  3 +++
+>  drivers/scsi/libsas/sas_scsi_host.c | 16 ++++++++++++++++
+>  4 files changed, 30 insertions(+), 15 deletions(-)
 > 
-> diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
-> index 08e11bc312c2..1ed5b1b64792 100644
-> --- a/drivers/ata/libata-eh.c
-> +++ b/drivers/ata/libata-eh.c
-> @@ -3446,6 +3446,7 @@ static int ata_eh_schedule_probe(struct ata_device *dev)
->  
->  	ata_eh_detach_dev(dev);
->  	ata_dev_init(dev);
-> +	ata_scsi_setup_sdev(dev);
->  	ehc->did_probe_mask |= (1 << dev->devno);
->  	ehc->i.action |= ATA_EH_RESET;
->  	ehc->saved_xfer_mode[dev->devno] = 0;
-> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-> index efdba852e363..476e0ef4bd29 100644
-> --- a/drivers/ata/libata-scsi.c
-> +++ b/drivers/ata/libata-scsi.c
-> @@ -1109,7 +1109,12 @@ int ata_scsi_dev_config(struct scsi_device *sdev, struct ata_device *dev)
->  	if (dev->flags & ATA_DFLAG_TRUSTED)
->  		sdev->security_supported = 1;
->  
-> -	dev->sdev = sdev;
-> +	/*
-> +	 * Put extra reference which we get when allocating the starget
-> +	 * initially
-> +	 */
-> +	scsi_target_reap(scsi_target(sdev));
+> diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
+> index e7cb95683522..cc41127ea5cc 100644
+> --- a/drivers/scsi/libsas/sas_expander.c
+> +++ b/drivers/scsi/libsas/sas_expander.c
+> @@ -43,34 +43,27 @@ static int smp_execute_task_sg(struct domain_device *dev,
+>  	pm_runtime_get_sync(ha->dev);
+>  	mutex_lock(&dev->ex_dev.cmd_mutex);
+>  	for (retry = 0; retry < 3; retry++) {
+> +		struct request *rq;
 > +
->  	return 0;
->  }
->  
-> @@ -4289,26 +4294,16 @@ void ata_scsi_scan_host(struct ata_port *ap, int sync)
->   repeat:
->  	ata_for_each_link(link, ap, EDGE) {
->  		ata_for_each_dev(dev, link, ENABLED) {
-> -			struct scsi_device *sdev;
-> +			struct Scsi_Host *shost = ap->scsi_host;
->  			int channel = 0, id = 0;
->  
-> -			if (dev->sdev)
-> -				continue;
-> -
->  			if (ata_is_host_link(link))
->  				id = dev->devno;
->  			else
->  				channel = link->pmp;
->  
-> -			sdev = __scsi_add_device(ap->scsi_host, channel, id, 0,
-> -						 NULL);
-> -			if (!IS_ERR(sdev)) {
-> -				dev->sdev = sdev;
-> -				ata_scsi_assign_ofnode(dev, ap);
-
-Is there something equivalent to what this function does inside
-scsi_scan_target() ? I had a quick look but did not see anything...
-
-> -				scsi_device_put(sdev);
-> -			} else {
-> -				dev->sdev = NULL;
-> -			}
-> +			scsi_scan_target(&shost->shost_gendev, channel, id,
-> +					 0, SCSI_SCAN_INITIAL);
+>  		if (test_bit(SAS_DEV_GONE, &dev->state)) {
+>  			res = -ECOMM;
+>  			break;
 >  		}
->  	}
 >  
-> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-> index b795c138f2c1..da7bc14b030c 100644
-> --- a/drivers/scsi/scsi_scan.c
-> +++ b/drivers/scsi/scsi_scan.c
-> @@ -598,6 +598,7 @@ void scsi_target_reap(struct scsi_target *starget)
->  	BUG_ON(starget->state == STARGET_DEL);
->  	scsi_target_reap_ref_put(starget);
+> -		task = sas_alloc_slow_task(GFP_KERNEL);
+> +		task = sas_alloc_slow_task_rq(dev, GFP_KERNEL);
+>  		if (!task) {
+>  			res = -ENOMEM;
+>  			break;
+>  		}
+> -		task->dev = dev;
+> +
+> +		rq = scsi_cmd_to_rq(task->uldd_task);
+> +		rq->timeout = SMP_TIMEOUT*HZ;
+
+Missing spaces around "*"
+
+> +
+>  		task->task_proto = dev->tproto;
+>  		task->smp_task.smp_req = *req;
+>  		task->smp_task.smp_resp = *resp;
+>  
+> -		task->task_done = sas_task_internal_done;
+> -
+> -		task->slow_task->timer.function = sas_task_internal_timedout;
+> -		task->slow_task->timer.expires = jiffies + SMP_TIMEOUT*HZ;
+> -		add_timer(&task->slow_task->timer);
+> -
+> -		res = i->dft->lldd_execute_task(task, GFP_KERNEL);
+> -
+> -		if (res) {
+> -			del_timer_sync(&task->slow_task->timer);
+> -			pr_notice("executing SMP task failed:%d\n", res);
+> -			break;
+> -		}
+> +		blk_execute_rq_nowait(rq, true);
+>  
+>  		wait_for_completion(&task->slow_task->completion);
+>  		res = -ECOMM;
+> diff --git a/drivers/scsi/libsas/sas_init.c b/drivers/scsi/libsas/sas_init.c
+> index 90e63ff5e966..5f9e71a54799 100644
+> --- a/drivers/scsi/libsas/sas_init.c
+> +++ b/drivers/scsi/libsas/sas_init.c
+> @@ -84,6 +84,7 @@ struct sas_task *sas_alloc_slow_task_rq(struct domain_device *device, gfp_t flag
+>  		return NULL;
+>  
+>  	task->dev = device;
+> +	task->task_done = sas_task_complete_internal;
+>  
+>  	rq = scsi_alloc_request(sdev->request_queue, REQ_OP_DRV_IN,
+>  				BLK_MQ_REQ_RESERVED | BLK_MQ_REQ_NOWAIT);
+> @@ -95,6 +96,8 @@ struct sas_task *sas_alloc_slow_task_rq(struct domain_device *device, gfp_t flag
+>  	scmd = blk_mq_rq_to_pdu(rq);
+>  
+>  	task->uldd_task = scmd;
+> +
+> +	rq->end_io = sas_blk_end_sync_rq;
+>  	rq->end_io_data = task;
+>  
+>  	return task;
+> diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
+> index f5ae4de382f7..9b58948c57c2 100644
+> --- a/drivers/scsi/libsas/sas_internal.h
+> +++ b/drivers/scsi/libsas/sas_internal.h
+> @@ -104,6 +104,9 @@ int sas_execute_tmf(struct domain_device *device, void *parameter,
+>  		    int para_len, int force_phy_id,
+>  		    struct sas_tmf_task *tmf);
+>  
+> +void sas_task_complete_internal(struct sas_task *task);
+> +enum rq_end_io_ret sas_blk_end_sync_rq(struct request *rq, blk_status_t error);
+> +
+>  #ifdef CONFIG_SCSI_SAS_HOST_SMP
+>  extern void sas_smp_host_handler(struct bsg_job *job, struct Scsi_Host *shost);
+>  #else
+> diff --git a/drivers/scsi/libsas/sas_scsi_host.c b/drivers/scsi/libsas/sas_scsi_host.c
+> index b7d1994a8f1b..2c734a87bb7c 100644
+> --- a/drivers/scsi/libsas/sas_scsi_host.c
+> +++ b/drivers/scsi/libsas/sas_scsi_host.c
+> @@ -913,6 +913,13 @@ void sas_task_internal_done(struct sas_task *task)
+>  	complete(&task->slow_task->completion);
 >  }
-> +EXPORT_SYMBOL_GPL(scsi_target_reap);
 >  
->  /**
->   * scsi_sanitize_inquiry_string - remove non-graphical chars from an
+> +void sas_task_complete_internal(struct sas_task *task)
+> +{
+> +	struct scsi_cmnd *scmd = task->uldd_task;
+> +
+> +	scsi_done(scmd);
+> +}
+> +
+>  void sas_task_internal_timedout(struct timer_list *t)
+>  {
+>  	struct sas_task_slow *slow = from_timer(slow, t, timer);
+> @@ -952,6 +959,15 @@ EXPORT_SYMBOL_GPL(sas_internal_timeout);
+>  #define TASK_TIMEOUT			(20 * HZ)
+>  #define TASK_RETRY			3
+>  
+> +enum rq_end_io_ret sas_blk_end_sync_rq(struct request *rq, blk_status_t error)
+> +{
+> +	struct scsi_cmnd *scmd = blk_mq_rq_to_pdu(rq);
+> +	struct sas_task *task = TO_SAS_TASK(scmd);
+> +	complete(&task->slow_task->completion);
+> +
+> +	return RQ_END_IO_NONE;
+> +}
+> +
+>  static int sas_execute_internal_abort(struct domain_device *device,
+>  				      enum sas_internal_abort type, u16 tag,
+>  				      unsigned int qid, void *data)
 
 -- 
 Damien Le Moal
