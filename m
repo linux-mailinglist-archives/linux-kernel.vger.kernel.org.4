@@ -2,145 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2FB60F1C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:02:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AA360F1B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234599AbiJ0IC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 04:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49918 "EHLO
+        id S233963AbiJ0IBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 04:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234782AbiJ0IB6 (ORCPT
+        with ESMTP id S233497AbiJ0IBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 04:01:58 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8933E072C;
-        Thu, 27 Oct 2022 01:01:56 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id d6so1154444lfs.10;
-        Thu, 27 Oct 2022 01:01:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=R+p5nvqTL5SOZ86ilaT/I5U765m1Ya4d2tLi/ODaxYo=;
-        b=fjUNCitPMLe0LKP7WU5jXTRdPcLx7DcETPhNKVdPHx/GnNEZTm1ZT+pzPA2tZBMftf
-         uCD58161lHfbO5y0NubbJXjD/q76vaTERUY2MCivssREbdZHTPtVUgLfAyBP3Exfftz9
-         DlAyprA8yuv1pVJJs1/JP+aRwq/JMMkeVCr7I/qgcw6FHrKlLS0lUNYA3E4eyp2lhtRl
-         qIpb3wFM8/ZUtUqPxC0SlSJiUGvVMCqel9XFDNJvhxBce1JYzODe+1atgJ7qJ5kHiOyF
-         n4SkLsQ6qVqxdbVTPeOx0It7DXrU3JBN31onsNt7WBGsccM0dZOKW+NeCdl4IE91MlqQ
-         PLjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R+p5nvqTL5SOZ86ilaT/I5U765m1Ya4d2tLi/ODaxYo=;
-        b=aB7Ll9mmleFVEI53MVt1SKmy0OJ+MTOseaMCm9rTO0zEa13AfQdxX4dw9JYZxMtUC3
-         Sx3PFq8bBRlMnK26qfKf6NrF54wxP2cfO68SiRE+Cng2t/WYFNLqj10EBvA5gajPKnXz
-         0cxSlulRl6P7Jr9Na6AnqDHytbg04Co/t6jso5+jDAXoFQe6gBb+ST8fzHVI2OCooj5h
-         Ngpns3uWh0rJOQauzFm4eaA9Q75Bq9qu/GaGuCFTbHrCiuQWrq8rZK6an7E5tcEgC66M
-         3jHmwG8jwHdaPfKSUJ109l9CKVt8HYXUrctbBCYrjTnTy/b0sCFgFOvpl0QiULgvk+9e
-         h/oA==
-X-Gm-Message-State: ACrzQf0zdk9rSAx8lRJxOojbK/wMvkFr2wyUHQUbUE8QEUn5WOpl3K2v
-        Efjb7d55mMvfYCO15MD0z91c9QsSHTzrDQ==
-X-Google-Smtp-Source: AMsMyM6Nv67EAM9h/Td5O72Xt6ReJH2LDW49aEY+sZtqV9LHv/nZzExS3Gr5P36bSJQ+cRS7N508MA==
-X-Received: by 2002:a17:906:eec9:b0:783:e662:2513 with SMTP id wu9-20020a170906eec900b00783e6622513mr40204306ejb.656.1666857704566;
-        Thu, 27 Oct 2022 01:01:44 -0700 (PDT)
-Received: from [109.186.183.118] (109-186-183-118.bb.netvision.net.il. [109.186.183.118])
-        by smtp.gmail.com with ESMTPSA id ce12-20020a170906b24c00b007828150a2f1sm392059ejb.36.2022.10.27.01.01.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 01:01:43 -0700 (PDT)
-Message-ID: <818c678f-8a51-a087-f8c0-09553ca1304d@gmail.com>
-Date:   Thu, 27 Oct 2022 11:01:25 +0300
+        Thu, 27 Oct 2022 04:01:37 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE480C34DD;
+        Thu, 27 Oct 2022 01:01:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0382322889;
+        Thu, 27 Oct 2022 08:01:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1666857694; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qa6sD3OJX290NYnGc0ulUW01Mac/lvuPb2vaepZWVak=;
+        b=GOfRQdi/m0WYSTD5CYAhkOmN4NswRTwudSaHgtIJ1oHw16QVwyrpau8AnA+4eYPePOcGhe
+        4VPRB2hWHIuofx9bzVfEvuQ+PfHUE5qM3DhDGpewPt3/bELf+bC3WB+x4DEvQu67yIfq1O
+        IKDmab7lHY5SApO2WVHdJr/goa+3CBw=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CFE08134CA;
+        Thu, 27 Oct 2022 08:01:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id RhNlL906WmNTNAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 27 Oct 2022 08:01:33 +0000
+Date:   Thu, 27 Oct 2022 10:01:33 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Feng Tang <feng.tang@intel.com>,
+        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Waiman Long <longman@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Chen, Tim C" <tim.c.chen@intel.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>
+Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
+Message-ID: <Y1o63SWD2KmQkT3v@dhcp22.suse.cz>
+References: <20221026074343.6517-1-feng.tang@intel.com>
+ <dc453287-015d-fd1c-fe7f-6ee45772d6aa@linux.ibm.com>
+ <Y1jpDfwBQId3GkJC@feng-clx>
+ <Y1j7tsj5M0Md/+Er@dhcp22.suse.cz>
+ <Y1kl8VbPE0RYdyEB@feng-clx>
+ <Y1lZV6qHp3gIINGc@dhcp22.suse.cz>
+ <87wn8lkbk5.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <Y1ou5DGHrEsKnhri@dhcp22.suse.cz>
+ <87o7txk963.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-From:   Eli Billauer <eli.billauer@gmail.com>
-Subject: Re: [PATCH] char: xillybus: Prevent use-after-free due to race
- condition
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, imv4bel@gmail.com
-References: <2e5cbdfe-f6cd-d24f-9785-55176af6c975@gmail.com>
- <Y1kjCqUlOFJUgLqZ@kroah.com>
-Content-Language: en-US
-In-Reply-To: <Y1kjCqUlOFJUgLqZ@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87o7txk963.fsf@yhuang6-desk2.ccr.corp.intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
-
-I'm going to follow Alan's advice, and add a mutex instead of juggling 
-with the existing one. So I'll prepare a new patch with a completely 
-different solution. I've answered your questions below, even though I'm 
-not sure any of that is still relevant.
-
-On 26/10/2022 15:07, Greg KH wrote:
-
->> int xillybus_find_inode(struct inode *inode,
->> +			struct mutex **to_unlock,
+On Thu 27-10-22 15:39:00, Huang, Ying wrote:
+> Michal Hocko <mhocko@suse.com> writes:
 > 
-> To unlock when?  Who unlocks it?  What is the lifespan here?
-
-xillybus_find_inode() finds the structure that represents a Xillybus 
-(PCIe / OF) or XillyUSB (USB) device. The idea was to delay the unlock 
-of the mutex until other means have been taken to prevent that structure 
-from being freed. Which was virtually immediately after 
-xillybus_find_inode() returns, but gave XillyUSB's driver a chance to 
-acquire another mutex before releasing this one.
-
-XillyUSB's driver can't prevent the release of this structure before it 
-knows which structure it is (that's xillybus_find_inode()'s job to find 
-out). But because xillybus_find_inode() unlocks its mutex before 
-returning, there is a short period of time where the structure is 
-unprotected. So I thought, let's extend the life of the first mutex just 
-a little bit to keep the whole thing watertight.
-
+> > On Thu 27-10-22 14:47:22, Huang, Ying wrote:
+> >> Michal Hocko <mhocko@suse.com> writes:
+> > [...]
+> >> > I can imagine workloads which wouldn't like to get their memory demoted
+> >> > for some reason but wouldn't it be more practical to tell that
+> >> > explicitly (e.g. via prctl) rather than configuring cpusets/memory
+> >> > policies explicitly?
+> >> 
+> >> If my understanding were correct, prctl() configures the process or
+> >> thread.
+> >
+> > Not necessarily. There are properties which are per adddress space like
+> > PR_[GS]ET_THP_DISABLE. This could be very similar.
+> >
+> >> How can we get process/thread configuration at demotion time?
+> >
+> > As already pointed out in previous emails. You could hook into
+> > folio_check_references path, more specifically folio_referenced_one
+> > where you have all that you need already - all vmas mapping the page and
+> > then it is trivial to get the corresponding vm_mm. If at least one of
+> > them has the flag set then the demotion is not allowed (essentially the
+> > same model as VM_LOCKED).
 > 
-> Why can't it just be part of the structure?
-
-The problem is that this structure is either a struct xilly_endpoint 
-(for PCIe / OF) or a struct xillyusb_dev (for USB), and these have 
-virtually nothing in common. xillybus_find_inode() is used by two 
-completely different drivers that are grouped into a single class.
-
->>
->> 	*private_data = unit->private_data;
->> 	*index = minor - unit->lowest_minor;
->> +	*to_unlock = &unit_mutex;
+> Got it!  Thanks for detailed explanation.
 > 
-> Why are you wanting the caller to unlock this?  It's a global mutex (for
-> the whole file), this feels really odd.
+> One bit may be not sufficient.  For example, if we want to avoid or
+> control cross-socket demotion and still allow demoting to slow memory
+> nodes in local socket, we need to specify a node mask to exclude some
+> NUMA nodes from demotion targets.
 
-As mentioned above, this gives the caller (i.e. XillyUSB's driver) a 
-chance to ensure that the structure isn't freed as a result of the 
-device's disconnection.
-> 
-> What is this function supposed to be doing?  You only return an int, and
-> you have some odd opaque void pointer being set.  That feels wrong and
-> is not a normal design at all.
+Isn't this something to be configured on the demotion topology side? Or
+do you expect there will be per process/address space usecases? I mean
+different processes running on the same topology, one requesting local
+demotion while other ok with the whole demotion topology?
+ 
+> >From overhead point of view, this appears similar as that of VMA/task
+> memory policy?  We can make mm->owner available for memory tiers
+> (CONFIG_NUMA && CONFIG_MIGRATION).  The advantage is that we don't need
+> to introduce new ABI.  I guess users may prefer to use `numactl` than a
+> new ABI?
 
-xillybus_find_inode() finds the device's structure, based upon the 
-inode's major and minor.
+mm->owner is a wrong direction. It doesn't have a strong meaning because
+there is no one task explicitly responsible for the mm so there is no
+real owner (our clone() semantic is just to permissive for that). The
+memcg::owner is a crude and ugly hack and it should go away over time
+rather than build new uses.
 
-The opaque void pointer is the structure that represents the device, 
-either a PCIe / OF device or a XillyUSB device. Because of the 
-difference between a driver for PCIe / OF and a USB driver, these are 
-different structs, and hence represented by a void pointer. The int just 
-says which of the device files, that are covered by the struct, has been 
-opened.
+Besides that, and as I have already tried to explain, per task demotion
+policy is what makes this whole thing expensive. So this better be a per
+mm or per vma property. Whether it is a on/off knob like PR_[GS]ET_THP_DISABLE
+or there are explicit requirements for fine grain control on the vma
+level I dunno. I haven't seen those usecases yet and it is really easy
+to overengineer this.
 
-Once again, all this is history, as I'm preparing a new patch, which is 
-going to add a separate mutex.
+To be completely honest I would much rather wait for those usecases
+before adding a more complex APIs.  PR_[GS]_DEMOTION_DISABLED sounds
+like a reasonable first step. Should we have more fine grained
+requirements wrt address space I would follow the MADV_{NO}HUGEPAGE
+lead.
 
-Regards,
-    Eli
+If we really need/want to give a fine grained control over demotion
+nodemask then we would have to go with vma->mempolicy interface. In
+any case a per process on/off knob sounds like a reasonable first step
+before we learn more about real usecases.
+-- 
+Michal Hocko
+SUSE Labs
