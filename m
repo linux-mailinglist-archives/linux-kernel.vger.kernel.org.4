@@ -2,87 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09EB060F3EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:45:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804D960F3F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234682AbiJ0Jpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 05:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
+        id S234766AbiJ0Jq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 05:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233280AbiJ0Jpl (ORCPT
+        with ESMTP id S229995AbiJ0Jq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 05:45:41 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5027376955
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:45:40 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7cb329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7cb:329c:23ff:fea6:a903])
+        Thu, 27 Oct 2022 05:46:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EEA3B96E;
+        Thu, 27 Oct 2022 02:46:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B556C1EC02AD;
-        Thu, 27 Oct 2022 11:45:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1666863938;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=kRvdo0VXbVuM9lNlzKBftAdtlpQQ17w5SrGYtszVIXg=;
-        b=Losv+AjqGqH6kvUmnR+XkVj+jt8yiZTHbNf4ua4Ry+7vKaTmowiHkLLacQAedpPW/yBtJn
-        b0kWK8c7ZTJpPUqJng78uplVFjJFpzXJkkDWpAh5JXjtQ+AxMBRY8k+mU7UnkyVCjkuwIL
-        yIWNL9K122b5GjU4BQQmXhibhHy8jIg=
-Date:   Thu, 27 Oct 2022 11:45:31 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dionna Amalie Glaze <dionnaglaze@google.com>
-Cc:     Peter Gonda <pgonda@google.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH] virt/coco/sev-guest: Initialize err in
- handle_guest_request
-Message-ID: <Y1pTO+T67EBdlQd9@zn.tnic>
-References: <20221012002323.2015637-1-dionnaglaze@google.com>
- <CAMkAt6qj-iHzk+FqCGh5z4EZHB9BzOfqES8RmjgYXs3CSg3CXQ@mail.gmail.com>
- <CAAH4kHbf6HO05bSwcSsqXTYKTn6wz44mivNY6ZpNrCVzgO3jRg@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2C58B8254D;
+        Thu, 27 Oct 2022 09:46:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AAA8C433C1;
+        Thu, 27 Oct 2022 09:46:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666864014;
+        bh=+7SX1LnPKN1/wXvR/tBK033ffob3mgOmCQxzgkbhrhQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BIG08dG6smedSfGOwOT1Psq4HOR3qY1iENZ0Lq1lngvm1zsOqcxKfJNltlS86Zkkt
+         FsFtIwGUcM/5BC/LrAtSgq7MKuDZB3fFdD0Yo9/KFwGnq0bmr8S6Tw5im3O1tRdWeA
+         ACtqwPTohfKvRYFuTTGwGULmIW+QnmTWCqccx7DER47XxOt73HmJIXfDL/Uv1o5C5n
+         9WdsrUH0J5khbHzVDV5xzXnFtbE/ZuPj5SZNwB3kcnUDBB3DtID/U4Ak7umvx1eI1u
+         OpkKTK4lDhhxaAWULdn+lgRtX1CVOSE9E5HurRGfaedkPIMhxl2BNl+dFjMlqpBRcu
+         Vsk8i/XjmGNRQ==
+Date:   Thu, 27 Oct 2022 11:46:47 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     Thippeswamy Havalige <thippeswamy.havalige@amd.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski@linaro.org,
+        bhelgaas@google.com, michals@xilinx.com, robh+dt@kernel.org,
+        lorenzo.pieralisi@arm.com, bharat.kumar.gogada@amd.com
+Subject: Re: [PATCH 00/13] Remove unused microblaze PCIe bus architecture
+Message-ID: <Y1pTh5fiN+/mKPrR@lpieralisi>
+References: <20221025065214.4663-1-thippeswamy.havalige@amd.com>
+ <06718d29-f3e1-db07-d537-b78290213b10@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAH4kHbf6HO05bSwcSsqXTYKTn6wz44mivNY6ZpNrCVzgO3jRg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <06718d29-f3e1-db07-d537-b78290213b10@amd.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 12:58:12PM -0700, Dionna Amalie Glaze wrote:
-> fw_err = 0xff doesn't make sense to me actually. It's not a documented
-> code that the firmware was never called.
-> Still, we can simply pass fw_err to snp_issue_guest_request rather
-> than an unsigned long err, since a null pointer results in an -EINVAL.
+On Tue, Oct 25, 2022 at 09:31:37AM +0200, Michal Simek wrote:
+> Hi,
+> 
+> On 10/25/22 08:52, Thippeswamy Havalige wrote:
+> > The current Xilinx AXI PCIe Host Bridge driver uses generic PCIe
+> > subsystem framework. This driver works on both Microblaze and Zynq
+> > architecture based platforms.
+> > 
+> > The microblaze architecture specific code has unused PCIe host bridge
+> > supported API's which are no longer needed.
+> > 
+> > This series of patch removes unused architecture specific
+> > microblaze PCIe code.
+> > 
+> > Thippeswamy Havalige (13):
+> >    microblaze/PCI: Remove unused early_read_config_byte() et al
+> >      declarations
+> >    microblaze/PCI: Remove Null PCI config access unused functions
+> >    microblaze/PCI: Remove unused PCI bus scan if configured as a host
+> >    microblaze/PCI: Remove unused PCI legacy IO's access on a bus
+> >    microblaze/PCI: Remove unused device tree parsing for a host bridge
+> >      resources
+> >    microblaze/PCI: Remove unused allocation & free of PCI host bridge
+> >      structure
+> >    microblaze/PCI: Remove unused PCI BIOS resource allocation
+> >    microblaze/PCI: Remove unused PCI Indirect ops
+> >    microblaze/PCI: Remove unused pci_address_to_pio() conversion of CPU
+> >      address to I/O port
+> >    microblaze/PCI: Remove unused sys_pciconfig_iobase() and et al
+> >      declaration
+> >    microblaze/PCI: Remove unused pci_iobar_pfn() and et al declarations
+> >    microblaze/PCI: Remove support for Xilinx PCI host bridge
+> >    microblaze/PCI: Moving PCI iounmap and dependent code
+> > 
+> >   arch/microblaze/Kconfig                  |    8 -
+> >   arch/microblaze/include/asm/pci-bridge.h |   92 ---
+> >   arch/microblaze/include/asm/pci.h        |   29 -
+> >   arch/microblaze/pci/Makefile             |    3 +-
+> >   arch/microblaze/pci/indirect_pci.c       |  158 -----
+> >   arch/microblaze/pci/iomap.c              |   36 +
+> >   arch/microblaze/pci/pci-common.c         | 1067 ------------------------------
+> >   arch/microblaze/pci/xilinx_pci.c         |  170 -----
+> >   8 files changed, 37 insertions(+), 1526 deletions(-)
+> >   delete mode 100644 arch/microblaze/pci/indirect_pci.c
+> >   delete mode 100644 arch/microblaze/pci/pci-common.c
+> >   delete mode 100644 arch/microblaze/pci/xilinx_pci.c
+> > 
+> 
+> Why are you sending it again?
 
-Yes, pls do that. Such I/O function args are always a PITA anyway.
+Michal,
 
-In retrospect, that handle_guest_request() with gazillion args should
-have been made to take a struct as a single argument and populate it as
-it operates.
+it looks like you don't need anything from me or Bjorn on this series so
+I shall drop it from the PCI queue and let you handle it.
 
-The callers then would look at it and decide what to do.
+If you need any help please let me know.
 
-Looking at the callers, they all take members of struct
-snp_guest_request_ioctl and pass them in. A first step in cleaning that
-up could be to simply pass that struct snp_guest_request_ioctl pointer
-instead...
-
-Oh well, in case folks feel bored. :-)
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Lorenzo
