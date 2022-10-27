@@ -2,83 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1E560F5B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DCD660F5B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234291AbiJ0Kts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 06:49:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55336 "EHLO
+        id S234765AbiJ0KuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 06:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233971AbiJ0Ktp (ORCPT
+        with ESMTP id S234330AbiJ0KuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 06:49:45 -0400
-Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5918117A92
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:49:40 -0700 (PDT)
-Received: (wp-smtpd smtp.wp.pl 757 invoked from network); 27 Oct 2022 12:49:35 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1666867775; bh=n4gJTD8b3MoWMElJc5sUpbaAckINJ1gq7JN80v6Jqh0=;
-          h=From:To:Cc:Subject;
-          b=eEHVHg1dRZlZJwtUfXpxsTbYUxVmKVBsOxVK3ETsONMqdtRVZDrGSGRjj9KO5YUt5
-           OUn43gwy01IgRIjgRrt8ElltuHboKqZ/lI31tYgARgmzznCmuqqLPFrJu6a3qYM7JL
-           fCSxXLqKLsbmQ8w9t5B/CarQBEclF7KFLnoByhbA=
-Received: from 89-64-7-202.dynamic.chello.pl (HELO localhost) (stf_xl@wp.pl@[89.64.7.202])
-          (envelope-sender <stf_xl@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <akpm@linux-foundation.org>; 27 Oct 2022 12:49:34 +0200
-From:   Stanislaw Gruszka <stf_xl@wp.pl>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Andy Whitcroft <apw@canonical.com>
-Cc:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] scripts: checkpatch: allow case x: return #x macros
-Date:   Thu, 27 Oct 2022 12:49:34 +0200
-Message-Id: <20221027104934.160513-1-stf_xl@wp.pl>
-X-Mailer: git-send-email 2.25.4
+        Thu, 27 Oct 2022 06:50:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC66550B2;
+        Thu, 27 Oct 2022 03:50:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB26CB82585;
+        Thu, 27 Oct 2022 10:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 53479C433D6;
+        Thu, 27 Oct 2022 10:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666867816;
+        bh=Tb9kHPexgDF6ff9yQLmBQ6mN+G6BrGv5fFKnJ4aoyvw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=jf21nyjbfaQwVoZl5qPHCw6eq9ymktHvuu6829vDVDiPHR6UiZJlk9xEr3uV7FHBB
+         1mEDhJeORIdKO+QdOBj+E02JEo2a+HXVf0aI4XdFddSyR6xI2y/AiypLdonzrVDgGi
+         8TGf8m5JlVQY3uGf/eIEadiXJz5jlNAJFrdNPDQjhGvEU36JNcwfXHIAhduGAkRWl4
+         2BvyLdBWyJ17uJ9DSgLYpY+Au6EP2heUpVsmpHyuCyA3MGGEild6BFOXHE3HBuW/bM
+         e6OuSzmNGy804D909UDob4AJyLBLbgE2V4GQxOr/Gk9Wztp4FrbJa3dkP4vNjmZukj
+         L+x7Tt+zXjPaA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 34E9FE270DA;
+        Thu, 27 Oct 2022 10:50:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: 0d1ea40ff672987e9a9430f29094d703
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 000000B [kXN0]                               
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 net 0/2]  openvswitch: syzbot splat fix and introduce
+ selftest
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166686781620.26454.9462786042081313490.git-patchwork-notify@kernel.org>
+Date:   Thu, 27 Oct 2022 10:50:16 +0000
+References: <20221025105018.466157-1-aconole@redhat.com>
+In-Reply-To: <20221025105018.466157-1-aconole@redhat.com>
+To:     Aaron Conole <aconole@redhat.com>
+Cc:     netdev@vger.kernel.org, pshelar@ovn.org, kuba@kernel.org,
+        davem@davemloft.net, pabeni@redhat.com, edumazet@google.com,
+        tgraf@suug.ch, ksprague0711@gmail.com, dev@openvswitch.org,
+        echaudro@redhat.com, i.maximets@ovn.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do not report errors like below:
+Hello:
 
-./scripts/checkpatch.pl -f drivers/net/wireless/ath/ath10k/wmi.h
+This series was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-ERROR: Macros with complex values should be enclosed in parentheses
-+#define C2S(x) case x: return #x
+On Tue, 25 Oct 2022 06:50:16 -0400 you wrote:
+> Syzbot recently caught a splat when dropping features from
+> openvswitch datapaths that are in-use.  The WARN() call is
+> definitely too large a hammer for the situation, so change
+> to pr_warn.
+> 
+> Second patch in the series introduces a new selftest suite which
+> can help show that an issue is fixed.  This change might be
+> more suited to net-next tree, so it has been separated out
+> as an additional patch and can be either applied to either tree
+> based on preference.
+> 
+> [...]
 
-since "case x: return #x" macros are already used by some
-in-kernel drivers.
+Here is the summary with links:
+  - [v2,net,1/2] openvswitch: switch from WARN to pr_warn
+    https://git.kernel.org/netdev/net/c/fd954cc1919e
+  - [v2,net,2/2] selftests: add openvswitch selftest suite
+    https://git.kernel.org/netdev/net/c/25f16c873fb1
 
-Signed-off-by: Stanislaw Gruszka <stf_xl@wp.pl>
----
- scripts/checkpatch.pl | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 1e5e66ae5a52..4b888b1313d5 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -5901,6 +5901,7 @@ sub process {
- 			    $dstat !~ /$exceptions/ &&
- 			    $dstat !~ /^\.$Ident\s*=/ &&				# .foo =
- 			    $dstat !~ /^(?:\#\s*$Ident|\#\s*$Constant)\s*$/ &&		# stringification #foo
-+			    $dstat !~ /^case\s*$Ident:\s*return\s*#$Ident$/ &&		# case x: return #x
- 			    $dstat !~ /^do\s*$Constant\s*while\s*$Constant;?$/ &&	# do {...} while (...); // do {...} while (...)
- 			    $dstat !~ /^while\s*$Constant\s*$Constant\s*$/ &&		# while (...) {...}
- 			    $dstat !~ /^for\s*$Constant$/ &&				# for (...)
+You are awesome, thank you!
 -- 
-2.25.4
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
