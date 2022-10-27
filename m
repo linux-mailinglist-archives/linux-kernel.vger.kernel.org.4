@@ -2,95 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0B16105C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 122ED6105C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235494AbiJ0W3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 18:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
+        id S235511AbiJ0WaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 18:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235203AbiJ0W3H (ORCPT
+        with ESMTP id S235235AbiJ0WaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 18:29:07 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FB0B18F6;
-        Thu, 27 Oct 2022 15:29:06 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 3-20020a17090a0f8300b00212d5cd4e5eso8041248pjz.4;
-        Thu, 27 Oct 2022 15:29:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=AG4F1mROTpr5u4kkYvWVpYOMl+6kqWe5+k0RORa+c4g=;
-        b=T4vZkZRWPUNObV5wj1y8eBsDMmxjq/rVfbjt4764bS+he3bH07MXwrr9le5PAECL1o
-         qz/6G9wiU6YTeOp57WDKnx7zkVGAxNyuAnJq+RcN/cBsj1QrEGBFvb8VHj8gL/033AeP
-         RhU3ACCMAqbkUJeQ0j1x8qPljx6Y7l4dgh8y/O5W+ihmkuHLuLHGK7FocHqAgMfigrpa
-         f5ITNxq3aKjo9R3RHyit3MSBX1MogKvmRmehUEqLEXL30RV2e8bHVB6uqg5fFa7Ovgx7
-         RX+4oCE6zwoVlw2YKrcocUuX7f1x1XsEyllMPLVHziI8+/KoDYitN2i3GUKj7gyHFPk1
-         UMKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AG4F1mROTpr5u4kkYvWVpYOMl+6kqWe5+k0RORa+c4g=;
-        b=l8TT8oXlESg+XFyXXvMw2PX7sIhfzy4HNoIF3+K2LhDCygsKrYH3Aw2CPM07xJf6uu
-         GtIuONJCoxC9RPSLkGwL552ke9Z5XcSEj1gj6PYPuNZUfqN5yi7OoyijPGyXcNH5B3g/
-         QDbzN9QaZXOcq6Dvi5zYv5ZAlfEaDuaVuaJkxX9mtC8ccYxdqfwZl3vMV++jnUsYEEYn
-         OhmBfWiWcrZfoEDLvRlnashpRmfvTgLinAIofcRoBTfCMyWAZZHVpLg18PY4WtqyFoUZ
-         Wl2rEfTmXiQYd7XdXEb6UysIUFawONOiUMcU7epACXC5VdUfRmXXJdfA+mYS4nuwceTd
-         pwhQ==
-X-Gm-Message-State: ACrzQf0z0kXFeTrpp4qmlKa5bExwCEBZAvT4tAJZo//r4edNrYN7ZD3c
-        wWbLqJS+I0UJVBYlF8uijto=
-X-Google-Smtp-Source: AMsMyM612gH6T9pOfKHLdz1UcPyO4sKgtZrlaDV8LzFxGi7671k9SzAi8/ROucP9RznXGiDfXU0qaA==
-X-Received: by 2002:a17:903:124e:b0:178:6946:a2ba with SMTP id u14-20020a170903124e00b001786946a2bamr51281893plh.89.1666909706755;
-        Thu, 27 Oct 2022 15:28:26 -0700 (PDT)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id x184-20020a6263c1000000b00561b3ee73f6sm1676604pfb.144.2022.10.27.15.28.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 15:28:26 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 15:28:24 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "Li, Xiaoyao" <xiaoyao.li@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        isaku.yamahata@gmail.com
-Subject: Re: [PATCH v6 01/21] x86/tdx: Use enum to define page level of TDX
- supported page sizes
-Message-ID: <20221027222824.GA4101506@ls.amr.corp.intel.com>
-References: <cover.1666824663.git.kai.huang@intel.com>
- <8a5b40d43f8b993a48b99d6647b16a82b433627c.1666824663.git.kai.huang@intel.com>
- <80e8111b-76a2-4999-782b-fdd4b9f425fa@intel.com>
- <d19c81ef34856f72c964322a7390d6fa21976e6f.camel@intel.com>
+        Thu, 27 Oct 2022 18:30:19 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B659239B9D;
+        Thu, 27 Oct 2022 15:30:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666909818; x=1698445818;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aoEiDTixrd3ldXf8sFLDxcEUQVB0T8uPkSk7p3cWyos=;
+  b=fT+ok3WwaC4B1DFtAJd6jZmjkxNCql/+i73VjE4RbohhfM/2ziR8njS0
+   pHamCQG/R6nL4b9Yd17vUpYyqUEd1HGzlairgGdLCPqaMRtvsOKMhHxTD
+   jKyxC5qkm/muobd3BoGxr6ImGqOjJ0LR6qFb53LdEVjXMxQ5QLsH8O4RR
+   Gz5VvfSrQUJDyHuAEVaG3T0ZW2m4CZG/XBsQJqgmhaqzqpP/vQNH52Sie
+   /ADKb71rOO9FENLD5snp7maoFs0I/KQf5htXa24dX0o2qark9yfdQx2E9
+   R7LzQ/pRon/WeYHCv9aY2JW1a0r6KLmaEKiLtPnQQ44tKbU8foyQSY0+u
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="394670487"
+X-IronPort-AV: E=Sophos;i="5.95,219,1661842800"; 
+   d="scan'208";a="394670487"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 15:30:17 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="701518893"
+X-IronPort-AV: E=Sophos;i="5.95,219,1661842800"; 
+   d="scan'208";a="701518893"
+Received: from vstelter-mobl.amr.corp.intel.com (HELO [10.212.214.108]) ([10.212.214.108])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 15:30:16 -0700
+Message-ID: <235f4f04-b2ae-4a7f-043b-1cd6a85bd8ea@intel.com>
+Date:   Thu, 27 Oct 2022 15:30:15 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d19c81ef34856f72c964322a7390d6fa21976e6f.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] x86: intel_epb: Set Alder Lake N and Raptor Lake P normal
+ EPB
+Content-Language: en-US
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, rafael@kernel.org,
+        len.brown@intel.com
+Cc:     peterz@infradead.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20221027220056.1534264-1-srinivas.pandruvada@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20221027220056.1534264-1-srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,37 +67,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 08:42:16AM +0000,
-"Huang, Kai" <kai.huang@intel.com> wrote:
+So, the tl;dr on this is:
 
-> On Thu, 2022-10-27 at 15:08 +0800, Li, Xiaoyao wrote:
-> > > @@ -663,27 +662,16 @@ static bool try_accept_one(phys_addr_t *start,
-> > > unsigned long len,
-> > >    	if (len < accept_size)
-> > >    		return false;
-> > >    
-> > > +	/* TDX only supports 4K/2M/1G page sizes */
-> > 
-> > yes, a page can be mapped as 1G size to TD via secure/shared EPT. But 
-> > for this particular TDX_ACCEPT_PAGE case, it only supports 4K and 2M 
-> > currently, which is defined in TDX module spec.
-> 
-> I checked the TDX module public spec, and it appears you are right.  But I am
-> not sure whether it will be changed in the future?
-> 
-> Anyway this patch doesn't intend to bring any functional change (I should have
-> stated this in the changelog), so I think fixing to this, if ever needed, should
-> be another patch.
-> 
-> Hi Isaku,
-> 
-> You suggested to introduce a helper, but this reminds me how KVM is going to use
-> this helper? KVM secure EPT can accept more levels than try_accept_one().
-> 
-> Perhaps I can just get rid of this helper? TDX host series only needs some
-> definitions to represent 4K/2M/1G page to get rid of using magic numbers.
+	The EPB setting is fundamentally a classic power vs. performance
+	knob.  This change helps power a bunch (200+mw) while having a
+	negligible performance impact (<1% if that), so it's a great
+	trade-off.
 
-Ok, let remove the helper function. The usage seems different from KVM case.
-In KVM side, it can introduce its own helper.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Right?
