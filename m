@@ -2,102 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D93B860FD0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A69860FD10
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236583AbiJ0Q24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 12:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
+        id S236601AbiJ0Q27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 12:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235213AbiJ0Q2y (ORCPT
+        with ESMTP id S236548AbiJ0Q2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 12:28:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C188238442;
-        Thu, 27 Oct 2022 09:28:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D36F623D0;
-        Thu, 27 Oct 2022 16:28:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B6FCC433C1;
-        Thu, 27 Oct 2022 16:28:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666888132;
-        bh=LtAbTc4oHjsc7CsB0RZFmCgJaDHyi66KNVvcsO+tF64=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dFAXjWPhTBNepjo+WzLlzFG3D5UjZlHgWEEbarhq/a31lrVSDOT7ryrgHXUbXJAYd
-         ixOMMJsbagIxDOsHrkWrmJXg26V/MJNmYpk+GANFjjh+9Ekf1tm5Oyu/e+K0uvlyqR
-         fs34N4xpVjUTSIj0PuhbRSuHqPQFEOAFy27gVqNSRqCS/Jtkn2nhFGiidFq+Hps1JY
-         wBnUFa8sJax9y68bCUHljiUk38r34azGZ2kPlyRVf8mI59mneAvPQtGnhwbm2J2GCa
-         p/Fd7roSVzCf1w9i2To3dyO9im8SMh7+btZZLXQ8vvIy3UXmHr3ZRrDbNbfU5r21TV
-         ILd4153NyQ/1g==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH v2] kbuild: fix SIGPIPE error message for AR=gcc-ar and AR=llvm-ar
-Date:   Fri, 28 Oct 2022 01:28:39 +0900
-Message-Id: <20221027162839.410720-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 27 Oct 2022 12:28:55 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EF5386B7
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:28:54 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-36a4b86a0abso20476157b3.7
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:28:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/twLMWw16uAE+n6BRsXXihWMHHuPUSy05Q/il/C7lHk=;
+        b=EtMfw7YoKHuJZm/wHL9s/OzTtTAPLgngkqz/eQFP2+h274lhVyRMh2abXnQvTdO4GY
+         VCMtYDVT70Q+lJi5lcFkVuY/1X4O0F1O/t8BU14MV0c06ReZ+P7hJIb4Ujv2xO7T30ps
+         KWeDXRhFJT6QUOwvEhzwfFC4kYUgnw9+Sp2qFgfAIFBaf36NwvNYnQIi941EOn9mwPSo
+         WUwv5d6O2ycvayl+vlEDAXVx5VlvzgO+MGGh4NIdAkbr4DWkn+9udzfQIYx24aCL3l1g
+         2RXiXmwNjN3IduQzypNgvkW7K14Xzr1a541+GVbEjMI5oN6MjT+46iEEsDpHQM39FC73
+         BZ1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/twLMWw16uAE+n6BRsXXihWMHHuPUSy05Q/il/C7lHk=;
+        b=A4+3IaXK/XaigsDFn5rNIb9rgmHFBFkS229v50vrTmEQMyQ5uCDSRP0vaPpXjfv1De
+         EMkEZKY1uD3eQ9bPvySUxhapChFCKlPE4Hy6mBVaxyra9j8jakMJ7MVlEbWyAqL8xAs+
+         K3HAxnGgfBX+DFeyvsO30GvzH9AnY6JfBeguf84FnsMB75aG6BmCR6cpyWy1gGLpqs5O
+         bWnMX4CX7Nup24ePEPCXRl5pbxkZUdhLPgvsEtm3uIHYHQmxftvVFQoDykrzfNp0JtIp
+         pOelTc7QJKw2mN9LB6XnjYS99wk0FCKU5E0SmDrIJYy0GKct/nr03ZJUetJhkrvpzwKi
+         uYwA==
+X-Gm-Message-State: ACrzQf1piI93nSIBFU5b2Yt96a8D8TEm8PB+RtB1AJLkTzhgOe9FS+uy
+        UHfrL52YP2aPnsF21yAOLEXuKMPN9kqAC+HRapJFjg==
+X-Google-Smtp-Source: AMsMyM67mvVRzQAcDIhH1GuVnNabzz1YBbDtdPr57xgs6+J2jg0eMPdUFQms3czCKEOQcKCYIIifsCQ/2jUAGTzNhHk=
+X-Received: by 2002:a81:ad09:0:b0:370:5b7:bef2 with SMTP id
+ l9-20020a81ad09000000b0037005b7bef2mr2515251ywh.47.1666888133447; Thu, 27 Oct
+ 2022 09:28:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220902141715.1038615-1-imagedong@tencent.com>
+ <CANn89iK7Mm4aPpr1-VM5OgicuHrHjo9nm9P9bYgOKKH9yczFzg@mail.gmail.com>
+ <20220905103808.434f6909@gandalf.local.home> <CANn89i+qp=gmhx_1b+=hEiHA7yNGkfh46YPKhUc9GFbtNYBZrA@mail.gmail.com>
+ <20221027114407.6429a809@gandalf.local.home>
+In-Reply-To: <20221027114407.6429a809@gandalf.local.home>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 27 Oct 2022 09:28:42 -0700
+Message-ID: <CANn89iL7EvdBhZGtxDOATeznLUwVaFm2gf4XCYeMPXE5CR=BTw@mail.gmail.com>
+Subject: Re: [PATCH net-next v2] net: skb: export skb drop reaons to user by TRACE_DEFINE_ENUM
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Ian Rogers <irogers@google.com>
+Cc:     Menglong Dong <menglong8.dong@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        David Ahern <dsahern@kernel.org>,
+        Hao Peng <flyingpeng@tencent.com>,
+        Dongli Zhang <dongli.zhang@oracle.com>, robh@kernel.org,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jiri Slaby reported that building the kernel with AR=gcc-ar shows:
-  /usr/bin/ar terminated with signal 13 [Broken pipe]
+On Thu, Oct 27, 2022 at 8:43 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Thu, 27 Oct 2022 08:32:02 -0700
+> Eric Dumazet <edumazet@google.com> wrote:
+>
+> > This seems broken again (tried on latest net-next tree)
+> >
+> > perf script
+>
+> Do you also have the latest perf and the latest libtraceevent installed?
+>
 
-Nathan Chancellor reported the latest AR=llvm-ar shows
-  error: write on a pipe with no reader
+I tried a more recent perf binary we have, but it is also not right.
 
-The latter occurs since LLVM commit 51b557adc131 ("Add an error message
-to the default SIGPIPE handler").
+I guess I will have to request a new perf binary at Google :/
 
-The resulting vmlinux is correct, but it is better to silence it.
-
-'head -n1' exits after reading the first line, so the pipe is closed.
-
-Use 'sed -n 1p' to eat the stream till the end.
-
-Fixes: 321648455061 ("kbuild: use obj-y instead extra-y for objects placed at the head")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1651
-Reported-by: Jiri Slaby <jirislaby@kernel.org>
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
----
-
-Changes in v2:
-  - Update commit description to mention llvm-ar
-
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Makefile b/Makefile
-index e90bb2b38607..e9e7eff906a5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1218,7 +1218,7 @@ quiet_cmd_ar_vmlinux.a = AR      $@
-       cmd_ar_vmlinux.a = \
- 	rm -f $@; \
- 	$(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
--	$(AR) mPiT $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
-+	$(AR) mPiT $$($(AR) t $@ | sed -n 1p) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
- 
- targets += vmlinux.a
- vmlinux.a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt autoksyms_recursive FORCE
--- 
-2.34.1
-
+perf5 script
+         swapper     0 [030]  4147.704606: skb:kfree_skb: [UNKNOWN EVENT]
+ kworker/30:1-ev   308 [030]  4147.704615: skb:kfree_skb: [UNKNOWN EVENT]
+         swapper     0 [030]  4148.048173: skb:kfree_skb: [UNKNOWN EVENT]
+ kworker/30:1-ev   308 [030]  4148.048179: skb:kfree_skb: [UNKNOWN EVENT]
+         swapper     0 [008]  4148.048773: skb:kfree_skb: [UNKNOWN EVENT]
+         swapper     0 [030]  4148.112271: skb:kfree_skb: [UNKNOWN EVENT]
+ kworker/30:1-ev   308 [030]  4148.112280: skb:kfree_skb: [UNKNOWN EVENT]
+         swapper     0 [030]  4148.720149: skb:kfree_skb: [UNKNOWN EVENT]
+ kworker/30:1-ev   308 [030]  4148.720155: skb:kfree_skb: [UNKNOWN EVENT]
+         swapper     0 [030]  4149.072141: skb:kfree_skb: [UNKNOWN EVENT]
+ kworker/30:1-ev   308 [030]  4149.072149: skb:kfree_skb: [UNKNOWN EVENT]
