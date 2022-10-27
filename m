@@ -2,115 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7849A60FA1F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 16:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F07960FA22
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 16:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235577AbiJ0OIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 10:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
+        id S235656AbiJ0OJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 10:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233701AbiJ0OIo (ORCPT
+        with ESMTP id S235524AbiJ0OJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 10:08:44 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554091187B1;
-        Thu, 27 Oct 2022 07:08:43 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id BE1345C00D4;
-        Thu, 27 Oct 2022 10:08:42 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 27 Oct 2022 10:08:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1666879722; x=1666966122; bh=iCtPu1jp0I
-        wdJMYxxdjgBYCTltAD023MDCiowAfRTN0=; b=tMEWO0Zl1UM+bVWVu9dH/h+uqX
-        iIXiI4j0c0j1KS42QF0jOlIoZUd5LKmFZz6zrmjNMs0Uc3/6tgBryeA4uKaQhZpG
-        u52MmaABZTdFpHpLNnHm/O0zA9hV04leGYvdMYzO9/meG4+kxLPE/iXXx65emUdq
-        zHzOjJR53mel7bOMDVPDEXaH/gBKedBdmsHGujNIapsce34pKojUZr+fVk8tusoh
-        FFgz9FbdcZWpfqeCKcyr0kOjqNngtUNa4Tf/JHpKV38nK4edxqWG/UQ8IaS4PGK2
-        Vnu1lX375HnfXYJVzDVDvLDRQY0A3Sb5TeJHCd0HZMBex/BiSJVssO3LE+JA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666879722; x=1666966122; bh=iCtPu1jp0IwdJMYxxdjgBYCTltAD
-        023MDCiowAfRTN0=; b=LvhG6YLgC3Sx2ZjMFu8HNgKZl5wswIxoY87GTJtJ6Qgi
-        az0mbD5/RzQ4ubRTSNROHWVNGkf4mWsEM8P4SSMzyR9knwAVgnFhvIfvSCAsEP/8
-        dMfP0UkKndKfyOJjIDYZmc/kuEfrVicPmn+ip5fHfcjKh8fDjDLKJnMntQG95Xj9
-        nE9kGVblAycz58QevBASqq2SfSu/58qr7PJD/piNOVuqgfuhB4QrWdQUOq0e407G
-        9pYwhIxWli4girVfqYdyqvLFiqm675UUWrRYCC8QlSSRkZKhIUSMS3KEJQLN+E3e
-        C1cMQn+OiAvKc+Rz1Dcst2XXgCsu0Mv2qCDdpCplbg==
-X-ME-Sender: <xms:6pBaY_Ytf-kgllGeYWso320lffZs3ScLwoghznggpxpFtZOhzV-hLw>
-    <xme:6pBaY-axL6n9e7j-Uj0vOTuKB53Bh5YCB39bZ3EG8WO_jeYhvoHOjX00LosOHnN_h
-    8Am5gymEC_v5lPp64Y>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeggdejudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:6pBaYx-7i051iGK68ZIZtwn8wnc7YtJEvBpMIVOo6VVRzCujP5j9Ng>
-    <xmx:6pBaY1ryE6OmCTW20VX1CVqz3PcVyf6Djb_J1PigrcQXNAbfmUJoag>
-    <xmx:6pBaY6rQdg7mxxvSGQ4KYF8eZzt2f1lYdczbPp5WeuEJM3OObYpTKw>
-    <xmx:6pBaY7f8iwbGHc0KJoUSJQfYek8UwHb6JrWUJyZnglpHnNc-T7GQAw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 5000BB6008D; Thu, 27 Oct 2022 10:08:42 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
-Mime-Version: 1.0
-Message-Id: <52599d6e-dc16-4186-9fb9-d17ce428fe9c@app.fastmail.com>
-In-Reply-To: <Y1Okpjbi2kKU2GFz@kroah.com>
-References: <20221022043548.1671644-1-scottjcrouch@gmail.com>
- <Y1Okpjbi2kKU2GFz@kroah.com>
-Date:   Thu, 27 Oct 2022 16:08:22 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Scott J. Crouch" <scottjcrouch@gmail.com>
-Cc:     "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Broadcom internal kernel review list" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        kernel-janitors@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: vchiq: add 'static' to function definition
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 27 Oct 2022 10:09:28 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89628184
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 07:09:25 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id x13so1360622qvn.6
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 07:09:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=I89zaE05JQ+ZcZwT8dk6MbYPpYEEi3XJBY1DJ5hKJc8=;
+        b=yYjiq3VFiXTlggeul5+4tcm2ocLGI+LTUfUS0cEU4BFrLGulj7Ztbd+iBUTFBokeZ0
+         xpDizvC92z+8w7X9ubQ91grB07Js2zkadNJuLZt7qN2eSG5a0AvulLt0IftLY31L2wos
+         UMkYPSP6ElK/0py4SQLaSxBcq8IGzTTAvhuepOHe8ArQLjASqtrSImfsdVNLRvCrvF7R
+         TmqZsCAAMIJw9NJYVXs7QT2ISoJjR6DvZeLEe+YjS3TQf04F1hMMZyokkVX1G8DRVIcS
+         qeH1TXHP/qw/yhA75XiBw7AZR1NVT7Zt3/U+GjmU46tRG7CdrQoJx8VkCU33OmHcbTpE
+         iLng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I89zaE05JQ+ZcZwT8dk6MbYPpYEEi3XJBY1DJ5hKJc8=;
+        b=Cj1OZs5hTRpAkE5kwTwriMUwUnKOGwYbQv6OCvTRO40wuEMtMoEw/9SstyHnHigWrt
+         R5aMj6BF72LFapzj2n/zLddVJ+O0pBJmgMuNp79bH7m4sx1ZaMqsAjoW00TV5FjWh82m
+         w/XhPwP2qkaU7+vjIQkMeB0wSETFYIJIBBsfbZXg/pryKs/B880SCxfM6oAxBu4oSySQ
+         zou1ljbBviCivSrfsm6u3q44/Mv0l8nD5ZHL8maQOkNRVlw4bwHVl42IR3NJXyIym707
+         nocSn63UPeorUYjhRWSenJLdwJUWQFVQIXN5ggd8QBKhUKc4J08KbSJ4oplhJeapAl5s
+         J5tA==
+X-Gm-Message-State: ACrzQf1utf2yw0SABbGAr8uV9CutBEtMVV4Z+3wyIkXsXVUFH1Pt4BN4
+        kSBSjMvD7D56aVX0/Z/wmu2Jzw==
+X-Google-Smtp-Source: AMsMyM5c4U2gbifsaVLJ70wFvb8UG3vCkg8d9jWESRPnpQGPWIfX0FHBuj5EznxDzFJ8dQ7ICfPLCw==
+X-Received: by 2002:a05:6214:d0c:b0:4b3:36b4:c89a with SMTP id 12-20020a0562140d0c00b004b336b4c89amr42176544qvh.93.1666879764570;
+        Thu, 27 Oct 2022 07:09:24 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id 18-20020ac84e92000000b0039cc7ebf46bsm879240qtp.93.2022.10.27.07.09.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 07:09:23 -0700 (PDT)
+Message-ID: <5e66c095-898e-067e-1874-a3d2e5babf17@linaro.org>
+Date:   Thu, 27 Oct 2022 10:09:21 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 09/11] arm64: dts: qcom: sc8280xp-x13s: Add PM8280_{1/2}
+ VADC channels
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        andersson@kernel.org
+Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
+        quic_jprakash@quicinc.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221027063006.9056-1-manivannan.sadhasivam@linaro.org>
+ <20221027063006.9056-10-manivannan.sadhasivam@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221027063006.9056-10-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022, at 10:07, Greg Kroah-Hartman wrote:
-> On Sat, Oct 22, 2022 at 03:35:48PM +1100, Scott J. Crouch wrote:
+On 27/10/2022 02:30, Manivannan Sadhasivam wrote:
+> Add VADC channels of PM8280_{1/2} PMICs for measuring the on-chip die
+> temperature and external thermistors connected to the AMUX pins.
+> 
+> The measurements are collected by the primary PMIC PMK8280 from the
+> slave PMICs PM8280_{1/2} and exposed them over the PMK8280's VADC
 
-> Nice try, but this breaks the build in a very horrible and strange way
-> that no one has been able to figure out yet:
+secondary PMICs
 
-I got curious and figured out what happens:
+Drop "them"
 
-Without CONFIG_OF, of_match_node() always returns NULL, so
-vchiq_probe() returns -EINVAL unconditionally before calling
-vchiq_platform_init(). 
 
-If vchiq_platform_init() is marked 'static', gcc's dead code
-elimination then eliminates it, which in turn means that
-'g_fragments_base' is never initialized and gets replaced
-with a NULL pointer.
+> channels.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 61 +++++++++++++++++++
+>  1 file changed, 61 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> index 9ac5d5c22832..d300d217fdc6 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> @@ -7,6 +7,7 @@
+>  /dts-v1/;
+>  
+>  #include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/iio/qcom,spmi-adc7-pm8350.h>
+>  #include <dt-bindings/iio/qcom,spmi-adc7-pmk8350.h>
+>  #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+>  
+> @@ -189,6 +190,66 @@ pmk8280-xo-therm@44 {
+>  		qcom,ratiometric;
+>  		qcom,hw-settle-time = <200>;
+>  	};
+> +
+> +	pm8280-1-die-temp@103 {
 
-I think the easiest workaround is to take this otherwise correct
-patch but at the same time add 'depends on OF' to BCM2835_VCHIQ.
-This is a correct dependency as shown by gcc above, and it still
-allows compile testing this driver on x86 allmodconfig, which
-enables CONFIG_OF.
+pmic-die-temp? What pm8280 stands here?
 
-     Arnd
+
+> +		reg = <PM8350_ADC7_DIE_TEMP(1)>;
+> +		label = "pm8280_1_die_temp";
+> +		qcom,pre-scaling = <1 1>;
+> +	};
+> +
+> +	sys-therm1@144 {
+
+I would say sys-therm@... why do we need the "1" suffix in node name?
+
+> +		reg = <PM8350_ADC7_AMUX_THM1_100K_PU(1)>;
+> +		qcom,ratiometric;
+> +		qcom,hw-settle-time = <200>;
+> +	};
+
+Best regards,
+Krzysztof
+
