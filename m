@@ -2,136 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D30C60FEAA
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F5A60FDF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237006AbiJ0RHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 13:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
+        id S236820AbiJ0RAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 13:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237018AbiJ0RHK (ORCPT
+        with ESMTP id S236815AbiJ0RAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 13:07:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7627219C06E;
-        Thu, 27 Oct 2022 10:07:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 27 Oct 2022 13:00:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBC3E22F3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 10:00:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666890048;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OLxo65GqqyDAg4pQmkoaDcyRjV3222s+5rEKoJQtb20=;
+        b=J+2TlVmfzJtlVpfc0vOODnqd/4Q4gMJmERctniPnm5cQs2VDYZqQP0l1iKUcXNLLo7feXk
+        r2Kke2Pho4DlyhlWCPOCx2A7uk0iId6+JjWWQEVejuEDk6RNi1aLHKrYXmCFg1+N8ox97y
+        Q212etztbNgvSmkA7k/lRGvWjB/TnHE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556-DzEm0zyWOb6egDRYU4pQAA-1; Thu, 27 Oct 2022 13:00:45 -0400
+X-MC-Unique: DzEm0zyWOb6egDRYU4pQAA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15CCF623F7;
-        Thu, 27 Oct 2022 17:07:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE921C433C1;
-        Thu, 27 Oct 2022 17:07:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666890427;
-        bh=KnqdBqXpwjnoczNNin28/Qu7T5+d3J3wqw/aPVgwV5I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M6gkwDRq0ZzW/1wjsK67lKou40T33TVnreVpyu07Srkg2xJGTGA9FB1KrmtyIVOKA
-         rSp0/RiFPQ9T5igRiiYFZ8Xe5FTQNSX1hJC+/r83GuFjNS8SlzrZ6GXEtmSWuDpSLR
-         f/xEYcoJCYAy853/om+k78fumLtbSSuciB4dmKDQ=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 67/79] fcntl: make F_GETOWN(EX) return 0 on dead owner task
-Date:   Thu, 27 Oct 2022 18:56:17 +0200
-Message-Id: <20221027165056.588648208@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221027165054.270676357@linuxfoundation.org>
-References: <20221027165054.270676357@linuxfoundation.org>
-User-Agent: quilt/0.67
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AEBC9858F13;
+        Thu, 27 Oct 2022 17:00:44 +0000 (UTC)
+Received: from jsavitz-csb.redhat.com (unknown [10.22.17.203])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 666491121320;
+        Thu, 27 Oct 2022 17:00:44 +0000 (UTC)
+From:   Joel Savitz <jsavitz@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Joel Savitz <jsavitz@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        David Hildenbrand <dhildenb@redhat.com>,
+        Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH linux-next] selftests/vm: add CATEGORY for ksm_functional_tests
+Date:   Thu, 27 Oct 2022 13:00:43 -0400
+Message-Id: <20221027170043.2363797-1-jsavitz@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+commit e080ceaa69c1 ("selftests/vm: add KSM unmerge tests") in
+linux-next adds an entry to run_vmtests.sh. I recently submitted
+commit b5ba705c2608 ("selftests/vm: enable running select groups of tests")
+to linux-next which categorizes tests by functionality in order to
+allow more precise selection of which tests are to be run.
 
-[ Upstream commit cc4a3f885e8f2bc3c86a265972e94fef32d68f67 ]
+Since this newest test targets ksm and does not require more than one
+numa node, add 'CATEGORY="ksm"' to the invocation to group this test
+with the other ksm tests.
 
-Currently there is no way to differentiate the file with alive owner
-from the file with dead owner but pid of the owner reused. That's why
-CRIU can't actually know if it needs to restore file owner or not,
-because if it restores owner but actual owner was dead, this can
-introduce unexpected signals to the "false"-owner (which reused the
-pid).
-
-Let's change the api, so that F_GETOWN(EX) returns 0 in case actual
-owner is dead already. This comports with the POSIX spec, which
-states that a PID of 0 indicates that no signal will be sent.
-
-Cc: Jeff Layton <jlayton@kernel.org>
-Cc: "J. Bruce Fields" <bfields@fieldses.org>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Cyrill Gorcunov <gorcunov@gmail.com>
-Cc: Andrei Vagin <avagin@gmail.com>
-Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
-Stable-dep-of: f671a691e299 ("fcntl: fix potential deadlocks for &fown_struct.lock")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Joel Savitz <jsavitz@redhat.com>
 ---
- fs/fcntl.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+ tools/testing/selftests/vm/run_vmtests.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/fcntl.c b/fs/fcntl.c
-index 71b43538fa44..5a56351f1fc3 100644
---- a/fs/fcntl.c
-+++ b/fs/fcntl.c
-@@ -148,11 +148,15 @@ void f_delown(struct file *filp)
+diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+index af35dd3bc589..fff00bb77086 100755
+--- a/tools/testing/selftests/vm/run_vmtests.sh
++++ b/tools/testing/selftests/vm/run_vmtests.sh
+@@ -252,7 +252,7 @@ CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 1
+ # KSM test with 2 NUMA nodes and merge_across_nodes = 0
+ CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 0
  
- pid_t f_getown(struct file *filp)
- {
--	pid_t pid;
-+	pid_t pid = 0;
- 	read_lock(&filp->f_owner.lock);
--	pid = pid_vnr(filp->f_owner.pid);
--	if (filp->f_owner.pid_type == PIDTYPE_PGID)
--		pid = -pid;
-+	rcu_read_lock();
-+	if (pid_task(filp->f_owner.pid, filp->f_owner.pid_type)) {
-+		pid = pid_vnr(filp->f_owner.pid);
-+		if (filp->f_owner.pid_type == PIDTYPE_PGID)
-+			pid = -pid;
-+	}
-+	rcu_read_unlock();
- 	read_unlock(&filp->f_owner.lock);
- 	return pid;
- }
-@@ -200,11 +204,14 @@ static int f_setown_ex(struct file *filp, unsigned long arg)
- static int f_getown_ex(struct file *filp, unsigned long arg)
- {
- 	struct f_owner_ex __user *owner_p = (void __user *)arg;
--	struct f_owner_ex owner;
-+	struct f_owner_ex owner = {};
- 	int ret = 0;
+-run_test ./ksm_functional_tests
++CATEGORY="ksm" run_test ./ksm_functional_tests
  
- 	read_lock(&filp->f_owner.lock);
--	owner.pid = pid_vnr(filp->f_owner.pid);
-+	rcu_read_lock();
-+	if (pid_task(filp->f_owner.pid, filp->f_owner.pid_type))
-+		owner.pid = pid_vnr(filp->f_owner.pid);
-+	rcu_read_unlock();
- 	switch (filp->f_owner.pid_type) {
- 	case PIDTYPE_PID:
- 		owner.type = F_OWNER_TID;
+ # protection_keys tests
+ if [ -x ./protection_keys_32 ]
 -- 
-2.35.1
-
-
+2.31.1
 
