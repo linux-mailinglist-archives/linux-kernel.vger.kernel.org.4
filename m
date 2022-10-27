@@ -2,86 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ADB760FBC6
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5D560FBC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236518AbiJ0PWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 11:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
+        id S236489AbiJ0PVu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 27 Oct 2022 11:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236513AbiJ0PVu (ORCPT
+        with ESMTP id S235835AbiJ0PVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 11:21:50 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B739E8049B;
-        Thu, 27 Oct 2022 08:21:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666884098; x=1698420098;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=oIFe3ETvGueK4heImMYjCz/snuv7scKeOIGa2nELdHM=;
-  b=XumHiQ0STtcAelQAglZD1xkKPELcDDJ7F1oNnqh0IWOle5JIPT5aIAW4
-   HyfJO/cAFMzrZTNgn2gUL6AKzaNnZdrlzvWL6YBTeLChpqBUXN/b+S5gN
-   Ek26nEfFx5+eIDfkIBkll+aF4rYZhqIaytfSEcHBg0GB9kFM21isonOs4
-   TdZTqctwssilg7hvR4qDk8SUv/9A5bnZyaPxwQE/HQkewBfyEjV67qdO2
-   NJUldM3eptFkav+83np3KdJlv3J0esDOLgEFYd6pbSmThZz2aJYmpZaAD
-   KYg364XBSTk4eo2fox5fuLLFJ0AxHGfVntbq8fprcBtgByx5K4njHs+8K
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="308245482"
-X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
-   d="scan'208";a="308245482"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 08:21:06 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="627203741"
-X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
-   d="scan'208";a="627203741"
-Received: from vstelter-mobl.amr.corp.intel.com (HELO [10.212.214.108]) ([10.212.214.108])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 08:21:03 -0700
-Message-ID: <6758af9b-1110-ad5a-3961-e256d5c8d576@intel.com>
-Date:   Thu, 27 Oct 2022 08:21:02 -0700
+        Thu, 27 Oct 2022 11:21:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DECD101D6;
+        Thu, 27 Oct 2022 08:21:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3E28B826DB;
+        Thu, 27 Oct 2022 15:21:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20249C433C1;
+        Thu, 27 Oct 2022 15:21:03 +0000 (UTC)
+Date:   Thu, 27 Oct 2022 11:21:17 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, Tony Lindgren <tony@atomide.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-input@vger.kernel.org,
+        linux-parisc@vger.kernel.org
+Subject: Re: [RFC][PATCH v2 15/31] timers: Input: Use del_timer_shutdown()
+ before freeing timer
+Message-ID: <20221027112117.7324570a@gandalf.local.home>
+In-Reply-To: <20221027150927.992061541@goodmis.org>
+References: <20221027150525.753064657@goodmis.org>
+        <20221027150927.992061541@goodmis.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v9 0/9] x86: Show in sysfs if a memory node is able to do
- encryption
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>,
-        Martin Fernandez <martin.fernandez@eclypsium.com>
-Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, ardb@kernel.org,
-        dvhart@infradead.org, andy@infradead.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
-        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
-        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
-        alison.schofield@intel.com, keescook@chromium.org
-References: <20220704135833.1496303-1-martin.fernandez@eclypsium.com>
- <Y0hrhzprPFTK+VWV@zn.tnic>
- <CAKgze5ajp-z0+F+8Qo2z=834=i=HNa5=s54MLyrk16wQVnxCzQ@mail.gmail.com>
- <Y1pH/DuYJeo7Kyo5@zn.tnic>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <Y1pH/DuYJeo7Kyo5@zn.tnic>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/27/22 01:57, Borislav Petkov wrote:
-> Well, I still think this is not going to work in all cases. SME/TME can
-> be enabled but the kernel can go - and for whatever reason - map a bunch
-> of memory unencrypted.
+[
+  quilt mail --send still can't handle unicode characters.
+    Here's the patch again
+]
 
-For TME on Intel systems, there's no way to make it unencrypted.  The
-memory controller is doing all the encryption behind the back of the OS
-and even devices that are doing DMA.  Nothing outside of the memory
-controller really knows or cares that encryption is happening.
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+
+Before a timer is freed, del_timer_shutdown() must be called.
+
+Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
+
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: "Pali Rohár" <pali@kernel.org>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Tony Lindgren <tony@atomide.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-input@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ drivers/input/keyboard/locomokbd.c   | 2 +-
+ drivers/input/keyboard/omap-keypad.c | 2 +-
+ drivers/input/mouse/alps.c           | 2 +-
+ drivers/input/serio/hil_mlc.c        | 2 +-
+ drivers/input/serio/hp_sdc.c         | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/input/keyboard/locomokbd.c b/drivers/input/keyboard/locomokbd.c
+index dae053596572..aabd1f6a986a 100644
+--- a/drivers/input/keyboard/locomokbd.c
++++ b/drivers/input/keyboard/locomokbd.c
+@@ -310,7 +310,7 @@ static void locomokbd_remove(struct locomo_dev *dev)
+ 
+ 	free_irq(dev->irq[0], locomokbd);
+ 
+-	del_timer_sync(&locomokbd->timer);
++	del_timer_shutdown(&locomokbd->timer);
+ 
+ 	input_unregister_device(locomokbd->input);
+ 	locomo_set_drvdata(dev, NULL);
+diff --git a/drivers/input/keyboard/omap-keypad.c b/drivers/input/keyboard/omap-keypad.c
+index 57447d6c9007..39974158961d 100644
+--- a/drivers/input/keyboard/omap-keypad.c
++++ b/drivers/input/keyboard/omap-keypad.c
+@@ -296,7 +296,7 @@ static int omap_kp_remove(struct platform_device *pdev)
+ 	omap_writew(1, OMAP1_MPUIO_BASE + OMAP_MPUIO_KBD_MASKIT);
+ 	free_irq(omap_kp->irq, omap_kp);
+ 
+-	del_timer_sync(&omap_kp->timer);
++	del_timer_shutdown(&omap_kp->timer);
+ 	tasklet_kill(&kp_tasklet);
+ 
+ 	/* unregister everything */
+diff --git a/drivers/input/mouse/alps.c b/drivers/input/mouse/alps.c
+index 4a6b33bbe7ea..4d402e75aca8 100644
+--- a/drivers/input/mouse/alps.c
++++ b/drivers/input/mouse/alps.c
+@@ -2970,7 +2970,7 @@ static void alps_disconnect(struct psmouse *psmouse)
+ 	struct alps_data *priv = psmouse->private;
+ 
+ 	psmouse_reset(psmouse);
+-	del_timer_sync(&priv->timer);
++	del_timer_shutdown(&priv->timer);
+ 	if (priv->dev2)
+ 		input_unregister_device(priv->dev2);
+ 	if (!IS_ERR_OR_NULL(priv->dev3))
+diff --git a/drivers/input/serio/hil_mlc.c b/drivers/input/serio/hil_mlc.c
+index d36e89d6fc54..33fc73da8e54 100644
+--- a/drivers/input/serio/hil_mlc.c
++++ b/drivers/input/serio/hil_mlc.c
+@@ -1017,7 +1017,7 @@ static int __init hil_mlc_init(void)
+ 
+ static void __exit hil_mlc_exit(void)
+ {
+-	del_timer_sync(&hil_mlcs_kicker);
++	del_timer_shutdown(&hil_mlcs_kicker);
+ 	tasklet_kill(&hil_mlcs_tasklet);
+ }
+ 
+diff --git a/drivers/input/serio/hp_sdc.c b/drivers/input/serio/hp_sdc.c
+index 13eacf6ab431..49e5884df801 100644
+--- a/drivers/input/serio/hp_sdc.c
++++ b/drivers/input/serio/hp_sdc.c
+@@ -980,7 +980,7 @@ static void hp_sdc_exit(void)
+ 	free_irq(hp_sdc.irq, &hp_sdc);
+ 	write_unlock_irq(&hp_sdc.lock);
+ 
+-	del_timer_sync(&hp_sdc.kicker);
++	del_timer_shutdown(&hp_sdc.kicker);
+ 
+ 	tasklet_kill(&hp_sdc.task);
+ 
+-- 
+2.35.1
