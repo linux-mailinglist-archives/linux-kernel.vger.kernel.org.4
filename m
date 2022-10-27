@@ -2,148 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C07F60F93D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F9E60F931
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236231AbiJ0NiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 09:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
+        id S236179AbiJ0Ngg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 09:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236203AbiJ0Nhu (ORCPT
+        with ESMTP id S232844AbiJ0Ngd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 09:37:50 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6161814A6;
-        Thu, 27 Oct 2022 06:37:49 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29RDKUSF027366;
-        Thu, 27 Oct 2022 13:37:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=Ejl5T5rkkQKY1oA+EH7MPZdTTOrGhLrVrHhBB8NLPaA=;
- b=PglINzJXYiVe4F0ZW5eltGBfoTy1FGILlDJT/TPmADIpuFVzFG9ory5HMOoQG4G+lflc
- J03o+a2kpPaZ8vmdVokQTiVepwiUU8efaorgPUSHJkFuekCiaLXJFfAh4m3v65er1x7m
- uiwTvURLb8LRpkqVdmeMfK+xST4jgxrc3cqWG0F6jfU4zp/3jxST60KysftUHjrsc1SD
- RufzTTiCAx1EM9NcbPz/TBqjuxzx2iTLR7jUzN6GrlwvGHpJmm6PtbM5kjKqpgz8ULad
- xdR5cxJ+gpaDSxTWo7G2LPzl3L/q6xOyb7VzYFefogUtE3KwpoBUsbHNmUzOhFOAnukx 3A== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kftspgj1w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Oct 2022 13:37:33 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29RDKJAa015026;
-        Thu, 27 Oct 2022 13:36:01 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma05fra.de.ibm.com with ESMTP id 3kfahd1dcw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Oct 2022 13:36:01 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29RDZwEV64094482
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Oct 2022 13:35:58 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 18F0E11C04A;
-        Thu, 27 Oct 2022 13:35:58 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9E06911C050;
-        Thu, 27 Oct 2022 13:35:57 +0000 (GMT)
-Received: from oc-nschnelle.boeblingen.de.ibm.com (unknown [9.155.199.46])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 27 Oct 2022 13:35:57 +0000 (GMT)
-Message-ID: <c98fa11d4efa86ca676a9d164893db8af8ab3693.camel@linux.ibm.com>
-Subject: Re: [PATCH 3/5] iommu/s390: Use RCU to allow concurrent domain_list
- iteration
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org
-Date:   Thu, 27 Oct 2022 15:35:57 +0200
-In-Reply-To: <Y1p/7YS338ghykGz@nvidia.com>
-References: <Y0/lMCQ8oeXJ2HTg@nvidia.com>
-         <f3551bb461b3ef3cfc1a0c644093816be1835b3f.camel@linux.ibm.com>
-         <Y1ErcEe82yjJI+ET@nvidia.com>
-         <68d91d7a5aadbd46dc34470eccd6b86a84c9e47b.camel@linux.ibm.com>
-         <Y1KgX8EwH8T+FgWC@nvidia.com>
-         <89a748fb5caee8be5d91806aa5dfd131e92d5d82.camel@linux.ibm.com>
-         <Y1K1AqVWEyY0/Uqy@nvidia.com>
-         <cef734b9f9b33380c1bbff40b56bb67b3de29341.camel@linux.ibm.com>
-         <Y1a8qM4c2ZAM9glJ@nvidia.com>
-         <3c2249fc7abf481b15d4988c2bd6456c48154c44.camel@linux.ibm.com>
-         <Y1p/7YS338ghykGz@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 4UEH8TwDmXoB9rlck4hFIklWCJOZ7Bvu
-X-Proofpoint-GUID: 4UEH8TwDmXoB9rlck4hFIklWCJOZ7Bvu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-27_07,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- mlxscore=0 bulkscore=0 priorityscore=1501 spamscore=0 phishscore=0
- adultscore=0 impostorscore=0 mlxlogscore=999 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2210270073
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 27 Oct 2022 09:36:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6F2180253
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:36:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E2A1622F8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:36:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE5E3C433D7;
+        Thu, 27 Oct 2022 13:36:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666877791;
+        bh=fcD3i38tih/t450LyEv0RqQmZcGH/IRBhD3dzjW7Ntc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p2dD10/n12DRMFyjak+v7jZXOk9zlkcHhT5zkKeAvSDmH4ZNifqdEJowSy4MfCt0R
+         +R+qYpZtqVX/LIswpRVepyUp3RNVGFAFuQhHljbBupOFwyludIvqvi6lJ0xnJ225r9
+         /zxrKcUw0JG/BX86NeaQ8R5yWoJnWQeHqvJZOQh274ijer8NDA6JIQuCw9qjb45v6p
+         LwUZ4zKsKZYf/F/YetfAkco8c+deTpKiXAkkxAwbw62CnTsTB0wy4LHfitNlaEluG/
+         GNa0oVV2sc16a/PKbNS0p7TyIPdmAYz1x39DPinXHpqX+pN2l9Sht/I00ngRReQySz
+         0S7sXqIps/fEQ==
+Date:   Thu, 27 Oct 2022 14:36:24 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     "Lu, Brent" <brent.lu@intel.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "C, Balamurugan" <balamurugan.c@intel.com>,
+        "Rojewski, Cezary" <cezary.rojewski@intel.com>,
+        Chao Song <chao.song@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        "Wang, Rander" <rander.wang@intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        "Song, Gongjun" <gongjun.song@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        "Chiang, Mac" <mac.chiang@intel.com>,
+        "Reddy, Muralidhar" <muralidhar.reddy@intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Ajye Huang <ajye.huang@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        "Gopal, Vamshi Krishna" <vamshi.krishna.gopal@intel.com>,
+        "Zhi, Yong" <yong.zhi@intel.com>
+Subject: Re: [PATCH 2/2] ASoC: Intel: sof_rt5682: quirk auto detection
+Message-ID: <Y1qJWDXishQ0pWkM@sirena.org.uk>
+References: <20221026071409.3235144-1-brent.lu@intel.com>
+ <20221026071409.3235144-3-brent.lu@intel.com>
+ <6916c126-c710-330a-ffcd-50dd3cdc47d3@linux.intel.com>
+ <CY5PR11MB6257D168A60B712088BC7CF797339@CY5PR11MB6257.namprd11.prod.outlook.com>
+ <bba5dc19-c0c4-2409-6cd2-c8fa91950444@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aSBYaSpkfMbKyRhv"
+Content-Disposition: inline
+In-Reply-To: <bba5dc19-c0c4-2409-6cd2-c8fa91950444@linux.intel.com>
+X-Cookie: Forgive and forget.
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-10-27 at 09:56 -0300, Jason Gunthorpe wrote:
-> On Thu, Oct 27, 2022 at 02:44:49PM +0200, Niklas Schnelle wrote:
-> > On Mon, 2022-10-24 at 13:26 -0300, Jason Gunthorpe wrote:
-> > > On Mon, Oct 24, 2022 at 05:22:24PM +0200, Niklas Schnelle wrote:
-> > > 
-> > > > Thanks for the explanation, still would like to grok this a bit more if
-> > > > you don't mind. If I do read things correctly synchronize_rcu() should
-> > > > run in the conext of the VFIO ioctl in this case and shouldn't block
-> > > > anything else in the kernel, correct? At least that's how I understand
-> > > > the synchronize_rcu() comments and the fact that e.g.
-> > > > net/vmw_vsock/virtio_transport.c:virtio_vsock_remove() also does a
-> > > > synchronize_rcu() and can be triggered from user-space too.
-> > > 
-> > > Yes, but I wouldn't look in the kernel to understand if things are OK
-> > >  
-> > > > So we're
-> > > > more worried about user-space getting slowed down rather than a Denial-
-> > > > of-Service against other kernel tasks.
-> > > 
-> > > Yes, functionally it is OK, but for something like vfio with vIOMMU
-> > > you could be looking at several domains that have to be detached
-> > > sequentially and with grace periods > 1s you can reach multiple
-> > > seconds to complete something like a close() system call. Generally it
-> > > should be weighed carefully
-> > > 
-> > > Jason
-> > 
-> > Thanks for the detailed explanation. Then let's not put a
-> > synchronize_rcu() in detach, as I said as long as the I/O translation
-> > tables are there an IOTLB flush after zpci_unregister_ioat() should
-> > result in an ignorable error. That said, I think if we don't have the
-> > synchronize_rcu() in detach we need it in s390_domain_free() before
-> > freeing the I/O translation tables.
-> 
-> Yes, it would be appropriate to free those using one of the rcu
-> free'rs, (eg kfree_rcu) not synchronize_rcu()
-> 
-> Jason
 
-They are allocated via kmem_cache_alloc() from caches shared by all
-IOMMU's so can't use kfree_rcu() directly. Also we're only freeing the
-entire I/O translation table of one IOMMU at once after it is not used
-anymore. Before that it is only grown. So I think synchronize_rcu() is
-the obvious and simple choice since we only need one grace period.
+--aSBYaSpkfMbKyRhv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Wed, Oct 26, 2022 at 08:30:00PM -0500, Pierre-Louis Bossart wrote:
+> On 10/26/22 19:13, Lu, Brent wrote:
+
+> > I'm thinking about using kernel module parameters for those boards which do not
+> > use default SSP port allocation. Not sure it's doable for machine driver module.
+
+> That's not a working solution IMHO, the kernel parameters should be used
+> by expert developers only for specific and short-term debug. It's not
+> possible to add a dependency on kernel parameters, that would prevent a
+> kernel update.
+
+Right, and it really doesn't work for distributions.
+
+--aSBYaSpkfMbKyRhv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNaiVcACgkQJNaLcl1U
+h9CpWAf9EuU66Nkj3rIR3UHKpodUXBtYkdKdRpjY+l4zDJeggtk6ReDLj3r8Ea/+
+JpKpstTYUlLNorsKoXY6E7N396S8hk+JVGJus+V4Xmea5OFBVQfTu41ueUTkDNBT
+r0d/QSs9l/UGm++YNyWOIgVoftSLfbFwsqqFPw0opUM3ImbB4CDft52x0Mm6StHQ
+riUAV2y+uXmzMK+oE+w8QyegxHttJXkjHcFcM0ok5iAoA7g7bezVVFEE1ndw/T1M
+1HxIMVnKbI4xGcaI6w33rguriufF4mATS0lao/vejizB7OUybHtW9gaQfA73xKDA
+IQMq7EDowX6yJuFM6BLon8N+QfLQaw==
+=spCX
+-----END PGP SIGNATURE-----
+
+--aSBYaSpkfMbKyRhv--
