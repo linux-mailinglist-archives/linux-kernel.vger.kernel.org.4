@@ -2,94 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0D960FF09
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9611060FF0C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235778AbiJ0RNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 13:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
+        id S235861AbiJ0RNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 13:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236072AbiJ0RM6 (ORCPT
+        with ESMTP id S236201AbiJ0RNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 13:12:58 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80980196082
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 10:12:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4hGgb27cTX++8isifWT9xPyeahfYycj+S4eTYQjsVes=; b=UIXAKxL/N5TusR3U8o8CQe+gjC
-        p2G6ER+peColdR9pM128fhsX0DOvtLDX2TMN0Pmc4sSSoiU0B4JbqYSULzqyMCYNNJTYsV5KpKODe
-        /ChrA+hiRQv+KYGcvqqJUdsi8tZaU2eWlYxw+YbFM7db9USrEyaj8AS6RHRjetx0fEz6Yz6W4Q819
-        h/xUJTjc9wn3KKQxJSAAjU0wdAVdfkF6uAZ6aJqTVjp85GtmaEGwLEfr9iGNKPaCuTkLrHZvCCJkx
-        piBuNIeC+hXM/TnAhd3vSRI9lqQBrFaI2wlocj1ePavmNPyTP+jIY2esdAyM8AKhLevWegSVfAsVN
-        +700HA9g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oo6Qw-006v8L-1u; Thu, 27 Oct 2022 17:12:47 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 73B5E30029C;
-        Thu, 27 Oct 2022 19:12:45 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5CD632C450536; Thu, 27 Oct 2022 19:12:45 +0200 (CEST)
-Date:   Thu, 27 Oct 2022 19:12:45 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Ravi Bangoria <ravi.bangoria@amd.com>
-Subject: Re: [tip:perf/core 1/2] kernel/events/core.c:181:48: error:
- redefinition of 'cpu_context' as different kind of symbol
-Message-ID: <Y1q8DcG09Z0PYXEf@hirez.programming.kicks-ass.net>
-References: <202210272227.jWuKg5y6-lkp@intel.com>
+        Thu, 27 Oct 2022 13:13:22 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C2E91A2E23;
+        Thu, 27 Oct 2022 10:13:19 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 29RHD84B031359;
+        Thu, 27 Oct 2022 19:13:08 +0200
+Date:   Thu, 27 Oct 2022 19:13:08 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/nolibc: always rebuild the sysroot when
+ running a test
+Message-ID: <20221027171307.GA30081@1wt.eu>
+References: <20221026054508.19634-1-w@1wt.eu>
+ <20221026164825.GN5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221026195902.GB24197@1wt.eu>
+ <20221026204138.GQ5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221027023456.GA26215@1wt.eu>
+ <20221027170453.GA5600@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202210272227.jWuKg5y6-lkp@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221027170453.GA5600@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 10:03:53PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/core
-> head:   dc39beffcfc19a8dd2a09c5818dcd1a4e9099033
-> commit: 983bd8543b5ab8e9a2870ae258bccd4ce7a22c7c [1/2] perf: Rewrite core context handling
-> config: mips-randconfig-r024-20221026
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install mips cross compiling tool for clang build
->         # apt-get install binutils-mips64el-linux-gnuabi64
->         # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=983bd8543b5ab8e9a2870ae258bccd4ce7a22c7c
->         git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
->         git fetch --no-tags tip perf/core
->         git checkout 983bd8543b5ab8e9a2870ae258bccd4ce7a22c7c
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash kernel/
+On Thu, Oct 27, 2022 at 10:04:53AM -0700, Paul E. McKenney wrote:
+> > > My intent is to push these nolicb patches into the upcoming v6.2
+> > > merge window:
+> > > 
+> > > 2318a710bffbd tools/nolibc: Fix missing strlen() definition and infinite loop with gcc-12
+> > > 6937b8de8f1c3 tools/nolibc/string: Fix memcmp() implementation
+> > > e1bbfe393c900 selftests/nolibc: Add 7 tests for memcmp()
+> > > 3f2c1c45a3a9a selftests/nolibc: Always rebuild the sysroot when running a test
+> > > 
+> > > I didn't see the problem until I queued the third patch (e1bbfe393c900),
+> > > and it is still in -rcu, not in v6.1.
+> > > 
+> > > What am I missing here?
+> > 
+> > I thought that since some of them are fixes, they would be pushed during
+> > 6.1-rc so that we don't release 6.1 with known defects. For example Rasmus'
+> > fix for memcmp() or the strlen() fix would IMHO make sense for this
+> > release since we're aware of the bugs and we have the fixes. The 3rd one
+> > is indeed an addition and in no way a fix and it can easily wait for 6.2.
+> > The 4th one is more of a usability fix but I agree that for this last one
+> > it's debatable, I was mostly seeing this as a possiility to avoid causing
+> > needless confusion.
+> > 
+> > Hoping this clarifies my initial question.
 > 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
+> Very much so, thank you!
 > 
-> All errors (new ones prefixed by >>):
-> 
-> >> kernel/events/core.c:181:48: error: redefinition of 'cpu_context' as different kind of symbol
->    static DEFINE_PER_CPU(struct perf_cpu_context, cpu_context);
->                                                   ^
->    arch/mips/include/asm/mmu_context.h:106:19: note: previous definition is here
->    static inline u64 cpu_context(unsigned int cpu, const struct mm_struct *mm)
+> I was not considering the bug fixed by the first two patches to be
+> serious, my mistake, apologies for my misclassification.
 
-*sigh*.. robot people.. this patch has sat in my queue.git for weeks now
-:/
+No worries, I wasn't probably clear upfront about the purpose.
 
-anyway, lemme go fix, this shouldn't be hard.
+> Given that background, I would rebase these two, test them, and send
+> off a pull request, probably early next week.
+> 
+> 2318a710bffbd tools/nolibc: Fix missing strlen() definition and infinite loop with gcc-12
+> 6937b8de8f1c3 tools/nolibc/string: Fix memcmp() implementation
+
+Perfect, thank you!
+
+> I would push the other two commits into the upcoming merge window.
+
+OK!
+
+> Or might the discussion between you and Rasmus result in changes to
+> either of those first two commits?  If so, I should of course wait for
+> that discussion to resolve.
+
+We'll see, but in any case it would just be a minor detail, but I'll
+give you a quick response so that you don't have to deal with multiple
+versions of the patch, we all know that it's painful.
+
+Thanks!
+Willy
