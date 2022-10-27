@@ -2,216 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FFE760F40A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D981860F417
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234963AbiJ0Jvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 05:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
+        id S234998AbiJ0JzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 05:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234802AbiJ0Jvj (ORCPT
+        with ESMTP id S234438AbiJ0JzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 05:51:39 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AFCD8EEA;
-        Thu, 27 Oct 2022 02:51:38 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Thu, 27 Oct 2022 05:55:16 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F95E4DB0C;
+        Thu, 27 Oct 2022 02:55:15 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 1C154221D4;
-        Thu, 27 Oct 2022 09:51:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1666864297; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lMhDnMZsampgRMF7aSgCvQ+2ib+vll1P4/w4qqcbYrU=;
-        b=o+Xnrhc+P/dGykBrUg4YiT1fyjCP23M39/0Mkg3D08oe15WqtJQcH8B0owXI+4xf4in7bW
-        yHcMDCGpK/Uv0JCPqRURadQD9H1DEIczWzoGVVG2k3bS8Zcwpk38sfzDmRidQj184mUa3r
-        HxZihd3l9bpRPVqyNCQ8t0i/mLyI/oE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1666864297;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lMhDnMZsampgRMF7aSgCvQ+2ib+vll1P4/w4qqcbYrU=;
-        b=AU6KYi2aeqTWCFIX/KbgPTSH1DgsFHj4gyYq6E0qtoww9FVYCY0oGZ0CW+a5z3blUfuhgq
-        dQbMkALsGeuaBMBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D7BD613357;
-        Thu, 27 Oct 2022 09:51:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id o4zMMqdUWmM4bAAAMHmgww
-        (envelope-from <hare@suse.de>); Thu, 27 Oct 2022 09:51:35 +0000
-Message-ID: <331fffd7-b5db-9b4a-42ae-940a6b54a37f@suse.de>
-Date:   Thu, 27 Oct 2022 11:51:34 +0200
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 16B8C6602549;
+        Thu, 27 Oct 2022 10:55:13 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666864513;
+        bh=E41IAV6f0YFdwiPzJRKjlleB+gic/fg4oOMysY+X1RI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KRWPu4lQEtR2fjCvGAakP8NjFXEMXxOMxnSVv9jbGasPU61c4xBuBAFXxmu3Oxqxv
+         uxfKaqCPdVmNVlXqBJ9oxGsCKjE4cPKDFgrQUirNQ2zKEEr4aGoN8loirPtKhT8DVk
+         3V8hcpdYQFCkaQRglxgL+N6LY3BsEGU+mRnTjBDyWZayOtvFgelM7gOQBoaGxkE+1k
+         Jy7qwBRc9q4poRAEbeuLqfA7jKp7SXaPVmZy4znrKG3cO/uOgxnGOqT7TeyeZTdg3i
+         sz3vpcSUbZkiya4rjWjUDIEoLOaK1R8Jc5EPsLhSodQWRmfk/psgvqvXk8/6Bq/nhK
+         Lh9eIhbhATh1g==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     matthias.bgg@gmail.com
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        angelogioacchino.delregno@collabora.com, hsinyi@chromium.org,
+        nfraprado@collabora.com, allen-kh.cheng@mediatek.com,
+        sam.shih@mediatek.com, andrew@lunn.ch, sean.wang@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v2 0/6] MT6795 Devicetrees and Sony Xperia M5
+Date:   Thu, 27 Oct 2022 11:54:58 +0200
+Message-Id: <20221027095504.37432-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH RFC v3 16/22] ata: libata-scsi: Allocate sdev early in
- port probe
-Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        John Garry <john.garry@huawei.com>, axboe@kernel.dk,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        jinpu.wang@cloud.ionos.com, bvanassche@acm.org, hch@lst.de,
-        ming.lei@redhat.com, niklas.cassel@wdc.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linuxarm@huawei.com
-References: <1666693096-180008-1-git-send-email-john.garry@huawei.com>
- <1666693096-180008-17-git-send-email-john.garry@huawei.com>
- <6c0a4a75-786a-c946-57f2-c511bd765bcc@opensource.wdc.com>
- <d4535f4f-d9cf-30de-ce8c-9d8ee9c0decb@suse.de>
- <5417d401-6fb3-c1d7-58df-e24e0013cfb8@opensource.wdc.com>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <5417d401-6fb3-c1d7-58df-e24e0013cfb8@opensource.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/27/22 11:16, Damien Le Moal wrote:
-> On 10/27/22 17:11, Hannes Reinecke wrote:
->> On 10/27/22 03:34, Damien Le Moal wrote:
->>> On 10/25/22 19:18, John Garry wrote:
->>>> Currently the per-ata device sdev is allocated as part of the scsi
->>>> target
->>>> scan, which is after the ata port probe.
->>>>
->>>> However it is useful to have the sdev available in the port probe. As an
->>>> example of an advantage, if the request queue is available in the probe
->>>> (which it would be if the sdev is available), then it is possible to use
->>>> a SCSI cmnd for ATA internal commands. The benefit of this is then we
->>>> can
->>>> put the ATA qc structure in the SCSI cmnd private data. It will also be
->>>> useful if we want to send ATA internal commands as requests.
->>>>
->>>> Export scsi_target_reap() so that it can be used to put the extra
->>>> reference we get when allocating the sdev.
->>>>
->>>> Signed-off-by: John Garry <john.garry@huawei.com>
->>>> ---
->>>>    drivers/ata/libata-eh.c   |  1 +
->>>>    drivers/ata/libata-scsi.c | 23 +++++++++--------------
->>>>    drivers/scsi/scsi_scan.c  |  1 +
->>>>    3 files changed, 11 insertions(+), 14 deletions(-)
->>>>
->>>> diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
->>>> index 08e11bc312c2..1ed5b1b64792 100644
->>>> --- a/drivers/ata/libata-eh.c
->>>> +++ b/drivers/ata/libata-eh.c
->>>> @@ -3446,6 +3446,7 @@ static int ata_eh_schedule_probe(struct
->>>> ata_device *dev)
->>>>          ata_eh_detach_dev(dev);
->>>>        ata_dev_init(dev);
->>>> +    ata_scsi_setup_sdev(dev);
->>>>        ehc->did_probe_mask |= (1 << dev->devno);
->>>>        ehc->i.action |= ATA_EH_RESET;
->>>>        ehc->saved_xfer_mode[dev->devno] = 0;
->>>> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
->>>> index efdba852e363..476e0ef4bd29 100644
->>>> --- a/drivers/ata/libata-scsi.c
->>>> +++ b/drivers/ata/libata-scsi.c
->>>> @@ -1109,7 +1109,12 @@ int ata_scsi_dev_config(struct scsi_device
->>>> *sdev, struct ata_device *dev)
->>>>        if (dev->flags & ATA_DFLAG_TRUSTED)
->>>>            sdev->security_supported = 1;
->>>>    -    dev->sdev = sdev;
->>>> +    /*
->>>> +     * Put extra reference which we get when allocating the starget
->>>> +     * initially
->>>> +     */
->>>> +    scsi_target_reap(scsi_target(sdev));
->>>> +
->>>>        return 0;
->>>>    }
->>>>    @@ -4289,26 +4294,16 @@ void ata_scsi_scan_host(struct ata_port
->>>> *ap, int sync)
->>>>     repeat:
->>>>        ata_for_each_link(link, ap, EDGE) {
->>>>            ata_for_each_dev(dev, link, ENABLED) {
->>>> -            struct scsi_device *sdev;
->>>> +            struct Scsi_Host *shost = ap->scsi_host;
->>>>                int channel = 0, id = 0;
->>>>    -            if (dev->sdev)
->>>> -                continue;
->>>> -
->>>>                if (ata_is_host_link(link))
->>>>                    id = dev->devno;
->>>>                else
->>>>                    channel = link->pmp;
->>>>    -            sdev = __scsi_add_device(ap->scsi_host, channel, id, 0,
->>>> -                         NULL);
->>>> -            if (!IS_ERR(sdev)) {
->>>> -                dev->sdev = sdev;
->>>> -                ata_scsi_assign_ofnode(dev, ap);
->>>
->>> Is there something equivalent to what this function does inside
->>> scsi_scan_target() ? I had a quick look but did not see anything...
->>>
->> Typically, the SCSI layer has two ways of scanning.
->> One it the old-style serial scanning (originating in the old SCSI
->> parallel model):
->> The scanning code will blindly scan _all_ devices up to max_luns, and
->> attach every device for which the scanning code returns 'OK'.
->> The other one is to issue REPORT_LUNS and scan all LUNs returned there.
->>
->> Mapped to libata we would need to figure out a stable SCSI enumeration,
->> given that we have PMP and slave devices to content with.
->> To my knowledge we have ATA ports, each can have either a 'master' and
->> 'slave' device, _or_ it be a PMP port when it can support up to 16
->> devices, right?
-> 
-> yes
-> 
->> Point being, master/slave and PMP are exclusive, right?
-> 
-> Never heard of pmp with ide cable :)
-> 
-See?
+This series brings some more support for the MT6795 SoC, as it
+adds support for basic clock controllers (and resets) and all
+of the mtk-sd mmc controllers.
 
->> So we can make the master as LUN 0, and the slave as LUN 1.
-> 
-> Yes, but isn't that a little wrong ? That would assume that the ata port
-> is the device and the ata devices the luns of that device. But beside
-> the "link busy" stuff that needs to be dealt with, master and slave are
-> independent devices, unlike LUNs. No ?
-> Well; technically, yes.
+While at it, since now it's possible to get the "first signs of
+life" out of a MT6795 smartphone platform, add a basic devicetree
+for the Sony Xperia M5 (codename "Holly") device as to start
+preparing the ground for a gradual bringup.
 
-But we already enumerate the ata ports (which is typically done by the 
-hardware/PCI layer etc), and if we were try to model slave devices as 
-independent ports we would either have to insert a numbering (awkward) 
-or add a number at the en (even more awkward).
+This series depends on [1] my mt6795 clocks series.
 
-And the one key takeaway from the 'multiple actuators' discussion is 
-that LUNs _are_ independent (cf all the hoops they had to jump through 
-to define a command spanning several LUNs ...)(which, incidentally, we 
-could leverage here, too ...), and the target port really only serves as 
-an enumeration thingie to address the LUNs.
+P.S.: Thumbs up for the first MediaTek-powered ARM64 smartphone
+      going upstream! :-) :-) :-)
 
-So we _could_ map the master device on LUN 0 and the slave device on LUN 
-1 with no loss of functionality, _but_ enable a consistent SCSI enumeration.
+Changes in v2:
+ - Rebased over next-20221026
+ - Removed "mediatek,mt8173-mmc" from mmc compatible strings
+ - Added clock and reset dt-bindings headers inclusions
 
-Cheers,
+AngeloGioacchino Del Regno (6):
+  arm64: dts: mediatek: mt6795: Add topckgen, infra, peri clocks/resets
+  arm64: dts: mediatek: mt6795: Replace UART dummy clocks with pericfg
+  arm64: dts: mediatek: mt6795: Add support for APDMA and wire up UART
+    DMAs
+  arm64: dts: mediatek: mt6795: Add support for eMMC/SD/SDIO controllers
+  dt-bindings: arm: mediatek: Add compatible for MT6795 Sony Xperia M5
+  arm64: dts: mediatek: Add support for MT6795 Sony Xperia M5 smartphone
 
-Hannes
+ .../devicetree/bindings/arm/mediatek.yaml     |   1 +
+ arch/arm64/boot/dts/mediatek/Makefile         |   1 +
+ .../dts/mediatek/mt6795-sony-xperia-m5.dts    |  88 ++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt6795.dtsi      | 109 +++++++++++++++++-
+ 4 files changed, 195 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
+
 -- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
-Myers, Andrew McDonald, Martje Boudien Moerman
+2.37.2
 
