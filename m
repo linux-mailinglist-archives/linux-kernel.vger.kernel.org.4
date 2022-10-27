@@ -2,142 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0AB60F9AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2191B60F9B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235928AbiJ0Nvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 09:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
+        id S235672AbiJ0Nwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 09:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234722AbiJ0Nvl (ORCPT
+        with ESMTP id S233403AbiJ0Nwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 09:51:41 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9CAAE848;
-        Thu, 27 Oct 2022 06:51:41 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id 2CED12B06761;
-        Thu, 27 Oct 2022 09:51:39 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 27 Oct 2022 09:51:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1666878698; x=
-        1666885898; bh=BSp3Kt1CP/UIPrkqEaKO1IGC4x0aoj/K3CvNuObJG+4=; b=V
-        u4h04XPewPJOObdRSiXlmHjStO2q1ZlSAemu2uiCbBiMPFj+1IJOKTamvgHn97xo
-        Yxt1Htb8K3hW8FSlkWWD/f2l+s7HAsGKklkT6Gd5dfmf0ZLHrd8ua3KhOa4Fibh/
-        KyKhwea2NRtfRpEuqQJpn6jOSaN4grRV0Cx1PEF3l0Ga08Z/SWRkHuCtVbl8S9CW
-        /v/VMcy1h3Bwe467PG8e7SzgNTvNEqhLut7YzNjiUSkC5ADly0ap02zmtATPezj/
-        K4qV3Wy6uN3KHKtPPfuOHaSllNYE/dHCEg0Yc6Oba/tFGf1SOxZVycdZ+u25hPrP
-        cXSuZpORjee4ewRmYt8+Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666878698; x=
-        1666885898; bh=BSp3Kt1CP/UIPrkqEaKO1IGC4x0aoj/K3CvNuObJG+4=; b=E
-        f4Wyv318BAPYiYC2TH+RSfT5kKjAWOJCnL0DpP3z7oekGSg9v70Nt6riKLR2Mrf7
-        3XJJT7mF9gUJJJBrE6WgV+W4iNbi6NnHJwB8neypu7ZC1/fMUTcqf6K3c69lz0x1
-        Cwy/YA8TP1vkDErjSD7Kl3+cXExfbCs6V/uoRqL4ecJOuUmOt7qRSRQ31hOcj8Lv
-        rRGgg1BXa26G65fvu/wzn7BCHgoWRsk679fPx4oe5jEbVtZdxl9IMXjYEQROE5Es
-        /hHCpkkAdjH9f4Soo4FbACoUJsQB0s8z6bGA1POFSrieLSzqYQadTtrG4lDTTxC6
-        wQs0LgraFwj/yGfzSKjlg==
-X-ME-Sender: <xms:6oxaY6nLIRcvPUzL60_v5JNbqpnmXtWxEFBguZEsgb5yZGiEKUvFOA>
-    <xme:6oxaYx2pH8zbub3-QVXtX32CGJAfGvXCQLL745LbTIQq8kkB4cRYJqLfr_YwvhPiC
-    _0J9MGwd2ZQgeG26GY>
-X-ME-Received: <xmr:6oxaY4pnh18AzCLnwQzB8C0Y9cWIrFe0uFJYfrP2prOHnm6HRzDjz82lEm9tBBffG2R0kw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeggdeijecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtugfgjgesthektddttddtjeenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefgjeeikefffeefvedugfdtkedvhfdttdeifeev
-    tdehgefgjeffleelgffggfdvkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:6oxaY-l9yLcjXPX0UlLylen9OqVlwB3vvHnt90ISAztI_fR3GQ8-AQ>
-    <xmx:6oxaY422jL5fNlbaxSN6-BVk9hfUcpPySj62Vj1gfurf4uTEu3kuZQ>
-    <xmx:6oxaY1sEz56le7prsp2SatQYhP2-ZbxXZ9q17tvbH37wEt89VsGQEA>
-    <xmx:6oxaYyUW3WQUdCgiwxbC6CKA235qlnAsr6R6vBjJTl04RyKBT94tIsgGDqw>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 27 Oct 2022 09:51:37 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id AA1A2104B71; Thu, 27 Oct 2022 16:51:34 +0300 (+03)
-Date:   Thu, 27 Oct 2022 16:51:34 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "Li, Xiaoyao" <xiaoyao.li@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v6 01/21] x86/tdx: Use enum to define page level of TDX
- supported page sizes
-Message-ID: <20221027135134.ya62y6lg2kh4yujb@box.shutemov.name>
-References: <cover.1666824663.git.kai.huang@intel.com>
- <8a5b40d43f8b993a48b99d6647b16a82b433627c.1666824663.git.kai.huang@intel.com>
- <80e8111b-76a2-4999-782b-fdd4b9f425fa@intel.com>
- <d19c81ef34856f72c964322a7390d6fa21976e6f.camel@intel.com>
+        Thu, 27 Oct 2022 09:52:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C581D16655D
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:52:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666878747;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=J3Fq153B9PaKBw4UwH16xPw9HcajjAUr3ziTEO7//xc=;
+        b=i0fZ9H/VN0NCfDQeh3kwUFgsVilXjUVXuWUP31Fb22fZ3ydpYMvGixM5gvgphRuwjWB5d0
+        j+pNMJfx35H2ahK/3M8ShrQgGtOmsKdJj+ArRQurAE+876DperyLVUgm4zdsvgAYUKegyR
+        XJTZ8Ot+KdcGCckNcY/J3T77CBqqC3o=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-58-rzb8YtayMOebD4r3zSmchA-1; Thu, 27 Oct 2022 09:52:24 -0400
+X-MC-Unique: rzb8YtayMOebD4r3zSmchA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 646E32A59558;
+        Thu, 27 Oct 2022 13:52:22 +0000 (UTC)
+Received: from localhost (ovpn-12-121.pek2.redhat.com [10.72.12.121])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8429F403162;
+        Thu, 27 Oct 2022 13:52:08 +0000 (UTC)
+Date:   Thu, 27 Oct 2022 21:52:04 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     David Hildenbrand <david@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Eric DeVolder <eric.devolder@oracle.com>
+Cc:     Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
+        sourabhjain@linux.ibm.com, linux-mm@kvack.org
+Subject: Re: [PATCH v12 7/7] x86/crash: Add x86 crash hotplug support
+Message-ID: <Y1qNBDY99Ypan9Ok@MiWiFi-R3L-srv>
+References: <d6386653-eb71-188c-8a09-5db46b4e42d4@oracle.com>
+ <YzcqE1RVtPcuLlxN@zn.tnic>
+ <Y0Dh4ieUUZ4oXa1/@MiWiFi-R3L-srv>
+ <Y0b9apyIs+RpSo1e@zn.tnic>
+ <53aed03e-2eed-09b1-9532-fe4e497ea47d@oracle.com>
+ <Y0cmaPTKQuWtwIRh@zn.tnic>
+ <Y0d+mFivS+88+Chr@MiWiFi-R3L-srv>
+ <Y1e7Hw0PRDI9NxU9@zn.tnic>
+ <Y1lIoTBNvHrKX5K9@MiWiFi-R3L-srv>
+ <d2ce1bed-a053-4840-2e84-643b678392c1@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d19c81ef34856f72c964322a7390d6fa21976e6f.camel@intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d2ce1bed-a053-4840-2e84-643b678392c1@redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 08:42:16AM +0000, Huang, Kai wrote:
-> On Thu, 2022-10-27 at 15:08 +0800, Li, Xiaoyao wrote:
-> > > @@ -663,27 +662,16 @@ static bool try_accept_one(phys_addr_t *start,
-> > > unsigned long len,
-> > >    	if (len < accept_size)
-> > >    		return false;
-> > >    
-> > > +	/* TDX only supports 4K/2M/1G page sizes */
-> > 
-> > yes, a page can be mapped as 1G size to TD via secure/shared EPT. But 
-> > for this particular TDX_ACCEPT_PAGE case, it only supports 4K and 2M 
-> > currently, which is defined in TDX module spec.
+On 10/26/22 at 04:54pm, David Hildenbrand wrote:
+> On 26.10.22 16:48, Baoquan He wrote:
+> > On 10/25/22 at 12:31pm, Borislav Petkov wrote:
+> > > On Thu, Oct 13, 2022 at 10:57:28AM +0800, Baoquan He wrote:
+> > > > The concern to range number mainly is on Virt guest systems.
+> > > 
+> > > And why would virt emulate 1K hotpluggable DIMM slots and not emulate a
+> > > real machine?
 > 
-> I checked the TDX module public spec, and it appears you are right.  But I am
-> not sure whether it will be changed in the future?
+> IIRC, ACPI only allows for 256 slots. PPC dlpar might provide more.
+> 
+> > 
+> > Well, currently, mem hotpug is an important feature on virt system to
+> > dynamically increase/shrink memory on the system. If only emulating real
+> > machine, it won't be different than bare metal system.
+> > 
+> > IIRC, the ballon driver or virtio-mem feature can add memory board, e.g
+> > 1G, block size is 128M, 8 blocks added. When shrinking this 1G memory
+> > later, it will take best effort way to hot remove memory. Means if any
+> > memory block is occupied, it will be kept there. Finally we could only
+> > remove every second blocks, 4 blocks altogether. Then the left
+> > un-removed blocks will produce 4 separate memory regions. Like this, a
+> > virt guest could have many memory regions in kernel after memory
+> > being added/removed.
+> > 
+> > If I am wrong, Please correct me, David.
+> 
+> Yes, virtio-mem (but also PPC dlpar) can result in many individual memory
+> blocks with holes in between after hotunplug. Hotplug OTOH, usually tries to
+> "plug" these holes and reduce the total number of memory blocks. It might be
+> rare that our range will be heavily fragmented after unplug, but it's
+> certainly possible.
+> 
+> [...]
+> 
+> > 
+> > Yes, now assume we have a HPE SGI system and it has memory hotplug
+> > capacity. The system itself has already got memory regions more than
+> > 1024. Then when we hot add extra memory board, we want to include the
+> > newly added memory regions into elfcorehdr so that it will be dumped out
+> > in kdump kernel.
+> > 
+> > That's why I earlier suggested 2048 for number of memory regions.
+> 
+> The more the better, unless "it hurts". Assuming a single memory block is
+> 128 MiB, that would be 256 GiB.
+> 
+> Usually, on big systems, the memory block size is 2 GiB. So 4 TiB.
 
-The spec says:
+Thanks a lot for these valuable inputs, David.
 
-	Level of the Secure EPT entry that maps the private page to be
-	accepted: either 0 (4KB) or 1 (2MB) – see 20.5.1
+Hi Boris, Eric
 
-Yes, it is about 4k and 2M, but it also refers 20.5.1, which lists sizes
-up to 16PB.
+So what's your suggested value for the Kconfig option?
 
-Ultimately, it does not matter: if TDX module doesn't support the size or
-cannot accept the memory for other reason guest kernel will fallback to
-smaller size.
+1) cpu number, 1024?
+2) memory regions, 2048?
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+About below draft, any comment? We can decide a value based on our
+knowledge, can adjust later if any real system has more than the number.
+
++config CRASH_ELF_CORE_PHDRS_NUM
++       depends on CRASH_DUMP && KEXEC_FILE && (HOTPLUG_CPU || MEMORY_HOTPLUG)
++       int
++       default 3072
++       help
++         For the kexec_file_load path, specify the default number of
++         phdr for the vmcore. E.g the memory regions represented by the
++         'System RAM' entries in /proc/iomem, the cpu notes of each
++         present cpu stored in /sys/devices/system/cpu/cpuX/crash_notes.
+
+Thanks
+Baoquan
+
