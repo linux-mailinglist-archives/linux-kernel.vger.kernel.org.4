@@ -2,117 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3DF6101F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0FC46101FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236686AbiJ0Tuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 15:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
+        id S236690AbiJ0TxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 15:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236674AbiJ0Tur (ORCPT
+        with ESMTP id S236017AbiJ0Tw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 15:50:47 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2722D83065
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:50:47 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id z30so1877463qkz.13
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:50:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kbezypLSh6VqVrml1sow4ORDBJYuza2zbwBxxGpFPDA=;
-        b=eBgGVKYJyj4We/SuivLC6BwwBqgII9xtrjF/sFCHLnRTpB9AMjVsXRufVAPqW1/f5Z
-         AIFelc1gdCtlL8b+YLbrGYSvlzYWB2es1VVyEMRHdGmo1wEkFBT4hHIspgf9LJVxO7J8
-         pC6evljIB5NSDQRfDNKmDd97XWRMY2u3f6TDiX1m8z1xS1XIh7TBp0rTFomgm+PML54a
-         B0EZb9Nl25NpxGnrqcP1P3cQ+GS/ZsKyHk14WixF+xsXVoJOxPgixqxPAwl1K3gFG9UA
-         cqW7h5mevXMpjTxGVm/uoj3jO1zjpGCM6rt/G8tJ24UMcWyNTw4YvKDRYF7scmD02+lW
-         U7KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kbezypLSh6VqVrml1sow4ORDBJYuza2zbwBxxGpFPDA=;
-        b=2wVnsQL/BedWeEw1n7hf9Rs6PscjJQ3A3GiaF44rfyd7L00KW0BoOBPgvbdxOH0fMg
-         Cc3ScWI0pc8RoyYG77K2XR7Xo6VcTxE5tvjdXJ2MWAb04qLTUiATx/1Sk8jt7Dcjiuih
-         LiSzyfgFihJ/HSo6OGRVJnwZtOB+eGwbHCQvk5iyKKQDPD2iyJhu4yoefDZpC/oFBvk1
-         SDcQJGnZTqMPMbBMajdyB7A1ISZMfxL6DjJHFeyuahYlMl1F4Q+6K+fviNE/XGOA9E3t
-         MlOP3+xSBdUaVJZ0D+lXEFD7e/7foPlUbHBnA3zcFYFaHe6NUtVExOXfOecWdF+cf3Oz
-         y6wQ==
-X-Gm-Message-State: ACrzQf3qXeI7U1hpeaNcaZpPNxhElEK9naCa58CtyvZnTK/P5gx9OZaX
-        SmpEOsPhCHA+N1RoxtSvDnW/HNHeACAwtw==
-X-Google-Smtp-Source: AMsMyM6LTS7BtcvY/zWy3LToVw/XhVt7yE0EBvt3tWq92IOeauHtb3KD6v0WYhteRY1I5+51zvCr4w==
-X-Received: by 2002:a05:622a:44b:b0:39c:f5bf:694d with SMTP id o11-20020a05622a044b00b0039cf5bf694dmr41610361qtx.531.1666900235578;
-        Thu, 27 Oct 2022 12:50:35 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id y14-20020a05620a25ce00b006ec62032d3dsm1577665qko.30.2022.10.27.12.50.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 12:50:34 -0700 (PDT)
-Message-ID: <e28b84fa-8830-65ad-24b9-bd64410fe4ab@linaro.org>
-Date:   Thu, 27 Oct 2022 15:50:32 -0400
+        Thu, 27 Oct 2022 15:52:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5E885A83;
+        Thu, 27 Oct 2022 12:52:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC730624C8;
+        Thu, 27 Oct 2022 19:52:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DB6CC433D6;
+        Thu, 27 Oct 2022 19:52:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666900376;
+        bh=35cFf88kblVuwSgahftZiRQRYQbkqp7M3ibAvifLwnQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cVO/GHMPGprH3caldUb141wNEv7znCzlhkzwQLKHBqih2wnXFR+D+D4eKDbHATdLz
+         dmzTEtzhKzDBiwuSVaqPaLx4W3HZDODH1ekvGQww03b4+ZekZP8rwtzymg44UuGrbk
+         k9BmDtzXMNTrFDsSC6MRQMCITRguw3Syjmr41rSesBwO+pmfRHjasHfZ6stfA3gXvT
+         6HSyNo+uWu692nnxZbv2iD4nCJ5cEKdADcZP7sVyh8ydAnvLdOonHcztKU7HGfoziK
+         AUxnGf/++G+ioNTD1on1w7LF0ddmyYdoJNLlpOMAHGizjtEGmS3nOUkS8gBnM0S8Ji
+         HOhhsfsmrbYzg==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Quan Nguyen <quan@os.amperecomputing.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH -next] hwmon: (smpro-hwmon) Add missing break in smpro_is_visible()
+Date:   Thu, 27 Oct 2022 12:52:38 -0700
+Message-Id: <20221027195238.1789586-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCHv2 1/1] dt-bindings: net: snps,dwmac: Document queue config
- subnodes
-Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20221027163119.107092-1-sebastian.reichel@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221027163119.107092-1-sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/10/2022 12:31, Sebastian Reichel wrote:
-> The queue configuration is referenced by snps,mtl-rx-config and
-> snps,mtl-tx-config. Some in-tree DTs and the example put the
-> referenced config nodes directly beneath the root node, but
-> most in-tree DTs put it as child node of the dwmac node.
-> 
-> This adds proper description for this setup, which has the
-> advantage of validating the queue configuration node content.
-> 
-> The example is also updated to use the sub-node style, incl.
-> the axi bus configuration node, which got the same treatment
-> as the queues config in 5361660af6d3 ("dt-bindings: net: snps,dwmac:
-> Document stmmac-axi-config subnode").
-> 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
-> Changes since PATCHv1:
->  * https://lore.kernel.org/all/20221021171055.85888-1-sebastian.reichel@collabora.com/
->  * add logic to make booleans that are actually enums mutually exclusive
->  * fix type of "snps,send_slope", "snps,idle_slope", "snps,high_credit" and "snps,low_credit"
->  * add missing 'additionalProperties: false' in rx-queues-config -> "^queue[0-9]$"
->  * add missing 'additionalProperties: false' in tx-queues-config -> "^queue[0-9]$"
->  * update example to follow the sub-node style
+Clang warns:
 
-Uh, this grew big... Thanks for fixing it.
+  drivers/hwmon/smpro-hwmon.c:378:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+          default:
+          ^
+  drivers/hwmon/smpro-hwmon.c:378:2: note: insert 'break;' to avoid fall-through
+          default:
+          ^
+          break;
+  1 error generated.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Clang is a little more pedantic than GCC, which does not warn when
+falling through to a case that is just break or return. Clang's version
+is more in line with the kernel's own stance in deprecated.rst, which
+states that all switch/case blocks must end in either break,
+fallthrough, continue, goto, or return. Add the missing break to silence
+the warning.
 
-Best regards,
-Krzysztof
+Fixes: a87456864cbb ("hwmon: Add Ampere's Altra smpro-hwmon driver")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1751
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/hwmon/smpro-hwmon.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/hwmon/smpro-hwmon.c b/drivers/hwmon/smpro-hwmon.c
+index ee54e21c2c12..667e88b6bae5 100644
+--- a/drivers/hwmon/smpro-hwmon.c
++++ b/drivers/hwmon/smpro-hwmon.c
+@@ -375,6 +375,7 @@ static umode_t smpro_is_visible(const void *data, enum hwmon_sensor_types type,
+ 				return 0;
+ 		break;
+ 		}
++		break;
+ 	default:
+ 		break;
+ 	}
+
+base-commit: 0ffb687b6508c36a17b99bdaf014b38532404182
+-- 
+2.38.1
 
