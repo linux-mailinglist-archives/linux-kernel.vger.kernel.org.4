@@ -2,99 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9611060FF0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48BD60FF1A
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235861AbiJ0RNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 13:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
+        id S234791AbiJ0ROt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 13:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236201AbiJ0RNW (ORCPT
+        with ESMTP id S235239AbiJ0ROq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 13:13:22 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C2E91A2E23;
-        Thu, 27 Oct 2022 10:13:19 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 29RHD84B031359;
-        Thu, 27 Oct 2022 19:13:08 +0200
-Date:   Thu, 27 Oct 2022 19:13:08 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/nolibc: always rebuild the sysroot when
- running a test
-Message-ID: <20221027171307.GA30081@1wt.eu>
-References: <20221026054508.19634-1-w@1wt.eu>
- <20221026164825.GN5600@paulmck-ThinkPad-P17-Gen-1>
- <20221026195902.GB24197@1wt.eu>
- <20221026204138.GQ5600@paulmck-ThinkPad-P17-Gen-1>
- <20221027023456.GA26215@1wt.eu>
- <20221027170453.GA5600@paulmck-ThinkPad-P17-Gen-1>
+        Thu, 27 Oct 2022 13:14:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD23264A;
+        Thu, 27 Oct 2022 10:14:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89597B826D7;
+        Thu, 27 Oct 2022 17:14:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6FCAC433C1;
+        Thu, 27 Oct 2022 17:14:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666890879;
+        bh=k+aoyyn+rNCjwBk+i7ZtBHKKkShng0Ez7j/+Qq6YQYM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IT6ovDv1uwtX6yb/kvPj3J2SfhAfu7zp0GOPfvzVjNnXMf82mYZSGQIieEtdZFX8s
+         WQq709mp1gPK/zjrJn6i0GO3dbrqX8eRwtzgcGjqtKnwMjSmoxM+f1WxobcuKdi5++
+         uyoBkRRF6NjP6/wQMq1Tcgf3YEpT+xi66m5UPwJk=
+Date:   Thu, 27 Oct 2022 19:13:47 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     casey.schaufler@intel.com, paul@paul-moore.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        keescook@chromium.org, john.johansen@canonical.com,
+        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        mic@digikod.net
+Subject: Re: [PATCH v1 4/8] LSM: Maintain a table of LSM attribute data
+Message-ID: <Y1q8SzpcdWgm/fLq@kroah.com>
+References: <20221025184519.13231-1-casey@schaufler-ca.com>
+ <20221025184519.13231-5-casey@schaufler-ca.com>
+ <Y1jNGMKfb+NUPrJS@kroah.com>
+ <e3949b66-26fe-807e-a626-79ca78396e8a@schaufler-ca.com>
+ <Y1olXIbTGx9NnthU@kroah.com>
+ <d545ef2a-5cc5-2848-e699-ff791d34d7c7@schaufler-ca.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221027170453.GA5600@paulmck-ThinkPad-P17-Gen-1>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d545ef2a-5cc5-2848-e699-ff791d34d7c7@schaufler-ca.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 10:04:53AM -0700, Paul E. McKenney wrote:
-> > > My intent is to push these nolicb patches into the upcoming v6.2
-> > > merge window:
-> > > 
-> > > 2318a710bffbd tools/nolibc: Fix missing strlen() definition and infinite loop with gcc-12
-> > > 6937b8de8f1c3 tools/nolibc/string: Fix memcmp() implementation
-> > > e1bbfe393c900 selftests/nolibc: Add 7 tests for memcmp()
-> > > 3f2c1c45a3a9a selftests/nolibc: Always rebuild the sysroot when running a test
-> > > 
-> > > I didn't see the problem until I queued the third patch (e1bbfe393c900),
-> > > and it is still in -rcu, not in v6.1.
-> > > 
-> > > What am I missing here?
-> > 
-> > I thought that since some of them are fixes, they would be pushed during
-> > 6.1-rc so that we don't release 6.1 with known defects. For example Rasmus'
-> > fix for memcmp() or the strlen() fix would IMHO make sense for this
-> > release since we're aware of the bugs and we have the fixes. The 3rd one
-> > is indeed an addition and in no way a fix and it can easily wait for 6.2.
-> > The 4th one is more of a usability fix but I agree that for this last one
-> > it's debatable, I was mostly seeing this as a possiility to avoid causing
-> > needless confusion.
-> > 
-> > Hoping this clarifies my initial question.
+On Thu, Oct 27, 2022 at 10:08:23AM -0700, Casey Schaufler wrote:
+> On 10/26/2022 11:29 PM, Greg KH wrote:
+> > On Wed, Oct 26, 2022 at 05:38:21PM -0700, Casey Schaufler wrote:
+> >> On 10/25/2022 11:00 PM, Greg KH wrote:
+> >>> On Tue, Oct 25, 2022 at 11:45:15AM -0700, Casey Schaufler wrote:
+> >>>> As LSMs are registered add their lsm_id pointers to a table.
+> >>>> This will be used later for attribute reporting.
+> >>>>
+> >>>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> >>>> ---
+> >>>>  include/linux/security.h | 17 +++++++++++++++++
+> >>>>  security/security.c      | 18 ++++++++++++++++++
+> >>>>  2 files changed, 35 insertions(+)
+> >>>>
+> >>>> diff --git a/include/linux/security.h b/include/linux/security.h
+> >>>> index ca1b7109c0db..e1678594d983 100644
+> >>>> --- a/include/linux/security.h
+> >>>> +++ b/include/linux/security.h
+> >>>> @@ -138,6 +138,23 @@ enum lockdown_reason {
+> >>>>  
+> >>>>  extern const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1];
+> >>>>  
+> >>>> +#define LSMID_ENTRIES ( \
+> >>>> +	1 + /* capabilities */ \
+> >>> No #define for capabilities?
+> >> Nope. There isn't one. CONFIG_SECURITY takes care of it.
+> >>
+> >>>> +	(IS_ENABLED(CONFIG_SECURITY_SELINUX) ? 1 : 0) + \
+> >>>> +	(IS_ENABLED(CONFIG_SECURITY_SMACK) ? 1 : 0) + \
+> >>>> +	(IS_ENABLED(CONFIG_SECURITY_TOMOYO) ? 1 : 0) + \
+> >>>> +	(IS_ENABLED(CONFIG_SECURITY_IMA) ? 1 : 0) + \
+> >>>> +	(IS_ENABLED(CONFIG_SECURITY_APPARMOR) ? 1 : 0) + \
+> >>>> +	(IS_ENABLED(CONFIG_SECURITY_YAMA) ? 1 : 0) + \
+> >>>> +	(IS_ENABLED(CONFIG_SECURITY_LOADPIN) ? 1 : 0) + \
+> >>>> +	(IS_ENABLED(CONFIG_SECURITY_SAFESETID) ? 1 : 0) + \
+> >>>> +	(IS_ENABLED(CONFIG_SECURITY_LOCKDOWN) ? 1 : 0) + \
+> >>>> +	(IS_ENABLED(CONFIG_BPF_LSM) ? 1 : 0) + \
+> >>>> +	(IS_ENABLED(CONFIG_SECURITY_LANDLOCK) ? 1 : 0))
+> >>>> +
+> >>>> +extern int lsm_id;
+> >>> u64?
+> >> u32. I doubt we'll get more than 32K security modules.
+> > These should be bits, not values, right?
 > 
-> Very much so, thank you!
+> lsm_id is the count of security modules that are registered.
+> It seemed like a good name for the value at the time, but as
+> it's causing confusion I should probably change it.
+
+Yeah, that's confusing.  "lsm_num_availble" might be better.
+
+> > Wait, this magic entry value is going to change depeneding on what is,
+> > or is not, enabled.  How is that a stable user/kernel api at all?
+> >
+> > confused.
 > 
-> I was not considering the bug fixed by the first two patches to be
-> serious, my mistake, apologies for my misclassification.
-
-No worries, I wasn't probably clear upfront about the purpose.
-
-> Given that background, I would rebase these two, test them, and send
-> off a pull request, probably early next week.
+> I'll clarify.
 > 
-> 2318a710bffbd tools/nolibc: Fix missing strlen() definition and infinite loop with gcc-12
-> 6937b8de8f1c3 tools/nolibc/string: Fix memcmp() implementation
+> This patch isn't implementing an API, but is required by subsequent
+> patches that do. Does linux-api want to see patches that are in support
+> of APIs, or just those with actual API implementation?
 
-Perfect, thank you!
+There's nothing wrong with seeing this patch, I was just confused as it
+seemed to be a user facing api.  It wasn't obvious to me, sorry.
 
-> I would push the other two commits into the upcoming merge window.
-
-OK!
-
-> Or might the discussion between you and Rasmus result in changes to
-> either of those first two commits?  If so, I should of course wait for
-> that discussion to resolve.
-
-We'll see, but in any case it would just be a minor detail, but I'll
-give you a quick response so that you don't have to deal with multiple
-versions of the patch, we all know that it's painful.
-
-Thanks!
-Willy
+greg k-h
