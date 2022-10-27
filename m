@@ -2,79 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B91160FD87
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B79F60FD8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236274AbiJ0QxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 12:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
+        id S235458AbiJ0Qxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 12:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235396AbiJ0Qwt (ORCPT
+        with ESMTP id S235579AbiJ0QxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 12:52:49 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F4D19D88C;
-        Thu, 27 Oct 2022 09:51:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HICjCe/T3KktXFKRv+wo+yHgKZxC3DJ5boYWFpCcesE=; b=ibo+HdQTm3+r0wK7uqOdAST2le
-        gsw90CiCXIlAGkIzYEC7A+1vAxYVvC2H0hZ10bgepKdLD3/JvHNjHYDSLBj6+IMEOO2t04AEf1jU5
-        lu5U0nhrME+intT5DAO17p3zcr7TRGet6GnYJ2BJhLU/oAH8PbQD7ZdsHHdw75fDQWPxqDqypniA2
-        fTj5J2gsP69L25Yrd0GAmXLnost182Tc7hcAyZJFAw3ovutFVUEzk+DjqTdznsdJ2E+BrW0AIFxFL
-        kvXKgp74xWaP05RzSk/0hHsCaffJDUb4wbrqJOGF1vL51uheP2Y1gdQ8hpRXL7tUPBTLBx0Q9kbfO
-        u8asqKmQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oo662-006uvv-BB; Thu, 27 Oct 2022 16:51:10 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5D75330008D;
-        Thu, 27 Oct 2022 18:51:09 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 374FA2C64658F; Thu, 27 Oct 2022 18:51:09 +0200 (CEST)
-Date:   Thu, 27 Oct 2022 18:51:09 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Yujie Liu <yujie.liu@intel.com>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        fengwei.yin@intel.com, ying.huang@intel.com,
-        fstests@vger.kernel.org, linux-xfs@vger.kernel.org
-Subject: Re: [tip:x86/core] [kallsyms] f138918162:
- WARNING:CPU:#PID:#at_fs/xfs/xfs_message.c:#xfs_buf_alert_ratelimited.cold-#[xfs]
-Message-ID: <Y1q2/fdvXI67MRch@hirez.programming.kicks-ass.net>
-References: <202210241614.2ae4c1f5-yujie.liu@intel.com>
- <Y1kDEmLeRA2UGeF8@hirez.programming.kicks-ass.net>
- <Y1kiuTIYobR4nexS@hirez.programming.kicks-ass.net>
- <Y1nobODPLUjcteJ0@yujie-X299>
- <2543dfb1-d9dc-0888-dbea-e420a19d732c@intel.com>
- <Y1qv3ku6ULHy8hOF@magnolia>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1qv3ku6ULHy8hOF@magnolia>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 27 Oct 2022 12:53:17 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D84290831
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:53:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666889596; x=1698425596;
+  h=date:message-id:from:to:cc:subject:in-reply-to:
+   references:mime-version;
+  bh=6T7x4jJwqmK5MZM7cgbwCuG33VbCeGteESpIjt+iO+k=;
+  b=OZMhwExL8a4Y4dAY2AkdxY2n5qrwp1As2hk8VRu9SRMte104Xxr4dPBa
+   4/OFzDTZhkwWJTBK4PEUNEsiEzgQY0PW3XRyKHZg0jitvG6p9WxIHtQf1
+   +2X0mlF5kI1kEf1MiwUFWDLIf4NHU8oYm2J+qjZnDhv7eWD70Q22OsuZQ
+   oe1ty8wEDr6bv1bzm4JewY3M78TLDjJE9whuzZAFIaNoHniitCtJK2TKt
+   ZCbHDhaVTy7fYBFYFHCEw5FK8I5Th9hjybw+4d6Yq6HZ8cYw0jmsfhaX7
+   DuGJkH03BQvqP5mukPToTFLGKWTNmt1z4PK4J6vpzX3jjxHu7XV1zGKU6
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="394593605"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="394593605"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 09:53:16 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="807519683"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="807519683"
+Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.209.68.192])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 09:53:15 -0700
+Date:   Thu, 27 Oct 2022 09:53:15 -0700
+Message-ID: <877d0lxl6s.wl-ashutosh.dixit@intel.com>
+From:   "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        anshuman.gupta@intel.com, intel-gfx@lists.freedesktop.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Andi Shyti <andi.shyti@linux.intel.com>
+Subject: Re: [PATCH] drm/i915/hwmon: Fix a build error used with clang compiler
+In-Reply-To: <CAKwvOdkpQvk31zbipLDPXfsDZ8FpGHs9t-+9JfFQO85Bs4h=wg@mail.gmail.com>
+References: <20221024210953.1572998-1-gwan-gyeong.mun@intel.com>        <87mt9kppb6.wl-ashutosh.dixit@intel.com>        <Y1ercgaqQwfqt42U@ashyti-mobl2.lan>     <87ilk7pwrw.wl-ashutosh.dixit@intel.com>        <Y1h8yn4QHI3aBlCe@ashyti-mobl2.lan>     <CAKwvOdkpQvk31zbipLDPXfsDZ8FpGHs9t-+9JfFQO85Bs4h=wg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/28.2 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 27 Oct 2022 09:35:24 -0700, Nick Desaulniers wrote:
+>
 
-> However, I noticed that the callsite in the WARNING: message has changed
-> from the usual 'asswarn' (which is the caller of WARN_ON) to
-> 'xfs_buf_alert_ratelimited', which seems totally wrong since XFS log
-> recovery doesn't touch xfs_buf objects at all.
+Hi Nick,
 
-Yeah; and I've meanwhile found more cases where it goes sideways.
+> On Tue, Oct 25, 2022 at 5:18 PM Andi Shyti <andi.shyti@linux.intel.com> wrote:
+> >
+> > Hi Ashutosh,
+> >
+> > > But I'd wait to hear from clang/llvm folks first.
+> >
+> > Yeah! Looking forward to getting some ideas :)
+>
+> Gwan-gyeong, which tree and set of configs are necessary to reproduce
+> the observed warning?
+>
+> Warnings are treated as errors, so I don't want this breaking our CI.
 
-I'll revert this patch and try an alternative approach. I'll post
-patches tomorrow or something.
+The following or equivalent should do it:
 
-Sorry about this.
+git clone https://anongit.freedesktop.org/git/drm/drm-tip
+git checkout drm-tip
+
+Kernel config:
+CONFIG_DRM_I915=m
+CONFIG_HWMON=y
+
+Files:
+drivers/gpu/drm/i915/i915_hwmon.c/.h
+
+Thanks for taking a look.
+--
+Ashutosh
