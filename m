@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB7A61061F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 01:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E238C6105E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235837AbiJ0XHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 19:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56910 "EHLO
+        id S235345AbiJ0Wrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 18:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235652AbiJ0XH3 (ORCPT
+        with ESMTP id S233884AbiJ0Wrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 19:07:29 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9838F97E
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 16:07:28 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id e4so3267638pfl.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 16:07:28 -0700 (PDT)
+        Thu, 27 Oct 2022 18:47:43 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB584B40CD
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 15:47:42 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id x15so2865764qvp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 15:47:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dGIOOj3+qzuziQHt4I3vJ0yhwP9i2B2Blb/XTHKGMxA=;
-        b=DQ12Roa/JCXk48lRfZQvcdCR5DKamBLnfsA/y+WP0VhsBcphWICeeOvOJAHZFSBoUn
-         gl0Tsxd+qmgZ90G5FiKpBF4SELi4PtDFKah+kk9F201OOfc3lFcfGZmV63Gvr+q6s6+m
-         AbIHcTHOuBjGXnUCqQzepYO8FPcpxVB1PNMgbybic+rmtKj4iTN1N0z2t2p9u1JbLb2E
-         WJpGxg1w1wg9Ih0R1E0wlkSdOJM2JZ+6tENLD8t+jhFBqKJNq/vvTzZErfS9S+becMJW
-         ob4mFbQrFaNrbt8NugT98wmIV5d/LCfe7Wi//gcNJBm2/Ye8qT9eQholmoulgMFnGk4s
-         rZfg==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=P1b8oympTfiO5TpKLj1JFWX96ZUFWry0jri1TDuGUJw=;
+        b=dKRAMe+29hBEeu4pcNPqMQuwfm1C9LFmGijhVMgs6k5kzS+c+ajk9Hd1hcV0PG1Lpg
+         lB2/0lxwurEEC5qanUyWLDtdVfIkCfZy+u9Fv6YW0dbmuedk+74aKAJZZb5dCKTinRpm
+         ClHsPY1arZ0X7nc3I5qzoUA37X+EbwTyHvwhYRagBvYHOLh3V52lNBHm8hev+EpPSu3P
+         Qc1XB8geHerIlmRzYgbVHks9jQdn1RqG7S4WmMIyzwHVdYSO4d1nb1rJl3OIEXgWrcAQ
+         bYGw/FKEuR07JkZPgRxlxGpBxc0MRPmKI3tzEcp/YlDiCROEJ4qecuW1qP9PdTnOSWHi
+         wJzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dGIOOj3+qzuziQHt4I3vJ0yhwP9i2B2Blb/XTHKGMxA=;
-        b=Z+LcqbmqviYGErSQQ6Evkf6NtJl2HEIxGQXT2xlJpjkhVkq6pJlVU7O4Mi1e96Fk3C
-         3/Z2Vi8hkgneq44EDHy+QjhIvrevfU/Grd2ZNlPt5bVCYTWq+9T2+cBHZZywCfO2Z3DJ
-         mrsLKwa4sy0e7KrS9sBpfVN48DO1lNyuRe6RMWq32UiHBLz4cm3S+7GVORPpt1fZXAWY
-         nxgCQO7hBNOx4AgATzJiQ3eWNSXdBx43/sDrlsuv88Z2MLQo++eZtF29wP+eeO6n5Me+
-         Ju2jyLAYIl9ujAryPkb1jpt1ZCyD6ccVHrWRATsTEVGge+FTI9Jb600mJKPqHQGNAZWm
-         KobQ==
-X-Gm-Message-State: ACrzQf00Edf/WvYRQg0ImXbz2PHANl4WHYEv35WkQX+9HvtWzEuL1b2s
-        q4nfjWmkuWVxDyZ0KHSVvfa01A==
-X-Google-Smtp-Source: AMsMyM4pGfab/Lu9otcgknoFf3QkCWBb4tRNWzqL/utHiVbszNKEX0k0wNujQ0wmYp9Ebm9yoeQFDQ==
-X-Received: by 2002:aa7:88d4:0:b0:56c:ae9d:6fdf with SMTP id k20-20020aa788d4000000b0056cae9d6fdfmr3713215pff.41.1666912048006;
-        Thu, 27 Oct 2022 16:07:28 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id w3-20020a63d743000000b0046f03254c9csm1542392pgi.23.2022.10.27.16.07.27
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P1b8oympTfiO5TpKLj1JFWX96ZUFWry0jri1TDuGUJw=;
+        b=6ebHCYnhRbyLDI3YPTd7jVGjSHQ5jgHSkqB7oeLxL2OSrD5IXkFmGESttUv2IRT5C9
+         0ah2vCXJbjpQyzb2Wywx2lmz6O5HT6D7TcpaLKUvY4oCWpPbQRmdFJ1yivK8bYiFeA7R
+         hHtWwCe8BHSuIIfXDJe1nqLN6V/JPR8MfQuPBxQEtB1Bx1qjzKVCW4BNeSE5WQuR7R/D
+         b8m/mqKuMWJcNU4nAifqISWWbh0ZLQGfFK7RM60Hnb/kVabW+le+8a6w55J4eIDMipfe
+         0U1cqn6eAIJ2prmdBXdmGF0EOFU//zFe7D26H2osO5XIEVRxvDxTfp2AtNZ+pt2TRK5V
+         B1eQ==
+X-Gm-Message-State: ACrzQf3cYYSO7werRRnhubm4by2i3CT80WqiVVBNxp/foeWiVokLf899
+        G7T7w0IWnTBAFLb6LdOlyngeSEG9EJizOw==
+X-Google-Smtp-Source: AMsMyM7Lbh+oRroquOz8WxsGFr52SUAIAOy7Z6N9sFljMKihOjOuiEfSU1EyPV7ogiGNbb0AXJMlIA==
+X-Received: by 2002:a17:902:d70e:b0:178:2d9d:ba7b with SMTP id w14-20020a170902d70e00b001782d9dba7bmr51985646ply.90.1666910851508;
+        Thu, 27 Oct 2022 15:47:31 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id nh6-20020a17090b364600b002135fdfa995sm2501962pjb.25.2022.10.27.15.47.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 16:07:27 -0700 (PDT)
-In-Reply-To: <20221018141200.1040-1-jszhang@kernel.org>
-References: <20221018141200.1040-1-jszhang@kernel.org>
-Subject: Re: [PATCH] riscv: remove special treatment for the link order of head.o
-Message-Id: <166691074225.22464.6806069295219492474.b4-ty@rivosinc.com>
-Date:   Thu, 27 Oct 2022 15:45:42 -0700
+        Thu, 27 Oct 2022 15:47:31 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 22:47:27 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>
+Subject: Re: [PATCH v2 2/3] KVM: x86/svm/pmu: Add AMD PerfMonV2 support
+Message-ID: <Y1sKf/PgwHwtAibK@google.com>
+References: <20220919093453.71737-1-likexu@tencent.com>
+ <20220919093453.71737-3-likexu@tencent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-36ce3
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Jisheng Zhang <jszhang@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nicolas Schier <nicolas@fjasle.eu>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919093453.71737-3-likexu@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,21 +74,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022 22:12:00 +0800, Jisheng Zhang wrote:
-> arch/riscv/kernel/head.o does not need any special treatment - the only
-> requirement is the ".head.text" section must be placed before the
-> normal ".text" section.
-> 
-> The linker script does the right thing to do. The build system does
-> not need to manipulate the link order of head.o.
-> 
-> [...]
+On Mon, Sep 19, 2022, Like Xu wrote:
+> @@ -162,20 +179,43 @@ static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+> +	struct kvm_cpuid_entry2 *entry;
+> +	union cpuid_0x80000022_ebx ebx;
+>  
+> -	if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE))
+> -		pmu->nr_arch_gp_counters = AMD64_NUM_COUNTERS_CORE;
+> -	else
+> -		pmu->nr_arch_gp_counters = AMD64_NUM_COUNTERS;
+> +	pmu->version = 1;
+> +	if (kvm_pmu_cap.version > 1) {
+> +		pmu->version = min_t(unsigned int, 2, kvm_pmu_cap.version);
 
-Applied, thanks!
+This is wrong, it forces the guest PMU verson to match the max version supported
+by KVM.  E.g. if userspace wants to expose v1 for whatever reason, pmu->version
+will still end up 2+.
 
-[1/1] riscv: remove special treatment for the link order of head.o
-      https://git.kernel.org/palmer/c/2348e6bf4421
+> +		entry = kvm_find_cpuid_entry_index(vcpu, 0x80000022, 0);
+> +		if (entry) {
+> +			ebx.full = entry->ebx;
+> +			pmu->nr_arch_gp_counters = min3((unsigned int)ebx.split.num_core_pmc,
+> +							(unsigned int)kvm_pmu_cap.num_counters_gp,
+> +							(unsigned int)KVM_AMD_PMC_MAX_GENERIC);
 
-Best regards,
--- 
-Palmer Dabbelt <palmer@rivosinc.com>
+This is technically wrong, the number of counters is supposed to be valid if and
+only if v2 is supported.  On a related topic, does KVM explode if userspace
+specifies a bogus PMU version on Intel?  I don't see any sanity checks there...
+
+With a proper feature flag
+
+	pmu->version = 1;
+	if (kvm_cpu_has(X86_FEATURE_AMD_PMU_V2) &&
+	    guest_cpuid_has(X86_FEATURE_AMD_PMU_V2)) {
+		pmu->version = 2;
+
+		entry = kvm_find_cpuid_entry_index(vcpu, 0x80000022, 0);
+		if (entry) {
+			...
+
+Though technically the "if (entry)" check is unnecesary.
+
+> +		}
+> +	}
+> +
+> +	/* Commitment to minimal PMCs, regardless of CPUID.80000022 */
+> +	if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE)) {
+
+Unnecessary braces.
+
+> +		pmu->nr_arch_gp_counters = max_t(unsigned int,
+> +						 pmu->nr_arch_gp_counters,
+> +						 AMD64_NUM_COUNTERS_CORE);
+
+What happens if userspace sets X86_FEATURE_PERFCTR_CORE when its not supported?
+E.g. will KVM be coerced into taking a #GP on a non-existent counter?
+
+
+> +	} else {
+> +		pmu->nr_arch_gp_counters = max_t(unsigned int,
+> +						 pmu->nr_arch_gp_counters,
+> +						 AMD64_NUM_COUNTERS);
+> +	}
