@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C9D6104BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 032CB6104C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237059AbiJ0Vvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 17:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
+        id S237094AbiJ0VwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 17:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237047AbiJ0Vvo (ORCPT
+        with ESMTP id S237077AbiJ0Vv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 17:51:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5B26FA29;
-        Thu, 27 Oct 2022 14:51:44 -0700 (PDT)
+        Thu, 27 Oct 2022 17:51:57 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5895F7E8;
+        Thu, 27 Oct 2022 14:51:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA783B827B3;
-        Thu, 27 Oct 2022 21:51:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AA71C433D6;
-        Thu, 27 Oct 2022 21:51:41 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1F2CCCE28B8;
+        Thu, 27 Oct 2022 21:51:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4BD1C433C1;
+        Thu, 27 Oct 2022 21:51:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666907501;
-        bh=t5fiZPd8YqRPakj+Z4a+yqrq/UBh6ClTJeeNuWXkERs=;
+        s=k20201202; t=1666907513;
+        bh=RZ6n1Wp1PFsVBBCVQ2iVN1FUb/bU4XwPpbmTXT863Tg=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=JE5DmVNp+1GU7FThHB5o8iMjKXhJZUnz7luxyvWhA79p54eUs6byQ9yW+hjLdFN0L
-         bY+/LCNfEp4caeODt50ZHgsFoFLlvDUF9QBdNIr9Jp0dDy3iqJ+v/toon7UQiPMWVp
-         a6hyn9xIggZSC78oc0wEpYfazS1qrRqXmbgYiRD108na4dMEBSk8TS0xq2pIG7xNYL
-         y7kBo/uXYjHXMLWWebGB4kOShe0a4muFsW6lPObKJ2IO96mwHD+2FWEE8vbS/vBjav
-         PrAlVhk6XVOvCyZGNUnoJhsV71Y9+n5AgRqnvHyvW94a/dsa5sL3fRUsNeSCISRbSN
-         CKd6BeLXyYlCw==
+        b=ewRxx0zdavdB66BZ0fWaMPTW3B1JFxeqVPvtGokff08K5irMIPkJcgWtIVeGxD0B3
+         GiMKIQgYm3xVcQlE8A+WIFFC1ZNrVs7+j4PifSJ5EK6xVvsGVIrV6ccYK4gAoSOJ92
+         G2loe1Bf56KTcp5m1LJmvSnHbZQ/i2SSbbzOxUh8YXgxFmPPtMZaaDCS7EQyPMqKtu
+         BeD/C9KeMf6nSSdjRRVM3MNShIxsM8CMgpk18caNbFF0crPwYSNhMK7bTZ2cy1+5ax
+         JYp+ZYY20gQNCMlRzS672zURk+kws7qzBIbTbqxfko55F1u5SL6RLHLtRE8Vg33Z2d
+         SQ/wbahJTWCHA==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221027192024.484320-2-lis8215@gmail.com>
-References: <20221027192024.484320-1-lis8215@gmail.com> <20221027192024.484320-2-lis8215@gmail.com>
-Subject: Re: [PATCH v6 1/3] dt-bindings: ingenic: Add support for the JZ4755 CGU
+In-Reply-To: <20221027192024.484320-3-lis8215@gmail.com>
+References: <20221027192024.484320-1-lis8215@gmail.com> <20221027192024.484320-3-lis8215@gmail.com>
+Subject: Re: [PATCH v6 2/3] dt-bindings: clock: Add Ingenic JZ4755 CGU header
 From:   Stephen Boyd <sboyd@kernel.org>
 Cc:     Siarhei Volkau <lis8215@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
@@ -48,9 +48,9 @@ Cc:     Siarhei Volkau <lis8215@gmail.com>,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
 To:     Siarhei Volkau <lis8215@gmail.com>
-Date:   Thu, 27 Oct 2022 14:51:39 -0700
+Date:   Thu, 27 Oct 2022 14:51:50 -0700
 User-Agent: alot/0.10
-Message-Id: <20221027215141.7AA71C433D6@smtp.kernel.org>
+Message-Id: <20221027215152.D4BD1C433C1@smtp.kernel.org>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,9 +60,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Siarhei Volkau (2022-10-27 12:20:21)
-> Add documentation for the clock generation unit (CGU)
-> of the JZ4755 SoC.
+Quoting Siarhei Volkau (2022-10-27 12:20:22)
+> This will be used from the devicetree bindings to specify the clocks
+> that should be obtained from the jz4755-cgu driver.
 >=20
 > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
