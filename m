@@ -2,139 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFDE60FD2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 754C560FD2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235974AbiJ0QeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 12:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
+        id S234923AbiJ0Qey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 12:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235493AbiJ0QeQ (ORCPT
+        with ESMTP id S235951AbiJ0Qeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 12:34:16 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066D3C509C
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:34:14 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4Myrq96lsqz9s5L;
-        Thu, 27 Oct 2022 16:34:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1666888454; bh=J4ygBh+OjH6+zJ/f+L7SeeBqOZrbDAyt8ylFmhMmOOY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=leiegaE9hfuVzp5jGxKhU4c3CAg1pDKytZOTEbPJxL/DIDyyiP4ChLyz1cWPPu133
-         cbieNYwag+EJPDkfGPorPzn/IiTVWQ8WbLkWhsuEW46Fz3pSEKlPOukgKwN/siHvjk
-         WJBdvMfaz9hgFwd92Td7uWfb//avP+y/tDRVV6mo=
-X-Riseup-User-ID: D12952F7A1A4DD109A7FA0664F46003D5026606957E13428C9749E5F7A86364B
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4Myrq54Ntfz5vSS;
-        Thu, 27 Oct 2022 16:34:09 +0000 (UTC)
-Message-ID: <2692de92-90e4-4a17-6609-da1bdfa5c850@riseup.net>
-Date:   Thu, 27 Oct 2022 13:34:04 -0300
+        Thu, 27 Oct 2022 12:34:50 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D42820F72
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:34:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666888488; x=1698424488;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ReW4mTL/Qrx5Ie4wYNRyXd3fjjAfU0EotIXdjdbjQJo=;
+  b=TiG5/djuNiwXm9UndN9KcIMicSqCLxVD9ZEgVcp2Ve3zA/qCPEHn7bGL
+   /TEqM651zPGCQCLNSbv9rd6pghCulApu8o6zAkdUArkAQ1Fa77MzGQziB
+   5tEHnYZ8ZKQOY+PPx/q4e24PjggBj4YT8KMDTlB1gDXHBSHKnDgte/z5d
+   YJGOy4mhYjXWkVurvY1yvsORfUHa2HrN1Yw0G62S+SQdWtgyxifbak0Ge
+   ZOj7/YldmeaVHbHA0HLb2K1IqI/VbyhcJiTSSdPfNDO/wZijAogzvCKzy
+   3vUM0OzytpIKVzPGB9Lrpw6B6T7wzWiU7w+Fav2kyMC85uKZXV1d6qgCq
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="370339955"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="370339955"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 09:34:47 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="807513294"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="807513294"
+Received: from djohn1-mobl1.amr.corp.intel.com (HELO [10.212.54.86]) ([10.212.54.86])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 09:34:46 -0700
+Message-ID: <f8fd25fc-a866-fcee-8bd3-9281bb328900@linux.intel.com>
+Date:   Thu, 27 Oct 2022 12:34:45 -0400
 MIME-Version: 1.0
-Subject: Re: [PATCH v2] drm/tests: Add back seed value information
-To:     Arthur Grillo <arthurgrillo@riseup.net>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>, andrealmeid@riseup.net,
-        melissa.srw@gmail.com,
-        =?UTF-8?Q?Micha=c5=82_Winiarski?= <michal.winiarski@intel.com>
-References: <20221027142903.200169-1-arthurgrillo@riseup.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.2.2
+Subject: Re: [BUG][v6.1-rc2] [SOF] max98373 i2c-MX98373:00: Runtime PM usage
+ count underflow!
+To:     Lukasz Majczak <lma@semihalf.com>, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>
+Cc:     alsa-devel@alsa-project.org, upstream@semihalf.com,
+        Curtis Malainey <cujomalainey@google.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <CAFJ_xbqwaOQ+NVbVuT-TqTJ5fcp6fvVfaUxxwLW1FLZDCjrAxQ@mail.gmail.com>
 Content-Language: en-US
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20221027142903.200169-1-arthurgrillo@riseup.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <CAFJ_xbqwaOQ+NVbVuT-TqTJ5fcp6fvVfaUxxwLW1FLZDCjrAxQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arthur,
 
-On 10/27/22 11:29, Arthur Grillo wrote:
-> As reported by Michał the drm_mm and drm_buddy unit tests lost the
-> printk with seed value after they where refactored into KUnit. This
-> patch add back this important information to assure reproducibility and
-> convert them to the KUnit API.
 
-Some grammar nits:
-- s/where/were
-- s/add/adds
-
-Moreover, you could write the commit message as André indicated, that 
-is: in imperative form.
-
+On 10/27/22 12:12, Lukasz Majczak wrote:
+> Hi,
 > 
-> Reported-by: Michał Winiarski <michal.winiarski@intel.com>
-> Signed-off-by: Arthur Grillo <arthurgrillo@riseup.net>
-> ---
-> v1->v2: https://lore.kernel.org/all/20221026211458.68432-1-arthurgrillo@riseup.net/
-> - Correct compilation issues
-> - Change tags order
-> - Remove useless line change
-> - Write commit message in imperative form
-> - Remove redundant message part
-> - Correct some grammars nits
-> - Correct checkpatch issues
+> I have noticed Runtime PM usage count underflow on my Chromebook (12th
+> Gen Intel(R) Core(TM) i3-1215U) running vanilla v6.1-rc2:
 > 
-> ---
->   drivers/gpu/drm/tests/drm_buddy_test.c | 4 ++++
->   drivers/gpu/drm/tests/drm_mm_test.c    | 4 ++++
->   2 files changed, 8 insertions(+)
+> [    7.558178] max98373 i2c-MX98373:00: Runtime PM usage count underflow!
+> [    7.558188] max98373 i2c-MX98373:01: Runtime PM usage count underflow!
+> [    7.558206] snd-soc-dummy snd-soc-dummy: Runtime PM usage count underflow!
+> [    7.558421] snd-soc-dummy snd-soc-dummy: Runtime PM usage count underflow!
 > 
-> diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
-> index 62f69589a72d..258137e9c047 100644
-> --- a/drivers/gpu/drm/tests/drm_buddy_test.c
-> +++ b/drivers/gpu/drm/tests/drm_buddy_test.c
-> @@ -731,6 +731,10 @@ static int drm_buddy_init_test(struct kunit *test)
->   	while (!random_seed)
->   		random_seed = get_random_u32();
->   
-> +	kunit_info(test,
-> +		   "Testing DRM buddy manager, with random_seed=0x%x\n",
-> +		   random_seed);
-> +
->   	return 0;
->   }
->   
+> Link to the full dmesg:
+> https://gist.github.com/semihalf-majczak-lukasz/d6a6d61d5937f762a524ed50fed93f25
 
-As I was checking the log, I realized that the random_seed only needs to 
-be generated by the start of the test suite, so this drm_buddy_init_test 
-could be a suite_init function, instead of an init function. This way 
-the random_seed will be generated by the start of the suite and the log 
-will be printed just once.
+You need to apply this:
 
-> diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
-> index c4b66eeae203..bec006e044a4 100644
-> --- a/drivers/gpu/drm/tests/drm_mm_test.c
-> +++ b/drivers/gpu/drm/tests/drm_mm_test.c
-> @@ -2214,6 +2214,10 @@ static int drm_mm_init_test(struct kunit *test)
->   	while (!random_seed)
->   		random_seed = get_random_u32();
->   
-> +	kunit_info(test,
-> +		   "Testing DRM range manager, with random_seed=0x%x max_iterations=%u max_prime=%u\n",
-> +		   random_seed, max_iterations, max_prime);
-> +
-
-Same here.
-
-Best Regards,
-- Maíra Canal
-
->   	return 0;
->   }
->   
+[PATCH] Revert "ASoC: soc-component: using pm_runtime_resume_and_get
+instead of pm_runtime_get_sync"
