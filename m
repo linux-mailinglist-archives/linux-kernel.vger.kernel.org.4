@@ -2,94 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 901EF61013C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82FB5610143
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235597AbiJ0TME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 15:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
+        id S235464AbiJ0TN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 15:13:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236323AbiJ0TMC (ORCPT
+        with ESMTP id S229670AbiJ0TNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 15:12:02 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1536653026
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:12:01 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id 8so1805129qka.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:12:01 -0700 (PDT)
+        Thu, 27 Oct 2022 15:13:23 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C439870E49
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:13:22 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id e4so2604714pfl.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:13:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=abXkIeZS2BqN/ZiXNcciWpaMLHMiXJFy0vINuEr3n74=;
-        b=gjxfTkCV6GWVCmXpkSYG8Qc8Sn/5IWAw8JPE/ZvF6BPVUFYFqMFLeRUdbPjpUZYpfc
-         /ENNSIMRBRLgyXf9RyTfJmrbNxh+6WFIpsH0tMFEqdBCCZZy+tEi+x8PhW6lVJjUr0lm
-         QvaDPmeyXiewZFMvg6JXusII3iciu3g9dJlks=
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KRy9sqvf0ZM2bZpgrnftqxmIbppdN+rJl6H1sXbtcEA=;
+        b=ePBvbYsqqxinV1869tyLVSPuexY7f5oFCO4bFBrZ0zRyJ8fAIYv6HyDImZpOI7sDK4
+         wV01b3ApWa7HxYPZmSq7Y80QJ8waTqfMmGkATXW/AodfcPzYcSL2X9iXgY+1T73b5Ysl
+         7tELmVPx85ac64Og2sYczqg5VmOjiPDZGHsIc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=abXkIeZS2BqN/ZiXNcciWpaMLHMiXJFy0vINuEr3n74=;
-        b=XgDyBqkTiVtr3oqosp7z4aWcKYulbV9X6O6+ThvqPiZrSGuG6PG+um9LRnL9gRW5ko
-         ZcGYDsXnCa1EsqAxkwxwwIa9ZtD//gg3JQuV7h2A3OKbt9iH6PodhkDu+OYMDxD27WWE
-         PJO7SSRRPtCHeF8TQhDFhR/H2no8+N0gsCPhHz8DS7s7gsLq8plqS9pmW0WFj7CwSV8E
-         HivQHsWXPj54rJ1vkWvRzVFvGKadzYp7ojlYAu7OaVY499065ii/OsIirh1+CZQPyVf1
-         zsJfWm2BUzOqaTajuFAR4nNmq6l51ypMg7O4S1Ytov6D5hs4FbHtTDPlQ5byfSp8bV+c
-         +sYQ==
-X-Gm-Message-State: ACrzQf2+9XMAdOY8a/jHKbNc9R8g9Oi6+r427D8Tg9WGrK2kPwggUIh5
-        Ok5wHOnxgMH9d7R9BvvDlC4mCN9g1zPdoQ==
-X-Google-Smtp-Source: AMsMyM4uKHEUaqIGxs6jCcpAN13PQi7U7GCw/cDnylAWYLnCwjdwL5NuNRNQJe7P86ZQw7zIQjpN1A==
-X-Received: by 2002:a05:620a:448e:b0:6ce:8dd2:bc46 with SMTP id x14-20020a05620a448e00b006ce8dd2bc46mr36997625qkp.705.1666897919863;
-        Thu, 27 Oct 2022 12:11:59 -0700 (PDT)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id w29-20020a05620a095d00b006eecc4a0de9sm1461913qkw.62.2022.10.27.12.11.59
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 12:11:59 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-367cd2807f2so25844527b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:11:59 -0700 (PDT)
-X-Received: by 2002:a81:11d0:0:b0:35b:dd9f:5358 with SMTP id
- 199-20020a8111d0000000b0035bdd9f5358mr46121043ywr.401.1666897919022; Thu, 27
- Oct 2022 12:11:59 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KRy9sqvf0ZM2bZpgrnftqxmIbppdN+rJl6H1sXbtcEA=;
+        b=x0HMh0doaMPVD5JweKS+kmF3VFTawb8Cdu6Ii8ojBkCLHRU8ixbIE+O78AQe3fkqdZ
+         HLvS9TBE7Ajn/sGxy2/9CRx0aezhI7jEA7uB0fiYxoKcDz/5Fe/+Vqx9EXe/mU/aQXpo
+         dUuet7CxyWatt/LT8DJElJxQ6G/Ukcboo39OGZqC6tZYCDvPFw6M+xcfXBYx26q5qpMr
+         skfPrFsJjoiKlqtf+AANHt4azslKljBAMRgcy+lzCpgBpOFzIsqkObgPGzLit2dsI5mE
+         O9wfgxMBP/uhS2P1dswJlwFmhTyGEmemolQITdV9HabdVXea8LhH42AeZW+elsvNC5Kd
+         lS0w==
+X-Gm-Message-State: ACrzQf28ttOPM6ytFTvGSdSNzFsYwzfxvd/jMFaAsocgbLktBjw7yV/L
+        EM1mNt8HBSqWtXJEPhFyJ/ibQQ==
+X-Google-Smtp-Source: AMsMyM4innxfNZAzhGWL/DpqnIwUOYEYiApzjV6DBWLPdx0UZXtA4mdOwut8gE2N2aGulndGyPlvSA==
+X-Received: by 2002:a63:7909:0:b0:458:1ba6:ec80 with SMTP id u9-20020a637909000000b004581ba6ec80mr44062420pgc.414.1666898002301;
+        Thu, 27 Oct 2022 12:13:22 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q10-20020a170903204a00b00176e6f553efsm1525222pla.84.2022.10.27.12.13.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 12:13:21 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 12:13:20 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Andrey Konovalov <andreyknvl@gmail.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-mm@kvack.org, kasan-dev@googlegroups.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] mm: Make ksize() a reporting-only function
+Message-ID: <202210271212.EB69EF1@keescook>
+References: <20221022180455.never.023-kees@kernel.org>
+ <CA+fCnZcj_Hq1NQv1L2U7+A8quqj+4kA=8A7LwOWz5eYNQFra+A@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221027150525.753064657@goodmis.org> <f62e19bb-497a-8cf6-93aa-d654d7850356@roeck-us.net>
- <20221027150237.4e69ba27@gandalf.local.home>
-In-Reply-To: <20221027150237.4e69ba27@gandalf.local.home>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 27 Oct 2022 12:11:43 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiXk3jrhzjkYgC=a7F1+oFY2wNmxeMDTza10maGU2-i4Q@mail.gmail.com>
-Message-ID: <CAHk-=wiXk3jrhzjkYgC=a7F1+oFY2wNmxeMDTza10maGU2-i4Q@mail.gmail.com>
-Subject: Re: [RFC][PATCH v2 00/31] timers: Use del_timer_shutdown() before
- freeing timers
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+fCnZcj_Hq1NQv1L2U7+A8quqj+4kA=8A7LwOWz5eYNQFra+A@mail.gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 12:02 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> So it works on current stable and current mainline? Does that mean we need
-> to worry about this?
+On Thu, Oct 27, 2022 at 09:05:45PM +0200, Andrey Konovalov wrote:
+> On Sat, Oct 22, 2022 at 8:08 PM Kees Cook <keescook@chromium.org> wrote:
+> [...]
+> > -/* Check that ksize() makes the whole object accessible. */
+> > +/* Check that ksize() does NOT unpoison whole object. */
+> >  static void ksize_unpoisons_memory(struct kunit *test)
+> >  {
+> >         char *ptr;
+> > @@ -791,15 +791,17 @@ static void ksize_unpoisons_memory(struct kunit *test)
+> >
+> >         ptr = kmalloc(size, GFP_KERNEL);
+> >         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
+> > +
+> >         real_size = ksize(ptr);
+> > +       KUNIT_EXPECT_GT(test, real_size, size);
+> >
+> >         OPTIMIZER_HIDE_VAR(ptr);
+> >
+> >         /* This access shouldn't trigger a KASAN report. */
+> > -       ptr[size] = 'x';
+> > +       ptr[size - 1] = 'x';
+> >
+> >         /* This one must. */
+> > -       KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)ptr)[real_size]);
+> > +       KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)ptr)[real_size - 1]);
+> 
+> How about also accessing ptr[size] here? It would allow for a more
+> precise checking of the in-object redzone.
 
-No, I think Guenter is saying that current mainline *without* the
-patches works fine.
+Sure! Probably both ptr[size] and ptr[real_size -1], yes?
 
-But v6.1-rc2 (which is quite close to that current mainline) *with*
-the patches blows up.
-
-So it's almost certainly the patches that break. There are no
-appreciable timer changes in those 105 commits (there's some added
-irq_work_sync but that looks very unlikely to be related.
-
-            Linus
+-- 
+Kees Cook
