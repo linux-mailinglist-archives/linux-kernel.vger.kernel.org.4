@@ -2,147 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BFE6610006
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 20:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA8E61000A
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 20:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234802AbiJ0SQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 14:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
+        id S234908AbiJ0SQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 14:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235733AbiJ0SPz (ORCPT
+        with ESMTP id S235659AbiJ0SQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 14:15:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3FB7C1D9;
-        Thu, 27 Oct 2022 11:15:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C7E662415;
-        Thu, 27 Oct 2022 18:15:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 762B8C433C1;
-        Thu, 27 Oct 2022 18:15:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666894503;
-        bh=3HRxhPs5aRt82sCmtdzYduN3y/fgPE5EeF7WhWyHiY8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=hFJ+ssifG3lbRsDRrGmIkez0dIzYs35PZPUPHi0U1U9DUeEdL9l/mnLbDIfrRq+Pj
-         q+52SJhDqKNPbcnD9oOghksA6ntCzMn37u5K15XynJPuyPDS8EteUI6sZUtpc3J4QH
-         R10oDECCio5GMwpCK7VPk0fQ4rEFuFPTZZ9+TQLdMjd5qoMU5bSlNTv2bzJlTImWi7
-         6Pib7X9nweO0JkPmiOJC0L2ScJtinkOGB8prXWU7gMY0IPVtPOClNmwdQHX6/BtpXB
-         pLgioVILGA/hXEmrK8a47EwAuy1XvhqNIU5y6fgY6KZ/r9KE0h7kqnfwq44xNHS5uW
-         YT0+kb4NEU7DQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1EDC95C0A59; Thu, 27 Oct 2022 11:15:03 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 11:15:03 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Parav Pandit <parav@nvidia.com>
-Cc:     Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
-        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Dan Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v4] locking/memory-barriers.txt: Improve documentation
- for writel() example
-Message-ID: <20221027181503.GE5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221010101331.29942-1-parav@nvidia.com>
- <d5faaf6f-7de5-49b0-92d6-9989ffbdbf2e@app.fastmail.com>
- <20221018100554.GA3112@willie-the-truck>
- <20221018174907.GT5600@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR12MB54810CA260159E805D448375DC289@PH0PR12MB5481.namprd12.prod.outlook.com>
+        Thu, 27 Oct 2022 14:16:39 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7043678D;
+        Thu, 27 Oct 2022 11:16:37 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29RIGLH0037720;
+        Thu, 27 Oct 2022 13:16:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666894581;
+        bh=/zj3g63JhQDHegIxQO0BLz+KSVsmlonxodsKrtWMvcg=;
+        h=Date:Subject:To:References:From:In-Reply-To;
+        b=lfPMG+cvYIxoBAkM0+DXQherZgSGwsW8587eLYBmme9zo/1pZdp0ikE3G8S7zzXVC
+         64Sn9Bd0aIN0QcrQVf8elePQQ2/TFFmGX9J8ybdc9sa4RcyRQWFEpwulUQPQ0iOq6J
+         w+MTVAMjfeCBb+iLvJdakUtmjHtath07zeMikDXM=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29RIGLfJ067267
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 27 Oct 2022 13:16:21 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 27
+ Oct 2022 13:16:21 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Thu, 27 Oct 2022 13:16:21 -0500
+Received: from [10.250.35.234] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29RIGKXe112488;
+        Thu, 27 Oct 2022 13:16:20 -0500
+Message-ID: <e25a5f89-42bb-f97b-4b84-e7609ee00139@ti.com>
+Date:   Thu, 27 Oct 2022 13:16:19 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR12MB54810CA260159E805D448375DC289@PH0PR12MB5481.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 1/2] ARM: nspire: Use syscon-reboot to handle restart
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Daniel Tang <dt.tangr@gmail.com>,
+        Fabian Vogt <fabian@ritter-vogt.de>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221026161302.5319-1-afd@ti.com>
+ <20221026161302.5319-2-afd@ti.com>
+ <9314a458-0fd9-c645-bb55-5f28b961ea5f@linaro.org>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <9314a458-0fd9-c645-bb55-5f28b961ea5f@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 08:33:08PM +0000, Parav Pandit wrote:
-> Hi Paul, Will,
+On 10/26/22 3:17 PM, Krzysztof Kozlowski wrote:
+> On 26/10/2022 12:13, Andrew Davis wrote:
+>> Writing this bit can be handled by the syscon-reboot driver. Add the
+>> info to DT and remove the machine_desc version.
+>>
+>> Signed-off-by: Andrew Davis <afd@ti.com>
+>> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>> ---
+>>   arch/arm/boot/dts/nspire.dtsi |  7 +++++++
 > 
-> > From: Paul E. McKenney <paulmck@kernel.org>
-> > Sent: Tuesday, October 18, 2022 1:49 PM
-> > 
-> > On Tue, Oct 18, 2022 at 11:05:55AM +0100, Will Deacon wrote:
-> > > On Mon, Oct 17, 2022 at 10:55:00PM +0200, Arnd Bergmann wrote:
-> > > > On Mon, Oct 10, 2022, at 12:13 PM, Parav Pandit wrote:
-> > > > > The cited commit describes that when using writel(), explcit wmb()
-> > > > > is not needed. wmb() is an expensive barrier. writel() uses the
-> > > > > needed platform specific barrier instead of expensive wmb().
-> > > > >
-> > > > > Hence update the example to be more accurate that matches the
-> > > > > current implementation.
-> > > > >
-> > > > > commit 5846581e3563 ("locking/memory-barriers.txt: Fix broken DMA
-> > vs.
-> > > > > MMIO ordering example")
-> > > > >
-> > > > > Signed-off-by: Parav Pandit <parav@nvidia.com>
-> > > >
-> > > > I have no objections, though I still don't see a real need to change
-> > > > the wording here.
-> > >
-> > > FWIW, I also don't think this change is necessary. If anything, I'd
-> > > say we'd be better off _removing_ the text about writel from this
-> > > section and extending the reference to the "KERNEL I/O BARRIER
-> > > EFFECTS" section, as you could make similar comments about e.g.
-> > > readb() and subsequent barriers.
-> > >
-> > > For example, something like the diff below.
-> > 
-> > I do like this change, but we might be dealing with two different groups of
-> > readers.  Will and Arnd implemented significant parts of the current
-> > MMIO/DMA ordering infrastructure.  It is thus quite possible that wording
-> > which suffices to remind them of how things work might or might not help
-> > someone new to Linux who is trying to figure out what is required to make
-> > their driver work.
-> > 
-> > The traditional resolution of this sort of thing is to provide the
-> > documentation to a newbie and take any resulting confusion seriously.
-> > 
-> > Parav, thoughts?
+> DTS cannot go with code.
 > 
-> I am ok with the change from Will that removes the writel() description.
-> However, it removes useful short description from the example of "why" writel() is used.
-> This is useful for newbie and experienced developers both.
+> Additionally, this breaks people's filtering as there is no "dts" prefix
+> in the subject.
 > 
-> So how about below additional change on top of Will's change?
-> This also aligns to rest of the short C comments in this example pseudo code.
+>>   arch/arm/mach-nspire/Kconfig  |  2 ++
+>>   arch/arm/mach-nspire/mmio.h   |  3 ---
+>>   arch/arm/mach-nspire/nspire.c | 10 ----------
+>>   4 files changed, 9 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/arch/arm/boot/dts/nspire.dtsi b/arch/arm/boot/dts/nspire.dtsi
+>> index bb240e6a3a6f..6357b803521e 100644
+>> --- a/arch/arm/boot/dts/nspire.dtsi
+>> +++ b/arch/arm/boot/dts/nspire.dtsi
+>> @@ -172,7 +172,14 @@ rtc: rtc@90090000 {
+>>   			};
+>>   
+>>   			misc: misc@900a0000 {
+>> +				compatible = "syscon", "simple-mfd";
 > 
-> If ok, I will take Will's and mine below change to v5.
+> These are not allowed on their own (need specific compatible) and you
+> should have warnings when running dtbs_check.
 > 
-> index 4d24d39f5e42..5939c5e09570 100644
-> --- a/Documentation/memory-barriers.txt
-> +++ b/Documentation/memory-barriers.txt
-> @@ -1919,7 +1919,9 @@ There are some more advanced barrier functions:
->                 /* assign ownership */
->                 desc->status = DEVICE_OWN;
-> 
-> -               /* notify device of new descriptors */
-> +               /* Make descriptor status visible to the device followed by
-> +                * notify device of new descriptors
-> +                */
->                 writel(DESC_NOTIFY, doorbell);
 
-Hearing no objections, please proceed.
+Ah, my bad, must have gotten lost in the other existing warnings.
+Sent v3 with the above fixes, and tried to remove some existing warnings.
 
-							Thanx, Paul
+Thanks,
+Andrew
+
+> Best regards,
+> Krzysztof
+> 
