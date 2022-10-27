@@ -2,126 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D7B6101EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 217A66101ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235990AbiJ0TnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 15:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58340 "EHLO
+        id S236623AbiJ0Tnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 15:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235547AbiJ0TnW (ORCPT
+        with ESMTP id S236423AbiJ0Tni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 15:43:22 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD5D80484
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:43:21 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id t16so2343669qvm.9
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:43:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=u5WV0fN4ArkrzknOWlVXairTOGe+oE0SgEdnrwAT0fQ=;
-        b=PgC9fn7D8Pv3QW3LbTscPthfBT03SvxrZhga/+9qUt92e4hANFEMmShtrwv+hZmOkD
-         c+x6P5DXf49yiOOlImuPHVf51/ucyxNwZcAqMuLweZiWm9eBv566KvERROVEAOknj5uP
-         xWIcpidBKZW02pfeL6mmtPCiWD0jzIW6ZS7ME=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u5WV0fN4ArkrzknOWlVXairTOGe+oE0SgEdnrwAT0fQ=;
-        b=EtVo3Y8tzA3Z1bgRmOpoMYUgSJ7MBVq8Z1RNZyJTUG2VajEvKESJAK/DS1TiUD5Nu8
-         9pMIxZqcOr0xScTuwa8AlhQcPnFfLrwcHQsOeuiDqd9oy4mLAiQ14EGNzfZ/gQkPEjXT
-         P/1iOKeJZuuip2IQ1L+SsjnLNE5TzF2sxgq/A5aOJV9vVOWeSc4PPP1S9ngA/ceGVHwm
-         8jkpFgLx2Hy7N7kWAzuPWMy5dCYrv1VO3gtZNg54HJ+gKnFW3VXzAoYul6TpwLzKJr0Q
-         +dL8ktCF+3ZU/f4pak3oi/vkZ4wR08X4qzV86XPlITiCyqePWIZUt8OPNY3/gLhtdzzE
-         MJ2A==
-X-Gm-Message-State: ACrzQf2jxbBaVTkZtEEr0MAVdLkxMckgO96L6VSF/DEItGR+4N5DGqRA
-        fFXjiFQ/x/DWzYSBEbS+6qLiWHEvhG0BvA==
-X-Google-Smtp-Source: AMsMyM5EZxIm5I78E82zxz17t4286cyiPhiDvln/3nxe232yVtviz8fJFmbeizfPydLYuZGsV6KzJg==
-X-Received: by 2002:a05:6214:e4a:b0:4b1:d684:f72f with SMTP id o10-20020a0562140e4a00b004b1d684f72fmr43333469qvc.3.1666899798944;
-        Thu, 27 Oct 2022 12:43:18 -0700 (PDT)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id t40-20020a05622a182800b003995f6513b9sm1291368qtc.95.2022.10.27.12.43.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 12:43:17 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-36a4b86a0abso26649147b3.7
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:43:17 -0700 (PDT)
-X-Received: by 2002:a81:11d0:0:b0:35b:dd9f:5358 with SMTP id
- 199-20020a8111d0000000b0035bdd9f5358mr46239372ywr.401.1666899797074; Thu, 27
- Oct 2022 12:43:17 -0700 (PDT)
+        Thu, 27 Oct 2022 15:43:38 -0400
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1680580BD8;
+        Thu, 27 Oct 2022 12:43:37 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 19:43:29 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1666899814; x=1667159014;
+        bh=ecgD3ocjBEk+64IIiypXst5XSaocPXz3+0qtVTaMWVI=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=cMLCdIjgewQmJOSr9cpH7ECdKF4NZgyINOCz1RjriHSVAx+XP9spIUfAdYfmsBJBM
+         /vBC5lxVAeeKro4izPbktEgGmat9nEoSBbzD8kXpG2RWINpK8kx2DTQkku1DPPapYc
+         GnQ6PDkNO8TUO0aKPDbDWgU8V1c5uiS88Yduwk7aNInKS7JysqyXo35XsjXcPKKX1s
+         GdzXZ8XrSHZKKv0I5FYOd+/acVfhcW94XNV4DCfIgdQMcsLR77RNujCT/eaTELMbfi
+         mEdfObfstqCzwie8K3UNMxHobTBlMGzjDYwQkXXRZ9G6BIquAFpI2BUsmJuADmxS8A
+         0AImlSC+vTHTA==
+To:     =?utf-8?Q?Eray_Or=C3=A7unus?= <erayorcunus@gmail.com>
+From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org, ike.pan@canonical.com,
+        jikos@kernel.org, benjamin.tissoires@redhat.com,
+        dmitry.torokhov@gmail.com, hdegoede@redhat.com,
+        mgross@linux.intel.com
+Subject: Re: [PATCH 5/6] platform/x86: ideapad-laptop: Expose camera_power only if supported
+Message-ID: <NVuCQsVF6HONw3-eRplxrMgWlvEu6AwKlrXqouYOw1FSFucZ9oprZoUeXzBCsrdzFStLjWP4DSl9wOXTe1pS19MZovS9fDmmtVuRD_prCvQ=@protonmail.com>
+In-Reply-To: <20221026190106.28441-6-erayorcunus@gmail.com>
+References: <20221026190106.28441-1-erayorcunus@gmail.com> <20221026190106.28441-6-erayorcunus@gmail.com>
+Feedback-ID: 20568564:user:proton
 MIME-Version: 1.0
-References: <20221022114424.515572025@infradead.org> <2c800ed1-d17a-def4-39e1-09281ee78d05@nvidia.com>
- <Y1ZGNwUEdm15W6Xz@hirez.programming.kicks-ass.net> <CAG48ez3fG=WnvbiE5mJaD66_gJj_hohnV8CqBG9eNdjd7pJW3A@mail.gmail.com>
- <Y1fsYwshJ93FT21r@hirez.programming.kicks-ass.net> <CAG48ez3VE+3dVdUMK+Pg_942gR+h_TCcSaFxGwCbNfh3W+mfOA@mail.gmail.com>
- <Y1f7YvKuwOl1XEwU@hirez.programming.kicks-ass.net> <CAG48ez05gBiB2w7bL_3O_OUoBWazmHnRwMiuni_wQyXBUcaxbQ@mail.gmail.com>
- <Y1oub9MvqwGBlHkq@hirez.programming.kicks-ass.net> <CAHk-=wihPdOtXgJ32pLB6Xd-UvnaZW9YvOOjM24JGYRjNHeykA@mail.gmail.com>
- <Y1rdeFdYSBXOvTXz@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y1rdeFdYSBXOvTXz@hirez.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 27 Oct 2022 12:43:01 -0700
-X-Gmail-Original-Message-ID: <CAHk-=win7Z=afpjQysvSsE8G8Vg-V5iN1P2F94e+E99USYo-Aw@mail.gmail.com>
-Message-ID: <CAHk-=win7Z=afpjQysvSsE8G8Vg-V5iN1P2F94e+E99USYo-Aw@mail.gmail.com>
-Subject: Re: [PATCH 01/13] mm: Update ptep_get_lockless()s comment
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Jann Horn <jannh@google.com>, John Hubbard <jhubbard@nvidia.com>,
-        x86@kernel.org, willy@infradead.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        aarcange@redhat.com, kirill.shutemov@linux.intel.com,
-        jroedel@suse.de, ubizjak@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 12:35 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Thu, Oct 27, 2022 at 11:13:55AM -0700, Linus Torvalds wrote:
->
-> > But "fullmm" is probably even stronger than "mmap write-lock" in that
-> > it should also mean "no other CPU can be actively using this" - either
-> > for hardware page table walking, or for GUP.
->
-> IIRC fullmm is really: this is the last user and we're taking the whole
-> mm down -- IOW exit().
+Hi
 
-Yes.
 
-But that doesn't mean that it's entirely "just ours" - vmscan can
-still see the entries due to rmap, I think. So there can still be some
-concurrency concerns, but it's limited.
+2022. okt=C3=B3ber 26., szerda 21:01 keltez=C3=A9ssel, Eray Or=C3=A7unus =
+=C3=ADrta:
 
-> Do we worry about CPU errata where things go side-ways if multiple CPUs
-> have inconsistent TLB state?
+> IdeaPads dropped support for VPCCMD_W_CAMERA somewhere between 2014-2016,
+> none of the IdeaPads produced after that I tested supports it. Fortunatel=
+y
+> I found a way to check it; if the DSDT has camera device(s) defined, it
+> shouldn't have working VPCCMD_W_CAMERA, thus camera_power shouldn't be
+> exposed to sysfs. To accomplish this, walk the ACPI namespace in
+> ideapad_check_features and check the devices starting with "CAM".
+> Tested on 520-15IKB and Legion Y520, which successfully didn't expose
+> the camera_power attribute.
+>=20
+> Link: https://www.spinics.net/lists/platform-driver-x86/msg26147.html
+> Signed-off-by: Eray Or=C3=A7unus <erayorcunus@gmail.com>
+> ---
+>  drivers/platform/x86/ideapad-laptop.c | 53 ++++++++++++++++++++++++++-
+>  1 file changed, 52 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/platform/x86/ideapad-laptop.c b/drivers/platform/x86=
+/ideapad-laptop.c
+> index f3d4f2beda07..65eea2e65bbe 100644
+> --- a/drivers/platform/x86/ideapad-laptop.c
+> +++ b/drivers/platform/x86/ideapad-laptop.c
+> @@ -149,6 +149,7 @@ struct ideapad_private {
+>  =09=09bool fn_lock              : 1;
+>  =09=09bool hw_rfkill_switch     : 1;
+>  =09=09bool kbd_bl               : 1;
+> +=09=09bool cam_ctrl_via_ec      : 1;
+>  =09=09bool touchpad_ctrl_via_ec : 1;
+>  =09=09bool usb_charging         : 1;
+>  =09} features;
+> @@ -163,6 +164,26 @@ static bool no_bt_rfkill;
+>  module_param(no_bt_rfkill, bool, 0444);
+>  MODULE_PARM_DESC(no_bt_rfkill, "No rfkill for bluetooth.");
+>=20
+> +static char *cam_device_prefix =3D "CAM";
+> +
+> +static acpi_status acpi_find_device_callback(acpi_handle handle, u32 lev=
+el,
+> +=09=09=09=09=09     void *context, void **return_value)
+> +{
+> +=09char buffer[8];
+> +=09struct acpi_buffer ret_buf;
+> +
+> +=09ret_buf.length =3D sizeof(buffer);
+> +=09ret_buf.pointer =3D buffer;
+> +
+> +=09if (ACPI_SUCCESS(acpi_get_name(handle, ACPI_SINGLE_NAME, &ret_buf)))
+> +=09=09if (strncmp(ret_buf.pointer, context, strlen(context)) =3D=3D 0) {
 
-Yeah, we should definitely worry about those, since I think they have
-been known to cause machine checks etc, which then crashes the machine
-because the machine check architecture is broken garbage.
+Please use `strstarts()` here. Is there any reason why you decided not to
+simply "inline" the "CAM" string here (or even in the function call)?
 
-"User gets the odd memory ordering they asked for" is different from
-"user can crash machine because of bad machine check architecture" ;)
 
-That said, I don't think this is a real worry here. Because if I
-recall the errata correctly, they are not about "different TLB
-contents", but "different cacheability for the same physical page".
+> +=09=09=09*return_value =3D handle;
+> +=09=09=09return AE_CTRL_TERMINATE;
+> +=09=09}
+> +
+> +=09return AE_OK;
+> +}
+> +
+>  /*
+>   * ACPI Helpers
+>   */
+> @@ -675,7 +696,7 @@ static umode_t ideapad_is_visible(struct kobject *kob=
+j,
+>  =09bool supported =3D true;
+>=20
+>  =09if (attr =3D=3D &dev_attr_camera_power.attr)
+> -=09=09supported =3D test_bit(CFG_CAP_CAM_BIT, &priv->cfg);
+> +=09=09supported =3D priv->features.cam_ctrl_via_ec;
+>  =09else if (attr =3D=3D &dev_attr_conservation_mode.attr)
+>  =09=09supported =3D priv->features.conservation_mode;
+>  =09else if (attr =3D=3D &dev_attr_fan_mode.attr)
+> @@ -1523,10 +1544,40 @@ static const struct dmi_system_id hw_rfkill_list[=
+] =3D {
+>  static void ideapad_check_features(struct ideapad_private *priv)
+>  {
+>  =09acpi_handle handle =3D priv->adev->handle;
+> +=09acpi_handle pci_handle;
+> +=09acpi_handle temp_handle =3D NULL;
+>  =09unsigned long val;
+> +=09acpi_status status;
 
-Because different TLB contents are normal and even expected, I think.
-Things like kmap_local etc already end up doing some lazy TLB
-flushing. No?
+It is a small thing, but I believe it is best to define these variables
+in the block of that `if` since they are not used outside of it.
 
-I think it's only "somebody did an UC access to a cacheline I have"
-that ends up being bad.
 
-Note the *WILD HANDWAVING* above - I didn't actually look up the
-errata. The above is from my dim memories of the issues we had, and I
-might just be wrong.
+>=20
+>  =09priv->features.hw_rfkill_switch =3D dmi_check_system(hw_rfkill_list);
+>=20
+> +=09/*
+> +=09 * Some IdeaPads have camera switch via EC (mostly older ones),
+> +=09 * some don't. Fortunately we know that if DSDT contains device
+> +=09 * object for the camera, camera isn't switchable via EC.
+> +=09 * So, let's walk the namespace and try to find CAM* object.
+> +=09 * If we can't find it, set cam_ctrl_via_ec to true.
+> +=09 */
+> +
+> +=09priv->features.cam_ctrl_via_ec =3D false;
+> +
+> +=09if (test_bit(CFG_CAP_CAM_BIT, &priv->cfg)) {
+> +=09=09status =3D acpi_get_handle(handle, "^^^", &pci_handle);
+> +=09=09if (ACPI_SUCCESS(status)) {
+> +=09=09=09status =3D acpi_walk_namespace(ACPI_TYPE_DEVICE, pci_handle,
+> +=09=09=09=09=09=09     ACPI_UINT32_MAX,
+> +=09=09=09=09=09=09     acpi_find_device_callback,
+> +=09=09=09=09=09=09     NULL, cam_device_prefix,
+> +=09=09=09=09=09=09     &temp_handle);
+> +
+> +=09=09=09if (ACPI_SUCCESS(status) && temp_handle =3D=3D NULL)
+> +=09=09=09=09priv->features.cam_ctrl_via_ec =3D true;
+> +
+> +=09=09} else
+> +=09=09=09dev_warn(&priv->platform_device->dev,
+> +=09=09=09=09"Could not find PCI* node in the namespace\n");
+> +=09}
+> +
+>  =09/* Most ideapads with ELAN0634 touchpad don't use EC touchpad switch =
+*/
+>  =09priv->features.touchpad_ctrl_via_ec =3D !acpi_dev_present("ELAN0634",=
+ NULL, -1);
+>=20
+> --
+> 2.34.1
+>=20
 
-               Linus
+
+Regards,
+Barnab=C3=A1s P=C5=91cze
