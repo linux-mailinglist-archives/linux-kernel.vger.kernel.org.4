@@ -2,230 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB87860ED88
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 03:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A6960ED8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 03:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233840AbiJ0Bm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 21:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51318 "EHLO
+        id S233942AbiJ0Bmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 21:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233516AbiJ0BmY (ORCPT
+        with ESMTP id S233721AbiJ0Bmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 21:42:24 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE39012A348
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 18:42:22 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MySwX42ztzVj1m;
-        Thu, 27 Oct 2022 09:37:32 +0800 (CST)
-Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 09:42:20 +0800
-Received: from [10.174.178.120] (10.174.178.120) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 09:42:20 +0800
-Message-ID: <d4f3d737-705a-91dd-0531-5326938c87cb@huawei.com>
-Date:   Thu, 27 Oct 2022 09:42:20 +0800
+        Wed, 26 Oct 2022 21:42:50 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02C512B37A
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 18:42:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1666834968; x=1698370968;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=V3VNtrd2sSuIeHi0rSjd4oShumm9o/iApZNZPCXWpZo=;
+  b=i437Lx5G7o0ZfUPXUKjOp1LkVTpja2aTR6hCo1wwopYQ/nnt87s1fuBr
+   zIgoQplUiICj97A49AGSUG4CS8hpnperujBz9h5XPClUWwu04kYQ/8pYD
+   IBAPJzGGEqXQu5d9GJsk6NoJiXGo7519mlGN24exdZ/KigHOUoSlIv5aR
+   1Ow3h2Gbgh8amW/Q9SMn9eZA8DASS58mQJ851roS9FfvBWbQIWjpr2uvS
+   wvVqIzM1aEyRsLnRcNYo8FcezZzWez4Gyw/XmJnyB77w24soxzJjBssIJ
+   Qgs6WrZ8pI/+b19lDOu8e7gkMJCCpRULODwnQu9PxJDwsLhi7EOH+R+2E
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,215,1661788800"; 
+   d="scan'208";a="214829909"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 27 Oct 2022 09:42:47 +0800
+IronPort-SDR: 236och8rFyriDh7KSg/d170jJvjUSys1TsWwBP/s18h/xVj2bQNtLzy+4lKTI4qSTDxthwULCM
+ z84fXVhUImwIBBpI7S2bIpsinSR9d3oy3dMmgE8g6sBdVxHh/UBSuiYGRqHd2o6QhlWAJ3HBR5
+ Y0MjwULnpStU6AHC8TrFjZXb0p3ZArUJVXuaM0MS64YoOaR11CLHO1gLwHDw/DF0joYSzqfvxj
+ K6Xr4FJLTkQdyw5l2w/2RIWnnbwXuRwBXjJGdOxMbQqY35brH/462rYomyYwKFcqvf2T5pNGmc
+ 158hmTfmwosNf31fylWQAe8u
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Oct 2022 18:02:08 -0700
+IronPort-SDR: /Fo9oCjit+TAl5LoncYJAxPWoLOoeE4OB6YG2X5DflrzYfDQrGDSdnNznCJuk2cfhltMxCS3gH
+ i5mpp4Pn7iaZj2pKA9KvKUQ6yuM5EKusOqhjnskrJGSSOu7w9bhJMciCa9uJZBfzKEbpwJVNhF
+ SDCN0bW5eYqzoHYLlsDVIVnC8HpyXUncAwR+G1wlkn2VGNA3j/H0IjTB+lqKtTfg62scKD2RVi
+ 42GvYw0EoDwZE6/I5pTY/mh6Neww98Hxk8LUzH26fh2VvEMqtNc3CxTa7gn3bnYb2TEKSxRsKV
+ Opk=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Oct 2022 18:42:47 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MyT2Z5gWfz1RwqL
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 18:42:46 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1666834965; x=1669426966; bh=V3VNtrd2sSuIeHi0rSjd4oShumm9o/iApZN
+        ZPCXWpZo=; b=iF+Yhl8c1M35Pfw+xhXyZVfrU88Z/Q+3Je58YIC1IRRT5eV12zP
+        Lx1xzm0RazzjPUK8H1r3Q6bjOIyKu1uQGSjCmQkvTtoIK/XfdgF2ZPNw7Jv3ZiS1
+        sp1g5LQaYginN6vWYMMzO2wOIMfog9aOcM9G+1zJ2cGTGsk4cg39MDoFBHmt5tH7
+        mrl77znNZ8K6uhNfJw1K62B5T/rNZ14ZneIfzm+Io4fQh9sHJT0uTq4GzXdHjE/D
+        6go+gIXRmHAa1W2pd0eWO5Bafwm03mXH3dWvNYV5bA7vKeAGDnyPIveTKk93YVMV
+        vfhRrHrOKRE3QA5Mv87Fou7Ud55bgGx/tNA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id JbCyearxkHue for <linux-kernel@vger.kernel.org>;
+        Wed, 26 Oct 2022 18:42:45 -0700 (PDT)
+Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MyT2W0VPrz1RvLy;
+        Wed, 26 Oct 2022 18:42:42 -0700 (PDT)
+Message-ID: <8ed42281-4400-a0ed-92f1-c57b9de726a4@opensource.wdc.com>
+Date:   Thu, 27 Oct 2022 10:42:41 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-CC:     <mawupeng1@huawei.com>, <akpm@linux-foundation.org>,
-        <mike.kravetz@oracle.com>, <songmuchun@bytedance.com>,
-        <mhocko@suse.com>, <osalvador@suse.de>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -next 1/1] mm: hugetlb_vmemmap: Fix WARN_ON in
- vmemmap_remap_pte
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH RFC v3 1/7] ata: libata-scsi: Add
+ ata_scsi_queue_internal()
 Content-Language: en-US
-To:     <anshuman.khandual@arm.com>, <muchun.song@linux.dev>,
-        <catalin.marinas@arm.com>
-References: <20221025014215.3466904-1-mawupeng1@huawei.com>
- <614E3E83-1EAB-4C39-AF9C-83C0CCF26218@linux.dev>
- <35dd51eb-c266-f221-298a-21309c17971a@arm.com>
-From:   mawupeng <mawupeng1@huawei.com>
-In-Reply-To: <35dd51eb-c266-f221-298a-21309c17971a@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.120]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, hare@suse.de, bvanassche@acm.org,
+        hch@lst.de, ming.lei@redhat.com, niklas.cassel@wdc.com
+Cc:     axboe@kernel.dk, jinpu.wang@cloud.ionos.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linuxarm@huawei.com
+References: <1666693976-181094-1-git-send-email-john.garry@huawei.com>
+ <1666693976-181094-2-git-send-email-john.garry@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <1666693976-181094-2-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/25/22 19:32, John Garry wrote:
+> Add a function to handle queued ATA internal SCSI cmnds - does much the
+> same as ata_exec_internal_sg() does (which will be fixed up later to
+> actually queue internal cmnds through this function).
+> 
+> Signed-off-by: John Garry <john.garry@huawei.com>
+> ---
+>  drivers/ata/libata-sata.c |  3 +++
+>  drivers/ata/libata-scsi.c | 43 +++++++++++++++++++++++++++++++++++++++
+>  drivers/ata/libata.h      |  3 ++-
+>  include/linux/libata.h    |  6 ++++++
+>  4 files changed, 54 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ata/libata-sata.c b/drivers/ata/libata-sata.c
+> index b6806d41a8c5..e8b828c56542 100644
+> --- a/drivers/ata/libata-sata.c
+> +++ b/drivers/ata/libata-sata.c
+> @@ -1258,6 +1258,9 @@ int ata_sas_queuecmd(struct scsi_cmnd *cmd, struct ata_port *ap)
+>  {
+>  	int rc = 0;
+>  
+> +	if (blk_mq_is_reserved_rq(scsi_cmd_to_rq(cmd)))
+> +		return ata_scsi_queue_internal(cmd, ap->link.device);
+> +
+>  	if (likely(ata_dev_enabled(ap->link.device)))
+>  		rc = __ata_scsi_queuecmd(cmd, ap->link.device);
+>  	else {
+> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+> index 476e0ef4bd29..30d7c90b0c35 100644
+> --- a/drivers/ata/libata-scsi.c
+> +++ b/drivers/ata/libata-scsi.c
+> @@ -3965,6 +3965,49 @@ static inline ata_xlat_func_t ata_get_xlat_func(struct ata_device *dev, u8 cmd)
+>  	return NULL;
+>  }
+>  
+> +unsigned int ata_scsi_queue_internal(struct scsi_cmnd *scmd,
+> +				     struct ata_device *dev)
+> +{
+> +	struct ata_link *link = dev->link;
+> +	struct ata_port *ap = link->ap;
+> +	struct ata_queued_cmd *qc;
+> +
+> +	/* no internal command while frozen */
+> +	if (ap->pflags & ATA_PFLAG_FROZEN)
+> +		goto did_err;
+> +
+> +	/* initialize internal qc */
+> +	qc = __ata_qc_from_tag(ap, ATA_TAG_INTERNAL);
+> +	link->preempted_tag = link->active_tag;
+> +	link->preempted_sactive = link->sactive;
+> +	ap->preempted_qc_active = ap->qc_active;
+> +	ap->preempted_nr_active_links = ap->nr_active_links;
+> +	link->active_tag = ATA_TAG_POISON;
+> +	link->sactive = 0;
+> +	ap->qc_active = 0;
+> +	ap->nr_active_links = 0;
+> +
+> +	if (qc->dma_dir != DMA_NONE) {
+> +		int n_elem;
+> +
+> +		n_elem = 1;
+> +		qc->n_elem = n_elem;
+> +		qc->sg = scsi_sglist(scmd);
+> +		qc->nbytes = qc->sg->length;
+> +		ata_sg_init(qc, qc->sg, n_elem);
+> +	}
+> +
+> +	scmd->submitter = SUBMITTED_BY_BLOCK_LAYER;
+> +
+> +	ata_qc_issue(qc);
 
+Arg, no ! This potentially mixes NCQ and non-NCQ commands, which is
+forbidden by ATA spec. You need to use something like:
 
-On 2022/10/26 13:06, Anshuman Khandual wrote:
-> 
-> 
-> On 10/25/22 12:06, Muchun Song wrote:
->>
->>
->>> On Oct 25, 2022, at 09:42, Wupeng Ma <mawupeng1@huawei.com> wrote:
->>>
->>> From: Ma Wupeng <mawupeng1@huawei.com>
->>>
->>> Commit f41f2ed43ca5 ("mm: hugetlb: free the vmemmap pages associated with
->>> each HugeTLB page") add vmemmap_remap_pte to remap the tail pages as
->>> read-only to catch illegal write operation to the tail page.
->>>
->>> However this will lead to WARN_ON in arm64 in __check_racy_pte_update()
->>
->> Thanks for your finding this issue.
->>
->>> since this may lead to dirty state cleaned. This check is introduced by
->>> commit 2f4b829c625e ("arm64: Add support for hardware updates of the
->>> access and dirty pte bits") and the initial check is as follow:
->>>
->>>  BUG_ON(pte_write(*ptep) && !pte_dirty(pte));
->>>
->>> Since we do need to mark this pte as read-only to catch illegal write
->>> operation to the tail pages, use set_pte  to replace set_pte_at to bypass
->>> this check.
->>
->> In theory, the waring does not affect anything since the tail vmemmap
->> pages are supposed to be read-only. So, skipping this check for vmemmap
-> 
-> Tails vmemmap pages are supposed to be read-only, in practice but their
-> backing pages do have pte_write() enabled. Otherwise the VM_WARN_ONCE()
-> warning would not have triggered.
-> 
->         VM_WARN_ONCE(pte_write(old_pte) && !pte_dirty(pte),
->                      "%s: racy dirty state clearing: 0x%016llx -> 0x%016llx",
->                      __func__, pte_val(old_pte), pte_val(pte));
+	if (ap->ops->qc_defer) {
+		if ((rc = ap->ops->qc_defer(qc)))
+			goto defer;
+	}
 
-So, arm64 will trigger this warn_on in this condition and this condition is not
-unusual such as this scenario?
+	ata_qc_issue(qc);
 
-It is true that we should change the login in arm64. but how to change it to
-make the code more common?
+which is done in __ata_scsi_queuecmd() -> ata_scsi_translate()
 
-Any thoughts?
+Unless you guarantee that ata_scsi_queue_internal() is always called
+from libata EH context ?
 
-Thanks for reviewing.
+> +
+> +	return 0;
+> +did_err:
+> +	scmd->result = (DID_ERROR << 16);
+> +	scsi_done(scmd);
+> +	return 0;
+> +}
+> +
+>  int __ata_scsi_queuecmd(struct scsi_cmnd *scmd, struct ata_device *dev)
+>  {
+>  	u8 scsi_op = scmd->cmnd[0];
+> diff --git a/drivers/ata/libata.h b/drivers/ata/libata.h
+> index 0c2df1e60768..15cd1cd618b8 100644
+> --- a/drivers/ata/libata.h
+> +++ b/drivers/ata/libata.h
+> @@ -82,7 +82,6 @@ extern int ata_port_probe(struct ata_port *ap);
+>  extern void __ata_port_probe(struct ata_port *ap);
+>  extern unsigned int ata_read_log_page(struct ata_device *dev, u8 log,
+>  				      u8 page, void *buf, unsigned int sectors);
+> -
+>  #define to_ata_port(d) container_of(d, struct ata_port, tdev)
+>  
+>  /* libata-acpi.c */
+> @@ -130,6 +129,8 @@ extern int ata_scsi_user_scan(struct Scsi_Host *shost, unsigned int channel,
+>  void ata_scsi_sdev_config(struct scsi_device *sdev);
+>  int ata_scsi_dev_config(struct scsi_device *sdev, struct ata_device *dev);
+>  int __ata_scsi_queuecmd(struct scsi_cmnd *scmd, struct ata_device *dev);
+> +unsigned int ata_scsi_queue_internal(struct scsi_cmnd *scmd,
+> +				     struct ata_device *dev);
+>  
+>  /* libata-eh.c */
+>  extern unsigned int ata_internal_cmd_timeout(struct ata_device *dev, u8 cmd);
+> diff --git a/include/linux/libata.h b/include/linux/libata.h
+> index 827d5838cd23..8938b584520f 100644
+> --- a/include/linux/libata.h
+> +++ b/include/linux/libata.h
+> @@ -764,7 +764,9 @@ struct ata_link {
+>  
+>  	struct device		tdev;
+>  	unsigned int		active_tag;	/* active tag on this link */
+> +	unsigned int		preempted_tag;
+>  	u32			sactive;	/* active NCQ commands */
+> +	u32			preempted_sactive;
+>  
+>  	unsigned int		flags;		/* ATA_LFLAG_xxx */
+>  
+> @@ -857,6 +859,10 @@ struct ata_port {
+>  #ifdef CONFIG_ATA_ACPI
+>  	struct ata_acpi_gtm	__acpi_init_gtm; /* use ata_acpi_init_gtm() */
+>  #endif
+> +
+> +	u64 preempted_qc_active;
+> +	int preempted_nr_active_links;
+> +
+>  	/* owned by EH */
+>  	u8			sector_buf[ATA_SECT_SIZE] ____cacheline_aligned;
+>  };
 
-> 
-> Also, is not it true that the pte being remapped into a different page
-> as read only, than what it had originally (which will be freed up) i.e 
-> the PFN in 'old_pte' and 'pte' will be different. Hence is there still
-> a possibility for a race condition even when the PFN changes ?
-> 
->> pages seem feasible. But I am not sure whether it is general to use
->> set_pte here instead of set_pte_at, I didn’t see any users of set_pte
->> from the common code routines except the code from arch/xxx. And this
->> issue is specific for arm64, so I suggest fixing it in __check_racy_pte_update()
->> itself.
-> 
-> Right, should not change it to yet lower level platform helper set_pte()
-> just to work around this warning. Instead, __check_racy_pte_update() is
-> the right place where it should be fixed.
-> 
->>
->> Something like (Just some thoughts from mine):
->>
->> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
->> index b5df82aa99e6..df7716965a93 100644
->> --- a/arch/arm64/include/asm/pgtable.h
->> +++ b/arch/arm64/include/asm/pgtable.h
->> @@ -292,7 +292,8 @@ extern void __sync_icache_dcache(pte_t pteval);
->>   *   PTE_DIRTY || (PTE_WRITE && !PTE_RDONLY)
->>   */
->>
->> -static inline void __check_racy_pte_update(struct mm_struct *mm, pte_t *ptep,
->> +static inline void __check_racy_pte_update(struct mm_struct *mm,
->> +                                          unsigned long addr, pte_t *ptep,
->>                                            pte_t pte)
->>  {
->>         pte_t old_pte;
->> @@ -307,6 +308,10 @@ static inline void __check_racy_pte_update(struct mm_struct *mm, pte_t *ptep,
->>         if (mm != current->active_mm && atomic_read(&mm->mm_users) <= 1)
->>                 return;
->>
->> +       if (IS_ENABLED(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP) &&
->> +           addr >= VMEMMAP_START && addr <= VMEMMAP_END)
->> +               return;
->> +
->>         /*
->>          * Check for potential race with hardware updates of the pte
->>          * (ptep_set_access_flags safely changes valid ptes without going
->>
->>>
->>> The following shell command can be used to reproduce this WARN_ON in
->>> 6.1.0-rc1:
->>>
->>>  echo 1 > /proc/sys/vm/hugetlb_optimize_vmemmap
->>>  cat /proc/sys/vm/hugetlb_optimize_vmemmap
->>>
->>>  echo 1024 > /proc/sys/vm/nr_overcommit_hugepages
->>>  mkdir -p /root/hugetlb
->>>  mount none /root/hugetlb -t hugetlbfs
->>>  fallocate -l 2g /root/hugetlb/xx &
->>>
->>> Here is the detail WARN_ON log:
->>>
->>> ------------[ cut here ]------------
->>> __check_racy_pte_update: racy dirty state clearing: 0x0068000416899f03 -> 0x0060000416898f83
->>> WARNING: CPU: 3 PID: 394 at arch/arm64/include/asm/pgtable.h:318 vmemmap_remap_pte+0x118/0x120
->>> Modules linked in:
->>> CPU: 3 PID: 394 Comm: fallocate Not tainted 6.1.0-rc1 #224
->>> Hardware name: QEMU QEMU Virtual Machine, BIOS 0.0.0 02/06/2015
->>> Call trace:
->>> vmemmap_remap_pte+0x118/0x120
->>> vmemmap_remap_range+0x30c/0x560
->>> hugetlb_vmemmap_optimize+0x158/0x408
->>> __prep_new_huge_page+0x24/0x150
->>> prep_new_huge_page+0x30/0x60
->>> alloc_fresh_huge_page+0x1c4/0x1e0
->>> alloc_surplus_huge_page+0xa0/0x168
->>> alloc_huge_page+0x264/0x5b8
->>> hugetlbfs_fallocate+0x294/0x680
->>> vfs_fallocate+0x12c/0x568
->>> ksys_fallocate+0x50/0xa0
->>> __arm64_sys_fallocate+0x28/0x38
->>> invoke_syscall+0x4c/0x110
->>> el0_svc_common.constprop.0+0x68/0x128
->>> do_el0_svc+0x34/0xd0
->>> el0_svc+0x48/0xb8
->>> el0t_64_sync_handler+0xb8/0xc0
->>> el0t_64_sync+0x18c/0x190
->>> ---[ end trace 0000000000000000 ]---
->>>
->>> Fixes: f41f2ed43ca5 ("mm: hugetlb: free the vmemmap pages associated with each HugeTLB page")
->>
->> Actually, this commit does not pose the issue for arm64. I think the correct commit
->> which should be fixed is 1e63ac088f20f7a4425c430c31ecd3cf167fb3f2.
->>
->> Thanks.
->>
->>> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
->>> ---
->>> mm/hugetlb_vmemmap.c | 2 +-
->>> 1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
->>> index ba2a2596fb4e..cb056265c31e 100644
->>> --- a/mm/hugetlb_vmemmap.c
->>> +++ b/mm/hugetlb_vmemmap.c
->>> @@ -249,7 +249,7 @@ static void vmemmap_remap_pte(pte_t *pte, unsigned long addr,
->>> struct page *page = pte_page(*pte);
->>>
->>> list_add_tail(&page->lru, walk->vmemmap_pages);
->>> - set_pte_at(&init_mm, addr, pte, entry);
->>> + set_pte(pte, entry);
->>> }
->>>
->>> /*
->>> -- 
->>> 2.25.1
->>>
->>>
->>
->>
-> 
+-- 
+Damien Le Moal
+Western Digital Research
+
