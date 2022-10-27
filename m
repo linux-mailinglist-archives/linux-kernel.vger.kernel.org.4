@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6EA60F54A
+	by mail.lfdr.de (Postfix) with ESMTP id 1546760F548
 	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235555AbiJ0KcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 06:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
+        id S235560AbiJ0KcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 06:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235509AbiJ0Kb1 (ORCPT
+        with ESMTP id S235512AbiJ0Kb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 06:31:27 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCC15DF14;
-        Thu, 27 Oct 2022 03:31:20 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id bp11so1398292wrb.9;
-        Thu, 27 Oct 2022 03:31:20 -0700 (PDT)
+        Thu, 27 Oct 2022 06:31:28 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F693869E;
+        Thu, 27 Oct 2022 03:31:22 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id k8so1434022wrh.1;
+        Thu, 27 Oct 2022 03:31:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=skMXhQ9UPg7y5/uNCv3zCPSIIk29nueisDJZKT9k6S4=;
-        b=Puus+a0Ez/l3tz/Hgs+YuBSrAVTXSzcyYoQ2rmJVCBlXJrkiKTThsBHZmux2uTLBTr
-         6OsanY+s3IV+2TuujAHkJlrujIFLoXBOiF2KDlr0tAzZuIORnCffLLwylq++85odQxXe
-         kzHsiSL778ZwjIYKalAPNRasHvvkJOKUaZH04XesJrE4fXunH/Pyw9/VHUN+ssQYc3eM
-         zWwGCJo59jXyiI/2jzCRiKK2+bBiUMzKUZ02EaUTOgzfEdEBNYSao2IOliEpVISuwZ7T
-         4O4jHP+2e3oWLM2ogyYDf/6J6Yz0Tyc/dQYmXLjgo4Nn8y6bJHCzfTKzgN+1v28cnf95
-         51Ig==
+        bh=xGjaJ0h4ppsoQp3v9BsoCq7FvfU2W9FyXDTBf8tg2P8=;
+        b=dF+e9xk08/IQ7SPTsfSOBhg5I9cqTjUejiIlsnErFZ3GX3SG7fqwG9zs+86T0noSYl
+         Ih4TuB7lxKE/367xoXdkPkpZFItWIjuVj1Li6VQ1lN107hbfJxPFdz41Y1JYDfoVySsS
+         16Vv9SGqjs48xW4iw2Vr2Kkw1+Px3xPYzL16FvL+Jom4vOpJeIG8Z8b4b0TwB0LkfGU9
+         bnjBLIsBoF9BM/C76lvGJSqLT3sa3kRjrVYLQYVwXELurEhWYymUqoVzrLmiGWKU0oTn
+         h4HCfbhKuenGx/ikEKX+1N5fasMNRNZ1uDDk36NfysZLYPhK3Hlr9QqhxrEyvdM/jlgC
+         wlCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=skMXhQ9UPg7y5/uNCv3zCPSIIk29nueisDJZKT9k6S4=;
-        b=7dXhf975zulLOOl8AXAwDALpl9eAFdcaKCqBYuQ5RJvq6W8CuXi1D//Y/DNRLL4cCQ
-         VY8SFwdTWVqCzdmBIC8SIlvQHTJoNwowkDjLCX8Gp1XbAUoelOuo9iKT9XgXF9ZBl8xS
-         jU1FIGubmXMyNUkcpWlqZYiSS6asra08iiUJfqAuuweUDDqsEu8iyzkxfoEv9lMhUvqO
-         FGbyjXaApnn2NipsGQL9mTOTM+vBUJ6GXDRwJ6b4joFhlWLPeog9SKC7nHpFdfvB0p9e
-         NZ0xBecpZOgLq0rWsM/f5IQ7e9VnSoUCnz/HOzSz+HsoTUgxCPT5zM9scdxB+Nf8i/j3
-         OK/g==
-X-Gm-Message-State: ACrzQf2c3VenZ6vvxSK3cf8tAlRjWi4Ynw7lZIo62pAiirVR/75EOlD7
-        6ry0HkblVNbk0wXPP4rTn5M=
-X-Google-Smtp-Source: AMsMyM7AwwUnf4hHm+7dG0tZI7w6zPZggzhbOBbx7uHhGsJ0J0zE9PLwNbVqC7GTzHZCaK3pw5l+PQ==
-X-Received: by 2002:a05:6000:1566:b0:236:6a6f:6c27 with SMTP id 6-20020a056000156600b002366a6f6c27mr15425842wrz.553.1666866679157;
-        Thu, 27 Oct 2022 03:31:19 -0700 (PDT)
+        bh=xGjaJ0h4ppsoQp3v9BsoCq7FvfU2W9FyXDTBf8tg2P8=;
+        b=b5k5y5JCKaq94Lp6QzflzeoxNnrIU88UYOEFGIP95pTWcbFZiIcqiE7WSKi/iRTMel
+         wliR2qPro8PvxRYDqEZ5N4ZeI4Qb0UoVgeLkRFUczdOqh5PB6pUTHuyc/5WglaJ15NxW
+         A9M1X1ISKIoZwZTX7h7kkjBfYq4xRI+WrfNmj5IpQHyAVuQLxC9xqxIKR3PA7AVWFfiU
+         C7xCNJNHC4XBttbNrLuVN6V1V+7F8BZb9sWJtxf76VNOOt1rYgr9KI1DTpuirTgENsaA
+         id6VhBldjy0bwIBkDgqYFPlP6JiuTeNxSmqGjAU/fvVljQoEAYvzk/IpLFxtW0IR8ghB
+         /wnw==
+X-Gm-Message-State: ACrzQf1AglPYBCHqwlhqUy+45tl/zn3anOgCTA2ta7oj7n+i69w2GLLQ
+        G9AYOpAcw0TyUZ3xM8kTgrI=
+X-Google-Smtp-Source: AMsMyM5eGmVD0uYhIid93we0Pfv30YcB2w5PeR5oA8ai3Yj2skr52yq00PBWn1TTSrA+j8kj2zm5WA==
+X-Received: by 2002:a5d:5d89:0:b0:226:e5ca:4bc2 with SMTP id ci9-20020a5d5d89000000b00226e5ca4bc2mr31531270wrb.310.1666866680529;
+        Thu, 27 Oct 2022 03:31:20 -0700 (PDT)
 Received: from prasmi.home ([2a00:23c8:2501:c701:66:ff81:b0d3:60a0])
-        by smtp.gmail.com with ESMTPSA id k9-20020adff5c9000000b0022eafed36ebsm824235wrp.73.2022.10.27.03.31.17
+        by smtp.gmail.com with ESMTPSA id k9-20020adff5c9000000b0022eafed36ebsm824235wrp.73.2022.10.27.03.31.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 03:31:18 -0700 (PDT)
+        Thu, 27 Oct 2022 03:31:19 -0700 (PDT)
 From:   Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -66,12 +66,10 @@ Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
         linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 2/4] media: dt-bindings: Document Renesas RZ/G2L CRU block
-Date:   Thu, 27 Oct 2022 11:31:02 +0100
-Message-Id: <20221027103104.74576-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v4 3/4] media: platform: Add Renesas RZ/G2L MIPI CSI-2 receiver driver
+Date:   Thu, 27 Oct 2022 11:31:03 +0100
+Message-Id: <20221027103104.74576-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221027103104.74576-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20221027103104.74576-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -89,200 +87,995 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Document the CRU block found on Renesas RZ/G2L (and alike) SoCs.
+Add MIPI CSI-2 receiver driver for Renesas RZ/G2L. The MIPI
+CSI-2 is part of the CRU module found on RZ/G2L family.
+
+Based on a patch in the BSP by Hien Huynh
+<hien.huynh.px@renesas.com>
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
 v3 -> v4
-* Included RB tag from Rob
+* Implemented post_streamoff callback
 
 v2 -> v3
-* Updated clock names
+* Switched to runtime PM
+* Implemented pre_streamon callback in CSI driver
+* Got rid of rzg2l_csi2_cmn_rstb_deassert()/
+  rzg2l_csi2_dphy_setting/rzg2l_csi2_mipi_link_setting() from CSI driver
+* Switched to for-loop instead of if block for getting CSI timings
+* Fixed rzg2l_csi2_set_format() as pointed by Laurent
+* Copied all colorspace-related fields received from userspace (colorspace,
+  xfer_func, ycbcr_enc and quantization) in rzg2l_csi2_set_format.
+* Initialised pad in rzg2l_csi2_init_config() 
+* Introduced RZG2L_CSI2_DEFAULT_WIDTH/HEIGHT/FMT macros
+* Dropped RZG2L_CSI2_SOURCE_VC0-RZG2L_CSI2_SOURCE_VC3 macros
 
 v1 -> v2
-* Dropped media prefix from subject
-* Dropped oneOf from compatible
-* Used 4 spaces for indentation in example node
-* Marked port0/1 as required
-* Updated example node
-* Included RB tag from Laurent
+* Sorted Kconfig select
+* Prefixed generic names for struct/variables with rzg2_csi2
+* Dropped unnecessary checks for remote source
+* Dropped exporting functions
+* Moved lane validation to probe
+* Split up rzg2l_csi2_dphy_setting() and rzg2l_csi2_mipi_link_setting()
+* Used rzg2l_csi2_write() wherever possible
+* Dropped stream_count/lock
+* Used active subdev state instead of manually storing format in driver
+* Implemented init_cfg/enum_frame_size/enum_mbus_code callbacks
+* Dropped check for bus_type of remote source
+* Switched to manually turn ON/OFF the clocks instead of pm_runtime so that
+  the mipi/dhpy initialization happens as per the HW manual
+* Hardcoded VC0 usage for now as streams API is under development
 
 RFC v2 -> v1
-* Dropped endpoint stuff from port1 as suggested by Rob
-* Updated description for endpoint
+* Fixed initialization sequence of DPHY and link
+* Exported DPHY and link initialization functions so that the
+  CRU core driver can initialize the CRU and CSI2 as per the HW manual.
 
 RFC v1 -> RFC v2
-* Dropped CSI
+* new patch (split up as new driver compared to v1)
 ---
- .../bindings/media/renesas,rzg2l-cru.yaml     | 157 ++++++++++++++++++
- 1 file changed, 157 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
+ drivers/media/platform/renesas/Kconfig        |   1 +
+ drivers/media/platform/renesas/Makefile       |   1 +
+ .../media/platform/renesas/rzg2l-cru/Kconfig  |  17 +
+ .../media/platform/renesas/rzg2l-cru/Makefile |   3 +
+ .../platform/renesas/rzg2l-cru/rzg2l-csi2.c   | 869 ++++++++++++++++++
+ 5 files changed, 891 insertions(+)
+ create mode 100644 drivers/media/platform/renesas/rzg2l-cru/Kconfig
+ create mode 100644 drivers/media/platform/renesas/rzg2l-cru/Makefile
+ create mode 100644 drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
 
-diff --git a/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml b/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
+diff --git a/drivers/media/platform/renesas/Kconfig b/drivers/media/platform/renesas/Kconfig
+index 9fd90672ea2d..ed788e991f74 100644
+--- a/drivers/media/platform/renesas/Kconfig
++++ b/drivers/media/platform/renesas/Kconfig
+@@ -41,6 +41,7 @@ config VIDEO_SH_VOU
+ 	  Support for the Video Output Unit (VOU) on SuperH SoCs.
+ 
+ source "drivers/media/platform/renesas/rcar-vin/Kconfig"
++source "drivers/media/platform/renesas/rzg2l-cru/Kconfig"
+ 
+ # Mem2mem drivers
+ 
+diff --git a/drivers/media/platform/renesas/Makefile b/drivers/media/platform/renesas/Makefile
+index 3ec226ef5fd2..55854e868887 100644
+--- a/drivers/media/platform/renesas/Makefile
++++ b/drivers/media/platform/renesas/Makefile
+@@ -4,6 +4,7 @@
+ #
+ 
+ obj-y += rcar-vin/
++obj-y += rzg2l-cru/
+ obj-y += vsp1/
+ 
+ obj-$(CONFIG_VIDEO_RCAR_DRIF) += rcar_drif.o
+diff --git a/drivers/media/platform/renesas/rzg2l-cru/Kconfig b/drivers/media/platform/renesas/rzg2l-cru/Kconfig
 new file mode 100644
-index 000000000000..7dde7967c886
+index 000000000000..57c40bb499df
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
-@@ -0,0 +1,157 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (C) 2022 Renesas Electronics Corp.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/renesas,rzg2l-cru.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/media/platform/renesas/rzg2l-cru/Kconfig
+@@ -0,0 +1,17 @@
++# SPDX-License-Identifier: GPL-2.0
 +
-+title: Renesas RZ/G2L (and alike SoC's) Camera Data Receiving Unit (CRU) Image processing
++config VIDEO_RZG2L_CSI2
++	tristate "RZ/G2L MIPI CSI-2 Receiver"
++	depends on ARCH_RENESAS || COMPILE_TEST
++	depends on V4L_PLATFORM_DRIVERS
++	depends on VIDEO_DEV && OF
++	select MEDIA_CONTROLLER
++	select RESET_CONTROLLER
++	select V4L2_FWNODE
++	select VIDEO_V4L2_SUBDEV_API
++	help
++	  Support for Renesas RZ/G2L (and alike SoC's) MIPI CSI-2
++	  Receiver driver.
 +
-+maintainers:
-+  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
++	  To compile this driver as a module, choose M here: the
++	  module will be called rzg2l-csi2.
+diff --git a/drivers/media/platform/renesas/rzg2l-cru/Makefile b/drivers/media/platform/renesas/rzg2l-cru/Makefile
+new file mode 100644
+index 000000000000..91ea97a944e6
+--- /dev/null
++++ b/drivers/media/platform/renesas/rzg2l-cru/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0
 +
-+description:
-+  The CRU image processing module is a data conversion module equipped with pixel
-+  color space conversion, LUT, pixel format conversion, etc. An MIPI CSI-2 input and
-+  parallel (including ITU-R BT.656) input are provided as the image sensor interface.
++obj-$(CONFIG_VIDEO_RZG2L_CSI2) += rzg2l-csi2.o
+diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
+new file mode 100644
+index 000000000000..5997ce8994f9
+--- /dev/null
++++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
+@@ -0,0 +1,869 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Driver for Renesas RZ/G2L MIPI CSI-2 Receiver
++ *
++ * Copyright (C) 2022 Renesas Electronics Corp.
++ */
 +
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - renesas,r9a07g044-cru       # RZ/G2{L,LC}
-+          - renesas,r9a07g054-cru       # RZ/V2L
-+      - const: renesas,rzg2l-cru
++#include <linux/clk.h>
++#include <linux/delay.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/of_graph.h>
++#include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
++#include <linux/reset.h>
++#include <linux/sys_soc.h>
++#include <linux/units.h>
 +
-+  reg:
-+    maxItems: 1
++#include <media/v4l2-ctrls.h>
++#include <media/v4l2-device.h>
++#include <media/v4l2-fwnode.h>
++#include <media/v4l2-mc.h>
++#include <media/v4l2-subdev.h>
 +
-+  interrupts:
-+    maxItems: 3
++/* LINK registers */
++/* Module Configuration Register */
++#define CSI2nMCG			0x0
++#define CSI2nMCG_SDLN			GENMASK(11, 8)
 +
-+  interrupt-names:
-+    items:
-+      - const: image_conv
-+      - const: image_conv_err
-+      - const: axi_mst_err
++/* Module Control Register 0 */
++#define CSI2nMCT0			0x10
++#define CSI2nMCT0_VDLN(x)		((x) << 0)
 +
-+  clocks:
-+    items:
-+      - description: CRU Main clock
-+      - description: CRU Register access clock
-+      - description: CRU image transfer clock
++/* Module Control Register 2 */
++#define CSI2nMCT2			0x18
++#define CSI2nMCT2_FRRSKW(x)		((x) << 16)
++#define CSI2nMCT2_FRRCLK(x)		((x) << 0)
 +
-+  clock-names:
-+    items:
-+      - const: video
-+      - const: apb
-+      - const: axi
++/* Module Control Register 3 */
++#define CSI2nMCT3			0x1c
++#define CSI2nMCT3_RXEN			BIT(0)
 +
-+  power-domains:
-+    maxItems: 1
++/* Reset Control Register */
++#define CSI2nRTCT			0x28
++#define CSI2nRTCT_VSRST			BIT(0)
 +
-+  resets:
-+    items:
-+      - description: CRU_PRESETN reset terminal
-+      - description: CRU_ARESETN reset terminal
++/* Reset Status Register */
++#define CSI2nRTST			0x2c
++#define CSI2nRTST_VSRSTS		BIT(0)
 +
-+  reset-names:
-+    items:
-+      - const: presetn
-+      - const: aresetn
++/* Receive Data Type Enable Low Register */
++#define CSI2nDTEL			0x60
 +
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
++/* Receive Data Type Enable High Register */
++#define CSI2nDTEH			0x64
 +
-+    properties:
-+      port@0:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description:
-+          Input port node, single endpoint describing a parallel input source.
++/* DPHY registers */
++/* D-PHY Control Register 0 */
++#define CSIDPHYCTRL0			0x400
++#define CSIDPHYCTRL0_EN_LDO1200		BIT(1)
++#define CSIDPHYCTRL0_EN_BGR		BIT(0)
 +
-+        properties:
-+          endpoint:
-+            $ref: video-interfaces.yaml#
-+            unevaluatedProperties: false
++/* D-PHY Timing Register 0 */
++#define CSIDPHYTIM0			0x404
++#define CSIDPHYTIM0_TCLK_MISS(x)	((x) << 24)
++#define CSIDPHYTIM0_T_INIT(x)		((x) << 0)
 +
-+            properties:
-+              hsync-active: true
-+              vsync-active: true
-+              bus-width: true
-+              data-shift: true
++/* D-PHY Timing Register 1 */
++#define CSIDPHYTIM1			0x408
++#define CSIDPHYTIM1_THS_PREPARE(x)	((x) << 24)
++#define CSIDPHYTIM1_TCLK_PREPARE(x)	((x) << 16)
++#define CSIDPHYTIM1_THS_SETTLE(x)	((x) << 8)
++#define CSIDPHYTIM1_TCLK_SETTLE(x)	((x) << 0)
 +
-+      port@1:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description:
-+          Input port node, describing the Image Processing module connected to the
-+          CSI-2 receiver.
++/* D-PHY Skew Adjustment Function */
++#define CSIDPHYSKW0			0x460
++#define CSIDPHYSKW0_UTIL_DL0_SKW_ADJ(x)	((x) & 0x3)
++#define CSIDPHYSKW0_UTIL_DL1_SKW_ADJ(x)	(((x) & 0x3) << 4)
++#define CSIDPHYSKW0_UTIL_DL2_SKW_ADJ(x)	(((x) & 0x3) << 8)
++#define CSIDPHYSKW0_UTIL_DL3_SKW_ADJ(x)	(((x) & 0x3) << 12)
++#define CSIDPHYSKW0_DEFAULT_SKW		CSIDPHYSKW0_UTIL_DL0_SKW_ADJ(1) | \
++					CSIDPHYSKW0_UTIL_DL1_SKW_ADJ(1) | \
++					CSIDPHYSKW0_UTIL_DL2_SKW_ADJ(1) | \
++					CSIDPHYSKW0_UTIL_DL3_SKW_ADJ(1)
 +
-+    required:
-+      - port@0
-+      - port@1
++#define VSRSTS_RETRIES			20
 +
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-names
-+  - clocks
-+  - clock-names
-+  - resets
-+  - reset-names
-+  - power-domains
++#define RZG2L_CSI2_MIN_WIDTH		320
++#define RZG2L_CSI2_MIN_HEIGHT		240
++#define RZG2L_CSI2_MAX_WIDTH		2800
++#define RZG2L_CSI2_MAX_HEIGHT		4095
 +
-+additionalProperties: false
++#define RZG2L_CSI2_DEFAULT_WIDTH	RZG2L_CSI2_MIN_WIDTH
++#define RZG2L_CSI2_DEFAULT_HEIGHT	RZG2L_CSI2_MIN_HEIGHT
++#define RZG2L_CSI2_DEFAULT_FMT		MEDIA_BUS_FMT_UYVY8_1X16
 +
-+examples:
-+  # Device node example with CSI-2
-+  - |
-+    #include <dt-bindings/clock/r9a07g044-cpg.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
++enum rzg2l_csi2_pads {
++	RZG2L_CSI2_SINK = 0,
++	RZG2L_CSI2_SOURCE,
++	NR_OF_RZG2L_CSI2_PAD,
++};
 +
-+    cru: video@10830000 {
-+        compatible = "renesas,r9a07g044-cru", "renesas,rzg2l-cru";
-+        reg = <0x10830000 0x400>;
-+        interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
-+        interrupt-names = "image_conv", "image_conv_err", "axi_mst_err";
-+        clocks = <&cpg CPG_MOD R9A07G044_CRU_VCLK>,
-+                 <&cpg CPG_MOD R9A07G044_CRU_PCLK>,
-+                 <&cpg CPG_MOD R9A07G044_CRU_ACLK>;
-+        clock-names = "video", "apb", "axi";
-+        power-domains = <&cpg>;
-+        resets = <&cpg R9A07G044_CRU_PRESETN>,
-+                 <&cpg R9A07G044_CRU_ARESETN>;
-+        reset-names = "presetn", "aresetn";
++struct rzg2l_csi2 {
++	struct device *dev;
++	void __iomem *base;
++	struct reset_control *presetn;
++	struct reset_control *cmn_rstb;
++	struct clk *sysclk;
++	unsigned long vclk_rate;
 +
-+        ports {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
++	struct v4l2_subdev subdev;
++	struct media_pad pads[NR_OF_RZG2L_CSI2_PAD];
 +
-+            port@0 {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+                reg = <0>;
++	struct v4l2_async_notifier notifier;
++	struct v4l2_subdev *remote_source;
 +
-+                cru_parallel_in: endpoint@0 {
-+                    reg = <0>;
-+                    remote-endpoint= <&ov5642>;
-+                    hsync-active = <1>;
-+                    vsync-active = <1>;
-+                };
-+            };
++	unsigned short lanes;
++	unsigned long hsfreq;
 +
-+            port@1 {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+                reg = <1>;
++	bool dphy_enabled;
++};
 +
-+                cru_csi_in: endpoint@0 {
-+                    reg = <0>;
-+                    remote-endpoint= <&csi_cru_in>;
-+                };
-+            };
-+        };
-+    };
++struct rzg2l_csi2_timings {
++	u32 t_init;
++	u32 tclk_miss;
++	u32 tclk_settle;
++	u32 ths_settle;
++	u32 tclk_prepare;
++	u32 ths_prepare;
++	u32 max_hsfreq;
++};
++
++static const struct rzg2l_csi2_timings rzg2l_csi2_global_timings[] = {
++	[0] = {
++		.max_hsfreq = 80,
++		.t_init = 79801,
++		.tclk_miss = 4,
++		.tclk_settle = 23,
++		.ths_settle = 31,
++		.tclk_prepare = 10,
++		.ths_prepare = 19,
++	},
++	[1] = {
++		.max_hsfreq = 125,
++		.t_init = 79801,
++		.tclk_miss = 4,
++		.tclk_settle = 23,
++		.ths_settle = 28,
++		.tclk_prepare = 10,
++		.ths_prepare = 19,
++	},
++	[2] = {
++		.max_hsfreq = 250,
++		.t_init = 79801,
++		.tclk_miss = 4,
++		.tclk_settle = 23,
++		.ths_settle = 22,
++		.tclk_prepare = 10,
++		.ths_prepare = 16,
++	},
++	[3] = {
++		.max_hsfreq = 360,
++		.t_init = 79801,
++		.tclk_miss = 4,
++		.tclk_settle = 18,
++		.ths_settle = 19,
++		.tclk_prepare = 10,
++		.ths_prepare = 10,
++	},
++	[4] = {
++		.max_hsfreq = 1500,
++		.t_init = 79801,
++		.tclk_miss = 4,
++		.tclk_settle = 18,
++		.ths_settle = 18,
++		.tclk_prepare = 10,
++		.ths_prepare = 10,
++	},
++};
++
++struct rzg2l_csi2_format {
++	u32 code;
++	unsigned int datatype;
++	unsigned int bpp;
++};
++
++static const struct rzg2l_csi2_format rzg2l_csi2_formats[] = {
++	{ .code = MEDIA_BUS_FMT_UYVY8_1X16,	.datatype = 0x1e, .bpp = 16 },
++};
++
++static inline struct rzg2l_csi2 *sd_to_csi2(struct v4l2_subdev *sd)
++{
++	return container_of(sd, struct rzg2l_csi2, subdev);
++}
++
++static const struct rzg2l_csi2_format *rzg2l_csi2_code_to_fmt(unsigned int code)
++{
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(rzg2l_csi2_formats); i++)
++		if (rzg2l_csi2_formats[i].code == code)
++			return &rzg2l_csi2_formats[i];
++
++	return NULL;
++}
++
++static inline struct rzg2l_csi2 *notifier_to_csi2(struct v4l2_async_notifier *n)
++{
++	return container_of(n, struct rzg2l_csi2, notifier);
++}
++
++static u32 rzg2l_csi2_read(struct rzg2l_csi2 *csi2, unsigned int reg)
++{
++	return ioread32(csi2->base + reg);
++}
++
++static void rzg2l_csi2_write(struct rzg2l_csi2 *csi2, unsigned int reg,
++			     u32 data)
++{
++	iowrite32(data, csi2->base + reg);
++}
++
++static void rzg2l_csi2_set(struct rzg2l_csi2 *csi2, unsigned int reg, u32 set)
++{
++	rzg2l_csi2_write(csi2, reg, rzg2l_csi2_read(csi2, reg) | set);
++}
++
++static void rzg2l_csi2_clr(struct rzg2l_csi2 *csi2, unsigned int reg, u32 clr)
++{
++	rzg2l_csi2_write(csi2, reg, rzg2l_csi2_read(csi2, reg) & ~clr);
++}
++
++static int rzg2l_csi2_calc_mbps(struct rzg2l_csi2 *csi2)
++{
++	struct v4l2_subdev *source = csi2->remote_source;
++	const struct rzg2l_csi2_format *format;
++	const struct v4l2_mbus_framefmt *fmt;
++	struct v4l2_subdev_state *state;
++	struct v4l2_ctrl *ctrl;
++	u64 mbps;
++
++	/* Read the pixel rate control from remote. */
++	ctrl = v4l2_ctrl_find(source->ctrl_handler, V4L2_CID_PIXEL_RATE);
++	if (!ctrl) {
++		dev_err(csi2->dev, "no pixel rate control in subdev %s\n",
++			source->name);
++		return -EINVAL;
++	}
++
++	state = v4l2_subdev_lock_and_get_active_state(&csi2->subdev);
++	fmt = v4l2_subdev_get_pad_format(&csi2->subdev, state, RZG2L_CSI2_SINK);
++	format = rzg2l_csi2_code_to_fmt(fmt->code);
++	v4l2_subdev_unlock_state(state);
++
++	/*
++	 * Calculate hsfreq in Mbps
++	 * hsfreq = (pixel_rate * bits_per_sample) / number_of_lanes
++	 */
++	mbps = v4l2_ctrl_g_ctrl_int64(ctrl) * format->bpp;
++	do_div(mbps, csi2->lanes * 1000000);
++
++	return mbps;
++}
++
++/* -----------------------------------------------------------------------------
++ * DPHY setting
++ */
++
++static int rzg2l_csi2_dphy_disable(struct rzg2l_csi2 *csi2)
++{
++	int ret;
++
++	/* Reset the CRU (D-PHY) */
++	ret = reset_control_assert(csi2->cmn_rstb);
++	if (ret)
++		return ret;
++
++	/* Stop the D-PHY clock */
++	clk_disable_unprepare(csi2->sysclk);
++
++	/* Cancel the EN_LDO1200 register setting */
++	rzg2l_csi2_clr(csi2, CSIDPHYCTRL0, CSIDPHYCTRL0_EN_LDO1200);
++
++	/* Cancel the EN_BGR register setting */
++	rzg2l_csi2_clr(csi2, CSIDPHYCTRL0, CSIDPHYCTRL0_EN_BGR);
++
++	csi2->dphy_enabled = false;
++
++	return 0;
++}
++
++static int rzg2l_csi2_dphy_enable(struct rzg2l_csi2 *csi2)
++{
++	const struct rzg2l_csi2_timings *dphy_timing;
++	u32 dphytim0, dphytim1;
++	unsigned int i;
++	int mbps;
++	int ret;
++
++	mbps = rzg2l_csi2_calc_mbps(csi2);
++	if (mbps < 0)
++		return mbps;
++
++	csi2->hsfreq = mbps;
++
++	/* Set DPHY timing parameters */
++	for (i = 0; i < ARRAY_SIZE(rzg2l_csi2_global_timings); ++i) {
++		dphy_timing = &rzg2l_csi2_global_timings[i];
++
++		if (csi2->hsfreq <= dphy_timing->max_hsfreq)
++			break;
++	}
++
++	if (i >= ARRAY_SIZE(rzg2l_csi2_global_timings))
++		return -EINVAL;
++
++	/* Set D-PHY timing parameters */
++	dphytim0 = CSIDPHYTIM0_TCLK_MISS(dphy_timing->tclk_miss) |
++			CSIDPHYTIM0_T_INIT(dphy_timing->t_init);
++	dphytim1 = CSIDPHYTIM1_THS_PREPARE(dphy_timing->ths_prepare) |
++			CSIDPHYTIM1_TCLK_PREPARE(dphy_timing->tclk_prepare) |
++			CSIDPHYTIM1_THS_SETTLE(dphy_timing->ths_settle) |
++			CSIDPHYTIM1_TCLK_SETTLE(dphy_timing->tclk_settle);
++	rzg2l_csi2_write(csi2, CSIDPHYTIM0, dphytim0);
++	rzg2l_csi2_write(csi2, CSIDPHYTIM1, dphytim1);
++
++	/* Enable D-PHY power control 0 */
++	rzg2l_csi2_write(csi2, CSIDPHYSKW0, CSIDPHYSKW0_DEFAULT_SKW);
++
++	/* Set the EN_BGR bit */
++	rzg2l_csi2_set(csi2, CSIDPHYCTRL0, CSIDPHYCTRL0_EN_BGR);
++
++	/* Delay 20us to be stable */
++	usleep_range(20, 40);
++
++	/* Enable D-PHY power control 1 */
++	rzg2l_csi2_set(csi2, CSIDPHYCTRL0, CSIDPHYCTRL0_EN_LDO1200);
++
++	/* Delay 10us to be stable */
++	usleep_range(10, 20);
++
++	/* Start supplying the internal clock for the D-PHY block */
++	ret = clk_prepare_enable(csi2->sysclk);
++	if (ret)
++		rzg2l_csi2_dphy_disable(csi2);
++
++	csi2->dphy_enabled = true;
++
++	return ret;
++}
++
++static int rzg2l_csi2_enable_reg_access(struct rzg2l_csi2 *csi2)
++{
++	int ret;
++
++	ret = reset_control_deassert(csi2->presetn);
++	if (ret < 0)
++		return ret;
++
++	ret = pm_runtime_resume_and_get(csi2->dev);
++	if (ret)
++		reset_control_assert(csi2->presetn);
++
++	return ret;
++}
++
++static void rzg2l_csi2_disable_reg_access(struct rzg2l_csi2 *csi2)
++{
++	pm_runtime_put_sync(csi2->dev);
++	reset_control_assert(csi2->presetn);
++}
++
++static int rzg2l_csi2_dphy_setting(struct v4l2_subdev *sd, bool on)
++{
++	struct rzg2l_csi2 *csi2 = sd_to_csi2(sd);
++	int ret;
++
++	ret = rzg2l_csi2_enable_reg_access(csi2);
++	if (ret < 0)
++		return ret;
++
++	if (on)
++		ret = rzg2l_csi2_dphy_enable(csi2);
++	else
++		ret = rzg2l_csi2_dphy_disable(csi2);
++
++	rzg2l_csi2_disable_reg_access(csi2);
++
++	return ret;
++}
++
++static void rzg2l_csi2_mipi_link_enable(struct rzg2l_csi2 *csi2)
++{
++	unsigned long vclk_rate = csi2->vclk_rate / HZ_PER_MHZ;
++	u32 frrskw, frrclk, frrskw_coeff, frrclk_coeff;
++
++	/* Select data lanes */
++	rzg2l_csi2_write(csi2, CSI2nMCT0, CSI2nMCT0_VDLN(csi2->lanes));
++
++	frrskw_coeff = 3 * vclk_rate * 8;
++	frrclk_coeff = frrskw_coeff / 2;
++	frrskw = DIV_ROUND_UP(frrskw_coeff, csi2->hsfreq);
++	frrclk = DIV_ROUND_UP(frrclk_coeff, csi2->hsfreq);
++	rzg2l_csi2_write(csi2, CSI2nMCT2, CSI2nMCT2_FRRSKW(frrskw) |
++			 CSI2nMCT2_FRRCLK(frrclk));
++
++	/*
++	 * Select data type.
++	 * FS, FE, LS, LE, Generic Short Packet Codes 1 to 8,
++	 * Generic Long Packet Data Types 1 to 4 YUV422 8-bit,
++	 * RGB565, RGB888, RAW8 to RAW20, User-defined 8-bit
++	 * data types 1 to 8
++	 */
++	rzg2l_csi2_write(csi2, CSI2nDTEL, 0xf778ff0f);
++	rzg2l_csi2_write(csi2, CSI2nDTEH, 0x00ffff1f);
++
++	/* Enable LINK reception */
++	rzg2l_csi2_write(csi2, CSI2nMCT3, CSI2nMCT3_RXEN);
++}
++
++static void rzg2l_csi2_mipi_link_disable(struct rzg2l_csi2 *csi2)
++{
++	unsigned int timeout = VSRSTS_RETRIES;
++
++	/* Stop LINK reception */
++	rzg2l_csi2_clr(csi2, CSI2nMCT3, CSI2nMCT3_RXEN);
++
++	/* Request a software reset of the LINK Video Pixel Interface */
++	rzg2l_csi2_write(csi2, CSI2nRTCT, CSI2nRTCT_VSRST);
++
++	/* Make sure CSI2nRTST.VSRSTS bit is cleared */
++	while (timeout--) {
++		if (!(rzg2l_csi2_read(csi2, CSI2nRTST) & CSI2nRTST_VSRSTS))
++			break;
++		usleep_range(100, 200);
++	};
++
++	if (!timeout)
++		dev_err(csi2->dev, "Clearing CSI2nRTST.VSRSTS timed out\n");
++}
++
++static int rzg2l_csi2_mipi_link_setting(struct v4l2_subdev *sd, bool on)
++{
++	struct rzg2l_csi2 *csi2 = sd_to_csi2(sd);
++	int ret;
++
++	ret = rzg2l_csi2_enable_reg_access(csi2);
++	if (ret < 0)
++		return ret;
++
++	if (on)
++		rzg2l_csi2_mipi_link_enable(csi2);
++	else
++		rzg2l_csi2_mipi_link_disable(csi2);
++
++	rzg2l_csi2_disable_reg_access(csi2);
++
++	return 0;
++}
++
++static int rzg2l_csi2_s_stream(struct v4l2_subdev *sd, int enable)
++{
++	struct rzg2l_csi2 *csi2 = sd_to_csi2(sd);
++	int ret;
++
++	if (enable) {
++		int ret;
++
++		ret = rzg2l_csi2_mipi_link_setting(sd, 1);
++		if (ret)
++			return ret;
++
++		ret = reset_control_deassert(csi2->cmn_rstb);
++		if (ret)
++			return ret;
++	}
++
++	ret = v4l2_subdev_call(csi2->remote_source, video, s_stream, enable);
++	if (ret)
++		dev_err(csi2->dev, "s_stream failed on remote source\n");
++
++	if (!enable) {
++		ret |= rzg2l_csi2_dphy_setting(sd, 0);
++		ret |= rzg2l_csi2_mipi_link_setting(sd, 0);
++	}
++
++	return ret;
++}
++
++static int rzg2l_csi2_pre_streamon(struct v4l2_subdev *sd, u32 flags)
++{
++	return rzg2l_csi2_dphy_setting(sd, 1);
++}
++
++static int rzg2l_csi2_post_streamoff(struct v4l2_subdev *sd)
++{
++	struct rzg2l_csi2 *csi2 = sd_to_csi2(sd);
++
++	/*
++	 * In ideal case D-PHY will be disabled in s_stream(0) callback
++	 * as mentioned the HW manual. The below will only happen when
++	 * pre_streamon succeeds and further down the line s_stream(1)
++	 * fails so we need to undo things in post_streamoff.
++	 */
++	if (csi2->dphy_enabled)
++		return rzg2l_csi2_dphy_setting(sd, 0);
++
++	return 0;
++}
++
++static int rzg2l_csi2_set_format(struct v4l2_subdev *sd,
++				 struct v4l2_subdev_state *state,
++				 struct v4l2_subdev_format *fmt)
++{
++	struct v4l2_mbus_framefmt *src_format;
++	struct v4l2_mbus_framefmt *sink_format;
++
++	if (fmt->pad != RZG2L_CSI2_SINK && fmt->pad != RZG2L_CSI2_SOURCE)
++		return -EINVAL;
++
++	sink_format = v4l2_subdev_get_pad_format(sd, state, RZG2L_CSI2_SINK);
++	src_format = v4l2_subdev_get_pad_format(sd, state, RZG2L_CSI2_SOURCE);
++
++	if (!rzg2l_csi2_code_to_fmt(fmt->format.code))
++		sink_format->code = rzg2l_csi2_formats[0].code;
++	else
++		sink_format->code = fmt->format.code;
++
++	sink_format->field = V4L2_FIELD_NONE;
++	sink_format->colorspace = fmt->format.colorspace;
++	sink_format->xfer_func = fmt->format.xfer_func;
++	sink_format->ycbcr_enc = fmt->format.ycbcr_enc;
++	sink_format->quantization = fmt->format.quantization;
++	sink_format->width = clamp_t(u32, fmt->format.width,
++				     RZG2L_CSI2_MIN_WIDTH, RZG2L_CSI2_MAX_WIDTH);
++	sink_format->height = clamp_t(u32, fmt->format.height,
++				      RZG2L_CSI2_MIN_HEIGHT, RZG2L_CSI2_MAX_HEIGHT);
++	fmt->format = *sink_format;
++
++	/* propagate format to source pad */
++	*src_format = *sink_format;
++
++	return 0;
++}
++
++static int rzg2l_csi2_init_config(struct v4l2_subdev *sd,
++				  struct v4l2_subdev_state *sd_state)
++{
++	struct v4l2_subdev_format fmt = { .pad = RZG2L_CSI2_SINK, };
++
++	fmt.format.width = RZG2L_CSI2_DEFAULT_WIDTH;
++	fmt.format.height = RZG2L_CSI2_DEFAULT_HEIGHT;
++	fmt.format.field = V4L2_FIELD_NONE;
++	fmt.format.code = RZG2L_CSI2_DEFAULT_FMT;
++	fmt.format.colorspace = V4L2_COLORSPACE_SRGB;
++	fmt.format.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
++	fmt.format.quantization = V4L2_QUANTIZATION_DEFAULT;
++	fmt.format.xfer_func = V4L2_XFER_FUNC_DEFAULT;
++
++	return rzg2l_csi2_set_format(sd, sd_state, &fmt);
++}
++
++static int rzg2l_csi2_enum_mbus_code(struct v4l2_subdev *sd,
++				     struct v4l2_subdev_state *sd_state,
++				     struct v4l2_subdev_mbus_code_enum *code)
++{
++	if (code->index >= ARRAY_SIZE(rzg2l_csi2_formats))
++		return -EINVAL;
++
++	code->code = rzg2l_csi2_formats[code->index].code;
++
++	return 0;
++}
++
++static int rzg2l_csi2_enum_frame_size(struct v4l2_subdev *sd,
++				      struct v4l2_subdev_state *sd_state,
++				      struct v4l2_subdev_frame_size_enum *fse)
++{
++	if (fse->index != 0)
++		return -EINVAL;
++
++	fse->min_width = RZG2L_CSI2_MIN_WIDTH;
++	fse->min_height = RZG2L_CSI2_MIN_HEIGHT;
++	fse->max_width = RZG2L_CSI2_MAX_WIDTH;
++	fse->max_height = RZG2L_CSI2_MAX_HEIGHT;
++
++	return 0;
++}
++
++static const struct v4l2_subdev_video_ops rzg2l_csi2_video_ops = {
++	.s_stream = rzg2l_csi2_s_stream,
++	.pre_streamon = rzg2l_csi2_pre_streamon,
++	.post_streamoff = rzg2l_csi2_post_streamoff,
++};
++
++static const struct v4l2_subdev_pad_ops rzg2l_csi2_pad_ops = {
++	.enum_mbus_code = rzg2l_csi2_enum_mbus_code,
++	.init_cfg = rzg2l_csi2_init_config,
++	.enum_frame_size = rzg2l_csi2_enum_frame_size,
++	.set_fmt = rzg2l_csi2_set_format,
++	.get_fmt = v4l2_subdev_get_fmt,
++};
++
++static const struct v4l2_subdev_ops rzg2l_csi2_subdev_ops = {
++	.video	= &rzg2l_csi2_video_ops,
++	.pad	= &rzg2l_csi2_pad_ops,
++};
++
++/* -----------------------------------------------------------------------------
++ * Async handling and registration of subdevices and links.
++ */
++
++static int rzg2l_csi2_notify_bound(struct v4l2_async_notifier *notifier,
++				   struct v4l2_subdev *subdev,
++				   struct v4l2_async_subdev *asd)
++{
++	struct rzg2l_csi2 *csi2 = notifier_to_csi2(notifier);
++
++	csi2->remote_source = subdev;
++
++	dev_dbg(csi2->dev, "Bound subdev: %s pad\n", subdev->name);
++
++	return media_create_pad_link(&subdev->entity, RZG2L_CSI2_SINK,
++				     &csi2->subdev.entity, 0,
++				     MEDIA_LNK_FL_ENABLED |
++				     MEDIA_LNK_FL_IMMUTABLE);
++}
++
++static void rzg2l_csi2_notify_unbind(struct v4l2_async_notifier *notifier,
++				     struct v4l2_subdev *subdev,
++				     struct v4l2_async_subdev *asd)
++{
++	struct rzg2l_csi2 *csi2 = notifier_to_csi2(notifier);
++
++	csi2->remote_source = NULL;
++
++	dev_dbg(csi2->dev, "Unbind subdev %s\n", subdev->name);
++}
++
++static const struct v4l2_async_notifier_operations rzg2l_csi2_notify_ops = {
++	.bound = rzg2l_csi2_notify_bound,
++	.unbind = rzg2l_csi2_notify_unbind,
++};
++
++static int rzg2l_csi2_parse_v4l2(struct rzg2l_csi2 *csi2,
++				 struct v4l2_fwnode_endpoint *vep)
++{
++	/* Only port 0 endpoint 0 is valid. */
++	if (vep->base.port || vep->base.id)
++		return -ENOTCONN;
++
++	csi2->lanes = vep->bus.mipi_csi2.num_data_lanes;
++
++	return 0;
++}
++
++static int rzg2l_csi2_parse_dt(struct rzg2l_csi2 *csi2)
++{
++	struct v4l2_fwnode_endpoint v4l2_ep = {
++		.bus_type = V4L2_MBUS_CSI2_DPHY
++	};
++	struct v4l2_async_subdev *asd;
++	struct fwnode_handle *fwnode;
++	struct fwnode_handle *ep;
++	int ret;
++
++	ep = fwnode_graph_get_endpoint_by_id(dev_fwnode(csi2->dev), 0, 0, 0);
++	if (!ep) {
++		dev_err(csi2->dev, "Not connected to subdevice\n");
++		return -EINVAL;
++	}
++
++	ret = v4l2_fwnode_endpoint_parse(ep, &v4l2_ep);
++	if (ret) {
++		dev_err(csi2->dev, "Could not parse v4l2 endpoint\n");
++		fwnode_handle_put(ep);
++		return -EINVAL;
++	}
++
++	ret = rzg2l_csi2_parse_v4l2(csi2, &v4l2_ep);
++	if (ret) {
++		fwnode_handle_put(ep);
++		return ret;
++	}
++
++	fwnode = fwnode_graph_get_remote_endpoint(ep);
++	fwnode_handle_put(ep);
++
++	v4l2_async_nf_init(&csi2->notifier);
++	csi2->notifier.ops = &rzg2l_csi2_notify_ops;
++
++	asd = v4l2_async_nf_add_fwnode(&csi2->notifier, fwnode,
++				       struct v4l2_async_subdev);
++	fwnode_handle_put(fwnode);
++	if (IS_ERR(asd))
++		return PTR_ERR(asd);
++
++	ret = v4l2_async_subdev_nf_register(&csi2->subdev, &csi2->notifier);
++	if (ret)
++		v4l2_async_nf_cleanup(&csi2->notifier);
++
++	return ret;
++}
++
++static int rzg2l_validate_csi2_lanes(struct rzg2l_csi2 *csi2)
++{
++	int ret = 0;
++	int lanes;
++
++	if (csi2->lanes != 1 && csi2->lanes != 2 && csi2->lanes != 4) {
++		dev_err(csi2->dev, "Unsupported number of data-lanes: %u\n",
++			csi2->lanes);
++		return -EINVAL;
++	}
++
++	ret = rzg2l_csi2_enable_reg_access(csi2);
++	if (ret < 0)
++		return ret;
++
++	/* Checking the maximum lanes support for CSI-2 module */
++	lanes = (rzg2l_csi2_read(csi2, CSI2nMCG) & CSI2nMCG_SDLN) >> 8;
++	if (lanes < csi2->lanes) {
++		dev_err(csi2->dev,
++			"Failed to support %d data lanes\n", csi2->lanes);
++		ret = -EINVAL;
++	}
++
++	rzg2l_csi2_disable_reg_access(csi2);
++
++	return ret;
++}
++
++/* -----------------------------------------------------------------------------
++ * Platform Device Driver.
++ */
++
++static const struct media_entity_operations rzg2l_csi2_entity_ops = {
++	.link_validate = v4l2_subdev_link_validate,
++};
++
++static int rzg2l_csi2_probe(struct platform_device *pdev)
++{
++	struct rzg2l_csi2 *csi2;
++	struct clk *vclk;
++	int ret;
++
++	csi2 = devm_kzalloc(&pdev->dev, sizeof(*csi2), GFP_KERNEL);
++	if (!csi2)
++		return -ENOMEM;
++
++	csi2->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(csi2->base))
++		return PTR_ERR(csi2->base);
++
++	csi2->cmn_rstb = devm_reset_control_get_exclusive(&pdev->dev, "cmn-rstb");
++	if (IS_ERR(csi2->cmn_rstb))
++		return dev_err_probe(&pdev->dev, PTR_ERR(csi2->cmn_rstb),
++				     "Failed to get cpg cmn-rstb\n");
++
++	csi2->presetn = devm_reset_control_get_shared(&pdev->dev, "presetn");
++	if (IS_ERR(csi2->presetn))
++		return dev_err_probe(&pdev->dev, PTR_ERR(csi2->presetn),
++				     "Failed to get cpg presetn\n");
++
++	csi2->sysclk = devm_clk_get(&pdev->dev, "system");
++	if (IS_ERR(csi2->sysclk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(csi2->sysclk),
++				     "Failed to get system clk\n");
++
++	vclk = clk_get(&pdev->dev, "video");
++	if (IS_ERR(vclk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(vclk),
++				     "Failed to get video clock\n");
++	csi2->vclk_rate = clk_get_rate(vclk);
++	clk_put(vclk);
++
++	csi2->dev = &pdev->dev;
++
++	platform_set_drvdata(pdev, csi2);
++
++	ret = rzg2l_csi2_parse_dt(csi2);
++	if (ret)
++		return ret;
++
++	pm_runtime_enable(&pdev->dev);
++
++	ret = rzg2l_validate_csi2_lanes(csi2);
++	if (ret)
++		goto error_pm;
++
++	csi2->subdev.dev = &pdev->dev;
++	v4l2_subdev_init(&csi2->subdev, &rzg2l_csi2_subdev_ops);
++	v4l2_set_subdevdata(&csi2->subdev, &pdev->dev);
++	snprintf(csi2->subdev.name, sizeof(csi2->subdev.name),
++		 "csi-%s", dev_name(&pdev->dev));
++	csi2->subdev.flags = V4L2_SUBDEV_FL_HAS_DEVNODE;
++
++	csi2->subdev.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
++	csi2->subdev.entity.ops = &rzg2l_csi2_entity_ops;
++
++	csi2->pads[RZG2L_CSI2_SINK].flags = MEDIA_PAD_FL_SINK;
++	/*
++	 * TODO: RZ/G2L CSI2 supports 4 virtual channels, as virtual
++	 * channels should be implemented by streams API which is under
++	 * development lets hardcode to VC0 for now.
++	 */
++	csi2->pads[RZG2L_CSI2_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
++	ret = media_entity_pads_init(&csi2->subdev.entity, 2, csi2->pads);
++	if (ret)
++		goto error_pm;
++
++	ret = v4l2_subdev_init_finalize(&csi2->subdev);
++	if (ret < 0)
++		goto error_async;
++
++	ret = v4l2_async_register_subdev(&csi2->subdev);
++	if (ret < 0)
++		goto error_subdev;
++
++	return 0;
++
++error_subdev:
++	v4l2_subdev_cleanup(&csi2->subdev);
++error_async:
++	v4l2_async_nf_unregister(&csi2->notifier);
++	v4l2_async_nf_cleanup(&csi2->notifier);
++	media_entity_cleanup(&csi2->subdev.entity);
++error_pm:
++	pm_runtime_disable(&pdev->dev);
++
++	return ret;
++}
++
++static int rzg2l_csi2_remove(struct platform_device *pdev)
++{
++	struct rzg2l_csi2 *csi2 = platform_get_drvdata(pdev);
++
++	v4l2_async_nf_unregister(&csi2->notifier);
++	v4l2_async_nf_cleanup(&csi2->notifier);
++	v4l2_async_unregister_subdev(&csi2->subdev);
++	v4l2_subdev_cleanup(&csi2->subdev);
++	media_entity_cleanup(&csi2->subdev.entity);
++	pm_runtime_disable(&pdev->dev);
++
++	return 0;
++}
++
++static const struct of_device_id rzg2l_csi2_of_table[] = {
++	{ .compatible = "renesas,rzg2l-csi2", },
++	{ /* sentinel */ }
++};
++
++static struct platform_driver rzg2l_csi2_pdrv = {
++	.remove	= rzg2l_csi2_remove,
++	.probe	= rzg2l_csi2_probe,
++	.driver	= {
++		.name = "rzg2l-csi2",
++		.of_match_table = rzg2l_csi2_of_table,
++	},
++};
++
++module_platform_driver(rzg2l_csi2_pdrv);
++
++MODULE_AUTHOR("Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>");
++MODULE_DESCRIPTION("Renesas RZ/G2L MIPI CSI2 receiver driver");
++MODULE_LICENSE("GPL");
 -- 
 2.25.1
 
