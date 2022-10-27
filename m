@@ -2,44 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C362360F61C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D467460F61E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234985AbiJ0LWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 07:22:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
+        id S235073AbiJ0LXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 07:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233403AbiJ0LWf (ORCPT
+        with ESMTP id S233403AbiJ0LXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 07:22:35 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21F6FFFB2;
-        Thu, 27 Oct 2022 04:22:34 -0700 (PDT)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MyjrJ3CrBzJnL6;
-        Thu, 27 Oct 2022 19:19:44 +0800 (CST)
-Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
- (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 27 Oct
- 2022 19:22:31 +0800
-From:   Zeng Heng <zengheng4@huawei.com>
-To:     <sfrench@samba.org>, <tom@talpey.com>, <sprasad@microsoft.com>,
-        <pc@cjr.nz>, <lsahlber@redhat.com>
-CC:     <linux-cifs@vger.kernel.org>, <samba-technical@lists.samba.org>,
-        <linux-kernel@vger.kernel.org>, <liwei391@huawei.com>
-Subject: [PATCH v3] cifs: fix use-after-free caused by invalid pointer `hostname`
-Date:   Thu, 27 Oct 2022 19:21:27 +0800
-Message-ID: <20221027112127.2433605-1-zengheng4@huawei.com>
+        Thu, 27 Oct 2022 07:23:21 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0180510048A;
+        Thu, 27 Oct 2022 04:23:21 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id n14so734098wmq.3;
+        Thu, 27 Oct 2022 04:23:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uY6K96MvM8kdidoT3f2vQiQI2jlMcMD1VqsRhi02ZgA=;
+        b=IBMhQKDnmWWHKnrtpmHImTZwcyPcNSMtUPJ4Vju90frunWYRMVlPWZg5KrARFf1VF7
+         j7rr0KQDlHKadvTO1M6Li84OCjI1zlbHaZ5CKWtOTLP1roDcsGau/emb6/y/PwLe7ngV
+         /L3Rdn2AoFWUnidrUiCmtkAT/Yv628XMCZMCzvrO8ig175BGSC2ZM9iUkuAiCmi6eaSc
+         4wUug+8AbGa8yKLx2dLFnoqptQ4+cBzLjIuzrwpAjo7JVZqMRUl18xbZ9VGcW3Z2zeZ9
+         DYUFXvALZSl5RnEwURYOHT0rNHKdUYl1WYwBc5Y7rIODPgxF70GiAWFT4egAnFTb4IO6
+         54ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uY6K96MvM8kdidoT3f2vQiQI2jlMcMD1VqsRhi02ZgA=;
+        b=si4EcgHiyIo4CUcEU4aGTi0Z0wis7fyxDczdCW+AA1+WOH8y+Da0WtufrYcjCO4SkF
+         E5BVpt2swHfWINd0ouFEzSelypwnqNT2GbZMddzPj3LH4+AlnFN4WwdEj6gaPgfo0vnr
+         z0JSF19q4vwjfss5Y82azLze+VOrOyTKhY5lwBuTcg36nSygIR8RidkO0pZpZwjrLBqV
+         vVq2JRkGKNbM6vULbye/GjAaXAoH9FPH27UDEeHe4tPsVgiOKE7Dj+4a8Yo8p2eSd/ae
+         nm1l2YLw+kuVJIJondZubO/bFTzXQm7UR2D8a4l8ARJY7cP1fH4Bdc0L1ZgClHW2YfJd
+         czWQ==
+X-Gm-Message-State: ACrzQf1J5LO3+b1a60t4ODxXQPcFPPsEASbjF6WVNCK+0yQB1UlHEqu+
+        pJmqL//mE7S04b3Jh2bVaWCSWencgcoFKg==
+X-Google-Smtp-Source: AMsMyM70rYvZIh4wwAn6qw20hdyrHftQAv8lftd68cBp3ndir8OAFF1VEMc5hrZZkozJR+z8C/xMSg==
+X-Received: by 2002:a1c:4454:0:b0:3cf:4792:d3ad with SMTP id r81-20020a1c4454000000b003cf4792d3admr5654130wma.5.1666869799536;
+        Thu, 27 Oct 2022 04:23:19 -0700 (PDT)
+Received: from prasmi.home ([2a00:23c8:2501:c701:66:ff81:b0d3:60a0])
+        by smtp.gmail.com with ESMTPSA id n19-20020a05600c4f9300b003b4c979e6bcsm4800634wmq.10.2022.10.27.04.23.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 04:23:18 -0700 (PDT)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] ARM: shmobile: Drop selecting GPIOLIB and PINCTRL
+Date:   Thu, 27 Oct 2022 12:23:00 +0100
+Message-Id: <20221027112300.77184-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500024.china.huawei.com (7.221.188.100)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,123 +75,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-`hostname` needs to be set as null-pointer after free in
-`cifs_put_tcp_session` function, or when `cifsd` thread attempts
-to resolve hostname and reconnect the host, the thread would deref
-the invalid pointer.
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Here is one of practical backtrace examples as reference:
+Don't automatically select the GPIOLIB and PINCTRL config options as we
+already have automatically selected it as part of the SOC_RENESAS config
+option [0].
 
-Task 477
----------------------------
- do_mount
-  path_mount
-   do_new_mount
-    vfs_get_tree
-     smb3_get_tree
-      smb3_get_tree_common
-       cifs_smb3_do_mount
-        cifs_mount
-         mount_put_conns
-          cifs_put_tcp_session
-          --> kfree(server->hostname)
+[0] drivers/soc/renesas/Kconfig
 
-cifsd
----------------------------
- kthread
-  cifs_demultiplex_thread
-   cifs_reconnect
-    reconn_set_ipaddr_from_hostname
-    --> if (!server->hostname)
-    --> if (server->hostname[0] == '\0')  // !! UAF fault here
-
-CIFS: VFS: cifs_mount failed w/return code = -112
-mount error(112): Host is down
-BUG: KASAN: use-after-free in reconn_set_ipaddr_from_hostname+0x2ba/0x310
-Read of size 1 at addr ffff888108f35380 by task cifsd/480
-CPU: 2 PID: 480 Comm: cifsd Not tainted 6.1.0-rc2-00106-gf705792f89dd-dirty #25
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-Call Trace:
- <TASK>
- dump_stack_lvl+0x68/0x85
- print_report+0x16c/0x4a3
- kasan_report+0x95/0x190
- reconn_set_ipaddr_from_hostname+0x2ba/0x310
- __cifs_reconnect.part.0+0x241/0x800
- cifs_reconnect+0x65f/0xb60
- cifs_demultiplex_thread+0x1570/0x2570
- kthread+0x2c5/0x380
- ret_from_fork+0x22/0x30
- </TASK>
-Allocated by task 477:
- kasan_save_stack+0x1e/0x40
- kasan_set_track+0x21/0x30
- __kasan_kmalloc+0x7e/0x90
- __kmalloc_node_track_caller+0x52/0x1b0
- kstrdup+0x3b/0x70
- cifs_get_tcp_session+0xbc/0x19b0
- mount_get_conns+0xa9/0x10c0
- cifs_mount+0xdf/0x1970
- cifs_smb3_do_mount+0x295/0x1660
- smb3_get_tree+0x352/0x5e0
- vfs_get_tree+0x8e/0x2e0
- path_mount+0xf8c/0x1990
- do_mount+0xee/0x110
- __x64_sys_mount+0x14b/0x1f0
- do_syscall_64+0x3b/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-Freed by task 477:
- kasan_save_stack+0x1e/0x40
- kasan_set_track+0x21/0x30
- kasan_save_free_info+0x2a/0x50
- __kasan_slab_free+0x10a/0x190
- __kmem_cache_free+0xca/0x3f0
- cifs_put_tcp_session+0x30c/0x450
- cifs_mount+0xf95/0x1970
- cifs_smb3_do_mount+0x295/0x1660
- smb3_get_tree+0x352/0x5e0
- vfs_get_tree+0x8e/0x2e0
- path_mount+0xf8c/0x1990
- do_mount+0xee/0x110
- __x64_sys_mount+0x14b/0x1f0
- do_syscall_64+0x3b/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-The buggy address belongs to the object at ffff888108f35380
- which belongs to the cache kmalloc-16 of size 16
-The buggy address is located 0 bytes inside of
- 16-byte region [ffff888108f35380, ffff888108f35390)
-The buggy address belongs to the physical page:
-page:00000000333f8e58 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888108f350e0 pfn:0x108f35
-flags: 0x200000000000200(slab|node=0|zone=2)
-raw: 0200000000000200 0000000000000000 dead000000000122 ffff8881000423c0
-raw: ffff888108f350e0 000000008080007a 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-Memory state around the buggy address:
- ffff888108f35280: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
- ffff888108f35300: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
->ffff888108f35380: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
-                   ^
- ffff888108f35400: fa fb fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888108f35480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-
-Fixes: 28eb24ff75c5 ("cifs: Always resolve hostname before reconnecting")
-Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
- fs/cifs/connect.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/mach-shmobile/Kconfig | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index ffb291579bb9..1cc47dd3b4d6 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -1584,6 +1584,7 @@ cifs_put_tcp_session(struct TCP_Server_Info *server, int from_reconnect)
- 	server->session_key.response = NULL;
- 	server->session_key.len = 0;
- 	kfree(server->hostname);
-+	server->hostname = NULL;
- 
- 	task = xchg(&server->tsk, NULL);
- 	if (task)
+diff --git a/arch/arm/mach-shmobile/Kconfig b/arch/arm/mach-shmobile/Kconfig
+index 37f862f13c8d..8d64cc7edccd 100644
+--- a/arch/arm/mach-shmobile/Kconfig
++++ b/arch/arm/mach-shmobile/Kconfig
+@@ -3,7 +3,5 @@ menuconfig ARCH_RENESAS
+ 	bool "Renesas ARM SoCs"
+ 	depends on ARCH_MULTI_V7
+ 	select ARM_GIC
+-	select GPIOLIB
+ 	select NO_IOPORT_MAP
+-	select PINCTRL
+ 	select ZONE_DMA if ARM_LPAE
 -- 
-2.25.1
+2.17.1
 
