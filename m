@@ -2,181 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F5860ECDA
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 02:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D21160ECDD
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 02:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233968AbiJ0AJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 20:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
+        id S233976AbiJ0ALr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 20:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233561AbiJ0AJq (ORCPT
+        with ESMTP id S229602AbiJ0ALo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 20:09:46 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA1D1A20B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 17:09:43 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id s196so16678883pgs.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 17:09:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wTlBrCwJCiqm4qgW+Kqhp/t9YirXcw72f/o9+Q65cAk=;
-        b=PJUdMX7rqK8ojWNaObFA0K+NUSzbhkq2m4qukO0HXsNoPPD3vgXn18Xduwu+q10KZq
-         wFSdN/ZkCjhc9neFlTJ7xf8VDXOf0XzW6X+h6JGge3Jupke4f2bd6rZMuyboykWhXBi5
-         6c09TF4QraBddkzJxCcZIP87ZtjSYHfE78yaYxQTXC+4Kwcies8PmMKkCpqNgcKr+B+u
-         F+GFOTz4c2tZ7vy+miBoAfia+XCnYTXpcW+wiQ2y4NQAPVkONhVF2dMNAxFwDGk+Z/d+
-         dq5f6PVEjR9R4zkFHLw8kr6+c6teQz4CZhGLRz9RKFhlVFatHBiq2g/tAzG7xF5xTHHK
-         k3sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wTlBrCwJCiqm4qgW+Kqhp/t9YirXcw72f/o9+Q65cAk=;
-        b=TUleVunN69KIFsrPiWF3hgZVXQcDsmNOZHByGMGvHT86LvcdR4Fb0aXY73xsQva/kB
-         QSG8EvEMXBvj59jOytMZtUN7pubyoxVYNIaoBFJnX/y/vY+RwjhBFodknErV24jnHQJU
-         Im/tIFqq2NYeNjWqDKi2qiTDdKMuFi9u1QRgavwcnD7P7x5uD+tlEGdjiIZktW/FH91F
-         1Y1iuUxAFz48872J/0lesZ+k02oCrVm5k2wAD6wenAqgkTZlgEp52PyjFudyQ5MUR4oF
-         htbEF11Q3YWXr51sDxZxD44nqE7Sch4KecNeSuw0J4U2dtXmtMPSCGp43e/DY2ykm3+z
-         elLA==
-X-Gm-Message-State: ACrzQf1tOkve5R/Owv3dtBjjG9Pq1G2BxXYHhgBQomlL9Qk2M/XmxEnV
-        fln0VkzDX++qehz8WbOzTk3FpA==
-X-Google-Smtp-Source: AMsMyM7dnb8oQgpA8KuYsV3JG5P6fLYeKC/AhK7EE2xTFrF/m+jhFnTTpZnjyRnFquteWADRb8Ao2w==
-X-Received: by 2002:a05:6a02:113:b0:43f:3554:ff9c with SMTP id bg19-20020a056a02011300b0043f3554ff9cmr12446892pgb.578.1666829383137;
-        Wed, 26 Oct 2022 17:09:43 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id q11-20020a170902f34b00b00177324a7862sm3456406ple.45.2022.10.26.17.09.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 17:09:42 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 00:09:38 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Wei Wang <wei.w.wang@intel.com>
-Cc:     pbonzini@redhat.com, dmatlack@google.com, vipinsh@google.com,
-        ajones@ventanamicro.com, eric.auger@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 03/18] KVM: selftests/kvm_util: helper functions for
- vcpus and threads
-Message-ID: <Y1nMQp11RKTDX7HX@google.com>
-References: <20221024113445.1022147-1-wei.w.wang@intel.com>
- <20221024113445.1022147-4-wei.w.wang@intel.com>
+        Wed, 26 Oct 2022 20:11:44 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1647AC0C;
+        Wed, 26 Oct 2022 17:11:43 -0700 (PDT)
+Received: from fsav315.sakura.ne.jp (fsav315.sakura.ne.jp [153.120.85.146])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 29R0B4Vd005152;
+        Thu, 27 Oct 2022 09:11:04 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav315.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp);
+ Thu, 27 Oct 2022 09:11:04 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 29R0B31K005147
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 27 Oct 2022 09:11:03 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <b994bc69-179f-afa9-239b-be6f31ece21b@I-love.SAKURA.ne.jp>
+Date:   Thu, 27 Oct 2022 09:11:03 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024113445.1022147-4-wei.w.wang@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v1 2/8] LSM: Add an LSM identifier for external use
+Content-Language: en-US
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     casey.schaufler@intel.com, paul@paul-moore.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        keescook@chromium.org, john.johansen@canonical.com,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, mic@digikod.net
+References: <20221025184519.13231-1-casey@schaufler-ca.com>
+ <20221025184519.13231-3-casey@schaufler-ca.com> <Y1jMeWl0oV4/2zyE@kroah.com>
+ <5396ab1e-9b93-df33-ca49-58dc59459a76@schaufler-ca.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <5396ab1e-9b93-df33-ca49-58dc59459a76@schaufler-ca.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022, Wei Wang wrote:
-> @@ -14,4 +15,23 @@
->  	for (i = 0, vcpu = vm->vcpus[0];				\
->  		vcpu && i < KVM_MAX_VCPUS; vcpu = vm->vcpus[++i])
->  
-> +void __pthread_create_with_name(pthread_t *thread, const pthread_attr_t *attr,
-
-Can these return pthread_t instead of taking them as a param and have a "void"
-return?  I'm pretty sure pthread_t is an integer type in most implementations,
-i.e. can be cheaply copied by value.
-
-> +			void *(*start_routine)(void *), void *arg, char *name);
-
-Add a typedef for the payload, both to make it harder to screw up, and to make the
-code more readable.  Does pthread really not provide one already?
-
-> +void pthread_create_with_name(pthread_t *thread,
-> +			void *(*start_routine)(void *), void *arg, char *name);
-
-Align params, e.g.
-
-void pthread_create_with_name(pthread_t *thread, void *(*start_routine)(void *),
-			      void *arg, char *name);
-
-Poking out past the 80 char soft limit is much preferable to arbitrary indentation.
-Please fix this in all patches.
-  
->  struct userspace_mem_regions {
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 1f69f5ca8356..ba3e774087fb 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -2006,3 +2006,175 @@ void __vm_get_stat(struct kvm_vm *vm, const char *stat_name, uint64_t *data,
->  		break;
->  	}
->  }
-> +
-> +/*
-> + * Create a named thread with user's attribute
-> + *
-> + * Input Args:
-> + *   attr - the attribute of the thread to create
-> + *   start_routine - the routine to run in the thread context
-> + *   arg - the argument passed to start_routine
-> + *   name - the name of the thread
-> + *
-> + * Output Args:
-> + *   thread - the thread to be created
-> + *
-> + * Create a thread with a user specified name.
-> + */
-
-Please don't add function comments, we're opportunistically removing the existing
-boilerplate ones as we go.  Most of the comments, like this one, add very little
-value as it's pretty obvious what the function does and what the params are.
-
-> +void __pthread_create_with_name(pthread_t *thread, const pthread_attr_t *attr,
-> +			void *(*start_routine)(void *), void *arg, char *name)
-> +{
-> +	int r;
-> +
-> +	r = pthread_create(thread, NULL, start_routine, arg);
-> +	TEST_ASSERT(!r, "thread(%s) creation failed, r = %d", name, r);
-
-Assuming 'r' is an errno, pretty print its name with strerror().
-
-> +	r = pthread_setname_np(*thread, name);
-> +	TEST_ASSERT(!r, "thread(%s) setting name failed, r = %d", name, r);
-
-Same here.
-
-> +}
-
-...
-
-> +void vm_vcpu_threads_create(struct kvm_vm *vm,
-> +		void *(*start_routine)(void *), uint32_t private_data_size)
-
-I vote (very strongly) to not deal with allocating private data.  The private data
-isn't strictly related to threads, and the vast majority of callers don't need
-private data, i.e. the param is dead weight in most cases.
-
-And unless I'm missing something, it's trivial to move to a separate helper,
-though honestly even that seems like overkill.
-
-Wait, looking further, it already is a separate helper...  Forcing a bunch of
-callers to specify '0' just to eliminate one function call in a handful of cases
-is not a good tradeoff.
-
-> +void vm_vcpu_threads_private_data_alloc(struct kvm_vm *vm, uint32_t data_size)
-
-As above, this isn't strictly related to threads, e.g. vm_alloc_vcpu_private_data()
-
-> +{
-> +	struct kvm_vcpu *vcpu;
-> +	int i;
-> +
-> +	vm_iterate_over_vcpus(vm, vcpu, i) {
-> +		vcpu->private_data = calloc(1, data_size);
-> +		TEST_ASSERT(vcpu->private_data, "%s: failed", __func__);
-> +	}
-> +}
-> -- 
-> 2.27.0
+>>> + */
+>>> +
+>>> +#ifndef _UAPI_LINUX_LSM_H
+>>> +#define _UAPI_LINUX_LSM_H
+>>> +
+>>> +/*
+>>> + * ID values to identify security modules.
+>>> + * A system may use more than one security module.
+>>> + *
+>>> + * LSM_ID_XXX values 0 - 31 are reserved for future use
+>> Reserved for what?  Why?
 > 
+> You're not the first person to ask. I'll remove the reserved values
+> for the next version. The invalid value has to change as the id field
+> is going to be unsigned.
+
+Don't define a user-visible static integer for LSM module.
+We can continue using names or dynamically assigned integer.
+
+https://lkml.kernel.org/r/a0567b10-fa83-50f4-7bf6-937e0c677e60@I-love.SAKURA.ne.jp
+
+Nacked-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+
