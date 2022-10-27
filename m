@@ -2,138 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B0060FB01
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 16:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CAC60FB04
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 16:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235692AbiJ0O71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 10:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60224 "EHLO
+        id S235589AbiJ0O7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 10:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235086AbiJ0O7X (ORCPT
+        with ESMTP id S235985AbiJ0O7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 10:59:23 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCA618DA9C;
-        Thu, 27 Oct 2022 07:59:22 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 6B3722B06707;
-        Thu, 27 Oct 2022 10:59:17 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 27 Oct 2022 10:59:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1666882757; x=1666889957; bh=RBYg14WquA
-        PHO/Rvaf3mTJVgsKomhCcikCm0o/kyeuc=; b=DbGdbbEesCm6HcSxGbiUGf4LrZ
-        JFOTDM9ZZfs8ntNhmmL2vI2nupEeFoCVR1BNRYOzvGfl3BZOAjfHLOeUEJqOXW6R
-        OyftBrAf0Sjq/1noT9ruXh59zwouLIOwxyW9ouybD/4Nb9L1kuFFb8z6hfVZcMOW
-        wA7WZSKGiYYkdyPs2odTjKn6SjtjKMlz+Fntk/zSIlk4/kcYb3QH8zuAzlf2leCS
-        avPYOlgrgCN/7FFAUrYpwBCv5rYWe2Ow4k83VgWQ+1KgUpgz5ahkyVBsPhtApb/y
-        1kIN6MeXQfN5cTlq4e2F6xQiOy8bE8E0dvwmtiWAigcFwaKK6vEUapXeWvRA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666882757; x=1666889957; bh=RBYg14WquAPHO/Rvaf3mTJVgsKom
-        hCcikCm0o/kyeuc=; b=BGhZy5mKL4NscqkA2CWhJUrbfW+7npBleCTrrcdxztrg
-        P6zjj7o5wmlumnjdv5ieEgYoAUkKirlS8m93J3egAhxOoJvNFzRFQ/41STgIxyg7
-        Y8mNDMdHcaKXP6mVw3zFhYOWlphEbrxg6BiSeHY3aGOApBn5mSg3+PA6bRWxNItU
-        ijLzwm9lQ9JUStc53/yig5XvLnIf/46ufasGD7hAjlrtpoHRV6+SS17fG0IkqCm2
-        jwsBshPzeJWImaqLNIv/ksfzHomiNB9ebR9u/hA8sOtQAaYP9l8pnSeSPk9wAOck
-        fupy8ANDeBtO/hqwrvCUC7sr+Qe/ex5RZV0K5O879A==
-X-ME-Sender: <xms:xJxaY4vs5M-2rzbsRzUANgEZO9Wwl6iOOcAscoaVYyT6pCrWoPvozQ>
-    <xme:xJxaY1e1FxMzRR9nlodW01PophtLdnOFmLoEPf6njzjWLdkurDbj9bRxkSLl8EMBG
-    dVq2ATu0KLjGtPk8rU>
-X-ME-Received: <xmr:xJxaYzy4mAOCrZI4WL2ORVZRuz2bqDrW-2gsg-2mhhOT5I6cpUsI9_2Cs9IaYvlpGt1tKERSDSH1MgZhUTQVkcMQpowljNdvuovndqbvLVia7Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeggdekudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnheptdelkeejiedufedvhfeiffetlefhiedvleeigfeiuefghfdvleeiffejieeg
-    teejnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:xJxaY7PFv-GaMML4cVmBwXq8ns331c7_nRwKvYxD_vG0pcIf9NwMaQ>
-    <xmx:xJxaY4_DjSE-1IdS3065TNQlEpoBrNT7mJ1D-MXBn-Nti7RfDEuyBg>
-    <xmx:xJxaYzVayXG1srQ_vDIMoGt-fMiqaXlHiFu-W7gFUSB0KzOUibHpgQ>
-    <xmx:xZxaYx3DcVB2OJ9_cDFXUfU9sWnvA0xfG_-2pnvvTZEzhyCOilOvKNhIzxQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 27 Oct 2022 10:59:16 -0400 (EDT)
-Date:   Thu, 27 Oct 2022 16:59:14 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org, Dom Cobley <popcornmix@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>, Ray Jui <rjui@broadcom.com>
-Subject: Re: [PATCH v5 0/7] drm/vc4: Fix the core clock behaviour
-Message-ID: <20221027145914.jv7krzw6fomffyai@houat>
-References: <20220815-rpi-fix-4k-60-v5-0-fe9e7ac8b111@cerno.tech>
+        Thu, 27 Oct 2022 10:59:36 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF43AF53
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 07:59:28 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id z30so1072400qkz.13
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 07:59:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FsQVftKSeBAc1FbMNJ35HF2pgqCq1gNRi3OVMUbJA30=;
+        b=H6mjRFz9bKTBGET0cIaEajnv1a9/LQ6ojXq8xpg3JdPEvWTzteKUm8ggA8TNOTqip+
+         NvTeAzaBYcGBmNclHrqexy/c1jDbht/2LK76s9cCVKJTrsq/M26MpH9SAr/q6TsvYXE4
+         B1BeD1A/JBohH2FvRqeoX/kHniSnk8Uh9IfFhX3TRMhlgLl4sfTUClUsm5UkOG8YvJwZ
+         FZGFvkoc2UsuK7bE2kqg0nfSaf5X41YxRtpPobxCVRNRO9Qbi4ERufAfJoXOzqnymK0p
+         ADQR2T0jn9jOmvfNDb5d48CO/MCJY9hWj7RfTuJproiTSGoXLBQAOebTIzkVMFwyn4ic
+         Ra0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FsQVftKSeBAc1FbMNJ35HF2pgqCq1gNRi3OVMUbJA30=;
+        b=MBDLfNh4sAOl6oywCBgzfp4E8tl9wz9esECLYGdp+y+69vsXME0mifz71vkXd6y6uw
+         O13V6FXmaRx+9UYnwem2hwlb3aL9jp4Vd/qdseA15gKjdvPqT9DSsGCz8tzcIC1ZD+ol
+         gdkAnAneAXv/jRdJlKR5LNWfooVGRptBovDRihng/3YpzlyQ7fXSw13tDAymRXpan9F7
+         AgkHdgA+g9UOv1RCfy+lDipR8AYgR6DdxInxR4dSTP2Plr019Y1epl3yVheevssFkV/8
+         xQUosbCYDmt3Mr7eTyOvYuPnAPzI3QQTX//WznARyMr+nhyQVVkY3Z5V/pj7SvKU4dhp
+         ACjw==
+X-Gm-Message-State: ACrzQf0QDlpCtbt51wClKJs0Xb0aWUSJhiCzGAWIM3J0tnIpHw8Y2i0V
+        NoXjW8Mb1Ou5g0jhP9zMRlmXmw==
+X-Google-Smtp-Source: AMsMyM55HGtvEs91o/AnOm1jyLgdQjFebhs2S+lDBlp0J8R+GXQThXx6GckPGpFjWXZu/LjC33Chow==
+X-Received: by 2002:a05:620a:45ac:b0:6f8:7c0c:20f with SMTP id bp44-20020a05620a45ac00b006f87c0c020fmr8425800qkb.270.1666882767987;
+        Thu, 27 Oct 2022 07:59:27 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id j4-20020a05620a410400b006cfc01b4461sm1091819qko.118.2022.10.27.07.59.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 07:59:27 -0700 (PDT)
+Message-ID: <35ed0b8f-04f1-d544-a0d8-19d12e7c0ef8@linaro.org>
+Date:   Thu, 27 Oct 2022 10:59:25 -0400
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bcitvyeml2o7kure"
-Content-Disposition: inline
-In-Reply-To: <20220815-rpi-fix-4k-60-v5-0-fe9e7ac8b111@cerno.tech>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v1 4/4] ARM: dts: rockchip: add rk3128-evb.dts
+Content-Language: en-US
+To:     Johan Jonker <jbx6244@gmail.com>, kever.yang@rock-chips.com,
+        heiko@sntech.de
+Cc:     sjg@chromium.org, philipp.tomsich@vrull.eu,
+        zhangqing@rock-chips.com, hjc@rock-chips.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+References: <da1252eb-85e9-bdb8-0542-207173523523@gmail.com>
+ <e0679728-7a15-50e1-8a5e-847db1528726@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e0679728-7a15-50e1-8a5e-847db1528726@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 26/10/2022 20:54, Johan Jonker wrote:
+> Add rk3128-evb.dts
+> 
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  arch/arm/boot/dts/Makefile       |   1 +
+>  arch/arm/boot/dts/rk3128-evb.dts | 105 +++++++++++++++++++++++++++++++
+>  2 files changed, 106 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/rk3128-evb.dts
+> 
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 68ac9b360..0f26539d2 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -1127,6 +1127,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += \
+>  	rk3066a-marsboard.dtb \
+>  	rk3066a-mk808.dtb \
+>  	rk3066a-rayeager.dtb \
+> +	rk3128-evb.dtb \
+>  	rk3188-bqedison2qc.dtb \
+>  	rk3188-px3-evb.dtb \
+>  	rk3188-radxarock.dtb \
+> diff --git a/arch/arm/boot/dts/rk3128-evb.dts b/arch/arm/boot/dts/rk3128-evb.dts
+> new file mode 100644
+> index 000000000..6ad4549d5
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/rk3128-evb.dts
+> @@ -0,0 +1,105 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * (C) Copyright 2017 Rockchip Electronics Co., Ltd
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "rk3128.dtsi"
+> +
+> +/ {
+> +	model = "Rockchip RK3128 Evaluation board";
+> +	compatible = "rockchip,rk3128-evb", "rockchip,rk3128";
+> +
+> +	aliases {
+> +		mmc0 = &emmc;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = &uart2;
+> +	};
+> +
+> +	memory@60000000 {
+> +		device_type = "memory";
+> +		reg = <0x60000000 0x40000000>;
+> +	};
+> +
+> +	vcc5v0_otg: vcc5v0-otg-drv {
 
---bcitvyeml2o7kure
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Generic node names, so at least regulator prefix or suffix.
 
-Hi Florian,
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vcc5v0_otg";
+> +		gpio = <&gpio0 26 GPIO_ACTIVE_HIGH>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&otg_vbus_drv>;
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +	};
+> +
+> +	vcc5v0_host: vcc5v0-host-drv {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vcc5v0_host";
+> +		gpio = <&gpio2 23 GPIO_ACTIVE_HIGH>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&host_vbus_drv>;
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		regulator-always-on;
+> +	};
+> +};
+> +
+> +&emmc {
+> +	bus-width = <8>;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&emmc_clk &emmc_cmd &emmc_bus8>;
+> +	status = "okay";
+> +};
+> +
+> +&i2c1 {
+> +	status = "okay";
+> +
+> +	hym8563: rtc@51 {
+> +		compatible = "haoyu,hym8563";
+> +		reg = <0x51>;
+> +		#clock-cells = <0>;
+> +		clock-frequency = <32768>;
+> +		clock-output-names = "xin32k";
+> +	};
+> +};
+> +
+> +&usb2phy {
+> +	status = "okay";
+> +};
+> +
+> +&usb2phy_host {
+> +	status = "okay";
+> +};
+> +
+> +&usb2phy_otg {
+> +	status = "okay";
+> +};
+> +
+> +&usb_host_ehci {
+> +	status = "okay";
+> +};
+> +
+> +&usb_host_ohci {
+> +	status = "okay";
+> +};
+> +
+> +&usb_otg {
+> +	vbus-supply = <&vcc5v0_otg>;
+> +	status = "okay";
+> +};
+> +
+> +&pinctrl {
+> +	usb_otg {
 
-On Thu, Oct 27, 2022 at 02:52:40PM +0200, Maxime Ripard wrote:
-> Hi,
->=20
-> Those patches used to be part of a larger clock fixes series:
-> https://lore.kernel.org/linux-clk/20220715160014.2623107-1-maxime@cerno.t=
-ech/
->=20
-> However, that series doesn't seem to be getting anywhere, so I've split o=
-ut
-> these patches that fix a regression that has been there since 5.18 and th=
-at
-> prevents the 4k output from working on the RaspberryPi4.
->=20
-> Hopefully, we will be able to merge those patches through the DRM tree to=
- avoid
-> any further disruption.
+No underscores in node names
 
-I intend to get this through drm-misc, but you just gave your
-Reviewed-by on all the firmware patches but the first. Are you ok with
-this? If so, can I add your Acked-by?
+> +		otg_vbus_drv: otg-vbus-drv {
+> +			rockchip,pins = <0 RK_PD2 RK_FUNC_GPIO &pcfg_pull_none>;
+> +		};
+> +	};
+> +
+> +	usb_host {
 
-Thanks!
-Maxime
+Ditto
 
---bcitvyeml2o7kure
-Content-Type: application/pgp-signature; name="signature.asc"
+> +		host_vbus_drv: host-vbus-drv {
+> +			rockchip,pins = <2 RK_PC7 RK_FUNC_GPIO &pcfg_pull_none>;
+> +		};
+> +	};
+> +};
+> --
+> 2.20.1
+> 
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+Krzysztof
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY1qcwgAKCRDj7w1vZxhR
-xRnpAP4mYypO0n/mu6W8PKbkeWkZB8q+mWTx9P/jV3NQOgm4cwD6Aue1CHu2k5RF
-QW/IToLJvz8grwPBhwxapcwmbghVKAk=
-=/kXP
------END PGP SIGNATURE-----
-
---bcitvyeml2o7kure--
