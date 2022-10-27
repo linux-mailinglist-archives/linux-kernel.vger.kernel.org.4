@@ -2,108 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABDA260FB16
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B6B60FB18
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234893AbiJ0PDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 11:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
+        id S235289AbiJ0PDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 11:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233619AbiJ0PDG (ORCPT
+        with ESMTP id S235166AbiJ0PDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 11:03:06 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0FE18DD5D;
-        Thu, 27 Oct 2022 08:03:05 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29RE75TP006304;
-        Thu, 27 Oct 2022 17:02:49 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=+ka7b9dqA75ujNAafgwvotrndDQkoRf5EU7I/cGmtu0=;
- b=RndY8IyUXdY2UF7lkIGsiCYvWwPQP1sd5ctg7yFENkaNdillsVPEIXtVrx+h1r6WRsfO
- Y1sb9v8SNHwfweTjQTvVvKLnXX3QCI6Fq+/18yY1dnh2O9SFRL3+PuCfDYc/jEgcu5aN
- bxEpfaHweZPTQZk+4UlSVhly9aU3scoyZo7DYltWGA0ne2ebjZ1HZ+IwfX71wCEGtyjV
- VNh9CWKbJ9vIXzgdfgLm+lwlFUyJJIh2BQuebcn3CB7EUaDPnQapQ8VG382tK2PFGX7k
- TSxoYDdoiD5WlAWS1412ndol/B2InNghxgHY7+v1pcLdf7NQ6wscvfP/5tisw2zG3Aax Zg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kfufh8c08-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Oct 2022 17:02:49 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 76F08100038;
-        Thu, 27 Oct 2022 17:02:44 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 71F10229A91;
-        Thu, 27 Oct 2022 17:02:44 +0200 (CEST)
-Received: from [10.48.0.157] (10.48.0.157) by SHFDAG1NODE3.st.com
- (10.75.129.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 27 Oct
- 2022 17:02:43 +0200
-Message-ID: <e25bd4c2-c0d1-2884-5bcf-93fe205c06a7@foss.st.com>
-Date:   Thu, 27 Oct 2022 17:02:42 +0200
+        Thu, 27 Oct 2022 11:03:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6076B18DD5D
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:03:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666882996;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VJvDBKztTqHWH2ECApC5EZ1MlW+Ts28acLI3gKMXC7E=;
+        b=Gw6x5i97k31BuyT/jXNtTaUhR9arzIa2RJtxgNI8Ozlso0bOyfJgvwYJHdeRHx9u5oGO/D
+        ETu+beV/AYlcnxacbywatgRGxVGD4dvTE5QcXmxcIFpUluBCVP4fGYZcDlKqc6eYTlh1Zk
+        haC7XrDFVdmeiMIJycGSQKW1UZ3ZOKE=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-41-LThIo0fAOZy3b9uncnnR0w-1; Thu, 27 Oct 2022 11:03:13 -0400
+X-MC-Unique: LThIo0fAOZy3b9uncnnR0w-1
+Received: by mail-wm1-f69.google.com with SMTP id h8-20020a1c2108000000b003cf550bfc8dso695289wmh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:03:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VJvDBKztTqHWH2ECApC5EZ1MlW+Ts28acLI3gKMXC7E=;
+        b=Yy+WZz0qrPx0Pod+c+Jyz9BwjbPtSbCGgWHvxuMzBdYjLJC/hRcvMsnuEJwd2gdWmD
+         /yx/UE9qHYNjGFUrkXOXSNOiwldBDWbLTYozVkHRBKbaYz9ghhUi1EJLkTKTpRK/gomA
+         ynKayTr6K9Z3fqTpur9JMQrZ8WR+GTeIbrKtFdoodon4JeuI2ELwjqhSRtfN2OLMm+6G
+         LrYPpsRRcvZjxdv101yELkOZTbM5d3HfrGvNWCuESCiFpSiMy/TQKGH9crQFSrOPIRbC
+         M0thlKHSpTFZQwtQu0xfUL2H8WSk2NrD6vc7cN4qMF4GtHMR3auR2f68fPYgIavgXa8L
+         lKEw==
+X-Gm-Message-State: ACrzQf2ppuPQlPHefMl5vPNctiOnymiUZ01qEejAtiuG3CeGr3yTYjT7
+        mKgQgMykqbYudYpGIaLBampcpIeWQLSw0eTErnlgAsIMDCJuo9ygMGWhg5tHfh+LBIHsbxhEfE8
+        BSKejcD9JQP5sf+UDn7dM+UjK
+X-Received: by 2002:a1c:f20f:0:b0:3be:eff3:bda2 with SMTP id s15-20020a1cf20f000000b003beeff3bda2mr6127376wmc.125.1666882991490;
+        Thu, 27 Oct 2022 08:03:11 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4nVlOa+R+hUdc5WaG70oHT5KXVZtqksEvvPR8qBPnvxOulKaZTOuDjihr0t9y1sc8P/ozZsQ==
+X-Received: by 2002:a1c:f20f:0:b0:3be:eff3:bda2 with SMTP id s15-20020a1cf20f000000b003beeff3bda2mr6127347wmc.125.1666882991217;
+        Thu, 27 Oct 2022 08:03:11 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id y16-20020adfd090000000b0022ae401e9e0sm1285436wrh.78.2022.10.27.08.03.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 08:03:10 -0700 (PDT)
+Message-ID: <24768aa3-0e2e-6d29-2749-9d74a26f9205@redhat.com>
+Date:   Thu, 27 Oct 2022 17:03:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] ARM: dts: stm32mp13: fix compatible for BSEC
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v2 03/16] KVM: x86: Always use non-compat
+ vcpu_runstate_info size for gfn=>pfn cache
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20221017134437.1.I167a5efc1f8777cce14518c6fa38400ac684de3e@changeid>
- <c33c5490-c43d-17d5-f0fb-0b930dd46928@linaro.org>
-From:   Patrick DELAUNAY <patrick.delaunay@foss.st.com>
-In-Reply-To: <c33c5490-c43d-17d5-f0fb-0b930dd46928@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Luczaj <mhal@rbox.co>,
+        David Woodhouse <dwmw2@infradead.org>
+References: <20221013211234.1318131-1-seanjc@google.com>
+ <20221013211234.1318131-4-seanjc@google.com>
+ <afad5f40-03ef-1380-9bfe-03bbaaed47a9@redhat.com>
+ <Y1qZagwM0dMBjYhe@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Y1qZagwM0dMBjYhe@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.0.157]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE3.st.com
- (10.75.129.71)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-27_07,2022-10-27_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 10/18/22 03:55, Krzysztof Kozlowski wrote:
-> On 17/10/2022 07:44, Patrick Delaunay wrote:
->> Use the new compatible for stm32mp13 support.
->>
->> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
->> ---
->> This device tree modification depends on the binding modification
->> introduced by the patch:
->>
->> dt-bindings: nvmem: add new stm32mp13 compatible for stm32-romem
->> https://patchwork.kernel.org/project/linux-arm-kernel/patch/20221014172324.1.Ifc1812116ff63f5501f3edd155d3cf5c0ecc846c@changeid/
-> This breaks users of DTS. The patch above did not describe devices as
-> compatible and that's the problem sending patches separately, without
-> context.
+On 10/27/22 16:44, Sean Christopherson wrote:
+>> - long mode cannot be changed after the shared info page is enabled (which
+>> makes sense because the shared info page also has a compat version)
+> 
+> How is this not introducing an additional restriction?  This seems way more
+> onerous than what is effectively a revert.
 >
-> You need to keep compatible.
->
-> Best regards,
-> Krzysztof
+>> - the caches must be activated after the shared info page (which enforces
+>> that the vCPU attributes are set after the VM attributes)
+>>
+>> This is technically a userspace API break, but nobody is really using this
+>> API outside Amazon so...  Patches coming after I finish testing.
+> 
+> It's not just userspace break, it affects the guest ABI as well.
 
-I will sent a V2 patch in a serie with binding change, driver updates 
-and explanations.
+Yes, I was talking of the VMM here; additional restrictions are fine there.
 
-Regards
+The guests however should be compatible with Xen, so you also need to 
+re-activate the cache after the hypercall page is written, but that's 
+two lines of code.
 
-Patrick
+Paolo
 
