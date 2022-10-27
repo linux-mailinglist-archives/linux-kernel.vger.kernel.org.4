@@ -2,192 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F35460EFDF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 08:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7CE160EFED
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 08:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234443AbiJ0GGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 02:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
+        id S234517AbiJ0GMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 02:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234331AbiJ0GGG (ORCPT
+        with ESMTP id S234534AbiJ0GMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 02:06:06 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650454DF31;
-        Wed, 26 Oct 2022 23:06:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666850762; x=1698386762;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=IOtoJvotBvGQVQl8hxk+xZrgGkgYvVwH6HE/NLIQ6g0=;
-  b=hma3Y+qBHbfVrf9+U1csL8WBe1foyx9EVeGP4mdPaCSRBKvE8aKAHyZm
-   l0QlDjb4N1Dv3RghkTZfJO1WacLrz25HZS1zrkI4I5VAJzvycQdp7d8p+
-   eC/QAlyHady+Z67+O2l3EbdWxBdPb6W1msThHHwfXgYDPld0UBoUGKScN
-   ifCXKbo5D3BA5gD9mLZ2/eetyAQoLLqfy6N+wI2f0A556SemIa4qJvQ17
-   yyGAERUUYb1W4pV2aZAy1YntW25Nnad3qU9mPXJxj98mZP3OpsKP/mFQ0
-   rJbSNvIKfj1/Ylpm0FR+jknTMusJoN8HCniLy5xQE23UGnD3kA5mzcME3
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="308132028"
-X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="308132028"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 23:06:02 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="774871166"
-X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="774871166"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 23:05:59 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Hocko, Michal" <mhocko@suse.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Waiman Long <longman@redhat.com>,
-        "aneesh.kumar@linux.ibm.com" <aneesh.kumar@linux.ibm.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Chen, Tim C" <tim.c.chen@intel.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>
-Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
-References: <20221026074343.6517-1-feng.tang@intel.com>
-        <878rl1luh1.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <Y1ob5XxqJzTDjBYy@feng-clx>
-Date:   Thu, 27 Oct 2022 14:05:19 +0800
-In-Reply-To: <Y1ob5XxqJzTDjBYy@feng-clx> (Feng Tang's message of "Thu, 27 Oct
-        2022 13:49:25 +0800")
-Message-ID: <871qqtls2o.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 27 Oct 2022 02:12:31 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA33815DB09
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 23:12:29 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id a5so198006qkl.6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 23:12:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2QZ9vtdnPCb5anjpxrp18BAjMTMzX01x/KMYy3kefQs=;
+        b=VctcnEzDheqjAB6wY79o8KHV0GUSpIrsXU6nYArQZkweOusS/2EH44abmuydZyohYC
+         r2eZqOigOSK4VjyMFZCVxvcceBmyyugO49AZ44fA8WxSzlUbS34wI4Yved+esoWPkW6A
+         usEHLQd0WCHhDM5jVgrAwQW6907Vmn4bzKNerFMklahCrnZy+hZ1TkxhgFjjDU8QVxr7
+         2DammHlGBsvtpEe7X/GYy5aoHE9JqYVft2pkRyZjUFYLhMj7/w72mm5xnEAyK1w0MCcY
+         uk4FrUJYo+gOnXY+TuJkhE8uxbgetwIIKGAIFBdjpluJi4rCY0OSbB1M4ZQWZCVFbqhR
+         GVEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2QZ9vtdnPCb5anjpxrp18BAjMTMzX01x/KMYy3kefQs=;
+        b=fUgN11t9Uh5HG9ETf+zHs/yjYzqNUbhht4I8KeSGKpjN0COpXb3EJs3oIPfme8o/bg
+         DWT/TH/AhLipkA/PifZJuyg56FoFPsGT4YVe5xGO6gchSVLdK6gNejCI4N/UauBjRc0i
+         67RocLQO3JCM9Nx2VrrFsgED85L6MFrLUWFcR5ShcgyucIM1UXqsQlqBiqxNYivZkg5w
+         Tfnz2rn7Ov4TZ/vi0Ae52oAYEL/CUjIM0hAgGmXXrJGKHkNmTajA6/KUQZIwQSoyDVR0
+         7McIIZB3qz1m87EpnhY/yVlHZFgy6MEbzlnr/Lu3SYqBwGA20ikhed6MlNPamvwstNKe
+         xBZQ==
+X-Gm-Message-State: ACrzQf0dstQW6WFhmXFplfwYjENL5tr4Y2cQscFvcucUdROidlB/+9NS
+        4Y0AkuScu422eN7ByUbI2Kb/MIPQTXlGT96hETVfld+epGGSrfa6
+X-Google-Smtp-Source: AMsMyM4xXlENiaz9joPwyHRduYwc4xPqiMmIlzMPZqKw0mWLeKGMn1YIoZ7Ls6vROZk1Ojke6i+lloYvcBtLVJAILK4=
+X-Received: by 2002:a05:622a:147:b0:39c:dc0d:7d0f with SMTP id
+ v7-20020a05622a014700b0039cdc0d7d0fmr38493245qtw.281.1666851138604; Wed, 26
+ Oct 2022 23:12:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1666740522.git.tanjubrunostar0@gmail.com>
+ <47da976cd02d262cebe520b21a0bf2451de6731b.1666740522.git.tanjubrunostar0@gmail.com>
+ <Y1k7cDP4Dpdr5EOe@kroah.com>
+In-Reply-To: <Y1k7cDP4Dpdr5EOe@kroah.com>
+From:   Tanju Brunostar <tanjubrunostar0@gmail.com>
+Date:   Thu, 27 Oct 2022 07:12:06 +0100
+Message-ID: <CAHJEyKW8ofQ0fNQ0L4TzqJTEUMDfAPMufGATbX2Ep7JJKcWHQg@mail.gmail.com>
+Subject: Re: [PATCH 05/17] staging: vt6655: changed variable name: pvRTS
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Feng Tang <feng.tang@intel.com> writes:
+On Wed, Oct 26, 2022 at 2:50 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Oct 25, 2022 at 11:37:01PM +0000, Tanjuate Brunostar wrote:
+>
+> Philipp has pointed out most of this already, but I'll just be specific
+> and say what isn't ok in all of these patches:
+>
+> >       change variable names pvRTS to meet the
+>
+> "name" not "name"
+>
+> >         linux coding standard, as it says to avoid using camelCase naming
+>
+> "Linux" not "linux"
+>
+> >         style. Cought by checkpatch
+>
+> Why is this all indented?
+>
+> Please do not do that, look at existing accepted changes in the git log
+> and match up what they look like.
+>
+> But worst of all, you didn't really fix the variable name at all.  You
+> just appeased a tool that was trying to say "don't use camelCase, use
+> sane names".
+>
+> > Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+> > ---
+> >  drivers/staging/vt6655/rxtx.c | 56 +++++++++++++++++------------------
+> >  1 file changed, 28 insertions(+), 28 deletions(-)
+> >
+> > diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+> > index 2cac8f3882df..e97cba014adf 100644
+> > --- a/drivers/staging/vt6655/rxtx.c
+> > +++ b/drivers/staging/vt6655/rxtx.c
+> > @@ -87,7 +87,7 @@ static const unsigned short w_fb_opt_1[2][5] = {
+> >  /*---------------------  Static Functions  --------------------------*/
+> >  static void s_v_fill_rts_head(struct vnt_private *p_device,
+> >                             unsigned char by_pkt_type,
+> > -                           void *pvRTS,
+> > +                           void *pv_rts,
+>
+> "pvRTS" is using Hungarian Notation.  Look it up on Wikipedia for what
+> it means, and why people used to use it.
+>
+> For us, we don't need that at all as the type of the variable is obvious
+> in the code and the compiler checks it.
+>
+> So "pvRTS" is trying to say "this is a pointer to void called "RTS".
+>
+> We don't care about the "describe the variable type in the name" thing,
+> so it should just be called "RTS", or better yet, "rts", right?
+>
+> But then, step back.  Why is this a void pointer at all?  This is really
+> a structure of type struct vnt_rts_g_fb.  So why isn't that being passed
+> here instead?
+>
+> So try to work on both, fixing up the names to be sane, and then,
+> getting rid of the void * stuff, to better reflect how data is flowing
+> around and what type that data is in.
+>
+> thanks,
+>
+> greg k-h
 
-> On Thu, Oct 27, 2022 at 01:13:30PM +0800, Huang, Ying wrote:
->> Feng Tang <feng.tang@intel.com> writes:
->> 
->> > In page reclaim path, memory could be demoted from faster memory tier
->> > to slower memory tier. Currently, there is no check about cpuset's
->> > memory policy, that even if the target demotion node is not allowd
->> > by cpuset, the demotion will still happen, which breaks the cpuset
->> > semantics.
->> >
->> > So add cpuset policy check in the demotion path and skip demotion
->> > if the demotion targets are not allowed by cpuset.
->> >
->> > Signed-off-by: Feng Tang <feng.tang@intel.com>
->> > ---
-> [...]
->> > index 18f6497994ec..c205d98283bc 100644
->> > --- a/mm/vmscan.c
->> > +++ b/mm/vmscan.c
->> > @@ -1537,9 +1537,21 @@ static struct page *alloc_demote_page(struct page *page, unsigned long private)
->> >  {
->> >  	struct page *target_page;
->> >  	nodemask_t *allowed_mask;
->> > -	struct migration_target_control *mtc;
->> > +	struct migration_target_control *mtc = (void *)private;
->> >  
->> > -	mtc = (struct migration_target_control *)private;
->> 
->> I think we should avoid (void *) conversion here.
->
-> OK, will change back.
->
->> > +#if IS_ENABLED(CONFIG_MEMCG) && IS_ENABLED(CONFIG_CPUSETS)
->> > +	struct mem_cgroup *memcg;
->> > +	nodemask_t cpuset_nmask;
->> > +
->> > +	memcg = page_memcg(page);
->> > +	cpuset_get_allowed_mem_nodes(memcg->css.cgroup, &cpuset_nmask);
->> > +
->> > +	if (!node_isset(mtc->nid, cpuset_nmask)) {
->> > +		if (mtc->nmask)
->> > +			nodes_and(*mtc->nmask, *mtc->nmask, cpuset_nmask);
->> > +		return alloc_migration_target(page, (unsigned long)mtc);
->> > +	}
->> 
->> If node_isset(mtc->nid, cpuset_nmask) == true, we should keep the
->> original 2 steps allocation and apply nodes_and() on node mask.
->
-> Good catch! Yes, the nodes_and() call should be taken out from this
-> check and done before calling node_isset().
->
->> > +#endif
->> >  
->> >  	allowed_mask = mtc->nmask;
->> >  	/*
->> > @@ -1649,6 +1661,7 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
->> >  		enum folio_references references = FOLIOREF_RECLAIM;
->> >  		bool dirty, writeback;
->> >  		unsigned int nr_pages;
->> > +		bool skip_this_demotion = false;
->> >  
->> >  		cond_resched();
->> >  
->> > @@ -1658,6 +1671,22 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
->> >  		if (!folio_trylock(folio))
->> >  			goto keep;
->> >  
->> > +#if IS_ENABLED(CONFIG_MEMCG) && IS_ENABLED(CONFIG_CPUSETS)
->> > +		if (do_demote_pass) {
->> > +			struct mem_cgroup *memcg;
->> > +			nodemask_t nmask, nmask1;
->> > +
->> > +			node_get_allowed_targets(pgdat, &nmask);
->> 
->> pgdat will not change in the loop, so we can move this out of the loop?
->  
-> Yes
->
->> > +			memcg = folio_memcg(folio);
->> > +			if (memcg)
->> > +				cpuset_get_allowed_mem_nodes(memcg->css.cgroup,
->> > +								&nmask1);
->> > +
->> > +			if (!nodes_intersects(nmask, nmask1))
->> > +				skip_this_demotion = true;
->> > +		}
->> 
->> If nodes_intersects() == true, we will call
->> cpuset_get_allowed_mem_nodes() twice.  Better to pass the intersecting
->> mask to demote_folio_list()?
->  
-> The pages in the loop may come from different mem control group, and
-> the cpuset's nodemask could be different, I don't know how to save
-> this per-page info to be used later in demote_folio_list.
+I see. thank you for the pointers
 
-Yes.  You are right.  We cannot do that.
-
-Best Regards,
-Huang, Ying
-
->
->> > +#endif
->> > +
->> >  		VM_BUG_ON_FOLIO(folio_test_active(folio), folio);
->> >  
->> >  		nr_pages = folio_nr_pages(folio);
->> > @@ -1799,7 +1828,7 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
->> >  		 * Before reclaiming the folio, try to relocate
->> >  		 * its contents to another node.
->> >  		 */
->> > -		if (do_demote_pass &&
->> > +		if (do_demote_pass && !skip_this_demotion &&
->> >  		    (thp_migration_supported() || !folio_test_large(folio))) {
->> >  			list_add(&folio->lru, &demote_folios);
->> >  			folio_unlock(folio);
->> 
->> Best Regards,
->> Huang, Ying
+Tanju
