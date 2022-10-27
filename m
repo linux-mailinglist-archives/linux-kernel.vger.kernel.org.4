@@ -2,199 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DF860F6CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D68F960F6C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234615AbiJ0MIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60016 "EHLO
+        id S235567AbiJ0MIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235551AbiJ0MIb (ORCPT
+        with ESMTP id S235551AbiJ0MIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:08:31 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05ACB03E8
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:08:28 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so6100106pji.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:08:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IRokpQrD/Xpoqhga6/IEwT5hyf0pX7PAPi9ZKJUnr7Q=;
-        b=JMScpzWl6emAup2u57Oz+x3Eu9xexeIgrXPigRBphDYLS17++q/iVRPSo68AKI+7HU
-         EfgGCjwU2Ux3cCL9UySpAo/NxqVFWjixbOmUZjZRvpAG8PUsbi26QqIcLHUvm3Dc+7Mu
-         tokABmH2890D/GOamLjXSHM6MQEKCFUb9JrhYTFPoO508RlLtXbGQkazNjCbw+V1FAaz
-         jm7qwXWgp9XoEvQ1BhPMwaBoBCc0GoDPc/Y4bzrIJIjKIRBFDj1aODTZM6Wohggdbqva
-         fsDS+dbhf8nPvt9M108QYnZr1E89+0CPxGqxOM6YJu8w8tq4K30L3TMD36h5vh2ysifk
-         ET6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IRokpQrD/Xpoqhga6/IEwT5hyf0pX7PAPi9ZKJUnr7Q=;
-        b=CL0Pv8EUcVfZHht+l3Ww7nEvpfyHdXgBxDMyQ+z5Q/zZtYUOs0KSZkTKjSp+u59KwD
-         8downQLmo0wlFehzRY/b1CyLdMXyjwJ5xe5aM6Ui0jE+7u5vwd8ah5xp4IL1CzXfN++l
-         qx9R2jYMqyKlZyw9XtzkZGyRb4eJp5abibNeP1eZTeLQvnoxUpkV0M90Ed5o+G49SpUd
-         vsBId7/RKWHogInRKAYOikR6Xn0Sm/TFOl3E6gAHHOfhidZWxwQonBXdzydkbbcklB0p
-         7RTgDKYtIAMT2ydUNjqJDuPsFcPQWv6OpbSyl5V4Viy0qyM/3zyLHQyLS/7YnSwXfnwg
-         uVAw==
-X-Gm-Message-State: ACrzQf3xnTEEbTxTsVXPeYPZfeMe4uJUIJuCATSkSlzbrXMI6ucefwMB
-        bg75tgmFU5qMkNpolqozgkRRA8oeVvp1XUkxyZd4IxTyyD39+Q==
-X-Google-Smtp-Source: AMsMyM4mFDjwKvJtTg/Yzz8RozT/UYy+3pElSAq7TFuq1ZEqDR1s26iqwELHXdK9Q2XTTM+wOKNPMi+xbxQi+xSTdnA=
-X-Received: by 2002:a17:902:70c7:b0:183:3e66:fe48 with SMTP id
- l7-20020a17090270c700b001833e66fe48mr47299112plt.165.1666872508418; Thu, 27
- Oct 2022 05:08:28 -0700 (PDT)
+        Thu, 27 Oct 2022 08:08:22 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2125.outbound.protection.outlook.com [40.107.215.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A196B03E8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:08:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gbg/8c0H5LKQTL5yTaJoMnzvYdPoNVYAfZLHkstV/X2WvQsnkmxKWYSLPkTGUlSooHHN6bXlTdzER64z0d6PmNqzousbAV2tnCcbasVMJbOlrZ0X7ZRShCrjGl0g3MocICYzk/nmRy4qzbWw++Y+w6haiqZy1jKgythdz1RdmH6NWOtYghHZeAERmcQu5WOfMgkbLdxT6H40LeJ2jWG1h9ynZhiqF5LQMfScijqSutkyQOWji97rJVTZ1HT1CkMdBTQraWnSSKtSMN0VRaX4Mr2eo5RnJc6I9S4dB/5un68jfY1DrOH6cH9nzzHk3Zg3r59784AOWHZPdyJ2Fy4bUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+YtFBksY2m45tgD3PKbTXJC+mVQ36+UJNFhpAC0UhIU=;
+ b=oepfvvkEUD64sOEeuAux1WEsFmjJR/QASHpXAu4kQtClY/VlsBb7kohexL/PZxY7/aUCcUNLliScn/daur4DuW53OZMckNP/evL6M/dymH93h+7AjS2Xrm8FgwLdesNvvxBYvPXIjbRZw6nwM7Q8baxmzeoOh+5LvhZBYjxGNGB32MQKwi863jlYhahKpDAG+QviZZPwg4AT/xBpqGDyBCZ7bfhRTEvGW+HFUwELX+K5LLcNWQ5xGM06MADNhkQBK0DmjjlI4w5wyrP/NaoaZr240AvD2UKt8pkUOejhqSSd9CLjp+GHXKLhb3WrjcH27maJ2wo7kC7eXB+m07BHCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+YtFBksY2m45tgD3PKbTXJC+mVQ36+UJNFhpAC0UhIU=;
+ b=a9M3bWpMnlXK0uxCVZKBFfYniltp0YTAXMys8jylO4+H1woRzAg12c8sPMF6hrxn6BQl2SEKjfEhyBQce5p+5KWcUc+WZ6PEbXYpkyxUmtKKNyfjdrfG9/HVn3LqppFqV7x8xdIUvWmgNsLdEwUDVvuv10+DaAyXxOGa08ll7Dj02OaYSSoKY7XND9MwQAOW8M3klQauvej3LV0Izu13BNLp6kGDekWBR7BRqDdDN4r3WWOVBym8UzntYM1h8ao/opiqAhmxptbD2fsDI/dvCYxQQe9tvviy3svEGkgqUJLlBMFYpEF0M7OLjlQAQyWa15T04mwNM5EdZ9vvgxm1Jg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by KL1PR0601MB4468.apcprd06.prod.outlook.com (2603:1096:820:73::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Thu, 27 Oct
+ 2022 12:08:18 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::c84b:5a6c:d66f:c0fd]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::c84b:5a6c:d66f:c0fd%3]) with mapi id 15.20.5746.023; Thu, 27 Oct 2022
+ 12:08:18 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
+Subject: [PATCH 1/3] f2fs: rename flush_error_work() to f2fs_record_error_work()
+Date:   Thu, 27 Oct 2022 20:08:05 +0800
+Message-Id: <20221027120807.6337-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR01CA0187.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:189::12) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-References: <20221018105149.820062-1-thierry.reding@gmail.com>
- <CAPDyKFopppohLJ7ptnQxpBHzMLh2SZObarQRC0bJyTwE=nky4w@mail.gmail.com> <Y1pLPHER+Pq+cRvc@orome>
-In-Reply-To: <Y1pLPHER+Pq+cRvc@orome>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 27 Oct 2022 14:07:51 +0200
-Message-ID: <CAPDyKFpG9ZjVTiK3HEqioDN8ksGpRYiXL_SLSmOfm9fjJfcrsw@mail.gmail.com>
-Subject: Re: [PATCH] iommu: Always define struct iommu_fwspec
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Prathamesh Shete <pshete@nvidia.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR0601MB4468:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6a795a56-99e9-4dbd-06cc-08dab813eedc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: b9z7lCcxZT0ejF9rp4ip75V7Mqwbch4efHFEsYXClSKhPnYiUiIZfXAttwUYkJapHNDmTyYMp4v6Cglp1OiY1c7UhwUDZDc3d7mESpKKci0KtZ6NIWdpAFZzFaYQDrhf2qBRGdyQGMhdLJg71nFHobnEpbmWsmjLzcoG7SjbJ2Bn+5UIPk+fpm6ZFeP5dSL4t2MWBQlSmxIXIYlRVel23BpdPA8ahD8rIBFGIb2U9320P/n8UZHxCGvEj9W7Hd1FOOnH0pUJNxaiQ3MrhheTZpksSdvRwQbCJfmG9Qzlfg+5pXOo5qRG9Is8Sa135M2rV9IhHUq/Xbfdf09S7nmWpuFGSnIsumq4oAfD/Uz8/wskUZAF4aEYDi5TNYKOdzl/jwLJ+52t/TnoUCw2XPHGiwGvg5y0wtyshdgHhUiohT15SPZDau3UOX+Ozww3u7zuxKiaatLPR3g7ZPQFocY4H842DBFDZUt2vZcfT5Y43oyIVp7mKiSF7NXYjKWMtuEvFmK7UP3TVoaqbKgNnpsO/tsLp4uqOBjMlL203JBhArXtK/X+7SFZqNxhQaiJm3O2qkAEgX0CmMcDRQUWPe/NPYH8V8eYu6lbMlEKCZGi5eP6eAfHFutajR8zcfRvKv4LD1FP0BGric/7ExfALPuUn3G+QGW303GvXCSyDI3X9wTF77ot3R0AszSkFszdVl01ySYvSpjPYzQ9nBL9oyG1mz6S6+BEnK/dlH0G3SqIRkJTBMgfZYOgej4XY+kUAWJkuskuRCupqxzSRehuvqhRVg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(396003)(376002)(366004)(136003)(451199015)(36756003)(186003)(1076003)(6486002)(52116002)(83380400001)(6506007)(6666004)(478600001)(107886003)(2616005)(5660300002)(8936002)(66556008)(4326008)(26005)(38350700002)(38100700002)(316002)(6512007)(41300700001)(2906002)(66476007)(8676002)(86362001)(66946007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3f8JQ4tu6Yha8D3F0WNv384iSNrgtijNsSCvkqFnVoy64YF5oqCqveiJ3625?=
+ =?us-ascii?Q?2DOuJ2S8SLURQrNzh24cCb4OFqmn6p2LmbE9EYoQll7oMcGQi0jKuZAPUcEC?=
+ =?us-ascii?Q?cQSNL8zzcvvu4Whe1lxFWa/hzzot41KnzZz4+npsrhRPA1t5mLHz66FRcTym?=
+ =?us-ascii?Q?eV1ineO9BDIR5N0ExIfY2FkZvTmy7mjStR/3ksCvkbwXgVkRP2PK7k3ZzeDW?=
+ =?us-ascii?Q?97Av41ofBhHx7pkaXYt9Pv30mO489WAr/OQ/qnMWpIecvzvAV4kjpPXb6U9a?=
+ =?us-ascii?Q?5O3X3zigInMg/WQqk6+omLyZseySruPK7qN3XDgsLvCKkbML6Ms58v4BZvHL?=
+ =?us-ascii?Q?zMSjR39JTbbs30wE8xHq3bDGW5M6p9FdKFxVZebO9oTpa7FWCHwB1ujfC/RO?=
+ =?us-ascii?Q?HUWkq4wwUVdqMaFS8A5J9CkPpUoDE+71AU5XrO2oRd0TeX8NVYdj38iww3tp?=
+ =?us-ascii?Q?JmrgTPpQHUyMNTSxP9F5UWxvIc751sdiCDNE5nd+oRI8JjKBPAjigAlqZVvh?=
+ =?us-ascii?Q?JVOd+hw+5VrSCW3bqKwkyRNZSwKTYfqciL28Jpwxh1/BhSfr7pVi0++cZ0ND?=
+ =?us-ascii?Q?L1TbqHN9/WizYRYAO2+t+PohcLZtvv+6uGt0ruMdxwFoU71ucZJcDZKd64a4?=
+ =?us-ascii?Q?OU2LHBk/9jdCC21Sru78H8LpQ3fOfpxt8ldaHhTbICpRz8SoMOBG+tKfLbg6?=
+ =?us-ascii?Q?CJw10kVcmpEr2YIMzVvaWuAaKnQk7o0dL7rTGIUYbTJvBEazKKO4akTwNuEz?=
+ =?us-ascii?Q?+iHrn6hDBDHlUifpyzVrkWiOOaspb77xqzgB5oTAWKvPmPbiSiQackaSa6sY?=
+ =?us-ascii?Q?w9eckUaqqgHZ3dJ+GbqR/kJkAP25tIr6myUjmfgmERZeoJVcE6pyLwc6oltO?=
+ =?us-ascii?Q?bChrokJi82iqURL28URP6rpl8oZFDi4N+Kw+56pdafwCXWtqRc1hyCTypdhm?=
+ =?us-ascii?Q?iAk7gCLSUkV8to967Ic2bGRSHSXE0M9c2E/VkMusfAZ7y8tKfwdTP9zIFE8t?=
+ =?us-ascii?Q?910qdzm5ZiiCJTkVykUzTd1G3PQRGVgYS8odmeRs0aio5/A74YUgnI35a1Bz?=
+ =?us-ascii?Q?BJoICxDSn5zCogJf73ff7939bJL7yV3Age9eOPoGMobwPflNzLoDiFzDdy7c?=
+ =?us-ascii?Q?hn/xktNxR79rs4PqLQ2xIxRQnDx1wk3PxGOpsUryoyMIZiovBQcbGsKnjbg1?=
+ =?us-ascii?Q?/JM89Bscqcg1eK0MGfUT5kA9tVEwuvlDUPww0mg63cweCvcGX4kWBoYuv6vC?=
+ =?us-ascii?Q?wmjOdinbF2xjGJpZVKFQ4TTe1iEbtJGqGyihvq9sxvfzPoWOlAMZUsJDYrJe?=
+ =?us-ascii?Q?6zNXJenFqtnfIu78O7juBfJ2SK+VT+89upfPWpt130+1AUc2ASWFn92MUbdy?=
+ =?us-ascii?Q?8kY3Z66X0zCo3wbP34ZT59fv+3G7ZUYT3jt3iRu1NNl2bJEF7y63Vh2wY6GG?=
+ =?us-ascii?Q?olL0FdAayBkoaATfI5UYYjZ4epuZCmRlnezgZvvKDAqwCFtqVsjvMxhB05RM?=
+ =?us-ascii?Q?uJedUEDeeI8dVPc7rvEjsPQCFlVD7YEFLJHrzVl8PWBptYEaWJVif5tzLIPF?=
+ =?us-ascii?Q?wlkE1brxM/r1HD7lOstTUS+Pm6+mv2mq5p+crDuN?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a795a56-99e9-4dbd-06cc-08dab813eedc
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 12:08:17.9675
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3IgFmGvEP0H7Lq9RBYKYleIZK+zuETQVpGaSoI9nFYYBKPOWoJMlUfDISELVuIKEvRUH6Bh4AknT14sriiDFGg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4468
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Oct 2022 at 11:11, Thierry Reding <thierry.reding@gmail.com> wrote:
->
-> On Thu, Oct 20, 2022 at 01:32:41PM +0200, Ulf Hansson wrote:
-> > On Tue, 18 Oct 2022 at 12:51, Thierry Reding <thierry.reding@gmail.com> wrote:
-> > >
-> > > From: Thierry Reding <treding@nvidia.com>
-> > >
-> > > In order to fully make use of the !IOMMU_API stub functions, make the
-> > > struct iommu_fwspec always available so that users of the stubs can keep
-> > > using the structure's internals without causing compile failures.
-> > >
-> > > Signed-off-by: Thierry Reding <treding@nvidia.com>
-> >
-> > Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> >
-> > > ---
-> > > Hi Joerg,
-> > >
-> > > this is a rebased patch extracted from an ancient series that never
-> > > ended up getting applied:
-> > >
-> > >         https://lore.kernel.org/all/20191209120005.2254786-3-thierry.reding@gmail.com/
-> > >
-> > > You had already acked this particular patch, so maybe you can pick this
-> > > up. I've seen at least two discussions where this was brought up again,
-> > > so I figured it'd be worth sending this out again because it can help
-> > > remove a number of #ifdef blocks throughout the kernel.
-> >
-> > Yes, this would certainly help to improve the code. To me, it looks
-> > like the current stub functions, like dev_iommu_fwspec_get() for
-> > example, aren't really useful without $subject patch.
-> >
-> > Note that, I have a pending patch for mmc that would benefit from
-> > this. To prevent me from delaying that, an easy way forward, assuming
-> > there are no objections of course, would be to send this for 6.1-rc.
->
-> Adding Prathamesh for visibility. Another alternative would be to
-> prepend this to Prathamesh's series with an Acked-by from Joerg.
+Since it is an f2fs module, it is best to prefix function names
+with f2fs_. At the same time, there is already a flush thread
+and related functions in the system, rename flush_error_work()
+to f2fs_record_error_work().
 
-Good idea!
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ fs/f2fs/super.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I will then be awaiting a new version from Prathamesh's series, that
-includes $subject patch too.
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index a241e4073f1d..fc220b5c5599 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -4019,7 +4019,7 @@ void f2fs_handle_critical_error(struct f2fs_sb_info *sbi, unsigned char reason,
+ 	f2fs_stop_discard_thread(sbi);
+ }
+ 
+-static void flush_error_work(struct work_struct *work)
++static void f2fs_record_error_work(struct work_struct *work)
+ {
+ 	struct f2fs_sb_info *sbi = container_of(work,
+ 					struct f2fs_sb_info, s_error_work);
+@@ -4374,7 +4374,7 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
+ 		goto free_devices;
+ 	}
+ 
+-	INIT_WORK(&sbi->s_error_work, flush_error_work);
++	INIT_WORK(&sbi->s_error_work, f2fs_record_error_work);
+ 	spin_lock_init(&sbi->error_lock);
+ 	memcpy(sbi->errors, raw_super->s_errors, MAX_F2FS_ERRORS);
+ 	memcpy(sbi->stop_reason, raw_super->s_stop_reason, MAX_STOP_REASON);
+-- 
+2.25.1
 
->
-> Joerg, any preference on how to move forward with this?
->
-> Thierry
->
-
-Kind regards
-Uffe
-
-> >
-> > >
-> > >  include/linux/iommu.h | 39 +++++++++++++++++++--------------------
-> > >  1 file changed, 19 insertions(+), 20 deletions(-)
-> > >
-> > > diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> > > index a325532aeab5..e3295c45d18f 100644
-> > > --- a/include/linux/iommu.h
-> > > +++ b/include/linux/iommu.h
-> > > @@ -173,6 +173,25 @@ enum iommu_dev_features {
-> > >
-> > >  #define IOMMU_PASID_INVALID    (-1U)
-> > >
-> > > +/**
-> > > + * struct iommu_fwspec - per-device IOMMU instance data
-> > > + * @ops: ops for this device's IOMMU
-> > > + * @iommu_fwnode: firmware handle for this device's IOMMU
-> > > + * @flags: IOMMU_FWSPEC_* flags
-> > > + * @num_ids: number of associated device IDs
-> > > + * @ids: IDs which this device may present to the IOMMU
-> > > + */
-> > > +struct iommu_fwspec {
-> > > +       const struct iommu_ops  *ops;
-> > > +       struct fwnode_handle    *iommu_fwnode;
-> > > +       u32                     flags;
-> > > +       unsigned int            num_ids;
-> > > +       u32                     ids[];
-> > > +};
-> > > +
-> > > +/* ATS is supported */
-> > > +#define IOMMU_FWSPEC_PCI_RC_ATS                        (1 << 0)
-> > > +
-> > >  #ifdef CONFIG_IOMMU_API
-> > >
-> > >  /**
-> > > @@ -598,25 +617,6 @@ extern struct iommu_group *generic_device_group(struct device *dev);
-> > >  /* FSL-MC device grouping function */
-> > >  struct iommu_group *fsl_mc_device_group(struct device *dev);
-> > >
-> > > -/**
-> > > - * struct iommu_fwspec - per-device IOMMU instance data
-> > > - * @ops: ops for this device's IOMMU
-> > > - * @iommu_fwnode: firmware handle for this device's IOMMU
-> > > - * @flags: IOMMU_FWSPEC_* flags
-> > > - * @num_ids: number of associated device IDs
-> > > - * @ids: IDs which this device may present to the IOMMU
-> > > - */
-> > > -struct iommu_fwspec {
-> > > -       const struct iommu_ops  *ops;
-> > > -       struct fwnode_handle    *iommu_fwnode;
-> > > -       u32                     flags;
-> > > -       unsigned int            num_ids;
-> > > -       u32                     ids[];
-> > > -};
-> > > -
-> > > -/* ATS is supported */
-> > > -#define IOMMU_FWSPEC_PCI_RC_ATS                        (1 << 0)
-> > > -
-> > >  /**
-> > >   * struct iommu_sva - handle to a device-mm bond
-> > >   */
-> > > @@ -680,7 +680,6 @@ bool iommu_group_dma_owner_claimed(struct iommu_group *group);
-> > >
-> > >  struct iommu_ops {};
-> > >  struct iommu_group {};
-> > > -struct iommu_fwspec {};
-> > >  struct iommu_device {};
-> > >  struct iommu_fault_param {};
-> > >  struct iommu_iotlb_gather {};
-> > > --
-> > > 2.37.3
-> > >
-> >
-> > Kind regards
-> > Uffe
