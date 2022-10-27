@@ -2,76 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CD160FA94
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 16:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED2D60FA99
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 16:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235362AbiJ0Oj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 10:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
+        id S235442AbiJ0OlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 10:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235489AbiJ0Ojw (ORCPT
+        with ESMTP id S234838AbiJ0OlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 10:39:52 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED42F58525;
-        Thu, 27 Oct 2022 07:39:51 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666881588;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jbxARsfRC6v5A83uXW6hh52ECqe0nM8Oe/dP4o5OVDQ=;
-        b=GRt8WmOOYTVQYQdbVvUO9ozbKobBIHsAqnsxffGe0aRtNiCGayoW0HpSWWOur4SwiLVKq0
-        WDvOhVKRp9+oBG7ma8og9hKAK97tI6S0rJZEG0xjyj6KKsAyEl/nQZbMSSMSTU1NkB3C7O
-        SSfDlaakqotzDdEQwyRYjdHRzH+4/L5k0dzEDBKAMUSmPJOJasznQX/VTXNh+asURWOxkX
-        m3bzyXH28+zubtQ3JJEIWGp8MkCT64bnonogoy5WzYE3E++MEPjsYP36tN1/cIABHJzV3Z
-        qwVKYvUBwBD3Px2ZeRyiONVLeW1eSXRHJM95fUoHsBYzW2OHkpDc6K51STgudw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666881588;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jbxARsfRC6v5A83uXW6hh52ECqe0nM8Oe/dP4o5OVDQ=;
-        b=RRC4iqdInwglcGXrHzMsTN+Tp1Aj4twNF78GnyK14oGdgK5t4Wlzn/4bprc5cM+75jPget
-        TrVUU0ytp+519qAg==
-To:     paulmck@kernel.org
-Cc:     Frederic Weisbecker <frederic@kernel.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, tglx@linutronix.de, pmladek@suse.com
-Subject: Re: [PATCH v2 rcu 0/8] NMI-safe SRCU reader API
-In-Reply-To: <20221027141045.GX5600@paulmck-ThinkPad-P17-Gen-1>
-References: <20221018215721.GA1716567@paulmck-ThinkPad-P17-Gen-1>
- <87pmeoawwe.fsf@jogness.linutronix.de>
- <20221019191418.GF5600@paulmck-ThinkPad-P17-Gen-1>
- <20221019220537.GA1234896@lothringen>
- <20221020222718.GA5600@paulmck-ThinkPad-P17-Gen-1>
- <87r0z1gy51.fsf@jogness.linutronix.de>
- <20221021184152.GO5600@paulmck-ThinkPad-P17-Gen-1>
- <87y1t5zqzz.fsf@jogness.linutronix.de>
- <20221024134727.GV5600@paulmck-ThinkPad-P17-Gen-1>
- <874jvpehod.fsf@jogness.linutronix.de>
- <20221027141045.GX5600@paulmck-ThinkPad-P17-Gen-1>
-Date:   Thu, 27 Oct 2022 16:45:47 +0206
-Message-ID: <87sfj9couk.fsf@jogness.linutronix.de>
+        Thu, 27 Oct 2022 10:41:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207CC17FD6F;
+        Thu, 27 Oct 2022 07:41:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DEE44B82672;
+        Thu, 27 Oct 2022 14:41:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 459A1C433C1;
+        Thu, 27 Oct 2022 14:41:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666881677;
+        bh=GDDsAQTkoe5z81yiS6K3qoBlbDSRdrFNOqNExR/hsAE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JcDeorEXLNLlVNkvU4Oj9yVGa2fACOMy+h9tF4pqHK1RJg6Hn3OBhejjcZD0ABekc
+         A9pkZWfRHB0Tor72qigihy7/lQvlchvHx/hjwi9IDh3I2+FHytRcKi0EpykAVJN3sC
+         J85EVyMJdzd8l8LE8BNxieSZCSiYhah9XuKoCOJofXcRT8egqwXhZAUWdVFnrCew2y
+         4Cey4thsmq8x0tjDBXvNpYC5u63fZi12cqXX9p9iqxmkNmdeEpRL/+bx8qnPqJN5dL
+         FeCp07JsuVsuexv7iUVJUNR8KxASpmAtBh26tffwtK2MV3e6hK0liMKnZvUSDpaHS6
+         ziPyqYnM84bqg==
+Date:   Thu, 27 Oct 2022 15:41:12 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        alsa-devel@alsa-project.org, Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, Derek Fang <derek.fang@realtek.com>,
+        kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH v2 2/4] ASoC: dt-bindings: realtek, rt5682s: Add AVDD and
+ MICVDD supplies
+Message-ID: <Y1qYiMEEohapaG0F@sirena.org.uk>
+References: <20221024220015.1759428-1-nfraprado@collabora.com>
+ <20221024220015.1759428-3-nfraprado@collabora.com>
+ <CAGXv+5HJo5x2ieOegmv5vkfh+rTevdR_fri-7PeK+Gd+GXVjNw@mail.gmail.com>
+ <20221027143627.nbbketezqunkclxh@notapiano>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1nCwZ8a5XeZnWgHr"
+Content-Disposition: inline
+In-Reply-To: <20221027143627.nbbketezqunkclxh@notapiano>
+X-Cookie: Forgive and forget.
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-27, "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> The warning is claiming that this srcu_struct was passed to
-> srcu_read_lock() at some point and is now being passed to
-> srcu_read_lock_nmisafe().
 
-Indeed, I found some code that was not using my wrappers. Thanks. Living
-proof that it was a good idea to add the checks. ;-)
+--1nCwZ8a5XeZnWgHr
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-John
+On Thu, Oct 27, 2022 at 10:36:27AM -0400, N=EDcolas F. R. A. Prado wrote:
+
+> Also, since you already gave the purpose of these other supplies, could y=
+ou also
+> tell the purpose of AVDD, MICVDD and (for rt5682) VBAT? That way I could =
+add
+> some description for them in the binding.
+
+Those are all very conventional names - analog, microphone and battery
+supplies.
+
+--1nCwZ8a5XeZnWgHr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNamIcACgkQJNaLcl1U
+h9BiXwf/a2LwV5EhWm7OrM48Kr5XuiVoUVNm9a4Eca+1o24Li+qLa1PHX7iFIMqR
+Cr8x3LhtXDeYmwmp4IKl+OOyxdG/qMiefCB6ItiZ399ojNEdp+7zd7qCrsbnPg74
+ZmPoFfjH6LLMy6j+rFWXWihU/3uFry6vaMT5g9XT/L2+7Dj49MEPQgbcIe4HlTz1
+Amzamoi142yiUTNlLxKRpTtalUd30b98O3tznX+km8XbWtcvAKgy6zU0MpIXU8FZ
+q2bw4F678dU8F4EdKLhDaoqwvAsosUgRow+thU8lqNJAZkjBRhyQn0gljtfvULcs
+Nw2JBnoqx6U54ZT7cE6nQU2fqIVB+w==
+=5WYh
+-----END PGP SIGNATURE-----
+
+--1nCwZ8a5XeZnWgHr--
