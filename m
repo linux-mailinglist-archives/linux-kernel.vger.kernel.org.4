@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B3B6102AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE086102B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236996AbiJ0U0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 16:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
+        id S236654AbiJ0UbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 16:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236987AbiJ0U0L (ORCPT
+        with ESMTP id S236595AbiJ0Ua5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 16:26:11 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E15862902
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:26:09 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id bq6-20020a056a000e0600b0056bcbc6720fso1380883pfb.22
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:26:09 -0700 (PDT)
+        Thu, 27 Oct 2022 16:30:57 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221726D85B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:30:56 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id z24so5512956ljn.4
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:30:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=RzZ+vF4gE05dMWHZyKFtCSH9kQcTRyTNNdiKLvSe3jo=;
-        b=T/ZYVbx0KbeZBXLgRwYuBgqxOeGY20vOvKPpeSFgk80Bm4qJo2NKG2ect8jMo4JN9h
-         4T8sk777O4897XlrfmS5X327Uqmb0T5Vt5hb8SI/9kF9hAukRqyq+Z9RqYvH8VnZgFk/
-         i7Gn33PnRLk48kAdh519ilvi0LjmAl3OsC6TYsYnP8Xd+Fp3nRIrJw9wh8X8+3WzWI2H
-         VvnBwQKb7k7ppOCT9Q6SD/pdOyZKJAIQe+d6Dc4yPkp5CM6v7glFZb9C5xmJFsn7A860
-         VMPZi6/UWThPlzQvG+L/5jJvr6GbXa8jSuuwBYo7ruqeg4cW54euqKpWrD6LYvRWMQ11
-         Marw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RJhLmmsZGJ8bUFvXGrjhxjigTY7tssuM34NIcqRQJks=;
+        b=ko4N/PqiVlcVf7rPdTn90/c1YL7CHD4kbLrdcKcGWYTUUSMtlKMiKyWHA+wDDKm3Ri
+         9e+QndcW1iHPHRjxD1ZSz74bPfh7+NQfvegupvFlxKBAE57swePOCKRNOtu8w+V5/LIh
+         oxfHuONcO0Ik1awpXYSMKm5/Us+dUNf4euurzQPxHHKyJd0J2aZg6aMTq63yWe/zpUHR
+         BdwcHWaYJTXY9nY7H0cZ5ZFnP+HjhVQMyXizdrg693dGmkkh+NZ1U3pB4zQGTKXjYAq1
+         O+7ty+Tq6vl57BKFDpOmZSjo8wIv9q+d+D2+wILbB19dg5S/gJyRJ3rpAwvrWr8JlqCE
+         oGcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RzZ+vF4gE05dMWHZyKFtCSH9kQcTRyTNNdiKLvSe3jo=;
-        b=qL+hm773H+FectBbga7kueHGKu4/88pAObhiObkfeCUNYg+mhAwkzeHEfVOEgDo4tY
-         Z3wC0ImmO5nk3mtMbYTvmjIrx1zrrk06EWsEIH1EpBbfYKvLW8YVeCwISM7LbPZtJrAp
-         3LRwOK4ZyqYHptAQQd1hJgVL1tvGuLhQaaif0SlEnklDqsRwUei4rLtF5yO2q+oYHPqe
-         Uf+5E+FOLZYEA4dCQU6VqHxYoFCBjIgZJiHAgo+KKjr1PI7ybPlm31oWCp0NRg5G6saH
-         e7m7aOL7Th5fjGC87abca4dKWXIOtwdDmZxwPLwSw5G+b4xozh8/keiFjDGxDiWxwCoF
-         o19w==
-X-Gm-Message-State: ACrzQf0GlAO01jurwnxwkJx5tX96pucqj84Zlm9u+rh6xLshtbTtzEQl
-        xAxmUuct1OZf/nouhSLNGET8emEo7d4=
-X-Google-Smtp-Source: AMsMyM48vPEqZao00Z8Youfvv/5sVG75DTsKLDY87vecWQ4LhAJKhgIiX3/lptJ+lDIKLQRfk26F0aiePsQ=
-X-Received: from avagin.kir.corp.google.com ([2620:0:1008:11:d8ef:d6b0:eaf1:152])
- (user=avagin job=sendgmr) by 2002:a05:6a00:cc9:b0:56c:b47:a73e with SMTP id
- b9-20020a056a000cc900b0056c0b47a73emr17753597pfv.19.1666902369143; Thu, 27
- Oct 2022 13:26:09 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 13:26:03 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-Message-ID: <20221027202603.670616-1-avagin@google.com>
-Subject: [PATCH] sched: consider WF_SYNC to find idle siblings
-From:   Andrei Vagin <avagin@google.com>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Andrei Vagin <avagin@gmail.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RJhLmmsZGJ8bUFvXGrjhxjigTY7tssuM34NIcqRQJks=;
+        b=jh4Gb9S0hDhcty7PJe8E4P/MKI60NIPv+Dml59fVGDCgnY+t7o2GM9runqke88RlfG
+         sJki7WlprVRYJmvmDMUEmDGFwdX2ZnvXuvX9ENtkbv7TB4ZfkqFnrZhU9JW3dU8K9uT6
+         hucp2avrGMKBqNh+3MeWKctbzwegCWgofTwB63XfTzvI/bobSsJah+fAIbFtyInIfxIY
+         ux9EP+HL4yCNgMTB3k7yLZFnXv3mt25cV2liG4set30JuJ8y/8ihgKr62VDg0IoR8Qxk
+         4U0+ZoYrSTTw0J5dW/OWF42FSpBuuUFejQ6rUfCozMIFgH5wAvVntuOD3vQ3kThg4KtE
+         OfFg==
+X-Gm-Message-State: ACrzQf2oOulhtS+Lh7AiGEQPlCtFNoUBcJ9/q0DEnEePU73QnhO0c1Qj
+        egFq3jarqLnO5CNSsdFcIyw9F0nmcDAwd6RNUltuKw==
+X-Google-Smtp-Source: AMsMyM5aP9GDCjgbJ8RdmCuiz8kw86pAQT51ja8FqsFb2OPVlHcT9WXJ4I4mEt7VBa1Y42QK1pGfOAzB7FUqg0u98iE=
+X-Received: by 2002:a05:651c:1a0a:b0:26f:ef12:9a42 with SMTP id
+ by10-20020a05651c1a0a00b0026fef129a42mr20984010ljb.457.1666902654247; Thu, 27
+ Oct 2022 13:30:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221027150558.722062-1-pgonda@google.com> <20221027150558.722062-2-pgonda@google.com>
+ <10e7e8df-69ba-c1bc-1f94-c77fe64774ab@amd.com> <CAMkAt6qzW0oW=2Mvq0uO+ccwRyYcRAkDoF47mH4hMET5wASzsQ@mail.gmail.com>
+In-Reply-To: <CAMkAt6qzW0oW=2Mvq0uO+ccwRyYcRAkDoF47mH4hMET5wASzsQ@mail.gmail.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Thu, 27 Oct 2022 14:30:42 -0600
+Message-ID: <CAMkAt6oWmX7iOe_vFKyrRZRbiyuNjO6GoSjSqExc5VPKcnOtDg@mail.gmail.com>
+Subject: Re: [PATCH V3 1/2] virt: sev: Prevent IV reuse in SNP guest driver
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Dionna Glaze <dionnaglaze@google.com>,
+        Borislav Petkov <bp@suse.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Marc Orr <marcorr@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Ashish Kalra <Ashish.Kalra@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,64 +76,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrei Vagin <avagin@gmail.com>
+On Thu, Oct 27, 2022 at 2:10 PM Peter Gonda <pgonda@google.com> wrote:
+>
+> On Thu, Oct 27, 2022 at 12:06 PM Tom Lendacky <thomas.lendacky@amd.com> wrote:
+> >
+> > On 10/27/22 10:05, Peter Gonda wrote:
+> > > The ASP and an SNP guest use a series of AES-GCM keys called VMPCKs to
+> > > communicate securely with each other. The IV to this scheme is a
+> > > sequence number that both the ASP and the guest track. Currently this
+> > > sequence number in a guest request must exactly match the sequence
+> > > number tracked by the ASP. This means that if the guest sees an error
+> > > from the host during a request it can only retry that exact request or
+> > > disable the VMPCK to prevent an IV reuse. AES-GCM cannot tolerate IV
+> > > reuse see:
+> > > https://csrc.nist.gov/csrc/media/projects/block-cipher-techniques/documents/bcm/comments/800-38-series-drafts/gcm/joux_comments.pdf
+> > >
+> > > To handle userspace querying the cert_data length. Instead of requesting
+> > > the cert length from userspace use the size of the drivers allocated
+> > > shared buffer. Then copy that buffer to userspace, or give userspace an
+> > > error depending on the size of the buffer given by userspace.
+> > >
+> > > Fixes: fce96cf044308 ("virt: Add SEV-SNP guest driver")
+> > > Signed-off-by: Peter Gonda <pgonda@google.com>
+> > > Reported-by: Peter Gonda <pgonda@google.com>
+> > > Reviewed-by: Dionna Glaze <dionnaglaze@google.com>
+> > > Cc: Borislav Petkov <bp@suse.de>
+> > > Cc: Tom Lendacky <thomas.lendacky@amd.com>
+> > > Cc: Michael Roth <michael.roth@amd.com>
+> > > Cc: Haowen Bai <baihaowen@meizu.com>
+> > > Cc: Yang Yingliang <yangyingliang@huawei.com>
+> > > Cc: Marc Orr <marcorr@google.com>
+> > > Cc: David Rientjes <rientjes@google.com>
+> > > Cc: Ashish Kalra <Ashish.Kalra@amd.com>
+> > > Cc: linux-kernel@vger.kernel.org
+> > > Cc: kvm@vger.kernel.org
+> > > ---
+> > >   drivers/virt/coco/sev-guest/sev-guest.c | 93 ++++++++++++++++---------
+> > >   1 file changed, 62 insertions(+), 31 deletions(-)
+> > >
+> > > diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
+> > > index f422f9c58ba7..8c54ea84bc57 100644
+> > > --- a/drivers/virt/coco/sev-guest/sev-guest.c
+> > > +++ b/drivers/virt/coco/sev-guest/sev-guest.c
+> > > @@ -41,7 +41,7 @@ struct snp_guest_dev {
+> > >       struct device *dev;
+> > >       struct miscdevice misc;
+> > >
+> > > -     void *certs_data;
+> > > +     u8 (*certs_data)[SEV_FW_BLOB_MAX_SIZE];
+> > >       struct snp_guest_crypto *crypto;
+> > >       struct snp_guest_msg *request, *response;
+> > >       struct snp_secrets_page_layout *layout;
+> > > @@ -67,8 +67,27 @@ static bool is_vmpck_empty(struct snp_guest_dev *snp_dev)
+> > >       return true;
+> > >   }
+> > >
+> > > +/*
+> > > + * If we receive an error from the host or ASP we have two options. We can
+> > > + * either retry the exact same encrypted request or we can discontinue using the
+> > > + * VMPCK.
+> > > + *
+> > > + * This is because in the current encryption scheme GHCB v2 uses AES-GCM to
+> > > + * encrypt the requests. The IV for this scheme is the sequence number. GCM
+> > > + * cannot tolerate IV reuse.
+> > > + *
+> > > + * The ASP FW v1.51 only increments the sequence numbers on a successful
+> > > + * guest<->ASP back and forth and only accepts messages at its exact sequence
+> > > + * number.
+> > > + *
+> > > + * So if we were to reuse the sequence number the encryption scheme is
+> > > + * vulnerable. If we encrypt the sequence number for a fresh IV the ASP will
+> > > + * reject our request.
+> > > + */
+> > >   static void snp_disable_vmpck(struct snp_guest_dev *snp_dev)
+> > >   {
+> > > +     dev_alert(snp_dev->dev, "Disabling vmpck_id: %d to prevent IV reuse.\n",
+> > > +               vmpck_id);
+> > >       memzero_explicit(snp_dev->vmpck, VMPCK_KEY_LEN);
+> > >       snp_dev->vmpck = NULL;
+> > >   }
+> > > @@ -326,29 +345,29 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+> > >       if (fw_err)
+> > >               *fw_err = err;
+> > >
+> > > -     if (rc)
+> > > -             return rc;
+> > > +     if (rc) {
+> > > +             dev_alert(snp_dev->dev,
+> > > +                       "Detected error from ASP request. rc: %d, fw_err: %llu\n",
+> > > +                       rc, *fw_err);
+> > > +             goto disable_vmpck;
+> > > +     }
+> >
+> > Realize that snp_issue_guest_request() will return -EIO in the case that
+> > the returned SW_EXITINFO2 value is SNP_GUEST_REQ_INVALID_LEN. So all the
+> > work you do below in get_ext_report() doesn't matter because you end up
+> > disabling the key here.
+> >
+> > So maybe this patch should be split up and parts of it added to the second
+> > patch (but that patch seems like it would still hit this issue because
+> > -EIO is still returned.
+> >
+>
+> Ack I see that. My testing didn't catch this since I realized I didn't
+> actually load any certificate data into the host. After doing so my
+> testing catches this bug.
+>
+> I agree with Dionna's comments on 2/2. My suggestion would be to keep
+> the constraint that either handle_guest_request() leaves the sequence
+> number in a good state or disables the VMPCK. After seeing her V4
+> series I suggest we take this patch and follow up on the certificate
+> querying with the further changes to snp_issue_guest_request().
+> Thoughts?
 
-WF_SYNC means that the waker goes to sleep after wakeup, so the current
-cpu can be considered idle if the waker is the only process that is
-running on it.
-
-The perf pipe benchmark shows that this change reduces the average time
-per operation from 8.8 usecs/op to 3.7 usecs/op.
-
-Before:
- $ ./tools/perf/perf bench sched pipe
- # Running 'sched/pipe' benchmark:
- # Executed 1000000 pipe operations between two processes
-
-     Total time: 8.813 [sec]
-
-       8.813985 usecs/op
-         113456 ops/sec
-
-After:
- $ ./tools/perf/perf bench sched pipe
- # Running 'sched/pipe' benchmark:
- # Executed 1000000 pipe operations between two processes
-
-     Total time: 3.743 [sec]
-
-       3.743971 usecs/op
-         267096 ops/sec
-
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ben Segall <bsegall@google.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc: Valentin Schneider <vschneid@redhat.com>
-Signed-off-by: Andrei Vagin <avagin@gmail.com>
----
- kernel/sched/fair.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index e4a0b8bd941c..40ac3cc68f5b 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -7245,7 +7245,8 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
- 		new_cpu = find_idlest_cpu(sd, p, cpu, prev_cpu, sd_flag);
- 	} else if (wake_flags & WF_TTWU) { /* XXX always ? */
- 		/* Fast path */
--		new_cpu = select_idle_sibling(p, prev_cpu, new_cpu);
-+		if (!sync || cpu != new_cpu || this_rq()->nr_running != 1)
-+			new_cpu = select_idle_sibling(p, prev_cpu, new_cpu);
- 	}
- 	rcu_read_unlock();
- 
--- 
-2.34.1
-
+Actually we want the V2 version of this patch, which forces userspace
+to use 4 pages and therefore doesn't let a short userspace request
+corrupt the sequence numbers.
