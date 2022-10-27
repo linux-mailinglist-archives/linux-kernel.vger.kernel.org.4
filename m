@@ -2,98 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9507160F45F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E36B560F479
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234980AbiJ0KDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 06:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54820 "EHLO
+        id S234327AbiJ0KJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 06:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234283AbiJ0KDS (ORCPT
+        with ESMTP id S234172AbiJ0KJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 06:03:18 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCDF8BCBA;
-        Thu, 27 Oct 2022 03:03:13 -0700 (PDT)
-Received: from anrayabh-desk (unknown [167.220.238.193])
-        by linux.microsoft.com (Postfix) with ESMTPSA id F007A210D86A;
-        Thu, 27 Oct 2022 03:03:08 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F007A210D86A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1666864993;
-        bh=pn5m/fsuZt2o/sMJ3Kn65n/0LQdWBVSALoeLYn13kis=;
+        Thu, 27 Oct 2022 06:09:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535D11115;
+        Thu, 27 Oct 2022 03:09:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C245B8252C;
+        Thu, 27 Oct 2022 10:09:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DEC2C433C1;
+        Thu, 27 Oct 2022 10:09:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666865372;
+        bh=tZ4B9hZpoBmF5BYQ8cjVqZIOcWnSZnmapQKKtNNTNrI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BThGiM/wSe52io/Na6nHbCaIO+y+/fTPYtARe06SNx7lqq/Albe4ZBQtIfdGy5UWQ
-         wtwLuEnHqfslFG8LwSBUtlpUbdD5gid4c3igIcQ0h7V4Ojd2SzhPVRDZ9XesVShyoJ
-         SD++xnCACEu8BRi7ZB8IzqtyTfnR1oGmcvOd6CX8=
-Date:   Thu, 27 Oct 2022 15:33:03 +0530
-From:   Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kumarpraveen@linux.microsoft.com" <kumarpraveen@linux.microsoft.com>,
-        "mail@anirudhrb.com" <mail@anirudhrb.com>
-Subject: Re: [PATCH 0/2] Fix MSR access errors during kexec in root partition
-Message-ID: <Y1pXV8mpjVLH9KvB@anrayabh-desk>
-References: <20221026134715.1438789-1-anrayabh@linux.microsoft.com>
- <BYAPR21MB1688DBC9CA80E03BDC7643E2D7309@BYAPR21MB1688.namprd21.prod.outlook.com>
+        b=VIT/SQh60NIG4GGLfFtLxmVxlOZfjm3ecQKgwYvLutGKfSVsxs2T7dDuK4oDjmQEw
+         pcH4Adch2iPY/qSJ4VEiGQOFIpJFXgtNCwBMdF9GtKxreyJo2h1x7jWIpkc0x3ygN2
+         sN8Zp1sMnP2coidZDy0FiVf3XKMoOGETdF9cPJtI=
+Date:   Thu, 27 Oct 2022 12:09:30 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Michele Jr De Candia <mdecandia@gmail.com>,
+        akpm@linux-foundation.org, bsegall@google.com, edumazet@google.com,
+        jbaron@akamai.com, khazhy@google.com, linux-kernel@vger.kernel.org,
+        r@hev.cc, rpenyaev@suse.de, stable@kernel.org,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        viro@zeniv.linux.org.uk
+Subject: Re: [PATCH 5.4 051/389] epoll: autoremove wakers even more
+ aggressively
+Message-ID: <Y1pY2n6E1Xa58MXv@kroah.com>
+References: <20220823080117.738248512@linuxfoundation.org>
+ <20221026160051.5340-1-mdecandia@gmail.com>
+ <Y1ljluiq8Ojp4vdL@kroah.com>
+ <CAAPDZK9Oz2Hs9wofW9820gM=SeWgycCEWN=Xsjmy-YY_iFBcfQ@mail.gmail.com>
+ <CALvZod5My-JaXBSm1iuVSFMiarB2YuE=O0AxD=6ZG0BfmJZ1AQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BYAPR21MB1688DBC9CA80E03BDC7643E2D7309@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CALvZod5My-JaXBSm1iuVSFMiarB2YuE=O0AxD=6ZG0BfmJZ1AQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 02:57:58PM +0000, Michael Kelley (LINUX) wrote:
-> From: Anirudh Rayabharam <anrayabh@linux.microsoft.com> Sent: Wednesday, October 26, 2022 6:47 AM
-> > 
-> > Fixes a couple of MSR access errors seen during kexec in root partition
-> > and opportunistically introduces a data structure for the reference TSC
-> > MSR in order to simplify the code that updates that MSR.
-> > 
-> > Anirudh Rayabharam (2):
-> >   x86/hyperv: fix invalid writes to MSRs during root partition kexec
-> >   clocksource/drivers/hyperv: add data structure for reference TSC MSR
+On Wed, Oct 26, 2022 at 11:48:01AM -0700, Shakeel Butt wrote:
+> On Wed, Oct 26, 2022 at 11:44 AM Michele Jr De Candia
+> <mdecandia@gmail.com> wrote:
+> >
+> > Hi Greg,
+> > sorry for the confusion.
+> >
+> > I'm running a container-based app on top of Ubuntu Linux 20.04 and linux kernel 5.4 always updated with latest patches.
+> >
+> > Updating from 5.4.210 to 5.4.211 we faced the hang up issue and searching for the cause we have tested that
+> > hangup occurs only with this patch
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-5.4.y&id=cf2db24ec4b8e9d399005ececd6f6336916ab6fc
+> >
+> > While understanding root cause, wt the moment we reverted it and hang up does not occurs (actually we are running 5.4.219 without that patch).
+> >
+> > Michele
+> >
 > 
-> Could these two patches be sequenced in the opposite order, to avoid the
-> need to change the TSC code in hyperv_cleanup() twice?  The new
-> data structure for the Reference TSC MSR and clocksource driver changes
-> would be in the first patch.  Then the second patch would update
-> hyperv_cleanup() and could use the new data structure.
+> Hi Michele, can you try the latest upstream kernel and see if the
+> issue repro ther? Also is it possible to provide a simplified repro of
+> the issue?
 
-I just sent a new version with the ordering you suggested.
+Also is this issue on 5.10.y and 5.15.y?
 
-Thanks,
-Anirudh.
+thanks,
 
-> 
-> Michael
-> 
-> > 
-> >  arch/x86/hyperv/hv_init.c          | 11 +++++++----
-> >  drivers/clocksource/hyperv_timer.c | 28 ++++++++++++++--------------
-> >  include/asm-generic/hyperv-tlfs.h  |  9 +++++++++
-> >  3 files changed, 30 insertions(+), 18 deletions(-)
-> > 
-> > --
-> > 2.34.1
+greg k-h
