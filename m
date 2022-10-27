@@ -2,216 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E6060F5A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ECDF60F5AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233652AbiJ0KpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 06:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
+        id S235104AbiJ0KqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 06:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235202AbiJ0KpO (ORCPT
+        with ESMTP id S235524AbiJ0KqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 06:45:14 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21DB1AF2F;
-        Thu, 27 Oct 2022 03:45:11 -0700 (PDT)
-Received: from frapeml500008.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Myj0F0S9Pz67KX2;
-        Thu, 27 Oct 2022 18:41:33 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- frapeml500008.china.huawei.com (7.182.85.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 12:45:09 +0200
-Received: from [10.195.32.169] (10.195.32.169) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 11:45:08 +0100
-Message-ID: <8280ec1c-c274-ba8d-b533-3316865fe5c1@huawei.com>
-Date:   Thu, 27 Oct 2022 11:45:08 +0100
+        Thu, 27 Oct 2022 06:46:09 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E076A5B9F1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:46:07 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29R9Xhcd004288;
+        Thu, 27 Oct 2022 10:45:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=LtkIr+lPSiHcvdABwFy+5FaSZ49U5nIyVIbrC2mZuU4=;
+ b=rzuzsiEvU/emg8JaHSHTT+0SkGecPudxX+R/JV67lOCtNIc3RyZhluKAioRuLpKPLGS0
+ qeZdF0NtuvVSVcVFy+vUcLBzDhSurGT2uTAUDTD4C7jhjlEyxMh3EAHMOJxJqBk0BCNp
+ PcLPSfvEDqQEK/7WIqPLda++vdnMCJCwX3X6QxeX1lMU6iDTze1IDlPh2hILLYNvHlgC
+ iYM/WOgNlq1/wgJxHwhQ7sbSq47nqqd0hjwpg9QBIpYN+t7i7hg+G4XPuOCMcQjuAkfF
+ HkewbvRidb51xZI6g9LmGPt+eGWxDd/Az3eQOMUQ60BeC2Xxp2z9Si253Xi7vujfFoN3 0g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kfqfcjw0b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Oct 2022 10:45:50 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29R9YlsV008850;
+        Thu, 27 Oct 2022 10:45:49 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kfqfcjvyv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Oct 2022 10:45:49 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29RAO0m5006727;
+        Thu, 27 Oct 2022 10:45:47 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3kfah81u5x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Oct 2022 10:45:47 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29RAjjOV51118516
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Oct 2022 10:45:45 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 21F8B4C046;
+        Thu, 27 Oct 2022 10:45:45 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 616994C044;
+        Thu, 27 Oct 2022 10:45:41 +0000 (GMT)
+Received: from [9.109.205.170] (unknown [9.109.205.170])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 27 Oct 2022 10:45:41 +0000 (GMT)
+Message-ID: <578c9b89-10eb-1e23-8868-cdd6685d8d4e@linux.ibm.com>
+Date:   Thu, 27 Oct 2022 16:15:40 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH RFC v3 1/7] ata: libata-scsi: Add
- ata_scsi_queue_internal()
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>, <hare@suse.de>,
-        <bvanassche@acm.org>, <hch@lst.de>, <ming.lei@redhat.com>,
-        <niklas.cassel@wdc.com>
-CC:     <axboe@kernel.dk>, <jinpu.wang@cloud.ionos.com>,
-        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <linuxarm@huawei.com>
-References: <1666693976-181094-1-git-send-email-john.garry@huawei.com>
- <1666693976-181094-2-git-send-email-john.garry@huawei.com>
- <8ed42281-4400-a0ed-92f1-c57b9de726a4@opensource.wdc.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <8ed42281-4400-a0ed-92f1-c57b9de726a4@opensource.wdc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [RFC] memory tiering: use small chunk size and more tiers
+Content-Language: en-US
+To:     Huang Ying <ying.huang@intel.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Jagdish Gediya <jvgediya.oss@gmail.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Tim Chen <tim.c.chen@intel.com>, Wei Xu <weixugc@google.com>,
+        Yang Shi <shy828301@gmail.com>
+References: <20221027065925.476955-1-ying.huang@intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <20221027065925.476955-1-ying.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.32.169]
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Ts_ZvK4L2uF410T_TzDd9HEqLBD3xA2x
+X-Proofpoint-GUID: Ic7NN2Y0RwrjyVFJ72m_pLOfn_wpDOK9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-27_05,2022-10-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 suspectscore=0 mlxlogscore=999 clxscore=1015 bulkscore=0
+ adultscore=0 priorityscore=1501 mlxscore=0 phishscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2210270058
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/10/2022 02:42, Damien Le Moal wrote:
-> On 10/25/22 19:32, John Garry wrote:
->> Add a function to handle queued ATA internal SCSI cmnds - does much the
->> same as ata_exec_internal_sg() does (which will be fixed up later to
->> actually queue internal cmnds through this function).
->>
->> Signed-off-by: John Garry <john.garry@huawei.com>
->> ---
->>   drivers/ata/libata-sata.c |  3 +++
->>   drivers/ata/libata-scsi.c | 43 +++++++++++++++++++++++++++++++++++++++
->>   drivers/ata/libata.h      |  3 ++-
->>   include/linux/libata.h    |  6 ++++++
->>   4 files changed, 54 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/ata/libata-sata.c b/drivers/ata/libata-sata.c
->> index b6806d41a8c5..e8b828c56542 100644
->> --- a/drivers/ata/libata-sata.c
->> +++ b/drivers/ata/libata-sata.c
->> @@ -1258,6 +1258,9 @@ int ata_sas_queuecmd(struct scsi_cmnd *cmd, struct ata_port *ap)
->>   {
->>   	int rc = 0;
->>   
->> +	if (blk_mq_is_reserved_rq(scsi_cmd_to_rq(cmd)))
->> +		return ata_scsi_queue_internal(cmd, ap->link.device);
->> +
->>   	if (likely(ata_dev_enabled(ap->link.device)))
->>   		rc = __ata_scsi_queuecmd(cmd, ap->link.device);
->>   	else {
->> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
->> index 476e0ef4bd29..30d7c90b0c35 100644
->> --- a/drivers/ata/libata-scsi.c
->> +++ b/drivers/ata/libata-scsi.c
->> @@ -3965,6 +3965,49 @@ static inline ata_xlat_func_t ata_get_xlat_func(struct ata_device *dev, u8 cmd)
->>   	return NULL;
->>   }
->>   
->> +unsigned int ata_scsi_queue_internal(struct scsi_cmnd *scmd,
->> +				     struct ata_device *dev)
->> +{
->> +	struct ata_link *link = dev->link;
->> +	struct ata_port *ap = link->ap;
->> +	struct ata_queued_cmd *qc;
->> +
->> +	/* no internal command while frozen */
->> +	if (ap->pflags & ATA_PFLAG_FROZEN)
->> +		goto did_err;
->> +
->> +	/* initialize internal qc */
->> +	qc = __ata_qc_from_tag(ap, ATA_TAG_INTERNAL);
->> +	link->preempted_tag = link->active_tag;
->> +	link->preempted_sactive = link->sactive;
->> +	ap->preempted_qc_active = ap->qc_active;
->> +	ap->preempted_nr_active_links = ap->nr_active_links;
->> +	link->active_tag = ATA_TAG_POISON;
->> +	link->sactive = 0;
->> +	ap->qc_active = 0;
->> +	ap->nr_active_links = 0;
->> +
->> +	if (qc->dma_dir != DMA_NONE) {
->> +		int n_elem;
->> +
->> +		n_elem = 1;
->> +		qc->n_elem = n_elem;
->> +		qc->sg = scsi_sglist(scmd);
->> +		qc->nbytes = qc->sg->length;
->> +		ata_sg_init(qc, qc->sg, n_elem);
->> +	}
->> +
->> +	scmd->submitter = SUBMITTED_BY_BLOCK_LAYER;
->> +
->> +	ata_qc_issue(qc);
+On 10/27/22 12:29 PM, Huang Ying wrote:
+> We need some way to override the system default memory tiers.  For
+> the example system as follows,
 > 
-> Arg, no ! This potentially mixes NCQ and non-NCQ commands, which is
-> forbidden by ATA spec. You need to use something like:
+> type		abstract distance
+> ----		-----------------
+> HBM		300
+> DRAM		1000
+> CXL_MEM		5000
+> PMEM		5100
 > 
-> 	if (ap->ops->qc_defer) {
-> 		if ((rc = ap->ops->qc_defer(qc)))
-> 			goto defer;
-> 	}
+> Given the memory tier chunk size is 100, the default memory tiers
+> could be,
 > 
-> 	ata_qc_issue(qc);
+> tier		abstract distance	types
+>                 range
+> ----		-----------------       -----
+> 3		300-400			HBM
+> 10		1000-1100		DRAM
+> 50		5000-5100		CXL_MEM
+> 51		5100-5200		PMEM
 > 
-> which is done in __ata_scsi_queuecmd() -> ata_scsi_translate()
+> If we want to group CXL MEM and PMEM into one tier, we have 2 choices.
 > 
-> Unless you guarantee that ata_scsi_queue_internal() is always called
-> from libata EH context ?
+> 1) Override the abstract distance of CXL_MEM or PMEM.  For example, if
+> we change the abstract distance of PMEM to 5050, the memory tiers
+> become,
+> 
+> tier		abstract distance	types
+>                 range
+> ----		-----------------       -----
+> 3		300-400			HBM
+> 10		1000-1100		DRAM
+> 50		5000-5100		CXL_MEM, PMEM
+> 
+> 2) Override the memory tier chunk size.  For example, if we change the
+> memory tier chunk size to 200, the memory tiers become,
+> 
+> tier		abstract distance	types
+>                 range
+> ----		-----------------       -----
+> 1		200-400			HBM
+> 5		1000-1200		DRAM
+> 25		5000-5200		CXL_MEM, PMEM
+> 
+> But after some thoughts, I think choice 2) may be not good.  The
+> problem is that even if 2 abstract distances are almost same, they may
+> be put in 2 tier if they sit in the different sides of the tier
+> boundary.  For example, if the abstract distance of CXL_MEM is 4990,
+> while the abstract distance of PMEM is 5010.  Although the difference
+> of the abstract distances is only 20, CXL_MEM and PMEM will put in
+> different tiers if the tier chunk size is 50, 100, 200, 250, 500, ....
+> This makes choice 2) hard to be used, it may become tricky to find out
+> the appropriate tier chunk size that satisfying all requirements.
+> 
 
-This will be called synchronously called from ata_exec_internal_sg(), so 
-the same rules on NCQ vs non-NCQ would apply here. As I see, 
-ata_exec_internal_sg() assumes non-NCQ mode and is not multi-thread safe.
+Shouldn't we wait for gaining experience w.r.t how we would end up
+mapping devices with different latencies and bandwidth before tuning these values? 
 
-Thanks,
-John
+> So I suggest to abandon choice 2) and use choice 1) only.  This makes
+> the overall design and user space interface to be simpler and easier
+> to be used.  The overall design of the abstract distance could be,
+> 
+> 1. Use decimal for abstract distance and its chunk size.  This makes
+>    them more user friendly.
+> 
+> 2. Make the tier chunk size as small as possible.  For example, 10.
+>    This will put different memory types in one memory tier only if their
+>    performance is almost same by default.  And we will not provide the
+>    interface to override the chunk size.
+> 
+
+this could also mean we can end up with lots of memory tiers with relative
+smaller performance difference between them. Again it depends how HMAT
+attributes will be used to map to abstract distance.
+
+
+
+> 3. Make the abstract distance of normal DRAM large enough.  For
+>    example, 1000, then 100 tiers can be defined below DRAM, this is
+>    more than enough in practice.
+
+Why 100? Will we really have that many tiers below/faster than DRAM? As of now 
+I see only HBM below it.
 
 > 
->> +
->> +	return 0;
->> +did_err:
->> +	scmd->result = (DID_ERROR << 16);
->> +	scsi_done(scmd);
->> +	return 0;
->> +}
->> +
->>   int __ata_scsi_queuecmd(struct scsi_cmnd *scmd, struct ata_device *dev)
->>   {
->>   	u8 scsi_op = scmd->cmnd[0];
->> diff --git a/drivers/ata/libata.h b/drivers/ata/libata.h
->> index 0c2df1e60768..15cd1cd618b8 100644
->> --- a/drivers/ata/libata.h
->> +++ b/drivers/ata/libata.h
->> @@ -82,7 +82,6 @@ extern int ata_port_probe(struct ata_port *ap);
->>   extern void __ata_port_probe(struct ata_port *ap);
->>   extern unsigned int ata_read_log_page(struct ata_device *dev, u8 log,
->>   				      u8 page, void *buf, unsigned int sectors);
->> -
->>   #define to_ata_port(d) container_of(d, struct ata_port, tdev)
->>   
->>   /* libata-acpi.c */
->> @@ -130,6 +129,8 @@ extern int ata_scsi_user_scan(struct Scsi_Host *shost, unsigned int channel,
->>   void ata_scsi_sdev_config(struct scsi_device *sdev);
->>   int ata_scsi_dev_config(struct scsi_device *sdev, struct ata_device *dev);
->>   int __ata_scsi_queuecmd(struct scsi_cmnd *scmd, struct ata_device *dev);
->> +unsigned int ata_scsi_queue_internal(struct scsi_cmnd *scmd,
->> +				     struct ata_device *dev);
->>   
->>   /* libata-eh.c */
->>   extern unsigned int ata_internal_cmd_timeout(struct ata_device *dev, u8 cmd);
->> diff --git a/include/linux/libata.h b/include/linux/libata.h
->> index 827d5838cd23..8938b584520f 100644
->> --- a/include/linux/libata.h
->> +++ b/include/linux/libata.h
->> @@ -764,7 +764,9 @@ struct ata_link {
->>   
->>   	struct device		tdev;
->>   	unsigned int		active_tag;	/* active tag on this link */
->> +	unsigned int		preempted_tag;
->>   	u32			sactive;	/* active NCQ commands */
->> +	u32			preempted_sactive;
->>   
->>   	unsigned int		flags;		/* ATA_LFLAG_xxx */
->>   
->> @@ -857,6 +859,10 @@ struct ata_port {
->>   #ifdef CONFIG_ATA_ACPI
->>   	struct ata_acpi_gtm	__acpi_init_gtm; /* use ata_acpi_init_gtm() */
->>   #endif
->> +
->> +	u64 preempted_qc_active;
->> +	int preempted_nr_active_links;
->> +
->>   	/* owned by EH */
->>   	u8			sector_buf[ATA_SECT_SIZE] ____cacheline_aligned;
->>   };
+> 4. If we want to override the default memory tiers, just override the
+>    abstract distances of some memory types with a per memory type
+>    interface.
 > 
+> This patch is to apply the design choices above in the existing code.
+> 
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> Cc: Alistair Popple <apopple@nvidia.com>
+> Cc: Bharata B Rao <bharata@amd.com>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Dave Hansen <dave.hansen@intel.com>
+> Cc: Davidlohr Bueso <dave@stgolabs.net>
+> Cc: Hesham Almatary <hesham.almatary@huawei.com>
+> Cc: Jagdish Gediya <jvgediya.oss@gmail.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Cc: Michal Hocko <mhocko@kernel.org>
+> Cc: Tim Chen <tim.c.chen@intel.com>
+> Cc: Wei Xu <weixugc@google.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> ---
+>  include/linux/memory-tiers.h | 7 +++----
+>  mm/memory-tiers.c            | 7 +++----
+>  2 files changed, 6 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
+> index 965009aa01d7..2e39d9a6c8ce 100644
+> --- a/include/linux/memory-tiers.h
+> +++ b/include/linux/memory-tiers.h
+> @@ -7,17 +7,16 @@
+>  #include <linux/kref.h>
+>  #include <linux/mmzone.h>
+>  /*
+> - * Each tier cover a abstrace distance chunk size of 128
+> + * Each tier cover a abstrace distance chunk size of 10
+>   */
+> -#define MEMTIER_CHUNK_BITS	7
+> -#define MEMTIER_CHUNK_SIZE	(1 << MEMTIER_CHUNK_BITS)
+> +#define MEMTIER_CHUNK_SIZE	10
+>  /*
+>   * Smaller abstract distance values imply faster (higher) memory tiers. Offset
+>   * the DRAM adistance so that we can accommodate devices with a slightly lower
+>   * adistance value (slightly faster) than default DRAM adistance to be part of
+>   * the same memory tier.
+>   */
+> -#define MEMTIER_ADISTANCE_DRAM	((4 * MEMTIER_CHUNK_SIZE) + (MEMTIER_CHUNK_SIZE >> 1))
+> +#define MEMTIER_ADISTANCE_DRAM	((100 * MEMTIER_CHUNK_SIZE) + (MEMTIER_CHUNK_SIZE / 2))
+>  #define MEMTIER_HOTPLUG_PRIO	100
+>  
+>  struct memory_tier;
+> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+> index fa8c9d07f9ce..e03011428fa5 100644
+> --- a/mm/memory-tiers.c
+> +++ b/mm/memory-tiers.c
+> @@ -165,11 +165,10 @@ static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memty
+>  	bool found_slot = false;
+>  	struct memory_tier *memtier, *new_memtier;
+>  	int adistance = memtype->adistance;
+> -	unsigned int memtier_adistance_chunk_size = MEMTIER_CHUNK_SIZE;
+>  
+>  	lockdep_assert_held_once(&memory_tier_lock);
+>  
+> -	adistance = round_down(adistance, memtier_adistance_chunk_size);
+> +	adistance = rounddown(adistance, MEMTIER_CHUNK_SIZE);
+>  	/*
+>  	 * If the memtype is already part of a memory tier,
+>  	 * just return that.
+> @@ -204,7 +203,7 @@ static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memty
+>  	else
+>  		list_add_tail(&new_memtier->list, &memory_tiers);
+>  
+> -	new_memtier->dev.id = adistance >> MEMTIER_CHUNK_BITS;
+> +	new_memtier->dev.id = adistance / MEMTIER_CHUNK_SIZE;
+>  	new_memtier->dev.bus = &memory_tier_subsys;
+>  	new_memtier->dev.release = memory_tier_device_release;
+>  	new_memtier->dev.groups = memtier_dev_groups;
+> @@ -641,7 +640,7 @@ static int __init memory_tier_init(void)
+>  #endif
+>  	mutex_lock(&memory_tier_lock);
+>  	/*
+> -	 * For now we can have 4 faster memory tiers with smaller adistance
+> +	 * For now we can have 100 faster memory tiers with smaller adistance
+>  	 * than default DRAM tier.
+>  	 */
+>  	default_dram_type = alloc_memory_type(MEMTIER_ADISTANCE_DRAM);
 
