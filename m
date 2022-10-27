@@ -2,169 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E41660F5DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2485B60F5DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235150AbiJ0LD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 07:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56750 "EHLO
+        id S235202AbiJ0LEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 07:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233971AbiJ0LDY (ORCPT
+        with ESMTP id S233971AbiJ0LEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 07:03:24 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9B8AA3FB
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 04:03:24 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id e129so981281pgc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 04:03:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gfjSKorD+JpWUrkLdIO6Gmq1wfUKMg3BKpb3Fqtrl1A=;
-        b=DaIsOYvWr/SW43ZSzs0tzVEdeKVybotiPfkw8dc7++/uhB0DBsH5RcBTreHj2F0b61
-         u4mfnRLDwM0fMMfse6ImuMk3Kg0MxgnAmeKULMIHc3HnCc8KqC1VAmDFBioeBz+Lc8rn
-         UGWxo7beG3Uwx2e4eJTwVxL/Vp56V8JYDB3RvyOApWulyiCDwK8OauX+grsQveyuJOnF
-         GgnM8mZFpoZ6XeXTyM7yesl6gOpm7pLp2AH970wBptWHrFDAvyH1YXQxw7SEViVlN9QS
-         yfOlNSdkj+9+iBinTpK7bRl41e8XPz567OS9l3OHH5a57J4MPBIsCqPz57YH8LJAJTdn
-         59fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gfjSKorD+JpWUrkLdIO6Gmq1wfUKMg3BKpb3Fqtrl1A=;
-        b=PfKXwcY4PEr1ewwlRHIljzNWdFBsbsNSzBKQmQnmDS4VaQXrm73xLwWBBGhoSCXSmS
-         5cM3rdKlcg2ZDPyB9Vs+0tP+tAUJbqUnpAYiWns42XWz5aFAK37StntdXvmK0HrxT0Ql
-         1/RbuiErmGi201fl37jndfGRlg4VXHHRZ1yHCwPqQhjGM7pX+QDKHSWl/ws/mutTqH08
-         Yrd5Hx6QJBgwi+MTLzUo1CNr4V9kWDGKJjlAcHQFV75HWpbPD+QHc8dnqe8Nm4N64AKM
-         mIUUxjc3nZImSbp4QtmL/Za0nTl7Lf6Ts7kyZYyn8rDV2v38R+ewp6DPNTpneCeWF5q1
-         PIyA==
-X-Gm-Message-State: ACrzQf1QJsgRqvcIGkeGdbNK3p2KRiwmTTfBdMxzbenSlTPONgFbvz9x
-        AbG6vTFLYLxPDfLutmimu7vY
-X-Google-Smtp-Source: AMsMyM4WciTiq9lWYxb+b0z06PCnnG2i3z6EXQh+vsgwgnDlZpAsB/p8cGH9rtNdKFTIP3jzKD62eQ==
-X-Received: by 2002:a63:6a03:0:b0:43a:18ce:7473 with SMTP id f3-20020a636a03000000b0043a18ce7473mr43457431pgc.616.1666868603589;
-        Thu, 27 Oct 2022 04:03:23 -0700 (PDT)
-Received: from thinkpad ([117.202.186.162])
-        by smtp.gmail.com with ESMTPSA id b12-20020a170903228c00b0018696c5d61esm954826plh.151.2022.10.27.04.03.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 04:03:22 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 16:33:16 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thierry Reding <treding@nvidia.com>,
-        PCI <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Krishna Thota <kthota@nvidia.com>,
-        Manikanta Maddireddy <mmaddireddy@nvidia.com>,
-        sagar.tv@gmail.com
-Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
- logging
-Message-ID: <20221027110316.GA76627@thinkpad>
-References: <b1c243b0-2e6e-3254-eff0-a5276020a320@nvidia.com>
- <20220913200746.GA619956@bhelgaas>
- <20220914062411.GD16459@workstation>
- <CAL_JsqLbr4O_BHb8s-Px4S0OOY23qhFkN32cKBctc_BFakSBzA@mail.gmail.com>
- <Y1pRtoLdWsDONsok@lpieralisi>
+        Thu, 27 Oct 2022 07:04:34 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511FF5F4D;
+        Thu, 27 Oct 2022 04:04:33 -0700 (PDT)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MyjVT4VnbzHv0F;
+        Thu, 27 Oct 2022 19:04:17 +0800 (CST)
+Received: from [10.174.178.171] (10.174.178.171) by
+ kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 27 Oct 2022 19:04:30 +0800
+Subject: Re: [PATCH net v2] tcp: reset tp->sacked_out when sack is enabled
+From:   "luwei (O)" <luwei32@huawei.com>
+To:     <edumazet@google.com>, <davem@davemloft.net>,
+        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <xemul@parallels.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <ovzxemul@gmail.com>, <ptikhomirov@virtuozzo.com>,
+        <den@virtuozzo.com>
+References: <20221027114930.137735-1-luwei32@huawei.com>
+Message-ID: <a4a6186e-e5e7-f9e9-3ba9-b9b8a9a1f37e@huawei.com>
+Date:   Thu, 27 Oct 2022 19:04:29 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <20221027114930.137735-1-luwei32@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y1pRtoLdWsDONsok@lpieralisi>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.171]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500015.china.huawei.com (7.221.188.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 11:39:02AM +0200, Lorenzo Pieralisi wrote:
-> On Thu, Sep 15, 2022 at 09:16:27AM -0500, Rob Herring wrote:
-> > On Wed, Sep 14, 2022 at 1:24 AM Manivannan Sadhasivam
-> > <manivannan.sadhasivam@linaro.org> wrote:
-> > >
-> > > On Tue, Sep 13, 2022 at 03:07:46PM -0500, Bjorn Helgaas wrote:
-> > > > On Tue, Sep 13, 2022 at 06:00:30PM +0100, Jon Hunter wrote:
-> > > > > On 13/09/2022 17:51, Manivannan Sadhasivam wrote:
-> > > > > > On Tue, Sep 13, 2022 at 03:42:37PM +0530, Vidya Sagar wrote:
-> > > > > > > Some of the platforms (like Tegra194 and Tegra234) have open slots and
-> > > > > > > not having an endpoint connected to the slot is not an error.
-> > > > > > > So, changing the macro from dev_err to dev_info to log the event.
-> > > > > >
-> > > > > > But the link up not happening is an actual error and -ETIMEDOUT is being
-> > > > > > returned. So I don't think the log severity should be changed.
-> > > > >
-> > > > > Yes it is an error in the sense it is a timeout, but reporting an error
-> > > > > because nothing is attached to a PCI slot seems a bit noisy. Please note
-> > > > > that a similar change was made by the following commit and it also seems
-> > > > > appropriate here ...
-> > > > >
-> > > > > commit 4b16a8227907118e011fb396022da671a52b2272
-> > > > > Author: Manikanta Maddireddy <mmaddireddy@nvidia.com>
-> > > > > Date:   Tue Jun 18 23:32:06 2019 +0530
-> > > > >
-> > > > >     PCI: tegra: Change link retry log level to debug
-> > > > >
-> > > > >
-> > > > > BTW, we check for error messages in the dmesg output and this is a new error
-> > > > > seen as of Linux v6.0 and so this was flagged in a test. We can ignore the
-> > > > > error, but in this case it seem more appropriate to make this a info or
-> > > > > debug level print.
-> > > >
-> > > > Can you tell whether there's a device present, e.g., via Slot Status
-> > > > Presence Detect?  If there's nothing in the slot, I don't know why we
-> > > > would print anything at all.  If a card is present but there's no
-> > > > link, that's probably worthy of dev_info() or even dev_err().
-> > > >
-> > >
-> > > I don't think all form factors allow for the PRSNT pin to be wired up,
-> > > so we cannot know if the device is actually present in the slot or not all
-> > > the time. Maybe we should do if the form factor supports it?
-> > >
-> > > > I guess if you can tell the slot is empty, there's no point in even
-> > > > trying to start the link, so you could avoid both the message and the
-> > > > timeout by not even calling dw_pcie_wait_for_link().
-> > >
-> > > Right. There is an overhead of waiting for ~1ms during boot.
-> > 
-> > Async probe should mitigate that, right? Saravana is working toward
-> > making that the default instead of opt in, but you could opt in now.
-> 
-> I read this as "trying to bring the link up is mandatory because
-> we can't detect an empty slot, therefore ~1ms delay during boot
-> is unavoidable" and on that Rob's suggestion applies.
-> 
+please ignore this patch�� I forgot to change the title
 
-Right. Rob's suggestion came as areply to my worry on waiting for link up
-during boot.
-
-> Just to understand where this thread is going. The suggestion
-> above does not change the aim of this patch, that seems reasonable
-> to me and it makes sense even if/when what Rob is suggesting is
-> implemented.
-> 
-> Is that correct ?
-> 
-
-Yes, Rob's suggestion makes sense to me. And it has to be implemented as a
-separate patch but this patch itself is required to demote the error log to
-debug.
-
-Thanks,
-Mani
-
-> Thanks,
-> Lorenzo
+�� 2022/10/27 7:49 PM, Lu Wei д��:
+> If setsockopt with option name of TCP_REPAIR_OPTIONS and opt_code
+> of TCPOPT_SACK_PERM is called to enable sack after data is sent
+> and before data is acked, it will trigger a warning in function
+> tcp_verify_left_out() as follows:
+>
+> ============================================
+> WARNING: CPU: 8 PID: 0 at net/ipv4/tcp_input.c:2132
+> tcp_timeout_mark_lost+0x154/0x160
+> tcp_enter_loss+0x2b/0x290
+> tcp_retransmit_timer+0x50b/0x640
+> tcp_write_timer_handler+0x1c8/0x340
+> tcp_write_timer+0xe5/0x140
+> call_timer_fn+0x3a/0x1b0
+> __run_timers.part.0+0x1bf/0x2d0
+> run_timer_softirq+0x43/0xb0
+> __do_softirq+0xfd/0x373
+> __irq_exit_rcu+0xf6/0x140
+>
+> This warning occurs in several steps:
+> Step1. If sack is not enabled, when server receives dup-ack,
+>         it calls tcp_add_reno_sack() to increase tp->sacked_out.
+>
+> Step2. Setsockopt() is called to enable sack
+>
+> Step3. The retransmit timer expires, it calls tcp_timeout_mark_lost()
+>         to increase tp->lost_out but not clear tp->sacked_out because
+>         sack is enabled and tcp_is_reno() is false.
+>
+> So tp->left_out is increased repeatly in Step1 and Step3 and it is
+> greater than tp->packets_out and trigger the warning. In function
+> tcp_timeout_mark_lost(), tp->sacked_out will be cleared if Step2 not
+> happen and the warning will not be triggered. As suggested by Denis
+> and Eric, TCP_REPAIR_OPTIONS should be prohibited if data was already
+> sent.
+>
+> socket-tcp tests in CRIU has been tested as follows:
+> $ sudo ./test/zdtm.py run -t zdtm/static/socket-tcp*  --keep-going \
+>         --ignore-taint
+>
+> socket-tcp* represent all socket-tcp tests in test/zdtm/static/.
+>
+> Fixes: b139ba4e90dc ("tcp: Repair connection-time negotiated parameters")
+> Signed-off-by: Lu Wei <luwei32@huawei.com>
+> ---
+>   net/ipv4/tcp.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index ef14efa1fb70..ef876e70f7fe 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
+> @@ -3647,7 +3647,7 @@ int do_tcp_setsockopt(struct sock *sk, int level, int optname,
+>   	case TCP_REPAIR_OPTIONS:
+>   		if (!tp->repair)
+>   			err = -EINVAL;
+> -		else if (sk->sk_state == TCP_ESTABLISHED)
+> +		else if (sk->sk_state == TCP_ESTABLISHED && !tp->packets_out)
+>   			err = tcp_repair_options_est(sk, optval, optlen);
+>   		else
+>   			err = -EPERM;
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Best Regards,
+Lu Wei
+
