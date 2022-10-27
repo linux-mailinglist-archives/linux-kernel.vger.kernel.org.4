@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7B960F15D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 09:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA23760F164
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 09:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234615AbiJ0HrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 03:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42768 "EHLO
+        id S234828AbiJ0HrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 03:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiJ0Hq7 (ORCPT
+        with ESMTP id S229616AbiJ0HrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 03:46:59 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2208C168E68;
-        Thu, 27 Oct 2022 00:46:58 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id 130so708459pfu.8;
-        Thu, 27 Oct 2022 00:46:58 -0700 (PDT)
+        Thu, 27 Oct 2022 03:47:02 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FA1168E68;
+        Thu, 27 Oct 2022 00:46:59 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso695584pjc.5;
+        Thu, 27 Oct 2022 00:46:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=o6Hvc44I/ESMlqa43mGR1Qp3cCc/2vV67IQonLZ5Kj4=;
-        b=XMZJXb2aMniO3wi3vct3lmCMu1sgd0TZS9mPPFUv3uGyO5BbE5Vv2eA13j3ZzfIrXn
-         6jbK7dsBJ4YJSk7BJUNfc6P1Ca0Ln/HlhrzBd6OEEgtM2rxGwUE+6iaFgK9tLf5K0Icc
-         bDZLqc8OIuhiZE8jkI9pXQfqg4Au9OrWeQIYnvYhKbO23XlImrZmoxRZsyz+1Tp7CwFd
-         8FUBnvxFarrfsb8wMGegH6xyUoxYQn/fKDIpKXeG6yGgf6jaUFGo1kwtrmdPeQmTMKuy
-         TlorfTpS+AJLKmlIiaqfcWxE7x7Omp+AjPh/rPEnQIGoxjQX1y0oZCTlItdFrknEaNPs
-         NwqA==
+        bh=RVj2OYA35z1rSXJ+3f5hZK8nYVXD1srUvtRewkk0Cmw=;
+        b=O9ooqwgFAsZHesA0Czqn7eG2fuaEknuY94kVun3oSV5B0ADMbzw0OZVQdqfPyWfPgH
+         R7/XM0/IcADAr4k7MUcQmn63724j8VS52D0jvcDsxnBe2wve8ot/DZk1AaFYOlSVYz1w
+         aW7nKN5BRMvd2bY0rAZFbEkKYYw7HpSKxn7SJ55DZgn8QOLBsTcshn2CF7HmsV4DPaaf
+         UQlQU3S6sUsYEEd+RaSGr5Ds06HchKKFzxz8PQ4b1pQDyiJPrsh8ZopQfF6SNTqO6sRc
+         AjkF3dzizFR0p+q/qLrj1T/Lpg8Wuo6OAzntRHeOTdwWPf9hV6QUM5SQgNltd3Ys/A+j
+         rz5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=o6Hvc44I/ESMlqa43mGR1Qp3cCc/2vV67IQonLZ5Kj4=;
-        b=beQcFAlkpYRBqMlo54EzrrrFW9IK0WiXNRLOrDRzv7MXf4sBM/PhQiXh7FD5FFkB1b
-         AATaEG6r0w9y5n4gWhuA3EDlwRXpl4ZTd09fgrJDzk2Oj/kBpEx6A0pi/vXVTOAxivdm
-         MeBfe1Z8eiqiSJW/vvmAek4Xw6yiaq7TNcn19NPigoH4/MKXaB3uOcK3mxaNZjr6T9Yl
-         ThCUUZheb6911go1kkQs9G0YvA+BZbuPok7xwQbGyWdvwtw2nz2uKVM4EpUZLDgJ0ZWH
-         y9hwxA4sceLjLuKRftQwNgOU+4WTZidvEAml1ZQC4Fxg6IpK6Ajzo/e08Cv7rVEMJrMW
-         /PpQ==
-X-Gm-Message-State: ACrzQf15cy1GI6c+z+1A3NFavMEXqa2yzxRvWLmPt6g2S2JPjXQH7CWn
-        uE/DzXnqvWc1M6W03m3Zk2o=
-X-Google-Smtp-Source: AMsMyM4SAdo0yIHCUNKVJcMdSQZ6/10dChczVTXApEI92NIcT0SnRLaHek+Q1nUaGqS5ytY5EY39Vw==
-X-Received: by 2002:a05:6a00:4504:b0:56b:3ed4:1fac with SMTP id cw4-20020a056a00450400b0056b3ed41facmr29774692pfb.73.1666856817535;
-        Thu, 27 Oct 2022 00:46:57 -0700 (PDT)
+        bh=RVj2OYA35z1rSXJ+3f5hZK8nYVXD1srUvtRewkk0Cmw=;
+        b=brMLOOuuHu2uJMI912EeaqSWHCojrmLOVWBfw+p5whamertl6ax2FxME8G5WmUVlQg
+         vI2a/NuuqRkNKc/LVud3dumrO5FA+LS1hZGTCk4dtOWCN5b7Mqb6Jv5LxB8EoDWXhxtM
+         WuDiW7gsvguRen8luO1W9qQg+ixevOGd1qwua4kdfvczdGcDyYhr1JGqxRqPbO7TyntS
+         099VjarhqGl3XsAh9CCKrobdQzkRSclda1kbmn/NooJMbP35I7bfmNWYmXLSvSwt+3CY
+         bpEJSTfApFGn06gxu9XcCeGExAWjl2uEGoV+DqksZyr4xvdLddupTQQfRboCOW4VBCjk
+         /wPw==
+X-Gm-Message-State: ACrzQf2ovGx0MtCOuw9YPNy5aoiQ72tuwhHR8sfLFsQ0jzFfbwmSSaXj
+        wb3mrdvsEmlQf48plX4rSeY=
+X-Google-Smtp-Source: AMsMyM7L1Nx0LeMvp30aX4Ygwo/qJy5jODl4ET/X+HffNWtZaL6taN+7ORXZGHHKhRULYGL+YtO2TA==
+X-Received: by 2002:a17:90b:1c0d:b0:213:1a9c:5b1 with SMTP id oc13-20020a17090b1c0d00b002131a9c05b1mr8494089pjb.188.1666856819163;
+        Thu, 27 Oct 2022 00:46:59 -0700 (PDT)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:99d6:ae15:f9aa:1819])
-        by smtp.gmail.com with ESMTPSA id i4-20020a056a00004400b0056ba02feda1sm611386pfk.94.2022.10.27.00.46.55
+        by smtp.gmail.com with ESMTPSA id i4-20020a056a00004400b0056ba02feda1sm611386pfk.94.2022.10.27.00.46.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 00:46:56 -0700 (PDT)
+        Thu, 27 Oct 2022 00:46:58 -0700 (PDT)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -61,9 +61,9 @@ Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/6] ASoC: dt-bindings: wcd9335: fix reset line polarity in example
-Date:   Thu, 27 Oct 2022 00:46:48 -0700
-Message-Id: <20221027074652.1044235-2-dmitry.torokhov@gmail.com>
+Subject: [PATCH 3/6] arm64: dts: qcom: sm8250-mtp: fix reset line polarity
+Date:   Thu, 27 Oct 2022 00:46:49 -0700
+Message-Id: <20221027074652.1044235-3-dmitry.torokhov@gmail.com>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
 In-Reply-To: <20221027074652.1044235-1-dmitry.torokhov@gmail.com>
 References: <20221027074652.1044235-1-dmitry.torokhov@gmail.com>
@@ -79,29 +79,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When resetting the block, the reset line is being driven low and then
-high, which means that the line in DTS should be annotated as "active
-low".
+The driver for the codec, when resetting the chip, first drives the line
+low, and then high. This means that the line is active low. Change the
+annotation in the DTS accordingly.
 
-Fixes: 1877c9fda1b7 ("ASoC: dt-bindings: add dt bindings for wcd9335 audio codec")
+Fixes: 36c9d012f193 ("arm64: dts: qcom: use GPIO flags for tlmm")
+Fixes: 5a263cf629a8 ("arm64: dts: qcom: sm8250-mtp: Add wcd9380 audio codec node")
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- Documentation/devicetree/bindings/sound/qcom,wcd9335.txt | 2 +-
+ arch/arm64/boot/dts/qcom/sm8250-mtp.dts | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/sound/qcom,wcd9335.txt b/Documentation/devicetree/bindings/sound/qcom,wcd9335.txt
-index 5d6ea66a863f..1f75feec3dec 100644
---- a/Documentation/devicetree/bindings/sound/qcom,wcd9335.txt
-+++ b/Documentation/devicetree/bindings/sound/qcom,wcd9335.txt
-@@ -109,7 +109,7 @@ audio-codec@1{
- 	reg  = <1 0>;
- 	interrupts = <&msmgpio 54 IRQ_TYPE_LEVEL_HIGH>;
- 	interrupt-names = "intr2"
--	reset-gpios = <&msmgpio 64 0>;
-+	reset-gpios = <&msmgpio 64 GPIO_ACTIVE_LOW>;
- 	slim-ifc-dev  = <&wc9335_ifd>;
- 	clock-names = "mclk", "native";
- 	clocks = <&rpmcc RPM_SMD_DIV_CLK1>,
+diff --git a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
+index 9db6136321b4..391806c62ccc 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
++++ b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
+@@ -635,7 +635,7 @@ &soc {
+ 	wcd938x: codec {
+ 		compatible = "qcom,wcd9380-codec";
+ 		#sound-dai-cells = <1>;
+-		reset-gpios = <&tlmm 32 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&tlmm 32 GPIO_ACTIVE_LOW>;
+ 		vdd-buck-supply = <&vreg_s4a_1p8>;
+ 		vdd-rxtx-supply = <&vreg_s4a_1p8>;
+ 		vdd-io-supply = <&vreg_s4a_1p8>;
 -- 
 2.38.0.135.g90850a2211-goog
 
