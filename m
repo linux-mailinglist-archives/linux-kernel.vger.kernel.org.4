@@ -2,139 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A4760F093
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 08:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3695060F097
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 08:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234446AbiJ0GsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 02:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
+        id S234389AbiJ0Gs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 02:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234389AbiJ0GsK (ORCPT
+        with ESMTP id S234457AbiJ0GsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 02:48:10 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3631213E6;
-        Wed, 26 Oct 2022 23:48:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666853289; x=1698389289;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=bNTVcZUk3EGA9xSMZhWo1dSEwPloZHZhSf6kjCFBv2U=;
-  b=c3yTwbuvKl22m9bW7iJtZFwb45N45ynGrPEBCqBpuh3qN9KQdPrsHrlu
-   1v2NL59UVftOYu7aCRex4SS3DPdw1M+D50ikHo2/Bpmf61eVaOFxNhdWG
-   fx1wktEP6B/X+Lt/h4V0+BF8wdz3Sf395MCgVJZYWARFh5s5Fibvv36Qq
-   O3wJicFQxu/RCpvzeLWqMdVDvHOyeS2hcNoqg0UtwGDoOWKPnjwK7OGg1
-   YgVciiD/O1H1llNugNQvaxwjWfGy+00FCQzA7o25g/ljHiobHVH3xhu/V
-   BSzu+XbHHnWXesunjlF5YpKM0868xwnwQBd0Fv8dju+T0Y1nGMlvui521
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="309236626"
-X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
-   d="scan'208";a="309236626"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 23:48:05 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="807339311"
-X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
-   d="scan'208";a="807339311"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 23:48:01 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Feng Tang <feng.tang@intel.com>,
-        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Waiman Long <longman@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Chen, Tim C" <tim.c.chen@intel.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>
-Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
-References: <20221026074343.6517-1-feng.tang@intel.com>
-        <dc453287-015d-fd1c-fe7f-6ee45772d6aa@linux.ibm.com>
-        <Y1jpDfwBQId3GkJC@feng-clx> <Y1j7tsj5M0Md/+Er@dhcp22.suse.cz>
-        <Y1kl8VbPE0RYdyEB@feng-clx> <Y1lZV6qHp3gIINGc@dhcp22.suse.cz>
-Date:   Thu, 27 Oct 2022 14:47:22 +0800
-In-Reply-To: <Y1lZV6qHp3gIINGc@dhcp22.suse.cz> (Michal Hocko's message of
-        "Wed, 26 Oct 2022 17:59:19 +0200")
-Message-ID: <87wn8lkbk5.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 27 Oct 2022 02:48:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B98148FE4;
+        Wed, 26 Oct 2022 23:48:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0D40621A6;
+        Thu, 27 Oct 2022 06:48:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD611C433C1;
+        Thu, 27 Oct 2022 06:48:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666853302;
+        bh=WfnvbZ0ZCG3kuH4jEsDaJ1/vqilkTKeoMzcOu0I4SPs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Kysx0dc6L/J0j3nGVVM2jJFOtqJIRbGQx5Y3yxQpNzm7DLQpaQQZjKTg4Iv01dVxS
+         ALAPc63FhXCIsLFO3+dSkJEfWZwktJpfSSygdudzkl2vgFq6o4YbPdQAIrSqkj22Cu
+         d2S2Dr8xeqVfH7UfulHYlNpfKSyx9LYqSRuGJzko=
+Date:   Thu, 27 Oct 2022 08:49:15 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        David Howells <dhowells@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-nfs@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] cred: Do not default to init_cred in
+ prepare_kernel_cred()
+Message-ID: <Y1op6wgDSPu4MGB8@kroah.com>
+References: <20221026232943.never.775-kees@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221026232943.never.775-kees@kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Michal Hocko <mhocko@suse.com> writes:
+On Wed, Oct 26, 2022 at 04:31:11PM -0700, Kees Cook wrote:
+> A common exploit pattern for ROP attacks is to abuse prepare_kernel_cred()
+> in order to construct escalated privileges[1]. Instead of providing a
+> short-hand argument (NULL) to the "daemon" argument to indicate using
+> init_cred as the base cred, require that "daemon" is always set to
+> an actual task. Replace all existing callers that were passing NULL
+> with &init_task.
+> 
+> Future attacks will need to have sufficiently powerful read/write
+> primitives to have found an appropriately privileged task and written it
+> to the ROP stack as an argument to succeed, which is similarly difficult
+> to the prior effort needed to escalate privileges before struct cred
+> existed: locate the current cred and overwrite the uid member.
+> 
+> This has the added benefit of meaning that prepare_kernel_cred() can no
+> longer exceed the privileges of the init task, which may have changed from
+> the original init_cred (e.g. dropping capabilities from the bounding set).
+> 
+> [1] https://google.com/search?q=commit_creds(prepare_kernel_cred(0))
+> 
+> Cc: "Eric W. Biederman" <ebiederm@xmission.com>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Russ Weight <russell.h.weight@intel.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Steve French <sfrench@samba.org>
+> Cc: Paulo Alcantara <pc@cjr.nz>
+> Cc: Ronnie Sahlberg <lsahlber@redhat.com>
+> Cc: Shyam Prasad N <sprasad@microsoft.com>
+> Cc: Tom Talpey <tom@talpey.com>
+> Cc: Namjae Jeon <linkinjeon@kernel.org>
+> Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+> Cc: Trond Myklebust <trond.myklebust@hammerspace.com>
+> Cc: Anna Schumaker <anna@kernel.org>
+> Cc: Chuck Lever <chuck.lever@oracle.com>
+> Cc: Jeff Layton <jlayton@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: "Michal Koutný" <mkoutny@suse.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: linux-cifs@vger.kernel.org
+> Cc: samba-technical@lists.samba.org
+> Cc: linux-nfs@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-> On Wed 26-10-22 20:20:01, Feng Tang wrote:
->> On Wed, Oct 26, 2022 at 05:19:50PM +0800, Michal Hocko wrote:
->> > On Wed 26-10-22 16:00:13, Feng Tang wrote:
->> > > On Wed, Oct 26, 2022 at 03:49:48PM +0800, Aneesh Kumar K V wrote:
->> > > > On 10/26/22 1:13 PM, Feng Tang wrote:
->> > > > > In page reclaim path, memory could be demoted from faster memory tier
->> > > > > to slower memory tier. Currently, there is no check about cpuset's
->> > > > > memory policy, that even if the target demotion node is not allowd
->> > > > > by cpuset, the demotion will still happen, which breaks the cpuset
->> > > > > semantics.
->> > > > > 
->> > > > > So add cpuset policy check in the demotion path and skip demotion
->> > > > > if the demotion targets are not allowed by cpuset.
->> > > > > 
->> > > > 
->> > > > What about the vma policy or the task memory policy? Shouldn't we respect
->> > > > those memory policy restrictions while demoting the page? 
->> > >  
->> > > Good question! We have some basic patches to consider memory policy
->> > > in demotion path too, which are still under test, and will be posted
->> > > soon. And the basic idea is similar to this patch.
->> > 
->> > For that you need to consult each vma and it's owning task(s) and that
->> > to me sounds like something to be done in folio_check_references.
->> > Relying on memcg to get a cpuset cgroup is really ugly and not really
->> > 100% correct. Memory controller might be disabled and then you do not
->> > have your association anymore.
->>  
->> You are right, for cpuset case, the solution depends on 'CONFIG_MEMCG=y',
->> and the bright side is most of distribution have it on.
->
-> CONFIG_MEMCG=y is not sufficient. You would need to enable memcg
-> controller during the runtime as well.
->  
->> > This all can get quite expensive so the primary question is, does the
->> > existing behavior generates any real issues or is this more of an
->> > correctness exercise? I mean it certainly is not great to demote to an
->> > incompatible numa node but are there any reasonable configurations when
->> > the demotion target node is explicitly excluded from memory
->> > policy/cpuset?
->> 
->> We haven't got customer report on this, but there are quite some customers
->> use cpuset to bind some specific memory nodes to a docker (You've helped
->> us solve a OOM issue in such cases), so I think it's practical to respect
->> the cpuset semantics as much as we can.
->
-> Yes, it is definitely better to respect cpusets and all local memory
-> policies. There is no dispute there. The thing is whether this is really
-> worth it. How often would cpusets (or policies in general) go actively
-> against demotion nodes (i.e. exclude those nodes from their allowes node
-> mask)?
->
-> I can imagine workloads which wouldn't like to get their memory demoted
-> for some reason but wouldn't it be more practical to tell that
-> explicitly (e.g. via prctl) rather than configuring cpusets/memory
-> policies explicitly?
-
-If my understanding were correct, prctl() configures the process or
-thread.  How can we get process/thread configuration at demotion time?
-
-Best Regards,
-Huang, Ying
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
