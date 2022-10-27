@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394DA60F19B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 09:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5553160F1A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 09:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234104AbiJ0Hy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 03:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
+        id S229473AbiJ0H4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 03:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234571AbiJ0Hyw (ORCPT
+        with ESMTP id S234150AbiJ0Hz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 03:54:52 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AF812614;
-        Thu, 27 Oct 2022 00:54:46 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0B55A66028B1;
-        Thu, 27 Oct 2022 08:54:44 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666857284;
-        bh=4AZv7w+df7t6LyazsEk8UMNZGm+qs6IZs8p8gcdUhEk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Rvjbc8//r3Uy8VL1XCP1GVXyedyen79kMryE4U+CnopVdJzEBRay0HBT1twx+i/FS
-         UNf0mAqVvu8tn4xRZKmmPkeGSg9LX3wiT5pS2FYjXsMjPUeqbG8TJ7YO0o97igWkhu
-         hegcdL9mL3BYwK/rJRFmnfYSbGtnibxnUeiObheM/JGjL4p31kNPYCKZkgxfooy9/l
-         gjA2gtvgvp7b+TZylAi1QphUi9XIrxPfWNi9+7Ll2SzrErAQ3h5Ox9kNRYrAPiHc6Y
-         KhZz6Yz2lFtNI8A1EfI3p9pvsZA1YE7t0+1P+UE0aFCBZ8KJNLezC9p1qWv2xi8rUU
-         mz04j7QQPjfug==
-Message-ID: <e889728c-13e9-37f8-4d1a-e31332a39498@collabora.com>
-Date:   Thu, 27 Oct 2022 09:54:41 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [RESEND v3 1/3] dt-bindings: watchdog: Add compatible for
- MediaTek MT8188
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Runyang Chen <Runyang.Chen@mediatek.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thu, 27 Oct 2022 03:55:58 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42C28D220;
+        Thu, 27 Oct 2022 00:55:54 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id w189so743220pfw.4;
+        Thu, 27 Oct 2022 00:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OJAEKndr3m6wkfHwUrnC0w/oTWY26XXJ7PxMYSqorLA=;
+        b=F0KKv+ad3qoKlO1BO7vEexO8niWP4K3suGfjq2soz7HeZjjCp+RCqX69vAAE4H0l3G
+         JjRa2lEKbrZ87cgPlqasGGxBPQOV1Sb8CRg9wJZh4wtTWP7jZXV1ogOeNLWzVibP7s/O
+         8TdEh2sP0bsFR/CyDsJD8HrOnHaVsRFRtTCC5nnaaT9e7CJChFvkkoTr9i1lZbImstoP
+         w0F8fNhT6nkeLNW9cHUP7qt7bPkGjWc6p9Jtq+twr0JcBEZA0Cw5H86toRxrWoYjt3za
+         Mpyme/IvITrGdk2wRYtxyTI5B3S3ayYvYMnimGqEQX/8wJT43/6Jkq5hh2MvMOHuhwTU
+         pf8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OJAEKndr3m6wkfHwUrnC0w/oTWY26XXJ7PxMYSqorLA=;
+        b=dBvRN1/AJeuG8esA3uWSPZCmix8na1RNrTpbFxHQYJHCjwTEoACG3Ft8QHc7LwQWul
+         R49DbnYcZlgmpvZNdyJUxCWDuzbM2uy/eRfPUfsqLhueIMcJrh4BHmgzoocu0L8lFX0K
+         iuOohWZxdt/ASS/y1/a0rLJfQeHO54576dfDmqMp49af3dxM1c0OXtY9yT79XH7OsCQq
+         Jg4Jmp+IRyadsTHqBq2CLwjfJh/RW/Q3DhGBd0Wg6HngoUr4mCeUcvVTvE3WWoHJYuFR
+         wUaywvjZ/SoG8NVLTQ+OKy2OljD5rVcbp3TQzE+mGqS32wFCHRqs1hHnV4cQRxrRUnX2
+         dS1w==
+X-Gm-Message-State: ACrzQf3Xt1LKrS9Lhezy68yqsUdW4/72cF8kkReSrAw2Fkt+kPjv8LI4
+        b2V9G3VGGrI2LirB2A37RUA=
+X-Google-Smtp-Source: AMsMyM4RuXf3SFWGHbEF/qs8moP9zk6bojXHDwIAw0jrPBotzHFLCqlixCAZlEmHMoAsFj6N/fwnpw==
+X-Received: by 2002:a63:4307:0:b0:464:a24d:8201 with SMTP id q7-20020a634307000000b00464a24d8201mr41524700pga.116.1666857353905;
+        Thu, 27 Oct 2022 00:55:53 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:99d6:ae15:f9aa:1819])
+        by smtp.gmail.com with ESMTPSA id s24-20020a170902b19800b0017b264a2d4asm588191plr.44.2022.10.27.00.55.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 00:55:53 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 00:55:49 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        nfraprado@collabora.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        "allen-kh.cheng" <allen-kh.cheng@mediatek.com>
-References: <20221026063327.20037-1-Runyang.Chen@mediatek.com>
- <20221026063327.20037-2-Runyang.Chen@mediatek.com>
- <20221026152645.GA2946818@roeck-us.net>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221026152645.GA2946818@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andy Gross <agross@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 06/11] dt-bindings: input: qcom,pm8921-pwrkey: convert
+ to dt-schema
+Message-ID: <Y1o5hYAnBuf1akJ9@google.com>
+References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
+ <20220928-mdm9615-dt-schema-fixes-v4-6-dac2dfaac703@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v4-6-dac2dfaac703@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 26/10/22 17:26, Guenter Roeck ha scritto:
-> On Wed, Oct 26, 2022 at 02:33:25PM +0800, Runyang Chen wrote:
->> From: Runyang Chen <runyang.chen@mediatek.com>
->>
->> Add dt-binding documentation of watchdog for MediaTek MT8188 Soc
->>
->> Signed-off-by: Runyang Chen <runyang.chen@mediatek.com>
->> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On Fri, Oct 21, 2022 at 11:06:42AM +0200, Neil Armstrong wrote:
+> Convert input/qcom,pm8xxx-pwrkey.txt to YAML, and take in account that
+> the PM8921 pwrkey compatible is used as fallback for the PM8018 pwrkey.
 > 
-> This conflicts with the ongoing yaml conversion of this file
-> which is still not accepted.
-> 
-> https://patchwork.kernel.org/project/linux-watchdog/patch/20221005113517.70628-4-angelogioacchino.delregno@collabora.com/
-> 
-> Nevertheless, I'll apply this series to my watchdog-next branch
-> and assume that it will be included in the next version of the
-> yaml conversion patch.
-> 
-> For my and Wim's reference:
-> 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> Thanks,
-> Guenter
-> 
-Adding Allen to the Cc's to make him aware of that, as he took over the
-mtk-wdt yaml conversion.
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+
+Should I merge this through my tree or you want all these changes to go
+together through some particular tree?
+
+Thanks.
+
+-- 
+Dmitry
