@@ -2,393 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92BB460FF2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9424B60FF22
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234137AbiJ0RQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 13:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
+        id S235573AbiJ0RQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 13:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235717AbiJ0RQc (ORCPT
+        with ESMTP id S233548AbiJ0RQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 13:16:32 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A62102DFD;
-        Thu, 27 Oct 2022 10:16:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666890987; x=1698426987;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=mJyf/w8NhBu33f8BUseSEzjr0oCdwuL6kRfCcvWSJlw=;
-  b=igO2eXX3YSI3uMFcZ24/DOdG7MJZDzsKOv+1iVDqE4KHSN513OXyXKka
-   zIQzwG6l8vsHZJY5LI7/VHKfW1Sqta2hUAhtkTyiITgGOdWeTrAl3H2jX
-   kNUPs95ddJBpZBbtB72yyMYYfVwme8MYuN/tFT937/mQayUai9Ybyag2L
-   lL9L0aCsyVpqQrhB9m8isBrOJzoMghxVOM9UzSJhonJhff2ctVIXnxqmp
-   GHn9KNGY4wGhXiWBiikt52Zj0FNJptzaM2BbdPIteCcAUpsDsKesGvo+g
-   u9/KQfYhGeRm7ysBISsOMPh3gHjs919POikwgw+B9KNuI5fC6M+NgTdUV
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="309375014"
-X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
-   d="scan'208";a="309375014"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 10:16:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="737772005"
-X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
-   d="scan'208";a="737772005"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga002.fm.intel.com with ESMTP; 27 Oct 2022 10:16:21 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 10:16:20 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 27 Oct 2022 10:16:20 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.107)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 27 Oct 2022 10:16:19 -0700
+        Thu, 27 Oct 2022 13:16:26 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8B610040F;
+        Thu, 27 Oct 2022 10:16:25 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29RGDopH006743;
+        Thu, 27 Oct 2022 17:16:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=9nvRf24mO/DLzO/f2qBkIz8klAg3JMUYKXoQY9AhGPU=;
+ b=Rqk0djKZt/IyBnQ02Lm0OE9sv2KS6zVTSDMdJdsboDKqf+SUCXtkAc1OjRTDCqRNdG0s
+ e9qvxbYOKY/dAcyHtbQMnAAg0F8m5pkhwbIC+gEN86cgH8CzM24FlE/LSMOfQyG0guPj
+ ysrbKF+AKo9Vl1nlBRNjtQiYFvmFC/opG7YEaTmGkD1Gutb6RM4A16r0X9ZfGODHXeb8
+ NekdT5osMvke9qb2CUJZod9ebe8PsXN/fWg9MIrqfzDd+oYL9/y0OCSqIpYNP4SaJb3v
+ KWrXETL4jYEl0Y4UujqN+nEzggdZUqyGUQF+9LUvxXxqCy4V8Y1XKhaKnXfjFHLbnzRZ +A== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kfays2vvr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Oct 2022 17:16:18 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29RFc0Zl011509;
+        Thu, 27 Oct 2022 17:16:15 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kfagr6xxt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Oct 2022 17:16:15 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QD1ihJ2MX4Pxf00Y07v7JMcV2w3FMW1CTwlQCy+RlWWhZiBCZRaA+E7S+NG30jOR+jvBdD486uodpi/0RbAFf6/x9U3pzXK1lAabfasMLbH3JafsAKlvYpGzE4jL+MmQL987piJG3XNJFO4LCa5JhO1NCoBMkxU/g8M3T7Wf5CmLv8JNNo0cOk5DHMRdCCa7MZn6/WqXnxv4YtD2aP1Yge+m084Cj8tp95J5PnnfmC1Hk9DgcmeQAy2WYr45xIgiM4MSMinn/cNPVPneEF31IiocnYnGdKpCmuQBsoAD0n1W4MGt9qOXmqFf7L5BXiieVblhiSTWTXfcuwn7ZVq+YQ==
+ b=MiacGB/ra3G0RjEv0IN5/ktK07xFAw5I4CPw6v/IVcA0wheApVNIU+ZRJn9GzDztFx0Jd5rEGmzmFXfV0jyE+JiQ7n+WMzhzJw5CXF8F1uFx7rkyd7ZlzmJWcG2mOTa52oplNvnCRryx0XioyQQHlR8zLl3PlkxnNXRRcR4wIi4T7EFjnWqMiIwFI1EIG1wj98VlmFiAmCYzx62Pw7lTBOMqvEZLmxfWRWznKTxFVOI2QfSaF07TpkLCsaCLugIuMig/FNs3QiWu+8uPMv5jL9DnE18/vRREfCafokLlP9PdD+45rqFSVOR59EMTns6B5xGq6P4p/h/OFgHLlSQHBw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mmA1bAZVW3972c1fllDQwAOrWZMy/E6OZyO5abB3BsY=;
- b=gckNNMV73QwtBG0D1dS8fvd2P0VtwOs3nMMEuSScWOoB+rl0VXqT/BVg0XoW0cIVfcl1qDBkk8yoloAbI7cvcAEGFmzDOofN49rZ0D45S0AWVoNrPw5pfT4VK5r37xmt2CQ3x6kKUMkYTfZKVTcgeRmoQYMzU0xCKxCXbKUH+cggSNrIVU3/Plj/HvWYn+CeLEz6tAkv95jjJJfojgAJk6qfrB/upxOqomJMuTmPg6EmfrGrNWA6cRAGVEbewCFBi2WCfB6QyCZwr232l5ffKvMSZJwpt7QqgxOkZ3LWW1qNYSgWWkdV1ZlLCAx94lMpsaRqWV4iSmLwFVRoGxuL+A==
+ bh=9nvRf24mO/DLzO/f2qBkIz8klAg3JMUYKXoQY9AhGPU=;
+ b=eRvIy6kz9K/NWqjiXCSe4r6wLiIez29mihaD7+vdMJ2+QEx24SLxcNpNk+0ZMo64jTlGoODIydeKeXQi8RI21GqUK3sAvQKna+7mYB4udVdi3LSPONCdF3lepT88cBUXcScPEhYpSuBrD7GYjBJp/d86KYzA/cu3WYiZpUWPIx9QpIih4NDkgr6IT+qU+v9c2xYNRokP9A2fbRGuz1aM7jhwtsUJO+sM4JaGi/7j0uS76iS3hNUWz7lgjzsg9or+t4DkBUVPcn+fOzR3TOjbXcl7ktMnAZRfnohqiGRoSaE2XP+BxIs+PCOHPMb8rAlKgcF7+36bm1ewSDuqwrqQjA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM5PR11MB1899.namprd11.prod.outlook.com (2603:10b6:3:10b::14)
- by DM6PR11MB4660.namprd11.prod.outlook.com (2603:10b6:5:2ad::16) with
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9nvRf24mO/DLzO/f2qBkIz8klAg3JMUYKXoQY9AhGPU=;
+ b=Bl1LpJ8Z6JZ29EvpvFOFO6pcgl/ztFFFzUS/sNOdjhRF4sS5rOswJSi/P9d5e3iQuEqo3yk6R4x2L3sSYym0/0X4sa92pGjK0yKXHi/h7drRKpdLR8iF5i3npCuHXxqlqWirTRi3M9WITWNoS//5+AyjF/box6KULRHdw9bR08s=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by MW5PR10MB5763.namprd10.prod.outlook.com (2603:10b6:303:19c::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Thu, 27 Oct
- 2022 17:16:18 +0000
-Received: from DM5PR11MB1899.namprd11.prod.outlook.com
- ([fe80::552f:d94f:b6bf:e339]) by DM5PR11MB1899.namprd11.prod.outlook.com
- ([fe80::552f:d94f:b6bf:e339%2]) with mapi id 15.20.5769.015; Thu, 27 Oct 2022
- 17:16:18 +0000
-Message-ID: <d675d189-2e22-aa0b-f95d-9973aa812fde@intel.com>
-Date:   Thu, 27 Oct 2022 10:16:13 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH] cred: Do not default to init_cred in
- prepare_kernel_cred()
+ 2022 17:16:13 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::f378:f1d0:796a:55a1]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::f378:f1d0:796a:55a1%3]) with mapi id 15.20.5746.028; Thu, 27 Oct 2022
+ 17:16:13 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+CC:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>
+Subject: Re: [PATCH 0/1] Dead stores in maple-tree
+Thread-Topic: [PATCH 0/1] Dead stores in maple-tree
+Thread-Index: AQHY6TKh6tbAMlcsqU61BoheyERWyK4guoCAgAEipYCAAKAMAA==
+Date:   Thu, 27 Oct 2022 17:16:13 +0000
+Message-ID: <20221027171604.cdu43dzcnsu7wy2i@revolver>
+References: <20221026120029.12555-1-lukas.bulwahn@gmail.com>
+ <20221026142259.mvcbtmj3kde5y25g@revolver> <Y1o2k+2PTMJ2X9QA@kadam>
+In-Reply-To: <Y1o2k+2PTMJ2X9QA@kadam>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-CC:     David Howells <dhowells@redhat.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        "Trond Myklebust" <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        <linux-cifs@vger.kernel.org>, <samba-technical@lists.samba.org>,
-        <linux-nfs@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-hardening@vger.kernel.org>
-References: <20221026232943.never.775-kees@kernel.org>
-From:   Russ Weight <russell.h.weight@intel.com>
-In-Reply-To: <20221026232943.never.775-kees@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MW4P223CA0024.NAMP223.PROD.OUTLOOK.COM
- (2603:10b6:303:80::29) To DM5PR11MB1899.namprd11.prod.outlook.com
- (2603:10b6:3:10b::14)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SN6PR10MB3022:EE_|MW5PR10MB5763:EE_
+x-ms-office365-filtering-correlation-id: 313592eb-4de3-441e-876f-08dab83ef327
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: cbItmBhG5ZjrMxWOlB8ElrhPLgJFt+4XUsYu6tghL79ZU/SmWcLxQD7jijWW7l0BYKPHVWQg31kOHtjzhvWPUJFHJid4lYm1JbhJ9F/B68rBTLVZabqylrpCU1sL3DSimvYp+3uzkQ57V89qkrU9/NGpYBtt2oy4SMooHYHwXEKIgpRus2x3lJPhrxFOSGRc47P/5SHij4YjNfIoRmgT4tTiu8zp+El+dahTGTbFfws5Ki70Ntl3rL4awAPdoITUBXZpiF2v5zLfSp1m9HSyDezlb2Am8rOdjevhFXKZUD/oy/rV8qtLHslHG1lh0MITFLgobe29sryqr52cmUvND6DTNb4SfEqnP8xxSZ/HywpcEX99GcnbSd+zN1cqvWiHjLdlu+Z2slz41ZeIX+YRemnlylKIM2FFkGeabDRiiv8bVLX1JHDSo9JUtDpCNjm+12jDjGLv+TMJEVRY0wyDFdUCsIGWe341aMVwXKw/+9HKjDZ8uegRswofLDXKPGBvS1Qm62a3UtPwCxnIMhHV5/a6rFYZS9eX/ESqOOn0Tu5Kwlw17ffE+Wb0TQ7FjgHfTGRS9b0Nky/Qn2AC1aAPvXjUz70YKm0g9LsekoXRyPwzeSeMsTSD0zcgpAdR33a79h6bfta+EekLx9n7cJ58br12KeROgf2B6QsUUJpXTPV46dqpXvOG999NDfL++sU/k4HIqso6Rk/VwIuvT5M4pgtg5kRaBmPWCcJD/XSFuZhoh6pooHxWBH4c6SqNZdwkTVuy12G95k9hYNqX5Yr2Vw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(136003)(366004)(39860400002)(346002)(376002)(451199015)(86362001)(44832011)(6862004)(41300700001)(5660300002)(8936002)(6512007)(9686003)(38100700002)(33716001)(122000001)(2906002)(186003)(1076003)(83380400001)(38070700005)(26005)(6486002)(71200400001)(66476007)(76116006)(6636002)(478600001)(54906003)(64756008)(66556008)(66446008)(8676002)(4326008)(66946007)(316002)(91956017)(6506007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9ZlXsqPoF6wifI5GWVu1mz8kbPsdXjVf8O6GasqU5A1PW9wYdmJICgm+I5ep?=
+ =?us-ascii?Q?snWx3ajR3Gsls+oi0u4+0G2tpk0tArwZRocVNqb0KaMLhOW/iFa54D8k9g/z?=
+ =?us-ascii?Q?oAKMLh3yJY7i5dhiv2rMVOTcROtpUQ/+OQB/2wFJ8iyuw2BLJpjNx8h+EW4i?=
+ =?us-ascii?Q?VG6c/Vc+WHYciCvbZVLZ4CPxf190bXJ1Mfmzw9OvVrVu0r1T1J3gXGuenv2r?=
+ =?us-ascii?Q?rEFMQIM5U5wenj9BIpcyUCyJiHAOThlUSmvYjwFaqGKvNdyfLYaZT0UWVJug?=
+ =?us-ascii?Q?DW8DRYrR0gUoSBK/Cy81RPq72rZgMf9eUwBrQ5VtpPlPxlscGrLgidxGYUb4?=
+ =?us-ascii?Q?KqVSyCMc0OWUcmNmasrjNte+9MD7DYf1hcc5J8HWA5do0UEKI+lcpiiZ0v9L?=
+ =?us-ascii?Q?Q0Q7S4G/sBvdSMgY4P3F3GZY+4K4wzy+/KCComQZlyCqHI9LF2oHVTwrEtf9?=
+ =?us-ascii?Q?ExlXx5mDsYhZ/I1XkuMrKxnJlfKsQ0z33HAyOi5/3mDbRYorw5jXy61lRKQ2?=
+ =?us-ascii?Q?pEbeVr5ac45/tGIFaiZ6Hu7AXY+cFysqls4Pepikv5D05NPT5+IiaXJ7vbPA?=
+ =?us-ascii?Q?HPMnOqlmuNdmiusJyOdiPsWZX1eZvpp1Xa1lxphPKDME2azYn34M+0yz5e5y?=
+ =?us-ascii?Q?deQ2XgCziBEYmJ/AbbuuYKgr2ZkFY6+wX83tXiFAVCE21rfPeA4ztr/rWA97?=
+ =?us-ascii?Q?l7KfLQZNQzltXPeUYU5bUo32h3ZlIHKLw5jUnA23zYuvHv/5gBV8FYpJ2qSw?=
+ =?us-ascii?Q?w1BIQ61UyHhxDY5pxI/SsH7Gi1MqRE6jWj2mPbDs8wtsG5mXzZ7DhdXPZBAU?=
+ =?us-ascii?Q?KQjYJWGA3HfDZvGOK61tFmeukTfFwgdbD85Vu3IRl5Vdt98cDaO78FByJYtB?=
+ =?us-ascii?Q?X7I/03brAU6IoW8Gf3ncDO0zVWc83J3MHTLBNeb1V01oHBJWP58J/pDRaX8u?=
+ =?us-ascii?Q?cFzV3oiTTduyxxyTCYJesCGYyMQpa/Wr+10ElaRzn8hl9ipyWm7sFIYdLG0t?=
+ =?us-ascii?Q?3Fj3Fk6gLZ1DiP6x0NEnMjVJ3K0UwlXheXquW6fY7gSksi8oBQxhSoyyAGQ7?=
+ =?us-ascii?Q?kyUDh3HRfmYJrcLHAtjptrw7NvuoGQ5pJqSUfCSgW28qvv7HS5J3x+fp4329?=
+ =?us-ascii?Q?2HoZ45CT6QmkBb+kMpElxs5Q97jrnVfUzhwiNtZBP8S8V52NHuesJoWs7b95?=
+ =?us-ascii?Q?WPiYlHWXU6hcsE5w458hjo0iCaTeKu8rt0wg/07uei7yeESbRpcd57dt0jsH?=
+ =?us-ascii?Q?ZPW3+hcDfPSg4Z0H5rjkCgDDp2THTIx7S3ybDamNG/HAcNaDQQZk9frJGv4P?=
+ =?us-ascii?Q?JXbrd0d694NXBpHXY0uMKMRmr5esf3f6D3TkNk2L6nDa2xgRKJcy83CTtMuG?=
+ =?us-ascii?Q?y+DdQbaILNu7b462TXmCI4ZK45kInYXFqP0ee2q0LnMr05u7gTfdtR+v4PJG?=
+ =?us-ascii?Q?rkpzeoE4QY5WbVvxeqGqrv9Ld6zAZg/oiPtu1f47fiwGvWMo+ssMuCDm8spi?=
+ =?us-ascii?Q?3UU8F8YI+D3rBkBVuy6QfxZLBjiTWBTlLmnQaFYLQX3+d1vUM/ip68KRG8gx?=
+ =?us-ascii?Q?aaxtU+Oco1P/XYOnDAxRjT+Hq3XhQd9n2Abchy7/yccihdhBVHsWnJrG6IFm?=
+ =?us-ascii?Q?mw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2C0DBA37C9488E4FAE0D9B116ABC1F60@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR11MB1899:EE_|DM6PR11MB4660:EE_
-X-MS-Office365-Filtering-Correlation-Id: 85ffa0d3-3a17-406b-73a2-08dab83ef5f6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iNgzYmpg0NYeAJTry0qNOD7APEYFE/7Z4o5Hu+4a1Qy1U1tS3914PWY7+K9pT+vN7+RZ1TUjWKP2HroF+5PEq2PNYAr3N8JYKbZhat6ATNJs8fc4AvA0KqYQTPAvwpyu/MZT4EC9zwYIL4DcMKIPzUOXVKSlPx0MQ5mmncoEpre8zPAn7CrUozKYgz1sumk+X4iGDegUppoFMlo1HcZn1D/jeZjDvmItDRlq20V5/1M44l94MgC7sCeF5IVB+DP6zzY3A1V/FDoUAzFTcjDWJo6ru9jslLDRoPPle00A4dijQm38STHRK7NaPwCWScPGgHDuvWvgaXNzhUv7L/71u35YquwRlr8knXaaY/XbguwffOWU2c6btWkB/UFoNRTmipUpXx/Jjfskr9Q8x5ZUtQpU9BjQ3hwH6FaVz6sv0Ho539DwObgla7l+NLOg2QYVPbxfgVVgl+S1RukC9/XP+0J2PSh4al273IEqoa/d0sLFOn28St0FSocddj7GiqcpSJTgdQRYrfzPh0X4Ae77y0XCUxQYwFk4zI+lE4YwQAvLVjzaDdkazld5Tfpy79tV1bifyIBRGruMWYIi+5tZ4QRn6AydWBW34fARVYoT7VydKEwRG4oNJL4q5WnHdFp1fBW3CtRn7X0uS95tl6zSwkuXXrbw4wucWhCoPM3Zz9eEsKmDkf9hUJDZ8Y6olyJuED738OpxwCJKDtQFGCvBYNfR4572oAMOLVeuCNzTriZFboo5Wo4BkttVV/81pjL0wu/1A1ttQ+5LCuY03/VnJqH0u1lP3kDhisT7F84MxVWdB0kpbP0ZPTYrwukMHuAd
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1899.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(136003)(396003)(39860400002)(366004)(346002)(451199015)(31696002)(186003)(86362001)(82960400001)(110136005)(8936002)(7416002)(38100700002)(2906002)(5660300002)(45080400002)(66556008)(8676002)(4326008)(41300700001)(6506007)(66946007)(6486002)(6666004)(2616005)(26005)(54906003)(6512007)(966005)(478600001)(83380400001)(66476007)(53546011)(36756003)(316002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cy9NMFJqenU5RW9pOWwvR0xTc2ZQQlFlYnFHek0ybVJRendXUWFab1VoMDc2?=
- =?utf-8?B?RFZWYjd4U1J2SStOYXZxc0YyNUtoRjhRVjAwbndqa2R5bGtsdHNpSU9CYnhL?=
- =?utf-8?B?eVBBZnl4Zko1RzVUOEZ5V2xIeXR1d1UxckQ1UjJUREN5eVJGaUJsa2Vta285?=
- =?utf-8?B?SnRra2QrWmFRVVErR1h3aUNxMlBEMDZ2UzEzQXA0Y2RwdWZRUGRlL0xicU96?=
- =?utf-8?B?Nk5WYTV6VmtPTWVORFJlTGZ1cVhPakNKSjlOdFdVQ2hxcEw5Qm0rdzJJa244?=
- =?utf-8?B?WEpqQ1d3N0l3cWVNc2szQjZGL3RjYUFEL2NQcHRuNVpURnZwR2hseUtqTGV5?=
- =?utf-8?B?SFZsSWRyY3k0Ry9GR0ZRVlhkNXZvb2o2MkJISHhaVWwwUkpHVGVudElXczBM?=
- =?utf-8?B?MFpUR2Z0Skd6c2tpV2RmOHJJUHpVSStvRnB4Q1lzc1g1MW1nbWw2NTNkdUhx?=
- =?utf-8?B?Q08ySm5Ddmg2VU51eXZ4RGRnUm1yTkZjOVo4M3FJNHJVNE1nWCtpNnJrdjZS?=
- =?utf-8?B?SG9FSmszbll4bHI1LzRMMUlhdGp2ajFmTko0ZjJrRDR1aGJSQms2eW9WdjhF?=
- =?utf-8?B?eHpIOVAxNzBTYXpyUkRVVXRGbFoxSXNCS2hTTEtKKzY5Y04zTkE2eW5xdWtj?=
- =?utf-8?B?ZGJPcFpPMml2MmF4OTFLK2pyd04wUDZYancraHhhczZMZTc0L3JQL3RUSmd0?=
- =?utf-8?B?aU1QSjBYUmxncDRFazJyT0FYRC85bDIxcXdQNXE1Q3YwSm9tTEpFQXZwMzdX?=
- =?utf-8?B?TXRBK2cvS3NoTiszakVnZ1g5WHA2YjRkSG15WExBNkYvRWZJVUhhZllrOHo5?=
- =?utf-8?B?bnZENVVZQVUvR1lZVE5CR3pESlgrTy9rblpQbWRKQ0RBWUJmaXIxd0cydDBz?=
- =?utf-8?B?d2V1V1kxWll5SGw4YUNPeW5EVEUxd1N4d1g0T0R1TVVod2tacSt3MFdMNEo2?=
- =?utf-8?B?ZElzUXE5eTU4K2hXSkJpL1lwajUrS1M4ZGhEbDVVSGdGclhrZEk1OGFjQTIw?=
- =?utf-8?B?R0FPRThkSXRpbHZoZS92bU5jaDFCUXlQVEVqbHFxSzAyUlFuKzJDM2JBMk1p?=
- =?utf-8?B?dzVpM0R0LzZmNzFycnhWeW9IaWIvWHNKOTNDWGpTZ3J0cXhidFlrdEVaay9k?=
- =?utf-8?B?eFl3ZG5sL1I2bnYwR281Uy83TEc4MDFXUzhZUnlRSlBlOWpPVzZrcEk5UEpS?=
- =?utf-8?B?VEh2UzFibEVCd1dZVzZZREFPbk1ET0J5NnBrSFdHOVZnWVZYbVpFK3BPWTJh?=
- =?utf-8?B?SXYzM2FnanArdThPVVg1VU1FbHN2N1h4ckZiVDNsNHRuS0s1WkVxVVhuaUpC?=
- =?utf-8?B?dnFYUS9VSjk5R29aWWF2bUpUdUNCKytvZE5hNGphV1hRZ0ZMamFhUFpyM0Q5?=
- =?utf-8?B?Y0JoQS9hbEhqOFVKSS9XZG5LLzdHNmthSFE3eklvUWVCczAzNnhkbkVrbjNH?=
- =?utf-8?B?ZjdVOFVwNWRaS2I4UU9CVmpZaUUyYS90dlo4RWpDM3hoWEhlUGhLRW9hd0JY?=
- =?utf-8?B?M3lvRWJnbnk0cGRrQVMyWFRIR3lRUE1tQkxxMmc1alJleEc1TUxsbzBlamlq?=
- =?utf-8?B?L0JyVE94dkR2UEhaMUYwaW5DQXQ0c3RvMFMwV0FGVkNhQkxyM0V2eTUra3dL?=
- =?utf-8?B?cVd4cllhMDlNWUJmZGIvWXdPSFgyWVVZTCtId0ZGZWJ5M1M4WFNSVFQyTnQx?=
- =?utf-8?B?QmdUMmVhZ0pBMkdRL2hvaXQ0NURDdk9HanlacTUvS1VZNDFBVUF5ditHc2k4?=
- =?utf-8?B?THVyZmtHbFE3RkN4S1FOZDN6c0llYkJmWUl6d0NTakMwSEgrbXRSY2JxeWZr?=
- =?utf-8?B?UmkxMUlQZElCdG13Qjk2d3lvQzBXVXdsM2diMWtNQnhhMXVRSThkTmpkR1JE?=
- =?utf-8?B?NUtCUEl2dkpORUt6SFR4dmoyeGt0Vk1TZjJpVGx2VzMzWDhoeGZ3bGRoRlAx?=
- =?utf-8?B?RDQ3eU9QdHB0bG92bDdmZFlOdHZ2UHBVdmcxUmQ3SGw4eU9YYmZvYlc5M2xW?=
- =?utf-8?B?Zmw1c0NHOVRha1lHdEIvcVkyM0xaRGM4SURPU05UVzFJYUhHWTNGL3ZYbnNB?=
- =?utf-8?B?d0ZQWmNjRWorYkd2U2ZZckVSK0pUaFU1SVM2UkNQS2ZlSmU3eGZpbWFTN3gw?=
- =?utf-8?B?UzcrM3dPZzFYSzc3Q1h5dVlpOGYxQVZVQlFCdHZ3SmFCN1kyRWNibWs5QnZ1?=
- =?utf-8?B?OUE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 85ffa0d3-3a17-406b-73a2-08dab83ef5f6
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1899.namprd11.prod.outlook.com
+X-OriginatorOrg: oracle.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 17:16:18.2117
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 313592eb-4de3-441e-876f-08dab83ef327
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Oct 2022 17:16:13.2658
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XLAhcqUhhpO6CD+t/9+R7ahEShUtChK2OcfPjRR315HYoOF3E6k0xNo3McOWlSi59hIE0DuqNDVsY9XNdW2cWRh0XvtJuBeiow/uBfhZM9M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4660
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: oJtW3XlL4VYgCM6pUSxEguN0cuinMnwgrX9b6xECD6Z1hrr5G82En9hW/GE7bjgaUprEEYz1yIaU42yAACxKnw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR10MB5763
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-27_07,2022-10-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ adultscore=0 malwarescore=0 mlxscore=0 suspectscore=0 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2210270096
+X-Proofpoint-ORIG-GUID: zLKiGaxQ6VIG_D7nPElYvmUvEqPXot55
+X-Proofpoint-GUID: zLKiGaxQ6VIG_D7nPElYvmUvEqPXot55
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+* Dan Carpenter <dan.carpenter@oracle.com> [221027 03:43]:
+> On Wed, Oct 26, 2022 at 02:23:19PM +0000, Liam Howlett wrote:
+> > * Lukas Bulwahn <lukas.bulwahn@gmail.com> [221026 08:01]:
+> > > Dear maple-tree authors, dear Liam, dear Matthew,
+> > >=20
+> > > there are some Dead Stores that clang-analyzer reports:
+> > >=20
+> > > lib/maple_tree.c:2906:2: warning: Value stored to 'last' is never rea=
+d [clang-analyzer-deadcode.DeadStores]
+> > > lib/maple_tree.c:2907:2: warning: Value stored to 'prev_min' is never=
+ read [clang-analyzer-deadcode.DeadStores]
+> > >=20
+> > > I addressed these two cases, which were most obvious and clear to fix=
+;
+> > > see patch of this one-element series.
+> > >=20
+> > > Further, clang-analyzer reports more, which I did not address:
+> > >=20
+> > > lib/maple_tree.c:332:2: warning: Value stored to 'node' is never read=
+ [clang-analyzer-deadcode.DeadStores]
+> > > lib/maple_tree.c:337:2: warning: Value stored to 'node' is never read=
+ [clang-analyzer-deadcode.DeadStores]
+> > >=20
+> > > Unclear to me if the tool is wrong or right in its analysis here for =
+the two functions above.
+> >=20
+> > The tool is correct but these aren't going anywhere.  They are compiled
+> > out and are needed for the future.
+> >=20
+>=20
+> lib/maple_tree.c
+
+~line 302:
+/* Bit 1 indicates the root is a node */
+#define MAPLE_ROOT_NODE                 0x02
+/* maple_type stored bit 3-6 */
+#define MAPLE_ENODE_TYPE_SHIFT          0x03
+/* Bit 2 means a NULL somewhere below */
+#define MAPLE_ENODE_NULL                0x04
 
 
-On 10/26/22 16:31, Kees Cook wrote:
-> A common exploit pattern for ROP attacks is to abuse prepare_kernel_cred()
-> in order to construct escalated privileges[1]. Instead of providing a
-> short-hand argument (NULL) to the "daemon" argument to indicate using
-> init_cred as the base cred, require that "daemon" is always set to
-> an actual task. Replace all existing callers that were passing NULL
-> with &init_task.
->
-> Future attacks will need to have sufficiently powerful read/write
-> primitives to have found an appropriately privileged task and written it
-> to the ROP stack as an argument to succeed, which is similarly difficult
-> to the prior effort needed to escalate privileges before struct cred
-> existed: locate the current cred and overwrite the uid member.
->
-> This has the added benefit of meaning that prepare_kernel_cred() can no
-> longer exceed the privileges of the init task, which may have changed from
-> the original init_cred (e.g. dropping capabilities from the bounding set).
->
-> [1] https://google.com/search?q=commit_creds(prepare_kernel_cred(0))
->
-> Cc: "Eric W. Biederman" <ebiederm@xmission.com>
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Russ Weight <russell.h.weight@intel.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Steve French <sfrench@samba.org>
-> Cc: Paulo Alcantara <pc@cjr.nz>
-> Cc: Ronnie Sahlberg <lsahlber@redhat.com>
-> Cc: Shyam Prasad N <sprasad@microsoft.com>
-> Cc: Tom Talpey <tom@talpey.com>
-> Cc: Namjae Jeon <linkinjeon@kernel.org>
-> Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-> Cc: Trond Myklebust <trond.myklebust@hammerspace.com>
-> Cc: Anna Schumaker <anna@kernel.org>
-> Cc: Chuck Lever <chuck.lever@oracle.com>
-> Cc: Jeff Layton <jlayton@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: "Michal Koutný" <mkoutny@suse.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: linux-cifs@vger.kernel.org
-> Cc: samba-technical@lists.samba.org
-> Cc: linux-nfs@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  drivers/base/firmware_loader/main.c    |  2 +-
->  fs/cifs/cifs_spnego.c                  |  2 +-
->  fs/cifs/cifsacl.c                      |  2 +-
->  fs/ksmbd/smb_common.c                  |  2 +-
->  fs/nfs/flexfilelayout/flexfilelayout.c |  4 ++--
->  fs/nfs/nfs4idmap.c                     |  2 +-
->  fs/nfsd/nfs4callback.c                 |  2 +-
->  kernel/cred.c                          | 15 +++++++--------
->  net/dns_resolver/dns_key.c             |  2 +-
->  9 files changed, 16 insertions(+), 17 deletions(-)
->
-> diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
-> index 7c3590fd97c2..017c4cdb219e 100644
-> --- a/drivers/base/firmware_loader/main.c
-> +++ b/drivers/base/firmware_loader/main.c
-> @@ -821,7 +821,7 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
->  	 * called by a driver when serving an unrelated request from userland, we use
->  	 * the kernel credentials to read the file.
->  	 */
-> -	kern_cred = prepare_kernel_cred(NULL);
-> +	kern_cred = prepare_kernel_cred(&init_task);
->  	if (!kern_cred) {
->  		ret = -ENOMEM;
->  		goto out;
-> diff --git a/fs/cifs/cifs_spnego.c b/fs/cifs/cifs_spnego.c
-> index 342717bf1dc2..6f3285f1dfee 100644
-> --- a/fs/cifs/cifs_spnego.c
-> +++ b/fs/cifs/cifs_spnego.c
-> @@ -189,7 +189,7 @@ init_cifs_spnego(void)
->  	 * spnego upcalls.
->  	 */
->  
-> -	cred = prepare_kernel_cred(NULL);
-> +	cred = prepare_kernel_cred(&init_task);
->  	if (!cred)
->  		return -ENOMEM;
->  
-> diff --git a/fs/cifs/cifsacl.c b/fs/cifs/cifsacl.c
-> index fa480d62f313..574de2b225ae 100644
-> --- a/fs/cifs/cifsacl.c
-> +++ b/fs/cifs/cifsacl.c
-> @@ -465,7 +465,7 @@ init_cifs_idmap(void)
->  	 * this is used to prevent malicious redirections from being installed
->  	 * with add_key().
->  	 */
-> -	cred = prepare_kernel_cred(NULL);
-> +	cred = prepare_kernel_cred(&init_task);
->  	if (!cred)
->  		return -ENOMEM;
->  
-> diff --git a/fs/ksmbd/smb_common.c b/fs/ksmbd/smb_common.c
-> index d96da872d70a..2a4fbbd55b91 100644
-> --- a/fs/ksmbd/smb_common.c
-> +++ b/fs/ksmbd/smb_common.c
-> @@ -623,7 +623,7 @@ int ksmbd_override_fsids(struct ksmbd_work *work)
->  	if (share->force_gid != KSMBD_SHARE_INVALID_GID)
->  		gid = share->force_gid;
->  
-> -	cred = prepare_kernel_cred(NULL);
-> +	cred = prepare_kernel_cred(&init_task);
->  	if (!cred)
->  		return -ENOMEM;
->  
-> diff --git a/fs/nfs/flexfilelayout/flexfilelayout.c b/fs/nfs/flexfilelayout/flexfilelayout.c
-> index 1ec79ccf89ad..7deb3cd76abe 100644
-> --- a/fs/nfs/flexfilelayout/flexfilelayout.c
-> +++ b/fs/nfs/flexfilelayout/flexfilelayout.c
-> @@ -493,10 +493,10 @@ ff_layout_alloc_lseg(struct pnfs_layout_hdr *lh,
->  		gid = make_kgid(&init_user_ns, id);
->  
->  		if (gfp_flags & __GFP_FS)
-> -			kcred = prepare_kernel_cred(NULL);
-> +			kcred = prepare_kernel_cred(&init_task);
->  		else {
->  			unsigned int nofs_flags = memalloc_nofs_save();
-> -			kcred = prepare_kernel_cred(NULL);
-> +			kcred = prepare_kernel_cred(&init_task);
->  			memalloc_nofs_restore(nofs_flags);
->  		}
->  		rc = -ENOMEM;
-> diff --git a/fs/nfs/nfs4idmap.c b/fs/nfs/nfs4idmap.c
-> index e3fdd2f45b01..25a7c771cfd8 100644
-> --- a/fs/nfs/nfs4idmap.c
-> +++ b/fs/nfs/nfs4idmap.c
-> @@ -203,7 +203,7 @@ int nfs_idmap_init(void)
->  	printk(KERN_NOTICE "NFS: Registering the %s key type\n",
->  		key_type_id_resolver.name);
->  
-> -	cred = prepare_kernel_cred(NULL);
-> +	cred = prepare_kernel_cred(&init_task);
->  	if (!cred)
->  		return -ENOMEM;
->  
-> diff --git a/fs/nfsd/nfs4callback.c b/fs/nfsd/nfs4callback.c
-> index f0e69edf5f0f..4a9e8d17e56a 100644
-> --- a/fs/nfsd/nfs4callback.c
-> +++ b/fs/nfsd/nfs4callback.c
-> @@ -870,7 +870,7 @@ static const struct cred *get_backchannel_cred(struct nfs4_client *clp, struct r
->  	} else {
->  		struct cred *kcred;
->  
-> -		kcred = prepare_kernel_cred(NULL);
-> +		kcred = prepare_kernel_cred(&init_task);
->  		if (!kcred)
->  			return NULL;
->  
-> diff --git a/kernel/cred.c b/kernel/cred.c
-> index e10c15f51c1f..811ad654abd1 100644
-> --- a/kernel/cred.c
-> +++ b/kernel/cred.c
-> @@ -701,9 +701,9 @@ void __init cred_init(void)
->   * override a task's own credentials so that work can be done on behalf of that
->   * task that requires a different subjective context.
->   *
-> - * @daemon is used to provide a base for the security record, but can be NULL.
-> - * If @daemon is supplied, then the security data will be derived from that;
-> - * otherwise they'll be set to 0 and no groups, full capabilities and no keys.
-> + * @daemon is used to provide a base cred, with the security data derived from
-> + * that; if this is "&init_task", they'll be set to 0, no groups, full
-> + * capabilities, and no keys.
->   *
->   * The caller may change these controls afterwards if desired.
->   *
-> @@ -714,17 +714,16 @@ struct cred *prepare_kernel_cred(struct task_struct *daemon)
->  	const struct cred *old;
->  	struct cred *new;
->  
-> +	if (WARN_ON_ONCE(!daemon))
-> +		return NULL;
-> +
->  	new = kmem_cache_alloc(cred_jar, GFP_KERNEL);
->  	if (!new)
->  		return NULL;
->  
->  	kdebug("prepare_kernel_cred() alloc %p", new);
->  
-> -	if (daemon)
-> -		old = get_task_cred(daemon);
-> -	else
-> -		old = get_cred(&init_cred);
-> -
-> +	old = get_task_cred(daemon);
->  	validate_creds(old);
->  
->  	*new = *old;
-> diff --git a/net/dns_resolver/dns_key.c b/net/dns_resolver/dns_key.c
-> index 3aced951d5ab..01e54b46ae0b 100644
-> --- a/net/dns_resolver/dns_key.c
-> +++ b/net/dns_resolver/dns_key.c
-> @@ -337,7 +337,7 @@ static int __init init_dns_resolver(void)
->  	 * this is used to prevent malicious redirections from being installed
->  	 * with add_key().
->  	 */
-> -	cred = prepare_kernel_cred(NULL);
-> +	cred = prepare_kernel_cred(&init_task);
->  	if (!cred)
->  		return -ENOMEM;
->  
-Acked-by: Russ Weight <russell.h.weight@intel.com>
+>    330  static inline void mte_set_full(const struct maple_enode *node)
+>    331  {
+>    332          node =3D (void *)((unsigned long)node & ~MAPLE_ENODE_NULL=
+);
+>    333  }
+>    334 =20
+>    335  static inline void mte_clear_full(const struct maple_enode *node)
+>    336  {
+>    337          node =3D (void *)((unsigned long)node | MAPLE_ENODE_NULL)=
+;
+>    338  }
 
-- Russ
+Looking at the code.... the analysis is correct and these need to be
+fixed.  Thanks Dan & Lukas.
+
+>=20
+> That code is really puzzling...  How far into the future before it starts
+> making sense?
+
+If you want to know details like this, you can look at the comments in
+the header and c file - that's where the development information
+resides.  Information about a node is encoded in the last bits of that
+nodes pointer - since they are aligned we can use a mask to restore the
+pointer.  Internally I refer to nodes with encoded information as
+maple_enodes.  This part is to do with finding out if there is a free
+index within the range the node holds.  Think about searching for the
+next available index for a unique identifier.
+
+Thanks,
+Liam=
