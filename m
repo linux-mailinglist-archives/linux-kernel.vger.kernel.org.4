@@ -2,62 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC256105DA
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82CFA6105DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234943AbiJ0WiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 18:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
+        id S235715AbiJ0WkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 18:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235629AbiJ0WiJ (ORCPT
+        with ESMTP id S235567AbiJ0WkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 18:38:09 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EC1B1DCD;
-        Thu, 27 Oct 2022 15:38:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666910289; x=1698446289;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CYTQAz5x8yB45/Cr8omKePud0pBEogtrS5KnQNykMKM=;
-  b=NjLSQP5Rd/+tdxw91w9iBLD7F4DkejPFkb0HLYrFgH2Ewma5Oy0ElAjp
-   0rcgUBgksVSzedsyLgA7Eu9rLDwXG6ejfUKtXdIb57nvRoRmqVv4En1Lw
-   W++uOs2pz47gKvuTP7rAkwD6jKwJK4RAwJZ5oCfKvxkHfEzYgY7vkSaaI
-   3Ios9W8BZS2bzLL4lJ7flBb3HMNPH/uGTi282la2QSSs/fYvM4yio8sGH
-   qbhskYgz9IXUyw1/rNgKVNfHPH7vC5qdDmtMd7H89jqhN/mEsE0QNyg20
-   ECXBCCW275z+uC3EDoxxHFCiCCi366Luv8KDGs3yLOjOj47XV0XYav4cx
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="334991686"
-X-IronPort-AV: E=Sophos;i="5.95,219,1661842800"; 
-   d="scan'208";a="334991686"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 15:38:08 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="583721220"
-X-IronPort-AV: E=Sophos;i="5.95,219,1661842800"; 
-   d="scan'208";a="583721220"
-Received: from lsiddan-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.190.203])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 15:38:08 -0700
-Message-ID: <b79748ff2f07f95eb637ec7b6de74446c28f72b3.camel@linux.intel.com>
-Subject: Re: [PATCH] x86: intel_epb: Set Alder Lake N and Raptor Lake P
- normal EPB
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, rafael@kernel.org, len.brown@intel.com
-Cc:     peterz@infradead.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Date:   Thu, 27 Oct 2022 15:38:07 -0700
-In-Reply-To: <235f4f04-b2ae-4a7f-043b-1cd6a85bd8ea@intel.com>
-References: <20221027220056.1534264-1-srinivas.pandruvada@linux.intel.com>
-         <235f4f04-b2ae-4a7f-043b-1cd6a85bd8ea@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Thu, 27 Oct 2022 18:40:17 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAD8D5B116;
+        Thu, 27 Oct 2022 15:40:15 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.50.127])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 7DE03210DD47;
+        Thu, 27 Oct 2022 15:40:14 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7DE03210DD47
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1666910414;
+        bh=D2RlgsI3bqXn1gR+DmTQa4Lc/lUwksa1OAu9iCgD4uI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Q/gKcrNrerr5vo9imqtDDP6m1pWvmalFGmS6kG0R+1mJoyHzyL+3zUHVPtLyNfQm/
+         tUpiqtZzywZ2QdjoCkAHb0uMv4F/6XrMYZHCr2JbRVsvZkde0SZHpBBRLHBQ/qICW4
+         uNcNyOolDF/Z4tsMh9aYt8yBAuti+TjM8wVbqcLs=
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     rostedt@goodmis.org, mhiramat@kernel.org,
+        mathieu.desnoyers@efficios.com, dcook@linux.microsoft.com,
+        alanau@linux.microsoft.com
+Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/2] tracing/user_events: Remote write ABI
+Date:   Thu, 27 Oct 2022 15:40:09 -0700
+Message-Id: <20221027224011.2075-1-beaub@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,20 +47,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-10-27 at 15:30 -0700, Dave Hansen wrote:
-> So, the tl;dr on this is:
-> 
->         The EPB setting is fundamentally a classic power vs.
-> performance
->         knob.  This change helps power a bunch (200+mw) while having
-> a
->         negligible performance impact (<1% if that), so it's a great
->         trade-off.
-> 
-> Right?
-Yes.
-We already using EPB 7 on other AlderLake Mobiles.
+As part of the discussions for user_events aligned with user space
+tracers, it was determined that user programs should register a 32-bit
+value to set or clear a bit when an event becomes enabled. Currently a
+shared page is being used that requires mmap().
 
-Thanks,
-Srinivas
+In this new model during the event registration from user programs 2 new
+values are specified. The first is the address to update when the event
+is either enabled or disabled. The second is the bit to set/clear to
+reflect the event being enabled. This allows for a local 32-bit value in
+user programs to support both kernel and user tracers. As an example,
+setting bit 31 for kernel tracers when the event becomes enabled allows
+for user tracers to use the other bits for ref counts or other flags.
+The kernel side updates the bit atomically, user programs need to also
+update these values atomically.
+
+User provided addresses must be aligned on a 32-bit boundary, this
+allows for single page checking and prevents odd behaviors such as a
+32-bit value straddling 2 pages instead of a single page.
+
+When page faults are encountered they are done asyncly via a workqueue.
+If the page faults back in, the write update is attempted again. If the
+page cannot fault-in, then we log and wait until the next time the event
+is enabled/disabled. This is to prevent possible infinite loops resulting
+from bad user processes unmapping or changing protection values after
+registering the address.
+
+NOTE:
+User programs that wish to have the enable bit shared across forks
+either need to use a MAP_SHARED allocated address or register a new
+address and file descriptor. If MAP_SHARED cannot be used or new
+registrations cannot be done, then it's allowable to use MAP_PRIVATE
+as long as the forked children never update the page themselves. Once
+the page has been updated, the page from the parent will be copied over
+to the child. This new copy-on-write page will not receive updates from
+the kernel until another registration has been performed with this new
+address.
+
+Beau Belgrave (2):
+  tracing/user_events: Use remote writes for event enablement
+  tracing/user_events: Fixup enable faults asyncly
+
+ include/linux/user_events.h      |  10 +-
+ kernel/trace/trace_events_user.c | 396 ++++++++++++++++++++-----------
+ 2 files changed, 270 insertions(+), 136 deletions(-)
+
+
+base-commit: 23758867219c8d84c8363316e6dd2f9fd7ae3049
+-- 
+2.25.1
 
