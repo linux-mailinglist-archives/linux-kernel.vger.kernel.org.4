@@ -2,161 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE31260FC7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2530760FC83
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236127AbiJ0P40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 11:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
+        id S235441AbiJ0P5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 11:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiJ0P4X (ORCPT
+        with ESMTP id S234985AbiJ0P52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 11:56:23 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBC21956D2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:56:22 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id m2so1956154pjr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:56:22 -0700 (PDT)
+        Thu, 27 Oct 2022 11:57:28 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72501958CD
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:57:27 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id o2so1250038qkk.10
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:57:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gvzrghwrfzUsJYhqUBxViutsbs1gyQ5GEUkX/9osrFs=;
-        b=FI+Sju9NW67lHQnyqb4cvmQVM4dJHtnh2R/XUliFBUNti1vbqC/ESoFnvuli+QpmOx
-         HnHTLVYTK2tWkuFvzLFDv3q5cngZOe/eWRGb2b32vWzXUG3xO8eMnBFNj36shPDJE9FB
-         FXc4KrH59g8aQGixuopEjEalG80hc9FHT4A4cR1JmHJ6KLvQd6ZyvKcP7gpth6JeQEf+
-         dRqxeqI5m6g4KaLrrAFbYp9WC4nE9epTCec6UMQ+6q6Q9wtnAUUP8ian3iiiJha3K2yc
-         6Czcjmes2afRP/i80waUU/xBx594UnAC5SI45hJx4r8dwnAeNVlKUnmqxwQy/aJhAkBo
-         dw1Q==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=df8V8QzWnG/MrADstC8wPeI8AU708a4im8SF07dHL9I=;
+        b=wDpe7xVPCoNut8Ty+WUvLl12Ppr+5FSDArchKi5DYeXeNccJhNIjCP26uXrL7Vp52k
+         2BTn0N3etbjGHhuZe8H5TWNeazBt0lfs9tnuusDE/AcGJy7LMua5WTvyGRXdpPd2e9+b
+         N6k2ALH3shp/C9DAuNfzGQ44lrv6Qy8OO00uQQL1kkpAPfrkW+CHX1HVayBXTccnoP60
+         Cmr/Mg3clpn9cA1oeLifnkoX1t2VIYBkbtAZ9t+nqrzGsCDUlBiPYraEQteNYuhCsla0
+         75surQNT83Y8E8VEVA2vKMAUOECp+zI0WZT8bv9Ju5a2C9P+vsRGF4g6Xg/TS6ItrF9l
+         /omQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gvzrghwrfzUsJYhqUBxViutsbs1gyQ5GEUkX/9osrFs=;
-        b=Gxsq567QTWiMfg13rxUdxPgyx2RK4Ws4HkndxZmeLgZ+hkg1KJhAxo1d3EQdIlFwWp
-         3hwruBnbECuTHm84C98YrgO6vtE93s5KLCokSCzraYLdICVZohlZF62VMf707Ew+Cdx/
-         EgOtWV8T5MiIKmAdLfWCVrd327HObv+83blPpPRPbwwP99o1u0w301+C6Cm4/E5TwyiH
-         An7TXjdmFUIo/93y45SD6jILOy2XOXKuSKATZEFpvVUfiSHgFqSrtY+tDTculkYbPZvS
-         Zy4r4TNa8VJU5/3fmAXFqCmjvWo1PbKmGyStH0TbrbC9xjGv+B4IVUgQYevMPXDD/cSd
-         eQGw==
-X-Gm-Message-State: ACrzQf1E7O31A0BFz28O2q/xkJP2/k7lEZGMRtc1WBBX5iX0objlQM6l
-        r7pG96pUDW8l641ixCASqCkGSQ==
-X-Google-Smtp-Source: AMsMyM5xrFACLrT57xNv7hENaHFzZdV/frxmH+f+50gFbfJembX614Hy6eQFClt2SKA2D8c9An8cww==
-X-Received: by 2002:a17:90b:4a09:b0:20c:316d:e58b with SMTP id kk9-20020a17090b4a0900b0020c316de58bmr11008214pjb.217.1666886181859;
-        Thu, 27 Oct 2022 08:56:21 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id rj9-20020a17090b3e8900b0020b21019086sm9918490pjb.3.2022.10.27.08.56.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 08:56:21 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 15:56:18 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Wang, Wei W" <wei.w.wang@intel.com>
-Cc:     Vipin Sharma <vipinsh@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "andrew.jones@linux.dev" <andrew.jones@linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 5/5] KVM: selftests: Allowing running
- dirty_log_perf_test on specific CPUs
-Message-ID: <Y1qqIgVdZi7qSUD0@google.com>
-References: <20221021211816.1525201-1-vipinsh@google.com>
- <20221021211816.1525201-6-vipinsh@google.com>
- <DS0PR11MB637351B52E5F8752E7DA16A4DC309@DS0PR11MB6373.namprd11.prod.outlook.com>
- <Y1lV0l4uDjXdKpkL@google.com>
- <DS0PR11MB6373E6CA4DDFFD47B64CB719DC339@DS0PR11MB6373.namprd11.prod.outlook.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=df8V8QzWnG/MrADstC8wPeI8AU708a4im8SF07dHL9I=;
+        b=Oa6wdGFaTRKuBhefWq36xz6CZ6bux579RkoiI8r9qkj++WzRRNwT+zvcK2jU5VOcrb
+         tKgYQ8LITIxdSrKmZ476kxvigmX65OfjjG/aRN7aLfA+5sYBuMLF/7dNoEmt8CUqhU/n
+         UmNubgQ35mc5KhdWSCElI25mGYFXcSv4GljKYIk7fQizSlkEnzMuGS/q73SwZ6jQ7OXA
+         S06F90U4JqgzfqfPzOHCg1Ld6j2kujN0qpAoLasqme9zV9dEv8zvjlkw/fqTEf0AXxh7
+         7cESEinB23KCHzylRqN66p/n7yGK7EIaWxrQB4Oq2TOkW7lhDdAefji8Fxij19GDsEpL
+         qsxQ==
+X-Gm-Message-State: ACrzQf1pup+N6omlNn53oKDcH8RCMCk2wolpLQuSB1+4z3bGURTZ6Av2
+        hrTgZ50JL+j+rWprBRSAX7wokw==
+X-Google-Smtp-Source: AMsMyM4i8RSkz2eYlr0BAh9Yzhl8dIaa0v0rxcHTTOwhX0fst4Ab+36GueZ99quat+8TFpKM02OaiA==
+X-Received: by 2002:a05:620a:2627:b0:6b8:c8c3:78f9 with SMTP id z39-20020a05620a262700b006b8c8c378f9mr34726354qko.641.1666886246933;
+        Thu, 27 Oct 2022 08:57:26 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id o9-20020ac86989000000b003a4fe88a9dcsm564741qtq.60.2022.10.27.08.57.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 08:57:26 -0700 (PDT)
+Message-ID: <de2cd5c0-1c3d-5d47-4896-82e32f3c0d88@linaro.org>
+Date:   Thu, 27 Oct 2022 11:57:24 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DS0PR11MB6373E6CA4DDFFD47B64CB719DC339@DS0PR11MB6373.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v3 2/5] dt-bindings: clock: Add RPMHCC bindings for
+ QDU1000 and QRU1000
+Content-Language: en-US
+To:     Melody Olvera <quic_molvera@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Taniya Das <quic_tdas@quicinc.com>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221026190441.4002212-1-quic_molvera@quicinc.com>
+ <20221026190441.4002212-3-quic_molvera@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221026190441.4002212-3-quic_molvera@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022, Wang, Wei W wrote:
-> On Wednesday, October 26, 2022 11:44 PM, Sean Christopherson wrote:
-> > > I think it would be better to do the thread pinning at the time when
-> > > the thread is created by providing a pthread_attr_t attr, e.g. :
-> > >
-> > > pthread_attr_t attr;
-> > >
-> > > CPU_SET(vcpu->pcpu, &cpu_set);
-> > > pthread_attr_setaffinity_np(&attr, sizeof(cpu_set_t), &cpu_set);
-> > > pthread_create(thread, attr,...);
-> > >
-> > > Also, pinning a vCPU thread to a pCPU is a general operation which
-> > > other users would need. I think we could make it more general and put
-> > > it to kvm_util.
-> > 
-> > We could, but it taking advantage of the pinning functionality would require
-> > plumbing a command line option for every test, 
+On 26/10/2022 15:04, Melody Olvera wrote:
+> Add compatible strings for RPMHCC for QDU1000 and QRU1000.
 > 
-> I think we could make this "pinning" be optional (no need to force everyone
-> to use it).
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> ---
 
-Heh, it's definitely optional.
+This looks correct except:
+1. redundant bindings in subject
+2. not cc-ing all maintainers
 
-> > If we go this route in the future, we'd need to add a worker trampoline as the
-> > pinning needs to happen in the worker task itself to guarantee that the pinning
-> > takes effect before the worker does anything useful.  That should be very
-> > doable.
-> 
-> The alternative way is the one I shared before, using this:
-> 
-> /* Thread created with attribute ATTR will be limited to run only on
->    the processors represented in CPUSET.  */
-> extern int pthread_attr_setaffinity_np (pthread_attr_t *__attr,
->                                  size_t __cpusetsize,
->                                  const cpu_set_t *__cpuset)
-> 
-> Basically, the thread is created on the pCPU as user specified.
-> I think this is better than "creating the thread on an arbitrary pCPU
-> and then pinning it to the user specified pCPU in the thread's start routine".
+so still not tag.
 
-Ah, yeah, that's better.
+Best regards,
+Krzysztof
 
-> > I do like the idea of extending __vcpu_thread_create(), but we can do that once
-> > __vcpu_thread_create() lands to avoid further delaying this series.
-> 
-> Sounds good. I can move some of those to vcpu_thread_create() once it's ready later.
-> 
-> >  struct perf_test_args {
-> > @@ -43,8 +41,12 @@ struct perf_test_args {
-> >  	bool nested;
-> >  	/* True if all vCPUs are pinned to pCPUs */
-> >  	bool pin_vcpus;
-> > +	/* The vCPU=>pCPU pinning map. Only valid if pin_vcpus is true. */
-> > +	uint32_t vcpu_to_pcpu[KVM_MAX_VCPUS];
-> 
-> How about putting the pcpu id to "struct kvm_vcpu"? (please see below code
-> posed to shows how that works). This is helpful when we later make this more generic,
-> as kvm_vcpu is used by everyone.
-
-I don't think "pcpu" belongs in kvm_vcpu, even in the long run.  The vast, vast
-majority of tests will never care about pinning, which means that vcpu->pcpu can't
-be used for anything except the actual pinning.   And for pinning, the "pcpu"
-doesn't need to be persistent information, i.e. doesn't need to live in kvm_vcpu.
-
-> Probably we also don't need "bool pin_vcpus".
-
-Yeah, but for selftests shaving bytes is not exactly top priority, and having a
-dedicated flag avoids the need for magic numbers.  If Vipin had used -1, I'd
-probably be fine with that, but I'm also totally fine using a dedicated flag too.
-
-> We could initialize pcpu_id to -1 to indicate that the vcpu doesn't need
-> pinning (this is also what I meant above optional for other users).
-> 
-> Put the whole changes together (tested and worked fine), FYI:
-
-The big downside of this is forcing all callers of perf_test_create_vm() to pass
-in NULL.  I really want to move away from this pattern as it makes what should be
-simple code rather difficult to read due to having a bunch of "dead" params
-dangling off the end of function calls.
