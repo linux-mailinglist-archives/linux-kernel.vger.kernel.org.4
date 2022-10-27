@@ -2,94 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D97960FBDD
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B24360FBDF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235244AbiJ0P1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 11:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
+        id S235552AbiJ0P1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 11:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235524AbiJ0P07 (ORCPT
+        with ESMTP id S235642AbiJ0P1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 11:26:59 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413FE172B6F
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:26:56 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id g16so1376676qtu.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:26:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9LPbSDa+MBywOmjjYSQBrIxZtqwfqdklED3LdicRb30=;
-        b=f1pJAPwVik75oeO3R9Cfh95P3uRLmnpTBaXmTyyd/nK6BAF40G2FI6QJQseH0ZpaMG
-         o8NjePfWROUjrYN/H1rYKeLUwFQkzzMlrqHw5CHZuXIXpTQiDep23SYO8hpzqckGzVOu
-         IJ38tor/aLMUvF9rtEfUHXoZrYNBli/Rk4gOxXN/r5qxiBk9JgB2tovGeHA0pG8ushbI
-         eUQvauYPA9quKmhnbZhgksHvliu1Iy28aOmQWAq4ZppJJepsipSsNtdL+vXiPFLXR/wZ
-         Ow3djaDWx0/1L85XReUGe10at7Z2g7e1P5rQHsuYAdIcRpUSEBlsB9kdjd6dqWQXgUic
-         Yd+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9LPbSDa+MBywOmjjYSQBrIxZtqwfqdklED3LdicRb30=;
-        b=ZUQBWNb+S+BrolkbVufJYAs8oh4HyZxtVZE6U31pjZNpsj5+nf5OKqPIgHNY784AVf
-         VhDluDA2JZspko3pJOT3pWc39dBTXiUIud/DovHGJoYD1xFiShvDNVJwBD/h+tFs5GNO
-         YbsUCzxvRL8QW/B0vwI+Sa01gjqz8T2Ife0d5Ah8HQwbwyLCK0BptV+pXZ0sJjjWv59U
-         Kf+sL1bGlYZgUL6k7jb1CV3LP/ly0EhhYNq2ibTAn1Lr3u4IvGYlmmdzzP7X17tOtS1a
-         HRF9xSntPQsLB7ShiZPQ8McOyj0avBrVa7Z9cfCD43cxbBUcX/TU35F55k1yVsgY49/I
-         3gyA==
-X-Gm-Message-State: ACrzQf33XfEc6ZZOLdVb+quXVjqthJ12iDf5hcLol/Wbka8Y0ZRN48Eg
-        o6C3bpLtCYifnXZhp26QtgEbl1wNrn6D+w==
-X-Google-Smtp-Source: AMsMyM4V1nmDJiKVYlT4rp0C1d+f84x0+W0srdAfp3Co9LNggnrL3zdamZcPPzCK4mwZ/oGlcxTqMw==
-X-Received: by 2002:a05:622a:1313:b0:39c:ff31:21e0 with SMTP id v19-20020a05622a131300b0039cff3121e0mr9149632qtk.274.1666884415437;
-        Thu, 27 Oct 2022 08:26:55 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id o24-20020a05620a229800b006ee7923c187sm1140355qkh.42.2022.10.27.08.26.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 08:26:54 -0700 (PDT)
-Message-ID: <b999144e-5137-6363-9792-8e6cf67e6a82@linaro.org>
-Date:   Thu, 27 Oct 2022 11:26:53 -0400
+        Thu, 27 Oct 2022 11:27:09 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B20817537B;
+        Thu, 27 Oct 2022 08:27:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666884429; x=1698420429;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=g6NyrQKF9LXeHoOqXcvYnumDkoDsCA06btGLwWECbcQ=;
+  b=cXx7AKZQxM6xMz9OYsAQ5QbCE8KHpy8BgZr6u0uDwZC3iTQpG35YnRpU
+   YZ4MPncpFMyVWnuHh7F+xp/0Pf4dZODiJ788CLyI0Nh8KBVRiNfwcxOGa
+   gCfP16DVTj8hOAPfPG9ccI3k4NosAifVCocsvXRhu9+rdLOf2MrDWaIbK
+   bz/gDnPvJeE2kX2nhVk2GwJmIV7RuAlpY11rDIF9U6eEVQ9DMrc++VAPk
+   hCohVOTMDAy4Giwm1KpjU5ig1iTPx2BYwsrzw11UbWrN3wZSKItf7THTb
+   9agaLMdW/AAyD8/HHE75a0r11WABFuPuB9EA+bNOBDDFjE/FD30ExJS5k
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="291556175"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="291556175"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 08:27:08 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="663657349"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="663657349"
+Received: from vstelter-mobl.amr.corp.intel.com (HELO [10.212.214.108]) ([10.212.214.108])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 08:27:07 -0700
+Message-ID: <03677288-2e96-a66e-fb1a-331e3b0d112f@intel.com>
+Date:   Thu, 27 Oct 2022 08:27:06 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: arm-smmu: Add compatible bindings for
- QDU1000 and QRU1000
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v6 01/21] x86/tdx: Use enum to define page level of TDX
+ supported page sizes
 Content-Language: en-US
-To:     Melody Olvera <quic_molvera@quicinc.com>,
-        Will Deacon <will@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221026190534.4004945-1-quic_molvera@quicinc.com>
- <20221026190534.4004945-2-quic_molvera@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221026190534.4004945-2-quic_molvera@quicinc.com>
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
+        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
+        kirill.shutemov@linux.intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, tony.luck@intel.com, peterz@infradead.org,
+        ak@linux.intel.com, isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+References: <cover.1666824663.git.kai.huang@intel.com>
+ <8a5b40d43f8b993a48b99d6647b16a82b433627c.1666824663.git.kai.huang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <8a5b40d43f8b993a48b99d6647b16a82b433627c.1666824663.git.kai.huang@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/10/2022 15:05, Melody Olvera wrote:
-> Add compatible bindings for Qualcomm QDU1000 and QRU1000 platforms.
-> 
-> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+On 10/26/22 16:16, Kai Huang wrote:
+> +/*
+> + * Get the TDX page level based on the kernel page level.  The caller
+> + * to make sure only pass 4K/2M/1G kernel page level.
+> + */
+> +static inline enum tdx_pg_level to_tdx_pg_level(enum pg_level pglvl)
+> +{
+> +	switch (pglvl) {
+> +	case PG_LEVEL_4K:
+> +		return TDX_PG_LEVEL_4K;
+> +	case PG_LEVEL_2M:
+> +		return TDX_PG_LEVEL_2M;
+> +	case PG_LEVEL_1G:
+> +		return TDX_PG_LEVEL_1G;
+> +	default:
+> +		WARN_ON_ONCE(1);
+> +	}
+> +	return TDX_PG_LEVEL_NUM;
+> +}
 
-Drop second, redundant "bindings" from subject.
+Is TDX_PG_LEVEL_NUM part of the ABI?  Or, is this going to accidentally
+pass a whacky value to the SEAM module?
 
-This applies to all your patches and all your patchsets which are for
-the bindings subsystem.
+This needs something like this at the call-site:
 
-Best regards,
-Krzysztof
-
+	page_size = to_tdx_pg_level(pg_level);
+	if (page_size >= TDX_PG_LEVEL_NUM)
+		return false;
