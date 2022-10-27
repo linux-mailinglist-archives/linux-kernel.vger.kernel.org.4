@@ -2,466 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1A560FD18
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BEB60FD1C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236463AbiJ0Qba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 12:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
+        id S236548AbiJ0Qcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 12:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235780AbiJ0Qb1 (ORCPT
+        with ESMTP id S234812AbiJ0Qcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 12:31:27 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1955F7F7;
-        Thu, 27 Oct 2022 09:31:25 -0700 (PDT)
-Received: from jupiter.universe (dyndsl-091-096-035-205.ewe-ip-backbone.de [91.96.35.205])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AD76B6602395;
-        Thu, 27 Oct 2022 17:31:23 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666888283;
-        bh=tNJIBKPU1noslMNdOTmfTOssBT36wHtENk08g0qT7PY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=F4LnUtrde4AQGUth8pPLJ/X9TUpIgeHPAlMAxevseuUrpPCO7x0GjrEG4B2/SynV1
-         35HkwAyPao8RjpKwOL1HpFVN5KIMMIYTXW3QfHz6ef4Y/psCCK7pQbnWIUkSSPMMGx
-         rxrLfUig9lxJARuh0jW2bN6qgMp1/dVxawd9GUatllWamKctzgkBCSGn4IZVNAsieA
-         xlWq6OnFK3oNQm/oKHkxOr5ffC2r8vZxggfmQjJCc6Bpi2xudAVUQYFH9PA1AIgU2U
-         TrY9bvrrIPausH/tQEdbvd2OFECYL7GJT5C5B74eajeaJZWGzU2m7vNOE9VQpgqG5A
-         KfC31Cez/aJhw==
-Received: by jupiter.universe (Postfix, from userid 1000)
-        id 057BF4801B9; Thu, 27 Oct 2022 18:31:21 +0200 (CEST)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCHv2 1/1] dt-bindings: net: snps,dwmac: Document queue config subnodes
-Date:   Thu, 27 Oct 2022 18:31:19 +0200
-Message-Id: <20221027163119.107092-1-sebastian.reichel@collabora.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 27 Oct 2022 12:32:31 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73FC9DF89;
+        Thu, 27 Oct 2022 09:32:27 -0700 (PDT)
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 29RGW5Bt010706;
+        Fri, 28 Oct 2022 01:32:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 29RGW5Bt010706
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1666888326;
+        bh=52K3j4S01m6w/RfZ2ZmouebwYkbBAw9HS00T9luyzUs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NbAQ6FXkO9En0C8Gi1ej9gn1bbEKRjuN0OQjeGqMUuzE5jS3YnzHhYwjEOWhQq3/s
+         RmqVCqFFTjGudrH2pQ5zuXFfSv14UPIzRRUKsUc0oBEGGymUH9RPkmwkSspuCBW25I
+         Ppvtyeb23nVGhJqIke+KIMGPKX19bvDYrLvPyrJYyqJiLXx9nJCOCEjsrf4ubq+VLJ
+         x3VTyjvJ1l5a8cCd5Y7jnPHGbjZdHAXXSxn5TC65QAm5ODb3sZEofiZ/ulw9WRIXsj
+         S7QkqPg+cVVx7f+K/fOhJ5936Sz+kHAZLZ//VFcQv3+TA7eugy0eWbq1in57rzd9WU
+         D7soZ/NNpmeAQ==
+X-Nifty-SrcIP: [209.85.160.44]
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1322d768ba7so2792724fac.5;
+        Thu, 27 Oct 2022 09:32:06 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0tBy5riaiPOJ6YBDg7wijXoMUD3o7pxueJbOyqd/7aFcsmFLiR
+        GDV9Lj0TUuPYe8ccekFN8tF2hrhFc1I1tsLzOMY=
+X-Google-Smtp-Source: AMsMyM5HtJWKYTji479rNEYH9axJJybHQHD8bBb7XeWPXWObEmy8J9YLvBHRuppp2rRV0aIxNwePrqHWrwGH8t/5cqE=
+X-Received: by 2002:a05:6870:7027:b0:13b:a5b7:165a with SMTP id
+ u39-20020a056870702700b0013ba5b7165amr5974579oae.194.1666888325338; Thu, 27
+ Oct 2022 09:32:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221023195257.175946-1-masahiroy@kernel.org> <CAKwvOd=pimEoN_OvyefPiTTsOdzo+Xda1gJrYg8+jAE5GA0rqA@mail.gmail.com>
+In-Reply-To: <CAKwvOd=pimEoN_OvyefPiTTsOdzo+Xda1gJrYg8+jAE5GA0rqA@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 28 Oct 2022 01:31:29 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS5nvQDYD8jqazng2_CwuuZMGE2FyLFF73iW1_Vp6DWgw@mail.gmail.com>
+Message-ID: <CAK7LNAS5nvQDYD8jqazng2_CwuuZMGE2FyLFF73iW1_Vp6DWgw@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: fix 'Broken pipe' message for AR=gcc-ar
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kbuild@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>, eng.stk@sapo.pt
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The queue configuration is referenced by snps,mtl-rx-config and
-snps,mtl-tx-config. Some in-tree DTs and the example put the
-referenced config nodes directly beneath the root node, but
-most in-tree DTs put it as child node of the dwmac node.
+On Tue, Oct 25, 2022 at 4:15 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Sun, Oct 23, 2022 at 12:53 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > Since commit 321648455061 ("kbuild: use obj-y instead extra-y for
+> > objects placed at the head"), 'make AR=gcc-ar' shows the following
+> > message:
+> >
+> >   /usr/bin/ar terminated with signal 13 [Broken pipe]
+>
+> Not just AR=gcc-ar, but also AR=llvm-ar:
+>
+> error: write on a pipe with no reader
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1651
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 
-This adds proper description for this setup, which has the
-advantage of validating the queue configuration node content.
 
-The example is also updated to use the sub-node style, incl.
-the axi bus configuration node, which got the same treatment
-as the queues config in 5361660af6d3 ("dt-bindings: net: snps,dwmac:
-Document stmmac-axi-config subnode").
 
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
-Changes since PATCHv1:
- * https://lore.kernel.org/all/20221021171055.85888-1-sebastian.reichel@collabora.com/
- * add logic to make booleans that are actually enums mutually exclusive
- * fix type of "snps,send_slope", "snps,idle_slope", "snps,high_credit" and "snps,low_credit"
- * add missing 'additionalProperties: false' in rx-queues-config -> "^queue[0-9]$"
- * add missing 'additionalProperties: false' in tx-queues-config -> "^queue[0-9]$"
- * update example to follow the sub-node style
----
- .../devicetree/bindings/net/snps,dwmac.yaml   | 345 ++++++++++++++----
- 1 file changed, 264 insertions(+), 81 deletions(-)
+Thank you.
 
-diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-index 13b984076af5..e88a86623fce 100644
---- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-@@ -167,56 +167,238 @@ properties:
-   snps,mtl-rx-config:
-     $ref: /schemas/types.yaml#/definitions/phandle
-     description:
--      Multiple RX Queues parameters. Phandle to a node that can
--      contain the following properties
--        * snps,rx-queues-to-use, number of RX queues to be used in the
--          driver
--        * Choose one of these RX scheduling algorithms
--          * snps,rx-sched-sp, Strict priority
--          * snps,rx-sched-wsp, Weighted Strict priority
--        * For each RX queue
--          * Choose one of these modes
--            * snps,dcb-algorithm, Queue to be enabled as DCB
--            * snps,avb-algorithm, Queue to be enabled as AVB
--          * snps,map-to-dma-channel, Channel to map
--          * Specifiy specific packet routing
--            * snps,route-avcp, AV Untagged Control packets
--            * snps,route-ptp, PTP Packets
--            * snps,route-dcbcp, DCB Control Packets
--            * snps,route-up, Untagged Packets
--            * snps,route-multi-broad, Multicast & Broadcast Packets
--          * snps,priority, bitmask of the tagged frames priorities assigned to
--            the queue
-+      Multiple RX Queues parameters. Phandle to a node that
-+      implements the 'rx-queues-config' object described in
-+      this binding.
-+
-+  rx-queues-config:
-+    type: object
-+    properties:
-+      snps,rx-queues-to-use:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description: number of RX queues to be used in the driver
-+      snps,rx-sched-sp:
-+        type: boolean
-+        description: Strict priority
-+      snps,rx-sched-wsp:
-+        type: boolean
-+        description: Weighted Strict priority
-+    allOf:
-+      - if:
-+          required:
-+            - snps,rx-sched-sp
-+        then:
-+          properties:
-+            snps,rx-sched-wsp: false
-+      - if:
-+          required:
-+            - snps,rx-sched-wsp
-+        then:
-+          properties:
-+            snps,rx-sched-sp: false
-+    patternProperties:
-+      "^queue[0-9]$":
-+        description: Each subnode represents a queue.
-+        type: object
-+        properties:
-+          snps,dcb-algorithm:
-+            type: boolean
-+            description: Queue to be enabled as DCB
-+          snps,avb-algorithm:
-+            type: boolean
-+            description: Queue to be enabled as AVB
-+          snps,map-to-dma-channel:
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            description: DMA channel id to map
-+          snps,route-avcp:
-+            type: boolean
-+            description: AV Untagged Control packets
-+          snps,route-ptp:
-+            type: boolean
-+            description: PTP Packets
-+          snps,route-dcbcp:
-+            type: boolean
-+            description: DCB Control Packets
-+          snps,route-up:
-+            type: boolean
-+            description: Untagged Packets
-+          snps,route-multi-broad:
-+            type: boolean
-+            description: Multicast & Broadcast Packets
-+          snps,priority:
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            description: Bitmask of the tagged frames priorities assigned to the queue
-+        allOf:
-+          - if:
-+              required:
-+                - snps,dcb-algorithm
-+            then:
-+              properties:
-+                snps,avb-algorithm: false
-+          - if:
-+              required:
-+                - snps,avb-algorithm
-+            then:
-+              properties:
-+                snps,dcb-algorithm: false
-+          - if:
-+              required:
-+                - snps,route-avcp
-+            then:
-+              properties:
-+                snps,route-ptp: false
-+                snps,route-dcbcp: false
-+                snps,route-up: false
-+                snps,route-multi-broad: false
-+          - if:
-+              required:
-+                - snps,route-ptp
-+            then:
-+              properties:
-+                snps,route-avcp: false
-+                snps,route-dcbcp: false
-+                snps,route-up: false
-+                snps,route-multi-broad: false
-+          - if:
-+              required:
-+                - snps,route-dcbcp
-+            then:
-+              properties:
-+                snps,route-avcp: false
-+                snps,route-ptp: false
-+                snps,route-up: false
-+                snps,route-multi-broad: false
-+          - if:
-+              required:
-+                - snps,route-up
-+            then:
-+              properties:
-+                snps,route-avcp: false
-+                snps,route-ptp: false
-+                snps,route-dcbcp: false
-+                snps,route-multi-broad: false
-+          - if:
-+              required:
-+                - snps,route-multi-broad
-+            then:
-+              properties:
-+                snps,route-avcp: false
-+                snps,route-ptp: false
-+                snps,route-dcbcp: false
-+                snps,route-up: false
-+        additionalProperties: false
-+    additionalProperties: false
- 
-   snps,mtl-tx-config:
-     $ref: /schemas/types.yaml#/definitions/phandle
-     description:
--      Multiple TX Queues parameters. Phandle to a node that can
--      contain the following properties
--        * snps,tx-queues-to-use, number of TX queues to be used in the
--          driver
--        * Choose one of these TX scheduling algorithms
--          * snps,tx-sched-wrr, Weighted Round Robin
--          * snps,tx-sched-wfq, Weighted Fair Queuing
--          * snps,tx-sched-dwrr, Deficit Weighted Round Robin
--          * snps,tx-sched-sp, Strict priority
--        * For each TX queue
--          * snps,weight, TX queue weight (if using a DCB weight
--            algorithm)
--          * Choose one of these modes
--            * snps,dcb-algorithm, TX queue will be working in DCB
--            * snps,avb-algorithm, TX queue will be working in AVB
--              [Attention] Queue 0 is reserved for legacy traffic
--                          and so no AVB is available in this queue.
--          * Configure Credit Base Shaper (if AVB Mode selected)
--            * snps,send_slope, enable Low Power Interface
--            * snps,idle_slope, unlock on WoL
--            * snps,high_credit, max write outstanding req. limit
--            * snps,low_credit, max read outstanding req. limit
--          * snps,priority, bitmask of the priorities assigned to the queue.
--            When a PFC frame is received with priorities matching the bitmask,
--            the queue is blocked from transmitting for the pause time specified
--            in the PFC frame.
-+      Multiple TX Queues parameters. Phandle to a node that
-+      implements the 'tx-queues-config' object described in
-+      this binding.
-+
-+  tx-queues-config:
-+    type: object
-+    properties:
-+      snps,tx-queues-to-use:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description: number of TX queues to be used in the driver
-+      snps,tx-sched-wrr:
-+        type: boolean
-+        description: Weighted Round Robin
-+      snps,tx-sched-wfq:
-+        type: boolean
-+        description: Weighted Fair Queuing
-+      snps,tx-sched-dwrr:
-+        type: boolean
-+        description: Deficit Weighted Round Robin
-+      snps,tx-sched-sp:
-+        type: boolean
-+        description: Strict priority
-+    allOf:
-+      - if:
-+          required:
-+            - snps,tx-sched-wrr
-+        then:
-+          properties:
-+            snps,tx-sched-wfq: false
-+            snps,tx-sched-dwrr: false
-+            snps,tx-sched-sp: false
-+      - if:
-+          required:
-+            - snps,tx-sched-wfq
-+        then:
-+          properties:
-+            snps,tx-sched-wrr: false
-+            snps,tx-sched-dwrr: false
-+            snps,tx-sched-sp: false
-+      - if:
-+          required:
-+            - snps,tx-sched-dwrr
-+        then:
-+          properties:
-+            snps,tx-sched-wrr: false
-+            snps,tx-sched-wfq: false
-+            snps,tx-sched-sp: false
-+      - if:
-+          required:
-+            - snps,tx-sched-sp
-+        then:
-+          properties:
-+            snps,tx-sched-wrr: false
-+            snps,tx-sched-wfq: false
-+            snps,tx-sched-dwrr: false
-+    patternProperties:
-+      "^queue[0-9]$":
-+        description: Each subnode represents a queue.
-+        type: object
-+        properties:
-+          snps,weight:
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            description: TX queue weight (if using a DCB weight algorithm)
-+          snps,dcb-algorithm:
-+            type: boolean
-+            description: TX queue will be working in DCB
-+          snps,avb-algorithm:
-+            type: boolean
-+            description:
-+              TX queue will be working in AVB.
-+              Queue 0 is reserved for legacy traffic and so no AVB is
-+              available in this queue.
-+          snps,send_slope:
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            description: enable Low Power Interface
-+          snps,idle_slope:
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            description: unlock on WoL
-+          snps,high_credit:
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            description: max write outstanding req. limit
-+          snps,low_credit:
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            description: max read outstanding req. limit
-+          snps,priority:
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            description:
-+              Bitmask of the tagged frames priorities assigned to the queue.
-+              When a PFC frame is received with priorities matching the bitmask,
-+              the queue is blocked from transmitting for the pause time specified
-+              in the PFC frame.
-+        allOf:
-+          - if:
-+              required:
-+                - snps,dcb-algorithm
-+            then:
-+              properties:
-+                snps,avb-algorithm: false
-+          - if:
-+              required:
-+                - snps,avb-algorithm
-+            then:
-+              properties:
-+                snps,dcb-algorithm: false
-+                snps,weight: false
-+        additionalProperties: false
-+    additionalProperties: false
- 
-   snps,reset-gpio:
-     deprecated: true
-@@ -463,41 +645,6 @@ additionalProperties: true
- 
- examples:
-   - |
--    stmmac_axi_setup: stmmac-axi-config {
--        snps,wr_osr_lmt = <0xf>;
--        snps,rd_osr_lmt = <0xf>;
--        snps,blen = <256 128 64 32 0 0 0>;
--    };
--
--    mtl_rx_setup: rx-queues-config {
--        snps,rx-queues-to-use = <1>;
--        snps,rx-sched-sp;
--        queue0 {
--            snps,dcb-algorithm;
--            snps,map-to-dma-channel = <0x0>;
--            snps,priority = <0x0>;
--        };
--    };
--
--    mtl_tx_setup: tx-queues-config {
--        snps,tx-queues-to-use = <2>;
--        snps,tx-sched-wrr;
--        queue0 {
--            snps,weight = <0x10>;
--            snps,dcb-algorithm;
--            snps,priority = <0x0>;
--        };
--
--        queue1 {
--            snps,avb-algorithm;
--            snps,send_slope = <0x1000>;
--            snps,idle_slope = <0x1000>;
--            snps,high_credit = <0x3E800>;
--            snps,low_credit = <0xFFC18000>;
--            snps,priority = <0x1>;
--        };
--    };
--
-     gmac0: ethernet@e0800000 {
-         compatible = "snps,dwxgmac-2.10", "snps,dwxgmac";
-         reg = <0xe0800000 0x8000>;
-@@ -516,6 +663,42 @@ examples:
-         snps,axi-config = <&stmmac_axi_setup>;
-         snps,mtl-rx-config = <&mtl_rx_setup>;
-         snps,mtl-tx-config = <&mtl_tx_setup>;
-+
-+        stmmac_axi_setup: stmmac-axi-config {
-+            snps,wr_osr_lmt = <0xf>;
-+            snps,rd_osr_lmt = <0xf>;
-+            snps,blen = <256 128 64 32 0 0 0>;
-+        };
-+
-+        mtl_rx_setup: rx-queues-config {
-+            snps,rx-queues-to-use = <1>;
-+            snps,rx-sched-sp;
-+            queue0 {
-+                snps,dcb-algorithm;
-+                snps,map-to-dma-channel = <0x0>;
-+                snps,priority = <0x0>;
-+            };
-+        };
-+
-+        mtl_tx_setup: tx-queues-config {
-+            snps,tx-queues-to-use = <2>;
-+            snps,tx-sched-wrr;
-+            queue0 {
-+                snps,weight = <0x10>;
-+                snps,dcb-algorithm;
-+                snps,priority = <0x0>;
-+            };
-+
-+            queue1 {
-+                snps,avb-algorithm;
-+                snps,send_slope = <0x1000>;
-+                snps,idle_slope = <0x1000>;
-+                snps,high_credit = <0x3E800>;
-+                snps,low_credit = <0xFFC18000>;
-+                snps,priority = <0x1>;
-+            };
-+        };
-+
-         mdio0 {
-             #address-cells = <1>;
-             #size-cells = <0>;
+I updated the commit description, and sent v2.
+
+https://lore.kernel.org/linux-kbuild/20221027162839.410720-1-masahiroy@kernel.org/T/#u
+
+
+> Note that due to
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8017ce50641c303b9b5d96f3c10229ecfd770a70
+> we should send a backport to stable like:
+> https://github.com/engstk/op8/commit/6f2688e3eb4ec06b276e541640d4f06364b68442
+
+
+Maybe, we can backport 8017ce50641c30 itself,
+but I am not sure if it is cleanly applicable.
+
+
+
 -- 
-2.35.1
-
+Best Regards
+Masahiro Yamada
