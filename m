@@ -2,210 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C407560F73B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF1960F73D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233884AbiJ0M2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
+        id S235675AbiJ0M3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235670AbiJ0M2e (ORCPT
+        with ESMTP id S235730AbiJ0M24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:28:34 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80082.outbound.protection.outlook.com [40.107.8.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CAE167256;
-        Thu, 27 Oct 2022 05:27:38 -0700 (PDT)
+        Thu, 27 Oct 2022 08:28:56 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA292132240;
+        Thu, 27 Oct 2022 05:28:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666873715; x=1698409715;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=q2IcdsyP8S87jcl88a3KdcuYIcWmmzjOMkhpxHSYmPU=;
+  b=Sh69Gk6Q7schj1deGkipBInUv3HnmqUkQRe6rVivuQDSJK2kcrTEVNwx
+   ShBeeKswFkLXCMFWZrngOL5Bl3OhYCFhwgOyXdwYPMxocbBo40rxciuiF
+   omxX5yF0x0nz0Ct4u7z6LNHhrSvORAPRnvf33L6TCEpOL0SDEMTLA3bN3
+   mllcRKuIoMoy8D05mwFw4MrTXcKLYH29Re9fw1vitO9DB06SYj8h8omso
+   KTPXthr92Vj9XnfM+JpqJHF23usndIm3jUjPTO6/q/2X9UO3G+tIYjj7H
+   rfEBvfz+7qErW8W8dhcIGOMD9GY5D1DkcSYhX0RsWXfAoLP2Tf8wgwTUG
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="372421106"
+X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
+   d="scan'208";a="372421106"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 05:28:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="695786738"
+X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
+   d="scan'208";a="695786738"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga008.fm.intel.com with ESMTP; 27 Oct 2022 05:28:34 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 27 Oct 2022 05:28:34 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 27 Oct 2022 05:28:34 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 27 Oct 2022 05:28:34 -0700
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.46) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 27 Oct 2022 05:28:33 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RqiH37Z1hmGTcMYEq8OZRy5ZHe0Gg36C8gNEtSExlJOY14/NjIgqY6GKNmbULlzbYO3LdJbl8Yq6Q1Py9wjpEVq0GxsemWjMQyrrf/yomqskITbiM63CsRXTtQmSDF+hoDcTrZwmxnagDRq8EBPbaMfXRnos2Rj/sTl+ZQVLSI7QULa+YRlbXe6i732V6ctjGENXa4OUsm85KfhErXqmUYMTxwpjVusoMtDmmvL9c+B6oxfcuvP46EDT9QPhaVwqSU/0WAXJahx+EH4Y5F6pIZBY8f1/jjFwu1Xo6fDLOGIeOYG/rJLPSCLnY01CGpjOMhY7H3Pu5qdZP9CRwbsX7A==
+ b=jtWLvp+c13BP7HbwJzQ4uK/rDmtDG8z/6Kd5ChP/kd8jFGWqi+nCbPKp1tLj7LNCtZgwL7E1HwcPJfRHR2m1GBj7pNzJHMU01txY/DYDGqW3hSDvtfLubgNfZjt74+A0UzVmLqs6FFM2SlKqLH3Sdf+LyS8ZCJwelV+yQ6Fuo3TgxpDTs0uAq6ZMaiXMAik4viU3GhWmLkRr5gQOHxRE+2uYTTY5XdVlZaqEtTzKhPhSeiMYw96UlH2t9mfRPprv6yB78cpPrYPatP8ZLdwkbqI7h7NL6LmosxUNlDn5GOAkBjI9+u/uPH98gq8C75ZWjnpEsscrFl/zylXaLuxwQg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=H3aQEypUdWuT7vwOlhMBAxlfw5A2SSoh4OdoKY7Ei3s=;
- b=HvRN3HIAaJTw5GXUEgsv6RX00zqXb6jS34cGnvrBzR7GBVFLEf/VrjXGR+/92rmP/pOP1DKbiSIjHNipPQPHqGuYJBsq7q7PVeSUh4IajIhN+Ytswvkt87+J1M9JYMgbK6T9RGCvaNZYObVsHkZK3nJAHtq1ypTd32f4LIe6/93dYBPb8gWxybSmOs/4EK0lWnkLwCnAvXOkftkV/cFhVuZ8H9fcBQ64MBCFkjDzRbJletJtjjjNO3Z0MTCquV9J3SqboYFGUKdCBqitJsRqCBZe2126GywO3vH9kr5TRunI1Y09S2R7NHe5GXUEePGbLTYhSxNBclbp9twIhcsc1w==
+ bh=UAolB/QG5UWfBC+WKeNPo/ICs4kYv99/j51rhixtttM=;
+ b=Qjnql3znV6tnQEECMDVCTyEioFtihMsVFx8mRliNCYCJxCj8GooqP9LcB/sS8bGtUuwWp8M4drSBH+7h9Rilg5JeZHoS4KrHEAnazNFjaiqgmXTl4hclsvdTzP4vd5XXlFtATl1xDBry3TU1S1Quv/2peuPG2SxYKVjDs8CRYkgiUAw7AEiKKmhEnZikHrQDv2/5c2SfP2KEOoak2Zy5KFiqfUKrnsk899yOsMEvxID7DceijGiLpDLSNpU0Js13A932QnkMG34Xsymaf5yy5S+qLyp38Nldpx+d5LdLW1Wn1hCagKNSccSemcGNarRvuhDuw+eWIrJzZ6NDDltCDg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=H3aQEypUdWuT7vwOlhMBAxlfw5A2SSoh4OdoKY7Ei3s=;
- b=EOaKYZpJ2tjqtZARsuvrF8rW9R/85POF/V4rnzQ1yVsxiHMqSbj2++wIDzKq1fnp4X59nAcJT/mUuGdXaBpOj0f4HBpUj5mONruT5O40lUz+b1Vrg0TERAj7PGNiKq5WPxHg90L228XMlCRlPkO8q1KaoH20dxHc4ZMIQi/Kx/A=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by PA4PR04MB7789.eurprd04.prod.outlook.com (2603:10a6:102:c3::10) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DS0PR11MB6373.namprd11.prod.outlook.com (2603:10b6:8:cb::20) by
+ PH0PR11MB7471.namprd11.prod.outlook.com (2603:10b6:510:28a::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.14; Thu, 27 Oct
- 2022 12:27:28 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::6710:c5fd:bc88:2035]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::6710:c5fd:bc88:2035%6]) with mapi id 15.20.5746.028; Thu, 27 Oct 2022
- 12:27:28 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     Shawn Guo <shawnguo@kernel.org>, Leo Li <leoyang.li@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Heiko Thiery <heiko.thiery@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH] Revert "arm64: dts: ls1028a: sl28: use ocelot-8021q
- tagging by default"
-Thread-Topic: [PATCH] Revert "arm64: dts: ls1028a: sl28: use ocelot-8021q
- tagging by default"
-Thread-Index: AQHY6ffdJD/5Oq16AkSmf/jVUKUJTq4iJNOAgAAGMIA=
-Date:   Thu, 27 Oct 2022 12:27:28 +0000
-Message-ID: <20221027122727.fhs35eqtzmeen6x4@skbuf>
-References: <20221027113248.420216-1-michael@walle.cc>
- <20221027120519.7f3xun66l4lamcq6@skbuf>
-In-Reply-To: <20221027120519.7f3xun66l4lamcq6@skbuf>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.27; Thu, 27 Oct
+ 2022 12:28:31 +0000
+Received: from DS0PR11MB6373.namprd11.prod.outlook.com
+ ([fe80::4625:d63e:1152:1246]) by DS0PR11MB6373.namprd11.prod.outlook.com
+ ([fe80::4625:d63e:1152:1246%6]) with mapi id 15.20.5746.021; Thu, 27 Oct 2022
+ 12:28:31 +0000
+From:   "Wang, Wei W" <wei.w.wang@intel.com>
+To:     "Christopherson,, Sean" <seanjc@google.com>
+CC:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "vipinsh@google.com" <vipinsh@google.com>,
+        "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v1 01/18] KVM: selftests/kvm_util: use array of pointers
+ to maintain vcpus in kvm_vm
+Thread-Topic: [PATCH v1 01/18] KVM: selftests/kvm_util: use array of pointers
+ to maintain vcpus in kvm_vm
+Thread-Index: AQHY55ylKGIU2b/Czky3MagHOAXjm64hW4iAgAB9rdA=
+Date:   Thu, 27 Oct 2022 12:28:31 +0000
+Message-ID: <DS0PR11MB6373E471C1378CBEEBD40A82DC339@DS0PR11MB6373.namprd11.prod.outlook.com>
+References: <20221024113445.1022147-1-wei.w.wang@intel.com>
+ <20221024113445.1022147-2-wei.w.wang@intel.com> <Y1nHL5BUoWPqUtt9@google.com>
+In-Reply-To: <Y1nHL5BUoWPqUtt9@google.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.500.17
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
+ header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1PR04MB5136:EE_|PA4PR04MB7789:EE_
-x-ms-office365-filtering-correlation-id: 24606e99-e106-40f8-7e8c-08dab8169cd6
+x-ms-traffictypediagnostic: DS0PR11MB6373:EE_|PH0PR11MB7471:EE_
+x-ms-office365-filtering-correlation-id: edc025f7-e201-4631-5eea-08dab816c217
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: D8xcH6FevX6hIdtCMM8Vbrbx0+Vd5594ZBeKOiGn8ITdUCUqwySXFN/oi0OjELzT9jOrGjw6bex/fEOTzpu+aJ82qbrLc5jnIDd6r8etaVZ2RIQkJvJueWrM0c8i5qyKrFoyShOaQ1+Wwwx+8fOojmopVqN4xBpM3Ss3LWelcUoYpIuTGqeIZxLT+VuMhEkvSmPKRRG4Z4h90Li4bir6ajCkCtl43wurC8vYfDBwt3yc2BFuLFHcQz6t7xeblpM8r33w57I89WJjWt4VpTWLf2SHs00lv5Ua3XIxoUO+W03b8UVLS4xzGnw0ue4vW+1XtNbhhRAwVoFnaBMlaoLocoKtFy7BOylQNE7UwoorOPGi04kiP0uvld7h3dI5rk35zBk7dF8zIkSLXMFUJPkb6bBvOMSlXNIcLIc3GqCSAJRyfub8TJGKTgCBD5nvm1GQxQDpc4MCgdNBhc/mLSlzvoVaH6LIeKyKmSUMQT2M19zhEI9QQEbaaqU4iwaO8uyVfWB091F2kRzYhjzXyw11hDDzXjntBalz9ne8k6zYdfsNb/yUG5eiz6HIXJoXUiqTJEDBAhSAfnB9lfOMCq/ggV7EY/I2iazSXWuqjGQHtAHGzBhybDEuW5GfJobrcm1Ko5yVvAPvYqWnwZXx6DcNr3XzDD1PX0tQaIf0Zf5QHx+iPB66ypGL7XiQHkMTXFbF6ycXCmjEVKbPUQReyU2ViBwX/KoYn7ByW6iOCqBZkgCXPJiWefX9sWH/NE9tUP0WiI38K8W+/c8GDl+CJyftjQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(39860400002)(366004)(136003)(376002)(396003)(346002)(451199015)(38070700005)(122000001)(6506007)(4326008)(2906002)(64756008)(66446008)(66476007)(66556008)(66946007)(76116006)(54906003)(316002)(6916009)(8676002)(83380400001)(1076003)(186003)(86362001)(6512007)(26005)(9686003)(44832011)(41300700001)(8936002)(5660300002)(7416002)(478600001)(6486002)(33716001)(71200400001)(38100700002);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: PpEjveLH+ahoSEaBStPpCXoSEjXIPn3r4MvsrKZuY5OtNlAbJMVowNjpaWSd2Rd2slo/4Np7HD+RAXsjNb0r/Pfd3LoD7fKETXcUs4DBptGo3gJjz3Rh9c3/AoZVS7BEAnHavwplVBKbsBIwWVbCXLzlwFscRiepoxf7XmDxXdXOmls/feCzl7a747tCAqW7wNpEKIA9Jhwk72VIrWOTVvO96WTp0U2G9hMbr/sfXEd81quVNe0nkuWBCkqNhxkvh1pmndNROS4m7j8QO0iTAHfYVMsuMkUmDqOqdaEWNsxpU1A/QVD81xWPFi0pqiHdKFBFJp2fcjIg+wPsk1gu9779AY4iBXx62ETTf/Caf5dQJGNSaRn/BHlug0woupgBWriClPU/qYuwHqCVANu+U4bT3U+906noBV6z3B5AvrRxZaJlgOR+9a/B7KUFk0VoS56XJv1xL2hKRCRNcMEOYKeFSBi3KWLW6G5GhI0Jx/IVWYMbjKiof4afT2a+PUgAbNtmeDKA+jZ+GuhC4ego5+xMoMeQ2rcKKox9m8kSmU2FtDwuKrl6LnCTXLAxneLpCb8rlE98A8OsK9tk+yNSqjVogGpImkQ8CMOK72eLzyWOPd2v8gk67vpbVRZjgBqC6lgDIROo2HgwqBAJhT4EKlgDNz9/35l6AwgJcrRapXdb5GvwZjlWT8X1yyLxY6sNVP812E4c6NKOEpSwGfiXA28P1ZIH2Yh7pQ8qglWdYNo1oqfDwVWRydvQYKxm0CgVIzbnobemtS0WfPyqujU1og==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB6373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(376002)(346002)(366004)(136003)(396003)(451199015)(478600001)(82960400001)(2906002)(186003)(71200400001)(38100700002)(66476007)(66556008)(76116006)(66446008)(4326008)(8676002)(66946007)(64756008)(41300700001)(38070700005)(53546011)(54906003)(6506007)(6916009)(7696005)(122000001)(26005)(8936002)(5660300002)(316002)(52536014)(9686003)(33656002)(86362001)(55016003);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DIeVvrR451wRRIeK0BEJl1rEl+kpAbj//IZ5/o96zweKRroQCuR5ANnpylRP?=
- =?us-ascii?Q?5AGefkD47NNJhHMZwaft4VDeczjJZzzo5qsjzSybL5Jf5UCaoqRglOajIjYc?=
- =?us-ascii?Q?9SJu323Mxj5YCX8fNmwB83l9dNQFZF3CmART32dpC2WacBSnWpUS65/osYjF?=
- =?us-ascii?Q?yMx4wpUtACUjbITC7MHJFbdLmmy1rvOSC4XbwdnmxPefi9tXM64x0oUjU7BO?=
- =?us-ascii?Q?6u/n7Z3GGXPJcNqbsokwvGIgPBLSmIamNrDwdfmMDKLKITXvI1F2dBDED+7r?=
- =?us-ascii?Q?RkthgeuQecURwj2MtsC3PRZrgdYb2RxC3uIlMYHtrMYeIKwbY9MbbM55smdL?=
- =?us-ascii?Q?SW0Gq8MbFyyhzB7PoGlF42lznx+X5UFdzUMt0cjqmoG53Rjhs70f0/Wv9fv1?=
- =?us-ascii?Q?+WcasV2ENHezH4EbDJAmLPPzZ/EAPPweY/SkZRzs85NBsZIPyDPVCW0FgfWv?=
- =?us-ascii?Q?D4Qq+HtdbjiKnmiLN70sIGRSdnzDQrwUIj2SwCY+xCDDT8kYhssCG0NRDc0v?=
- =?us-ascii?Q?VfRYjGbYAKzrRJq+h6vdpJtrmMOgYF7a5s7kEzbKYB6CdPO+A/aPLnTFcQoi?=
- =?us-ascii?Q?Y24L+3iD2ASMu/mEVn/5PuD5EgTvQdicdkfSWTiMXNixDHA8VlxmM7bfopU9?=
- =?us-ascii?Q?hGOJ2cikE4TLaTCPHghAqj3cQK/6hlq6zyr3Dg7qtGoZaQLyvJeSB9MasJOs?=
- =?us-ascii?Q?4l++n/zIeYEqze1EfGPUEX46xMHeBRaMQDwVp7NFqv4zsWmce5m5QVJMxZvU?=
- =?us-ascii?Q?nA5bW95vWVOfuHYdqgkWP9YzPOk9BY0zLF0lVWc6YaUEBj+G9ea9InSsrUmu?=
- =?us-ascii?Q?dastDhTHQGrvyMpeawZwZf2PSWYgpN9kh2eVzXn68bbMyiYceticexe5pCsR?=
- =?us-ascii?Q?6bQiDad0gCHEokeHYq6YnDXkdpTwV5WrV5XoVygYWjGvJdzoWsE0RHzIb9aI?=
- =?us-ascii?Q?QDYN1UONDanzxC031OuGYyjpc9DFdVLLwClizzzwxp4IXmujQKYKmIh4ROQC?=
- =?us-ascii?Q?6KGsuKThlQjTNcuJfSrtgihlDEpo4R+bVtg/jfXFk/KmLod2AGcu5LU6aN5I?=
- =?us-ascii?Q?lXSyp0WOUnBz+vxJqGD6WcpDu6/r+AdCF7PV2F3fShcxMNQksF8uj6VKrEON?=
- =?us-ascii?Q?DmoBQfiTviumYkcnLYtqHEhc8Mp5I+73FL+qCfoOr/cwbNHDRDWIQL4snosp?=
- =?us-ascii?Q?+UFARz7VdtG/3gxReNdhRWddGrHXb19PjvuhpX0BNYhVT8nscQPmzYgse3WI?=
- =?us-ascii?Q?8NKE0JQYTB4L47TZVLYaAKgf9KcZ3Oar7387PnhAOcmHvsH9tmX+IUQIa9Bz?=
- =?us-ascii?Q?kLRVDJaluHzo82/wvgaPBcietzif2pVeyMHf+JTPAZfFSeLW7wRmhdFh95BM?=
- =?us-ascii?Q?p0yR3xI6zOUGAMOtP7/mXq2Ot9tboMBbcXgi9i4fAEDHcYVIK0S80kqqQdNS?=
- =?us-ascii?Q?7ipTKwzwfsExrk0R35yUWVukJ1PLemsxZ4HV3KkxbTxavV7Qzi5ThJSuNC59?=
- =?us-ascii?Q?H0GivgjHs1NNjZBJmGx18AZDT/RiofxN1IKcT9nC7YnsfvYDkUw5j+qy5yRC?=
- =?us-ascii?Q?YP5XRdvJc6t6+fYaKniVwiCVUa4UBNdO86ui8gqbdsrpQYEfFrtUq5vCTzmu?=
- =?us-ascii?Q?/A=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?t08JEqmEbolPYgaVG2GI4yiEPeQQ1GeXefo/sNwr9B56jCM5yDaPTnqARO0b?=
+ =?us-ascii?Q?kqHPFM/BVcjsStH/lq5X5SzWIL+ZoEKDKiGzka7io0S+onodIUqz6t3E7FD0?=
+ =?us-ascii?Q?1xpyVNnpxVr1JOmXBrzc16FgeTAX+59oqu3t5yogKn54dUq5P7M7CSR4tARY?=
+ =?us-ascii?Q?v8qR3B4/LLntI5H8XP52AYhHFfPGH6BhI7qCdRkWTfJjMS9AsXqn0El4/ptx?=
+ =?us-ascii?Q?OxTW86WLiCwOvCwgG+0IcRbUqQwZKx67Uu5UuSvc5nQELmMPFSQXNy4xYxVk?=
+ =?us-ascii?Q?HFUI9Ofis+IwTw69SspVNCU/I1oMnaha/itLyUI/ArGdajy6muq8Juqz9K3M?=
+ =?us-ascii?Q?TLPjqSQdHc4nfEFsf+YLiiZ6Xu0Zxd/IXGy+0QIUvGchC5+KxWFrSitLeFma?=
+ =?us-ascii?Q?9c5udobHQnb3ZH17dOo7gt6ytGXt/5jwpa0UJ+gBdk80Zo7X75ZvXDaRAvLi?=
+ =?us-ascii?Q?n9CbXOUHZ3Pe9CeD+b8s6XBQ7iuXzMvH4tfp76LHHpdXUEGkG3XWbrP4ZpGC?=
+ =?us-ascii?Q?PWMbwfZh73hHmf6FyKfxcNwnwnJnSiPrqF7tXDkjupbH0YtX7dmgNALzQyUP?=
+ =?us-ascii?Q?KfDQMwYwlQlEtunATGgkPr0mGrtsY/MsoJ/G23vBqXQYQS/KIIRxmpWwUIoe?=
+ =?us-ascii?Q?dhv/D2kopXorsvvFO0EGciDOOAeSt+1v/0YstQmGbz7Pk1Xa16aiVs2tFMMt?=
+ =?us-ascii?Q?XLaD0Gkyp9aJHoUpilvPK3ws8BdP69paP+Bn7EWDWgRAeN3fTICB7k9jeyiP?=
+ =?us-ascii?Q?x42zGUks9cLX+mEjYv8Irz9FDEZlstamvmDQ1Zj1DSTaWlV9qeOsMVLpeQ+P?=
+ =?us-ascii?Q?ggF4t1TXBww5d5hlxhasFbFhAitS3qS0zAUcz+DQ/X1MblQnyiqtDWP+i6sf?=
+ =?us-ascii?Q?L8ElX8Vf0StWzMvsx8P6cN8MPTtNEAMRcu1lfkXbdbE0e6/D2ll4rg+w+Mh0?=
+ =?us-ascii?Q?RCVcZFFsCqrQrZNeRnT4Y1POLdtayRboSUqiT6JZCcAAnvC6spPISDRK1OxW?=
+ =?us-ascii?Q?HFZOd939qR4oELVD1InnUvrzToZlRXkfAvyEX0urOdp6aPt0i8A6RxUKzdG1?=
+ =?us-ascii?Q?YRs3daqowSzzhhMSsa68648kbrg7p7JYwbDLVlRMuF6Py++GbJu2jy1GYXm5?=
+ =?us-ascii?Q?oiAPYjyJfy65eIOye6UWr2Aty29o63RpYtF/edxLSWAZlcwOfTTKtq8nNz0N?=
+ =?us-ascii?Q?BjQVQIM2K1jjxloZiFpT0NElvOSNmWCSryNF5IjZvyPm4F27h6ta466KjcNd?=
+ =?us-ascii?Q?zjHzAWD4NIkR3rwubMPAs59lnI/rw1V7fYlN2IUvb5DNur8jnc1GMQqOkEUf?=
+ =?us-ascii?Q?WhLx5IwVjRfXoaxM5yaBJp2P4XRX4TMEv352b5V1XiMqy6FFpiwAdLfky6Ev?=
+ =?us-ascii?Q?pL2CGZV82DxO5SvQ73jdbprd58+c7IXvCN/oea65L3qdebCfQPeHmYZQFfR7?=
+ =?us-ascii?Q?ag1ugRJOsI157LDu2lQSCygUVy/fwVk/q45tRFOg3qXJjg+HlSu81yOMQ0iU?=
+ =?us-ascii?Q?n6TmsY9/k6/j2HG4MnMSyPZ2ouTBpfYepGFIKoKFBVwRf4mZkOwBEjiLckoI?=
+ =?us-ascii?Q?XspB3AntxhqDRZFAgRWgoSZlozBH3V1KzxbDyHNy?=
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <8A9F26EFFD79B141BCB4039AC7B3D820@eurprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24606e99-e106-40f8-7e8c-08dab8169cd6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Oct 2022 12:27:28.6284
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB6373.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: edc025f7-e201-4631-5eea-08dab816c217
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Oct 2022 12:28:31.0979
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GOUzUVXjC5BJ7hw7pe6myKDvzs/eprOAswvBDL7ht6p/w6uxcwNI/8K6FU5n+2Q39Tel7fez7Dlf4p0izpI9uw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7789
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: g3xXbLiVWLh5sR8uRnNSm+UxX7ey9xWY1klxnFzXOsbbGDYiH2RY9UHSxWewPetp3YUWDC5wMy4jD8zRwrYNBQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB7471
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 03:05:19PM +0300, Vladimir Oltean wrote:
-> On Thu, Oct 27, 2022 at 01:32:48PM +0200, Michael Walle wrote:
-> > This reverts commit be0b178c50c37a666d54f435da71cf9f008362a0.
-> >=20
-> > This commit will break networking on the sl28 boards if the tagger is
-> > not compiled into the kernel. If a non-default tagger is used, the
-> > kernel doesn't do a request_module(). Fixing that is also not that
-> > trivial because the tagger modules are loaded by ids, not by name.
-> > Thus for now, just revert to the default tagger until that is fixed.
-> >=20
-> > Fixes: be0b178c50c3 ("arm64: dts: ls1028a: sl28: use ocelot-8021q taggi=
-ng by default")
-> > Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
-> > Signed-off-by: Michael Walle <michael@walle.cc>
-> > ---
-> > Vladimir, I'm not sure how to fix that one. Adding aliases to the tagge=
-r
-> > modules? Something like "MODULE_ALIAS("dsa_tag-ocelot-8021q");" and the=
-n do
-> > a request_module() in dsa_find_tagger_by_name(), too?
-> >=20
-> >  .../arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts | 8 --------
-> >  1 file changed, 8 deletions(-)
-> >=20
-> > diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts=
- b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-> > index 72429b37a8b4..771c50c7f50a 100644
-> > --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-> > +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-> > @@ -324,14 +324,6 @@ &lpuart1 {
-> >  	status =3D "okay";
-> >  };
-> > =20
-> > -&mscc_felix_port4 {
-> > -	dsa-tag-protocol =3D "ocelot-8021q";
-> > -};
-> > -
-> > -&mscc_felix_port5 {
-> > -	dsa-tag-protocol =3D "ocelot-8021q";
-> > -};
-> > -
-> >  &usb0 {
-> >  	status =3D "okay";
-> >  };
-> > --=20
-> > 2.30.2
+On Thursday, October 27, 2022 7:48 AM, Sean Christopherson wrote:
+> > +	for (i =3D 0, vcpu =3D vm->vcpus[0];				\
+> > +		vcpu && i < KVM_MAX_VCPUS; vcpu =3D vm->vcpus[++i])
+>=20
+> I hate pointer arithmetic more than most people, but in this case it avoi=
+ds the
+> need to pass in 'i', which in turn cuts down on boilerplate and churn.
+
+Hmm, indeed, this can be improved, how about this one:
+
++#define vm_iterate_over_vcpus(vm, vcpu)                         \
++       for (vcpu =3D vm->vcpus[0]; vcpu; vcpu =3D vm->vcpus[vcpu->id + 1])=
+ \
+
+
+>=20
+> >  #endif /* SELFTEST_KVM_UTIL_H */
+> > diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > index e42a09cd24a0..c90a9609b853 100644
+> > --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > @@ -45,7 +45,6 @@ struct userspace_mem_region {  };
 > >
+> >  struct kvm_vcpu {
+> > -	struct list_head list;
+> >  	uint32_t id;
+> >  	int fd;
+> >  	struct kvm_vm *vm;
+> > @@ -75,7 +74,6 @@ struct kvm_vm {
+> >  	unsigned int pa_bits;
+> >  	unsigned int va_bits;
+> >  	uint64_t max_gfn;
+> > -	struct list_head vcpus;
+> >  	struct userspace_mem_regions regions;
+> >  	struct sparsebit *vpages_valid;
+> >  	struct sparsebit *vpages_mapped;
+> > @@ -92,6 +90,7 @@ struct kvm_vm {
+> >  	int stats_fd;
+> >  	struct kvm_stats_header stats_header;
+> >  	struct kvm_stats_desc *stats_desc;
+> > +	struct kvm_vcpu *vcpus[KVM_MAX_VCPUS];
 >=20
-> Pretty nasty. Of all the switch drivers that support tagging protocol
-> change, Ocelot/Felix is the only one with this bug, because in all other
-> cases, the default and the alternative tagging protocol are part of the
-> same .ko. Only here we have tag_ocelot.ko and tag_ocelot_8021q.ko.
+> We can dynamically allocate the array without too much trouble, though I'=
+m not
+> sure it's worth shaving the few KiB of memory.  For __vm_create(), the nu=
+mber
+> of vCPUs is known when the VM is created.  For vm_create_barebones(), we
+> could do the simple thing of allocating KVM_MAX_VCPU.
+
+The issue with dynamic allocation is that some users start with __vm_create=
+(nr_vcpus), and later
+could add more cpus with vm_vcpu_add (e.g. x86_64/xapic_ipi_test.c). To sup=
+port this we may
+need to re-allocate the array for later vm_vcpu_add(), and also need to add=
+ nr_vcpus to indicate
+the size.
+It's userspace memory, and not a problem to use a bit larger virtual memory=
+ (memory are not really
+allocated until we have that many vcpus to touch the array entries), I thin=
+k.
+
 >=20
-> The problem preventing us from calling request_module() is that currently=
-,
-> the string identifying the tagging protocol (to which we match device
-> tree information) is part of the tag_*.ko. I think we'd need the
-> translation table between string and enum dsa_tag_protocol to be part of
-> dsa_core.ko.
+> > @@ -534,6 +533,10 @@ __weak void vcpu_arch_free(struct kvm_vcpu *vcpu)
+> > static void vm_vcpu_rm(struct kvm_vm *vm, struct kvm_vcpu *vcpu)  {
+> >  	int ret;
+> > +	uint32_t vcpu_id =3D vcpu->id;
+> > +
+> > +	TEST_ASSERT(!!vm->vcpus[vcpu_id], "vCPU%d wasn't added\n", vcpu_id);
+>=20
+> This is unecessary, there's one caller and it's iterating over the array =
+of vCPUs.
 
-I think we should treat what we committed to in terms of dt-bindings
-with utmost respect, so I would consider your proposed revert as the
-absolute last option. Reverting a device tree change doesn't mean that
-the device trees without the revert will disappear from circulation.
-
-So far we have 3 options for fixing this within the kernel
-
-- make tag_ocelot.o and tag_ocelot_8021q.o link into the same
-  tag_ocelot.ko
-
-- change the MODULE_ALIAS() of all tagging protocol driver modules from
-  "dsa_tag-<number" to something containing their string name - what you
-  proposed. I don't know why the current MODULE_ALIAS() is formatted the
-  way it is. Maybe Andrew can comment on whether this is feasible.
-  I think there isn't any backwards compatibility concern, since only
-  modules compiled for a certain kernel version are expected to be
-  loaded.
-
-- put a translation table between string and MODULE_ALIAS() inside
-  dsa_core.ko, which potentially duplicates code. Maybe if we
-  auto-generate it somehow?=
+That's right, thanks.
