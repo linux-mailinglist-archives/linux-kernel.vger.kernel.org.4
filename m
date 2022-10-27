@@ -2,178 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2D160F333
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7742C60F33A
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235003AbiJ0JHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 05:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
+        id S234576AbiJ0JJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 05:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235237AbiJ0JHB (ORCPT
+        with ESMTP id S234728AbiJ0JJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 05:07:01 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715A7CABD7;
-        Thu, 27 Oct 2022 02:06:52 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 5BB0632008FF;
-        Thu, 27 Oct 2022 05:06:51 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 27 Oct 2022 05:06:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        Thu, 27 Oct 2022 05:09:35 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924D9FEE;
+        Thu, 27 Oct 2022 02:09:32 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 620FF5C0138;
+        Thu, 27 Oct 2022 05:09:31 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 27 Oct 2022 05:09:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
         :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1666861610; x=1666948010; bh=lbTvqe1Qhg
-        mw46guAJu3GHWBQbJFc8iZalauOR+hqY8=; b=W2A2XajcnjxqbGLlUUGWRT7Elj
-        a+bP+DxqgomsV1AtcVVX1ZLyVF+63mnRGKspYMGKb06xaQ3bRMBw+Y97SetAF6ba
-        OJSuXqsXQfnPXQFEg6wprIt19z4bg2+ahFN7yi6xlC9lVytEA/Kw+Jvx47xut1s6
-        HAiDsxeTC6moECeE12D7EUvkKtJ3rIzpxGA+7y1HZPsqdDAkSS+1OE6gPrr30ABQ
-        OPQtU9G/rsM330tGVTdcFnMSEWcCsXIt/jEDAKc+spVSk29DNvLDj1+gk3wLJVey
-        oj0W9iXTCEyNr/MiYt4Tlh8M2N5qTE4Ri6jo/7MAQu7a5UOO5UCS2boUyWdw==
+        :subject:to:to; s=fm2; t=1666861771; x=1666948171; bh=u2xJJZS73/
+        d/o0CIY2bxlyBu06Lupq5Y1/URzXoJcZI=; b=rUKXcm/ZhA8H39d7Mex+vFksm2
+        Qmi6KcNPjWQvRWB12gV8FTf66HPVHIIA3nYIek0C31gN+JN5Ak1sDL7DM2mLRfVs
+        RRCRnZ4q9ByYglAPDZDcXb6P/ICiQYtL44cdpumyX3jIexaSuM8Kcj0H20+eaZfy
+        sfFqsByd37G0970SHeKG/pbBAKPNChWG61mB6DzOMkKCSXTFYrEzXOEgzSWO9N/I
+        tPDXvnIxRMLa9EAbW0ieaMW45agQW6DqvolCY3qc/quOEV7qb5UL4ANB2KWjeP3R
+        Xvee8PU9sHJZaDkiPxLB73yJi0h1g2p2TV3c4uj6imLbCJVzolZzAAgacAUQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
         :feedback-id:from:from:in-reply-to:in-reply-to:message-id
         :mime-version:references:reply-to:sender:subject:subject:to:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666861610; x=1666948010; bh=lbTvqe1Qhgmw46guAJu3GHWBQbJF
-        c8iZalauOR+hqY8=; b=jVQS2xWst5NneyxEw0CfYlqSk9hgGqJAPfdWGy0iHaRG
-        4wC6C5T8ibxf5wWOPTtDTnBrRL7BVJSzDgZPd+ktoWrQU3DNYJxi947B0UvQHieV
-        gOZ1eqsGE1r2LQsWpE+MvY3fMggIeYDLF0Vqkgt5kCO8tbRlJIXEQgr6uyvMzqBo
-        KsJJzA8nk53GPd8c2EAkgEDaRZCt5KPptscx7nOCzVKYbSzdd3GuMNEwkuHHQDD2
-        DRYsxqPe3cebq3J95JVn3Baa92sfMR84a7oBK0S8p6ACQiVQbvVG2j29xCRWNNsO
-        9DqnuJ8/K1U/pvLVnVajIw1jgkcdyMXxBgMdUVemug==
-X-ME-Sender: <xms:KkpaY5zFi6cxPT-HQTVkfnBJ-lXduwowj7IfKuNGZADigtXbGuendg>
-    <xme:KkpaY5Rn06WhSmBem2EbTxhi_WexsriguzDtj1Z7Df4BTGKfFiBhH1GPp_rnjv6RY
-    9C1d20V--2Iu5iI0Q>
-X-ME-Received: <xmr:KkpaYzVq4lV2J2F1TSKQUvsXE7bjMfMflygNkz4ecY_n-N0bsl0i7tGJ2str1bZp7S4JSUpAWmxkVWYV22Pm>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeggddtlecutefuodetggdotefrodftvf
+        fm3; t=1666861771; x=1666948171; bh=u2xJJZS73/d/o0CIY2bxlyBu06Lu
+        pq5Y1/URzXoJcZI=; b=SdiOIhdIJ8srI2G1QM70siY4nnlcIEMsHF0g+Lil2Rd2
+        kAyh8Nhsrgu6iyT89NTTAAAyvaE4Z0B8SeXYyI4GeKuq+Y33p9D3cVC9yBi5tCpK
+        FL30Acjm208Dkl2yl+PyKSPq8xKMs+eb+hg39HUISIdVDkttQxsjS6eyusj6Klqs
+        Xlnk0VFqhU1eTOLybznPzWfbKgfLJLGasSlfCUBzs646X3Q5ev1AmKKnUiA1GUOm
+        y8olD3ck/4/NMjMivWcs2/j0NF4zrTC1+KhxlgWaHtIb3rVkizCCBE8bW061WD+3
+        2jh4AdSgPcRBt1m0t6N02o6pHkwE5U0sU94GYCWuNQ==
+X-ME-Sender: <xms:ykpaY0KWaotJ45JC5ZtlrW6LfAJDZgJlDBi_8IKWod2VHL4uNJ9khQ>
+    <xme:ykpaY0JiLyiWR0aGDXKRIbpXHPlk7D59WCk4jGnM9WB7pgelEpzV93GVZSj_WCHLi
+    LW6drCasIWZs7TEZpA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeggddutdcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
-    hrlhcuvffnffculddujedmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
-    vdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqeenuc
-    ggtffrrghtthgvrhhnpeefveefhffhueeuledvhfegveelieeujeeuleffffekleeiveff
-    gfejgfetgeffveenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhthhhusgdrtg
-    homhdpnhgvthhfihhlthgvrhdrohhrghdpfihighhnvghrrdhhuhenucevlhhushhtvghr
-    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighi
-    ii
-X-ME-Proxy: <xmx:KkpaY7hCkiC7lLgpF2psVFV0qkyS-ZmLgElyvncKTuc0YKcfCV5FKg>
-    <xmx:KkpaY7B8G5QLD0gxRqBmneY3SLUolkPhPDiFE4l8mq9KbL_7B_pOnw>
-    <xmx:KkpaY0LT4NRZywg4ktBGLpPRGeBB6wiLjubgXhMKzu7pT4u98Eni3g>
-    <xmx:KkpaY93JJViQkXHyKHi9Xv3KuhVyVpzfbkdoZBHxwuLXoOOjLknz9w>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 27 Oct 2022 05:06:48 -0400 (EDT)
-Date:   Thu, 27 Oct 2022 03:06:55 -0600
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     Jozsef Kadlecsik <kadlec@netfilter.org>
-Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ppenkov@aviatrix.com
-Subject: Re: ip_set_hash_netiface
-Message-ID: <20221027090655.r54utor2bkty3m5p@k2>
-References: <9a91603a-7b8f-4c6d-9012-497335e4373b@app.fastmail.com>
- <7fcf3bbb-95d2-a286-e3a-4d4dd87f713a@netfilter.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7fcf3bbb-95d2-a286-e3a-4d4dd87f713a@netfilter.org>
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:ykpaY0t6rHaBzO-MUiy4m4ByeJtxXyIoWktJqjfaEIqRfy1rnC_5Pg>
+    <xmx:ykpaYxbgVok8mkEjSt4JuyEVPwIutPHGRIKM5wENuAsMfmLDuezsoA>
+    <xmx:ykpaY7bx3GuB4uFZWbCuELJxeklHf0ZBaBK9AFreCoD8ekn9mJqP9A>
+    <xmx:y0paY5OLajxl7OmgsdR88wMXGeN1HKW-byrpc7FgDG5_-b-k5QYZ9Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 88ADEB60089; Thu, 27 Oct 2022 05:09:30 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
+Mime-Version: 1.0
+Message-Id: <83c93b5e-c589-4ca9-8bc0-ad3571f7f54d@app.fastmail.com>
+In-Reply-To: <CA+G9fYvvtyO8fsYQb25L+bLXUnHJ5LoFToD+cYbKCcE6JUk5FQ@mail.gmail.com>
+References: <CA+G9fYvvtyO8fsYQb25L+bLXUnHJ5LoFToD+cYbKCcE6JUk5FQ@mail.gmail.com>
+Date:   Thu, 27 Oct 2022 11:09:10 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+        patches@opensource.cirrus.com,
+        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+        "Linux Samsung SOC" <linux-samsung-soc@vger.kernel.org>,
+        "open list" <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Cc:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+Subject: Re: s3c6400_defconfig: arch/arm/mach-s3c/mach-crag6410.c:183:12: error: use of
+ undeclared identifier 'KEY_VOLUMEUP'
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jozsef,
+On Thu, Oct 27, 2022, at 09:29, Naresh Kamboju wrote:
+> Following build warnings / errors noticed while building arm s3c6400_defconfig
+> with clang tool chain.
 
-On Wed, Oct 26, 2022 at 02:26:08PM +0200, Jozsef Kadlecsik wrote:
-> Hi Daniel,
-> 
-> On Tue, 25 Oct 2022, Daniel Xu wrote:
-> 
-> > I'm following up with our hallway chat yesterday about how ipset 
-> > hash:net,iface can easily OOM.
-> > 
-> > Here's a quick reproducer (stolen from
-> > https://bugzilla.kernel.org/show_bug.cgi?id=199107):
-> > 
-> >         $ ipset create ACL.IN.ALL_PERMIT hash:net,iface hashsize 1048576 timeout 0
-> >         $ for i in $(seq 0 100); do /sbin/ipset add ACL.IN.ALL_PERMIT 0.0.0.0/0,kaf_$i timeout 0 -exist; done
-> > 
-> > This used to cause a NULL ptr deref panic before
-> > https://github.com/torvalds/linux/commit/2b33d6ffa9e38f344418976b06 .
-> > 
-> > Now it'll either allocate a huge amount of memory or fail a
-> > vmalloc():
-> > 
-> >         [Tue Oct 25 00:13:08 2022] ipset: vmalloc error: size 1073741848, exceeds total pages
-> >         <...>
-> >         [Tue Oct 25 00:13:08 2022] Call Trace:
-> >         [Tue Oct 25 00:13:08 2022]  <TASK>
-> >         [Tue Oct 25 00:13:08 2022]  dump_stack_lvl+0x48/0x60
-> >         [Tue Oct 25 00:13:08 2022]  warn_alloc+0x155/0x180
-> >         [Tue Oct 25 00:13:08 2022]  __vmalloc_node_range+0x72a/0x760
-> >         [Tue Oct 25 00:13:08 2022]  ? hash_netiface4_add+0x7c0/0xb20
-> >         [Tue Oct 25 00:13:08 2022]  ? __kmalloc_large_node+0x4a/0x90
-> >         [Tue Oct 25 00:13:08 2022]  kvmalloc_node+0xa6/0xd0
-> >         [Tue Oct 25 00:13:08 2022]  ? hash_netiface4_resize+0x99/0x710
-> >         <...>
-> > 
-> > Note that this behavior is somewhat documented
-> > (https://ipset.netfilter.org/ipset.man.html):
-> > 
-> > >  The internal restriction of the hash:net,iface set type is that the same
-> > >  network prefix cannot be stored with more than 64 different interfaces
-> > >  in a single set.
-> > 
-> > I'm not sure how hard it would be to enforce a limit, but I think it would
-> > be a bit better to error than allocate many GBs of memory.
-> 
-> That's a bug, actually the limit is not enforced in spite of the 
-> documentation. The next patch fixes it and I'm going to submit to Pablo:
-> 
-> diff --git a/net/netfilter/ipset/ip_set_hash_gen.h b/net/netfilter/ipset/ip_set_hash_gen.h
-> index 6e391308431d..3f8853ed32e9 100644
-> --- a/net/netfilter/ipset/ip_set_hash_gen.h
-> +++ b/net/netfilter/ipset/ip_set_hash_gen.h
-> @@ -61,10 +61,6 @@ tune_bucketsize(u8 curr, u32 multi)
->  	 */
->  	return n > curr && n <= AHASH_MAX_TUNED ? n : curr;
->  }
-> -#define TUNE_BUCKETSIZE(h, multi)	\
-> -	((h)->bucketsize = tune_bucketsize((h)->bucketsize, multi))
-> -#else
-> -#define TUNE_BUCKETSIZE(h, multi)
->  #endif
->  
->  /* A hash bucket */
-> @@ -936,7 +932,11 @@ mtype_add(struct ip_set *set, void *value, const struct ip_set_ext *ext,
->  		goto set_full;
->  	/* Create a new slot */
->  	if (n->pos >= n->size) {
-> -		TUNE_BUCKETSIZE(h, multi);
-> +#ifdef IP_SET_HASH_WITH_MULTI
-> +		if (h->bucketsize >= AHASH_MAX_TUNED)
-> +			goto set_full;
-> +		h->bucketsize = tune_bucketsize(h->bucketsize, multi);
-> +#endif
->  		if (n->size >= AHASH_MAX(h)) {
->  			/* Trigger rehashing */
->  			mtype_data_next(&h->next, d);
-> 
-> Best regards,
-> Jozsef
-> -
-> E-mail  : kadlec@blackhole.kfki.hu, kadlecsik.jozsef@wigner.hu
-> PGP key : https://wigner.hu/~kadlec/pgp_public_key.txt
-> Address : Wigner Research Centre for Physics
->           H-1525 Budapest 114, POB. 49, Hungary
+Do you mean this is a clang specific issue? 
 
-Thank you!
+> arch/arm/mach-s3c/mach-crag6410.c:183:12: error: use of undeclared
+> identifier 'KEY_VOLUMEUP'
+>         KEY(0, 0, KEY_VOLUMEUP),
+>                   ^
 
-Daniel
+I can see that KEY_VOLUMEUP is defined in <linux/input-event-codes.h>,
+which is included by a couple of files in the kernel, but not
+from this specific board file, so I don't see how it works with gcc.
+
+Isn't this just a regression from commit 1810e248b2dc ("Input:
+matrix_keypad - replace header inclusions by forward declarations")?
+
+If that is the problem, I would expect to see the same thing in
+all of these files, regardless of the compiler:
+
+$ git grep -wl '\(linux/input/matrix_keypad.h\|linux/mfd/twl.h\|linux/platform_data/keyboard-spear.h\|linux/platform_data/keypad-nomadik-ske.h\|linux/platform_data/keypad-omap.h\|linux/platform_data/keypad-pxa27x.h\|linux/input/samsung-keypad.h\|\"keypad.h\"\)'  | xargs grep -l \\\<KEY_ | xargs grep -L '\(linux/input-events-code.h\|linux/input.h\)' | grep '\.c$'
+
+arch/arm/mach-pxa/corgi.c
+arch/arm/mach-pxa/littleton.c
+arch/arm/mach-pxa/spitz.c
+arch/arm/mach-pxa/tavorevb.c
+arch/arm/mach-pxa/z2.c
+arch/arm/mach-pxa/zylonite.c
+arch/arm/mach-s3c/mach-crag6410.c
+
+   Arnd
