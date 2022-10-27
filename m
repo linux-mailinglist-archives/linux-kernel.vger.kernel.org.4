@@ -2,105 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D611060EEF3
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 06:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EECF60EEFB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 06:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233705AbiJ0ESE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 00:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
+        id S233801AbiJ0EZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 00:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJ0ER5 (ORCPT
+        with ESMTP id S229691AbiJ0EZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 00:17:57 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C165A0330;
-        Wed, 26 Oct 2022 21:17:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666844277; x=1698380277;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=c2WM3jy4H4MuU5+8696owJAO8S+vMks/LJZNj3CcUtI=;
-  b=l94wk7x/b5r35T7ZXFhj05SI//9AKy0D4514rjvzy7BVqZkzCFvUHIWT
-   Ycu/AgI5/Oy5SckxGpqJrhqXfOLBr8t3EQxOzxxFceYhCEIJBqwcA+k6c
-   wlo+lExZGxjb35ObhDEZ9fhfB8x2oPMwxnrhXhMvKW9Ok1ZUkuj8870Fu
-   7AtcbueRAKWcEmlzSEH6ej891VqPNdOWSmZY+cocZWtDvx8KS6WycV/Ic
-   lvdRFdaCr3oWosWxZf2KTObznjRhCDdsTWZ3zf2ozQW+N7mSnLWVpQAwE
-   yGZQz7bhb9HhkDG7MtK1KWw59jLPxKV1e+BBgPgr57kzpFETZJg/A4KNU
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="306855089"
-X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="306855089"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 21:17:48 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="737518965"
-X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="737518965"
-Received: from holmeskx-mobl.amr.corp.intel.com (HELO [10.209.105.249]) ([10.209.105.249])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 21:17:36 -0700
-Message-ID: <a0f29483-9557-9900-bcb7-ec832dc5d2d1@linux.intel.com>
-Date:   Wed, 26 Oct 2022 21:17:36 -0700
+        Thu, 27 Oct 2022 00:25:36 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5D132B9D;
+        Wed, 26 Oct 2022 21:25:00 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0VT9cxpK_1666844688;
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VT9cxpK_1666844688)
+          by smtp.aliyun-inc.com;
+          Thu, 27 Oct 2022 12:24:51 +0800
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+To:     rafael@kernel.org, lenb@kernel.org, james.morse@arm.com,
+        tony.luck@intel.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        jarkko@kernel.org, naoya.horiguchi@nec.com, linmiaohe@huawei.com,
+        akpm@linux-foundation.org
+Cc:     stable@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, cuibixuan@linux.alibaba.com,
+        baolin.wang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
+        xueshuai@linux.alibaba.com
+Subject: [PATCH] ACPI: APEI: set memory failure flags as MF_ACTION_REQUIRED on action required events
+Date:   Thu, 27 Oct 2022 12:24:45 +0800
+Message-Id: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH 0/5] Parse the PCIE AER structure and set to relevant
- registers
-Content-Language: en-US
-To:     LeoLiu-oc <LeoLiu-oc@zhaoxin.com>, rafael@kernel.org,
-        lenb@kernel.org, james.morse@arm.com, tony.luck@intel.com,
-        bp@alien8.de, robert.moore@intel.com, ying.huang@intel.com,
-        rdunlap@infradead.org, bhelgaas@google.com,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devel@acpica.org
-Cc:     CobeChen@zhaoxin.com, TonyWWang@zhaoxin.com, ErosZhang@zhaoxin.com
-References: <20221027031458.2855599-1-LeoLiu-oc@zhaoxin.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20221027031458.2855599-1-LeoLiu-oc@zhaoxin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There are two major types of uncorrected error (UC) :
 
+- Action Required: The error is detected and the processor already consumes the
+  memory. OS requires to take action (for example, offline failure page/kill
+  failure thread) to recover this uncorrectable error.
 
-On 10/26/22 8:14 PM, LeoLiu-oc wrote:
-> From: leoliu-oc <leoliu-oc@zhaoxin.com>
-> 
-> HEST PCIE AER error source information describes the Uncorrectable Error 
-> Severity, CorrectableError Mask and other aer register's value to write to the
+- Action Optional: The error is detected out of processor execution context.
+  Some data in the memory are corrupted. But the data have not been consumed.
+  OS is optional to take action to recover this uncorrectable error.
 
-/s/CorrectableError/Correctable Error
-/s/aer/AER
+For X86 platforms, we can easily distinguish between these two types
+based on the MCA Bank. While for arm64 platform, the memory failure
+flags for all UCs which severity are GHES_SEV_RECOVERABLE are set as 0,
+a.k.a, Action Optional now.
 
-> bridge's Correctable Error Mask register.
+If UC is detected by a background scrubber, it is obviously an Action
+Optional error.  For other errors, we should conservatively regard them
+as Action Required.
 
-Can you add spec reference?
+cper_sec_mem_err::error_type identifies the type of error that occurred
+if CPER_MEM_VALID_ERROR_TYPE is set. So, set memory failure flags as 0
+for Scrub Uncorrected Error (type 14). Otherwise, set memory failure
+flags as MF_ACTION_REQUIRED.
 
-> 
-> leoliu-oc (5):
->   ACPI/APEI: Add apei_hest_parse_aer()
->   ACPI/APEI: remove static from apei_hest_parse()
->   ACPI/PCI: Add AER bits #defines for PCIE/PCI-X bridges
->   ACPI/PCI: Add pci_acpi_program_hest_aer_params()
->   ACPI/PCI: config pcie devices's aer register
-> 
->  drivers/acpi/apei/hest.c      | 121 +++++++++++++++++++++++++++++++++-
->  drivers/pci/pci-acpi.c        |  92 ++++++++++++++++++++++++++
->  drivers/pci/pci.h             |   5 ++
->  drivers/pci/probe.c           |   1 +
->  include/acpi/actbl1.h         |  69 +++++++++++++++++++
->  include/acpi/apei.h           |   9 +++
->  include/uapi/linux/pci_regs.h |   5 ++
->  7 files changed, 300 insertions(+), 2 deletions(-)
-> 
+Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+---
+ drivers/acpi/apei/ghes.c | 10 ++++++++--
+ include/linux/cper.h     |  3 +++
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+index 80ad530583c9..6c03059cbfc6 100644
+--- a/drivers/acpi/apei/ghes.c
++++ b/drivers/acpi/apei/ghes.c
+@@ -474,8 +474,14 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
+ 	if (sec_sev == GHES_SEV_CORRECTED &&
+ 	    (gdata->flags & CPER_SEC_ERROR_THRESHOLD_EXCEEDED))
+ 		flags = MF_SOFT_OFFLINE;
+-	if (sev == GHES_SEV_RECOVERABLE && sec_sev == GHES_SEV_RECOVERABLE)
+-		flags = 0;
++	if (sev == GHES_SEV_RECOVERABLE && sec_sev == GHES_SEV_RECOVERABLE) {
++		if (mem_err->validation_bits & CPER_MEM_VALID_ERROR_TYPE)
++			flags = mem_err->error_type == CPER_MEM_SCRUB_UC ?
++					0 :
++					MF_ACTION_REQUIRED;
++		else
++			flags = MF_ACTION_REQUIRED;
++	}
+ 
+ 	if (flags != -1)
+ 		return ghes_do_memory_failure(mem_err->physical_addr, flags);
+diff --git a/include/linux/cper.h b/include/linux/cper.h
+index eacb7dd7b3af..b77ab7636614 100644
+--- a/include/linux/cper.h
++++ b/include/linux/cper.h
+@@ -235,6 +235,9 @@ enum {
+ #define CPER_MEM_VALID_BANK_ADDRESS		0x100000
+ #define CPER_MEM_VALID_CHIP_ID			0x200000
+ 
++#define CPER_MEM_SCRUB_CE			13
++#define CPER_MEM_SCRUB_UC			14
++
+ #define CPER_MEM_EXT_ROW_MASK			0x3
+ #define CPER_MEM_EXT_ROW_SHIFT			16
+ 
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.20.1.9.gb50a0d7
+
