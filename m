@@ -2,130 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1842160FFDE
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 20:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7920460FFDF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 20:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236087AbiJ0SLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 14:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
+        id S236240AbiJ0SMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 14:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235822AbiJ0SLV (ORCPT
+        with ESMTP id S235822AbiJ0SL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 14:11:21 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8281AE27
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 11:11:20 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id l190so2075344vsc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 11:11:20 -0700 (PDT)
+        Thu, 27 Oct 2022 14:11:56 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157A0634E
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 11:11:55 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id cb2-20020a056830618200b00661b6e5dcd8so1512376otb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 11:11:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ghnNel5RKIEKXRcO60Bu3zt02+g/FgjrBbtkb59h7Tg=;
-        b=Nl9cV5hYd2NWV2/as5lCXgG/I8Z11C0iPyKcAP0GszGBIl6USl/ycrM5NQHq9QaKsB
-         lGnxoZfgdTx+oAjyswEeet279YE8dI0Rr3tICwth/e9xjOpgr2VA8dX0qKPYoeGbiqkh
-         SQ3ZDkD8lRd/peA5QVJ0LYpGrxJp/3AcCEsIQ=
+        bh=QJtzOhE6/L30ry0uaWLAjIXQQZvTKtHnJVm+sCzBkQc=;
+        b=g1C9zReZykwnHPreZdHmP+71ORV2Kk5V+Mlk2VuFx3UtBigXhYbVhrS7VfZv/pIJkf
+         N5LqRPpKBG9KvN3fl3sMOaY4i5h+zF5JfqRDV9GW96hJ0bzMAf6bLlnUCw1Zu8s0EFIa
+         Lwhxbbgs892tEBtA1qI6zsAFukgcFwpNfOURFMjSoeXNtlBJjw+gmsxRtrmqP9x9WtFq
+         rZloSKRuArJaf832NVz9CmZwD+V3g3hdi7c8yY+uhq1tlx4gQGv4M9oSy4dnWqjDOy/G
+         lvRW1tkd3Gykd2fXWuhtSNJun1XHoaFE6SeqGeml4HkCbqbcyLRekrq8Wz5T2nbJ7agT
+         LmMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ghnNel5RKIEKXRcO60Bu3zt02+g/FgjrBbtkb59h7Tg=;
-        b=ExDYbf++s00FSCQ8/iarXmuotdQkEVcOkaDVZTU8963bkKq4K9lqQUWyBDuXeIQTBx
-         hi6PIsXzzSzJDH64fGh0P1MjX4qlkL9F26yvkSI8xUkVQ2zmzvI8eEn7tbMe7jn9+CGS
-         6eSN7PPJs4OZ2P+ArsQy76ZRE5Rue7VuH+NLkNwX8LVdJE62KS8sKqLdYjBiT7TZTBO6
-         Kh1wCwtSI4vmj0O4hZVCJRpLUIvpmDB4SsXqpRwXVG/Mv6lw4/F5PQ082M+AlXBCza4X
-         LwA53buRsS9T1Rt1MxnFzoNOuO2gZPyQyygzP3OqIbF82Olt+Y95kD76quC4bKsSEl7k
-         s0cA==
-X-Gm-Message-State: ACrzQf2dxyjWBgn+hxWATFCl5BCol/zLjkUUN+mNl+zjPm/R3oeMDhD/
-        ylxOYnwvuzNwIb2YhZcZy7BGi7BVbdJgEDuhHBG1kWYlOsQ=
-X-Google-Smtp-Source: AMsMyM74dMH2UoVHwZH6BpexiKJleb8/1mmL7Ju2e0nr7U59fEqEsXTNrYgjaZxot46p9f92JXvR6Ux0CcO4bSM4nxM=
-X-Received: by 2002:a05:6102:3ed5:b0:386:91a5:a246 with SMTP id
- n21-20020a0561023ed500b0038691a5a246mr28545900vsv.26.1666894279657; Thu, 27
- Oct 2022 11:11:19 -0700 (PDT)
+        bh=QJtzOhE6/L30ry0uaWLAjIXQQZvTKtHnJVm+sCzBkQc=;
+        b=Hz2mmmL3BKV7dWZcHkeG6Dd7s6OEz20fga2JGWMkadJktiI9oyMbW1NA7gFUozrevF
+         Ba8bNYls8PL6Z+1KWVVuMcDIP97VyAqklOVs3kF6/RS+f2wRtw6+Ii7sN7ikeTy58aJ4
+         1y9aGyvnWj5losEmMSnaHg1jcQsfZkUVz4Kwnn0AhDSiiRu/SHCyJ7JMJniqjeGrTzL2
+         5cunJsaTycfbGZcXrB+ABaUO3jMbXdb3Gx1pValpLQ17vutwCacz9TK0jaWyRzsA0aDF
+         KZhfBesqY4csTeAYUJsl+cNCNzNUZ96Ha2UPInUt028hxqR8T0/AR8wfoTWNCnidLNlS
+         NPgw==
+X-Gm-Message-State: ACrzQf3rbH/VW/H/1Ig0WFYPiVxYDmtIwsnil+VrEujiQaeM8Yr0kC9N
+        X5RXZSwPrbtxFkkdY4KIBaQqUXgtaGGtF1GYqwCAUiDG
+X-Google-Smtp-Source: AMsMyM4jjuFrlpqBqyFRhAzTZBKokkpHZpdKZ5Rkt35nql6+sCJLV89w05XmokGXcuGbrRTBVVtbaTEIwG7XIxlogbU=
+X-Received: by 2002:a9d:6645:0:b0:661:b778:41b8 with SMTP id
+ q5-20020a9d6645000000b00661b77841b8mr25371917otm.233.1666894314391; Thu, 27
+ Oct 2022 11:11:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221024220015.1759428-1-nfraprado@collabora.com>
- <20221024220015.1759428-3-nfraprado@collabora.com> <CAGXv+5HJo5x2ieOegmv5vkfh+rTevdR_fri-7PeK+Gd+GXVjNw@mail.gmail.com>
- <20221027143627.nbbketezqunkclxh@notapiano> <CAGXv+5Hki=VsvZrtANujFYseBp0Lxj4WVf3nzT7cx1kkMmWPFg@mail.gmail.com>
-In-Reply-To: <CAGXv+5Hki=VsvZrtANujFYseBp0Lxj4WVf3nzT7cx1kkMmWPFg@mail.gmail.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Thu, 27 Oct 2022 11:11:08 -0700
-Message-ID: <CAGXv+5EZO0+Af-Fmz8JW0SiV+b5He8ZSrinJ3TtaCP0vEoW1Mg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] ASoC: dt-bindings: realtek, rt5682s: Add AVDD and
- MICVDD supplies
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        alsa-devel@alsa-project.org, Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, Derek Fang <derek.fang@realtek.com>,
-        kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
+References: <20221026161935.6491-1-afd@ti.com>
+In-Reply-To: <20221026161935.6491-1-afd@ti.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 27 Oct 2022 14:11:43 -0400
+Message-ID: <CADnq5_OLHbGrq-hTFpyUfawHMwMRAkT84-coAfCweKbPeSZBrA@mail.gmail.com>
+Subject: Re: [PATCH v3] drm: Move radeon and amdgpu Kconfig options into their directories
+To:     Andrew Davis <afd@ti.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 10:48 AM Chen-Yu Tsai <wenst@chromium.org> wrote:
->
-> On Thu, Oct 27, 2022 at 7:36 AM N=C3=ADcolas F. R. A. Prado
-> <nfraprado@collabora.com> wrote:
-> >
-> > On Tue, Oct 25, 2022 at 01:12:49PM -0700, Chen-Yu Tsai wrote:
-> > > On Mon, Oct 24, 2022 at 3:01 PM N=C3=ADcolas F. R. A. Prado
-> > > <nfraprado@collabora.com> wrote:
-> > > >
-> > > > The rt5682s codec can have two supplies: AVDD and MICVDD. They are
-> > >
-> > > The actual chip also has LDO1_IN (for digital core and charge pump)
-> > > and DBVDD (for I/O). However in the Chromebook designs these two
-> > > and AVDD are all provided from the same power rail, through separate
-> > > filter banks.
-> >
-> > What about rt5682 (no s), does that chip also have these same supplies?
+Applied.  Thanks!
 
-(Missed this question)
+Alex
 
-The RT5682 has the same supplies, plus the VBAT one.
-
-ChenYu
-
-> > Also, since you already gave the purpose of these other supplies, could=
- you also
-> > tell the purpose of AVDD, MICVDD and (for rt5682) VBAT? That way I coul=
-d add
-> > some description for them in the binding.
+On Wed, Oct 26, 2022 at 12:31 PM Andrew Davis <afd@ti.com> wrote:
 >
-> As Mark mentioned in his reply, these are quite standard names.
+> Most Kconfig options to enable a driver are in the Kconfig file
+> inside the relevant directory, move these two to the same.
 >
-> AVDD is for the analog bits. MICVDD is for the microphone bias.
-> VBAT is called battery power in the datasheet. The block diagram
-> shows it going through an internal controllable LDO whose output
-> then powers MICVDD. This could be used in designs that don't
-> include a suitable external supply for MICVDD. If MICVDD is provided,
-> then one would turn the internal LDO off.
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+> ---
 >
-> So either VBAT or MICVDD has to be provided.
+> Changes from v2:
+>  - Rebased on latest
 >
-> ChenYu
+> Changes from v1:
+>  - Fix whitespace issue pointed out by Randy
 >
-> > Thanks,
-> > N=C3=ADcolas
-> >
-> > >
-> > > Neither does the datasheet specify the ordering of AVDD, DBVDD, and
-> > > LDO1_IN for power sequencing, just that three should be toggled toget=
-her.
-> > >
-> > > Should we model these? Or wait until some design actually splits thes=
-e?
-> > [..]
+>  drivers/gpu/drm/Kconfig            | 57 ------------------------------
+>  drivers/gpu/drm/amd/amdgpu/Kconfig | 29 +++++++++++++++
+>  drivers/gpu/drm/radeon/Kconfig     | 30 ++++++++++++++++
+>  3 files changed, 59 insertions(+), 57 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+> index fa986075e8fb..9c2d9495cb3c 100644
+> --- a/drivers/gpu/drm/Kconfig
+> +++ b/drivers/gpu/drm/Kconfig
+> @@ -233,65 +233,8 @@ source "drivers/gpu/drm/i2c/Kconfig"
+>
+>  source "drivers/gpu/drm/arm/Kconfig"
+>
+> -config DRM_RADEON
+> -       tristate "ATI Radeon"
+> -       depends on DRM && PCI && MMU
+> -       depends on AGP || !AGP
+> -       select FW_LOADER
+> -       select DRM_DISPLAY_DP_HELPER
+> -       select DRM_DISPLAY_HELPER
+> -        select DRM_KMS_HELPER
+> -        select DRM_TTM
+> -       select DRM_TTM_HELPER
+> -       select SND_HDA_COMPONENT if SND_HDA_CORE
+> -       select POWER_SUPPLY
+> -       select HWMON
+> -       select BACKLIGHT_CLASS_DEVICE
+> -       select INTERVAL_TREE
+> -       # radeon depends on ACPI_VIDEO when ACPI is enabled, for select t=
+o work
+> -       # ACPI_VIDEO's dependencies must also be selected.
+> -       select INPUT if ACPI
+> -       select ACPI_VIDEO if ACPI
+> -       # On x86 ACPI_VIDEO also needs ACPI_WMI
+> -       select X86_PLATFORM_DEVICES if ACPI && X86
+> -       select ACPI_WMI if ACPI && X86
+> -       help
+> -         Choose this option if you have an ATI Radeon graphics card.  Th=
+ere
+> -         are both PCI and AGP versions.  You don't need to choose this t=
+o
+> -         run the Radeon in plain VGA mode.
+> -
+> -         If M is selected, the module will be called radeon.
+> -
+>  source "drivers/gpu/drm/radeon/Kconfig"
+>
+> -config DRM_AMDGPU
+> -       tristate "AMD GPU"
+> -       depends on DRM && PCI && MMU
+> -       select FW_LOADER
+> -       select DRM_DISPLAY_DP_HELPER
+> -       select DRM_DISPLAY_HDMI_HELPER
+> -       select DRM_DISPLAY_HELPER
+> -       select DRM_KMS_HELPER
+> -       select DRM_SCHED
+> -       select DRM_TTM
+> -       select DRM_TTM_HELPER
+> -       select POWER_SUPPLY
+> -       select HWMON
+> -       select BACKLIGHT_CLASS_DEVICE
+> -       select INTERVAL_TREE
+> -       select DRM_BUDDY
+> -       # amdgpu depends on ACPI_VIDEO when ACPI is enabled, for select t=
+o work
+> -       # ACPI_VIDEO's dependencies must also be selected.
+> -       select INPUT if ACPI
+> -       select ACPI_VIDEO if ACPI
+> -       # On x86 ACPI_VIDEO also needs ACPI_WMI
+> -       select X86_PLATFORM_DEVICES if ACPI && X86
+> -       select ACPI_WMI if ACPI && X86
+> -       help
+> -         Choose this option if you have a recent AMD Radeon graphics car=
+d.
+> -
+> -         If M is selected, the module will be called amdgpu.
+> -
+>  source "drivers/gpu/drm/amd/amdgpu/Kconfig"
+>
+>  source "drivers/gpu/drm/nouveau/Kconfig"
+> diff --git a/drivers/gpu/drm/amd/amdgpu/Kconfig b/drivers/gpu/drm/amd/amd=
+gpu/Kconfig
+> index 7777d55275de..5fcd510f1abb 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/Kconfig
+> +++ b/drivers/gpu/drm/amd/amdgpu/Kconfig
+> @@ -1,4 +1,33 @@
+>  # SPDX-License-Identifier: MIT
+> +
+> +config DRM_AMDGPU
+> +       tristate "AMD GPU"
+> +       depends on DRM && PCI && MMU
+> +       select FW_LOADER
+> +       select DRM_DISPLAY_DP_HELPER
+> +       select DRM_DISPLAY_HDMI_HELPER
+> +       select DRM_DISPLAY_HELPER
+> +       select DRM_KMS_HELPER
+> +       select DRM_SCHED
+> +       select DRM_TTM
+> +       select DRM_TTM_HELPER
+> +       select POWER_SUPPLY
+> +       select HWMON
+> +       select BACKLIGHT_CLASS_DEVICE
+> +       select INTERVAL_TREE
+> +       select DRM_BUDDY
+> +       # amdgpu depends on ACPI_VIDEO when ACPI is enabled, for select t=
+o work
+> +       # ACPI_VIDEO's dependencies must also be selected.
+> +       select INPUT if ACPI
+> +       select ACPI_VIDEO if ACPI
+> +       # On x86 ACPI_VIDEO also needs ACPI_WMI
+> +       select X86_PLATFORM_DEVICES if ACPI && X86
+> +       select ACPI_WMI if ACPI && X86
+> +       help
+> +         Choose this option if you have a recent AMD Radeon graphics car=
+d.
+> +
+> +         If M is selected, the module will be called amdgpu.
+> +
+>  config DRM_AMDGPU_SI
+>         bool "Enable amdgpu support for SI parts"
+>         depends on DRM_AMDGPU
+> diff --git a/drivers/gpu/drm/radeon/Kconfig b/drivers/gpu/drm/radeon/Kcon=
+fig
+> index 52819e7f1fca..2267c501f724 100644
+> --- a/drivers/gpu/drm/radeon/Kconfig
+> +++ b/drivers/gpu/drm/radeon/Kconfig
+> @@ -1,4 +1,34 @@
+>  # SPDX-License-Identifier: MIT
+> +
+> +config DRM_RADEON
+> +       tristate "ATI Radeon"
+> +       depends on DRM && PCI && MMU
+> +       depends on AGP || !AGP
+> +       select FW_LOADER
+> +       select DRM_DISPLAY_DP_HELPER
+> +       select DRM_DISPLAY_HELPER
+> +       select DRM_KMS_HELPER
+> +       select DRM_TTM
+> +       select DRM_TTM_HELPER
+> +       select SND_HDA_COMPONENT if SND_HDA_CORE
+> +       select POWER_SUPPLY
+> +       select HWMON
+> +       select BACKLIGHT_CLASS_DEVICE
+> +       select INTERVAL_TREE
+> +       # radeon depends on ACPI_VIDEO when ACPI is enabled, for select t=
+o work
+> +       # ACPI_VIDEO's dependencies must also be selected.
+> +       select INPUT if ACPI
+> +       select ACPI_VIDEO if ACPI
+> +       # On x86 ACPI_VIDEO also needs ACPI_WMI
+> +       select X86_PLATFORM_DEVICES if ACPI && X86
+> +       select ACPI_WMI if ACPI && X86
+> +       help
+> +         Choose this option if you have an ATI Radeon graphics card.  Th=
+ere
+> +         are both PCI and AGP versions.  You don't need to choose this t=
+o
+> +         run the Radeon in plain VGA mode.
+> +
+> +         If M is selected, the module will be called radeon.
+> +
+>  config DRM_RADEON_USERPTR
+>         bool "Always enable userptr support"
+>         depends on DRM_RADEON
+> --
+> 2.37.3
+>
