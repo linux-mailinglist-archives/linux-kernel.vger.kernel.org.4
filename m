@@ -2,118 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA80760F7E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C5460F7E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235767AbiJ0Mrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34356 "EHLO
+        id S235808AbiJ0Mrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234874AbiJ0Mr1 (ORCPT
+        with ESMTP id S235799AbiJ0Mrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:47:27 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003A252FCB;
-        Thu, 27 Oct 2022 05:47:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666874847; x=1698410847;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4i12he+deeRnF8xkAn6beuOyKTTgyW/CZlwDz1jI4YI=;
-  b=Xs9QnggXj1KoyEYuFylQkJhFhmK6t0dDBskNUXjHDUOvm2g3P/rx+xp8
-   asLLOEYGifKNGqntofx6gWfyJLu+qBeVfSkLSgN3km4FEcSQd39hKWFra
-   PTUSz5qQbiR/ri9jQErZAXGmXdoOQA26vJbSM3oD0VgJH1qtR+CUFXqRT
-   KElQnQtuDVkrAfEkhj95aGZUdOwQRJKVYMZso3NPeq2tqqqTG+qLal3Jc
-   HZyqvcybkUfxG/NSA1wkWEiR/cuatVaWKtAQcpEhCCrYeqQ5DKaqwa5OD
-   NT8PZrErMAspwPPIZPxwLcgvw1CzPuzio6Uz6zlPvo+JFpb0xHRV/avSS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="309908133"
-X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
-   d="scan'208";a="309908133"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 05:47:25 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="757686035"
-X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
-   d="scan'208";a="757686035"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 05:47:21 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 796102026C;
-        Thu, 27 Oct 2022 15:47:19 +0300 (EEST)
-Date:   Thu, 27 Oct 2022 12:47:19 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v2 2/5] media: i2c: ov5645: Use runtime PM
-Message-ID: <Y1p91+XxPCB9NWwh@paasikivi.fi.intel.com>
-References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221014183459.181567-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <Y1pphVPw0J97AmW4@paasikivi.fi.intel.com>
- <CA+V-a8szaPjwumrBgOT9gzMKBjY7hk0zfP8RgzUUDfY+BAsogA@mail.gmail.com>
+        Thu, 27 Oct 2022 08:47:36 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BF23168E76
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:47:35 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.32])
+        by gateway (Coremail) with SMTP id _____8AxzNjlfVpjA+ICAA--.11073S3;
+        Thu, 27 Oct 2022 20:47:34 +0800 (CST)
+Received: from loongson-pc.loongson.cn (unknown [10.20.42.32])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxV1fkfVpjFdwFAA--.2819S2;
+        Thu, 27 Oct 2022 20:47:33 +0800 (CST)
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+Subject: [PATCH V2] LoongArch: Fix memsection size
+Date:   Thu, 27 Oct 2022 20:47:32 +0800
+Message-Id: <20221027124732.20837-1-lvjianmin@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+V-a8szaPjwumrBgOT9gzMKBjY7hk0zfP8RgzUUDfY+BAsogA@mail.gmail.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxV1fkfVpjFdwFAA--.2819S2
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7ZrWxXFy8ArWDuw15uF1xZrb_yoW8Gr1xpF
+        929r95Krs8Wa1xur48t345Cry5Kan5u342qF98Z34UAr43Wrs2yr4qywsrZF97Jw48ArWI
+        qFsxXws3ZF98A3DanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b38YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
+        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280
+        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28Icx
+        kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E
+        5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAV
+        WUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY
+        1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
+        0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU
+        74lkDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+On LoongArch, the physical address (0 - 0xfff_ffff) is always memory, which
+is in the low half of the memsection (0 - 0x1fff_ffff) with 512M size, and
+the high half will be a hole which is not memory but I/O registers (of cpu
+and chipset).
 
-On Thu, Oct 27, 2022 at 01:01:52PM +0100, Lad, Prabhakar wrote:
-> Hi Sakari,
-> 
-> On Thu, Oct 27, 2022 at 12:20 PM Sakari Ailus
-> <sakari.ailus@linux.intel.com> wrote:
-> >
-> > Hi Prabhakar,
-> >
-> > One more comment.
-> >
-> > On Fri, Oct 14, 2022 at 07:34:56PM +0100, Prabhakar wrote:
-> > > @@ -1209,12 +1190,16 @@ static int ov5645_probe(struct i2c_client *client)
-> > >
-> > >       dev_info(dev, "OV5645 detected at address 0x%02x\n", client->addr);
-> > >
-> > > +     pm_runtime_set_active(dev);
-> > > +     pm_runtime_get_noresume(dev);
-> > > +     pm_runtime_enable(dev);
-> >
-> > You won't gain anything by eanbling runtime PM here. Just move it to the
-> > end of the function before the rest of the calls. Error handling becomes
-> > more simple.
-> >
-> If I move the above calls below I get the below warning:
-> 
-> [    2.633386] ov5645 0-003c: Runtime PM usage count underflow!
-> 
-> This is because of the last patch which moves ov5645_entity_init_cfg()
-> before registering the subdev. ov5645_entity_init_cfg() calls s_ctrl
-> due to which we are seeing the above message. Please let me know how
-> to proceed on this.
+This situation may cause some issues. For example, during S3, these I/O registers
+will be saved and restored as valid memory pages (pfn_valid() of common version
+returns true for the whole memsection) which will cause exception, especially
+on resume.
 
-Ah. Yes, this is a problem with the usage pattern of
-pm_runtime_get_if_in_use(). But please don't change that.
+To avoid exceptions, we can use 256M memsection size, or use the way as ARM64 to
+walk through all memory memblock to check if a mem pfn is valid which maybe
+lower performance. For simplicity, this patch just use the former way.
 
-You can still move enabling runtime PM later in the function.
+Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
 
+diff --git a/arch/loongarch/include/asm/sparsemem.h b/arch/loongarch/include/asm/sparsemem.h
+index 3d18cdf1b069..05903b40a625 100644
+--- a/arch/loongarch/include/asm/sparsemem.h
++++ b/arch/loongarch/include/asm/sparsemem.h
+@@ -8,7 +8,7 @@
+  * SECTION_SIZE_BITS		2^N: how big each section will be
+  * MAX_PHYSMEM_BITS		2^N: how much memory we can have in that space
+  */
+-#define SECTION_SIZE_BITS	29 /* 2^29 = Largest Huge Page Size */
++#define SECTION_SIZE_BITS	28
+ #define MAX_PHYSMEM_BITS	48
+ 
+ #endif /* CONFIG_SPARSEMEM */
 -- 
-Kind regards,
+2.31.1
 
-Sakari Ailus
