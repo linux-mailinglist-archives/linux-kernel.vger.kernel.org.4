@@ -2,106 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F5860EDF1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 04:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5607D60EDF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 04:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233901AbiJ0C2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 22:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
+        id S233473AbiJ0CfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 22:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234127AbiJ0C15 (ORCPT
+        with ESMTP id S233040AbiJ0CfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 22:27:57 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B580143A45;
-        Wed, 26 Oct 2022 19:27:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666837673; x=1698373673;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=afo/CE2nmd8ntlb2SDjykBmeyxC2sXyG6CNK+1/fCLE=;
-  b=kJ72yHXZBaQRPrBgukF2N3RPqQCkV4Pkq7QdsSMTfs2+d8lFtHR4UiUd
-   MpJv95vc/mzrZ9wd5RprxWDOKeHcDEAX7R0l7cx+wqABOomI2u/9uZh1r
-   FJtfBTGIlLBOe5l5dBs3ncRzDkEPkgxpRdd7M4RxHQzhDfXsSITd2dulK
-   26zYF1Mnbvm0XHRgFhpNJLzoyibtnGNiwq1aQ1lkljCH/KJqDWh66qZUK
-   heFExs+sWpYVpfFlXQB5rs7mPoU3cZUdO3Ap2EiGmFs1eotWCmyKCIgMZ
-   VGukCoc8nUXmo3Xtyu75JgFPULv2dufeyGy2Gzj81gsmLpwXU3hafqm4G
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="287828482"
-X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="287828482"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 19:27:53 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="634732714"
-X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="634732714"
-Received: from jiaxiche-mobl.ccr.corp.intel.com (HELO [10.238.2.23]) ([10.238.2.23])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 19:27:48 -0700
-Message-ID: <4b50da57-f4ec-7bd7-b062-b495612868b4@linux.intel.com>
-Date:   Thu, 27 Oct 2022 10:27:46 +0800
+        Wed, 26 Oct 2022 22:35:05 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7C2D1AF34;
+        Wed, 26 Oct 2022 19:35:02 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 29R2YunU026375;
+        Thu, 27 Oct 2022 04:34:56 +0200
+Date:   Thu, 27 Oct 2022 04:34:56 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/nolibc: always rebuild the sysroot when
+ running a test
+Message-ID: <20221027023456.GA26215@1wt.eu>
+References: <20221026054508.19634-1-w@1wt.eu>
+ <20221026164825.GN5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221026195902.GB24197@1wt.eu>
+ <20221026204138.GQ5600@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH 1/6] x86: KVM: Enable CMPccXADD CPUID and expose it to
- guest
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     kvm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        pbonzini@redhat.com, ndesaulniers@google.com,
-        alexandre.belloni@bootlin.com, peterz@infradead.org,
-        jpoimboe@kernel.org, chang.seok.bae@intel.com,
-        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
-        jmattson@google.com, sandipan.das@amd.com, tony.luck@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, fenghua.yu@intel.com,
-        keescook@chromium.org, jane.malalane@citrix.com, nathan@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>
-References: <20221019084734.3590760-1-jiaxi.chen@linux.intel.com>
- <20221019084734.3590760-2-jiaxi.chen@linux.intel.com>
- <Y1AUhlwWjIkKfZHA@google.com>
- <cce514da-32b4-3b84-cfad-67a05705bc9f@linux.intel.com>
- <Y1lrGgyIcgweVGup@zn.tnic>
-From:   Jiaxi Chen <jiaxi.chen@linux.intel.com>
-In-Reply-To: <Y1lrGgyIcgweVGup@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221026204138.GQ5600@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Oct 26, 2022 at 01:41:38PM -0700, Paul E. McKenney wrote:
+> > > I have queued this.  I expect to push this into the next merge window,
+> > > thus avoiding the need to document the need for "make clean" in my
+> > > pull request.  ;-)
+> > 
+> > Stupid question, is it really worth postponing it, considering that
+> > we've just introduced this series right now ? I mean, if the current
+> > usage is confusing, it's probably better to propose the fix before
+> > 6.1-final ? It's not a new feature here but rather a fix for a recently
+> > introduced one, thus I think it could be part of the next fix series.
+> > Rest assured I don't want to put a mess into your patch workflow, just
+> > asking :-)
+> 
+> You lost me here.
 
+Ah sorry!
 
-On 10/27/2022 1:15 AM, Borislav Petkov wrote:
-> On Wed, Oct 26, 2022 at 11:40:31AM +0800, Jiaxi Chen wrote:
->>> What do you think about moving CPUID_7_1_EAX to be a KVM-only leaf too?  AFAICT,
->>> KVM passthrough is the only reason the existing features are defined.
+> My intent is to push these nolicb patches into the upcoming v6.2
+> merge window:
 > 
-> Yap, looking at the patches which added those 2 feature flags upstream,
-> they don't look like some particular use was the goal but rather to
-> expose it to guests. Besides, AVX512 apps do their own CPUID detection.
+> 2318a710bffbd tools/nolibc: Fix missing strlen() definition and infinite loop with gcc-12
+> 6937b8de8f1c3 tools/nolibc/string: Fix memcmp() implementation
+> e1bbfe393c900 selftests/nolibc: Add 7 tests for memcmp()
+> 3f2c1c45a3a9a selftests/nolibc: Always rebuild the sysroot when running a test
 > 
->> Since CPUID_7_1_EAX has only 5 features now, it is a big waste,       
->> should we move it to KVM-only leaf as Sean suggested. What's your     
->> opinion about this?                                                   
+> I didn't see the problem until I queued the third patch (e1bbfe393c900),
+> and it is still in -rcu, not in v6.1.
 > 
-> Yes, pls do.
-> 
-> And when you do, make sure to undo what
-> 
->   b302e4b176d0 ("x86/cpufeatures: Enumerate the new AVX512 BFLOAT16 instructions")
-> 
-> added.
-> 
-> Thx.
-> 
+> What am I missing here?
 
-Yes, will do this in v2. Thanks for reminding~
--- 
-Regards,
-Jiaxi
+I thought that since some of them are fixes, they would be pushed during
+6.1-rc so that we don't release 6.1 with known defects. For example Rasmus'
+fix for memcmp() or the strlen() fix would IMHO make sense for this
+release since we're aware of the bugs and we have the fixes. The 3rd one
+is indeed an addition and in no way a fix and it can easily wait for 6.2.
+The 4th one is more of a usability fix but I agree that for this last one
+it's debatable, I was mostly seeing this as a possiility to avoid causing
+needless confusion.
+
+Hoping this clarifies my initial question.
+
+Thanks,
+Willy
