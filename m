@@ -2,127 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F5C610395
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97A0361039F
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236945AbiJ0U7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 16:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33352 "EHLO
+        id S235673AbiJ0VAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 17:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236516AbiJ0U6q (ORCPT
+        with ESMTP id S237588AbiJ0U7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 16:58:46 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78847BB390
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:51:00 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id l5so3853015oif.7
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:51:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=a/RXZrnyXMZnlvEbv/57lMhjH53DEG43L7XPPMRhNYw=;
-        b=YK+y8DUf+1F7+Hx2tExzpOAFepFQzEpBuz33Bm7dHiPre37Wq+CstT5H6gl9W9S14S
-         GsUjTUYFlzi7ASZ+agfdxm0hhrcnrTCH85XNZr/QhrNsdXVcJaINdP7F1xc3vviDUh6g
-         CSDKfczLsJ0dekIiB4N3IDgEP9v6QuWKUpODJw4MWLWwF6nHxXXsbcliZwBiaKZ1DyMi
-         GTLT7laLArMx+soPdzyOXVyn/KLkhRNh8MhQU5ambLLhYM+SG8m7RO6v3V/uvQ3Q6+EC
-         0cEU9ksGfoMel7OZcrRx1oha6wCn9/JL/DyXzjnW+NR3Fs4r0/VcrMP8KvyumN5QSqms
-         HieQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a/RXZrnyXMZnlvEbv/57lMhjH53DEG43L7XPPMRhNYw=;
-        b=Wy9Jq9lgrLboxq0O3C6/T1WlwKPT+0FQkGfU0tk4v5LY8UeRxGVKtSeLp5fC09WeZk
-         5dcM/dW0WwNOeBDEIoVHM6LFIRINIYwtUxf0/KVnUBkZb207OffkujMsExmeyhHhvNLA
-         5D/29+RBAd3MKxY0amxAjQ0djs2eOZPsnkqUAjPjcOcw9LTkEijbI/4/3yknNMSK+oNX
-         z/ei1b8w+darrODxGhtOca7LcisGnVVpvBW4PWpbNt79D32D6gIN/kPVsX++YRMXzSH7
-         67gvjmLaHeiZ72IcffwTx4iu0ITcS6t7keOPX9X6PVlTiwiExzDU4Ow//Z8bdR8EZmuU
-         WFNw==
-X-Gm-Message-State: ACrzQf28e1O7ecRRRNMYLmX6N6Iyhed/BvykuvcUVCFFdnd/gOVDdjck
-        NpARlORxYLzr9eBiVEJpO7TkpdoORQGzBaT21VQ=
-X-Google-Smtp-Source: AMsMyM6q5QKHZWk2Q74ziTsW0ZuV8/HJjb0OZSYBzcXVAPQWPp0/8EX98CPYBczqOFglNNMlHMJDyCIx2QSifWCs9GQ=
-X-Received: by 2002:aca:1b0a:0:b0:359:b400:6385 with SMTP id
- b10-20020aca1b0a000000b00359b4006385mr4897915oib.11.1666903859337; Thu, 27
- Oct 2022 13:50:59 -0700 (PDT)
+        Thu, 27 Oct 2022 16:59:37 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D42837FB1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:51:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666903912; x=1698439912;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xAJMSA2cfH2n8wVY+GBEloeMSijoh81s68yyfHIupxg=;
+  b=l2hyFmHPxnk97pUs5rfkyjvf0e0QxpJRgTh6JSlkIhZp5HSxq788ZH6J
+   tO+NlMS+Km22diziV5npzFFp6kSOPMf4CJNV+er2s/kzr1G5PEA8cYMHB
+   RJK+MGqT2YHsGbEUMJggWtZi1iZjGGSK4KIu4qGhYxhMZVgHayLIQIJZ8
+   dhPyX9NskeNqHLk2a6Ackm2qSE+hUvgxWdr0L2DkikgIN+GFMUi20AtFd
+   RQc65kyJz970rtJdG806olzi0bDA9UANZma3L+RUPuMh8hd7nN1NK+a8U
+   m3EJm8yNKfUzyrXqfdvfYHHj/gRxRlHcgf6Bshj1pACjCqu0wur1iDnlZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="394653563"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="394653563"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 13:51:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="610507111"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="610507111"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 27 Oct 2022 13:51:50 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oo9qv-00099x-2K;
+        Thu, 27 Oct 2022 20:51:49 +0000
+Date:   Fri, 28 Oct 2022 04:51:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:perf/urgent] BUILD SUCCESS
+ cb6c18b5a41622c7a439508f7421f8766a91cb87
+Message-ID: <635aef41.3/+uCoy9lPWkDuYq%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Received: by 2002:a05:6850:7f87:b0:378:74e3:5749 with HTTP; Thu, 27 Oct 2022
- 13:50:58 -0700 (PDT)
-From:   "Ms. Ella Vinegar" <ellavan212@gmail.com>
-Date:   Thu, 27 Oct 2022 21:50:58 +0100
-Message-ID: <CAGNBo7DqwQxXHiprA8jVKphOC4=bjvq7x+ekq39=NFC6mgYD6A@mail.gmail.com>
-Subject: GOOD DAY
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.5 required=5.0 tests=ADVANCE_FEE_5_NEW,BAYES_99,
-        BAYES_999,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:234 listed in]
-        [list.dnswl.org]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 0.9999]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 0.9999]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [ellavan212[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ellavan212[at]gmail.com]
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  1.0 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
-        *      419)
-        *  2.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good day to you, my dear friend,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/urgent
+branch HEAD: cb6c18b5a41622c7a439508f7421f8766a91cb87  perf/mem: Rename PERF_MEM_LVLNUM_EXTN_MEM to PERF_MEM_LVLNUM_CXL
 
-How are you doing today?
+elapsed time: 721m
 
-Please I would want you to read my message very well,
+configs tested: 58
+configs skipped: 2
 
-My name is Mrs. Ella Vinegar, 56yrs old, I am originally from
-Switzerland. But my late husband is from Burkina Faso. I am someone
-suffering from (cancer) before my late husband died.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-I contacted you personally because the doctors told me few days ago,
-that I have few months to live before I die.  I've decided to contact
-you to help me develop divine mission projects in your country.
-(Charity projects)
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                        randconfig-a006
+x86_64                         rhel-8.3-kunit
+i386                          randconfig-a001
+x86_64                        randconfig-a002
+m68k                             allyesconfig
+i386                          randconfig-a003
+x86_64                              defconfig
+m68k                             allmodconfig
+x86_64                               rhel-8.3
+arc                              allyesconfig
+i386                          randconfig-a005
+x86_64                           allyesconfig
+alpha                            allyesconfig
+x86_64                        randconfig-a004
+i386                                defconfig
+sh                               allmodconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+riscv                randconfig-r042-20221026
+x86_64                        randconfig-a013
+powerpc                          allmodconfig
+ia64                             allmodconfig
+arc                  randconfig-r043-20221026
+x86_64                        randconfig-a011
+arm                                 defconfig
+x86_64                        randconfig-a015
+arc                                 defconfig
+i386                          randconfig-a016
+s390                 randconfig-r044-20221026
+s390                             allmodconfig
+arm64                            allyesconfig
+alpha                               defconfig
+arm                              allyesconfig
+i386                             allyesconfig
+s390                                defconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+s390                             allyesconfig
 
-I have funds that my late husband left in the bank, and we have no
-child before my husband's death. I want you to use the fund to develop
-charity projects for the betterment of lives of orphan children,
-widows, homeless people, church project or schools and any other way
-that you know to help people that need help in order to make the world
-better. I am confident to contact you today as I wish you can
-understand me.
+clang tested configs:
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+x86_64                        randconfig-a003
+hexagon              randconfig-r045-20221026
+i386                          randconfig-a004
+i386                          randconfig-a006
+hexagon              randconfig-r041-20221026
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+i386                          randconfig-a015
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a011
 
-I want to know if we can collaborate to help the orphans, the needy
-people and disability who are suffering. Can I trust you with the
-funds? I'm currently going through some difficulties due to unforeseen
-life circumstances. Please get back to me if we can collaborate to
-help the less privileged, and if you can be trusted with the funds and
-the charity projects.
-
-I want you to respond for more details about the charity project.
-
-Your sister in the Lord,
-Mrs. Ella Vinegar
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
