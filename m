@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D45610022
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 20:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 470A161002B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 20:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235154AbiJ0SZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 14:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
+        id S235626AbiJ0S0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 14:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235842AbiJ0SYz (ORCPT
+        with ESMTP id S235874AbiJ0S0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 14:24:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB4831DED;
-        Thu, 27 Oct 2022 11:24:52 -0700 (PDT)
+        Thu, 27 Oct 2022 14:26:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59F74DB65;
+        Thu, 27 Oct 2022 11:26:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BBCCDB82752;
-        Thu, 27 Oct 2022 18:24:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 366AEC433D6;
-        Thu, 27 Oct 2022 18:24:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF2BDB824BC;
+        Thu, 27 Oct 2022 18:26:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FFB9C433D6;
+        Thu, 27 Oct 2022 18:26:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666895089;
-        bh=59Pw40a4Cn+LbgrGbl89Wp804IafCpdymwLTbzmtb8Q=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=PwetMeddijuZSfdb3qiz+ALrl6FPHsc1Ei/dIxhQiaQxHCeRRdYV9+Hpiq/qZghfF
-         jcYKLCDWLeYWlzaMjMRMc116RahtvDMmn5AHskY8stRDqNNPRWHfFUtbG7G+iYCglM
-         VtMEI+FWgRCBrujaz+mRJPPa5t7E8pEFJJ2ihiJHqKn42Gk19m82BVaHCAjypsdDeY
-         e7CNhKZU/TtBq5flOmTRUm9xNx/38qUmYnMjpWYMBeryAUNHDynM25IGSn4fQk5pmA
-         VTkcAcoCRwM+2vKazzC52qq71AmrnfB8Oc6KgA+ayo4fhRabQkyDPrEjTbLBkActAQ
-         huWBKCeodfluA==
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1666895190;
+        bh=wma9TzoIDA+DTOwALcOueK9AiE1EyfWmz+CoJNPRnH0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=jNT56GMvod5SPSxbUukNY+ZqvN66AYjBCtQLdWwe2wnXat0J100nPxOdMLu5ZrJaS
+         D2iNz5X9jlcJq7XsmyA/SF1jar5yzAWrJSZuheYMP/Z04n9FtKWNt6qbiJgV3GKWmY
+         29NoMigCwJ+L/yfnn1fmTtQpBXZCtKu0gbDEdyD6+lp5iXvPSjTsK2UKUmMghzZYxN
+         BxM3BQ6sR6nLV7y8lRFGXJ1gS+NnRdnp0wKELm3GA6YrqfV9042XyA00boiHf49ve7
+         TtTUglzyiZZGV5kvZmnMZ727AUC0EuDHBZlBCfRoWqQv4ygugYuLsiSRvSfsa/NL+s
+         qlonCLkq99x+A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 0419B5C0A59; Thu, 27 Oct 2022 11:26:30 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 11:26:29 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/nolibc: always rebuild the sysroot when
+ running a test
+Message-ID: <20221027182629.GF5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221026054508.19634-1-w@1wt.eu>
+ <20221026164825.GN5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221026195902.GB24197@1wt.eu>
+ <20221026204138.GQ5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221027023456.GA26215@1wt.eu>
+ <20221027170453.GA5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221027171307.GA30081@1wt.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <e5009a33-1f71-1fe3-3a06-98bba031fdf0@linaro.org>
-References: <20221026190441.4002212-1-quic_molvera@quicinc.com> <20221026190441.4002212-2-quic_molvera@quicinc.com> <e5009a33-1f71-1fe3-3a06-98bba031fdf0@linaro.org>
-Subject: Re: [PATCH v3 1/5] dt-bindings: clock: Add QDU1000 and QRU1000 GCC clock bindings
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Taniya Das <quic_tdas@quicinc.com>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Date:   Thu, 27 Oct 2022 11:24:45 -0700
-User-Agent: alot/0.10
-Message-Id: <20221027182449.366AEC433D6@smtp.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221027171307.GA30081@1wt.eu>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,31 +62,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Krzysztof Kozlowski (2022-10-27 08:54:51)
-> On 26/10/2022 15:04, Melody Olvera wrote:
-> > +description: |
-> > +  Qualcomm global clock control module which supports the clocks, rese=
-ts and
-> > +  power domains on QDU1000 and QRU1000
-> > +
-> > +  See also:
-> > +  - include/dt-bindings/clock/qcom,gcc-qdu1000.h
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - const: qcom,gcc-qdu1000
-> > +      - const: syscon
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: Board XO source
-> > +      - description: Sleep clock source
-> > +      - description: PCIE 0 Pipe clock source
-> > +      - description: PCIE 0 Phy Auxiliary clock source
-> > +      - description: USB3 Phy wrapper pipe clock source
-> > +    minItems: 2
->=20
-> Why the clocks are optional?
+On Thu, Oct 27, 2022 at 07:13:08PM +0200, Willy Tarreau wrote:
+> On Thu, Oct 27, 2022 at 10:04:53AM -0700, Paul E. McKenney wrote:
+> > > > My intent is to push these nolicb patches into the upcoming v6.2
+> > > > merge window:
+> > > > 
+> > > > 2318a710bffbd tools/nolibc: Fix missing strlen() definition and infinite loop with gcc-12
+> > > > 6937b8de8f1c3 tools/nolibc/string: Fix memcmp() implementation
+> > > > e1bbfe393c900 selftests/nolibc: Add 7 tests for memcmp()
+> > > > 3f2c1c45a3a9a selftests/nolibc: Always rebuild the sysroot when running a test
+> > > > 
+> > > > I didn't see the problem until I queued the third patch (e1bbfe393c900),
+> > > > and it is still in -rcu, not in v6.1.
+> > > > 
+> > > > What am I missing here?
+> > > 
+> > > I thought that since some of them are fixes, they would be pushed during
+> > > 6.1-rc so that we don't release 6.1 with known defects. For example Rasmus'
+> > > fix for memcmp() or the strlen() fix would IMHO make sense for this
+> > > release since we're aware of the bugs and we have the fixes. The 3rd one
+> > > is indeed an addition and in no way a fix and it can easily wait for 6.2.
+> > > The 4th one is more of a usability fix but I agree that for this last one
+> > > it's debatable, I was mostly seeing this as a possiility to avoid causing
+> > > needless confusion.
+> > > 
+> > > Hoping this clarifies my initial question.
+> > 
+> > Very much so, thank you!
+> > 
+> > I was not considering the bug fixed by the first two patches to be
+> > serious, my mistake, apologies for my misclassification.
+> 
+> No worries, I wasn't probably clear upfront about the purpose.
+> 
+> > Given that background, I would rebase these two, test them, and send
+> > off a pull request, probably early next week.
+> > 
+> > 2318a710bffbd tools/nolibc: Fix missing strlen() definition and infinite loop with gcc-12
+> > 6937b8de8f1c3 tools/nolibc/string: Fix memcmp() implementation
+> 
+> Perfect, thank you!
+> 
+> > I would push the other two commits into the upcoming merge window.
+> 
+> OK!
+> 
+> > Or might the discussion between you and Rasmus result in changes to
+> > either of those first two commits?  If so, I should of course wait for
+> > that discussion to resolve.
+> 
+> We'll see, but in any case it would just be a minor detail, but I'll
+> give you a quick response so that you don't have to deal with multiple
+> versions of the patch, we all know that it's painful.
 
-They should not be optional. They're always there.
+If I don't hear otherwise from you by the end of tomorrow (Friday),
+Pacific Time, I will rebase those two patches in preparation for sending
+a pull request for the regression.  I will of course run the pull-message
+text past you before sending the pull request.
+
+							Thanx, Paul
