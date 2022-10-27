@@ -2,106 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA62A60EE7D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 05:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6E660EE84
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 05:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233932AbiJ0DWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 23:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
+        id S233626AbiJ0D0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 23:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233553AbiJ0DWR (ORCPT
+        with ESMTP id S232865AbiJ0D0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 23:22:17 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACCB8FD72
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 20:22:12 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id d59-20020a17090a6f4100b00213202d77e1so4991710pjk.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 20:22:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CAdp5j8ulbSqSMP5WhQQ65OXGcxKYysV58XuMaNjzUY=;
-        b=gy3HWQyvWny4e6D1XXtgdsCcjIx6Rzbj2W5EZH2Iy54P7OmKCs88Rlz49SuKony4Jf
-         opZrpoerdjb//gzLAO5Ny+kSF1OSL3hdDDJOqLyHlHs3JfNCDsD3pDo6ZZMEZTZfWyT+
-         0QYIUMsF3UdyP9syDq9uDbz0SQqub8LVZBve4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CAdp5j8ulbSqSMP5WhQQ65OXGcxKYysV58XuMaNjzUY=;
-        b=iCCfan5Y55rdyHXvQAdY8DMzTeR8MSIiIv3BO9ofC7CXVYGX6wAxUjy+Ig26Muhl1K
-         KgmR5s6zfRfSVw8z24OwHUnJPHCvc1EexsKsqIK5ohU3z8pQXbkQwCtYSV2sh3FieONY
-         aApZ3Kv69jYZAKNeJmda2aa5Ns1t9wpaSoOMzD/wWr85XoegVEDghHP0WHG9uulhMas7
-         WcbngljMj1XOfDFjdIW/zIxHrP6cLOqz8DDdXqWbo+jH5rEW4BxvFxQWLRSWq4eT5Z8U
-         j9P/+5O6U9YhrjqvkCsjz5u6CWul/MFAMXVpr2G8oaQqtIslplCUIckAjfjeaxCrBn8L
-         WYMQ==
-X-Gm-Message-State: ACrzQf2Y2R5AcVwc8pibg2Ehwn5NQArFJvRtbNyOxUDvKEVgvsVbMcBs
-        qWqCYftY7zCSA1RyHbKnrgYjTA==
-X-Google-Smtp-Source: AMsMyM7ISTd7H5l+G+sR0cdRQnp4XV0OGpkEeWvzyTBCL/fYpUTGshzgfY1/BntVE31+WRiqRg0a9A==
-X-Received: by 2002:a17:902:708a:b0:183:88dd:1d36 with SMTP id z10-20020a170902708a00b0018388dd1d36mr45241452plk.166.1666840932382;
-        Wed, 26 Oct 2022 20:22:12 -0700 (PDT)
-Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:3790:5571:53c5:e671])
-        by smtp.gmail.com with ESMTPSA id y129-20020a633287000000b00464aa9ea6fasm62884pgy.20.2022.10.26.20.22.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 20:22:11 -0700 (PDT)
-From:   Pin-yen Lin <treapking@chromium.org>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Pin-yen Lin <treapking@chromium.org>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH] drm/bridge: it6505: Fix return value check for pm_runtime_get_sync
-Date:   Thu, 27 Oct 2022 11:21:49 +0800
-Message-Id: <20221027032149.2739912-1-treapking@chromium.org>
-X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
+        Wed, 26 Oct 2022 23:26:14 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DF54D828;
+        Wed, 26 Oct 2022 20:26:11 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MyWDB4mkPzmVY0;
+        Thu, 27 Oct 2022 11:21:14 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 27 Oct 2022 11:26:08 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 27 Oct 2022 11:26:07 +0800
+Subject: Re: [PATCH v7 00/11] kallsyms: Optimizes the performance of lookup
+ symbols
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-modules@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Ingo Molnar" <mingo@redhat.com>
+References: <20221017064950.2038-1-thunder.leizhen@huawei.com>
+ <Y0/nEngJF6bbINEx@bombadil.infradead.org>
+ <ad9e51c6-f77d-d9e9-9c13-42fcbbde7147@huawei.com>
+ <Y1gisUFzgt1D1Jle@bombadil.infradead.org>
+ <77f1c8f0-5e67-0e57-9285-15ba613044fb@huawei.com>
+ <Y1mEiIvbld4SX1lx@bombadil.infradead.org>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <4f06547b-456f-e1ec-c535-16577f502ff1@huawei.com>
+Date:   Thu, 27 Oct 2022 11:26:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y1mEiIvbld4SX1lx@bombadil.infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-`pm_runtime_get_sync` may return 1 on success. Fix the `if` statement
-here to make the code less confusing, even though additional calls to
-`it6505_poweron` doesn't break anything when it's already powered.
 
-This was reported by Dan Carpenter <dan.carpenter@oracle.com> in
-https://lore.kernel.org/all/Y1fMCs6VnxbDcB41@kili/
 
-Fixes: 10517777d302 ("drm/bridge: it6505: Adapt runtime power management framework")
-Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+On 2022/10/27 3:03, Luis Chamberlain wrote:
+> On Wed, Oct 26, 2022 at 02:44:36PM +0800, Leizhen (ThunderTown) wrote:
+>> On 2022/10/26 1:53, Luis Chamberlain wrote:
+>>> This answers how we don't use a hash table, the question was *should* we
+>>> use one?
+>>
+>> I'm not the original author, and I can only answer now based on my understanding. Maybe
+>> the original author didn't think of the hash method, or he has weighed it out.
+>>
+>> Hash is a good solution if only performance is required and memory overhead is not
+>> considered. Using hash will increase the memory size by up to "4 * kallsyms_num_syms +
+>> 4 * ARRAY_SIZE(hashtable)" bytes, kallsyms_num_syms is about 1-2 million.
+>>
+>> Because I don't know what hash algorithm will be used, the cost of generating the
+>> hash value corresponding to the symbol name is unknown now. But I think it's gonna
+>> be small. But it definitely needs a simpler algorithm, the tool needs to implement
+>> the same hash algorithm.
+> 
+> For instance, you can look at evaluating if alloc_large_system_hash() would help.
 
----
+OK, I found the right hash function. In this way, the tool does not need to consider
+the byte order.
 
- drivers/gpu/drm/bridge/ite-it6505.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+include/linux/stringhash.h
 
-diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-index b929fc766e24..21a9b8422bda 100644
---- a/drivers/gpu/drm/bridge/ite-it6505.c
-+++ b/drivers/gpu/drm/bridge/ite-it6505.c
-@@ -2699,7 +2699,7 @@ static void it6505_extcon_work(struct work_struct *work)
- 		 * pm_runtime_force_resume re-enables runtime power management.
- 		 * Handling the error here to make sure the bridge is powered on.
- 		 */
--		if (ret)
-+		if (ret < 0)
- 			it6505_poweron(it6505);
- 
- 		complete_all(&it6505->extcon_completion);
+/*
+ * Version 1: one byte at a time.  Example of use:
+ *
+ * unsigned long hash = init_name_hash;
+ * while (*p)
+ *      hash = partial_name_hash(tolower(*p++), hash);
+ * hash = end_name_hash(hash);
+
+
+> 
+>   Luis
+> .
+> 
+
 -- 
-2.38.0.135.g90850a2211-goog
-
+Regards,
+  Zhen Lei
