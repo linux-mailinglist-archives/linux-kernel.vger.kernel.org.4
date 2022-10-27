@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED4960F8A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5739B60F8A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235272AbiJ0NK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 09:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
+        id S236107AbiJ0NLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 09:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236078AbiJ0NKY (ORCPT
+        with ESMTP id S236087AbiJ0NKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 09:10:24 -0400
+        Thu, 27 Oct 2022 09:10:41 -0400
 Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2066.outbound.protection.outlook.com [40.107.105.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6443451A1D;
-        Thu, 27 Oct 2022 06:10:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEBC645F3;
+        Thu, 27 Oct 2022 06:10:19 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m0SdoCoxiX2xR8xlZFoHgRLB9n1HxGUs/cIdEXBsvfyV3E2FcMOvF4rO760tuCrkRF6r+l8imOqx8WKryj4gwLTAt4lRhbQMf0N4XcDm0McX48k7rGBU7uzNrktDsldhkdKtZfrlvavayYGvhcSwp0bam5PWRZOLu0aTBLSWPQwOSV2BTcPltJHZdgE5dNB8wWAge6IXwJiwrPZXKCDJ55v9sZh25g5ZPkjQvZo7sZbvxNhr4K65iJ8pKrvRSeSyaSMft0Qv52SRQFOTJkZ4VC1bwhD6CUcNTMAu4rJaOxDllxd9ecG0vQfYkHw7iHMpwpkL+aayqzWu8kmwceCegw==
+ b=V+si1J4+E+DlttlP2F8QMtW85bLSZKeMIt4Jc1b/CCryI0fAQXdvAdHxEYQbcxv9TasFBvrJ6UPPdqL9q244VYhWGDRlYNXZuei1Pri1fY2kMwrgWxW7WXGpe2yUXYAO+gvACfGuud7hibBJB1Y80/etA4qyhYKSM+0U9JdIEIr8+fQpo70nGPSSC3UpFr16rcmhysWmHjGwzHfhm8FKfSq2XfKJi2qjU9FizgIjcxWbnYtFgXn6I7Vkf6bRp3p7JYKpYXWqlj4kQJMI58CeculKXPObxpvGPteuaqI0wmh0Su6fN0ftTRviVMnKnAVV/sj415CikDrcyC/XrRFy9A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Zx7rvzpGKveheuABrjJhPyG94a0owwancSk7/48YbcE=;
- b=J/QvjtCJ48Y6CxF21yw48iLhM911TflpGi8Oj2eVlti3Ta+78le2xKOJIrk12QsksO8wRrop/dMSADjwX1m1rK2BmrGWFUWi0no3NVw4kcds00rrQiIJoHrU9XLPbI65epMPeEIb8Sm7Px97Q7GcaituQXFgipO9Q3gX6uzNsxw8Sa02azCaQlEVVQdhWTwFW94yVKtaVcaDcHXEVNuasayEkotWugX0mqexLlnYxMKuCasHN9WrWFdSY1gi7SUd96vebgtlSomxnqvlqrCq7fg/zNmz0xb/ksl0zfJ4NUouFNNgpq6hbdpeidl0hiuPe2Tm4DAROBSB7kRNfr9YXQ==
+ bh=RQZfuvJnXI/eFijRUp7QGqWSIetSaEZLmeIl9T5qHUQ=;
+ b=SXmYizy2/71YoR+w0R7xKG7ywFsndbHvzaml6Hx5jHXgcGw2lUObQWxR/+WAC3AsmEGw+WWJq4mIoXIQXVBre6byj7BcaxOsqdOmo1eVzg0elZuhdv4wbkR7XQcxw8rr2X4i1eSALJzSgGTaUqAAG2DanonSj4LnNh5HrI09BYC3jz8MffypZUWMvDU0m+8A0rNLVCIM5R7JxRF6aU1e/qVhalSit3YR90DcqothrsMJLxA0UvQ4pPEcgyZqsmxbjAAkAQoBumR/hm4VKlc94ImXdSArKaVXdzVdnt97SbIfkdhcFpDrf3yxgOtDvF8N10oQK7yq/VBl8ZvZiiYaRQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Zx7rvzpGKveheuABrjJhPyG94a0owwancSk7/48YbcE=;
- b=BHPE+tVwHGj/DRGK100H7Wt8BTCTFvaACK99qIFKj/Ckt6R4pVpYtkwaD/jQEQPJM4VuceeHI7fMVJDEo8uYlfRijAwTfJPR9SU1nD57KP77yYVwok2XKtTfpxVDtw7cOLSJ2IHMkoKn9M2lU27Helkea0+zoyndu7pwmz4HVc0=
+ bh=RQZfuvJnXI/eFijRUp7QGqWSIetSaEZLmeIl9T5qHUQ=;
+ b=Zwsu+sAgzcMOJsfqSk/IgJ4xksg03Oi7Z7fFfQb0YAVgNlDMtPMLHYsaTMt1IuGRAHXIRxPcggJUUPBW2ngpo1z5Qm9ie6sOn1bzFrn8kBip6w5bINS4V6xJfS3SVrLIKdXz8NzEXYLeJKwO+HLd2bQNPuu3EStNrBDjiBHJ7Tk=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from PAXPR04MB9185.eurprd04.prod.outlook.com (2603:10a6:102:231::11)
  by AM7PR04MB6807.eurprd04.prod.outlook.com (2603:10a6:20b:104::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Thu, 27 Oct
- 2022 13:10:10 +0000
+ 2022 13:10:18 +0000
 Received: from PAXPR04MB9185.eurprd04.prod.outlook.com
  ([fe80::b1ab:dd4f:9237:d9f8]) by PAXPR04MB9185.eurprd04.prod.outlook.com
  ([fe80::b1ab:dd4f:9237:d9f8%3]) with mapi id 15.20.5769.014; Thu, 27 Oct 2022
- 13:10:10 +0000
+ 13:10:18 +0000
 From:   Shenwei Wang <shenwei.wang@nxp.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -55,66 +55,66 @@ Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
         Shenwei Wang <shenwei.wang@nxp.com>,
         Peng Fan <peng.fan@nxp.com>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        imx@lists.linux.dev, kernel test robot <lkp@intel.com>
-Subject: [PATCH v4 4/5] pinctrl: freescale: add pad wakeup config
-Date:   Thu, 27 Oct 2022 08:08:58 -0500
-Message-Id: <20221027130859.1444412-5-shenwei.wang@nxp.com>
+        imx@lists.linux.dev
+Subject: [PATCH v4 5/5] gpio: mxc: enable pad wakeup on i.MX8x platforms
+Date:   Thu, 27 Oct 2022 08:08:59 -0500
+Message-Id: <20221027130859.1444412-6-shenwei.wang@nxp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221027130859.1444412-1-shenwei.wang@nxp.com>
 References: <20221027130859.1444412-1-shenwei.wang@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR05CA0139.namprd05.prod.outlook.com
- (2603:10b6:a03:33d::24) To PAXPR04MB9185.eurprd04.prod.outlook.com
+X-ClientProxiedBy: SJ0PR05CA0044.namprd05.prod.outlook.com
+ (2603:10b6:a03:33f::19) To PAXPR04MB9185.eurprd04.prod.outlook.com
  (2603:10a6:102:231::11)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PAXPR04MB9185:EE_|AM7PR04MB6807:EE_
-X-MS-Office365-Filtering-Correlation-Id: 839ee7eb-5045-4832-410c-08dab81c9285
+X-MS-Office365-Filtering-Correlation-Id: bbe4d484-b5b5-4daf-9c43-08dab81c980e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xD1hzBs22KfZ8/ZPDhGz3VN20AjCfwtQRxeD2izuBNKfQ63c+ZGoi7gA/EMOJ+Qdmw97qOGzQtz84KJXz4eLp+LKLkzAGhlx47gsu8VQzRNrYB3XeNgrdWrolZtHfondLcne5jO5hHHItlNlfZo44Xw1xP9RXTGclQD+vkmrk8i3r0DBRTfaJ9nNfL7Pn+q8blUcWzWWYxCSZO+Y+4UDww44qqyz0Gq1mMqyjx6utwymV5Mi07oR8wY4GwP65KO9Sr/ug02nBop+1RiqGoORzCAQ0YrEeqQt78k7G0rFXUVgbR321/TaIqA6gPCANhPDCbAWlCdKqIshvl/HNL8I+WFmF+DUqtEcUyojcZYPmcQUa/Ktbzr28bJ2FHESMKRB1KybAbgLfRY3bD0n29B5xyDy56mlF/IJnUHWU58UreqzTq+WdUHYudDF9JdtdTs1d/kuePg74g1lKp1n6a3bIT9HwlxOysFY74zGD2RV5An6n9IHtC9cUb04AUujK7WmjEG8tg+x/gisD4IznVWEGXSOGwHRQ1/bhmsKcPkzJxcKsaLaCxGgl7LdixMgxgSR2zj2wUFlFSrdbXQevHs9F3XaQ65Bg67ECLlu4FJf+QxPo5aAN79k1sxO8k8+ZFNSGuKq6fV0q5/HTjC3EZU2u0Xj5pXtbm4+gQvdHP8Va697oLDMwzNHh+Bs5tlH/HoDT9QSjQ0spvU0myj6WkB6fu48WX9l5WfaYJ8J8+NyOB3eZfgzYJHQN34BSoCf3Fb2OQGMBnTz+mQTnpt71LPL1A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(396003)(39860400002)(366004)(346002)(451199015)(55236004)(1076003)(6512007)(26005)(52116002)(6666004)(6506007)(478600001)(186003)(2616005)(44832011)(2906002)(6636002)(5660300002)(54906003)(8676002)(110136005)(6486002)(316002)(41300700001)(66556008)(7416002)(66946007)(66476007)(4326008)(8936002)(36756003)(86362001)(38350700002)(38100700002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ZoKjo7GUdyH/MN7V9NB08SogM3y8M45pXZqqqInG5i3kzezRHKDYST4uci+oWCJFdcoini8tpnKqbqWFasyHxL5CrWwDgp8Rb3dSSQ8hE1Ww7p7Kx4HtPcdD8VvsEmdAikcFIqbpG/c+OzW/TJn0rwHMg2zs6Rtz34NJ7TW/d2LQ3aDNHRng/MD7ND+o092s/6M0gr2qrEoUuwz+C2nT0JUjp3QRHLcrG1Y3TjukWrWKMxX7B8zSXbtLxKs+wWJAC4fpDURv2hxxz1ZlY8LYEBOC20iVgwdIzb1znWz293ExmjW8xHNsuxvwPXiYg9u8xKlNsHmlDf9F8wLe1P2yLXcaLBFG6aVKLUzmy7My5dbXacL1hWXL3C1dDQyQdoyPTV0kCoXn6Xo7vzM7nhg+05C+iShJ0PyruLBAzzaAKHrQn6nPTswvorw1bKF/kIOHOPZmLC8RCqYtukPmsCcSXxvxi91G1dSEMD/fcAiPKtQgGOCdgH5JHXP+NpMYN6EreZhzh/PCi4cz44ZMKD3fLChTKQ+Re1TOOFlYjCwethRezlATQHp252xPffH2xF3n5ZTle9ZgggLfAK+xIwEXxjUBX3+dBJLPAUa8NWDozh1DTeWhC0O3n4GyuycEGUnXBy2N8aUpsckrZmdg/dXIaBlVeLT8MN8zcq4XdK0Gx/0rHY/Yb+SIz8e6QtKD04XwdRdPG/hMYoGgI3/7tMcWHYX6n2VR7Mr4j3NsC3h9kRS7z8ugw0aq14vOOGkPj6Hoam9Cw+jZDlIjROlwpNc1VA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(396003)(39860400002)(366004)(346002)(451199015)(55236004)(1076003)(6512007)(26005)(52116002)(6666004)(83380400001)(6506007)(478600001)(186003)(2616005)(44832011)(2906002)(6636002)(5660300002)(54906003)(8676002)(110136005)(6486002)(316002)(41300700001)(66556008)(7416002)(66946007)(66476007)(4326008)(8936002)(36756003)(86362001)(38350700002)(38100700002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mEwZ9oScSjYGIJpReP+h3HJiifzWEEKMnmOAYTOV4KGKSDJZe7xC2ExYWlsB?=
- =?us-ascii?Q?7FHCuudA5BXaNH5k6xw4ihJjRiaxR4h4Si0paxRH3vvyKBoVwOgd2GjkNOkD?=
- =?us-ascii?Q?oMAbx8WqxaFBWPuBQVJmb/7oHWPs+bV+nEg7Hx5gmsya7OPR8vTm6KY4B3Tg?=
- =?us-ascii?Q?CIGMjQm73cT3wGmiTzetjOdrx1dhxiuftKbI7fXQx379FNHbKcUPQUK4u4RY?=
- =?us-ascii?Q?5f+e8nBlEmMJKodR9fssZaI9gkX8yITU9JB4/9d13Jyng3UUkcDavdUINbo9?=
- =?us-ascii?Q?smtQlmjpOLcIZ8Ypm4eDSD0lZU2X19CpK4VzWp2hO9YwI+Ig362DnpNw9TeJ?=
- =?us-ascii?Q?dCy3BGZuPun5Cx8iwzeOGG4ha61GG9cGfWdCjrB/56d0/gbuTcPqOwZQWFdN?=
- =?us-ascii?Q?C62M+Jc3L5F4gUENkZ199gGob76Fzniso0kzsJ/2clUCu3/XQHun+AjravkE?=
- =?us-ascii?Q?YowC6Kx4Yufp0Wbm54ullcx9GkUEjusQhKlXCq8wvd459fv2GPHNXO1dLxJ9?=
- =?us-ascii?Q?HOGfgQ8nBxVhXUpEOsVksn8siBIKQxeTo0YkBkRYW/agpz0swPOwdngGV9JR?=
- =?us-ascii?Q?ghP8cLB8XPbencQxZR7jaT7AYGFIIk4Objnob5pnmI25eziuXN8+IcrtI2CV?=
- =?us-ascii?Q?HHe7cBC3+1xIytsE36EEjVwt+4R9vwHYBd/UoUisSnTUgETTmMbFGTlcMrx4?=
- =?us-ascii?Q?BE29uiy+EAWFz5+cf8C24ADRSrZzoT3iGanZbdCn6Or7A5nf+DeQuRiOZvQy?=
- =?us-ascii?Q?vr1J7LmE3jNNfnw91i1lSEtk+67ambHVoUgsOFx6Nj0OSmsIkYvWQc/bjnVC?=
- =?us-ascii?Q?gHNX8vA9pGtv4rbrYPisxSTGzPtwLpX1oKdtTLNvl7Z+UzQxQpKpASy670iS?=
- =?us-ascii?Q?UC08Y2L+WOGle3asN2B7vNVwsHFrBxrrGfYcllswFJyZd//l12njj/5sRmSG?=
- =?us-ascii?Q?XkH+fXehw+iwhdcTDNqXATEfU9znYvJNuZKJ/CyyGWsPERl9VCc9w/hTAqq6?=
- =?us-ascii?Q?oZKkkNoxWC2CvOV4uTRCje+TDUDNA22bEGyFr+FUBEBr57RJ+nUZu7X1qT06?=
- =?us-ascii?Q?OCUd529cAXv89CVZ8Z8DQJrhY3pbUyTFy0H7uDYtDD99QZgyaRt0dHmnh4Dn?=
- =?us-ascii?Q?w8XmQHMEyKhcKPRh82KSVfNIY84e9HjsV/pz76feq3PDHZCuOnQc0FNNmNk+?=
- =?us-ascii?Q?oBa2wxJ0T4vMoI77ERPB+9pR41ku8aEn7P6pLRk0HH7pr+cFfyr3pxLHU1Ha?=
- =?us-ascii?Q?0BjnaDXYJT/PNaSixPvr69lQdFhiDNdWcoLBdp4H0+fXfpPJddqACCMcxx+T?=
- =?us-ascii?Q?9232Fq25JJxWwBtTX2dClv6/FBUJUoZ8jlvtniWS7OOlNvb0UywkrJEQPSeg?=
- =?us-ascii?Q?GS6Z997scMD0yt7PPllAse9utbbd/HJOTPv8r3eODzM7lDswlRwbPbGv+EYq?=
- =?us-ascii?Q?MtkviwUxtLE78/hgcq2leMsmHYu31Llr9uip+G2ZHQk3xVhekSRJ8trENCQE?=
- =?us-ascii?Q?0qJqNMhax0i0oZB7QvtDst6ziYiSUIjNuOZodpCWU7ry3h39/fsvcJDT3foR?=
- =?us-ascii?Q?13JRMZgFnz427WGvGzPat940Hdjz2WJEGTFs7LQ/ltvjWheYVMepJ8b+6WMM?=
- =?us-ascii?Q?9g=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YgIj2yHyuQttUD4ER99SAf2r8yK37aMz2NAtDPwWH1XUrUfdH00azFHh/GTs?=
+ =?us-ascii?Q?WSFghLGywVecVp+hK+ho8vT6vqpSwhDErMYS3skT6VMSIwmtJR4VqMyOcqXL?=
+ =?us-ascii?Q?WhUrfg1FMzjvS2ZdzhW9NsGeaL85m7VeOmpiRsOPR32c8/DTeWbZAljlIMwZ?=
+ =?us-ascii?Q?LgoDqi1HllTRvCZoDLfNI2eB0BZjBqykk4g4+oA2Arm9SxxzWQUjHB6BrEv5?=
+ =?us-ascii?Q?R5iBf69WRyo0gCTg97aAmAtC+4oP7vRU6kXd6buT8dszfSexnotHQjiS2Jyc?=
+ =?us-ascii?Q?x3M0pHm+0WLfUTq4ouIIi+6np4ZqtAdz+WcgF8p2wUsLjkvhJC5r2VGTRZlV?=
+ =?us-ascii?Q?2YU87GkuPZHrj2lrIycI394tnuzccqNRXQpYQp07XbqXzTlpEegf2FRgAY6S?=
+ =?us-ascii?Q?9m0RgvCZMAQoC06BbcvVfFPN8p1NaDHrCX9aUrAT10yYg284XWk/64oPuS3z?=
+ =?us-ascii?Q?wUae1ExGBW2U+ehlhmsmr27bgWH5iVQq1PlmHUEaBHkSWz7PvByuToJWUGTu?=
+ =?us-ascii?Q?PGPV9WLYHGT+3+vIPiUPl7nvQ7jlgyIWKaemE8FjAGR0cMjxBkFuUZQqVCjz?=
+ =?us-ascii?Q?8r/ys7177nkjwXSNQA4/1WYtJ2g/PzS2HTq3OWescjK2/vZ4ZIoDvTGZoC5K?=
+ =?us-ascii?Q?NPci+oFPTOO6PJo2Q4oXVUN8/XnoOlBZcjNdmmOeflod2yZ8QuIkjYts2ODa?=
+ =?us-ascii?Q?dnUoXEnr2Lq0PmV73VzmtY+yCiTQeWmaJm4tDVFhmw2RpwLn3CWMvEIIYn5/?=
+ =?us-ascii?Q?yeQwFC9HHPNNqzVXZ4koOfgqS7iDdNs0BKk4klk8b+N+iObKLIhitLfgwWg3?=
+ =?us-ascii?Q?JKokS9cNLG4cZRSFoWjDvnwWzk9XGmKaMPQW2ck+zcJ/kxtYYy4xMtaz7hhh?=
+ =?us-ascii?Q?Oyj9IKxKFD1kfKHV/7yUiQsICJyFMVG6uwQWFMg0cQsh4BjuCVdnxk0iBU+M?=
+ =?us-ascii?Q?8mF5mt0E6ftWkhVRkK3d2/QhYi7nldfbc7j2LvvEvcbH7gE/Jn1R9hrS7Lub?=
+ =?us-ascii?Q?gAKjQ7FVCwM2moqEf2sAH1IKlNPEoljCd+lQgKnseeteYlRfZ0ZutO3RcMcy?=
+ =?us-ascii?Q?N5BKbByZk8TeTn4XEfw8i1KaUgDcoxqK4igN6BEgqoamKpsmY28jBXP3ACoP?=
+ =?us-ascii?Q?LvcQL6riGU2B0bPQQQkQXFxubJrcmsH/pjaVGZzhRRl6xyk0cMVQVL3TSyn0?=
+ =?us-ascii?Q?zF2ZycgCK958aGQ0WGx5FOGVvIbEJN/lef48rhKXpxwJ+04Aub8ict6JijAa?=
+ =?us-ascii?Q?QBAtie0BUl5KLFONu1N8MLQc1dvc3fgWPFMwjIU5s9cYNlx0F6rbnhK2pJhA?=
+ =?us-ascii?Q?+ik4+w39wzZrCbjCvNc6u7wfP4PwWmzM+NweE3qZHsq4lUmkVPb69L3PWAT0?=
+ =?us-ascii?Q?nCfGRxknXhucsglOs+fyrU/YCDXuimBxBqf6t8XXf11nfab1l2+qAtJsSwl5?=
+ =?us-ascii?Q?x5EGLVM7ZqsRJ68B3pq4k7vuxAmH8e5C1nH1d8gUH1gnnaPCQq6SHfhqtk8u?=
+ =?us-ascii?Q?iMDp4JVVgSOD0tliBRFnSEdNKKoblPluMZjsWr82vz2+25rKFBbzYlEMsktf?=
+ =?us-ascii?Q?iln/8mb7g4YTsp1ueQh9RZGrmMkhL5QqilI8avy0hfkIXAmPpPeppzociHeb?=
+ =?us-ascii?Q?Cw=3D=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 839ee7eb-5045-4832-410c-08dab81c9285
+X-MS-Exchange-CrossTenant-Network-Message-Id: bbe4d484-b5b5-4daf-9c43-08dab81c980e
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9185.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 13:10:10.0566
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 13:10:17.9333
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: p7mTWpYTYaOuRuugJu3kM1LzhtWhAPhVdF4M4uA/y6kIccwRNbMrcc5p1TcYZC/NUd+Z/vOCHJiiyvxE09zbcA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0SRmzfqxWFSgKVcXQb0836FvTV6k9/ii7Cr3FsI9Ex0HgQ8m22+VL5lauidzW9/BQJVmLwRTqOb6TLGMFMYtJw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6807
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -126,75 +126,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-add the logic to configure the pad wakeup function via
-the pin_config_set handler.
+On i.MX8QM/QXP/DXL SoCs, even a GPIO is selected as the wakeup source,
+the GPIO block will be powered off when system enters into suspend
+state. This can greatly reduce the power consumption of suspend state
+because the whole partition can be shutdown. This is called PAD wakeup
+feature on i.MX8x platform.
+
+This patch adds the noirq suspend/resume hooks and uses the pad wakeup
+feature as the default wakeup method for GPIO modules on
+i.MX8QM/QXP/DXL platforms.
 
 Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
-Reported-by: kernel test robot <lkp@intel.com>
 Reviewed-by: Peng Fan <peng.fan@nxp.com>
 ---
- drivers/pinctrl/freescale/pinctrl-scu.c | 30 +++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ drivers/gpio/gpio-mxc.c | 92 ++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 91 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/freescale/pinctrl-scu.c b/drivers/pinctrl/freescale/pinctrl-scu.c
-index 59b5f8a35111..ea261b6e7458 100644
---- a/drivers/pinctrl/freescale/pinctrl-scu.c
-+++ b/drivers/pinctrl/freescale/pinctrl-scu.c
-@@ -15,6 +15,11 @@
- #include "../core.h"
- #include "pinctrl-imx.h"
+diff --git a/drivers/gpio/gpio-mxc.c b/drivers/gpio/gpio-mxc.c
+index c871602fc5ba..d5626c572d24 100644
+--- a/drivers/gpio/gpio-mxc.c
++++ b/drivers/gpio/gpio-mxc.c
+@@ -24,6 +24,12 @@
+ #include <linux/of_device.h>
+ #include <linux/bug.h>
  
-+#define IMX_SC_PAD_FUNC_GET_WAKEUP	9
-+#define IMX_SC_PAD_FUNC_SET_WAKEUP	4
-+#define IMX_SC_IRQ_GROUP_WAKE           3   /* Wakeup interrupts */
-+#define IMX_SC_IRQ_PAD			2   /* Pad wakeup */
++#define IMX_SCU_WAKEUP_OFF		0
++#define IMX_SCU_WAKEUP_LOW_LVL		4
++#define IMX_SCU_WAKEUP_FALL_EDGE	5
++#define IMX_SCU_WAKEUP_RISE_EDGE	6
++#define IMX_SCU_WAKEUP_HIGH_LVL		7
 +
- enum pad_func_e {
- 	IMX_SC_PAD_FUNC_SET = 15,
- 	IMX_SC_PAD_FUNC_GET = 16,
-@@ -36,10 +41,18 @@ struct imx_sc_msg_resp_pad_get {
- 	u32 val;
- } __packed;
+ /* device type dependent stuff */
+ struct mxc_gpio_hwdata {
+ 	unsigned dr_reg;
+@@ -61,6 +67,9 @@ struct mxc_gpio_port {
+ 	u32 both_edges;
+ 	struct mxc_gpio_reg_saved gpio_saved_reg;
+ 	bool power_off;
++	u32 wakeup_pads;
++	bool is_pad_wakeup;
++	u32 pad_type[32];
+ 	const struct mxc_gpio_hwdata *hwdata;
+ };
  
-+struct imx_sc_msg_gpio_set_pad_wakeup {
-+	struct imx_sc_rpc_msg hdr;
-+	u16 pad;
-+	u8 wakeup;
-+} __packed __aligned(4);
-+
- static struct imx_sc_ipc *pinctrl_ipc_handle;
+@@ -130,6 +139,9 @@ static const struct of_device_id mxc_gpio_dt_ids[] = {
+ 	{ .compatible = "fsl,imx31-gpio", .data = &imx31_gpio_hwdata },
+ 	{ .compatible = "fsl,imx35-gpio", .data = &imx35_gpio_hwdata },
+ 	{ .compatible = "fsl,imx7d-gpio", .data = &imx35_gpio_hwdata },
++	{ .compatible = "fsl,imx8dxl-gpio", .data = &imx35_gpio_hwdata },
++	{ .compatible = "fsl,imx8qm-gpio", .data = &imx35_gpio_hwdata },
++	{ .compatible = "fsl,imx8qxp-gpio", .data = &imx35_gpio_hwdata },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, mxc_gpio_dt_ids);
+@@ -203,6 +215,7 @@ static int gpio_set_irq_type(struct irq_data *d, u32 type)
+ 	}
  
- int imx_pinctrl_sc_ipc_init(struct platform_device *pdev)
- {
-+	imx_scu_irq_group_enable(IMX_SC_IRQ_GROUP_WAKE,
-+					 IMX_SC_IRQ_PAD, true);
- 	return imx_scu_get_handle(&pinctrl_ipc_handle);
+ 	writel(1 << gpio_idx, port->base + GPIO_ISR);
++	port->pad_type[gpio_idx] = type;
+ 
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(imx_pinctrl_sc_ipc_init);
-@@ -81,6 +94,23 @@ int imx_pinconf_set_scu(struct pinctrl_dev *pctldev, unsigned pin_id,
- 	unsigned int val;
- 	int ret;
+@@ -254,6 +267,9 @@ static void mx3_gpio_irq_handler(struct irq_desc *desc)
+ 	struct mxc_gpio_port *port = irq_desc_get_handler_data(desc);
+ 	struct irq_chip *chip = irq_desc_get_chip(desc);
  
-+	if (num_configs == 1) {
-+		struct imx_sc_msg_gpio_set_pad_wakeup wmsg;
++	if (port->is_pad_wakeup)
++		return;
 +
-+		hdr = &wmsg.hdr;
-+		hdr->ver = IMX_SC_RPC_VERSION;
-+		hdr->svc = IMX_SC_RPC_SVC_PAD;
-+		hdr->func = IMX_SC_PAD_FUNC_SET_WAKEUP;
-+		hdr->size = 2;
-+		wmsg.pad = pin_id;
-+		wmsg.wakeup = *configs;
-+		ret = imx_scu_call_rpc(pinctrl_ipc_handle, &wmsg, true);
+ 	chained_irq_enter(chip, desc);
+ 
+ 	irq_stat = readl(port->base + GPIO_ISR) & readl(port->base + GPIO_IMR);
+@@ -306,11 +322,13 @@ static int gpio_set_wake_irq(struct irq_data *d, u32 enable)
+ 			ret = enable_irq_wake(port->irq_high);
+ 		else
+ 			ret = enable_irq_wake(port->irq);
++		port->wakeup_pads |= (1 << gpio_idx);
+ 	} else {
+ 		if (port->irq_high && (gpio_idx >= 16))
+ 			ret = disable_irq_wake(port->irq_high);
+ 		else
+ 			ret = disable_irq_wake(port->irq);
++		port->wakeup_pads &= ~(1 << gpio_idx);
+ 	}
+ 
+ 	return ret;
+@@ -365,7 +383,6 @@ static int mxc_gpio_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	port->dev = &pdev->dev;
+-
+ 	port->hwdata = device_get_match_data(&pdev->dev);
+ 
+ 	port->base = devm_platform_ioremap_resource(pdev, 0);
+@@ -498,6 +515,78 @@ static void mxc_gpio_restore_regs(struct mxc_gpio_port *port)
+ 	writel(port->gpio_saved_reg.dr, port->base + GPIO_DR);
+ }
+ 
++static bool mxc_gpio_generic_config(struct mxc_gpio_port *port,
++		unsigned int offset, unsigned long conf)
++{
++	struct device_node *np = port->dev->of_node;
 +
-+		dev_dbg(ipctl->dev, "wakeup pin_id: %d type: %ld\n",
-+				pin_id, *configs);
-+		return ret;
++	if (of_device_is_compatible(np, "fsl,imx8dxl-gpio") ||
++	    of_device_is_compatible(np, "fsl,imx8qxp-gpio") ||
++	    of_device_is_compatible(np, "fsl,imx8qm-gpio"))
++		return (gpiochip_generic_config(&port->gc, offset, conf) == 0);
++
++	return false;
++}
++
++static bool mxc_gpio_set_pad_wakeup(struct mxc_gpio_port *port, bool enable)
++{
++	unsigned long config;
++	bool ret = false;
++	int i, type;
++
++	static const u32 pad_type_map[] = {
++		IMX_SCU_WAKEUP_OFF,		/* 0 */
++		IMX_SCU_WAKEUP_RISE_EDGE,	/* IRQ_TYPE_EDGE_RISING */
++		IMX_SCU_WAKEUP_FALL_EDGE,	/* IRQ_TYPE_EDGE_FALLING */
++		IMX_SCU_WAKEUP_FALL_EDGE,	/* IRQ_TYPE_EDGE_BOTH */
++		IMX_SCU_WAKEUP_HIGH_LVL,	/* IRQ_TYPE_LEVEL_HIGH */
++		IMX_SCU_WAKEUP_OFF,		/* 5 */
++		IMX_SCU_WAKEUP_OFF,		/* 6 */
++		IMX_SCU_WAKEUP_OFF,		/* 7 */
++		IMX_SCU_WAKEUP_LOW_LVL,		/* IRQ_TYPE_LEVEL_LOW */
++	};
++
++	for (i = 0; i < 32; i++) {
++		if ((port->wakeup_pads & (1 << i))) {
++			type = port->pad_type[i];
++			if (enable)
++				config = pad_type_map[type];
++			else
++				config = IMX_SCU_WAKEUP_OFF;
++			ret |= mxc_gpio_generic_config(port, i, config);
++		}
 +	}
 +
- 	/*
- 	 * Set mux and conf together in one IPC call
- 	 */
++	return ret;
++}
++
++static int __maybe_unused mxc_gpio_noirq_suspend(struct device *dev)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++	struct mxc_gpio_port *port = platform_get_drvdata(pdev);
++
++	if (port->wakeup_pads > 0)
++		port->is_pad_wakeup = mxc_gpio_set_pad_wakeup(port, true);
++
++	return 0;
++}
++
++static int __maybe_unused mxc_gpio_noirq_resume(struct device *dev)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++	struct mxc_gpio_port *port = platform_get_drvdata(pdev);
++
++	if (port->wakeup_pads > 0)
++		mxc_gpio_set_pad_wakeup(port, false);
++	port->is_pad_wakeup = false;
++
++	return 0;
++}
++
++static const struct dev_pm_ops mxc_gpio_dev_pm_ops = {
++	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(mxc_gpio_noirq_suspend, mxc_gpio_noirq_resume)
++};
++
+ static int mxc_gpio_syscore_suspend(void)
+ {
+ 	struct mxc_gpio_port *port;
+@@ -537,6 +626,7 @@ static struct platform_driver mxc_gpio_driver = {
+ 		.name	= "gpio-mxc",
+ 		.of_match_table = mxc_gpio_dt_ids,
+ 		.suppress_bind_attrs = true,
++		.pm = &mxc_gpio_dev_pm_ops,
+ 	},
+ 	.probe		= mxc_gpio_probe,
+ };
 -- 
 2.34.1
 
