@@ -2,100 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D593260F94A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7C060F94D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236233AbiJ0Nif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 09:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
+        id S236276AbiJ0Ni4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 09:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236207AbiJ0Nib (ORCPT
+        with ESMTP id S236208AbiJ0Nip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 09:38:31 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058FF181953
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:38:30 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id u7so1242513qvn.13
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:38:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k0R27uVh9S1IODnsPNgVc4Gf/GzSriaNtmqZC9M5Tyc=;
-        b=gZhPe4VeYbOtt8sG3IB1d1L2z5Q5c9vFXzrWKMnRxbYkuqoSeILYTgVjGUSd/j4aeP
-         YtwcqLSLVtH2JghCkBchwyU9TzY67jCbueW9MoSv9Tl5YEhv38RCn1lUswCA0tA4+PFc
-         bsop7SntiUqhmzTOSg0YzRRt2NjzRzRl5x9AVv8PJCHwtkWvgqMShR0vUqCbi4eeWSAX
-         b0I+qzDDUe/BC1SIVmDclsjqbWJf1yCfzpIiQyYnPjnreh0wZFtOmeqOeOQ7WDOUa3FF
-         TeTcnhivb0TGJbrPL+nK+FJyBh286y5AdavZZkkJP1wYqxNjPcUmoNSFDBZ0ZK6QnulJ
-         a7fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k0R27uVh9S1IODnsPNgVc4Gf/GzSriaNtmqZC9M5Tyc=;
-        b=WVXG7C3wDb8b7Jk8RW23Kd7/76efTZdRXqLtSW6qTM3V5w+gm2ub1MizNVosE1m0d5
-         iHuruti8yAWRIE1osqLQ6AdE0Ms51r7gladzfhq3svThmi7A/2tQXXx+kI7VVC/NTVF+
-         cCepsbofDcv4LThBpGfOINczn7Krfz/b8CvpvMf3SvDT1l6ZIYEc+diGEwA0YzPwL1KO
-         K3rHsWjjiCRJl0/bBlClzXAQY8HV6DFspNFpc8UZ2bDXmCcQoEn/ELSyIPYg78pHLY/a
-         aMclVMyKdVnfmcF8qC0JRL1e6UzrLIC2ABnMj8HI6eSNUO7EX384nUX0+zYNh4tmbXiy
-         w6pQ==
-X-Gm-Message-State: ACrzQf0Q6KEYMld3Rv04NkXRqdk1AUk4XzaVznACQLl43y7y0LW6n7IF
-        GzH8/pPhDPQyG3sDxNNk7wAtXw==
-X-Google-Smtp-Source: AMsMyM5cH3mUoy0Vy6ThcdzX44QwG6ALzGgdClmEC9/O+6ZNxX4RBhOn2RkVEFpmCkZZFMT3ujJNcg==
-X-Received: by 2002:ad4:5ecd:0:b0:4b7:c95c:2c0c with SMTP id jm13-20020ad45ecd000000b004b7c95c2c0cmr32828493qvb.60.1666877909168;
-        Thu, 27 Oct 2022 06:38:29 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id s10-20020a05620a29ca00b006eea4b5abcesm973846qkp.89.2022.10.27.06.38.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 06:38:28 -0700 (PDT)
-Message-ID: <c5e3497e-c131-1909-f0b7-62b5d5b0d7eb@linaro.org>
-Date:   Thu, 27 Oct 2022 09:38:26 -0400
+        Thu, 27 Oct 2022 09:38:45 -0400
+Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3684D181970
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:38:37 -0700 (PDT)
+Received: (wp-smtpd smtp.wp.pl 3359 invoked from network); 27 Oct 2022 15:38:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1666877914; bh=AiyMaUpIR3tX5cAsNQr2RN+63d1dCIMTRTaZHBEfWHM=;
+          h=From:To:Cc:Subject;
+          b=A4ddB9/e9xR5YNHXLbm6oGdFeCrlfJSzUwNZn9kGG6X4Na8j+65W1HHtTMIqtPXXf
+           j70SbCwn6JpOQNGwahlkUwP6mXUfxMl3XV/z4eMc/qJWV3wJ5blNnZIlp4ctRffD6/
+           Ow6HoSaOvVJ1BDoGCrWFVgJAJ55YtEFnZYBrd8pw=
+Received: from 89-64-7-202.dynamic.chello.pl (HELO localhost) (stf_xl@wp.pl@[89.64.7.202])
+          (envelope-sender <stf_xl@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <joe@perches.com>; 27 Oct 2022 15:38:34 +0200
+Date:   Thu, 27 Oct 2022 15:38:34 +0200
+From:   Stanislaw Gruszka <stf_xl@wp.pl>
+To:     Joe Perches <joe@perches.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scripts: checkpatch: allow case x: return #x macros
+Message-ID: <20221027133834.GA161407@wp.pl>
+References: <20221027104934.160513-1-stf_xl@wp.pl>
+ <8064d49ffca92adc171f6a954ad9dea2027b8e4d.camel@perches.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH RESEND v2 1/3] dt-bindings: dmaengine: Add
- dma-channel-mask to Tegra GPCDMA
-Content-Language: en-US
-To:     Akhil R <akhilrajeev@nvidia.com>, ldewangan@nvidia.com,
-        jonathanh@nvidia.com, vkoul@kernel.org, thierry.reding@gmail.com,
-        p.zabel@pengutronix.de, dmaengine@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sfr@canb.auug.org.au
-References: <20221020083322.36431-1-akhilrajeev@nvidia.com>
- <20221020083322.36431-2-akhilrajeev@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221020083322.36431-2-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8064d49ffca92adc171f6a954ad9dea2027b8e4d.camel@perches.com>
+X-WP-MailID: 6d99d22315aa28265f775ffa1ef75a40
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [YXP0]                               
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/10/2022 04:33, Akhil R wrote:
-> Add dma-channel-mask property in Tegra GPCDMA document.
+On Thu, Oct 27, 2022 at 04:15:53AM -0700, Joe Perches wrote:
+> On Thu, 2022-10-27 at 12:49 +0200, Stanislaw Gruszka wrote:
+> > Do not report errors like below:
+> > 
+> > ./scripts/checkpatch.pl -f drivers/net/wireless/ath/ath10k/wmi.h
+> > 
+> > ERROR: Macros with complex values should be enclosed in parentheses
+> > +#define C2S(x) case x: return #x
+> > 
+> > since "case x: return #x" macros are already used by some
+> > in-kernel drivers.
+> > 
+> > Signed-off-by: Stanislaw Gruszka <stf_xl@wp.pl>
+> > ---
+> >  scripts/checkpatch.pl | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> > index 1e5e66ae5a52..4b888b1313d5 100755
+> > --- a/scripts/checkpatch.pl
+> > +++ b/scripts/checkpatch.pl
+> > @@ -5901,6 +5901,7 @@ sub process {
+> >  			    $dstat !~ /$exceptions/ &&
+> >  			    $dstat !~ /^\.$Ident\s*=/ &&				# .foo =
+> >  			    $dstat !~ /^(?:\#\s*$Ident|\#\s*$Constant)\s*$/ &&		# stringification #foo
+> > +			    $dstat !~ /^case\s*$Ident:\s*return\s*#$Ident$/ &&		# case x: return #x
 > 
-> The property would help to specify the channels to be used in
-> kernel and reserve few for the firmware. This was previously
-> achieved by limiting the channel number to 31 in the driver.
-> Now since we can list all 32 channels, update the interrupts
-> property as well to list all 32 interrupts.
+> I think there needs to be a \s+ not \s* after return
 > 
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> Acked-by: Thierry Reding <treding@nvidia.com>
-> ---
+> And try this grep and see how many of these are handled
+> 
+> $ git grep -P -n '^\s*#\s*define.*\bcase.*#'
+> 
+> It may be better to just use
+> 
+> 			    $dstat !~ /^case\b/ &&
 
+Make sense, I'll send v2.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Thanks
+Stanislaw
