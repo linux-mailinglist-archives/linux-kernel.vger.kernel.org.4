@@ -2,73 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE086102B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4952F6102B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236654AbiJ0UbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 16:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40478 "EHLO
+        id S236550AbiJ0Ubp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 16:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236595AbiJ0Ua5 (ORCPT
+        with ESMTP id S235587AbiJ0Ubl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 16:30:57 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221726D85B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:30:56 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id z24so5512956ljn.4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:30:56 -0700 (PDT)
+        Thu, 27 Oct 2022 16:31:41 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CED7646A
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:31:40 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id ml12so2535732qvb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:31:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RJhLmmsZGJ8bUFvXGrjhxjigTY7tssuM34NIcqRQJks=;
-        b=ko4N/PqiVlcVf7rPdTn90/c1YL7CHD4kbLrdcKcGWYTUUSMtlKMiKyWHA+wDDKm3Ri
-         9e+QndcW1iHPHRjxD1ZSz74bPfh7+NQfvegupvFlxKBAE57swePOCKRNOtu8w+V5/LIh
-         oxfHuONcO0Ik1awpXYSMKm5/Us+dUNf4euurzQPxHHKyJd0J2aZg6aMTq63yWe/zpUHR
-         BdwcHWaYJTXY9nY7H0cZ5ZFnP+HjhVQMyXizdrg693dGmkkh+NZ1U3pB4zQGTKXjYAq1
-         O+7ty+Tq6vl57BKFDpOmZSjo8wIv9q+d+D2+wILbB19dg5S/gJyRJ3rpAwvrWr8JlqCE
-         oGcw==
+        bh=40/NzUhqBfpBB930IrYklEEa68Z0CgmOyOOoo4pZLBo=;
+        b=f3ObglpSHvlAmkyYbSNMXkn3I28foU8FiO9qbDYRaBj2NoxEHo/iigszE2yQs0TSKW
+         Evu731JN6+9voVpQZrxahvnki+UtO9PruUqprG4YisNFTi9d2MFS5AWdI4374Pg51fP3
+         ABAe6o3LkroGX/O2nx+pllOZLvY2b8mEFq11g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RJhLmmsZGJ8bUFvXGrjhxjigTY7tssuM34NIcqRQJks=;
-        b=jh4Gb9S0hDhcty7PJe8E4P/MKI60NIPv+Dml59fVGDCgnY+t7o2GM9runqke88RlfG
-         sJki7WlprVRYJmvmDMUEmDGFwdX2ZnvXuvX9ENtkbv7TB4ZfkqFnrZhU9JW3dU8K9uT6
-         hucp2avrGMKBqNh+3MeWKctbzwegCWgofTwB63XfTzvI/bobSsJah+fAIbFtyInIfxIY
-         ux9EP+HL4yCNgMTB3k7yLZFnXv3mt25cV2liG4set30JuJ8y/8ihgKr62VDg0IoR8Qxk
-         4U0+ZoYrSTTw0J5dW/OWF42FSpBuuUFejQ6rUfCozMIFgH5wAvVntuOD3vQ3kThg4KtE
-         OfFg==
-X-Gm-Message-State: ACrzQf2oOulhtS+Lh7AiGEQPlCtFNoUBcJ9/q0DEnEePU73QnhO0c1Qj
-        egFq3jarqLnO5CNSsdFcIyw9F0nmcDAwd6RNUltuKw==
-X-Google-Smtp-Source: AMsMyM5aP9GDCjgbJ8RdmCuiz8kw86pAQT51ja8FqsFb2OPVlHcT9WXJ4I4mEt7VBa1Y42QK1pGfOAzB7FUqg0u98iE=
-X-Received: by 2002:a05:651c:1a0a:b0:26f:ef12:9a42 with SMTP id
- by10-20020a05651c1a0a00b0026fef129a42mr20984010ljb.457.1666902654247; Thu, 27
- Oct 2022 13:30:54 -0700 (PDT)
+        bh=40/NzUhqBfpBB930IrYklEEa68Z0CgmOyOOoo4pZLBo=;
+        b=edVe8N1OKgCic0abfQwyOdKMzbuCO5nKqbDgGzDwsKZnbz3mdvy5V4UqrpGJpVOuSP
+         UxrCNKs0Jp2bENelXTPUuIMRW/5/ocpcRqf5ljzsq+gMQTNst5/4tM/7MGGzwO9b5OKq
+         ZMyko+WxymS77X3sBrANgQRKOuUbAB/iaTGVaTiBdrMbKGgZmiO9iYskCnQYPbJ6/d0B
+         vLTLqF/M/hzHdap4zc0FO8Hgp4PT/Y+ZdlkiJIJLK6SykO/O2c/CZL8XAwGAC6Tzvsud
+         Wg8XWiu7jvegDVISvIsPOWjvhQYwP8Gg9aT/DfFexL1HMgKgcGK3GSW0ewVIpEeuKDRC
+         t0yg==
+X-Gm-Message-State: ACrzQf1E0rgdSoiVE/IoDBpeGP6Q96TTy2cByI5PG91Cz2ZfVxfe43OF
+        ZwqAWm2iZRbtNQW41hE3QxGIK+aDl9knEQ==
+X-Google-Smtp-Source: AMsMyM52L4uQkjpJD40JWlqupuRQawlf9kUckg7hcQRbIFA/ACzc1FIQoA/wzT1xZRIeo8X+9EmnGw==
+X-Received: by 2002:a05:6214:1c81:b0:4af:664c:2913 with SMTP id ib1-20020a0562141c8100b004af664c2913mr43247990qvb.103.1666902699260;
+        Thu, 27 Oct 2022 13:31:39 -0700 (PDT)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id s10-20020a05620a29ca00b006eea4b5abcesm1602044qkp.89.2022.10.27.13.31.38
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 13:31:38 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-333a4a5d495so27876477b3.10
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:31:38 -0700 (PDT)
+X-Received: by 2002:a81:555:0:b0:36b:2d71:5861 with SMTP id
+ 82-20020a810555000000b0036b2d715861mr27546294ywf.340.1666902698189; Thu, 27
+ Oct 2022 13:31:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221027150558.722062-1-pgonda@google.com> <20221027150558.722062-2-pgonda@google.com>
- <10e7e8df-69ba-c1bc-1f94-c77fe64774ab@amd.com> <CAMkAt6qzW0oW=2Mvq0uO+ccwRyYcRAkDoF47mH4hMET5wASzsQ@mail.gmail.com>
-In-Reply-To: <CAMkAt6qzW0oW=2Mvq0uO+ccwRyYcRAkDoF47mH4hMET5wASzsQ@mail.gmail.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Thu, 27 Oct 2022 14:30:42 -0600
-Message-ID: <CAMkAt6oWmX7iOe_vFKyrRZRbiyuNjO6GoSjSqExc5VPKcnOtDg@mail.gmail.com>
-Subject: Re: [PATCH V3 1/2] virt: sev: Prevent IV reuse in SNP guest driver
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Marc Orr <marcorr@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Ashish Kalra <Ashish.Kalra@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20221022111403.531902164@infradead.org> <20221022114424.515572025@infradead.org>
+ <2c800ed1-d17a-def4-39e1-09281ee78d05@nvidia.com> <Y1ZGNwUEdm15W6Xz@hirez.programming.kicks-ass.net>
+ <CAG48ez3fG=WnvbiE5mJaD66_gJj_hohnV8CqBG9eNdjd7pJW3A@mail.gmail.com>
+ <Y1fsYwshJ93FT21r@hirez.programming.kicks-ass.net> <CAG48ez3VE+3dVdUMK+Pg_942gR+h_TCcSaFxGwCbNfh3W+mfOA@mail.gmail.com>
+ <Y1f7YvKuwOl1XEwU@hirez.programming.kicks-ass.net> <CAG48ez05gBiB2w7bL_3O_OUoBWazmHnRwMiuni_wQyXBUcaxbQ@mail.gmail.com>
+ <Y1oub9MvqwGBlHkq@hirez.programming.kicks-ass.net> <CAHk-=wihPdOtXgJ32pLB6Xd-UvnaZW9YvOOjM24JGYRjNHeykA@mail.gmail.com>
+ <6C548A9A-3AF3-4EC1-B1E5-47A7FFBEB761@gmail.com>
+In-Reply-To: <6C548A9A-3AF3-4EC1-B1E5-47A7FFBEB761@gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 27 Oct 2022 13:31:22 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh8oi0qQtYDFTfm7d1s5C8mG7ig=NfzGWt4zbjXMzcdqQ@mail.gmail.com>
+Message-ID: <CAHk-=wh8oi0qQtYDFTfm7d1s5C8mG7ig=NfzGWt4zbjXMzcdqQ@mail.gmail.com>
+Subject: Re: [PATCH 01/13] mm: Update ptep_get_lockless()s comment
+To:     Nadav Amit <nadav.amit@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>, x86@kernel.org,
+        willy@infradead.org, Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        kirill.shutemov@linux.intel.com, jroedel@suse.de, ubizjak@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,119 +85,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 2:10 PM Peter Gonda <pgonda@google.com> wrote:
+On Thu, Oct 27, 2022 at 1:15 PM Nadav Amit <nadav.amit@gmail.com> wrote:
 >
-> On Thu, Oct 27, 2022 at 12:06 PM Tom Lendacky <thomas.lendacky@amd.com> wrote:
-> >
-> > On 10/27/22 10:05, Peter Gonda wrote:
-> > > The ASP and an SNP guest use a series of AES-GCM keys called VMPCKs to
-> > > communicate securely with each other. The IV to this scheme is a
-> > > sequence number that both the ASP and the guest track. Currently this
-> > > sequence number in a guest request must exactly match the sequence
-> > > number tracked by the ASP. This means that if the guest sees an error
-> > > from the host during a request it can only retry that exact request or
-> > > disable the VMPCK to prevent an IV reuse. AES-GCM cannot tolerate IV
-> > > reuse see:
-> > > https://csrc.nist.gov/csrc/media/projects/block-cipher-techniques/documents/bcm/comments/800-38-series-drafts/gcm/joux_comments.pdf
-> > >
-> > > To handle userspace querying the cert_data length. Instead of requesting
-> > > the cert length from userspace use the size of the drivers allocated
-> > > shared buffer. Then copy that buffer to userspace, or give userspace an
-> > > error depending on the size of the buffer given by userspace.
-> > >
-> > > Fixes: fce96cf044308 ("virt: Add SEV-SNP guest driver")
-> > > Signed-off-by: Peter Gonda <pgonda@google.com>
-> > > Reported-by: Peter Gonda <pgonda@google.com>
-> > > Reviewed-by: Dionna Glaze <dionnaglaze@google.com>
-> > > Cc: Borislav Petkov <bp@suse.de>
-> > > Cc: Tom Lendacky <thomas.lendacky@amd.com>
-> > > Cc: Michael Roth <michael.roth@amd.com>
-> > > Cc: Haowen Bai <baihaowen@meizu.com>
-> > > Cc: Yang Yingliang <yangyingliang@huawei.com>
-> > > Cc: Marc Orr <marcorr@google.com>
-> > > Cc: David Rientjes <rientjes@google.com>
-> > > Cc: Ashish Kalra <Ashish.Kalra@amd.com>
-> > > Cc: linux-kernel@vger.kernel.org
-> > > Cc: kvm@vger.kernel.org
-> > > ---
-> > >   drivers/virt/coco/sev-guest/sev-guest.c | 93 ++++++++++++++++---------
-> > >   1 file changed, 62 insertions(+), 31 deletions(-)
-> > >
-> > > diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-> > > index f422f9c58ba7..8c54ea84bc57 100644
-> > > --- a/drivers/virt/coco/sev-guest/sev-guest.c
-> > > +++ b/drivers/virt/coco/sev-guest/sev-guest.c
-> > > @@ -41,7 +41,7 @@ struct snp_guest_dev {
-> > >       struct device *dev;
-> > >       struct miscdevice misc;
-> > >
-> > > -     void *certs_data;
-> > > +     u8 (*certs_data)[SEV_FW_BLOB_MAX_SIZE];
-> > >       struct snp_guest_crypto *crypto;
-> > >       struct snp_guest_msg *request, *response;
-> > >       struct snp_secrets_page_layout *layout;
-> > > @@ -67,8 +67,27 @@ static bool is_vmpck_empty(struct snp_guest_dev *snp_dev)
-> > >       return true;
-> > >   }
-> > >
-> > > +/*
-> > > + * If we receive an error from the host or ASP we have two options. We can
-> > > + * either retry the exact same encrypted request or we can discontinue using the
-> > > + * VMPCK.
-> > > + *
-> > > + * This is because in the current encryption scheme GHCB v2 uses AES-GCM to
-> > > + * encrypt the requests. The IV for this scheme is the sequence number. GCM
-> > > + * cannot tolerate IV reuse.
-> > > + *
-> > > + * The ASP FW v1.51 only increments the sequence numbers on a successful
-> > > + * guest<->ASP back and forth and only accepts messages at its exact sequence
-> > > + * number.
-> > > + *
-> > > + * So if we were to reuse the sequence number the encryption scheme is
-> > > + * vulnerable. If we encrypt the sequence number for a fresh IV the ASP will
-> > > + * reject our request.
-> > > + */
-> > >   static void snp_disable_vmpck(struct snp_guest_dev *snp_dev)
-> > >   {
-> > > +     dev_alert(snp_dev->dev, "Disabling vmpck_id: %d to prevent IV reuse.\n",
-> > > +               vmpck_id);
-> > >       memzero_explicit(snp_dev->vmpck, VMPCK_KEY_LEN);
-> > >       snp_dev->vmpck = NULL;
-> > >   }
-> > > @@ -326,29 +345,29 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
-> > >       if (fw_err)
-> > >               *fw_err = err;
-> > >
-> > > -     if (rc)
-> > > -             return rc;
-> > > +     if (rc) {
-> > > +             dev_alert(snp_dev->dev,
-> > > +                       "Detected error from ASP request. rc: %d, fw_err: %llu\n",
-> > > +                       rc, *fw_err);
-> > > +             goto disable_vmpck;
-> > > +     }
-> >
-> > Realize that snp_issue_guest_request() will return -EIO in the case that
-> > the returned SW_EXITINFO2 value is SNP_GUEST_REQ_INVALID_LEN. So all the
-> > work you do below in get_ext_report() doesn't matter because you end up
-> > disabling the key here.
-> >
-> > So maybe this patch should be split up and parts of it added to the second
-> > patch (but that patch seems like it would still hit this issue because
-> > -EIO is still returned.
-> >
->
-> Ack I see that. My testing didn't catch this since I realized I didn't
-> actually load any certificate data into the host. After doing so my
-> testing catches this bug.
->
-> I agree with Dionna's comments on 2/2. My suggestion would be to keep
-> the constraint that either handle_guest_request() leaves the sequence
-> number in a good state or disables the VMPCK. After seeing her V4
-> series I suggest we take this patch and follow up on the certificate
-> querying with the further changes to snp_issue_guest_request().
-> Thoughts?
+> I think it might be easier to come up with new rules instead of phrasing the
+> existing ones.
 
-Actually we want the V2 version of this patch, which forces userspace
-to use 4 pages and therefore doesn't let a short userspace request
-corrupt the sequence numbers.
+I'm ok with that, but I think you are missing a very important issue:
+all the cases where we can short-circuit TLB invalidations *entirely*.
+
+You don't mention those at all.
+
+Those optimizations are *very* important. Process exit is one of the
+most performance-critical pieces of code in the kernel on some loads,
+because a lot of traditional unix loads have a *ton* of small
+fork/exec/exit sequences, and the whole "do just one TLB flush" was at
+least historically quite a big deal.
+
+So one very big issue here is when zap_page_tables() can end up
+skipping TLB flushes entirely, because nobody cares.
+
+And no, the fix is not to turn it into some "just increment a
+generation number".
+
+We want to avoid *even that* cost for the whole "we don't actually
+need a TLB flush at all, until we actually free the pages".
+
+So there are two levels of tlb flush optimizations
+
+ (a) avoiding them entirely in the first place
+
+ (b) the whole "once you have to flush, keep track of lazy modes and
+TLB generations, and flush ranges"
+
+And honestly, I think you ignored (a), and that's where we do exactly
+those kinds of "this case doesn't need to flush AT ALL" things.
+
+So when you say
+
+>       The thing I like about this scheme
+> the most is that it avoids relying on almost all the OS data-structures
+> (e.g., PageAnon()), making it much easier to grasp.
+
+I think it's because you've ignored a big part of the whole issue.
+
+               Linus
