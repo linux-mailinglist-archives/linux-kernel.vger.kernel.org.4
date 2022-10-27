@@ -2,79 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA0160EEE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 06:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9413A60EEE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 06:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233785AbiJ0EEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 00:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34348 "EHLO
+        id S234335AbiJ0EFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 00:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbiJ0EEl (ORCPT
+        with ESMTP id S232906AbiJ0EFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 00:04:41 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CA7B2B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 21:04:25 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1322d768ba7so462985fac.5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 21:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=O4zxOHr5pL/tZbv/Lney9NNoy+V8TXoApZzVW+UpE9c=;
-        b=djdp3vBObrtKXk5iR2I5mQ+gUxa3qFdrLVOfoGTRZRKq0CjbUBqUL47z3HYzO5ZEvS
-         xUP1b7enKhRqRrp9dPgJSFx0sBgq1QzRSBLZ/PvFJrNtaaWNkd4MxBHUHpf/FBxYBHEn
-         tvO6HWb7/j3VZ2LClPg+V9COXkNFTcAi0L3LHy96UTepRVVwmc+NpZuuEIRdbqNbPdTF
-         rSgGpzGBj0vrOz9t85G5yvbSfrPMejBFPNCX3i34fArLuTe8xDissBOe4KZm/0he5yB4
-         y44Dvn/DvwnXa5zEKJgnNjqMf+50N4Zj+pQIVq3klkWlzE+pO/ZyNQO2hXSeVoww78s4
-         FjMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O4zxOHr5pL/tZbv/Lney9NNoy+V8TXoApZzVW+UpE9c=;
-        b=bK19EHPmCjf2N/igPkkkYoy+NTeabaMIReUQMTT7d9BrDq+VFsWMXqpYTFKvUUwr9D
-         W39/++NptVFhX+CPCoM5/vLVZbq/8T6UY7MyOugZmBaYY7aPlSI5CGfTAMonOsPfIQGn
-         XeUr+hLY98MXwX+BZj/6i0VowGyc91pc9n6m0ebLWuozR28vaXd7SbfIMnvB00abPaz/
-         rLHU54XEW91Bzs4LG+zUCHLVnw9MC9XMkCowxrRtyc1goVdJtst8+oi5BxJBx0N7zAUP
-         fGpCE52HCxP0Jkf1MNtVtTbHVs/S9L+1lJcKw8Nb/1RizartYiMTf3My5j5lJXGKNJbA
-         /Aqg==
-X-Gm-Message-State: ACrzQf0cLjlEqdxEfdNZEcKXNZ+GwTvUUzz4rAJ8orD9FO8C5Ln+5Ek+
-        kjHSonueDiClX9spZlG1vLU=
-X-Google-Smtp-Source: AMsMyM7jk2gdeNDOiu2o8p6WCnnUCNOLAYix7ph4jJIVEGB/+VOj7vRGrGyD1yt/IGRHpLJ+hzO0FA==
-X-Received: by 2002:a05:6870:2052:b0:132:7b2:2fe6 with SMTP id l18-20020a056870205200b0013207b22fe6mr4473033oad.98.1666843464841;
-        Wed, 26 Oct 2022 21:04:24 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r5-20020aca5d05000000b0035956747d07sm44594oib.17.2022.10.26.21.04.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 21:04:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9330bab0-1fbf-95a7-8d97-af522762f470@roeck-us.net>
-Date:   Wed, 26 Oct 2022 21:04:22 -0700
+        Thu, 27 Oct 2022 00:05:34 -0400
+Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D2976175A
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 21:05:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=hToTL
+        1YXyd99vlYdAIvfJ1lzlYkibJvP8auH8qTvXJM=; b=Mld/Ujl6JPVy2/Lr7AsEe
+        zz3Wn2X987bsXRgBjDzXhzZlr1zlDAZeZhbiwuyn31DzYfji/ItfEQxRoZwzsHF0
+        7r5kCrV9KEzUwjf8gganbYNx6kUALZChCKv1TCSDJvHUGX92I6v31kHtEtYrVPPv
+        FA6QRlSVzpGM6nv9k/AjW8=
+Received: from localhost.localdomain (unknown [111.206.145.21])
+        by smtp2 (Coremail) with SMTP id GtxpCgBHuM1vA1pjIBc6pA--.31475S2;
+        Thu, 27 Oct 2022 12:05:04 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     gregkh@linuxfoundation.org
+Cc:     zhengyejian1@huawei.com, dimitri.sivanich@hpe.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        alex000young@gmail.com, security@kernel.org, sivanich@hpe.com,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH v5] misc: sgi-gru: fix use-after-free error in  gru_set_context_option, gru_fault and gru_handle_user_call_os
+Date:   Thu, 27 Oct 2022 12:04:55 +0800
+Message-Id: <20221027040455.115035-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] ALSA: Use del_timer_sync() before freeing timer
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
-References: <20221026231236.6834b551@gandalf.local.home>
-Content-Language: en-US
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20221026231236.6834b551@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GtxpCgBHuM1vA1pjIBc6pA--.31475S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGr4xtF4UKFy3AryxAw4fZrb_yoWrKr43pa
+        1jg348urW3XF4Y9rs7ta1kXFW3Ca48JFW5Gr9rJ34F9w4rAFs8C34DJas0qr4DZrW0qF4a
+        yr4rtFnI93Z0gaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi-J55UUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbCqRSnU10DhX4-bgAAs9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,56 +53,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/26/22 20:12, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> The current code for freeing the emux timer is extremely dangerous:
-> 
->    CPU0				CPU1
->    ----				----
-> snd_emux_timer_callback()
-> 			    snd_emux_free()
-> 			      spin_lock(&emu->voice_lock)
-> 			      del_timer(&emu->tlist); <-- returns immediately
-> 			      spin_unlock(&emu->voice_lock);
-> 			      [..]
-> 			      kfree(emu);
-> 
->    spin_lock(&emu->voice_lock);
-> 
->   [BOOM!]
-> 
-> Instead just use del_timer_sync() which will wait for the timer to finish
-> before continuing. No need to check if the timer is active or not when
-> doing so.
-> 
-> This doesn't fix the race of a possible re-arming of the timer, but at
-> least it won't use the data that has just been freed.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Gts may be freed in gru_check_chiplet_assignment.
+The caller still use it after that, UAF happens.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Fix it by introducing a return value to see if it's in error path or not.
+Free the gts in caller if gru_check_chiplet_assignment check failed.
 
-> ---
->   sound/synth/emux/emux.c | 5 +----
->   1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/sound/synth/emux/emux.c b/sound/synth/emux/emux.c
-> index 5ed8e36d2e04..a2ee78809cfb 100644
-> --- a/sound/synth/emux/emux.c
-> +++ b/sound/synth/emux/emux.c
-> @@ -131,10 +131,7 @@ int snd_emux_free(struct snd_emux *emu)
->   	if (! emu)
->   		return -EINVAL;
->   
-> -	spin_lock_irqsave(&emu->voice_lock, flags);
-> -	if (emu->timer_active)
-> -		del_timer(&emu->tlist);
-> -	spin_unlock_irqrestore(&emu->voice_lock, flags);
-> +	del_timer_sync(&emu->tlist);
->   
->   	snd_emux_proc_free(emu);
->   	snd_emux_delete_virmidi(emu);
+Fixes: 55484c45dbec ("gru: allow users to specify gru chiplet 2")
+Reported-by: Zheng Wang <hackerzheng666@gmail.com>
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+v5:
+- fix logical issue and remove unnecessary variable suggested by Dimitri Sivanich
+
+v4:
+- use VM_FAULT_NOPAGE as failure code in gru_fault and -EINVAL in other functions suggested by Yejian
+
+v3:
+- add preempt_enable and use VM_FAULT_NOPAGE as failure code suggested by Yejian
+
+v2:
+- commit message changes suggested by Greg
+
+v1: https://lore.kernel.org/lkml/CAJedcCzY72jqgF-pCPtx66vXXwdPn-KMagZnqrxcpWw1NxTLaA@mail.gmail.com/
+---
+ drivers/misc/sgi-gru/grufault.c  | 14 ++++++++++++--
+ drivers/misc/sgi-gru/grumain.c   | 17 +++++++++++++----
+ drivers/misc/sgi-gru/grutables.h |  2 +-
+ 3 files changed, 26 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
+index d7ef61e602ed..bdd515d33225 100644
+--- a/drivers/misc/sgi-gru/grufault.c
++++ b/drivers/misc/sgi-gru/grufault.c
+@@ -656,7 +656,9 @@ int gru_handle_user_call_os(unsigned long cb)
+ 	if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
+ 		goto exit;
+ 
+-	gru_check_context_placement(gts);
++	ret = gru_check_context_placement(gts);
++	if (ret)
++		goto err;
+ 
+ 	/*
+ 	 * CCH may contain stale data if ts_force_cch_reload is set.
+@@ -677,6 +679,10 @@ int gru_handle_user_call_os(unsigned long cb)
+ exit:
+ 	gru_unlock_gts(gts);
+ 	return ret;
++err:
++	gru_unlock_gts(gts);
++	gru_unload_context(gts, 1);
++	return -EINVAL;
+ }
+ 
+ /*
+@@ -874,7 +880,11 @@ int gru_set_context_option(unsigned long arg)
+ 		} else {
+ 			gts->ts_user_blade_id = req.val1;
+ 			gts->ts_user_chiplet_id = req.val0;
+-			gru_check_context_placement(gts);
++			if (gru_check_context_placement(gts)) {
++				gru_unlock_gts(gts);
++				gru_unload_context(gts, 1);
++				return -EINVAL;
++			}
+ 		}
+ 		break;
+ 	case sco_gseg_owner:
+diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
+index 9afda47efbf2..8c9f7055068d 100644
+--- a/drivers/misc/sgi-gru/grumain.c
++++ b/drivers/misc/sgi-gru/grumain.c
+@@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct gru_state *gru,
+  * chiplet. Misassignment can occur if the process migrates to a different
+  * blade or if the user changes the selected blade/chiplet.
+  */
+-void gru_check_context_placement(struct gru_thread_state *gts)
++int gru_check_context_placement(struct gru_thread_state *gts)
+ {
+ 	struct gru_state *gru;
++	int ret = 0;
+ 
+ 	/*
+ 	 * If the current task is the context owner, verify that the
+@@ -727,14 +728,16 @@ void gru_check_context_placement(struct gru_thread_state *gts)
+ 	 */
+ 	gru = gts->ts_gru;
+ 	if (!gru || gts->ts_tgid_owner != current->tgid)
+-		return;
++		return ret;
+ 
+ 	if (!gru_check_chiplet_assignment(gru, gts)) {
+ 		STAT(check_context_unload);
+-		gru_unload_context(gts, 1);
++		ret = -EINVAL;
+ 	} else if (gru_retarget_intr(gts)) {
+ 		STAT(check_context_retarget_intr);
+ 	}
++
++	return ret;
+ }
+ 
+ 
+@@ -919,6 +922,7 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
+ 	struct gru_thread_state *gts;
+ 	unsigned long paddr, vaddr;
+ 	unsigned long expires;
++	int ret;
+ 
+ 	vaddr = vmf->address;
+ 	gru_dbg(grudev, "vma %p, vaddr 0x%lx (0x%lx)\n",
+@@ -934,7 +938,12 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
+ 	mutex_lock(&gts->ts_ctxlock);
+ 	preempt_disable();
+ 
+-	gru_check_context_placement(gts);
++	if (gru_check_context_placement(gts)) {
++		preempt_enable();
++		mutex_unlock(&gts->ts_ctxlock);
++		gru_unload_context(gts, 1);
++		return VM_FAULT_NOPAGE;
++	}
+ 
+ 	if (!gts->ts_gru) {
+ 		STAT(load_user_context);
+diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
+index 5efc869fe59a..f4a5a787685f 100644
+--- a/drivers/misc/sgi-gru/grutables.h
++++ b/drivers/misc/sgi-gru/grutables.h
+@@ -632,7 +632,7 @@ extern int gru_user_flush_tlb(unsigned long arg);
+ extern int gru_user_unload_context(unsigned long arg);
+ extern int gru_get_exception_detail(unsigned long arg);
+ extern int gru_set_context_option(unsigned long address);
+-extern void gru_check_context_placement(struct gru_thread_state *gts);
++extern int gru_check_context_placement(struct gru_thread_state *gts);
+ extern int gru_cpu_fault_map_id(void);
+ extern struct vm_area_struct *gru_find_vma(unsigned long vaddr);
+ extern void gru_flush_all_tlb(struct gru_state *gru);
+-- 
+2.25.1
 
