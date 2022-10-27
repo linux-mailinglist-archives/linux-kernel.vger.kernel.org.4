@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2A160F328
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 072B660F329
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234420AbiJ0JDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 05:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53174 "EHLO
+        id S234665AbiJ0JGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 05:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233986AbiJ0JDt (ORCPT
+        with ESMTP id S233986AbiJ0JGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 05:03:49 -0400
-Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC11889AF8
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:03:48 -0700 (PDT)
-Received: by mail-ej1-x649.google.com with SMTP id gn34-20020a1709070d2200b0079330e196c8so618406ejc.16
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:03:48 -0700 (PDT)
+        Thu, 27 Oct 2022 05:06:06 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C047E5B07D
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:06:01 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id g7so1456572lfv.5
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:06:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=iTr70DtRX5dCDfAbqlnnnZ499B2Ss7MujMAGG+uKbJ8=;
-        b=fh8RaZQmCnFN93SvEg9vAlawCR0caXXFB3UqU+vvhSxkUGYv4qsFIY5TKS3lmsYUpg
-         k5qzbsesTTx9X5M/Cx9Ev9Yf64YnOTFe3DUa5aGOCV8qfXyIBhmTZym8dorWimQlNfH1
-         4sDPm/MZZUPG4sKVyVt0AYZH7+fz5xNghtBAwYgRwSy3rBi7N6G/wbovVYrdNSMSMj10
-         VhjlPK1vEah1WeVoe9ZxdYDRoG57LB6zhnc95wC1WRLVk0gsh+DM5p2RZMWXHzRBTypf
-         Uy4IxlCQYoDTJAAnJD1mNpU1r4hJdBH/ayksv6jXselX3mTGL2MCWXif1O+Uci3Hvfxg
-         JqLg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pb7xGr5fuIL0NtgblTv6xk3hHUrL7glkJIQ1IQxfKe0=;
+        b=jLSWcMzrSk/mqEfzXQZjeid0ZwoWYAz1FTuDTp+7XVyQaSLobdU/+LjtKZMk+LSI++
+         U95kA/OZrU6OBs9TKnAUQwXCQ27GFtbkfB3+m8WW9PLT5CC7+lh5cNwZvkIztGwgIoSO
+         AQ9QVAQEwNvyiE4ez3Q85GI7CyJF/4w4SldN4by45idAz1Y6Ll94tb1QLZn7W0AAdGmq
+         S1zfIfidXOsQHq4pNbmweXVSeaSt3VdFos7Oo+Z0ljVzawpeq6Jg0YNrEabxmFqomM+V
+         3N1WMSOQ096/F0Pm5Pcob8lclKu1Kqae9MqbZNRhm6i8KdNn/m4YMwD/E5vWytYqqvQs
+         dzKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iTr70DtRX5dCDfAbqlnnnZ499B2Ss7MujMAGG+uKbJ8=;
-        b=tl9ob4FJs4BVkAzZH0dLqxLXT3zSWDiw2xDGMLSgNcJ8an0J+fJf0lQ7e++OPCPLqS
-         ct+ri1nXT+ODsj2zhijU1LcdBkgJDMl4H9xDyqTR3PRUvM9O+5n13AsQQ1tgpDQ8RoS8
-         UKQWM43p4ko35yFzqcTWk+g2i8F8F5l7h7C5GEtZJqyThRkcpntL5WiQzAsA9ridPWfO
-         Ghwlfw7SS9Pu6kCoIBNv7I6+5hTbAYY/+HlBw5tVWqOEgG4LwHUVxMfEjvxBvAfhF4pO
-         5FvJ+KzTaQnBRLUhJRtAt3ZcGAPyBzkZ7QEdh0oD4l0540Hl+yjkFDZla6yY+KjovXDA
-         wnTw==
-X-Gm-Message-State: ACrzQf02ikjVMcXkIrIklgBlrdxUDKteLGrIiXDmws2KLVq0jMpxMeoz
-        bKukoJgKyRF0zjN+vRENF7WJhm9IbScavw==
-X-Google-Smtp-Source: AMsMyM6/TQlrI8rBZTi+nkUz/grj7uWJdKC6mjGtvE1qiKHrwLI0etzOQ3hFekBjfLMd5qG3AU2vF2uXCRSF5Q==
-X-Received: from bistanclaque.zrh.corp.google.com ([2a00:79e0:42:204:34aa:3c10:4b35:5e84])
- (user=ndumazet job=sendgmr) by 2002:aa7:c302:0:b0:461:85d7:b82 with SMTP id
- l2-20020aa7c302000000b0046185d70b82mr24493592edq.354.1666861427143; Thu, 27
- Oct 2022 02:03:47 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 11:03:42 +0200
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Message-ID: <20221027090342.38928-1-ndumazet@google.com>
-Subject: [PATCH v2] usb: add NO_LPM quirk for Realforce 87U Keyboard
-From:   Nicolas Dumazet <ndumazet@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
-Cc:     Petar Kostic <petar@kostic.dev>, Oliver Neukum <oneukum@suse.com>,
-        Ole Ernst <olebowle@gmx.com>,
-        Hannu Hartikainen <hannu@hrtk.in>,
-        Jimmy Wang <wangjm221@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Nicolas Dumazet <ndumazet@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pb7xGr5fuIL0NtgblTv6xk3hHUrL7glkJIQ1IQxfKe0=;
+        b=A66RUtc/FvklfR6zA1m7gtuXLhb8BbTqCewbmwg3vynnJO2oN+YUShQPx7nFGWAdr/
+         ARHyptulInEP3W49e9sQtwRoUyZ0olEApnpQqcdLnh9xD/vo/pclMp2WMTU6Qs8iUMsN
+         ONv5DXq6v6mOcthWHb2Zp52lRVWIewu8h0F3parN3DDzaKMrAgbRt/5zXFAttffHUJ4g
+         1NtiA2Krw/M7vOuHFVvZjjc33sArPRoyh5s0Tin0k2w/4UYlC5x8SjS9O8YWTUo03t4k
+         g76yHE87WenSnJ2ZIK+cUrH1TuyOXfHsSCH3H7BfKH6I5tXc14Q2F2QwaxGJkqo22Jki
+         2S0w==
+X-Gm-Message-State: ACrzQf3sF/b2lKT+wp+/ukj9i/OQof0nu8FvmWNZcuI6RKlz5Pga80OQ
+        1TzaBv1F8VlYdrr8NSwsFjhqwEjtujPNUQ==
+X-Google-Smtp-Source: AMsMyM7N6TxNy+/Mr3NYgX7nR3Jit1vP2BXCodMzldTEl/RHwqQFdCcWjnzzPthI6c6QO14DHKMwIg==
+X-Received: by 2002:a05:6512:2a98:b0:4a2:d66f:c57c with SMTP id dt24-20020a0565122a9800b004a2d66fc57cmr17088367lfb.506.1666861559033;
+        Thu, 27 Oct 2022 02:05:59 -0700 (PDT)
+Received: from elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net ([20.240.130.248])
+        by smtp.googlemail.com with ESMTPSA id d9-20020a2e96c9000000b0026f9cb6d10fsm153273ljj.45.2022.10.27.02.05.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 02:05:58 -0700 (PDT)
+From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        outreachy@lists.linux.dev,
+        Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+Subject: [PATCH v5 0/6] staging: vt6655: a series of checkpatch fixes on the file: rxtx.c
+Date:   Thu, 27 Oct 2022 09:05:49 +0000
+Message-Id: <cover.1666849707.git.tanjubrunostar0@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,52 +70,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before adding this quirk, this (mechanical keyboard) device would not be
-recognized, logging:
+The fixes are similar, mostly long lines splitting. I had to make
+serveral patches to ease the work of inspectors
 
-  new full-speed USB device number 56 using xhci_hcd
-  unable to read config index 0 descriptor/start: -32
-  chopping to 0 config(s)
+v2: fixed a compilation error found by the kernel test robot and
+recompiled the code
 
-It would take dozens of plugging/unpuggling cycles for the keyboard to
-be recognized. Keyboard seems to simply work after applying this quirk.
+v3: tends out the error persisted in the second version. this version is
+a correction of that
 
-This issue had been reported by users in two places already ([1], [2])
-but nobody tried upstreaming a patch yet. After testing I believe their
-suggested fix (DELAY_INIT + NO_LPM + DEVICE_QUALIFIER) was probably a
-little overkill. I assume this particular combination was tested because
-it had been previously suggested in [3], but only NO_LPM seems
-sufficient for this device.
+v4: did some corrections as recommended by Greg KH
 
-[1]: https://qiita.com/float168/items/fed43d540c8e2201b543
-[2]: https://blog.kostic.dev/posts/making-the-realforce-87ub-work-with-usb30-on-Ubuntu/
-[3]: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1678477
+v5: shortend changelog comments as recommended by Greg KH
 
----
-Changes in v2:
-  - add the entry to the right location (sorting entries by
-    vendor/device id).
+Tanjuate Brunostar (6):
+  staging: vt6655: fix lines ending in a '('
+  staging: vt6655: refactor code in s_uGetRTSCTSDuration
+  staging: vt6655: refactor code in s_uFillDataHead
+  staging: vt6655: refactor code in s_vGenerateTxParamete
+  staging: vt6655: refactor code in the rest of the file
+  staging: vt6655: refactor code to avoid a line ending in '('
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Nicolas Dumazet <ndumazet@google.com>
----
- drivers/usb/core/quirks.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/staging/vt6655/rxtx.c | 542 ++++++++++++++++++++--------------
+ 1 file changed, 324 insertions(+), 218 deletions(-)
 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index 0722d2131305..079e183cf3bf 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -362,6 +362,9 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	{ USB_DEVICE(0x0781, 0x5583), .driver_info = USB_QUIRK_NO_LPM },
- 	{ USB_DEVICE(0x0781, 0x5591), .driver_info = USB_QUIRK_NO_LPM },
- 
-+	/* Realforce 87U Keyboard */
-+	{ USB_DEVICE(0x0853, 0x011b), .driver_info = USB_QUIRK_NO_LPM },
-+
- 	/* M-Systems Flash Disk Pioneers */
- 	{ USB_DEVICE(0x08ec, 0x1000), .driver_info = USB_QUIRK_RESET_RESUME },
- 
 -- 
-2.38.0.135.g90850a2211-goog
+2.34.1
 
