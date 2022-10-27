@@ -2,203 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73BFB60EE4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 05:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8DE460EE45
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 05:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234252AbiJ0DCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 23:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46580 "EHLO
+        id S234024AbiJ0DC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 23:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234196AbiJ0DCR (ORCPT
+        with ESMTP id S234193AbiJ0DCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 23:02:17 -0400
-Received: from ironport.ite.com.tw (60-251-196-230.hinet-ip.hinet.net [60.251.196.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE56148FDF
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 20:02:15 -0700 (PDT)
-Received: from unknown (HELO mse.ite.com.tw) ([192.168.35.30])
-  by ironport.ite.com.tw with ESMTP; 27 Oct 2022 11:02:14 +0800
-Received: from CSBMAIL1.internal.ite.com.tw (CSBMAIL1.internal.ite.com.tw [192.168.65.58])
-        by mse.ite.com.tw with ESMTP id 29R329I1066884;
-        Thu, 27 Oct 2022 11:02:09 +0800 (GMT-8)
-        (envelope-from allen.chen@ite.com.tw)
-Received: from VirtualBox.internal.ite.com.tw (192.168.70.46) by
- CSBMAIL1.internal.ite.com.tw (192.168.65.58) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.14; Thu, 27 Oct 2022 11:02:09 +0800
-From:   allen <allen.chen@ite.com.tw>
-CC:     Allen Chen <allen.chen@ite.com.tw>,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 2/2] drm/bridge: add it6505 driver to read data-lanes and link-frequencies from dt
-Date:   Thu, 27 Oct 2022 11:01:54 +0800
-Message-ID: <20221027030155.59238-3-allen.chen@ite.com.tw>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221027030155.59238-1-allen.chen@ite.com.tw>
-References: <20221027030155.59238-1-allen.chen@ite.com.tw>
+        Wed, 26 Oct 2022 23:02:14 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B4F148FDC
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 20:02:13 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id fy4so880826ejc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 20:02:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o7rZB0XkIEpMEFuMSp0Bun4m+5RdGa/e8szfl96xuHA=;
+        b=BhR7keRnd6nNVcTPc6uP/UfMdItmQBDN3OgAvYm84DLnUQUx2nSWo36hM9XkVlyz7p
+         sMccyN4uJd8+nq0eRGaLB5NEM1SCMU1J20AHsAtSP5MSwQKHy5z9+JQ+iLSgQl4AQh+Z
+         AFDPsDoo6gH2ZwsqAg5yXOj8KXEw/NdJhu7j0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o7rZB0XkIEpMEFuMSp0Bun4m+5RdGa/e8szfl96xuHA=;
+        b=KTWafPs3+zsf7Pnnhw4xwpdwATSg98io+QwNb6i1E8fqrC77QJN+9s+WJ80VGhtAkV
+         KDiRQjUz4zPpK3TRyHwktxHsuYmxYSYmDCaO+yaN4M990tCkMxhcK/OyVHQZShpRPcvh
+         jwmhncETj1lr7ieqhKzX0irblG1cUNbH/oGC+YHPs42nvqnpo1DHb2g02WP6beBHN0X8
+         mArOPIXDAp3I3AKG4/VV8uamctwR28E7Xfl7/JSvsjWE9MY2o/HJ+5hX1L3W22zYg4u9
+         ZA7+N/HqeVtQo8jhOdJF/awF6QJvrDqFAiVcMy0KWXbqiSOlhlS2gSdAIkJ68juLBW6A
+         zxfg==
+X-Gm-Message-State: ACrzQf21ivQag7ZZxvzVcdKQIlwVnh1oSLa8biONjtVzEbPEwprMC4CM
+        F77EKrJtcf2EUi+mFxrkzR1/2vIIq+usKDJrmQVgGQ==
+X-Google-Smtp-Source: AMsMyM7v5VDtQldWHY7LbSYnX2W9FTr8ZklLCzWu0mW/aBtFjD2a7olumY4PHY7WMeG7WNGNmqJbTF1s6/aVBFGYq9E=
+X-Received: by 2002:a17:906:9b90:b0:78d:9704:752 with SMTP id
+ dd16-20020a1709069b9000b0078d97040752mr38598911ejc.695.1666839732130; Wed, 26
+ Oct 2022 20:02:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.70.46]
-X-ClientProxiedBy: CSBMAIL1.internal.ite.com.tw (192.168.65.58) To
- CSBMAIL1.internal.ite.com.tw (192.168.65.58)
-X-TM-SNTS-SMTP: D2FAF83ABC70EADEED34BCE8DDA5CC3317F3AABE3E0EC9380F4DCCB60E1D035E2002:8
-X-MAIL: mse.ite.com.tw 29R329I1066884
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20221019093215.8204-1-allen.chen@ite.com.tw> <20221019093215.8204-2-allen.chen@ite.com.tw>
+ <20221024163748.GA1874793-robh@kernel.org> <58b1b01c1f494c3e8a54890ad8a7cdb8@ite.com.tw>
+In-Reply-To: <58b1b01c1f494c3e8a54890ad8a7cdb8@ite.com.tw>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Thu, 27 Oct 2022 11:02:00 +0800
+Message-ID: <CAEXTbpdHkd3KfOkwLt63QhHheqEJuWyRLWiNzD1i4a1rbUabnQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] dt-bindings: it6505: add properties to restrict
+ output bandwidth
+To:     allen.chen@ite.com.tw
+Cc:     robh@kernel.org, Jau-Chih.Tseng@ite.com.tw, Hermes.Wu@ite.com.tw,
+        Kenneth.Hung@ite.com.tw, andrzej.hajda@intel.com,
+        narmstrong@baylibre.com, robert.foss@linaro.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
+        krzysztof.kozlowski+dt@linaro.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: allen chen <allen.chen@ite.com.tw>
+Hi Allen,
 
-Add driver to read data-lanes and link-frequencies from dt property to
-restrict output bandwidth.
+On Thu, Oct 27, 2022 at 9:09 AM <allen.chen@ite.com.tw> wrote:
+>
+> Hi rob
+>
+> -----Original Message-----
+> From: Rob Herring <robh@kernel.org>
+> Sent: Tuesday, October 25, 2022 12:38 AM
+> To: Allen Chen (=E9=99=B3=E6=9F=8F=E5=AE=87) <allen.chen@ite.com.tw>
+> Cc: Pin-Yen Lin <treapking@chromium.org>; Jau-Chih Tseng (=E6=9B=BE=E6=98=
+=AD=E6=99=BA) <Jau-Chih.Tseng@ite.com.tw>; Hermes Wu (=E5=90=B3=E4=BD=B3=E5=
+=AE=8F) <Hermes.Wu@ite.com.tw>; Kenneth Hung (=E6=B4=AA=E5=AE=B6=E5=80=AB) =
+<Kenneth.Hung@ite.com.tw>; Andrzej Hajda <andrzej.hajda@intel.com>; Neil Ar=
+mstrong <narmstrong@baylibre.com>; Robert Foss <robert.foss@linaro.org>; La=
+urent Pinchart <Laurent.pinchart@ideasonboard.com>; Jonas Karlman <jonas@kw=
+iboo.se>; Jernej Skrabec <jernej.skrabec@gmail.com>; David Airlie <airlied@=
+linux.ie>; Daniel Vetter <daniel@ffwll.ch>; Krzysztof Kozlowski <krzysztof.=
+kozlowski+dt@linaro.org>; open list:DRM DRIVERS <dri-devel@lists.freedeskto=
+p.org>; open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS <devicet=
+ree@vger.kernel.org>; open list <linux-kernel@vger.kernel.org>
+> Subject: Re: [PATCH v5 1/2] dt-bindings: it6505: add properties to restri=
+ct output bandwidth
+>
+> On Wed, Oct 19, 2022 at 05:32:13PM +0800, allen wrote:
+> > From: allen chen <allen.chen@ite.com.tw>
+> >
+> > Add properties to restrict dp output data-lanes and clock.
+> >
+> > Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
+> > Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
+> > ---
+> >  .../bindings/display/bridge/ite,it6505.yaml   | 89 +++++++++++++++++--
+> >  1 file changed, 83 insertions(+), 6 deletions(-)
+> >
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+> > b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+> > index 833d11b2303a7..8e607b6929fc9 100644
+> > --- a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+> > +++ b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+> > @@ -52,9 +52,70 @@ properties:
+> >      maxItems: 1
+> >      description: extcon specifier for the Power Delivery
+> >
+> > -  port:
+> > -    $ref: /schemas/graph.yaml#/properties/port
+> > -    description: A port node pointing to DPI host port node
+>
+> No existing users you are breaking? The commit msg should explain.
+>
+> =3D=3D> There are no it6505 users in community.
 
-Signed-off-by: Allen chen <allen.chen@ite.com.tw>
-Signed-off-by: Pin-yen Lin <treapking@chromium.org>
----
- drivers/gpu/drm/bridge/ite-it6505.c | 80 +++++++++++++++++++++++++++--
- 1 file changed, 77 insertions(+), 3 deletions(-)
+I would say, currently there are no "upstream" users. So, no existing
+users to break.
 
-diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-index a4302492cf8df..ed4536cde3140 100644
---- a/drivers/gpu/drm/bridge/ite-it6505.c
-+++ b/drivers/gpu/drm/bridge/ite-it6505.c
-@@ -437,6 +437,8 @@ struct it6505 {
- 	bool powered;
- 	bool hpd_state;
- 	u32 afe_setting;
-+	u32 max_dpi_pixel_clock;
-+	u32 max_lane_count;
- 	enum hdcp_state hdcp_status;
- 	struct delayed_work hdcp_work;
- 	struct work_struct hdcp_wait_ksv_list;
-@@ -1476,7 +1478,8 @@ static void it6505_parse_link_capabilities(struct it6505 *it6505)
- 	it6505->lane_count = link->num_lanes;
- 	DRM_DEV_DEBUG_DRIVER(dev, "Sink support %d lanes training",
- 			     it6505->lane_count);
--	it6505->lane_count = min_t(int, it6505->lane_count, MAX_LANE_COUNT);
-+	it6505->lane_count = min_t(int, it6505->lane_count,
-+				   it6505->max_lane_count);
- 
- 	it6505->branch_device = drm_dp_is_branch(it6505->dpcd);
- 	DRM_DEV_DEBUG_DRIVER(dev, "Sink %sbranch device",
-@@ -2912,7 +2915,7 @@ it6505_bridge_mode_valid(struct drm_bridge *bridge,
- 	if (mode->flags & DRM_MODE_FLAG_INTERLACE)
- 		return MODE_NO_INTERLACE;
- 
--	if (mode->clock > DPI_PIXEL_CLK_MAX)
-+	if (mode->clock > it6505->max_dpi_pixel_clock)
- 		return MODE_CLOCK_HIGH;
- 
- 	it6505->video_info.clock = mode->clock;
-@@ -3099,10 +3102,32 @@ static int it6505_init_pdata(struct it6505 *it6505)
- 	return 0;
- }
- 
-+static int it6505_get_data_lanes_count(const struct device_node *endpoint,
-+				       const unsigned int min,
-+				       const unsigned int max)
-+{
-+	int ret;
-+
-+	ret = of_property_count_u32_elems(endpoint, "data-lanes");
-+	if (ret < 0)
-+		return ret;
-+
-+	if (ret < min || ret > max)
-+		return -EINVAL;
-+
-+	return ret;
-+}
-+
- static void it6505_parse_dt(struct it6505 *it6505)
- {
- 	struct device *dev = &it6505->client->dev;
-+	struct device_node *np = dev->of_node, *ep = NULL;
-+	int len;
-+	u64 link_frequencies;
-+	u32 data_lanes[4];
- 	u32 *afe_setting = &it6505->afe_setting;
-+	u32 *max_lane_count = &it6505->max_lane_count;
-+	u32 *max_dpi_pixel_clock = &it6505->max_dpi_pixel_clock;
- 
- 	it6505->lane_swap_disabled =
- 		device_property_read_bool(dev, "no-laneswap");
-@@ -3118,7 +3143,56 @@ static void it6505_parse_dt(struct it6505 *it6505)
- 	} else {
- 		*afe_setting = 0;
- 	}
--	DRM_DEV_DEBUG_DRIVER(dev, "using afe_setting: %d", *afe_setting);
-+
-+	ep = of_graph_get_endpoint_by_regs(np, 1, 0);
-+	of_node_put(ep);
-+
-+	if (ep) {
-+		len = it6505_get_data_lanes_count(ep, 1, 4);
-+
-+		if (len > 0 && len != 3) {
-+			of_property_read_u32_array(ep, "data-lanes",
-+						   data_lanes, len);
-+			*max_lane_count = len;
-+		} else {
-+			*max_lane_count = MAX_LANE_COUNT;
-+			dev_err(dev, "error data-lanes, use default");
-+		}
-+	} else {
-+		*max_lane_count = MAX_LANE_COUNT;
-+		dev_err(dev, "error endpoint, use default");
-+	}
-+
-+	ep = of_graph_get_endpoint_by_regs(np, 0, 0);
-+	of_node_put(ep);
-+
-+	if (ep) {
-+		len = of_property_read_variable_u64_array(ep,
-+							  "link-frequencies",
-+							  &link_frequencies, 0,
-+							  1);
-+		if (len >= 0) {
-+			do_div(link_frequencies, 1000);
-+			if (link_frequencies > 297000) {
-+				dev_err(dev,
-+					"max pixel clock error, use default");
-+				*max_dpi_pixel_clock = DPI_PIXEL_CLK_MAX;
-+			} else {
-+				*max_dpi_pixel_clock = link_frequencies;
-+			}
-+		} else {
-+			dev_err(dev, "error link frequencies, use default");
-+			*max_dpi_pixel_clock = DPI_PIXEL_CLK_MAX;
-+		}
-+	} else {
-+		dev_err(dev, "error endpoint, use default");
-+		*max_dpi_pixel_clock = DPI_PIXEL_CLK_MAX;
-+	}
-+
-+	DRM_DEV_DEBUG_DRIVER(dev, "using afe_setting: %u, max_lane_count: %u",
-+			     it6505->afe_setting, it6505->max_lane_count);
-+	DRM_DEV_DEBUG_DRIVER(dev, "using max_dpi_pixel_clock: %u kHz",
-+			     it6505->max_dpi_pixel_clock);
- }
- 
- static ssize_t receive_timing_debugfs_show(struct file *file, char __user *buf,
--- 
-2.25.1
+The term "community" is a bit vague and broad.
 
+Regards,
+Pin-yen
+
+> > +  ports:
+> > +    $ref: /schemas/graph.yaml#/properties/ports
+> > +
+> > +    properties:
+> > +      port@0:
+> > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > +        unevaluatedProperties: false
+> > +        description: A port node pointing to DPI host port node
+> > +
+> > +        properties:
+> > +          endpoint:
+> > +            $ref: /schemas/graph.yaml#/$defs/endpoint-base
+> > +            unevaluatedProperties: false
+> > +
+> > +            properties:
+> > +              link-frequencies:
+> > +                minItems: 1
+> > +                maxItems: 1
+> > +                description: Allowed max link frequencies in Hz
+> > +
+> > +      port@1:
+> > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > +        unevaluatedProperties: false
+> > +        description: Video port for DP output
+> > +
+> > +        properties:
+> > +          endpoint:
+> > +            $ref: /schemas/graph.yaml#/$defs/endpoint-base
+> > +            unevaluatedProperties: false
+> > +
+> > +            properties:
+> > +              data-lanes:
+> > +                oneOf:
+> > +                  - minItems: 1
+> > +                    maxItems: 1
+> > +                    uniqueItems: true
+> > +                    items:
+> > +                      enum:
+> > +                        - 0
+> > +                        - 1
+> > +                    description: For one lane operation.
+> > +
+> > +                  - minItems: 2
+> > +                    maxItems: 2
+> > +                    uniqueItems: true
+> > +                    items:
+> > +                      enum:
+> > +                        - 0
+> > +                        - 1
+> > +                    description: For two lanes operation.
+> > +
+> > +                  - minItems: 4
+> > +                    maxItems: 4
+> > +                    uniqueItems: true
+> > +                    items:
+> > +                      enum:
+> > +                        - 0
+> > +                        - 1
+> > +                        - 2
+> > +                        - 3
+> > +                    description: For four lanes operation.
+>
+> I would do just:
+>
+> data-lanes:
+>   minItems: 1
+>   items:
+>     - enum: [ 0, 1 ]
+>     - const: 1
+>     - const: 2
+>     - const: 3
+>
+> It does allow 3 lanes, but I don't think that's a big deal. What it does =
+doesn't allow is any order and yours does.
+>
+> Rob
