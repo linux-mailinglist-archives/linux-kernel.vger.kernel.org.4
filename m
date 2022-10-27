@@ -2,85 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA8860FCC9
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D10F360FCCC
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236471AbiJ0QR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 12:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
+        id S236344AbiJ0QS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 12:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236236AbiJ0QRz (ORCPT
+        with ESMTP id S236472AbiJ0QSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 12:17:55 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B340B18499C;
-        Thu, 27 Oct 2022 09:17:54 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id f8so1318755qkg.3;
-        Thu, 27 Oct 2022 09:17:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WNivv6DRz6IEkkxyGRhb+JocG+RcUmjQEd9pXKbOdDc=;
-        b=NxS8gxZ5r2NidNCaiTXc+eL/q287MblVn2H5BsRA7or5nWiqGB6CkpEOwUw0ckzECs
-         yjt3sPFNpfdMT+XrqidYEuhYGhrNNGz7B5Ez9Mm9CiJfpcEJssXc8dloV8nM93+xBrHR
-         +aiqUB+ntichlicautD/OLfx/lO6ufjVKVMarUVBt3o8uR13AnIHVVSJH6nz3jcv/qmF
-         tUicgzZbJew7Yno+y1GqF7887A2KZPqZJSE023H42rx2wsxA6+S6S7ACNHWdStf6TZa0
-         ypb/lxBeharZN2Y2L29TT9md983qf412hShCxXQBnRVxzDhwVcJnYzhl8+mHxknZTr6Q
-         WYXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WNivv6DRz6IEkkxyGRhb+JocG+RcUmjQEd9pXKbOdDc=;
-        b=KglMzB1Rjpi/F2a3Kduj7NGiA5RRM8zAHIbEaaLGBoCylTzYpgBxc9gT1+/F+2Su8L
-         q73IxeIF1sXMEwYPtZrtJL9L0FJPHmpMlWc9hBDYEFfisQfNUNBCsiZ8BKXLDAPIWYuV
-         3Yrg9JBdy9tFKGmljN7OWGTYSL/7UG15uu/y5irPH/6QQkyKwQvLVTyVbSWn9KCWJqoU
-         bMzgi5X0EHsxtjW4h9gYGEsS27HWROwHrF1/g599eMeOUjjfGeG6qYeyKWvAqRmjyjz0
-         sSuUR2VxuEEBLYMPdo6iH9a0VTuBp7Q7NDtPyVmoPntVMZkulS5viuM/070sD0CVgOK6
-         yQgQ==
-X-Gm-Message-State: ACrzQf0yAIyOHh/qcirppPevU6q1WHa6k0zK8BH7/aELoDGoJj/G2J+O
-        uCyaw3dFfpJkrUg4Q0uUgVk=
-X-Google-Smtp-Source: AMsMyM5vHmoX2lyAii7orMewell05XbgGBaMZ0nuXVmF0ltTsUChJojDSXLe3If80wF1op6DMfBhEQ==
-X-Received: by 2002:a05:620a:40cb:b0:6ee:79ce:e985 with SMTP id g11-20020a05620a40cb00b006ee79cee985mr34437793qko.219.1666887473804;
-        Thu, 27 Oct 2022 09:17:53 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id y27-20020a37f61b000000b006cf19068261sm1177502qkj.116.2022.10.27.09.17.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 09:17:52 -0700 (PDT)
-Message-ID: <5c26e62a-0e69-aad6-c72f-eb7fc28051cb@gmail.com>
-Date:   Thu, 27 Oct 2022 09:17:51 -0700
+        Thu, 27 Oct 2022 12:18:17 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF3F18C945;
+        Thu, 27 Oct 2022 09:18:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666887496; x=1698423496;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=mio/fM7+F8nVUXn2ZcQlynlshnIvyeSjm66BSTRpQzQ=;
+  b=aKH/5ICmP5ZNbEdQ3c8/0I9ZMwuEXLVfYpMWr7N+rEzKZfBjs2gT0GrP
+   i/zGkjjZJVif5B9UwhammT5C7e0ypbZSo70kHsKp0ahcSLVrCp1GssW0m
+   73mTTBuAANCgm1rVe+diKuuUdrFKpn/IvyQhd+Zg58zjpa1K+MZdzBxHe
+   Zax4j6/rwgcItzNl0cSC3sw0CS/Wx8XvwWENV2tczFMt45LapmNZdjBmO
+   3ns1ogX9xu564hG3POUoONbJ9PgnUJUVzHfVSI/97Gw+xRYLPRdmFA+sU
+   YiS7TGAZxgimk2J6B5nC+BRKETbXSz+QBGblkgdEstsbhspmUwPIkWPZI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="287985806"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="287985806"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 09:18:16 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="701401909"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="701401909"
+Received: from vstelter-mobl.amr.corp.intel.com (HELO [10.212.214.108]) ([10.212.214.108])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 09:18:15 -0700
+Message-ID: <3ce6ef93-2f47-eda3-f974-0cfea7f43766@intel.com>
+Date:   Thu, 27 Oct 2022 09:18:13 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v5 3/7] firmware: raspberrypi: Provide a helper to query a
- clock max rate
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4] memregion: Add cpu_cache_invalidate_memregion()
+ interface
 Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>, Stephen Boyd <sboyd@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>, Ray Jui <rjui@broadcom.com>
-Cc:     linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org, Dom Cobley <popcornmix@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>
-References: <20220815-rpi-fix-4k-60-v5-0-fe9e7ac8b111@cerno.tech>
- <20220815-rpi-fix-4k-60-v5-3-fe9e7ac8b111@cerno.tech>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220815-rpi-fix-4k-60-v5-3-fe9e7ac8b111@cerno.tech>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Dan Williams <dan.j.williams@intel.com>, linux-cxl@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <166672803035.2801111.9244172033971411169.stgit@dwillia2-xfh.jf.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <166672803035.2801111.9244172033971411169.stgit@dwillia2-xfh.jf.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,18 +70,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/25/22 13:05, Dan Williams wrote:
+> Users must first call cpu_cache_has_invalidate_memregion() to know whether
+> this functionality is available on the architecture. Only enable it on
+> x86-64 via the wbinvd() hammer. Hypervisors are not supported as TDX
+> guests may trigger a virtualization exception and may need proper handling
+> to recover. See:
+That sentence doesn't quite parse correctly.  Does it need to be "and
+may trigger..."?
 
+> This global cache invalidation facility,
+> cpu_cache_invalidate_memregion(), is exported to modules since NVDIMM
+> and CXL support can be built as a module. However, the intent is that
+> this facility is not available outside of specific "device-memory" use
+> cases. To that end the API is scoped to a new "DEVMEM" module namespace
+> that only applies to the NVDIMM and CXL subsystems.
 
-On 10/27/2022 5:52 AM, Maxime Ripard wrote:
-> The firmware allows to query for its clocks the operating range of a
-> given clock. We'll need this for some drivers (KMS, in particular) to
-> infer the state of some configuration options, so let's create a
-> function to do so.
-> 
-> Acked-by: Stephen Boyd <sboyd@kernel.org>
-> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Oh, thank $DEITY you're trying to limit the amount of code that has
+access to this thing.
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 67745ceab0db..b68661d0633b 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -69,6 +69,7 @@ config X86
+>  	select ARCH_ENABLE_THP_MIGRATION if X86_64 && TRANSPARENT_HUGEPAGE
+>  	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
+>  	select ARCH_HAS_CACHE_LINE_SIZE
+> +	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION  if X86_64
+
+What is 64-bit only about this?
+
+I don't expect to have a lot of NVDIMMs or CXL devices on 32-bit
+kernels, but it would be nice to remove this if it's not strictly
+needed.  Or, to add a changelog nugget that says:
+
+	Restrict this to X86_64 kernels.  It would probably work on 32-
+	bit, but there is no practical reason to use 32-bit kernels and
+	no one is testing them.
+
+>  	select ARCH_HAS_CURRENT_STACK_POINTER
+>  	select ARCH_HAS_DEBUG_VIRTUAL
+>  	select ARCH_HAS_DEBUG_VM_PGTABLE	if !X86_PAE
+> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+> index 97342c42dda8..8650bb6481a8 100644
+> --- a/arch/x86/mm/pat/set_memory.c
+> +++ b/arch/x86/mm/pat/set_memory.c
+> @@ -330,6 +330,21 @@ void arch_invalidate_pmem(void *addr, size_t size)
+>  EXPORT_SYMBOL_GPL(arch_invalidate_pmem);
+>  #endif
+>  
+> +#ifdef CONFIG_ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+> +bool cpu_cache_has_invalidate_memregion(void)
+> +{
+> +	return !cpu_feature_enabled(X86_FEATURE_HYPERVISOR);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(cpu_cache_has_invalidate_memregion, DEVMEM);
+> +
+> +int cpu_cache_invalidate_memregion(int res_desc)
+> +{
+> +	wbinvd_on_all_cpus();
+> +	return 0;
+> +}
+
+Does this maybe also deserve a:
+
+	WARN_ON_ONCE(!cpu_cache_has_invalidate_memregion());
+
+in case one of the cpu_cache_invalidate_memregion() paths missed a
+cpu_cache_has_invalidate_memregion() check?
+
+> +/**
+> + * cpu_cache_invalidate_memregion - drop any CPU cached data for
+> + *     memregions described by @res_desc
+> + * @res_desc: one of the IORES_DESC_* types
+> + *
+> + * Perform cache maintenance after a memory event / operation that
+> + * changes the contents of physical memory in a cache-incoherent manner.
+> + * For example, device memory technologies like NVDIMM and CXL have
+> + * device secure erase, or dynamic region provision features where such
+> + * semantics.
+
+s/where/with/ ?
+
+> + * Limit the functionality to architectures that have an efficient way
+> + * to writeback and invalidate potentially terabytes of memory at once.
+> + * Note that this routine may or may not write back any dirty contents
+> + * while performing the invalidation. It is only exported for the
+> + * explicit usage of the NVDIMM and CXL modules in the 'DEVMEM' symbol
+> + * namespace.
+> + *
+> + * Returns 0 on success or negative error code on a failure to perform
+> + * the cache maintenance.
+> + */
+
+WBINVD is a scary beast.  But, there's also no better alternative in the
+architecture.  I don't think any of my comments above are deal breakers,
+so from the x86 side:
+
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
