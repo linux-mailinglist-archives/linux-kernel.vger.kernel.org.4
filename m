@@ -2,160 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E812160F515
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ECC260F52D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234899AbiJ0K2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 06:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
+        id S234618AbiJ0Kaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 06:30:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234428AbiJ0K1z (ORCPT
+        with ESMTP id S234855AbiJ0KaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 06:27:55 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A642C588C
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:27:52 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id l14so1416041wrw.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:27:52 -0700 (PDT)
+        Thu, 27 Oct 2022 06:30:01 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC6C1F2E4
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:29:52 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id g12so1871478lfh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:29:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P38kTBSJr/DRXyh4Je0XkAOEtRTZS4roS95ylRUlbWA=;
-        b=ILJoWb3XrEu77ZuGCBs0pipPfO4HGPcyLw4RSiRRZTtUO8SCysUSQExzlcDrTMIRvN
-         cBb/7EBQclQbY0zrEv8j2I7E8PiPYHot7xwsKOOLha0kgM4OGpvJNZX/a/Bywk3iAGDq
-         tiNgZJe/5heYhar822aPNtv4gneYYhPVFkUpLzNE02gv0IiOTV6YfhMHsZtnXsawmqJj
-         Gekwk2Dr72DN8aRhqRrIln6/ekwlGOsmNGRspkG9AVr1XVz52NqnswULcIvM7d9N7a5L
-         2wpww+JO5VccrA/sXkL/b5jdTiw4as9PKSPi1tCh9N8Y03eBbXgTg5IatcSelIrWtx/+
-         8RIg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0heoQ75/5VSlWRbzYWlqtOyoihaCk0GBJXOxfmWTOfk=;
+        b=TGZ+AHB+/VCuAf8/5IZLQRevtX055y+nnz+ARUuKwQU1I4fg7fp43eeRuH2v7XFvkS
+         X+Gt7cF2nNFj4HpCbNa8jW9qEUtRMt+sS17Fcf05qC4cN3kYAndhWb9LZ0eyn6IvzOxf
+         UOeSAFO4W+oPeg/fJnHtuDOr3YrIC4cX/Z4LxgyBljFOwiOLrYYkl4IKn8x7WwMN1DhQ
+         vFafYxM3d1UVYup5HarUqQRn5QU47KwSOnDd0hfHqSRGuVJWqjUDcO1XM/8rHi/L59+w
+         VU2aUC5tKx1ZdvIV+kfKXyE5JbtXoSIREX3CedB+BO6IQKhcKT+BItyxmNDmmPiu/8QV
+         lzzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P38kTBSJr/DRXyh4Je0XkAOEtRTZS4roS95ylRUlbWA=;
-        b=Hc64NGWvJzU36gKcaUp+PJTIyMMqPI/tdYP31E2+lBmRVqo5akKOU0N4KGcOly82/8
-         lEH2cH8RS+zdgX4EU/RyGkSFYNa6RmAA9HILx/rRAu1LoDsaFAV1LpsbJCQs2o5162BY
-         PMadZ2o7KBvLMSbE1bNfsC8B6SHze0JI7vrAWZO0Fr5OmgtApHJFD+JSQhCmrMqs6iAt
-         rV75UhjE6neQKS3M4IDuJez6pUaERH0s/87j7qJjBEsd0aGWU6tkzKbkLrc5cEXMtjlN
-         VBuMbHdOTeaDaA7WgEaMcnBw28O1C1Gqaqr3jY3iOC2L4S/RHogzgBsnRsGl/P/PtARw
-         wKZg==
-X-Gm-Message-State: ACrzQf1I8lVL14YlwJC/sTC22U5JiDWkVo4BWVwbddaUi1Wh6NHkwMYF
-        VtSjdXe2Ul1PHMeiA/2Qdv56zw==
-X-Google-Smtp-Source: AMsMyM6n1kCTi8daTd2SVcuEjyzVj6ZAP/A2zOOB2oE7t372oUSp1ruGQ0IjsqMc53/pKEuRKijVQQ==
-X-Received: by 2002:a05:6000:1b0e:b0:236:5c9e:7110 with SMTP id f14-20020a0560001b0e00b002365c9e7110mr18891472wrz.650.1666866470678;
-        Thu, 27 Oct 2022 03:27:50 -0700 (PDT)
-Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id fc7-20020a05600c524700b003b505d26776sm5088674wmb.5.2022.10.27.03.27.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 03:27:50 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     broonie@kernel.org
-Cc:     lgirdwood@gmail.com, bgoswami@quicinc.com, perex@perex.cz,
-        tiwai@suse.com, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v3 9/9] ASoC: qdsp6: audioreach: add support to enable module command
-Date:   Thu, 27 Oct 2022 11:27:10 +0100
-Message-Id: <20221027102710.21407-10-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20221027102710.21407-1-srinivas.kandagatla@linaro.org>
-References: <20221027102710.21407-1-srinivas.kandagatla@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0heoQ75/5VSlWRbzYWlqtOyoihaCk0GBJXOxfmWTOfk=;
+        b=OfVW/VPWPH7XngNCWZCSXJBMozuiUYMPbStfgMQE12g70YfjSu+DK8MP2ZSylD1Z1x
+         LvoKsglI1fSZZj3JqJ89+owiI5VYyAL7T+kHsnKobyHVQtHcJyRWcfVXlF4kV3Phu9lb
+         h0e5QBAQdQj5aZtJbySJoEn/9DNlvR5vOIRjLroYNblc1Tua78tO1zgdOZR7ZM8OOor2
+         amSoDfqSzcNzA0PSkebzjsjPMcyh5PFDTqqREJs1IMmhMTaPM70+ITG4nBo2VkBHqaF0
+         0E3IFl0RXtfbaH7/A5n692D4wLIHgcUGpLrRrhGxz8piZzFJkPNc6LEEnMXLZ6bTeKg1
+         Qwug==
+X-Gm-Message-State: ACrzQf1qWJ2j3RL2V4A0otIKmGQ3tL4tXj1RP7fpdcwDaOc4VX5tDUfm
+        NYWzcI/xASGh8ibK5DAokCLclcUlxUCbc5HhCyiQcQ==
+X-Google-Smtp-Source: AMsMyM6pXaQUclBRuQdHyU6LfjVbG2j8GF0LigG6tmbtr2FkYZjZ0nO5HPb+OzdJSXOTlsdg0oH0XtaqnFKTblieit4=
+X-Received: by 2002:a05:6512:2392:b0:4a2:550a:e21d with SMTP id
+ c18-20020a056512239200b004a2550ae21dmr19000831lfv.550.1666866591008; Thu, 27
+ Oct 2022 03:29:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com> <20221025151344.3784230-5-chao.p.peng@linux.intel.com>
+In-Reply-To: <20221025151344.3784230-5-chao.p.peng@linux.intel.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Thu, 27 Oct 2022 11:29:14 +0100
+Message-ID: <CA+EHjTySnJTuLB+XoRya6kS_zw2iMahW9-Ze70oKTf+6k0GrGQ@mail.gmail.com>
+Subject: Re: [PATCH v9 4/8] KVM: Use gfn instead of hva for mmu_notifier_retry
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to enable Module command which is required for logging
-module to be able to debug.
+Hi,
 
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- sound/soc/qcom/qdsp6/audioreach.c | 40 ++++++++++++++++++++++++++++++-
- sound/soc/qcom/qdsp6/audioreach.h |  5 ++++
- 2 files changed, 44 insertions(+), 1 deletion(-)
+On Tue, Oct 25, 2022 at 4:19 PM Chao Peng <chao.p.peng@linux.intel.com> wrote:
+>
+> Currently in mmu_notifier validate path, hva range is recorded and then
+> checked against in the mmu_notifier_retry_hva() of the page fault path.
+> However, for the to be introduced private memory, a page fault may not
+> have a hva associated, checking gfn(gpa) makes more sense.
+>
+> For existing non private memory case, gfn is expected to continue to
+> work. The only downside is when aliasing multiple gfns to a single hva,
+> the current algorithm of checking multiple ranges could result in a much
+> larger range being rejected. Such aliasing should be uncommon, so the
+> impact is expected small.
+>
+> It also fixes a bug in kvm_zap_gfn_range() which has already been using
 
-diff --git a/sound/soc/qcom/qdsp6/audioreach.c b/sound/soc/qcom/qdsp6/audioreach.c
-index 1338b99f37e1..1e0c918eb576 100644
---- a/sound/soc/qcom/qdsp6/audioreach.c
-+++ b/sound/soc/qcom/qdsp6/audioreach.c
-@@ -731,6 +731,42 @@ static int audioreach_sal_set_media_format(struct q6apm_graph *graph,
- 	return rc;
- }
- 
-+static int audioreach_module_enable(struct q6apm_graph *graph,
-+				    struct audioreach_module *module,
-+				    bool enable)
-+{
-+	struct apm_module_param_data *param_data;
-+	struct param_id_module_enable *param;
-+	int payload_size;
-+	struct gpr_pkt *pkt;
-+	int rc;
-+	void *p;
-+
-+	payload_size = sizeof(*param) + APM_MODULE_PARAM_DATA_SIZE;
-+
-+	pkt = audioreach_alloc_apm_cmd_pkt(payload_size, APM_CMD_SET_CFG, 0);
-+	if (IS_ERR(pkt))
-+		return PTR_ERR(pkt);
-+
-+	p = (void *)pkt + GPR_HDR_SIZE + APM_CMD_HDR_SIZE;
-+
-+	param_data = p;
-+	param_data->module_instance_id = module->instance_id;
-+	param_data->error_code = 0;
-+	param_data->param_id = PARAM_ID_MODULE_ENABLE;
-+	param_data->param_size = sizeof(*param);
-+	p = p + APM_MODULE_PARAM_DATA_SIZE;
-+	param = p;
-+
-+	param->enable = enable;
-+
-+	rc = q6apm_send_cmd_sync(graph->apm, pkt, 0);
-+
-+	kfree(pkt);
-+
-+	return rc;
-+}
-+
- static int audioreach_mfc_set_media_format(struct q6apm_graph *graph,
- 					   struct audioreach_module *module,
- 					   struct audioreach_module_config *cfg)
-@@ -1077,7 +1113,9 @@ int audioreach_set_media_format(struct q6apm_graph *graph, struct audioreach_mod
- 
- 	switch (module->module_id) {
- 	case MODULE_ID_DATA_LOGGING:
--		rc = audioreach_logging_set_media_format(graph, module);
-+		rc = audioreach_module_enable(graph, module, true);
-+		if (!rc)
-+			rc = audioreach_logging_set_media_format(graph, module);
- 		break;
- 	case MODULE_ID_PCM_DEC:
- 	case MODULE_ID_PCM_ENC:
-diff --git a/sound/soc/qcom/qdsp6/audioreach.h b/sound/soc/qcom/qdsp6/audioreach.h
-index 707dfbdbc156..1d1d47d47d40 100644
---- a/sound/soc/qcom/qdsp6/audioreach.h
-+++ b/sound/soc/qcom/qdsp6/audioreach.h
-@@ -537,6 +537,11 @@ struct payload_media_fmt_pcm {
- 	uint8_t channel_mapping[];
- } __packed;
- 
-+#define PARAM_ID_MODULE_ENABLE			0x08001026
-+struct param_id_module_enable {
-+	uint32_t enable;
-+} __packed;
-+
- #define PARAM_ID_CODEC_DMA_INTF_CFG		0x08001063
- 
- struct param_id_codec_dma_intf_cfg {
--- 
-2.21.0
+nit: Now it's kvm_unmap_gfn_range().
 
+> gfn when calling kvm_mmu_invalidate_begin/end() while these functions
+> accept hva in current code.
+>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> ---
+
+Based on reading this code and my limited knowledge of the x86 MMU code:
+Reviewed-by: Fuad Tabba <tabba@google.com>
+
+Cheers,
+/fuad
+
+
+>  arch/x86/kvm/mmu/mmu.c   |  2 +-
+>  include/linux/kvm_host.h | 18 +++++++---------
+>  virt/kvm/kvm_main.c      | 45 ++++++++++++++++++++++++++--------------
+>  3 files changed, 39 insertions(+), 26 deletions(-)
+>
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 6f81539061d6..33b1aec44fb8 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -4217,7 +4217,7 @@ static bool is_page_fault_stale(struct kvm_vcpu *vcpu,
+>                 return true;
+>
+>         return fault->slot &&
+> -              mmu_invalidate_retry_hva(vcpu->kvm, mmu_seq, fault->hva);
+> +              mmu_invalidate_retry_gfn(vcpu->kvm, mmu_seq, fault->gfn);
+>  }
+>
+>  static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 739a7562a1f3..79e5cbc35fcf 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -775,8 +775,8 @@ struct kvm {
+>         struct mmu_notifier mmu_notifier;
+>         unsigned long mmu_invalidate_seq;
+>         long mmu_invalidate_in_progress;
+> -       unsigned long mmu_invalidate_range_start;
+> -       unsigned long mmu_invalidate_range_end;
+> +       gfn_t mmu_invalidate_range_start;
+> +       gfn_t mmu_invalidate_range_end;
+>  #endif
+>         struct list_head devices;
+>         u64 manual_dirty_log_protect;
+> @@ -1365,10 +1365,8 @@ void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc);
+>  void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
+>  #endif
+>
+> -void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
+> -                             unsigned long end);
+> -void kvm_mmu_invalidate_end(struct kvm *kvm, unsigned long start,
+> -                           unsigned long end);
+> +void kvm_mmu_invalidate_begin(struct kvm *kvm, gfn_t start, gfn_t end);
+> +void kvm_mmu_invalidate_end(struct kvm *kvm, gfn_t start, gfn_t end);
+>
+>  long kvm_arch_dev_ioctl(struct file *filp,
+>                         unsigned int ioctl, unsigned long arg);
+> @@ -1937,9 +1935,9 @@ static inline int mmu_invalidate_retry(struct kvm *kvm, unsigned long mmu_seq)
+>         return 0;
+>  }
+>
+> -static inline int mmu_invalidate_retry_hva(struct kvm *kvm,
+> +static inline int mmu_invalidate_retry_gfn(struct kvm *kvm,
+>                                            unsigned long mmu_seq,
+> -                                          unsigned long hva)
+> +                                          gfn_t gfn)
+>  {
+>         lockdep_assert_held(&kvm->mmu_lock);
+>         /*
+> @@ -1949,8 +1947,8 @@ static inline int mmu_invalidate_retry_hva(struct kvm *kvm,
+>          * positives, due to shortcuts when handing concurrent invalidations.
+>          */
+>         if (unlikely(kvm->mmu_invalidate_in_progress) &&
+> -           hva >= kvm->mmu_invalidate_range_start &&
+> -           hva < kvm->mmu_invalidate_range_end)
+> +           gfn >= kvm->mmu_invalidate_range_start &&
+> +           gfn < kvm->mmu_invalidate_range_end)
+>                 return 1;
+>         if (kvm->mmu_invalidate_seq != mmu_seq)
+>                 return 1;
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 8dace78a0278..09c9cdeb773c 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -540,8 +540,7 @@ static void kvm_mmu_notifier_invalidate_range(struct mmu_notifier *mn,
+>
+>  typedef bool (*hva_handler_t)(struct kvm *kvm, struct kvm_gfn_range *range);
+>
+> -typedef void (*on_lock_fn_t)(struct kvm *kvm, unsigned long start,
+> -                            unsigned long end);
+> +typedef void (*on_lock_fn_t)(struct kvm *kvm, gfn_t start, gfn_t end);
+>
+>  typedef void (*on_unlock_fn_t)(struct kvm *kvm);
+>
+> @@ -628,7 +627,8 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
+>                                 locked = true;
+>                                 KVM_MMU_LOCK(kvm);
+>                                 if (!IS_KVM_NULL_FN(range->on_lock))
+> -                                       range->on_lock(kvm, range->start, range->end);
+> +                                       range->on_lock(kvm, gfn_range.start,
+> +                                                           gfn_range.end);
+>                                 if (IS_KVM_NULL_FN(range->handler))
+>                                         break;
+>                         }
+> @@ -715,15 +715,9 @@ static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
+>         kvm_handle_hva_range(mn, address, address + 1, pte, kvm_set_spte_gfn);
+>  }
+>
+> -void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
+> -                             unsigned long end)
+> +static inline void update_invalidate_range(struct kvm *kvm, gfn_t start,
+> +                                                           gfn_t end)
+>  {
+> -       /*
+> -        * The count increase must become visible at unlock time as no
+> -        * spte can be established without taking the mmu_lock and
+> -        * count is also read inside the mmu_lock critical section.
+> -        */
+> -       kvm->mmu_invalidate_in_progress++;
+>         if (likely(kvm->mmu_invalidate_in_progress == 1)) {
+>                 kvm->mmu_invalidate_range_start = start;
+>                 kvm->mmu_invalidate_range_end = end;
+> @@ -744,6 +738,28 @@ void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
+>         }
+>  }
+>
+> +static void mark_invalidate_in_progress(struct kvm *kvm, gfn_t start, gfn_t end)
+> +{
+> +       /*
+> +        * The count increase must become visible at unlock time as no
+> +        * spte can be established without taking the mmu_lock and
+> +        * count is also read inside the mmu_lock critical section.
+> +        */
+> +       kvm->mmu_invalidate_in_progress++;
+> +}
+> +
+> +static bool kvm_mmu_handle_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+> +{
+> +       update_invalidate_range(kvm, range->start, range->end);
+> +       return kvm_unmap_gfn_range(kvm, range);
+> +}
+> +
+> +void kvm_mmu_invalidate_begin(struct kvm *kvm, gfn_t start, gfn_t end)
+> +{
+> +       mark_invalidate_in_progress(kvm, start, end);
+> +       update_invalidate_range(kvm, start, end);
+> +}
+> +
+>  static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+>                                         const struct mmu_notifier_range *range)
+>  {
+> @@ -752,8 +768,8 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+>                 .start          = range->start,
+>                 .end            = range->end,
+>                 .pte            = __pte(0),
+> -               .handler        = kvm_unmap_gfn_range,
+> -               .on_lock        = kvm_mmu_invalidate_begin,
+> +               .handler        = kvm_mmu_handle_gfn_range,
+> +               .on_lock        = mark_invalidate_in_progress,
+>                 .on_unlock      = kvm_arch_guest_memory_reclaimed,
+>                 .flush_on_ret   = true,
+>                 .may_block      = mmu_notifier_range_blockable(range),
+> @@ -791,8 +807,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+>         return 0;
+>  }
+>
+> -void kvm_mmu_invalidate_end(struct kvm *kvm, unsigned long start,
+> -                           unsigned long end)
+> +void kvm_mmu_invalidate_end(struct kvm *kvm, gfn_t start, gfn_t end)
+>  {
+>         /*
+>          * This sequence increase will notify the kvm page fault that
+> --
+> 2.25.1
+>
