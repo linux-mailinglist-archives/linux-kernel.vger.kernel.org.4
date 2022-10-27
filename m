@@ -2,90 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F7360FCA3
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079FD60FCAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236367AbiJ0QIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 12:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
+        id S236393AbiJ0QJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 12:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234372AbiJ0QIK (ORCPT
+        with ESMTP id S236380AbiJ0QJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 12:08:10 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A7B181D9F
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:08:09 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id n18so1711068qvt.11
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:08:09 -0700 (PDT)
+        Thu, 27 Oct 2022 12:09:41 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1876342
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:09:39 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so6905221pjc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:09:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+EByezWssNJpDNY0y+L8q4F549C1PMWF7aqVJonq+z0=;
-        b=aAVZaCTCOqatS09ZMKrhBEnOEbQndq2u9CKWDuWcuRP38rqyHCkiTwZh9zPE1q2+mR
-         gVCrlGA4rKcKHf1K8jkfpjSR/pPaLnDDzvrIbCYPTBNc9lncg0QvLmshiuF7Cxm4Gltx
-         uCb8bYZaFFjiT7/PbY6/ZuMUYPXBEPw8I1xqdf2vDQ8xzr6B7vmxhvhJLJvrfImXcL4K
-         X44hEmyBYA8IwWRc/hMhQ2db2BTq2sV17rr1r+/KCnuKEjqJ98Nlt3u1bPvOxe9S8epF
-         3Lii+YEzV+Nbr6Noz/2gnVYU5pU95cPX4XV1D8Jku1vlQEoIOW0NCsQdmSUADbhfr4mA
-         ILCg==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=cs6Se82l4PDsSj9I2mLI3f+GZ/GJF+Opr2Jjis5B+58=;
+        b=gr/x3Rmw+ft/dWHSYXxVElM0ozip0qNvQoiaAb7SE3U23IY75AgH/lPJDcqT0638Ts
+         KreY/MOQbHmTECj/j0eOSRu2dYoVj8QWWkrdhhF0zwCgqMm4Vb2P+VSLd/ZOEOdLpvPw
+         N3cXmnt7x8itiPJ83eQQdCPR102fH5oJvdYV8Km7l48+hRK+ZiJbHT9YL9biHiH4gRGG
+         pNRa2Dwd5DMHE8olSf37Q54BHys2n/JF58TJC1E34xWi6p61LXWrt4NXDGqzBv19Vj3f
+         zw0eE/aO+D6k3bNTuYNBx5y+1k1QHVXR5642U/tDnaMj5t4/CuDfFZOvDrUnIfcDLroJ
+         Yl+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+EByezWssNJpDNY0y+L8q4F549C1PMWF7aqVJonq+z0=;
-        b=HadpRR16qAl31sfffL15Yb7rYNZXzX7ywMvk4IacheN1ICjp87zCTlDGK6sRn0zn/Q
-         Wfry/AwuiU26Tms68khMzLjY1AJJh1fhSPB2QuJqNqNeTdZyg+0JvGGHLPB5lYkooN9p
-         4xJPoFVZQsUT2KapmuRn1O0CPRLGwi+YGGaDLvsj+uFSQ9CTNCLiRAnTZl6KR/thOhbq
-         QfUxcMG5HL/SwEynMdXeFLu0gjyxVdSluTGMChDaoUgyrrfNpd4U9eBFZurN9oYKP7O+
-         ZXrSVTaSxBmuVVtgaIDHysXR7xDK3iSRGioETp1+nNUD30CKKA3SO8L0LIDavz6g1IGv
-         N/Yg==
-X-Gm-Message-State: ACrzQf2smBUdjli89oTJPHAmyyQCQFb5jD+5tsw0Kz5pDQRXfp4CRcRY
-        7+Fk9sE69mQ4IKacyxnmja0TwA==
-X-Google-Smtp-Source: AMsMyM5KQ32g/c5YieGNUnfeAUqqnYFAbo62RxNtSDi/P5hmklPmYdfcPmNYo17iNk7me6skE3c8Ow==
-X-Received: by 2002:a05:6214:dac:b0:4bb:5901:38b1 with SMTP id h12-20020a0562140dac00b004bb590138b1mr26687385qvh.18.1666886888990;
-        Thu, 27 Oct 2022 09:08:08 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id g19-20020a05620a40d300b006eeb3165565sm1214137qko.80.2022.10.27.09.08.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 09:08:08 -0700 (PDT)
-Message-ID: <b2844341-d334-27e6-bceb-94914e42131c@linaro.org>
-Date:   Thu, 27 Oct 2022 12:08:06 -0400
+        bh=cs6Se82l4PDsSj9I2mLI3f+GZ/GJF+Opr2Jjis5B+58=;
+        b=W41CuTc1Sjim0exs1DOYHgfrTE7Wopr9MaRPX+ESjSt2H1d6G1z9FxAktipmpPjZ7V
+         F2KQKtuyl90ZSiVDnDdl78DecCCHvVWupgXO6gNQEmWtnhUAcQzVDf5cw74vQ5nTz7Rf
+         SiI+mcV9g+WpRKQVxfimJ61pMB661mYN8nuaaVYqgBgx78vYzfXVIedl0MCSwqGqK+J2
+         /1pYGLZLEFpXHwuQzPkINf+5IFtxRHfkl51kLvYWbUMeg6oteO1AwCGIVqTccYLHiTMP
+         McARMMeYtePJI2/3jOFwDdMEhLODrhYZwoaBfc2i1h00R6pf+TxQ78xeXm7nDkAksDA6
+         u2dg==
+X-Gm-Message-State: ACrzQf0cplNS4WOysGfzPBchTIXYNul1xwmL7POGG3zasOJpKAk9u2PE
+        +yeFtavJeG9JQvGZZjm7SITp
+X-Google-Smtp-Source: AMsMyM53JceTu9c/G4onEt7iCb9cuuRM2cwy18Blh80zUk9iUEs6nhRalt+MMq6PmBPGozyinxPUNQ==
+X-Received: by 2002:a17:902:f684:b0:17f:95cc:af8 with SMTP id l4-20020a170902f68400b0017f95cc0af8mr50148643plg.91.1666886979301;
+        Thu, 27 Oct 2022 09:09:39 -0700 (PDT)
+Received: from thinkpad ([117.202.186.162])
+        by smtp.gmail.com with ESMTPSA id d1-20020a170902cec100b0018661d627d7sm1410039plg.59.2022.10.27.09.09.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 09:09:38 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 21:39:32 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Frank Li <frank.li@nxp.com>
+Cc:     Shunsuke Mie <mie@igel.co.jp>, Jon Mason <jdmason@kudzu.us>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Allen Hubbe <allenbh@gmail.com>, kishon@kernel.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "ntb@lists.linux.dev" <ntb@lists.linux.dev>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [EXT] Re: [PATCH v2] PCI: endpoint: pci-epf-{,v}ntb: fix a check
+ for no epc alignment constraint
+Message-ID: <20221027160932.GD76627@thinkpad>
+References: <20220922092357.123732-1-mie@igel.co.jp>
+ <20221025142143.GA109941@thinkpad>
+ <HE1PR0401MB233126D2C7410EC5F6C3976488319@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+ <CANXvt5qjnbZMzFJt8kBtQz6FHc_QQYw7=fZp8kK87mZ-t75z+g@mail.gmail.com>
+ <HE1PR0401MB23319EE329D62420919740C688339@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+ <20221027151220.GC76627@thinkpad>
+ <HE1PR0401MB233111DEC8F76341029183F188339@HE1PR0401MB2331.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [RFC net-next 1/2] dt-bindings: net: dsa: add bindings for GSW
- Series switches
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Camel Guo <camelg@axis.com>, Camel Guo <Camel.Guo@axis.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>, kernel <kernel@axis.com>
-References: <20221025135243.4038706-1-camel.guo@axis.com>
- <20221025135243.4038706-2-camel.guo@axis.com>
- <16aac887-232a-7141-cc65-eab19c532592@linaro.org>
- <d0179725-0730-5826-caa4-228469d3bad4@axis.com>
- <a7f75d47-30e7-d076-a9fd-baa57688bbf7@linaro.org>
- <20221027135719.pt7rz6dnjvcuqcxv@skbuf>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221027135719.pt7rz6dnjvcuqcxv@skbuf>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <HE1PR0401MB233111DEC8F76341029183F188339@HE1PR0401MB2331.eurprd04.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,40 +86,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/10/2022 09:57, Vladimir Oltean wrote:
-> Hi Camel,
+[Added Kishon's new email address and removed the old one]
+
+On Thu, Oct 27, 2022 at 03:34:11PM +0000, Frank Li wrote:
 > 
-> On Thu, Oct 27, 2022 at 08:46:27AM -0400, Krzysztof Kozlowski wrote:
->>>  >> +      - enum:
->>>  >> +          - mxl,gsw145-mdio
->>>  >
->>>  > Why "mdio" suffix?
->>>
->>> Inspired by others dsa chips.
->>> lan9303.txt:  - "smsc,lan9303-mdio" for mdio managed mode
->>> lantiq-gswip.txt:- compatible   : "lantiq,xrx200-mdio" for the MDIO bus
->>> inside the GSWIP
->>> nxp,sja1105.yaml:                  - nxp,sja1110-base-t1-mdio
->>
->> As I replied to Andrew, this is discouraged.
 > 
-> Let's compare apples to apples, shall we?
-> "nxp,sja1110-base-t1-mdio" is the 100Base-T1 MDIO controller of the
-> NXP SJA1110 switch, hence the name. It is not a SJA1110 switch connected
-> over MDIO.
+> > -----Original Message-----
+> > From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > Sent: Thursday, October 27, 2022 10:12 AM
+> > To: Frank Li <frank.li@nxp.com>
+> > Cc: Shunsuke Mie <mie@igel.co.jp>; Jon Mason <jdmason@kudzu.us>; Dave
+> > Jiang <dave.jiang@intel.com>; Allen Hubbe <allenbh@gmail.com>; Kishon
+> > Vijay Abraham I <kishon@ti.com>; Lorenzo Pieralisi <lpieralisi@kernel.org>;
+> > Krzysztof Wilczyński <kw@linux.com>; Bjorn Helgaas
+> > <bhelgaas@google.com>; ntb@lists.linux.dev; linux-pci@vger.kernel.org;
+> > linux-kernel@vger.kernel.org
+> > Subject: Re: [EXT] Re: [PATCH v2] PCI: endpoint: pci-epf-{,v}ntb: fix a check for
+> > no epc alignment constraint
+> > 
+> > Caution: EXT Email
+> > 
+> > On Thu, Oct 27, 2022 at 02:35:56PM +0000, Frank Li wrote:
+> > >
+> > >
+> > > > -----Original Message-----
+> > > > From: Shunsuke Mie <mie@igel.co.jp>
+> > > > Sent: Wednesday, October 26, 2022 8:43 PM
+> > > > To: Frank Li <frank.li@nxp.com>
+> > > > Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>; Jon
+> > > > Mason <jdmason@kudzu.us>; Dave Jiang <dave.jiang@intel.com>; Allen
+> > > > Hubbe <allenbh@gmail.com>; Kishon Vijay Abraham I <kishon@ti.com>;
+> > > > Lorenzo Pieralisi <lpieralisi@kernel.org>; Krzysztof Wilczyński
+> > > > <kw@linux.com>; Bjorn Helgaas <bhelgaas@google.com>;
+> > > > ntb@lists.linux.dev; linux-pci@vger.kernel.org; linux-
+> > kernel@vger.kernel.org
+> > > > Subject: Re: [EXT] Re: [PATCH v2] PCI: endpoint: pci-epf-{,v}ntb: fix a check
+> > for
+> > > > no epc alignment constraint
+> > > >
+> > > > Caution: EXT Email
+> > > >
+> > > > Hi Frank,
+> > > >
+> > > > 2022年10月26日(水) 1:07 Frank Li <frank.li@nxp.com>:
+> > > > >
+> > > > >
+> > > > >
+> > > > > > -----Original Message-----
+> > > > > > From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > > > > Sent: Tuesday, October 25, 2022 9:22 AM
+> > > > > > To: Shunsuke Mie <mie@igel.co.jp>
+> > > > > > Cc: Jon Mason <jdmason@kudzu.us>; Dave Jiang
+> > <dave.jiang@intel.com>;
+> > > > > > Allen Hubbe <allenbh@gmail.com>; Kishon Vijay Abraham I
+> > > > > > <kishon@ti.com>; Lorenzo Pieralisi <lpieralisi@kernel.org>; Krzysztof
+> > > > > > Wilczyński <kw@linux.com>; Bjorn Helgaas <bhelgaas@google.com>;
+> > > > > > ntb@lists.linux.dev; linux-pci@vger.kernel.org; linux-
+> > > > kernel@vger.kernel.org
+> > > > > > Subject: [EXT] Re: [PATCH v2] PCI: endpoint: pci-epf-{,v}ntb: fix a check
+> > for
+> > > > no
+> > > > > > epc alignment constraint
+> > > > > >
+> > > > > > Caution: EXT Email
+> > > > > >
+> > > > > > On Thu, Sep 22, 2022 at 06:23:57PM +0900, Shunsuke Mie wrote:
+> > > > > > > Some PCI endpoint controllers have no alignment constraints, and
+> > the
+> > > > > > > epc_features->align becomes 0. In this case, IS_ALIGNED() in
+> > > > >
+> > > > > [Frank Li] why not set epc_features->align 1
+> > > > > no alignment constraints should mean align to byte.
+> > > > It is one of the solutions too I think. But in that case,  we need to
+> > > > write epc_features->align = 1 to all epc drivers, dwc, qcom, rcar,
+> > > > tegra, and etc.
+> > > >
+> > > > I think that my change is better.
+> > >
+> > > I think it should be based on what original term defined.
+> > > It should be fixed at where make mistake.
+> > >
+> > 
+> > 1byte is the default alignment that drivers can assume, why do you want
+> > drivers
+> > to set them explicitly when they do not want any special alignment?
+> 
+> What's definition of not alignment by align variable?
+> Using both 0 and 1 as no alignment is not good enough. 
+> 
+> I grep whole kernel driver directory, not one use 
+> 	If (align && IS_ALIGNED(x, align))  statement.    
 
-Thanks for clarifying. Then this could be fine. Let me then explain what
-is discouraged:
-1. Adding bus suffixes to the compatible, so for example foo,bar LED
-controller is on I2C bus, so you call it "foo,bar-i2c".
+I can see multiple hits:
 
-2. Adding device types to the compatible, if this is the only
-function/variant of the device, so for example calling foo,bar LED
-controller "foo,bar-led". This makes sense in case of multi functional
-devices (PMICs, SoCs), but not standalone ones.
+lib/ubsan.c
+drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+drivers/gpu/drm/i915/i915_vma.c
+drivers/nvdimm/pfn_devs.c
+drivers/misc/pci_endpoint_test.c
 
-So what do we have here? Is it one of the cases above?
+But in most of the places, the alignment is guaranteed to be set by the client
+drivers because they might be read from the hardware register or fixed for an
+IP. But in this case, I don't think we should _force_ the drivers to set
+alignment to 1 (default) if they don't really care about it.
 
-Best regards,
-Krzysztof
+Thanks,
+Mani
 
+> 
+> There are a common convention, align is 2^n
+> 
+> 
+> > 
+> > I think this patch is fine.
+> > 
+> > Thanks,
+> > Mani
+> > 
+> > > Are there other place use align == 0 means no alignment in kernel?
+> > >
+> > > >
+> > > > > > > epf_ntb_config_spad_bar_alloc() doesn't work well. Check for this
+> > > > before
+> > > > > > > IS_ALIGNED().
+> > > > > > >
+> > > > > > > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
+> > > > > >
+> > > > > > Reviewed-by: Manivannan Sadhasivam
+> > > > > > <manivannan.sadhasivam@linaro.org>
+> > > > > >
+> > > > > > Thanks,
+> > > > > > Mani
+> > > > > >
+> > > > > > > ---
+> > > > > > > Changes in v2:
+> > > > > > > * Fix the commit message in phrasings and words.
+> > > > > > > ---
+> > > > > > > ---
+> > > > > > >  drivers/pci/endpoint/functions/pci-epf-ntb.c  | 2 +-
+> > > > > > >  drivers/pci/endpoint/functions/pci-epf-vntb.c | 2 +-
+> > > > > > >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > > > > > >
+> > > > > > > diff --git a/drivers/pci/endpoint/functions/pci-epf-ntb.c
+> > > > > > b/drivers/pci/endpoint/functions/pci-epf-ntb.c
+> > > > > > > index 9a00448c7e61..f74155ee8d72 100644
+> > > > > > > --- a/drivers/pci/endpoint/functions/pci-epf-ntb.c
+> > > > > > > +++ b/drivers/pci/endpoint/functions/pci-epf-ntb.c
+> > > > > > > @@ -1021,7 +1021,7 @@ static int
+> > > > epf_ntb_config_spad_bar_alloc(struct
+> > > > > > epf_ntb *ntb,
+> > > > > > >       peer_size = peer_epc_features->bar_fixed_size[peer_barno];
+> > > > > > >
+> > > > > > >       /* Check if epc_features is populated incorrectly */
+> > > > > > > -     if ((!IS_ALIGNED(size, align)))
+> > > > > > > +     if (align && (!IS_ALIGNED(size, align)))
+> > > > > > >               return -EINVAL;
+> > > > > > >
+> > > > > > >       spad_count = ntb->spad_count;
+> > > > > > > diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > > > > > b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > > > > > > index 0ea85e1d292e..5e346c0a0f05 100644
+> > > > > > > --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > > > > > > +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > > > > > > @@ -418,7 +418,7 @@ static int
+> > epf_ntb_config_spad_bar_alloc(struct
+> > > > > > epf_ntb *ntb)
+> > > > > > >       size = epc_features->bar_fixed_size[barno];
+> > > > > > >       align = epc_features->align;
+> > > > > > >
+> > > > > > > -     if ((!IS_ALIGNED(size, align)))
+> > > > > > > +     if (align && !IS_ALIGNED(size, align))
+> > > > > > >               return -EINVAL;
+> > > > > > >
+> > > > > > >       spad_count = ntb->spad_count;
+> > > > > > > --
+> > > > > > > 2.17.1
+> > > > > > >
+> > > > > >
+> > > > > > --
+> > > > > > மணிவண்ணன் சதாசிவம்
+> > > >
+> > > > Best,
+> > > > Shunsuke
+> > 
+> > --
+> > மணிவண்ணன் சதாசிவம்
+
+-- 
+மணிவண்ணன் சதாசிவம்
