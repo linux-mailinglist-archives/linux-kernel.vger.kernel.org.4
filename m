@@ -2,137 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8869F60F805
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D4560F72D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235872AbiJ0MvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
+        id S234330AbiJ0M0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235615AbiJ0MvJ (ORCPT
+        with ESMTP id S235562AbiJ0M0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:51:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527556112D;
-        Thu, 27 Oct 2022 05:51:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD0B4B82617;
-        Thu, 27 Oct 2022 12:51:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2197BC433B5;
-        Thu, 27 Oct 2022 12:51:04 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="f2fM4ZDI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666875062;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7IPqLid7IqQX7xaoa0h3UH2jSWB/Ci1zDdeGKf+rIB4=;
-        b=f2fM4ZDIKnXv9bRiVzrnlRhFtoKYOKi38u+1Cjf/ikMv1QsfHYOElJmM6dvRgufqXkl07H
-        9KKLhchavXNOUhSIrwv/HWESXrTvH5RII6KF7ZQMjOLhPNo1KJeSFs2UyANZjdg5Yg1jjt
-        yAbOl8idgbB+CTcIVlmplwVG3rHCdqw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4aff23bd (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 27 Oct 2022 12:51:01 +0000 (UTC)
-Date:   Thu, 27 Oct 2022 14:26:26 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH 07/15] MIPS: IP27: clean out sn/nmi.h
-Message-ID: <Y1p48oJVBeUSrfC2@zx2c4.com>
-References: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
- <08c138e14f71c207c4428df9fd31154744be9d98.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
+        Thu, 27 Oct 2022 08:26:41 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3802C132240
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:26:40 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id y143so460949iof.9
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:26:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mZhPH98EZI2dEoFXGWQtmjLxJRjCACN6xFS+27Ga9q8=;
+        b=CGOB+dy4GUYVpZbN/DWiHffXQGLBKtcmB1o3l8pIV6Su1Tk7/cZYKQBTlO6wnaarmQ
+         7VxFaYWL5uwsE9aAL2ZwDSgT0VNkNynJspstC4HVS2vS4YWvbNdYKdx3gIuoHuMhusDL
+         GSh6+4QsnoL1WXG8yGkpQ5nU05969EC4nc/mQP+BH5cxcDqHiNJYDLqYY8vgDs9uz5wN
+         uNGMVLymJbJfomK+gHqG4Q0Rr+NB8gWE7k3ZXOg7Pdj6k42BfgnCpf8kbAA4gapcXSUd
+         E1q6/w1VhnDAepMXHViahUPSJdEs/+tVmTv8jnyFpPIYcPMgHjzFKTKFkZeziQ0YwKat
+         DX6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mZhPH98EZI2dEoFXGWQtmjLxJRjCACN6xFS+27Ga9q8=;
+        b=lIHlvATdeaAkuxCYBnwcYbIImkMsc5ZBNbBlIPdkHdNas03OWWd5ZnaqoMba+5raTL
+         ztt2RqcuxHWQEjGEGZGPpPxkz4zV5uAErpCXyip01JEKUHTJ/rTWcaJ/2Err4YUQgeVj
+         7Nq7GopfRV9vKyrv64BmbFc1/7m8710oRyp8ZluH3TznF+235caOmvk6MxzxpNMc/SgJ
+         C6Ylc/KEGGCnWzwL8y5UqZi9cltOqdY0h6ZhZyX0G6PxYIhQWIiawfj6WQrDKwN9KnmA
+         Sa0sVm0ANgZcIHLMKW7LtgRnwBDlj03AVcUzswcpBTMBu0K+dhMmgeojsv/NeLnQH3i7
+         3cXw==
+X-Gm-Message-State: ACrzQf3OZtpy7DUa15/8g4JtS55Yc7MD0PDE7/lFdMAQfsPzew3fkDSW
+        CX7glRmySjuVkkr00VNPRFJB0Q==
+X-Google-Smtp-Source: AMsMyM4g+r8w9GFfz7c0hkxjUrZJwSTc6gyWD9hZwwkTwdOZ6LpuMCgR3yYayx37JARnCXXFoBgCOQ==
+X-Received: by 2002:a6b:5f1d:0:b0:6c5:247c:6763 with SMTP id t29-20020a6b5f1d000000b006c5247c6763mr1803360iob.65.1666873599556;
+        Thu, 27 Oct 2022 05:26:39 -0700 (PDT)
+Received: from localhost.localdomain ([98.61.227.136])
+        by smtp.gmail.com with ESMTPSA id w24-20020a05663800d800b003566ff0eb13sm526528jao.34.2022.10.27.05.26.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 05:26:39 -0700 (PDT)
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     mka@chromium.org, evgreen@chromium.org, andersson@kernel.org,
+        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
+        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
+        elder@kernel.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 2/7] net: ipa: change an IPA v5.0 memory requirement
+Date:   Thu, 27 Oct 2022 07:26:27 -0500
+Message-Id: <20221027122632.488694-3-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221027122632.488694-1-elder@linaro.org>
+References: <20221027122632.488694-1-elder@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <08c138e14f71c207c4428df9fd31154744be9d98.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Don't require IPA v5.0 to have a STATS_TETHERING memory region.
+Downstream defines its size to 0, so it apparently is unused.
 
-Thanks for working on this patchset. The magic-number.rst file has
-always kind of bothered me with its outdated encouragements to magic up
-every struct.
+Signed-off-by: Alex Elder <elder@linaro.org>
+---
+ drivers/net/ipa/ipa_mem.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Technically, this series seems okay. It'd be nice if somebody had some
-SGI hardware to figure out what NMI_MAGIC is all about, but that doesn't
-need to block removing it from magic-number.rst, so that
-magic-number.rst can be put to rest. Interestingly, though,
-0x48414d4d455201 is "HAMMER\x01". The only reference to it I could find
-on the Internet that wasn't this file itself was some forum on Intel
-stuff? https://www.eevblog.com/forum/microcontrollers/intel-bare-metal-programming/msg1273587/#msg1273587
-No idea.
+diff --git a/drivers/net/ipa/ipa_mem.c b/drivers/net/ipa/ipa_mem.c
+index cb95402018394..9ec5af323f731 100644
+--- a/drivers/net/ipa/ipa_mem.c
++++ b/drivers/net/ipa/ipa_mem.c
+@@ -198,9 +198,12 @@ static bool ipa_mem_id_required(struct ipa *ipa, enum ipa_mem_id mem_id)
+ 
+ 	case IPA_MEM_PDN_CONFIG:
+ 	case IPA_MEM_STATS_QUOTA_MODEM:
+-	case IPA_MEM_STATS_TETHERING:
+ 		return ipa->version >= IPA_VERSION_4_0;
+ 
++	case IPA_MEM_STATS_TETHERING:
++		return ipa->version >= IPA_VERSION_4_0 &&
++			ipa->version != IPA_VERSION_5_0;
++
+ 	default:
+ 		return false;		/* Anything else is optional */
+ 	}
+-- 
+2.34.1
 
-Anyway, I suspect the actual issues that remain are mostly formalities,
-as others have mentioned:
-
-1) Add a 00/15 cover letter that explains your intentions, and make sure
-   the "right people" are CC'd on that. Hard to say who that might be,
-   given how diverse this patchset is. Maybe Andrew Morton? Or Kees
-   Cook? No idea.
-
-2) Fix up your commit messages:
-
-> The only user is arch/mips/sgi-ip27/ip27-nmi.c;
-> this file was imported wholesale in 2.3.99pre9-1,
-> and received only whitespace updates since then
-> 
-> NMI_MAGIC isn't a magic number; it's unclear if it's actually used
-> by the firmware in some capacity or if it's a holdover from copying
-> the SGI code, but in the former case it's API
-> and in the latter it's dead cruft
-> 
-> Lack of QEMU support makes this unvalidatable without the hardware,
-> so leave it in
-
-Add some trailing periods, and reformat this to have the usual
-alignment. `gq` in vim will do that for you. So for that message, it
-should become:
-
-| The only user is arch/mips/sgi-ip27/ip27-nmi.c; this file was imported
-| wholesale in 2.3.99pre9-1, and received only whitespace updates since
-| then.
-| 
-| NMI_MAGIC isn't a magic number; it's unclear if it's actually used by
-| the firmware in some capacity or if it's a holdover from copying the
-| SGI code, but in the former case it's API and in the latter it's dead
-| cruft.
-| 
-| Lack of QEMU support makes this unvalidatable without the hardware, so
-| leave it in.
-
-3) Ensure the "From:" header of your email matches your Signed-off-by:
-   trailer.
-
-4) Use "Link: " instead of "Ref: ", and make sure all of your tags are
-   *above* your Signed-off-by:, not below.
-
-5) Figure out what your name actually is. If it's fake (as somebody
-   earlier suggested), either don't make it fake, or don't get caught
-   with it being fake in some obvious way, as the kernel supposedly
-   requires real names (George Spelvin notwithstanding). Probably (3) is
-   enough to take care of this though.
-
-I realize this is likely annoying administrivia. Sorry. So it goes with
-Linux stuff.
-
-Jason
