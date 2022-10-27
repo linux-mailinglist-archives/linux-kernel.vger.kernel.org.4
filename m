@@ -2,121 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1D160F6F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2078960F6F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234915AbiJ0MRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
+        id S235085AbiJ0MQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234375AbiJ0MRS (ORCPT
+        with ESMTP id S234698AbiJ0MQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:17:18 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B0C9FFC;
-        Thu, 27 Oct 2022 05:17:17 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Myl2g4VQ3zpW3F;
-        Thu, 27 Oct 2022 20:13:47 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 20:17:14 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 20:17:14 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
-CC:     <jdelvare@suse.com>, <wsa@kernel.org>, <chenzhongjin@huawei.com>
-Subject: [PATCH v2] i2c: piix4: Fix adapter not be removed in piix4_remove()
-Date:   Thu, 27 Oct 2022 20:13:53 +0800
-Message-ID: <20221027121353.181695-1-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 27 Oct 2022 08:16:05 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AAB92DCE92
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:16:03 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B80D023A;
+        Thu, 27 Oct 2022 05:16:09 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.1.184])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 07EE03F7B4;
+        Thu, 27 Oct 2022 05:16:01 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 13:15:59 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] firmware/psci: demote suspend-mode warning to info
+ level
+Message-ID: <Y1p2f6OnN2wjCuop@FVFF77S0Q05N>
+References: <20221026135445.8004-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221026135445.8004-1-johan+linaro@kernel.org>
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In piix4_probe(), the piix4 adapter will be registered in:
+On Wed, Oct 26, 2022 at 03:54:45PM +0200, Johan Hovold wrote:
+> On some Qualcomm platforms, like SC8280XP, the attempt to set PC mode
+> during boot fails with PSCI_RET_DENIED and since commit 998fcd001feb
+> ("firmware/psci: Print a warning if PSCI doesn't accept PC mode") this
+> is now logged at warning level:
+> 
+> 	psci: failed to set PC mode: -3
+> 
+> As there is nothing users can do about the firmware behaving this way,
+> demote the warning to info level and clearly mark it as a firmware bug:
+> 
+> 	psci: [Firmware Bug]: failed to set PC mode: -3
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-   piix4_probe()
-     piix4_add_adapters_sb800() / piix4_add_adapter()
-       i2c_add_adapter()
+On the assumption that we don't have any latent issues in this case, this looks
+ok to me, so:
 
-Based on the probed device type, piix4_add_adapters_sb800() or single
-piix4_add_adapter() will be called.
-For the former case, piix4_adapter_count is set as the number of adapters,
-while for antoher case it is not set and kept default *zero*.
+  Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-When piix4 is removed, piix4_remove() removes the adapters added in
-piix4_probe(), basing on the piix4_adapter_count value.
-Because the count is zero for the single adapter case, the adapter won't
-be removed and makes the sources allocated for adapter leaked, such as
-the i2c client and device.
+Sudeep, does this reasonable to you?
 
-These sources can still be accessed by i2c or bus and cause problems.
-An easily reproduced case is that if a new adapter is registered, i2c
-will get the leaked adapter and try to call smbus_algorithm, which was
-already freed:
+Are there any latent issues that mean we should keep this as a pr_warn()? 
 
-Triggered by: rmmod i2c_piix4 && modprobe max31730
+Thanks,
+Mark.
 
- BUG: unable to handle page fault for address: ffffffffc053d860
- #PF: supervisor read access in kernel mode
- #PF: error_code(0x0000) - not-present page
- Oops: 0000 [#1] PREEMPT SMP KASAN
- CPU: 0 PID: 3752 Comm: modprobe Tainted: G
- Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
- RIP: 0010:i2c_default_probe (drivers/i2c/i2c-core-base.c:2259) i2c_core
- RSP: 0018:ffff888107477710 EFLAGS: 00000246
- ...
- <TASK>
-  i2c_detect (drivers/i2c/i2c-core-base.c:2302) i2c_core
-  __process_new_driver (drivers/i2c/i2c-core-base.c:1336) i2c_core
-  bus_for_each_dev (drivers/base/bus.c:301)
-  i2c_for_each_dev (drivers/i2c/i2c-core-base.c:1823) i2c_core
-  i2c_register_driver (drivers/i2c/i2c-core-base.c:1861) i2c_core
-  do_one_initcall (init/main.c:1296)
-  do_init_module (kernel/module/main.c:2455)
-  ...
- </TASK>
- ---[ end trace 0000000000000000 ]---
-
-Fix this problem by correctly set piix4_adapter_count as 1 for the
-single adapter so it can be normally removed.
-
-Fixes: 528d53a1592b ("i2c: piix4: Fix probing of reserved ports on AMD Family 16h Model 30h")
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
-v1 -> v2:
-Set piix4_adapter_count as 1 rather than increase it and slightly fix
-the commit message.
----
- drivers/i2c/busses/i2c-piix4.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
-index 39cb1b7bb865..809fbd014cd6 100644
---- a/drivers/i2c/busses/i2c-piix4.c
-+++ b/drivers/i2c/busses/i2c-piix4.c
-@@ -1080,6 +1080,7 @@ static int piix4_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 					   "", &piix4_main_adapters[0]);
- 		if (retval < 0)
- 			return retval;
-+		piix4_adapter_count = 1;
- 	}
- 
- 	/* Check for auxiliary SMBus on some AMD chipsets */
--- 
-2.17.1
-
+> ---
+>  drivers/firmware/psci/psci.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> index e7bcfca4159f..f8fa32f0a130 100644
+> --- a/drivers/firmware/psci/psci.c
+> +++ b/drivers/firmware/psci/psci.c
+> @@ -165,7 +165,8 @@ int psci_set_osi_mode(bool enable)
+>  
+>  	err = invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE, suspend_mode, 0, 0);
+>  	if (err < 0)
+> -		pr_warn("failed to set %s mode: %d\n", enable ? "OSI" : "PC", err);
+> +		pr_info(FW_BUG "failed to set %s mode: %d\n",
+> +				enable ? "OSI" : "PC", err);
+>  	return psci_to_linux_errno(err);
+>  }
+>  
+> -- 
+> 2.37.3
+> 
