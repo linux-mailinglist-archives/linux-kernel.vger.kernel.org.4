@@ -2,117 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804D960F3F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A03B60F3FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234766AbiJ0Jq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 05:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
+        id S234526AbiJ0Jr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 05:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiJ0Jq6 (ORCPT
+        with ESMTP id S233669AbiJ0Jrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 05:46:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EEA3B96E;
-        Thu, 27 Oct 2022 02:46:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 27 Oct 2022 05:47:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1C896233
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:47:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666864071;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+        b=PXq3Q/RZpDspOx6i6T3kXTazUtiKpWOOlouG1oXq3gCX2h0c3pWKTcfE99G6Nt8gDad1l4
+        IpPRnnsKVfsm+Wh7n5izzfjZmkbOqwsr1PyXaXO1+2XA0nrBCW/OfYZ1Q0j6evhhRbwFSA
+        P+7/aO+YJ4PK9X8MfsL8C5KY/rVyr6Q=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-662-5xTLsLP3PPK-CLEbwH8FpQ-1; Thu, 27 Oct 2022 05:47:46 -0400
+X-MC-Unique: 5xTLsLP3PPK-CLEbwH8FpQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2C58B8254D;
-        Thu, 27 Oct 2022 09:46:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AAA8C433C1;
-        Thu, 27 Oct 2022 09:46:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666864014;
-        bh=+7SX1LnPKN1/wXvR/tBK033ffob3mgOmCQxzgkbhrhQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BIG08dG6smedSfGOwOT1Psq4HOR3qY1iENZ0Lq1lngvm1zsOqcxKfJNltlS86Zkkt
-         FsFtIwGUcM/5BC/LrAtSgq7MKuDZB3fFdD0Yo9/KFwGnq0bmr8S6Tw5im3O1tRdWeA
-         ACtqwPTohfKvRYFuTTGwGULmIW+QnmTWCqccx7DER47XxOt73HmJIXfDL/Uv1o5C5n
-         9WdsrUH0J5khbHzVDV5xzXnFtbE/ZuPj5SZNwB3kcnUDBB3DtID/U4Ak7umvx1eI1u
-         OpkKTK4lDhhxaAWULdn+lgRtX1CVOSE9E5HurRGfaedkPIMhxl2BNl+dFjMlqpBRcu
-         Vsk8i/XjmGNRQ==
-Date:   Thu, 27 Oct 2022 11:46:47 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Michal Simek <michal.simek@amd.com>
-Cc:     Thippeswamy Havalige <thippeswamy.havalige@amd.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski@linaro.org,
-        bhelgaas@google.com, michals@xilinx.com, robh+dt@kernel.org,
-        lorenzo.pieralisi@arm.com, bharat.kumar.gogada@amd.com
-Subject: Re: [PATCH 00/13] Remove unused microblaze PCIe bus architecture
-Message-ID: <Y1pTh5fiN+/mKPrR@lpieralisi>
-References: <20221025065214.4663-1-thippeswamy.havalige@amd.com>
- <06718d29-f3e1-db07-d537-b78290213b10@amd.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AFE913C0F424;
+        Thu, 27 Oct 2022 09:47:45 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 232E32166B26;
+        Thu, 27 Oct 2022 09:47:45 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Carlos Bilbao <carlos.bilbao@amd.com>
+Cc:     pbonzini@redhat.com, seanjc@google.com, bp@alien8.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, venu.busireddy@oracle.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas.Lendacky@amd.com, bilbao@vt.edu
+Subject: Re: [PATCH] KVM: SVM: Name and check reserved fields with structs offset
+Date:   Thu, 27 Oct 2022 05:47:43 -0400
+Message-Id: <20221027094743.2702214-1-pbonzini@redhat.com>
+In-Reply-To: <20221024164448.203351-1-carlos.bilbao@amd.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <06718d29-f3e1-db07-d537-b78290213b10@amd.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 09:31:37AM +0200, Michal Simek wrote:
-> Hi,
-> 
-> On 10/25/22 08:52, Thippeswamy Havalige wrote:
-> > The current Xilinx AXI PCIe Host Bridge driver uses generic PCIe
-> > subsystem framework. This driver works on both Microblaze and Zynq
-> > architecture based platforms.
-> > 
-> > The microblaze architecture specific code has unused PCIe host bridge
-> > supported API's which are no longer needed.
-> > 
-> > This series of patch removes unused architecture specific
-> > microblaze PCIe code.
-> > 
-> > Thippeswamy Havalige (13):
-> >    microblaze/PCI: Remove unused early_read_config_byte() et al
-> >      declarations
-> >    microblaze/PCI: Remove Null PCI config access unused functions
-> >    microblaze/PCI: Remove unused PCI bus scan if configured as a host
-> >    microblaze/PCI: Remove unused PCI legacy IO's access on a bus
-> >    microblaze/PCI: Remove unused device tree parsing for a host bridge
-> >      resources
-> >    microblaze/PCI: Remove unused allocation & free of PCI host bridge
-> >      structure
-> >    microblaze/PCI: Remove unused PCI BIOS resource allocation
-> >    microblaze/PCI: Remove unused PCI Indirect ops
-> >    microblaze/PCI: Remove unused pci_address_to_pio() conversion of CPU
-> >      address to I/O port
-> >    microblaze/PCI: Remove unused sys_pciconfig_iobase() and et al
-> >      declaration
-> >    microblaze/PCI: Remove unused pci_iobar_pfn() and et al declarations
-> >    microblaze/PCI: Remove support for Xilinx PCI host bridge
-> >    microblaze/PCI: Moving PCI iounmap and dependent code
-> > 
-> >   arch/microblaze/Kconfig                  |    8 -
-> >   arch/microblaze/include/asm/pci-bridge.h |   92 ---
-> >   arch/microblaze/include/asm/pci.h        |   29 -
-> >   arch/microblaze/pci/Makefile             |    3 +-
-> >   arch/microblaze/pci/indirect_pci.c       |  158 -----
-> >   arch/microblaze/pci/iomap.c              |   36 +
-> >   arch/microblaze/pci/pci-common.c         | 1067 ------------------------------
-> >   arch/microblaze/pci/xilinx_pci.c         |  170 -----
-> >   8 files changed, 37 insertions(+), 1526 deletions(-)
-> >   delete mode 100644 arch/microblaze/pci/indirect_pci.c
-> >   delete mode 100644 arch/microblaze/pci/pci-common.c
-> >   delete mode 100644 arch/microblaze/pci/xilinx_pci.c
-> > 
-> 
-> Why are you sending it again?
+Queued, thanks.
 
-Michal,
+Paolo
 
-it looks like you don't need anything from me or Bjorn on this series so
-I shall drop it from the PCI queue and let you handle it.
 
-If you need any help please let me know.
-
-Thanks,
-Lorenzo
