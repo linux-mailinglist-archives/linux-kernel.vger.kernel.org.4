@@ -2,166 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B456360F3C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DE460F3BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235419AbiJ0JdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 05:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
+        id S234693AbiJ0JdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 05:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234420AbiJ0Jcr (ORCPT
+        with ESMTP id S235394AbiJ0Jch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 05:32:47 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9678C3BC7C;
-        Thu, 27 Oct 2022 02:32:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666863151; x=1698399151;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=o45ZowjyZfFdbT4eNKTF4OINZYO4WatGCLArdaxRHBY=;
-  b=FoSXwyWGnVDYFV+RAtBWi3/5B72N5umz+1mKeNE1lOUOuZuoOAL8vq3u
-   H1rZ4Qp6SDeMWHXh25SVPxUrvpt45XpLI4sgrdi/tN7gBpAKVBP2wPZdA
-   kk5cCWwxXBnPhHvJEDWOidtR4rsqza2lY9ppoB79S5UOfgLRiuYzhhe2M
-   60FjffCyI9QnG1FtgKeIIHfOfLVy7OexLYtSCAd26k0ZhBFR6Q7V0efrH
-   LYmV3/d5BeQkNTuzqDuwW0qgqyZH76BmRZAvbsSKgi021w438n50EPuVV
-   dX99Qaz9KEgN0IFG4yEj2MPduoLCNeH4RQfO/eDWwfGeH/ngodwJRbknq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="309873060"
-X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
-   d="scan'208";a="309873060"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 02:32:18 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="877518330"
-X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
-   d="scan'208";a="877518330"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 02:32:15 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Feng Tang <feng.tang@intel.com>,
-        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Waiman Long <longman@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Chen, Tim C" <tim.c.chen@intel.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>
-Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
-References: <20221026074343.6517-1-feng.tang@intel.com>
-        <dc453287-015d-fd1c-fe7f-6ee45772d6aa@linux.ibm.com>
-        <Y1jpDfwBQId3GkJC@feng-clx> <Y1j7tsj5M0Md/+Er@dhcp22.suse.cz>
-        <Y1kl8VbPE0RYdyEB@feng-clx> <Y1lZV6qHp3gIINGc@dhcp22.suse.cz>
-        <87wn8lkbk5.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <Y1ou5DGHrEsKnhri@dhcp22.suse.cz>
-        <87o7txk963.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <Y1o63SWD2KmQkT3v@dhcp22.suse.cz>
-Date:   Thu, 27 Oct 2022 17:31:35 +0800
-In-Reply-To: <Y1o63SWD2KmQkT3v@dhcp22.suse.cz> (Michal Hocko's message of
-        "Thu, 27 Oct 2022 10:01:33 +0200")
-Message-ID: <87fsf9k3yg.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 27 Oct 2022 05:32:37 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569EF1A818;
+        Thu, 27 Oct 2022 02:31:49 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1666863107;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=plJs/SoOUqHYc5g+kkyWDkzzsy5zK9O4baDmIbyq7Js=;
+        b=dmOqHK7dachlvzmMBDFuhv9vVD2VG33IsuAm/PWibmMAZZZ/7U4kFHX6/S38l8EBOD+Q/m
+        7qtIYJsmyv3VEkz/lMQl6Ljkw1fqvUVPI+kLdiCD3rBf33NSEVc9rYKu8QO3rWMxFC5LCB
+        XT/4IGVGN0kmTqn4QbZ9VF+tYS7c9QoWN/LCrd2tMwRpAMtdIicetVjP72Hw+5Po9ye99k
+        xTyjsUTXV35eaa7AwjL/maRZSEVLPVdcQf4hHnglePwyC3u7kMgnmR06z1J9+fjyn/y3NX
+        gDJMkPk4KaCkW0ACkyabfmCNAbhtqjOlDVe+BYdIddSS7au0ctxQiC9XPv65TQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1666863107;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=plJs/SoOUqHYc5g+kkyWDkzzsy5zK9O4baDmIbyq7Js=;
+        b=1vL3dRHaAKZqE8g2Z4EHSwlAM8OybK3JylpDRijEUTib+FOSWvkBQx8ugb40bjJGt0wewu
+        qGeO6M5Ymp6dpIDw==
+To:     paulmck@kernel.org
+Cc:     Frederic Weisbecker <frederic@kernel.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        rostedt@goodmis.org, tglx@linutronix.de, pmladek@suse.com
+Subject: Re: [PATCH v2 rcu 0/8] NMI-safe SRCU reader API
+In-Reply-To: <20221024134727.GV5600@paulmck-ThinkPad-P17-Gen-1>
+References: <87ilkh0y52.fsf@jogness.linutronix.de>
+ <20221018185936.GX5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221018215721.GA1716567@paulmck-ThinkPad-P17-Gen-1>
+ <87pmeoawwe.fsf@jogness.linutronix.de>
+ <20221019191418.GF5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221019220537.GA1234896@lothringen>
+ <20221020222718.GA5600@paulmck-ThinkPad-P17-Gen-1>
+ <87r0z1gy51.fsf@jogness.linutronix.de>
+ <20221021184152.GO5600@paulmck-ThinkPad-P17-Gen-1>
+ <87y1t5zqzz.fsf@jogness.linutronix.de>
+ <20221024134727.GV5600@paulmck-ThinkPad-P17-Gen-1>
+Date:   Thu, 27 Oct 2022 11:37:46 +0206
+Message-ID: <874jvpehod.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Michal Hocko <mhocko@suse.com> writes:
+Hi Paul,
 
-> On Thu 27-10-22 15:39:00, Huang, Ying wrote:
->> Michal Hocko <mhocko@suse.com> writes:
->> 
->> > On Thu 27-10-22 14:47:22, Huang, Ying wrote:
->> >> Michal Hocko <mhocko@suse.com> writes:
->> > [...]
->> >> > I can imagine workloads which wouldn't like to get their memory demoted
->> >> > for some reason but wouldn't it be more practical to tell that
->> >> > explicitly (e.g. via prctl) rather than configuring cpusets/memory
->> >> > policies explicitly?
->> >> 
->> >> If my understanding were correct, prctl() configures the process or
->> >> thread.
->> >
->> > Not necessarily. There are properties which are per adddress space like
->> > PR_[GS]ET_THP_DISABLE. This could be very similar.
->> >
->> >> How can we get process/thread configuration at demotion time?
->> >
->> > As already pointed out in previous emails. You could hook into
->> > folio_check_references path, more specifically folio_referenced_one
->> > where you have all that you need already - all vmas mapping the page and
->> > then it is trivial to get the corresponding vm_mm. If at least one of
->> > them has the flag set then the demotion is not allowed (essentially the
->> > same model as VM_LOCKED).
->> 
->> Got it!  Thanks for detailed explanation.
->> 
->> One bit may be not sufficient.  For example, if we want to avoid or
->> control cross-socket demotion and still allow demoting to slow memory
->> nodes in local socket, we need to specify a node mask to exclude some
->> NUMA nodes from demotion targets.
->
-> Isn't this something to be configured on the demotion topology side? Or
-> do you expect there will be per process/address space usecases? I mean
-> different processes running on the same topology, one requesting local
-> demotion while other ok with the whole demotion topology?
+I am running some tests using srcunmisafe.2022.10.21a and I am hitting
+the WARN_ONCE in srcu_check_nmi_safety():
 
-I think that it's possible for different processes have different
-requirements.
+[    1.836703][    T1] rcu: Hierarchical SRCU implementation.
+[    1.836707][    T1] rcu:     Max phase no-delay instances is 1000.
+[    1.836844][   T15] ------------[ cut here ]------------
+[    1.836846][   T15] CPU 0 old state 1 new state 2
+[    1.836885][   T15] WARNING: CPU: 0 PID: 15 at kernel/rcu/srcutree.c:652 srcu_check_nmi_safety+0x79/0x90
+[    1.836897][   T15] Modules linked in:
+[    1.836903][   T15] CPU: 0 PID: 15 Comm: pr/bkl Not tainted 6.1.0-rc1+ #9
+[    1.836909][   T15] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+[    1.836912][   T15] RIP: 0010:srcu_check_nmi_safety+0x79/0x90
+[    1.836919][   T15] Code: d3 80 3d 9f 76 d3 01 00 75 e5 55 8b b0 c8 01 00 00 44 89 c1 48 c7 c7 d0 1f 87 82 c6 05 850
+[    1.836923][   T15] RSP: 0000:ffffc90000083e98 EFLAGS: 00010282
+[    1.836929][   T15] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+[    1.836933][   T15] RDX: 0000000000000001 RSI: 0000000000000000 RDI: 00000000ffffffff
+[    1.836936][   T15] RBP: ffffc90000083e98 R08: 0000000000000000 R09: 0000000000000001
+[    1.836940][   T15] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+[    1.836943][   T15] R13: ffffc90000013d70 R14: ffff888004073900 R15: 0000000000000000
+[    1.836946][   T15] FS:  0000000000000000(0000) GS:ffff888019600000(0000) knlGS:0000000000000000
+[    1.836951][   T15] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    1.836954][   T15] CR2: ffff888003c01000 CR3: 0000000002c22001 CR4: 0000000000370ef0
+[    1.836962][   T15] Call Trace:
+[    1.836964][   T15]  <TASK>
+[    1.836970][   T15]  console_bkl_kthread_func+0x27a/0x590
+[    1.836981][   T15]  ? _raw_spin_unlock_irqrestore+0x3c/0x60
+[    1.836998][   T15]  ? console_fill_outbuf+0x210/0x210
+[    1.837003][   T15]  kthread+0x108/0x130
+[    1.837012][   T15]  ? kthread_complete_and_exit+0x20/0x20
+[    1.837025][   T15]  ret_from_fork+0x1f/0x30
+[    1.837059][   T15]  </TASK>
+[    1.837062][   T15] irq event stamp: 71
+[    1.837065][   T15] hardirqs last  enabled at (73): [<ffffffff81106f99>] vprintk_store+0x1b9/0x5e0
+[    1.837070][   T15] hardirqs last disabled at (74): [<ffffffff811071fb>] vprintk_store+0x41b/0x5e0
+[    1.837075][   T15] softirqs last  enabled at (0): [<ffffffff8107ce22>] copy_process+0x952/0x1dd0
+[    1.837081][   T15] softirqs last disabled at (0): [<0000000000000000>] 0x0
+[    1.837085][   T15] ---[ end trace 0000000000000000 ]---
+[    1.945054][   T12] Callback from call_rcu_tasks_rude() invoked.
 
-- Some processes don't care about where the memory is placed, prefer
-  local, then fall back to remote if no free space.
+My code is calling srcu_read_lock_nmisafe() from task context, in a
+dedicated kthread. I am using DEFINE_STATIC_SRCU() to define/initialize
+the srcu struct.
 
-- Some processes want to avoid cross-socket traffic, bind to nodes of
-  local socket.
+What does the warning imply?
 
-- Some processes want to avoid to use slow memory, bind to fast memory
-  node only.
-
->> >From overhead point of view, this appears similar as that of VMA/task
->> memory policy?  We can make mm->owner available for memory tiers
->> (CONFIG_NUMA && CONFIG_MIGRATION).  The advantage is that we don't need
->> to introduce new ABI.  I guess users may prefer to use `numactl` than a
->> new ABI?
->
-> mm->owner is a wrong direction. It doesn't have a strong meaning because
-> there is no one task explicitly responsible for the mm so there is no
-> real owner (our clone() semantic is just to permissive for that). The
-> memcg::owner is a crude and ugly hack and it should go away over time
-> rather than build new uses.
->
-> Besides that, and as I have already tried to explain, per task demotion
-> policy is what makes this whole thing expensive. So this better be a per
-> mm or per vma property. Whether it is a on/off knob like PR_[GS]ET_THP_DISABLE
-> or there are explicit requirements for fine grain control on the vma
-> level I dunno. I haven't seen those usecases yet and it is really easy
-> to overengineer this.
->
-> To be completely honest I would much rather wait for those usecases
-> before adding a more complex APIs.  PR_[GS]_DEMOTION_DISABLED sounds
-> like a reasonable first step. Should we have more fine grained
-> requirements wrt address space I would follow the MADV_{NO}HUGEPAGE
-> lead.
->
-> If we really need/want to give a fine grained control over demotion
-> nodemask then we would have to go with vma->mempolicy interface. In
-> any case a per process on/off knob sounds like a reasonable first step
-> before we learn more about real usecases.
-
-Yes.  Per-mm or per-vma property is much better than per-task property.
-Another possibility, how about add a new flag to set_mempolicy() system
-call to set the per-mm mempolicy?  `numactl` can use that by default.
-
-Best Regards,
-Huang, Ying
+John Ogness
