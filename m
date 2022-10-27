@@ -2,81 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0225A61066B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 01:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373AC61066D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 01:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiJ0Xag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 19:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
+        id S235472AbiJ0Xb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 19:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233687AbiJ0Xad (ORCPT
+        with ESMTP id S233687AbiJ0Xb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 19:30:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE563F1C5;
-        Thu, 27 Oct 2022 16:30:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B059762573;
-        Thu, 27 Oct 2022 23:30:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F3FAC433D6;
-        Thu, 27 Oct 2022 23:30:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666913430;
-        bh=N3/tiBBM65lbA3Kx0jToCOjz1sXOtHVXWYvgKgpiDFc=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=iu6ONbFOuNtcJM4mQaxWpdNWxM/V/eSzUpZ73hpm3Qffo2BJqyPDWAqe0OR9TbNOh
-         B6erzkAR+KYefBQnqAlUM8ofjzhedfcAsQ1QXRNpCxC8iBexmKJt0eFujzgcVORvLO
-         ptEYjNYbC7CBC3v/yVO/a47eUK/wU08m8G/rEi0Jru8z4X302KFe3HCx/B/E2EksS1
-         nQm7pGTZlJCCceE2Ma/wWzDQpD5elcc16qEbDL5rxpmLWCohB4x1y9LSIGmLkgnF2M
-         gsUfd5eWBCbTN3nxWBKyNUR8izsE3bNEJuJ0hIeYOeIqBFjs7u0ncaNsawDK/qgOYz
-         EQRxkyggrj46w==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 27 Oct 2022 19:31:56 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AD425C75
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 16:31:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666913515; x=1698449515;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xb34HM1PJPWlVXKpZk1fn15yijOC0zLVZmc/tTvrib0=;
+  b=UWeeFdWYQTa8P0xUCrYK9sZdKYfvpA/GktLTpfqyyBGuxPsaSUReR86p
+   +inQ27qWnhwdxjNKVHfxDnpNXjP691hpacdZrYxMPM8exT3mczghCLy9K
+   R/QOCONjafoYPMsLeOsnhkV2SJbavTcO2BO7aoKdW1BGLXnecf+cqWTYF
+   w8ttgU0RfcWviU7Ot68JMR7XRUwLrFlKaT4wkgi4CzVa45GEoZfiDx/Aa
+   sYzoeu0zuawE+IksFpP3Q+cIOGezHjpc/yfCj68dYfsmx1epPlNeofcrR
+   t553xxuhUknU8Q2IzJOUw+cx9vr0+Shi762kvD7Zd0nkKHKd1JAgQspQY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="295776751"
+X-IronPort-AV: E=Sophos;i="5.95,219,1661842800"; 
+   d="scan'208";a="295776751"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 16:31:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="665866601"
+X-IronPort-AV: E=Sophos;i="5.95,219,1661842800"; 
+   d="scan'208";a="665866601"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 27 Oct 2022 16:31:53 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ooCLp-0009GJ-11;
+        Thu, 27 Oct 2022 23:31:53 +0000
+Date:   Fri, 28 Oct 2022 07:31:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 3011466f39cd2d82825785b68270fbc3ba22a5c5
+Message-ID: <635b14b8.gDNfq0fn77K4onxS%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <Y1sTM/E1VY+XdHk5@makrotopia.org>
-References: <9bde77be-f4ec-11e7-e645-7c4465bcf6db@collabora.com> <5e55012567da74870e1fb2edc2dc513b5821e523.1666801017.git.daniel@makrotopia.org> <20221027214151.7F112C433D6@smtp.kernel.org> <Y1sTM/E1VY+XdHk5@makrotopia.org>
-Subject: Re: [PATCH v2] clk: mediatek: fix dependency of MT7986 ADC clocks
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Sam Shih <sam.shih@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>
-To:     Daniel Golle <daniel@makrotopia.org>
-Date:   Thu, 27 Oct 2022 16:30:27 -0700
-User-Agent: alot/0.10
-Message-Id: <20221027233030.0F3FAC433D6@smtp.kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Daniel Golle (2022-10-27 16:24:35)
-> On Thu, Oct 27, 2022 at 02:41:49PM -0700, Stephen Boyd wrote:
-> > Quoting Daniel Golle (2022-10-26 09:18:07)
-> > > It seems like CLK_INFRA_ADC_FRC_CK always need to be enabled for
-> > > CLK_INFRA_ADC_26M_CK to work. Instead of adding this dependency to the
-> > > mtk-thermal and mt6577_auxadc drivers, add dependency to the clock
-> > > driver clk-mt7986-infracfg.c.
-> >=20
-> > Is this a cleanup patch? Or a pre-requisite for thermal and auxadc
-> > drivers? I don't understand the priority of this patch. Should I apply
-> > it to fix a regression?
->=20
-> I'd say 'no', as AUXADC and thermal has not yet been added to
-> mt7986a.dtsi, also the corresponding clocks are currently still unused.
-> So while this commit does fix a previous commit, it doesn't have a direct
-> impact and will only matter once thermal and auxadc units are added to
-> mt7986.dtsi.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 3011466f39cd2d82825785b68270fbc3ba22a5c5  Merge branch into tip/master: 'x86/core'
 
-Thanks! Please include these details next time.
+elapsed time: 854m
+
+configs tested: 53
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+alpha                               defconfig
+arm                                 defconfig
+x86_64                              defconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a001
+x86_64                        randconfig-a006
+x86_64                          rhel-8.3-func
+i386                          randconfig-a003
+x86_64                    rhel-8.3-kselftests
+s390                                defconfig
+riscv                randconfig-r042-20221026
+arc                  randconfig-r043-20221026
+s390                             allmodconfig
+x86_64                               rhel-8.3
+arm                              allyesconfig
+s390                 randconfig-r044-20221026
+powerpc                           allnoconfig
+x86_64                           rhel-8.3-kvm
+mips                             allyesconfig
+i386                          randconfig-a005
+m68k                             allmodconfig
+i386                                defconfig
+s390                             allyesconfig
+arc                              allyesconfig
+x86_64                           allyesconfig
+ia64                             allmodconfig
+alpha                            allyesconfig
+sh                               allmodconfig
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-syz
+i386                          randconfig-a014
+m68k                             allyesconfig
+i386                          randconfig-a012
+i386                          randconfig-a016
+i386                             allyesconfig
+arm64                            allyesconfig
+powerpc                          allmodconfig
+
+clang tested configs:
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a002
+hexagon              randconfig-r045-20221026
+hexagon              randconfig-r041-20221026
+i386                          randconfig-a004
+i386                          randconfig-a006
+i386                          randconfig-a013
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a015
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
