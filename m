@@ -2,104 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15BD60FFFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 20:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BFE6610006
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 20:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236542AbiJ0SOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 14:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47042 "EHLO
+        id S234802AbiJ0SQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 14:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236410AbiJ0SOK (ORCPT
+        with ESMTP id S235733AbiJ0SPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 14:14:10 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C316BCE3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 11:14:09 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id p127so3195739oih.9
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 11:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=O9gqzuSFD8OHrR9IjrolL9UfkWIT9N31C4ipvtJhMW8=;
-        b=JuqTzzID34wq6D1oN12Cd6J4Zq0xzc0zuLcz6NUrrTu9+v7ofooLT1itaZcs9MzZC1
-         BCG3RGQpB22gU3Au43lu42WPhkdsUVfRTWPVEA3xcJ6YMMwI+I5EOtqCr5fLJ5R7blLA
-         urKyTSa0XqOGaw/Hu1yj3mY37fHb0qUEutsEEXtpZvmD0scdfh9OkPfzccjMRYE0y7Xg
-         heGrCoUmunHuaIkUrQcsCQX0GFZI1FIOdngfGdOsSI5gEZtaTLtuLIpa+8jEPT5etey0
-         ZU2BjmXhwgkY8QhWy5HogrSpZJn5RabKCUKX6xgyo6OWgPizrzYC/TeVKc8P67QJEnaS
-         uJZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O9gqzuSFD8OHrR9IjrolL9UfkWIT9N31C4ipvtJhMW8=;
-        b=B3d3le2Qtafu1AotPKRfyJyclykgxjkBBqH5EX8+Q6LOwwyGuwlg0qgP1wOmWsPvZv
-         lwthX/59fGYiAX35yHK4sBDXbSPG9Nhd1AOFZeigWZZrIwA084OlnJTKyuWJdPFmpcrd
-         dwBn+kQI1gNEeM0e8ZDOadiZl568ENvUeqOwGr407yCf7Cor793JTEnVogZahwFCBHqo
-         ql1uw01TfFWPlkBm37k9wnSmiNyPnNhffwoNF4PAb74EOkiEnemJUMc/gvbOBGX5WThs
-         RvQR3OHgkYwGsXHNdIThNcS+HTWNqRu8WxyB0KSUL+AfwxVwTzzKYQVsXgbnXsKcW0Ko
-         aQDw==
-X-Gm-Message-State: ACrzQf2k+8RC1a1xKeOaXeU5t9uoTVwEyLTkknrUsuuooqnwzmJSNuGu
-        Mc0bBYDkdcrDjz5w8yPSCQ6gQrUbEvQ/3GnOjUzrDVw7
-X-Google-Smtp-Source: AMsMyM4TkBtBzw97AttzykCWImSm8pLeapwXLsEUfoctb8c365GhyTENUYp7BGzF7yEEe04UhM5r8FrNGPbwWBbbzNM=
-X-Received: by 2002:a05:6808:14d2:b0:354:c733:abd3 with SMTP id
- f18-20020a05680814d200b00354c733abd3mr5721852oiw.96.1666894448715; Thu, 27
- Oct 2022 11:14:08 -0700 (PDT)
+        Thu, 27 Oct 2022 14:15:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3FB7C1D9;
+        Thu, 27 Oct 2022 11:15:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C7E662415;
+        Thu, 27 Oct 2022 18:15:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 762B8C433C1;
+        Thu, 27 Oct 2022 18:15:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666894503;
+        bh=3HRxhPs5aRt82sCmtdzYduN3y/fgPE5EeF7WhWyHiY8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=hFJ+ssifG3lbRsDRrGmIkez0dIzYs35PZPUPHi0U1U9DUeEdL9l/mnLbDIfrRq+Pj
+         q+52SJhDqKNPbcnD9oOghksA6ntCzMn37u5K15XynJPuyPDS8EteUI6sZUtpc3J4QH
+         R10oDECCio5GMwpCK7VPk0fQ4rEFuFPTZZ9+TQLdMjd5qoMU5bSlNTv2bzJlTImWi7
+         6Pib7X9nweO0JkPmiOJC0L2ScJtinkOGB8prXWU7gMY0IPVtPOClNmwdQHX6/BtpXB
+         pLgioVILGA/hXEmrK8a47EwAuy1XvhqNIU5y6fgY6KZ/r9KE0h7kqnfwq44xNHS5uW
+         YT0+kb4NEU7DQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1EDC95C0A59; Thu, 27 Oct 2022 11:15:03 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 11:15:03 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Parav Pandit <parav@nvidia.com>
+Cc:     Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
+        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Dan Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v4] locking/memory-barriers.txt: Improve documentation
+ for writel() example
+Message-ID: <20221027181503.GE5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221010101331.29942-1-parav@nvidia.com>
+ <d5faaf6f-7de5-49b0-92d6-9989ffbdbf2e@app.fastmail.com>
+ <20221018100554.GA3112@willie-the-truck>
+ <20221018174907.GT5600@paulmck-ThinkPad-P17-Gen-1>
+ <PH0PR12MB54810CA260159E805D448375DC289@PH0PR12MB5481.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-References: <20221026070110.35364-1-jiapeng.chong@linux.alibaba.com> <20221026070110.35364-2-jiapeng.chong@linux.alibaba.com>
-In-Reply-To: <20221026070110.35364-2-jiapeng.chong@linux.alibaba.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 27 Oct 2022 14:13:57 -0400
-Message-ID: <CADnq5_M4jCG4fuikkegn+PBMedW=xX=qLq86uFhwKNw7k_EsAw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drm/amd/display: Modify mismatched function name
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     alexander.deucher@amd.com, Xinhui.Pan@amd.com,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, christian.koenig@amd.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR12MB54810CA260159E805D448375DC289@PH0PR12MB5481.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied the series.  Thanks!
+On Tue, Oct 18, 2022 at 08:33:08PM +0000, Parav Pandit wrote:
+> Hi Paul, Will,
+> 
+> > From: Paul E. McKenney <paulmck@kernel.org>
+> > Sent: Tuesday, October 18, 2022 1:49 PM
+> > 
+> > On Tue, Oct 18, 2022 at 11:05:55AM +0100, Will Deacon wrote:
+> > > On Mon, Oct 17, 2022 at 10:55:00PM +0200, Arnd Bergmann wrote:
+> > > > On Mon, Oct 10, 2022, at 12:13 PM, Parav Pandit wrote:
+> > > > > The cited commit describes that when using writel(), explcit wmb()
+> > > > > is not needed. wmb() is an expensive barrier. writel() uses the
+> > > > > needed platform specific barrier instead of expensive wmb().
+> > > > >
+> > > > > Hence update the example to be more accurate that matches the
+> > > > > current implementation.
+> > > > >
+> > > > > commit 5846581e3563 ("locking/memory-barriers.txt: Fix broken DMA
+> > vs.
+> > > > > MMIO ordering example")
+> > > > >
+> > > > > Signed-off-by: Parav Pandit <parav@nvidia.com>
+> > > >
+> > > > I have no objections, though I still don't see a real need to change
+> > > > the wording here.
+> > >
+> > > FWIW, I also don't think this change is necessary. If anything, I'd
+> > > say we'd be better off _removing_ the text about writel from this
+> > > section and extending the reference to the "KERNEL I/O BARRIER
+> > > EFFECTS" section, as you could make similar comments about e.g.
+> > > readb() and subsequent barriers.
+> > >
+> > > For example, something like the diff below.
+> > 
+> > I do like this change, but we might be dealing with two different groups of
+> > readers.  Will and Arnd implemented significant parts of the current
+> > MMIO/DMA ordering infrastructure.  It is thus quite possible that wording
+> > which suffices to remind them of how things work might or might not help
+> > someone new to Linux who is trying to figure out what is required to make
+> > their driver work.
+> > 
+> > The traditional resolution of this sort of thing is to provide the
+> > documentation to a newbie and take any resulting confusion seriously.
+> > 
+> > Parav, thoughts?
+> 
+> I am ok with the change from Will that removes the writel() description.
+> However, it removes useful short description from the example of "why" writel() is used.
+> This is useful for newbie and experienced developers both.
+> 
+> So how about below additional change on top of Will's change?
+> This also aligns to rest of the short C comments in this example pseudo code.
+> 
+> If ok, I will take Will's and mine below change to v5.
+> 
+> index 4d24d39f5e42..5939c5e09570 100644
+> --- a/Documentation/memory-barriers.txt
+> +++ b/Documentation/memory-barriers.txt
+> @@ -1919,7 +1919,9 @@ There are some more advanced barrier functions:
+>                 /* assign ownership */
+>                 desc->status = DEVICE_OWN;
+> 
+> -               /* notify device of new descriptors */
+> +               /* Make descriptor status visible to the device followed by
+> +                * notify device of new descriptors
+> +                */
+>                 writel(DESC_NOTIFY, doorbell);
 
-Alex
+Hearing no objections, please proceed.
 
-On Wed, Oct 26, 2022 at 3:02 AM Jiapeng Chong
-<jiapeng.chong@linux.alibaba.com> wrote:
->
-> No functional modification involved.
->
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:615: warning: expecting prototype for setup_subvp_dmub_command(). Prototype was for populate_subvp_cmd_pipe_info() instead.
->
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2587
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-> index 774e06936661..67eef5beab95 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-> @@ -595,7 +595,7 @@ static void update_subvp_prefetch_end_to_mall_start(struct dc *dc,
->  }
->
->  /**
-> - * setup_subvp_dmub_command - Helper to populate the SubVP pipe info for the DMUB subvp command
-> + * populate_subvp_cmd_pipe_info - Helper to populate the SubVP pipe info for the DMUB subvp command
->   *
->   * @dc: [in] current dc state
->   * @context: [in] new dc state
-> --
-> 2.20.1.7.g153144c
->
+							Thanx, Paul
