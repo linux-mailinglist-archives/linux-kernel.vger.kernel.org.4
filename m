@@ -2,94 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E6B60ED6E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 03:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5435760ED72
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 03:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233839AbiJ0B1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 21:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48686 "EHLO
+        id S233659AbiJ0BaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 21:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233244AbiJ0B06 (ORCPT
+        with ESMTP id S229565AbiJ0BaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 21:26:58 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574FA6B64B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 18:26:58 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id t10-20020a17090a4e4a00b0020af4bcae10so20472pjl.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 18:26:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GHA4PABhtEK1rXCzmMniG/pV1qITSZAaITYQ81bgOXc=;
-        b=oZtRdUiV4y1KcexeIjhm5ZaiRVBbr/CjhTTKej0NGu1CTmnwmXu37d0Y24JHY7HEKt
-         7s6XazoTKjYXoD0jedPfTjRl2jwpQHqzet7yg/RjpRRJyOjObRZXttCs4veLT3lIHD86
-         C29pmXUHUx7AHZgZH5G/JGnL39YQdSckDLNy5IN/45+EFgSeF/gHH88qdut8K6fQiXC3
-         VOaMOo5QbFS3Fnd0ntmFp1ZuMUUURgyHRHi4eJ3H+KC+toON1Pity1aBmGFLZBYVfxfX
-         ymSxLypehov09orGq+EaXgAj54GIVn9L35j3wf2mY01wTIHVmKy+upRoqyPhG2h7uSUF
-         FUiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GHA4PABhtEK1rXCzmMniG/pV1qITSZAaITYQ81bgOXc=;
-        b=Mo/0192qbMNiIXIvZ98HLE2ds9Mvm4g/9yxS93Ex7r51ZLiieE/o49j0reRdJ9cBIx
-         O8kUiXVIjUXGYgnsBWChlqvYykUHWbf+qXczYMRx2VItalwjeqHoLS3wkSsXGr18ac7X
-         8aYtiCAR+Zzk/7dQYiD1kNs27tu0o5Vp60F2Den2WNJjRlZvtQvfwRilHUBkuVl4Wcdb
-         Od2N+xoP2L6ohxj/C912d77nJZx0HQhZYhAgozcIk1e0h1WL1aHwv7eU4QoQxpN4z+xT
-         j4L7YdF69baep2mhlu7NPq7vY72EjBotsfp9kijWWTAOOi58CH72MrpeL+fH7Am5W16g
-         2fyA==
-X-Gm-Message-State: ACrzQf2ogqmkbu4GIrqU9qtPrzYsF6c7isBGxmQKJDgQ0vn2Hwx2sTQf
-        0kAMrpg5oXqlbtTiMQCk2pxbIg5So90XyA==
-X-Google-Smtp-Source: AMsMyM5iDQZ1vf+K1ir7PueOek+T8gwlbragRmvnz13FTxQqYHuoSKpX0U4SaMmHLduBrvhlMpefGQ==
-X-Received: by 2002:a17:90a:b10b:b0:212:fbc3:e623 with SMTP id z11-20020a17090ab10b00b00212fbc3e623mr7386982pjq.5.1666834017847;
-        Wed, 26 Oct 2022 18:26:57 -0700 (PDT)
-Received: from marshmallow (192-184-163-51.fiber.dynamic.sonic.net. [192.184.163.51])
-        by smtp.gmail.com with ESMTPSA id q6-20020a17090a178600b00210c84b8ae5sm7533pja.35.2022.10.26.18.26.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 18:26:57 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 18:26:54 -0700
-From:   Emily Peri <eperi1024@gmail.com>
-To:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: rtl8723bs: Replace ternary statement with min
- function
-Message-ID: <Y1neXqVYZ8mq8jH+@marshmallow>
+        Wed, 26 Oct 2022 21:30:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D0A792CF;
+        Wed, 26 Oct 2022 18:30:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2921D62104;
+        Thu, 27 Oct 2022 01:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6FA13C433C1;
+        Thu, 27 Oct 2022 01:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666834215;
+        bh=DB++pazv5ozlsiKREdOHZcQWip34xtnYMkgDfscnfkU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=KeINVIRrFlYgLPXfLhK8qp0r06gXlL7kTXmGOwViWNOtF6XT3Qg+CSde2frrJvjlp
+         7NCEDbWb9JY+MWzRGKEzQTGhIsLaVdvkTAzwZL1505j3l+2VQThcl7qc1GGezu1hQT
+         IuFsyaGiDjBXvNHyBZmlkuSWXQcUZpoIGSpRES0MsP9GNtfCbzx+mvLlFPQwV5sYR3
+         FECYFhHocWnn7Jm1o7AFl2WB0SLCqvtCy1fQRZrT2AgLz5EAB9Ajy81aHK6JHzV62C
+         G2UFE6Fub+fXujZqwsZKA99B2thJsDlAcibnGZF/medD5OIFTL7kItM3g9uhw61egM
+         o7HM4b2PgqPaA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4FA6CE45192;
+        Thu, 27 Oct 2022 01:30:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH][next] bpftool: Fix spelling mistake "disasembler" ->
+ "disassembler"
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166683421532.6869.9193789922007917963.git-patchwork-notify@kernel.org>
+Date:   Thu, 27 Oct 2022 01:30:15 +0000
+References: <20221026081645.3186878-1-colin.i.king@gmail.com>
+In-Reply-To: <20221026081645.3186878-1-colin.i.king@gmail.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     quentin@isovalent.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        bpf@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ternary statements that pick the min of two values can be replaced by
-the built-in min() function. This improves readability, since its quicker
-to understand min(x, y) than x < y ? x : y. Issue found by coccicheck.
+Hello:
 
-Signed-off-by: Emily Peri <eperi1024@gmail.com>
----
- drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch was applied to bpf/bpf-next.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
-diff --git a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
-index 6aeb169c6ebf..0cf7d9f82b83 100644
---- a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
-+++ b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
-@@ -1551,7 +1551,7 @@ static int rtw_cfg80211_set_wpa_ie(struct adapter *padapter, u8 *pie, size_t iel
- 
- 		wps_ie = rtw_get_wps_ie(buf, ielen, NULL, &wps_ielen);
- 		if (wps_ie && wps_ielen > 0) {
--			padapter->securitypriv.wps_ie_len = wps_ielen < MAX_WPS_IE_LEN ? wps_ielen : MAX_WPS_IE_LEN;
-+			padapter->securitypriv.wps_ie_len = min(wps_ielen, MAX_WPS_IE_LEN);
- 			memcpy(padapter->securitypriv.wps_ie, wps_ie, padapter->securitypriv.wps_ie_len);
- 			set_fwstate(&padapter->mlmepriv, WIFI_UNDER_WPS);
- 		} else {
+On Wed, 26 Oct 2022 09:16:45 +0100 you wrote:
+> There is a spelling mistake in an error message. Fix it.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  tools/bpf/bpftool/jit_disasm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Here is the summary with links:
+  - [next] bpftool: Fix spelling mistake "disasembler" -> "disassembler"
+    https://git.kernel.org/bpf/bpf-next/c/96f341a4751d
+
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
