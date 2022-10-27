@@ -2,95 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3D360F951
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16CBB60F956
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236220AbiJ0Njp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 09:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
+        id S236244AbiJ0Nj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 09:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236248AbiJ0Nji (ORCPT
+        with ESMTP id S236238AbiJ0Njz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 09:39:38 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D263E4E
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:39:36 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id w29so1085260qtv.9
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:39:36 -0700 (PDT)
+        Thu, 27 Oct 2022 09:39:55 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2BA12AEE
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:39:53 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id f205so2044634yba.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:39:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DXI7ttHruh1sJniS6TpJJRJcjXoXJ/dSqy2SyC1F0VA=;
-        b=kFiekM9BXanfNbGJ5MdCQMWLy47GZ83U2h7aw1Tkexy8Og4ISelKH6cwszpIaHA0Sn
-         UXWTWABH5vUlkqWPV+WnKg9dzn4l7TXcALRIK7R8yCOMuFBVv0bGAKUeI7CcZEJdBRgy
-         xb1YUGNzU1emvfumth2zWqCLpKT/CaY6ND5L0c38JMmy8alEEXliM2K70ggS868CB2iS
-         zwPkkYPwAjSk9qUYiLG4nNRfpJRkhft4FTF0ql+xTLwAS/wdIYxaUhXx03+IptlDjC2P
-         dRHoHCjmnjMseI0U9DEqBxqrhy8KlexvY8sxOHcxKh7lZJTXwuaUSJPGy9QbdUcYk6Mi
-         +7QQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=T7RxfUpE+B/HYJd5zuMNI1CVQxXADlNT94gOnJfbWU8=;
+        b=Mj/q7HNYsLLDCbO1NTCyj3g6/R8aSY3UUT/VO+0/Kv48WUGGEsM9f7fNdc3ZN49w6k
+         OduPhKZAxfdbbNIzfzJc+G/RceTUjpH/M+x3W2VgMyuSZDnpx4yI2+aYQrD3fD2DfBlR
+         GY3ggAswiGb11ShtenAInjlIxA664H6r8g0YyIumF0vHp5072mlQe3F8r8ON4KVIeZv+
+         W95DZDD1WCFP0OCqqbGJhxnsk3DPVotETTC1G5EhEU/0lel2iRvSHD0QhUrIaqnkxnTX
+         8zMhfIbuqvW7+U+Y0Wc2C6eUiX+G43fTDhJIZO2oFhjEGrSeXFIjp+2Se4l2U6vx2/h0
+         QbtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DXI7ttHruh1sJniS6TpJJRJcjXoXJ/dSqy2SyC1F0VA=;
-        b=LWPWBcdnnTjUw2mxPfIy1TDjCi3VklleabIczc3Lsc/eESvXCP8PzI5RYwb/J868G+
-         1DesYtLZ792Bod+AfuqzBB169KcOuZUphCo0sghl8K1HNLRXnD5zDosHnqKdL/U0Rh3V
-         FTNyvDu2/2A8cn/JeAVn2/mg0GRNMkHdBQRoWvZ9fFv3A7Ro5LoNo39hIJc/xqQ3Wu32
-         7icIMYo1EEPha2L8YM5f/BdqQo1V+XKVzGrf9xB7zG0tgFW5iy8k1AOf01WVeO0QPy2J
-         yi1IDJAKW/yHen6I/jU+2JmB6Dnh28YAAadi5Kk18ki/SLj3gZE8dP2z7BfooB0YdEOP
-         s+rw==
-X-Gm-Message-State: ACrzQf24feUKXiZhNpPx1biOaQLmGMbKKx+PRKCtBeH24KNet6BzJ2On
-        vXqOadcFjcWIFcVXR3OcO0RySQ==
-X-Google-Smtp-Source: AMsMyM51EC06AFkH8LuvtXEBIHaCz7EHTGzSieB15/F7HnjFlhWODFvVB5sLxkSNNGmH6+hxPN3k2w==
-X-Received: by 2002:a05:622a:1903:b0:39c:e308:ee1a with SMTP id w3-20020a05622a190300b0039ce308ee1amr42153049qtc.469.1666877975306;
-        Thu, 27 Oct 2022 06:39:35 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id k25-20020ac84759000000b0039bfe8acff6sm887391qtp.58.2022.10.27.06.39.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 06:39:34 -0700 (PDT)
-Message-ID: <0cfb3da3-99ff-31b7-d3e3-cf425296af67@linaro.org>
-Date:   Thu, 27 Oct 2022 09:39:33 -0400
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T7RxfUpE+B/HYJd5zuMNI1CVQxXADlNT94gOnJfbWU8=;
+        b=110KIjt1YsHBc28BJMr/+ASrPBQ7kuU9+DGc+VFOqShKyfcYK6aZHjo44CZdhEtgG1
+         Qt7rqvLrUpE6Kpm4N22XNdjDPD9wVJ0XLQqkTRLZtMs0Q5/i9mzkKw9OeOtHwJupy4AZ
+         veME0yQViV/twPfqWu4fb/NWeUg8bkjVvkgqBCNwDZYYW4SeglJeQt6/kZZ6Bd0M7FTa
+         kKwyrvlAMJlLezbup6XaNvcom4TTHd5my9omv1NxMwnjV8TnklI/4I/2VyRm8w2HKJTx
+         wVahV+RqEaqVfAmBC+HlVXME8bNE8zhohGam5I683Wdc/UY9rZCbtdfSlFmXl3cGSy5S
+         hPVA==
+X-Gm-Message-State: ACrzQf1+W/sbAdl8owG0qNRqPoqLE44cTWxz8GnAOUAECN163a9b5hVs
+        Wk0SUcX2l6ugxK1J+DoTKbTSnTrNiayDwt/EohoaSq5KkNI=
+X-Google-Smtp-Source: AMsMyM7FaeVUsOl4ZXpzdSIIGTvEVJeq7ijb6oQekn41n7jUMVcDFH424GiYBNtVIxFyKBB8e/h5UlmX6izq4gYKueY=
+X-Received: by 2002:a25:6647:0:b0:6cb:8601:238a with SMTP id
+ z7-20020a256647000000b006cb8601238amr11408366ybm.598.1666877992173; Thu, 27
+ Oct 2022 06:39:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 5/6] dt-bindings: arm: mediatek: Add compatible for
- MT6795 Sony Xperia M5
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, matthias.bgg@gmail.com
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        hsinyi@chromium.org, nfraprado@collabora.com,
-        allen-kh.cheng@mediatek.com, sam.shih@mediatek.com, andrew@lunn.ch,
-        sean.wang@mediatek.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20221027095504.37432-1-angelogioacchino.delregno@collabora.com>
- <20221027095504.37432-6-angelogioacchino.delregno@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221027095504.37432-6-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221027102449.926410-1-william.xuanziyang@huawei.com>
+ <CANn89iJkKJ3-b8vncrxgawWTtaLphYERhVma7+1qgdSEXn8tiQ@mail.gmail.com> <8523b754-992d-0d72-ecd1-4f076e57ebde@huawei.com>
+In-Reply-To: <8523b754-992d-0d72-ecd1-4f076e57ebde@huawei.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 27 Oct 2022 06:39:41 -0700
+Message-ID: <CANn89i+FYGkR5_-C3wp7GdpW=JT8V5LELwMNcHg9Gt6=e877JA@mail.gmail.com>
+Subject: Re: [PATCH net] ipv6/gro: fix an out of bounds memory bug in ipv6_gro_receive()
+To:     "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, herbert@gondor.apana.org.au
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/10/2022 05:55, AngeloGioacchino Del Regno wrote:
-> Add a compatible for the Sony Xperia M5 smartphone.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
+On Thu, Oct 27, 2022 at 6:01 AM Ziyang Xuan (William)
+<william.xuanziyang@huawei.com> wrote:
+>
+> > On Thu, Oct 27, 2022 at 3:25 AM Ziyang Xuan
+> > <william.xuanziyang@huawei.com> wrote:
+> >>
+> >> IPv6 packets without NEXTHDR_NONE extension header can make continuous
+> >> __skb_pull() until pskb_may_pull() failed in ipv6_gso_pull_exthdrs().
+> >> That results in a big value of skb_gro_offset(), and after __skb_push()
+> >> in ipv6_gro_receive(), skb->data will less than skb->head, an out of
+> >> bounds memory bug occurs. That will trigger the problem as following:
+> >>
+> >> ==================================================================
+> >> BUG: KASAN: use-after-free in eth_type_trans+0x100/0x260
+> >> ...
+> >> Call trace:
+> >>  dump_backtrace+0xd8/0x130
+> >>  show_stack+0x1c/0x50
+> >>  dump_stack_lvl+0x64/0x7c
+> >>  print_address_description.constprop.0+0xbc/0x2e8
+> >>  print_report+0x100/0x1e4
+> >>  kasan_report+0x80/0x120
+> >>  __asan_load8+0x78/0xa0
+> >>  eth_type_trans+0x100/0x260
+> >
+> > Crash happens from eth_type_trans() , this should happen before
+> > ipv6_gro_receive() ?
+> >
+> > It seems your patch is unrelated.
+> >
+> > Please provide a repro.
+>
+> C repro put in attachment.
 
+This seems to be a bug in tun device.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Please take more time to root cause this issue, instead of adding work
+arounds all over the place.
 
-Best regards,
-Krzysztof
+Thanks.
 
+>
+> >
+> >
+> >>  napi_gro_frags+0x164/0x550
+> >>  tun_get_user+0xda4/0x1270
+> >>  tun_chr_write_iter+0x74/0x130
+> >>  do_iter_readv_writev+0x130/0x1ec
+> >>  do_iter_write+0xbc/0x1e0
+> >>  vfs_writev+0x13c/0x26c
+> >>
+> >> Add comparison between skb->data - skb_gro_offset() and skb->head
+> >> and exception handler before __skb_push() to fix the bug.
+> >>
+> >> Fixes: 86911732d399 ("gro: Avoid copying headers of unmerged packets")
+> >> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+> >> ---
+> >>  net/ipv6/ip6_offload.c | 4 ++++
+> >>  1 file changed, 4 insertions(+)
+> >>
+> >> diff --git a/net/ipv6/ip6_offload.c b/net/ipv6/ip6_offload.c
+> >> index 3ee345672849..6659ccf25387 100644
+> >> --- a/net/ipv6/ip6_offload.c
+> >> +++ b/net/ipv6/ip6_offload.c
+> >> @@ -237,6 +237,10 @@ INDIRECT_CALLABLE_SCOPE struct sk_buff *ipv6_gro_receive(struct list_head *head,
+> >>                 proto = ipv6_gso_pull_exthdrs(skb, proto);
+> >>                 skb_gro_pull(skb, -skb_transport_offset(skb));
+> >>                 skb_reset_transport_header(skb);
+> >> +               if (unlikely(skb_headroom(skb) < skb_gro_offset(skb))) {
+> >
+> > This makes no sense to me.
+> >
+> > If there is a bug, it should be fixed earlier.
+>
+> Maybe it is good to validate IPv6 packet earlier in ipv6_gro_receive() or more earlier?
+>
+> >
+> >> +                       kfree_skb(skb);
+> >> +                       return ERR_PTR(-EINPROGRESS);
+> >> +               }
+> >>                 __skb_push(skb, skb_gro_offset(skb));
+> >>
+> >>                 ops = rcu_dereference(inet6_offloads[proto]);
+> >> --
+> >> 2.25.1
+> >>
+> > .
+> >
