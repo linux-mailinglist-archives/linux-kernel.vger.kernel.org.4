@@ -2,78 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BAD860ED05
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 02:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACFA60ED0A
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 02:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233809AbiJ0AcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 20:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
+        id S233788AbiJ0Aev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 20:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJ0AcR (ORCPT
+        with ESMTP id S233245AbiJ0Aer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 20:32:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E623132249
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 17:32:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666830735;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LMKewoUAt79Xc4gzp2ylHJXZ8WKiI9xisq9uY0Ul/yQ=;
-        b=L0722b97xmdxzudBWpDmelAJy8K+vfmT/vvZt+ufpNwwrPki5NIvZMDnXLVUxIFvOM0JRE
-        ynsXlCkKZipneqEjqdhyfIRCECdP8o110c6JitHVsdp68A+/Z73iRrfk2UP7LsxOo02Ub3
-        aQ4tTRFJkyO1hW3sDS94dg5jjTPfABk=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-110--Te8o8jGP-uY60XrLuoZ6w-1; Wed, 26 Oct 2022 20:32:11 -0400
-X-MC-Unique: -Te8o8jGP-uY60XrLuoZ6w-1
-Received: by mail-io1-f71.google.com with SMTP id r197-20020a6b8fce000000b006c3fc33424dso70584iod.5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 17:32:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LMKewoUAt79Xc4gzp2ylHJXZ8WKiI9xisq9uY0Ul/yQ=;
-        b=RcBt4pjHtR2qiWi0Su57WV/btEiCPN8WAB3rLiC6O4kp6zSJz0n3MExkHVmlrYcksL
-         vNNXOcfe/28eXch0qFwJJtUzg2Lq6jUyZQiRE7m/ExPwf7EmLHmL/guNMLS6gy1KMXnN
-         GHQSL25GXFLSu7KmPFLejFCLcaqldErH6D8va6afbXXlVd3SpoCJDksaVNiV6eiA3pEg
-         s9OEZPy44jdVJoOXu+bQY/3y09JAaNSDWWg1FY0MtJ4F5L1xqCV4RL+lidpjurBI/UAI
-         D2EXt7irBTeN8lNaXUM+fnoHjQHXZcUoZwmzI3D98iYC+Wpb8j+eX2nipafU5cOQzg7l
-         Cbtw==
-X-Gm-Message-State: ACrzQf0jXz46nUSOvWFTQOMk9yzK3RoprkdshmRE9cFQtSOqbULx70bv
-        aL6flLWWH0wMJKs+S5UUPYIk6/iqgNn4k7yCk9XH/hdY/dSFX93aZgIySijwRCeR/x5EOyeyjnk
-        9xevijECWEEClFuaYj+zwrbtt
-X-Received: by 2002:a05:6602:4191:b0:68a:144c:82dd with SMTP id bx17-20020a056602419100b0068a144c82ddmr3368884iob.33.1666830730420;
-        Wed, 26 Oct 2022 17:32:10 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM51bORvzjwQH2dqSHTTF6NkqFxjIWb4x+zF9nY4N7wW9vflHq5T25kEe1IpxUnSj9WcGpCyow==
-X-Received: by 2002:a05:6602:4191:b0:68a:144c:82dd with SMTP id bx17-20020a056602419100b0068a144c82ddmr3368861iob.33.1666830730119;
-        Wed, 26 Oct 2022 17:32:10 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id h14-20020a056e021b8e00b0030061b6d93bsm1029016ili.20.2022.10.26.17.32.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 17:32:09 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 20:32:08 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Yuanzheng Song <songyuanzheng@huawei.com>,
-        akpm@linux-foundation.org, gregkh@linuxfoundation.org,
-        david@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH STABLE 5.10] mm/memory: add non-anonymous page check in
- the copy_present_page()
-Message-ID: <Y1nRiJ1LYB62uInn@x1n>
-References: <20221024094911.3054769-1-songyuanzheng@huawei.com>
- <3823471f-6dda-256e-e082-718879c05449@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Wed, 26 Oct 2022 20:34:47 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EB427CD2;
+        Wed, 26 Oct 2022 17:34:45 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QMW9sn000954;
+        Thu, 27 Oct 2022 00:34:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=7CqWoGNPislws48PL2HBt8w5ENHgGzFukTXAc3siTu0=;
+ b=LRx8825pLglYM6HOUsvmuQ20uJR6KadGUQ/zZSJ1NVt5rOTvIDHBemysYKFOC41ky4wM
+ MW+b35b0VLxOQVXW1Nd8nENJ+N8coLx+LUK2nzibEWHe9QaxPpt2Bx/o+3dU4SQiNc2h
+ mQObF9PjAtB9+qm7LdKDpJbJR2tf5gE3vrt03dRhpWn33/lDzjlxGWIiUm4dVzmaqode
+ ta+4hFhY+P7d8D9ibU60Yr/CNQo2vnI6snRCxy+Q4tcvPwCeaByyk4qSUoT/63jvhj00
+ PvdbGdiqJh7Wu6MsUdT4ZNm53k2puDdQz8QFmPC31RqykwVRRFKsCB1oz87sj3EXUNjN 4w== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kfax7rk20-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Oct 2022 00:34:15 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29QMBECB006561;
+        Thu, 27 Oct 2022 00:34:14 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2108.outbound.protection.outlook.com [104.47.70.108])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kfaggex0v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Oct 2022 00:34:14 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=k12z/nWn846KEe98FUo0UZwRm5TJlPgbG38qkCVswVY33SGO+uHN5zeA0cucrFlcXjYgLn5ToUPJK7/wzuIbW/4q1pPIJcvEalZYKQIyV1w/qOw/JltxgaN7xsH0aMPv1oNwef+fA7BhP9fC8Mj+m3eI+TXEWnhsQGtMeBJ1EBYa6y5v1/m1FMPdFf7xXBY8nehkzTGsKl7ccAoSqlW2GbA5R/9Iq2xvLCoO2sJLhmyrRT6T66hZb86z9xG35WPDLR6WyRuabiAwPAwPrLE51rLP8a52ADI4FIMXfbFq7IWixfqw6MnujEp7I0YwZE0qt8hJ5wo+gxyKba3K6qvKkA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7CqWoGNPislws48PL2HBt8w5ENHgGzFukTXAc3siTu0=;
+ b=aoLf12g4Bm07zMjZkIRbZx4+GGeVHJi1iTAn02jkaY6bgIOS5/TvPu4gg/FWKnwGIGJLmuanB+/j/jKNuW1/zPRKcfetoSDAZAJH/3lY0a0kHBNo2bTwBK1thIbyK4bB3FTBQOBW4EfdNaWAoZtNaqdTXrTrtg3pDcABX3cciRLY2bxKrYqi2RUTP2r3jBlXgMVQBMRw+LhVSJGA4GLhO7YIGqbhD7m/aYnyV2CYYU1wVz3Tr+b2LxZ8IvzaZn5kEHkbUPJfog+aKLosVB/Y8JF6HbqMPoY6CLWoF1fSZtH5fNjUIbivj6Kczx4QeY4hKZB2aLLQUm+BVVxkldXybg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7CqWoGNPislws48PL2HBt8w5ENHgGzFukTXAc3siTu0=;
+ b=HJNcM3VjGGKqa1Y/CsJyytxfOVEei4yG2CUAxvE3x1urBhY+xVdLThYWDxQsIN9p9UXzNfx7S/IMeduxpBGI6TLoDdwbXpfuTsFp2bkXJjsygTpd3YUPLEUo+n9l3f+oSIeGxIj3rPu1HVx5XAERMYz8z6hNGUlZkzT3x13gzvc=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by BY5PR10MB4116.namprd10.prod.outlook.com (2603:10b6:a03:203::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.26; Thu, 27 Oct
+ 2022 00:34:09 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::58e9:95ba:d31e:ddd3]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::58e9:95ba:d31e:ddd3%5]) with mapi id 15.20.5746.028; Thu, 27 Oct 2022
+ 00:34:09 +0000
+Date:   Wed, 26 Oct 2022 17:34:04 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-ia64@vger.kernel.org,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Hildenbrand <david@redhat.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v3] hugetlb: simplify hugetlb handling in follow_page_mask
+Message-ID: <Y1nR/KToV44GKZ5G@monkey>
+References: <20220919021348.22151-1-mike.kravetz@oracle.com>
+ <Y1mtz7dFAlhGRsAd@x1n>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3823471f-6dda-256e-e082-718879c05449@google.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+In-Reply-To: <Y1mtz7dFAlhGRsAd@x1n>
+X-ClientProxiedBy: MW4PR04CA0357.namprd04.prod.outlook.com
+ (2603:10b6:303:8a::32) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|BY5PR10MB4116:EE_
+X-MS-Office365-Filtering-Correlation-Id: 832c52ac-7592-4121-1cbd-08dab7b2f670
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +5lukjWAtfwuR8CW5OK6RhGzouwswCtewlDDpOcEvgs4qVIUS0cSfxWHuzhOX00DRtdqei+5PFotrYNzRHXYrNBXXhcGDxXi2oJwpi4o4bCFXxSycSmph9upG12NITRaLWe2NLe2oaSU4HUzFxBXsNDYn9ubOtoxM4AQwcGLI67E02VkMLKgck6SZswykizUvOGwO1PYBdOuAsmddzqGUXkz7gPJzjISQTtIsFcAaztKoRemTnIyjYwgu/EFI94tzsbRyWpZz4IinGSwH6FZC/HVmcIu7BZX8jiw2QX3buvw7aJ9fbpl6wo9IUW5jJ1EG0f/GBZY1stKTkbQhJKWoCgXGcigaLudflj/kPg7D/qWDJ5fgvIa21GERPRCoN3I3FWgasZ3vOG6WwzQYSZw2hGJVq650IBPS3rQJHoLBk1W4X9PCSZ5SpvMw0NqF5qAqmAZSLBPwLKxVxOb8KFQ9VT2Vjj3TpClPyHeLIz+gyQki6APA7jAKZOC5kBUynTJe61QuxJj9m/TQD3c6WB6RUlfolFBC+oesS/MB9pw24RJGPVdMSk4y5kM9POvy1M0Q/C+s1z9EZdGPYN7g87/mIVTZ8GeuVol7vv4KkKTdX9N5zomkDJIXwtAWo9x6oKgjwn5zKleWZyTL2k6gcibXHqEMUGpqpT0xBP/4AuGJEFuLm3Ego50r7KnKZgC4tQIFF3fLbepbOgq7LkxXVqjOw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(346002)(136003)(396003)(376002)(39860400002)(451199015)(186003)(66476007)(5660300002)(44832011)(66946007)(7416002)(8936002)(66556008)(83380400001)(38100700002)(86362001)(6916009)(54906003)(6486002)(26005)(6512007)(9686003)(478600001)(316002)(8676002)(4326008)(6506007)(33716001)(6666004)(53546011)(41300700001)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?p8xszGyeESy7Ky18c5HASNoJiVm0Pb0REteQ51wudBZb+FRAf7T0bbBRcjAu?=
+ =?us-ascii?Q?7G5PouugtGjfs82GdFEhsY3B6Ot642AwCO6wLiE6m6YvxZS/3g4ng398xczf?=
+ =?us-ascii?Q?AV/HA4gstBuVwzUK1RwoxrXw6fhi4LV0Deu0NDT08xoyhT8uMyfH7zZe2Kmf?=
+ =?us-ascii?Q?TWwlataIg+Bxu0gToNv801wd2C7TcXCpYIEi6XS6navAkR1nhk20yY7wPRQ8?=
+ =?us-ascii?Q?zjVOO34vBIEuoGJwDs/qEO8NSJi74isIQjh7XqQFx9XMisiyPZ9n9vPLpSs4?=
+ =?us-ascii?Q?C0+SASXLV+i1857X7kPjf0NiW6mUMmHC1yy3heEX4SaGaQZ4u1TLzPkSdxoD?=
+ =?us-ascii?Q?EPGJv0v2kIaG8yeR1gHRsqa8uieNUy0GtOV/yuq6w9KALbDREbjpzx6vWYC5?=
+ =?us-ascii?Q?HDu/VhhmxoJldHKPYaRstFUE7/t/2ipyQNrJqzmmXFfa6FC65PfGjl+00qVT?=
+ =?us-ascii?Q?pWCJxfs01FYx05cViJIA6xfnUYmULIqMMF6yZgEh4G8XfOeQU/GnULDaa+Z+?=
+ =?us-ascii?Q?/0iPG/cyMuHoRwHIi9UAdMVqH3mQHH4/cZ2Re2XvVSn/w8tdQjGyP5FpGkXG?=
+ =?us-ascii?Q?4jqkzi3SEeKFJLDsQ5ZORxypR6Lah5nqLBHe+qJNEBOGfbfVW3ERrjFsVuN1?=
+ =?us-ascii?Q?qWQYLHUs57u2qEuQ5LVGdD97vgcwed5asFw2NnolCibs9JMt81gq4MxyjofF?=
+ =?us-ascii?Q?F12aZTP//CmjPt4XVo0+hlVUa1simY41lAPKAnPg5vsW9sfTYfZDVm4GsGca?=
+ =?us-ascii?Q?nopkE7VrDwzdkNPac7yGLpJ/LaSEFhszHcCvIP+mg6kkt/50bKdJnbOJmLVf?=
+ =?us-ascii?Q?SDtt66aFSIB1nBpjGmrmIc2as0CDzRTxmlQPQGqmJGmpT7mldvAtrCLywz5W?=
+ =?us-ascii?Q?VS7sbBvULgATCZajvPoa9+CdRmpMI7HVq64FuovG1BFoUJOkZa0R0hjR7O0I?=
+ =?us-ascii?Q?jqdVNIpHI6XdhTsyQ52aMwMoHWJ9GeUAsm1HDuuTwjO0J+yn2gKVbBS4U0sS?=
+ =?us-ascii?Q?/vY3xzpyrlfE3KtjALXSezEsIy8BkCVXG6wyyk9Gw64zv8c6z5v+hRLjkSGQ?=
+ =?us-ascii?Q?gysIMEHjKPOkZpk3pIF7GtXfZ4dbdgBerGa7jFW7pavhpnkrD18L8YkOFwfa?=
+ =?us-ascii?Q?E8biWsulbkk+oy7xijHmjXKd1XcpYr/4hNRhX3oaOvFf3cmxL2kWxc/z7vGm?=
+ =?us-ascii?Q?q/3ArvxUI459X23Cx/1xbS7oSJm8dkU9UsHHYMe4YiTNHLDa4EenXVkoCuVP?=
+ =?us-ascii?Q?9dDwfkCdNyMecUJPaMAoIYRHcYVUdLATazYgYoFrI5Rxibd3fxtxLAChhEKU?=
+ =?us-ascii?Q?Lht9uf0A8o1qEzx6zYENftSDhldndWu26N5VOIOANJy3+uRl9EYkVNcqC0kL?=
+ =?us-ascii?Q?ge983kjF7DgSbwVtjZBHInSYB6Ja657svC0Mmql16mWg/JZvoMSu+phkT23u?=
+ =?us-ascii?Q?VURDf7uBLVVNQhIUxmkfAEMItRwbF7Jj+/W1XRRLHGhE4bB0jnnyPHCG2cAx?=
+ =?us-ascii?Q?MNqUMhVgQy4oKxIEbMisOgL3mU7jekPVyyK8SyeI/5hPvb0T6t0sd23DRP0/?=
+ =?us-ascii?Q?RL0EsM13SouC4vnZeRd73oDa7lgzssTt9QvgSDuG0o+4A8zfULluQExEFvdS?=
+ =?us-ascii?Q?Kw=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 832c52ac-7592-4121-1cbd-08dab7b2f670
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 00:34:09.5450
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YmXoyEbRhaGCFAZOfMbYRA3lfGrdOGfnn75xL367JNk0w8HdqCA3Ls46TLxD2nm4axIEe/+6ac73ICm4XKq7lA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4116
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-26_10,2022-10-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0
+ suspectscore=0 phishscore=0 adultscore=0 mlxscore=0 mlxlogscore=999
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2210270001
+X-Proofpoint-GUID: fw9fhbyyge4U_DqnXSqatBFQLaU4LiTn
+X-Proofpoint-ORIG-GUID: fw9fhbyyge4U_DqnXSqatBFQLaU4LiTn
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,122 +153,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yuanzheng,
-
-On Wed, Oct 26, 2022 at 02:51:16PM -0700, Hugh Dickins wrote:
-> On Mon, 24 Oct 2022, Yuanzheng Song wrote:
+On 10/26/22 17:59, Peter Xu wrote:
+> Hi, Mike,
 > 
-> > The vma->anon_vma of the child process may be NULL because
-> > the entire vma does not contain anonymous pages. In this
-> > case, a BUG will occur when the copy_present_page() passes
-> > a copy of a non-anonymous page of that vma to the
-> > page_add_new_anon_rmap() to set up new anonymous rmap.
-> > 
-> > ------------[ cut here ]------------
-> > kernel BUG at mm/rmap.c:1044!
-> > Internal error: Oops - BUG: 0 [#1] SMP
-> > Modules linked in:
-> > CPU: 2 PID: 3617 Comm: test Not tainted 5.10.149 #1
-> > Hardware name: linux,dummy-virt (DT)
-> > pstate: 80000005 (Nzcv daif -PAN -UAO -TCO BTYPE=--)
-> > pc : __page_set_anon_rmap+0xbc/0xf8
-> > lr : __page_set_anon_rmap+0xbc/0xf8
-> > sp : ffff800014c1b870
-> > x29: ffff800014c1b870 x28: 0000000000000001
-> > x27: 0000000010100073 x26: ffff1d65c517baa8
-> > x25: ffff1d65cab0f000 x24: ffff1d65c416d800
-> > x23: ffff1d65cab5f248 x22: 0000000020000000
-> > x21: 0000000000000001 x20: 0000000000000000
-> > x19: fffffe75970023c0 x18: 0000000000000000
-> > x17: 0000000000000000 x16: 0000000000000000
-> > x15: 0000000000000000 x14: 0000000000000000
-> > x13: 0000000000000000 x12: 0000000000000000
-> > x11: 0000000000000000 x10: 0000000000000000
-> > x9 : ffffc3096d5fb858 x8 : 0000000000000000
-> > x7 : 0000000000000011 x6 : ffff5a5c9089c000
-> > x5 : 0000000000020000 x4 : ffff5a5c9089c000
-> > x3 : ffffc3096d200000 x2 : ffffc3096e8d0000
-> > x1 : ffff1d65ca3da740 x0 : 0000000000000000
-> > Call trace:
-> >  __page_set_anon_rmap+0xbc/0xf8
-> >  page_add_new_anon_rmap+0x1e0/0x390
-> >  copy_pte_range+0xd00/0x1248
-> >  copy_page_range+0x39c/0x620
-> >  dup_mmap+0x2e0/0x5a8
-> >  dup_mm+0x78/0x140
-> >  copy_process+0x918/0x1a20
-> >  kernel_clone+0xac/0x638
-> >  __do_sys_clone+0x78/0xb0
-> >  __arm64_sys_clone+0x30/0x40
-> >  el0_svc_common.constprop.0+0xb0/0x308
-> >  do_el0_svc+0x48/0xb8
-> >  el0_svc+0x24/0x38
-> >  el0_sync_handler+0x160/0x168
-> >  el0_sync+0x180/0x1c0
-> > Code: 97f8ff85 f9400294 17ffffeb 97f8ff82 (d4210000)
-> > ---[ end trace a972347688dc9bd4 ]---
-> > Kernel panic - not syncing: Oops - BUG: Fatal exception
-> > SMP: stopping secondary CPUs
-> > Kernel Offset: 0x43095d200000 from 0xffff800010000000
-> > PHYS_OFFSET: 0xffffe29a80000000
-> > CPU features: 0x08200022,61806082
-> > Memory Limit: none
-> > ---[ end Kernel panic - not syncing: Oops - BUG: Fatal exception ]---
-> > 
-> > This problem has been fixed by the fb3d824d1a46
-> > ("mm/rmap: split page_dup_rmap() into page_dup_file_rmap() and page_try_dup_anon_rmap()"),
-> > but still exists in the linux-5.10.y branch.
-> > 
-> > This patch is not applicable to this version because
-> > of the large version differences. Therefore, fix it by
-> > adding non-anonymous page check in the copy_present_page().
-> > 
-> > Fixes: 70e806e4e645 ("mm: Do early cow for pinned pages during fork() for ptes")
-> > Signed-off-by: Yuanzheng Song <songyuanzheng@huawei.com>
+> On Sun, Sep 18, 2022 at 07:13:48PM -0700, Mike Kravetz wrote:
+> > +struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+> > +				unsigned long address, unsigned int flags)
+> > +{
+> > +	struct hstate *h = hstate_vma(vma);
+> > +	struct mm_struct *mm = vma->vm_mm;
+> > +	unsigned long haddr = address & huge_page_mask(h);
+> > +	struct page *page = NULL;
+> > +	spinlock_t *ptl;
+> > +	pte_t *pte, entry;
+> > +
+> > +	/*
+> > +	 * FOLL_PIN is not supported for follow_page(). Ordinary GUP goes via
+> > +	 * follow_hugetlb_page().
+> > +	 */
+> > +	if (WARN_ON_ONCE(flags & FOLL_PIN))
+> > +		return NULL;
+> > +
+> > +retry:
+> > +	/*
+> > +	 * vma lock prevents racing with another thread doing a pmd unshare.
+> > +	 * This keeps pte as returned by huge_pte_offset valid.
+> > +	 */
+> > +	hugetlb_vma_lock_read(vma);
 > 
-> It's a good point, but this patch should not go into any stable release
-> without an explicit Ack from either Peter Xu or David Hildenbrand.
-> 
-> To my eye, it's simply avoiding the issue, rather than fixing
-> it properly; and even if the issue is so rare, and fixing properly
-> too difficult or inefficent (a cached anon_vma?), that a workaround
-> is good enough, it still looks like the wrong workaround (checking
-> dst_vma->anon_vma instead of PageAnon seems more to the point, and
-> less lenient).
+> I'm not sure whether it's okay to take a rwsem here, as the code can be
+> called by e.g. FOLL_NOWAIT?
 
-Sorry to have missed this patch. I agree with Hugh that this patch may not
-really fix the issue.
+I think you are right.  This is possible even thought not called this
+way today,
 
-IIUC it's the case where the vma is privately mapping a file.  Some shared
-pages got pinned, and here we're trying to trigger the CoW assuming it's
-anonymous page but it's not.
+> I'm wondering whether it's fine to just drop this anyway, just always walk
+> it lockless.  IIUC gup callers should be safe here because the worst case
+> is the caller will fetch a wrong page, but then it should be invalidated
+> very soon with mmu notifiers.  One thing worth mention is that pmd unshare
+> should never free a pgtable page.
 
-The pin should be RO - if it was a write pin, CoW should have happened on
-the page cache and there should be an anonymous page, and anon_vma should
-be there, no issue should happen.  Only if with RO pin, we won't trigger
-CoW, we won't have any anonymous page, we won't have anon_vma, hence the
-panic.
-
-The thing is if the page is RO pinned, skip copying it (as what was done in
-this patch) is not correct either, because e.g. a follow up write after
-fork() from the parent will trigger CoW and the dma RO page that was pinned
-will be inconsistent to the page in pgtable anymore, I think.
-
-IIUC the correct fix is what David worked on with unshare - when RO pin the
-page cache we should have triggered CoR already before fork().  But as you
-mentioned, that's too much change for stable.
-
-So besides this workaround which seems feasible to at least not panic the
-system (Hugh: I can't quickly tell what'll be the difference here to check
-dst anon_vma or PageAnon, they all seem to work?  I could have missed
-something for sure..), the other workaround is teach the user app to switch
-to use RW pin for any DMA pages even if RO, so that it'll always guarantee
-page coherence even with the old kernel, and afaict that's what RDMA relied
-on for years.  I don't know an easy way to make old kernel work with RO pin
-solidly if without the unsharing logic.
-
-Thanks,
+You are correct in that pmd unshare will not directly free a pgtable page.
+However, I think a 'very worst case' race could be caused by two threads(1,2)
+in the same process A, and another process B.  Processes A and B share a PMD.
+- Process A thread 1 gets a *ptep via huge_pte_offset and gets scheduled out.
+- Process A thread 2 calls mprotect to change protection and unshares
+  the PMD shared with process B.
+- Process B then unmaps the PMD shared with process A and the PMD page
+  gets deleted.
+- The *ptep in Process A thread 1 then points into a freed page.
+This is VERY unlikely, but I do think it is possible and is the reason I
+may be overcautious about protecting against races with pmd unshare.
 
 -- 
-Peter Xu
+Mike Kravetz
 
+> 
+> IIUC it's also the same as fast-gup - afaiu we don't take the read vma lock
+> in fast-gup too but I also think it's safe.  But I hope I didn't miss
+> something.
+> 
+> -- 
+> Peter Xu
+> 
