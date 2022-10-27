@@ -2,51 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE3D60F7C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2442560FA59
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 16:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235751AbiJ0Moq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52712 "EHLO
+        id S235595AbiJ0OZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 10:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235724AbiJ0Moh (ORCPT
+        with ESMTP id S235046AbiJ0OZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:44:37 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5E95F65;
-        Thu, 27 Oct 2022 05:44:30 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MylcQ1c1Lz15MCN;
-        Thu, 27 Oct 2022 20:39:34 +0800 (CST)
-Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 20:44:28 +0800
-Received: from build.huawei.com (10.175.101.6) by
- dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 20:44:27 +0800
-From:   Wenchao Hao <haowenchao@huawei.com>
-To:     Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        "Mike Christie" <michael.christie@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Steffen Maier <maier@linux.ibm.com>, <liuzhiqiang26@huawei.com>,
-        <linfeilong@huawei.com>, Wenchao Hao <haowenchao@huawei.com>
-Subject: [PATCH v5] scsi:iscsi: Fix multiple iscsi session unbind event sent to userspace
-Date:   Thu, 27 Oct 2022 22:00:27 -0400
-Message-ID: <20221028020026.2870104-1-haowenchao@huawei.com>
-X-Mailer: git-send-email 2.32.0
+        Thu, 27 Oct 2022 10:25:21 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDF65A2E8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 07:25:20 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id d13so1003370qko.5
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 07:25:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GuDQalOlhKFsf9Yqc1jpknnU37kxT+pjhyntYc+6FYY=;
+        b=MCHvetBoSau9DLlXXXOAwcfa59qdAXBdT4lmQDyRlJvfDA+P7lT/NjZHnWwHhJWlGs
+         t5SOZ4uPguaiZEtUF0XIdeurImkX+E8TwjlRkt2uvMGIygfQvYWoJmTrypyQRboEMN3h
+         37wjvX4bqyijupAFgNdQAuMRsJlKBh4AeYDRPkQkCU/Lqpa3QHYtfVv5daOOTZ6sPwgC
+         jwS9HAnTUARzS6F5FQ30PJSNJJEGqL7tK0V1B5jp+1HlgB6Y0vlWRol30u6fTITuHCZI
+         2vLtM1iFpD7tNyxU31fKDtjmGphDcAvCB0NBDRPQi2OKYZtlUek+rBY0sRgCucYK0sia
+         nM/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GuDQalOlhKFsf9Yqc1jpknnU37kxT+pjhyntYc+6FYY=;
+        b=UQrZ1eIiJb6DZSsNOlYeIY3sbf5vRiMU1DhW0vGVxSueKrRQFPPL/difdEFui5Z9JO
+         QyRvxlV958IXxyX6dnCLuxR6Ks5Xvona6XWu3Ya/ihtXvYDkj0QQBO4WLCfYj14MBK1J
+         c9Zxij1dGht6AmzMapBFjTFhsnFqDf6iSR53qYRDdJkFpPkB+RbMAs7Bn8BxET7h2yfY
+         lZjgksY7gfVbTgNBk5iAXy+gUscN6wjdq/1AZ8+w+/0AvSA8hrMDuwoF6OzDs2YFb38x
+         g3b9q+7PU4Y64SYNgfxBDhE8cNzDGcAsYRZUbrZJTr102WYXqBHgjnOcg/gHpqQVgjaC
+         a6uA==
+X-Gm-Message-State: ACrzQf2PUfgwgXWwV0y4277n3oX6R86TT/QaqJqtoU5CaARXlwPrbdJY
+        5et1J35aPvd9NGIb+6fX42wbRCKEAuf2IyC6Du8=
+X-Google-Smtp-Source: AMsMyM5boG+qxOLp3PS/qK6jfb6JYFkNefj+69tRO6f3D+CFULxPe92Oy4MjD3ez3m0bn5FPi+y/23tRf3IVHewXpWQ=
+X-Received: by 2002:a05:620a:2686:b0:6f5:723e:6316 with SMTP id
+ c6-20020a05620a268600b006f5723e6316mr15104081qkp.103.1666880719656; Thu, 27
+ Oct 2022 07:25:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500017.china.huawei.com (7.185.36.178)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <cover.1666849707.git.tanjubrunostar0@gmail.com>
+ <0e6a307052d3a354a850a502e509f46baccdbe1e.1666849707.git.tanjubrunostar0@gmail.com>
+ <Y1pNJMvl89jgq9qz@kroah.com>
+In-Reply-To: <Y1pNJMvl89jgq9qz@kroah.com>
+From:   Tanju Brunostar <tanjubrunostar0@gmail.com>
+Date:   Thu, 27 Oct 2022 14:09:52 +0100
+Message-ID: <CAHJEyKVpK=BSkuM_RmJ+eUYApYJig8wfqDP4nM=cou_0mThHuw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/6] staging: vt6655: refactor code in s_uGetRTSCTSDuration
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        outreachy@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,186 +69,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I found an issue that kernel would send ISCSI_KEVENT_UNBIND_SESSION
-for multiple times which should be fixed.
+On Thu, Oct 27, 2022 at 10:19 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Oct 27, 2022 at 08:59:04AM +0000, Tanjuate Brunostar wrote:
+> > refactor long lines of code in the function: s_uGetRTSCTSDuration
+>
+> Please write full sentences.
+>
+> Also please read the in-kernel documentation for how to write good
+> changelog text.  Specifically look at the section entitled "The
+> canonical patch format" in the kernel file,
+> Documentation/SubmittingPatches for a description of how to do this
+> properly.
+>
+> Do this for all of the patches in this series.
+>
+> thanks,
+>
+> greg k-h
 
-This patch introduce target_state in iscsi_cls_session to make
-sure session would send only one ISCSI_KEVENT_UNBIND_SESSION.
+Hello Greg
+the file does not exist in Documentations
 
-But this would break issue fixed in commit 13e60d3ba287 ("scsi: iscsi:
-Report unbind session event when the target has been removed"). The issue
-is iscsid died for any reason after it send unbind session to kernel, once
-iscsid restart again, it loss kernel's ISCSI_KEVENT_UNBIND_SESSION event.
+Also, I had to make the sentences shorter because you said changelog
+text was too long. Can you please give an example of a good changelog
+text? I feel like I have not understood you.
 
-Now kernel think iscsi_cls_session has already sent an
-ISCSI_KEVENT_UNBIND_SESSION event and would not send it any more. Which
-would cause userspace unable to logout. Actually the session is in
-invalid state(it's target_id is INVALID), iscsid should not sync this
-session in it's restart.
+thanks
 
-So we need to check session's target state during iscsid restart,
-if session is in unbound state, do not sync this session and perform
-session teardown. It's reasonable because once a session is unbound, we
-can not recover it any more(mainly because it's target id is INVALID)
-
-V5:
-- Add ISCSI_SESSION_TARGET_ALLOCATED to indicate the session's
-  target has been allocated but not scanned yet. We should
-  sync this session and scan this session when iscsid restarted.
-
-V4:
-- Move debug print out of spinlock critical section
-
-V3:
-- Make target bind state to a state kind rather than a bool.
-
-V2:
-- Using target_unbound rather than state to indicate session has been
-  unbound
-
-Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
----
- drivers/scsi/scsi_transport_iscsi.c | 51 +++++++++++++++++++++++++++++
- include/scsi/scsi_transport_iscsi.h |  8 +++++
- 2 files changed, 59 insertions(+)
-
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index cd3db9684e52..2e0d1cd6d4ea 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -1676,6 +1676,30 @@ static const char *iscsi_session_state_name(int state)
- 	return name;
- }
- 
-+static struct {
-+	int value;
-+	char *name;
-+} iscsi_session_target_state_names[] = {
-+	{ ISCSI_SESSION_TARGET_UNBOUND,		"UNBOUND" },
-+	{ ISCSI_SESSION_TARGET_ALLOCATED,	"ALLOCATED" },
-+	{ ISCSI_SESSION_TARGET_BOUND,		"BOUND" },
-+	{ ISCSI_SESSION_TARGET_UNBINDING,	"UNBINDING" },
-+};
-+
-+static const char *iscsi_session_target_state_name(int state)
-+{
-+	int i;
-+	char *name = NULL;
-+
-+	for (i = 0; i < ARRAY_SIZE(iscsi_session_target_state_names); i++) {
-+		if (iscsi_session_target_state_names[i].value == state) {
-+			name = iscsi_session_target_state_names[i].name;
-+			break;
-+		}
-+	}
-+	return name;
-+}
-+
- int iscsi_session_chkready(struct iscsi_cls_session *session)
- {
- 	int err;
-@@ -1779,6 +1803,7 @@ static int iscsi_user_scan_session(struct device *dev, void *data)
- 		goto user_scan_exit;
- 	}
- 	id = session->target_id;
-+	session->target_state = ISCSI_SESSION_TARGET_BOUND;
- 	spin_unlock_irqrestore(&session->lock, flags);
- 
- 	if (id != ISCSI_MAX_TARGET) {
-@@ -1899,6 +1924,7 @@ static void __iscsi_unblock_session(struct work_struct *work)
- 	cancel_delayed_work_sync(&session->recovery_work);
- 	spin_lock_irqsave(&session->lock, flags);
- 	session->state = ISCSI_SESSION_LOGGED_IN;
-+	session->target_state = ISCSI_SESSION_TARGET_ALLOCATED;
- 	spin_unlock_irqrestore(&session->lock, flags);
- 	/* start IO */
- 	scsi_target_unblock(&session->dev, SDEV_RUNNING);
-@@ -1961,6 +1987,15 @@ static void __iscsi_unbind_session(struct work_struct *work)
- 	unsigned long flags;
- 	unsigned int target_id;
- 
-+	spin_lock_irqsave(&session->lock, flags);
-+	if (session->target_state != ISCSI_SESSION_TARGET_BOUND) {
-+		spin_unlock_irqrestore(&session->lock, flags);
-+		ISCSI_DBG_TRANS_SESSION(session, "Abort unbind sesison\n");
-+		return;
-+	}
-+	session->target_state = ISCSI_SESSION_TARGET_UNBINDING;
-+	spin_unlock_irqrestore(&session->lock, flags);
-+
- 	ISCSI_DBG_TRANS_SESSION(session, "Unbinding session\n");
- 
- 	/* Prevent new scans and make sure scanning is not in progress */
-@@ -1984,6 +2019,9 @@ static void __iscsi_unbind_session(struct work_struct *work)
- 
- unbind_session_exit:
- 	iscsi_session_event(session, ISCSI_KEVENT_UNBIND_SESSION);
-+	spin_lock_irqsave(&session->lock, flags);
-+	session->target_state = ISCSI_SESSION_TARGET_UNBOUND;
-+	spin_unlock_irqrestore(&session->lock, flags);
- 	ISCSI_DBG_TRANS_SESSION(session, "Completed target removal\n");
- }
- 
-@@ -4368,6 +4406,16 @@ iscsi_session_attr(def_taskmgmt_tmo, ISCSI_PARAM_DEF_TASKMGMT_TMO, 0);
- iscsi_session_attr(discovery_parent_idx, ISCSI_PARAM_DISCOVERY_PARENT_IDX, 0);
- iscsi_session_attr(discovery_parent_type, ISCSI_PARAM_DISCOVERY_PARENT_TYPE, 0);
- 
-+static ssize_t
-+show_priv_session_target_state(struct device *dev, struct device_attribute *attr,
-+			char *buf)
-+{
-+	struct iscsi_cls_session *session = iscsi_dev_to_session(dev->parent);
-+	return sysfs_emit(buf, "%s\n",
-+			iscsi_session_target_state_name(session->target_state));
-+}
-+static ISCSI_CLASS_ATTR(priv_sess, target_state, S_IRUGO,
-+			show_priv_session_target_state, NULL);
- static ssize_t
- show_priv_session_state(struct device *dev, struct device_attribute *attr,
- 			char *buf)
-@@ -4470,6 +4518,7 @@ static struct attribute *iscsi_session_attrs[] = {
- 	&dev_attr_sess_boot_target.attr,
- 	&dev_attr_priv_sess_recovery_tmo.attr,
- 	&dev_attr_priv_sess_state.attr,
-+	&dev_attr_priv_sess_target_state.attr,
- 	&dev_attr_priv_sess_creator.attr,
- 	&dev_attr_sess_chap_out_idx.attr,
- 	&dev_attr_sess_chap_in_idx.attr,
-@@ -4583,6 +4632,8 @@ static umode_t iscsi_session_attr_is_visible(struct kobject *kobj,
- 		return S_IRUGO | S_IWUSR;
- 	else if (attr == &dev_attr_priv_sess_state.attr)
- 		return S_IRUGO;
-+	else if (attr == &dev_attr_priv_sess_target_state.attr)
-+		return S_IRUGO;
- 	else if (attr == &dev_attr_priv_sess_creator.attr)
- 		return S_IRUGO;
- 	else if (attr == &dev_attr_priv_sess_target_id.attr)
-diff --git a/include/scsi/scsi_transport_iscsi.h b/include/scsi/scsi_transport_iscsi.h
-index cab52b0f11d0..db5db8dea28a 100644
---- a/include/scsi/scsi_transport_iscsi.h
-+++ b/include/scsi/scsi_transport_iscsi.h
-@@ -236,6 +236,13 @@ enum {
- 	ISCSI_SESSION_FREE,
- };
- 
-+enum {
-+	ISCSI_SESSION_TARGET_UNBOUND,
-+	ISCSI_SESSION_TARGET_ALLOCATED,
-+	ISCSI_SESSION_TARGET_BOUND,
-+	ISCSI_SESSION_TARGET_UNBINDING,
-+};
-+
- #define ISCSI_MAX_TARGET -1
- 
- struct iscsi_cls_session {
-@@ -264,6 +271,7 @@ struct iscsi_cls_session {
- 	 */
- 	pid_t creator;
- 	int state;
-+	int target_state;			/* session target bind state */
- 	int sid;				/* session id */
- 	void *dd_data;				/* LLD private data */
- 	struct device dev;	/* sysfs transport/container device */
--- 
-2.35.3
-
+Tanju
