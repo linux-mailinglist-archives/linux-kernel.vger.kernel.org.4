@@ -2,74 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CD560F4B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C988A60F4B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235226AbiJ0KR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 06:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
+        id S235047AbiJ0KSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 06:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235185AbiJ0KRZ (ORCPT
+        with ESMTP id S234792AbiJ0KSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 06:17:25 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C445EDB752
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:17:22 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29RAA4nU005961;
-        Thu, 27 Oct 2022 10:17:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=fG55fBexeMtPhT/uGjxoAaYENDzs4R3mS3BwVk01lno=;
- b=lxyVcQMAis70XUG4KeKD9X5U5E3/3SGpzWW21TH2wyx0bR7OceTPYS5hcO+U61wFjAK/
- cod6foe6UmFNzfkjDkEtHUQaaL2YhGWEyGP6N8pmxhn/8CSBKvB1UkrUOoUP2y9YJEw3
- Ol1Zk2D2pEWlUFY2UX4Rfg37fQ1m2/S5wjcNm3RpohdWqzORyon+bFLcZGdKi2X7Y5ik
- EYcKB39u+JPmoibZ/iDE+0aXwwgeOnE14q0tL1nxal3lC7eA8yxcvV61iDGUzHOK22lk
- K7xMfjWbhwTIKvrgp6wnz3VwrjHOXMkD2se6BydYgkuzu0jglDU/5GiXSZ43OtqJ6SCF ug== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kfahvsmpv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Oct 2022 10:17:10 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29RAH923023305
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Oct 2022 10:17:09 GMT
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Thu, 27 Oct 2022 03:17:06 -0700
-Date:   Thu, 27 Oct 2022 15:47:02 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-CC:     <jaegeuk@kernel.org>, <chao@kernel.org>, <mhiramat@kernel.org>,
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>
-Subject: Re: [PATCH 2/2] f2fs: fix the msg data type
-Message-ID: <20221027101702.GA18823@hu-pkondeti-hyd.qualcomm.com>
-References: <1666861961-12924-1-git-send-email-quic_mojha@quicinc.com>
- <1666861961-12924-2-git-send-email-quic_mojha@quicinc.com>
+        Thu, 27 Oct 2022 06:18:02 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76F2DCE8E
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:18:01 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9566E1FDF7;
+        Thu, 27 Oct 2022 10:18:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1666865880; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jrKsilkf0uj+r1eRshWBU762MqE12IH8fg83o5QmgcQ=;
+        b=sNF7k3KC4MkRmb7Jr2NUnmNGBqClsgGW3wgyEtQ45tbkW32hebKgMT9UxwEK/PQ0y0Y83d
+        t95WyF+Wj9s3QDiwxY/02NN9eSj65Zwix/BnwGJ9kiGEj+fLo3Fvxz0B15VngMpSPdA9Vz
+        0UcSkw7Bs5XCCnvG/xXTlGgSv7GkZOA=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 67B3D2C141;
+        Thu, 27 Oct 2022 10:18:00 +0000 (UTC)
+Date:   Thu, 27 Oct 2022 12:17:59 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH printk v2 35/38] tty: tty_io: use console_list_lock for
+ list synchronization
+Message-ID: <Y1pa13t0ldq+AuTh@alley>
+References: <20221019145600.1282823-1-john.ogness@linutronix.de>
+ <20221019145600.1282823-36-john.ogness@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1666861961-12924-2-git-send-email-quic_mojha@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 67saJliUz5pFVmH7TQJNmzs8nFWWDG7d
-X-Proofpoint-GUID: 67saJliUz5pFVmH7TQJNmzs8nFWWDG7d
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-27_05,2022-10-26_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- impostorscore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=999
- spamscore=0 phishscore=0 bulkscore=0 malwarescore=0 clxscore=1015
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2210270057
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+In-Reply-To: <20221019145600.1282823-36-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,45 +58,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 02:42:41PM +0530, Mukesh Ojha wrote:
-> Data type of msg in f2fs_write_checkpoint trace should
-> be const char * instead of char *.
+On Wed 2022-10-19 17:01:57, John Ogness wrote:
+> show_cons_active() uses the console_lock to gather information
+> on registered consoles. It requires that no consoles are unregistered
+> until it is finished. The console_list_lock should be used because
+> list synchronization repsponsibility will be removed from the
+> console_lock in a later change.
 > 
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> ---
->  include/trace/events/f2fs.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Note, the console_lock is still needed to stop console printing.
 > 
-> diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
-> index ff57e7f..7fbfce4 100644
-> --- a/include/trace/events/f2fs.h
-> +++ b/include/trace/events/f2fs.h
-> @@ -1404,7 +1404,7 @@ TRACE_EVENT(f2fs_readpages,
->  
->  TRACE_EVENT(f2fs_write_checkpoint,
->  
-> -	TP_PROTO(struct super_block *sb, int reason, char *msg),
-> +	TP_PROTO(struct super_block *sb, int reason, const char *msg),
->  
->  	TP_ARGS(sb, reason, msg),
->  
-LGTM. one minor comment.
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
-Declare it const char pointer in the trace point structure also.
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
-index 11f6b71..22960e6 100644
---- a/include/trace/events/f2fs.h
-+++ b/include/trace/events/f2fs.h
-@@ -1429,7 +1429,7 @@ TRACE_EVENT(f2fs_write_checkpoint,
- 	TP_STRUCT__entry(
- 		__field(dev_t,	dev)
- 		__field(int,	reason)
--		__field(char *,	msg)
-+		__field(const char *,	msg)
- 	),
- 
- 	TP_fast_assign(
-
-Thanks,
-Pavan
+Best Regards,
+Petr
