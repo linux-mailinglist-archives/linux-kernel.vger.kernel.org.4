@@ -2,94 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575DB60EE8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 05:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C630760EECE
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 05:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233974AbiJ0DaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 23:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40224 "EHLO
+        id S234090AbiJ0DqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 23:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234418AbiJ0D3h (ORCPT
+        with ESMTP id S234137AbiJ0DqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 23:29:37 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E35414DF36;
-        Wed, 26 Oct 2022 20:28:39 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MyWKs0Y0dz6S2cm;
-        Thu, 27 Oct 2022 11:26:09 +0800 (CST)
-Received: from k01.huawei.com (unknown [10.67.174.197])
-        by APP4 (Coremail) with SMTP id gCh0CgDH1efj+lljHTQKAQ--.53757S2;
-        Thu, 27 Oct 2022 11:28:36 +0800 (CST)
-From:   Xu Kuohai <xukuohai@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: [PATCH bpf-next v2] bpf: Fix a typo in comment for DFS algorithm
-Date:   Wed, 26 Oct 2022 23:44:58 -0400
-Message-Id: <20221027034458.2925218-1-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 26 Oct 2022 23:46:12 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15704BD1E
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 20:46:09 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id r3so344892yba.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 20:46:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hYm2eIdTsh6fFKPg4Wkygxm3tnPpIqxoD+YVXOxrxNU=;
+        b=QPgBcJyts4KPBtcWrYww9GmjIZM4PMoqTL/bQGjKyPZB8GbKlA6wxJiRzUwwR2qbKJ
+         1DSZ6twM5dEm/3ojR2AG4Mug7eWREhTPvZGM6i9lX4b1ak6zY1GKWeKYsXwRL9F66y7+
+         mN4fb9cuqxcWVzT5P8eawkYrkbZYxa2kTplaBbPMynDFFJnKj33auWEpQEaGf9Zg79z/
+         KYdw8/mmRrmw/Uws0tpfEyGvFJPzn8ZoXA1/3iRrLOSKPcnrYmMvA8peI0HDCSgKZyaZ
+         xObxKmw74BoSNchv57FgwEAf18cEFk8F955A1yR4alsJmOXaYAHHBZCRB3M+af7c+7ra
+         YNFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hYm2eIdTsh6fFKPg4Wkygxm3tnPpIqxoD+YVXOxrxNU=;
+        b=YOXgzEpIdLTbiGM/FVDEEIJwaDpGGuZgF83uhID8Xl5kKJMApMyStQp1S+87yPMsth
+         uCEL0I6JNJAa/hBUv3k/Bv5/ToxH7Hc9c+PLzAjQ+kG23jyciP+aGwMfN2jNOHMMbPhL
+         FOsBJ/7UBE+jI7AITxdKSJ9VrCcDHGiAv8A7d1CmUjqzT6LvoPwaeKU53sRPgQMs5yft
+         eD+XA+qZ2o+G6gQY54RpYKx3hfWFJKlRClrwaj3oy43qJ3COjbM6E8t07X4D/3ahZeHL
+         +g4z7Rk7vQp+s0FajWFEz1th09b+RcK0Lg8rm0v5XH2zPG4l8TQzx/hOID9SounNFl14
+         +wsg==
+X-Gm-Message-State: ACrzQf1Y4fEQKdBjf9MiN8V3tOml/+YPMvl0vSp0u4VCjmeX49+bfoeH
+        YTNOTP6eYHyYgwNWtnrozwSfyWMfcrcRaHWpF4bpLw==
+X-Google-Smtp-Source: AMsMyM60ablXKisWXtLW19mQvL4Q0EgElMhZFYeuPwRN8S2lD064Zr82DnCllkgtFtALUpSrY/q9F4Djz/2WXVbfcMU=
+X-Received: by 2002:a25:32ca:0:b0:6ca:40e2:90c8 with SMTP id
+ y193-20020a2532ca000000b006ca40e290c8mr32620466yby.55.1666842368863; Wed, 26
+ Oct 2022 20:46:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgDH1efj+lljHTQKAQ--.53757S2
-X-Coremail-Antispam: 1UD129KBjvdXoWruFyftr1UJF1DXFyfXFykGrg_yoW3KrXEkr
-        s5X3ZagrsxX3ZaywsxCayxXw1jkwn8tF18ZrnxW39rArWYqw18WrZ5JFn8Xa4DAFW8trZr
-        tF93GrWqqw1Y9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb28YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
-        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000fd9a4005ebbeac67@google.com> <Y1YeSj2vwPvRAW61@gondor.apana.org.au>
+ <CANn89i+41Whp=ACQo393s_wPx_MtWAZgL9DqG9aoLomN4ddwTg@mail.gmail.com>
+ <Y1YrVGP+5TP7V1/R@gondor.apana.org.au> <Y1Y8oN5xcIoMu+SH@hog>
+ <Y1d8+FdfgtVCaTDS@gondor.apana.org.au> <Y1k4T/rgRz4rkvcl@hog> <Y1n+LM57U3HUHMJa@gondor.apana.org.au>
+In-Reply-To: <Y1n+LM57U3HUHMJa@gondor.apana.org.au>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 26 Oct 2022 20:45:57 -0700
+Message-ID: <CANn89iLVRq28iMzjKBovyDvytH1ssW_Tp0AjoUbv74dFg2wXWQ@mail.gmail.com>
+Subject: Re: [v3 PATCH] af_key: Fix send_acquire race with pfkey_register
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Sabrina Dubroca <sd@queasysnail.net>,
+        syzbot <syzbot+1e9af9185d8850e2c2fa@syzkaller.appspotmail.com>,
+        davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        steffen.klassert@secunet.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Kuohai <xukuohai@huawei.com>
+On Wed, Oct 26, 2022 at 8:42 PM Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> On Wed, Oct 26, 2022 at 03:38:23PM +0200, Sabrina Dubroca wrote:
+> >
+> > LGTM, thanks.
+> >
+> > Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
+>
+> Thanks for the review and comments!
 
-There is a typo in comment for DFS algorithm in bpf/verifier.c. The top
-element should not be popped until all its neighbors have been checked.
-Fix it.
+SGTM, thanks for the fix.
 
-Fixes: 475fb78fbf48 ("bpf: verifier (add branch/goto checks)")
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index adf998159897..8c1152c7c289 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10662,7 +10662,7 @@ static int check_return_code(struct bpf_verifier_env *env)
-  * 3      let S be a stack
-  * 4      S.push(v)
-  * 5      while S is not empty
-- * 6            t <- S.pop()
-+ * 6            t <- S.peek()
-  * 7            if t is what we're looking for:
-  * 8                return t
-  * 9            for all edges e in G.adjacentEdges(t) do
--- 
-2.30.2
-
+Reviewed-by: Eric Dumazet <edumazet@google.com>
