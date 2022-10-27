@@ -2,168 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0099A610466
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1202D61046B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236914AbiJ0V3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 17:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54216 "EHLO
+        id S236892AbiJ0VaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 17:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235686AbiJ0V3D (ORCPT
+        with ESMTP id S235869AbiJ0VaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 17:29:03 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DFA62A8B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 14:29:02 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id p24-20020a63f458000000b0043cd718c49dso1404980pgk.15
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 14:29:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=sogLxSdG4yhSyQPPmGTG1lTI5fUEQY8x224g/Iq10fc=;
-        b=ZfPQ53qWiF9lKVX7A6P52Hq3jFTphhwqs712Act23LApJ68RGcZiAYyi9BwF+Zl+AV
-         a0lM5zs8rBWPovdTteQVAHwN0wrzj990wBJBsnlaf4bKLExxEl9FQbxCP7mOphdTB0SB
-         4BKGGYsX66p9ToTP9xG8ipeq8gBa0QZo5COoWeUFYvDhXpLmgu9BxECYUW4mXuSITOpb
-         +vpq9LhO5MIkI9j7dtDMgAQyZHeo61lmrhSg7EERHcZrYcWZ4EGm9iALoA36WiLjOGdO
-         4aats94IGSscqNdxVjuYSH/alw8dVwbFeaWq3H8BwPg0/SpFqo4IyJeTO2fvQ3cplfKt
-         hhAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sogLxSdG4yhSyQPPmGTG1lTI5fUEQY8x224g/Iq10fc=;
-        b=ENsGXCC0RktqbCv63W+ygrjveZ1raKaHY+KCqDYdqgs4AmslvroU7TkERQwagdOoPe
-         7fDjTIuJy/k6xuTUjFGWySmovZf3vwDVDqReqyE49IEyZERy48NU3jgJUqbTWJnFtMxU
-         GHF1/aqXAUWDqPNTz7g4M9StsQqWFDr1wbISeyTGN2nuhMzgoORFvtmgLrJtVa07d6D0
-         L85lYiIimaVxOKz+zZ8hB7I73eYyaPSVXeFxYaeBL3q9vnx3Go3dOY0rUw9FnalHyDiV
-         tSsTZio7oQXKMmYkAK77LpJvgHEHiJ1y/soaYD0xMnYhGWkDO5p+xjraoBxirXbCwyOY
-         31Gg==
-X-Gm-Message-State: ACrzQf1Hg1600dCU0JUJw/VwEKYhXGvLvzxmGjI3axqAAiqG5oD9VfSC
-        YSKfPj80X5NgLZzGjNf2RI3TbYaXoncTFA==
-X-Google-Smtp-Source: AMsMyM4uM4T1zCFb+ABPod5xJDsDwyQXMdmcaWbc/HvdOYvOkB3E/tAajIyRYpToivIpyzCGtz91zVTkXPrw3g==
-X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
- (user=wonchung job=sendgmr) by 2002:a05:6a00:150e:b0:56c:83b3:d148 with SMTP
- id q14-20020a056a00150e00b0056c83b3d148mr7337251pfu.48.1666906142035; Thu, 27
- Oct 2022 14:29:02 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 21:28:54 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-Message-ID: <20221027212854.1083686-1-wonchung@google.com>
-Subject: [PATCH v3] drm/sysfs: Link DRM connectors to corresponding Type-C connectors
-From:   Won Chung <wonchung@google.com>
-To:     wonchung@google.com, bleung@google.com, pmalani@chromium.org,
-        heikki.krogerus@linux.intel.com, imre.deak@intel.com,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, airlied@gmail.com,
-        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 27 Oct 2022 17:30:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67414E635;
+        Thu, 27 Oct 2022 14:30:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7ED862502;
+        Thu, 27 Oct 2022 21:30:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAC74C433C1;
+        Thu, 27 Oct 2022 21:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666906212;
+        bh=l3fIpRXljQEvqf+6oNMQQggxOWliUf7OCRru66C9w+o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=K0lrezsupKUjvCBZKwUvrC5aMYWr/fHwTJPhauAcNH1gEPx9jmeMlfW8+Y9CZyUVt
+         Oq5uUWLvZxjAph26l/t2Jc/TsYUwGHkwOzjtOxn6DsnyL7fDfkrmQcA8vqsA+Zni4j
+         pdDaoliguOJVaY7vDCz7Y4N/BTH6R66jclGhYPi1z+o02IaBJwLq4WjuHLpyXYz3eR
+         nzFOqm0G/SI7iYl5j2AYAcsawmtC8g5EEfO4XRlbOYZ+KdIA9NgpQihVc9dk/T4/oN
+         YQy/f+hizNiQTcLFpWCX0GKYSEwRVvhxgnp1TsakArnnIj9JhpWJKw6co3K+96jEMO
+         LmZFT4Cb1Rg2Q==
+Date:   Thu, 27 Oct 2022 16:30:10 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Terry Bowman <terry.bowman@amd.com>
+Cc:     alison.schofield@intel.com, vishal.l.verma@intel.com,
+        dave.jiang@intel.com, ira.weiny@intel.com, bwidawsk@kernel.org,
+        dan.j.williams@intel.com, linux-cxl@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bhelgaas@google.com,
+        rafael@kernel.org, lenb@kernel.org, Jonathan.Cameron@huawei.com,
+        dave@stgolabs.net, rrichter@amd.com
+Subject: Re: [PATCH 5/5] cxl/pci: Log CXL device's PCIe AER and CXL RAS error
+ information
+Message-ID: <20221027213010.GA827560@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221021185615.605233-6-terry.bowman@amd.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create a symlink pointing to USB Type-C connector for DRM connectors
-when they are created. The link will be created only if the firmware is
-able to describe the connection beween the two connectors.
+On Fri, Oct 21, 2022 at 01:56:15PM -0500, Terry Bowman wrote:
+> The CXL downport PCIe AER and CXL RAS capability information needs to be
+> logged during PCIe AER error handling.
+> 
+> The existing PCIe AER error handler logs native AER errors but does not
+> log upport/downport AER capability residing in the RCRB. The CXL1.1
+> RCRB does not have a BDF and is not enunmerable. The existing error handler
+> logic does not display CXL RAS details either.
 
-Signed-off-by: Won Chung <wonchung@google.com>
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
-Changes from v2:
-- Resending the patch to dri-devel list
+s/enunmerable/enumerable/
 
-Changes from v1:
-- Fix multiple lines to single line
+The patch itself doesn't seem to reference RCRB.  What's the
+connection?
 
+Is this specific to CXL?  The base PCIe spec also documents an RCRB,
+though I don't think Linux does anything with it.
 
- drivers/gpu/drm/drm_sysfs.c | 40 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+I guess at least the RCRB discovery must be CXL-specific, since I have
+no idea how to find a generic PCIe RCRB.
 
-diff --git a/drivers/gpu/drm/drm_sysfs.c b/drivers/gpu/drm/drm_sysfs.c
-index 430e00b16eec..6a9904fa9186 100644
---- a/drivers/gpu/drm/drm_sysfs.c
-+++ b/drivers/gpu/drm/drm_sysfs.c
-@@ -11,12 +11,14 @@
-  */
- 
- #include <linux/acpi.h>
-+#include <linux/component.h>
- #include <linux/device.h>
- #include <linux/err.h>
- #include <linux/export.h>
- #include <linux/gfp.h>
- #include <linux/i2c.h>
- #include <linux/kdev_t.h>
-+#include <linux/property.h>
- #include <linux/slab.h>
- 
- #include <drm/drm_connector.h>
-@@ -95,6 +97,34 @@ static char *drm_devnode(struct device *dev, umode_t *mode)
- 	return kasprintf(GFP_KERNEL, "dri/%s", dev_name(dev));
- }
- 
-+static int typec_connector_bind(struct device *dev,
-+	struct device *typec_connector, void *data)
-+{
-+	int ret;
-+
-+	ret = sysfs_create_link(&dev->kobj, &typec_connector->kobj, "typec_connector");
-+	if (ret)
-+		return ret;
-+
-+	ret = sysfs_create_link(&typec_connector->kobj, &dev->kobj, "drm_connector");
-+	if (ret)
-+		sysfs_remove_link(&dev->kobj, "typec_connector");
-+
-+	return ret;
-+}
-+
-+static void typec_connector_unbind(struct device *dev,
-+	struct device *typec_connector, void *data)
-+{
-+	sysfs_remove_link(&typec_connector->kobj, "drm_connector");
-+	sysfs_remove_link(&dev->kobj, "typec_connector");
-+}
-+
-+static const struct component_ops typec_connector_ops = {
-+	.bind = typec_connector_bind,
-+	.unbind = typec_connector_unbind,
-+};
-+
- static CLASS_ATTR_STRING(version, S_IRUGO, "drm 1.1.0 20060810");
- 
- /**
-@@ -355,6 +385,13 @@ int drm_sysfs_connector_add(struct drm_connector *connector)
- 	if (connector->ddc)
- 		return sysfs_create_link(&connector->kdev->kobj,
- 				 &connector->ddc->dev.kobj, "ddc");
-+
-+	if (dev_fwnode(kdev)) {
-+		r = component_add(kdev, &typec_connector_ops);
-+		if (r)
-+			drm_err(dev, "failed to add component\n");
-+	}
-+
- 	return 0;
- 
- err_free:
-@@ -367,6 +404,9 @@ void drm_sysfs_connector_remove(struct drm_connector *connector)
- 	if (!connector->kdev)
- 		return;
- 
-+	if (dev_fwnode(connector->kdev))
-+		component_del(connector->kdev, &typec_connector_ops);
-+
- 	if (connector->ddc)
- 		sysfs_remove_link(&connector->kdev->kobj, "ddc");
- 
--- 
-2.37.3.998.g577e59143f-goog
+> +static void cxl_error_report(struct cxl_memdev *cxlmd)
+> +{
+> +	struct pci_dev *pdev = to_pci_dev(cxlmd->cxlds->dev);
+> +	struct aer_capability_regs *aer_cap;
+> +	struct ras_cap *ras_cap;
+> +
+> +	aer_cap = (struct aer_capability_regs *)cxlmd->cxlds->aer_map.base;
+> +	ras_cap = (struct ras_cap *)cxlmd->cxlds->ras_map.base;
 
+I don't think you need casts since .base is void *.
+
+> +	pci_err(pdev, "CXL Error Report\n");
+> +	pci_err(pdev, "AER Errors:\n");
+> +	if (aer_cap) {
+> +		cxl_print_aer(pdev, AER_CORRECTABLE, aer_cap);
+> +		cxl_print_aer(pdev, AER_NONFATAL, aer_cap);
+> +		cxl_print_aer(pdev, AER_FATAL, aer_cap);
+> +	}
+> +
+> +	pci_err(pdev, "RAS Errors:\n");
+> +	if (ras_cap) {
+> +		pci_err(pdev, "RAS: uc_error_status = %X\n", readl(&ras_cap->uc_error_status));
+
+"%X" will look a lot different than what cper_print_aer() logged
+above.  No "0x", upper-case vs lower-case, "=" vs ":", etc.  Maybe
+there should be a hint to connect RAS with CXL (maybe there's already
+a dev_fmt somewhere that I missed)?
+
+> +static void cxl_error_detected(struct pci_dev *pdev)
+> +{
+> +	struct cxl_memdev *cxlmd;
+> +
+> +	if (!is_cxl_memdev(&pdev->dev)) {
+> +		pci_err(pdev, "CXL memory device is invalid\n");
+> +		return;
+> +	}
+> +
+> +	cxlmd = dev_get_drvdata(&pdev->dev);
+> +	if (!cxlmd) {
+> +		pci_err(pdev, "CXL memory device is NULL\n");
+> +		return;
+> +	}
+> +
+> +	if (!cxlmd->cxlds) {
+> +		pci_err(pdev, "CXL device state object is NULL\n");
+> +		return;
+> +	}
+
+Would these NULL pointers indicate a programming error, or do they
+indicate lack of an optional feature?  If the former, I generally
+prefer to just take the NULL pointer dereference oops instead of just
+printing an easily-missed message.  But maybe the CXL style is to be
+more defensive.
+
+> +void cxl_print_aer(struct pci_dev *dev, int aer_severity,
+> +		    struct aer_capability_regs *aer)
+> +{
+> +	cper_print_aer(dev, aer_severity, aer);
+
+What is the purpose of this wrapper?  I guess you need an exported
+symbol for some reason?
+
+> +}
+> +EXPORT_SYMBOL_GPL(cxl_print_aer);
+
+> +static void report_cxl_errors(struct aer_rpc *rpc,
+> +			      struct aer_err_source *e_src)
+> +{
+> +	struct pci_dev *pdev = rpc->rpd;
+> +	struct aer_err_info e_info;
+> +	u32 uncor_status, cor_status;
+> +
+> +	pci_read_config_dword(pdev, pdev->aer_cap + PCI_ERR_UNCOR_STATUS, &uncor_status);
+> +	pci_read_config_dword(pdev, pdev->aer_cap + PCI_ERR_COR_STATUS, &cor_status);
+
+I think it's kind of an existing defect that we don't have a single
+place to read these registers.  I think they should be read either in
+firmware (for firmware-first error handling, where Linux basically
+gets a package of these register contents) or in Linux (for native
+handling).  Ideally I think these paths would converge right after
+Linux reads them.
+
+Anyway, I don't think we should read these registers *again* for CXL.
+And I assume firmware-first error handling should work for CXL as well
+as for base PCIe?  That would imply that we wouldn't read them at all
+here for the firmware-first case.
+
+> +	if (!uncor_status && !cor_status)
+> +		return;
+> +
+> +	if (pci_pcie_type(pdev) == PCI_EXP_TYPE_RC_EC)
+> +		pcie_walk_rcec(pdev, report_cxl_errors_iter, &e_info);
+> +	else
+> +		pci_walk_bus(pdev->subordinate, report_cxl_errors_iter, &e_info);
+> +
+> +	pci_write_config_dword(pdev, pdev->aer_cap + PCI_ERR_UNCOR_STATUS, uncor_status);
+> +	pci_write_config_dword(pdev, pdev->aer_cap + PCI_ERR_COR_STATUS, cor_status);
+
+Shouldn't this clearing be somehow contingent on pcie_aer_is_native()?
+
+> +++ b/include/linux/pci.h
+> @@ -827,6 +827,10 @@ enum pci_ers_result {
+>  
+>  /* PCI bus error event callbacks */
+>  struct pci_error_handlers {
+> +
+> +	/* CXL error detected on this device */
+
+Nit on the comment: calling this function doesn't imply that a CXL
+error was detected; we *always* call it.  Apparently it's just an
+opportunity to log any CXL-specific errors that may have occurred?
+
+I think we need a comment about why this couldn't be done in the
+existing .error_detected() callback.  I gather it might be related to
+AER_CORRECTABLE errors, for which we don't call .error_detected()?
+
+If the purpose is only to learn about correctable errors, maybe the
+callback doesn't need to be CXL-specific and could be called at the
+point where we test for AER_CORRECTABLE?
+
+> +	void (*cxl_error_detected)(struct pci_dev *dev);
+> +
+>  	/* PCI bus error detected on this device */
+>  	pci_ers_result_t (*error_detected)(struct pci_dev *dev,
+>  					   pci_channel_state_t error);
+> -- 
+> 2.34.1
+> 
