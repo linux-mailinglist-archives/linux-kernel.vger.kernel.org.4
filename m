@@ -2,60 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D256560FC76
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE31260FC7F
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 17:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236042AbiJ0PzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 11:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
+        id S236127AbiJ0P40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 11:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236135AbiJ0PzM (ORCPT
+        with ESMTP id S229670AbiJ0P4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 11:55:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454AF9AC3F
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:55:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6D4AB8267F
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 15:55:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8BBEC433C1;
-        Thu, 27 Oct 2022 15:55:07 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Yz+BVrk/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666886106;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QeQ60BIP3jZU0Ri9J8V6P6ft5JOnUHK0BgfpvSb2GFQ=;
-        b=Yz+BVrk/3n378ObDWGt8QFhe0BHRd2wrEPuY1WciXUD0gkQ6V8Hs8/nYU5nsbUts6GjHOz
-        wUbYwNvkoF0xtgAKE4B7UV6Iy/HYISB1aSiv4CNF8DzcIdQOsdD8+r68Z2Ktd6C9BWBOtX
-        MFth+c7Ztl1uuXo51sOFvF94aoKu3jI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 04bb5124 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 27 Oct 2022 15:55:05 +0000 (UTC)
-Date:   Thu, 27 Oct 2022 17:55:03 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Theodore Tso <tytso@mit.edu>
-Subject: Re: [RFC][PATCH v2 11/31] timers: random: Use del_timer_shutdown()
- before freeing timer
-Message-ID: <Y1qp17ZEM7Mp+7Xc@zx2c4.com>
-References: <20221027150525.753064657@goodmis.org>
- <20221027150927.162027754@goodmis.org>
+        Thu, 27 Oct 2022 11:56:23 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBC21956D2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:56:22 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id m2so1956154pjr.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 08:56:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gvzrghwrfzUsJYhqUBxViutsbs1gyQ5GEUkX/9osrFs=;
+        b=FI+Sju9NW67lHQnyqb4cvmQVM4dJHtnh2R/XUliFBUNti1vbqC/ESoFnvuli+QpmOx
+         HnHTLVYTK2tWkuFvzLFDv3q5cngZOe/eWRGb2b32vWzXUG3xO8eMnBFNj36shPDJE9FB
+         FXc4KrH59g8aQGixuopEjEalG80hc9FHT4A4cR1JmHJ6KLvQd6ZyvKcP7gpth6JeQEf+
+         dRqxeqI5m6g4KaLrrAFbYp9WC4nE9epTCec6UMQ+6q6Q9wtnAUUP8ian3iiiJha3K2yc
+         6Czcjmes2afRP/i80waUU/xBx594UnAC5SI45hJx4r8dwnAeNVlKUnmqxwQy/aJhAkBo
+         dw1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gvzrghwrfzUsJYhqUBxViutsbs1gyQ5GEUkX/9osrFs=;
+        b=Gxsq567QTWiMfg13rxUdxPgyx2RK4Ws4HkndxZmeLgZ+hkg1KJhAxo1d3EQdIlFwWp
+         3hwruBnbECuTHm84C98YrgO6vtE93s5KLCokSCzraYLdICVZohlZF62VMf707Ew+Cdx/
+         EgOtWV8T5MiIKmAdLfWCVrd327HObv+83blPpPRPbwwP99o1u0w301+C6Cm4/E5TwyiH
+         An7TXjdmFUIo/93y45SD6jILOy2XOXKuSKATZEFpvVUfiSHgFqSrtY+tDTculkYbPZvS
+         Zy4r4TNa8VJU5/3fmAXFqCmjvWo1PbKmGyStH0TbrbC9xjGv+B4IVUgQYevMPXDD/cSd
+         eQGw==
+X-Gm-Message-State: ACrzQf1E7O31A0BFz28O2q/xkJP2/k7lEZGMRtc1WBBX5iX0objlQM6l
+        r7pG96pUDW8l641ixCASqCkGSQ==
+X-Google-Smtp-Source: AMsMyM5xrFACLrT57xNv7hENaHFzZdV/frxmH+f+50gFbfJembX614Hy6eQFClt2SKA2D8c9An8cww==
+X-Received: by 2002:a17:90b:4a09:b0:20c:316d:e58b with SMTP id kk9-20020a17090b4a0900b0020c316de58bmr11008214pjb.217.1666886181859;
+        Thu, 27 Oct 2022 08:56:21 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id rj9-20020a17090b3e8900b0020b21019086sm9918490pjb.3.2022.10.27.08.56.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 08:56:21 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 15:56:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Wang, Wei W" <wei.w.wang@intel.com>
+Cc:     Vipin Sharma <vipinsh@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "andrew.jones@linux.dev" <andrew.jones@linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 5/5] KVM: selftests: Allowing running
+ dirty_log_perf_test on specific CPUs
+Message-ID: <Y1qqIgVdZi7qSUD0@google.com>
+References: <20221021211816.1525201-1-vipinsh@google.com>
+ <20221021211816.1525201-6-vipinsh@google.com>
+ <DS0PR11MB637351B52E5F8752E7DA16A4DC309@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <Y1lV0l4uDjXdKpkL@google.com>
+ <DS0PR11MB6373E6CA4DDFFD47B64CB719DC339@DS0PR11MB6373.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221027150927.162027754@goodmis.org>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <DS0PR11MB6373E6CA4DDFFD47B64CB719DC339@DS0PR11MB6373.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,24 +81,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 11:05:36AM -0400, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Thu, Oct 27, 2022, Wang, Wei W wrote:
+> On Wednesday, October 26, 2022 11:44 PM, Sean Christopherson wrote:
+> > > I think it would be better to do the thread pinning at the time when
+> > > the thread is created by providing a pthread_attr_t attr, e.g. :
+> > >
+> > > pthread_attr_t attr;
+> > >
+> > > CPU_SET(vcpu->pcpu, &cpu_set);
+> > > pthread_attr_setaffinity_np(&attr, sizeof(cpu_set_t), &cpu_set);
+> > > pthread_create(thread, attr,...);
+> > >
+> > > Also, pinning a vCPU thread to a pCPU is a general operation which
+> > > other users would need. I think we could make it more general and put
+> > > it to kvm_util.
+> > 
+> > We could, but it taking advantage of the pinning functionality would require
+> > plumbing a command line option for every test, 
 > 
-> Before a timer is freed, del_timer_shutdown() must be called.
+> I think we could make this "pinning" be optional (no need to force everyone
+> to use it).
+
+Heh, it's definitely optional.
+
+> > If we go this route in the future, we'd need to add a worker trampoline as the
+> > pinning needs to happen in the worker task itself to guarantee that the pinning
+> > takes effect before the worker does anything useful.  That should be very
+> > doable.
 > 
-> Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
+> The alternative way is the one I shared before, using this:
 > 
-> Cc: "Theodore Ts'o" <tytso@mit.edu>
-> Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> /* Thread created with attribute ATTR will be limited to run only on
+>    the processors represented in CPUSET.  */
+> extern int pthread_attr_setaffinity_np (pthread_attr_t *__attr,
+>                                  size_t __cpusetsize,
+>                                  const cpu_set_t *__cpuset)
+> 
+> Basically, the thread is created on the pCPU as user specified.
+> I think this is better than "creating the thread on an arbitrary pCPU
+> and then pinning it to the user specified pCPU in the thread's start routine".
 
-If this patchset lands,
+Ah, yeah, that's better.
 
-    Acked-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > I do like the idea of extending __vcpu_thread_create(), but we can do that once
+> > __vcpu_thread_create() lands to avoid further delaying this series.
+> 
+> Sounds good. I can move some of those to vcpu_thread_create() once it's ready later.
+> 
+> >  struct perf_test_args {
+> > @@ -43,8 +41,12 @@ struct perf_test_args {
+> >  	bool nested;
+> >  	/* True if all vCPUs are pinned to pCPUs */
+> >  	bool pin_vcpus;
+> > +	/* The vCPU=>pCPU pinning map. Only valid if pin_vcpus is true. */
+> > +	uint32_t vcpu_to_pcpu[KVM_MAX_VCPUS];
+> 
+> How about putting the pcpu id to "struct kvm_vcpu"? (please see below code
+> posed to shows how that works). This is helpful when we later make this more generic,
+> as kvm_vcpu is used by everyone.
 
-However, please keep with the uniform subject convention for commits to
-that file. Namely, title this:
+I don't think "pcpu" belongs in kvm_vcpu, even in the long run.  The vast, vast
+majority of tests will never care about pinning, which means that vcpu->pcpu can't
+be used for anything except the actual pinning.   And for pinning, the "pcpu"
+doesn't need to be persistent information, i.e. doesn't need to live in kvm_vcpu.
 
-    random: use del_timer_shutdown() before freeing timer
+> Probably we also don't need "bool pin_vcpus".
 
-Jason
+Yeah, but for selftests shaving bytes is not exactly top priority, and having a
+dedicated flag avoids the need for magic numbers.  If Vipin had used -1, I'd
+probably be fine with that, but I'm also totally fine using a dedicated flag too.
+
+> We could initialize pcpu_id to -1 to indicate that the vcpu doesn't need
+> pinning (this is also what I meant above optional for other users).
+> 
+> Put the whole changes together (tested and worked fine), FYI:
+
+The big downside of this is forcing all callers of perf_test_create_vm() to pass
+in NULL.  I really want to move away from this pattern as it makes what should be
+simple code rather difficult to read due to having a bunch of "dead" params
+dangling off the end of function calls.
