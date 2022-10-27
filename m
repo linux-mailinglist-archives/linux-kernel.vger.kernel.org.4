@@ -2,374 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E928560FFD4
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 20:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9319060FFD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 20:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235064AbiJ0SGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 14:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
+        id S235283AbiJ0SIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 14:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235842AbiJ0SGT (ORCPT
+        with ESMTP id S235332AbiJ0SIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 14:06:19 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2073.outbound.protection.outlook.com [40.107.220.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7346247;
-        Thu, 27 Oct 2022 11:06:17 -0700 (PDT)
+        Thu, 27 Oct 2022 14:08:10 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E7E2124E;
+        Thu, 27 Oct 2022 11:08:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666894089; x=1698430089;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=GwNVRxTiCYFzojdPwmngirWE3nXMoSVqjyOK4NFJUVk=;
+  b=CnnKBHu1+MX+i4VpAN1yNEPUeTusTsaSz53Q/yK1a6XTb71127uvQvGP
+   fnZikV0uakdrg8a72L/rOAZVQPYrDwWfo55Aj4nfJ4O64V7uR0sajL373
+   Jm0SUK15TE1g94zsM8Y8rOYZ4UCdyWiyB2ZHR9pM+8FqYTJp3rmEtCJJS
+   TzsjD5erufuedPby6rdcrE/gA+QpM2JPqg3NhnuPpDjKAeW63La7+321F
+   3MJcl6DUKJcZfVCNRKTqJWQfN0Wj3MSJaLURsmPvRjvfV94Rc1FYLSgZP
+   O1RJTXAwtmXpm/4qEcvTbyEwkhIoTH7IwSeZ6kv350YxkM68Q9fxhjOp2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="372513804"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="372513804"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 11:08:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="663715197"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="663715197"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga008.jf.intel.com with ESMTP; 27 Oct 2022 11:08:09 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 27 Oct 2022 11:08:09 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 27 Oct 2022 11:08:09 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.174)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 27 Oct 2022 11:08:08 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MlF5hqoUwzyA6377pM8aOB+QOi0n9BTm/CJxWjbD/Qnd2yzMHS39eFACo4Hd+ShEddkbJjlszu5aobC9qUIB/EdOhquAlpi8foSe4XXypDwrYAo4ySsu8uWZpBDa/oFsfJg/6ynlkezcZurUuBYnqa+EVfSJFkZjwg+DRgbbzbEIRd2E1774+XyNuAsh7lBYoVrxVoY7YX/PRvRw5s03s+IR176W/nSRBOEz/csK0wcy20pOZzzHJwqGJ8mXvpXCUYvLoyxI2dU80NKpBjW4Uw2jRzyiVDr/sVm+u6gM5amQskQ9RJGvhoLo9MGv8zOsK2C3RitJEEAFkYJMayz2bA==
+ b=NMyl0BmOwrswctK6vkWOpiB+6Rd14NaQPPa/JjW95fzmn24XavAaT8K0eZdWuEfd8Fczno6qSLTet5/EOQGT9NNbqZ67f2xOHTmsYni32v2UHXjoWhvHJBhMb81aiEdkpSaJWf2CI20eHsP7pG43K59NJdRhtlhMCqKPkIoytXI4kcPIAZKNQkBrfI1SFtGwN1N9Fao1W5ZbOxi6mNXOwRiTCEP/cIAc47efWn/Xc2zoqypkxrma7b3vjWW5AEWkIR4tAumvb+gzYGNfQX7nnP3YKHvxJK2uGsdC15A84TyFD8vOLVjAKpw9tSIzD4ctCLy0d4lRC6/aTDxX15JAlA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pCjO/TND/jKMRB35Wm/H4ZlCmwm/4s77sN8TjMLsORI=;
- b=HS9JNMpZSW3364Sq0SvcLD/mY4MMXUqnHzLmuZxHYk2ZG5jVeapLtWc7AkGtgr2K/Xeozfs+uUtOwFCJASkxJ3ntUbVz9rl4GM78sIPFZ3d6c4CPJ7icEehpP3L7qqD9LSxVJe7a6z1O81caKCoC5kL+S7Jw9X488fhj8ZGTj3v6fBeMHxN8mmz7eY8MzunW7Xw7JN+bxyzv7PTzPbIDU/1FN6thD8q08J/RQxIlrHpam7XllOREg0CV0NTVy14x1qOQOWuqPiNRl++K2hI9t1UDnOcidqA3h06vYHrIIv3hqEbTbBh/Z+QEVwWVKxANosuP6uQ1B1wuGwHdyYrIFg==
+ bh=diki5L5E3e9R/bCDwCEu7w65ozBI4PfymPB8UE4EazY=;
+ b=HeKPADvQEONPQeZ71RML6EoC2mW3e/qUwKIdH2Eh8TKvMF0cKYjX8pSoHYG6JIuKcotT2hZH6rqFy2KHgWbc5prQu32cIlUhGXBmxAEgukMTtbkApGz3wa3SteRv0XztDRA80o1celDWpaeXeYGKyrw7Z8F9+6965QpvF0tF1Og8NUks2xxgv8BPbA4SO2ACB3ZNSeRGlLHkO15+LEPhmopD0zF9S0DoA+kX/UkQoUbXJfjNZBVJRPWp3Eewq3XdyMevvMxG6rBawdoG3ZX2WAvUbhRFq2Wu5DdVmyzkDo9Y4w5mrZRhMAFMyjGZ0eCgXj4VtY0Bre2sfzCPJpGx5w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pCjO/TND/jKMRB35Wm/H4ZlCmwm/4s77sN8TjMLsORI=;
- b=CDu6HR2vn3SWUhVBeMmFWZaoa4GtrJCVKZjvsLd8H1ikWcnMO7XeYSgfd/DvK1supwLkY8yvR7u4giYhFyNhlKwrcR7zv5e0m3aXuPVo17UPOlBjp5Le9HHx3lDiPtI9yHIivC4Ysw0CBvMDxCPZaIBDTBzMj/vO/XnzHvT+dvY=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by CH2PR12MB4310.namprd12.prod.outlook.com (2603:10b6:610:a9::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.26; Thu, 27 Oct
- 2022 18:06:15 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::4da8:e3eb:20eb:f00]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::4da8:e3eb:20eb:f00%2]) with mapi id 15.20.5746.026; Thu, 27 Oct 2022
- 18:06:15 +0000
-Message-ID: <10e7e8df-69ba-c1bc-1f94-c77fe64774ab@amd.com>
-Date:   Thu, 27 Oct 2022 13:06:12 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH V3 1/2] virt: sev: Prevent IV reuse in SNP guest driver
-Content-Language: en-US
-To:     Peter Gonda <pgonda@google.com>
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Marc Orr <marcorr@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Ashish Kalra <Ashish.Kalra@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20221027150558.722062-1-pgonda@google.com>
- <20221027150558.722062-2-pgonda@google.com>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <20221027150558.722062-2-pgonda@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR01CA0045.prod.exchangelabs.com (2603:10b6:208:23f::14)
- To DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20) by MW5PR11MB5931.namprd11.prod.outlook.com
+ (2603:10b6:303:198::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34; Thu, 27 Oct
+ 2022 18:08:03 +0000
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::7d5a:684d:99f7:4e83]) by MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::7d5a:684d:99f7:4e83%12]) with mapi id 15.20.5746.023; Thu, 27 Oct
+ 2022 18:08:02 +0000
+Date:   Thu, 27 Oct 2022 11:07:49 -0700
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        <linux-cxl@vger.kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>, <nvdimm@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] memregion: Add cpu_cache_invalidate_memregion()
+ interface
+Message-ID: <635ac8f52615_11722294cf@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+References: <166672803035.2801111.9244172033971411169.stgit@dwillia2-xfh.jf.intel.com>
+ <3ce6ef93-2f47-eda3-f974-0cfea7f43766@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <3ce6ef93-2f47-eda3-f974-0cfea7f43766@intel.com>
+X-ClientProxiedBy: BYAPR02CA0063.namprd02.prod.outlook.com
+ (2603:10b6:a03:54::40) To MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|CH2PR12MB4310:EE_
-X-MS-Office365-Filtering-Correlation-Id: dbecd3fd-5df6-40a1-8ded-08dab845f06f
+X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|MW5PR11MB5931:EE_
+X-MS-Office365-Filtering-Correlation-Id: dddd5942-cc24-486a-b12e-08dab8462ff2
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qD3H7JIme2qmYADsgtc0ZvW6C5KSayPn1czG0j6EZ/N/Hjs8Rsirg+Ey/bxGx4SRAHGgqqb3V5KAq2rnzoPUIDZRamng0IjggvhwRwHmmPEX5Eq0/LunPdjQ8io8gVNjj3LPdsARhQsnjasVa/radY2NKGUlBtknlE4t8uzA5JAb5wJ2ikfbOUIlETVWE8HNK4MWFHo5owIhNrWITKrkSvUM1po890XwVUeS478mVvKWFxGjAPCyhC6Ol05rH3THSXUGfJrZwxFiH9YyD8mgGsRoLLnF0/01tb7Y8aiXZunEkV9nuSA8TYyMZfyO/OK+X5QvCdjtgkZUcIdE8uBuWbYI1PruuvlgXc3iJKFGQDFNfQ5efjK9+H+n6HwtteHILRVJIRVgHhpMuKCtS3qqLMSM+XidxmpWhuxnbn2ew2LcR9zBxG3nuDrShXUZy3uzZ9BLYnYKRpwmxtIIiVYd1X5Am+p24C1SHIJpwwL/w908IQzVb2+8vukH8Dp99DFMwiY+p6o/69ghP8Ch2g38M+foL1Z09qrSgI5az457ulRsmKRY7IBnG1Ub4Hp8qLD5AQONLuPvV9g/n6tVfaeQkc4fwXSL4sZuwbWsDiQXyFVl77nMmUDfc9WZsCmc+wnctjAAlvWDVWCrmHuQUHHe96g75YvIMX8EwXMDUvpNduTKWNCZ4xCGvUR6V6chAJ3izPh0n+nmEz6eHkx4RwXNgP5XKftkgeZtaS9/2SagaYil98Or2kidGIUUuhAL5eLFyro5NcnmTpvQjSWIRYel55xuY/Ma7MdsrX2IUpbNqQrYB1rXLFi0oAQQp+gC50emRTWtJBZkod0gyYjruRiWuQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(39860400002)(366004)(346002)(136003)(451199015)(41300700001)(8676002)(4326008)(66946007)(66556008)(54906003)(6916009)(6506007)(53546011)(36756003)(6666004)(66476007)(86362001)(31696002)(83380400001)(5660300002)(6512007)(26005)(8936002)(316002)(2616005)(478600001)(31686004)(2906002)(186003)(966005)(6486002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: h9YwZozm1i9rhPSkrgDCUboQ5Tmd2ZykiIGOSO/EyJjnaeR+LFVzk5esWqK55bT6gL8ZHuWVa0DwkSkxK6h1DI2vD6jKmZpMmXXqu1QlPXNAbDGcPqYYy96oW2BDBm4+R4LJRE4oielw7/sQ6WAS2wkkqPBwPgwu72w8tVfcQAQWIIxqokYH5lCaWXUkWaJapyXxLJXmT1St6PcX2pR8F4j1b1nNYOh3Dj9VPYvApBbHnyayI1PFfhXaoZUUOq0g0ozmPBDHp2WstI3N6PWMql1YHvtxYXOsJxDsNVyZkuRHG1jGS21AqJaXtRZ4RBoMazHrkDGLkA7gq8C3+MSf+oDOAHwC5FOBsShMR0Q/Mj+HKMR9D2+xQKDPOO2Gsjye4WA0DF8zS0uRKd9OBR0kI7bG60FmzU9Tmzy8rt2D1VFtw8dHljTB8Sy35uWvDvzs8jBuaMoEujUHWza0xAqmM3YgrPysyW1C/u2kqSOqGfQaCt7/PHdNR9Q52LunxOqyIjpYH/XbNThGBCNBjJq3CJ+RiwPPiuyUgKRXS8AziHGTcaK6oJpMiSX9La7MypIO5lvpSaNepfHcL68g/G+sC75wrjkaKoM4SNbQz16ViGytshygfwEnsBHzR8J4nDVtTzAHb2zZl4peumL94AT0k2/NWyLGsRQk1H0RstbUkknry/B/iERw37wJMftnhViuU3CDWLUrPAoXzjDeGfoibA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(39860400002)(376002)(366004)(396003)(346002)(451199015)(66899015)(82960400001)(86362001)(8936002)(7416002)(38100700002)(5660300002)(83380400001)(26005)(6512007)(9686003)(478600001)(8676002)(6666004)(6486002)(66476007)(110136005)(54906003)(316002)(186003)(66946007)(53546011)(4326008)(66556008)(2906002)(41300700001)(6506007);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YjM3ZUhnUWFyN3luTSswc1JLN3g3cTE1TTh6TkZmWmcrZTBZSXh6U0dyMzkv?=
- =?utf-8?B?ZGRFb2VMQnhrRk1UdFBXc293RTE4d0tDdlhienk4eGRMR1JMNUZSVCtHUmts?=
- =?utf-8?B?d0pWeU5CQ3RmN0ZKQXQ5R2VQWjdWRXBBT0dueE92S2hwWS83MTVkcDVrVXFm?=
- =?utf-8?B?ZmpzSFJTWElGamM2eEIyZk5HTk9qbGdGUlhGZHNWMXVwUk84QnN1WEhlNEJZ?=
- =?utf-8?B?Z0lHc1d5bHdWS2pNZXc3bnhKRS9CYmpBZHJKcVpWblN5RHFaN1VBVXRXMzBQ?=
- =?utf-8?B?RENXSmIxd0RXVVVGdkdzTjFsdWloSDdUSEptTExIZmc4ZEd3QVRZQUk1eHlz?=
- =?utf-8?B?Z2owZ0FjUlFqTEJ2a3NBZE1zQ3o3RjBWeEd3cEVLeUlJVjJHSWNXYktlTWN6?=
- =?utf-8?B?VGpndWw2ZW1ubE5oQ3lvczdweVc2aFpqSm1xV3NyZmI3V01RYXhBSVBEcFQy?=
- =?utf-8?B?RVVMbjFCZ1M5bWs2bDVWT3ZBUCsrVThFVmdlOGU2bStkVmEwdmg5bXZDbkdw?=
- =?utf-8?B?M0lFRldKMUFOUm9OVldoc2lzSERGV0s5WS9DNjhBRFdlQ3dJbEFDcDhaWEV2?=
- =?utf-8?B?YmZ1emdLM3gza2pnZW1EaXBOc3R3djI4VWZnVmpwNlVoeWhlL3UxNUpTMHFN?=
- =?utf-8?B?UXd3RTZCSXBlTzloM0EvdnJ5NFhiSkV4MGJIdlcyTUdkdVlYR3BqY2VnckRh?=
- =?utf-8?B?d0ZsZk80M0NZQ0c0anBQTk1lV2hFZWtEZ1pkQ0lvdnFtYkJ6aEhVRnc4UjQz?=
- =?utf-8?B?dUFEcXJkR1V6Q3U0SjErT1d3L2ZxYUhEaTI2a1hUWXltSkxFZVNMM04ycWNk?=
- =?utf-8?B?cWlCWGRkR3hUVDJML2t1Y1JyaEJ5SXZITUl4NzhuWjVneTRBa200bmY0YnFO?=
- =?utf-8?B?bXdGWC9obFk3VnViNnRTckM2VmdMYjZPZGVLQ1BSNlhyNUZZbkRxUnBURlRm?=
- =?utf-8?B?WG9lUE1uMVkxY1ZMQTJUNVBnNlY4VzAwSHphd2JxSUZzWUFIM3k1b2xQa1BF?=
- =?utf-8?B?UTBnZ2tjVDlnblIxM2I3MnVXUEFETm5jMnJvcW9CaVFacEpyZE5ReTNFdi93?=
- =?utf-8?B?M3NqbCszanlTc1F5NE1zaGZDT1VNTUF3eDI0THhwRVZQZm9xYUVpN3ZOWlVQ?=
- =?utf-8?B?MDR4bnZPcXdyTDdWRDZoL3cxa3V5VjRPOG9WRGxudzcxRExIdlFuMDM4QW9S?=
- =?utf-8?B?Y1FLbEgwRmwvMFNmbzlOYnJmTUtRdXJCMGlXMlo3Z3BxQ1hvSGVweXJLOEhl?=
- =?utf-8?B?S0dDaURUNElLdExSQk11M01VdFduazg5SmFsa3gvRVdhUW84U09ZU1YzL01Z?=
- =?utf-8?B?Vm1NNmI2ZG03TCt1bXZFRWVnZjVkNy8yUUowN2pYelFCZXlpWDV2bHd0U0ZT?=
- =?utf-8?B?WHI2RmNhb3J1ZzE1TDFjRVQydmRrWFg2K0YycGpsZmIyb0NiV2g4RStjcWZP?=
- =?utf-8?B?VmhwZnY0ODBrRzNiU0RRUG0rNUtwQUhXeEtDZE83V21FajZhMTlKOEtVYk5N?=
- =?utf-8?B?bUpjOG1QNkZJbDVuMm0vZ094UTNNMjlKeUxZb09MU1BYckltODRBUlBHZWRn?=
- =?utf-8?B?YUw0UDlXbEtaQXRoVnRwamtqTXZha2h5ai9CY3I0ZS9CaG9jWjgzWVFlY1l1?=
- =?utf-8?B?L0orRXoya1FQN2djNzFqSVlJdENqTGJrZGcyWUxZbVZIbWJ6YTArME5Ga1B5?=
- =?utf-8?B?eExlQk5ZMDNyaDJKN3c2M3JJQnV2T0F3OEtqSDZPK0VHWi93RDR2VHp4c2xF?=
- =?utf-8?B?aktISjZLRTFvOWZwcUkyRlh0NkxaSTczK1o4TysvdUx5cEQ1eVRDcklhUUVj?=
- =?utf-8?B?eUtpQjlCVW9lTjl0U253N1FVSzdIRnI0YWZkT0MvSkVoWkd2NjkzYS9hWXZ0?=
- =?utf-8?B?eGFaUnFGU1lJZmtvdW0weFROVi9KdVdwQ2swMTBRRjY0bkhIcWwzWG5vWVRs?=
- =?utf-8?B?dHY2THFvZFFtWXdFU1E3cjQ4K3JmeVNsSldyeVByQ1NCQnJOT1haUFlzZ2ZB?=
- =?utf-8?B?WUlZWEpvcHEySXFDZ0pKZkp1b3pDWHViSERvdWxrNTltTFNOdFk5OFpzb3lV?=
- =?utf-8?B?Q3U4dnFBUlA5MStwcnJFL0luNW5QenpYUEJvdGltVytPVklSMWxaNy8zWnhH?=
- =?utf-8?Q?+nUss/lx++oZc3Xe3ILoxIMlU?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dbecd3fd-5df6-40a1-8ded-08dab845f06f
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?grlDp0+gMTktEL5CTumz5WPgolYCgf7W+WiKgFyNb0oIHkm+3evaTpkH8bs5?=
+ =?us-ascii?Q?ResZRRlTXH6nvULh6FfqCarn4QvNd/3L7KRRthZ0PqRvHGKCKQCW+HLiSd9q?=
+ =?us-ascii?Q?WLbmm7RsFwSuH7Xa360fTRXN+RltzOZbYQd/dk9LrIpenjteUDuPboKUUlbl?=
+ =?us-ascii?Q?ePRXyxgk3RRc1KsXjisIVNwqNpr+LaNvPuHnUId4aLIA4ir+8h2a2H2cl+Tz?=
+ =?us-ascii?Q?nSzKXrEDxWid5T5xGzJqsJqrd4nUJzvxT0oa10Ztmjwh7hrdl3K/n7n+j4VM?=
+ =?us-ascii?Q?M3WoWJLmIdvpO5yZNW+eEfFZUc1NPkpJQz3D3bP0bmgO2uLYjDiBTEQ0oTeP?=
+ =?us-ascii?Q?L7U0FFSf9OpnZn/t9mCKiInKphQvgCle5tJy6eTz1DAuAq2b3tSAsT7n8vij?=
+ =?us-ascii?Q?f358a3n6Es1j1SLouZimMpFMjowzXAsLsZaY+RbPLXEbSuBW4oa0uSKjmgTS?=
+ =?us-ascii?Q?R8F/y5nFP3kgQFvh3BwFIhvjt9OyrE/0fclX31gifgJL8Kqp77gXa/q7wuJY?=
+ =?us-ascii?Q?rvkdl0K74pl+7VDCMzDVXikpQerGDUTZC1Xf2J/+f9K7xNhgAp5E2y9diTv+?=
+ =?us-ascii?Q?VxaWisHaP18Eq3Jwc4EkEAf0VAhR80MvcIJHdjhthvwf6l8tavBGcxWDGeDC?=
+ =?us-ascii?Q?pjT56LVlB1ksVBbzJZptksk/sLuDtAOZqz61+IVRCZj/fW30GFOQV4wWBlkz?=
+ =?us-ascii?Q?rwmd44IARCvwUSEaTxLTUnv4TCYxNhllWoVh+SsQSacmfbC79i5saoK36w9g?=
+ =?us-ascii?Q?IKFsrXDLbSJDOU+B9+r+hugN0UHJiSLIyHCfbvKuEikAq8sPVKRYU11NjYtl?=
+ =?us-ascii?Q?W0y6FmUWoqbOlHY3wQF0LlT6uZaBYkP80CItPaNHlm3nDKoTAiygRUsg70FL?=
+ =?us-ascii?Q?nwa6qk5e0KOQG6L7Vw4B2U8zHp3P547vZdP8fQemhrxtM935yZx4HaxNGSPj?=
+ =?us-ascii?Q?vF/QxxqanRZP5qLVtXWKrSXYCNOYVQKP2wy0eZcQoXUS0xPzELro8dlNXCXi?=
+ =?us-ascii?Q?YUEdiOEYA1k5YX5+r93IqB/qoe6/qVPgS3aMEUwuoN3Fyi0+wx/lttu5Nwp7?=
+ =?us-ascii?Q?Gg20XNqq41qo88INhK418ysAmaDHCJgLUZZ9h1GsIY+nYKbcJr/jzZdR8ZRR?=
+ =?us-ascii?Q?OD0tDecCMuF6MI4GHw9Oy9WdhOwfD9M76Ahu+oZjfVUVxxUletfi7AYn6o5X?=
+ =?us-ascii?Q?XFNB8PQ5d0MWPWbFjSHTRokrv8ngJmIjMUWNxgi1aRLlvy5TVrg2sRHrIHUc?=
+ =?us-ascii?Q?t63jPUI2cmsB1lMPEfzinpGSTRQtU0oiBks0u4Au00O7RuWvPiGxjNf+1Y6n?=
+ =?us-ascii?Q?y2eP2ZcRIJNohxOrIbbuRdl/W9mOrZIlxPjRcJ7Tf6V0DyqgEn51+5Xuiau9?=
+ =?us-ascii?Q?B7P3HyKZpp/LM0hxVmLaw3hvSHFRSViYQbUQCfBXrg/s7Tgo9H+KfGqeVDCy?=
+ =?us-ascii?Q?uHIoSzZwJtYjGSNFNvjflO6UzKFhUz9W8cIz2GSey3aNkSQ6/alMPsbUsPAi?=
+ =?us-ascii?Q?Qqz/cmu5Dj7PByYQzXZIoMb07bx1QKH5/mtRhKZOfUCp+RB9XvUfCxjBNulp?=
+ =?us-ascii?Q?xsJFsgfsZj/vfPCEB8wj1CjlJzY/77G4rqNASQAF0zWQjhN1xvujvRdMvW7Z?=
+ =?us-ascii?Q?hg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: dddd5942-cc24-486a-b12e-08dab8462ff2
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 18:06:15.4161
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 18:08:02.3782
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2I4NSdr6uW4/5SX/1a9aFxeq7WyYj7fjUr1drIDqDnfbYlxDKCrrUQNbBQykqBFiIVCOxoM6OAMnu1pmtP4uig==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4310
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: edmj+LC92Yb7lvwPQJjzPEmID3bnIgJY3HqhRB0IX0QxsaY0g14cvkzFzrwVuBjWy1ckW7FANb233py8PwVfcSU5BGw+ocy14sqwt27OlHA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR11MB5931
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/27/22 10:05, Peter Gonda wrote:
-> The ASP and an SNP guest use a series of AES-GCM keys called VMPCKs to
-> communicate securely with each other. The IV to this scheme is a
-> sequence number that both the ASP and the guest track. Currently this
-> sequence number in a guest request must exactly match the sequence
-> number tracked by the ASP. This means that if the guest sees an error
-> from the host during a request it can only retry that exact request or
-> disable the VMPCK to prevent an IV reuse. AES-GCM cannot tolerate IV
-> reuse see:
-> https://csrc.nist.gov/csrc/media/projects/block-cipher-techniques/documents/bcm/comments/800-38-series-drafts/gcm/joux_comments.pdf
+Dave Hansen wrote:
+> On 10/25/22 13:05, Dan Williams wrote:
+> > Users must first call cpu_cache_has_invalidate_memregion() to know whether
+> > this functionality is available on the architecture. Only enable it on
+> > x86-64 via the wbinvd() hammer. Hypervisors are not supported as TDX
+> > guests may trigger a virtualization exception and may need proper handling
+> > to recover. See:
+> That sentence doesn't quite parse correctly.  Does it need to be "and
+> may trigger..."?
+
+Yes, but I think this can be said more generally, and with more detail:
+
+"Only enable on bare metal x86-64 vai the wbinvd() hammer. It is already
+the case that wbinvd() is problematic to allow in VMs due its global
+performance impact and KVM, for example, has been known to just trap and
+ignore the call. With confidential computing guest execution of wbinvd
+may even trigger an exception. As guests should not be messing with the
+bare metal address map cpu_cache_has_invalidate_memregion() returns
+false in those environments."
+
+> > This global cache invalidation facility,
+> > cpu_cache_invalidate_memregion(), is exported to modules since NVDIMM
+> > and CXL support can be built as a module. However, the intent is that
+> > this facility is not available outside of specific "device-memory" use
+> > cases. To that end the API is scoped to a new "DEVMEM" module namespace
+> > that only applies to the NVDIMM and CXL subsystems.
 > 
-> To handle userspace querying the cert_data length. Instead of requesting
-> the cert length from userspace use the size of the drivers allocated
-> shared buffer. Then copy that buffer to userspace, or give userspace an
-> error depending on the size of the buffer given by userspace.
+> Oh, thank $DEITY you're trying to limit the amount of code that has
+> access to this thing.
 > 
-> Fixes: fce96cf044308 ("virt: Add SEV-SNP guest driver")
-> Signed-off-by: Peter Gonda <pgonda@google.com>
-> Reported-by: Peter Gonda <pgonda@google.com>
-> Reviewed-by: Dionna Glaze <dionnaglaze@google.com>
-> Cc: Borislav Petkov <bp@suse.de>
-> Cc: Tom Lendacky <thomas.lendacky@amd.com>
-> Cc: Michael Roth <michael.roth@amd.com>
-> Cc: Haowen Bai <baihaowen@meizu.com>
-> Cc: Yang Yingliang <yangyingliang@huawei.com>
-> Cc: Marc Orr <marcorr@google.com>
-> Cc: David Rientjes <rientjes@google.com>
-> Cc: Ashish Kalra <Ashish.Kalra@amd.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: kvm@vger.kernel.org
-> ---
->   drivers/virt/coco/sev-guest/sev-guest.c | 93 ++++++++++++++++---------
->   1 file changed, 62 insertions(+), 31 deletions(-)
+> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> > index 67745ceab0db..b68661d0633b 100644
+> > --- a/arch/x86/Kconfig
+> > +++ b/arch/x86/Kconfig
+> > @@ -69,6 +69,7 @@ config X86
+> >  	select ARCH_ENABLE_THP_MIGRATION if X86_64 && TRANSPARENT_HUGEPAGE
+> >  	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
+> >  	select ARCH_HAS_CACHE_LINE_SIZE
+> > +	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION  if X86_64
 > 
-> diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-> index f422f9c58ba7..8c54ea84bc57 100644
-> --- a/drivers/virt/coco/sev-guest/sev-guest.c
-> +++ b/drivers/virt/coco/sev-guest/sev-guest.c
-> @@ -41,7 +41,7 @@ struct snp_guest_dev {
->   	struct device *dev;
->   	struct miscdevice misc;
->   
-> -	void *certs_data;
-> +	u8 (*certs_data)[SEV_FW_BLOB_MAX_SIZE];
->   	struct snp_guest_crypto *crypto;
->   	struct snp_guest_msg *request, *response;
->   	struct snp_secrets_page_layout *layout;
-> @@ -67,8 +67,27 @@ static bool is_vmpck_empty(struct snp_guest_dev *snp_dev)
->   	return true;
->   }
->   
-> +/*
-> + * If we receive an error from the host or ASP we have two options. We can
-> + * either retry the exact same encrypted request or we can discontinue using the
-> + * VMPCK.
-> + *
-> + * This is because in the current encryption scheme GHCB v2 uses AES-GCM to
-> + * encrypt the requests. The IV for this scheme is the sequence number. GCM
-> + * cannot tolerate IV reuse.
-> + *
-> + * The ASP FW v1.51 only increments the sequence numbers on a successful
-> + * guest<->ASP back and forth and only accepts messages at its exact sequence
-> + * number.
-> + *
-> + * So if we were to reuse the sequence number the encryption scheme is
-> + * vulnerable. If we encrypt the sequence number for a fresh IV the ASP will
-> + * reject our request.
-> + */
->   static void snp_disable_vmpck(struct snp_guest_dev *snp_dev)
->   {
-> +	dev_alert(snp_dev->dev, "Disabling vmpck_id: %d to prevent IV reuse.\n",
-> +		  vmpck_id);
->   	memzero_explicit(snp_dev->vmpck, VMPCK_KEY_LEN);
->   	snp_dev->vmpck = NULL;
->   }
-> @@ -326,29 +345,29 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
->   	if (fw_err)
->   		*fw_err = err;
->   
-> -	if (rc)
-> -		return rc;
-> +	if (rc) {
-> +		dev_alert(snp_dev->dev,
-> +			  "Detected error from ASP request. rc: %d, fw_err: %llu\n",
-> +			  rc, *fw_err);
-> +		goto disable_vmpck;
-> +	}
+> What is 64-bit only about this?
+> 
+> I don't expect to have a lot of NVDIMMs or CXL devices on 32-bit
+> kernels, but it would be nice to remove this if it's not strictly
+> needed.  Or, to add a changelog nugget that says:
+> 
+> 	Restrict this to X86_64 kernels.  It would probably work on 32-
+> 	bit, but there is no practical reason to use 32-bit kernels and
+> 	no one is testing them.
 
-Realize that snp_issue_guest_request() will return -EIO in the case that 
-the returned SW_EXITINFO2 value is SNP_GUEST_REQ_INVALID_LEN. So all the 
-work you do below in get_ext_report() doesn't matter because you end up 
-disabling the key here.
+I had to go recall this myself, but it looks like this is unnecessarily
+cargo culting the stance of ARCH_HAS_PMEM_API that arose from this
+change:
 
-So maybe this patch should be split up and parts of it added to the second 
-patch (but that patch seems like it would still hit this issue because 
--EIO is still returned.
+96601adb7451 x86, pmem: clarify that ARCH_HAS_PMEM_API implies PMEM mapped WB
 
-Thanks,
-Tom
+...that observed that on pure 32-bit x86 CPUs that non-temporal stores
+had weaker guarantees about whether writes would bypass the CPU cache.
+However, that commit is so old that it even talks about the interactions
+with the pcommit instruction. Suffice to say there is no X86_64
+dependency for wbinvd, I'll drop the dependency.
 
->   
-> -	/*
-> -	 * The verify_and_dec_payload() will fail only if the hypervisor is
-> -	 * actively modifying the message header or corrupting the encrypted payload.
-> -	 * This hints that hypervisor is acting in a bad faith. Disable the VMPCK so that
-> -	 * the key cannot be used for any communication. The key is disabled to ensure
-> -	 * that AES-GCM does not use the same IV while encrypting the request payload.
-> -	 */
->   	rc = verify_and_dec_payload(snp_dev, resp_buf, resp_sz);
->   	if (rc) {
->   		dev_alert(snp_dev->dev,
-> -			  "Detected unexpected decode failure, disabling the vmpck_id %d\n",
-> -			  vmpck_id);
-> -		snp_disable_vmpck(snp_dev);
-> -		return rc;
-> +			  "Detected unexpected decode failure from ASP. rc: %d\n",
-> +			  rc);
-> +		goto disable_vmpck;
->   	}
->   
->   	/* Increment to new message sequence after payload decryption was successful. */
->   	snp_inc_msg_seqno(snp_dev);
->   
->   	return 0;
-> +
-> +disable_vmpck:
-> +	snp_disable_vmpck(snp_dev);
-> +	return rc;
->   }
->   
->   static int get_report(struct snp_guest_dev *snp_dev, struct snp_guest_request_ioctl *arg)
-> @@ -437,7 +456,7 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
->   	struct snp_guest_crypto *crypto = snp_dev->crypto;
->   	struct snp_ext_report_req req;
->   	struct snp_report_resp *resp;
-> -	int ret, npages = 0, resp_len;
-> +	int ret, resp_len, req_cert_len, resp_cert_len;
->   
->   	lockdep_assert_held(&snp_cmd_mutex);
->   
-> @@ -448,14 +467,15 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
->   		return -EFAULT;
->   
->   	/* userspace does not want certificate data */
-> -	if (!req.certs_len || !req.certs_address)
-> +	req_cert_len = req.certs_len;
-> +	if (!req_cert_len || !req.certs_address)
->   		goto cmd;
->   
-> -	if (req.certs_len > SEV_FW_BLOB_MAX_SIZE ||
-> -	    !IS_ALIGNED(req.certs_len, PAGE_SIZE))
-> +	if (req_cert_len > sizeof(*snp_dev->certs_data) ||
-> +	    !IS_ALIGNED(req_cert_len, PAGE_SIZE))
->   		return -EINVAL;
->   
-> -	if (!access_ok((const void __user *)req.certs_address, req.certs_len))
-> +	if (!access_ok((const void __user *)req.certs_address, req_cert_len))
->   		return -EFAULT;
->   
->   	/*
-> @@ -464,8 +484,7 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
->   	 * the host. If host does not supply any certs in it, then copy
->   	 * zeros to indicate that certificate data was not provided.
->   	 */
-> -	memset(snp_dev->certs_data, 0, req.certs_len);
-> -	npages = req.certs_len >> PAGE_SHIFT;
-> +	memset(snp_dev->certs_data, 0, sizeof(*snp_dev->certs_data));
->   cmd:
->   	/*
->   	 * The intermediate response buffer is used while decrypting the
-> @@ -477,25 +496,37 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
->   	if (!resp)
->   		return -ENOMEM;
->   
-> -	snp_dev->input.data_npages = npages;
-> +	snp_dev->input.data_npages = sizeof(*snp_dev->certs_data) >> PAGE_SHIFT;
->   	ret = handle_guest_request(snp_dev, SVM_VMGEXIT_EXT_GUEST_REQUEST, arg->msg_version,
->   				   SNP_MSG_REPORT_REQ, &req.data,
->   				   sizeof(req.data), resp->data, resp_len, &arg->fw_err);
->   
-> +	resp_cert_len = snp_dev->input.data_npages << PAGE_SHIFT;
-> +
->   	/* If certs length is invalid then copy the returned length */
->   	if (arg->fw_err == SNP_GUEST_REQ_INVALID_LEN) {
-> -		req.certs_len = snp_dev->input.data_npages << PAGE_SHIFT;
-> +		dev_alert(snp_dev->dev,
-> +			  "Certificate data from host: %d, Max size allocated by driver: %lu.\n",
-> +			  resp_cert_len, sizeof(*snp_dev->certs_data));
-> +		ret = -EFAULT;
-> +	}
-> +
-> +	if (ret)
-> +		goto e_free;
-> +
-> +	/* Pass the actual certificate data size back to userspace */
-> +	req.certs_len = resp_cert_len;
-> +	if (resp_cert_len > req_cert_len) {
-> +		arg->fw_err = SNP_GUEST_REQ_INVALID_LEN;
->   
->   		if (copy_to_user((void __user *)arg->req_data, &req, sizeof(req)))
->   			ret = -EFAULT;
-> -	}
->   
-> -	if (ret)
->   		goto e_free;
-> +	}
->   
-> -	if (npages &&
-> -	    copy_to_user((void __user *)req.certs_address, snp_dev->certs_data,
-> -			 req.certs_len)) {
-> +	if (copy_to_user((void __user *)req.certs_address, snp_dev->certs_data,
-> +			 resp_cert_len)) {
->   		ret = -EFAULT;
->   		goto e_free;
->   	}
-> @@ -676,7 +707,7 @@ static int __init sev_guest_probe(struct platform_device *pdev)
->   	if (!snp_dev->response)
->   		goto e_free_request;
->   
-> -	snp_dev->certs_data = alloc_shared_pages(dev, SEV_FW_BLOB_MAX_SIZE);
-> +	snp_dev->certs_data = alloc_shared_pages(dev, sizeof(*snp_dev->certs_data));
->   	if (!snp_dev->certs_data)
->   		goto e_free_response;
->   
-> @@ -703,7 +734,7 @@ static int __init sev_guest_probe(struct platform_device *pdev)
->   	return 0;
->   
->   e_free_cert_data:
-> -	free_shared_pages(snp_dev->certs_data, SEV_FW_BLOB_MAX_SIZE);
-> +	free_shared_pages(snp_dev->certs_data, sizeof(*snp_dev->certs_data));
->   e_free_response:
->   	free_shared_pages(snp_dev->response, sizeof(struct snp_guest_msg));
->   e_free_request:
-> @@ -717,7 +748,7 @@ static int __exit sev_guest_remove(struct platform_device *pdev)
->   {
->   	struct snp_guest_dev *snp_dev = platform_get_drvdata(pdev);
->   
-> -	free_shared_pages(snp_dev->certs_data, SEV_FW_BLOB_MAX_SIZE);
-> +	free_shared_pages(snp_dev->certs_data, sizeof(*snp_dev->certs_data));
->   	free_shared_pages(snp_dev->response, sizeof(struct snp_guest_msg));
->   	free_shared_pages(snp_dev->request, sizeof(struct snp_guest_msg));
->   	deinit_crypto(snp_dev->crypto);
+> 
+> >  	select ARCH_HAS_CURRENT_STACK_POINTER
+> >  	select ARCH_HAS_DEBUG_VIRTUAL
+> >  	select ARCH_HAS_DEBUG_VM_PGTABLE	if !X86_PAE
+> > diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+> > index 97342c42dda8..8650bb6481a8 100644
+> > --- a/arch/x86/mm/pat/set_memory.c
+> > +++ b/arch/x86/mm/pat/set_memory.c
+> > @@ -330,6 +330,21 @@ void arch_invalidate_pmem(void *addr, size_t size)
+> >  EXPORT_SYMBOL_GPL(arch_invalidate_pmem);
+> >  #endif
+> >  
+> > +#ifdef CONFIG_ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+> > +bool cpu_cache_has_invalidate_memregion(void)
+> > +{
+> > +	return !cpu_feature_enabled(X86_FEATURE_HYPERVISOR);
+> > +}
+> > +EXPORT_SYMBOL_NS_GPL(cpu_cache_has_invalidate_memregion, DEVMEM);
+> > +
+> > +int cpu_cache_invalidate_memregion(int res_desc)
+> > +{
+> > +	wbinvd_on_all_cpus();
+> > +	return 0;
+> > +}
+> 
+> Does this maybe also deserve a:
+> 
+> 	WARN_ON_ONCE(!cpu_cache_has_invalidate_memregion());
+> 
+> in case one of the cpu_cache_invalidate_memregion() paths missed a
+> cpu_cache_has_invalidate_memregion() check?
+
+Yeah, good idea.
+
+> 
+> > +/**
+> > + * cpu_cache_invalidate_memregion - drop any CPU cached data for
+> > + *     memregions described by @res_desc
+> > + * @res_desc: one of the IORES_DESC_* types
+> > + *
+> > + * Perform cache maintenance after a memory event / operation that
+> > + * changes the contents of physical memory in a cache-incoherent manner.
+> > + * For example, device memory technologies like NVDIMM and CXL have
+> > + * device secure erase, or dynamic region provision features where such
+> > + * semantics.
+> 
+> s/where/with/ ?
+
+Yes.
+
+> 
+> > + * Limit the functionality to architectures that have an efficient way
+> > + * to writeback and invalidate potentially terabytes of memory at once.
+> > + * Note that this routine may or may not write back any dirty contents
+> > + * while performing the invalidation. It is only exported for the
+> > + * explicit usage of the NVDIMM and CXL modules in the 'DEVMEM' symbol
+> > + * namespace.
+> > + *
+> > + * Returns 0 on success or negative error code on a failure to perform
+> > + * the cache maintenance.
+> > + */
+> 
+> WBINVD is a scary beast.  But, there's also no better alternative in the
+> architecture.  I don't think any of my comments above are deal breakers,
+> so from the x86 side:
+> 
+> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+
+Thanks Dave, this unblocks a significant amount of CXL work.
