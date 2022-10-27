@@ -2,89 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C6960FF9F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8131560FF9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235925AbiJ0R7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 13:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
+        id S235742AbiJ0R6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 13:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233548AbiJ0R7I (ORCPT
+        with ESMTP id S233548AbiJ0R61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 13:59:08 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BDF1799AB;
-        Thu, 27 Oct 2022 10:59:06 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 036444268490c277; Thu, 27 Oct 2022 19:59:04 +0200
-Received: from kreacher.localnet (unknown [213.134.169.45])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 27 Oct 2022 13:58:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D141781C6;
+        Thu, 27 Oct 2022 10:58:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id E90F066D838;
-        Thu, 27 Oct 2022 19:59:03 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>
-Subject: [PATCH 10/11] ACPICA: IORT: Update for revision E.e
-Date:   Thu, 27 Oct 2022 19:57:42 +0200
-Message-ID: <1841510.CQOukoFCf9@kreacher>
-In-Reply-To: <4756726.GXAFRqVoOG@kreacher>
-References: <4756726.GXAFRqVoOG@kreacher>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1488623A7;
+        Thu, 27 Oct 2022 17:58:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1FC3C433D6;
+        Thu, 27 Oct 2022 17:58:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666893506;
+        bh=5CHCNYh4rHVTPWKhbeifwNLikouiIV39GFNOmLjJyOU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=b8Uyrz4xrdSNdUZTKWhO81HsQENUaTUZFh4X2b3zePG/N2Qu08luPneNUfA7cVMY2
+         +j3U+7BuhoH86ewnfvOYsXk1qZTUP2KDuARVfbhtFmzk0CbsCm6+SXZkzjMbzRumFO
+         ptW7MQ992Z8kith8VQlIQx2Oqa6wGWZ9UMrII5/sb2WlPKEkGw+dXWjJ1+huFwsYGN
+         H3YfKYeKA2YXPxZeUYpzdw3O7dyqddscQYDv1YLDH7x1suL2LiBwGmcKLOm0gSG6QR
+         XZyN6VE7LIITSQRw1/GpaTuxIBpTngNAQXnBpnU6kL6SVJrpcwh7vv8KqNtMeyBw3h
+         p7XhZB7vN9RfA==
+Date:   Thu, 27 Oct 2022 10:58:24 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 net] net: enetc: survive memory pressure without
+ crashing
+Message-ID: <20221027105824.1c2157a2@kernel.org>
+In-Reply-To: <20221026121330.2042989-1-vladimir.oltean@nxp.com>
+References: <20221026121330.2042989-1-vladimir.oltean@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.169.45
-X-CLIENT-HOSTNAME: 213.134.169.45
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeggdduudejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepledtieekkeekveeikeetgffgteeuteefjeevjeegudelvdduheeiuedvieehieevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudeiledrgeehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeiledrgeehpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robin Murphy <robin.murphy@arm.com>
+On Wed, 26 Oct 2022 15:13:30 +0300 Vladimir Oltean wrote:
+> To fix this problem, memset the DMA coherent area used for RX buffer
+> descriptors in enetc_dma_alloc_bdr(). This makes all BDs be "not ready"
+> by default, which makes enetc_clean_rx_ring() exit early from the BD
+> processing loop when there is no valid buffer available.
 
-ACPICA commit 54b54732c5fc9e0384bcfd531f3c10d3a7b628b5
+IIRC dma_alloc_coherent() always zeros, and I'd guess there is a cocci
+script that checks this judging but the number of "fixes" we got for
+this in the past.
 
-The latest IORT update makes one small addition to SMMUv3 nodes to
-describe MSI support independently of wired GSIV support.
-
-Link: https://github.com/acpica/acpica/commit/54b54732
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-Signed-off-by: Bob Moore <robert.moore@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- include/acpi/actbl2.h |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-Index: linux-pm/include/acpi/actbl2.h
-===================================================================
---- linux-pm.orig/include/acpi/actbl2.h
-+++ linux-pm/include/acpi/actbl2.h
-@@ -375,7 +375,7 @@ struct acpi_table_ccel {
-  * IORT - IO Remapping Table
-  *
-  * Conforms to "IO Remapping Table System Software on ARM Platforms",
-- * Document number: ARM DEN 0049E.d, Feb 2022
-+ * Document number: ARM DEN 0049E.e, Sep 2022
-  *
-  ******************************************************************************/
- 
-@@ -546,6 +546,7 @@ struct acpi_iort_smmu_v3 {
- #define ACPI_IORT_SMMU_V3_COHACC_OVERRIDE   (1)
- #define ACPI_IORT_SMMU_V3_HTTU_OVERRIDE     (3<<1)
- #define ACPI_IORT_SMMU_V3_PXM_VALID         (1<<3)
-+#define ACPI_IORT_SMMU_V3_DEVICEID_VALID    (1<<4)
- 
- struct acpi_iort_pmcg {
- 	u64 page0_base_address;
-
-
-
+scripts/coccinelle/api/alloc/zalloc-simple.cocci ?
