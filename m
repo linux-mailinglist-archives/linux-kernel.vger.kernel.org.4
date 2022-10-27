@@ -2,119 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CEF60F5BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE31760F5C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 12:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234803AbiJ0Kuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 06:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59534 "EHLO
+        id S234745AbiJ0Kxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 06:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234838AbiJ0Kuv (ORCPT
+        with ESMTP id S234219AbiJ0Kxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 06:50:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E256C12B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 03:50:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 27 Oct 2022 06:53:44 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D104814C5;
+        Thu, 27 Oct 2022 03:53:43 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2A88B82583
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 10:50:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5924C433C1;
-        Thu, 27 Oct 2022 10:50:45 +0000 (UTC)
-Date:   Thu, 27 Oct 2022 11:50:42 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Muchun Song <muchun.song@linux.dev>,
-        Wupeng Ma <mawupeng1@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next 1/1] mm: hugetlb_vmemmap: Fix WARN_ON in
- vmemmap_remap_pte
-Message-ID: <Y1piguJXagcxiTpn@arm.com>
-References: <20221025014215.3466904-1-mawupeng1@huawei.com>
- <614E3E83-1EAB-4C39-AF9C-83C0CCF26218@linux.dev>
- <35dd51eb-c266-f221-298a-21309c17971a@arm.com>
- <3D6FDA43-A812-4907-B9C8-C2B25567DBBC@linux.dev>
- <3c545133-71aa-9a8d-8a13-09186c4fa767@arm.com>
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 9FFB83FA55;
+        Thu, 27 Oct 2022 10:53:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1666868021; bh=zNucYYy3VjQEKj8yZ2eMFXotjkia9Wx2c/L4/Yd59Cw=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=XPMvFFGZxXBxIN71ObjM//Ar4Dh3+gqxeI0kTomnuAigiYJ33GQYyPc9RzqOz/QHI
+         XC8w9nq07gKNA48XdHIBeY2KfHEYlPa8CMp3c7kDt74Z7GhEUk6BT6SdFehuG1HcMh
+         pKD1jCyqTNg3e1ByL1uAtbgg/sMy/C5s7Yum+UEEpKGJlLa6Qi+1n2WLeHH+P1tsV5
+         RRpHtQrWhPDQ9xU03P16DNICh9PSlUWBAWhS4dkkaI1z5P/JMRWaZ3UJCPHAWUgk3m
+         9iBGeYLZXMyB4X9hgNqbPg8NmudpLOZTUBm8Y24YaQ1KMoz3x/7hoNO+/Ii+paycN8
+         MmvpObuEXERZQ==
+Message-ID: <cfe65da9-497d-b825-7332-874b6e87c087@marcan.st>
+Date:   Thu, 27 Oct 2022 19:53:35 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c545133-71aa-9a8d-8a13-09186c4fa767@arm.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Pekka Paalanen <pekka.paalanen@collabora.com>,
+        dri-devel@lists.freedesktop.org, asahi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20221027101327.16678-1-marcan@marcan.st>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH] drm/simpledrm: Only advertise formats that are supported
+In-Reply-To: <20221027101327.16678-1-marcan@marcan.st>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 02:06:00PM +0530, Anshuman Khandual wrote:
-> On 10/26/22 12:31, Muchun Song wrote:
-> >> On 10/25/22 12:06, Muchun Song wrote:
-> >>>> On Oct 25, 2022, at 09:42, Wupeng Ma <mawupeng1@huawei.com> wrote:
-> >>>> From: Ma Wupeng <mawupeng1@huawei.com>
-> >>>>
-> >>>> Commit f41f2ed43ca5 ("mm: hugetlb: free the vmemmap pages associated with
-> >>>> each HugeTLB page") add vmemmap_remap_pte to remap the tail pages as
-> >>>> read-only to catch illegal write operation to the tail page.
-> >>>>
-> >>>> However this will lead to WARN_ON in arm64 in __check_racy_pte_update()
-> >>>
-> >>> Thanks for your finding this issue.
-> >>>
-> >>>> since this may lead to dirty state cleaned. This check is introduced by
-> >>>> commit 2f4b829c625e ("arm64: Add support for hardware updates of the
-> >>>> access and dirty pte bits") and the initial check is as follow:
-> >>>>
-> >>>> BUG_ON(pte_write(*ptep) && !pte_dirty(pte));
-> >>>>
-> >>>> Since we do need to mark this pte as read-only to catch illegal write
-> >>>> operation to the tail pages, use set_pte  to replace set_pte_at to bypass
-> >>>> this check.
-> >>>
-> >>> In theory, the waring does not affect anything since the tail vmemmap
-> >>> pages are supposed to be read-only. So, skipping this check for vmemmap
-> >>
-> >> Tails vmemmap pages are supposed to be read-only, in practice but their
-> >> backing pages do have pte_write() enabled. Otherwise the VM_WARN_ONCE()
-> >> warning would not have triggered.
-> > 
-> > Right.
-> > 
-> >>
-> >>        VM_WARN_ONCE(pte_write(old_pte) && !pte_dirty(pte),
-> >>                     "%s: racy dirty state clearing: 0x%016llx -> 0x%016llx",
-> >>                     __func__, pte_val(old_pte), pte_val(pte));
-> >>
-> >> Also, is not it true that the pte being remapped into a different page
-> >> as read only, than what it had originally (which will be freed up) i.e 
-> >> the PFN in 'old_pte' and 'pte' will be different. Hence is there still
-> > 
-> > Right.
-> > 
-> >> a possibility for a race condition even when the PFN changes ?
-> > 
-> > Sorry, I didn't get this question. Did you mean the PTE is changed from
-> > new (pte) to the old one (old_pte) by the hardware because of the update
-> > of dirty bit when a concurrent write operation to the tail vmemmap page?
+On 27/10/2022 19.13, Hector Martin wrote:
+> Until now, simpledrm unconditionally advertised all formats that can be
+> supported natively as conversions. However, we don't actually have a
+> full conversion matrix of helpers. Although the list is arguably
+> provided to userspace in precedence order, userspace can pick something
+> out-of-order (and thus break when it shouldn't), or simply only support
+> a format that is unsupported (and thus think it can work, which results
+> in the appearance of a hang as FB blits fail later on, instead of the
+> initialization error you'd expect in this case).
 > 
-> No, but is not vmemmap_remap_pte() reuses walk->reuse_page for all remaining
-> tails pages ? Is not there a PFN change, along with access permission change
-> involved in this remapping process ?
+> Split up the format table into separate ones for each required subset,
+> and then pick one based on the native format. Also remove the
+> native<->conversion overlap check from the helper (which doesn't make
+> sense any more, since the native format is advertised anyway and this
+> way RGB565/RGB888 can share a format table), and instead print the same
+> message in simpledrm when the native format is not one for which we have
+> conversions at all.
+> 
+> This fixes a real user regression where the ?RGB2101010 support commit
+> started advertising it unconditionally where not supported, and KWin
+> decided to start to use it over the native format, but also the fixes
+> the spurious RGB565/RGB888 formats which have been wrongly
+> unconditionally advertised since the dawn of simpledrm.
+> 
+> Note: this patch is merged because splitting it into two patches, one
+> for the helper and one for simpledrm, would regress at the midpoint
+> regardless of the order. If simpledrm is changed first, that would break
+> working conversions to RGB565/RGB888 (since those share a table that
+> does not include the native formats). If the helper is changed first, it
+> would start spuriously advertising all conversion formats when the
+> native format doesn't have any supported conversions at all.
+> 
+> Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
+> Fixes: 6ea966fca084 ("drm/simpledrm: Add [AX]RGB2101010 formats")
+> Fixes: 11e8f5fd223b ("drm: Add simpledrm driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  drivers/gpu/drm/drm_format_helper.c | 15 -------
+>  drivers/gpu/drm/tiny/simpledrm.c    | 62 +++++++++++++++++++++++++----
+>  2 files changed, 55 insertions(+), 22 deletions(-)
+> 
 
-For the record, as we discussed offline, changing the output address
-(pfn) of a pte is not safe without break-before-make if at least one of
-the mappings was writeable. The caller (vmemmap_remap_pte()) would need
-to be fixed to first invalidate the pte and then write the new pte. I
-assume no other CPU accesses this part of the vmemmap while the pte is
-being remapped.
+To answer some issues that came up on IRC:
 
--- 
-Catalin
+Q: Why not move this logic / the tables to the helper?
+A: Because simpledrm is the only user so far, and this patch is Cc:
+stable because we have an actual regression that broke KDE. I'm going
+for the minimal patch that keeps everything that worked to this day
+working, and stops advertising things that never worked, no more, no
+less. Future refactoring can always happen later (and is probably a good
+idea when other drivers start using the helper).
+
+Q: XRGB8888 is supposed to be the only canonical format. Why not just
+drop everything but conversions to/from XRGB8888?
+A: Because that would regress things that work today, and could break
+existing userspace on some platforms. That may be a good idea, but I
+think we should fix the bugs first, and leave the discussion of whether
+we want to actually remove existing functionality for later.
+
+Q: Why not just add a conversion from XRGB2101010 to XRGB8888?
+A: Because that would only fix KDE, and would make it slower vs. not
+advertising XRGB2101010 at all (double conversions, plus kernel
+conversion can be slower). Plus, it doesn't make any sense as it only
+fills in one entry in the conversion matrix. If we wanted to actually
+fill out the conversion matrix, and thus support everything simpledrm
+has advertised to day correctly, we would need helpers for:
+
+rgb565->rgb888
+rgb888->rgb565
+rgb565->xrgb2101010
+rgb888->xrgb2101010
+xrgb2101010->rgb565
+xrgb2101010->rgb888
+xrgb2101010->xrgb8888
+
+That seems like overkill and unlikely to actually help anyone, it'd just
+give userspace more options to shoot itself in the foot with a
+sub-optimal format choice. And it's a pile of code.
+
+- Hector
