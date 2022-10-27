@@ -2,192 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB3460F356
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3612D60F38A
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235404AbiJ0JME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 05:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
+        id S235357AbiJ0JUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 05:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235347AbiJ0JLD (ORCPT
+        with ESMTP id S235353AbiJ0JUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 05:11:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8872140E04
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:10:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666861840;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ziau/u6EFDYrbkB/0U+jFJAy6/VcVCK6XBP9il5+IKo=;
-        b=DR5zuXHf5QYQzPYnaLGXt8eE8oU7NfyR9QZxMvMVwhJuA7xwH/EZj0ElS7pRNsptcEFkeu
-        e8JSGMnmc/lnJg6iqUJEWGsUMIAVat7/2FcnYJhRcSqpDtDF6bH0JFo9+Mm0LJrSPHvsgb
-        MmUgl5J7hAXmZ1k2btfJ5I15MkVZFPM=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-631-m41V0twtOKWg0wuLqEwFJg-1; Thu, 27 Oct 2022 05:10:39 -0400
-X-MC-Unique: m41V0twtOKWg0wuLqEwFJg-1
-Received: by mail-lj1-f200.google.com with SMTP id v9-20020a2e9909000000b002770921b281so422972lji.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:10:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ziau/u6EFDYrbkB/0U+jFJAy6/VcVCK6XBP9il5+IKo=;
-        b=5wCmGmxsDuawhWVpZm36bECRp9xAHpIlmHapGK4gzmLQ3Z9pi9ApGXtWXUEIkIKS/U
-         M4JfBoZxQr5nYziiU9kgm+7aGgOqJzrMlUyXYEgeOsfhfWuG4UOWHFYp4Vis1WhMG1yZ
-         3C3QjP69ImOkwyX5nlWRh7vb6YDMSbvVFxpROBwLyzfpaZrk5WY77iW5CBOW9VC+TcTT
-         QANThfoX60u62GMjZqTVbtNmoXOARn11qjr4Lrnhi0JUaH4caHFLhhH3BPw6dgerr9a1
-         xivLIHwjyeFFfFNGzudZwHwGrziU9qwM6NMXKFWU5Et9ZM/Zk+8B/vvid3Q1D38A/lHr
-         +NLA==
-X-Gm-Message-State: ACrzQf1kYEyP4bM8ugvugb6AMKfPJ0ReG9e7E5xqozF0hTHmzM0CcwnB
-        ucv0o5WSjx+6RP3m8POgFRrLwEt60gESLx2QMqV7I1XOuzXwkJR4xCS6Hb4JhJLrPYRpwGN5H/K
-        htAhBm9QL+c4TuBzm7mRI2JckvYEvghKOQBligQ4k
-X-Received: by 2002:ac2:47e1:0:b0:4af:5088:9576 with SMTP id b1-20020ac247e1000000b004af50889576mr2998558lfp.468.1666861837592;
-        Thu, 27 Oct 2022 02:10:37 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4fIV6ydQRgmrMVyIU2r9H0oB18YXsVEUdlFYjrQuSfS2ucEUJhllLqj68fs6nzyLA4Vj6RKPmXnDYesOOZKOo=
-X-Received: by 2002:ac2:47e1:0:b0:4af:5088:9576 with SMTP id
- b1-20020ac247e1000000b004af50889576mr2998542lfp.468.1666861837363; Thu, 27
- Oct 2022 02:10:37 -0700 (PDT)
+        Thu, 27 Oct 2022 05:20:22 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31D91FFAA
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:20:14 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29R5J10Z029019;
+        Thu, 27 Oct 2022 09:19:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=FEV68A32v+oOBg8wVp3Otkn00cWdPegP8fO0J269VmU=;
+ b=kl0CZfLheEoNmxtL91PiVORGn+aYtSEPUb51CMMETYSoxZmI20ZbJeA7xXVGV6tpsT/F
+ 6c5cEqMPQ0o9YDVMFfWavFQnIlBQU+YphWKcPoB/s3JNzNMJ7ed1QCX19wmjX9E05oqZ
+ YrMC0VW5GgGJ2Cl3Q7dHyj2I3l17J7QHGUqIfiiM5SqQrKM5JJE9mjAXwqmyRd8UDu1I
+ iR6sJJgued61POzIbL0Ii073PV2/LvZMMZAsF20ba7+8bOjZ68dDPtc8xt8H5emsjMlh
+ +07rwk6tfbF0khazcWz002PbJ5Xyu5ct95kcwY5LS84zt9LyYDj5DLyILdY3YlCBvlJP DQ== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kfahca1y9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Oct 2022 09:19:56 +0000
+Received: from nasanex01c.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29R9JtoD027680
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Oct 2022 09:19:55 GMT
+Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Thu, 27 Oct 2022 02:19:52 -0700
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     <jaegeuk@kernel.org>, <chao@kernel.org>, <mhiramat@kernel.org>
+CC:     <linux-f2fs-devel@lists.sourceforge.net>,
+        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: [PATCH v2 1/2] f2fs: fix the assign logic of iocb
+Date:   Thu, 27 Oct 2022 14:42:40 +0530
+Message-ID: <1666861961-12924-1-git-send-email-quic_mojha@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20221025093458.457089-1-benjamin.tissoires@redhat.com>
- <20221025093458.457089-3-benjamin.tissoires@redhat.com> <20221025225219.i3pi7ewue6xqeig4@macbook-pro-4.dhcp.thefacebook.com>
-In-Reply-To: <20221025225219.i3pi7ewue6xqeig4@macbook-pro-4.dhcp.thefacebook.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Thu, 27 Oct 2022 10:11:31 +0100
-Message-ID: <CAO-hwJ+WWO-GhzX-eaoGtF8+5Mw-QOVREWYmtm-VNBF5NGC22g@mail.gmail.com>
-Subject: Re: [PATCH hid v11 02/14] HID: initial BPF implementation
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: R5lVbCzdee-6cVQiQTaQ7LAAcnteaSjr
+X-Proofpoint-GUID: R5lVbCzdee-6cVQiQTaQ7LAAcnteaSjr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-27_03,2022-10-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ priorityscore=1501 mlxlogscore=999 malwarescore=0 bulkscore=0 phishscore=0
+ spamscore=0 impostorscore=0 clxscore=1015 adultscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2210270052
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 11:52 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Oct 25, 2022 at 11:34:46AM +0200, Benjamin Tissoires wrote:
-> >  include/linux/hid.h                           |   5 +
-> >  include/linux/hid_bpf.h                       | 102 +++
-> >  include/uapi/linux/hid_bpf.h                  |  25 +
-> >  tools/include/uapi/linux/hid.h                |  62 ++
-> >  tools/include/uapi/linux/hid_bpf.h            |  25 +
->
-> ...
->
-> > +++ b/include/linux/hid_bpf.h
-> > @@ -0,0 +1,102 @@
-> > +/* SPDX-License-Identifier: GPL-2.0+ */
-> > +
-> > +#ifndef __HID_BPF_H
-> > +#define __HID_BPF_H
-> > +
-> > +#include <linux/spinlock.h>
-> > +#include <uapi/linux/hid.h>
-> > +#include <uapi/linux/hid_bpf.h>
-> > +
-> > +struct hid_device;
-> > +
-> > +/*
-> > + * The following is the HID BPF API.
-> > + *
-> > + * It should be treated as UAPI, so extra care is required
-> > + * when making change to this file.
-> > + */
->
-> I thought at the maintainer summit we discussed that it shouldn't be
-> treated as uapi. There is no need to draw this line right now.
-> If the whole concept turns out to be useful and api is stable
-> then promote it.
+commit 18ae8d12991b ("f2fs: show more DIO information in tracepoint")
+introduces iocb field in 'f2fs_direct_IO_enter' trace event
+And it only assigns the pointer and later it accesses its field
+in trace print log.
 
-I'd still like to keep the kfunc API explicitly marked as "danger
-zone". I want to let contributors know that changing this part has an
-impact on the existing available bpf programs that are out of the tree
-(the HID firewall for instance might be out of the tree).
+Unable to handle kernel paging request at virtual address ffffffc04cef3d30
+Mem abort info:
+ESR = 0x96000007
+EC = 0x25: DABT (current EL), IL = 32 bits
 
-I'll reword it to not mark it as uapi though.
+ pc : trace_raw_output_f2fs_direct_IO_enter+0x54/0xa4
+ lr : trace_raw_output_f2fs_direct_IO_enter+0x2c/0xa4
+ sp : ffffffc0443cbbd0
+ x29: ffffffc0443cbbf0 x28: ffffff8935b120d0 x27: ffffff8935b12108
+ x26: ffffff8935b120f0 x25: ffffff8935b12100 x24: ffffff8935b110c0
+ x23: ffffff8935b10000 x22: ffffff88859a936c x21: ffffff88859a936c
+ x20: ffffff8935b110c0 x19: ffffff8935b10000 x18: ffffffc03b195060
+ x17: ffffff8935b11e76 x16: 00000000000000cc x15: ffffffef855c4f2c
+ x14: 0000000000000001 x13: 000000000000004e x12: ffff0000ffffff00
+ x11: ffffffef86c350d0 x10: 00000000000010c0 x9 : 000000000fe0002c
+ x8 : ffffffc04cef3d28 x7 : 7f7f7f7f7f7f7f7f x6 : 0000000002000000
+ x5 : ffffff8935b11e9a x4 : 0000000000006250 x3 : ffff0a00ffffff04
+ x2 : 0000000000000002 x1 : ffffffef86a0a31f x0 : ffffff8935b10000
+ Call trace:
+  trace_raw_output_f2fs_direct_IO_enter+0x54/0xa4
+  print_trace_fmt+0x9c/0x138
+  print_trace_line+0x154/0x254
+  tracing_read_pipe+0x21c/0x380
+  vfs_read+0x108/0x3ac
+  ksys_read+0x7c/0xec
+  __arm64_sys_read+0x20/0x30
+  invoke_syscall+0x60/0x150
+  el0_svc_common.llvm.1237943816091755067+0xb8/0xf8
+  do_el0_svc+0x28/0xa0
 
->
-> > +++ b/include/uapi/linux/hid_bpf.h
-> > @@ -0,0 +1,25 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> > +
-> > +#ifndef _UAPI_HID_BPF_H
-> > +#define _UAPI_HID_BPF_H
-> > +
-> > +#include <linux/const.h>
-> > +#include <linux/hid.h>
-> > +
-> > +/**
-> > + * enum hid_bpf_attach_flags - flags used when attaching a HIF-BPF program
-> > + *
-> > + * @HID_BPF_FLAG_NONE: no specific flag is used, the kernel choses where to
-> > + *                     insert the program
-> > + * @HID_BPF_FLAG_INSERT_HEAD: insert the given program before any other program
-> > + *                            currently attached to the device. This doesn't
-> > + *                            guarantee that this program will always be first
-> > + * @HID_BPF_FLAG_MAX: sentinel value, not to be used by the callers
-> > + */
-> > +enum hid_bpf_attach_flags {
-> > +     HID_BPF_FLAG_NONE = 0,
-> > +     HID_BPF_FLAG_INSERT_HEAD = _BITUL(0),
-> > +     HID_BPF_FLAG_MAX,
-> > +};
-> > +
-> > +#endif /* _UAPI_HID_BPF_H */
->
-> Not sure what is the purpose of this uapi file.
-> Since it's enum the progs can get it from vmlinux.h.
+Fix it by copying the required variables for printing and while at
+it fix the similar issue at some other places in the same file.
 
-Good point. It can easily go into the non uapi hid_bpf.h
+Fixes: 18ae8d12991b ("f2fs: show more DIO information in tracepoint")
+Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+---
+Changes in v2:
+ - Added commit text with crash information.
+ - Fixed the similar issue at some other places in the file.
+ - Only copy the required variables instead of memcpy.
 
->
-> > diff --git a/tools/include/uapi/linux/hid.h b/tools/include/uapi/linux/hid.h
-> > new file mode 100644
-> > index 000000000000..3e63bea3b3e2
-> > --- /dev/null
-> > +++ b/tools/include/uapi/linux/hid.h
-> > @@ -0,0 +1,62 @@
-> > +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
-> > +/*
-> > + *  Copyright (c) 1999 Andreas Gal
-> > + *  Copyright (c) 2000-2001 Vojtech Pavlik
-> > + *  Copyright (c) 2006-2007 Jiri Kosina
-> > + */
-> > +#ifndef _UAPI__HID_H
-> > +#define _UAPI__HID_H
->
-> This is a copy of include/uapi/linux/hid.h ?
+ include/trace/events/f2fs.h | 34 +++++++++++++++++++---------------
+ 1 file changed, 19 insertions(+), 15 deletions(-)
 
-Yes it is
-
-> Probably should be a separate commit to make it obvious.
->
-
-I'll need to assess why I needed that. I think it was related to the
-selftests, but now that they are in selftests/hid, I can probably have
-a special include in the Makefile to not have to duplicate the file at
-all.
-
-Thanks for the review :)
-
-Cheers,
-Benjamin
+diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
+index c6b3724..ff57e7f 100644
+--- a/include/trace/events/f2fs.h
++++ b/include/trace/events/f2fs.h
+@@ -322,7 +322,7 @@ TRACE_EVENT(f2fs_unlink_enter,
+ 		__field(ino_t,	ino)
+ 		__field(loff_t,	size)
+ 		__field(blkcnt_t, blocks)
+-		__field(const char *,	name)
++		__string(name,  dentry->d_name.name)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -330,7 +330,7 @@ TRACE_EVENT(f2fs_unlink_enter,
+ 		__entry->ino	= dir->i_ino;
+ 		__entry->size	= dir->i_size;
+ 		__entry->blocks	= dir->i_blocks;
+-		__entry->name	= dentry->d_name.name;
++		__assign_str(name, dentry->d_name.name);
+ 	),
+ 
+ 	TP_printk("dev = (%d,%d), dir ino = %lu, i_size = %lld, "
+@@ -338,7 +338,7 @@ TRACE_EVENT(f2fs_unlink_enter,
+ 		show_dev_ino(__entry),
+ 		__entry->size,
+ 		(unsigned long long)__entry->blocks,
+-		__entry->name)
++		__get_str(name))
+ );
+ 
+ DEFINE_EVENT(f2fs__inode_exit, f2fs_unlink_exit,
+@@ -940,25 +940,29 @@ TRACE_EVENT(f2fs_direct_IO_enter,
+ 	TP_STRUCT__entry(
+ 		__field(dev_t,	dev)
+ 		__field(ino_t,	ino)
+-		__field(struct kiocb *,	iocb)
++		__field(loff_t,	ki_pos)
++		__field(int,	ki_flags)
++		__field(u16,	ki_ioprio)
+ 		__field(unsigned long,	len)
+ 		__field(int,	rw)
+ 	),
+ 
+ 	TP_fast_assign(
+-		__entry->dev	= inode->i_sb->s_dev;
+-		__entry->ino	= inode->i_ino;
+-		__entry->iocb	= iocb;
+-		__entry->len	= len;
+-		__entry->rw	= rw;
++		__entry->dev		= inode->i_sb->s_dev;
++		__entry->ino		= inode->i_ino;
++		__entry->ki_pos		= iocb->ki_pos;
++		__entry->ki_flags	= iocb->ki_flags;
++		__entry->ki_ioprio	= iocb->ki_ioprio;
++		__entry->len		= len;
++		__entry->rw		= rw;
+ 	),
+ 
+ 	TP_printk("dev = (%d,%d), ino = %lu pos = %lld len = %lu ki_flags = %x ki_ioprio = %x rw = %d",
+ 		show_dev_ino(__entry),
+-		__entry->iocb->ki_pos,
++		__entry->ki_pos,
+ 		__entry->len,
+-		__entry->iocb->ki_flags,
+-		__entry->iocb->ki_ioprio,
++		__entry->ki_flags,
++		__entry->ki_ioprio,
+ 		__entry->rw)
+ );
+ 
+@@ -1407,19 +1411,19 @@ TRACE_EVENT(f2fs_write_checkpoint,
+ 	TP_STRUCT__entry(
+ 		__field(dev_t,	dev)
+ 		__field(int,	reason)
+-		__field(char *,	msg)
++		__string(dest_msg, msg)
+ 	),
+ 
+ 	TP_fast_assign(
+ 		__entry->dev		= sb->s_dev;
+ 		__entry->reason		= reason;
+-		__entry->msg		= msg;
++		__assign_str(dest_msg, msg);
+ 	),
+ 
+ 	TP_printk("dev = (%d,%d), checkpoint for %s, state = %s",
+ 		show_dev(__entry->dev),
+ 		show_cpreason(__entry->reason),
+-		__entry->msg)
++		__get_str(dest_msg))
+ );
+ 
+ DECLARE_EVENT_CLASS(f2fs_discard,
+-- 
+2.7.4
 
