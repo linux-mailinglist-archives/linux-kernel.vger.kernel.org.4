@@ -2,150 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FCBA60F5E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A4F60F5E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234753AbiJ0LFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 07:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34616 "EHLO
+        id S235252AbiJ0LGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 07:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233971AbiJ0LFu (ORCPT
+        with ESMTP id S234759AbiJ0LGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 07:05:50 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D503DD886
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 04:05:49 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso1105316pjc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 04:05:49 -0700 (PDT)
+        Thu, 27 Oct 2022 07:06:10 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43CDE0706;
+        Thu, 27 Oct 2022 04:06:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=XEwRhdQJcdc4xZoLtd367feLEMlETLt1yb2FFn/p5XA=;
-        b=YP/O5W/XhBIROQVWOlPHb/VksUkA9NLH4PIHnj1VW/THheH22UE4AFCOq/aM/RsZpt
-         ldzum9OUFrBGbRAwl8jeCOaw7knYL7AEWs158PnAf27trfSec3WI/JeZrGmc887v/WwV
-         KqhdVy8rlClRc0To4fOfeHMCofppIYlmVTD4qlE4CwNF0S3ptrOOci9HQPZCwLC1vCw4
-         V4qRpKaCW5O8VTsk+/6xfFbd6/1VRGRbE59vjLMnUg65qC7FPrjI3m5VVtiAR47i6CvJ
-         8nog5gjiQbUslWsZZOsmBDeSG5KDPjbIG2lVeJbSBQjkvcqtJC8UYkUuh2R1c2Eeydzn
-         GQQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XEwRhdQJcdc4xZoLtd367feLEMlETLt1yb2FFn/p5XA=;
-        b=GOIVQrfgofx6RjMb68H0q2LCklk3eUqjj1gxGpG6SSgwSGklBNiMTPNoCuHQAlCyqt
-         jTzKHngn4wJk7v6HXUnFMUoDycIo4hOcFAmZX0OYD6o1BEjRJa2QyvgYX922Y/j7DRRt
-         pvD8AaxzdgrZxuh2/qrZl3lM4XxKBJNOlGevnv1l/iT/rlu1rfsthi50xbz5npbjAIa1
-         sBgtnz7LN+Y50hEwqpz1HROLbzSKqPXT00jvovkeAolK5DjCzmZqbxCQAEp/NEpCbMG5
-         ik4VNFKDSpe9SAASUtHF1P8lv5t2LA9MM8f/djEWwxQSSHvjtuvpmyS7jzn4oPXK5hHX
-         pIGQ==
-X-Gm-Message-State: ACrzQf2+l/4RGn8/WfaAYA5QFBB1BaIwB/jPT15trRyEC2+HIuWCm9WY
-        sivBz4r7VzfPWkU75RU4+wL9
-X-Google-Smtp-Source: AMsMyM7kzSGbqXsxZ1bo/hrYc02Ge8C4ogqMxcjTXdPJQ+1Awiz3BfhKLShVOsvOX7HAavrf04IveQ==
-X-Received: by 2002:a17:902:ebc4:b0:186:b32c:4ce5 with SMTP id p4-20020a170902ebc400b00186b32c4ce5mr17564012plg.74.1666868748462;
-        Thu, 27 Oct 2022 04:05:48 -0700 (PDT)
-Received: from thinkpad ([117.202.186.162])
-        by smtp.gmail.com with ESMTPSA id iz15-20020a170902ef8f00b00186a1b243basm916705plb.226.2022.10.27.04.05.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 04:05:47 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 16:35:40 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Ben Dooks <ben.dooks@codethink.co.uk>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Bjorn Helgaas <helgaas@kernel.org>, lpieralisi@kernel.org,
-        Vidya Sagar <vidyas@nvidia.com>, jingoohan1@gmail.com,
-        gustavo.pimentel@synopsys.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, treding@nvidia.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
- logging
-Message-ID: <20221027110540.GB76627@thinkpad>
-References: <20221018164329.GA3808783@bhelgaas>
- <8670e757-7275-57eb-3f5c-0a21ba354e37@nvidia.com>
- <6bba0876-3002-0614-5aeb-c4cf901938ca@codethink.co.uk>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1666868767; x=1698404767;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=9vDsFDWsTM0HLzYvJtlR+FkhaxKdyM61nwfYVVJDHfs=;
+  b=q/YD47EfZ24rAElSea5YNfe1GAz6V0idmC/rXu13Ef4V+eMb8v3RXHr0
+   Rzt+sGwgfYC0Lq9XpM2LFLjaFBiuSlxvTam7f+SfAEUbXYow6mdizd0rH
+   Ef15ybKtN8acLjjYTiYhpdHpMsolvnuhkCyhzHdfCR1FXx8ruAu6a2GKS
+   Y=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Oct 2022 04:06:07 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 04:06:07 -0700
+Received: from zijuhu-gv.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Thu, 27 Oct 2022 04:06:05 -0700
+From:   Zijun Hu <quic_zijuhu@quicinc.com>
+To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
+        <luiz.dentz@gmail.com>, <luiz.von.dentz@intel.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
+        <netdev@vger.kernel.org>, Zijun Hu <zijuhu@qti.qualcomm.com>
+Subject: [PATCH v1] Bluetooth: btusb: Fix enable failure for a CSR BT dongle
+Date:   Thu, 27 Oct 2022 19:06:00 +0800
+Message-ID: <1666868760-4680-1-git-send-email-quic_zijuhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6bba0876-3002-0614-5aeb-c4cf901938ca@codethink.co.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 10:55:34AM +0100, Ben Dooks wrote:
-> On 26/10/2022 12:39, Jon Hunter wrote:
-> > Hi Lorenzo,
-> > 
-> > On 18/10/2022 17:43, Bjorn Helgaas wrote:
-> > > On Tue, Oct 18, 2022 at 07:21:54AM +0100, Jon Hunter wrote:
-> > > > Hi Bjorn,
-> > > > 
-> > > > On 13/09/2022 11:12, Vidya Sagar wrote:
-> > > > > Some of the platforms (like Tegra194 and Tegra234) have open slots and
-> > > > > not having an endpoint connected to the slot is not an error.
-> > > > > So, changing the macro from dev_err to dev_info to log the event.
-> > > > > 
-> > > > > Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> > > > > ---
-> > > > >    drivers/pci/controller/dwc/pcie-designware.c | 2 +-
-> > > > >    1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > 
-> > > > > diff --git a/drivers/pci/controller/dwc/pcie-designware.c
-> > > > > b/drivers/pci/controller/dwc/pcie-designware.c
-> > > > > index 650a7f22f9d0..25154555aa7a 100644
-> > > > > --- a/drivers/pci/controller/dwc/pcie-designware.c
-> > > > > +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> > > > > @@ -456,7 +456,7 @@ int dw_pcie_wait_for_link(struct dw_pcie *pci)
-> > > > >        }
-> > > > >        if (retries >= LINK_WAIT_MAX_RETRIES) {
-> > > > > -        dev_err(pci->dev, "Phy link never came up\n");
-> > > > > +        dev_info(pci->dev, "Phy link never came up\n");
-> > > > >            return -ETIMEDOUT;
-> > > > >        }
-> > > > 
-> > > > 
-> > > > Are you OK to take this change?
-> > > 
-> > > When this came up, Lorenzo was in the middle of a big move and I was
-> > > covering for him while he was unavailable.  But he's back, and I'm
-> > > sure he will resolve this soon.
-> > > 
-> > > Personally I'm OK either way.
-> > > 
-> > > Bjorn
-> > 
-> > 
-> > Can we come to a conclusion on this?
-> > 
-> > We have tests that fail when errors/warning messages are reported. We
-> > can choose to ignore these errors, but given that this is not an error
-> > in this case, we were thinking it is better to make it informational.
-> 
-> Is there any hardware presence detect available to just avoid even
-> trying to bring a link up on an disconnected port?
-> 
+From: Zijun Hu <zijuhu@qti.qualcomm.com>
 
-PRSNT pin is not available on all form factors sadly.
+A CSR BT dongle fails to be enabled bcz it is not detected as fake
+rightly, fixed by correcting fake detection condition.
 
-Thanks,
-Mani
+below btmon error log says HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL is not set.
 
-> 
-> -- 
-> Ben Dooks				http://www.codethink.co.uk/
-> Senior Engineer				Codethink - Providing Genius
-> 
-> https://www.codethink.co.uk/privacy.html
-> 
+< HCI Command: Set Event Filter (0x03|0x0005) plen 1        #23 [hci0]
+        Type: Clear All Filters (0x00)
+> HCI Event: Command Complete (0x0e) plen 4                 #24 [hci0]
+      Set Event Filter (0x03|0x0005) ncmd 1
+        Status: Invalid HCI Command Parameters (0x12)
 
+the quirk is not set bcz current fake detection does not mark the dongle
+as fake with below version info.
+
+< HCI Command: Read Local Version In.. (0x04|0x0001) plen 0  #1 [hci0]
+> HCI Event: Command Complete (0x0e) plen 12                 #2 [hci0]
+      Read Local Version Information (0x04|0x0001) ncmd 1
+        Status: Success (0x00)
+        HCI version: Bluetooth 4.0 (0x06) - Revision 12576 (0x3120)
+        LMP version: Bluetooth 4.0 (0x06) - Subversion 8891 (0x22bb)
+        Manufacturer: Cambridge Silicon Radio (10)
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=60824
+Signed-off-by: Zijun Hu <zijuhu@qti.qualcomm.com>
+---
+ drivers/bluetooth/btusb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index 420be2ee2acf..727469d073f9 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -2155,7 +2155,7 @@ static int btusb_setup_csr(struct hci_dev *hdev)
+ 		is_fake = true;
+ 
+ 	else if (le16_to_cpu(rp->lmp_subver) <= 0x22bb &&
+-		 le16_to_cpu(rp->hci_ver) > BLUETOOTH_VER_4_0)
++		 le16_to_cpu(rp->hci_ver) >= BLUETOOTH_VER_4_0)
+ 		is_fake = true;
+ 
+ 	/* Other clones which beat all the above checks */
 -- 
-மணிவண்ணன் சதாசிவம்
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
+
