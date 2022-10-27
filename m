@@ -2,108 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7EB60F660
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16C560F64E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234974AbiJ0LlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 07:41:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
+        id S235064AbiJ0Lhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 07:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234428AbiJ0LlU (ORCPT
+        with ESMTP id S233867AbiJ0Lhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 07:41:20 -0400
-X-Greylist: delayed 242 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Oct 2022 04:41:19 PDT
-Received: from out203-205-221-231.mail.qq.com (out203-205-221-231.mail.qq.com [203.205.221.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95196CD2E;
-        Thu, 27 Oct 2022 04:41:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1666870876;
-        bh=kq2dkLdtlAFSXtPcRBGcoOgLscYYb762vapxdZuQxtY=;
-        h=From:To:Cc:Subject:Date;
-        b=C4dzwzBj2PhL7Uf5vehDltmOxapHBzlFV8o/EDjAXbrHmxvXktRz8vL0Fe9QkcUFl
-         K0zM3nTLk6B/WjqZVbdUpAG8/Je1mLngopGLi73n2GfDiq5BCBIuTai7tcgeCRkGLT
-         5lkSP7UClzM5sC77mjXSKof0DiHe5o16VM+5H+5w=
-Received: from localhost.localdomain ([2408:8406:7921:e168:31:95d9:81c3:8f7a])
-        by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
-        id 873AA247; Thu, 27 Oct 2022 19:33:51 +0800
-X-QQ-mid: xmsmtpt1666870431tz61axw4g
-Message-ID: <tencent_EE3E19F80ACD66955D26A878BC768CFA210A@qq.com>
-X-QQ-XMAILINFO: M7uElAZZZMmFu5KDsmeZ/hj057vsdXmD9fbgbJsbI3L+ZJAKzeY6635AhyTWCr
-         wEWttLcQ5MnRQGTlFR+XfvpCjETgBctsPVgaKiJqlagYt3ex61y7p5GXLTexiKyv7MdsdpF80Wfp
-         jtr97YlABnP0c3MgB6SlNr4G5/kdyMeXXVbeM9MwEngaCCH9sm9KJGNQ49aRbVmfxhkteXY1+qWC
-         Rqa8YoL4U2MJKsj6cVRIHUz1yHdXxIlsixPptxJOSf1AIn+18qfftN/YKw0Nv53pLQdU94xRCASd
-         JLq9k7YqXaf/RtS6DWpgtc+CNuKLA96Yu47t9nPgsJDjV+O3aEYPRfaILly+n+mlAuHCf3knPkbM
-         u6XYR9x9SOigUTIxt0zS3vcJa2TqO3CfwWQGRztFeI6Ar4batnN/auU/8c1TflJQ47L9tNV+sqw5
-         2ZiSX3pkTF+pKGVJN2vrdYjjwEpIKuH/YZ+bNT9VXOGLb7JFDUzTftKY+T8+EB/Wzbr6gkTcAr+U
-         ZlS+JH22M6Gp/OsPBpPg35hZmQ9izNKGZ/v7z6uMJoaLj8E1Gs8Z53V8ntJE4NZFZvVCuWxaBNYi
-         3SRboncW0r6IBW6egthE2iQp1G9iinZSj5qINyOSHxOZprwhDDScOUzBzaQX78e5Tu5YK3YP+5LB
-         uGkIbGGV5UROnwUQ3w9zzPPSVqhpk+gjQkfyaOUeGz7p/feD6h+ni2Mxh445aMCWPaugoGykIJzP
-         6CBUOnlXDO7lFeLYzrfhf8xdDx6g5HghkAeXzEeCxNBl0PJPjaCkDWxa7cPm8dbpcE4Nj0F2WdCM
-         eY4KuSbqr5W24h06bRNyzbYjg9zTPEfPmZ+UsLhRoWBdgQ2/bjnvfj4iBGbsSexksGf2QQaIrdmZ
-         TeyoN5a3zj3QhmH2/qQWCtBNkFyeWXDVn2CFevj61noj62ScnhS6VCkz8bFoNNoAXLIh4vaIZuRo
-         5kslU9Yu1Q4pzWUzC6WYKF3+RErSk6
-From:   Rong Tao <rtoax@foxmail.com>
-Cc:     Rong Tao <rongtao@cestc.cn>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
-        Tools)),
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH bpf-next] selftests/bpf: Fix strncpy() fortify warning
-Date:   Thu, 27 Oct 2022 19:33:50 +0800
-X-OQ-MSGID: <20221027113350.40173-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 27 Oct 2022 07:37:34 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093CDE196E;
+        Thu, 27 Oct 2022 04:37:32 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Myk7903wHz15Lwm;
+        Thu, 27 Oct 2022 19:32:37 +0800 (CST)
+Received: from [10.174.179.110] (10.174.179.110) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 27 Oct 2022 19:37:30 +0800
+Message-ID: <6e9d8e46-708a-a431-b673-a5cb5b46ad86@huawei.com>
+Date:   Thu, 27 Oct 2022 19:37:30 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH STABLE 5.10] mm/memory: add non-anonymous page check in
+ the copy_present_page()
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <akpm@linux-foundation.org>, <peterx@redhat.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>
+References: <20221024094911.3054769-1-songyuanzheng@huawei.com>
+ <Y1lluEIsa2T0wXE6@kroah.com>
+From:   songyuanzheng <songyuanzheng@huawei.com>
+In-Reply-To: <Y1lluEIsa2T0wXE6@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.110]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+Hi, Greg KH,
 
-Compile samples/bpf, error:
-$ cd samples/bpf
-$ make
-...
-In function ‘__enable_controllers’:
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:80:17: warning: ‘strncpy’ specified bound 4097 equals destination size [-Wstringop-truncation]
-   80 |                 strncpy(enable, controllers, sizeof(enable));
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Currently, this patch is under review and no correct solution
+is available to solve this problem. After a perfect patch is
+available, I will send the corresponding patch to 5.15y.
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- tools/testing/selftests/bpf/cgroup_helpers.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2022/10/27 0:52, Greg KH wrote:
+> On Mon, Oct 24, 2022 at 09:49:11AM +0000, Yuanzheng Song wrote:
+>> The vma->anon_vma of the child process may be NULL because
+>> the entire vma does not contain anonymous pages. In this
+>> case, a BUG will occur when the copy_present_page() passes
+>> a copy of a non-anonymous page of that vma to the
+>> page_add_new_anon_rmap() to set up new anonymous rmap.
+>>
+>> ------------[ cut here ]------------
+>> kernel BUG at mm/rmap.c:1044!
+>> Internal error: Oops - BUG: 0 [#1] SMP
+>> Modules linked in:
+>> CPU: 2 PID: 3617 Comm: test Not tainted 5.10.149 #1
+>> Hardware name: linux,dummy-virt (DT)
+>> pstate: 80000005 (Nzcv daif -PAN -UAO -TCO BTYPE=--)
+>> pc : __page_set_anon_rmap+0xbc/0xf8
+>> lr : __page_set_anon_rmap+0xbc/0xf8
+>> sp : ffff800014c1b870
+>> x29: ffff800014c1b870 x28: 0000000000000001
+>> x27: 0000000010100073 x26: ffff1d65c517baa8
+>> x25: ffff1d65cab0f000 x24: ffff1d65c416d800
+>> x23: ffff1d65cab5f248 x22: 0000000020000000
+>> x21: 0000000000000001 x20: 0000000000000000
+>> x19: fffffe75970023c0 x18: 0000000000000000
+>> x17: 0000000000000000 x16: 0000000000000000
+>> x15: 0000000000000000 x14: 0000000000000000
+>> x13: 0000000000000000 x12: 0000000000000000
+>> x11: 0000000000000000 x10: 0000000000000000
+>> x9 : ffffc3096d5fb858 x8 : 0000000000000000
+>> x7 : 0000000000000011 x6 : ffff5a5c9089c000
+>> x5 : 0000000000020000 x4 : ffff5a5c9089c000
+>> x3 : ffffc3096d200000 x2 : ffffc3096e8d0000
+>> x1 : ffff1d65ca3da740 x0 : 0000000000000000
+>> Call trace:
+>>   __page_set_anon_rmap+0xbc/0xf8
+>>   page_add_new_anon_rmap+0x1e0/0x390
+>>   copy_pte_range+0xd00/0x1248
+>>   copy_page_range+0x39c/0x620
+>>   dup_mmap+0x2e0/0x5a8
+>>   dup_mm+0x78/0x140
+>>   copy_process+0x918/0x1a20
+>>   kernel_clone+0xac/0x638
+>>   __do_sys_clone+0x78/0xb0
+>>   __arm64_sys_clone+0x30/0x40
+>>   el0_svc_common.constprop.0+0xb0/0x308
+>>   do_el0_svc+0x48/0xb8
+>>   el0_svc+0x24/0x38
+>>   el0_sync_handler+0x160/0x168
+>>   el0_sync+0x180/0x1c0
+>> Code: 97f8ff85 f9400294 17ffffeb 97f8ff82 (d4210000)
+>> ---[ end trace a972347688dc9bd4 ]---
+>> Kernel panic - not syncing: Oops - BUG: Fatal exception
+>> SMP: stopping secondary CPUs
+>> Kernel Offset: 0x43095d200000 from 0xffff800010000000
+>> PHYS_OFFSET: 0xffffe29a80000000
+>> CPU features: 0x08200022,61806082
+>> Memory Limit: none
+>> ---[ end Kernel panic - not syncing: Oops - BUG: Fatal exception ]---
+>>
+>> This problem has been fixed by the fb3d824d1a46
+>> ("mm/rmap: split page_dup_rmap() into page_dup_file_rmap() and page_try_dup_anon_rmap()"),
+>> but still exists in the linux-5.10.y branch.
+>>
+>> This patch is not applicable to this version because
+>> of the large version differences. Therefore, fix it by
+>> adding non-anonymous page check in the copy_present_page().
+>>
+>> Fixes: 70e806e4e645 ("mm: Do early cow for pinned pages during fork() for ptes")
+>> Signed-off-by: Yuanzheng Song <songyuanzheng@huawei.com>
+>> ---
+>>   mm/memory.c | 11 +++++++++++
+>>   1 file changed, 11 insertions(+)
+> 
+> We also need this in 5.15.y, right?  Can you provide a working version
+> for there so that no one upgrades from 5.10.y to 5.15.y and has a
+> regression?
+> 
+> I'll wait for that before taking this one.
+> 
+> thanks,
+> 
+> greg k-h
+> .
+> 
+Thanks,
 
-diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
-index e914cc45b766..a70e873b267e 100644
---- a/tools/testing/selftests/bpf/cgroup_helpers.c
-+++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-@@ -77,7 +77,7 @@ static int __enable_controllers(const char *cgroup_path, const char *controllers
- 		enable[len] = 0;
- 		close(fd);
- 	} else {
--		strncpy(enable, controllers, sizeof(enable));
-+		strncpy(enable, controllers, sizeof(enable) - 1);
- 	}
- 
- 	snprintf(path, sizeof(path), "%s/cgroup.subtree_control", cgroup_path);
--- 
-2.31.1
-
+Yuanzheng
+.
