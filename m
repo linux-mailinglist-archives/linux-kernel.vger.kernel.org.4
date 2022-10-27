@@ -2,122 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DB46100E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 20:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6894A6100E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 20:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234831AbiJ0S6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 14:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58900 "EHLO
+        id S236392AbiJ0S6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 14:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236015AbiJ0S6W (ORCPT
+        with ESMTP id S236402AbiJ0S6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 14:58:22 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7499C14032
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 11:58:21 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id h24so1913039qta.7
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 11:58:21 -0700 (PDT)
+        Thu, 27 Oct 2022 14:58:39 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294FB32A86
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 11:58:38 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9so2512390pll.7
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 11:58:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=enc8IrGpVjXGNTcKz9NxXiwj8ah68/uzbqH61bvPW30=;
-        b=T2O/UqT9b2lz5tGyVKo3w7qSdvlSrNFQ37SWI2uZf0Nn4+uPmE9YdNtiJPcnQSKinL
-         B+eqU34CGQmU9wle9SLzksOFAmckb66lWvuozE7KgX+n9kcb/Ub7DRCrODUmlcQYK39F
-         06hV4YwV43E0Nruyr0qfriRMkV9nvTunLOmD8=
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=v0rEzPQriwPo47Lm4i24LI1bHNyCZGAXuw3tIRiGOno=;
+        b=V2XxrzoXvdqaJk8i30tWvAs37oiT3u8hHgDDrUIbwP/IiKCO+3DGQu3a5Gd2T5pnHG
+         OqVCAe7Wk9XnPtoRuGu/qBocuqjw7BMDvQF68tXzBjBS2Nad/HHlkoQpPntvv/LbASfd
+         9kzsqSJokfr2PTlfqtanN0CvvfI4o3jMdiWqA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=enc8IrGpVjXGNTcKz9NxXiwj8ah68/uzbqH61bvPW30=;
-        b=tIidK/CsZDUenndOCsz7ei+QQkOzXON/UZIi79UWStMheDACKEZs/STR1KK/yhL1M5
-         GjCyp802ysDMJasC96rU4NQA7Gv1cGf+Y3sby4039qLlmvLoKOi3v1v8/KBngJKNqKA2
-         pjD1mG6LmyxRKd6mimsJHqq1y7T3F6CSEJ/3Pk54VDy/RrF9bQ2OLFWA3rt3ttqrKfWN
-         0ATiBAWiWHLIrHXQDqtJ52VJ0o85H4Ov/gKUTiO+PJnvqoXVIckWltgCoVhSVLwQb8ms
-         NVJMazaugCIb49XngBmRRnhLG4V6/NdF5hy7bSCP6o9wVLcOm84F/vs35S2NRR+YPS2I
-         4XUQ==
-X-Gm-Message-State: ACrzQf1yZqLUhKAv7k9pJ5SGDG7y0iKSWOzuZOo93/hrkpgEsE5oQtBh
-        wvS5VG0HK4I8hhjO+2rWzxH5fgK+PylbKA==
-X-Google-Smtp-Source: AMsMyM4wN09CFBsYmoyHPBEdrjQvoOR+cntEoRzy1SFw8RKTk2O+19AJrXBUP507CzqqZAgQkYdrBg==
-X-Received: by 2002:ac8:5848:0:b0:39c:e974:1c2c with SMTP id h8-20020ac85848000000b0039ce9741c2cmr42445928qth.674.1666897100162;
-        Thu, 27 Oct 2022 11:58:20 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id s12-20020a05622a1a8c00b003a4cda52c95sm1287774qtc.63.2022.10.27.11.58.19
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 11:58:19 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id f205so3387041yba.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 11:58:19 -0700 (PDT)
-X-Received: by 2002:a25:5389:0:b0:6bc:f12c:5d36 with SMTP id
- h131-20020a255389000000b006bcf12c5d36mr45238400ybb.184.1666897099027; Thu, 27
- Oct 2022 11:58:19 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v0rEzPQriwPo47Lm4i24LI1bHNyCZGAXuw3tIRiGOno=;
+        b=s8GPHob+peP758fqaZBUaMN9RdgpV0q9STsDol3BaHsaUvXUyNDpJSgghyrcbV/gZ0
+         PtWkJ5VTqQBM5sA9GGLwG2eGy8BZacAEhjGVDDD4c7ptuouwsu4oR00Iu3mol2i+zoOz
+         x6YDDlSNZ4pQTxXwB1Wn4yZu+HcH16IueT5JnBJJjcFLwBXCnteg7eW8DB6fDmaLxXfn
+         p224JOxRX/qkn7q+n0CurqtKFFtGK98wrKEkK81l1pLjIJVTNNN15ivibU3MOjQikg6d
+         tS7ygaTUFh3/vkkVaLI2FOtZ3UNvSJglAjBvwOmSZ+jkfBZz4bhpVxjPJtRqktAR0B4X
+         igZQ==
+X-Gm-Message-State: ACrzQf1mJBEBNcOMinMo4C/hkZJwfHCOCp6kca13imbbfP0ymoApSZdr
+        bgUOXAMewL7hOMRbbMQIjbx7YA==
+X-Google-Smtp-Source: AMsMyM7M1S3pYMn11kqaTSR05FudAWk7NZXCscCwXokV8piWycAQ3wjI0LkRvFh+wINQ10dYe4hkzA==
+X-Received: by 2002:a17:902:b68b:b0:186:aee0:53ec with SMTP id c11-20020a170902b68b00b00186aee053ecmr21476664pls.90.1666897117516;
+        Thu, 27 Oct 2022 11:58:37 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id pj7-20020a17090b4f4700b00212e60c7d9csm2986668pjb.41.2022.10.27.11.58.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 11:58:36 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 11:58:35 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Subject: Re: [PATCH] x86/uaccess: instrument copy_from_user_nmi()
+Message-ID: <202210271155.33956B1@keescook>
+References: <20221025221755.3810809-1-glider@google.com>
+ <Y1j+Tt9mnMDU0zO+@hirez.programming.kicks-ass.net>
+ <CAG_fn=XDeghFBGXT37Mc-ky-8NaPaMmCLdo3Par=xh92Fk_CAQ@mail.gmail.com>
+ <Y1o72704bVK0FgCr@hirez.programming.kicks-ass.net>
+ <CAG_fn=XESk1PPqbAVDqMdGbRwyvLvLQrm2hybr2cXaaYjfZEKA@mail.gmail.com>
 MIME-Version: 1.0
-References: <Y1oPDy2mpOd91+Ii@sol.localdomain>
-In-Reply-To: <Y1oPDy2mpOd91+Ii@sol.localdomain>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 27 Oct 2022 11:58:03 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjDQiJn6YUJ18Nb=L82qsgx3LBLtQu0xANeVoc6OAzFtQ@mail.gmail.com>
-Message-ID: <CAHk-=wjDQiJn6YUJ18Nb=L82qsgx3LBLtQu0xANeVoc6OAzFtQ@mail.gmail.com>
-Subject: Re: [GIT PULL] fscrypt fix for 6.1-rc3
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG_fn=XESk1PPqbAVDqMdGbRwyvLvLQrm2hybr2cXaaYjfZEKA@mail.gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 9:54 PM Eric Biggers <ebiggers@kernel.org> wrote:
->
-> Fix a memory leak that was introduced by a change that went into -rc1.
+On Thu, Oct 27, 2022 at 11:26:50AM -0700, Alexander Potapenko wrote:
+> On Thu, Oct 27, 2022 at 1:05 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Wed, Oct 26, 2022 at 11:38:53AM -0700, Alexander Potapenko wrote:
+> > > A bigger issue from the NMI perspective is probably
+> > > having __msan_poison_alloca() inserted in every non-noinstr kernel
+> > > function, because that hook may acquire the stackdepot lock.
+> >
+> > *urgghhh* that's broken, that must not be. There is a *TON* of NMI
+> > functions that are non-noinstr.
+> 
+> __msan_poison_alloca() is guarded by kmsan_in_runtime(), which is
+> currently implemented as:
+> 
+>   static __always_inline bool kmsan_in_runtime(void)
+>   {
+>           if ((hardirq_count() >> HARDIRQ_SHIFT) > 1)
+>                   return true;
+>           return kmsan_get_context()->kmsan_in_runtime;
+>   }
+> 
+> I think the easiest way to fix the NMI situation would be adding "if
+> in_nmi() return true"?
 
-Unrelated to the patch in question, but since it made me look, I wish
-code like that fscrypt_destroy_keyring() function would be much more
-obvious about the whole "yes, I can validly be called multiple times"
-(not exactly idempotent, but you get the idea).
+It might help to look through these threads:
 
-Yes, it does that
+https://lore.kernel.org/lkml/20220916135953.1320601-1-keescook@chromium.org/
+https://lore.kernel.org/all/20220919201648.2250764-1-keescook@chromium.org/
 
-        struct fscrypt_keyring *keyring = sb->s_master_keys;
-        ...
-        if (!keyring)
-                return;
-        ...
-        sb->s_master_keys = NULL;
+I wandered around attempting to deal with in_nmi(), etc. And in
+the end just drop the attempt to cover it. It's worth noting that
+copy_from_user_nmi() exists on 1 architecture and has exactly 1
+call-site...
 
-but it's all spread out so that you have to actually look for it (and
-check that there's not some other early return).
-
-Now, this would need an atomic xchg(NULL) to be actually thread-safe,
-and that's not what I'm looking for - I'm just putting out the idea
-that for functions that are intentionally meant to be cleanup
-functions that can be called multiple times serially, we should strive
-to make that more clear.
-
-Just putting that sequence together at the very top of the function
-would have helped, being one simple visually obvious pattern:
-
-        keyring = sb->s_master_keys;
-        if (!keyring)
-                return;
-        sb->s_master_keys = NULL;
-
-makes it easier to see that yes, it's fine to call this sequentially.
-
-It also, incidentally, tends to generate better code, because that
-means that we're just done with 'sb' entirely after that initial
-sequence and that it has better register pressure and cache patterns.
-
-No, that code generation is not really important here, but just a sign
-that this is just a good coding pattern in general - not just good for
-people looking at the code, but for the compiler and hardware too.
-
-                   Linus
+-- 
+Kees Cook
