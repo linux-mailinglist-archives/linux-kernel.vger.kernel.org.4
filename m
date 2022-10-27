@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F375C60F0CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 08:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4966A60F0C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 08:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234737AbiJ0G4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 02:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
+        id S234733AbiJ0G4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 02:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234677AbiJ0Gzp (ORCPT
+        with ESMTP id S234078AbiJ0Gzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 27 Oct 2022 02:55:45 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0103C8D5;
-        Wed, 26 Oct 2022 23:55:30 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0VTAKi.y_1666853725;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VTAKi.y_1666853725)
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B9C42D41;
+        Wed, 26 Oct 2022 23:55:32 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0VTAHLrj_1666853727;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VTAHLrj_1666853727)
           by smtp.aliyun-inc.com;
-          Thu, 27 Oct 2022 14:55:26 +0800
+          Thu, 27 Oct 2022 14:55:28 +0800
 From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 To:     Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
@@ -34,650 +34,452 @@ To:     Herbert Xu <herbert@gondor.apana.org.au>,
         linux-kernel@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com
 Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH v3 10/13] crypto: arm64/sm4 - add CE implementation for XTS mode
-Date:   Thu, 27 Oct 2022 14:55:02 +0800
-Message-Id: <20221027065505.15306-11-tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH v3 11/13] crypto: arm64/sm4 - add CE implementation for cmac/xcbc/cbcmac
+Date:   Thu, 27 Oct 2022 14:55:03 +0800
+Message-Id: <20221027065505.15306-12-tianjia.zhang@linux.alibaba.com>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 In-Reply-To: <20221027065505.15306-1-tianjia.zhang@linux.alibaba.com>
 References: <20221027065505.15306-1-tianjia.zhang@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch is a CE-optimized assembly implementation for XTS mode.
+This patch is a CE-optimized assembly implementation for cmac/xcbc/cbcmac.
 
-Benchmark on T-Head Yitian-710 2.75 GHz, the data comes from the 218 mode of
+Benchmark on T-Head Yitian-710 2.75 GHz, the data comes from the 300 mode of
 tcrypt, and compared the performance before and after this patch (the driver
-used before this patch is xts(ecb-sm4-ce)). The abscissas are blocks of
+used before this patch is XXXmac(sm4-ce)). The abscissas are blocks of
 different lengths. The data is tabulated and the unit is Mb/s:
 
 Before:
 
-xts(ecb-sm4-ce) |      16       64      128      256     1024     1420     4096
-----------------+--------------------------------------------------------------
-        XTS enc |  117.17   430.56   732.92  1134.98  2007.03  2136.23  2347.20
-        XTS dec |  116.89   429.02   733.40  1132.96  2006.13  2130.50  2347.92
+update-size    |      16      64     256    1024    2048    4096    8192
+---------------+--------------------------------------------------------
+cmac(sm4-ce)   |  293.33  403.69  503.76  527.78  531.10  535.46  535.81
+xcbc(sm4-ce)   |  292.83  402.50  504.02  529.08  529.87  536.55  538.24
+cbcmac(sm4-ce) |  318.42  415.79  497.12  515.05  523.15  521.19  523.01
 
 After:
 
-xts-sm4-ce      |      16       64      128      256     1024     1420     4096
-----------------+--------------------------------------------------------------
-        XTS enc |  224.68   798.91  1248.08  1714.60  2413.73  2467.84  2612.62
-        XTS dec |  229.85   791.34  1237.79  1720.00  2413.30  2473.84  2611.95
+update-size    |      16      64     256    1024    2048    4096    8192
+---------------+--------------------------------------------------------
+cmac-sm4-ce    |  371.99  675.28  903.56  971.65  980.57  990.40  991.04
+xcbc-sm4-ce    |  372.11  674.55  903.47  971.61  980.96  990.42  991.10
+cbcmac-sm4-ce  |  371.63  675.33  903.23  972.07  981.42  990.93  991.45
 
 Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 ---
- arch/arm64/crypto/Kconfig       |   4 +-
- arch/arm64/crypto/sm4-ce-core.S | 343 ++++++++++++++++++++++++++++++++
- arch/arm64/crypto/sm4-ce-glue.c | 159 ++++++++++++++-
- 3 files changed, 504 insertions(+), 2 deletions(-)
+ arch/arm64/crypto/sm4-ce-core.S |  70 +++++++++
+ arch/arm64/crypto/sm4-ce-glue.c | 267 +++++++++++++++++++++++++++++++-
+ 2 files changed, 336 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/crypto/Kconfig b/arch/arm64/crypto/Kconfig
-index 4b121dc0cfba..8939f5ae9214 100644
---- a/arch/arm64/crypto/Kconfig
-+++ b/arch/arm64/crypto/Kconfig
-@@ -231,7 +231,7 @@ config CRYPTO_SM4_ARM64_CE
- 	  - NEON (Advanced SIMD) extensions
- 
- config CRYPTO_SM4_ARM64_CE_BLK
--	tristate "Ciphers: SM4, modes: ECB/CBC/CFB/CTR (ARMv8 Crypto Extensions)"
-+	tristate "Ciphers: SM4, modes: ECB/CBC/CFB/CTR/XTS (ARMv8 Crypto Extensions)"
- 	depends on KERNEL_MODE_NEON
- 	select CRYPTO_SKCIPHER
- 	select CRYPTO_SM4
-@@ -242,6 +242,8 @@ config CRYPTO_SM4_ARM64_CE_BLK
- 	  - CBC (Cipher Block Chaining) mode (NIST SP800-38A)
- 	  - CFB (Cipher Feedback) mode (NIST SP800-38A)
- 	  - CTR (Counter) mode (NIST SP800-38A)
-+	  - XTS (XOR Encrypt XOR with ciphertext stealing) mode (NIST SP800-38E
-+	    and IEEE 1619)
- 
- 	  Architecture: arm64 using:
- 	  - ARMv8 Crypto Extensions
 diff --git a/arch/arm64/crypto/sm4-ce-core.S b/arch/arm64/crypto/sm4-ce-core.S
-index 414d29f8110b..ddd15ec09d38 100644
+index ddd15ec09d38..877b80c54a0d 100644
 --- a/arch/arm64/crypto/sm4-ce-core.S
 +++ b/arch/arm64/crypto/sm4-ce-core.S
 @@ -35,6 +35,7 @@
  #define RTMP3	v19
  
  #define RIV	v20
-+#define RMASK	v21
++#define RMAC	v20
+ #define RMASK	v21
  
  
- .align 3
-@@ -665,6 +666,348 @@ SYM_FUNC_START(sm4_ce_ctr_enc)
- SYM_FUNC_END(sm4_ce_ctr_enc)
+@@ -1007,6 +1008,75 @@ SYM_FUNC_START(sm4_ce_xts_dec)
+ 	ret
+ SYM_FUNC_END(sm4_ce_xts_dec)
  
- 
-+#define tweak_next(vt, vin, RTMP)					\
-+		sshr		RTMP.2d, vin.2d, #63;			\
-+		and		RTMP.16b, RTMP.16b, RMASK.16b;		\
-+		add		vt.2d, vin.2d, vin.2d;			\
-+		ext		RTMP.16b, RTMP.16b, RTMP.16b, #8;	\
-+		eor		vt.16b, vt.16b, RTMP.16b;
-+
 +.align 3
-+SYM_FUNC_START(sm4_ce_xts_enc)
++SYM_FUNC_START(sm4_ce_mac_update)
 +	/* input:
 +	 *   x0: round key array, CTX
-+	 *   x1: dst
++	 *   x1: digest
 +	 *   x2: src
-+	 *   x3: tweak (big endian, 128 bit)
-+	 *   w4: nbytes
-+	 *   x5: round key array for IV
++	 *   w3: nblocks
++	 *   w4: enc_before
++	 *   w5: enc_after
 +	 */
-+	ld1		{v8.16b}, [x3]
-+
-+	cbz		x5, .Lxts_enc_nofirst
-+
-+	SM4_PREPARE(x5)
-+
-+	/* Generate first tweak */
-+	SM4_CRYPT_BLK(v8)
-+
-+.Lxts_enc_nofirst:
 +	SM4_PREPARE(x0)
 +
-+	ands		w5, w4, #15
-+	lsr		w4, w4, #4
-+	sub		w6, w4, #1
-+	csel		w4, w4, w6, eq
-+	uxtw		x5, w5
++	ld1		{RMAC.16b}, [x1]
 +
-+	movi		RMASK.2s, #0x1
-+	movi		RTMP0.2s, #0x87
-+	uzp1		RMASK.4s, RMASK.4s, RTMP0.4s
++	cbz		w4, .Lmac_update
 +
-+	cbz		w4, .Lxts_enc_cts
++	SM4_CRYPT_BLK(RMAC)
 +
-+.Lxts_enc_loop_8x:
-+	sub		w4, w4, #8
-+	tbnz		w4, #31, .Lxts_enc_4x
++.Lmac_update:
++	cbz		w3, .Lmac_ret
 +
-+	tweak_next( v9,  v8, RTMP0)
-+	tweak_next(v10,  v9, RTMP1)
-+	tweak_next(v11, v10, RTMP2)
-+	tweak_next(v12, v11, RTMP3)
-+	tweak_next(v13, v12, RTMP0)
-+	tweak_next(v14, v13, RTMP1)
-+	tweak_next(v15, v14, RTMP2)
++	sub		w6, w3, #1
++	cmp		w5, wzr
++	csel		w3, w3, w6, ne
++
++	cbz		w3, .Lmac_end
++
++.Lmac_loop_4x:
++	cmp		w3, #4
++	blt		.Lmac_loop_1x
++
++	sub		w3, w3, #4
 +
 +	ld1		{v0.16b-v3.16b}, [x2], #64
-+	ld1		{v4.16b-v7.16b}, [x2], #64
-+	eor		v0.16b, v0.16b,  v8.16b
-+	eor		v1.16b, v1.16b,  v9.16b
-+	eor		v2.16b, v2.16b, v10.16b
-+	eor		v3.16b, v3.16b, v11.16b
-+	eor		v4.16b, v4.16b, v12.16b
-+	eor		v5.16b, v5.16b, v13.16b
-+	eor		v6.16b, v6.16b, v14.16b
-+	eor		v7.16b, v7.16b, v15.16b
 +
-+	SM4_CRYPT_BLK8(v0, v1, v2, v3, v4, v5, v6, v7)
++	eor		RMAC.16b, RMAC.16b, v0.16b
++	SM4_CRYPT_BLK(RMAC)
++	eor		RMAC.16b, RMAC.16b, v1.16b
++	SM4_CRYPT_BLK(RMAC)
++	eor		RMAC.16b, RMAC.16b, v2.16b
++	SM4_CRYPT_BLK(RMAC)
++	eor		RMAC.16b, RMAC.16b, v3.16b
++	SM4_CRYPT_BLK(RMAC)
 +
-+	eor		v0.16b, v0.16b,  v8.16b
-+	eor		v1.16b, v1.16b,  v9.16b
-+	eor		v2.16b, v2.16b, v10.16b
-+	eor		v3.16b, v3.16b, v11.16b
-+	eor		v4.16b, v4.16b, v12.16b
-+	eor		v5.16b, v5.16b, v13.16b
-+	eor		v6.16b, v6.16b, v14.16b
-+	eor		v7.16b, v7.16b, v15.16b
-+	st1		{v0.16b-v3.16b}, [x1], #64
-+	st1		{v4.16b-v7.16b}, [x1], #64
++	cbz		w3, .Lmac_end
++	b		.Lmac_loop_4x
 +
-+	tweak_next(v8, v15, RTMP3)
-+
-+	cbz		w4, .Lxts_enc_cts
-+	b		.Lxts_enc_loop_8x
-+
-+.Lxts_enc_4x:
-+	add		w4, w4, #8
-+	cmp		w4, #4
-+	blt		.Lxts_enc_loop_1x
-+
-+	sub		w4, w4, #4
-+
-+	tweak_next( v9,  v8, RTMP0)
-+	tweak_next(v10,  v9, RTMP1)
-+	tweak_next(v11, v10, RTMP2)
-+
-+	ld1		{v0.16b-v3.16b}, [x2], #64
-+	eor		v0.16b, v0.16b,  v8.16b
-+	eor		v1.16b, v1.16b,  v9.16b
-+	eor		v2.16b, v2.16b, v10.16b
-+	eor		v3.16b, v3.16b, v11.16b
-+
-+	SM4_CRYPT_BLK4(v0, v1, v2, v3)
-+
-+	eor		v0.16b, v0.16b,  v8.16b
-+	eor		v1.16b, v1.16b,  v9.16b
-+	eor		v2.16b, v2.16b, v10.16b
-+	eor		v3.16b, v3.16b, v11.16b
-+	st1		{v0.16b-v3.16b}, [x1], #64
-+
-+	tweak_next(v8, v11, RTMP3)
-+
-+	cbz		w4, .Lxts_enc_cts
-+
-+.Lxts_enc_loop_1x:
-+	sub		w4, w4, #1
++.Lmac_loop_1x:
++	sub		w3, w3, #1
 +
 +	ld1		{v0.16b}, [x2], #16
-+	eor		v0.16b, v0.16b, v8.16b
 +
-+	SM4_CRYPT_BLK(v0)
++	eor		RMAC.16b, RMAC.16b, v0.16b
++	SM4_CRYPT_BLK(RMAC)
 +
-+	eor		v0.16b, v0.16b, v8.16b
-+	st1		{v0.16b}, [x1], #16
-+
-+	tweak_next(v8, v8, RTMP0)
-+
-+	cbnz		w4, .Lxts_enc_loop_1x
-+
-+.Lxts_enc_cts:
-+	cbz		x5, .Lxts_enc_end
-+
-+	/* cipher text stealing */
-+
-+	tweak_next(v9, v8, RTMP0)
-+	ld1		{v0.16b}, [x2]
-+	eor		v0.16b, v0.16b, v8.16b
-+	SM4_CRYPT_BLK(v0)
-+	eor		v0.16b, v0.16b, v8.16b
-+
-+	/* load permute table */
-+	adr_l		x6, .Lcts_permute_table
-+	add		x7, x6, #32
-+	add		x6, x6, x5
-+	sub		x7, x7, x5
-+	ld1		{v3.16b}, [x6]
-+	ld1		{v4.16b}, [x7]
-+
-+	/* overlapping loads */
-+	add		x2, x2, x5
-+	ld1		{v1.16b}, [x2]
-+
-+	/* create Cn from En-1 */
-+	tbl		v2.16b, {v0.16b}, v3.16b
-+	/* padding Pn with En-1 at the end */
-+	tbx		v0.16b, {v1.16b}, v4.16b
-+
-+	eor		v0.16b, v0.16b, v9.16b
-+	SM4_CRYPT_BLK(v0)
-+	eor		v0.16b, v0.16b, v9.16b
++	cbnz		w3, .Lmac_loop_1x
 +
 +
-+	/* overlapping stores */
-+	add		x5, x1, x5
-+	st1		{v2.16b}, [x5]
-+	st1		{v0.16b}, [x1]
-+
-+	b		.Lxts_enc_ret
-+
-+.Lxts_enc_end:
-+	/* store new tweak */
-+	st1		{v8.16b}, [x3]
-+
-+.Lxts_enc_ret:
-+	ret
-+SYM_FUNC_END(sm4_ce_xts_enc)
-+
-+.align 3
-+SYM_FUNC_START(sm4_ce_xts_dec)
-+	/* input:
-+	 *   x0: round key array, CTX
-+	 *   x1: dst
-+	 *   x2: src
-+	 *   x3: tweak (big endian, 128 bit)
-+	 *   w4: nbytes
-+	 *   x5: round key array for IV
-+	 */
-+	ld1		{v8.16b}, [x3]
-+
-+	cbz		x5, .Lxts_dec_nofirst
-+
-+	SM4_PREPARE(x5)
-+
-+	/* Generate first tweak */
-+	SM4_CRYPT_BLK(v8)
-+
-+.Lxts_dec_nofirst:
-+	SM4_PREPARE(x0)
-+
-+	ands		w5, w4, #15
-+	lsr		w4, w4, #4
-+	sub		w6, w4, #1
-+	csel		w4, w4, w6, eq
-+	uxtw		x5, w5
-+
-+	movi		RMASK.2s, #0x1
-+	movi		RTMP0.2s, #0x87
-+	uzp1		RMASK.4s, RMASK.4s, RTMP0.4s
-+
-+	cbz		w4, .Lxts_dec_cts
-+
-+.Lxts_dec_loop_8x:
-+	sub		w4, w4, #8
-+	tbnz		w4, #31, .Lxts_dec_4x
-+
-+	tweak_next( v9,  v8, RTMP0)
-+	tweak_next(v10,  v9, RTMP1)
-+	tweak_next(v11, v10, RTMP2)
-+	tweak_next(v12, v11, RTMP3)
-+	tweak_next(v13, v12, RTMP0)
-+	tweak_next(v14, v13, RTMP1)
-+	tweak_next(v15, v14, RTMP2)
-+
-+	ld1		{v0.16b-v3.16b}, [x2], #64
-+	ld1		{v4.16b-v7.16b}, [x2], #64
-+	eor		v0.16b, v0.16b,  v8.16b
-+	eor		v1.16b, v1.16b,  v9.16b
-+	eor		v2.16b, v2.16b, v10.16b
-+	eor		v3.16b, v3.16b, v11.16b
-+	eor		v4.16b, v4.16b, v12.16b
-+	eor		v5.16b, v5.16b, v13.16b
-+	eor		v6.16b, v6.16b, v14.16b
-+	eor		v7.16b, v7.16b, v15.16b
-+
-+	SM4_CRYPT_BLK8(v0, v1, v2, v3, v4, v5, v6, v7)
-+
-+	eor		v0.16b, v0.16b,  v8.16b
-+	eor		v1.16b, v1.16b,  v9.16b
-+	eor		v2.16b, v2.16b, v10.16b
-+	eor		v3.16b, v3.16b, v11.16b
-+	eor		v4.16b, v4.16b, v12.16b
-+	eor		v5.16b, v5.16b, v13.16b
-+	eor		v6.16b, v6.16b, v14.16b
-+	eor		v7.16b, v7.16b, v15.16b
-+	st1		{v0.16b-v3.16b}, [x1], #64
-+	st1		{v4.16b-v7.16b}, [x1], #64
-+
-+	tweak_next(v8, v15, RTMP3)
-+
-+	cbz		w4, .Lxts_dec_cts
-+	b		.Lxts_dec_loop_8x
-+
-+.Lxts_dec_4x:
-+	add		w4, w4, #8
-+	cmp		w4, #4
-+	blt		.Lxts_dec_loop_1x
-+
-+	sub		w4, w4, #4
-+
-+	tweak_next( v9,  v8, RTMP0)
-+	tweak_next(v10,  v9, RTMP1)
-+	tweak_next(v11, v10, RTMP2)
-+
-+	ld1		{v0.16b-v3.16b}, [x2], #64
-+	eor		v0.16b, v0.16b,  v8.16b
-+	eor		v1.16b, v1.16b,  v9.16b
-+	eor		v2.16b, v2.16b, v10.16b
-+	eor		v3.16b, v3.16b, v11.16b
-+
-+	SM4_CRYPT_BLK4(v0, v1, v2, v3)
-+
-+	eor		v0.16b, v0.16b,  v8.16b
-+	eor		v1.16b, v1.16b,  v9.16b
-+	eor		v2.16b, v2.16b, v10.16b
-+	eor		v3.16b, v3.16b, v11.16b
-+	st1		{v0.16b-v3.16b}, [x1], #64
-+
-+	tweak_next(v8, v11, RTMP3)
-+
-+	cbz		w4, .Lxts_dec_cts
-+
-+.Lxts_dec_loop_1x:
-+	sub		w4, w4, #1
++.Lmac_end:
++	cbnz		w5, .Lmac_ret
 +
 +	ld1		{v0.16b}, [x2], #16
-+	eor		v0.16b, v0.16b, v8.16b
++	eor		RMAC.16b, RMAC.16b, v0.16b
 +
-+	SM4_CRYPT_BLK(v0)
-+
-+	eor		v0.16b, v0.16b, v8.16b
-+	st1		{v0.16b}, [x1], #16
-+
-+	tweak_next(v8, v8, RTMP0)
-+
-+	cbnz		w4, .Lxts_dec_loop_1x
-+
-+.Lxts_dec_cts:
-+	cbz		x5, .Lxts_dec_end
-+
-+	/* cipher text stealing */
-+
-+	tweak_next(v9, v8, RTMP0)
-+	ld1		{v0.16b}, [x2]
-+	eor		v0.16b, v0.16b, v9.16b
-+	SM4_CRYPT_BLK(v0)
-+	eor		v0.16b, v0.16b, v9.16b
-+
-+	/* load permute table */
-+	adr_l		x6, .Lcts_permute_table
-+	add		x7, x6, #32
-+	add		x6, x6, x5
-+	sub		x7, x7, x5
-+	ld1		{v3.16b}, [x6]
-+	ld1		{v4.16b}, [x7]
-+
-+	/* overlapping loads */
-+	add		x2, x2, x5
-+	ld1		{v1.16b}, [x2]
-+
-+	/* create Cn from En-1 */
-+	tbl		v2.16b, {v0.16b}, v3.16b
-+	/* padding Pn with En-1 at the end */
-+	tbx		v0.16b, {v1.16b}, v4.16b
-+
-+	eor		v0.16b, v0.16b, v8.16b
-+	SM4_CRYPT_BLK(v0)
-+	eor		v0.16b, v0.16b, v8.16b
-+
-+
-+	/* overlapping stores */
-+	add		x5, x1, x5
-+	st1		{v2.16b}, [x5]
-+	st1		{v0.16b}, [x1]
-+
-+	b		.Lxts_dec_ret
-+
-+.Lxts_dec_end:
-+	/* store new tweak */
-+	st1		{v8.16b}, [x3]
-+
-+.Lxts_dec_ret:
++.Lmac_ret:
++	st1		{RMAC.16b}, [x1]
 +	ret
-+SYM_FUNC_END(sm4_ce_xts_dec)
++SYM_FUNC_END(sm4_ce_mac_update)
 +
-+
+ 
  	.section	".rodata", "a"
  	.align 4
- .Lbswap128_mask:
 diff --git a/arch/arm64/crypto/sm4-ce-glue.c b/arch/arm64/crypto/sm4-ce-glue.c
-index 4d4072c7bfa2..8222766f712a 100644
+index 8222766f712a..0a2d32ed3bde 100644
 --- a/arch/arm64/crypto/sm4-ce-glue.c
 +++ b/arch/arm64/crypto/sm4-ce-glue.c
-@@ -17,6 +17,7 @@
+@@ -14,8 +14,10 @@
+ #include <linux/cpufeature.h>
+ #include <asm/neon.h>
+ #include <asm/simd.h>
++#include <crypto/b128ops.h>
  #include <crypto/internal/simd.h>
  #include <crypto/internal/skcipher.h>
++#include <crypto/internal/hash.h>
  #include <crypto/scatterwalk.h>
-+#include <crypto/xts.h>
+ #include <crypto/xts.h>
  #include <crypto/sm4.h>
- 
- #define BYTES2BLKS(nbytes)	((nbytes) >> 4)
-@@ -40,12 +41,23 @@ asmlinkage void sm4_ce_cfb_dec(const u32 *rkey, u8 *dst, const u8 *src,
- 			       u8 *iv, unsigned int nblks);
- asmlinkage void sm4_ce_ctr_enc(const u32 *rkey, u8 *dst, const u8 *src,
- 			       u8 *iv, unsigned int nblks);
-+asmlinkage void sm4_ce_xts_enc(const u32 *rkey1, u8 *dst, const u8 *src,
-+			       u8 *tweak, unsigned int nbytes,
-+			       const u32 *rkey2_enc);
-+asmlinkage void sm4_ce_xts_dec(const u32 *rkey1, u8 *dst, const u8 *src,
-+			       u8 *tweak, unsigned int nbytes,
-+			       const u32 *rkey2_enc);
+@@ -47,6 +49,9 @@ asmlinkage void sm4_ce_xts_enc(const u32 *rkey1, u8 *dst, const u8 *src,
+ asmlinkage void sm4_ce_xts_dec(const u32 *rkey1, u8 *dst, const u8 *src,
+ 			       u8 *tweak, unsigned int nbytes,
+ 			       const u32 *rkey2_enc);
++asmlinkage void sm4_ce_mac_update(const u32 *rkey_enc, u8 *digest,
++				  const u8 *src, unsigned int nblocks,
++				  bool enc_before, bool enc_after);
  
  EXPORT_SYMBOL(sm4_ce_expand_key);
  EXPORT_SYMBOL(sm4_ce_crypt_block);
- EXPORT_SYMBOL(sm4_ce_cbc_enc);
- EXPORT_SYMBOL(sm4_ce_cfb_enc);
+@@ -58,6 +63,16 @@ struct sm4_xts_ctx {
+ 	struct sm4_ctx key2;
+ };
  
-+struct sm4_xts_ctx {
-+	struct sm4_ctx key1;
-+	struct sm4_ctx key2;
++struct sm4_mac_tfm_ctx {
++	struct sm4_ctx key;
++	u8 __aligned(8) consts[];
++};
++
++struct sm4_mac_desc_ctx {
++	unsigned int len;
++	u8 digest[SM4_BLOCK_SIZE];
 +};
 +
  static int sm4_setkey(struct crypto_skcipher *tfm, const u8 *key,
  		      unsigned int key_len)
  {
-@@ -61,6 +73,29 @@ static int sm4_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 	return 0;
- }
+@@ -594,13 +609,260 @@ static struct skcipher_alg sm4_algs[] = {
+ 	}
+ };
  
-+static int sm4_xts_setkey(struct crypto_skcipher *tfm, const u8 *key,
-+			  unsigned int key_len)
++static int sm4_cbcmac_setkey(struct crypto_shash *tfm, const u8 *key,
++			     unsigned int key_len)
 +{
-+	struct sm4_xts_ctx *ctx = crypto_skcipher_ctx(tfm);
-+	int ret;
++	struct sm4_mac_tfm_ctx *ctx = crypto_shash_ctx(tfm);
 +
-+	if (key_len != SM4_KEY_SIZE * 2)
++	if (key_len != SM4_KEY_SIZE)
 +		return -EINVAL;
 +
-+	ret = xts_verify_key(tfm, key, key_len);
-+	if (ret)
-+		return ret;
-+
 +	kernel_neon_begin();
-+	sm4_ce_expand_key(key, ctx->key1.rkey_enc,
-+			  ctx->key1.rkey_dec, crypto_sm4_fk, crypto_sm4_ck);
-+	sm4_ce_expand_key(&key[SM4_KEY_SIZE], ctx->key2.rkey_enc,
-+			  ctx->key2.rkey_dec, crypto_sm4_fk, crypto_sm4_ck);
++	sm4_ce_expand_key(key, ctx->key.rkey_enc, ctx->key.rkey_dec,
++			  crypto_sm4_fk, crypto_sm4_ck);
 +	kernel_neon_end();
 +
 +	return 0;
 +}
 +
- static int sm4_ecb_do_crypt(struct skcipher_request *req, const u32 *rkey)
- {
- 	struct skcipher_walk walk;
-@@ -357,6 +392,111 @@ static int sm4_ctr_crypt(struct skcipher_request *req)
- 	return err;
- }
- 
-+static int sm4_xts_crypt(struct skcipher_request *req, bool encrypt)
++static int sm4_cmac_setkey(struct crypto_shash *tfm, const u8 *key,
++			   unsigned int key_len)
 +{
-+	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
-+	struct sm4_xts_ctx *ctx = crypto_skcipher_ctx(tfm);
-+	int tail = req->cryptlen % SM4_BLOCK_SIZE;
-+	const u32 *rkey2_enc = ctx->key2.rkey_enc;
-+	struct scatterlist sg_src[2], sg_dst[2];
-+	struct skcipher_request subreq;
-+	struct scatterlist *src, *dst;
-+	struct skcipher_walk walk;
-+	unsigned int nbytes;
-+	int err;
++	struct sm4_mac_tfm_ctx *ctx = crypto_shash_ctx(tfm);
++	be128 *consts = (be128 *)ctx->consts;
++	u64 a, b;
 +
-+	if (req->cryptlen < SM4_BLOCK_SIZE)
++	if (key_len != SM4_KEY_SIZE)
 +		return -EINVAL;
 +
-+	err = skcipher_walk_virt(&walk, req, false);
-+	if (err)
-+		return err;
-+
-+	if (unlikely(tail > 0 && walk.nbytes < walk.total)) {
-+		int nblocks = DIV_ROUND_UP(req->cryptlen, SM4_BLOCK_SIZE) - 2;
-+
-+		skcipher_walk_abort(&walk);
-+
-+		skcipher_request_set_tfm(&subreq, tfm);
-+		skcipher_request_set_callback(&subreq,
-+					      skcipher_request_flags(req),
-+					      NULL, NULL);
-+		skcipher_request_set_crypt(&subreq, req->src, req->dst,
-+					   nblocks * SM4_BLOCK_SIZE, req->iv);
-+
-+		err = skcipher_walk_virt(&walk, &subreq, false);
-+		if (err)
-+			return err;
-+	} else {
-+		tail = 0;
-+	}
-+
-+	while ((nbytes = walk.nbytes) >= SM4_BLOCK_SIZE) {
-+		if (nbytes < walk.total)
-+			nbytes &= ~(SM4_BLOCK_SIZE - 1);
-+
-+		kernel_neon_begin();
-+
-+		if (encrypt)
-+			sm4_ce_xts_enc(ctx->key1.rkey_enc, walk.dst.virt.addr,
-+				       walk.src.virt.addr, walk.iv, nbytes,
-+				       rkey2_enc);
-+		else
-+			sm4_ce_xts_dec(ctx->key1.rkey_dec, walk.dst.virt.addr,
-+				       walk.src.virt.addr, walk.iv, nbytes,
-+				       rkey2_enc);
-+
-+		kernel_neon_end();
-+
-+		rkey2_enc = NULL;
-+
-+		err = skcipher_walk_done(&walk, walk.nbytes - nbytes);
-+		if (err)
-+			return err;
-+	}
-+
-+	if (likely(tail == 0))
-+		return 0;
-+
-+	/* handle ciphertext stealing */
-+
-+	dst = src = scatterwalk_ffwd(sg_src, req->src, subreq.cryptlen);
-+	if (req->dst != req->src)
-+		dst = scatterwalk_ffwd(sg_dst, req->dst, subreq.cryptlen);
-+
-+	skcipher_request_set_crypt(&subreq, src, dst, SM4_BLOCK_SIZE + tail,
-+				   req->iv);
-+
-+	err = skcipher_walk_virt(&walk, &subreq, false);
-+	if (err)
-+		return err;
++	memset(consts, 0, SM4_BLOCK_SIZE);
 +
 +	kernel_neon_begin();
 +
-+	if (encrypt)
-+		sm4_ce_xts_enc(ctx->key1.rkey_enc, walk.dst.virt.addr,
-+			       walk.src.virt.addr, walk.iv, walk.nbytes,
-+			       rkey2_enc);
-+	else
-+		sm4_ce_xts_dec(ctx->key1.rkey_dec, walk.dst.virt.addr,
-+			       walk.src.virt.addr, walk.iv, walk.nbytes,
-+			       rkey2_enc);
++	sm4_ce_expand_key(key, ctx->key.rkey_enc, ctx->key.rkey_dec,
++			  crypto_sm4_fk, crypto_sm4_ck);
++
++	/* encrypt the zero block */
++	sm4_ce_crypt_block(ctx->key.rkey_enc, (u8 *)consts, (const u8 *)consts);
 +
 +	kernel_neon_end();
 +
-+	return skcipher_walk_done(&walk, 0);
++	/* gf(2^128) multiply zero-ciphertext with u and u^2 */
++	a = be64_to_cpu(consts[0].a);
++	b = be64_to_cpu(consts[0].b);
++	consts[0].a = cpu_to_be64((a << 1) | (b >> 63));
++	consts[0].b = cpu_to_be64((b << 1) ^ ((a >> 63) ? 0x87 : 0));
++
++	a = be64_to_cpu(consts[0].a);
++	b = be64_to_cpu(consts[0].b);
++	consts[1].a = cpu_to_be64((a << 1) | (b >> 63));
++	consts[1].b = cpu_to_be64((b << 1) ^ ((a >> 63) ? 0x87 : 0));
++
++	return 0;
 +}
 +
-+static int sm4_xts_encrypt(struct skcipher_request *req)
++static int sm4_xcbc_setkey(struct crypto_shash *tfm, const u8 *key,
++			   unsigned int key_len)
 +{
-+	return sm4_xts_crypt(req, true);
++	struct sm4_mac_tfm_ctx *ctx = crypto_shash_ctx(tfm);
++	u8 __aligned(8) key2[SM4_BLOCK_SIZE];
++	static u8 const ks[3][SM4_BLOCK_SIZE] = {
++		{ [0 ... SM4_BLOCK_SIZE - 1] = 0x1},
++		{ [0 ... SM4_BLOCK_SIZE - 1] = 0x2},
++		{ [0 ... SM4_BLOCK_SIZE - 1] = 0x3},
++	};
++
++	if (key_len != SM4_KEY_SIZE)
++		return -EINVAL;
++
++	kernel_neon_begin();
++
++	sm4_ce_expand_key(key, ctx->key.rkey_enc, ctx->key.rkey_dec,
++			  crypto_sm4_fk, crypto_sm4_ck);
++
++	sm4_ce_crypt_block(ctx->key.rkey_enc, key2, ks[0]);
++	sm4_ce_crypt(ctx->key.rkey_enc, ctx->consts, ks[1], 2);
++
++	sm4_ce_expand_key(key2, ctx->key.rkey_enc, ctx->key.rkey_dec,
++			  crypto_sm4_fk, crypto_sm4_ck);
++
++	kernel_neon_end();
++
++	return 0;
 +}
 +
-+static int sm4_xts_decrypt(struct skcipher_request *req)
++static int sm4_mac_init(struct shash_desc *desc)
 +{
-+	return sm4_xts_crypt(req, false);
++	struct sm4_mac_desc_ctx *ctx = shash_desc_ctx(desc);
++
++	memset(ctx->digest, 0, SM4_BLOCK_SIZE);
++	ctx->len = 0;
++
++	return 0;
 +}
 +
- static struct skcipher_alg sm4_algs[] = {
- 	{
- 		.base = {
-@@ -435,6 +575,22 @@ static struct skcipher_alg sm4_algs[] = {
- 		.setkey		= sm4_setkey,
- 		.encrypt	= sm4_cbc_cts_encrypt,
- 		.decrypt	= sm4_cbc_cts_decrypt,
-+	}, {
++static int sm4_mac_update(struct shash_desc *desc, const u8 *p,
++			  unsigned int len)
++{
++	struct sm4_mac_tfm_ctx *tctx = crypto_shash_ctx(desc->tfm);
++	struct sm4_mac_desc_ctx *ctx = shash_desc_ctx(desc);
++	unsigned int l, nblocks;
++
++	if (len == 0)
++		return 0;
++
++	if (ctx->len || ctx->len + len < SM4_BLOCK_SIZE) {
++		l = min(len, SM4_BLOCK_SIZE - ctx->len);
++
++		crypto_xor(ctx->digest + ctx->len, p, l);
++		ctx->len += l;
++		len -= l;
++		p += l;
++	}
++
++	if (len && (ctx->len % SM4_BLOCK_SIZE) == 0) {
++		kernel_neon_begin();
++
++		if (len < SM4_BLOCK_SIZE && ctx->len == SM4_BLOCK_SIZE) {
++			sm4_ce_crypt_block(tctx->key.rkey_enc,
++					   ctx->digest, ctx->digest);
++			ctx->len = 0;
++		} else {
++			nblocks = len / SM4_BLOCK_SIZE;
++			len %= SM4_BLOCK_SIZE;
++
++			sm4_ce_mac_update(tctx->key.rkey_enc, ctx->digest, p,
++					  nblocks, (ctx->len == SM4_BLOCK_SIZE),
++					  (len != 0));
++
++			p += nblocks * SM4_BLOCK_SIZE;
++
++			if (len == 0)
++				ctx->len = SM4_BLOCK_SIZE;
++		}
++
++		kernel_neon_end();
++
++		if (len) {
++			crypto_xor(ctx->digest, p, len);
++			ctx->len = len;
++		}
++	}
++
++	return 0;
++}
++
++static int sm4_cmac_final(struct shash_desc *desc, u8 *out)
++{
++	struct sm4_mac_tfm_ctx *tctx = crypto_shash_ctx(desc->tfm);
++	struct sm4_mac_desc_ctx *ctx = shash_desc_ctx(desc);
++	const u8 *consts = tctx->consts;
++
++	if (ctx->len != SM4_BLOCK_SIZE) {
++		ctx->digest[ctx->len] ^= 0x80;
++		consts += SM4_BLOCK_SIZE;
++	}
++
++	kernel_neon_begin();
++	sm4_ce_mac_update(tctx->key.rkey_enc, ctx->digest, consts, 1,
++			  false, true);
++	kernel_neon_end();
++
++	memcpy(out, ctx->digest, SM4_BLOCK_SIZE);
++
++	return 0;
++}
++
++static int sm4_cbcmac_final(struct shash_desc *desc, u8 *out)
++{
++	struct sm4_mac_tfm_ctx *tctx = crypto_shash_ctx(desc->tfm);
++	struct sm4_mac_desc_ctx *ctx = shash_desc_ctx(desc);
++
++	if (ctx->len) {
++		kernel_neon_begin();
++		sm4_ce_crypt_block(tctx->key.rkey_enc, ctx->digest,
++				   ctx->digest);
++		kernel_neon_end();
++	}
++
++	memcpy(out, ctx->digest, SM4_BLOCK_SIZE);
++
++	return 0;
++}
++
++static struct shash_alg sm4_mac_algs[] = {
++	{
 +		.base = {
-+			.cra_name		= "xts(sm4)",
-+			.cra_driver_name	= "xts-sm4-ce",
++			.cra_name		= "cmac(sm4)",
++			.cra_driver_name	= "cmac-sm4-ce",
 +			.cra_priority		= 400,
 +			.cra_blocksize		= SM4_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct sm4_xts_ctx),
++			.cra_ctxsize		= sizeof(struct sm4_mac_tfm_ctx)
++							+ SM4_BLOCK_SIZE * 2,
 +			.cra_module		= THIS_MODULE,
 +		},
-+		.min_keysize	= SM4_KEY_SIZE * 2,
-+		.max_keysize	= SM4_KEY_SIZE * 2,
-+		.ivsize		= SM4_BLOCK_SIZE,
-+		.walksize	= SM4_BLOCK_SIZE * 2,
-+		.setkey		= sm4_xts_setkey,
-+		.encrypt	= sm4_xts_encrypt,
-+		.decrypt	= sm4_xts_decrypt,
- 	}
- };
++		.digestsize	= SM4_BLOCK_SIZE,
++		.init		= sm4_mac_init,
++		.update		= sm4_mac_update,
++		.final		= sm4_cmac_final,
++		.setkey		= sm4_cmac_setkey,
++		.descsize	= sizeof(struct sm4_mac_desc_ctx),
++	}, {
++		.base = {
++			.cra_name		= "xcbc(sm4)",
++			.cra_driver_name	= "xcbc-sm4-ce",
++			.cra_priority		= 400,
++			.cra_blocksize		= SM4_BLOCK_SIZE,
++			.cra_ctxsize		= sizeof(struct sm4_mac_tfm_ctx)
++							+ SM4_BLOCK_SIZE * 2,
++			.cra_module		= THIS_MODULE,
++		},
++		.digestsize	= SM4_BLOCK_SIZE,
++		.init		= sm4_mac_init,
++		.update		= sm4_mac_update,
++		.final		= sm4_cmac_final,
++		.setkey		= sm4_xcbc_setkey,
++		.descsize	= sizeof(struct sm4_mac_desc_ctx),
++	}, {
++		.base = {
++			.cra_name		= "cbcmac(sm4)",
++			.cra_driver_name	= "cbcmac-sm4-ce",
++			.cra_priority		= 400,
++			.cra_blocksize		= 1,
++			.cra_ctxsize		= sizeof(struct sm4_mac_tfm_ctx),
++			.cra_module		= THIS_MODULE,
++		},
++		.digestsize	= SM4_BLOCK_SIZE,
++		.init		= sm4_mac_init,
++		.update		= sm4_mac_update,
++		.final		= sm4_cbcmac_final,
++		.setkey		= sm4_cbcmac_setkey,
++		.descsize	= sizeof(struct sm4_mac_desc_ctx),
++	}
++};
++
+ static int __init sm4_init(void)
+ {
+-	return crypto_register_skciphers(sm4_algs, ARRAY_SIZE(sm4_algs));
++	int err;
++
++	err = crypto_register_skciphers(sm4_algs, ARRAY_SIZE(sm4_algs));
++	if (err)
++		return err;
++
++	err = crypto_register_shashes(sm4_mac_algs, ARRAY_SIZE(sm4_mac_algs));
++	if (err)
++		goto out_err;
++
++	return 0;
++
++out_err:
++	crypto_unregister_skciphers(sm4_algs, ARRAY_SIZE(sm4_algs));
++	return err;
+ }
  
-@@ -451,7 +607,7 @@ static void __exit sm4_exit(void)
- module_cpu_feature_match(SM4, sm4_init);
- module_exit(sm4_exit);
+ static void __exit sm4_exit(void)
+ {
++	crypto_unregister_shashes(sm4_mac_algs, ARRAY_SIZE(sm4_mac_algs));
+ 	crypto_unregister_skciphers(sm4_algs, ARRAY_SIZE(sm4_algs));
+ }
  
--MODULE_DESCRIPTION("SM4 ECB/CBC/CFB/CTR using ARMv8 Crypto Extensions");
-+MODULE_DESCRIPTION("SM4 ECB/CBC/CFB/CTR/XTS using ARMv8 Crypto Extensions");
- MODULE_ALIAS_CRYPTO("sm4-ce");
- MODULE_ALIAS_CRYPTO("sm4");
- MODULE_ALIAS_CRYPTO("ecb(sm4)");
-@@ -459,5 +615,6 @@ MODULE_ALIAS_CRYPTO("cbc(sm4)");
- MODULE_ALIAS_CRYPTO("cfb(sm4)");
+@@ -616,5 +878,8 @@ MODULE_ALIAS_CRYPTO("cfb(sm4)");
  MODULE_ALIAS_CRYPTO("ctr(sm4)");
  MODULE_ALIAS_CRYPTO("cts(cbc(sm4))");
-+MODULE_ALIAS_CRYPTO("xts(sm4)");
+ MODULE_ALIAS_CRYPTO("xts(sm4)");
++MODULE_ALIAS_CRYPTO("cmac(sm4)");
++MODULE_ALIAS_CRYPTO("xcbc(sm4)");
++MODULE_ALIAS_CRYPTO("cbcmac(sm4)");
  MODULE_AUTHOR("Tianjia Zhang <tianjia.zhang@linux.alibaba.com>");
  MODULE_LICENSE("GPL v2");
 -- 
