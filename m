@@ -2,72 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0C961065B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 01:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 857A8610665
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 01:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234916AbiJ0XZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 19:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
+        id S235243AbiJ0X2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 19:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235236AbiJ0XZf (ORCPT
+        with ESMTP id S229616AbiJ0X2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 19:25:35 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3470137F9D
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 16:25:32 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id z192so4343461yba.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 16:25:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U3Byo6DTMlo6Jt8yL6f7ACFRU3q1j3diDDzmPUKHU5k=;
-        b=E/+fYpPFt183h3xeXmVGJHzY/XkJfR5adPubVtmrTnRjKdl6blRarOiXfSvnoJVMWO
-         e5rpaYh5594QcsiV1+RDiL2HzBs413Q6R1sG5U2xpob0TyOlNfeqOmcTDLdl52EUrK42
-         3t9ufy0Lglh2L8nyGnnslh6Ur35XG9VMj6u1qs9XSObn5ZBaGhdkS7neLztuLfQZF/ol
-         svSETPZICFFDZhfxP/b4hIkbL8FMpwiYF8wGyiBii4k0iEsMRGhEWFi+rSWMIotWfMfe
-         i7Qu4UOfN8pBY1tGPXDK0rMZbbaSSoBsUt6RLOCrTQw3sSU6nTvasy3NQozyRbJKBkgs
-         BPnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U3Byo6DTMlo6Jt8yL6f7ACFRU3q1j3diDDzmPUKHU5k=;
-        b=LQ1uRnqB7BEO+cj3Tpxz0duRiVd0W1CPlRwk+3onu+JBYmGAGRCceHkkJDh+B8k+O9
-         Ce4kkkNXRwoIQy6jDoEnsJmLwVWDWvfqWKosLzlq98Oe8iKNfj56c6fkJoi+wPiujMRw
-         4juZfMBHIWOn8tsXfwt13sf3Ai4kPc8OP6CYZQ0yqsqzz5NG3kahwIFhQ/YwdhGT7eXz
-         5mLmyDorOyCde8+UmeNMZsd0lDLXxwY7YAJzgwNIBmcnD7EwrhKwof1QTrOIBE2W7SLz
-         vV0qWOkd+ysBuD4U7X25N5yICF9588QK95q+osGPVqVAg10L96X+HR5RWk2FGDI+90S9
-         7jFw==
-X-Gm-Message-State: ACrzQf0NhmvTJN8abfmGOr+toRA2+gP78NoOLV6pPN3H5djKzKrZgd/c
-        gC8wq4w8NFcQGcrTEt7uK59tt3hg/HpTXh5ajH6XhA==
-X-Google-Smtp-Source: AMsMyM6GLtSYbTHSUfM6xVMU0IYuYtA1g9ueGfmppuuROyJL0q9lHQot+gix8SB49FhnNhQJWnJ1xbgbZlTY7SowUZ8=
-X-Received: by 2002:a25:9b43:0:b0:6b3:9cc2:a651 with SMTP id
- u3-20020a259b43000000b006b39cc2a651mr45710151ybo.485.1666913131361; Thu, 27
- Oct 2022 16:25:31 -0700 (PDT)
+        Thu, 27 Oct 2022 19:28:19 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9631921246;
+        Thu, 27 Oct 2022 16:28:16 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mz20s1K73z4x1G;
+        Fri, 28 Oct 2022 10:28:12 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1666913294;
+        bh=l1mZYQANjUQZxBeBSrpWYKI49wKEgcpLkLLgYPYl7Wo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dCPyAPs28vq7MKXTAOO86ymMHNDlajjvwHlKR0rPKEtGrlTwBrkiPN3WNRKS/YjXs
+         zKWFydZ63ZDG4QtFoFyiiw0776SXeoAmMD4tbfRq576+V03Mk+Q5fHFsX0AWa9HSdH
+         482FfslG+ZsDulxp9TeiYPxPYvSWXKnmU38k9Mpb0gdDXXOvoFNS/HWJvQlLQ63rTV
+         kZQ1y3lpPyAsTW1aGII7J3VNdEQn4H6upxRhmqIvsm0yq2oSm4JHMeOyR1j/BnDv4Y
+         hrLrGWhLhuB1WpIrmMU/ENW9YOYNK/zF1HxQwwf5b8k37XgkR+0eCCIvgjCFhvfEAY
+         N+P6jxn1aprZg==
+Date:   Fri, 28 Oct 2022 10:28:11 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Anssi Hannula <anssi.hannula@bitwise.fi>,
+        Jimmy Assarsson <extja@kvaser.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: linux-next: manual merge of the net-next tree with Linus' tree
+Message-ID: <20221028102811.5938f029@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20221025221755.3810809-1-glider@google.com> <Y1j+Tt9mnMDU0zO+@hirez.programming.kicks-ass.net>
- <CAG_fn=XDeghFBGXT37Mc-ky-8NaPaMmCLdo3Par=xh92Fk_CAQ@mail.gmail.com>
- <Y1o72704bVK0FgCr@hirez.programming.kicks-ass.net> <CAG_fn=XESk1PPqbAVDqMdGbRwyvLvLQrm2hybr2cXaaYjfZEKA@mail.gmail.com>
- <202210271155.33956B1@keescook>
-In-Reply-To: <202210271155.33956B1@keescook>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 27 Oct 2022 16:24:55 -0700
-Message-ID: <CAG_fn=XX2exsGcD3ZR4LGw4Tqy_ietYe46WEOKt7a_nt9Gf=Cw@mail.gmail.com>
-Subject: Re: [PATCH] x86/uaccess: instrument copy_from_user_nmi()
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/pW=4nL90RBLWfjr45coo/tP";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,72 +54,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 11:58 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Thu, Oct 27, 2022 at 11:26:50AM -0700, Alexander Potapenko wrote:
-> > On Thu, Oct 27, 2022 at 1:05 AM Peter Zijlstra <peterz@infradead.org> w=
-rote:
-> > >
-> > > On Wed, Oct 26, 2022 at 11:38:53AM -0700, Alexander Potapenko wrote:
-> > > > A bigger issue from the NMI perspective is probably
-> > > > having __msan_poison_alloca() inserted in every non-noinstr kernel
-> > > > function, because that hook may acquire the stackdepot lock.
-> > >
-> > > *urgghhh* that's broken, that must not be. There is a *TON* of NMI
-> > > functions that are non-noinstr.
-> >
-> > __msan_poison_alloca() is guarded by kmsan_in_runtime(), which is
-> > currently implemented as:
-> >
-> >   static __always_inline bool kmsan_in_runtime(void)
-> >   {
-> >           if ((hardirq_count() >> HARDIRQ_SHIFT) > 1)
-> >                   return true;
-> >           return kmsan_get_context()->kmsan_in_runtime;
-> >   }
-> >
-> > I think the easiest way to fix the NMI situation would be adding "if
-> > in_nmi() return true"?
->
-> It might help to look through these threads:
->
-> https://lore.kernel.org/lkml/20220916135953.1320601-1-keescook@chromium.o=
-rg/
-> https://lore.kernel.org/all/20220919201648.2250764-1-keescook@chromium.or=
-g/
+--Sig_/pW=4nL90RBLWfjr45coo/tP
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry, I missed that letter, should have responded earlier.
+Hi all,
 
-> I wandered around attempting to deal with in_nmi(), etc. And in
-> the end just drop the attempt to cover it. It's worth noting that
-> copy_from_user_nmi() exists on 1 architecture and has exactly 1
-> call-site...
+Today's linux-next merge of the net-next tree got a conflict in:
 
-It doesn't really matter for KASAN, because a missing addressability
-check is a matter of missing some (possibly rare) bugs.
-For KMSAN a missing initialization will result in false positives, and
-we already started seeing them: show_opcodes() copies data to a local
-and prints it, but without a call to kmsan_unpoison_memory() it will
-result in error reports about opcodes[] being uninitialized.
+  drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
 
-So for this particular case I want to ensure kmsan_unpoison_memory()
-can be called from NMI context (by removing the kmsan_in_runtime()
-check from it), but to be on the safe side we'll also have to do
-nothing in __msan_poison_alloca() under in_nmi().
+between commit:
 
+  2871edb32f46 ("can: kvaser_usb: Fix possible completions during init_comp=
+letion")
 
-> --
-> Kees Cook
+from Linus' tree and commit:
 
+  abb8670938b2 ("can: kvaser_usb_leaf: Ignore stale bus-off after start")
 
---
-Alexander Potapenko
-Software Engineer
+from the net-next tree.
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+index 19958037720f,5225e2da6437..000000000000
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+@@@ -1318,9 -1632,12 +1632,12 @@@ static int kvaser_usb_leaf_set_opt_mode
+ =20
+  static int kvaser_usb_leaf_start_chip(struct kvaser_usb_net_priv *priv)
+  {
++ 	struct kvaser_usb_net_leaf_priv *leaf =3D priv->sub_priv;
+  	int err;
+ =20
++ 	leaf->joining_bus =3D true;
++=20
+ -	init_completion(&priv->start_comp);
+ +	reinit_completion(&priv->start_comp);
+ =20
+  	err =3D kvaser_usb_leaf_send_simple_cmd(priv->dev, CMD_START_CHIP,
+  					      priv->channel);
+@@@ -1336,10 -1653,13 +1653,13 @@@
+ =20
+  static int kvaser_usb_leaf_stop_chip(struct kvaser_usb_net_priv *priv)
+  {
++ 	struct kvaser_usb_net_leaf_priv *leaf =3D priv->sub_priv;
+  	int err;
+ =20
+ -	init_completion(&priv->stop_comp);
+ +	reinit_completion(&priv->stop_comp);
+ =20
++ 	cancel_delayed_work(&leaf->chip_state_req_work);
++=20
+  	err =3D kvaser_usb_leaf_send_simple_cmd(priv->dev, CMD_STOP_CHIP,
+  					      priv->channel);
+  	if (err)
+
+--Sig_/pW=4nL90RBLWfjr45coo/tP
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNbFAsACgkQAVBC80lX
+0Gy57QgAlO+AdQG1WKqPqWdkLyZqFf82xrI8EJbuveeIgC0Aw5+1042URuSoiKpZ
+LtzCkhydPObHPvZiBEIKhnOx3rUaktnGxW0KOUqOkor3QzH3i8cNYklD1LmAYoq7
+w9X2/Xph91mDf1RVBBsj7LPg8+u/MHYC50mpNcSrUMRwnaUuvDxNa87VpH4sQQzK
+qLSI+BrMgqtHZFWzMuotCz4blkZBeUlRyhI9lNILJcd2ii+VjW5t4XiiylX8kxHU
+FEiq6LcT3P3q28/oEgj5Qg2NJAZuUfKuvEI7R1Yj/UzYVwujNzSVIcPEgdMYEZuf
+GyHKt4A3rrS//LXpwjl057MKdwU0dQ==
+=KNc4
+-----END PGP SIGNATURE-----
+
+--Sig_/pW=4nL90RBLWfjr45coo/tP--
