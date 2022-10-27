@@ -2,76 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7DB60F85F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A2C60F863
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235539AbiJ0NFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 09:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
+        id S235803AbiJ0NFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 09:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235962AbiJ0NEz (ORCPT
+        with ESMTP id S234721AbiJ0NFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 09:04:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D4C6145
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:04:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666875888;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nbdDPve9bMdFNi05LB/lERN+PFeDBEnGOqNBNGwp0ks=;
-        b=OWEdyB+kYbQ4WGiulAw7s5+GSrVjpTbGxAZKJT549CjakmxOoVT5sug8KouTBa478x70+k
-        NQ6Y+giW9p7md2t+DcwX8GsSUtL3LQ6IMN+ghHKDJ3glybm5A0AQ6Bjoeg8S4jCv8DDM+U
-        UqWIfWOpiIGYvx+qY7hu6SSmP0P9dAU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-317--ZUmVQNnOEChLp9IS6wMBg-1; Thu, 27 Oct 2022 09:04:39 -0400
-X-MC-Unique: -ZUmVQNnOEChLp9IS6wMBg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B7F1A811E81;
-        Thu, 27 Oct 2022 13:04:38 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.73])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8137D39DB3;
-        Thu, 27 Oct 2022 13:04:37 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20221027083547.46933-3-jefflexu@linux.alibaba.com>
-References: <20221027083547.46933-3-jefflexu@linux.alibaba.com> <20221027083547.46933-1-jefflexu@linux.alibaba.com>
-To:     Jingbo Xu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, jlayton@kernel.org, linux-cachefs@redhat.com,
-        linux-erofs@lists.ozlabs.org, linux-cifs@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/9] fscache,netfs: rename netfs_io_source as fscache_io_source
+        Thu, 27 Oct 2022 09:05:20 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03A85317CF;
+        Thu, 27 Oct 2022 06:05:20 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0F0B423A;
+        Thu, 27 Oct 2022 06:05:26 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 567363F7B4;
+        Thu, 27 Oct 2022 06:05:18 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 14:05:15 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: sm8250: Disable the not yet supported
+ cluster idle state
+Message-ID: <20221027130515.uixhr4a7axmvtabe@bogus>
+References: <20221027115745.240516-1-ulf.hansson@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3306187.1666875875.1@warthog.procyon.org.uk>
-Date:   Thu, 27 Oct 2022 14:04:35 +0100
-Message-ID: <3306188.1666875875@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221027115745.240516-1-ulf.hansson@linaro.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jingbo Xu <jefflexu@linux.alibaba.com> wrote:
+On Thu, Oct 27, 2022 at 01:57:45PM +0200, Ulf Hansson wrote:
+> To support the deeper cluster idle state for sm8250 platforms, some
+> additional synchronization is needed between the rpmh-rsc device and the
+> CPU cluster PM domain. Until that is supported, let's disable the cluster
+> idle state.
+> 
+> This fixes a problem that has been reported for the Qcom RB5 platform (see
+> below), but most likely other sm8250 platforms suffers from similar issues,
+> so let's make the fix generic for sm8250.
+> 
+> vreg_l11c_3p3: failed to enable: -ETIMEDOUT
+> qcom-rpmh-regulator 18200000.rsc:pm8150l-rpmh-regulators: ldo11: devm_regulator_register() failed, ret=-110
+> qcom-rpmh-regulator: probe of 18200000.rsc:pm8150l-rpmh-regulators failed with error -110
+> 
+> Reported-by: Amit Pundir <amit.pundir@linaro.org>
+> Fixes: 32bc936d7321 ("arm64: dts: qcom: sm8250: Add cpuidle states")
 
-> Rename netfs_io_source as fscache_io_source.  This is a cleanup without
-> logic change.
+Thanks for the patience and fixing it this way :). I take it is only the
+cluster states that has the issue because [1] only disables the CPU level
+states which was confusing and I had asked the same.
 
-This is a netfslib feature that is used by fscache.  Please don't do this.
+Anyways for this,
 
-David
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 
+-- 
+Regards,
+Sudeep
