@@ -2,168 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6076960F832
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48FE260F838
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235918AbiJ0M4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34426 "EHLO
+        id S234514AbiJ0M5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235891AbiJ0M4R (ORCPT
+        with ESMTP id S235522AbiJ0M5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:56:17 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2060.outbound.protection.outlook.com [40.107.212.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F4153D1D;
-        Thu, 27 Oct 2022 05:56:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DnB6Hsj1EB59ckHv3v2vUs798SXVvj3uKcCKMXNR6KFP7I5F0QDwbS8CgzaFkbe70TwjqpeFDpsIbZgn6D0ZCd0FFIyKxwVxRshEd+6tndOUsziSF5oTjRkXzOjrkU8QulhqPbOaZPryaqHozn/u6PW6nO13Iu25V0W/kQfDfy/k+FYIrXITALEYcr825KxOPJ5XigvX0rle1hfDZXUJR1uq4FEBlH/8cJc31osM0JsxTvMqPSb4fDYCMTqcglQnXA+WD0khhyBn4OQvN0Jg6Nq48OSYysEB1yA3IrhC9Lwe9kQjJKUHHBIFHsm69OLX8XO6NHrdJUKwJvAaxXz5rA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NKR/TI7rB1OcdiGg7rdalDedqldoShXaUvEJf2bDhIQ=;
- b=cjC9n5YUs+QjAk/PHQHttSlpsO/ZjcXbeR9AmNRmK/1+UdSdrV4fdXftyyie95CoIjPWrbwCTEAvhRWjqNRXxF5ZHtKLRzdpwf2z07rorvuW2xWmQgRWKwuH1VDsAy1AW1UbRTbg/BcY02pBb0KOimfOkBuP9yUytP+5Sb3VZRz0Y8Q0QZjkZI3CMBFRcV82mLWdj5rZFPKnKQ2/nJAq/GtPmb9fNFxIL6hI86pNV37VL/F7UWEE8iAmgwMvbmyZltr/gWKE7u/CNoMNnwOKy9OAG7rggWOD4TmoIF8eFuLgU7ZCrpykbmMgrT3XoaeHu3o2qMSYEHpvxyIAtylqBw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NKR/TI7rB1OcdiGg7rdalDedqldoShXaUvEJf2bDhIQ=;
- b=VeZsW2B8hKVF0ziCB7Suz6ioAaLjkj+yfvAkr/jnUaaLeFpqV3y1PbrJdqDr/to0XdFvVq6C/uaMpu4919FV3ShfObf4GuxMR5Eef9D1Wf7SQhEHRui5vTBx82EoOyMXCq1Z/0QH/iFoyZPX214Uy1u1gBHNOAuMqL9sV/UFVJCGxFWzEQXg6+pJnPAtrySDm/7Pdn2bELNDfT5ctg7RHGqSkv6JNCXgnxmRF2YRDuQqC7XoOKU7QexVOjeGWj8ZRHYt0p8jbFVtU4iytuW8+N2S3ppV8ItCEIVGJzj6lMb0DDi7keVP4m1hfYNBIgd9Jd6GE0364q7hdeFJ/zZG+w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by IA1PR12MB6258.namprd12.prod.outlook.com (2603:10b6:208:3e6::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Thu, 27 Oct
- 2022 12:56:14 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5746.021; Thu, 27 Oct 2022
- 12:56:14 +0000
-Date:   Thu, 27 Oct 2022 09:56:13 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/5] iommu/s390: Use RCU to allow concurrent domain_list
- iteration
-Message-ID: <Y1p/7YS338ghykGz@nvidia.com>
-References: <Y0/lMCQ8oeXJ2HTg@nvidia.com>
- <f3551bb461b3ef3cfc1a0c644093816be1835b3f.camel@linux.ibm.com>
- <Y1ErcEe82yjJI+ET@nvidia.com>
- <68d91d7a5aadbd46dc34470eccd6b86a84c9e47b.camel@linux.ibm.com>
- <Y1KgX8EwH8T+FgWC@nvidia.com>
- <89a748fb5caee8be5d91806aa5dfd131e92d5d82.camel@linux.ibm.com>
- <Y1K1AqVWEyY0/Uqy@nvidia.com>
- <cef734b9f9b33380c1bbff40b56bb67b3de29341.camel@linux.ibm.com>
- <Y1a8qM4c2ZAM9glJ@nvidia.com>
- <3c2249fc7abf481b15d4988c2bd6456c48154c44.camel@linux.ibm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c2249fc7abf481b15d4988c2bd6456c48154c44.camel@linux.ibm.com>
-X-ClientProxiedBy: BL1PR13CA0215.namprd13.prod.outlook.com
- (2603:10b6:208:2bf::10) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Thu, 27 Oct 2022 08:57:01 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABAF1171CE2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:56:57 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id j6so1129474qvn.12
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:56:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qCO64SkNwxVGG1ag/c7O3RrYpoMWZcVRtx+sb3WRBdM=;
+        b=Mn4UEB1jx0Qdiy3QuA1RzSM1lDNgVbi4heOCcoPNcJtx+/NG28n1JCY7CVARu6tx8v
+         9mFC1fVjFB7DYJ5ux1bABi4xsRpSXcNRgR4QPHLHD2/c/9g3bK0YXoDYhwuNLOvJuKww
+         YQaXgP/7Q8DZhov+Blslx+MhFvEqjcI0bkhT2YYqqHtjSVTjK4aHubr7yR/g12OP/arj
+         Fz15n+9GllhHQ5ti7rt3+zu9xStLe0iI3aegxh/Y8WW/LSp3ASzLPlM20j0BGYdE4hwa
+         vbM4wjrTbtoyui76/uLWtG+idBJB+G5RMjszrlyUUE4WxpX9eBhOUIflv3TiV4cn+ACu
+         ApQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qCO64SkNwxVGG1ag/c7O3RrYpoMWZcVRtx+sb3WRBdM=;
+        b=l48eeaq5kVANq5XOylXlaeertckgKexN3H4SnoooPeHoHk/f33w2rWK2A0Ti6PHqYl
+         u4dU6UmqdsIjG5umx6rmE/SOqTxpHgtRLFx1CiErDKHxX53/l4ITXtOhPV+bKMq/dPPu
+         hGZSxy/soK29tfOKwu/rHw0AI97noqonfyerxLAI48mOQyVYluyUrt8tgOHCFPQg6fnG
+         3WRnWBCDvQviOSeVNBbTa1zNfPt3iBhVdnwMrI7M9U4+0Fels9xTe+WySXItesggsm2w
+         rA8vSR/Y3am8SkJkYexLGlsOw+n0rIDHCea07W/X/pVZcVP1rTohErn+Otaq2BP43MSV
+         Gt/w==
+X-Gm-Message-State: ACrzQf1Ygj+CdufkwdDirTQApfLFttQ5S8cYr3wtw65+BIqW7e3QVdFZ
+        akiu/hhI0lPClV12ZYDnbI6CQXNCozQ/Xw==
+X-Google-Smtp-Source: AMsMyM5zWzthkb3qrJEd1AJr37EXmT5WBPwcs3gJYiw0SeknjIW5iLzQWI2HIYlaL/cJ/rL1jM2i/g==
+X-Received: by 2002:a05:6214:21ce:b0:4bb:7392:c94d with SMTP id d14-20020a05621421ce00b004bb7392c94dmr16781666qvh.71.1666875416776;
+        Thu, 27 Oct 2022 05:56:56 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id o8-20020ac841c8000000b0039cd508f1d3sm811749qtm.75.2022.10.27.05.56.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 05:56:55 -0700 (PDT)
+Message-ID: <b804457b-2d69-3eb8-38e2-955542cdd0b8@linaro.org>
+Date:   Thu, 27 Oct 2022 08:56:54 -0400
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA1PR12MB6258:EE_
-X-MS-Office365-Filtering-Correlation-Id: ca63570e-12cb-4bac-c3bd-08dab81aa15e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UOKVM1PIJSwtzuCFsUI0J+ZX/4C9QHRQC4naDEOtrEdUSH0uPAcr42Pb3IcZvSecjQU2N6xvkVhHCzoli+J+MYjVFg/sFdqgYX4nLfrKe8+Wq6wmE2o8SRArpWRV20utoC+QAhCUzEso8+pgb64n2tdtBjeJK3uXZPbhIESk4jDe/Wu1A2HAnmP1qvJRIDD2Avvs/Wt1AjPoRivLTzT44C9fLstcH3QUTvCHpkca0AJOGvi0Rk8t28P8bLM9rSf8gLD8E3Ow+JQ8bNpItIGwjBGlxmuZ4WqtO5tDe4rREbpp2q+UsgLPISfnsT5pznpgKB0u+xNAUhAqq2nx0XkAPgksdXu2UC6VxCZrdk6jfwUyZUEP3+mACBzlX1LXcdXdiiFh6beR3HQ8jeqtjtRYbDJ3vG6aLYMvEAlu+Ss2lkL6bX3pxMD7LRP0CrzjG0qs/YZh0+lUdbHOBeUAQ5NHO7Nh06HmibhULhNnCkNeCQweU40WmUm0urjKucsCRakZJIv+hvkRxi42IXL+mEYii/mCSKfEbbixaj0YmSup7KVZEot7SVEJ49V3jPD3pRq9r3ydS1KXNvMZxDek4d2JWo8LYjEsC7gPVrxQueQwET7tIYCrWOkPR1Q5Z9mGOHwfiYzAOQAopvWLGBarWMt/3fqnThWw8PyhKTEP27tJ2lIQCw2ievFVsyrUFh0aIx1dvwKimpoEuMD3bxotIWHReQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(366004)(136003)(396003)(39860400002)(451199015)(6486002)(478600001)(6512007)(86362001)(6916009)(83380400001)(316002)(38100700002)(54906003)(66556008)(4326008)(8676002)(66946007)(186003)(6506007)(2906002)(36756003)(8936002)(2616005)(7416002)(66476007)(26005)(41300700001)(4001150100001)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eySSPujH9ace8qpISQC5aQR0dY/HzRM41vyG5FkLwTJ6dTu1RWmqU8leXyh3?=
- =?us-ascii?Q?w/4r5Vv8/ZWIhly3ChlmcISJUVWGFhUN/MVpZIsbo5qkLM6kIaMS1RvYAtVI?=
- =?us-ascii?Q?gBNIR9Vhz5Sj88M5El6CAuVQ1Rhinm+GwL3G6AgQFggCgTReOOjv460YURhK?=
- =?us-ascii?Q?UusCxeJcyMCZcqdfe39Wze1UPkSbocdsEA41+E0CCkZDRprpHq3jjYY49U7g?=
- =?us-ascii?Q?XQgniYG1pSFKIF9a9n1KZcBZIbtoEUDpMl9u5H6ihr1DsxvgnFmhtwgoshrO?=
- =?us-ascii?Q?jUs/TeIAprrRxZ50YDcf/LXjQ0P1UvfxhvMxbY+5IFQ2rrtgPg11SEyrbTc5?=
- =?us-ascii?Q?sWwzPw1Y2qze8V6okXzy1y3wNE9Hp20d9bSQmHnFeqrI1+oyYPAKXjhBvjF1?=
- =?us-ascii?Q?BLXL3BAkXX9M6znC5eOz8LAH+X4VCT1MyHE7Ruo1Xm6BZ1cD+g1uzd+9deiZ?=
- =?us-ascii?Q?PX2AtuJCNrjQGMhPnjaB7SqW1sZ0BgGS/8MXoDWgNdsFwltS9Q5bAIBRmZFN?=
- =?us-ascii?Q?rZOqyLtSRNn6celDZmAoenZpMM5bf9Lr1lkBMNLY0C5ZbMsznWImAeRYcapW?=
- =?us-ascii?Q?JlAKxBc/Vo135G9KZNlxWCvWEFYAosaytNg9ILzMQ+PXa30vg6S38Qy8sTff?=
- =?us-ascii?Q?/3MaUOnMn8bpn0PNfVFz0AkZFX/OHzbLj+2lxbSe64+ijfDn0a7qIPxv58lT?=
- =?us-ascii?Q?r3maOMyvn0q0eFDHOyFd+NJJ5uWRHZP01QzC/30dkIRMwzUHHd7JrlEwwcHS?=
- =?us-ascii?Q?3aESxocU5OIiRJY/Hy9ZmdDHQ36TLTq9f5A1J/AA9pCWXQGoIyiD0a4pCc5H?=
- =?us-ascii?Q?+r6g7cdjwIK8+OI6M399CGSQMKuucTUJ4N5tmp9PlbYkRSbLl5741VAwJgRH?=
- =?us-ascii?Q?QhLrqLmbfgkJtsXou6CR4zO2tj+O2CVC0B89K/Z6DHKLfVfkeorIE0a6GyRj?=
- =?us-ascii?Q?RIEzUAKKYuG7EBNJMTaI/MgQK3Iby1m80cJYPTiJ/mQZSQoGvR2ByGub+syk?=
- =?us-ascii?Q?ZaOonNHCoXZG81taXkrssSOg09fWdtBY/OZ5bOFEUei+1U5px/ThOGs0dtW4?=
- =?us-ascii?Q?TxBrZ88mxoOK1jn2fTq0jNEfrvXSxsy2Rul6RvEiZ5eiVN0ax8obd9Q3A72K?=
- =?us-ascii?Q?VIG7bcCCwHGnipaOelavBKs7UqMqkJmeyPLVFFnXZ1Iv7LBeHqK8vquvenNt?=
- =?us-ascii?Q?yhXRAFzfp9L8C0hPcvFCAybjkVVKanfUEKYL8Q+KhaSPZDGdklPW6aGNKGgy?=
- =?us-ascii?Q?/VUiFBJq5ZEW/z7T9GRrJdpSM2OEfj8F722zAbdQeTgjr7hEwfJDa+QvtwWR?=
- =?us-ascii?Q?y/OtRUteyf2181+bKJhhe/K0ghuOXhVYiyEALESk+6ftHoRMtENdv9uKvIyV?=
- =?us-ascii?Q?inkycf9s5CW9hIsQO9wl+/5Guapl6pkf1fl1YnkYDn14WSNr52syLkro+vYR?=
- =?us-ascii?Q?PZAJLaXkd5hBydMwvRPMqhnEgFSpQ7CWvcTaGHYLon22aRh2grPgC4AXBxls?=
- =?us-ascii?Q?YUHnY+avwuK7fuSorg6xQ+4dHujj1NctW3htnqt3F0QnWYFetp6XF3i3QOsL?=
- =?us-ascii?Q?VRlG6k4hRPizzhLpRfA=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca63570e-12cb-4bac-c3bd-08dab81aa15e
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 12:56:14.3900
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ztfJVINeqTkP4qCaOG/h5ygHS/rGJpeMD/3ay6bjc+Msu4cu5gL9/6Zwl/+6ldan
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6258
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 2/2] dt-bindings: soc: add loongson2 guts
+Content-Language: en-US
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hector Martin <marcan@marcan.st>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Brian Norris <briannorris@chromium.org>,
+        Sven Peter <sven@svenpeter.dev>, loongarch@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221025035128.21068-1-zhuyinbo@loongson.cn>
+ <20221025035128.21068-2-zhuyinbo@loongson.cn>
+ <7c67c721-685a-fa0e-ab4b-41b7de3ea0a0@linaro.org>
+ <52de60bd-8aa5-a461-9bca-ce8e6f82ead8@loongson.cn>
+ <ae7cf416-f7b9-2316-5bb2-0043651ed0fd@linaro.org>
+ <7bd6db22-210b-d8ff-7476-b2e38dc7c683@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <7bd6db22-210b-d8ff-7476-b2e38dc7c683@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 02:44:49PM +0200, Niklas Schnelle wrote:
-> On Mon, 2022-10-24 at 13:26 -0300, Jason Gunthorpe wrote:
-> > On Mon, Oct 24, 2022 at 05:22:24PM +0200, Niklas Schnelle wrote:
-> > 
-> > > Thanks for the explanation, still would like to grok this a bit more if
-> > > you don't mind. If I do read things correctly synchronize_rcu() should
-> > > run in the conext of the VFIO ioctl in this case and shouldn't block
-> > > anything else in the kernel, correct? At least that's how I understand
-> > > the synchronize_rcu() comments and the fact that e.g.
-> > > net/vmw_vsock/virtio_transport.c:virtio_vsock_remove() also does a
-> > > synchronize_rcu() and can be triggered from user-space too.
-> > 
-> > Yes, but I wouldn't look in the kernel to understand if things are OK
-> >  
-> > > So we're
-> > > more worried about user-space getting slowed down rather than a Denial-
-> > > of-Service against other kernel tasks.
-> > 
-> > Yes, functionally it is OK, but for something like vfio with vIOMMU
-> > you could be looking at several domains that have to be detached
-> > sequentially and with grace periods > 1s you can reach multiple
-> > seconds to complete something like a close() system call. Generally it
-> > should be weighed carefully
-> > 
-> > Jason
+On 26/10/2022 23:52, Yinbo Zhu wrote:
 > 
-> Thanks for the detailed explanation. Then let's not put a
-> synchronize_rcu() in detach, as I said as long as the I/O translation
-> tables are there an IOTLB flush after zpci_unregister_ioat() should
-> result in an ignorable error. That said, I think if we don't have the
-> synchronize_rcu() in detach we need it in s390_domain_free() before
-> freeing the I/O translation tables.
+> 
+> 在 2022/10/26 下午10:10, Krzysztof Kozlowski 写道:
+>> On 26/10/2022 03:22, Yinbo Zhu wrote:
+>>>
+>>>
+>>> 在 2022/10/26 上午3:40, Krzysztof Kozlowski 写道:
+>>>> On 24/10/2022 23:51, Yinbo Zhu wrote:
+>>>>> Add the loongson2 soc guts driver binding with DT schema format
+>>>>> using json-schema.
+>>>>>
+>>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>>> ---
+>>>>>    .../soc/loongson/loongson,ls2k-guts.yaml      | 37 +++++++++++++++++++
+>>>>
+>>>> Looks like wrong location, although difficult to judge because you did
+>>>> not describe the hardware at all. If this is chipinfo-like device, then
+>>>> Documentation/devicetree/bindings/hwinfo/.
+> yes it is a chipinfo/socinfo device, I will following your advice.
+>>> My guts driver is refer fsl platform. It was was to manage and access
+>>> global utilities register block for SoC and it was only used in SoC
+>>> platform. when driver need use Soc ops to do some function the this
+>>> driver was needed.  the dcfg (device config) was a function in guts
+>>> (global utilities) block.
+>>
+>> I can barely understand it.
+> My description is about chipinfo/socinfo definition. and I have a look
+> /bindings/hwinfo/, I think move binding file to hwinfo that is okay for me.
+> 
+> Documentation/devicetree/bindings/hwinfo/ti,k3-socinfo.yaml
+> 
+>>
+>>> For these type of driver, other platforms were initially placed on
+>>> Documentation/devicetree/bindings/arm/   if it is arm/arm64
+>>> architecture. Later, move it to the soc directory.
+>>>
+>>> Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-dcfg.yaml
+>>
+>> How is this related? This is Layerscape, not Loongson2. Describe the
+>> hardware you are adding bindings for.
+> The driver functions/type are the same, the driver was register a struct 
+> soc_device_attribute by soc_device_register then other peripheral driver
+> can call SoC ops, such as soc_device_match.
+> 
+> then layerscape guts module bindings are placed in
+> Documentation/devicetree/bindings/soc/, the loongson guts module 
+> bindings was follow that layerscape and are placed in
+> Documentation/devicetree/bindings/soc/
+> 
+> In a words,  It is a question about where the binding file should be 
+> placed.  I think move binding file to hwinfo that is okay for me.
 
-Yes, it would be appropriate to free those using one of the rcu
-free'rs, (eg kfree_rcu) not synchronize_rcu()
+My review is limited to the scope I understand from what you wrote. You
+described so far something being only a soc info registers. For this the
+place is hwinfo.
 
-Jason
+The Layerscape dcfg is more than that - it is a syscon, system register
+controller with at least one child device.
+
+If your device is exactly like that, describe it in bindings fully, not
+partially. These are then incomplete bindings.
+
+>>
+>>>
+>>> So, do you still think it is inappropriate to place it in the soc dir?
+>>>>
+>>>>
+>>>>>    MAINTAINERS                                   |  1 +
+>>>>>    2 files changed, 38 insertions(+)
+>>>>>    create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
+>>>>> new file mode 100644
+>>>>> index 000000000000..2502f8aeb74d
+>>>>> --- /dev/null
+>>>>> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
+>>>>> @@ -0,0 +1,37 @@
+>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>>> +%YAML 1.2
+>>>>> +---
+>>>>> +$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-guts.yaml#
+>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>> +
+>>>>> +title: Loongson2 GUTS driver.
+>>>>
+>>>> Drop "driver." unless you refer to some hardware (like motor driver?).
+>>> this need refer hardware soc datasheet to gain soc register (global
+>>> utilities register block ).
+>>> so keep "driver" string that whether was more appropriate?
+>>
+>> What? I cannot parse it.
+>>
+>> Did you understand my comment? If yes, please point to Wikipedia article
+>> explaining this "Driver" you refer to.
+> I will remove the "driver" string.
+>>
+>>
+>>>>
+>>>>> +
+>>>>> +maintainers:
+>>>>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>>> +
+>>>>> +description: |
+>>>>> +  GUTS driver was to manage and access global utilities block. Initially
+>>>>
+>>>> Drop "driver" and describe instead what is GUTS, including its acronym,
+>>>>
+>>>>> +  only reading SVR and registering soc device are supported.
+>>>>
+>>>> Entire sentence describe Linux driver - drop it. Instead describe the
+>>>> device, the hardware.
+>>>>
+>>>>> +
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    const: loongson,ls2k-guts
+>>>>> +
+>>>>> +  reg:
+>>>>> +    maxItems: 1
+>>>>> +
+>>>>> +  little-endian: true
+>>>>> +
+>>>>> +required:
+>>>>> +  - compatible
+>>>>> +  - reg
+>>>>> +
+>>>>> +additionalProperties: false
+>>>>> +
+>>>>> +examples:
+>>>>> +  - |
+>>>>> +    guts: guts@1fe00000 {
+>>>>
+>>>> Node names should be generic.
+>>> dcfg/scfg (device cfg/ soc cfg)was the key function of guts (global
+>>> utilities) block. and guts name I was refer fsl soc driver.
+>>> "drivers/soc/fsl/guts.c"
+>>> this binding file was follows of fsl guts.
+>>> Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-dcfg.yaml
+>>> Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-scfg.yaml
+>>>
+>>> or, I was use scfg as node name, Do you think it's appropriate?
+>>
+>> No, these are not generic node names.
+> I was refer "ti,k3-socinfo.yaml",  Do you think it's appropriate that 
+> socinfo as node name?
+
+The blocks are called usually chipid and you can find examples for that.
+There are no examples using socinfo name.
+
+If the main purpose of this register block (and/or device) is to provide
+socinfo, then call it chipid.
+
+Best regards,
+Krzysztof
+
