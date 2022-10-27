@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772D560F050
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 08:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C323360F052
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 08:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234690AbiJ0Gbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 02:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46268 "EHLO
+        id S234697AbiJ0Gbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 02:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234626AbiJ0GbM (ORCPT
+        with ESMTP id S234041AbiJ0GbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 02:31:12 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A821633A1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 23:31:04 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 3-20020a17090a0f8300b00212d5cd4e5eso5313733pjz.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 23:31:04 -0700 (PDT)
+        Thu, 27 Oct 2022 02:31:17 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70603164BFE
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 23:31:09 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id f5-20020a17090a4a8500b002131bb59d61so5065782pjh.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 23:31:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=S9zfCoPbv1xIgqLZ/LFbFJSfu67nIjBlVVkKmd65qsM=;
-        b=is8QnbnoChevKHiay+bv5Egd+bDsQhPC0aq/P4NjR+ALCycC/OB1OdwDPfPyntNJc7
-         UiheyUL7BK+kynwb3kLtygMqaeaYJvL5FRP5DzFRGxJNaPlhHFqvCiOx+pFopgPjBWM7
-         BXTXwmkAIJ3YG//Wgr4rrK+f41MChPvZgDOncNAazTphhD54qDyEE7joSCG9PlXllAfx
-         QY0GxWK1smipMMGlHKIVkIqC0LDI0JCqkZ5K/O/zu7U5+Y7tW0jGSfcbXtS2bkM046+F
-         JEuSLYoXF4m++1qHCb+a99lBt37sjPiXV6AvEM9xQdbieHAbuHNNREemBpx4qX9A54n6
-         p0Bg==
+        bh=henhCPd8lraNCdDJWnoPIO23RxmIlqkGqlJr0QeoFWY=;
+        b=WE/Xq3QwBPWoeDATpRNcL8M/G3ZKU2pYBLzvWJrmuGUvxW0GUAe1AmVjKmfKMgSzLb
+         PUSSfPAITJLPvPEgGfkFysS0VwoZe9bMHVTM/0n+Hs36qUa6lJVsNBu7SP8MaR27ujgA
+         WccP0bqYy2igcJ7O0h6IquokzIsz/GUepMurdUx6TzHcvD1nTkZ1F7RhOILXqM9oiSVl
+         k4kCu4S2qzetpkIh4iVSMzzbQz8ZfmRwr2e3eCDtkDPNLFJUpzJdE1BWXkHx8UZjFAxg
+         E7ghOFIcBGZX8rXlWcg9bEG8c4h5vM7jLsHQTrKjHwfpD+Q/ZUBUQcRpcycoB2Nvs22F
+         eSvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=S9zfCoPbv1xIgqLZ/LFbFJSfu67nIjBlVVkKmd65qsM=;
-        b=QkNGOZ79jww3C/KbuqRrpp1e4vHD+kqtB2NrHwwgiD8hewMFYHDXSP0sjY2SzvB5JT
-         mh7K+Znc3DDwbem19G8G8bdjWmTgsoWw5KOfFYtJJ8fRWzLV5ibfroN+j4dz3WNjMdot
-         CIZttM7Gr+ktsC9dRjh8XC0VXP5a3pMb0FN14iOoYo+9GHMCLRnxPYcmT4RD2pIWlMp/
-         t+DVwDCP5TZeDRjzEh0DrIf3hxRjnZJp3wBihsVmUE6FjomV+12KiJIr9r2KpFGYVAWi
-         w8j4th6h+atA1Y5ahKQVEl4ouN0pmQ2EdLO4ofHpFmpYToUH0R6a25Mqnx5ZLhulFbL5
-         tgKQ==
-X-Gm-Message-State: ACrzQf0Jn4fAhDuegeOvBMs/38LYBwog9UJMwxTmILcvUuPb0kX4ZPy5
-        vWapqeGw6xTY6IYKu6Dy4r+n
-X-Google-Smtp-Source: AMsMyM7Q/eezkojdGLTN34Rxc4KS+ssNZthocVIq6NSgFAtGAAaGSNRHdkULICxqAmVEsDKc2oVvAQ==
-X-Received: by 2002:a17:902:e790:b0:183:88dd:1d30 with SMTP id cp16-20020a170902e79000b0018388dd1d30mr48171770plb.62.1666852263725;
-        Wed, 26 Oct 2022 23:31:03 -0700 (PDT)
+        bh=henhCPd8lraNCdDJWnoPIO23RxmIlqkGqlJr0QeoFWY=;
+        b=EXJ5aAjqV+PElTPDEzZRe1lVXmQWFqheJLHh4QNzrj1CF4iMWJJzUKSPxqzX56PDi7
+         9ZBHcYfhX6Z99asxGwMccdNRq5Evt2yU3Ct0dIPYEDhK4BHak5wFXBWPPlgq66hL7HEi
+         sO411U1eTm3vHrt3zOQmO5lXQQcj+WpsgkaKQrLO5Dz3C1jmkxmd9iSzbgwMO87flULF
+         vxYD6zKmK6VfN3WGypp8hMHSFktep53HitabkooSeh9nBPVnFMQ6qbazFGV7RDQAsB3q
+         dgIT7sGBvWHHjkoUqDkQ3EhXzk56ZXN0psyzJyn5IB1xpt/EA4p4ZIDlTw0vsVy/G+iZ
+         JETQ==
+X-Gm-Message-State: ACrzQf2JjJUdSVtNoJLzKWuDmz4usukhhE2V9+8tJOVkMuu0++bjiCwy
+        TSmMKNjj00037QCy3dXz/ias
+X-Google-Smtp-Source: AMsMyM6r5m8xHEeOyHEYSqVROVYNLWpCgVzv+sw9X1/TV9wpB2SPnM0rPpLNuEnIbWYMni4dN3ycNg==
+X-Received: by 2002:a17:902:8bc3:b0:178:8563:8e42 with SMTP id r3-20020a1709028bc300b0017885638e42mr47814600plo.0.1666852268489;
+        Wed, 26 Oct 2022 23:31:08 -0700 (PDT)
 Received: from localhost.localdomain ([117.193.208.123])
-        by smtp.gmail.com with ESMTPSA id i126-20020a626d84000000b00561d79f1064sm446041pfc.57.2022.10.26.23.30.59
+        by smtp.gmail.com with ESMTPSA id i126-20020a626d84000000b00561d79f1064sm446041pfc.57.2022.10.26.23.31.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 23:31:02 -0700 (PDT)
+        Wed, 26 Oct 2022 23:31:07 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     andersson@kernel.org
 Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
@@ -57,9 +57,9 @@ Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
         quic_jprakash@quicinc.com, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 10/11] arm64: dts: qcom: sc8280xp-x13s: Add PMR735A VADC channel
-Date:   Thu, 27 Oct 2022 12:00:05 +0530
-Message-Id: <20221027063006.9056-11-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 11/11] arm64: dts: qcom: sc8280xp-x13s: Add PM8280_{1/2} ADC_TM5 channels
+Date:   Thu, 27 Oct 2022 12:00:06 +0530
+Message-Id: <20221027063006.9056-12-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221027063006.9056-1-manivannan.sadhasivam@linaro.org>
 References: <20221027063006.9056-1-manivannan.sadhasivam@linaro.org>
@@ -67,45 +67,103 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add VADC channel of PMR735A for measuring the on-chip die temperature.
+Add ADC_TM5 channels of PM8280_{1/2} for monitoring the temperatures from
+external thermistors connected to AMUX pins. The temperture measurements
+are collected from the PMK8280's VADC channels that expose the
+mesasurements from slave PMICs PM8280_{1/2}.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts | 7 +++++++
- 1 file changed, 7 insertions(+)
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-index d300d217fdc6..babf594384f2 100644
+index babf594384f2..fe6b75551ab9 100644
 --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
 +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-@@ -9,6 +9,7 @@
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/iio/qcom,spmi-adc7-pm8350.h>
- #include <dt-bindings/iio/qcom,spmi-adc7-pmk8350.h>
-+#include <dt-bindings/iio/qcom,spmi-adc7-pmr735a.h>
- #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
- 
- #include "sc8280xp.dtsi"
-@@ -250,6 +251,12 @@ sys-therm8@347 {
- 		qcom,ratiometric;
- 		qcom,hw-settle-time = <200>;
+@@ -259,6 +259,74 @@ pmr735a-die-temp@403 {
  	};
-+
-+	pmr735a-die-temp@403 {
-+		reg = <PMR735A_ADC7_DIE_TEMP>;
-+		label = "pmr735a_die_temp";
-+		qcom,pre-scaling = <1 1>;
-+	};
  };
  
++&pmk8280_adc_tm {
++	status = "okay";
++
++	sys-therm1@0 {
++		reg = <0>;
++		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM1_100K_PU(1)>;
++		qcom,avg-samples = <2>;
++		qcom,ratiometric;
++		qcom,hw-settle-time-us = <200>;
++	};
++
++	sys-therm2@1 {
++		reg = <1>;
++		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM2_100K_PU(1)>;
++		qcom,avg-samples = <2>;
++		qcom,ratiometric;
++		qcom,hw-settle-time-us = <200>;
++	};
++
++	sys-therm3@2 {
++		reg = <2>;
++		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM3_100K_PU(1)>;
++		qcom,avg-samples = <2>;
++		qcom,ratiometric;
++		qcom,hw-settle-time-us = <200>;
++	};
++
++	sys-therm4@3 {
++		reg = <3>;
++		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM4_100K_PU(1)>;
++		qcom,avg-samples = <2>;
++		qcom,ratiometric;
++		qcom,hw-settle-time-us = <200>;
++	};
++
++	sys-therm5@4 {
++		reg = <4>;
++		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM1_100K_PU(3)>;
++		qcom,avg-samples = <2>;
++		qcom,ratiometric;
++		qcom,hw-settle-time-us = <200>;
++	};
++
++	sys-therm6@5 {
++		reg = <5>;
++		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM2_100K_PU(3)>;
++		qcom,avg-samples = <2>;
++		qcom,ratiometric;
++		qcom,hw-settle-time-us = <200>;
++	};
++
++	sys-therm7@6 {
++		reg = <6>;
++		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM3_100K_PU(3)>;
++		qcom,avg-samples = <2>;
++		qcom,ratiometric;
++		qcom,hw-settle-time-us = <200>;
++	};
++
++	sys-therm8@7 {
++		reg = <7>;
++		io-channels = <&pmk8280_vadc PM8350_ADC7_AMUX_THM4_100K_PU(3)>;
++		qcom,avg-samples = <2>;
++		qcom,ratiometric;
++		qcom,hw-settle-time-us = <200>;
++	};
++};
++
  &qup0 {
+ 	status = "okay";
+ };
 -- 
 2.25.1
 
