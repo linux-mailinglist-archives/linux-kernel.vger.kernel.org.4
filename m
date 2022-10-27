@@ -2,93 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261F060F21B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2F560F21E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234656AbiJ0IU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 04:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
+        id S234664AbiJ0IUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 04:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234598AbiJ0IUX (ORCPT
+        with ESMTP id S234902AbiJ0IUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 04:20:23 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538AD3687F;
-        Thu, 27 Oct 2022 01:20:20 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id o4so898092wrq.6;
-        Thu, 27 Oct 2022 01:20:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bZhAkeTE+r3qGSdf1uyZlVySOESrVW6Y6fLcnPw4YAY=;
-        b=DiIQNYyGrONs6G2AQZr+dH+U4Jsn1FBRy0IMRIDZ7JwnXFYfQfDx2nvhwWlwRS3BAO
-         eBm+2xhvAhNAoD9cFxe/7H3bUDw4fOg6AGfRjMk//F9lvQWnNzxR/R2TLWJBjnfXlOkT
-         Qb5EOia6u6jGmzYO8Gim9Lll50kq5jv/zaC7dWh1yrQeuRJ35ifdQC95/5K1tBCKLyCB
-         CDsKBeJl/YhXGwRk5QSzOibqNb4MmhBoeWN6FNofhaMmfSDYYkCgq8Yy0scM3zhYWMkk
-         PvwANTuSx6fd+fJALVH0vCJ6Gv0/pcaCdqW+cPCOCcI15EI2hNghLYUb17kALwkndbcw
-         c0UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bZhAkeTE+r3qGSdf1uyZlVySOESrVW6Y6fLcnPw4YAY=;
-        b=qgxnMUhIQMEc55Z9+Ma4Xnoot5Ghi1ZfK3Ss3/W48FOmDSno380O4syQaqEeKlcgE2
-         Y4/i68wjzGmL2AA+WqIyE4la1oHvbA1DeDzaN8/tbTWn+ge6IK3l0MtY0QKz0KYZyljA
-         ybovRnp4nO8SyyeIMWfXYebe9bire7+Awsyf8awSgthvBxbavVxiRV0eBsNQoGCGG24S
-         P+hecNk1cB26FSuruqADoiiaoQqtsvkw8qws3AMDTvxenQQVeVDRFzeoRHLKJ004w7Ba
-         6innEr7IPjYp/KtRUf80IpeBrKcFviTfDXLgGXROH/5bh/dACv9q7YtY/WW4Y2I0MOO+
-         kTOg==
-X-Gm-Message-State: ACrzQf2Xd30/Pv1YFwsUW3wn08osxn/yH4GTr00kbKJcKT9Uqbpiy1K5
-        +O3sV25aejavZHZEjWq9quY=
-X-Google-Smtp-Source: AMsMyM4fwrpf2P3XzwJoDzmjqVVVomWWxMoIdN49K5425D5uKFtKQmYX6UoderE+s+rzfRIQjOZtKg==
-X-Received: by 2002:a05:6000:10d1:b0:236:755b:e038 with SMTP id b17-20020a05600010d100b00236755be038mr12072900wrx.153.1666858818700;
-        Thu, 27 Oct 2022 01:20:18 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id l17-20020a5d6751000000b00236488f62d6sm519681wrw.79.2022.10.27.01.20.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 01:20:18 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] selftests/watchdog: Fix spelling mistake "Temeprature" -> "Temperature"
-Date:   Thu, 27 Oct 2022 09:20:17 +0100
-Message-Id: <20221027082017.3255055-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Thu, 27 Oct 2022 04:20:30 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A2FC2FC10;
+        Thu, 27 Oct 2022 01:20:25 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8CxrrdIP1pj8dUCAA--.5816S3;
+        Thu, 27 Oct 2022 16:20:24 +0800 (CST)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx9VZHP1pjcbAFAA--.2365S2;
+        Thu, 27 Oct 2022 16:20:24 +0800 (CST)
+Subject: Re: [PATCH v3 1/2] pinctrl: pinctrl-loongson2: add pinctrl driver
+ support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, zhuyinbo@loongson.cn,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        zhanghongchen <zhanghongchen@loongson.cn>
+References: <20221024014209.5327-1-zhuyinbo@loongson.cn>
+ <a5a5c18f-476c-2f45-8cd0-3c88b3aa509d@linaro.org>
+ <841bad76-e19c-e400-e46a-2a83986c29eb@loongson.cn>
+ <9dfb7434-dd62-64e8-7831-b797687827e7@linaro.org>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <542e661c-5aa3-a855-889f-6deb8a74584f@loongson.cn>
+Date:   Thu, 27 Oct 2022 16:20:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <9dfb7434-dd62-64e8-7831-b797687827e7@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Dx9VZHP1pjcbAFAA--.2365S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7KF1fWry5GF45JFyUuFW3KFg_yoW8tF15pr
+        Z3Ja1qkF4UGr10g34IqwnYqrn2kr4UtF43Xr1fW3yxuas8JFy7JFWUGF1jkrn5C34kAr4U
+        Xr4YgayYyF45Aa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bxkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x
+        8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
+        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
+        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
+        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z2
+        80aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8I_M7UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a print statement. Fix it.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/watchdog/watchdog-test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
-index fb3ca67785c2..bc71cbca0dde 100644
---- a/tools/testing/selftests/watchdog/watchdog-test.c
-+++ b/tools/testing/selftests/watchdog/watchdog-test.c
-@@ -260,7 +260,7 @@ int main(int argc, char *argv[])
- 			if (ret)
- 				printf("WDIOC_GETTEMP: '%s'\n", strerror(errno));
- 			else
--				printf("Temeprature: %d\n", temperature);
-+				printf("Temperature %d\n", temperature);
- 
- 			break;
- 		case 't':
--- 
-2.37.3
+在 2022/10/26 下午10:11, Krzysztof Kozlowski 写道:
+> On 26/10/2022 02:40, Yinbo Zhu wrote:
+>>
+>>
+>> 在 2022/10/26 上午12:07, Krzysztof Kozlowski 写道:
+>>> On 23/10/2022 21:42, Yinbo Zhu wrote:
+>>>> The loongson2 SoC has a few pins that can be used as GPIOs or take
+>>>> multiple other functions. Add a driver for the pinmuxing.
+>>>>
+>>>> There is currently no support for GPIO pin pull-up and pull-down.
+>>>
+>>> Thank you for your patch. There is something to discuss/improve.
+>>>
+>>>> +static const struct pinmux_ops loongson2_pmx_ops = {
+>>>> +	.set_mux = loongson2_pmx_set_mux,
+>>>> +	.get_functions_count = loongson2_pmx_get_funcs_count,
+>>>> +	.get_function_name = loongson2_pmx_get_func_name,
+>>>> +	.get_function_groups = loongson2_pmx_get_groups,
+>>>> +};
+>>>> +
+>>>> +static int loongson2_pinctrl_probe(struct platform_device *pdev)
+>>>> +{
+>>>> +	struct device *dev = &pdev->dev;
+>>>> +	struct loongson2_pinctrl *pctrl;
+>>>> +	struct resource *res;
+>>>> +
+>>>> +	pctrl = devm_kzalloc(dev, sizeof(*pctrl), GFP_KERNEL);
+>>>> +	if (!pctrl)
+>>>> +		return -ENOMEM;
+>>>> +
+>>>> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>>>> +	pctrl->reg_base = devm_ioremap_resource(dev, res);
+>>>
+>>> This is still not fixed.
+>> sorry, I don't get your meaning about "Use combined helper for this."
+>> please you tell me more specific.
+> 
+> So you ignored the feedback? That's not how review process works. You
+> either implement the feeedback or ask questions. Ignoring it is not
+> acceptable.
+You can find these code has a change in this code conext.  I have a 
+feedback on this code.  but I mistakenly thought helper is dev_err_probe.
+         res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+         pctrl->reg_base = devm_ioremap_resource(dev, res);
+         if (IS_ERR(pctrl->reg_base))
+-               return PTR_ERR(pctrl->reg_base);
++               return dev_err_probe(pctrl->dev, PTR_ERR(pctrl->reg_base),
++                               "unable to map I/O memory");
+
+         raw_spin_lock_init(&pctrl->lock);
+
+> 
+> There is a helper combining two calls into one. Grep for it in headers
+> and use it.
+> 
+You said is that use "devm_platform_get_and_ioremap_resource" as a 
+helper? sorry, I will do it.
+> Best regards,
+> Krzysztof
+> 
 
