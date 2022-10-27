@@ -2,164 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3613660F6B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DF860F6CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235546AbiJ0MEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
+        id S234615AbiJ0MIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235551AbiJ0MEs (ORCPT
+        with ESMTP id S235551AbiJ0MIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:04:48 -0400
-Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3D93FD5D;
-        Thu, 27 Oct 2022 05:04:46 -0700 (PDT)
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id BF77180789;
-        Thu, 27 Oct 2022 12:04:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1666872284;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BJb1Kk7GF9cOzQWU+/M02gbNTsVeaeweLROo/X/n1M4=;
-        b=Yz46Hnt6E5EU6iZqONWTfxHOqzhnh+dZNZ+JIcNtcUgjTkq2JxRQ6OtVUBMrHLUog6YPf6
-        r+0CUhcvCehlQNIKqcWEAVgXbeQ993wUxpclGWbun4sZ3Yyzl03pMr7Q5W2bmA+3d3AUm9
-        oSxYmfx3ht8d37r5G12bq8Y80Fh83EoF8tEiPMoPGhxuTDqzdhkZSTT/6U/3L1ySqcp3B4
-        75UBjGnYbMYw9w/tsMIn0NJkoo4fobpgMmp2KUwCulPTl01XLt7AK61kVnQ0nUWkQVFe/T
-        Sk2Pcgyi0JS5T4mL+3j9ygflekLEoijFGmp3gcAW93oQezPSJtgLywUvaz1rqg==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     Zeng Heng <zengheng4@huawei.com>, sfrench@samba.org,
-        tom@talpey.com, sprasad@microsoft.com, lsahlber@redhat.com
-Cc:     linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-kernel@vger.kernel.org, liwei391@huawei.com
-Subject: Re: [PATCH v3] cifs: fix use-after-free caused by invalid pointer
- `hostname`
-In-Reply-To: <20221027112127.2433605-1-zengheng4@huawei.com>
-References: <20221027112127.2433605-1-zengheng4@huawei.com>
-Date:   Thu, 27 Oct 2022 09:05:50 -0300
-Message-ID: <878rl1h3oh.fsf@cjr.nz>
+        Thu, 27 Oct 2022 08:08:31 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05ACB03E8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:08:28 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so6100106pji.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:08:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=IRokpQrD/Xpoqhga6/IEwT5hyf0pX7PAPi9ZKJUnr7Q=;
+        b=JMScpzWl6emAup2u57Oz+x3Eu9xexeIgrXPigRBphDYLS17++q/iVRPSo68AKI+7HU
+         EfgGCjwU2Ux3cCL9UySpAo/NxqVFWjixbOmUZjZRvpAG8PUsbi26QqIcLHUvm3Dc+7Mu
+         tokABmH2890D/GOamLjXSHM6MQEKCFUb9JrhYTFPoO508RlLtXbGQkazNjCbw+V1FAaz
+         jm7qwXWgp9XoEvQ1BhPMwaBoBCc0GoDPc/Y4bzrIJIjKIRBFDj1aODTZM6Wohggdbqva
+         fsDS+dbhf8nPvt9M108QYnZr1E89+0CPxGqxOM6YJu8w8tq4K30L3TMD36h5vh2ysifk
+         ET6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IRokpQrD/Xpoqhga6/IEwT5hyf0pX7PAPi9ZKJUnr7Q=;
+        b=CL0Pv8EUcVfZHht+l3Ww7nEvpfyHdXgBxDMyQ+z5Q/zZtYUOs0KSZkTKjSp+u59KwD
+         8downQLmo0wlFehzRY/b1CyLdMXyjwJ5xe5aM6Ui0jE+7u5vwd8ah5xp4IL1CzXfN++l
+         qx9R2jYMqyKlZyw9XtzkZGyRb4eJp5abibNeP1eZTeLQvnoxUpkV0M90Ed5o+G49SpUd
+         vsBId7/RKWHogInRKAYOikR6Xn0Sm/TFOl3E6gAHHOfhidZWxwQonBXdzydkbbcklB0p
+         7RTgDKYtIAMT2ydUNjqJDuPsFcPQWv6OpbSyl5V4Viy0qyM/3zyLHQyLS/7YnSwXfnwg
+         uVAw==
+X-Gm-Message-State: ACrzQf3xnTEEbTxTsVXPeYPZfeMe4uJUIJuCATSkSlzbrXMI6ucefwMB
+        bg75tgmFU5qMkNpolqozgkRRA8oeVvp1XUkxyZd4IxTyyD39+Q==
+X-Google-Smtp-Source: AMsMyM4mFDjwKvJtTg/Yzz8RozT/UYy+3pElSAq7TFuq1ZEqDR1s26iqwELHXdK9Q2XTTM+wOKNPMi+xbxQi+xSTdnA=
+X-Received: by 2002:a17:902:70c7:b0:183:3e66:fe48 with SMTP id
+ l7-20020a17090270c700b001833e66fe48mr47299112plt.165.1666872508418; Thu, 27
+ Oct 2022 05:08:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20221018105149.820062-1-thierry.reding@gmail.com>
+ <CAPDyKFopppohLJ7ptnQxpBHzMLh2SZObarQRC0bJyTwE=nky4w@mail.gmail.com> <Y1pLPHER+Pq+cRvc@orome>
+In-Reply-To: <Y1pLPHER+Pq+cRvc@orome>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 27 Oct 2022 14:07:51 +0200
+Message-ID: <CAPDyKFpG9ZjVTiK3HEqioDN8ksGpRYiXL_SLSmOfm9fjJfcrsw@mail.gmail.com>
+Subject: Re: [PATCH] iommu: Always define struct iommu_fwspec
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Prathamesh Shete <pshete@nvidia.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zeng Heng <zengheng4@huawei.com> writes:
+On Thu, 27 Oct 2022 at 11:11, Thierry Reding <thierry.reding@gmail.com> wrote:
+>
+> On Thu, Oct 20, 2022 at 01:32:41PM +0200, Ulf Hansson wrote:
+> > On Tue, 18 Oct 2022 at 12:51, Thierry Reding <thierry.reding@gmail.com> wrote:
+> > >
+> > > From: Thierry Reding <treding@nvidia.com>
+> > >
+> > > In order to fully make use of the !IOMMU_API stub functions, make the
+> > > struct iommu_fwspec always available so that users of the stubs can keep
+> > > using the structure's internals without causing compile failures.
+> > >
+> > > Signed-off-by: Thierry Reding <treding@nvidia.com>
+> >
+> > Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> >
+> > > ---
+> > > Hi Joerg,
+> > >
+> > > this is a rebased patch extracted from an ancient series that never
+> > > ended up getting applied:
+> > >
+> > >         https://lore.kernel.org/all/20191209120005.2254786-3-thierry.reding@gmail.com/
+> > >
+> > > You had already acked this particular patch, so maybe you can pick this
+> > > up. I've seen at least two discussions where this was brought up again,
+> > > so I figured it'd be worth sending this out again because it can help
+> > > remove a number of #ifdef blocks throughout the kernel.
+> >
+> > Yes, this would certainly help to improve the code. To me, it looks
+> > like the current stub functions, like dev_iommu_fwspec_get() for
+> > example, aren't really useful without $subject patch.
+> >
+> > Note that, I have a pending patch for mmc that would benefit from
+> > this. To prevent me from delaying that, an easy way forward, assuming
+> > there are no objections of course, would be to send this for 6.1-rc.
+>
+> Adding Prathamesh for visibility. Another alternative would be to
+> prepend this to Prathamesh's series with an Acked-by from Joerg.
 
-> `hostname` needs to be set as null-pointer after free in
-> `cifs_put_tcp_session` function, or when `cifsd` thread attempts
-> to resolve hostname and reconnect the host, the thread would deref
-> the invalid pointer.
->
-> Here is one of practical backtrace examples as reference:
->
-> Task 477
-> ---------------------------
->  do_mount
->   path_mount
->    do_new_mount
->     vfs_get_tree
->      smb3_get_tree
->       smb3_get_tree_common
->        cifs_smb3_do_mount
->         cifs_mount
->          mount_put_conns
->           cifs_put_tcp_session
->           --> kfree(server->hostname)
->
-> cifsd
-> ---------------------------
->  kthread
->   cifs_demultiplex_thread
->    cifs_reconnect
->     reconn_set_ipaddr_from_hostname
->     --> if (!server->hostname)
->     --> if (server->hostname[0] == '\0')  // !! UAF fault here
->
-> CIFS: VFS: cifs_mount failed w/return code = -112
-> mount error(112): Host is down
-> BUG: KASAN: use-after-free in reconn_set_ipaddr_from_hostname+0x2ba/0x310
-> Read of size 1 at addr ffff888108f35380 by task cifsd/480
-> CPU: 2 PID: 480 Comm: cifsd Not tainted 6.1.0-rc2-00106-gf705792f89dd-dirty #25
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x68/0x85
->  print_report+0x16c/0x4a3
->  kasan_report+0x95/0x190
->  reconn_set_ipaddr_from_hostname+0x2ba/0x310
->  __cifs_reconnect.part.0+0x241/0x800
->  cifs_reconnect+0x65f/0xb60
->  cifs_demultiplex_thread+0x1570/0x2570
->  kthread+0x2c5/0x380
->  ret_from_fork+0x22/0x30
->  </TASK>
-> Allocated by task 477:
->  kasan_save_stack+0x1e/0x40
->  kasan_set_track+0x21/0x30
->  __kasan_kmalloc+0x7e/0x90
->  __kmalloc_node_track_caller+0x52/0x1b0
->  kstrdup+0x3b/0x70
->  cifs_get_tcp_session+0xbc/0x19b0
->  mount_get_conns+0xa9/0x10c0
->  cifs_mount+0xdf/0x1970
->  cifs_smb3_do_mount+0x295/0x1660
->  smb3_get_tree+0x352/0x5e0
->  vfs_get_tree+0x8e/0x2e0
->  path_mount+0xf8c/0x1990
->  do_mount+0xee/0x110
->  __x64_sys_mount+0x14b/0x1f0
->  do_syscall_64+0x3b/0x90
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> Freed by task 477:
->  kasan_save_stack+0x1e/0x40
->  kasan_set_track+0x21/0x30
->  kasan_save_free_info+0x2a/0x50
->  __kasan_slab_free+0x10a/0x190
->  __kmem_cache_free+0xca/0x3f0
->  cifs_put_tcp_session+0x30c/0x450
->  cifs_mount+0xf95/0x1970
->  cifs_smb3_do_mount+0x295/0x1660
->  smb3_get_tree+0x352/0x5e0
->  vfs_get_tree+0x8e/0x2e0
->  path_mount+0xf8c/0x1990
->  do_mount+0xee/0x110
->  __x64_sys_mount+0x14b/0x1f0
->  do_syscall_64+0x3b/0x90
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> The buggy address belongs to the object at ffff888108f35380
->  which belongs to the cache kmalloc-16 of size 16
-> The buggy address is located 0 bytes inside of
->  16-byte region [ffff888108f35380, ffff888108f35390)
-> The buggy address belongs to the physical page:
-> page:00000000333f8e58 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888108f350e0 pfn:0x108f35
-> flags: 0x200000000000200(slab|node=0|zone=2)
-> raw: 0200000000000200 0000000000000000 dead000000000122 ffff8881000423c0
-> raw: ffff888108f350e0 000000008080007a 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
-> Memory state around the buggy address:
->  ffff888108f35280: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
->  ffff888108f35300: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
->>ffff888108f35380: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
->                    ^
->  ffff888108f35400: fa fb fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->  ffff888108f35480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->
-> Fixes: 28eb24ff75c5 ("cifs: Always resolve hostname before reconnecting")
-> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
-> ---
->  fs/cifs/connect.c | 1 +
->  1 file changed, 1 insertion(+)
+Good idea!
 
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+I will then be awaiting a new version from Prathamesh's series, that
+includes $subject patch too.
+
+>
+> Joerg, any preference on how to move forward with this?
+>
+> Thierry
+>
+
+Kind regards
+Uffe
+
+> >
+> > >
+> > >  include/linux/iommu.h | 39 +++++++++++++++++++--------------------
+> > >  1 file changed, 19 insertions(+), 20 deletions(-)
+> > >
+> > > diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> > > index a325532aeab5..e3295c45d18f 100644
+> > > --- a/include/linux/iommu.h
+> > > +++ b/include/linux/iommu.h
+> > > @@ -173,6 +173,25 @@ enum iommu_dev_features {
+> > >
+> > >  #define IOMMU_PASID_INVALID    (-1U)
+> > >
+> > > +/**
+> > > + * struct iommu_fwspec - per-device IOMMU instance data
+> > > + * @ops: ops for this device's IOMMU
+> > > + * @iommu_fwnode: firmware handle for this device's IOMMU
+> > > + * @flags: IOMMU_FWSPEC_* flags
+> > > + * @num_ids: number of associated device IDs
+> > > + * @ids: IDs which this device may present to the IOMMU
+> > > + */
+> > > +struct iommu_fwspec {
+> > > +       const struct iommu_ops  *ops;
+> > > +       struct fwnode_handle    *iommu_fwnode;
+> > > +       u32                     flags;
+> > > +       unsigned int            num_ids;
+> > > +       u32                     ids[];
+> > > +};
+> > > +
+> > > +/* ATS is supported */
+> > > +#define IOMMU_FWSPEC_PCI_RC_ATS                        (1 << 0)
+> > > +
+> > >  #ifdef CONFIG_IOMMU_API
+> > >
+> > >  /**
+> > > @@ -598,25 +617,6 @@ extern struct iommu_group *generic_device_group(struct device *dev);
+> > >  /* FSL-MC device grouping function */
+> > >  struct iommu_group *fsl_mc_device_group(struct device *dev);
+> > >
+> > > -/**
+> > > - * struct iommu_fwspec - per-device IOMMU instance data
+> > > - * @ops: ops for this device's IOMMU
+> > > - * @iommu_fwnode: firmware handle for this device's IOMMU
+> > > - * @flags: IOMMU_FWSPEC_* flags
+> > > - * @num_ids: number of associated device IDs
+> > > - * @ids: IDs which this device may present to the IOMMU
+> > > - */
+> > > -struct iommu_fwspec {
+> > > -       const struct iommu_ops  *ops;
+> > > -       struct fwnode_handle    *iommu_fwnode;
+> > > -       u32                     flags;
+> > > -       unsigned int            num_ids;
+> > > -       u32                     ids[];
+> > > -};
+> > > -
+> > > -/* ATS is supported */
+> > > -#define IOMMU_FWSPEC_PCI_RC_ATS                        (1 << 0)
+> > > -
+> > >  /**
+> > >   * struct iommu_sva - handle to a device-mm bond
+> > >   */
+> > > @@ -680,7 +680,6 @@ bool iommu_group_dma_owner_claimed(struct iommu_group *group);
+> > >
+> > >  struct iommu_ops {};
+> > >  struct iommu_group {};
+> > > -struct iommu_fwspec {};
+> > >  struct iommu_device {};
+> > >  struct iommu_fault_param {};
+> > >  struct iommu_iotlb_gather {};
+> > > --
+> > > 2.37.3
+> > >
+> >
+> > Kind regards
+> > Uffe
