@@ -2,70 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B923B60F30F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C9C60F309
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 10:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235217AbiJ0I77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 04:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42934 "EHLO
+        id S233283AbiJ0I7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 04:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235176AbiJ0I7m (ORCPT
+        with ESMTP id S233946AbiJ0I7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 04:59:42 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362185F6F
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:59:37 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id r14so1448109lfm.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:59:37 -0700 (PDT)
+        Thu, 27 Oct 2022 04:59:16 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836F3160208
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:59:15 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id m6-20020a17090a5a4600b00212f8dffec9so882943pji.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 01:59:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RFb+mglUFPvXWdrJsvsz1Oyw5hvEWlHP8+gxdLuuI4Y=;
-        b=AClN4Xx8nkYIo55iNw/FwS4mTkS9Pk3d1VD01Zc539u/57KqFDJg+Pgo6am+Huh1Hq
-         kjQ7w08ZDShJ/SjEizJnxxLrxZTGiF5G0DZSzwkh7tW/prqKiCJ4WBN9cPh1y2Lyez58
-         giC1iNPqbcehHg4s2yR2NhjQHuVjd/KD9XlwiwUTT+whoazeB6IxwDMuFtqdxz8faFDv
-         RUCbAirnm8BXVO1UZ2Suif+t9kxF0bERRI9X/9N1Y4JGofRcKY24UkDMOEKehO/sC51a
-         xjuUZHslGPp1jlKL1MHMIPW+vqJ577rk/WrigGBzAXlEvq7fmzvQRSJUSG4vMs5iRHie
-         7qbg==
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KU8QUlmyL8K+kL2JWwcrY9MKfup5fHZG57Xenhinxbw=;
+        b=KSYKzgO5bo3EHVAA36BTCInDIsYnBhnaVYPX+l79AEiJNHcUstKm85vMi+JzUs58uT
+         KFiUXNGJ/611sUUzd3msbLK+C1jVwIw2PS9/nrxVQfwcoUCRYCxr3+ziWgsz9dXszTBS
+         tJbRKzhe9vifba5gzjAE1VvW0iWAcxeEAKjsU6oOaZ8fhMAAfBmIDTBhl6t5XrM8r8cq
+         zuErgoZ02sCkHxrTHNTz0VTnQapSoABy8hdOQCvFGV1OG0O+uvpVqcVXZ820awkYLViW
+         cBcJbRq54zdVXKarPITq8c5P8AvJZ8F8Zv5sAliAdwQ/A2dYlQIKgZ59yjixxLsdAyVl
+         /+VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RFb+mglUFPvXWdrJsvsz1Oyw5hvEWlHP8+gxdLuuI4Y=;
-        b=rrlaBXjPLCCbRksIkJJ9ehGni+pht51WBtJo7DL069yfbz7Og0wHAMirF+U7xrRu6R
-         zwPU1CjYpEd3Ao0Lh1iKSnq8S2PGl9iw+/Fbf3J/i6si9CNUky0CTA2SQE484+/70w+W
-         skH8D7mt+NjzCz8dLHIlGGJxgFJZq+LwTQL++EL7AH+07XM6EmQbnV8UKRswk6Bivljp
-         HaqOdj99d2s7RqL9dFmbOy/Jc/jQnUuMSfCYay7Em688vytFCZm29mQX5+3mb6y55bqb
-         OXtgEdb3hrwvJRy6pWOxQS1Pgao6BOnCU5sEpdIN1ENcBsOJ0cXWTlJuWZpXvXXW/VuY
-         PDAQ==
-X-Gm-Message-State: ACrzQf1X/+yhLdKrXP3nNelOu4fKQnVw0SWbwz2RIEgN3QZOd+5Yoo6D
-        vS7l8SgMPgaJnbkZeMQd3UbfejV7z7t9ZA==
-X-Google-Smtp-Source: AMsMyM73pLD3GJI/ef4Z15u+4OUByzpPSkI/l7lV2kCsbFdnufEtdBYY4yH21HunSEF5eLVkiGcCkA==
-X-Received: by 2002:ac2:509a:0:b0:4a2:2bfc:3487 with SMTP id f26-20020ac2509a000000b004a22bfc3487mr18282527lfm.458.1666861175386;
-        Thu, 27 Oct 2022 01:59:35 -0700 (PDT)
-Received: from elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net ([20.240.130.248])
-        by smtp.googlemail.com with ESMTPSA id m3-20020a056512114300b004a050ddc4ecsm109892lfg.125.2022.10.27.01.59.34
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KU8QUlmyL8K+kL2JWwcrY9MKfup5fHZG57Xenhinxbw=;
+        b=4FNt+IpdIKNB290E5tQCJog6QNvHpUG+KNFDGOvKnrqheUsq572+9SMaXn4A2t8+Nk
+         OBoTkB1JKPZ3a9y6g5ybjccy/JmwoIokpZk+sNEqlJnwKaWwTucsTBul0LvEAL0mfWiZ
+         hiDWQb7AfCCeiXtalz1b+pN0Cqr7Blg8Qouqk7BhE6vRAqmgyuBEWSPlhe9pi5uZ9cyn
+         7TPnY1LJoTY46A7Lm9x0VdSN8/DEyj5k3GndnAJTCr3ECD8FSwi6elUWLTYk3V3ncP1Z
+         qgGdff/XuJN+4+E0euLguoBAHdCQPTiaiq0ydlSV2Thvstj1YBr9vLl9eHWLykZzjU0l
+         X/kQ==
+X-Gm-Message-State: ACrzQf2l+D6nOXC4sOJL7+HNePF0nD9qT9xhnpVxdAN+ckgY6qsJ0nP0
+        hVlYNnKQiiYCF+SxxDeIUfQ=
+X-Google-Smtp-Source: AMsMyM66ukX1ctNL2P50qsKqcWsCvPccrwS7iSlv8cUwHi9AKQis3RBSWyzfcOhwA1zmjNtdfZSwmw==
+X-Received: by 2002:a17:902:dac5:b0:186:a687:e082 with SMTP id q5-20020a170902dac500b00186a687e082mr20920145plx.84.1666861155009;
+        Thu, 27 Oct 2022 01:59:15 -0700 (PDT)
+Received: from mail.google.com (122-58-209-93-fibre.sparkbb.co.nz. [122.58.209.93])
+        by smtp.gmail.com with ESMTPSA id 23-20020a631357000000b0046f1e8cb30dsm635717pgt.26.2022.10.27.01.59.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 01:59:35 -0700 (PDT)
-From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        outreachy@lists.linux.dev,
-        Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-Subject: [PATCH v5 2/6] staging: vt6655: refactor code in s_uGetRTSCTSDuration
-Date:   Thu, 27 Oct 2022 08:59:04 +0000
-Message-Id: <0e6a307052d3a354a850a502e509f46baccdbe1e.1666849707.git.tanjubrunostar0@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1666849707.git.tanjubrunostar0@gmail.com>
-References: <cover.1666849707.git.tanjubrunostar0@gmail.com>
+        Thu, 27 Oct 2022 01:59:14 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 21:59:04 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>, Likun Gao <Likun.Gao@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Victor Zhao <Victor.Zhao@amd.com>,
+        Jack Xiao <Jack.Xiao@amd.com>,
+        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        Evan Quan <evan.quan@amd.com>,
+        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] [next] drm/amdgpu: clean up unused constants, macros and
+ includes
+Message-ID: <Y1pIWKbPi1GtPfE9@mail.google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,188 +83,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-refactor long lines of code in the function: s_uGetRTSCTSDuration
+Remove include directives in which header is already included via
+another header (atombios.h -> atom.h). Remove unused constants and
+macros.
 
-Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
 ---
- drivers/staging/vt6655/rxtx.c | 108 ++++++++++++++++++++++++----------
- 1 file changed, 76 insertions(+), 32 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu.h              | 3 ---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_atomfirmware.c | 1 -
+ 2 files changed, 4 deletions(-)
 
-diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-index 7eb7c6eb5cf0..8e56a7ee8035 100644
---- a/drivers/staging/vt6655/rxtx.c
-+++ b/drivers/staging/vt6655/rxtx.c
-@@ -186,20 +186,29 @@ static __le16 get_rtscts_time(struct vnt_private *priv,
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+index 0e6ddf05c23c..dc55e60c2e4a 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+@@ -245,10 +245,8 @@ extern int amdgpu_vcnfw_log;
+ #define AMDGPU_VM_MAX_NUM_CTX			4096
+ #define AMDGPU_SG_THRESHOLD			(256*1024*1024)
+ #define AMDGPU_DEFAULT_GTT_SIZE_MB		3072ULL /* 3GB by default */
+-#define AMDGPU_WAIT_IDLE_TIMEOUT_IN_MS	        3000
+ #define AMDGPU_MAX_USEC_TIMEOUT			100000	/* 100 ms */
+ #define AMDGPU_FENCE_JIFFIES_TIMEOUT		(HZ / 2)
+-#define AMDGPU_DEBUGFS_MAX_COMPONENTS		32
+ #define AMDGPUFB_CONN_LIMIT			4
+ #define AMDGPU_BIOS_NUM_SCRATCH			16
  
- 	data_time = bb_get_frame_time(priv->preamble_type, pkt_type, frame_length, current_rate);
- 	if (rts_rsvtype == 0) { /* RTSTxRrvTime_bb */
--		rts_time = bb_get_frame_time(priv->preamble_type, pkt_type, 20, priv->byTopCCKBasicRate);
--		ack_time = bb_get_frame_time(priv->preamble_type, pkt_type, 14, priv->byTopCCKBasicRate);
-+		rts_time = bb_get_frame_time(priv->preamble_type, pkt_type, 20,
-+					     priv->byTopCCKBasicRate);
-+		ack_time = bb_get_frame_time(priv->preamble_type, pkt_type, 14,
-+					     priv->byTopCCKBasicRate);
- 		cts_time = ack_time;
- 	} else if (rts_rsvtype == 1) { /* RTSTxRrvTime_ba, only in 2.4GHZ */
--		rts_time = bb_get_frame_time(priv->preamble_type, pkt_type, 20, priv->byTopCCKBasicRate);
--		cts_time = bb_get_frame_time(priv->preamble_type, pkt_type, 14, priv->byTopCCKBasicRate);
--		ack_time = bb_get_frame_time(priv->preamble_type, pkt_type, 14, priv->byTopOFDMBasicRate);
-+		rts_time = bb_get_frame_time(priv->preamble_type, pkt_type, 20,
-+					     priv->byTopCCKBasicRate);
-+		cts_time = bb_get_frame_time(priv->preamble_type, pkt_type, 14,
-+					     priv->byTopCCKBasicRate);
-+		ack_time = bb_get_frame_time(priv->preamble_type, pkt_type, 14,
-+					     priv->byTopOFDMBasicRate);
- 	} else if (rts_rsvtype == 2) { /* RTSTxRrvTime_aa */
--		rts_time = bb_get_frame_time(priv->preamble_type, pkt_type, 20, priv->byTopOFDMBasicRate);
--		ack_time = bb_get_frame_time(priv->preamble_type, pkt_type, 14, priv->byTopOFDMBasicRate);
-+		rts_time = bb_get_frame_time(priv->preamble_type, pkt_type, 20,
-+					     priv->byTopOFDMBasicRate);
-+		ack_time = bb_get_frame_time(priv->preamble_type, pkt_type, 14,
-+					     priv->byTopOFDMBasicRate);
- 		cts_time = ack_time;
- 	} else if (rts_rsvtype == 3) { /* CTSTxRrvTime_ba, only in 2.4GHZ */
--		cts_time = bb_get_frame_time(priv->preamble_type, pkt_type, 14, priv->byTopCCKBasicRate);
--		ack_time = bb_get_frame_time(priv->preamble_type, pkt_type, 14, priv->byTopOFDMBasicRate);
-+		cts_time = bb_get_frame_time(priv->preamble_type, pkt_type, 14,
-+					     priv->byTopCCKBasicRate);
-+		ack_time = bb_get_frame_time(priv->preamble_type, pkt_type, 14,
-+					     priv->byTopOFDMBasicRate);
- 		rrv_time = cts_time + ack_time + data_time + 2 * priv->uSIFS;
- 		return cpu_to_le16((u16)rrv_time);
- 	}
-@@ -320,73 +329,108 @@ static __le16 s_uGetRTSCTSDuration(struct vnt_private *pDevice,
+@@ -1227,7 +1225,6 @@ int emu_soc_asic_init(struct amdgpu_device *adev);
+ #define amdgpu_asic_set_vce_clocks(adev, ev, ec) (adev)->asic_funcs->set_vce_clocks((adev), (ev), (ec))
+ #define amdgpu_get_pcie_lanes(adev) (adev)->asic_funcs->get_pcie_lanes((adev))
+ #define amdgpu_set_pcie_lanes(adev, l) (adev)->asic_funcs->set_pcie_lanes((adev), (l))
+-#define amdgpu_asic_get_gpu_clock_counter(adev) (adev)->asic_funcs->get_gpu_clock_counter((adev))
+ #define amdgpu_asic_read_disabled_bios(adev) (adev)->asic_funcs->read_disabled_bios((adev))
+ #define amdgpu_asic_read_bios_from_rom(adev, b, l) (adev)->asic_funcs->read_bios_from_rom((adev), (b), (l))
+ #define amdgpu_asic_read_register(adev, se, sh, offset, v)((adev)->asic_funcs->read_register((adev), (se), (sh), (offset), (v)))
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_atomfirmware.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_atomfirmware.c
+index b81b77a9efa6..0c3448dc4951 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_atomfirmware.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_atomfirmware.c
+@@ -26,7 +26,6 @@
+ #include "atomfirmware.h"
+ #include "amdgpu_atomfirmware.h"
+ #include "atom.h"
+-#include "atombios.h"
+ #include "soc15_hw_ip.h"
  
- 	switch (byDurType) {
- 	case RTSDUR_BB:    /* RTSDuration_bb */
--		uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14, pDevice->byTopCCKBasicRate);
--		uDurTime = uCTSTime + 2 * pDevice->uSIFS + s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wRate, bNeedAck);
-+		uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14,
-+					     pDevice->byTopCCKBasicRate);
-+		uDurTime = uCTSTime + 2 * pDevice->uSIFS +
-+			s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wRate, bNeedAck);
- 		break;
- 
- 	case RTSDUR_BA:    /* RTSDuration_ba */
--		uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14, pDevice->byTopCCKBasicRate);
--		uDurTime = uCTSTime + 2 * pDevice->uSIFS + s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wRate, bNeedAck);
-+		uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14,
-+					     pDevice->byTopCCKBasicRate);
-+		uDurTime = uCTSTime + 2 * pDevice->uSIFS +
-+			s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wRate, bNeedAck);
- 		break;
- 
- 	case RTSDUR_AA:    /* RTSDuration_aa */
--		uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14, pDevice->byTopOFDMBasicRate);
--		uDurTime = uCTSTime + 2 * pDevice->uSIFS + s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wRate, bNeedAck);
-+		uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14,
-+					     pDevice->byTopOFDMBasicRate);
-+		uDurTime = uCTSTime + 2 * pDevice->uSIFS +
-+			s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wRate, bNeedAck);
- 		break;
- 
- 	case CTSDUR_BA:    /* CTSDuration_ba */
--		uDurTime = pDevice->uSIFS + s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wRate, bNeedAck);
-+		uDurTime = pDevice->uSIFS + s_uGetTxRsvTime(pDevice, byPktType,
-+							    cbFrameLength, wRate, bNeedAck);
- 		break;
- 
- 	case RTSDUR_BA_F0: /* RTSDuration_ba_f0 */
--		uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14, pDevice->byTopCCKBasicRate);
-+		uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14,
-+					     pDevice->byTopCCKBasicRate);
- 		if ((byFBOption == AUTO_FB_0) && (wRate >= RATE_18M) && (wRate <= RATE_54M))
--			uDurTime = uCTSTime + 2 * pDevice->uSIFS + s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wFB_Opt0[FB_RATE0][wRate - RATE_18M], bNeedAck);
-+			uDurTime = uCTSTime + 2 * pDevice->uSIFS +
-+				s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength,
-+						wFB_Opt0[FB_RATE0][wRate - RATE_18M], bNeedAck);
- 		else if ((byFBOption == AUTO_FB_1) && (wRate >= RATE_18M) && (wRate <= RATE_54M))
--			uDurTime = uCTSTime + 2 * pDevice->uSIFS + s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wFB_Opt1[FB_RATE0][wRate - RATE_18M], bNeedAck);
-+			uDurTime = uCTSTime + 2 * pDevice->uSIFS +
-+				s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength,
-+						wFB_Opt1[FB_RATE0][wRate - RATE_18M], bNeedAck);
- 
- 		break;
- 
- 	case RTSDUR_AA_F0: /* RTSDuration_aa_f0 */
--		uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14, pDevice->byTopOFDMBasicRate);
-+		uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14,
-+					     pDevice->byTopOFDMBasicRate);
- 		if ((byFBOption == AUTO_FB_0) && (wRate >= RATE_18M) && (wRate <= RATE_54M))
--			uDurTime = uCTSTime + 2 * pDevice->uSIFS + s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wFB_Opt0[FB_RATE0][wRate - RATE_18M], bNeedAck);
-+			uDurTime = uCTSTime + 2 * pDevice->uSIFS +
-+				s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength,
-+						wFB_Opt0[FB_RATE0][wRate - RATE_18M], bNeedAck);
- 		else if ((byFBOption == AUTO_FB_1) && (wRate >= RATE_18M) && (wRate <= RATE_54M))
--			uDurTime = uCTSTime + 2 * pDevice->uSIFS + s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wFB_Opt1[FB_RATE0][wRate - RATE_18M], bNeedAck);
-+			uDurTime = uCTSTime + 2 * pDevice->uSIFS +
-+				s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength,
-+						wFB_Opt1[FB_RATE0][wRate - RATE_18M], bNeedAck);
- 
- 		break;
- 
- 	case RTSDUR_BA_F1: /* RTSDuration_ba_f1 */
--		uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14, pDevice->byTopCCKBasicRate);
-+		uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14,
-+					     pDevice->byTopCCKBasicRate);
- 		if ((byFBOption == AUTO_FB_0) && (wRate >= RATE_18M) && (wRate <= RATE_54M))
--			uDurTime = uCTSTime + 2 * pDevice->uSIFS + s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wFB_Opt0[FB_RATE1][wRate - RATE_18M], bNeedAck);
-+			uDurTime = uCTSTime + 2 * pDevice->uSIFS +
-+				s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength,
-+						wFB_Opt0[FB_RATE1][wRate - RATE_18M], bNeedAck);
- 		else if ((byFBOption == AUTO_FB_1) && (wRate >= RATE_18M) && (wRate <= RATE_54M))
--			uDurTime = uCTSTime + 2 * pDevice->uSIFS + s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wFB_Opt1[FB_RATE1][wRate - RATE_18M], bNeedAck);
-+			uDurTime = uCTSTime + 2 * pDevice->uSIFS +
-+				s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength,
-+						wFB_Opt1[FB_RATE1][wRate - RATE_18M], bNeedAck);
- 
- 		break;
- 
- 	case RTSDUR_AA_F1: /* RTSDuration_aa_f1 */
--		uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14, pDevice->byTopOFDMBasicRate);
-+		uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14,
-+					     pDevice->byTopOFDMBasicRate);
- 		if ((byFBOption == AUTO_FB_0) && (wRate >= RATE_18M) && (wRate <= RATE_54M))
--			uDurTime = uCTSTime + 2 * pDevice->uSIFS + s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wFB_Opt0[FB_RATE1][wRate - RATE_18M], bNeedAck);
-+			uDurTime = uCTSTime + 2 * pDevice->uSIFS +
-+				s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength,
-+						wFB_Opt0[FB_RATE1][wRate - RATE_18M], bNeedAck);
- 		else if ((byFBOption == AUTO_FB_1) && (wRate >= RATE_18M) && (wRate <= RATE_54M))
--			uDurTime = uCTSTime + 2 * pDevice->uSIFS + s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wFB_Opt1[FB_RATE1][wRate - RATE_18M], bNeedAck);
-+			uDurTime = uCTSTime + 2 * pDevice->uSIFS +
-+				s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength,
-+						wFB_Opt1[FB_RATE1][wRate - RATE_18M], bNeedAck);
- 
- 		break;
- 
- 	case CTSDUR_BA_F0: /* CTSDuration_ba_f0 */
- 		if ((byFBOption == AUTO_FB_0) && (wRate >= RATE_18M) && (wRate <= RATE_54M))
--			uDurTime = pDevice->uSIFS + s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wFB_Opt0[FB_RATE0][wRate - RATE_18M], bNeedAck);
-+			uDurTime = pDevice->uSIFS +
-+				s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength,
-+						wFB_Opt0[FB_RATE0][wRate - RATE_18M], bNeedAck);
- 		else if ((byFBOption == AUTO_FB_1) && (wRate >= RATE_18M) && (wRate <= RATE_54M))
--			uDurTime = pDevice->uSIFS + s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wFB_Opt1[FB_RATE0][wRate - RATE_18M], bNeedAck);
-+			uDurTime = pDevice->uSIFS +
-+				s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength,
-+						wFB_Opt1[FB_RATE0][wRate - RATE_18M], bNeedAck);
- 
- 		break;
- 
- 	case CTSDUR_BA_F1: /* CTSDuration_ba_f1 */
- 		if ((byFBOption == AUTO_FB_0) && (wRate >= RATE_18M) && (wRate <= RATE_54M))
--			uDurTime = pDevice->uSIFS + s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wFB_Opt0[FB_RATE1][wRate - RATE_18M], bNeedAck);
-+			uDurTime = pDevice->uSIFS +
-+				s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength,
-+						wFB_Opt0[FB_RATE1][wRate - RATE_18M], bNeedAck);
- 		else if ((byFBOption == AUTO_FB_1) && (wRate >= RATE_18M) && (wRate <= RATE_54M))
--			uDurTime = pDevice->uSIFS + s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength, wFB_Opt1[FB_RATE1][wRate - RATE_18M], bNeedAck);
-+			uDurTime = pDevice->uSIFS +
-+				s_uGetTxRsvTime(pDevice, byPktType, cbFrameLength,
-+						wFB_Opt1[FB_RATE1][wRate - RATE_18M], bNeedAck);
- 
- 		break;
- 
+ union firmware_info {
 -- 
-2.34.1
+2.37.3
 
