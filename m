@@ -2,155 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87BA6105D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43C486105E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235613AbiJ0WfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 18:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37752 "EHLO
+        id S235354AbiJ0WsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 18:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235294AbiJ0WfF (ORCPT
+        with ESMTP id S235318AbiJ0WsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 18:35:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BBD232EDE;
-        Thu, 27 Oct 2022 15:35:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99879B8263F;
-        Thu, 27 Oct 2022 22:35:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F2E1C433C1;
-        Thu, 27 Oct 2022 22:34:56 +0000 (UTC)
-Date:   Thu, 27 Oct 2022 18:35:11 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mirko Lindner <mlindner@marvell.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net
-Subject: Re: [RFC][PATCH v2 19/31] timers: net: Use del_timer_shutdown()
- before freeing timer
-Message-ID: <20221027183511.66b058c4@gandalf.local.home>
-In-Reply-To: <20221027170720.31497319@gandalf.local.home>
-References: <20221027150525.753064657@goodmis.org>
-        <20221027150928.780676863@goodmis.org>
-        <20221027155513.60b211e2@gandalf.local.home>
-        <CAHk-=wjAjW2P5To82+CAM0Rx8RexQBHPTVZBWBPHyEPGm37oFA@mail.gmail.com>
-        <20221027163453.383bbf8e@gandalf.local.home>
-        <CAHk-=whoS+krLU7JNe=hMp2VOcwdcCdTXhdV8qqKoViwzzJWfA@mail.gmail.com>
-        <20221027170720.31497319@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 27 Oct 2022 18:48:10 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D212CB48AD
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 15:48:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1666910886; x=1698446886;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=H+7M2UuZtjw+FCc+KMjrmjoeHRhHt0w0ZWFxTeOO8oM=;
+  b=Ls6/iZ6+lKFPcJuNeH7M5a0juXI7MBvxKYfRraolSoF08GAHsQHDPM5p
+   u6xpdJ9RHcCR+t/wUs0c/uvwlwmjv7mccgtOsQl9Q9bTAC8TRcnuDdFhd
+   pz7WcW/8rwJh9tpsn52/YeSAV0GnYrhmkUaH/TUFdTjdId6CKLMb5a7lo
+   6lmpAzI/jShDVqmGNkAL5h/hvz6dFP9GzP4Sp+rlrsOCM/qH0wa90Dxpy
+   1DLLJIwjNJFNU6N/7r/Im/SV5+NpE3Mg4pwQ6ZlTiTugPYsdWDKQMvtfP
+   qG6IKoS5dPCLroIFLbaFeltJdbvYpjmVUU6uq5SxCD2PSrNrdXnJ4u27N
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,219,1661788800"; 
+   d="scan'208";a="220084584"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Oct 2022 06:48:06 +0800
+IronPort-SDR: YbJksikfdp0Y+MsX/2KYIbKIOKosPsCwCn6s53MSL/887AhS+xDJyLrcVgFD62YwVW4zGjQKSw
+ X6Rs4CDNZNbwNGg9Qme/CmFY/2Fc2u+eikwd+hvVXfkxSXj1vzmYLCIgvzYNdA0k709fSvA9A3
+ w3jw5cE62IWdfu9qAsaiv573VudAjEljuaGdBI5blq/kASbzcJIWwPtAC1aTGQw4eGhGQYkoyT
+ 6seLl6nUcy1ProQvE7hfZv8dNQzT+r+p18R/QZO3AJGLyfd/PI28ESBOh/DhnsyVdrU5XrNMuV
+ 4ZM1NCLmnDy3ENYyadIfVrUq
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Oct 2022 15:01:44 -0700
+IronPort-SDR: mNJR5EBg/63X2pbEyYmG6Pdzq+lJX6kt30uu25ygvZQtCa0EJ4u+DhlnNtal17bDg8Kzy2gA0t
+ GZB+crYNLsJ4l55IYWjQT3pOA9extmjEqwHoSaybuiQrPnmPQgTAh/xmGytG/2u5r4DkON3bl3
+ 8lEtJ/n0cdEjQ/Q7Ea6VLoTdl0x89QysAPCqfFoBcqBkR5mS82xnezCCZdvanCPJlqcjzoQoxd
+ GaqD8wEcwnbo8f3bI8EPX4H36nAqS9HR0boewwwjMPDk++8php7ViiK+T0PXfJIWDH+F9z4kz0
+ q98=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Oct 2022 15:48:07 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mz0qt2TJ2z1RWxq
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 15:35:22 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1666910121; x=1669502122; bh=H+7M2UuZtjw+FCc+KMjrmjoeHRhHt0w0ZWF
+        xTeOO8oM=; b=B+2w+4zMhpTBwTuBm2aeKe/8yHd8OfbrM6CaxqALnXREUhZnEP0
+        1ozDMDCo58W1o79ZWZi2INJd6Xj9qX/177p7EhCM4KCSkhqMBOYlpnLhSiXW3hxa
+        9MC1N1+izEeQhOLU8pAcQUKjATlAkFi0Bvq9v/LzaKvl1Q1K+TImOU0GLH2MlzKs
+        OVVdhZejIqs6sRokPc0lyQjkDzpgjL+vlMIOsXC6d+l7Wqh6eDiL2VdxVq3L/w5O
+        H4XFAQaE+n9L9SK1xy9etDk0IDikG3puf24HT5mfeHJkhFVJvCKlBkmW9mC03ZKR
+        hR4ThSv5qhbfdC/DWWtpNenvkJud8MvK2Zw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id wwE3xeD_I2wK for <linux-kernel@vger.kernel.org>;
+        Thu, 27 Oct 2022 15:35:21 -0700 (PDT)
+Received: from [10.225.163.15] (unknown [10.225.163.15])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mz0qp2LJDz1RvLy;
+        Thu, 27 Oct 2022 15:35:18 -0700 (PDT)
+Message-ID: <07028dac-d6cc-d707-db08-b92c365a6220@opensource.wdc.com>
+Date:   Fri, 28 Oct 2022 07:35:17 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH RFC v3 2/7] ata: libata-scsi: Add
+ ata_internal_queuecommand()
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, Hannes Reinecke <hare@suse.de>,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, bvanassche@acm.org,
+        hch@lst.de, ming.lei@redhat.com, niklas.cassel@wdc.com
+Cc:     axboe@kernel.dk, jinpu.wang@cloud.ionos.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linuxarm@huawei.com, john.garry2@mail.dcu.ie
+References: <1666693976-181094-1-git-send-email-john.garry@huawei.com>
+ <1666693976-181094-3-git-send-email-john.garry@huawei.com>
+ <08fdb698-0df3-7bc8-e6af-7d13cc96acfa@opensource.wdc.com>
+ <83d9dc82-ea37-4a3c-7e67-1c097f777767@huawei.com>
+ <3ef0347f-f3e2-cf08-2b27-f65a7afe82a2@suse.de>
+ <ea0be367-a4e0-3cc2-c4c7-04d8db1714cd@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <ea0be367-a4e0-3cc2-c4c7-04d8db1714cd@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Oct 2022 17:07:20 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On 10/28/22 02:23, John Garry wrote:
+> On 27/10/2022 14:02, Hannes Reinecke wrote:
+>>>>> =C2=A0 /**
+>>>>> =C2=A0=C2=A0 *=C2=A0=C2=A0=C2=A0 ata_scsi_slave_config - Set SCSI d=
+evice attributes
+>>>>> =C2=A0=C2=A0 *=C2=A0=C2=A0=C2=A0 @sdev: SCSI device to examine
+>>>>> diff --git a/include/linux/libata.h b/include/linux/libata.h
+>>>>> index 8938b584520f..f09c5dca16ce 100644
+>>>>> --- a/include/linux/libata.h
+>>>>> +++ b/include/linux/libata.h
+>>>>> @@ -1141,6 +1141,8 @@ extern int ata_std_bios_param(struct=20
+>>>>> scsi_device *sdev,
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sector_t capacity, int geom=
+[]);
+>>>>> =C2=A0 extern void ata_scsi_unlock_native_capacity(struct scsi_devi=
+ce=20
+>>>>> *sdev);
+>>>>> =C2=A0 extern int ata_scsi_slave_config(struct scsi_device *sdev);
+>>>>> +extern int ata_internal_queuecommand(struct Scsi_Host *shost,
+>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 struct scsi_cmnd *scmd);
+>>>>> =C2=A0 extern void ata_scsi_slave_destroy(struct scsi_device *sdev)=
+;
+>>>>> =C2=A0 extern int ata_scsi_change_queue_depth(struct scsi_device *s=
+dev,
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ int queue_depth);
+>>>>> @@ -1391,7 +1393,8 @@ extern const struct attribute_group=20
+>>>>> *ata_common_sdev_groups[];
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .slave_destroy=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 =3D ata_scsi_slave_destroy,=C2=A0=C2=A0=C2=A0 \
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .bios_param=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 =3D ata_std_bios_param,=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 \
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .unlock_native_capacity=C2=A0=C2=A0=C2=
+=A0 =3D ata_scsi_unlock_native_capacity,\
+>>>>> -=C2=A0=C2=A0=C2=A0 .max_sectors=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 =3D ATA_MAX_SECTORS_LBA48
+>>>>> +=C2=A0=C2=A0=C2=A0 .max_sectors=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 =3D ATA_MAX_SECTORS_LBA48,\
+>>>>> +=C2=A0=C2=A0=C2=A0 .reserved_queuecommand =3D ata_internal_queueco=
+mmand
+>>>>> =C2=A0 #define ATA_SUBBASE_SHT(drv_name)=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 \
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __ATA_BASE_SHT(drv_name),=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 \
+>>>>
+>>>
+>>
+>> But that means we can't use it before the SCSI host is initialized; so=
+me=20
+>> HBAs require to send commands before the host can be initialized prope=
+rly.
+>=20
+> At what stage do you want to send these commands? The tags for the shos=
+t=20
+> are not setup until scsi_add_host() -> scsi_mq_setup_tags() is called,=20
+> so can't expect blk-mq to manage reserved tags before then.
+>=20
+> If you are required to send commands prior to scsi_add_host(), then I=20
+> suppose the low-level driver still needs to manage tags until the shost=
+=20
+> is ready. I guess that some very simple scheme can be used, like always=
+=20
+> use tag 0, since most probe is done serially per-host. But that's not a=
+=20
+> case which I have had to deal with yet.
 
-> Well, I think this current use case will break if we prevent the timer from
-> being rearmed or run again if it's not found. But as you said, the
-> networking folks need to confirm or deny it.
-> 
-> The fact that it does the sock_put() when it removes the timer makes me
-> think that it can be called again, and we shouldn't prevent that from
-> happening.
-> 
-> The debug code will let us know too, as it only "frees" it for freeing if
-> it deactivated the timer and shut it down.
+In libata case, ata_dev_configure() will cause a lot of
+ata_exec_internal_sg() calls for IDENTIFY and various READ LOG commands.
+That is all done with non-ncq commands, which means that we do not requir=
+e
+a hw tag. But given that you are changing ata_exec_internal_sg() to call
+alloc_request + blk_execute_rq_nowait(), how would these work without a
+tag, at least a soft one ? Or we would need to keep the current code to
+use ata_qc_issue() directly for probe time ? That will look very ugly...
 
-I think we have our answer from Guenter's report:
+>=20
+> Thanks,
+> John
 
-
-Linux version 6.1.0-rc2-00138-gced58c742836 (groeck@jupiter) (aarch64-linux-gcc (GCC) 11.3.0, GNU ld (GNU Binutils) 2.39) #1 SMP PREEMPT Thu Oct 27 14:53:17 PDT 2022
-[   17.258727] ------------[ cut here ]------------
-[   17.259079] ODEBUG: free active (active state 0) object type: timer_list hint: tcp_write_timer+0x0/0x190
-[   17.259723] WARNING: CPU: 0 PID: 309 at lib/debugobjects.c:502 debug_print_object+0xb8/0x100
-[   17.259951] Modules linked in:
-[   17.260249] CPU: 0 PID: 309 Comm: telnet Tainted: G                 N 6.1.0-rc2-00138-gced58c742836 #1
-[   17.260518] Hardware name: linux,dummy-virt (DT)
-[   17.260779] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   17.260967] pc : debug_print_object+0xb8/0x100
-[   17.261096] lr : debug_print_object+0xb8/0x100
-[   17.261223] sp : ffff8000086539e0
-[   17.261324] x29: ffff8000086539e0 x28: 0000000000000004 x27: ffff0d2ac2168000
-[   17.261574] x26: 0000000000000000 x25: ffffa241e2b9de18 x24: ffffa241e4f8fcd8
-[   17.261772] x23: ffffa241e336b370 x22: ffffa241e2b9de18 x21: ffff0d2ac20c5710
-[   17.261967] x20: ffffa241e4ea2568 x19: ffffa241e3ea3c00 x18: 00000000ffffffff
-[   17.262161] x17: 6c6973742068696e x16: 3a2074696d65725f x15: 6563742074797065
-[   17.262375] x14: 65203029206f626a x13: ffffa241e3ec7640 x12: 0000000000000d50
-[   17.262591] x11: 0000000000000470 x10: ffffa241e3f1f640 x9 : ffffa241e3ec7640
-[   17.262821] x8 : 00000000ffffefff x7 : ffffa241e3f1f640 x6 : 0000000000000000
-[   17.263028] x5 : ffff0d2adfebba68 x4 : 0000000000000000 x3 : 0000000000000027
-[   17.263235] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff0d2ac658b340
-[   17.263528] Call trace:
-[   17.263646]  debug_print_object+0xb8/0x100
-[   17.263795]  __debug_check_no_obj_freed+0x1d0/0x25c
-[   17.263927]  debug_check_no_obj_freed+0x20/0x90
-[   17.264051]  slab_free_freelist_hook.constprop.0+0xac/0x1b0
-[   17.264197]  kmem_cache_free+0x1ac/0x500
-[   17.264311]  __sk_destruct+0x140/0x2a0
-[   17.264425]  sk_destruct+0x54/0x64
-[   17.264531]  __sk_free+0x74/0x120
-[   17.264636]  sk_free+0x64/0x8c
-[   17.264736]  tcp_close+0x94/0xc0
-[   17.264840]  inet_release+0x50/0xb0
-[   17.264949]  __sock_release+0x44/0xbc
-[   17.265061]  sock_close+0x18/0x30
-[   17.265166]  __fput+0x84/0x270
-[   17.265266]  ____fput+0x10/0x20
-[   17.265366]  task_work_run+0x88/0xf0
-[   17.265491]  do_exit+0x334/0xafc
-[   17.265596]  do_group_exit+0x34/0x90
-[   17.265705]  __arm64_sys_exit_group+0x18/0x20
-[   17.265826]  invoke_syscall+0x48/0x114
-[   17.265941]  el0_svc_common.constprop.0+0x60/0x11c
-[   17.266070]  do_el0_svc+0x30/0xd0
-[   17.266175]  el0_svc+0x48/0xc0
-[   17.266276]  el0t_64_sync_handler+0xbc/0x13c
-[   17.266396]  el0t_64_sync+0x18c/0x190
-[   17.266565] irq event stamp: 5192
-[   17.266676] hardirqs last  enabled at (5191): [<ffffa241e1926a18>] __up_console_sem+0x78/0x84
-[   17.266903] hardirqs last disabled at (5192): [<ffffa241e2b4d504>] el1_dbg+0x24/0x90
-[   17.267093] softirqs last  enabled at (5170): [<ffffa241e181050c>] __do_softirq+0x46c/0x5d8
-[   17.267305] softirqs last disabled at (5163): [<ffffa241e1816750>] ____do_softirq+0x10/0x20
-[   17.267506] ---[ end trace 0000000000000000 ]---
-[   17.275715] ------------[ cut here ]------------
-
-I'll go modify that code to make it shutdown even if it returns zero.
-
-I thinks this means we'll need to change the name to:
-
- del_timer_shutdown()
- del_timer_shutdown_sync()
-
-But I want to confirm this first.
-
--- Steve
-
+--=20
+Damien Le Moal
+Western Digital Research
 
