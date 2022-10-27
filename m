@@ -2,54 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A61060F644
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A8760F647
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 13:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235339AbiJ0LdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 07:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
+        id S234689AbiJ0Leb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 07:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235341AbiJ0LdB (ORCPT
+        with ESMTP id S233867AbiJ0Le3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 07:33:01 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8B61211D9
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 04:32:59 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 7E33E1B40;
-        Thu, 27 Oct 2022 13:32:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1666870376;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=86Syqd89b1/HCshZzD+et9Bo2opsZhhVIvgaLhrsOcI=;
-        b=mvJXS1/G8NnG3D8HvhI7aMBDN2AXxviQSZavm7F0DzocELCt0oHdv4/KtBG5eJQ7oGQuHa
-        gmQ4L6B6yEJJ2fneIa9NrNWrDt4jgLaN3G0cIMq56FyxznBTnb78gxVtlUeHys9Pu8q3FD
-        uty1ze5E+RFo9Wcx1tZrZWGBVkLQhp/nPJdxWgSddvpdP3TgpUHll5nFJlAWiBXIdZikHj
-        dmotv999hjgrG09N0X8YkS72kyk1hm2Cw8+06a5oocyBcFw8qyHa/m8WJ+fRWS/rZTsNN/
-        PoMnKhHxwRZ7l6SX4CAWBpRxS6xlhfYycrSjpwtw6/yDINY7LmShYi3ud4N+dQ==
-From:   Michael Walle <michael@walle.cc>
-To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Heiko Thiery <heiko.thiery@gmail.com>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH] Revert "arm64: dts: ls1028a: sl28: use ocelot-8021q tagging by default"
-Date:   Thu, 27 Oct 2022 13:32:48 +0200
-Message-Id: <20221027113248.420216-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
+        Thu, 27 Oct 2022 07:34:29 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB512AE
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 04:34:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666870466; x=1698406466;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=flCRs9jw0HAjMIFvnZCYTgvhKf7rP5DZDjYxa1HnfSE=;
+  b=UHI+yI3q1i6NwMAKhKy24AJTSw7gNOpDRK2OUWqdGqw2iJPMTys6KQEu
+   d/BsgceTW3kLF16m8XWz+aSYAJrlKvx/cSnVGrzlvaJv6tAzra0qzIaub
+   XiQLuLGu+7VZRQUjMqxtytdABxZch6KReSzJbWKLN1iivqyNBClQdhRLN
+   uQDwZBmBQriFU7Ih6o5FURxvOEM+qTPYKYSrkcB4LGqbOh3jAnFES0hpK
+   tLqm/O2EHIj+CHRFCnX5C/bATTu23r57kO8ve6Umcs+Ach0ISgHWSWYJo
+   uBlkeuAsvnvHphojrxJsAeqYgDDYCY4Ruk8Fs0WUqAzd+E8/LCzffUXxW
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="309289877"
+X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
+   d="scan'208";a="309289877"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 04:34:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="583524315"
+X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
+   d="scan'208";a="583524315"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 27 Oct 2022 04:34:21 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oo19Q-0008jJ-1r;
+        Thu, 27 Oct 2022 11:34:20 +0000
+Date:   Thu, 27 Oct 2022 19:33:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
+ 1c382012d3fc642907b0dd1c729e0f38d6f8fb21
+Message-ID: <635a6c8f.4nUDNT4Uh7UC28TZ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam: Yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,44 +64,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit be0b178c50c37a666d54f435da71cf9f008362a0.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: 1c382012d3fc642907b0dd1c729e0f38d6f8fb21  rcu: Refactor kvfree_call_rcu() and high-level helpers
 
-This commit will break networking on the sl28 boards if the tagger is
-not compiled into the kernel. If a non-default tagger is used, the
-kernel doesn't do a request_module(). Fixing that is also not that
-trivial because the tagger modules are loaded by ids, not by name.
-Thus for now, just revert to the default tagger until that is fixed.
+elapsed time: 1022m
 
-Fixes: be0b178c50c3 ("arm64: dts: ls1028a: sl28: use ocelot-8021q tagging by default")
-Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Michael Walle <michael@walle.cc>
----
-Vladimir, I'm not sure how to fix that one. Adding aliases to the tagger
-modules? Something like "MODULE_ALIAS("dsa_tag-ocelot-8021q");" and then do
-a request_module() in dsa_find_tagger_by_name(), too?
+configs tested: 66
+configs skipped: 2
 
- .../arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts | 8 --------
- 1 file changed, 8 deletions(-)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-index 72429b37a8b4..771c50c7f50a 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-@@ -324,14 +324,6 @@ &lpuart1 {
- 	status = "okay";
- };
- 
--&mscc_felix_port4 {
--	dsa-tag-protocol = "ocelot-8021q";
--};
--
--&mscc_felix_port5 {
--	dsa-tag-protocol = "ocelot-8021q";
--};
--
- &usb0 {
- 	status = "okay";
- };
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+i386                          randconfig-a001
+s390                             allyesconfig
+i386                          randconfig-a003
+powerpc                           allnoconfig
+x86_64                              defconfig
+powerpc                          allmodconfig
+riscv                randconfig-r042-20221026
+i386                          randconfig-a005
+i386                                defconfig
+mips                             allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a013
+sh                               allmodconfig
+x86_64                          rhel-8.3-func
+x86_64                        randconfig-a011
+i386                          randconfig-a014
+x86_64                        randconfig-a002
+arm                                 defconfig
+arc                  randconfig-r043-20221026
+x86_64                               rhel-8.3
+ia64                             allmodconfig
+s390                 randconfig-r044-20221026
+x86_64                           rhel-8.3-syz
+x86_64                           allyesconfig
+i386                          randconfig-a012
+x86_64                    rhel-8.3-kselftests
+x86_64                        randconfig-a006
+i386                          randconfig-a016
+arm64                            allyesconfig
+x86_64                        randconfig-a015
+arm                              allyesconfig
+i386                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+x86_64                           rhel-8.3-kvm
+x86_64                         rhel-8.3-kunit
+m68k                       m5249evb_defconfig
+parisc                generic-32bit_defconfig
+arm                          pxa910_defconfig
+powerpc                    amigaone_defconfig
+sh                           se7724_defconfig
+sh                          rsk7201_defconfig
+i386                          randconfig-c001
+
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a013
+i386                          randconfig-a006
+x86_64                        randconfig-a005
+x86_64                        randconfig-a016
+x86_64                        randconfig-a001
+hexagon              randconfig-r045-20221026
+i386                          randconfig-a011
+hexagon              randconfig-r041-20221026
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+i386                          randconfig-a015
+x86_64                        randconfig-a003
+x86_64                        randconfig-k001
+
 -- 
-2.30.2
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
