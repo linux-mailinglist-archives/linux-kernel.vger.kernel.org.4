@@ -2,97 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B9360FF47
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464EC60FF4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 19:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235752AbiJ0RZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 13:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
+        id S235765AbiJ0R1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 13:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235679AbiJ0RZS (ORCPT
+        with ESMTP id S234595AbiJ0R1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 13:25:18 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB6E43E73;
-        Thu, 27 Oct 2022 10:25:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xudGXE+bH5g0uONSt7W7O2capWykcQVvMeLlbM88H0c=; b=onax5cj46BBmSaer2uSKXZEkQs
-        oA+FAjxCJOlLeWflBb9VqaU0mPXUetzMX4sRSEFNdQQV7deJs5IEMxW8YqxOBdy5KM7CPRm6W3YNz
-        A6Z1jGTb7uG/eyXfAViZ+nOUoUlMFwXff8YQJfFBFd2ELbYvZiAwBcLw4wFcAjSnVw7R2+29163hL
-        /FauygackP6NDvE/INb7d/CHDJFSwzXwwPVlQFCWKisG9DeGZEVl897BuI5KRjO4grAWxfOryKkIP
-        tvzjtjebSFEj0PCd1NgIbaBQJmarf6VQ8QkfAVHviEhArYSEUlB8taSbVrKBoZ3q8omk9+/qZnSA8
-        kRRZSr8A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oo6cw-000RdB-7A; Thu, 27 Oct 2022 17:25:10 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2174D30029C;
-        Thu, 27 Oct 2022 19:25:05 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0DC6B2C450539; Thu, 27 Oct 2022 19:25:05 +0200 (CEST)
-Date:   Thu, 27 Oct 2022 19:25:04 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        broonie@kernel.org, acme@kernel.org,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Vince Weaver <vincent.weaver@maine.edu>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        kristina.martsenko@arm.com
-Subject: Re: [PATCH v2 1/1] perf arm64: Send pointer auth masks to ring buffer
-Message-ID: <Y1q+8JF7uYlcvasM@hirez.programming.kicks-ass.net>
-References: <20221020101921.1219533-1-james.clark@arm.com>
- <20221020101921.1219533-2-james.clark@arm.com>
- <Y1F8DUWaWhlh/phL@hirez.programming.kicks-ass.net>
- <4e50b890-0588-1551-fb7c-6cd8191d1054@arm.com>
- <8eb174c0-c785-c092-96f5-3a4fa3441287@arm.com>
+        Thu, 27 Oct 2022 13:27:33 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9211B18D835
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 10:27:32 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id fy4so6659403ejc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 10:27:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iKwgc0IEVzdwHiCkgDGhcjbv4ywgJ7EoDsClZ3RBIFQ=;
+        b=RbC0vkTGEMUeQrfJXCft2qqEnZJJyBYFBsOMTIEMZCPtrp9s7yI8JISMrDg9xGjgWx
+         SaX7Wu/zbIT6zyIEqKxM8HfHRhzrylWfGwazIuBkgyxjTPk5M3xMS5/4ZkCjKwhWFavV
+         bXE7tgiBGemndv8v1Dzl99jyPMwtMGt/7j9V3Im3KgeJ9BLkZjGv+hj7t8l6KItdk5tf
+         klIYQwrpu2CykpntIeStHWnUW9O1SMhzG5DR8rN2qAz/VacH2qu+ye8MaBXw1Nq2B4hL
+         awrIS/shHd1ZNtcEGU2U2bvedTtxv7dAOdLBK6tMVGzGOJKVUB0kLBZDmy/RTo6e+RL5
+         FxSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iKwgc0IEVzdwHiCkgDGhcjbv4ywgJ7EoDsClZ3RBIFQ=;
+        b=62CK4dARlGseIi0bbQeOHsvFEwR7Vdlgxpu9CAWTzVYkJifZvfrPTM/xmpb6/IQdGi
+         P1pC6Ywl0qaPA15NMvyWJeoVwyUaRqi+5WJWMNVedh5e7MbPEfBwyOSPQQ23ORaHPraH
+         ub4l0i8AVODmSx58cJNjR6ITdu3EtvaUT4i+GkPYEZ10MpHQj3pw/T9PR+K8C+gcgJPf
+         EpJWsGU/8EDgq9jt/6S8D6FMr8MNHs26jgVdHOVeChn/yVJRFnxFIN4PDNBkOCSaCHTz
+         7H0DdTCj2+QIfKqaKHeQrRFcfIhGQ56N1qL5/oLKKGdAc/g7lqKxWfkJofwYcu9SwV0A
+         Juxw==
+X-Gm-Message-State: ACrzQf3iIFzjYrtEkPQ9GCrbDybviuP2vxtBmhJvEbs2iCt4CP5IoqIl
+        q6XY0jiVINCwjHqJZxo6OZA5/zft5OWD+HE2KeINfsllCGo=
+X-Google-Smtp-Source: AMsMyM5twZ9tdWk2MZDWI7eWPTemq+JQna3Y1We9BVZLu3UcOLu8pNEbZLf/a6LZBhXDWqj4vAmNIRpWNNqMQPXWjHU=
+X-Received: by 2002:a17:906:fe46:b0:73d:939a:ec99 with SMTP id
+ wz6-20020a170906fe4600b0073d939aec99mr43726049ejb.169.1666891640744; Thu, 27
+ Oct 2022 10:27:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8eb174c0-c785-c092-96f5-3a4fa3441287@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221027150558.722062-1-pgonda@google.com> <20221027150558.722062-3-pgonda@google.com>
+In-Reply-To: <20221027150558.722062-3-pgonda@google.com>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Thu, 27 Oct 2022 10:27:09 -0700
+Message-ID: <CAAH4kHYTYtHBBzF-0BiTzmHHiF=mnQhRy+5Mfsj1WN4vyPoCZg@mail.gmail.com>
+Subject: Re: [PATCH V3 2/2] virt: sev: Allow for retrying SNP extended requests
+To:     Peter Gonda <pgonda@google.com>
+Cc:     thomas.lendacky@amd.com, Borislav Petkov <bp@suse.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Marc Orr <marcorr@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Ashish Kalra <Ashish.Kalra@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 03:11:47PM +0100, James Clark wrote:
+I think just no to this patch? Reasons below.
 
-> Sorry for flip flopping, but I've read those threads that I linked and
-> spoke with Kristina and we would like to stick with the per sample
-> implementation after all.
-> 
-> The reason is that in the future there may also be a prctrl for 48/52
-> bit userspace addressing which would change the mask dynamically in the
-> same way as the enabled keys. Although this isn't possible now it makes
-> sense to do it this way in case of that, and also for consistency with
-> the ptrace feature.
-> 
-> I also think that repeating the mask in this case has a very low impact
-> because if you are doing dwarf unwinding, then the whole stack is saved
-> anyway, so a few extra u64s wouldn't be noticeable.
-> 
-> Are you ok with that and for me to resubmit with the expanded commit
-> message?
+>
+>         if (ghcb->save.sw_exit_info_2) {
+> -               /* Number of expected pages are returned in RBX */
+> +               /* For a SNP Extended Request, if the request was placed with
+> +                * insufficient data pages. The host will return the number of
+> +                * pages required using RBX in the GHCB. We can than retry the
+> +                * call as an SNP Request to fulfill the command without getting
+> +                * the extended request data.
+> +                */
+>                 if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST &&
+> -                   ghcb->save.sw_exit_info_2 == SNP_GUEST_REQ_INVALID_LEN)
+> -                       input->data_npages = ghcb_get_rbx(ghcb);
+> -
+> -               *fw_err = ghcb->save.sw_exit_info_2;
+> +                   ghcb->save.sw_exit_info_2 == SNP_GUEST_REQ_INVALID_LEN) {
+> +                       int npages = ghcb_get_rbx(ghcb);
+> +
+> +                       ghcb_clear_rax(ghcb);
+> +                       ghcb_clear_rbx(ghcb);
+> +
+> +                       ret = sev_es_ghcb_hv_call(ghcb, &ctxt,
+> +                                                 SVM_VMGEXIT_GUEST_REQUEST,
+> +                                                 input->req_gpa,
+> +                                                 input->resp_gpa);
+> +                       if (ret)
+> +                               goto e_put;
+> +
 
-But you can send a side-band thing around if/when it changes. Same as
-all the other stuff. We don't include MMAP data with each event either.
+I'm not keen on reissuing the call in this function. I think
+issue_request should do its job of sending a request to the host and
+returning the specified data, in this case the number of pages in RBX.
+I know it's not particularly fun to interpret exitinfo2 in a couple
+places, but it serves a purpose. We don't want this function to grow
+to have special cases for all the commands that can be sent to the psp
+if they don't involve data passed back through the GHCB. The
+get_ghcb/put_ghcb frame is the only thing we really need to respect in
+here.
 
-Yes, the DWARF thing is slow as anything. but imagine needing this for
-something else as well, and then you're stuck with it.
+The sev-guest device owns the VMPCKn keys, the message sequence
+number, and the responsibility of sending a coherent response back to
+user space. When we account for the host changing the certificate page
+length during the request and not wanting to return to the guest
+without completing the firmware call, the length might grow past the
+4KiB max constant we have so far. The driver can make the choice of
+issuing the request without extended data like you do here, or to
+reallocate its cert_data buffer and ask for the extended data again.
+It shouldn't matter to the core functionality of issuing a single
+request.
+
+When throttling comes into play and retrying needs to happen more than
+once, then we're in another situation where the sev-guest driver also
+owns the responsibility of trying not to get throttled too hard. My
+patches suggest a 2HZ rate limit to avoid any big penalties of running
+requests in a tight loop and looking like a DoS antagonist, but that
+doesn't belong in arch/x86/kernel/sev.c due to the variability of
+strategies.
+
+> +                       input->data_npages = npages;
+> +                       *fw_err = SNP_GUEST_REQ_INVALID_LEN;
+> +               } else
+> +                       *fw_err = ghcb->save.sw_exit_info_2;
+
+I think in both branches of the conditional, fw_err gets set to
+exit_info_2. See v4 of my throttling patch series.
+
+-- 
+-Dionna Glaze, PhD (she/her)
