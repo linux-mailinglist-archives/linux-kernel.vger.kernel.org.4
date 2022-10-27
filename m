@@ -2,299 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185A46105B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 280C56105B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 00:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235423AbiJ0WYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 18:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
+        id S235447AbiJ0WYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 18:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234438AbiJ0WYI (ORCPT
+        with ESMTP id S235521AbiJ0WYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 18:24:08 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5E3B14CB
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 15:24:07 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id r187so4183240oia.8
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 15:24:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UVV552RlmafxU8ICe/Ndbq9JrxwN9+hj45aKH1BDx4U=;
-        b=Ix42sbrwNCkJ0gvPEf9RG2VDXhBBhnYJW59koGaRy+ZcOsCgNsipW3wJOkHafEpg/2
-         S9ZQtM1otwOeorcv6mQ2qkQ0BG5nopeWQG/LBGV4ZiB0LfsQcQx4BwDIGFWsRveC/WSA
-         2CGPFeCe9ITCTuL1DpjvB6nG1RxJX7k66VhVoY3t/US4rpnPOclWCaEa8zPSJYiRgWg2
-         JqeftfddDEaY0HVt68c8guRfEl2w5VM7ls2ZUkRs/0uIxC2xz0csKVqicn1Yzncc1UM+
-         Qhlxd2Xsjw+48DMGxYriZlk2OpeubQUFGTw65Zu4LRFrzE2ecRo9MzAycBlnEIN+f9Vq
-         NPLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UVV552RlmafxU8ICe/Ndbq9JrxwN9+hj45aKH1BDx4U=;
-        b=dzwdngaXa9rrsuilM4PXmKpNx17R6SEsMrcqZ7vrVF6U1EhCHuvPZCeQIAsiRibSNb
-         C0IxoCTEjv12IVDbHklU2xU4r9+/9lS3WBBnpZKSklDWVC+HdfCPdXVU0DBvZm0nDihy
-         uwnUOxyitIBH5aZN+sUBE+KpU6EgU+PzR4VvluAnzuu4lmJkccU+HJP0t6CvUocZxQMp
-         EHKJQOuUyx43sC+B4ZE0dA3h00zk1osUcJ6MxgWAATzaPSQzNJlH9tcOLirwTyoJEEUr
-         xtld46LfQHLaR8stfa3lr2L/NlH00JLez6bb80cbofobI2EU8DXoTyEyfTe6OGHR5kNE
-         81tA==
-X-Gm-Message-State: ACrzQf3xlBx7HJ5BJQXfGK34hRHCQSctgvqnVyHSVsUwwfQiz/iLlNlL
-        rGHtXKU9/+t07+7RTH3y8Q4=
-X-Google-Smtp-Source: AMsMyM76ZNWqFZqax2BbLnjQAB93G2XEvSI9aUvj2Izdw3Lbxe8oKJD4pSurybY6gFX4fqO4mYoIPQ==
-X-Received: by 2002:a05:6808:13c2:b0:357:6f03:d0a1 with SMTP id d2-20020a05680813c200b003576f03d0a1mr6191057oiw.32.1666909446305;
-        Thu, 27 Oct 2022 15:24:06 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t17-20020a0568080b3100b003546fada8f6sm881713oij.12.2022.10.27.15.24.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 15:24:05 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 27 Oct 2022 15:24:04 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [RFC][PATCH v2 00/31] timers: Use del_timer_shutdown() before
- freeing timers
-Message-ID: <20221027222404.GA3123386@roeck-us.net>
-References: <20221027150525.753064657@goodmis.org>
+        Thu, 27 Oct 2022 18:24:24 -0400
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59A2B3B11
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 15:24:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1666909460; x=1698445460;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Ghho3uT1wVcKZxAY1waa0VNzE/2MhAyS4Otpt4rMWvA=;
+  b=CsErEsT0WHeQcaDsZn33J6vI3bE5ygF6cGAU+KWK82DH8+u57YGPxewm
+   +B3Qy2xHTvZ8m8ex29wx5PSWYiDf7MI1VQjTwDA/cUrcr3HSf9xajJw2t
+   mYaDum6Fa9jY3U63oRimxo0oFC8eYU2OJ4A8dMvXr7yoRUbWNdFgLpUNl
+   O9iUVUVEPEX65PMJQzNJzTEDw1IIgx7SC0MT9WR/d1jXYAFWXHHr7yMEt
+   3Wt/Xsrqky+f6bpTmGz9sgGykDc02RBFCrsJObRpU5KFIpBWDW3z38ym+
+   kg8JIhMOoEhlJZnwX7CtqFI3guc5MtlAfe5zEl96ciRMF6K5U1A7atZzT
+   g==;
+X-IronPort-AV: E=Sophos;i="5.95,219,1661788800"; 
+   d="scan'208";a="327021781"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Oct 2022 06:24:18 +0800
+IronPort-SDR: NYkCxG3Yd4YPnnCuKkb2MgB9u/e1J6u06exaLSVioJEB29KZlquHr2OmKsPywzaHoHKROq0OTV
+ RMuwA18af+geB1ibmIfO96QhTAVc6G5LCl7wcYYMNeEcoxFNqmfvFWmsmhKloYqrcBJgec3G1K
+ l3UhIkPW8is8ccA1M4hg0XBYx5ds6wX9Bv5f8yW2mY1D9Gu55dZj5oLVqkX0cndh/QgCYmpkOd
+ VD84dGbDlPiZNKigzBAZ6OV7ei4FeALqQHWulcDEyK9mTtYvlPAwmZ3IHOiS5aXY5jOVGZrOEC
+ WU9QSzDx56+EHY2AvPpq+fv4
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Oct 2022 14:37:56 -0700
+IronPort-SDR: AOuRgoxVsoSERou6NJjCr+Bw+D2GydF/2HtsonUQbWI/ezZgihAQZQ0ucPwB3um6aCu3zs0+t3
+ DCknDxltAKNdVtqx2z6OceNS1PkA5vJJcrOsDYMoG8I1ArGeagAkVApzYAWsanYbPeCsNFSy6Z
+ 9f39kc5NGr+T9pMpQWgeLHtyjk6f7YPpj971XBB7gonJjJjwMnVw/VYVQ7DRfomvvGBZ7hF4mR
+ Zo6BFZ39pOWxehdqxArMV43shS1TXescR+zW/qv34pTOUhnLh6nCdFFM8+X0rTg1ylcOGitd5l
+ nIo=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Oct 2022 15:24:19 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mz0b46T2Sz1Rwt8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 15:24:16 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1666909455; x=1669501456; bh=Ghho3uT1wVcKZxAY1waa0VNzE/2MhAyS4Ot
+        pt4rMWvA=; b=msHsUCDYs9hyOeqVJo0pikFKOKEHiuD4luzB2JtsYH86fC4YsAV
+        0xBkK9tx/OTph+NevLSswAhOiffnFisnX6l1XUI4ESqBfueCH8U5ZOElGUwqjsxP
+        +Mf7POFGIiGKeujRH+xx1p9NNBjEy9CSp1cvvqTDRpSDqRBsnGWmkRToRxnBRk91
+        LUOJ1M5ejKi84DopjZ/1kRZB/glytGetsAwL6m0TxwcVZenRZFvm2eb4THK9HjrG
+        76NtK+phGWt5bE28gNHvH1vknkbUlvCxFkhK6vXwRjwjYXboefFmok+6Vgv3cIph
+        qm9DsIZNYwGgIqJB8f9i2PAZae5FzTWeXPQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id lA8a39Tvjvmf for <linux-kernel@vger.kernel.org>;
+        Thu, 27 Oct 2022 15:24:15 -0700 (PDT)
+Received: from [10.225.163.15] (unknown [10.225.163.15])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mz0b03ZHwz1RvLy;
+        Thu, 27 Oct 2022 15:24:12 -0700 (PDT)
+Message-ID: <199fa346-5a53-b66d-3964-99dabb858765@opensource.wdc.com>
+Date:   Fri, 28 Oct 2022 07:24:11 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221027150525.753064657@goodmis.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH RFC v3 1/7] ata: libata-scsi: Add
+ ata_scsi_queue_internal()
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, hare@suse.de, bvanassche@acm.org,
+        hch@lst.de, ming.lei@redhat.com, niklas.cassel@wdc.com
+Cc:     axboe@kernel.dk, jinpu.wang@cloud.ionos.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linuxarm@huawei.com
+References: <1666693976-181094-1-git-send-email-john.garry@huawei.com>
+ <1666693976-181094-2-git-send-email-john.garry@huawei.com>
+ <8ed42281-4400-a0ed-92f1-c57b9de726a4@opensource.wdc.com>
+ <8280ec1c-c274-ba8d-b533-3316865fe5c1@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <8280ec1c-c274-ba8d-b533-3316865fe5c1@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 11:05:25AM -0400, Steven Rostedt wrote:
+On 10/27/22 19:45, John Garry wrote:
+> On 27/10/2022 02:42, Damien Le Moal wrote:
+>> On 10/25/22 19:32, John Garry wrote:
+>>> Add a function to handle queued ATA internal SCSI cmnds - does much the
+>>> same as ata_exec_internal_sg() does (which will be fixed up later to
+>>> actually queue internal cmnds through this function).
+>>>
+>>> Signed-off-by: John Garry <john.garry@huawei.com>
+>>> ---
+>>>   drivers/ata/libata-sata.c |  3 +++
+>>>   drivers/ata/libata-scsi.c | 43 +++++++++++++++++++++++++++++++++++++++
+>>>   drivers/ata/libata.h      |  3 ++-
+>>>   include/linux/libata.h    |  6 ++++++
+>>>   4 files changed, 54 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/ata/libata-sata.c b/drivers/ata/libata-sata.c
+>>> index b6806d41a8c5..e8b828c56542 100644
+>>> --- a/drivers/ata/libata-sata.c
+>>> +++ b/drivers/ata/libata-sata.c
+>>> @@ -1258,6 +1258,9 @@ int ata_sas_queuecmd(struct scsi_cmnd *cmd, struct ata_port *ap)
+>>>   {
+>>>   	int rc = 0;
+>>>   
+>>> +	if (blk_mq_is_reserved_rq(scsi_cmd_to_rq(cmd)))
+>>> +		return ata_scsi_queue_internal(cmd, ap->link.device);
+>>> +
+>>>   	if (likely(ata_dev_enabled(ap->link.device)))
+>>>   		rc = __ata_scsi_queuecmd(cmd, ap->link.device);
+>>>   	else {
+>>> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+>>> index 476e0ef4bd29..30d7c90b0c35 100644
+>>> --- a/drivers/ata/libata-scsi.c
+>>> +++ b/drivers/ata/libata-scsi.c
+>>> @@ -3965,6 +3965,49 @@ static inline ata_xlat_func_t ata_get_xlat_func(struct ata_device *dev, u8 cmd)
+>>>   	return NULL;
+>>>   }
+>>>   
+>>> +unsigned int ata_scsi_queue_internal(struct scsi_cmnd *scmd,
+>>> +				     struct ata_device *dev)
+>>> +{
+>>> +	struct ata_link *link = dev->link;
+>>> +	struct ata_port *ap = link->ap;
+>>> +	struct ata_queued_cmd *qc;
+>>> +
+>>> +	/* no internal command while frozen */
+>>> +	if (ap->pflags & ATA_PFLAG_FROZEN)
+>>> +		goto did_err;
+>>> +
+>>> +	/* initialize internal qc */
+>>> +	qc = __ata_qc_from_tag(ap, ATA_TAG_INTERNAL);
+>>> +	link->preempted_tag = link->active_tag;
+>>> +	link->preempted_sactive = link->sactive;
+>>> +	ap->preempted_qc_active = ap->qc_active;
+>>> +	ap->preempted_nr_active_links = ap->nr_active_links;
+>>> +	link->active_tag = ATA_TAG_POISON;
+>>> +	link->sactive = 0;
+>>> +	ap->qc_active = 0;
+>>> +	ap->nr_active_links = 0;
+>>> +
+>>> +	if (qc->dma_dir != DMA_NONE) {
+>>> +		int n_elem;
+>>> +
+>>> +		n_elem = 1;
+>>> +		qc->n_elem = n_elem;
+>>> +		qc->sg = scsi_sglist(scmd);
+>>> +		qc->nbytes = qc->sg->length;
+>>> +		ata_sg_init(qc, qc->sg, n_elem);
+>>> +	}
+>>> +
+>>> +	scmd->submitter = SUBMITTED_BY_BLOCK_LAYER;
+>>> +
+>>> +	ata_qc_issue(qc);
+>>
+>> Arg, no ! This potentially mixes NCQ and non-NCQ commands, which is
+>> forbidden by ATA spec. You need to use something like:
+>>
+>> 	if (ap->ops->qc_defer) {
+>> 		if ((rc = ap->ops->qc_defer(qc)))
+>> 			goto defer;
+>> 	}
+>>
+>> 	ata_qc_issue(qc);
+>>
+>> which is done in __ata_scsi_queuecmd() -> ata_scsi_translate()
+>>
+>> Unless you guarantee that ata_scsi_queue_internal() is always called
+>> from libata EH context ?
 > 
-> Back in April, I posted an RFC patch set to help mitigate a common issue
-> where a timer gets armed just before it is freed, and when the timer
-> goes off, it crashes in the timer code without any evidence of who the
-> culprit was. I got side tracked and never finished up on that patch set.
-> Since this type of crash is still our #1 crash we are seeing in the field,
-> it has become a priority again to finish it.
+> This will be called synchronously called from ata_exec_internal_sg(), so 
+> the same rules on NCQ vs non-NCQ would apply here. As I see, 
+> ata_exec_internal_sg() assumes non-NCQ mode and is not multi-thread safe.
+
+Yep. No thread safety needed as we are always guaranteed to be in EH with
+the queue quiesced when this is executed. No other commands can come in at
+the same time.
+
 > 
-> This is v2 of that patch set. Thomas Gleixner posted an untested version
-> that makes timer->function NULL as the flag that it is shutdown. I took that
-> code, tested it (fixed it up), added more comments, and changed the
-> name to del_timer_shutdown() as Linus had asked. I also converted it to use
-> WARN_ON_ONCE() instead of just WARN_ON() as Linus asked for that too.
+> Thanks,
+> John
+> 
+>>
+>>> +
+>>> +	return 0;
+>>> +did_err:
+>>> +	scmd->result = (DID_ERROR << 16);
+>>> +	scsi_done(scmd);
+>>> +	return 0;
+>>> +}
+>>> +
+>>>   int __ata_scsi_queuecmd(struct scsi_cmnd *scmd, struct ata_device *dev)
+>>>   {
+>>>   	u8 scsi_op = scmd->cmnd[0];
+>>> diff --git a/drivers/ata/libata.h b/drivers/ata/libata.h
+>>> index 0c2df1e60768..15cd1cd618b8 100644
+>>> --- a/drivers/ata/libata.h
+>>> +++ b/drivers/ata/libata.h
+>>> @@ -82,7 +82,6 @@ extern int ata_port_probe(struct ata_port *ap);
+>>>   extern void __ata_port_probe(struct ata_port *ap);
+>>>   extern unsigned int ata_read_log_page(struct ata_device *dev, u8 log,
+>>>   				      u8 page, void *buf, unsigned int sectors);
+>>> -
+>>>   #define to_ata_port(d) container_of(d, struct ata_port, tdev)
+>>>   
+>>>   /* libata-acpi.c */
+>>> @@ -130,6 +129,8 @@ extern int ata_scsi_user_scan(struct Scsi_Host *shost, unsigned int channel,
+>>>   void ata_scsi_sdev_config(struct scsi_device *sdev);
+>>>   int ata_scsi_dev_config(struct scsi_device *sdev, struct ata_device *dev);
+>>>   int __ata_scsi_queuecmd(struct scsi_cmnd *scmd, struct ata_device *dev);
+>>> +unsigned int ata_scsi_queue_internal(struct scsi_cmnd *scmd,
+>>> +				     struct ata_device *dev);
+>>>   
+>>>   /* libata-eh.c */
+>>>   extern unsigned int ata_internal_cmd_timeout(struct ata_device *dev, u8 cmd);
+>>> diff --git a/include/linux/libata.h b/include/linux/libata.h
+>>> index 827d5838cd23..8938b584520f 100644
+>>> --- a/include/linux/libata.h
+>>> +++ b/include/linux/libata.h
+>>> @@ -764,7 +764,9 @@ struct ata_link {
+>>>   
+>>>   	struct device		tdev;
+>>>   	unsigned int		active_tag;	/* active tag on this link */
+>>> +	unsigned int		preempted_tag;
+>>>   	u32			sactive;	/* active NCQ commands */
+>>> +	u32			preempted_sactive;
+>>>   
+>>>   	unsigned int		flags;		/* ATA_LFLAG_xxx */
+>>>   
+>>> @@ -857,6 +859,10 @@ struct ata_port {
+>>>   #ifdef CONFIG_ATA_ACPI
+>>>   	struct ata_acpi_gtm	__acpi_init_gtm; /* use ata_acpi_init_gtm() */
+>>>   #endif
+>>> +
+>>> +	u64 preempted_qc_active;
+>>> +	int preempted_nr_active_links;
+>>> +
+>>>   	/* owned by EH */
+>>>   	u8			sector_buf[ATA_SECT_SIZE] ____cacheline_aligned;
+>>>   };
+>>
 > 
 
-Here are various warnings and crashes. Complete logs are at
-
-https://kerneltests.org/builders
-
-in the "testing" column of the qemu test results.
-
-This is with the published patch set plus the fixups in 
-timer_fixup_init() and timer_fixup_free().
-
-Guenter
-
----
-Block code:
-
-WARNING: CPU: 0 PID: 8 at lib/debugobjects.c:502 debug_print_object+0x66/0x7a
-ODEBUG: free active (active state 0) object type: timer_list hint: blk_rq_timed_out_timer+0x0/0xc
-
----
-In tcp:
-
-WARNING: CPU: 0 PID: 255 at lib/debugobjects.c:502 debug_print_object+0xa4/0xd8
-ODEBUG: free active (active state 0) object type: timer_list hint: tcp_keepalive_timer+0x0/0x3a8
-
-WARNING: CPU: 0 PID: 255 at lib/debugobjects.c:502 debug_print_object+0xa4/0xd8
-ODEBUG: free active (active state 0) object type: timer_list hint: tcp_write_timer+0x0/0x1a8
-
----
-Other networking:
-
-WARNING: CPU: 0 PID: 8 at lib/debugobjects.c:502 debug_print_object+0xa4/0xd8
-ODEBUG: free active (active state 0) object type: timer_list hint: neigh_timer_handler+0x0/0x468
-
----
-
-WARNING: CPU: 0 PID: 280 at lib/debugobjects.c:502 debug_print_object+0xa4/0xd8
-ODEBUG: init active (active state 0) object type: timer_list hint: tulip_timer+0x0/0x38
-
-That one is often followed by:
-
-[   29.833216] ODEBUG: init active (active state 0) object type: timer_list hint: 0x0
-[   29.833723] WARNING: CPU: 0 PID: 365 at lib/debugobjects.c:502 debug_print_object+0xb8/0x100
-
-in the same code line, suggesting that the timer may be shut down
-more than once (?). Then there is another crash with
-
-[   29.863890] Insufficient stack space to handle exception!
-[   29.863939] ESR: 0x0000000096000047 -- DABT (current EL)
-[   29.863952] FAR: 0xffff800008b17f80
-[   29.863959] Task stack:     [0xffff800008b18000..0xffff800008b1c000]
-[   29.863967] IRQ stack:      [0xffff800008000000..0xffff800008004000]
-[   29.863975] Overflow stack: [0xffff30a35fe7a0f0..0xffff30a35fe7b0f0]
-[   29.863987] CPU: 0 PID: 365 Comm: ip Tainted: G        W        N 6.1.0-rc2-00138-gced58c742836 #1
-[   29.863999] Hardware name: linux,dummy-virt (DT)
-
-followed by a sequence of
-
-[   29.864572]  __try_to_del_timer_sync+0x40/0xdc
-[   29.864582]  __del_timer_sync+0xa4/0x100
-[   29.864590]  timer_fixup_init+0x2c/0x5c
-[   29.864599]  __debug_object_init+0x248/0x53c
-[   29.864606]  debug_object_init+0x24/0x30
-[   29.864614]  timer_fixup_init+0x40/0x5c
-[   29.864622]  __debug_object_init+0x248/0x53c
-[   29.864630]  debug_object_init+0x24/0x30
-[   29.864637]  timer_fixup_init+0x40/0x5c
-[   29.864645]  __debug_object_init+0x248/0x53c
-[   29.864658]  debug_object_init+0x24/0x30
-[   29.864666]  timer_fixup_init+0x40/0x5c
-...
-[   29.866492]  debug_object_init+0x24/0x30
-[   29.866500]  init_timer_key+0x7c/0x80
-[   29.866508]  tulip_down+0x1d0/0x24c
-[   29.866518]  tulip_close+0x3c/0xc0
-
-This crash is seen with variants on several platforms/architectures.
-
----
-
-WARNING: CPU: 0 PID: 8 at lib/debugobjects.c:502 debug_print_object+0xa4/0xd8
-ODEBUG: free active (active state 0) object type: timer_list hint: addrconf_dad_work+0x0/0x628
-
----
-mips64:
-
-WARNING: CPU: 0 PID: 280 at lib/debugobjects.c:502 debug_print_object+0xa4/0xd8
-ODEBUG: init active (active state 0) object type: timer_list hint: 0x0
-Modules linked in:
-CPU: 0 PID: 280 Comm: ip Tainted: G        W        N 6.1.0-rc2-00138-gced58c742836 #1
-Stack : 0000000000000056 ffffffffffffffff 0000000000000008 00b65275abba8126
-        00b65275abba8126 0000000000000000 9000000004193728 ffffffff80f29f38
-        ffffffff8105c9d8 ffffffffffff8880 9000000004193668 0000000000000000
-        0000000000000005 0000000000000010 ffffffff80c731a0 ffffffff81030000
-        2020205720202020 ffffffff81030000 0000000000000000 ffffffff80f29f38
-        0000000000000009 00000000000001f6 ffffffff8063d45c ffffffff81cb94c0
-        ffffffff81d76240 0000000000000000 ffffffff807575a8 0000000000000000
-        ffffffff81230000 9000000004190000 9000000004193720 9000000018002030
-        ffffffff80c8f528 0000000000000000 0000000000000000 00b65275abba8126
-        ffffffff8122e050 000000001000a4e1 ffffffff8010a884 00b65275abba8126
-        ...
-Call Trace:
-[<ffffffff8010a884>] show_stack+0x3c/0x120
-[<ffffffff80c8f528>] dump_stack_lvl+0x4c/0x90
-[<ffffffff80130e54>] __warn+0xdc/0x1c8
-[<ffffffff80c75a08>] warn_slowpath_fmt+0x98/0xc4
-[<ffffffff8063d45c>] debug_print_object+0xa4/0xd8
-[<ffffffff8063e590>] __debug_object_init+0x2d0/0x670
-[<ffffffff801b44b8>] timer_fixup_init+0x40/0x58
-
-irq event stamp: 1537
-hardirqs last  enabled at (1549): [<ffffffff8018e67c>] __up_console_sem+0x9c/0xc8
-hardirqs last disabled at (1560): [<ffffffff8018e658>] __up_console_sem+0x78/0xc8
-softirqs last  enabled at (1324): [<ffffffff80a572bc>] dev_deactivate_many+0x32c/0x458
-softirqs last disabled at (1322): [<ffffffff80a57288>] dev_deactivate_many+0x2f8/0x458
----[ end trace 0000000000000000 ]---
-
-=====================================
-WARNING: bad unlock balance detected!
-6.1.0-rc2-00138-gced58c742836 #1 Tainted: G        W        N
--------------------------------------
-�������␈␂/-1 is trying to release lock (&obj_hash[i].lock) at:
-[<ffffffff801b41e0>] __try_to_del_timer_sync+0x48/0x140
-but there are no more locks to release!
-
-other info that might help us debug this:
-qemu-system-mips64: terminating on signal 15 from pid 2525787 (/bin/bash)
-
----
-Openrisc fails completely. Lots of the following, then boot stalls.
-
-WARNING: CPU: 0 PID: 88 at lib/debugobjects.c:502 debug_print_object+0xc0/0xe8
-ODEBUG: init active (active state 0) object type: timer_list hint: 0x0
-Modules linked in:
-CPU: 0 PID: 88 Comm: udhcpc Not tainted 6.1.0-rc2-00138-gced58c742836 #1
-Call trace:
-[<8eaa3f51>] dump_stack_lvl+0x44/0x80
-[<4da6c5ef>] dump_stack+0x1c/0x2c
-[<1b9f58b7>] __warn+0xdc/0x118
-[<86d4d066>] ? debug_print_object+0xc0/0xe8
-[<689beae8>] warn_slowpath_fmt+0x78/0x90
-[<86d4d066>] debug_print_object+0xc0/0xe8
-[<872f4074>] __debug_object_init+0x2bc/0x7f4
-[<c30d6214>] ? _raw_spin_unlock_irqrestore+0x50/0x84
-[<c3f3be91>] ? debug_check_no_locks_freed+0xb8/0x194
-[<558675c1>] ? slob_alloc+0xe8/0x350
-[<26225550>] ? lockdep_init_map_type+0x68/0x38c
-[<c3f3be91>] ? debug_check_no_locks_freed+0xb8/0x194
-[<2c9cf7b5>] ? inet_create+0x2e8/0x404
-[<bab055df>] debug_object_init+0x30/0x40
-[<6d2e468f>] init_timer_key+0xb4/0x110
-[<60c0d3e7>] ? sk_init_common+0x1a0/0x1c0
-[<b52686c2>] sock_init_data+0x60/0x2a4
-[<1ff904c3>] ? sk_alloc+0xe8/0x138
-[<ca3e6ef9>] inet_create+0x1e0/0x404
-[<623d726a>] ? inet_create+0x80/0x404
-[<a3256728>] ? lock_release+0x1c0/0x30c
-[<960a454e>] __sock_create+0x140/0x288
-[<0290cd64>] ? __sock_create+0x98/0x288
-[<b62bc649>] __sys_socket+0x7c/0x128
-[<fa003224>] ? do_work_pending+0x4c/0x118
-[<705147e9>] sys_socket+0x14/0x24
-[<9c4e015d>] ? _syscall_return+0x0/0x4
----[ end trace 0000000000000000 ]---
-
----
-parisc crashes.
-
-[    3.015186] ------------[ cut here ]------------
-[    3.015580] ODEBUG: init active (active state 0) object type: timer_list hint: timeout_waiting_on_port+0x0/0x2c
-[    3.016945] WARNING: CPU: 0 PID: 1 at lib/debugobjects.c:502 debug_print_object+0x98/0xc8
-...
-[    3.026117] ODEBUG: init active (active state 0) object type: timer_list hint: 0x0
-[    3.026355] WARNING: CPU: 0 PID: 1 at lib/debugobjects.c:502 debug_print_object+0x98/0xc8
-...
-[ many more of the same ]
-
-[    3.054542] stackcheck: swapper/0 will most likely overflow irq stack (sp:11e51800, stk bottom-top:11460004-11468004)
-[    3.054592] Kernel panic - not syncing: low stack detected by irq handler - check messages
-
-and boom.
-
----
-usb:
-
-[   23.993737] WARNING: CPU: 0 PID: 343 at lib/debugobjects.c:502 debug_print_object+0xac/0xc8
-[   23.993953] ODEBUG: free active (active state 0) object type: timer_list hint: hub_init_func2+0x0/0xc
-
----
-ppc:
-
-[    6.607478][    T1] ODEBUG: init active (active state 0) object type: timer_list hint: .ibmvscsi_timeout+0x0/0x58
-[    6.608536][    T1] WARNING: CPU: 0 PID: 1 at lib/debugobjects.c:502 .debug_print_object+0xbc/0xf0
-
-followed by several of
-
-[    6.623661][    T1] ODEBUG: init active (active state 0) object type: timer_list hint: 0x0
-[    6.624155][    T1] WARNING: CPU: 0 PID: 1 at lib/debugobjects.c:502 .debug_print_object+0xbc/0xf0
-
-and finally:
-
-[    6.694785][    C0] BUG: Kernel NULL pointer dereference on read at 0x000000b8
-[    6.694796][    C0] Faulting instruction address: 0xc0000000001ece44
-[    6.694807][    C0] Thread overran stack, or stack corrupted
-[    6.694967][    C0] Oops: Kernel access of bad area, sig: 7 [#1]
+-- 
+Damien Le Moal
+Western Digital Research
 
