@@ -2,57 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD2060FD6E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8980160FD81
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236665AbiJ0QuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 12:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51264 "EHLO
+        id S236784AbiJ0Qus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 12:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236146AbiJ0Qtw (ORCPT
+        with ESMTP id S236692AbiJ0QuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 12:49:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAC7399DC
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:49:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666889390;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lXIKNzxn7gEudfn9nb45VSrNj59yt6Czo/wBWBxPUSE=;
-        b=fegIKAS5ytdhVZi0jCPDSOyVVdMgVwlVhBSxzcB+LmXus6Q58BjMwQ114/3rDJD2chlznN
-        odo/QKii+5Plp6YbRrP7BKgCtTCLcKn0pl4oL49mU059zYuMB/oB951MWset+tZl9tNPMS
-        jjn934Pbfcw4/Rfcc++VmQb0oP1a8tA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-288-LiZmI3BgM0uc_oG7P16kRw-1; Thu, 27 Oct 2022 12:49:47 -0400
-X-MC-Unique: LiZmI3BgM0uc_oG7P16kRw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 14D0529324AF;
-        Thu, 27 Oct 2022 16:49:47 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E7F8F2166B26;
-        Thu, 27 Oct 2022 16:49:46 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     mlevitsk@redhat.com, seanjc@google.com
-Subject: [PATCH 10/10] KVM: x86: do not define SMM-related constants if SMM disabled
-Date:   Thu, 27 Oct 2022 12:49:44 -0400
-Message-Id: <20221027164944.3031588-11-pbonzini@redhat.com>
-In-Reply-To: <20221027164944.3031588-1-pbonzini@redhat.com>
-References: <20221027164944.3031588-1-pbonzini@redhat.com>
+        Thu, 27 Oct 2022 12:50:07 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793D271993
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:50:01 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id ud5so6397056ejc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:50:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=27thMH6kbiBYeHImVpD7suGwEm5dpzCEVU9319M7znE=;
+        b=LR5ylFn+fuISymwTB00xHZ6t3I/9VqmosSnSmVnG+w+wni69hiZfzUtKio5rU1epqQ
+         PKwl26tatzAMYRrFcU1ArEm9elaSOfVYxYBaGAWAwJBeUH6o3WbL+H1eChTNMnckRwoz
+         YLpPwxWkmTWPIxMH08r77/N86vm90ow8+Nhsduxhz4JqYgwq6ENfqc6awtMqNKOHO+6V
+         APUEvq4dtPgK6eeZbttohwccXcC/kku6WwdXXlVR1ixzeDn8iQsKFSwKwl3AdZMJa2ue
+         mqr0ytlrq4EJhLDIncsbdsYhTXeS7S5MImB0/owkhV2qBAOaNUPPhxO/Xwo4qnZHWMA+
+         JDVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=27thMH6kbiBYeHImVpD7suGwEm5dpzCEVU9319M7znE=;
+        b=wxoIuwLhWsgP17PcRPEHqYIbHiv4qzBbi1yvydM49JgGsT2KUJkoJ4EVKGOk4diYUX
+         3ctK4mzSWtYrKv4sQ1oWVZ8klGoT1BIXDKA1/rpq7h/SrzIWoGL/Ri2TFIElGaLCBre/
+         FMoq9/RN+MLFzrpPr2wdlA465U9P6C1Vi6GB0RY8sMhdtk7liOszFWaptd8im+6z9yPT
+         GBQcGtlMVrACmfQ1UIzX71R5A9GuEwowhgWH5KGaiDaUKyZY+PQ94MCyzVLs1IR3I5Xc
+         aB1ZZdeWB62n5FqZnS89qgx6XC00Tg09shDDmA4G11kUnqj82AHvXObEC+TwVzia+F0R
+         n4Fw==
+X-Gm-Message-State: ACrzQf3sFWQ0Czyn0/ja574fmMRriQDgtVvty4eKz1AZySaeqsBxKvn+
+        gLgd1JUuUiAE92MaFBvZZRC6jsUlxgKn+hpfZq0=
+X-Google-Smtp-Source: AMsMyM58LmKYkZC59FJWd+D3WjBzjSxLpn7tvaAGnZjFQMskGI5vXH3qrtVsby1unS0KOziaRirmP2zfJqz42OjuNno=
+X-Received: by 2002:a17:906:da85:b0:741:40a7:d08d with SMTP id
+ xh5-20020a170906da8500b0074140a7d08dmr45198589ejb.263.1666889399497; Thu, 27
+ Oct 2022 09:49:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20221026224450.2958762-1-f.fainelli@gmail.com>
+In-Reply-To: <20221026224450.2958762-1-f.fainelli@gmail.com>
+From:   Justin Chen <justinpopo6@gmail.com>
+Date:   Thu, 27 Oct 2022 09:49:48 -0700
+Message-ID: <CAJx26kWS6+FPjpe125817f7Rf6LiXHBPJ2AfM_1Sj7BwK09Fug@mail.gmail.com>
+Subject: Re: [PATCH] phy: phy-brcm-usb: Utilize platform_get_irq_byname_optional()
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Al Cooper <alcooperx@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,71 +71,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/include/asm/kvm_host.h | 3 ++-
- arch/x86/kvm/smm.c              | 3 +++
- arch/x86/kvm/x86.c              | 4 ++--
- 3 files changed, 7 insertions(+), 3 deletions(-)
+On Wed, Oct 26, 2022 at 3:45 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> The wake-up interrupt lines are entirely optional, avoid printing
+> messages that interrupts were not found by switching to the _optional
+> variant.
+>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 7ddcc0e6fae5..89c89c70f74e 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1992,10 +1992,11 @@ enum {
- #define HF_NMI_MASK		(1 << 3)
- #define HF_IRET_MASK		(1 << 4)
- #define HF_GUEST_MASK		(1 << 5) /* VCPU is in guest-mode */
-+
-+#ifdef CONFIG_KVM_SMM
- #define HF_SMM_MASK		(1 << 6)
- #define HF_SMM_INSIDE_NMI_MASK	(1 << 7)
- 
--#ifdef CONFIG_KVM_SMM
- # define __KVM_VCPU_MULTIPLE_ADDRESS_SPACE
- # define KVM_ADDRESS_SPACE_NUM 2
- # define kvm_arch_vcpu_memslots_id(vcpu) ((vcpu)->arch.hflags & HF_SMM_MASK ? 1 : 0)
-diff --git a/arch/x86/kvm/smm.c b/arch/x86/kvm/smm.c
-index 41ca128478fc..44a8f7e57b77 100644
---- a/arch/x86/kvm/smm.c
-+++ b/arch/x86/kvm/smm.c
-@@ -10,6 +10,9 @@
- 
- void kvm_smm_changed(struct kvm_vcpu *vcpu, bool entering_smm)
- {
-+	BUILD_BUG_ON(HF_SMM_MASK != X86EMUL_SMM_MASK);
-+	BUILD_BUG_ON(HF_SMM_INSIDE_NMI_MASK != X86EMUL_SMM_INSIDE_NMI_MASK);
-+
- 	trace_kvm_smm_transition(vcpu->vcpu_id, vcpu->arch.smbase, entering_smm);
- 
- 	if (entering_smm) {
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 5959f74c5a0a..910e3757b222 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -5092,10 +5092,12 @@ static void kvm_vcpu_ioctl_x86_get_vcpu_events(struct kvm_vcpu *vcpu,
- 
- 	/* events->sipi_vector is never valid when reporting to user space */
- 
-+#ifdef CONFIG_KVM_SMM
- 	events->smi.smm = is_smm(vcpu);
- 	events->smi.pending = vcpu->arch.smi_pending;
- 	events->smi.smm_inside_nmi =
- 		!!(vcpu->arch.hflags & HF_SMM_INSIDE_NMI_MASK);
-+#endif
- 	events->smi.latched_init = kvm_lapic_latched_init(vcpu);
- 
- 	events->flags = (KVM_VCPUEVENT_VALID_NMI_PENDING
-@@ -8266,8 +8268,6 @@ static void init_emulate_ctxt(struct kvm_vcpu *vcpu)
- 		     cs_db				? X86EMUL_MODE_PROT32 :
- 							  X86EMUL_MODE_PROT16;
- 	BUILD_BUG_ON(HF_GUEST_MASK != X86EMUL_GUEST_MASK);
--	BUILD_BUG_ON(HF_SMM_MASK != X86EMUL_SMM_MASK);
--	BUILD_BUG_ON(HF_SMM_INSIDE_NMI_MASK != X86EMUL_SMM_INSIDE_NMI_MASK);
- 
- 	ctxt->interruptibility = 0;
- 	ctxt->have_exception = false;
--- 
-2.31.1
+Acked-by: Justin Chen <justinpopo6@gmail.com>
 
+> ---
+>  drivers/phy/broadcom/phy-brcm-usb.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/phy/broadcom/phy-brcm-usb.c b/drivers/phy/broadcom/phy-brcm-usb.c
+> index 2cb3779fcdf8..fbf454b206f2 100644
+> --- a/drivers/phy/broadcom/phy-brcm-usb.c
+> +++ b/drivers/phy/broadcom/phy-brcm-usb.c
+> @@ -445,9 +445,9 @@ static int brcm_usb_phy_dvr_init(struct platform_device *pdev,
+>                 priv->suspend_clk = NULL;
+>         }
+>
+> -       priv->wake_irq = platform_get_irq_byname(pdev, "wake");
+> +       priv->wake_irq = platform_get_irq_byname_optional(pdev, "wake");
+>         if (priv->wake_irq < 0)
+> -               priv->wake_irq = platform_get_irq_byname(pdev, "wakeup");
+> +               priv->wake_irq = platform_get_irq_byname_optional(pdev, "wakeup");
+>         if (priv->wake_irq >= 0) {
+>                 err = devm_request_irq(dev, priv->wake_irq,
+>                                        brcm_usb_phy_wake_isr, 0,
+> --
+> 2.25.1
+>
