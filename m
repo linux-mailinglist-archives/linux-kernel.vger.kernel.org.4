@@ -2,124 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC356101FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F78610204
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236702AbiJ0Txe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 15:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
+        id S236735AbiJ0Tyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 15:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236692AbiJ0Txc (ORCPT
+        with ESMTP id S236723AbiJ0Tyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 15:53:32 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810D886802
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:53:29 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oo8wL-0002tI-AN; Thu, 27 Oct 2022 21:53:21 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     atishp@atishpatra.org, anup@brainfault.org,
-        Will Deacon <will@kernel.org>, mark.rutland@arm.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Conor.Dooley@microchip.com,
-        samuel@sholland.org
-Subject: Re: [PATCH v6 0/2] riscv_pmu_sbi: add support for PMU variant on T-Head C9xx cores
-Date:   Thu, 27 Oct 2022 21:53:20 +0200
-Message-ID: <3621249.aeNJFYEL58@diego>
-In-Reply-To: <mhng-0bf8c154-76ce-4cd3-bfdb-ffd8a4670600@palmer-ri-x1c9>
-References: <mhng-0bf8c154-76ce-4cd3-bfdb-ffd8a4670600@palmer-ri-x1c9>
+        Thu, 27 Oct 2022 15:54:33 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE742195;
+        Thu, 27 Oct 2022 12:54:28 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id b25so1911395qkk.7;
+        Thu, 27 Oct 2022 12:54:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L3SZEZa2CJV4SjO0lun68s17zx0qUNNwhmx2jM0d8fw=;
+        b=a1VqFrUx5ufOx8Ndmi3Yz7UYzK6rz5jSxFqxr/oHJ2tuKPgqrAhVQCwrgLoNpzKVtX
+         YFp+toDsrkIuZ/5EgBc2BIbnUWSdvtuFuM36lLr69oxtcAUaGtZADkKwhwE0ztyoH1Nx
+         gn3sTwmG4/5Ok8FkKv16ljzU+cpR1jnrKKBJPAil9dZ3WSSyCC8H/BVbbCs30/olP4Xq
+         Fhnbj0v9zW6CXkjtK4kVkw2NH63PcPtaW5Lqd8QY9bqTetHMmFp/r0U2PfgMUOJqXARu
+         ZMlzWU2yFBagwIge8BUQZJrZvbH5GNCjdEHGsQtgoEjGEFw+tvSov5L+XM4JuIP1roHi
+         V+lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L3SZEZa2CJV4SjO0lun68s17zx0qUNNwhmx2jM0d8fw=;
+        b=S4m9HljjP9HGm2tDxRBJcN7XIZt0CLlRHtIykP1sDdSLsfPBcPXVhbsqW8Tfy7zx6T
+         vJKpaOkzzoxKk9PKPBKbjctFSJX2QmRzAnglh+IBKyr2fAUOl3yyYt+xizEaEjbXcMe+
+         5vAqG2wxyKR9ulmwLl8paMfH5Z6D7gSdaA8sedNvG8SH2UNBWaVgt8EOyS0y3z6pz5vF
+         TqcworcY8YPtsS5ZYNkTxhVqYbBdF8BeQ47Pe0efGsmHKjZSWO6Rg1UwUv2P5LIQ+lOg
+         5zk1Q2Yq6rMu6McMQ1P5faGMPSh96dm3X7O4F5qIcqtEpujxR3F14tmgjW1DHzlMycxZ
+         Gz/A==
+X-Gm-Message-State: ACrzQf1+KQg8nY1gDlL6NeXEuc2g/9RAoaR1jrSdnUOewiq+WJFGZv5S
+        eRkuZSFZdCrVGyhEjPUhZp0=
+X-Google-Smtp-Source: AMsMyM5/3x/owzdlPKOOgN+JTLlnKbleEwOi3n4bsdz4hUh6J+BRXMMFedFYhMIGh9R+YX+bhp1C4Q==
+X-Received: by 2002:a05:620a:440e:b0:6f6:2a11:c497 with SMTP id v14-20020a05620a440e00b006f62a11c497mr14149909qkp.213.1666900467381;
+        Thu, 27 Oct 2022 12:54:27 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id h24-20020ac85498000000b00399b73d06f0sm1357418qtq.38.2022.10.27.12.54.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 12:54:26 -0700 (PDT)
+Message-ID: <d1a46ccc-cb07-fa51-f722-c48d6c84bf9d@gmail.com>
+Date:   Thu, 27 Oct 2022 12:54:18 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 5.10 00/79] 5.10.151-rc1 review
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>, Pavel Machek <pavel@denx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+References: <20221027165054.270676357@linuxfoundation.org>
+ <8617f970-2a72-799b-530d-3a5bb07822a6@roeck-us.net>
+ <Y1rbQqkdeliRrQPF@kroah.com> <20221027192744.GC11819@duo.ucw.cz>
+ <ffeb2d7f-cfc6-887a-5751-d58545171526@roeck-us.net>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <ffeb2d7f-cfc6-887a-5751-d58545171526@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, 27. Oktober 2022, 07:02:59 CEST schrieb Palmer Dabbelt:
-> On Tue, 11 Oct 2022 16:18:39 PDT (-0700), heiko@sntech.de wrote:
-> > The PMU on T-Head C9xx cores is quite similar to the SSCOFPMF extension
-> > but not completely identical, so this series
+On 10/27/22 12:39, Guenter Roeck wrote:
+> On 10/27/22 12:27, Pavel Machek wrote:
+>> On Thu 2022-10-27 21:25:54, Greg Kroah-Hartman wrote:
+>>> On Thu, Oct 27, 2022 at 11:10:18AM -0700, Guenter Roeck wrote:
+>>>> On 10/27/22 09:55, Greg Kroah-Hartman wrote:
+>>>>> This is the start of the stable review cycle for the 5.10.151 release.
+>>>>> There are 79 patches in this series, all will be posted as a response
+>>>>> to this one.  If anyone has any issues with these being applied, 
+>>>>> please
+>>>>> let me know.
+>>>>>
+>>>>> Responses should be made by Sat, 29 Oct 2022 16:50:35 +0000.
+>>>>> Anything received after that time might be too late.
+>>>>>
+>>>>
+>>>> Building arm64:allmodconfig ... failed
+>>>> --------------
+>>>> Error log:
+>>>> /bin/sh: scripts/pahole-flags.sh: Permission denied
+>>>>
+>>>> Indeed:
+>>>>
+>>>> $ ls -l scripts/pahole-flags.sh
+>>>> -rw-rw-r-- 1 groeck groeck 530 Oct 27 11:08 scripts/pahole-flags.sh
+>>>>
+>>>> Compared to upstream:
+>>>>
+>>>> -rwxrwxr-x 1 groeck groeck 585 Oct 20 11:31 scripts/pahole-flags.sh
+>>>
+>>> Yeah, this is going to be an odd one.  I have to do this by hand as
+>>> quilt and git quilt-import doesn't like setting the mode bit.
+>>>
+>>> I wonder if I should just make a single-commit release with this file in
+>>> it, set to the proper permission, to get past this hurdle.  I'll think
+>>> about it in the morning...
+>>
+>> Alternatively you can modify the caller to do /bin/sh /scripts/... so
+>> it does not need a +x bit...
+>>
 > 
-> The rest of that sentance got dropped, so I put in
-> 
->     The PMU on T-Head C9xx cores is quite similar to the SSCOFPMF extension
->     but not completely identical, so this series adds a T-Head PMU errata
->     that handlen the differences.
-> 
-> but LMK if you had a better version, it's still early so I don't mind 
-> swapping it around.
+> That should be done in mainline, though.
 
-sounds just fine and sorry for not finishing that sentence on my own.
+This is the second time this is reported unfortunately, so while we 
+could change things in mainline to avoid being dependent upon the file 
+permissions stored in git, this really seems to be a workflow issue 
+involving quilt.
 
-
-> b4 also got kind of confused here so I had to merge suff manually.
-
-do you still know what b4 complained about?
-
-My patch workflow is pretty basic (git format-patch + separate
-git send-email) so I guess it might be interesting what it was
-stumbling on.
-
-Thanks
-Heiko
-
-
-> > changes in v6:
-> > - follow Anup's suggestion and hook into the (pending) cpuinfo patch [2]
-> >   instead of modifying the core sbi_get_* functions
-> >
-> > changes in v5:
-> > - add received Reviews
-> > - fix sbi caching wrt. negative values (Drew)
-> > - add comment about specific c9xx arch- and imp-ids (Conor)
-> >
-> > changes in v4:
-> > - add new patch to cache sbi mvendor, march and mimp-ids (Atish)
-> > - errata dependencies in one line (Conor)
-> > - make driver detection conditional on CONFIG_ERRATA_THEAD_PMU too (Atish)
-> >
-> > changes in v3:
-> > - improve commit message (Atish, Conor)
-> > - IS_ENABLED and BIT() in errata probe (Conor)
-> >
-> > The change depends on my cpufeature/t-head errata probe cleanup series [1].
-> >
-> >
-> > changes in v2:
-> > - use alternatives for the CSR access
-> > - make the irq num selection a bit nicer
-> >
-> > There is of course a matching opensbi-part whose most recent implementation
-> > can be found on [0].
-> >
-> >
-> > [0] https://patchwork.ozlabs.org/project/opensbi/cover/20221004164227.1381825-1-heiko@sntech.de
-> > [1] https://lore.kernel.org/all/20220905111027.2463297-1-heiko@sntech.de/
-> > [2] https://lore.kernel.org/r/20220727043829.151794-1-apatel@ventanamicro.com
-> >
-> > Heiko Stuebner (2):
-> >   RISC-V: Cache SBI vendor values
-> >   drivers/perf: riscv_pmu_sbi: add support for PMU variant on T-Head
-> >     C9xx cores
-> >
-> >  arch/riscv/Kconfig.erratas           | 13 +++++++++++
-> >  arch/riscv/errata/thead/errata.c     | 19 ++++++++++++++++
-> >  arch/riscv/include/asm/errata_list.h | 16 ++++++++++++-
-> >  arch/riscv/include/asm/sbi.h         |  5 ++++
-> >  arch/riscv/kernel/cpu.c              | 30 +++++++++++++++++++++---
-> >  drivers/perf/riscv_pmu_sbi.c         | 34 ++++++++++++++++++++--------
-> >  6 files changed, 103 insertions(+), 14 deletions(-)
-> 
-
-
-
+Any chance you can run a fixup while you apply a patch Greg?
+-- 
+Florian
 
