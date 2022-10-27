@@ -2,169 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF624610188
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3F76101F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236584AbiJ0TVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 15:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
+        id S236672AbiJ0Tpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 15:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236606AbiJ0TUw (ORCPT
+        with ESMTP id S236363AbiJ0Tpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 15:20:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D854D753B6
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:20:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 27 Oct 2022 15:45:35 -0400
+Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A1854656;
+        Thu, 27 Oct 2022 12:45:29 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 113285410D4;
+        Thu, 27 Oct 2022 19:45:28 +0000 (UTC)
+Received: from pdx1-sub0-mail-a225 (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 779D7540EBA;
+        Thu, 27 Oct 2022 19:45:27 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1666899927; a=rsa-sha256;
+        cv=none;
+        b=Tx3N8G61enaXP3hY00PQkoRRM+BDW4V3GjdXsV44o7sw1kknR/nSyveyG2GlGtgb9EZxjr
+        zyGv1mqC+Cg/Vsrvt3Jk2dH6zR6u5ThoUU6e9ysoDnbXLRtYdZSS0CRT76RwE6REfM7uyI
+        dHZ7XunaRTNXbkNsKLPyOc1G4+pszYdMbRBgNw7yR8UvV1n3lNPTmyvug6DIBhQjMkCS/D
+        h6XP4zzdiHYTkqR8UdZ/0JGlDIOojhr43mNk8HcGY5JknIIzCzBlMywqVYXS7IIJricye6
+        eFhOOFJFTPy0OvcsTUwYrZjhzD86g+5S5ZiztxepE1IofAWhpcID0v+M7T3G/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1666899927;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=LgCJNes0M/e9uOGlPfODNjUYtuk1rQXw4FrNx0CN4O4=;
+        b=YxvNjFPKWUt6mpgOpQcC90hhwgf1I+//m6iXB7aasdsKeaxWqyZYFyy+6L2iSYDBlD01sV
+        QXpQfFKLQLL3lJFijdFUilBP98jJiyMPgGqn/pmhUbKYiB0ogMNK9+0ruVA7BmDnLGwKlq
+        ePcMiJaTNLbauGQFaZ18z+FICVbltXtWDk9nYCxBEUnVEAEDm8rpQs0dOkNHffpfE6hPKy
+        lV+gRz+OHKAataxBeH1HqJwxyN5IJ2lwLs316gS9pWTLyVToQA5gVqCJhCpTsMTmJrlo36
+        su/rgV06Ex2tnBp2cP3WNI9DCE7HzSiU3R1Hppjhv2OpcdL41W1YbsgMoGTqQQ==
+ARC-Authentication-Results: i=1;
+        rspamd-7fb88f4dd5-crcnf;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Minister-Cold: 411e9b1352b9e008_1666899927853_4160441994
+X-MC-Loop-Signature: 1666899927853:3360058680
+X-MC-Ingress-Time: 1666899927853
+Received: from pdx1-sub0-mail-a225 (pop.dreamhost.com [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.97.34.76 (trex/6.7.1);
+        Thu, 27 Oct 2022 19:45:27 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75C7C62493
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 19:20:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 314FDC433C1;
-        Thu, 27 Oct 2022 19:20:44 +0000 (UTC)
-Date:   Thu, 27 Oct 2022 15:20:58 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a225 (Postfix) with ESMTPSA id 4Myx3p2T7bz1G;
+        Thu, 27 Oct 2022 12:45:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1666899927;
+        bh=LgCJNes0M/e9uOGlPfODNjUYtuk1rQXw4FrNx0CN4O4=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=S861251m7hwlBl9VdDcTGQTXZ19uWIjz7MKZKMOzkvCb0tQZfFcwBMKLIoZZJvlHW
+         LxthQP60HBgGOTqrxbbgsOG17hBYOlEebeLquGeC/2UbMwRVGpazOKupZTgjan+rzt
+         r1UL2sA3QvPNHNYQWxqrkup5Um/UFec8NkdRNHlrDMOf0KfPT/4y2peFJZ7N08vkAs
+         TemrAQ4bSKpu9c+hGYph5cyWbI6t2TWIbXQ9wwbGIO/3OlQ1qswhHTtBWZCdyfyxRb
+         1dSC9Ka82m6e+uw9B8PaPd8FCo0RZccKvZlKSHeIBneIzlVveFLIkYRs7J8WwzOq0P
+         kC28tuJhVaU3g==
+Date:   Thu, 27 Oct 2022 12:23:41 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>, linux-cxl@vger.kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [RFC][PATCH v2 00/31] timers: Use del_timer_shutdown() before
- freeing timers
-Message-ID: <20221027152058.5f75cfd1@gandalf.local.home>
-In-Reply-To: <f62e19bb-497a-8cf6-93aa-d654d7850356@roeck-us.net>
-References: <20221027150525.753064657@goodmis.org>
-        <f62e19bb-497a-8cf6-93aa-d654d7850356@roeck-us.net>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] memregion: Add cpu_cache_invalidate_memregion()
+ interface
+Message-ID: <20221027192341.flsnbnmptd4t32ki@offworld>
+References: <166672803035.2801111.9244172033971411169.stgit@dwillia2-xfh.jf.intel.com>
+ <3ce6ef93-2f47-eda3-f974-0cfea7f43766@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <3ce6ef93-2f47-eda3-f974-0cfea7f43766@intel.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Oct 2022 11:58:59 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
+On Thu, 27 Oct 2022, Dave Hansen wrote:
 
-> On 10/27/22 08:05, Steven Rostedt wrote:
-> > Back in April, I posted an RFC patch set to help mitigate a common issue
-> > where a timer gets armed just before it is freed, and when the timer
-> > goes off, it crashes in the timer code without any evidence of who the
-> > culprit was. I got side tracked and never finished up on that patch set.
-> > Since this type of crash is still our #1 crash we are seeing in the field,
-> > it has become a priority again to finish it.
-> > 
-> > This is v2 of that patch set. Thomas Gleixner posted an untested version
-> > that makes timer->function NULL as the flag that it is shutdown. I took that
-> > code, tested it (fixed it up), added more comments, and changed the
-> > name to del_timer_shutdown() as Linus had asked. I also converted it to use
-> > WARN_ON_ONCE() instead of just WARN_ON() as Linus asked for that too.
-> >   
-> 
-> I rebased the series on top of v6.1-rc2 and gave it a try. Unfortunately it
-> blows up in my face, first with
-> 
-> [   16.212535] ------------[ cut here ]------------
-> [   16.212887] ODEBUG: free active (active state 0) object type: timer_list hint: tcp_write_timer+0x0/0x190
-> [   16.213725] WARNING: CPU: 0 PID: 310 at lib/debugobjects.c:502 debug_print_object+0xb8/0x100
-> 
-> which, of course, might be real, but after a couple of those I get
-> 
-> [   16.325257] Insufficient stack space to handle exception!
-> [   16.325326] ESR: 0x0000000096000047 -- DABT (current EL)
-> [   16.325355] FAR: 0xffff800008677fe0
-> [   16.325366] Task stack:     [0xffff800008678000..0xffff80000867c000]
-> [   16.325376] IRQ stack:      [0xffff800008000000..0xffff800008004000]
-> [   16.325387] Overflow stack: [0xffff51e19feab300..0xffff51e19feac300]
-> [   16.325406] CPU: 0 PID: 310 Comm: telnet Tainted: G        W        N 6.1.0-rc2-00032-g895257c4037a #1
-> [   16.325425] Hardware name: linux,dummy-virt (DT)
-> [   16.325434] pstate: 400000c5 (nZcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [   16.325450] pc : mark_lock+0x4/0x620
-> [   16.325482] lr : __lock_acquire+0x3e8/0x1950
-> [   16.325493] sp : ffff800008678090
-> [   16.325499] x29: ffff800008678090 x28: ffff51e18651ccc0 x27: ffffc690a5583000
-> [   16.325530] x26: ffff51e18651d590 x25: 0000000000000001 x24: 0000000000000001
-> [   16.325552] x23: 0000000000000001 x22: 0000000000000028 x21: ffff51e18651d568
-> [   16.325571] x20: ffffc690a61b5710 x19: 0000000000000000 x18: ffffffffffffffff
-> [   16.325589] x17: 6e6968207473696c x16: 5f72656d6974203a x15: 6570797420746365
-> [   16.325608] x14: 6a626f2029302065 x13: ffffc690a55a78c0 x12: 00000000000c02e7
-> [   16.325626] x11: 0000000030fa562e x10: ffffc690a5a9f208 x9 : ffffc690a5a9f200
-> [   16.325645] x8 : ffff51e18651ccc0 x7 : 0000000000000000 x6 : 000000000002e9fa
-> [   16.325663] x5 : 0000000000000028 x4 : 0000000000000002 x3 : 00000000000c0003
-> [   16.325681] x2 : 0000000000000008 x1 : ffff51e18651d590 x0 : ffff51e18651ccc0
-> [   16.325902] Kernel panic - not syncing: kernel stack overflow
-> [   16.325992] CPU: 0 PID: 310 Comm: telnet Tainted: G        W        N 6.1.0-rc2-00032-g895257c4037a #1
-> [   16.326008] Hardware name: linux,dummy-virt (DT)
-> [   16.326026] Call trace:
-> [   16.326031]  dump_backtrace.part.0+0xe0/0xf0
-> [   16.326048]  show_stack+0x18/0x40
-> [   16.326058]  dump_stack_lvl+0x9c/0xd8
-> [   16.326073]  dump_stack+0x18/0x34
-> [   16.326083]  panic+0x194/0x38c
-> [   16.326093]  nmi_panic+0xac/0xb0
-> [   16.326103]  panic_bad_stack+0x104/0x124
-> [   16.326113]  handle_bad_stack+0x34/0xe0
-> [   16.326124]  __bad_stack+0x78/0x7c
-> [   16.326134]  mark_lock+0x4/0x620
-> [   16.326144]  lock_acquire.part.0+0xf0/0x26c
-> [   16.326155]  lock_acquire+0x68/0x84
-> [   16.326166]  _raw_spin_lock_irqsave+0x70/0x150
-> [   16.326178]  debug_object_assert_init+0xa0/0x1a4
-> [   16.326193]  __try_to_del_timer_sync+0x40/0xdc
-> [   16.326207]  __del_timer_sync+0xa4/0x100
-> [   16.326218]  timer_fixup_free+0x2c/0x54
-> [   16.326229]  debug_object_free.part.0+0x188/0x1b0
-> ...
-> (many more of those)
-> ...
-> [   16.329989]  timer_fixup_free+0x40/0x54
+>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+>> index 67745ceab0db..b68661d0633b 100644
+>> --- a/arch/x86/Kconfig
+>> +++ b/arch/x86/Kconfig
+>> @@ -69,6 +69,7 @@ config X86
+>>	select ARCH_ENABLE_THP_MIGRATION if X86_64 && TRANSPARENT_HUGEPAGE
+>>	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
+>>	select ARCH_HAS_CACHE_LINE_SIZE
+>> +	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION  if X86_64
+>
+>What is 64-bit only about this?
+>
+>I don't expect to have a lot of NVDIMMs or CXL devices on 32-bit
+>kernels, but it would be nice to remove this if it's not strictly
+>needed.  Or, to add a changelog nugget that says:
+>
+>	Restrict this to X86_64 kernels.  It would probably work on 32-
+>	bit, but there is no practical reason to use 32-bit kernels and
+>	no one is testing them.
 
-Ah, I see the issue here. Looks like the timer_fixup_free() is calling
-itself and crashing.
-
-Let me take a look into that. I didn't touch the fixup code, and there
-could be an assumption there that it's behaving with the old approach.
-
--- Steve
-
-
-> [   16.329996]  __debug_check_no_obj_freed+0x1ec/0x25c
-> [   16.330003]  debug_check_no_obj_freed+0x20/0x90
-> [   16.330009]  slab_free_freelist_hook.constprop.0+0xac/0x1b0
-> [   16.330019]  kmem_cache_free+0x1ac/0x500
-> [   16.330026]  __sk_destruct+0x140/0x2a0
-> [   16.330035]  sk_destruct+0x54/0x64
-> [   16.330042]  __sk_free+0x74/0x120
-> [   16.330048]  sk_free+0x64/0x8c
-> [   16.330055]  tcp_close+0x94/0xc0
-> [   16.330064]  inet_release+0x50/0xb0
-> [   16.330071]  __sock_release+0x44/0xbc
-> [   16.330076]  sock_close+0x18/0x30
-> [   16.330081]  __fput+0x84/0x270
-> [   16.330088]  ____fput+0x10/0x20
-> [   16.330094]  task_work_run+0x88/0xf0
-> [   16.330102]  do_exit+0x334/0xafc
-> [   16.330108]  do_group_exit+0x34/0x90
-> [   16.330115]  __arm64_sys_exit_group+0x18/0x20
-> [   16.330121]  invoke_syscall+0x48/0x114
-> [   16.330133]  el0_svc_common.constprop.0+0x60/0x11c
-> [   16.330146]  do_el0_svc+0x30/0xd0
-> [   16.330157]  el0_svc+0x48/0xc0
-> [   16.330170]  el0t_64_sync_handler+0xbc/0x13c
-> [   16.330179]  el0t_64_sync+0x18c/0x190
-> [   16.330645] Kernel Offset: 0x46909ae00000 from 0xffff800008000000
-> [   16.330664] PHYS_OFFSET: 0xffffae1ec0000000
-> [   16.330686] CPU features: 0x22000,2033c080,0000421b
-> [   16.330752] Memory Limit: none
-> 
-> This is with arm64_defconfig plus various debug options.
-> Running the same test with v6.0.4 produces no errors, and neither
-> does running it with v6.1-rc2-105-gb229b6ca5abb (current mainline).
-> 
-> Guenter
-
+Yes, this was to further limit the potential users.
