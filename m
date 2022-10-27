@@ -2,192 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B14660F3AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B456360F3C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234938AbiJ0J2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 05:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33670 "EHLO
+        id S235419AbiJ0JdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 05:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiJ0J2n (ORCPT
+        with ESMTP id S234420AbiJ0Jcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 05:28:43 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50187645EC;
-        Thu, 27 Oct 2022 02:28:40 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1DEDF66028C6;
-        Thu, 27 Oct 2022 10:28:37 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666862918;
-        bh=nkLiBVCq8vH0MrkVPppLESgMJQN4ENcJIlUdfoTlX3k=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JsMoHSUWjscrjyRcFEI09Vb+4I/iVUwYCNIqSiZu+oYKGyjoBrY7wvwzODTgQvqZS
-         BlkdJnP40hCu6Tt/QcsgC3cMajtRroAE92NvvfSyOQKCCTktYbir0tpMvb4enWVfRb
-         mK1/rhmf6Y34WoMMwqO0JZylDWfZmjec7cO8hgEmc/WEWjL3eodJ59VV7itMzn6CXV
-         XNEsXqiTQGsbzlA175jU0rxY7ImPIEP2BmyzuqEpwkr5xRQ341ftPUKbp3gCdCJLsI
-         1lAsHrnRiJyFajpjqFSQRwFgu0KT9fpQBrT1CVjUgm8aweV39YBZUUeeogZR5Azr1s
-         9h+2YP9BaiCZQ==
-Message-ID: <17139e24-d33c-8240-cd4a-d87fb3b29276@collabora.com>
-Date:   Thu, 27 Oct 2022 11:28:34 +0200
+        Thu, 27 Oct 2022 05:32:47 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9678C3BC7C;
+        Thu, 27 Oct 2022 02:32:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666863151; x=1698399151;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=o45ZowjyZfFdbT4eNKTF4OINZYO4WatGCLArdaxRHBY=;
+  b=FoSXwyWGnVDYFV+RAtBWi3/5B72N5umz+1mKeNE1lOUOuZuoOAL8vq3u
+   H1rZ4Qp6SDeMWHXh25SVPxUrvpt45XpLI4sgrdi/tN7gBpAKVBP2wPZdA
+   kk5cCWwxXBnPhHvJEDWOidtR4rsqza2lY9ppoB79S5UOfgLRiuYzhhe2M
+   60FjffCyI9QnG1FtgKeIIHfOfLVy7OexLYtSCAd26k0ZhBFR6Q7V0efrH
+   LYmV3/d5BeQkNTuzqDuwW0qgqyZH76BmRZAvbsSKgi021w438n50EPuVV
+   dX99Qaz9KEgN0IFG4yEj2MPduoLCNeH4RQfO/eDWwfGeH/ngodwJRbknq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="309873060"
+X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
+   d="scan'208";a="309873060"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 02:32:18 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="877518330"
+X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
+   d="scan'208";a="877518330"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 02:32:15 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Feng Tang <feng.tang@intel.com>,
+        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Waiman Long <longman@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Chen, Tim C" <tim.c.chen@intel.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>
+Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
+References: <20221026074343.6517-1-feng.tang@intel.com>
+        <dc453287-015d-fd1c-fe7f-6ee45772d6aa@linux.ibm.com>
+        <Y1jpDfwBQId3GkJC@feng-clx> <Y1j7tsj5M0Md/+Er@dhcp22.suse.cz>
+        <Y1kl8VbPE0RYdyEB@feng-clx> <Y1lZV6qHp3gIINGc@dhcp22.suse.cz>
+        <87wn8lkbk5.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <Y1ou5DGHrEsKnhri@dhcp22.suse.cz>
+        <87o7txk963.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <Y1o63SWD2KmQkT3v@dhcp22.suse.cz>
+Date:   Thu, 27 Oct 2022 17:31:35 +0800
+In-Reply-To: <Y1o63SWD2KmQkT3v@dhcp22.suse.cz> (Michal Hocko's message of
+        "Thu, 27 Oct 2022 10:01:33 +0200")
+Message-ID: <87fsf9k3yg.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 7/7] arm64: dts: mediatek: Add support for MT6795 Sony
- Xperia M5 smartphone
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>, robh+dt@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        chaotian.jing@mediatek.com, ulf.hansson@linaro.org,
-        matthias.bgg@gmail.com, hsinyi@chromium.org,
-        nfraprado@collabora.com, allen-kh.cheng@mediatek.com,
-        fparent@baylibre.com, sam.shih@mediatek.com,
-        sean.wang@mediatek.com, long.cheng@mediatek.com,
-        wenbin.mei@mediatek.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20220729104441.39177-1-angelogioacchino.delregno@collabora.com>
- <20220729104441.39177-8-angelogioacchino.delregno@collabora.com>
- <a8fa9e22-8c3f-60b2-a0db-01cfd5c37765@somainline.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <a8fa9e22-8c3f-60b2-a0db-01cfd5c37765@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 29/07/22 14:00, Konrad Dybcio ha scritto:
-> 
-> 
-> On 29.07.2022 12:44, AngeloGioacchino Del Regno wrote:
->> Add a basic support for the Sony Xperia M5 (codename "Holly")
->> smartphone, powered by a MediaTek Helio X10 SoC.
->>
->> This achieves a console boot.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Michal Hocko <mhocko@suse.com> writes:
 
-Hello Konrad,
-First of all, I'm sorry for the very late reply.
+> On Thu 27-10-22 15:39:00, Huang, Ying wrote:
+>> Michal Hocko <mhocko@suse.com> writes:
+>> 
+>> > On Thu 27-10-22 14:47:22, Huang, Ying wrote:
+>> >> Michal Hocko <mhocko@suse.com> writes:
+>> > [...]
+>> >> > I can imagine workloads which wouldn't like to get their memory demoted
+>> >> > for some reason but wouldn't it be more practical to tell that
+>> >> > explicitly (e.g. via prctl) rather than configuring cpusets/memory
+>> >> > policies explicitly?
+>> >> 
+>> >> If my understanding were correct, prctl() configures the process or
+>> >> thread.
+>> >
+>> > Not necessarily. There are properties which are per adddress space like
+>> > PR_[GS]ET_THP_DISABLE. This could be very similar.
+>> >
+>> >> How can we get process/thread configuration at demotion time?
+>> >
+>> > As already pointed out in previous emails. You could hook into
+>> > folio_check_references path, more specifically folio_referenced_one
+>> > where you have all that you need already - all vmas mapping the page and
+>> > then it is trivial to get the corresponding vm_mm. If at least one of
+>> > them has the flag set then the demotion is not allowed (essentially the
+>> > same model as VM_LOCKED).
+>> 
+>> Got it!  Thanks for detailed explanation.
+>> 
+>> One bit may be not sufficient.  For example, if we want to avoid or
+>> control cross-socket demotion and still allow demoting to slow memory
+>> nodes in local socket, we need to specify a node mask to exclude some
+>> NUMA nodes from demotion targets.
+>
+> Isn't this something to be configured on the demotion topology side? Or
+> do you expect there will be per process/address space usecases? I mean
+> different processes running on the same topology, one requesting local
+> demotion while other ok with the whole demotion topology?
 
->> ---
->>   arch/arm64/boot/dts/mediatek/Makefile         |  1 +
->>   .../dts/mediatek/mt6795-sony-xperia-m5.dts    | 90 +++++++++++++++++++
->>   2 files changed, 91 insertions(+)
->>   create mode 100644 arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
->>
->> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
->> index af362a085a02..72fd683c9264 100644
->> --- a/arch/arm64/boot/dts/mediatek/Makefile
->> +++ b/arch/arm64/boot/dts/mediatek/Makefile
->> @@ -3,6 +3,7 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt2712-evb.dtb
->>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6755-evb.dtb
->>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6779-evb.dtb
->>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6795-evb.dtb
->> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt6795-sony-xperia-m5.dtb
-> -holly.dtb?
-> 
+I think that it's possible for different processes have different
+requirements.
 
-I prefer using the commercial name to identify the device.
-"Holly" is the smartphone project codename and that is mentioned almost nowhere:
-the aim here is to enhance readability as to make it immediately understandable
-that this devicetree is for the Xperia M5 device.
+- Some processes don't care about where the memory is placed, prefer
+  local, then fall back to remote if no free space.
 
->>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-evb.dtb
->>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-x20-dev.dtb
->>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
->> diff --git a/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts b/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
->> new file mode 100644
->> index 000000000000..94d011c4126c
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
->> @@ -0,0 +1,90 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (c) 2022, Collabora Ltd
->> + * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> + */
->> +
->> +/dts-v1/;
->> +#include "mt6795.dtsi"
->> +
->> +#include <dt-bindings/gpio/gpio.h>
-> Looks unused.
-> 
+- Some processes want to avoid cross-socket traffic, bind to nodes of
+  local socket.
 
-Right, I'll remove that in v2.
+- Some processes want to avoid to use slow memory, bind to fast memory
+  node only.
 
->> +
->> +/ {
->> +	model = "Sony Xperia M5";
->> +	compatible = "sony,xperia-m5", "mediatek,mt6795";
-> sony,holly?
-> 
+>> >From overhead point of view, this appears similar as that of VMA/task
+>> memory policy?  We can make mm->owner available for memory tiers
+>> (CONFIG_NUMA && CONFIG_MIGRATION).  The advantage is that we don't need
+>> to introduce new ABI.  I guess users may prefer to use `numactl` than a
+>> new ABI?
+>
+> mm->owner is a wrong direction. It doesn't have a strong meaning because
+> there is no one task explicitly responsible for the mm so there is no
+> real owner (our clone() semantic is just to permissive for that). The
+> memcg::owner is a crude and ugly hack and it should go away over time
+> rather than build new uses.
+>
+> Besides that, and as I have already tried to explain, per task demotion
+> policy is what makes this whole thing expensive. So this better be a per
+> mm or per vma property. Whether it is a on/off knob like PR_[GS]ET_THP_DISABLE
+> or there are explicit requirements for fine grain control on the vma
+> level I dunno. I haven't seen those usecases yet and it is really easy
+> to overengineer this.
+>
+> To be completely honest I would much rather wait for those usecases
+> before adding a more complex APIs.  PR_[GS]_DEMOTION_DISABLED sounds
+> like a reasonable first step. Should we have more fine grained
+> requirements wrt address space I would follow the MADV_{NO}HUGEPAGE
+> lead.
+>
+> If we really need/want to give a fine grained control over demotion
+> nodemask then we would have to go with vma->mempolicy interface. In
+> any case a per process on/off knob sounds like a reasonable first step
+> before we learn more about real usecases.
 
-I'm sorry, but I can't understand the sense of adding that compatible string to
-the mix. To the kernel, it doesn't mean anything - and we already have another
-string advertising the specific machine, which is "sony,xperia-m5".
+Yes.  Per-mm or per-vma property is much better than per-task property.
+Another possibility, how about add a new flag to set_mempolicy() system
+call to set the per-mm mempolicy?  `numactl` can use that by default.
 
-Of course, there is no Xperia M5 with a different SoC and, even if there was a
-xperia-m5 with a different SoC, we anyway have both a machine compatible and a
-SoC compatible in here, so that would still not pose any issue.
-
->> +	chassis-type = "handset";
->> +
->> +	aliases {
->> +		mmc0 = &mmc0;
->> +		mmc1 = &mmc1;
->> +		serial0 = &uart0;
->> +		serial1 = &uart1;
->> +	};
->> +
->> +	memory@40000000 {
->> +		device_type = "memory";
->> +		reg = <0 0x40000000 0 0x1E800000>;
-> Lowercase hex in size. Also, doesn't the bootloader fill it in?
-> 
-
-Updating the device to the latest software version will give you a bootloader
-that fills that in, but the first-ever software release contains one that will
-not do that in particular conditions (fastboot boot).
-
->> +	};
->> +
->> +	reserved_memory: reserved-memory {
->> +		#address-cells = <2>;
->> +		#size-cells = <2>;
->> +		ranges;
->> +
->> +		/* 128 KiB reserved for ARM Trusted Firmware (BL31) */
-> Is that true for all devices with this SoC, or..? If so, it may be worth
-> moving this into mt6795.dtsi.
-> 
->> +		bl31_secmon_reserved: secmon@43000000 {
-> memory@, everywhere. Use labels to name the nodes.
-> 
-
-I'm afraid that's not possible, as the bootloader is reading the devicetree
-and requires these nodes to follow this naming.
-
->> +			no-map;
-> reg goes first.
-
-Will fix in v2.
-
-Best regards,
-Angelo
-
-
+Best Regards,
+Huang, Ying
