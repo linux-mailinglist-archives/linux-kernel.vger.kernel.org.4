@@ -2,89 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3368860F70E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C948460F712
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234927AbiJ0MUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
+        id S234989AbiJ0MV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 08:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234303AbiJ0MT7 (ORCPT
+        with ESMTP id S230441AbiJ0MVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:19:59 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695E27CE2D;
-        Thu, 27 Oct 2022 05:19:58 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id CC0EE5C00E9;
-        Thu, 27 Oct 2022 08:19:57 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 27 Oct 2022 08:19:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1666873197; x=1666959597; bh=FUld14XjKn
-        KMFXv/UVH0lX7uw/zb5d/sjLEMjFLzqh8=; b=HVHCdmGvYA4PYVmDGHzMywaVOF
-        vdEo6lxLO3N9pnnp+gO0Kc0dAzh/I4lm0rNS0WmQ68pzAkvcpseP5RdK0xERwq0e
-        nV7eSguy33ncdHv6shVBKfwZygCZISXtsgzTvQsRs13Oq8W+lcTncI1FFRtX/he5
-        0spl/2ADAJe/6QuklzJJCkS0cXoBOTJpx5HuWkObDqrmB4bFs2MOX6QP+Cm6rsqs
-        Coxrp76G9XgBFvFmGKaQ5hpKcOaZqCzrZ8T16TDBhpOpFGTDfQZbeZhuq+oU3287
-        eKkcMMVhiuVVRJrDu922HNpFAuThHB14KzlUfeuTooVRfI/dTwHox1g8fOwA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666873197; x=1666959597; bh=FUld14XjKnKMFXv/UVH0lX7uw/zb
-        5d/sjLEMjFLzqh8=; b=fYyTK3eBb5rPWJfZGXg4jCphdK0z8TXh0XLZ8UnJaK6L
-        BYwTFAANvaWm89RqR8HCL8jAL4sqve++WLWJCRdQsNoaQOi4XVh4W93EawG59j5O
-        2S0IUBLGq+/ReQ5Nh5Evk9KMHURS0gl5NQtPYq7NimF/SFfQhNrRytailG3i/0dk
-        R6zrsG2OB0eN2D3UUx/LGFhQSTkUJqpUYDPE5LR1S+liRVfTcOfItorvu8CTv7Ii
-        GI3wX8eufk1oE9A6BYj/CZGyfYqHdrwlPsRVxo/jzc3NMuqbrGDFUHD+jaAJ2O/A
-        OAyy9j4xpiA+zWp5ov7u6NHC1cO0lK8xpIYAbZxkFw==
-X-ME-Sender: <xms:bXdaYx3n_WCnKCPI5BKKJ3ouJ598TcyOvIMeuZFQSp13MDkN9Nm8jg>
-    <xme:bXdaY4GRceZVeRNj1RAcgSUcjpwJIH2rrlJ7hdMP0PHp2HtAFfUQXWvHB6k5tc1hS
-    xxFK2ObtBomVTkF6Lg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeggdegkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:bXdaYx4yYR-11gMHlzbJHQOtO7_sN5Nj5DGCiC68d3mdcZ52TjSshQ>
-    <xmx:bXdaY-229CsyK99-0-lYP5UxPJfmUqojKeAPofBuIxX9_NWjCJ-KYA>
-    <xmx:bXdaY0GVSvhbGWlxLX5FFq-I67QxlPZYpnpEZ9z-3nn8U7VkvK6DoA>
-    <xmx:bXdaY55N1-DyPdQW8DqqAnKaauGSFA_DdL7_umGD5Mum6keTiXEg4w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id AFFF5B60086; Thu, 27 Oct 2022 08:19:57 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
-Mime-Version: 1.0
-Message-Id: <43a50889-5229-463b-bf3b-349a48c21d94@app.fastmail.com>
-In-Reply-To: <fdf94c6b-0293-5dd0-1717-176d1a2056de@socionext.com>
-References: <20221027045157.23325-1-hayashi.kunihiko@socionext.com>
- <20221027045157.23325-5-hayashi.kunihiko@socionext.com>
- <b3c4f9ec-ba8e-4af1-b347-e07b06530d6c@app.fastmail.com>
- <8c11d7c4-dfc4-b84c-82cd-a9708bd79aab@socionext.com>
- <dcbbde62-fcf1-4435-8f65-665b25ec3b0a@app.fastmail.com>
- <fdf94c6b-0293-5dd0-1717-176d1a2056de@socionext.com>
-Date:   Thu, 27 Oct 2022 14:19:27 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Kunihiko Hayashi" <hayashi.kunihiko@socionext.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Olof Johansson" <olof@lixom.net>,
-        "Masami Hiramatsu" <mhiramat@kernel.org>
-Cc:     soc@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] arm64: dts: uniphier: Add NX1 SoC and boards support
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        Thu, 27 Oct 2022 08:21:24 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE105B7A9;
+        Thu, 27 Oct 2022 05:21:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=xsGtsidvxvyfqpXeJMajzF00+EPlnmxjEEENNgRqwIk=; b=yS
+        W4WeALI5A3+voHv6z2AQ8Y9fgHothwYySsklSOPalHOwZNxrzi+to4nwrBqhWaNqkGA3DWEmqXoc+
+        dLyubpCvgqSvCCp7xNrffQJ4nxkD8KqU7LY3HApCL4xWaL33Qv+lsc2E1KVFA4BKSLRRRP+/8hgb/
+        g943WZpoDIWXurI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oo1sJ-000hio-7p; Thu, 27 Oct 2022 14:20:43 +0200
+Date:   Thu, 27 Oct 2022 14:20:43 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Camel Guo <camelg@axis.com>
+Cc:     Camel Guo <Camel.Guo@axis.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>, kernel <kernel@axis.com>
+Subject: Re: [RFC net-next 2/2] net: dsa: Add driver for Maxlinear GSW1XX
+ switch
+Message-ID: <Y1p3m9lEMuJg1pUe@lunn.ch>
+References: <20221025135243.4038706-1-camel.guo@axis.com>
+ <20221025135243.4038706-3-camel.guo@axis.com>
+ <Y1f4bIavgSv0OWi0@lunn.ch>
+ <a04fc8bd-e18e-c300-8300-7cba8fe33557@axis.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a04fc8bd-e18e-c300-8300-7cba8fe33557@axis.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,16 +66,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022, at 13:58, Kunihiko Hayashi wrote:
-> On 2022/10/27 20:28, Arnd Bergmann wrote:
->> Using the GIC is preferred here, because otherwise you lose
->> all the benefits that MSIs offer, regarding latency and CPU
->> affinity.
->
-> I understand, however, unfortunately GIC-ITS (or something alternative)
-> isn't supported in this SoC, so I think it is difficult to use the GIC
-> itself as msi-parent.
+> >> +}
+> >> +
+> >> +static int gsw1xx_mdio_wr(struct mii_bus *bus, int addr, int reg, u16 val)
+> >> +{
+> >> +     struct gsw1xx_priv *priv = bus->priv;
+> >> +     int err;
+> >
+> > Please check for C45 and return -EOPNOTSUPP.
+> 
+> Maybe not need. According to the datasheet of gsw145 "The interface uses the
+> serial protocol defined by IEEE 802.3, clause 22.",  I think it is enough to
+> add "ds->slave_mii_bus->probe_capabilities = MDIOBUS_C22" into gsw1xx_mdio. It
+> probe_capabilities is static and never changes.
 
-Ok, got it.
+probe_capabilities only limits probing the bus when it is
+registered. It does not prevent C45 transfers from being requested by
+PHY drivers. And there are some funky PHY drivers which mix C22 and
+C45. They can probe via C22 and then use C45. So it is much better to
+check and return an error if requested to do something which the
+hardware cannot do. Also, if you don't check, and convert a C45
+request into a C22 request, you often end up with really odd accesses,
+depending on the hardware, reads could become writes, etc.
 
-     arnd
+> > I noticed there is no tagging protocol defined. How are frames
+> > direction out a specific port?
+> 
+> Yes, this chip supports Special Tags which should be enabled, but unfortunately
+> I have no make it work.
+
+You need to make this work. You added support to set the port spanning
+tree status. But that makes no sense if you cannot send/receive bridge
+PDUs out specific ports, etc.
+
+> The chip in my dev board works in self-start, managed switch mode. So far, it
+> works fine on this board.
+> 
+> >
+> > I've also not yet looked at the overlap with lantiq_gswip.c.
+> 
+> The version of GSWIP changes and also the management interface of
+> it is memory-mapped io. I tried to use the same logic in my gsw145 chip
+> (with mdio interface update), lots of parts (e.g: fdb, vlan) don't work
+> at all.
+
+There has been past attempts at a driver for this hardware and it was
+argued that they are sufficiently different that a new driver was
+needed. As i said, i've not compared the code yet, so i cannot comment
+on that yet.
+
+   Andrew
