@@ -2,115 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F267160FA68
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 16:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C0960FA71
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 16:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235345AbiJ0O3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 10:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
+        id S234672AbiJ0Ocz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 10:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234517AbiJ0O3U (ORCPT
+        with ESMTP id S234367AbiJ0Ocw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 10:29:20 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BF91805B7
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 07:29:20 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4Myp331xP6zDqpk;
-        Thu, 27 Oct 2022 14:29:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1666880959; bh=1d9N8tRMn2an5tIHcrDyPVTUDk1W0TFjFY2XfgUzMPQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ozd1KgIvSOK/zNKoguDNyFI62E/EsymmYJdlotGbrUnmc2TucXIGNHG/3IyG22/nE
-         J2b/Rn7RKmP29B0AAHEJe0v8IPVa9AM5x5weu8K0WurzXuwIEEr+d9A94m81AF1pcv
-         SJ5qFWCFlZY/40SvaT2wtboYHloa3Ud4F2B0CMiI=
-X-Riseup-User-ID: 58AC7B8BAF276B6DB86B393FFB0EB34ED88215BC0C4A76B5DD30AB2ECC029068
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4Myp2y6F0gz5vRX;
-        Thu, 27 Oct 2022 14:29:14 +0000 (UTC)
-From:   Arthur Grillo <arthurgrillo@riseup.net>
-To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>, andrealmeid@riseup.net,
-        melissa.srw@gmail.com, Arthur Grillo <arthurgrillo@riseup.net>,
-        =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>
-Subject: [PATCH v2] drm/tests: Add back seed value information
-Date:   Thu, 27 Oct 2022 11:29:03 -0300
-Message-Id: <20221027142903.200169-1-arthurgrillo@riseup.net>
+        Thu, 27 Oct 2022 10:32:52 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0418179988;
+        Thu, 27 Oct 2022 07:32:51 -0700 (PDT)
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 29REWQkr000621;
+        Thu, 27 Oct 2022 23:32:27 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 29REWQkr000621
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1666881147;
+        bh=4HDEXnWr6VYARBxhtIHHxyW+0nXTxgQlhNlzoM6U/Ls=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cEMOUuGRx0CiM5dMBySppPWAb4vz2zKfDBSxF4AaxelQ/VZgyeTz6mR356DZvwGBa
+         L3NaQm+ysBspNbVVKOWPlMn6/0PplDiKBUg3GhXYU9BkTbi9sxuUvk+WElbubd1YOi
+         6028JqJm4ULcqhRMu4AUwjYsrRn6JIMdWzOkXjn8DxDUQKF7HG3/ATh3bomtk47REf
+         m7hLWNKkhA6XpXQlCfgMQ7jK9Llyk/WehKgjD9RTCQR05P/9gNZ5CLsh/Zru2hgSKa
+         IQY1BoGcyNjwcLK1yJ8gNdAWs8XQaojSQ/fGnWHkP/z2b6KgRHhBQguArRzJlutDt9
+         KRp0rWdr3qVDg==
+X-Nifty-SrcIP: [209.85.167.169]
+Received: by mail-oi1-f169.google.com with SMTP id s125so1777921oib.6;
+        Thu, 27 Oct 2022 07:32:26 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3RFApk6ytHKf8GM4ti80xAt1WjrVgWChO2/16kJOSKQ07DGf1X
+        yDZHGVj8Luy9fxOZCaqAR5JW3/dTgw0AK7YNZAE=
+X-Google-Smtp-Source: AMsMyM4tqsHTbHWe+6yz0cnG9uKVuvy2JEqtwziNTOAmy0shG5LX1mgNgc+M3G+YmcTGs8ePnEbYIasezCTtPb52hqI=
+X-Received: by 2002:aca:bbd4:0:b0:353:f167:6fd3 with SMTP id
+ l203-20020acabbd4000000b00353f1676fd3mr5067095oif.287.1666881145769; Thu, 27
+ Oct 2022 07:32:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221024212144.2852069-1-glider@google.com> <20221024212144.2852069-3-glider@google.com>
+In-Reply-To: <20221024212144.2852069-3-glider@google.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 27 Oct 2022 23:31:49 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARfKkiNSUfZAqDQd15O8NAhpX13dHDuGn3OPL_b_F_92g@mail.gmail.com>
+Message-ID: <CAK7LNARfKkiNSUfZAqDQd15O8NAhpX13dHDuGn3OPL_b_F_92g@mail.gmail.com>
+Subject: Re: [PATCH 3/5] Kconfig.debug: disable CONFIG_FRAME_WARN for KMSAN by default
+To:     Alexander Potapenko <glider@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As reported by Michał the drm_mm and drm_buddy unit tests lost the
-printk with seed value after they where refactored into KUnit. This
-patch add back this important information to assure reproducibility and
-convert them to the KUnit API.
+On Tue, Oct 25, 2022 at 6:22 AM Alexander Potapenko <glider@google.com> wrote:
+>
+> KMSAN adds a lot of instrumentation to the code, which results in
+> increased stack usage (up to 2048 bytes and more in some cases).
+> It's hard to predict how big the stack frames can be, so we disable
+> the warnings for KMSAN instead.
+>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: linux-kbuild@vger.kernel.org
+> Link: https://github.com/google/kmsan/issues/89
+> Signed-off-by: Alexander Potapenko <glider@google.com>
+> ---
+>  lib/Kconfig.debug | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 3fc7abffc7aa2..29280072dc0e4 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -400,8 +400,9 @@ config FRAME_WARN
+>         default 1536 if (!64BIT && XTENSA)
+>         default 1024 if !64BIT
+>         default 2048 if 64BIT
+> +       default 0 if KMSAN
 
-Reported-by: Michał Winiarski <michal.winiarski@intel.com>
-Signed-off-by: Arthur Grillo <arthurgrillo@riseup.net>
----
-v1->v2: https://lore.kernel.org/all/20221026211458.68432-1-arthurgrillo@riseup.net/
-- Correct compilation issues
-- Change tags order
-- Remove useless line change
-- Write commit message in imperative form
-- Remove redundant message part
-- Correct some grammars nits
-- Correct checkpatch issues
 
----
- drivers/gpu/drm/tests/drm_buddy_test.c | 4 ++++
- drivers/gpu/drm/tests/drm_mm_test.c    | 4 ++++
- 2 files changed, 8 insertions(+)
 
-diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
-index 62f69589a72d..258137e9c047 100644
---- a/drivers/gpu/drm/tests/drm_buddy_test.c
-+++ b/drivers/gpu/drm/tests/drm_buddy_test.c
-@@ -731,6 +731,10 @@ static int drm_buddy_init_test(struct kunit *test)
- 	while (!random_seed)
- 		random_seed = get_random_u32();
- 
-+	kunit_info(test,
-+		   "Testing DRM buddy manager, with random_seed=0x%x\n",
-+		   random_seed);
-+
- 	return 0;
- }
- 
-diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
-index c4b66eeae203..bec006e044a4 100644
---- a/drivers/gpu/drm/tests/drm_mm_test.c
-+++ b/drivers/gpu/drm/tests/drm_mm_test.c
-@@ -2214,6 +2214,10 @@ static int drm_mm_init_test(struct kunit *test)
- 	while (!random_seed)
- 		random_seed = get_random_u32();
- 
-+	kunit_info(test,
-+		   "Testing DRM range manager, with random_seed=0x%x max_iterations=%u max_prime=%u\n",
-+		   random_seed, max_iterations, max_prime);
-+
- 	return 0;
- }
- 
+This is wrong.
+
+Kconfig picks up the first default entry which has
+true 'if' condition.
+
+
+Since (!64BIT || 64BIT) covers all the possible cases,
+this patch is just adding dead code.
+
+
+
+
+
+
+
+>         help
+> -         Tell gcc to warn at build time for stack frames larger than this.
+> +         Tell the compiler to warn at build time for stack frames larger than this.
+>           Setting this too low will cause a lot of warnings.
+>           Setting it to 0 disables the warning.
+>
+> --
+> 2.38.0.135.g90850a2211-goog
+>
+
+
 -- 
-2.37.3
-
+Best Regards
+Masahiro Yamada
