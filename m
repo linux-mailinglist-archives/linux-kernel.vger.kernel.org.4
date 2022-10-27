@@ -2,64 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1274660EF84
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 07:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1135060EF88
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 07:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233473AbiJ0FbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 01:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
+        id S233881AbiJ0FeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 01:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiJ0FbL (ORCPT
+        with ESMTP id S229473AbiJ0FeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 01:31:11 -0400
-Received: from out199-12.us.a.mail.aliyun.com (out199-12.us.a.mail.aliyun.com [47.90.199.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F71D15A8FE;
-        Wed, 26 Oct 2022 22:31:09 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VTA1yNm_1666848664;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VTA1yNm_1666848664)
-          by smtp.aliyun-inc.com;
-          Thu, 27 Oct 2022 13:31:05 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     miklos@szeredi.hu
-Cc:     linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] ovl: Remove duplicated include in inode.c
-Date:   Thu, 27 Oct 2022 13:31:03 +0800
-Message-Id: <20221027053103.123173-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 27 Oct 2022 01:34:23 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DE497D65
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 22:34:21 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id r18so244007pgr.12
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 22:34:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ac/dPXfdapcJi6R++ywswTtoxteB6ZZ2SeSnB/OESj8=;
+        b=ExryRHGS58d0xSXrGRgUqru2wfTVzxXR3VRekqMuVbOPiqaslNUEpqI+m7WuvJDyq8
+         0r49s21EiIK0nS5bsQgiBMChfXYKV7mCRCRBkb6/emmvZlbzLSMsfMtC6qFhclwL9zg3
+         nm8o6FfN+ts/Hrruvi53sWfnzJFQDBKaeDRKQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ac/dPXfdapcJi6R++ywswTtoxteB6ZZ2SeSnB/OESj8=;
+        b=L6cn/ce3R9ZdHcTu7NwdqD+X7ScdPY/XqgEKHq6z3wsr1yAmnBMSmerlDi1MBND0HJ
+         WBqd+HIYwivC1uYDTzrBeiMZArKAYV6d2TzAwAVQZAxwdc5UqoMGalXXooalTgUritTy
+         puRi9qWACAieLKH/DEMXCHjXyox+Cv0514ToGFL6n7gJV1f5AIiiZSWEpP03fzwm2tUD
+         Dpzx73MeKD3YMr5u2ecX5fjbVphnQwgZ0/9Wt8eNH5yeKGmnPqsiafJAXlIiYn/1lAMz
+         hPNpJy8uTl3X+ZrfcnD05Iged64bqmaUnvsvTFzI6MaQiFs1ekObvkhzYSZtxx3GMxx3
+         okkg==
+X-Gm-Message-State: ACrzQf1wxOxcJvL0zkFiQ0SiDDbgZjzzS6KXV8HKj0ysBpKXTU0Bn1h2
+        iw0o70aL3Oa39uH/6ANxxEKP7g==
+X-Google-Smtp-Source: AMsMyM4IRJfSWcHdgMX+5M2VG7pQG8tnNKBJxJwoLxbBdkq5EUKumYJM9SAARxYwMi3qa0P41Hho7A==
+X-Received: by 2002:a63:2a8b:0:b0:46e:9fda:2171 with SMTP id q133-20020a632a8b000000b0046e9fda2171mr31209479pgq.106.1666848861019;
+        Wed, 26 Oct 2022 22:34:21 -0700 (PDT)
+Received: from rekanorman3.syd.corp.google.com ([2401:fa00:9:14:b007:7d32:6096:a655])
+        by smtp.gmail.com with ESMTPSA id w23-20020a1709026f1700b0017e232b6724sm278540plk.69.2022.10.26.22.34.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 22:34:20 -0700 (PDT)
+From:   Reka Norman <rekanorman@chromium.org>
+To:     Mathias Nyman <mathias.nyman@intel.com>
+Cc:     Reka Norman <rekanorman@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH] xhci: Apply XHCI_RESET_TO_DEFAULT quirk to ADL-N
+Date:   Thu, 27 Oct 2022 16:34:07 +1100
+Message-Id: <20221027053407.421783-1-rekanorman@chromium.org>
+X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-./fs/overlayfs/inode.c: linux/posix_acl.h is included more than once.
+ADL-N systems have the same issue as ADL-P, where a large boot firmware
+delay is seen if USB ports are left in U3 at shutdown. So apply the
+XHCI_RESET_TO_DEFAULT quirk to ADL-N as well.
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2599
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+This patch depends on "xhci: Add quirk to reset host back to default
+state at shutdown".
+
+Signed-off-by: Reka Norman <rekanorman@chromium.org>
 ---
- fs/overlayfs/inode.c | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/fs/overlayfs/inode.c b/fs/overlayfs/inode.c
-index 77a77fd7a77b..d52bcdad4e5b 100644
---- a/fs/overlayfs/inode.c
-+++ b/fs/overlayfs/inode.c
-@@ -14,7 +14,6 @@
- #include <linux/fileattr.h>
- #include <linux/security.h>
- #include <linux/namei.h>
--#include <linux/posix_acl.h>
- #include <linux/posix_acl_xattr.h>
- #include "overlayfs.h"
+ drivers/usb/host/xhci-pci.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 7bccbe50bab15..f98cf30a3c1a5 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -59,6 +59,7 @@
+ #define PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI		0x9a13
+ #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI		0x51ed
++#define PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_PCH_XHCI	0x54ed
  
+ #define PCI_DEVICE_ID_AMD_RENOIR_XHCI			0x1639
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
+@@ -246,7 +247,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 		xhci->quirks |= XHCI_MISSING_CAS;
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_INTEL &&
+-	    pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI)
++	    (pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_PCH_XHCI))
+ 		xhci->quirks |= XHCI_RESET_TO_DEFAULT;
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_INTEL &&
 -- 
-2.20.1.7.g153144c
+2.38.0.135.g90850a2211-goog
 
