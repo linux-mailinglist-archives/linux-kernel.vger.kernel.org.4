@@ -2,78 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D8660F340
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04DD60F345
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235243AbiJ0JKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 05:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40766 "EHLO
+        id S235342AbiJ0JK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 05:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235262AbiJ0JKJ (ORCPT
+        with ESMTP id S235254AbiJ0JKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 05:10:09 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F56120A1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:09:58 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id j4so1544549lfk.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:09:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OmfGV//KmMuic4TgO6B6vfIweF0JdsZfuu3s+Qe2Rfc=;
-        b=BOMLOipgWTGcIVb7PapOdU9iiCF8wgQ45BNUdfX0F957+X8rdd2g09ehnb/YzoQE0U
-         1+urSVIxFDBtB7meLqbvaxdg+t5vQj2AHEL8XLuElrDsXQ+gc8B1uJxlFaDBKH6ZnMHA
-         NTmHmfkbZaav1fWDblzrnvLqaUo+Vlj6UUecY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OmfGV//KmMuic4TgO6B6vfIweF0JdsZfuu3s+Qe2Rfc=;
-        b=VBEYICmiAjwmliRhvCahUOlpIKogBaHBx1nDN5amyXVMW1VbiDKkHJP1eAfZqq2Nzk
-         i17jYeIWkxiHdldTTrWlRFrqZEVSrtD02lFZdHB4tNLNGGO/0V9diYOkqNDNlCoLQBuI
-         s3jRLQBOP0YaC6XsPTSJ0GN/4ZzyfT7WRWVDDXY4+boYIKCReFdhLht6VSkZoPCw9jJW
-         Wv9cX1MdCh39v9X3a+eG+aSMDN159Bf4bAFmFC95drrHFjEjiEawhPPZP4olg6YlhY9/
-         Z0BYJXgbRT82zqqcBQUNaV6zWRpF0O64bYc5ilpajAbcUcD2P6T9dujFeRHhL3LRwiBr
-         +80Q==
-X-Gm-Message-State: ACrzQf2jqYlYLApDQ4Jd3aUMSbrAET65wLVLGkxK03fDyZUzSNXFICum
-        WxSLliuuuEggpI2SyyGu2n4w+Q==
-X-Google-Smtp-Source: AMsMyM5jjPBa7Tcg65INJ5Gwrp3OOniDuXxIBIYwfP4ATGzQwGtdbjWycZGpTSapwM38W6w8zOuSeQ==
-X-Received: by 2002:a19:700a:0:b0:4a4:7fc2:788b with SMTP id h10-20020a19700a000000b004a47fc2788bmr19520859lfc.117.1666861797193;
-        Thu, 27 Oct 2022 02:09:57 -0700 (PDT)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id w7-20020ac254a7000000b004946c99e78asm107237lfk.277.2022.10.27.02.09.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 02:09:56 -0700 (PDT)
-Message-ID: <0b8feeb2-6ec6-d2af-8aa7-0bf34e7ab4b2@rasmusvillemoes.dk>
-Date:   Thu, 27 Oct 2022 11:09:55 +0200
+        Thu, 27 Oct 2022 05:10:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB6F10059
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:10:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09439B8255B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 09:10:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4E26C433D6;
+        Thu, 27 Oct 2022 09:10:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666861817;
+        bh=dQF2+43kff3gQF+6a/Xx6YbAFvzuGAzfM4cCujcupLU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Z5KcJGJ438pv+d34ILDz0V04vC4I9oPn7Hmkz1CPuZVp3/KS86bdeE50TbOFOYcAo
+         lg4joZa9GLUa0HVww7Y7CBEPM4jhwygoBRb7EUXxz9H9uV1SL0Zx3OeKCWCNMuX0Jh
+         PGOmyI6m95dE8ghv/V9vqMb+e3aTUDI+2tnkurxzEwmY12p6m5fCks+Pq9zrIXWrDI
+         FZMMb+iyWD9mx05rnD+7qgpdI3udnzTIQKyB0caKKT9QtE6wNLjpp0xAAjff+23xiB
+         hL263s8UaSIY6cgH0SpsFGpBFB0+CxneWqHlO09dWk7XlohRR26A+qRGnoiZHr4Tel
+         pv0md0Z6AK7uA==
+From:   Oded Gabbay <ogabbay@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dani Liberman <dliberman@habana.ai>
+Subject: [PATCH 04/15] habanalabs: fix user mappings calculation in case of page fault
+Date:   Thu, 27 Oct 2022 12:09:56 +0300
+Message-Id: <20221027091007.664797-4-ogabbay@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221027091007.664797-1-ogabbay@kernel.org>
+References: <20221027091007.664797-1-ogabbay@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] selftests/nolibc: add 7 tests for memcmp()
-Content-Language: en-US
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221021060340.7515-1-w@1wt.eu>
- <20221021155645.GK5600@paulmck-ThinkPad-P17-Gen-1>
- <20221021170134.GB8420@1wt.eu>
- <20221021170738.GM5600@paulmck-ThinkPad-P17-Gen-1>
- <20221021172026.GC8420@1wt.eu>
- <20221021180040.GN5600@paulmck-ThinkPad-P17-Gen-1>
- <20221022112228.GB30596@1wt.eu>
- <20221024155357.GZ5600@paulmck-ThinkPad-P17-Gen-1>
- <20221026053922.GA19206@1wt.eu>
- <a5233381-4081-afce-07b5-72d653eeeefb@rasmusvillemoes.dk>
- <20221026195224.GA24197@1wt.eu>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20221026195224.GA24197@1wt.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,31 +52,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/10/2022 21.52, Willy Tarreau wrote:
-> On Wed, Oct 26, 2022 at 11:08:41AM +0200, Rasmus Villemoes wrote:
->> On 26/10/2022 07.39, Willy Tarreau wrote:
->>>
->>> No more false positives nor false negatives anymore. I'm sending you
->>> the patch separately.
->>
->> While you're at it, may I suggest also adding a few test cases where the
->> buffers differ by 128, e.g. 0x0 v 0x80 and 0x40 v 0xc0.
-> 
-> I initially thought about it but changed my mind for +/- 0xc0 that
-> covered the same cases in my opinion. Do you have a particular error
-> case in mind that would be caught by this one that the other one does
-> not catch ?
+From: Dani Liberman <dliberman@habana.ai>
 
-Not really, but in a sense the opposite: for the +/- 0xc0 case, both
-ways of comparison will give the wrong sign because -192 becomes +64 and
-vice versa. For +/- 0x80, one way of doing the comparison will
-"accidentally" produce the right answer, and I thought that might also
-be a little interesting.
+As there are 2 types of user mappings, pmmu and hmmu, calculate
+only the relevant mappings for the requested type.
 
-I'm fine for proposing a respin of the patch to improve
-> it if it brings some value,
+Signed-off-by: Dani Liberman <dliberman@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+---
+ drivers/misc/habanalabs/common/device.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-It's your call, you can respin, do an incremental patch, or just ignore
-me :)
+diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
+index 0026fe42b3d2..0e88396744a1 100644
+--- a/drivers/misc/habanalabs/common/device.c
++++ b/drivers/misc/habanalabs/common/device.c
+@@ -2305,8 +2305,13 @@ static void hl_capture_user_mappings(struct hl_device *hdev, bool is_pmmu)
+ 	}
+ 
+ 	mutex_lock(&ctx->mem_hash_lock);
+-	hash_for_each(ctx->mem_hash, i, hnode, node)
+-		pgf_info->num_of_user_mappings++;
++	hash_for_each(ctx->mem_hash, i, hnode, node) {
++		vm_type = hnode->ptr;
++		if (((*vm_type == VM_TYPE_USERPTR) && is_pmmu) ||
++				((*vm_type == VM_TYPE_PHYS_PACK) && !is_pmmu))
++			pgf_info->num_of_user_mappings++;
++
++	}
+ 
+ 	if (!pgf_info->num_of_user_mappings)
+ 		goto finish;
+-- 
+2.25.1
 
-Rasmus
