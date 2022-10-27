@@ -2,164 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B7B6104DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B2BC6104E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 23:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237119AbiJ0V4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 17:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43064 "EHLO
+        id S237135AbiJ0V4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 17:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233569AbiJ0Vz6 (ORCPT
+        with ESMTP id S233569AbiJ0V4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 17:55:58 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603C08E718;
-        Thu, 27 Oct 2022 14:55:57 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id t25so8536108ejb.8;
-        Thu, 27 Oct 2022 14:55:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NBF9nN1amKjoEJYkIjpsAIirOQycb1TH6Xv8hrGX720=;
-        b=mDkvDqdAij8U7APRP9yt0MpP0X4VRBno0CXMoN30kyF44cwwyG6SWPi0RMmgixT3Bt
-         gDGI3NQdLQgzAOkEJRsHlv30WGUJ2hQblLeSpwcJ5STMlX4u4j8a3tQV2KR2m0LIQzBm
-         AQJ503ah+Ml5VjRZNjjXGPE/NDYPCFMXA8zgjE5t0SVsx9Hw9IWLWZ3AMAqfOZwZ+V+e
-         qYuMVsdT8DFxXyS63KjEsQME+nw+FVWDILA1TQjyCKoVJwx1GB6oAfX2SEHxx6BUkppp
-         FRbFNc1nFH6dDsPv8S53kFNtYm8nzlkRSUmQ01A3lEAB9LpF+C23K7NNIPQTDmTy9HCd
-         Qzng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NBF9nN1amKjoEJYkIjpsAIirOQycb1TH6Xv8hrGX720=;
-        b=6BVG8AZlvHBdNfDuq3y0z0cB4b1Wz77p1Qw9M60GA2NEmU3KgTPr2ySvQQHz7shLSp
-         c7/7/4S7F/XYaHq+sDa85+TCuzKNUuspSDKOczKSArB/GAhRVU3TpQeeiKyT5asUY3HD
-         IBPVGA+822LvOWeul5Rk7bpegwv4o3zFHUps2GE8xf4tgwQxpgozAEL5tT3m0hCpZhIE
-         RCt1nl74uaaac8dywy+LwjBWlv3VyYuIr9P0mv2K0dAzo9pWXgQ3rjx8rzm4QwOk4E3M
-         tkWsvgIVTHQY1SmkihR84tviWtfpvldiUCXeBrbBBGGOJDcLyK/jc8gbZQREJiWX6gpc
-         60KA==
-X-Gm-Message-State: ACrzQf3oqve7tszSgB1J/9Vf7QOWwXmlx46uMoffqRrJHQsZXqAEVGxP
-        VaOO3lBr+QoJl6MaDDecDaOSFd5IzH1CT8+lKUU=
-X-Google-Smtp-Source: AMsMyM6xp5XG883Sfz6qxUaX5+gPHPonCP4MPn0vbsj6Bzy6ERW5G8ermHkmXVNLJ97zdVUdhxlu0w7L/DMiIXxWfLY=
-X-Received: by 2002:a17:906:8442:b0:7ad:960b:ef61 with SMTP id
- e2-20020a170906844200b007ad960bef61mr2610486ejy.702.1666907755828; Thu, 27
- Oct 2022 14:55:55 -0700 (PDT)
+        Thu, 27 Oct 2022 17:56:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24740900F7;
+        Thu, 27 Oct 2022 14:56:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B537462521;
+        Thu, 27 Oct 2022 21:56:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCE66C433D6;
+        Thu, 27 Oct 2022 21:56:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666907806;
+        bh=ejwdQUPGbamg43pbRin0jcwr6MfLouQO3nxsVDdp1bI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=YJgE1gwXtxAvtHgchp1pnusC8/HhXp2bvBD8j/azadbQFsN997JU3vFv3F3frp7uh
+         Vyv86kEM3Jk6brzKSdP6553i9KD9aaAoJLN+2gCQby2iBAUA4yk1WUqTJFtcRqTSiI
+         K6c2mmd7LmGdj10qcmpIMzUYn2P1e4CNcCYqt/xU9rytLUMzWfMO4+mDPrILU3+6og
+         snIz75cIFK8MWQ3FoU4TlyWGnC/hJUvQpyP8DXB0poi2u3M35xlelTuDcfb4W4hZ11
+         NVSfchwbYv/bZ6mR7vheshD7rSUouOpuQr6lx/Nbh2gNVIqC7qvpnBlEzOI6VMGppr
+         pjz58/9Cw5faQ==
+Date:   Thu, 27 Oct 2022 16:56:44 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     LeoLiu-oc <LeoLiu-oc@zhaoxin.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, james.morse@arm.com,
+        tony.luck@intel.com, bp@alien8.de, robert.moore@intel.com,
+        ying.huang@intel.com, rdunlap@infradead.org, bhelgaas@google.com,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devel@acpica.org,
+        CobeChen@zhaoxin.com, TonyWWang@zhaoxin.com, ErosZhang@zhaoxin.com
+Subject: Re: [PATCH 3/5] ACPI/PCI: Add AER bits #defines for PCIE/PCI-X
+ bridges
+Message-ID: <20221027215644.GA844326@bhelgaas>
 MIME-Version: 1.0
-References: <20220921084302.43631-1-yangyicong@huawei.com> <20220921084302.43631-3-yangyicong@huawei.com>
- <168eac93-a6ee-0b2e-12bb-4222eff24561@arm.com> <8e391962-4e3a-5a56-64b4-78e8637e3b8c@huawei.com>
- <CAGsJ_4z=dZbrAUD9jczT08S3qi_ep-h+EK35UfayVk1S+Cnp2A@mail.gmail.com>
- <ecd161db-b290-7997-a81e-a0a00bd1c599@arm.com> <87o7tx5oyx.fsf@stealth>
-In-Reply-To: <87o7tx5oyx.fsf@stealth>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Fri, 28 Oct 2022 10:55:42 +1300
-Message-ID: <CAGsJ_4zrGfPYAXGW0g3Z-GF4vT7GD0xDjZn1dv-qruztEQTghg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] arm64: support batched/deferred tlb shootdown
- during page reclamation
-To:     Punit Agrawal <punit.agrawal@bytedance.com>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Yicong Yang <yangyicong@huawei.com>, yangyicong@hisilicon.com,
-        corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, darren@os.amperecomputing.com,
-        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
-        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-mm@kvack.org, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, akpm@linux-foundation.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        wangkefeng.wang@huawei.com, xhao@linux.alibaba.com,
-        prime.zeng@hisilicon.com, Barry Song <v-songbaohua@oppo.com>,
-        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>,
-        catalin.marinas@arm.com, will@kernel.org, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221027031554.2856036-1-LeoLiu-oc@zhaoxin.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 3:19 AM Punit Agrawal
-<punit.agrawal@bytedance.com> wrote:
->
->
-> [ Apologies for chiming in late in the conversation ]
->
-> Anshuman Khandual <anshuman.khandual@arm.com> writes:
->
-> > On 9/28/22 05:53, Barry Song wrote:
-> >> On Tue, Sep 27, 2022 at 10:15 PM Yicong Yang <yangyicong@huawei.com> wrote:
-> >>>
-> >>> On 2022/9/27 14:16, Anshuman Khandual wrote:
-> >>>> [...]
-> >>>>
-> >>>> On 9/21/22 14:13, Yicong Yang wrote:
-> >>>>> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
-> >>>>> +{
-> >>>>> +    /* for small systems with small number of CPUs, TLB shootdown is cheap */
-> >>>>> +    if (num_online_cpus() <= 4)
-> >>>>
-> >>>> It would be great to have some more inputs from others, whether 4 (which should
-> >>>> to be codified into a macro e.g ARM64_NR_CPU_DEFERRED_TLB, or something similar)
-> >>>> is optimal for an wide range of arm64 platforms.
-> >>>>
-> >>
-> >> I have tested it on a 4-cpus and 8-cpus machine. but i have no machine
-> >> with 5,6,7
-> >> cores.
-> >> I saw improvement on 8-cpus machines and I found 4-cpus machines don't need
-> >> this patch.
-> >>
-> >> so it seems safe to have
-> >> if (num_online_cpus()  < 8)
-> >>
-> >>>
-> >>> Do you prefer this macro to be static or make it configurable through kconfig then
-> >>> different platforms can make choice based on their own situations? It maybe hard to
-> >>> test on all the arm64 platforms.
-> >>
-> >> Maybe we can have this default enabled on machines with 8 and more cpus and
-> >> provide a tlbflush_batched = on or off to allow users enable or
-> >> disable it according
-> >> to their hardware and products. Similar example: rodata=on or off.
-> >
-> > No, sounds bit excessive. Kernel command line options should not be added
-> > for every possible run time switch options.
-> >
-> >>
-> >> Hi Anshuman, Will,  Catalin, Andrew,
-> >> what do you think about this approach?
-> >>
-> >> BTW, haoxin mentioned another important user scenarios for tlb bach on arm64:
-> >> https://lore.kernel.org/lkml/393d6318-aa38-01ed-6ad8-f9eac89bf0fc@linux.alibaba.com/
-> >>
-> >> I do believe we need it based on the expensive cost of tlb shootdown in arm64
-> >> even by hardware broadcast.
-> >
-> > Alright, for now could we enable ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH selectively
-> > with CONFIG_EXPERT and for num_online_cpus()  > 8 ?
->
-> When running the test program in the commit in a VM, I saw benefits from
-> the patches at all sizes from 2, 4, 8, 32 vcpus. On the test machine,
-> ptep_clear_flush() went from ~1% in the unpatched version to not showing
-> up.
->
-> Yicong mentioned that he didn't see any benefit for <= 4 CPUs but is
-> there any overhead? I am wondering what are the downsides of enabling
-> the config by default.
+On Thu, Oct 27, 2022 at 11:15:54AM +0800, LeoLiu-oc wrote:
+> From: leoliu-oc <leoliu-oc@zhaoxin.com>
+> 
+> Define PCI Express Advanced Error Reporting Extended Capabilities bits.
+> 
+> Signed-off-by: leoliu-oc <leoliu-oc@zhaoxin.com>
+> ---
+>  include/uapi/linux/pci_regs.h | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/include/uapi/linux/pci_regs.h b/include/uapi/linux/pci_regs.h
+> index 57b8e2ffb1dd..3662106fd8dc 100644
+> --- a/include/uapi/linux/pci_regs.h
+> +++ b/include/uapi/linux/pci_regs.h
+> @@ -799,6 +799,11 @@
+>  #define  PCI_ERR_ROOT_AER_IRQ		0xf8000000 /* Advanced Error Interrupt Message Number */
+>  #define PCI_ERR_ROOT_ERR_SRC	0x34	/* Error Source Identification */
+>  
+> +/* PCI Express Advanced Error Reporting Extended Capabilities for Bridges */
+> +#define PCI_ERR_UNCOR_MASK2		0x30	/* Secondary Uncorrectable Error Mask */
+> +#define PCI_ERR_UNCOR_SEVER2	0x34	/* Secondary Uncorrectable Error Severit */
+> +#define PCI_ERR_CAP2			0x38	/* Secondary Advanced Error Capabilities */
 
-As we are deferring tlb flush, but sometimes while we are modifying the vma
-which are deferred, we need to do a sync by flush_tlb_batched_pending() in
-mprotect() , madvise() to make sure they can see the flushed result. if nobody
-is doing mprotect(), madvise() etc in the deferred period, the overhead is zero.
+Can you include a spec reference for these?  I'm looking at PCIe r6.0,
+sec 7.8.4, and I don't see anything I can match up with these.
 
->
-> Thanks,
-> Punit
-
-Thanks
-Barry
+Bjorn
