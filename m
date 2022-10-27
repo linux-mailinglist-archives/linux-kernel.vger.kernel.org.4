@@ -2,131 +2,448 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1B260EE1B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 04:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA8460EE20
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 04:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234015AbiJ0CyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 22:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55434 "EHLO
+        id S233099AbiJ0Cy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 22:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233941AbiJ0CyE (ORCPT
+        with ESMTP id S234118AbiJ0CyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 22:54:04 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA9D127433
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 19:54:04 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so4909779pjc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 19:54:04 -0700 (PDT)
+        Wed, 26 Oct 2022 22:54:19 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A601147D13
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 19:54:12 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id n7so70090plp.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 19:54:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=alwOCN2lVugGQDo7bNzsNkCClF+obiVDxZ+DoG3doNQ=;
-        b=49Yiz+j1vU0PQcTjF7/YjHEUuHZ26mEKUQQic96K13BQMOM+XGdvPXWYjJqb+z7n1b
-         l8LAnPEf2VoH4z13zxXfMKHtPUIfzYBAP4AIVBVgDbpbrVy1qJy7fx/tqgWjsDh7c0Jb
-         vVMhze9eZIVfJaedO9Bfcq2XiUQoNuV+j/EAmv4D96NX02vtW3B1aGRZ6L+9Zr2ltn3E
-         3IdoDYMC3Lu7/l9mIqUYPX04EUi9pJv5+Nsb9lkpq2eqltTIC8fchbPDnoPCJWjeWXRu
-         L5w+PSsb0gXIODEr4XqR/n9WvUv4myDyJtrkEbFTKwoATXien451oQFG3N2J5thvBpvs
-         SCdg==
+        bh=3uDzj3xfoqua/ReBQcTFPxgbHPXWlBiMpS7ZejnRM0Q=;
+        b=4Eylhn+7+ibRf+ZpoLNfl1xWoM/yIjNPedJrB82jdccOprR5LGAT5zd5Neh/3bcMV1
+         8PTL4g1XORCtjwfjjM8eZjO91WGc5Sa9dTu9um3/Dzmg29cHkBeK2YRh1nNhsV0+lnx4
+         /h2a1cyXTDUE/myxdkDFplbuYO0NF22lmivCvNZ1z2Hf4+bbSDR2J1dyl5t3hg31WK21
+         DbO7ZAzVqZEJTv3ISiZeYOij8tr4n4iI1Lu2u2aihnxy5nFLjb15DstiOndEZCrqqnOs
+         LKSh6qLark3An7QWz7+RDHmmYQf+5ifHwl6DyOgxtyzeLnZh5NAkjEkGUwfW7ucJ14wI
+         pUrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=alwOCN2lVugGQDo7bNzsNkCClF+obiVDxZ+DoG3doNQ=;
-        b=L5t1YrhCgFrTGZlVxYTf2l+931juYoQqzF18gKAYmK6YaPC74lZe6L7xoZ1Jhggwin
-         hEHj9k3A51QfZRTV0vKJe2sPGjw/MGc1By3dNFF/SEsTbp39N+KfY4bDGJu9eU0ndhYK
-         1o6qbLbssyQ1JMNauV9L1QgP8WXCKHlBoBpv14EpuBcdmqoz2tN4t2svBWSzGlb8DyeD
-         ywnYKOyUgOv2wVBtCLFkCDvCyKtkZ5UZJdqqR893Scsqu/cltyE0xQqc6mJ9QvfyDHxn
-         y8k6eRb19NiktisPfdE9R8Rmotskf4/QqkTmjnnoSxbqEbgCNAERZBd8EErszcSnFgWN
-         bS4A==
-X-Gm-Message-State: ACrzQf3rR+agh0Htera23i0iDZe6+/pPyTmE5W1BKmA2Zi2nOPg7BMsf
-        gULobaPUgI5dXdEzdcaDlYozkQ==
-X-Google-Smtp-Source: AMsMyM46I1QvdBEYTxlVsfywzN2A+sbyVGRZkR1Yaa5nLihSh6wf45pCsKToOcIq6rHQKfHNnAeFOg==
-X-Received: by 2002:a17:903:26ce:b0:186:9029:fa22 with SMTP id jg14-20020a17090326ce00b001869029fa22mr24082523plb.140.1666839243909;
-        Wed, 26 Oct 2022 19:54:03 -0700 (PDT)
+        bh=3uDzj3xfoqua/ReBQcTFPxgbHPXWlBiMpS7ZejnRM0Q=;
+        b=zlssDzhirvLUzl3n/iKVGej79VmdvwL+WI928CB2oOmCHL4YMMIWOBvVS6iwbnmlYC
+         4DglHFbkCOkuItdCE0/q5QTiDd0GgNOf1ZIE/Ke3kwLaHJvREVNtHPQn/Yg9iRWILeyv
+         LfcUOVzkJp2EAavQE0pgbW18Sg7joJXm7j4n9C+tUE7CX5G5MT42OCY43nGZSDoZISTn
+         8aofxzFCYIaWC9seuAqlWMwwURXFliFfcQXLFiM+I4nSmSYbgS8JyCUxMuXvUHFYkPZd
+         aLk7JQ+g/HAimgdmXAGyJE92MQxzdRm7DEEejZUVffasdmQvSg63RWu0t0jyXMtV9QNK
+         pZ2w==
+X-Gm-Message-State: ACrzQf3JZDYuYEO03L2u0wDOm13S1LCXkGGe6BvydOvvP+m04BJOX2P4
+        n9D53tFHAyrrZODr6WQ8DunreQ==
+X-Google-Smtp-Source: AMsMyM7voE4RrfzGTYSyChsln1Sy6eKR8E94edHCJUVA0dL+cwvzM0+ZyIR6IvaSA+JqofhQMyJZaw==
+X-Received: by 2002:a17:90b:4b4a:b0:213:35c:bf7 with SMTP id mi10-20020a17090b4b4a00b00213035c0bf7mr7551157pjb.14.1666839252279;
+        Wed, 26 Oct 2022 19:54:12 -0700 (PDT)
 Received: from C02FT5A6MD6R.bytedance.net ([61.120.150.75])
-        by smtp.gmail.com with ESMTPSA id o1-20020aa79781000000b0056b6a22d6c9sm79783pfp.212.2022.10.26.19.54.01
+        by smtp.gmail.com with ESMTPSA id o1-20020aa79781000000b0056b6a22d6c9sm79783pfp.212.2022.10.26.19.54.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 19:54:03 -0700 (PDT)
+        Wed, 26 Oct 2022 19:54:11 -0700 (PDT)
 From:   Gang Li <ligang.bdlg@bytedance.com>
-Cc:     Gang Li <ligang.bdlg@bytedance.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 1/2] sched/numa: use static_branch_inc/dec for sched_numa_balancing
-Date:   Thu, 27 Oct 2022 10:53:01 +0800
-Message-Id: <20221027025302.45766-2-ligang.bdlg@bytedance.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Cc:     Gang Li <ligang.bdlg@bytedance.com>, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH v5 2/2] sched/numa: add per-process numa_balancing
+Date:   Thu, 27 Oct 2022 10:53:02 +0800
+Message-Id: <20221027025302.45766-3-ligang.bdlg@bytedance.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20221027025302.45766-1-ligang.bdlg@bytedance.com>
 References: <20221027025302.45766-1-ligang.bdlg@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-per-process numa balancing use static_branch_inc/dec() to count
-how many enables in sched_numa_balancing. So here must be converted
-to inc/dec too.
+Add PR_NUMA_BALANCING in prctl.
 
+A large number of page faults will cause performance loss when numa
+balancing is performing. Thus those processes which care about worst-case
+performance need numa balancing disabled. Others, on the contrary, allow a
+temporary performance loss in exchange for higher average performance, so
+enable numa balancing is better for them.
+
+Numa balancing can only be controlled globally by
+/proc/sys/kernel/numa_balancing. Due to the above case, we want to
+disable/enable numa_balancing per-process instead.
+
+Set per-process numa balancing:
+	prctl(PR_NUMA_BALANCING, PR_SET_NUMA_BALANCING_DISABLE); //disable
+	prctl(PR_NUMA_BALANCING, PR_SET_NUMA_BALANCING_ENABLE);  //enable
+	prctl(PR_NUMA_BALANCING, PR_SET_NUMA_BALANCING_DEFAULT); //follow global
+Get numa_balancing state:
+	prctl(PR_NUMA_BALANCING, PR_GET_NUMA_BALANCING, &ret);
+	cat /proc/<pid>/status | grep NumaB_mode
+
+Cc: linux-api@vger.kernel.org
 Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
 ---
- kernel/sched/core.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+ Documentation/filesystems/proc.rst   |  2 ++
+ fs/proc/task_mmu.c                   | 20 ++++++++++++
+ include/linux/mm_types.h             |  3 ++
+ include/linux/sched/numa_balancing.h | 45 ++++++++++++++++++++++++++
+ include/uapi/linux/prctl.h           |  7 +++++
+ kernel/fork.c                        |  4 +++
+ kernel/sched/fair.c                  |  9 +++---
+ kernel/sys.c                         | 47 ++++++++++++++++++++++++++++
+ mm/mprotect.c                        |  6 ++--
+ 9 files changed, 137 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index cb2aa2b54c7a..43716d107d72 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -4372,21 +4372,15 @@ DEFINE_STATIC_KEY_FALSE(sched_numa_balancing);
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index ec6cfdf1796a..e7f058c4e906 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -193,6 +193,7 @@ read the file /proc/PID/status::
+   VmLib:      1412 kB
+   VmPTE:        20 kb
+   VmSwap:        0 kB
++  NumaB_mode:  default
+   HugetlbPages:          0 kB
+   CoreDumping:    0
+   THP_enabled:	  1
+@@ -274,6 +275,7 @@ It's slow but very precise.
+  VmPTE                       size of page table entries
+  VmSwap                      amount of swap used by anonymous private data
+                              (shmem swap usage is not included)
++ NumaB_mode                  numa balancing mode, set by prctl(PR_NUMA_BALANCING, ...)
+  HugetlbPages                size of hugetlb memory portions
+  CoreDumping                 process's memory is currently being dumped
+                              (killing the process may lead to a corrupted core)
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 8a74cdcc9af0..835b68ec218b 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -19,6 +19,8 @@
+ #include <linux/shmem_fs.h>
+ #include <linux/uaccess.h>
+ #include <linux/pkeys.h>
++#include <linux/sched/numa_balancing.h>
++#include <linux/prctl.h>
  
- int sysctl_numa_balancing_mode;
- 
--static void __set_numabalancing_state(bool enabled)
--{
--	if (enabled)
--		static_branch_enable(&sched_numa_balancing);
--	else
--		static_branch_disable(&sched_numa_balancing);
--}
--
- void set_numabalancing_state(bool enabled)
- {
--	if (enabled)
-+	if (enabled) {
- 		sysctl_numa_balancing_mode = NUMA_BALANCING_NORMAL;
--	else
-+		static_branch_enable(&sched_numa_balancing);
-+	} else {
- 		sysctl_numa_balancing_mode = NUMA_BALANCING_DISABLED;
--	__set_numabalancing_state(enabled);
-+		static_branch_disable(&sched_numa_balancing);
+ #include <asm/elf.h>
+ #include <asm/tlb.h>
+@@ -75,6 +77,24 @@ void task_mem(struct seq_file *m, struct mm_struct *mm)
+ 		    " kB\nVmPTE:\t", mm_pgtables_bytes(mm) >> 10, 8);
+ 	SEQ_PUT_DEC(" kB\nVmSwap:\t", swap);
+ 	seq_puts(m, " kB\n");
++#ifdef CONFIG_NUMA_BALANCING
++	seq_puts(m, "NumaB_mode:\t");
++	switch (mm->numa_balancing_mode) {
++	case PR_SET_NUMA_BALANCING_DEFAULT:
++		seq_puts(m, "default");
++		break;
++	case PR_SET_NUMA_BALANCING_DISABLED:
++		seq_puts(m, "disabled");
++		break;
++	case PR_SET_NUMA_BALANCING_ENABLED:
++		seq_puts(m, "enabled");
++		break;
++	default:
++		seq_puts(m, "unknown");
++		break;
 +	}
++	seq_putc(m, '\n');
++#endif
+ 	hugetlb_report_usage(m, mm);
+ }
+ #undef SEQ_PUT_DEC
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index a82f06ab18a1..b789acf1f69c 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -679,6 +679,9 @@ struct mm_struct {
+ 
+ 		/* numa_scan_seq prevents two threads remapping PTEs. */
+ 		int numa_scan_seq;
++
++		/* Controls whether NUMA balancing is active for this mm. */
++		int numa_balancing_mode;
+ #endif
+ 		/*
+ 		 * An operation with batched TLB flushing is going on. Anything
+diff --git a/include/linux/sched/numa_balancing.h b/include/linux/sched/numa_balancing.h
+index 3988762efe15..aa8629dfde45 100644
+--- a/include/linux/sched/numa_balancing.h
++++ b/include/linux/sched/numa_balancing.h
+@@ -8,6 +8,8 @@
+  */
+ 
+ #include <linux/sched.h>
++#include <linux/sched/sysctl.h>
++#include <linux/prctl.h>
+ 
+ #define TNF_MIGRATED	0x01
+ #define TNF_NO_GROUP	0x02
+@@ -16,12 +18,47 @@
+ #define TNF_MIGRATE_FAIL 0x10
+ 
+ #ifdef CONFIG_NUMA_BALANCING
++DECLARE_STATIC_KEY_FALSE(sched_numa_balancing);
+ extern void task_numa_fault(int last_node, int node, int pages, int flags);
+ extern pid_t task_numa_group_id(struct task_struct *p);
+ extern void set_numabalancing_state(bool enabled);
+ extern void task_numa_free(struct task_struct *p, bool final);
+ extern bool should_numa_migrate_memory(struct task_struct *p, struct page *page,
+ 					int src_nid, int dst_cpu);
++static inline bool numa_balancing_enabled(struct task_struct *p)
++{
++	if (!static_branch_unlikely(&sched_numa_balancing))
++		return false;
++
++	if (p->mm) switch (p->mm->numa_balancing_mode) {
++	case PR_SET_NUMA_BALANCING_ENABLED:
++		return true;
++	case PR_SET_NUMA_BALANCING_DISABLED:
++		return false;
++	default:
++		break;
++	}
++
++	return sysctl_numa_balancing_mode;
++}
++static inline int numa_balancing_mode(struct mm_struct *mm)
++{
++	if (!static_branch_unlikely(&sched_numa_balancing))
++		return PR_SET_NUMA_BALANCING_DISABLED;
++
++	if (mm) switch (mm->numa_balancing_mode) {
++	case PR_SET_NUMA_BALANCING_ENABLED:
++		return sysctl_numa_balancing_mode == NUMA_BALANCING_DISABLED ?
++			NUMA_BALANCING_NORMAL : sysctl_numa_balancing_mode;
++	case PR_SET_NUMA_BALANCING_DISABLED:
++		return NUMA_BALANCING_DISABLED;
++	case PR_SET_NUMA_BALANCING_DEFAULT:
++	default:
++		break;
++	}
++
++	return sysctl_numa_balancing_mode;
++}
+ #else
+ static inline void task_numa_fault(int last_node, int node, int pages,
+ 				   int flags)
+@@ -42,6 +79,14 @@ static inline bool should_numa_migrate_memory(struct task_struct *p,
+ {
+ 	return true;
+ }
++static inline int numa_balancing_mode(struct mm_struct *mm)
++{
++	return 0;
++}
++static inline bool numa_balancing_enabled(struct task_struct *p)
++{
++	return 0;
++}
+ #endif
+ 
+ #endif /* _LINUX_SCHED_NUMA_BALANCING_H */
+diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
+index a5e06dcbba13..25477fe0b4ef 100644
+--- a/include/uapi/linux/prctl.h
++++ b/include/uapi/linux/prctl.h
+@@ -284,4 +284,11 @@ struct prctl_mm_map {
+ #define PR_SET_VMA		0x53564d41
+ # define PR_SET_VMA_ANON_NAME		0
+ 
++/* Set/get enabled per-process numa_balancing */
++#define PR_NUMA_BALANCING		65
++# define PR_SET_NUMA_BALANCING_DISABLED	0
++# define PR_SET_NUMA_BALANCING_ENABLED	1
++# define PR_SET_NUMA_BALANCING_DEFAULT	2
++# define PR_GET_NUMA_BALANCING		3
++
+ #endif /* _LINUX_PRCTL_H */
+diff --git a/kernel/fork.c b/kernel/fork.c
+index cfb09ca1b1bc..7811fa5e098d 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -97,6 +97,7 @@
+ #include <linux/scs.h>
+ #include <linux/io_uring.h>
+ #include <linux/bpf.h>
++#include <linux/prctl.h>
+ 
+ #include <asm/pgalloc.h>
+ #include <linux/uaccess.h>
+@@ -1133,6 +1134,9 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
+ 	init_tlb_flush_pending(mm);
+ #if defined(CONFIG_TRANSPARENT_HUGEPAGE) && !USE_SPLIT_PMD_PTLOCKS
+ 	mm->pmd_huge_pte = NULL;
++#endif
++#ifdef CONFIG_NUMA_BALANCING
++	mm->numa_balancing_mode = PR_SET_NUMA_BALANCING_DEFAULT;
+ #endif
+ 	mm_init_uprobes_state(mm);
+ 	hugetlb_count_init(mm);
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index e4a0b8bd941c..94fd6f48fd45 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -47,6 +47,7 @@
+ #include <linux/psi.h>
+ #include <linux/ratelimit.h>
+ #include <linux/task_work.h>
++#include <linux/prctl.h>
+ 
+ #include <asm/switch_to.h>
+ 
+@@ -2830,7 +2831,7 @@ void task_numa_fault(int last_cpupid, int mem_node, int pages, int flags)
+ 	struct numa_group *ng;
+ 	int priv;
+ 
+-	if (!static_branch_likely(&sched_numa_balancing))
++	if (!numa_balancing_enabled(p))
+ 		return;
+ 
+ 	/* for example, ksmd faulting in a user's mm */
+@@ -3151,7 +3152,7 @@ static void update_scan_period(struct task_struct *p, int new_cpu)
+ 	int src_nid = cpu_to_node(task_cpu(p));
+ 	int dst_nid = cpu_to_node(new_cpu);
+ 
+-	if (!static_branch_likely(&sched_numa_balancing))
++	if (!numa_balancing_enabled(p))
+ 		return;
+ 
+ 	if (!p->mm || !p->numa_faults || (p->flags & PF_EXITING))
+@@ -7996,7 +7997,7 @@ static int migrate_degrades_locality(struct task_struct *p, struct lb_env *env)
+ 	unsigned long src_weight, dst_weight;
+ 	int src_nid, dst_nid, dist;
+ 
+-	if (!static_branch_likely(&sched_numa_balancing))
++	if (!numa_balancing_enabled(p))
+ 		return -1;
+ 
+ 	if (!p->numa_faults || !(env->sd->flags & SD_NUMA))
+@@ -11584,7 +11585,7 @@ static void task_tick_fair(struct rq *rq, struct task_struct *curr, int queued)
+ 		entity_tick(cfs_rq, se, queued);
+ 	}
+ 
+-	if (static_branch_unlikely(&sched_numa_balancing))
++	if (numa_balancing_enabled(curr))
+ 		task_tick_numa(rq, curr);
+ 
+ 	update_misfit_status(curr, rq);
+diff --git a/kernel/sys.c b/kernel/sys.c
+index 5fd54bf0e886..f683fb065bc7 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -60,6 +60,7 @@
+ #include <linux/sched/coredump.h>
+ #include <linux/sched/task.h>
+ #include <linux/sched/cputime.h>
++#include <linux/sched/numa_balancing.h>
+ #include <linux/rcupdate.h>
+ #include <linux/uidgid.h>
+ #include <linux/cred.h>
+@@ -2104,6 +2105,35 @@ static int prctl_set_auxv(struct mm_struct *mm, unsigned long addr,
+ 	return 0;
  }
  
- #ifdef CONFIG_PROC_SYSCTL
-@@ -4420,8 +4414,14 @@ int sysctl_numa_balancing(struct ctl_table *table, int write,
- 		if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
- 		    (state & NUMA_BALANCING_MEMORY_TIERING))
- 			reset_memory_tiering();
--		sysctl_numa_balancing_mode = state;
--		__set_numabalancing_state(state);
-+		if (sysctl_numa_balancing_mode != state) {
-+			if (state == NUMA_BALANCING_DISABLED)
-+				static_branch_dec(&sched_numa_balancing);
-+			else if (sysctl_numa_balancing_mode == NUMA_BALANCING_DISABLED)
-+				static_branch_inc(&sched_numa_balancing);
++#ifdef CONFIG_NUMA_BALANCING
++static int prctl_pid_numa_balancing_write(int numa_balancing)
++{
++	int old_numa_balancing;
 +
-+			sysctl_numa_balancing_mode = state;
++	if (numa_balancing != PR_SET_NUMA_BALANCING_DEFAULT &&
++	    numa_balancing != PR_SET_NUMA_BALANCING_DISABLED &&
++	    numa_balancing != PR_SET_NUMA_BALANCING_ENABLED)
++		return -EINVAL;
++
++	old_numa_balancing = xchg(&current->mm->numa_balancing_mode, numa_balancing);
++
++	if (numa_balancing == old_numa_balancing)
++		return 0;
++
++	if (numa_balancing == 1)
++		static_branch_inc(&sched_numa_balancing);
++	else if (old_numa_balancing == 1)
++		static_branch_dec(&sched_numa_balancing);
++
++	return 0;
++}
++
++static int prctl_pid_numa_balancing_read(void)
++{
++	return current->mm->numa_balancing_mode;
++}
++#endif
++
+ static int prctl_set_mm(int opt, unsigned long addr,
+ 			unsigned long arg4, unsigned long arg5)
+ {
+@@ -2618,6 +2648,23 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
+ 		error = set_syscall_user_dispatch(arg2, arg3, arg4,
+ 						  (char __user *) arg5);
+ 		break;
++#ifdef CONFIG_NUMA_BALANCING
++	case PR_NUMA_BALANCING:
++		switch (arg2) {
++		case PR_SET_NUMA_BALANCING_DEFAULT:
++		case PR_SET_NUMA_BALANCING_DISABLED:
++		case PR_SET_NUMA_BALANCING_ENABLED:
++			error = prctl_pid_numa_balancing_write((int)arg2);
++			break;
++		case PR_GET_NUMA_BALANCING:
++			error = put_user(prctl_pid_numa_balancing_read(), (int __user *)arg3);
++			break;
++		default:
++			error = -EINVAL;
++			break;
 +		}
- 	}
- 	return err;
- }
++		break;
++#endif
+ #ifdef CONFIG_SCHED_CORE
+ 	case PR_SCHED_CORE:
+ 		error = sched_core_share_pid(arg2, arg3, arg4, arg5);
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index 99762403cc8f..968a389467d5 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -30,6 +30,7 @@
+ #include <linux/mm_inline.h>
+ #include <linux/pgtable.h>
+ #include <linux/sched/sysctl.h>
++#include <linux/sched/numa_balancing.h>
+ #include <linux/userfaultfd_k.h>
+ #include <linux/memory-tiers.h>
+ #include <asm/cacheflush.h>
+@@ -158,10 +159,11 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
+ 				 * Skip scanning top tier node if normal numa
+ 				 * balancing is disabled
+ 				 */
+-				if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_NORMAL) &&
++				if (!(numa_balancing_mode(vma->vm_mm) & NUMA_BALANCING_NORMAL) &&
+ 				    toptier)
+ 					continue;
+-				if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING &&
++				if (numa_balancing_mode(vma->vm_mm) &
++				    NUMA_BALANCING_MEMORY_TIERING &&
+ 				    !toptier)
+ 					xchg_page_access_time(page,
+ 						jiffies_to_msecs(jiffies));
 -- 
 2.20.1
 
