@@ -2,186 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A778A61025F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 333DD610266
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236340AbiJ0UKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 16:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60028 "EHLO
+        id S236402AbiJ0UKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 16:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234928AbiJ0UKD (ORCPT
+        with ESMTP id S236819AbiJ0UKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 16:10:03 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2F42250F
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:10:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666901402; x=1698437402;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=GK/6U/TTsQEF8BHYrBSjmqLyj5BXfQ4NU4SaklzPeHg=;
-  b=gWLdERzCsZ6SPIC4QZ3AQyN+8ZOHrSDot0SU+Y3S04fGNQk3E6stUcu2
-   awMnHFWioADJMdLLKGNIWUQjJxfLI1grHNIsKjBUoaVAaWiIUpT5XY0wI
-   fc8O3qlIglkyQvihc9XEjeVBiNNRN1VhcRijyRwO7FIS8vms4OLnIffHN
-   QpEYctQSzpkamUJuALyvIQ3Cz7Z3Q9HzmQgGziSgr97p1aQI2mbvANsCv
-   sr3E/JsIl19oKF4P1OiK0XQi7n+xz0PmpTtJTbsYmy+BmilciYW6tgjj2
-   Z+lyMA3zWhClAbt0Q+si5rGi6so2lxoNHo1GDSi9BRdkQwv1Gk0ndwxrx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="291629581"
-X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
-   d="scan'208";a="291629581"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 13:10:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="695951649"
-X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
-   d="scan'208";a="695951649"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
-  by fmsmga008.fm.intel.com with SMTP; 27 Oct 2022 13:09:56 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Thu, 27 Oct 2022 23:09:56 +0300
-Date:   Thu, 27 Oct 2022 23:09:56 +0300
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     jim.cromie@gmail.com
-Cc:     Jason Baron <jbaron@akamai.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>, daniel.vetter@ffwll.ch,
-        intel-gfx@lists.freedesktop.org, linux@rasmusvillemoes.dk,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        seanpaul@chromium.org, dri-devel@lists.freedesktop.org,
-        joe@perches.com, intel-gvt-dev@lists.freedesktop.org
-Subject: Re: [Intel-gfx] [PATCH v7 0/9] dyndbg: drm.debug adaptation
-Message-ID: <Y1rllFeOnT9/PQVA@intel.com>
-References: <20220912052852.1123868-1-jim.cromie@gmail.com>
- <Yy7/6oTBW2lqVSK1@kroah.com>
- <Y1Fyuh12g/gt3Izn@intel.com>
- <87a65pfsbq.fsf@intel.com>
- <c1807585-f6c8-c05d-bc20-c6a540e59814@akamai.com>
- <CAJfuBxxWVBxL29sXS3XoE5Es9HTbVyFUi9bQFYNupJAERffAew@mail.gmail.com>
- <Y1qqurH/lG0u+3ky@intel.com>
- <CAJfuBxzpG+C1ARLs3c_znXECEU7Ldg8RhruLMUXA67w+DwcrOQ@mail.gmail.com>
+        Thu, 27 Oct 2022 16:10:12 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609132CC9D;
+        Thu, 27 Oct 2022 13:10:11 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id sc25so7796532ejc.12;
+        Thu, 27 Oct 2022 13:10:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q7qkzsPf4Wsy3Ys2sVKTyt+Eo/JlciSvXArZDH9fmiY=;
+        b=l5gaCDVVhGQ8Y5EquY6I9Ojcw/dlIjSsABW1ecEFamptjjW1cnav6ZSYH/ssMqYhWv
+         8U8+rS9UiOElwdoXBq7KsG/SJjl8f+d8dm4xqnMGE/Ynda08atIgTGlQltUIh0oirbN8
+         /XaQkWc6PrcPeSELQyQI3cEOseDU2kR2rPpMM/bKOGeyXVroRwfrNZqJMAtOOHLB5RAd
+         YLZoao0V0CAVDpZVthi/e+udKyu7ABs7AAFQB8lRpefedXFSfA2MxFB9TlweOEQJbYVp
+         Hz7jXwbUzorSi1x9gqoaO/VZieBlWSlsgaWKwdEojYHzY2RCZBqU1hm86+0nj8/j3zbz
+         gS5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q7qkzsPf4Wsy3Ys2sVKTyt+Eo/JlciSvXArZDH9fmiY=;
+        b=qsD8Cd6Uh4tQoO0zfi2AL/MgxCsIqn4C7bFDBHHviKkprczbOMc2NfCQntl66VB1dX
+         1Nw/e6vTAjxTIreW3YkJtlFvrxNBgaonrhvdmo+KqUl+BUeXGBvZOATXX/H6fDyOtDlB
+         XS1cKCW8BjsH4zTn+pnu4auqk6dZHMXs5YUOIz/uXKW/lT5w5OhN3TLvGEx+HpsoAOVd
+         yP2GGMG0qAUiNKbV9nihtXhC1y/sKlfCodUMJ71RJ3qWuJgVLB966Sfwy3tE0EwDTkyy
+         1lb120eUjO31midfyfaL5oz9RmfdgjYXAYt4z1d2hvasBnkscIYQBwb7m3vDVCvB53W2
+         BJCQ==
+X-Gm-Message-State: ACrzQf2ymaKt2B1i8rul0enc0sB2fGwaCRogxC4LSG+sDfHNkSNGiPj7
+        4S2U8IGddyno24PtHwkGOx9VjGeO0F3YiSfQnIs=
+X-Google-Smtp-Source: AMsMyM7TYEM2Cx88wDUSsE2LXMvlu6hNz/jx1bxb/M96kqza4kf5VyNmt9ecjeFZcJqrhMEmBQsLVGf9yf27k2D2RhE=
+X-Received: by 2002:a17:907:2d91:b0:78d:8747:71b4 with SMTP id
+ gt17-20020a1709072d9100b0078d874771b4mr43697599ejc.545.1666901409929; Thu, 27
+ Oct 2022 13:10:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJfuBxzpG+C1ARLs3c_znXECEU7Ldg8RhruLMUXA67w+DwcrOQ@mail.gmail.com>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <tencent_EE3E19F80ACD66955D26A878BC768CFA210A@qq.com>
+In-Reply-To: <tencent_EE3E19F80ACD66955D26A878BC768CFA210A@qq.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 27 Oct 2022 13:09:57 -0700
+Message-ID: <CAEf4Bzbq0PSsc6xCGSF=Af-pcysjt8Lv76-4N65AJMpXOOpOcg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix strncpy() fortify warning
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     Rong Tao <rongtao@cestc.cn>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" 
+        <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 01:55:39PM -0600, jim.cromie@gmail.com wrote:
-> On Thu, Oct 27, 2022 at 9:59 AM Ville Syrjälä
-> <ville.syrjala@linux.intel.com> wrote:
-> >
-> > On Thu, Oct 27, 2022 at 09:37:52AM -0600, jim.cromie@gmail.com wrote:
-> > > On Thu, Oct 27, 2022 at 9:08 AM Jason Baron <jbaron@akamai.com> wrote:
-> > > >
-> > > >
-> > > >
-> > > > On 10/21/22 05:18, Jani Nikula wrote:
-> > > > > On Thu, 20 Oct 2022, Ville Syrjälä <ville.syrjala@linux.intel.com> wrote:
-> > > > >> On Sat, Sep 24, 2022 at 03:02:34PM +0200, Greg KH wrote:
-> > > > >>> On Sun, Sep 11, 2022 at 11:28:43PM -0600, Jim Cromie wrote:
-> > > > >>>> hi Greg, Dan, Jason, DRM-folk,
-> > > > >>>>
-> > > > >>>> heres follow-up to V6:
-> > > > >>>>   rebased on driver-core/driver-core-next for -v6 applied bits (thanks)
-> > > > >>>>   rework drm_debug_enabled{_raw,_instrumented,} per Dan.
-> > > > >>>>
-> > > > >>>> It excludes:
-> > > > >>>>   nouveau parts (immature)
-> > > > >>>>   tracefs parts (I missed --to=Steve on v6)
-> > > > >>>>   split _ddebug_site and de-duplicate experiment (way unready)
-> > > > >>>>
-> > > > >>>> IOW, its the remaining commits of V6 on which Dan gave his Reviewed-by.
-> > > > >>>>
-> > > > >>>> If these are good to apply, I'll rebase and repost the rest separately.
-> > > > >>>
-> > > > >>> All now queued up, thanks.
-> > > > >>
-> > > > >> This stuff broke i915 debugs. When I first load i915 no debug prints are
-> > > > >> produced. If I then go fiddle around in /sys/module/drm/parameters/debug
-> > > > >> the debug prints start to suddenly work.
-> > > > >
-> > > > > Wait what? I always assumed the default behaviour would stay the same,
-> > > > > which is usually how we roll. It's a regression in my books. We've got a
-> > > > > CI farm that's not very helpful in terms of dmesg logging right now
-> > > > > because of this.
-> > > > >
-> > > > > BR,
-> > > > > Jani.
-> > > > >
-> > > > >
-> > > >
-> > > > That doesn't sound good - so you are saying that prior to this change some
-> > > > of the drm debugs were default enabled. But now you have to manually enable
-> > > > them?
-> > > >
-> > > > Thanks,
-> > > >
-> > > > -Jason
-> > >
-> > >
-> > > Im just seeing this now.
-> > > Any new details ?
-> >
-> > No. We just disabled it as BROKEN for now. I was just today thinking
-> > about sending that patch out if no solutin is forthcoming soon since
-> > we need this working before 6.1 is released.
-> >
-> > Pretty sure you should see the problem immediately with any driver
-> > (at least if it's built as a module, didn't try builtin). Or at least
-> > can't think what would make i915 any more special.
-> >
-> 
-> So, I should note -
-> 99% of my time & energy on this dyndbg + drm patchset
-> has been done using virtme,
-> so my world-view (and dev-hack-test env) has been smaller, simpler
-> maybe its been fatally simplistic.
-> 
-> ive just rebuilt v6.0  (before the trouble)
-> and run it thru my virtual home box,
-> I didnt see any unfamiliar drm-debug output
-> that I might have inadvertently altered somehow
-> 
-> I have some real HW I can put a reference kernel on,0
-> to look for the missing output, but its all gonna take some time,
-> esp to tighten up my dev-test-env
-> 
-> in the meantime, there is:
-> 
-> config DRM_USE_DYNAMIC_DEBUG
-> bool "use dynamic debug to implement drm.debug"
-> default y
-> depends on DRM
-> depends on DYNAMIC_DEBUG || DYNAMIC_DEBUG_CORE
-> depends on JUMP_LABEL
-> help
->   Use dynamic-debug to avoid drm_debug_enabled() runtime overheads.
->   Due to callsite counts in DRM drivers (~4k in amdgpu) and 56
->   bytes per callsite, the .data costs can be substantial, and
->   are therefore configurable.
-> 
-> Does changing the default fix things for i915 dmesg ?
+On Thu, Oct 27, 2022 at 4:34 AM Rong Tao <rtoax@foxmail.com> wrote:
+>
+> From: Rong Tao <rongtao@cestc.cn>
+>
+> Compile samples/bpf, error:
+> $ cd samples/bpf
+> $ make
+> ...
+> In function =E2=80=98__enable_controllers=E2=80=99:
+> samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:80:17: war=
+ning: =E2=80=98strncpy=E2=80=99 specified bound 4097 equals destination siz=
+e [-Wstringop-truncation]
+>    80 |                 strncpy(enable, controllers, sizeof(enable));
+>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+> ---
+>  tools/testing/selftests/bpf/cgroup_helpers.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing=
+/selftests/bpf/cgroup_helpers.c
+> index e914cc45b766..a70e873b267e 100644
+> --- a/tools/testing/selftests/bpf/cgroup_helpers.c
+> +++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+> @@ -77,7 +77,7 @@ static int __enable_controllers(const char *cgroup_path=
+, const char *controllers
+>                 enable[len] =3D 0;
+>                 close(fd);
+>         } else {
+> -               strncpy(enable, controllers, sizeof(enable));
+> +               strncpy(enable, controllers, sizeof(enable) - 1);
 
-I think we want to mark it BROKEN in addition to make sure no one
-enables it by accident. We already got one bug report where I had to
-ask the reporter to rebuild their kernel since this had gotten
-enabled and we didn't get any debugs from the driver probe.
+enable is not initialized, so we might end up with non-zero-terminated
+string. Let's enable[0] =3D '\0'; at the beginning and then strncat()
+here?
 
-> or is the problem deeper ?
-> 
-> theres also this Makefile addition, which I might have oversimplified
-> 
-> CFLAGS-$(CONFIG_DRM_USE_DYNAMIC_DEBUG) += -DDYNAMIC_DEBUG_MODULE
-
--- 
-Ville Syrjälä
-Intel
+>         }
+>
+>         snprintf(path, sizeof(path), "%s/cgroup.subtree_control", cgroup_=
+path);
+> --
+> 2.31.1
+>
