@@ -2,147 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4972760F017
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 08:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98FA560F023
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 08:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233687AbiJ0G2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 02:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
+        id S234021AbiJ0G3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 02:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiJ0G17 (ORCPT
+        with ESMTP id S234305AbiJ0G3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 02:27:59 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64732C068B;
-        Wed, 26 Oct 2022 23:27:57 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MybHc01XXzpW51;
-        Thu, 27 Oct 2022 14:24:28 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 14:27:54 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 14:27:53 +0800
-Subject: Re: [PATCH v7 00/11] kallsyms: Optimizes the performance of lookup
- symbols
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-modules@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Ingo Molnar" <mingo@redhat.com>
-References: <20221017064950.2038-1-thunder.leizhen@huawei.com>
- <Y0/nEngJF6bbINEx@bombadil.infradead.org>
- <ad9e51c6-f77d-d9e9-9c13-42fcbbde7147@huawei.com>
- <Y1gisUFzgt1D1Jle@bombadil.infradead.org>
- <77f1c8f0-5e67-0e57-9285-15ba613044fb@huawei.com>
- <Y1mEiIvbld4SX1lx@bombadil.infradead.org>
- <4f06547b-456f-e1ec-c535-16577f502ff1@huawei.com>
-Message-ID: <d7393d45-84bb-9e7b-99f4-412eb9223208@huawei.com>
-Date:   Thu, 27 Oct 2022 14:27:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Thu, 27 Oct 2022 02:29:03 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E06D160EC3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 23:29:01 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id v130-20020a1cac88000000b003bcde03bd44so3358435wme.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 23:29:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UAU5yyUB4mbIzxXvKnUzDnBw+wtC3frKRq03Vtd4mjk=;
+        b=Z8cD2SRF8NdlhNsfIxe6nUjGhLrhsYf9WGWW9PsMmE8uc5DkWHR3lahx6cWyvRhXLl
+         z2FU0Tt3vTBYv/wlVDrsPcpDVDC9+T0MsPMrNmXEd20DF0cRbLZV8Ca5iUfyJsDdgi1i
+         1PEVzA6JI02LirahtzQ+QQrzXDhhLIx9A7bNdjH7xJ6W3EAjseypMIPMfQSuB2e4QRum
+         jh1rgsKl+qH21mjo+tjgSHIIXTVTuzd+PBgVMnqrPXvJXtlI1YebvZj8UR/KuLbxVDig
+         TY+vfFCIOcLtlmd5m+z2tiQrG8FVipheuP/8ygVtua9cZq/Hh7wSB99OgoMcXLyuoMu9
+         shEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UAU5yyUB4mbIzxXvKnUzDnBw+wtC3frKRq03Vtd4mjk=;
+        b=LTkl0afAWYRLMI7GXIMvHcoLYAPu2eDUXKP/WFqwdyJY1TsduL0EmbUfGfYg3fjVy8
+         wQJN2jORmpvrXPie3XFJ9Bz2ejHuFdrYAYOkHfsNj0OaFfdcwfZINrW1os7JZPkXawvx
+         kLAK7i9oacZnOvdO/6wJYLYvSw3rUx7Hh8rKSQJGscuuNhyLgBzGyB5qHB4qNSwdEq8d
+         naQtdaznb5wrQy+d9PSSx3bcr2SEhQdxnj0oUiswX1CMnEpG5I0eROr5KcelFbuLzIKI
+         TXL+w2C+OABa+6PehKBQo9Y30jZj1SrRaK3osLmV6BVOgy8Gt3prWSxmkrP3hwzCVrun
+         wZPQ==
+X-Gm-Message-State: ACrzQf3+mJw8oNtro2Jod+KRiucTkg/Qy9ZlwonwxaFxpv+I0cvbQMci
+        Jk1hjIDcNWYhOLFWWXgZUuglVVBvO51xh4ZiEqZxrQ==
+X-Google-Smtp-Source: AMsMyM7sIvc3ouhHdP/BMmcus+/e+M3eEwv1Rcsd+WkQCyB+TVAsfjUMV/cU6GqcBhhsX8RK4kMXEQmzTgV4Vy2BT70=
+X-Received: by 2002:a1c:ac81:0:b0:3c6:e566:cc21 with SMTP id
+ v123-20020a1cac81000000b003c6e566cc21mr4771527wme.0.1666852139803; Wed, 26
+ Oct 2022 23:28:59 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <4f06547b-456f-e1ec-c535-16577f502ff1@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221026020200.29222-1-zhaoping.shu@mediatek.com>
+ <CAMZdPi-bAw293XWBQL0wZS-nO_COD=ZOBduBVicof87HyEmS3w@mail.gmail.com> <7e8434e1fc683de62400dd93ea7a248e28e1efaa.camel@mediatek.com>
+In-Reply-To: <7e8434e1fc683de62400dd93ea7a248e28e1efaa.camel@mediatek.com>
+From:   Loic Poulain <loic.poulain@linaro.org>
+Date:   Thu, 27 Oct 2022 08:28:23 +0200
+Message-ID: <CAMZdPi-8dRVioPUWcOABZsT53mQrji1sDjMWnLQzdXKhBd4-rA@mail.gmail.com>
+Subject: Re: [PATCH net v1] net: wwan: iosm: fix memory leak in ipc_wwan_dellink
+To:     "zhaoping.shu" <zhaoping.shu@mediatek.com>
+Cc:     m.chetan.kumar@intel.com, linuxwwan@intel.com,
+        ryazanov.s.a@gmail.com, johannes@sipsolutions.net,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, srv_heupstream@mediatek.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        haijun.liu@mediatek.com, xiayu.zhang@mediatek.com,
+        lambert.wang@mediatek.com, "hw . he" <hw.he@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 27 Oct 2022 at 04:08, zhaoping.shu <zhaoping.shu@mediatek.com> wrote:
+>
+> Hi Loic,
+>
+> On Wed, 2022-10-26 at 09:50 +0200, Loic Poulain wrote:
+> > Hi Zhaoping,
+> >
+> > On Wed, 26 Oct 2022 at 04:02, zhaoping.shu <zhaoping.shu@mediatek.com
+> > > wrote:
+> > >
+> > > From: hw.he <hw.he@mediatek.com>
+> > >
+> > > IOSM driver registers network device without setting the
+> > > needs_free_netdev flag, and does NOT call free_netdev() when
+> > > unregisters network device, which causes a memory leak.
+> > >
+> > > This patch sets needs_free_netdev to true when registers
+> > > network device, which makes netdev subsystem call free_netdev()
+> > > automatically after unregister_netdevice().
+> > >
+> > > Signed-off-by: hw.he <hw.he@mediatek.com>
+> > > Signed-off-by: zhaoping.shu <zhaoping.shu@mediatek.com>
+> >
+> > Could you please add a corresponding 'fixes' tag.
+> This issue was introduced in the first commit of this driver:
+> Fixes: 2a54f2c77934 ("net: iosm: net driver")
+
+Ok, fine, then simply send a V2 with that tag.
+You can append mine as well:
+
+Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
 
 
-On 2022/10/27 11:26, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2022/10/27 3:03, Luis Chamberlain wrote:
->> On Wed, Oct 26, 2022 at 02:44:36PM +0800, Leizhen (ThunderTown) wrote:
->>> On 2022/10/26 1:53, Luis Chamberlain wrote:
->>>> This answers how we don't use a hash table, the question was *should* we
->>>> use one?
->>>
->>> I'm not the original author, and I can only answer now based on my understanding. Maybe
->>> the original author didn't think of the hash method, or he has weighed it out.
->>>
->>> Hash is a good solution if only performance is required and memory overhead is not
->>> considered. Using hash will increase the memory size by up to "4 * kallsyms_num_syms +
->>> 4 * ARRAY_SIZE(hashtable)" bytes, kallsyms_num_syms is about 1-2 million.
-
-Sorry, 1-2 million ==> 0.1~0.2 million
-
->>>
->>> Because I don't know what hash algorithm will be used, the cost of generating the
->>> hash value corresponding to the symbol name is unknown now. But I think it's gonna
->>> be small. But it definitely needs a simpler algorithm, the tool needs to implement
->>> the same hash algorithm.
->>
->> For instance, you can look at evaluating if alloc_large_system_hash() would help.
-> 
-> OK, I found the right hash function. In this way, the tool does not need to consider
-> the byte order.
-
-https://en.wikipedia.org/wiki/Jenkins_hash_function
-
-Let's go with jenkins_one_at_a_time_hash(), which looks simpler and doesn't even
-have to think about sizeof(long). It seems to be closest to our current needs.
-
-uint32_t jenkins_one_at_a_time_hash(const uint8_t* key, size_t length) {
-	size_t i = 0;
-	uint32_t hash = 0;
-
-	while (i != length) {
-		hash += key[i++];
-		hash += hash << 10;
-		hash ^= hash >> 6;
-	}
-	hash += hash << 3;
-	hash ^= hash >> 11;
-	hash += hash << 15;
-
-	return hash;
-}
-
-> 
-> include/linux/stringhash.h
-> 
-> /*
->  * Version 1: one byte at a time.  Example of use:
->  *
->  * unsigned long hash = init_name_hash;
->  * while (*p)
->  *      hash = partial_name_hash(tolower(*p++), hash);
->  * hash = end_name_hash(hash);
-> 
-> 
->>
->>   Luis
->> .
->>
-> 
-
--- 
-Regards,
-  Zhen Lei
+>
+> >
+> > > ---
+> > >  drivers/net/wwan/iosm/iosm_ipc_wwan.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/drivers/net/wwan/iosm/iosm_ipc_wwan.c
+> > > b/drivers/net/wwan/iosm/iosm_ipc_wwan.c
+> > > index 2f1f8b5d5b59..0108d8d01ff2 100644
+> > > --- a/drivers/net/wwan/iosm/iosm_ipc_wwan.c
+> > > +++ b/drivers/net/wwan/iosm/iosm_ipc_wwan.c
+> > > @@ -168,6 +168,7 @@ static void ipc_wwan_setup(struct net_device
+> > > *iosm_dev)
+> > >         iosm_dev->max_mtu = ETH_MAX_MTU;
+> > >
+> > >         iosm_dev->flags = IFF_POINTOPOINT | IFF_NOARP;
+> > > +       iosm_dev->needs_free_netdev = true;
+> >
+> > Look like we have the same problem in mhi_wwan_mbim driver, would you
+> > be able to submit a change for it as well?
+> We will submit another patch to fix it, since this patch is dedicated
+> for iosm.
