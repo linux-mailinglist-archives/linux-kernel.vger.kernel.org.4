@@ -2,97 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907E66101AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EED06101B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235176AbiJ0Tae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 15:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
+        id S236426AbiJ0Tcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 15:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236609AbiJ0Tab (ORCPT
+        with ESMTP id S235213AbiJ0Tcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 15:30:31 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E366938A0B;
-        Thu, 27 Oct 2022 12:30:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666899030; x=1698435030;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=xFp5AHBEoE8rNzDe/zETFp3RudK9uoaP5P3Wmzrbr0Q=;
-  b=AB7LEnoEg5G1+vetPCd1OO6owIQ4Vq9423ktgkJiUJqqCGvkUVZgMk7h
-   k0zMi2gdWPkA/tWMMSfb6UtUqStA3R2Dl9cUn0/cDnLn1MjuvYBr9twDs
-   cStTSIAva1Ei6Zi1twuqQPzCeCiG3eI4TGJ/woibgmh90ZnTkpcjyIG9m
-   OdWsyNusu2e6yu3v4FZjX/XoTWp9g3C8h1rILoE/Bv1LsjkAcnMBzl0ws
-   OsofcxNooakhSXhIIL1r2svK6t7RCsuRBpHj2rHl10gEJhGDnl6rMFGpN
-   wKKNcqQJEDDTGhNkVE7BWrSKoxUFyq9LLwZXI3q8hcRH2SaRVvqgg6C2e
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="394637697"
-X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
-   d="scan'208";a="394637697"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 12:30:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="695941078"
-X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
-   d="scan'208";a="695941078"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Oct 2022 12:30:27 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oo8aA-003KCy-0E;
-        Thu, 27 Oct 2022 22:30:26 +0300
-Date:   Thu, 27 Oct 2022 22:30:25 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH -next] pinctrl: qcom: Include bitfield.h in
- pinctrl-lpass-lpi.c
-Message-ID: <Y1rcUbCVJi7QhcFK@smile.fi.intel.com>
-References: <20221027191625.1738204-1-nathan@kernel.org>
+        Thu, 27 Oct 2022 15:32:50 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075465B9DA
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:32:50 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id ay12so1347214qtb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:32:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RtgEL63Tlyb0o1Eh/Oo0zvf3LB4TM+4LKozQxGoY5mA=;
+        b=lkA69nOiOYyLC61juz90h/aBdsIingLRTQmDpl6vFdYxtApI8EgIIfvlV0tSlG3dn9
+         G1AX+JiyrYu/HVyC2nWlQF/ImwdnBkLOr4wN+vZc1r++oF81LCzlgBNep900xrNq0nIS
+         yBBqUhh2XRy019vt911mXg4erErQJbW28Tc9KGjuv4fMAcP9VP6CTSSVrNNGaOl7FIv/
+         UznSdvKzc5TUG8eo9kjn1ax9IwR6NoEr8CQiSsqdsLE47H2fTGVppq/1wFkoRgHbrE6A
+         wmrNC844NAKEtfnPC+Uo/JPoio0LZdrILJfpkk1uDIkMvXnBvNKvGTZsNMxvBxmce/9Q
+         H2EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RtgEL63Tlyb0o1Eh/Oo0zvf3LB4TM+4LKozQxGoY5mA=;
+        b=omj+tBoFgqg0utZ3wSIBKx3l1gv4OgdO0WYuvRaEgFcuyJOx90xk7x5WVQlMHeJaKW
+         CXLyQs2SgAmPaxCW/qbzJNmV3pq969N7GATsAmmxnElBvpcLrNnF1TPMD+nq1jfd9ycr
+         3/ja8FvHVyG//yEZ8YqQ112XINMkO7Bl2UwiCAjfvQZtXgmBdUKBEiIUWCNlj0PyT8BA
+         GrX7O57XBh9FWpBumgzrwZHT23G1LYXrTu3xJut8DKyyBgLfYeAPwVYR8lcv8eXLUFta
+         5wiiLQ6MLfVmRkwq8Np2LwVqVZVeTkVFxyF2b39B4458MpN1/oAeJxS2LVnjDorUTQ8S
+         B/bQ==
+X-Gm-Message-State: ACrzQf0EOZOkdYrkkd0Ke1+TyrJKpvFR3qesCKHBTAOZqsSxfXSTdaS6
+        8sBArcLoC4E+RTRnim6ALTo0Kz1CwiYdqA==
+X-Google-Smtp-Source: AMsMyM7+EgBJ3VeVRnVI3DYBnQifABterCUNmIWpax4C3CZhC/fU7vjpzGm3rocEansWxHCs70HJsA==
+X-Received: by 2002:a05:620a:400e:b0:6db:18a3:4001 with SMTP id h14-20020a05620a400e00b006db18a34001mr34886353qko.427.1666899158724;
+        Thu, 27 Oct 2022 12:32:38 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id r19-20020ac85213000000b0039cc944ebdasm1306535qtn.54.2022.10.27.12.32.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 12:32:38 -0700 (PDT)
+Message-ID: <5fbe3d15-5847-193e-f8f7-dd3d4cbe0aa3@linaro.org>
+Date:   Thu, 27 Oct 2022 15:32:36 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221027191625.1738204-1-nathan@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v3 1/9] dt-bindings: mfd: syscon: Add TI-Nspire misc
+ registers compatible
+Content-Language: en-US
+To:     Andrew Davis <afd@ti.com>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Daniel Tang <dt.tangr@gmail.com>,
+        Fabian Vogt <fabian@ritter-vogt.de>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20221027181337.8651-1-afd@ti.com>
+ <20221027181337.8651-2-afd@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221027181337.8651-2-afd@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 12:16:25PM -0700, Nathan Chancellor wrote:
-> When building ARCH=arm allmodconfig, the following error occurs:
+On 27/10/2022 14:13, Andrew Davis wrote:
+> The TI Nspire devices contain a set of registers with a seemingly
+> miscellaneous set of functionality. This area is known simply as the
+> "misc" region. As "syscon" nodes like this still need a specific
+> compatible, document "ti,nspire-misc" here.
 > 
->   drivers/pinctrl/qcom/pinctrl-lpass-lpi.c: In function ‘lpi_gpio_set_mux’:
->   drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:102:9: error: implicit declaration of function ‘u32p_replace_bits’ [-Werror=implicit-function-declaration]
->     102 |         u32p_replace_bits(&val, i, LPI_GPIO_FUNCTION_MASK);
->         |         ^~~~~~~~~~~~~~~~~
->   drivers/pinctrl/qcom/pinctrl-lpass-lpi.c: In function ‘lpi_config_get’:
->   drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:127:16: error: implicit declaration of function ‘FIELD_GET’ [-Werror=implicit-function-declaration]
->     127 |         pull = FIELD_GET(LPI_GPIO_PULL_MASK, ctl_reg);
->         |                ^~~~~~~~~
->   drivers/pinctrl/qcom/pinctrl-lpass-lpi.c: In function ‘lpi_config_set’:
->   drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:233:23: error: implicit declaration of function ‘u32_encode_bits’ [-Werror=implicit-function-declaration]
->     233 |                 val = u32_encode_bits(value ? 1 : 0, LPI_GPIO_VALUE_OUT_MASK);
->         |                       ^~~~~~~~~~~~~~~
->   cc1: all warnings being treated as errors
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> bitfield.h was included via pinctrl-lpass-lpi.h but another change
-> removed that include to restrict what was being included. Add bitfield.h
-> back to pinctrl-lpass-lpi.c, as it is needed there.
+> diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> index 4e4baf53796d..37a00532ea79 100644
+> --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> @@ -69,6 +69,7 @@ properties:
+>                - samsung,exynos5433-sysreg
+>                - samsung,exynos850-sysreg
+>                - samsung,exynosautov9-sysreg
+> +              - ti,nspire-misc
 
-Thanks, https://lore.kernel.org/linux-gpio/20221027184145.2533-1-andriy.shevchenko@linux.intel.com/
+This is not what your DTS is saying...
 
--- 
-With Best Regards,
-Andy Shevchenko
-
+Best regards,
+Krzysztof
 
