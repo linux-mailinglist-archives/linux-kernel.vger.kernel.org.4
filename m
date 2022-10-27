@@ -2,208 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4436060F3D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA3560F3D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234486AbiJ0Jhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 05:37:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
+        id S231706AbiJ0JjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 05:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233626AbiJ0Jhn (ORCPT
+        with ESMTP id S233600AbiJ0JjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 05:37:43 -0400
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E8577EBC
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:37:41 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id E0A312B066EB;
-        Thu, 27 Oct 2022 05:37:34 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 27 Oct 2022 05:37:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1666863454; x=1666870654; bh=5ItCVshj6J
-        yZau2J5cjH0M8JHw139GrYlnIerAQcZWs=; b=IVFSYrra2yRKDBScb6i+EPPsnR
-        H7iUD7VkPJAKE695dyeIFHVvDzTnEOFd/PuRkXJYQDLL3GqO5VDnC18zyG53l/7I
-        pvgnmLqeiBPBWXQjApcUVHOrKRHilbj5+ASZsv6ndq61A0vf5cAG6GPGNStKiCRy
-        wer2bctGBN1o9JRLtzfw8j3SxBth2GhmC1AF3SbqCoOAk5ikvGienxjeMuTVnd3b
-        CIYEdhLoJTnMe4apOVtrct3AJygLwtX9QefTOEjFMks85VRv9W7SGo+EMXE4ei+c
-        /vSdG+pF0qpFn1D0F3ffTOrvCiLzPaO3Iv99pS2pxcK/5ssmEIuPwA72joMw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666863454; x=1666870654; bh=5ItCVshj6JyZau2J5cjH0M8JHw13
-        9GrYlnIerAQcZWs=; b=aMBp3hE4BgyODOr6WOBsdolHjS2Onrihiev6Ff/sAjQh
-        Cama2t5zFVnEKp63jv9ugJbpKhvl71qc+L5qSL1TZPihHUka8luZ1042BOHS5Sxh
-        aMKHX7Ay1bGb29oD5v8DX8oZBPKSAoX9G4RJblIy3UNVtu3bbfNqg1CYVaEHxNJc
-        pHr9LW/SlL0Xhx1KndHWOx5hpeWVSz48zu40JY3Je6zDtTTEvFuI+nyPVFLcWWtY
-        eqbDGYXUYbYyBSfExtphfrsas5tR+XzSbiwxPrJVDiXhOZHeBFTCAEXgpwFpx+Y+
-        pod1LrzbN+UsFQjTvFLBJJEhMjbUc60CIEflbK3G1Q==
-X-ME-Sender: <xms:XVFaY2V3HXvfhP1sHBM2RqKgaN_XBF1qyOB-16Icc85JB7HqiOyGyQ>
-    <xme:XVFaYymw4tPdxY-cElvQVHHZLmvXXXhqeFlJcjgr306-I0KGXWDk9VMwSgLcrhFrI
-    6vBlnwtvAVwP-Gv9dE>
-X-ME-Received: <xmr:XVFaY6Yv9syrc2eNVMwBSReD-NF-yontoCDOlMFptjpietVbD3UxWNp9XeGYc57se2BDpokpHl05GwQ2hi7OCyXnbvZ2cF1h8PCaUIeVB1DPtg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeggdduiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
-    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:XVFaY9XZjJldLB8TfWAvQMGF4_ZIwB3BAmJ9FrbIS74qAyEc9gHcKw>
-    <xmx:XVFaYwniTa_gv5wa6Swk-Bkdalxuyr-d6ooN7h3oJMCVZXoae2kxxg>
-    <xmx:XVFaYyfwb0zZapv__NMakGUW6Ff2JSZL3y8FQRnm40OE9l_KC--TOQ>
-    <xmx:XlFaY0E6LsDzaiDnQgO6ixyU_rtUbrrppb7Nh4KTrTCg4VBJmZ0lFuKlYcg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 27 Oct 2022 05:37:32 -0400 (EDT)
-Date:   Thu, 27 Oct 2022 11:37:30 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Mateusz Kwiatkowski <kfyatek@gmail.com>
-Cc:     Karol Herbst <kherbst@redhat.com>, Emma Anholt <emma@anholt.net>,
-        Ben Skeggs <bskeggs@redhat.com>, Chen-Yu Tsai <wens@csie.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>, linux-sunxi@lists.linux.dev,
-        intel-gfx@lists.freedesktop.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org,
-        nouveau@lists.freedesktop.org, Hans de Goede <hdegoede@redhat.com>,
-        Dom Cobley <dom@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v6 16/23] drm/probe-helper: Provide a TV get_modes helper
-Message-ID: <20221027093730.tb4oaissdapf6ifr@houat>
-References: <20220728-rpi-analog-tv-properties-v6-0-e7792734108f@cerno.tech>
- <20220728-rpi-analog-tv-properties-v6-16-e7792734108f@cerno.tech>
- <8d0eee22-50f5-5b0a-c1e6-c5f61dd5bbcd@gmail.com>
+        Thu, 27 Oct 2022 05:39:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0EB786CE;
+        Thu, 27 Oct 2022 02:39:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0EAE0B8255A;
+        Thu, 27 Oct 2022 09:39:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 032D4C433D6;
+        Thu, 27 Oct 2022 09:39:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666863549;
+        bh=v+g7pRKxDyhhfF+WuOK6H0OrXUtvUEoGhM5OK8fa3kY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jq+V9llT5CXJFTjov0+0v9i74yYRTIbvZFh9oFHComZQkdc0qVMQO5YL8t4qaiNkU
+         mPOXvS4Sl+AvQimGl+u0/jVpQCAgqciwPlMr+Z0fwXhYtZtwdutDJ/S753AUyyw3eo
+         rr9XaXTe85cufXENy7927rR8JvLoCLsakXnbGGC/LlrauGMXI+Dl8Rsz1ygy162Ewt
+         SqRRkwDOVe/bzqfA522oCTwBUKaCG+ekCMtr8vV1SNueB9MGgr1so1oDjroDaY1r6C
+         UsFhb42pIYzNJSkk6TsVF1Zn0nTnVtII0/uH1QORF07Qvj4cDklndDd0I8Loamm6is
+         IWHC+UdDR4kbA==
+Date:   Thu, 27 Oct 2022 11:39:02 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thierry Reding <treding@nvidia.com>,
+        PCI <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Krishna Thota <kthota@nvidia.com>,
+        Manikanta Maddireddy <mmaddireddy@nvidia.com>,
+        sagar.tv@gmail.com
+Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
+ logging
+Message-ID: <Y1pRtoLdWsDONsok@lpieralisi>
+References: <b1c243b0-2e6e-3254-eff0-a5276020a320@nvidia.com>
+ <20220913200746.GA619956@bhelgaas>
+ <20220914062411.GD16459@workstation>
+ <CAL_JsqLbr4O_BHb8s-Px4S0OOY23qhFkN32cKBctc_BFakSBzA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xamrv4lbhqfdsxuo"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8d0eee22-50f5-5b0a-c1e6-c5f61dd5bbcd@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAL_JsqLbr4O_BHb8s-Px4S0OOY23qhFkN32cKBctc_BFakSBzA@mail.gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 15, 2022 at 09:16:27AM -0500, Rob Herring wrote:
+> On Wed, Sep 14, 2022 at 1:24 AM Manivannan Sadhasivam
+> <manivannan.sadhasivam@linaro.org> wrote:
+> >
+> > On Tue, Sep 13, 2022 at 03:07:46PM -0500, Bjorn Helgaas wrote:
+> > > On Tue, Sep 13, 2022 at 06:00:30PM +0100, Jon Hunter wrote:
+> > > > On 13/09/2022 17:51, Manivannan Sadhasivam wrote:
+> > > > > On Tue, Sep 13, 2022 at 03:42:37PM +0530, Vidya Sagar wrote:
+> > > > > > Some of the platforms (like Tegra194 and Tegra234) have open slots and
+> > > > > > not having an endpoint connected to the slot is not an error.
+> > > > > > So, changing the macro from dev_err to dev_info to log the event.
+> > > > >
+> > > > > But the link up not happening is an actual error and -ETIMEDOUT is being
+> > > > > returned. So I don't think the log severity should be changed.
+> > > >
+> > > > Yes it is an error in the sense it is a timeout, but reporting an error
+> > > > because nothing is attached to a PCI slot seems a bit noisy. Please note
+> > > > that a similar change was made by the following commit and it also seems
+> > > > appropriate here ...
+> > > >
+> > > > commit 4b16a8227907118e011fb396022da671a52b2272
+> > > > Author: Manikanta Maddireddy <mmaddireddy@nvidia.com>
+> > > > Date:   Tue Jun 18 23:32:06 2019 +0530
+> > > >
+> > > >     PCI: tegra: Change link retry log level to debug
+> > > >
+> > > >
+> > > > BTW, we check for error messages in the dmesg output and this is a new error
+> > > > seen as of Linux v6.0 and so this was flagged in a test. We can ignore the
+> > > > error, but in this case it seem more appropriate to make this a info or
+> > > > debug level print.
+> > >
+> > > Can you tell whether there's a device present, e.g., via Slot Status
+> > > Presence Detect?  If there's nothing in the slot, I don't know why we
+> > > would print anything at all.  If a card is present but there's no
+> > > link, that's probably worthy of dev_info() or even dev_err().
+> > >
+> >
+> > I don't think all form factors allow for the PRSNT pin to be wired up,
+> > so we cannot know if the device is actually present in the slot or not all
+> > the time. Maybe we should do if the form factor supports it?
+> >
+> > > I guess if you can tell the slot is empty, there's no point in even
+> > > trying to start the link, so you could avoid both the message and the
+> > > timeout by not even calling dw_pcie_wait_for_link().
+> >
+> > Right. There is an overhead of waiting for ~1ms during boot.
+> 
+> Async probe should mitigate that, right? Saravana is working toward
+> making that the default instead of opt in, but you could opt in now.
 
---xamrv4lbhqfdsxuo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I read this as "trying to bring the link up is mandatory because
+we can't detect an empty slot, therefore ~1ms delay during boot
+is unavoidable" and on that Rob's suggestion applies.
 
-Hi Mateusz,
+Just to understand where this thread is going. The suggestion
+above does not change the aim of this patch, that seems reasonable
+to me and it makes sense even if/when what Rob is suggesting is
+implemented.
 
-On Thu, Oct 27, 2022 at 12:02:24AM +0200, Mateusz Kwiatkowski wrote:
-> First of all, nice idea with the helper function that can be reused by
-> different drivers. This is neat!
+Is that correct ?
 
-Yeah, it looked to me that given how complex it is, we don't want to
-duplicate it in each and every driver.
-
-> But looking at this function, it feels a bit overcomplicated. You're
-> creating the two modes,
-
-If reported as supported by the connector, yes.
-
-> then checking which one is the default, then set the preferred one and
-> possibly reorder them. Maybe it can be simplified somehow?
-
-Possibly, but I couldn't find something simpler. We should only expose
-the modes that the driver reports as supported, so we can have 0-2
-modes. Then the preferred flag needs to be set on the default one like
-you suggested.
-
-But also, EDIDs define the preferred mode as either the mode with the
-flag set or the first mode listed. So a lot of program just use the
-heuristic to just pick the first mode listed.
-
-So it might be that I'm too careful, but it still seems useful to me.
-
-> Although when I tried to refactor it myself, I ended up with something th=
-at's
-> not better at all. Maybe it needs to be complicated, after all :(
-
-Yeah, that was my conclusion too :/
-
-> Anyway, the current version seems to have a couple of bugs:
->=20
-> > +	if (tv_mode_supported(connector, DRM_MODE_TV_MODE_PAL) ||
-> > +	    tv_mode_supported(connector, DRM_MODE_TV_MODE_PAL_N) ||
-> > +	    tv_mode_supported(connector, DRM_MODE_TV_MODE_SECAM)) {
-> > +		mode =3D drm_mode_analog_pal_576i(connector->dev);
-> > +		if (!mode)
-> > +			return 0;
-> > +
-> > +		tv_modes[count++] =3D mode;
-> > +	}
->=20
-> If the 480i mode has been created properly, but there's an error creating=
- the
-> 576i one (we enter the if (!mode) clause), the 480i mode will leak.
->=20
-> > +	if (count =3D=3D 1) {
->=20
-> You're handling the count =3D=3D 1 case specially, but if count =3D=3D 0,=
- the rest of
-> the code will assume that two modes exist and probably segfault in the pr=
-ocess.
->=20
-> > +	ret =3D drm_object_property_get_default_value(&connector->base,
-> > +						    dev->mode_config.tv_mode_property,
-> > +						    &default_mode);
-> > +	if (ret)
-> > +		return 0;
-> > +
-> > +	if (cmdline->tv_mode_specified)
-> > +		default_mode =3D cmdline->tv_mode;
->=20
-> In case of an error (ret !=3D 0), the modes created so far in the tv_mode=
-s array
-> will leak.
-
-Thanks for the review, I'll fix these bugs
-
-> Also, I wonder if maybe the if (cmdline->tv_mode_specified) clause should=
- go
-> first? If we're going to use the default from cmdline, there's no point i=
-n even
-> querying the property default value.
-
-Maybe, I don't know. I find the flow of the code more readable that way,
-but if you disagree I'll change it.
-
-Maxime
-
---xamrv4lbhqfdsxuo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY1pRWgAKCRDj7w1vZxhR
-xTVQAQCdqQ7+vEr0O0pC7P93kHAYwFz0oBZn90Ip4EjyExKRPgD/cMwjjUZ6daWo
-/idlovksY5X1UdblxYiDcBffKZ9k8gM=
-=nRSG
------END PGP SIGNATURE-----
-
---xamrv4lbhqfdsxuo--
+Thanks,
+Lorenzo
