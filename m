@@ -2,113 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33276101B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE636101B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236499AbiJ0TdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 15:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
+        id S236216AbiJ0TeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 15:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235508AbiJ0TdR (ORCPT
+        with ESMTP id S236513AbiJ0TeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 15:33:17 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B917A773
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:33:16 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id z6so2005570qtv.5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:33:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UQI3LphKdUKfSMPC5E/0S2hsbKeYljk0IHAsBDPnaQk=;
-        b=rHY/Uj8d1kLGva+GaFjVY77q7FMzS+C9HgWiMagaOYih0C6ETP2Gakc5AAKXKLaTNi
-         qUMx5CK0KtwFK0T5XPRgM1HQUQfuIeE8CT68hmcsWWZI8hzLaVM0ud6+BiUMXsE7Jca0
-         LWe4IzLMMa/gNyqmJL3jt369cY6OXNf4tJ3XmrEurQL9RwXU9KFtw0NgabaL7mWRtKuJ
-         tEKS/fnJ4XN9oN7odri6nZQhqoNj0gb2PL1SbKO7BnuMNbyq7ZYMKkUPAjVsRwmwzMV7
-         Kr/VSQoQfzPnyDNYOvW1QkqyYyE0l4LdinDECoYIRlcA9RU12JZa+UnO4UxlI1o8/rar
-         lmKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UQI3LphKdUKfSMPC5E/0S2hsbKeYljk0IHAsBDPnaQk=;
-        b=8HGNZJwQzxy2wQXMsB4LJSn3SIUDyzQovD4bYEt17HGn3yEkJAx+f4DVCo5w9SjGkl
-         0xCHNtEDcfdOrWMbryk8RlA4zRSvWiup3Zx4u/ytD3VKDntEF/SA/H8Jzp1WcbY+ELub
-         mXvPGzDdm/E6mnigwC7cFwJViuMOqEZ4hqv8fjSL8bB1gfFUZL+Ry8JaPnpWR7lZ1QY2
-         ICf+fVmFlZG9JCV6WUVh3nhY/8o46mOsjieUfByxeRCIviLe8UN9FohLprcTp/2/YDwk
-         fnMgObeVX0694gm69mLjpKoFqg3ms4J9/EQyH9XC7E4Ca0Om7w95ZcWlns6Pim1ZPBbg
-         yTFg==
-X-Gm-Message-State: ACrzQf1I9py7ucAyWmhmvxTH2LZfOW5I+mTE2nwDIVrXu7lI/ODkxj8M
-        XIJpEBGZdu7PEMEYeCLCQy6rSg==
-X-Google-Smtp-Source: AMsMyM6Doqe8fC75+O0x7wOvaGjtUNeFFc4hfjCF5qjJWLNcXyOMvsGPgbmoPxFqRlYVxMh9/N73tg==
-X-Received: by 2002:a05:622a:6096:b0:39c:f37c:4d97 with SMTP id hf22-20020a05622a609600b0039cf37c4d97mr43578676qtb.395.1666899195252;
-        Thu, 27 Oct 2022 12:33:15 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id h1-20020a05620a400100b006e54251993esm1514846qko.97.2022.10.27.12.33.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 12:33:14 -0700 (PDT)
-Message-ID: <050f3d65-5720-9c97-1930-bc458c4c2fb8@linaro.org>
-Date:   Thu, 27 Oct 2022 15:33:12 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v3 2/9] ARM: dts: nspire: Use syscon-reboot to handle
- restart
-Content-Language: en-US
-To:     Andrew Davis <afd@ti.com>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Daniel Tang <dt.tangr@gmail.com>,
-        Fabian Vogt <fabian@ritter-vogt.de>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Thu, 27 Oct 2022 15:34:02 -0400
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416BD5B9DA
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666899222; bh=xys/aAejh7JTopsuNYt2PnyiMn9PjHrWmN/+pjwgiEE=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=KS9YmOf6EBDaxcPo/tg3HGTAuf92EmuJLBWel96a+p+8VCYMwpuPluj7RvyYISadM
+         IoAjmxcvGPR5sbEM6w3U8Ys37h44Scfj0dIbcnLwbdkKq4MMreqmuF/lHKOQ/Wu2dH
+         zIU3agUiYkRtpPq9h6CuvK1tsOEi2pG7GCZ3VWCk=
+Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
+        via [213.182.55.206]
+        Thu, 27 Oct 2022 21:33:42 +0200 (CEST)
+X-EA-Auth: B0BsiMOjJQVyJF9UqMNnrzd1/hQN7g5BhYv/Vhez2hUJ+yc4MQSg/PqvKBP4gCRwzt/uBl5if8fWpFUovfKJtnJ6Bt3Q5gaY
+Date:   Fri, 28 Oct 2022 01:03:36 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-References: <20221027181337.8651-1-afd@ti.com>
- <20221027181337.8651-3-afd@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221027181337.8651-3-afd@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 2/2] staging: rtl8192u: remove unused macro definition
+Message-ID: <Y1rdEE8HBb9CVwlq@ubunlion>
+References: <cover.1666754500.git.drv@mailo.com>
+ <b7053d8737c048d6a878609f0ec24d66b18c5abd.1666754500.git.drv@mailo.com>
+ <Y1kyr/hWqbKCzaaR@kroah.com>
+ <Y1k5y5PVT6t0+OIS@debian-BULLSEYE-live-builder-AMD64>
+ <Y1k8NWuTxOf6z5zL@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1k8NWuTxOf6z5zL@kroah.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/10/2022 14:13, Andrew Davis wrote:
-> Writing this bit can be handled by the syscon-reboot driver.
-> Add this node to DT.
-> 
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Tested-by: Fabian Vogt <fabian@ritter-vogt.de>
-> Reviewed-by: Fabian Vogt <fabian@ritter-vogt.de>
-> ---
->  arch/arm/boot/dts/nspire.dtsi | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/nspire.dtsi b/arch/arm/boot/dts/nspire.dtsi
-> index bb240e6a3a6f..48fbc9d533c3 100644
-> --- a/arch/arm/boot/dts/nspire.dtsi
-> +++ b/arch/arm/boot/dts/nspire.dtsi
-> @@ -172,7 +172,14 @@ rtc: rtc@90090000 {
->  			};
->  
->  			misc: misc@900a0000 {
-> +				compatible = "ti,nspire-misc", "syscon", "simple-mfd";
+On Wed, Oct 26, 2022 at 03:55:01PM +0200, Greg Kroah-Hartman wrote:
+> On Wed, Oct 26, 2022 at 07:14:43PM +0530, Deepak R Varma wrote:
+> > On Wed, Oct 26, 2022 at 03:14:23PM +0200, Greg Kroah-Hartman wrote:
+> > > On Wed, Oct 26, 2022 at 08:58:44AM +0530, Deepak R Varma wrote:
+> > > > Pre-processor macros that are defined but are never used should be
+> > > > cleaned up to avoid unexpected usage.
+> > > >
+> > > > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > > > ---
+> > > >  drivers/staging/rtl8192u/ieee80211/ieee80211.h | 2 --
+> > > >  1 file changed, 2 deletions(-)
+> > > >
+> > > > diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211.h b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
+> > > > index 00c07455cbb3..0b3dda59d7c0 100644
+> > > > --- a/drivers/staging/rtl8192u/ieee80211/ieee80211.h
+> > > > +++ b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
+> > > > @@ -230,8 +230,6 @@ struct cb_desc {
+> > > >  #define ieee80211_unregister_crypto_ops ieee80211_unregister_crypto_ops_rsl
+> > > >  #define ieee80211_get_crypto_ops	ieee80211_get_crypto_ops_rsl
+> > > >
+> > > > -#define ieee80211_ccmp_null		ieee80211_ccmp_null_rsl
+> > > > -
+> > > >  #define free_ieee80211			free_ieee80211_rsl
+> > > >  #define alloc_ieee80211			alloc_ieee80211_rsl
+> > >
+> > > These #defines are a mess, please look into unwinding them as they
+> > > should not be needed at all.
+> >
+> > Hello Greg,
+> > I would like to know what you mean by "unwind them". Is there a documentation or past
+> > commit that I can review to understand the expectations better?
+>
+> Look at them and try to figure out why they are there, and then work to
+> remove them entirely.  A define like this is very odd in the kernel, it
+> should not be needed at all, right?
 
-You have syscon and simple-mfd, but bindings in patch #1 say only syscon.
+Hello Greg,
+I will look into these additional macros soon and send any further edits as a
+separate patch (set). Is the current patch set with 2 patches acceptable?
 
+Also, I am trying to get Coccinelle to work on my machine. Trying to work
+through strange issues. I will work on the macro unwinding task you suggested
+once a get the Coccinelle task completed.
 
-Best regards,
-Krzysztof
+Thank you,
+./drv
+
+>
+> thanks,
+>
+> greg k-h
+>
+
 
