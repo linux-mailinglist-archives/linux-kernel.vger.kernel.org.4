@@ -2,99 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB046610617
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 01:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DAC661061B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 01:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235425AbiJ0XFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 19:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54124 "EHLO
+        id S235547AbiJ0XH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 19:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235028AbiJ0XFd (ORCPT
+        with ESMTP id S234377AbiJ0XHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 19:05:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384185A2E1;
-        Thu, 27 Oct 2022 16:05:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C941F6258A;
-        Thu, 27 Oct 2022 23:05:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2288CC433D7;
-        Thu, 27 Oct 2022 23:05:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666911931;
-        bh=kMiSzIp8QDq8Q/JDWrd3tsQMI+u2ReRt1KdGThVt6sM=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=SMdBv5HyjHZ/qmlwreA2kqytkytGSznE9Wx00Go/Yv25WmZwSIMX8mN7V44PGH/Cq
-         C1OYefQsJQpJCzC5ON9S3Huif7Z7rhHRq6zuSdPSoXSrGut1Y0jewOa6p0GaM1GKtO
-         vb7FK28RxGReFh/5aelUUKD3i4JSdQYwRnnyd/TgKm9/4ZXq8ndoDImiR9bqi0pLXW
-         NEYxl0jOlHp1uOAzhZHMxc9mCI7NTc4Dkzvn+Xg0NlQHd4fHm8HdRiNGm5BEiIJUE4
-         C+XIoEUTV8/+mBwZtCOlSm/0xEncEKobekqLofgFMaH90WpYg3Gqu7dSV8WWtEjO48
-         37q5SJy7a05ug==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221027101159.942843-7-peng.fan@oss.nxp.com>
-References: <20221027101159.942843-1-peng.fan@oss.nxp.com> <20221027101159.942843-7-peng.fan@oss.nxp.com>
-Subject: Re: [PATCH 6/6] clk: imx93: keep sys ctr clock always on
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-imx@nxp.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Jacky Bai <ping.bai@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>
-To:     Peng Fan (OSS) <peng.fan@oss.nxp.com>, abel.vesa@linaro.org,
-        abelvesa@kernel.org, festevam@gmail.com, kernel@pengutronix.de,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        robh+dt@kernel.org, s.hauer@pengutronix.de, shawnguo@kernel.org
-Date:   Thu, 27 Oct 2022 16:05:29 -0700
-User-Agent: alot/0.10
-Message-Id: <20221027230531.2288CC433D7@smtp.kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 27 Oct 2022 19:07:21 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9EC8F97E
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 16:07:20 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id f193so3208307pgc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 16:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3gyfpmFe14VJ3jdYNVJ0rx3Ah2uaRzNTmMnT4495S4I=;
+        b=ZNNSYZLMCiTx3pCpdTSLaMqTAwcT0XD23hboDkck2m1sj0K18I/wiwFIJBnxkxlMh1
+         TMOX+6v0XNUWVLrMkaS7nFMD6HK3C70ZLK5411vF56AMxZrrEveIWdn7U/wWYAX6hu8f
+         z7X+MhLcDZ2abQ+JkeJnFiHqWkFba2HtnVwkX4LhmKXO9kCXDrbkBH+MQc0VlITciM7I
+         DQ4GGK7LnrmeObtOo33dthlXeC/HBl0rQRBuyHKeRHXZmYYPUrcsYqTcTlXIWwUSoL9i
+         Op+9awjoXqXajuMDeHaLc5MvW/7/blHnT1v9JwgcyUng9A7q3UoZ9aZNVukbXbfjaCwz
+         UOQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3gyfpmFe14VJ3jdYNVJ0rx3Ah2uaRzNTmMnT4495S4I=;
+        b=aNuJZaEFuemXFQ3A9P5PBNrQWZYJ/+lnaUCqzBxlmv8G93zN4zuY7nyLFGbHSmrBhM
+         FCa3B1k8DKq4mD32QPyACzh5Y4xTSgws9hkFMI3TmnTdB/V/7QUnkQnq1PS5GWuQt2yD
+         MzVCzpD1E7/Davk2ZT2eX9uPTIgAOl5rY1r7izwe3OFNyPmuEnrdDpbdzCuogFB5LmIw
+         IjmfQNOVtTOmfIH9sRwafu7yu/vjrpWqVkn/Ltahd5dxfZ46y5nVvtJr+vuqx6XLe1Fp
+         8sjymKxW6qPm/pk+ZzySy/8N0/27SgV6sLY3kUseYtSaIaTyMi3oN3JdFlzI8BKkZPPQ
+         adNg==
+X-Gm-Message-State: ACrzQf3jWTpEpCFR4MuqI89KM5PeRgRDqMeKX3Wv1Xi7jRtWN4h4DPXz
+        qz+jqQmSNQeyDv62qVpEIVrqcQ==
+X-Google-Smtp-Source: AMsMyM48cCCOaGHpcUrqKPuvLPqi8N0s0YHUDIkD3gXkNLjihHit7dpsoFkfZbjAvACH4Z61kt9rCg==
+X-Received: by 2002:a65:44c1:0:b0:428:ab8f:62dd with SMTP id g1-20020a6544c1000000b00428ab8f62ddmr44319504pgs.211.1666912040505;
+        Thu, 27 Oct 2022 16:07:20 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id bf4-20020a170902b90400b00186e8526790sm1675818plb.127.2022.10.27.16.07.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 16:07:18 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 16:07:18 -0700 (PDT)
+X-Google-Original-Date: Thu, 27 Oct 2022 15:22:27 PDT (-0700)
+Subject:     Re: [PATCH v3 0/2] Fix /proc/cpuinfo cpumask warning
+In-Reply-To: <20221014155845.1986223-1-ajones@ventanamicro.com>
+CC:     x86@kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, yury.norov@gmail.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        openrisc@lists.librecores.org, mpe@ellerman.id.au,
+        linuxppc-dev@lists.ozlabs.org, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        linux-s390@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     ajones@ventanamicro.com
+Message-ID: <mhng-b3bcbdea-1572-44ba-9d9a-e35e55b8880f@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Peng Fan (OSS) (2022-10-27 03:11:59)
-> From: Jacky Bai <ping.bai@nxp.com>
->=20
-> Keep sys ctr clock always on to make sure its register
-> can be accessed for cpuidle.
->=20
-> Reviewed-by: Peng Fan <peng.fan@nxp.com>
-> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/clk/imx/clk-imx93.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/clk/imx/clk-imx93.c b/drivers/clk/imx/clk-imx93.c
-> index 74e8d810db7f..91db356564c1 100644
-> --- a/drivers/clk/imx/clk-imx93.c
-> +++ b/drivers/clk/imx/clk-imx93.c
-> @@ -238,7 +238,7 @@ static const struct imx93_clk_ccgr {
->         { IMX93_CLK_HSIO_32K_GATE,      "hsio_32k",     "osc_32k",       =
-       0x9dc0, },
->         { IMX93_CLK_ENET1_GATE,         "enet1",        "wakeup_axi_root"=
-,      0x9e00, },
->         { IMX93_CLK_ENET_QOS_GATE,      "enet_qos",     "wakeup_axi_root"=
-,      0x9e40, },
-> -       { IMX93_CLK_SYS_CNT_GATE,       "sys_cnt",      "osc_24m",       =
-       0x9e80, },
-> +       { IMX93_CLK_SYS_CNT_GATE,       "sys_cnt",      "osc_24m",       =
-       0x9e80, CLK_IS_CRITICAL},
+On Fri, 14 Oct 2022 08:58:43 PDT (-0700), ajones@ventanamicro.com wrote:
+> Commit 78e5a3399421 ("cpumask: fix checking valid cpu range") has
+> started issuing warnings[*] when cpu indices equal to nr_cpu_ids - 1
+> are passed to cpumask_next* functions. seq_read_iter() and cpuinfo's
+> start and next seq operations implement a pattern like
+>
+>   n = cpumask_next(n - 1, mask);
+>   show(n);
+>   while (1) {
+>       ++n;
+>       n = cpumask_next(n - 1, mask);
+>       if (n >= nr_cpu_ids)
+>           break;
+>       show(n);
+>   }
+>
+> which will issue the warning when reading /proc/cpuinfo.
+>
+> [*] Warnings will only appear with DEBUG_PER_CPU_MAPS enabled.
+>
+> This series address the issue for x86 and riscv, but from a quick
+> grep of cpuinfo seq operations, I think at least openrisc, powerpc,
+> and s390 also need an equivalent patch. While the test is simple (see
+> next paragraph) I'm not equipped to test on each architecture.
+>
+> To test, just build a kernel with DEBUG_PER_CPU_MAPS enabled, boot to
+> a shell, do 'cat /proc/cpuinfo', and look for a kernel warning.
+>
+> While the patches are being posted together in a series since they're
+> for two different architectures they don't necessarily need to go
+> through the same tree.
+>
+> v3:
+>   - Change condition from >= to == in order to still get a warning
+>     for > as that's unexpected. [Yury]
+>   - Picked up tags on the riscv patch
+>
+> v2:
+>   - Added all the information I should have in the first place
+>     to the commit message [Boris]
+>   - Changed style of fix [Boris]
+>
+> Andrew Jones (2):
+>   RISC-V: Fix /proc/cpuinfo cpumask warning
 
-Please add a comment like
+I just took the RISC-V fix, might be worth re-sending the x86 one alone 
+as nobody's replied over there so it may be lost.
 
-	/* Critical because clk accessed during CPU idle */
+Thanks!
 
->         { IMX93_CLK_TSTMR1_GATE,        "tstmr1",       "bus_aon_root",  =
-       0x9ec0, },
->         { IMX93_CLK_TSTMR2_GATE,        "tstmr2",       "bus_wakeup_root"=
-,      0x9f00, },
->         { IMX93_CLK_TMC_GATE,           "tmc",          "osc_24m",       =
-       0x9f40, },
+>   x86: Fix /proc/cpuinfo cpumask warning
+>
+>  arch/riscv/kernel/cpu.c    | 3 +++
+>  arch/x86/kernel/cpu/proc.c | 3 +++
+>  2 files changed, 6 insertions(+)
