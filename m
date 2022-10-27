@@ -2,106 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A18E060F0D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 08:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A2260F0DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 09:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234773AbiJ0G6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 02:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42764 "EHLO
+        id S234477AbiJ0HAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 03:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234715AbiJ0G5m (ORCPT
+        with ESMTP id S234021AbiJ0G7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 02:57:42 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCD21633A3;
-        Wed, 26 Oct 2022 23:55:59 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id m6-20020a17090a5a4600b00212f8dffec9so646916pji.0;
-        Wed, 26 Oct 2022 23:55:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jf24NLbsU8ask7SM9WbvKjapzt603tSoicBq9TM59p0=;
-        b=j9TwfG7tRhD0JT9otRxnwA5Tb6uM8vQKwVRSDS/zeOrXoAkCjAe1YbjSmLBZ39V1p0
-         BsD7khiVnQq3fOkT1vJfl6bwIfk3U888ldYxOhHvkuTtzWGzUZ0NBgI6ErTw0S5SlhH9
-         Yk48LLK4rKMBsTWkxyPZfPuJKecacf3GJ52cf9sFQUfuTvLcxkv71zlKHx/XzGuy3ZVr
-         4evoXXXRls0jdzdj5CX9cUy1Vp0zhorJDl6ThzDKbfWgRC4ny0qmCOJAq0pbV/u12WK4
-         Fu+VlvyerziKPgIDMR/jYE5TICvIW3aC/Xyz0YxgL199XulbUDxtVDoCbhOXjeFh41Jc
-         t05g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jf24NLbsU8ask7SM9WbvKjapzt603tSoicBq9TM59p0=;
-        b=gNABhg2KJrkeHdCyyBr6M6gfQZ4vGY7hm2Fo/KPQOjSMeIMXXckcnw+5DdECsbnDdw
-         nteFcSXwysxXuj+Lfw4OEyvCBkbSaKt5cWEAdCfSfgutun5gILmMk3qnAUinB48OS2ol
-         Q7UlXCGkvmsGPmreZPjUlMxi/53y5K0muuni6okNZztEOW4muJwnlnNZxMuzIiQrvCcT
-         vVWoVN6Gr576+QDJOKE8ZxkQwE/49I70OzXCLZJp8wwdXuUHmBCRSZXCzSQOfFk4HsI6
-         Zqs4OHXfTTANRyeWymx7XBfwfO1HQnPtH0B0Ozq4UqMq61JjsWdwQUn9472wdA+NUzGi
-         fJ1g==
-X-Gm-Message-State: ACrzQf0P3fE7ULfqwZaf8MgoQ29Br2E9bEl/E19ZZ3aGi/9T7A6ZbtN4
-        YGcCGdQV+1GDEq1tWOtnflQ=
-X-Google-Smtp-Source: AMsMyM6Z5BPeJFtq9ZQCWYDYdOcSXjcrbGtbV+lmUTu1wG1dCdjMfvbMKAiLzwkn2GkuDRC8Cm4Rhw==
-X-Received: by 2002:a17:90a:d50e:b0:213:7a2e:8991 with SMTP id t14-20020a17090ad50e00b002137a2e8991mr394348pju.113.1666853759073;
-        Wed, 26 Oct 2022 23:55:59 -0700 (PDT)
-Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:99d6:ae15:f9aa:1819])
-        by smtp.gmail.com with ESMTPSA id h7-20020a17090a710700b00213202d77d9sm405482pjk.43.2022.10.26.23.55.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 23:55:58 -0700 (PDT)
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] gpiolib: of: add polarity quirk for Freescale PCIe controller
-Date:   Wed, 26 Oct 2022 23:55:53 -0700
-Message-Id: <20221027065553.801153-2-dmitry.torokhov@gmail.com>
-X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-In-Reply-To: <20221027065553.801153-1-dmitry.torokhov@gmail.com>
-References: <20221027065553.801153-1-dmitry.torokhov@gmail.com>
+        Thu, 27 Oct 2022 02:59:55 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF2DF5BE
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 23:59:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666853980; x=1698389980;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=V14uG5yjLb6jlXg9bU1RN+1W4f8+KLhPzp7C9u7WGug=;
+  b=WJSPINb2jE75FhasQPI+Jj8BjAXLIIKUPlwsTL8YxH9UBiBUBRp+b3K4
+   pgP/UbtGwi0clDzCVWW/LZL1NBL9xyqGxJCE76cV1eA2Q8Vh3Pm6n7yF0
+   92/BFQDQX/Yvndeh5KwNwduawtudeRk/aVeNmYrX1N/WAvGRGMzTIzuM9
+   zsaMoShXRLRbZHCbz69VSByh5t7gYKegZYWivY9Tw5Yhn0C8qYo8NG90C
+   A/2TJfoVIEzd1ffLJ+r7Q6gT8edQl0e7adS2KMPJudOUWQ1FtFMCwPHPO
+   fFdNJIyqzAJU3k2DjVD/KA6CCluxIzXT08UiZXbGjXXulADZw+w1vVMLR
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="291449137"
+X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
+   d="scan'208";a="291449137"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 23:59:39 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="774884708"
+X-IronPort-AV: E=Sophos;i="5.95,217,1661842800"; 
+   d="scan'208";a="774884708"
+Received: from yunfeima-mobl.ccr.corp.intel.com (HELO yhuang6-mobl2.ccr.corp.intel.com) ([10.254.212.241])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 23:59:35 -0700
+From:   Huang Ying <ying.huang@intel.com>
+To:     linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Huang Ying <ying.huang@intel.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Jagdish Gediya <jvgediya.oss@gmail.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Tim Chen <tim.c.chen@intel.com>, Wei Xu <weixugc@google.com>,
+        Yang Shi <shy828301@gmail.com>
+Subject: [RFC] memory tiering: use small chunk size and more tiers
+Date:   Thu, 27 Oct 2022 14:59:25 +0800
+Message-Id: <20221027065925.476955-1-ying.huang@intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bindings for Freescale PCIe controller use a separate property called
-"reset-gpio-active-high" to control polarity of its reset line, add it
-to the list of quirks in gpiolib so that gpiod API can be used in the
-driver.
+We need some way to override the system default memory tiers.  For
+the example system as follows,
 
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+type		abstract distance
+----		-----------------
+HBM		300
+DRAM		1000
+CXL_MEM		5000
+PMEM		5100
+
+Given the memory tier chunk size is 100, the default memory tiers
+could be,
+
+tier		abstract distance	types
+                range
+----		-----------------       -----
+3		300-400			HBM
+10		1000-1100		DRAM
+50		5000-5100		CXL_MEM
+51		5100-5200		PMEM
+
+If we want to group CXL MEM and PMEM into one tier, we have 2 choices.
+
+1) Override the abstract distance of CXL_MEM or PMEM.  For example, if
+we change the abstract distance of PMEM to 5050, the memory tiers
+become,
+
+tier		abstract distance	types
+                range
+----		-----------------       -----
+3		300-400			HBM
+10		1000-1100		DRAM
+50		5000-5100		CXL_MEM, PMEM
+
+2) Override the memory tier chunk size.  For example, if we change the
+memory tier chunk size to 200, the memory tiers become,
+
+tier		abstract distance	types
+                range
+----		-----------------       -----
+1		200-400			HBM
+5		1000-1200		DRAM
+25		5000-5200		CXL_MEM, PMEM
+
+But after some thoughts, I think choice 2) may be not good.  The
+problem is that even if 2 abstract distances are almost same, they may
+be put in 2 tier if they sit in the different sides of the tier
+boundary.  For example, if the abstract distance of CXL_MEM is 4990,
+while the abstract distance of PMEM is 5010.  Although the difference
+of the abstract distances is only 20, CXL_MEM and PMEM will put in
+different tiers if the tier chunk size is 50, 100, 200, 250, 500, ....
+This makes choice 2) hard to be used, it may become tricky to find out
+the appropriate tier chunk size that satisfying all requirements.
+
+So I suggest to abandon choice 2) and use choice 1) only.  This makes
+the overall design and user space interface to be simpler and easier
+to be used.  The overall design of the abstract distance could be,
+
+1. Use decimal for abstract distance and its chunk size.  This makes
+   them more user friendly.
+
+2. Make the tier chunk size as small as possible.  For example, 10.
+   This will put different memory types in one memory tier only if their
+   performance is almost same by default.  And we will not provide the
+   interface to override the chunk size.
+
+3. Make the abstract distance of normal DRAM large enough.  For
+   example, 1000, then 100 tiers can be defined below DRAM, this is
+   more than enough in practice.
+
+4. If we want to override the default memory tiers, just override the
+   abstract distances of some memory types with a per memory type
+   interface.
+
+This patch is to apply the design choices above in the existing code.
+
+Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+Cc: Alistair Popple <apopple@nvidia.com>
+Cc: Bharata B Rao <bharata@amd.com>
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Dave Hansen <dave.hansen@intel.com>
+Cc: Davidlohr Bueso <dave@stgolabs.net>
+Cc: Hesham Almatary <hesham.almatary@huawei.com>
+Cc: Jagdish Gediya <jvgediya.oss@gmail.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Tim Chen <tim.c.chen@intel.com>
+Cc: Wei Xu <weixugc@google.com>
+Cc: Yang Shi <shy828301@gmail.com>
 ---
- drivers/gpio/gpiolib-of.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ include/linux/memory-tiers.h | 7 +++----
+ mm/memory-tiers.c            | 7 +++----
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-index 331744c75faf..1d37172579d1 100644
---- a/drivers/gpio/gpiolib-of.c
-+++ b/drivers/gpio/gpiolib-of.c
-@@ -208,6 +208,15 @@ static void of_gpio_set_polarity_by_property(const struct device_node *np,
- 		{ "fsl,imx8qm-fec",  "phy-reset-gpios", "phy-reset-active-high" },
- 		{ "fsl,s32v234-fec", "phy-reset-gpios", "phy-reset-active-high" },
- #endif
-+#if IS_ENABLED(CONFIG_PCI_IMX6)
-+		{ "fsl,imx6q-pcie",  "reset-gpio", "reset-gpio-active-high" }
-+		{ "fsl,imx6sx-pcie", "reset-gpio", "reset-gpio-active-high" }
-+		{ "fsl,imx6qp-pcie", "reset-gpio", "reset-gpio-active-high" }
-+		{ "fsl,imx7d-pcie",  "reset-gpio", "reset-gpio-active-high" }
-+		{ "fsl,imx8mq-pcie", "reset-gpio", "reset-gpio-active-high" }
-+		{ "fsl,imx8mm-pcie", "reset-gpio", "reset-gpio-active-high" }
-+		{ "fsl,imx8mp-pcie", "reset-gpio", "reset-gpio-active-high" }
-+#endif
+diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
+index 965009aa01d7..2e39d9a6c8ce 100644
+--- a/include/linux/memory-tiers.h
++++ b/include/linux/memory-tiers.h
+@@ -7,17 +7,16 @@
+ #include <linux/kref.h>
+ #include <linux/mmzone.h>
+ /*
+- * Each tier cover a abstrace distance chunk size of 128
++ * Each tier cover a abstrace distance chunk size of 10
+  */
+-#define MEMTIER_CHUNK_BITS	7
+-#define MEMTIER_CHUNK_SIZE	(1 << MEMTIER_CHUNK_BITS)
++#define MEMTIER_CHUNK_SIZE	10
+ /*
+  * Smaller abstract distance values imply faster (higher) memory tiers. Offset
+  * the DRAM adistance so that we can accommodate devices with a slightly lower
+  * adistance value (slightly faster) than default DRAM adistance to be part of
+  * the same memory tier.
+  */
+-#define MEMTIER_ADISTANCE_DRAM	((4 * MEMTIER_CHUNK_SIZE) + (MEMTIER_CHUNK_SIZE >> 1))
++#define MEMTIER_ADISTANCE_DRAM	((100 * MEMTIER_CHUNK_SIZE) + (MEMTIER_CHUNK_SIZE / 2))
+ #define MEMTIER_HOTPLUG_PRIO	100
  
- 		/*
- 		 * The regulator GPIO handles are specified such that the
+ struct memory_tier;
+diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+index fa8c9d07f9ce..e03011428fa5 100644
+--- a/mm/memory-tiers.c
++++ b/mm/memory-tiers.c
+@@ -165,11 +165,10 @@ static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memty
+ 	bool found_slot = false;
+ 	struct memory_tier *memtier, *new_memtier;
+ 	int adistance = memtype->adistance;
+-	unsigned int memtier_adistance_chunk_size = MEMTIER_CHUNK_SIZE;
+ 
+ 	lockdep_assert_held_once(&memory_tier_lock);
+ 
+-	adistance = round_down(adistance, memtier_adistance_chunk_size);
++	adistance = rounddown(adistance, MEMTIER_CHUNK_SIZE);
+ 	/*
+ 	 * If the memtype is already part of a memory tier,
+ 	 * just return that.
+@@ -204,7 +203,7 @@ static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memty
+ 	else
+ 		list_add_tail(&new_memtier->list, &memory_tiers);
+ 
+-	new_memtier->dev.id = adistance >> MEMTIER_CHUNK_BITS;
++	new_memtier->dev.id = adistance / MEMTIER_CHUNK_SIZE;
+ 	new_memtier->dev.bus = &memory_tier_subsys;
+ 	new_memtier->dev.release = memory_tier_device_release;
+ 	new_memtier->dev.groups = memtier_dev_groups;
+@@ -641,7 +640,7 @@ static int __init memory_tier_init(void)
+ #endif
+ 	mutex_lock(&memory_tier_lock);
+ 	/*
+-	 * For now we can have 4 faster memory tiers with smaller adistance
++	 * For now we can have 100 faster memory tiers with smaller adistance
+ 	 * than default DRAM tier.
+ 	 */
+ 	default_dram_type = alloc_memory_type(MEMTIER_ADISTANCE_DRAM);
 -- 
-2.38.0.135.g90850a2211-goog
+2.35.1
 
