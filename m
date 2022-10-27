@@ -2,117 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C36660F98E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C27A160F994
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235361AbiJ0Np5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 09:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
+        id S235726AbiJ0NrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 09:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235236AbiJ0Npq (ORCPT
+        with ESMTP id S235236AbiJ0NrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 09:45:46 -0400
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 99A7C2D1C6;
-        Thu, 27 Oct 2022 06:45:43 -0700 (PDT)
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id A3BEC4474;
-        Thu, 27 Oct 2022 15:45:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202205; t=1666878341;
-        bh=dQDx9GQjjlRYVn7DDiUSbgC4UFIlpnAm/sOjUWUvd6c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E8lVSGbKd3NCm3ZCMyZWP/fLOsTs/tyAkWjxMnXehNWBfAZMJqPZJXFHG2MDvwnl+
-         sKB2YKY7yPO8p8OsqbBP+Jrabi87k/H+E27R5L7HbNFYxBF4n7MfI1BzPrBx9LcIMn
-         QSQGULQS4F5m5xuUhP8fZFfAzPPShf54MuHi865vYy76CyPrutVhwLb78HWWBmKyb1
-         S/mwY/ekrTsXi2xZMTSe9thVOKW8tq1QwDRKdE8+zKby7KLlBwgwZhOPU7XeYAq+tv
-         o9A9W3h3RB145keotZIwGHzqMS8i10fBS0jRzMKpfzMIrPWtr9jTtxurAE5/nxbuxM
-         F8lTl1N54EL836RCnJ/LfjLzlASVPO2eUlxp7ZI9Z1lSThRnaXr3NNY8ldUze5nIP5
-         Psq4/fFO3wNYkSc4m3zaMTgbmW16D3Ss4+mKJHp1eyv64Y0aH45tu8okC6RHFsSxUe
-         tLGW0loHb3Y0nOFmSr1TgWEQ2VIZ55gU3UJt7jfYe7UHPIvwmakGfOTR1A1QBxoAtn
-         J+hJ5SN+DLEoiMOgEAGgd9gENcvlL7yraXRWcNEN3nKoLpXjw8cAM19MSD8EmPOeCT
-         qVpuoVlFaKe3s3WwoLu7hYvy5YoaNoCHVu3OEjXVdzekX2d9PUHFB80+GNJZhVL926
-         DiHuh0YxFA/5jZwFWg49G6c8=
-Date:   Thu, 27 Oct 2022 15:45:40 +0200
-From:   =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub =?utf-8?B?S2ljacWEc2tp?= <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Duoming Zhou <duoming@zju.edu.cn>,
-        Huang Pei <huangpei@loongson.cn>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net, netdev@vger.kernel.org
-Subject: Re: [PATCH 12/15] drivers: net: slip: remove SLIP_MAGIC
-Message-ID: <20221027134540.rwzotwafrv6psb4t@tarta.nabijaczleweli.xyz>
-References: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
- <f5f9036f2a488886fe5a424d8143e8f2f3fdcf3f.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
- <31c8f481-aeec-daf8-92d7-016824f88760@hartkopp.net>
+        Thu, 27 Oct 2022 09:47:04 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC9414C50B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:47:01 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id z30so875361qkz.13
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:47:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1G4uza6OunYBQ//lixENKM+uBhXjuS/v82cPTgaP3Fw=;
+        b=O3vgzsRfBu6EpgVs5hN61Zsk5tTlBSEf1LZZL/C9gCKXnmYF1gfjQp6ZPm6phX88qx
+         Q62Pf3Jwyz/V5S84k6DJLkGczFEVg8SuFw69SCSjL64ILASDXySnAKFPKIhh5eWVk2sc
+         +YrSpw7DPRyFz52RujOT40FIrD/TmJlB3XLBZBSgrQrlu4IFAhCGAloExlO1VOJ3fMbN
+         U9+QGp1mkf3LerDazIZ2cL0zuGatBV9mNy4pxkehxNpZu6cnpSQBbTZSLhWN7BS/z21D
+         fENoCJ7tWTrvZXEhxbqy4UtQExM+e6UGnvX4uu+9K9hYoRSpBOeX/c90Aa9/q2FrGlGf
+         Rgcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1G4uza6OunYBQ//lixENKM+uBhXjuS/v82cPTgaP3Fw=;
+        b=JaosRTqotprApJccC4fVeMDwocXcosPR4OQ2hKQZF2pBwJ3ksXDTalWyAEApMgioW/
+         jiyHZN+0LSf8lpeMh6TlHiBwP38XWu/eBfkLzENNGhvCoa5gABDOPEsqkA17JJ4DQT/H
+         geyOivFyzBXfmAGlUUPevDrnUCSfyNIsLptksfRLP3d2mAEUN5SBl9MVJi+Ame054HRt
+         mYI7720a1N/jhvjnCaeKgb+sa21CVo8GgKWsQnaOYvDCSpoJwZOKT97RiGcdIHhMusLk
+         zP/NkyYKYpEmNs6XrLI59L1Ndwx9MyweCl19jJ9HKS6SSC8eWY/mITpuouPLV43nQfXn
+         sq0g==
+X-Gm-Message-State: ACrzQf1QwpyMS0cs4IiF8+BTinncaft1qmq/T0I+sjHaweM5SFvOsXKs
+        km5JcAPmsfzjDtSTGqUk/kIzIw==
+X-Google-Smtp-Source: AMsMyM6u4j3Fw0nLx0Bg1S0gIFL0V0Jou31arkL1Q03nKtCYQDxobMqN3uwUJ0IKtCWeNrlbTax+zQ==
+X-Received: by 2002:a37:9306:0:b0:6f9:b745:68b5 with SMTP id v6-20020a379306000000b006f9b74568b5mr4525771qkd.582.1666878420178;
+        Thu, 27 Oct 2022 06:47:00 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id f11-20020a05620a280b00b006eee3a09ff3sm993432qkp.69.2022.10.27.06.46.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 06:46:59 -0700 (PDT)
+Message-ID: <f023f273-e4d2-fd92-a3d4-2c17af7e4314@linaro.org>
+Date:   Thu, 27 Oct 2022 09:46:58 -0400
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t7qokkbezy6yv635"
-Content-Disposition: inline
-In-Reply-To: <31c8f481-aeec-daf8-92d7-016824f88760@hartkopp.net>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 01/11] dt-bindings: iio: qcom: adc7-pm8350: Allow
+ specifying SID for channels
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        andersson@kernel.org
+Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
+        quic_jprakash@quicinc.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221027063006.9056-1-manivannan.sadhasivam@linaro.org>
+ <20221027063006.9056-2-manivannan.sadhasivam@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221027063006.9056-2-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 27/10/2022 02:29, Manivannan Sadhasivam wrote:
+> As per the new ADC7 architecture used by the Qualcomm PMICs, each PMIC
+> has the static Slave ID (SID) assigned by default. The primary PMIC
+> PMK8350 is responsible for collecting the temperature/voltage data from
+> the slave PMICs and exposing them via it's registers.
+> 
+> For getting the measurements from the slave PMICs, PMK8350 uses the
+> channel ID encoded with the SID of the relevant PMIC. So far, the
+> dt-binding for the slave PMIC PM8350 assumed that there will be only
+> one PM8350 in a system. So it harcoded SID 1 with channel IDs.
+> 
+> But this got changed in platforms such as Lenovo X13s where there are a
+> couple of PM8350 PMICs available. So to address multiple PM8350s, change
+> the binding to accept the SID specified by the user and use it for
+> encoding the channel ID.
+> 
+> It should be noted that, even though the SID is static it is not
+> globally unique. Only the primary PMIC has the unique SID id 0.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  .../bindings/thermal/qcom-spmi-adc-tm5.yaml   |  6 +-
+>  .../dt-bindings/iio/qcom,spmi-adc7-pm8350.h   | 90 +++++++++----------
+>  2 files changed, 46 insertions(+), 50 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
+> index feb390d50696..d20569b9b763 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
+> @@ -222,8 +222,8 @@ examples:
+>                  qcom,hw-settle-time = <200>;
+>              };
+>  
+> -            conn-therm@47 {
+> -                reg = <PM8350_ADC7_AMUX_THM4_100K_PU>;
+> +            conn-therm@147 {
+> +                reg = <PM8350_ADC7_AMUX_THM4_100K_PU(1)>;
+>                  qcom,ratiometric;
+>                  qcom,hw-settle-time = <200>;
+>              };
+> @@ -247,7 +247,7 @@ examples:
+>  
+>              conn-therm@1 {
+>                  reg = <1>;
+> -                io-channels = <&pmk8350_vadc PM8350_ADC7_AMUX_THM4_100K_PU>;
+> +                io-channels = <&pmk8350_vadc PM8350_ADC7_AMUX_THM4_100K_PU(1)>;
+>                  qcom,avg-samples = <2>;
+>                  qcom,ratiometric;
+>                  qcom,hw-settle-time-us = <200>;
+> diff --git a/include/dt-bindings/iio/qcom,spmi-adc7-pm8350.h b/include/dt-bindings/iio/qcom,spmi-adc7-pm8350.h
+> index 9426f27a1946..50de5adfe6ac 100644
+> --- a/include/dt-bindings/iio/qcom,spmi-adc7-pm8350.h
+> +++ b/include/dt-bindings/iio/qcom,spmi-adc7-pm8350.h
+> @@ -6,62 +6,58 @@
+>  #ifndef _DT_BINDINGS_QCOM_SPMI_VADC_PM8350_H
+>  #define _DT_BINDINGS_QCOM_SPMI_VADC_PM8350_H
+>  
+> -#ifndef PM8350_SID
+> -#define PM8350_SID					1
+> -#endif
+> -
+>  /* ADC channels for PM8350_ADC for PMIC7 */
+> -#define PM8350_ADC7_REF_GND			(PM8350_SID << 8 | 0x0)
+> -#define PM8350_ADC7_1P25VREF			(PM8350_SID << 8 | 0x01)
+> -#define PM8350_ADC7_VREF_VADC			(PM8350_SID << 8 | 0x02)
+> -#define PM8350_ADC7_DIE_TEMP			(PM8350_SID << 8 | 0x03)
+> -
+> -#define PM8350_ADC7_AMUX_THM1			(PM8350_SID << 8 | 0x04)
+> -#define PM8350_ADC7_AMUX_THM2			(PM8350_SID << 8 | 0x05)
+> -#define PM8350_ADC7_AMUX_THM3			(PM8350_SID << 8 | 0x06)
+> -#define PM8350_ADC7_AMUX_THM4			(PM8350_SID << 8 | 0x07)
+> -#define PM8350_ADC7_AMUX_THM5			(PM8350_SID << 8 | 0x08)
+> -#define PM8350_ADC7_GPIO1			(PM8350_SID << 8 | 0x0a)
+> -#define PM8350_ADC7_GPIO2			(PM8350_SID << 8 | 0x0b)
+> -#define PM8350_ADC7_GPIO3			(PM8350_SID << 8 | 0x0c)
+> -#define PM8350_ADC7_GPIO4			(PM8350_SID << 8 | 0x0d)
+> +#define PM8350_ADC7_REF_GND(sid)			(sid << 8 | 0x0)
 
---t7qokkbezy6yv635
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+As it is macro, I think it argument should be in parens: (sid)
 
-On Thu, Oct 27, 2022 at 03:11:56PM +0200, Oliver Hartkopp wrote:
-> I'm not sure why I'm in 'To' here as I'm definitely not the official
-> maintainer of slip.
->=20
-> But it looks like there is no real maintainer anyway but maybe Jiri ;-)
 
-According to get_maintainer.pl,
-(which I just shoved into Cc: indiscriminately,
- lacking any knowledge to the contrary),
-you get picked up for slip.{c,h} as commit_signer:2/4=3D50% and 1/2, resp.
+Best regards,
+Krzysztof
 
-As does Jiri, so on that front we're good at least.
-
-Best,
-
---t7qokkbezy6yv635
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNai4QACgkQvP0LAY0m
-WPHd9Q/+K2dZIj1YG+R33sxAl+Mt8dIpRZzF1vcgYh9GK++i6rKtgQp2hdi669wz
-1SK+ElvyCoiBVciPDZ9C8VrMRqWbyuFSJmdLPE0Pn5UXeaRDY/MKK0NjqO2uIMEt
-m/Gussa+VhpbX/vKYAHpcPKt9lcqjDXi+Rgyom5NijjKL/0Bak6vaJmy3TFCTBOE
-qIWorspbyKHnUqHGHNOnwTTKVQw6rfP7LtDw9yw43oEhkBy9iLShYncZeZs+LG5N
-82+1WaHvXAA9ZPxaYL7HlaZ0HfB7yLswbn4i2zLVAXMibGaQsvZDywkZsjVFSHG6
-RGJpJ9ynFDe9WHR4Leig7mOa46K0zJOmLQ73/GsC/4Xm/balihDJbghDRcxsfT1T
-Jznna74M5EekaOYNyQHOeD6NNFPOAb4NP3AxCzzWkMeTDRNJB7J08BNCoX97AHzo
-gIxQEB4pChAwPm/IdLuNZ4PRjrCVyXk3hPAMdhHlECaMdyfkpURsJx1I9ChuFCom
-kuyiNla/YH0tEkNHiUWyfdQNU1EQjsADYlImpYwm6xm+Pf54IUus4CDWVT7/A9PH
-o4N5UAV/50/S1ZvZfZJuBED24BlS5dHaaBFXVJcOteAqWFFEH/zoZaVxNsfOmcFn
-1egDuVCG/TDj9v2xOfebu4sFNlu2wQOYidJdcFOBEDPku8jYWPM=
-=oi5M
------END PGP SIGNATURE-----
-
---t7qokkbezy6yv635--
