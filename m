@@ -2,193 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE3061026B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B88F610268
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 22:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236610AbiJ0UKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 16:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33184 "EHLO
+        id S236593AbiJ0UKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 16:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236902AbiJ0UKe (ORCPT
+        with ESMTP id S236477AbiJ0UKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 16:10:34 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2040.outbound.protection.outlook.com [40.107.220.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2D142D62;
-        Thu, 27 Oct 2022 13:10:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mkNo53cNx53/NH1ojk/ULjH0JzTwoHjOBEHetptwv816B8yWuHdYMYIxnj8NcimrSEqW12tazyHpibf42hb72d8iJhfwdATj2vbpclQRDv/NVBq04dhSvSbBDTM/aIyA8/I8rHxaFJyo9NYCjAzNqrUu+8BISEWP+oHwT86ddND8H98ajap30RESrXsQaS/LRiU8bNOc+41m+AziMFAqP2rdNFC4olWsTdYlzApcWZpN3UemwUSPQPSGPCn1aWQtlzt94Z0tVps8uhpaoyux1ZWtni1oE4EHcgok0cgpkhJzKXZOQzEi0z/MeBijKf2XOhSEQsl/uNC0GKWOw9kC3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ErTieuUf1a0AEbviSnyTQ+5hjQZl4lJn32HDoS8V7tk=;
- b=QKJxsGhGtunVgI9z+CQJ6LiTyqso0mRSITg36GWRdARu2eQJaVMavb0QbdxUZW/SYeAzbLTNj3bE7Rk90nme+qvPRjO1+i/mgJA5ORzd4j9sRLLy+ZIxVCXD08PXsZEVm4l7+IdJUOfKpl8dFdcxtOD01krPfdR/6QZxtMNWxpqcSumFRrlKwt5CjqPjZ3zftxSvXF6EseNafed3M9YDQymFWNgs4enykJaZejKhKOfdi8xBV9VVa9lPMA+l7WES34vBWp983XLPlNZ+DXF1IINsgoiz3c+hQccSkq6FgfGNi7WuAbLjP1bpObM1Lnwex6q2YzGe0SuM7qmkNgl9ZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ErTieuUf1a0AEbviSnyTQ+5hjQZl4lJn32HDoS8V7tk=;
- b=k2JgVgmwj7cpun5Ua1qE1gOPuKQJCzosCJ7xH1XMx55pAI9hzB1m1XrBnhS3zeEbylH4TabdpAwdPGriuw7QdfErMq5Kb5S6CGSIFJnbFrJQk0eVFdJiBmGIDi2KqpWYfZ9GEa2IKGGhuHgKc7B6XYFc7NytgMclRQCI09DI+P53Romc3Xb7lIrT7Twh119RmhOC8RVIfyIUJKiuY/T+Dhb9a7TmTclomXp/iEwxY40P8OW+QAKOnw/h234MQCValwShsUNKaWphH2LGuZPELuqIj+zjcpmNv3QCyxso4Jecsz03fF7r/MoK/9I1vkC5df3OqeSicvj4rO56+IazjA==
-Received: from DM6PR01CA0024.prod.exchangelabs.com (2603:10b6:5:296::29) by
- SA1PR12MB5670.namprd12.prod.outlook.com (2603:10b6:806:239::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5746.21; Thu, 27 Oct 2022 20:10:30 +0000
-Received: from DM6NAM11FT014.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:296:cafe::f8) by DM6PR01CA0024.outlook.office365.com
- (2603:10b6:5:296::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.14 via Frontend
- Transport; Thu, 27 Oct 2022 20:10:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DM6NAM11FT014.mail.protection.outlook.com (10.13.173.132) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5746.16 via Frontend Transport; Thu, 27 Oct 2022 20:10:30 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Thu, 27 Oct
- 2022 13:10:16 -0700
-Received: from sw-mtx-036.mtx.labs.mlnx (10.126.230.35) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Thu, 27 Oct 2022 13:10:14 -0700
-From:   Parav Pandit <parav@nvidia.com>
-To:     <bagasdotme@gmail.com>, <arnd@arndb.de>,
-        <stern@rowland.harvard.edu>, <parri.andrea@gmail.com>,
-        <will@kernel.org>, <peterz@infradead.org>, <boqun.feng@gmail.com>,
-        <npiggin@gmail.com>, <dhowells@redhat.com>, <j.alglave@ucl.ac.uk>,
-        <luc.maranget@inria.fr>, <paulmck@kernel.org>, <akiyks@gmail.com>,
-        <dlustig@nvidia.com>, <joel@joelfernandes.org>, <corbet@lwn.net>,
-        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>
-CC:     Parav Pandit <parav@nvidia.com>
-Subject: [PATCH v5] locking/memory-barriers.txt: Improve documentation for writel() example
-Date:   Thu, 27 Oct 2022 23:10:00 +0300
-Message-ID: <20221027201000.219731-1-parav@nvidia.com>
-X-Mailer: git-send-email 2.26.2
+        Thu, 27 Oct 2022 16:10:20 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0982D746
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:10:18 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1666901416;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OIqcZRUcgxs1qDADU8Zu6W54GU95YqrDSNAf8mGexD8=;
+        b=MLRzYvvqmtPTt9XY6I6RkLN6jN4QxLSLzM/wvr5P1IMcuEDFWNep8vChlHwqmTWaDNp9/9
+        jKI/BWTyFEuKGJeaE5DxT63CWij1UrQQEcCguR+dW/3ib0nR9i1tnqeAyKnpVHGxBCNKim
+        m4OkpWJ8z1uJWKYSckFDh3HkhuTAGwc=
+From:   andrey.konovalov@linux.dev
+To:     Marco Elver <elver@google.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Florian Mayer <fmayer@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH] kasan: allow sampling page_alloc allocations for HW_TAGS
+Date:   Thu, 27 Oct 2022 22:10:09 +0200
+Message-Id: <c124467c401e9d44dd35a36fdae1c48e4e505e9e.1666901317.git.andreyknvl@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT014:EE_|SA1PR12MB5670:EE_
-X-MS-Office365-Filtering-Correlation-Id: 54587a02-9220-46d4-850f-08dab8574bff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Q9TRyBNX28FaMHuoH8BdDoV/r5mMwyo3OCDfzgozqHoO+2V3zmGxHshFdrwPiCOUmYqWWNIp2D2Mh2lywkhMIIwiDlUirj6D7dbeFs565IUXXC58PJ+3IbPFpsmi+JCaoNArk5RLWdgw7S4BTSde3mHg/Ja684EUYAtPabfgEsLMs/HBlMmx/Y3ItfeOm52247dBp/KojuSABqG9/JxRLt9m100ij34+c6B8sib7X6dptSGjix7WpFWTm9oYu517fuG1Jxw8k2LSd8gj9qONmLpOSUPQiIwof/+J5FDSEnfbecwpCvqUMccaJgRJaTxIKL0gDve8u+kb3qZ7FhzzWTKj1QB2X/NIEXKZ4rh54FaxFwrc4st2yO8oTIEDUnhwGdIn0kYMDWfZFIu0UDje/hrr03USHlLmpf/szMphjHaoy/FUVcx6sD6ABGYTchFVcHs3cZZyamU0mpfE7KVPmdh7E2zI3lGZHA45FqbP5pHOV5Qt9P5NkbpcEFRa9ThCjo5r4Mg1rYlBkBNIFLzvOLcgs1zNhokvDRS20gln3vvq1Co4tyKWvmGbEuY5f072LtAczca0IUvhSrvqCDvj097K8oQChLEofk7Gmo/0RF4jbf4e/JJ7Uk4T39wa65v1jnLZcyEKrMJnyay8+x/HVi0p+mSuIMdgbrBoFIvASMghJ2wXpARtbRgdj8jOWjrhDuyVtp6MAOLGXhs6HUM2kbUJBiRQh0vLQy5yvVUZOI2rug4j7zIV0jEDjCziDY78B8757nLOQoBtWfjyu7UIrh7pk90OyUU5DhdOCf5+GUo=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(39860400002)(376002)(396003)(451199015)(46966006)(36840700001)(40470700004)(1076003)(8676002)(921005)(4326008)(70206006)(40480700001)(83380400001)(16526019)(7636003)(2906002)(2616005)(336012)(47076005)(36756003)(82310400005)(41300700001)(26005)(70586007)(186003)(8936002)(7416002)(5660300002)(478600001)(426003)(356005)(86362001)(316002)(6666004)(110136005)(36860700001)(107886003)(40460700003)(82740400003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2022 20:10:30.1486
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54587a02-9220-46d4-850f-08dab8574bff
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT014.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB5670
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The cited commit describes that when using writel(), explicit wmb()
-is not needed. wmb() is an expensive barrier. writel() uses the needed
-platform specific barrier instead of wmb().
+From: Andrey Konovalov <andreyknvl@google.com>
 
-writeX() section of "KERNEL I/O BARRIER EFFECTS" already describes
-ordering of I/O accessors with MMIO writes.
+Add a new boot parameter called kasan.page_alloc.sample, which makes
+Hardware Tag-Based KASAN tag only every Nth page_alloc allocation.
 
-Hence add the comment for pseudo code of writel() and remove confusing
-text around writel() and wmb().
+As Hardware Tag-Based KASAN is intended to be used in production, its
+performance impact is crucial. As page_alloc allocations tend to be big,
+tagging and checking all such allocations introduces a significant
+slowdown in some testing scenarios. The new flag allows to alleviate
+that slowdown.
 
-commit 5846581e3563 ("locking/memory-barriers.txt: Fix broken DMA vs. MMIO ordering example")
+Enabling page_alloc sampling has a downside: KASAN will miss bad accesses
+to a page_alloc allocation that has not been tagged.
 
-Signed-off-by: Parav Pandit <parav@nvidia.com>
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
-changelog:
-v4->v5:
-- Used suggested documentation update from Will
-- Added comment to the writel() pseudo code example
-- updated commit log for newer changes
-v3->v4:
-- further trimmed the documentation for redundant description
-v2->v3:
-- removed redundant description for writeX()
-- updated text for alignment and smaller change lines
-- updated commit log with blank line before signed-off-by line
-v1->v2:
-- Further improved description of writel() example
-- changed commit subject from 'usage' to 'example'
-v0->v1:
-- Corrected to mention I/O barrier instead of dma_wmb().
-- removed numbered references in commit log
-- corrected typo 'explcit' to 'explicit' in commit log
----
- Documentation/memory-barriers.txt | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ Documentation/dev-tools/kasan.rst |  4 +++
+ include/linux/kasan.h             |  7 ++---
+ mm/kasan/common.c                 |  9 +++++--
+ mm/kasan/hw_tags.c                | 26 +++++++++++++++++++
+ mm/kasan/kasan.h                  | 15 +++++++++++
+ mm/page_alloc.c                   | 43 +++++++++++++++++++++----------
+ 6 files changed, 85 insertions(+), 19 deletions(-)
 
-diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-index 06f80e3785c5..e698093bade1 100644
---- a/Documentation/memory-barriers.txt
-+++ b/Documentation/memory-barriers.txt
-@@ -1910,7 +1910,8 @@ There are some more advanced barrier functions:
+diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/kasan.rst
+index 5c93ab915049..bd97301845ef 100644
+--- a/Documentation/dev-tools/kasan.rst
++++ b/Documentation/dev-tools/kasan.rst
+@@ -140,6 +140,10 @@ disabling KASAN altogether or controlling its features:
+ - ``kasan.vmalloc=off`` or ``=on`` disables or enables tagging of vmalloc
+   allocations (default: ``on``).
  
-      These are for use with consistent memory to guarantee the ordering
-      of writes or reads of shared memory accessible to both the CPU and a
--     DMA capable device.
-+     DMA capable device. See Documentation/core-api/dma-api.rst file for more
-+     information about consistent memory.
- 
-      For example, consider a device driver that shares memory with a device
-      and uses a descriptor status value to indicate if the descriptor belongs
-@@ -1931,22 +1932,21 @@ There are some more advanced barrier functions:
- 		/* assign ownership */
- 		desc->status = DEVICE_OWN;
- 
--		/* notify device of new descriptors */
-+		/* Make descriptor status visible to the device followed by
-+		 * notify device of new descriptor
-+		 */
- 		writel(DESC_NOTIFY, doorbell);
- 	}
- 
--     The dma_rmb() allows us guarantee the device has released ownership
-+     The dma_rmb() allows us to guarantee that the device has released ownership
-      before we read the data from the descriptor, and the dma_wmb() allows
-      us to guarantee the data is written to the descriptor before the device
-      can see it now has ownership.  The dma_mb() implies both a dma_rmb() and
--     a dma_wmb().  Note that, when using writel(), a prior wmb() is not needed
--     to guarantee that the cache coherent memory writes have completed before
--     writing to the MMIO region.  The cheaper writel_relaxed() does not provide
--     this guarantee and must not be used here.
--
--     See the subsection "Kernel I/O barrier effects" for more information on
--     relaxed I/O accessors and the Documentation/core-api/dma-api.rst file for
--     more information on consistent memory.
-+     a dma_wmb().
++- ``kasan.page_alloc.sample=<sampling frequency>`` makes KASAN tag only
++  every Nth page_alloc allocation, where N is the value of the parameter
++  (default: ``1``).
 +
-+     Note that the dma_*() barriers do not provide any ordering guarantees for
-+     accesses to MMIO regions.  See the later "KERNEL I/O BARRIER EFFECTS"
-+     subsection for more information about I/O accessors and MMIO ordering.
+ Error reports
+ ~~~~~~~~~~~~~
  
-  (*) pmem_wmb();
+diff --git a/include/linux/kasan.h b/include/linux/kasan.h
+index d811b3d7d2a1..d45d45dfd007 100644
+--- a/include/linux/kasan.h
++++ b/include/linux/kasan.h
+@@ -120,12 +120,13 @@ static __always_inline void kasan_poison_pages(struct page *page,
+ 		__kasan_poison_pages(page, order, init);
+ }
  
+-void __kasan_unpoison_pages(struct page *page, unsigned int order, bool init);
+-static __always_inline void kasan_unpoison_pages(struct page *page,
++bool __kasan_unpoison_pages(struct page *page, unsigned int order, bool init);
++static __always_inline bool kasan_unpoison_pages(struct page *page,
+ 						 unsigned int order, bool init)
+ {
+ 	if (kasan_enabled())
+-		__kasan_unpoison_pages(page, order, init);
++		return __kasan_unpoison_pages(page, order, init);
++	return false;
+ }
+ 
+ void __kasan_cache_create_kmalloc(struct kmem_cache *cache);
+diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+index 833bf2cfd2a3..1f30080a7a4c 100644
+--- a/mm/kasan/common.c
++++ b/mm/kasan/common.c
+@@ -95,19 +95,24 @@ asmlinkage void kasan_unpoison_task_stack_below(const void *watermark)
+ }
+ #endif /* CONFIG_KASAN_STACK */
+ 
+-void __kasan_unpoison_pages(struct page *page, unsigned int order, bool init)
++bool __kasan_unpoison_pages(struct page *page, unsigned int order, bool init)
+ {
+ 	u8 tag;
+ 	unsigned long i;
+ 
+ 	if (unlikely(PageHighMem(page)))
+-		return;
++		return false;
++
++	if (!kasan_sample_page_alloc())
++		return false;
+ 
+ 	tag = kasan_random_tag();
+ 	kasan_unpoison(set_tag(page_address(page), tag),
+ 		       PAGE_SIZE << order, init);
+ 	for (i = 0; i < (1 << order); i++)
+ 		page_kasan_tag_set(page + i, tag);
++
++	return true;
+ }
+ 
+ void __kasan_poison_pages(struct page *page, unsigned int order, bool init)
+diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
+index b22c4f461cb0..aa3b5a080297 100644
+--- a/mm/kasan/hw_tags.c
++++ b/mm/kasan/hw_tags.c
+@@ -59,6 +59,11 @@ EXPORT_SYMBOL_GPL(kasan_mode);
+ /* Whether to enable vmalloc tagging. */
+ DEFINE_STATIC_KEY_TRUE(kasan_flag_vmalloc);
+ 
++/* Frequency of page_alloc allocation poisoning. */
++unsigned long kasan_page_alloc_sample = 1;
++
++DEFINE_PER_CPU(unsigned long, kasan_page_alloc_count);
++
+ /* kasan=off/on */
+ static int __init early_kasan_flag(char *arg)
+ {
+@@ -122,6 +127,27 @@ static inline const char *kasan_mode_info(void)
+ 		return "sync";
+ }
+ 
++/* kasan.page_alloc.sample=<sampling frequency> */
++static int __init early_kasan_flag_page_alloc_sample(char *arg)
++{
++	int rv;
++
++	if (!arg)
++		return -EINVAL;
++
++	rv = kstrtoul(arg, 0, &kasan_page_alloc_sample);
++	if (rv)
++		return rv;
++
++	if (!kasan_page_alloc_sample) {
++		kasan_page_alloc_sample = 1;
++		return -EINVAL;
++	}
++
++	return 0;
++}
++early_param("kasan.page_alloc.sample", early_kasan_flag_page_alloc_sample);
++
+ /*
+  * kasan_init_hw_tags_cpu() is called for each CPU.
+  * Not marked as __init as a CPU can be hot-plugged after boot.
+diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+index abbcc1b0eec5..ee67eb35f4a7 100644
+--- a/mm/kasan/kasan.h
++++ b/mm/kasan/kasan.h
+@@ -42,6 +42,9 @@ enum kasan_mode {
+ 
+ extern enum kasan_mode kasan_mode __ro_after_init;
+ 
++extern unsigned long kasan_page_alloc_sample;
++DECLARE_PER_CPU(unsigned long, kasan_page_alloc_count);
++
+ static inline bool kasan_vmalloc_enabled(void)
+ {
+ 	return static_branch_likely(&kasan_flag_vmalloc);
+@@ -57,6 +60,13 @@ static inline bool kasan_sync_fault_possible(void)
+ 	return kasan_mode == KASAN_MODE_SYNC || kasan_mode == KASAN_MODE_ASYMM;
+ }
+ 
++static inline bool kasan_sample_page_alloc(void)
++{
++	unsigned long *count = this_cpu_ptr(&kasan_page_alloc_count);
++
++	return (*count)++ % kasan_page_alloc_sample == 0;
++}
++
+ #else /* CONFIG_KASAN_HW_TAGS */
+ 
+ static inline bool kasan_async_fault_possible(void)
+@@ -69,6 +79,11 @@ static inline bool kasan_sync_fault_possible(void)
+ 	return true;
+ }
+ 
++static inline bool kasan_sample_page_alloc(void)
++{
++	return true;
++}
++
+ #endif /* CONFIG_KASAN_HW_TAGS */
+ 
+ #ifdef CONFIG_KASAN_GENERIC
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index b5a6c815ae28..0b36456aedfb 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -1366,6 +1366,8 @@ static int free_tail_pages_check(struct page *head_page, struct page *page)
+  *    see the comment next to it.
+  * 3. Skipping poisoning is requested via __GFP_SKIP_KASAN_POISON,
+  *    see the comment next to it.
++ * 4. The allocation is excluded from being checked due to sampling,
++ *    see the call to kasan_unpoison_pages.
+  *
+  * Poisoning pages during deferred memory init will greatly lengthen the
+  * process and cause problem in large memory systems as the deferred pages
+@@ -2475,7 +2477,8 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
+ {
+ 	bool init = !want_init_on_free() && want_init_on_alloc(gfp_flags) &&
+ 			!should_skip_init(gfp_flags);
+-	bool init_tags = init && (gfp_flags & __GFP_ZEROTAGS);
++	bool zero_tags = init && (gfp_flags & __GFP_ZEROTAGS);
++	bool reset_tags = !zero_tags;
+ 	int i;
+ 
+ 	set_page_private(page, 0);
+@@ -2498,30 +2501,42 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
+ 	 */
+ 
+ 	/*
+-	 * If memory tags should be zeroed (which happens only when memory
+-	 * should be initialized as well).
++	 * If memory tags should be zeroed
++	 * (which happens only when memory should be initialized as well).
+ 	 */
+-	if (init_tags) {
++	if (zero_tags) {
+ 		/* Initialize both memory and tags. */
+ 		for (i = 0; i != 1 << order; ++i)
+ 			tag_clear_highpage(page + i);
+ 
+-		/* Note that memory is already initialized by the loop above. */
++		/* Take note that memory was initialized by the loop above. */
+ 		init = false;
+ 	}
+ 	if (!should_skip_kasan_unpoison(gfp_flags)) {
+-		/* Unpoison shadow memory or set memory tags. */
+-		kasan_unpoison_pages(page, order, init);
+-
+-		/* Note that memory is already initialized by KASAN. */
+-		if (kasan_has_integrated_init())
+-			init = false;
+-	} else {
+-		/* Ensure page_address() dereferencing does not fault. */
++		/* Try unpoisoning (or setting tags) and initializing memory. */
++		if (kasan_unpoison_pages(page, order, init)) {
++			/* Take note that memory was initialized by KASAN. */
++			if (kasan_has_integrated_init())
++				init = false;
++			/* Take note that memory tags were set by KASAN. */
++			reset_tags = false;
++		} else {
++			/*
++			 * KASAN decided to exclude this allocation from being
++			 * poisoned due to sampling. Skip poisoning as well.
++			 */
++			SetPageSkipKASanPoison(page);
++		}
++	}
++	/*
++	 * If memory tags have not been set, reset the page tags to ensure
++	 * page_address() dereferencing does not fault.
++	 */
++	if (reset_tags) {
+ 		for (i = 0; i != 1 << order; ++i)
+ 			page_kasan_tag_reset(page + i);
+ 	}
+-	/* If memory is still not initialized, do it now. */
++	/* If memory is still not initialized, initialize it now. */
+ 	if (init)
+ 		kernel_init_pages(page, 1 << order);
+ 	/* Propagate __GFP_SKIP_KASAN_POISON to page flags. */
 -- 
-2.26.2
+2.25.1
 
