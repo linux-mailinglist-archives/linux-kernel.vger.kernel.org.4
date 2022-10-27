@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314D360F163
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 09:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7B960F15D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 09:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234289AbiJ0HrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 03:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42770 "EHLO
+        id S234615AbiJ0HrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 03:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233099AbiJ0Hq7 (ORCPT
+        with ESMTP id S229616AbiJ0Hq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 27 Oct 2022 03:46:59 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78ECC168E71;
-        Thu, 27 Oct 2022 00:46:56 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id f9so552802pgj.2;
-        Thu, 27 Oct 2022 00:46:56 -0700 (PDT)
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2208C168E68;
+        Thu, 27 Oct 2022 00:46:58 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id 130so708459pfu.8;
+        Thu, 27 Oct 2022 00:46:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7eZPMxhWXLAdP7JOTovMyPi4TE0q0a0Jvomoy/MT8tw=;
-        b=Vsy6ZN8gN8QvBnQr03269m+9k5zizOLHe3hBf79CANsb7LyA1/zH+HWj36gdXoFvKc
-         SwuDRXtPoL9x9kVL66wnByKZD7iHRkU8jwhYQCNQTVuvqx9M4+JGove6EnxQNXu0oLwO
-         fmK4M9lsIlIUnid+HyTKRSs9twfGen+mJp2tlnAgELiuLZjL4aCP1pIkg3EoAg+94TPB
-         8SHEHdF9cLSjCKo0oah8Jlua5t6SuZS9Wscgnd41JoO98l/WYemMKVf1kYw+tY8Gn7cG
-         r5EZ93OaCsFVhSEZ7yd/HN8d/k71cLbR7K1kEtehFPiwh8Rks2syPRj4UYTs9PJ6lgJC
-         5o1w==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o6Hvc44I/ESMlqa43mGR1Qp3cCc/2vV67IQonLZ5Kj4=;
+        b=XMZJXb2aMniO3wi3vct3lmCMu1sgd0TZS9mPPFUv3uGyO5BbE5Vv2eA13j3ZzfIrXn
+         6jbK7dsBJ4YJSk7BJUNfc6P1Ca0Ln/HlhrzBd6OEEgtM2rxGwUE+6iaFgK9tLf5K0Icc
+         bDZLqc8OIuhiZE8jkI9pXQfqg4Au9OrWeQIYnvYhKbO23XlImrZmoxRZsyz+1Tp7CwFd
+         8FUBnvxFarrfsb8wMGegH6xyUoxYQn/fKDIpKXeG6yGgf6jaUFGo1kwtrmdPeQmTMKuy
+         TlorfTpS+AJLKmlIiaqfcWxE7x7Omp+AjPh/rPEnQIGoxjQX1y0oZCTlItdFrknEaNPs
+         NwqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7eZPMxhWXLAdP7JOTovMyPi4TE0q0a0Jvomoy/MT8tw=;
-        b=bjgqyJAkC8m9K4HMr3w748JBrD38gWVqRM8+xsUXKtU1haDro+C0fTHAd90X+1DPwA
-         h4Vtnzqpe7ydklwWkrOw3Ov3hLoyjY6dCxUSx+Dp5BMX+1PpIg5kMTIZUjOskiCwHtuA
-         Scj/s2hHtW7fl8o4wUsWzrnWoeYOLd/kXNOUy2+ZabI3SFkzhmtIXSgzmUA/BOKwRIh2
-         OEQ9y5Id4U44PLs2XGCCFiz2aEAmmhkcWQLu/IiLBOpfoWQuLvmpBGNVezF/nH4cnvEH
-         9znhYp2gyfArsKDjQsGqyCLoUWnLb4VfDY8qz6KAg6UrdZw/Jjpv8bz5MtGb01baMsCx
-         qIog==
-X-Gm-Message-State: ACrzQf09VuBZ11fH9rOKfD2bL4x6ok2I9ft/2iiZXPxV+DgXpEj/kuRT
-        Sf7QlWZcIV0TdykBrDXauVE=
-X-Google-Smtp-Source: AMsMyM5PGiH/y2F3FFolvyUUUvcKWHQq2NBuOq+yFYxmeaH75p/1LDgLZHZQ/ZvK7ktzxwNEi++vVw==
-X-Received: by 2002:a63:194b:0:b0:457:7295:8de0 with SMTP id 11-20020a63194b000000b0045772958de0mr41849875pgz.612.1666856815733;
-        Thu, 27 Oct 2022 00:46:55 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o6Hvc44I/ESMlqa43mGR1Qp3cCc/2vV67IQonLZ5Kj4=;
+        b=beQcFAlkpYRBqMlo54EzrrrFW9IK0WiXNRLOrDRzv7MXf4sBM/PhQiXh7FD5FFkB1b
+         AATaEG6r0w9y5n4gWhuA3EDlwRXpl4ZTd09fgrJDzk2Oj/kBpEx6A0pi/vXVTOAxivdm
+         MeBfe1Z8eiqiSJW/vvmAek4Xw6yiaq7TNcn19NPigoH4/MKXaB3uOcK3mxaNZjr6T9Yl
+         ThCUUZheb6911go1kkQs9G0YvA+BZbuPok7xwQbGyWdvwtw2nz2uKVM4EpUZLDgJ0ZWH
+         y9hwxA4sceLjLuKRftQwNgOU+4WTZidvEAml1ZQC4Fxg6IpK6Ajzo/e08Cv7rVEMJrMW
+         /PpQ==
+X-Gm-Message-State: ACrzQf15cy1GI6c+z+1A3NFavMEXqa2yzxRvWLmPt6g2S2JPjXQH7CWn
+        uE/DzXnqvWc1M6W03m3Zk2o=
+X-Google-Smtp-Source: AMsMyM4SAdo0yIHCUNKVJcMdSQZ6/10dChczVTXApEI92NIcT0SnRLaHek+Q1nUaGqS5ytY5EY39Vw==
+X-Received: by 2002:a05:6a00:4504:b0:56b:3ed4:1fac with SMTP id cw4-20020a056a00450400b0056b3ed41facmr29774692pfb.73.1666856817535;
+        Thu, 27 Oct 2022 00:46:57 -0700 (PDT)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:99d6:ae15:f9aa:1819])
-        by smtp.gmail.com with ESMTPSA id i4-20020a056a00004400b0056ba02feda1sm611386pfk.94.2022.10.27.00.46.54
+        by smtp.gmail.com with ESMTPSA id i4-20020a056a00004400b0056ba02feda1sm611386pfk.94.2022.10.27.00.46.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 00:46:55 -0700 (PDT)
+        Thu, 27 Oct 2022 00:46:56 -0700 (PDT)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -60,10 +61,12 @@ Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/6] arm64: dts: qcom: msm8996: fix sound card reset line polarity
-Date:   Thu, 27 Oct 2022 00:46:47 -0700
-Message-Id: <20221027074652.1044235-1-dmitry.torokhov@gmail.com>
+Subject: [PATCH 2/6] ASoC: dt-bindings: wcd9335: fix reset line polarity in example
+Date:   Thu, 27 Oct 2022 00:46:48 -0700
+Message-Id: <20221027074652.1044235-2-dmitry.torokhov@gmail.com>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
+In-Reply-To: <20221027074652.1044235-1-dmitry.torokhov@gmail.com>
+References: <20221027074652.1044235-1-dmitry.torokhov@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,28 +81,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 When resetting the block, the reset line is being driven low and then
 high, which means that the line in DTS should be annotated as "active
-low". It will become important when wcd9335 driver will be converted
-to gpiod API that respects declared line polarities.
+low".
 
-Fixes: f3eb39a55a1f ("arm64: dts: db820c: Add sound card support")
+Fixes: 1877c9fda1b7 ("ASoC: dt-bindings: add dt bindings for wcd9335 audio codec")
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 2 +-
+ Documentation/devicetree/bindings/sound/qcom,wcd9335.txt | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index 5ff8de3e3de7..d5271718d03c 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -3354,7 +3354,7 @@ wcd9335: codec@1,0 {
- 					interrupt-names = "intr1", "intr2";
- 					interrupt-controller;
- 					#interrupt-cells = <1>;
--					reset-gpios = <&tlmm 64 GPIO_ACTIVE_HIGH>;
-+					reset-gpios = <&tlmm 64 GPIO_ACTIVE_LOW>;
- 
- 					slim-ifc-dev = <&tasha_ifd>;
- 
+diff --git a/Documentation/devicetree/bindings/sound/qcom,wcd9335.txt b/Documentation/devicetree/bindings/sound/qcom,wcd9335.txt
+index 5d6ea66a863f..1f75feec3dec 100644
+--- a/Documentation/devicetree/bindings/sound/qcom,wcd9335.txt
++++ b/Documentation/devicetree/bindings/sound/qcom,wcd9335.txt
+@@ -109,7 +109,7 @@ audio-codec@1{
+ 	reg  = <1 0>;
+ 	interrupts = <&msmgpio 54 IRQ_TYPE_LEVEL_HIGH>;
+ 	interrupt-names = "intr2"
+-	reset-gpios = <&msmgpio 64 0>;
++	reset-gpios = <&msmgpio 64 GPIO_ACTIVE_LOW>;
+ 	slim-ifc-dev  = <&wc9335_ifd>;
+ 	clock-names = "mclk", "native";
+ 	clocks = <&rpmcc RPM_SMD_DIV_CLK1>,
 -- 
 2.38.0.135.g90850a2211-goog
 
