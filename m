@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68D760EF6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 07:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30F460EF6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 07:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiJ0FPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 01:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
+        id S233914AbiJ0FRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 01:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234035AbiJ0FPk (ORCPT
+        with ESMTP id S233352AbiJ0FRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 01:15:40 -0400
+        Thu, 27 Oct 2022 01:17:16 -0400
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01083BB047
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 22:15:38 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-352e29ff8c2so2838917b3.21
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 22:15:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE70159D51
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 22:17:15 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-369d18a90c3so3700457b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 22:17:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
         bh=kZrV/1Wpi1+HqcfGR+b498M10ZLeStFwJCyAnig/6KY=;
-        b=Tx2lkoNOzNqsVk/vJbR0GpGaA48pFVNkUh4t+YEjnIbPng3xLxJy1j2YQw0Gcaq4Fz
-         ZDGKKNYiSeFqCbO7iBko8QLzcMXyD77QSZXgFLkp7jvcFQRxckF2lv9K5x0Vh8aqRqSy
-         Px49dQPvNnRUV3aFAcSu373Okxz4HwKER4kIoXokWDEhzfi3NuY74kW8XL/oeP9X0Q48
-         DM00Q5oXLv+rjvyffH9rzBnUUvwW7pFD5siBSIU7dZTjX1WrFzWwtn1gN58rTUaCIZlH
-         nykZKPku+bxK3e/Ymo4D0M3y/Z51VhjiY0RP2XME1ta6xvSjKxYRxb6CO4ahZnQfW7qH
-         Borw==
+        b=JUBIOI3l2EGreHiUCM4juD1059ffAruYfyWohhCAJhRFYN3hmE4smD96x0cX5bb8Wi
+         /e04FmgEtbfzoyIc7Do0gLQpFdutsRVvpKY+qsQDkJzd4at42pf8SB21HNBpT77DrBTW
+         EnjHuNjuLaNNNs+ved2bSLGP4jhfL5GL7FlTHRfXfafJh6F83EKHIZDyNfLTRhpvvZ11
+         dPCmU7+3jEkdUR031feyIlWfKxtFEexnVmyCHKAWZ5adHa+c07+LezZF7eS1bZWIG9Ta
+         kynL+Ra1pe3eh+omqJorLgdShLccEM4UiS1L0MKZBadGj/VvdKuJIfCeG/iXFLmQgBfF
+         jY6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
         bh=kZrV/1Wpi1+HqcfGR+b498M10ZLeStFwJCyAnig/6KY=;
-        b=sw9JukPow/YYlOIu/stsJQFMFoVzB3QsR2KUAMwWv/Lb32ZDh9PydsF1PDzgJXBa1s
-         nfjW9qfDvvg59wbsti0+IA0eQEZpoN6EAr1ejtJVS71mYdiorGxt+XwxTDNsr3LErtD0
-         n/efSVX/3XLPekbo/ZPEPSBafojSK9hPsHw/NSZjSTfdav85QFVkPTwQEzKvYmPptxBJ
-         iDEn/i3xBYyc0KaGyJunIM3I+6ecowaIk0PawqQpGHa/LGBJl5hOPglmyLo4Ggb57ZWx
-         pGej6spDhPT+Pu2J0Ns9n08z2lI16XyQA892DPl1Ex8ajof1J0Hrpt9lqBrH2haKIh/i
-         WriA==
-X-Gm-Message-State: ACrzQf0FFY4gnNC1H5P42X00v9y0J/gDqsP+TsAMj0Zyiy45oY65KEL0
-        xC0cDw1zj29stnh9NPdNvH5fVlSlwGzpRxdz3a8=
-X-Google-Smtp-Source: AMsMyM5Grn1I55wSTTMsiFvuPjOX1kB6QyFyWKcx5iVaHM4kFiMN/A8apf9ZlannAYtoWQ06OcCEzyTpp3mKNSxNuW0=
+        b=JuMIkjyhksOHOt6Jq0jKuQwrK/lq2fSCU+k92iKYAtOttA86uc25eKZmMxuJbGeuVw
+         qRc0axB8KQRIVHR6F1+Ix5TWzr3aP3W/6hUEs96THOxwuOZbmqtLLvFIKMBYt3N2Pqly
+         Y7MuJxY2rrw+BNFePevvYrdltEixzqrMVHfIwKDsqtAYT+IsXCZKLbRrtEl3FTud7Bjt
+         HWIn8qnFW1nCockWhXkEzuJCZ6RRBH5gXpfXD2FomYBRpOj5996TI2bBvyk7i+pOYStz
+         xa7TKP1igIcBltGLH+Hz/8GIOt3dhsU2YZ6Ptmp87giBwtbrX7RHqqKef4fgVkNiOS/z
+         HxHQ==
+X-Gm-Message-State: ACrzQf23p/qZ4P5CJzVtF0Aqzf/gun4+DqlVCtZnSoFkS/24Uq34FEQc
+        jAzoPDJUTzj/1m94cEfAXwZ+2D4o0tBxIxkwq8E=
+X-Google-Smtp-Source: AMsMyM5cF0zw3ybvkEcOG3fmwEqPbYgrvZIU3jKLTIPCGz7EQqCIVsx6CoWTgFHLcNI/IyhxEjerI/Nvxvxtowsx/yM=
 X-Received: from huangrandall-gl0.tao.corp.google.com ([2401:fa00:fd:203:334d:6a5:213c:f5a5])
- (user=huangrandall job=sendgmr) by 2002:a81:be17:0:b0:36f:ced5:b938 with SMTP
- id i23-20020a81be17000000b0036fced5b938mr0ywn.22.1666847737521; Wed, 26 Oct
- 2022 22:15:37 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 13:15:32 +0800
+ (user=huangrandall job=sendgmr) by 2002:a25:d24a:0:b0:6ca:4a7a:75cd with SMTP
+ id j71-20020a25d24a000000b006ca4a7a75cdmr32461812ybg.89.1666847834389; Wed,
+ 26 Oct 2022 22:17:14 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 13:17:09 +0800
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Message-ID: <20221027051532.267913-1-huangrandall@google.com>
-Subject: [PATCH] Introduce sg_read_buffer
+Message-ID: <20221027051709.268869-1-huangrandall@google.com>
+Subject: [f2fs-dev][PATCH] f2fs-tools: introduce sg_read_buffer
 From:   Randall Huang <huangrandall@google.com>
 To:     jaegeuk@kernel.org, yuchao0@huawei.com,
         linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
