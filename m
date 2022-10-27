@@ -2,88 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D5060F83F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 14:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D704560F843
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234865AbiJ0M6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 08:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
+        id S235459AbiJ0NAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 09:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233473AbiJ0M6l (ORCPT
+        with ESMTP id S235156AbiJ0NAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 08:58:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 39F9F173FC4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 05:58:40 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4699D23A;
-        Thu, 27 Oct 2022 05:58:46 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C5EBD3F7B4;
-        Thu, 27 Oct 2022 05:58:38 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 13:58:36 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] firmware/psci: demote suspend-mode warning to info
- level
-Message-ID: <20221027125836.jlqis3qzyh232smy@bogus>
-References: <20221026135445.8004-1-johan+linaro@kernel.org>
- <Y1p2f6OnN2wjCuop@FVFF77S0Q05N>
+        Thu, 27 Oct 2022 09:00:30 -0400
+X-Greylist: delayed 5245 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Oct 2022 06:00:25 PDT
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A0F44548;
+        Thu, 27 Oct 2022 06:00:24 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 405311B40;
+        Thu, 27 Oct 2022 15:00:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1666875623;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bbs1eXEVQVuOzAybnzUTCaYFUXD74DOpgHPgNk+a7uk=;
+        b=dLdUUfxnerVh0Yn+UpV43/yTSi7BVHeQBt09FYcH/DLPOV6zG9azJbNiUHIRvSRO31ss8T
+        uR7mECbEa1whFtX3rF5/1Wok90RRZFpVUBU/In5BkZd2xIo2z0EmaaNDfE7SmiyWvvFcqJ
+        5Eu+FCWzaWuDZpYs7yJU7ze6YB27wItJWOCWZUz/bpanJgoyy/6YSUphHyNO6098zdmiIH
+        MlA2vxxwdYPIakqbC+raJ1MtmG836sYi2vhIfyDYj0Bbc3ZX3HirDwHmLPuhJwjKonSynp
+        15tdvkRWsVue/6pu3+F2LhIbjQ/tCZjBCQUnoUTWjYB6pi1ZvDvmGimVaTMIvA==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1p2f6OnN2wjCuop@FVFF77S0Q05N>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Thu, 27 Oct 2022 15:00:23 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>, Leo Li <leoyang.li@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Heiko Thiery <heiko.thiery@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH] Revert "arm64: dts: ls1028a: sl28: use ocelot-8021q
+ tagging by default"
+In-Reply-To: <20221027124009.mxfcyuayfv2snqf5@skbuf>
+References: <20221027113248.420216-1-michael@walle.cc>
+ <20221027120519.7f3xun66l4lamcq6@skbuf>
+ <20221027122727.fhs35eqtzmeen6x4@skbuf>
+ <20221027124009.mxfcyuayfv2snqf5@skbuf>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <be6395ef27d47b16c3ea9a38e31b4c88@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 01:15:59PM +0100, Mark Rutland wrote:
-> On Wed, Oct 26, 2022 at 03:54:45PM +0200, Johan Hovold wrote:
-> > On some Qualcomm platforms, like SC8280XP, the attempt to set PC mode
-> > during boot fails with PSCI_RET_DENIED and since commit 998fcd001feb
-> > ("firmware/psci: Print a warning if PSCI doesn't accept PC mode") this
-> > is now logged at warning level:
-> > 
-> > 	psci: failed to set PC mode: -3
-> > 
-> > As there is nothing users can do about the firmware behaving this way,
-> > demote the warning to info level and clearly mark it as a firmware bug:
-> > 
-> > 	psci: [Firmware Bug]: failed to set PC mode: -3
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> 
-> On the assumption that we don't have any latent issues in this case, this looks
-> ok to me, so:
-> 
->   Acked-by: Mark Rutland <mark.rutland@arm.com>
-> 
-> Sudeep, does this reasonable to you?
-> 
-> Are there any latent issues that mean we should keep this as a pr_warn()?
+Am 2022-10-27 14:40, schrieb Vladimir Oltean:
 
-I am fine removing it as warning but making it debug may mask the issue
-completely on the platforms that are using Linux itself for validation of
-their PSCI firmware implementation. This sounds like a good compromise
-instead of jumping from warning directly to debug. I just want to give a
-chance for platforms noticing this and working on getting their firmware
-fixed.
+> Sorry for sending so many emails. I think the problem we should fix
+> first and foremost is that, if there's a user protocol specified in the
+> device tree but the kernel fails to load it, it should simply stick 
+> with
+> the default tagging protocol, instead of failing to probe. Everything
+> else can be dealt with as a future refinement.
 
-So for this version:
+Sounds good to me. Should I come up with a patch or will you do it?
 
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+-michael
 
---
-Regards,
-Sudeep
