@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E2060F9F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 16:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E74FC60F9F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 16:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235518AbiJ0OBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 10:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
+        id S235615AbiJ0OCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 10:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235052AbiJ0OBj (ORCPT
+        with ESMTP id S235052AbiJ0OCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 10:01:39 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1780C17045A
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 07:01:34 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id l28so1152599qtv.4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 07:01:34 -0700 (PDT)
+        Thu, 27 Oct 2022 10:02:05 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98BC1867AE
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 07:02:04 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id r19so1143134qtx.6
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 07:02:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=9BIM9AP/v/YdcTWJm3DuGMdy8t+tc52c5MKOBGgfU4M=;
-        b=R3vQ58xpuvPRsK/v1rJtbV1VrnwALFfPqAvm4KnkYe5QVUjkIG55wUQC6WvBsmbvQV
-         MukottTOxv3hByPXVcPVFcbAm8K27k37BU7P7L8wxo0LgyCBPpJ0XbdnQGd1jf3OM8qT
-         ewTEzBB1cAVdL0YYaPT0B97Y67X7++zULD3iB+AgVuJp0AuXCbcV+1Bdly1ogBWbndUF
-         58VqzLGojrPt5DJeCemEvU46KqjlbPcPncPWQSBcU3pfKu9j3uneSTpjgZgI1SB0zw6Z
-         v/N7ZN9w6Le7+Ii+X0o9z/LQjimx3mW6DGOd/GteSyk5LIb4y1PXaqRNoz08/Kw+n42J
-         rZLA==
+        bh=CSI134q3G18vUOM2R14o4I7JTrpKljdKg2N+dHw2UKg=;
+        b=h/TyVcNyD90NOTJae72UiS5ijQQiCeQ62WFCUxoY/ro/nYIE/HxARb4Cusl7AZk+8r
+         BUHhuOalv0zSaGXebJBCnr7LXp3iTruNKOFvhMQeTMpM51Sm3675hiVyW0X82RojRLYl
+         jEhbg6gsAn1AsQrVwiWzgvpxyI0LTe9AHQKGGl4DsMBQfsgJzM91YrvMyPsOFBE2k1bm
+         QLy5RdIkl2ZbPWieY6cj3gHzeBuvD1ManViJF6n56TMsFVxHPN+1yKa0C7hf8xgdgzvs
+         V8TtQLA8WXvE7tAd+NV0pKIepzgpD+LTcTe1uKnt1sa2pom+6af3PQQpkNUd+gWSYevD
+         Eyww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9BIM9AP/v/YdcTWJm3DuGMdy8t+tc52c5MKOBGgfU4M=;
-        b=ZjfuF7AR+4Yq+WnCKHKYEC1EuGKQ4/XR8G/pyO6CD0S0/AdK1FN+VU/oVBr8srZjVB
-         p7Aw6ddhovW3sfx1FCylObbgMJNe4xENGlkSoEq2HB7cXtFu0A4FDkL87rLoFHSTpbFJ
-         YTKnQnWrc1aHeVHqdHTPPUEbjIqsOZo19tnKI3FSldOM/tPENa4KxeYlNvoRBAzpr2MI
-         mbNRP0jLqjWF1xbjFMOCS1MzqGbuk8cxaCUyi/K8nlHyfraLaWBFi956qLDaiZ0w/MFN
-         L2Vg25dCed41r814pSVFsuUtlu+3gAcaGIXQ338Z/+Lj7pmZpJUUVAFG6/ZTmi9PL1/K
-         ZCCQ==
-X-Gm-Message-State: ACrzQf1gpa9stX8LzYWHZN4tbYM3ecbZTZSCDwGc4ql89Xvz0Rp9tDYv
-        qvNr7hO7xTv8Mx8Oaps8FVaCFw==
-X-Google-Smtp-Source: AMsMyM7xZFWRL6Ie5t5hA8Zm48nyfRGc08IHmbxDYgQBF5smoCBBh1JWYehyB1TePUCLr3nTXSS+1A==
-X-Received: by 2002:a05:622a:250:b0:3a4:f664:16be with SMTP id c16-20020a05622a025000b003a4f66416bemr4144613qtx.86.1666879292179;
-        Thu, 27 Oct 2022 07:01:32 -0700 (PDT)
+        bh=CSI134q3G18vUOM2R14o4I7JTrpKljdKg2N+dHw2UKg=;
+        b=lf0MFQzlNFs+Y1MZB4IOklVt2z03TcRIWK5YeSjCvzsVuMEpSJ8A3ungvrK9R+gpSh
+         Kz/oOQ1XqIFQT1tYZ7zLl0IVNaSufoD0PpEQhjr4vzJ9yX5/m0zU3cVp4EwmEN8AupHn
+         D32v8/r1jXWpu/3ZCEwfrR1vPF6YS07eJYznOdCE2rHDyheYIVR1PMDiiV5C401md+jM
+         Z/lnr5kXjxeC/rPAS98K3Ea4x91VaUI6i+xDeVOn6Fe1h20sb+AA2FgVBJy3f6GcmPZd
+         RqmoJbSDuspV/I2jXoMBkTZrbhYNguOBQ+8EdqlfKMJkef+8f9YFX4Ox4RPYwyb9XGMW
+         tyJQ==
+X-Gm-Message-State: ACrzQf1KGSzDAhhxeBKP3GeWa+8HlkEyF898WwW4UVxsnwUTFTHlR2r0
+        luxYmv8b74wUT3AiCxQyV8v5zuC9kLbtfw==
+X-Google-Smtp-Source: AMsMyM5k6qFVt09+gePFQzp2veaHXo7bZ48hnaS7zc2NraR/t00V3L5VKDp6l+eJyEA7D69n1XkizQ==
+X-Received: by 2002:a05:622a:1312:b0:39c:fbd3:6dbf with SMTP id v18-20020a05622a131200b0039cfbd36dbfmr37799641qtk.335.1666879313363;
+        Thu, 27 Oct 2022 07:01:53 -0700 (PDT)
 Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id q11-20020a05620a0d8b00b006ee9d734479sm1029140qkl.33.2022.10.27.07.01.30
+        by smtp.gmail.com with ESMTPSA id c5-20020ac80545000000b0039a610a04b1sm913975qth.37.2022.10.27.07.01.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 07:01:31 -0700 (PDT)
-Message-ID: <e5240681-6382-b354-ae7e-5fef016f2716@linaro.org>
-Date:   Thu, 27 Oct 2022 10:01:29 -0400
+        Thu, 27 Oct 2022 07:01:52 -0700 (PDT)
+Message-ID: <088bd8a1-fcc7-820a-a100-9d4c62837a17@linaro.org>
+Date:   Thu, 27 Oct 2022 10:01:51 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
-Subject: Re: [PATCH 06/11] arm64: dts: qcom: sc8280xp-pmics: Add support for
- TM5 block in PMK8280
+Subject: Re: [PATCH 07/11] arm64: dts: qcom: sc8280xp-x13s: Enable PMK8280
+ RESIN input
 Content-Language: en-US
 To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         andersson@kernel.org
@@ -65,9 +65,9 @@ Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
         quic_jprakash@quicinc.com, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20221027063006.9056-1-manivannan.sadhasivam@linaro.org>
- <20221027063006.9056-7-manivannan.sadhasivam@linaro.org>
+ <20221027063006.9056-8-manivannan.sadhasivam@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221027063006.9056-7-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20221027063006.9056-8-manivannan.sadhasivam@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,10 +81,13 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 27/10/2022 02:30, Manivannan Sadhasivam wrote:
-> Thermal Monitoring block ADC5 (TM5) in PMK8280 can be used to monitor the
-> temperature from slave PMICs like PM8280.
+> Enable resetting the PMK8280 through RESIN block in SC8280XP X13s.
 > 
-
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
