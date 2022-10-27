@@ -2,171 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DFBA60F42A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA5D60F430
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235113AbiJ0J6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 05:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
+        id S234582AbiJ0J6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 05:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235020AbiJ0J6K (ORCPT
+        with ESMTP id S234918AbiJ0J6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 05:58:10 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C6592F62;
-        Thu, 27 Oct 2022 02:57:46 -0700 (PDT)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29R9Jlqg028129;
-        Thu, 27 Oct 2022 05:57:20 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kfaghm964-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Oct 2022 05:57:20 -0400
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 29R9vJ06030185
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 27 Oct 2022 05:57:19 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Thu, 27 Oct
- 2022 05:57:18 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Thu, 27 Oct 2022 05:57:18 -0400
-Received: from tachici-Precision-5530.ad.analog.com ([10.48.65.157])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 29R9uxW6027251;
-        Thu, 27 Oct 2022 05:57:14 -0400
-From:   Alexandru Tachici <alexandru.tachici@analog.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <andrew@lunn.ch>, <linux@armlinux.org.uk>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <lennart@lfdomain.com>
-Subject: [net v4 1/1] net: ethernet: adi: adin1110: Fix notifiers
-Date:   Thu, 27 Oct 2022 12:56:55 +0300
-Message-ID: <20221027095655.89890-2-alexandru.tachici@analog.com>
+        Thu, 27 Oct 2022 05:58:13 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 630EE9A9F6;
+        Thu, 27 Oct 2022 02:57:50 -0700 (PDT)
+Received: from anrayabh-desk.corp.microsoft.com (unknown [167.220.238.193])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 3D1DF210CC07;
+        Thu, 27 Oct 2022 02:57:45 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3D1DF210CC07
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1666864670;
+        bh=Bvmo3uopcCHqTy41GnJDIxmpJghyOohBNndaPK/207U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GuK58xEfqlzPOT12zgrPQ0v9aqqYhgJimibJuxL8K7MXXVFvxrbgyuNVm03gEN5LZ
+         ShREypEUJbZUSHdP2rRGgvnURgHbHnxj6Iyv0QnQTt5hZ4Qmb37tvuam4kiK6ykkyj
+         1d2DEvY182zQrWbe+qS0z3rw8e/8kqoVZSryg3j4=
+From:   Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, daniel.lezcano@linaro.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Cc:     stanislav.kinsburskiy@gmail.com,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        kumarpraveen@linux.microsoft.com, mail@anirudhrb.com
+Subject: [PATCH v2 0/2] Fix MSR access errors during kexec in root partition
+Date:   Thu, 27 Oct 2022 15:27:27 +0530
+Message-Id: <20221027095729.1676394-1-anrayabh@linux.microsoft.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221027095655.89890-1-alexandru.tachici@analog.com>
-References: <20221027095655.89890-1-alexandru.tachici@analog.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: fdaYpN4JnSajLTzQg9Z8qVzw8XlSW_46
-X-Proofpoint-GUID: fdaYpN4JnSajLTzQg9Z8qVzw8XlSW_46
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-27_04,2022-10-26_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 malwarescore=0 mlxlogscore=999 phishscore=0
- clxscore=1015 bulkscore=0 lowpriorityscore=0 mlxscore=0 adultscore=0
- impostorscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2210270054
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ADIN1110 was registering netdev_notifiers on each device probe.
-This leads to warnings/probe failures because of double registration
-of the same notifier when to adin1110/2111 devices are connected to
-the same system.
+Fixes a couple of MSR access errors seen during kexec in root partition
+and opportunistically introduces a data structure for the reference TSC
+MSR in order to simplify the code that updates that MSR.
 
-Move the registration of netdev_notifiers in module init call,
-in this way multiple driver instances can use the same notifiers.
+New in v2:
+1. Reverse the patch order as suggested by Michael. First introduce the
+   new structure for reference tsc MSR and then use it in the hv_cleanup
+   fix.
+2. Use hv_{get,set}_register functions in hv_cleanup().
 
-Fixes: bc93e19d088b ("net: ethernet: adi: Add ADIN1110 support")
-Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
----
- drivers/net/ethernet/adi/adin1110.c | 38 ++++++++++++++++++++++-------
- 1 file changed, 29 insertions(+), 9 deletions(-)
+Anirudh Rayabharam (2):
+  clocksource/drivers/hyperv: add data structure for reference TSC MSR
+  x86/hyperv: fix invalid writes to MSRs during root partition kexec
 
-diff --git a/drivers/net/ethernet/adi/adin1110.c b/drivers/net/ethernet/adi/adin1110.c
-index 1c0015b55993..0805f249fff2 100644
---- a/drivers/net/ethernet/adi/adin1110.c
-+++ b/drivers/net/ethernet/adi/adin1110.c
-@@ -1528,16 +1528,15 @@ static struct notifier_block adin1110_switchdev_notifier = {
- 	.notifier_call = adin1110_switchdev_event,
- };
- 
--static void adin1110_unregister_notifiers(void *data)
-+static void adin1110_unregister_notifiers(void)
- {
- 	unregister_switchdev_blocking_notifier(&adin1110_switchdev_blocking_notifier);
- 	unregister_switchdev_notifier(&adin1110_switchdev_notifier);
- 	unregister_netdevice_notifier(&adin1110_netdevice_nb);
- }
- 
--static int adin1110_setup_notifiers(struct adin1110_priv *priv)
-+static int adin1110_setup_notifiers(void)
- {
--	struct device *dev = &priv->spidev->dev;
- 	int ret;
- 
- 	ret = register_netdevice_notifier(&adin1110_netdevice_nb);
-@@ -1552,13 +1551,14 @@ static int adin1110_setup_notifiers(struct adin1110_priv *priv)
- 	if (ret < 0)
- 		goto err_sdev;
- 
--	return devm_add_action_or_reset(dev, adin1110_unregister_notifiers, NULL);
-+	return 0;
- 
- err_sdev:
- 	unregister_switchdev_notifier(&adin1110_switchdev_notifier);
- 
- err_netdev:
- 	unregister_netdevice_notifier(&adin1110_netdevice_nb);
-+
- 	return ret;
- }
- 
-@@ -1629,10 +1629,6 @@ static int adin1110_probe_netdevs(struct adin1110_priv *priv)
- 	if (ret < 0)
- 		return ret;
- 
--	ret = adin1110_setup_notifiers(priv);
--	if (ret < 0)
--		return ret;
--
- 	for (i = 0; i < priv->cfg->ports_nr; i++) {
- 		ret = devm_register_netdev(dev, priv->ports[i]->netdev);
- 		if (ret < 0) {
-@@ -1709,7 +1705,31 @@ static struct spi_driver adin1110_driver = {
- 	.probe = adin1110_probe,
- 	.id_table = adin1110_spi_id,
- };
--module_spi_driver(adin1110_driver);
-+
-+static int __init adin1110_driver_init(void)
-+{
-+	int ret;
-+
-+	ret = adin1110_setup_notifiers();
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = spi_register_driver(&adin1110_driver);
-+	if (ret < 0) {
-+		adin1110_unregister_notifiers();
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void __exit adin1110_exit(void)
-+{
-+	adin1110_unregister_notifiers();
-+	spi_unregister_driver(&adin1110_driver);
-+}
-+module_init(adin1110_driver_init);
-+module_exit(adin1110_exit);
- 
- MODULE_DESCRIPTION("ADIN1110 Network driver");
- MODULE_AUTHOR("Alexandru Tachici <alexandru.tachici@analog.com>");
+ arch/x86/hyperv/hv_init.c          | 11 +++++++----
+ drivers/clocksource/hyperv_timer.c | 28 ++++++++++++++--------------
+ include/asm-generic/hyperv-tlfs.h  |  9 +++++++++
+ 3 files changed, 30 insertions(+), 18 deletions(-)
+
 -- 
 2.34.1
 
