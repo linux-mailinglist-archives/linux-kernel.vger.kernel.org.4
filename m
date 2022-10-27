@@ -2,109 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA4960FAE5
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 16:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EF1560FAFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 16:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235965AbiJ0OzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 10:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
+        id S235979AbiJ0O6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 10:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235945AbiJ0OzB (ORCPT
+        with ESMTP id S235924AbiJ0O6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 10:55:01 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C788F30544
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 07:54:59 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id m6so1826719pfb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 07:54:59 -0700 (PDT)
+        Thu, 27 Oct 2022 10:58:42 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3A0108DF2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 07:58:41 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id 8so1096757qka.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 07:58:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kPYnXX3okow1kRCKteMrz1kZILFzqyga2dfyqPNexuw=;
-        b=cEfkDhbsG3tWzlruT2T+yhVrvDC0e4ykbkS6TUSvMJMueQ6BVIDiPTsqqcYZtsTc+8
-         LrYzP001ez9kpMJ/QQd4Gu+VMdkTELU1EMtFejqQc/LP9szyilchAjELqL/mwXd8ndzw
-         fywoH45H9zctKGaXnyld1myb4JXGwSCqPQYXLXtMcFJYgtPD5EdFILCHZgFvPMCs4Uow
-         +CVTppidf6VdXwZikxsTU+BJ+3ezaYvp6t/gSF/OTniNM53VRtW/XuAZ1+wZLTDliLEV
-         oqhC5aYEj4e5JZFE6h8T/Rq2k9QV3HQwEqmq84tVGXIDG3D9shf5SWJICcQjADFliAMU
-         lhKg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aBTBb9mYsO/bWIRGTLUEcV64642M/1C9Rv4JP7J0eJI=;
+        b=J2G+exWTK2vBkW5KSNWs9dOO61qmN1M+oA4zlOxHvkZOYdeDYjc8eMy15TODjlMErm
+         sv52x42bTqk4oUCokXyzolTWJP3nbWScYJrbhp/QnCOJJnYl2bdeIfFPo801YA/HBM5n
+         ZtD3VZbui/Ef0Ct5cOc5cRlbn9GftRbDpRp7eMLY0BRlY4HI2xZTy8H5k3OeoUkVltu3
+         /kGoRCIz8M+RFKYpsQOYipf7amBGUi40siOpDuEiPbokYsf9OzgQAjOvZEfNpPEd0XtQ
+         CyfaiF5HI1n4j3LMQuNu+fYnBSoi4rm+Pt9q1dHxCH6U8rWV61CQQQSirJy30C5Qbvve
+         7VFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kPYnXX3okow1kRCKteMrz1kZILFzqyga2dfyqPNexuw=;
-        b=64AOm3nGqPHoZvdiQ9bNFpGG5BYKoFYbjhwfjQL3SnCRmgVwjQ6sVRpBb/71PUqW53
-         SCfM03KWoVdaGPpc31AEBbZeWvbQGifgcBZKgVnFXA1AtLs7igWf6GfuQBitSt58znLW
-         2+oGBcEGaxds/mX7u1MouhSyiamGdhPh4xJE6f1PVuYWyzL0xxaXDJspEpgOCznSXvof
-         slk5zXAvH9ETuAQEnbIsDYmD+JXyC37LwsU54eYrD7ADrRxL7slCqXw/+zFuz78e4QIC
-         z/P85frhB/uk7cdgZJQLuNFiO3kGAPye3rG32T7BXBJ21VI960j4Ny2E2SEiVaWxrv1z
-         pcpQ==
-X-Gm-Message-State: ACrzQf37xnkteEHbZD2ciDQOsQi3UgpqWocxd5MUSIrDb4/5OzUFTN09
-        ilYdA7KGIPiCHWS6i0WpF9Fmcw==
-X-Google-Smtp-Source: AMsMyM77yVvmwPODxDgAB3imONWVBFbWeOxtNYJsvGc7QT0gYGTWB6Y7DO0uZ0fKfEYkiUdl/H/obw==
-X-Received: by 2002:a63:c112:0:b0:443:94a1:f09 with SMTP id w18-20020a63c112000000b0044394a10f09mr42823906pgf.396.1666882499230;
-        Thu, 27 Oct 2022 07:54:59 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 5-20020a170902e9c500b0018691ce1696sm1310297plk.131.2022.10.27.07.54.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 07:54:58 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 14:54:55 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Wang, Wei W" <wei.w.wang@intel.com>
-Cc:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "vipinsh@google.com" <vipinsh@google.com>,
-        "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 03/18] KVM: selftests/kvm_util: helper functions for
- vcpus and threads
-Message-ID: <Y1qbv/HdkuILzNSa@google.com>
-References: <20221024113445.1022147-1-wei.w.wang@intel.com>
- <20221024113445.1022147-4-wei.w.wang@intel.com>
- <Y1nMQp11RKTDX7HX@google.com>
- <DS0PR11MB6373FBC16E8515174E444692DC339@DS0PR11MB6373.namprd11.prod.outlook.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aBTBb9mYsO/bWIRGTLUEcV64642M/1C9Rv4JP7J0eJI=;
+        b=ObZ7D4EwcGMZx62NwGJrTnMQDyN9gpidoSVwV7Xl4KMKJ6bg2ssXaJFidQMW3ryzgE
+         pvHgEV+QVd4Ekhu/0NVa2f3huWUNb/mlXpnI/zpmmZIxjc8Sz6o3ZgmeMklxYfr0eVb/
+         s0MwsGhJdSwFiMjcovorPetllw1cQY2UvuI1ZHtJG2dHyqxXdNz5cOoX7pjBXaPDjRVk
+         hhGxiVLjsra7QvF5HCaQCKBPVrcB3eARWisviLxqfvbeWa/bj+A0dbtHrg084rqaHbu5
+         83naeeVJEVnL7LYhuz4QYwB/Mf1WXGwOylntz66nsAe09LxcfDOFGtG7Ej8xNhsE+MCV
+         NF8g==
+X-Gm-Message-State: ACrzQf1CdmW9+t2maiDN5aOyKyBnkiqJLtN855dyf1CAhtLscPhl/PXt
+        QBuU2Wn7mLMkDrDuXYB8lZHnwQ==
+X-Google-Smtp-Source: AMsMyM5EhvBne8BTpFgbh4xmJ4O3CTeyG2GRaTNgWWbno/JTCE6LmAUbPg8zLVTar77LMFTDfHlQ9Q==
+X-Received: by 2002:a05:620a:d55:b0:6f9:fadd:4762 with SMTP id o21-20020a05620a0d5500b006f9fadd4762mr1614437qkl.335.1666882720655;
+        Thu, 27 Oct 2022 07:58:40 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id bp43-20020a05622a1bab00b00399d5d564b7sm961058qtb.56.2022.10.27.07.58.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 07:58:40 -0700 (PDT)
+Message-ID: <f45a4dcb-12e6-9a72-dbb3-7ec198ff2b1d@linaro.org>
+Date:   Thu, 27 Oct 2022 10:58:38 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DS0PR11MB6373FBC16E8515174E444692DC339@DS0PR11MB6373.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v1 3/4] ARM: dts: rockchip: add rk3128.dtsi
+Content-Language: en-US
+To:     Johan Jonker <jbx6244@gmail.com>, kever.yang@rock-chips.com,
+        heiko@sntech.de
+Cc:     sjg@chromium.org, philipp.tomsich@vrull.eu,
+        zhangqing@rock-chips.com, hjc@rock-chips.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+References: <da1252eb-85e9-bdb8-0542-207173523523@gmail.com>
+ <674b875a-0dfa-eff2-5018-eafed851707f@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <674b875a-0dfa-eff2-5018-eafed851707f@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022, Wang, Wei W wrote:
-> On Thursday, October 27, 2022 8:10 AM, Sean Christopherson wrote:
-> > > +void vm_vcpu_threads_create(struct kvm_vm *vm,
-> > > +		void *(*start_routine)(void *), uint32_t private_data_size)
-> > 
-> > I vote (very strongly) to not deal with allocating private data.  The private data
-> > isn't strictly related to threads, and the vast majority of callers don't need private
-> > data, i.e. the param is dead weight in most cases.
-> > 
-> > And unless I'm missing something, it's trivial to move to a separate helper,
-> > though honestly even that seems like overkill.
-> > 
-> > Wait, looking further, it already is a separate helper...  Forcing a bunch of
-> > callers to specify '0' just to eliminate one function call in a handful of cases is not
-> > a good tradeoff.
+On 26/10/2022 20:53, Johan Jonker wrote:
+> Add basic rk3128 support.
 > 
-> The intention was to do the allocation within one vm_for_each_vcpu()
-> iteration when possible. Just a micro-optimization, but no problem, we can keep
-> them separate if that looks better (simpler).
 
-Keep them separate, that level of optimization is not something that's ever going
-to be noticeable.
+Thank you for your patch. There is something to discuss/improve.
 
-I don't want to say that performance is an afterthought for KVM selftests, but in
-common code it's definitely way down the list of priorities because even the most
-naive implementation for things like configuring vCPUs is going to have a runtime
-measured in milliseconds.
+> +#include <dt-bindings/clock/rk3128-cru.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/pinctrl/rockchip.h>
+> +
+> +/ {
+> +	compatible = "rockchip,rk3128";
+> +	interrupt-parent = <&gic>;
+> +	#address-cells = <1>;
+> +	#size-cells = <1>;
+> +
+> +	aliases {
+> +		gpio0 = &gpio0;
+> +		gpio1 = &gpio1;
+> +		gpio2 = &gpio2;
+> +		gpio3 = &gpio3;
+> +		i2c0 = &i2c0;
+> +		i2c1 = &i2c1;
+> +		i2c2 = &i2c2;
+> +		i2c3 = &i2c3;
+> +		spi0 = &spi0;
+> +		serial0 = &uart0;
+> +		serial1 = &uart1;
+> +		serial2 = &uart2;
+
+Bus aliases are board specific and represent what is actually available
+on headers/pins etc. These do not belong to SoC DTSI.
+
+> +	};
+> +
+> +	arm-pmu {
+> +		compatible = "arm,cortex-a7-pmu";
+> +		interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
+> +		interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>;
+> +	};
+> +
+> +	cpus {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		cpu0: cpu@f00 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a7";
+> +			reg = <0xf00>;
+> +			clock-latency = <40000>;
+> +			clocks = <&cru ARMCLK>;
+> +			operating-points = <
+> +				/* KHz    uV */
+> +				 816000 1000000
+> +			>;
+
+Why not operating-points-v2?
+
+> +			#cooling-cells = <2>; /* min followed by max */
+> +		};
+> +
+> +		cpu1: cpu@f01 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a7";
+> +			reg = <0xf01>;
+> +		};
+> +
+> +		cpu2: cpu@f02 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a7";
+> +			reg = <0xf02>;
+> +		};
+> +
+> +		cpu3: cpu@f03 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a7";
+> +			reg = <0xf03>;
+> +		};
+> +	};
+> +
+> +	timer {
+> +		compatible = "arm,armv7-timer";
+> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>,
+> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
+> +		arm,cpu-registers-not-fw-configured;
+> +		clock-frequency = <24000000>;
+> +	};
+> +
+> +	xin24m: oscillator {
+> +		compatible = "fixed-clock";
+> +		clock-frequency = <24000000>;
+> +		clock-output-names = "xin24m";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	pmu: syscon@100a0000 {
+> +		compatible = "rockchip,rk3128-pmu", "syscon", "simple-mfd";
+> +		reg = <0x100a0000 0x1000>;
+> +	};
+> +
+> +	gic: interrupt-controller@10139000 {
+> +		compatible = "arm,cortex-a7-gic";
+> +		reg = <0x10139000 0x1000>,
+> +		      <0x1013a000 0x1000>,
+> +		      <0x1013c000 0x2000>,
+> +		      <0x1013e000 0x2000>;
+> +		interrupts = <GIC_PPI 9 0xf04>;
+
+f04 looks like a mask, so use standard defines for it.
+
+> +		interrupt-controller;
+> +		#interrupt-cells = <3>;
+> +		#address-cells = <0>;
+> +	};
+> +
+> +	usb_otg: usb@10180000 {
+> +		compatible = "rockchip,rk3128-usb", "rockchip,rk3066-usb", "snps,dwc2";
+> +		reg = <0x10180000 0x40000>;
+> +		interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+> +		clocks = <&cru HCLK_OTG>;
+> +		clock-names = "otg";
+> +		dr_mode = "otg";
+> +		phys = <&usb2phy_otg>;
+> +		phy-names = "usb2-phy";
+> +		status = "disabled";
+> +	};
+> +
+> +	usb_host_ehci: usb@101c0000 {
+> +		compatible = "generic-ehci";
+> +		reg = <0x101c0000 0x20000>;
+> +		interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+> +		phys = <&usb2phy_host>;
+> +		phy-names = "usb";
+> +		status = "disabled";
+> +	};
+> +
+> +	usb_host_ohci: usb@101e0000 {
+> +		compatible = "generic-ohci";
+> +		reg = <0x101e0000 0x20000>;
+> +		interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
+> +		phys = <&usb2phy_host>;
+> +		phy-names = "usb";
+> +		status = "disabled";
+> +	};
+> +
+> +	sdmmc: mmc@10214000 {
+> +		compatible = "rockchip,rk3128-dw-mshc", "rockchip,rk3288-dw-mshc";
+> +		reg = <0x10214000 0x4000>;
+> +		interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
+> +		clocks = <&cru HCLK_SDMMC>, <&cru SCLK_SDMMC>,
+> +			 <&cru SCLK_SDMMC_DRV>, <&cru SCLK_SDMMC_SAMPLE>;
+> +		clock-names = "biu", "ciu", "ciu-drive", "ciu-sample";
+> +		dmas = <&pdma 10>;
+> +		dma-names = "rx-tx";
+> +		fifo-depth = <256>;
+> +		max-frequency = <150000000>;
+> +		resets = <&cru SRST_SDMMC>;
+> +		reset-names = "reset";
+> +		status = "disabled";
+> +	};
+> +
+> +	sdio: mmc@10218000 {
+> +		compatible = "rockchip,rk3128-dw-mshc", "rockchip,rk3288-dw-mshc";
+> +		reg = <0x10218000 0x4000>;
+> +		interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
+> +		clocks = <&cru HCLK_SDIO>, <&cru SCLK_SDIO>,
+> +			 <&cru SCLK_SDIO_DRV>, <&cru SCLK_SDIO_SAMPLE>;
+> +		clock-names = "biu", "ciu", "ciu-drive", "ciu-sample";
+> +		dmas = <&pdma 11>;
+> +		dma-names = "rx-tx";
+> +		fifo-depth = <256>;
+> +		max-frequency = <150000000>;
+> +		resets = <&cru SRST_SDIO>;
+> +		reset-names = "reset";
+> +		status = "disabled";
+> +	};
+> +
+> +	emmc: mmc@1021c000 {
+> +		compatible = "rockchip,rk3128-dw-mshc", "rockchip,rk3288-dw-mshc";
+> +		reg = <0x1021c000 0x4000>;
+> +		interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
+> +		clocks = <&cru HCLK_EMMC>, <&cru SCLK_EMMC>,
+> +			 <&cru SCLK_EMMC_DRV>, <&cru SCLK_EMMC_SAMPLE>;
+> +		clock-names = "biu", "ciu", "ciu-drive", "ciu-sample";
+> +		dmas = <&pdma 12>;
+> +		dma-names = "rx-tx";
+> +		fifo-depth = <256>;
+> +		max-frequency = <150000000>;
+> +		resets = <&cru SRST_EMMC>;
+> +		reset-names = "reset";
+> +		status = "disabled";
+> +	};
+> +
+> +	nfc: nand-controller@10500000 {
+> +		compatible = "rockchip,rk3128-nfc", "rockchip,rk2928-nfc";
+> +		reg = <0x10500000 0x4000>;
+> +		interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
+> +		clocks = <&cru HCLK_NANDC>, <&cru SCLK_NANDC>;
+> +		clock-names = "ahb", "nfc";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&flash_ale &flash_bus8 &flash_cle &flash_cs0
+> +			     &flash_dqs &flash_rdn &flash_rdy &flash_wrn>;
+> +		status = "disabled";
+> +	};
+> +
+> +	cru: clock-controller@20000000 {
+> +		compatible = "rockchip,rk3128-cru";
+> +		reg = <0x20000000 0x1000>;
+> +		clocks = <&xin24m>;
+> +		clock-names = "xin24m";
+> +		rockchip,grf = <&grf>;
+> +		#clock-cells = <1>;
+> +		#reset-cells = <1>;
+> +		assigned-clocks = <&cru PLL_GPLL>;
+> +		assigned-clock-rates = <594000000>;
+> +	};
+> +
+> +	grf: syscon@20008000 {
+> +		compatible = "rockchip,rk3128-grf", "syscon", "simple-mfd";
+> +		reg = <0x20008000 0x1000>;
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +
+> +		usb2phy: usb2phy@17c {
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +			compatible = "rockchip,rk3128-usb2phy";
+> +			reg = <0x017c 0x0c>;
+> +			clocks = <&cru SCLK_OTGPHY0>;
+> +			clock-names = "phyclk";
+> +			clock-output-names = "usb480m_phy";
+> +			#clock-cells = <0>;
+> +			status = "disabled";
+> +
+
+
+Best regards,
+Krzysztof
+
