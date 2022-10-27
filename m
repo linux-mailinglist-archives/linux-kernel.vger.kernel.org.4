@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2012F60ED2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 02:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D43A960ED2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 02:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233600AbiJ0Av5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 20:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
+        id S233403AbiJ0Awm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 20:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiJ0Avz (ORCPT
+        with ESMTP id S232865AbiJ0Awj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 20:51:55 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C480DBBE2;
-        Wed, 26 Oct 2022 17:51:54 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id ud5so298745ejc.4;
-        Wed, 26 Oct 2022 17:51:54 -0700 (PDT)
+        Wed, 26 Oct 2022 20:52:39 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E19ADBE63;
+        Wed, 26 Oct 2022 17:52:38 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id t25so263734ejb.8;
+        Wed, 26 Oct 2022 17:52:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=zKQQQwNdmP0I/7sbEgciKRJH80dN4WVefIoocRKiN3s=;
-        b=UxmhUtWDYn/Ae6ytp6eFL+jck/3SwSMRCNKSTifMbbyR3oX9qwJCmtQ/PUcfWiLcp3
-         l00zgYXE+C16PItqTNArXlv2jbXvYzk2LDX8aeKZgP64K+H5t9xb+CPWLCE9qNZ4nLvu
-         yi0mfrtoI/WKUh01I1UMoxsOrW8A4tt86uRtGOim8VxCwRrcRj70bCydOewQvh0yRVH1
-         Vtdmz3BZ1mr1XDpYQ2eBW30Ut1eLE6BF8ABZukZn7fHVBpcnnQ9ILQXIYrFqH4roK9Iq
-         2qgJVdyYCFaGPc3AmlaANX+/aRGrgfaTdoLcD4eMwRXg4uFmikTok4HkphdvWDCfwm7l
-         +YWg==
+        bh=ybHFtQFlusC5omeu3YXQVOdQ/jnkll+XG3jlSuR3Z1Y=;
+        b=JRZ5QquTA8oO61xvU2RT9SeJAOYaBWyQ2l+uIIixfdmu63ujGYkC46hk5q4a+6b4SM
+         sWjQyS+RR8cE2sJOlq3cDGyLhewgzgSgCxgCa1ok5Xo2T2bqe59lPXBQdQjHcBpDbLfV
+         7kAGDXLfNCIJy+ooMHI8zIANbWDh9H51ioEx4ySqhg3eu/7xs/oxJ6JLePP44H1RpDPv
+         T2NWMQuTeHDBO5593g5jkbnY+uVT+Ih6UlY+sdT0VQE4tWcxg6LkRAo2XtEeRTt4Xicp
+         RtcHZnKDztvyoWvx33XPB+TjdY8Dt5pJyVZfkHCmwQo1gEp+KaG+3PExt3OGOP/JCJ4L
+         thUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zKQQQwNdmP0I/7sbEgciKRJH80dN4WVefIoocRKiN3s=;
-        b=u9O+gjTgrrkgD2HbyY2Fc8rrSo33+ZMS0fXL4SaKtPc+Jt2bokFjsORlp/kevKSQKw
-         28YkZRUIkDS00zL3LEe8BEVLI8Too1V+RVjylaTk/lF5sG12tjdnZPJmcbajV3KV1t11
-         eUpGPYisXxGmy0caBIVpVBZjeSWJXqJXv4QfbcpzLb2wgQ4HG6/G/QfFt8nEpM7ScAxh
-         AHf14tW1NVpZtdpbNne2LzO4FE2zxtsqKNx6ZMbk6qcUeCoWXl97i9vpQ+Sof69Itgpb
-         nZmMSQ2mHUzVXvaB0ESE2wkSuK0UUixlEj/NXQRfdJ0cfZPiVQ1ceVmRg1o3jkCYk9Kz
-         AS8A==
-X-Gm-Message-State: ACrzQf1a/fu8N0rn9t8kQj5FDV6MKDyBU0vjMHKUtyPP6RiBFyhh1UrY
-        JBiE5yJIx4C75IwEp+XMA58=
-X-Google-Smtp-Source: AMsMyM6BPmm4tam1hIVqE5W6S7kMh5eIMq81+FlGsJXakTWmualZq8N+pHVhJ18p5o7fy2DyAl3kLw==
-X-Received: by 2002:a17:906:9bca:b0:78d:bc5a:9137 with SMTP id de10-20020a1709069bca00b0078dbc5a9137mr41992336ejc.25.1666831913177;
-        Wed, 26 Oct 2022 17:51:53 -0700 (PDT)
+        bh=ybHFtQFlusC5omeu3YXQVOdQ/jnkll+XG3jlSuR3Z1Y=;
+        b=sXmbDij9ZNUveGeXyWWAO6cZIG2wmzmf06yuBYsOgin+Z5UMYCNMdWgD76Yp8AGzCu
+         6mb7rHEWGqr8JUBVlPTRx4PfiVp3sUw5qEqh57HtlKygy683Rt3ygS0L/4PtQOOFlIHA
+         5Zhop1h6vve24tiAnCHtWEcBTHzUMaCTIMICnbTtC3O0YglcfNauWkmwKKlaqwpcFN9z
+         lt0G0R5GuFyEqXGIvwJZcF16qZC4S1Er1IXyt/bD1zpoT6LPyX1d8mt/AjdQkRijSCie
+         9IQWmt/FwiHwa+nnBV1gR/tQrUxKa2SCR3rVWgb0GkmW0G6MkQ2Q3sxG/8eAp5Jv00PU
+         1gMw==
+X-Gm-Message-State: ACrzQf0x/QKv+gY2rNGZwM6mUEebYS4M2FFQLDVsPnI57rwn2lsAnYyq
+        zHmnzazvLVC0s1cwfdGmCfU=
+X-Google-Smtp-Source: AMsMyM6+8P4B6n5+dZShu0ejqohqVlGyYoGYsVAKNdJ/Y9b8hANB/L2EB3YodE1KW9Ov62LNLFPiGQ==
+X-Received: by 2002:a17:907:3d91:b0:78d:f675:5659 with SMTP id he17-20020a1709073d9100b0078df6755659mr38947525ejc.92.1666831957083;
+        Wed, 26 Oct 2022 17:52:37 -0700 (PDT)
 Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id bt20-20020a0564020a5400b004614fd33789sm60029edb.18.2022.10.26.17.51.52
+        by smtp.gmail.com with ESMTPSA id u9-20020a1709061da900b00781dbdb292asm3677685ejh.155.2022.10.26.17.52.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 17:51:52 -0700 (PDT)
-Message-ID: <16afe467-7b9e-6e99-ca27-7eefce50a066@gmail.com>
-Date:   Thu, 27 Oct 2022 02:51:51 +0200
+        Wed, 26 Oct 2022 17:52:36 -0700 (PDT)
+Message-ID: <939d9e2c-4431-5408-5884-12d328b6a4f2@gmail.com>
+Date:   Thu, 27 Oct 2022 02:52:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
 From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v1 1/4] dt-bindings: arm: rockchip: Add Rockchip RK3128
- Evaluation board
+Subject: [PATCH v1 2/4] dt-bindings: timer: rockchip: add
+ rockchip,rk3128-timer
 To:     kever.yang@rock-chips.com, heiko@sntech.de
 Cc:     sjg@chromium.org, philipp.tomsich@vrull.eu,
         zhangqing@rock-chips.com, hjc@rock-chips.com, robh+dt@kernel.org,
@@ -81,29 +81,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Rockchip RK3128 Evaluation board.
+Add rockchip,rk3128-timer compatible string.
 
 Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 ---
- Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-index 72bf2fbfe..e81d9d1ef 100644
---- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-+++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-@@ -662,6 +662,11 @@ properties:
-           - const: rockchip,rk3036-evb
-           - const: rockchip,rk3036
-
-+      - description: Rockchip RK3128 Evaluation board
-+        items:
-+          - const: rockchip,rk3128-evb
-+          - const: rockchip,rk3128
-+
-       - description: Rockchip RK3228 Evaluation board
-         items:
-           - const: rockchip,rk3228-evb
+diff --git a/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml b/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
+index dc3bc1e62..b61ed1a43 100644
+--- a/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
++++ b/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
+@@ -18,6 +18,7 @@ properties:
+           - enum:
+               - rockchip,rv1108-timer
+               - rockchip,rk3036-timer
++              - rockchip,rk3128-timer
+               - rockchip,rk3188-timer
+               - rockchip,rk3228-timer
+               - rockchip,rk3229-timer
 --
 2.20.1
 
