@@ -2,59 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30AB060F939
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E9B60F948
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236197AbiJ0Nh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 09:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
+        id S236226AbiJ0Nid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 09:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236189AbiJ0NhY (ORCPT
+        with ESMTP id S236203AbiJ0Nia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 09:37:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B6E181488
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:37:23 -0700 (PDT)
+        Thu, 27 Oct 2022 09:38:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E454B181488;
+        Thu, 27 Oct 2022 06:38:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9014162301
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 13:37:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9C06C4347C;
-        Thu, 27 Oct 2022 13:37:21 +0000 (UTC)
-Date:   Thu, 27 Oct 2022 09:37:36 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A036B82633;
+        Thu, 27 Oct 2022 13:38:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 722B2C433C1;
+        Thu, 27 Oct 2022 13:38:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666877907;
+        bh=pllUkLfz45ydi2Wi6jpPnGPo9M25t+6/Kw3UeVHzGdQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XA5Ckkqd0MKG04G1je+NRuX1YlckWLju0xK3x3oUFbwBzEWP6CCfNDpPs4an9dpok
+         zTBWBixFCPVT6QiWgG06RRjmUVE+7QhKtLZW6B7yG60cj4z+DP30OQiyW+scbCLjhc
+         /E23kdKoDTQanhEvTGk+kVSkBlzowin0Wcf+oPMRuHMB4/tpgnkvmmiqqPZ4NF0Vcq
+         p942/XBiczoyTBgTKPBfe9CjdC6F5DbIXfIVQwcdzJ4ryHBrcqdU5Jp1Lva0Po2bTn
+         L/okQRXRP0jU38kGSHQZ8g9LmY5hxfULdWp2a9lD5utiwTnV0uXe3TVXFuRzmMBt6V
+         TjROlYhclurRw==
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
-Subject: Re: [PATCH] ALSA: Use del_timer_sync() before freeing timer
-Message-ID: <20221027093736.1e8cc9b9@gandalf.local.home>
-In-Reply-To: <87pmedojfv.wl-tiwai@suse.de>
-References: <20221026231236.6834b551@gandalf.local.home>
-        <87pmedojfv.wl-tiwai@suse.de>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Richard Weinberger <richard@nod.at>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: (subset) [PATCH v1 00/11] Get rid of [devm_]gpiod_get_from_of_node() public APIs
+Date:   Thu, 27 Oct 2022 15:38:11 +0200
+Message-Id: <166687787352.847482.10005684512699510391.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
+References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Oct 2022 08:43:32 +0200
-Takashi Iwai <tiwai@suse.de> wrote:
+On Sun, 4 Sep 2022 23:30:52 -0700, Dmitry Torokhov wrote:
+> I would like to stop exporting OF-specific [devm_]gpiod_get_from_of_node()
+> so that gpiolib can be cleaned a bit. We can do that by switching drivers
+> to use generic fwnode API ([devm_]fwnode_gpiod_get()). By doing so we open
+> the door to augmenting device tree and ACPI information through secondary
+> software properties (once we teach gpiolib how to handle those).
+> 
+> I hope that relevant maintainers will take patches through their trees and
+> then we could merge the last one some time after -rc1.
+> 
+> [...]
 
-> Applied now with the fix of unused variable warning.
+Applied to pci/tegra, thanks!
 
-Thanks Takashi!
+[01/11] PCI: tegra: switch to using devm_fwnode_gpiod_get
+        https://git.kernel.org/lpieralisi/pci/c/16e3f4077965
 
--- Steve
+Thanks,
+Lorenzo
