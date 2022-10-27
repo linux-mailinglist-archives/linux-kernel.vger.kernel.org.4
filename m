@@ -2,99 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0FC46101FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC356101FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 21:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236690AbiJ0TxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 15:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
+        id S236702AbiJ0Txe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 15:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236017AbiJ0Tw5 (ORCPT
+        with ESMTP id S236692AbiJ0Txc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 15:52:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5E885A83;
-        Thu, 27 Oct 2022 12:52:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC730624C8;
-        Thu, 27 Oct 2022 19:52:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DB6CC433D6;
-        Thu, 27 Oct 2022 19:52:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666900376;
-        bh=35cFf88kblVuwSgahftZiRQRYQbkqp7M3ibAvifLwnQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cVO/GHMPGprH3caldUb141wNEv7znCzlhkzwQLKHBqih2wnXFR+D+D4eKDbHATdLz
-         dmzTEtzhKzDBiwuSVaqPaLx4W3HZDODH1ekvGQww03b4+ZekZP8rwtzymg44UuGrbk
-         k9BmDtzXMNTrFDsSC6MRQMCITRguw3Syjmr41rSesBwO+pmfRHjasHfZ6stfA3gXvT
-         6HSyNo+uWu692nnxZbv2iD4nCJ5cEKdADcZP7sVyh8ydAnvLdOonHcztKU7HGfoziK
-         AUxnGf/++G+ioNTD1on1w7LF0ddmyYdoJNLlpOMAHGizjtEGmS3nOUkS8gBnM0S8Ji
-         HOhhsfsmrbYzg==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH -next] hwmon: (smpro-hwmon) Add missing break in smpro_is_visible()
-Date:   Thu, 27 Oct 2022 12:52:38 -0700
-Message-Id: <20221027195238.1789586-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.38.1
+        Thu, 27 Oct 2022 15:53:32 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810D886802
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 12:53:29 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oo8wL-0002tI-AN; Thu, 27 Oct 2022 21:53:21 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     atishp@atishpatra.org, anup@brainfault.org,
+        Will Deacon <will@kernel.org>, mark.rutland@arm.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Conor.Dooley@microchip.com,
+        samuel@sholland.org
+Subject: Re: [PATCH v6 0/2] riscv_pmu_sbi: add support for PMU variant on T-Head C9xx cores
+Date:   Thu, 27 Oct 2022 21:53:20 +0200
+Message-ID: <3621249.aeNJFYEL58@diego>
+In-Reply-To: <mhng-0bf8c154-76ce-4cd3-bfdb-ffd8a4670600@palmer-ri-x1c9>
+References: <mhng-0bf8c154-76ce-4cd3-bfdb-ffd8a4670600@palmer-ri-x1c9>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang warns:
+Am Donnerstag, 27. Oktober 2022, 07:02:59 CEST schrieb Palmer Dabbelt:
+> On Tue, 11 Oct 2022 16:18:39 PDT (-0700), heiko@sntech.de wrote:
+> > The PMU on T-Head C9xx cores is quite similar to the SSCOFPMF extension
+> > but not completely identical, so this series
+> 
+> The rest of that sentance got dropped, so I put in
+> 
+>     The PMU on T-Head C9xx cores is quite similar to the SSCOFPMF extension
+>     but not completely identical, so this series adds a T-Head PMU errata
+>     that handlen the differences.
+> 
+> but LMK if you had a better version, it's still early so I don't mind 
+> swapping it around.
 
-  drivers/hwmon/smpro-hwmon.c:378:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-          default:
-          ^
-  drivers/hwmon/smpro-hwmon.c:378:2: note: insert 'break;' to avoid fall-through
-          default:
-          ^
-          break;
-  1 error generated.
+sounds just fine and sorry for not finishing that sentence on my own.
 
-Clang is a little more pedantic than GCC, which does not warn when
-falling through to a case that is just break or return. Clang's version
-is more in line with the kernel's own stance in deprecated.rst, which
-states that all switch/case blocks must end in either break,
-fallthrough, continue, goto, or return. Add the missing break to silence
-the warning.
 
-Fixes: a87456864cbb ("hwmon: Add Ampere's Altra smpro-hwmon driver")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1751
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/hwmon/smpro-hwmon.c | 1 +
- 1 file changed, 1 insertion(+)
+> b4 also got kind of confused here so I had to merge suff manually.
 
-diff --git a/drivers/hwmon/smpro-hwmon.c b/drivers/hwmon/smpro-hwmon.c
-index ee54e21c2c12..667e88b6bae5 100644
---- a/drivers/hwmon/smpro-hwmon.c
-+++ b/drivers/hwmon/smpro-hwmon.c
-@@ -375,6 +375,7 @@ static umode_t smpro_is_visible(const void *data, enum hwmon_sensor_types type,
- 				return 0;
- 		break;
- 		}
-+		break;
- 	default:
- 		break;
- 	}
+do you still know what b4 complained about?
 
-base-commit: 0ffb687b6508c36a17b99bdaf014b38532404182
--- 
-2.38.1
+My patch workflow is pretty basic (git format-patch + separate
+git send-email) so I guess it might be interesting what it was
+stumbling on.
+
+Thanks
+Heiko
+
+
+> > changes in v6:
+> > - follow Anup's suggestion and hook into the (pending) cpuinfo patch [2]
+> >   instead of modifying the core sbi_get_* functions
+> >
+> > changes in v5:
+> > - add received Reviews
+> > - fix sbi caching wrt. negative values (Drew)
+> > - add comment about specific c9xx arch- and imp-ids (Conor)
+> >
+> > changes in v4:
+> > - add new patch to cache sbi mvendor, march and mimp-ids (Atish)
+> > - errata dependencies in one line (Conor)
+> > - make driver detection conditional on CONFIG_ERRATA_THEAD_PMU too (Atish)
+> >
+> > changes in v3:
+> > - improve commit message (Atish, Conor)
+> > - IS_ENABLED and BIT() in errata probe (Conor)
+> >
+> > The change depends on my cpufeature/t-head errata probe cleanup series [1].
+> >
+> >
+> > changes in v2:
+> > - use alternatives for the CSR access
+> > - make the irq num selection a bit nicer
+> >
+> > There is of course a matching opensbi-part whose most recent implementation
+> > can be found on [0].
+> >
+> >
+> > [0] https://patchwork.ozlabs.org/project/opensbi/cover/20221004164227.1381825-1-heiko@sntech.de
+> > [1] https://lore.kernel.org/all/20220905111027.2463297-1-heiko@sntech.de/
+> > [2] https://lore.kernel.org/r/20220727043829.151794-1-apatel@ventanamicro.com
+> >
+> > Heiko Stuebner (2):
+> >   RISC-V: Cache SBI vendor values
+> >   drivers/perf: riscv_pmu_sbi: add support for PMU variant on T-Head
+> >     C9xx cores
+> >
+> >  arch/riscv/Kconfig.erratas           | 13 +++++++++++
+> >  arch/riscv/errata/thead/errata.c     | 19 ++++++++++++++++
+> >  arch/riscv/include/asm/errata_list.h | 16 ++++++++++++-
+> >  arch/riscv/include/asm/sbi.h         |  5 ++++
+> >  arch/riscv/kernel/cpu.c              | 30 +++++++++++++++++++++---
+> >  drivers/perf/riscv_pmu_sbi.c         | 34 ++++++++++++++++++++--------
+> >  6 files changed, 103 insertions(+), 14 deletions(-)
+> 
+
+
+
 
