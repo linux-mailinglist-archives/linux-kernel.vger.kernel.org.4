@@ -2,98 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED0960EEB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 05:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3BCE60EE71
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 05:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234108AbiJ0DgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 23:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60360 "EHLO
+        id S233669AbiJ0DRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 23:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234343AbiJ0DgE (ORCPT
+        with ESMTP id S229616AbiJ0DQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 23:36:04 -0400
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF6D47BAF
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 20:35:51 -0700 (PDT)
-X-ASG-Debug-ID: 1666840590-1eb14e7e6353350001-xx1T2L
-Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id dcSdmVLfPpBzSFVa (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 27 Oct 2022 11:16:31 +0800 (CST)
-X-Barracuda-Envelope-From: LeoLiu-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX2.zhaoxin.com
- (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Thu, 27 Oct
- 2022 11:16:30 +0800
-Received: from localhost.localdomain (10.32.64.1) by ZXBJMBX03.zhaoxin.com
- (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Thu, 27 Oct
- 2022 11:16:28 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-From:   LeoLiu-oc <LeoLiu-oc@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.7
-To:     <rafael@kernel.org>, <lenb@kernel.org>, <james.morse@arm.com>,
-        <tony.luck@intel.com>, <bp@alien8.de>, <robert.moore@intel.com>,
-        <ying.huang@intel.com>, <rdunlap@infradead.org>,
-        <bhelgaas@google.com>, <linux-acpi@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devel@acpica.org>
-CC:     <CobeChen@zhaoxin.com>, <TonyWWang@zhaoxin.com>,
-        <ErosZhang@zhaoxin.com>, leoliu-oc <leoliu-oc@zhaoxin.com>
-Subject: [PATCH 5/5] ACPI/PCI: config pcie devices's aer register
-Date:   Thu, 27 Oct 2022 11:16:28 +0800
-X-ASG-Orig-Subj: [PATCH 5/5] ACPI/PCI: config pcie devices's aer register
-Message-ID: <20221027031628.2856297-1-LeoLiu-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.20.1
+        Wed, 26 Oct 2022 23:16:59 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B89DD896;
+        Wed, 26 Oct 2022 20:16:58 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id q1so17045600pgl.11;
+        Wed, 26 Oct 2022 20:16:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UdfYL7Y9VZRkcaGm5JO6kmXdUQOSNAtEcm9KHbShwM0=;
+        b=XIR6I96JOE4YdJFAGI9vkaV9ftdFHLXvgaTfH/BrmdWg9E2lioAP3gwj4j1QwOd2kg
+         X+kE3+dK4thHPm6gdtYky6VrtInB+1Q1jGzVBZwg+eGWIVy8edwa/o3jOjFBZZGh3+Jn
+         avgFZEtcdOQWzfLftnRYYAcVp/s5Bxbq3Yt5xcRHl7a6pW2hZ54N3drqU/cnp3KUd2s9
+         waFl/lFpGUTa42N5g7fZz0MaF7hrepY/48d78ngJk4gNlWYNWURl2QoudknCUVCzYOen
+         48S/4/HXTh9ZzjtopQlg7loHvqdxIZxAN2OmYYfCwiucNx58+w6gXGKor9H8EGjaTk0O
+         wQNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UdfYL7Y9VZRkcaGm5JO6kmXdUQOSNAtEcm9KHbShwM0=;
+        b=1P2R7Zn5QVL+zeH63gLYPgcSDLL1UBQAo3Nnv02pQzk3Dr4aJk6UiF01BfEhKvHonA
+         c4QvsLscOlbDDEYgXu3lIOHQScISbAe2u5G9XuizpG2waqUw80AcrWjjlmI6MpEymrw0
+         Cd3kg5egWYUj/YT/7dvikP9RB++OyEgdjT1K+yfPKaG12ucbQRc5AFmn5AZgN4BJ+2zq
+         HcxI8yevoUPEE1K5/coM6a0w9hZL6ed06WXNzHWtu22SG7QV/pttOoQbgEe41BjULlEU
+         PB5+aLXb/wuWuuJLF++y/7a/lZwGr1SGS/17RStUGvJYnAGsOrLKWzFZox31yauNPd4J
+         llCw==
+X-Gm-Message-State: ACrzQf2qQImFKOE4tVDyHwjAKEIKmHYbx2Zm6BKsv+74EpVQZTypAkGY
+        WY8irqnl4qyigdnCbizVjGA=
+X-Google-Smtp-Source: AMsMyM5+xOtqqxmysxAnn8Duv7uM/CHacx922DUA+NrlUAuR8I9zgfdwOzN/MkestWZMoGjCzSI39g==
+X-Received: by 2002:a63:1b16:0:b0:46b:8e7:3e0a with SMTP id b22-20020a631b16000000b0046b08e73e0amr39509387pgb.86.1666840618217;
+        Wed, 26 Oct 2022 20:16:58 -0700 (PDT)
+Received: from localhost.localdomain ([43.224.245.180])
+        by smtp.gmail.com with ESMTPSA id d17-20020aa797b1000000b0056bb99db338sm112636pfq.175.2022.10.26.20.16.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 20:16:57 -0700 (PDT)
+From:   Qibo Huang <huangqibo.tech@gmail.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Qibo Huang <huangqibo.tech@gmail.com>
+Subject: [PATCH] thermal/core: cooling device duplicate creation check
+Date:   Thu, 27 Oct 2022 11:16:48 +0800
+Message-Id: <20221027031648.2452-1-huangqibo.tech@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.32.64.1]
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- ZXBJMBX03.zhaoxin.com (10.29.252.7)
-X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
-X-Barracuda-Start-Time: 1666840590
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 774
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.4589 1.0000 0.0000
-X-Barracuda-Spam-Score: 0.00
-X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.101705
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: leoliu-oc <leoliu-oc@zhaoxin.com>
+Because creating a cooling device may have duplicate names.
+When creating, first check thermal_cdev_list whether
+there is a device with the same name. If it has the same name,
+it returns a reference to the cooling device.
 
-In order to write the PCI Express Root Port/Device/Bridge AER Structure
-record to relevant devices's aer registers, call the func
-pci_acpi_program_hest_aer_params() for every pcie devices.
-
-Signed-off-by: leoliu-oc <leoliu-oc@zhaoxin.com>
+Signed-off-by: Qibo Huang <huangqibo.tech@gmail.com>
 ---
- drivers/pci/probe.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/thermal/thermal_core.c | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index b66fa42c4b1f..02bf9180e96d 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -2263,6 +2263,7 @@ static void pci_configure_device(struct pci_dev *dev)
- 	pci_configure_serr(dev);
- 
- 	pci_acpi_program_hp_params(dev);
-+	pci_acpi_program_hest_aer_params(dev);
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 7e669b60a065..f38f9464e9f4 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -844,6 +844,34 @@ static void bind_cdev(struct thermal_cooling_device *cdev)
+ 	mutex_unlock(&thermal_list_lock);
  }
  
- static void pci_release_capabilities(struct pci_dev *dev)
++struct thermal_cooling_device *thermal_cdev_get_zone_by_name(const char *name)
++{
++	struct thermal_cooling_device *pos = NULL, *ref = ERR_PTR(-EINVAL);
++	unsigned int found = 0;
++
++	if (!name)
++		goto exit;
++
++	mutex_lock(&thermal_list_lock);
++	list_for_each_entry(pos, &thermal_cdev_list, node)
++		if (!strncasecmp(name, pos->type, THERMAL_NAME_LENGTH)) {
++			found++;
++			ref = pos;
++		}
++	mutex_unlock(&thermal_list_lock);
++
++	/* nothing has been found, thus an error code for it */
++	if (found == 0)
++		ref = ERR_PTR(-ENODEV);
++	else if (found > 1)
++	/* Success only when an unique zone is found */
++		ref = ERR_PTR(-EEXIST);
++
++exit:
++	return ref;
++}
++EXPORT_SYMBOL_GPL(thermal_cdev_get_zone_by_name);
++
+ /**
+  * __thermal_cooling_device_register() - register a new thermal cooling device
+  * @np:		a pointer to a device tree node.
+@@ -873,6 +901,12 @@ __thermal_cooling_device_register(struct device_node *np,
+ 	    !ops->set_cur_state)
+ 		return ERR_PTR(-EINVAL);
+ 
++	if (type) {
++		cdev = thermal_cdev_get_zone_by_name(type);
++		if (!IS_ERR(cdev))
++			return cdev;
++	}
++
+ 	cdev = kzalloc(sizeof(*cdev), GFP_KERNEL);
+ 	if (!cdev)
+ 		return ERR_PTR(-ENOMEM);
 -- 
-2.20.1
+2.37.1
 
