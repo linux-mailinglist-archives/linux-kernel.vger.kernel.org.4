@@ -2,293 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0646F60F396
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E85C360F39E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 11:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234571AbiJ0JWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 05:22:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
+        id S234598AbiJ0JXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 05:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235002AbiJ0JWn (ORCPT
+        with ESMTP id S233099AbiJ0JXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 05:22:43 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C774B999
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:22:42 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1onz5p-0007LF-Or; Thu, 27 Oct 2022 11:22:29 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1onz5p-000fr5-4o; Thu, 27 Oct 2022 11:22:28 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1onz5n-00B4Xo-IF; Thu, 27 Oct 2022 11:22:27 +0200
-Date:   Thu, 27 Oct 2022 11:22:27 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Romain Perier <romain.perier@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] pwm: Add support for the MSTAR MSC313 PWM
-Message-ID: <20221027092227.wkxjsw6mep3o3auc@pengutronix.de>
-References: <20220907131241.31941-1-romain.perier@gmail.com>
- <20220907131241.31941-3-romain.perier@gmail.com>
- <20220927163314.rzfld7sqchsdfvfg@pengutronix.de>
- <CABgxDoJmVRbZEP02QoEhHKXiu127073oK2NE2VgFHBADCBbdog@mail.gmail.com>
+        Thu, 27 Oct 2022 05:23:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FEA4055D
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:23:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666862594;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oBxCkJiySEo1+7aZs/UOh2TcHCjQMbCYKkq8+3qYF14=;
+        b=dDa//I6akrVmKUfxMlYFQ3YlobKe/YKvtv7czBbBGqUKaXCQBNckVbQbeBtWgVkWjWLOiG
+        E4Mq8DfGpW8rKG4l+s27LWeR5GyVH1FM4Q/rhWHHr0ZAnfNmsiR/KlBG5O0Ye15HWthdcW
+        JAqJJirbf4zhTfevODtgpoaznwyZvUo=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-556-bvozvDD_NvqNn0jAAmSzeA-1; Thu, 27 Oct 2022 05:23:12 -0400
+X-MC-Unique: bvozvDD_NvqNn0jAAmSzeA-1
+Received: by mail-wm1-f69.google.com with SMTP id z10-20020a05600c220a00b003c6ecad1decso324835wml.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 02:23:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oBxCkJiySEo1+7aZs/UOh2TcHCjQMbCYKkq8+3qYF14=;
+        b=5Efsysrl9G2x7mcaNVkZzUII64/r5SZFtJ61YCMasBhGkcvrmcSJEIO8Ljl8nldGIP
+         GlhtpbbVVkQh+e85sfmDWUiULR5aFxcphCulbecc8lUe1/4TLYp29pxkL85BS375c7zV
+         sqbgVDdADi5MyXE6qE50RX7lCR/X1u7EGP06pR8su9ly61Qtt2mWYfUUvMdMr49xEUuN
+         lWCkabe8V/6XzFC1ZeTTPbR3W9LTyBa80bxPxYBs0fgEO2F49Euea3TSqcfbfIKfu0RF
+         imY7UmGdIyE4AUulBrAzB9IIug13KpCikPkYlYK6l2OoLz3D08hi08iqTTIdY+r4YgyR
+         theQ==
+X-Gm-Message-State: ACrzQf2Vd9JRqUY8Ugia7nFjXX8uH70UzdZaz6El93Hg/utaCWqGyTNM
+        LJzxrkcyQHR6ewAx7BJJjTkvHc0LGq1lH3dr4poFAfAvOudqYdfHMhwZrh8BkG0E4KfIn2mt3m1
+        OxFzNu6vWWRD+leozdSegbD+M
+X-Received: by 2002:adf:ba01:0:b0:22e:7318:4e94 with SMTP id o1-20020adfba01000000b0022e73184e94mr32097692wrg.330.1666862591427;
+        Thu, 27 Oct 2022 02:23:11 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6FI1Mv/Hrt6d0+GZfcE0mcgytCHWfH1c6PRyC9uCfVRV1tFG4aIZ1F/3D1pVAAus4cOJsVzg==
+X-Received: by 2002:adf:ba01:0:b0:22e:7318:4e94 with SMTP id o1-20020adfba01000000b0022e73184e94mr32097676wrg.330.1666862591145;
+        Thu, 27 Oct 2022 02:23:11 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-103-235.dyn.eolo.it. [146.241.103.235])
+        by smtp.gmail.com with ESMTPSA id h5-20020a05600c2ca500b003b435c41103sm5672043wmc.0.2022.10.27.02.23.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 02:23:10 -0700 (PDT)
+Message-ID: <6b50b9996faffe9fbddb54ed6a407b037a8509ff.camel@redhat.com>
+Subject: Re: [PATCH net-next v8.1] net: phy: Add driver for Motorcomm yt8521
+ gigabit ethernet phy
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Frank <Frank.Sae@motor-comm.com>, Peter Geis <pgwipeout@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     yinghong.zhang@motor-comm.com, fei.zhang@motor-comm.com,
+        hua.sun@motor-comm.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 27 Oct 2022 11:23:09 +0200
+In-Reply-To: <20221025064532.1595-1-Frank.Sae@motor-comm.com>
+References: <20221025064532.1595-1-Frank.Sae@motor-comm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gok45hmzf5nviwgp"
-Content-Disposition: inline
-In-Reply-To: <CABgxDoJmVRbZEP02QoEhHKXiu127073oK2NE2VgFHBADCBbdog@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---gok45hmzf5nviwgp
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, 2022-10-25 at 14:45 +0800, Frank wrote:
+[...]
+> +/**
+> + * yt8521_read_status_paged() -  determines the speed and duplex of one page
+> + * @phydev: a pointer to a &struct phy_device
+> + * @page: The reg page(YT8521_RSSR_FIBER_SPACE/YT8521_RSSR_UTP_SPACE) to
+> + * operate.
+> + *
+> + * returns 1 (utp or fiber link),0 (no link) or negative errno code
+> + */
+> +static int yt8521_read_status_paged(struct phy_device *phydev, int page)
+> +{
+> +	int fiber_latch_val;
+> +	int fiber_curr_val;
+> +	int old_page;
+> +	int ret = 0;
+> +	int status;
+> +	int link;
+> +
+> +	linkmode_zero(phydev->lp_advertising);
+> +	phydev->duplex = DUPLEX_UNKNOWN;
+> +	phydev->speed = SPEED_UNKNOWN;
+> +	phydev->asym_pause = 0;
+> +	phydev->pause = 0;
+> +
+> +	/* YT8521 has two reg space (utp/fiber) for linkup with utp/fiber
+> +	 * respectively. but for utp/fiber combo mode, reg space should be
+> +	 * arbitrated based on media priority. by default, utp takes
+> +	 * priority. reg space should be properly set before read
+> +	 * YTPHY_SPECIFIC_STATUS_REG.
+> +	 */
+> +
+> +	page &= YT8521_RSSR_SPACE_MASK;
+> +	old_page = phy_select_page(phydev, page);
+> +	if (old_page < 0)
+> +		goto err_restore_page;
+> +
+> +	/* Read YTPHY_SPECIFIC_STATUS_REG, which indicates the speed and duplex
+> +	 * of the PHY is actually using.
+> +	 */
+> +	ret = __phy_read(phydev, YTPHY_SPECIFIC_STATUS_REG);
+> +	if (ret < 0)
+> +		goto err_restore_page;
+> +
+> +	status = ret;
+> +	link = !!(status & YTPHY_SSR_LINK);
+> +
+> +	/* When PHY is in fiber mode, speed transferred from 1000Mbps to
+> +	 * 100Mbps,there is not link down from YTPHY_SPECIFIC_STATUS_REG, so
+> +	 * we need check MII_BMSR to identify such case.
+> +	 */
+> +	if (page == YT8521_RSSR_FIBER_SPACE) {
+> +		ret = __phy_read(phydev, MII_BMSR);
+> +		if (ret < 0)
+> +			goto err_restore_page;
+> +
+> +		fiber_latch_val = ret;
+> +		ret = __phy_read(phydev, MII_BMSR);
+> +		if (ret < 0)
+> +			goto err_restore_page;
+> +
+> +		fiber_curr_val = ret;
+> +		if (link && fiber_latch_val != fiber_curr_val) {
+> +			link = 0;
+> +			phydev_info(phydev,
+> +				    "%s, fiber link down detect, latch = %04x, curr = %04x\n",
+> +				    __func__, fiber_latch_val, fiber_curr_val);
+> +		}
+> +	} else {
+> +		/* Read autonegotiation status */
+> +		ret = __phy_read(phydev, MII_BMSR);
+> +		if (ret < 0)
+> +			return ret;
 
-Hello Romain,
+You need to restore the page even on this error path.
 
-On Thu, Oct 27, 2022 at 10:36:10AM +0200, Romain Perier wrote:
-> Le mar. 27 sept. 2022 =E0 18:33, Uwe Kleine-K=F6nig
-> <u.kleine-koenig@pengutronix.de> a =E9crit :
-> >
-> > Hello Romain, hello Daniel,
-> >
-> > adding Mark Brown to Cc: for the regmap stuff.
-> >
-> > On Wed, Sep 07, 2022 at 03:12:38PM +0200, Romain Perier wrote:
-> > > From: Daniel Palmer <daniel@0x0f.com>
-> > >
-> > > This adds support for the PWM block on the Mstar MSC313e SoCs and new=
-er.
-> > >
-> > > Signed-off-by: Daniel Palmer <daniel@0x0f.com>
-> > > Co-developed-by: Romain Perier <romain.perier@gmail.com>
-> > > Signed-off-by: Romain Perier <romain.perier@gmail.com>
-> > > ---
-> > >  MAINTAINERS               |   1 +
-> > >  drivers/pwm/Kconfig       |   9 ++
-> > >  drivers/pwm/Makefile      |   1 +
-> > >  drivers/pwm/pwm-msc313e.c | 269 ++++++++++++++++++++++++++++++++++++=
-++
-> > >  4 files changed, 280 insertions(+)
-> > >  create mode 100644 drivers/pwm/pwm-msc313e.c
-> > >
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index 9d7f64dc0efe..c3b39b09097c 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -2439,6 +2439,7 @@ F:      arch/arm/mach-mstar/
-> > >  F:   drivers/clk/mstar/
-> > >  F:   drivers/clocksource/timer-msc313e.c
-> > >  F:   drivers/gpio/gpio-msc313.c
-> > > +F:   drivers/pwm/pwm-msc313e.c
-> > >  F:   drivers/rtc/rtc-msc313.c
-> > >  F:   drivers/watchdog/msc313e_wdt.c
-> > >  F:   include/dt-bindings/clock/mstar-*
-> > > diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-> > > index 60d13a949bc5..8049fd03a821 100644
-> > > --- a/drivers/pwm/Kconfig
-> > > +++ b/drivers/pwm/Kconfig
-> > > @@ -372,6 +372,15 @@ config PWM_MESON
-> > >         To compile this driver as a module, choose M here: the module
-> > >         will be called pwm-meson.
-> > >
-> > > +config PWM_MSC313E
-> > > +     tristate "MStar MSC313e PWM support"
-> > > +     depends on ARCH_MSTARV7 || COMPILE_TEST
-> > > +     help
-> > > +       Generic PWM framework driver for MSTAR MSC313e.
-> > > +
-> > > +       To compile this driver as a module, choose M here: the module
-> > > +       will be called pwm-msc313e.
-> > > +
-> > >  config PWM_MTK_DISP
-> > >       tristate "MediaTek display PWM driver"
-> > >       depends on ARCH_MEDIATEK || COMPILE_TEST
-> > > diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
-> > > index 7bf1a29f02b8..bc285c054f2a 100644
-> > > --- a/drivers/pwm/Makefile
-> > > +++ b/drivers/pwm/Makefile
-> > > @@ -62,4 +62,5 @@ obj-$(CONFIG_PWM_TWL)               +=3D pwm-twl.o
-> > >  obj-$(CONFIG_PWM_TWL_LED)    +=3D pwm-twl-led.o
-> > >  obj-$(CONFIG_PWM_VISCONTI)   +=3D pwm-visconti.o
-> > >  obj-$(CONFIG_PWM_VT8500)     +=3D pwm-vt8500.o
-> > > +obj-$(CONFIG_PWM_MSC313E)    +=3D pwm-msc313e.o
-> > >  obj-$(CONFIG_PWM_XILINX)     +=3D pwm-xilinx.o
-> > > diff --git a/drivers/pwm/pwm-msc313e.c b/drivers/pwm/pwm-msc313e.c
-> > > new file mode 100644
-> > > index 000000000000..a71f39ba66c3
-> > > --- /dev/null
-> > > +++ b/drivers/pwm/pwm-msc313e.c
-> > > @@ -0,0 +1,269 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Copyright (C) 2021 Daniel Palmer <daniel@thingy.jp>
-> > > + * Copyright (C) 2022 Romain Perier <romain.perier@gmail.com>
-> > > + */
-> > > +
-> > > +#include <linux/clk.h>
-> > > +#include <linux/of_device.h>
-> > > +#include <linux/pwm.h>
-> > > +#include <linux/regmap.h>
-> > > +
-> > > +#define DRIVER_NAME "msc313e-pwm"
-> > > +
-> > > +#define CHANNEL_OFFSET       0x80
-> > > +#define REG_DUTY     0x8
-> > > +#define REG_PERIOD   0x10
-> > > +#define REG_DIV              0x18
-> > > +#define REG_CTRL     0x1c
-> > > +#define REG_SWRST    0x1fc
-> > > +
-> > > +struct msc313e_pwm_channel {
-> > > +     struct regmap_field *clkdiv;
-> > > +     struct regmap_field *polarity;
-> > > +     struct regmap_field *dutyl;
-> > > +     struct regmap_field *dutyh;
-> > > +     struct regmap_field *periodl;
-> > > +     struct regmap_field *periodh;
-> > > +     struct regmap_field *swrst;
-> > > +};
-> > > +
-> > > +struct msc313e_pwm {
-> > > +     struct regmap *regmap;
-> > > +     struct pwm_chip pwmchip;
-> > > +     struct clk *clk;
-> > > +     struct msc313e_pwm_channel channels[];
-> > > +};
-> > > +
-> > > +struct msc313e_pwm_info {
-> > > +     unsigned int channels;
-> > > +};
-> > > +
-> > > +#define to_msc313e_pwm(ptr) container_of(ptr, struct msc313e_pwm, pw=
-mchip)
-> > > +
-> > > +static const struct regmap_config msc313e_pwm_regmap_config =3D {
-> > > +     .reg_bits =3D 16,
-> > > +     .val_bits =3D 16,
-> > > +     .reg_stride =3D 4,
-> > > +};
-> > > +
-> > > +static const struct msc313e_pwm_info msc313e_data =3D {
-> > > +     .channels =3D 8,
-> > > +};
-> > > +
-> > > +static const struct msc313e_pwm_info ssd20xd_data =3D {
-> > > +     .channels =3D 4,
-> > > +};
-> > > +
-> > > +static void msc313e_pwm_writecounter(struct regmap_field *low, struc=
-t regmap_field *high, u32 value)
-> > > +{
-> > > +     /* The bus that connects the CPU to the peripheral registers sp=
-lits 32 bit registers into
-> >
-> > Please fix the comment style to use /* on a line for itself. Also for
-> > comments staying below 80 chars per line is appreciated.
->=20
-> even if check-patch.pl --strict passed ? ^^
 
-I also already wondered about check-patch not demanding this. *shrug*
 
-> > > +      * two 16bit registers placed 4 bytes apart. It's the hardware =
-design they used. The counter
-> > > +      * we are about to write has this contrainst.
-> >
-> > s/contrainst/contraint/
-> >
-> > I wonder if that could be abstracted by regmap?!
->=20
-> I had the same thought, not from what I have read/found, but perhaps
-> the regmap maintainer has an opinion.
->=20
-> >
-> > > +      */
-> > > +     regmap_field_write(low, value & 0xffff);
-> > > +     regmap_field_write(high, value >> 16);
-> > > +}
-> > > +
-> > > +static void msc313e_pwm_readcounter(struct regmap_field *low, struct=
- regmap_field *high, u32 *value)
-> > > +{
-> > > +     unsigned int val =3D 0;
-> > > +
-> > > +     regmap_field_read(low, &val);
-> > > +     *value =3D val;
-> > > +     regmap_field_read(high, &val);
-> > > +     *value =3D (val << 16) | *value;
-> > > +}
-> > > +
-> > > +static int msc313e_pwm_config(struct pwm_chip *chip, struct pwm_devi=
-ce *device,
-> > > +                           int duty_ns, int period_ns)
-> > > +{
-> > > +     struct msc313e_pwm *pwm =3D to_msc313e_pwm(chip);
-> > > +     unsigned long long nspertick =3D DIV_ROUND_DOWN_ULL(NSEC_PER_SE=
-C, clk_get_rate(pwm->clk));
-> > > +     struct msc313e_pwm_channel *channel =3D &pwm->channels[device->=
-hwpwm];
-> > > +     unsigned long long div =3D 1;
-> > > +
-> > > +     /* Fit the period into the period register by prescaling the cl=
-k */
-> > > +     while (DIV_ROUND_DOWN_ULL(period_ns, nspertick) > 0x3ffff) {
-> >
-> > dividing by the result of a division looses precision. Also rounding
-> > down both divisions looks wrong.
->=20
-> Such cases are not supposed to be covered by PWM_DEBUG ? (because
-> everything passed with PWM_DEBUG)
+[...]
 
-Note that PWM_DEBUG being silent isn't an indicator that everything is
-fine. It cannot catch everything and so doesn't replace human review.
 
-If you tell me what clk_get_rate() returns for you, I might be able to
-tell you a procedure that makes PWM_DEBUG unhappy.
+> +/**
+> + * yt8521_modify_bmcr_paged - bits modify a PHY's BMCR register of one page
+> + * @phydev: the phy_device struct
+> + * @page: The reg page(YT8521_RSSR_FIBER_SPACE/YT8521_RSSR_UTP_SPACE) to operate
+> + * @mask: bit mask of bits to clear
+> + * @set: bit mask of bits to set
+> + *
+> + * NOTE: Convenience function which allows a PHY's BMCR register to be
+> + * modified as new register value = (old register value & ~mask) | set.
+> + * YT8521 has two space (utp/fiber) and three mode (utp/fiber/poll), each space
+> + * has MII_BMCR. poll mode combines utp and faber,so need do both.
+> + * If it is reset, it will wait for completion.
+> + *
+> + * returns 0 or negative errno code
+> + */
+> +static int yt8521_modify_bmcr_paged(struct phy_device *phydev, int page,
+> +				    u16 mask, u16 set)
+> +{
+> +	int max_cnt = 500; /* the max wait time of reset ~ 500 ms */
+> +	int old_page;
+> +	int ret = 0;
+> +
+> +	old_page = phy_select_page(phydev, page & YT8521_RSSR_SPACE_MASK);
+> +	if (old_page < 0)
+> +		goto err_restore_page;
+> +
+> +	ret = __phy_modify(phydev, MII_BMCR, mask, set);
+> +	if (ret < 0)
+> +		goto err_restore_page;
+> +
+> +	/* If it is reset, need to wait for the reset to complete */
+> +	if (set == BMCR_RESET) {
+> +		while (max_cnt--) {
+> +			usleep_range(1000, 1100);
+> +			ret = __phy_read(phydev, MII_BMCR);
+> +			if (ret < 0)
+> +				goto err_restore_page;
+> +
+> +			if (!(ret & BMCR_RESET))
+> +				return phy_restore_page(phydev, old_page, 0);
+> +		}
+> +		if (max_cnt <= 0)
 
-Best regards
-Uwe
+The above check is not needed, the loop can terminate only when such
+condition is true.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---gok45hmzf5nviwgp
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Cheers,
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNaTdAACgkQwfwUeK3K
-7AnMqgf8DzFsEd9BI2kFodRUCfC6mjEpPasgkBKB6PUykVv8BpgpneGcod1ZuGaf
-mFa8bCcs+2m/KIBKGaO6EXjWd5/8v1jwfTUMi6tArh2KXYcODvyWBDkAFenw5jqX
-3K+dpScgpoD+tBam1wzgkCsDBqH7aS7tk0yTEJZEQd1U0kTiKUTFLHarnmlqQcAZ
-ZaTQdSuA4DXfKVEIsXo+PxMF6VUuW96tvnktN15Q1qe1baW7hymbe5w3sGOLYI3c
-AxQI5QeEshwegQ+CmJNYFE+s96MuMG2tA+Y9C7Jyzb2iooqkIPB65sS3DnJaa4Gh
-NT22oQSFzN+YTPBRGIjPos0kq84n2A==
-=Umol
------END PGP SIGNATURE-----
+Paolo
 
---gok45hmzf5nviwgp--
