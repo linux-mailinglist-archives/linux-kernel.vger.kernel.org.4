@@ -2,111 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2740360F8CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB5A60F8D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 15:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235576AbiJ0NOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 09:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
+        id S235963AbiJ0NQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 09:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233619AbiJ0NOW (ORCPT
+        with ESMTP id S235741AbiJ0NQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 09:14:22 -0400
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A664AD5E;
-        Thu, 27 Oct 2022 06:14:21 -0700 (PDT)
-Received: by mail-qk1-f173.google.com with SMTP id b25so808191qkk.7;
-        Thu, 27 Oct 2022 06:14:21 -0700 (PDT)
+        Thu, 27 Oct 2022 09:16:21 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446C286F82
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:16:19 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id h24so1033251qta.7
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 06:16:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E+oq3QsRUsNah3XNCHZp7kka0MIAB/dhO+Ih97e/MD0=;
+        b=xD8rYMu8m+5/wsoqIdFawJVrZfZkOO4NKuKtEhVBAtjEOPNKDNvhaVggJnjZBnKDs/
+         GeF69dUImt0Tu2AkCuSmE+d7QY7eUsoXJx1u6434BS7a4PxDurfCMHA8HHbpsAqDzOx0
+         vdsljc4789NfeXJAxLrO/Q2F4YZ9c+WFtjEj98LyxFglSzTs8p1y6pqYqZ9J77qCcS8W
+         KP6agAgByGqV7MtjtsOcCZCePgoPgvxKJ2Tpf6U7q8kv6N7gsisyEoRndpu+yTHHZ4rI
+         3eZATjuhuRgWI/WzEVfloxBJs07fnKmK1IVgsh6aWhzDMnlQk10+mYGnwAXbvBHWFZv0
+         /RUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/7yrQv4nD+SX3WfQBwYkM1Zs5RwSPJZfuMM6N6ixuFk=;
-        b=CPqkRzERv8rhDp6QHqjK2t9YY7O9UQaoyO3VeQbxYCBdjQQRiGTpg9hgmHSL28B+JK
-         erTbzBivVpaJu1CZSRWIhD/yB4pHyhi8N4Ikfv/KeWSia/WhsWV2gXH6Kl7z88Ymzga7
-         GTQi9wkinZdx2ot8vt2yqAr7q7+fY+FmMsaq7/Ys1kVqYjlik3sB1JwKT+CXLcDFf/mf
-         NZVAeZfi80bbGqtRm5NQQFIB23Z/0ISg7L8opYDsAQUp5hqPrg3GXM7gizXDYZk19d7S
-         f+EPpPbqYj3HOVLbwkH7DhMJuEEQ2ZXEDuI5FA2Eb3utb8RltEuCbhGc7o/nQUFKBEuK
-         60Ow==
-X-Gm-Message-State: ACrzQf37p7nAzYD5ELk44/JYhRDE5GndAZM2DbWsN/3J0IqrN6hn7kDL
-        M2CdebUJjF7F7gJg33VcApTZVQpo1uHkvg==
-X-Google-Smtp-Source: AMsMyM6tKZwvLfc7CIH+UhU5iN73K7pVTQeoGJPI6/bjtyPkxPsCwiUiqF/buwMkhV3CY7eY2221IQ==
-X-Received: by 2002:a05:620a:2456:b0:6ee:e24f:74f7 with SMTP id h22-20020a05620a245600b006eee24f74f7mr34604285qkn.9.1666876460759;
-        Thu, 27 Oct 2022 06:14:20 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id h17-20020ac87451000000b00398313f286dsm860827qtr.40.2022.10.27.06.14.19
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E+oq3QsRUsNah3XNCHZp7kka0MIAB/dhO+Ih97e/MD0=;
+        b=B6FpgbbLCyXTpX+ic0Jk7t80woat3n2y0PaAiCDNbs4TicLtLEJCLXZTiyMmtQyE1d
+         JFlHnZNTNVvqdmZ1oq4Z3flJyRQCbm3b1U/Y/dpO//898cUnsEIPi22svLBR5krmSmbc
+         /jV8H+gqh23XTs90wUixoGgDlS+kv5s1BTkCM4RHk6K5xhNVaw1PnY8nefEg0aKmLA58
+         vbKK8wRUaoagnt6474dX16JOM/518+QI74rDzj2+UDSKBVZC1UmN4pg2QxhYmr6BkTJv
+         54ECC1q14vBnAIQC+dO0Sc5Tjz1KxvVNMUV7aDdTT0Vh7EKfNp9RqQxW0r+X9A6S0mh/
+         Ijog==
+X-Gm-Message-State: ACrzQf2nhIYtnU+u2Dl8lPG4MhvSDIHyBfXW7OFlz0X5NdGuZjsZYHJM
+        UKAK2AE6nirt5WLOwgRjQmFGbw==
+X-Google-Smtp-Source: AMsMyM56sXvFcb/k1mCEILThX5/x4D0drnzJ+/8BM1VtGEtyAsbveifKToQvA2R8bMaLtRGnk0ahHg==
+X-Received: by 2002:ac8:5e06:0:b0:399:880c:28eb with SMTP id h6-20020ac85e06000000b00399880c28ebmr41599233qtx.222.1666876578379;
+        Thu, 27 Oct 2022 06:16:18 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id i16-20020a05620a405000b006eeb25369e9sm965612qko.25.2022.10.27.06.16.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 06:14:19 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id i127so1878502ybc.11;
-        Thu, 27 Oct 2022 06:14:19 -0700 (PDT)
-X-Received: by 2002:a5b:52:0:b0:6cb:7584:1b20 with SMTP id e18-20020a5b0052000000b006cb75841b20mr11996441ybp.380.1666876458981;
- Thu, 27 Oct 2022 06:14:18 -0700 (PDT)
+        Thu, 27 Oct 2022 06:16:17 -0700 (PDT)
+Message-ID: <453cf370-4b59-967e-b7da-9b3a6eebbc48@linaro.org>
+Date:   Thu, 27 Oct 2022 09:16:15 -0400
 MIME-Version: 1.0
-References: <20221026130658.45601-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221026130658.45601-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221026130658.45601-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 27 Oct 2022 15:14:06 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXMvkboWKmNMmb53MjEtmeDgLoeDVOhJ8_Jxrm4M-grgw@mail.gmail.com>
-Message-ID: <CAMuHMdXMvkboWKmNMmb53MjEtmeDgLoeDVOhJ8_Jxrm4M-grgw@mail.gmail.com>
-Subject: Re: [PATCH v3 4/9] arm64: dts: renesas: aistarvision-mipi-adapter-2.1:
- Drop clock-names property
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH -next] slimbus: qcom-ngd: Fix build error when
+ CONFIG_SLIM_QCOM_NGD_CTRL=y && CONFIG_QCOM_RPROC_COMMON=m
+Content-Language: en-US
+To:     Zheng Bin <zhengbin13@huawei.com>, srinivas.kandagatla@linaro.org,
+        gregkh@linuxfoundation.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20221027095904.3388959-1-zhengbin13@huawei.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221027095904.3388959-1-zhengbin13@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 3:07 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Now that the driver has been updated to drop fetching the clk reference by
-> name we no longer need the clock-names property in the ov5645 sensor node.
->
-> This is in preparation for removal for clock-names property from the DT
-> binding.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v3
-> * New patch
+On 27/10/2022 05:59, Zheng Bin wrote:
+> If CONFIG_SLIM_QCOM_NGD_CTRL=y, CONFIG_QCOM_RPROC_COMMON=m, COMPILE_TEST=y,
+> bulding fails:
+> 
+> drivers/slimbus/qcom-ngd-ctrl.o: In function `qcom_slim_ngd_ctrl_probe':
+> qcom-ngd-ctrl.c:(.text+0x330): undefined reference to `qcom_register_ssr_notifier'
+> qcom-ngd-ctrl.c:(.text+0x5fc): undefined reference to `qcom_unregister_ssr_notifier'
+> drivers/slimbus/qcom-ngd-ctrl.o: In function `qcom_slim_ngd_remove':
+> qcom-ngd-ctrl.c:(.text+0x90c): undefined reference to `qcom_unregister_ssr_notifier'
+> 
+> Make SLIM_QCOM_NGD_CTRL depends on QCOM_RPROC_COMMON || (COMPILE_TEST && !QCOM_RPROC_COMMON) to fix this.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Gr{oetje,eeting}s,
+Best regards,
+Krzysztof
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
