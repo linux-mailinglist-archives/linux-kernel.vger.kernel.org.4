@@ -2,83 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA12060FD13
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1A560FD18
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 18:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236056AbiJ0QaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 12:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59224 "EHLO
+        id S236463AbiJ0Qba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 12:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234595AbiJ0Q35 (ORCPT
+        with ESMTP id S235780AbiJ0Qb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 12:29:57 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7E01CFE2;
-        Thu, 27 Oct 2022 09:29:54 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 21so3733667edv.3;
-        Thu, 27 Oct 2022 09:29:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4EO/XaHHAYS6GeJfSnQWFmxKFuiTLnQ4YqMDn6u6Ez4=;
-        b=jG97r2s21zdreoQ+29zBMec2NdLznLyGpQU+Suguv4TigQhpqUKac6ATFo6mSKJUhe
-         Ldm7Q1fta2Grnbu7lgvupJgIm+E0bpXA+q0UebkUncUWwfwnuvlrb/Syk5DQ4W9UIRgP
-         CEc5BUCVvbjjgfwaTxJdEUZgepuRvWjbb1Vj0OhpAbSJx7TTsyjL2+G3lExUcpkBULaW
-         Mt0HXfIOFFVGBC+jINlh/9GgN+6yyu3CzVa00p13TE5q18SqVkPFG0XiISrEYhoDfdxS
-         1McyIyFcqXhSG1b93RKabURMqGTvUSV6P25vreBnOoGDhAHbvQ7xpzECA1yxOmieMUIi
-         /LMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4EO/XaHHAYS6GeJfSnQWFmxKFuiTLnQ4YqMDn6u6Ez4=;
-        b=xgDH7o8zCStXYfBY5nuh4eXW17ZPaxTXbzzV8/+KF0atbZtJwXI3TsvXK3Q94BF53Y
-         rmcah8ORekFs+E8ElZua2BhyMMxw6iePgV/kbYFtFd6YDYdPGwTMhmTJTUtBUCu8BLlN
-         1s3vDBcY8Vt3KqjUtAEyDSj971n7mw4rOcMK75+XRyyHHMx6w9mb48er89D26Fwdxsfe
-         Hwv9040IhWTnXtlNQDSCp9d8JZclq0Lp/LoBb8sOyY23ygCZF+vKLBfKuJ/Ht5vbv4jf
-         j4Rhb27aESnXFGiJ7BOpMcB00aAC4B0evkz3R6nRgVVdz1wIFq2f5djNWO/oqjLu3nEU
-         kuBg==
-X-Gm-Message-State: ACrzQf2m6DGiNegptDvhtMX8NR2KN4spaMHE1Cft8wklHgtIKvcy39Y4
-        9xzFGHah6J3IIPs/va0cqzelqYROl34=
-X-Google-Smtp-Source: AMsMyM7ZmXSLJFOitA9xJwu9AlpliQ9Hvo/1RgAWmGVZ4VRQ71YJQE7oPHhnbBeaivopMt8XtNEp5w==
-X-Received: by 2002:a50:cc07:0:b0:453:4427:a918 with SMTP id m7-20020a50cc07000000b004534427a918mr46558088edi.121.1666888192673;
-        Thu, 27 Oct 2022 09:29:52 -0700 (PDT)
-Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id ty21-20020a170907c71500b0077205dd15basm1018461ejc.66.2022.10.27.09.29.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 09:29:52 -0700 (PDT)
-Message-ID: <d36d91cd-7c54-a558-72eb-d73e9d935668@gmail.com>
-Date:   Thu, 27 Oct 2022 18:29:51 +0200
+        Thu, 27 Oct 2022 12:31:27 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1955F7F7;
+        Thu, 27 Oct 2022 09:31:25 -0700 (PDT)
+Received: from jupiter.universe (dyndsl-091-096-035-205.ewe-ip-backbone.de [91.96.35.205])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AD76B6602395;
+        Thu, 27 Oct 2022 17:31:23 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666888283;
+        bh=tNJIBKPU1noslMNdOTmfTOssBT36wHtENk08g0qT7PY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=F4LnUtrde4AQGUth8pPLJ/X9TUpIgeHPAlMAxevseuUrpPCO7x0GjrEG4B2/SynV1
+         35HkwAyPao8RjpKwOL1HpFVN5KIMMIYTXW3QfHz6ef4Y/psCCK7pQbnWIUkSSPMMGx
+         rxrLfUig9lxJARuh0jW2bN6qgMp1/dVxawd9GUatllWamKctzgkBCSGn4IZVNAsieA
+         xlWq6OnFK3oNQm/oKHkxOr5ffC2r8vZxggfmQjJCc6Bpi2xudAVUQYFH9PA1AIgU2U
+         TrY9bvrrIPausH/tQEdbvd2OFECYL7GJT5C5B74eajeaJZWGzU2m7vNOE9VQpgqG5A
+         KfC31Cez/aJhw==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id 057BF4801B9; Thu, 27 Oct 2022 18:31:21 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCHv2 1/1] dt-bindings: net: snps,dwmac: Document queue config subnodes
+Date:   Thu, 27 Oct 2022 18:31:19 +0200
+Message-Id: <20221027163119.107092-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 1/1] dt-bindings: rtc: convert hym8563 bindings to
- json-schema
-Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-References: <20221021170605.85163-1-sebastian.reichel@collabora.com>
- <a5db8a34-acd0-e262-36f0-0b904468bd1f@linaro.org>
- <20221024185049.GA2034297-robh@kernel.org>
- <20221024220559.dddihmq4xg55h26w@mercury.elektranox.org>
- <1a9e1bfb-0437-fcd9-8d41-a1e07aced0e3@gmail.com>
- <20221027162648.mowz2lefcajv3s2q@mercury.elektranox.org>
-From:   Johan Jonker <jbx6244@gmail.com>
-In-Reply-To: <20221027162648.mowz2lefcajv3s2q@mercury.elektranox.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,141 +62,406 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The queue configuration is referenced by snps,mtl-rx-config and
+snps,mtl-tx-config. Some in-tree DTs and the example put the
+referenced config nodes directly beneath the root node, but
+most in-tree DTs put it as child node of the dwmac node.
 
+This adds proper description for this setup, which has the
+advantage of validating the queue configuration node content.
 
-On 10/27/22 18:26, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Thu, Oct 27, 2022 at 06:11:19PM +0200, Johan Jonker wrote:
->> On 10/25/22 00:05, Sebastian Reichel wrote:
->>> On Mon, Oct 24, 2022 at 01:50:49PM -0500, Rob Herring wrote:
->>>> On Fri, Oct 21, 2022 at 07:59:26PM -0400, Krzysztof Kozlowski wrote:
->>>>> On 21/10/2022 13:06, Sebastian Reichel wrote:
->>>>>> Convert RTC binding for Haoyu Microelectronics HYM8563 to Device Tree
->>>>>> Schema format.
->>>>>>
->>>>>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->>>>>> ---
->>>>>>  .../devicetree/bindings/rtc/haoyu,hym8563.txt | 30 ----------
->>>>>>  .../bindings/rtc/haoyu,hym8563.yaml           | 55 +++++++++++++++++++
->>>>>>  2 files changed, 55 insertions(+), 30 deletions(-)
->>>>>>  delete mode 100644 Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt
->>>>>>  create mode 100644 Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt b/Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt
->>>>>> deleted file mode 100644
->>>>>> index a8934fe2ab4c..000000000000
->>>>>> --- a/Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt
->>>>>> +++ /dev/null
->>>>>> @@ -1,30 +0,0 @@
->>>>>> -Haoyu Microelectronics HYM8563 Real Time Clock
->>>>>> -
->>>>>> -The HYM8563 provides basic rtc and alarm functionality
->>>>>> -as well as a clock output of up to 32kHz.
->>>>>> -
->>>>>> -Required properties:
->>>>>> -- compatible: should be: "haoyu,hym8563"
->>>>>> -- reg: i2c address
->>>>>> -- #clock-cells: the value should be 0
->>>>>> -
->>>>>> -Optional properties:
->>>>>> -- clock-output-names: From common clock binding
->>>>>> -- interrupts: rtc alarm/event interrupt
->>>>>> -
->>>>>> -Example:
->>>>>> -
->>>>>> -hym8563: hym8563@51 {
->>>>>> -	compatible = "haoyu,hym8563";
->>>>>> -	reg = <0x51>;
->>>>>> -
->>>>>> -	interrupts = <13 IRQ_TYPE_EDGE_FALLING>;
->>>>>> -
->>>>>> -	#clock-cells = <0>;
->>>>>> -};
->>>>>> -
->>>>>> -device {
->>>>>> -...
->>>>>> -	clocks = <&hym8563>;
->>>>>> -...
->>>>>> -};
->>>>>> diff --git a/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml b/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
->>>>>> new file mode 100644
->>>>>> index 000000000000..b0b6126b12dd
->>>>>> --- /dev/null
->>>>>> +++ b/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
->>>>>> @@ -0,0 +1,55 @@
->>>>>> +# SPDX-License-Identifier: GPL-2.0
->>>>>
->>>>> Dual license please. I don't think you copied any content from original
->>>>> bindings... unless the example?
->>>>>
->>>>>> +%YAML 1.2
->>>>>> +---
->>>>>> +$id: http://devicetree.org/schemas/rtc/haoyu,hym8563.yaml#
->>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>> +
->>>>>> +title: Haoyu Microelectronics HYM8563 RTC
->>>>>> +
->>>>>> +maintainers:
->>>>>> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
->>>>>> +
->>>>>> +properties:
->>>>>> +  compatible:
->>>>>> +    const: haoyu,hym8563
->>>>>> +
->>>>>> +  reg:
->>>>>> +    maxItems: 1
->>>>>> +
->>>>>> +  interrupts:
->>>>>> +    maxItems: 1
->>>>>> +
->>>>>> +  "#clock-cells":
->>>>>> +    const: 0
->>>>>> +
->>>>>> +  clock-output-names:
->>>>>> +    description: From common clock binding to override the default output clock name.
->>>>>
->>>>> You need maxItems for this.
->>>>>
->>>>>> +
->>>>>> +  wakeup-source:
->>>>>> +    description: Enables wake up of host system on alarm.
->>>>>> +
->>>>>> +allOf:
->>>>>> +  - $ref: rtc.yaml
->>>>>> +
->>>>>> +unevaluatedProperties: false
->>>>>> +
->>>>>
->>
->>>>> Would be great if you could also correct DTS using these bindings (see
->>>>> warning from Rob).
->>>>
->>>> It looked to me like 'clock-frequency' should be added to the schema.
->>>
->>> I've sent PATCHv2, which removes clock-frequency from all hym8563
->>> users. My reasoning is, that the old txt binding does not describe
->>> it and the current Linux driver does not handle it as far as I can
->>> see.
->>
->> Didn't note you were doing a conversion as well...
->> From my abandonment patch serie
->>
->>   clock-frequency:
->>     enum: [1, 32, 1024, 32768]
->>
->> The data sheet shows that it can generate 4 different frequencies.
->> Rockchip mostly uses 32768, but that doesn't mean someone else is
->> not alowed to set what he/she prefers.
-> 
-> As far as I can tell 32768 has been cargo copied by everyone, but
-> the driver is not parsing this at all and I would expect the clock
-> API to be used for requesting a specific frequency.
+The example is also updated to use the sub-node style, incl.
+the axi bus configuration node, which got the same treatment
+as the queues config in 5361660af6d3 ("dt-bindings: net: snps,dwmac:
+Document stmmac-axi-config subnode").
 
-DT and Linux driver support are 2 different things.
-What Linux currently doesn't support might be needed elsewhere.
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+---
+Changes since PATCHv1:
+ * https://lore.kernel.org/all/20221021171055.85888-1-sebastian.reichel@collabora.com/
+ * add logic to make booleans that are actually enums mutually exclusive
+ * fix type of "snps,send_slope", "snps,idle_slope", "snps,high_credit" and "snps,low_credit"
+ * add missing 'additionalProperties: false' in rx-queues-config -> "^queue[0-9]$"
+ * add missing 'additionalProperties: false' in tx-queues-config -> "^queue[0-9]$"
+ * update example to follow the sub-node style
+---
+ .../devicetree/bindings/net/snps,dwmac.yaml   | 345 ++++++++++++++----
+ 1 file changed, 264 insertions(+), 81 deletions(-)
 
-Johan
+diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+index 13b984076af5..e88a86623fce 100644
+--- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
++++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+@@ -167,56 +167,238 @@ properties:
+   snps,mtl-rx-config:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description:
+-      Multiple RX Queues parameters. Phandle to a node that can
+-      contain the following properties
+-        * snps,rx-queues-to-use, number of RX queues to be used in the
+-          driver
+-        * Choose one of these RX scheduling algorithms
+-          * snps,rx-sched-sp, Strict priority
+-          * snps,rx-sched-wsp, Weighted Strict priority
+-        * For each RX queue
+-          * Choose one of these modes
+-            * snps,dcb-algorithm, Queue to be enabled as DCB
+-            * snps,avb-algorithm, Queue to be enabled as AVB
+-          * snps,map-to-dma-channel, Channel to map
+-          * Specifiy specific packet routing
+-            * snps,route-avcp, AV Untagged Control packets
+-            * snps,route-ptp, PTP Packets
+-            * snps,route-dcbcp, DCB Control Packets
+-            * snps,route-up, Untagged Packets
+-            * snps,route-multi-broad, Multicast & Broadcast Packets
+-          * snps,priority, bitmask of the tagged frames priorities assigned to
+-            the queue
++      Multiple RX Queues parameters. Phandle to a node that
++      implements the 'rx-queues-config' object described in
++      this binding.
++
++  rx-queues-config:
++    type: object
++    properties:
++      snps,rx-queues-to-use:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description: number of RX queues to be used in the driver
++      snps,rx-sched-sp:
++        type: boolean
++        description: Strict priority
++      snps,rx-sched-wsp:
++        type: boolean
++        description: Weighted Strict priority
++    allOf:
++      - if:
++          required:
++            - snps,rx-sched-sp
++        then:
++          properties:
++            snps,rx-sched-wsp: false
++      - if:
++          required:
++            - snps,rx-sched-wsp
++        then:
++          properties:
++            snps,rx-sched-sp: false
++    patternProperties:
++      "^queue[0-9]$":
++        description: Each subnode represents a queue.
++        type: object
++        properties:
++          snps,dcb-algorithm:
++            type: boolean
++            description: Queue to be enabled as DCB
++          snps,avb-algorithm:
++            type: boolean
++            description: Queue to be enabled as AVB
++          snps,map-to-dma-channel:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            description: DMA channel id to map
++          snps,route-avcp:
++            type: boolean
++            description: AV Untagged Control packets
++          snps,route-ptp:
++            type: boolean
++            description: PTP Packets
++          snps,route-dcbcp:
++            type: boolean
++            description: DCB Control Packets
++          snps,route-up:
++            type: boolean
++            description: Untagged Packets
++          snps,route-multi-broad:
++            type: boolean
++            description: Multicast & Broadcast Packets
++          snps,priority:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            description: Bitmask of the tagged frames priorities assigned to the queue
++        allOf:
++          - if:
++              required:
++                - snps,dcb-algorithm
++            then:
++              properties:
++                snps,avb-algorithm: false
++          - if:
++              required:
++                - snps,avb-algorithm
++            then:
++              properties:
++                snps,dcb-algorithm: false
++          - if:
++              required:
++                - snps,route-avcp
++            then:
++              properties:
++                snps,route-ptp: false
++                snps,route-dcbcp: false
++                snps,route-up: false
++                snps,route-multi-broad: false
++          - if:
++              required:
++                - snps,route-ptp
++            then:
++              properties:
++                snps,route-avcp: false
++                snps,route-dcbcp: false
++                snps,route-up: false
++                snps,route-multi-broad: false
++          - if:
++              required:
++                - snps,route-dcbcp
++            then:
++              properties:
++                snps,route-avcp: false
++                snps,route-ptp: false
++                snps,route-up: false
++                snps,route-multi-broad: false
++          - if:
++              required:
++                - snps,route-up
++            then:
++              properties:
++                snps,route-avcp: false
++                snps,route-ptp: false
++                snps,route-dcbcp: false
++                snps,route-multi-broad: false
++          - if:
++              required:
++                - snps,route-multi-broad
++            then:
++              properties:
++                snps,route-avcp: false
++                snps,route-ptp: false
++                snps,route-dcbcp: false
++                snps,route-up: false
++        additionalProperties: false
++    additionalProperties: false
+ 
+   snps,mtl-tx-config:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description:
+-      Multiple TX Queues parameters. Phandle to a node that can
+-      contain the following properties
+-        * snps,tx-queues-to-use, number of TX queues to be used in the
+-          driver
+-        * Choose one of these TX scheduling algorithms
+-          * snps,tx-sched-wrr, Weighted Round Robin
+-          * snps,tx-sched-wfq, Weighted Fair Queuing
+-          * snps,tx-sched-dwrr, Deficit Weighted Round Robin
+-          * snps,tx-sched-sp, Strict priority
+-        * For each TX queue
+-          * snps,weight, TX queue weight (if using a DCB weight
+-            algorithm)
+-          * Choose one of these modes
+-            * snps,dcb-algorithm, TX queue will be working in DCB
+-            * snps,avb-algorithm, TX queue will be working in AVB
+-              [Attention] Queue 0 is reserved for legacy traffic
+-                          and so no AVB is available in this queue.
+-          * Configure Credit Base Shaper (if AVB Mode selected)
+-            * snps,send_slope, enable Low Power Interface
+-            * snps,idle_slope, unlock on WoL
+-            * snps,high_credit, max write outstanding req. limit
+-            * snps,low_credit, max read outstanding req. limit
+-          * snps,priority, bitmask of the priorities assigned to the queue.
+-            When a PFC frame is received with priorities matching the bitmask,
+-            the queue is blocked from transmitting for the pause time specified
+-            in the PFC frame.
++      Multiple TX Queues parameters. Phandle to a node that
++      implements the 'tx-queues-config' object described in
++      this binding.
++
++  tx-queues-config:
++    type: object
++    properties:
++      snps,tx-queues-to-use:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description: number of TX queues to be used in the driver
++      snps,tx-sched-wrr:
++        type: boolean
++        description: Weighted Round Robin
++      snps,tx-sched-wfq:
++        type: boolean
++        description: Weighted Fair Queuing
++      snps,tx-sched-dwrr:
++        type: boolean
++        description: Deficit Weighted Round Robin
++      snps,tx-sched-sp:
++        type: boolean
++        description: Strict priority
++    allOf:
++      - if:
++          required:
++            - snps,tx-sched-wrr
++        then:
++          properties:
++            snps,tx-sched-wfq: false
++            snps,tx-sched-dwrr: false
++            snps,tx-sched-sp: false
++      - if:
++          required:
++            - snps,tx-sched-wfq
++        then:
++          properties:
++            snps,tx-sched-wrr: false
++            snps,tx-sched-dwrr: false
++            snps,tx-sched-sp: false
++      - if:
++          required:
++            - snps,tx-sched-dwrr
++        then:
++          properties:
++            snps,tx-sched-wrr: false
++            snps,tx-sched-wfq: false
++            snps,tx-sched-sp: false
++      - if:
++          required:
++            - snps,tx-sched-sp
++        then:
++          properties:
++            snps,tx-sched-wrr: false
++            snps,tx-sched-wfq: false
++            snps,tx-sched-dwrr: false
++    patternProperties:
++      "^queue[0-9]$":
++        description: Each subnode represents a queue.
++        type: object
++        properties:
++          snps,weight:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            description: TX queue weight (if using a DCB weight algorithm)
++          snps,dcb-algorithm:
++            type: boolean
++            description: TX queue will be working in DCB
++          snps,avb-algorithm:
++            type: boolean
++            description:
++              TX queue will be working in AVB.
++              Queue 0 is reserved for legacy traffic and so no AVB is
++              available in this queue.
++          snps,send_slope:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            description: enable Low Power Interface
++          snps,idle_slope:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            description: unlock on WoL
++          snps,high_credit:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            description: max write outstanding req. limit
++          snps,low_credit:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            description: max read outstanding req. limit
++          snps,priority:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            description:
++              Bitmask of the tagged frames priorities assigned to the queue.
++              When a PFC frame is received with priorities matching the bitmask,
++              the queue is blocked from transmitting for the pause time specified
++              in the PFC frame.
++        allOf:
++          - if:
++              required:
++                - snps,dcb-algorithm
++            then:
++              properties:
++                snps,avb-algorithm: false
++          - if:
++              required:
++                - snps,avb-algorithm
++            then:
++              properties:
++                snps,dcb-algorithm: false
++                snps,weight: false
++        additionalProperties: false
++    additionalProperties: false
+ 
+   snps,reset-gpio:
+     deprecated: true
+@@ -463,41 +645,6 @@ additionalProperties: true
+ 
+ examples:
+   - |
+-    stmmac_axi_setup: stmmac-axi-config {
+-        snps,wr_osr_lmt = <0xf>;
+-        snps,rd_osr_lmt = <0xf>;
+-        snps,blen = <256 128 64 32 0 0 0>;
+-    };
+-
+-    mtl_rx_setup: rx-queues-config {
+-        snps,rx-queues-to-use = <1>;
+-        snps,rx-sched-sp;
+-        queue0 {
+-            snps,dcb-algorithm;
+-            snps,map-to-dma-channel = <0x0>;
+-            snps,priority = <0x0>;
+-        };
+-    };
+-
+-    mtl_tx_setup: tx-queues-config {
+-        snps,tx-queues-to-use = <2>;
+-        snps,tx-sched-wrr;
+-        queue0 {
+-            snps,weight = <0x10>;
+-            snps,dcb-algorithm;
+-            snps,priority = <0x0>;
+-        };
+-
+-        queue1 {
+-            snps,avb-algorithm;
+-            snps,send_slope = <0x1000>;
+-            snps,idle_slope = <0x1000>;
+-            snps,high_credit = <0x3E800>;
+-            snps,low_credit = <0xFFC18000>;
+-            snps,priority = <0x1>;
+-        };
+-    };
+-
+     gmac0: ethernet@e0800000 {
+         compatible = "snps,dwxgmac-2.10", "snps,dwxgmac";
+         reg = <0xe0800000 0x8000>;
+@@ -516,6 +663,42 @@ examples:
+         snps,axi-config = <&stmmac_axi_setup>;
+         snps,mtl-rx-config = <&mtl_rx_setup>;
+         snps,mtl-tx-config = <&mtl_tx_setup>;
++
++        stmmac_axi_setup: stmmac-axi-config {
++            snps,wr_osr_lmt = <0xf>;
++            snps,rd_osr_lmt = <0xf>;
++            snps,blen = <256 128 64 32 0 0 0>;
++        };
++
++        mtl_rx_setup: rx-queues-config {
++            snps,rx-queues-to-use = <1>;
++            snps,rx-sched-sp;
++            queue0 {
++                snps,dcb-algorithm;
++                snps,map-to-dma-channel = <0x0>;
++                snps,priority = <0x0>;
++            };
++        };
++
++        mtl_tx_setup: tx-queues-config {
++            snps,tx-queues-to-use = <2>;
++            snps,tx-sched-wrr;
++            queue0 {
++                snps,weight = <0x10>;
++                snps,dcb-algorithm;
++                snps,priority = <0x0>;
++            };
++
++            queue1 {
++                snps,avb-algorithm;
++                snps,send_slope = <0x1000>;
++                snps,idle_slope = <0x1000>;
++                snps,high_credit = <0x3E800>;
++                snps,low_credit = <0xFFC18000>;
++                snps,priority = <0x1>;
++            };
++        };
++
+         mdio0 {
+             #address-cells = <1>;
+             #size-cells = <0>;
+-- 
+2.35.1
 
-> 
-> -- Sebastian
