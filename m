@@ -2,228 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820A56114DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726936114E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbiJ1Omp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
+        id S231158AbiJ1OnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbiJ1OmJ (ORCPT
+        with ESMTP id S230038AbiJ1Ome (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:42:09 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5D81D375F;
-        Fri, 28 Oct 2022 07:42:02 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id a67so8150392edf.12;
-        Fri, 28 Oct 2022 07:42:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=rdd3C6TN+Q7jAZQuqgCwSsa1Ij3JEPJSz4b5ZZhAUUs=;
-        b=kLyhfxR7p36DQOpBZl9Xm1k1GIhdt6OshFZhitwORGQ4ER/NSqvUrwy0cariZW8PjV
-         vFYdHyLIFACFRD1KV+wh8kL3/ZjXdYqz2pdqmP3635Byw/7Fj+x+dV4xVSGv0G3Do4lJ
-         8qCN46HjeV+2NOY27mN4RIeeXmg7X+KmzRz50V522lgwncRkkA8dNxJ5X88A2MFRdoo0
-         Lt+F3o57iXZ/dcrn77HCvh+lpNqTrkNHx6lbrmfKLX2WAdjQBY4N/OMZrQ1o78IESYdk
-         KnAxF8nypDpLVU/UxAqHON/1IPzbDN+TzWRQYJw82pmC0H3sgIk1I4Q0B5m27FXMhKRW
-         bndw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rdd3C6TN+Q7jAZQuqgCwSsa1Ij3JEPJSz4b5ZZhAUUs=;
-        b=GN8M3zj/xNBrwMWWt59X9UWDXIPCr0dDD4FC6z1Juz/8+z0qLZSKLwuqzeHLy3CVVo
-         oJgzqWJbQVia1cGBHxjY9wzPrZzoOes5njn29ON7CkWlknB4he75U4CMP1TNFIM2z8mm
-         Jc/MvSTI3h1tn4IwJ8uo0SIaMtbfokJM/lt0aK0WE2clSxLW/H33TMa6i4N2QK4b63h7
-         hDgWQZ288ClTpI/arXgZfj9w1JGg2SC0YC3gkEYqP8nnbSk5zr4tjzwtS0nW4YqBJUU+
-         HKHOK8ddfdm7k2edf0gX5BcH2qL3A2J/9jLC4+3e20vwvxdrB9CFcCAd8VdjqK8PDbfL
-         6U3A==
-X-Gm-Message-State: ACrzQf14buUAgv5aG+8sbehnz6FBiwOnR+tI1EdCBloT6IrZYs32W6W6
-        eHry2B72NvnPitr6AaT539c=
-X-Google-Smtp-Source: AMsMyM7sw0vsxz8O0tx9YfPlNRv5qrozUBj34sERmHlZ8BKSV46Pt6oF9zRc8ChmME8VeYPRgBeJig==
-X-Received: by 2002:a50:bb06:0:b0:461:4acc:4540 with SMTP id y6-20020a50bb06000000b004614acc4540mr37760091ede.307.1666968121365;
-        Fri, 28 Oct 2022 07:42:01 -0700 (PDT)
-Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id x9-20020a056402414900b004589da5e5cesm2793607eda.41.2022.10.28.07.42.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 07:42:01 -0700 (PDT)
-Message-ID: <56dbd2ab-dc2c-2f7d-0403-1d29dfd3c2e7@gmail.com>
-Date:   Fri, 28 Oct 2022 16:41:59 +0200
+        Fri, 28 Oct 2022 10:42:34 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41E61B8646
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:42:33 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1ooQYy-0005tX-WB; Fri, 28 Oct 2022 16:42:25 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1ooQYy-0000X8-JX; Fri, 28 Oct 2022 16:42:24 +0200
+Date:   Fri, 28 Oct 2022 16:42:24 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de,
+        Sherry Sun <sherry.sun@nxp.com>, devicetree@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH V2 13/15] arm64: dts: imx8mm-evk: Enable usdhc1 to
+ support wifi
+Message-ID: <20221028144224.dthligupldj2wift@pengutronix.de>
+References: <20221024031351.4135651-1-peng.fan@oss.nxp.com>
+ <20221024031351.4135651-14-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v2 4/4] ARM: dts: rockchip: add rk3128-evb.dts
-To:     kever.yang@rock-chips.com, heiko@sntech.de
-Cc:     sjg@chromium.org, philipp.tomsich@vrull.eu,
-        zhangqing@rock-chips.com, hjc@rock-chips.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-References: <e83964fe-ad87-0905-4586-e235757c6b2b@gmail.com>
-Content-Language: en-US
-In-Reply-To: <e83964fe-ad87-0905-4586-e235757c6b2b@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024031351.4135651-14-peng.fan@oss.nxp.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add rk3128-evb.dts
+On 22-10-24, Peng Fan (OSS) wrote:
+> From: Sherry Sun <sherry.sun@nxp.com>
+> 
+> Enable usdhc1 which is used for wifi.
+> 
+> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  arch/arm64/boot/dts/freescale/imx8mm-evk.dts  | 23 +++++++++++
+>  arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi | 39 +++++++++++++++++++
+>  2 files changed, 62 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+> index a2b24d4d4e3e..c93387fcd498 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+> @@ -15,6 +15,17 @@ / {
+>  	aliases {
+>  		spi0 = &flexspi;
+>  	};
+> +
+> +	reg_sd1_vmmc: sd1_regulator {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "WLAN_EN";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		gpio = <&gpio2 10 GPIO_ACTIVE_HIGH>;
+> +		off-on-delay = <20000>;
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
+This is wrong and also unnecessary for wifi?
 
-Changed V2:
-  use generic node names
-  remove underscores in node names
-  add more aliases
-  sort
----
- arch/arm/boot/dts/Makefile       |   1 +
- arch/arm/boot/dts/rk3128-evb.dts | 110 +++++++++++++++++++++++++++++++
- 2 files changed, 111 insertions(+)
- create mode 100644 arch/arm/boot/dts/rk3128-evb.dts
+Regards,
+  Marco
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 68ac9b360..0f26539d2 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1127,6 +1127,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += \
- 	rk3066a-marsboard.dtb \
- 	rk3066a-mk808.dtb \
- 	rk3066a-rayeager.dtb \
-+	rk3128-evb.dtb \
- 	rk3188-bqedison2qc.dtb \
- 	rk3188-px3-evb.dtb \
- 	rk3188-radxarock.dtb \
-diff --git a/arch/arm/boot/dts/rk3128-evb.dts b/arch/arm/boot/dts/rk3128-evb.dts
-new file mode 100644
-index 000000000..c529e7437
---- /dev/null
-+++ b/arch/arm/boot/dts/rk3128-evb.dts
-@@ -0,0 +1,110 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * (C) Copyright 2017 Rockchip Electronics Co., Ltd
-+ */
-+
-+/dts-v1/;
-+
-+#include "rk3128.dtsi"
-+
-+/ {
-+	model = "Rockchip RK3128 Evaluation board";
-+	compatible = "rockchip,rk3128-evb", "rockchip,rk3128";
-+
-+	aliases {
-+		gpio0 = &gpio0;
-+		gpio1 = &gpio1;
-+		gpio2 = &gpio2;
-+		gpio3 = &gpio3;
-+		i2c1 = &i2c1;
-+		mmc0 = &emmc;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart2;
-+	};
-+
-+	memory@60000000 {
-+		device_type = "memory";
-+		reg = <0x60000000 0x40000000>;
-+	};
-+
-+	vcc5v0_otg: vcc5v0-otg-regulator {
-+		compatible = "regulator-fixed";
-+		gpio = <&gpio0 26 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&otg_vbus_drv>;
-+		regulator-name = "vcc5v0_otg";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+	};
-+
-+	vcc5v0_host: vcc5v0-host-regulator {
-+		compatible = "regulator-fixed";
-+		gpio = <&gpio2 23 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&host_vbus_drv>;
-+		regulator-name = "vcc5v0_host";
-+		regulator-always-on;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+	};
-+};
-+
-+&emmc {
-+	bus-width = <8>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&emmc_clk &emmc_cmd &emmc_bus8>;
-+	status = "okay";
-+};
-+
-+&i2c1 {
-+	status = "okay";
-+
-+	hym8563: rtc@51 {
-+		compatible = "haoyu,hym8563";
-+		reg = <0x51>;
-+		#clock-cells = <0>;
-+		clock-frequency = <32768>;
-+		clock-output-names = "xin32k";
-+	};
-+};
-+
-+&usb2phy {
-+	status = "okay";
-+};
-+
-+&usb2phy_host {
-+	status = "okay";
-+};
-+
-+&usb2phy_otg {
-+	status = "okay";
-+};
-+
-+&usb_host_ehci {
-+	status = "okay";
-+};
-+
-+&usb_host_ohci {
-+	status = "okay";
-+};
-+
-+&usb_otg {
-+	vbus-supply = <&vcc5v0_otg>;
-+	status = "okay";
-+};
-+
-+&pinctrl {
-+	usb-host {
-+		host_vbus_drv: host-vbus-drv {
-+			rockchip,pins = <2 RK_PC7 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+
-+	usb-otg {
-+		otg_vbus_drv: otg-vbus-drv {
-+			rockchip,pins = <0 RK_PD2 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+};
---
-2.20.1
-
+> +		startup-delay-us = <100>;
+> +		enable-active-high;
+> +	};
+>  };
+>  
+>  &ddrc {
+> @@ -53,6 +64,18 @@ flash@0 {
+>  	};
+>  };
+>  
+> +&usdhc1 {
+> +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+> +	pinctrl-0 = <&pinctrl_usdhc1>, <&pinctrl_usdhc1_gpio>;
+> +	pinctrl-1 = <&pinctrl_usdhc1_100mhz>, <&pinctrl_usdhc1_gpio>;
+> +	pinctrl-2 = <&pinctrl_usdhc1_200mhz>, <&pinctrl_usdhc1_gpio>;
+> +	bus-width = <4>;
+> +	vmmc-supply = <&reg_sd1_vmmc>;
+> +	keep-power-in-suspend;
+> +	non-removable;
+> +	status = "okay";
+> +};
+> +
+>  &usdhc3 {
+>  	assigned-clocks = <&clk IMX8MM_CLK_USDHC3_ROOT>;
+>  	assigned-clock-rates = <400000000>;
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+> index 7d6317d95b13..ce450965e837 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+> @@ -559,6 +559,45 @@ MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX	0x140
+>  		>;
+>  	};
+>  
+> +	pinctrl_usdhc1_gpio: usdhc1grpgpio {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_SD1_RESET_B_GPIO2_IO10	0x41
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc1: usdhc1grp {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK		0x190
+> +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD		0x1d0
+> +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0	0x1d0
+> +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1	0x1d0
+> +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2	0x1d0
+> +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d0
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc1_100mhz: usdhc1grp100mhz {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK		0x194
+> +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD		0x1d4
+> +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0	0x1d4
+> +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1	0x1d4
+> +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2	0x1d4
+> +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d4
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc1_200mhz: usdhc1grp200mhz {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK		0x196
+> +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD		0x1d6
+> +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0	0x1d6
+> +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1	0x1d6
+> +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2	0x1d6
+> +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d6
+> +		>;
+> +	};
+> +
+>  	pinctrl_usdhc2_gpio: usdhc2grpgpiogrp {
+>  		fsl,pins = <
+>  			MX8MM_IOMUXC_GPIO1_IO15_GPIO1_IO15	0x1c4
+> -- 
+> 2.37.1
+> 
+> 
+> 
