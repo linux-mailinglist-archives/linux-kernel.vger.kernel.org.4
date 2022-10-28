@@ -2,186 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD6B61142D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF14611433
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiJ1OMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
+        id S230016AbiJ1ONJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbiJ1OMb (ORCPT
+        with ESMTP id S230217AbiJ1ONB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:12:31 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9CA1C8406;
-        Fri, 28 Oct 2022 07:12:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666966350; x=1698502350;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=q9Olp4YqLgqBAJYRL0jQZ9E01eAQBEhHXpcQaGWFd5k=;
-  b=V4Ye95J+B1DfRqorVBi7sn1QK+BTGZhUhrCD7aapn7PkY6koRPfI72Iz
-   L1/zjR0eNcP7suSVShYGabbU9wakm9WH3PuMR/+JZ7aopXardZ65zeCfX
-   zXCLYusKdPELZaqWhgbI6JfR0rutMVxsRp7icl4JIduoKMZZalQNpCV2k
-   xpJnOB/Gx+WJVJ6VMrbqdPAJHL+LltiSqxF4WHdMuDMrurlCaZKmn/m/L
-   Q+7JXbnNnC516qxM9Tghlp/Rcx6HKNG6I6MuU+V8hcFP+i8NL/jdcirBV
-   EdFkSz9Iti5JUUAOFdVoawlYTlnRqvE0eejAjIkpOImY1PrOPpEQ1S55F
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="335142692"
-X-IronPort-AV: E=Sophos;i="5.95,221,1661842800"; 
-   d="scan'208";a="335142692"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 07:12:29 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="583936262"
-X-IronPort-AV: E=Sophos;i="5.95,221,1661842800"; 
-   d="scan'208";a="583936262"
-Received: from snehalde-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.46.229])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 07:12:24 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 1DFAF10828A; Fri, 28 Oct 2022 17:12:22 +0300 (+03)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        dan.j.williams@intel.com, david@redhat.com, hpa@zytor.com,
-        seanjc@google.com, thomas.lendacky@amd.com,
-        elena.reshetova@intel.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH 2/2] x86/tdx: Do not allow #VE due to EPT violation on the private memory
-Date:   Fri, 28 Oct 2022 17:12:20 +0300
-Message-Id: <20221028141220.29217-3-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221028141220.29217-1-kirill.shutemov@linux.intel.com>
-References: <20221028141220.29217-1-kirill.shutemov@linux.intel.com>
+        Fri, 28 Oct 2022 10:13:01 -0400
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800D21D5E1A
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:13:00 -0700 (PDT)
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4MzPdl2xLcz9ssY;
+        Fri, 28 Oct 2022 14:12:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1666966379; bh=J5HaiEhTFSaGiDDEVy4o0my0rUOLZZl0pxQcyF76RGs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QhOUO6U51cD2+psUCH4qoCWs2LNWy9vq8PK5s5B4nSwUfLDK3clBO4ejy/EmYQCvF
+         1sJzSVNt76rOiTf7gJv7GxGp9LPZ4GUedVimTDOWN4MpiImjha+4X49KNju0DtqJWy
+         kF3KdlofZs71BM3tpLQGpJhSuzcqRbGzkYdp3dqE=
+X-Riseup-User-ID: 3BE6563F11EEB38585CBAACA620A54D2FE9A0A4ED502D9BE6FEDDE5C5ECBEBE8
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4MzPdf25k6z5vNH;
+        Fri, 28 Oct 2022 14:12:54 +0000 (UTC)
+From:   Arthur Grillo <arthurgrillo@riseup.net>
+To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>, andrealmeid@riseup.net,
+        melissa.srw@gmail.com, Arthur Grillo <arthurgrillo@riseup.net>,
+        =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>
+Subject: [PATCH v3] drm/tests: Add back seed value information
+Date:   Fri, 28 Oct 2022 11:12:46 -0300
+Message-Id: <20221028141246.280079-1-arthurgrillo@riseup.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Virtualization Exceptions (#VE) are delivered to TDX guests due to
-specific guest actions such as using specific instructions or accessing
-a specific MSR.
+As reported by Michał the drm_mm and drm_buddy unit tests lost the
+printk with seed value after they were refactored into KUnit.
 
-Notable reason for #VE is access to specific guest physical addresses.
-It requires special security considerations as it is not fully in
-control of the guest kernel. VMM can remove a page from EPT page table
-and trigger #VE on access.
+Add kunit_info with seed value information to assure reproducibility.
 
-The primary use-case for #VE on a memory access is MMIO: VMM removes
-page from EPT to trigger exception in the guest which allows guest to
-emulate MMIO with hypercalls.
-
-MMIO only happens on shared memory. All conventional kernel memory is
-private. This includes everything from kernel stacks to kernel text.
-
-Handling exceptions on arbitrary accesses to kernel memory is
-essentially impossible as handling #VE may require access to memory
-that also triggers the exception.
-
-TDX module provides mechanism to disable #VE delivery on access to
-private memory. If SEPT_VE_DISABLE TD attribute is set, private EPT
-violation will not be reflected to the guest as #VE, but will trigger
-exit to VMM.
-
-Make sure the attribute is set by VMM. Panic otherwise.
-
-There's small window during the boot before the check where kernel has
-early #VE handler. But the handler is only for port I/O and panic as
-soon as it sees any other #VE reason.
-
-SEPT_VE_DISABLE makes SEPT violation unrecoverable and terminating the
-TD is the only option.
-
-Kernel has no legitimate use-cases for #VE on private memory. It is
-either a guest kernel bug (like access of unaccepted memory) or
-malicious/buggy VMM that removes guest page that is still in use.
-
-In both cases terminating TD is the right thing to do.
-
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Fixes: 9a22bf6debbf ("x86/traps: Add #VE support for TDX guest")
-Cc: stable@vger.kernel.org # v5.19
+Reported-by: Michał Winiarski <michal.winiarski@intel.com>
+Signed-off-by: Arthur Grillo <arthurgrillo@riseup.net>
 ---
- arch/x86/coco/tdx/tdx.c | 49 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+v1->v2: https://lore.kernel.org/all/20221026211458.68432-1-arthurgrillo@riseup.net/
+- Correct compilation issues
+- Change tags order
+- Remove useless line change
+- Write commit message in imperative form
+- Remove redundant message part
+- Correct some grammars nits
+- Correct checkpatch issues
 
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 343d60853b71..a376a0c3fddc 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -34,6 +34,9 @@
- #define VE_GET_PORT_NUM(e)	((e) >> 16)
- #define VE_IS_IO_STRING(e)	((e) & BIT(4))
+v2->v3: https://lore.kernel.org/all/20221027142903.200169-1-arthurgrillo@riseup.net/
+- Change .init to .suite_init
+- Correct some grammars nits
+
+---
+ drivers/gpu/drm/tests/drm_buddy_test.c | 6 ++++--
+ drivers/gpu/drm/tests/drm_mm_test.c    | 8 ++++++--
+ 2 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
+index 62f69589a72d..90ec5e8a485b 100644
+--- a/drivers/gpu/drm/tests/drm_buddy_test.c
++++ b/drivers/gpu/drm/tests/drm_buddy_test.c
+@@ -726,11 +726,13 @@ static void drm_test_buddy_alloc_limit(struct kunit *test)
+ 	drm_buddy_fini(&mm);
+ }
  
-+/* TD Attributes */
-+#define ATTR_SEPT_VE_DISABLE	BIT(28)
+-static int drm_buddy_init_test(struct kunit *test)
++static int drm_buddy_init_suite(struct kunit_suite *suite)
+ {
+ 	while (!random_seed)
+ 		random_seed = get_random_u32();
+ 
++	kunit_info(suite, "Testing DRM buddy manager, with random_seed=0x%x\n", random_seed);
 +
- /* Caches GPA width from TDG.VP.INFO TDCALL */
- static unsigned int gpa_width __ro_after_init;
+ 	return 0;
+ }
  
-@@ -770,6 +773,52 @@ void __init tdx_early_init(void)
- 	 */
- 	tdx_parse_tdinfo();
+@@ -746,7 +748,7 @@ static struct kunit_case drm_buddy_tests[] = {
  
-+	/*
-+	 * Do not allow #VE due to EPT violation on the private memory
-+	 *
-+	 * Virtualization Exceptions (#VE) are delivered to TDX guests due to
-+	 * specific guest actions such as using specific instructions or
-+	 * accessing a specific MSR.
-+	 *
-+	 * Notable reason for #VE is access to specific guest physical
-+	 * addresses. It requires special security considerations as it is not
-+	 * fully in control of the guest kernel. VMM can remove a page from EPT
-+	 * page table and trigger #VE on access.
-+	 *
-+	 * The primary use-case for #VE on a memory access is MMIO: VMM removes
-+	 * page from EPT to trigger exception in the guest which allows guest to
-+	 * emulate MMIO with hypercalls.
-+	 *
-+	 * MMIO only happens on shared memory. All conventional kernel memory is
-+	 * private. This includes everything from kernel stacks to kernel text.
-+	 *
-+	 * Handling exceptions on arbitrary accesses to kernel memory is
-+	 * essentially impossible as handling #VE may require access to memory
-+	 * that also triggers the exception.
-+	 *
-+	 * TDX module provides mechanism to disable #VE delivery on access to
-+	 * private memory. If SEPT_VE_DISABLE TD attribute is set, private EPT
-+	 * violation will not be reflected to the guest as #VE, but will trigger
-+	 * exit to VMM.
-+	 *
-+	 * Make sure the attribute is set by VMM. Panic otherwise.
-+	 *
-+	 * There's small window during the boot before the check where kernel has
-+	 * early #VE handler. But the handler is only for port I/O and panic as
-+	 * soon as it sees any other #VE reason.
-+	 *
-+	 * SEPT_VE_DISABLE makes SEPT violation unrecoverable and terminating
-+	 * the TD is the only option.
-+	 *
-+	 * Kernel has no legitimate use-cases for #VE on private memory. It is
-+	 * either a guest kernel bug (like access of unaccepted memory) or
-+	 * malicious/buggy VMM that removes guest page that is still in use.
-+	 *
-+	 * In both cases terminating TD is the right thing to do.
-+	 */
-+	if (!(td_attr & ATTR_SEPT_VE_DISABLE))
-+		panic("TD misconfiguration: SEPT_VE_DISABLE attibute must be set.\n");
+ static struct kunit_suite drm_buddy_test_suite = {
+ 	.name = "drm_buddy",
+-	.init = drm_buddy_init_test,
++	.suite_init = drm_buddy_init_suite,
+ 	.test_cases = drm_buddy_tests,
+ };
+ 
+diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
+index c4b66eeae203..97b9e0cd3e91 100644
+--- a/drivers/gpu/drm/tests/drm_mm_test.c
++++ b/drivers/gpu/drm/tests/drm_mm_test.c
+@@ -2209,11 +2209,15 @@ static void drm_test_mm_color_evict_range(struct kunit *test)
+ 	vfree(nodes);
+ }
+ 
+-static int drm_mm_init_test(struct kunit *test)
++static int drm_mm_init_suite(struct kunit_suite *suite)
+ {
+ 	while (!random_seed)
+ 		random_seed = get_random_u32();
+ 
++	kunit_info(sute,
++		   "Testing DRM range manager, with random_seed=0x%x max_iterations=%u max_prime=%u\n",
++		   random_seed, max_iterations, max_prime);
 +
- 	setup_force_cpu_cap(X86_FEATURE_TDX_GUEST);
+ 	return 0;
+ }
  
- 	cc_set_vendor(CC_VENDOR_INTEL);
+@@ -2246,7 +2250,7 @@ static struct kunit_case drm_mm_tests[] = {
+ 
+ static struct kunit_suite drm_mm_test_suite = {
+ 	.name = "drm_mm",
+-	.init = drm_mm_init_test,
++	.suite_init = drm_mm_init_suite,
+ 	.test_cases = drm_mm_tests,
+ };
+ 
 -- 
-2.38.0
+2.37.3
 
