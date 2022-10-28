@@ -2,71 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3A26112E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4736112F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbiJ1NfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34984 "EHLO
+        id S230222AbiJ1Nf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbiJ1NfJ (ORCPT
+        with ESMTP id S230454AbiJ1Nfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:35:09 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4C03DBE3;
-        Fri, 28 Oct 2022 06:35:04 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1666964099tjoe2pxq
-Received: from localhost.localdomain ( [182.148.13.81])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 28 Oct 2022 21:34:58 +0800 (CST)
-X-QQ-SSF: 01000000000000F0J000000A0000000
-X-QQ-FEAT: +Fw3Sd5mYDVr8j3Iuapb6Blpa7vtw7dAAGvAdK3X11fEyn+OUJN9NpRIELpPL
-        Q7z/pc4bV5jjfXb4KbPYjqpnXFJcsqz6u+OiMi5wFMGA8U/c6XPy0ZK1lnVgXwOlAz6+dQV
-        pYJsduStumosMzahoDxaldtVfJTAKK7QQU4hkOXhjoobAhLxORL/dNCK6W1Py5xuVDpxRmB
-        gl7WenGXRS7K5RsGBeo/T2fI4sDLhWJ1XidywaapNq5kTZcX21dQVCJlk2BZBxGl3vXzbF6
-        bpYQMNj5/w4hqt2E3TWLFAVJJP/vS6pikuZh3lSdUgpC8WepQh1lAIjk0chEAAAgvkYtfq+
-        i3kKl91itNxPdXT+9TmLCGKWIa6Gd9EVIDiOFvX0HXP1UXD+cOoVP03EGtQKg==
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] scsi: qla4xxx: fix repeated words in comments
-Date:   Fri, 28 Oct 2022 21:34:51 +0800
-Message-Id: <20221028133451.57916-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 28 Oct 2022 09:35:55 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E5174B9A
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:35:53 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id m15so7860918edb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:35:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mind.be; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WSwQM4r3Aloa2EOq8rU0uP3kNCarhDXB0thjIbc77xg=;
+        b=STyBewDO/7n9ft69SvCHqaswoHQvZFRM3ljBu+AQ9E6wq3TtWYkWUMcr+eiu3te4+S
+         oIhlMd2D9UcNJ6mi9XJk2mqIzApoFYoKjMbM88SfD8kRmNogMRGMZoOgHJ1llBQ0bpXl
+         weTsPE4Syk7c1GQffwixdScJufTiulEPVRlKx1bI/N09XwMTOHyoFKo5TXZ1+a1S339g
+         suMm3HROwfKIj/2ACxboL+ThNqSaF6bk6q3NLZ7fJHIQTs+RVon+IoKK5eNosi2um7Qn
+         f3wqQUE9RSyasQCicPx044wTuwhQNvFE9i3qMrqHi4yGa0MeSBAzR2C8mWjWxbISEu6Q
+         TdTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WSwQM4r3Aloa2EOq8rU0uP3kNCarhDXB0thjIbc77xg=;
+        b=gmg23IJBMt08Iuoc+GdCRRI5cVGU1cjsHQV10zQnzm6XAsEDuJ/621cvAPBlevhbkp
+         vuDp/kd04voNkpD/FXARXoVzdA3DYbDyVUChNUZG97Ml9UKs9+/6L2upHJmEqIPGKiFo
+         bbnAdFAGToNpoZIl7r3h7ctyfOqDnHturUw8BKIrHERq/fs+7fnPht/fUAY6d3iTKDno
+         n6JhiNHjZw7R2EdSAQ1iJskkJpEXzP/Iiy7OibAR8Bu3wb+mUoccOOzNLs9fYnZroqJT
+         rv0KGTx+YIVn8UJJa4bTgp9PiywK3/8/29PY4lXQzkVugqN2idGJ6VZ76ApB2Dw45VU7
+         mCYQ==
+X-Gm-Message-State: ACrzQf3ebSPhb27yBi7cFq2UjAYjFpudSQ+QHuoYIJkYroD7MqFV2f8A
+        sPnjj53L6phVa3PthihJeS1XASHfbaTN7YMk
+X-Google-Smtp-Source: AMsMyM6LVAkBeUbJXuZCHehVOHMks5GfyGlenLV/x11aGi6VugERXZO0ftYFMJ+FIrvXED9FlWuYKw==
+X-Received: by 2002:a05:6402:1941:b0:457:13a:cce9 with SMTP id f1-20020a056402194100b00457013acce9mr51736950edz.265.1666964151837;
+        Fri, 28 Oct 2022 06:35:51 -0700 (PDT)
+Received: from dtpc.zanders.be (78-22-137-109.access.telenet.be. [78.22.137.109])
+        by smtp.gmail.com with ESMTPSA id mf7-20020a170906cb8700b007aa239cf4d9sm2190907ejb.89.2022.10.28.06.35.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 06:35:51 -0700 (PDT)
+From:   Maarten Zanders <maarten.zanders@mind.be>
+Cc:     Maarten Zanders <maarten.zanders@mind.be>,
+        devicetree@vger.kernel.org,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        Pavel Machek <pavel@ucw.cz>
+Subject: [PATCH 0/2] leds: lp55xx: support disabling the charge pump
+Date:   Fri, 28 Oct 2022 15:34:57 +0200
+Message-Id: <20221028133501.95833-1-maarten.zanders@mind.be>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'should'.
+A new option in the devicetree "ti,disable-charge-pump" disables the internal
+charge pump. This can be used to avoid current flowing into the Vout pin when
+an external supply has been connected to drive the LEDs.
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/scsi/qla4xxx/ql4_os.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Maarten Zanders (2):
+  dt-bindings: leds-lp55xx: add ti,disable-charge-pump
+  leds: lp55xx: add option to disable charge pump
 
-diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
-index 9e849f6b0d0f..6449823eca48 100644
---- a/drivers/scsi/qla4xxx/ql4_os.c
-+++ b/drivers/scsi/qla4xxx/ql4_os.c
-@@ -8726,7 +8726,7 @@ static int qla4xxx_probe_adapter(struct pci_dev *pdev,
- 		 * NOTE: If ql4dontresethba==1, set IDC_CTRL DONTRESET_BIT0.
- 		 * If DONRESET_BIT0 is set, drivers should not set dev_state
- 		 * to NEED_RESET. But if NEED_RESET is set, drivers should
--		 * should honor the reset.
-+		 * honor the reset.
- 		 */
- 		if (ql4xdontresethba == 1)
- 			qla4_83xx_set_idc_dontreset(ha);
+ .../devicetree/bindings/leds/leds-lp55xx.yaml     |  5 +++++
+ drivers/leds/leds-lp5521.c                        |  6 ++++--
+ drivers/leds/leds-lp5523.c                        | 15 +++++++++++----
+ drivers/leds/leds-lp55xx-common.c                 |  3 +++
+ drivers/leds/leds-lp8501.c                        |  5 ++++-
+ include/linux/platform_data/leds-lp55xx.h         |  3 +++
+ 6 files changed, 30 insertions(+), 7 deletions(-)
+
+
+base-commit: 5f52a8ba7e91215c3d046d298fb328d1b9f7897d
 -- 
-2.36.1
+2.37.3
 
