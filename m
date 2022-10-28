@@ -2,146 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A2A9611774
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4F1611777
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiJ1QXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
+        id S230227AbiJ1QXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbiJ1QWz (ORCPT
+        with ESMTP id S230163AbiJ1QXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:22:55 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C686A1DC816;
-        Fri, 28 Oct 2022 09:22:52 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29SEjWW8030137;
-        Fri, 28 Oct 2022 16:22:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=8YJLhi7gI3v6i9QZknaF9uO+U7de8FrzMeEk5/i2jrY=;
- b=cT0bRsRCkLh2cFm5QZzbvE7ngFwk35/8ZeyfxdBt4ZqCFftLxyhiH5bLbDszN41YQcDl
- Fb99OE+T3LbRvDmwTNrdxmpcHpsgBC3WVlgl+CgVniLv/gLUaWPLIdYYWOqcBMmKGpW/
- GoZ9390lvmtWK+HBvGqY8q0GRLxP+ZaKVB+jZHgqaoemAwXuxMr5gR/+xg2rmj9HcGqW
- pldhSF8YiFufAqW5SO5nUBRNGLAWArLTV+ipdg9e/rq55FjS23gUp34N7GVvwBBR1xHT
- 14vFRE39/++QgrHzfPvU+F8MW0N/1nVbAhL2ekOdPx3mJEL4AOgtnu0eK5nz06d72tTD 5g== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kfawrwhjy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Oct 2022 16:22:45 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29SE7Mh0017470;
-        Fri, 28 Oct 2022 16:22:44 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2109.outbound.protection.outlook.com [104.47.58.109])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kfaghqnwd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Oct 2022 16:22:44 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GDiItAz2jvtbtJo9bNRKbXi1KcnN1j/DV6UifCFEVkzpFIEfR5Jx/gNwPgXZ5MzR3V1QuMRYpQEETMvXkQ0ZmCeVPa+sJmJWp+IhLz7QeNt/ddmx12Drbbg65p3y2lyd1ejUcaH7FR+hijErl7MvMi+ThXkgiNWVILHsDwseL34D+LDe4EY03pptLgjwbCfoWz0YO5KlbVjUqe3niJyMH+X3EDUFze4waUB1Twc3BeRpwp2hF6MYCFt5l4WXShaPH8W69qKIRMr6ck8Q2qiIShULEyWb2dPqvYUbT2ihxNtSmsK637t+37swZ5xWM6RnuKhRhmAMvgkxnz2vTi3PYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8YJLhi7gI3v6i9QZknaF9uO+U7de8FrzMeEk5/i2jrY=;
- b=HMO8dSbZv03O5LdP//9zTz8GmJalfNJobZe/JMTFsCAunf9c9dCTSb/6NhdCVx1i5yLseNKwTaac41FIXxjJc4dlIA+4rF58NQQT7vJGSxD2Ac1nACtFZDkBek+gLCkhngBZ6fhf8kq0ueq5uEtaBjJ1ArPN5GKJKUKSKcrM6kBXSihNb1eHIFzUEj3mEH+T4hAsOcvT4jzu/5mY3Yy1rNRD/4gg9UPXRjSHxKl+Q+Qq/Gup+P8ooNJhPjeDxirFuwBwTQ8p76srxGQ/DL5XZl33qqmjoM2oG4m/+NaE11UAMd2FJ1UTH5mPg6cORZGphyoi3QhQSf+8HfdPG1jmjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Fri, 28 Oct 2022 12:23:19 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406CD1DEC19;
+        Fri, 28 Oct 2022 09:23:18 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id fy4so14115316ejc.5;
+        Fri, 28 Oct 2022 09:23:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8YJLhi7gI3v6i9QZknaF9uO+U7de8FrzMeEk5/i2jrY=;
- b=GGd98zJ+Ooy3QTf2QOiDvuI7Oc+AKSoBTtBy9nczm1jgkyR0zo93DoGshmLAQWioOdL1l9LSw8KHNEcGbKVCcxupYftX+nrfeR3ShzEmP90r1UDRsTd5A1gZbONOMQTtWzj0Jxo5yXuXyFlwFx/AUSiQa0a8NbTZOJrAowAqL04=
-Received: from SA1PR10MB5711.namprd10.prod.outlook.com (2603:10b6:806:23e::20)
- by CH3PR10MB6689.namprd10.prod.outlook.com (2603:10b6:610:153::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15; Fri, 28 Oct
- 2022 16:22:40 +0000
-Received: from SA1PR10MB5711.namprd10.prod.outlook.com
- ([fe80::780c:bae6:7248:d67e]) by SA1PR10MB5711.namprd10.prod.outlook.com
- ([fe80::780c:bae6:7248:d67e%9]) with mapi id 15.20.5746.021; Fri, 28 Oct 2022
- 16:22:40 +0000
-Date:   Fri, 28 Oct 2022 12:22:36 -0400
-From:   Daniel Jordan <daniel.m.jordan@oracle.com>
-To:     Nicolai Stange <nstange@suse.de>
-Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Martin Doucha <mdoucha@suse.cz>, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/5] padata: make padata_free_shell() to respect pd's
- ->refcnt
-Message-ID: <20221028162236.5hvgga57bhfsdwmo@parnassus.localdomain>
-References: <20221019083708.27138-1-nstange@suse.de>
- <20221019083708.27138-3-nstange@suse.de>
- <20221028143546.3xc6rnfkfcml373c@parnassus.localdomain>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221028143546.3xc6rnfkfcml373c@parnassus.localdomain>
-X-ClientProxiedBy: MN2PR20CA0030.namprd20.prod.outlook.com
- (2603:10b6:208:e8::43) To SA1PR10MB5711.namprd10.prod.outlook.com
- (2603:10b6:806:23e::20)
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=43IXkrBvhJMjTYYaSy9C6G880H4PyNNIIiDB/uxTIJA=;
+        b=iVnAWSYn34kjfTHNy3nIZtYnYq5Tsj0LT1wqqTorR6HuhvRcB4NNohue3zuRC8UzyC
+         Fjg6bZ4T0JMde4iCl7jsd1vHper8Q0sCGSfuE9TNa4Tk8b7J1pHIp0mmAz3R8zOWS2UP
+         UBMvJgNR7Bqkm5CtpZCZ3tHafj0cJPKI2ujYNAYYiDg+MgJdIzT9gUqKKeclaEkxjDQj
+         h03hT6TzDgsK8U6fkUp8wW8bJTKq+S40YmtXEfVtbn7j0RK6yDtiahHL4/cjLbxmxC6j
+         C/EOOMK2p86GWwQtWPutLQJARG+uJpPtJiPBUtSPJ2C/0OUSDMPFF6NiaTwjDD9Ck6G7
+         mRFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=43IXkrBvhJMjTYYaSy9C6G880H4PyNNIIiDB/uxTIJA=;
+        b=O97Vllgwo2ejvnhyumqbLjlma1QN1bWyTkvHJrj2P3azQXvcxzrOayfSp2VOgLMnR4
+         wYyV8tgtn3tMjuhNkNCc/F3o/pU3PpWZdGx5eHpfRDwvOzeCqj6TbZnaYCLvjWu8mmub
+         g9QeOJQyUmws+CP0TwO6t3FrzjJXH202pxseDrmybff4dz3gR53pyE4TFepvhQ2p1Wnk
+         bWTzw7TmY6IzMLcNDndHHTGGaH61FtDfUfJDanRRyP/EKIiKANJvRb9yUXLj83W0hAeR
+         8rx4P0vPpckhj6Z0YMxoNpFkXpN3XOVSgDivpf9pGZRoqRbHJMvkdUD1MEdZDqIml504
+         wijA==
+X-Gm-Message-State: ACrzQf0f5a15arwCOriQ8uu3OOiMS4BN9JQLaTMYOC1eoy/UAylMgmVK
+        X7WDpfltCvElVx5/0RTxows=
+X-Google-Smtp-Source: AMsMyM42XCNA5AF7L70F/2Fb1twGetD6QuXX9asJ4OFTfi/0GJPHTVVIp8/eZyCBKMm6Vp4fKgFY5g==
+X-Received: by 2002:a17:907:1dda:b0:7a6:8ffc:7dc with SMTP id og26-20020a1709071dda00b007a68ffc07dcmr121847ejc.163.1666974196606;
+        Fri, 28 Oct 2022 09:23:16 -0700 (PDT)
+Received: from eray-Lenovo-Z50-70.. ([188.132.247.187])
+        by smtp.googlemail.com with ESMTPSA id c15-20020aa7c74f000000b0043bbb3535d6sm2878090eds.66.2022.10.28.09.23.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 09:23:16 -0700 (PDT)
+From:   =?UTF-8?q?Eray=20Or=C3=A7unus?= <erayorcunus@gmail.com>
+To:     pobrn@protonmail.com
+Cc:     benjamin.tissoires@redhat.com, dmitry.torokhov@gmail.com,
+        erayorcunus@gmail.com, hdegoede@redhat.com, ike.pan@canonical.com,
+        jikos@kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mgross@linux.intel.com,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH 5/6] platform/x86: ideapad-laptop: Expose camera_power only if supported
+Date:   Fri, 28 Oct 2022 19:23:14 +0300
+Message-Id: <20221028162314.15490-1-erayorcunus@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <NVuCQsVF6HONw3-eRplxrMgWlvEu6AwKlrXqouYOw1FSFucZ9oprZoUeXzBCsrdzFStLjWP4DSl9wOXTe1pS19MZovS9fDmmtVuRD_prCvQ=@protonmail.com>
+References: <20221026190106.28441-1-erayorcunus@gmail.com> <20221026190106.28441-6-erayorcunus@gmail.com> <NVuCQsVF6HONw3-eRplxrMgWlvEu6AwKlrXqouYOw1FSFucZ9oprZoUeXzBCsrdzFStLjWP4DSl9wOXTe1pS19MZovS9fDmmtVuRD_prCvQ=@protonmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR10MB5711:EE_|CH3PR10MB6689:EE_
-X-MS-Office365-Filtering-Correlation-Id: ea5e92e5-7b9b-4150-cac3-08dab900a274
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zWS6BN2N5lW6Dy3o3YjjHehh2eIitwIZExLGYlzQhtIU4n4qn2pXm1NHkYZLJVqscevjBhzQYQdK9tkLeGR43HBPfVIcS8FUYtKBGLWz/zVPk1G4bHdf5GIt6tY6FxKPtWO046AklgxaY/lapgA1RGnm9L6Ynsuk9eckp+GNkyWZ4rZBur8O5MGM7iziGQiCYDO7o0jrYCdOUvtLctf7HPP7hcafcdsa3erT15+C8mkS2CtZ2mbnffJjHMx+kBxsRITCJBUxOS5rawS6RHk4LsmQSrtCtcaBhGTNJIodoWTHA+w2BKZQEbRjCzv8IACHkpwLS4tlaM1HMmKnap2WaMwUtktMD/Yljlm2tI5YLBNtq/uzKsV35lVZqtTmvGYWPfJV4TEVIyXZDIBqtNEqiMHYvWPtS3QiweIUHTwieSHgKjeUkVQg206CEwvU1+PReJPEJ9EVKyGeF+itlaGLbBnurnUE/ry7mImL07EO1ndAPaw6qH31ytngP/PVHEKtuR+K7MLgG97YWWfHD6BUAQtA1PU5IGOvjn/MhN0bKWlfnuOMFXYNo6LhM3oqrWs7E8j257uNnoIKkLr9I45KU01i50aDnJxZj0JIlizrLQY/7ul4TAeQOe2OeymR+i/gjoJipaRrhY0wxTW5Z7uXsbOnCzqrr0YuL1kLiiuGVY6IwC2liTKhHR9JzeaYdhfbANaBfoO4Ub/cr+FNCYWQqw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR10MB5711.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(39860400002)(396003)(346002)(136003)(376002)(451199015)(478600001)(9686003)(6666004)(6512007)(26005)(83380400001)(6506007)(1076003)(186003)(2906002)(6486002)(66476007)(316002)(4744005)(6916009)(54906003)(8936002)(66556008)(5660300002)(66946007)(4326008)(8676002)(41300700001)(86362001)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8aMU5I/2Rcw2bmht9bM2Lj0R0zJKnhTK4MGDb/iPtMUYKeq24fD8pSF/aX34?=
- =?us-ascii?Q?7USOC1FdpwmPuO8rJUYILDc1VCpLahcN2xroavT9560mBBkdHK5Q+R/E3ywr?=
- =?us-ascii?Q?RFbywsiWdK5c4T5lbcsyGy/s3AhmWGt/FI25OfVlFsP+Px9VgoRbKGjOa6cT?=
- =?us-ascii?Q?G00w7qutKnMWp/48WRuRUc4p+iTjs7/nwtw3p8EI4602uqyO3/h6ejfve2Ri?=
- =?us-ascii?Q?8gKCVAFhiilvALsgRRKN456wexZtNDnKtYuwYAxTLHLbR63lyYTd2wqiPDHi?=
- =?us-ascii?Q?wMnbJIRB7QpdndT4Bm7Zlykiv3OgksIuBuhI83h2hap1HpFzV809nB1Bz07s?=
- =?us-ascii?Q?JlK9TrIxSe9lUUSSCtiJ86lXMxveinwB51oKe1sX4YdGVuFW59djTILJo7vt?=
- =?us-ascii?Q?R2CbY6/i4GkgpIYXDzSNJcvntQgSVg134GtOAiFDxLamwqtLSjSnDsPP6Faa?=
- =?us-ascii?Q?XbB5vdR0jDvM+9rZizYjZcAgQj1tVoFYQLqjWECpu1cKiLrpfEi8P/g9RK0U?=
- =?us-ascii?Q?RGQF7nxQhWgILEgxqGdiTq+2cU+98r05cqnEQbSBI9air9mMvaqJjobS3xxl?=
- =?us-ascii?Q?/SvhGj8UKaLwYpqSLoYP0L3hkcNA43yRE5xfiDRck7SbW+B3yhILjCP6Dtnt?=
- =?us-ascii?Q?+jPK5/B/wTsXQ9qDiKqyki1psEBoPOlmEDGNDLVcc/lG6tE4Kb1MQg5Mb792?=
- =?us-ascii?Q?KFO2nfB6y+oDme4cehygd9ROPU5l877Wpv73WyFIP/Mc836k9TFP1BT1kOBA?=
- =?us-ascii?Q?uoVJydgmxbPmvoAKOhcFyEu0STJ7GEBSdZDRaiZ3pHgYl5l5CCwM4vocwk28?=
- =?us-ascii?Q?vSsJGZGHEJ/29L+3SjfvzsQcuAXQgIZGNsbzs48+cimFsSk9yFQhjvMO3IVX?=
- =?us-ascii?Q?ugkB2qkQ38GgUk7doHcKYjeGQlsMJlyLn52pI/jgTHPltI+1gstidMBi1v5B?=
- =?us-ascii?Q?HtyD/fwxln6m4fkepdD+ObpC2ZKksJRU9aiP7deRyRtHVns3fdk7vUqcW7wv?=
- =?us-ascii?Q?1c0gfvKsJyErwbNPYznH3T+mf+yOVlMdJ8KMejVkYqixGQmbVOaqxp+0FPPb?=
- =?us-ascii?Q?4TSxT/YmDLtPNgJ8zJWG/CmzLMgNoHq5/7OIdRab1AaV7Dd+nIQJxhW9zk5M?=
- =?us-ascii?Q?rqdziOMaHYqBzscdVeQlWzOVa/jsV2OrwLJJg29s41byo6pCsF4/5jmq+nj+?=
- =?us-ascii?Q?VGfDAKQ44+Znhh5ubgZIQFkgdlvcr7YiOdSSbu9dnQCuBqmKaNYK5ghCME2U?=
- =?us-ascii?Q?D+G2rTY0SB6JdSfWangLrmr4VUFWd377Px9GrozY2rRm3JqGN5gpTrJe0X7t?=
- =?us-ascii?Q?vawTj/D6Ui8T4j8SPIpwXKHNIurFrifZN1UFCkYEkYzDtnz5e+XQY1bHoK20?=
- =?us-ascii?Q?ftp8Tl/A8NvEPchRsN4EnbhgagWJDISKd4Pud35d4UHYfJj+ADJhWiAdQi6Z?=
- =?us-ascii?Q?sriQB9byISfbP6enEHsXCSe/r/YAqlfpJb2MnVP6NQRRxfSsC/K7qokeVE2B?=
- =?us-ascii?Q?5XIlOGJaqNJgItqURCPz0r6TpjqbxXzQe7KQvhkurFilrYZzeLtOqOw/5euw?=
- =?us-ascii?Q?H31lvVH5EWnKkcmsI+JUgJHJifI/w+Xf+WaXFM29p/GSK5xEsP0lPmfuXI4x?=
- =?us-ascii?Q?aA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea5e92e5-7b9b-4150-cac3-08dab900a274
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR10MB5711.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 16:22:40.3985
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qNr1GRuIUlIFZceAgxC3poGG3sZCGbKUILs0cxbV0qDjicAuEjSofm7QxHzGKGXvCU+A1W/t1MmR039OhBv5LEhrs3j2tciHpbHn5MpIwjI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB6689
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-28_07,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 malwarescore=0
- phishscore=0 mlxlogscore=631 mlxscore=0 spamscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2210280102
-X-Proofpoint-ORIG-GUID: fxwBLdul1dM86Lxk6gcqBdF4k4sjV66N
-X-Proofpoint-GUID: fxwBLdul1dM86Lxk6gcqBdF4k4sjV66N
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -149,21 +75,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 10:35:49AM -0400, Daniel Jordan wrote:
-> On Wed, Oct 19, 2022 at 10:37:05AM +0200, Nicolai Stange wrote:
-> > Fixes: 07928d9bfc81 ("padata: Remove broken queue flushing")
-> 
-> It looks like this issue goes back to the first padata commit.  For
-> instance, pd->refcnt goes to zero after the last _priv is serialized,
-> padata_free is called in another task, and a particularly sluggish
-> padata_reorder call touches pd after.
-> 
-> So wouldn't it be
-> 
-> Fixes: 16295bec6398 ("padata: Generic parallelization/serialization interface")
-> 
-> ?
+On Thu, 27 Oct 2022 19:43:29 +0000 Barnab=C3=A1s P=C5=91cze <pobrn@protonmail.com> wrote:
 
-I guess not, by my own logic from 2/5.  I think it might be
+> Hi
+> 
+> 
+> 2022. okt=C3=B3ber 26., szerda 21:01 keltez=C3=A9ssel, Eray Or=C3=A7unus =
+> =C3=ADrta:
+> 
+> > IdeaPads dropped support for VPCCMD_W_CAMERA somewhere between 2014-2016,
+> > none of the IdeaPads produced after that I tested supports it. Fortunatel=
+> y
+> > I found a way to check it; if the DSDT has camera device(s) defined, it
+> > shouldn't have working VPCCMD_W_CAMERA, thus camera_power shouldn't be
+> > exposed to sysfs. To accomplish this, walk the ACPI namespace in
+> > ideapad_check_features and check the devices starting with "CAM".
+> > Tested on 520-15IKB and Legion Y520, which successfully didn't expose
+> > the camera_power attribute.
+> >=20
+> > Link: https://www.spinics.net/lists/platform-driver-x86/msg26147.html
+> > Signed-off-by: Eray Or=C3=A7unus <erayorcunus@gmail.com>
+> > ---
+> >  drivers/platform/x86/ideapad-laptop.c | 53 ++++++++++++++++++++++++++-
+> >  1 file changed, 52 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/platform/x86/ideapad-laptop.c b/drivers/platform/x86=
+> /ideapad-laptop.c
+> > index f3d4f2beda07..65eea2e65bbe 100644
+> > --- a/drivers/platform/x86/ideapad-laptop.c
+> > +++ b/drivers/platform/x86/ideapad-laptop.c
+> > @@ -149,6 +149,7 @@ struct ideapad_private {
+> >  =09=09bool fn_lock              : 1;
+> >  =09=09bool hw_rfkill_switch     : 1;
+> >  =09=09bool kbd_bl               : 1;
+> > +=09=09bool cam_ctrl_via_ec      : 1;
+> >  =09=09bool touchpad_ctrl_via_ec : 1;
+> >  =09=09bool usb_charging         : 1;
+> >  =09} features;
+> > @@ -163,6 +164,26 @@ static bool no_bt_rfkill;
+> >  module_param(no_bt_rfkill, bool, 0444);
+> >  MODULE_PARM_DESC(no_bt_rfkill, "No rfkill for bluetooth.");
+> >=20
+> > +static char *cam_device_prefix =3D "CAM";
+> > +
+> > +static acpi_status acpi_find_device_callback(acpi_handle handle, u32 lev=
+> el,
+> > +=09=09=09=09=09     void *context, void **return_value)
+> > +{
+> > +=09char buffer[8];
+> > +=09struct acpi_buffer ret_buf;
+> > +
+> > +=09ret_buf.length =3D sizeof(buffer);
+> > +=09ret_buf.pointer =3D buffer;
+> > +
+> > +=09if (ACPI_SUCCESS(acpi_get_name(handle, ACPI_SINGLE_NAME, &ret_buf)))
+> > +=09=09if (strncmp(ret_buf.pointer, context, strlen(context)) =3D=3D 0) {
+> 
+> Please use `strstarts()` here. Is there any reason why you decided not to
+> simply "inline" the "CAM" string here (or even in the function call)?
 
-Fixes: d46a5ac7a7e2 ("padata: Use a timer to handle remaining objects in the reorder queues")
+I may use this function to find other devices in future
+(thus the name `acpi_find_device_callback`) and I've found a code in the kernel
+which use static global initialization like that, so I decided to go for it in here.
+But now I will create the "CAM" string inline, and I will also use `strstarts()`
+(I didn't know such a function existed), thank you.
+
+> 
+> 
+> > +=09=09=09*return_value =3D handle;
+> > +=09=09=09return AE_CTRL_TERMINATE;
+> > +=09=09}
+> > +
+> > +=09return AE_OK;
+> > +}
+> > +
+> >  /*
+> >   * ACPI Helpers
+> >   */
+> > @@ -675,7 +696,7 @@ static umode_t ideapad_is_visible(struct kobject *kob=
+> j,
+> >  =09bool supported =3D true;
+> >=20
+> >  =09if (attr =3D=3D &dev_attr_camera_power.attr)
+> > -=09=09supported =3D test_bit(CFG_CAP_CAM_BIT, &priv->cfg);
+> > +=09=09supported =3D priv->features.cam_ctrl_via_ec;
+> >  =09else if (attr =3D=3D &dev_attr_conservation_mode.attr)
+> >  =09=09supported =3D priv->features.conservation_mode;
+> >  =09else if (attr =3D=3D &dev_attr_fan_mode.attr)
+> > @@ -1523,10 +1544,40 @@ static const struct dmi_system_id hw_rfkill_list[=
+> ] =3D {
+> >  static void ideapad_check_features(struct ideapad_private *priv)
+> >  {
+> >  =09acpi_handle handle =3D priv->adev->handle;
+> > +=09acpi_handle pci_handle;
+> > +=09acpi_handle temp_handle =3D NULL;
+> >  =09unsigned long val;
+> > +=09acpi_status status;
+> 
+> It is a small thing, but I believe it is best to define these variables
+> in the block of that `if` since they are not used outside of it.
+
+Ok, will do in next revision, thank you.
+
+-eray
