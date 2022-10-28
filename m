@@ -2,161 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC0C61147E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6758611486
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbiJ1OZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33934 "EHLO
+        id S229721AbiJ1O1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiJ1OYj (ORCPT
+        with ESMTP id S231154AbiJ1O1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:24:39 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A03010B1;
-        Fri, 28 Oct 2022 07:24:36 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29SEOQ1q008177;
-        Fri, 28 Oct 2022 09:24:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666967066;
-        bh=1sNW9NejH8BybzwsPnUBsHJrG4Y80shP3LjdJoV0xME=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ykEX2V7tPwJ31D4VDkp+XiNC+uQ5i3Z1TccnEXqhcAP9suyeEStN9XYHhjezOMht4
-         Qbs+nRvhKw4JC+37kbCDHR1OOLDRpOgx2V3158yWKD1+t25X19qlq9dXDxiio7O+NP
-         8dUQ8KXpfUqSoiGcyJZoyiePovPjVQADvSh82HQQ=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29SEOQTO030672
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 28 Oct 2022 09:24:26 -0500
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 28
- Oct 2022 09:24:25 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Fri, 28 Oct 2022 09:24:25 -0500
-Received: from ula0226330.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29SEOHfa039275;
-        Fri, 28 Oct 2022 09:24:25 -0500
-From:   Andrew Davis <afd@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bryan Brattlof <bb@ti.com>, Le Jin <le.jin@siemens.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Davis <afd@ti.com>
-Subject: [PATCH 11/11] arm64: dts: ti: k3-am65: Enable McASP nodes at the board level
-Date:   Fri, 28 Oct 2022 09:24:17 -0500
-Message-ID: <20221028142417.10642-12-afd@ti.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221028142417.10642-1-afd@ti.com>
-References: <20221028142417.10642-1-afd@ti.com>
+        Fri, 28 Oct 2022 10:27:22 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6900303CE
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:26:47 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7ce329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ce:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AF1981EC0523;
+        Fri, 28 Oct 2022 16:26:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1666967205;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references; bh=el2mP9InyE78h3IW1FW4zNaQQl77po30/ZmCSwmJRyA=;
+        b=inb0PmBlddp4Z44qCNETn+PC8IH7lcHE/lsanimeD0H9l9VMVrw6DnI34koqHZOwerThgs
+        J8DIQ6SifUpRbeW+lyNFKBus7xUe0dRFZU82MoI6gLKive+EzUziTy02o4gRSGCfewMc4U
+        UgWnhsF7x2qhlwa9AEqzjTxLKmX6uIM=
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ashok Raj <ashok.raj@intel.com>
+Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/5] x86/microcode: Clean up the init path
+Date:   Fri, 28 Oct 2022 16:26:33 +0200
+Message-Id: <20221028142638.28498-1-bp@alien8.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-McASP nodes defined in the top-level AM65x SoC dtsi files are incomplete
-and will not be functional unless they are extended with pinmux
-information.
+From: Borislav Petkov <bp@suse.de>
 
-As the pinmux is only known at the board integration level, these
-nodes should only be enabled when provided with this information.
+The microcode loader init path had a lot of old and unnecessary gunk.
+Rip it out.
 
-Disable the McASP nodes in the dtsi files and only enable the ones that
-are actually pinned out on a given board.
+No functional changes.
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi | 12 ------------
- arch/arm64/boot/dts/ti/k3-am65-main.dtsi           |  3 +++
- arch/arm64/boot/dts/ti/k3-am654-base-board.dts     | 12 ------------
- 3 files changed, 3 insertions(+), 24 deletions(-)
+Borislav Petkov (5):
+  x86/microcode: Rip out the subsys interface gunk
+  x86/microcode: Simplify init path even more
+  x86/microcode: Kill refresh_fw
+  x86/microcode: Do some minor fixups
+  x86/microcode: Drop struct ucode_cpu_info.valid
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
-index c6c79dde79c52..3cced26b520a1 100644
---- a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
-@@ -674,15 +674,3 @@ &mcu_r5fss0_core1 {
- 			<&mcu_r5fss0_core1_memory_region>;
- 	mboxes = <&mailbox0_cluster1 &mbox_mcu_r5fss0_core1>;
- };
--
--&mcasp0 {
--	status = "disabled";
--};
--
--&mcasp1 {
--	status = "disabled";
--};
--
--&mcasp2 {
--	status = "disabled";
--};
-diff --git a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-index 3dc624a379c5f..1930da25d2821 100644
---- a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-@@ -799,6 +799,7 @@ mcasp0: mcasp@2b00000 {
- 		clocks = <&k3_clks 104 0>;
- 		clock-names = "fck";
- 		power-domains = <&k3_pds 104 TI_SCI_PD_EXCLUSIVE>;
-+		status = "disabled";
- 	};
- 
- 	mcasp1: mcasp@2b10000 {
-@@ -816,6 +817,7 @@ mcasp1: mcasp@2b10000 {
- 		clocks = <&k3_clks 105 0>;
- 		clock-names = "fck";
- 		power-domains = <&k3_pds 105 TI_SCI_PD_EXCLUSIVE>;
-+		status = "disabled";
- 	};
- 
- 	mcasp2: mcasp@2b20000 {
-@@ -833,6 +835,7 @@ mcasp2: mcasp@2b20000 {
- 		clocks = <&k3_clks 106 0>;
- 		clock-names = "fck";
- 		power-domains = <&k3_pds 106 TI_SCI_PD_EXCLUSIVE>;
-+		status = "disabled";
- 	};
- 
- 	cal: cal@6f03000 {
-diff --git a/arch/arm64/boot/dts/ti/k3-am654-base-board.dts b/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
-index d1c8047d96726..592ab2b54cb3d 100644
---- a/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
-@@ -487,18 +487,6 @@ &cpsw_port1 {
- 	phy-handle = <&phy0>;
- };
- 
--&mcasp0 {
--	status = "disabled";
--};
--
--&mcasp1 {
--	status = "disabled";
--};
--
--&mcasp2 {
--	status = "disabled";
--};
--
- &dss {
- 	status = "disabled";
- };
+ arch/x86/include/asm/microcode.h      |   4 +-
+ arch/x86/kernel/cpu/intel.c           |   1 -
+ arch/x86/kernel/cpu/microcode/amd.c   |   5 +-
+ arch/x86/kernel/cpu/microcode/core.c  | 205 +++++---------------------
+ arch/x86/kernel/cpu/microcode/intel.c |   3 +-
+ 5 files changed, 43 insertions(+), 175 deletions(-)
+
 -- 
-2.37.3
+2.35.1
 
