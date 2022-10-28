@@ -2,101 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F77611450
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C4A611453
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiJ1ORO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
+        id S229965AbiJ1ORb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiJ1ORG (ORCPT
+        with ESMTP id S229872AbiJ1OR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:17:06 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D521D73EC
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:17:05 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id r14so8545690lfm.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:17:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4J/sXyEdqyItftLKRWQlfAWzGrOTW4HnYFqWzMysIi4=;
-        b=ZAL5xdvHt5LTVV98rbvm/6GVG7tPk50osYKnbq4cW9aBUDbMM2ZBuNrVDrWu7vhQ9X
-         Hpi/T/OQSeA6kJS/sR8eKQ/26fNqKlY9PsD9t/MP4qO7o65/8PASdP1AB7nplZ4gOzJz
-         Z/lHLC6TEFHlKSg4xatMU/FHWFNk6e0B1P+MDqI5lFnLQYpUi5jAmEBxFVRfYljaZCl9
-         0GeMkc+8n5rqae9qCYwYfyQY2O3TnZqG99bJRyA6RnqLrtma8W+77TjHgvlTjBLoJUmI
-         xObLRsuHh88/WnD87ryb8PvUR+Q1WNtMPDKU06znt3oUOLuj4OlQADfr+6L29QuI/tDT
-         rf8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4J/sXyEdqyItftLKRWQlfAWzGrOTW4HnYFqWzMysIi4=;
-        b=g8BdNJxu/VA/M1rCu/zkxTLDyknzTD20c7Ii+g7XW77FLtM0Z9MF7bVxoG9jSxzbOS
-         YqP6NiqQr9C2pP2EOj7164RQNTCj9Y5neg1P53i3NBCFkO2C94C/py0g2A/s/ekDAU5B
-         nI7MZ4g6//3Ov2vNm02S+qGSVqHdwaErgtbybpfuyusPfVNL8emTYSNvRg0aev1HXkZG
-         O7vtTDDM1GLgMb2l5qr1n+X3knJhvxBfQm+spW3oUNKkU7V58/CLJwRwJKEYBdFhEMkl
-         g2fc2XpkIhh9SCcdVofQX3YPvZ0CTuUMGz179xTaaHbqAqXMQmnsqeTh/W1GQhC+XT7t
-         WQ2A==
-X-Gm-Message-State: ACrzQf1AIUzp2JhxcMSI67SNKc9X4C+isufugC9iYwt7Y9DxOEBxT8Yx
-        MyKJy0ELorb3sww8fYwzDdwphA==
-X-Google-Smtp-Source: AMsMyM6eQiKVik2y9rlF5HrxniO/C+2f15b/1ffW5U9Uj2hWXG+lSG3PQEG8rBodPyFRQNcgbaf6sw==
-X-Received: by 2002:a05:6512:ac8:b0:4a2:61e7:7963 with SMTP id n8-20020a0565120ac800b004a261e77963mr19939264lfu.363.1666966623425;
-        Fri, 28 Oct 2022 07:17:03 -0700 (PDT)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id v22-20020a05651203b600b00497a1f92a72sm578570lfp.221.2022.10.28.07.17.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 07:17:03 -0700 (PDT)
-Message-ID: <f8c0e2c1-945e-9bcb-30ae-05bdc43269ee@linaro.org>
-Date:   Fri, 28 Oct 2022 17:17:02 +0300
+        Fri, 28 Oct 2022 10:17:28 -0400
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607BF1D6A63
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:17:27 -0700 (PDT)
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4MzPkt5YXCz9t2l;
+        Fri, 28 Oct 2022 14:17:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1666966647; bh=05DwsEtuFxAdWMYdnLuc4HqkK3OOSFQT/s1dsjunvVo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=H1MemKUQwg2r0iR+b0GCsA6ZEHIyiBzZwg/tpgGCTHjxtqqsnKpqUdHvRrSxEwc29
+         vjB3SYmYXKypboU2KM9Sqoanm3jhnQ/8t0tmcIQ5h/sC0XnTkaDXqFryro0hoNEeys
+         G/tOwICghcm4T+D5PsIOoaM0xmXpKEUYK1+U2pzI=
+X-Riseup-User-ID: 60BAB0CF0D43BD6345A4C232725DB4247F6C53CBDC54E6A95636B368FF910655
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4MzPkp5T67z5vRl;
+        Fri, 28 Oct 2022 14:17:22 +0000 (UTC)
+From:   Arthur Grillo <arthurgrillo@riseup.net>
+To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>, andrealmeid@riseup.net,
+        melissa.srw@gmail.com, Arthur Grillo <arthurgrillo@riseup.net>,
+        =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>
+Subject: [PATCH v4] drm/tests: Add back seed value information
+Date:   Fri, 28 Oct 2022 11:17:15 -0300
+Message-Id: <20221028141715.290903-1-arthurgrillo@riseup.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v4 15/16] phy: qcom-qmp-pcie: add support for sc8280xp
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20221028133603.18470-1-johan+linaro@kernel.org>
- <20221028133603.18470-16-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221028133603.18470-16-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/10/2022 16:36, Johan Hovold wrote:
-> Add support for the single and dual-lane PHYs found on SC8280XP.
-> 
-> Note that the SC8280XP binding does not try to describe every register
-> subregion and instead the driver holds the corresponding offsets.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      | 299 +++++++++++++++++-
->   .../phy/qualcomm/phy-qcom-qmp-pcs-pcie-v5.h   |   2 +
->   2 files changed, 291 insertions(+), 10 deletions(-)
+As reported by Michał the drm_mm and drm_buddy unit tests lost the
+printk with seed value after they were refactored into KUnit.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Add kunit_info with seed value information to assure reproducibility.
 
+Reported-by: Michał Winiarski <michal.winiarski@intel.com>
+Signed-off-by: Arthur Grillo <arthurgrillo@riseup.net>
+---
+v1->v2: https://lore.kernel.org/all/20221026211458.68432-1-arthurgrillo@riseup.net/
+- Correct compilation issues
+- Change tags order
+- Remove useless line change
+- Write commit message in imperative form
+- Remove redundant message part
+- Correct some grammars nits
+- Correct checkpatch issues
+
+v2->v3: https://lore.kernel.org/all/20221027142903.200169-1-arthurgrillo@riseup.net/
+- Change .init to .suite_init
+- Correct some grammars nits
+
+v3->v4:
+- Correct compilation issues
+
+---
+ drivers/gpu/drm/tests/drm_buddy_test.c | 6 ++++--
+ drivers/gpu/drm/tests/drm_mm_test.c    | 8 ++++++--
+ 2 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
+index 62f69589a72d..90ec5e8a485b 100644
+--- a/drivers/gpu/drm/tests/drm_buddy_test.c
++++ b/drivers/gpu/drm/tests/drm_buddy_test.c
+@@ -726,11 +726,13 @@ static void drm_test_buddy_alloc_limit(struct kunit *test)
+ 	drm_buddy_fini(&mm);
+ }
+ 
+-static int drm_buddy_init_test(struct kunit *test)
++static int drm_buddy_init_suite(struct kunit_suite *suite)
+ {
+ 	while (!random_seed)
+ 		random_seed = get_random_u32();
+ 
++	kunit_info(suite, "Testing DRM buddy manager, with random_seed=0x%x\n", random_seed);
++
+ 	return 0;
+ }
+ 
+@@ -746,7 +748,7 @@ static struct kunit_case drm_buddy_tests[] = {
+ 
+ static struct kunit_suite drm_buddy_test_suite = {
+ 	.name = "drm_buddy",
+-	.init = drm_buddy_init_test,
++	.suite_init = drm_buddy_init_suite,
+ 	.test_cases = drm_buddy_tests,
+ };
+ 
+diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
+index c4b66eeae203..4663e4611976 100644
+--- a/drivers/gpu/drm/tests/drm_mm_test.c
++++ b/drivers/gpu/drm/tests/drm_mm_test.c
+@@ -2209,11 +2209,15 @@ static void drm_test_mm_color_evict_range(struct kunit *test)
+ 	vfree(nodes);
+ }
+ 
+-static int drm_mm_init_test(struct kunit *test)
++static int drm_mm_init_suite(struct kunit_suite *suite)
+ {
+ 	while (!random_seed)
+ 		random_seed = get_random_u32();
+ 
++	kunit_info(suite,
++		   "Testing DRM range manager, with random_seed=0x%x max_iterations=%u max_prime=%u\n",
++		   random_seed, max_iterations, max_prime);
++
+ 	return 0;
+ }
+ 
+@@ -2246,7 +2250,7 @@ static struct kunit_case drm_mm_tests[] = {
+ 
+ static struct kunit_suite drm_mm_test_suite = {
+ 	.name = "drm_mm",
+-	.init = drm_mm_init_test,
++	.suite_init = drm_mm_init_suite,
+ 	.test_cases = drm_mm_tests,
+ };
+ 
 -- 
-With best wishes
-Dmitry
+2.37.3
 
