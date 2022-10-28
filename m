@@ -2,183 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB3E6115DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDB26115DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiJ1Pat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 11:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
+        id S230180AbiJ1PbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 11:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiJ1PaT (ORCPT
+        with ESMTP id S230136AbiJ1Paw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:30:19 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95C550B9B
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:30:17 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id cy15-20020a056830698f00b0065c530585afso3171714otb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:30:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pVC7omGYGHWjyxu8HSssobUiNhAheSxDNb5DGhYJISA=;
-        b=ft7EONnxR0qQF3VVWwkZyDfGV/Fv2zZRdCYnkxD+HUW8s5qRgBodMFhMJIx9oOvebl
-         Z1go3Mjc2sumYtLldBwBWjNPs4+rdNvkMqUp2fTyiIQyYIrJVcKaclY9+v0bQZf7+p83
-         S7VPJ4f0kj2ws+oeSr/2m21AH4SguIh+NRG62sDGUpKoCpo5Wg6E/dHxma7nBNLM6BEh
-         YKAbDMyJjOPYT2pEO1oRTmmc1+WsxoCYuJAM/rXhKUGhSLSXoym5K4aIdiNU4C4VRCrt
-         ldqvKbGk8+fwu7kM0NC40geHGozwZV5sdvUDMGAGGd2f+wQ0vLKJBXN5D3DkWgyOHytp
-         rqBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pVC7omGYGHWjyxu8HSssobUiNhAheSxDNb5DGhYJISA=;
-        b=HeRxTCXSVRjvsci+I58lgyfB+FBna0I8XoYblq5K52wDnnH0v1zEQzqWL9At7DcrkR
-         D3eWDCYx+gM2bNh5gk+ZCwjRATJlygcAFebJIjaJRtisrA6TwduSb8e9gHsuTb7jO8IN
-         ucoc+sSuTmTWvUfS7bggE6UrjimMxBbsgXOlhXLeeO/wPQt70s56UOsqpQwwj5lncMl2
-         Bsy11mmvliyULcQecWkPUahB1wjks+iSlAN6fa12y4OtBUa2dcYEn4RvGW2NNtREK9Ic
-         qMiUJEA1fMp8ffhQhGfOFsEf1vp66GmQCNAXF5rR4pArp2Vo2Ps2TBXcFogHsinIs31W
-         mdng==
-X-Gm-Message-State: ACrzQf22rf7ayZD7FNJrRfm33M6brbA2DpPZwlLvZuD9rQmZ8z+rdzRp
-        Zc4LE0sqgQtts2flvMS4YoBM4QAep2E=
-X-Google-Smtp-Source: AMsMyM5Bsi8dLgSLpso4bnUKABB8xvpRjEQn5ubzeUuW8IlSMqSVPUFDqOTrSSXF3ej06qvtAy30aw==
-X-Received: by 2002:a05:6830:6016:b0:661:959a:c60d with SMTP id bx22-20020a056830601600b00661959ac60dmr27705709otb.74.1666971017040;
-        Fri, 28 Oct 2022 08:30:17 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l13-20020a9d550d000000b0063696cbb6bdsm1752850oth.62.2022.10.28.08.30.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 08:30:16 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4ed6a6f6-a6e7-fbda-7658-9f645c95326a@roeck-us.net>
-Date:   Fri, 28 Oct 2022 08:30:15 -0700
+        Fri, 28 Oct 2022 11:30:52 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62EC17CB53;
+        Fri, 28 Oct 2022 08:30:50 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6918A1FB;
+        Fri, 28 Oct 2022 08:30:56 -0700 (PDT)
+Received: from pierre123.arm.com (unknown [10.57.3.128])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6D50B3F534;
+        Fri, 28 Oct 2022 08:30:46 -0700 (PDT)
+From:   Pierre Gondois <pierre.gondois@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ionela.Voinescu@arm.com, Pierre Gondois <Pierre.Gondois@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-doc@vger.kernel.org
+Subject: [PATCH v2] sched/topology: Remove EM_MAX_COMPLEXITY limit
+Date:   Fri, 28 Oct 2022 17:30:31 +0200
+Message-Id: <20221028153032.395898-1-pierre.gondois@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>
-References: <20221027150525.753064657@goodmis.org>
- <20221027222404.GA3123386@roeck-us.net>
- <20221027185859.1087d3ca@gandalf.local.home>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC][PATCH v2 00/31] timers: Use del_timer_shutdown() before
- freeing timers
-In-Reply-To: <20221027185859.1087d3ca@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/27/22 15:58, Steven Rostedt wrote:
-> On Thu, 27 Oct 2022 15:24:04 -0700
-> Guenter Roeck <linux@roeck-us.net> wrote:
-> 
->> On Thu, Oct 27, 2022 at 11:05:25AM -0400, Steven Rostedt wrote:
->>>
->>> Back in April, I posted an RFC patch set to help mitigate a common issue
->>> where a timer gets armed just before it is freed, and when the timer
->>> goes off, it crashes in the timer code without any evidence of who the
->>> culprit was. I got side tracked and never finished up on that patch set.
->>> Since this type of crash is still our #1 crash we are seeing in the field,
->>> it has become a priority again to finish it.
->>>
->>> This is v2 of that patch set. Thomas Gleixner posted an untested version
->>> that makes timer->function NULL as the flag that it is shutdown. I took that
->>> code, tested it (fixed it up), added more comments, and changed the
->>> name to del_timer_shutdown() as Linus had asked. I also converted it to use
->>> WARN_ON_ONCE() instead of just WARN_ON() as Linus asked for that too.
->>>    
->>
->> Here are various warnings and crashes. Complete logs are at
->>
->> https://kerneltests.org/builders
->>
->> in the "testing" column of the qemu test results.
->>
->> This is with the published patch set plus the fixups in
->> timer_fixup_init() and timer_fixup_free().
->>
->> Guenter
->>
->> ---
-[ ... ]
+From: Pierre Gondois <Pierre.Gondois@arm.com>
 
->>
->> WARNING: CPU: 0 PID: 280 at lib/debugobjects.c:502 debug_print_object+0xa4/0xd8
->> ODEBUG: init active (active state 0) object type: timer_list hint: tulip_timer+0x0/0x38
->>
+The Energy Aware Scheduler (EAS) estimates the energy consumption
+of placing a task on different CPUs. The goal is to minimize this
+energy consumption. Estimating the energy of different task placements
+is increasingly complex with the size of the platform. To avoid having
+a slow wake-up path, EAS is only enabled if this complexity is low
+enough.
 
+The current complexity limit was set in:
+commit b68a4c0dba3b1 ("sched/topology: Disable EAS on inappropriate
+platforms").
+base on the first implementation of EAS, which was re-computing
+the power of the whole platform for each task placement scenario, cf:
+commit 390031e4c309 ("sched/fair: Introduce an energy estimation helper
+function").
+but the complexity of EAS was reduced in:
+commit eb92692b2544d ("sched/fair: Speed-up energy-aware wake-ups")
+and find_energy_efficient_cpu() (feec) algorithm was updated in:
+commit 3e8c6c9aac42 ("sched/fair: Remove task_util from effective
+utilization in feec()")
 
-The problem is that the tulip code calls timer_setup() repeatedly (and
-unnecessarily). Apparently either the new timer code and/or the associated
-ODEBUG code doesn't like that. The patch below fixes the problem.
+find_energy_efficient_cpu() (feec) is now doing:
+feec()
+\_ for_each_pd(pd) [0]
+  // get max_spare_cap_cpu and compute_prev_delta
+  \_ for_each_cpu(pd) [1]
 
-I think there needs to be a means to handle that situation gracefully.
-The parport code has the same problem (see second patch below), and
-I am sure there are others.
+  \_ eenv_pd_busy_time(pd) [2]
+	\_ for_each_cpu(pd)
 
-Thanks,
-Guenter
+  // compute_energy(pd) without the task
+  \_ eenv_pd_max_util(pd, -1) [3.0]
+    \_ for_each_cpu(pd)
+  \_ em_cpu_energy(pd, -1)
+    \_ for_each_ps(pd)
 
+  // compute_energy(pd) with the task on prev_cpu
+  \_ eenv_pd_max_util(pd, prev_cpu) [3.1]
+    \_ for_each_cpu(pd)
+  \_ em_cpu_energy(pd, prev_cpu)
+    \_ for_each_ps(pd)
+
+  // compute_energy(pd) with the task on max_spare_cap_cpu
+  \_ eenv_pd_max_util(pd, max_spare_cap_cpu) [3.2]
+    \_ for_each_cpu(pd)
+  \_ em_cpu_energy(pd, max_spare_cap_cpu)
+    \_ for_each_ps(pd)
+
+[3.1] happens only once since prev_cpu is unique. With the same
+definitions for nr_pd, nr_cpus and nr_ps, the complexity is of:
+nr_pd * (2 * [nr_cpus in pd] + 2 * ([nr_cpus in pd] + [nr_ps in pd]))
++ ([nr_cpus in pd] + [nr_ps in pd])
+
+ [0]  * (     [1] + [2]      +       [3.0] + [3.2]                  )
++ [3.1]
+
+= nr_pd * (4 * [nr_cpus in pd] + 2 * [nr_ps in pd])
++ [nr_cpus in prev pd] + nr_ps
+
+The complexity limit was set to 2048 in:
+commit b68a4c0dba3b1 ("sched/topology: Disable EAS on inappropriate
+platforms")
+to make "EAS usable up to 16 CPUs with per-CPU DVFS and less than 8
+performance states each". For the same platform, the complexity would
+actually be of:
+16 * (4 + 2 * 7) + 1 + 7 = 296
+
+Since the EAS complexity was greatly reduced, bigger platforms can
+handle EAS. For instance, a platform with 112 CPUs with 7 performance
+states each would not reach it:
+112 * (4 + 2 * 7) + 1 + 7 = 2024
+
+To reflect this improvement, remove the EAS complexity check.
+
+Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 ---
-tulip:
 
-diff --git a/drivers/net/ethernet/dec/tulip/tulip_core.c b/drivers/net/ethernet/dec/tulip/tulip_core.c
-index ecfad43df45a..0c86066929d3 100644
---- a/drivers/net/ethernet/dec/tulip/tulip_core.c
-+++ b/drivers/net/ethernet/dec/tulip/tulip_core.c
-@@ -770,8 +770,6 @@ static void tulip_down (struct net_device *dev)
+Notes:
+    v2:
+     - Fix complexity computation in the commit message. [Dietmar]
+     - Use correct/latest function names. [Ionela]
+     - Added Rb from Lukasz.
 
-         spin_unlock_irqrestore (&tp->lock, flags);
+ Documentation/scheduler/sched-energy.rst | 37 ++--------------------
+ kernel/sched/topology.c                  | 39 ++----------------------
+ 2 files changed, 6 insertions(+), 70 deletions(-)
 
--       timer_setup(&tp->timer, tulip_tbl[tp->chip_id].media_timer, 0);
+diff --git a/Documentation/scheduler/sched-energy.rst b/Documentation/scheduler/sched-energy.rst
+index 8fbce5e767d9..3d1d71134d16 100644
+--- a/Documentation/scheduler/sched-energy.rst
++++ b/Documentation/scheduler/sched-energy.rst
+@@ -356,38 +356,7 @@ placement. For EAS it doesn't matter whether the EM power values are expressed
+ in milli-Watts or in an 'abstract scale'.
+ 
+ 
+-6.3 - Energy Model complexity
+-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 -
-         dev->if_port = tp->saved_if_port;
-
-         /* Leave the driver in snooze, not sleep, mode. */
-@@ -1869,10 +1867,14 @@ static int __maybe_unused tulip_resume(struct device *dev_d)
-  static void tulip_remove_one(struct pci_dev *pdev)
-  {
-         struct net_device *dev = pci_get_drvdata (pdev);
-+       struct tulip_private *tp;
-
-         if (!dev)
-                 return;
-
-+       tp = netdev_priv(dev);
-+       del_timer_shutdown(&tp->timer);
-+
-         unregister_netdev(dev);
-  }
-
-
----
-parport:
-
-diff --git a/drivers/parport/ieee1284.c b/drivers/parport/ieee1284.c
-index 4547ac44c8d4..50dbd2ea23fc 100644
---- a/drivers/parport/ieee1284.c
-+++ b/drivers/parport/ieee1284.c
-@@ -73,7 +73,7 @@ int parport_wait_event (struct parport *port, signed long timeout)
-         timer_setup(&port->timer, timeout_waiting_on_port, 0);
-         mod_timer(&port->timer, jiffies + timeout);
-         ret = down_interruptible (&port->physport->ieee1284.irq);
--       if (!del_timer_sync(&port->timer) && !ret)
-+       if (!del_timer_shutdown(&port->timer) && !ret)
-                 /* Timed out. */
-                 ret = 1;
-
+-The task wake-up path is very latency-sensitive. When the EM of a platform is
+-too complex (too many CPUs, too many performance domains, too many performance
+-states, ...), the cost of using it in the wake-up path can become prohibitive.
+-The energy-aware wake-up algorithm has a complexity of:
+-
+-	C = Nd * (Nc + Ns)
+-
+-with: Nd the number of performance domains; Nc the number of CPUs; and Ns the
+-total number of OPPs (ex: for two perf. domains with 4 OPPs each, Ns = 8).
+-
+-A complexity check is performed at the root domain level, when scheduling
+-domains are built. EAS will not start on a root domain if its C happens to be
+-higher than the completely arbitrary EM_MAX_COMPLEXITY threshold (2048 at the
+-time of writing).
+-
+-If you really want to use EAS but the complexity of your platform's Energy
+-Model is too high to be used with a single root domain, you're left with only
+-two possible options:
+-
+-    1. split your system into separate, smaller, root domains using exclusive
+-       cpusets and enable EAS locally on each of them. This option has the
+-       benefit to work out of the box but the drawback of preventing load
+-       balance between root domains, which can result in an unbalanced system
+-       overall;
+-    2. submit patches to reduce the complexity of the EAS wake-up algorithm,
+-       hence enabling it to cope with larger EMs in reasonable time.
+-
+-
+-6.4 - Schedutil governor
++6.3 - Schedutil governor
+ ^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+ EAS tries to predict at which OPP will the CPUs be running in the close future
+@@ -405,7 +374,7 @@ frequency requests and energy predictions.
+ Using EAS with any other governor than schedutil is not supported.
+ 
+ 
+-6.5 Scale-invariant utilization signals
++6.4 Scale-invariant utilization signals
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+ In order to make accurate prediction across CPUs and for all performance
+@@ -417,7 +386,7 @@ Using EAS on a platform that doesn't implement these two callbacks is not
+ supported.
+ 
+ 
+-6.6 Multithreading (SMT)
++6.5 Multithreading (SMT)
+ ^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+ EAS in its current form is SMT unaware and is not able to leverage
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index 8739c2a5a54e..ce2fa85b2362 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -346,32 +346,13 @@ static void sched_energy_set(bool has_eas)
+  *    1. an Energy Model (EM) is available;
+  *    2. the SD_ASYM_CPUCAPACITY flag is set in the sched_domain hierarchy.
+  *    3. no SMT is detected.
+- *    4. the EM complexity is low enough to keep scheduling overheads low;
+- *    5. schedutil is driving the frequency of all CPUs of the rd;
+- *    6. frequency invariance support is present;
+- *
+- * The complexity of the Energy Model is defined as:
+- *
+- *              C = nr_pd * (nr_cpus + nr_ps)
+- *
+- * with parameters defined as:
+- *  - nr_pd:    the number of performance domains
+- *  - nr_cpus:  the number of CPUs
+- *  - nr_ps:    the sum of the number of performance states of all performance
+- *              domains (for example, on a system with 2 performance domains,
+- *              with 10 performance states each, nr_ps = 2 * 10 = 20).
+- *
+- * It is generally not a good idea to use such a model in the wake-up path on
+- * very complex platforms because of the associated scheduling overheads. The
+- * arbitrary constraint below prevents that. It makes EAS usable up to 16 CPUs
+- * with per-CPU DVFS and less than 8 performance states each, for example.
++ *    4. schedutil is driving the frequency of all CPUs of the rd;
++ *    5. frequency invariance support is present;
+  */
+-#define EM_MAX_COMPLEXITY 2048
+-
+ extern struct cpufreq_governor schedutil_gov;
+ static bool build_perf_domains(const struct cpumask *cpu_map)
+ {
+-	int i, nr_pd = 0, nr_ps = 0, nr_cpus = cpumask_weight(cpu_map);
++	int i;
+ 	struct perf_domain *pd = NULL, *tmp;
+ 	int cpu = cpumask_first(cpu_map);
+ 	struct root_domain *rd = cpu_rq(cpu)->rd;
+@@ -429,20 +410,6 @@ static bool build_perf_domains(const struct cpumask *cpu_map)
+ 			goto free;
+ 		tmp->next = pd;
+ 		pd = tmp;
+-
+-		/*
+-		 * Count performance domains and performance states for the
+-		 * complexity check.
+-		 */
+-		nr_pd++;
+-		nr_ps += em_pd_nr_perf_states(pd->em_pd);
+-	}
+-
+-	/* Bail out if the Energy Model complexity is too high. */
+-	if (nr_pd * (nr_ps + nr_cpus) > EM_MAX_COMPLEXITY) {
+-		WARN(1, "rd %*pbl: Failed to start EAS, EM complexity is too high\n",
+-						cpumask_pr_args(cpu_map));
+-		goto free;
+ 	}
+ 
+ 	perf_domain_debug(cpu_map, pd);
+-- 
+2.25.1
 
