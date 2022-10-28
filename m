@@ -2,414 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A165610CCE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C093F610CD6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiJ1JLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 05:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
+        id S230007AbiJ1JNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 05:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiJ1JLO (ORCPT
+        with ESMTP id S229456AbiJ1JNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 05:11:14 -0400
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD23A66879;
-        Fri, 28 Oct 2022 02:11:12 -0700 (PDT)
-Received: by mail-vk1-xa35.google.com with SMTP id m18so2159648vka.10;
-        Fri, 28 Oct 2022 02:11:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4RCyKD8zYwlvu9aAaMjqHPPigA0jvv7ic1y64rLtWXs=;
-        b=fbWNzhHat+rQnn4Ziatl6xQK9MURxadNNbt6kWvOFV6Cmk7DYFImu2bzMacNAadR7V
-         Nksz+4ZgrH1/4IOQqpF19YioFWuNdAIVvfVOlebZoE9BQc6beKbCKxbcvtWv/9T+63Cs
-         BMXBbIlY/ivDVg9w+k/fcMaAg07IURovRBREkp2kYNttl1kzT5Nl9wezcnMZFgX+6dr9
-         SQ/3TcoSjyssu/nAa1ynjgvRgz2xKbvwrPtDeo8FIKhGdaw9QQTxzibL7g3a92a6qq5w
-         01YG/wAXELy+BAmQLBz4HycemOoKQfbNJYCTBoqh9avI6Zo0zAy3aIDaoStuF+CmMTpQ
-         71zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4RCyKD8zYwlvu9aAaMjqHPPigA0jvv7ic1y64rLtWXs=;
-        b=PJdk63cdgOHDWz5UniprEO7QhQGCfZtffkQ2JuPmucioDQCDXhj2Ty7Wk8Y6eKvWAU
-         w7cAxXomZVrmdww3gvtYtppFYRAA4osksAt45j/3KSahJdGR9fkotKM3vrZWC5e7eskE
-         ay1V2S8WCtCwumv2hnlIno/6/LeosuR5T/4PJaRd5F21kpInUPSRfJiM3Hl8igfKTkQC
-         8ke7bz3zv2/iS0ZWV9tSxJBmV16cexNPAKaRm9wWpsGeV/ij9E1J/T+cDDV7CbV6mrL/
-         b0GnIZaff7oBYCvYb0mgAIQX2ii2Dx9lm062Jo5gNsAR5UX/Nbxx4sus7eBsAT1pjqsl
-         wzUQ==
-X-Gm-Message-State: ACrzQf3l+y5qba0R8lVHnuDFOF94oO3zg4lOF8QpYJxhxzP/uB2BeEGm
-        MzG8rIgn+Mrfy5C7XTnhWzpwNNkBPx/XDO74P9prJOXXe1U=
-X-Google-Smtp-Source: AMsMyM4VJ0uhReh7DSMsTR7/NZm6joni79FPgcP+xgw5WX0PEPjhJcAEsf/VYa1TFndmgEXxYbvjQ0gEaLs+cYHzJEg=
-X-Received: by 2002:a1f:a1c5:0:b0:3b7:690b:c3d4 with SMTP id
- k188-20020a1fa1c5000000b003b7690bc3d4mr5631661vke.3.1666948271545; Fri, 28
- Oct 2022 02:11:11 -0700 (PDT)
+        Fri, 28 Oct 2022 05:13:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E1277541;
+        Fri, 28 Oct 2022 02:13:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E10BB8286D;
+        Fri, 28 Oct 2022 09:13:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CF18C433C1;
+        Fri, 28 Oct 2022 09:13:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666948398;
+        bh=iYXZY4WsmuaHa1Ddq+Oh8cvkVFxpiuUetxLnBj6TjxI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jvhQLH+KDCqjW2so/K+XAaMCuQckB7EAlWrKywKoiXwLg5L2KXRaSV/z5UNG3sACO
+         4fMVJ6y/+rDUr6CHwEbAD5BJx+PBX8i5v+MgyWlx2CtDMXgCI+iE541wIIRVP32Fon
+         1SfjwVl88s+bEEQc4ozS50whc9OhL3P4r2lJdFuQ=
+Date:   Fri, 28 Oct 2022 11:13:15 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Cixi Geng <gengcixi@gmail.com>
+Cc:     Thinh.Nguyen@synopsys.com, bruce.chen@unisoc.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: Fix dentry leak in dwc3_gadget_free_endpoints
+Message-ID: <Y1udKz/0UpVJb++p@kroah.com>
+References: <20221028084919.21654-1-gengcixi@gmail.com>
 MIME-Version: 1.0
-References: <20221021010310.29521-1-stephen.s.brennan@oracle.com>
- <20221028001016.332663-1-stephen.s.brennan@oracle.com> <20221028001016.332663-3-stephen.s.brennan@oracle.com>
-In-Reply-To: <20221028001016.332663-3-stephen.s.brennan@oracle.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Fri, 28 Oct 2022 12:11:00 +0300
-Message-ID: <CAOQ4uxjF8kU90F49wHjMehhmxGFTHdsWDQZks4v9jWiLs76qzw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] fsnotify: Protect i_fsnotify_mask and child flags
- with inode rwsem
-To:     Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc:     Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221028084919.21654-1-gengcixi@gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 3:10 AM Stephen Brennan
-<stephen.s.brennan@oracle.com> wrote:
->
-> When an inode is interested in events on its children, it must set
-> DCACHE_FSNOTIFY_PARENT_WATCHED flag on all its children. Currently, when
-> the fsnotify connector is removed and i_fsnotify_mask becomes zero, we
-> lazily allow __fsnotify_parent() to do this the next time we see an
-> event on a child.
->
-> However, if the list of children is very long (e.g., in the millions),
-> and lots of activity is occurring on the directory, then it's possible
-> for many CPUs to end up blocked on the inode spinlock in
-> __fsnotify_update_child_flags(). Each CPU will then redundantly iterate
-> over the very long list of children. This situation can cause soft
-> lockups.
->
-> To avoid this, stop lazily updating child flags in __fsnotify_parent().
-> Protect the child flag update with i_rwsem held exclusive, to ensure
-> that we only iterate over the child list when it's absolutely necessary,
-> and even then, only once.
->
-> Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
+On Fri, Oct 28, 2022 at 04:49:19PM +0800, Cixi Geng wrote:
+> From: Bruce Chen <bruce.chen@unisoc.com>
+> 
+> When using debugfs_remove_recursive leaks a dentry with
+> a hotplug stress test, the phone runs out of memory.
+> 
+> Thus fix the issue by using the newly created debugfs_lookup_and_remove().
+> 
+> Signed-off-by: Bruce Chen <bruce.chen@unisoc.com>
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
 > ---
+>  drivers/usb/dwc3/core.h    | 1 +
+>  drivers/usb/dwc3/debugfs.c | 3 ++-
+>  drivers/usb/dwc3/gadget.c  | 4 +---
+>  3 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index 8f9959ba9fd4..ba3ecaa7f06c 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -1261,6 +1261,7 @@ struct dwc3 {
+>  	u8			num_eps;
+>  
+>  	struct dwc3_hwparams	hwparams;
+> +	struct dentry		*root;
 
-Looking good
+You forgot to document this new variable.
 
-Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+And name it a bit better?
 
-Regardless, some nits on comment styles...
-
->
-> Notes:
->     v3 changes:
->
->     * Moved fsnotify_update_children_dentry_flags() into fsnotify.c,
->       declared it in the header. Made
->       __fsnotify_update_children_dentry_flags() static since it has no
->       external callers except fsnotify_update...().
->     * Use bitwise xor operator in children_need_update()
->     * Eliminated FSNOTIFY_OBJ_FLAG_* constants, reused CONN_FLAG_*
->     * Updated documentation of fsnotify_update_inode_conn_flags() to
->       reflect its behavior
->     * Renamed "flags" to "update_flags" in all its uses, so that it's a
->       clear pattern and matches renamed fsnotify_update_object().
->
->  fs/notify/fsnotify.c             |  45 ++++++++++-
->  fs/notify/fsnotify.h             |  13 +++-
->  fs/notify/mark.c                 | 124 ++++++++++++++++++++-----------
->  include/linux/fsnotify_backend.h |   1 +
->  4 files changed, 137 insertions(+), 46 deletions(-)
->
-> diff --git a/fs/notify/fsnotify.c b/fs/notify/fsnotify.c
-> index 7939aa911931..ccb8a3a6c522 100644
-> --- a/fs/notify/fsnotify.c
-> +++ b/fs/notify/fsnotify.c
-> @@ -103,13 +103,15 @@ void fsnotify_sb_delete(struct super_block *sb)
->   * parent cares.  Thus when an event happens on a child it can quickly tell
->   * if there is a need to find a parent and send the event to the parent.
->   */
-> -void __fsnotify_update_child_dentry_flags(struct inode *inode)
-> +static bool __fsnotify_update_children_dentry_flags(struct inode *inode)
+>  	struct debugfs_regset32	*regset;
+>  
+>  	u32			dbg_lsp_select;
+> diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
+> index f2b7675c7f62..b9af4a81f51d 100644
+> --- a/drivers/usb/dwc3/debugfs.c
+> +++ b/drivers/usb/dwc3/debugfs.c
+> @@ -911,6 +911,7 @@ void dwc3_debugfs_init(struct dwc3 *dwc)
+>  	dwc->regset->base = dwc->regs - DWC3_GLOBALS_REGS_START;
+>  
+>  	root = debugfs_create_dir(dev_name(dwc->dev), usb_debug_root);
+> +	dwc->root = root;
+>  	debugfs_create_regset32("regdump", 0444, root, dwc->regset);
+>  	debugfs_create_file("lsp_dump", 0644, root, dwc, &dwc3_lsp_fops);
+>  
+> @@ -929,6 +930,6 @@ void dwc3_debugfs_init(struct dwc3 *dwc)
+>  
+>  void dwc3_debugfs_exit(struct dwc3 *dwc)
 >  {
->         struct dentry *alias, *child;
->         int watched;
->
->         if (!S_ISDIR(inode->i_mode))
-> -               return;
-> +               return false;
-> +
-> +       lockdep_assert_held_write(&inode->i_rwsem);
->
->         /* determine if the children should tell inode about their events */
->         watched = fsnotify_inode_watches_children(inode);
-> @@ -136,6 +138,43 @@ void __fsnotify_update_child_dentry_flags(struct inode *inode)
->         }
->         spin_unlock(&alias->d_lock);
->         dput(alias);
-> +       return watched;
-> +}
-> +
-> +void fsnotify_update_children_dentry_flags(struct fsnotify_mark_connector *conn,
-> +                                          struct inode *inode)
-> +{
-> +       bool need_update;
-> +
-> +       inode_lock(inode);
-> +       spin_lock(&conn->lock);
-> +       need_update = fsnotify_children_need_update(conn, inode);
-> +       spin_unlock(&conn->lock);
-> +       if (need_update) {
-> +               bool watched = __fsnotify_update_children_dentry_flags(inode);
-> +
-> +               spin_lock(&conn->lock);
-> +               if (watched)
-> +                       conn->flags |= FSNOTIFY_CONN_FLAG_WATCHES_CHILDREN;
-> +               else
-> +                       conn->flags &= ~FSNOTIFY_CONN_FLAG_WATCHES_CHILDREN;
-> +               spin_unlock(&conn->lock);
-> +       }
-> +       inode_unlock(inode);
-> +}
-> +
-> +
-> +static void fsnotify_update_child_dentry_flags(struct inode *inode, struct dentry *dentry)
-> +{
-> +       /*
-> +        * Flag would be cleared soon by
-> +        * __fsnotify_update_child_dentry_flags(), but as an
-> +        * optimization, clear it now.
-> +        */
-
-Line breaks are weird.
-Seems that this comment is out of context.
-It is only true in the context of the specific call site.
-Either remove it or move it.
-
-> +       spin_lock(&dentry->d_lock);
-> +       if (!fsnotify_inode_watches_children(inode))
-> +               dentry->d_flags &= ~DCACHE_FSNOTIFY_PARENT_WATCHED;
-> +       spin_unlock(&dentry->d_lock);
+> -	debugfs_remove(debugfs_lookup(dev_name(dwc->dev), usb_debug_root));
+> +	debugfs_remove(dwc->root);
+>  	kfree(dwc->regset);
 >  }
->
->  /* Are inode/sb/mount interested in parent and name info with this event? */
-> @@ -206,7 +245,7 @@ int __fsnotify_parent(struct dentry *dentry, __u32 mask, const void *data,
->         p_inode = parent->d_inode;
->         p_mask = fsnotify_inode_watches_children(p_inode);
->         if (unlikely(parent_watched && !p_mask))
-> -               __fsnotify_update_child_dentry_flags(p_inode);
-> +               fsnotify_update_child_dentry_flags(p_inode, dentry);
->
->         /*
->          * Include parent/name in notification either if some notification
-> diff --git a/fs/notify/fsnotify.h b/fs/notify/fsnotify.h
-> index fde74eb333cc..621e78a6f0fb 100644
-> --- a/fs/notify/fsnotify.h
-> +++ b/fs/notify/fsnotify.h
-> @@ -70,11 +70,22 @@ static inline void fsnotify_clear_marks_by_sb(struct super_block *sb)
->         fsnotify_destroy_marks(&sb->s_fsnotify_marks);
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 079cd333632e..6d6c188fcbea 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -3172,9 +3172,7 @@ static void dwc3_gadget_free_endpoints(struct dwc3 *dwc)
+>  			list_del(&dep->endpoint.ep_list);
+>  		}
+>  
+> -		debugfs_remove_recursive(debugfs_lookup(dep->name,
+> -				debugfs_lookup(dev_name(dep->dwc->dev),
+> -					       usb_debug_root)));
+> +		debugfs_lookup_and_remove(dep->name, dwc->root);
+>  		kfree(dep);
+>  	}
 >  }
->
-> +static inline bool fsnotify_children_need_update(struct fsnotify_mark_connector *conn,
-> +                                                struct inode *inode)
-> +{
-> +       bool watched, flags_set;
-> +
-> +       watched = fsnotify_inode_watches_children(inode);
-> +       flags_set = conn->flags & FSNOTIFY_CONN_FLAG_WATCHES_CHILDREN;
-> +       return watched ^ flags_set;
-> +}
-> +
->  /*
->   * update the dentry->d_flags of all of inode's children to indicate if inode cares
->   * about events that happen to its children.
->   */
-> -extern void __fsnotify_update_child_dentry_flags(struct inode *inode);
-> +extern void fsnotify_update_children_dentry_flags(struct fsnotify_mark_connector *conn,
-> +                                                 struct inode *inode);
->
->  extern struct kmem_cache *fsnotify_mark_connector_cachep;
->
-> diff --git a/fs/notify/mark.c b/fs/notify/mark.c
-> index c74ef947447d..8969128dacc1 100644
-> --- a/fs/notify/mark.c
-> +++ b/fs/notify/mark.c
-> @@ -123,37 +123,52 @@ static void fsnotify_get_inode_ref(struct inode *inode)
->  }
->
->  /*
-> - * Grab or drop inode reference for the connector if needed.
-> + * Determine the connector flags that it is necessary to update
->   *
-> - * When it's time to drop the reference, we only clear the HAS_IREF flag and
-> - * return the inode object. fsnotify_drop_object() will be resonsible for doing
-> - * iput() outside of spinlocks. This happens when last mark that wanted iref is
-> - * detached.
-> + * If any action needs to be taken on the connector's inode outside of a spinlock,
-> + * we return the inode and set *update_flags accordingly.
-> + *
-> + * If FSNOTIFY_CONN_FLAG_HAS_IREF is set in *update_flags, then the caller needs
-> + * to drop the last inode reference using fsnotify_put_inode_ref().
-> + *
-> + * If FSNOTIFY_CONN_FLAG_WATCHES_CHILDREN is set in *update_flags, then the
-> + * caller needs to update the children dentry flags so that their
-> + * DCACHE_FSNOTIFY_PARENT_WATCHED flag matches the i_fsnotify_mask value, using
-> + * fsnotify_update_children_dentry_flags().
->   */
-> -static struct inode *fsnotify_update_iref(struct fsnotify_mark_connector *conn,
-> -                                         bool want_iref)
-> +static struct inode *fsnotify_update_inode_conn_flags(struct fsnotify_mark_connector *conn,
-> +                                                     bool want_iref, int *update_flags)
->  {
->         bool has_iref = conn->flags & FSNOTIFY_CONN_FLAG_HAS_IREF;
-> -       struct inode *inode = NULL;
-> +       struct inode *inode = NULL, *ret = NULL;
->
-> -       if (conn->type != FSNOTIFY_OBJ_TYPE_INODE ||
-> -           want_iref == has_iref)
-> +       if (conn->type != FSNOTIFY_OBJ_TYPE_INODE)
->                 return NULL;
->
-> -       if (want_iref) {
-> -               /* Pin inode if any mark wants inode refcount held */
-> -               fsnotify_get_inode_ref(fsnotify_conn_inode(conn));
-> -               conn->flags |= FSNOTIFY_CONN_FLAG_HAS_IREF;
-> -       } else {
-> -               /* Unpin inode after detach of last mark that wanted iref */
-> -               inode = fsnotify_conn_inode(conn);
-> -               conn->flags &= ~FSNOTIFY_CONN_FLAG_HAS_IREF;
-> +       inode = fsnotify_conn_inode(conn);
-> +
-> +       if (want_iref != has_iref) {
-> +               if (want_iref) {
-> +                       /* Pin inode if any mark wants inode refcount held */
-> +                       fsnotify_get_inode_ref(inode);
-> +                       conn->flags |= FSNOTIFY_CONN_FLAG_HAS_IREF;
-> +               } else {
-> +                       /* Unpin inode after detach of last mark that wanted iref */
-> +                       conn->flags &= ~FSNOTIFY_CONN_FLAG_HAS_IREF;
-> +                       ret = inode;
-> +                       *update_flags |= FSNOTIFY_CONN_FLAG_HAS_IREF;
-> +               }
-> +       }
-> +       if (fsnotify_children_need_update(conn, inode)) {
-> +               ret = inode;
-> +               *update_flags |= FSNOTIFY_CONN_FLAG_WATCHES_CHILDREN;
->         }
->
-> -       return inode;
-> +       return ret;
->  }
->
-> -static void *__fsnotify_recalc_mask(struct fsnotify_mark_connector *conn)
-> +static void *__fsnotify_recalc_mask(struct fsnotify_mark_connector *conn,
-> +                                   int *update_flags)
->  {
->         u32 new_mask = 0;
->         bool want_iref = false;
-> @@ -173,7 +188,7 @@ static void *__fsnotify_recalc_mask(struct fsnotify_mark_connector *conn)
->         }
->         *fsnotify_conn_mask_p(conn) = new_mask;
->
-> -       return fsnotify_update_iref(conn, want_iref);
-> +       return fsnotify_update_inode_conn_flags(conn, want_iref, update_flags);
->  }
->
->  /*
-> @@ -184,15 +199,19 @@ static void *__fsnotify_recalc_mask(struct fsnotify_mark_connector *conn)
->   */
->  void fsnotify_recalc_mask(struct fsnotify_mark_connector *conn)
->  {
-> +       struct inode *inode = NULL;
-> +       int flags = 0;
-> +
->         if (!conn)
->                 return;
->
->         spin_lock(&conn->lock);
-> -       __fsnotify_recalc_mask(conn);
-> +       inode = __fsnotify_recalc_mask(conn, &flags);
->         spin_unlock(&conn->lock);
-> -       if (conn->type == FSNOTIFY_OBJ_TYPE_INODE)
-> -               __fsnotify_update_child_dentry_flags(
-> -                                       fsnotify_conn_inode(conn));
-> +
-> +       if (flags & FSNOTIFY_CONN_FLAG_WATCHES_CHILDREN)
-> +               fsnotify_update_children_dentry_flags(conn, inode);
-> +       WARN_ON_ONCE(flags & FSNOTIFY_CONN_FLAG_HAS_IREF);
->  }
->
->  /* Free all connectors queued for freeing once SRCU period ends */
-> @@ -240,7 +259,8 @@ static void fsnotify_put_sb_connectors(struct fsnotify_mark_connector *conn)
->
->  static void *fsnotify_detach_connector_from_object(
->                                         struct fsnotify_mark_connector *conn,
-> -                                       unsigned int *type)
-> +                                       unsigned int *type,
-> +                                       unsigned int *update_flags)
->  {
->         struct inode *inode = NULL;
->
-> @@ -252,8 +272,10 @@ static void *fsnotify_detach_connector_from_object(
->                 inode = fsnotify_conn_inode(conn);
->                 inode->i_fsnotify_mask = 0;
->
-> -               /* Unpin inode when detaching from connector */
-> -               if (!(conn->flags & FSNOTIFY_CONN_FLAG_HAS_IREF))
-> +               *update_flags = conn->flags &
-> +                       (FSNOTIFY_CONN_FLAG_HAS_IREF |
-> +                        FSNOTIFY_CONN_FLAG_WATCHES_CHILDREN);
-> +               if (!*update_flags)
->                         inode = NULL;
->         } else if (conn->type == FSNOTIFY_OBJ_TYPE_VFSMOUNT) {
->                 fsnotify_conn_mount(conn)->mnt_fsnotify_mask = 0;
-> @@ -279,15 +301,37 @@ static void fsnotify_final_mark_destroy(struct fsnotify_mark *mark)
->         fsnotify_put_group(group);
->  }
->
-> -/* Drop object reference originally held by a connector */
-> -static void fsnotify_drop_object(unsigned int type, void *objp)
-> +/* Apply the update_flags for a connector after recalculating mask */
-> +static void fsnotify_update_object(struct fsnotify_mark_connector *conn,
-> +                                  unsigned int type, void *objp,
-> +                                  int update_flags)
->  {
->         if (!objp)
->                 return;
->         /* Currently only inode references are passed to be dropped */
->         if (WARN_ON_ONCE(type != FSNOTIFY_OBJ_TYPE_INODE))
->                 return;
-> -       fsnotify_put_inode_ref(objp);
-> +
-> +       if (update_flags & FSNOTIFY_CONN_FLAG_WATCHES_CHILDREN)
-> +               /*.
+> -- 
+> 2.34.1
+> 
 
-Stray .
+I don't think this is the full fix.
 
-> +                * At this point, we've already detached the connector from the
-> +                * inode. It's entirely possible that another connector has been
-> +                * attached, and that connector would assume that the children's
-> +                * flags are all clear. There are two possibilities:
-> +                * (a) The connector has not yet attached a mark that watches its
-> +                * children. In this case, we will properly clear out the flags,
-> +                * and the connector's flags will be consistent with the
-> +                * children.
-> +                * (b) The connector attaches a mark that watches its children.
-> +                * It may have even already altered i_fsnotify_mask and/or
-> +                * altered the child dentry flags. In this case, our call here
-> +                * will read the correct value of i_fsnotify_mask and apply it
-> +                * to the children, which duplicates some work, but isn't
-> +                * harmful.
-> +                */
+Below is a patch that I've had in a tree that I need to push out (along
+with the other 33 debugfs_lookup patches) that should resolve this for
+this driver in a more complete way.
 
-Multi line section after if should have {} even if there is only a
-single line of
-code (checkpatch should complain?).
+Can you try this version instead?
 
-But I personally dislike large and deeply indented comments,
-so if it were me, I would change the wording a bit
-"...When detaching a connector from an inode that watches children,
- there are two possibilities:..."
-and move the huge comment above the if ().
+thanks,
 
-Thanks,
-Amir.
+greg k-h
+
+---------------------
+
+
+From 49b893792579af1bea46c5004759cb35475c4fca Mon Sep 17 00:00:00 2001
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date: Fri, 2 Sep 2022 16:41:39 +0200
+Subject: [PATCH 06/34] USB: dwc3: debugfs_lookup() fix
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/dwc3/core.h    |  2 ++
+ drivers/usb/dwc3/debug.h   |  3 +++
+ drivers/usb/dwc3/debugfs.c | 19 ++++++++-----------
+ drivers/usb/dwc3/gadget.c  |  4 +---
+ 4 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 8f9959ba9fd4..582ebd9cf9c2 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1117,6 +1117,7 @@ struct dwc3_scratchpad_array {
+  *		     address.
+  * @num_ep_resized: carries the current number endpoints which have had its tx
+  *		    fifo resized.
++ * @debug_root: root debugfs directory for this device to put its files in.
+  */
+ struct dwc3 {
+ 	struct work_struct	drd_work;
+@@ -1332,6 +1333,7 @@ struct dwc3 {
+ 	int			max_cfg_eps;
+ 	int			last_fifo_depth;
+ 	int			num_ep_resized;
++	struct dentry		*debug_root;
+ };
+ 
+ #define INCRX_BURST_MODE 0
+diff --git a/drivers/usb/dwc3/debug.h b/drivers/usb/dwc3/debug.h
+index 48b44b88dc25..8bb2c9e3b9ac 100644
+--- a/drivers/usb/dwc3/debug.h
++++ b/drivers/usb/dwc3/debug.h
+@@ -414,11 +414,14 @@ static inline const char *dwc3_gadget_generic_cmd_status_string(int status)
+ 
+ #ifdef CONFIG_DEBUG_FS
+ extern void dwc3_debugfs_create_endpoint_dir(struct dwc3_ep *dep);
++extern void dwc3_debugfs_remove_endpoint_dir(struct dwc3_ep *dep);
+ extern void dwc3_debugfs_init(struct dwc3 *d);
+ extern void dwc3_debugfs_exit(struct dwc3 *d);
+ #else
+ static inline void dwc3_debugfs_create_endpoint_dir(struct dwc3_ep *dep)
+ {  }
++static inline void dwc3_debugfs_remove_endpoint_dir(struct dwc3_ep *dep)
++{  }
+ static inline void dwc3_debugfs_init(struct dwc3 *d)
+ {  }
+ static inline void dwc3_debugfs_exit(struct dwc3 *d)
+diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
+index f2b7675c7f62..850df0e6bcab 100644
+--- a/drivers/usb/dwc3/debugfs.c
++++ b/drivers/usb/dwc3/debugfs.c
+@@ -873,27 +873,23 @@ static const struct dwc3_ep_file_map dwc3_ep_file_map[] = {
+ 	{ "GDBGEPINFO", &dwc3_ep_info_register_fops, },
+ };
+ 
+-static void dwc3_debugfs_create_endpoint_files(struct dwc3_ep *dep,
+-		struct dentry *parent)
++void dwc3_debugfs_create_endpoint_dir(struct dwc3_ep *dep)
+ {
++	struct dentry		*dir;
+ 	int			i;
+ 
++	dir = debugfs_create_dir(dep->name, dep->dwc->debug_root);
+ 	for (i = 0; i < ARRAY_SIZE(dwc3_ep_file_map); i++) {
+ 		const struct file_operations *fops = dwc3_ep_file_map[i].fops;
+ 		const char *name = dwc3_ep_file_map[i].name;
+ 
+-		debugfs_create_file(name, 0444, parent, dep, fops);
++		debugfs_create_file(name, 0444, dir, dep, fops);
+ 	}
+ }
+ 
+-void dwc3_debugfs_create_endpoint_dir(struct dwc3_ep *dep)
++void dwc3_debugfs_remove_endpoint_dir(struct dwc3_ep *dep)
+ {
+-	struct dentry		*dir;
+-	struct dentry		*root;
+-
+-	root = debugfs_lookup(dev_name(dep->dwc->dev), usb_debug_root);
+-	dir = debugfs_create_dir(dep->name, root);
+-	dwc3_debugfs_create_endpoint_files(dep, dir);
++	debugfs_lookup_and_remove(dep->name, dep->dwc->debug_root);
+ }
+ 
+ void dwc3_debugfs_init(struct dwc3 *dwc)
+@@ -911,6 +907,7 @@ void dwc3_debugfs_init(struct dwc3 *dwc)
+ 	dwc->regset->base = dwc->regs - DWC3_GLOBALS_REGS_START;
+ 
+ 	root = debugfs_create_dir(dev_name(dwc->dev), usb_debug_root);
++	dwc->debug_root = root;
+ 	debugfs_create_regset32("regdump", 0444, root, dwc->regset);
+ 	debugfs_create_file("lsp_dump", 0644, root, dwc, &dwc3_lsp_fops);
+ 
+@@ -929,6 +926,6 @@ void dwc3_debugfs_init(struct dwc3 *dwc)
+ 
+ void dwc3_debugfs_exit(struct dwc3 *dwc)
+ {
+-	debugfs_remove(debugfs_lookup(dev_name(dwc->dev), usb_debug_root));
++	debugfs_lookup_and_remove(dev_name(dwc->dev), usb_debug_root);
+ 	kfree(dwc->regset);
+ }
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 079cd333632e..404bb7ee61a8 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -3172,9 +3172,7 @@ static void dwc3_gadget_free_endpoints(struct dwc3 *dwc)
+ 			list_del(&dep->endpoint.ep_list);
+ 		}
+ 
+-		debugfs_remove_recursive(debugfs_lookup(dep->name,
+-				debugfs_lookup(dev_name(dep->dwc->dev),
+-					       usb_debug_root)));
++		dwc3_debugfs_remove_endpoint_dir(dep);
+ 		kfree(dep);
+ 	}
+ }
+-- 
+2.38.1
+
