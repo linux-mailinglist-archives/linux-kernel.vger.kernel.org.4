@@ -2,92 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0F2610D77
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87BDE610D81
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiJ1JkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 05:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
+        id S229668AbiJ1Jn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 05:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJ1JkS (ORCPT
+        with ESMTP id S229553AbiJ1Jn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 05:40:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DB44D81A;
-        Fri, 28 Oct 2022 02:40:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 350B9B828C7;
-        Fri, 28 Oct 2022 09:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D257EC433D6;
-        Fri, 28 Oct 2022 09:40:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666950014;
-        bh=WRRGcNNCROx1+Z4NlDm9dGYO6hp9XY5M+L6HTZmlWnM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rhC4s7A4uatXGkPPtzjbUtHoVgKJkWEMACi/sXJKoFJuiVgoOnkdOBZ2W1Tsu3DGy
-         mI1M6HsIJsoANBFVaJMDzCLlZcWRvOmOyMA5zpjpg01a/fELZzWWNbJnMowvMk/TgC
-         cNBzDU7Hz+CjPWb8GkQwKLgH2lbFoOWu3yL8ajZfYixrS0V33yJfiRwe7eppUeIarf
-         hHvailWwg0Nbgpcnf1Zs7XBzKMIASfGwlAja0+1MNrQD2oHF76/ZxqAuD3IPzXgcT2
-         LbhO4XwXk93GRKwKL2XYzB6318/wo1AEHjek8MyjcAT3jDdD4roTOzwbX9P9EL7OV0
-         nRoVAVuUnAIBQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B9AC7C4314C;
-        Fri, 28 Oct 2022 09:40:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 28 Oct 2022 05:43:26 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8DFD77F9;
+        Fri, 28 Oct 2022 02:43:25 -0700 (PDT)
+X-UUID: 2e246e3450494a8d8b4baea61e9a1bad-20221028
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=L7iUhJXsjZSKAeavtsFdah6zQihRiXF6NImTOySL6k0=;
+        b=VXNAO348lJmKy6jGVNKfWp1J2fpxhP+NmUWP4e1tdG6yh3nG2RIj48pOJx2Iekby0liPqlj8justPWWB3+e95YJlhvFUuZpOZYnjsMn6HzZ4OuU6d4+ZnuAgQ6dT4SAPxyIsz3O4qnkjWbOxi+AQyqx8GrQUgPFo98Xc7NkyTCE=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:cfd45132-5cd0-4295-83be-0c9b619bb233,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:90
+X-CID-INFO: VERSION:1.1.12,REQID:cfd45132-5cd0-4295-83be-0c9b619bb233,IP:0,URL
+        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:90
+X-CID-META: VersionHash:62cd327,CLOUDID:eea4bfea-84ac-4628-a416-bc50d5503da6,B
+        ulkID:221028174323W2U7BPUS,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 2e246e3450494a8d8b4baea61e9a1bad-20221028
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 511302477; Fri, 28 Oct 2022 17:43:23 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 28 Oct 2022 17:43:22 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 28 Oct 2022 17:43:22 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>
+Subject: [PATCH v4 0/3] Add driver nodes for MT8195 SoC
+Date:   Fri, 28 Oct 2022 17:43:14 +0800
+Message-ID: <20221028094317.29270-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: dsa: Fix possible memory leaks in dsa_loop_init()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166695001475.8410.5727114306921032694.git-patchwork-notify@kernel.org>
-Date:   Fri, 28 Oct 2022 09:40:14 +0000
-References: <20221026020321.58615-1-chenzhongjin@huawei.com>
-In-Reply-To: <20221026020321.58615-1-chenzhongjin@huawei.com>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Add pcie and venc nodes for MT8195 SoC.
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+This series is based on linux-next/next-20221028.
+Depends on https://lore.kernel.org/all/20221001030752.14486-1-irui.wang@mediatek.com/ 
 
-On Wed, 26 Oct 2022 10:03:21 +0800 you wrote:
-> kmemleak reported memory leaks in dsa_loop_init():
-> 
-> kmemleak: 12 new suspected memory leaks
-> 
-> unreferenced object 0xffff8880138ce000 (size 2048):
->   comm "modprobe", pid 390, jiffies 4295040478 (age 238.976s)
->   backtrace:
->     [<000000006a94f1d5>] kmalloc_trace+0x26/0x60
->     [<00000000a9c44622>] phy_device_create+0x5d/0x970
->     [<00000000d0ee2afc>] get_phy_device+0xf3/0x2b0
->     [<00000000dca0c71f>] __fixed_phy_register.part.0+0x92/0x4e0
->     [<000000008a834798>] fixed_phy_register+0x84/0xb0
->     [<0000000055223fcb>] dsa_loop_init+0xa9/0x116 [dsa_loop]
->     ...
-> 
-> [...]
+v3 -> v4:
+- update resets of pcie node
 
-Here is the summary with links:
-  - net: dsa: Fix possible memory leaks in dsa_loop_init()
-    https://git.kernel.org/netdev/net/c/633efc8b3dc9
+v2 -> v3:
+- update pcie iommu-map-mask
 
-You are awesome, thank you!
+v1 -> v2:
+- remove 8195 example from pcie yaml
+- update reset-names of pcie yaml
+- add resets and reset-names to pcie node 
+- rename venc node
+
+---
+Jianjun Wang (1):
+  dt-bindings: PCI: mediatek-gen3: Support mt8195
+
+Tinghan Shen (2):
+  arm64: dts: mt8195: Add pcie and pcie phy nodes
+  arm64: dts: mt8195: Add venc node
+
+ .../bindings/pci/mediatek-pcie-gen3.yaml      |  16 +-
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 174 ++++++++++++++++++
+ 2 files changed, 187 insertions(+), 3 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.18.0
 
