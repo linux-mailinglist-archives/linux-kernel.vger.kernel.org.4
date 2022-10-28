@@ -2,129 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4246112BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD606112BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbiJ1N32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
+        id S230436AbiJ1N3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbiJ1N3U (ORCPT
+        with ESMTP id S229665AbiJ1N3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:29:20 -0400
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC422792E6;
-        Fri, 28 Oct 2022 06:29:19 -0700 (PDT)
-Received: by mail-qv1-f45.google.com with SMTP id c8so4026874qvn.10;
-        Fri, 28 Oct 2022 06:29:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ewf1/0yS/MPVhCM+bumhxUWSJIhluAl1yOgoepsPDa4=;
-        b=vq51oE0CjsKMLZlgeai7ShOdfS53y13/NgTUZZMTPJ7+bp86Om0jTXHgq5YC5qFAb/
-         KaQTQ5tIPcEQtnbAgAGSVJs/CRfg1vikWn+psTDZenzPymU/X3R+0f4DLvfKpUnSoOYX
-         PxPZSBKv+YzvUxiQ2ukVGvWRfsj+EpWkdM6HewN9Dl5a06coshTviaFgqi7q1G/8aVDX
-         vi3OnEZrMaxWvDtzqXiTsenIUII3G2aWsW3sSYIpE7uAb/gTnt8UWjIotT8N0qZ2PGVK
-         0HrGg/OgNS0i+EMQOQ3f9VhWx/+iiPiB62SOyFf6aEcjqgrhJLbSkUarq5sgJA5pD1GG
-         6RgQ==
-X-Gm-Message-State: ACrzQf0nO9uTmoFXd1+poUpxHNYksuW/5onZ2fEQxRyjsvSfiiwJe5eQ
-        eBPV4ai2TRUCUSO/qi9jCS+YiZJT52alluvNAlY=
-X-Google-Smtp-Source: AMsMyM69tjCqCgwdNnpekRVLWiO5RijjEAo0SO6mteLZEeWi6P7gklOz9rvsahUQ70s1DEaFcXaJMxjlrR1TlHlbLww=
-X-Received: by 2002:ad4:596b:0:b0:4b1:ee66:1cb8 with SMTP id
- eq11-20020ad4596b000000b004b1ee661cb8mr45829729qvb.3.1666963758929; Fri, 28
- Oct 2022 06:29:18 -0700 (PDT)
+        Fri, 28 Oct 2022 09:29:18 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1D61D066C
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:29:17 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29SDTBvW014436;
+        Fri, 28 Oct 2022 08:29:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666963751;
+        bh=AvndWKZN6LBnkeyEo3GsLVOgmRkKVK4LJoEomFPHleA=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=fYzKHqgRVz3mt8gQUxdWcGPVImByYC/bJ9cja1lM2Sm/i0kmVEZyolqacQIGiOW6T
+         hXjVTRqrVNm7zg3WiKEA5K4gbJ/R/CPdS9NVD6AGwfKQQNRMPyKK4bVjWjnQIhqIB5
+         YU0jkmfEk/AQjIHCGBCO7f6YH4LG8Z4hJuSCQyIY=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29SDTBtW014758
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 28 Oct 2022 08:29:11 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 28
+ Oct 2022 08:29:11 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Fri, 28 Oct 2022 08:29:11 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29SDTBYi049338;
+        Fri, 28 Oct 2022 08:29:11 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Santosh Shilimkar <ssantosh@kernel.org>, <vigneshr@ti.com>,
+        <kristo@kernel.org>, <vibhore@ti.com>, <g-vlaev@ti.com>
+CC:     Nishanth Menon <nm@ti.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [RESEND PATCH] firmware: ti_sci: Fix polled mode during system suspend
+Date:   Fri, 28 Oct 2022 08:29:10 -0500
+Message-ID: <166696372897.12728.15984133708392906212.b4-ty@ti.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20221021185704.181316-1-g-vlaev@ti.com>
+References: <20221021185704.181316-1-g-vlaev@ti.com>
 MIME-Version: 1.0
-References: <20221003144914.160547-1-kajetan.puchalski@arm.com>
- <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com>
- <Y0fymW5LOoIHstE2@e126311.manchester.arm.com> <CAAYoRsW+5xbW_Zd7Mtbo4VMi4RZFXRr7mf4NAU=Le7GhQzNJvg@mail.gmail.com>
- <c6e6d338-60e5-4401-1cf4-faaee3cc447f@arm.com>
-In-Reply-To: <c6e6d338-60e5-4401-1cf4-faaee3cc447f@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Oct 2022 15:29:07 +0200
-Message-ID: <CAJZ5v0iwr1rAFuxn3H0XEyr1wEjRtTXKXPo5ZzhBp8Fg2fonnw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional util-awareness
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Doug Smythies <dsmythies@telus.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org,
-        Dietmar.Eggemann@arm.com, yu.chen.surf@gmail.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 9:56 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
-> Hi Doug,
->
-> Thank you for your effort in testing these patches and different
-> governors. We really appreciate that, since this helped us to
-> better understand the platform that you are using. It is different
-> to what we have and our workloads. That's why I have some comments.
->
-> It would be hard to combine these two worlds and requirements.
-> I have some concerns to the tests, the setup and the platform.
-> I can see a reason why this patch has to prove the
-> strengths on this platform and environment.
-> Please see my comments below.
->
-> On 10/13/22 23:12, Doug Smythies wrote:
-> > Hi All,
-> >
-> > On Thu, Oct 13, 2022 at 4:12 AM Kajetan Puchalski
-> > <kajetan.puchalski@arm.com> wrote:
-> >> On Wed, Oct 12, 2022 at 08:50:39PM +0200, Rafael J. Wysocki wrote:
-> >>> On Mon, Oct 3, 2022 at 4:50 PM Kajetan Puchalski
-> >>> <kajetan.puchalski@arm.com> wrote:
-> > ...
-> >
-> >> On the Intel & power usage angle you might have seen in the discussion,
-> >> Doug sent me some interesting data privately. As far as I can tell the
-> >> main issue there is that C0 on Intel doesn't actually do power saving so
-> >> moving the state selection down to it is a pretty bad idea because C1
-> >> could be very close in terms of latency and save much more power.
-> >>
-> >> A potential solution could be altering the v2 to only decrease the state
-> >> selection by 1 if it's above 1, ie 2->1 but not 1->0. It's fine for us
-> >> because arm systems with 2 states use the early exit path anyway. It'd
-> >> just amount to changing this hunk:
-> >>
-> >> +       if (cpu_data->utilized && idx > 0 && !dev->states_usage[idx-1].disable)
-> >> +               idx--;
-> >>
-> >> to:
-> >>
-> >> +       if (cpu_data->utilized && idx > 1 && !dev->states_usage[idx-1].disable)
-> >> +               idx--;
-> >>
-> >> What would you think about that? Should make it much less intense for
-> >> Intel systems.
-> >
-> > I tested the above, which you sent me as patch version v2-2.
-> >
-> > By default, my Intel i5-10600K has 4 idle states:
-> >
-> > $ grep . /sys/devices/system/cpu/cpu7/cpuidle/state*/name
-> > /sys/devices/system/cpu/cpu7/cpuidle/state0/name:POLL
->
-> This active polling state type worries me a bit. We don't have
-> such on our platforms. Our shallowest idle state is really different.
-> We don't have active polling and there is no need for such.
+Hi Georgi Vlaev,
 
-So as I said in a reply to Kajetan, the way to go is to avoid them
-when you do this utilization-based optimization.
+On Fri, 21 Oct 2022 21:57:04 +0300, Georgi Vlaev wrote:
+> Commit b9e8a7d950ff ("firmware: ti_sci: Switch transport to polled
+> mode during system suspend") uses read_poll_timeout_atomic() macro
+> in ti_sci_do_xfer() to wait for completion when the system is
+> suspending. The break condition of the macro is set to "true" which
+> will cause it break immediately when evaluated, likely before the
+> TISCI xfer is completed, and always return 0. We want to poll here
+> until "done_state == true".
+> 
+> [...]
 
-CPUIDLE_FLAG_POLLING is for that and it is used already in the code.
+I have applied the following to branch ti-drivers-soc-next on [1].
+Thank you!
 
-Moreover, as I said in the other message, IMO the utilization-based
-optimization makes the most sense when the current candidate state is
-state 1, so it may not make sense to do it on Intel systems at all.
+[1/1] firmware: ti_sci: Fix polled mode during system suspend
+      commit: b13b2c3e0e4d0854228b5217fa34e145f3ace8ac
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+
