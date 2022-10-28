@@ -2,44 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067CF611268
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF064611226
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbiJ1NLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
+        id S230203AbiJ1NCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiJ1NLu (ORCPT
+        with ESMTP id S229592AbiJ1NCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:11:50 -0400
-X-Greylist: delayed 551 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Oct 2022 06:11:46 PDT
-Received: from mail.cock.li (unknown [37.120.193.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047611C2EAD;
-        Fri, 28 Oct 2022 06:11:45 -0700 (PDT)
+        Fri, 28 Oct 2022 09:02:49 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EC81757A6;
+        Fri, 28 Oct 2022 06:02:48 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 151C1660291B;
+        Fri, 28 Oct 2022 14:02:44 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666962166;
+        bh=RrGA38kF9uCwoRURHrbUbA5rP3minRYBauW06GkVdAU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=NFoyMEsUhXGvmBVAW3ALjq2HZ8/Biw0fHKo/MDNE9ElPw/7r2GTINx78pugexMRUx
+         nFH3TFfpwnvS1Uvu9ZnYJwvHAun5T/lTDokvKsDrZ1gJlPlXfipVda2AIGTUkKgOH+
+         dyJ3fHj7Vb8xQcx1SGdYX36IDysFKj+BbtVTbzyNQVoVQ0kN5BJ36NNdRRpmR0uUoe
+         krI6GGix+CcI2O1JD7zTznOUdhswx12G2ZuQ+ElKjGJ7gNqY736hIsoYzIiqK8Yj6u
+         KNpaO3WUAZGM51+1Yxk07l7MnByK6xj+8YFrZIeyEfp9XPFpExrZaoneZ3gKa/S/dz
+         LgI7QMwL0KpiQ==
+Message-ID: <664bd195bdde7fd740572c4981c60b32de1465aa.camel@collabora.com>
+Subject: Re: [PATCH] vcodec: mediatek: add check for NULL for 
+ vsi->frm_bufs[vsi->new_fb_idx].buf.fb in vp9_swap_frm_bufs
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Anastasia Belova <abelova@astralinux.ru>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, lvc-project@linuxtesting.org
+Date:   Fri, 28 Oct 2022 09:02:35 -0400
+In-Reply-To: <20221028125811.11340-1-abelova@astralinux.ru>
+References: <20221028125811.11340-1-abelova@astralinux.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tfwno.gf; s=mail;
-        t=1666962143; bh=DtqNWOtFT8hw8nEEdF0WNtUoPrpPIt01zfqy5oCYP98=;
-        h=Date:From:To:Subject:From;
-        b=HFXv+/6hCmM4TKSJ1FVpzgYQgQ05+CzT6N83RncfSJI5p/5NoB7F5BycLwFfO627h
-         NPKc+nhle+14LrcO8CpuE2DhIQwe6cv5PUPKXj6Zr7oU2ZIxOk+xjbj51T/+t6hHIN
-         3Vqq/i1noAP9mJRAQdEfeD3JC5eyk3RttfIUDbENEr7FdFGoMdcxmtwA3ZQNVFyGHc
-         9y2Ho64yPjz5beRlVbYAJa0uoDy2qhuUtB4zM5hit+7DiD8axQcMe/cze3kpb/7lSX
-         q3gRFm0Cv5YcdOIaiJzqZM4KfHq6EN22QWxOWCx9bINWR3S6rJZHG4aBnEqaeYuNop
-         XlwBpoQ+6wJHQ==
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 28 Oct 2022 13:02:23 +0000
-From:   ns@tfwno.gf
-To:     Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        linux-efi@vger.kernel.org
-Subject: Bug: kexec on Lenovo ThinkPad T480 disables EFI mode
-Message-ID: <3acf1cc7a974cb4fb9b77b39311c6714@tfwno.gf>
-X-Sender: ns@tfwno.gf
-User-Agent: Roundcube Webmail/1.3.17
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,59 +64,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
+Hi,
 
-I've been hitting a bug on my Lenovo ThinkPad T480 where kexecing will
-cause EFI mode (if that's the right term for it) to be unconditionally
-disabled, even when not using the --noefi option to kexec.
+Le vendredi 28 octobre 2022 =C3=A0 15:58 +0300, Anastasia Belova a =C3=A9cr=
+it=C2=A0:
+> If vsi->frm_bufs[vsi->new_fb_idx].buf.fb =3D=3D NULL while cleaning
+> fb_free_list NULL-pointer is dereferenced.
+>=20
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>=20
+> Fixes: f77e89854b3e ("[media] vcodec: mediatek: Add Mediatek VP9 Video De=
+coder Driver")
+>=20
+> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+> ---
+>  drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c b/=
+drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c
+> index 70b8383f7c8e..b0679aaf6192 100644
+> --- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c
+> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c
+> @@ -512,7 +512,7 @@ static void vp9_swap_frm_bufs(struct vdec_vp9_inst *i=
+nst)
+>  	 * clean fb_free_list
+>  	 */
+>  	if (vsi->frm_bufs[vsi->new_fb_idx].ref_cnt =3D=3D 0) {
+> -		if (!vp9_is_sf_ref_fb(
+> +		if (vsi->frm_bufs[vsi->new_fb_idx].buf.fb !=3D NULL && !vp9_is_sf_ref_=
+fb(
+>  			inst, vsi->frm_bufs[vsi->new_fb_idx].buf.fb)) {
+>  			struct vdec_fb *fb;
 
-What I mean by "EFI mode" being disabled, more than just EFI runtime
-services, is that basically nothing about the system's EFI is visible
-post-kexec. Normally you have a message like this in dmesg when the
-system is booted in EFI mode:
+Perhaps we could try and maintain some readability ? I'd suggest to move th=
+e
+check into vp9_is_sf_ref_fb() as an early return.
 
-[    0.000000] efi: EFI v2.70 by EDK II
-[    0.000000] efi: SMBIOS=0x7f98a000 ACPI=0x7fb7e000 ACPI 
-2.0=0x7fb7e014 MEMATTR=0x7ec63018
-(obviously not the real firmware of the machine I'm talking about, but I
-can also send that if it would be of any help)
+Nicolas
 
-No such message pops up in my dmesg as a result of this bug, & this
-causes some fallout like being unable to find the system's DMI
-information:
 
-<6>[    0.000000] DMI not present or invalid.
-
-The efivarfs module also fails to load with -ENODEV.
-
-I've tried also booting with efi=runtime explicitly but it doesn't
-change anything. The kernel still does not print the name of the EFI
-firmware, DMI is still missing, & efivarfs still fails to load.
-
-I've been using the kexec_load syscall for all these tests, if it's
-important.
-
-Also, to make it very clear, all this only ever happens post-kexec. When
-booting straight from UEFI (with the EFI stub), all the aforementioned
-stuff that fails works perfectly fine (i.e. name of firmware is printed,
-DMI is properly found, & efivarfs loads & mounts just fine).
-
-This is reproducible with a vanilla 6.1-rc2 kernel. I've been trying to
-bisect it, but it seems like it goes pretty far back. I've got vanilla
-mainline kernel builds dating back to 5.17 that have the exact same
-issue. It might be worth noting that during this testing, I made sure
-the version of the kernel being kexeced & the kernel kexecing were the
-same version. It may not have been a problem in older kernels, but that
-would be difficult to test for me (a pretty important driver for this
-machine was only merged during v5.17-rc4). So it may not have been a
-regression & just a hidden problem since time immemorial.
-
-I am willing to test any patches I may get to further debug or fix
-this issue, preferably based on the current state of torvalds/linux.git.
-I can build & test kernels quite a few times per day.
-
-I can also send any important materials (kernel config, dmesg, firmware
-information, so on & so forth) on request. I'll also just mention I'm
-using kexec-tools 2.0.24 upfront, if it matters.
-
-Regards,
