@@ -2,126 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 547B96114D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3456114D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbiJ1Old (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
+        id S230041AbiJ1Olg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbiJ1OlW (ORCPT
+        with ESMTP id S230157AbiJ1OlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:41:22 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C358710CFBC
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:41:16 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1ooQXl-0005da-A9; Fri, 28 Oct 2022 16:41:09 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1ooQXk-0000Us-K3; Fri, 28 Oct 2022 16:41:08 +0200
-Date:   Fri, 28 Oct 2022 16:41:08 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de,
-        devicetree@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        linux-kernel@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
-        linux-imx@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH V2 14/15] arm64: dts: imx8m[m, p]-evk: change to use
- off-on-delay-us in regulator
-Message-ID: <20221028144108.3ytq77yxkc5f64jk@pengutronix.de>
-References: <20221024031351.4135651-1-peng.fan@oss.nxp.com>
- <20221024031351.4135651-15-peng.fan@oss.nxp.com>
+        Fri, 28 Oct 2022 10:41:23 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF640E9873;
+        Fri, 28 Oct 2022 07:41:15 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id b2so13440076eja.6;
+        Fri, 28 Oct 2022 07:41:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SVxJ12c1A+xM0aCvd/9/hnx+Wg8Tkv2AsxQ0FKrV7Fo=;
+        b=e8PuIJKYvVwZG8pMIVdsuACZ9hgCDCdCOOm6qZ9QEXRFloflT70eDzvCkEx02u8Eda
+         A9wmqY1bfVxFQ7oZGfaGC/LFp3NhBBLwH91Llp1msKGVILazbrSIe6cz1PnC2rbhAWuG
+         Lap2dQLywubkbNeFVdmBrX4fKMuAJfbKnLCuICMcD8nqoeoeEBFL6zO7Juarwj1CcA4A
+         vaCof7MQlpnqykdvT6ZcdfNYA4jnC9IAuW5VPOKgSFKZzBvnU3qQta5s3ZkcRxzvG5H4
+         5QCPzg0derVXMseJUguLo1RS7bwdblG31/bqP9a92i8FRKom98aLXGBHzvsYcTDY88Cm
+         URYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SVxJ12c1A+xM0aCvd/9/hnx+Wg8Tkv2AsxQ0FKrV7Fo=;
+        b=bMG3LW+73wtJZfc0tj5VtZWnJWYBass6XvuXNdpvQlAJHPQtbLFosVP85D8LSrQQO4
+         +0x2aa7zjhXhqUPL5C3GyEns0slJBqInACNrPMGcIExkFVZFdCT0MRYIxWexuxK4Wx2M
+         9b2RDi/RY6Lm+UIp5F+EQpz9ZjulwLxjiVIQiGpS//RUg+CTU0MD/pdshuVT+wzRKVWS
+         McMrdWebyIFxXi3zy468WKYyTD+XrVG29Ikuj1OyX0XpSZFV+YsEWbs1I98IHGV050Sg
+         JgmLh0aBp1ey1Den7pIY7N7jEQzaFg/HOVap32cSwa0opK0T130Qrvk7XNLi5egtun6G
+         uOyw==
+X-Gm-Message-State: ACrzQf0vKRMk2Ty7OzTXsuDBL6TmIt83CGRLSmE+l2SBuQL/89IVpzxR
+        DXxl1s50t0TrmT5gUosS8zA=
+X-Google-Smtp-Source: AMsMyM7HXQ72bbrXuPMgRLSwI+e9C5ONtGcWO383f1AvM3xeoYFRDCq0hKSnjGHViuvp1OXIqoWYtw==
+X-Received: by 2002:a17:906:730f:b0:791:9b75:2ca1 with SMTP id di15-20020a170906730f00b007919b752ca1mr45292306ejc.140.1666968074370;
+        Fri, 28 Oct 2022 07:41:14 -0700 (PDT)
+Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id my7-20020a1709065a4700b007417041fb2bsm2237114ejc.116.2022.10.28.07.41.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 07:41:14 -0700 (PDT)
+Message-ID: <dca18633-54d4-1264-725c-213d82fdf1c5@gmail.com>
+Date:   Fri, 28 Oct 2022 16:41:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024031351.4135651-15-peng.fan@oss.nxp.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v2 1/4] dt-bindings: arm: rockchip: Add Rockchip RK3128
+ Evaluation board
+To:     kever.yang@rock-chips.com, heiko@sntech.de
+Cc:     sjg@chromium.org, philipp.tomsich@vrull.eu,
+        zhangqing@rock-chips.com, hjc@rock-chips.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+References: <e83964fe-ad87-0905-4586-e235757c6b2b@gmail.com>
+Content-Language: en-US
+In-Reply-To: <e83964fe-ad87-0905-4586-e235757c6b2b@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-10-24, Peng Fan (OSS) wrote:
-> From: Haibo Chen <haibo.chen@nxp.com>
-> 
-> Some SD Card controller and power circuitry has increased capacitance,
-> so the usual toggling of regulator to power the card off and on
-> is insufficient.
-> 
-> According to SD spec, for sd card power reset operation, the sd card
-> supply voltage needs to be lower than 0.5v and keep over 1ms, otherwise,
-> next time power back the sd card supply voltage to 3.3v, sd card can't
-> support SD3.0 mode again.
-> 
-> This patch add the off-on-delay-us, make sure the sd power reset behavior
-> is align with the specification. Without this patch, when do quick system
-> suspend/resume test, some sd card can't work at SD3.0 mode after system
-> resume back.
-> 
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx8mm-evk.dts  | 2 +-
->  arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi | 1 +
->  arch/arm64/boot/dts/freescale/imx8mq-evk.dts  | 1 +
->  3 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> index c93387fcd498..898735965ac9 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> @@ -22,7 +22,7 @@ reg_sd1_vmmc: sd1_regulator {
->  		regulator-min-microvolt = <3300000>;
->  		regulator-max-microvolt = <3300000>;
->  		gpio = <&gpio2 10 GPIO_ACTIVE_HIGH>;
-> -		off-on-delay = <20000>;
+Add Rockchip RK3128 Evaluation board.
 
-I can't find the "off-on-delay" property you're deleting here in
-upstream.
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-> +		off-on-delay-us = <20000>;
->  		startup-delay-us = <100>;
->  		enable-active-high;
->  	};
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> index ce450965e837..fdbcd2483efc 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> @@ -56,6 +56,7 @@ reg_usdhc2_vmmc: regulator-usdhc2 {
->  		regulator-min-microvolt = <3300000>;
->  		regulator-max-microvolt = <3300000>;
->  		gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
-> +		off-on-delay-us = <20000>;
->  		enable-active-high;
->  	};
->  
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-> index 82387b9cb800..07d9fb2aacf8 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-> @@ -46,6 +46,7 @@ reg_usdhc2_vmmc: regulator-vsd-3v3 {
->  		regulator-min-microvolt = <3300000>;
->  		regulator-max-microvolt = <3300000>;
->  		gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
-> +		off-on-delay-us = <20000>;
->  		enable-active-high;
->  	};
->  
-> -- 
-> 2.37.1
-> 
-> 
-> 
+diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
+index 72bf2fbfe..e81d9d1ef 100644
+--- a/Documentation/devicetree/bindings/arm/rockchip.yaml
++++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
+@@ -662,6 +662,11 @@ properties:
+           - const: rockchip,rk3036-evb
+           - const: rockchip,rk3036
+
++      - description: Rockchip RK3128 Evaluation board
++        items:
++          - const: rockchip,rk3128-evb
++          - const: rockchip,rk3128
++
+       - description: Rockchip RK3228 Evaluation board
+         items:
+           - const: rockchip,rk3228-evb
+--
+2.20.1
+
