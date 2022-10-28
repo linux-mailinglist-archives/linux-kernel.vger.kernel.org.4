@@ -2,107 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9AA26113E5
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 892F2611404
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiJ1OEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
+        id S231342AbiJ1OGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbiJ1OEI (ORCPT
+        with ESMTP id S230315AbiJ1OGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:04:08 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0086B1DEC1B;
-        Fri, 28 Oct 2022 07:04:07 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id b11so4783394pjp.2;
-        Fri, 28 Oct 2022 07:04:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o1QkAhlKr5y3Yemv84a0WENoZI0iQ9cHsX5Tp/FV6B8=;
-        b=EXftrL6jQFzF0sxNA70BdMwTF3A8Qh650r36dic5x9N30A+WrSN+lKkncvIzFNnXQ2
-         Gt+hdA1/wsTu1tompguNjBSrcYt3Db1INEujJj7MFsZRH+ePkGfdx1mHo1HRnbbQWNBU
-         knWUYIEXnwOlOGfFWqyeEdvp8/kd+9OUcFx9hf7rYu7ggIrIj52YPIJM/JYd1rh9dnnn
-         vPzTlOJ9bQ3OlBwkKrWr5MZt3xET8wfvGvO0JptJlclvbnH1On/jrAqWyKjN+zMNNuJj
-         mVw4STKzDnquKc5Fqta+JE1aEiDbH4NlnUKlae8P2f5d/HTXp7zLyp0fC8UeyCIAaEbS
-         o1ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o1QkAhlKr5y3Yemv84a0WENoZI0iQ9cHsX5Tp/FV6B8=;
-        b=pKJpN9OW4wnRTzuY4svPXuSiAm4sXduQr8BTUiXTzO+N8Gwil5dmqfSNb5ipbKJ47W
-         wFhgCQyohrHvywTFRluVmGstnbLI5+eoXvMu0Xh+53tYxublmA9wcdrcBTMZS4AUiD/+
-         PfZQ7STNuiOmSAp75noEjbnLcEFCmfDmyJFG1Q1GvCsLxM6hcvKCYKlICf7SlcOfM9OQ
-         OGp5XmgtB3PP7HPxenew8iRr8O3zmI2bcNkqaTmgPTzonDWCueisIRt064+XX0Tgwor1
-         H8md7gzkk/UAj2aaIMUgahQu2KHqnxDgd3QMcf8slBSOIQa9XnLU54r0rMFg0JoobWiZ
-         kXXA==
-X-Gm-Message-State: ACrzQf2bUEMmRGxpKn2SAhfUVm+t7xuVoN9h/GzhZXe9ncYm0anrWX+3
-        qtNU/WsT/VPHiN5u3+3MlTw=
-X-Google-Smtp-Source: AMsMyM5Bdu55a+pqkKJZBBQ1bL85SEwmUnbaJNJya+QsyYzpf2RxaaFGM5Ml577NXVyPVftPP7SA0A==
-X-Received: by 2002:a17:903:2442:b0:186:ef89:7b41 with SMTP id l2-20020a170903244200b00186ef897b41mr7574440pls.164.1666965847480;
-        Fri, 28 Oct 2022 07:04:07 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-72.three.co.id. [180.214.233.72])
-        by smtp.gmail.com with ESMTPSA id k12-20020a170902c40c00b001822121c45asm3209062plk.28.2022.10.28.07.04.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 07:04:07 -0700 (PDT)
-Message-ID: <3f4ca307-c995-e105-7190-5fff51dfe742@gmail.com>
-Date:   Fri, 28 Oct 2022 21:04:01 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 15/15] Documentation: bury magic-number, now devoid of
- content
-Content-Language: en-US
-To:     =?UTF-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Kees Cook <keescook@chromium.org>,
-        Stefano Zacchiroli <zack@upsilon.cc>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Wu XiangCheng <bobwxc@email.cn>, linux-doc@vger.kernel.org,
+        Fri, 28 Oct 2022 10:06:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC895B125;
+        Fri, 28 Oct 2022 07:06:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61CF4B82A31;
+        Fri, 28 Oct 2022 14:06:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A76D2C433D6;
+        Fri, 28 Oct 2022 14:06:40 +0000 (UTC)
+Date:   Fri, 28 Oct 2022 10:06:56 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@infradead.org>,
         linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net
-References: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
- <83bd024a7f81492be259a531c407cb017186d745.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <83bd024a7f81492be259a531c407cb017186d745.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Christoph =?UTF-8?B?QsO2aG13YWxk?= =?UTF-8?B?ZXI=?= 
+        <christoph.boehmwalder@linbit.com>, drbd-dev@lists.linbit.com,
+        Tejun Heo <tj@kernel.org>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org
+Subject: Re: [RFC][PATCH v2 04/31] timers: block: Use del_timer_shutdown()
+ before freeing timer
+Message-ID: <20221028100656.00a4d537@gandalf.local.home>
+In-Reply-To: <60b91c39-1e54-ac8b-5e9e-db7e46ca2d60@kernel.dk>
+References: <20221027150525.753064657@goodmis.org>
+        <20221027150925.819019339@goodmis.org>
+        <20221027111944.39b3a80c@gandalf.local.home>
+        <Y1uSG/7VXWLNlxlt@infradead.org>
+        <20221028062414.7859f787@gandalf.local.home>
+        <60b91c39-1e54-ac8b-5e9e-db7e46ca2d60@kernel.dk>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/27/22 05:43, наб wrote:
-> The list is now empty, and we've largely moved away from this approach,
-> and we have better debugging instrumentation nowadays
+On Fri, 28 Oct 2022 07:56:50 -0600
+Jens Axboe <axboe@kernel.dk> wrote:
+
+> On 10/28/22 4:24 AM, Steven Rostedt wrote:
+> > On Fri, 28 Oct 2022 01:26:03 -0700
+> > Christoph Hellwig <hch@infradead.org> wrote:
+> >   
+> >> This is just a single patch out of apparently 31, which claims that
+> >> something that doesn't even exist in mainline must be used without any
+> >> explanation.  How do you expect anyone to be able to review it?  
+> > 
+> >   https://lore.kernel.org/all/20221027150525.753064657@goodmis.org/
+> > 
+> > Only the first patch is relevant to you. I guess the Cc list would have
+> > been too big to Cc everyone that was Cc'd in the series.  
+> 
+> No it's not, because how on earth would anyone know what the change does
+> if you only see the simple s/name/newname change? The patch is useless
+> by itself.
 > 
 
-The patch subject should be "Documentation: remove magic number
-documentation".
+I meant this as the first patch:
 
-Better say for the description "Now that all magic numbers have
-been removed, remove the documentation".
+  https://lore.kernel.org/all/20221027150925.248421571@goodmis.org/
 
-Thanks.
+Which was what the link above was suppose to point to.
 
--- 
-An old man doll... just what I always wanted! - Clara
+It's the only patch relevant to the rest of the series, as the rest is just
+converting over to the shutdown API, and the last patch changes
+DEBUG_OBJECTS_TIMERS to catch if this was done properly.
 
+That is, patch 01/31 and the patch you were Cc'd on is relevant, and for
+those that want to look deeper, see patch 31 as well.
+
+But if I included the Cc list for patch 01 for all those Cc'd in the
+entire series, it would be a huge Cc list, so I avoided doing so.
+
+Also, this is still RFC as the changes may still change. That is, this
+patch set is a heads up to what is to come. Ideally, I'd like to get just
+the API possibly in the kernel before the merge window without anyone using
+it. Then I can ask all the sub systems to pull in these individual patches
+as well.
+
+-- Steve
