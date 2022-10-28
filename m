@@ -2,108 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5183E611715
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A61A361171D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbiJ1QIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
+        id S229652AbiJ1QJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbiJ1QHF (ORCPT
+        with ESMTP id S231150AbiJ1QIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:07:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E43DFB6;
-        Fri, 28 Oct 2022 09:06:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 28 Oct 2022 12:08:01 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD081A39E;
+        Fri, 28 Oct 2022 09:06:48 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7ce329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ce:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76F756294B;
-        Fri, 28 Oct 2022 16:06:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A68C7C433D6;
-        Fri, 28 Oct 2022 16:06:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666973182;
-        bh=AvE4K79k2Jd4cse5cXKljbcr2tgCzWv/Xo3UPKYz1zk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=W7rizIooL9XO1d8G/SyX0QkpWWxwYNGVWpDOLC+rakFjWiMPbMRK9GzhamJ0pvidL
-         M2taZ0aT1QLzc1+i3vgyQqrgLnKEg4msOdkG4xh6W1apKRDC82W3NQqJzBHTbjIoL9
-         4U7aImMj5b08zi70ifAJQ6ljFFDPi+qtwbjg+DTh47HM35EvA70RRwVewlY84KjPKg
-         Q6itNMGfRHzFsy4125xzKSNNOwfJou2ij9mbTYfVNgkF87hz+r1PgCRciXVQFqBq7a
-         CycALh7gGDzQei6dmuIBXHJf3nCLoDrihHOpIn42LKR/cEHSaWeCYucDovbZXuqEmY
-         D3R4bu1RXDYkQ==
-Date:   Fri, 28 Oct 2022 11:06:21 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] PCI: Add vendor ID for Quectel and Cinterion
-Message-ID: <20221028160621.GA892468@bhelgaas>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4623B1EC0518;
+        Fri, 28 Oct 2022 18:06:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1666973207;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=TaSyEs2uDEeNFySFbsAWLGbxmyPJdlW/cEgdh6Dc9LA=;
+        b=XHRJ4OhKGvnSUY3FZm5qFAiodKxGqGTCRY5VncUDeCygsxhy9Q4bM8IEzLrXXfF9nBehiX
+        F7RLgBP2A6Oi14yCT72nCZ/izgf6RazLC87U75EJpOOQeUI+HZNL9wnR/pPQJCb7fDjnM3
+        tBLFlldzMQiEmDed7zRxx/CCa6R7SoA=
+Date:   Fri, 28 Oct 2022 18:06:41 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Andrew Jones <ajones@ventanamicro.com>, x86@kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        openrisc@lists.librecores.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] x86: Fix /proc/cpuinfo cpumask warning
+Message-ID: <Y1v+Ed6mRN9gisJS@zn.tnic>
+References: <20221014155845.1986223-1-ajones@ventanamicro.com>
+ <20221014155845.1986223-3-ajones@ventanamicro.com>
+ <20221028074828.b66uuqqfbrnjdtab@kamzik>
+ <Y1vrMMtRwb0Lekl0@yury-laptop>
+ <Y1vvMlwf/4EA/8WW@zn.tnic>
+ <CAAH8bW_DkvPCH0-q2Bfe0OJ72r63mRM3GP7NKOFrhe3zMO2gbQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221028023711.4196-1-slark_xiao@163.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAAH8bW_DkvPCH0-q2Bfe0OJ72r63mRM3GP7NKOFrhe3zMO2gbQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 10:37:11AM +0800, Slark Xiao wrote:
-> In MHI driver, there are some companies product still do not have their
->  own PCI vendor macro. So we add it here to make the code neat. Ref ID
->  could be found in link https://pcisig.com/membership/member-companies
->  and https://pciids.sourceforge.net/pci.ids . Thales use Cinterion as
-> their IOT modem card's trademark. So you will find 0x1269 belongs to
-> Thales. Actually, Cinterion belongs to Gemalto, and Gemalto belongs to
->  Thales.
+On Fri, Oct 28, 2022 at 10:13:28AM -0500, Yury Norov wrote:
+> Because it's related to bitmap API usage and has been revealed after
+> some work in bitmaps.
 
-There should not be spaces at the beginning of these lines.
+So first of all, that "fix" needs to explain what exactly it is fixing.
+Not "it fixes this and that warning" but why the input arg to
+cpumask_next() cannot be nr_cpu_ids because... yadda yadda...
 
-Don't bother with the sourceforge URL; I don't think that's really
-useful here.
+> And because nobody else cares.
 
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
-> ---
->  include/linux/pci_ids.h | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index b362d90eb9b0..9e2b6286f53f 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -1765,6 +1765,8 @@
->  #define PCI_VENDOR_ID_SATSAGEM		0x1267
->  #define PCI_DEVICE_ID_SATSAGEM_NICCY	0x1016
->  
-> +#define PCI_VENDOR_ID_CINTERION		0x1269	/* Celluar Modules*/
+Why do you assume that?
 
-This should identify the *vendor*, not a trademark for a specific
-product line.  And it should correspond somehow with the PCI-SIG
-registration.  So I think PCI_VENDOR_ID_THALES would be more
-appropriate here.
+> If you're willing to move it yourself please go ahead.
 
-I think the best thing here would be two patches.  One patch would add
-PCI_VENDOR_ID_THALES to pci_ids.h and also add a use of it in the MHI
-driver.  The second patch would do the same for PCI_VENDOR_ID_QUECTEL.
+If it fixes a real issue, we are taking it. And pls note that x86
+patches go through the tip tree.
 
-Then each one is logically self-contained.
+Thx.
 
->  #define PCI_VENDOR_ID_ENSONIQ		0x1274
->  #define PCI_DEVICE_ID_ENSONIQ_CT5880	0x5880
->  #define PCI_DEVICE_ID_ENSONIQ_ES1370	0x5000
-> @@ -2585,6 +2587,8 @@
->  #define PCI_VENDOR_ID_TEKRAM		0x1de1
->  #define PCI_DEVICE_ID_TEKRAM_DC290	0xdc29
->  
-> +#define PCI_VENDOR_ID_QUECTEL		0x1eac
-> +
->  #define PCI_VENDOR_ID_TEHUTI		0x1fc9
->  #define PCI_DEVICE_ID_TEHUTI_3009	0x3009
->  #define PCI_DEVICE_ID_TEHUTI_3010	0x3010
-> -- 
-> 2.34.1
-> 
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
