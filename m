@@ -2,55 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DC2610962
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 06:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2A3610966
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 06:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiJ1E5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 00:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
+        id S229552AbiJ1E6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 00:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiJ1E5B (ORCPT
+        with ESMTP id S229544AbiJ1E6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 00:57:01 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEE0197FA5;
-        Thu, 27 Oct 2022 21:56:59 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 12:56:55 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1666933018;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iENfr5ZPUTr7bus8FV8bzCGok8UT4CZsu/mTj2KyRuM=;
-        b=Bgd+6+bqzAmI65Tij20r2PW15cevOr7v3mZ3OYrcp4mqvN4mXdvbenM6QqSFLEkGZd/FZy
-        uSYOKF65yMSt6NYzVLv9cPFCBvWRZwcjdywokM+Tw2fPhaEi6FUDG07XLFFnRs6v6VZroD
-        8QWRiP+qP0ubUf1NMe6O1MN2Kj65mSk=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Bin Chen <bin.chen@corigine.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Peter Chen <peter.chen@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] net: hinic: Add control command support for VF PMD
- driver in DPDK
-Message-ID: <20221028045655.GB3164@chq-T47>
-References: <20221026125922.34080-1-cai.huoqing@linux.dev>
- <20221026125922.34080-2-cai.huoqing@linux.dev>
- <20221027110312.7391f69f@kernel.org>
+        Fri, 28 Oct 2022 00:58:23 -0400
+Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58A219844A;
+        Thu, 27 Oct 2022 21:58:22 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1ooHR5-007Ut7-7o; Fri, 28 Oct 2022 12:58:16 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 28 Oct 2022 12:58:15 +0800
+Date:   Fri, 28 Oct 2022 12:58:15 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Subject: [GIT PULL] Crypto Fixes for 6.1
+Message-ID: <Y1thZ/+Gh/ONyf7x@gondor.apana.org.au>
+References: <20211029041408.GA3192@gondor.apana.org.au>
+ <20211112104815.GA14105@gondor.apana.org.au>
+ <YcKz4wHYTe3qlW7L@gondor.apana.org.au>
+ <YgMn+1qQPQId50hO@gondor.apana.org.au>
+ <YjE5yThYIzih2kM6@gondor.apana.org.au>
+ <YkUdKiJflWqxBmx5@gondor.apana.org.au>
+ <YpC1/rWeVgMoA5X1@gondor.apana.org.au>
+ <Yqw7bf7ln6vtU/VH@gondor.apana.org.au>
+ <Yr1XPJsAH2l1cx3A@gondor.apana.org.au>
+ <Y0zcWCmNmdXnX8RP@gondor.apana.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221027110312.7391f69f@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+In-Reply-To: <Y0zcWCmNmdXnX8RP@gondor.apana.org.au>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,31 +49,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27 10月 22 11:03:12, Jakub Kicinski wrote:
-> On Wed, 26 Oct 2022 20:59:11 +0800 Cai Huoqing wrote:
-> > The control command only can be set to register in PF,
-> > so add support in PF driver for VF PMD driver control
-> > command when VF PMD driver work with linux PF driver.
-> 
-> For what definition of "work"?
-Hi Jakub,
-  The work means that when the VF NIC driver in guest OS do some
-  configuration (VF L2NIC config),
-  firstly, VF send cmd to PF viamailbox,
-  then, PF deside what cmd is valid as a command filter.
- 
-  see these,
-  ./hinic_sriov.c:1031:static int nic_pf_mbox_handler(..
-  ./hinic_sriov.c:1045:   if (!hinic_mbox_check_cmd_valid(hwdev, nic_cmd_support_vf, vf_id, cmd,
-> 
-> The commands are actually supported or you're just ignoring them
-> silently?
-No, if the cmd is not added to 'nic_cmd_support_vf',
-the PF will return false, and the error messsage "PF Receive VFx
-unsupported cmd x" in the function 'hinic_mbox_check_cmd_valid',
-then, the configuration will not be set to hardware.
+Hi Linus:
 
-./hinic_hw_mbox.c:1238:bool hinic_mbox_check_cmd_valid(struct hinic_hwdev *hwdev,
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git tags/v6.1-p3
+
+for you to fetch changes up to 9f6035af06b526e678808d492fc0830aef6cfbd8:
+
+  crypto: x86/polyval - Fix crashes when keys are not 16-byte aligned (2022-10-21 19:05:05 +0800)
+
+----------------------------------------------------------------
+This push fixes an alignment crash in x86/polyval.
+----------------------------------------------------------------
+
+Nathan Huckleberry (1):
+      crypto: x86/polyval - Fix crashes when keys are not 16-byte aligned
+
+ arch/x86/crypto/polyval-clmulni_glue.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
 Thanks,
-Cai
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
