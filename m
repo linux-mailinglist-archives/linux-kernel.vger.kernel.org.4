@@ -2,130 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4143F611803
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E921861180E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbiJ1Qss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39440 "EHLO
+        id S229952AbiJ1Quk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbiJ1Qsa (ORCPT
+        with ESMTP id S229520AbiJ1Qug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:48:30 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AC521464C
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:48:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-        Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
-        In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=OhpOuWjeen7QG1He6lXTiBfyZaGo2Ecqc0tyM0FhmYY=; b=v89NSJvDt4HVfbfHi/VcP+62QL
-        Ofplk8KUS2qWPd42RjzNexz3DmjfBpg8PzD9c2v5GuTPyzMoFy44N3/Jv78HT3WE/uiilcEzYHUxQ
-        o1oc4SaoCnGcCwSKBoeIw6NMgj5gLP3EJ5lWbz+FDcU8raSg+IWRv/Bziz+7+wfnXvw4TVpS0MdY1
-        dtIXLR7Od74TtK6+5kQwWuxtbmXh6HJQPaSWikgd4+0OgyQt0R6KNE0swC+qYMfsPZstYOk6ais83
-        WwVSMXbUj2Pn3UJaAtcO0IJKnUV+0HGqa9qnyzPNaC56T8Hyd/CkW2lWmXgE8Qn/KGoPmb7VL5vq7
-        q/JkKMIg==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:40014 helo=rmk-PC.armlinux.org.uk)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <rmk@armlinux.org.uk>)
-        id 1ooSWk-00007E-6D; Fri, 28 Oct 2022 17:48:14 +0100
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-        id 1ooSWj-000FEM-Jl; Fri, 28 Oct 2022 17:48:13 +0100
-In-Reply-To: <Y1wHlSE0S5QZ+QCI@shell.armlinux.org.uk>
-References: <Y1wHlSE0S5QZ+QCI@shell.armlinux.org.uk>
-From:   "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 5/5] ARM: findbit: add unwinder information
+        Fri, 28 Oct 2022 12:50:36 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8ACE31EE3;
+        Fri, 28 Oct 2022 09:50:30 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MzT0126w3z9xqxd;
+        Sat, 29 Oct 2022 00:44:01 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwD3LPk3CFxjeW4cAA--.34547S2;
+        Fri, 28 Oct 2022 17:50:11 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        revest@chromium.org, jackmanb@chromium.org, shuah@kernel.org,
+        paul@paul-moore.com, casey@schaufler-ca.com
+Cc:     bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC][PATCH 1/3] lsm: Clarify documentation of vm_enough_memory hook
+Date:   Fri, 28 Oct 2022 18:49:46 +0200
+Message-Id: <20221028164948.385783-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1ooSWj-000FEM-Jl@rmk-PC.armlinux.org.uk>
-Sender: Russell King <rmk@armlinux.org.uk>
-Date:   Fri, 28 Oct 2022 17:48:13 +0100
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: GxC2BwD3LPk3CFxjeW4cAA--.34547S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruFy8GF18ZrWxtw17KrWUCFg_yoWkXFb_u3
+        4fG348Xw4fXF4xKa1Ikr93tryrK3yfXr1qgF1Yq39IqFWDJas5Gw4xWFnxX3WDWwn293s5
+        uFyktrWxAwnIgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbIAYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
+        AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
+        w2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
+        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
+        uYvjxUIa0PDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBF1jj4TMTQAAsi
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add unwinder information so oops in the findbit functions can create a
-proper backtrace.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+include/linux/lsm_hooks.h reports the result of the LSM infrastructure to
+the callers, not what LSMs should return to the LSM infrastructure.
+
+Clarify that and add that returning 1 from the LSMs means calling
+__vm_enough_memory() with cap_sys_admin set, 0 without.
+
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- arch/arm/lib/findbit.S | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ include/linux/lsm_hooks.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/lib/findbit.S b/arch/arm/lib/findbit.S
-index 6ec584d16d46..b7ac2d3c0748 100644
---- a/arch/arm/lib/findbit.S
-+++ b/arch/arm/lib/findbit.S
-@@ -12,6 +12,7 @@
-  */
- #include <linux/linkage.h>
- #include <asm/assembler.h>
-+#include <asm/unwind.h>
-                 .text
- 
- #ifdef __ARMEB__
-@@ -22,6 +23,7 @@
- 
- 		.macro	find_first, endian, set, name
- ENTRY(_find_first_\name\()bit_\endian)
-+	UNWIND(	.fnstart)
- 		teq	r1, #0
- 		beq	3f
- 		mov	r2, #0
-@@ -41,11 +43,13 @@ ENTRY(_find_first_\name\()bit_\endian)
- 		blo	1b
- 3:		mov	r0, r1			@ no more bits
- 		ret	lr
-+	UNWIND(	.fnend)
- ENDPROC(_find_first_\name\()bit_\endian)
- 		.endm
- 
- 		.macro	find_next, endian, set, name
- ENTRY(_find_next_\name\()bit_\endian)
-+	UNWIND(	.fnstart)
- 		cmp	r2, r1
- 		bhs	3b
- 		mov	ip, r2, lsr #5		@ word index
-@@ -69,6 +73,7 @@ ENTRY(_find_next_\name\()bit_\endian)
- 		orr	r2, r2, #31		@ no zero bits
- 		add	r2, r2, #1		@ align bit pointer
- 		b	2b			@ loop for next bit
-+	UNWIND(	.fnend)
- ENDPROC(_find_next_\name\()bit_\endian)
- 		.endm
- 
-@@ -97,6 +102,7 @@ ENDPROC(_find_next_\name\()bit_\endian)
-  * One or more bits in the LSB of r3 are assumed to be set.
-  */
- .L_found_swab:
-+	UNWIND(	.fnstart)
- 		rev_l	r3, ip
- .L_found:
- #if __LINUX_ARM_ARCH__ >= 7
-@@ -130,4 +136,4 @@ ENDPROC(_find_next_\name\()bit_\endian)
- 		cmp	r1, r0			@ Clamp to maxbit
- 		movlo	r0, r1
- 		ret	lr
--
-+	UNWIND(	.fnend)
+diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+index 4ec80b96c22e..f40b82ca91e7 100644
+--- a/include/linux/lsm_hooks.h
++++ b/include/linux/lsm_hooks.h
+@@ -1411,7 +1411,9 @@
+  *	Check permissions for allocating a new virtual mapping.
+  *	@mm contains the mm struct it is being added to.
+  *	@pages contains the number of pages.
+- *	Return 0 if permission is granted.
++ *	Return 0 if permission is granted by LSMs to the caller. LSMs should
++ *	return 1 if __vm_enough_memory() should be called with
++ *	cap_sys_admin set, 0 if not.
+  *
+  * @ismaclabel:
+  *	Check if the extended attribute specified by @name
 -- 
-2.30.2
+2.25.1
 
