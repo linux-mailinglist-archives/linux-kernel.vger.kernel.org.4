@@ -2,154 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78201610880
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 04:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A93610889
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 05:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235349AbiJ1C5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 22:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
+        id S234875AbiJ1DEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 23:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234810AbiJ1C5h (ORCPT
+        with ESMTP id S233867AbiJ1DDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 22:57:37 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA04C1DA2;
-        Thu, 27 Oct 2022 19:57:35 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29S2eLG8031432;
-        Fri, 28 Oct 2022 02:57:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=8boYx5DMpSKCIKsl187S1xKyolTLlB5T0x9Z9MXfnZs=;
- b=k9dcFmdKKNBRCnfzGIOEDFvbb4KVFdgxN2HYJyAzSI9Whh+fShBAxgrqhoBx1Q7+fIA4
- 5JimJD8e9erO6OzGEoAPntwsGOMIDJonLCthWM07uwRO5TBJpkXXEGzL4172oTvWqWR1
- 3xjyTSYJeD1fMz4UIfCYYzdrPhlOmPn00zM77X6P9Jx3Q7rgnWvo9+Fx6OOpehwVs2Jo
- SO0BXlJ7J7KRwfeLqHtv6WDcgJ1Sq7M8T4SG7RNg64qeqjS8ZLY4xjv5zHfljDpQs0UY
- p96FgOCle3JOs9FvzbMf6yHGXQOxnI89pxKIMz5nA/wQWkTy9hW5S9pe6/0Acom8Kz54 Pw== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kfahvutrs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 02:57:21 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29S2vKiu020978
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 02:57:20 GMT
-Received: from [10.249.8.186] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 27 Oct
- 2022 19:57:17 -0700
-Message-ID: <8c9bbcde-6dcb-2e31-d3d8-c51d8fe03035@quicinc.com>
-Date:   Fri, 28 Oct 2022 10:57:15 +0800
+        Thu, 27 Oct 2022 23:03:55 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CA27F272
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 20:03:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666926234; x=1698462234;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=d4g/WkxhxP3clLiqPsAN8+c7o+p4HweRQSra1ss6Fz8=;
+  b=LchRjOS6Qy9AqOEo0AIrEzdYOnZlNNsBsylKWYc/uuCDTiYkjR+ZCnEb
+   qPy/liC2w1ZvFeBCQTQllM1oGsa83K3vILMgb07ir2dK2tcAEll81sl6w
+   lHx07/jIkOpMFL22Mf1Xh10iN8Jac3zy/FvsXYsU5yGhCIDc/hzmSnRqd
+   GUfHhcm87x7UopvkufU84nPDxg+iu2I7LOP8ta0srXjw1YpWyyguHzJbb
+   rdOQOnHj2c2UK3zPOtoEpKXkPWSh5BMw1pYfM2b9jXZ0Gqa8gWz14iFeZ
+   el1XINDbodDvDbOPHq4QOJQC5nN9L7gllRr/4LKyKTujPtbR3j0EjWb74
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="310093926"
+X-IronPort-AV: E=Sophos;i="5.95,219,1661842800"; 
+   d="scan'208";a="310093926"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 20:03:53 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="807678714"
+X-IronPort-AV: E=Sophos;i="5.95,219,1661842800"; 
+   d="scan'208";a="807678714"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 20:03:49 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Jagdish Gediya <jvgediya.oss@gmail.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Tim Chen <tim.c.chen@intel.com>, Wei Xu <weixugc@google.com>,
+        Yang Shi <shy828301@gmail.com>
+Subject: Re: [RFC] memory tiering: use small chunk size and more tiers
+References: <20221027065925.476955-1-ying.huang@intel.com>
+        <578c9b89-10eb-1e23-8868-cdd6685d8d4e@linux.ibm.com>
+Date:   Fri, 28 Oct 2022 11:03:04 +0800
+In-Reply-To: <578c9b89-10eb-1e23-8868-cdd6685d8d4e@linux.ibm.com> (Aneesh
+        Kumar K. V.'s message of "Thu, 27 Oct 2022 16:15:40 +0530")
+Message-ID: <877d0kk5uf.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1] Bluetooth: btusb: Fix enable failure for a CSR BT
- dongle
-Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-CC:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
-        <luiz.dentz@gmail.com>, <luiz.von.dentz@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
-        <netdev@vger.kernel.org>, Zijun Hu <zijuhu@qti.qualcomm.com>
-References: <1666868760-4680-1-git-send-email-quic_zijuhu@quicinc.com>
- <abb598cd-c849-33b8-34fa-4cedcf185138@molgen.mpg.de>
-From:   quic_zijuhu <quic_zijuhu@quicinc.com>
-In-Reply-To: <abb598cd-c849-33b8-34fa-4cedcf185138@molgen.mpg.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: jlFQDkb_UT7kRVqimgYsBYkuSvIYOhvG
-X-Proofpoint-GUID: jlFQDkb_UT7kRVqimgYsBYkuSvIYOhvG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-27_07,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- impostorscore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=999
- spamscore=0 phishscore=0 bulkscore=0 malwarescore=0 clxscore=1011
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2210280017
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/27/2022 7:18 PM, Paul Menzel wrote:
-> Dear Zijun,
-> 
-> 
-> Thank you for the patch.
-> 
-> 
-> Am 27.10.22 um 13:06 schrieb Zijun Hu:
->> From: Zijun Hu <zijuhu@qti.qualcomm.com>
-> 
-> I‘d be more specific in the summary/title. Maybe:
-> 
-> Correct quirk check to include BT 4.0
-> 
->> A CSR BT dongle fails to be enabled bcz it is not detected as fake
-> 
-> I’d write *because*.
-> 
->> rightly, fixed by correcting fake detection condition.
->>
->> below btmon error log says HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL is not set.
->>
->> < HCI Command: Set Event Filter (0x03|0x0005) plen 1        #23 [hci0]
->>          Type: Clear All Filters (0x00)
->>> HCI Event: Command Complete (0x0e) plen 4                 #24 [hci0]
->>        Set Event Filter (0x03|0x0005) ncmd 1
->>          Status: Invalid HCI Command Parameters (0x12)
->>
->> the quirk is not set bcz current fake detection does not mark the dongle
->> as fake with below version info.
->>
->> < HCI Command: Read Local Version In.. (0x04|0x0001) plen 0  #1 [hci0]
->>> HCI Event: Command Complete (0x0e) plen 12                 #2 [hci0]
->>        Read Local Version Information (0x04|0x0001) ncmd 1
->>          Status: Success (0x00)
->>          HCI version: Bluetooth 4.0 (0x06) - Revision 12576 (0x3120)
->>          LMP version: Bluetooth 4.0 (0x06) - Subversion 8891 (0x22bb)
->>          Manufacturer: Cambridge Silicon Radio (10)
->>
->> Link: https://bugzilla.kernel.org/show_bug.cgi?id=60824
->> Signed-off-by: Zijun Hu <zijuhu@qti.qualcomm.com>
-> 
-> Please add a Fixes: tag.
-> 
-> 
-> Kind regards,
-> 
-> Paul
-> 
-> 
+Hi, Aneesh,
+
+Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+
+> On 10/27/22 12:29 PM, Huang Ying wrote:
+>> We need some way to override the system default memory tiers.  For
+>> the example system as follows,
+>> 
+>> type		abstract distance
+>> ----		-----------------
+>> HBM		300
+>> DRAM		1000
+>> CXL_MEM		5000
+>> PMEM		5100
+>> 
+>> Given the memory tier chunk size is 100, the default memory tiers
+>> could be,
+>> 
+>> tier		abstract distance	types
+>>                 range
+>> ----		-----------------       -----
+>> 3		300-400			HBM
+>> 10		1000-1100		DRAM
+>> 50		5000-5100		CXL_MEM
+>> 51		5100-5200		PMEM
+>> 
+>> If we want to group CXL MEM and PMEM into one tier, we have 2 choices.
+>> 
+>> 1) Override the abstract distance of CXL_MEM or PMEM.  For example, if
+>> we change the abstract distance of PMEM to 5050, the memory tiers
+>> become,
+>> 
+>> tier		abstract distance	types
+>>                 range
+>> ----		-----------------       -----
+>> 3		300-400			HBM
+>> 10		1000-1100		DRAM
+>> 50		5000-5100		CXL_MEM, PMEM
+>> 
+>> 2) Override the memory tier chunk size.  For example, if we change the
+>> memory tier chunk size to 200, the memory tiers become,
+>> 
+>> tier		abstract distance	types
+>>                 range
+>> ----		-----------------       -----
+>> 1		200-400			HBM
+>> 5		1000-1200		DRAM
+>> 25		5000-5200		CXL_MEM, PMEM
+>> 
+>> But after some thoughts, I think choice 2) may be not good.  The
+>> problem is that even if 2 abstract distances are almost same, they may
+>> be put in 2 tier if they sit in the different sides of the tier
+>> boundary.  For example, if the abstract distance of CXL_MEM is 4990,
+>> while the abstract distance of PMEM is 5010.  Although the difference
+>> of the abstract distances is only 20, CXL_MEM and PMEM will put in
+>> different tiers if the tier chunk size is 50, 100, 200, 250, 500, ....
+>> This makes choice 2) hard to be used, it may become tricky to find out
+>> the appropriate tier chunk size that satisfying all requirements.
+>> 
+>
+> Shouldn't we wait for gaining experience w.r.t how we would end up
+> mapping devices with different latencies and bandwidth before tuning these values? 
+
+Just want to discuss the overall design.
+
+>> So I suggest to abandon choice 2) and use choice 1) only.  This makes
+>> the overall design and user space interface to be simpler and easier
+>> to be used.  The overall design of the abstract distance could be,
+>> 
+>> 1. Use decimal for abstract distance and its chunk size.  This makes
+>>    them more user friendly.
+>> 
+>> 2. Make the tier chunk size as small as possible.  For example, 10.
+>>    This will put different memory types in one memory tier only if their
+>>    performance is almost same by default.  And we will not provide the
+>>    interface to override the chunk size.
+>> 
+>
+> this could also mean we can end up with lots of memory tiers with relative
+> smaller performance difference between them. Again it depends how HMAT
+> attributes will be used to map to abstract distance.
+
+Per my understanding, there will not be many memory types in a system.
+So, there will not be many memory tiers too.  In most systems, there are
+only 2 or 3 memory tiers in the system, for example, HBM, DRAM, CXL,
+etc.  Do you know systems with many memory types?  The basic idea is to
+put different memory types in different memory tiers by default.  If
+users want to group them, they can do that via overriding the abstract
+distance of some memory type.
+
+>
+>> 3. Make the abstract distance of normal DRAM large enough.  For
+>>    example, 1000, then 100 tiers can be defined below DRAM, this is
+>>    more than enough in practice.
+>
+> Why 100? Will we really have that many tiers below/faster than DRAM? As of now 
+> I see only HBM below it.
+
+Yes.  100 is more than enough.  We just want to avoid to group different
+memory types by default.
+
+Best Regards,
+Huang, Ying
+
+>> 
+>> 4. If we want to override the default memory tiers, just override the
+>>    abstract distances of some memory types with a per memory type
+>>    interface.
+>> 
+>> This patch is to apply the design choices above in the existing code.
+>> 
+>> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+>> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>> Cc: Alistair Popple <apopple@nvidia.com>
+>> Cc: Bharata B Rao <bharata@amd.com>
+>> Cc: Dan Williams <dan.j.williams@intel.com>
+>> Cc: Dave Hansen <dave.hansen@intel.com>
+>> Cc: Davidlohr Bueso <dave@stgolabs.net>
+>> Cc: Hesham Almatary <hesham.almatary@huawei.com>
+>> Cc: Jagdish Gediya <jvgediya.oss@gmail.com>
+>> Cc: Johannes Weiner <hannes@cmpxchg.org>
+>> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>> Cc: Michal Hocko <mhocko@kernel.org>
+>> Cc: Tim Chen <tim.c.chen@intel.com>
+>> Cc: Wei Xu <weixugc@google.com>
+>> Cc: Yang Shi <shy828301@gmail.com>
 >> ---
->>   drivers/bluetooth/btusb.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
->> index 420be2ee2acf..727469d073f9 100644
->> --- a/drivers/bluetooth/btusb.c
->> +++ b/drivers/bluetooth/btusb.c
->> @@ -2155,7 +2155,7 @@ static int btusb_setup_csr(struct hci_dev *hdev)
->>           is_fake = true;
->>         else if (le16_to_cpu(rp->lmp_subver) <= 0x22bb &&
->> -         le16_to_cpu(rp->hci_ver) > BLUETOOTH_VER_4_0)
->> +         le16_to_cpu(rp->hci_ver) >= BLUETOOTH_VER_4_0)
->>           is_fake = true;
->>         /* Other clones which beat all the above checks */
-
-thank you Paul for your code review.
-i am sorry, please Ignore this wrong fix.
-the enable failure should be  caused that below fix is not be picked up
-https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git/commit/?id=b3cf94c8b6b2f1a2b94825a025db291da2b151fd
-
+>>  include/linux/memory-tiers.h | 7 +++----
+>>  mm/memory-tiers.c            | 7 +++----
+>>  2 files changed, 6 insertions(+), 8 deletions(-)
+>> 
+>> diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
+>> index 965009aa01d7..2e39d9a6c8ce 100644
+>> --- a/include/linux/memory-tiers.h
+>> +++ b/include/linux/memory-tiers.h
+>> @@ -7,17 +7,16 @@
+>>  #include <linux/kref.h>
+>>  #include <linux/mmzone.h>
+>>  /*
+>> - * Each tier cover a abstrace distance chunk size of 128
+>> + * Each tier cover a abstrace distance chunk size of 10
+>>   */
+>> -#define MEMTIER_CHUNK_BITS	7
+>> -#define MEMTIER_CHUNK_SIZE	(1 << MEMTIER_CHUNK_BITS)
+>> +#define MEMTIER_CHUNK_SIZE	10
+>>  /*
+>>   * Smaller abstract distance values imply faster (higher) memory tiers. Offset
+>>   * the DRAM adistance so that we can accommodate devices with a slightly lower
+>>   * adistance value (slightly faster) than default DRAM adistance to be part of
+>>   * the same memory tier.
+>>   */
+>> -#define MEMTIER_ADISTANCE_DRAM	((4 * MEMTIER_CHUNK_SIZE) + (MEMTIER_CHUNK_SIZE >> 1))
+>> +#define MEMTIER_ADISTANCE_DRAM	((100 * MEMTIER_CHUNK_SIZE) + (MEMTIER_CHUNK_SIZE / 2))
+>>  #define MEMTIER_HOTPLUG_PRIO	100
+>>  
+>>  struct memory_tier;
+>> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+>> index fa8c9d07f9ce..e03011428fa5 100644
+>> --- a/mm/memory-tiers.c
+>> +++ b/mm/memory-tiers.c
+>> @@ -165,11 +165,10 @@ static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memty
+>>  	bool found_slot = false;
+>>  	struct memory_tier *memtier, *new_memtier;
+>>  	int adistance = memtype->adistance;
+>> -	unsigned int memtier_adistance_chunk_size = MEMTIER_CHUNK_SIZE;
+>>  
+>>  	lockdep_assert_held_once(&memory_tier_lock);
+>>  
+>> -	adistance = round_down(adistance, memtier_adistance_chunk_size);
+>> +	adistance = rounddown(adistance, MEMTIER_CHUNK_SIZE);
+>>  	/*
+>>  	 * If the memtype is already part of a memory tier,
+>>  	 * just return that.
+>> @@ -204,7 +203,7 @@ static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memty
+>>  	else
+>>  		list_add_tail(&new_memtier->list, &memory_tiers);
+>>  
+>> -	new_memtier->dev.id = adistance >> MEMTIER_CHUNK_BITS;
+>> +	new_memtier->dev.id = adistance / MEMTIER_CHUNK_SIZE;
+>>  	new_memtier->dev.bus = &memory_tier_subsys;
+>>  	new_memtier->dev.release = memory_tier_device_release;
+>>  	new_memtier->dev.groups = memtier_dev_groups;
+>> @@ -641,7 +640,7 @@ static int __init memory_tier_init(void)
+>>  #endif
+>>  	mutex_lock(&memory_tier_lock);
+>>  	/*
+>> -	 * For now we can have 4 faster memory tiers with smaller adistance
+>> +	 * For now we can have 100 faster memory tiers with smaller adistance
+>>  	 * than default DRAM tier.
+>>  	 */
+>>  	default_dram_type = alloc_memory_type(MEMTIER_ADISTANCE_DRAM);
