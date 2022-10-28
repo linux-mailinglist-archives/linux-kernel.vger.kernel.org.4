@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39497611367
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA18F61136F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiJ1NpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
+        id S231411AbiJ1Nps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiJ1Noy (ORCPT
+        with ESMTP id S231351AbiJ1Noy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 28 Oct 2022 09:44:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA41313F8A;
-        Fri, 28 Oct 2022 06:44:44 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4872BE2D;
+        Fri, 28 Oct 2022 06:44:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C197CB82A38;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F6AC62890;
         Fri, 28 Oct 2022 13:44:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19D3AC43163;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4041DC4FEBF;
         Fri, 28 Oct 2022 13:44:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1666964681;
-        bh=ILxmO+luaNlHEkk+yA0QURG+N4WAyWonqKyVeubJWJQ=;
+        bh=pa4qRgP2TlnZgyliaD9iQA0RXiwo8Z4IYATkxJPpjoE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OcYx8KXrZNl9Y6aSkV5am2QJsAArAwoAvHOtcAAkLk6FtZb7rku24ubOq0ewTTNIF
-         UlilfuxZqCJRo6PLFXqUpnJIa/FjrDhOtXDef0vYyytsMoeNcCAMj/D+eovTU4X6Sz
-         mtuL8p+y3FOqlTN3+JbXXpjxLQVUkf0gmSxkHDlgTjws0RpeyG2czgjvcV7A6DntNh
-         BeN1k4hJ+qx9gYCgnLa9QEoJm8vVN8/XMjctksNuDs/8y4hW7zO0ZNNybn/oZbaxhA
-         GV/eR+19Oc8pblClhQz0bPgTLPBByTTSB4oDQcsfhju3AAT0xGneFxyD6vO07o2Zue
-         wXOCYiaDvMpDg==
+        b=KbPamdSC7FSFA6KJDpgIAc93hR65jOa/vuiRpQGUpVMeRypqS0Ov0dPsBMkG0zEqa
+         HbNei4Bi1hqyKiMCJnCb7JA3z519yZQmAh1pRm7UqxMNFtseosrgpLNqalNt1xH8l/
+         vJEksxtfxuWxLPrVudS8oucczPWtNABghOx84RCnjfpUrj5mRsND7XbtEb1ybVkA7Q
+         gPFHtPFXShfq/vpOvKlh4CSZ4nTOAX1N+iq0mr9AM8/DqKd67IRkzBcDQkjnQVgSc+
+         2F+JlOctUkuj33nQmKdJZPpnuHns+drG6Td22bLk3S0AxX3GqraG8mvfUHGgntDIgG
+         LQmZ1lhOCumBw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1ooPet-00052M-Gf; Fri, 28 Oct 2022 15:44:27 +0200
+        id 1ooPet-00052P-Jc; Fri, 28 Oct 2022 15:44:27 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -46,9 +46,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 08/13] phy: qcom-qmp-usb: rename PHY ops structure
-Date:   Fri, 28 Oct 2022 15:44:02 +0200
-Message-Id: <20221028134407.19300-9-johan+linaro@kernel.org>
+Subject: [PATCH v2 09/13] phy: qcom-qmp-usb: clean up PHY init
+Date:   Fri, 28 Oct 2022 15:44:03 +0200
+Message-Id: <20221028134407.19300-10-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221028134407.19300-1-johan+linaro@kernel.org>
 References: <20221028134407.19300-1-johan+linaro@kernel.org>
@@ -63,56 +63,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename the PHY operation structure so that it has a "phy_ops" suffix and
-move it next to the implementation.
+Clean up the PHY initialisation somewhat by programming both tx and rx
+for the second lane after the first lane.
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-index 2e603831e45e..4a7b961d2965 100644
+index 4a7b961d2965..d5e62cfd93f8 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-@@ -2149,6 +2149,13 @@ static int qmp_usb_set_mode(struct phy *phy, enum phy_mode mode, int submode)
- 	return 0;
- }
+@@ -2058,14 +2058,12 @@ static int qmp_usb_power_on(struct phy *phy)
  
-+static const struct phy_ops qmp_usb_phy_ops = {
-+	.init		= qmp_usb_enable,
-+	.exit		= qmp_usb_disable,
-+	.set_mode	= qmp_usb_set_mode,
-+	.owner		= THIS_MODULE,
-+};
-+
- static void qmp_usb_enable_autonomous_mode(struct qmp_usb *qmp)
- {
- 	const struct qmp_phy_cfg *cfg = qmp->cfg;
-@@ -2366,13 +2373,6 @@ static int phy_pipe_clk_register(struct qmp_usb *qmp, struct device_node *np)
- 	return devm_add_action_or_reset(qmp->dev, phy_clk_release_provider, np);
- }
- 
--static const struct phy_ops qmp_usb_ops = {
--	.init		= qmp_usb_enable,
--	.exit		= qmp_usb_disable,
--	.set_mode	= qmp_usb_set_mode,
--	.owner		= THIS_MODULE,
--};
+ 	/* Tx, Rx, and PCS configurations */
+ 	qmp_usb_configure_lane(tx, cfg->tx_tbl, cfg->tx_tbl_num, 1);
 -
- static void __iomem *qmp_usb_iomap(struct device *dev, struct device_node *np,
- 					int index, bool exclusive)
- {
-@@ -2451,7 +2451,7 @@ static int qmp_usb_create(struct qmp_usb *qmp, struct device_node *np)
- 				     "failed to get pipe clock\n");
- 	}
+-	if (cfg->lanes >= 2)
+-		qmp_usb_configure_lane(qmp->tx2, cfg->tx_tbl, cfg->tx_tbl_num, 2);
+-
+ 	qmp_usb_configure_lane(rx, cfg->rx_tbl, cfg->rx_tbl_num, 1);
  
--	generic_phy = devm_phy_create(dev, np, &qmp_usb_ops);
-+	generic_phy = devm_phy_create(dev, np, &qmp_usb_phy_ops);
- 	if (IS_ERR(generic_phy)) {
- 		ret = PTR_ERR(generic_phy);
- 		dev_err(dev, "failed to create PHY: %d\n", ret);
+-	if (cfg->lanes >= 2)
++	if (cfg->lanes >= 2) {
++		qmp_usb_configure_lane(qmp->tx2, cfg->tx_tbl, cfg->tx_tbl_num, 2);
+ 		qmp_usb_configure_lane(qmp->rx2, cfg->rx_tbl, cfg->rx_tbl_num, 2);
++	}
+ 
+ 	qmp_usb_configure(pcs, cfg->pcs_tbl, cfg->pcs_tbl_num);
+ 
 -- 
 2.37.3
 
