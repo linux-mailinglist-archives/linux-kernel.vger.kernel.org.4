@@ -2,97 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB861611D51
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EDC611D54
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbiJ1WQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 18:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
+        id S230147AbiJ1WRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 18:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiJ1WQu (ORCPT
+        with ESMTP id S229571AbiJ1WRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 18:16:50 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62897249D3B
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 15:16:49 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id w29so4363893qtv.9
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 15:16:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AnYlAKDE7Id/0+mYIu8Vu+E1SnnSzVg+K0/rkruZ2h8=;
-        b=KHwk2RAuaECbC3I7NYokRNVpeeKvnlcV85rc9BRqkxuNJlkU2+lVRJXfJqZFDfM1tD
-         FPistzLhKYj8sYn3DvAo1CqC/S7W4JqEJD56XQqUZjtYm/C2ymDinNrQ4rq5SnOF4dzq
-         s3iTuqPV6qb+SdKUqqpld/8OMroRwU6Cqrrel1ZZlUgH/Y/aAjQ3hdm/rcnQ2Z07o1CO
-         thqe8VfVj7/vhOIUQZk0RFINemife/mrT1/5eXAfVArDHO4V3yhn1eljUADT7uOBhtB3
-         8In3Mv7oNC0I/MEK0dD49w6ktF3SPP+AzPOtzs3Qh0xn9f97/9CE9AFekFUiHMPmebCT
-         F6cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AnYlAKDE7Id/0+mYIu8Vu+E1SnnSzVg+K0/rkruZ2h8=;
-        b=fWighjUTKCF35erkmUr37Ne0c70Puf1Tduzsz71tyIIfCZHLQO4ArcVrA301yai1R/
-         3G1fQmoBoPMwUPmI8D0hlxHQ3AHFa6VTDldxCZyY6htnxXVeh3zu/rjAX4zeKtkrfByl
-         0vTFFRDyUMEt/ZVcnwbWfu/ZoK6Y8YZKYzGyUBarzvnNwiqFXyjq19yc2d44cPqHSlmf
-         aQQy14hVP6baB1VGvv+5H3O5LtKSji5+Wvaf2omp0FRwEyJ/QJReGNV5+ThfZpvnbRuA
-         TWXwYnizILSbInEwFgngstcxG2KS196RIQchUSeCu9fulyXR7oKvY4vpB7yCKM+9Kf6c
-         RaVQ==
-X-Gm-Message-State: ACrzQf2CkXv4hoIo5FyM0IVm7fDIZnz1ZLRaYeEdcVSKnclf3AVPn0JQ
-        NqPaIn8j5eHtaBLiuRy8q2FE2A==
-X-Google-Smtp-Source: AMsMyM4JqcQtQfto3gxhbFuFfIPXNDpMOLw+m+TMO83HEMc+0lwBFGtm0ISPPKKz6TltA+cegdORBA==
-X-Received: by 2002:ac8:57cd:0:b0:39c:bb4c:565b with SMTP id w13-20020ac857cd000000b0039cbb4c565bmr1511242qta.115.1666995408600;
-        Fri, 28 Oct 2022 15:16:48 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id v8-20020a05620a440800b006ec59941acasm4018380qkp.11.2022.10.28.15.16.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 15:16:47 -0700 (PDT)
-Message-ID: <1e5b41c7-5f0d-68e7-ddbb-d2594998bd4f@linaro.org>
-Date:   Fri, 28 Oct 2022 18:16:46 -0400
+        Fri, 28 Oct 2022 18:17:36 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D439249D2D;
+        Fri, 28 Oct 2022 15:17:35 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.50.127])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 27D3420B929B;
+        Fri, 28 Oct 2022 15:17:35 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 27D3420B929B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1666995455;
+        bh=+pV23nWckVn/wTOHqMgILAsrEga2k7t0NAINVBKLQvs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R/HzSKmvDWuOorx9xaNrLRK0MO5cbHPveqqmKw167gbhdQvCsZAcxFiiWqPx4/r1n
+         c0yu0xwIGctBQR2dg5FE6ShTpc1c9zMV6KGAsjOix+ijEoYlC8T23GbEOUGfdG7n/f
+         kblL/lUo1wR/gKwdD8mHHTWJxXVXk/7EcfwTdhzc=
+Date:   Fri, 28 Oct 2022 15:17:28 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     rostedt@goodmis.org, mhiramat@kernel.org,
+        dcook@linux.microsoft.com, alanau@linux.microsoft.com,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] tracing/user_events: Remote write ABI
+Message-ID: <20221028221728.GA162@W11-BEAU-MD.localdomain>
+References: <20221027224011.2075-1-beaub@linux.microsoft.com>
+ <96d9f066-2f39-78e6-9be7-f9c69235615e@efficios.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 10/10] arm64: dts: qcom: sc8280xp: Add bwmon instances
-Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-Cc:     Georgi Djakov <djakov@kernel.org>,
-        Mike Tipton <quic_mdtipton@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221028034155.5580-1-quic_bjorande@quicinc.com>
- <20221028034155.5580-11-quic_bjorande@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221028034155.5580-11-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <96d9f066-2f39-78e6-9be7-f9c69235615e@efficios.com>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/10/2022 23:41, Bjorn Andersson wrote:
-> Add the two bwmon instances and define votes for CPU -> LLCC and LLCC ->
-> DDR, with bandwidth values based on the downstream DeviceTree.
+On Fri, Oct 28, 2022 at 05:50:04PM -0400, Mathieu Desnoyers wrote:
+> On 2022-10-27 18:40, Beau Belgrave wrote:
+> > As part of the discussions for user_events aligned with user space
+> > tracers, it was determined that user programs should register a 32-bit
+> > value to set or clear a bit when an event becomes enabled. Currently a
+> > shared page is being used that requires mmap().
+> > 
+> > In this new model during the event registration from user programs 2 new
+> > values are specified. The first is the address to update when the event
+> > is either enabled or disabled. The second is the bit to set/clear to
+> > reflect the event being enabled. This allows for a local 32-bit value in
+> > user programs to support both kernel and user tracers. As an example,
+> > setting bit 31 for kernel tracers when the event becomes enabled allows
+> > for user tracers to use the other bits for ref counts or other flags.
+> > The kernel side updates the bit atomically, user programs need to also
+> > update these values atomically.
 > 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
+> Nice!
+> 
+> > 
+> > User provided addresses must be aligned on a 32-bit boundary, this
+> > allows for single page checking and prevents odd behaviors such as a
+> > 32-bit value straddling 2 pages instead of a single page.
+> > 
+> > When page faults are encountered they are done asyncly via a workqueue.
+> > If the page faults back in, the write update is attempted again. If the
+> > page cannot fault-in, then we log and wait until the next time the event
+> > is enabled/disabled. This is to prevent possible infinite loops resulting
+> > from bad user processes unmapping or changing protection values after
+> > registering the address.
+> 
+> I'll have a close look at this workqueue page fault scheme, probably next
+> week.
+> 
 
-Looks good (with compatible change to include "cpu" part):
+Excellent.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > 
+> > NOTE:
+> > User programs that wish to have the enable bit shared across forks
+> > either need to use a MAP_SHARED allocated address or register a new
+> > address and file descriptor. If MAP_SHARED cannot be used or new
+> > registrations cannot be done, then it's allowable to use MAP_PRIVATE
+> > as long as the forked children never update the page themselves. Once
+> > the page has been updated, the page from the parent will be copied over
+> > to the child. This new copy-on-write page will not receive updates from
+> > the kernel until another registration has been performed with this new
+> > address.
+> 
+> This seems rather odd. I would expect that if a parent process registers
+> some instrumentation using private mappings for enabled state through the
+> user events ioctl, and then forks, the child process would seamlessly be
+> traced by the user events ABI while being able to also change the enabled
+> state from the userspace tracer libraries (which would trigger COW).
+> Requiring the child to re-register to user events is rather odd.
+> 
 
-Best regards,
-Krzysztof
+It's the COW that is the problem, see below.
 
+> What is preventing us from tracing the child without re-registration in this
+> scenario ?
+> 
+
+Largely knowing when the COW occurs on a specific page. We don't make
+the mappings, so I'm unsure if we can ask to be notified easily during
+these times or not. If we could, that would solve this. I'm glad you are
+thinking about this. The note here was exactly to trigger this
+discussion :)
+
+I believe this is the same as a Futex, I'll take another look at that
+code to see if they've come up with anything regarding this.
+
+Any ideas?
+
+Thanks,
+-Beau
