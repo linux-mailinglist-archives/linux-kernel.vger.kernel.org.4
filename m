@@ -2,115 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F38610FA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB179610FAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiJ1L1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 07:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34950 "EHLO
+        id S230309AbiJ1L2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 07:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiJ1L1O (ORCPT
+        with ESMTP id S229822AbiJ1L2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 07:27:14 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAF81D0D79
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 04:27:13 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id z30so3159364qkz.13
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 04:27:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n27P9fQzAea5JJ3rcyXtQsWTxD0urj62so3demloRqQ=;
-        b=s3VsWG//KkD/UGRA5ywODMgnFjgOsElESRo8QPf8XegqHktP0/qfkb8meHjwzOWjSf
-         Quq2ROyt8VFaPIeB+1xj6oI72gAuBcNZ5+rJZ4VAtCFpV15SoOVyzXo7H4OfzXTc+xMj
-         MRGbsvy61qw9FzMmxbYYiP9+piZt39XblXjYoV6DXnwlStS10/O1ZHYZ7oBvzBauQHoy
-         utP8L2g93zI+vErg9j684msLNCKn0Jbt5L6R00DAP3X9WmMDAAuRfsgq8m44I+ErlLQk
-         2oDrig9l72iCUk2/aKTshcG3eY2qemwJM2I2HVTZeq7a42Xf7iUABHninoGSUpit8xyN
-         jYew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n27P9fQzAea5JJ3rcyXtQsWTxD0urj62so3demloRqQ=;
-        b=MoJ/o+cQ7Iy/2ez2V3ybL5bFueZccqqlMsdNXGqzzTx993ZkYb5U5aD2Jk84CLlTxg
-         PfgerfpkwTl5c+uLC9YQnTJPdu6lfZyQJWfmYYReZf2KqKvueyMsV+3tfwVnug94mjEO
-         /7l3/uumZdMpAbPwGOzYHM8DuH7xbyL0Z9unWkETBvFrj9ISFqT49ZEV7x8CnBDoGktT
-         zi/TSC/fKgBcIB6LlK/6jbj2bmPEvAxr2bG+y5D+z+MvoHQSTmub5DBUx3J0YKFrJMNC
-         +I6WEkm8yb5aMgfBIDYMrhF2y/wwttweEaSqYVFAwqiPsDeXnzymSdc8We55mbxsaqkl
-         iKHg==
-X-Gm-Message-State: ACrzQf0cRap2HAY8nYR/KIii8wIV/u9fl1uPVc5zt5sYHslN/fskpyx7
-        uB5pB+cH7UmLrH9ondf/rlYxPQ==
-X-Google-Smtp-Source: AMsMyM4oWiDhP7JzCJKC5Vj52NzocxJ+zmvdbOC+BFV0wwy5MqyYFVo6KZ9q5UpuKFDMXqnwowNswQ==
-X-Received: by 2002:a37:bb82:0:b0:6fa:e8d:534 with SMTP id l124-20020a37bb82000000b006fa0e8d0534mr297964qkf.738.1666956432590;
-        Fri, 28 Oct 2022 04:27:12 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id w24-20020ac86b18000000b0039764587192sm2223661qts.57.2022.10.28.04.27.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 04:27:11 -0700 (PDT)
-Message-ID: <5676bcd2-14fc-4e1d-643e-89e575d190c3@linaro.org>
-Date:   Fri, 28 Oct 2022 07:27:09 -0400
+        Fri, 28 Oct 2022 07:28:18 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2048.outbound.protection.outlook.com [40.107.237.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2856F1D1038;
+        Fri, 28 Oct 2022 04:28:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BKWbGijD/IeFDIeR0rVwi/jaWZuC8EfZijfY7sJ3XJjl5ris06G8XYrvT8ZG9hKiDLWV2m8/ogwaW739nAxPms73HKzpwwNUfkQNTzJ6Fd0nnYO2Ob8MY5g5UBfMNHMMgR85m6inmY9CGnXQSyujLDHs6SKNmXpkzoVqNCnBiAmyqiWwDF5hcUhNXtWzFh35AfIPjL8STCaLrUQyJhWux8HFdYFsHTLjtRHZ5OfW2tmSakn+Tb9v+o4fSxhhhu54I72pdywGUMRXecfUSznsQZoaIomO2TM3/hde20gpraUdYamczlZWoJRX8nWYHaSnuanca9588XbgSW4SAnj8pw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lOLgK1rWXwgJeZS/Z+dF2H95Dhvy+wmRuA6C5ZNDQTA=;
+ b=P+jm5Em6304VxuFzx5sPba9RKXMwN5bUCGRuqb2Nd4QmlpAqYJUlNaC1Kh7Md6+yg/FDwUhKbXoVtoJGbjfg0yw4KwzrageD2IGLisGcAVBsXHMze1Yl7ZLqT0WOXJ41T1aqCLgqz9rcfy2f9vx5WpMxqGWVlNsX84z2zC1wyc4Nh3i3N3V20klyQ0xtx/4D2OKxORGYT76Pf3zCjQzTvbJbt1Rj9lZqg198dgi0YPEHg2xW2WeWvP+EoSIvy69GJtwJyD2BT1BevGHjI4GcBi+zSveZn1LxRIt6OI/CJcPSDtYMmB3cg4XxnH1MyWqpq7lb5G/g2D8xV4WlhvRGsg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lOLgK1rWXwgJeZS/Z+dF2H95Dhvy+wmRuA6C5ZNDQTA=;
+ b=bibp61tLW+Nr3Yvu3hZVMWo4hlnyEeIARHRBHf7JnXF0uT5RdRFONV3kGI/mYpekAwnUC7op2LUiYJPpNMiwLtlmJXGSj9++X7glCNYWj5vfSBWPCAtH9TMCqvJWAGFrsKgLKWWx2GlD1HOgEgKtwdEN7LlaFw9LbWMwZduwJrY6aOgQlhmmbRx9NqyvVSyrlrixlCjfc0KwE6V9wL0UydAAa++WiajBRpEmXU4U8mcmkRd+/Vcrm0bzaE36mdqflotfk7dGyKILRQ3yERPhK07EWc7sCSA6ozZRfGIsQPCmAk8mVu1weWe3ufBNA/+r23OeuGlgeb22zFPMYE3KVg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by PH7PR12MB7380.namprd12.prod.outlook.com (2603:10b6:510:20f::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15; Fri, 28 Oct
+ 2022 11:28:15 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5769.015; Fri, 28 Oct 2022
+ 11:28:15 +0000
+Date:   Fri, 28 Oct 2022 08:28:14 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/5] iommu/s390: Use RCU to allow concurrent domain_list
+ iteration
+Message-ID: <Y1u8zrKUh2S/J6LM@nvidia.com>
+References: <Y1KgX8EwH8T+FgWC@nvidia.com>
+ <89a748fb5caee8be5d91806aa5dfd131e92d5d82.camel@linux.ibm.com>
+ <Y1K1AqVWEyY0/Uqy@nvidia.com>
+ <cef734b9f9b33380c1bbff40b56bb67b3de29341.camel@linux.ibm.com>
+ <Y1a8qM4c2ZAM9glJ@nvidia.com>
+ <3c2249fc7abf481b15d4988c2bd6456c48154c44.camel@linux.ibm.com>
+ <Y1p/7YS338ghykGz@nvidia.com>
+ <c98fa11d4efa86ca676a9d164893db8af8ab3693.camel@linux.ibm.com>
+ <Y1qPvg+g6EEaayF6@nvidia.com>
+ <1e10c0605e65f43acf6d2b5e71c7c74d6ff980b5.camel@linux.ibm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1e10c0605e65f43acf6d2b5e71c7c74d6ff980b5.camel@linux.ibm.com>
+X-ClientProxiedBy: BL1P223CA0017.NAMP223.PROD.OUTLOOK.COM
+ (2603:10b6:208:2c4::22) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 04/11] arm64: tegra: Enable XUSB host and device on Jetson
- AGX Orin
-Content-Language: en-US
-To:     Jon Hunter <jonathanh@nvidia.com>, Wayne Chang <waynec@nvidia.com>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
-        thierry.reding@gmail.com, heikki.krogerus@linux.intel.com,
-        ajayg@nvidia.com, kishon@ti.com, vkoul@kernel.org,
-        p.zabel@pengutronix.de, balbi@kernel.org, mathias.nyman@intel.com,
-        jckuo@nvidia.com
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-References: <20221024074128.1113554-1-waynec@nvidia.com>
- <20221024074128.1113554-5-waynec@nvidia.com>
- <2059dfe5-b084-42a4-7f35-9da9561fc12b@linaro.org>
- <b803bcf9-fc47-5239-ffe9-707925f324de@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <b803bcf9-fc47-5239-ffe9-707925f324de@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH7PR12MB7380:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4d44c71d-7cc4-4db4-27aa-08dab8d78100
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gRNiH3BDYNX3UdZeKL0+VUDTj2CzApekCAkY+1T6apIFtY2Urc66M3SHmtK/0bCBG+CObg7jsFCBArGi0zw35DW3XPF1iYSaEgSTBrc0bXHio37m3pauicydCtlo7d5caueZM47vXbcsTVy8xrTZe21k/21m4UrvG8E943hTGJS1gB394DELLXbQYPhkn+I1AKrxbP72638gIqavnn7Ow2q6Pn5u4oSlkilH0a/LKvnSDTCLIql2xRIDplLMwcsgQL6fw2N8SiMd94wTluBeNnDQ6mBJCO3ZIokoiQrOfjmFqTP8pzehL9YQBoUcTvtVh8Jtq3x9IykUDZ7S7jVVxSfb8O/1pzTCQr7p6dnyk4qogQJHdMj3HNubrsQ3cprw7Yhk17Ww/yDaB2m66FloQn2wuY27WXT9/91fyk7N7yXKx4zWe+68FJHI6/DkxKLOWkhilf51Zw86ICENQ3+K40yQ/+aPEuMkTuFzpinx1hxTdwMylZlseiaRQAd9VQSfrJaDRqgDbR7l4+RP0IPG7d60JOG7ixJjzqmupC7Ttfink10iVSW0AGnm5N8VOSjApRsMD9VL0JxC8/qv/5jr9VgOOQ6eItRC0enpM1Fj4D74nXwNWN73ON91zU7m+OzxfuFDo2Ik7dnQiVHMIW93FL+Gc/Hg8oZq7mOzq9crXcdC/OOtl9uympsopT8jelPlHySwsUahxElK5E3YRlah4w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(39860400002)(136003)(376002)(346002)(451199015)(7416002)(6512007)(26005)(478600001)(6916009)(54906003)(36756003)(86362001)(6506007)(8936002)(2616005)(5660300002)(186003)(2906002)(66476007)(66556008)(4326008)(8676002)(66946007)(38100700002)(83380400001)(41300700001)(316002)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/39K09IAs4t3xOhKq/5V4xHs9jpVnJtdDSn2QBGF1/jqpb7nx7Z/HgkIpwPr?=
+ =?us-ascii?Q?krISGAqBSDHH7GLqezB97T6hjIt9U+qIPE3sgoQfxAvNtArdPyESxSFtKESH?=
+ =?us-ascii?Q?WTY+D4lEALyahgOga7+oQzm5+7x0n/zodOA1nxoP03ebLy+knbYMVl2cCdcD?=
+ =?us-ascii?Q?1EFWmsM9mZP7fmDkxpPcWBTSkBB6vJ8Nhy6cQq2jdpYezQl45jo18xgCoXVo?=
+ =?us-ascii?Q?GG0h/XuYVfVB6cUAZ0EjjtzlFsYNZZUi5wsCZRrj74skdGZ9FDDpY5/hUoPU?=
+ =?us-ascii?Q?XKej6sxsaM5BENmXmu1AybZvLOx90LcE60KzicKq4+97o8z0TGzdDzOPqox/?=
+ =?us-ascii?Q?4o5V2ROAXqEPjDfpB9v1egGqOLI2glMRYq91t8mW4MsD5i4lCjfUTCnbI6af?=
+ =?us-ascii?Q?Ld6O2JXQEFesTub4jfkEgcuKajH3GDEPnxlC2ZH4lQ/U1IbflR9BBdE/Vlmq?=
+ =?us-ascii?Q?Re77Cp0MCNwTxXUHctvYHjzltgmgH2oToHMvikHQrLPu9NBD04n8zd0g0lmT?=
+ =?us-ascii?Q?5CznUab0pSlgdXa9KvqQTSOUTLcithAOX/lKIiCdzNnl7X62ekynwPhZDV7Q?=
+ =?us-ascii?Q?WfJlQq8l3Pnp6VkBLdud/LFYzV4DWdInttAPKAiJ47PThL61n0d8lVPp8Fu0?=
+ =?us-ascii?Q?FV8++dH9zzkaZfGlsSgAN9gRo7K/i9CPiH98i5f2bZv48bWYlirDhKL10/mQ?=
+ =?us-ascii?Q?bWo+qjUwI9bDdV7PtUuelhyMj2T2P29zZB/9Zj84ZMai5NVASP7o7+MOGxRY?=
+ =?us-ascii?Q?e5g2WTN7UJv5E81l7tYgIj0h7pdnJX4E/4lM5/SdvUvOHPrNAAFhiBdeiE2W?=
+ =?us-ascii?Q?Q0p9vRD8IIZdIINenaD8qL9rQHFazXCD3NZ5+pKRNKQbSCb873CiG5P6Hlp/?=
+ =?us-ascii?Q?fJc+EyxL5h88WrzLzV2wieH9H5e5l4arAHwuiiLV2wk39GCN+yhjYjEzRSG4?=
+ =?us-ascii?Q?dvQ6uH04MPr/0IFuoIe5T+XCLld/SBIOmFHM3giEaOArExirxFlEgGW3XYEN?=
+ =?us-ascii?Q?tukq3ovjaGKHDhzJRdLKHHfkwvDd9WNnycERB+Bp+CNjsai40o4OZi80DRPl?=
+ =?us-ascii?Q?gtY14aLs1MexCwsudErr/mlth1Jl4J8AGVE3PBkjrhofnOWYUBe5jNKFn2D8?=
+ =?us-ascii?Q?f4Zr/QKGYJi9L3ZWm3nJovoCAOynS0zFdo2Z1cY1CXr5aod6F4UENxynaG97?=
+ =?us-ascii?Q?ZCcZsAQM69NKuUwS4cXzW3RCh3dpFU/pWhpSohN+2OWDnTTYgxTcBroppBoS?=
+ =?us-ascii?Q?dmDqtn/LeoyepTaV/9gagn///l55cQdIG1B2MCKrHdOtxgD4PEBAvHuFBQY2?=
+ =?us-ascii?Q?O8+sDYe/TeMScsl2VcnKs5dhuUorQpxqDTL67UU6armOPAIG20x1O2H06t7b?=
+ =?us-ascii?Q?S8W8rQrtPQNA3IRfLd9BBOaBUExYrH/VdXEKGhWI+UhM4RUy/wrYuuIzMYhW?=
+ =?us-ascii?Q?UNg1YA3xS7KRi4sf6lZ/E27xTzVO3gSjpHecdg+kk5+w7b6KADKxzgaWAF23?=
+ =?us-ascii?Q?lzeJJk39R2YGH7akzi72rbImcTCaC6PLroViyeL7CWGxqMrJyYjiu58qg/y5?=
+ =?us-ascii?Q?tChY7r4XnQnv/it2rHI=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4d44c71d-7cc4-4db4-27aa-08dab8d78100
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 11:28:15.0606
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JaGw7sY5/695b96I3pJ6TW6ANNtGGVQV6paYoGL1bmL11Yo81M40V1dJmsrqS16m
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7380
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/10/2022 05:33, Jon Hunter wrote:
->>> +			ucsi_ccg: ucsi_ccg@8 {
->>
->> No underscores in node names.
->>
->>> +				compatible = "cypress,cypd4226";
->>> +				cypress,firmware-build = "gn";
->>> +				interrupt-parent = <&gpio>;
->>> +				interrupts = <TEGRA234_MAIN_GPIO(Y, 4) IRQ_TYPE_LEVEL_LOW>;
->>> +				reg = <0x08>;
->>> +				status = "okay";
->>
->> The pattern of redefining full path in Tegra is confusing - I have no
->> clue which of these status=okay are correct which are redundant.
->>
->> Do you?
+On Fri, Oct 28, 2022 at 11:29:00AM +0200, Niklas Schnelle wrote:
+
+> > rcu_head = kzalloc(rcu_head, GFP_NOWAIT, GFP_NOWARN)
+> > if (!rcu_head)
+> >    synchronize_rcu()
+> > else
+> >    call_rcu(rcu_head)
+> > 
+> > And then call kmem_cache_free() from the rcu callback
 > 
-> I understand you may not like this approach, however, this comment is 
-> not really relevant to just this patch, but a general comment. But yes 
-> we will ensure that this is correct.
+> Hmm, maybe a stupid question but why can't I just put the rcu_head in
+> struct s390_domain and then do a call_rcu() on that with a callback
+> that does:
 > 
+> 	dma_cleanup_tables(s390_domain->dma_table);
+> 	kfree(s390_domain);
+> 
+> I.e. the rest of the current s390_domain_free().
+> Then I don't have to worry about failing to allocate the rcu_head and
+> it's simple enough. Basically just do the actual freeing of the
+> s390_domain via call_rcu().
 
-Just to clarify - this status looks redundant, but I have no way to tell
-for sure...
+Oh, if you never reallocate the dma_table then yes that is a good idea
 
-Best regards,
-Krzysztof
+> Or do you mean to use a kref that is taken by RCU readers together with
+> rcu_read_lock() and dropped at rcu_read_unlock() such that during the
+> RCU read critical sections the refcount can't fall below 1 and the
+> domain is actually freed once we have a) put the initial reference
+> during s390_domain_free() and b) put all temporary references on
+> exiting the RCU read critical sections?
 
+Yes, this is a common pattern. Usually you want to optimize away the
+global lock that protects, say, a linked list and then accept a local
+lock/refcount inside the object
+
+Jason
