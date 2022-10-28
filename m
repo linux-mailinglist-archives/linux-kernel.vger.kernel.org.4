@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388CC61121B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B359B61121E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbiJ1NBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
+        id S230197AbiJ1NBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbiJ1NBH (ORCPT
+        with ESMTP id S230094AbiJ1NBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:01:07 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB62A5755E
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:01:06 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id s196so4780317pgs.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:01:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cj+cFSWB3bhdp7XduUn/4e2RygvL5XBdKHCLMG1Ezq8=;
-        b=O6DaBoYnrcEcnm5eNCgvLRdsvuRtP7sVUc53dIggCP1DPm/qe0sU0YU3hry8fF88Lk
-         90/QvKXOpeYgxtHvLnr1urLL7z1Hj5U57/qK+4GHnxieBr7sTcDfp/7APxH1CHZJ8A/W
-         7eU3z+sn87mU6P2hb1J1skJpForlSSu1Y9FtryeAC7xUgWnyBJGf3fzK6ZTrBswAPmQB
-         Qeox2vWn2h7ltJbf+DvHMUAqRTMcC82Y8VMgMWocKvP8xQggaln1KxANCQ+96g49HyA+
-         9DKFsZCTQwn2Ax9kdfL/Vv/EmpQj46mrlAMA6MmY1x5msu3/bRBM9ZTXoqe7VZpz6zQ7
-         tQjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cj+cFSWB3bhdp7XduUn/4e2RygvL5XBdKHCLMG1Ezq8=;
-        b=qAfNMUaS5EWxAwkBVaWyGMbrKB3vMnk60f1247aqOXWin2Q+oSelDNIohyRVkTNenH
-         Ny0X6njJ3cvm/D3vGWwpvX2TDWlUMp5LvzGY65ezacBf+Tm0HwJdNpEJRtGOdgTQhQqi
-         uJXSi/lIXP6UuJBQ0pP7BOGtg8plbw01y0Lf/4Wa1X2mgeBixy8OqCp26kpJGLCuMfqG
-         5QN9s81rdruhYPti6yuP8uuPfc1DnCQbMz2vyUzTGCffgsBCOHxDWEL+ZHol2/bIC6ju
-         cncsdJnnlgkOJN7ZsyGgGsx+Wv4fQICu3znIKveF03UekYh021KJq01X3k5DNJRDhsxU
-         MJNg==
-X-Gm-Message-State: ACrzQf29moXx7kCjqeLhlzdpfDV6iVt9mYVw83Un8xdFwbXW0yUA27ti
-        H5tQ5xFosWqCFWhHW4O2CpHa8+rZYeDKdp4D
-X-Google-Smtp-Source: AMsMyM6LSRa1cWipx9sEb0JvczrXkVEj0/vqjDyiNWRWZcl9wt128WQw5AkN25ESjk4UgWXRc/bnBQ==
-X-Received: by 2002:a05:6a00:1348:b0:56b:f5c0:1d9d with SMTP id k8-20020a056a00134800b0056bf5c01d9dmr23236578pfu.45.1666962065722;
-        Fri, 28 Oct 2022 06:01:05 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-72.three.co.id. [180.214.233.72])
-        by smtp.gmail.com with ESMTPSA id n11-20020a17090a394b00b0020d45a155d9sm4181687pjf.35.2022.10.28.06.01.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 06:01:05 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 77EF810030A; Fri, 28 Oct 2022 20:01:01 +0700 (WIB)
-Date:   Fri, 28 Oct 2022 20:01:01 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
-        Michael Schmitz <schmitzmic@gmail.com>
-Subject: Re: [PATCH] m68k: mac: Reword comment using double "in"
-Message-ID: <Y1vSjQfkDfPINUBo@debian.me>
-References: <0229879ee3e2d8828707d291cddbb89ac18a10c2.1666945731.git.geert@linux-m68k.org>
+        Fri, 28 Oct 2022 09:01:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585C55FDD2;
+        Fri, 28 Oct 2022 06:01:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8E286284E;
+        Fri, 28 Oct 2022 13:01:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E99C433D6;
+        Fri, 28 Oct 2022 13:01:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666962106;
+        bh=sZ4ZNjf/cBaX1w4dLi8MwgTB0O0ug+mmFH/68/wbeBQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gmUDYsblOxDs80NsXHKuUFuycP2tAGkpdpu10+draWkdkiUZ9AwyxOazRzfYhivhP
+         QHOekOla/y0+0tCm547GHITIA842fwUeDRAJBTfxek8v3gDl0zyC2mIQJdDAmsBtWj
+         1Gd+Y4t/wxGQH9lGrkpz7qfS4gcIw/BFhrDlC9w+iEFaRaE+wbR7wvO8sNEJGHuz1i
+         WXpbN6IkUx+va3SVtdlUsDi2rlHkuHl0dI+ur7XU3hzBwQ+1/OkPzQulJz6cnG8BRC
+         dleOZqSyzenWbcT6flZ00TbZeFX9voP/cjdxzG4dzZ8RynxARP9FeNXhVcqm2B1TIX
+         OzjdgDtCYavSw==
+Date:   Fri, 28 Oct 2022 14:01:40 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+Cc:     linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, robh@kernel.org,
+        Shengjiu Wang <shengjiu.wang@nxp.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        angelogioacchino.delregno@collabora.corp-partner.google.com,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v1 2/2] ASoC: dmic: Add optional dmic selection
+Message-ID: <Y1vStD8vNYmdvPH1@sirena.org.uk>
+References: <20221028102450.1161382-1-ajye_huang@compal.corp-partner.google.com>
+ <20221028102450.1161382-3-ajye_huang@compal.corp-partner.google.com>
+ <Y1vDxtdNGURAT850@sirena.org.uk>
+ <CALprXBbTkj0Q_-3AL81Q1okRD5ZyDf_c=daPrkQstkM4_CNgGQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ANg38O8+lLGM5VLB"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Fc5e//HBGfgKdc7B"
 Content-Disposition: inline
-In-Reply-To: <0229879ee3e2d8828707d291cddbb89ac18a10c2.1666945731.git.geert@linux-m68k.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CALprXBbTkj0Q_-3AL81Q1okRD5ZyDf_c=daPrkQstkM4_CNgGQ@mail.gmail.com>
+X-Cookie: Life -- Love It or Leave It.
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,60 +67,40 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---ANg38O8+lLGM5VLB
-Content-Type: text/plain; charset=utf-8
+--Fc5e//HBGfgKdc7B
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 28, 2022 at 10:30:26AM +0200, Geert Uytterhoeven wrote:
-> People keep on sending (incorrect) patches to remove the second
-> occurrence of the word "in".  Reword the comment to stop the inflood.
->=20
+On Fri, Oct 28, 2022 at 08:59:54PM +0800, Ajye Huang wrote:
 
-Ah! People who aren't fluent in English think that duplicated "in" below
-isn't OK, which after stripping that become nonsense without reading the
-actual code.
+> Thank you for review,
+> I think it is appropriate to implement on audio machine side, like
+> this I did before,
+> commit 3cfbf07c6d27
+> ("ASoC: qcom: sc7180: Modify machine driver for 2mic")
 
-> Suggested-by: Michael Schmitz <schmitzmic@gmail.com>
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> ---
-> To be queued in the m68k branch for v6.2.
+> What is your suggestion?  Thank you.
 
-Should this patch be Cc: stable'ed so that no more trivial patches as
-you mentioned?
+Doing that seems fine.
 
->=20
->  arch/m68k/mac/misc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/arch/m68k/mac/misc.c b/arch/m68k/mac/misc.c
-> index 4fab3479175865d4..c7cb29f0ff016360 100644
-> --- a/arch/m68k/mac/misc.c
-> +++ b/arch/m68k/mac/misc.c
-> @@ -126,7 +126,7 @@ static void via_rtc_send(__u8 data)
-> =20
->  	reg =3D via1[vBufB] & ~(VIA1B_vRTCClk | VIA1B_vRTCData);
-> =20
-> -	/* The bits of the byte go in in MSB order */
-> +	/* The bits of the byte go into the RTC in MSB order */
-> =20
+Please don't top post, reply in line with needed context.  This allows
+readers to readily follow the flow of conversation and understand what
+you are talking about and also helps ensure that everything in the
+discussion is being addressed.
 
-LGTM, thanks.
-
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---ANg38O8+lLGM5VLB
+--Fc5e//HBGfgKdc7B
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY1vSjQAKCRD2uYlJVVFO
-oyl/AQCne+PlmVryq56xblbXyNvF0nK68wyPIgtQsuuVuAffqgD9HImvqkpYnVhU
-JHDcJ8W1xI/YfhNBJO7wcrEhDt0+nAw=
-=9DZc
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNb0rMACgkQJNaLcl1U
+h9A95Qf/RAWnE6Y2m+kzFQRiw0jEfmsInSLiQXOqfF8ByYGq5HxCsEoOJQUz8FCT
+OrYN6znnN0/Cj2vZP6ZMCyQP+Tawetbrn1XX2YU9RUgLQS35sPUrSTMXgyBuXEn6
+2xrSN0IwzRR3TpmTGKUdDb3YtzvrFUCsQXvlbt37/CIlI3xSEPVSQCych7yUEnt3
+yVEKP2kg8G2aHN+3aEygCNC8OvH98gUYPTil2wHAou2sa8/WBD5yP0+iJHKs5tY2
+Uni784arkAKm5Pr2CYhS79Swx/Wzrf+r0skHgoEL/Ml4Gu2Y6xTbHaVfBITd+v1L
+kGiIgWVmSbPSTv+jt6CjGcaj66zzVQ==
+=iTcB
 -----END PGP SIGNATURE-----
 
---ANg38O8+lLGM5VLB--
+--Fc5e//HBGfgKdc7B--
