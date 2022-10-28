@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4B3610F42
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F6C610F44
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229379AbiJ1LBS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 28 Oct 2022 07:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
+        id S230058AbiJ1LBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 07:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiJ1LBQ (ORCPT
+        with ESMTP id S229978AbiJ1LBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 07:01:16 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C5E1B7F32
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 04:01:13 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-237-22Dr50z3PuWQWbxBYKSvpw-1; Fri, 28 Oct 2022 12:01:10 +0100
-X-MC-Unique: 22Dr50z3PuWQWbxBYKSvpw-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 28 Oct
- 2022 12:01:08 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.042; Fri, 28 Oct 2022 12:01:08 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Peter Zijlstra' <peterz@infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "Joao Moreira" <joao@overdrivepizza.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        "Mark Rutland" <mark.rutland@arm.com>
-Subject: RE: [PATCH 0/4] x86/ibt: Implement FineIBT
-Thread-Topic: [PATCH 0/4] x86/ibt: Implement FineIBT
-Thread-Index: AQHY6eaqrH5B7d5A2kqD+PKSAMrXq64jpC0w
-Date:   Fri, 28 Oct 2022 11:01:08 +0000
-Message-ID: <322c0b333f0a4a60be2a89f0cdf7edde@AcuMS.aculab.com>
-References: <20221027092812.185993858@infradead.org>
-In-Reply-To: <20221027092812.185993858@infradead.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 28 Oct 2022 07:01:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7BE1C8400;
+        Fri, 28 Oct 2022 04:01:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 190DAB8294D;
+        Fri, 28 Oct 2022 11:01:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39DC4C433D6;
+        Fri, 28 Oct 2022 11:01:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666954896;
+        bh=Sbj94qyOysjZJE+ackYXXNKl168AQnZBHbwv9gdbaps=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ya9OWcXiNBemxAcmFdTmRCg7T8N5KQVO5LeCTzcTeDZhZuwGGAXd63KnPPS8IkaZi
+         PeMwW9aIr40qpk3kjcKWev8dLzv4yze7SgIBsIl9pmvD1pjL96ZB8tcxO92VMrIsti
+         klFUTv9kBsf15SH7/W6K01tCzILhZR3MYN9oQm5Y=
+Date:   Fri, 28 Oct 2022 13:01:34 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Pavel Machek <pavel@denx.de>, Guenter Roeck <linux@roeck-us.net>,
+        stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Subject: Re: [PATCH 5.10 00/79] 5.10.151-rc1 review
+Message-ID: <Y1u2jq+blROrB8IC@kroah.com>
+References: <20221027165054.270676357@linuxfoundation.org>
+ <8617f970-2a72-799b-530d-3a5bb07822a6@roeck-us.net>
+ <Y1rbQqkdeliRrQPF@kroah.com>
+ <20221027192744.GC11819@duo.ucw.cz>
+ <CAHk-=wgweH9GibJBzuEZNBGKbYPrs4NchT0YLuyxk1=N7gsWog@mail.gmail.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgweH9GibJBzuEZNBGKbYPrs4NchT0YLuyxk1=N7gsWog@mail.gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,29 +59,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra
-> Sent: 27 October 2022 10:28
+On Thu, Oct 27, 2022 at 12:49:22PM -0700, Linus Torvalds wrote:
+> On Thu, Oct 27, 2022 at 12:27 PM Pavel Machek <pavel@denx.de> wrote:
+> >
+> > Alternatively you can modify the caller to do /bin/sh /scripts/... so
+> > it does not need a +x bit...
 > 
-> Hi all,
+> Generally we should be doing both.
 > 
-> Updated FineIBT series; I've (hopefully) incorporated all feedback from last
-> time with the notable exception of the Kconfig CFI default -- I'm not sure we
-> want to add to the Kconfig space for this, also what would a distro do with it.
+> Make it have the proper +x bit to show clearly that it's an executable
+> script and have 'ls' and friends show it that way when people enable
+> colorization or whatever.
 > 
-> Anyway; please have a look, I'm hoping to merge this soonish so we can make the
-> next cycle.
+> *And* make any Makefiles and tooling use an explicit "sh" or whatever
+> thing, because we've traditionally let people use tar-files and patch
+> to generate their trees, and various stupid tools exist and get it
+> wrong even when we get it right in our git tree.
+> 
+> So belt and suspenders.
+> 
+> But in this case, I think our tools already do the "run shell" part:
+> 
+>   Makefile:PAHOLE_FLAGS   = $(shell PAHOLE=$(PAHOLE)
+> $(srctree)/scripts/pahole-flags.sh)
+> 
+> no? And at least in my -git tree, it's already executable.
 
-Is there a test to ensure that modules are actually compiled
-with the required endbra, function prologue gap (etc).
-Having the module load fail is somewhat better than a crash.
+In your tree, yes.
 
-It is almost certainly quite easy to generate an out of tree module that
-is missing all of those (even if compiled at the same time as the kernel).
-(Never mind issues with modules that contain binary blobs.)
+And when I export the patch, we get the proper:
+	create mode 100755 scripts/pahole-flags.sh
+line added to the patch.
 
-	David
+But then when importing the patch using:
+	git quilt-import
+that line is totally ignored and the permissions are set to normal.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+It's a long-running issue, and I think I'm about the only one that uses
+git quilt-import outside of the debian build system, so it's low on my
+list of things to fix up with that shell script (speed is my biggest
+issue, it's just slow on large amounts of patches and needs to be
+rewritten in C).
 
+I'll go fix this up by hand...
+
+thanks,
+
+greg k-h
