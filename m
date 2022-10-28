@@ -2,214 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E71611883
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E50E9611881
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiJ1Q7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56852 "EHLO
+        id S230253AbiJ1Q7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbiJ1Q6c (ORCPT
+        with ESMTP id S230328AbiJ1Q6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:58:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618F91C4ED3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:58:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14D2CB82BA0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:58:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4C77C433D6;
-        Fri, 28 Oct 2022 16:58:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666976308;
-        bh=NB0C0XzePklNj5LqvcpaBIGZcLpM/zxQPQkwfYE8xes=;
-        h=From:To:Cc:Subject:Date:From;
-        b=AkIgq6yW2OlEt6AJS7pE04e2O5YRC47NvexFUTDp0DIrugH9DjiNky5t6paHsWK+b
-         P1zeRA25HRW5Eb/rJ04l4DFcVgiTTv/3/FQWGqwqBfpCl9UhJfFiZpI02UOOqc3zHN
-         Uj4IHScoG28OvoC0va1fHxA/9mQeSPj+vPkN7XxFJryHVn984NHX7rIkpnBVHNgkWf
-         v+N3NyYgUbJi7uVmhHSAJB7wzKLVexE4IBiUirgdXMLZLdlF3gwjUYLEAFkpCIVcGH
-         GdrLDZ5X2OKj2dfXyAIQOFgaY8ncfouX6/ZmCFwcepQN/c0DCWCj/UPNug+GHayo7r
-         3O4tCklE68JGg==
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH] f2fs: use sysfs_emit instead of sprintf
-Date:   Fri, 28 Oct 2022 09:58:27 -0700
-Message-Id: <20221028165827.11558-1-jaegeuk@kernel.org>
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
+        Fri, 28 Oct 2022 12:58:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B6B671D5575
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:58:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BE4A61FB;
+        Fri, 28 Oct 2022 09:58:51 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 99F353F703;
+        Fri, 28 Oct 2022 09:58:43 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 17:58:33 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, souvik.chakravarty@arm.com,
+        wleavitt@marvell.com, peter.hilber@opensynergy.com,
+        nicola.mazzucato@arm.com, tarek.el-sherbiny@arm.com,
+        quic_kshivnan@quicinc.com
+Subject: Re: [PATCH v4 0/11] Introduce a unified API for SCMI Server testing
+Message-ID: <Y1wKHoxcWTz6VXyh@e120937-lin>
+References: <20221019204626.3813043-1-cristian.marussi@arm.com>
+ <CAKfTPtBJy4SdbYUNHFn2ZXEO_pnaMPYibfjXWNBnXy49P2h78Q@mail.gmail.com>
+ <Y1vvPBw4xB7m23wY@e120937-lin>
+ <CAKfTPtAfuqtCee7f4bREsLqb5KJcLWw1Y=-0Y+2t+3XfX_YctQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtAfuqtCee7f4bREsLqb5KJcLWw1Y=-0Y+2t+3XfX_YctQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's use sysfs_emit.
+On Fri, Oct 28, 2022 at 06:18:52PM +0200, Vincent Guittot wrote:
+> On Fri, 28 Oct 2022 at 17:04, Cristian Marussi <cristian.marussi@arm.com> wrote:
+> >
+> > On Fri, Oct 28, 2022 at 04:40:02PM +0200, Vincent Guittot wrote:
+> > > On Wed, 19 Oct 2022 at 22:46, Cristian Marussi <cristian.marussi@arm.com> wrote:
+> > > >
+> > > > Hi all,
+> > > >
+> >
+> > Hi Vincent,
+> >
+> > > > This series aims to introduce a new SCMI unified userspace interface meant
+> > > > to ease testing an SCMI Server implementation for compliance, fuzzing etc.,
+> > > > from the perspective of the OSPM agent (non-secure world only ...)
+> > > >
+> 
+> [ snip]
+> 
+> > > Hi Cristian,
+> > >
+> > > I have tested your series with an optee message transport layer and
+> > > been able to send raw messages to the scmi server PTA
+> > >
+> > > FWIW
+> > >
+> > > Tested-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > >
+> >
+> > Thanks a lot for your test and feedback !
+> >
+> > ... but I was going to reply to this saying that I spotted another issue
+> > with the current SCMI Raw implementation (NOT related to optee/smc) so
+> > that I'll post a V5 next week :P
+> >
+> > Anyway, the issue is much related to the debugfs root used by SCMI Raw,
+> > i.e.:
+> >
+> >         /sys/kernel/debug/scmi_raw/
+> >
+> > ..this works fine unless you run it on a system sporting multiple DT-defined
+> > server instances ...that is not officially supported but....ehm...a little
+> > bird told these system with multiple servers do exists :D
+> 
+> ;-)
+> 
+> >
+> > In such a case the SCMI core stack is probed multiuple times and so it
+> > will try to register multiple debugfs Raw roots: there is no chanche to
+> > root the SCMI Raw entries at the same point clearly ... and then anyway
+> > there is the issue of recognizing which server is rooted where ... with
+> > the additional pain that a server CANNOT be recognized by querying...cause
+> > there is only one by teh spec with agentID ZERO ... in theory :D...
+> >
+> > So my tentaive solution for V5 would be:
+> >
+> > - change the Raw root debugfs as:
+> >
+> >         /sys/kernel/debug/scmi_raw/0/... (first server defined)
+> >
+> >         /sys/kernel/debug/scmi_raw/1/... (possible additional server(s)..)
+> >
+> > - expose the DT scmi-server root-node name of the server somewhere under
+> >   that debugfs root like:
+> >
+> >         ..../scmi_raw/0/transport_name -> 'scmi-mbx'
+> >
+> >         ..../scmi_raw/1/transport_name -> 'scmi-virtio'
+> 
+> I was about to say that you would display the server name but that
+> means that you have send a request to the server which probably
+> defeats the purpose of the raw mode
+> 
+> >
+> >   so that if you know HOW you have configured your own system in the DT
+> >   (maybe multiple servers with different kind of transports ?), you can
+> >   easily select programmatically which one is which, and so decide
+> >   which Raw debugfs fs to use...
+> >
+> > ... I plan to leave the SCMI ACS suite use by default the first system
+> > rooted at /sys/kernel/debug/scmi_raw/0/...maybe adding a commandline
+> > option to choose an alternative path for SCMI Raw.
+> >
+> > Does all of this sound reasonable ?
+> 
+> Yes, adding an index looks good to me.
 
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
- fs/f2fs/sysfs.c | 36 ++++++++++++++++++------------------
- 1 file changed, 18 insertions(+), 18 deletions(-)
+Ok, I'll rework accordingly.
 
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index 66c88220d319..aaf93bb6c64d 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -95,28 +95,28 @@ static unsigned char *__struct_ptr(struct f2fs_sb_info *sbi, int struct_type)
- static ssize_t dirty_segments_show(struct f2fs_attr *a,
- 		struct f2fs_sb_info *sbi, char *buf)
- {
--	return sprintf(buf, "%llu\n",
-+	return sysfs_emit(buf, "%llu\n",
- 			(unsigned long long)(dirty_segments(sbi)));
- }
- 
- static ssize_t free_segments_show(struct f2fs_attr *a,
- 		struct f2fs_sb_info *sbi, char *buf)
- {
--	return sprintf(buf, "%llu\n",
-+	return sysfs_emit(buf, "%llu\n",
- 			(unsigned long long)(free_segments(sbi)));
- }
- 
- static ssize_t ovp_segments_show(struct f2fs_attr *a,
- 		struct f2fs_sb_info *sbi, char *buf)
- {
--	return sprintf(buf, "%llu\n",
-+	return sysfs_emit(buf, "%llu\n",
- 			(unsigned long long)(overprovision_segments(sbi)));
- }
- 
- static ssize_t lifetime_write_kbytes_show(struct f2fs_attr *a,
- 		struct f2fs_sb_info *sbi, char *buf)
- {
--	return sprintf(buf, "%llu\n",
-+	return sysfs_emit(buf, "%llu\n",
- 			(unsigned long long)(sbi->kbytes_written +
- 			((f2fs_get_sectors_written(sbi) -
- 				sbi->sectors_written_start) >> 1)));
-@@ -125,13 +125,13 @@ static ssize_t lifetime_write_kbytes_show(struct f2fs_attr *a,
- static ssize_t sb_status_show(struct f2fs_attr *a,
- 		struct f2fs_sb_info *sbi, char *buf)
- {
--	return sprintf(buf, "%lx\n", sbi->s_flag);
-+	return sysfs_emit(buf, "%lx\n", sbi->s_flag);
- }
- 
- static ssize_t cp_status_show(struct f2fs_attr *a,
- 		struct f2fs_sb_info *sbi, char *buf)
- {
--	return sprintf(buf, "%x\n", le32_to_cpu(F2FS_CKPT(sbi)->ckpt_flags));
-+	return sysfs_emit(buf, "%x\n", le32_to_cpu(F2FS_CKPT(sbi)->ckpt_flags));
- }
- 
- static ssize_t pending_discard_show(struct f2fs_attr *a,
-@@ -139,7 +139,7 @@ static ssize_t pending_discard_show(struct f2fs_attr *a,
- {
- 	if (!SM_I(sbi)->dcc_info)
- 		return -EINVAL;
--	return sprintf(buf, "%llu\n", (unsigned long long)atomic_read(
-+	return sysfs_emit(buf, "%llu\n", (unsigned long long)atomic_read(
- 				&SM_I(sbi)->dcc_info->discard_cmd_cnt));
- }
- 
-@@ -205,7 +205,7 @@ static ssize_t features_show(struct f2fs_attr *a,
- static ssize_t current_reserved_blocks_show(struct f2fs_attr *a,
- 					struct f2fs_sb_info *sbi, char *buf)
- {
--	return sprintf(buf, "%u\n", sbi->current_reserved_blocks);
-+	return sysfs_emit(buf, "%u\n", sbi->current_reserved_blocks);
- }
- 
- static ssize_t unusable_show(struct f2fs_attr *a,
-@@ -217,7 +217,7 @@ static ssize_t unusable_show(struct f2fs_attr *a,
- 		unusable = sbi->unusable_block_count;
- 	else
- 		unusable = f2fs_get_unusable_blocks(sbi);
--	return sprintf(buf, "%llu\n", (unsigned long long)unusable);
-+	return sysfs_emit(buf, "%llu\n", (unsigned long long)unusable);
- }
- 
- static ssize_t encoding_show(struct f2fs_attr *a,
-@@ -232,13 +232,13 @@ static ssize_t encoding_show(struct f2fs_attr *a,
- 			(sb->s_encoding->version >> 8) & 0xff,
- 			sb->s_encoding->version & 0xff);
- #endif
--	return sprintf(buf, "(none)");
-+	return sysfs_emit(buf, "(none)");
- }
- 
- static ssize_t mounted_time_sec_show(struct f2fs_attr *a,
- 		struct f2fs_sb_info *sbi, char *buf)
- {
--	return sprintf(buf, "%llu", SIT_I(sbi)->mounted_time);
-+	return sysfs_emit(buf, "%llu", SIT_I(sbi)->mounted_time);
- }
- 
- #ifdef CONFIG_F2FS_STAT_FS
-@@ -247,7 +247,7 @@ static ssize_t moved_blocks_foreground_show(struct f2fs_attr *a,
- {
- 	struct f2fs_stat_info *si = F2FS_STAT(sbi);
- 
--	return sprintf(buf, "%llu\n",
-+	return sysfs_emit(buf, "%llu\n",
- 		(unsigned long long)(si->tot_blks -
- 			(si->bg_data_blks + si->bg_node_blks)));
- }
-@@ -257,7 +257,7 @@ static ssize_t moved_blocks_background_show(struct f2fs_attr *a,
- {
- 	struct f2fs_stat_info *si = F2FS_STAT(sbi);
- 
--	return sprintf(buf, "%llu\n",
-+	return sysfs_emit(buf, "%llu\n",
- 		(unsigned long long)(si->bg_data_blks + si->bg_node_blks));
- }
- 
-@@ -268,7 +268,7 @@ static ssize_t avg_vblocks_show(struct f2fs_attr *a,
- 
- 	si->dirty_count = dirty_segments(sbi);
- 	f2fs_update_sit_info(sbi);
--	return sprintf(buf, "%llu\n", (unsigned long long)(si->avg_vblocks));
-+	return sysfs_emit(buf, "%llu\n", (unsigned long long)(si->avg_vblocks));
- }
- #endif
- 
-@@ -363,7 +363,7 @@ static ssize_t f2fs_sbi_show(struct f2fs_attr *a,
- 
- 	ui = (unsigned int *)(ptr + a->offset);
- 
--	return sprintf(buf, "%u\n", *ui);
-+	return sysfs_emit(buf, "%u\n", *ui);
- }
- 
- static ssize_t __sbi_store(struct f2fs_attr *a,
-@@ -728,7 +728,7 @@ static void f2fs_sb_release(struct kobject *kobj)
- static ssize_t f2fs_feature_show(struct f2fs_attr *a,
- 		struct f2fs_sb_info *sbi, char *buf)
- {
--	return sprintf(buf, "supported\n");
-+	return sysfs_emit(buf, "supported\n");
- }
- 
- #define F2FS_FEATURE_RO_ATTR(_name)				\
-@@ -741,8 +741,8 @@ static ssize_t f2fs_sb_feature_show(struct f2fs_attr *a,
- 		struct f2fs_sb_info *sbi, char *buf)
- {
- 	if (F2FS_HAS_FEATURE(sbi, a->id))
--		return sprintf(buf, "supported\n");
--	return sprintf(buf, "unsupported\n");
-+		return sysfs_emit(buf, "supported\n");
-+	return sysfs_emit(buf, "unsupported\n");
- }
- 
- #define F2FS_SB_FEATURE_RO_ATTR(_name, _feat)			\
--- 
-2.38.1.273.g43a17bfeac-goog
+> 
+> As we are there, should we consider adding a per channel entry in the
+> tree when there are several channels shared with the same server ?
+> 
+
+So, I was thinking about this and, even though, it seems not strictly
+needed for Compliance testing (as discussed offline) I do think that
+could be a sensible option to have as an additional mean to stress the
+server transport implementation (as you wish).
+
+Having said that, this week, I was reasoning about an alternative
+interface to do this, i.e. to avoid to add even more debugfs entries
+for this chosen-channel config or possibly in the future to ask for
+transport polling mode (if supported by the underlying transport)
+
+My idea (not thought fully through as of now eh..) would be as follows:
+
+since the current Raw implementation enforces a minimum size of 4 bytes
+for the injected message (more on this later down below in NOTE), I was
+thinking about using less-than-4-bytes-sized messages to sort of
+pre-configure the Raw stack.
+
+IOW, instead of having a number of new additional entries like
+
+	../message_ch10
+	../message_ch13
+	../message_poll
+
+we could design a sort of API (in the API :D) that defines how
+3-bytes message payload are to be interpreted, so that in normal usage
+everything will go on as it is now, while if a 3-bytes message is
+injected by a specially crafted testcase, it would be used to configure
+the behaviour stack for the subsequent set of Raw transactions
+(i.e. for the currently opened fd...) like:
+
+- open message fd
+
+- send a configure message:
+
+	| proto_chan_# 	|     flags (polling..)  |
+	------------------------------------------
+	0		7			21
+
+- send/receive your test messages
+
+- repeat or close (then the config will vanish...)
+
+This would mean adding some sort entry under scmi_raw to expose the
+configured available channels on the system though.
+
+[maybe the flags above could also include an async flag and avoid
+ also to add the message_async entries...]
+
+I discarded the idea to run the above config process via IOCTLs since
+it seemed to me even more frowned upon to use IOCTLs on a debugfs entry
+:P...but I maybe wrong ah...
+
+All of this is still to be explored anyway, any thoughts ? or evident
+drawbacks ? (beside having to clearly define an API for these message
+config machinery)
+
+Anyway, whatever direction we'll choose (additional entries vs 3-bytes
+config msg), I would prefer to add this per-channel (or polling)
+capabilities with separate series to post on top of this in teh next
+cycle.
+
+..too many words even this time :P
+
+Thanks,
+Cristian
+
+
+P.S: NOTE min_injected_msg_size:
+--------------------------------
+Thinking about all of the above, at first, I was a bit dubious if
+instead I should not allow, in Raw mode, the injection of shorter than
+4 bytes messages (i.e. shorter than a SCMI header) for the purpose of
+fuzzing: then I realized that even though I should allow the injection
+of smaller messages, the underlying transports, as they are defined, both
+sides (platform and agent) will anyway carry out a 4bytes transaction,
+it's just that all the other non-provided bytes will be zeroed in the
+memory layout; this is just how the transports itself (shmem or msg
+based) are designed to work both sides. (and again would be transport
+layer testing more than SCMI spec verification..)
+
+So at the end I thought this kind of less-than-4-bytes transmissions
+gave no benefit and I came up with the above trick to use such tiny
+message for configuration.
 
