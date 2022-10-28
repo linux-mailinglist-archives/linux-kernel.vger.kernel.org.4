@@ -2,120 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF806111AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2867B6111B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbiJ1Mih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 08:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
+        id S230046AbiJ1MjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 08:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJ1Mie (ORCPT
+        with ESMTP id S229819AbiJ1Mi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 08:38:34 -0400
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B26C01D4DCC
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:38:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666960698; bh=B5OaSZ8HsPRmrMQQFyz9KT8sdbr9Ub7sfHqu4Tovee8=;
-        h=X-EA-Auth:Date:From:To:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=Ekxlr7DrdfyemSZ0COtOM0B0w5kwQriCAHGa4y4lvSmfe4CMBWu+DzjOc2Hl7+uLx
-         GUoK3UGw7L/9luMrAgX2ObKa0rHloNNIQUS0OpZgc6j1JN2XzpoMHrSqZUt9xDZzOX
-         E4ODFRtppCXlPDwyGcimnB9fHbSgiGVvzisG62Xs=
-Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
-        via [213.182.55.206]
-        Fri, 28 Oct 2022 14:38:18 +0200 (CEST)
-X-EA-Auth: VkRt+j6nGRWQq6EtMOp8yVWLs+3ZU5k2Lm4NBQLPnnZrKfXl+WSKVQSq7rMV6nqg+He7Dm8gvOBToPU9ngJiMtCWFCKBgdLm
-Date:   Fri, 28 Oct 2022 18:08:13 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     outreachy@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: wlan-ng: Use flexible-array for one / zero-length
- arrays
-Message-ID: <Y1vNNSSWK1EkcohT@ubunlion>
+        Fri, 28 Oct 2022 08:38:59 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923BF1D52FE;
+        Fri, 28 Oct 2022 05:38:58 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id q9so12724690ejd.0;
+        Fri, 28 Oct 2022 05:38:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R6b7kwg2WdDmY6cz9AakvTDLGqm+2/XRfuZcHo4JzlI=;
+        b=edsoFRNhow/344HliqnP78Nu6McqtN0HTJNgsIUWyOp7wcqLGZrRmFA0ReEx5yhUOD
+         drAU+pubF3GbxOcNo98+s4tjxNvrZZm3ovUE6xCgNBWKln3d1UggSKFeHG4VnU3n4rPp
+         VAnFdOKGxOPSlLGWHCbkN/9kspeI+K7YWDf2YduR35stoHRzpdmCKjAhG/3Qp/zXSt6K
+         V11AHANMQ7KgC8X81S53RBwF+UcFsGebZSRM+lKbnFxETvh4SX3WxilbhUmeFBBF/+w4
+         A2LEWO/soXzEYGnKYr6HPr4AkTM511tgEyIzHEw2h9Vzf8M48tMVUEOl+JZ9nF3aCvTi
+         +vbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R6b7kwg2WdDmY6cz9AakvTDLGqm+2/XRfuZcHo4JzlI=;
+        b=DUoQ2mHlNpsIIXx5NyaeOoflOE992eSqsa0BQ2nIEqkRA1w1kMlpaGoxCaDZfJlSPF
+         qHqyjrsh1+6HhI5xf18FTjhCgKH5yRGhk4jepEebZu16IaiBgmdplViJaWpBC4UYqjTm
+         uwspRNOXh0nKMZxCYYEjISIYNlNJfHC1qctYbVJM8UPDewIZmMAyhvc+a0iFK8mCIIAU
+         CpuPDs0nqapUJ35CDtGiBz6c4o1ayWTZ1cLQHhVw6EMxXMP1l+EJ5GTriHcN3nzIgKpE
+         LJ2tAWKLSQwdaCtioHFU5QeCIGJeaXK1/5t7KcWWVl8IUhgoEMTAccwHI4CAFvTpWHJ0
+         0n7w==
+X-Gm-Message-State: ACrzQf1M9sh51jgg4zAEwY1oP1s/vW2YSMpQVWiZspVCnqouNcz/mA4o
+        F6yo3g9lciFPQGky6+MWQszQeFdvzrk=
+X-Google-Smtp-Source: AMsMyM5KnL1wkxqYW6p6I6VHF1z1SahRA1W6Hhu9pGmq0/xsQhltyL8KFY/7jc2NLhLwrk9+dKqNrg==
+X-Received: by 2002:a17:907:5ce:b0:730:bae0:deb with SMTP id wg14-20020a17090705ce00b00730bae00debmr48272599ejb.181.1666960726223;
+        Fri, 28 Oct 2022 05:38:46 -0700 (PDT)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id pv3-20020a170907208300b0074134543f82sm2075974ejb.90.2022.10.28.05.38.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 05:38:45 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 14:38:43 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jon Hunter <jonathanh@nvidia.com>, Wayne Chang <waynec@nvidia.com>,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
+        heikki.krogerus@linux.intel.com, ajayg@nvidia.com, kishon@ti.com,
+        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
+        mathias.nyman@intel.com, jckuo@nvidia.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 04/11] arm64: tegra: Enable XUSB host and device on
+ Jetson AGX Orin
+Message-ID: <Y1vNU1KeUH8LvG0r@orome>
+References: <20221024074128.1113554-1-waynec@nvidia.com>
+ <20221024074128.1113554-5-waynec@nvidia.com>
+ <2059dfe5-b084-42a4-7f35-9da9561fc12b@linaro.org>
+ <b803bcf9-fc47-5239-ffe9-707925f324de@nvidia.com>
+ <5676bcd2-14fc-4e1d-643e-89e575d190c3@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="/hNVoH5xZwyCFIYG"
 Content-Disposition: inline
+In-Reply-To: <5676bcd2-14fc-4e1d-643e-89e575d190c3@linaro.org>
+User-Agent: Mutt/2.2.7 (2022-08-07)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Flexible-array member should be used instead of one or zero member to
-meet the need for having a dynamically sized trailing elements in a
-structure. Refer to links [1] and [2] for detailed guidance on this
-suggestion.
 
-[1] https://en.wikipedia.org/wiki/Flexible_array_member
-[2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
+--/hNVoH5xZwyCFIYG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Issue identified using coccicheck.
+On Fri, Oct 28, 2022 at 07:27:09AM -0400, Krzysztof Kozlowski wrote:
+> On 28/10/2022 05:33, Jon Hunter wrote:
+> >>> +			ucsi_ccg: ucsi_ccg@8 {
+> >>
+> >> No underscores in node names.
+> >>
+> >>> +				compatible =3D "cypress,cypd4226";
+> >>> +				cypress,firmware-build =3D "gn";
+> >>> +				interrupt-parent =3D <&gpio>;
+> >>> +				interrupts =3D <TEGRA234_MAIN_GPIO(Y, 4) IRQ_TYPE_LEVEL_LOW>;
+> >>> +				reg =3D <0x08>;
+> >>> +				status =3D "okay";
+> >>
+> >> The pattern of redefining full path in Tegra is confusing - I have no
+> >> clue which of these status=3Dokay are correct which are redundant.
+> >>
+> >> Do you?
+> >=20
+> > I understand you may not like this approach, however, this comment is=
+=20
+> > not really relevant to just this patch, but a general comment. But yes=
+=20
+> > we will ensure that this is correct.
+> >=20
+>=20
+> Just to clarify - this status looks redundant, but I have no way to tell
+> for sure...
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/staging/wlan-ng/p80211mgmt.h  | 8 ++++----
- drivers/staging/wlan-ng/p80211types.h | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+But that's independent of whether we specify this using the full path or
+reference the node by label, isn't it? The only way to make sure that a
+status =3D "okay" is not redundant is by manual inspection. I don't know
+of an automated way to do that. Perhaps it's something that could be
+added as a check to DTC?
 
-diff --git a/drivers/staging/wlan-ng/p80211mgmt.h b/drivers/staging/wlan-ng/p80211mgmt.h
-index 1ef30d3f3159..d6fe52de2c8f 100644
---- a/drivers/staging/wlan-ng/p80211mgmt.h
-+++ b/drivers/staging/wlan-ng/p80211mgmt.h
-@@ -229,14 +229,14 @@ struct wlan_ie {
- struct wlan_ie_ssid {
- 	u8 eid;
- 	u8 len;
--	u8 ssid[1];		/* may be zero, ptrs may overlap */
-+	u8 ssid[];		/* may be zero, ptrs may overlap */
- } __packed;
+In this particular case I don't think the status is needed. As Jon
+mentioned, this device is first defined here and status =3D "okay" is the
+default, so this is redundant.
 
- /*-- Supported Rates  -----------------------------*/
- struct wlan_ie_supp_rates {
- 	u8 eid;
- 	u8 len;
--	u8 rates[1];		/* had better be at LEAST one! */
-+	u8 rates[];		/* had better be at LEAST one! */
- } __packed;
+Thierry
 
- /*-- FH Parameter Set  ----------------------------*/
-@@ -274,7 +274,7 @@ struct wlan_ie_tim {
- 	u8 dtim_cnt;
- 	u8 dtim_period;
- 	u8 bitmap_ctl;
--	u8 virt_bm[1];
-+	u8 virt_bm[];
- } __packed;
+--/hNVoH5xZwyCFIYG
+Content-Type: application/pgp-signature; name="signature.asc"
 
- /*-- IBSS Parameter Set ---------------------------*/
-@@ -288,7 +288,7 @@ struct wlan_ie_ibss_parms {
- struct wlan_ie_challenge {
- 	u8 eid;
- 	u8 len;
--	u8 challenge[1];
-+	u8 challenge[];
- } __packed;
+-----BEGIN PGP SIGNATURE-----
 
- /*-------------------------------------------------*/
-diff --git a/drivers/staging/wlan-ng/p80211types.h b/drivers/staging/wlan-ng/p80211types.h
-index 6486612a8f31..b2ffd09881b0 100644
---- a/drivers/staging/wlan-ng/p80211types.h
-+++ b/drivers/staging/wlan-ng/p80211types.h
-@@ -234,7 +234,7 @@ struct p80211pstr32 {
- /* MAC address array */
- struct p80211macarray {
- 	u32 cnt;
--	u8 data[1][MAXLEN_PSTR6];
-+	u8 data[][MAXLEN_PSTR6];
- } __packed;
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNbzVMACgkQ3SOs138+
+s6E9wRAAvxEstA7fsndJGHjQBJ1VnmgD/ut80RMq/RbIlNqAXTvWdomp7Kg0qf/z
+HicY0UPrvJyw+8gSLQJ6Pi5syvsYlT15ORzmmui1lTylQ37EwD/z+gh1YoW5ajws
+8K/p8ax7ivzd1O1ARWfdP7NCdocn3HJqgrIFvgcYC1wjlf5tqoxklBU3YVqrlTDI
+TeULZVqjsV85W9x7Bi0BSbkRbiHcyCbRMRnlz3rjBynmydO/Um6CDZvpGysukVik
+oz4uS7PGfMm7yDcVSEiVaqXfa551Z3AckA/trp2Py+8/K5qMc5PI58EOzQMQhHF6
+6SNSdmmPhFWK6HcYx6XMB7q7retFEdAJErNXK9ko6izVmXmJ5sPjHCg00vxElGCm
+jnVajKP3Okc59tWcxOauCw5ATbyqsifxF2d5AnPWgflEIpjZuAUWdhYZOich+YcE
+7hyCZaQ73kUhVMJkiTTVaI22Va3Aql7UWoPS2ZfJhV/U0NbMykhG+rlqz+JHGo+o
+ya+3Fp5nStQCGAUyNcsxDsEycsRRwhCKWNvI2EaqrWmMOg+tSfV+AjZVyOcXyPuy
+nqtLr6u+wJ3dob/P9dza5p/RepoeqpxEsaEHa5AUQs32ckFdltiT2pSZT4WxUggA
+dyOMFtaNlN83jb74q22ny7ie3OUSyi1TtmriJRFw19+gnNmCsd4=
+=PpVN
+-----END PGP SIGNATURE-----
 
- /* prototype template */
---
-2.34.1
-
-
-
+--/hNVoH5xZwyCFIYG--
