@@ -2,210 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960176108AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 05:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7405D6108C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 05:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235866AbiJ1DXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 23:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60274 "EHLO
+        id S235866AbiJ1DdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 23:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233622AbiJ1DXA (ORCPT
+        with ESMTP id S235239AbiJ1DdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 23:23:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1B9688B4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 20:22:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 27 Oct 2022 23:33:20 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E159CF878;
+        Thu, 27 Oct 2022 20:33:16 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90F53624B7
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 03:22:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D90AEC433C1;
-        Fri, 28 Oct 2022 03:22:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666927379;
-        bh=4V73CUSd+nXaHDYvC206fkLxHVRkpC9uU3+rsmZJ+o0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BuZlQwaxZyGcOerqJ+DlveNRjyisJoiivS36Hk35iXhWEbuzJZrIZ928eydAWWBrF
-         /u/CwgBiUHoS6jD0+PImqYGKnbkeUZFvdxdnPSGchjeN471dDPJiix5l4QujkdtFKw
-         XXmFIv+imZxwZh0i3oSao+ER/0fJ/sB3HZAGeCTroUcGmaAdXarOUrX+I3fmkFek/i
-         qhQnFcQnH7w5PwP+NPVz2ocmovhXFRiKSL2KqbwSAEFm4eUAqXdkYmrfsLthnVs6/g
-         AbjPkOpndSz9/2Rs4FuAe8YfCuyvxwlweI/9Z5AMzHhnF291pLAaUKPViU+6UJwZnR
-         6iblb0mzAPeXg==
-Date:   Thu, 27 Oct 2022 20:22:57 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] f2fs: introducr gc_urgent_idle_remaining sysfs
- node and mark gc_urgent_high_remaining node deprecated
-Message-ID: <Y1tLEVYQjj2qC3I7@google.com>
-References: <20221025065025.35017-1-frank.li@vivo.com>
- <20221025065025.35017-2-frank.li@vivo.com>
- <cd6d15e3-b692-d3c1-0f01-33e632f5f94c@kernel.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mz7RV1gHsz4x1V;
+        Fri, 28 Oct 2022 14:33:10 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1666927990;
+        bh=5a5NSU0dIsDMvlc+OJ8XPLj9mtmzu3jUW4rkE0WVaKA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Tw9mR5leTLrZVOxrA5i6fh0icdHm5BoDvjurgyoxKXVzGy5EqIlcRjKwnHahDvKRp
+         e+/b0XtM8Qkjqr0py7eePG5Xgo8xfkF8eDuxAeU1BQVuh2tOEsn4aL3cVnA8HV4ugo
+         AFoXHEpSnHTiUrOeor4mnHZW3xtyyiAByJJfHpWiY1nAUwIWPOlm2zcUJOjKGmlhqN
+         wHfGb6w5DQ/obmk8kDaYHLrxcwSnJx4wb6gokiRmQPW5rUpKCOM9n1RLxQpK1PziHJ
+         SL3CGJBKR4wnnYUVc7jnueqx4+IsylsHCJqsgjpNjQWT7P771qN85KZpsi0rg7Fjhf
+         A86E2H/O/5mWg==
+Date:   Fri, 28 Oct 2022 14:33:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Aurabindo Pillai <Aurabindo.Pillai@amd.com>,
+        Mark Broadworth <mark.broadworth@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the amdgpu tree
+Message-ID: <20221028143303.2cb92d35@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cd6d15e3-b692-d3c1-0f01-33e632f5f94c@kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/5zAGblCR1PAeeT+0Eu61XLg";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/28, Chao Yu wrote:
-> On 2022/10/25 14:50, Yangtao Li wrote:
-> > Added a new sysfs node called gc_urgent_idle_remaining.
-> > The user can set the trial count limit for GC urgent and
-> > idle mode with this value. If GC thread gets to the limit,
-> > the mode will turn back to GC normal mode finally.
-> > 
-> > This method is not only applicable to gc_urgent_high,
-> > but applicable to all gc modes. Also mark
-> > gc_urgent_high_remaining as deprecated, so that the node
-> > can be removed in the future.
-> > 
-> > Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> > ---
-> >   Documentation/ABI/testing/sysfs-fs-f2fs |  8 ++++++++
-> >   fs/f2fs/f2fs.h                          |  6 ++++--
-> >   fs/f2fs/gc.c                            | 12 ++++++------
-> >   fs/f2fs/super.c                         |  2 +-
-> >   fs/f2fs/sysfs.c                         | 14 ++++++++++----
-> >   5 files changed, 29 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
-> > index 483639fb727b..859c4e53a846 100644
-> > --- a/Documentation/ABI/testing/sysfs-fs-f2fs
-> > +++ b/Documentation/ABI/testing/sysfs-fs-f2fs
-> > @@ -598,6 +598,14 @@ Contact:	"Daeho Jeong" <daehojeong@google.com>
-> >   Description:	You can set the trial count limit for GC urgent high mode with this value.
-> >   		If GC thread gets to the limit, the mode will turn back to GC normal mode.
-> >   		By default, the value is zero, which means there is no limit like before.
-> > +		<deprecated>
-> > +
-> > +What:		/sys/fs/f2fs/<disk>/gc_urgent_idle_remaining
-> > +Date:		October 2022
-> > +Contact:	"Yangtao Li" <frank.li@vivo.com>
-> > +Description:	You can set the trial count limit for GC urgent and idle mode with this value.
-> > +		If GC thread gets to the limit, the mode will turn back to GC normal mode.
-> > +		By default, the value is zero, which means there is no limit like before.
-> >   What:		/sys/fs/f2fs/<disk>/max_roll_forward_node_blocks
-> >   Date:		January 2022
-> > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> > index e6355a5683b7..2bad69cf9fd9 100644
-> > --- a/fs/f2fs/f2fs.h
-> > +++ b/fs/f2fs/f2fs.h
-> > @@ -1734,8 +1734,10 @@ struct f2fs_sb_info {
-> >   	unsigned int cur_victim_sec;		/* current victim section num */
-> >   	unsigned int gc_mode;			/* current GC state */
-> >   	unsigned int next_victim_seg[2];	/* next segment in victim section */
-> > -	spinlock_t gc_urgent_high_lock;
-> > -	unsigned int gc_urgent_high_remaining;	/* remaining trial count for GC_URGENT_HIGH */
-> > +	spinlock_t gc_urgent_idle_lock;
-> > +	/* remaining trial count for GC_URGENT_* and GC_IDLE_* */
-> > +	unsigned int gc_urgent_idle_remaining;
-> > +	unsigned int gc_urgent_high_remaining;	/* deprecated */
-> >   	/* for skip statistic */
-> >   	unsigned long long skipped_gc_rwsem;		/* FG_GC only */
-> > diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-> > index e0ff99c7e3f2..0ed5b3c5922c 100644
-> > --- a/fs/f2fs/gc.c
-> > +++ b/fs/f2fs/gc.c
-> > @@ -152,14 +152,14 @@ static int gc_thread_func(void *data)
-> >   		/* balancing f2fs's metadata periodically */
-> >   		f2fs_balance_fs_bg(sbi, true);
-> >   next:
-> > -		if (sbi->gc_mode == GC_URGENT_HIGH) {
-> > -			spin_lock(&sbi->gc_urgent_high_lock);
-> > -			if (sbi->gc_urgent_high_remaining) {
-> > -				sbi->gc_urgent_high_remaining--;
-> > -				if (!sbi->gc_urgent_high_remaining)
-> > +		if (sbi->gc_mode != GC_NORMAL) {
-> > +			spin_lock(&sbi->gc_urgent_idle_lock);
-> > +			if (sbi->gc_urgent_idle_remaining) {
-> > +				sbi->gc_urgent_idle_remaining--;
-> > +				if (!sbi->gc_urgent_idle_remaining)
-> >   					sbi->gc_mode = GC_NORMAL;
-> >   			}
-> > -			spin_unlock(&sbi->gc_urgent_high_lock);
-> > +			spin_unlock(&sbi->gc_urgent_idle_lock);
-> >   		}
-> >   		sb_end_write(sbi->sb);
-> > diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> > index 3834ead04620..f90a8c0a53ec 100644
-> > --- a/fs/f2fs/super.c
-> > +++ b/fs/f2fs/super.c
-> > @@ -3616,7 +3616,7 @@ static void init_sb_info(struct f2fs_sb_info *sbi)
-> >   	sbi->seq_file_ra_mul = MIN_RA_MUL;
-> >   	sbi->max_fragment_chunk = DEF_FRAGMENT_SIZE;
-> >   	sbi->max_fragment_hole = DEF_FRAGMENT_SIZE;
-> > -	spin_lock_init(&sbi->gc_urgent_high_lock);
-> > +	spin_lock_init(&sbi->gc_urgent_idle_lock);
-> >   	atomic64_set(&sbi->current_atomic_write, 0);
-> >   	sbi->dir_level = DEF_DIR_LEVEL;
-> > diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-> > index df27afd71ef4..2b1c653b37cf 100644
-> > --- a/fs/f2fs/sysfs.c
-> > +++ b/fs/f2fs/sysfs.c
-> > @@ -531,10 +531,14 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
-> >   		return count;
-> >   	}
-> > -	if (!strcmp(a->attr.name, "gc_urgent_high_remaining")) {
-> > -		spin_lock(&sbi->gc_urgent_high_lock);
-> > -		sbi->gc_urgent_high_remaining = t;
-> > -		spin_unlock(&sbi->gc_urgent_high_lock);
-> > +	/* deprecated */
-> > +	if (!strcmp(a->attr.name, "gc_urgent_high_remaining"))
-> > +		return -EINVAL;
-> 
-> How about those users who has already used these interface... it breaks
-> the usage.
-> 
-> It needs to keep old interface and tag as deprecated, and recommend user
-> to use new interface you introduced.
+--Sig_/5zAGblCR1PAeeT+0Eu61XLg
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I feel that this is not a super critical node, so how about just removing it?
+Hi all,
 
-> 
-> e.g.:
-> 
-> What:           /sys/fs/f2fs/<disk>/features
-> Date:           July 2017
-> Contact:        "Jaegeuk Kim" <jaegeuk@kernel.org>
-> Description:    <deprecated: should use /sys/fs/f2fs/<disk>/feature_list/
->                 Shows all enabled features in current device.
->                 Supported features:
->                 encryption, blkzoned, extra_attr, projquota, inode_checksum,
->                 flexible_inline_xattr, quota_ino, inode_crtime, lost_found,
->                 verity, sb_checksum, casefold, readonly, compression, pin_file.
-> 
-> Thanks,
-> 
-> > +
-> > +	if (!strcmp(a->attr.name, "gc_urgent_idle_remaining")) {
-> > +		spin_lock(&sbi->gc_urgent_idle_lock);
-> > +		sbi->gc_urgent_idle_remaining = t;
-> > +		spin_unlock(&sbi->gc_urgent_idle_lock);
-> >   		return count;
-> >   	}
-> > @@ -826,6 +830,7 @@ F2FS_RW_ATTR(FAULT_INFO_TYPE, f2fs_fault_info, inject_type, inject_type);
-> >   F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, data_io_flag, data_io_flag);
-> >   F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, node_io_flag, node_io_flag);
-> >   F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_urgent_high_remaining, gc_urgent_high_remaining);
-> > +F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_urgent_idle_remaining, gc_urgent_idle_remaining);
-> >   F2FS_RW_ATTR(CPRC_INFO, ckpt_req_control, ckpt_thread_ioprio, ckpt_thread_ioprio);
-> >   F2FS_GENERAL_RO_ATTR(dirty_segments);
-> >   F2FS_GENERAL_RO_ATTR(free_segments);
-> > @@ -953,6 +958,7 @@ static struct attribute *f2fs_attrs[] = {
-> >   	ATTR_LIST(data_io_flag),
-> >   	ATTR_LIST(node_io_flag),
-> >   	ATTR_LIST(gc_urgent_high_remaining),
-> > +	ATTR_LIST(gc_urgent_idle_remaining),
-> >   	ATTR_LIST(ckpt_thread_ioprio),
-> >   	ATTR_LIST(dirty_segments),
-> >   	ATTR_LIST(free_segments),
+After merging the amdgpu tree, today's linux-next build (htmldocs)
+produced this warning:
+
+drivers/gpu/drm/amd/display/dc/dc.h:502: warning: cannot understand functio=
+n prototype: 'struct dc_clocks '
+
+Introduced by commit
+
+  1682bd1a6b5f ("drm/amd/display: Expand kernel doc for DC")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/5zAGblCR1PAeeT+0Eu61XLg
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNbTW8ACgkQAVBC80lX
+0GwnRQf/TaqG7hPoJFK9iky2uGr/3IYI0zY51UvSKxyjHSQlgwNIRCGnekiQ1WUZ
+sa/tAT3JIxC1aWDp6gfpl/Ahm/tUf6Sovf5Dt7IoDiyg5Q7jx8OF65JdZUssY4je
+dkRIbGdX0gEEp0hyQ6Cc3XorDsLoUQ8AR/Lk3NTkCmpEUlTkwI1bLyjC2PYmiZnb
+8mX+uuySj19GpDi62BJ99hu58OOYkKmQjIyu0t6jpTJtiFTXTzXQap3nVm4TAnj2
+olLxWhWHJmlLIGyo/RW4Ac7yfKshlUH7bmsdsMLPOahHo6KxbRy1Q7qt1Qxo7al+
+XDqetRPnyUljpOEJdBwyzNelrvo90Q==
+=XTga
+-----END PGP SIGNATURE-----
+
+--Sig_/5zAGblCR1PAeeT+0Eu61XLg--
