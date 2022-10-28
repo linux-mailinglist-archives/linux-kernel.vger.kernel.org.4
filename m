@@ -2,165 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C547611E49
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 01:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDCD2611E5F
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 01:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiJ1XtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 19:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
+        id S229930AbiJ1X4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 19:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbiJ1XtL (ORCPT
+        with ESMTP id S229750AbiJ1X4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 19:49:11 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1C82475CC
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:49:10 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id b25so4500608qkk.7
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:49:10 -0700 (PDT)
+        Fri, 28 Oct 2022 19:56:20 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8D414707E
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:56:02 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id f22so4486636qto.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:56:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=7BWT12cmS3hZogCGoRQZdPiSUfY711/3MhZolzbjO68=;
-        b=lNRM++TEsOOQdoJkPPi2j3oCwZ9MgoABUmqx/DlBsZEE5TBaGJ/iUNlnKTFD9+wUpo
-         fWaA7zH19/CcjOcWPUdHi+VUe9Ws1PP+Xb/MGBi0wZXV9L702eSZ5QXub6eRLKqv2p8j
-         mUWHgbktkLvNPkwi9lUCdJQg74YF48tLUF1AiSGXy2wglL7mETxiWkpPKzgh19rWNfN3
-         bCtvv4LfwMNx+WI+8o6v7YVoA9e4aTXVairb4A4AWxmbjYCCzCungBVsjx2MkU3Ah65K
-         2FeQ+N6XN0xabbZU/awhiFqNFlWXzeo/MM/wVGO1S+IrtkIqIWqOe66sR/uQbW21vWL/
-         jqOQ==
+        bh=8w2NYwcU/LxoZeA70fFUf8Snmsz0a/FEvB2F4yg5rzI=;
+        b=RS9HoOWqVyRPdi4iPukjXDBFWBHpBP+0R3pRGgU1YY0THtRKCGBm5+TvZe/Y7tqf4W
+         WmAnDLLOfK1tAVDJS6tTqjW5D4YCnPxAuDGxBXvqcVcm35aXhBSscbEQrS+bUo7MVXeY
+         HFn3q6CnpBg5EwMKeQ8hosbhPRbpnZ/dRNFUOSzWkb7z4ED525yYK3sC4Lig2GblI23S
+         PG7D3d8rlIrKNWvNrtcq/M6FOflJ/xRA7D5dm2eFUwz9kASav0ny4OklPZo8vPoIIlT2
+         7GTsH1bv4guGVz/o53yS6/pe4dw1k3AZPbYjUmQkPuoQNSuYDex5qn7X6WbZGUcHWLRf
+         u1yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7BWT12cmS3hZogCGoRQZdPiSUfY711/3MhZolzbjO68=;
-        b=qFCBWNwXDCnGIBsb68P7csImyd3LBWIo2pVEY+Xzzlszp0YIZf5mNPVBGcTnSATvA9
-         rBUpguRpkPDSaGH+00fdg/uJuTUmtBTnGPIrEKZ3aBRwo8gv3GR9lLp9nDo5aPknDogf
-         ab84HjYOO5u/ePDOLqdeBS2NvpmL65IoMozaedYBX7afKUpXARQh1hVB+Ga3BjH0/Lis
-         aQwoRj0aunz5DxJttexM1pjsSabv4TMHrwRhc+4LE6Y5zNAX4kjJQrVT7RAe48o0sgqF
-         3iuw2pA8iwXvuP/cRSq1UPC63BnsRm43UJEt7D69FRp8DyTB7rkVT9PAB7cMHYDyjv4W
-         FNXw==
-X-Gm-Message-State: ACrzQf2FRu5v+TJ89jdrt2+uUFjQ9iyAGktD6xgsb39q0BJiYU81+Clp
-        fxt93Ld92nKxdAPFjlfU1HfBAg==
-X-Google-Smtp-Source: AMsMyM7R4pV35Ac0Ut6hmcynP9u2Swne9bQcW3gcQ8DsD39A/z8fNafRdy0YOTjAOD/DwE5dqG6JeQ==
-X-Received: by 2002:a05:620a:d94:b0:6bc:5a8c:3168 with SMTP id q20-20020a05620a0d9400b006bc5a8c3168mr1451802qkl.56.1667000949580;
-        Fri, 28 Oct 2022 16:49:09 -0700 (PDT)
+        bh=8w2NYwcU/LxoZeA70fFUf8Snmsz0a/FEvB2F4yg5rzI=;
+        b=StMRNucdThKIWLNHXoS5fO3YAHNxTgGuNLKchLVrdKO0FQz8rVSDT3slkRuZjWK5UM
+         pRUU50XeUYaNxxVa1OFZpIeUjXamzN8+sW0DziTfyY8FzH4hxUrA//jNWzh68mc2AlT2
+         5hQ4JNKWOACCPPmVCsy7zvbi+vkdoHC5uTBBnlQzm88DXtNEUTGAuOV6pHmPbvRaPtgA
+         SKtNFtV/mOMqWAv0y0UAFivNTZirek3RhUJinp6M0VsL0SwLQnlLrdT43l0MoKrmdslB
+         II4x9l2qbwiim8HcQKs/35bsMoh2ym7CsZJiEYZqbYe9L2hno40kgkkZbzV4h2U1rDnx
+         o+3A==
+X-Gm-Message-State: ACrzQf2/rKlzevToVADklbZxEE8P2iUz4GjnnrQhGlZONnHfGd9JRr83
+        uSP3aa/zxD/5ivUJ9jCGkHBBWNxK0iIVHA==
+X-Google-Smtp-Source: AMsMyM7fMyqhfK46Jxy9MvJOiMmlZBT+lsFy9twv/ntI4E00t092YTyfoMwUSvVgDhAOeV9pu7xWtQ==
+X-Received: by 2002:ac8:5e54:0:b0:399:e614:3b0b with SMTP id i20-20020ac85e54000000b00399e6143b0bmr1803085qtx.89.1667001361886;
+        Fri, 28 Oct 2022 16:56:01 -0700 (PDT)
 Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id bs11-20020ac86f0b000000b0039cc82a319asm8100qtb.76.2022.10.28.16.49.08
+        by smtp.gmail.com with ESMTPSA id i21-20020a05620a249500b006a6ebde4799sm33564qkn.90.2022.10.28.16.56.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 16:49:09 -0700 (PDT)
-Message-ID: <360e6322-e5c1-b698-22d7-d7c8c5be368a@linaro.org>
-Date:   Fri, 28 Oct 2022 19:49:07 -0400
+        Fri, 28 Oct 2022 16:56:01 -0700 (PDT)
+Message-ID: <fdbde791-b0d9-7cb8-c028-5e4466ae3d81@linaro.org>
+Date:   Fri, 28 Oct 2022 19:55:59 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
-Subject: Re: [PATCH] Microchip MCP795xx RTC driver patch
+Subject: Re: [PATCH 1/2] dt-bindings: clock: Add bindings for Renesas ProXO
 Content-Language: en-US
-To:     tollsimy <simonetollardo@gmail.com>, a.zummo@towertech.it
-Cc:     alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221016162913.38661-1-simonetollardo@gmail.com>
+To:     Alex Helms <alexander.helms.jy@renesas.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, sboyd@kernel.org,
+        mturquette@baylibre.com, geert+renesas@glider.be
+References: <20220914211809.22500-1-alexander.helms.jy@renesas.com>
+ <20220914211809.22500-2-alexander.helms.jy@renesas.com>
+ <20220915120844.GA996386-robh@kernel.org>
+ <8d71b849-7226-09ec-d099-ae5c172e1a17@renesas.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221016162913.38661-1-simonetollardo@gmail.com>
+In-Reply-To: <8d71b849-7226-09ec-d099-ae5c172e1a17@renesas.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/10/2022 12:29, tollsimy wrote:
-> RTC Microchip mcp795 patch for 5.19-rc5
-> 
-> Here is the mcp795 patch for the 5.19-rc5 merge window.
-> The main modification are the following:
->         - fixed wrong driver naming: RTC is a Microchip
->           mcp795 and not Maxim mcp795
->         - added date/time write sequences: added date/time      
->           write sequences accordingly to official silicon 
->           errata document to fix silicon bugs.
->         - added support to date/time permanent storage:
->           the driver was missing some register bits in order
->           to enable the storage of date/time whenever the       
->           device looses main power.
->         - added a check after starting oscillator in order
->           to be sure that it is properly working as specified
->           in the datasheet
->         - renamed OSCON bit to OSCRUN as in the datasheet
->         - add debug messages when setting and reading the
->           alarm
->         - removed wrong offset when retrieving the current
->           year from the device
-> 
-> The patch has been successfully tested in the latest
-> linux-next releases, and the original problems that I found have
-> all been resolved.
+On 22/09/2022 14:06, Alex Helms wrote:
+> On 9/15/2022 5:08 AM, Rob Herring wrote:
+>> On Wed, Sep 14, 2022 at 02:18:08PM -0700, Alex Helms wrote:
+>>> Add dt bindings for the Renesas ProXO oscillator.
+>>>
+>>> Signed-off-by: Alex Helms <alexander.helms.jy@renesas.com>
 
 Please use scripts/get_maintainers.pl to get a list of necessary people
 and lists to CC.  It might happen, that command when run on an older
 kernel, gives you outdated entries.  Therefore please be sure you base
 your patches on recent Linux kernel.
 
-You missed several people so it seems you did not follow the process.
+>>> ---
+>>>  .../bindings/clock/renesas,proxo.yaml         | 50 +++++++++++++++++++
+>>>  MAINTAINERS                                   |  5 ++
+>>>  2 files changed, 55 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/clock/renesas,proxo.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/clock/renesas,proxo.yaml b/Documentation/devicetree/bindings/clock/renesas,proxo.yaml
+>>> new file mode 100644
+>>> index 000000000..2ae131431
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/clock/renesas,proxo.yaml
+>>> @@ -0,0 +1,50 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: https://jpn01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.org%2Fschemas%2Fclock%2Frenesas%2Cversaclock7.yaml%23&amp;data=05%7C01%7Calexander.helms.jy%40renesas.com%7C34ce960b2542459b61d408da97130b50%7C53d82571da1947e49cb4625a166a4a2a%7C0%7C0%7C637988405289843575%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=izvR%2FXbUNVXknaODSnMmcetPnn%2Ff3Jk%2F6RuBdZ7uSa0%3D&amp;reserved=0
+>>> +$schema: https://jpn01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23&amp;data=05%7C01%7Calexander.helms.jy%40renesas.com%7C34ce960b2542459b61d408da97130b50%7C53d82571da1947e49cb4625a166a4a2a%7C0%7C0%7C637988405289843575%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=dQ7nZtgfTE5DrXB1iavJuOhSWmGl4tYI1m6iZpkPAhA%3D&amp;reserved=0
+>>> +
+>>> +title: Renesas ProXO Oscillator Device Tree Bindings
+>>> +
+>>> +maintainers:
+>>> +  - Alex Helms <alexander.helms.jy@renesas.com>
+>>> +
+>>> +description: |
+>>
+>> Don't need '|' if no formatting to preserve.
+>>
+>>> +  Renesas ProXO is a family of programmable ultra-low phase noise 
+>>> +  quartz-based oscillators.
+>>
+>> Are they all the same from a s/w standpoint. If not you need specific 
+>> compatibles for the differences. 
+> 
+> At this time only the XP variant is supported and this is reflected in
+> the "compatible" string.
+
+You should document everything, if possible, not what is supported by
+some version of some system/driver/firmware.
 
 > 
-> Signed-off-by: tollsimy <simonetollardo@gmail.com>
-
-Full name is needed.
-
+>>
+>>> +
+>>> +properties:
+>>> +  '#clock-cells':
+>>> +    const: 0
+>>> +
+>>> +  compatible:
+>>> +    enum:
+>>> +      - renesas,proxo-xp
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  renesas,xtal:
+>>> +    description: Internal crystal frequency, default is 50000000 (50MHz)
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>
+>> Use 'clock-frequency'.
 > 
-> ---
->  .../devicetree/bindings/rtc/maxim,mcp795.txt  |  11 -
->  .../bindings/rtc/microchip,mcp795.txt         |  11 +
+> I think "crystal-frequency" would make more sense. The parts come
+> programmed to a factory clock frequency which is different than the
+> internal crystal frequency.
 
-Bindings are always separate patch.
-
->  drivers/rtc/rtc-mcp795.c                      | 359 ++++++++++++++----
->  3 files changed, 296 insertions(+), 85 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/rtc/maxim,mcp795.txt
->  create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mcp795.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt b/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt
-> deleted file mode 100644
-> index a59fdd8c236d..000000000000
-> --- a/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt
-> +++ /dev/null
-> @@ -1,11 +0,0 @@
-> -* Maxim MCP795		SPI Serial Real-Time Clock
-> -
-> -Required properties:
-> -- compatible: Should contain "maxim,mcp795".
-> -- reg: SPI address for chip
-> -
-> -Example:
-> -	mcp795: rtc@0 {
-> -		compatible = "maxim,mcp795";
-> -		reg = <0>;
-> -	};
-> diff --git a/Documentation/devicetree/bindings/rtc/microchip,mcp795.txt b/Documentation/devicetree/bindings/rtc/microchip,mcp795.txt
-> new file mode 100644
-> index 000000000000..854364c3a173
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/microchip,mcp795.txt
-> @@ -0,0 +1,11 @@
-> +* Microchip MCP795		SPI Serial Real-Time Clock
-> +
-> +Required properties:
-> +- compatible: Should contain "microchip,mcp795".
-> +- reg: SPI address for chip
-> +
-> +Example:
-> +	mcp795: rtc@0 {
-> +		compatible = "microchip,mcp795";
-> +		reg = <0>;
-> +	};
-
-This part is not erally explained/justified.
+We have a standard property and it should be used, when applicable.
+Don't encode here frequency for something else than the driving clock.
 
 Best regards,
 Krzysztof
