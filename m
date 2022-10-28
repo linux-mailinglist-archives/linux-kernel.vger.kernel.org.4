@@ -2,62 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F40F611B38
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE80D611B3B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiJ1Tw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 15:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
+        id S229902AbiJ1TyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 15:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiJ1TwZ (ORCPT
+        with ESMTP id S229631AbiJ1TyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 15:52:25 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18D9245EA8;
-        Fri, 28 Oct 2022 12:52:24 -0700 (PDT)
+        Fri, 28 Oct 2022 15:54:12 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E3A245EA8;
+        Fri, 28 Oct 2022 12:54:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ffjXFJfInRuY4KexRLpq5bVKkJ2P7hPt+j48cm2aYeA=; b=qAS/JAFmFk9DKJdgkhy5AeqPBP
-        KLXBfQyUgyZrToj2OeJ8E57MV6wv2GSdVchdawCnUrYWp+I56BaSJvMPIAzwiaeStiBqQc46XqJZ6
-        bqRheLwJOKrmLdgLsBbEjG4/X+BNqO7wUNqoa0gUgMzhnW8K8Lgi1EF0Tyzz+qZhy1PCyJey7V7xD
-        Gw2cKHhmQ8iYLf0RrJ5Ww6271NSOHJSjS/Vz590QrJVa9x4kV5OXCkOrdIWkAmnGc7XUWyObrz2D4
-        K4PvHsFgE+Xphrf5qVleUhs5q478YAONr/HwAtraPJdp+te9KW9MD0wFikm7IbDZd87REelkhKDH8
-        ycubKXoA==;
+        bh=e5314e7MKAMLIb3zwbxdaealEyLm4PnV3W7SwfDYJKo=; b=dCAwGvL9ZNNRsZqUE3tpFOXlhe
+        FJqQ+QK9lDRNSqOe/XXWWaqqBaGQurTrGKmAoVwKmXT1p6aEqFtx3DB8TyhxlnUdovZFlgNas/0mR
+        L4NfoKU/LoZWUvN8p68gToayE783JvI4cXNTWE6qlvhidGOFwrcMjR4GyuZ5CjLxZSte9Z67jTi2H
+        MT7Y93jkIEmPZ0Xf4xAZPp0GSEf05kwyi5AjDHhmYKhHcrj60neqASAvUEGTgd8ig9Su/JzeIVpo4
+        pOnLdhEC+LAX8leIyEpErZ+JFTi4oZd+tg98d3JU2Osl+Kp0uMnyrT0lhonQWF+lQWrAGrZNMxsK6
+        2PsrMJjw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ooVOy-001VKK-9S; Fri, 28 Oct 2022 19:52:24 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ooVQU-007AUn-4O; Fri, 28 Oct 2022 19:53:59 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 322EE30029C;
-        Fri, 28 Oct 2022 21:52:19 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9EE5830008D;
+        Fri, 28 Oct 2022 21:53:57 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 18A482C26AB85; Fri, 28 Oct 2022 21:52:19 +0200 (CEST)
-Date:   Fri, 28 Oct 2022 21:52:18 +0200
+        id 4BE9A2C26AB85; Fri, 28 Oct 2022 21:53:57 +0200 (CEST)
+Date:   Fri, 28 Oct 2022 21:53:57 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Yujie Liu <yujie.liu@intel.com>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        fengwei.yin@intel.com, ying.huang@intel.com,
-        fstests@vger.kernel.org, linux-xfs@vger.kernel.org
-Subject: Re: [tip:x86/core] [kallsyms] f138918162:
- WARNING:CPU:#PID:#at_fs/xfs/xfs_message.c:#xfs_buf_alert_ratelimited.cold-#[xfs]
-Message-ID: <Y1wy8nvCWmXssMnY@hirez.programming.kicks-ass.net>
-References: <202210241614.2ae4c1f5-yujie.liu@intel.com>
- <Y1kDEmLeRA2UGeF8@hirez.programming.kicks-ass.net>
- <Y1kiuTIYobR4nexS@hirez.programming.kicks-ass.net>
- <Y1nobODPLUjcteJ0@yujie-X299>
- <2543dfb1-d9dc-0888-dbea-e420a19d732c@intel.com>
- <Y1qv3ku6ULHy8hOF@magnolia>
- <Y1q2/fdvXI67MRch@hirez.programming.kicks-ass.net>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
+        linux-tip-commits@vger.kernel.org,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>
+Subject: Re: [External] [tip: sched/core] sched/psi: Fix avgs_work re-arm in
+ psi_avgs_work()
+Message-ID: <Y1wzVeCYDFSO0KYe@hirez.programming.kicks-ass.net>
+References: <20221010104206.12184-1-zhouchengming@bytedance.com>
+ <166693932887.29415.17016910542871419770.tip-bot2@tip-bot2>
+ <f990a324-e28e-6de1-acb0-ba764808a56a@bytedance.com>
+ <CAJuCfpHOt1Vfc=ZtAYt_2QamOujfuFtNHAdJe7iBMmDgTLGtyw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1q2/fdvXI67MRch@hirez.programming.kicks-ass.net>
+In-Reply-To: <CAJuCfpHOt1Vfc=ZtAYt_2QamOujfuFtNHAdJe7iBMmDgTLGtyw@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -67,18 +63,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 06:51:09PM +0200, Peter Zijlstra wrote:
-> 
-> > However, I noticed that the callsite in the WARNING: message has changed
-> > from the usual 'asswarn' (which is the caller of WARN_ON) to
-> > 'xfs_buf_alert_ratelimited', which seems totally wrong since XFS log
-> > recovery doesn't touch xfs_buf objects at all.
-> 
-> Yeah; and I've meanwhile found more cases where it goes sideways.
-> 
-> I'll revert this patch and try an alternative approach. I'll post
-> patches tomorrow or something.
+On Fri, Oct 28, 2022 at 08:58:03AM -0700, Suren Baghdasaryan wrote:
 
-Now posted:
+> Not sure what went wrong. Peter, could you please replace this one
 
-  https://lkml.kernel.org/r/20221028194022.388521751@infradead.org
+Probably me being an idiot and searching on subject instead of msgid :/
+
+I'll go fix up -- tomorrow though, it's late and I'm likely to mess it
+up again.
+
