@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6708B611BE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B8C611BEA
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbiJ1U4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 16:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
+        id S229917AbiJ1U4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 16:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbiJ1Uzx (ORCPT
+        with ESMTP id S230003AbiJ1Uzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 16:55:53 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C20A1D1009;
-        Fri, 28 Oct 2022 13:55:50 -0700 (PDT)
+        Fri, 28 Oct 2022 16:55:55 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CA11D2B6D;
+        Fri, 28 Oct 2022 13:55:52 -0700 (PDT)
 Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 18D78660293A;
-        Fri, 28 Oct 2022 21:55:46 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 511DE6602942;
+        Fri, 28 Oct 2022 21:55:49 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666990548;
-        bh=/xWER+x0oIFofm2IpHy5fUUgY7g0hKyTCznvNF7+CqA=;
+        s=mail; t=1666990551;
+        bh=dgNVES+PG7HYw90A/f6Jhk6U5cFEmEyu1X+wMPSSjEk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TnrQ1htkoHEWLyVfQvnS1zDqwnVJLfaspdiMRoVtYHz6yeWXdJimx7MDgfuvbG2x9
-         On+v13qBR8Bbq7mbl6dYsbLnoCQdhFdD7vmVXGdVfOOnvNdCTpzrIR9an02sCDaOyR
-         zrOexNFlp61rZ/ekhsw1QswkvJZvROGorR+j6DHE997IjpOBpsPM+KrCs6KI0h8PT4
-         IQBzoVzkTtndgGiY2HE3lzEWtiuAXrR3/27AH1DPOMQ1J8oqFyLSnlGLadRvfVEcMe
-         F3VA/UrlLhlXi+lRx1PH35hgPxG69uddO1xdYrLXl3HX7vcaQxLz7HO1WsRGdq16+N
-         I2DFlrcDgoziA==
+        b=oaRdgjikT/hfU/s0FaK1hkwIVF9Y1l3kfEWLM3nrpKFDOtkGCt4iiQhaNF5w0vWVU
+         zIdCEi74XlLewBLxA31M+O93kT6m6IHkaOqnJQBYeULCbVEfEui8tcb+9PyppGF/Qf
+         SqiT6TbpVrmc/4K1bPbOy33UnzjCgqiEKisZpp6WhYqtPjE3Ojyk/tEewx+fMb2SgK
+         QtwcSj+Nc1Pj0FNTvGETnpg2g7ADwR5RT0hg68udxeztOW5gIgbM+oX8TMFZ1xCKLJ
+         eBHJAO0I3Ox7tEZ3VT5jxjTUjO2WYyLgBPGRPxHoff+zoCgJLI9eqKtF0NS+Kcqw89
+         zfJ+AeGsHwAcQ==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Mark Brown <broonie@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     kernel@collabora.com,
         Liam Girdwood <lgirdwood@gmail.com>,
         Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/8] ASoC: dt-bindings: realtek,rt5682s: Add AVDD and MICVDD supplies
-Date:   Fri, 28 Oct 2022 16:55:33 -0400
-Message-Id: <20221028205540.3197304-2-nfraprado@collabora.com>
+Subject: [PATCH 2/8] ASoC: dt-bindings: realtek,rt5682s: Add dbvdd and ldo1-in supplies
+Date:   Fri, 28 Oct 2022 16:55:34 -0400
+Message-Id: <20221028205540.3197304-3-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221028205540.3197304-1-nfraprado@collabora.com>
 References: <20221028205540.3197304-1-nfraprado@collabora.com>
@@ -63,54 +63,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rt5682s codec has two supplies - AVDD and MICVDD - which are already
-used by sc7180-trogdor-kingoftown.dtsi. Document them in the binding.
+The rt5682s codec has two additional power supply pins, DBVDD and
+LDO1_IN, that aren't currently described in the binding. Add them.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
 ---
-Commit adapted from [1], changes:
-- Made supplies required
-- Added description for supplies
 
-[1] https://lore.kernel.org/all/20221024220015.1759428-3-nfraprado@collabora.com
-
- .../devicetree/bindings/sound/realtek,rt5682s.yaml   | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ .../devicetree/bindings/sound/realtek,rt5682s.yaml    | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/sound/realtek,rt5682s.yaml b/Documentation/devicetree/bindings/sound/realtek,rt5682s.yaml
-index 1c0b06d82369..b7338bfc0f5a 100644
+index b7338bfc0f5a..5b2bbf6f9156 100644
 --- a/Documentation/devicetree/bindings/sound/realtek,rt5682s.yaml
 +++ b/Documentation/devicetree/bindings/sound/realtek,rt5682s.yaml
-@@ -90,11 +90,20 @@ properties:
-   "#sound-dai-cells":
-     const: 1
+@@ -97,6 +97,13 @@ properties:
+     description: Regulator supplying power for the microphone bias through the
+       MICVDD pin.
  
-+  AVDD-supply:
-+    description: Regulator supplying analog power through the AVDD pin.
++  dbvdd-supply:
++    description: Regulator supplying I/O power through the DBVDD pin.
 +
-+  MICVDD-supply:
-+    description: Regulator supplying power for the microphone bias through the
-+      MICVDD pin.
++  ldo1-in-supply:
++    description: Regulator supplying power to the digital core and charge pump
++      through the LDO1_IN pin.
 +
  additionalProperties: false
  
  required:
-   - compatible
+@@ -104,6 +111,8 @@ required:
    - reg
-+  - AVDD-supply
-+  - MICVDD-supply
+   - AVDD-supply
+   - MICVDD-supply
++  - dbvdd-supply
++  - ldo1-in-supply
  
  examples:
    - |
-@@ -120,5 +129,8 @@ examples:
+@@ -132,5 +141,7 @@ examples:
  
-             clocks = <&osc>;
-             clock-names = "mclk";
-+
-+            AVDD-supply = <&avdd_reg>;
-+            MICVDD-supply = <&micvdd_reg>;
+             AVDD-supply = <&avdd_reg>;
+             MICVDD-supply = <&micvdd_reg>;
++            dbvdd-supply = <&dbvdd_reg>;
++            ldo1-in-supply = <&ldo1_in_reg>;
          };
      };
 -- 
