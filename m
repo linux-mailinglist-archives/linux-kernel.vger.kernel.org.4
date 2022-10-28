@@ -2,122 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E19611583
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495EA61158A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiJ1PIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 11:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
+        id S230005AbiJ1PJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 11:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiJ1PIm (ORCPT
+        with ESMTP id S229740AbiJ1PJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:08:42 -0400
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84528208832;
-        Fri, 28 Oct 2022 08:08:38 -0700 (PDT)
-Received: by mail-qt1-f179.google.com with SMTP id r19so3609449qtx.6;
-        Fri, 28 Oct 2022 08:08:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NYii+0fW0gEKCWGN+D7BxbLvb2ZrmudcEIDGIcfsEBs=;
-        b=lxdkkRzhhdN5w6Q12sb9uZzvWAZxG3MxGZo9iXqP6QUTA7/7E/xckczlwQSMlRmZ2n
-         2QJM+9i8uD5E2rfA/J7rJPA8YzD+PGZD4w5laHWbP5S8+bcyFD/iLzNUxHqEyQa8Tk8W
-         Cmv/9kvlEbxW1mSC7BssqkOMdsdej+VXUXi7PGRgO7+fnjCgGrjvtxdttJknzK+7weN8
-         FdlqI3KwXlMZOu/kOI0/a+jjN57eSDOiazFCA01L4aHsqM6mXYeK3Ys8DciFA3MRjNm0
-         USuyJudj/qmBVucuFIEhmM+HfeTVgjqR1lVeX6z9CIj7bsAqwlAHmhcPPTi6Bmv7PnYi
-         8tdw==
-X-Gm-Message-State: ACrzQf1NjBJi41eNwpRBtkljnzsekZBy3ywsT+EN84RXJqxAeW4tigRU
-        irE/tG5vx4EnPH5ILx3VqA2GrULDYffvmUdYy3p0r4yE
-X-Google-Smtp-Source: AMsMyM7oYD83QNmGbnNTLaNVUXqpU/34cwf3LMweStOy4pBRdXXttiV/RN14ltJFbmmMQ5L05ce61fr71s7gmW2vCbA=
-X-Received: by 2002:a05:622a:44d:b0:39c:f7a4:5ee0 with SMTP id
- o13-20020a05622a044d00b0039cf7a45ee0mr45218839qtx.48.1666969717630; Fri, 28
- Oct 2022 08:08:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221003144914.160547-1-kajetan.puchalski@arm.com>
- <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com>
- <Y0fymW5LOoIHstE2@e126311.manchester.arm.com> <CAJZ5v0gvAtpzdQo0Tj13ZGFcop8fdNht7e_Nc_UNYCgbU1zZLA@mail.gmail.com>
- <Y1vum4BECMf2BXQW@e126311.manchester.arm.com> <CAJZ5v0hZbw18BuG64046DiG2_dWOFk9gcg0bD+X3rQknwp0xsA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hZbw18BuG64046DiG2_dWOFk9gcg0bD+X3rQknwp0xsA@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Oct 2022 17:08:26 +0200
-Message-ID: <CAJZ5v0iGM84i72m2eJkF6k8PkFqHw4gTDQhYV-K9D_VPWNKW7A@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional util-awareness
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
-        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Fri, 28 Oct 2022 11:09:22 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B351320B104;
+        Fri, 28 Oct 2022 08:09:21 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 279445C0063;
+        Fri, 28 Oct 2022 11:09:21 -0400 (EDT)
+Received: from imap47 ([10.202.2.97])
+  by compute2.internal (MEProxy); Fri, 28 Oct 2022 11:09:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1666969761; x=1667056161; bh=Sy
+        6FI25zRCehPukmtH7/3V5knsC4JumJoR5V84h5kaM=; b=G+cOvYkJUUuGPABiFE
+        zjECEj6bJ8KF8IJsUGHKSG0kkvtJ2VGlxHt/vHL3ot1tcHvmCSHq8Yxsn4jmlio7
+        b87XcMRi/qNN2Hb+sQrrIZ/MprY+gQcSbAB1QGBlp6tKIsdFXVmWzpQXjwkBy+xO
+        4NvUlBVNiARkhbYcP5kRP5B0zXk8MJkJINm4XJm8NEnr4Qzbl7givGBykTZzep89
+        cUxHoMgh2r033YFDu1ONbt6pohcKPJwCy45muRy6CLnu6U5L9/8q6rm0UoXVOE4f
+        JDMshM/hm6kmL+pRMQ9aVtqAhwjY2GOiTOFxCdJtIFMMe1NV8rq+RTaTz7G9SCGw
+        O0AQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666969761; x=1667056161; bh=Sy6FI25zRCehPukmtH7/3V5knsC4
+        JumJoR5V84h5kaM=; b=TsctoJvwFdAcmmgfHHKeVjmT4R7aNkVhe6oQqMfWMVbJ
+        5eenZ0qnr+0i+VeZ4wJBz8Vh/koB0kDeIK1jZa+7vK5IVeaOZdE+MA8+s4RxrBZ+
+        X592De5wmxSVbMZkK3U06Bco6tBH2UULWY+GgRgGJdh0HdjwVinsImTnjLXK3bAJ
+        Kvn9Ot2VuqzkO4U05kBK9GNBs4Ul0H1ednZr4yCjeLd8Qn7ZYGyCGJvEBWRxUmSn
+        ow91pTIwYpEuEIFXibkL7lxzaZ977U4bzMrtl2gCdWegTSLYhVw5uyD2RhX3rB1A
+        3yrcm+/abvZP9pUGBNFqCI2vjfocyFju8Dr4PVuyjQ==
+X-ME-Sender: <xms:n_BbY5q9PM5WcB2nasCymuRAfsH5P_socO5xgz8nev3Qz577tghQMg>
+    <xme:n_BbY7oyIwDdM-bSjSjqj4cCpDS2JGnPeg9RIC0TEUut5aaeH8DTzvXVTGvqiV-xP
+    k58Tbpa6Z9GUzsD3y4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeigdekgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
+    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
+    htthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefghfei
+    veeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:oPBbY2MNaLXplfXAKqaolwa_6NaHLJ0Ptmad9_r4hec89t2_VdM70w>
+    <xmx:oPBbY04RfC88foBNrWOloMJshDEZKbin3RfvfhkZRJoLcpJj_2C5dQ>
+    <xmx:oPBbY442i4NZAMcpqZQCBHKaiD37HPyZZa7a9dcqmIt7_vtzC4goUg>
+    <xmx:ofBbY3TVaZqRl7-HOh0h5ylgzJPy1WpKCeDbgQNMvtPaN1kDZyXdtg>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id EDD5AA6007C; Fri, 28 Oct 2022 11:09:19 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
+Mime-Version: 1.0
+Message-Id: <587611e4-eb08-4b86-a8e8-aaa10f8efee6@app.fastmail.com>
+In-Reply-To: <CABBYNZKJnmfWfvxdgpxNFUGc7jTKP+BGv6CiZc2MsR970L35MA@mail.gmail.com>
+References: <20221027150822.26120-1-sven@svenpeter.dev>
+ <20221027150822.26120-7-sven@svenpeter.dev>
+ <CABBYNZKJnmfWfvxdgpxNFUGc7jTKP+BGv6CiZc2MsR970L35MA@mail.gmail.com>
+Date:   Fri, 28 Oct 2022 17:08:59 +0200
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>
+Cc:     "Marcel Holtmann" <marcel@holtmann.org>,
+        "Johan Hedberg" <johan.hedberg@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Hector Martin" <marcan@marcan.st>,
+        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 6/7] Bluetooth: Add quirk to disable MWS Transport Configuration
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 5:04 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Fri, Oct 28, 2022 at 5:01 PM Kajetan Puchalski
-> <kajetan.puchalski@arm.com> wrote:
-> >
-> > On Fri, Oct 28, 2022 at 03:12:43PM +0200, Rafael J. Wysocki wrote:
-> >
-> > > > The result being that this util-aware TEO variant while using much less
-> > > > C1 and decreasing the percentage of too deep sleeps from ~24% to ~3% in
-> > > > PCMark Web Browsing also uses almost 2% less power. Clearly the power is
-> > > > being wasted on not hitting C1 residency over and over.
-> > >
-> > > Hmm.  The PCMark Web Browsing table in your cover letter doesn't indicate that.
-> > >
-> > > The "gmean power usage" there for "teo + util-aware" is 205, whereas
-> > > for "teo" alone it is 187.8.  This is still arguably balanced by the
-> > > latency difference (~100 us vs ~185 us, respectively), but this looks
-> > > like trading energy for performance.
-> >
-> > In this case yes, I meant 2% less compared to menu but you're right of
-> > course.
-> >
-> > [...]
-> >
-> > > Definitely it should not be changed if the previous state is a polling
-> > > one which can be checked right away.  That would take care of the
-> > > "Intel case" automatically.
-> >
-> > Makes sense, I already used the polling flag to implement this in this other
-> > governor I mentioned.
-> >
-> > >
-> > > > Should make it much less intense for Intel systems.
-> > >
-> > > So I think that this adjustment only makes sense if the current
-> > > candidate state is state 1 and state 0 is not polling.  In the other
-> > > cases the cost of missing an opportunity to save energy would be too
-> > > high for the observed performance gain.
-> >
-> > Interesting, but only applying it to C1 and only when C0 isn't polling would
-> > make it effectively not do anything on Intel systems, right?
->
-> Indeed.
->
-> > From what I've seen on Doug's plots even C1 is hardly ever used on his platform, most
-> > sleeps end up in the deepest possible state.
->
-> That depends a lot on the workload.  There are workloads in which C1
-> is mostly used and the deeper idle states aren't.
->
-> > Checking for the polling flag is a good idea regardless so I can send a
-> > v3 with that. If you'd like me to also restrict the entire mechanism to
-> > only working on C1 as you suggested then I'm okay with including that in
-> > the v3 as well. What do you think?
->
-> It would be good to do that and see if there are any significant
-> differences in the results.
+Hi Luiz,
 
-BTW, you may as well drop the extra #ifdeffery from the v3, I don't
-think that it is particularly useful.
+On Thu, Oct 27, 2022, at 20:59, Luiz Augusto von Dentz wrote:
+> Hi Sven,
+>
+> On Thu, Oct 27, 2022 at 8:09 AM Sven Peter <sven@svenpeter.dev> wrote:
+>>
+>> Broadcom 4378/4387 controllers found in Apple Silicon Macs claim to
+>> support getting MWS Transport Layer Configuration,
+>>
+>> < HCI Command: Read Local Supported... (0x04|0x0002) plen 0
+>> > HCI Event: Command Complete (0x0e) plen 68
+>>       Read Local Supported Commands (0x04|0x0002) ncmd 1
+>>         Status: Success (0x00)
+>> [...]
+>>           Get MWS Transport Layer Configuration (Octet 30 - Bit 3)]
+>> [...]
+>>
+>> , but then don't actually allow the required command:
+>>
+>> > HCI Event: Command Complete (0x0e) plen 15
+>>       Get MWS Transport Layer Configuration (0x05|0x000c) ncmd 1
+>>         Status: Command Disallowed (0x0c)
+>>         Number of transports: 0
+>>         Baud rate list: 0 entries
+>>         00 00 00 00 00 00 00 00 00 00
+>>
+>> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+>> ---
+>>  include/net/bluetooth/hci.h | 10 ++++++++++
+>>  net/bluetooth/hci_sync.c    |  2 ++
+>>  2 files changed, 12 insertions(+)
+>>
+>> diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
+>> index 8cd89948f961..110d6df1299b 100644
+>> --- a/include/net/bluetooth/hci.h
+>> +++ b/include/net/bluetooth/hci.h
+>> @@ -273,6 +273,16 @@ enum {
+>>          * during the hdev->setup vendor callback.
+>>          */
+>>         HCI_QUIRK_BROKEN_EXT_SCAN,
+>> +
+>> +       /*
+>> +        * When this quirk is set, the HCI_OP_GET_MWS_TRANSPORT_CONFIG command is
+>> +        * disabled. This is required for some Broadcom controllers which
+>> +        * erroneously claim to support MWS Transport Layer Configuration.
+>> +        *
+>> +        * This quirk can be set before hci_register_dev is called or
+>> +        * during the hdev->setup vendor callback.
+>> +        */
+>> +       HCI_QUIRK_BROKEN_MWS_TRANSPORT_CONFIG,
+>>  };
+>>
+>>  /* HCI device flags */
+>> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+>> index 76c3107c9f91..91788d356748 100644
+>> --- a/net/bluetooth/hci_sync.c
+>> +++ b/net/bluetooth/hci_sync.c
+>> @@ -4260,6 +4260,8 @@ static int hci_get_mws_transport_config_sync(struct hci_dev *hdev)
+>>  {
+>>         if (!(hdev->commands[30] & 0x08))
+>>                 return 0;
+>> +       if (test_bit(HCI_QUIRK_BROKEN_MWS_TRANSPORT_CONFIG, &hdev->quirks))
+>> +               return 0;
+>
+> Let's add a macro that tests both the command and the quirk so we
+> don't have to test them separately.
+
+Sure, I'll add a macro for v5.
+
+
+Best,
+
+
+Sven
