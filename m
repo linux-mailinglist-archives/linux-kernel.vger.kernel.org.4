@@ -2,96 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4A6611101
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9AA611104
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiJ1MST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 08:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
+        id S229642AbiJ1MT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 08:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiJ1MSR (ORCPT
+        with ESMTP id S229556AbiJ1MTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 08:18:17 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7986B177
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:18:16 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id j4so8060028lfk.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:18:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/dY7Y+da7X9K9O4Ac5PtXq8SnkiyCLSRFHFISMn8IhE=;
-        b=DU/ltOdllZxhJVdhSGGBTsAkXZC5s2ayfhqb/2pf8/3L9WCb7vmJSPARaIteVgy/C6
-         qefskjshrJUgmbJvibi3tHq0ZBku8XhlPA3Rz2pqtcKr/QEXOySEOD0e5hhfX6/nqS7D
-         dsFXf7B8regkLIC4WtjeGV3BelF8TQs7tkv20VdQABoAPosbWtzVEYiommR6l7x9ruom
-         I+a9bRGWQFtWVRyLquZEZYbaBp374LTir4XJFDPoGs4sRXHMirMUQFTuw28kif3drxGs
-         aNRC8BAwblSSghNY2r4gkPVmm7Q0vU6C9ifwEyg8kXzCOoVZrTd9PaDMgNXTlUY3qLOv
-         ze7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/dY7Y+da7X9K9O4Ac5PtXq8SnkiyCLSRFHFISMn8IhE=;
-        b=RbiumrMym9KzbSwmAo8/iD3c7+tC2bxQBsHA9+olTGRUWZholrQB3QcjsnWpy8+5fB
-         rCjiIfVIVYC7kH6GRHez+bZ7tKLBd5hQvquR8JRjdxrqsWq/9EA/SfM+ta/vZPMtu/Vg
-         nf5E4BKlQg/xjUPbal38UtUNae9ClhQAi+qa3pYoVgtaxWlyOfouZhWmSB9uQURcdYT1
-         mrwAZHaOiDWUa7lLD52e0palzWOXskdcdqHcGTyQhDkfFhZ/iUR2eaN9zT9Z4xVQ1HcN
-         BHReMA7wSfdxd+0F5ACzjDCNkAnTzdutDxq4KMoE95+sTMoHwA4ecKXnTmsDgy6ozdca
-         QiFA==
-X-Gm-Message-State: ACrzQf24oKkKAmagANLKJgEatKiRS+5LLek1AEFRSsJp09uCWUgdv/0L
-        Gk/8IPq3os0V9nFBiOxi6uxwx1JWUABdfA==
-X-Google-Smtp-Source: AMsMyM4c64YK1SqRcBUqVGXKUB+3puqxMCX6YfubK8Z20vazKfoyf++BNBmBQ6mfJ01bOyalCKPcYw==
-X-Received: by 2002:a05:6512:2213:b0:4ae:8476:2ce with SMTP id h19-20020a056512221300b004ae847602cemr7356152lfu.0.1666959495019;
-        Fri, 28 Oct 2022 05:18:15 -0700 (PDT)
-Received: from localhost.localdomain ([95.79.189.126])
-        by smtp.gmail.com with ESMTPSA id v7-20020a2ea607000000b00277041268absm618550ljp.78.2022.10.28.05.18.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 05:18:14 -0700 (PDT)
-From:   Oleg Kanatov <okanatov@gmail.com>
-X-Google-Original-From: Oleg Kanatov <okanatov@astralinux.ru>
-To:     Dave Kleikamp <shaggy@kernel.org>
-Cc:     Oleg Kanatov <okanatov@astralinux.ru>,
-        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org, Oleg Kanatov <okanatov@gmail.com>
-Subject: [PATCH] jfs: Fix a typo in function jfs_umount
-Date:   Fri, 28 Oct 2022 15:16:39 +0300
-Message-Id: <20221028121639.19341-1-okanatov@astralinux.ru>
-X-Mailer: git-send-email 2.30.2
+        Fri, 28 Oct 2022 08:19:25 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DFDE6B177;
+        Fri, 28 Oct 2022 05:19:23 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C9D5C1FB;
+        Fri, 28 Oct 2022 05:19:29 -0700 (PDT)
+Received: from e126815.warwick.arm.com (e126815.arm.com [10.32.32.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B5A263F7B4;
+        Fri, 28 Oct 2022 05:19:21 -0700 (PDT)
+From:   James Clark <james.clark@arm.com>
+To:     linux-perf-users@vger.kernel.org, acme@kernel.org,
+        atrajeev@linux.vnet.ibm.com
+Cc:     linux-kernel@vger.kernel.org, Anshuman.Khandual@arm.com,
+        James Clark <james.clark@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>
+Subject: [PATCH] perf test: Fix skipping branch stack sampling test
+Date:   Fri, 28 Oct 2022 13:19:13 +0100
+Message-Id: <20221028121913.745307-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When closing the block allocation map, an incorrect pointer
-was NULL'ed. This commit fixes that.
+Commit f4a2aade6809 ("perf tests powerpc: Fix branch stack sampling test
+to include sanity check for branch filter") added a skip if certain
+branch options aren't available. But the change added both -b
+(--branch-any) and --branch-filter options at the same time, which will
+always result in a failure on any platform because the arguments can't
+be used together.
 
-Signed-off-by: Oleg Kanatov <okanatov@gmail.com>
+Fix this by removing -b (--branch-any) and leaving --branch-filter which
+already specifies 'any'. Also add warning messages to the test and perf
+tool.
+
+Output on x86 before this fix:
+
+   $ sudo ./perf test branch
+   108: Check branch stack sampling         : Skip
+
+After:
+
+   $ sudo ./perf test branch
+   108: Check branch stack sampling         : Ok
+
+Fixes: f4a2aade6809 ("perf tests powerpc: Fix branch stack sampling test to include sanity check for branch filter")
+Signed-off-by: James Clark <james.clark@arm.com>
 ---
- fs/jfs/jfs_umount.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/tests/shell/test_brstack.sh | 5 ++++-
+ tools/perf/util/parse-branch-options.c | 4 +++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/fs/jfs/jfs_umount.c b/fs/jfs/jfs_umount.c
-index 3e8b13e6aa01..673e132c1c26 100644
---- a/fs/jfs/jfs_umount.c
-+++ b/fs/jfs/jfs_umount.c
-@@ -89,7 +89,7 @@ int jfs_umount(struct super_block *sb)
- 	dbUnmount(ipbmap, 0);
+diff --git a/tools/perf/tests/shell/test_brstack.sh b/tools/perf/tests/shell/test_brstack.sh
+index ec801cffae6b..d7ff5c4b4da4 100755
+--- a/tools/perf/tests/shell/test_brstack.sh
++++ b/tools/perf/tests/shell/test_brstack.sh
+@@ -13,7 +13,10 @@ fi
  
- 	diFreeSpecial(ipbmap);
--	sbi->ipimap = NULL;
-+	sbi->ipbmap = NULL;
+ # skip the test if the hardware doesn't support branch stack sampling
+ # and if the architecture doesn't support filter types: any,save_type,u
+-perf record -b -o- -B --branch-filter any,save_type,u true > /dev/null 2>&1 || exit 2
++if ! perf record -o- --no-buildid --branch-filter any,save_type,u -- true > /dev/null 2>&1 ; then
++	echo "skip: system doesn't support filter types: any,save_type,u"
++	exit 2
++fi
  
+ TMPDIR=$(mktemp -d /tmp/__perf_test.program.XXXXX)
+ 
+diff --git a/tools/perf/util/parse-branch-options.c b/tools/perf/util/parse-branch-options.c
+index 00588b9db474..31faf2bb49ff 100644
+--- a/tools/perf/util/parse-branch-options.c
++++ b/tools/perf/util/parse-branch-options.c
+@@ -102,8 +102,10 @@ parse_branch_stack(const struct option *opt, const char *str, int unset)
  	/*
- 	 * Make sure all metadata makes it to disk before we mark
+ 	 * cannot set it twice, -b + --branch-filter for instance
+ 	 */
+-	if (*mode)
++	if (*mode) {
++		pr_err("Error: Can't use --branch-any (-b) with --branch-filter (-j).\n");
+ 		return -1;
++	}
+ 
+ 	return parse_branch_str(str, mode);
+ }
 -- 
-2.30.2
+2.25.1
 
