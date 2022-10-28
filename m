@@ -2,98 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE14A61125D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3271061125F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbiJ1NIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
+        id S230288AbiJ1NJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiJ1NI1 (ORCPT
+        with ESMTP id S230293AbiJ1NJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:08:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589D76C74B;
-        Fri, 28 Oct 2022 06:08:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DEEFF62856;
-        Fri, 28 Oct 2022 13:08:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF53C433D6;
-        Fri, 28 Oct 2022 13:08:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666962506;
-        bh=ECi5ZL9/CovQrvlXRqJIBv8wWvMwdtva2tmSf8ayGz8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YHCV8/xrqJ4VydITOXS6s0km2idgLo5DtBEjthmVLki9+Blqo7INGNTqczdDJm2sT
-         mK767JbQIE7BlOVsk0Z5DZ8H/HLzqQMMVT9rO+aynsEWPr5PmN6r7WDQtFPPKbpq0x
-         lTlTZbQoS9DQ3OSYADBVZ8xT2iyWjj2esS1qSG9KqC0sEUrXlJ5/xyyYZHoLlO+vkg
-         jfqPyEPZO6BBpZAqrOXB4zmKiSar/7WatDoceZJVlQ6UWFAQ35vZhijJQyeLjy82Fl
-         S8T0WP/bRw9VxtHA/k+Dshomv9ornM7Dbz6ThoDAJwMuTVNNwbU3yaS+DKybALYX0w
-         xOYxbceKs4/iw==
-Date:   Fri, 28 Oct 2022 18:38:22 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 08/15] phy: qcom-qmp-pcie: add register init helper
-Message-ID: <Y1vURr4xPZD5/bh0@matsya>
-References: <20221021110947.28103-1-johan+linaro@kernel.org>
- <20221021110947.28103-9-johan+linaro@kernel.org>
- <932765e0-ecbc-8c9b-69c5-ce0bb0c8de68@linaro.org>
- <Y1KDXD9n0cCqjTGy@hovoldconsulting.com>
- <Y1vRDv+hrMmnqwPj@matsya>
- <Y1vT94blD9PJHKDp@hovoldconsulting.com>
+        Fri, 28 Oct 2022 09:09:39 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0297101E7
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:09:37 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-35befab86a4so46547837b3.8
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:09:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zNvEGzwFZiPNSYA/riEwCNGdEsEkX1GF8vTXGSAxJg4=;
+        b=j/Ro6KESD6qEo8DaVVUq3iotBaCxQLlZwORfAykz4UFJz1XnfXypAIyl8qAzDxzx+K
+         IAhjUghZjt+GzqNmin22zQXpTtz4SjRLO6N0nZqwdG7vrXQuX/sbvkbtiPCHtBhS0eoH
+         qy2Q7VHmjJ6tdNweJK2n/smTGza7+9BVNsvN2BSMmp8JCjGUaEcSwevBbThJntv3dslG
+         jUz3E70/ODotZIDMigHxJzat6yB+K6dYEWGKuKRE5TFqHCf0dvZT8vHMW0QqcLcvLyqj
+         KSVSo2tG89mKnwIgB2jPhcRZHZomvC4dJiX6SSou7qhnKS+Y+827B5w2V1VZRD/eFepK
+         Uspw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zNvEGzwFZiPNSYA/riEwCNGdEsEkX1GF8vTXGSAxJg4=;
+        b=yj5MiAOUX+aaVPohW6t4T21DGeTwwL/qQ7pMqHg4N6K6X2B3KWt/7RW3T2XePBjPdb
+         bB0XJbOV2J1wRsqbL+2hw6l4AMFi8pdu0/YFuDCX/ap8jwZE700ECt3EBTmcyt1DLWAq
+         nN2NwqFv9ykWr/m0U5KaamhZQpuMEUDSdtMs0AJIZLi3FCdOMlpLIUPwGy7u/EIqkswX
+         1KQULCiErRrRXOBfA9eQZEvkP1QJoJYflNBudtgkZoj2Tue13tmmBoZHmdLAZuKDkZct
+         bZmu4IGOYdAXfFb88WVzke4St4cFAbCXJgYGNbqYN0l0xZtrOyoGpw05xhh5r278nk9A
+         ViFQ==
+X-Gm-Message-State: ACrzQf1qK0mD9vciYu33KgtmBPiXlR+owT81bBFS9kD+gLyOiqYbXLjC
+        Q9JuhsJERGhPutM31Nm5z4BCqMsWsB5H09N9NVdtDw==
+X-Google-Smtp-Source: AMsMyM4RlEu/ZOLsDrVy8uJcLRb63RMgIWBseuziSlav6DYsCFUaKtiFKKtHnLGhUZVQNf3FzpLYAMYgWfoFz/21v3Q=
+X-Received: by 2002:a81:164b:0:b0:36f:ced7:985f with SMTP id
+ 72-20020a81164b000000b0036fced7985fmr16909310yww.360.1666962576949; Fri, 28
+ Oct 2022 06:09:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1vT94blD9PJHKDp@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221028102450.1161382-1-ajye_huang@compal.corp-partner.google.com>
+ <20221028102450.1161382-3-ajye_huang@compal.corp-partner.google.com>
+ <Y1vDxtdNGURAT850@sirena.org.uk> <CALprXBbTkj0Q_-3AL81Q1okRD5ZyDf_c=daPrkQstkM4_CNgGQ@mail.gmail.com>
+ <Y1vStD8vNYmdvPH1@sirena.org.uk>
+In-Reply-To: <Y1vStD8vNYmdvPH1@sirena.org.uk>
+From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+Date:   Fri, 28 Oct 2022 21:09:30 +0800
+Message-ID: <CALprXBZMvPhDo_7Hsvvgutb50ZBvmQZTAwvzUstQCEC3QN58vg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] ASoC: dmic: Add optional dmic selection
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, robh@kernel.org,
+        Shengjiu Wang <shengjiu.wang@nxp.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        angelogioacchino.delregno@collabora.corp-partner.google.com,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28-10-22, 15:07, Johan Hovold wrote:
-> On Fri, Oct 28, 2022 at 06:24:38PM +0530, Vinod Koul wrote:
-> > On 21-10-22, 13:32, Johan Hovold wrote:
-> 
-> > > [...] This is not about keeping the
-> > > diff small, this is about readability of the new helper function as I
-> > > already told you.
-> > > 
-> > > And this is a *local* identifier, not some state member that needs a
-> > > super descriptive name. And the rest of the driver used "tbl"
-> > > consistently until your EP/RC mode patches for that matter.
-> > 
-> > I would disagree here... You can change tbls/tables but then it does not
-> > help _this_ patch
-> > 
-> > Right thing would be to change tbls to tables first and then add init
-> > helper... For a reviewer seeing an undocumented change and unnecessary
-> > diff is not right..
-> 
-> I still think that it belongs in the patch adding the new helper
-> because it is essentially only in that new function that the improved
-> readability due to the shorter identifier matters (the earlier helpers
-> where per table type).
->  
-> > Pls split if you would still like the rename
-> 
-> But if you prefer I'll split it out in a preparatory patch.
+Hi Mark Brown
 
-That would be good thanks
+I need to abandon this one, I will send another new patch, thank you so much.
 
--- 
-~Vinod
+On Fri, Oct 28, 2022 at 9:01 PM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Fri, Oct 28, 2022 at 08:59:54PM +0800, Ajye Huang wrote:
+>
+> > Thank you for review,
+> > I think it is appropriate to implement on audio machine side, like
+> > this I did before,
+> > commit 3cfbf07c6d27
+> > ("ASoC: qcom: sc7180: Modify machine driver for 2mic")
+>
+> > What is your suggestion?  Thank you.
+>
+> Doing that seems fine.
+>
+> Please don't top post, reply in line with needed context.  This allows
+> readers to readily follow the flow of conversation and understand what
+> you are talking about and also helps ensure that everything in the
+> discussion is being addressed.
