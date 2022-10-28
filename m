@@ -2,88 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F416610A11
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD16610A2D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbiJ1GKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
+        id S229729AbiJ1GRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiJ1GKn (ORCPT
+        with ESMTP id S229588AbiJ1GRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:10:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFE67D1C8;
-        Thu, 27 Oct 2022 23:10:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C63E3B827D5;
-        Fri, 28 Oct 2022 06:10:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EE93C433C1;
-        Fri, 28 Oct 2022 06:10:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666937439;
-        bh=bCo8sXVXchrf2o28bo48O/daDV+GIQFafX21yGzPoKM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kv5ZCao93o4KVTw1pIIWXlsFUCdz4D9OVZBEO5Ms5ib3lGy+a2OhbcyPZl+R3bUBn
-         YPzCG1PPzlQdXfWrxgs9KkkygJOcI+R2FKFttC1T7I4d4VE1/IOlnPIg6Y1JNKR2O6
-         EpuS/yWVvkOeK1lb9Ym3itLRK+147A0RpGSDNCRk=
-Date:   Fri, 28 Oct 2022 08:11:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Reka Norman <rekanorman@chromium.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] xhci: Apply XHCI_RESET_TO_DEFAULT quirk to ADL-N
-Message-ID: <Y1tyldAD/nDIoL3d@kroah.com>
-References: <20221027053407.421783-1-rekanorman@chromium.org>
- <Y1ohUyZJItFh3xDs@kroah.com>
- <CAEmPcwtZt0RoksByW0OnkNsBiPJ-wHqzR9nuZEwAn3d2m=fyOA@mail.gmail.com>
+        Fri, 28 Oct 2022 02:17:15 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75EF68CD6;
+        Thu, 27 Oct 2022 23:17:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666937834; x=1698473834;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=dF/aWwaNQggwj6gD+KJTCT5Ni9qMvVF3l+TfbYoad8o=;
+  b=cz4o6+8UlqHnvioAVQjz4Ublzvx8r+9l3uEQN2RV0Ivt+YJkLLVcCfL0
+   8QplgOY/8AE7rrUfZYbwpdVYKaZ9in52yRzSPgSMPrkjv/M3lG0tKmL6C
+   j8BwegLkehF7mAy/Iw6z39HnTOseMEHWx2QfMD8408wgFLI3t8TqAMaL0
+   UK3Vt9wqn9CymgRBiJmk2o7nU5K2bX/bojBdnsLhe39jenVsoquk4tIhE
+   bLWyMh1sgqnPIZkEHD25lmzRy118mpem8iBU85zZhApGHxyZmmgCGmi6r
+   SJiBO3cROnEXTHLeLO9uWM/gmGYFNNcsNcSafc3ZwA7r/kWx45oqkfEeJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="372634624"
+X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
+   d="scan'208";a="372634624"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 23:17:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="627427865"
+X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
+   d="scan'208";a="627427865"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 27 Oct 2022 23:17:01 -0700
+Date:   Fri, 28 Oct 2022 14:12:32 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
+ create restricted user memory
+Message-ID: <20221028061232.GA3885130@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
+ <20221026173145.GA3819453@ls.amr.corp.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEmPcwtZt0RoksByW0OnkNsBiPJ-wHqzR9nuZEwAn3d2m=fyOA@mail.gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221026173145.GA3819453@ls.amr.corp.intel.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 10:56:56AM +1100, Reka Norman wrote:
-> On Thu, Oct 27, 2022 at 5:11 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Thu, Oct 27, 2022 at 04:34:07PM +1100, Reka Norman wrote:
-> > > ADL-N systems have the same issue as ADL-P, where a large boot firmware
-> > > delay is seen if USB ports are left in U3 at shutdown. So apply the
-> > > XHCI_RESET_TO_DEFAULT quirk to ADL-N as well.
-> > >
-> > > This patch depends on "xhci: Add quirk to reset host back to default
-> > > state at shutdown".
-> >
-> > What is the git commit id of that change?
+On Wed, Oct 26, 2022 at 10:31:45AM -0700, Isaku Yamahata wrote:
+> On Tue, Oct 25, 2022 at 11:13:37PM +0800,
+> Chao Peng <chao.p.peng@linux.intel.com> wrote:
 > 
-> It hasn't been merged in mainline yet, only in the xhci tree:
-> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?id=feb0b04b09c82589af65c84398b7d3fefaa7b7ac&head=for-usb-linus
-> Should I add the commit id from there? Or add the lore link?
-
-This is in linux-next already as 34cd2db408d5 ("xhci: Add quirk to reset
-host back to default state at shutdown") right?
-
-Please use that.
-
-> > And is this needed in stable kernels?  If so, how far back?
+> > +int restrictedmem_get_page(struct file *file, pgoff_t offset,
+> > +			   struct page **pagep, int *order)
+> > +{
+> > +	struct restrictedmem_data *data = file->f_mapping->private_data;
+> > +	struct file *memfd = data->memfd;
+> > +	struct page *page;
+> > +	int ret;
+> > +
+> > +	ret = shmem_getpage(file_inode(memfd), offset, &page, SGP_WRITE);
 > 
-> Sorry, I'm not sure how to answer that properly.
-> It looks like most ADL-N support was added starting from 5.16.
-> The issue it fixes is a ~20s boot delay in the specific case of booting from S5.
-> It probably makes sense for it to go wherever the ADL-P patch goes.
+> shmem_getpage() was removed.
+> https://lkml.kernel.org/r/20220902194653.1739778-34-willy@infradead.org
 
-Then properly mark it with that information.
+Thanks for pointing out. My current base(kvm/queue) has not included
+this change yet so still use shmem_getpage().
 
-thanks,
-
-greg k-h
+Chao
+> 
+> I needed the following fix to compile.
+> 
+> thanks,
+> 
+> diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
+> index e5bf8907e0f8..4694dd5609d6 100644
+> --- a/mm/restrictedmem.c
+> +++ b/mm/restrictedmem.c
+> @@ -231,13 +231,15 @@ int restrictedmem_get_page(struct file *file, pgoff_t offset,
+>  {
+>         struct restrictedmem_data *data = file->f_mapping->private_data;
+>         struct file *memfd = data->memfd;
+> +       struct folio *folio = NULL;
+>         struct page *page;
+>         int ret;
+>  
+> -       ret = shmem_getpage(file_inode(memfd), offset, &page, SGP_WRITE);
+> +       ret = shmem_get_folio(file_inode(memfd), offset, &folio, SGP_WRITE);
+>         if (ret)
+>                 return ret;
+>  
+> +       page = folio_file_page(folio, offset);
+>         *pagep = page;
+>         if (order)
+>                 *order = thp_order(compound_head(page));
+> -- 
+> Isaku Yamahata <isaku.yamahata@gmail.com>
