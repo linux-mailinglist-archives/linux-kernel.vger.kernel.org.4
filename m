@@ -2,88 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 993CD610B32
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 812F9610B34
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiJ1HVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 03:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42716 "EHLO
+        id S229926AbiJ1HWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 03:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiJ1HVh (ORCPT
+        with ESMTP id S229473AbiJ1HWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 03:21:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC9392CC3;
-        Fri, 28 Oct 2022 00:21:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82630B81FC3;
-        Fri, 28 Oct 2022 07:21:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E13DC433B5;
-        Fri, 28 Oct 2022 07:21:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666941694;
-        bh=ldtxaAYay6wYygiBjwGGXItQZodlkvcE8cVHtMo9FS8=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=JFMMmB+l7nc9LCK5MzHep3/DeBTWgUirBgn5kitkgrP6nc/tXBTcJNysSkF0fh+ko
-         xI73+Z/PtIUb1BSPZ8W27IQtW0aiaLkcfP6BKsuzd9IXvEN+3g+WMgZV6dP30ceibK
-         ReJ++1gySB6OOz8mzMV4H7GvsSF7PNsFY7cn8BIG6ubNP6XyPqKmeZaKeD9Q+ovFfa
-         nocyZY/dapsuw5zHHVYbudYsyes723I2dLqZ6zKBYLoXIlejthXjFcFsBsEeW668GP
-         MYGmLVnUu28QC1Y3UbOETpoRTn+7Ax6qSC21WNPNObQ0nD93zmrRvCQx5D0tX47yCA
-         ynYLIzDvMwAoQ==
-Message-ID: <ba254421-c721-87a8-11f8-e27b04782189@kernel.org>
-Date:   Fri, 28 Oct 2022 10:21:30 +0300
+        Fri, 28 Oct 2022 03:22:37 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B45CD5F4
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 00:22:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=0kHs01PQa80TsHGmTZUZWsuUjTB6ZMnDZZBdpbxyknA=;
+  b=kmbA+1YsZfLc5Zs/C/3vkxApFiJBMskkMPoxWrVI+g2B59zrCOE8LtdQ
+   nw4rf0okywtJUeUa4lH00QjdggpCSf6buI5twHJK/aZCBVDFXBD0XLHXM
+   LKf8REzP0hDfYaxd70T7Kn5SBauaHwOVJcV8h/7yMnsbI+3cMGH9AGuNG
+   Y=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.95,220,1661810400"; 
+   d="scan'208";a="35792117"
+Received: from 51.123.68.85.rev.sfr.net (HELO hadrien) ([85.68.123.51])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 09:22:33 +0200
+Date:   Fri, 28 Oct 2022 09:22:33 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     UMWARI JOVIAL <umwarijovial@gmail.com>
+cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH] Remove Unnecessary typecast of c90 int constant
+In-Reply-To: <20221028063711.GA35659@rdm>
+Message-ID: <alpine.DEB.2.22.394.2210280918550.2845@hadrien>
+References: <20221028063711.GA35659@rdm>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Subject: Re: [PATCH 1/3] interconnect: qcom: sc7180: fix dropped const of
- qcom_icc_bcm
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221027154848.293523-1-krzysztof.kozlowski@linaro.org>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20221027154848.293523-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.10.22 18:48, Krzysztof Kozlowski wrote:
-> Pointers to struct qcom_icc_bcm are const, but the change was dropped
-> during merge.
 
-Oops, thanks for the fix!
 
-BR,
-Georgi
+On Fri, 28 Oct 2022, UMWARI JOVIAL wrote:
 
-> Fixes: 016fca59f95f ("Merge branch 'icc-const' into icc-next")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> According to Linux kernel coding style.
+>
+> Reported by checkpatch:
+> WARNING: Unnecessary typecast of c90 int constant - '(int)2.412e8' could be '2.412e8'
+> WARNING: Unnecessary typecast of c90 int constant - '(int)2.487e8' could be '2.487e8'
+
+It's not ideal to just include the checkpatch messges verbatim in your log
+message.  It woudl be better to say what you are doing and why, in
+complete sentences ("According to the Linux coding style" is not a
+complete sentence).
+
+I also suspect that the checkpatch message is wrong.  Floating point
+numbers cannot be used in the kernel, and the case of the constant ensures
+that the value will be converted to an integer at compile time.
+
+julia
+
+>
+> Signed-off-by: UMWARI JOVIAL <umwarijovial@gmail.com>
 > ---
->   drivers/interconnect/qcom/sc7180.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/interconnect/qcom/sc7180.c b/drivers/interconnect/qcom/sc7180.c
-> index 35cd448efdfb..82d5e8a8c19e 100644
-> --- a/drivers/interconnect/qcom/sc7180.c
-> +++ b/drivers/interconnect/qcom/sc7180.c
-> @@ -369,7 +369,7 @@ static const struct qcom_icc_desc sc7180_gem_noc = {
->   	.num_bcms = ARRAY_SIZE(gem_noc_bcms),
->   };
->   
-> -static struct qcom_icc_bcm *mc_virt_bcms[] = {
-> +static struct qcom_icc_bcm * const mc_virt_bcms[] = {
->   	&bcm_acv,
->   	&bcm_mc0,
->   };
-
+>  drivers/staging/rtl8192e/rtllib_softmac_wx.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/staging/rtl8192e/rtllib_softmac_wx.c b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+> index fdf867a5dd7a..4fc4fb25d8d6 100644
+> --- a/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+> +++ b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+> @@ -41,8 +41,8 @@ int rtllib_wx_set_freq(struct rtllib_device *ieee, struct iw_request_info *a,
+>
+>  	/* if setting by freq convert to channel */
+>  	if (fwrq->e == 1) {
+> -		if ((fwrq->m >= (int)2.412e8 &&
+> -		     fwrq->m <= (int)2.487e8)) {
+> +		if ((fwrq->m >= 2.412e8 &&
+> +		     fwrq->m <= 2.487e8)) {
+>  			int f = fwrq->m / 100000;
+>  			int c = 0;
+>
+> --
+> 2.25.1
+>
+>
+>
