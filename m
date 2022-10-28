@@ -2,160 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2439D610794
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 04:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF392610769
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 03:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234916AbiJ1CBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 22:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
+        id S235762AbiJ1Bsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 21:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234920AbiJ1CBL (ORCPT
+        with ESMTP id S235168AbiJ1Bsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 22:01:11 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E0553A64
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 19:01:09 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id z17so2609810qkj.8
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 19:01:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VcEbkQyKWb0L/Kg+ZX5HS6lAAi/DowSIXYc8QAB2Kvg=;
-        b=ewKFgj2VXv+7hOe1fSACo9aaYnFrC2eObv3KKRwT6XZ2Y8AxykC0UNMzi9vkpu9asf
-         PeFG2R+MOYlyOHZ9so4lnwzQydIOI6jDJpLHlnXtGB1aUrnWoyrSl/Z5ISJjA4JsJ3/W
-         VqFv7fAXe1zS7aQudC4D3J/ScT/8shcfjDZ6Y9RKQmz6Jl7u6eXiTujTuUzm0b4hLPL+
-         BB1dVtEU2LVYc70hHo4KZgzmMCgvyX0qIuTbhHcZVRoDbfnxbd8htJ6HoqxBIRMVUTL1
-         YSv2LSD8Pd8P90+54refqhPmqqpPjKR/2EYMWhjMXI6HitC6/GWmMrr3m2oxYqUBX4bW
-         v1yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VcEbkQyKWb0L/Kg+ZX5HS6lAAi/DowSIXYc8QAB2Kvg=;
-        b=nPnCBTImaJuhsy7nUHYk5n+5IWxaIqajdy1MDhnjBiDmjOOvW66sPJoKQks9plV62Z
-         fi5Vk31kLO46zp8S/ZD4Jo4w07uvGUed9WskYoDG7gKtT+uBG9UyDKcPJhUZZ6J9RZYv
-         Aga6Kq9uqZW8Kc1EH+2pWr58COyxJQmkUJlEeVRN0wfWPYPZxyRavNgMU0FLp00l1iq1
-         xgvC5zS7lmnFLJUET16efDU7DF900d1oW/HaK8oJR9/4QJv3iqtWqe3PvLGcn4ZZqj77
-         viQ8RArUTrW8RT6poExuQTn+RSBezRpEQ9dIHDj8+eZwonjAQI1/HuTcrf6CmWE+n6pa
-         Ctmw==
-X-Gm-Message-State: ACrzQf2LZUyFiNeiicBIPhwHzJtmrUnnUZvNfNjia6MQIq2VskNkg9Yx
-        ZVsxaDu1D41uMONkCbrV77AXLA==
-X-Google-Smtp-Source: AMsMyM4d/n9swMkcWtvrJM2VCoFzwdy2vtmRKr+nsDpZ0zGmNvHHxuJUhYkQKjPr828IJ5kn0OOVMQ==
-X-Received: by 2002:a05:620a:254e:b0:6c9:cc85:c41a with SMTP id s14-20020a05620a254e00b006c9cc85c41amr37259351qko.260.1666922468461;
-        Thu, 27 Oct 2022 19:01:08 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id r22-20020ac84256000000b0039467aadeb8sm1449703qtm.13.2022.10.27.19.01.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 19:01:07 -0700 (PDT)
-Message-ID: <49f504a1-e7c3-ade7-b4b4-e7571125b992@linaro.org>
-Date:   Thu, 27 Oct 2022 22:01:05 -0400
+        Thu, 27 Oct 2022 21:48:37 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D62AA342;
+        Thu, 27 Oct 2022 18:48:36 -0700 (PDT)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mz52q1sX3zpWG9;
+        Fri, 28 Oct 2022 09:45:07 +0800 (CST)
+Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 28 Oct 2022 09:48:34 +0800
+Received: from localhost.localdomain (10.175.112.70) by
+ dggpeml500006.china.huawei.com (7.185.36.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 28 Oct 2022 09:48:34 +0800
+From:   Zhang Changzhong <zhangchangzhong@huawei.com>
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nimrod Andy <B38611@freescale.com>
+CC:     Zhang Changzhong <zhangchangzhong@huawei.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH net] net: fec: fix improper use of NETDEV_TX_BUSY
+Date:   Fri, 28 Oct 2022 10:09:11 +0800
+Message-ID: <1666922951-1645-1-git-send-email-zhangchangzhong@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [EXT] Re: [PATCH v8 1/2] dt-bindings: fsl-imx-sdma: Convert imx
- sdma to DT schema
-Content-Language: en-US
-To:     Joy Zou <joy.zou@nxp.com>, "vkoul@kernel.org" <vkoul@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>
-Cc:     "S.J. Wang" <shengjiu.wang@nxp.com>,
-        "martink@posteo.de" <martink@posteo.de>,
-        "dev@lynxeye.de" <dev@lynxeye.de>,
-        "alexander.stein@ew.tq-group.com" <alexander.stein@ew.tq-group.com>,
-        Peng Fan <peng.fan@nxp.com>, "david@ixit.cz" <david@ixit.cz>,
-        "aford173@gmail.com" <aford173@gmail.com>,
-        Hongxing Zhu <hongxing.zhu@nxp.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221025083609.2129260-1-joy.zou@nxp.com>
- <20221025083609.2129260-2-joy.zou@nxp.com>
- <133f27f4-d92c-ef8d-4fc9-32387518e4c0@linaro.org>
- <AM6PR04MB5925157A3A6F8ADB80371082E1339@AM6PR04MB5925.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <AM6PR04MB5925157A3A6F8ADB80371082E1339@AM6PR04MB5925.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500006.china.huawei.com (7.185.36.76)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/10/2022 23:01, Joy Zou wrote:
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: 2022年10月26日 22:59
->> To: Joy Zou <joy.zou@nxp.com>; vkoul@kernel.org; robh+dt@kernel.org;
->> krzysztof.kozlowski+dt@linaro.org; shawnguo@kernel.org;
->> s.hauer@pengutronix.de; kernel@pengutronix.de; festevam@gmail.com
->> Cc: S.J. Wang <shengjiu.wang@nxp.com>; martink@posteo.de;
->> dev@lynxeye.de; alexander.stein@ew.tq-group.com; Peng Fan
->> <peng.fan@nxp.com>; david@ixit.cz; aford173@gmail.com; Hongxing Zhu
->> <hongxing.zhu@nxp.com>; dl-linux-imx <linux-imx@nxp.com>;
->> dmaengine@vger.kernel.org; devicetree@vger.kernel.org;
->> linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
->> Subject: [EXT] Re: [PATCH v8 1/2] dt-bindings: fsl-imx-sdma: Convert imx sdma
->> to DT schema
->>
->> Caution: EXT Email
->>
->> On 25/10/2022 04:36, Joy Zou wrote:
->>> Convert the i.MX SDMA binding to DT schema format using json-schema.
->>>
->>> The compatibles fsl,imx31-to1-sdma, fsl,imx31-to2-sdma,
->>> fsl,imx35-to1-sdma and fsl,imx35-to2-sdma are not used. So need to
->>> delete it. The compatibles fsl,imx50-sdma, fsl,imx6sll-sdma and
->>> fsl,imx6sl-sdma are added. The original binding don't list all compatible used.
->>>
->>> In addition, add new peripheral types HDMI Audio.
->>>
->>> Signed-off-by: Joy Zou <joy.zou@nxp.com>
->>> ---
->>> Changes in v8:
->>> add the dma-controller quotes.
->>
->> Why adding quotes?
-> I refer to your comments in patch v7/1. The comment as follow:
-> +maintainers:
-> +  - Joy Zou <joy.zou@nxp.com>
-> +
-> You need to reference dma-controller.yaml schema.
+The ndo_start_xmit() method must not free skb when returning
+NETDEV_TX_BUSY, since caller is going to requeue freed skb.
 
-Yes, you need to reference dma-controller.yaml. Nothing about quotes.
-Reference is "$ref: .....yaml"
+Fix it by returning NETDEV_TX_OK in case of dma_map_single() fails.
 
+Fixes: 79f339125ea3 ("net: fec: Add software TSO support")
+Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+---
+ drivers/net/ethernet/freescale/fec_main.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> +properties:
-> +  compatible:
-> +    one of:
-> I misunderstand that add the dma-controller.yaml quotes. 
-
-There was nothing about quotes - ".
-
-> So I am a little confused. Now, I see.
-> should I add dma-common.yaml quotes but not the dma-controller?
-
-Just drop "
-
-https://en.wikipedia.org/wiki/Quotation_mark
-
-Best regards,
-Krzysztof
+diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
+index 28ef4d3..f623c12 100644
+--- a/drivers/net/ethernet/freescale/fec_main.c
++++ b/drivers/net/ethernet/freescale/fec_main.c
+@@ -713,7 +713,7 @@ fec_enet_txq_put_data_tso(struct fec_enet_priv_tx_q *txq, struct sk_buff *skb,
+ 		dev_kfree_skb_any(skb);
+ 		if (net_ratelimit())
+ 			netdev_err(ndev, "Tx DMA memory map failed\n");
+-		return NETDEV_TX_BUSY;
++		return NETDEV_TX_OK;
+ 	}
+ 
+ 	bdp->cbd_datlen = cpu_to_fec16(size);
+@@ -775,7 +775,7 @@ fec_enet_txq_put_hdr_tso(struct fec_enet_priv_tx_q *txq,
+ 			dev_kfree_skb_any(skb);
+ 			if (net_ratelimit())
+ 				netdev_err(ndev, "Tx DMA memory map failed\n");
+-			return NETDEV_TX_BUSY;
++			return NETDEV_TX_OK;
+ 		}
+ 	}
+ 
+-- 
+2.9.5
 
