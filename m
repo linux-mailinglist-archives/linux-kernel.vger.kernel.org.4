@@ -2,152 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E5D611D57
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D89D8611D59
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbiJ1WSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 18:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51092 "EHLO
+        id S230166AbiJ1WTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 18:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiJ1WSH (ORCPT
+        with ESMTP id S229571AbiJ1WTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 18:18:07 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB95224C967
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 15:18:06 -0700 (PDT)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4MzcPV0cgMzDqFC;
-        Fri, 28 Oct 2022 22:18:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1666995486; bh=o+QznyhV3hIjjr8HLNlww/g7V5QGQpu6+kYN6wHY96s=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mcMgNT5eZO9EjynIMSq4ViVA44gocxY8FJQDv1k6zofCNXOqWwXN7puzTam+FAfv8
-         NUEEGkWt7TiMRBPZTgPotOD8jW/1D6sA7bpdSmIBazi4+cFA0u7Sn/uq6K4lcTXjDo
-         hnG0eGof4NbG1ugrsqjGth9gKep6D/wufIZoK3Kk=
-X-Riseup-User-ID: 84B3480913F1F914D1A1C52E14951CFE0F8957CA37B981EE12A82DD8D2519D67
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4MzcPQ0pflz1yZp;
-        Fri, 28 Oct 2022 22:18:01 +0000 (UTC)
-From:   Arthur Grillo <arthurgrillo@riseup.net>
-To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>, andrealmeid@riseup.net,
-        melissa.srw@gmail.com, Arthur Grillo <arthurgrillo@riseup.net>,
-        =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>
-Subject: [PATCH v5] drm/tests: Add back seed value information
-Date:   Fri, 28 Oct 2022 19:17:54 -0300
-Message-Id: <20221028221755.340487-1-arthurgrillo@riseup.net>
+        Fri, 28 Oct 2022 18:19:09 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2FA24D891;
+        Fri, 28 Oct 2022 15:19:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1666995547;
+        bh=7fGGTJiBnBwoOzWOY+OrfZgCSiiHtsd/IqDjU+qNNFc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=uWts0J68AVvRNslRuA09DiQH4RNCub/3+XelVs/vnZ0uAKVzlZstImBPaJCGDAHpl
+         tok01SdDtXyY7fErphN0+DRQrUH3HL5LC259Oei+wcE8X3cAiGwupFjrl3mOfqr+F5
+         lxNWXK3MhGYdD3Fte2Ni6x80s1hYH2jHB5L4RwFql0AcwL5u+wTrNjjdw40qCLu4+J
+         rRBGsHu9/WvClWWuMrvVT6gK8s5sCyl7kxT4Taohh4BifxoshtBlsLgi7m2nLWPSnM
+         hWvn+V9LJvYIb53BiyH9JJOi2qDSFVh3usibd+acV7Ms1riKBgh/+8EfgmFuiv44+9
+         qmPDFVHCI2NVw==
+Received: from [172.16.0.156] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4MzcQg4GTGz16MQ;
+        Fri, 28 Oct 2022 18:19:07 -0400 (EDT)
+Message-ID: <a18e940d-8423-0294-23b4-f2702313f3eb@efficios.com>
+Date:   Fri, 28 Oct 2022 18:19:10 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [RFC PATCH 2/2] tracing/user_events: Fixup enable faults asyncly
+Content-Language: en-US
+To:     Beau Belgrave <beaub@linux.microsoft.com>, rostedt@goodmis.org,
+        mhiramat@kernel.org, dcook@linux.microsoft.com,
+        alanau@linux.microsoft.com
+Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221027224011.2075-1-beaub@linux.microsoft.com>
+ <20221027224011.2075-3-beaub@linux.microsoft.com>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20221027224011.2075-3-beaub@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As reported by Michał the drm_mm and drm_buddy unit tests lost the
-printk with seed value after they were refactored into KUnit.
+On 2022-10-27 18:40, Beau Belgrave wrote:
+> When events are enabled within the various tracing facilities, such as
+> ftrace/perf, the event_mutex is held. As events are enabled pages are
+> accessed. We do not want page faults to occur under this lock. Instead
+> queue the fault to a workqueue to be handled in a process context safe
+> way without the lock.
+> 
+> The enable address is disabled while the async fault-in occurs. This
+> ensures that we don't attempt fault-in more than is necessary. Once the
+> page has been faulted in, the address write is attempted again. If the
+> page couldn't fault-in, then we wait until the next time the event is
+> enabled to prevent any potential infinite loops.
 
-Add kunit_info with seed value information to assure reproducibility.
+I'm also unclear about how the system call initiating the enabled state 
+change is delayed (or not) when a page fault is queued.
 
-Reported-by: Michał Winiarski <michal.winiarski@intel.com>
-Signed-off-by: Arthur Grillo <arthurgrillo@riseup.net>
----
-v1->v2: https://lore.kernel.org/all/20221026211458.68432-1-arthurgrillo@riseup.net/
-- Correct compilation issues
-- Change tags order
-- Remove useless line change
-- Write commit message in imperative form
-- Remove redundant message part
-- Correct some grammars nits
-- Correct checkpatch issues
+I would expect that when a page fault is needed, after enqueuing work to 
+the worker thread, the system call initiating the state change would 
+somehow wait for a completion (after releasing the user events mutex). 
+That completion would be signaled by the worker thread either if the 
+page fault fails, or if the state change is done.
 
-v2->v3: https://lore.kernel.org/all/20221027142903.200169-1-arthurgrillo@riseup.net/
-- Change .init to .suite_init
-- Correct some grammars nits
+Thoughts ?
 
-v3->v4: https://lore.kernel.org/all/20221028141246.280079-1-arthurgrillo@riseup.net/
-- Correct compilation issues
+Thanks,
 
-v4->v5: https://lore.kernel.org/all/20221028141715.290903-1-arthurgrillo@riseup.net/
-- Change functions names from init_suite to suite_init
----
- drivers/gpu/drm/tests/drm_buddy_test.c | 6 ++++--
- drivers/gpu/drm/tests/drm_mm_test.c    | 8 ++++++--
- 2 files changed, 10 insertions(+), 4 deletions(-)
+Mathieu
 
-diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
-index 62f69589a72d..f8ee714df396 100644
---- a/drivers/gpu/drm/tests/drm_buddy_test.c
-+++ b/drivers/gpu/drm/tests/drm_buddy_test.c
-@@ -726,11 +726,13 @@ static void drm_test_buddy_alloc_limit(struct kunit *test)
- 	drm_buddy_fini(&mm);
- }
- 
--static int drm_buddy_init_test(struct kunit *test)
-+static int drm_buddy_suite_init(struct kunit_suite *suite)
- {
- 	while (!random_seed)
- 		random_seed = get_random_u32();
- 
-+	kunit_info(suite, "Testing DRM buddy manager, with random_seed=0x%x\n", random_seed);
-+
- 	return 0;
- }
- 
-@@ -746,7 +748,7 @@ static struct kunit_case drm_buddy_tests[] = {
- 
- static struct kunit_suite drm_buddy_test_suite = {
- 	.name = "drm_buddy",
--	.init = drm_buddy_init_test,
-+	.suite_init = drm_buddy_suite_init,
- 	.test_cases = drm_buddy_tests,
- };
- 
-diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
-index c4b66eeae203..89f12d3b4a21 100644
---- a/drivers/gpu/drm/tests/drm_mm_test.c
-+++ b/drivers/gpu/drm/tests/drm_mm_test.c
-@@ -2209,11 +2209,15 @@ static void drm_test_mm_color_evict_range(struct kunit *test)
- 	vfree(nodes);
- }
- 
--static int drm_mm_init_test(struct kunit *test)
-+static int drm_mm_suite_init(struct kunit_suite *suite)
- {
- 	while (!random_seed)
- 		random_seed = get_random_u32();
- 
-+	kunit_info(suite,
-+		   "Testing DRM range manager, with random_seed=0x%x max_iterations=%u max_prime=%u\n",
-+		   random_seed, max_iterations, max_prime);
-+
- 	return 0;
- }
- 
-@@ -2246,7 +2250,7 @@ static struct kunit_case drm_mm_tests[] = {
- 
- static struct kunit_suite drm_mm_test_suite = {
- 	.name = "drm_mm",
--	.init = drm_mm_init_test,
-+	.suite_init = drm_mm_suite_init,
- 	.test_cases = drm_mm_tests,
- };
- 
+> 
+> Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+> ---
+>   kernel/trace/trace_events_user.c | 125 ++++++++++++++++++++++++++++++-
+>   1 file changed, 121 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+> index 633f24c2a1ac..f1eb8101e053 100644
+> --- a/kernel/trace/trace_events_user.c
+> +++ b/kernel/trace/trace_events_user.c
+> @@ -81,11 +81,22 @@ struct user_event_enabler {
+>   	struct list_head link;
+>   	struct mm_struct *mm;
+>   	struct file *file;
+> +	refcount_t refcnt;
+>   	unsigned long enable_addr;
+>   	unsigned int enable_bit: 5,
+> -		     __reserved: 27;
+> +		     __reserved: 26,
+> +		     disabled: 1;
+>   };
+>   
+> +/* Used for asynchronous faulting in of pages */
+> +struct user_event_enabler_fault {
+> +	struct work_struct work;
+> +	struct user_event_enabler *enabler;
+> +	struct user_event *event;
+> +};
+> +
+> +static struct kmem_cache *fault_cache;
+> +
+>   /*
+>    * Stores per-event properties, as users register events
+>    * within a file a user_event might be created if it does not
+> @@ -236,6 +247,19 @@ static void user_event_enabler_destroy(struct user_event_enabler *enabler)
+>   	kfree(enabler);
+>   }
+>   
+> +static __always_inline struct user_event_enabler
+> +*user_event_enabler_get(struct user_event_enabler *enabler)
+> +{
+> +	refcount_inc(&enabler->refcnt);
+> +	return enabler;
+> +}
+> +
+> +static void user_event_enabler_put(struct user_event_enabler *enabler)
+> +{
+> +	if (refcount_dec_and_test(&enabler->refcnt))
+> +		user_event_enabler_destroy(enabler);
+> +}
+> +
+>   static void user_event_enabler_remove(struct file *file,
+>   				      struct user_event *user)
+>   {
+> @@ -249,13 +273,93 @@ static void user_event_enabler_remove(struct file *file,
+>   		if (enabler->file != file)
+>   			continue;
+>   
+> +		enabler->disabled = 0;
+>   		list_del(&enabler->link);
+> -		user_event_enabler_destroy(enabler);
+> +		user_event_enabler_put(enabler);
+>   	}
+>   
+>   	mutex_unlock(&event_mutex);
+>   }
+>   
+> +static void user_event_enabler_write(struct user_event_enabler *enabler,
+> +				     struct user_event *user);
+> +
+> +static void user_event_enabler_fault_fixup(struct work_struct *work)
+> +{
+> +	struct user_event_enabler_fault *fault = container_of(
+> +		work, struct user_event_enabler_fault, work);
+> +	struct user_event_enabler *enabler = fault->enabler;
+> +	struct user_event *user = fault->event;
+> +	struct mm_struct *mm = enabler->mm;
+> +	unsigned long uaddr = enabler->enable_addr;
+> +	bool unlocked = false;
+> +	int ret;
+> +
+> +	might_sleep();
+> +
+> +	mmap_read_lock(mm);
+> +
+> +	ret = fixup_user_fault(mm, uaddr, FAULT_FLAG_WRITE | FAULT_FLAG_REMOTE,
+> +			       &unlocked);
+> +
+> +	mmap_read_unlock(mm);
+> +
+> +	if (ret)
+> +		pr_warn("user_events: Fixup fault failed with %d "
+> +			"for mm: 0x%pK offset: 0x%llx event: %s\n", ret, mm,
+> +			(unsigned long long)uaddr, EVENT_NAME(user));
+> +
+> +	/* Prevent state changes from racing */
+> +	mutex_lock(&event_mutex);
+> +
+> +	/*
+> +	 * If we managed to get the page, re-issue the write. We do not
+> +	 * want to get into a possible infinite loop, which is why we only
+> +	 * attempt again directly if the page came in. If we couldn't get
+> +	 * the page here, then we will try again the next time the event is
+> +	 * enabled/disabled.
+> +	 */
+> +	enabler->disabled = 0;
+> +
+> +	if (!ret)
+> +		user_event_enabler_write(enabler, user);
+> +
+> +	mutex_unlock(&event_mutex);
+> +
+> +	refcount_dec(&user->refcnt);
+> +	user_event_enabler_put(enabler);
+> +	kmem_cache_free(fault_cache, fault);
+> +}
+> +
+> +static bool user_event_enabler_queue_fault(struct user_event_enabler *enabler,
+> +					   struct user_event *user)
+> +{
+> +	struct user_event_enabler_fault *fault;
+> +
+> +	fault = kmem_cache_zalloc(fault_cache, GFP_NOWAIT | __GFP_NOWARN);
+> +
+> +	if (!fault)
+> +		return false;
+> +
+> +	INIT_WORK(&fault->work, user_event_enabler_fault_fixup);
+> +	fault->enabler = user_event_enabler_get(enabler);
+> +	fault->event = user;
+> +
+> +	refcount_inc(&user->refcnt);
+> +	enabler->disabled = 1;
+> +
+> +	if (!schedule_work(&fault->work)) {
+> +		enabler->disabled = 0;
+> +		refcount_dec(&user->refcnt);
+> +		user_event_enabler_put(enabler);
+> +		kmem_cache_free(fault_cache, fault);
+> +
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+>   static void user_event_enabler_write(struct user_event_enabler *enabler,
+>   				     struct user_event *user)
+>   {
+> @@ -266,6 +370,11 @@ static void user_event_enabler_write(struct user_event_enabler *enabler,
+>   	void *kaddr;
+>   	int ret;
+>   
+> +	lockdep_assert_held(&event_mutex);
+> +
+> +	if (unlikely(enabler->disabled))
+> +		return;
+> +
+>   	mmap_read_lock(mm);
+>   
+>   	ret = pin_user_pages_remote(mm, uaddr, 1, FOLL_WRITE | FOLL_NOFAULT,
+> @@ -273,8 +382,10 @@ static void user_event_enabler_write(struct user_event_enabler *enabler,
+>   
+>   	mmap_read_unlock(mm);
+>   
+> -	if (ret <= 0) {
+> -		pr_warn("user_events: Enable write failed\n");
+> +	if (unlikely(ret <= 0)) {
+> +		if (!user_event_enabler_queue_fault(enabler, user))
+> +			pr_warn("user_events: Unable to queue fault handler\n");
+> +
+>   		return;
+>   	}
+>   
+> @@ -321,6 +432,7 @@ static struct user_event_enabler
+>   	enabler->file = file;
+>   	enabler->enable_addr = (unsigned long)reg->enable_addr;
+>   	enabler->enable_bit = reg->enable_bit;
+> +	refcount_set(&enabler->refcnt, 1);
+>   
+>   	/* Prevents state changes from racing with new enablers */
+>   	mutex_lock(&event_mutex);
+> @@ -1902,6 +2014,11 @@ static int __init trace_events_user_init(void)
+>   {
+>   	int ret;
+>   
+> +	fault_cache = KMEM_CACHE(user_event_enabler_fault, 0);
+> +
+> +	if (!fault_cache)
+> +		return -ENOMEM;
+> +
+>   	init_group = user_event_group_create(&init_user_ns);
+>   
+>   	if (!init_group)
+
 -- 
-2.37.3
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
