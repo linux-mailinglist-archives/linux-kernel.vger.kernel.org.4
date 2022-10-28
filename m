@@ -2,273 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF8B610AD2
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B23A610AD6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbiJ1G5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
+        id S229587AbiJ1G5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiJ1G45 (ORCPT
+        with ESMTP id S229441AbiJ1G51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:56:57 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5762AB803
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:56:53 -0700 (PDT)
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20221028065650epoutp04061486cb92ee26e8ebf36a7e3b21c280~iKUoOqeQT2418624186epoutp04M
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:56:50 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20221028065650epoutp04061486cb92ee26e8ebf36a7e3b21c280~iKUoOqeQT2418624186epoutp04M
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1666940210;
-        bh=f5AeGuQ91kgMx+p1pLQmTx7L0CdNWT5cP5Evk4stoEw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qiOWMybRgq3FJ9o9w2R71LGH7d1Ze2at/oTtYmhJ0DkXHgt4uHFIvtXONAV+vZmdk
-         Gh60NfM+QVNc+tut4ss5jxyRbIqK6KJYi5el90vtSSVmiVB5cfeqH/0WNknAdPV47J
-         VW6UuoxMnHdYYxL2mrXIT7oinC2d2cXzH7DI//cA=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20221028065649epcas1p1009eb03e96ba85836aecb846f22f40d4~iKUnmJrvD0386903869epcas1p1n;
-        Fri, 28 Oct 2022 06:56:49 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.38.235]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4MzCyS16qZz4x9Q7; Fri, 28 Oct
-        2022 06:56:48 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        21.45.07146.A2D7B536; Fri, 28 Oct 2022 15:56:42 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20221028065642epcas1p19a36e65931dc8e1a5fc56724c3852f40~iKUhLtIKI0604406044epcas1p1J;
-        Fri, 28 Oct 2022 06:56:42 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221028065642epsmtrp2f569670b38dc450cbde5b7e9ea32ffdf~iKUhKeoVO2721527215epsmtrp2g;
-        Fri, 28 Oct 2022 06:56:42 +0000 (GMT)
-X-AuditID: b6c32a35-47bfe70000021bea-a7-635b7d2a01d9
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        75.54.14392.A2D7B536; Fri, 28 Oct 2022 15:56:42 +0900 (KST)
-Received: from jiho-chu04.tn.corp.samsungelectronics.net (unknown
-        [10.113.112.236]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20221028065642epsmtip2583922363b8ea09946dcd287d6000d2e~iKUg3orPI0626306263epsmtip2h;
-        Fri, 28 Oct 2022 06:56:42 +0000 (GMT)
-Date:   Fri, 28 Oct 2022 15:56:42 +0900
-From:   Jiho Chu <jiho.chu@samsung.com>
-To:     Oded Gabbay <ogabbay@kernel.org>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
-Subject: Re: [RFC PATCH 3/3] drm: add dedicated minor for accelerator
- devices
-Message-Id: <20221028155642.460c2ece8a7abbfa52eb4539@samsung.com>
-In-Reply-To: <CAFCwf11kg-ZvYjEKf=VrvgvM03QZp7GejFhJ=gbCp4up++4h2w@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Tf1CTdRzH77tnezY07GFofKOC+aDnwTW2yQZfPfA0PXs6uZgZpdVJazwB
-        N9jmnqH8qOSn8dMYYSIHhgRBJBFzLBg/7OBOEpEE50UkIXcpify04MQ5a+OR7L/35/N9fb7v
-        7+fzua8AE+bxfQUJWiNt0KoSSXwN19obKBFLPn5XLV0oFKOffqnhoC9udvCQs/QSH/1jNWHI
-        nnuah+yLczjK/qoZR1dKXEjZoJOH/jaX4Mj+uBOglts1fDRX2IGh5U8tHHTdVomjcwutXJSZ
-        PYKhE/lf81B30QJAA+ceYKjvcRqyTJtcd04qd/pQTQvjPCp32IlTjoelgJobyeVTXUvVXOrP
-        RStGtVeM8akLDUGUuTEfp85e3k9drDrPp8YL+zhUcfYsTpk6P6FOWhoBdeFKulL4jiY8nlbF
-        0gYRrVXrYhO0cRHkvgMxu2MUoVKZWLYNhZEirSqJjiD3RCrFexMSXYMgRUdVicmulFLFMKRk
-        R7hBl2ykRfE6xhhB0vrYRL1CH8yokphkbVywljZul0mlWxUu8H1N/PKZVo7+mjjl5ugNfga4
-        JCoAHgJIyKHdMQEKwBqBkGgD8PfF1eA+gINDWTgbLAFYv9jPWy2xjnTx2IMuAE/3XeWyQR4H
-        tg11r1BcYjOss90Bbo279Jny8/wCIBCsJzbBoTq5m8eIeRxOt5ziufPeRBS0dcnduCexCzZn
-        WTG39iD2w+mZaQ5rjOBYUcMK7kl4QWebtzuNEf7wh5lKjEU6PKC5NcCNQGIPLLilZ9PecKrP
-        wme1L/xrtgtntQaW5dVwWa2Hg5OtGFsaAocaYt0SIwJhs03CEhthu6MKsKbr4OxiEY+lPWHe
-        CSGLkLD2Ue8TIwhPlS89eToFxwe+WzFyjZkDJy8TJUBU8bSTiv91UvHUtxpgjeA5Ws8kxdGM
-        TC/7b7dqXZIZrHyJIEUbMM3MB/cAjgD0ACjAyPWeV0feVgs9Y1WpabRBF2NITqSZHqBwbcWE
-        +W5Q61x/SmuMkcm3SeWhW0PkSBYqI308M8qD1EIiTmWkNTStpw2rdRyBh28GJ/MDx+Sj6PRj
-        f7yxOcQR5lUaF3KLa2l86G2zN5yVH1N+fiPnaGoC4//z8Icpd6kXuz77yDzxZnH5RclI//KX
-        r/4ICqtHi7YsjO0zWsx6+VTBM+JNv5qjo5r8pmqfrxd0Kw/dS2/7dsr2fUsoXRuUdaikKqDe
-        1n/krSxrddrxKq+XXtOFxy71wTv3f+vNUpWV1OZrd5OVnRHD1ZKA+uBgTXHIC8cjMfthrmi+
-        Tvys5N5hcufLvDTSakySDftnTmxUTO3YFTBoMh4ZeN3Z/l7ggbBMpS8e6ePXet1RePda5Tc5
-        Gw4O1DXd9lsrcAJNQudo6va1J9f1bjn4SnROinSc8YlqeMCQXCZeJQvCDIzqX7MY016bBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDIsWRmVeSWpSXmKPExsWy7bCSvK5WbXSywarzMhYnri9isph2Zzer
-        xd9Jx9gt/m+byGxxpXU6q8WVr+/ZLJoXr2ezOD0BqGTKub+sFl82TWCzuPJvD6PFxqeL2C3e
-        d+9mtvjZvoXJ4vKuOWwWCz9uZbFobL7BbNHWuYzVYl/PR0aLMwt/MFsc/1dlseXNRKCZzwMc
-        xD3WfrzP6tF66S+bx+9fkxg93t9oZffY+20Bi8eLr9uYPXbOusvusXmFlsemVZ1sHvNOBnrs
-        n7uG3eN+93Emj97md2weE/fUefRtWcXosfl0dYBQFJdNSmpOZllqkb5dAlfGz5lbmQou6Fbc
-        uXWVvYHxmEIXIyeHhICJxLYbe1lBbCGB3YwSa6ZyQcQlJDbdW87cxcgBZAtLHD5c3MXIBVTS
-        xiSxs+MmM0gNi4CqxNJdzxhBbDYge+aMNewg9SICKhIXl5qA1DMLfGCT2Ld9JitIXFjAX2LX
-        XhOQcl4BR4n1TdvAxnAKBEq8efuGCeKEHUwSz08KQJxgIXG3ZwVYK6+AoMTfHcIgYWYBLYmH
-        v26xQNjyEtvfzmGewCg4C6FqFpKqWUiqFjAyr2KUTC0ozk3PLTYsMMxLLdcrTswtLs1L10vO
-        z93ECE4AWpo7GLev+qB3iJGJg/EQowQHs5II79kb4clCvCmJlVWpRfnxRaU5qcWHGKU5WJTE
-        eS90nYwXEkhPLEnNTk0tSC2CyTJxcEo1MFWHHs2d9pVrsuFO68N7a89bn0ju+/Fxy/9vZ42a
-        Vhnx2Ditbru5tdNR5clvYz+1DTvmnIkILlbvFN4o8GPvJo2/pWErH83Vv7D777v9mpXfprb3
-        c64QnWIh9FAkRPjOpsdrzlp88F1+WoHnY5U4f9i7+3Wvch+4T+FSl2DWN5BKOh4n0eLrW8sQ
-        Lnn/Z6PkEd1jeaHSZjwfZOUmxbU/nd0XFbLz5O8DnF/8Sh089FI0Tm+7rWr+iu3UI8fUj95F
-        mossRTea6l3d+/jDxmSNp2EPLwtefaZnuTR/9+bu6sWB+YePNF1Q7U++lBn02v1r7X/vBuWy
-        tt1S6dskF93aK37MIWOtWJvDkpn3D838b6bEUpyRaKjFXFScCABeoe+0bwMAAA==
-X-CMS-MailID: 20221028065642epcas1p19a36e65931dc8e1a5fc56724c3852f40
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221022214657epcas1p18a2625c84cd6470b5404cb71f9836cc8
-References: <20221022214622.18042-1-ogabbay@kernel.org>
-        <CGME20221022214657epcas1p18a2625c84cd6470b5404cb71f9836cc8@epcas1p1.samsung.com>
-        <20221022214622.18042-4-ogabbay@kernel.org>
-        <20221025154330.a3a839357363da6d5de96c89@samsung.com>
-        <CAFCwf11kg-ZvYjEKf=VrvgvM03QZp7GejFhJ=gbCp4up++4h2w@mail.gmail.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 28 Oct 2022 02:57:27 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8024E16D89A;
+        Thu, 27 Oct 2022 23:57:25 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8DxvrdTfVtj3wkDAA--.6717S3;
+        Fri, 28 Oct 2022 14:57:23 +0800 (CST)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxiFdOfVtjsjkGAA--.3812S2;
+        Fri, 28 Oct 2022 14:57:19 +0800 (CST)
+Subject: Re: [PATCH v8 1/2] thermal: loongson-2: add thermal management
+ support
+To:     kernel test robot <lkp@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        zhuyinbo@loongson.cn, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+References: <20221028013532.10361-1-zhuyinbo@loongson.cn>
+ <202210281326.Wv56U0Zw-lkp@intel.com>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <53b1516b-ec53-dc03-fc23-f3d8014e7d55@loongson.cn>
+Date:   Fri, 28 Oct 2022 14:57:17 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <202210281326.Wv56U0Zw-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxiFdOfVtjsjkGAA--.3812S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3Jr18ZF17trykKr47uw45KFg_yoWxCw4rpa
+        y5Jas8GrZ7Xr1DZ3WUA3y8Ar4Dtr13tasrZr4xGw15ArWrX34agFy8JF15urWIkF98KFyj
+        vr90gFWY93Z8XrJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
+        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU8jXdUUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Oct 2022 09:38:13 +0300
-Oded Gabbay <ogabbay@kernel.org> wrote:
 
-> On Tue, Oct 25, 2022 at 9:43 AM Jiho Chu <jiho.chu@samsung.com> wrote:
-> >
-> >
-> > On Sun, 23 Oct 2022 00:46:22 +0300
-> > Oded Gabbay <ogabbay@kernel.org> wrote:
-> >
-> > > diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
-> > > index b58ffb1433d6..c13701a8d4be 100644
-> > > --- a/drivers/gpu/drm/drm_drv.c
-> > > +++ b/drivers/gpu/drm/drm_drv.c
-> > > @@ -56,6 +56,9 @@ MODULE_LICENSE("GPL and additional rights");
-> > >  static DEFINE_SPINLOCK(drm_minor_lock);
-> > >  static struct idr drm_minors_idr;
-> > >
-> > > +static DEFINE_SPINLOCK(accel_minor_lock);
-> > > +static struct idr accel_minors_idr;
-> > > +
-> > >  /*
-> > >   * If the drm core fails to init for whatever reason,
-> > >   * we should prevent any drivers from registering with it.
-> > > @@ -94,6 +97,8 @@ static struct drm_minor **drm_minor_get_slot(struct drm_device *dev,
-> > >               return &dev->primary;
-> > >       case DRM_MINOR_RENDER:
-> > >               return &dev->render;
-> > > +     case DRM_MINOR_ACCEL:
-> > > +             return &dev->accel;
-> > >       default:
-> > >               BUG();
-> > >       }
-> > > @@ -108,9 +113,15 @@ static void drm_minor_alloc_release(struct drm_device *dev, void *data)
-> > >
-> > >       put_device(minor->kdev);
-> > >
-> > > -     spin_lock_irqsave(&drm_minor_lock, flags);
-> > > -     idr_remove(&drm_minors_idr, minor->index);
-> > > -     spin_unlock_irqrestore(&drm_minor_lock, flags);
-> > > +     if (minor->type == DRM_MINOR_ACCEL) {
-> > > +             spin_lock_irqsave(&accel_minor_lock, flags);
-> > > +             idr_remove(&accel_minors_idr, minor->index);
-> > > +             spin_unlock_irqrestore(&accel_minor_lock, flags);
-> > > +     } else {
-> > > +             spin_lock_irqsave(&drm_minor_lock, flags);
-> > > +             idr_remove(&drm_minors_idr, minor->index);
-> > > +             spin_unlock_irqrestore(&drm_minor_lock, flags);
-> > > +     }
-> > >  }
-> > >
-> > >  static int drm_minor_alloc(struct drm_device *dev, unsigned int type)
-> > > @@ -127,13 +138,23 @@ static int drm_minor_alloc(struct drm_device *dev, unsigned int type)
-> > >       minor->dev = dev;
-> > >
-> > >       idr_preload(GFP_KERNEL);
-> > > -     spin_lock_irqsave(&drm_minor_lock, flags);
-> > > -     r = idr_alloc(&drm_minors_idr,
-> > > -                   NULL,
-> > > -                   64 * type,
-> > > -                   64 * (type + 1),
-> > > -                   GFP_NOWAIT);
-> > > -     spin_unlock_irqrestore(&drm_minor_lock, flags);
-> > > +     if (type == DRM_MINOR_ACCEL) {
-> > > +             spin_lock_irqsave(&accel_minor_lock, flags);
-> > > +             r = idr_alloc(&accel_minors_idr,
-> > > +                     NULL,
-> > > +                     64 * (type - DRM_MINOR_ACCEL),
-> > > +                     64 * (type - DRM_MINOR_ACCEL + 1),
-> > > +                     GFP_NOWAIT);
-> > > +             spin_unlock_irqrestore(&accel_minor_lock, flags);
-> > > +     } else {
-> > > +             spin_lock_irqsave(&drm_minor_lock, flags);
-> > > +             r = idr_alloc(&drm_minors_idr,
-> > > +                     NULL,
-> > > +                     64 * type,
-> > > +                     64 * (type + 1),
-> > > +                     GFP_NOWAIT);
-> > > +             spin_unlock_irqrestore(&drm_minor_lock, flags);
-> > > +     }
-> >
-> > Hi,
-> > There are many functions which checks drm type and decides its behaviors. It's good to
-> > re-use exiting codes, but accel devices use totally different major/minor, and so it needs to be moved to
-> > /drvier/accel/ (maybe later..). How about seperating functions for alloc/release minor (accel_minor_alloc..)?
-> > also, for others which have drm type related codes.
-> My feeling was moving the minor code handling to a different file (in
-> addition to moving the major code handling) will cause too much
-> duplication.
-> My main theme is that an accel minor is another minor in drm, even if
-> a bit different. i.e. It uses the same drm_minor structure.
-> The driver declares he wants to use this minor using a drm driver feature flag.
-> imo, all of that indicates the code should be inside drm.
-> >
-> >
-> >
-> >
-> > > @@ -607,6 +652,14 @@ static int drm_dev_init(struct drm_device *dev,
-> > >       /* no per-device feature limits by default */
-> > >       dev->driver_features = ~0u;
-> > >
-> > > +     if (drm_core_check_feature(dev, DRIVER_COMPUTE_ACCEL) &&
-> > > +                             (drm_core_check_feature(dev, DRIVER_RENDER) ||
-> > > +                             drm_core_check_feature(dev, DRIVER_MODESET))) {
-> > > +
-> > > +             DRM_ERROR("DRM driver can't be both a compute acceleration and graphics driver\n");
-> > > +             return -EINVAL;
-> > > +     }
-> > > +
-> >
-> > It's fine for the device only for acceleration, but can't graphic devices have acceleration feature?
-> Of course they can :) In that case, and if they want to expose an
-> accel device char, they should write an accel driver and connect it to
-> their main graphics driver via auxiliary bus.
+
+在 2022/10/28 下午1:55, kernel test robot 写道:
+> Hi Yinbo,
 > 
-> I could have added two flags - compute_accel, and compute_accel_only
-> (similar to a patch that was sent to add render only flag), but imo it
-> would make the code more convoluted. I prefer the clean separation and
-> using standard auxiliary bus.
+> I love your patch! Perhaps something to improve:
 > 
-> Thanks,
-> Oded
+> [auto build test WARNING on rafael-pm/thermal]
+> [also build test WARNING on linus/master v6.1-rc2 next-20221027]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/thermal-loongson-2-add-thermal-management-support/20221028-093603
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+> patch link:    https://lore.kernel.org/r/20221028013532.10361-1-zhuyinbo%40loongson.cn
+> patch subject: [PATCH v8 1/2] thermal: loongson-2: add thermal management support
+> config: sparc-allyesconfig
+> compiler: sparc64-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/d94e01f4aefe4c0ab05babe101f0a0ce53165456
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Yinbo-Zhu/thermal-loongson-2-add-thermal-management-support/20221028-093603
+>          git checkout d94e01f4aefe4c0ab05babe101f0a0ce53165456
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/thermal/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>     drivers/thermal/loongson2_thermal.c:136:21: error: variable 'loongson2_of_thermal_ops' has initializer but incomplete type
+>       136 | static const struct thermal_zone_of_device_ops loongson2_of_thermal_ops = {
+>           |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>     drivers/thermal/loongson2_thermal.c:137:10: error: 'const struct thermal_zone_of_device_ops' has no member named 'get_temp'
+>       137 |         .get_temp = loongson2_thermal_get_temp,
+>           |          ^~~~~~~~
+>>> drivers/thermal/loongson2_thermal.c:137:21: warning: excess elements in struct initializer
+>       137 |         .get_temp = loongson2_thermal_get_temp,
+>           |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>     drivers/thermal/loongson2_thermal.c:137:21: note: (near initialization for 'loongson2_of_thermal_ops')
+>     drivers/thermal/loongson2_thermal.c:138:10: error: 'const struct thermal_zone_of_device_ops' has no member named 'set_trips'
+>       138 |         .set_trips = loongson2_thermal_set_trips,
+>           |          ^~~~~~~~~
+>     drivers/thermal/loongson2_thermal.c:138:22: warning: excess elements in struct initializer
+>       138 |         .set_trips = loongson2_thermal_set_trips,
+>           |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>     drivers/thermal/loongson2_thermal.c:138:22: note: (near initialization for 'loongson2_of_thermal_ops')
+>     drivers/thermal/loongson2_thermal.c: In function 'loongson2_thermal_probe':
+>     drivers/thermal/loongson2_thermal.c:177:21: error: implicit declaration of function 'devm_thermal_zone_of_sensor_register'; did you mean 'devm_thermal_of_zone_register'? [-Werror=implicit-function-declaration]
+>       177 |         data->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
+>           |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>           |                     devm_thermal_of_zone_register
+>>> drivers/thermal/loongson2_thermal.c:177:19: warning: assignment to 'struct thermal_zone_device *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+>       177 |         data->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
+>           |                   ^
+>     drivers/thermal/loongson2_thermal.c: At top level:
+>     drivers/thermal/loongson2_thermal.c:136:48: error: storage size of 'loongson2_of_thermal_ops' isn't known
+>       136 | static const struct thermal_zone_of_device_ops loongson2_of_thermal_ops = {
+>           |                                                ^~~~~~~~~~~~~~~~~~~~~~~~
+>     cc1: some warnings being treated as errors
+> 
+> 
+> vim +137 drivers/thermal/loongson2_thermal.c
+> 
+>     135	
+>     136	static const struct thermal_zone_of_device_ops loongson2_of_thermal_ops = {
+>   > 137		.get_temp = loongson2_thermal_get_temp,
+>     138		.set_trips = loongson2_thermal_set_trips,
+>     139	};
+>     140	
+>     141	static int loongson2_thermal_probe(struct platform_device *pdev)
+>     142	{
+>     143		struct device *dev = &pdev->dev;
+>     144		struct resource *res;
+>     145		struct loongson2_thermal_data *data;
+>     146		int ret;
+>     147	
+>     148		data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>     149		if (!data)
+>     150			return -ENOMEM;
+>     151	
+>     152		data->pdev = pdev;
+>     153		platform_set_drvdata(pdev, data);
+>     154	
+>     155		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>     156		data->regs = devm_ioremap(dev, res->start, resource_size(res));
+>     157		if (IS_ERR(data->regs))
+>     158			return PTR_ERR(data->regs);
+>     159	
+>     160		/* get irq */
+>     161		data->irq = platform_get_irq(pdev, 0);
+>     162		if (data->irq < 0)
+>     163			return data->irq;
+>     164	
+>     165		/* get id */
+>     166		data->id = loongson2_thermal_get_sensor_id();
+>     167		if (data->id > LOONGSON2_SOC_MAX_SENSOR_NUM - 1 || data->id < 0) {
+>     168			dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
+>     169					LOONGSON2_SOC_MAX_SENSOR_NUM - 1);
+>     170			return -EINVAL;
+>     171		}
+>     172	
+>     173		writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
+>     174	
+>     175		loongson2_thermal_set(data, 0, 0, false);
+>     176	
+>   > 177		data->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
+>     178								   data->id, data,
+>     179								   &loongson2_of_thermal_ops);
+>     180		if (IS_ERR(data->tzd)) {
+>     181			ret = PTR_ERR(data->tzd);
+>     182			data->tzd = NULL;
+>     183			dev_err(&pdev->dev, "failed to register %d\n", ret);
+>     184			return ret;
+>     185		}
+>     186	
+>     187		ret = devm_request_threaded_irq(dev, data->irq,
+>     188				loongson2_thermal_alarm_irq, loongson2_thermal_irq_thread,
+>     189				IRQF_ONESHOT, "loongson2_thermal", data);
+>     190		if (ret < 0) {
+>     191			dev_err(dev, "failed to request alarm irq: %d\n", ret);
+>     192			return ret;
+>     193		}
+>     194	
+>     195		/*
+>     196		 * Thermal_zone doesn't enable hwmon as default,
+>     197		 * enable it here
+>     198		 */
+>     199		data->tzd->tzp->no_hwmon = false;
+>     200		ret = thermal_add_hwmon_sysfs(data->tzd);
+>     201		if (ret) {
+>     202			dev_err(dev, "failed to add hwmon sysfs interface %d\n", ret);
+>     203			return ret;
+>     204		}
+>     205	
+>     206		return 0;
+>     207	}Hi
 
-I understood. Seperation would be good as you mentioned in other mail.
-This subsystem would be better choice for acceleration only devices, who need some features
-of drm, but deoesnot want to include whole graphics related considerations.
-I'll prepare Samsung's NPU driver using this after your reference driver is presented (maybe habana').
+I use W=1 to compile it and doesn't reproduce that warning, and I added
+the change that don't touch .c code. I think it shoud be error report.
 
-Thanks.
-Jiho Chu
-
+Tks
+Yinbo
+>     208	
+> 
 
