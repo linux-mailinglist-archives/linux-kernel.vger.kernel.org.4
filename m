@@ -2,176 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A59611577
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 135E661157F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbiJ1PGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 11:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50580 "EHLO
+        id S229661AbiJ1PGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 11:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiJ1PFy (ORCPT
+        with ESMTP id S229755AbiJ1PGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:05:54 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2921BC152
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:05:53 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1ooQvb-0005o4-9u; Fri, 28 Oct 2022 17:05:47 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1ooQva-0002bp-U5; Fri, 28 Oct 2022 17:05:46 +0200
-Date:   Fri, 28 Oct 2022 17:05:46 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de,
-        devicetree@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        kernel@pengutronix.de, festevam@gmail.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH V2 12/15] arm64: dts: imx8mn-evk: enable usdhc1
-Message-ID: <20221028150546.cavkbayw6jakd2d6@pengutronix.de>
-References: <20221024031351.4135651-1-peng.fan@oss.nxp.com>
- <20221024031351.4135651-13-peng.fan@oss.nxp.com>
+        Fri, 28 Oct 2022 11:06:36 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED04203574
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:06:30 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id y16so6932312wrt.12
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:06:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/1Bni2amD0jAR8XTAOGCUubFB4RfYi0aSzsPqrZfAy0=;
+        b=HkO6OxN6qsix7ydLktv9/mCo31nYQGtwB2WYmbr6zkVjf33/wGMKE91v0wcCP2ltjp
+         h5XPSN0oWx1x7mf5ppIwtq4BnT5hwpr/Rz6MqBxXz+EWiTLC8vjANXLkyAmCVDBLu9u8
+         TaeuZS4YHn/uq8AUrrRKbtX8MZIHpVMEK6P/0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/1Bni2amD0jAR8XTAOGCUubFB4RfYi0aSzsPqrZfAy0=;
+        b=aTNtKRsCNvEaXTDVj9B5Sp5mf7lQmXs0bOJ0k94JdEbuUXNnPZVEHbS3mVPUx7TqxY
+         8gurTtE8HgqtKHD5B634/CyZxY5VR1zBzIY01Xc6er7LBShCbzDhcvJcCO47kCIB0/+b
+         tMyp9GVwhuo1iClsAoMWNxjFOGTz+SD13q8kk1T/jCckopIMnysnNGAexYMCvEmAeCm3
+         jJm6dsG5lpGY8fs2hpsF4qd1k3Myg/oK+WLrCQcxabNDgtVefAEbV4+vnYThqnChRHN4
+         4Jqj3vhgO1Umr9s/uBn5Xf4sfBF3ji+TW6LmptsWCptz6KuzBh1eFYsqpGDKBwuRzKS6
+         JRRw==
+X-Gm-Message-State: ACrzQf1Aub2wKIr2FdslD3gGoxVSk/VQwCsSRgRkggj5xm6xBrKHW72j
+        dZo3bf50WVZIQ6rvx1qfo4Qstg==
+X-Google-Smtp-Source: AMsMyM549Vj2K2MQt/E/1QlxV19rVfi086Dk5jtlJRWE0kj89yeiwtVyzMwbiIdHy8BW1WmAFNGWPg==
+X-Received: by 2002:a05:6000:54e:b0:236:5818:d432 with SMTP id b14-20020a056000054e00b002365818d432mr24648306wrf.37.1666969589179;
+        Fri, 28 Oct 2022 08:06:29 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-54-207.cust.vodafonedsl.it. [188.217.54.207])
+        by smtp.gmail.com with ESMTPSA id h8-20020adffa88000000b0023538fb27c1sm3908096wrr.85.2022.10.28.08.06.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 08:06:28 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 17:06:26 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        linux-media@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: dvb-core: remove variable n, turn for-loop to
+ while-loop
+Message-ID: <20221028150626.GA165737@tom-ThinkPad-T14s-Gen-2i>
+References: <20221024142954.2162920-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221024031351.4135651-13-peng.fan@oss.nxp.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221024142954.2162920-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-10-24, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Enable usdhc1 for wlan usage, the wifi device node not included.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
-> index f137eb406c24..50553359401f 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
-> @@ -28,6 +28,13 @@ memory@40000000 {
->  		reg = <0x0 0x40000000 0 0x80000000>;
->  	};
->  
-> +	usdhc1_pwrseq: usdhc1_pwrseq {
-> +		compatible = "mmc-pwrseq-simple";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_usdhc1_gpio>;
-> +		reset-gpios = <&gpio2 10 GPIO_ACTIVE_LOW>;
-> +	};
-> +
->  	reg_usdhc2_vmmc: regulator-usdhc2 {
->  		compatible = "regulator-fixed";
->  		pinctrl-names = "default";
-> @@ -271,6 +278,22 @@ &uart3 {
->  	status = "okay";
->  };
->  
-> +&usdhc1 {
-> +	#address-cells = <1>;
-> +	#size-cells = <0>;
+Hi Colin,
 
-Nit: it is rather uncommon, to place it on-top if you have more than
-these two properties to add.
+On Mon, Oct 24, 2022 at 03:29:54PM +0100, Colin Ian King wrote:
+> Variable n is just being incremented and it's never used
+> anywhere else. The variable and the increment are redundant so
+> remove it. This allows the for-loop to be replaced with a
+> while-loop.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/media/dvb-core/dvb_demux.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
+> index 83cc32ad7e12..398c86279b5b 100644
+> --- a/drivers/media/dvb-core/dvb_demux.c
+> +++ b/drivers/media/dvb-core/dvb_demux.c
+> @@ -233,7 +233,7 @@ static int dvb_dmx_swfilter_section_copy_dump(struct dvb_demux_feed *feed,
+>  {
+>  	struct dvb_demux *demux = feed->demux;
+>  	struct dmx_section_feed *sec = &feed->feed.sec;
+> -	u16 limit, seclen, n;
+> +	u16 limit, seclen;
+>  
+>  	if (sec->tsfeedp >= DMX_MAX_SECFEED_SIZE)
+>  		return 0;
+> @@ -262,7 +262,7 @@ static int dvb_dmx_swfilter_section_copy_dump(struct dvb_demux_feed *feed,
+>  	/* to be sure always set secbuf */
+>  	sec->secbuf = sec->secbuf_base + sec->secbufp;
+>  
+> -	for (n = 0; sec->secbufp + 2 < limit; n++) {
+> +	while (sec->secbufp + 2 < limit) {
+>  		seclen = section_length(sec->secbuf);
+>  		if (seclen <= 0 || seclen > DMX_MAX_SECTION_SIZE
+>  		    || seclen + sec->secbufp > limit)
+> -- 
+> 2.37.3
+> 
+
+Looks good to me.
+We save some space into function stack :)
+
+Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 
 Regards,
-  Marco
+Tommaso
 
-> +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-> +	pinctrl-0 = <&pinctrl_usdhc1>, <&pinctrl_wlan>;
-> +	pinctrl-1 = <&pinctrl_usdhc1_100mhz>, <&pinctrl_wlan>;
-> +	pinctrl-2 = <&pinctrl_usdhc1_200mhz>, <&pinctrl_wlan>;
-> +	bus-width = <4>;
-> +	keep-power-in-suspend;
-> +	non-removable;
-> +	wakeup-source;
-> +	fsl,sdio-async-interrupt-enabled;
-> +	mmc-pwrseq = <&usdhc1_pwrseq>;
-> +	status = "okay";
-> +};
-> +
->  &usbotg1 {
->  	dr_mode = "otg";
->  	hnp-disable;
-> @@ -474,6 +497,45 @@ MX8MN_IOMUXC_ECSPI1_MISO_UART3_DCE_CTS_B	0x140
->  		>;
->  	};
->  
-> +	pinctrl_usdhc1_gpio: usdhc1grpgpio {
-> +		fsl,pins = <
-> +			MX8MN_IOMUXC_SD1_RESET_B_GPIO2_IO10	0x41
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc1: usdhc1grp {
-> +		fsl,pins = <
-> +			MX8MN_IOMUXC_SD1_CLK_USDHC1_CLK		0x190
-> +			MX8MN_IOMUXC_SD1_CMD_USDHC1_CMD		0x1d0
-> +			MX8MN_IOMUXC_SD1_DATA0_USDHC1_DATA0	0x1d0
-> +			MX8MN_IOMUXC_SD1_DATA1_USDHC1_DATA1	0x1d0
-> +			MX8MN_IOMUXC_SD1_DATA2_USDHC1_DATA2	0x1d0
-> +			MX8MN_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d0
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc1_100mhz: usdhc1grp100mhz {
-> +		fsl,pins = <
-> +			MX8MN_IOMUXC_SD1_CLK_USDHC1_CLK		0x194
-> +			MX8MN_IOMUXC_SD1_CMD_USDHC1_CMD		0x1d4
-> +			MX8MN_IOMUXC_SD1_DATA0_USDHC1_DATA0	0x1d4
-> +			MX8MN_IOMUXC_SD1_DATA1_USDHC1_DATA1	0x1d4
-> +			MX8MN_IOMUXC_SD1_DATA2_USDHC1_DATA2	0x1d4
-> +			MX8MN_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d4
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc1_200mhz: usdhc1grp200mhz {
-> +		fsl,pins = <
-> +			MX8MN_IOMUXC_SD1_CLK_USDHC1_CLK		0x196
-> +			MX8MN_IOMUXC_SD1_CMD_USDHC1_CMD		0x1d6
-> +			MX8MN_IOMUXC_SD1_DATA0_USDHC1_DATA0	0x1d6
-> +			MX8MN_IOMUXC_SD1_DATA1_USDHC1_DATA1	0x1d6
-> +			MX8MN_IOMUXC_SD1_DATA2_USDHC1_DATA2	0x1d6
-> +			MX8MN_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d6
-> +		>;
-> +	};
-> +
->  	pinctrl_usdhc2_gpio: usdhc2gpiogrp {
->  		fsl,pins = <
->  			MX8MN_IOMUXC_GPIO1_IO15_GPIO1_IO15	0x1c4
-> @@ -569,4 +631,11 @@ pinctrl_wdog: wdoggrp {
->  			MX8MN_IOMUXC_GPIO1_IO02_WDOG1_WDOG_B		0x166
->  		>;
->  	};
-> +
-> +	pinctrl_wlan: wlangrp {
-> +		fsl,pins = <
-> +			MX8MN_IOMUXC_GPIO1_IO00_ANAMIX_REF_CLK_32K	0x141
-> +			MX8MN_IOMUXC_SD1_DATA7_GPIO2_IO9		0x159
-> +		>;
-> +	};
->  };
-> -- 
-> 2.37.1
-> 
-> 
-> 
+
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com
