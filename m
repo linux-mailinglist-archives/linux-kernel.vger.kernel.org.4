@@ -2,221 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C642611E34
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 01:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B64E611E3F
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 01:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiJ1Xkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 19:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
+        id S229909AbiJ1Xpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 19:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiJ1Xkn (ORCPT
+        with ESMTP id S229889AbiJ1Xpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 19:40:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A95A71706
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:40:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B035262AD8
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 23:40:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5141EC433D6;
-        Fri, 28 Oct 2022 23:40:39 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="PB+weiRE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1667000437;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=cp1Xr1b0al/fXFCbuvHhFS7yT6OAQVKZYDYFdLMcyIc=;
-        b=PB+weiREJSJgZVfkz58SPQiIAV1W8QU2tt8R107aoTX7yo+d9d/uWKMtINVzQoODHODEna
-        U5yRE23sBGGxWaYcWfeqfOftRpMkOEeEMrEjsjf+yKvWMyidVak8fO4av6UM8Sd3KXr0l9
-        vc89vsRwN9ctWa2tSkoKQj2Nm+DoXHo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 2b502cb8 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 28 Oct 2022 23:40:36 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     catalin.marinas@arm.com, will@kernel.org, jean-philippe@linaro.org,
-        ardb@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH] random: remove early archrandom abstraction
-Date:   Sat, 29 Oct 2022 01:40:25 +0200
-Message-Id: <20221028234025.82222-1-Jason@zx2c4.com>
+        Fri, 28 Oct 2022 19:45:35 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A1374DCA
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:45:33 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id d6-20020a056e02214600b002fa23a188ebso6105530ilv.6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:45:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H60CO/7ESD8qYAR25JqKtv1QA/7SsWIOSgVv3mhXfqY=;
+        b=2SvJoHhIwEzfM/L3keQWqL2U9MnAO+crtLhCQFWwsHVY+OSqTLD44Gt/kZMA60GSnV
+         b+iuo/kH532yhJ7m/xbK/ZgP7H8M81Rk5xPm/KsWS6Jjhk8DahNForZHoy0HP2I6gHLv
+         6Bc5vdaYl4uvLSbr6MFS+z+tnpkMYTHVBoIxOFer354+kvtbqggsXcy0qeT6Y14u1Hyi
+         /rAYZ/Go5NPkLbv1lsScO08nDRWkUURYSteXzGcXfciZwmYW8RwZJ1m4CuAZqIf+9jfP
+         uhF4G3b41ewBxuWSUyTQH/Hc/Yekcg47sgujpxHBUlA3gU3kD2DtAjxAevtjSITSnmfO
+         sI7g==
+X-Gm-Message-State: ACrzQf3tc1VEIbWnGVtcBsnSBh9HgbH6bChyGhgvtfJag8DF/xXF+Y3g
+        bqgbZ7mF9A7DGcP3KRZtgKEmeuYUBUqHj6MZeHy8JbVNS8Ul
+X-Google-Smtp-Source: AMsMyM4JWcj4ZzNZUcc9Ft4kLvCmNODOGL0M5AXbM8q37wEto5tD876N2CZkKPqPI+DRndw565l6Pg9wlWRJ2vQdCoWA3e9RLLhr
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:380f:b0:363:cb7f:4fb8 with SMTP id
+ i15-20020a056638380f00b00363cb7f4fb8mr981737jav.227.1667000733222; Fri, 28
+ Oct 2022 16:45:33 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 16:45:33 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008b529305ec20dacc@google.com>
+Subject: [syzbot] kernel BUG in dnotify_free_mark
+From:   syzbot <syzbot+06cc05ddc896f12b7ec5@syzkaller.appspotmail.com>
+To:     amir73il@gmail.com, jack@suse.cz, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The arch_get_random*_early() abstraction is not completely useful and
-adds complexity, because it's not a given that there will be no calls to
-arch_get_random*() between random_init_early(), which uses
-arch_get_random*_early(), and init_cpu_features(). During that gap,
-crng_reseed() might be called, which uses arch_get_random*(), since it's
-mostly not init code.
+Hello,
 
-Instead we can test whether we're in the early phase in
-arch_get_random*() itself, and in doing so avoid all ambiguity about
-where we are. Fortunately, the only architecture that currently
-implements arch_get_random*_early() also has an alternatives-based cpu
-feature system, one flag of which determines whether the other flags
-have been initialized. This makes it possible to do the early check with
-zero cost once the system is initialized.
+syzbot found the following issue on:
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+HEAD commit:    247f34f7b803 Linux 6.1-rc2
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=157f594a880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
+dashboard link: https://syzkaller.appspot.com/bug?extid=06cc05ddc896f12b7ec5
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15585936880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14ec85ba880000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/a5f39164dea4/disk-247f34f7.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/8d1b92f5a01f/vmlinux-247f34f7.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/1a4d2943796c/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+06cc05ddc896f12b7ec5@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+kernel BUG at fs/notify/dnotify/dnotify.c:136!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 56 Comm: kworker/u4:4 Not tainted 6.1.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+Workqueue: events_unbound fsnotify_mark_destroy_workfn
+RIP: 0010:dnotify_free_mark+0x53/0x60 fs/notify/dnotify/dnotify.c:136
+Code: 48 89 df e8 ff b3 dd ff 48 83 3b 00 75 17 e8 e4 bc 89 ff 48 8b 3d 4d ce 0f 0c 4c 89 f6 5b 41 5e e9 a2 de dc ff e8 cd bc 89 ff <0f> 0b cc cc cc cc cc cc cc cc cc cc cc 55 41 57 41 56 41 55 41 54
+RSP: 0018:ffffc90001577b68 EFLAGS: 00010293
+RAX: ffffffff81fe1253 RBX: ffff888075d2b080 RCX: ffff888018d40000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888075d2b000
+RBP: ffffc90001577c30 R08: dffffc0000000000 R09: fffffbfff2325fe4
+R10: fffffbfff2325fe4 R11: 1ffffffff2325fe3 R12: ffff888145e77800
+R13: ffffc90001577bc0 R14: ffff888075d2b000 R15: ffff888075d2b000
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f127cdcaa38 CR3: 000000001dd46000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ fsnotify_final_mark_destroy fs/notify/mark.c:278 [inline]
+ fsnotify_mark_destroy_workfn+0x2cc/0x340 fs/notify/mark.c:902
+ process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:dnotify_free_mark+0x53/0x60 fs/notify/dnotify/dnotify.c:136
+Code: 48 89 df e8 ff b3 dd ff 48 83 3b 00 75 17 e8 e4 bc 89 ff 48 8b 3d 4d ce 0f 0c 4c 89 f6 5b 41 5e e9 a2 de dc ff e8 cd bc 89 ff <0f> 0b cc cc cc cc cc cc cc cc cc cc cc 55 41 57 41 56 41 55 41 54
+RSP: 0018:ffffc90001577b68 EFLAGS: 00010293
+RAX: ffffffff81fe1253 RBX: ffff888075d2b080 RCX: ffff888018d40000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888075d2b000
+RBP: ffffc90001577c30 R08: dffffc0000000000 R09
+
+
 ---
-Catalin - Though this touches arm64's archrandom.h, I intend to take
-this through the random.git tree, if that's okay. I have other patches
-that will build off of this one. -Jason
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
- arch/arm64/include/asm/archrandom.h | 57 ++++++-----------------------
- drivers/char/random.c               |  4 +-
- include/linux/random.h              | 20 ----------
- 3 files changed, 14 insertions(+), 67 deletions(-)
-
-diff --git a/arch/arm64/include/asm/archrandom.h b/arch/arm64/include/asm/archrandom.h
-index 109e2a4454be..8a059a9033af 100644
---- a/arch/arm64/include/asm/archrandom.h
-+++ b/arch/arm64/include/asm/archrandom.h
-@@ -58,6 +58,16 @@ static inline bool __arm64_rndrrs(unsigned long *v)
- 	return ok;
- }
- 
-+static __always_inline bool __cpu_has_rng(void)
-+{
-+	if (!system_capabilities_finalized()) {
-+		/* Open code as we run prior to the first call to cpufeature. */
-+		unsigned long ftr = read_sysreg_s(SYS_ID_AA64ISAR0_EL1);
-+		return (ftr >> ID_AA64ISAR0_EL1_RNDR_SHIFT) & 0xf;
-+	}
-+	return cpus_have_const_cap(ARM64_HAS_RNG);
-+}
-+
- static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t max_longs)
- {
- 	/*
-@@ -66,7 +76,7 @@ static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t
- 	 * cpufeature code and with potential scheduling between CPUs
- 	 * with and without the feature.
- 	 */
--	if (max_longs && cpus_have_const_cap(ARM64_HAS_RNG) && __arm64_rndr(v))
-+	if (max_longs && __cpu_has_rng() && __arm64_rndr(v))
- 		return 1;
- 	return 0;
- }
-@@ -108,53 +118,10 @@ static inline size_t __must_check arch_get_random_seed_longs(unsigned long *v, s
- 	 * reseeded after each invocation. This is not a 100% fit but good
- 	 * enough to implement this API if no other entropy source exists.
- 	 */
--	if (cpus_have_const_cap(ARM64_HAS_RNG) && __arm64_rndrrs(v))
-+	if (__cpu_has_rng() && __arm64_rndrrs(v))
- 		return 1;
- 
- 	return 0;
- }
- 
--static inline bool __init __early_cpu_has_rndr(void)
--{
--	/* Open code as we run prior to the first call to cpufeature. */
--	unsigned long ftr = read_sysreg_s(SYS_ID_AA64ISAR0_EL1);
--	return (ftr >> ID_AA64ISAR0_EL1_RNDR_SHIFT) & 0xf;
--}
--
--static inline size_t __init __must_check
--arch_get_random_seed_longs_early(unsigned long *v, size_t max_longs)
--{
--	WARN_ON(system_state != SYSTEM_BOOTING);
--
--	if (!max_longs)
--		return 0;
--
--	if (smccc_trng_available) {
--		struct arm_smccc_res res;
--
--		max_longs = min_t(size_t, 3, max_longs);
--		arm_smccc_1_1_invoke(ARM_SMCCC_TRNG_RND64, max_longs * 64, &res);
--		if ((int)res.a0 >= 0) {
--			switch (max_longs) {
--			case 3:
--				*v++ = res.a1;
--				fallthrough;
--			case 2:
--				*v++ = res.a2;
--				fallthrough;
--			case 1:
--				*v++ = res.a3;
--				break;
--			}
--			return max_longs;
--		}
--	}
--
--	if (__early_cpu_has_rndr() && __arm64_rndr(v))
--		return 1;
--
--	return 0;
--}
--#define arch_get_random_seed_longs_early arch_get_random_seed_longs_early
--
- #endif /* _ASM_ARCHRANDOM_H */
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 6f323344d0b9..e3cf4f51ed58 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -813,13 +813,13 @@ void __init random_init_early(const char *command_line)
- #endif
- 
- 	for (i = 0, arch_bits = sizeof(entropy) * 8; i < ARRAY_SIZE(entropy);) {
--		longs = arch_get_random_seed_longs_early(entropy, ARRAY_SIZE(entropy) - i);
-+		longs = arch_get_random_seed_longs(entropy, ARRAY_SIZE(entropy) - i);
- 		if (longs) {
- 			_mix_pool_bytes(entropy, sizeof(*entropy) * longs);
- 			i += longs;
- 			continue;
- 		}
--		longs = arch_get_random_longs_early(entropy, ARRAY_SIZE(entropy) - i);
-+		longs = arch_get_random_longs(entropy, ARRAY_SIZE(entropy) - i);
- 		if (longs) {
- 			_mix_pool_bytes(entropy, sizeof(*entropy) * longs);
- 			i += longs;
-diff --git a/include/linux/random.h b/include/linux/random.h
-index 182780cafd45..2bdd3add3400 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -153,26 +153,6 @@ declare_get_random_var_wait(long, unsigned long)
- 
- #include <asm/archrandom.h>
- 
--/*
-- * Called from the boot CPU during startup; not valid to call once
-- * secondary CPUs are up and preemption is possible.
-- */
--#ifndef arch_get_random_seed_longs_early
--static inline size_t __init arch_get_random_seed_longs_early(unsigned long *v, size_t max_longs)
--{
--	WARN_ON(system_state != SYSTEM_BOOTING);
--	return arch_get_random_seed_longs(v, max_longs);
--}
--#endif
--
--#ifndef arch_get_random_longs_early
--static inline bool __init arch_get_random_longs_early(unsigned long *v, size_t max_longs)
--{
--	WARN_ON(system_state != SYSTEM_BOOTING);
--	return arch_get_random_longs(v, max_longs);
--}
--#endif
--
- #ifdef CONFIG_SMP
- int random_prepare_cpu(unsigned int cpu);
- int random_online_cpu(unsigned int cpu);
--- 
-2.38.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
