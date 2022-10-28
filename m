@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD496116B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE256116B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbiJ1QBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
+        id S230462AbiJ1QBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiJ1P7I (ORCPT
+        with ESMTP id S230487AbiJ1P74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:59:08 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF0221E127
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:58:16 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-367cd2807f2so51090967b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:58:16 -0700 (PDT)
+        Fri, 28 Oct 2022 11:59:56 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36F5214657;
+        Fri, 28 Oct 2022 08:59:01 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id n83so6549650oif.11;
+        Fri, 28 Oct 2022 08:59:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cCjKXOcyb+QfEnjzlc/Kq6Ie9WHUfNkR4Nmc4Tu9NGg=;
-        b=sQxEF8vf9wEhNL47iGTHFGkUYbZG0nG3CjKs3iVwb8l7dM6ONtA01xgJpKSObA+PUB
-         8nccovNYgn7wfzqKMK7f33/4a0/BjC2q93ZTK8RwfPyII2HRkOf9pY4/80pUvtOcvD+L
-         I6Jm7hLlYI8oB1MhKoAoggrmnOeBFU/kbFFoqp1ivel2stRRkRrarskMOQuXxRod9zo0
-         e5gkO5l8pfC/Wo21INsuy1Ma8Kt7eEFH/5YuylTOxLMInLucdBWgBM+CTx76jI7cXRNd
-         9qV42/5UQasctFbmb5aFB8v81DSxzNq2iMasbPy7Z1WeFgHav9zYTWOYJGL70hsVd6jP
-         NI3w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kGV5CRuXO/AflfNqwOyb3q124XfnO4+Le7SUJ2VJU3I=;
+        b=YEtveQ5geZPkTIxyIW1RGzgwGnwFThDcL8Wv8vKpWOWescIp3AKZvU140u86bHSctS
+         /WHC/hmjpHBos5Hsg0sNydLxJm4tylUPI8AzWzyWluY1vVuXG/7OjgnTWV2zDOBQ2tgh
+         2YIIErFMOMyFYdwhQ285czT3VOJpUm8T9YJgxEQvLj1Rd4ZX/bFyImyiSJ0Mc/1okjkI
+         JcInEEarNY+WFTfmOAsL5smiQld4j8i/XdWjxxwznnvmmqB6CYjLjXOT73p7CvI2Dnwr
+         CTHW1+tadB0YLfZ02AD8Tk0QlPInG43fpuM7w8eLUkFLnrVfJ3NmH2HDECrKJlDIDVuA
+         oNlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cCjKXOcyb+QfEnjzlc/Kq6Ie9WHUfNkR4Nmc4Tu9NGg=;
-        b=m7Kti4sJFa0B98qN4cn97ZFt+lSefWDXM1WuYyWcDsToNza+wV+WId+8NrJI5STLpC
-         8GLa9QnzWC9Kb2P8O9pA9/dn8EcaUvXc+FWn3dehOc7/s69pY5vsKhpW7olhLEzvtvBo
-         gdMBRG6WkemHPdzRwnuyDzEgrxOm+ScbyyupD53O9Y5TX+YVHJr7gqrxBmsltuJKeeGQ
-         ITE1QfYgUI05R6pd91OxnVRdT+Yia4+tmC8BsY+M6pvnRqHAJqb4/QDlHkSuh/J0TjpQ
-         WwYGJPnf68/lDvEdKeQnTMailpP6P9P7baUoOM+SDvdrdBVK0sfVqGyoxQ2UAVziOoD2
-         WI9A==
-X-Gm-Message-State: ACrzQf3GzsH7FHqoDXVQU4RTcjtVFD88TyHJLfG8riPMZQ45K3jluerP
-        6GpXIbmxdSxsJhbpm1Xa0xu56OlI+U8pwCwu70q2ow==
-X-Google-Smtp-Source: AMsMyM5vsIZKxoHongbDFxuMxaxcFkmp+JflF7xq1e6OEAIn9CL8/ZCzlrYqinTB6OypsOiq9NMLgnVr2u+oYAuCAe0=
-X-Received: by 2002:a81:8606:0:b0:349:17ad:6998 with SMTP id
- w6-20020a818606000000b0034917ad6998mr77944ywf.409.1666972695278; Fri, 28 Oct
- 2022 08:58:15 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kGV5CRuXO/AflfNqwOyb3q124XfnO4+Le7SUJ2VJU3I=;
+        b=XjEW36iyuH1+PNyWU3bocMDYjqjjws7diM14xC6V5JAGS56vQDZJW5o/Fe5nYkVHAD
+         X3/zlxPRFmp91T6A7Bz5Ae6YXXVfRTxicKn9CQOLjhJbUEY3GmEoVGwrB92xuut8H4La
+         nOFZLxdXhZFpkfaospJ+4/VyL2Ay7B6qhJrKQBSOcqV7YjIaTBooFDqO5KGRrL3FpPy7
+         zMpwhuRwMXJSuEy2x3jLs8MeOr5Y6E8wsKV7u7LRh024nC/KSFg4c1Md1Gaku8UaXwII
+         URiUS0JwewA8MVQYJlYI5exi/OFwLPZijlKdF+t1MT1rY7vpIX2JSkTkvVd5PANML5BO
+         JHHw==
+X-Gm-Message-State: ACrzQf2rc4G/+GP5zNXLeIbuKb9oQHl91g3kjUWyPDugXArEqI8ekjNM
+        jDw4Q3A0Uj0+e03wJq5gUiVCajXYwR4=
+X-Google-Smtp-Source: AMsMyM4SI17djKyPfTO294g8vpTQAc+lvUiYSSoWh5QXmXPQBgV9ybiftpT43M5gbq2CZaSK3grXfg==
+X-Received: by 2002:a05:6808:2083:b0:355:2c71:7e58 with SMTP id s3-20020a056808208300b003552c717e58mr8578008oiw.168.1666972740889;
+        Fri, 28 Oct 2022 08:59:00 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l23-20020a544517000000b00359ba124b07sm1626854oil.36.2022.10.28.08.58.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 08:59:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e4040686-851c-d8b0-b274-ac71d38685e1@roeck-us.net>
+Date:   Fri, 28 Oct 2022 08:58:58 -0700
 MIME-Version: 1.0
-References: <20221010104206.12184-1-zhouchengming@bytedance.com>
- <166693932887.29415.17016910542871419770.tip-bot2@tip-bot2> <f990a324-e28e-6de1-acb0-ba764808a56a@bytedance.com>
-In-Reply-To: <f990a324-e28e-6de1-acb0-ba764808a56a@bytedance.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 28 Oct 2022 08:58:03 -0700
-Message-ID: <CAJuCfpHOt1Vfc=ZtAYt_2QamOujfuFtNHAdJe7iBMmDgTLGtyw@mail.gmail.com>
-Subject: Re: [External] [tip: sched/core] sched/psi: Fix avgs_work re-arm in psi_avgs_work()
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     linux-tip-commits@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Content-Language: en-US
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-hwmon@vger.kernel.org
+References: <20221028140833.280091-1-cristian.marussi@arm.com>
+ <20221028140833.280091-7-cristian.marussi@arm.com>
+ <b914ea25-a9a8-f443-2ba0-615bdd6cc04f@roeck-us.net>
+ <Y1v2ozURFdIk1PfU@e120937-lin>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 7/8] hwmon: (scmi) Register explicitly with Thermal
+ Framework
+In-Reply-To: <Y1v2ozURFdIk1PfU@e120937-lin>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,111 +82,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 11:50 PM Chengming Zhou
-<zhouchengming@bytedance.com> wrote:
->
-> Hello,
->
-> Thanks for picking this up. There is a newer version which has been acked:
-> https://lore.kernel.org/all/20221014110551.22695-1-zhouchengming@bytedance.com/
+On 10/28/22 08:35, Cristian Marussi wrote:
+[ ... ]
+>>> +	/*
+>>> +	 * Try to register a temperature sensor with the Thermal Framework:
+>>> +	 * skip sensors not defined as part of any thermal zone (-ENODEV) but
+>>> +	 * report any other errors related to misconfigured zones/sensors.
+>>> +	 */
+>>> +	tzd = devm_thermal_of_zone_register(dev, th_sensor->info->id, th_sensor,
+>>> +					    &scmi_hwmon_thermal_ops);
+>>> +	if (IS_ERR(tzd)) {
+>>> +		devm_kfree(dev, th_sensor);
+>>> +
+>>> +		if (PTR_ERR(tzd) != -ENODEV)
+>>> +			return PTR_ERR(tzd);
+>>> +
+>>> +		dev_info(dev, "Sensor '%s' not attached to any thermal zone.\n",
+>>> +			 sensor->name);
+>>
+>> There were complaints about this message as it is noisy. If you send
+>> another version, please drop it unless attaching each sensor to a thermal
+>> zone is strongly expected. If you don't send another version, I'll drop it
+>> while applying.
+>>
+> 
+> Ok fine for me. I am waiting to have some feedback from Sudeep too, but
+> I do not have plan for another version as of now.
+> 
+> As a side note, though, I understand the 'noisiness' argument, but,
+> sincerely this same message in the original HWMON code was the only
+> reason why I spotted that something was wrong with the SCMI/HWMON
+> interactions and discovered the indexes/ids mismatch...if not for
+> that it would have gone un-noticed that a perfectly configured
+> ThermalZone/Sensor was not working properly...
+> (un-noticed at least until something would have been burnt to fire
+>   in my house .. joking :P)
+> 
 
-Hmm. Indeed this seems to be an older version and not the one I asked
-Peter to pick up in
-https://lore.kernel.org/all/CAJuCfpHeJuZBbv-q+WXjgNHwt_caMomFPL3L9rxosXOrZz3fBw@mail.gmail.com/.
-Not sure what went wrong. Peter, could you please replace this one
-with https://lore.kernel.org/all/20221014110551.22695-1-zhouchengming@bytedance.com/?
+Good point.
 
-Chengming, please do not top-post next time. Would be better if you
-posted your note under the "Link:" field in this email.
-Thanks!
+Did you ever check the returned error code ? Maybe we could use it to
+distinguish "it is not attached to a thermal zone because it is not
+associated with one" from "attaching to a thermal zone failed because
+its configuration is bad/incomplete".
 
->
-> As well another PSI patch that has been acked by Johannes:
-> https://lore.kernel.org/all/20220926081931.45420-1-zhouchengming@bytedance.com/
->
-> Thanks!
->
->
-> On 2022/10/28 14:42, tip-bot2 for Chengming Zhou wrote:
-> > The following commit has been merged into the sched/core branch of tip:
-> >
-> > Commit-ID:     7d89d7bb921c5ae5a428df282e64ee5692e26fe0
-> > Gitweb:        https://git.kernel.org/tip/7d89d7bb921c5ae5a428df282e64ee5692e26fe0
-> > Author:        Chengming Zhou <zhouchengming@bytedance.com>
-> > AuthorDate:    Mon, 10 Oct 2022 18:42:06 +08:00
-> > Committer:     Peter Zijlstra <peterz@infradead.org>
-> > CommitterDate: Thu, 27 Oct 2022 11:01:23 +02:00
-> >
-> > sched/psi: Fix avgs_work re-arm in psi_avgs_work()
-> >
-> > Pavan reported a problem that PSI avgs_work idle shutoff is not
-> > working at all. Because PSI_NONIDLE condition would be observed in
-> > psi_avgs_work()->collect_percpu_times()->get_recent_times() even if
-> > only the kworker running avgs_work on the CPU.
-> >
-> > Although commit 1b69ac6b40eb ("psi: fix aggregation idle shut-off")
-> > avoided the ping-pong wake problem when the worker sleep, psi_avgs_work()
-> > still will always re-arm the avgs_work, so shutoff is not working.
-> >
-> > This patch changes to consider current CPU groupc as IDLE if the
-> > kworker running avgs_work is the only task running and no IOWAIT
-> > or MEMSTALL sleep tasks, in which case we will shut off the avgs_work
-> > if other CPUs' groupc are also IDLE.
-> >
-> > One potential problem is that the brief period of non-idle time
-> > incurred between the aggregation run and the kworker's dequeue will
-> > be stranded in the per-cpu buckets until avgs_work run next time.
-> > The buckets can hold 4s worth of time, and future activity will wake
-> > the avgs_work with a 2s delay, giving us 2s worth of data we can leave
-> > behind when shut off the avgs_work. If the kworker run other works after
-> > avgs_work shut off and doesn't have any scheduler activities for 2s,
-> > this maybe a problem.
-> >
-> > Reported-by: Pavan Kondeti <quic_pkondeti@quicinc.com>
-> > Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > Link: https://lore.kernel.org/r/20221010104206.12184-1-zhouchengming@bytedance.com
-> > ---
-> >  kernel/sched/psi.c | 15 +++++++++++++++
-> >  1 file changed, 15 insertions(+)
-> >
-> > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> > index ee2ecc0..f4cdf6f 100644
-> > --- a/kernel/sched/psi.c
-> > +++ b/kernel/sched/psi.c
-> > @@ -242,6 +242,8 @@ static void get_recent_times(struct psi_group *group, int cpu,
-> >                            u32 *pchanged_states)
-> >  {
-> >       struct psi_group_cpu *groupc = per_cpu_ptr(group->pcpu, cpu);
-> > +     int current_cpu = raw_smp_processor_id();
-> > +     bool only_avgs_work = false;
-> >       u64 now, state_start;
-> >       enum psi_states s;
-> >       unsigned int seq;
-> > @@ -256,6 +258,15 @@ static void get_recent_times(struct psi_group *group, int cpu,
-> >               memcpy(times, groupc->times, sizeof(groupc->times));
-> >               state_mask = groupc->state_mask;
-> >               state_start = groupc->state_start;
-> > +             /*
-> > +              * This CPU has only avgs_work kworker running, snapshot the
-> > +              * newest times then don't need to re-arm for this groupc.
-> > +              * Normally this kworker will sleep soon and won't wake
-> > +              * avgs_work back up in psi_group_change().
-> > +              */
-> > +             if (current_cpu == cpu && groupc->tasks[NR_RUNNING] == 1 &&
-> > +                 !groupc->tasks[NR_IOWAIT] && !groupc->tasks[NR_MEMSTALL])
-> > +                     only_avgs_work = true;
-> >       } while (read_seqcount_retry(&groupc->seq, seq));
-> >
-> >       /* Calculate state time deltas against the previous snapshot */
-> > @@ -280,6 +291,10 @@ static void get_recent_times(struct psi_group *group, int cpu,
-> >               if (delta)
-> >                       *pchanged_states |= (1 << s);
-> >       }
-> > +
-> > +     /* Clear PSI_NONIDLE so avgs_work won't be re-armed for this groupc */
-> > +     if (only_avgs_work)
-> > +             *pchanged_states &= ~(1 << PSI_NONIDLE);
-> >  }
-> >
-> >  static void calc_avgs(unsigned long avg[3], int missed_periods,
+Thanks,
+Guenter
+
