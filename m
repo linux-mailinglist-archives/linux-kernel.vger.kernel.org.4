@@ -2,132 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F12611D60
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AD5611D63
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiJ1WWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 18:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
+        id S230075AbiJ1WXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 18:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiJ1WWS (ORCPT
+        with ESMTP id S229553AbiJ1WX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 18:22:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DAC9230AB8;
-        Fri, 28 Oct 2022 15:22:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE570B82A8C;
-        Fri, 28 Oct 2022 22:22:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FACFC433D6;
-        Fri, 28 Oct 2022 22:22:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666995734;
-        bh=6IsD/VDiCGWiqM8PmP7en4IAVivnTYw5J8ZAvemVnNw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=IVDIpIEwAW5JY8EItFRpIBRfPn6WjbimLXjqX3qpNHQ/uoRjJj+uROArdA+va+8PL
-         1Q+wHNVOYA773bhOcv/b1/WXIlbxvE3erb0XrX0B9n++Z52fa09hEFgFCFrrDjip1U
-         /0GKrE6/qfvZp6cVZhoVh6HN7j74CVNbcmu9hJ2BqiTStJtSZhD0PQI8CugOG8V6OM
-         v49DFssv3iSIiOegneXKCXoUjjfnd04OQZCQbpVnDh4Nafj3psMfpOnLzCirnLwOXW
-         9+v3I9g27RPTvCGQQHyeQ8a3Mgsl84UuU4IqQ8uZBFFzNTISGMWwYDmihyE0+YogsX
-         C0EcnjF2pFlNw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 32CA45C1040; Fri, 28 Oct 2022 15:22:14 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 15:22:14 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/nolibc: always rebuild the sysroot when
- running a test
-Message-ID: <20221028222214.GU5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221026054508.19634-1-w@1wt.eu>
- <20221026164825.GN5600@paulmck-ThinkPad-P17-Gen-1>
- <20221026195902.GB24197@1wt.eu>
- <20221026204138.GQ5600@paulmck-ThinkPad-P17-Gen-1>
- <20221027023456.GA26215@1wt.eu>
- <20221027170453.GA5600@paulmck-ThinkPad-P17-Gen-1>
- <20221027171307.GA30081@1wt.eu>
- <20221027182629.GF5600@paulmck-ThinkPad-P17-Gen-1>
- <20221028193405.GA8395@1wt.eu>
+        Fri, 28 Oct 2022 18:23:28 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA82E24E393
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 15:23:25 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id j7so2156198pjn.5
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 15:23:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=to:from:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1Ihcw8NxFdUArfYGoYPQQdxW1/H3YB3VcR84XFdSGYw=;
+        b=qkUdA/p6Q+cT+8qbm8kiLgu1x0YNjH2FbQwsJNCU/3V9tcobjtro71CSmddyIPYZX6
+         WOZqnfgUhhOrytqaJt9vv3HUx7O9tFANNfKCRymPc4g9slE2WjBb2B8slG58lAepI3cs
+         GLmZtln4A6EKXTQMy15TsD2yJRUd4/fl5R9DcsnxwUmruYwYUsHF3bnz2KdeEbrk2aAt
+         x58BOTPidIbZvqmYVLOOVPMd/HSU9qktmEYSFZfD687C9FizvVUXcS2aKY3ULTaOJMTt
+         G3hspNTEafiQsVXYU5Cp6fe6OXnowU08tTf+2MNkxhIg4r2HsEFqmmuq5r9HD7nk+hRs
+         ntGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1Ihcw8NxFdUArfYGoYPQQdxW1/H3YB3VcR84XFdSGYw=;
+        b=JGw3bu+qsOTVHKEtGHb9cRFbLmclpFL7VttkOk5I+iwqOJao6mKftJ3GriKIAxavkJ
+         JcE9Io4KPDFIE2YkSI7iNjnuFDYPxzTME7dYsA2jb8zinpq3fmkPICmBjfH4CgkoufFI
+         EV9pK2QXvUdZ9VK8hI6CTTkdHkuEZ2BLdSIrf2hbZ9gtnrM/Pp0c9erfDUP8aFhkh41g
+         2ID5enh3G8BA8+WwS1ynDeGHLq/QRLFlgm/mucC0/nunuQMvSQ+DuUhwseBmV0QfJjN2
+         BlM0C2ENRlV6N7ljuEUpc8vL9guzxjFSzczILXBTMCuzlW7mWDoPqzAA7v0N8W3Rzn9T
+         i7Tg==
+X-Gm-Message-State: ACrzQf1mThjbVaFhZzeJU1a5HFoyxJno3LG6xRmzKUix489qGq5J1QOo
+        ArjNSfFf7fdlSwdCegGBP7yXRQ==
+X-Google-Smtp-Source: AMsMyM5FkW8lXL0j94ViobvJHEOvz1kLRmJFT1+V9+Q2wyOOwmHy+AcAQB7vEC9Iy2KxwNKEI0ahRA==
+X-Received: by 2002:a17:90a:dc10:b0:213:90f3:27c9 with SMTP id i16-20020a17090adc1000b0021390f327c9mr1517757pjv.240.1666995805267;
+        Fri, 28 Oct 2022 15:23:25 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id d16-20020a170903231000b00186b04776b0sm2537002plh.118.2022.10.28.15.23.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 15:23:24 -0700 (PDT)
+In-Reply-To: <20221010182848.GA28029@watet-ms7b87>
+References: <20221010182848.GA28029@watet-ms7b87>
+Subject: Re: [PATCH v2] riscv: fix styling in ucontext header
+Message-Id: <166699579461.30369.17737854094128986667.b4-ty@rivosinc.com>
+Date:   Fri, 28 Oct 2022 15:23:14 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221028193405.GA8395@1wt.eu>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URG_BIZ autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-36ce3
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Cleo John <waterdev@galaxycrow.de>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 09:34:05PM +0200, Willy Tarreau wrote:
-> Hi Paul,
+On Mon, 10 Oct 2022 20:28:48 +0200, Cleo John wrote:
+> Change the two comments in ucontext.h by getting them up to
+> the coding style proposed by torvalds.
 > 
-> On Thu, Oct 27, 2022 at 11:26:29AM -0700, Paul E. McKenney wrote:
-> > > We'll see, but in any case it would just be a minor detail, but I'll
-> > > give you a quick response so that you don't have to deal with multiple
-> > > versions of the patch, we all know that it's painful.
-> > 
-> > If I don't hear otherwise from you by the end of tomorrow (Friday),
-> > Pacific Time, I will rebase those two patches in preparation for sending
-> > a pull request for the regression.  I will of course run the pull-message
-> > text past you before sending the pull request.
 > 
-> No news on this front, so feel free to pick what you already have.
 
-Very good, thank you!
+Applied, thanks!
 
-I currently expect to send something like the pull request shown
-below early next week.
+[1/1] riscv: fix styling in ucontext header
+      https://git.kernel.org/palmer/c/3558927fc2b2
 
-Thoughts?
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-Hello, Linus,
-
-This pull request fixes a couple of nolibc string-function bugs noted
-by kernel test robot, Rasmus Villemoes, Willy Tarreau.
-
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/nolibc-urgent.2022.10.28a
-
-for you to fetch changes up to b3f4f51ea68a495f8a5956064c33dce711a2df91:
-
-  tools/nolibc/string: Fix memcmp() implementation (2022-10-28 15:07:02 -0700)
-
-----------------------------------------------------------------
-Urgent nolibc pull request for v6.1
-
-This pull request contains a couple of commits that fix string-function
-bugs introduced by:
-
-96980b833a21 ("tools/nolibc/string: do not use __builtin_strlen() at -O0")
-66b6f755ad45 ("rcutorture: Import a copy of nolibc")
-
-These appeared in v5.19 and v5.0, respectively, but it would be good
-to get these fixes in sooner rather than later.  Commits providing the
-corresponding tests are in -rcu and I expect to submit them into the
-upcoming v6.2 merge window.
-
-----------------------------------------------------------------
-Rasmus Villemoes (1):
-      tools/nolibc/string: Fix memcmp() implementation
-
-Willy Tarreau (1):
-      tools/nolibc: Fix missing strlen() definition and infinite loop with gcc-12
-
- tools/include/nolibc/string.h | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+Best regards,
+-- 
+Palmer Dabbelt <palmer@rivosinc.com>
