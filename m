@@ -2,557 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1AB6112E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2AA6112E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbiJ1NeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
+        id S230176AbiJ1Neh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230458AbiJ1NeE (ORCPT
+        with ESMTP id S230510AbiJ1Ne2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:34:04 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F211E0991
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:34:02 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id z18so2894566edb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:34:02 -0700 (PDT)
+        Fri, 28 Oct 2022 09:34:28 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E007673
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:34:26 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29SBNfUe011185;
+        Fri, 28 Oct 2022 13:34:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=HugjZH2KFuMK7dRfEHlUOELvbVdB9lVfiXHI7gJGaeY=;
+ b=tI6lARP6EFsFmLzr4XJ+9/XM86ajGvzme6G7l558YawBTUYBnYJeSmYA4kpRF1l1B8gq
+ uP7vWeM7gBuNWVh1RLkcuWPk3kTVOrddReQWbUYW8hFOxFvtIqqXaPQPyYnYTme1egy/
+ 6B4F8tIZn/X+TsX5j/wJJaMiIg6batAIdiGC+2nS1+7JNccjRkoFrH7SDCP+qwAyu+TQ
+ XWshx/34hOOu7jwolbLuZw7I2AEDNVNDjXaqqcZN6/a7KukHNaFGk29I8H1iDiT1qWpu
+ Uhzih66LAP+AEQ1mPxh8otG5hlPNUWmwpjVwSaOIEYnknuJyo+6n1QfXnGHStJsW8FYw TQ== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kfahedb13-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 28 Oct 2022 13:34:14 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29SBPL7L009654;
+        Fri, 28 Oct 2022 13:34:13 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2045.outbound.protection.outlook.com [104.47.66.45])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kfagg2trn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 28 Oct 2022 13:34:13 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Mpb6AdLaHmxmMuIf9LsikdJg/JQnaHrpU4gLYmuopjSfVWa75QBAWAFaCO5s012ZqE/SZu8nynvfCDi47WTerL61aQo1YfEeHdfjYsYL1w6VWE35zKPdUo1azCEqh/YaTb3ERpguiVRkwPh1A+Q8d5LN/KwDlfwby2wHd7NLjaGd6WDurSuBT/flEz7atyDxKQCA78iO1REF39gs8pIxhwdz8+1n45saA1yeUEG1Xi6CpAu8/7wPPzZ21ayTIP3qQ9D66UPvxXbg+5ovYLBTvvKfeXKQ0d8am0/rgIVIFwKF2vtR4d4mr0MypkPHykyJV2fw3Rde26Lgt2js98b0fA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HugjZH2KFuMK7dRfEHlUOELvbVdB9lVfiXHI7gJGaeY=;
+ b=XJzE+WThTi9bfKZDH8MhgMgiKn6F9ZFUdLCP0FwYDnHn4VejPirDUcYxNbxmiEgB1j7xEK/YhfN6rWx3deJMj0q7AyukSmOkbLE/8Ojf+bp+/H8EXNlhcOyz2xf47RsUtXihpTT+RTRRa27LLjbiZJg6QQ5/toQ8bOirX/oriqPpXVUpwjfMgMq5hgvn1SyrSD2Dt7CPWMZQ8Bc5mDDpCJFBlYrBsCmFQiWChPopdx/pe/BF1EEyTMZ2gUkjxaLKVyBy6/7QS1EMh1LX0+PSO/AZ6hN5SGZt2/3DGpVaM2InT8xlYciGt/St2zC/I0SqTYRhF63+b6YgZ03cVNIs6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e9wwq0N7Q/p0HNN6IR/TsA18qAO4m6l6eUZVnQdWFgM=;
-        b=wRePGTkMXdMf/zQdaoSKJKStCoIkXi9M1Neybau8ShPum5JeloJLVMZrlMaOCZbKCv
-         Rny4Gl9ZBK3I5P8POGInr0HCcCb3GfJ+hQVHqo8qOiaViUYsXfTN3csC7mka79HJXW7L
-         o91OMhZ2+iXyNDj1KBsGwmPXH1AyIPhzM1JorCSP1RjjWLzy99JmYsJNaVcl5rY/LLtZ
-         qYgERP3JEdxwiB7bTCLi0YXDFjQNykLdGI7bzhfnepfRSJ4USP6IsKQJg/Q2rOkcEYZk
-         F+K9yXPmaDQ45j3hoHfJssoK2eGzvd1kJt0DKDKHQBZ6/a3gpDcSzEORB0KiI26niXLg
-         v4sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e9wwq0N7Q/p0HNN6IR/TsA18qAO4m6l6eUZVnQdWFgM=;
-        b=NMIJofy+RNLeOG36+C58/dnh5jbyi9tF6uvQqT6NTHYk2s95NZ5byVp/2V1PhQGtes
-         vUBPabcT0/PuuigNbPdjiHrwOhHLRQmtziHrHX7Q4T1SnM7zOmc2RNYs9jE5aifW72xc
-         jUyh/ipwHsKXoqfhktQDCELMQMi+sD42MmJyz63UtrXu7Jd5X8UTDA+iU8ybCJ/qxAFf
-         jf14VklIgsROO4Ek1WZutkxWXEMVCQ9ZousP8DDyi6Q0JPy9jm/NylkjsUdc49tK74Gz
-         XBldWCfZJsXu/TGwQP6VZYbbh3YcK8bRTAIUCiQ9fdaauP7VJoSusVioi6Ie49QePasD
-         6X7Q==
-X-Gm-Message-State: ACrzQf3aIZh46eBlqmD4CcOJUt0TAnB20ZReQGlrV5eA8VT1w5X6wAt3
-        a/FJobVv/4BA6Kr4ydmYM27gRy7LJTXUp7CUNDEc
-X-Google-Smtp-Source: AMsMyM7lmgzWJ8wLxRQFR8+2QFn3steG7yk2UO2LGPDChWLE9Q8r4zSVg2Y4kmqtLa1VaUiABetZX6t2CDrNBjqWfso=
-X-Received: by 2002:a50:c387:0:b0:461:3ae6:8cdf with SMTP id
- h7-20020a50c387000000b004613ae68cdfmr37368962edf.131.1666964040549; Fri, 28
- Oct 2022 06:34:00 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HugjZH2KFuMK7dRfEHlUOELvbVdB9lVfiXHI7gJGaeY=;
+ b=p3jtYT5DLAg9bJOD9VoRZLZ1TTTOT45oDnW15bWT7TwBfVUSJGIX8TS7+54diTVnqSsx5VMIAAvPnupXzg72jCeAFtq9n1oH8lE3QbLn1Rnxk/wdkLTYLYP9laPPPtw/nqJf+VONQJeVGSq0Ip1pPZ7h5ErDt1mO6T02sp7ScuY=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by PH7PR10MB6356.namprd10.prod.outlook.com
+ (2603:10b6:510:1b7::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Fri, 28 Oct
+ 2022 13:34:11 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::3809:e335:4589:331e]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::3809:e335:4589:331e%7]) with mapi id 15.20.5769.015; Fri, 28 Oct 2022
+ 13:34:11 +0000
+Date:   Fri, 28 Oct 2022 16:33:59 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: wlan-ng: Use flexible-array for one /
+ zero-length arrays
+Message-ID: <Y1vaR0olLH9+bJbk@kadam>
+References: <Y1vNNSSWK1EkcohT@ubunlion>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1vNNSSWK1EkcohT@ubunlion>
+X-ClientProxiedBy: JNAP275CA0021.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4d::12)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-References: <Yza1u1KfKa7ycQm0@T590> <Yzs9xQlVuW41TuNC@fedora>
- <YzwARuAZdaoGTUfP@T590> <CAJSP0QXVK=wUy_JgJ9NmNMtKTRoRX0MwOZUuFWU-1mVWWKij8A@mail.gmail.com>
- <Yz0FrzJVZTqlQtJ5@T590> <50827796-af93-4af5-4121-dc13c31a67fc@linux.alibaba.com>
- <CAJSP0QXW9TmuvJpQPRF-AF01aW79jH8tnkHPEf+do5vQ1crGFA@mail.gmail.com>
- <CACycT3ufcN+a_wtWe6ioOWZUCak-JmcMgSa=rqeEsS63_HqSog@mail.gmail.com>
- <Y0lcmZTP5sr467z6@T590> <CACycT3u8yYUS-WnNzgHQtQFYuK-XcyffpFc35HVZzrCS7hH5Sg@mail.gmail.com>
- <Y05OzeC7wImts4p7@T590> <CACycT3sK1AzA4RH1ZfbstV3oax-oeBVtEz+sY+8scBU0=1x46g@mail.gmail.com>
- <CAJSP0QVevA0gvyGABAFSoMhBN9ydZqUJh4qJYgNbGeyRXL8AjA@mail.gmail.com>
- <CACycT3udzt0nyqweGbAsZB4LDQU=a7OSWKC8ZWieoBpsSfa2FQ@mail.gmail.com>
- <1d051d63-ce34-1bb3-2256-4ced4be6d690@redhat.com> <CACycT3usE0QdJd50bSiLiPwTFxscg-Ur=iZyeGJJBPe7+KxOFQ@mail.gmail.com>
- <CAJSP0QUGj4t8nYeJvGaO-cWJ+F3Zvxcq007RHOm-=41zaE-v0Q@mail.gmail.com>
-In-Reply-To: <CAJSP0QUGj4t8nYeJvGaO-cWJ+F3Zvxcq007RHOm-=41zaE-v0Q@mail.gmail.com>
-From:   Yongji Xie <xieyongji@bytedance.com>
-Date:   Fri, 28 Oct 2022 21:33:49 +0800
-Message-ID: <CACycT3uWiS9BoY6-qA3_ac2CZfA5LyqB7GY-4BFPr-mc6zE7Bw@mail.gmail.com>
-Subject: Re: ublk-qcow2: ublk-qcow2 is available
-To:     Stefan Hajnoczi <stefanha@gmail.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Ming Lei <tom.leiming@gmail.com>,
-        Ziyang Zhang <ZiyangZhang@linux.alibaba.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        io-uring@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Denis V. Lunev" <den@openvz.org>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2365:EE_|PH7PR10MB6356:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3f1d71db-cb4a-404d-55d6-08dab8e918b0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 07bp+BpDUkLMZX+GcgCXudTJwK3tJz/xwcGHRVlg8lD1oDTEzXu/EzgFVmcak53yhkcEYu3C5MeBJb79Jv/wYaFOeQjinrpeGEQOjkKfrbYy+WnFNYYX96/pMfXHXTcZ2kylapXnXhwTUssMRBoym/mQF0np8V4NQg3PGdSYMLEbbBAL+fQn+sn9NyWbTQeuyAAJAw/x4xJbIy6sjTyRYgh9Z8EwoNw+vnZ1UgQWXLMUWrVGfrGla7WHErya0n/HIb6dv21LsNK+eRQyz1JNDhaIPS0bSy2uIbzdjkKNP+iHh+m5Ghojd70x8Ze59e4bCkkKBvbjKTBQt5hGPFsJOt9eNFPo2fSRNUYVtjhkSG6yfFIlzId6sCB7GZvhaC3dFB1+G4Ug3Blfe427fI8VwzKzUFRV9rn/+W87t9pvLCUUSAaLN6lnDVKazmvGyZ+4z7+QBg7TkUt03OGQ3mEEq1WgpqqvAnpadZ1ooumBQHW/3L0E5kuh9QplggI6KItAV9EDdMax5Y8DOxTs6mbLRQBhwLbVkj1FCZwY5s2+JsNOWv7GsBub8tN3xfTlWWfQodf8B7bAkukdNRnm4IGtd+L/L+foant7rlSvOVE4lIkU0s9ImGLEsHwEGH+Ri98fu/KtWi1HeBtALFgVQ0Nr0FHwdil2WkefiZ9SIlBDje7rI7H97mhsVE9N/qc3aBJj/mmm2KH7JKAQexWlK/3BYfzPS9BB1XOIccT8KETsI5LzYajigdWtj8vu+p+rLC7qyMl4gFfANlP5imtvN+FbVcWiaTI2T+8qIbu2wLAm0K8DVTafkznTjpVs0jo/7Wvk
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(39860400002)(136003)(396003)(366004)(376002)(451199015)(186003)(26005)(33716001)(9686003)(83380400001)(6506007)(44832011)(6666004)(41300700001)(8676002)(66556008)(66946007)(2906002)(6916009)(6512007)(478600001)(66476007)(8936002)(316002)(5660300002)(86362001)(4326008)(6486002)(966005)(38100700002)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?O2kJgGImfIWJOYXMfXdiKpHdUGTRxJwE+OTuhD6eeI7pLvGBIfJrNqQ2sKGF?=
+ =?us-ascii?Q?TQ5BHW2S4mGdYchQDo0wL9t5fN40bau80HpLiye6P37zEjjIPiN/Cvb0lhKB?=
+ =?us-ascii?Q?dtVfhaNqxzE6c4id/kRb10l/cnTmeI7lJmAabXQMJBl0ARVuMqHU5QTHBnNz?=
+ =?us-ascii?Q?vIL5rxVuyE4uHBzPuQwL73+aayA9nPPyVgLDhwAIxOnmq9XtP9PTHQyeFT2I?=
+ =?us-ascii?Q?tWAqqjoTaNgdPp5tyJ2ZomUeO6lx7s7+nAS0jTbkzAlaADMUtOd9UTlZB0Xs?=
+ =?us-ascii?Q?Gg4Bt50wClstyuFdgJIBhRFU7ajczUe6Md7jY8yPYuTAztG406MQmbU6FaWp?=
+ =?us-ascii?Q?8SpkmZsOv+a5+A7KozNj64UTwIFc7xzO5cS3JyK5MuJ2jG/U87GBroycssE6?=
+ =?us-ascii?Q?x4crAaj+EoBgqlvmHwJ47SbNWgvKaIuBPIvSkJr4EtrHwIRpG2nmav5ZcA54?=
+ =?us-ascii?Q?aEAFk9GH5aL5njOo/OBIFSNP9uZevWar6MCuJfajR0zg2cERR7+WO5e3RvOU?=
+ =?us-ascii?Q?u7rglz1neWFWw+buf2q5l2gxMo42haeVymMD3xJkHp7aiZrDnXnfOtUI5P2+?=
+ =?us-ascii?Q?oYM/yROk2vyx7BOUe8fh8DCRKy1RvM/mU2vNtRRdqGz6+47D/CijlKLdMTkD?=
+ =?us-ascii?Q?aDlr3mroljVz+n26KPue4Ljz8wWOdqbdBQim4j0mXQgA0AoFaeEFf6F1wfMR?=
+ =?us-ascii?Q?Pwz1+8QDjw8dp+k2y9rAg4+ejPp5PvKZX7kKDBRYRDUvAFu/wwb1NsZ1JfkP?=
+ =?us-ascii?Q?J/3q6iQefI4nZ8j8sXE6ij06LgPZkpEmoBTFnDUT6PhbbLKP13sDEexAeJlC?=
+ =?us-ascii?Q?jsi2PJg9vEWFJHZ5Q/G5sEiW2mEL5sxIXx5qGlpuOm/c5EzrX6ljwkrd4/Dw?=
+ =?us-ascii?Q?xvAvWDBUNJDhs+VuZAb8D2+dS7/Ioc8MeDwlbrQyFD3qVJ98fM0zbSSHDd3s?=
+ =?us-ascii?Q?JJjFy4v+HzX7YKXmp9ZwogI0d2+jHoYEkxssCFRRrDttyFHtEKBJJ3jkKOyD?=
+ =?us-ascii?Q?YHqOASDGITlQHxazrBtfoO4xwvSW+5iPEGLpk5zz2w9iWhqOsQ3ZYO44vQta?=
+ =?us-ascii?Q?+QrPFsrm7V9YO4KpyHXk3lDVaJG2Fi0cKkguQ0wmfQdpIZCFaBOCca8/iPaC?=
+ =?us-ascii?Q?n7OifIV9GRRh6R//c9BR9xnXZqOFQi2S+yzVzVaSLGd6eslb3Jxb4+VKLXF1?=
+ =?us-ascii?Q?ZfBh7wyHRpabsbzlG3UrHSiqUYP63n+Bu9I5oUR+3Ar8/iznv/gqvUT9TV84?=
+ =?us-ascii?Q?9CeIDjf2ywdzPQmKCrZGSIr168Zoxu+5ijCq1NfjLK9zfVbXjAWqUdpRsflI?=
+ =?us-ascii?Q?HQ/lNnmJHjyZj0dNP3qdghm6fThdadiNFmKWZLSAbUm2j8sHzLuyPN0pOWe/?=
+ =?us-ascii?Q?IcihnqABRTczLjc1Z4bzRB0DI107ucIlVGAzyCvIOimkD8sj677k4QlhriDu?=
+ =?us-ascii?Q?Pze5v+uefZhYhd3BKXIy+aTVyBTPgs2iM1X6hMd1MVivwlZ2doaX4rKLB3SO?=
+ =?us-ascii?Q?W4/WZ5vRVNsQ0nn0HLh3Kg8Dvm4xVgVBVmXaS2Obg+hIluFFIVFpAdHKNKe3?=
+ =?us-ascii?Q?pCKPTwjpqFsxrmeW4qFMi1D8Co98S5wize6PrZbgEZsndg96gEpQv1tn/w/l?=
+ =?us-ascii?Q?9g=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f1d71db-cb4a-404d-55d6-08dab8e918b0
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 13:34:11.6508
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: m+nwIaUG4Gy3P1kk8jyXGNgsjDMAd8+8ALZlPNcmq9JjWraHDfwIIrCT2uFa2EgI5XR6k1TKE/XP1DnvPCsLShq1LVqawrRLdcEhS9OGVlM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6356
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-28_07,2022-10-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999
+ suspectscore=0 mlxscore=0 spamscore=0 phishscore=0 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2210280084
+X-Proofpoint-GUID: n_lpvYdYVvdzTNA5Fje7i_yC_emyD_49
+X-Proofpoint-ORIG-GUID: n_lpvYdYVvdzTNA5Fje7i_yC_emyD_49
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 8:02 PM Stefan Hajnoczi <stefanha@gmail.com> wrote:
->
-> On Tue, 25 Oct 2022 at 04:17, Yongji Xie <xieyongji@bytedance.com> wrote:
-> >
-> > On Fri, Oct 21, 2022 at 2:30 PM Jason Wang <jasowang@redhat.com> wrote:
-> > >
-> > >
-> > > =E5=9C=A8 2022/10/21 13:33, Yongji Xie =E5=86=99=E9=81=93:
-> > > > On Tue, Oct 18, 2022 at 10:54 PM Stefan Hajnoczi <stefanha@gmail.co=
-m> wrote:
-> > > >> On Tue, 18 Oct 2022 at 09:17, Yongji Xie <xieyongji@bytedance.com>=
- wrote:
-> > > >>> On Tue, Oct 18, 2022 at 2:59 PM Ming Lei <tom.leiming@gmail.com> =
-wrote:
-> > > >>>> On Mon, Oct 17, 2022 at 07:11:59PM +0800, Yongji Xie wrote:
-> > > >>>>> On Fri, Oct 14, 2022 at 8:57 PM Ming Lei <tom.leiming@gmail.com=
-> wrote:
-> > > >>>>>> On Thu, Oct 13, 2022 at 02:48:04PM +0800, Yongji Xie wrote:
-> > > >>>>>>> On Wed, Oct 12, 2022 at 10:22 PM Stefan Hajnoczi <stefanha@gm=
-ail.com> wrote:
-> > > >>>>>>>> On Sat, 8 Oct 2022 at 04:43, Ziyang Zhang <ZiyangZhang@linux=
-.alibaba.com> wrote:
-> > > >>>>>>>>> On 2022/10/5 12:18, Ming Lei wrote:
-> > > >>>>>>>>>> On Tue, Oct 04, 2022 at 09:53:32AM -0400, Stefan Hajnoczi =
-wrote:
-> > > >>>>>>>>>>> On Tue, 4 Oct 2022 at 05:44, Ming Lei <tom.leiming@gmail.=
-com> wrote:
-> > > >>>>>>>>>>>> On Mon, Oct 03, 2022 at 03:53:41PM -0400, Stefan Hajnocz=
-i wrote:
-> > > >>>>>>>>>>>>> On Fri, Sep 30, 2022 at 05:24:11PM +0800, Ming Lei wrot=
-e:
-> > > >>>>>>>>>>>>>> ublk-qcow2 is available now.
-> > > >>>>>>>>>>>>> Cool, thanks for sharing!
-> > > >>>>>>>>>>>>>
-> > > >>>>>>>>>>>>>> So far it provides basic read/write function, and comp=
-ression and snapshot
-> > > >>>>>>>>>>>>>> aren't supported yet. The target/backend implementatio=
-n is completely
-> > > >>>>>>>>>>>>>> based on io_uring, and share the same io_uring with ub=
-lk IO command
-> > > >>>>>>>>>>>>>> handler, just like what ublk-loop does.
-> > > >>>>>>>>>>>>>>
-> > > >>>>>>>>>>>>>> Follows the main motivations of ublk-qcow2:
-> > > >>>>>>>>>>>>>>
-> > > >>>>>>>>>>>>>> - building one complicated target from scratch helps l=
-ibublksrv APIs/functions
-> > > >>>>>>>>>>>>>>    become mature/stable more quickly, since qcow2 is c=
-omplicated and needs more
-> > > >>>>>>>>>>>>>>    requirement from libublksrv compared with other sim=
-ple ones(loop, null)
-> > > >>>>>>>>>>>>>>
-> > > >>>>>>>>>>>>>> - there are several attempts of implementing qcow2 dri=
-ver in kernel, such as
-> > > >>>>>>>>>>>>>>    ``qloop`` [2], ``dm-qcow2`` [3] and ``in kernel qco=
-w2(ro)`` [4], so ublk-qcow2
-> > > >>>>>>>>>>>>>>    might useful be for covering requirement in this fi=
-eld
-> > > >>>>>>>>>>>>>>
-> > > >>>>>>>>>>>>>> - performance comparison with qemu-nbd, and it was my =
-1st thought to evaluate
-> > > >>>>>>>>>>>>>>    performance of ublk/io_uring backend by writing one=
- ublk-qcow2 since ublksrv
-> > > >>>>>>>>>>>>>>    is started
-> > > >>>>>>>>>>>>>>
-> > > >>>>>>>>>>>>>> - help to abstract common building block or design pat=
-tern for writing new ublk
-> > > >>>>>>>>>>>>>>    target/backend
-> > > >>>>>>>>>>>>>>
-> > > >>>>>>>>>>>>>> So far it basically passes xfstest(XFS) test by using =
-ublk-qcow2 block
-> > > >>>>>>>>>>>>>> device as TEST_DEV, and kernel building workload is ve=
-rified too. Also
-> > > >>>>>>>>>>>>>> soft update approach is applied in meta flushing, and =
-meta data
-> > > >>>>>>>>>>>>>> integrity is guaranteed, 'make test T=3Dqcow2/040' cov=
-ers this kind of
-> > > >>>>>>>>>>>>>> test, and only cluster leak is reported during this te=
-st.
-> > > >>>>>>>>>>>>>>
-> > > >>>>>>>>>>>>>> The performance data looks much better compared with q=
-emu-nbd, see
-> > > >>>>>>>>>>>>>> details in commit log[1], README[5] and STATUS[6]. And=
- the test covers both
-> > > >>>>>>>>>>>>>> empty image and pre-allocated image, for example of pr=
-e-allocated qcow2
-> > > >>>>>>>>>>>>>> image(8GB):
-> > > >>>>>>>>>>>>>>
-> > > >>>>>>>>>>>>>> - qemu-nbd (make test T=3Dqcow2/002)
-> > > >>>>>>>>>>>>> Single queue?
-> > > >>>>>>>>>>>> Yeah.
-> > > >>>>>>>>>>>>
-> > > >>>>>>>>>>>>>>      randwrite(4k): jobs 1, iops 24605
-> > > >>>>>>>>>>>>>>      randread(4k): jobs 1, iops 30938
-> > > >>>>>>>>>>>>>>      randrw(4k): jobs 1, iops read 13981 write 14001
-> > > >>>>>>>>>>>>>>      rw(512k): jobs 1, iops read 724 write 728
-> > > >>>>>>>>>>>>> Please try qemu-storage-daemon's VDUSE export type as w=
-ell. The
-> > > >>>>>>>>>>>>> command-line should be similar to this:
-> > > >>>>>>>>>>>>>
-> > > >>>>>>>>>>>>>    # modprobe virtio_vdpa # attaches vDPA devices to ho=
-st kernel
-> > > >>>>>>>>>>>> Not found virtio_vdpa module even though I enabled all t=
-he following
-> > > >>>>>>>>>>>> options:
-> > > >>>>>>>>>>>>
-> > > >>>>>>>>>>>>          --- vDPA drivers
-> > > >>>>>>>>>>>>            <M>   vDPA device simulator core
-> > > >>>>>>>>>>>>            <M>     vDPA simulator for networking device
-> > > >>>>>>>>>>>>            <M>     vDPA simulator for block device
-> > > >>>>>>>>>>>>            <M>   VDUSE (vDPA Device in Userspace) suppor=
-t
-> > > >>>>>>>>>>>>            <M>   Intel IFC VF vDPA driver
-> > > >>>>>>>>>>>>            <M>   Virtio PCI bridge vDPA driver
-> > > >>>>>>>>>>>>            <M>   vDPA driver for Alibaba ENI
-> > > >>>>>>>>>>>>
-> > > >>>>>>>>>>>> BTW, my test environment is VM and the shared data is do=
-ne in VM too, and
-> > > >>>>>>>>>>>> can virtio_vdpa be used inside VM?
-> > > >>>>>>>>>>> I hope Xie Yongji can help explain how to benchmark VDUSE=
-.
-> > > >>>>>>>>>>>
-> > > >>>>>>>>>>> virtio_vdpa is available inside guests too. Please check =
-that
-> > > >>>>>>>>>>> VIRTIO_VDPA ("vDPA driver for virtio devices") is enabled=
- in "Virtio
-> > > >>>>>>>>>>> drivers" menu.
-> > > >>>>>>>>>>>
-> > > >>>>>>>>>>>>>    # modprobe vduse
-> > > >>>>>>>>>>>>>    # qemu-storage-daemon \
-> > > >>>>>>>>>>>>>        --blockdev file,filename=3Dtest.qcow2,cache.dire=
-ct=3Dof|off,aio=3Dnative,node-name=3Dfile \
-> > > >>>>>>>>>>>>>        --blockdev qcow2,file=3Dfile,node-name=3Dqcow2 \
-> > > >>>>>>>>>>>>>        --object iothread,id=3Diothread0 \
-> > > >>>>>>>>>>>>>        --export vduse-blk,id=3Dvduse0,name=3Dvduse0,num=
--queues=3D$(nproc),node-name=3Dqcow2,writable=3Don,iothread=3Diothread0
-> > > >>>>>>>>>>>>>    # vdpa dev add name vduse0 mgmtdev vduse
-> > > >>>>>>>>>>>>>
-> > > >>>>>>>>>>>>> A virtio-blk device should appear and xfstests can be r=
-un on it
-> > > >>>>>>>>>>>>> (typically /dev/vda unless you already have other virti=
-o-blk devices).
-> > > >>>>>>>>>>>>>
-> > > >>>>>>>>>>>>> Afterwards you can destroy the device using:
-> > > >>>>>>>>>>>>>
-> > > >>>>>>>>>>>>>    # vdpa dev del vduse0
-> > > >>>>>>>>>>>>>
-> > > >>>>>>>>>>>>>> - ublk-qcow2 (make test T=3Dqcow2/022)
-> > > >>>>>>>>>>>>> There are a lot of other factors not directly related t=
-o NBD vs ublk. In
-> > > >>>>>>>>>>>>> order to get an apples-to-apples comparison with qemu-*=
- a ublk export
-> > > >>>>>>>>>>>>> type is needed in qemu-storage-daemon. That way only th=
-e difference is
-> > > >>>>>>>>>>>>> the ublk interface and the rest of the code path is ide=
-ntical, making it
-> > > >>>>>>>>>>>>> possible to compare NBD, VDUSE, ublk, etc more precisel=
-y.
-> > > >>>>>>>>>>>> Maybe not true.
-> > > >>>>>>>>>>>>
-> > > >>>>>>>>>>>> ublk-qcow2 uses io_uring to handle all backend IO(includ=
-e meta IO) completely,
-> > > >>>>>>>>>>>> and so far single io_uring/pthread is for handling all q=
-cow2 IOs and IO
-> > > >>>>>>>>>>>> command.
-> > > >>>>>>>>>>> qemu-nbd doesn't use io_uring to handle the backend IO, s=
-o we don't
-> > > >>>>>>>>>> I tried to use it via --aio=3Dio_uring for setting up qemu=
--nbd, but not succeed.
-> > > >>>>>>>>>>
-> > > >>>>>>>>>>> know whether the benchmark demonstrates that ublk is fast=
-er than NBD,
-> > > >>>>>>>>>>> that the ublk-qcow2 implementation is faster than qemu-nb=
-d's qcow2,
-> > > >>>>>>>>>>> whether there are miscellaneous implementation difference=
-s between
-> > > >>>>>>>>>>> ublk-qcow2 and qemu-nbd (like using the same io_uring con=
-text for both
-> > > >>>>>>>>>>> ublk and backend IO), or something else.
-> > > >>>>>>>>>> The theory shouldn't be too complicated:
-> > > >>>>>>>>>>
-> > > >>>>>>>>>> 1) io uring passthough(pt) communication is fast than sock=
-et, and io command
-> > > >>>>>>>>>> is carried over io_uring pt commands, and should be fast t=
-han virio
-> > > >>>>>>>>>> communication too.
-> > > >>>>>>>>>>
-> > > >>>>>>>>>> 2) io uring io handling is fast than libaio which is taken=
- in the
-> > > >>>>>>>>>> test on qemu-nbd, and all qcow2 backend io(include meta io=
-) is handled
-> > > >>>>>>>>>> by io_uring.
-> > > >>>>>>>>>>
-> > > >>>>>>>>>> https://github.com/ming1/ubdsrv/blob/master/tests/common/q=
-cow2_common
-> > > >>>>>>>>>>
-> > > >>>>>>>>>> 3) ublk uses one single io_uring to handle all io commands=
- and qcow2
-> > > >>>>>>>>>> backend IOs, so batching handling is common, and it is eas=
-y to see
-> > > >>>>>>>>>> dozens of IOs/io commands handled in single syscall, or ev=
-en more.
-> > > >>>>>>>>>>
-> > > >>>>>>>>>>> I'm suggesting measuring changes to just 1 variable at a =
-time.
-> > > >>>>>>>>>>> Otherwise it's hard to reach a conclusion about the root =
-cause of the
-> > > >>>>>>>>>>> performance difference. Let's learn why ublk-qcow2 perfor=
-ms well.
-> > > >>>>>>>>>> Turns out the latest Fedora 37-beta doesn't support vdpa y=
-et, so I built
-> > > >>>>>>>>>> qemu from the latest github tree, and finally it starts to=
- work. And test kernel
-> > > >>>>>>>>>> is v6.0 release.
-> > > >>>>>>>>>>
-> > > >>>>>>>>>> Follows the test result, and all three devices are setup a=
-s single
-> > > >>>>>>>>>> queue, and all tests are run in single job, still done in =
-one VM, and
-> > > >>>>>>>>>> the test images are stored on XFS/virito-scsi backed SSD.
-> > > >>>>>>>>>>
-> > > >>>>>>>>>> The 1st group tests all three block device which is backed=
- by empty
-> > > >>>>>>>>>> qcow2 image.
-> > > >>>>>>>>>>
-> > > >>>>>>>>>> The 2nd group tests all the three block devices backed by =
-pre-allocated
-> > > >>>>>>>>>> qcow2 image.
-> > > >>>>>>>>>>
-> > > >>>>>>>>>> Except for big sequential IO(512K), there is still not sma=
-ll gap between
-> > > >>>>>>>>>> vdpa-virtio-blk and ublk.
-> > > >>>>>>>>>>
-> > > >>>>>>>>>> 1. run fio on block device over empty qcow2 image
-> > > >>>>>>>>>> 1) qemu-nbd
-> > > >>>>>>>>>> running qcow2/001
-> > > >>>>>>>>>> run perf test on empty qcow2 image via nbd
-> > > >>>>>>>>>>        fio (nbd(/mnt/data/ublk_null_8G_nYbgF.qcow2), libai=
-o, bs 4k, dio, hw queues:1)...
-> > > >>>>>>>>>>        randwrite: jobs 1, iops 8549
-> > > >>>>>>>>>>        randread: jobs 1, iops 34829
-> > > >>>>>>>>>>        randrw: jobs 1, iops read 11363 write 11333
-> > > >>>>>>>>>>        rw(512k): jobs 1, iops read 590 write 597
-> > > >>>>>>>>>>
-> > > >>>>>>>>>>
-> > > >>>>>>>>>> 2) ublk-qcow2
-> > > >>>>>>>>>> running qcow2/021
-> > > >>>>>>>>>> run perf test on empty qcow2 image via ublk
-> > > >>>>>>>>>>        fio (ublk/qcow2( -f /mnt/data/ublk_null_8G_s761j.qc=
-ow2), libaio, bs 4k, dio, hw queues:1, uring_comp: 0, get_data: 0).
-> > > >>>>>>>>>>        randwrite: jobs 1, iops 16086
-> > > >>>>>>>>>>        randread: jobs 1, iops 172720
-> > > >>>>>>>>>>        randrw: jobs 1, iops read 35760 write 35702
-> > > >>>>>>>>>>        rw(512k): jobs 1, iops read 1140 write 1149
-> > > >>>>>>>>>>
-> > > >>>>>>>>>> 3) vdpa-virtio-blk
-> > > >>>>>>>>>> running debug/test_dev
-> > > >>>>>>>>>> run io test on specified device
-> > > >>>>>>>>>>        fio (vdpa(/dev/vdc), libaio, bs 4k, dio, hw queues:=
-1)...
-> > > >>>>>>>>>>        randwrite: jobs 1, iops 8626
-> > > >>>>>>>>>>        randread: jobs 1, iops 126118
-> > > >>>>>>>>>>        randrw: jobs 1, iops read 17698 write 17665
-> > > >>>>>>>>>>        rw(512k): jobs 1, iops read 1023 write 1031
-> > > >>>>>>>>>>
-> > > >>>>>>>>>>
-> > > >>>>>>>>>> 2. run fio on block device over pre-allocated qcow2 image
-> > > >>>>>>>>>> 1) qemu-nbd
-> > > >>>>>>>>>> running qcow2/002
-> > > >>>>>>>>>> run perf test on pre-allocated qcow2 image via nbd
-> > > >>>>>>>>>>        fio (nbd(/mnt/data/ublk_data_8G_sc0SB.qcow2), libai=
-o, bs 4k, dio, hw queues:1)...
-> > > >>>>>>>>>>        randwrite: jobs 1, iops 21439
-> > > >>>>>>>>>>        randread: jobs 1, iops 30336
-> > > >>>>>>>>>>        randrw: jobs 1, iops read 11476 write 11449
-> > > >>>>>>>>>>        rw(512k): jobs 1, iops read 718 write 722
-> > > >>>>>>>>>>
-> > > >>>>>>>>>> 2) ublk-qcow2
-> > > >>>>>>>>>> running qcow2/022
-> > > >>>>>>>>>> run perf test on pre-allocated qcow2 image via ublk
-> > > >>>>>>>>>>        fio (ublk/qcow2( -f /mnt/data/ublk_data_8G_yZiaJ.qc=
-ow2), libaio, bs 4k, dio, hw queues:1, uring_comp: 0, get_data: 0).
-> > > >>>>>>>>>>        randwrite: jobs 1, iops 98757
-> > > >>>>>>>>>>        randread: jobs 1, iops 110246
-> > > >>>>>>>>>>        randrw: jobs 1, iops read 47229 write 47161
-> > > >>>>>>>>>>        rw(512k): jobs 1, iops read 1416 write 1427
-> > > >>>>>>>>>>
-> > > >>>>>>>>>> 3) vdpa-virtio-blk
-> > > >>>>>>>>>> running debug/test_dev
-> > > >>>>>>>>>> run io test on specified device
-> > > >>>>>>>>>>        fio (vdpa(/dev/vdc), libaio, bs 4k, dio, hw queues:=
-1)...
-> > > >>>>>>>>>>        randwrite: jobs 1, iops 47317
-> > > >>>>>>>>>>        randread: jobs 1, iops 74092
-> > > >>>>>>>>>>        randrw: jobs 1, iops read 27196 write 27234
-> > > >>>>>>>>>>        rw(512k): jobs 1, iops read 1447 write 1458
-> > > >>>>>>>>>>
-> > > >>>>>>>>>>
-> > > >>>>>>>>> Hi All,
-> > > >>>>>>>>>
-> > > >>>>>>>>> We are interested in VDUSE vs UBLK, too. And I have tested =
-them with nullblk backend.
-> > > >>>>>>>>> Let me share some results here.
-> > > >>>>>>>>>
-> > > >>>>>>>>> I setup UBLK with:
-> > > >>>>>>>>>    ublk add -t loop -f /dev/nullb0 -d QUEUE_DEPTH -q NR_QUE=
-UE
-> > > >>>>>>>>>
-> > > >>>>>>>>> I setup VDUSE with:
-> > > >>>>>>>>>    qemu-storage-daemon \
-> > > >>>>>>>>>         --chardev socket,id=3Dcharmonitor,path=3D/tmp/qmp.s=
-ock,server=3Don,wait=3Doff \
-> > > >>>>>>>>>         --monitor chardev=3Dcharmonitor \
-> > > >>>>>>>>>         --blockdev driver=3Dhost_device,cache.direct=3Don,f=
-ilename=3D/dev/nullb0,node-name=3Ddisk0 \
-> > > >>>>>>>>>         --export vduse-blk,id=3Dtest,node-name=3Ddisk0,name=
-=3Dvduse_test,writable=3Don,num-queues=3DNR_QUEUE,queue-size=3DQUEUE_DEPTH
-> > > >>>>>>>>>
-> > > >>>>>>>>> Here QUEUE_DEPTH is 1, 32 or 128 and NR_QUEUE is 1 or 4.
-> > > >>>>>>>>>
-> > > >>>>>>>>> Note:
-> > > >>>>>>>>> (1) VDUSE requires QUEUE_DEPTH >=3D 2. I cannot setup QUEUE=
-_DEPTH to 1.
-> > > >>>>>>>>> (2) I use qemu 7.1.0-rc3. It supports vduse-blk.
-> > > >>>>>>>>> (3) I do not use ublk null target so that the test is fair.
-> > > >>>>>>>>> (4) I setup fio with direct=3D1, bs=3D4k.
-> > > >>>>>>>>>
-> > > >>>>>>>>> ------------------------------
-> > > >>>>>>>>> 1 job 1 iodepth, lat=EF=BC=88usec)
-> > > >>>>>>>>>                  vduse   ublk
-> > > >>>>>>>>> seq-read        22.55   11.15
-> > > >>>>>>>>> rand-read       22.49   11.17
-> > > >>>>>>>>> seq-write       25.67   10.25
-> > > >>>>>>>>> rand-write      24.13   10.16
-> > > >>>>>>>> Thanks for sharing. Any idea what the bottlenecks are for vd=
-use and ublk?
-> > > >>>>>>>>
-> > > >>>>>>> I think one reason for the latency gap of sync I/O is that vd=
-use uses
-> > > >>>>>>> workqueue in the I/O completion path but ublk doesn't.
-> > > >>>>>>>
-> > > >>>>>>> And one bottleneck for the async I/O in vduse is that vduse w=
-ill do
-> > > >>>>>>> memcpy inside the critical section of virtqueue's spinlock in=
- the
-> > > >>>>>>> virtio-blk driver. That will hurt the performance heavily whe=
-n
-> > > >>>>>>> virtio_queue_rq() and virtblk_done() run concurrently. And it=
- can be
-> > > >>>>>>> mitigated by the advance DMA mapping feature [1] or irq bindi=
-ng
-> > > >>>>>>> support [2].
-> > > >>>>>> Hi Yongji,
-> > > >>>>>>
-> > > >>>>>> Yeah, that is the cost you paid for virtio. Wrt. userspace blo=
-ck device
-> > > >>>>>> or other sort of userspace devices, cmd completion is driven b=
-y
-> > > >>>>>> userspace, not sure if one such 'irq' is needed.
-> > > >>>>> I'm not sure, it can be an optional feature in the future if ne=
-eded.
-> > > >>>>>
-> > > >>>>>> Even not sure if virtio
-> > > >>>>>> ring is one good choice for such use case, given io_uring has =
-been proved
-> > > >>>>>> as very efficient(should be better than virtio ring, IMO).
-> > > >>>>>>
-> > > >>>>> Since vduse is aimed at creating a generic userspace device fra=
-mework,
-> > > >>>>> virtio should be the right way IMO.
-> > > >>>> OK, it is the right way, but may not be the effective one.
-> > > >>>>
-> > > >>> Maybe, but I think we can try to optimize it.
-> > > >>>
-> > > >>>>> And with the vdpa framework, the
-> > > >>>>> userspace device can serve both virtual machines and containers=
-.
-> > > >>>> virtio is good for VM, but not sure it is good enough for other
-> > > >>>> cases.
-> > > >>>>
-> > > >>>>> Regarding the performance issue, actually I can't measure how m=
-uch of
-> > > >>>>> the performance loss is due to the difference between virtio ri=
-ng and
-> > > >>>>> iouring. But I think it should be very small. The main costs co=
-me from
-> > > >>>>> the two bottlenecks I mentioned before which could be mitigated=
- in the
-> > > >>>>> future.
-> > > >>>> Per my understanding, at least there are two places where virtio=
- ring is
-> > > >>>> less efficient than io_uring:
-> > > >>>>
-> > > >>> I might have misunderstood what you mean by virtio ring before. M=
-y
-> > > >>> previous understanding of the virtio ring does not include the
-> > > >>> virtio-blk driver.
-> > > >>>
-> > > >>>> 1) io_uring uses standalone submission queue(SQ) and completion =
-queue(CQ),
-> > > >>>> so no contention exists between submission and completion; but v=
-irtio queue
-> > > >>>> requires per-vq lock in both submission and completion.
-> > > >>>>
-> > > >>> Yes, this is the bottleneck of the virtio-blk driver, even in the=
- VM
-> > > >>> case. We are also trying to optimize this lock.
-> > > >>>
-> > > >>> One way to mitigate it is making submission and completion happen=
- in
-> > > >>> the same core.
-> > > >> QEMU sizes virtio-blk device num-queues to match the vCPU count. T=
-he
-> > > >> virtio-blk driver is a blk-mq driver, so submissions and completio=
-ns
-> > > >> for a given virtqueue should already be processed by the same vCPU=
-.
-> > > >>
-> > > >> Unless the device is misconfigured or the guest software chooses a
-> > > >> custom vq:vCPU mapping, there should be no vq lock contention betw=
-een
-> > > >> vCPUs.
-> > > >>
-> > > >> I can think of a reason why submission and completion require
-> > > >> coordination: descriptors are occupied until completion. The
-> > > >> submission logic chooses free descriptors from the table. The
-> > > >> completion logic returns free descriptors so they can be used in
-> > > >> future submissions.
-> > > >>
-> > > > Yes, we need to maintain a head pointer of the free descriptors in
-> > > > both submission and completion path.
-> > >
-> > >
-> > > Not necessarily after IN_ORDER?
-> > >
-> >
-> > Sounds like a good idea.
->
-> Submission and completion are still not 100% independent with IN_ORDER
-> because descriptors are still in use until completion. It may not be
-> necessary to keep a freelist, but you cannot actually use the
-> descriptors for new submissions until existing requests complete. Is
-> that correct?
->
+On Fri, Oct 28, 2022 at 06:08:13PM +0530, Deepak R Varma wrote:
+> Flexible-array member should be used instead of one or zero member to
+> meet the need for having a dynamically sized trailing elements in a
+> structure. Refer to links [1] and [2] for detailed guidance on this
+> suggestion.
+> 
+> [1] https://en.wikipedia.org/wiki/Flexible_array_member
+> [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
+> 
+> Issue identified using coccicheck.
+> 
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
+>  drivers/staging/wlan-ng/p80211mgmt.h  | 8 ++++----
+>  drivers/staging/wlan-ng/p80211types.h | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/staging/wlan-ng/p80211mgmt.h b/drivers/staging/wlan-ng/p80211mgmt.h
+> index 1ef30d3f3159..d6fe52de2c8f 100644
+> --- a/drivers/staging/wlan-ng/p80211mgmt.h
+> +++ b/drivers/staging/wlan-ng/p80211mgmt.h
+> @@ -229,14 +229,14 @@ struct wlan_ie {
+>  struct wlan_ie_ssid {
+>  	u8 eid;
+>  	u8 len;
+> -	u8 ssid[1];		/* may be zero, ptrs may overlap */
+> +	u8 ssid[];		/* may be zero, ptrs may overlap */
 
-Yes. But we can get rid of the per-vq lock at least.
+How have you ensured that changing this from a 1 byte array to a zero
+byte array does not break anything?  It's not uncommon for a people
+to do math like "size - 1 + length".  The "- 1" would be to take the
+1 element into consideration.
 
-> Anyway, independent submission and completion rings aren't perfect
-> either because independent submission introduces a new point of
-> communication: the device must tell the driver when submitted
-> descriptors have been processed. That means the driver must access a
-> hardware register on the device or the device must DMA to RAM. So it
-> involves extra bus traffic that is not necessary if descriptors are in
-> use until completion. io_uring gets away with it because the
-> io_uring_enter(2) syscall is synchronous and can therefore return the
-> number of consumed sq elements for free.
->
-> There are ways to minimize that cost:
-> 1. The driver only needs to fetch the device's sq index when it has
-> run out of sq ring space.
-> 2. The device can include sq index updates with completions. This is
-> what NVMe does with the CQE SQ Head Pointer field, but the
-> disadvantage is that the driver has no way of determining the sq index
-> until a completion occurs.
->
+I was trying to read through this code to check your work, but then
+you sent a second patch which also does not explain how you are auditing
+your changes.  Can you go a bit slower?
 
-It seems that the per-vq lock is still needed in this way if IN_ORDER
-is not supported. We still need to maintain a list of the free
-descriptors since out-of-order completion may occur.
+regards,
+dan carpenter
 
-Thanks,
-Yongji
