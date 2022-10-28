@@ -2,143 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD16610A2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10FB5610A1B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiJ1GRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
+        id S229661AbiJ1GNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiJ1GRP (ORCPT
+        with ESMTP id S229535AbiJ1GN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:17:15 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75EF68CD6;
-        Thu, 27 Oct 2022 23:17:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666937834; x=1698473834;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=dF/aWwaNQggwj6gD+KJTCT5Ni9qMvVF3l+TfbYoad8o=;
-  b=cz4o6+8UlqHnvioAVQjz4Ublzvx8r+9l3uEQN2RV0Ivt+YJkLLVcCfL0
-   8QplgOY/8AE7rrUfZYbwpdVYKaZ9in52yRzSPgSMPrkjv/M3lG0tKmL6C
-   j8BwegLkehF7mAy/Iw6z39HnTOseMEHWx2QfMD8408wgFLI3t8TqAMaL0
-   UK3Vt9wqn9CymgRBiJmk2o7nU5K2bX/bojBdnsLhe39jenVsoquk4tIhE
-   bLWyMh1sgqnPIZkEHD25lmzRy118mpem8iBU85zZhApGHxyZmmgCGmi6r
-   SJiBO3cROnEXTHLeLO9uWM/gmGYFNNcsNcSafc3ZwA7r/kWx45oqkfEeJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="372634624"
-X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
-   d="scan'208";a="372634624"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 23:17:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="627427865"
-X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
-   d="scan'208";a="627427865"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga007.jf.intel.com with ESMTP; 27 Oct 2022 23:17:01 -0700
-Date:   Fri, 28 Oct 2022 14:12:32 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <20221028061232.GA3885130@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
- <20221026173145.GA3819453@ls.amr.corp.intel.com>
+        Fri, 28 Oct 2022 02:13:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014031B7F03;
+        Thu, 27 Oct 2022 23:13:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9077162672;
+        Fri, 28 Oct 2022 06:13:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D82E3C433D7;
+        Fri, 28 Oct 2022 06:13:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666937606;
+        bh=4CqAhmzska+zzYLW4aongWkFXFBMvigrTx+gYITPknc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z6eCy8hir0S58TiK/kcwLHlj+03InJp83Lz6JQZe8LjzvTbuC9THnZoyAnuXOnFMU
+         OGNByaMKlMlFwswkRReYkxJfB5JUkGQo5UtiPzXeV64wXT7wthwbyBOr6QyqrQq4JF
+         hPmVB6TugYmwTExukSPq+QLbdXlJ+dWE9wFtUlAWlaXGRD6C4qxqpLMxD73rYLiB3b
+         /feBI0g+bgjZyZRTu1hA8f6Zv0FDb2UzIUYoAZcsKy9HX0/HHiQEXXQ+6MvH3RwIqx
+         RYWmQ0E/Z9gbDIAv65wU1UsYzI+LKfAN50GAnGLJKkVDs7F6LHURL8cyB2rTAeJcjF
+         gfZSrQFpxdvhQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ooIcC-0005Sw-8T; Fri, 28 Oct 2022 08:13:12 +0200
+Date:   Fri, 28 Oct 2022 08:13:12 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/13] dt-bindings: phy: qcom,qmp-usb: fix sc8280xp
+ binding
+Message-ID: <Y1ty+E2qyxlniIsV@hovoldconsulting.com>
+References: <20221024100632.20549-1-johan+linaro@kernel.org>
+ <20221024100632.20549-12-johan+linaro@kernel.org>
+ <c9940701-8486-5a0c-4c7d-9c85b9460a7f@linaro.org>
+ <Y1tyBw2iQvV89+UB@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221026173145.GA3819453@ls.amr.corp.intel.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y1tyBw2iQvV89+UB@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 10:31:45AM -0700, Isaku Yamahata wrote:
-> On Tue, Oct 25, 2022 at 11:13:37PM +0800,
-> Chao Peng <chao.p.peng@linux.intel.com> wrote:
+On Fri, Oct 28, 2022 at 08:09:11AM +0200, Johan Hovold wrote:
+> On Thu, Oct 27, 2022 at 10:15:45PM -0400, Krzysztof Kozlowski wrote:
+> > On 24/10/2022 06:06, Johan Hovold wrote:
+> > > The current QMP USB PHY bindings are based on the original MSM8996 PCIe
+> > > PHY binding which provided multiple PHYs per IP block and these in turn
+> > > were described by child nodes.
+> > > 
+> > > The QMP USB PHY block only provide a single PHY and the remnant child
+> > > node does not really reflect the hardware.
+> > > 
+> > > The original MSM8996 binding also ended up describing the individual
+> > > register blocks as belonging to either the wrapper node or the PHY child
+> > > nodes.
+> > > 
+> > 
+> > (...)
+> > 
+> > >      then:
+> > > diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb-phy.yaml
+> > > new file mode 100644
+> > > index 000000000000..95ee81d782f9
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb-phy.yaml
+> > 
+> > Filename based on compatible, so in this case
+> > "qcom,sc8280xp-qmp-usb3-uni-phy.yaml", unless it's like the PCI case?
 > 
-> > +int restrictedmem_get_page(struct file *file, pgoff_t offset,
-> > +			   struct page **pagep, int *order)
-> > +{
-> > +	struct restrictedmem_data *data = file->f_mapping->private_data;
-> > +	struct file *memfd = data->memfd;
-> > +	struct page *page;
-> > +	int ret;
-> > +
-> > +	ret = shmem_getpage(file_inode(memfd), offset, &page, SGP_WRITE);
-> 
-> shmem_getpage() was removed.
-> https://lkml.kernel.org/r/20220902194653.1739778-34-willy@infradead.org
+> Yes, you're right. Thanks for catching that. This should be the only
+> sc8280xp USB PHY compatible so the file name should be updates as you
+> suggested.
 
-Thanks for pointing out. My current base(kvm/queue) has not included
-this change yet so still use shmem_getpage().
+Looks like I missed the '3' in 'usb3' in the previous patch as well.
 
-Chao
-> 
-> I needed the following fix to compile.
-> 
-> thanks,
-> 
-> diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
-> index e5bf8907e0f8..4694dd5609d6 100644
-> --- a/mm/restrictedmem.c
-> +++ b/mm/restrictedmem.c
-> @@ -231,13 +231,15 @@ int restrictedmem_get_page(struct file *file, pgoff_t offset,
->  {
->         struct restrictedmem_data *data = file->f_mapping->private_data;
->         struct file *memfd = data->memfd;
-> +       struct folio *folio = NULL;
->         struct page *page;
->         int ret;
->  
-> -       ret = shmem_getpage(file_inode(memfd), offset, &page, SGP_WRITE);
-> +       ret = shmem_get_folio(file_inode(memfd), offset, &folio, SGP_WRITE);
->         if (ret)
->                 return ret;
->  
-> +       page = folio_file_page(folio, offset);
->         *pagep = page;
->         if (order)
->                 *order = thp_order(compound_head(page));
-> -- 
-> Isaku Yamahata <isaku.yamahata@gmail.com>
+Johan
