@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA5E610A93
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3266610A97
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiJ1GoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
+        id S230104AbiJ1GoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbiJ1GmZ (ORCPT
+        with ESMTP id S229482AbiJ1GmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 28 Oct 2022 02:42:25 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A501BB573;
-        Thu, 27 Oct 2022 23:42:20 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 06:42:17 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E281BB941;
+        Thu, 27 Oct 2022 23:42:21 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 06:42:18 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666939339;
+        s=2020; t=1666939340;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+V1Zjg7R6j1LUTb4PqfZFg9+ZMgRl0HrtQtwBXBU7g8=;
-        b=0YenhQqMKhGZML5/VgfZybC3xgpQL0TSSsxYpNGPmKqp/FYfSuPjXTfXhTUpKw2cT2wkq2
-        nXV7tvaqC9hp856N+wJBJ4iRXJrtAdbGaDlgAA1WTxu0BE7wy0Za7S8gZGFq3X4GXSG5Lq
-        RKdYFWI/x83dBdCvakjf94a62lHPrDln8r5WAZzzK8FC16az7sUo+ndRR7lul2m1Wd+6ps
-        yJFG4Pm2RIbxIGn7vpszcvfDeElUL9bI+dIPUZ6FdXITAxmsjA5ufMI5z6ypqinlrZEkzC
-        eMvZZK6bISRaBOe8kBRnn/XbK9Z/xK9b4S44GNU7n1sDwlvNmnZ9lHJ7Ws916Q==
+        bh=GEjp49Gdru83OdMCYGTYXPHKRndNIPLnwf2Koa1z9H8=;
+        b=Kp2d+iMR9e1XDgBThz8EHIIPhaCet6DX1Wo34hjtsInL4ObxHxbqKoZfFjXuh/j3P4I+yn
+        MqOnWTEW5TDOS2CxJ34uVoC+kMH933opBDkFFmCB+ONhR3SRr89QelipvzxyKwFFkKXt1D
+        RXC9+pTjO1QmOMoXiVWGzxKH0Gzz69FZkT801XWVqjTuULUXvZkFyqwBh/YNybxwqr+O/Q
+        wvzEnNTrnglcHg2BvJt4elrNThwto8Hw3UM4JFe/ddONJ8ggcACtFRII8GlrQKr6qTMcNp
+        Zn4IHn7YYXxG3ysLyN5R9BMD5QdpFzo1MblQTYV3A3YtIwSMgjqUX8F9C1NLBQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666939339;
+        s=2020e; t=1666939340;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+V1Zjg7R6j1LUTb4PqfZFg9+ZMgRl0HrtQtwBXBU7g8=;
-        b=IYgc+Oa9xJzewmRNPO62GVAcKBuGHhOJHZh1jWHKeaKGjVmL0kSWHYZSw+5/pcYYw6xev+
-        D+kg2VAUXMKFgTDw==
+        bh=GEjp49Gdru83OdMCYGTYXPHKRndNIPLnwf2Koa1z9H8=;
+        b=zovM2xchP60YFd3C1vCDJpr6l5sBTC7MSW+MtnCRpYlM6Rt/HwRJcT1YPVQ6bolKdO8eBd
+        kNJCjIwZvqlZ7JAQ==
 From:   "tip-bot2 for Qais Yousef" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/fair: Detect capacity inversion
+Subject: [tip: sched/core] sched/uclamp: Cater for uclamp in
+ find_energy_efficient_cpu()'s early exit condition
 Cc:     Qais Yousef <qais.yousef@arm.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220804143609.515789-9-qais.yousef@arm.com>
-References: <20220804143609.515789-9-qais.yousef@arm.com>
+In-Reply-To: <20220804143609.515789-8-qais.yousef@arm.com>
+References: <20220804143609.515789-8-qais.yousef@arm.com>
 MIME-Version: 1.0
-Message-ID: <166693933776.29415.4930965019951446484.tip-bot2@tip-bot2>
+Message-ID: <166693933885.29415.5003832338719378198.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,155 +67,65 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     44c7b80bffc3a657a36857098d5d9c49d94e652b
-Gitweb:        https://git.kernel.org/tip/44c7b80bffc3a657a36857098d5d9c49d94e652b
+Commit-ID:     d81304bc6193554014d4372a01debdf65e1e9a4d
+Gitweb:        https://git.kernel.org/tip/d81304bc6193554014d4372a01debdf65e1e9a4d
 Author:        Qais Yousef <qais.yousef@arm.com>
-AuthorDate:    Thu, 04 Aug 2022 15:36:08 +01:00
+AuthorDate:    Thu, 04 Aug 2022 15:36:07 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Thu, 27 Oct 2022 11:01:20 +02:00
+CommitterDate: Thu, 27 Oct 2022 11:01:19 +02:00
 
-sched/fair: Detect capacity inversion
+sched/uclamp: Cater for uclamp in find_energy_efficient_cpu()'s early exit condition
 
-Check each performance domain to see if thermal pressure is causing its
-capacity to be lower than another performance domain.
+If the utilization of the woken up task is 0, we skip the energy
+calculation because it has no impact.
 
-We assume that each performance domain has CPUs with the same
-capacities, which is similar to an assumption made in energy_model.c
+But if the task is boosted (uclamp_min != 0) will have an impact on task
+placement and frequency selection. Only skip if the util is truly
+0 after applying uclamp values.
 
-We also assume that thermal pressure impacts all CPUs in a performance
-domain equally.
+Change uclamp_task_cpu() signature to avoid unnecessary additional calls
+to uclamp_eff_get(). feec() is the only user now.
 
-If there're multiple performance domains with the same capacity_orig, we
-will trigger a capacity inversion if the domain is under thermal
-pressure.
-
-The new cpu_in_capacity_inversion() should help users to know when
-information about capacity_orig are not reliable and can opt in to use
-the inverted capacity as the 'actual' capacity_orig.
-
+Fixes: 732cd75b8c920 ("sched/fair: Select an energy-efficient CPU on task wake-up")
 Signed-off-by: Qais Yousef <qais.yousef@arm.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220804143609.515789-9-qais.yousef@arm.com
+Link: https://lore.kernel.org/r/20220804143609.515789-8-qais.yousef@arm.com
 ---
- kernel/sched/fair.c  | 63 ++++++++++++++++++++++++++++++++++++++++---
- kernel/sched/sched.h | 19 +++++++++++++-
- 2 files changed, 79 insertions(+), 3 deletions(-)
+ kernel/sched/fair.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 0f32acb..4c4ea47 100644
+index a0ee319..0f32acb 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -8824,16 +8824,73 @@ static unsigned long scale_rt_capacity(int cpu)
- 
- static void update_cpu_capacity(struct sched_domain *sd, int cpu)
- {
-+	unsigned long capacity_orig = arch_scale_cpu_capacity(cpu);
- 	unsigned long capacity = scale_rt_capacity(cpu);
- 	struct sched_group *sdg = sd->groups;
-+	struct rq *rq = cpu_rq(cpu);
- 
--	cpu_rq(cpu)->cpu_capacity_orig = arch_scale_cpu_capacity(cpu);
-+	rq->cpu_capacity_orig = capacity_orig;
- 
- 	if (!capacity)
- 		capacity = 1;
- 
--	cpu_rq(cpu)->cpu_capacity = capacity;
--	trace_sched_cpu_capacity_tp(cpu_rq(cpu));
-+	rq->cpu_capacity = capacity;
-+
-+	/*
-+	 * Detect if the performance domain is in capacity inversion state.
-+	 *
-+	 * Capacity inversion happens when another perf domain with equal or
-+	 * lower capacity_orig_of() ends up having higher capacity than this
-+	 * domain after subtracting thermal pressure.
-+	 *
-+	 * We only take into account thermal pressure in this detection as it's
-+	 * the only metric that actually results in *real* reduction of
-+	 * capacity due to performance points (OPPs) being dropped/become
-+	 * unreachable due to thermal throttling.
-+	 *
-+	 * We assume:
-+	 *   * That all cpus in a perf domain have the same capacity_orig
-+	 *     (same uArch).
-+	 *   * Thermal pressure will impact all cpus in this perf domain
-+	 *     equally.
-+	 */
-+	if (static_branch_unlikely(&sched_asym_cpucapacity)) {
-+		unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
-+		struct perf_domain *pd = rcu_dereference(rq->rd->pd);
-+
-+		rq->cpu_capacity_inverted = 0;
-+
-+		for (; pd; pd = pd->next) {
-+			struct cpumask *pd_span = perf_domain_span(pd);
-+			unsigned long pd_cap_orig, pd_cap;
-+
-+			cpu = cpumask_any(pd_span);
-+			pd_cap_orig = arch_scale_cpu_capacity(cpu);
-+
-+			if (capacity_orig < pd_cap_orig)
-+				continue;
-+
-+			/*
-+			 * handle the case of multiple perf domains have the
-+			 * same capacity_orig but one of them is under higher
-+			 * thermal pressure. We record it as capacity
-+			 * inversion.
-+			 */
-+			if (capacity_orig == pd_cap_orig) {
-+				pd_cap = pd_cap_orig - thermal_load_avg(cpu_rq(cpu));
-+
-+				if (pd_cap > inv_cap) {
-+					rq->cpu_capacity_inverted = inv_cap;
-+					break;
-+				}
-+			} else if (pd_cap_orig > inv_cap) {
-+				rq->cpu_capacity_inverted = inv_cap;
-+				break;
-+			}
-+		}
-+	}
-+
-+	trace_sched_cpu_capacity_tp(rq);
- 
- 	sdg->sgc->capacity = capacity;
- 	sdg->sgc->min_capacity = capacity;
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index d6d488e..5f18460 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1041,6 +1041,7 @@ struct rq {
- 
- 	unsigned long		cpu_capacity;
- 	unsigned long		cpu_capacity_orig;
-+	unsigned long		cpu_capacity_inverted;
- 
- 	struct balance_callback *balance_callback;
- 
-@@ -2878,6 +2879,24 @@ static inline unsigned long capacity_orig_of(int cpu)
- 	return cpu_rq(cpu)->cpu_capacity_orig;
+@@ -4280,14 +4280,16 @@ static inline unsigned long task_util_est(struct task_struct *p)
  }
  
-+/*
-+ * Returns inverted capacity if the CPU is in capacity inversion state.
-+ * 0 otherwise.
-+ *
-+ * Capacity inversion detection only considers thermal impact where actual
-+ * performance points (OPPs) gets dropped.
-+ *
-+ * Capacity inversion state happens when another performance domain that has
-+ * equal or lower capacity_orig_of() becomes effectively larger than the perf
-+ * domain this CPU belongs to due to thermal pressure throttling it hard.
-+ *
-+ * See comment in update_cpu_capacity().
-+ */
-+static inline unsigned long cpu_in_capacity_inversion(int cpu)
-+{
-+	return cpu_rq(cpu)->cpu_capacity_inverted;
-+}
-+
- /**
-  * enum cpu_util_type - CPU utilization type
-  * @FREQUENCY_UTIL:	Utilization used to select frequency
+ #ifdef CONFIG_UCLAMP_TASK
+-static inline unsigned long uclamp_task_util(struct task_struct *p)
++static inline unsigned long uclamp_task_util(struct task_struct *p,
++					     unsigned long uclamp_min,
++					     unsigned long uclamp_max)
+ {
+-	return clamp(task_util_est(p),
+-		     uclamp_eff_value(p, UCLAMP_MIN),
+-		     uclamp_eff_value(p, UCLAMP_MAX));
++	return clamp(task_util_est(p), uclamp_min, uclamp_max);
+ }
+ #else
+-static inline unsigned long uclamp_task_util(struct task_struct *p)
++static inline unsigned long uclamp_task_util(struct task_struct *p,
++					     unsigned long uclamp_min,
++					     unsigned long uclamp_max)
+ {
+ 	return task_util_est(p);
+ }
+@@ -7205,7 +7207,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 	target = prev_cpu;
+ 
+ 	sync_entity_load_avg(&p->se);
+-	if (!task_util_est(p))
++	if (!uclamp_task_util(p, p_util_min, p_util_max))
+ 		goto unlock;
+ 
+ 	eenv_task_busy_time(&eenv, p, prev_cpu);
