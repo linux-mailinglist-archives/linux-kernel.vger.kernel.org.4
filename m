@@ -2,101 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4D161102E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0AB8611025
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiJ1L54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 07:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
+        id S229958AbiJ1L5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 07:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiJ1L5r (ORCPT
+        with ESMTP id S230146AbiJ1L5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 07:57:47 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9BA1D2F53;
-        Fri, 28 Oct 2022 04:57:46 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id bp11so6279399wrb.9;
-        Fri, 28 Oct 2022 04:57:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d6TXMetWnpVwYHSPTFYs3mT2fLaW0Up+55RjBCRl8KU=;
-        b=mvmaK9T8qwPNPB+J7se1Ff9zTxxeP5LLtleQPQy2l7Ig/MCTEFsrnWFwWD7izpJuDX
-         OFjdnlq66bH7TMJzIUW2jFH/t+JtAqni85de4XJRnsuyWahj4y7ZQef9hvkcilHKIwJX
-         9CBpP0OTuUDodmFUqc4VNfUlJzuzkJnzp/CTbLRQsT3Er27hbpQO7Af9jhUnpZn8Cw/7
-         O9+hK8QKIRtVOUnvAlaMaRJhuj0GNA3qbF2cR78tBUoUk8ELZCMDWTZ7clljMjsNJqT0
-         tHqkbcxREOVf0xpWkXPvJYZj63Hdx1+MxdBeJlfxIjK1ewNECpMl/LcVh+pxL0oS22N6
-         R06w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=d6TXMetWnpVwYHSPTFYs3mT2fLaW0Up+55RjBCRl8KU=;
-        b=dammCV1/erP2hD3tUesLqG+u9ixNgQnuhAt7gtGijQryAKcBJ6Hkt3jMOdIjHjYDBs
-         BQs0BQAhAWQ4WKtT5nv6N/JD2cCNnyGRX9L+sIOjCp54RjHJMkW3W88qmWnVMeyNoSXS
-         3yful2Vx2dp6LmdpNEuQD2UV+3MeiF7+0nppjcvweQj//lY7EqXrqaPYCJKsozYhE2GP
-         zPzMYslMxGDEog9rjwncpgk5a7IViu1vdIVS21Fj9SDgswUh1y50SJrYK6bZZ0p5U0+a
-         vqubpQVbxbdyu5/MChFkcXjhM7gjK/HptWH82D/azTi0rySzIFa26jDoHVPuuJNOV5T/
-         3Jbg==
-X-Gm-Message-State: ACrzQf177XCJKQUXZexTqf2kVegFnj+c6v1KdG7DWytinlVP2/bsqNAm
-        eouYfeglqfrcIdJafGXBeiQ=
-X-Google-Smtp-Source: AMsMyM5hRnYbweXL1+XX4tNLxBdLLaib/s1w7MLS8s8E1AxKI0PtEVr2IixL3tBFIsXYWvEkZo2/Mg==
-X-Received: by 2002:a5d:47a4:0:b0:230:20a1:2054 with SMTP id 4-20020a5d47a4000000b0023020a12054mr35753467wrb.299.1666958264871;
-        Fri, 28 Oct 2022 04:57:44 -0700 (PDT)
-Received: from felia.fritz.box (200116b826565c00108e11a5f898944c.dip.versatel-1u1.de. [2001:16b8:2656:5c00:108e:11a5:f898:944c])
-        by smtp.gmail.com with ESMTPSA id h8-20020adffa88000000b0023538fb27c1sm3547623wrr.85.2022.10.28.04.57.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 04:57:43 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: adjust entry after arm64 efi-entry.S file movement
-Date:   Fri, 28 Oct 2022 13:56:19 +0200
-Message-Id: <20221028115619.2814-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 28 Oct 2022 07:57:04 -0400
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABCA1D2F60
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 04:57:01 -0700 (PDT)
+X-ASG-Debug-ID: 1666958216-086e23532754130001-xx1T2L
+Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx1.zhaoxin.com with ESMTP id xPvKL4IXIYgT3cjC (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Fri, 28 Oct 2022 19:56:57 +0800 (CST)
+X-Barracuda-Envelope-From: LeoLiu-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX3.zhaoxin.com
+ (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Fri, 28 Oct
+ 2022 19:56:56 +0800
+Received: from [10.32.56.18] (125.76.214.122) by ZXBJMBX03.zhaoxin.com
+ (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Fri, 28 Oct
+ 2022 19:56:54 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Message-ID: <8472b248-11ac-2148-e39f-12647044332b@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.32.56.18
+Date:   Fri, 28 Oct 2022 19:56:43 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 3/5] ACPI/PCI: Add AER bits #defines for PCIE/PCI-X
+ bridges
+To:     Bjorn Helgaas <helgaas@kernel.org>
+X-ASG-Orig-Subj: Re: [PATCH 3/5] ACPI/PCI: Add AER bits #defines for PCIE/PCI-X
+ bridges
+CC:     <rafael@kernel.org>, <lenb@kernel.org>, <james.morse@arm.com>,
+        <tony.luck@intel.com>, <bp@alien8.de>, <robert.moore@intel.com>,
+        <ying.huang@intel.com>, <rdunlap@infradead.org>,
+        <bhelgaas@google.com>, <linux-acpi@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devel@acpica.org>, <CobeChen@zhaoxin.com>,
+        <TonyWWang@zhaoxin.com>, <ErosZhang@zhaoxin.com>
+References: <20221027215644.GA844326@bhelgaas>
+From:   LeoLiuoc <LeoLiu-oc@zhaoxin.com>
+In-Reply-To: <20221027215644.GA844326@bhelgaas>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [125.76.214.122]
+X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
+ ZXBJMBX03.zhaoxin.com (10.29.252.7)
+X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
+X-Barracuda-Start-Time: 1666958217
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 1390
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.4999 1.0000 0.0000
+X-Barracuda-Spam-Score: 0.00
+X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.101737
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 6ed27461c9c8 ("arm64: efi: Move efi-entry.S into the libstub source
-directory") moves arch/arm64/kernel/efi-entry.S to
-drivers/firmware/efi/libstub/arm64-entry.S, but misses to adjust the
-MAINTAINERS file.
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken file pattern.
 
-Adjust the file entry in EXTENSIBLE FIRMWARE INTERFACE (EFI) to this file
-movement.
+在 2022/10/28 5:56, Bjorn Helgaas 写道:
+> On Thu, Oct 27, 2022 at 11:15:54AM +0800, LeoLiu-oc wrote:
+>> From: leoliu-oc <leoliu-oc@zhaoxin.com>
+>>
+>> Define PCI Express Advanced Error Reporting Extended Capabilities bits.
+>>
+>> Signed-off-by: leoliu-oc <leoliu-oc@zhaoxin.com>
+>> ---
+>>   include/uapi/linux/pci_regs.h | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/include/uapi/linux/pci_regs.h b/include/uapi/linux/pci_regs.h
+>> index 57b8e2ffb1dd..3662106fd8dc 100644
+>> --- a/include/uapi/linux/pci_regs.h
+>> +++ b/include/uapi/linux/pci_regs.h
+>> @@ -799,6 +799,11 @@
+>>   #define  PCI_ERR_ROOT_AER_IRQ		0xf8000000 /* Advanced Error Interrupt Message Number */
+>>   #define PCI_ERR_ROOT_ERR_SRC	0x34	/* Error Source Identification */
+>>   
+>> +/* PCI Express Advanced Error Reporting Extended Capabilities for Bridges */
+>> +#define PCI_ERR_UNCOR_MASK2		0x30	/* Secondary Uncorrectable Error Mask */
+>> +#define PCI_ERR_UNCOR_SEVER2	0x34	/* Secondary Uncorrectable Error Severit */
+>> +#define PCI_ERR_CAP2			0x38	/* Secondary Advanced Error Capabilities */
+> 
+> Can you include a spec reference for these?  I'm looking at PCIe r6.0,
+> sec 7.8.4, and I don't see anything I can match up with these.
+> 
+> Bjorn
+Please refer to PCI Express to PCI/PCI-X Bridge Specification, sec 
+5.2.3.2, 5.2.3.3 and 5.2.3.4.
 
-As the file drivers/firmware/efi/libstub/arm64-entry.S is already covered
-by the entry drivers/firmware/efi/, simply remove the arm64 file entry.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- MAINTAINERS | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f4f908c28d7e..194ae5dd952e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7806,7 +7806,6 @@ F:	Documentation/admin-guide/efi-stub.rst
- F:	arch/*/include/asm/efi.h
- F:	arch/*/kernel/efi.c
- F:	arch/arm/boot/compressed/efi-header.S
--F:	arch/arm64/kernel/efi-entry.S
- F:	arch/x86/platform/efi/
- F:	drivers/firmware/efi/
- F:	include/linux/efi*.h
--- 
-2.17.1
-
+Thanks
+leoliu-oc
