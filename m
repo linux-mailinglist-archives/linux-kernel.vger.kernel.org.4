@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF166113A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A51C6113A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiJ1NwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
+        id S229864AbiJ1NxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiJ1NwA (ORCPT
+        with ESMTP id S229515AbiJ1NxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:52:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1F71C073A;
-        Fri, 28 Oct 2022 06:51:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B12706288D;
-        Fri, 28 Oct 2022 13:51:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 241EEC433C1;
-        Fri, 28 Oct 2022 13:51:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666965115;
-        bh=8LGyRSk3SzWLea/SocQw2KYwe2/s43N0zn66ZL8tl3w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ocZDdUVBp9IQpEIWrO89mtv1ATbEs0Eyw3QCvjwXDwKu8rEU585hPJeUPquXYXb0c
-         E1ryS39iHtVvHHnYXb/kiTKxA7NJ6UETpmJtRBvXEZ4T/Q6d+Gey3Vzl7lNC98/Zw3
-         ONWGqUtio6PeKcJOYunHWtjntQ27XotjpZTnmq+xv+8Buswq0rskVxviWz8/+jQbQX
-         EMPPcjBqs1Zb//8p4dN0O8+DDI4iXPYFNxUHsH63yU8UnYB2Em2bN49ZCD+SxqCL5t
-         u0B1hxwIRwUkPK4nx9KbCfBJD8fuHINT0cao8JGLnfnONuGhoYOij79HlELi1ZB6mj
-         IFD/F/zqBUjZg==
-Date:   Fri, 28 Oct 2022 08:51:51 -0500
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
-        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
-        quic_kalyant@quicinc.com, swboyd@chromium.org,
-        angelogioacchino.delregno@somainline.org, loic.poulain@linaro.org,
-        quic_vpolimer@quicinc.com, vkoul@kernel.org, dianders@chromium.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org,
-        Jonathan Marek <jonathan@marek.ca>, vinod.koul@linaro.org,
-        quic_jesszhan@quicinc.com
-Subject: Re: [PATCH v1 8/9] arm64: dts: qcom: sm8350-hdk: Enable display &
- dsi nodes
-Message-ID: <20221028135150.6rkih4d67trs23h4@baldur>
-References: <20221028120812.339100-1-robert.foss@linaro.org>
- <20221028120812.339100-9-robert.foss@linaro.org>
+        Fri, 28 Oct 2022 09:53:00 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838591B1E6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:52:59 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id f37so8376810lfv.8
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:52:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AiWvRk5q394PNtyPtfd7RRYQFcCCdv9RmCjUimVbiRc=;
+        b=u/CESXdXFuPawAP1b5wROE8H7g1FCRybxiltZnhqhICp8E+B/lrUnTRBdS6e/MCZEq
+         aYSGu+/hTirXeaI+N/4d6zRaHn8HF4O6HxoCaRhGxhx0p2dGnqkn7aDIkX96ijWIz9Hq
+         DG46k4r+LQI4g3QDtUAjRHfpWEGhd3GO8s7StrVkEd9ACR4pGhO0yeWBumhv/pEHuyRJ
+         mCnkpu3xD8JbUBprupa6nNVQeMoV+3zGjbJq2jb3Kp0NkB/tsgtdnEahIYA4HPrtEHdV
+         zzBoAyF1C4JbBcG1ZBReI1aUK6DB/rIeySOQyrr4qZcKYLaDJC+QkouCVmHdwTFzYgfZ
+         MCTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AiWvRk5q394PNtyPtfd7RRYQFcCCdv9RmCjUimVbiRc=;
+        b=UVcxgG6fL0SRHJvWgq6DBcfHsH52OotAnyzkY6bkYi84t/ODYPOcDRVDN8o4aswnVI
+         X08S8E5G0TwdMFhhVvAG0i1vVMgm11TUY5p3CZz8nexuv8wu39YyXcK+G2Bf5qfMqDd0
+         QANX0jxaswL1GV9f+oslmRXtYbsgzNhNf13r/XWPALseH4n6x8e7asN41tNpBtTDhlUp
+         3Pqx95//9V1inPqBc4eOxSP5VwvYtrHqZakwBmZZmpR3puU1pL5zCIHNYQX1uCrRfksP
+         uY+0o2mB293iqflwGYnUWQVkWXCtdMeC7vG6B+aAoy5Xx3doVRr6EeRAqrkvm9YTC/SS
+         S9qQ==
+X-Gm-Message-State: ACrzQf0ShqIS0MuVPuEIYU6mC6kMecKHev9I8GcSfL1cGNnIMn44viSn
+        cUosGNQKKInBeWOKlVVQMVcP1w==
+X-Google-Smtp-Source: AMsMyM6xwa69zPU5Api0/SuUeh0vhLdfvaskkbvOqtLiVAlR/kBVhkzG42NM/VUs77WXPYk9xEjL3w==
+X-Received: by 2002:ac2:5dce:0:b0:4a2:2dad:7ad4 with SMTP id x14-20020ac25dce000000b004a22dad7ad4mr19544897lfq.654.1666965177599;
+        Fri, 28 Oct 2022 06:52:57 -0700 (PDT)
+Received: from uffe-XPS13.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id d3-20020a056512368300b00492ce573726sm572523lfs.47.2022.10.28.06.52.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 06:52:56 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [GIT PULL] MMC fixes for v6.1-rc3
+Date:   Fri, 28 Oct 2022 15:52:55 +0200
+Message-Id: <20221028135255.8070-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221028120812.339100-9-robert.foss@linaro.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,59 +69,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 02:08:11PM +0200, Robert Foss wrote:
-> Enable the display subsystem and the dsi0 output for
-> the sm8350-hdk board.
-> 
-> Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm8350-hdk.dts | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
-> index e6deb08c6da0..6e07feb4b3b2 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
-> @@ -213,10 +213,32 @@ &cdsp {
->  	firmware-name = "qcom/sm8350/cdsp.mbn";
->  };
->  
-> +&dispcc {
-> +	status = "okay";
-> +};
-> +
-> +&dsi0 {
+Hi Linus,
 
-If you prefix the label for the dsi controller and phy with mdss_ they
-sort nicely together with the other display nodes.
+Here's a PR with a couple of MMC fixes intended for v6.1-rc3. Details about the
+highlights are as usual found in the signed tag.
 
-Regards,
-Bjorn
+Please pull this in!
 
-> +	status = "okay";
-> +	vdda-supply = <&vreg_l6b_1p2>;
-> +};
-> +
-> +&dsi0_phy  {
-> +	status = "okay";
-> +	vdds-supply = <&vreg_l5b_0p88>;
-> +};
-> +
->  &gpi_dma1 {
->  	status = "okay";
->  };
->  
-> +&mdss {
-> +	status = "okay";
-> +};
-> +
-> +&mdss_mdp {
-> +	status = "okay";
-> +};
-> +
->  &mpss {
->  	status = "okay";
->  	firmware-name = "qcom/sm8350/modem.mbn";
-> -- 
-> 2.34.1
-> 
+Kind regards
+Ulf Hansson
+
+
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v6.1-rc1
+
+for you to fetch changes up to 8d280b1df87e0b3d1355aeac7e62b62214b93f1c:
+
+  mmc: sdhci_am654: 'select', not 'depends' REGMAP_MMIO (2022-10-26 11:48:03 +0200)
+
+----------------------------------------------------------------
+MMC core:
+ - Cancel recovery work on cleanup to avoid NULL pointer dereference
+ - Fix error path in the read/write error recovery path
+ - Fix kernel panic when remove non-standard SDIO card
+ - Fix WRITE_ZEROES handling for CQE
+
+MMC host:
+ - sdhci_am654: Fixup Kconfig dependency for REGMAP_MMIO
+ - sdhci-esdhc-imx: Avoid warning of misconfigured bus-width
+ - sdhci-pci: Disable broken HS400 ES mode for ASUS BIOS on Jasper Lake
+
+----------------------------------------------------------------
+Brian Norris (1):
+      mmc: sdhci_am654: 'select', not 'depends' REGMAP_MMIO
+
+Christian Löhle (2):
+      mmc: block: Remove error check of hw_reset on reset
+      mmc: queue: Cancel recovery work on cleanup
+
+Matthew Ma (1):
+      mmc: core: Fix kernel panic when remove non-standard SDIO card
+
+Patrick Thompson (1):
+      mmc: sdhci-pci-core: Disable ES for ASUS BIOS on Jasper Lake
+
+Sascha Hauer (1):
+      mmc: sdhci-esdhc-imx: Propagate ESDHC_FLAG_HS400* only on 8bit bus
+
+Vincent Whitchurch (1):
+      mmc: core: Fix WRITE_ZEROES CQE handling
+
+ drivers/mmc/core/block.c           | 44 ++++++++++++++++++++++----------------
+ drivers/mmc/core/queue.c           |  8 +++++++
+ drivers/mmc/core/sdio_bus.c        |  3 ++-
+ drivers/mmc/host/Kconfig           |  3 ++-
+ drivers/mmc/host/sdhci-esdhc-imx.c | 14 ++++++------
+ drivers/mmc/host/sdhci-pci-core.c  | 14 +++++++++---
+ 6 files changed, 57 insertions(+), 29 deletions(-)
