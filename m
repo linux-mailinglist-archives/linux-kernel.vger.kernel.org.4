@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00244610A67
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 383D3610A69
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiJ1GmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
+        id S229864AbiJ1GmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiJ1Glc (ORCPT
+        with ESMTP id S229755AbiJ1Glj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:41:32 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E476B8F2;
-        Thu, 27 Oct 2022 23:41:21 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 06:41:16 -0000
+        Fri, 28 Oct 2022 02:41:39 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D8DB1DCD;
+        Thu, 27 Oct 2022 23:41:35 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 06:41:32 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666939279;
+        s=2020; t=1666939293;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=G66XG9gLBxL7ayzwcWq/23hJvItsciCHWB9RfR+j2i4=;
-        b=FUMEyRbm3jWkbleEcg+oEr0KhLAOceC3tjtjDDflRHBN07EOkWNt72NQaCjynARJ283r/O
-        6KC5UtXMHwOYWKL8Eggfp1Wv4bwDIwjk735nHVCeUDKihTQFNt6MeEsge5DGZZZSmeCHky
-        Mq0nxvOgp3QiFAz73tOY/gcSPtgCzGIkT3rXye5NNv8xlZiCTpR8e72XdphaePz32W6/+m
-        roDARgsgNBmRn1A21Rzp5M2jzRpXz9E6pC6t/vUMQitV66r6OdUnmo1wzlQnilA7quvuMQ
-        UbDmHQPho6Y2wTKa6fsFSUJyAlZyUdOZmPFJ2kzmKhzCm81zQqmPWTWUX5ePZw==
+        bh=418PeG1m3KiESUjrABGHYXcYvntC5lkqgItingIMeP8=;
+        b=m4blkYTVRISE9h01oLV9GZUua+GHJSmoj6X8r/1p1W+1fbMc9IKf3uAtgW3I4Bno4/kJNS
+        MV/vaB2Cc/6LU+6/q/+Nn7am/k6Sz/du4Y8Le+i9t8dr9vwueyRPYkf5pgnvABnYfPGXYy
+        x8fo+Jpo6xNUtJJhwqgxF8WS+mwJ2Plb0Hq8o1lfijpRXqJ0TpIgD4ypqtqxQJ7HJfhcQn
+        xlTK8sFn/uZqStU01ycqfdmgzTSJ/Pp3+YTDYg9Z5iacuNLGrC8UbaUNK2/IrULUcEXHDd
+        6RQ8tEAIkkPHCh0X7g1lmqeG5sdOy4BggHNNZEnImM+ZMo94xvknM9aY3KDrlw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666939279;
+        s=2020e; t=1666939293;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=G66XG9gLBxL7ayzwcWq/23hJvItsciCHWB9RfR+j2i4=;
-        b=1gTDZ4GRJ0JhSKHFD0FQSMDNLWhbcNJSpGGuqTPm5vbGITbgfI33lyNWPWV+ZT0yjL8GaI
-        RqMsv0aOJDDzgLBA==
-From:   "tip-bot2 for Yazen Ghannam" <tip-bot2@linutronix.de>
+        bh=418PeG1m3KiESUjrABGHYXcYvntC5lkqgItingIMeP8=;
+        b=QIBf+Z9PgrlliPNlwsv+LK5jWP/olRmOyprkpIRaJhXg9HRsgMmmS2/b82RNhds8adi44m
+        nn3I74QEhvCXm8Dw==
+From:   "tip-bot2 for Uros Bizjak" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: ras/core] x86/MCE/AMD: Clear DFR errors found in THR handler
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
-        Borislav Petkov <bp@suse.de>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220621155943.33623-1-yazen.ghannam@amd.com>
-References: <20220621155943.33623-1-yazen.ghannam@amd.com>
+Subject: [tip: locking/core] jump_label: Use atomic_try_cmpxchg() in
+ static_key_slow_inc_cpuslocked()
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221019140850.3395-1-ubizjak@gmail.com>
+References: <20221019140850.3395-1-ubizjak@gmail.com>
 MIME-Version: 1.0
-Message-ID: <166693927682.29415.17717990197566504986.tip-bot2@tip-bot2>
+Message-ID: <166693929232.29415.8209039784382977219.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -64,102 +65,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the ras/core branch of tip:
+The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     bc1b705b0eee4c645ad8b3bbff3c8a66e9688362
-Gitweb:        https://git.kernel.org/tip/bc1b705b0eee4c645ad8b3bbff3c8a66e9688362
-Author:        Yazen Ghannam <yazen.ghannam@amd.com>
-AuthorDate:    Tue, 21 Jun 2022 15:59:43 
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Thu, 27 Oct 2022 17:01:25 +02:00
+Commit-ID:     d0c006402e7941558e5283ae434e2847c7999378
+Gitweb:        https://git.kernel.org/tip/d0c006402e7941558e5283ae434e2847c7999378
+Author:        Uros Bizjak <ubizjak@gmail.com>
+AuthorDate:    Wed, 19 Oct 2022 16:08:50 +02:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Thu, 27 Oct 2022 10:35:41 +02:00
 
-x86/MCE/AMD: Clear DFR errors found in THR handler
+jump_label: Use atomic_try_cmpxchg() in static_key_slow_inc_cpuslocked()
 
-AMD's MCA Thresholding feature counts errors of all severity levels, not
-just correctable errors. If a deferred error causes the threshold limit
-to be reached (it was the error that caused the overflow), then both a
-deferred error interrupt and a thresholding interrupt will be triggered.
+Use atomic_try_cmpxchg() instead of atomic_cmpxchg (*ptr, old, new) ==
+old in static_key_slow_inc_cpuslocked().  x86 CMPXCHG instruction
+returns success in ZF flag, so this change saves a compare after
+cmpxchg (and related move instruction in front of cmpxchg).
 
-The order of the interrupts is not guaranteed. If the threshold
-interrupt handler is executed first, then it will clear MCA_STATUS for
-the error. It will not check or clear MCA_DESTAT which also holds a copy
-of the deferred error. When the deferred error interrupt handler runs it
-will not find an error in MCA_STATUS, but it will find the error in
-MCA_DESTAT. This will cause two errors to be logged.
+Also, atomic_try_cmpxchg() implicitly assigns old *ptr value to "old" when
+cmpxchg fails, enabling further code simplifications.
 
-Check for deferred errors when handling a threshold interrupt. If a bank
-contains a deferred error, then clear the bank's MCA_DESTAT register.
+No functional change intended.
 
-Define a new helper function to do the deferred error check and clearing
-of MCA_DESTAT.
-
-  [ bp: Simplify, convert comment to passive voice. ]
-
-Fixes: 37d43acfd79f ("x86/mce/AMD: Redo error logging from APIC LVT interrupt handlers")
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220621155943.33623-1-yazen.ghannam@amd.com
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20221019140850.3395-1-ubizjak@gmail.com
 ---
- arch/x86/kernel/cpu/mce/amd.c | 33 ++++++++++++++++++++-------------
- 1 file changed, 20 insertions(+), 13 deletions(-)
+ kernel/jump_label.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 1c87501..10fb5b5 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -788,6 +788,24 @@ _log_error_bank(unsigned int bank, u32 msr_stat, u32 msr_addr, u64 misc)
- 	return status & MCI_STATUS_DEFERRED;
- }
+diff --git a/kernel/jump_label.c b/kernel/jump_label.c
+index 714ac4c..4d6c6f5 100644
+--- a/kernel/jump_label.c
++++ b/kernel/jump_label.c
+@@ -115,8 +115,6 @@ EXPORT_SYMBOL_GPL(static_key_count);
  
-+static bool _log_error_deferred(unsigned int bank, u32 misc)
-+{
-+	if (!_log_error_bank(bank, mca_msr_reg(bank, MCA_STATUS),
-+			     mca_msr_reg(bank, MCA_ADDR), misc))
-+		return false;
-+
-+	/*
-+	 * Non-SMCA systems don't have MCA_DESTAT/MCA_DEADDR registers.
-+	 * Return true here to avoid accessing these registers.
-+	 */
-+	if (!mce_flags.smca)
-+		return true;
-+
-+	/* Clear MCA_DESTAT if the deferred error was logged from MCA_STATUS. */
-+	wrmsrl(MSR_AMD64_SMCA_MCx_DESTAT(bank), 0);
-+	return true;
-+}
-+
- /*
-  * We have three scenarios for checking for Deferred errors:
-  *
-@@ -799,19 +817,8 @@ _log_error_bank(unsigned int bank, u32 msr_stat, u32 msr_addr, u64 misc)
-  */
- static void log_error_deferred(unsigned int bank)
+ void static_key_slow_inc_cpuslocked(struct static_key *key)
  {
--	bool defrd;
+-	int v, v1;
 -
--	defrd = _log_error_bank(bank, mca_msr_reg(bank, MCA_STATUS),
--				mca_msr_reg(bank, MCA_ADDR), 0);
--
--	if (!mce_flags.smca)
--		return;
--
--	/* Clear MCA_DESTAT if we logged the deferred error from MCA_STATUS. */
--	if (defrd) {
--		wrmsrl(MSR_AMD64_SMCA_MCx_DESTAT(bank), 0);
-+	if (_log_error_deferred(bank, 0))
- 		return;
+ 	STATIC_KEY_CHECK_USE(key);
+ 	lockdep_assert_cpus_held();
+ 
+@@ -132,11 +130,9 @@ void static_key_slow_inc_cpuslocked(struct static_key *key)
+ 	 * so it counts as "enabled" in jump_label_update().  Note that
+ 	 * atomic_inc_unless_negative() checks >= 0, so roll our own.
+ 	 */
+-	for (v = atomic_read(&key->enabled); v > 0; v = v1) {
+-		v1 = atomic_cmpxchg(&key->enabled, v, v + 1);
+-		if (likely(v1 == v))
++	for (int v = atomic_read(&key->enabled); v > 0; )
++		if (likely(atomic_try_cmpxchg(&key->enabled, &v, v + 1)))
+ 			return;
 -	}
  
- 	/*
- 	 * Only deferred errors are logged in MCA_DE{STAT,ADDR} so just check
-@@ -832,7 +839,7 @@ static void amd_deferred_error_interrupt(void)
- 
- static void log_error_thresholding(unsigned int bank, u64 misc)
- {
--	_log_error_bank(bank, mca_msr_reg(bank, MCA_STATUS), mca_msr_reg(bank, MCA_ADDR), misc);
-+	_log_error_deferred(bank, misc);
- }
- 
- static void log_and_reset_block(struct threshold_block *block)
+ 	jump_label_lock();
+ 	if (atomic_read(&key->enabled) == 0) {
