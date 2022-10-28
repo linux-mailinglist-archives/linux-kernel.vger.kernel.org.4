@@ -2,81 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 251236106C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 02:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2636106C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 02:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235033AbiJ1AYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 20:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
+        id S233884AbiJ1A0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 20:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234235AbiJ1AYf (ORCPT
+        with ESMTP id S229998AbiJ1A0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 20:24:35 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC86495B0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 17:24:30 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id j14so6301283ljh.12
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 17:24:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zG8vNqu+yOnidTThsRRaGZjoea/P4g3Vo3zqFSDgNyo=;
-        b=l8rrr8Z85GFAmVl1MYomr5u3ZX297sQGN4+2wABZM/iRfD+r2T5n7Nngwech8/gi0t
-         05hJL/dAm9TOv8+IbW3z3IOl3Euj2WAJRAp/xVWlKhwIT3+Q7qinLIaY8eBZWCE+Rojs
-         +2ag0ajmdC5pmF1zNiyJ0gliOJJ03ok1/dR0o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zG8vNqu+yOnidTThsRRaGZjoea/P4g3Vo3zqFSDgNyo=;
-        b=N7xZlD/bt7in30MB8NHofahgHq1j+kUb5lYtTdg/rZsATFDdc4lNBfcugxkWPcrUF9
-         uqpWR8iWtWH+UqnLRQPrZ6wuySvFbHxqIxTuf1hPnaBZXwemzLXKMnWG+ysq8thqHyP1
-         pFy7HJ2cTLsyOJ8cY9b8lg2+pm02jR4v7zGGmu4xUNGj4foEUzFM8zPYoBKmUVn7w1bV
-         W+39IB+2yCVqk/v9c6frW74nnMyzRWRTtJ79R8jpx7O2nXvGCxCm2TUGYaBbvXm/P5Wc
-         E2gLr/FEcuhqPPQttoThFkIMEXSBc0Uf4g46YHqOYHfw1B3RlNsCApzWIbF66yPfxF3w
-         xnvw==
-X-Gm-Message-State: ACrzQf0F7Uwr6f95N39+LOiYLKhDBAk/v6z8rO/FHgHQVb2cfnu5Dy7z
-        awr3LPfFJ580+edvXfa1H4WfYAdRdzshUHBisgGTcw==
-X-Google-Smtp-Source: AMsMyM6a19Ff+UZWtCjteZZ3KxTuJu0T7yhL5jb3q9l4sm2lLlt2HHa3p/naIEz1+VA2IO+Fp6GOG466ZtOwZ2jwpxw=
-X-Received: by 2002:a2e:8081:0:b0:277:b:33db with SMTP id i1-20020a2e8081000000b00277000b33dbmr11474019ljg.228.1666916669276;
- Thu, 27 Oct 2022 17:24:29 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 27 Oct 2022 20:24:28 -0400
+        Thu, 27 Oct 2022 20:26:13 -0400
+Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA5698C96;
+        Thu, 27 Oct 2022 17:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1666916768;
+        bh=suBHY5qlkVC2FazI0mEXno4TRJYxkCCmk1jWJMwKEnw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=CfvDxVBRRzuxsMIilKXp8zPGasD46y1UBDikt880+AACxPu9VcH6GE1vdTXzNJU2W
+         4YV8vPCGpFUcAz327qgTlriI3pZZ75koc5Cp14ZLRwahIAhSdb3sDBWuHSHyJ1uf83
+         UmWcRu1BBNrPnezvg+wdMWYJePp4Z9E5K/tue0Is=
+Received: from localhost.localdomain ([39.156.73.13])
+        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
+        id 683932A9; Fri, 28 Oct 2022 08:26:03 +0800
+X-QQ-mid: xmsmtpt1666916763tf0jfoxmb
+Message-ID: <tencent_CD22930180507496CE65B30ACBABC4681506@qq.com>
+X-QQ-XMAILINFO: MyIXMys/8kCtSl1818EcLCSNRBDbUY51bDHj+Me+Ax7xqLMJLM8ZcEXnXlBD3E
+         MKb/Tcv+w8xlbRGaBgdLZcrIm/+CnzBD+3LtMUbw5l7anlZoZmDARjqMBWdJccZVa9trNESDQEhM
+         QBi0Q1xjkUSKbflCyU3hD7hdCrVlr1cOvIXsRb0CNB8C1TKS79CZf1jTbiUgWVOCy26rErIviPKy
+         XevaDkKXbXh5QrTI+nfXO0iIm4avyIqrShBFkcb7spmuWOlFWOMRcXY06d/gHpZIcodCQcQ9VjS3
+         SzxG9gqCHpMJ/VOD3MtmBCpJbKRmqo2YRSOfAK4O8QmQfzX3d2YltPhFpwU/8a+PZnWX1k+s0uoE
+         VIUPRDLuID1VUPvx9eoAHiaNBQUyjLQlERssJkDLPT+nVVF8upYUPboyAVfs9CTuZUCHitoT8mMb
+         0hMgT5a7o6Bpf4r2MgOyk1/MGGIBrvGSnpDpguyrt/OE8x9kt4QRQ0edbggArYwZT47Qjp1W3lg5
+         eF5mo0rbwB35Y/YT8nRNCZQ+C19SluFtt6ZTJRo1TFPvAb2tGBGIxC8lpGnPUQUYh7N54n/VW7dk
+         JRMvgD02whXbLZSjB9iFG09oP38+VTOeFOxpy8f0K2fkWtIw6s02rU+XpLAFQ0iQBxJHFsE7w6dT
+         Z/KZPBFatyo9EbedYihVOhxF9jLGY6tMmIQE6y4pur+D2jcQZoBeVPbTEJGiPpOuvFx3M1LQ1Y3F
+         8YCFwdqg6hyJoXjHXdfn1wGI4vixu29Pw8QErftHlOg0s7Zo/BTx5tkMwy8Zbj+j8mGyzeAewnXV
+         qKPkprYJ5mD5bLxhzoFHMQcj3V/hbTQQ0O71aVf8lzfHglOwU2M976FrKMm21eE9VFafMByVSnLh
+         GsbdoJmkGNrEAwm/0CyD4ygEZktmoQhBC8W5AGHVJfKasnR1vJ266qBub1L7p5Nea/HRi2XSHE9Y
+         vshE/icZgvj1mfZuvIQ7THcJwRBrEW19hKZ9TZd8KOZlwwMVUnKg==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     andrii.nakryiko@gmail.com
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, martin.lau@linux.dev,
+        mykolal@fb.com, rongtao@cestc.cn, rtoax@foxmail.com,
+        sdf@google.com, shuah@kernel.org, song@kernel.org, yhs@fb.com
+Subject: Re: Re: [PATCH] selftests/bpf: Fix strncpy() fortify warning
+Date:   Fri, 28 Oct 2022 08:26:03 +0800
+X-OQ-MSGID: <20221028002603.97776-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <CAEf4Bzbq0PSsc6xCGSF=Af-pcysjt8Lv76-4N65AJMpXOOpOcg@mail.gmail.com>
+References: <CAEf4Bzbq0PSsc6xCGSF=Af-pcysjt8Lv76-4N65AJMpXOOpOcg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1666159535-6447-1-git-send-email-quic_c_skakit@quicinc.com>
-References: <1666159535-6447-1-git-send-email-quic_c_skakit@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 27 Oct 2022 20:24:28 -0400
-Message-ID: <CAE-0n52N6oxSLoU_=Cq1xK9bVX7H+AvPsR3dLepMNjKywdffvQ@mail.gmail.com>
-Subject: Re: [PATCH] clk: qcom: Update the force mem core bit for GPU clocks
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_tdas@quicinc.com, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Satya Priya (2022-10-18 23:05:35)
-> From: Taniya Das <quic_tdas@quicinc.com>
->
-> There are few GPU clocks which are powering up the memories
-> and thus enable the FORCE_MEM_PERIPH always for these clocks
-> to force the periph_on signal to remain active during halt
-> state of the clock.
+Thanks for your reply, `enable[0] = '\0';` at the beginning and then
+strncat() still has the same compile warning
 
-I take it that missing this causes GPU to lose state when it suspends
-and that confuses the driver?
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -77,7 +77,8 @@ static int __enable_controllers(const char *cgroup_path, const char *controllers
+                enable[len] = 0;
+                close(fd);
+        } else {
+-               strncpy(enable, controllers, sizeof(enable));
++               enable[0] = '\0';
++               strncat(enable, controllers, sizeof(enable));
+        }
+
+In function ‘__enable_controllers’:
+tools/testing/selftests/bpf/cgroup_helpers.c:81:17: warning: ‘strncat’ specified bound 4097 equals destination size [-Wstringop-truncation]
+   81 |                 strncat(enable, controllers, sizeof(enable));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/testing/selftests/bpf/cgroup_helpers.c:81:17: warning: ‘strncat’ specified bound 4097 equals destination size [-Wstringop-overflow=]
+
+So, i think just add '-1' for strncpy() is a good way.
