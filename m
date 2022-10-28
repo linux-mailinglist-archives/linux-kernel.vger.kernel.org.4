@@ -2,83 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 871046106FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 02:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C796106FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 02:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234719AbiJ1Axb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 20:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
+        id S235476AbiJ1Ayv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 20:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234810AbiJ1Ax3 (ORCPT
+        with ESMTP id S234030AbiJ1Ayr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 20:53:29 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519A0A3F73;
-        Thu, 27 Oct 2022 17:53:26 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso8364960pjg.5;
-        Thu, 27 Oct 2022 17:53:26 -0700 (PDT)
+        Thu, 27 Oct 2022 20:54:47 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335CE18B0F
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 17:54:46 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-13bd2aea61bso4764284fac.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 17:54:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BTLDGG1JfCbcJjNOZkikvC8f7AaHQJjjKAzvQey3fqs=;
-        b=YnAdcvuXVzFEKYlYf+iaNqeO54C1FKncfcUPJNMcb9fT3kuLTBm1UToeqsx0dAmz3w
-         YIU1Kk3Af0qMH7kR5YnVFhLLbyG1FR3Z7PuKnPUyVzfL3LtPVEs5BLP3+tHdHJcc8dkh
-         l1N2kRSl+QuKM3DEayZicbnVHgQqQKTjGRJgVRsV45fV5suhfQpIm/6z8LKgrYu7EnTb
-         po3Mtx06BVaoGcxu8k3H+tovzxKoKxzg5V2gf3LmWmdwGokt1y/pPUO3CsYWoZyHz63l
-         gXwoQWf3wkd+Bvcyr7Cavb1POamSpm1W8P6XR7A/XjJOGxm1XHl4rJ4c6KH/dpxj0eCc
-         dndw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=A6gCh4ZYv30l/VnGu0TP6apPI78P3JKkBaYC4tXXpPk=;
+        b=Ptxa1ZOCg5S3XOE5u2AaKjTZoeI/Ir8b/CXcNoMqlAgc55SaXImBYzkAjYV5D/m10b
+         r8Hu0NQf/r/YNjZWOn6Y/itO3u2vYxGCZlxH6EzoB53e10T+PgnVm/q8t+mle4tFbygq
+         8QHFI6LJNptl1Yx6J7y8kKkboivrgCbrYU2y9h5cARE31V5fjqCem6JWKO9CG3acjfis
+         0JXSe1Wqp+twOCitMxC4uUR7AO0r/Od6MhqUaxTbkVQGSM+hdU/8xCg+KoD1gRsSjqSN
+         06pK0EZk99OHoPuNyFQfr621vDXk5TP8Hu9b/1lVH+48uhE7kqJy28bMUqE2wY7RNHd2
+         g2TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BTLDGG1JfCbcJjNOZkikvC8f7AaHQJjjKAzvQey3fqs=;
-        b=K4w4GnidSTQPrAsWtnI0XJ7/K/2gyrQarNd0RssVC6kxBx+YixBtCcl9YuO6q797He
-         n7d8/h62Aibk0nL88KYLIBrDYClhkoHkD0tQWdAEIXJINIJjRH8qqc0L/sThLR2fLnNp
-         9vADgq9Pu/qxt4k+S+TKiO3Ajea7O3NFg2K5uyK26US6TKdIC3odTn4CbAMzZVqSrI8C
-         cgWa4hhcU7vty6YFQ8IEI9W1LY3s0fUJM63hu7CusRTn2H8m56T892uQAPpt8NJoInzs
-         j9iyZzJxK2qpLIEFocxralbiGistcPTNZ8h5RK5ywKAhAh5rnNMMXKW4JCWZssJ1e1Q8
-         LT3Q==
-X-Gm-Message-State: ACrzQf2iLxWow8fW3KZ7vwN+0AIwpGkc2HSmYeB+p606dtnN7ZUUyMaM
-        U0YsgHtoGfkqp1JLtm8Gm3wttTHpGIk=
-X-Google-Smtp-Source: AMsMyM4MlDLg14I1SS17xTsY8wvg4fC9kOv0osvlxi1GA2wcy5gtR5CrX6S1qEjfxC6MYC0rgq4mEg==
-X-Received: by 2002:a17:902:f710:b0:184:7a4c:fdc1 with SMTP id h16-20020a170902f71000b001847a4cfdc1mr51902574plo.27.1666918405546;
-        Thu, 27 Oct 2022 17:53:25 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:ea9a:801b:ed52:2db1])
-        by smtp.gmail.com with ESMTPSA id a17-20020a170902ecd100b00176b3d7db49sm1843475plh.0.2022.10.27.17.53.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 17:53:24 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 17:53:21 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     neil.armstrong@linaro.org, Bjorn Andersson <andersson@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andy Gross <agross@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 06/11] dt-bindings: input: qcom,pm8921-pwrkey: convert
- to dt-schema
-Message-ID: <Y1soAaUqIHb6+I8T@google.com>
-References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
- <20220928-mdm9615-dt-schema-fixes-v4-6-dac2dfaac703@linaro.org>
- <Y1o5hYAnBuf1akJ9@google.com>
- <e8f53c8a-2842-9e6e-75bd-e099db3fe6f3@linaro.org>
- <68f6d58e-8b7a-1032-4a3d-c4c74b82d111@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A6gCh4ZYv30l/VnGu0TP6apPI78P3JKkBaYC4tXXpPk=;
+        b=PT2kBEaM9/zK6u7P+dlm6pNqSIhj4XhJ6IKtqYBCYn1fEFAAZXCCeuHnEHKYH2Z+Wt
+         QNAbr4UYqpAO/GJ/mzr5LWivcewKAeEKC7kHie/CBmQfK1TddlrOhPErrhNRDoXMLIXv
+         0mKPli3S59Wbr/M4vgd43BKh1P2COaSUEthTykBjptGp80E4NCOgeh3O0aanMcwP7340
+         b/IijZiHk8wf7aUT9evpfOmTGWpuAXwhkrwJZBbXPPHn06p1hv8n1IIHFb6jjPJ474Zb
+         XyIVrjbBaD0ymZHH5ku0c7jQrkL9nMrwkcuUgPsZnFJ0KfbEYf+jfRdme6CpH1u5acSd
+         vl/Q==
+X-Gm-Message-State: ACrzQf0lWuzBwyNap76oJnc2gsVXZ2vpg7/t6Uys+V04saS0RZ2x3Ri5
+        0shE4CznfM9hmazMOlCHx4dWFlFNmyc=
+X-Google-Smtp-Source: AMsMyM4VHM64hPELLvRoJYiYWeeLV7TAVr/b8Cso6JhU7ACWlOeMYMzTz9uCTBk+qfjvz1z7W/a35Q==
+X-Received: by 2002:a05:6870:4798:b0:12c:fdf7:e948 with SMTP id c24-20020a056870479800b0012cfdf7e948mr7122154oaq.247.1666918485521;
+        Thu, 27 Oct 2022 17:54:45 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n11-20020a056870558b00b0013ae5246449sm1348519oao.22.2022.10.27.17.54.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 17:54:44 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <72bc60b6-6fe1-9a7f-27ab-2f84832d62b1@roeck-us.net>
+Date:   Thu, 27 Oct 2022 17:54:42 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <68f6d58e-8b7a-1032-4a3d-c4c74b82d111@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [RFC][PATCH v2 00/31] timers: Use del_timer_shutdown() before
+ freeing timers
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>
+References: <20221027150525.753064657@goodmis.org>
+ <20221027222404.GA3123386@roeck-us.net>
+ <20221027185859.1087d3ca@gandalf.local.home>
+ <20221027232442.GA279073@roeck-us.net>
+ <20221027195509.6fb3793c@gandalf.local.home>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20221027195509.6fb3793c@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,31 +85,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 08:43:20AM -0400, Krzysztof Kozlowski wrote:
-> On 27/10/2022 08:39, Neil Armstrong wrote:
-> > Hi,
-> > 
-> > On 27/10/2022 09:55, Dmitry Torokhov wrote:
-> >> On Fri, Oct 21, 2022 at 11:06:42AM +0200, Neil Armstrong wrote:
-> >>> Convert input/qcom,pm8xxx-pwrkey.txt to YAML, and take in account that
-> >>> the PM8921 pwrkey compatible is used as fallback for the PM8018 pwrkey.
-> >>>
-> >>> Reviewed-by: Rob Herring <robh@kernel.org>
-> >>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> >>
-> >> Should I merge this through my tree or you want all these changes to go
-> >> together through some particular tree?
-> > 
-> > I have no preference,
-> > Krzysztof will you take it and prepare a branch to Bjorn ?
+On 10/27/22 16:55, Steven Rostedt wrote:
+> On Thu, 27 Oct 2022 16:24:42 -0700
+> Guenter Roeck <linux@roeck-us.net> wrote:
 > 
-> No, I did not plan on doing it.
+>>> This is probably just missing a switch to shutdown.
+>>>    
+>> Wild shot, and I don't really know what I am doing,
+>> but I'll try
+>>
+>> iff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
+>> index e71b3b43927c..6c1cb4a219f0 100644
+>> --- a/block/blk-sysfs.c
+>> +++ b/block/blk-sysfs.c
+>> @@ -767,6 +767,8 @@ static void blk_release_queue(struct kobject *kobj)
+>>
+>>          might_sleep();
+>>
+>> +       del_timer_shutdown(&q->timeout);
+>> +
+>>          percpu_ref_exit(&q->q_usage_counter);
+>>
+>>          if (q->poll_stat)
 > 
-> Dmitry,
-> Please grab it (assuming there are no dependencies).
+> Or perhaps this:
+> 
 
-Applied, thank you.
+I think you are correct. Let me give it a try.
 
--- 
-Dmitry
+> -- Steve
+> 
+> diff --git a/block/blk-core.c b/block/blk-core.c
+> index 17667159482e..69b1daa2e91a 100644
+> --- a/block/blk-core.c
+> +++ b/block/blk-core.c
+> @@ -227,7 +227,7 @@ const char *blk_status_to_str(blk_status_t status)
+>    */
+>   void blk_sync_queue(struct request_queue *q)
+>   {
+> -	del_timer_sync(&q->timeout);
+> +	del_timer_shutdown(&q->timeout);
+>   	cancel_work_sync(&q->timeout_work);
+>   }
+>   EXPORT_SYMBOL(blk_sync_queue);
+> diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
+> index e71b3b43927c..12a1e46536ed 100644
+> --- a/block/blk-sysfs.c
+> +++ b/block/blk-sysfs.c
+> @@ -769,6 +769,8 @@ static void blk_release_queue(struct kobject *kobj)
+>   
+>   	percpu_ref_exit(&q->q_usage_counter);
+>   
+> +	blk_sync_queue(q);
+> +
+This might not even be needed. I'll try without it first.
+
+Thanks,
+Guenter
+
+>   	if (q->poll_stat)
+>   		blk_stat_remove_callback(q, q->poll_cb);
+>   	blk_stat_free_callback(q->poll_cb);
+
