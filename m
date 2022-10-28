@@ -2,125 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77399611D85
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 410BD611DAF
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbiJ1WqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 18:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S230209AbiJ1Ws3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 18:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiJ1WqX (ORCPT
+        with ESMTP id S230151AbiJ1WsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 18:46:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093201D3473;
-        Fri, 28 Oct 2022 15:46:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0F56B82AA2;
-        Fri, 28 Oct 2022 22:46:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82950C433D6;
-        Fri, 28 Oct 2022 22:46:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666997179;
-        bh=s26jHyd1kGfu++KNYnyX//dTrAoWFdZ+ZNmo3nKnJss=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VxGwJ9O9yotsrKvlxcwXmQ0Fk4p3v9D5+DlTte1u/b8zE1L6oWXtT1okcCGymzc+F
-         uUzTBz6nnK6iiPp7ONuOcluxciyA+H2AWZrZubpDNsGXF9Il1djnbo/LR4hvlZPj9A
-         0kcsvnbXvyZm70ZgqLxx8R3a5VvJzOLCGoXRet/I+ti1hMmQnBvu+tjrjCIr4vv2w6
-         OEFoGL6xEvwVAQA3kmozlS8z6UFzjyJceJxRPFqcAUpN8icgdMmKp9Kauc4XA3OBaI
-         M/O249pRehQLwqy4hrrgyuAQ8mLrPOQJg4gBTCW/3paQdOBy2HRsGcOdxhzSitZK13
-         YSSld8uxG8jGQ==
-Date:   Fri, 28 Oct 2022 15:46:17 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mirko Lindner <mlindner@marvell.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net
-Subject: Re: [RFC][PATCH v2 19/31] timers: net: Use del_timer_shutdown()
- before freeing timer
-Message-ID: <20221028154617.3c63ba68@kernel.org>
-In-Reply-To: <20221028183149.2882a29b@gandalf.local.home>
-References: <20221027150525.753064657@goodmis.org>
-        <20221027150928.780676863@goodmis.org>
-        <20221027155513.60b211e2@gandalf.local.home>
-        <CAHk-=wjAjW2P5To82+CAM0Rx8RexQBHPTVZBWBPHyEPGm37oFA@mail.gmail.com>
-        <20221027163453.383bbf8e@gandalf.local.home>
-        <CAHk-=whoS+krLU7JNe=hMp2VOcwdcCdTXhdV8qqKoViwzzJWfA@mail.gmail.com>
-        <20221027170720.31497319@gandalf.local.home>
-        <20221027183511.66b058c4@gandalf.local.home>
-        <20221028183149.2882a29b@gandalf.local.home>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 28 Oct 2022 18:48:00 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89B31E3EF4
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 15:47:59 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id f193so6063910pgc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 15:47:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PUbdrJIexM2PmxhWqwHeRbpmJO2wc72laJAHiT+SdrY=;
+        b=SXhC0xT0j1O3099HzLxYhiDHa0sl/KIFOG53mQzJmSQbCJ1VIp02ViUAjZ4gJ73sY4
+         T156y9oNY0K7tsJbRJysN7MKJFoRWhWmDZdqulVJe1c51T6qBf9krTbEf6R1hyVVSyJ9
+         m9bfFrOBxREcd6U39/u7VuQMqm/RMhABTEF0Qo2emZ2VPwtCkNg0YZaCKZ3NZUyRSP8L
+         wesUOl7ThlMVpv4jloQhhkC6tEjaf1vNeTc9g/5JnnVOyZQl2eAIR9rFHdiybQ46NeL8
+         hzJln7utJvAkvtP2TW4A2WyzGXhotujxdM+7sqCXGHF7Hfsd9Vdheton1YV9RAowc9ZI
+         gNPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PUbdrJIexM2PmxhWqwHeRbpmJO2wc72laJAHiT+SdrY=;
+        b=uxexyPgDasxwfhQM8C/f7/GQ1YJYYwUnnHqPoL0tiy0KJJUk5RRehj3I6swVtk1rHm
+         xyM2oYPlU0HAMBftJUeZzzAb7V55vEStC3hIFfBrOVn89x1h0rufjkUvyNyf7YQIgm5h
+         bYdRPerxq968cgaFKxOdbH0ZjrrGWnfNKsjceTk2GD59LUTmM9MmSWNKDONxjF/L3XQr
+         nMLKQnBbdc1l1n4zgOB2t8emY5vxnDGX055nK+s/YwleDrnsar0l1w7oa0M+lRmI5xeO
+         5MoU/uybHsq1CjeEetYkqo1/tJ8VdKTPGt+wFCWyqjJGZL29T4FzdKMLGUVuF4ykYhzE
+         4ohA==
+X-Gm-Message-State: ACrzQf0fXhY0NJW+6v1XUt1GaOB1ecyrMZ8//pkL68lg5LXkyTpERsu+
+        FKkqlSBWfmiGQ1MvhmBcc/sA9w==
+X-Google-Smtp-Source: AMsMyM5wcdv4vaAvLa/8L59ro1q5+Z6ez29oP4z6iKYbz+sl1LRtZmebdPWN2bVwnC6jdfsXR0fnZQ==
+X-Received: by 2002:a63:5a1b:0:b0:461:9934:6f62 with SMTP id o27-20020a635a1b000000b0046199346f62mr1606820pgb.266.1666997278953;
+        Fri, 28 Oct 2022 15:47:58 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id q6-20020a17090a178600b00210c84b8ae5sm2992406pja.35.2022.10.28.15.47.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 15:47:58 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 15:47:58 -0700 (PDT)
+X-Google-Original-Date: Fri, 28 Oct 2022 15:42:40 PDT (-0700)
+Subject:     Re: [PATCH v1] riscv: dts: sifive unleashed: Add PWM controlled LEDs
+In-Reply-To: <20221012110928.352910-1-emil.renner.berthing@canonical.com>
+CC:     linux-riscv@lists.infradead.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        alexandre.ghiti@canonical.com, bin.meng@windriver.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     emil.renner.berthing@canonical.com
+Message-ID: <mhng-a36f2ace-57aa-4bd0-811d-c3aaa3018969@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Oct 2022 18:31:49 -0400 Steven Rostedt wrote:
-> Could someone from networking confirm (or deny) that the timer being
-> removed in sk_stop_timer() will no longer be used even if del_timer()
-> returns false?
-> 
-> net/core/sock.c:
-> 
-> void sk_stop_timer(struct sock *sk, struct timer_list* timer)
-> {
-> 	if (del_timer(timer))
-> 		__sock_put(sk);
-> }
-> 
-> If this is the case, then I'll add the following interface:
-> 
->    del_timer_sync_shutdown() // the common case which syncs
-> 
->    del_timer_shutdown() // the uncommon case, that returns immediately
->                         // used for those cases that add extra code to
->                         // handle it, like sk_stop_timer()
+On Wed, 12 Oct 2022 04:09:28 PDT (-0700), emil.renner.berthing@canonical.com wrote:
+> This adds the 4 PWM controlled green LEDs to the HiFive Unleashed device
+> tree. The schematic doesn't specify any special function for the LEDs,
+> so they're added here without any default triggers and named d1, d2, d3
+> and d4 just like in the schematic.
+>
+> Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+> ---
+>
+> Yes this board is old, but I'm trying to get rid of custom riscv patches in
+> the Ubuntu kernel.
 
-Sorry too many bugs at once :)
+IMO fixing stuff for old boards is great, particularly if they're broken 
+upstream but supported by distro kernels -- that's kind of a messy spot 
+to be in.
 
-FWIW Paolo was saying privately earlier today that he spotted some cases
-of reuse, he gave an example of ccid2_hc_tx_packet_recv()
-
-So we can't convert all cases of sk_stop_timer() in one fell swoop :(
-
-> Which has the same semantics as del_timer_sync() and del_timer()
-> respectively, but will prevent the timer from being rearmed again.
-> 
-> This way we can convert the sk_stop_timer() to:
-> 
-> void sk_stop_timer(struct sock *sk, struct timer_list* timer)
-> {
-> 	if (del_timer_shutdown(timer))
-> 		__sock_put(sk);
-> }
-> 
-> 
-> We can also add the del_timer_shutdown() to other locations that need to
-> put a timer into a shutdown state before freeing, and where it's in a
-> context that can not call del_timer_sync_shutdown().
+>  .../boot/dts/sifive/hifive-unleashed-a00.dts  | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>
+> diff --git a/arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts b/arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts
+> index ced0d4e47938..900a50526d77 100644
+> --- a/arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts
+> +++ b/arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts
+> @@ -3,6 +3,8 @@
+>
+>  #include "fu540-c000.dtsi"
+>  #include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/leds/common.h>
+> +#include <dt-bindings/pwm/pwm.h>
+>
+>  /* Clock frequency (in Hz) of the PCB crystal for rtcclk */
+>  #define RTCCLK_FREQ		1000000
+> @@ -42,6 +44,42 @@ gpio-restart {
+>  		compatible = "gpio-restart";
+>  		gpios = <&gpio 10 GPIO_ACTIVE_LOW>;
+>  	};
+> +
+> +	led-controller {
+> +		compatible = "pwm-leds";
+> +
+> +		led-d1 {
+> +			pwms = <&pwm0 0 7812500 PWM_POLARITY_INVERTED>;
+> +			active-low;
+> +			color = <LED_COLOR_ID_GREEN>;
+> +			max-brightness = <255>;
+> +			label = "d1";
+> +		};
+> +
+> +		led-d2 {
+> +			pwms = <&pwm0 1 7812500 PWM_POLARITY_INVERTED>;
+> +			active-low;
+> +			color = <LED_COLOR_ID_GREEN>;
+> +			max-brightness = <255>;
+> +			label = "d2";
+> +		};
+> +
+> +		led-d3 {
+> +			pwms = <&pwm0 2 7812500 PWM_POLARITY_INVERTED>;
+> +			active-low;
+> +			color = <LED_COLOR_ID_GREEN>;
+> +			max-brightness = <255>;
+> +			label = "d3";
+> +		};
+> +
+> +		led-d4 {
+> +			pwms = <&pwm0 3 7812500 PWM_POLARITY_INVERTED>;
+> +			active-low;
+> +			color = <LED_COLOR_ID_GREEN>;
+> +			max-brightness = <255>;
+> +			label = "d4";
+> +		};
+> +	};
+>  };
+>
+>  &uart0 {
