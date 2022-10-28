@@ -2,130 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8201C611213
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B2AB611218
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbiJ1NAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42800 "EHLO
+        id S230158AbiJ1NA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbiJ1NAU (ORCPT
+        with ESMTP id S230161AbiJ1NAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:00:20 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C849B3641A
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:00:18 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso4391566pjc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:00:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5iJgtqpqiJVn//zhOfDmx7Kv+t48Z9oElzV8cQV4k8Q=;
-        b=OYyI1D0//SYHg7b9sDx9vjzWuMkJE0shNqa2Ap8f/NCqkVLJzjc+VklmLtIPloaXN/
-         bcAk4bSk4VpzlPj13/R1bBnPUM5Qm8iMvZq8utmw3hiV1k1tRJwDYZBeAOJsOVPTm75I
-         CKSRzSfgiTeWhtkm5GuQVZpD+1iTHJp6chiq+v7s0ZFpqU53u4FTWEMoLqUFCnL/KqCl
-         x0nm9C4ORjC47udpZ2tXLPfgAA28yQHwo9lh29uFutgVJ4jdNWR8r4qtc+xVra76ILdX
-         QMwFkn5XQReuxrsDbdnzfuCipMkOxzzpTFJNiNbGt5NWk16rMldf2cpA5MYmxASsmzn9
-         QPOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5iJgtqpqiJVn//zhOfDmx7Kv+t48Z9oElzV8cQV4k8Q=;
-        b=5z3panGyYMb1zkE9Tw3fBp5Secqtadd1wmQMccUteFLLSzfvK1c/GtD/L4iLQWCB+r
-         8ECeZkFtex69z2O1dtBEWns4NkUHT9g6Y+94zno111KLl/eNyML3q7mO9qMFXV7lif2c
-         5174ZTCvf7j4Vo8/MzJOou9QPYlPdHvfQcY/1qBgMatDp39CwfUsxRooVWmIArsuqQ4a
-         54ysQ65FBEhMex7utEwfg1zcgOSC5ieeuf0vlXPgc4G4JJtzFhQLCgGrpCddzOQ9ghV4
-         sjhNfPSCwMhdG4kVOJgeDIZmDHS/RteZMOUEDo98CMFcopECPr/zVy5Xw/pPk9QnkyND
-         yJpg==
-X-Gm-Message-State: ACrzQf2TJ4bjeHlzdlc+byObPw5VTXUb1kS4WaYg2+XKTQL1KbMqdMS8
-        0I49ZNGU2eAYbXNlT017erX3lA==
-X-Google-Smtp-Source: AMsMyM7PmTVcA7PMinrbHKlUjxdSN3EiXgN4d3rE8Fu3scAMRdj2UzkM3odDl9Tmj7UjN9XWOSa9DA==
-X-Received: by 2002:a17:902:b90b:b0:186:8a4d:d4b7 with SMTP id bf11-20020a170902b90b00b001868a4dd4b7mr33134131plb.129.1666962015777;
-        Fri, 28 Oct 2022 06:00:15 -0700 (PDT)
-Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
-        by smtp.gmail.com with ESMTPSA id v19-20020a17090ac91300b002036006d65bsm2512524pjt.39.2022.10.28.06.00.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 06:00:15 -0700 (PDT)
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Yuri Benditovich <yuri.benditovich@daynix.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yan Vugenfirer <yan@daynix.com>,
-        intel-wired-lan@lists.osuosl.org, Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Akihiko Odaki <akihiko.odaki@daynix.com>
-Subject: [PATCH v2] e1000e: Fix TX dispatch condition
-Date:   Fri, 28 Oct 2022 22:00:00 +0900
-Message-Id: <20221028130000.7318-1-akihiko.odaki@daynix.com>
-X-Mailer: git-send-email 2.37.3
+        Fri, 28 Oct 2022 09:00:51 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2580844E9;
+        Fri, 28 Oct 2022 06:00:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1666962042; x=1698498042;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Q6RUi+rLXaM5pWbUnyblE7p8zaqln2TeO5NDpPS1p94=;
+  b=NpL6XXAtoXUOu6wI79bvhO0P5cGpVxC3FdiOjkluuxAegbIXdwLi0eCH
+   G4KOHcRpjIwoWJMx8o/bYhypm7kKG9OpVS3FJ+Wh3x7WSgeth6fQSey1H
+   5M9ggbUI9ORichbDDcLfOqAdfeENqtMSoHb8HmatEqUocr//Ae4I+S4XD
+   ZdjaHIG99HakKXNVBfo3yGOTJb9fnE1FewNsBTMAHMMeBjb4+Avpf0ehu
+   GXDjLeKTkD5VPl1Kq5jHHHy6podjusqh+gz/CAmo1qE5e+zMSYloip6Dn
+   pTLgpkhMKhTd5mxxsoU6tL33xftfWMs6BLrED7A2JGHZlg//CJpOda+J6
+   g==;
+X-IronPort-AV: E=Sophos;i="5.95,221,1661842800"; 
+   d="scan'208";a="186776959"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Oct 2022 06:00:42 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 28 Oct 2022 06:00:42 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Fri, 28 Oct 2022 06:00:40 -0700
+Message-ID: <4fc31b0c-3295-2272-52c8-548634c3a6dc@microchip.com>
+Date:   Fri, 28 Oct 2022 15:00:38 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 00/32] dmaengine: at_hdmac: Fix concurrency bugs and
+ then convert to virt-dma
+Content-Language: en-US
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>, <vkoul@kernel.org>,
+        <peda@axentia.se>, <du@axentia.se>
+CC:     <maciej.sosnowski@intel.com>, <mripard@kernel.org>,
+        <torfl6749@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <dmaengine@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+References: <20221025090306.297886-1-tudor.ambarus@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20221025090306.297886-1-tudor.ambarus@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-e1000_xmit_frame is expected to stop the queue and dispatch frames to
-hardware if there is not sufficient space for the next frame in the
-buffer, but sometimes it failed to do so because the estimated maxmium
-size of frame was wrong. As the consequence, the later invocation of
-e1000_xmit_frame failed with NETDEV_TX_BUSY, and the frame in the buffer
-remained forever, resulting in a watchdog failure.
+On 25/10/2022 at 11:02, Tudor Ambarus wrote:
+> v2:
+> - reorder patches so that fixes come first -> easier to backport to
+> stable kernels.
+> - drop the devm_request_irq() patch as we had to disable the irq anyway
+> in remove() in order to avoid spurios IRQs. Using devm variant brings no
+> palpable benefit.
+> - reword pm_ptr commit message
+> 
+> 
+> at_hdmac driver had poor list handling and concurrency bugs.
+> We experienced calling of the completion call twice for the
+> same descriptor. Peter Rosin encountered the same while
+> reporting a different bug:
+> https://lore.kernel.org/lkml/13c6c9a2-6db5-c3bf-349b-4c127ad3496a@axentia.se/
+> 
+> Two sets of tests were performed:
+> 1/ tested just the fixes, to make sure everything is fine and the
+> concurrency bugs are squashed even without the conversion to virt-dma.
+> All went fine.
+> 2/ tested the entire series including the conversion the virt-dma
+> All went fine.
+> 
+> I tested NAND (prep_dma_memcpy), MMC (prep_dma_slave_sg),
+> usart (cyclic mode), dmatest (memcpy, memset).
 
-This change fixes the estimated size by making it match with the
-condition for NETDEV_TX_BUSY. Apparently, the old estimation failed to
-account for the following lines which determines the space requirement
-for not causing NETDEV_TX_BUSY:
-    ```
-    	/* reserve a descriptor for the offload context */
-    	if ((mss) || (skb->ip_summed == CHECKSUM_PARTIAL))
-    		count++;
-    	count++;
+All these tests are reassuring.
 
-    	count += DIV_ROUND_UP(len, adapter->tx_fifo_limit);
-    ```
+The important piece to preserve is the computation of the residue as it 
+went with lots of experiments in both silicon and simulation with the IP 
+designer. The errors were very difficult to reproduce.
+As this part seems well understood and maintained it its good 
+conditions, I can give my Ack to the series.
+So, for the whole series, after a quick-but-not-too-quick review:
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-This issue was found when running http-stress02 test included in Linux
-Test Project 20220930 on QEMU with the following commandline:
-```
-qemu-system-x86_64 -M q35,accel=kvm -m 8G -smp 8
-	-drive if=virtio,format=raw,file=root.img,file.locking=on
-	-device e1000e,netdev=netdev
-	-netdev tap,script=ifup,downscript=no,id=netdev
-```
+Thanks for this effort Tudor. Best regards,
+   Nicolas
 
-Fixes: bc7f75fa9788 ("[E1000E]: New pci-express e1000 driver (currently for ICH9 devices only)")
-Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
----
- drivers/net/ethernet/intel/e1000e/netdev.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> With the conversion to virt-dma I replaced the election of a new transfer
+> in the tasklet with the election of the new transfer in the interrupt
+> handler. We should have a shorter idle window as we remove the scheduling
+> latency of the tasklet. Using mtd_speedtest showed similar performances
+> when using NAND with DMA. That could be because of using a low timming
+> mode on NAND.
+> 
+> 
+> Tudor Ambarus (32):
+>    dmaengine: at_hdmac: Fix at_lli struct definition
+>    dmaengine: at_hdmac: Don't start transactions at tx_submit level
+>    dmaengine: at_hdmac: Start transfer for cyclic channels in
+>      issue_pending
+>    dmaengine: at_hdmac: Fix premature completion of desc in issue_pending
+>    dmaengine: at_hdmac: Do not call the complete callback on
+>      device_terminate_all
+>    dmaengine: at_hdmac: Protect atchan->status with the channel lock
+>    dmaengine: at_hdmac: Fix concurrency problems by removing
+>      atc_complete_all()
+>    dmaengine: at_hdmac: Fix concurrency over descriptor
+>    dmaengine: at_hdmac: Free the memset buf without holding the chan lock
+>    dmaengine: at_hdmac: Fix concurrency over the active list
+>    dmaengine: at_hdmac: Fix descriptor handling when issuing it to
+>      hardware
+>    dmaengine: at_hdmac: Fix completion of unissued descriptor in case of
+>      errors
+>    dmaengine: at_hdmac: Don't allow CPU to reorder channel enable
+>    dmaengine: at_hdmac: Fix impossible condition
+>    dmaengine: at_hdmac: Check return code of dma_async_device_register
+>    dmaengine: at_hdmac: Do not print messages on console while holding
+>      the lock
+>    dmaengine: at_hdmac: Return dma_cookie_status()'s ret code when
+>      txstate is NULL
+>    dmaengine: at_hdmac: Remove superfluous cast
+>    dmaengine: at_hdmac: Pass residue by address to avoid unnecessary
+>      implicit casts
+>    dmaengine: at_hdmac: s/atc_get_bytes_left/atc_get_residue
+>    dmaengine: at_hdmac: Introduce atc_get_llis_residue()
+>    dmaengine: at_hdmac: Use devm_kzalloc() and struct_size()
+>    dmaengine: at_hdmac: Use devm_platform_ioremap_resource
+>    dmaengine: at_hdmac: Use devm_clk_get()
+>    dmaengine: at_hdmac: Use pm_ptr()
+>    dmaengine: at_hdmac: Set include entries in alphabetic order
+>    dmaengine: at_hdmac: Keep register definitions and structures private
+>      to at_hdmac.c
+>    dmaengine: at_hdmac: Use bitfield access macros
+>    dmaengine: at_hdmac: Rename "dma_common" to "dma_device"
+>    dmaengine: at_hdmac: Rename "chan_common" to "dma_chan"
+>    dmaengine: at_hdmac: Remove unused member of at_dma_chan
+>    dmaengine: at_hdmac: Convert driver to use virt-dma
+> 
+>   MAINTAINERS                 |    1 -
+>   drivers/dma/Kconfig         |    1 +
+>   drivers/dma/at_hdmac.c      | 1899 ++++++++++++++++++-----------------
+>   drivers/dma/at_hdmac_regs.h |  478 ---------
+>   4 files changed, 990 insertions(+), 1389 deletions(-)
+>   delete mode 100644 drivers/dma/at_hdmac_regs.h
+> 
 
-diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
-index 49e926959ad3..55cf2f62bb30 100644
---- a/drivers/net/ethernet/intel/e1000e/netdev.c
-+++ b/drivers/net/ethernet/intel/e1000e/netdev.c
-@@ -5936,9 +5936,9 @@ static netdev_tx_t e1000_xmit_frame(struct sk_buff *skb,
- 		e1000_tx_queue(tx_ring, tx_flags, count);
- 		/* Make sure there is space in the ring for the next send. */
- 		e1000_maybe_stop_tx(tx_ring,
--				    (MAX_SKB_FRAGS *
-+				    ((MAX_SKB_FRAGS + 1) *
- 				     DIV_ROUND_UP(PAGE_SIZE,
--						  adapter->tx_fifo_limit) + 2));
-+						  adapter->tx_fifo_limit) + 4));
- 
- 		if (!netdev_xmit_more() ||
- 		    netif_xmit_stopped(netdev_get_tx_queue(netdev, 0))) {
 -- 
-2.37.3
+Nicolas Ferre
 
