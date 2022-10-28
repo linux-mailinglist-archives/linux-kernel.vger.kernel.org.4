@@ -2,173 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DDFF6115F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 089E7611600
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiJ1PfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 11:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50586 "EHLO
+        id S229926AbiJ1Pfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 11:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiJ1PfU (ORCPT
+        with ESMTP id S230064AbiJ1Pfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:35:20 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB80E5AA01;
-        Fri, 28 Oct 2022 08:35:15 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id F29EC1C09E5; Fri, 28 Oct 2022 17:35:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1666971313;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NZ+XC4iEcro/8zXcMRHQx9f6mpwLNOhOuYFKcJdBGUA=;
-        b=KyY770jITqm/kV0UkVD96zlokENQ8wQv5fmjhAsHoiAUv3+H95RR1GHp47r6vDXgzAWkoP
-        jyKeT/+t7UX+Z1VKq+y8zSA34lBha8BTtH/ooGNPBDrMXmaWGrwCyWZfW0egCLBcRmNbRJ
-        4NReokL4i9zkvQbKBEwzwrZ3KlDYiDA=
-Date:   Fri, 28 Oct 2022 17:34:57 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Maarten Zanders <maarten.zanders@mind.be>
-Cc:     Arne Staessen <a.staessen@televic.com>, linux-leds@vger.kernel.org,
+        Fri, 28 Oct 2022 11:35:34 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E9E7992E;
+        Fri, 28 Oct 2022 08:35:31 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id x2so8428788edd.2;
+        Fri, 28 Oct 2022 08:35:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LqCccumknJLELEs6P6qfy76QQ4LLkzIhoHsvgTTQP0A=;
+        b=Tn73lx7E473nQMYoOWdMzrI4B7Y8cLS0asgGZ4ic/y9XfDXHi8Uknu1+0NNt/ochSe
+         v+V0HUSncvJcrrBRUIH7B5buSwacbfeYn73OZbijlDaow5KZZKeMEhlhyNG/Fh1mxtHe
+         vl9UKo9MUlYXzV0YQZrcfvtkNvPvFQ182phxyxvaksqAmpS1xtKsaKRg7ivadDebxmKK
+         KsMZZxYsnouvNfW9xNWPeicZC3sMS8IeRAxYCPydS9gq3n8inlcbyluC/sKl7Knth5Tm
+         /gjEWYHTWoOyemlIApJBHMBMfdLAWB+rx/qZ8h0W0TOTmgLOROVfFJ+zXdDc0yeEs0Gr
+         IesA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LqCccumknJLELEs6P6qfy76QQ4LLkzIhoHsvgTTQP0A=;
+        b=IYP0xiTabDz49Db7kWw7pHUr9BjZrpfo51uTIEf8sCg7TaTB8JlQpW7WyXagQ1Rmf2
+         d3t9gZQFyc/m66WnXbcsVVtx82SWJIYY8XA6qFSyFww6yOdegz4y6JCsxyzDyywwdSwm
+         NS5tc15DFYhgGYHhR/Deba29aj7p7EH+CbD9wAKrk9weTbdAROAGLuH1SFKX6YTQQaON
+         qq2cv90I2YxbDf2WxqNPhlwq6jKJfURz1zeRjPNfJZX/opnxB5IgAaphq5vgoFVBrwF4
+         bRClE17Wd57/DSJAbd9Rm6A7JH43q0hI283ueB5qVtpf5wHH3+j7LN8JEdp/Httua1Nd
+         lP0w==
+X-Gm-Message-State: ACrzQf3vNqR/W04L/+tCz9IgxseeNRBSKmS97k45rW2hqdhESAM0DkJs
+        M57KrVsAAIHqvV6Eiovm9Ss=
+X-Google-Smtp-Source: AMsMyM47SbkBLgzsyeqHvow0DxFIWZcWEVDjQy8qASHWKeuoqSZCOJP1h1nqlFCyxDv+tJeohq8wFA==
+X-Received: by 2002:a05:6402:2791:b0:461:c5b4:d114 with SMTP id b17-20020a056402279100b00461c5b4d114mr25045506ede.357.1666971331095;
+        Fri, 28 Oct 2022 08:35:31 -0700 (PDT)
+Received: from localhost.localdomain ([95.183.227.98])
+        by smtp.gmail.com with ESMTPSA id ds12-20020a0564021ccc00b00461aebb2fe2sm2830635edb.54.2022.10.28.08.35.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 08:35:30 -0700 (PDT)
+From:   Yassine Oudjana <yassine.oudjana@gmail.com>
+X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Andy Teng <andy.teng@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Yassine Oudjana <yassine.oudjana@gmail.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] leds: lp5523: fix out-of-bounds bug in lp5523_selftest()
-Message-ID: <20221028153457.GA14936@duo.ucw.cz>
-References: <20221028105643.45300-1-maarten.zanders@mind.be>
+Subject: [PATCH v4 05/13] dt-bindings: pinctrl: mediatek,pinctrl-mt6795: Fix interrupt count
+Date:   Fri, 28 Oct 2022 18:34:57 +0300
+Message-Id: <20221028153505.23741-6-y.oudjana@protonmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221028153505.23741-1-y.oudjana@protonmail.com>
+References: <20221028153505.23741-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="azLHFNyN32YCQGCU"
-Content-Disposition: inline
-In-Reply-To: <20221028105643.45300-1-maarten.zanders@mind.be>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Yassine Oudjana <y.oudjana@protonmail.com>
 
---azLHFNyN32YCQGCU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The document currently states a maximum of 1 interrupt, but the DT
+has 2 specified causing a dtbs_check error. Replace the maximum limit
+with a minimum and add per-interrupt descriptions to pass the check.
 
-Hi!
+Fixes: 81557a71564a ("dt-bindings: pinctrl: Add MediaTek MT6795 pinctrl bindings")
+Suggested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ .../devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> When not all LED channels of the led chip are configured, the
-> sysfs selftest functionality gives erroneous results and tries to
-> test all channels of the chip.
-> There is a potential for LED overcurrent conditions since the
-> test current will be set to values from out-of-bound regions.
->=20
-> It is wrong to use pdata->led_config[i].led_current to skip absent
-> channels as led_config[] only contains the configured LED channels.
->=20
-> Instead of iterating over all the physical channels of the device,
-> loop over the available LED configurations and use led->chan_nr to
-> access the correct i2c registers. Keep the zero-check for the LED
-> current as existing users might depend on this to disable a channel.
+diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
+index 73ae6e11410b..a3a3f7fb9605 100644
+--- a/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
+@@ -47,7 +47,10 @@ properties:
+ 
+   interrupts:
+     description: The interrupt outputs to sysirq.
+-    maxItems: 1
++    minItems: 1
++    items:
++      - description: EINT interrupt
++      - description: EINT event_b interrupt
+ 
+ # PIN CONFIGURATION NODES
+ patternProperties:
+-- 
+2.38.1
 
-Thanks, applied, I'll push eventually.
-
-I wonder, should we do these kind of actions on attribute _read_? I'd
-preffer some kind of write action to trigger this.
-
-Best regards,
-								Pavel
-
-> Reported-by: Arne Staessen <a.staessen@televic.com>
-> Signed-off-by: Maarten Zanders <maarten.zanders@mind.be>
-> ---
->  drivers/leds/leds-lp5523.c | 27 +++++++++++++++------------
->  1 file changed, 15 insertions(+), 12 deletions(-)
->=20
-> diff --git a/drivers/leds/leds-lp5523.c b/drivers/leds/leds-lp5523.c
-> index 369d40b0b65b..e08e3de1428d 100644
-> --- a/drivers/leds/leds-lp5523.c
-> +++ b/drivers/leds/leds-lp5523.c
-> @@ -581,8 +581,8 @@ static ssize_t lp5523_selftest(struct device *dev,
->  	struct lp55xx_led *led =3D i2c_get_clientdata(to_i2c_client(dev));
->  	struct lp55xx_chip *chip =3D led->chip;
->  	struct lp55xx_platform_data *pdata =3D chip->pdata;
-> -	int i, ret, pos =3D 0;
-> -	u8 status, adc, vdd;
-> +	int ret, pos =3D 0;
-> +	u8 status, adc, vdd, i;
-> =20
->  	mutex_lock(&chip->lock);
-> =20
-> @@ -612,20 +612,21 @@ static ssize_t lp5523_selftest(struct device *dev,
-> =20
->  	vdd--;	/* There may be some fluctuation in measurement */
-> =20
-> -	for (i =3D 0; i < LP5523_MAX_LEDS; i++) {
-> -		/* Skip non-existing channels */
-> +	for (i =3D 0; i < pdata->num_channels; i++) {
-> +		/* Skip disabled channels */
->  		if (pdata->led_config[i].led_current =3D=3D 0)
->  			continue;
-> =20
->  		/* Set default current */
-> -		lp55xx_write(chip, LP5523_REG_LED_CURRENT_BASE + i,
-> +		lp55xx_write(chip, LP5523_REG_LED_CURRENT_BASE + led->chan_nr,
->  			pdata->led_config[i].led_current);
-> =20
-> -		lp55xx_write(chip, LP5523_REG_LED_PWM_BASE + i, 0xff);
-> +		lp55xx_write(chip, LP5523_REG_LED_PWM_BASE + led->chan_nr,
-> +			     0xff);
->  		/* let current stabilize 2 - 4ms before measurements start */
->  		usleep_range(2000, 4000);
->  		lp55xx_write(chip, LP5523_REG_LED_TEST_CTRL,
-> -			     LP5523_EN_LEDTEST | i);
-> +			     LP5523_EN_LEDTEST | led->chan_nr);
->  		/* ADC conversion time is 2.7 ms typically */
->  		usleep_range(3000, 6000);
->  		ret =3D lp55xx_read(chip, LP5523_REG_STATUS, &status);
-> @@ -633,20 +634,22 @@ static ssize_t lp5523_selftest(struct device *dev,
->  			goto fail;
-> =20
->  		if (!(status & LP5523_LEDTEST_DONE))
-> -			usleep_range(3000, 6000);/* Was not ready. Wait. */
-> +			usleep_range(3000, 6000); /* Was not ready. Wait. */
-> =20
->  		ret =3D lp55xx_read(chip, LP5523_REG_LED_TEST_ADC, &adc);
->  		if (ret < 0)
->  			goto fail;
-> =20
->  		if (adc >=3D vdd || adc < LP5523_ADC_SHORTCIRC_LIM)
-> -			pos +=3D sprintf(buf + pos, "LED %d FAIL\n", i);
-> +			pos +=3D sprintf(buf + pos, "LED %d FAIL\n",
-> +				       led->chan_nr);
-> =20
-> -		lp55xx_write(chip, LP5523_REG_LED_PWM_BASE + i, 0x00);
-> +		lp55xx_write(chip, LP5523_REG_LED_PWM_BASE + led->chan_nr,
-> +			     0x00);
-> =20
->  		/* Restore current */
-> -		lp55xx_write(chip, LP5523_REG_LED_CURRENT_BASE + i,
-> -			led->led_current);
-> +		lp55xx_write(chip, LP5523_REG_LED_CURRENT_BASE + led->chan_nr,
-> +			     led->led_current);
->  		led++;
->  	}
->  	if (pos =3D=3D 0)
-> --=20
-> 2.37.3
-
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---azLHFNyN32YCQGCU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY1v2oQAKCRAw5/Bqldv6
-8j8zAJ4583whUfrj47M9T7qQaBaALIaEiwCcDtOhDGdoDID3q8P0gLhCuvpq/8Y=
-=0oRS
------END PGP SIGNATURE-----
-
---azLHFNyN32YCQGCU--
