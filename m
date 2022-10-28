@@ -2,77 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9300161196C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429FA611970
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbiJ1RkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 13:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
+        id S230000AbiJ1RlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 13:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiJ1Rj6 (ORCPT
+        with ESMTP id S229776AbiJ1RlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 13:39:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9A922B0C;
-        Fri, 28 Oct 2022 10:39:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E31D1629E7;
-        Fri, 28 Oct 2022 17:39:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F741C433C1;
-        Fri, 28 Oct 2022 17:39:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666978795;
-        bh=ijO6aXAOytrnNWFvN6FIBPIF9fWaDeLYuPg+SmXzcW0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XlmX7AbLOlzcuDycIMTqQo5Msl/O1UrlY9QhSC6rGdeKF9JUjr3yrR9NpcHe2TYM+
-         5suxjBt+Zv56j2cJU/oSN2Rahek8/rTW3NlgC9YBMu3vbyyg+IhXjKhjmvkhmwtAuP
-         H+WDYNUQADpwXTt2AHYU66l28ZAbVfxwVvcfyurSOdWvYTYLSLAmOqWoKEaF0CGXQv
-         MSBOUzEDFqrU4NM2XAp6iS6vNsOkEaPg2Nnllrq2Pk4hVjQk6CGstuMijgXCdnBLTZ
-         qu/Law20CAgJeDQjTdRk1ob/7vgoAUmxchqimhuDnH231xMHziRaQRDrkzyPjqkUrp
-         kGHDZ0Y2vmiBw==
-Message-ID: <eeeb3895-4eed-ab2f-10e7-111a6275b8e7@kernel.org>
-Date:   Fri, 28 Oct 2022 13:39:49 -0400
+        Fri, 28 Oct 2022 13:41:11 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA828733D5
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:41:10 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id bn35so9249564ljb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:41:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LgIFkJpodLhQ5UNB8CnN3tOTm9odgIidnDRK4X3byAg=;
+        b=WA90H9fRil7olR1Vlx/1sOEtZ0T3JsGEo/zahhOQwFUmffec42jXK67bQZGEdVJZ0b
+         PYwyVYcokv5NPLfkNsVbXmyXYVR9YLMFNmi7vs9nbz5JgD9VKC+53jP7g/gRZ1JDGVnS
+         lPvldw9IbWef9my0YLqiicSNaq6pP14bPdQmhtlOE8M39NmP2qkFpq5LZW2bvOuZXlgs
+         FJuJlV3ME0cnhFQpYb8shJ8a49kWaPha38YsKJt5QZD8CqX1kMlX0jFxxpsk2w2jm+jS
+         T74nIkCZBAQOf7oX1ItpdaqEDMjPJ4uxp3LxlEaHVO2KSqmva8PqV9VW8ECg0ESXmhia
+         DT7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LgIFkJpodLhQ5UNB8CnN3tOTm9odgIidnDRK4X3byAg=;
+        b=nD+Rd4Nq0lniBz3czGUNPsc9z4kUqz+Px8S0KbI2cR6XqWNPPie7T0dBSSmInH2JJD
+         7U/SmC+yorNu1wQCF3kAlfPaqpe5ul622u6U4YyFqQzswfK/fAtO4ulonR6GsCEG79P1
+         RT44QUANzHkOAyh3KWgGDfrPfhpjJZLretYMpk5yksAPHDUrRwX9tWmZCadYQd95dBbs
+         NO+XclDwP/dIj62+jfe0hJB0Js5RsrgxPpVdzvkXTNKumVTkf7v0zUGtUnlXKW3Ee06e
+         OpP3z6pOMIurKVqiLp8slVgs69/4uSwS/Pd7QyB9PdfggSDA1HnJf93a4oh9xFXT8gkL
+         LF9A==
+X-Gm-Message-State: ACrzQf3rTtKLJo7DRP2b7XN18JuapXakpq+ELOrb26pGV9kYWb0+/orS
+        1C8ffeMCPP4BPEZ5grPl4Go=
+X-Google-Smtp-Source: AMsMyM64brzYPgM+s1MBqIb04al8rRJrwRpHxsRYZxtpixVfUpmsR7RdEF2c8Q9Bz7kscIa7No5C4Q==
+X-Received: by 2002:a05:651c:2212:b0:26c:2baf:652e with SMTP id y18-20020a05651c221200b0026c2baf652emr295510ljq.84.1666978868819;
+        Fri, 28 Oct 2022 10:41:08 -0700 (PDT)
+Received: from elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net ([20.240.130.248])
+        by smtp.googlemail.com with ESMTPSA id s2-20020a2eb622000000b0026dfdcbccdasm725322ljn.14.2022.10.28.10.41.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 10:41:08 -0700 (PDT)
+From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev,
+        Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+Subject: [PATCH v8 0/6] staging: vt6655: a series of checkpatch fixes on the file: rxtx.c
+Date:   Fri, 28 Oct 2022 17:40:52 +0000
+Message-Id: <cover.1666978292.git.tanjubrunostar0@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v5 2/2] dt-bindings: Document common device controller
- bindings
-Content-Language: en-US
-To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     "fabio.estevam@nxp.com" <fabio.estevam@nxp.com>,
-        "alexandre.torgue@st.com" <alexandre.torgue@st.com>,
-        "peng.fan@oss.nxp.com" <peng.fan@oss.nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "a.fatoum@pengutronix.de" <a.fatoum@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "tomase@xilinx.com" <tomase@xilinx.com>,
-        "benjamin.gaignard@st.com" <benjamin.gaignard@st.com>,
-        "loic.pallardy@st.com" <loic.pallardy@st.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <cover.1666806317.git.oleksii_moisieiev@epam.com>
- <ab68324eea3c788a369260f5a1e5da843a960cde.1666806317.git.oleksii_moisieiev@epam.com>
- <166682078099.1353934.10574272333105424439.robh@kernel.org>
- <Y1omrFVw0FbC3YTc@EPUAKYIW015D>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <Y1omrFVw0FbC3YTc@EPUAKYIW015D>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,56 +70,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/10/2022 02:35, Oleksii Moisieiev wrote:
-> On Wed, Oct 26, 2022 at 04:51:15PM -0500, Rob Herring wrote:
->> On Wed, 26 Oct 2022 17:51:27 +0000, Oleksii Moisieiev wrote:
->>> Introducing of the common device controller bindings for the controller
->>> provider and consumer devices. Those bindings are intended to allow
->>> divided system on chip into muliple domains, that can be used to
->>> configure hardware permissions.
->>>
->>> Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
->>> ---
->>>  .../feature-domain-controller.yaml            | 80 +++++++++++++++++++
->>>  1 file changed, 80 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/feature-domains/feature-domain-controller.yaml
->>>
->>
->> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>
->> yamllint warnings/errors:
->>
->> dtschema/dtc warnings/errors:
->> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/feature-domains/feature-domain-controller.example.dtb: foo@0: feature-domain-names: ['default', 'unbind'] is too long
->> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/feature-domains/feature-domain-controller.yaml
->>
->> doc reference errors (make refcheckdocs):
->>
->>
->> See https://urldefense.com/v3/__https://patchwork.ozlabs.org/project/devicetree-bindings/patch/ab68324eea3c788a369260f5a1e5da843a960cde.1666806317.git.oleksii_moisieiev@epam.com/__;!!GF_29dbcQIUBPA!y6dnIrQEa4gr2RDYPf2_Oc7JsKHJrAKtl69xg0Jlf-Qri5BP9kBzqIknprWXaikX5y2Yz_UWCW5yYv_9Hw$  [patchwork[.]ozlabs[.]org]
->>
->> This check can fail if there are any dependencies. The base for a patch
->> series is generally the most recent rc1.
->>
->> If you already ran 'make dt_binding_check' and didn't see the above
->> error(s), then make sure 'yamllint' is installed and dt-schema is up to
->> date:
->>
->> pip3 install dtschema --upgrade
->>
->> Please check and re-submit.
->>
-> 
-> Hello,
-> 
-> Thank you for the response. I would recheck and resubmit patch series if there
-> will be no additional comments.
->
+The fixes are similar, mostly long lines splitting. I had to make
+serveral patches to ease the work of inspectors
 
-when resubmitting, Cc necessary maintainers as pointed out by
-scripts/get_maintainer.pl. Or base your tree on something decent...
+v2: fixed a compilation error found by the kernel test robot and
+recompiled the code
 
-Best regards,
-Krzysztof
+v3: tends out the error persisted in the second version. this version is
+a correction of that
+
+v4: did some corrections as recommended by Greg KH
+
+v5: shortend changelog comments as recommended by Greg KH
+
+v6: did some corrections as recommended by Greg KH
+
+v7: fixed some errors on my changelog comments
+
+v8: fixed some errors pointed out by Philipp Hortmann
+
+Tanjuate Brunostar (6):
+  staging: vt6655: fix lines ending in a '('
+  staging: vt6655: fix long lines of code in s_uGetRTSCTSDuration
+  staging: vt6655: fix long lines of code in s_uFillDataHead
+  staging: vt6655: fix long lines of code in s_vGenerateTxParamete
+  staging: vt6655: fix long lines of code in the rest of the file
+  staging: vt6655: fix lines of code ending in a '('
+
+ drivers/staging/vt6655/rxtx.c | 542 ++++++++++++++++++++--------------
+ 1 file changed, 324 insertions(+), 218 deletions(-)
+
+-- 
+2.34.1
 
