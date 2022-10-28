@@ -2,167 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8147611762
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A579611767
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiJ1QT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
+        id S230062AbiJ1QUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbiJ1QTF (ORCPT
+        with ESMTP id S230106AbiJ1QUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:19:05 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87C825C59
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:19:04 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id d123so230594iof.7
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:19:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xW0qy0QSAw0ACVX00MvHC2+VGmGGDq6tD3ZEfCdUDKs=;
-        b=SsihEPHu6Fm4BB4DYOwzRg+VLMAxJA/lkC7J4rNqva58u6HwkxASdJUF50PATfUHV+
-         owjMfX16oNLEWJgCpCKqoa7osqVOWSdy8N5OSXb6hCrPvV/xUPkf5dmWBXWstZh7RJll
-         NlHmfcw7VLKEL0vRPR2ziuNZiveLDIX1gdEu2KihPXFxnKtHJQlkJxRWUgAK4RlGUJ6s
-         rEs34gVeIj6xzD2uBQ2h0hqLVU0wb+6wTtD6vgMr6Bw4cfe/0XDJIeKVcXOkPkztNVqV
-         ZpDkyg5dl5tnC6DA0NXXeK+t414cdMDD21imhRAVVbzP5ZzwoJcrLWKndZcxL1hAW+L/
-         g7TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xW0qy0QSAw0ACVX00MvHC2+VGmGGDq6tD3ZEfCdUDKs=;
-        b=vLu+D1rNC32US0c7Nit+a1phhuKkoMOQ080zE2KN15Ns3wVGeHHx6qbmOlNBrgon35
-         HvIG0cX4bhChLvuy2KGXl+5gxpsFz9PiAlx9PTYQ98fw1oY2W4MA01EaZPmNWtGKuNRW
-         zkxgTzJGSavlE7x+/T0TrQ9FpEDtlSzm9rBEhmld/H2Ma4Qxg0i0F26HIAb/ijUfCt+U
-         /N2CRE0DkKOY5hBpwpGKCz/jx3xRM9BcxLC7+m5e01VoJBcyE+85v6oODe7nX83wF/MH
-         A3nvlS9lHv9hOtUqY6quOqkjCM0x41HDke6pXFYWC9lHuPFocwVWnx6kVYYoaJx01FS6
-         1TQw==
-X-Gm-Message-State: ACrzQf0UVQRpcRFH0NnBlWnK1IN5nfx9PA2bUNHB7l12uGjavtNaDNOH
-        UqHoXK1k1yKxPzLRZowNn8nYLwiJyFM20JJ4xK3Eug==
-X-Google-Smtp-Source: AMsMyM55sXUTfO66GI5WCzKQ9qDzpXG7NjVFhovcKJOiWVM5GqyJ3BII1VIKyWwSQCgeFeEi1KMotEd6tgsiNmqCH9g=
-X-Received: by 2002:a05:6638:381c:b0:364:6e0:4e98 with SMTP id
- i28-20020a056638381c00b0036406e04e98mr128076jav.71.1666973944034; Fri, 28 Oct
- 2022 09:19:04 -0700 (PDT)
+        Fri, 28 Oct 2022 12:20:03 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA842558F1;
+        Fri, 28 Oct 2022 09:20:00 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B8E9B100003;
+        Fri, 28 Oct 2022 16:19:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1666973999;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aJh1duVqfrTZOVl5OU502038SgZk4GABxwyxLjkmh54=;
+        b=h97V6tVlYT7n7gv2po/gXaRJbtRgw+JXw2QIbdhKDu3DD4cNHQm0TnPeRkDMZvQ/YvNoJP
+        S17toEHjZwS4bdiuGQaL1DaOqGyAWMJt/84Alh+LTSUMv828qLLu6WDWus8BoN4cT/I+pL
+        nm6HwTG0/IjEYL35mDv3iM9lmrfHFH3PVBDU9Sp9u3sFohtl2znQEWvhjq8HtzMZzubn0u
+        NflkQDE545L53hQ9124VTW5UJqodeiwUb8PWLUwo+BjdOsCYuXh9zs/r7F0AZo+Z8Pq2tX
+        MfHD6J5CRI2qWk+Xt4xHaVZ09GVEgtMki+eFVNMPwpFF2hIlGIsQidKFu+ICig==
+Date:   Fri, 28 Oct 2022 18:19:57 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH 1/1] dt-bindings: rtc: convert hym8563 bindings to
+ json-schema
+Message-ID: <Y1wBLZL7GeUMu8nr@mail.local>
+References: <20221021170605.85163-1-sebastian.reichel@collabora.com>
+ <a5db8a34-acd0-e262-36f0-0b904468bd1f@linaro.org>
+ <20221024185049.GA2034297-robh@kernel.org>
+ <20221024220559.dddihmq4xg55h26w@mercury.elektranox.org>
+ <1a9e1bfb-0437-fcd9-8d41-a1e07aced0e3@gmail.com>
+ <20221027162648.mowz2lefcajv3s2q@mercury.elektranox.org>
+ <d36d91cd-7c54-a558-72eb-d73e9d935668@gmail.com>
 MIME-Version: 1.0
-References: <20221019204626.3813043-1-cristian.marussi@arm.com>
- <CAKfTPtBJy4SdbYUNHFn2ZXEO_pnaMPYibfjXWNBnXy49P2h78Q@mail.gmail.com> <Y1vvPBw4xB7m23wY@e120937-lin>
-In-Reply-To: <Y1vvPBw4xB7m23wY@e120937-lin>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 28 Oct 2022 18:18:52 +0200
-Message-ID: <CAKfTPtAfuqtCee7f4bREsLqb5KJcLWw1Y=-0Y+2t+3XfX_YctQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/11] Introduce a unified API for SCMI Server testing
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, souvik.chakravarty@arm.com,
-        wleavitt@marvell.com, peter.hilber@opensynergy.com,
-        nicola.mazzucato@arm.com, tarek.el-sherbiny@arm.com,
-        quic_kshivnan@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d36d91cd-7c54-a558-72eb-d73e9d935668@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Oct 2022 at 17:04, Cristian Marussi <cristian.marussi@arm.com> wrote:
->
-> On Fri, Oct 28, 2022 at 04:40:02PM +0200, Vincent Guittot wrote:
-> > On Wed, 19 Oct 2022 at 22:46, Cristian Marussi <cristian.marussi@arm.com> wrote:
-> > >
-> > > Hi all,
-> > >
->
-> Hi Vincent,
->
-> > > This series aims to introduce a new SCMI unified userspace interface meant
-> > > to ease testing an SCMI Server implementation for compliance, fuzzing etc.,
-> > > from the perspective of the OSPM agent (non-secure world only ...)
-> > >
+On 27/10/2022 18:29:51+0200, Johan Jonker wrote:
+> 
+> 
+> On 10/27/22 18:26, Sebastian Reichel wrote:
+> > Hi,
+> > 
+> > On Thu, Oct 27, 2022 at 06:11:19PM +0200, Johan Jonker wrote:
+> >> On 10/25/22 00:05, Sebastian Reichel wrote:
+> >>> On Mon, Oct 24, 2022 at 01:50:49PM -0500, Rob Herring wrote:
+> >>>> On Fri, Oct 21, 2022 at 07:59:26PM -0400, Krzysztof Kozlowski wrote:
+> >>>>> On 21/10/2022 13:06, Sebastian Reichel wrote:
+> >>>>>> Convert RTC binding for Haoyu Microelectronics HYM8563 to Device Tree
+> >>>>>> Schema format.
+> >>>>>>
+> >>>>>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> >>>>>> ---
+> >>>>>>  .../devicetree/bindings/rtc/haoyu,hym8563.txt | 30 ----------
+> >>>>>>  .../bindings/rtc/haoyu,hym8563.yaml           | 55 +++++++++++++++++++
+> >>>>>>  2 files changed, 55 insertions(+), 30 deletions(-)
+> >>>>>>  delete mode 100644 Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt
+> >>>>>>  create mode 100644 Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
+> >>>>>>
+> >>>>>> diff --git a/Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt b/Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt
+> >>>>>> deleted file mode 100644
+> >>>>>> index a8934fe2ab4c..000000000000
+> >>>>>> --- a/Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt
+> >>>>>> +++ /dev/null
+> >>>>>> @@ -1,30 +0,0 @@
+> >>>>>> -Haoyu Microelectronics HYM8563 Real Time Clock
+> >>>>>> -
+> >>>>>> -The HYM8563 provides basic rtc and alarm functionality
+> >>>>>> -as well as a clock output of up to 32kHz.
+> >>>>>> -
+> >>>>>> -Required properties:
+> >>>>>> -- compatible: should be: "haoyu,hym8563"
+> >>>>>> -- reg: i2c address
+> >>>>>> -- #clock-cells: the value should be 0
+> >>>>>> -
+> >>>>>> -Optional properties:
+> >>>>>> -- clock-output-names: From common clock binding
+> >>>>>> -- interrupts: rtc alarm/event interrupt
+> >>>>>> -
+> >>>>>> -Example:
+> >>>>>> -
+> >>>>>> -hym8563: hym8563@51 {
+> >>>>>> -	compatible = "haoyu,hym8563";
+> >>>>>> -	reg = <0x51>;
+> >>>>>> -
+> >>>>>> -	interrupts = <13 IRQ_TYPE_EDGE_FALLING>;
+> >>>>>> -
+> >>>>>> -	#clock-cells = <0>;
+> >>>>>> -};
+> >>>>>> -
+> >>>>>> -device {
+> >>>>>> -...
+> >>>>>> -	clocks = <&hym8563>;
+> >>>>>> -...
+> >>>>>> -};
+> >>>>>> diff --git a/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml b/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
+> >>>>>> new file mode 100644
+> >>>>>> index 000000000000..b0b6126b12dd
+> >>>>>> --- /dev/null
+> >>>>>> +++ b/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
+> >>>>>> @@ -0,0 +1,55 @@
+> >>>>>> +# SPDX-License-Identifier: GPL-2.0
+> >>>>>
+> >>>>> Dual license please. I don't think you copied any content from original
+> >>>>> bindings... unless the example?
+> >>>>>
+> >>>>>> +%YAML 1.2
+> >>>>>> +---
+> >>>>>> +$id: http://devicetree.org/schemas/rtc/haoyu,hym8563.yaml#
+> >>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>>>>> +
+> >>>>>> +title: Haoyu Microelectronics HYM8563 RTC
+> >>>>>> +
+> >>>>>> +maintainers:
+> >>>>>> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
+> >>>>>> +
+> >>>>>> +properties:
+> >>>>>> +  compatible:
+> >>>>>> +    const: haoyu,hym8563
+> >>>>>> +
+> >>>>>> +  reg:
+> >>>>>> +    maxItems: 1
+> >>>>>> +
+> >>>>>> +  interrupts:
+> >>>>>> +    maxItems: 1
+> >>>>>> +
+> >>>>>> +  "#clock-cells":
+> >>>>>> +    const: 0
+> >>>>>> +
+> >>>>>> +  clock-output-names:
+> >>>>>> +    description: From common clock binding to override the default output clock name.
+> >>>>>
+> >>>>> You need maxItems for this.
+> >>>>>
+> >>>>>> +
+> >>>>>> +  wakeup-source:
+> >>>>>> +    description: Enables wake up of host system on alarm.
+> >>>>>> +
+> >>>>>> +allOf:
+> >>>>>> +  - $ref: rtc.yaml
+> >>>>>> +
+> >>>>>> +unevaluatedProperties: false
+> >>>>>> +
+> >>>>>
+> >>
+> >>>>> Would be great if you could also correct DTS using these bindings (see
+> >>>>> warning from Rob).
+> >>>>
+> >>>> It looked to me like 'clock-frequency' should be added to the schema.
+> >>>
+> >>> I've sent PATCHv2, which removes clock-frequency from all hym8563
+> >>> users. My reasoning is, that the old txt binding does not describe
+> >>> it and the current Linux driver does not handle it as far as I can
+> >>> see.
+> >>
+> >> Didn't note you were doing a conversion as well...
+> >> From my abandonment patch serie
+> >>
+> >>   clock-frequency:
+> >>     enum: [1, 32, 1024, 32768]
+> >>
+> >> The data sheet shows that it can generate 4 different frequencies.
+> >> Rockchip mostly uses 32768, but that doesn't mean someone else is
+> >> not alowed to set what he/she prefers.
+> > 
+> > As far as I can tell 32768 has been cargo copied by everyone, but
+> > the driver is not parsing this at all and I would expect the clock
+> > API to be used for requesting a specific frequency.
+> 
+> DT and Linux driver support are 2 different things.
+> What Linux currently doesn't support might be needed elsewhere.
+> 
 
-[ snip]
+Yes but being a clock provider is enough for any OS.
 
-> > Hi Cristian,
-> >
-> > I have tested your series with an optee message transport layer and
-> > been able to send raw messages to the scmi server PTA
-> >
-> > FWIW
-> >
-> > Tested-by: Vincent Guittot <vincent.guittot@linaro.org>
-> >
->
-> Thanks a lot for your test and feedback !
->
-> ... but I was going to reply to this saying that I spotted another issue
-> with the current SCMI Raw implementation (NOT related to optee/smc) so
-> that I'll post a V5 next week :P
->
-> Anyway, the issue is much related to the debugfs root used by SCMI Raw,
-> i.e.:
->
->         /sys/kernel/debug/scmi_raw/
->
-> ..this works fine unless you run it on a system sporting multiple DT-defined
-> server instances ...that is not officially supported but....ehm...a little
-> bird told these system with multiple servers do exists :D
-
-;-)
-
->
-> In such a case the SCMI core stack is probed multiuple times and so it
-> will try to register multiple debugfs Raw roots: there is no chanche to
-> root the SCMI Raw entries at the same point clearly ... and then anyway
-> there is the issue of recognizing which server is rooted where ... with
-> the additional pain that a server CANNOT be recognized by querying...cause
-> there is only one by teh spec with agentID ZERO ... in theory :D...
->
-> So my tentaive solution for V5 would be:
->
-> - change the Raw root debugfs as:
->
->         /sys/kernel/debug/scmi_raw/0/... (first server defined)
->
->         /sys/kernel/debug/scmi_raw/1/... (possible additional server(s)..)
->
-> - expose the DT scmi-server root-node name of the server somewhere under
->   that debugfs root like:
->
->         ..../scmi_raw/0/transport_name -> 'scmi-mbx'
->
->         ..../scmi_raw/1/transport_name -> 'scmi-virtio'
-
-I was about to say that you would display the server name but that
-means that you have send a request to the server which probably
-defeats the purpose of the raw mode
-
->
->   so that if you know HOW you have configured your own system in the DT
->   (maybe multiple servers with different kind of transports ?), you can
->   easily select programmatically which one is which, and so decide
->   which Raw debugfs fs to use...
->
-> ... I plan to leave the SCMI ACS suite use by default the first system
-> rooted at /sys/kernel/debug/scmi_raw/0/...maybe adding a commandline
-> option to choose an alternative path for SCMI Raw.
->
-> Does all of this sound reasonable ?
-
-Yes, adding an index looks good to me.
-
-As we are there, should we consider adding a per channel entry in the
-tree when there are several channels shared with the same server ?
-
-Vincent
-
->
-> Thanks,
-> Cristian
->
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
