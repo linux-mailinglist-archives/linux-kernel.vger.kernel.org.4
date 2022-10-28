@@ -2,72 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101E16109A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 07:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC836109B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 07:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiJ1FQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 01:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
+        id S229455AbiJ1FUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 01:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiJ1FQE (ORCPT
+        with ESMTP id S229497AbiJ1FUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 01:16:04 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB691B2BA5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 22:16:03 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id s24so6939071ljs.11
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 22:16:03 -0700 (PDT)
+        Fri, 28 Oct 2022 01:20:41 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4448D4D80C;
+        Thu, 27 Oct 2022 22:20:39 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id be13so6542356lfb.4;
+        Thu, 27 Oct 2022 22:20:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M8TWnAkdw09Zj0R/c7tZPSOwcVhSuuKAhF825MfonPw=;
-        b=UfXRw/6d6dzbCEFbmjwfu/TI3ptp5UWU8exlg3F34b0m2W3eK+UZggCC+wIMWiYEDw
-         srEchjAfgPhhq/XoXAIyTg0yJfbIqKLWvov1TdHvS9WKrDMHNHi0+AAddaqQOoqsQCeT
-         LXz7BubdiS86zDSrVnMh+VCO+ZafogS6kt+vmL5IfZY+Bo3Fg0NJHKu6CCGUf7vsLR8N
-         LLh4FU7ptoLdtse4Zyh1duVF75v98F1z9T/C4IjnmRSBjZJOCXsCf4IYlzs4HixXlqWT
-         zoVJ2grUArAq4TvihERax1+mEfLSeICkPD0TFtulYLvQ17NBT7K/Anik9/vDTM79emBG
-         zezg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CN6XjvDtu46q0u2KRm5mMXry24we3sE+OyWEdY5evzU=;
+        b=pyjbPtyLw+hu0QM/S/SIX/Ny0NwoIrbrnLAvgmhZ9Sc7dM6f6/I6mW96gkAIOk07pF
+         DOycU/wjze4oJHt/wkl8+iED6D0vpr+xLsxW1LBhWefofMwgDEHaVz3JWyd8xLpN28Yi
+         IQtM7XrA2QCgj/tbJFU7kqMrP4udtagDWum2y9VUxbEnTYZEA+jCa674prtjx9nIC0Zl
+         +QgYe6B3npdujZn7nrXR9QvVcrXvwIF/iAzcVS9OuioU5AsvS1tdf+mghfURfdDK67mr
+         io+YtCs4j8lQqUdplKjkWGKt5vyhoEfyaIJm5iwzO45NoGHzFOWDFyC18M40rwrXoZ1W
+         YCWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M8TWnAkdw09Zj0R/c7tZPSOwcVhSuuKAhF825MfonPw=;
-        b=nvzhvFcUKXFLfHxqtgXIzuHNwDchEVNplP2NbkkEAdK9A4LhCL92zYDxMAGOzXI8gP
-         /4DU/yTwkrMOt70y9GKCNvT5Z5zHAYziNuvDjw6WHjN9CeAZMoUMD4mDUxCasqiSnY+M
-         zUuWTX7WQBBnkjtLgNufigLtxdHxCyZnTpen6SPxy+y8F75lhTkpGwuUT/qEwOCxu5ul
-         8IX2cNycBiR2zSB+bUs6HzsRXbr504tO17kbJIjdc8dWRnFs24cQc1sQj8ag0jn6oBZR
-         Wjs8+84WorpHQ3s8PPJ/TWFiv8d+i83XKHQ8GllTca2Z2pCmIfyOj5BrjUVpMfzIVNFR
-         OEug==
-X-Gm-Message-State: ACrzQf3vC/lOSO4YgQt8Gk2jevTmfuk+nlidGmoJITRRdNR11GxOFk6y
-        OgsXV0QAhxasUR6vPQQ1LTA=
-X-Google-Smtp-Source: AMsMyM4GRKUlaS7FLCbMf6Xv2BBGud0iVijVMQ5rr04hR6X+r7aEfsOOvtfox9XGr5qy6wyiqCDrbg==
-X-Received: by 2002:a2e:bf15:0:b0:26c:12ca:52ae with SMTP id c21-20020a2ebf15000000b0026c12ca52aemr18618275ljr.103.1666934161518;
-        Thu, 27 Oct 2022 22:16:01 -0700 (PDT)
-Received: from dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::2])
-        by smtp.gmail.com with ESMTPSA id by40-20020a05651c1a2800b002770d8625ffsm481886ljb.88.2022.10.27.22.16.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 22:16:00 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 08:15:45 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matt.vaittinen@fi.rohmeurope.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, Lee Jones <lee@kernel.org>,
-        Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: Change myself to a maintainer
-Message-ID: <Y1tlgUVWLBRSIt5U@dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CN6XjvDtu46q0u2KRm5mMXry24we3sE+OyWEdY5evzU=;
+        b=mNdVfRsy876+I3glKHzuVKCSbzwbU5Orhk6dC/2piSjO4lj+O2Kz8TRTsekFW2arzc
+         BfofsgciRvKaB4IlmA4c120tTqZ6aRlW/6Q5G+pEU0arvrMzFR5+MAbSQ59sVZSGzZVj
+         UtyELGK57GgBFUhGEsnYrsmUS82TFdN4UimmOXx+vC4ihyijqyb+i1dEFpA8dFizupHz
+         wEcAf2Xi4Qq46y6cbkp5QqpIZ8XFeLmGZGAtXR/32eO50qIUuZtR5rbw4Or9Y/WTVcPY
+         soj/5++EyjeJaTbbGD0JK7Zt41lzqvNSqejpbqwz5+9/g96aEnV6hR9m0xXOR6/wQohu
+         0VdA==
+X-Gm-Message-State: ACrzQf3MUwecwcgRC+fYjbTpSQnVCfcuNNKEX+hi2cLm/ed0sE1Zko+z
+        YKh/DRWkC1nHJ51vx0tXMuGxeRtz0BvWPrWU3rY=
+X-Google-Smtp-Source: AMsMyM6QW7+6YgKsOE7rghTy3mNlmrpkNv+xLE4oZvFKfk7Cf8VrSXH3mueaGQBwfTwLvSWB/O/Uv3lVLK+kN7Qxl1w=
+X-Received: by 2002:a05:6512:104c:b0:4a2:6cee:ae17 with SMTP id
+ c12-20020a056512104c00b004a26ceeae17mr18449491lfb.417.1666934437436; Thu, 27
+ Oct 2022 22:20:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ipHwZaTlZQ8SmoKx"
-Content-Disposition: inline
+References: <20221027124528.2487025-1-zengheng4@huawei.com>
+In-Reply-To: <20221027124528.2487025-1-zengheng4@huawei.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 28 Oct 2022 00:20:25 -0500
+Message-ID: <CAH2r5mu2-jfhFBTJDf8Td7yF5e4QEJbG85wVpxyePK1q8bMjAg@mail.gmail.com>
+Subject: Re: [PATCH v4] cifs: fix use-after-free caused by invalid pointer `hostname`
+To:     Zeng Heng <zengheng4@huawei.com>
+Cc:     sfrench@samba.org, tom@talpey.com, sprasad@microsoft.com,
+        pc@cjr.nz, lsahlber@redhat.com, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-kernel@vger.kernel.org,
+        liwei391@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -78,83 +69,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+merged into cifs-2.6 for-next
 
---ipHwZaTlZQ8SmoKx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+thx
 
-After some off-list discussion with Marek Vasut and Geert Uytterhoeven
-and finally a kx022a driver related discussion with Joe Perches
-https://lore.kernel.org/lkml/92c3f72e60bc99bf4a21da259b4d78c1bdca447d.camel=
-@perches.com/
-it seems that my status as a reviewer has been wrong. I do look after
-the ROHM/Kionix drivers I've authored and currently I am also paid to do
-so as is reflected by the 'S: Supported'. According to Joe, the reviewer
-entry in MAINTAINERS do not indicate such level of support and having a
-reviewer supporting an IC is a contradiction.
+On Thu, Oct 27, 2022 at 7:49 AM Zeng Heng <zengheng4@huawei.com> wrote:
+>
+> `hostname` needs to be set as null-pointer after free in
+> `cifs_put_tcp_session` function, or when `cifsd` thread attempts
+> to resolve hostname and reconnect the host, the thread would deref
+> the invalid pointer.
+>
+> Here is one of practical backtrace examples as reference:
+>
+> Task 477
+> ---------------------------
+>  do_mount
+>   path_mount
+>    do_new_mount
+>     vfs_get_tree
+>      smb3_get_tree
+>       smb3_get_tree_common
+>        cifs_smb3_do_mount
+>         cifs_mount
+>          mount_put_conns
+>           cifs_put_tcp_session
+>           --> kfree(server->hostname)
+>
+> cifsd
+> ---------------------------
+>  kthread
+>   cifs_demultiplex_thread
+>    cifs_reconnect
+>     reconn_set_ipaddr_from_hostname
+>     --> if (!server->hostname)
+>     --> if (server->hostname[0] == '\0')  // !! UAF fault here
+>
+> CIFS: VFS: cifs_mount failed w/return code = -112
+> mount error(112): Host is down
+> BUG: KASAN: use-after-free in reconn_set_ipaddr_from_hostname+0x2ba/0x310
+> Read of size 1 at addr ffff888108f35380 by task cifsd/480
+> CPU: 2 PID: 480 Comm: cifsd Not tainted 6.1.0-rc2-00106-gf705792f89dd-dirty #25
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x68/0x85
+>  print_report+0x16c/0x4a3
+>  kasan_report+0x95/0x190
+>  reconn_set_ipaddr_from_hostname+0x2ba/0x310
+>  __cifs_reconnect.part.0+0x241/0x800
+>  cifs_reconnect+0x65f/0xb60
+>  cifs_demultiplex_thread+0x1570/0x2570
+>  kthread+0x2c5/0x380
+>  ret_from_fork+0x22/0x30
+>  </TASK>
+> Allocated by task 477:
+>  kasan_save_stack+0x1e/0x40
+>  kasan_set_track+0x21/0x30
+>  __kasan_kmalloc+0x7e/0x90
+>  __kmalloc_node_track_caller+0x52/0x1b0
+>  kstrdup+0x3b/0x70
+>  cifs_get_tcp_session+0xbc/0x19b0
+>  mount_get_conns+0xa9/0x10c0
+>  cifs_mount+0xdf/0x1970
+>  cifs_smb3_do_mount+0x295/0x1660
+>  smb3_get_tree+0x352/0x5e0
+>  vfs_get_tree+0x8e/0x2e0
+>  path_mount+0xf8c/0x1990
+>  do_mount+0xee/0x110
+>  __x64_sys_mount+0x14b/0x1f0
+>  do_syscall_64+0x3b/0x90
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> Freed by task 477:
+>  kasan_save_stack+0x1e/0x40
+>  kasan_set_track+0x21/0x30
+>  kasan_save_free_info+0x2a/0x50
+>  __kasan_slab_free+0x10a/0x190
+>  __kmem_cache_free+0xca/0x3f0
+>  cifs_put_tcp_session+0x30c/0x450
+>  cifs_mount+0xf95/0x1970
+>  cifs_smb3_do_mount+0x295/0x1660
+>  smb3_get_tree+0x352/0x5e0
+>  vfs_get_tree+0x8e/0x2e0
+>  path_mount+0xf8c/0x1990
+>  do_mount+0xee/0x110
+>  __x64_sys_mount+0x14b/0x1f0
+>  do_syscall_64+0x3b/0x90
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> The buggy address belongs to the object at ffff888108f35380
+>  which belongs to the cache kmalloc-16 of size 16
+> The buggy address is located 0 bytes inside of
+>  16-byte region [ffff888108f35380, ffff888108f35390)
+> The buggy address belongs to the physical page:
+> page:00000000333f8e58 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888108f350e0 pfn:0x108f35
+> flags: 0x200000000000200(slab|node=0|zone=2)
+> raw: 0200000000000200 0000000000000000 dead000000000122 ffff8881000423c0
+> raw: ffff888108f350e0 000000008080007a 00000001ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+> Memory state around the buggy address:
+>  ffff888108f35280: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
+>  ffff888108f35300: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
+> >ffff888108f35380: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
+>                    ^
+>  ffff888108f35400: fa fb fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>  ffff888108f35480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>
+> Fixes: 7be3248f3139 ("cifs: To match file servers, make sure the server hostname matches")
+> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+> Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+> ---
+> changes in v4:
+>  - correct fix tag
+>  - add reviewed-by
+> ---
+>  fs/cifs/connect.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+> index ffb291579bb9..1cc47dd3b4d6 100644
+> --- a/fs/cifs/connect.c
+> +++ b/fs/cifs/connect.c
+> @@ -1584,6 +1584,7 @@ cifs_put_tcp_session(struct TCP_Server_Info *server, int from_reconnect)
+>         server->session_key.response = NULL;
+>         server->session_key.len = 0;
+>         kfree(server->hostname);
+> +       server->hostname = NULL;
+>
+>         task = xchg(&server->tsk, NULL);
+>         if (task)
+> --
+> 2.25.1
+>
 
-Switch undersigned from a reviewer to a maintainer for IC drivers I am
-taking care of.
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
----
- MAINTAINERS | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+-- 
+Thanks,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e04d944005ba..fad5e16e8074 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17811,7 +17811,7 @@ S:	Odd Fixes
- F:	drivers/tty/serial/rp2.*
-=20
- ROHM BD99954 CHARGER IC
--R:	Matti Vaittinen <mazziesaccount@gmail.com>
-+M:	Matti Vaittinen <mazziesaccount@gmail.com>
- S:	Supported
- F:	drivers/power/supply/bd99954-charger.c
- F:	drivers/power/supply/bd99954-charger.h
-@@ -17834,7 +17834,7 @@ F:	drivers/regulator/bd9571mwv-regulator.c
- F:	include/linux/mfd/bd9571mwv.h
-=20
- ROHM POWER MANAGEMENT IC DEVICE DRIVERS
--R:	Matti Vaittinen <mazziesaccount@gmail.com>
-+M:	Matti Vaittinen <mazziesaccount@gmail.com>
- S:	Supported
- F:	drivers/clk/clk-bd718x7.c
- F:	drivers/gpio/gpio-bd71815.c
-
-base-commit: 247f34f7b80357943234f93f247a1ae6b6c3a740
---=20
-2.37.3
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---ipHwZaTlZQ8SmoKx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmNbZXwACgkQeFA3/03a
-ocU0KggA0MGtqp9mCzrtc8KsrLtD1UBfVJU6roXy5mdPpM5X/GZYH8yyiIZHlwj5
-7t9b4eWH2R00D7U5ZAlrAAZJ+jMZZih94Q2qaRXBR8BNhiVROZSfyvpmbUhxxhWi
-3YmRSMTdz17tAQ3kW//3JM8nq7T55wYX8ClYwLion94T5iK7fsn1TS5PwnJ7fB+N
-Bhpx2aX9m3IBqp0drbp03Sk9hpn2MOBURhHkfEBTWW7scJWmaveO3ReVID3T/iB2
-DDPh9ufm2xXADL/xcmWCduF2uTmf3EZbINqV1b95KRv6eBOLwA8xvP7cTRxg6MJW
-RPdEwjeKeUSjHW+GUGocVGbypBTbGg==
-=eqkN
------END PGP SIGNATURE-----
-
---ipHwZaTlZQ8SmoKx--
+Steve
