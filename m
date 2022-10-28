@@ -2,241 +2,473 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D157E610C81
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 10:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E19C610C8B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 10:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiJ1Ix4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 04:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
+        id S229720AbiJ1I4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 04:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiJ1Ixw (ORCPT
+        with ESMTP id S229551AbiJ1I4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 04:53:52 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EAEF1BE904;
-        Fri, 28 Oct 2022 01:53:51 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id F29DE219AD;
-        Fri, 28 Oct 2022 08:53:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1666947230; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xCdn9fKql75AYxVJtfMBUOilnEy+gC86JfFz/Sapfik=;
-        b=adEwFkyknc9TlXinMNkotEzn6epJ/pNvU7reFBVCnHdb6pggZ4nouMX6WUsxaIWJkV3EVF
-        8EkwhvgT14dUww7YpuHwMO51Xj0N2nPUl5DgPjh/11hbQC8lBkMkF3YNIAXPkQqqTG/0Ju
-        ELyrPC0ndkJIhqyhKeND+Odbcb/hrUc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1666947230;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xCdn9fKql75AYxVJtfMBUOilnEy+gC86JfFz/Sapfik=;
-        b=mQIfhOu9sr3WXr5pDkGwOJIWj8or4LhO9HY/OiqoY1OfQ63imn1UMGCIR58pe+z4Ms095k
-        y+GicpaA7aX9R8CA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BD23613A6E;
-        Fri, 28 Oct 2022 08:53:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id RTgJLZ2YW2O8CQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 28 Oct 2022 08:53:49 +0000
-Message-ID: <efd80dc5-d732-113d-b8fd-398b650beb8f@suse.de>
-Date:   Fri, 28 Oct 2022 10:53:49 +0200
+        Fri, 28 Oct 2022 04:56:36 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2492F19C05E;
+        Fri, 28 Oct 2022 01:56:33 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8Bx3NhAmVtjgA8DAA--.11855S3;
+        Fri, 28 Oct 2022 16:56:32 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxb+I6mVtjy0cGAA--.22327S2;
+        Fri, 28 Oct 2022 16:56:31 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v4 1/2] pinctrl: pinctrl-loongson2: add pinctrl driver support
+Date:   Fri, 28 Oct 2022 16:56:24 +0800
+Message-Id: <20221028085625.24217-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2] drm/format-helper: Only advertise supported formats
- for conversion
-Content-Language: en-US
-To:     Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     Hector Martin <marcan@marcan.st>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        stable@vger.kernel.org, asahi@lists.linux.dev
-References: <20221027135711.24425-1-marcan@marcan.st>
- <6102d131-fd3f-965b-cd52-d8d3286e0048@suse.de>
- <20221028113705.084502b6@eldfell>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20221028113705.084502b6@eldfell>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------ISP6ZAnOBi8elFTzO6WZS1LZ"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Cxb+I6mVtjy0cGAA--.22327S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvAXoW3Zr17CryrtF45tw4rGFyUKFg_yoW8Gry5Ao
+        WS9Fn8Xw4fJr18XFZ8Zrn8GrW7ZFs7Cr1DA397Zrs8u3yavrnFgryDtr4xGFy8trs5tF17
+        ZasagFWrJa1Iqwn5n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
+        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
+        UUkY1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFV
+        AK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2
+        z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0ow
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l
+        57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
+        vE14v26r106r15McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxV
+        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+        6r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
+        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG
+        6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJV
+        WxJrUvcSsGvfC2KfnxnUUI43ZEXa7IUbl_M7UUUUU==
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------ISP6ZAnOBi8elFTzO6WZS1LZ
-Content-Type: multipart/mixed; boundary="------------vNeDTCH9Xq3OTneeQ57ybLEH";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Pekka Paalanen <ppaalanen@gmail.com>
-Cc: Hector Martin <marcan@marcan.st>,
- Javier Martinez Canillas <javierm@redhat.com>, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, stable@vger.kernel.org,
- asahi@lists.linux.dev
-Message-ID: <efd80dc5-d732-113d-b8fd-398b650beb8f@suse.de>
-Subject: Re: [PATCH v2] drm/format-helper: Only advertise supported formats
- for conversion
-References: <20221027135711.24425-1-marcan@marcan.st>
- <6102d131-fd3f-965b-cd52-d8d3286e0048@suse.de>
- <20221028113705.084502b6@eldfell>
-In-Reply-To: <20221028113705.084502b6@eldfell>
+The Loongson-2 SoC has a few pins that can be used as GPIOs or take
+multiple other functions. Add a driver for the pinmuxing.
 
---------------vNeDTCH9Xq3OTneeQ57ybLEH
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+There is currently no support for GPIO pin pull-up and pull-down.
 
-SGkNCg0KQW0gMjguMTAuMjIgdW0gMTA6Mzcgc2NocmllYiBQZWtrYSBQYWFsYW5lbjoNCj4g
-T24gRnJpLCAyOCBPY3QgMjAyMiAxMDowNzoyNyArMDIwMA0KPiBUaG9tYXMgWmltbWVybWFu
-biA8dHppbW1lcm1hbm5Ac3VzZS5kZT4gd3JvdGU6DQo+IA0KPj4gSGkNCj4+DQo+PiBBbSAy
-Ny4xMC4yMiB1bSAxNTo1NyBzY2hyaWViIEhlY3RvciBNYXJ0aW46DQo+Pj4gZHJtX2ZiX2J1
-aWxkX2ZvdXJjY19saXN0KCkgY3VycmVudGx5IHJldHVybnMgYWxsIGVtdWxhdGVkIGZvcm1h
-dHMNCj4+PiB1bmNvbmRpdGlvbmFsbHkgYXMgbG9uZyBhcyB0aGUgbmF0aXZlIGZvcm1hdCBp
-cyBhbW9uZyB0aGVtLCBldmVuIHRob3VnaA0KPj4+IG5vdCBhbGwgY29tYmluYXRpb25zIGhh
-dmUgY29udmVyc2lvbiBoZWxwZXJzLiBBbHRob3VnaCB0aGUgbGlzdCBpcw0KPj4+IGFyZ3Vh
-Ymx5IHByb3ZpZGVkIHRvIHVzZXJzcGFjZSBpbiBwcmVjZWRlbmNlIG9yZGVyLCB1c2Vyc3Bh
-Y2UgY2FuIHBpY2sNCj4+PiBzb21ldGhpbmcgb3V0LW9mLW9yZGVyIChhbmQgdGh1cyBicmVh
-ayB3aGVuIGl0IHNob3VsZG4ndCksIG9yIHNpbXBseQ0KPj4+IG9ubHkgc3VwcG9ydCBhIGZv
-cm1hdCB0aGF0IGlzIHVuc3VwcG9ydGVkIChhbmQgdGh1cyB0aGluayBpdCBjYW4gd29yaywN
-Cj4+PiB3aGljaCByZXN1bHRzIGluIHRoZSBhcHBlYXJhbmNlIG9mIGEgaGFuZyBhcyBGQiBi
-bGl0cyBmYWlsIGxhdGVyIG9uLA0KPj4+IGluc3RlYWQgb2YgdGhlIGluaXRpYWxpemF0aW9u
-IGVycm9yIHlvdSdkIGV4cGVjdCBpbiB0aGlzIGNhc2UpLg0KPj4+DQo+Pj4gQWRkIGNoZWNr
-cyB0byBmaWx0ZXIgdGhlIGxpc3Qgb2YgZW11bGF0ZWQgZm9ybWF0cyB0byBvbmx5IHRob3Nl
-DQo+Pj4gc3VwcG9ydGVkIGZvciBjb252ZXJzaW9uIHRvIHRoZSBuYXRpdmUgZm9ybWF0LiBU
-aGlzIHByZXN1bWVzIHRoYXQgdGhlcmUNCj4+PiBpcyBhIHNpbmdsZSBuYXRpdmUgZm9ybWF0
-IChvbmx5IHRoZSBmaXJzdCBpcyBjaGVja2VkLCBpZiB0aGVyZSBhcmUNCj4+PiBtdWx0aXBs
-ZSkuIFJlZmFjdG9yaW5nIHRoaXMgQVBJIHRvIGRyb3AgdGhlIG5hdGl2ZSBsaXN0IG9yIHN1
-cHBvcnQgaXQNCj4+PiBwcm9wZXJseSAoYnkgcmV0dXJuaW5nIHRoZSBhcHByb3ByaWF0ZSBl
-bXVsYXRlZC0+bmF0aXZlIG1hcHBpbmcgdGFibGUpDQo+Pj4gaXMgbGVmdCBmb3IgYSBmdXR1
-cmUgcGF0Y2guDQo+Pj4NCj4+PiBUaGUgc2ltcGxlZHJtIGRyaXZlciBpcyBsZWZ0IGFzLWlz
-IHdpdGggYSBmdWxsIHRhYmxlIG9mIGVtdWxhdGVkDQo+Pj4gZm9ybWF0cy4gVGhpcyBrZWVw
-cyBhbGwgY3VycmVudGx5IHdvcmtpbmcgY29udmVyc2lvbnMgYXZhaWxhYmxlIGFuZA0KPj4+
-IGRyb3BzIGFsbCB0aGUgYnJva2VuIG9uZXMgKGkuZS4gdGhpcyBhIHN0cmljdCBidWdmaXgg
-cGF0Y2gsIGFkZGluZyBubw0KPj4+IG5ldyBzdXBwb3J0ZWQgZm9ybWF0cyBub3IgcmVtb3Zp
-bmcgYW55IGFjdHVhbGx5IHdvcmtpbmcgb25lcykuIEluIG9yZGVyDQo+Pj4gdG8gYXZvaWQg
-cHJvbGlmZXJhdGlvbiBvZiBlbXVsYXRlZCBmb3JtYXRzLCBmdXR1cmUgZHJpdmVycyBzaG91
-bGQNCj4+PiBhZHZlcnRpc2Ugb25seSBYUkdCODg4OCBhcyB0aGUgc29sZSBlbXVsYXRlZCBm
-b3JtYXQgKHNpbmNlIHNvbWUNCj4+PiB1c2Vyc3BhY2UgYXNzdW1lcyBpdHMgcHJlc2VuY2Up
-Lg0KPj4+DQo+Pj4gVGhpcyBmaXhlcyBhIHJlYWwgdXNlciByZWdyZXNzaW9uIHdoZXJlIHRo
-ZSA/UkdCMjEwMTAxMCBzdXBwb3J0IGNvbW1pdA0KPj4+IHN0YXJ0ZWQgYWR2ZXJ0aXNpbmcg
-aXQgdW5jb25kaXRpb25hbGx5IHdoZXJlIG5vdCBzdXBwb3J0ZWQsIGFuZCBLV2luDQo+Pj4g
-ZGVjaWRlZCB0byBzdGFydCB0byB1c2UgaXQgb3ZlciB0aGUgbmF0aXZlIGZvcm1hdCBhbmQg
-YnJva2UsIGJ1dCBhbHNvDQo+Pj4gdGhlIGZpeGVzIHRoZSBzcHVyaW91cyBSR0I1NjUvUkdC
-ODg4IGZvcm1hdHMgd2hpY2ggaGF2ZSBiZWVuIHdyb25nbHkNCj4+PiB1bmNvbmRpdGlvbmFs
-bHkgYWR2ZXJ0aXNlZCBzaW5jZSB0aGUgZGF3biBvZiBzaW1wbGVkcm0uDQo+Pj4NCj4+PiBG
-aXhlczogNmVhOTY2ZmNhMDg0ICgiZHJtL3NpbXBsZWRybTogQWRkIFtBWF1SR0IyMTAxMDEw
-IGZvcm1hdHMiKQ0KPj4+IEZpeGVzOiAxMWU4ZjVmZDIyM2IgKCJkcm06IEFkZCBzaW1wbGVk
-cm0gZHJpdmVyIikNCj4+PiBDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZw0KPj4+IFNpZ25l
-ZC1vZmYtYnk6IEhlY3RvciBNYXJ0aW4gPG1hcmNhbkBtYXJjYW4uc3Q+DQo+Pg0KPj4gUmV2
-aWV3ZWQtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KPj4N
-Cj4+IFRoYW5rcyBmb3IgeW91ciBwYXRjaC4gSSBoYXZlIHZlcmlmaWVkIHRoYXQgdmlkZW89
-LXsxNiwyNH0gc3RpbGwgd29ya3MNCj4+IHdpdGggc2ltcGxlZHJtLg0KPj4NCj4+PiAtLS0N
-Cj4+PiBJJ20gcHJvcG9zaW5nIHRoaXMgYWx0ZXJuYXRpdmUgYXBwcm9hY2ggYWZ0ZXIgYSBo
-ZWF0ZWQgZGlzY3Vzc2lvbiBvbg0KPj4+IElSQy4gSSdtIG91dCBvZiBpZGVhcywgaWYgeSdh
-bGwgZG9uJ3QgbGlrZSB0aGlzIG9uZSB5b3UgY2FuIGZpZ3VyZSBpdA0KPj4+IG91dCBmb3Ig
-eW91cnNldmVzIDotKQ0KPj4+DQo+Pj4gQ2hhbmdlcyBzaW5jZSB2MToNCj4+PiBUaGlzIHYy
-IG1vdmVzIGFsbCB0aGUgY2hhbmdlcyB0byB0aGUgaGVscGVyIChzbyB0aGV5IHdpbGwgYXBw
-bHkgdG8NCj4+PiB0aGUgdXBjb21pbmcgb2Zkcm0sIHRob3VnaCBvZmRybSBhbHNvIG5lZWRz
-IHRvIGJlIGZpeGVkIHRvIHRyaW0gaXRzDQo+Pj4gZm9ybWF0IHRhYmxlIHRvIG9ubHkgZm9y
-bWF0cyB0aGF0IHNob3VsZCBiZSBlbXVsYXRlZCwgcHJvYmFibHkgb25seQ0KPj4+IFhSR0I4
-ODg4LCB0byBhdm9pZCBmdXJ0aGVyIHByb2xpZmVyYXRpbmcgdGhlIHVzZSBvZiBjb252ZXJz
-aW9ucyksDQo+Pj4gYW5kIGF2b2lkcyB0b3VjaGluZyBtb3JlIHRoYW4gb25lIGZpbGUuIFRo
-ZSBBUEkgc3RpbGwgbmVlZHMgY2xlYW51cA0KPj4+IGFzIG1lbnRpb25lZCAoc3VwcG9ydGlu
-ZyBtb3JlIHRoYW4gb25lIG5hdGl2ZSBmb3JtYXQgaXMgZnVuZGFtZW50YWxseQ0KPj4+IGJy
-b2tlbiwgc2luY2UgdGhlIGhlbHBlciB3b3VsZCBuZWVkIHRvIHRlbGwgdGhlIGRyaXZlciAq
-d2hhdCogbmF0aXZlDQo+Pj4gZm9ybWF0IHRvIHVzZSBmb3IgKmVhY2gqIGVtdWxhdGVkIGZv
-cm1hdCBzb21laG93KSwgYnV0IGFsbCBjdXJyZW50IGFuZA0KPj4+IHBsYW5uZWQgdXNlcnMg
-b25seSBwYXNzIGluIG9uZSBuYXRpdmUgZm9ybWF0LCBzbyB0aGlzIGNhbiAoYW5kIHNob3Vs
-ZCkNCj4+PiBiZSBmaXhlZCBsYXRlci4NCj4+Pg0KPj4+IEFzaWRlOiBBZnRlciBvdGhlciBJ
-UkMgZGlzY3Vzc2lvbiwgSSdtIHRlc3RpbmcgbnVraW5nIHRoZQ0KPj4+IFhSR0IyMTAxMDEw
-IDwtPiBBUkdCMjEwMTAxMCBhZHZlcnRpc2VtZW50ICh3aGljaCBkb2VzIG5vdCBpbnZvbHZl
-DQo+Pj4gY29udmVyc2lvbikgYnkgcmVtb3ZpbmcgdGhvc2UgZW50cmllcyBmcm9tIHNpbXBs
-ZWRybSBpbiB0aGUgQXNhaGkgTGludXgNCj4+PiBkb3duc3RyZWFtIHRyZWUuIEFzIGZhciBh
-cyBJJ20gY29uY2VybmVkLCBpdCBjYW4gYmUgcmVtb3ZlZCBpZiBub2JvZHkNCj4+PiBjb21w
-bGFpbnMgKGJ5IHJlbW92aW5nIHRob3NlIGVudHJpZXMgZnJvbSB0aGUgc2ltcGxlZHJtIGFy
-cmF5KSwgaWYNCj4+PiBtYWludGFpbmVycyBhcmUgZ2VuZXJhbGx5IG9rYXkgd2l0aCByZW1v
-dmluZyBhZHZlcnRpc2VkIGZvcm1hdHMgYXQgYWxsLg0KPj4+IElmIHNvLCB0aGVyZSBtaWdo
-dCBiZSBvdGhlciBvcHBvcnR1bml0aWVzIGZvciBmdXJ0aGVyIHRyaW1taW5nIHRoZSBsaXN0
-DQo+Pj4gbm9uLW5hdGl2ZSBmb3JtYXRzIGFkdmVydGlzZWQgdG8gdXNlcnNwYWNlLg0KPj4N
-Cj4+IElNSE8gYWxsIG9mIHRoZSBleHRyYSBBIGZvcm1hdHMgY2FuIGltbWVkaWF0ZWx5IGdv
-LiBXZSBoYXZlIHBsZW50eSBvZg0KPj4gc2ltcGxlIGRyaXZlcnMgdGhhdCBvbmx5IGV4cG9y
-dCBYUkdCODg4OCBwbHVzIHNvbWV0aW1lcyBhIGZldyBvdGhlcg0KPj4gbm9uLUEgZm9ybWF0
-cy4gSWYgYW55dGhpbmcgaW4gdXNlcnNwYWNlIGhhZCBhIGhhcmQgZGVwZW5kZW5jeSBvbiBh
-biBBDQo+PiBmb3JtYXQsIHdlJ2QgcHJvYmFibHkgaGVhcmQgYWJvdXQgaXQuDQo+Pg0KPj4g
-SW4geWVzdGVyZGF5J3MgZGlzY3Vzc2lvbiBvbiBJUkMsIGl0IHdhcyBzYWlkIHRoYXQgc2V2
-ZXJhbCBkZXZpY2VzDQo+PiBhZHZlcnRpc2UgQVJHQiBmcmFtZWJ1ZmZlcnMgd2hlbiB0aGUg
-aGFyZHdhcmUgYWN0dWFsbHkgdXNlcyBYUkdCPyBJcw0KPj4gdGhlcmUgaGFyZHdhcmUgdGhh
-dCBzdXBwb3J0cyB0cmFuc3BhcmVudCBwcmltYXJ5IHBsYW5lcz8NCj4gDQo+IEknbSBmYWly
-bHkgc3VyZSBzdWNoIGhhcmR3YXJlIGRvZXMgZXhpc3QsIGJ1dCBJIGRvbid0IGtub3cgaWYg
-aXQncyB0aGUNCj4gZHJpdmVycyBpbiBxdWVzdGlvbiBoZXJlLg0KPiANCj4gSXQncyBub3Qg
-dW5jb21tb24gdG8gaGF2ZSBleHRyYSBoYXJkd2FyZSBwbGFuZXMgYmVsb3cgdGhlIHByaW1h
-cnkNCj4gcGxhbmUsIGFuZCB0aGVuIHVzZSBhbHBoYSBvbiBwcmltYXJ5IHBsYW5lIHRvIGN1
-dCBhIGhvbGUgdG8gc2VlIHRocm91Z2gNCj4gdG8gdGhlICJ1bmRlcmxheSIgcGxhbmUuIFRo
-aXMgaXMgYSBnb29kIHNldHVwIGZvciB2aWRlbyBwbGF5YmFjaywgd2hlcmUNCj4gdGhlIHZp
-ZGVvIGlzIG9uIHRoZSB1bmRlcmxheSwgYW5kIChhIHNsb3cgR1BVIG9yIENQVSByZW5kZXJz
-KSB0aGUNCj4gc3VidGl0bGVzIGFuZCBVSSBvbiB0aGUgcHJpbWFyeSBwbGFuZS4NCj4gDQo+
-IEkndmUgaGVhcmQgdGhhdCBzb21lIGhhcmR3YXJlIGFsc28gaGFzIGEgc2VwYXJhdGUgYmFj
-a2dyb3VuZCBjb2xvcg0KPiAicGxhbmUiIGJlbG93IGFsbCBoYXJkd2FyZSBwbGFuZXMsIGJ1
-dCBJIGZvcmdldCBpZiB1cHN0cmVhbSBLTVMgZXhwb3Nlcw0KPiB0aGF0Lg0KDQpUaGF0J3Mg
-YWxzbyB3aGF0IEkgaGVhcmQgb2YuIEl0J3Mgbm90IHNvbWV0aGluZyB3ZSBjYW4gY29udHJv
-bCB3aXRoaW4gDQpzaW1wbGVkcm0gb3IgYW55IG90aGVyIGdlbmVyaWMgZHJpdmVyLg0KDQpJ
-J20gd29ycmllZCB0aGF0IHdlIGFkdmVydGlzZSBBUkdCIHRvIHVzZXJzcGFjZSB3aGVuIHRo
-ZSBzY2Fub3V0IGJ1ZmZlciANCmlzIGFjdHVhbGx5IFhSR0IuIEJ1dCBpZiB3ZSBhZHZlcnRp
-c2UgWFJHQiBhbmQgdGhlIHNjYW5vdXQgYnVmZmVyIGlzIA0KcmVhbGx5IEFSR0IsIGFueSBn
-YXJiYWdlIGluIHRoZSBYIGZpbGxlciBieXRlIHdvdWxkIGludGVyZmVyZS4NCg0KSWYgd2Ug
-aGF2ZSBhIG5hdGl2ZSBBUkdCIHNjYW5vdXQgYnVmZmVyLCB3ZSBjb3VsZCBhZHZlcnRpc2Ug
-WFJHQiB0byANCnVzZXJzcGFjZSBhbmQgc2V0IHRoZSBmaWxsZXIgYnl0ZSB1bmNvbmRpdGlv
-bmFsbHkgZHVyaW5nIHRoZSBwYWdlZmxpcCANCnN0ZXAuIFRoYXQgc2hvdWxkIGJlIHNhZmUg
-b24gYWxsIGhhcmR3YXJlLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiBZb3Un
-ZCBmaW5kIHRoaXMgbW9zdGx5IGluICJlbWJlZGRlZCIgZGlzcGxheSBjaGlwcy4NCj4gDQo+
-IA0KPiBUaGFua3MsDQo+IHBxDQo+IA0KPj4gQmVmb3JlIHJlbW92aW5nIHRoZSBleHRyYSBu
-b24tQSBmb3JtYXRzLCB3ZSBmaXJzdCBoYXZlIHRvIGZpeCB0aGUgZmJkZXYNCj4+IGNvbnNv
-bGUncyBmb3JtYXQgc2VsZWN0aW9uLiBTbyBpZiB1c2VycyBzZXQgdmlkZW89LTI0IHdpdGhv
-dXQgbmF0aXZlDQo+PiBoYXJkd2FyZSBzdXBwb3J0LCBzaW1wbGVkcm0gKGFuZCBhbnkgb3Ro
-ZXIgZHJpdmVyKSBmYWxscyBiYWNrIHRvIGENCj4+IHN1cHBvcnRlZCBmb3JtYXQuIFRoaXMg
-d29ya2VkIHdpdGggdGhlIG9sZCBmYmRldiBkcml2ZXJzLCBzdWNoIGFzDQo+PiBzaW1wbGVm
-YiBhbmQgZWZpZmIsIGFuZCBzb21lIHVzZXJzIGV4cGVjdCBpdC4NCj4+DQo+PiBJZiBub3Ro
-aW5nIGVsc2UgY29tZXMgaW4sIEknbGwgbWVyZ2UgeW91ciBwYXRjaCBvbiBNb25kYXkuDQo+
-Pg0KPj4gQmVzdCByZWdhcmRzDQo+PiBUaG9tYXMNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFu
-bg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMg
-R2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkN
-CihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90
-ZXYNCg==
+Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+Change in v4:
+		1. Replace Loongson2/loongson2 with Loongson-2/loongson-2/LOONGSON-2
+		   but except c file.
+		2. Add a helper combining two calls and that helper is
+		   "devm_platform_ioremap_resource". 
 
---------------vNeDTCH9Xq3OTneeQ57ybLEH--
+ MAINTAINERS                         |   7 +
+ drivers/pinctrl/Kconfig             |  11 +
+ drivers/pinctrl/Makefile            |   1 +
+ drivers/pinctrl/pinctrl-loongson2.c | 328 ++++++++++++++++++++++++++++
+ 4 files changed, 347 insertions(+)
+ create mode 100644 drivers/pinctrl/pinctrl-loongson2.c
 
---------------ISP6ZAnOBi8elFTzO6WZS1LZ
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e677c77136a2..8afa53595124 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11922,6 +11922,13 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
+ F:	drivers/clocksource/loongson2_hpet.c
+ 
++LOONGSON-2 SOC SERIES PINCTRL DRIVER
++M:	zhanghongchen <zhanghongchen@loongson.cn>
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	linux-gpio@vger.kernel.org
++S:	Maintained
++F:	drivers/pinctrl/pinctrl-loongson2.c
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+index 1cf74b0c42e5..36b0d243e902 100644
+--- a/drivers/pinctrl/Kconfig
++++ b/drivers/pinctrl/Kconfig
+@@ -507,6 +507,17 @@ config PINCTRL_ZYNQMP
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called pinctrl-zynqmp.
+ 
++config PINCTRL_LOONGSON2
++	tristate "Pinctrl driver for the Loongson-2 SoC"
++	depends on LOONGARCH || COMPILE_TEST
++	select PINMUX
++	select GENERIC_PINCONF
++	help
++	  This selects pin control driver for the Loongson-2 SoC. It
++	  provides pin config functions multiplexing.  GPIO pin pull-up,
++	  pull-down functions are not supported. Say yes to enable
++	  pinctrl for Loongson-2 SoC.
++
+ source "drivers/pinctrl/actions/Kconfig"
+ source "drivers/pinctrl/aspeed/Kconfig"
+ source "drivers/pinctrl/bcm/Kconfig"
+diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
+index e76f5cdc64b0..bad6a760c141 100644
+--- a/drivers/pinctrl/Makefile
++++ b/drivers/pinctrl/Makefile
+@@ -28,6 +28,7 @@ obj-$(CONFIG_PINCTRL_KEEMBAY)	+= pinctrl-keembay.o
+ obj-$(CONFIG_PINCTRL_LANTIQ)	+= pinctrl-lantiq.o
+ obj-$(CONFIG_PINCTRL_FALCON)	+= pinctrl-falcon.o
+ obj-$(CONFIG_PINCTRL_XWAY)	+= pinctrl-xway.o
++obj-$(CONFIG_PINCTRL_LOONGSON2) += pinctrl-loongson2.o
+ obj-$(CONFIG_PINCTRL_LPC18XX)	+= pinctrl-lpc18xx.o
+ obj-$(CONFIG_PINCTRL_MAX77620)	+= pinctrl-max77620.o
+ obj-$(CONFIG_PINCTRL_MCP23S08_I2C)	+= pinctrl-mcp23s08_i2c.o
+diff --git a/drivers/pinctrl/pinctrl-loongson2.c b/drivers/pinctrl/pinctrl-loongson2.c
+new file mode 100644
+index 000000000000..3b0b2e218767
+--- /dev/null
++++ b/drivers/pinctrl/pinctrl-loongson2.c
+@@ -0,0 +1,328 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Author: zhanghongchen <zhanghongchen@loongson.cn>
++ *         Yinbo Zhu <zhuyinbo@loongson.cn>
++ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
++ */
++
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/of.h>
++#include <linux/pinctrl/pinmux.h>
++#include <linux/pinctrl/pinconf-generic.h>
++#include "core.h"
++#include "pinctrl-utils.h"
++
++#define PMX_GROUP(grp, offset, bitv)					\
++	{								\
++		.name = #grp,						\
++		.pins = grp ## _pins,					\
++		.num_pins = ARRAY_SIZE(grp ## _pins),			\
++		.reg = offset,						\
++		.bit = bitv,						\
++	}
++
++#define SPECIFIC_GROUP(group)						\
++	static const char * const group##_groups[] = {			\
++		#group							\
++	}
++
++#define FUNCTION(fn)							\
++	{								\
++		.name = #fn,						\
++		.groups = fn ## _groups,				\
++		.num_groups = ARRAY_SIZE(fn ## _groups),		\
++	}
++
++struct loongson2_pinctrl {
++	struct device *dev;
++	struct pinctrl_dev *pcdev;
++	struct pinctrl_desc desc;
++	struct device_node *of_node;
++	spinlock_t lock;
++	void * __iomem reg_base;
++};
++
++struct loongson2_pmx_group {
++	const char *name;
++	const unsigned int *pins;
++	unsigned int num_pins;
++	unsigned int reg;
++	unsigned int bit;
++};
++
++struct loongson2_pmx_func {
++	const char *name;
++	const char * const *groups;
++	unsigned int num_groups;
++};
++
++#define LOONGSON2_PIN(x) PINCTRL_PIN(x, "gpio"#x)
++static const struct pinctrl_pin_desc loongson2_pctrl_pins[] = {
++	LOONGSON2_PIN(0),  LOONGSON2_PIN(1),  LOONGSON2_PIN(2),  LOONGSON2_PIN(3),
++	LOONGSON2_PIN(4),  LOONGSON2_PIN(5),  LOONGSON2_PIN(6),  LOONGSON2_PIN(7),
++	LOONGSON2_PIN(8),  LOONGSON2_PIN(9),  LOONGSON2_PIN(10), LOONGSON2_PIN(11),
++	LOONGSON2_PIN(12), LOONGSON2_PIN(13), LOONGSON2_PIN(14),
++	LOONGSON2_PIN(16), LOONGSON2_PIN(17), LOONGSON2_PIN(18), LOONGSON2_PIN(19),
++	LOONGSON2_PIN(20), LOONGSON2_PIN(21), LOONGSON2_PIN(22), LOONGSON2_PIN(23),
++	LOONGSON2_PIN(24), LOONGSON2_PIN(25), LOONGSON2_PIN(26), LOONGSON2_PIN(27),
++	LOONGSON2_PIN(28), LOONGSON2_PIN(29), LOONGSON2_PIN(30),
++	LOONGSON2_PIN(32), LOONGSON2_PIN(33), LOONGSON2_PIN(34), LOONGSON2_PIN(35),
++	LOONGSON2_PIN(36), LOONGSON2_PIN(37), LOONGSON2_PIN(38), LOONGSON2_PIN(39),
++	LOONGSON2_PIN(40), LOONGSON2_PIN(41),
++	LOONGSON2_PIN(44), LOONGSON2_PIN(45), LOONGSON2_PIN(46), LOONGSON2_PIN(47),
++	LOONGSON2_PIN(48), LOONGSON2_PIN(49), LOONGSON2_PIN(50), LOONGSON2_PIN(51),
++	LOONGSON2_PIN(52), LOONGSON2_PIN(53), LOONGSON2_PIN(54), LOONGSON2_PIN(55),
++	LOONGSON2_PIN(56), LOONGSON2_PIN(57), LOONGSON2_PIN(58), LOONGSON2_PIN(59),
++	LOONGSON2_PIN(60), LOONGSON2_PIN(61), LOONGSON2_PIN(62), LOONGSON2_PIN(63),
++};
++
++static const unsigned int gpio_pins[] = {0, 1, 2, 3, 4, 5, 6, 7,
++					 8, 9, 10, 11, 12, 13, 14,
++					 16, 17, 18, 19, 20, 21, 22, 23,
++					 24, 25, 26, 27, 28, 29, 30,
++					 32, 33, 34, 35, 36, 37, 38, 39,
++					 40,         43, 44, 45, 46, 47,
++					 48, 49, 50, 51, 52, 53, 46, 55,
++					 56, 57, 58, 59, 60, 61, 62, 63};
++static const unsigned int sdio_pins[] = {36, 37, 38, 39, 40, 41};
++static const unsigned int can1_pins[] = {34, 35};
++static const unsigned int can0_pins[] = {32, 33};
++static const unsigned int pwm3_pins[] = {23};
++static const unsigned int pwm2_pins[] = {22};
++static const unsigned int pwm1_pins[] = {21};
++static const unsigned int pwm0_pins[] = {20};
++static const unsigned int i2c1_pins[] = {18, 19};
++static const unsigned int i2c0_pins[] = {16, 17};
++static const unsigned int nand_pins[] = {44, 45, 46, 47, 48, 49, 50, 51,
++					 52, 53, 54, 55, 56, 57, 58, 59, 60,
++					 61, 62, 63};
++static const unsigned int sata_led_pins[] = {14};
++static const unsigned int lio_pins[]    = {};
++static const unsigned int i2s_pins[]    = {24, 25, 26, 27, 28};
++static const unsigned int hda_pins[]    = {24, 25, 26, 27, 28, 29, 30};
++static const unsigned int uart2_pins[]  = {};
++static const unsigned int uart1_pins[]  = {};
++static const unsigned int camera_pins[] = {};
++static const unsigned int dvo1_pins[]   = {};
++static const unsigned int dvo0_pins[]   = {};
++
++static struct loongson2_pmx_group loongson2_pmx_groups[] = {
++	PMX_GROUP(gpio, 0x0, 64),
++	PMX_GROUP(sdio, 0x0, 20),
++	PMX_GROUP(can1, 0x0, 17),
++	PMX_GROUP(can0, 0x0, 16),
++	PMX_GROUP(pwm3, 0x0, 15),
++	PMX_GROUP(pwm2, 0x0, 14),
++	PMX_GROUP(pwm1, 0x0, 13),
++	PMX_GROUP(pwm0, 0x0, 12),
++	PMX_GROUP(i2c1, 0x0, 11),
++	PMX_GROUP(i2c0, 0x0, 10),
++	PMX_GROUP(nand, 0x0, 9),
++	PMX_GROUP(sata_led, 0x0, 8),
++	PMX_GROUP(lio, 0x0, 7),
++	PMX_GROUP(i2s, 0x0, 6),
++	PMX_GROUP(hda, 0x0, 4),
++	PMX_GROUP(uart2, 0x8, 13),
++	PMX_GROUP(uart1, 0x8, 12),
++	PMX_GROUP(camera, 0x10, 5),
++	PMX_GROUP(dvo1, 0x10, 4),
++	PMX_GROUP(dvo0, 0x10, 1),
++
++};
++
++SPECIFIC_GROUP(sdio);
++SPECIFIC_GROUP(can1);
++SPECIFIC_GROUP(can0);
++SPECIFIC_GROUP(pwm3);
++SPECIFIC_GROUP(pwm2);
++SPECIFIC_GROUP(pwm1);
++SPECIFIC_GROUP(pwm0);
++SPECIFIC_GROUP(i2c1);
++SPECIFIC_GROUP(i2c0);
++SPECIFIC_GROUP(nand);
++SPECIFIC_GROUP(sata_led);
++SPECIFIC_GROUP(lio);
++SPECIFIC_GROUP(i2s);
++SPECIFIC_GROUP(hda);
++SPECIFIC_GROUP(uart2);
++SPECIFIC_GROUP(uart1);
++SPECIFIC_GROUP(camera);
++SPECIFIC_GROUP(dvo1);
++SPECIFIC_GROUP(dvo0);
++
++static const char * const gpio_groups[] = {
++	"sdio", "can1", "can0", "pwm3", "pwm2", "pwm1", "pwm0", "i2c1",
++	"i2c0", "nand", "sata_led", "lio", "i2s", "hda", "uart2", "uart1",
++	"camera", "dvo1", "dvo0"
++};
++
++static const struct loongson2_pmx_func loongson2_pmx_functions[] = {
++	FUNCTION(gpio),
++	FUNCTION(sdio),
++	FUNCTION(can1),
++	FUNCTION(can0),
++	FUNCTION(pwm3),
++	FUNCTION(pwm2),
++	FUNCTION(pwm1),
++	FUNCTION(pwm0),
++	FUNCTION(i2c1),
++	FUNCTION(i2c0),
++	FUNCTION(nand),
++	FUNCTION(sata_led),
++	FUNCTION(lio),
++	FUNCTION(i2s),
++	FUNCTION(hda),
++	FUNCTION(uart2),
++	FUNCTION(uart1),
++	FUNCTION(camera),
++	FUNCTION(dvo1),
++	FUNCTION(dvo0),
++};
++
++static int loongson2_get_groups_count(struct pinctrl_dev *pcdev)
++{
++	return ARRAY_SIZE(loongson2_pmx_groups);
++}
++
++static const char *loongson2_get_group_name(struct pinctrl_dev *pcdev,
++					unsigned int selector)
++{
++	return loongson2_pmx_groups[selector].name;
++}
++
++static int loongson2_get_group_pins(struct pinctrl_dev *pcdev, unsigned int selector,
++			const unsigned int **pins, unsigned int *num_pins)
++{
++	*pins = loongson2_pmx_groups[selector].pins;
++	*num_pins = loongson2_pmx_groups[selector].num_pins;
++
++	return 0;
++}
++
++static void loongson2_pin_dbg_show(struct pinctrl_dev *pcdev, struct seq_file *s,
++			       unsigned int offset)
++{
++	seq_printf(s, " %s", dev_name(pcdev->dev));
++}
++
++static const struct pinctrl_ops loongson2_pctrl_ops = {
++	.get_groups_count	= loongson2_get_groups_count,
++	.get_group_name		= loongson2_get_group_name,
++	.get_group_pins		= loongson2_get_group_pins,
++	.dt_node_to_map		= pinconf_generic_dt_node_to_map_all,
++	.dt_free_map		= pinctrl_utils_free_map,
++	.pin_dbg_show		= loongson2_pin_dbg_show,
++};
++
++static int loongson2_pmx_set_mux(struct pinctrl_dev *pcdev, unsigned int func_num,
++			      unsigned int group_num)
++{
++	struct loongson2_pinctrl *pctrl = pinctrl_dev_get_drvdata(pcdev);
++	unsigned long reg = (unsigned long)pctrl->reg_base +
++				loongson2_pmx_groups[group_num].reg;
++	unsigned int mux_bit = loongson2_pmx_groups[group_num].bit;
++	unsigned int val;
++	unsigned long flags;
++
++	spin_lock_irqsave(&pctrl->lock, flags);
++	val = readl((void *)reg);
++	if (func_num == 0)
++		val &= ~(1<<mux_bit);
++	else
++		val |= (1<<mux_bit);
++	writel(val, (void *)reg);
++	spin_unlock_irqrestore(&pctrl->lock, flags);
++
++	return 0;
++}
++
++static int loongson2_pmx_get_funcs_count(struct pinctrl_dev *pcdev)
++{
++	return ARRAY_SIZE(loongson2_pmx_functions);
++}
++
++static const char *loongson2_pmx_get_func_name(struct pinctrl_dev *pcdev,
++				    unsigned int selector)
++{
++	return loongson2_pmx_functions[selector].name;
++}
++
++static int loongson2_pmx_get_groups(struct pinctrl_dev *pcdev,
++			 unsigned int selector,
++			 const char * const **groups,
++			 unsigned int * const num_groups)
++{
++	*groups = loongson2_pmx_functions[selector].groups;
++	*num_groups = loongson2_pmx_functions[selector].num_groups;
++
++	return 0;
++}
++
++static const struct pinmux_ops loongson2_pmx_ops = {
++	.set_mux = loongson2_pmx_set_mux,
++	.get_functions_count = loongson2_pmx_get_funcs_count,
++	.get_function_name = loongson2_pmx_get_func_name,
++	.get_function_groups = loongson2_pmx_get_groups,
++};
++
++static int loongson2_pinctrl_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct loongson2_pinctrl *pctrl;
++
++	pctrl = devm_kzalloc(dev, sizeof(*pctrl), GFP_KERNEL);
++	if (!pctrl)
++		return -ENOMEM;
++
++	pctrl->reg_base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(pctrl->reg_base))
++		return dev_err_probe(pctrl->dev, PTR_ERR(pctrl->reg_base),
++				     "unable to map I/O memory");
++
++	spin_lock_init(&pctrl->lock);
++
++	pctrl->dev = dev;
++	pctrl->desc.name	= "pinctrl-loongson2";
++	pctrl->desc.owner	= THIS_MODULE;
++	pctrl->desc.pctlops	= &loongson2_pctrl_ops;
++	pctrl->desc.pmxops	= &loongson2_pmx_ops;
++	pctrl->desc.confops	= NULL;
++	pctrl->desc.pins	= loongson2_pctrl_pins;
++	pctrl->desc.npins	= ARRAY_SIZE(loongson2_pctrl_pins);
++
++	pctrl->pcdev = devm_pinctrl_register(pctrl->dev, &pctrl->desc, pctrl);
++	if (IS_ERR(pctrl->pcdev))
++		return dev_err_probe(pctrl->dev, PTR_ERR(pctrl->pcdev),
++				     "can't register pinctrl device");
++
++	return 0;
++}
++
++static const struct of_device_id loongson2_pinctrl_dt_match[] = {
++	{
++		.compatible = "loongson,ls2k-pinctrl",
++	},
++	{ },
++};
++
++static struct platform_driver loongson2_pinctrl_driver = {
++	.probe		= loongson2_pinctrl_probe,
++	.driver = {
++		.name	= "loongson2-pinctrl",
++		.of_match_table = loongson2_pinctrl_dt_match,
++	},
++};
++
++static int __init loongson2_pinctrl_init(void)
++{
++	return platform_driver_register(&loongson2_pinctrl_driver);
++}
++arch_initcall(loongson2_pinctrl_init);
++
++static void __exit loongson2_pinctrl_exit(void)
++{
++	platform_driver_unregister(&loongson2_pinctrl_driver);
++}
++module_exit(loongson2_pinctrl_exit);
+-- 
+2.31.1
 
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmNbmJ0FAwAAAAAACgkQlh/E3EQov+C+
-eQ//cJFMsCwY34/cnzjjmsD5znrg8jCNDe1O3K7AaX+HQyv8JC5r9do4M15FrYfm4/9T6McXblTS
-HXfBLT6pzQoybdSb8DRT6kgb8mLgEdYET+cv2RCIU3++YdUirclcFJNnEjZirwbl530MR4UCyLAv
-b1iS5r5gL5OrC6BJP8naSOQ5zPU/LMTCYs+MnPrUxFy0k9t1uklvbgO1mbdTeyQo1AdRcIzO1CPZ
-5X70B6gx5qi8AovmYgdkGzDKAbofsT8EiLDQFumKttYDCH4s3leGdblOoWZySQAAkIaus+aYsNt8
-r32/hYKBL9e2eIv7JaTpIFsYmKjd4XPWYHXC8/WInxibhGfEqXbiKuInXSmPcU5+EycFocsYP12R
-g6hvxeLRDma6UWQZmL7Mqat3SKy0VMUSbiC7lguWwwFZ0OSh69Ri/3miyG/86zLo9vLaF3vkiGWW
-Zl0LHbI9Huz3C90WLtKb2nE4PjTi+syiGaoJe+Mp4ujVfyyV8EgLUuy3eBIJ1wC/1pv9x5Yv2J9k
-tNDCJ/30n2dGqC5S41OeA7yTJQMr5klf3HfZI55pP01kr/n5xQWcpPVrH3QkeN9Vz8YVLCpPnlet
-3aKQ4l/e2+mVAfwkX46/Lc2kbwFCQMeYzbhjdVcC3SHtsoTqiVaqVuWoNR8eT8hOX/foqb/NzOE3
-7aU=
-=Oh4c
------END PGP SIGNATURE-----
-
---------------ISP6ZAnOBi8elFTzO6WZS1LZ--
