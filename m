@@ -2,104 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E87610EF0
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E59A6610EF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbiJ1KqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 06:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
+        id S231143AbiJ1KsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 06:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbiJ1KqK (ORCPT
+        with ESMTP id S230487AbiJ1KsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 06:46:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB401A7A14;
-        Fri, 28 Oct 2022 03:46:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D97A7B80502;
-        Fri, 28 Oct 2022 10:46:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 986B1C43141;
-        Fri, 28 Oct 2022 10:46:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666953966;
-        bh=0GOxupD0PCRPvzw+G0OTdqPzj8Eevayoc9MyN2qZUBM=;
-        h=From:Date:Subject:To:Cc:From;
-        b=Wz2Fq2zO2hz9lldRywykHiGC0IxrccfLDzu3bRyDBqbEVqTHwRGpI1p28My8FbFST
-         rK48J+U92dqRBwPrOOn6ZUG9P5pXh3CyIm12y7w49vuwyd/4dD2yjoCxzdRHg+ZXIT
-         aAUvwtXCsGNymDdJOpFoX2Dw8mzUkwAE/Ku26/zCKDSskB7m90UD23x1NgeriVDWyy
-         1XxoW9iUxQuUO86oPvIWOL6rRmLaropeXRIDVn0UzE6KRDV9zqyEyYGGX7j6YBlKHZ
-         L0JasKh/hTxce/tg2VGLUKkKdw5BWSad3dpwgtczd725Nq6fh1uMLaJAADCKhkum3j
-         BuulASjXilNHg==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-13c2cfd1126so5821509fac.10;
-        Fri, 28 Oct 2022 03:46:06 -0700 (PDT)
-X-Gm-Message-State: ACrzQf22K5K6SsZvVWc7pKpxWb84zUoGtRrssGTcOU1/yNvpzBf+yH+5
-        7vt8UiuT7txkgbEdi1V5Zkr7uzVkl1xPgjQJBfE=
-X-Google-Smtp-Source: AMsMyM4qwHAoqaml+e8xqB734gZIPUTgCIbJ/oKHw8fhpT5q+q8EDp+xtpcDHY7UzGtj0gSBQV4sqA/y4YTE5T0uP+Y=
-X-Received: by 2002:a05:6870:63aa:b0:13a:fe6c:5ed0 with SMTP id
- t42-20020a05687063aa00b0013afe6c5ed0mr9088447oap.257.1666953965748; Fri, 28
- Oct 2022 03:46:05 -0700 (PDT)
+        Fri, 28 Oct 2022 06:48:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD8A1C8D55
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 03:47:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666954042;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hDq1HbvLhh+n0wG0ICvMus6kd7ngVIZaD98ZKD5lL4c=;
+        b=Tly3i1cct7vmyjwEUDQQlmKNq5RiDKmgGBdwuAqtk4oPA+Bk7UHCNpsDwcVL0xNqR0FO63
+        xv7+YcdRA3/siX239LrgIsQMGXj60xijaiIk3wWfC1uye0NWKgBKdsQR/n0Mdw/e5hL5nM
+        GYqVlfJ2lUVVIE1Z5EPTVZou15V2OJE=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-44-eA0ozdgoMkufGBqWJMkTlw-1; Fri, 28 Oct 2022 06:47:21 -0400
+X-MC-Unique: eA0ozdgoMkufGBqWJMkTlw-1
+Received: by mail-wm1-f69.google.com with SMTP id z10-20020a05600c220a00b003c6ecad1decso1322572wml.2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 03:47:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hDq1HbvLhh+n0wG0ICvMus6kd7ngVIZaD98ZKD5lL4c=;
+        b=IcGoJcz4xrTS0MfWaGhEY41b89xmmty9rn1B8JwZEPPwH43RUCkApgXwf7NVbaTKvZ
+         XV0MczgP5F7MEEyQZH7gkvJ6n0H8bv2+Qcvq/u5H+vmeuxzzhzfOA5eqjHVCN6X/YX/d
+         MdSd9URWbiRuPmmkwL96hzzfw7Q4iXFtvxzJQ+B5m8Qd2dmNY4LizUojuSVIdOSzjCGl
+         zJL8mWpbWoj7Wf1V7GN9leOhXew/v0MPYA5tBOqR4mRwG2HTPK17gs3P+a9bSya5BsgR
+         hcLGQ28sIFb+c5wJW+TAQvmZPdUkmNe1Kd1B1moPgj2BSvICXfjKNZQrPqEAsEYtERm7
+         3Maw==
+X-Gm-Message-State: ACrzQf1W0cT+Y1lMh6Ou5owO6q5f1luS+/LsccQQHSmwHupDWLFj/cpX
+        cFYpRsAyRLtdS8Xpv/fMqDAbQ4DxQPbPgE61YJXLrFwu7iUJJv/lJZ6uu5UdKRnpFSHCN0gRY3g
+        dsgQsCEjyIIKNLHnnezW7rNzw
+X-Received: by 2002:adf:f511:0:b0:236:60be:e885 with SMTP id q17-20020adff511000000b0023660bee885mr20457314wro.663.1666954039863;
+        Fri, 28 Oct 2022 03:47:19 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5/fXxc6OnwaNWfY45NED0RPKuJn4GcdOSO9KoLrfLKSFRh6syx6QiMQVqa+MMXkuoWqVzZ/A==
+X-Received: by 2002:adf:f511:0:b0:236:60be:e885 with SMTP id q17-20020adff511000000b0023660bee885mr20457305wro.663.1666954039661;
+        Fri, 28 Oct 2022 03:47:19 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id t18-20020a05600001d200b0023647841c5bsm3251599wrx.60.2022.10.28.03.47.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 03:47:19 -0700 (PDT)
+Message-ID: <0ecc0739-aa3c-bbf8-b52f-c710cae0675f@redhat.com>
+Date:   Fri, 28 Oct 2022 12:47:17 +0200
 MIME-Version: 1.0
-Received: by 2002:a05:6838:4424:0:0:0:0 with HTTP; Fri, 28 Oct 2022 03:46:05
- -0700 (PDT)
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Fri, 28 Oct 2022 19:46:05 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd8G1kkpiZbjU2nAWMSffsTXXJeDKorcVrvHptMU3p1jhw@mail.gmail.com>
-Message-ID: <CAKYAXd8G1kkpiZbjU2nAWMSffsTXXJeDKorcVrvHptMU3p1jhw@mail.gmail.com>
-Subject: [ANNOUNCE] exfatprogs-1.2.0 version released
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Cc:     Eric Sandeen <sandeen@sandeen.net>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        Nicolas Boos <nicolas.boos@wanadoo.fr>, sedat.dilek@gmail.com,
-        Hyunchul Lee <hyc.lee@gmail.com>,
-        Luca Stefani <luca.stefani.ge1@gmail.com>,
-        Matthieu CASTET <castet.matthieu@free.fr>,
-        Sven Hoexter <sven@stormbind.net>,
-        Ethan Sommer <e5ten.arch@gmail.com>,
-        "Yuezhang.Mo" <Yuezhang.Mo@sony.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] KVM: x86/xen: Fix eventfd error handling in
+ kvm_xen_eventfd_assign()
+Content-Language: en-US
+To:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>, seanjc@google.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ankur.a.arora@oracle.com, dwmw@amazon.co.uk,
+        joao.m.martins@oracle.com
+Cc:     syzbot+6f0c896c5a9449a10ded@syzkaller.appspotmail.com
+References: <20221028092631.117438-1-eiichi.tsukata@nutanix.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20221028092631.117438-1-eiichi.tsukata@nutanix.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi folk,
+On 10/28/22 11:26, Eiichi Tsukata wrote:
+> Should not call eventfd_ctx_put() in case of error.
+> 
+> Fixes: 2fd6df2f2b47 ("KVM: x86/xen: intercept EVTCHNOP_send from guests")
+> Reported-by: syzbot+6f0c896c5a9449a10ded@syzkaller.appspotmail.com
+> Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+> ---
+>   arch/x86/kvm/xen.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+> index 93c628d3e3a9..a357994982c6 100644
+> --- a/arch/x86/kvm/xen.c
+> +++ b/arch/x86/kvm/xen.c
+> @@ -1716,7 +1716,7 @@ static int kvm_xen_eventfd_assign(struct kvm *kvm,
+>   	if (ret == -ENOSPC)
+>   		ret = -EEXIST;
+>   out:
+> -	if (eventfd)
+> +	if (eventfd && !IS_ERR(eventfd))
+>   		eventfd_ctx_put(eventfd);
+>   	kfree(evtchnfd);
+>   	return ret;
 
-We have released exfatprogs 1.2.0 version. In this release, fsck.exfat
-is able to fix(repair) corruptions in exFAT(The previous versions only
-check consistency).  Also, exfat2img has been added to clone exFAT
-storage(only metadata) to the image file.
+Slightly more verbose, but cleaner:
 
-Any feedback is welcome!:)
+diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+index 6714bbdbedf3..2dae413bd62a 100644
+--- a/arch/x86/kvm/xen.c
++++ b/arch/x86/kvm/xen.c
+@@ -1666,18 +1666,18 @@ static int kvm_xen_eventfd_assign(struct kvm *kvm,
+  	case EVTCHNSTAT_ipi:
+  		/* IPI  must map back to the same port# */
+  		if (data->u.evtchn.deliver.port.port != data->u.evtchn.send_port)
+-			goto out; /* -EINVAL */
++			goto out_noeventfd; /* -EINVAL */
+  		break;
+  
+  	case EVTCHNSTAT_interdomain:
+  		if (data->u.evtchn.deliver.port.port) {
+  			if (data->u.evtchn.deliver.port.port >= max_evtchn_port(kvm))
+-				goto out; /* -EINVAL */
++				goto out_noeventfd; /* -EINVAL */
+  		} else {
+  			eventfd = eventfd_ctx_fdget(data->u.evtchn.deliver.eventfd.fd);
+  			if (IS_ERR(eventfd)) {
+  				ret = PTR_ERR(eventfd);
+-				goto out;
++				goto out_noeventfd;
+  			}
+  		}
+  		break;
+@@ -1717,6 +1717,7 @@ static int kvm_xen_eventfd_assign(struct kvm *kvm,
+  out:
+	if (eventfd)
+  		eventfd_ctx_put(eventfd);
++out_noeventfd:
+  	kfree(evtchnfd);
+  	return ret;
+  }
 
-CHANGES :
- * fsck.exfat: Keep traveling files even if there is a corrupted
-directory entry set.
- * fsck.exfat: Introduce the option "b" to recover a boot sector even
-if an exFAT filesystem is not found.
- * fsck.exfat: Introduce the option "s" to create files in
-"/LOST+FOUND", which have clusters allocated but was not belonged to
-any files.
- * fsck.exfat: Rename '.' and '..' entry name to the one user want.
+Only the last goto has to be changed in order to fix the bug, the
+others are only needed to respect the LIFO order of the unwinding
+labels.
 
-NEW FEATURES :
- * fsck.exfat: Repair corruptions of an exFAT filesystem. Please refer
-to fsck.exfat manpage to see what kind of corruptions can be repaired.
- * exfat2img: Dump metadata of an exFAT filesystem. Please refer to
-exfat2img manpage to see how to use it.
+Paolo
 
-BUG FIXES:
- * fsck.exfat: Fix an infinite loop while traveling files.
- * tune.exfat: Fix bitmap entry corruption when adding new volume lablel.
-
-The git tree is at:
-      https://github.com/exfatprogs/exfatprogs
-
-The tarballs can be found at:
-      https://github.com/exfatprogs/exfatprogs/releases/download/1.2.0/exfatprogs-1.2.0.tar.gz
