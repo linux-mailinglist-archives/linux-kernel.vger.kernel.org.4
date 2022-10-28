@@ -2,96 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1736111FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA9F611200
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiJ1Mzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 08:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
+        id S230096AbiJ1M4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 08:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiJ1Mzm (ORCPT
+        with ESMTP id S229786AbiJ1M4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 08:55:42 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB68198989;
-        Fri, 28 Oct 2022 05:55:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1666961741; x=1698497741;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=j6mmci6yqeE9vsqUFPTb1XAq/fXqTEJvQ3kd2FzN0qw=;
-  b=yk+D6gvI8d2+K8qKOkyh+IKPekV1BkNLXBDxXu1eePS9oYZKUBDdtalq
-   kJW4qwuCNnuTPsZZMOTOfaQv5eS3bWbE51Qn3I4mKCR+1+HO277mZes+2
-   ABl8AQzovIAYKhs56/ZqkTePcCNKMiCSs/gzZS8KojJpBF0lxYJLY4XU9
-   Rh9SUNyNONxp/TfIS8k9PgsXvh+2Wu5+W6Py0E22kGa/Tk3TBOKc3UMF0
-   XSE7OfHRQMt1QD7wmtoxI0AO19wdpuelbqrI1RzPnIw+mkwHRavfASyZb
-   HbSFJvE43eqa+G2dDSm0kpP/1B1IQGiHmkDuiZiPpLOo1PYjxOkoKWuyE
-   A==;
-X-IronPort-AV: E=Sophos;i="5.95,221,1661842800"; 
-   d="scan'208";a="186775063"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Oct 2022 05:55:40 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 28 Oct 2022 05:55:40 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Fri, 28 Oct 2022 05:55:38 -0700
-Message-ID: <61e54c48-6347-f0ab-e843-ae48d5374903@microchip.com>
-Date:   Fri, 28 Oct 2022 14:55:37 +0200
+        Fri, 28 Oct 2022 08:56:09 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74ED1BFBA6;
+        Fri, 28 Oct 2022 05:56:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1D473CE2B27;
+        Fri, 28 Oct 2022 12:56:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EF42C433C1;
+        Fri, 28 Oct 2022 12:56:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666961765;
+        bh=VHuzHyK/ptJnT7l0y3XH9UJ/iKdBdii83zZaQVjzLGQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qJK0uSjCKHOuaBdb8fohf3eG1Ezo4BX544vlCK2s//gCGhInnaT0Y3Xh5qduPhxVo
+         1xJoCClTBT1I/iAGPMIZjp1q3pBJGSE1VkBpeWg19qtZxpJ3eYGh92wPjSNUXikuAF
+         1dy22fZ5u/q0+2M1wBMKsVqxqtut6tdeWxJhkP2PPDvyFoOoxklODSzWQSuTXp8xSZ
+         7Us2KxxmzFn99c1rpOtNvVzLir8Nmw8bF7F5n3dwp1WcYi+Ixvit93imqOsWYWuDus
+         TzjKR/P+cjwYi/DTQecG5tUinB/wj0YeFJjBTAwjts7u7VTd5Gmjiex6ecadXqWHms
+         cMvd68M5hNUpw==
+Date:   Fri, 28 Oct 2022 18:26:00 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] phy: qcom-qmp-combo: fix NULL-deref on runtime resume
+Message-ID: <Y1vRYIl1eaAzfmEG@matsya>
+References: <20221026162116.26462-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 32/32] dmaengine: at_hdmac: Convert driver to use
- virt-dma
-Content-Language: en-US
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>, <vkoul@kernel.org>,
-        <peda@axentia.se>, <du@axentia.se>
-CC:     <maciej.sosnowski@intel.com>, <mripard@kernel.org>,
-        <torfl6749@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <dmaengine@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-References: <20221025090306.297886-1-tudor.ambarus@microchip.com>
- <20221025090306.297886-33-tudor.ambarus@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20221025090306.297886-33-tudor.ambarus@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221026162116.26462-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/10/2022 at 11:03, Tudor Ambarus wrote:
-> Convert the driver to use the core virt-dma. The driver will be easier to
-> maintain as it uses the list handling and the tasklet from virt-dma.
+On 26-10-22, 18:21, Johan Hovold wrote:
+> Commit fc64623637da ("phy: qcom-qmp-combo,usb: add support for separate
+> PCS_USB region") started treating the PCS_USB registers as potentially
+> separate from the PCS registers but used the wrong base when no PCS_USB
+> offset has been provided.
 > 
-> With the conversion replace the election of a new transfer in the tasklet
-> with the election of the new transfer in the interrupt handler. With this
-> we have a shorter idle window as we remove the scheduling latency of the
-> tasklet. I chose to do this while doing the conversion to virt-dma,
-> because if I made a prerequisite patch with the new transfer election in
-> the irq handler, I would have to duplicate some virt-dma code in the
-> at_hdmac driver that would end up being removed at the virt-dma conversion
-> anyway. So do this in a single step.
-> 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> Fix the PCS_USB base used at runtime resume to prevent dereferencing a
+> NULL pointer on platforms that do not provide a PCS_USB offset (e.g.
+> SC7180).
 
-Even if it's difficult to review, I support the transition:
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-
-Thanks Tudor, regards,
-   Nicolas
-
-[..]
+Applied, thanks
 
 -- 
-Nicolas Ferre
-
+~Vinod
