@@ -2,276 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633E7610E75
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A56610E71
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbiJ1K2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 06:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57936 "EHLO
+        id S229667AbiJ1K2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 06:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiJ1K2l (ORCPT
+        with ESMTP id S229441AbiJ1K2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 06:28:41 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D056C947;
-        Fri, 28 Oct 2022 03:28:39 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id o12so7538442lfq.9;
-        Fri, 28 Oct 2022 03:28:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tkun3rRy+GzEVIQYIXSl4ZmmxciQnM9huc9BB1/7wtE=;
-        b=SBX8JZ9XHJCczt7NDMF++v1va3K7PfSKi0knv8JyLkArFjK8rumzqOEWBr1aptiLAw
-         dQmvgEisV+NfgBA9+m1m3/oO7iBbVPvE/rDFaUBMAeMvcjlqoleTe+GN4UZNmmve/jG6
-         HU3mCC2XHat/5xtiESvjdk7++heBO2VyJDm/6ntJqToqE/l1rYWvji4hk7hjksSGFjrq
-         M780Er4qTM3Igm9U9Fd/oKuDv3PQ96pBUtfaxhJudrA4ItL9v0oBLYb1fdy0Gbyuu/tn
-         ugQc+qmA2EhABlFjWUSVjzoaYdWhsQBjK9dGj+pbAD/YcPLED5GgHrL7hub91p9L98rW
-         JFXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tkun3rRy+GzEVIQYIXSl4ZmmxciQnM9huc9BB1/7wtE=;
-        b=gSuaS+vQy9Au0UfB80po5YNmfpXuP4c8RSh6ANmDrs+uwZcUfz2qtu8hyu3eCI2msz
-         YLsH7TWvuM8wIZtW8qCpa7MihwJMr6TyPh4ePvajQwHEARfTUmfMgC3DXY20Lc4OSxZ2
-         OAHODUT3pBSqH2LcVQk3ZoajSkCCxOZpV3QfFABdKXKgYg1SAdDD4UPACSUafRgc09VH
-         Pn23952tDLRDe4NjDXkhLY2tEsUvjqVsl4d4LKGsHTqyk0KYAx/2blCl4k8Jgqo8nulb
-         DbUj7HsbFx9eZdxpgOWTwq/PBD2SpiU+t9MnphU+hO5ltOQXKM0warJXS+UYqNmjA8/n
-         qXuA==
-X-Gm-Message-State: ACrzQf1MIhexiXa6F3rcjapsEi5DNNjq2z+YbVNhNR4C+EB8qz+FcGg2
-        YvKhEFO8IrrGh8i1h0jtkO4=
-X-Google-Smtp-Source: AMsMyM6Ky5cOVvQNbwTNrAZX8JSaggXdVR5qTbRzqueJXB8sJK0bOuw4suTa/Sr3h62sZF6Hw3Tv4A==
-X-Received: by 2002:a05:6512:1287:b0:4a2:a7c3:641d with SMTP id u7-20020a056512128700b004a2a7c3641dmr21949742lfs.511.1666952917737;
-        Fri, 28 Oct 2022 03:28:37 -0700 (PDT)
-Received: from eldfell ([194.136.85.206])
-        by smtp.gmail.com with ESMTPSA id i15-20020a056512006f00b004a4251c7f75sm506551lfo.202.2022.10.28.03.28.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 03:28:37 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 13:28:24 +0300
-From:   Pekka Paalanen <ppaalanen@gmail.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     dri-devel@lists.freedesktop.org, Hector Martin <marcan@marcan.st>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev
-Subject: Re: [PATCH v2] drm/format-helper: Only advertise supported formats
- for conversion
-Message-ID: <20221028132824.7155b072@eldfell>
-In-Reply-To: <98ec2c54-cf99-6465-31a1-b63e3b4d021d@suse.de>
-References: <20221027135711.24425-1-marcan@marcan.st>
-        <6102d131-fd3f-965b-cd52-d8d3286e0048@suse.de>
-        <20221028113705.084502b6@eldfell>
-        <efd80dc5-d732-113d-b8fd-398b650beb8f@suse.de>
-        <20221028121744.2073d196@eldfell>
-        <98ec2c54-cf99-6465-31a1-b63e3b4d021d@suse.de>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 28 Oct 2022 06:28:35 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F90841521;
+        Fri, 28 Oct 2022 03:28:33 -0700 (PDT)
+Received: from loongson.cn (unknown [112.20.109.239])
+        by gateway (Coremail) with SMTP id _____8BxWtjQrltjjxQDAA--.9904S3;
+        Fri, 28 Oct 2022 18:28:32 +0800 (CST)
+Received: from [192.168.100.8] (unknown [112.20.109.239])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxPuDQrltjhlMGAA--.22302S3;
+        Fri, 28 Oct 2022 18:28:32 +0800 (CST)
+Message-ID: <53b87ee6-c803-1f33-eb2c-bb39c3ada7dd@loongson.cn>
+Date:   Fri, 28 Oct 2022 18:28:32 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hL8suL49hYQ0bVssPUv1n2x";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH] docs/zh_CN: Add userspace-api/no_new_privs Chinese
+ translation
+To:     Rui Li <me@lirui.org>, Alex Shi <alexs@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Wu XiangCheng <wu.xiangcheng@linux.dev>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221022120557.381115-1-me@lirui.org>
+From:   YanTeng Si <siyanteng@loongson.cn>
+In-Reply-To: <20221022120557.381115-1-me@lirui.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxPuDQrltjhlMGAA--.22302S3
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxXF17ZFy5CrWUur47JryfCrg_yoW7Jr4Up3
+        WagryfG3WxAryjkryjgr17XF1fuFykWasrua17GayFgwn0kFWDCr1qyrZFyrn7J3y2yF98
+        JF4qgFW8u342k37anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1ln4kS
+        14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv
+        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+        AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
+        67AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
+        8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8
+        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
+        1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07jz2NtUUUUU=
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/hL8suL49hYQ0bVssPUv1n2x
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, 28 Oct 2022 11:34:34 +0200
-Thomas Zimmermann <tzimmermann@suse.de> wrote:
+在 2022/10/22 20:05, Rui Li 写道:
+> Translate the following documents into Chinese:
+>
+> - userspace-api/no_new_privs.rst
+>
+> Signed-off-by: Rui Li <me@lirui.org>
 
-> Hi
->=20
-> Am 28.10.22 um 11:17 schrieb Pekka Paalanen:
-> > On Fri, 28 Oct 2022 10:53:49 +0200
-> > Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> >  =20
-> >> Hi
-> >>
-> >> Am 28.10.22 um 10:37 schrieb Pekka Paalanen: =20
-> >>> On Fri, 28 Oct 2022 10:07:27 +0200
-> >>> Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> >>>     =20
-> >>>> Hi
-> >>>>
-> >>>> Am 27.10.22 um 15:57 schrieb Hector Martin: =20
-> >>>>> drm_fb_build_fourcc_list() currently returns all emulated formats
-> >>>>> unconditionally as long as the native format is among them, even th=
-ough
-> >>>>> not all combinations have conversion helpers. Although the list is
-> >>>>> arguably provided to userspace in precedence order, userspace can p=
-ick
-> >>>>> something out-of-order (and thus break when it shouldn't), or simply
-> >>>>> only support a format that is unsupported (and thus think it can wo=
-rk,
-> >>>>> which results in the appearance of a hang as FB blits fail later on,
-> >>>>> instead of the initialization error you'd expect in this case).
-> >>>>>
-> >>>>> Add checks to filter the list of emulated formats to only those
-> >>>>> supported for conversion to the native format. This presumes that t=
-here
-> >>>>> is a single native format (only the first is checked, if there are
-> >>>>> multiple). Refactoring this API to drop the native list or support =
-it
-> >>>>> properly (by returning the appropriate emulated->native mapping tab=
-le)
-> >>>>> is left for a future patch.
-> >>>>>
-> >>>>> The simpledrm driver is left as-is with a full table of emulated
-> >>>>> formats. This keeps all currently working conversions available and
-> >>>>> drops all the broken ones (i.e. this a strict bugfix patch, adding =
-no
-> >>>>> new supported formats nor removing any actually working ones). In o=
-rder
-> >>>>> to avoid proliferation of emulated formats, future drivers should
-> >>>>> advertise only XRGB8888 as the sole emulated format (since some
-> >>>>> userspace assumes its presence).
-> >>>>>
-> >>>>> This fixes a real user regression where the ?RGB2101010 support com=
-mit
-> >>>>> started advertising it unconditionally where not supported, and KWin
-> >>>>> decided to start to use it over the native format and broke, but al=
-so
-> >>>>> the fixes the spurious RGB565/RGB888 formats which have been wrongly
-> >>>>> unconditionally advertised since the dawn of simpledrm.
-> >>>>>
-> >>>>> Fixes: 6ea966fca084 ("drm/simpledrm: Add [AX]RGB2101010 formats")
-> >>>>> Fixes: 11e8f5fd223b ("drm: Add simpledrm driver")
-> >>>>> Cc: stable@vger.kernel.org
-> >>>>> Signed-off-by: Hector Martin <marcan@marcan.st> =20
-> >>>>
-> >>>> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-> >>>>
-> >>>> Thanks for your patch. I have verified that video=3D-{16,24} still w=
-orks
-> >>>> with simpledrm.
-> >>>>    =20
-> >>>>> ---
-> >>>>> I'm proposing this alternative approach after a heated discussion on
-> >>>>> IRC. I'm out of ideas, if y'all don't like this one you can figure =
-it
-> >>>>> out for yourseves :-)
-> >>>>>
-> >>>>> Changes since v1:
-> >>>>> This v2 moves all the changes to the helper (so they will apply to
-> >>>>> the upcoming ofdrm, though ofdrm also needs to be fixed to trim its
-> >>>>> format table to only formats that should be emulated, probably only
-> >>>>> XRGB8888, to avoid further proliferating the use of conversions),
-> >>>>> and avoids touching more than one file. The API still needs cleanup
-> >>>>> as mentioned (supporting more than one native format is fundamental=
-ly
-> >>>>> broken, since the helper would need to tell the driver *what* native
-> >>>>> format to use for *each* emulated format somehow), but all current =
-and
-> >>>>> planned users only pass in one native format, so this can (and shou=
-ld)
-> >>>>> be fixed later.
-> >>>>>
-> >>>>> Aside: After other IRC discussion, I'm testing nuking the
-> >>>>> XRGB2101010 <-> ARGB2101010 advertisement (which does not involve
-> >>>>> conversion) by removing those entries from simpledrm in the Asahi L=
-inux
-> >>>>> downstream tree. As far as I'm concerned, it can be removed if nobo=
-dy
-> >>>>> complains (by removing those entries from the simpledrm array), if
-> >>>>> maintainers are generally okay with removing advertised formats at =
-all.
-> >>>>> If so, there might be other opportunities for further trimming the =
-list
-> >>>>> non-native formats advertised to userspace. =20
-> >>>>
-> >>>> IMHO all of the extra A formats can immediately go. We have plenty of
-> >>>> simple drivers that only export XRGB8888 plus sometimes a few other
-> >>>> non-A formats. If anything in userspace had a hard dependency on an A
-> >>>> format, we'd probably heard about it.
-> >>>>
-> >>>> In yesterday's discussion on IRC, it was said that several devices
-> >>>> advertise ARGB framebuffers when the hardware actually uses XRGB? Is
-> >>>> there hardware that supports transparent primary planes? =20
-> >>>
-> >>> I'm fairly sure such hardware does exist, but I don't know if it's the
-> >>> drivers in question here.
-> >>>
-> >>> It's not uncommon to have extra hardware planes below the primary
-> >>> plane, and then use alpha on primary plane to cut a hole to see throu=
-gh
-> >>> to the "underlay" plane. This is a good setup for video playback, whe=
-re
-> >>> the video is on the underlay, and (a slow GPU or CPU renders) the
-> >>> subtitles and UI on the primary plane.
-> >>>
-> >>> I've heard that some hardware also has a separate background color
-> >>> "plane" below all hardware planes, but I forget if upstream KMS expos=
-es
-> >>> that. =20
-> >>
-> >> That's also what I heard of. It's not something we can control within
-> >> simpledrm or any other generic driver.
-> >>
-> >> I'm worried that we advertise ARGB to userspace when the scanout buffer
-> >> is actually XRGB. =20
-> >=20
-> > What would be the problem with that?
-> > simpledrm would never expose more than only the primary plane, right?
-> > Not even background color. =20
->=20
-> Right. My concerns are the proliferation of A format, and userspace that=
-=20
-> tries something fancy with that incorrect A byte, which leads to display=
-=20
-> artifacts. Like fading in/out the content of the primary plane.
-
-I agree.
-
-> > That means that userspace cannot use the alpha channel for anything
-> > anyway, there is nothing to show through. Or are you thinking about
-> > transparent monitors? =20
->=20
-> I can't tell if you're serious, but I'm not going to rule this out. ;)
-
-I am kind of serious. See-through monitors would be cool if not
-practical. They actually kind of exist already as projections through
-semi-mirrors like in AR-goggles or car windscreens, but they don't yet
-allow displaying opaque black (or do they?). OTOH, one could use a
-traditional LCD and replace the mirror with another polarizing filter,
-I guess. Maybe that's a way to implement controllable opacity. I've no
-idea if anyone has combined these technologies.
-
-Hmm, if alpha controls the opacity layer, then RGB values would behave
-as if pre-multiplied in optical blending. The projected RGB primaries
-can only add light on top of what passes through the LCD opacity mask.
-
-Why don't I have one of those yet!
+Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
 
 
 Thanks,
-pq
 
---Sig_/hL8suL49hYQ0bVssPUv1n2x
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Yanteng
 
------BEGIN PGP SIGNATURE-----
+> ---
+>   .../zh_CN/userspace-api/index.rst             |  2 +-
+>   .../zh_CN/userspace-api/no_new_privs.rst      | 57 +++++++++++++++++++
+>   2 files changed, 58 insertions(+), 1 deletion(-)
+>   create mode 100644 Documentation/translations/zh_CN/userspace-api/no_new_privs.rst
+>
+> diff --git a/Documentation/translations/zh_CN/userspace-api/index.rst b/Documentation/translations/zh_CN/userspace-api/index.rst
+> index 12c63d81c663..6a7e82ac16b9 100644
+> --- a/Documentation/translations/zh_CN/userspace-api/index.rst
+> +++ b/Documentation/translations/zh_CN/userspace-api/index.rst
+> @@ -25,10 +25,10 @@ Linux 内核用户空间API指南
+>      :maxdepth: 2
+>   
+>      ebpf/index
+> +   no_new_privs
+>   
+>   TODOList:
+>   
+> -* no_new_privs
+>   * seccomp_filter
+>   * landlock
+>   * unshare
+> diff --git a/Documentation/translations/zh_CN/userspace-api/no_new_privs.rst b/Documentation/translations/zh_CN/userspace-api/no_new_privs.rst
+> new file mode 100644
+> index 000000000000..81bd16ce3ad2
+> --- /dev/null
+> +++ b/Documentation/translations/zh_CN/userspace-api/no_new_privs.rst
+> @@ -0,0 +1,57 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +.. include:: ../disclaimer-zh_CN.rst
+> +
+> +:Original: Documentation/userspace-api/no_new_privs.rst
+> +
+> +:翻译:
+> +
+> + 李睿 Rui Li <me@lirui.org>
+> +
+> +============
+> +无新权限标志
+> +============
+> +
+> +execve系统调用可以给一个新启动的程序授予它的父程序本没有的权限。最明显的两个
+> +例子就是setuid/setgid控制程序和文件的能力。为了避免父程序也获得这些权限，内
+> +核和用户代码必须小心避免任何父程序可以颠覆子程序的情况。比如：
+> +
+> + - 程序在setuid后，动态装载器处理 ``LD_*`` 环境变量的不同方式。
+> +
+> + - 对于非特权程序，chroot是不允许的，因为这会允许 ``/etc/passwd`` 在继承
+> +   chroot的程序眼中被替换。
+> +
+> + - 执行代码对ptrace有特殊处理。
+> +
+> +这些都是临时性的修复。 ``no_new_privs`` 位（从 Linux 3.5 起）是一个新的通
+> +用的机制来保证一个进程安全地修改其执行环境并跨execve持久化。任何任务都可以设
+> +置 ``no_new_privs`` 。一旦该位被设置，它会在fork、clone和execve中继承下去
+> +，并且不能被撤销。在 ``no_new_privs`` 被设置的情况下， ``execve()`` 将保证
+> +不会授予权限去做任何没有execve调用就不能做的事情。比如， setuid 和 setgid
+> +位不会再改变 uid 或 gid；文件能力不会被添加到授权集合中，并且Linux安全模块（
+> +LSM）不会在execve调用后放松限制。
+> +
+> +设置 ``no_new_privs`` 使用::
+> +
+> +    prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
+> +
+> +不过要小心，Linux安全模块（LSM）也可能不会在 ``no_new_privs`` 模式下收紧约束。
+> +（这意味着一个一般的服务启动器在执行守护进程前就去设置 ``no_new_privs`` 可能
+> +会干扰基于LSM的沙箱。）
+> +
+> +请注意， ``no_new_privs`` 并不能阻止不涉及 ``execve()`` 的权限变化。一个拥有
+> +适当权限的任务仍然可以调用 ``setuid(2)`` 并接收 SCM_RIGHTS 数据报。
+> +
+> +目前来说， ``no_new_privs`` 有两大使用场景：
+> +
+> + - 为seccomp模式2沙箱安装的过滤器会跨execve持久化，并能够改变新执行程序的行为。
+> +   非特权用户因此在 ``no_new_privs`` 被设置的情况下只允许安装这样的过滤器。
+> +
+> + - ``no_new_privs`` 本身就能被用于减少非特权用户的攻击面。如果所有以某个 uid
+> +   运行的程序都设置了 ``no_new_privs`` ，那么那个 uid 将无法通过攻击 setuid，
+> +   setgid 和使用文件能力的二进制来提权；它需要先攻击一些没有被设置 ``no_new_privs``
+> +   位的东西。
+> +
+> +将来，其他潜在的危险的内核特性可能被非特权任务利用，即使 ``no_new_privs`` 被置位。
+> +原则上，当 ``no_new_privs`` 被置位时， ``unshare(2)`` 和 ``clone(2)`` 的几个选
+> +项将是安全的，并且 ``no_new_privs`` 加上 ``chroot`` 是可以被认为比 chroot本身危
+> +险性小得多的。
 
-iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmNbrsgACgkQI1/ltBGq
-qqcvPw//Tp0h1jYN+RREbW3JJUS8hX9177kB4uZA4+7JGREUDBPqaRLxYqp2s+Ut
-068BR7NP8QEMbVABjaArCCPrbwJcDluEXm8Il10Ednni6DFunoME4YxSkcBVJdw/
-S7wHQtYzyg1shR8J3gtpKyaRzkrmvP32YZr4EhShVKq+TBkTRZglKPmJqC+4X/gH
-mf4tZP8fbX3wWABA7kZYMcraGTELG7shkomG037/QqyRoE5tqzWc3OrNM+SOCe4B
-62A1bAi5yVCFk6XJXSyO3MN6Pcqb0+0WXOSvcFzA4Pkj3IMh8VmtEPRZ4XMmQQQ9
-Q5oW5w2NO/m8jpog/aok1B4iJBIJOKZ5k1ZMLDajw1x/xWi4y0EeEXKw/K0stqMc
-wV4zudB/p++ttsUc7ihbydmKNNQDSNl70hH44qNgSYddpbsgDIDxAwtlX9aiAJ4c
-1tMzS0lJCcysaEF8Jzja0Ow4nwwc0lG3+QVJPEKnkUwIASFJWoccbCVHE+oV7eQg
-UZN1VkNmjfveX2wZYrfHb+4E4BNDiWBQHzOH/xT8qX+nooXnzGbVWTb7QNqz8A0M
-Tzw5r9luliZaP8U6wSEzFbcK2JVfC05CoBqs2IGAok/gCnZNbrxTH1w3xYF9njX3
-pXGfp9Ef5HsNB40e0s88U2fU4Hs2hyclaRVE+3vsrC34vo6LGt8=
-=z5Fk
------END PGP SIGNATURE-----
-
---Sig_/hL8suL49hYQ0bVssPUv1n2x--
