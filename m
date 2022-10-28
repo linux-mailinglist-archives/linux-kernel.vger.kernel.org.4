@@ -2,108 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065F4610A18
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42589610A33
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiJ1GN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
+        id S229613AbiJ1GTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiJ1GN0 (ORCPT
+        with ESMTP id S229629AbiJ1GSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:13:26 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146491B7F01
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:13:26 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id 1so4229109vsx.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:13:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=svUKb/qGduMTdMpMANs9sftdQURYpjN7AKh6kz9DZ6I=;
-        b=lAnaWCGYhih1u7TWtMjy+gL28ADi0aS/VKHL8wVCLiQ7cdRnxEF62JJIPDKQi3xLn3
-         MwOolUGV100XU77+5strKd4TJu/wu1+mAZaRQ1qXZw/b0LgUA7YsISKIzI6n/HlTYvcV
-         GmtR1l0SmVQSLcLZp6p61aiR3W0PQ1ORR3UwH+CmajrqdBblDmT4DhZ1wjnLYO1tVrl7
-         A3FEGW54Pc1MmmOv1EAi93dTfpP0HVRS6RNL1G2UkOtullgBhWqCz05vuX9Vvz30Y4Vf
-         g/vkB+zy3aF+QpnbAKxRaGBgO1bot8pant36vEOT69Iff63cTTxj9PrWRodK968buJvB
-         Z9Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=svUKb/qGduMTdMpMANs9sftdQURYpjN7AKh6kz9DZ6I=;
-        b=q7to9yawIIPVD+BHPwaG2wi/7gcnqW4zLvx0ZxJU58ueRlU7fwCStxdApbgfv3mxWZ
-         H24EDHTkllKUgRlmcCmiWus6DZEPfm5f+ezL8z4uEqjGtljNsbEJegQdAkJ44MRqPzwQ
-         KNXI3vmTO5aaYZNFTEIreZnwQ2iYtU6YBjvS2CU2yGX4J4zeFgmuJxzvW+OpW1OWl9pL
-         YJU/gUTU71LLUEl1vv8y9YgJqM59NoVZIW3wJSVFELGdvWLrf2CoX7NYQi8lGRfH2K9w
-         4daNdEMDqHSknw4zh4v6ELlWeadWiRHYeAM+1OdGeFRFMOQK9avb3VoL7HeVefTQKcEt
-         itsw==
-X-Gm-Message-State: ACrzQf1CJTEnTldUeq5dyEZonRq7NJRgszxFKErU0YTYbRPplmvNs/fp
-        t9p0XA557fahyNKkeiz4ypSfYXgmyu5PYG0ygqYFVQl8x0PiKA==
-X-Google-Smtp-Source: AMsMyM5yYz4YZOQ8J/3ry14yHAjgQh8eJL0ctUFcoxocbjaFkHKniRrnfwdUS5loiGVK0aNpDPUmkjB5xFd8BqyLBUs=
-X-Received: by 2002:a67:c313:0:b0:3aa:3a91:690d with SMTP id
- r19-20020a67c313000000b003aa3a91690dmr8873394vsj.25.1666937605163; Thu, 27
- Oct 2022 23:13:25 -0700 (PDT)
+        Fri, 28 Oct 2022 02:18:55 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02B31B7F2B;
+        Thu, 27 Oct 2022 23:18:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666937934; x=1698473934;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=+Xc37e1S+pXkub/JJrhuVoXoAzIONIWOhKRDpZ+Jp3Q=;
+  b=lYjO5awxAeslreeXQqzv/dMqBwejJB7EPTpyeUwWtahbTIDkTvSyjiqj
+   MDqOdPHCeA+B5W1qcU2fJZPLmqtuHd5N6PIzSXAf0kbC5jov200/OoMwv
+   Uck7RplBzq0elLHxPgiDD23xuH4lxirsauSPKxwaF0BJ0T9UoOXED8PRc
+   V9BqmWjzZ4wIzyw9/lkjzCpyK99L5jyEC12u10dQyMDRNFJUKvpQtTcks
+   eusT5nQO3k2PsGIC8VUZghNkUQxiF9IZ3O3V6hzSoVIGIL2IDm1y7QYo/
+   RVuva+0hpkmwXwbV5cFciESZKaetuWYWt4gpglRQurQIGhquzBwuX/XPQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="291720435"
+X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
+   d="scan'208";a="291720435"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 23:18:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="627428346"
+X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
+   d="scan'208";a="627428346"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 27 Oct 2022 23:18:42 -0700
+Date:   Fri, 28 Oct 2022 14:14:13 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Fuad Tabba <tabba@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
+Message-ID: <20221028061413.GB3885130@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
+ <CA+EHjTxzLDAW=MyfKFcL2cGQimw3bdVYePUgRw+=1+AbCQouUQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221028051420.GA30073@rdm> <Y1tx8XjmR5QKV9lQ@kroah.com>
-In-Reply-To: <Y1tx8XjmR5QKV9lQ@kroah.com>
-From:   jovial umwari <umwarijovial@gmail.com>
-Date:   Fri, 28 Oct 2022 09:13:14 +0300
-Message-ID: <CAMk1CBOdgwnt3E7ByZMASv+O1WAmgKvsvMv5Gy9UNgg=kMBRJQ@mail.gmail.com>
-Subject: Re: [PATCH] WARNING: Possible repeated word: 'very'
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+EHjTxzLDAW=MyfKFcL2cGQimw3bdVYePUgRw+=1+AbCQouUQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you
-working on it now
-
-Best Regards
-Umwari Jovial
-
-On Fri, 28 Oct 2022 at 09:07, Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Oct 28, 2022 at 08:14:20AM +0300, UMWARI JOVIAL wrote:
-> > i used checkpatch.pl script to identify the above
-> > Repetition of the same word in one sentence same line
->
-> Please read the documentation for how to write a good changelog text.
-> Hint, "i" is not something you see in a text, right?
->
-> Also, why do you have WARNING in the subject line and not the driver
-> name?  Again, read the documentation please.
->
+On Thu, Oct 27, 2022 at 11:27:05AM +0100, Fuad Tabba wrote:
+> Hi,
+> 
+> On Tue, Oct 25, 2022 at 4:19 PM Chao Peng <chao.p.peng@linux.intel.com> wrote:
 > >
-> > Signed-off-by: UMWARI JOVIAL <umwarijovial@gmail.com>
+> > This new KVM exit allows userspace to handle memory-related errors. It
+> > indicates an error happens in KVM at guest memory range [gpa, gpa+size).
+> > The flags includes additional information for userspace to handle the
+> > error. Currently bit 0 is defined as 'private memory' where '1'
+> > indicates error happens due to private memory access and '0' indicates
+> > error happens due to shared memory access.
+> >
+> > When private memory is enabled, this new exit will be used for KVM to
+> > exit to userspace for shared <-> private memory conversion in memory
+> > encryption usage. In such usage, typically there are two kind of memory
+> > conversions:
+> >   - explicit conversion: happens when guest explicitly calls into KVM
+> >     to map a range (as private or shared), KVM then exits to userspace
+> >     to perform the map/unmap operations.
+> >   - implicit conversion: happens in KVM page fault handler where KVM
+> >     exits to userspace for an implicit conversion when the page is in a
+> >     different state than requested (private or shared).
+> >
+> > Suggested-by: Sean Christopherson <seanjc@google.com>
+> > Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
 > > ---
-> >  drivers/staging/rtl8712/rtl871x_xmit.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Reviewed-by: Fuad Tabba <tabba@google.com>
+> 
+> I have tested the V8 version of this patch on arm64/qemu, and
+> considering this hasn't changed:
+> Tested-by: Fuad Tabba <tabba@google.com>
+
+Appreciate your review and testing!
+
+Chao
+> 
+> Cheers,
+> /fuad
+> 
+> 
+> 
+> >  Documentation/virt/kvm/api.rst | 23 +++++++++++++++++++++++
+> >  include/uapi/linux/kvm.h       |  9 +++++++++
+> >  2 files changed, 32 insertions(+)
 > >
-> > diff --git a/drivers/staging/rtl8712/rtl871x_xmit.c b/drivers/staging/rtl8712/rtl871x_xmit.c
-> > index 090345bad223..30a0276b8b58 100644
-> > --- a/drivers/staging/rtl8712/rtl871x_xmit.c
-> > +++ b/drivers/staging/rtl8712/rtl871x_xmit.c
-> > @@ -766,7 +766,7 @@ void r8712_free_xmitbuf(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
-> >   * If we turn on USE_RXTHREAD, then, no need for critical section.
-> >   * Otherwise, we must use _enter/_exit critical to protect free_xmit_queue...
-> >   *
-> > - * Must be very very cautious...
-> > + * Must be very cautious...
->
-> The original text here is correct.
->
-> thanks,
->
-> greg k-h
+> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> > index f3fa75649a78..975688912b8c 100644
+> > --- a/Documentation/virt/kvm/api.rst
+> > +++ b/Documentation/virt/kvm/api.rst
+> > @@ -6537,6 +6537,29 @@ array field represents return values. The userspace should update the return
+> >  values of SBI call before resuming the VCPU. For more details on RISC-V SBI
+> >  spec refer, https://github.com/riscv/riscv-sbi-doc.
+> >
+> > +::
+> > +
+> > +               /* KVM_EXIT_MEMORY_FAULT */
+> > +               struct {
+> > +  #define KVM_MEMORY_EXIT_FLAG_PRIVATE (1 << 0)
+> > +                       __u32 flags;
+> > +                       __u32 padding;
+> > +                       __u64 gpa;
+> > +                       __u64 size;
+> > +               } memory;
+> > +
+> > +If exit reason is KVM_EXIT_MEMORY_FAULT then it indicates that the VCPU has
+> > +encountered a memory error which is not handled by KVM kernel module and
+> > +userspace may choose to handle it. The 'flags' field indicates the memory
+> > +properties of the exit.
+> > +
+> > + - KVM_MEMORY_EXIT_FLAG_PRIVATE - indicates the memory error is caused by
+> > +   private memory access when the bit is set. Otherwise the memory error is
+> > +   caused by shared memory access when the bit is clear.
+> > +
+> > +'gpa' and 'size' indicate the memory range the error occurs at. The userspace
+> > +may handle the error and return to KVM to retry the previous memory access.
+> > +
+> >  ::
+> >
+> >      /* KVM_EXIT_NOTIFY */
+> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> > index f1ae45c10c94..fa60b032a405 100644
+> > --- a/include/uapi/linux/kvm.h
+> > +++ b/include/uapi/linux/kvm.h
+> > @@ -300,6 +300,7 @@ struct kvm_xen_exit {
+> >  #define KVM_EXIT_RISCV_SBI        35
+> >  #define KVM_EXIT_RISCV_CSR        36
+> >  #define KVM_EXIT_NOTIFY           37
+> > +#define KVM_EXIT_MEMORY_FAULT     38
+> >
+> >  /* For KVM_EXIT_INTERNAL_ERROR */
+> >  /* Emulate instruction failed. */
+> > @@ -538,6 +539,14 @@ struct kvm_run {
+> >  #define KVM_NOTIFY_CONTEXT_INVALID     (1 << 0)
+> >                         __u32 flags;
+> >                 } notify;
+> > +               /* KVM_EXIT_MEMORY_FAULT */
+> > +               struct {
+> > +#define KVM_MEMORY_EXIT_FLAG_PRIVATE   (1 << 0)
+> > +                       __u32 flags;
+> > +                       __u32 padding;
+> > +                       __u64 gpa;
+> > +                       __u64 size;
+> > +               } memory;
+> >                 /* Fix the size of the union. */
+> >                 char padding[256];
+> >         };
+> > --
+> > 2.25.1
+> >
