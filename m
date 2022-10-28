@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A525B61166B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4B1611673
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbiJ1Pzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 11:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42828 "EHLO
+        id S229959AbiJ1P4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 11:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiJ1Pza (ORCPT
+        with ESMTP id S229482AbiJ1P4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:55:30 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9614B7695F;
-        Fri, 28 Oct 2022 08:55:29 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-13be3ef361dso6701999fac.12;
-        Fri, 28 Oct 2022 08:55:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Szxxr+qfaXpGQuF2CmkZ3hvRQy5GRhL2g4OW24nDsmQ=;
-        b=o+yDDs/H92eNLAMm/fHQS6lY9Ha+3H9XZqJ1VEUj5BnuxtdjcoPc1f2t7fy+3Ya7xK
-         3MI6LBvqaQV19s3f6bt3s8cGHRxpgR2oYQZlfoeu2lKQsJeolcevfwvplyEfJ8GnRKry
-         0W0LzmfaGKv8Sh6OYj6gCqSN2rBMCrmpqpeAfI0cVwYd1LVW9yZKoeLwT/QfFDwM8syZ
-         L6IabJtpV6oKD8zu8ARHqdAAQbNNkrcEZ4Uf7KVotKHfQ4I6E6avWBF7Gkvp4gWpYy+E
-         HdqDRWK8PEFV6VaTvU8RenG1PQfbZDWP+/8Hsnl57F8yj2mfaDpPvNz5R1dW8yZJi0JK
-         Jecg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Szxxr+qfaXpGQuF2CmkZ3hvRQy5GRhL2g4OW24nDsmQ=;
-        b=sS1zucPfq5YnaWlLwXCxfxWET7ov02eOsnIz7zYfZ92n1VmCmCmH2G1/CGnLcLv/rV
-         prD9plabBr44LiS2aTosFvWz94xDdudAGl7eaErHtXF/stG/yf9nZ27w+V3+ohY8faV1
-         ZCtHAbAxHYZHr9VD3MQov/NDAzuTFYdyzmel6LAgplKxOAhGJ35sIC7p9aJI7aQ++vmq
-         iuTq1bGRb1G1nV0nYcdHB4KCXGl8Kq4dhniNuUT1gqDMX9JQ1NYj5pSE6Q9b1uE3hDpa
-         ou4O5B63Bca28Jl2AhGdSxhUe2eW8oV3Ag7P6CArbqvjg0gvMQZeDEc6wbswf8OhLhAU
-         e9Eg==
-X-Gm-Message-State: ACrzQf0UjVwQmZvxfp512yc7YdTlgvN1Ep/N0r+jiA3v5zOVf6FEKu6j
-        +ItV3T4N1ejFFIAw4bTyVD09aNJzRfk=
-X-Google-Smtp-Source: AMsMyM6f6q0iaRA9rBp5xdUcVvsD7pIWzH95B6UoEDKDp3o/ck7hEUj2K9Jyij174sLM7BMhdfrIXw==
-X-Received: by 2002:a05:6870:9625:b0:13b:65ff:2ff8 with SMTP id d37-20020a056870962500b0013b65ff2ff8mr9966685oaq.292.1666972528870;
-        Fri, 28 Oct 2022 08:55:28 -0700 (PDT)
-Received: from grumpy-VECTOR.hsd1.tx.comcast.net ([2601:2c3:480:7390:c120:b306:638c:958])
-        by smtp.gmail.com with ESMTPSA id 125-20020a4a1483000000b0047f8ceca22bsm1689807ood.15.2022.10.28.08.55.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 08:55:28 -0700 (PDT)
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-X-Google-Original-From: Jorge Lopez <jorge.lopez2@hp.com>
-To:     hdegoede@redhat.com, balalic.enver@gmail.com,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     markgross@kernel.org
-Subject: [PATCH v1] hp_wmi causing rfkill soft blocked wifi
-Date:   Fri, 28 Oct 2022 10:55:27 -0500
-Message-Id: <20221028155527.7724-1-jorge.lopez2@hp.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 28 Oct 2022 11:56:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39160FAE73
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:55:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666972549;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hQM2P8ykq/hiieMREgaD1+G+mSyHhsgs0GYOAB71Ku0=;
+        b=VKlz6JhiMJleyVlVC773f3N7DfL8+WlFYeLWc+LI6xTayyXPGsRhjuG4B1LPFQQXJXMzzM
+        gNVw1/OAiwG57oaKC17upq11hs06IGE+aIASiW7ljW8eOh84kcXbvG28YcI0JgjYQg8hT9
+        tSnMOnbabhX5CJM/NcGr/lAnxkWaZ30=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-250-krPUD6jBPLSCY8bxTUkkhg-1; Fri, 28 Oct 2022 11:55:48 -0400
+X-MC-Unique: krPUD6jBPLSCY8bxTUkkhg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 79074185A794;
+        Fri, 28 Oct 2022 15:55:47 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.73])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C7F9A1415102;
+        Fri, 28 Oct 2022 15:55:45 +0000 (UTC)
+Subject: [RFC PATCH 0/9] smb3: Add iter helpers and use iov_iters down to the
+ network transport
+From:   David Howells <dhowells@redhat.com>
+To:     Steve French <smfrench@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Rohith Surabattula <rohiths.msft@gmail.com>,
+        Steve French <sfrench@samba.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        linux-cifs@vger.kernel.org, dhowells@redhat.com,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Tom Talpey <tom@talpey.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 28 Oct 2022 16:55:44 +0100
+Message-ID: <166697254399.61150.1256557652599252121.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,55 +70,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After upgrading BIOS to U82 01.02.01 Rev.A, the console is flooded
-strange char "^@" which printed out every second and makes login
-nearly impossible. Also the below messages were shown both in console
-and journal/dmesg every second:
 
-usb 1-3: Device not responding to setup address.
-usb 1-3: device not accepting address 4, error -71
-usb 1-3: device descriptor read/all, error -71
-usb usb1-port3: unable to enumerate USB device
+Hi Steve, Al, Christoph,
 
-Wifi is soft blocked by checking rfkill. When unblocked manually,
-after few seconds it would be soft blocked again. So I was suspecting
-something triggered rfkill to soft block wifi.  At the end it was
-fixed by removing hp_wmi module.
+Here's an updated version of a subset of my branch to make the cifs/smb3
+driver pass iov_iters down to the lowest layers where they can be passed to
+the network transport.
 
-The root cause is the way hp-wmi driver handles command 1B on
-post-2009 BIOS.  In pre-2009 BIOS, command 1Bh return 0x4 to indicate
-that BIOS no longer controls the power for the wireless devices.
+Al, Christoph: Could you look at the first four patches and see if you're okay
+with them - at least on a temporary basis so that I can get this moving?
 
-Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
+Note that patch (4) uses kmap_local_folio() to map an entire folio - this is
+wrong.  I'm going to try using Willy's vmap_folio() code - but I haven't done
+that yet.
 
+The first two patches are placed in netfslib as I have patches for netfslib
+that will want to use them:
+
+ (1) Add a function to extract part of an IOVEC-/UBUF-type iterator into a
+     BVEC-type iterator.  Refs are taken on the pages to prevent them from
+     evaporating.
+
+ (2) Add a function to extract part of an iterator into a scatterlist.  If
+     extracting from an IOVEC-/UBUF-type iterator, the pages have refs taken on
+     them; any other type and they don't.
+
+     It might be worth splitting this into two separate functions, one for
+     IOVEC/UBUF that refs and one for the others that doesn't.
+
+The other patches are placed in cifs as they're only used by cifs for now.
+
+ (3) Add a function to build an RDMA SGE list from a BVEC-, KVEC- or
+     XARRAY-type iterator.  It's left to the caller to make sure they don't
+     evaporate.
+
+ (4) Add a function to hash part of the contents of a BVEC-, KVEC- or
+     XARRAY-type iterator.
+
+I will need to make use of thew proposed page pinning when it becomes
+available, but that's not yet.
+
+Changes made in a later patch in the series make the upper layers convert an
+IOVEC-/UBUF-iterator to a BVEC-type iterator in direct/unbuffered I/O so that
+the signing, crypt and RDMA code see the BVEC instead of user buffers.
+
+Note also that I haven't managed to test all the combinations of transport.
+Samba doesn't support RDMA and ksmbd doesn't support encryption.  I can test
+them separately, but not together.  That said, rdma, sign, seal and sign+seal
+seem to work.
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=cifs-for-viro
+
+David
 ---
-Based on the latest platform-drivers-x86.git/for-next
----
- drivers/platform/x86/hp-wmi.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+David Howells (9):
+      netfs: Add a function to extract a UBUF or IOVEC into a BVEC iterator
+      netfs: Add a function to extract an iterator into a scatterlist
+      cifs: Add a function to build an RDMA SGE list from an iterator
+      cifs: Add a function to Hash the contents of an iterator
+      cifs: Add some helper functions
+      cifs: Add a function to read into an iter from a socket
+      cifs: Change the I/O paths to use an iterator rather than a page list
+      cifs: Build the RDMA SGE list directly from an iterator
+      cifs: Remove unused code
 
-diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
-index 627a6d0eaf83..29cd4e437d97 100644
---- a/drivers/platform/x86/hp-wmi.c
-+++ b/drivers/platform/x86/hp-wmi.c
-@@ -1300,8 +1300,15 @@ static int __init hp_wmi_bios_setup(struct platform_device *device)
- 	wwan_rfkill = NULL;
- 	rfkill2_count = 0;
- 
--	if (hp_wmi_rfkill_setup(device))
--		hp_wmi_rfkill2_setup(device);
-+	/*
-+	 * In pre-2009 BIOS, command 1Bh return 0x4 to indicate that
-+	 * BIOS no longer controls the power for the wireless
-+	 * devices. All features supported by this command will no
-+	 * longer be supported.
-+	 */
-+	if (!hp_wmi_bios_2009_later())
-+		if (hp_wmi_rfkill_setup(device))
-+			hp_wmi_rfkill2_setup(device);
- 
- 	err = hp_wmi_hwmon_init();
- 
--- 
-2.34.1
+
+ fs/cifs/cifsencrypt.c |  167 +++-
+ fs/cifs/cifsfs.h      |    3 +
+ fs/cifs/cifsglob.h    |   30 +-
+ fs/cifs/cifsproto.h   |   11 +-
+ fs/cifs/cifssmb.c     |   13 +-
+ fs/cifs/connect.c     |   16 +
+ fs/cifs/file.c        | 1700 ++++++++++++++++++-----------------------
+ fs/cifs/fscache.c     |   22 +-
+ fs/cifs/fscache.h     |   10 +-
+ fs/cifs/misc.c        |  110 +--
+ fs/cifs/smb2ops.c     |  378 +++++----
+ fs/cifs/smb2pdu.c     |   44 +-
+ fs/cifs/smbdirect.c   |  503 +++++++-----
+ fs/cifs/smbdirect.h   |    4 +-
+ fs/cifs/transport.c   |   57 +-
+ fs/netfs/Makefile     |    1 +
+ fs/netfs/iterator.c   |  347 +++++++++
+ include/linux/netfs.h |    5 +
+ 18 files changed, 1835 insertions(+), 1586 deletions(-)
+ create mode 100644 fs/netfs/iterator.c
+
 
