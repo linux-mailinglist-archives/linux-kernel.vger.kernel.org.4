@@ -2,95 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 864CE611836
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AD3611846
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiJ1Qx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
+        id S230231AbiJ1Qy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiJ1QxX (ORCPT
+        with ESMTP id S230173AbiJ1QyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:53:23 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15151F5273
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:53:21 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id l9so3788326qkk.11
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:53:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pS2bJeXXT06AFFeuqTEmblG396E9ENt2zIPLMqMrcVc=;
-        b=WTUQKY9BYXSR5sxjZPQsTMF4y1c0ZYOJzqUdsGaqYe+p/B6Nt7IoyzxULeM/759P1o
-         UZXutu2q/e0zcjNH1gOm8AXgE6AATzgXfntHGezYDEn8UhP90n7Qb0p7ll+ZutI+8KTz
-         +Z3deCUTm+jK5myD3ZMteKw2KDAVusImHYaJY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pS2bJeXXT06AFFeuqTEmblG396E9ENt2zIPLMqMrcVc=;
-        b=zK3s+PIzP+Y7UQ3GWW0k0U3pV1sEraft6zHXq0QSJI7MWjh9qKvIHsw3hFSatABz5q
-         KYZAL7+eyR7usntVY0YmmZW4WSlG3U9fWs6noeJr/pOqlbvsbyeXSXup9U2KcXlRJs0f
-         NJuyh01z/Oc2GHsgGipW4gSt6dDmR+PLFQbs0L/a8Z1FLRx6yMDCejN3jie2fcU+7Wlu
-         0E4Ak/L//oYLSF+1WaKWfBjpslXOSIVuGJ5gcTMJZTmEyxkJyLLXbpolYROGNTgVPEpG
-         PNXq0XM7JHBNxRco6mIUrsmiW6f2TuOL60aLmbIfmtkS1u8BaDDaK4kdM4CrVAd8Fqvp
-         OIQA==
-X-Gm-Message-State: ACrzQf36ohPt49n7s07HtSd3Hp/WL7GqOMi72l+HySO00h/E9+JR3MrT
-        QOZAbLxGimw0rC6MoJO4cGgpzVCNM4csJg==
-X-Google-Smtp-Source: AMsMyM6bFwkH4fIXl11weiYM2OTcUrAuR9jWWsbWptF622gh7ctmjucQ4jpzgaZCrinjociYDHZ2yg==
-X-Received: by 2002:ae9:ed06:0:b0:6f9:efd2:9b96 with SMTP id c6-20020ae9ed06000000b006f9efd29b96mr96497qkg.651.1666976000657;
-        Fri, 28 Oct 2022 09:53:20 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id x29-20020a05620a0b5d00b006b615cd8c13sm3173779qkg.106.2022.10.28.09.53.19
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 09:53:19 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id i127so6735376ybc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:53:19 -0700 (PDT)
-X-Received: by 2002:a05:6902:1352:b0:6bb:3f4b:9666 with SMTP id
- g18-20020a056902135200b006bb3f4b9666mr143622ybu.101.1666975999213; Fri, 28
- Oct 2022 09:53:19 -0700 (PDT)
+        Fri, 28 Oct 2022 12:54:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB0E224A97;
+        Fri, 28 Oct 2022 09:54:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B075623A9;
+        Fri, 28 Oct 2022 16:54:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD04EC433B5;
+        Fri, 28 Oct 2022 16:54:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666976051;
+        bh=CagHt1YKwrFPw9NQtg1cErC7qHaLnYF/pJpMHFrobgY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YZCvVBy+vDkYlZMf/7/EGEMNXjyy3syl32922bEgQN1M1C36tEVngOnb1IlPUKXaY
+         wSHlRtWrfGlshaalXeNuf9OC1wFi91GF/zFU8FRIIteQwV4XBD8vvDnUdDRZCdBr8Z
+         UluKjSLTSKuB8OA2wNwxNwaSEDwO6iZALGwhE/z3DxBY7cgJBIwCDojZ7A32ChZPm2
+         1uj+y0rIstBtFf3KBnLeIoxLOljEtHgTP6eP4zlIL9ZUIgHHzAX+BMJ2Riqn8SMFr+
+         HBlQqwfiL2UeHMVKCe9JZBueFJtrk48+E43D/o+CetvRJwTvVTEGSP+gQ5bAhXJNCH
+         RIBOi4AOUoGYQ==
+Date:   Fri, 28 Oct 2022 22:24:01 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Qiang Yu <quic_qianyu@quicinc.com>
+Cc:     mani@kernel.org, loic.poulain@linaro.org, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_cang@quicinc.com, mrana@quicinc.com
+Subject: Re: [PATCH v2] bus: mhi: host: Fix race between channel preparation
+ and M0 event
+Message-ID: <20221028165401.GA13880@thinkpad>
+References: <1665889532-13634-1-git-send-email-quic_qianyu@quicinc.com>
 MIME-Version: 1.0
-References: <Y1oPDy2mpOd91+Ii@sol.localdomain> <CAHk-=wjDQiJn6YUJ18Nb=L82qsgx3LBLtQu0xANeVoc6OAzFtQ@mail.gmail.com>
- <Y1tI1ek80kCrsi2R@sol.localdomain>
-In-Reply-To: <Y1tI1ek80kCrsi2R@sol.localdomain>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 28 Oct 2022 09:53:03 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgud4Bc_um+htgfagYpZAnOoCb3NUoW67hc9LhOKsMtJg@mail.gmail.com>
-Message-ID: <CAHk-=wgud4Bc_um+htgfagYpZAnOoCb3NUoW67hc9LhOKsMtJg@mail.gmail.com>
-Subject: Re: [GIT PULL] fscrypt fix for 6.1-rc3
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1665889532-13634-1-git-send-email-quic_qianyu@quicinc.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 8:13 PM Eric Biggers <ebiggers@kernel.org> wrote:
->
-> Thanks Linus.  That makes sense in general, but in this case ->s_master_keys
-> gets used in the middle of the function, in fscrypt_put_master_key_activeref().
+On Sun, Oct 16, 2022 at 11:05:32AM +0800, Qiang Yu wrote:
+> There is a race condition where mhi_prepare_channel() updates the
+> read and write pointers as the base address and in parallel, if
+> an M0 transition occurs, the tasklet goes ahead and rings
+> doorbells for all channels with a delta in TRE rings assuming
+> they are already enabled. This causes a null pointer access. Fix
+> it by adding a channel enabled check before ringing channel
+> doorbells.
+> 
+> Fixes: a6e2e3522f29 "bus: mhi: core: Add support for PM state transitions"
+> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
 
-Ouch. I tried to look for things like that, but it's clearly indirect
-through 'mk' so I missed it.
+Can you also CC stable list for backporting?
 
-All the callers except for put_crypt_info() do seem to have the 'sb'
-pointer, and I _think_ sb is inode->i_sb in that case. And this seems
-to *literally* be the only use of 'mk->mk_sb' in the whole data
-structure, so I think it's all wrong, and that field just shouldn't
-exist at all, but be passed into the (only) user as an argument.
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
 
-Oh well. Whatever. I think the code is ugly, but it is what it is. It
-may not be worth the churn of fixing.
+Thanks,
+Mani
 
-              Linus
+> ---
+> v1->v2: add Fixes tags
+> 
+>  drivers/bus/mhi/host/pm.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
+> index 4a42186..0834590 100644
+> --- a/drivers/bus/mhi/host/pm.c
+> +++ b/drivers/bus/mhi/host/pm.c
+> @@ -301,7 +301,8 @@ int mhi_pm_m0_transition(struct mhi_controller *mhi_cntrl)
+>  		read_lock_irq(&mhi_chan->lock);
+>  
+>  		/* Only ring DB if ring is not empty */
+> -		if (tre_ring->base && tre_ring->wp  != tre_ring->rp)
+> +		if (tre_ring->base && tre_ring->wp  != tre_ring->rp &&
+> +		    mhi_chan->ch_state == MHI_CH_STATE_ENABLED)
+>  			mhi_ring_chan_db(mhi_cntrl, mhi_chan);
+>  		read_unlock_irq(&mhi_chan->lock);
+>  	}
+> -- 
+> 2.7.4
+> 
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
