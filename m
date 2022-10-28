@@ -2,150 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DF46118B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990196118C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbiJ1RES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 13:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
+        id S231229AbiJ1REo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 13:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbiJ1RD7 (ORCPT
+        with ESMTP id S231269AbiJ1REK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 13:03:59 -0400
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4117C74D;
-        Fri, 28 Oct 2022 10:02:59 -0700 (PDT)
-Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id BB693218D;
-        Fri, 28 Oct 2022 17:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1666976418;
-        bh=/mJlfZpKQiISMX08oxRpKAnkO7e2Q5yFIpcw3wftSqA=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=o/smmKU0axmJVk+bWKQYA8tJM7Bcix5OROTciVjH4DN5LHz7y+htVHZ0pj667fdnw
-         20CJztmqj5p0wPVUPm9qFr9SpqMNLQz1QM7Ryr01t7EAlLvbtzvqILonk1BJB2loZq
-         oYVjgy+VPls0jpJQvLUiYAFf2PiRwD7wSl1BOb6U=
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id B3FFDDD;
-        Fri, 28 Oct 2022 17:02:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1666976577;
-        bh=/mJlfZpKQiISMX08oxRpKAnkO7e2Q5yFIpcw3wftSqA=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=ok6hQPEiCLvCjCtq1SSO+CfMUFC+fzXIKSX7vR9jqK2GOvwf+cJJsxzg7Da4XLSae
-         9GJZ/Wg6RJ9wYjFOSMDYJe2QQnJjEAQKrYhjyc/KAicmIuptR69nS53FJ0B/oqp5Jp
-         6XgwLZc+J8GUc1D8K/xV2iV2NdGTY8AYlKLuKVus=
-Received: from [172.30.8.65] (172.30.8.65) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 28 Oct 2022 20:02:57 +0300
-Message-ID: <c318809e-df14-c03c-b122-8a84f979331c@paragon-software.com>
-Date:   Fri, 28 Oct 2022 20:02:57 +0300
+        Fri, 28 Oct 2022 13:04:10 -0400
+Received: from smtpout1.mo3004.mail-out.ovh.net (smtpout1.mo3004.mail-out.ovh.net [79.137.123.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910301EF05E;
+        Fri, 28 Oct 2022 10:03:27 -0700 (PDT)
+Received: from pro2.mail.ovh.net (unknown [10.108.1.240])
+        by mo3004.mail-out.ovh.net (Postfix) with ESMTPS id 32AC8244439;
+        Fri, 28 Oct 2022 17:03:25 +0000 (UTC)
+Received: from localhost.localdomain (88.161.25.233) by DAG1EX1.emp2.local
+ (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Fri, 28 Oct
+ 2022 19:03:24 +0200
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+To:     <lee.jones@linaro.org>, <pavel@ucw.cz>, <robh+dt@kernel.org>,
+        <sven.schwermer@disruptive-technologies.com>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <johan+linaro@kernel.org>, <marijn.suijten@somainline.org>,
+        <bjorn.andersson@linaro.org>, <andy.shevchenko@gmail.com>,
+        <jacek.anaszewski@gmail.com>, <linux-leds@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Subject: [PATCH v5 0/6] Add a multicolor LED driver for groups of monochromatic LEDs
+Date:   Fri, 28 Oct 2022 19:03:02 +0200
+Message-ID: <20221028170308.2676734-1-jjhiblot@traphandler.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: [PATCH 03/14] fs/ntfs3: Fix wrong indentations
-Content-Language: en-US
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-To:     <ntfs3@lists.linux.dev>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
-References: <fc5957cc-a71b-cfa3-f291-cb63b23800d1@paragon-software.com>
-In-Reply-To: <fc5957cc-a71b-cfa3-f291-cb63b23800d1@paragon-software.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.30.8.65]
-X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [88.161.25.233]
+X-ClientProxiedBy: DAG2EX2.emp2.local (172.16.2.12) To DAG1EX1.emp2.local
+ (172.16.2.1)
+X-Ovh-Tracer-Id: 818810708008516059
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeigddutdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkffoggfgtghisehtkeertdertddtnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpeejuefhkeelgffhlefhtefhgeektdevvdfgkeeltdehgeeujeeutdehkeeuhffftdenucfkphepuddvjedrtddrtddruddpkeekrdduiedurddvhedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhgvvgdrjhhonhgvsheslhhinhgrrhhordhorhhgpdhprghvvghlsehutgifrdgtiidprhhosghhodgutheskhgvrhhnvghlrdhorhhgpdhsvhgvnhdrshgthhifvghrmhgvrhesughishhruhhpthhivhgvqdhtvggthhhnohhlohhgihgvshdrtghomhdpkhhriiihshiithhofhdrkhhoiihlohifshhkihdoughtsehlihhnrghrohdrohhrghdpjhhohhgrnhdolhhinhgrrhhosehkvghrnhgvlhdrohhrghdpmhgrrhhijhhnrdhsuhhijhhtvghnsehsohhmrghinh
+ hlihhnvgdrohhrghdpsghjohhrnhdrrghnuggvrhhsshhonheslhhinhgrrhhordhorhhgpdgrnhguhidrshhhvghvtghhvghnkhhosehgmhgrihhlrdgtohhmpdhjrggtvghkrdgrnhgrshiivgifshhkihesghhmrghilhdrtghomhdplhhinhhugidqlhgvughssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdguvghvihgtvghtrhgvvgesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmoheftddtgedpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Also simplifying code.
 
-Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
----
-  fs/ntfs3/fslog.c | 3 +--
-  fs/ntfs3/index.c | 8 ++++----
-  fs/ntfs3/inode.c | 8 +++++---
-  3 files changed, 10 insertions(+), 9 deletions(-)
+Some HW design implement multicolor LEDs with several monochromatic LEDs.
+Grouping the monochromatic LEDs allows to configure them in sync and use
+the triggers.
+The PWM multicolor LED driver implements such grouping but only for
+PWM-based LEDs. As this feature is also desirable for the other types of
+LEDs, this series implements it for any kind of LED device.
 
-diff --git a/fs/ntfs3/fslog.c b/fs/ntfs3/fslog.c
-index 5289c25b1ee4..e61545b9772e 100644
---- a/fs/ntfs3/fslog.c
-+++ b/fs/ntfs3/fslog.c
-@@ -4824,8 +4824,7 @@ int log_replay(struct ntfs_inode *ni, bool *initialized)
-  		goto out;
-  	}
-  	attr = oa->attr;
--	t64 = le64_to_cpu(attr->nres.alloc_size);
--	if (size > t64) {
-+	if (size > le64_to_cpu(attr->nres.alloc_size)) {
-  		attr->nres.valid_size = attr->nres.data_size =
-  			attr->nres.alloc_size = cpu_to_le64(size);
-  	}
-diff --git a/fs/ntfs3/index.c b/fs/ntfs3/index.c
-index bc9ab93db1d0..a2e1e07b5bb8 100644
---- a/fs/ntfs3/index.c
-+++ b/fs/ntfs3/index.c
-@@ -625,9 +625,8 @@ void fnd_clear(struct ntfs_fnd *fnd)
-  static int fnd_push(struct ntfs_fnd *fnd, struct indx_node *n,
-  		    struct NTFS_DE *e)
-  {
--	int i;
-+	int i = fnd->level;
-  
--	i = fnd->level;
-  	if (i < 0 || i >= ARRAY_SIZE(fnd->nodes))
-  		return -EINVAL;
-  	fnd->nodes[i] = n;
-@@ -2121,9 +2120,10 @@ static int indx_get_entry_to_replace(struct ntfs_index *indx,
-  	fnd->de[level] = e;
-  	indx_write(indx, ni, n, 0);
-  
--	/* Check to see if this action created an empty leaf. */
--	if (ib_is_leaf(ib) && ib_is_empty(ib))
-+	if (ib_is_leaf(ib) && ib_is_empty(ib)) {
-+		/* An empty leaf. */
-  		return 0;
-+	}
-  
-  out:
-  	fnd_clear(fnd);
-diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
-index 18edbc7b35df..df0d30a3218a 100644
---- a/fs/ntfs3/inode.c
-+++ b/fs/ntfs3/inode.c
-@@ -1810,11 +1810,12 @@ static int ntfs_translate_junction(const struct super_block *sb,
-  
-  	/* Make translated path a relative path to mount point */
-  	strcpy(translated, "./");
--	++link_path;	/* Skip leading / */
-+	++link_path; /* Skip leading / */
-  	for (tl_len = sizeof("./") - 1; *link_path; ++link_path) {
-  		if (*link_path == '/') {
-  			if (PATH_MAX - tl_len < sizeof("../")) {
--				ntfs_err(sb, "Link path %s has too many components",
-+				ntfs_err(sb,
-+					 "Link path %s has too many components",
-  					 link_path);
-  				err = -EINVAL;
-  				goto out;
-@@ -1830,7 +1831,8 @@ static int ntfs_translate_junction(const struct super_block *sb,
-  		++target_start;
-  
-  	if (!*target_start) {
--		ntfs_err(sb, "Link target (%s) missing drive separator", target);
-+		ntfs_err(sb, "Link target (%s) missing drive separator",
-+			 target);
-  		err = -EINVAL;
-  		goto out;
-  	}
+changes v4->v5:
+ - Use "depends on COMPILE_TEST || OF" in Kconfig to indicate that OF
+   is a functional requirement, not just a requirement for the
+   compilation.
+ - in led_mcg_probe() check if devm_of_led_get_optional() returns an
+   error before testing for the end of the list.
+ - use sysfs_emit() instead of sprintf() in color_show().
+ - some grammar fixes in the comments and the commit logs.
+
+changes v2->v3, only minor changes:
+ - rephrased the Kconfig descritpion
+ - make the sysfs interface of underlying LEDs read-only only if the probe
+   is successful.
+ - sanitize the header files
+ - removed the useless call to dev_set_drvdata()
+ - use dev_fwnode() to get the fwnode to the device.
+
+changes v1->v2:
+ - Followed Rob Herrings's suggestion to make the dt binding much simpler.
+ - Added a patch to store the color property of a LED in its class
+   structure (struct led_classdev).
+
+Jean-Jacques Hiblot (6):
+  devres: provide devm_krealloc_array()
+  leds: class: simplify the implementation of devm_of_led_get()
+  leds: provide devm_of_led_get_optional()
+  leds: class: store the color index in struct led_classdev
+  dt-bindings: leds: Add binding for a multicolor group of LEDs
+  leds: Add a multicolor LED driver to group monochromatic LEDs
+
+ Documentation/ABI/testing/sysfs-class-led     |   9 +
+ .../bindings/leds/leds-group-multicolor.yaml  |  64 ++++++++
+ drivers/leds/led-class.c                      |  65 ++++++--
+ drivers/leds/rgb/Kconfig                      |  10 ++
+ drivers/leds/rgb/Makefile                     |   1 +
+ drivers/leds/rgb/leds-group-multicolor.c      | 154 ++++++++++++++++++
+ include/linux/device.h                        |  13 ++
+ include/linux/leds.h                          |   3 +
+ 8 files changed, 305 insertions(+), 14 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
+ create mode 100644 drivers/leds/rgb/leds-group-multicolor.c
+
 -- 
-2.37.0
-
+2.25.1
 
