@@ -2,330 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7AB6118CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EDF86118D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbiJ1RFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 13:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
+        id S231215AbiJ1RGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 13:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbiJ1REU (ORCPT
+        with ESMTP id S231174AbiJ1REf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 13:04:20 -0400
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D32D22D5F0;
-        Fri, 28 Oct 2022 10:03:56 -0700 (PDT)
-Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 9BA2D218D;
-        Fri, 28 Oct 2022 17:01:15 +0000 (UTC)
+        Fri, 28 Oct 2022 13:04:35 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCA81D4DF5
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:04:19 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id f22so3849602qto.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:04:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1666976475;
-        bh=7CPKDDVsSnfhQv2FIDQRZDeSJd/QzjNRDoHBpF6DsHc=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=NHENqJ9QiBWV1u1KbsanQe8xs5FBr8mTnQhxFnENOfFJMFR3mLFu9crLcdCHSBHuH
-         0dywRoB4lG8wZlfLFs4ad8ZiC/6j/Iki0Wc2aLbofhBI9fAqPCGPJ0bImQcqUwWEXh
-         5UMefF0H9LrLoAieK/OQjaYQcF89i8H5rXFc1zXk=
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 97A68DD;
-        Fri, 28 Oct 2022 17:03:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1666976634;
-        bh=7CPKDDVsSnfhQv2FIDQRZDeSJd/QzjNRDoHBpF6DsHc=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=ZtwaZy3jXCrm0t26DkS0rm4OCn2jQRYOZ/50MvH6FSnC1I05902RZAwzuTt22iS0n
-         y2927ENmvKF44rdhcUtPpMdoEm0l7B00MjKSwopN/CT9Un/uAScaNI+MdkIrYDB+sS
-         0NIVY9BTIykVJvLMpF8PQuPP8AJZHYCZKsxnOifE=
-Received: from [172.30.8.65] (172.30.8.65) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 28 Oct 2022 20:03:54 +0300
-Message-ID: <5f006fed-743e-336a-ea14-699c376215e7@paragon-software.com>
-Date:   Fri, 28 Oct 2022 20:03:53 +0300
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BecPoUdtyriaGRdEC0yaq/kOsCgwleGfAD3v/inHFss=;
+        b=VEi/o4qlwmTmTinWpfVFLR6J+3qtjckJn+wM4ZNwHu7NEeztPi/GG7w6OGYUOYPrdT
+         uE8w0yMNfCH0EYrIFX9xrNaLPRQCxbvwY0e34UcOMkt1IH6Mw0t9qlgNkCOMsicL1yaT
+         Nm8SeeghKlgDAOz2FPNfOqgcJnva7SKRmfGN9AaFf1F6WsEcOfPL4TRqTKprgIUsLzvn
+         9D5ZUIhczJdga93U9qAX1FVn1iLxUUKcGkk13uDPD9eoSPrrxffUz8XYUB7xAQQhtCGC
+         1uCD/mRsUNOlTnchtk+suRj0IkQgMaoziTwnnlvywb8pMgVyS7JSJ8fP5QLGma4p+8d2
+         g/wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BecPoUdtyriaGRdEC0yaq/kOsCgwleGfAD3v/inHFss=;
+        b=0LoMNiY1GT8132KVrqKUlmJBrU6wUXPP7T5LiXZ3mmmuUzhr53Uuiy1TmgrbvRW8Kl
+         zmpUBRmOWpBrQc3ctNestRqxCL8CMghhN/s9PvD9lIQeCNtTRorVUH8uHp11ZHKAAX5G
+         AkVyDWs6q+fQlyEzaAvKxXGPzTgqTe5GNJCuheXjqK0bQslEiFWfceRy5OnHSrEnvxx+
+         a4qKhcl6aS5jXJvxK1VQeNxBEMtqZipn/fYuE2ShsCPIsgagXZDjXBzaBNP+851zEcfj
+         plr6ay0O4qbppCqzmNTr0+yLJ3nEC3y7PrrCoCYcstJBSqVZslaCm0DpLcbXfhK/lrDq
+         88WQ==
+X-Gm-Message-State: ACrzQf3/P0Q12hTseslf38VdXWgFNnGGgxPiStNHUr2eWnWsWVFIJ+le
+        Ah2zJAdC737S80YRNEsu+H3jxg==
+X-Google-Smtp-Source: AMsMyM4N5WenspONfhfhkjmQ49KrFNFDIeVzvcVu0RlUAOyiClI7XXp7mAXHj4iIG+vnvp4TsKakFg==
+X-Received: by 2002:a05:622a:12:b0:39c:f028:4881 with SMTP id x18-20020a05622a001200b0039cf0284881mr437026qtw.94.1666976658685;
+        Fri, 28 Oct 2022 10:04:18 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id m22-20020a05620a291600b006f926a0572asm3367853qkp.27.2022.10.28.10.04.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 10:04:18 -0700 (PDT)
+Message-ID: <dd8e5bb7-e2e2-90a8-24ff-cf6428123a2b@linaro.org>
+Date:   Fri, 28 Oct 2022 13:04:16 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: [PATCH 05/14] fs/ntfs3: Fixing wrong logic in attr_set_size and
- ntfs_fallocate
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v2 1/5] dt-bindings: firmware: qcom-scm: Add
+ "allow-multi-call" property
 Content-Language: en-US
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-To:     <ntfs3@lists.linux.dev>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
-References: <fc5957cc-a71b-cfa3-f291-cb63b23800d1@paragon-software.com>
-In-Reply-To: <fc5957cc-a71b-cfa3-f291-cb63b23800d1@paragon-software.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     David Heidelberg <david@ixit.cz>,
+        Robert Marko <robimarko@gmail.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>
+References: <1658529438-9234-1-git-send-email-quic_gurus@quicinc.com>
+ <1658529438-9234-2-git-send-email-quic_gurus@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1658529438-9234-2-git-send-email-quic_gurus@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.30.8.65]
-X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There were 2 problems:
-- in some cases we lost dirty flag;
-- cluster allocation can be called even when it wasn't needed.
-Fixes xfstest generic/465
+On 22/07/2022 18:37, Guru Das Srinagesh wrote:
+> For firmware that supports it, allow multiple SCM calls to be passed
+> down to it by removing the serialization lock in the SCM driver.
+> 
+> This patch is based on this YAML conversion patch [1] that is in-flight
+> currently.
+> 
+> [1] https://lore.kernel.org/lkml/20220708090431.30437-1-david@ixit.cz/
+> 
+> Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
----
-  fs/ntfs3/attrib.c | 25 +++++++++++--------------
-  fs/ntfs3/file.c   | 30 ++++++++++++++++++------------
-  fs/ntfs3/index.c  |  9 +++++++++
-  fs/ntfs3/inode.c  | 17 +++++------------
-  4 files changed, 43 insertions(+), 38 deletions(-)
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
-index eda83a37a0c3..91ea73e6f4fe 100644
---- a/fs/ntfs3/attrib.c
-+++ b/fs/ntfs3/attrib.c
-@@ -414,6 +414,7 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
-  	CLST alen, vcn, lcn, new_alen, old_alen, svcn, evcn;
-  	CLST next_svcn, pre_alloc = -1, done = 0;
-  	bool is_ext, is_bad = false;
-+	bool dirty = false;
-  	u32 align;
-  	struct MFT_REC *rec;
-  
-@@ -434,8 +435,10 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
-  			return err;
-  
-  		/* Return if file is still resident. */
--		if (!attr_b->non_res)
-+		if (!attr_b->non_res) {
-+			dirty = true;
-  			goto ok1;
-+		}
-  
-  		/* Layout of records may be changed, so do a full search. */
-  		goto again;
-@@ -458,7 +461,7 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
-  
-  	if (keep_prealloc && new_size < old_size) {
-  		attr_b->nres.data_size = cpu_to_le64(new_size);
--		mi_b->dirty = true;
-+		mi_b->dirty = dirty = true;
-  		goto ok;
-  	}
-  
-@@ -504,7 +507,7 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
-  
-  		if (new_alloc <= old_alloc) {
-  			attr_b->nres.data_size = cpu_to_le64(new_size);
--			mi_b->dirty = true;
-+			mi_b->dirty = dirty = true;
-  			goto ok;
-  		}
-  
-@@ -595,7 +598,7 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
-  		next_svcn = le64_to_cpu(attr->nres.evcn) + 1;
-  		new_alloc_tmp = (u64)next_svcn << cluster_bits;
-  		attr_b->nres.alloc_size = cpu_to_le64(new_alloc_tmp);
--		mi_b->dirty = true;
-+		mi_b->dirty = dirty = true;
-  
-  		if (next_svcn >= vcn && !to_allocate) {
-  			/* Normal way. Update attribute and exit. */
-@@ -681,7 +684,7 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
-  		old_valid = old_size = old_alloc = (u64)vcn << cluster_bits;
-  		attr_b->nres.valid_size = attr_b->nres.data_size =
-  			attr_b->nres.alloc_size = cpu_to_le64(old_size);
--		mi_b->dirty = true;
-+		mi_b->dirty = dirty = true;
-  		goto again_1;
-  	}
-  
-@@ -743,7 +746,7 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
-  				attr_b->nres.valid_size =
-  					attr_b->nres.alloc_size;
-  		}
--		mi_b->dirty = true;
-+		mi_b->dirty = dirty = true;
-  
-  		err = run_deallocate_ex(sbi, run, vcn, evcn - vcn + 1, &dlen,
-  					true);
-@@ -804,16 +807,9 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
-  	if (ret)
-  		*ret = attr_b;
-  
--	/* Update inode_set_bytes. */
-  	if (((type == ATTR_DATA && !name_len) ||
-  	     (type == ATTR_ALLOC && name == I30_NAME))) {
--		bool dirty = false;
--
--		if (ni->vfs_inode.i_size != new_size) {
--			ni->vfs_inode.i_size = new_size;
--			dirty = true;
--		}
--
-+		/* Update inode_set_bytes. */
-  		if (attr_b->non_res) {
-  			new_alloc = le64_to_cpu(attr_b->nres.alloc_size);
-  			if (inode_get_bytes(&ni->vfs_inode) != new_alloc) {
-@@ -822,6 +818,7 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
-  			}
-  		}
-  
-+		/* Don't forget to update duplicate information in parent. */
-  		if (dirty) {
-  			ni->ni_flags |= NI_FLAG_UPDATE_PARENT;
-  			mark_inode_dirty(&ni->vfs_inode);
-diff --git a/fs/ntfs3/file.c b/fs/ntfs3/file.c
-index 63aef132e529..511e58f2b0f8 100644
---- a/fs/ntfs3/file.c
-+++ b/fs/ntfs3/file.c
-@@ -337,7 +337,6 @@ static int ntfs_extend(struct inode *inode, loff_t pos, size_t count,
-  		err = ntfs_set_size(inode, end);
-  		if (err)
-  			goto out;
--		inode->i_size = end;
-  	}
-  
-  	if (extend_init && !is_compressed(ni)) {
-@@ -588,12 +587,14 @@ static long ntfs_fallocate(struct file *file, int mode, loff_t vbo, loff_t len)
-  		if (err)
-  			goto out;
-  
--		/*
--		 * Allocate clusters, do not change 'valid' size.
--		 */
--		err = ntfs_set_size(inode, new_size);
--		if (err)
--			goto out;
-+		if (new_size > i_size) {
-+			/*
-+			 * Allocate clusters, do not change 'valid' size.
-+			 */
-+			err = ntfs_set_size(inode, new_size);
-+			if (err)
-+				goto out;
-+		}
-  
-  		if (is_supported_holes) {
-  			CLST vcn = vbo >> sbi->cluster_bits;
-@@ -635,6 +636,8 @@ static long ntfs_fallocate(struct file *file, int mode, loff_t vbo, loff_t len)
-  					    &ni->file.run, i_size, &ni->i_valid,
-  					    true, NULL);
-  			ni_unlock(ni);
-+		} else if (new_size > i_size) {
-+			inode->i_size = new_size;
-  		}
-  	}
-  
-@@ -678,7 +681,7 @@ int ntfs3_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
-  		goto out;
-  
-  	if (ia_valid & ATTR_SIZE) {
--		loff_t oldsize = inode->i_size;
-+		loff_t newsize, oldsize;
-  
-  		if (WARN_ON(ni->ni_flags & NI_FLAG_COMPRESSED_MASK)) {
-  			/* Should never be here, see ntfs_file_open(). */
-@@ -686,16 +689,19 @@ int ntfs3_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
-  			goto out;
-  		}
-  		inode_dio_wait(inode);
-+		oldsize = inode->i_size;
-+		newsize = attr->ia_size;
-  
--		if (attr->ia_size <= oldsize)
--			err = ntfs_truncate(inode, attr->ia_size);
--		else if (attr->ia_size > oldsize)
--			err = ntfs_extend(inode, attr->ia_size, 0, NULL);
-+		if (newsize <= oldsize)
-+			err = ntfs_truncate(inode, newsize);
-+		else
-+			err = ntfs_extend(inode, newsize, 0, NULL);
-  
-  		if (err)
-  			goto out;
-  
-  		ni->ni_flags |= NI_FLAG_UPDATE_PARENT;
-+		inode->i_size = newsize;
-  	}
-  
-  	setattr_copy(mnt_userns, inode, attr);
-diff --git a/fs/ntfs3/index.c b/fs/ntfs3/index.c
-index a2e1e07b5bb8..35369ae5c438 100644
---- a/fs/ntfs3/index.c
-+++ b/fs/ntfs3/index.c
-@@ -1445,6 +1445,9 @@ static int indx_add_allocate(struct ntfs_index *indx, struct ntfs_inode *ni,
-  		goto out1;
-  	}
-  
-+	if (in->name == I30_NAME)
-+		ni->vfs_inode.i_size = data_size;
-+
-  	*vbn = bit << indx->idx2vbn_bits;
-  
-  	return 0;
-@@ -1978,6 +1981,9 @@ static int indx_shrink(struct ntfs_index *indx, struct ntfs_inode *ni,
-  	if (err)
-  		return err;
-  
-+	if (in->name == I30_NAME)
-+		ni->vfs_inode.i_size = new_data;
-+
-  	bpb = bitmap_size(bit);
-  	if (bpb * 8 == nbits)
-  		return 0;
-@@ -2461,6 +2467,9 @@ int indx_delete_entry(struct ntfs_index *indx, struct ntfs_inode *ni,
-  
-  		err = attr_set_size(ni, ATTR_ALLOC, in->name, in->name_len,
-  				    &indx->alloc_run, 0, NULL, false, NULL);
-+		if (in->name == I30_NAME)
-+			ni->vfs_inode.i_size = 0;
-+
-  		err = ni_remove_attr(ni, ATTR_ALLOC, in->name, in->name_len,
-  				     false, NULL);
-  		run_close(&indx->alloc_run);
-diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
-index 405afb54cc19..78ec3e6bbf67 100644
---- a/fs/ntfs3/inode.c
-+++ b/fs/ntfs3/inode.c
-@@ -550,17 +550,6 @@ static noinline int ntfs_get_block_vbo(struct inode *inode, u64 vbo,
-  	clear_buffer_new(bh);
-  	clear_buffer_uptodate(bh);
-  
--	/* Direct write uses 'create=0'. */
--	if (!create && vbo >= ni->i_valid) {
--		/* Out of valid. */
--		return 0;
--	}
--
--	if (vbo >= inode->i_size) {
--		/* Out of size. */
--		return 0;
--	}
--
-  	if (is_resident(ni)) {
-  		ni_lock(ni);
-  		err = attr_data_read_resident(ni, page);
-@@ -624,7 +613,6 @@ static noinline int ntfs_get_block_vbo(struct inode *inode, u64 vbo,
-  		}
-  	} else if (vbo >= valid) {
-  		/* Read out of valid data. */
--		/* Should never be here 'cause already checked. */
-  		clear_buffer_mapped(bh);
-  	} else if (vbo + bytes <= valid) {
-  		/* Normal read. */
-@@ -974,6 +962,11 @@ int ntfs_write_end(struct file *file, struct address_space *mapping,
-  			dirty = true;
-  		}
-  
-+		if (pos + err > inode->i_size) {
-+			inode->i_size = pos + err;
-+			dirty = true;
-+		}
-+
-  		if (dirty)
-  			mark_inode_dirty(inode);
-  	}
--- 
-2.37.0
-
+Best regards,
+Krzysztof
 
