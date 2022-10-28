@@ -2,157 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 561F3611411
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1160461140C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:07:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbiJ1OIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53500 "EHLO
+        id S231395AbiJ1OHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiJ1OIU (ORCPT
+        with ESMTP id S230315AbiJ1OHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:08:20 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F231DF41E;
-        Fri, 28 Oct 2022 07:08:20 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29SBNtZ9003776;
-        Fri, 28 Oct 2022 14:07:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=zDIAzTSY63brcUEUymq1GphjBGryegzoGnkVDKwZ2Tg=;
- b=b62E8tR9kIMc5Q7DphEB2Xki6uaILk6X8MvMbghu79QaBH04/67lkZ2jNExSfQAllEWt
- 1E9XJAQeDV3wtyLwcFdGyELoyqGp5bEvSP9vmttkilFQtGPEQcsDPgZxAJD2iqBzYkyM
- 4xH44tWKFyuTNq028ejGDQtXFRcHd+C4Q0/bMPOy0CZuXP2tKTcRqVYr8Hjd4WF8pMc4
- EO7DGBmT4iM0aNRDU1PUpt6kBfSNKuPqSmdfIHVjVYwh3Opd32XC7n3ngE7obrmlKnZR
- vBlUb4JufIKE5BKt1P2jR5ZGabiMTCrYSwgzAlv9zF+zuRNDMNDs3MMBzL721Kq6ZvTr tw== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kfb0an2hg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Oct 2022 14:07:23 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29SDORK6026386;
-        Fri, 28 Oct 2022 14:07:22 GMT
-Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2169.outbound.protection.outlook.com [104.47.73.169])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kfagr4y12-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Oct 2022 14:07:21 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nhC4R/dTHB4mbB2PK/PSVBQtECvINnSa73YABy7kXrQg3d5Cdi45vU1kgj0KqtnI851eIVArqjSYYtkr0rnG/guKufZ6spwAMhWBWIPgTmNmkPBL06nxfSQIJ6x4Z5znk4dchYQpUd12ZGjxPJ6WbNzJXMdj2lNGt8UdgL4jB50UWRT6aM6XTyFoUQtR5zsdRvhedU0IEJvF9ARev3lIgUjw1QYm6p1xKFkSANLtyvQniQZ5GFBZwJJHAM9Rv09vxlbK08qewpMPxGPSmsS9xA3i9QRsbPOe8eq97WaRCS8p8wnQfHKPmppOs4wM1G8DrE139xTuDdnQ+Z6dBMN7nA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zDIAzTSY63brcUEUymq1GphjBGryegzoGnkVDKwZ2Tg=;
- b=KmH29HgjyppNNtlqQ5awKUF2vaxrDDmejSSgjvO/YoAAlgk9v4F7hziSGavxr4CKf4uPC4BOcB/B3vYdMPEa4LMs3GKP/Y8Z7KssS/gDaVOPepfbTRehC3QWqfloAQCCsYF8jmeOZDe81ZsPjKrPkhfwsAEFv0CYbunUem7yLLlxwUy8hFo7FOdNXMPPd+tJakyOub7L3K3LjVf7ISq0hWKSt/m72nqj9gHjuZXPXWEkdC9Tuit8f7gABcLHdthlDQnt/yc/1EPnCt2c+vRMLITnZJobNVOPeA5yeqhmU0pp22cHlCMmgIYsgpfc6lw0CYCQQMpNH9c/FoKS2tTlUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Fri, 28 Oct 2022 10:07:37 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C591D586A;
+        Fri, 28 Oct 2022 07:07:34 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id y14so13179514ejd.9;
+        Fri, 28 Oct 2022 07:07:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zDIAzTSY63brcUEUymq1GphjBGryegzoGnkVDKwZ2Tg=;
- b=P2MAcoRm42y7rO5lvXCYVCHy+lWe98aGRRgRpzxwXq5LlvY4dJnQX54lvwfu1tn2edVRZEpbq1evtdfD7KSEzAZSsPTbOy/NsExnTd25DU7VyOmyvCGQ7gifucCxXryvKv6H1ce+PtrAFdFPuYvOh0bwA91cJiumM3lIaCbDaxk=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by MN2PR10MB4221.namprd10.prod.outlook.com
- (2603:10b6:208:1d7::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Fri, 28 Oct
- 2022 14:07:19 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::3809:e335:4589:331e]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::3809:e335:4589:331e%7]) with mapi id 15.20.5769.015; Fri, 28 Oct 2022
- 14:07:18 +0000
-Date:   Fri, 28 Oct 2022 17:07:02 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Thomas Sailer <t.sailer@alumni.ethz.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub =?utf-8?B?S2ljacWEc2tp?= <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-hams@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 01/15] hamradio: baycom: remove BAYCOM_MAGIC
-Message-ID: <Y1viBi7DAAJAn7kP@kadam>
-References: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
- <47c2bffb-6bfe-7f5d-0d2d-3cbb99d31019@gmail.com>
- <Y1vccrsHSnF1QOIb@kadam>
- <61febb47-28a4-3343-081c-4c06b87ba870@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <61febb47-28a4-3343-081c-4c06b87ba870@gmail.com>
-X-ClientProxiedBy: JNAP275CA0001.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4c::6)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TWCvMt3elQQkvkQ/TKdQKZ3J9fekFt08XY7JDczxDLs=;
+        b=S5eY76mlN2tFMg+4pLeThtnQhlp4ocsMO1J3iG4xW0oV/kkyPzOpnEnvV96kPcbAEX
+         pbGUvnoQJIZ95APLSXS4hW6GB5gy94WKMjEToBbUpw4NokE4TqtkSCm9ACSDWfZGnNQD
+         b7wVwNfYnewVRwljr++Ct92/bcHX7eKuqEDn5CnNEZE+7KkxIzNTS8UpVME4hZhTIKZm
+         bzuBhN9OxJ4li3ASyX2rXrq/8f2r3EURY1gPKsL1td0mHbqjux9QNh48qlZfTruxE9sG
+         bAU1D0LXvoFLKp0wN4wQ5wve7qS/mVmphAbQwyoyPxa3aEv55geRY6CSrrb0aneRY0Tl
+         41iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TWCvMt3elQQkvkQ/TKdQKZ3J9fekFt08XY7JDczxDLs=;
+        b=5vfpgsSzEqpxMK6rhzAuSNrqQgApJICrnHEWgRxjKvY0/mtk2zCsBwKWBdaAEbbpQ/
+         a6S9/MEvv6GjbJAJz12rPEa0Z3Ij3qadlOCPeSIZWSwCmO3/vSP4QHAfW8vokZgcXlXm
+         szyEsa6xdYzed3vGKhKJvOrpxGD4P8A8zeKdofWAtn0us8N9aBZ78qBm+RYH8JRZZs8H
+         p6w0guBgCZHGKCKEyD+4O3kF5NoO+n3O7qteC7m86ZDlJaylVCW5hjT4FZgeHm8fv3lb
+         Q0uhoAPoQEuNC4/KhUg+IDtD+/0l/ojccSI/SokhjNnD+awkOIiU9/pA8VpyBvUGxNl9
+         AsQg==
+X-Gm-Message-State: ACrzQf2n5XP2uc33XGMeiSkRDZzn0+Nae79SExJggmPTEpd31Zib/lUP
+        ooWxtz8urvjG67wOUT642vM=
+X-Google-Smtp-Source: AMsMyM7D3twQkFaMfCxUy6j9VvCERfNQOjRgLpCvU6hp4Gwe+FiZ4kg6TX2AcUjBQmTjLeWIeDMKGw==
+X-Received: by 2002:a17:906:846c:b0:7a5:ccb:c174 with SMTP id hx12-20020a170906846c00b007a50ccbc174mr25997482ejc.583.1666966053263;
+        Fri, 28 Oct 2022 07:07:33 -0700 (PDT)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id cs8-20020a0564020c4800b00461816beef9sm2736314edb.14.2022.10.28.07.07.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 07:07:32 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 16:07:30 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
+        treding@nvidia.com, heikki.krogerus@linux.intel.com,
+        ajayg@nvidia.com, kishon@ti.com, vkoul@kernel.org,
+        p.zabel@pengutronix.de, balbi@kernel.org, mathias.nyman@intel.com,
+        jckuo@nvidia.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        singhanc@nvidia.com, linux-i2c@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 03/11] dt-bindings: usb: Add binding for Cypress cypd4226
+ I2C driver
+Message-ID: <Y1viIsL+Nxthc97j@orome>
+References: <20221024074128.1113554-1-waynec@nvidia.com>
+ <20221024074128.1113554-4-waynec@nvidia.com>
+ <f8eeeebc-e635-9c97-b97b-46df38f06002@nvidia.com>
+ <Y1vLoT+/dgOgrxjD@orome>
+ <7a1c4943-4ae2-cde4-221b-fa972c2baab2@nvidia.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2365:EE_|MN2PR10MB4221:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0ae65770-0a78-490b-386a-08dab8edb97a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RyhzLAZ/pO3CLkPCH69fb8Ahc5/aK834URE9BPWBSqpl3OSiZDZSXx9dO1veBvaAaHTOnlLPH4FOTEiYD2bFDvhqFw819GYAExeCM62TiywzTcSKPZ6ti1rtF9/Jbx2DN0D/oSoLmH6aF+saKZy65Nf4tPVTBZdho4PY8CuUdSmOCq7A17fJirLETiE+lvqWnOBk58QxsJ4WvpXMyPN2jKmqzt9q4eu62zr8viTkgd2nH2d5LhEMdnxktpwZQRGVuNkWsqIpkmgoT+4ItPldaw+dGtwQFxCc8aLKYkoLQn9OWmP9RqCHDu3iGO07eJKxKR39FfX7FoFOfLljzJpY7fO/yZR44j2Ko2njGL49HCI6nPKN6Lba7fPszlvxQcPC742rAveQUq/NeLKm7udj6+eytpm0rgh6R2HQcUPWKQS7l6JpK3tWOOLMnQrp0ppeNsLaQfoiiKwrw9LtKfNUw9Oe/fG9+0KJqQSN5c0dDCSGOfk+Uo7cQPc2UCiqVaMtoVM3cKqcz788k9doWIeBU9usoryT7kIbq/w6xknhkUbITgLNyQZZcXYimtKqa8d0xLAOkfEbt/IQlK2PIdUIqj9ZTbt7E9EVRPvmr0hJZcd2jQBexhrji3Umj9bm8OTOZ68pxKlZk6q7X2kMdfVeQrWuB2G76fMe4Aac/VAEhLH9lpnVuBxRnWyexdIEhcckBVt3hTAkmtftMs5DbqDS/Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(396003)(39860400002)(346002)(376002)(136003)(451199015)(6916009)(316002)(26005)(4326008)(53546011)(6506007)(54906003)(5660300002)(9686003)(6512007)(7416002)(86362001)(66476007)(8936002)(2906002)(8676002)(41300700001)(66556008)(66946007)(44832011)(83380400001)(6666004)(478600001)(6486002)(38100700002)(186003)(33716001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IWJm1kgM0vpH9DA7ts3StuWrIA4sCuRDpOU3T58xSQ6AmXC7Jugg32bJgMd1?=
- =?us-ascii?Q?MvnRpY00Y/dG8iMAQUZImMg/jJZVEcdBvHQSUcmIMBQwzjjp68bUUBlsLGAU?=
- =?us-ascii?Q?EkYRUErmjZI7l5ddFpn93Iwv5km+OZP8oK2tAb8vMOC7C3NSwcqve+GGy2Kz?=
- =?us-ascii?Q?7rNfdmAMdlzrBoiiPkssn+wcIsDKQc7QlysarHZK5kqnHAyc50UtRL7J8Hrb?=
- =?us-ascii?Q?HLo02g7nMv8js2Va4E23RDHcKvxofcd96oDoDUAUCRwd/S6vpP0OG2QWkUon?=
- =?us-ascii?Q?F/UBxEzpPTyekZm4uSzQjM5Dq1dsEfRAYyP/K89M0rt/YXgpXgXysodF4jG7?=
- =?us-ascii?Q?l5AydknNSoYjGyR+YxlgkEVvo3+RFn+il5vTKsrniUIQ1d5oZZker8RDT5Jf?=
- =?us-ascii?Q?sK7iVAiKsSdb/tIVfuQAD2VpCHAbegXsIIFSmuy5y6LpQyeQoMB0Y0Rzt2z4?=
- =?us-ascii?Q?oky2Ahlq1f/fyu/0VF+Egg+M+qdz/vdtq2P6LcD0v0jXJk4T07NXAUPMZDE5?=
- =?us-ascii?Q?MZDG87SgYKgevTy+MSxyhTzyuVO2zF0W1EAZlnI4LgRJ2QIRHNyoFLeon0B5?=
- =?us-ascii?Q?D1/9y0JFbGFcEPwj9sC5XWDcu0DERhL4FE39+xwkJnMYxZQGw0m0diVjAKuF?=
- =?us-ascii?Q?qelkNslI/5B+d1YM079U/1/qEvzJY/MENJ5Ilk1GRMGiWOUGhiwxIGFwDrIf?=
- =?us-ascii?Q?ndC4pthCmYfE5dgXrQl/nmLd3rYvFn52kYik2Umpb7wSp40zVyq9zAFmJrZg?=
- =?us-ascii?Q?YVhsFtNxQ6BwZK7kzONX9Sm5ZrZm4oIHChP5rYQfd3Y3QL1mEOx/PxuIj8T1?=
- =?us-ascii?Q?r7JeF8Cso1d+Gp+9J3THs2H2YLpzav6HBgmupephkeRpOcjW44IaS7OOwHC2?=
- =?us-ascii?Q?JMpYkQrOzP96FBCTt9WfvfvgiLpshodfmZxU5JUNviPIz+BHVJYikVqTwL0J?=
- =?us-ascii?Q?OrQH7x6eF5JbxbU5HmEJvJFWTpA2EHklKp3/mMUy5vUGTpEGOhHZOhBzlYfV?=
- =?us-ascii?Q?3VMRqohAFhft05CqdAqFo9uuHH5i+YRXuSutqTbnpkBNBMxoyCMlkgjUfyVI?=
- =?us-ascii?Q?dxWc47Xh5oCUKZr/i7K+lQrYNpZPdw7V81z/hZsXoI9QXIbqeQXq95ebfFuo?=
- =?us-ascii?Q?GcKR82DVQhp+ldA1AOXUOgznrJlWHjjB+HZ1nQlhXaxDEOBw66494esi3yOC?=
- =?us-ascii?Q?VAzx7zREVa63se1asdWcSHKvOVGxaNnVNzQCmNbuUnJjc6nI2xnP0Bw84IHO?=
- =?us-ascii?Q?cpnVjPfrViKeoJP2UXEmGwpVetG/v0VTRJ+6uEnX1qMezHUQQOEK4FWtGMtN?=
- =?us-ascii?Q?IQ+iGUX3wufNt6LRgkNTu+eKgKNoWpzn+VvV5kyKCfu9nEEQQWRiNn0gwJ+7?=
- =?us-ascii?Q?MSK+xFQajftODOt2kyQwEQCnniCOJEyhrKI+2D+kXXtuFZlJdu6eok0WwVpc?=
- =?us-ascii?Q?L5AbofA3qA0pNKHNKhTO7vSgA6fcyDlYb+k8ogkzjWAG7ayovvAU3+5NiDon?=
- =?us-ascii?Q?mSOP/i38t/Ps26UM5o4kJhjMDiq4c1TV5SycJQGiDQHU4+ORPhOY0hFMorPe?=
- =?us-ascii?Q?XpF8sNQa2jt0HLz5C66lWXiPMBpuGvLBMZxLyC0+v3DUmcG9mnFpGgjnxX6B?=
- =?us-ascii?Q?pg=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0ae65770-0a78-490b-386a-08dab8edb97a
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 14:07:18.9275
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zvL3UMzYjaBZswe5GrWlDsQDDizuzyAJppKnms0yRCJsQtbNnqgEi1XT/LSntpuuVfEi2lM3R4kM9qZ3njl1QzP08/4HV3HAEZseYHJgzDA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4221
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-28_07,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 mlxlogscore=759
- spamscore=0 phishscore=0 bulkscore=0 malwarescore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2210280088
-X-Proofpoint-GUID: brr0eHMmY66ho7Gho_oV3ufpix3-UiQr
-X-Proofpoint-ORIG-GUID: brr0eHMmY66ho7Gho_oV3ufpix3-UiQr
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="QbiyuPHHLdatsw0h"
+Content-Disposition: inline
+In-Reply-To: <7a1c4943-4ae2-cde4-221b-fa972c2baab2@nvidia.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -160,47 +87,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 08:50:59PM +0700, Bagas Sanjaya wrote:
-> On 10/28/22 20:43, Dan Carpenter wrote:
-> >>
-> >> Also, s/Kill it/Remove BAYCOM_MAGIC from magic numbers table/ (your
-> >> wording is kinda mature).
-> >>
-> > 
-> > The kernel has almost 13 thousand kills...
-> > 
-> > $ git grep -i kill | wc -l
-> > 12975
-> > $
-> > 
-> > It's fine.
-> > 
-> 
-> The word meaning depends on context. In this case, the author means
-> removing SOME_MAGIC magic number from the table, one by one until
-> the magic number documentation is removed (due to historical cruft).
 
-Kernel devs are naturally blood thirsty people...
+--QbiyuPHHLdatsw0h
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-$ git log --after=2022-01-01 | grep -w kill | wc -l
-207
+On Fri, Oct 28, 2022 at 01:42:36PM +0100, Jon Hunter wrote:
+>=20
+> On 28/10/2022 13:31, Thierry Reding wrote:
+> > On Wed, Oct 26, 2022 at 08:13:57AM +0100, Jon Hunter wrote:
+> > >=20
+> > > On 24/10/2022 08:41, Wayne Chang wrote:
+> > > > add device-tree binding documentation for Cypress cypd4226 type-C
+> > > > controller's I2C interface. It is a standard i2c slave with GPIO
+> > > > input as IRQ interface.
+> > > >=20
+> > > > Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> > > > ---
+> > > >    .../bindings/usb/cypress,cypd4226.yaml        | 86 +++++++++++++=
+++++++
+> > > >    1 file changed, 86 insertions(+)
+> > > >    create mode 100644 Documentation/devicetree/bindings/usb/cypress=
+,cypd4226.yaml
+> > > >=20
+> > > > diff --git a/Documentation/devicetree/bindings/usb/cypress,cypd4226=
+=2Eyaml b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..5ac28ab4e7a1
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
+> > > > @@ -0,0 +1,86 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/usb/cypress,cypd4226.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: Cypress cypd4226 UCSI I2C Type-C Controller
+> > > > +
+> > > > +maintainers:
+> > > > +  - Wayne Chang <waynec@nvidia.com>
+> > > > +
+> > > > +description: |
+> > > > +  The Cypress cypd4226 UCSI I2C type-C controller is a I2C interfa=
+ce type-C
+> > > > +  controller.
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    const: cypress,cypd4226
+> > > > +
+> > > > +  '#address-cells':
+> > > > +    const: 1
+> > > > +
+> > > > +  '#size-cells':
+> > > > +    const: 0
+> > > > +
+> > > > +  reg:
+> > > > +    const: 0x08
+> > > > +
+> > > > +  interrupts:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  cypress,firmware-build:
+> > > > +    enum:
+> > > > +      - nv
+> > > > +      - gn
+> > > > +    description: |
+> > > > +      the name of the CCGx firmware built for product series.
+> > > > +      should be set one of following:
+> > > > +      - "nv" for the RTX product series
+> > >=20
+> > > Please add 'NVIDIA' so that it is 'for the NVIDIA RTX product series'
+> > >=20
+> > > > +      - "gn" for the Jetson product series
+> > >=20
+> > > Same here please add 'NVIDIA' so that it is 'for the NVIDIA Jetson pr=
+oduct
+> > > series'.
+> > >=20
+> > > Rob, any concerns about this property in general? Unfortunately, ACPI=
+ choose
+> > > a 16-bit type for this and used 'nv' for the RTX product. I don't fin=
+d 'gn'
+> > > for Jetson very descriptive but we need a way to differentiate from R=
+TX.
+> > >=20
+> > > This is needed in the Cypress CCGX driver for the following ...
+> > >=20
+> > > https://lore.kernel.org/lkml/20220928150840.3804313-1-waynec@nvidia.c=
+om/
+> > >=20
+> > > Ideally, this should have been included in this series but was sent b=
+efore.
+> > > We can always re-work/update the above patch even though it has been =
+queued
+> > > up now.
+> >=20
+> > The driver seems to use this 16-bit value only to compare with a
+> > corresponding field in the firmware headers. How exactly we obtain this
+> > value is therefore not important. However, since this 16-bit value is
+> > embedded in firmware images, we also cannot substitute them with
+> > something more sensible.
+>=20
+> I am actually wondering if this is actually embedded in any images becaus=
+e I
+> see it populated by the i2c-nvidia-gpu.c driver [0]. So I am wondering if=
+ we
+> can use PROPERTY_ENTRY_STRING() for this driver instead and have a more
+> descriptive name such as 'nvidia,rtx'?
 
-When people talk about killing stuff they mostly mean deleting code.
-Look at this sample of the very first kills from January.  Seven out
-of ten times this is what they meant.
+What I mean by "embedded in firmware images" is that the value read from
+the property is compared to values read from a firmware blob (either one
+read back from the chip or one loaded using request_firmware()). See for
+example ccg_check_vendor_version() and ccg_check_fw_version().
 
-$ git log --after=2022-01-01 | grep -w kill | head -n 10
-    useless now, kill it.
-    net: ipa: kill ipa_table_valid()
-    net: ipa: kill two constant symbols
-      io_uring: kill hot path fixed file bitmap debug checks
-                   newattrs.ia_valid = ATTR_FORCE | kill;
-                newattrs.ia_valid = ATTR_FORCE | kill;
-                        newattrs.ia_valid = attr_force | kill;
-    kill it off before it ends up in a release. It was just part of the
-    io_uring: kill hot path fixed file bitmap debug checks
-      block: kill deprecated BUG_ON() in the flush handling
-$
+So the way that this 16-bit number is used is to define what type of
+vendor firmware we support. So this is also used to avoid trying to load
+a Tegra firmware on a GPU and vice versa.
 
-regards,
-dan carpenter
+So yes, we could potentially still make the i2c-nvidia-gpu.c driver add
+a "nvidia,rtx" string to make it more descriptive like DT, but then we'd
+still need to somehow resolve that to the "nv" string for the assignment
+to uc->fw_build.
+
+Not sure about how that would impact the AMD bits. Another of those CCGX
+UCSI devices is registered by the i2c-designware-pcidrv.c driver, but it
+doesn't pass a software node. From what I can tell that simply means all
+of those checks will work with fw_build =3D=3D 0x00. Primarily I think that
+will cause flashing of the firmware not to be supported.
+
+So yeah, having that string be something else (i.e. more descriptive)
+and then match on that instead would definitely work. After looking at
+this some more, using existing driver-matching may not work after all
+because while there's ACPI matching and with this series DT matching,
+the various GPU I2C instantiations are purely done in software, so they
+have neither and therefore would need a secondary lookup mechanism. We
+may be stuck with that ccgx,firmware-build property, but as you said it
+should be possible to at least sanitize it.
+
+Thierry
+
+>=20
+> Jon
+>=20
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
+ee/drivers/i2c/busses/i2c-nvidia-gpu.c#n261
+> --=20
+> nvpublic
+
+--QbiyuPHHLdatsw0h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNb4iAACgkQ3SOs138+
+s6Fb+xAAmX8j8dRwWMQ2s1lwzVNMk1Jcsa77csUwNBOti7FLrLvg8Mlvy2To7Jm8
+TZ9NcUHoe1ox+EMElJpijz0qYsTGLo0tz38HGVdKOQbnASevsZ/1SoFqZebuGzb5
+IqRi35yCKQa9bRdVP1i874yU4eN8HKSFbcU6p4gFIkJ3pCJtvBDbh0fF8E5z94xI
+gmnDehmn7SSBDzZiyTOymRSEktbFxHJo/qutCB38Ev2C2winovtLIqMWLgnKRG86
+M8dyVJE5+FePHdKH3YkcFNDQn7nvA/vEdp+9xn2uTax+Z7rLNccFW1k3eM3aYnoY
+QMhnZdaYI/rf8GUpmih9jeeoNfyG8sidF2oXkRCeA94RWmyoWaoEeh5mQNOSJEq8
+OooqWxiUKPlJMQZ5mksTiFTJcUYg3fRCw1gLzH9h0ojIWBuIGw8CpizTCPLSzBiS
+zmNYm/vCPn6YRawDw3ngtMBGI7oK2+0lqdQNAGhAlBno7TOFKHqiNCdg32gykHYi
+jmBlK3gGuCvHCJzoZl9YGesXLdcHw1xeqpl70suWxmRwcXsPfFMnuWT6lI+zvSqi
+j2JpsXltKEdhbmNsy6v/HzqL5KMZAaG36oxuphUXf4NIaSvtDDgx1/VQbABjA3Lw
+z5g+HW/ArQqDwfBnasDZFURWw1czK8LcD/rse4hQt+zWeZES9Ow=
+=S/4p
+-----END PGP SIGNATURE-----
+
+--QbiyuPHHLdatsw0h--
