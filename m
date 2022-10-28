@@ -2,84 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25655611CCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 23:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BD3611D19
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbiJ1V6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 17:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
+        id S229974AbiJ1WBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 18:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJ1V6p (ORCPT
+        with ESMTP id S229494AbiJ1WBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 17:58:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5299B24CCA0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 14:58:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2EAB62A9A
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 21:58:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D567CC433C1;
-        Fri, 28 Oct 2022 21:58:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1666994323;
-        bh=qoD2Yq4J1KRgQuRQsI1oHZEyZ2p5PGAeR1n7zGQja70=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Fl50cHEzQCOTlJOXfJEapMQiXQQnmXF0EP5jPdVsaNeWpxBLRGhPnGgQtRF/XovTW
-         zrB0sW445qu2JQdY0BzQumCu9P0GHGzYoDaISRWMr5hDKYyeJ2EFmgU5hJSLU0Hj6H
-         CJaw8VtdwFqWX89CQ4g9HiUUKUW8mfvCN8azV+dg=
-Date:   Fri, 28 Oct 2022 14:58:41 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v2] maple_tree: Reorganize testing to restore module
- testing
-Message-Id: <20221028145841.4b0eaa422cbc775c3c074962@linux-foundation.org>
-In-Reply-To: <20221028180415.3074673-1-Liam.Howlett@oracle.com>
-References: <20221028180415.3074673-1-Liam.Howlett@oracle.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Fri, 28 Oct 2022 18:01:32 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA2B226E4A;
+        Fri, 28 Oct 2022 15:01:29 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id z6so4358500qtv.5;
+        Fri, 28 Oct 2022 15:01:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DJMZPHVTJnFr33kcUUeOBhHNHfNHRBfcq5bdTAYqszQ=;
+        b=dSwF0cYukDaPvmbFrNBBPzHX8vR8DHxft5aDidoyQOCak61NDEn9WmEoeISvCDdbMJ
+         A+zZzHBAko7IW+yqo97Wjlr5KDigVv9+OwX/q6QgsyCJwJRyG71Xux4MXpIfACYYDiGr
+         OkFgYAeGOvg3EqxfE1CpDKCIKKGFv0ToX1Ccy0DTzPGp1qtL6zvjOM1hb2GqepLzxBmL
+         D6k5jFHIOXhARxvSqwtSgpZb4Y4O5awIF18oVgAbmkF0hhlvcCVC5FonoChhYX2tJlLK
+         VVpWI36knkRzxZhmUOXL25cKGqb+eCm/Xc1voUh8aOINa4LPGTRa6hWzzaAUc30+wN41
+         xK0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DJMZPHVTJnFr33kcUUeOBhHNHfNHRBfcq5bdTAYqszQ=;
+        b=GclXzHJ5zn2LY1iD2HX7FWJTB0M60tQC9bXkxCnJWDMsvbyBPHlV0To8tIQIFVlSjt
+         O6nchfXLL//4Foxmm3Joe2oEYdfOl9NZc/hckzyw+baUS5OPYEZn1HMMAPK0nehtMOeM
+         ektneYFjiJdJWxa+PLcj2BwL6JbmnwPEZxMridkJpWECcc4OzUHq/OkufeClOfVoPt0X
+         sJuJi8546cwJxVUswJblMgH6d2F7N1rkl8rh15OjIlg2SSK212nXk9Yg1hf4k2gFD8K4
+         NQn+juEACfZLK6oZpIcnjOc/mddFXtg97dXlpxAsOa+rjV0sX4mr9qF7DZImGpx9txBi
+         w8CQ==
+X-Gm-Message-State: ACrzQf1VAXIB++2v7smD6dCjYHjoEW3uWFaLxV/hgxjrIQE/6nB0Dimm
+        9xVi2rp4MjbSGa6klFsW48TZxtPiWRA0VQ==
+X-Google-Smtp-Source: AMsMyM5z7TnalClyLz/r/L2LC0f5nKSGHK9GEBBHZiIv+u4dnDnbwWnT4BJDbU8JnTxhyMxfHy5wag==
+X-Received: by 2002:a05:622a:1710:b0:39a:cc1d:1daf with SMTP id h16-20020a05622a171000b0039acc1d1dafmr1517035qtk.394.1666994489025;
+        Fri, 28 Oct 2022 15:01:29 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id t11-20020a37ea0b000000b006cfaee39ccesm3676635qkj.114.2022.10.28.15.01.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 15:01:28 -0700 (PDT)
+Message-ID: <b048a478-32a7-6d3f-a104-c7123c93826e@gmail.com>
+Date:   Fri, 28 Oct 2022 15:01:21 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 6.0 00/94] 6.0.6-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+References: <20221027165057.208202132@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221027165057.208202132@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Oct 2022 18:04:30 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
+On 10/27/22 09:54, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.6 release.
+> There are 94 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 29 Oct 2022 16:50:35 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.6-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-> Along the development cycle, the testing code support for
-> module/in-kernel compiles was removed.  Restore this functionality by
-> moving any internal API tests to the userspace side, as well as
-> threading tests.  Fix the lockdep issues and add a way to reduce memory
-> usage so the tests can complete with KASAN + memleak detection.  Make
-> the tests work on 32 bit hosts where possible and detect 32 bit hosts in
-> the radix test suite.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-My x86_64 allmodconfig failed with
-
-ERROR: modpost: "mas_find_rev" [lib/test_maple_tree.ko] undefined!
-
-so I did this:
-
---- a/lib/maple_tree.c~maple_tree-reorganize-testing-to-restore-module-testing-fix
-+++ a/lib/maple_tree.c
-@@ -6059,7 +6059,7 @@ void *mas_find_rev(struct ma_state *mas,
- 	/* Retries on dead nodes handled by mas_next_entry */
- 	return mas_prev_entry(mas, min);
- }
--EXPORT_SYMBOL_GPL(mas_find);
-+EXPORT_SYMBOL_GPL(mas_find_rev);
- 
- /**
-  * mas_erase() - Find the range in which index resides and erase the entire
-_
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
