@@ -2,125 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F40611DE9
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 01:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7F2611DEA
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 01:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiJ1XGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 19:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
+        id S229629AbiJ1XIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 19:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiJ1XGM (ORCPT
+        with ESMTP id S229531AbiJ1XIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 19:06:12 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367A31DA350;
-        Fri, 28 Oct 2022 16:06:11 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id A998C5C017D;
-        Fri, 28 Oct 2022 19:06:08 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 28 Oct 2022 19:06:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1666998368; x=
-        1667084768; bh=6ErzU4gGH8yU302IzT7x6da7AL+aZ5llrq9RKS5ab+o=; b=m
-        4KE7OmqbQjEH6Dw7ERDVmB6GefrXwfUe7oysqCxp3133igpTqTk1ZoW9smT1XyVM
-        Hs0AUPK3HuPLBjX+oN8UfFPD4oP6wwUUitFUXyXVM9keADNGtoM/NLJU+AjTPxcL
-        lyuBYKhtXcfPqK3wFLwH/CtKQ8hjI1xcBdYWMgTzyxbJbmfOsdl/tWQZgDkfB7/4
-        OSwTsBPpe/8O4588iyhaXtUgjNrzzavsI4hzVaHMY7IpzgnF6JnGSqhS8k1O3qO8
-        DI+0NqIq50m4O/pNFFkwoGTnEpCWRgnSnR2rYWNqmFOba5xRWs/3Y9FkFeES/LCT
-        F7W8T6VQklOZgLaD1qH1A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666998368; x=
-        1667084768; bh=6ErzU4gGH8yU302IzT7x6da7AL+aZ5llrq9RKS5ab+o=; b=r
-        3oYnFdEmdZp5pkHqVuUmxM4VBDFEnBscB3R/qKU3Oy5uJD8GJs6XM1SucbhJuVqM
-        MUrnPHMByyJzoX9ZxNfuqXYwJ8Txz2DL0jAL5baPKqT2TwfJvf/FC6iizK/dmtc7
-        XOFeTkw90EStN6MZJb79+6J7Er/3MT97cAnE8tO32mwWoeZay5yZ1al5qre2M3NC
-        jU7SQzzlvn5CuG9JQc/e/WTsslUWu9hu+xmrbUhBZgXImGn5SyBhckPUnd2AKnI0
-        KK6ckukK4ADwX8G5DhhN1H/gD/vDHh79OxbseuVhqiyv2zIw0SnCU6ucQjKYtJKD
-        M2z/PLxlMpv6x9Diwd6Gw==
-X-ME-Sender: <xms:YGBcY7xe3yfeZjsCWtvfyiCCoEKEqJcxfMYf6D1zv6jNhh2KwqBjRg>
-    <xme:YGBcYzRafk6PU8IVgJpQ6u9ewraMSHpDCQc26uWcxQhFAeIhfl85AX0vZRXxtxr4q
-    87xiZ65XfnEnI5Y0A>
-X-ME-Received: <xmr:YGBcY1V4JyheSNZtpaHGF4OIv-lvOHQqAyxq5QPz2c1tayTybzyYYTPlgjcLxy0MDW_IIY3P0rp6tuZnqGDnyJtVGbsVbZJysvZCa9rcqOcwEpWWpqT-3kgMbQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdejgddukecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepkeejleelfeeitdfhtdfgkeeghedufeduueegffdvhfdukeelleef
-    tdetjeehuddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:YGBcY1gGKngsAa3EiqfAC_uuZakxRfHY9sRzsBhK1eDP98Ap56Fy3Q>
-    <xmx:YGBcY9CH-1C7N_yfuTW3btaZe09km3mwHSU7v39NvYlOcA5QfjopYA>
-    <xmx:YGBcY-JPxItgIvBNRhraPcJRjvPEAoTWlA5ZECp5D2765St7tECQ0w>
-    <xmx:YGBcY8MPPsGMVtp6xZUgeJ2t18IQjl1XOJ7UFSKbrlJtoYqgEV_Z8w>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 28 Oct 2022 19:06:08 -0400 (EDT)
-Message-ID: <6b23af14-340d-b7b5-7d20-14fae03f724c@sholland.org>
-Date:   Fri, 28 Oct 2022 18:06:07 -0500
+        Fri, 28 Oct 2022 19:08:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B9A23797A
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:07:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666998472;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=A2c8ymd1GFvLBVMNdJ9tI50soRavZnzeQUSNcQq0dMs=;
+        b=FGTGwBp7M0d02EniqDmPYaiiK4e93zjFJI/Cl41ah7bXwTgf2b1A9oWw4TvBI+hIe0bS4q
+        QCyxUhGB6CjzRFUfNhpCZmuErSdwA6ci7EUg3/StYne+6CflNVeBbnnD2SXQossMIh48qW
+        c+osX1yVQl65M549NKG8HaD0PwSD5Zk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-455-LZJSepqpOAikHMAm8TLHDg-1; Fri, 28 Oct 2022 19:07:50 -0400
+X-MC-Unique: LZJSepqpOAikHMAm8TLHDg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E9579857D0D;
+        Fri, 28 Oct 2022 23:07:39 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D7CC540C6EC3;
+        Fri, 28 Oct 2022 23:07:25 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     jmattson@google.com, seanjc@google.com, jpoimboe@kernel.org
+Subject: [RFC PATCH 0/7] KVM: SVM: move MSR_IA32_SPEC_CTRL save/restore to assembly
+Date:   Fri, 28 Oct 2022 19:07:16 -0400
+Message-Id: <20221028230723.3254250-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH] power: supply: ip5xxx: Fix integer overflow in
- current_now calculation
-Content-Language: en-US
-To:     Ondrej Jirman <megi@xff.cz>, Sebastian Reichel <sre@kernel.org>
-Cc:     "open list:POWER SUPPLY CLASS/SUBSYSTEM and DRIVERS" 
-        <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-rockchip@lists.infradead.org
-References: <20221028224052.293693-1-megi@xff.cz>
-From:   Samuel Holland <samuel@sholland.org>
-In-Reply-To: <20221028224052.293693-1-megi@xff.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/28/22 17:40, Ondrej Jirman wrote:
-> When current is larger than ~2A, the multiplication in current_now
-> property overflows and the kernel reports invalid negative current
-> value. Change the numerator and denominator while preserving their
-> ratio to allow up to +-6A before the overflow.
-> 
-> Fixes: 75853406fa27 ("power: supply: Add a driver for Injoinic power bank ICs")
-> Signed-off-by: Ondrej Jirman <megi@xff.cz>
+On the Intel side, restoration of the guest's IA32_SPEC_CTRL is done
+as late as possible before vmentry, with the comment:
 
-Reviewed-by: Samuel Holland <samuel@sholland.org>
+* IMPORTANT: To avoid RSB underflow attacks and any other nastiness,
+* there must not be any returns or indirect branches between this code
+* and vmentry.
 
-> ---
->  drivers/power/supply/ip5xxx_power.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/power/supply/ip5xxx_power.c b/drivers/power/supply/ip5xxx_power.c
-> index 02ee4d252a3e..f39cb2f7aa11 100644
-> --- a/drivers/power/supply/ip5xxx_power.c
-> +++ b/drivers/power/supply/ip5xxx_power.c
-> @@ -398,7 +398,7 @@ static int ip5xxx_battery_get_property(struct power_supply *psy,
->  		ret = ip5xxx_battery_read_adc(ip5xxx, IP5XXX_BATIADC_DAT0,
->  					      IP5XXX_BATIADC_DAT1, &raw);
->  
-> -		val->intval = DIV_ROUND_CLOSEST(raw * 745985, 1000);
-> +		val->intval = DIV_ROUND_CLOSEST(raw * 261095, 350);
+On AMD, there is no need to avoid returns or indirect branches between
+wrmsr and vmrun because Linux doesn't use IBRS; however, restoration
+of the host IA32_SPEC_CTRL value is definitely way too late. With
+respect to the user/kernel boundary, AMD says, "If software chooses to
+toggle STIBP (e.g., set STIBP on kernel entry, and clear it on kernel
+exit), software should set STIBP to 1 before executing the return thunk
+training sequence." Assuming the same requirements apply to the guest/host
+boundary, KVM does not respect this recommendation: the return thunk
+training sequence is in vmenter.S, quite close to the VM-exit, while
+the host's IA32_SPEC_CTRL value is only restored much later for hosts
+without V_SPEC_CTRL.
 
-DIV_ROUND_CLOSEST(raw * 149197, 200) would be marginally more accurate,
-but it doesn't matter in practice.
+In the absence of clarifications for AMD, move all the SPEC_CTRL
+handling to assembly code and, in passing, also make the Intel and AMD
+code a bit more similar to each other.
 
->  		return 0;
->  
->  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+Patches 1-2 are the Intel side, which is just a cleanup.
+
+Patch 3 prepares for adding asm-offsets.c entries in arch/x86/kvm/svm/svm.h,
+and patches 4-5 are a similar cleanup to the earlier VMX ones.
+
+Patch 6 is the bulk of the change, and finally patch 7 removes now
+dead code in asm/spec-ctrl.h and arch/x86/kernel/.
+
+This is RFC because I haven't tested SEV-ES or 32-bit yet.
+
+Paolo
+
+Paolo Bonzini (7):
+  KVM: VMX: remove regs argument of __vmx_vcpu_run
+  KVM: VMX: more cleanups to __vmx_vcpu_run
+  KVM: SVM: extract VMCB accessors to a new file
+  KVM: SVM: replace argument of __svm_vcpu_run with vcpu_svm
+  KVM: SVM: adjust register allocation for __svm_vcpu_run
+  KVM: SVM: move MSR_IA32_SPEC_CTRL save/restore to assembly
+  x86, KVM: remove unnecessary argument to x86_virt_spec_ctrl and
+    callers
+
+ arch/x86/include/asm/spec-ctrl.h |  10 +-
+ arch/x86/kernel/asm-offsets.c    |   8 ++
+ arch/x86/kernel/cpu/bugs.c       |  15 +--
+ arch/x86/kvm/svm/avic.c          |   1 +
+ arch/x86/kvm/svm/nested.c        |   1 +
+ arch/x86/kvm/svm/sev.c           |   1 +
+ arch/x86/kvm/svm/svm.c           |  39 +++---
+ arch/x86/kvm/svm/svm.h           | 204 +-----------------------------
+ arch/x86/kvm/svm/svm_onhyperv.c  |   1 +
+ arch/x86/kvm/svm/vmcb.h          | 211 +++++++++++++++++++++++++++++++
+ arch/x86/kvm/svm/vmenter.S       | 164 ++++++++++++++++++------
+ arch/x86/kvm/vmx/nested.c        |   3 +-
+ arch/x86/kvm/vmx/vmenter.S       |  92 ++++++--------
+ arch/x86/kvm/vmx/vmx.c           |   3 +-
+ arch/x86/kvm/vmx/vmx.h           |   3 +-
+ 15 files changed, 419 insertions(+), 337 deletions(-)
+ create mode 100644 arch/x86/kvm/svm/vmcb.h
+
+-- 
+2.31.1
 
