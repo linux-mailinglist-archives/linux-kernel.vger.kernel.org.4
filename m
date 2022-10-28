@@ -2,136 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4CF610740
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 03:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D82E6610743
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 03:32:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235475AbiJ1B3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 21:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
+        id S235532AbiJ1BcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 21:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235398AbiJ1B3n (ORCPT
+        with ESMTP id S234184AbiJ1BcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 21:29:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85DCA98EF
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:28:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666920525;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wla9uF0gA118Z36K6veuICKKbGh2thQWauGdmuDklz4=;
-        b=GxNduojNsSNUKgm0ztStR1NGhJpYtLRwTSCzygsnO+NBnvaSFGPzu1BH5TWGM8Ath+laCG
-        KbFnPHTtDFSAAEWFjBQ8qa+X1WzgW/wqKErVnETbIAj0K49OblhFfgOug5+PUeoJwn9b+x
-        fJ+6yU5J11WkdGIpsi/6cFDypdc3IsY=
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
- [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-546-VdeKynq5MX2d6akY15g4Jg-1; Thu, 27 Oct 2022 21:28:44 -0400
-X-MC-Unique: VdeKynq5MX2d6akY15g4Jg-1
-Received: by mail-pg1-f198.google.com with SMTP id h2-20020a656382000000b0044b0f6c572fso1705321pgv.20
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:28:44 -0700 (PDT)
+        Thu, 27 Oct 2022 21:32:14 -0400
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E999F35D
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:32:12 -0700 (PDT)
+Received: by mail-oo1-xc2b.google.com with SMTP id s125-20020a4a5183000000b0047fbaf2fcbcso589343ooa.11
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:32:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=331LzS+zCTF3pctjI7hxcWQiOyXx0a+a6N3w5ukhHUE=;
+        b=kgs6Xv0qIqMuqIGJ0UHFLm/ChHVo11DD7vFMu04CHNJJgZftpEG7Td58323QRBU/x+
+         TjJQYkhu7uZ24KkjRIGek7a5SljPW4FToR+YgHVJQsBjUxdJ+CwJ+i+iXhP7f/pdwfMk
+         8MF94v33ZvOAUNoJPSdcy/wo3bPPQQ8HK2IY96nONBMbw+Zp13LFWqEjPW9OswSD4yL8
+         9OTcWmJsgMWoqyH6+F2Cavbzrn/sJjxNGVzj8yx6yqipH46d64o+vETHsCCuOp3FDa/R
+         8G16VN9gvmP1UODU7CPnVsEfXI3NUadvYlyAiU1xwiS++uMDl9vYLCqSOUzkTqBTEvhr
+         /ypQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wla9uF0gA118Z36K6veuICKKbGh2thQWauGdmuDklz4=;
-        b=QdtlkiXRVSF5DFgw9dqlR1w9jx8W5bBbmcqIYMeKx5VSxaG8z2u6ABgntzJmDH8mXz
-         g/kEsyi844/Sy31VdwHyzRbVEAJfOFClK9rPq7CgPx25qGJAYrJxFehPXifetn/RPijS
-         cRBJAYv493IRbCSokwiVCybwcYqtKcMX36VERFzgsS78CFx8sG0bHPtkpyqm24mG34fJ
-         N5wzV8045kd+qAQHT0KzcjXNP+86ORGxNAyxSkxBtThzV7Hm29wCBc0HLNAWH2lwtBGx
-         mt7BAAuPuNM9zhGuC6hfocA53fmuupqTjxK2aujrIm36RGEnhYNgq97orC0jo+VO61kQ
-         Kn5g==
-X-Gm-Message-State: ACrzQf0pbIlNNJT0haxor1yVnmXi7QhNOsiwy1CQoNgk1niJxwNIQuG/
-        fDaEaiqiZ3dDh0i8Q6GU7JkCG9Cqop2JdYy02XWUxpTLuXhiTgA3RQZ10dSp/67H1gX2QpKrZ7v
-        +pnu1SwRwRwG9GpP16I5MWLTxIUiH4aif2FDTAyUTxVsumGWBxcZfsWd2XknhGYW8rX36fnDQcA
-        ==
-X-Received: by 2002:a63:3184:0:b0:46f:714d:96f6 with SMTP id x126-20020a633184000000b0046f714d96f6mr211389pgx.298.1666920523388;
-        Thu, 27 Oct 2022 18:28:43 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM64yR5cKYB75ppDJGHgde46Bvcv+KVzYwGEN3aPYDhKENXwt2ytxb7v1yXtoNq23XOELC+igQ==
-X-Received: by 2002:a63:3184:0:b0:46f:714d:96f6 with SMTP id x126-20020a633184000000b0046f714d96f6mr211363pgx.298.1666920523052;
-        Thu, 27 Oct 2022 18:28:43 -0700 (PDT)
-Received: from [10.72.13.65] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id 1-20020a17090a0e8100b002009db534d1sm1545432pjx.24.2022.10.27.18.28.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 18:28:42 -0700 (PDT)
-Subject: Re: [PATCH] ceph: fix mdsmap decode for v >= 17
-To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221027152811.7603-1-lhenriques@suse.de>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <8b666226-ef41-13ae-c90c-aaa5f499b0a0@redhat.com>
-Date:   Fri, 28 Oct 2022 09:28:37 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=331LzS+zCTF3pctjI7hxcWQiOyXx0a+a6N3w5ukhHUE=;
+        b=zGBp9jv0qLav5DkvqoHySLd/SGFiFOwEoeMlJrnFox/Tkk+T9LOBF7j93CLM3ozgS+
+         AeQ3c+Iq78ofrWqIfRqP9CXxEERosaSzHI/cZhPEFnaWsMcWb4C3ILAkpdCiWgcbcV3H
+         gIyl0AHHi/BCkEU1DmIvJY/3+Ne/Z3RQE5qiUEBgzdauvCZSCadHyEHntqYJfeORti1a
+         tvWQdCzoCu1hywrrCnS9BQWg/3HwiQqFRFVBlx0nmQtslgdPVPUbLzrcXxOTWKXf/hHX
+         qSkMnG11bNhgFAeFgeW+wk6oOlI0739/rvrR6LPiSBhiIEqiHdp21jDrQAgli31M7KPP
+         JLtg==
+X-Gm-Message-State: ACrzQf23YodOsGAJTn8+iao2eIRe9xn1+2hq6MNqbvg1lfpRy2fXZCDx
+        MuavBqlFTho0lShbTfR9/ID2A2CYtuzZoA==
+X-Google-Smtp-Source: AMsMyM4XBcp/I/fJ3W6TgmzA2JGzNhm3lSOLz+l1rdRK8SGnaXXOumsAPQYQ+sr7f9e1Avdx/C5cdg==
+X-Received: by 2002:a4a:ab0c:0:b0:47f:653f:693e with SMTP id i12-20020a4aab0c000000b0047f653f693emr22777153oon.86.1666920731528;
+        Thu, 27 Oct 2022 18:32:11 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id 126-20020a4a0384000000b00480816a5b8csm1075684ooi.18.2022.10.27.18.32.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 18:32:10 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 18:32:01 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Peter Xu <peterx@redhat.com>
+cc:     Hugh Dickins <hughd@google.com>,
+        Yuanzheng Song <songyuanzheng@huawei.com>,
+        akpm@linux-foundation.org, gregkh@linuxfoundation.org,
+        david@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH STABLE 5.10] mm/memory: add non-anonymous page check in
+ the copy_present_page()
+In-Reply-To: <Y1sMk30wS+1uH/hc@x1n>
+Message-ID: <432c4428-b6d4-f93-266-b920a854c3c@google.com>
+References: <20221024094911.3054769-1-songyuanzheng@huawei.com> <3823471f-6dda-256e-e082-718879c05449@google.com> <Y1nRiJ1LYB62uInn@x1n> <fffefe4-adce-a7d-23e0-9f8afc7ce6cf@google.com> <Y1qdY8oUlUvWl067@x1n> <8aad435-bdc6-816f-2fe4-efe53abd6e5@google.com>
+ <Y1sMk30wS+1uH/hc@x1n>
 MIME-Version: 1.0
-In-Reply-To: <20221027152811.7603-1-lhenriques@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Reinstating Cc stable, which I removed just before the discussion settled.
 
-On 27/10/2022 23:28, Luís Henriques wrote:
-> Commit d93231a6bc8a ("ceph: prevent a client from exceeding the MDS
-> maximum xattr size") was merged before the corresponding MDS-side changes
-> have been merged.  With the introduction of 'bal_rank_mask' in the mdsmap,
-> the decoding of maps with v>=17 is now incorrect.  Fix this by skipping
-> the 'bal_rank_mask' string decoding.
->
-> Fixes: d93231a6bc8a ("ceph: prevent a client from exceeding the MDS maximum xattr size")
-> Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> ---
-> Hi!
->
-> This inconsistency was introduced by ceph PR #43284; I think that, before
-> picking this patch, we need to get PR #46357 merged to avoid new
-> problems.
->
-> Cheers,
-> --
-> Luís
->
->   fs/ceph/mdsmap.c | 2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/fs/ceph/mdsmap.c b/fs/ceph/mdsmap.c
-> index 3fbabc98e1f7..fe4f1a6c3465 100644
-> --- a/fs/ceph/mdsmap.c
-> +++ b/fs/ceph/mdsmap.c
-> @@ -379,6 +379,8 @@ struct ceph_mdsmap *ceph_mdsmap_decode(void **p, void *end, bool msgr2)
->   		ceph_decode_skip_8(p, end, bad_ext);
->   		/* required_client_features */
->   		ceph_decode_skip_set(p, end, 64, bad_ext);
-> +		/* bal_rank_mask */
-> +		ceph_decode_skip_string(p, end, bad_ext);
->   		ceph_decode_64_safe(p, end, m->m_max_xattr_size, bad_ext);
->   	} else {
->   		/* This forces the usage of the (sync) SETXATTR Op */
->
-Luis,
+On Thu, 27 Oct 2022, Peter Xu wrote:
+> ...
+> 
+> After a re-read and 2nd thought, I think David has a valid point in that we
+> shouldn't have special handling of !anon pages on CoW during fork(),
+> because that seems to be against the fundamental concept of fork().
+> 
+> So now I think I agree the !Anon original check does look a bit cleaner,
+> and also make fork() behavior matching with the old/new kernels, irrelevant
+> of the pin mess.
 
-Because the ceph PR #43284 will break kclient here and your xattr size 
-patch got merged long time ago, we should fix it in ceph. More detail 
-please see my comments in:
+Thanks Peter.  So Yuanzheng's patch for 5.10 is exactly right.
 
-https://github.com/ceph/ceph/pull/46357#issuecomment-1294290492
+Sorry for leading everyone astray: my mistake was to suppose that
+its !PageAnon check was simply to avoid the later BUG_ON(!anon_vma):
+whereas David and Peter now agree that it actually corrects the
+semantics for fork() on file pages.
 
-Thanks!
+I lift my hold on Yuanzheng's patch: nobody actually said "Acked-by",
+but I think the discussion and resolution have given better than that.
+(No 3rd thoughts please!)
 
-- Xiubo
-
-
-
+Hugh
