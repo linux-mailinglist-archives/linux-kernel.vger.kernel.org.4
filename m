@@ -2,85 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E00AF6117CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF896117BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiJ1QnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
+        id S229988AbiJ1QmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJ1QnF (ORCPT
+        with ESMTP id S229743AbiJ1Ql6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:43:05 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA351E3ECD
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:43:00 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1666975373t3ojrg6p
-Received: from localhost.localdomain ( [139.227.214.232])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 29 Oct 2022 00:42:25 +0800 (CST)
-X-QQ-SSF: 01100000002000G0Z000B00A0000000
-X-QQ-FEAT: HIVLo4mOhq4qihiPUl/eRaSVdgWUX71V7R5uJ06BDbmcypBb+mqsGkSrPIOFf
-        sKrNbRzeGR6sCZ1H3OiUHjyt+wfn5os6fTIYkTsB8pe2tenL2s5BycrsMwOrBWv2Sc00ike
-        dudrKmbBzDD9ngtWBXSrX9TfUwsISaJr2Nc1GRNoaaq0jUvajcgDRrpt30FBewM+WA+GDMI
-        6fHE8Uq6iqKKPyAeTo02wzRG8Kn8H/XSBu65Cpseho3ea17A7+ID7un6v/ml2/0CLbvuL0q
-        dfEiplYMi8kIvgkrbRe2xqipb4XtqgBSWbr2DJm8zVYinnK2bOVqGo5AvqksVpFyy06DF+2
-        5lduiK4MFuxQZlV+Z4pTZ9qmrWvdQ==
-X-QQ-GoodBg: 0
-From:   Soha Jin <soha@lohu.info>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, Wende Tan <twd2.me@gmail.com>,
-        Soha Jin <soha@lohu.info>
-Subject: [PATCH v2] platform: use fwnode_irq_get_byname instead of of_irq_get_byname to get irq
-Date:   Sat, 29 Oct 2022 00:41:20 +0800
-Message-Id: <20221028164120.2798-1-soha@lohu.info>
-X-Mailer: git-send-email 2.35.1
+        Fri, 28 Oct 2022 12:41:58 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACB31D6384
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:41:57 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id n18so4405783qvt.11
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:41:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=R2O57OBzpb8FA+DnVcdKrC0pUlI+m8T71gxg18g9ML0=;
+        b=KiggagMYrTu7SdTQf7qYTjBuh7Vgh0DLPpwOBg8u9qpWv7WzBIc/UO/p3ds0BQ10Y2
+         twYZGkSmA7kxGJkxMhsJuQftz9pMY+b7t5qOEkdTuyRtagTPZL/MxUkxUaekrc5Qnqz8
+         TGwfbYloJxbCkPQdW88sUCBtcQCOvMnJfcMNI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R2O57OBzpb8FA+DnVcdKrC0pUlI+m8T71gxg18g9ML0=;
+        b=a+66T10GQjOQQKvtJj488cJ3Q/wQSRiAW05jFoY3dEmvJE/QHcjOMSZgme49DX9BMN
+         3whuE4NojNX84TPu3CRDmLtTY5TTvTBuOLwpmIlIclFzHJ5uJ1ON70ZwE4WKmZY2ag2j
+         DWp4xEU/MSMaVUbcl5uB26M/RzMWT9qQ/7vaB7h+dgtAkmurqxaDai5CkPSJDv7iFxH3
+         40dPLPS9texp87pxwo1HVBQtKfooO2Dm79DjZvV2ZWntRW+zPzvapedMfWGWdAkgb7wp
+         klbCYnpMG9ZSQ9lKBrfkbCal66tW+dCy1XUAR1dO1hsTFlH1JZQtadqYQnLLGqGb0vrH
+         H+Dg==
+X-Gm-Message-State: ACrzQf2SPvfIT28o962+IKrralBRS8x6mtoBdDpfIRBleG9kYff3Ae4u
+        zWn6YiE1yjsVLih1Vqrf6vIoG903M6MrfA==
+X-Google-Smtp-Source: AMsMyM43Txn9CRLZKdCY7WuaQ5rYRWE4/MY0AcPsr2hpLRBuleqxMyph3nMtDPZiOP/sDXPO4Uek8Q==
+X-Received: by 2002:a05:6214:29eb:b0:4af:b287:8ff6 with SMTP id jv11-20020a05621429eb00b004afb2878ff6mr283678qvb.65.1666975315907;
+        Fri, 28 Oct 2022 09:41:55 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id g20-20020ac87754000000b0039d085a2571sm2566820qtu.55.2022.10.28.09.41.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 09:41:53 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id n130so6710474yba.10
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:41:53 -0700 (PDT)
+X-Received: by 2002:a05:6902:124f:b0:66e:e3da:487e with SMTP id
+ t15-20020a056902124f00b0066ee3da487emr144065ybu.310.1666975312766; Fri, 28
+ Oct 2022 09:41:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:lohu.info:qybglogicsvr:qybglogicsvr3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y1btOP0tyPtcYajo@ZenIV> <20221028023352.3532080-1-viro@zeniv.linux.org.uk>
+ <20221028023352.3532080-12-viro@zeniv.linux.org.uk>
+In-Reply-To: <20221028023352.3532080-12-viro@zeniv.linux.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 28 Oct 2022 09:41:35 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wibPKfv7mpReMj5PjKBQi4OsAQ8uwW_7=6VCVnaM-p_Dw@mail.gmail.com>
+Message-ID: <CAHk-=wibPKfv7mpReMj5PjKBQi4OsAQ8uwW_7=6VCVnaM-p_Dw@mail.gmail.com>
+Subject: Re: [PATCH v2 12/12] use less confusing names for iov_iter direction initializers
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>, willy@infradead.org,
+        dchinner@redhat.com, Steve French <smfrench@gmail.com>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Not only platform devices described by OF have named interrupts, but
-devices described by ACPI also have named interrupts. The fwnode is an
-abstraction to different standards, and using fwnode_irq_get_byname can
-support more devices.
+On Thu, Oct 27, 2022 at 7:34 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> READ/WRITE proved to be actively confusing
 
-Moreover, when CONFIG_OF_IRQ is not enabled, there will be a stub method
-always returning 0, the if statement can be removed safely.
+I agree, we had the same issue with rw_verify_area()
 
-Signed-off-by: Soha Jin <soha@lohu.info>
-Tested-by: Wende Tan <twd2.me@gmail.com>
----
- drivers/base/platform.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+However:
 
-diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-index 51bb2289865c..6cd7fd478c5f 100644
---- a/drivers/base/platform.c
-+++ b/drivers/base/platform.c
-@@ -441,11 +441,9 @@ static int __platform_get_irq_byname(struct platform_device *dev,
- 	struct resource *r;
- 	int ret;
- 
--	if (IS_ENABLED(CONFIG_OF_IRQ) && dev->dev.of_node) {
--		ret = of_irq_get_byname(dev->dev.of_node, name);
--		if (ret > 0 || ret == -EPROBE_DEFER)
--			return ret;
--	}
-+	ret = fwnode_irq_get_byname(dev_fwnode(&dev->dev), name);
-+	if (ret > 0 || ret == -EPROBE_DEFER)
-+		return ret;
- 
- 	r = platform_get_resource_byname(dev, IORESOURCE_IRQ, name);
- 	if (r) {
--- 
-2.30.2
+> Call them ITER_DEST and ITER_SOURCE - at least that is harder
+> to misinterpret...
 
+I'm not sure this really helps, or is less likely to cause issues.
+
+The old naming at least had some advantages (yes, yes, this is the
+_source_ of the old naming):
+
+> @@ -243,7 +243,7 @@ static int lo_write_bvec(struct file *file, struct bio_vec *bvec, loff_t *ppos)
+>         struct iov_iter i;
+>         ssize_t bw;
+>
+> -       iov_iter_bvec(&i, WRITE, bvec, 1, bvec->bv_len);
+>
+>         file_start_write(file);
+>         bw = vfs_iter_write(file, &i, ppos, 0);
+> @@ -286,7 +286,7 @@ static int lo_read_simple(struct loop_device *lo, struct request *rq,
+>         ssize_t len;
+>
+>         rq_for_each_segment(bvec, rq, iter) {
+> -               iov_iter_bvec(&i, READ, &bvec, 1, bvec.bv_len);
+>                 len = vfs_iter_read(lo->lo_backing_file, &i, &pos, 0);
+>                 if (len < 0)
+>                         return len;
+
+where WRITE is used in the 'write()' function, and READ is used in the
+read() function.
+
+So that naming is not great, but it has a fairly obvious pattern in a
+lot of code.
+
+Not all code, no, as clearly shown by the other eleven patches in this
+series, but still..
+
+The new naming doesn't strike me as being obviously less confusing.
+It's not horrible, but I'm also not seeing it as being any less likely
+in the long run to then cause the same issues we had with READ/WRITE.
+It's not like
+
+                iov_iter_bvec(&i, ITER_DEST, &bvec, 1, bvec.bv_len);
+
+is somehow obviously really clear.
+
+I can see the logic: "the destination is the iter, so the source is
+the bvec". I understand. But that was pretty much exactly the logic
+behind READ too: "this is a read from the device, so the source is the
+bvec". I can well imagine that the new one is clearer for some cases,
+and in the context of seeing all these other changes it's all quite
+straightforward, but I'm trying to think as a driver writer that is
+dealing with one random case at a time, and ITER_DEST doesn't strike
+me as hugely intuitive either.
+
+I think the real fix for this is your 11/12, which at least makes the
+iter movement helpers warn about mis-use. That said, I hate 11/12 too,
+but for a minor technicality: please make the WARN_ON() be a
+WARN_ON_ONCE(), and please don't make it abort.
+
+Because otherwise somebody who has a random - but important enough -
+driver that does this wrong will just have an unbootable machine.
+
+So your 11/12 is conceptually the right thing, but practically
+horribly wrong. While this 12/12 mainly makes me go "If we have a
+patch this big, I think we should be able to do better than change
+from one ambiguous name to another possibly slightly less ambiguous".
+
+Honestly, I think the *real* fix would be a type-based one. Don't do
+
+        iov_iter_kvec(&iter, ITER_DEST, ...
+
+at all, but instead have two different kinds of 'struct iov_iter': one
+as a destination (iov_iter_dst), and one as a source (iov_iter_src),
+and then just force all the use-cases to use the right version. The
+actual *underlying" struct could still be the same
+(iov_iter_implementation), but you'd force people to always use the
+right version - kind of the same way a 'const void *' is always a
+source, and a 'void *' is always a destination for things like memcpy.
+
+That would catch mis-uses much earlier.
+
+That would also make the patch much bigger, but I do think 99.9% of
+all users are very distinct. When you pass a iter source around, that
+'iov_iter_src' is basically *always* a source of the data through the
+whole call-chain. No?
+
+Maybe I'm 100% wrong and that type-based one has some fundamental
+problem in it, but it really feels to me like your dynamic WARN_ON()
+calls in 11/12 could have been type-based. Because they are entirely
+static based on 'data_source'.
+
+In fact, in a perfect world, 'data_source' as a dynamic flag goes away
+entirely, and becomes the compile-time static type. If anything really
+needs to change the data_source, it would be done as an inline
+function that does a type-cast instead.
+
+And yes, yes, I'm sure we have lots of code that currently is of the
+type "just pass it an iov_iter, and depending on data_source it does
+something different. I'm looking at __blkdev_direct_IO_simple(), which
+seems to be exactly that. So I guess the whole "->direct_IO interface
+breaks this, because - as usual - DIRECT_IO is a steaming pile of sh*t
+that couldn't do separate read/write functions, but had to be
+"special".
+
+Oh well.
+
+I still think that a type-based interface would be better, maybe
+together with the bad paths having a "iov_iter_confused" thing that
+then needs the runtime checking of ->data_source (aka iov_iter_rw()).
+But maybe DIRECT_IO isn't the only thing that thought that it's a good
+idea to use the same function for both reads and writes.
+
+                         Linus
