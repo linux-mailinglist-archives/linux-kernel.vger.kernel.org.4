@@ -2,122 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0646E611056
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4C8611249
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiJ1MCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 08:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
+        id S230421AbiJ1NGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiJ1MCJ (ORCPT
+        with ESMTP id S230314AbiJ1NGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 08:02:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C221D3471;
-        Fri, 28 Oct 2022 05:02:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9297162802;
-        Fri, 28 Oct 2022 12:02:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0E06C433C1;
-        Fri, 28 Oct 2022 12:02:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666958528;
-        bh=K2I0+h0HKdxxHpaoI5prv2lPqR8XHD+OIibFyJYp1NI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OC8HuWyOAiOvMiNnGGXBTAyDdBKDmJaGqXuI99k1l7Ts9hg4LxprIKGG0zXUAk8mZ
-         0a0me1cVWOPnde8TQCVHEIE8OexHYNSU8t9WhuIjnQoeayN4KEw6WAga+mvZgFj1zo
-         yFviX/TzNx4+F20f6Vik/qL0knA+llmqg9fGNJRI=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org
-Cc:     lwn@lwn.net, jslaby@suse.cz,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: Linux 5.10.151
-Date:   Fri, 28 Oct 2022 14:01:57 +0200
-Message-Id: <1666958516682@kroah.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <1666958516101237@kroah.com>
-References: <1666958516101237@kroah.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Fri, 28 Oct 2022 09:06:14 -0400
+X-Greylist: delayed 1379 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Oct 2022 06:05:44 PDT
+Received: from ma1-aaemail-dr-lapp02.apple.com (ma1-aaemail-dr-lapp02.apple.com [17.171.2.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431201C77C0;
+        Fri, 28 Oct 2022 06:05:43 -0700 (PDT)
+Received: from pps.filterd (ma1-aaemail-dr-lapp02.apple.com [127.0.0.1])
+        by ma1-aaemail-dr-lapp02.apple.com (8.16.0.42/8.16.0.42) with SMTP id 29S9u46C016057;
+        Fri, 28 Oct 2022 02:58:06 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=apple.com; h=from : content-type :
+ content-transfer-encoding : mime-version : subject : message-id : date :
+ cc : to; s=20180706; bh=Xjc094u+AENYAy780wiOIS7Vu4csTEusafewG04ZfLk=;
+ b=rGfIzaEiP9tADaTvuOLfYE2pgsuMC5cb+qiwBMdkZgjTDgVgxbNy1g0fN3wkyMpgYUTl
+ /heKsKdnMoq6dT9A0qmUtPOtVJ09yi7YIRYeANjAbZGN0qf9i1VY+/QeE5iz/v0ZM3Q0
+ 6AmU3TrLKY7TBl+jHYBec1SCDnpcz2NxRrAxl9Uslo3SJkYJbjKepq7fJZVs/Ols4SgN
+ pDHSCmF29wJUSkM5FqkmfOxmzM+GmZve/4fQBVQb0yCMrCaTAOklCeYKBYyQ6ICyZJal
+ 1PASLN/1vvZET+9GQgA1m5dnQizczpM1kwYrCssOAefGXXyJ/3a6+wOaSuekDa4DDDEL Ww== 
+Received: from sg-mailsvcp-mta-lapp04.asia.apple.com (sg-mailsvcp-mta-lapp04.asia.apple.com [17.84.67.72])
+        by ma1-aaemail-dr-lapp02.apple.com with ESMTP id 3kfareubhp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Fri, 28 Oct 2022 02:58:06 -0700
+Received: from sg-mailsvcp-mmp-lapp03.asia.apple.com
+ (sg-mailsvcp-mmp-lapp03.asia.apple.com [17.84.71.203])
+ by sg-mailsvcp-mta-lapp04.asia.apple.com
+ (Oracle Communications Messaging Server 8.1.0.19.20220711 64bit (built Jul 11
+ 2022))
+ with ESMTPS id <0RKG00WGEJOSD500@sg-mailsvcp-mta-lapp04.asia.apple.com>; Fri,
+ 28 Oct 2022 17:58:04 +0800 (+08)
+Received: from process_milters-daemon.sg-mailsvcp-mmp-lapp03.asia.apple.com by
+ sg-mailsvcp-mmp-lapp03.asia.apple.com
+ (Oracle Communications Messaging Server 8.1.0.19.20220711 64bit (built Jul 11
+ 2022)) id <0RKG00700J9FQ700@sg-mailsvcp-mmp-lapp03.asia.apple.com>; Fri,
+ 28 Oct 2022 17:58:04 +0800 (+08)
+X-Va-A: 
+X-Va-T-CD: f0a22bb548ee5a27b547ffb857e18dd9
+X-Va-E-CD: c97f448c63d97b3cfb2d969c8ae164a2
+X-Va-R-CD: 93ae6d4824a01f2bf1a497fa17aabd03
+X-Va-CD: 0
+X-Va-ID: c6ad71e9-3350-45ad-a0c1-eb8893672283
+X-V-A:  
+X-V-T-CD: f0a22bb548ee5a27b547ffb857e18dd9
+X-V-E-CD: c97f448c63d97b3cfb2d969c8ae164a2
+X-V-R-CD: 93ae6d4824a01f2bf1a497fa17aabd03
+X-V-CD: 0
+X-V-ID: 2a6940f2-5a7b-4957-803b-fa54b013e3a3
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.545,18.0.895
+ definitions=2022-10-28_04:2022-10-26,2022-10-28 signatures=0
+Received: from smtpclient.apple (unknown [17.235.153.88])
+ by sg-mailsvcp-mmp-lapp03.asia.apple.com
+ (Oracle Communications Messaging Server 8.1.0.19.20220711 64bit (built Jul 11
+ 2022))
+ with ESMTPSA id <0RKG00XG1JOO9F00@sg-mailsvcp-mmp-lapp03.asia.apple.com>; Fri,
+ 28 Oct 2022 17:58:03 +0800 (+08)
+From:   Vee Khee Wong <veekhee@apple.com>
+Content-type: text/plain; charset=utf-8
+Content-transfer-encoding: quoted-printable
+MIME-version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
+Subject: Re: [PATCH net-next 1/1] stmmac: intel: Separate ADL-N and RPL-P
+ device ID from TGL
+Message-id: <A23A7058-5598-46EB-8007-C401ADC33149@apple.com>
+Date:   Fri, 28 Oct 2022 17:57:49 +0800
+Cc:     alexandre.torgue@foss.st.com, davem@davemloft.net,
+        edumazet@google.com, hong.aun.looi@intel.com, joabreu@synopsys.com,
+        kuba@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        mcoquelin.stm32@gmail.com, muhammad.husaini.zulkifli@intel.com,
+        netdev@vger.kernel.org, pabeni@redhat.com, peppe.cavallaro@st.com,
+        tee.min.tan@intel.com, weifeng.voon@intel.com,
+        yi.fang.gan@intel.com, yoong.siang.song@intel.com
+To:     michael.wei.hong.sit@intel.com
+X-Mailer: Apple Mail (2.3731.200.110.1.12)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.545,18.0.895
+ definitions=2022-10-28_04:2022-10-26,2022-10-28 signatures=0
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-diff --git a/Makefile b/Makefile
-index 5c7075d3b2f6..0e22d4c8bc79 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- VERSION = 5
- PATCHLEVEL = 10
--SUBLEVEL = 150
-+SUBLEVEL = 151
- EXTRAVERSION =
- NAME = Dare mighty things
- 
-@@ -465,6 +465,8 @@ LZ4		= lz4c
- XZ		= xz
- ZSTD		= zstd
- 
-+PAHOLE_FLAGS	= $(shell PAHOLE=$(PAHOLE) $(srctree)/scripts/pahole-flags.sh)
-+
- CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
- 		  -Wbitwise -Wno-return-void -Wno-unknown-attribute $(CF)
- NOSTDINC_FLAGS :=
-@@ -518,6 +520,7 @@ export KBUILD_CFLAGS CFLAGS_KERNEL CFLAGS_MODULE
- export KBUILD_AFLAGS AFLAGS_KERNEL AFLAGS_MODULE
- export KBUILD_AFLAGS_MODULE KBUILD_CFLAGS_MODULE KBUILD_LDFLAGS_MODULE
- export KBUILD_AFLAGS_KERNEL KBUILD_CFLAGS_KERNEL
-+export PAHOLE_FLAGS
- 
- # Files to ignore in find ... statements
- 
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index d0b44bee9286..acd07a70a2f4 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -161,7 +161,7 @@ gen_btf()
- 	vmlinux_link ${1}
- 
- 	info "BTF" ${2}
--	LLVM_OBJCOPY=${OBJCOPY} ${PAHOLE} -J ${1}
-+	LLVM_OBJCOPY="${OBJCOPY}" ${PAHOLE} -J ${PAHOLE_FLAGS} ${1}
- 
- 	# Create ${2} which contains just .BTF section but no symbols. Add
- 	# SHF_ALLOC because .BTF will be part of the vmlinux image. --strip-all
-diff --git a/scripts/pahole-flags.sh b/scripts/pahole-flags.sh
-new file mode 100755
-index 000000000000..8c82173e42e5
---- /dev/null
-+++ b/scripts/pahole-flags.sh
-@@ -0,0 +1,21 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+extra_paholeopt=
-+
-+if ! [ -x "$(command -v ${PAHOLE})" ]; then
-+	exit 0
-+fi
-+
-+pahole_ver=$(${PAHOLE} --version | sed -E 's/v([0-9]+)\.([0-9]+)/\1\2/')
-+
-+if [ "${pahole_ver}" -ge "118" ] && [ "${pahole_ver}" -le "121" ]; then
-+	# pahole 1.18 through 1.21 can't handle zero-sized per-CPU vars
-+	extra_paholeopt="${extra_paholeopt} --skip_encoding_btf_vars"
-+fi
-+
-+if [ "${pahole_ver}" -ge "124" ]; then
-+	extra_paholeopt="${extra_paholeopt} --skip_encoding_btf_enum64"
-+fi
-+
-+echo ${extra_paholeopt}
+What is the purpose of this patch?
+
+The function definition looks exactly the same as =
+=E2=80=98tgl_sgmii_phy0_data=E2=80=99.
+
+
+Regards,
+Vee Khee=
