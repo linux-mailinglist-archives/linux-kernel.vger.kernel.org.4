@@ -2,146 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BE4610B99
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09FF9610B9D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiJ1HvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 03:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
+        id S230269AbiJ1Hvo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 28 Oct 2022 03:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbiJ1HvP (ORCPT
+        with ESMTP id S230142AbiJ1Hvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 03:51:15 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0984485AB9;
-        Fri, 28 Oct 2022 00:51:13 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29S6lQ80023975;
-        Fri, 28 Oct 2022 07:51:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=FUOkIyLd1KkITdni1CtAq8I3dI94667xNj2Ue+unSpU=;
- b=YF9tD7MqFdEcg7iH132qjRTQKVyDiJv0LqXCKSDHBKY2pO0QWSAB1FA1QqRjbe+p31EF
- /Oumxv90sZhYglezFh0VvEzRdoA/FwkHEcpVzsGhoHgsEVionUWMzqISGo+jvfnv3DRH
- CiBf945TpbTlNnGtWM+mDs7Iq2mfP6CR8fSyHt42191uggjt0MBQxDMvaGAQw4n14/uw
- +TJ96Dp3MXhpm7/gtNMSHUiZPjX3QzDRpHHINBi7A8ia18CR2+gwfK5xPuKaW3BCC9Ez
- CDRE5gaif56TJlpFofIU/OYzT2v4WN1o/HC0sARpMtGMGDyEW6qHtbymOITmiUrTUpBA sA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kg59agx8t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 07:51:07 +0000
-Received: from pps.filterd (NALASPPMTA05.qualcomm.com [127.0.0.1])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 29S7m1tq009085;
-        Fri, 28 Oct 2022 07:51:07 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 3kf9urq5ea-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 07:51:07 +0000
-Received: from NALASPPMTA05.qualcomm.com (NALASPPMTA05.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29S7nWBk010017;
-        Fri, 28 Oct 2022 07:51:06 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 29S7p6BG011702
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 07:51:06 +0000
-Received: from hu-ppareek-blr.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Fri, 28 Oct 2022 00:51:03 -0700
-Date:   Fri, 28 Oct 2022 13:20:59 +0530
-From:   Parikshit Pareek <quic_ppareek@quicinc.com>
-To:     <konrad.dybcio@somainline.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        Shazad Hussain <quic_shazhuss@quicinc.com>,
-        "Brian Masney" <bmasney@redhat.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: Re: [PATCH v6 2/2] arm64: dts: qcom: add SA8540P ride(Qdrive-3)
-Message-ID: <20221028075059.GA15101@hu-ppareek-blr.qualcomm.com>
-References: <20221020073036.16656-1-quic_ppareek@quicinc.com>
- <20221020073036.16656-3-quic_ppareek@quicinc.com>
- <7a62dd552c02e2b83fabaf9ff55a7c6c@somainline.org>
+        Fri, 28 Oct 2022 03:51:37 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7711BF856
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 00:51:33 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-32-5DrEyXUYNVeSOoVba2Mbxw-1; Fri, 28 Oct 2022 08:51:30 +0100
+X-MC-Unique: 5DrEyXUYNVeSOoVba2Mbxw-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 28 Oct
+ 2022 08:51:28 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.042; Fri, 28 Oct 2022 08:51:28 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Jozsef Kadlecsik' <kadlec@netfilter.org>,
+        Daniel Xu <dxu@dxuuu.xyz>
+CC:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
+        "coreteam@netfilter.org" <coreteam@netfilter.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "ppenkov@aviatrix.com" <ppenkov@aviatrix.com>
+Subject: RE: ip_set_hash_netiface
+Thread-Topic: ip_set_hash_netiface
+Thread-Index: AQHY6Td/ZX+DEWvLgEGa9nnokIvRm64jbupg
+Date:   Fri, 28 Oct 2022 07:51:28 +0000
+Message-ID: <4a0da0bfe87b4e10a83b97508d3c853e@AcuMS.aculab.com>
+References: <9a91603a-7b8f-4c6d-9012-497335e4373b@app.fastmail.com>
+ <7fcf3bbb-95d2-a286-e3a-4d4dd87f713a@netfilter.org>
+In-Reply-To: <7fcf3bbb-95d2-a286-e3a-4d4dd87f713a@netfilter.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <7a62dd552c02e2b83fabaf9ff55a7c6c@somainline.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: BNlJnMlT2jzr7tJQHOKrWUIHFqqr54qT
-X-Proofpoint-ORIG-GUID: BNlJnMlT2jzr7tJQHOKrWUIHFqqr54qT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-28_04,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- clxscore=1015 mlxscore=0 suspectscore=0 mlxlogscore=757 bulkscore=0
- priorityscore=1501 spamscore=0 impostorscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2210280049
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 01:49:23PM +0200, konrad.dybcio@somainline.org wrote:
-> On 2022-10-20 09:30, Parikshit Pareek wrote:
-> > Introduce the Qualcomm SA8540P ride automotive platform, also known as
-> > Qdrive-3 development board.
-> > 
-> > This initial contribution supports SMP, CPUFreq, cluster idle, UFS, RPMh
-> > regulators, debug UART, PMICs, remoteprocs and USB.
-> > 
-> > The SA8540P ride contains four PM8450 PMICs.
-> > 
-> > Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
-> > ---
+From: Jozsef Kadlecsik
+> Sent: 26 October 2022 13:26
 > 
-> Hi!
+> On Tue, 25 Oct 2022, Daniel Xu wrote:
 > 
-> [...[
+> > I'm following up with our hallway chat yesterday about how ipset
+> > hash:net,iface can easily OOM.
+> >
+> > Here's a quick reproducer (stolen from
+> > https://bugzilla.kernel.org/show_bug.cgi?id=199107):
+> >
+> >         $ ipset create ACL.IN.ALL_PERMIT hash:net,iface hashsize 1048576 timeout 0
+> >         $ for i in $(seq 0 100); do /sbin/ipset add ACL.IN.ALL_PERMIT 0.0.0.0/0,kaf_$i timeout 0 -
+> exist; done
+> >
+> > This used to cause a NULL ptr deref panic before
+> > https://github.com/torvalds/linux/commit/2b33d6ffa9e38f344418976b06 .
+> >
+> > Now it'll either allocate a huge amount of memory or fail a
+> > vmalloc():
+> >
+> >         [Tue Oct 25 00:13:08 2022] ipset: vmalloc error: size 1073741848, exceeds total pages
+> >         <...>
+> >         [Tue Oct 25 00:13:08 2022] Call Trace:
+> >         [Tue Oct 25 00:13:08 2022]  <TASK>
+> >         [Tue Oct 25 00:13:08 2022]  dump_stack_lvl+0x48/0x60
+> >         [Tue Oct 25 00:13:08 2022]  warn_alloc+0x155/0x180
+> >         [Tue Oct 25 00:13:08 2022]  __vmalloc_node_range+0x72a/0x760
+> >         [Tue Oct 25 00:13:08 2022]  ? hash_netiface4_add+0x7c0/0xb20
+> >         [Tue Oct 25 00:13:08 2022]  ? __kmalloc_large_node+0x4a/0x90
+> >         [Tue Oct 25 00:13:08 2022]  kvmalloc_node+0xa6/0xd0
+> >         [Tue Oct 25 00:13:08 2022]  ? hash_netiface4_resize+0x99/0x710
+> >         <...>
+> >
+> > Note that this behavior is somewhat documented
+> > (https://ipset.netfilter.org/ipset.man.html):
+> >
+> > >  The internal restriction of the hash:net,iface set type is that the same
+> > >  network prefix cannot be stored with more than 64 different interfaces
+> > >  in a single set.
+> >
+> > I'm not sure how hard it would be to enforce a limit, but I think it would
+> > be a bit better to error than allocate many GBs of memory.
 > 
-> > +		vreg_l3c: ldo3 {
-> > +			regulator-name = "vreg_l3c";
-> > +			regulator-min-microvolt = <1200000>;
-> > +			regulator-max-microvolt = <1200000>;
-> > +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> > +			regulator-allow-set-load;
-> Not sure if setting load is desired after recent rpmh regulator changes.
-May I know the exact patch being refered here?
+> That's a bug, actually the limit is not enforced in spite of the
+> documentation. The next patch fixes it and I'm going to submit to Pablo:
 > 
-> [...]
+> diff --git a/net/netfilter/ipset/ip_set_hash_gen.h b/net/netfilter/ipset/ip_set_hash_gen.h
+> index 6e391308431d..3f8853ed32e9 100644
+> --- a/net/netfilter/ipset/ip_set_hash_gen.h
+> +++ b/net/netfilter/ipset/ip_set_hash_gen.h
+> @@ -61,10 +61,6 @@ tune_bucketsize(u8 curr, u32 multi)
+>  	 */
+>  	return n > curr && n <= AHASH_MAX_TUNED ? n : curr;
+>  }
+> -#define TUNE_BUCKETSIZE(h, multi)	\
+> -	((h)->bucketsize = tune_bucketsize((h)->bucketsize, multi))
+> -#else
+> -#define TUNE_BUCKETSIZE(h, multi)
+>  #endif
 > 
-> > +
-> > +&spmi_bus {
-> > +	pm8450a: pmic@0 {
-> > +		compatible = "qcom,pm8150", "qcom,spmi-pmic";
-> Please add a pm8450[aceg].dtsi instead, as other boards would probably like
-> to
-> reuse this. Also, move the spmi.h inclusion there.
-> 
-> [...]
-> 
-> > +};
-> > +
-> > +/* PINCTRL */
-> Not sure if it's useful if there's nothing there for now.
-> 
-> Konrad
+>  /* A hash bucket */
+> @@ -936,7 +932,11 @@ mtype_add(struct ip_set *set, void *value, const struct ip_set_ext *ext,
+>  		goto set_full;
+>  	/* Create a new slot */
+>  	if (n->pos >= n->size) {
+> -		TUNE_BUCKETSIZE(h, multi);
+> +#ifdef IP_SET_HASH_WITH_MULTI
+> +		if (h->bucketsize >= AHASH_MAX_TUNED)
+> +			goto set_full;
+> +		h->bucketsize = tune_bucketsize(h->bucketsize, multi);
+> +#endif
 
-Regards,
-Parikshit Pareek
+AFAICT this is the only call of tune_bucketsize().
+It is defined just above TUNE_BUCKETSIZE as:
+static u8
+tune_bucketsize(u8 curr, u32 multi)
+{
+	u32 n;
+
+	if (multi < curr)
+		return curr;
+
+	n = curr + AHASH_INIT_SIZE;
+	/* Currently, at listing one hash bucket must fit into a message.
+	 * Therefore we have a hard limit here.
+	 */
+	return n > curr && n <= AHASH_MAX_TUNED ? n : curr;
+}
+
+If I'm reading it correctly this is just:
+	return curr >= multi || curr >= 64 ? curr : curr + 2;
+(the 'n > curr' test is unconditionally true).
+The extra check is limiting it to 12 (AHASH_MAX_TUNED) not 64.
+
+Quite why the change makes a significant difference to the validity
+of the kvalloc() is another matter.
+Changing a multiplier from 64 to 12 seems unlikely to be that
+significant - if it is you wouldn't want to be multiplying by 12.
+
+I've not looked what 'multi' is, but I'm sort of surprised it isn't
+used as the new bucketsize.
+
+Also it doesn't really look right to have lots of static functions
+in a .h file?
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
