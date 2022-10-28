@@ -2,221 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7CE3611C42
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 23:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED219611C49
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 23:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbiJ1VMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 17:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33730 "EHLO
+        id S229726AbiJ1VOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 17:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJ1VMc (ORCPT
+        with ESMTP id S229441AbiJ1VOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 17:12:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFA31C6BC1;
-        Fri, 28 Oct 2022 14:12:31 -0700 (PDT)
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0A1AE660293A;
-        Fri, 28 Oct 2022 22:12:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666991550;
-        bh=jWH2LrnqWW5APGbbB92HHtgOVN1H5O4Iz1A6yQQbztQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AbnKzSlM5MhWsrz6HZMY8Of9YqK3wQcRMyA638IBdoUP3HWFgP9yCIZhlid6vpqBA
-         p+h8CbHTHlhMVes6h6Dx1AIX74TPARgb33JHEShviB5Q8c9fqINOfLXtSjxPq5Lv4F
-         h4fYIy2yAyuh/L+biqA//QjZ5XZLnIqLDSAEcnoK9N/piV7XkpOUDHqTL+efGF1/Re
-         NaxIWugspY9CgiSeHYUtXEgKX0iygcpyHXtJjqYXgCx2qy84OpJ+2LjUfTr/2yR9Tt
-         6W6JvTWYME/id7nqtpHyZjqjunk4A9PrvXEp1l9SjcHMXNGTQfm//K4TwSY9uFwXqa
-         q3LMVGZ0fE8qw==
-Date:   Fri, 28 Oct 2022 17:12:24 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Mark Brown <broonie@kernel.org>, kernel@collabora.com,
-        Derek Fang <derek.fang@realtek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] ASoC: dt-bindings: realtek,rt5682s: Add AVDD and
- MICVDD supplies
-Message-ID: <20221028211224.iiphmwrpqqs27jr4@notapiano>
-References: <20221024220015.1759428-1-nfraprado@collabora.com>
- <20221024220015.1759428-3-nfraprado@collabora.com>
- <dcf284c6-dee5-d726-7f8f-c4ff1be99ddb@collabora.com>
+        Fri, 28 Oct 2022 17:14:40 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3E4DEF7;
+        Fri, 28 Oct 2022 14:14:36 -0700 (PDT)
+Message-ID: <a7629245-850c-e854-9ad9-1e83f971e867@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1666991674;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1pOmJVK8D335gMD8nvcvHaDc4747jVgbe83q3WqPhro=;
+        b=ovttEpBYNB78uQPn/5wrJLSGC7j5XJErM1QiflClAyYOmRW7940PrJVCUAJzm/PoROXG2L
+        ZpbXLWkkvtc2WeCYjnppq6uujxHsjexNbjOndVdx9du4yc6f4XDpgzR6+pHVSNWZKjt1d6
+        Gy7rhv5I8DcUzVYe/nz7KavBPmM0cQY=
+Date:   Fri, 28 Oct 2022 16:14:31 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <dcf284c6-dee5-d726-7f8f-c4ff1be99ddb@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH V7 3/4] PCI: vmd: Add vmd_device_data
+Content-Language: en-US
+To:     david.e.box@linux.intel.com, Bjorn Helgaas <helgaas@kernel.org>
+Cc:     nirmal.patel@linux.intel.com, lorenzo.pieralisi@arm.com,
+        hch@infradead.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, michael.a.bottini@intel.com,
+        rafael@kernel.org, me@adhityamohan.in, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221028194014.GA907046@bhelgaas>
+ <85336561282c1c444501b799096e9c94b23722e0.camel@linux.intel.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Jonathan Derrick <jonathan.derrick@linux.dev>
+In-Reply-To: <85336561282c1c444501b799096e9c94b23722e0.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 12:06:23PM +0200, AngeloGioacchino Del Regno wrote:
-> Il 25/10/22 00:00, Nícolas F. R. A. Prado ha scritto:
-> > The rt5682s codec can have two supplies: AVDD and MICVDD. They are
-> > already used by sc7180-trogdor-kingoftown.dtsi, so document them in the
-> > binding.
-> > 
-> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> > 
+
+
+On 10/28/2022 3:22 PM, David E. Box wrote:
+> On Fri, 2022-10-28 at 14:40 -0500, Bjorn Helgaas wrote:
+>> On Fri, Oct 28, 2022 at 02:18:48PM -0500, Jonathan Derrick wrote:
+>>> On 10/28/2022 2:13 PM, Bjorn Helgaas wrote:
+>>>> On Mon, Oct 24, 2022 at 05:44:10PM -0700, David E. Box wrote:
+>>>>> Add vmd_device_data to allow adding additional info for driver data.
+>>>>>  	{PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
+>>>>> -		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+>>>>> -				VMD_FEAT_HAS_BUS_RESTRICTIONS |
+>>>>> -				VMD_FEAT_OFFSET_FIRST_VECTOR,},
+>>>>> +		(kernel_ulong_t)&(struct vmd_device_data) {
+>>>>> +			.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+>>>>> +				    VMD_FEAT_HAS_BUS_RESTRICTIONS |
+>>>>> +				    VMD_FEAT_OFFSET_FIRST_VECTOR,
+>>>>> +		},
+>>>>> +	},
+>>>>
+>>>> It looks like these devices come in families where several device IDs
+>>>> share the same features.  I think this would be more readable if you
+>>>> defined each family outside this table and simply referenced the
+>>>> family here.  E.g., you could do something like:
+>>>>
+>>>>   static struct vmd_device_data vmd_v1 = {
+>>>>     .features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+>>>> 		VMD_FEAT_HAS_BUS_RESTRICTIONS |
+>>>> 		VMD_FEAT_OFFSET_FIRST_VECTOR,
+>>>>   };
+>>>
+>>> I seem to recall it being similar to this in one of the previous revisions
+>>> It's fine with me either way
+>>
+>> Indeed it was:
+>> https://lore.kernel.org/r/366a9602-555f-7a1b-a8db-bbcbf84b7b08@linux.dev
+>> I'd forgotten that.
+>>
+>> At the time there were four devices (0x467f 0x4c3d 0xa77f 0x9a0b)
+>> that used the 467f data.  The current series adds two more (0x7d0b
+>> 0x0ad0b).  Maybe the "vmd_467f_data" name could have been more
+>> descriptive, but the code was definitely shorter:
+>>
+>>   +     { PCI_VDEVICE(INTEL, 0x467f), (kernel_ulong_t)&vmd_467f_data },
+>>   +     { PCI_VDEVICE(INTEL, 0x4c3d), (kernel_ulong_t)&vmd_467f_data },
+>>   +     { PCI_VDEVICE(INTEL, 0xa77f), (kernel_ulong_t)&vmd_467f_data },
+>>   +     { PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
+>> (kernel_ulong_t)&vmd_467f_data },
 > 
-> I also don't like these uppercase supply names... I wonder if it's worth changing
-> the driver to get "avdd" *or* "AVDD" (so, if "avdd" fails -> backwards compat)...
+> I prefer this too but don't know what's the best name. Could just be by the
+> platform that started this grouping, e.g. vmd_tgl_data for Tiger Lake. What do
+> you think Jonathan?
 > 
-> ...this way, we can change the devicetree to use the lowercase names without
-> breaking abi.
+> David
+vmd_client_data ? (meaning product class; client vs enterprise)
+
+
 > 
-> Of course, this commit would need to be changed to document only the lowercase
-> supply names.
+>>
+>> I do wish pci_device_id.driver_data were a void pointer, as it is for
+>> of_device_id, which makes it much more natural to express [1], but
+>> that ship has long sailed.
+>>
+>> [1] 
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/controller/dwc/pcie-kirin.c?id=v6.0#n768
+>>
+>>>>   {PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
+>>>>     .driver_data = (kernel_ulong_t) &vmd_v1,
+>>>>
+>>>> Then you can add VMD_FEAT_BIOS_PM_QUIRK and the .ltr value in one place
+>>>> instead of repeating it a half dozen times.
+>>>>
+>>>>>  	{0,}
+>>>>>  };
+>>>>>  MODULE_DEVICE_TABLE(pci, vmd_ids);
+>>>>> -- 
+>>>>> 2.25.1
+>>>>>
 > 
-> Driver-wise, we have a rt5682s_supply_names array... we could do something like:
-> 
-> static const char *rt5682s_supply_names_legacy[RT5682S_NUM_SUPPLIES] = {
-> 	[RT5682S_SUPPLY_AVDD] = "AVDD",
-> 	[RT5682S_SUPPLY_MICVDD] = "MICVDD",
-> };
-> 
-> static const char *rt5682s_supply_names[RT5682S_NUM_SUPPLIES] = {
-> 	[RT5682S_SUPPLY_AVDD] = "avdd",
-> 	[RT5682S_SUPPLY_MICVDD] = "micvdd",
-> };
-> 
-> for (...) assign_supply_names;
-> ret = devm_regulator_bulk_get(...);
-> 
-> if (ret) {
-> 	for (...) assign_legacy_supply_names;
-> 	ret = devm_regulator_bulk_get(...)
-> 	if (ret)
-> 		return ret;
-> }
-> 
-> What do you think?
-
-Hi,
-
-I took a stab at this, but the resulting code wasn't as elegant. The default
-behavior of the regulator core when a regulator is missing is to just print
-a warning and give a dummy regulator in its place. A way around this is the
-"optional" variant, but it doesn't have a bulk version (in fact seems like it
-was added and then removed a few years back, but I haven't dug out the reason).
-
-So the result was a code block that wasn't nearly as neat as your draft above
-and it didn't seem worth it to add this complexity just to gain the usage of
-lowercase properties, which is why in the end I decided to not include this in
-the series I just sent [1]. 
-
-I've included the patch below. If you do think there's a more reasonable
-approach or if having the lowercase supplies is worth it, let me know.
-
-Thanks,
-Nícolas
-
-[1] https://lore.kernel.org/all/20221028205540.3197304-1-nfraprado@collabora.com
-
-
-From 8de4a86f10ba2e13458afe63fe658df685b21b45 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?=
- <nfraprado@collabora.com>
-Date: Thu, 27 Oct 2022 16:10:22 -0400
-Subject: [PATCH] ASoC: rt5682s: Handle lowercase supply name and fallback if
- needed
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-Supply names provided by devicetree are conventionally lowercase. In
-order to be able to use lowercase names without breaking existing
-setups, detect if any of the older names are used and if so fallback to
-them.
-
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
- sound/soc/codecs/rt5682s.c | 40 ++++++++++++++++++++++++++++++--------
- 1 file changed, 32 insertions(+), 8 deletions(-)
-
-diff --git a/sound/soc/codecs/rt5682s.c b/sound/soc/codecs/rt5682s.c
-index 466a37f3500c..3cefa016be77 100644
---- a/sound/soc/codecs/rt5682s.c
-+++ b/sound/soc/codecs/rt5682s.c
-@@ -41,11 +41,16 @@ static const struct rt5682s_platform_data i2s_default_platform_data = {
- 	.dai_clk_names[RT5682S_DAI_BCLK_IDX] = "rt5682-dai-bclk",
- };
-
--static const char *rt5682s_supply_names[RT5682S_NUM_SUPPLIES] = {
-+static const char *rt5682s_legacy_supply_names[RT5682S_NUM_SUPPLIES] = {
- 	[RT5682S_SUPPLY_AVDD] = "AVDD",
- 	[RT5682S_SUPPLY_MICVDD] = "MICVDD",
- };
-
-+static const char *rt5682s_supply_names[RT5682S_NUM_SUPPLIES] = {
-+	[RT5682S_SUPPLY_AVDD] = "avdd",
-+	[RT5682S_SUPPLY_MICVDD] = "micvdd",
-+};
-+
- static const struct reg_sequence patch_list[] = {
- 	{RT5682S_I2C_CTRL,			0x0007},
- 	{RT5682S_DIG_IN_CTRL_1,			0x0000},
-@@ -3090,7 +3095,9 @@ static int rt5682s_i2c_probe(struct i2c_client *i2c)
- 	struct rt5682s_platform_data *pdata = dev_get_platdata(&i2c->dev);
- 	struct rt5682s_priv *rt5682s;
- 	int i, ret;
-+	struct regulator *reg;
- 	unsigned int val;
-+	bool using_legacy_supply_names = false;
-
- 	rt5682s = devm_kzalloc(&i2c->dev, sizeof(struct rt5682s_priv), GFP_KERNEL);
- 	if (!rt5682s)
-@@ -3112,14 +3119,31 @@ static int rt5682s_i2c_probe(struct i2c_client *i2c)
- 		return ret;
- 	}
-
--	for (i = 0; i < ARRAY_SIZE(rt5682s->supplies); i++)
--		rt5682s->supplies[i].supply = rt5682s_supply_names[i];
-+	for (i = 0; i < ARRAY_SIZE(rt5682s_supply_names); i++) {
-+		reg = devm_regulator_get_optional(&i2c->dev, rt5682s_supply_names[i]);
-+		if (IS_ERR(reg)) {
-+			if (PTR_ERR(reg) == -ENODEV) {
-+				using_legacy_supply_names = true;
-+				break;
-+			} else {
-+				dev_err(&i2c->dev, "Failed to request supplies: %d\n", ret);
-+				return PTR_ERR(reg);
-+			}
-+		}
-
--	ret = devm_regulator_bulk_get(&i2c->dev,
--			ARRAY_SIZE(rt5682s->supplies), rt5682s->supplies);
--	if (ret) {
--		dev_err(&i2c->dev, "Failed to request supplies: %d\n", ret);
--		return ret;
-+		rt5682s->supplies[i].consumer = reg;
-+	}
-+
-+	if (using_legacy_supply_names) {
-+		for (i = 0; i < ARRAY_SIZE(rt5682s->supplies); i++)
-+			rt5682s->supplies[i].supply = rt5682s_legacy_supply_names[i];
-+
-+		ret = devm_regulator_bulk_get(&i2c->dev, ARRAY_SIZE(rt5682s->supplies),
-+					      rt5682s->supplies);
-+		if (ret) {
-+			dev_err(&i2c->dev, "Failed to request supplies: %d\n", ret);
-+			return ret;
-+		}
- 	}
-
- 	ret = devm_add_action_or_reset(&i2c->dev, rt5682s_i2c_disable_regulators, rt5682s);
---
-2.38.1
