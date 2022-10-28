@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B88F161148A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AB961148B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbiJ1O1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34320 "EHLO
+        id S230465AbiJ1O2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbiJ1O1W (ORCPT
+        with ESMTP id S230482AbiJ1O1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:27:22 -0400
+        Fri, 28 Oct 2022 10:27:23 -0400
 Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1653F7CE1E
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C517E028
         for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:26:48 -0700 (PDT)
 Received: from zn.tnic (p200300ea9733e7ce329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ce:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AD5031EC0676;
-        Fri, 28 Oct 2022 16:26:46 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 414261EC072E;
+        Fri, 28 Oct 2022 16:26:47 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1666967206;
+        t=1666967207;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mav6KMGb8CiUNcHVuiIE28N3tUmXGA9j/5krq1Vd03A=;
-        b=ZGwhkfDSqIBxQ6dePovBjH3xsRiE2Vliv0qwI8Scdaa30O6MjQZXi9DXeQzl8bxoGJoWUo
-        007wNheMMfHpo9XHKglxdpCqf9YXBCo6wdQ6VRfH4FA4IIAcmsP0g/+Zo3W8V0JjNXTYAr
-        Ja1Ng1IuDVfbqn2elhztTFVzAORvnsA=
+        bh=QJIf89KSwzJWm9JqbRoQ+vSQXO2nZLHSd4du3DdJICo=;
+        b=l2sh8wzlwUyITJW1IwqsQNYoMAxHJabFqa9JcBCzsoMFU6FytznN4AvqxCYCF308eyMISO
+        uxQXjX8ASrYzDN72pmNWB0lDUdWX6BTFZiQA0cev1fDp6gyIjeVb7qsUTca6mW2ZJjiC5X
+        uBcnqPhrUvvUWez+onMJ4eF/fhqLbdQ=
 From:   Borislav Petkov <bp@alien8.de>
 To:     Ashok Raj <ashok.raj@intel.com>
 Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/5] x86/microcode: Simplify init path even more
-Date:   Fri, 28 Oct 2022 16:26:35 +0200
-Message-Id: <20221028142638.28498-3-bp@alien8.de>
+Subject: [PATCH 3/5] x86/microcode: Kill refresh_fw
+Date:   Fri, 28 Oct 2022 16:26:36 +0200
+Message-Id: <20221028142638.28498-4-bp@alien8.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221028142638.28498-1-bp@alien8.de>
 References: <20221028142638.28498-1-bp@alien8.de>
@@ -52,205 +52,81 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Borislav Petkov <bp@suse.de>
 
-Get rid of all the IPI-sending functions and their wrappers and use
-those which are supposed to be called on each CPU.
-
-Thus:
-
-- microcode_init_cpu() gets called on each CPU on init, applying any new
-  microcode that the driver might've found on the filesystem.
-
-- mc_cpu_starting() simply tries to apply cached microcode as this is
-  the cpuhp starting callback which gets called on CPU resume too.
-
-Even if the driver init function is a late initcall, there is no
-filesystem by then (not even a hdd driver has been loaded yet) so a new
-firmware load attempt cannot simply be done.
-
-It is pointless anyway - for that there's late loading if one really
-needs it.
+request_microcode_fw() can always request firmware now so drop this
+superfluous argument.
 
 Signed-off-by: Borislav Petkov <bp@suse.de>
 ---
- arch/x86/kernel/cpu/microcode/core.c | 120 ++++-----------------------
- 1 file changed, 16 insertions(+), 104 deletions(-)
+ arch/x86/include/asm/microcode.h      | 3 +--
+ arch/x86/kernel/cpu/microcode/amd.c   | 5 ++---
+ arch/x86/kernel/cpu/microcode/core.c  | 2 +-
+ arch/x86/kernel/cpu/microcode/intel.c | 3 +--
+ 4 files changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index 4c222e667567..63f7678743be 100644
---- a/arch/x86/kernel/cpu/microcode/core.c
-+++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -319,60 +319,6 @@ void reload_early_microcode(void)
- 	}
- }
- 
--static void collect_cpu_info_local(void *arg)
--{
--	struct cpu_info_ctx *ctx = arg;
--
--	ctx->err = microcode_ops->collect_cpu_info(smp_processor_id(),
--						   ctx->cpu_sig);
--}
--
--static int collect_cpu_info_on_target(int cpu, struct cpu_signature *cpu_sig)
--{
--	struct cpu_info_ctx ctx = { .cpu_sig = cpu_sig, .err = 0 };
--	int ret;
--
--	ret = smp_call_function_single(cpu, collect_cpu_info_local, &ctx, 1);
--	if (!ret)
--		ret = ctx.err;
--
--	return ret;
--}
--
--static int collect_cpu_info(int cpu)
--{
--	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
--	int ret;
--
--	memset(uci, 0, sizeof(*uci));
--
--	ret = collect_cpu_info_on_target(cpu, &uci->cpu_sig);
--	if (!ret)
--		uci->valid = 1;
--
--	return ret;
--}
--
--static void apply_microcode_local(void *arg)
--{
--	enum ucode_state *err = arg;
--
--	*err = microcode_ops->apply_microcode(smp_processor_id());
--}
--
--static int apply_microcode_on_target(int cpu)
--{
--	enum ucode_state err;
--	int ret;
--
--	ret = smp_call_function_single(cpu, apply_microcode_local, &err, 1);
--	if (!ret) {
--		if (err == UCODE_ERROR)
--			ret = 1;
--	}
--	return ret;
--}
--
- /* fake device for request_firmware */
- static struct platform_device	*microcode_pdev;
- 
-@@ -458,7 +404,7 @@ static int __reload_late(void *info)
- 	 * below.
- 	 */
- 	if (cpumask_first(topology_sibling_cpumask(cpu)) == cpu)
--		apply_microcode_local(&err);
-+		err = microcode_ops->apply_microcode(cpu);
- 	else
- 		goto wait_for_siblings;
- 
-@@ -480,7 +426,7 @@ static int __reload_late(void *info)
- 	 * revision.
- 	 */
- 	if (cpumask_first(topology_sibling_cpumask(cpu)) != cpu)
--		apply_microcode_local(&err);
-+		err = microcode_ops->apply_microcode(cpu);
- 
- 	return ret;
- }
-@@ -589,51 +535,15 @@ static void microcode_fini_cpu(int cpu)
- 		microcode_ops->microcode_fini_cpu(cpu);
- }
- 
--static enum ucode_state microcode_resume_cpu(int cpu)
--{
--	if (apply_microcode_on_target(cpu))
--		return UCODE_ERROR;
--
--	pr_debug("CPU%d updated upon resume\n", cpu);
--
--	return UCODE_OK;
--}
--
--static enum ucode_state microcode_init_cpu(int cpu, bool refresh_fw)
--{
--	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
--	enum ucode_state ustate;
--
--	if (uci->valid)
--		return UCODE_OK;
--
--	if (collect_cpu_info(cpu))
--		return UCODE_ERROR;
--
--	/* --dimm. Trigger a delayed update? */
--	if (system_state != SYSTEM_RUNNING)
--		return UCODE_NFOUND;
--
--	ustate = microcode_ops->request_microcode_fw(cpu, &microcode_pdev->dev, refresh_fw);
--	if (ustate == UCODE_NEW) {
--		pr_debug("CPU%d updated upon init\n", cpu);
--		apply_microcode_on_target(cpu);
--	}
--
--	return ustate;
--}
--
--static enum ucode_state microcode_update_cpu(int cpu)
-+static enum ucode_state microcode_init_cpu(int cpu)
- {
- 	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
- 
--	/* Refresh CPU microcode revision after resume. */
--	collect_cpu_info(cpu);
-+	memset(uci, 0, sizeof(*uci));
- 
--	if (uci->valid)
--		return microcode_resume_cpu(cpu);
-+	microcode_ops->collect_cpu_info(cpu, &uci->cpu_sig);
- 
--	return microcode_init_cpu(cpu, false);
-+	return microcode_ops->apply_microcode(cpu);
- }
- 
- /**
-@@ -651,14 +561,14 @@ void microcode_bsp_resume(void)
- }
- 
- static struct syscore_ops mc_syscore_ops = {
--	.resume			= microcode_bsp_resume,
-+	.resume	= microcode_bsp_resume,
+diff --git a/arch/x86/include/asm/microcode.h b/arch/x86/include/asm/microcode.h
+index 74ecc2bd6cd0..d4c36fbd1d39 100644
+--- a/arch/x86/include/asm/microcode.h
++++ b/arch/x86/include/asm/microcode.h
+@@ -33,8 +33,7 @@ enum ucode_state {
  };
  
- static int mc_cpu_starting(unsigned int cpu)
+ struct microcode_ops {
+-	enum ucode_state (*request_microcode_fw) (int cpu, struct device *,
+-						  bool refresh_fw);
++	enum ucode_state (*request_microcode_fw) (int cpu, struct device *);
+ 
+ 	void (*microcode_fini_cpu) (int cpu);
+ 
+diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
+index e7410e98fc1f..b103d5e5f447 100644
+--- a/arch/x86/kernel/cpu/microcode/amd.c
++++ b/arch/x86/kernel/cpu/microcode/amd.c
+@@ -891,8 +891,7 @@ load_microcode_amd(bool save, u8 family, const u8 *data, size_t size)
+  *
+  * These might be larger than 2K.
+  */
+-static enum ucode_state request_microcode_amd(int cpu, struct device *device,
+-					      bool refresh_fw)
++static enum ucode_state request_microcode_amd(int cpu, struct device *device)
  {
--	microcode_update_cpu(cpu);
--	pr_debug("CPU%d added\n", cpu);
--	return 0;
-+	enum ucode_state err = microcode_ops->apply_microcode(cpu);
-+
-+	return err == UCODE_ERROR;
+ 	char fw_name[36] = "amd-ucode/microcode_amd.bin";
+ 	struct cpuinfo_x86 *c = &cpu_data(cpu);
+@@ -901,7 +900,7 @@ static enum ucode_state request_microcode_amd(int cpu, struct device *device,
+ 	const struct firmware *fw;
+ 
+ 	/* reload ucode container only on the boot cpu */
+-	if (!refresh_fw || !bsp)
++	if (!bsp)
+ 		return UCODE_OK;
+ 
+ 	if (c->x86 >= 0x15)
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index 63f7678743be..7c41e0132fa1 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -477,7 +477,7 @@ static ssize_t reload_store(struct device *dev,
+ 	if (ret)
+ 		goto put;
+ 
+-	tmp_ret = microcode_ops->request_microcode_fw(bsp, &microcode_pdev->dev, true);
++	tmp_ret = microcode_ops->request_microcode_fw(bsp, &microcode_pdev->dev);
+ 	if (tmp_ret != UCODE_NEW)
+ 		goto put;
+ 
+diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
+index 1fcbd671f1df..8c35c70029bf 100644
+--- a/arch/x86/kernel/cpu/microcode/intel.c
++++ b/arch/x86/kernel/cpu/microcode/intel.c
+@@ -885,8 +885,7 @@ static bool is_blacklisted(unsigned int cpu)
+ 	return false;
  }
  
- static int mc_cpu_online(unsigned int cpu)
-@@ -688,11 +598,13 @@ static int mc_cpu_down_prep(unsigned int cpu)
- static void setup_online_cpu(struct work_struct *work)
+-static enum ucode_state request_microcode_fw(int cpu, struct device *device,
+-					     bool refresh_fw)
++static enum ucode_state request_microcode_fw(int cpu, struct device *device)
  {
- 	int cpu = smp_processor_id();
--	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
--
--	memset(uci, 0, sizeof(*uci));
-+	enum ucode_state err;
- 
--	microcode_ops->collect_cpu_info(cpu, &uci->cpu_sig);
-+	err = microcode_init_cpu(cpu);
-+	if (err == UCODE_ERROR) {
-+		pr_err("Error applying microcode on CPU%d\n", cpu);
-+		return;
-+	}
- 
- 	mc_cpu_online(cpu);
- }
+ 	struct cpuinfo_x86 *c = &cpu_data(cpu);
+ 	const struct firmware *firmware;
 -- 
 2.35.1
 
