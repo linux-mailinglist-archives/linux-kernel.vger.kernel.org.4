@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46567610770
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 03:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F8D61076A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 03:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236040AbiJ1BtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 21:49:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
+        id S235854AbiJ1Bst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 21:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235884AbiJ1Bsu (ORCPT
+        with ESMTP id S235104AbiJ1Bsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 21:48:50 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7275FAC4B1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:48:49 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id d13so2612652qko.5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:48:49 -0700 (PDT)
+        Thu, 27 Oct 2022 21:48:41 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2C9AC389
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:48:40 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id f22so2714957qto.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:48:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0w7DYUpPoHwkKsz/O/epVHDzkGEN4zz7NZ/8XRkaZ5s=;
-        b=bv+ZXexWl0uhqX5/Zmj34Ib4dbITg9XnYqNa/61/AAXlCpniuIH9FLV64XwGINmaty
-         FIlRPryc7+tX85M05cf/YNRLYxCEtW1neU7iHAr88UYZy7raN1Aqet11Z7eQMNHaaPnx
-         1OwJeztoRKs/thbnZjcIdAR0h5QuWOzpDnNcOBODAt0Bmj/LKnQM/jFC/YkE55Qx5qOx
-         LQFKySgG4ai07KgZOi5hgajtGci1cK1O9UFHdQORdIT7zTcobmGYHnp/aGmpnqKVREg4
-         fXRmp5RQ7J1YUl6sleqJKNXTlTQgHD3DUfW/mi9KpmG1ZxiUBi89Sx3tCut46GRfc836
-         10lQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RIvfGYehnMa6vIHYYKC8CbCIUzksWXHKOuTYYTC6QyE=;
+        b=cyuxwjjEgSIb7u4uJQfNUyKZwsoP4ZsECrSTZJxHowpz5sUFI0h/S9O4Ph0F9CDeqb
+         jutAHfg4no8JzCg10FjaZYUzxlwcHExfUskHnAe8C0w7obuj/p2pm3pSDTxAvFGxbqnu
+         yrUJqXbZm9hDpwcQb1W1JzZmk3zmw4x7XFBRC9d8bO8zGC6mfQexAGA0isj9MTuor3AS
+         wC832jU/H95L7x120ZV+eS974IF3w3XLlnolJJTP1FQNlW8uXw7hxVsbvvLLl/M+MElh
+         3BKaac7yFMqAgU0QL8o+e0VQfVU+VwYnlW+yOb94BwBtgSr0APLU8zLlCKn2MIhjNHr0
+         HpXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0w7DYUpPoHwkKsz/O/epVHDzkGEN4zz7NZ/8XRkaZ5s=;
-        b=xsp8GPaWFUPMuWlAMTgm8EB41exrUcFahCZRRQnUEVxQCTrXbEZ32/7ffMEKmVS9dm
-         0w6leQNgCZi7wNZXeAtXZY0VcKf3GGYACoaD1Onpd/K9xbmaF2cHYmpNpvF0v9gIX9lk
-         8WOH2OsMVKKsfInRXvnJ1tNGUtoGnDNoEk71+qfA5Kg2S6xmGlc9wbLoFMDiepFOrb2h
-         cCGMAbvBHwSVVodzvaG1+ywnuW2Ap/2jsyocX7YKzx4X5G/IKcKqr6SodbvFozkGN4oK
-         6yZjDpW8JNhpxReCwnQO+Nuhm7NFsJzRlr6JdN7cU8dKCPfK/1m3uvAOp+kxhGBSgxOA
-         MXZg==
-X-Gm-Message-State: ACrzQf01sXxE39jPJ1U6am2LmtkVn4ooqqgU6FHA68eSa72mWu9zniUv
-        Ex6k3dPgbJLUzeNHe5xdLD1wiwv3IWM=
-X-Google-Smtp-Source: AMsMyM6Qu6vpDOrUXI5ppiyQCpj3SD91PK3TAGK64Xc+L1mtK5kPjiBKNMImU/JDskNFNc9WENFg3g==
-X-Received: by 2002:a05:622a:550:b0:39c:f017:4b0c with SMTP id m16-20020a05622a055000b0039cf0174b0cmr43157180qtx.452.1666921718100;
-        Thu, 27 Oct 2022 18:48:38 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RIvfGYehnMa6vIHYYKC8CbCIUzksWXHKOuTYYTC6QyE=;
+        b=bAj94sxcQQ1lBkysj08tZCUOAaHgO+xisM9eH9GkjNflYXGQvDq/vFMzhnSO3fJRe/
+         39b94cigrUFxfRK1w7Ge9474rzGS2mpZeLfvf27l1CGHk7hFeIviJeWRu+ifrZxSAnfI
+         c4MQL7TbUle4hDd45vsDyCvsITlEupWE8FttvA/GOg7ONnOvPW3pGJYpT9BWO3dvlQF+
+         yFVPRpdBcHhiVaSydxcGt/v2L9A6+kAOk0mYAKAANdzHBmY+p7AjACWwldOXIaYcSDCa
+         QanwUsuJymMoN+11YaqyvrxY6qFx2co4ek5NjhRbZ+OR1fwlWFxnbNFaTj6w2bhJoLP5
+         H7Ig==
+X-Gm-Message-State: ACrzQf0OiPvodID+9flS0PKAMKzoa25QMIu9o9dLpk+8PCW7FxwXQSGh
+        SYMyt8UpaYq1cnq/4yzMMyjCzvVqWNI=
+X-Google-Smtp-Source: AMsMyM6pvtfauL443znH2AFXFJIteBfX5dL1uOhAcoRBRHR9NFqJR6y16I1Tmis8U83AH3Vg7jHwpA==
+X-Received: by 2002:a05:622a:19a0:b0:39c:ba70:e475 with SMTP id u32-20020a05622a19a000b0039cba70e475mr43122367qtc.50.1666921719131;
+        Thu, 27 Oct 2022 18:48:39 -0700 (PDT)
 Received: from localhost ([2601:589:4102:4c7c:d8d0:78d7:ad97:2651])
-        by smtp.gmail.com with ESMTPSA id m3-20020a05620a24c300b006b953a7929csm2080764qkn.73.2022.10.27.18.48.37
+        by smtp.gmail.com with ESMTPSA id o8-20020ac841c8000000b0039cd508f1d3sm1704079qtm.75.2022.10.27.18.48.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 18:48:37 -0700 (PDT)
+        Thu, 27 Oct 2022 18:48:38 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 0/6] bitmap: remove _reg_op()
-Date:   Thu, 27 Oct 2022 18:48:28 -0700
-Message-Id: <20221028014834.572819-1-yury.norov@gmail.com>
+Subject: [PATCH 1/6] bitmap: add bitmap_empty_from()
+Date:   Thu, 27 Oct 2022 18:48:29 -0700
+Message-Id: <20221028014834.572819-2-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221028014834.572819-1-yury.norov@gmail.com>
+References: <20221028014834.572819-1-yury.norov@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,24 +73,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-_reg_op() duplicates functionality of other bitmap functions.
-This series removes it.
+New function checks if a bitmap is empty starting from a specific bit.
+In the following patch, it's used to replace _reg_op(REG_OP_ISFREE).
 
-On top of this:
-https://lore.kernel.org/lkml/20221027043810.350460-1-yury.norov@gmail.com/
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ include/linux/bitmap.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Yury Norov (6):
-  bitmap: add bitmap_empty_from()
-  bitmap: replace _reg_op(REG_OP_ALLOC) with bitmap_set()
-  bitmap: replace _reg_op(REG_OP_RELEASE) with bitmap_clear()
-  bitmap: replace _reg_op(REG_OP_ISFREE) with bitmap_empty_from()
-  bitmap: fix opencoded bitmap_allocate_region()
-  bitmap: drop _reg_op()
-
- include/linux/bitmap.h | 11 ++++++
- lib/bitmap.c           | 89 +++---------------------------------------
- 2 files changed, 17 insertions(+), 83 deletions(-)
-
+diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
+index 40e53a2ecc0d..f84553805c9c 100644
+--- a/include/linux/bitmap.h
++++ b/include/linux/bitmap.h
+@@ -49,6 +49,7 @@ struct device;
+  *  bitmap_intersects(src1, src2, nbits)        Do *src1 and *src2 overlap?
+  *  bitmap_subset(src1, src2, nbits)            Is *src1 a subset of *src2?
+  *  bitmap_empty(src, nbits)                    Are all bits zero in *src?
++ *  bitmap_empty_from(src, start, nbits)        Are all bits zero in *src starting from @start?
+  *  bitmap_full(src, nbits)                     Are all bits set in *src?
+  *  bitmap_weight(src, nbits)                   Hamming Weight: number set bits
+  *  bitmap_weight_and(src1, src2, nbits)        Hamming Weight of and'ed bitmap
+@@ -433,6 +434,16 @@ static __always_inline bool bitmap_full(const unsigned long *src, unsigned int n
+ 	return find_first_zero_bit(src, nbits) == nbits;
+ }
+ 
++static __always_inline
++bool bitmap_empty_from(const unsigned long *src, unsigned int start, unsigned int nbits)
++{
++	if (small_const_nbits_off(nbits, start))
++		return !(src[start/BITS_PER_LONG] &
++			 GENMASK((nbits - 1) % BITS_PER_LONG, start % BITS_PER_LONG));
++
++	return find_next_bit(src, nbits, start) == nbits;
++}
++
+ static __always_inline
+ unsigned int bitmap_weight(const unsigned long *src, unsigned int nbits)
+ {
 -- 
 2.34.1
 
