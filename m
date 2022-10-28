@@ -2,426 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5753E61105D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03762611057
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiJ1MEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 08:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
+        id S229893AbiJ1MDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 08:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiJ1MEh (ORCPT
+        with ESMTP id S229522AbiJ1MDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 08:04:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B054911A3A;
-        Fri, 28 Oct 2022 05:04:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90A2E62805;
-        Fri, 28 Oct 2022 12:04:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78617C433D6;
-        Fri, 28 Oct 2022 12:04:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666958674;
-        bh=C/YGsVUCYNapFuiu+tIr3fnU0QrhrmqBFmkN/+Z71+M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YkSNdNZvxyILFuIrGakqFQwfCq/ZmbvcrrkDfFf9AutLYx6AKlXB1GkGPlYQ1B8M8
-         Y+WIgIYH1+sEuKNjNauaooxNfAbzxA3MyAOx6neSWS6LOLeP2cz2qnz3CBOuN9nmVj
-         vqIEIt0/DBmKedpzPG5rU2yRJOHDDxOShGZEekzs=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: [PATCH 5.10 00/73] 5.10.152-rc1 review
-Date:   Fri, 28 Oct 2022 14:02:57 +0200
-Message-Id: <20221028120232.344548477@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
+        Fri, 28 Oct 2022 08:03:47 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340571D374E
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=82n6RBa9XoGODnQnRPQprS3ZGGcq4vGNRDRtnAIQpAo=; b=ZZa9sWqpWD4mk5ewernqXo0tZ7
+        JDwneWcYgTU6S7HP4Pl8VVQ5/eVw8QH/z23oOG+DR+GY9yk1QbixPhXBUBrSYNbmPHPmGiJKTGVJD
+        6eL3QKbayrf5zYd+Ws9Z/AZRBLBk8GDJRlLhYwEXOkqzepPEvM1lOrve4EX9PBnBBOPoymGXijBrw
+        HbZFk3rpy1nO7ACSYfh5XFkhlHTJP/M8rYZHN6m1GX7wtcFnlCqAV5DuOFGnVFee0bpr8d9RApo6c
+        dTA/IrSASCXEznfW7esYIIQzR2ACwUx9ONT7e7k4MChmMGe5uLNM5XKoRAk6P1p7ivLHYhU6I9IuN
+        e3UJ4Iiw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ooO58-0076Ja-5d; Fri, 28 Oct 2022 12:03:26 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1528830035C;
+        Fri, 28 Oct 2022 14:03:25 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E11C52C6CBA2E; Fri, 28 Oct 2022 14:03:24 +0200 (CEST)
+Date:   Fri, 28 Oct 2022 14:03:24 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH 0/4] x86/ibt: Implement FineIBT
+Message-ID: <Y1vFDJ9UECgyAkDj@hirez.programming.kicks-ass.net>
+References: <20221027092812.185993858@infradead.org>
+ <322c0b333f0a4a60be2a89f0cdf7edde@AcuMS.aculab.com>
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.152-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.10.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.10.152-rc1
-X-KernelTest-Deadline: 2022-10-30T12:02+00:00
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <322c0b333f0a4a60be2a89f0cdf7edde@AcuMS.aculab.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.10.152 release.
-There are 73 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
-
-Responses should be made by Sun, 30 Oct 2022 12:02:13 +0000.
-Anything received after that time might be too late.
-
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.152-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-and the diffstat can be found below.
-
-thanks,
-
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.10.152-rc1
-
-Seth Jenkins <sethjenkins@google.com>
-    mm: /proc/pid/smaps_rollup: fix no vma's null-deref
-
-Yu Kuai <yukuai3@huawei.com>
-    blk-wbt: fix that 'rwb->wc' is always set to 1 in wbt_init()
-
-Avri Altman <avri.altman@wdc.com>
-    mmc: core: Add SD card quirk for broken discard
-
-Nick Desaulniers <ndesaulniers@google.com>
-    Makefile.debug: re-enable debug info for .S files
-
-Nathan Chancellor <nathan@kernel.org>
-    x86/Kconfig: Drop check for -mabi=ms for CONFIG_EFI_STUB
-
-Werner Sembach <wse@tuxedocomputers.com>
-    ACPI: video: Force backlight native for more TongFang devices
-
-Gaurav Kohli <gauravkohli@linux.microsoft.com>
-    hv_netvsc: Fix race between VF offering and VF association message from host
-
-Adrian Hunter <adrian.hunter@intel.com>
-    perf/x86/intel/pt: Relax address filter validation
-
-Conor Dooley <conor.dooley@microchip.com>
-    riscv: topology: fix default topology reporting
-
-Conor Dooley <conor.dooley@microchip.com>
-    arm64: topology: move store_cpu_topology() to shared code
-
-Sibi Sankar <sibis@codeaurora.org>
-    arm64: dts: qcom: sc7180-trogdor: Fixup modem memory region
-
-Desmond Cheong Zhi Xi <desmondcheongzx@gmail.com>
-    fcntl: fix potential deadlocks for &fown_struct.lock
-
-Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-    fcntl: make F_GETOWN(EX) return 0 on dead owner task
-
-Rob Herring <robh@kernel.org>
-    perf: Skip and warn on unknown format 'configN' attrs
-
-Jin Yao <yao.jin@linux.intel.com>
-    perf pmu: Validate raw event with sysfs exported format bits
-
-Wenting Zhang <zephray@outlook.com>
-    riscv: always honor the CONFIG_CMDLINE_FORCE when parsing dtb
-
-Kefeng Wang <wangkefeng.wang@huawei.com>
-    riscv: Add machine name to kernel boot log and stack dump output
-
-Prathamesh Shete <pshete@nvidia.com>
-    mmc: sdhci-tegra: Use actual clock rate for SW tuning correction
-
-M. Vefa Bicakci <m.v.b@runbox.com>
-    xen/gntdev: Accommodate VMA splitting
-
-Juergen Gross <jgross@suse.com>
-    xen: assume XENFEAT_gnttab_map_avail_bits being set for pv guests
-
-Steven Rostedt (Google) <rostedt@goodmis.org>
-    tracing: Do not free snapshot if tracer is on cmdline
-
-sunliming <sunliming@kylinos.cn>
-    tracing: Simplify conditional compilation code in tracing_set_tracer()
-
-Dario Binacchi <dario.binacchi@amarulasolutions.com>
-    dmaengine: mxs: use platform_driver_register
-
-Fabio Estevam <festevam@gmail.com>
-    dmaengine: mxs-dma: Remove the unused .id_table
-
-Dmitry Osipenko <dmitry.osipenko@collabora.com>
-    drm/virtio: Use appropriate atomic state in virtio_gpu_plane_cleanup_fb()
-
-Jerry Snitselaar <jsnitsel@redhat.com>
-    iommu/vt-d: Clean up si_domain in the init_dmars() error path
-
-Charlotte Tan <charlotte@extrahop.com>
-    iommu/vt-d: Allow NVS regions in arch_rmrr_sanity_check()
-
-Felix Riemann <felix.riemann@sma.de>
-    net: phy: dp83822: disable MDI crossover status change interrupt
-
-Eric Dumazet <edumazet@google.com>
-    net: sched: fix race condition in qdisc_graft()
-
-Yang Yingliang <yangyingliang@huawei.com>
-    net: hns: fix possible memory leak in hnae_ae_register()
-
-Pieter Jansen van Vuuren <pieter.jansen-van-vuuren@amd.com>
-    sfc: include vport_id in filter spec hash and equal()
-
-Zhengchao Shao <shaozhengchao@huawei.com>
-    net: sched: sfb: fix null pointer access issue when sfb_init() fails
-
-Zhengchao Shao <shaozhengchao@huawei.com>
-    net: sched: delete duplicate cleanup of backlog and qlen
-
-Zhengchao Shao <shaozhengchao@huawei.com>
-    net: sched: cake: fix null pointer access issue when cake_init() fails
-
-Serge Semin <Sergey.Semin@baikalelectronics.ru>
-    nvme-hwmon: kmalloc the NVME SMART log buffer
-
-Christoph Hellwig <hch@lst.de>
-    nvme-hwmon: consistently ignore errors from nvme_hwmon_init
-
-Daniel Wagner <dwagner@suse.de>
-    nvme-hwmon: Return error code when registration fails
-
-Hannes Reinecke <hare@suse.de>
-    nvme-hwmon: rework to avoid devm allocation
-
-Brett Creeley <brett@pensando.io>
-    ionic: catch NULL pointer issue on reconfig
-
-Eric Dumazet <edumazet@google.com>
-    net: hsr: avoid possible NULL deref in skb_clone()
-
-Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
-    cifs: Fix xid leak in cifs_ses_add_channel()
-
-Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
-    cifs: Fix xid leak in cifs_flock()
-
-Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
-    cifs: Fix xid leak in cifs_copy_file_range()
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    udp: Update reuse->has_conns under reuseport_lock.
-
-Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-    tcp: Add num_closed_socks to struct sock_reuseport.
-
-Harini Katakam <harini.katakam@amd.com>
-    net: phy: dp83867: Extend RX strap quirk for SGMII mode
-
-Xiaobo Liu <cppcoffee@gmail.com>
-    net/atm: fix proc_mpc_write incorrect return value
-
-Jonathan Cooper <jonathan.s.cooper@amd.com>
-    sfc: Change VF mac via PF as first preference if available.
-
-José Expósito <jose.exposito89@gmail.com>
-    HID: magicmouse: Do not set BTN_MOUSE on double report
-
-Jan Sokolowski <jan.sokolowski@intel.com>
-    i40e: Fix DMA mappings leak
-
-Alexander Potapenko <glider@google.com>
-    tipc: fix an information leak in tipc_topsrv_kern_subscr
-
-Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
-    tipc: Fix recognition of trial period
-
-Tony Luck <tony.luck@intel.com>
-    ACPI: extlog: Handle multiple records
-
-Filipe Manana <fdmanana@suse.com>
-    btrfs: fix processing of delayed tree block refs during backref walking
-
-Filipe Manana <fdmanana@suse.com>
-    btrfs: fix processing of delayed data refs during backref walking
-
-Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
-    r8152: add PID for the Lenovo OneLink+ Dock
-
-James Morse <james.morse@arm.com>
-    arm64: errata: Remove AES hwcap for COMPAT tasks
-
-Yu Kuai <yukuai3@huawei.com>
-    blk-wbt: call rq_qos_add() after wb_normal is initialized
-
-Lei Chen <lennychen@tencent.com>
-    block: wbt: Remove unnecessary invoking of wbt_update_limits in wbt_init
-
-Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-    media: venus: dec: Handle the case where find_format fails
-
-Sean Young <sean@mess.org>
-    media: mceusb: set timeout to at least timeout provided
-
-Eric Ren <renzhengeek@gmail.com>
-    KVM: arm64: vgic: Fix exit condition in scan_its_table()
-
-Alexander Graf <graf@amazon.com>
-    kvm: Add support for arch compat vm ioctls
-
-Fabien Parent <fabien.parent@linaro.org>
-    cpufreq: qcom: fix memory leak in error path
-
-Kai-Heng Feng <kai.heng.feng@canonical.com>
-    ata: ahci: Match EM_MAX_SLOTS with SATA_PMP_MAX_PORTS
-
-Alexander Stein <alexander.stein@ew.tq-group.com>
-    ata: ahci-imx: Fix MODULE_ALIAS
-
-Zhang Rui <rui.zhang@intel.com>
-    hwmon/coretemp: Handle large core ID value
-
-Borislav Petkov <bp@suse.de>
-    x86/microcode/AMD: Apply the patch early on every logical thread
-
-Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-    i2c: qcom-cci: Fix ordering of pm_runtime_xx and i2c_add_adapter
-
-Fabien Parent <fabien.parent@linaro.org>
-    cpufreq: qcom: fix writes in read-only memory region
-
-GONG, Ruiqi <gongruiqi1@huawei.com>
-    selinux: enable use of both GFP_KERNEL and GFP_ATOMIC in convert_context()
-
-Joseph Qi <joseph.qi@linux.alibaba.com>
-    ocfs2: fix BUG when iput after ocfs2_mknod fails
-
-Joseph Qi <joseph.qi@linux.alibaba.com>
-    ocfs2: clear dinode links count in case of error
-
-
--------------
-
-Diffstat:
-
- Documentation/arm64/silicon-errata.rst             |  4 +
- Makefile                                           |  8 +-
- arch/arm64/Kconfig                                 | 16 ++++
- .../boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi      |  4 +
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi       |  2 +-
- arch/arm64/include/asm/cpucaps.h                   |  3 +-
- arch/arm64/kernel/cpu_errata.c                     | 16 ++++
- arch/arm64/kernel/cpufeature.c                     | 13 ++-
- arch/arm64/kernel/topology.c                       | 40 ---------
- arch/arm64/kvm/vgic/vgic-its.c                     |  5 +-
- arch/riscv/Kconfig                                 |  2 +-
- arch/riscv/kernel/setup.c                          | 13 ++-
- arch/riscv/kernel/smpboot.c                        |  4 +-
- arch/x86/Kconfig                                   |  1 -
- arch/x86/events/intel/pt.c                         | 63 ++++++++++++---
- arch/x86/include/asm/iommu.h                       |  4 +-
- arch/x86/kernel/cpu/microcode/amd.c                | 16 +++-
- block/blk-wbt.c                                    | 11 +--
- drivers/acpi/acpi_extlog.c                         | 33 +++++---
- drivers/acpi/video_detect.c                        | 64 +++++++++++++++
- drivers/ata/ahci.h                                 |  2 +-
- drivers/ata/ahci_imx.c                             |  2 +-
- drivers/base/arch_topology.c                       | 19 +++++
- drivers/cpufreq/qcom-cpufreq-nvmem.c               | 10 ++-
- drivers/dma/mxs-dma.c                              | 48 +++--------
- drivers/gpu/drm/virtio/virtgpu_plane.c             |  6 +-
- drivers/hid/hid-magicmouse.c                       |  2 +-
- drivers/hwmon/coretemp.c                           | 56 +++++++++----
- drivers/i2c/busses/i2c-qcom-cci.c                  | 13 +--
- drivers/iommu/intel/iommu.c                        |  5 ++
- drivers/media/platform/qcom/venus/vdec.c           |  2 +
- drivers/media/rc/mceusb.c                          |  2 +-
- drivers/mmc/core/block.c                           |  7 +-
- drivers/mmc/core/card.h                            |  6 ++
- drivers/mmc/core/quirks.h                          |  6 ++
- drivers/mmc/host/sdhci-tegra.c                     |  2 +-
- drivers/net/ethernet/hisilicon/hns/hnae.c          |  4 +-
- drivers/net/ethernet/intel/i40e/i40e_ethtool.c     |  3 -
- drivers/net/ethernet/intel/i40e/i40e_main.c        | 16 ++--
- drivers/net/ethernet/intel/i40e/i40e_txrx.c        | 13 ++-
- drivers/net/ethernet/intel/i40e/i40e_txrx.h        |  1 -
- drivers/net/ethernet/intel/i40e/i40e_xsk.c         | 67 +++++++++++++--
- drivers/net/ethernet/intel/i40e/i40e_xsk.h         |  2 +-
- drivers/net/ethernet/pensando/ionic/ionic_lif.c    | 12 ++-
- drivers/net/ethernet/sfc/ef10.c                    | 58 ++++++-------
- drivers/net/ethernet/sfc/filter.h                  |  3 +-
- drivers/net/ethernet/sfc/rx_common.c               | 10 +--
- drivers/net/hyperv/hyperv_net.h                    |  3 +-
- drivers/net/hyperv/netvsc.c                        |  4 +
- drivers/net/hyperv/netvsc_drv.c                    | 20 +++++
- drivers/net/phy/dp83822.c                          |  3 +-
- drivers/net/phy/dp83867.c                          |  8 ++
- drivers/net/usb/cdc_ether.c                        |  7 ++
- drivers/net/usb/r8152.c                            |  1 +
- drivers/nvme/host/core.c                           |  7 +-
- drivers/nvme/host/hwmon.c                          | 58 +++++++++----
- drivers/nvme/host/nvme.h                           |  8 ++
- drivers/xen/gntdev-common.h                        |  3 +-
- drivers/xen/gntdev.c                               | 94 +++++++---------------
- fs/btrfs/backref.c                                 | 46 +++++++----
- fs/cifs/cifsfs.c                                   |  7 +-
- fs/cifs/file.c                                     | 11 ++-
- fs/cifs/sess.c                                     |  1 +
- fs/fcntl.c                                         | 32 +++++---
- fs/ocfs2/namei.c                                   | 23 +++---
- fs/proc/task_mmu.c                                 |  2 +-
- include/linux/kvm_host.h                           |  2 +
- include/linux/mmc/card.h                           |  1 +
- include/net/sch_generic.h                          |  1 -
- include/net/sock_reuseport.h                       | 16 ++--
- kernel/trace/trace.c                               | 12 +--
- net/atm/mpoa_proc.c                                |  3 +-
- net/core/sock_reuseport.c                          | 91 ++++++++++++++++-----
- net/hsr/hsr_forward.c                              | 12 +--
- net/ipv4/datagram.c                                |  2 +-
- net/ipv4/udp.c                                     |  2 +-
- net/ipv6/datagram.c                                |  2 +-
- net/ipv6/udp.c                                     |  2 +-
- net/sched/sch_api.c                                |  5 +-
- net/sched/sch_atm.c                                |  1 -
- net/sched/sch_cake.c                               |  4 +
- net/sched/sch_cbq.c                                |  1 -
- net/sched/sch_choke.c                              |  2 -
- net/sched/sch_drr.c                                |  2 -
- net/sched/sch_dsmark.c                             |  2 -
- net/sched/sch_etf.c                                |  3 -
- net/sched/sch_ets.c                                |  2 -
- net/sched/sch_fq_codel.c                           |  2 -
- net/sched/sch_fq_pie.c                             |  3 -
- net/sched/sch_hfsc.c                               |  2 -
- net/sched/sch_htb.c                                |  2 -
- net/sched/sch_multiq.c                             |  1 -
- net/sched/sch_prio.c                               |  2 -
- net/sched/sch_qfq.c                                |  2 -
- net/sched/sch_red.c                                |  2 -
- net/sched/sch_sfb.c                                |  5 +-
- net/sched/sch_skbprio.c                            |  3 -
- net/sched/sch_taprio.c                             |  2 -
- net/sched/sch_tbf.c                                |  2 -
- net/sched/sch_teql.c                               |  1 -
- net/tipc/discover.c                                |  2 +-
- net/tipc/topsrv.c                                  |  2 +-
- security/selinux/ss/services.c                     |  5 +-
- security/selinux/ss/sidtab.c                       |  4 +-
- security/selinux/ss/sidtab.h                       |  2 +-
- tools/perf/util/parse-events.c                     |  6 ++
- tools/perf/util/pmu.c                              | 50 ++++++++++++
- tools/perf/util/pmu.h                              |  5 ++
- tools/perf/util/pmu.l                              |  2 -
- tools/perf/util/pmu.y                              | 15 +---
- virt/kvm/kvm_main.c                                | 11 +++
- 111 files changed, 863 insertions(+), 475 deletions(-)
-
-
+On Fri, Oct 28, 2022 at 11:01:08AM +0000, David Laight wrote:
+> From: Peter Zijlstra
+> > Sent: 27 October 2022 10:28
+> > 
+> > Hi all,
+> > 
+> > Updated FineIBT series; I've (hopefully) incorporated all feedback from last
+> > time with the notable exception of the Kconfig CFI default -- I'm not sure we
+> > want to add to the Kconfig space for this, also what would a distro do with it.
+> > 
+> > Anyway; please have a look, I'm hoping to merge this soonish so we can make the
+> > next cycle.
+> 
+> Is there a test to ensure that modules are actually compiled
+> with the required endbra, function prologue gap (etc).
+> Having the module load fail is somewhat better than a crash.
+> 
+> It is almost certainly quite easy to generate an out of tree module that
+> is missing all of those (even if compiled at the same time as the kernel).
+> (Never mind issues with modules that contain binary blobs.)
+
+There is not; it is always possible to load a 'malformed' module. We
+have no sanity checking on modules. It is no different from any other
+binary compatilibity issue; if you build a dud module, you get to keep
+the pieces.
