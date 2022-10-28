@@ -2,227 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD846115F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106DB611626
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229379AbiJ1Pf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 11:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S229868AbiJ1Pkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 11:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiJ1PfW (ORCPT
+        with ESMTP id S229706AbiJ1PkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:35:22 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FA615D72E;
-        Fri, 28 Oct 2022 08:35:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 112181FB;
-        Fri, 28 Oct 2022 08:35:26 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D28323F534;
-        Fri, 28 Oct 2022 08:35:18 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 16:35:12 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sudeep.holla@arm.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 7/8] hwmon: (scmi) Register explicitly with Thermal
- Framework
-Message-ID: <Y1v2ozURFdIk1PfU@e120937-lin>
-References: <20221028140833.280091-1-cristian.marussi@arm.com>
- <20221028140833.280091-7-cristian.marussi@arm.com>
- <b914ea25-a9a8-f443-2ba0-615bdd6cc04f@roeck-us.net>
+        Fri, 28 Oct 2022 11:40:25 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09E15BC3D;
+        Fri, 28 Oct 2022 08:40:19 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29SDUEtq006872;
+        Fri, 28 Oct 2022 17:40:04 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=NbSB6f9Ybohoa8sO7EshRv4xTh4x+pWRCcytboWIs/k=;
+ b=pgoR/CsMI+tvg2md6eHJrB6jO6zrERgJg2N2jHt0sU1Z5pBoN3lBYLSbnB7Z/ePsMPOq
+ p0lMnbv3WW7qzfqbTJ6QNtHXoLhzgufALSiXTG4XCj/u0vN+tG3ap8BDhMKwa1OMdhZM
+ fApaV1qjCXw+jlVJtZzaFAnrTAWtoI9Cz6jK2aGxkvy1KCbKBrZNUrqFYsjo8xsfnSrS
+ wpWHzjwKExqrCL7kOR4wAF7DLU3bIorcknYrxXICGA2HcUTphJWmew7/zdQkSiYHS4pg
+ EHgBiad629AVF4n4zye3L1pry7665iN2jhMTIXD/3+UaHQg0KxN71IDOfZ0obYVtR0Wv 8Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kfajfdsyf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Oct 2022 17:40:04 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C618F10002A;
+        Fri, 28 Oct 2022 17:40:00 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C1E60229A8C;
+        Fri, 28 Oct 2022 17:40:00 +0200 (CEST)
+Received: from [10.252.12.236] (10.252.12.236) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 28 Oct
+ 2022 17:39:57 +0200
+Message-ID: <5cb2f55d-dfb1-7481-1907-007db8d25448@foss.st.com>
+Date:   Fri, 28 Oct 2022 17:39:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b914ea25-a9a8-f443-2ba0-615bdd6cc04f@roeck-us.net>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/3] dt-bindings: nvmem: add new stm32mp13 compatible for
+ stm32-romem
+Content-Language: en-US
+To:     Patrick Delaunay <patrick.delaunay@foss.st.com>,
+        Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+CC:     Rob Herring <robh@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20221028145252.2115933-1-patrick.delaunay@foss.st.com>
+ <20221028165150.1.Ifc1812116ff63f5501f3edd155d3cf5c0ecc846c@changeid>
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+In-Reply-To: <20221028165150.1.Ifc1812116ff63f5501f3edd155d3cf5c0ecc846c@changeid>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.252.12.236]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-28_07,2022-10-27_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 08:11:59AM -0700, Guenter Roeck wrote:
-> On 10/28/22 07:08, Cristian Marussi wrote:
-> > Available sensors are enumerated and reported by the SCMI platform server
-> > using a 16bit identification number; not all such sensors are of a type
-> > supported by hwmon subsystem and, among the supported ones, only a subset
-> > could be temperature sensors that have to be registered with the Thermal
-> > Framework.
-> > Potential clashes between hwmon channels indexes and the underlying real
-> > sensors IDs do not play well with the hwmon<-->thermal bridge automatic
-> > registration routines and could need a sensible number of fake dummy
-> > sensors to be made up in order to keep indexes and IDs in sync.
-> > 
-> > Avoid to use the hwmon<-->thermal bridge dropping the HWMON_C_REGISTER_TZ
-> > attribute and instead explicit register temperature sensors directly with
-> > the Thermal Framework.
-> > 
+On 10/28/22 16:52, Patrick Delaunay wrote:
+> Add a new compatible for stm32mp13 support.
 > 
-> 
-> For my reference:
-> 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> $subject says "patch 7/8". Patches 1-6 are firmware patches. Does this patch
-> depend on the other patches of the series or can I apply it on its own ?
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
 
-Thanks for having a look first of all !
+Hi Patrick,
 
-This patch can be applied on its own...it's just that I have bundled
-together a bunch of fixes (... this being probably a bit too big really it
-should have been on its own, sorry for that...)
-
-> 
-> Additional comment inline below.
-> 
-> Thanks,
-> Guenter
-> 
-> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Cc: linux-hwmon@vger.kernel.org
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > ---
-> >   drivers/hwmon/scmi-hwmon.c | 115 ++++++++++++++++++++++++++++++++-----
-> >   1 file changed, 102 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
-> > index b1329a58ce40..124fe8ee1b9b 100644
-> > --- a/drivers/hwmon/scmi-hwmon.c
-> > +++ b/drivers/hwmon/scmi-hwmon.c
-> > @@ -20,6 +20,11 @@ struct scmi_sensors {
-> >   	const struct scmi_sensor_info **info[hwmon_max];
-> >   };
-> > +struct scmi_thermal_sensor {
-> > +	const struct scmi_protocol_handle *ph;
-> > +	const struct scmi_sensor_info *info;
-> > +};
-> > +
-> >   static inline u64 __pow10(u8 x)
-> >   {
-> >   	u64 r = 1;
-> > @@ -64,16 +69,14 @@ static int scmi_hwmon_scale(const struct scmi_sensor_info *sensor, u64 *value)
-> >   	return 0;
-> >   }
-> > -static int scmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> > -			   u32 attr, int channel, long *val)
-> > +static int scmi_hwmon_read_scaled_value(const struct scmi_protocol_handle *ph,
-> > +					const struct scmi_sensor_info *sensor,
-> > +					long *val)
-> >   {
-> >   	int ret;
-> >   	u64 value;
-> > -	const struct scmi_sensor_info *sensor;
-> > -	struct scmi_sensors *scmi_sensors = dev_get_drvdata(dev);
-> > -	sensor = *(scmi_sensors->info[type] + channel);
-> > -	ret = sensor_ops->reading_get(scmi_sensors->ph, sensor->id, &value);
-> > +	ret = sensor_ops->reading_get(ph, sensor->id, &value);
-> >   	if (ret)
-> >   		return ret;
-> > @@ -84,6 +87,17 @@ static int scmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> >   	return ret;
-> >   }
-> > +static int scmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> > +			   u32 attr, int channel, long *val)
-> > +{
-> > +	const struct scmi_sensor_info *sensor;
-> > +	struct scmi_sensors *scmi_sensors = dev_get_drvdata(dev);
-> > +
-> > +	sensor = *(scmi_sensors->info[type] + channel);
-> > +
-> > +	return scmi_hwmon_read_scaled_value(scmi_sensors->ph, sensor, val);
-> > +}
-> > +
-> >   static int
-> >   scmi_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
-> >   		       u32 attr, int channel, const char **str)
-> > @@ -122,6 +136,25 @@ static struct hwmon_chip_info scmi_chip_info = {
-> >   	.info = NULL,
-> >   };
-> > +static int scmi_hwmon_thermal_get_temp(struct thermal_zone_device *tz,
-> > +				       int *temp)
-> > +{
-> > +	int ret;
-> > +	long value;
-> > +	struct scmi_thermal_sensor *th_sensor = tz->devdata;
-> > +
-> > +	ret = scmi_hwmon_read_scaled_value(th_sensor->ph, th_sensor->info,
-> > +					   &value);
-> > +	if (!ret)
-> > +		*temp = value;
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static const struct thermal_zone_device_ops scmi_hwmon_thermal_ops = {
-> > +	.get_temp = scmi_hwmon_thermal_get_temp,
-> > +};
-> > +
-> >   static int scmi_hwmon_add_chan_info(struct hwmon_channel_info *scmi_hwmon_chan,
-> >   				    struct device *dev, int num,
-> >   				    enum hwmon_sensor_types type, u32 config)
-> > @@ -149,7 +182,6 @@ static enum hwmon_sensor_types scmi_types[] = {
-> >   };
-> >   static u32 hwmon_attributes[hwmon_max] = {
-> > -	[hwmon_chip] = HWMON_C_REGISTER_TZ,
-> >   	[hwmon_temp] = HWMON_T_INPUT | HWMON_T_LABEL,
-> >   	[hwmon_in] = HWMON_I_INPUT | HWMON_I_LABEL,
-> >   	[hwmon_curr] = HWMON_C_INPUT | HWMON_C_LABEL,
-> > @@ -157,6 +189,43 @@ static u32 hwmon_attributes[hwmon_max] = {
-> >   	[hwmon_energy] = HWMON_E_INPUT | HWMON_E_LABEL,
-> >   };
-> > +static int scmi_thermal_sensor_register(struct device *dev,
-> > +					const struct scmi_protocol_handle *ph,
-> > +					const struct scmi_sensor_info *sensor)
-> > +{
-> > +	struct scmi_thermal_sensor *th_sensor;
-> > +	struct thermal_zone_device *tzd;
-> > +
-> > +	th_sensor = devm_kzalloc(dev, sizeof(*th_sensor), GFP_KERNEL);
-> > +	if (!th_sensor)
-> > +		return -ENOMEM;
-> > +
-> > +	th_sensor->ph = ph;
-> > +	th_sensor->info = sensor;
-> > +
-> > +	/*
-> > +	 * Try to register a temperature sensor with the Thermal Framework:
-> > +	 * skip sensors not defined as part of any thermal zone (-ENODEV) but
-> > +	 * report any other errors related to misconfigured zones/sensors.
-> > +	 */
-> > +	tzd = devm_thermal_of_zone_register(dev, th_sensor->info->id, th_sensor,
-> > +					    &scmi_hwmon_thermal_ops);
-> > +	if (IS_ERR(tzd)) {
-> > +		devm_kfree(dev, th_sensor);
-> > +
-> > +		if (PTR_ERR(tzd) != -ENODEV)
-> > +			return PTR_ERR(tzd);
-> > +
-> > +		dev_info(dev, "Sensor '%s' not attached to any thermal zone.\n",
-> > +			 sensor->name);
-> 
-> There were complaints about this message as it is noisy. If you send
-> another version, please drop it unless attaching each sensor to a thermal
-> zone is strongly expected. If you don't send another version, I'll drop it
-> while applying.
-> 
-
-Ok fine for me. I am waiting to have some feedback from Sudeep too, but
-I do not have plan for another version as of now.
-
-As a side note, though, I understand the 'noisiness' argument, but,
-sincerely this same message in the original HWMON code was the only
-reason why I spotted that something was wrong with the SCMI/HWMON
-interactions and discovered the indexes/ids mismatch...if not for
-that it would have gone un-noticed that a perfectly configured
-ThermalZone/Sensor was not working properly...
-(un-noticed at least until something would have been burnt to fire
- in my house .. joking :P)
+You can add my:
+Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 
 Thanks,
-Cristian
+Fabrice
 
+> ---
+> This patch is already sent separately in:
+> https://lore.kernel.org/all/20221014172324.1.Ifc1812116ff63f5501f3edd155d3cf5c0ecc846c@changeid/
+> https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=685403
+> 
+> I create a serie for more efficient review.
+> 
+> Patrick.
+> 
+>  Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+> index 448a2678dc62..16f4cad2fa55 100644
+> --- a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+> +++ b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+> @@ -22,6 +22,7 @@ properties:
+>    compatible:
+>      enum:
+>        - st,stm32f4-otp
+> +      - st,stm32mp13-bsec
+>        - st,stm32mp15-bsec
+>  
+>    reg:
