@@ -2,136 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94EDB610E00
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83FA1610E04
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiJ1J6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 05:58:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54808 "EHLO
+        id S230370AbiJ1J7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 05:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbiJ1J5z (ORCPT
+        with ESMTP id S230457AbiJ1J65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 05:57:55 -0400
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B936B4BA65
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 02:57:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1666951058; x=1698487058;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=JydiMbJm91qt7Dzdbzqgf9FuIhgVG9u78TP21lC8mbE=;
-  b=KcqwFCXt6O6YYo0VqzY0Me9E/fyCCDsQ5pS6d+uchlsR6pfAYcE38KaH
-   zL3Nyd6VCNkwgENEYAkiYiRYf5L4+YWCLZ//qUgVFZcBkqtTgeR7KZ9im
-   M/LbwmdZOXbQARep2jIoOIFyzyqNQuoubb+9Aaql0hyGJF9jTP7sY4PBv
-   B+Y7TmIxwg9NunNhk4knfd+8Y3FY/WTV7WX2nOIaMURQg5NwbM10PYy+U
-   KYL44YTXUCoVez0Q7+oe+6ssLd/FHqir3gsvO3bet5bC4GPnCpXJxFTkm
-   cbwshbucx7Y00TvIfuVlD5LMhU097Mc47QyQsI+ulhh7du69UdgPkK2kP
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.95,220,1661788800"; 
-   d="scan'208";a="327068528"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Oct 2022 17:57:37 +0800
-IronPort-SDR: aVnYPSrmKr4bWmI4qyDuy+K3i84Aflr90WQnTX6VLCTC1wMv/NdL+iqYo4LT4774+2zoJ5n/1p
- B7dGqFRgMfepGdqmyBIQUwa/25/iJjJkm0fZtUfQKiTMIUolM6GiseJK2ZLf9ZAxxnbNQZOPUL
- hgpk1g83tnPFYipT1EWiS0kVUMSQKtxTvMN2akXrA0eAC0LmqPvZzsAn0OxIj1LBTySbHq0LN3
- IK/gVJ9xS1Sor5sicwDYmkpUrb/Om5velLX7b+wCf7QFJ9ZjWQyz4ipbjiadQodCOG4DRQ+MRe
- d8MCESJeKCKanq3jcP2iduRs
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Oct 2022 02:11:14 -0700
-IronPort-SDR: OkxcFIkieMD7AV5nA6FtG9LqsBVlqL6u4VB+xMqHYZnXllmjW/gLasypTY2jm6kg7sFyjMYQs/
- YW339jqmZLO63PumM/azGNhmw3apMMCZGqFq326JSoHfOJt9m/sJkGDBu2aMVjympnQz6OQxu1
- GwxVpsHqbiyoQ7O+a7zwuuSvr29Bz2S6OJcTf8E5ms0Ap1GoSh+Wyryo++/LUOrq1usxOdDqjG
- BrSxDm3fY75qsYkcBKFRVoRBDmV3hI//yiRNhQvZDWTOhh9667d4xB8j7YsFNfIhYEP1KOiRYp
- SRM=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Oct 2022 02:57:38 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MzHz45yL5z1SHkN
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 02:57:36 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:mime-version
-        :references:in-reply-to:x-mailer:message-id:date:subject:to
-        :from; s=dkim; t=1666951055; x=1669543056; bh=JydiMbJm91qt7Dzdbz
-        qgf9FuIhgVG9u78TP21lC8mbE=; b=j4RPkeDxD2OMqX5Kxa/3L32kWsZVpnmHr6
-        BX+yIlhNHMvGj8A/k3T1hWRpUdDmrQWD7bum2uaSPmy7PgQtfwWQh9jsrpx9aLai
-        twJ3Qb4KRS3qMqAY5VyHySyh/tP8wknTEYHCs061Qq7tKyih2RzCagzYSo+nsAQH
-        dvvF8wU4J247DKqVq+cPiysOHuqw5sByri8/ct5ZjmjXPD6smYx/xm7TL4i5AZvh
-        i539ZC1YkSepuErIJctkmpHBUR4i5HAeJgJKBBDQ/doWP8SbVzFX+EErBI3DA9hF
-        vGgkNwGT29RTkowIHP/Zy/Wu4zNaPL+MlyFdv2ud1IqiEU2U1i/g==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 8d7oQvq_s8MR for <linux-kernel@vger.kernel.org>;
-        Fri, 28 Oct 2022 02:57:35 -0700 (PDT)
-Received: from toolbox.alistair23.me (unknown [10.225.167.50])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MzHyy43gyz1RvLy;
-        Fri, 28 Oct 2022 02:57:30 -0700 (PDT)
-From:   Alistair Francis <alistair.francis@opensource.wdc.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     acme@kernel.org, dave@stgolabs.net,
-        alexander.shishkin@linux.intel.com, tglx@linutronix.de,
-        namhyung@kernel.org, jolsa@redhat.com,
-        linux-perf-users@vger.kernel.org, acme@redhat.com,
-        dvhart@infradead.org, mark.rutland@arm.com, peterz@infradead.org,
-        arnd@arndb.de, alistair23@gmail.com,
-        linux-riscv@lists.infradead.org, mingo@redhat.com,
-        alistair.francis@wdc.com, atish.patra@wdc.com
-Subject: [PATCH 6/6] selftests: futex: Use futex_waitv helper function
-Date:   Fri, 28 Oct 2022 19:56:32 +1000
-Message-Id: <20221028095632.1081262-7-alistair.francis@opensource.wdc.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221028095632.1081262-1-alistair.francis@opensource.wdc.com>
-References: <20221028095632.1081262-1-alistair.francis@opensource.wdc.com>
+        Fri, 28 Oct 2022 05:58:57 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C60C1CB51E
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 02:58:31 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id a5so7089889edb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 02:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bYKEr5auoSxhUbnKh8GP4BOEfllJvo3KF+zVmGdF7Sg=;
+        b=MYSQFwayXDSAWGx5ivuAAd2NOXYDyguhrniWK4AYwyWyL1vd1HtVJ9Qpp2pJAITSGL
+         DOBXEv8YeEPfDU7pDQGkEY5XdXoD5Z0L8woRrmece4n9jzK9b+qrtvW8WOlEGhS59Hxo
+         8/jgT35zbZsHzZRsj0uoYJBtb6l4TeA1WJMJwLPiBo6IAqrjV8O3JY1gFyNYRCKN6qUV
+         6ec4T3ooSS5SWkAGyrtweqSI6qWn2xCG35nf3kiB9aJL7RG1+PY9BwITKUwFW1wjgnuQ
+         zKHNX7YKTWypdPAyk40wZZE7BEt+LbBPx5olFd1J6bZDQv42wnsnV+0vji/Pd28IP80o
+         +dwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bYKEr5auoSxhUbnKh8GP4BOEfllJvo3KF+zVmGdF7Sg=;
+        b=iDHFaOr6NFE+OQR1AX++yLxkptb+VzxUav0LZIy9LRqiwbzsHqEfKBTRnpzh2wRsy5
+         LR0QQPFbXT+FPWfqkrCXw9ABZAKsW2Uhx9CFiGhSqSc0ODXfCzrdF7379hZxKwQQBtEr
+         8LnklMUerlLqy1E1S1l3cgQlQZf3r4gdfMPIOIORLZuN4cwo6tyIjn8xBAKjpJuWGgor
+         D5LPyx2owovfVWzD5HP0fFxIOcC/9oqFPu7vR3PT6PBoe3aGm4+LKPyING2YfODapgRS
+         yhq8n3nIDj5hdyFjoHLbt+HF+OOXYmTgBRZ04Ae2KuOboa9lEKeOyCrFRSwWreK7I1bj
+         gfTA==
+X-Gm-Message-State: ACrzQf2z6VOEsHoiydLq1A/7c8Y8V77q9L0VqWTTR0ny53mQkt2/Pn4y
+        uWaOkoOA7UWkoeIwFEPH0Slf3qKJPzkMa4hpaTtRyQ==
+X-Google-Smtp-Source: AMsMyM7oS354NzcDqLUqBnEZXnmJ0HPJ4ER/xskF3RgNgH6aSe4k9cFHaGQOmkmK/I9k0BcYqXil4mFtIwD1g3d3m14=
+X-Received: by 2002:a05:6402:3c5:b0:45b:55d8:21ff with SMTP id
+ t5-20020a05640203c500b0045b55d821ffmr50594337edw.253.1666951109615; Fri, 28
+ Oct 2022 02:58:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221027165054.917467648@linuxfoundation.org>
+In-Reply-To: <20221027165054.917467648@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 28 Oct 2022 15:28:17 +0530
+Message-ID: <CA+G9fYtYAVEL0wk_FxGLfgTPB7pX0NskPao57036Y9p31hHi1w@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/79] 5.15.76-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alistair Francis <alistair.francis@wdc.com>
+On Thu, 27 Oct 2022 at 22:32, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.76 release.
+> There are 79 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 29 Oct 2022 16:50:35 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.76-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Use the publically exposed __kernel_futex_syscall_waitv() helper
-function for the futex_waitv tests.
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-Message-Id: <20211209235857.423773-6-alistair.francis@opensource.wdc.com>
----
- tools/testing/selftests/futex/include/futex2test.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/tools/testing/selftests/futex/include/futex2test.h b/tools/t=
-esting/selftests/futex/include/futex2test.h
-index 9d305520e849..fdc0a0a270cd 100644
---- a/tools/testing/selftests/futex/include/futex2test.h
-+++ b/tools/testing/selftests/futex/include/futex2test.h
-@@ -5,6 +5,7 @@
-  * Copyright 2021 Collabora Ltd.
-  */
- #include <stdint.h>
-+#include <linux/futex_syscall.h>
-=20
- #define u64_to_ptr(x) ((void *)(uintptr_t)(x))
-=20
-@@ -18,5 +19,5 @@
- static inline int futex_waitv(volatile struct futex_waitv *waiters, unsi=
-gned long nr_waiters,
- 			      unsigned long flags, struct timespec *timo, clockid_t clockid)
- {
--	return syscall(__NR_futex_waitv, waiters, nr_waiters, flags, timo, cloc=
-kid);
-+	return __kernel_futex_syscall_waitv(waiters, nr_waiters, flags, timo, c=
-lockid);
- }
---=20
-2.37.3
+NOTE:
+As other reported arm64 allmodconfig builds failed [1].
+[1] https://builds.tuxbuild.com/2GjYlZaXK7ZwRlerOgTwH1deWP9/
 
+## Build
+* kernel: 5.15.76-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 5ea1b40eb20832f02b922538e861382e148832e5
+* git describe: v5.15.75-80-g5ea1b40eb208
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.75-80-g5ea1b40eb208
+
+## No Test Regressions (compared to v5.15.74-531-g98108584d385)
+
+## No Metric Regressions (compared to v5.15.74-531-g98108584d385)
+
+## No Test Fixes (compared to v5.15.74-531-g98108584d385)
+
+## No Metric Fixes (compared to v5.15.74-531-g98108584d385)
+
+## Test result summary
+total: 149983, pass: 126822, fail: 3787, skip: 18858, xfail: 516
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 140 total, 139 passed, 1 failed
+* arm64: 46 total, 44 passed, 2 failed
+* i386: 36 total, 34 passed, 2 failed
+* mips: 26 total, 26 passed, 0 failed
+* parisc: 6 total, 6 passed, 0 failed
+* powerpc: 30 total, 30 passed, 0 failed
+* riscv: 9 total, 9 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 5 total, 5 passed, 0 failed
+* x86_64: 38 total, 36 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
