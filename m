@@ -2,98 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61A361171D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B855F61171F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiJ1QJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38534 "EHLO
+        id S230488AbiJ1QJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231150AbiJ1QIB (ORCPT
+        with ESMTP id S231288AbiJ1QJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:08:01 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD081A39E;
-        Fri, 28 Oct 2022 09:06:48 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7ce329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ce:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4623B1EC0518;
-        Fri, 28 Oct 2022 18:06:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1666973207;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=TaSyEs2uDEeNFySFbsAWLGbxmyPJdlW/cEgdh6Dc9LA=;
-        b=XHRJ4OhKGvnSUY3FZm5qFAiodKxGqGTCRY5VncUDeCygsxhy9Q4bM8IEzLrXXfF9nBehiX
-        F7RLgBP2A6Oi14yCT72nCZ/izgf6RazLC87U75EJpOOQeUI+HZNL9wnR/pPQJCb7fDjnM3
-        tBLFlldzMQiEmDed7zRxx/CCa6R7SoA=
-Date:   Fri, 28 Oct 2022 18:06:41 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andrew Jones <ajones@ventanamicro.com>, x86@kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        openrisc@lists.librecores.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] x86: Fix /proc/cpuinfo cpumask warning
-Message-ID: <Y1v+Ed6mRN9gisJS@zn.tnic>
-References: <20221014155845.1986223-1-ajones@ventanamicro.com>
- <20221014155845.1986223-3-ajones@ventanamicro.com>
- <20221028074828.b66uuqqfbrnjdtab@kamzik>
- <Y1vrMMtRwb0Lekl0@yury-laptop>
- <Y1vvMlwf/4EA/8WW@zn.tnic>
- <CAAH8bW_DkvPCH0-q2Bfe0OJ72r63mRM3GP7NKOFrhe3zMO2gbQ@mail.gmail.com>
+        Fri, 28 Oct 2022 12:09:20 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F349F220F98;
+        Fri, 28 Oct 2022 09:07:27 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id y14so13992739ejd.9;
+        Fri, 28 Oct 2022 09:07:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lD+pA5E2PNMxHP5NE3vNozzPpwCUBIHi+D6BtibFHBk=;
+        b=MCRMjTQyuhwiic2rx3/v6/6wv5tUBlNUxyTBXfCrem/HTZd6Q5qYN15Vtr8kcgICu8
+         BRhNj8V3nAk/I4EmIKMR5oL24I/CbxITjPj0aE9JdJFDqDvVKcEgaT5aTVY5OgOZHcFN
+         4iPuwdHdZe+8NaB/mNBZW7O1eVPJ96D9yY4K1bVN74WjgtbpkuQiDnKyvJRjzMTQs3Dk
+         erAqUISOiz9VnpZ8Y3/Gd2BpsnYRD7dLLe5or3g4yOznJWJatofGqAmXsPLu0mQfU0er
+         VEcYbahqVD39i7eqvfv/tDEmhCuYC/oItPDqanRqNxqBlG/xdN1ITvfPH/B6kXRzgFI2
+         p+TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lD+pA5E2PNMxHP5NE3vNozzPpwCUBIHi+D6BtibFHBk=;
+        b=nXllAd5SAhc90p+w5GWqTV3EdIb5rqBhrqXMWVfIiWNMVB0tdF4Q5nrMBnx7O8BhP0
+         dVE8pqhIrRZLWILUm4ZhF2X1hGJzgOl0AfQX4LL644wKtz3whG0a7nhmO7q55qzVbogf
+         ObO8vT5dvHfVVSQNMoBZZS8zaAai/IrArB4WIZtD39uyg+29dPQQS8HaGf1d27w7RPrM
+         eLgIj7ylz7pev5Ed5SsJBG4MVODDvarcLQMEkjuobjvuAPsoGaSIvlyduHkamMEIVRIs
+         IQ+9YqE5PjWeYn8kNLQLO0SSQ9NZBFwKwDQlutUwP6sfodlTNT0ENXXsO+j8iWu/bjch
+         j+NA==
+X-Gm-Message-State: ACrzQf3afJZiqTMVtRyzsE5gBsBdgk62kus86Xnj9LvjRTh0zf9G19mS
+        GOGi1ci1aW7EzcJy49qolK94wjVmZvnqzm1fzX8=
+X-Google-Smtp-Source: AMsMyM76cFhYbRy1BTy6Nv2FnQl9QDQ+2TmzHjytA9QtTA7YnSxuEYgxNhvPaKIQLqQDevlFZ09jBU6yII5qJB1owVU=
+X-Received: by 2002:a17:907:728b:b0:7a1:b545:b39b with SMTP id
+ dt11-20020a170907728b00b007a1b545b39bmr27114ejc.661.1666973246450; Fri, 28
+ Oct 2022 09:07:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAAH8bW_DkvPCH0-q2Bfe0OJ72r63mRM3GP7NKOFrhe3zMO2gbQ@mail.gmail.com>
+References: <Y1vZKg6UHjdUZt1W@debian> <fcd3d702-d645-2847-d8ee-0fb4734258c6@intel.com>
+In-Reply-To: <fcd3d702-d645-2847-d8ee-0fb4734258c6@intel.com>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Fri, 28 Oct 2022 17:06:50 +0100
+Message-ID: <CADVatmN-iM6mhWo+R1hDBvw_qg=NBdccSDQ2104A2JxZLBkExw@mail.gmail.com>
+Subject: Re: boot failure of linux-next due to 1248fb6a8201 ("x86/mm:
+ Randomize per-cpu entry area")
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 10:13:28AM -0500, Yury Norov wrote:
-> Because it's related to bitmap API usage and has been revealed after
-> some work in bitmaps.
+On Fri, Oct 28, 2022 at 3:33 PM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 10/28/22 06:29, Sudip Mukherjee (Codethink) wrote:
+> > I will be happy to test any patch or provide any extra log if needed.
+> > Though I am not sure how I will collect extra logs (if needed) as there
+> > was no output from qemu.
+>
+> Could you share your qemu config?  The command-line would be fine.  Does
+> it have a serial console set up?
 
-So first of all, that "fix" needs to explain what exactly it is fixing.
-Not "it fixes this and that warning" but why the input arg to
-cpumask_next() cannot be nr_cpu_ids because... yadda yadda...
+qemu-system-x86_64 -m 2048 -smp 2 -chardev
+socket,id=SOCKSYZ,server,nowait,host=localhost,port=46514 -mon
+chardev=SOCKSYZ,mode=control -display none -serial stdio -no-reboot
+-name VM-test -device virtio-rng-pci -enable-kvm -cpu
+host,migratable=off -device e1000,netdev=net0 -netdev
+user,id=net0,restrict=on,hostfwd=tcp:127.0.0.1:28993-:22 -hda
+bullseye.img -snapshot -kernel bzImage -append "root=/dev/sda
+console=ttyS0 net.ifnames=0 biosdevname=0"
 
-> And because nobody else cares.
+serial is via stdio, and in normal boots I get the bootlog in the
+terminal, but in this case there was nothing.
 
-Why do you assume that?
-
-> If you're willing to move it yourself please go ahead.
-
-If it fixes a real issue, we are taking it. And pls note that x86
-patches go through the tip tree.
-
-Thx.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Regards
+Sudip
