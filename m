@@ -2,111 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9414E610C49
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 10:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0072610C50
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 10:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiJ1Ier (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 04:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
+        id S229773AbiJ1IgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 04:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiJ1Ien (ORCPT
+        with ESMTP id S229572AbiJ1IgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 04:34:43 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861EB1C42D
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 01:34:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666946082; x=1698482082;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=I7+l1li97AG1W4nCdyskwIa37THe0xzjljy5/l3afeQ=;
-  b=KQRhi/nIPXbyx53oWRDRqu2cA9MhLAeG0TQrztfQ6uyb6ItQ1zSs/lLC
-   4YI/UkxHBHGuM2VXpxE1h7uqs6oPKNpCBYBDb24T3j6TejBUnsEAnAXR4
-   2ZCGmOShB3ZZfcljjPTW/+hNPlRb7lBrn5s7FToQErET+iaO1S7H5ELe3
-   OvMvgYtTmXwo3uOlXFErMDJYuHv6QerA76VOL7nj1KZP+3k/FAD15IPCD
-   GG21PPh5yIiMiqO2YknRAzZMG1Hekl1bpS8AeVR+8RK7Azh1SB0sh0Pcl
-   7erpAHPqcebpFmiCkvmYt5jrLOoeQGJCPv1QMsMejY2carzpYhe2U2lkH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="335083761"
-X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
-   d="scan'208";a="335083761"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 01:34:41 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="632708139"
-X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
-   d="scan'208";a="632708139"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 01:34:37 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Bharata B Rao <bharata@amd.com>
-Cc:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        "Dan Williams" <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Jagdish Gediya <jvgediya.oss@gmail.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Tim Chen <tim.c.chen@intel.com>, Wei Xu <weixugc@google.com>,
-        Yang Shi <shy828301@gmail.com>
-Subject: Re: [RFC] memory tiering: use small chunk size and more tiers
-References: <20221027065925.476955-1-ying.huang@intel.com>
-        <578c9b89-10eb-1e23-8868-cdd6685d8d4e@linux.ibm.com>
-        <877d0kk5uf.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <59291b98-6907-0acf-df11-6d87681027cc@linux.ibm.com>
-        <8735b8jy9k.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <0d938c9f-c810-b10a-e489-c2b312475c52@amd.com>
-Date:   Fri, 28 Oct 2022 16:33:48 +0800
-In-Reply-To: <0d938c9f-c810-b10a-e489-c2b312475c52@amd.com> (Bharata B. Rao's
-        message of "Fri, 28 Oct 2022 13:34:46 +0530")
-Message-ID: <87tu3oibyr.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 28 Oct 2022 04:36:11 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC4E1A9112
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 01:36:10 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id p184so4008138iof.11
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 01:36:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=9Y1p+qlCnBvED9zzTgvEOAvn502VsmGTh3U1RRB9d4M=;
+        b=Ih3yYh9FIJXwEuCshZuNKX/cwFfmlEZRmef7ihrBclwuNPvkIm50GzcGBi+SXi3CNi
+         j9A7byZVlFMtYx6LiOMrEukdU26TWj5WzQXnQb5H1PX5DUBVRS0wk7y6YzZlQnGNhnKt
+         u5B8kNiUGFrHurNUMWeU6F++3LOA0BNNzP+FR/ymOd8CJKKyhChg+QAGYjeF1qyK5eun
+         woqKcvlEe5Dcm4cDQrEDYQJUxeR0pg0U9bBzAPVDMYxdW+BSq3sHzkQwwN7VtDL1fCng
+         bRRqp3rJJ1nwruNszDvZjSHCQA9vT53UcgHMozpztEb+bOz50XwPk/77mn6orkT8lip4
+         MeYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9Y1p+qlCnBvED9zzTgvEOAvn502VsmGTh3U1RRB9d4M=;
+        b=ceX1oDpQoSW424KtUX6rCoHUSqcG4frUWyat4NW6kt3E1NYlXi5pCV/OZLfv18zchD
+         Ndm93+srTzX1YLTSstjk9j6o5d5fs979Ry8R+zi+cipc2pzhk3SThWa7iuJ7zQHZWhGn
+         nURH/dlWRqG4gG1hb1cGgAcsm9x9LfWy0dQ70AtLEFBubUN0G3Y2QGSh5JdLmywFfvej
+         SIuDrzzbF69D9ZxGVhSPMrkbUw5dBbQpNKCovCOk7ou2XB/75Xv+gfRFPrWxC4sRcj7H
+         gp23i2QM83/Mo6z2H5NI3vZuucx8qrPhpy74DXsQuQ438Bbv3MdNasrjK7Yo9SUe1N6W
+         q0VA==
+X-Gm-Message-State: ACrzQf04Tfslc3xdMd7F9QpfzshW1sYRZtlisJbLsrUOctms80sgjpzR
+        8IhfGvImIuhqef1dw5L6mSgve5HVmz9EcML5xhxM4pkxx0bgfR/r
+X-Google-Smtp-Source: AMsMyM4v8P3eh9JcJMr/U6H9IOtksx0ADf18qvqW7OJhHTf4xyBA1TEwmH2d/EJyqYcj4+SLfNk9iUprf9VUwVrtYtM=
+X-Received: by 2002:a05:622a:147:b0:39c:dc0d:7d0f with SMTP id
+ v7-20020a05622a014700b0039cdc0d7d0fmr43237667qtw.281.1666946159569; Fri, 28
+ Oct 2022 01:35:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Tanju Brunostar <tanjubrunostar0@gmail.com>
+Date:   Fri, 28 Oct 2022 09:35:48 +0100
+Message-ID: <CAHJEyKU8YhVLg2k4c6H_B9YJo=Va=V8ea+vkgDKH8aUZBou0wA@mail.gmail.com>
+Subject: Outreachy first patch wiki modification proposal
+To:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev, Julia Lawall <julia.lawall@inria.fr>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bharata B Rao <bharata@amd.com> writes:
+After setting up my mutt with Gmail, I tested it by sending an email
+but it did not go through. After some research, I realized that Gmail
+no longer allows less secure apps. The way around this is to set up
+two step verification, then generate and use "App password". I would
+like to add this to the wiki, as this will save others from the
+additional work. Please let me know if I can proceed.
 
-> On 10/28/2022 11:16 AM, Huang, Ying wrote:
->> If my understanding were correct, you think the latency / bandwidth of
->> these NUMA nodes will near each other, but may be different.
->> 
->> Even if the latency / bandwidth of these NUMA nodes isn't exactly same,
->> we should deal with that in memory types instead of memory tiers.
->> There's only one abstract distance for each memory type.
->> 
->> So, I still believe we will not have many memory tiers with my proposal.
->> 
->> I don't care too much about the exact number, but want to discuss some
->> general design choice,
->> 
->> a) Avoid to group multiple memory types into one memory tier by default
->>    at most times.
->
-> Do you expect the abstract distances of two different types to be
-> close enough in real life (like you showed in your example with
-> CXL - 5000 and PMEM - 5100) that they will get assigned into same tier
-> most times?
->
-> Are you foreseeing that abstract distance that get mapped by sources
-> like HMAT would run into this issue?
+Thanks,
 
-Only if we set abstract distance chunk size large.  So, I think that
-it's better to set chunk size as small as possible to avoid potential
-issue.  What is the downside to set the chunk size small?
-
-Best Regards,
-Huang, Ying
+Tanju
