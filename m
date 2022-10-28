@@ -2,104 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2CC5611389
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D59611390
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbiJ1NtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        id S230062AbiJ1Nuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbiJ1Nsx (ORCPT
+        with ESMTP id S229927AbiJ1NuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:48:53 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC1A1E0443
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:46:58 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id l32so3252146wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:46:58 -0700 (PDT)
+        Fri, 28 Oct 2022 09:50:20 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2153EA46;
+        Fri, 28 Oct 2022 06:48:57 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id h2so4890076pgp.4;
+        Fri, 28 Oct 2022 06:48:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vlka1GHz30o8aFh5tsOBDtq0uUt2y6UQRhwfqrBr1vE=;
-        b=QYmk5BWs/oI32LYoqi6tLS8sQs5PGD1Qrw15MH8NBomuEMZV10PHqTFlI+RoBIu63A
-         O3/7wsg3FeQJ8vpmH241KKQ65NuURSh+kytsn4Er3zqNF+2kZrikQips6ZOXKrKbtlZ2
-         t+ChjWuvDTdR8O1yED8kWYgLfTG3bEGRzxsxItS4+3Z+603sVU7GuAYftmbDHAx9PbhO
-         x9igrP530WCjTkHlUR07gSVAPV0wbqlU/N7YUS/Zs66d9uG/4YOFXarqhBQqMQZGnXTA
-         Y6rKBrErcmc0BcARnZN8SJZ7gHOj9FiEyUNKny59c92ODDwddB7ExNP8QQ3t20w8FXkr
-         0AGg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wE36S4Q5QWhpFdF46oNzWKHxmiuCfLnpzqCU+eFD2+c=;
+        b=cG4Pku9rZ0VITcSQVmtP7BMBPYsHVd6SmHjm3wGArrpOIxcqYGgw6eG5tPmqJncahT
+         3tGUiHNeRrmqc3kkMULrXFwFVoLLr5sMimq5SOnfFWY8nb82uRynQE0NtjHRqW1sAmFW
+         nM7pwNFyM/Hoiw7FMr8vKM2wTBRoHb9vz/cvDRpSF89H6h9z0bwi249J5Cpb60wRLkcn
+         F2E5lNpaLs0AtN+49DEjknt7U/baVHM/NGwoVn5gUEkU7+wYcBAMZZx9ATPS1hINIEd2
+         oGb+1SImBElSIllLMNm3Q1UBc3RQv181o+8OfmQkAxC8xqTBoQJ0pAjsUfl+Knn7L4cB
+         GRSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Vlka1GHz30o8aFh5tsOBDtq0uUt2y6UQRhwfqrBr1vE=;
-        b=6sMIPaO0kWrtCaTx6E9GDTaBNB0NBDSURPOYoMlslOqAEqtxhuWwqw7UAUC7LkrOVH
-         hnPlJrkKToTWIcSNixjUOqgt5cQptLwzzjNf273KjFbaFxO2jvPhNXParlrbWQxPSfKp
-         5LIaGjqRSK/q9INQB2MJu5Q5TY/Z68HKvE18YOfUNgCsWl5KyuoiSEiMFKZEQCSS4WcZ
-         8B548QsTAHMVtfQ18OIa6y+uiYL+ripasf5Q/LKAzCPrzLrPLYGZ+BloKu820Cci0OTQ
-         nHFn7ALj7S9VPTqV4U/thggpE9utQNp0OIWVb97SxgFS7MpBOnTcnFILFCXgytGG/Ht/
-         IA2A==
-X-Gm-Message-State: ACrzQf1J2BuqK5qNz4caV4Au+L0PhzgreeRuHZ5OxhwugsCUBVCvpD6Z
-        EoMj50gljHpPcTAavDwx6JkXvg==
-X-Google-Smtp-Source: AMsMyM6jRcL5aI0pR7qvy593FXtb1XFIcJ1VPvGc+0GGu3R4pUQo7szAhVrmZO9sLmRfQplU7LHFgQ==
-X-Received: by 2002:a05:600c:3789:b0:3c6:beed:fecf with SMTP id o9-20020a05600c378900b003c6beedfecfmr9281906wmr.174.1666964817077;
-        Fri, 28 Oct 2022 06:46:57 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:898:f380:9e9c:c6c2:95a3:c182? ([2a01:e0a:898:f380:9e9c:c6c2:95a3:c182])
-        by smtp.gmail.com with ESMTPSA id he11-20020a05600c540b00b003c6c5a5a651sm4267793wmb.28.2022.10.28.06.46.55
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wE36S4Q5QWhpFdF46oNzWKHxmiuCfLnpzqCU+eFD2+c=;
+        b=q601H8A4aNXca1vUUV8aYd3b630qbdOV2OmlX1kjfdhwCXTGZVzQulEy+JQ+to2MCg
+         iLxLyCEK7DgRDuf2V6hYtB+u5D0X1ySuvw52bzYd2q9ZLL13Jy8Vn9u9WU+HIx35V2Z5
+         F7sQTT++zNzdpH0cDZkYh3SZiCMIuEpEczXIYYdHmGvqcostZneLJtkof7QPV7J58KvO
+         290yk87sNLQ6PzykwrMe0Owl/e3Ljl7QUaYl+nLpRyKbmF9kN8kjax9xNZPpkQNls+RH
+         /cUScGmvK6IgDjHgooFLppJtAcuMxv8v0h5rFwQZpBO/u+5bAO89sV/dSBExDE9/aX+h
+         imug==
+X-Gm-Message-State: ACrzQf2pJciQLZHq5REMVA4G2CZzBaT4nDJ/xuXe6eyx/vjWFu12hsE0
+        H+QDJWLjHWryx2ghZXeqXrc=
+X-Google-Smtp-Source: AMsMyM7Ocqtk9aKZ7TyJ4UhBbCZ4/O7u2PI6jmlN6yYJC+D8ujXagdwRZF10yINmvJfWzQPXIWYr0g==
+X-Received: by 2002:a05:6a00:1acd:b0:56b:8181:d78d with SMTP id f13-20020a056a001acd00b0056b8181d78dmr33676499pfv.50.1666964936887;
+        Fri, 28 Oct 2022 06:48:56 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-72.three.co.id. [180.214.233.72])
+        by smtp.gmail.com with ESMTPSA id m5-20020a170902bb8500b00186a8beec78sm3096216pls.52.2022.10.28.06.48.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 06:46:56 -0700 (PDT)
-Message-ID: <ec753353-a844-2262-bbbf-7b77fc55af19@linaro.org>
-Date:   Fri, 28 Oct 2022 15:46:54 +0200
+        Fri, 28 Oct 2022 06:48:56 -0700 (PDT)
+Message-ID: <ca4ed45b-8183-07e0-1ebc-796241b27e18@gmail.com>
+Date:   Fri, 28 Oct 2022 20:48:51 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] clk: meson: fix repeated words in comments
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 10/15] scsi: acorn: remove QUEUE_MAGIC_{FREE,USED}
 Content-Language: en-US
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>, jbrunet@baylibre.com,
-        mturquette@baylibre.com, sboyd@kernel.org, khilman@baylibre.com
-Cc:     linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221028134156.64042-1-yuanjilin@cdjrlc.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20221028134156.64042-1-yuanjilin@cdjrlc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     =?UTF-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>,
+        Russell King <linux@armlinux.org.uk>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org
+References: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
+ <f1330d4027e3d7e85d2a5cd7c5f43fed866b9ef9.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <f1330d4027e3d7e85d2a5cd7c5f43fed866b9ef9.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/10/2022 15:41, Jilin Yuan wrote:
-> Delete the redundant word 'of'.
+On 10/27/22 05:43, наб wrote:
+> We have largely moved away from this approach,
+> and we have better debugging instrumentation nowadays: kill it
 > 
-> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
-> ---
->   drivers/clk/meson/clk-regmap.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/meson/clk-regmap.h b/drivers/clk/meson/clk-regmap.h
-> index e365312da54e..e08a9fa0cc36 100644
-> --- a/drivers/clk/meson/clk-regmap.h
-> +++ b/drivers/clk/meson/clk-regmap.h
-> @@ -18,7 +18,7 @@
->    * @data:	data specific to the clock type
->    *
->    * Clock which is controlled by regmap backed registers. The actual type of
-> - * of the clock is controlled by the clock_ops and data.
-> + * the clock is controlled by the clock_ops and data.
->    */
->   struct clk_regmap {
->   	struct clk_hw	hw;
 
+Same reply as [1].
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+[1]: https://lore.kernel.org/linux-doc/80c998ec-435f-158c-9b45-4e6844f7861b@gmail.com/
+
+-- 
+An old man doll... just what I always wanted! - Clara
+
