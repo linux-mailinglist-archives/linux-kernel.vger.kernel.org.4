@@ -2,336 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB0E6115E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9036115E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiJ1PcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 11:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
+        id S230123AbiJ1Pci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 11:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiJ1Pbu (ORCPT
+        with ESMTP id S229629AbiJ1Pcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:31:50 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F27A1E195F;
-        Fri, 28 Oct 2022 08:31:34 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29SDEULx006768;
-        Fri, 28 Oct 2022 17:31:29 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=u6cu1jz1wB4QfB/R1wnqpbH5+1ldsNcYBR14zuK9HsA=;
- b=jRDFg2KPyhfLiUfHyo/ThBYMvqTJy72bhBD9CYNqXiGk6mn28NFuVMml8U86pPiYoBUy
- hXNhqIStX1TVW4Q1AVyVJu+5H9wVcNSutTF1IfuLW7gkd53+6ewH8iVDZmhY8470IHdS
- wleXJA1kUrbqC2P8nD/lNfY+ZP3eyRXXTYTL95HHDbHMsNVjeK6sZZO9bj+LbM21J7NV
- 5OU6r2RJXEUTWKZXMbahYLxzIp2MJr7976lR7vffZEhwodB1pAQuAEKuxecdZeLm3qn2
- oeBFoivI+7cymWDuyE8yrQC1DGBtmDSlO3XMIFRBAejixXYNNpK7QAENuFkkS/MKHmKz 3A== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kfajfdrrc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 17:31:29 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2DD8F10002A;
-        Fri, 28 Oct 2022 17:31:23 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 26610229A77;
-        Fri, 28 Oct 2022 17:31:23 +0200 (CEST)
-Received: from [10.211.9.253] (10.211.9.253) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 28 Oct
- 2022 17:31:22 +0200
-Message-ID: <420faf00-d59e-57c6-55a5-fae08a411517@foss.st.com>
-Date:   Fri, 28 Oct 2022 17:31:22 +0200
+        Fri, 28 Oct 2022 11:32:35 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138031D73E5;
+        Fri, 28 Oct 2022 08:32:34 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id x2so8417376edd.2;
+        Fri, 28 Oct 2022 08:32:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rA52xSpWNjIdx/8QEz/cc4dBngxq1FlPz1lpxICBmW4=;
+        b=bGFwqMWMZG1ZLcnK6YKpwXadUagKjTkDvkG8mhwnOxnfzefGFq5ijm6mn7HOKTmQwr
+         UNoEh1GsHOlgUrMtA+G2GK/fMEDw2bLZpggpkY8gT31TSxakXuyYPAXA/uzgC6y/yu/r
+         X+EBsSQFUIpRUBeqhaX09ACFDmI9gDRJDf9K0i7tkCE5/Y18e3eLjlyV5MLf2E/Sw2eh
+         FSEFuxuu7NnooDeS9lfisM5K5PJYhKxGTAgBB88Rdh0zBz5bCwKaFlYbeIyXVzLLb/Ul
+         vx7HnEYg66BN9taVH5kVrm0kXly/ltIBMOraQQnO2EuBaddfByh+Oj6Ud9PvcmLXqMX1
+         fTlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rA52xSpWNjIdx/8QEz/cc4dBngxq1FlPz1lpxICBmW4=;
+        b=2vI37GPtge/oAA1mFsLTDDN7/37SgZIBW4qWmoyXo9pqWbKMLvjXRfSJnrFht44hew
+         07MGWC93Kklt2VhNij5E2+dvN8ieqnKWTmyGcZZT7uz+9vbSkQ3J2werW5Q2RJPgNbGX
+         MQtoQPq7z/dxaiAOEm7LEheybVIAoFLLyVZlG2udFvbJbDptOi3LQCewt+D/3s2y4ji3
+         zzk0m0dplwrE87vVFBQbY8X3H5Y8M+51pBLqoAjtmXywHIHKhWPG8IzlPIGqWsVfj6Jr
+         qmcujpiWYIgUN6o14XVDUqeQs0/FcmiC7AOnoNnkl9GPgDVZWaX/H/cLuVooy0rMGQXH
+         Lp8g==
+X-Gm-Message-State: ACrzQf30zi/Kxsl5ueivDWNf5T2Ax8V8aWPilQfMLfh+KOwbiNh6fVW8
+        RVNuTEwqk5uWP2OAENnITnVq6YPIrO8lTt1qvuU=
+X-Google-Smtp-Source: AMsMyM4yu8P8naNK3sitQlK8E3t9rjXJ1jA/lLsWlaREMfIj4OdAQ52kdXaZe7qedAAaokMiywUOz8LBXSyp2oMa+OA=
+X-Received: by 2002:a05:6402:f2a:b0:461:eff7:bae8 with SMTP id
+ i42-20020a0564020f2a00b00461eff7bae8mr9429eda.322.1666971152543; Fri, 28 Oct
+ 2022 08:32:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4] remoteproc: core: do pm relax when in RPROC_OFFLINE
-Content-Language: en-US
-To:     "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_clew@quicinc.com>
-References: <128dc161-8949-1146-bf8b-310aa33c06a8@quicinc.com>
- <1663312351-28476-1-git-send-email-quic_aiquny@quicinc.com>
- <20221012204344.GA1178915@p14s>
- <792f05fc-995e-9a87-ab7d-bee03f15bc79@quicinc.com>
- <20221013173442.GA1279972@p14s> <20221013180334.GB1279972@p14s>
- <8807a9a6-d93d-aef5-15f4-88648a6ecbe2@quicinc.com>
- <CANLsYkx8Vcha9FpfRvJEkq2pd+mSYFeZQBXj65YoiSBv+WEY4A@mail.gmail.com>
- <70828854-8427-8ce1-1535-e14261fd122d@quicinc.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-In-Reply-To: <70828854-8427-8ce1-1535-e14261fd122d@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.211.9.253]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-28_07,2022-10-27_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000c5461a05ec18b4e6@google.com> <20221028150501.5159-1-yin31149@gmail.com>
+In-Reply-To: <20221028150501.5159-1-yin31149@gmail.com>
+From:   Hawkins Jiawei <yin31149@gmail.com>
+Date:   Fri, 28 Oct 2022 23:32:20 +0800
+Message-ID: <CAKrof1NyNjozshnGPgxKHuBoKgnd79tC50M44UL_DfeVBad+Kw@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in btrfs_block_rsv_release
+To:     syzbot+dde7e853812ed57835ea@syzkaller.appspotmail.com,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Cc:     18801353760@163.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        syzkaller-bugs@googlegroups.com
+Content-Type: multipart/mixed; boundary="00000000000066139005ec19f79f"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+--00000000000066139005ec19f79f
+Content-Type: text/plain; charset="UTF-8"
 
-On 10/24/22 05:17, Aiqun(Maria) Yu wrote:
-> On 10/22/2022 3:34 AM, Mathieu Poirier wrote:
->> On Wed, 19 Oct 2022 at 23:52, Aiqun(Maria) Yu <quic_aiquny@quicinc.com> wrote:
->>>
->>> On 10/14/2022 2:03 AM, Mathieu Poirier wrote:
->>>> On Thu, Oct 13, 2022 at 11:34:42AM -0600, Mathieu Poirier wrote:
->>>>> On Thu, Oct 13, 2022 at 09:40:09AM +0800, Aiqun(Maria) Yu wrote:
->>>>>> Hi Mathieu,
->>>>>>
->>>>>> On 10/13/2022 4:43 AM, Mathieu Poirier wrote:
->>>>>>> Please add what has changed from one version to another, either in a cover
->>>>>>> letter or after the "Signed-off-by".  There are many examples on how to
->>>>>>> do that
->>>>>>> on the mailing list.
->>>>>>>
->>>>>> Thx for the information, will take a note and benefit for next time.
->>>>>>
->>>>>>> On Fri, Sep 16, 2022 at 03:12:31PM +0800, Maria Yu wrote:
->>>>>>>> RPROC_OFFLINE state indicate there is no recovery process
->>>>>>>> is in progress and no chance to do the pm_relax.
->>>>>>>> Because when recovering from crash, rproc->lock is held and
->>>>>>>> state is RPROC_CRASHED -> RPROC_OFFLINE -> RPROC_RUNNING,
->>>>>>>> and then unlock rproc->lock.
->>>>>>>
->>>>>>> You are correct - because the lock is held rproc->state should be set to
->>>>>>> RPROC_RUNNING
->>>>>>> when rproc_trigger_recovery() returns.  If that is not the case then
->>>>>>> something
->>>>>>> went wrong.
->>>>>>>
->>>>>>> Function rproc_stop() sets rproc->state to RPROC_OFFLINE just before
->>>>>>> returning,
->>>>>>> so we know the remote processor was stopped.  Therefore if rproc->state
->>>>>>> is set
->>>>>>> to RPROC_OFFLINE something went wrong in either request_firmware() or
->>>>>>> rproc_start().  Either way the remote processor is offline and the system
->>>>>>> probably
->>>>>>> in an unknown/unstable.  As such I don't see how calling pm_relax() can help
->>>>>>> things along.
->>>>>>>
->>>>>> PROC_OFFLINE is possible that rproc_shutdown is triggered and successfully
->>>>>> finished.
->>>>>> Even if it is multi crash rproc_crash_handler_work contention issue, and
->>>>>> last rproc_trigger_recovery bailed out with only
->>>>>> rproc->state==RPROC_OFFLINE, it is still worth to do pm_relax in pair.
->>>>>> Since the subsystem may still can be recovered with customer's next trigger
->>>>>> of rproc_start, and we can make each error out path clean with pm resources.
->>>>>>
->>>>>>> I suggest spending time understanding what leads to the failure when
->>>>>>> recovering
->>>>>>> from a crash and address that problem(s).
->>>>>>>
->>>>>> In current case, the customer's information is that the issue happened when
->>>>>> rproc_shutdown is triggered at similar time. So not an issue from error out
->>>>>> of rproc_trigger_recovery.
->>>>>
->>>>> That is a very important element to consider and should have been mentioned
->>>>> from
->>>>> the beginning.  What I see happening is the following:
->>>>>
->>>>> rproc_report_crash()
->>>>>           pm_stay_awake()
->>>>>           queue_work() // current thread is suspended
->>>>>
->>>>> rproc_shutdown()
->>>>>           rproc_stop()
->>>>>                   rproc->state = RPROC_OFFLINE;
->>>>>
->>>>> rproc_crash_handler_work()
->>>>>           if (rproc->state == RPROC_OFFLINE)
->>>>>                   return // pm_relax() is not called
->>>>>
->>>>> The right way to fix this is to add a pm_relax() in rproc_shutdown() and
->>>>> rproc_detach(), along with a very descriptive comment as to why it is needed.
->>>>
->>>> Thinking about this further there are more ramifications to consider.  Please
->>>> confirm the above scenario is what you are facing.  I will advise on how to
->>>> move
->>>> forward if that is the case.
->>>>
->>> Not sure if the situation is clear or not. So resend the email again.
->>>
->>> The above senario is what customer is facing. crash hanppened while at
->>> the same time shutdown is triggered.
->>
->> Unfortunately this is not enough details to address a problem as
->> complex as this one.
->>
->>> And the device cannto goes to suspend state after that.
->>> the subsystem can still be start normally after this.
->>
->> If the code flow I pasted above reflects the problem at hand, the
->> current patch will not be sufficient to address the issue.  If Arnaud
->> confirms my suspicions we will have to think about a better solution.
->>
-> 
-> Hi Mathiew,
-> 
-> Could you pls have more details of any side effects other then power issue of
-> the current senario?
-> Why the current patch is not sufficient pls?
-> 
-> 
-> Have the current senario in details with rproc->lock information in details:
-> 
-> | subsystem crashed interrupt issued      | user trigger shutdown
-> | rproc_report_crash()                    |
-> |          pm_stay_awake()                |
-> |          queue_work()                   |
-> |                                         |rproc_shutdown
-> |                                         |mutex_lock(&rproc->lock);
-> |                                         |rproc_stop()
-> |rproc_crash_handler_work()               |rproc->state = RPROC_OFFLINE;
-> |                                         |mutex_unlock(&rproc->lock);
-> |mutex_lock(&rproc->lock);                |
-> |if (rproc->state == RPROC_OFFLINE)       |
-> |return // pm_relax() is not called       |rproc_boot
-> |mutex_unlock(&rproc->lock);              |
-> |                                         |mutex_lock(&rproc->lock);
-> |                                         |rproc_start()
-> |                                         |mutex_unlock(&rproc->lock);
-> 
-> 
+On Fri, 28 Oct 2022 at 23:06, Hawkins Jiawei <yin31149@gmail.com> wrote:
+>
+> On Fri, 28 Oct 2022 at 19:14, Hawkins Jiawei <yin31149@gmail.com> wrote:
+> >
+> > Hi,
+> > > Hello,
+> > >
+> > > syzbot found the following issue on:
+> > >
+> > > HEAD commit:    493ffd6605b2 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
+> > > git tree:       upstream
+> > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=1025dd72880000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=dde7e853812ed57835ea
+> > > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17d16e6e880000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1672873c880000
+> > >
+> > > Downloadable assets:
+> > > disk image: https://storage.googleapis.com/syzbot-assets/f1ff6481e26f/disk-493ffd66.raw.xz
+> > > vmlinux: https://storage.googleapis.com/syzbot-assets/101bd3c7ae47/vmlinux-493ffd66.xz
+> > > mounted in repro: https://storage.googleapis.com/syzbot-assets/df89d50ed284/mount_0.gz
+> > >
+> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > Reported-by: syzbot+dde7e853812ed57835ea@syzkaller.appspotmail.com
+> > >
+> > > ------------[ cut here ]------------
+> > > WARNING: CPU: 0 PID: 3612 at fs/btrfs/space-info.h:122 btrfs_space_info_free_bytes_may_use fs/btrfs/space-info.h:154 [inline]
+> > > WARNING: CPU: 0 PID: 3612 at fs/btrfs/space-info.h:122 block_rsv_release_bytes fs/btrfs/block-rsv.c:151 [inline]
+> > > WARNING: CPU: 0 PID: 3612 at fs/btrfs/space-info.h:122 btrfs_block_rsv_release+0x5d1/0x730 fs/btrfs/block-rsv.c:295
+> > > Modules linked in:
+> > > CPU: 0 PID: 3612 Comm: syz-executor894 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
+> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> > > RIP: 0010:btrfs_space_info_update_bytes_may_use fs/btrfs/space-info.h:122 [inline]
+> > > RIP: 0010:btrfs_space_info_free_bytes_may_use fs/btrfs/space-info.h:154 [inline]
+> > > RIP: 0010:block_rsv_release_bytes fs/btrfs/block-rsv.c:151 [inline]
+> > > RIP: 0010:btrfs_block_rsv_release+0x5d1/0x730 fs/btrfs/block-rsv.c:295
+> > > Code: 8b 7c 24 10 74 08 4c 89 f7 e8 2b 94 33 fe 49 8b 1e 48 89 df 48 8b 2c 24 48 89 ee e8 a9 2b e0 fd 48 39 eb 73 0b e8 5f 29 e0 fd <0f> 0b 31 db eb 25 e8 54 29 e0 fd 48 b8 00 00 00 00 00 fc ff df 41
+> > > RSP: 0000:ffffc90003baf9e8 EFLAGS: 00010293
+> > > RAX: ffffffff83a657f1 RBX: 00000000000d0000 RCX: ffff888020c59d80
+> > > RDX: 0000000000000000 RSI: 00000000000e0000 RDI: 00000000000d0000
+> > > RBP: 00000000000e0000 R08: ffffffff83a657e7 R09: fffffbfff1c19fde
+> > > R10: fffffbfff1c19fde R11: 1ffffffff1c19fdd R12: 1ffff11004f2190c
+> > > R13: 00000000000e0000 R14: ffff88802790c860 R15: 0000000000000000
+> > > FS:  000055555651b300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > CR2: 00007f207ed54000 CR3: 0000000026ea2000 CR4: 00000000003506f0
+> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > > Call Trace:
+> > >  <TASK>
+> > >  btrfs_release_global_block_rsv+0x2f/0x250 fs/btrfs/block-rsv.c:463
+> > >  btrfs_free_block_groups+0xb67/0xfd0 fs/btrfs/block-group.c:4053
+> > >  close_ctree+0x6c5/0xbde fs/btrfs/disk-io.c:4710
+> > >  generic_shutdown_super+0x130/0x310 fs/super.c:491
+> > >  kill_anon_super+0x36/0x60 fs/super.c:1085
+> > >  btrfs_kill_super+0x3d/0x50 fs/btrfs/super.c:2441
+> > >  deactivate_locked_super+0xa7/0xf0 fs/super.c:331
+> > >  cleanup_mnt+0x4ce/0x560 fs/namespace.c:1186
+> > >  task_work_run+0x146/0x1c0 kernel/task_work.c:177
+> > >  ptrace_notify+0x29a/0x340 kernel/signal.c:2354
+> > >  ptrace_report_syscall include/linux/ptrace.h:420 [inline]
+> > >  ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
+> > >  syscall_exit_work+0x8c/0xe0 kernel/entry/common.c:249
+> > >  syscall_exit_to_user_mode_prepare+0x63/0xc0 kernel/entry/common.c:276
+> > >  __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
+> > >  syscall_exit_to_user_mode+0xa/0x60 kernel/entry/common.c:294
+> > >  do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
+> > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > RIP: 0033:0x7f694614c2f7
+> > > Code: 07 00 48 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> > > RSP: 002b:00007ffee1dcd8e8 EFLAGS: 00000206 ORIG_RAX: 00000000000000a6
+> > > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f694614c2f7
+> > > RDX: 00007ffee1dcd9a9 RSI: 000000000000000a RDI: 00007ffee1dcd9a0
+> > > RBP: 00007ffee1dcd9a0 R08: 00000000ffffffff R09: 00007ffee1dcd780
+> > > R10: 000055555651c653 R11: 0000000000000206 R12: 00007ffee1dcea20
+> > > R13: 000055555651c5f0 R14: 00007ffee1dcd910 R15: 0000000000000004
+> > >  </TASK>
+> >
+> > According to my analysis, this bug seems to be related to
+> > btrfs_free_reserved_bytes()(Please correct me if I am wrong).
+> >
+> > To be more specific, in btrfs_new_extent_direct(), kernel will
+> > reserves space for extent by btrfs_reserve_extent(), and
+> > frees those space by btrfs_free_reserved_extent() if
+> > btrfs_create_dio_extent() fails(such as inject_fault in the syzkaller)
+> >
+> > Yet the problem is that when reserving space for extent, kernel will
+> > converts it from * ->bytes_may_use to ->bytes_reserved, in
+> > btrfs_add_reserved_bytes(). But in freeing those space,
+> > kernel does not convert it from ->bytes_reserved back to
+> > * ->bytes_may_use in btrfs_free_reserved_bytes(),
+> > which triggers the above warning.(Please correct me if I am wrong)
+> >
+> > So I think we can convert space from ->bytes_reserved back to
+> > * ->bytes_may_use in btrfs_free_reserved_bytes() to solve this bug,
+> > as below:
+> >
+>
+> It seems that syzbot build/boot failed because of some
+> irrelevant reason. Try the specific kernel version.
 
-Agree with Mathieu, this is not so simple.
+It seems that the syzbot got the incomplete patch from email,
+so use a text attachment instead.
 
-Here is my view  hoping I haven't missed a point in your discussion or
-an other corner cases.
+#syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+493ffd6605b2d3d4dc7008ab927dba319f36671f
 
-I tried to analyze the issues (in what follows, the term "condition" means
-the "if" condition in which Aiqun proposes to add the fix) :
+--00000000000066139005ec19f79f
+Content-Type: text/x-patch; charset="US-ASCII"; name="0001-btrfs-fix.patch"
+Content-Disposition: attachment; filename="0001-btrfs-fix.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l9snk82o0>
+X-Attachment-Id: f_l9snk82o0
 
-I can see 4 use cases with race condition
-
-1) crash report while already one is treated (rproc_boot_recovery called) 
-     => not a real use case as if the remote processor is crashed we
-	      should not have a second crash report
- 	
-2) rproc_stop executed between the queuing of the crash work and the call of
-  rproc_crash_handler_work
-   => rproc->state = RPROC_OFFLINE
-   => we enter in the "condition" and the pm_relax has to be called
-   => This commit fix should solve this use case
-
-3) rproc_detach executed between the queue of the crash work and the call of
-  rproc_crash_handler_work
-   => rproc->state = RPROC_DETACHED;
-   => we don't go in "the condition" and issue because the recovery reattach
-      to the remote processor
-   => but pm_relax is called
-   => probably need an extra fix to avoid to re-attach
-
-4) crash report while already one is treated (rproc_attach_recovery called)
-   this one corresponds to an auto reboot of the remote processor, with a
-   new crash
-   => rproc->state = RPROC_CRASHED or rproc->state = RPROC_DETACHED;
-   4)a) rproc->state = RPROC_CRASHED if rproc->recovery_disabled = true
-	=> should call pm_relax if rproc->recovery_disabled = true
-	=> commit does not work for this use case
-
-   4)b) rproc->state = RPROC_DETACHED if recovery fails
-       => error case with an unstable state
-       => how to differentiate it from the use case 3) ?
-       => introduce a RPROC_RECOVERY_FAIL state?		
-
-
-Then pm_stay_awake is called when the crash work is queued.
-It seems to me coherent to call the pm_relax in the work handler.
-
-
-
-Here is a quick and dirty patch (not tested) that should take into account the 
-main use cases ( except 1) and 4)b) )
-
-@@ -2009,8 +2009,18 @@ static void rproc_crash_handler_work(struct work_struct *work)
- 
- 	mutex_lock(&rproc->lock);
- 
--	if (rproc->state == RPROC_CRASHED || rproc->state == RPROC_OFFLINE) {
-+	if (rproc->state == RPROC_CRASHED || rproc->state == RPROC_OFFLINE ||
-+	    rproc->state == RPROC_DETACHED) {
- 		/* handle only the first crash detected */
-+
-+		/*
-+		 * call pm-relax in following use cases:
-+		 * - the remote processor has been stopped by the user
-+		 * - the remote processor is detached
-+		 + - the remote proc has an autonomous reset but recovery_disabled is true. 
-+		 */
-+		if(rproc->state != RPROC_CRASHED || rproc->recovery_disabled)
-+			pm_relax(rproc->dev.parent);
- 		mutex_unlock(&rproc->lock);
- 		return;
- 	}
-
-Regards,
-Arnaud
-
->>>
->>>>>
->>>>>
->>>>>>> Thanks,
->>>>>>> Mathieu
->>>>>>>
->>>>>>>
->>>>>>>> When the state is in RPROC_OFFLINE it means separate request
->>>>>>>> of rproc_stop was done and no need to hold the wakeup source
->>>>>>>> in crash handler to recover any more.
->>>>>>>>
->>>>>>>> Signed-off-by: Maria Yu <quic_aiquny@quicinc.com>
->>>>>>>> ---
->>>>>>>>     drivers/remoteproc/remoteproc_core.c | 11 +++++++++++
->>>>>>>>     1 file changed, 11 insertions(+)
->>>>>>>>
->>>>>>>> diff --git a/drivers/remoteproc/remoteproc_core.c
->>>>>>>> b/drivers/remoteproc/remoteproc_core.c
->>>>>>>> index e5279ed9a8d7..6bc7b8b7d01e 100644
->>>>>>>> --- a/drivers/remoteproc/remoteproc_core.c
->>>>>>>> +++ b/drivers/remoteproc/remoteproc_core.c
->>>>>>>> @@ -1956,6 +1956,17 @@ static void rproc_crash_handler_work(struct
->>>>>>>> work_struct *work)
->>>>>>>>            if (rproc->state == RPROC_CRASHED || rproc->state ==
->>>>>>>> RPROC_OFFLINE) {
->>>>>>>>                    /* handle only the first crash detected */
->>>>>>>>                    mutex_unlock(&rproc->lock);
->>>>>>>> +         /*
->>>>>>>> +          * RPROC_OFFLINE state indicate there is no recovery process
->>>>>>>> +          * is in progress and no chance to have pm_relax in place.
->>>>>>>> +          * Because when recovering from crash, rproc->lock is held and
->>>>>>>> +          * state is RPROC_CRASHED -> RPROC_OFFLINE -> RPROC_RUNNING,
->>>>>>>> +          * and then unlock rproc->lock.
->>>>>>>> +          * RPROC_OFFLINE is only an intermediate state in recovery
->>>>>>>> +          * process.
->>>>>>>> +          */
->>>>>>>> +         if (rproc->state == RPROC_OFFLINE)
->>>>>>>> +                 pm_relax(rproc->dev.parent);
->>>>>>>>                    return;
->>>>>>>>            }
->>>>>>>> -- 
->>>>>>>> 2.7.4
->>>>>>>>
->>>>>>
->>>>>>
->>>>>> -- 
->>>>>> Thx and BRs,
->>>>>> Aiqun(Maria) Yu
->>>
->>>
->>> -- 
->>> Thx and BRs,
->>> Aiqun(Maria) Yu
-> 
-> 
+RnJvbSA3M2ExYTZjMDEyYTViODlhMzE2OTZiYzhiMDM3NzI0M2EwOGM4NzVhIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBIYXdraW5zIEppYXdlaSA8eWluMzExNDlAZ21haWwuY29tPgpE
+YXRlOiBGcmksIDI4IE9jdCAyMDIyIDE2OjQ1OjMwICswODAwCgpTaWduZWQtb2ZmLWJ5OiBIYXdr
+aW5zIEppYXdlaSA8eWluMzExNDlAZ21haWwuY29tPgotLS0KIGZzL2J0cmZzL2Jsb2NrLWdyb3Vw
+LmMgfCA1ICsrKysrCiAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0
+IGEvZnMvYnRyZnMvYmxvY2stZ3JvdXAuYyBiL2ZzL2J0cmZzL2Jsb2NrLWdyb3VwLmMKaW5kZXgg
+ZGVlYmM4ZGRiZDkzLi5jYjc0ZmNiZjdhYWYgMTAwNjQ0Ci0tLSBhL2ZzL2J0cmZzL2Jsb2NrLWdy
+b3VwLmMKKysrIGIvZnMvYnRyZnMvYmxvY2stZ3JvdXAuYwpAQCAtMzQxNSw2ICszNDE1LDExIEBA
+IHZvaWQgYnRyZnNfZnJlZV9yZXNlcnZlZF9ieXRlcyhzdHJ1Y3QgYnRyZnNfYmxvY2tfZ3JvdXAg
+KmNhY2hlLAogCXNwYWNlX2luZm8tPmJ5dGVzX3Jlc2VydmVkIC09IG51bV9ieXRlczsKIAlzcGFj
+ZV9pbmZvLT5tYXhfZXh0ZW50X3NpemUgPSAwOwogCisJdHJhY2VfYnRyZnNfc3BhY2VfcmVzZXJ2
+YXRpb24oY2FjaGUtPmZzX2luZm8sICJzcGFjZV9pbmZvIiwKKwkJCQkgICAgICBzcGFjZV9pbmZv
+LT5mbGFncywgLW51bV9ieXRlcywgMSk7CisJYnRyZnNfc3BhY2VfaW5mb191cGRhdGVfYnl0ZXNf
+bWF5X3VzZShjYWNoZS0+ZnNfaW5mbywKKwkJCQkJICAgICAgc3BhY2VfaW5mbywgbnVtX2J5dGVz
+KTsKKwogCWlmIChkZWxhbGxvYykKIAkJY2FjaGUtPmRlbGFsbG9jX2J5dGVzIC09IG51bV9ieXRl
+czsKIAlzcGluX3VubG9jaygmY2FjaGUtPmxvY2spOwotLSAKMi4yNS4xCgo=
+--00000000000066139005ec19f79f--
