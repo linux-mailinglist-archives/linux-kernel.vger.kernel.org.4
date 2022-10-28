@@ -2,165 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B696119C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 20:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D976119CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 20:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiJ1SAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 14:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
+        id S229944AbiJ1SBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 14:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiJ1SAr (ORCPT
+        with ESMTP id S229846AbiJ1SBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 14:00:47 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFF969BEF
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 11:00:43 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id t4so3664705wmj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 11:00:43 -0700 (PDT)
+        Fri, 28 Oct 2022 14:01:33 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8F61E8B84;
+        Fri, 28 Oct 2022 11:01:32 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id l6so5342409pjj.0;
+        Fri, 28 Oct 2022 11:01:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=smdWxHRtEO+PTUqODIAY9J3ZmIcI6FLoPLj5U1S7fzY=;
-        b=PqRljvG6XB3XGqOsF43juRSzcKEmk/Ug6d7eyTMgpL5hsfl7JfXCbf8e57eE4/ZFqF
-         s41gxLYm3sBbOOLNsc7l7ZLkoY0+gjpeGhPIBEyN7qm5uN3X6EL2Rp2uWG0cyWogtljg
-         rsh9UUwYmjsckB0Mi1f+RYOYCHLWWf3eaD4F82LYzQjrdOJj/soGoKAMUFuavHCjp7Ac
-         HkgPdaVsNzAI4z5DTRCZkKsHvd+Y7Q7+u9TU8S5mknpS+A0ger3EwH4WIIlUJt7wcEga
-         0vbjTE9xBVHSLARwFoom1WtGpDa+ZXCUVlf9xvxzYEqZMyLK927JqHLgL4DQKA+sVlWz
-         jzVg==
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=E5Fawjdz//CY913JJ5jwFxvwPuQZcfdesxaOJNGqcAY=;
+        b=o+GFBerinI2XeQJSXO2qlJ5+Du+CeHTM9pXn2DZeJNlGYjzpa5pAqbVUuN67AfrRmS
+         N45NOKjC8F1cIWVHLxCv1Vobk0gPZbiZNWXiDO0vePMHt6ubtCed+StgebAf8NumhDQL
+         4o2EEEotQw7chMXocG3G0nX/Vr0ctP+OKNetj5EIaXuC0m6h9mIgdOGCjaKD6k8Vr1oZ
+         Q6QDTTpExSmzd+V2W99oIxZ9sSc6azIrbL3o/iGVViTAYMQbO933epSAqRp7DDjy0ybS
+         lKzJnioXaQ4g1VG6kC1AzQIfseSSfzuuWFGVVb3h7XQNdfKHRCUd28ofKlvI72HtOETG
+         yYcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=smdWxHRtEO+PTUqODIAY9J3ZmIcI6FLoPLj5U1S7fzY=;
-        b=dd3eXrx6HEvkPDGxUKkF5iDe+ZiLfNtMVpCZVjX3Q7vZG5KzZKpwyY8o7hFuKdjXqD
-         HXkHF8keWpMM79bOVyR0Pv9N+m/lfR2+zkIE3hEaS5uT44tXC9Gos9WXRVkphdq37Ugd
-         uXlbOKA8tnBlcotDnVcEjWTWN6fgDPSLbri9cHtInWOCYSLBPOV+B6UzcDV76j/bM2td
-         NIAdDu7LaZYG4K4GpueQuStwY3RoiyhLsJRZRmt19PoH8wo+8Ob6TQrCRED0Hl+Xfepy
-         13/A0kXlwWwKKctJTyS7RtmnEdFBD+Uh7yf9X4/bsqHq2abCk2i4n+fhJB1ZhQx3fRbq
-         e5OA==
-X-Gm-Message-State: ACrzQf2DNh7+/WcO5DriBfazDDnLqXqlZ2NpL/Yp9kF28u77Kf5DtzVn
-        pE1B3ir+4hiHYwEy6rHzW5yGcQ==
-X-Google-Smtp-Source: AMsMyM4AvlRio9ODd6XxLoB4qs0p0Wif2JBGAMBcBlJkoOTS8nxP+6g/FufNPIct3leO5o4W6jSznQ==
-X-Received: by 2002:a05:600c:1da7:b0:3ce:a1:f961 with SMTP id p39-20020a05600c1da700b003ce00a1f961mr10173407wms.175.1666980041750;
-        Fri, 28 Oct 2022 11:00:41 -0700 (PDT)
-Received: from nicolas-Precision-3551.home ([2001:861:5180:dcc0:dd1b:73fb:9e6e:c05f])
-        by smtp.gmail.com with ESMTPSA id e7-20020a5d65c7000000b0022ccae2fa62sm4155108wrw.22.2022.10.28.11.00.40
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E5Fawjdz//CY913JJ5jwFxvwPuQZcfdesxaOJNGqcAY=;
+        b=J0vj2qM6RsKEnb/qGmsJvnaePlAm1GndJmK8D8or+wiBS/EC8wrHCrjNMUVy1EtMj8
+         raW5+83WV3cM0RGChwqYzU/A+bG2zfgybpv006xlfVH9WNleHgqvWRHuVmJm8GgUEaD4
+         itv3wTmVk4SPUGs8nq9Ki54ZVOvXyMvxChFfhsSSoaKRKiwpLqO9JjFxa0s1VbsXFLmc
+         QEhD93gIE4flfFP+vLShyGjiHJxWAlLldQUKMcP4uIuN8jjScMyW77/er3g8qIXk5sRE
+         wKmD8K3D0mhWv+PuLoZJZRSKlGptVvzZEQ+2gtRRYxbGiGTDt1OGGg5OuQfK+9FgLA7N
+         gDWw==
+X-Gm-Message-State: ACrzQf1H22ZcLvil2Y5gLHA7O2lSVvdrxsFNHz7ss/3dRhcdSU2EnzAQ
+        m4VFZpz6mQJNSR6Dv0dKfKc=
+X-Google-Smtp-Source: AMsMyM4Yz+hWIamQ2+lA+U58v4U0s1y77GCqHp+7UcWi8sepqbBImbOH+JfT+TdORqkeQzCKSyfUIQ==
+X-Received: by 2002:a17:90b:4b46:b0:20a:e906:426d with SMTP id mi6-20020a17090b4b4600b0020ae906426dmr533181pjb.48.1666980091847;
+        Fri, 28 Oct 2022 11:01:31 -0700 (PDT)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:976f:f075:7c14:87a2])
+        by smtp.gmail.com with ESMTPSA id n3-20020a170903110300b00186b86ed450sm3400236plh.156.2022.10.28.11.01.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 11:00:40 -0700 (PDT)
-From:   Nicolas Frayer <nfrayer@baylibre.com>
-To:     nm@ti.com, ssantosh@kernel.org, linux-kernel@vger.kernel.org
-Cc:     khilman@baylibre.com, glaroque@baylibre.com, nfrayer@baylibre.com
-Subject: [PATCH v3] soc: ti: Convert allocations to devm
-Date:   Fri, 28 Oct 2022 20:00:33 +0200
-Message-Id: <20221028180033.606362-1-nfrayer@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 28 Oct 2022 11:01:30 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 0/4] perf lock contention: Small random fixes
+Date:   Fri, 28 Oct 2022 11:01:24 -0700
+Message-Id: <20221028180128.3311491-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changed the memory and resource allocations in the probe function
-to devm. Also added a remove callback.
+Hello,
 
-Signed-off-by: Nicolas Frayer <nfrayer@baylibre.com>
----
+This is a small update for the perf lock contention command.
 
-v2->v3:
-dropped module conversion part of this series while other driver dependencies
-on socinfo are worked out.
-A dependency issue is introduced by changing subsys_initcall()
-to module_platform_driver(). Some drivers using the socinfo information probe
-before the socinfo driver itself and it makes their probe fail.
+The first issue is from msan (memory sanitizer) related to uninitialized
+memory access and use of variable length array.
 
-Dropped series:
-https://lore.kernel.org/all/20221010131538.7333-1-nfrayer@baylibre.com/
+The other is to increase the default stack skip count to find appropriate
+callers in most cases.
 
- drivers/soc/ti/k3-socinfo.c | 36 +++++++++++++++++++-----------------
- 1 file changed, 19 insertions(+), 17 deletions(-)
+You can get it from 'perf/lock-con-fix-v1' branch in
 
-diff --git a/drivers/soc/ti/k3-socinfo.c b/drivers/soc/ti/k3-socinfo.c
-index 91f441ee6175..19f3e74f5376 100644
---- a/drivers/soc/ti/k3-socinfo.c
-+++ b/drivers/soc/ti/k3-socinfo.c
-@@ -96,21 +96,18 @@ static int k3_chipinfo_probe(struct platform_device *pdev)
- 	partno_id = (jtag_id & CTRLMMR_WKUP_JTAGID_PARTNO_MASK) >>
- 		 CTRLMMR_WKUP_JTAGID_PARTNO_SHIFT;
- 
--	soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
-+	soc_dev_attr = devm_kzalloc(&pdev->dev, sizeof(*soc_dev_attr), GFP_KERNEL);
- 	if (!soc_dev_attr)
- 		return -ENOMEM;
- 
--	soc_dev_attr->revision = kasprintf(GFP_KERNEL, "SR%x.0", variant);
--	if (!soc_dev_attr->revision) {
--		ret = -ENOMEM;
--		goto err;
--	}
-+	soc_dev_attr->revision = devm_kasprintf(&pdev->dev, GFP_KERNEL, "SR%x.0", variant);
-+	if (!soc_dev_attr->revision)
-+		return -ENOMEM;
- 
- 	ret = k3_chipinfo_partno_to_names(partno_id, soc_dev_attr);
- 	if (ret) {
- 		dev_err(dev, "Unknown SoC JTAGID[0x%08X]\n", jtag_id);
--		ret = -ENODEV;
--		goto err_free_rev;
-+		return -ENODEV;
- 	}
- 
- 	node = of_find_node_by_path("/");
-@@ -118,22 +115,26 @@ static int k3_chipinfo_probe(struct platform_device *pdev)
- 	of_node_put(node);
- 
- 	soc_dev = soc_device_register(soc_dev_attr);
--	if (IS_ERR(soc_dev)) {
--		ret = PTR_ERR(soc_dev);
--		goto err_free_rev;
--	}
-+	if (IS_ERR(soc_dev))
-+		return PTR_ERR(soc_dev);
-+
-+	platform_set_drvdata(pdev, soc_dev);
- 
- 	dev_info(dev, "Family:%s rev:%s JTAGID[0x%08x] Detected\n",
- 		 soc_dev_attr->family,
- 		 soc_dev_attr->revision, jtag_id);
- 
- 	return 0;
-+}
-+
-+static int k3_chipinfo_remove(struct platform_device *pdev)
-+{
-+	struct soc_device *soc_dev = platform_get_drvdata(pdev);
- 
--err_free_rev:
--	kfree(soc_dev_attr->revision);
--err:
--	kfree(soc_dev_attr);
--	return ret;
-+	if (soc_dev)
-+		soc_device_unregister(soc_dev);
-+
-+	return 0;
- }
- 
- static const struct of_device_id k3_chipinfo_of_match[] = {
-@@ -147,6 +148,7 @@ static struct platform_driver k3_chipinfo_driver = {
- 		.of_match_table = k3_chipinfo_of_match,
- 	},
- 	.probe = k3_chipinfo_probe,
-+	.remove = k3_chipinfo_remove,
- };
- 
- static int __init k3_chipinfo_init(void)
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+
+Thanks,
+Namhyung
+
+
+Namhyung Kim (4):
+  perf lock contention: Fix memory sanitizer issue
+  perf lock contention: Check --max-stack option
+  perf lock contention: Avoid variable length arrays
+  perf lock contention: Increase default stack skip to 4
+
+ tools/perf/builtin-lock.c             | 30 +++++++++++++++++--
+ tools/perf/util/bpf_lock_contention.c | 43 ++++++++++++++++++---------
+ tools/perf/util/lock-contention.h     |  2 +-
+ 3 files changed, 57 insertions(+), 18 deletions(-)
+
+
+base-commit: a3a365655a28f12f07eddf4f3fd596987b175e1d
 -- 
-2.25.1
+2.38.1.273.g43a17bfeac-goog
 
