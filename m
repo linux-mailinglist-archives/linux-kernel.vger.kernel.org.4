@@ -2,80 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4C3610D1B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 201D3610D26
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbiJ1JZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 05:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
+        id S230211AbiJ1J03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 05:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiJ1JZO (ORCPT
+        with ESMTP id S230116AbiJ1JZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 05:25:14 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA2475CC3;
-        Fri, 28 Oct 2022 02:25:07 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id F3BCB6602910;
-        Fri, 28 Oct 2022 10:25:05 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666949106;
-        bh=f6ptsnReV3a9VJBtHj0GZyQSgb/myI+fsdeM0fiT+jI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Biu+pmWwfqcoNzL/LIPjiksYzL/0MpFKje9T6GXG3CeyHZkmz7oSKFdDhP/b//v+O
-         Lf3NxoMopsfcwwx2dVT177p8LEW5rQh5MIsfjzmVcsMUmM/6FkQzsnlVtGndSiOaYJ
-         Lkh4J0N8w2OE8xunH8eXl20CI+LCK8YwUobFE8YMDd/Qyv6YWsVnVqxAvuORdCsSqS
-         pE6QCiv5zagm8TKOiaBz3lV5WNrjV8WO82KiS6SBJZzlFDR+4BcnlayBlaz+ATAV4E
-         u+8Qtg3Q43SDFLRBsbsk4m4yIJG+8+UXdAeo/Wr2EOX2hOxC9cOzVTUmVlx4T9pcBQ
-         ds455YPvEUfJw==
-Message-ID: <e797d832-a6b7-f153-f01e-6320216375db@collabora.com>
-Date:   Fri, 28 Oct 2022 11:25:03 +0200
+        Fri, 28 Oct 2022 05:25:38 -0400
+Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C4A4A128
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 02:25:36 -0700 (PDT)
+Received: from gproxy4-pub.mail.unifiedlayer.com (unknown [69.89.23.142])
+        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id B1E108032F06
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:25:35 +0000 (UTC)
+Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
+        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id B603210044F50
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:25:14 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id oLc1o9YcWZpqYoLc2oohPy; Fri, 28 Oct 2022 09:25:14 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=MKClJOVl c=1 sm=1 tr=0 ts=635b9ffa
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=Qawa6l4ZSaYA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=0oICYUvbRubpdfELCN0A:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ac3xIBIBoop+J+Z8129aC1dDGZl7tyu8mfy2myC8Fvk=; b=x4owMx0QRsyeFEIHd5Umik1fLo
+        DEUBUI/0mWXS4KjrdBc5SI7JMHLO6kNcdJ0gazLZraNWe/3bL8GkqLuJQfhXD+YARovn8qQq6Gmqc
+        +K6iC+FxrULohocw/HIg09Vj9WG9xVMob/J8dOXtLxdN/lxYoq18QscnrQcntsYuzB63jeITyDjPo
+        KCEdt/B6Y9QbPOzBX5AIabvxHDdSJ4fWTVizA+iJ6EPfEEGLfvphKR/6fv6cL6dnLXWNZ2oQKqEOf
+        xIl+EDA0eecjRSq58ptzTK87iKTi7q3Fucectm0zYrAFCihfZjOZeg7VagsG7oCw3bAotrib4LGzP
+        Ny6k+s/Q==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:55666 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1ooLbz-000rNV-KF;
+        Fri, 28 Oct 2022 03:25:11 -0600
+Subject: Re: [PATCH 6.0 00/94] 6.0.6-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+References: <20221027165057.208202132@linuxfoundation.org>
+In-Reply-To: <20221027165057.208202132@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <afa3559c-09d7-2328-73dc-88bad4f4b374@w6rz.net>
+Date:   Fri, 28 Oct 2022 02:25:07 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v5 2/6] dt-bindings: mmc: Add support for Mediatek MT7986
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     devicetree@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        Sam Shih <sam.shih@mediatek.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>
-References: <20221025132953.81286-1-linux@fw-web.de>
- <20221025132953.81286-3-linux@fw-web.de>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221025132953.81286-3-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1ooLbz-000rNV-KF
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:55666
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 25/10/22 15:29, Frank Wunderlich ha scritto:
-> From: Sam Shih <sam.shih@mediatek.com>
-> 
-> This commit adds dt-binding documentation of mmc for Mediatek MT7986 SoC
-> Platform.
-> Add SoC specific section for defining clock configuration.
-> 
-> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 10/27/22 9:54 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.6 release.
+> There are 94 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 29 Oct 2022 16:50:35 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.6-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
+Tested-by: Ron Economos <re@w6rz.net>
 
