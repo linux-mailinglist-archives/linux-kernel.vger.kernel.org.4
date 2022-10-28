@@ -2,114 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2056113AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B326113AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbiJ1Nyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
+        id S229956AbiJ1NzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiJ1Nyv (ORCPT
+        with ESMTP id S230024AbiJ1NzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:54:51 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E0E201BB;
-        Fri, 28 Oct 2022 06:54:49 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id l6so4786860pjj.0;
-        Fri, 28 Oct 2022 06:54:49 -0700 (PDT)
+        Fri, 28 Oct 2022 09:55:12 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594AB4E42B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:55:06 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id e19so2973961ili.4
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:55:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zAImP6PWJ5WKUhDLfWykBuCXt66Oh0xkfiNtM65y4vc=;
-        b=odgyqA70A3ESvmjUlqp5hpilRZmgvLyLT/NCtcrt8ymsLwCJENdZpKZFuSXCBG+AnY
-         Q86vMciO80RAUc9b91LXgCHhLD3fLj9NKeBiIlI3CATTCHkZLfgLJZx2UwLTBFJk/GME
-         Zk4GvwmIfod3CnXPtr+jRck8cjW2nWNElHM7wK/WyLdpdkH2Xee+QBW02diy9iVkGDVB
-         Oy/a/G9W/aIytmcyDgVJ6d0FwtEwmOeyVnDwRQSfgEzx09p4bt6RxuJXvPo5zxfI/OdC
-         S7YQ4OhwxQQBNs9ySlo2ARuVeNZQzElfeINCyLkgJ4DZAiHDzbL00ZP62fZyiStptrSv
-         CWOQ==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tj6XPZgUzW8NJ94b23+3IuXwJoGOQr4AlpD0AF0r/6w=;
+        b=Xlu1uPNMpYPUg0+TCziv/31NEm7rrpAH9J9cxIJ0HL4Ks3WBfICWa1sJYzimYnSruR
+         MSHyU607tb/52sAo0Dlw5AN7oYNOwz1iPvMJjPNTPrxrDx9v0Cx3kCrdJrCM1p1wE9E/
+         ox2mCg65fPbX6FrTZEwrmGkusuDTJSOgqZIUbvSpgmv+i/VWSqD4qUB8g4YbGUK7AtmS
+         9ZDDk60XjREUnCoImKiS0YLPcXmv9CT3eaVKWpDre9DZrrb7KwcNMavUFRBOgCnqeFqB
+         Pl61KwVnz141j7ZUqdwhFhQsRFqZvRtcgTmqnZ9xA2o5/DbVYm3M21fga+iYK080DQQ6
+         NP0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zAImP6PWJ5WKUhDLfWykBuCXt66Oh0xkfiNtM65y4vc=;
-        b=hZv8B/BgHin4jnlxKdwVxWzXKHbwa9FkfWawFshAx+yuUFdo4JPiFKO2HeCD/4LChN
-         YGVvTGtb2Zy5DHL3LyUvqRIleSVo4MI8xR/gG7BY2oLJoBx1AP+iwNe/CEpu9Ryk4INs
-         ANu1MlUybiQXZT1VkRYJTkAiYBHVnIstHT3+868vxaNJWU5cuZ1i1MsNyAbE63VOxe8G
-         mZ8QitK2RE1s0oIbW7uxhtOrZUvc+7XlrK08lSXt3JuMZucvzfYh3FJ0fGtMxMN7m/zJ
-         Yz1q2nYy0ExuLDXB6HDe9JPgPL2KZjiXzw9gtB4MdpHcqeJ4aT8kjGa4/J3Q5W5T15Wh
-         Kdug==
-X-Gm-Message-State: ACrzQf07Z1L5qoOhiZthBD620eQKMorUD1U0zk/o4/Jx5VXhkzE70Wv4
-        Eev7PRtB9APlnQpl9SV21lU=
-X-Google-Smtp-Source: AMsMyM7raeSiL0bcANzUkRefG1GBCNbNvX1iZSwHR+qG9H5Nlc3HgW1g9UH/63LhwEBggls+D9Xr9g==
-X-Received: by 2002:a17:902:e74e:b0:186:f3f4:f7fc with SMTP id p14-20020a170902e74e00b00186f3f4f7fcmr6116570plf.130.1666965288563;
-        Fri, 28 Oct 2022 06:54:48 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-72.three.co.id. [180.214.233.72])
-        by smtp.gmail.com with ESMTPSA id 73-20020a62194c000000b00561cf757749sm2869821pfz.183.2022.10.28.06.54.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 06:54:48 -0700 (PDT)
-Message-ID: <9386b19f-dd99-3601-9e87-3056100dfe53@gmail.com>
-Date:   Fri, 28 Oct 2022 20:54:40 +0700
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Tj6XPZgUzW8NJ94b23+3IuXwJoGOQr4AlpD0AF0r/6w=;
+        b=ZoY2nI53HIg3cisH4st5zhgYnmgqNdo/PPR0EaPNjYlPW9g739J2mUy1TB4GdTYDfh
+         SZg0mq1JqdY9fUOvjh8ltjxEUbr9K1qqZ2daL69VG6HO85DiJdVhu1XzCQMgeoj2HFWA
+         8/wzh90ktMYsVWikb7RrmjkEO29F77zqUxVH/n7/K5TycytkDQkE49jFCVlHwgtl6oY0
+         vcJ6c6m9jGFH5xPf3a5KQYw7232qKRjoBCxLvjwIpNGP9prvXLdXj8RR3KUlKfFst3ZV
+         tdqoVA1nEVlxUUIFsA3rwY4Cq7R6S9GAVOaHQYCaV02Y/XyYHpe9pyPMBe7HoH+CMxlo
+         G7Cg==
+X-Gm-Message-State: ACrzQf18KYdeiWsbj42Im1znC9/f2DayEjVrCcL38JSSpbpzbFYRs2nl
+        /0QJafvc4HUDnhDouqPGzR66IODYiZyWg5iL
+X-Google-Smtp-Source: AMsMyM4xFQNkAsTtD+ONkVrsD9AIwgTvJR5bGZF0QsaRtxvMxMiYp3OH0bt/EAjWQOe7H1sGReFw/w==
+X-Received: by 2002:a05:6e02:1605:b0:2fc:405a:d04d with SMTP id t5-20020a056e02160500b002fc405ad04dmr34107225ilu.320.1666965305346;
+        Fri, 28 Oct 2022 06:55:05 -0700 (PDT)
+Received: from [127.0.0.1] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id y16-20020a92d210000000b002f9f44625fbsm1616544ily.52.2022.10.28.06.55.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 06:55:04 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     John Garry <john.garry@huawei.com>
+Cc:     linux-block@vger.kernel.org, ming.lei@redhat.com,
+        bvanassche@acm.org, linux-kernel@vger.kernel.org, hch@lst.de
+In-Reply-To: <1666780513-121650-1-git-send-email-john.garry@huawei.com>
+References: <1666780513-121650-1-git-send-email-john.garry@huawei.com>
+Subject: Re: [PATCH v2] blk-mq: Properly init requests from blk_mq_alloc_request_hctx()
+Message-Id: <166696530392.41700.5029897700030243844.b4-ty@kernel.dk>
+Date:   Fri, 28 Oct 2022 07:55:03 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 11/15] hdlcdrv: remove HDLCDRV_MAGIC
-Content-Language: en-US
-To:     =?UTF-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Thomas Sailer <t.sailer@alumni.ethz.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        =?UTF-8?Q?Jakub_Kici=c5=84ski?= <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-hams@vger.kernel.org, netdev@vger.kernel.org
-References: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
- <ad19b20f5867e845a843884bbb0f107e7ea7e11a.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <ad19b20f5867e845a843884bbb0f107e7ea7e11a.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Mailer: b4 0.11.0-dev-d9ed3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/27/22 05:43, наб wrote:
-> We have largely moved away from this approach,
-> and we have better debugging instrumentation nowadays: kill it
+On Wed, 26 Oct 2022 18:35:13 +0800, John Garry wrote:
+> Function blk_mq_alloc_request_hctx() is missing zeroing/init of rq->bio,
+> biotail, __sector, and __data_len members, which blk_mq_alloc_request()
+> has, so duplicate what we do in blk_mq_alloc_request().
+> 
 > 
 
-Same reply as [1].
+Applied, thanks!
 
-> Additionally, ~half HDLCDRV_MAGIC checks just early-exit instead
-> of noting the bug, so they're detrimental, if anything
-> 
+[1/1] blk-mq: Properly init requests from blk_mq_alloc_request_hctx()
+      commit: e3c5a78cdb6237bfb9641b63cccf366325229eec
 
-"... instead of handling the magic number"?
-
-Thanks.
-
-[1]: https://lore.kernel.org/linux-doc/80c998ec-435f-158c-9b45-4e6844f7861b@gmail.com/
-
+Best regards,
 -- 
-An old man doll... just what I always wanted! - Clara
+Jens Axboe
+
 
