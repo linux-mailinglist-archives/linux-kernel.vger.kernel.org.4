@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 273DE611BEC
+	by mail.lfdr.de (Postfix) with ESMTP id BD606611BEE
 	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbiJ1U4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 16:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
+        id S229845AbiJ1U4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 16:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbiJ1Uz6 (ORCPT
+        with ESMTP id S230055AbiJ1U4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 16:55:58 -0400
+        Fri, 28 Oct 2022 16:56:02 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F591EA541;
-        Fri, 28 Oct 2022 13:55:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADF5226E7E
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:55:58 -0700 (PDT)
 Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9DDD76602946;
-        Fri, 28 Oct 2022 21:55:53 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B45B7660294B;
+        Fri, 28 Oct 2022 21:55:55 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666990555;
-        bh=kjJv2wI4r1COdPJDLysFujzo37yIvD0eiCbT/D7WY8Q=;
+        s=mail; t=1666990557;
+        bh=fWR6lgaHeOPHW1FSsPg4QG/1KgRcjLHEyF+Wsu51etk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gVADpfkI9YN8wvlcRgrsvTvdm8VyxolhpHN7+2z3ao+LKiotKKSHsYNVuoUFAh/X5
-         ncUKhS0W2QJK0rnAK9M2Sp2D6+GfW+EtzDfDgpQyywPigP79gyWm1kGgGYzFhydyMP
-         kjYlMenwb/GMAlTOrL1tgeoPOoLr7LMJPPIu4xH9IvcsHqDk6AXdcxs5SI4Mgc0OOw
-         xxUN+QMiWsSbzESkpU+7viNdCpv1BUrC0GXVNOezS/xbb2CyuLjhaisxxTmgBgDqqc
-         /M8/Awa1tJIQTDSnYKD1ENE4fwv8exUmDkeFZPoln8BPcQ5AFYuMIrp8nO2cb/Z/3n
-         WH75CERAEuSFA==
+        b=UrmysWN2I9Qqpva8V2G9/hL5C9jyElZSwIVdheQjvOtBk3gQCViqJgDYmils7P/pZ
+         eOWqWMsy2u2qZ/kU8sKUykuSbFvINlb1MgLt+qy0rx0njLcGBNxdic9cGyX1zzYe1W
+         WWiZU+htGxfrXsql80TI6Vx+TUyljCwi1ysLqfm159j9awR5ENR17JpW6ICMdiAh53
+         bponcNnEUG+c/bCRIQ42WjekH5YQgEn9JLJDz0biUcGsLcB0KhSBN5Qnp8P8qF78WQ
+         6Wj8FC3Hq2N0DZRFiKk0zRShwOhwXL9xV+plvKI7i5zZiFIt8YhZndIZXF1lVh/V+R
+         xEKm5UboxXncg==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Mark Brown <broonie@kernel.org>,
@@ -40,14 +40,14 @@ Cc:     kernel@collabora.com,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
         =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <nfraprado@collabora.com>, Jaroslav Kysela <perex@perex.cz>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/8] ASoC: dt-bindings: rt5682: Add dbvdd and ldo1-in supplies
-Date:   Fri, 28 Oct 2022 16:55:36 -0400
-Message-Id: <20221028205540.3197304-5-nfraprado@collabora.com>
+        Oder Chiou <oder_chiou@realtek.com>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 5/8] ASoC: rt5682s: Support dbvdd and ldo1-in supplies
+Date:   Fri, 28 Oct 2022 16:55:37 -0400
+Message-Id: <20221028205540.3197304-6-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221028205540.3197304-1-nfraprado@collabora.com>
 References: <20221028205540.3197304-1-nfraprado@collabora.com>
@@ -63,39 +63,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rt5682 codec has two additional power supply pins, DBVDD and
-LDO1_IN, that aren't currently described in the binding. Add them.
+Add support for the dbvdd and ldo1-in supplies.
 
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
 
- Documentation/devicetree/bindings/sound/rt5682.txt | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ sound/soc/codecs/rt5682s.c | 22 ++++++++++++++++++++++
+ sound/soc/codecs/rt5682s.h |  2 ++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sound/rt5682.txt b/Documentation/devicetree/bindings/sound/rt5682.txt
-index 89e6245b870e..948109ff0db3 100644
---- a/Documentation/devicetree/bindings/sound/rt5682.txt
-+++ b/Documentation/devicetree/bindings/sound/rt5682.txt
-@@ -17,6 +17,12 @@ Required properties:
- - VBAT-supply: phandle to the regulator supplying battery power through the
-   VBAT pin. Either MICVDD or VBAT should be present.
- 
-+- dbvdd-supply: phandle to the regulator supplying I/O power through the DBVDD
-+  pin.
-+
-+- ldo1-in-supply: phandle to the regulator supplying power to the digital core
-+  and charge pump through the LDO1_IN pin.
-+
- Optional properties:
- 
- - interrupts : The CODEC's interrupt output.
-@@ -87,4 +93,6 @@ rt5682 {
- 
- 	AVDD-supply = <&avdd_reg>;
- 	MICVDD-supply = <&micvdd_reg>;
-+	dbvdd-supply = <&dbvdd_reg>;
-+	ldo1-in-supply = <&ldo1_in_reg>;
+diff --git a/sound/soc/codecs/rt5682s.c b/sound/soc/codecs/rt5682s.c
+index 80c673aa14db..de686004e504 100644
+--- a/sound/soc/codecs/rt5682s.c
++++ b/sound/soc/codecs/rt5682s.c
+@@ -44,6 +44,8 @@ static const struct rt5682s_platform_data i2s_default_platform_data = {
+ static const char *rt5682s_supply_names[RT5682S_NUM_SUPPLIES] = {
+ 	[RT5682S_SUPPLY_AVDD] = "AVDD",
+ 	[RT5682S_SUPPLY_MICVDD] = "MICVDD",
++	[RT5682S_SUPPLY_DBVDD] = "dbvdd",
++	[RT5682S_SUPPLY_LDO1_IN] = "ldo1-in",
  };
+ 
+ static const struct reg_sequence patch_list[] = {
+@@ -3089,6 +3091,14 @@ static void rt5682s_i2c_disable_regulators(void *data)
+ 	if (ret)
+ 		dev_err(dev, "Failed to disable supply AVDD: %d\n", ret);
+ 
++	ret = regulator_disable(rt5682s->supplies[RT5682S_SUPPLY_DBVDD].consumer);
++	if (ret)
++		dev_err(dev, "Failed to disable supply dbvdd: %d\n", ret);
++
++	ret = regulator_disable(rt5682s->supplies[RT5682S_SUPPLY_LDO1_IN].consumer);
++	if (ret)
++		dev_err(dev, "Failed to disable supply ldo1-in: %d\n", ret);
++
+ 	usleep_range(1000, 1500);
+ 
+ 	ret = regulator_disable(rt5682s->supplies[RT5682S_SUPPLY_MICVDD].consumer);
+@@ -3150,6 +3160,18 @@ static int rt5682s_i2c_probe(struct i2c_client *i2c)
+ 		return ret;
+ 	}
+ 
++	ret = regulator_enable(rt5682s->supplies[RT5682S_SUPPLY_DBVDD].consumer);
++	if (ret) {
++		dev_err(&i2c->dev, "Failed to enable supply dbvdd: %d\n", ret);
++		return ret;
++	}
++
++	ret = regulator_enable(rt5682s->supplies[RT5682S_SUPPLY_LDO1_IN].consumer);
++	if (ret) {
++		dev_err(&i2c->dev, "Failed to enable supply ldo1-in: %d\n", ret);
++		return ret;
++	}
++
+ 	if (gpio_is_valid(rt5682s->pdata.ldo1_en)) {
+ 		if (devm_gpio_request_one(&i2c->dev, rt5682s->pdata.ldo1_en,
+ 					  GPIOF_OUT_INIT_HIGH, "rt5682s"))
+diff --git a/sound/soc/codecs/rt5682s.h b/sound/soc/codecs/rt5682s.h
+index 45464a041765..67f86a38a1cc 100644
+--- a/sound/soc/codecs/rt5682s.h
++++ b/sound/soc/codecs/rt5682s.h
+@@ -1438,6 +1438,8 @@ struct pll_calc_map {
+ enum {
+ 	RT5682S_SUPPLY_AVDD,
+ 	RT5682S_SUPPLY_MICVDD,
++	RT5682S_SUPPLY_DBVDD,
++	RT5682S_SUPPLY_LDO1_IN,
+ 	RT5682S_NUM_SUPPLIES,
+ };
+ 
 -- 
 2.38.1
 
