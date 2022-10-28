@@ -2,217 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09276610ABE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40312610AD0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiJ1GwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
+        id S229552AbiJ1G4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiJ1GwE (ORCPT
+        with ESMTP id S230030AbiJ1Gz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:52:04 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DEC101EF;
-        Thu, 27 Oct 2022 23:52:02 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id d6so6756922lfs.10;
-        Thu, 27 Oct 2022 23:52:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gs4Nw3TorDT8ueT7qP3f5rmMZ2nJoqgVxN+G5n/Vf5c=;
-        b=fSUOkyKVCXMtimE8+bPYbGoX8LbXu7eHsP+MX91yLr4uFG3i5d3CxLW8sMP8EIUnsy
-         7z5VQ8DCcRXIqxDCzgZBaE2QGLPVeTGCSQT35j4DdJTSuZ7RZZjZssBkjBXzcPELOd8d
-         YZHFzkscuDx7TfCwML6L7Q+z45N6blaktzaxuPYTuCRm2evmbwxYgnCAZXku0SDrEesL
-         bJfS0r91BEqjrFQu85bY6sztV9jNRfjzMQYeLsCOlX9jYHA6RhD4SeHcjHGjf59Ff82K
-         G4UrK1QLyGuFTaxS77wKxJdBZ6eW2y8QroZy1qZXSLzV0x9lKeBLJt9k3duBbYPO/cTX
-         8ulw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Gs4Nw3TorDT8ueT7qP3f5rmMZ2nJoqgVxN+G5n/Vf5c=;
-        b=rm5+2sRPWa6hrGSnWKv85i6hm4w85y6GWkOF0SXHcU8XdSJkFFFXzhPo1hHp5k3m+a
-         P0V3qKGEpYkMaB+f7OhqsQ2YhgJSKWel4PgsgOrOW5Ps+imPVlXlcVe00x7pemmnjMZ7
-         0AwgbLmwnJiVLNDfS8J6JJLdjR6G1IwMnDHPi/23eZhKIzz3Y4OZED91dEqONYunqIti
-         nI0zblRRDvupKyPn273vRdiydp7Zs+nHxkaJaiyyGLM7BZm0z/WbnpIHfayTHzrIHrhM
-         DZGdxiHSoogpddK22SgC224tjL1Mt8YtTMqJujm5opoS6VRdGcheYSQYY6Ef1l43t/gd
-         fTFg==
-X-Gm-Message-State: ACrzQf2c82omBPy8HNDaNOslCDcdTlXqv6wlDqiSgSAE8m6XsO9th6UA
-        8lJtPGVYcE7doiNw+MtK2ogPLkOIc4K7m3A02aU=
-X-Google-Smtp-Source: AMsMyM6uaHZ7WZBI2PJSJdKl7lRWeiM+fC5b8O14doKAGYJHJStfURBic60XzGqiUt0dXrnUQABcFW0vp42fNRM0GGo=
-X-Received: by 2002:ac2:5f97:0:b0:4b0:144:a243 with SMTP id
- r23-20020ac25f97000000b004b00144a243mr2143762lfe.394.1666939920919; Thu, 27
- Oct 2022 23:52:00 -0700 (PDT)
+        Fri, 28 Oct 2022 02:55:59 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C5D5B70F;
+        Thu, 27 Oct 2022 23:55:41 -0700 (PDT)
+X-UUID: f56dba9acbb249abaeed337066c527f0-20221028
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Om6e9HJa3Y2xbqqlidvMSIavVsT9gkHzqKrxqv9RHmM=;
+        b=anKIvAMl8gYU0EQ1LtLet6Zb1/AHJF/raCeGXrbsW3dbd9BJxf4AgKd7s6V9C+njJl+msVYIJhICS2WX4q2q1vhTvvkZsN80p1+u3WCMs+sjKsd94kDT2q/xehT+efwShxYUbD/3i6+lUBv9Wo+K127JSMbgLp7+/VKp+LqiEfA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:bbf317af-822f-4da6-9921-2a58100b0b80,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:62cd327,CLOUDID:0ae76827-9eb1-469f-b210-e32d06cfa36e,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: f56dba9acbb249abaeed337066c527f0-20221028
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <mark-pk.tsai@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2077977924; Fri, 28 Oct 2022 14:55:35 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 28 Oct 2022 14:55:34 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 28 Oct 2022 14:55:34 +0800
+From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+To:     Sumit Semwal <sumit.semwal@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        "Laura Abbott" <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        "John Stultz" <jstultz@google.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <yj.chiang@mediatek.com>, Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v3] dma-buf: cma_heap: Remove duplicated 'by' in comment
+Date:   Fri, 28 Oct 2022 14:55:26 +0800
+Message-ID: <20221028065533.23856-1-mark-pk.tsai@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20221027124528.2487025-1-zengheng4@huawei.com> <CAH2r5mu2-jfhFBTJDf8Td7yF5e4QEJbG85wVpxyePK1q8bMjAg@mail.gmail.com>
-In-Reply-To: <CAH2r5mu2-jfhFBTJDf8Td7yF5e4QEJbG85wVpxyePK1q8bMjAg@mail.gmail.com>
-From:   Shyam Prasad N <nspmangalore@gmail.com>
-Date:   Fri, 28 Oct 2022 12:21:49 +0530
-Message-ID: <CANT5p=qBFdFB84xh=6WQtdYhAKhrXaF09Py=bn8eGgoS3jhqtA@mail.gmail.com>
-Subject: Re: [PATCH v4] cifs: fix use-after-free caused by invalid pointer `hostname`
-To:     Steve French <smfrench@gmail.com>
-Cc:     Zeng Heng <zengheng4@huawei.com>, sfrench@samba.org,
-        tom@talpey.com, sprasad@microsoft.com, pc@cjr.nz,
-        lsahlber@redhat.com, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-kernel@vger.kernel.org,
-        liwei391@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 11:29 AM Steve French <smfrench@gmail.com> wrote:
->
-> merged into cifs-2.6 for-next
->
-> thx
->
-> On Thu, Oct 27, 2022 at 7:49 AM Zeng Heng <zengheng4@huawei.com> wrote:
-> >
-> > `hostname` needs to be set as null-pointer after free in
-> > `cifs_put_tcp_session` function, or when `cifsd` thread attempts
-> > to resolve hostname and reconnect the host, the thread would deref
-> > the invalid pointer.
-> >
-> > Here is one of practical backtrace examples as reference:
-> >
-> > Task 477
-> > ---------------------------
-> >  do_mount
-> >   path_mount
-> >    do_new_mount
-> >     vfs_get_tree
-> >      smb3_get_tree
-> >       smb3_get_tree_common
-> >        cifs_smb3_do_mount
-> >         cifs_mount
-> >          mount_put_conns
-> >           cifs_put_tcp_session
-> >           --> kfree(server->hostname)
-> >
-> > cifsd
-> > ---------------------------
-> >  kthread
-> >   cifs_demultiplex_thread
-> >    cifs_reconnect
-> >     reconn_set_ipaddr_from_hostname
-> >     --> if (!server->hostname)
-> >     --> if (server->hostname[0] == '\0')  // !! UAF fault here
-> >
-> > CIFS: VFS: cifs_mount failed w/return code = -112
-> > mount error(112): Host is down
-> > BUG: KASAN: use-after-free in reconn_set_ipaddr_from_hostname+0x2ba/0x310
-> > Read of size 1 at addr ffff888108f35380 by task cifsd/480
-> > CPU: 2 PID: 480 Comm: cifsd Not tainted 6.1.0-rc2-00106-gf705792f89dd-dirty #25
-> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-> > Call Trace:
-> >  <TASK>
-> >  dump_stack_lvl+0x68/0x85
-> >  print_report+0x16c/0x4a3
-> >  kasan_report+0x95/0x190
-> >  reconn_set_ipaddr_from_hostname+0x2ba/0x310
-> >  __cifs_reconnect.part.0+0x241/0x800
-> >  cifs_reconnect+0x65f/0xb60
-> >  cifs_demultiplex_thread+0x1570/0x2570
-> >  kthread+0x2c5/0x380
-> >  ret_from_fork+0x22/0x30
-> >  </TASK>
-> > Allocated by task 477:
-> >  kasan_save_stack+0x1e/0x40
-> >  kasan_set_track+0x21/0x30
-> >  __kasan_kmalloc+0x7e/0x90
-> >  __kmalloc_node_track_caller+0x52/0x1b0
-> >  kstrdup+0x3b/0x70
-> >  cifs_get_tcp_session+0xbc/0x19b0
-> >  mount_get_conns+0xa9/0x10c0
-> >  cifs_mount+0xdf/0x1970
-> >  cifs_smb3_do_mount+0x295/0x1660
-> >  smb3_get_tree+0x352/0x5e0
-> >  vfs_get_tree+0x8e/0x2e0
-> >  path_mount+0xf8c/0x1990
-> >  do_mount+0xee/0x110
-> >  __x64_sys_mount+0x14b/0x1f0
-> >  do_syscall_64+0x3b/0x90
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > Freed by task 477:
-> >  kasan_save_stack+0x1e/0x40
-> >  kasan_set_track+0x21/0x30
-> >  kasan_save_free_info+0x2a/0x50
-> >  __kasan_slab_free+0x10a/0x190
-> >  __kmem_cache_free+0xca/0x3f0
-> >  cifs_put_tcp_session+0x30c/0x450
-> >  cifs_mount+0xf95/0x1970
-> >  cifs_smb3_do_mount+0x295/0x1660
-> >  smb3_get_tree+0x352/0x5e0
-> >  vfs_get_tree+0x8e/0x2e0
-> >  path_mount+0xf8c/0x1990
-> >  do_mount+0xee/0x110
-> >  __x64_sys_mount+0x14b/0x1f0
-> >  do_syscall_64+0x3b/0x90
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > The buggy address belongs to the object at ffff888108f35380
-> >  which belongs to the cache kmalloc-16 of size 16
-> > The buggy address is located 0 bytes inside of
-> >  16-byte region [ffff888108f35380, ffff888108f35390)
-> > The buggy address belongs to the physical page:
-> > page:00000000333f8e58 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888108f350e0 pfn:0x108f35
-> > flags: 0x200000000000200(slab|node=0|zone=2)
-> > raw: 0200000000000200 0000000000000000 dead000000000122 ffff8881000423c0
-> > raw: ffff888108f350e0 000000008080007a 00000001ffffffff 0000000000000000
-> > page dumped because: kasan: bad access detected
-> > Memory state around the buggy address:
-> >  ffff888108f35280: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
-> >  ffff888108f35300: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
-> > >ffff888108f35380: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
-> >                    ^
-> >  ffff888108f35400: fa fb fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> >  ffff888108f35480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> >
-> > Fixes: 7be3248f3139 ("cifs: To match file servers, make sure the server hostname matches")
-> > Signed-off-by: Zeng Heng <zengheng4@huawei.com>
-> > Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-> > ---
-> > changes in v4:
-> >  - correct fix tag
-> >  - add reviewed-by
-> > ---
-> >  fs/cifs/connect.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-> > index ffb291579bb9..1cc47dd3b4d6 100644
-> > --- a/fs/cifs/connect.c
-> > +++ b/fs/cifs/connect.c
-> > @@ -1584,6 +1584,7 @@ cifs_put_tcp_session(struct TCP_Server_Info *server, int from_reconnect)
-> >         server->session_key.response = NULL;
-> >         server->session_key.len = 0;
-> >         kfree(server->hostname);
-> > +       server->hostname = NULL;
-> >
-> >         task = xchg(&server->tsk, NULL);
-> >         if (task)
-> > --
-> > 2.25.1
-> >
->
->
-> --
-> Thanks,
->
-> Steve
+Remove duplicated 'by' from comment in cma_heap_allocate().
 
-What I mean is something like this:
-https://github.com/sprasad-microsoft/smb3-kernel-client/commit/07abfbeb01d3cb8d55d76c1937bd4cde46063e5d.patch
+Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+---
+ drivers/dma-buf/heaps/cma_heap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/dma-buf/heaps/cma_heap.c b/drivers/dma-buf/heaps/cma_heap.c
+index 28fb04eccdd0..cd386ce639f3 100644
+--- a/drivers/dma-buf/heaps/cma_heap.c
++++ b/drivers/dma-buf/heaps/cma_heap.c
+@@ -316,7 +316,7 @@ static struct dma_buf *cma_heap_allocate(struct dma_heap *heap,
+ 			kunmap_atomic(vaddr);
+ 			/*
+ 			 * Avoid wasting time zeroing memory if the process
+-			 * has been killed by by SIGKILL
++			 * has been killed by SIGKILL
+ 			 */
+ 			if (fatal_signal_pending(current))
+ 				goto free_cma;
 -- 
-Regards,
-Shyam
+2.18.0
+
