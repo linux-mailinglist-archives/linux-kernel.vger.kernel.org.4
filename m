@@ -2,106 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28D16109A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 07:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 900C26109A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 07:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiJ1FLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 01:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
+        id S229615AbiJ1FLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 01:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiJ1FK7 (ORCPT
+        with ESMTP id S229828AbiJ1FLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 01:10:59 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2066.outbound.protection.outlook.com [40.107.94.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B6756037;
-        Thu, 27 Oct 2022 22:10:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XYWpu3RhHYp8AGIlCxAErDRIRfGkJndljW9g3ppXBPNevRCgvT5P+190K+hvedyVJRU/CLBFs6SiZQpD1nwG7CSTAmoGxhyR9t6pkPMUnSGIxC3UiWHvmpOgd6FTbxtfzeXxNxYq4kxOy8bgdgtJvwUOQ0pIuMHufFPic5A0l+MHf14Wr377wtRo4d1tPLcfkAdpA+Tip/HMFale6HHh0w+NBXKaB5nCeuCsmq9s8smur3sk49adlgaM5UDbee4OH5OvxHFgXoWtLp7z1RdCXbj2qGe0H2YGOtWAEpbqmp2mpyna0owvxTNIc49eH7jrG3R+lkwqgdcM2eMZJTEVJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=35+uhI6rMw5Yr67wj0Fw1ZKBa8BIxlCESp8lm9CgQRM=;
- b=dIn+S54KEYylr0eIdgP8ExcOB+gmLC3zFlXesKRqEcK5JIQDKY09bzxUoe8jYT6VHJRop51C9fGybLtjpZ+Qdc2DIVO2og5PKVqueex9gTxNOmszeGj+PMGCvF4NJf/jSk04NS81OeQhwStimAV7xIvSI+CyT0phF5QLsGnvDXkkO8/WH0UGzY7jsVm88j5qiCNq0EnFWrX3k53eLQpNPcdvom0S0TqqCQUdyjPJIYuJZo6mGIGu0y8WTeLInkxxZgUxj7NlyBgVilp5a/s7hG4LirbIYctdYWt97NpTt4WgjmVArWPzs7X2bVahgis/EdwySS5QlaqRJm3bsFKIyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=35+uhI6rMw5Yr67wj0Fw1ZKBa8BIxlCESp8lm9CgQRM=;
- b=xdWKtTVZsXtBUrb52C65zfCMpgD2AlRdyd7AzVntMu4oMaOxemVCmT7OX7fWcaDDySgqtDRLiREBIU9mN5qSMF/UXyiD1dVxTbEsXducAyscYx4JubHCdvks1BL9IW66ziu6e6Eezuk5bm91Gdy096wJfc27Rr2ktKqKfCO9PCE=
-Received: from BN9P221CA0008.NAMP221.PROD.OUTLOOK.COM (2603:10b6:408:10a::30)
- by IA1PR12MB7566.namprd12.prod.outlook.com (2603:10b6:208:42e::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Fri, 28 Oct
- 2022 05:10:55 +0000
-Received: from BN8NAM11FT070.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:10a:cafe::a7) by BN9P221CA0008.outlook.office365.com
- (2603:10b6:408:10a::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15 via Frontend
- Transport; Fri, 28 Oct 2022 05:10:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT070.mail.protection.outlook.com (10.13.177.50) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5769.14 via Frontend Transport; Fri, 28 Oct 2022 05:10:55 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 28 Oct
- 2022 00:10:24 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 28 Oct
- 2022 00:10:06 -0500
-Received: from xhdpranavis40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.31 via Frontend
- Transport; Fri, 28 Oct 2022 00:10:02 -0500
-From:   Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
-To:     <vkoul@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <lars@metafoo.de>,
-        <adrianml@alumnos.upm.es>
-CC:     <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <michal.simek@amd.com>,
-        <radhey.shyam.pandey@amd.com>, <anirudha.sarangi@amd.com>,
-        <harini.katakam@amd.com>, <sarath.babu.naidu.gaddam@amd.com>,
-        <git@amd.com>
-Subject: [PATCH 5/5] dmaengine: xilinx_dma: Use tasklet_hi_schedule for timing critical usecase
-Date:   Thu, 27 Oct 2022 23:09:40 -0600
-Message-ID: <20221028050940.27888-6-sarath.babu.naidu.gaddam@amd.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221028050940.27888-1-sarath.babu.naidu.gaddam@amd.com>
-References: <20221028050940.27888-1-sarath.babu.naidu.gaddam@amd.com>
+        Fri, 28 Oct 2022 01:11:01 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FB9DAC46;
+        Thu, 27 Oct 2022 22:10:59 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so8851290pji.1;
+        Thu, 27 Oct 2022 22:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EW5mS+GWU1SupYaIIjSXlUc0IhtqJK+50Uo45NdbWBY=;
+        b=q6yImUxFLTMfanG+izGED95xKf3LufN3J34sg6wfjnz9NMfpaYj8F4MEKJ7vWziSNY
+         37S4Gra4Kr3oQNfnmI7g6yZIwJyrIj3kgEXO5xxhpMKXRde+8/x8VdNxmtEyPPwlnFad
+         Qi+G6D00gt+jSvM4/n2MeS2L2HLch255epOJ2r/83DrmquuGt2UTgZW+6ma/nLnHX0KO
+         Vgjr14CKLyOenoWatMLS4VBRmwz8GpabUezC+w/LZgxkQKeaj/py+3bo6nlvDW2aIp97
+         ZNZ1zkT9kcQEy/DSvXKWzTAV73ZFeSvRR48bPpY/7C5UlAtlkJ2KIBqFYwKJDUJVu6OH
+         KhMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EW5mS+GWU1SupYaIIjSXlUc0IhtqJK+50Uo45NdbWBY=;
+        b=YBN+Ti9Qc7duuAXwa9A2fXV/WdFJE1nOw7Au3BTrPM4OBHkfR/pSok5Nn0osrsJllr
+         CLx+bIoKODlaA5vcH9YrNmN+DBqH6a3UdiYzpMNJuF9vIvoXJ+FNGNXTuEA/Z/oX0l02
+         LT6hngTTKZxjYgy2lnM2XxhVesXYzqLoDjNfWpCPqxcI7niLfbiIgbVy/cjFBrnYy3sP
+         J3FVwAcyxnnVcq3T5oC8PpAy6OH4yGfiLl+hU8b55DiQJNuXW5LnqiHOCVl7zTFc82hS
+         iEWY0+EoteMMegiyZVRKEBH1jVToKzvOUYS0hlKaZd3mnrBAxxeY4Wz7q1Fb3NKRB/W9
+         1M2g==
+X-Gm-Message-State: ACrzQf38B+huRaAogahorRTgODVchbjZ5DtLr0jta+z3EEvhrB4HUatO
+        baYDLM/7IVODHSgZLNpuq/4=
+X-Google-Smtp-Source: AMsMyM5GM/3tLFRJYxepSO/XFCIBgVeZFKsq4TMsmUupAFVXO71DeS3BNZM+MP1OT/kUE34Oyew6lg==
+X-Received: by 2002:a17:902:ef43:b0:186:99be:2ee9 with SMTP id e3-20020a170902ef4300b0018699be2ee9mr12142176plx.148.1666933859072;
+        Thu, 27 Oct 2022 22:10:59 -0700 (PDT)
+Received: from mail.google.com (122-58-209-93-fibre.sparkbb.co.nz. [122.58.209.93])
+        by smtp.gmail.com with ESMTPSA id 5-20020a170902e9c500b0018691ce1696sm2075367plk.131.2022.10.27.22.10.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 22:10:58 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 18:10:49 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Grigory Vasilyev <h0tc0d3@gmail.com>,
+        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
+        Claudio Suarez <cssk@net-c.es>,
+        Slark Xiao <slark_xiao@163.com>,
+        Rongguang Wei <weirongguang@kylinos.cn>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] [next] drm/amdgpu: Replace one-element array with
+ flexible-array member
+Message-ID: <Y1tkWdwPUp+UdpM0@mail.google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT070:EE_|IA1PR12MB7566:EE_
-X-MS-Office365-Filtering-Correlation-Id: a1ed7878-fb25-4e90-6608-08dab8a2cae2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TQU6GjpvkllfBCYIpGRtox3NWy9XoDV4jfmvZ78tCqtCsz8oI7hu+CE0mL7mnkUmA96kEVTCqewG//TmdTUAfkRJ7GEhk6nZwc2GZ3E5tTEMYxh8dlUdDSKM/y+vh4MajrWRfkMVvhe8/nqbRaaEUXZDDw4xiHwBX16eOmcXPr76Zmd6QqGPr0O2w+LxQsJMNeFJlkc0wHWjwbu09/Sc/brEISD8OWWySJZfNfSx6jlp7rvtQwzaXlgY28LWb9SCpRQYw72hYpHgl/tvZ8fWS5aMaedr/JORO9en2o7A3W33obhGkaWCOyIbXBuXN6CdJ/FXWvxz9ZS7sbYKVilfvEm2YURnMZCua3uBt8281rzieDxUPU6jUPsMy77xyBzUTASl1P0osp4z6X/f/FsAwh2oEqhWv9YfK64g7lartDNl/DDHPlvwn9vR1oBAvyhN2KEe8gK7K0MACOOKb7n8livBIRAkpZV0QoHONJj2mLOh1TGr3AxzBpRalELPciEcafnPsOnN/kEzkVCkRUpXHXMLYrRk4bu2tLhq7NMo+oRlFXP3XkBBr2dGGFnJb/cFrjPS9zl1Qp50OR2f8KW+23OrsMwg8bfs/MUpsLDsfs+pFUpfFPpM6fHA4l9qlX181bBT0rdM8WvKLAjSfDHanbWFDMeyaipjVOnpjg8cYDOteLxoygOFELREo7mEq7FDtJ0g4xQwjYfu2WLbRYi3cDb9lSDIWxwoIj+H0ImEVdaeoweLmiy+YA+3idh/TibTjKYViebBeA/ufHysOJapnIWii8L7956d0ke4Pc8ObIVZ8ELp9XSyE1Sz/GiT31ne
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(376002)(346002)(396003)(451199015)(40470700004)(46966006)(36840700001)(8936002)(186003)(26005)(47076005)(426003)(83380400001)(1076003)(5660300002)(2906002)(336012)(4744005)(36860700001)(41300700001)(478600001)(40460700003)(54906003)(316002)(6666004)(86362001)(356005)(81166007)(2616005)(103116003)(82740400003)(70206006)(70586007)(82310400005)(40480700001)(36756003)(110136005)(8676002)(4326008)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 05:10:55.3925
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a1ed7878-fb25-4e90-6608-08dab8a2cae2
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT070.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7566
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,30 +79,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+One-element arrays are deprecated, and we are replacing them with
+flexible array members instead. So, replace one-element array with
+flexible-array member in struct _ATOM_FAKE_EDID_PATCH_RECORD and
+refactor the rest of the code accordingly.
 
-Schedule tasklet with high priority to ensure that callback processing
-is prioritized. It improves throughput for netdev dma clients.
+This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+routines on memcpy() and help us make progress towards globally
+enabling -fstrict-flex-arrays=3 [1].
 
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Signed-off-by: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+Link: https://github.com/KSPP/linux/issues/79
+Link: https://github.com/KSPP/linux/issues/238
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
+
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
 ---
- drivers/dma/xilinx/xilinx_dma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdgpu/atombios_encoders.c | 10 +++++++---
+ drivers/gpu/drm/amd/include/atombios.h         |  2 +-
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/dma/xilinx/xilinx_dma.c b/drivers/dma/xilinx/xilinx_dma.c
-index 43737e0f3625..bee21e4f1e59 100644
---- a/drivers/dma/xilinx/xilinx_dma.c
-+++ b/drivers/dma/xilinx/xilinx_dma.c
-@@ -1839,7 +1839,7 @@ static irqreturn_t xilinx_mcdma_irq_handler(int irq, void *data)
- 		spin_unlock(&chan->lock);
- 	}
+diff --git a/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c b/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
+index 6be9ac2b9c5b..6b5abf1249db 100644
+--- a/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
++++ b/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
+@@ -2079,10 +2079,14 @@ amdgpu_atombios_encoder_get_lcd_info(struct amdgpu_encoder *encoder)
+ 							} else
+ 								kfree(edid);
+ 						}
++
++						record += struct_size(fake_edid_record,
++								      ucFakeEDIDString,
++								      fake_edid_record->ucFakeEDIDLength);
++					} else {
++						/* empty fake edid record must be 3 bytes long */
++						record += sizeof(ATOM_FAKE_EDID_PATCH_RECORD) + 1;
+ 					}
+-					record += fake_edid_record->ucFakeEDIDLength ?
+-						fake_edid_record->ucFakeEDIDLength + 2 :
+-						sizeof(ATOM_FAKE_EDID_PATCH_RECORD);
+ 					break;
+ 				case LCD_PANEL_RESOLUTION_RECORD_TYPE:
+ 					panel_res_record = (ATOM_PANEL_RESOLUTION_PATCH_RECORD *)record;
+diff --git a/drivers/gpu/drm/amd/include/atombios.h b/drivers/gpu/drm/amd/include/atombios.h
+index 15943bc21bc5..b5b1d073f8e2 100644
+--- a/drivers/gpu/drm/amd/include/atombios.h
++++ b/drivers/gpu/drm/amd/include/atombios.h
+@@ -4107,7 +4107,7 @@ typedef struct _ATOM_FAKE_EDID_PATCH_RECORD
+ {
+   UCHAR ucRecordType;
+   UCHAR ucFakeEDIDLength;       // = 128 means EDID length is 128 bytes, otherwise the EDID length = ucFakeEDIDLength*128
+-  UCHAR ucFakeEDIDString[1];    // This actually has ucFakeEdidLength elements.
++  UCHAR ucFakeEDIDString[];     // This actually has ucFakeEdidLength elements.
+ } ATOM_FAKE_EDID_PATCH_RECORD;
  
--	tasklet_schedule(&chan->tasklet);
-+	tasklet_hi_schedule(&chan->tasklet);
- 	return IRQ_HANDLED;
- }
- 
+ typedef struct  _ATOM_PANEL_RESOLUTION_PATCH_RECORD
 -- 
-2.25.1
+2.37.3
 
