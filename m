@@ -2,89 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A14C61179A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D517261179D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiJ1Qfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
+        id S229973AbiJ1Qge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiJ1QfL (ORCPT
+        with ESMTP id S230245AbiJ1QgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:35:11 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2E1360A8
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:35:08 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id p8so9117580lfu.11
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:35:08 -0700 (PDT)
+        Fri, 28 Oct 2022 12:36:22 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97001CCCCA
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:36:21 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id 130so5212661pfu.8
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:36:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dDdem09UvQC6RtPh9eP/fPIosZi0f2DCCtFcOfni9E0=;
-        b=iVRKB99bCuGg75YHK5Jin6eKXNVe9XeG9Wu8TuxvOpZO8X9g0HtdOKXe+lJnotbapy
-         yY1d/TS43YunRmZBAdM4kiS1Sb8vvY1JzgsNRODuo9qg+niv7CXg1LdbK/MFiVHVTCVh
-         uZZlAnEomqAMCPuV5LXMWtWwirMKSIYACBgbeq/QvJ2NTjC6iw3aocNENCpW3yfSF+VF
-         h4Np4qcUKUFrsMntcE0udkLz1iH8nhF4d+Vl8ryBfkZ1woIlFqAplaVWyTnQlJUeIlwr
-         w9vUx8zv8jyRRFHooTylzter5G7/0iRYvFvfCgrWmJ1KX4Ui/6vhhI2pxLyUISlF4kgT
-         PF/Q==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fiP/gtk1BinFFJgTXUZEj1NdMWlthKZ0OUfBLn7rLIU=;
+        b=nimtRxz4mCnrDpP+awp+tQ1a53a8hyPg7iNtWXfhDq3ltrOL5UCs75i4rozXJGbMPX
+         SDVQCO8PRkleubIaQin2/IPNBC4hc/yjrIa8pVbxkiahBacQ89eO+azcDW644Ub8H9WK
+         rSEWZcGkj/DmpWCp2i1iWe6DBzQ+UBvL4XPl8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dDdem09UvQC6RtPh9eP/fPIosZi0f2DCCtFcOfni9E0=;
-        b=2KDcVXR0kpmqSum2xVwZGb39pXbNn8yoYN+DIAEjJtGPKhETNaNBVb3B1ZBZka8Qqn
-         jkdrfDd2eWThZm6RTWO4SG3M7/v9OKKKgeSBNywEyk7cSYFcYFkHIhP2HTfKQzB4KXun
-         Bj0PZW7KbpbZZZWU7cFP65isUaQx+NYmkjM3lNMy7NvKQEfxTNPfs6Uv0o3CM9Jdk24j
-         F7vLv3OOfsEF1EO+5MOFa5Z4c6BHKOmxZ0IiKvDJsw6gdo909qlpKRYNXUuBJhdvY6sc
-         hq5Kr5GNvQxTmy/SB9tSa5RagYzlaxjhTBwt6jnKzHNOaREG4YP63nWGnsyFaclyh2cm
-         U04w==
-X-Gm-Message-State: ACrzQf38zh+2ph6zgBMU3HQiGuv38Q5qxw7/FrfWPU5GHBv3IQq7vAjF
-        wrRp4zWjT5dV1NcDFtfoj007YSPykd25bL0mwtUC
-X-Google-Smtp-Source: AMsMyM4GCKg+Wc/lMbvqmo5qiLQjfqMXoXH+QadR3RXEfZMfTqJByvQ611ruQrIRULNKM67OA8DPiAstRGkRDG9JZno=
-X-Received: by 2002:a05:6512:2616:b0:4a2:1723:cf40 with SMTP id
- bt22-20020a056512261600b004a21723cf40mr80364lfb.354.1666974906701; Fri, 28
- Oct 2022 09:35:06 -0700 (PDT)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fiP/gtk1BinFFJgTXUZEj1NdMWlthKZ0OUfBLn7rLIU=;
+        b=RG+irE231AySc8mi/JAw97eYchH7S56SnktD8tjfJKosFP8+0JO67N/B4062dV4irR
+         zpFL+SEYrGDlBVXZFNUVtkjAfG+ivx7wnnqZbMZR6HDaoFf6cYsgbt/1baX/atvvVPKc
+         GdoWj9WHdPj1eECB/tiPffk0kYYD4y4ym6ej1m/U/9xfrVHFpDufUOUiQpNA4vYxLeL9
+         MEf/paKddVXR1HBRqEgjKx29mmttcl4QxukWKnytWuvQ4wgTfcsGx6TFYEOvnlzUddGk
+         XaYXp7c3xVljHY09AZUzYTszYrhQaPhv02JWRoWi47L2Reyyv+B+vIRwsHqbavK5uicY
+         lZWw==
+X-Gm-Message-State: ACrzQf3BZoVD4jjJR/bvFK2tl0yr6YnuL7xeBRXbL3Yq9ZAXOOqh8Ium
+        xHAO7e1krnUY1Jzq/5x4kX4TXQ==
+X-Google-Smtp-Source: AMsMyM4EYfEXFnyMkOYnJEcYhC2e5fufT2TqnDENGZXbTy1gPAt1ADSI1/a/kujO8yVT2unTkINrkA==
+X-Received: by 2002:a63:5a05:0:b0:434:23a5:a5ca with SMTP id o5-20020a635a05000000b0043423a5a5camr296969pgb.515.1666974981269;
+        Fri, 28 Oct 2022 09:36:21 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v9-20020a170902ca8900b00180a7ff78ccsm3223888pld.126.2022.10.28.09.36.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 09:36:20 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 09:36:19 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Grigory Vasilyev <h0tc0d3@gmail.com>,
+        Claudio Suarez <cssk@net-c.es>,
+        Slark Xiao <slark_xiao@163.com>,
+        Rongguang Wei <weirongguang@kylinos.cn>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] [next] drm/amdgpu: Replace one-element array with
+ flexible-array member
+Message-ID: <202210280855.9DF8E4D72@keescook>
+References: <Y1tkWdwPUp+UdpM0@mail.google.com>
+ <04e37ee1-53b0-97ab-d6d7-a39edfbdc2ea@amd.com>
 MIME-Version: 1.0
-References: <20221028065533.23856-1-mark-pk.tsai@mediatek.com>
-In-Reply-To: <20221028065533.23856-1-mark-pk.tsai@mediatek.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Fri, 28 Oct 2022 09:34:55 -0700
-Message-ID: <CANDhNCpWcfMfXKHU7rHSUXd8e0JcAnD+qJABWCs9rWTC_J3h6g@mail.gmail.com>
-Subject: Re: [PATCH v3] dma-buf: cma_heap: Remove duplicated 'by' in comment
-To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        yj.chiang@mediatek.com, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <04e37ee1-53b0-97ab-d6d7-a39edfbdc2ea@amd.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 11:55 PM Mark-PK Tsai <mark-pk.tsai@mediatek.com> wrote:
->
-> Remove duplicated 'by' from comment in cma_heap_allocate().
->
-> Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+On Fri, Oct 28, 2022 at 09:18:39AM +0200, Christian König wrote:
+> Am 28.10.22 um 07:10 schrieb Paulo Miguel Almeida:
+> > One-element arrays are deprecated, and we are replacing them with
+> > flexible array members instead. So, replace one-element array with
+> > flexible-array member in struct _ATOM_FAKE_EDID_PATCH_RECORD and
+> > refactor the rest of the code accordingly.
+> > 
+> > This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> > routines on memcpy() and help us make progress towards globally
+> > enabling -fstrict-flex-arrays=3 [1].
+> > 
+> > Link: https://github.com/KSPP/linux/issues/79
+> > Link: https://github.com/KSPP/linux/issues/238
+> > Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
+> 
+> I'm not sure if that's a good idea. We had multiple attempts to refactor
+> this now and it always caused a regression.
+> 
+> Additional to that the header in question came from our BIOS team and isn't
+> following Linux styles in general.
+> 
+> Alex what do you think?
 
-Thanks for sending this and going through a few iterations!
+Fake flexible arrays (i.e. 1-element arrays) are deprecated in Linux[1]
+(and, frankly, deprecated in C since 1999 and even well before then given
+the 0-sized extension that was added in GCC), so we can't continue to
+bring them into kernel sources. Their use breaks both compile-time and
+run-time bounds checking efforts, etc.
 
-Acked-by: John Stultz <jstultz@google.com>
+All that said, converting away from them can be tricky, and I think such
+conversions need to explicitly show how they were checked for binary
+differences[2].
 
--john
+Paulo, can you please check for deltas and report your findings in the
+commit log? Note that add struct_size() use in the same patch may result
+in binary differences, so for more complex cases, you may want to split
+the 1-element conversion from the struct_size() conversions.
+
+-Kees
+
+[1] https://docs.kernel.org/process/deprecated.html#zero-length-and-one-element-arrays
+[2] https://outflux.net/blog/archives/2022/06/24/finding-binary-differences/
+
+-- 
+Kees Cook
