@@ -2,132 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F596110F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA9D6110FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbiJ1MOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 08:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40420 "EHLO
+        id S230137AbiJ1MOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 08:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbiJ1MNx (ORCPT
+        with ESMTP id S230076AbiJ1MOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 08:13:53 -0400
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1198BDB55A
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:13:52 -0700 (PDT)
-Received: by mail-qv1-f70.google.com with SMTP id nn2-20020a056214358200b004bb7bc3dfdcso2846590qvb.23
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:13:52 -0700 (PDT)
+        Fri, 28 Oct 2022 08:14:39 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA57313EAE
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:14:30 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id o12so7950841lfq.9
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:14:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BKq/BAGmscRdIakGFeHMFgaXLKmHS1XLU04+kzk8aUs=;
+        b=mv0vzwMwoeoZPKSMypkyY+Zixy9IODdXpl1NaNgcwFr13k/Cq3iR5BWo2kftrQBv2I
+         xq3dclF155wKsn4N/Ai4J63MUjsPzDyF8g9bUERvA6OQn63WM2qVUcpiRRcX1/g/T3JT
+         0mpwwlsXkLy0VqTUCmtl/E2kXwWDazMjjJp0kvIhQu3+NofIePwF1G0E7lKYAflMm8nL
+         35rtBStM1Mzd0GvnlN++VAzHn7rUdIfUvi7D+5H1T7NGpwXkCNGOwuAaTpNW7utfQuw0
+         GuHdIdeI2PYbRCLMw6j+DTyUn7duJp4b8zhRhCDbfFshKnWFcbji4WXU+TJD8lBq9vOW
+         BGNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=j6ne5l4wFuW3mDlWTj92zFRxrlKnOY6SlahMV9UlXFU=;
-        b=GuGg6UdJb4l4sRu3OtCAOJ5jqPUyrl/aWk71jEKfI1gEPrRpuBJD8B0qF8GX+ZQMC5
-         MtzrEI2WF/0JyHdZ6JKYtdmWuVfoRtWvGz7DCULfdz8EN42JG5+Bxn1rVS3CxTUCUtSl
-         BPao74Wet58Nt6Y4Ho1o+L4kMCAfLAs5LM/Moc6z4Pxw+SHEfL493AWYEpxpf0l6H3zc
-         ACG1JumU7MHQo6iiLTLywPdPrGNE1iWGMH4g2Fobc7iLqlaLaJbNBF/MQvC33y1F+UBb
-         qmzOaEsxh4q/u00slZTFxLz/jma3PLdenODWk7Btf4bY5L7W6VduzduBoBDSM4LepQGH
-         XJ1A==
-X-Gm-Message-State: ACrzQf0vpEFtjdrI8vWW8v76mat5pY1sgthhBS8HtgnMAhoEQ8HXA1hY
-        dH8qIiWvjNPJ/UYk1rNzVrwewLJjh1qa3R2CcNbPa7wnrCLO
-X-Google-Smtp-Source: AMsMyM4q2ydnFVVPRFgahh5a3y2Hk6ZYLuulgKgwoqfWPdZkx26jfpTP2h1x9f7PJf7bsrmQ/8Bsv96gp0UBRSgYz+zz1O+JSDdf
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BKq/BAGmscRdIakGFeHMFgaXLKmHS1XLU04+kzk8aUs=;
+        b=nK8yYRMZB65Y5IoSbxwxWgTaQbKdXBjyfNeQlzGPS7Iv5OON/W/5+UJ4HQpBU1I1Af
+         PpH5oPnSheGyTN3GnYHMHxSjBX0IXQuarHQw1PE6T9XPgzuHLnkV8adzdQIZsRDjyFg9
+         18Y4hMV8rtXEBPX2APrWDMH02BzHGoL3JxhasrU1keF3MXJsG5N2i9ove53bqYEia5OB
+         /pK5TuLKizzQJmXSOgo3YVAI7cC4za87qA+glTm2P3yZJ53F7SeH8hHKWnbfbLtEG9KO
+         B2ez7kYKy2A1Iq8MndZDy8m10qK3biy98WQIdktmkPVH4RwfLHi/j8PvyT2Cvq5EAaNV
+         yDSw==
+X-Gm-Message-State: ACrzQf1pyFji1ZwK/zn0bxk9f9eixMXQEy7MbmhH2xlpZYtz00P36ak8
+        02bb5LqceBG3S2ZuhClvJLKLUg==
+X-Google-Smtp-Source: AMsMyM4eQd3Q/pRYd6iLWMrAfdgYq54z9EEnAEBplA25vQFQtwxb0tbZEkLhPVoctzD6fNHh+Ia1eQ==
+X-Received: by 2002:ac2:44b6:0:b0:4a2:5084:6163 with SMTP id c22-20020ac244b6000000b004a250846163mr19435844lfm.446.1666959269207;
+        Fri, 28 Oct 2022 05:14:29 -0700 (PDT)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id c11-20020a056512324b00b0048af3c090f8sm544422lfr.13.2022.10.28.05.14.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 05:14:28 -0700 (PDT)
+Message-ID: <9cde097d-2cec-7222-7e38-efefc4ad1c94@linaro.org>
+Date:   Fri, 28 Oct 2022 15:14:28 +0300
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1450:b0:363:7052:9c30 with SMTP id
- l16-20020a056638145000b0036370529c30mr35103714jad.53.1666959221083; Fri, 28
- Oct 2022 05:13:41 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 05:13:41 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003a534305ec1730ec@google.com>
-Subject: [syzbot] kernel BUG in add_to_queue
-From:   syzbot <syzbot+8a4b520a9affc6d8ea56@syzkaller.appspotmail.com>
-To:     agruenba@redhat.com, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org, rpeterso@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v1 2/9] drm/msm/dpu: Refactor sc7280_pp location
+Content-Language: en-GB
+To:     Robert Foss <robert.foss@linaro.org>, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robdclark@gmail.com, quic_abhinavk@quicinc.com, sean@poorly.run,
+        airlied@linux.ie, daniel@ffwll.ch, quic_kalyant@quicinc.com,
+        swboyd@chromium.org, angelogioacchino.delregno@somainline.org,
+        loic.poulain@linaro.org, quic_vpolimer@quicinc.com,
+        vkoul@kernel.org, dianders@chromium.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org,
+        Jonathan Marek <jonathan@marek.ca>, vinod.koul@linaro.org,
+        quic_jesszhan@quicinc.com
+References: <20221028120812.339100-1-robert.foss@linaro.org>
+ <20221028120812.339100-3-robert.foss@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221028120812.339100-3-robert.foss@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 28/10/2022 15:08, Robert Foss wrote:
+> The sc7280_pp declaration is not located by the other _pp
+> declarations, but rather hidden around the _merge_3d
+> declarations. Let's fix this to avoid confusion.
+> 
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 14 +++++++-------
+>   1 file changed, 7 insertions(+), 7 deletions(-)
 
-syzbot found the following issue on:
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=10f68cb6880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
-dashboard link: https://syzkaller.appspot.com/bug?extid=8a4b520a9affc6d8ea56
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+-- 
+With best wishes
+Dmitry
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8a4b520a9affc6d8ea56@syzkaller.appspotmail.com
-
-gfs2: fsid=syz:syz.0: G:  s:EX n:8/1 f:qb t:EX d:EX/0 a:0 v:0 r:5 m:20 p:0
-gfs2: fsid=syz:syz.0:  H: s:EX f:cH e:0 p:3072 [syz-executor.5] gfs2_quota_sync+0xf0/0x204 fs/gfs2/quota.c:1322
-------------[ cut here ]------------
-kernel BUG at fs/gfs2/glock.c:1521!
-Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 3072 Comm: syz-executor.5 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : add_to_queue+0x5e0/0x710 fs/gfs2/glock.c:1520
-lr : add_to_queue+0x5e0/0x710 fs/gfs2/glock.c:1520
-sp : ffff80001367ba40
-x29: ffff80001367ba50 x28: ffff000131decee0 x27: ffff0000c91a1b00
-x26: 0000000000000040 x25: 0000000000000000 x24: 0000000000000000
-x23: 0000000000000000 x22: ffff0000c91a1b00 x21: ffff00012b643270
-x20: ffff000131decf18 x19: ffff0001172327f8 x18: 00000000000000c0
-x17: 205d352e726f7475 x16: ffff80000db49158 x15: ffff0000c73c1a80
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c73c1a80
-x11: ff8080000926b160 x10: 0000000000000000 x9 : 8630f0a241885900
-x8 : 8630f0a241885900 x7 : ffff80000819545c x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000001 x0 : 0000000000000000
-Call trace:
- add_to_queue+0x5e0/0x710 fs/gfs2/glock.c:1520
- gfs2_glock_nq+0x90/0x220 fs/gfs2/glock.c:1546
- gfs2_glock_nq_init fs/gfs2/glock.h:263 [inline]
- do_sync+0x1dc/0x650 fs/gfs2/quota.c:914
- gfs2_quota_sync+0xf0/0x204 fs/gfs2/quota.c:1322
- gfs2_sync_fs+0x30/0x78 fs/gfs2/super.c:642
- sync_filesystem+0x68/0x134 fs/sync.c:56
- generic_shutdown_super+0x38/0x190 fs/super.c:474
- kill_block_super+0x30/0x78 fs/super.c:1427
- gfs2_kill_sb+0x68/0x78
- deactivate_locked_super+0x70/0xe8 fs/super.c:332
- deactivate_super+0xd0/0xd4 fs/super.c:363
- cleanup_mnt+0x1f8/0x234 fs/namespace.c:1186
- __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
- task_work_run+0xc4/0x14c kernel/task_work.c:177
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
- prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
- exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
- el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-Code: 52800022 aa1f03e0 aa1303e1 97fff284 (d4210000) 
----[ end trace 0000000000000000 ]---
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
