@@ -2,342 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01D9611B56
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C204611B5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbiJ1UCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 16:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
+        id S230143AbiJ1UFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 16:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiJ1UCH (ORCPT
+        with ESMTP id S230000AbiJ1UFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 16:02:07 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA30D1DE3E7
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:02:01 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id 8so4173521qka.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:02:01 -0700 (PDT)
+        Fri, 28 Oct 2022 16:05:05 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6AE1FC;
+        Fri, 28 Oct 2022 13:05:00 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id ud5so15509188ejc.4;
+        Fri, 28 Oct 2022 13:04:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bdMQ1e2RSiY0iFjHTnOY+ZoLlVTTLqoC3Ptqc5DqK0I=;
-        b=PcqZ7PtW5MlDoiLP2IwcD+4RGCbeVZgP8Ksej6kiYupCJ8j+Ee9znOOhCKCd+Xs5m9
-         vHlrKzRJTBMnvo+aNvaGBudhEltguTzoc8Cjo2zBRrlX4Fa0sAuPbHHoHwbF1XXrhIpC
-         uMDPzyHpUpDGsJ7C67l22jfaKS6nIdticRTNFiIZpA1AMRM9Ug3ZQ4oGLGV259rLUVBG
-         6yZwkCzCDTG8IFGZc7HVfOgdCUNE6lGJnd62PKYU08DJA++91R1ZZ3F8cWlWjMRNGtPS
-         5aexMW7upmnpRE6YqJRp5EAYSHk5+YM6N1LumIhWeFSIY8j4fasxqCM5RwRkqgSQMX/F
-         lngg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=98ZH6bxaeHTtNqFE8fsLgZCssjQAnRpbtSPQxMvUivw=;
+        b=NI0fAVJsuMZeFCF9mP1Btmeodw0bx5/GurFR3ZGfZwj+c8L8qWLm6BtbNpe5ZoU/HN
+         JxyXTMnQF5wQMHh2jotO4/KDsmiid4v18utEf8Mwr4IqNu1Xo0An9hRJxf3cbngzLZ2D
+         jXznW7OaViSYXnVSadr6+nz2bKdMk5ySJ++NhC2sKhEUVUl5TPSyvAKk0f5ppK5SW3p+
+         ZJWxydxIXm6mBkJqXvGE7Wm1YA5+SQsdcDOhr42s4tFRCAqhDW1Q9qivfRuGhdX8Fehw
+         zHI+ULDBZdg+ZyOxoXro2G4xGV7n8tsitxKUa8KEvLaaapRPgzDwFJyJwB/VNairnQzQ
+         wvXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bdMQ1e2RSiY0iFjHTnOY+ZoLlVTTLqoC3Ptqc5DqK0I=;
-        b=RS5uD6/1gUAqTvCD9rEvGGeVJadIKg93S7UZST0T2G+y5mFeLcskiHBK82OJfDsAbY
-         IOemDCmCfhONphQIVY8rv140R1gusLHEruNNvNQY+o61dGKX5l+mD7CwxHsKCLu+Btnc
-         tiN3W9Cjtvi/jjms7y2+0AAiT2wYoLN6z31HNMiRJrRX4Ji84EDwS8/m1Kgbo50BHMP7
-         jWjfu/QweuSs525foJ7AmQn+eScrFNSvzXsrY5yph8wsff9D/3bpZn6VvHhMr0rEM5sH
-         6CJUotP5/ohBKPDKt2PeYzNgkzsA0IS/2nEkWkArKiU5bUn142CkttiU0T+ddQAyvWJo
-         ohTw==
-X-Gm-Message-State: ACrzQf1AQGtzktPE5z7LbMNBDpzDwpuF2rxEzs2or6HKN3mp733929Js
-        tyfsYoM/5xR4VFbzbNBz3dg6GQ==
-X-Google-Smtp-Source: AMsMyM5YpeL94Iw48e5O3aOG/3SA+rFA4qewOF0lq3w+vTmwLbFf7lZKx0HynAPmLDSOr4u3Ran9sA==
-X-Received: by 2002:a37:2d02:0:b0:6f1:15cd:1493 with SMTP id t2-20020a372d02000000b006f115cd1493mr769971qkh.131.1666987320813;
-        Fri, 28 Oct 2022 13:02:00 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id v6-20020a05622a014600b003999d25e772sm2839124qtw.71.2022.10.28.13.01.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 13:02:00 -0700 (PDT)
-Message-ID: <e34b35f4-4197-3973-0947-14ee577494e9@linaro.org>
-Date:   Fri, 28 Oct 2022 16:01:58 -0400
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=98ZH6bxaeHTtNqFE8fsLgZCssjQAnRpbtSPQxMvUivw=;
+        b=DwPrNNonSnr1L6MaOdMK2UjQ3pP4CMjL0aNeM9PLoSUGJS/P3fuu/okjZnYMvTe3wk
+         /0wWux34pN78i25MXaveNcXy9uTUsGRSw7huQ0bZAufC7Z56RDr6Pz20AlCdQCQVJhWh
+         TbQcY462dFEE1qb0MtCvOclRV8s4ZwWO0Vz4Z4t5wCHglgskIYnllUcEF28j2ZvlWFms
+         HuZh8f3IRYH76fguvyquaXx7i1wW/l7Wh5sXyjaQTer3HKbYGqyPxj9DpsL+BlXU4kjj
+         yXhPyMptq4EYqJQVUeSnoGLcObCjiL/l3fVwrICDRsgSkZSub5Rk2tlEnozsIcpy+luk
+         rXKw==
+X-Gm-Message-State: ACrzQf21y4Kwu5+q/qzj9tBa7E6y9LTD+u/ju6IcghtG6aaElC8lXKzB
+        ksaoKrJMQPCQIxch2Y+yfamgYeVyhhOMPxNrorY=
+X-Google-Smtp-Source: AMsMyM7Fa0dwCZTDURB0YKKa8I7Z1YN1AzqEzF8KXo81jw3NWsY3RtR8pIGQDFEo+3ESMObflkOkF9Xf6RMz5Oc1+KI=
+X-Received: by 2002:a17:907:c208:b0:7ad:a0df:d4c7 with SMTP id
+ ti8-20020a170907c20800b007ada0dfd4c7mr942244ejc.312.1666987498608; Fri, 28
+ Oct 2022 13:04:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v4 09/13] dt-bindings: pinctrl: mediatek,mt6779-pinctrl:
- Add MT6795
-Content-Language: en-US
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Andy Teng <andy.teng@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20221028153505.23741-1-y.oudjana@protonmail.com>
- <20221028153505.23741-10-y.oudjana@protonmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221028153505.23741-10-y.oudjana@protonmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <Y1vZKg6UHjdUZt1W@debian> <202210280940.D7A7330@keescook>
+In-Reply-To: <202210280940.D7A7330@keescook>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Fri, 28 Oct 2022 21:04:22 +0100
+Message-ID: <CADVatmNwZUtR5qoWEvSuM6mH1v8PPYePLZKC2Wx2UGZrDNiFRA@mail.gmail.com>
+Subject: Re: boot failure of linux-next due to 1248fb6a8201 ("x86/mm:
+ Randomize per-cpu entry area")
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/10/2022 11:35, Yassine Oudjana wrote:
-> From: Yassine Oudjana <y.oudjana@protonmail.com>
-> 
-> Combine MT6795 pin controller document into MT6779 one. In the
-> process, amend the example with comments and additional pinctrl
-> nodes from the MT6795 example, replace the current interrupts
-> property description with the one from the MT6795 document since
-> it makes more sense and define its items using conditionals
-> as they now vary between variants. Also use conditionals to define
-> valid values for the drive-strength property for each variant.
-> 
-> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-> ---
->  .../pinctrl/mediatek,mt6779-pinctrl.yaml      | 189 ++++++++++-----
->  .../pinctrl/mediatek,pinctrl-mt6795.yaml      | 227 ------------------
->  2 files changed, 127 insertions(+), 289 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
-> index 70e4ffa2d897..6f2cffe50b11 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
-> @@ -8,6 +8,7 @@ title: Mediatek MT6779 Pin Controller
->  
->  maintainers:
->    - Andy Teng <andy.teng@mediatek.com>
-> +  - AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->    - Sean Wang <sean.wang@kernel.org>
->  
->  description:
-> @@ -18,6 +19,7 @@ properties:
->    compatible:
->      enum:
->        - mediatek,mt6779-pinctrl
-> +      - mediatek,mt6795-pinctrl
->        - mediatek,mt6797-pinctrl
->  
->    reg:
-> @@ -43,9 +45,7 @@ properties:
->    interrupt-controller: true
->  
->    interrupts:
-> -    maxItems: 1
+On Fri, Oct 28, 2022 at 5:41 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Fri, Oct 28, 2022 at 02:29:14PM +0100, Sudip Mukherjee (Codethink) wro=
+te:
+> > Hi All,
+> >
+> > Our qemu boots were failing since next-20221024, and a git bisect of
+> > next-20221028 showed the bad commit as 1248fb6a8201 ("x86/mm: Randomize=
+ per-cpu entry area")
+> >
+> > After reverting the commit I could boot qemu again with next-20221028.
+> >
+> > This is my config:
+> >
+> > make defconfig
+> > make kvm_guest.config
+> > scripts/config -e KCOV -e KCOV_INSTRUMENT_ALL -e KCOV_ENABLE_COMPARISON=
+S -e DEBUG_FS -e DEBUG_KMEMLEAK -e DEBUG_INFO -e KALLSYMS -e KALLSYMS_ALL -=
+e NAMESPACES -e UTS_NS -e IPC_NS -e PID_NS -e NET_NS -e CGROUP_PIDS -e MEMC=
+G -e USER_NS -e CONFIGFS_FS -e SECURITYFS -e KASAN -e KASAN_INLINE -e FAULT=
+_INJECTION -e FAULT_INJECTION_DEBUG_FS -e FAULT_INJECTION_USERCOPY -e FAILS=
+LAB -e FAIL_PAGE_ALLOC -e FAIL_MAKE_REQUEST -e FAIL_IO_TIMEOUT -e FAIL_FUTE=
+X -e LOCKDEP -e PROVE_LOCKING -e DEBUG_ATOMIC_SLEEP -e PROVE_RCU -e DEBUG_V=
+M -e REFCOUNT_FULL -e FORTIFY_SOURCE -e HARDENED_USERCOPY -e LOCKUP_DETECTO=
+R -e SOFTLOCKUP_DETECTOR -e HARDLOCKUP_DETECTOR -e BOOTPARAM_HARDLOCKUP_PAN=
+IC -e DETECT_HUNG_TASK -e WQ_WATCHDOG -e USB_GADGET -e USB_RAW_GADGET -e TU=
+N -e KCSAN -d RANDOMIZE_BASE -e MAC80211_HWSIM -e IEEE802154 -e MAC802154 -=
+e IEEE802154_DRIVERS -e IEEE802154_HWSIM -e BT -e BT_HCIVHCI
+> > echo "CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=3D140" >> .config
+> > echo "CONFIG_RCU_CPU_STALL_TIMEOUT=3D100" >> .config
+> >
+> > I will be happy to test any patch or provide any extra log if needed.
+> > Though I am not sure how I will collect extra logs (if needed) as there
+> > was no output from qemu.
+>
+> I see KASAN in your config, does this fix it?
+>
+> https://lore.kernel.org/lkml/166693938482.29415.7034851115705424459.tip-b=
+ot2@tip-bot2/
 
-Leave the constraints.
+Yes, it does. Thanks.
+I can see qemu booting up again. Also, looks like thats already merged
+to x86/mm, so I am not sending a Tested-by in reply to that patch.
 
-Why? Because now you dropped it for mt6797... You bring here some random
-changes and it is difficult to review it.
-
-> -    description: |
-> -      Specifies the summary IRQ.
-> +    description: Interrupt outputs to the system interrupt controller (sysirq).
->  
->    "#interrupt-cells":
->      const: 2
-> @@ -57,59 +57,6 @@ required:
->    - gpio-controller
->    - "#gpio-cells"
->  
-> -allOf:
-> -  - $ref: "pinctrl.yaml#"
-> -  - if:
-> -      properties:
-
-Make the move of this hunk in your description cleanup patch. Don't mix
-functional changes and some cleanups.
-
-> -        compatible:
-> -          contains:
-> -            const: mediatek,mt6779-pinctrl
-> -    then:
-> -      properties:
-> -        reg:
-> -          minItems: 9
-> -          maxItems: 9
-> -
-> -        reg-names:
-> -          items:
-> -            - const: gpio
-> -            - const: iocfg_rm
-> -            - const: iocfg_br
-> -            - const: iocfg_lm
-> -            - const: iocfg_lb
-> -            - const: iocfg_rt
-> -            - const: iocfg_lt
-> -            - const: iocfg_tl
-> -            - const: eint
-> -  - if:
-> -      properties:
-> -        compatible:
-> -          contains:
-> -            const: mediatek,mt6797-pinctrl
-> -    then:
-> -      properties:
-> -        reg:
-> -          minItems: 5
-> -          maxItems: 5
-> -
-> -        reg-names:
-> -          items:
-> -            - const: gpio
-> -            - const: iocfgl
-> -            - const: iocfgb
-> -            - const: iocfgr
-> -            - const: iocfgt
-> -  - if:
-> -      properties:
-> -        reg-names:
-> -          contains:
-> -            const: eint
-> -    then:
-> -      required:
-> -        - interrupts
-> -        - interrupt-controller
-> -        - "#interrupt-cells"
-> -
->  patternProperties:
->    '-pins$':
->      type: object
-> @@ -169,8 +116,7 @@ patternProperties:
->  
->            input-schmitt-disable: true
->  
-> -          drive-strength:
-> -            enum: [2, 4, 8, 12, 16]
-> +          drive-strength: true
->  
->            slew-rate:
->              enum: [0, 1]
-> @@ -202,6 +148,110 @@ patternProperties:
->  
->          additionalProperties: false
->  
-> +allOf:
-> +  - $ref: "pinctrl.yaml#"
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: mediatek,mt6779-pinctrl
-> +    then:
-> +      properties:
-> +        reg:
-> +          minItems: 9
-> +          maxItems: 9
-> +
-> +        reg-names:
-> +          items:
-> +            - const: gpio
-> +            - const: iocfg_rm
-> +            - const: iocfg_br
-> +            - const: iocfg_lm
-> +            - const: iocfg_lb
-> +            - const: iocfg_rt
-> +            - const: iocfg_lt
-> +            - const: iocfg_tl
-> +            - const: eint
-> +
-> +        interrupts:
-> +          items:
-> +            - description: EINT interrupt
-> +
-> +      patternProperties:
-> +        '-pins$':
-> +          patternProperties:
-> +            '^pins':
-> +              properties:
-> +                drive-strength:
-> +                  enum: [2, 4, 8, 12, 16]
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: mediatek,mt6795-pinctrl
-> +    then:
-> +      properties:
-> +        reg:
-> +          minItems: 2
-> +          maxItems: 2
-> +
-> +        reg-names:
-> +          items:
-> +            - const: base
-> +            - const: eint
-> +
-> +        interrupts:
-> +          items:
-> +            - description: EINT interrupt
-> +            - description: EINT event_b interrupt
-> +
-> +      patternProperties:
-> +        '-pins$':
-> +          patternProperties:
-> +            '^pins':
-> +              properties:
-> +                drive-strength:
-> +                  enum: [2, 4, 6, 8, 10, 12, 14, 16]
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: mediatek,mt6797-pinctrl
-> +    then:
-> +      properties:
-> +        reg:
-> +          minItems: 5
-> +          maxItems: 5
-> +
-> +        reg-names:
-> +          items:
-> +            - const: gpio
-> +            - const: iocfgl
-> +            - const: iocfgb
-> +            - const: iocfgr
-> +            - const: iocfgt
-> +
-> +      patternProperties:
-> +        '-pins$':
-> +          patternProperties:
-> +            '^pins':
-> +              properties:
-> +                drive-strength:
-> +                  enum: [2, 4, 8, 12, 16]
-> +
-> +  - if:
-> +      properties:
-> +        reg-names:
-> +          contains:
-> +            const: eint
-> +    then:
-> +      required:
-> +        - interrupts
-> +        - interrupt-controller
-> +        - "#interrupt-cells"
-> +
->  additionalProperties: false
->  
->  examples:
-> @@ -237,8 +287,9 @@ examples:
->              #interrupt-cells = <2>;
->              interrupts = <GIC_SPI 204 IRQ_TYPE_LEVEL_HIGH>;
->  
-> -            mmc0_pins_default: mmc0-0 {
-> -                cmd-dat-pins {
-
-How this is related to the patch?
-
-Organize the patches so they are easy for review.
-
-Best regards,
-Krzysztof
-
+--=20
+Regards
+Sudip
