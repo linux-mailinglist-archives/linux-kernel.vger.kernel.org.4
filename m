@@ -2,87 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D46C610805
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 04:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 306D2610827
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 04:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235830AbiJ1Cd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 22:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46052 "EHLO
+        id S236417AbiJ1Ce6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 22:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbiJ1Cdx (ORCPT
+        with ESMTP id S236198AbiJ1CeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 22:33:53 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97910BB3B3;
-        Thu, 27 Oct 2022 19:33:52 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id b2so9858744eja.6;
-        Thu, 27 Oct 2022 19:33:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=53s4zP1UbHrZ8BLuZgRVSbCBJDm3/rz9JXrjUQqbB5E=;
-        b=WqdwLO4ke2DgLv0opSrzgJZjZHbK0QD8uH4ZNd0x7dk3s52U+rbOWgudpTkvlrbc2C
-         njU2wtGfrvV8/NUss1r1BUe0ygYP0nWdf+rRnRW4iOhcdq4E7JgmNeYcpaER62C++10W
-         Rf95LXFsaYGzr7yodO/XgAhLvDQCLx8jb/r+Lbn8kK25e1uSti9JV5ceofWXWDnK8EcB
-         YS6XfxG28QdlWzh6VvM+B2fo1ubnZXeMEk8Mb9SzWDrUtTO7k2d0V+BYHU5dJS8+BN3+
-         yEEOJUGLXKRULSBtEfLR87dRCV4abkoy+j9klKG9rdJkiEPKgQeaxGkRnSYHdqmIrymv
-         xEpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=53s4zP1UbHrZ8BLuZgRVSbCBJDm3/rz9JXrjUQqbB5E=;
-        b=U8Jtmcy38yxUc8qvv5x1r2eqnCwiCtD/R/L5YSzhSw9LRhDiQgZrmjb9XaotDAniF3
-         LFq0szL7s3HOTSrVxIWO6F02gASuNkaZNrteHKcVXnyGWc/fV4PrOf/5KuueliETh36m
-         q6gVgdIT/lnCWl73bqWtclpTj71s8qYoZWFKf5DcsAjcTx/96PJhQiNuwHHOLuNhAxTF
-         uIAWPHW7XpQto9SegXVyBZtk+eX2KndSA4QeR4oyLyGF5PHLIIZpbvTRhcZaHz1CM+Gr
-         QB406B9Mejkp6SkT+SsVUYahOstnnMJZX6USvZ8VoEOvpca8HoKsBALPWc6xAX5q7Poc
-         xX3w==
-X-Gm-Message-State: ACrzQf17HgvU+MrFTVCBc+bRL7Lx1GwJuMDcM3FRqJjOvpe5WaLTmCKD
-        kKZ/jFuUxj9tmLpj9aIRtCunsrcFva5hB0/hn/4=
-X-Google-Smtp-Source: AMsMyM7/yz23JjtCZZBG4XioO8LLTMkgQkesu0H7ASDVCHRK0f36BZw2OFvG1P/5ZVpCqSaVcLKXWKDgKFVy6fpso9Q=
-X-Received: by 2002:a17:907:2bdb:b0:7ad:95e5:ce80 with SMTP id
- gv27-20020a1709072bdb00b007ad95e5ce80mr3390491ejc.625.1666924431113; Thu, 27
- Oct 2022 19:33:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221026185846.3983888-1-quic_eberman@quicinc.com> <20221026185846.3983888-3-quic_eberman@quicinc.com>
-In-Reply-To: <20221026185846.3983888-3-quic_eberman@quicinc.com>
-From:   Jassi Brar <jassisinghbrar@gmail.com>
-Date:   Thu, 27 Oct 2022 21:33:39 -0500
-Message-ID: <CABb+yY3JVNPG3dcyHNFxEeGEu3MN_pAOh3+cwexPPe2YG6SNUg@mail.gmail.com>
-Subject: Re: [PATCH v6 02/21] dt-bindings: Add binding for gunyah hypervisor
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Kalle Valo <kvalo@kernel.org>, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Thu, 27 Oct 2022 22:34:15 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5687BE2F5;
+        Thu, 27 Oct 2022 19:34:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=fVteMAVIVg+91bTuLaocFDEKI259Dr9+CPyGCGwShcc=; b=ijcu/m4XkLYK3DKlJDahWgJHiW
+        mu7ewOaipKjhqe8VSwqNcZrMyfILUJsa2yaMpnmbZVxHA5i3JWu6p/V0JfsAfj48zCsFoHd3YLmOt
+        W01JhZsZst4iSFEpppNf0MEqyWOTaXTYlGSc3NLkewsdvMRN00foyNDwR016b8PpHvZo/LKktG6ty
+        MXuZ13R+s+K9VtWA2tvb7xaYR/SlUqxnGEQKVOT6YaVhxbYNRWPcd1wpEdp+lzWrFjBgwtVu+3LUS
+        fP6w3UjjniYWMPy29/vK7NAp1gDNZyW3VKJITWWsNvR+1mP8W70AvsKCFX+mWhOMS3BghRETljTH7
+        Dq1sletg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1ooFBw-00Eor9-0O;
+        Fri, 28 Oct 2022 02:33:52 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     David Howells <dhowells@redhat.com>, willy@infradead.org,
+        dchinner@redhat.com, Steve French <smfrench@gmail.com>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>, torvalds@linux-foundation.org,
+        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Subject: [PATCH v2 01/12] get rid of unlikely() on page_copy_sane() calls
+Date:   Fri, 28 Oct 2022 03:33:41 +0100
+Message-Id: <20221028023352.3532080-1-viro@zeniv.linux.org.uk>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <Y1btOP0tyPtcYajo@ZenIV>
+References: <Y1btOP0tyPtcYajo@ZenIV>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,22 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 1:59 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
-.....
-> +
-> +        gunyah-resource-mgr@0 {
-> +            compatible = "gunyah-resource-manager-1-0", "gunyah-resource-manager";
-> +            interrupts = <GIC_SPI 3 IRQ_TYPE_EDGE_RISING>, /* TX full IRQ */
-> +                         <GIC_SPI 4 IRQ_TYPE_EDGE_RISING>; /* RX empty IRQ */
-> +            reg = <0x00000000 0x00000000>, <0x00000000 0x00000001>;
-> +                  /* TX, RX cap ids */
-> +        };
->
-All these resources are used only by the mailbox controller driver.
-So, this should be the mailbox controller node, rather than the
-mailbox user.
-One option is to load gunyah-resource-manager as a module that relies
-on the gunyah-mailbox provider. That would also avoid the "Allow
-direct registration to a channel" hack patch.
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+ lib/iov_iter.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-thanks.
+diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+index c3ca28ca68a6..e9a8fc9ee8ee 100644
+--- a/lib/iov_iter.c
++++ b/lib/iov_iter.c
+@@ -703,17 +703,16 @@ static inline bool page_copy_sane(struct page *page, size_t offset, size_t n)
+ 	head = compound_head(page);
+ 	v += (page - head) << PAGE_SHIFT;
+ 
+-	if (likely(n <= v && v <= (page_size(head))))
+-		return true;
+-	WARN_ON(1);
+-	return false;
++	if (WARN_ON(n > v || v > page_size(head)))
++		return false;
++	return true;
+ }
+ 
+ size_t copy_page_to_iter(struct page *page, size_t offset, size_t bytes,
+ 			 struct iov_iter *i)
+ {
+ 	size_t res = 0;
+-	if (unlikely(!page_copy_sane(page, offset, bytes)))
++	if (!page_copy_sane(page, offset, bytes))
+ 		return 0;
+ 	if (unlikely(iov_iter_is_pipe(i)))
+ 		return copy_page_to_iter_pipe(page, offset, bytes, i);
+@@ -808,7 +807,7 @@ size_t copy_page_from_iter_atomic(struct page *page, unsigned offset, size_t byt
+ 				  struct iov_iter *i)
+ {
+ 	char *kaddr = kmap_atomic(page), *p = kaddr + offset;
+-	if (unlikely(!page_copy_sane(page, offset, bytes))) {
++	if (!page_copy_sane(page, offset, bytes)) {
+ 		kunmap_atomic(kaddr);
+ 		return 0;
+ 	}
+-- 
+2.30.2
+
