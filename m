@@ -2,94 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32DF16118F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7786B6118FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbiJ1RLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 13:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
+        id S231346AbiJ1RLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 13:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbiJ1RKV (ORCPT
+        with ESMTP id S231216AbiJ1RK1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 13:10:21 -0400
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55BF77547;
-        Fri, 28 Oct 2022 10:08:12 -0700 (PDT)
-Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id D9FE9218D;
-        Fri, 28 Oct 2022 17:05:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1666976731;
-        bh=TVrq+vQGb+av6ii3jqQDdjetxf7DCNwUg01zC3qewKs=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=gAXYhGKxNxS9jnSw23PcRE5QSOyUUHsJS9hpwu6oX845dwVSgtxDTaYmuMZIQo+V9
-         6GcmRS4YmY7zplFzNuA4W1Vv6sY0QpIHvQvJNpuO91Or4DaZUNcpoAkRiW6iGxiPDW
-         4YOLMtZiCt+7tdxeyPSwh0Zp4SDG3KDHz2FDJmic=
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id D903FDD;
-        Fri, 28 Oct 2022 17:08:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1666976890;
-        bh=TVrq+vQGb+av6ii3jqQDdjetxf7DCNwUg01zC3qewKs=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=SP66XS7JeULWj/kAbmS0oBErTfmLbpWHzNenHpvvq2OrXoCm3M8C9xMZEWMk6qhZc
-         JBR1wBN9NqKS5jjlM0i0P5j/gKDLH4fqIkoa37jFcIioV6374q76PrLPFu3uV5N5ao
-         XEkH+gxx84TbiHvTDubs+tUbLMtrwJ0Qes6WjEvo=
-Received: from [172.30.8.65] (172.30.8.65) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 28 Oct 2022 20:08:10 +0300
-Message-ID: <2f497702-ace1-9b3e-65d1-a7dc57623372@paragon-software.com>
-Date:   Fri, 28 Oct 2022 20:08:10 +0300
+        Fri, 28 Oct 2022 13:10:27 -0400
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A051679634;
+        Fri, 28 Oct 2022 10:08:25 -0700 (PDT)
+Received: by mail-qk1-f181.google.com with SMTP id k4so939015qkj.8;
+        Fri, 28 Oct 2022 10:08:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ACYDNRFbUSp7i+jczQsEaccisHzmM8JzMkLPkBS56xA=;
+        b=5vDmIOQf81ZFU5qBvZSjqx7AAnhKoYtT2vR36fSW4Y6td7r7pf+G69dti9r0CEEC5a
+         lk62meRaHfTNon+bmVd00kKn0gmzG/YF17yZfdLxxaxPJUD3xJq9uZ/Ny1MPqCWoJ6bT
+         iuO1ydEBeC+qGxVjK4kfUKN9rcJLG3SblbaP2Zhw6exXOU3GxXqkkFkhi2GT8LauY2/P
+         MkYqA4uBDfstvZf9ZJsE6NE6jPFobR8T7R3mDCnI6O4n53icntDgDqsc0fZvinDAB64R
+         jxKQWSJ+YKii1c4HiNpZNWHzxr9htg0QxOIlChXykoqdQ9nHrrhHCPtgDjYdVnpjcH/p
+         ig9Q==
+X-Gm-Message-State: ACrzQf0Kd5BIaIZB+g2SLAIlhwSmsqQkdu3cSefKsXu8Z7lfq0jZFRPa
+        q2XsQ+LbJ68rgHvMt68iEu1XyOfS9BUQ2ze371s=
+X-Google-Smtp-Source: AMsMyM6GirJGOCAxq2HD+MvgRGOX0aUHEUf8UPJWN5E1NV/YOWm4CZ7W0aezKcaOZwjW07YOs1f70zgtPQoCpcq932Y=
+X-Received: by 2002:a37:b1c2:0:b0:6fa:1185:4dbf with SMTP id
+ a185-20020a37b1c2000000b006fa11854dbfmr177991qkf.764.1666976904692; Fri, 28
+ Oct 2022 10:08:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: [PATCH 14/14] fs/ntfs3: Make if more readable
-Content-Language: en-US
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-To:     <ntfs3@lists.linux.dev>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
-References: <fc5957cc-a71b-cfa3-f291-cb63b23800d1@paragon-software.com>
-In-Reply-To: <fc5957cc-a71b-cfa3-f291-cb63b23800d1@paragon-software.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.30.8.65]
-X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+In-Reply-To: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 28 Oct 2022 19:08:13 +0200
+Message-ID: <CAJZ5v0hdgxsDiXqOmeqBQoZUQJ1RssM=3jpYpWt3qzy0n2eyaA@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: APEI: set memory failure flags as
+ MF_ACTION_REQUIRED on action required events
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, james.morse@arm.com,
+        tony.luck@intel.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        jarkko@kernel.org, naoya.horiguchi@nec.com, linmiaohe@huawei.com,
+        akpm@linux-foundation.org, stable@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cuibixuan@linux.alibaba.com, baolin.wang@linux.alibaba.com,
+        zhuo.song@linux.alibaba.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This way it looks better.
+On Thu, Oct 27, 2022 at 6:25 AM Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+>
+> There are two major types of uncorrected error (UC) :
+>
+> - Action Required: The error is detected and the processor already consumes the
+>   memory. OS requires to take action (for example, offline failure page/kill
+>   failure thread) to recover this uncorrectable error.
+>
+> - Action Optional: The error is detected out of processor execution context.
+>   Some data in the memory are corrupted. But the data have not been consumed.
+>   OS is optional to take action to recover this uncorrectable error.
+>
+> For X86 platforms, we can easily distinguish between these two types
+> based on the MCA Bank. While for arm64 platform, the memory failure
+> flags for all UCs which severity are GHES_SEV_RECOVERABLE are set as 0,
+> a.k.a, Action Optional now.
+>
+> If UC is detected by a background scrubber, it is obviously an Action
+> Optional error.  For other errors, we should conservatively regard them
+> as Action Required.
+>
+> cper_sec_mem_err::error_type identifies the type of error that occurred
+> if CPER_MEM_VALID_ERROR_TYPE is set. So, set memory failure flags as 0
+> for Scrub Uncorrected Error (type 14). Otherwise, set memory failure
+> flags as MF_ACTION_REQUIRED.
+>
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
 
-Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
----
-  fs/ntfs3/record.c | 5 ++---
-  1 file changed, 2 insertions(+), 3 deletions(-)
+I need input from the APEI reviewers on this.
 
-diff --git a/fs/ntfs3/record.c b/fs/ntfs3/record.c
-index a952cd7aa7a4..defce6a5c8e1 100644
---- a/fs/ntfs3/record.c
-+++ b/fs/ntfs3/record.c
-@@ -265,10 +265,9 @@ struct ATTRIB *mi_enum_attr(struct mft_inode *mi, struct ATTRIB *attr)
-  		if (t16 + t32 > asize)
-  			return NULL;
-  
--		if (attr->name_len &&
--		    le16_to_cpu(attr->name_off) + sizeof(short) * attr->name_len > t16) {
-+		t32 = sizeof(short) * attr->name_len;
-+		if (t32 && le16_to_cpu(attr->name_off) + t32 > t16)
-  			return NULL;
--		}
-  
-  		return attr;
-  	}
--- 
-2.37.0
+Thanks!
 
-
+> ---
+>  drivers/acpi/apei/ghes.c | 10 ++++++++--
+>  include/linux/cper.h     |  3 +++
+>  2 files changed, 11 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+> index 80ad530583c9..6c03059cbfc6 100644
+> --- a/drivers/acpi/apei/ghes.c
+> +++ b/drivers/acpi/apei/ghes.c
+> @@ -474,8 +474,14 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
+>         if (sec_sev == GHES_SEV_CORRECTED &&
+>             (gdata->flags & CPER_SEC_ERROR_THRESHOLD_EXCEEDED))
+>                 flags = MF_SOFT_OFFLINE;
+> -       if (sev == GHES_SEV_RECOVERABLE && sec_sev == GHES_SEV_RECOVERABLE)
+> -               flags = 0;
+> +       if (sev == GHES_SEV_RECOVERABLE && sec_sev == GHES_SEV_RECOVERABLE) {
+> +               if (mem_err->validation_bits & CPER_MEM_VALID_ERROR_TYPE)
+> +                       flags = mem_err->error_type == CPER_MEM_SCRUB_UC ?
+> +                                       0 :
+> +                                       MF_ACTION_REQUIRED;
+> +               else
+> +                       flags = MF_ACTION_REQUIRED;
+> +       }
+>
+>         if (flags != -1)
+>                 return ghes_do_memory_failure(mem_err->physical_addr, flags);
+> diff --git a/include/linux/cper.h b/include/linux/cper.h
+> index eacb7dd7b3af..b77ab7636614 100644
+> --- a/include/linux/cper.h
+> +++ b/include/linux/cper.h
+> @@ -235,6 +235,9 @@ enum {
+>  #define CPER_MEM_VALID_BANK_ADDRESS            0x100000
+>  #define CPER_MEM_VALID_CHIP_ID                 0x200000
+>
+> +#define CPER_MEM_SCRUB_CE                      13
+> +#define CPER_MEM_SCRUB_UC                      14
+> +
+>  #define CPER_MEM_EXT_ROW_MASK                  0x3
+>  #define CPER_MEM_EXT_ROW_SHIFT                 16
+>
+> --
+> 2.20.1.9.gb50a0d7
+>
