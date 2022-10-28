@@ -2,209 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73CD7611710
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F2C611709
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbiJ1QIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36320 "EHLO
+        id S231139AbiJ1QHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiJ1QGt (ORCPT
+        with ESMTP id S230465AbiJ1QG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:06:49 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C09C14
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:06:00 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29SFi76Q037322;
-        Fri, 28 Oct 2022 16:05:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=Ag61Q8Xg55sUv7jlbJD5dxol/V7IGyeMOcpLHVlRgKg=;
- b=ZXCtEZNoaDkxNsFS8wPL7gpTXbQ6DM9x+hpzZAMVQaSB62KgKQkhciwtTJrQf5d+hTQX
- 7GIT2rZMaAtQ+HN360Vzeb+bmIidbeBO4BpYekBWw9uL3rtfLhLUiLYwSEMMB6Y0dgTS
- VIiKhUciRl0t0hR/q1DbYZwKhLapqIADnasUdQjnv03E9wSaU77LEjEnfR+5MdpoXzmV
- bq921REj5QBQxlXPBfiB/m4CypAGC1lYgkbyOZONcFxXXqNErlaXrvcbyvvz+ERtlDBX
- kAcJqixo/j8UgofGqbG5ym62LdFxr4mooOJNfyy2h0rm6MtkkY4aZrUv6YEw+gRzsUy3 8Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kghyw8q6h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 16:05:49 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29SFlXf5010291;
-        Fri, 28 Oct 2022 16:05:49 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kghyw8q59-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 16:05:49 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29SFppHt004243;
-        Fri, 28 Oct 2022 16:00:38 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3kfbg2ar0x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 16:00:38 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29SG1BhP29295030
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Oct 2022 16:01:11 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8614711C04A;
-        Fri, 28 Oct 2022 16:00:36 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3D25511C04C;
-        Fri, 28 Oct 2022 16:00:36 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.145.94.157])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 28 Oct 2022 16:00:36 +0000 (GMT)
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-To:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] powerpc: Take in account addition CPU node when building kexec FDT
-Date:   Fri, 28 Oct 2022 18:00:34 +0200
-Message-Id: <20221028160034.44400-3-ldufour@linux.ibm.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221028160034.44400-1-ldufour@linux.ibm.com>
-References: <20221028160034.44400-1-ldufour@linux.ibm.com>
+        Fri, 28 Oct 2022 12:06:28 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EED36795
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:05:27 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id bk15so7139193wrb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:05:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EwmCRs4VSiMfypRrD7D2mR4onALfK9W6TO7PXOA1Xlw=;
+        b=fTjuqZyXsmSTk2cIPQ/0aCdcmB+/FsutYK3NdLqf0DNci1I6j4hl4AqlqJPNqSeZB5
+         iDopaXFIaQajYePTXR/Usccjn+rhQ9YX6MbdOUr0ZesAHQlVZooI4D5brDiy7dhu7agq
+         Q/NstEV5l8VKCLuC9BJpvAswKqto1GtwHQh+Hw40PzQiaCjkBS6jy3nbos9b9boaZlmY
+         X2pFBOtPo/H288fAyaWlJY5gX5XDRG96CynvLC8nfaSz1HNYXON2ICyXFoZdGqeyA1ey
+         VtWHe6HwzBGqTVOm7vA8I5pQlC1XDtdkd4p4fIyvk7gHki9UnZeRYFFL1pj4YmTx47gq
+         0L5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EwmCRs4VSiMfypRrD7D2mR4onALfK9W6TO7PXOA1Xlw=;
+        b=3RqoLDZ8tO9HaRkaeYfFQW9Po8RkT4dg/E/Us9IJNfBKd2g9qZQNxlASek2KDRXBrK
+         a7FIhyAc4kf3Lg5ZJN0Cmg9hAr3358UGSGnuP/Sha9kbPUhdDBlsb1ym0ZsYwtjmERLv
+         3xisawhc47AiWfUpH/5tg/WdhEzEZ8GMcPvo1zxXCwLMr3Nwmv+EJyHJQRzfx4dfWsy3
+         mPg8nvpLo1Mn6u5yQLOkgSezwPYCpWrZaoW3wLBVJoCAH3J7HrhDvuoBbzb8GV+QnEO6
+         fnh8PLsrAPD3C8AdNgGlbzMbbCldboGjN1RvtoPJCUmrHO9LrjfsPkOUevzJnNu24nFP
+         P9hw==
+X-Gm-Message-State: ACrzQf1svB+2tyRwhYoTHG8suV7JGn7Y65ZH3Za89AHPDTqjc7nXhY2P
+        kFMZJeQLM43kLZxuxEKI7fFFzw==
+X-Google-Smtp-Source: AMsMyM6LAIow3wsRy3i/XkJRAuc+KOqBrJiL8BkCF5fHKU+6HuYulPKWA1OkiKQ5ODgHDgEeChW/0g==
+X-Received: by 2002:adf:f384:0:b0:236:64ad:c958 with SMTP id m4-20020adff384000000b0023664adc958mr63408wro.174.1666973126321;
+        Fri, 28 Oct 2022 09:05:26 -0700 (PDT)
+Received: from localhost.localdomain (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id dn10-20020a05600c654a00b003a3170a7af9sm4560049wmb.4.2022.10.28.09.05.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 09:05:25 -0700 (PDT)
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Jason@zx2c4.com, tytso@mit.edu
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        ardb@kernel.org, andre.przywara@arm.com,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: [PATCH] random: Use arch_get_random*_early() in random_init()
+Date:   Fri, 28 Oct 2022 17:00:42 +0100
+Message-Id: <20221028160041.753052-1-jean-philippe@linaro.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: JPYw-6l1ZhIYxfCFG3f87yUQjTYgtouA
-X-Proofpoint-ORIG-GUID: XDD6smsMZ-tfigq6HbcTJXcfw1qNR-gN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-28_07,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- lowpriorityscore=0 adultscore=0 bulkscore=0 impostorscore=0 clxscore=1015
- malwarescore=0 mlxlogscore=999 phishscore=0 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2210280100
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On a system with a large number of CPUs, the creation of the FDT for a
-kexec kernel may fail because the allocated FDT is not large enough.
+While reworking the archrandom handling, commit d349ab99eec7 ("random:
+handle archrandom with multiple longs") switched to the non-early
+archrandom helpers in random_init(), which broke initialization of the
+entropy pool from the arm64 random generator.
 
-When this happens, such a message is displayed on the console:
+Indeed at that point the arm64 CPU features, which verify that all CPUs
+have compatible capabilities, are not finalized so arch_get_random_seed_longs()
+is unsuccessful. Instead random_init() should use the _early functions,
+which check only the boot CPU on arm64. On other architectures the
+_early functions directly call the normal ones.
 
-Unable to add ibm,processor-vadd-size property: FDT_ERR_NOSPACE
-
-The property's name may change depending when the buffer overwrite is
-detected.
-
-Obviously the created FDT is missing information, and it is expected that
-system dump or kexec kernel failed to run properly.
-
-When the FDT is allocated, the size of the FDT the kernel received at boot
-time is used and an extra size can be applied. Currently, only memory added
-after boot time is taken in account, not the CPU nodes.
-
-The extra size should take in account these additional CPU nodes and
-compute the required extra space. To achieve that, the size of a CPU node,
-including its subnode is computed once and multiplied by the number of
-additional CPU nodes.
-
-The assumption is that the size of the CPU node is _same_ for all the node,
-the only variable part should be the name "PowerPC,POWERxx@##" where "##"
-may vary a bit.
-
-Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+Fixes: d349ab99eec7 ("random: handle archrandom with multiple longs")
+Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 ---
- arch/powerpc/kexec/file_load_64.c | 59 ++++++++++++++++++++++++++++++-
- 1 file changed, 58 insertions(+), 1 deletion(-)
+ drivers/char/random.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/powerpc/kexec/file_load_64.c b/arch/powerpc/kexec/file_load_64.c
-index 349a781cea0b..1476922cd7c5 100644
---- a/arch/powerpc/kexec/file_load_64.c
-+++ b/arch/powerpc/kexec/file_load_64.c
-@@ -928,6 +928,46 @@ int setup_purgatory_ppc64(struct kimage *image, const void *slave_code,
- 	return ret;
- }
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 2fe28eeb2f38..085af17c32f5 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -791,13 +791,14 @@ void __init random_init_early(const char *command_line)
+ #endif
  
-+/**
-+ * get_cpu_node_size - Compute the size of a CPU node in the FDT.
-+ *                     This should be done only once and the value is stored in
-+ *                     a static variable.
-+ * Returns the max size of a CPU node in the FDT.
-+ */
-+static unsigned int cpu_node_size(void)
-+{
-+	static unsigned int cpu_node_size;
-+	struct device_node *dn;
-+	struct property *pp;
-+
-+	/*
-+	 * Don't compute it twice, we are assuming that the per CPU node size
-+	 * doesn't change during the system's life.
-+	 */
-+	if (cpu_node_size)
-+		return cpu_node_size;
-+
-+	dn = of_find_node_by_type(NULL, "cpu");
-+	if (!dn) {
-+		/* Unlikely to happen */
-+		WARN_ON_ONCE(1);
-+		return 0;
-+	}
-+
-+	/*
-+	 * We compute the sub node size for a CPU node, assuming it
-+	 * will be the same for all.
-+	 */
-+	cpu_node_size += strlen(dn->name) + 5;
-+	for_each_property_of_node(dn, pp) {
-+		cpu_node_size += strlen(pp->name);
-+		cpu_node_size += pp->length;
-+	}
-+
-+	of_node_put(dn);
-+	return cpu_node_size;
-+}
-+
- /**
-  * kexec_extra_fdt_size_ppc64 - Return the estimated additional size needed to
-  *                              setup FDT for kexec/kdump kernel.
-@@ -937,7 +977,10 @@ int setup_purgatory_ppc64(struct kimage *image, const void *slave_code,
-  */
- unsigned int kexec_extra_fdt_size_ppc64(struct kimage *image)
- {
-+	struct device_node *dn;
- 	u64 usm_entries;
-+	unsigned int cpu_nodes = 0;
-+	unsigned int extra_size;
- 
- 	if (image->type != KEXEC_TYPE_CRASH)
- 		return 0;
-@@ -949,7 +992,21 @@ unsigned int kexec_extra_fdt_size_ppc64(struct kimage *image)
- 	 */
- 	usm_entries = ((memblock_end_of_DRAM() / drmem_lmb_size()) +
- 		       (2 * (resource_size(&crashk_res) / drmem_lmb_size())));
--	return (unsigned int)(usm_entries * sizeof(u64));
-+
-+	extra_size = (unsigned int)(usm_entries * sizeof(u64));
-+
-+	/*
-+	 * Get the number of CPU nodes in the current DT. This allows to
-+	 * reserve places for CPU nodes added since the boot time.
-+	 */
-+	for_each_node_by_type(dn, "cpu") {
-+		cpu_nodes++;
-+	}
-+
-+	if (cpu_nodes > boot_cpu_node_count)
-+		extra_size += (cpu_nodes - boot_cpu_node_count) * cpu_node_size();
-+
-+	return extra_size;
- }
- 
- /**
+ 	for (i = 0, arch_bits = sizeof(entropy) * 8; i < ARRAY_SIZE(entropy);) {
+-		longs = arch_get_random_seed_longs(entropy, ARRAY_SIZE(entropy) - i);
++		longs = arch_get_random_seed_longs_early(entropy,
++							 ARRAY_SIZE(entropy) - i);
+ 		if (longs) {
+ 			_mix_pool_bytes(entropy, sizeof(*entropy) * longs);
+ 			i += longs;
+ 			continue;
+ 		}
+-		longs = arch_get_random_longs(entropy, ARRAY_SIZE(entropy) - i);
++		longs = arch_get_random_longs_early(entropy, ARRAY_SIZE(entropy) - i);
+ 		if (longs) {
+ 			_mix_pool_bytes(entropy, sizeof(*entropy) * longs);
+ 			i += longs;
 -- 
-2.38.1
+2.37.3
 
