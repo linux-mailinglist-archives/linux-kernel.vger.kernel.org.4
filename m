@@ -2,207 +2,440 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC836109B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 07:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB936109B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 07:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229455AbiJ1FUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 01:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
+        id S229515AbiJ1FVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 01:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJ1FUl (ORCPT
+        with ESMTP id S229497AbiJ1FV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 01:20:41 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4448D4D80C;
-        Thu, 27 Oct 2022 22:20:39 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id be13so6542356lfb.4;
-        Thu, 27 Oct 2022 22:20:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CN6XjvDtu46q0u2KRm5mMXry24we3sE+OyWEdY5evzU=;
-        b=pyjbPtyLw+hu0QM/S/SIX/Ny0NwoIrbrnLAvgmhZ9Sc7dM6f6/I6mW96gkAIOk07pF
-         DOycU/wjze4oJHt/wkl8+iED6D0vpr+xLsxW1LBhWefofMwgDEHaVz3JWyd8xLpN28Yi
-         IQtM7XrA2QCgj/tbJFU7kqMrP4udtagDWum2y9VUxbEnTYZEA+jCa674prtjx9nIC0Zl
-         +QgYe6B3npdujZn7nrXR9QvVcrXvwIF/iAzcVS9OuioU5AsvS1tdf+mghfURfdDK67mr
-         io+YtCs4j8lQqUdplKjkWGKt5vyhoEfyaIJm5iwzO45NoGHzFOWDFyC18M40rwrXoZ1W
-         YCWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CN6XjvDtu46q0u2KRm5mMXry24we3sE+OyWEdY5evzU=;
-        b=mNdVfRsy876+I3glKHzuVKCSbzwbU5Orhk6dC/2piSjO4lj+O2Kz8TRTsekFW2arzc
-         BfofsgciRvKaB4IlmA4c120tTqZ6aRlW/6Q5G+pEU0arvrMzFR5+MAbSQ59sVZSGzZVj
-         UtyELGK57GgBFUhGEsnYrsmUS82TFdN4UimmOXx+vC4ihyijqyb+i1dEFpA8dFizupHz
-         wEcAf2Xi4Qq46y6cbkp5QqpIZ8XFeLmGZGAtXR/32eO50qIUuZtR5rbw4Or9Y/WTVcPY
-         soj/5++EyjeJaTbbGD0JK7Zt41lzqvNSqejpbqwz5+9/g96aEnV6hR9m0xXOR6/wQohu
-         0VdA==
-X-Gm-Message-State: ACrzQf3MUwecwcgRC+fYjbTpSQnVCfcuNNKEX+hi2cLm/ed0sE1Zko+z
-        YKh/DRWkC1nHJ51vx0tXMuGxeRtz0BvWPrWU3rY=
-X-Google-Smtp-Source: AMsMyM6QW7+6YgKsOE7rghTy3mNlmrpkNv+xLE4oZvFKfk7Cf8VrSXH3mueaGQBwfTwLvSWB/O/Uv3lVLK+kN7Qxl1w=
-X-Received: by 2002:a05:6512:104c:b0:4a2:6cee:ae17 with SMTP id
- c12-20020a056512104c00b004a26ceeae17mr18449491lfb.417.1666934437436; Thu, 27
- Oct 2022 22:20:37 -0700 (PDT)
+        Fri, 28 Oct 2022 01:21:29 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8632DAC285
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 22:21:27 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8DxvrfVZltjggUDAA--.6651S3;
+        Fri, 28 Oct 2022 13:21:25 +0800 (CST)
+Received: from [10.130.0.63] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxLuLTZltjVi0GAA--.21982S3;
+        Fri, 28 Oct 2022 13:21:25 +0800 (CST)
+Subject: Re: [PATCH v5 07/10] LoongArch: modules/ftrace: Initialize PLT at
+ load time
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20220919031632.15374-1-zhangqing@loongson.cn>
+ <20220919031632.15374-8-zhangqing@loongson.cn>
+ <CAAhV-H5WqjoC-jgVD5TNx3mkq6gWoerkXHTD4SUkr-DfdnSkig@mail.gmail.com>
+From:   Qing Zhang <zhangqing@loongson.cn>
+Message-ID: <6f1122be-ffd2-b4ad-c7c2-9ec953b4bbb1@loongson.cn>
+Date:   Fri, 28 Oct 2022 13:21:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <20221027124528.2487025-1-zengheng4@huawei.com>
-In-Reply-To: <20221027124528.2487025-1-zengheng4@huawei.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Fri, 28 Oct 2022 00:20:25 -0500
-Message-ID: <CAH2r5mu2-jfhFBTJDf8Td7yF5e4QEJbG85wVpxyePK1q8bMjAg@mail.gmail.com>
-Subject: Re: [PATCH v4] cifs: fix use-after-free caused by invalid pointer `hostname`
-To:     Zeng Heng <zengheng4@huawei.com>
-Cc:     sfrench@samba.org, tom@talpey.com, sprasad@microsoft.com,
-        pc@cjr.nz, lsahlber@redhat.com, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-kernel@vger.kernel.org,
-        liwei391@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAAhV-H5WqjoC-jgVD5TNx3mkq6gWoerkXHTD4SUkr-DfdnSkig@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxLuLTZltjVi0GAA--.21982S3
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvAXoW3KF45ZFWDXF17trWrJw4UCFg_yoW8Jr4rGo
+        W3tF1Igr4xJr429FW3Ja4jqFW7tw1FkrW5A3yfAwsxAa1qya4UKF17Ga1Yqay3W34ktFWf
+        Gas7GFW8AayxJr95n29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
+        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
+        UUBFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
+        0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1l84
+        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
+        M2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
+        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2
+        z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2
+        IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4U
+        YxBIdaVFxhVjvjDU0xZFpf9x07jepB-UUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-merged into cifs-2.6 for-next
+Hi, Hucai
 
-thx
-
-On Thu, Oct 27, 2022 at 7:49 AM Zeng Heng <zengheng4@huawei.com> wrote:
->
-> `hostname` needs to be set as null-pointer after free in
-> `cifs_put_tcp_session` function, or when `cifsd` thread attempts
-> to resolve hostname and reconnect the host, the thread would deref
-> the invalid pointer.
->
-> Here is one of practical backtrace examples as reference:
->
-> Task 477
-> ---------------------------
->  do_mount
->   path_mount
->    do_new_mount
->     vfs_get_tree
->      smb3_get_tree
->       smb3_get_tree_common
->        cifs_smb3_do_mount
->         cifs_mount
->          mount_put_conns
->           cifs_put_tcp_session
->           --> kfree(server->hostname)
->
-> cifsd
-> ---------------------------
->  kthread
->   cifs_demultiplex_thread
->    cifs_reconnect
->     reconn_set_ipaddr_from_hostname
->     --> if (!server->hostname)
->     --> if (server->hostname[0] == '\0')  // !! UAF fault here
->
-> CIFS: VFS: cifs_mount failed w/return code = -112
-> mount error(112): Host is down
-> BUG: KASAN: use-after-free in reconn_set_ipaddr_from_hostname+0x2ba/0x310
-> Read of size 1 at addr ffff888108f35380 by task cifsd/480
-> CPU: 2 PID: 480 Comm: cifsd Not tainted 6.1.0-rc2-00106-gf705792f89dd-dirty #25
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x68/0x85
->  print_report+0x16c/0x4a3
->  kasan_report+0x95/0x190
->  reconn_set_ipaddr_from_hostname+0x2ba/0x310
->  __cifs_reconnect.part.0+0x241/0x800
->  cifs_reconnect+0x65f/0xb60
->  cifs_demultiplex_thread+0x1570/0x2570
->  kthread+0x2c5/0x380
->  ret_from_fork+0x22/0x30
->  </TASK>
-> Allocated by task 477:
->  kasan_save_stack+0x1e/0x40
->  kasan_set_track+0x21/0x30
->  __kasan_kmalloc+0x7e/0x90
->  __kmalloc_node_track_caller+0x52/0x1b0
->  kstrdup+0x3b/0x70
->  cifs_get_tcp_session+0xbc/0x19b0
->  mount_get_conns+0xa9/0x10c0
->  cifs_mount+0xdf/0x1970
->  cifs_smb3_do_mount+0x295/0x1660
->  smb3_get_tree+0x352/0x5e0
->  vfs_get_tree+0x8e/0x2e0
->  path_mount+0xf8c/0x1990
->  do_mount+0xee/0x110
->  __x64_sys_mount+0x14b/0x1f0
->  do_syscall_64+0x3b/0x90
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> Freed by task 477:
->  kasan_save_stack+0x1e/0x40
->  kasan_set_track+0x21/0x30
->  kasan_save_free_info+0x2a/0x50
->  __kasan_slab_free+0x10a/0x190
->  __kmem_cache_free+0xca/0x3f0
->  cifs_put_tcp_session+0x30c/0x450
->  cifs_mount+0xf95/0x1970
->  cifs_smb3_do_mount+0x295/0x1660
->  smb3_get_tree+0x352/0x5e0
->  vfs_get_tree+0x8e/0x2e0
->  path_mount+0xf8c/0x1990
->  do_mount+0xee/0x110
->  __x64_sys_mount+0x14b/0x1f0
->  do_syscall_64+0x3b/0x90
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> The buggy address belongs to the object at ffff888108f35380
->  which belongs to the cache kmalloc-16 of size 16
-> The buggy address is located 0 bytes inside of
->  16-byte region [ffff888108f35380, ffff888108f35390)
-> The buggy address belongs to the physical page:
-> page:00000000333f8e58 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888108f350e0 pfn:0x108f35
-> flags: 0x200000000000200(slab|node=0|zone=2)
-> raw: 0200000000000200 0000000000000000 dead000000000122 ffff8881000423c0
-> raw: ffff888108f350e0 000000008080007a 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
-> Memory state around the buggy address:
->  ffff888108f35280: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
->  ffff888108f35300: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
-> >ffff888108f35380: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
->                    ^
->  ffff888108f35400: fa fb fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->  ffff888108f35480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->
-> Fixes: 7be3248f3139 ("cifs: To match file servers, make sure the server hostname matches")
-> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
-> Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-> ---
-> changes in v4:
->  - correct fix tag
->  - add reviewed-by
-> ---
->  fs/cifs/connect.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-> index ffb291579bb9..1cc47dd3b4d6 100644
-> --- a/fs/cifs/connect.c
-> +++ b/fs/cifs/connect.c
-> @@ -1584,6 +1584,7 @@ cifs_put_tcp_session(struct TCP_Server_Info *server, int from_reconnect)
->         server->session_key.response = NULL;
->         server->session_key.len = 0;
->         kfree(server->hostname);
-> +       server->hostname = NULL;
->
->         task = xchg(&server->tsk, NULL);
->         if (task)
-> --
-> 2.25.1
+On 2022/10/28 上午11:06, Huacai Chen wrote:
+> Hi, Qing,
+> 
+> Maybe this patch can be squashed to another one? If not, please move
+> it earlier because it looks like some preparation work.
 >
 
+ok, I'll move this patch sequence and send it later.
 
--- 
-Thanks,
+- Qing
 
-Steve
+> Huacai
+> 
+> On Mon, Sep 19, 2022 at 11:16 AM Qing Zhang <zhangqing@loongson.cn> wrote:
+>>
+>> To Implement ftrace trampiones through plt entry.
+>>
+>> Tested by forcing ftrace_make_call() to use the module PLT, and then
+>> loading up a module after setting up ftrace with:
+>>
+>> | echo ":mod:<module-name>" > set_ftrace_filter;
+>> | echo function > current_tracer;
+>> | modprobe <module-name>
+>>
+>> Since FTRACE_ADDR/FTRACE_REGS_ADDR is only defined when CONFIG_DYNAMIC_FTRACE
+>> is selected, we wrap its use along with most of module_init_ftrace_plt() with
+>> ifdeffery rather than using IS_ENABLED().
+>>
+>> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+>> ---
+>>   arch/loongarch/include/asm/ftrace.h     |  4 ++
+>>   arch/loongarch/include/asm/inst.h       |  3 +
+>>   arch/loongarch/include/asm/module.h     |  5 +-
+>>   arch/loongarch/include/asm/module.lds.h |  1 +
+>>   arch/loongarch/kernel/ftrace_dyn.c      | 79 +++++++++++++++++++++++++
+>>   arch/loongarch/kernel/inst.c            | 11 ++++
+>>   arch/loongarch/kernel/module-sections.c | 11 ++++
+>>   arch/loongarch/kernel/module.c          | 47 +++++++++++++++
+>>   8 files changed, 160 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/loongarch/include/asm/ftrace.h b/arch/loongarch/include/asm/ftrace.h
+>> index 5cc13ae48164..807226aad1c0 100644
+>> --- a/arch/loongarch/include/asm/ftrace.h
+>> +++ b/arch/loongarch/include/asm/ftrace.h
+>> @@ -6,6 +6,10 @@
+>>   #ifndef _ASM_LOONGARCH_FTRACE_H
+>>   #define _ASM_LOONGARCH_FTRACE_H
+>>
+>> +#define FTRACE_PLT_IDX         0
+>> +#define FTRACE_REGS_PLT_IDX    1
+>> +#define NR_FTRACE_PLTS         2
+>> +
+>>   #ifdef CONFIG_FUNCTION_TRACER
+>>   #define MCOUNT_INSN_SIZE 4             /* sizeof mcount call */
+>>
+>> diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
+>> index f4a12f872a71..5a1aa977ae20 100644
+>> --- a/arch/loongarch/include/asm/inst.h
+>> +++ b/arch/loongarch/include/asm/inst.h
+>> @@ -15,10 +15,12 @@
+>>
+>>   #define ADDR_IMMMASK_LU52ID    0xFFF0000000000000
+>>   #define ADDR_IMMMASK_LU32ID    0x000FFFFF00000000
+>> +#define ADDR_IMMMASK_LU12IW    0x00000000FFFFF000
+>>   #define ADDR_IMMMASK_ADDU16ID  0x00000000FFFF0000
+>>
+>>   #define ADDR_IMMSHIFT_LU52ID   52
+>>   #define ADDR_IMMSHIFT_LU32ID   32
+>> +#define ADDR_IMMSHIFT_LU12IW   12
+>>   #define ADDR_IMMSHIFT_ADDU16ID 16
+>>
+>>   #define ADDR_IMM(addr, INSN)   ((addr & ADDR_IMMMASK_##INSN) >> ADDR_IMMSHIFT_##INSN)
+>> @@ -346,6 +348,7 @@ u32 larch_insn_gen_or(enum loongarch_gpr rd, enum loongarch_gpr rj,
+>>                          enum loongarch_gpr rk);
+>>   u32 larch_insn_gen_move(enum loongarch_gpr rd, enum loongarch_gpr rj);
+>>
+>> +u32 larch_insn_gen_lu12iw(enum loongarch_gpr rd, int imm);
+>>   u32 larch_insn_gen_lu32id(enum loongarch_gpr rd, int imm);
+>>   u32 larch_insn_gen_lu52id(enum loongarch_gpr rd, enum loongarch_gpr rj, int imm);
+>>   u32 larch_insn_gen_jirl(enum loongarch_gpr rd, enum loongarch_gpr rj, unsigned long pc, unsigned long dest);
+>> diff --git a/arch/loongarch/include/asm/module.h b/arch/loongarch/include/asm/module.h
+>> index b29b19a46f42..a311cfec2b23 100644
+>> --- a/arch/loongarch/include/asm/module.h
+>> +++ b/arch/loongarch/include/asm/module.h
+>> @@ -20,6 +20,9 @@ struct mod_arch_specific {
+>>          struct mod_section got;
+>>          struct mod_section plt;
+>>          struct mod_section plt_idx;
+>> +
+>> +       /* for CONFIG_DYNAMIC_FTRACE */
+>> +       struct plt_entry *ftrace_trampolines;
+>>   };
+>>
+>>   struct got_entry {
+>> @@ -49,7 +52,7 @@ static inline struct plt_entry emit_plt_entry(unsigned long val)
+>>   {
+>>          u32 lu12iw, lu32id, lu52id, jirl;
+>>
+>> -       lu12iw = (lu12iw_op << 25 | (((val >> 12) & 0xfffff) << 5) | LOONGARCH_GPR_T1);
+>> +       lu12iw = larch_insn_gen_lu12iw(LOONGARCH_GPR_T1, ADDR_IMM(val, LU12IW));
+>>          lu32id = larch_insn_gen_lu32id(LOONGARCH_GPR_T1, ADDR_IMM(val, LU32ID));
+>>          lu52id = larch_insn_gen_lu52id(LOONGARCH_GPR_T1, LOONGARCH_GPR_T1, ADDR_IMM(val, LU52ID));
+>>          jirl = larch_insn_gen_jirl(0, LOONGARCH_GPR_T1, 0, (val & 0xfff));
+>> diff --git a/arch/loongarch/include/asm/module.lds.h b/arch/loongarch/include/asm/module.lds.h
+>> index a3d1bc0fcc72..438f09d4ccf4 100644
+>> --- a/arch/loongarch/include/asm/module.lds.h
+>> +++ b/arch/loongarch/include/asm/module.lds.h
+>> @@ -5,4 +5,5 @@ SECTIONS {
+>>          .got : { BYTE(0) }
+>>          .plt : { BYTE(0) }
+>>          .plt.idx : { BYTE(0) }
+>> +       .ftrace_trampoline : { BYTE(0) }
+>>   }
+>> diff --git a/arch/loongarch/kernel/ftrace_dyn.c b/arch/loongarch/kernel/ftrace_dyn.c
+>> index f538829312d7..dd37185d446e 100644
+>> --- a/arch/loongarch/kernel/ftrace_dyn.c
+>> +++ b/arch/loongarch/kernel/ftrace_dyn.c
+>> @@ -9,6 +9,7 @@
+>>   #include <linux/uaccess.h>
+>>
+>>   #include <asm/inst.h>
+>> +#include <asm/module.h>
+>>
+>>   static int ftrace_modify_code(unsigned long pc, u32 old, u32 new,
+>>                                bool validate)
+>> @@ -72,12 +73,63 @@ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
+>>          return ftrace_modify_code(pc, old, new, true);
+>>   }
+>>
+>> +static inline int __get_mod(struct module **mod, unsigned long addr)
+>> +{
+>> +       preempt_disable();
+>> +       *mod = __module_text_address(addr);
+>> +       preempt_enable();
+>> +
+>> +       if (WARN_ON(!(*mod)))
+>> +               return -EINVAL;
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static struct plt_entry *get_ftrace_plt(struct module *mod, unsigned long addr)
+>> +{
+>> +       struct plt_entry *plt = mod->arch.ftrace_trampolines;
+>> +
+>> +       if (addr == FTRACE_ADDR)
+>> +               return &plt[FTRACE_PLT_IDX];
+>> +       if (addr == FTRACE_REGS_ADDR &&
+>> +                       IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS))
+>> +               return &plt[FTRACE_REGS_PLT_IDX];
+>> +
+>> +       return NULL;
+>> +}
+>> +
+>> +static unsigned long get_plt_addr(struct module *mod, unsigned long addr)
+>> +{
+>> +       struct plt_entry *plt;
+>> +
+>> +       plt = get_ftrace_plt(mod, addr);
+>> +       if (!plt) {
+>> +               pr_err("ftrace: no module PLT for %ps\n", (void *)addr);
+>> +               return -EINVAL;
+>> +       }
+>> +
+>> +       return (unsigned long)plt;
+>> +}
+>> +
+>>   int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+>>   {
+>>          unsigned long pc;
+>> +       long offset;
+>>          u32 old, new;
+>>
+>>          pc = rec->ip + LOONGARCH_INSN_SIZE;
+>> +       offset = (long)pc - (long)addr;
+>> +
+>> +       if (offset < -SZ_128M || offset >= SZ_128M) {
+>> +               int ret;
+>> +               struct module *mod;
+>> +
+>> +               ret = __get_mod(&mod, pc);
+>> +               if (ret)
+>> +                       return ret;
+>> +
+>> +               addr = get_plt_addr(mod, addr);
+>> +       }
+>>
+>>          old = larch_insn_gen_nop();
+>>          new = larch_insn_gen_bl(pc, addr);
+>> @@ -89,9 +141,22 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
+>>                      unsigned long addr)
+>>   {
+>>          unsigned long pc;
+>> +       long offset;
+>>          u32 old, new;
+>>
+>>          pc = rec->ip + LOONGARCH_INSN_SIZE;
+>> +       offset = (long)pc - (long)addr;
+>> +
+>> +       if (offset < -SZ_128M || offset >= SZ_128M) {
+>> +               int ret;
+>> +               struct module *mod;
+>> +
+>> +               ret = __get_mod(&mod, pc);
+>> +               if (ret)
+>> +                       return ret;
+>> +
+>> +               addr = get_plt_addr(mod, addr);
+>> +       }
+>>
+>>          new = larch_insn_gen_nop();
+>>          old = larch_insn_gen_bl(pc, addr);
+>> @@ -108,6 +173,20 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
+>>          u32 old, new;
+>>
+>>          pc = rec->ip + LOONGARCH_INSN_SIZE;
+>> +       offset = (long)pc - (long)addr;
+>> +
+>> +       if (offset < -SZ_128M || offset >= SZ_128M) {
+>> +               int ret;
+>> +               struct module *mod;
+>> +
+>> +               ret = __get_mod(&mod, pc);
+>> +               if (ret)
+>> +                       return ret;
+>> +
+>> +               addr = get_plt_addr(mod, addr);
+>> +
+>> +               old_addr = get_plt_addr(mod, old_addr);
+>> +       }
+>>
+>>          old = larch_insn_gen_bl(pc, old_addr);
+>>          new = larch_insn_gen_bl(pc, addr);
+>> diff --git a/arch/loongarch/kernel/inst.c b/arch/loongarch/kernel/inst.c
+>> index 2d2e942eb06a..0d6bd7000ba6 100644
+>> --- a/arch/loongarch/kernel/inst.c
+>> +++ b/arch/loongarch/kernel/inst.c
+>> @@ -103,6 +103,17 @@ u32 larch_insn_gen_bl(unsigned long pc, unsigned long dest)
+>>          return insn.word;
+>>   }
+>>
+>> +u32 larch_insn_gen_lu12iw(enum loongarch_gpr rd, int imm)
+>> +{
+>> +       union loongarch_instruction insn;
+>> +
+>> +       insn.reg1i20_format.opcode = lu12iw_op;
+>> +       insn.reg1i20_format.rd = rd;
+>> +       insn.reg1i20_format.immediate = imm;
+>> +
+>> +       return insn.word;
+>> +}
+>> +
+>>   u32 larch_insn_gen_lu32id(enum loongarch_gpr rd, int imm)
+>>   {
+>>          union loongarch_instruction insn;
+>> diff --git a/arch/loongarch/kernel/module-sections.c b/arch/loongarch/kernel/module-sections.c
+>> index d296a70b758f..bd1a96691c98 100644
+>> --- a/arch/loongarch/kernel/module-sections.c
+>> +++ b/arch/loongarch/kernel/module-sections.c
+>> @@ -4,6 +4,7 @@
+>>    */
+>>
+>>   #include <linux/elf.h>
+>> +#include <linux/ftrace.h>
+>>   #include <linux/kernel.h>
+>>   #include <linux/module.h>
+>>
+>> @@ -103,6 +104,7 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
+>>                                char *secstrings, struct module *mod)
+>>   {
+>>          unsigned int i, num_plts = 0, num_gots = 0;
+>> +       Elf_Shdr *tramp = NULL;
+>>
+>>          /*
+>>           * Find the empty .plt sections.
+>> @@ -114,6 +116,8 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
+>>                          mod->arch.plt.shdr = sechdrs + i;
+>>                  else if (!strcmp(secstrings + sechdrs[i].sh_name, ".plt.idx"))
+>>                          mod->arch.plt_idx.shdr = sechdrs + i;
+>> +               else if (!strcmp(secstrings + sechdrs[i].sh_name, ".ftrace_trampoline"))
+>> +                       tramp = sechdrs + i;
+>>          }
+>>
+>>          if (!mod->arch.got.shdr) {
+>> @@ -166,5 +170,12 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
+>>          mod->arch.plt_idx.num_entries = 0;
+>>          mod->arch.plt_idx.max_entries = num_plts;
+>>
+>> +       if (tramp) {
+>> +               tramp->sh_type = SHT_NOBITS;
+>> +               tramp->sh_flags = SHF_EXECINSTR | SHF_ALLOC;
+>> +               tramp->sh_addralign = __alignof__(struct plt_entry);
+>> +               tramp->sh_size = NR_FTRACE_PLTS * sizeof(struct plt_entry);
+>> +       }
+>> +
+>>          return 0;
+>>   }
+>> diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
+>> index 097595b2fc14..e036b1ebf98e 100644
+>> --- a/arch/loongarch/kernel/module.c
+>> +++ b/arch/loongarch/kernel/module.c
+>> @@ -10,6 +10,7 @@
+>>
+>>   #include <linux/moduleloader.h>
+>>   #include <linux/elf.h>
+>> +#include <linux/ftrace.h>
+>>   #include <linux/mm.h>
+>>   #include <linux/numa.h>
+>>   #include <linux/vmalloc.h>
+>> @@ -17,6 +18,7 @@
+>>   #include <linux/fs.h>
+>>   #include <linux/string.h>
+>>   #include <linux/kernel.h>
+>> +#include <asm/inst.h>
+>>
+>>   static int rela_stack_push(s64 stack_value, s64 *rela_stack, size_t *rela_stack_top)
+>>   {
+>> @@ -456,3 +458,48 @@ void *module_alloc(unsigned long size)
+>>          return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
+>>                          GFP_KERNEL, PAGE_KERNEL, 0, NUMA_NO_NODE, __builtin_return_address(0));
+>>   }
+>> +
+>> +#ifdef CONFIG_DYNAMIC_FTRACE
+>> +static const Elf_Shdr *find_section(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
+>> +                                   const char *name)
+>> +{
+>> +       const Elf_Shdr *s, *se;
+>> +       const char *secstrs = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
+>> +
+>> +       for (s = sechdrs, se = sechdrs + hdr->e_shnum; s < se; s++) {
+>> +               if (strcmp(name, secstrs + s->sh_name) == 0)
+>> +                       return s;
+>> +       }
+>> +
+>> +       return NULL;
+>> +}
+>> +#endif
+>> +
+>> +static int module_init_ftrace_plt(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
+>> +                                 struct module *mod)
+>> +{
+>> +#ifdef CONFIG_DYNAMIC_FTRACE
+>> +       const Elf_Shdr *s;
+>> +       struct plt_entry *ftrace_plts;
+>> +
+>> +       s = find_section(hdr, sechdrs, ".ftrace_trampoline");
+>> +       if (!s)
+>> +               return -ENOEXEC;
+>> +
+>> +       ftrace_plts = (void *)s->sh_addr;
+>> +
+>> +       ftrace_plts[FTRACE_PLT_IDX] = emit_plt_entry(FTRACE_ADDR);
+>> +
+>> +       if (IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS))
+>> +               ftrace_plts[FTRACE_REGS_PLT_IDX] = emit_plt_entry(FTRACE_REGS_ADDR);
+>> +
+>> +       mod->arch.ftrace_trampolines = ftrace_plts;
+>> +#endif
+>> +       return 0;
+>> +}
+>> +
+>> +int module_finalize(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs, struct module *mod)
+>> +{
+>> +       return module_init_ftrace_plt(hdr, sechdrs, mod);
+>> +
+>> +}
+>> --
+>> 2.36.1
+>>
+
