@@ -2,111 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0C9611991
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:45:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E89BC611992
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbiJ1Rp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 13:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
+        id S230248AbiJ1Rpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 13:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbiJ1RpU (ORCPT
+        with ESMTP id S230179AbiJ1Rp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 13:45:20 -0400
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F07150FAC;
-        Fri, 28 Oct 2022 10:45:19 -0700 (PDT)
-Received: by mail-qv1-f47.google.com with SMTP id o8so4536445qvw.5;
-        Fri, 28 Oct 2022 10:45:19 -0700 (PDT)
+        Fri, 28 Oct 2022 13:45:27 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD3E4F3BC
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:45:24 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id u6so5433914plq.12
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:45:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sq+4+K8W7qz9CqdPYKGdGPJUiIj89nYCMsj4hrq+PXE=;
+        b=Qk8LjvSnKQ+nIz7iqqSWHFadvUV7NzJ6KPQ1r3p/lUiuWBKuG4/YdTl8U2LDkwWWQX
+         ZTdEZPBQv33zkr7IS54F9tB+LCHpxqUrERaqe7kqttssTQmiUT8DJ26n3dEcMAIJPPmw
+         2uAFLRTwFf+091cseHU88g11bR5cZGAOVEfyg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RZQHAqFn7xHc+L6KaGyhnBY2IDdvQwbbysAINIV2Tus=;
-        b=B/LBiLbbUJqVRBoeAS0dCssIbAb1vT7sgkabMaWw7Mjab0GDI9toP4AlmkvvP7eQ44
-         Ex0Y72VNBcvvWKWP1sLICcMGHVfPXssjWr228NuipEPa9STALc6PbhVAxm0QnBYei/vP
-         9GkrHJRBbbi5JGg4sSA0YAvnHn1DgruwvOZepHFYngcq8UD6E9pQZ9hEz2ZIkHSiw364
-         aFhQsDFIQudeUrgg8J+Joo0zLqjuabYxIdrwK2rabwuG4aCwkgPwPxYoR/9a6lECA8Yb
-         Lx9VKiarnIYNINnBeQp+5AXJOhS3WlhqVc6GISEu2010bvdWRjszdgnQCIWas0gv6MBy
-         T83A==
-X-Gm-Message-State: ACrzQf0zePYJSQ/hzGmnboO35mJ35bhu0h7ycVdOB49LLMjCCa04J0tp
-        2dWIK3CECpjNz0jqMcsx9d2pnD+3+0d3WoqTLUc=
-X-Google-Smtp-Source: AMsMyM5kQXQVWqsSU6Ox3yyFrYUf5omerGPpDbFWWyIuatB8czIAQj/JR/xRrizGLcjX4nFjOGe5rFrWtyomOZrWpOk=
-X-Received: by 2002:ad4:596b:0:b0:4b1:ee66:1cb8 with SMTP id
- eq11-20020ad4596b000000b004b1ee661cb8mr554004qvb.3.1666979118329; Fri, 28 Oct
- 2022 10:45:18 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sq+4+K8W7qz9CqdPYKGdGPJUiIj89nYCMsj4hrq+PXE=;
+        b=SMAUf3dOkGJ4XPSIZ/MRLX1hzxHoPNwdjpxbqwxBgUyUNWaxO4WykMNXhbLjm3rvdq
+         AZs+ffxH/g9q01YDvcaOtJOUO/Clc/FU67lfwF03kaRYY8epn/qAz+2i943F7j+Hu/Hp
+         akZAhTx/DeiFn97E/7xfPpnzNdiJ4CTelVWVniUEldyUR42QbgB0k5iHWndDS7Rny5qd
+         wRc866Z5lrYBoBaE/ImQLF0Tz5FNv+naWZW3uEV5YISSb+8SBD98fMlHmvrN6MUCINty
+         FDV0ySLgV66d2oSBQDAF+u4AHT5blPHusRYrJK5gozGl/NEkDz3+ss+ZpsfdFPKSXlZB
+         PW7w==
+X-Gm-Message-State: ACrzQf3vlHMvjgwQWqsC3MVJ+3pLrtD8b+y8K7I3piYyqrroc8tqNJ/R
+        TS5QznBoqmicfTkUCaW9laroVA==
+X-Google-Smtp-Source: AMsMyM5xMG3TVG7u/78SN5J7HmVo4/yAWKlp64gxV3zMh7Cx/cWT4TaKn1MTwMTg+/YXh4xKD0Cd8A==
+X-Received: by 2002:a17:90a:cf82:b0:20b:3525:81ec with SMTP id i2-20020a17090acf8200b0020b352581ecmr452552pju.42.1666979123537;
+        Fri, 28 Oct 2022 10:45:23 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u8-20020a17090341c800b001866a019010sm3368538ple.97.2022.10.28.10.45.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 10:45:22 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 10:45:21 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Joey Gouly <joey.gouly@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Lennart Poettering <lennart@poettering.net>,
+        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Topi Miettinen <toiwoton@gmail.com>, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-abi-devel@lists.sourceforge.net, nd@arm.com, shuah@kernel.org
+Subject: Re: [PATCH v1 2/2] kselftest: vm: add tests for
+ memory-deny-write-execute
+Message-ID: <202210281043.DFC05DEF@keescook>
+References: <20221026150457.36957-1-joey.gouly@arm.com>
+ <20221026150457.36957-3-joey.gouly@arm.com>
 MIME-Version: 1.0
-References: <20221027150525.753064657@goodmis.org> <20221027150926.394670044@goodmis.org>
-In-Reply-To: <20221027150926.394670044@goodmis.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Oct 2022 19:45:07 +0200
-Message-ID: <CAJZ5v0j_4xMY1fGY7ocbOzbJKdHDRUoY0OgyvQ=JCeNy_FOWDA@mail.gmail.com>
-Subject: Re: [RFC][PATCH v2 07/31] timers: PM: Use del_timer_shutdown()
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221026150457.36957-3-joey.gouly@arm.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 5:09 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
->
-> Instead of open coding making the timer look like it was not registered by
-> setting the function pointer to NULL, call del_timer_shutdown() that does
-> the same thing.
->
-> Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+On Wed, Oct 26, 2022 at 04:04:57PM +0100, Joey Gouly wrote:
+> +#include "../kselftest.h"
 
-Please add "wakeup:" to the subject after "PM:".
+I recommend using kselftest_harness.h instead; it provides much of the
+infrastructure that is open-coded here. But yes, testing is good; thank
+you! :)
 
-Apart from this
-
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-
-> ---
->  drivers/base/power/wakeup.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
->
-> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> index 7cc0c0cf8eaa..c690f6c0d670 100644
-> --- a/drivers/base/power/wakeup.c
-> +++ b/drivers/base/power/wakeup.c
-> @@ -202,12 +202,7 @@ void wakeup_source_remove(struct wakeup_source *ws)
->         raw_spin_unlock_irqrestore(&events_lock, flags);
->         synchronize_srcu(&wakeup_srcu);
->
-> -       del_timer_sync(&ws->timer);
-> -       /*
-> -        * Clear timer.function to make wakeup_source_not_registered() treat
-> -        * this wakeup source as not registered.
-> -        */
-> -       ws->timer.function = NULL;
-> +       del_timer_shutdown(&ws->timer);
->  }
->  EXPORT_SYMBOL_GPL(wakeup_source_remove);
->
-> --
-> 2.35.1
+-- 
+Kees Cook
