@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9AAA61135C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C66FF61136B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbiJ1NpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
+        id S230010AbiJ1Np0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbiJ1Nov (ORCPT
+        with ESMTP id S231163AbiJ1Noy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:44:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE9B15804;
-        Fri, 28 Oct 2022 06:44:41 -0700 (PDT)
+        Fri, 28 Oct 2022 09:44:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4C518E06;
+        Fri, 28 Oct 2022 06:44:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 67F7B62843;
-        Fri, 28 Oct 2022 13:44:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A44C433D7;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20BA7B82A33;
+        Fri, 28 Oct 2022 13:44:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B549CC433B5;
         Fri, 28 Oct 2022 13:44:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1666964680;
-        bh=MmnLFLEGV38Oa0D4suwaaBqgVsASkgXcREUF9ghKQhk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=b6I83973NpTJu0pEVU8pqNx1VhMLIQm58a5y037R1gi6ZQML2VNeFgmNun+czg6IR
-         0b1FrM63M3lywgUVCQCI+YGlxW7Tweqi9Z2yDuKOgJZK52C9sc+Pd0pxGSbR+rJAQQ
-         GJaJjGQSADAzClmtyzst+lbRWEnpMqVibSabKGmRnRwvjNLHWnX8K9wUNYDme2awth
-         UUcSrDdop3JKdkP5owtVmB/OFCfbfU5uUfxUTNNsMi110/p7fndi+ikuOJgks8AesJ
-         8j51tHtlHbmjqeYOLu6t0LiFnJODy94qR7YUtNSvSGZftczut9D17SuK01/r7jIRVS
-         Fory2ai5fG7Gw==
+        bh=lQAeh2JyHulI6VOCF5gUBOHb/iKIMa8Q2OtzfLpz+8E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=r2uVNvl/PcKsdDGoiQ1W/g6KAoAP8k6eXbCLp7cuQMEr4IsvTd4vYYwd4Rxk4GB8J
+         uVL8w+mevAPVIZWpsDQMcqthCvnvf0Pk7ewr/Fsm+U0+us+/iNp8TuwBgD/2hAD4Bu
+         LtclCJZYCoD7jfiGRflj1Ng1JpmH9cGcJAPxlkFj5mEwyRx0lY5E+CaRb8fXRuQKhs
+         kKMwOjAg8LVBU7mHalOFIESf9MKK1lzIRvsi5kp+mdzLEHyhCBY88aK3jnbr03Hzmq
+         vrnE5RGdZP3SBcjzYO/2XZGhzlqpkwQGte58KPuTprfCjvCHGi+wy9tnzah5pF3fu+
+         Kr6DkDV9gZolA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1ooPes-000520-0y; Fri, 28 Oct 2022 15:44:26 +0200
+        id 1ooPes-000522-RN; Fri, 28 Oct 2022 15:44:26 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -46,10 +46,12 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 00/13] phy: qcom-qmp-usb: fix sc8280xp binding
-Date:   Fri, 28 Oct 2022 15:43:54 +0200
-Message-Id: <20221028134407.19300-1-johan+linaro@kernel.org>
+Subject: [PATCH v2 01/13] phy: qcom-qmp-usb: fix sc8280xp PCS_USB offset
+Date:   Fri, 28 Oct 2022 15:43:55 +0200
+Message-Id: <20221028134407.19300-2-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221028134407.19300-1-johan+linaro@kernel.org>
+References: <20221028134407.19300-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,56 +63,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series fixes the USB PHY devicetree binding for SC8280XP and adds
-support for the new updated binding to the driver.
+The PCS_USB register block lives at an offset of 0x1000 from the PCS
+region on SC8280XP so add the missing offset to avoid corrupting
+unrelated registers on runtime suspend.
 
-The first half of the series clean up the driver in preparation for
-supporting SC8280XP and its new binding that drops the legacy child node
-and the (incomplete) description of register subregions.
+Note that the current binding is broken as it does not describe the
+PCS_USB region and the PCS register size does not cover PCS_USB and the
+regions in between. As Linux currently maps full pages, simply adding
+the offset to driver works until the binding has been fixed.
 
-The other QMP bindings suffer from similar problems and the PCIe and UFS
-drivers are being fixed here:
+Fixes: c0c7769cdae2 ("phy: qcom-qmp: Add SC8280XP USB3 UNI phy")
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-        https://lore.kernel.org/lkml/20221021110947.28103-1-johan+linaro@kernel.org/
-	https://lore.kernel.org/lkml/20221024090041.19574-1-johan+linaro@kernel.org/
-
-and a follow-on series will do corresponding changes to the combo QMP
-bindings and driver.
-
-Note that these patches depend on the linux-phy next branch of today.
-
-Johan
-
-
-Changes in v2
- - add missing "3" to current bindings file name
-   "qcom,msm8996-qmp-usb3-phy.yaml" to match compatible
- - add missing "-uni" infix to new bindings file name
-   "qcom,sc8280xp-qmp-usb3-uni-phy.yaml" to match compatible (Krzysztof)
-
-
-Johan Hovold (13):
-  phy: qcom-qmp-usb: fix sc8280xp PCS_USB offset
-  phy: qcom-qmp-usb: sort device-id table
-  phy: qcom-qmp-usb: move device-id table
-  phy: qcom-qmp-usb: move pm ops
-  phy: qcom-qmp-usb: merge driver data
-  phy: qcom-qmp-usb: clean up device-tree parsing
-  phy: qcom-qmp-usb: clean up probe initialisation
-  phy: qcom-qmp-usb: rename PHY ops structure
-  phy: qcom-qmp-usb: clean up PHY init
-  dt-bindings: phy: qcom,qmp-usb: rename current bindings
-  dt-bindings: phy: qcom,qmp-usb: fix sc8280xp binding
-  phy: qcom-qmp-usb: restructure PHY creation
-  phy: qcom-qmp-usb: add support for updated sc8280xp binding
-
- ...hy.yaml => qcom,msm8996-qmp-usb3-phy.yaml} |  20 +-
- .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml   | 105 ++++
- drivers/phy/qualcomm/phy-qcom-qmp-usb.c       | 532 +++++++++---------
- 3 files changed, 368 insertions(+), 289 deletions(-)
- rename Documentation/devicetree/bindings/phy/{qcom,qmp-usb-phy.yaml => qcom,msm8996-qmp-usb3-phy.yaml} (95%)
- create mode 100644 Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+index d0c433197080..82af28f4a91b 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+@@ -1682,6 +1682,7 @@ static const struct qmp_phy_cfg sc8280xp_usb3_uniphy_cfg = {
+ 	.vreg_list		= qmp_phy_vreg_l,
+ 	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
+ 	.regs			= qmp_v4_usb3phy_regs_layout,
++	.pcs_usb_offset		= 0x1000,
+ };
+ 
+ static const struct qmp_phy_cfg qmp_v3_usb3_uniphy_cfg = {
 -- 
 2.37.3
 
