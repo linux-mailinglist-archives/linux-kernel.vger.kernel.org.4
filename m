@@ -2,111 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9AA611104
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4F7611109
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbiJ1MT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 08:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49856 "EHLO
+        id S230075AbiJ1MTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 08:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiJ1MTZ (ORCPT
+        with ESMTP id S230178AbiJ1MTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 08:19:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DFDE6B177;
-        Fri, 28 Oct 2022 05:19:23 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C9D5C1FB;
-        Fri, 28 Oct 2022 05:19:29 -0700 (PDT)
-Received: from e126815.warwick.arm.com (e126815.arm.com [10.32.32.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B5A263F7B4;
-        Fri, 28 Oct 2022 05:19:21 -0700 (PDT)
-From:   James Clark <james.clark@arm.com>
-To:     linux-perf-users@vger.kernel.org, acme@kernel.org,
-        atrajeev@linux.vnet.ibm.com
-Cc:     linux-kernel@vger.kernel.org, Anshuman.Khandual@arm.com,
-        James Clark <james.clark@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>
-Subject: [PATCH] perf test: Fix skipping branch stack sampling test
-Date:   Fri, 28 Oct 2022 13:19:13 +0100
-Message-Id: <20221028121913.745307-1-james.clark@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 28 Oct 2022 08:19:45 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A03B496
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:19:38 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id o4so8127295ljp.8
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:19:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QqZ/Qc1FnrWIUAUi2q99TKdUttjkOnjxxLO746k/+Bc=;
+        b=xQIEY0TpD09A33rkhem0UoVZkMXzm8P+7zxsKyfZ/5USRnotlVdQidMQ/sGyxSfPAn
+         DAGt2yw5sjOOk6aAdNl7AWNUHKLXPzauaO5FnoO0gE9IINBKpc8+NSNOtqEOoe4D/LRR
+         J77JJhA0SiSsmMCW3DZ/nY1O7+2GBpQNwI8H34aR/GHqsD+XMCyUFVX3PZpP5byBVO3A
+         gdoTU1w0kCwOnobDWwdZtjxx5WUM20hZTSpmwfeU21FKJuHdqFcGcrGrDW/pQnkJwTUc
+         wW234XtCtjy7o2e54x3+ijdRYyZUycCiIhh7cWnNoEIMkxNja/UiO2dFRoY3SuIB+L4b
+         Drlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QqZ/Qc1FnrWIUAUi2q99TKdUttjkOnjxxLO746k/+Bc=;
+        b=XgZWrOCc8OQ57Ii18M/Wa3l15fiJrfxKr3fXiaWuV6xFFGjz5hQKtguhWxdAK6LBGT
+         DnAXJsANaeJ2/HRk/GfqlRdSCJFEIwDjThsDH5HDhfR0dM9E29mcx3WS5LN47bSI17wH
+         yxEiAgRz2z+4pSF3IefYHoQ7c5bAQs6Bj7hur0+kizcqP7iwkgrW72IgOS8PQq2C4Hi/
+         OM2qI5hiPDWbA3tTqH1II2L1MFUrl/d8lGZ0NMTfiUAWuFnmBkUEQRkWw64hyj24CxYg
+         tF5mj/pK6pioSbYxmnsadfKvJSGOegMTJMU+w5ij+VA7bMNGM/BkBHW9dIfa9bGGJYS+
+         VFeA==
+X-Gm-Message-State: ACrzQf2d6A0/W+zIJXdiLYrrxoBbAigOqWKYn9IlNzSu6EIFgJo4tbYX
+        OPfY9A3Ij/WHviRdnXoqvU5XZQ==
+X-Google-Smtp-Source: AMsMyM411sNvmz92ardTeuC0ToSlfgrGqncLtbJKx2D+HYetFJMO9ZYRene6rqwku/khHxngvmjs/g==
+X-Received: by 2002:a2e:b60a:0:b0:26e:50f:2870 with SMTP id r10-20020a2eb60a000000b0026e050f2870mr20706767ljn.162.1666959577212;
+        Fri, 28 Oct 2022 05:19:37 -0700 (PDT)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id w21-20020a194915000000b00498fd423cc3sm540119lfa.295.2022.10.28.05.19.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 05:19:36 -0700 (PDT)
+Message-ID: <0f8e73f6-d005-7e0b-ba38-c4d0161c1acd@linaro.org>
+Date:   Fri, 28 Oct 2022 15:19:35 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v1 1/9] drm/msm: Add compatibles for SM8350 display
+Content-Language: en-GB
+To:     Robert Foss <robert.foss@linaro.org>, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robdclark@gmail.com, quic_abhinavk@quicinc.com, sean@poorly.run,
+        airlied@linux.ie, daniel@ffwll.ch, quic_kalyant@quicinc.com,
+        swboyd@chromium.org, angelogioacchino.delregno@somainline.org,
+        loic.poulain@linaro.org, quic_vpolimer@quicinc.com,
+        vkoul@kernel.org, dianders@chromium.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org,
+        Jonathan Marek <jonathan@marek.ca>, vinod.koul@linaro.org,
+        quic_jesszhan@quicinc.com
+References: <20221028120812.339100-1-robert.foss@linaro.org>
+ <20221028120812.339100-2-robert.foss@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221028120812.339100-2-robert.foss@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit f4a2aade6809 ("perf tests powerpc: Fix branch stack sampling test
-to include sanity check for branch filter") added a skip if certain
-branch options aren't available. But the change added both -b
-(--branch-any) and --branch-filter options at the same time, which will
-always result in a failure on any platform because the arguments can't
-be used together.
+On 28/10/2022 15:08, Robert Foss wrote:
+> Add compatible string for "qcom,sm8350-dpu" and
+> "qcom,sm8350-mdss".
+> 
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 1 +
+>   drivers/gpu/drm/msm/msm_mdss.c          | 1 +
+>   2 files changed, 2 insertions(+)
 
-Fix this by removing -b (--branch-any) and leaving --branch-filter which
-already specifies 'any'. Also add warning messages to the test and perf
-tool.
+[skipped]
 
-Output on x86 before this fix:
+> diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
+> index e13c5c12b775..fd5a95cace16 100644
+> --- a/drivers/gpu/drm/msm/msm_mdss.c
+> +++ b/drivers/gpu/drm/msm/msm_mdss.c
+> @@ -447,6 +447,7 @@ static const struct of_device_id mdss_dt_match[] = {
+>   	{ .compatible = "qcom,sc8180x-mdss" },
+>   	{ .compatible = "qcom,sm8150-mdss" },
+>   	{ .compatible = "qcom,sm8250-mdss" },
+> +	{ .compatible = "qcom,sm8350-mdss" },
+>   	{}
+>   };
+>   MODULE_DEVICE_TABLE(of, mdss_dt_match);
 
-   $ sudo ./perf test branch
-   108: Check branch stack sampling         : Skip
 
-After:
+BTW: you probably also have to update the msm_mdss_enable() function 
+with the 8350-specific code.
 
-   $ sudo ./perf test branch
-   108: Check branch stack sampling         : Ok
-
-Fixes: f4a2aade6809 ("perf tests powerpc: Fix branch stack sampling test to include sanity check for branch filter")
-Signed-off-by: James Clark <james.clark@arm.com>
----
- tools/perf/tests/shell/test_brstack.sh | 5 ++++-
- tools/perf/util/parse-branch-options.c | 4 +++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/tools/perf/tests/shell/test_brstack.sh b/tools/perf/tests/shell/test_brstack.sh
-index ec801cffae6b..d7ff5c4b4da4 100755
---- a/tools/perf/tests/shell/test_brstack.sh
-+++ b/tools/perf/tests/shell/test_brstack.sh
-@@ -13,7 +13,10 @@ fi
- 
- # skip the test if the hardware doesn't support branch stack sampling
- # and if the architecture doesn't support filter types: any,save_type,u
--perf record -b -o- -B --branch-filter any,save_type,u true > /dev/null 2>&1 || exit 2
-+if ! perf record -o- --no-buildid --branch-filter any,save_type,u -- true > /dev/null 2>&1 ; then
-+	echo "skip: system doesn't support filter types: any,save_type,u"
-+	exit 2
-+fi
- 
- TMPDIR=$(mktemp -d /tmp/__perf_test.program.XXXXX)
- 
-diff --git a/tools/perf/util/parse-branch-options.c b/tools/perf/util/parse-branch-options.c
-index 00588b9db474..31faf2bb49ff 100644
---- a/tools/perf/util/parse-branch-options.c
-+++ b/tools/perf/util/parse-branch-options.c
-@@ -102,8 +102,10 @@ parse_branch_stack(const struct option *opt, const char *str, int unset)
- 	/*
- 	 * cannot set it twice, -b + --branch-filter for instance
- 	 */
--	if (*mode)
-+	if (*mode) {
-+		pr_err("Error: Can't use --branch-any (-b) with --branch-filter (-j).\n");
- 		return -1;
-+	}
- 
- 	return parse_branch_str(str, mode);
- }
 -- 
-2.25.1
+With best wishes
+Dmitry
 
