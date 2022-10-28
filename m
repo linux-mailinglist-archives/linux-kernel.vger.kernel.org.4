@@ -2,120 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7513C610698
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 01:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7457C6106A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 02:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235384AbiJ0X6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 19:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
+        id S235121AbiJ1ADx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 20:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiJ0X6G (ORCPT
+        with ESMTP id S233548AbiJ1ADu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 19:58:06 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFF6719BF;
-        Thu, 27 Oct 2022 16:58:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mz2gC1Qsxz4x1V;
-        Fri, 28 Oct 2022 10:57:59 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1666915080;
-        bh=ddrk81J8bHwCRad9ZM5gwOArNofx9a2KFHicAz+ouIc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=RWKsvQBStioNmK5S90nGAkHGeQSQ/cdH0nKoINqdTlu/FTk7I/PHDYFVfmflU6eOu
-         oyxVz09AoORPWaSd5IY8lvamT+QxwxCVQJSXepLYPvWymVGVM5UCQ9Vy0263QtagwO
-         DNVBvOM8GGekl5nmEKwkzJqmrgF2yw9ETUHfeoZbxc3qgnoSPSbuiwQSmhsnIoKg+F
-         erIjnZ6isfP4q4S+vEyIcCU0m+UJCp7aSrKZlbsPswME3EBNlMWxtETGUQ8NG2nQi/
-         umyD+UedHPn6RBzbccuDFnTPu/YvlW4AdhC/d3Wu1nBHFz+5oWq72DP6J5hEKagcAp
-         U581BMDOKzxDA==
-Date:   Fri, 28 Oct 2022 10:57:57 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>,
-        Dave Airlie <airlied@redhat.com>
-Cc:     DRI <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Yifan Zhang <yifan1.zhang@amd.com>,
-        Zack Rusin <zackr@vmware.com>
-Subject: linux-next: manual merge of the amdgpu tree with the drm tree
-Message-ID: <20221028105757.123c05c9@canb.auug.org.au>
+        Thu, 27 Oct 2022 20:03:50 -0400
+Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C20774368
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 17:03:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1666915425;
+        bh=dl6yBMYwe2DpRerjx1DwIpqPoeEi77jJTwJJ4yakXcw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=BQVBffIiI/5QS4W0/kOUAAlOZmMlFtlRBCUpmdAkLl5XLUI40DFEYu7MEOyry6yAK
+         jA8dScFX39B3tG+5rPo4iGVkF/cLruITsCW41zOyZb/7jNGJs6kf5EK5p4XINf0nYE
+         RgxjZrHmWdnPzzjd/pgebs+NYxxkK0ett2aFkBn0=
+Received: from localhost.localdomain ([39.156.73.13])
+        by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
+        id EA272E7; Fri, 28 Oct 2022 08:03:42 +0800
+X-QQ-mid: xmsmtpt1666915422tyxflzaif
+Message-ID: <tencent_1E036FA19AACC8CB3915EBD7AA5127C42107@qq.com>
+X-QQ-XMAILINFO: N+tZcXNNUKPOx9aF/32esR5b5Obql5Yi4lm//cVYJcwGbLo9alD9QoYI3afM5j
+         vCp2hNQcBrJZpFPWoSHrFL+jF4VRrhUfYY4TjvaBt/8o3VpcktWSAFqRNlf3LspM4uvmczGGsDe4
+         lhgtSuxu20DoTmTTMXddhZ8GzWCCexWcmVdV5/3ZFA6CtH84szVfvK5QCRQuF23PEzT0ewqcG1pb
+         UoThM90R4ndki4rc+TruJP09wes4kc4XwzI9FIyNVMTQngFPH1vj++34TdwxoLDaS7gq9h5ByRua
+         81bDoRJiMjzACJ+MRyt8RFeb5U6+AGdXxfwiN2FtFJLp9anZ4d/2Exi3UcMT5D5+w2OBuYdUKD86
+         3hDFGtfevVVaO3QX97F+ZY9QyFmHGtDi6L8b9Rj0RcXsE2HNbNiijMS+m1YwZAzi0SL2n8SM+eCM
+         kikO8ngkum/YoFIWW1BOG06ZKBjiuZdMyutA1xWRnBY3ic5KQxdC61O6GBQOdpChyYk0Vdr3PVrv
+         CtWv75n0RY/vJ2G7WRz4hPT/tPZgXSlHIWJr4czUn+M2hiWsLcqKEfwyDjV6WsHszhS0sCSxOsdl
+         HRu8mHkH1tERFdo0GBQ4YKKyNBDx7R+6VTX8dWGRZaIzIqFiiKFt/06PBXeExtGBrSQRK1Hfl4sw
+         RI01NgrAlp1ITnDGCHofZDTQbAemBVJA4oM1cY98IO6Q2Xt4ykeEI5ificUZLBaG/WbS+T1qnxFO
+         ldwyNRKXOAlruE2lI4iIrZU2byn+soc0F/SB726CbBxwrfsShTlxu81xw03dSgtP/m9BjsXVY/CU
+         U5wvpsy5h6qOzzTUuctyONSSuqMFbstyTaZu4Dfta4Ecy7+HolcEMT/w259IA/MB8BzBEIW2b9uN
+         LC6+NC/5JXISyFaZ4plFOBTmNRkAoMajDQIiFRACviIDoK347/8EcKx1YQSOckhy2Nau9ZEYokIZ
+         MHUE4ZmnM4B2RoNR/qnsrJGi2MbfIu
+From:   Rong Tao <rtoax@foxmail.com>
+To:     seanjc@google.com
+Cc:     Rong Tao <rongtao@cestc.cn>, Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>,
+        kvm@vger.kernel.org (open list:KERNEL VIRTUAL MACHINE FOR X86 (KVM/x86)),
+        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
+        64-BIT))
+Subject: [PATCH] KVM: VMX: Use tabs instead of spaces for indentation
+Date:   Fri, 28 Oct 2022 08:03:40 +0800
+X-OQ-MSGID: <20221028000340.86450-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <Y1sMPJvZDj6hGvih@google.com>
+References: <Y1sMPJvZDj6hGvih@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AFy6pOsv//9MyZ397vV/N8=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/AFy6pOsv//9MyZ397vV/N8=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: Rong Tao <rongtao@cestc.cn>
 
-Hi all,
+Code indentation should use tabs where possible and miss a '*'.
 
-Today's linux-next merge of the amdgpu tree got a conflict in:
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ arch/x86/kvm/vmx/vmenter.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-  drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c
+diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
+index 8477d8bdd69c..f09e3aaab102 100644
+--- a/arch/x86/kvm/vmx/vmenter.S
++++ b/arch/x86/kvm/vmx/vmenter.S
+@@ -229,7 +229,7 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
+ 	 * eIBRS has its own protection against poisoned RSB, so it doesn't
+ 	 * need the RSB filling sequence.  But it does need to be enabled, and a
+ 	 * single call to retire, before the first unbalanced RET.
+-         */
++	 */
+ 
+ 	FILL_RETURN_BUFFER %_ASM_CX, RSB_CLEAR_LOOPS, X86_FEATURE_RSB_VMEXIT,\
+ 			   X86_FEATURE_RSB_VMEXIT_LITE
+@@ -273,7 +273,7 @@ SYM_FUNC_END(__vmx_vcpu_run)
+  * vmread_error_trampoline - Trampoline from inline asm to vmread_error()
+  * @field:	VMCS field encoding that failed
+  * @fault:	%true if the VMREAD faulted, %false if it failed
+-
++ *
+  * Save and restore volatile registers across a call to vmread_error().  Note,
+  * all parameters are passed on the stack.
+  */
+-- 
+2.31.1
 
-between commit:
-
-  7c99616e3fe7 ("drm: Remove drm_mode_config::fb_base")
-
-from the drm tree and commit:
-
-  887e8cec55f2 ("drm/amdgpu: set fb_modifiers_not_supported in vkms")
-
-from the amdgpu tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c
-index 09dec2561adf,500a1dc4fe02..000000000000
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c
-@@@ -498,6 -498,10 +498,8 @@@ static int amdgpu_vkms_sw_init(void *ha
-  	adev_to_drm(adev)->mode_config.preferred_depth =3D 24;
-  	adev_to_drm(adev)->mode_config.prefer_shadow =3D 1;
- =20
- -	adev_to_drm(adev)->mode_config.fb_base =3D adev->gmc.aper_base;
- -
-+ 	adev_to_drm(adev)->mode_config.fb_modifiers_not_supported =3D true;
-+=20
-  	r =3D amdgpu_display_modeset_create_props(adev);
-  	if (r)
-  		return r;
-
---Sig_/AFy6pOsv//9MyZ397vV/N8=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNbGwUACgkQAVBC80lX
-0GzRNQf+OVrLfblP62Bj+U4EfeXhKTAuSeVAhuNfEDEpl8YrGQ6l1uBVe3FPjpR6
-DaKO2cMY6W/EjClLH5LreDFKp5fZ3ChxYUHA1/FEiYrfyoetdBya0x85ioYA1tYq
-mTzOCLEJ44P86BV0E4RhqriXJwbyRLdGlL+cZSmeZBhAE7j/sMavp1OhrosgyFF7
-Go9SJ0qOVdHrBgemqUEj3b5T4xdjUGSZJ+oKV+UnWbb45J8hskOgxVB1kQRSJvg9
-HRGxOYPFhIqvpQBDuC8ssjMPsFVQnPBjC2YcqPv4/4LikeYPNvgT7XbrHI6Y5GV+
-AFnGhMXPqkPDIBi+SRYG0XyHKoykjg==
-=XT7Y
------END PGP SIGNATURE-----
-
---Sig_/AFy6pOsv//9MyZ397vV/N8=--
