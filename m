@@ -2,188 +2,538 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF41D611747
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E26861175A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiJ1QPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59308 "EHLO
+        id S230392AbiJ1QRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbiJ1QPD (ORCPT
+        with ESMTP id S231197AbiJ1QQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:15:03 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEA92035A
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:13:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666973593; x=1698509593;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=/Bo8kKiuA6YqBeKm/DYCRshxpG8c6+bAYgY28Ah9Leo=;
-  b=P47aDGnBqznn3hNyaSEduvYOtfRUK7gVSjA+5ClfXmBebVvIPHi/Ylpb
-   8vQ1dLsR9JE9pKUIYaWP0ARS6Q8dLDttVm8/BqIwO9DejZJv2nE4dcZWl
-   05WbZyDmZolzJ/4qMTIOn749aFzsYbcFQK/xregKkqmq/2YDXGGIR2Awj
-   BHIBJfLz5nczn4GG/vIUzC4wBmpfF55ibe1BCWURPIV5UKbR8mWeKmB8K
-   X6X5+EENIWvYy/dD47JD6NCBxFW2LIC8UgMEO521oUOf+abBNugAeNapl
-   mzNsTrfAJSU8MbAct6YRzySf18xKEIhpuhO0V/7cUJRsVehRf9kJ2QhWG
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="295937497"
-X-IronPort-AV: E=Sophos;i="5.95,221,1661842800"; 
-   d="scan'208";a="295937497"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 09:13:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="722103354"
-X-IronPort-AV: E=Sophos;i="5.95,221,1661842800"; 
-   d="scan'208";a="722103354"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by FMSMGA003.fm.intel.com with ESMTP; 28 Oct 2022 09:13:12 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 28 Oct 2022 09:13:11 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 28 Oct 2022 09:13:10 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Fri, 28 Oct 2022 09:13:10 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.47) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Fri, 28 Oct 2022 09:13:10 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U+MBXljgcCBguwwBgsYAqyrkdAks+93MHI+OQW+lRU+IPNgIvwudv0Ezzrq1mi9GNgepnyl8gGgXIBsEskBg+0mJ8rYrIwRF0hAWKfVPYoXbSXRL4V8Erh5fO7jGAbffvkglUy0vEn/d/+Im2TPtCSbMGAL+6eZ9O0iWEcIk5GwQQWXv3+5pQ+6QmgLOKCiZjoPoZv/b3nOTKm34krc3It5ApEkXielkG4dmxDahCDprVyVYyG3Bs2WT/vFrWFGbjaNhaP9xBvZH9s3t2IEENdsazYi007pPHTeu1uzmHlgcxaVwjT0RViJSZfucZgy6M78HRRxexs+ZbZixnnC90A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/Bo8kKiuA6YqBeKm/DYCRshxpG8c6+bAYgY28Ah9Leo=;
- b=chX1ckC4co5lZ+nIYYl2kNUhl73fcX+WlNoRcantWZz6J7yGuFK2KnLfOrOezQRUtnx33eb/orq1bXTlJEg4TwliIHeXC1Gf88nbERHX6s8X7Iu9xP9M0qlZ741/fNcbQynDGk00qeye5q0kkY6deG8sEKqnur4OCUMUuULMOfz/izSksHfRmO8kyyiVEedxboS0feeqGT32EK566xmmrZnaJ9248uleMD4+/p4jp/Wd/0EV7H2XFegpYLqsKiYObi7aBbci/2wMCfB4xghrL/Y/LBZgU7oHaF9IbsqPYKbfOx0riLe2k8fen/QaCy+Wiuvbfba9XLnwwwb7SXNsYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by PH8PR11MB7047.namprd11.prod.outlook.com (2603:10b6:510:215::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Fri, 28 Oct
- 2022 16:13:08 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::51de:f739:3681:b16f]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::51de:f739:3681:b16f%7]) with mapi id 15.20.5769.015; Fri, 28 Oct 2022
- 16:13:08 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-CC:     Matthew Wilcox <willy@infradead.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: RE: [PATCH v3 2/2] mm, hwpoison: When copy-on-write hits poison, take
- page offline
-Thread-Topic: [PATCH v3 2/2] mm, hwpoison: When copy-on-write hits poison,
- take page offline
-Thread-Index: AQHY5YfqmLntvmoGXUWRwO1ZO/f4S64jHvAAgADlmYA=
-Date:   Fri, 28 Oct 2022 16:13:08 +0000
-Message-ID: <SJ1PR11MB608354A1D8817902D7FC9DFAFC329@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <20221019170835.155381-1-tony.luck@intel.com>
- <20221021200120.175753-1-tony.luck@intel.com>
- <20221021200120.175753-3-tony.luck@intel.com>
- <c5ade8ea-6349-7ade-f245-273de69888a4@huawei.com>
-In-Reply-To: <c5ade8ea-6349-7ade-f245-273de69888a4@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|PH8PR11MB7047:EE_
-x-ms-office365-filtering-correlation-id: afbe65cc-4eb9-4e58-70ac-08dab8ff4d8e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Qv7AIIDRB/i04Ge2+24NTJNGv+1ohgJNrJR2Ovpaew8pgkWnqusnU8mlL7XrauI0g4EcC2fxCwi/3tE7LkjnmueJ+19yN5chD0mkk+JoXXr9Cd7etDeAMCrSoZpMxxC4CCpv/tjqYHrxO9VFZFTdYNumzwrMT/c4JuqT6SlCeixf+owxcCLiwGFVOyIec5Iho+omQmJuw+POlV9xs8Ol4y7anm82XdbfRLmkBCC9B1l8pYlX1H2P50D6koSxUJeTBcGL/xBq1Uq27ibiBlLSEk0M82sBWMNQSSs1Fe5pJNX1vuw93qTR107PpmQJ3aiDqKM7CQr43ig11YcpkTNiRro0qdN+71vjmVL5hu3vad+juiUjz4JNV9bVXPXcjofegeLgWOSiKFLLyF1E92oyEJDtEiA6ioF10MehkSs12n1DLdpFhRpQHK6nnXVZS2cnCxdGtq5vN3mjvqE9yLyP9rSzo09AnTmuxsJns8SHXCd+9jmI9DbgCDRZx1pOKWL5o8NeovUcjyh4t8S4yb2p2x5sbjo4DRKMpNm9r5puSxWUURiUw82Cv4MmHlIUTozKNKNtpDsXe/WwXfV2rUcXRGWlRD1wioa63N2C0Dun97oa60HSrWzGJNNntQTEb9dXAL7F4h2nfbqOX80zoe8YfuJ0G/XHIzhcs6jEwF9Q3Xxeqidyk+SqpvvOs9oMKCdofRGafeoHmnlmmxwa8hqm4NEEXR7QY1M3wTJNE431qPYTlf7ash3ThDbHMqvg5LHBCk1hQWv3u80rvkBmF1/A4g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(346002)(39860400002)(136003)(396003)(376002)(451199015)(6506007)(4744005)(9686003)(26005)(52536014)(8936002)(7696005)(5660300002)(4326008)(64756008)(2906002)(66476007)(82960400001)(6916009)(38070700005)(8676002)(122000001)(66556008)(33656002)(66446008)(55016003)(41300700001)(66946007)(76116006)(186003)(478600001)(316002)(7416002)(83380400001)(54906003)(71200400001)(86362001)(38100700002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bCtBVkdWQk1mOGZES3lkc2VtQkRMMUp2Yk1GUkJFVkpSS3k3bFpLaG9BcU5E?=
- =?utf-8?B?eGhsSXdYc202TitPVVZkd2xYalE2Nzl0WnUvcllzMVRqcytjdXRaOER2ZlVo?=
- =?utf-8?B?Nnp6UWZlaVlPRzlXSDRON2pCZG9tSEpvOFNnMktaWExNWmowM1JHZ01ha0hz?=
- =?utf-8?B?cCs4eVFzRjczTzl4U2kwWVpKUUJwYU40Y2xpZFY1OEZlZmovMXp3YlZKcllK?=
- =?utf-8?B?QlQ3eVZWN0R0ZXd5M1hIQ1ByOXJ1bGxFRHNsbmpyWGJrdDZacXMxRk1uSVlB?=
- =?utf-8?B?a0s5dEJuOStZQmtvL2xmcTZNeHpPd0tVSnk1MFhld2hneVBBaTJIYXVWZVBv?=
- =?utf-8?B?aTI0RFB4MjFsdWJiVUxxTG9BTEN2eWtqZkUyaWtlS1hjdnJ0V2k4eENQK1M5?=
- =?utf-8?B?d3VObWtlZkV3NmdYQkdxNUZjdyt6MTVxSWdoVzVMZmJLdnhHZlJaM2dtZ0tt?=
- =?utf-8?B?R1VtcVdsMGxTS0k1R2I4ZVJydXVZMmU1OWc2T2FJOVExTkhkekloOC9lSXNm?=
- =?utf-8?B?cVFyeVgxOUg1akVQa1ljRk1MMzVSMzBIclkyQjhCS2diL1pieDF3bzJUUFdn?=
- =?utf-8?B?Z2NWUG5WWUtJSUNJeFVySlhyV2FTU1lmNS85RUVxVVdUNVNWNlR4WUNNNjYx?=
- =?utf-8?B?SmF1N2tzRjhRUXNtbHZlNUFnYUY3QzMveGEwZlJmS2RHMXI1UlNHM0tmS1Ro?=
- =?utf-8?B?aUpkNnZ3KzA0VXdEUmpKZE9HR1FUanJZZ3VWd2gyYzVZdDRUWWFsU1ptVExq?=
- =?utf-8?B?THhsa0tsSnlWOEZSS3JDWFdSN21QMHlObkgvSlIyVEhHcVY4UVRkSEc5U1JZ?=
- =?utf-8?B?SlBXbmR2dERTWEF6L3FDREF3V2c5TmxpRkFZSTJQSmhabitEaFNxSzJXdUFo?=
- =?utf-8?B?dGM3NkpsdFZOU0VodzdrRnVSMG5DNExBdHBpSHp2QVVuQVEybkcyRklDS01t?=
- =?utf-8?B?ckxuVVdHUlZ3a0trL1RvRERZYm1CMERILzhKVmRpWWM1TWJPRDZhZENJbjhL?=
- =?utf-8?B?QnUwSy8zN3lsRTBtdTEzZ09qZ0g4M0tuSGpIM240amxscmpkbUc5REk1RFhy?=
- =?utf-8?B?b1hnTnJsSU9XZnBGTjhGL2VPVy9YKzRnemtZYnZsYW42NlJHRWtIMVBxWDRS?=
- =?utf-8?B?WTdjZHZxOS92b1E3VGdnaDYxRGYvbmNzZEgyOFpEUlBybE5Xd0JiVFVab2JT?=
- =?utf-8?B?YlNMRTNFdkVDU0lTRGR5Y0VjQy96a3RCT2JlL0tiT1luOFpiNkwxYzlxTVpW?=
- =?utf-8?B?TndSY2QyMkZHMklud2JwWXp0ZkVsQ0FEQ0JCN2ZWY251ZmlEd2IzS2RmWTE2?=
- =?utf-8?B?bFViRS8rZXdmVFlFdFc4YTRmZFkzYXJQVzFFRWp3NUdMUCtobVJBNiszSzdp?=
- =?utf-8?B?QWZHNzgrYyt3L1JHN1V1WStDRTJMTjdKdFVQQ3g2OTYrcXBIdUl5WHZxVUpp?=
- =?utf-8?B?amtuQ243WkdDT2RpemYxZlBLU3NyVmtOd1h5ZE91TXVPV0IwSy84VWRkV3dD?=
- =?utf-8?B?dyt2akQySXgzSHUxYzJaUW5qeUlqc0FnRmduZmxwdndYaWNpMktiQXlCOVRS?=
- =?utf-8?B?SUV1aVVrdmg0V0xWMGlWRktyVXluRC85R3lyNmpaUE9yMDlaMzRRUkE4YVJU?=
- =?utf-8?B?WkVGTUg1Y3l6amRsYUxiOEx5KzJ3bFZYM2V5WU9ocHJ5eEJ0Q2NkQU1lTmcv?=
- =?utf-8?B?bllCZnFBa3U1N0k3RlV0S1BUQkV3NlhVU2l0ZENtU255SmFFWVFjMDF0V3I0?=
- =?utf-8?B?VDdyY0ZYMmRUTDlXMTFibTZhc0s0ekYrNjR1THI4K0QxL25JSGpBdUF6MVJs?=
- =?utf-8?B?dkJIa1d5UjJPZnFSdjY3dmFqM0F2blJKZnY5V2FyeG1JMDVqK1pYZHlwYVZy?=
- =?utf-8?B?MU1kV2trajhNQkZQSDZBckN3L2NVeDdzL3doRWZpdlRtY0RGcXpGbUZYQlBJ?=
- =?utf-8?B?SHhpS0Nud1BMdWhMcHBUeGd6bDF2ckc4WFBRMktYTVdUOFkvYmczMlREcmp5?=
- =?utf-8?B?WHBmNlpidHhJUFJrOVpiNER0b28zTG10QXRvb0xFR1JUTG95dFRUSFMvbzZJ?=
- =?utf-8?B?VVE5YkV2MERzZ3FLTWVoaU56a1QvZEM0Y1lpWmxnYXpIQ1VDQTVncmZ4RHRn?=
- =?utf-8?Q?REpBEWFg1mSm+HQSmJPSqgzrG?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 28 Oct 2022 12:16:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5E339B81
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:14:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666973644;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rDZ7J4mUUQKFteff96EVjc76dQM5q+9jB4O8HpfWPQI=;
+        b=dVnN4fIpSmUN6cHukJvpdp/HxNixOn+zfUjgH3tAgfU0R0n5ZNtygLK88/F4HobjVoK/1o
+        RpAB7sKVMx3UwUT9akLcKNe5tDUHUURL1vMSewtWlXXL4DbNUsDD3dowPakLDKakBYliCo
+        MHyzd8CwW8hC3VgA/RZXDSuwGxNEOb4=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-26-7s5r8J8kPYeppShPjk_AdQ-1; Fri, 28 Oct 2022 12:14:02 -0400
+X-MC-Unique: 7s5r8J8kPYeppShPjk_AdQ-1
+Received: by mail-qk1-f199.google.com with SMTP id az32-20020a05620a172000b006ee8ae138a7so4013156qkb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:14:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rDZ7J4mUUQKFteff96EVjc76dQM5q+9jB4O8HpfWPQI=;
+        b=splBQuOo14R21nige8nlA5G5vjh2TN1u+WX2TyN7H6Gj2aIVS1d7pM+s66LJNdqrkR
+         EwVa6q84l7QwIBPWtAgQwwPNTe9Rn9jMfJQm9hUzIoD/cjujcZjrg+jrRxh6PQHKXGP+
+         ZYdn3Yyf+aeUFwRvtzpD6UWl822d3csZ24exqWLF5SBxrDoW6/YzTolukaIdHuQ7HqKY
+         X+t/B5qWR+nhY+1uYw0VCqwQd3fPFxL7oj8VqfFeKhQvbQUPcaFjcdMjoOMi6+Niwn1x
+         aEx0mjyx4hJ6X5v/pqxUbc3m394c8gb3g8Lwvnm09czwDLLV9cV/pnVoooRUb0IeYUXe
+         gO+A==
+X-Gm-Message-State: ACrzQf181DSzXE0oibrEPqJ2RSC57Jbdy6oTRu5COcRb/lrVFXeqFsPf
+        RBJ7XZhJklltZYU0bshLUJwxopPTnzG8jiU0N16/7BYk92aVmkpg75E15cE3opoudAMe6pAYR4g
+        EPJ9DBzTPem9OF6e2+fyaxNlp
+X-Received: by 2002:a05:622a:188a:b0:39c:eb39:e7d0 with SMTP id v10-20020a05622a188a00b0039ceb39e7d0mr224554qtc.182.1666973641400;
+        Fri, 28 Oct 2022 09:14:01 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM63XBhkCjoIjMipJk/6aSbcFrDVN+sB+T0pzZ6+lEDbpBgTEPo6cvLrXRP+VSz8iVIFoqD9kQ==
+X-Received: by 2002:a05:622a:188a:b0:39c:eb39:e7d0 with SMTP id v10-20020a05622a188a00b0039ceb39e7d0mr224524qtc.182.1666973641032;
+        Fri, 28 Oct 2022 09:14:01 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id f18-20020a05620a409200b006cdd0939ffbsm3243543qko.86.2022.10.28.09.13.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 09:14:00 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 12:13:59 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        David Hildenbrand <david@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wei Chen <harperchen1110@gmail.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2] hugetlb: don't delete vma_lock in hugetlb
+ MADV_DONTNEED processing
+Message-ID: <Y1v/x5RRpRjU4b/W@x1n>
+References: <20221023025047.470646-1-mike.kravetz@oracle.com>
+ <Y1mpwKpwsiN6u6r7@x1n>
+ <Y1nImUVseAOpXwPv@monkey>
+ <Y1nbErXmHkyrzt8F@x1n>
+ <Y1vz7VvQ5zg5KTxk@monkey>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: afbe65cc-4eb9-4e58-70ac-08dab8ff4d8e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2022 16:13:08.3229
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: EOtL6rvXbry+yfzgBKKlmz7/U4a/cU7rwOcouL3hDB+tK3xiFzRwk877gYviOzGC1ZZtneaoXLLFGvqUwqrcJA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB7047
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y1vz7VvQ5zg5KTxk@monkey>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pj4gQ2Fubm90IGNhbGwgbWVtb3J5X2ZhaWx1cmUoKSBkaXJlY3RseSBmcm9tIHRoZSBmYXVsdCBo
-YW5kbGVyIGJlY2F1c2UNCj4+IG1tYXBfbG9jayAoYW5kIG90aGVycykgYXJlIGhlbGQuDQo+DQo+
-IENvdWxkIHlvdSBwbGVhc2UgZXhwbGFpbiB3aGljaCBsb2NrIG1ha2VzIGl0IHVuZmVhc2libGUg
-dG8gY2FsbCBtZW1vcnlfZmFpbHVyZSgpIGRpcmVjdGx5IGFuZA0KPiB3aHk/IEknbSBzb21ld2hh
-dCBjb25mdXNlZC4gQnV0IEkgYWdyZWUgdXNpbmcgbWVtb3J5X2ZhaWx1cmVfcXVldWUoKSBzaG91
-bGQgYmUgYSBnb29kIGlkZWEuDQoNCkkgdHJpZWQgY2FsbGluZyBtZW1vcnlfZmFpbHVyZSgpIGRp
-cmVjdGx5LCBhbmQgbXkgc3lzdGVtIGp1c3QgaHVuZy4gSSBtYWRlIHRoZSBhc3N1bXB0aW9uDQp0
-aGF0IGl0IGhhZCBkZWFkbG9ja2VkIGJhc2VkIHNvbWV3aGF0IG9uIHRoZSBjb21tZW50cyBpbiBt
-bS9tZW1vcnkuYyBhYm91dCBtbWFwX2xvY2sNCmJlaW5nIGhlbGQgLi4uIGJ1dCBJIGRpZG4ndCBk
-aWcgaW50byB3aGF0IGhhZCBnb25lIHdyb25nLg0KDQotVG9ueQ0K
+On Fri, Oct 28, 2022 at 08:23:25AM -0700, Mike Kravetz wrote:
+> On 10/26/22 21:12, Peter Xu wrote:
+> > On Wed, Oct 26, 2022 at 04:54:01PM -0700, Mike Kravetz wrote:
+> > > On 10/26/22 17:42, Peter Xu wrote:
+> > > > 
+> > > > Pure question: can we rely on hugetlb_vm_op_close() to destroy the hugetlb
+> > > > vma lock?
+> > > > 
+> > > > I read the comment above, it seems we are trying to avoid racing with pmd
+> > > > sharing, but I don't see how that could ever happen, since iiuc there
+> > > > should only be two places that unmaps the vma (final==true):
+> > > > 
+> > > >   (1) munmap: we're holding write lock, so no page fault possible
+> > > >   (2) exit_mmap: we've already reset current->mm so no page fault possible
+> > > > 
+> > > 
+> > > Thanks for taking a look Peter!
+> > > 
+> > > The possible sharing we are trying to stop would be initiated by a fault
+> > > in a different process on the same underlying mapping object (inode).  The
+> > > specific vma in exit processing is still linked into the mapping interval
+> > > tree.  So, even though we call huge_pmd_unshare in the unmap processing (in
+> > > __unmap_hugepage_range) the sharing could later be initiated by another
+> > > process.
+> > > 
+> > > Hope that makes sense.  That is also the reason the routine
+> > > page_table_shareable contains this check:
+> > > 
+> > > 	/*
+> > > 	 * match the virtual addresses, permission and the alignment of the
+> > > 	 * page table page.
+> > > 	 *
+> > > 	 * Also, vma_lock (vm_private_data) is required for sharing.
+> > > 	 */
+> > > 	if (pmd_index(addr) != pmd_index(saddr) ||
+> > > 	    vm_flags != svm_flags ||
+> > > 	    !range_in_vma(svma, sbase, s_end) ||
+> > > 	    !svma->vm_private_data)
+> > > 		return 0;
+> > 
+> > Ah, makes sense.  Hmm, then I'm wondering whether hugetlb_vma_lock_free()
+> > would ever be useful at all?  Because remove_vma() (or say, the close()
+> > hook) seems to always be called after an precedent unmap_vmas().
+> 
+> You are right.  hugetlb_vma_lock_free will almost always be a noop when
+> called from the close hook.  It is still 'needed' for vms setup error
+> pathss.
+
+Ah, yes.
+
+Not sure whether it would be worthwhile to have a comment for that in the
+close() hook, because it's rare that the vma lock is released (and need to
+be released) before the vma destroy hook function.  The pmd unsharing
+definitely complicates things.  In all cases, definitely worth a repost for
+this, only to raise this point up.
+
+> 
+> > > > > +void clear_hugetlb_page_range(struct vm_area_struct *vma, unsigned long start,
+> > > > > +				unsigned long end)
+> > > > > +{
+> > > > > +	struct mmu_notifier_range range;
+> > > > > +	struct mmu_gather tlb;
+> > > > > +
+> > > > > +	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, vma->vm_mm,
+> > > > > +				start, end);
+> > > > 
+> > > > Is mmu_notifier_invalidate_range_start() missing here?
+> > > > 
+> > > 
+> > > It certainly does look like it.  When I created this routine, I was trying to
+> > > mimic what was done in the current calling path zap_page_range to
+> > > __unmap_hugepage_range_final.  Now when I look at that, I am not seeing
+> > > a mmu_notifier_invalidate_range_start/end.  Am I missing something, or
+> > > are these missing today?
+> > 
+> > I'm not sure whether we're looking at the same code base; here it's in
+> > zap_page_range() itself.
+> > 
+> > 	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, vma->vm_mm,
+> > 				start, start + size);
+> > 	tlb_gather_mmu(&tlb, vma->vm_mm);
+> > 	update_hiwater_rss(vma->vm_mm);
+> > 	mmu_notifier_invalidate_range_start(&range);
+> > 	do {
+> > 		unmap_single_vma(&tlb, vma, start, range.end, NULL);
+> > 	} while ((vma = mas_find(&mas, end - 1)) != NULL);
+> > 	mmu_notifier_invalidate_range_end(&range);
+> 
+> Yes, I missed that.  Thanks!
+> 
+> > 
+> > > Do note that we do MMU_NOTIFY_UNMAP in __unmap_hugepage_range.
+> > 
+> > Hmm, I think we may want CLEAR for zap-only and UNMAP only for unmap.
+> > 
+> >  * @MMU_NOTIFY_UNMAP: either munmap() that unmap the range or a mremap() that
+> >  * move the range
+> >  * @MMU_NOTIFY_CLEAR: clear page table entry (many reasons for this like
+> >  * madvise() or replacing a page by another one, ...).
+> > 
+> > The other thing is that unmap_vmas() also notifies (same to
+> > zap_page_range), it looks a duplicated notification if any of them calls
+> > __unmap_hugepage_range() at last.
+> 
+> The only call into __unmap_hugepage_range() from generic zap/unmap calls
+> is via __unmap_hugepage_range_final.  Other call paths are entirely
+> within hugetlb code.
+
+Right, the duplication only happens on the outside-hugetlb (aka generic mm)
+calls.  I saw that below it's being considered, thanks.  Though I had a
+(maybe...) better thought, more below.
+
+> 
+> > > > > +	tlb_gather_mmu(&tlb, vma->vm_mm);
+> > > > > +	update_hiwater_rss(vma->vm_mm);
+> > > > > +
+> > > > > +	__unmap_hugepage_range_locking(&tlb, vma, start, end, NULL, 0, false);
+> > > > > +
+> > > > > +	mmu_notifier_invalidate_range_end(&range);
+> > > > > +	tlb_finish_mmu(&tlb);
+> > > > > +}
+> > > > > +#endif
+> > > > > +
+> > > > >  void unmap_hugepage_range(struct vm_area_struct *vma, unsigned long start,
+> > > > >  			  unsigned long end, struct page *ref_page,
+> > > > >  			  zap_flags_t zap_flags)
+> > > > > diff --git a/mm/madvise.c b/mm/madvise.c
+> > > > > index 2baa93ca2310..90577a669635 100644
+> > > > > --- a/mm/madvise.c
+> > > > > +++ b/mm/madvise.c
+> > > > > @@ -790,7 +790,10 @@ static int madvise_free_single_vma(struct vm_area_struct *vma,
+> > > > >  static long madvise_dontneed_single_vma(struct vm_area_struct *vma,
+> > > > >  					unsigned long start, unsigned long end)
+> > > > >  {
+> > > > > -	zap_page_range(vma, start, end - start);
+> > > > > +	if (!is_vm_hugetlb_page(vma))
+> > > > > +		zap_page_range(vma, start, end - start);
+> > > > > +	else
+> > > > > +		clear_hugetlb_page_range(vma, start, end);
+> > > > >  	return 0;
+> > > > >  }
+> > > > 
+> > > > This does look a bit unfortunate - zap_page_range() contains yet another
+> > > > is_vm_hugetlb_page() check (further down in unmap_single_vma), it can be
+> > > > very confusing on which code path is really handling hugetlb.
+> > > > 
+> > > > The other mm_users check in v3 doesn't need this change, but was a bit
+> > > > hackish to me, because IIUC we're clear on the call paths to trigger this
+> > > > (unmap_vmas), so it seems clean to me to pass that info from the upper
+> > > > stack.
+> > > > 
+> > > > Maybe we can have a new zap_flags passed into unmap_single_vma() showing
+> > > > that it's destroying the vma?
+> > > 
+> > > I thought about that.  However, we would need to start passing the flag
+> > > here into zap_page_range as this is the beginning of that call down into
+> > > the hugetlb code where we do not want to remove zap_page_rangethe
+> > > vma_lock.
+> > 
+> > Right.  I was thinking just attach the new flag in unmap_vmas().  A pesudo
+> > (not compiled) code attached.
+> 
+> I took your suggestions and came up with a new version of this patch.  Not
+> sure if I love the new zap flag, as it is only used by hugetlb code.  I also
+> added a bool to __unmap_hugepage_range to eliminate the duplicate notification
+> calls.
+> 
+> From 15ffe922b60af9f4c19927d5d5aaca75840d0f6c Mon Sep 17 00:00:00 2001
+> From: Mike Kravetz <mike.kravetz@oracle.com>
+> Date: Fri, 28 Oct 2022 07:46:50 -0700
+> Subject: [PATCH v5] hugetlb: don't delete vma_lock in hugetlb MADV_DONTNEED
+>  processing
+> 
+> madvise(MADV_DONTNEED) ends up calling zap_page_range() to clear the page
+> tables associated with the address range.  For hugetlb vmas,
+> zap_page_range will call __unmap_hugepage_range_final.  However,
+> __unmap_hugepage_range_final assumes the passed vma is about to be removed
+> and deletes the vma_lock to prevent pmd sharing as the vma is on the way
+> out.  In the case of madvise(MADV_DONTNEED) the vma remains, but the
+> missing vma_lock prevents pmd sharing and could potentially lead to issues
+> with truncation/fault races.
+> 
+> This issue was originally reported here [1] as a BUG triggered in
+> page_try_dup_anon_rmap.  Prior to the introduction of the hugetlb
+> vma_lock, __unmap_hugepage_range_final cleared the VM_MAYSHARE flag to
+> prevent pmd sharing.  Subsequent faults on this vma were confused as
+> VM_MAYSHARE indicates a sharable vma, but was not set so page_mapping was
+> not set in new pages added to the page table.  This resulted in pages that
+> appeared anonymous in a VM_SHARED vma and triggered the BUG.
+> 
+> Create a new routine clear_hugetlb_page_range() that can be called from
+> madvise(MADV_DONTNEED) for hugetlb vmas.  It has the same setup as
+> zap_page_range, but does not delete the vma_lock.  Also, add a new zap
+> flag ZAP_FLAG_UNMAP to indicate an unmap call from unmap_vmas().  This
+> is used to indicate the 'final' unmapping of a vma.  The routine
+> __unmap_hugepage_range to take a notification_needed argument.  This is
+> used to prevent duplicate notifications.
+> 
+> [1] https://lore.kernel.org/lkml/CAO4mrfdLMXsao9RF4fUE8-Wfde8xmjsKrTNMNC9wjUb6JudD0g@mail.gmail.com/
+> Fixes: 90e7e7f5ef3f ("mm: enable MADV_DONTNEED for hugetlb mappings")
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> Reported-by: Wei Chen <harperchen1110@gmail.com>
+> Cc: <stable@vger.kernel.org>
+> ---
+>  include/linux/hugetlb.h |  7 ++++
+>  include/linux/mm.h      |  3 ++
+>  mm/hugetlb.c            | 93 +++++++++++++++++++++++++++++++----------
+>  mm/madvise.c            |  5 ++-
+>  mm/memory.c             |  2 +-
+>  5 files changed, 86 insertions(+), 24 deletions(-)
+> 
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index 3568b90b397d..badcb277603d 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -158,6 +158,8 @@ long follow_hugetlb_page(struct mm_struct *, struct vm_area_struct *,
+>  void unmap_hugepage_range(struct vm_area_struct *,
+>  			  unsigned long, unsigned long, struct page *,
+>  			  zap_flags_t);
+> +void clear_hugetlb_page_range(struct vm_area_struct *vma,
+> +			unsigned long start, unsigned long end);
+>  void __unmap_hugepage_range_final(struct mmu_gather *tlb,
+>  			  struct vm_area_struct *vma,
+>  			  unsigned long start, unsigned long end,
+> @@ -428,6 +430,11 @@ static inline void __unmap_hugepage_range_final(struct mmu_gather *tlb,
+>  	BUG();
+>  }
+>  
+> +static void __maybe_unused clear_hugetlb_page_range(struct vm_area_struct *vma,
+> +			unsigned long start, unsigned long end)
+> +{
+> +}
+> +
+>  static inline vm_fault_t hugetlb_fault(struct mm_struct *mm,
+>  			struct vm_area_struct *vma, unsigned long address,
+>  			unsigned int flags)
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 978c17df053e..517c8cc8ccb9 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3464,4 +3464,7 @@ madvise_set_anon_name(struct mm_struct *mm, unsigned long start,
+>   */
+>  #define  ZAP_FLAG_DROP_MARKER        ((__force zap_flags_t) BIT(0))
+>  
+> +/* Set in unmap_vmas() to indicate an unmap call.  Only used by hugetlb */
+> +#define  ZAP_FLAG_UNMAP              ((__force zap_flags_t) BIT(1))
+> +
+>  #endif /* _LINUX_MM_H */
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 4a0289ef09fa..0309a7c0f3bc 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -5062,7 +5062,8 @@ int move_hugetlb_page_tables(struct vm_area_struct *vma,
+>  
+>  static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct *vma,
+>  				   unsigned long start, unsigned long end,
+> -				   struct page *ref_page, zap_flags_t zap_flags)
+> +				   struct page *ref_page, zap_flags_t zap_flags,
+> +				   bool notification_needed)
+>  {
+>  	struct mm_struct *mm = vma->vm_mm;
+>  	unsigned long address;
+> @@ -5087,13 +5088,16 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
+>  	tlb_change_page_size(tlb, sz);
+>  	tlb_start_vma(tlb, vma);
+>  
+> -	/*
+> -	 * If sharing possible, alert mmu notifiers of worst case.
+> -	 */
+> -	mmu_notifier_range_init(&range, MMU_NOTIFY_UNMAP, 0, vma, mm, start,
+> -				end);
+> -	adjust_range_if_pmd_sharing_possible(vma, &range.start, &range.end);
+> -	mmu_notifier_invalidate_range_start(&range);
+> +	if (notification_needed) {
+
+I'm not 100% sure whether this is needed.  Can we move the notification
+just outside of this function, to where it's needed?  Based on the latest
+mm-unstable c59145c0aa2c, what I read is that it's only needed for
+unmap_hugepage_range() not __unmap_hugepage_range_locking() (these are the
+only two callers of __unmap_hugepage_range).  Then maybe we can move these
+notifications into unmap_hugepage_range().
+
+Also note that I _think_ when moving we should change UNMAP to CLEAR
+notifies too, but worth double check.
+
+> +		/*
+> +		 * If sharing possible, alert mmu notifiers of worst case.
+> +		 */
+> +		mmu_notifier_range_init(&range, MMU_NOTIFY_UNMAP, 0, vma, mm,
+> +					start, end);
+> +		adjust_range_if_pmd_sharing_possible(vma, &range.start,
+> +					&range.end);
+> +		mmu_notifier_invalidate_range_start(&range);
+> +	}
+>  	last_addr_mask = hugetlb_mask_last_page(h);
+>  	address = start;
+>  	for (; address < end; address += sz) {
+> @@ -5178,7 +5182,8 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
+>  		if (ref_page)
+>  			break;
+>  	}
+> -	mmu_notifier_invalidate_range_end(&range);
+> +	if (notification_needed)
+> +		mmu_notifier_invalidate_range_end(&range);
+>  	tlb_end_vma(tlb, vma);
+>  
+>  	/*
+> @@ -5198,29 +5203,72 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
+>  		tlb_flush_mmu_tlbonly(tlb);
+>  }
+>  
+> -void __unmap_hugepage_range_final(struct mmu_gather *tlb,
+> +static void __unmap_hugepage_range_locking(struct mmu_gather *tlb,
+>  			  struct vm_area_struct *vma, unsigned long start,
+>  			  unsigned long end, struct page *ref_page,
+>  			  zap_flags_t zap_flags)
+>  {
+> +	bool final = zap_flags & ZAP_FLAG_UNMAP;
+> +
+>  	hugetlb_vma_lock_write(vma);
+>  	i_mmap_lock_write(vma->vm_file->f_mapping);
+>  
+> -	__unmap_hugepage_range(tlb, vma, start, end, ref_page, zap_flags);
+> +	__unmap_hugepage_range(tlb, vma, start, end, ref_page, zap_flags,
+> +				false);
+>  
+> -	/*
+> -	 * Unlock and free the vma lock before releasing i_mmap_rwsem.  When
+> -	 * the vma_lock is freed, this makes the vma ineligible for pmd
+> -	 * sharing.  And, i_mmap_rwsem is required to set up pmd sharing.
+> -	 * This is important as page tables for this unmapped range will
+> -	 * be asynchrously deleted.  If the page tables are shared, there
+> -	 * will be issues when accessed by someone else.
+> -	 */
+> -	__hugetlb_vma_unlock_write_free(vma);
+> +	if (final) {
+> +		/*
+> +		 * Unlock and free the vma lock before releasing i_mmap_rwsem.
+> +		 * When the vma_lock is freed, this makes the vma ineligible
+> +		 * for pmd sharing.  And, i_mmap_rwsem is required to set up
+> +		 * pmd sharing.  This is important as page tables for this
+> +		 * unmapped range will be asynchrously deleted.  If the page
+> +		 * tables are shared, there will be issues when accessed by
+> +		 * someone else.
+> +		 */
+> +		__hugetlb_vma_unlock_write_free(vma);
+> +		i_mmap_unlock_write(vma->vm_file->f_mapping);
+> +	} else {
+> +		i_mmap_unlock_write(vma->vm_file->f_mapping);
+> +		hugetlb_vma_unlock_write(vma);
+> +	}
+> +}
+>  
+> -	i_mmap_unlock_write(vma->vm_file->f_mapping);
+> +void __unmap_hugepage_range_final(struct mmu_gather *tlb,
+> +			  struct vm_area_struct *vma, unsigned long start,
+> +			  unsigned long end, struct page *ref_page,
+> +			  zap_flags_t zap_flags)
+> +{
+> +	__unmap_hugepage_range_locking(tlb, vma, start, end, ref_page,
+> +					zap_flags);
+>  }
+>  
+> +#ifdef CONFIG_ADVISE_SYSCALLS
+> +/*
+> + * Similar setup as in zap_page_range().  madvise(MADV_DONTNEED) can not call
+> + * zap_page_range for hugetlb vmas as __unmap_hugepage_range_final will delete
+> + * the associated vma_lock.
+> + */
+> +void clear_hugetlb_page_range(struct vm_area_struct *vma, unsigned long start,
+> +				unsigned long end)
+> +{
+> +	struct mmu_notifier_range range;
+> +	struct mmu_gather tlb;
+> +
+> +	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, vma->vm_mm,
+> +				start, end);
+> +	adjust_range_if_pmd_sharing_possible(vma, &range.start, &range.end);
+> +	tlb_gather_mmu(&tlb, vma->vm_mm);
+> +	update_hiwater_rss(vma->vm_mm);
+> +	mmu_notifier_invalidate_range_start(&range);
+> +
+> +	__unmap_hugepage_range_locking(&tlb, vma, start, end, NULL, 0);
+> +
+> +	mmu_notifier_invalidate_range_end(&range);
+> +	tlb_finish_mmu(&tlb);
+> +}
+> +#endif
+> +
+>  void unmap_hugepage_range(struct vm_area_struct *vma, unsigned long start,
+>  			  unsigned long end, struct page *ref_page,
+>  			  zap_flags_t zap_flags)
+> @@ -5228,7 +5276,8 @@ void unmap_hugepage_range(struct vm_area_struct *vma, unsigned long start,
+>  	struct mmu_gather tlb;
+>  
+>  	tlb_gather_mmu(&tlb, vma->vm_mm);
+> -	__unmap_hugepage_range(&tlb, vma, start, end, ref_page, zap_flags);
+> +	__unmap_hugepage_range(&tlb, vma, start, end, ref_page, zap_flags,
+> +				true);
+>  	tlb_finish_mmu(&tlb);
+>  }
+>  
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index c7105ec6d08c..d8b4d7e56939 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -790,7 +790,10 @@ static int madvise_free_single_vma(struct vm_area_struct *vma,
+>  static long madvise_dontneed_single_vma(struct vm_area_struct *vma,
+>  					unsigned long start, unsigned long end)
+>  {
+> -	zap_page_range(vma, start, end - start);
+> +	if (!is_vm_hugetlb_page(vma))
+> +		zap_page_range(vma, start, end - start);
+> +	else
+> +		clear_hugetlb_page_range(vma, start, end);
+
+With the new ZAP_FLAG_UNMAP flag, clear_hugetlb_page_range() can be dropped
+completely?  As zap_page_range() won't be with ZAP_FLAG_UNMAP so we can
+identify things?
+
+IIUC that's the major reason why I thought the zap flag could be helpful..
+
+Thanks!
+
+>  	return 0;
+>  }
+>  
+> diff --git a/mm/memory.c b/mm/memory.c
+> index c5599a9279b1..679b702af4ce 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -1671,7 +1671,7 @@ void unmap_vmas(struct mmu_gather *tlb, struct maple_tree *mt,
+>  {
+>  	struct mmu_notifier_range range;
+>  	struct zap_details details = {
+> -		.zap_flags = ZAP_FLAG_DROP_MARKER,
+> +		.zap_flags = ZAP_FLAG_DROP_MARKER | ZAP_FLAG_UNMAP,
+>  		/* Careful - we need to zap private pages too! */
+>  		.even_cows = true,
+>  	};
+> -- 
+> 2.37.3
+> 
+
+-- 
+Peter Xu
+
