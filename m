@@ -2,80 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09368611693
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD706116B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:01:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiJ1P6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 11:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
+        id S229941AbiJ1QBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbiJ1P5e (ORCPT
+        with ESMTP id S230465AbiJ1P7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:57:34 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003D1214679;
-        Fri, 28 Oct 2022 08:57:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1666972632;
-        bh=nRKXV0qvwDL9I8bHXNjzoNeda8BPvLXBGzFqDz1CBK0=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=rbdqX0YrRDhoPFb7Rzty7m/2TwVTiEmuqegCUaWnjajspXIGzxAqR0sBNVTklGYp/
-         seNtpuvwXZsVLeaGkIHFEeqA27n9KL8Lpd6go9uD8nniqtb3wEMfvqtG+MZXFwZoBx
-         5qAoNbX1TtepJS/NSA1oFOInNc+xeVloVGeuWdQUXIg2liPBUjiytR8lRxs/k3OfNh
-         HqecD3mbYI7rN89yQE1oAvVby1zVDfkdkgK6bwMqURn6llgTuCzdgLpnTPN7jG5++M
-         ww+ta3SZXtWw/WtyPTsDA4PIXm3qRs9Se6CrdIsJvdliHUx6au7Roha8xYhk2XPZ+f
-         eMUbXULfOVYaQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.151.20] ([217.61.151.20]) by web-mail.gmx.net
- (3c-app-gmx-bs17.server.lan [172.19.170.69]) (via HTTP); Fri, 28 Oct 2022
- 17:57:12 +0200
+        Fri, 28 Oct 2022 11:59:04 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FE421CD6C
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:58:04 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id d26so13892954eje.10
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:58:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1Xr2CNsw+VY+dbet5pYw3oER8lbXOO+2VzqoPsHpdMI=;
+        b=KhkLxBqfiFMHXECCShFAGZVJiXZW6+pBTKSgJlGaqwAQXWTPjqLBv9YWh8OjVv/+Mx
+         cezH0PfN7bkIqQjRXdJpYhS4wQWs+j2prgc0/hEQKNoKFuDj73kTevLaUh1KTbWAxhF+
+         YyJR/gPDjODa3qFLWqQ+64XL7XiglA1mZqUIh9W9xPrDOvGGzjaG+UXHlU+mbUcBerHr
+         8k5gxP6SYS6q9dmhZHao0KXJMoMb0SMnq/TAz/IOC4Jcacex35pgBjKp7ihus91OjSid
+         f1r7pRdwVhDDscDHsauqFOVu/lTZcspyO4Z9wgiNubrX9II3x+HT/X1iMqdyKFiawDmA
+         C2fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1Xr2CNsw+VY+dbet5pYw3oER8lbXOO+2VzqoPsHpdMI=;
+        b=uDwyCczc4Jm7GEMQEGhju2fI7PKYPPCv0X9HinzIbVRywwwE1a4DEyN4eEk+I4exyG
+         P8FkBh1HOGVgVhtnsbBUdFeRfAfAg1F+NE2NcLUaTdK5FRMmw/5PPPy5RsOZES65j5Dl
+         1iexrvPoTlj3TgiAguo4TW41a7IoIo6POMx1gWvSC5msxT3Mqj5P4gRvLYkyUJm2XlHU
+         2OhI5inwvHfCErzOoVPTcohgSKBNN9W4v79DqEAMN7kq9BI0dgIhhyQ937qKmlXcxSaS
+         7Lk7aEubyhVpvk/FjPMWvuLpgzVJWeHl0NerA8+OqXxJLWzmAGlAS3yHJP9eoW3CnBxZ
+         CoZA==
+X-Gm-Message-State: ACrzQf18xyoPv5T+iWStZhYg0HZ382QQ1z1ujvhWc7VNoMUEHtVZJ65v
+        VkjQJYhWagYOGh5JOT2o8G8p+gz91TK46MyaN+DlSLChu6o49A==
+X-Google-Smtp-Source: AMsMyM569TzZTM4irwGSuarUlt24Y6DZxt6SSBAo5Fiz5IQohK2zv7e3FaNQ4qlsnDS2NmVppAfYWbQNWNmvMEgJBjA=
+X-Received: by 2002:a17:907:628f:b0:72f:58fc:3815 with SMTP id
+ nd15-20020a170907628f00b0072f58fc3815mr47792331ejc.719.1666972682791; Fri, 28
+ Oct 2022 08:58:02 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <trinity-6e94e8e9-4b31-4d93-ac21-f51aee3b790a-1666972632153@3c-app-gmx-bs17>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     "Frank Wunderlich (linux)" <linux@fw-web.de>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, Felix Fietkau <nbd@nbd.name>
-Subject: Aw: Re: [RFC v2 7/7] arm64: dts: mt7986: add Bananapi R3
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 28 Oct 2022 17:57:12 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <Y1vd9+q2PzG5DIKa@makrotopia.org>
-References: <20221026093650.110290-1-linux@fw-web.de>
- <20221026093650.110290-8-linux@fw-web.de>
- <64daf96b-b2b5-6f02-91aa-58d19083ee01@collabora.com>
- <a97aa98a6230e7f33a6b5f5e2c9e54ce@fw-web.de>
- <Y1vd9+q2PzG5DIKa@makrotopia.org>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:2Jf5uCm93TCrRRVMUpsdNxtQIL/d0QsSjHv7fNClGY/TTCHAn9Z0DqfxZ2UnKkGFaRMbG
- m/W0B1uIQqbknKQHn8cnuQ1KJAUggdcFYIo6FlnjkelLLU38iBMHEtuby6EEklxe94weXDWyj91Q
- 68/ZaLszOjo5pAScv4TowYn4zT6gBhVehcUUZePjdhFVFAW4qYe4c+gUBaJUNGiVp1Xg8AkrKCz4
- z5i3HTCKoGF99/aY/WMNmvKXbdk47WSPj2RZnl2SDJkzjVfo2ZRtOGrT0EzZ9heO/mwME/v3NQ+l
- p0=
-UI-OutboundReport: notjunk:1;M01:P0:YkrS8YEqMno=;IIodNu81S8JdrNW4QABw2sg5KjV
- dhBUui4yBhUJI/hH9bhssPgbGD0f/g0lhJQ52kEM9aHpCf4QJTyW/S38L7hWdc8tVdQRYLwEx
- sYgoKRXtiuXRnclg/8jTwYGjGWmdxQKmmOEOwXSWv9URD/95gTUPz0ecsbtgCHV8pd1AJVx98
- b2BMoTFddpvEqFfEyIUs2V0waGT/C4xD5I5F/fogsrAXw5Dll6K6Vz3cdE9FrvcPljfdc2PjM
- ZuqMNjVh+OzdlYs35NcgDTa4qm5VR4S9A2HPhXLz5couWxDpJiQVATrX8L9rx9gyBNLOEshN/
- 1/uecBn+t2oPJTOGqXHM2mmajoc4IAiee7J5PsL8PRH9+4Zd9XmA17+Me0NSza1iIkdlpQ03j
- XlDgf/V7AE0BOmq7Vw7vniEiZ/UnKGvWjkWGoQwd8TJIiB0dlcKit0j5oasb34314goa7exof
- j+MMxrxzgNEoEwcQICMvAROfrQkvqzkSTDs4+poz5lPMAYWLtpmYdCBMUBjtmA7YA6oM0iuZe
- xYxuD+EJREfASLq+paHx66VKQf7J2+UbvFGvv8dW86pmz6CNrKraslXIjT8t/T3mwEMolPe8t
- N7W0mn5lZm48ss+rAS8nDOgvqvtd3ge8mRuzieq8Xgx2QA5FJpFotKB9KOuoPweGONVxltcri
- oLEahQpfCt7NSFl7FPDhe8s64zsgy3y1N2Ngzmk9WLHbAunS9X7LJO++JBgk1raf3AtCMWKi4
- oxOH7rR5Yhc6WHthsorbIMCPODY/7tIM+m9cYtx5HebgoFOrNBHEHf/WbQd1cgF+Om2+PPrXn
- 3GgqxKTXG194m5iWYYhUT0MQ==
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221024224657.2917482-1-dionnaglaze@google.com>
+ <20221024224657.2917482-5-dionnaglaze@google.com> <31d7bd35-6b26-b7b8-0903-09c3d260d801@amd.com>
+In-Reply-To: <31d7bd35-6b26-b7b8-0903-09c3d260d801@amd.com>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Fri, 28 Oct 2022 08:57:51 -0700
+Message-ID: <CAAH4kHa+-H6femVto=Jp2zCGaEesG4POpTdqtSCsCO_dx1phfA@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] virt/coco/sev-guest: interpret VMM errors from
+ guest request
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Peter Gonda <pgonda@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,134 +74,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
-> Gesendet: Freitag, 28. Oktober 2022 um 15:49 Uhr
-> Von: "Daniel Golle" <daniel@makrotopia.org>
-
-> On Fri, Oct 28, 2022 at 12:57:44PM +0200, Frank Wunderlich (linux) wrote=
-:
-> > Am 2022-10-28 11:19, schrieb AngeloGioacchino Del Regno:
-> > > Il 26/10/22 11:36, Frank Wunderlich ha scritto:
-> > > > From: Frank Wunderlich <frank-w@public-files.de>
-
-> You could also use device tree overlays to select SDMMC or eMMC just
-> like for the NOR vs. NAND choice on this board.
-
-i recently found a way to compile dtbo via kernel compile-tools
-
-https://github.com/frank-w/BPI-R2-4.14/commit/8a0d96d0932e71dd226b4cca641d=
-cc097b23247c
-
-is this the right way?
-
-imho adding the mmc-node in base dts is better than getting device to boot=
- only
-with at least one overlay.
-
-> > > > +		factory-key {
-> > >
-> > > I'd say that this is not "factory-key" but "reset-key"?
+> >   static u32 vmpck_id;
+> >   module_param(vmpck_id, uint, 0444);
+> >   MODULE_PARM_DESC(vmpck_id, "The VMPCK ID to use when communicating with the PSP.");
 > >
-> > okay i rename it.
+> > +static int rate_hz = 2;
+>
+> s/int/unsigned int/ to match uint below.
+>
+
+I'll change the uint to int, since the types in ratelimit_struct are int.
+
+> > +module_param(rate_burst, uint, 0444);
+> > +MODULE_PARM_DESC(rate_burst, "The rate limit burst amount to limit requests to.");
+> > +
+> >   /* Mutex to serialize the shared buffer access and command handling. */
+> >   static DEFINE_MUTEX(snp_cmd_mutex);
 > >
-> > > > +			label =3D "reset";
-> > > > +			linux,code =3D <KEY_RESTART>;
-> > > > +			gpios =3D <&pio 9 GPIO_ACTIVE_LOW>;
->
-> At least on my V1.0 board and reportedly also on V1.1 boards the RST
-> button doesn't work. As soon as a NVME/M.2 module is inserted this
-> also connects the GPIO just like if the button was pressed all the
-> time. This issue has also been discussed in BananaPi forums.
-
-maybe drop it for now till we can test it?
-
-> > > > +	mmc0_pins_default: mmc0-pins {
-> > > > +		mux {
-> > > > +			function =3D "emmc";
-> > > > +			groups =3D "emmc_51";
-> > > > +		};
-> > > > +		conf-cmd-dat {
-> > > > +			pins =3D "EMMC_DATA_0", "EMMC_DATA_1", "EMMC_DATA_2",
-> > > > +			       "EMMC_DATA_3", "EMMC_DATA_4", "EMMC_DATA_5",
-> > > > +			       "EMMC_DATA_6", "EMMC_DATA_7", "EMMC_CMD";
-> > > > +			input-enable;
-> > > > +			drive-strength =3D <4>;
-> > > > +			mediatek,pull-up-adv =3D <1>;	/* pull-up 10K */
-> > >
-> > > Can we please stop using these custom pull-{up,down}-adv properties?
-> > > Check what was done on pinctrl-mt8192.c (and dt schema) for more
-> > > information
-> > > and examples.
-
-as far as i see it defines array mt8192_pull_type with multiple MTK_PULL_P=
-U_PD_TYPE / MTK_PULL_PUPD_R1R0_TYPE / MTK_PULL_PU_PD_RSEL_TYPE, but have n=
-ot yet found out how it is working (array only put into mt8192_data.pull_t=
-ype, no usage of this memeber, see no reference in mt8192.dtsi).
-
-maybe with the
-
-bias-pull-up =3D <MTK_PULL_SET_RSEL_011>;
-
-in arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi is pointing to this ar=
-ray?
-
-> > need to check these with MTK.
+> > @@ -305,9 +316,12 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+> >                               u8 type, void *req_buf, size_t req_sz, void *resp_buf,
+> >                               u32 resp_sz, __u64 *exitinfo2)
+> >   {
+> > +     unsigned int vmm_err;
+> >       u64 seqno;
+> >       int rc;
 > >
-> > > > +		};
-> > > > +		conf-clk {
+> > +     might_resched();
+> > +
+>
+> Not sure this is needed. This may call cond_resched() right away, so I
+> don't think this is doing what you think it is (as I only see it used in
+> scheduler code and spinlock code). Did you mean to use might_sleep()?
 
-> > > > +&wifi {
-> > > > +	status =3D "okay";
-> > > > +	pinctrl-names =3D "default", "dbdc";
-> > > > +	pinctrl-0 =3D <&wf_2g_5g_pins>, <&wf_led_pins>;
-> > > > +	pinctrl-1 =3D <&wf_dbdc_pins>, <&wf_led_pins>;
-> > > > +
-> > > > +	mediatek,eeprom-data =3D <0x86790900 0xc4326 0x60000000 0x00 0x0=
-0
-> > > > 0x00 0x00 0x00
-> > >
-> > > Ouch! This looks like firmware unrolled in a devicetree property - t=
-hat
-> > > can't
-> > > be right.
-> > >
-> > > Please dump that in a binary file and load it as firmware from
-> > > userspace.
+Rereading the docs about it, I'll remove it.
+
+>
+> >       /* Get message sequence and verify that its a non-zero */
+> >       seqno = snp_get_msg_seqno(snp_dev);
+> >       if (!seqno)
+> > @@ -320,9 +334,35 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+> >       if (rc)
+> >               return rc;
 > >
-> > it uses the mt76 driver and here eeprom can only be loaded from
-> > mtd-partition or from device tree. Previous attempts loading eeprom da=
-ta
-> > from userspace file (like it's done for "normal" firmware) were reject=
-ed.
+> > +retry:
+> > +     /*
+> > +      * Rate limit commands internally since the host can also throttle, and
+> > +      * we don't want to create a tight request spin that could end up
+> > +      * getting this VM throttled more heavily.
+> > +      */
+> > +     if (!__ratelimit(&snp_dev->rs)) {
 >
-> Note that strictly speaking this is not firmware but rather calibration
-> data (ie. board-specific configuration, not code).
+> This doesn't do any sleeping/delaying, it just returns a 0 or 1, so you
+> could still cause a tight spin here. I guess that shouldn't be a problem
+> is nothing else is ready to run. But maybe adding an msleep()/usleep()
+> here based on the rate limit parameters (half the rate limit?) would be
+> good so that the CPU isn't pegged while rating for the ratelimit to be
+> satisified?
 >
-> In case you don't like the large amount of data in the DTS file, you
-> can use the /incbin/ statement to include it from a file instead.
 
-but this file needs to be inside the kernels tree to get the dts compiled.
-As this is basicly a blob (and firmware is stored outside) this is tricky.
+It looks like sleep_timeout_interruptible((rate_hz * HZ) / 2) could be
+the appropriate solution for this.
 
-> As there is no physical EEPROM nor calibration data stored anywhere in
-> he flash there is no easy way the driver could request a board-specific
-> filename, unlike e.g. ath10k requesting BDF from userspace.
-> In the past (e.g. out-of-tree patches for rt2x00 driver allowing it's
-> use on Rt305x WiSoC) this lack of a board-specific filename has lead to
-> people treating the file just like a generic firmware file: ignoring
-> the board-specific nature of calibration data and just copying it from
-> another board... As a work-around to prevent that, we could at least
-> embed the filename in the dts or hack the driver to request a filename
-> based on the top level 'compatible' string of the board's device tree.
+> I'll let others chime in on that and see if it is appropriate.
 >
-> I've added Felix to Cc: as he suggested that solution back then.
 
-maybe i should drop it for now to get basic support of the board without w=
-ifi till this is solved?
+Same, I'll wait until later Monday to send out v5.
 
-or adding wifi without the eeprom-data property and add firmware (file or =
-directly like now) in my
-own repo, but this needs to be done in every sourcebase as mainline is the=
-n non-functional.
+> Thanks,
+> Tom
 
-regards Frank
+Thanks for the reviews :)
+
+-- 
+-Dionna Glaze, PhD (she/her)
