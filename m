@@ -2,153 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2389C611000
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C13611005
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiJ1Lty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 07:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
+        id S229999AbiJ1LuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 07:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiJ1Ltu (ORCPT
+        with ESMTP id S229588AbiJ1LuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 07:49:50 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2065.outbound.protection.outlook.com [40.107.22.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2089D17A93;
-        Fri, 28 Oct 2022 04:49:48 -0700 (PDT)
+        Fri, 28 Oct 2022 07:50:10 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2067.outbound.protection.outlook.com [40.107.96.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32671CFEE;
+        Fri, 28 Oct 2022 04:50:06 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BtzpSEbKJl9oyC6BZ/uw1ygb88IAXyQs+IHOMUmQdVHzYr3FOl3mMrQB5g2Pj0RwXEHTERyoozUdeLWu4NR2ddyLMXBRQxk58Q29/HOgjwzOJ8toD0aWET2y/yznqPxk9pk3q7Iai/hYcoGxbw5Uws+HSnF/K42nGzRXe42J/nRd4omB29IOa+swMlhNwsMSaaZxHuqvwR9ZI/QNWwaHIR39k3uBoEDoj+6dsASKORPIAvsjGehRxnKSsS10gbueVWZXrqmPHKVEDM+djqIar7Q9aXrKd2dQyeV7hwahjauz9sYJ3SkMw7N0Ch4P4jLKeD/1NKs1R7BkpkP08k1JKA==
+ b=Kr55oi5FCtvwIFgy5SO9F588Xtx6K5IYBvf8gSQrjlSWr54TNTTmAVrYYFpiNESYWnF3+AUV1DVziUwL1Sd6gOjMBRfSuNk01cOmt6qCrmbcj/INPmW9ZqecfvxjYAcIFygcV/Zul8IjKnC1TQPV7fSgcPhkmAH5aKZ61g7+v2KRZlq7yGV+VYk8M59hNl7SVqFYe2v/4muuOd1DYnRUvN7dCvfcLlNn+fwo2txJ5B8LXhiJmylSuJ5HbeJusyVoJzJiFyU3N0HAC0iYmT9G5FkmmpMWfKLRzJffDNRHOWn3nedfbdZ4Yi5y5cyUam7n5rxvjXlHiNtT7WgLd9+duA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/cm6cSj+Dms9K7WSVR3ElNwWity2Wlu99q1l5FUBYFg=;
- b=c+/nGEvh9fY7PcMKfsaGJ9Jk7oqJbQGxrMk+8HnAZUqzLv1wY0srC0y2CE7TGilnrZLuTVzvnx2qkozkL9K1ymU9DJt2A/G3TtQNdF2EZVcQoEfO5SdennqncI9Z3a3WOJpqVezR/ZUBpAXtOedP0nS+ea/yfXhg0qenJ5/Re7N54JP0meJly3lyDVNBjZKkWiHLzNjQL8/XNCmwOYm4pbGwmxR125pxy+1d73wx00SvRYoMZTUj/WBwBIu5DmR/XfeV2Ws2ur5INqKwVnXVtJlxatBEtxzBz0LoJGRMCVsO+s+nx+qYKC4WggbM8mJl3wJWDQsMazwhVTkmCK4b/Q==
+ bh=F6i/D3yh4HFUu0nR4FEnuJ2NfaCeEfp9U4JFT/LqfEI=;
+ b=N4E/qdZvArGJqrHvCDzaoMfriV+83w5O7AQ6c3+iBP2Nvli05TJNeA/2qIIZJlzdaemdPH/bSyMS0s2O4+/zc0bl0HKxXNl8TE+n8WNBo5OzC2s2L7Nqjec2WBhTGF36jgrV8x//QVGOSgWqn9kg4b569oNwjQrwC0AM4Vwel/JajvCzT4DwoxbQtbcVClYQFOQl5UgbtWfSQ9TvGZ0mlH1PBxky7DQBuWzidxDJmxBcANwkgEBPqfhkS+9ZKgKwzgyTahJ46QkHSXsfQH2GQcrX1oq01hDSPcpa+I9YopXzmfN3NSEBAxZZw8LTLzWfu2hO2pWa2hCJgY7uhhyHgg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=theobroma-systems.com; dmarc=pass action=none
- header.from=theobroma-systems.com; dkim=pass header.d=theobroma-systems.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=theobroma-systems.com;
- s=selector1;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/cm6cSj+Dms9K7WSVR3ElNwWity2Wlu99q1l5FUBYFg=;
- b=atNbofhGmlVl8I5s+i9JBswKObcHF22PZS/ZIoxS4WewXzWQz4dHe3p7e7o9yXGy6bNg648eAVSvNQQfm+S3N9JTESnQXqppx0kOE8L5UaNjTQslrBleEOOyhYaEWXCH8NEuFsD432sV0Yy83SqTEl9Vw0n+eKE4K7E6DtIzbqA1DHdbnXLa7LuUgYBP4sz1j3SuFHJi1J558HW9DAmXcSBDXPXFGmDEHB4ddygE4Y28ZahTwH1B6aEgD7ymOv1ucwgJ+ZUlCWXpLO4sHhS8vl0dfW+xLXWrM1eKAo/0VJ2NM8ifVYkt+6JSn9FPCbH4cBdPMJblIiTfBE8F3UVFCw==
+ bh=F6i/D3yh4HFUu0nR4FEnuJ2NfaCeEfp9U4JFT/LqfEI=;
+ b=N6AgxgnGnVM58I3TbbkmPK1wyYIaly7O/HabnNn29YTOQnfm7NiPM+/x7TmjFwOL5qRS63oyqV5cAp6AxP6lLhsu2NJm8mL1rPbof4a+xQ1e7Y+NTzdjJkrlrS/YbVwtW8KmhQsduIqcEOnG60MADXHZavIiPDCf6WlxmStZv+npLc4+G2hdQMaHv286zvZ2iyvUOwGxDdbaXjaxVJi5QYP0dtwrADwUBRj3W8YJ4HzF8EMB6R2YUbZ7GvJGbOIUD8SE4OMaZTHKFuMelhuBYe0TNgjwQ1ntOBXcmAnW5xLUpInT47uKin6r6laKOrJJHtq+vlEkLFbsCgV9Y33SDQ==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=theobroma-systems.com;
-Received: from AM6PR04MB6311.eurprd04.prod.outlook.com (2603:10a6:20b:b7::20)
- by DB9PR04MB8106.eurprd04.prod.outlook.com (2603:10a6:10:24b::13) with
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com (2603:10b6:408:69::18)
+ by CY5PR12MB6153.namprd12.prod.outlook.com (2603:10b6:930:27::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15; Fri, 28 Oct
- 2022 11:49:44 +0000
-Received: from AM6PR04MB6311.eurprd04.prod.outlook.com
- ([fe80::2b0d:be6b:edaa:62e7]) by AM6PR04MB6311.eurprd04.prod.outlook.com
- ([fe80::2b0d:be6b:edaa:62e7%4]) with mapi id 15.20.5746.023; Fri, 28 Oct 2022
- 11:49:44 +0000
-Message-ID: <04aa2fa5-c04d-d2ad-55e4-f78705b513ac@theobroma-systems.com>
-Date:   Fri, 28 Oct 2022 13:49:42 +0200
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: ext4 online resize -> EXT4-fs error (device loop0) in
- ext4_update_backup_sb:174: Filesystem failed CRC
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Schulz, Quentin" <quentin.schulz@theobroma-systems.com>
-References: <AM6PR04MB63111922B96138C374A39C68C7309@AM6PR04MB6311.eurprd04.prod.outlook.com>
- <Y1tTk5ILKICjJL82@mit.edu>
-From:   Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>
-In-Reply-To: <Y1tTk5ILKICjJL82@mit.edu>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Fri, 28 Oct
+ 2022 11:50:03 +0000
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::2e44:5abb:8e9e:a72e]) by BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::2e44:5abb:8e9e:a72e%3]) with mapi id 15.20.5769.015; Fri, 28 Oct 2022
+ 11:50:03 +0000
+Message-ID: <1e4714f8-f535-4972-6304-6f9e7471da09@nvidia.com>
+Date:   Fri, 28 Oct 2022 17:19:50 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH V3 08/21] phy: tegra: p2u: Set ENABLE_L2_EXIT_RATE_CHANGE
+ in calibration
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, kishon@ti.com, mani@kernel.org,
+        Sergey.Semin@baikalelectronics.ru, ffclaire1224@gmail.com,
+        linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
+References: <20221013183854.21087-1-vidyas@nvidia.com>
+ <20221013183854.21087-9-vidyas@nvidia.com> <Y1vAEh3NRiB5mrM7@matsya>
+From:   Vidya Sagar <vidyas@nvidia.com>
+In-Reply-To: <Y1vAEh3NRiB5mrM7@matsya>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0069.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:4b::16) To AM6PR04MB6311.eurprd04.prod.outlook.com
- (2603:10a6:20b:b7::20)
+X-ClientProxiedBy: MA0PR01CA0071.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:ad::11) To BN8PR12MB2900.namprd12.prod.outlook.com
+ (2603:10b6:408:69::18)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB6311:EE_|DB9PR04MB8106:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2d30e1b5-f5b2-4d5d-b085-08dab8da8184
+X-MS-TrafficTypeDiagnostic: BN8PR12MB2900:EE_|CY5PR12MB6153:EE_
+X-MS-Office365-Filtering-Correlation-Id: 53c90fdd-e1f0-4009-e56d-08dab8da8ce4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kTVDc2Y26wiUnc61V17VwMVRyBug7kEbJCBjB9B438+aqg1E90pdGfCW2BxnAYV2akIdzJeZLFV2Sry2XZYJjMei4yHDklboKmtLHv7v2dnWpKNKytVRJpm49CtfovVV9NEQDY1oMBAMRJ51VWoIIDnPh2NiwMn2RF5KhdxZ375CR4kSP8s1rCVSKJEoHlqQrClZsMNXXsANjAAcjvBZEGTCM9al6LmWMqHcyzycw1L/eijKSsrG1lghG2KXyBESpfVN5aZ4qWZn/IlxFfr8eX5Aejss6QU+X4OcxzVEX5HpQ1y4vdWLRlf90r0vt5SKxHRT+tYnAl6nI7r/7hLl14kDXWwXONQ1ISZasypKHRBdCEWB2zw/YMvmI/NhUt5U55vdFqgMaFh8ga7+ybneBtKDCm63ldGJN5Ku/mVRtDjDhJEr2o84GV0TRPpMkST6Tfb+P3NCrgGumiSm8GTfAUqHJYt4xSUVk33BjiU5R7GyDS+xeldjU+x8wo8joVlEo9WdcNUg5DWg2ieIgwpCbotQuCb8juSfZizFZM5Fjk2UssE4W7PWMTeA0C7fQSLt+cROjoZCSiD+V2zh0Yn1N4v4BZXxZak58Ec6Y6qz62H5dM8MDPuuYO2Jgp1m6thtLXFOB8Wo1+GrnqxxAZ4Xxnbq4EO0BcAWczjUh5E4WJz3+X2LncFLt+EIrwkyNAusoBmyqU9SlO2PvUBfht8/WQ+e5KcQ+w0e/Ii+GXlV6sB5zbsop0K5Dircc9xSbTQDpVuAHl8ha7Hd5+gGoNlpFbMFeveb1PAf0gN4kND9/og=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6311.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(396003)(39850400004)(376002)(346002)(451199015)(2906002)(38100700002)(4744005)(44832011)(36756003)(6916009)(41300700001)(8936002)(6512007)(86362001)(31696002)(8676002)(26005)(6506007)(107886003)(2616005)(53546011)(54906003)(186003)(316002)(478600001)(83380400001)(6486002)(66476007)(66556008)(66946007)(4326008)(5660300002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: RH7ynH8mhMas+6ZYdV1FRM/5mt/HPfcu7//iLilx0AmXBgjKziEBt4IBq1qmZoxDUY7R7GpOgTr39rSsJHoVGmH5+tUhquVrc1jz5n4wgp1uZeL26zYG3wxHowiXg4RPBkAGFO0C9v7HE8oi5K9pZayGbi0sI3KCFyIs477cj4hB8rIN0v5ERwTxWfVUFvZVmg8eLPNE70ct3Wz4ILRqJEmGSuBSMRanJssA2D5wxZttzIoIWuXucRvJi1HKLaYVaHicnZu7+foQlXFUCK2qABhqEuj7vChMWAlxgOo7vmakY6b3z3unqhmTgXod+fKLYYj75tSK/Ai6dauU2FcDea5YHT1SELOlGWF8Ni3tqjStbtlAVHVHmm9MqbexRz7dCYM8QkYDsSYpRwcll7OJtxHtKHQaddcdp0hUarcYnjv3Fx8K8xQL3Rw/6Dtrpp5jJEBxBbowHnZuNb4WihUMkvM20QtxGsKcQH8x9JZRJECK0F2yRds/THwBPmMD/I4p+PEHwdu6keu2MqtvMJxIE+SrFJZacdIvVFsSzTMIzs/clOL5vIx2xyVmuFpSa1w2Q6D9VyvMcq+6r8gKqz3fFcGEZUurWUmL0gvM8wANyhIiqC93CNiMd/Pxe0lxo64lEw8yp7IwKOx1XldyyAlfjiMBOYKLxEjCc8N/UinX6M33mYl+kEm3UghKsbZ+BIJUE+86OwJQNBeMpPhh384gl4CFqB1jw88VpLkf5+3VlrapY1iUwAJSRKy5SWe9kuv+3aZW4ev9yP+OrqrYonqRY/yL1J7EEQ2jlXMIso+GiZw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB2900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(396003)(39860400002)(376002)(366004)(451199015)(41300700001)(31686004)(6486002)(7416002)(5660300002)(8936002)(66946007)(4326008)(66556008)(66476007)(8676002)(6916009)(38100700002)(6506007)(2616005)(6666004)(478600001)(53546011)(26005)(6512007)(316002)(2906002)(86362001)(31696002)(83380400001)(186003)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?enZsTDhvOEhsbGF0K244SU1zTU1yR0s4V0J0THRtZTAvNFpnRmM0RU1BOC9P?=
- =?utf-8?B?WDJYMU1XSys3THZtTzlIT1B1dERoMXBhZEF6RzVVclgzam5jVGRrS1pIVW9L?=
- =?utf-8?B?dHhDVUt3Sm82ZWJORWFjeWVBZUZ3WjFkN0g0OU44VTdRME8reUkzRkNJb2FV?=
- =?utf-8?B?ckUyNnByU3orU1pkVlRGUlJPaXg2TU10Smk1c01FclNRVHYxUnJtVVlkTlBD?=
- =?utf-8?B?ZEJaWG96N2QrZno0NHN3QndoVWhUQ0srakJpRVc4M2F0TFVSYjFabjNKZEFm?=
- =?utf-8?B?YXhTUkNmK0NYcVZCQlg5cTV3cVFWdGwvRGphNDA0MUZCazhzMW94T0xzamRZ?=
- =?utf-8?B?RTk3alhtOGZIeDZhRXBSVXlxMG5OQzZJL1lmTGhsb2k4Y3YrUWQ2Ris2SXV0?=
- =?utf-8?B?TmdvNXhYNFlDMCtiWW9UZnFhaDVHeFV4ZXNiRHNaUC9TODExNkg4Zmo5R0VT?=
- =?utf-8?B?L1FjZUdONXByK01oM0NBbnE5cktJN2tsd2JRc2puZkNobENKQVpGVlJQY3B0?=
- =?utf-8?B?RXBWRmpWNjdkb0xBUU9KN09IaEJyK1NVMFllTUZBRnFTbXliOFVQbHd4eFpj?=
- =?utf-8?B?K2ZabFdwWDhwanRBQ2ZYQTRITFRQR3FXaWY3V2tHYXZEQ3Z5cm1pWmxOMXhB?=
- =?utf-8?B?UFpLaGw2eW5HK1RCOFV0UGRCRFl3Q2pXZDZUSit5SXFHbmxQN1dlQnBqQW1B?=
- =?utf-8?B?MW12Y0QzU2NlNndRYitnajdhakVFL3h5dU9xNXBFdXFiN3U4UkZBK1NxYXZM?=
- =?utf-8?B?b2ZwdStpUmg0cjFpRmpmbUROK1g1dFYyTlpUWEUvNTA4YmxqbHhXV2psY3pj?=
- =?utf-8?B?bGp6MTNZY3JkSVZiRnFMbHUvTitGZWdTcWlmci9pSCtmbUFBMk1nRkJqQ3RN?=
- =?utf-8?B?VllQVTdVRmE2M2YvclphM0o5V1VkYXlGM3NVMXdjSDhIbWFEM2tTRnJtMWpZ?=
- =?utf-8?B?eWw4RU5XUVpQbW5wcEROR2pqSkk0NFZZZGhNVUxLMmF0T3RiNEFCWXd3STVw?=
- =?utf-8?B?c0JLQnlWQTVOZGczdVhRYVBqZ2NnRG1wSkJuUUh6ejN5ZnNQd0NtT0ZqQ2Z0?=
- =?utf-8?B?SVNpSTBhRmIyeHRNRkNLa1lDTzlUbllxM0U4V2NXYnZSTEgzWnRRNlNNbGtp?=
- =?utf-8?B?Q3pLeXBLbnpXSUlZTGl3QlgyaWptY1RWQml1WW5MNHlxbGZFZlhlcWNGYysx?=
- =?utf-8?B?THZ0cTBOTXN2WnM2VktrN2M4WXdFc1BjYXpSa3IvOGx0bmtPTlVJVGlDdUl1?=
- =?utf-8?B?SkJIa1ViRkFrbUphK3drUW43dGZCdFo1QlBSSmhkMk1sSGJkaldQd1RHV0Vi?=
- =?utf-8?B?b3V3WnFwZGR0QXdpT2RQQ2ZVSUlrRythSzVNMzNUOFpuaEdDcHB2SVRwQ0lY?=
- =?utf-8?B?alk5R0RzYjJES3BNQU5ncG9sN2MwT016YWxPeUNMSkU5V29xS29LbzJPSHNo?=
- =?utf-8?B?dUpHdy85V3EwSjhTKzZUaDE0aXNxWVZnc0hZcHROSnFsV1hHZlgzeTFCcTJE?=
- =?utf-8?B?S242bHk3bytSSG90dG9kTDRVWGRDSHdmdnYxRTBaOUoxSkhWZ1lFYUk1ZGdY?=
- =?utf-8?B?NGsrVThZaDlMV2pLZkRsT2k3UUdCSUo1eEVjUmZGTnNCSWM1bjVEWG1HNHhj?=
- =?utf-8?B?ZkdpZHIvandxRmdWS1JBdVhlQnRaellTTzJPcm9kZGc4S1hIVjV4VXd5azF3?=
- =?utf-8?B?RnJnSXpRc1FlRDludUw1RlZOcUtLRzFIalRhUWpZVTBFOVcwWkd6ZXdoNDFE?=
- =?utf-8?B?Z3pjdnlxa05lbDNqaGIrMkhyUjR4YXdJR1pXQXUxT2ZRUy9wTDlMY1dYUW5H?=
- =?utf-8?B?Vnp2ZHBIN1FWbWJNV0ZzWFhhNnNsNGV6dXZ6THRubndOSnVmMFdNbTdnODIw?=
- =?utf-8?B?V0dvdGFoVnRnbG5xRWVCSmdTQ0pmQWdkK0wxTHkzQTU2enByNzB1cjZ5L2sy?=
- =?utf-8?B?L3duVjlxRDljRFIxeUhIeVVJNXNVU21ybEtlR0ZPaUZ0VldIOVVOblFxZEFW?=
- =?utf-8?B?N1JZclU2M000WGxVWjlhRytjMGxpb0Z6OTNMZGNJYy90ak1RbkZrWkh6TU55?=
- =?utf-8?B?bWNKSDhYWmxlbzdyZEVMMXB3ek5XclpCdW8xc0FzWnI0SDBNbEJtS1JXSll0?=
- =?utf-8?B?eVMvcnlKTXlZQzEranI0RVRubExFR0QzNDRNb3k0YWt3Y0RKZ3pIZWdMVU9W?=
- =?utf-8?Q?BDOlVbpig8c2aOX+rWRMvGFdJjHM1nxWjausAmC65071?=
-X-OriginatorOrg: theobroma-systems.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d30e1b5-f5b2-4d5d-b085-08dab8da8184
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6311.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SkJyM0JsamVEaGg1elo5dTZDVFpBbi9BRzBQelNzaWZTNG4wWkJaY2tiN0dy?=
+ =?utf-8?B?ZHFIT21zc0taVFl3RCtlS2Nqc2wvdTUxSURJRG1YT285U252aWpPL2oyc2E4?=
+ =?utf-8?B?clhScDVrR293akIvWCthY3dpSHRzRHo0Rnp5eUVoUDZkSUJuQkZxdWl0ZHo4?=
+ =?utf-8?B?RGIwY1pzR1QrNzVYaVd0M0l0ZHdnMVNnSmd5Y2M5YXZKVE9VS2FlYUZqSWZl?=
+ =?utf-8?B?Zjl6Z0pSYUJMRmNTMWxLYldmaXk5QkFheDFweW1jR0NCZU5Zcmp3Y1JOTGJz?=
+ =?utf-8?B?YkUwTjVNa1pSMXV1UHViRFVqSTM1cE03RkhXa0ZObGZBeTRaOUd1T0xTaFUz?=
+ =?utf-8?B?Vm9XYjhiZHZtT0xSUHhnMk9XT1BNYkErMGN5eTNlOFZyc0l4Y3pReG5CTDBE?=
+ =?utf-8?B?VWJ0emtKUjgwN2hTOGJzM1BrUDlBRXlueWVidFdnTHlDY0tEeVczUUhabFpV?=
+ =?utf-8?B?UXJXaHI5eVhrZkpyZ0RMc3FwVWxtU1VzOVNGYU1jOGFETkdmY0ZHajlOUGdE?=
+ =?utf-8?B?b2s3OXRFQnFBbGxYWFRjaUFEVTk4bWR5eVBKS0ZUSDNyaHFQOXc1ZzNIMy9V?=
+ =?utf-8?B?SzBrTHBKcmpUWXlyVVU5aUM2bW1zNUhwVWtRUnpEa1RXTHUvWVRIZ1ZwM2wv?=
+ =?utf-8?B?QWZqWUJ2NExMRHZERWJzQSs4QnA2SWRtb0dZbzdpMDVmRll1ZmJxNDEyU0hW?=
+ =?utf-8?B?WTVrT2NrcTgwSEN1THBiOGlHTCtJY3lRTnRRazk0UVhZM1NqVTMxM0Fkd2lR?=
+ =?utf-8?B?bEFET3ArRnpad0pTSGJnUjVJSlFTSlcyaFlRejRjeXVLWnBwOU0xQjZPdENZ?=
+ =?utf-8?B?Mlczd001N0h1S1g2a0NNUTg4NGNHWUVoZjNtcTMrV2hkWVVkOS9RdVNZYzZG?=
+ =?utf-8?B?SHAwZEt6ZVBZbUhub3FQQzRWZGdOcjlvNEJoOTlvWFJMemx1NTVLZUlLemlQ?=
+ =?utf-8?B?emlKVTVyVUs2OHI0OURSWGNkUUNqQWZTbDJEaU5mTkM3ck1iL2ZadEpCWmFp?=
+ =?utf-8?B?QkRuYXg1YStzOC85cTZwNk52MVo0YXltMkUvdm8xK0xTNEZUSUpKYVpERWdp?=
+ =?utf-8?B?UldzYUY2c2s1eFZ3WUJDKzJZL2F6NWpxeXRMbmdkb0RYdHNUeEFodExFaGlR?=
+ =?utf-8?B?eWQ5c1BRNXVKenBMZmhQZStlYTE3Vi9zcStNSHArcTQ0eTNmQ2IxZ3ZrZzVX?=
+ =?utf-8?B?dWQzdkVUaW95aWR1c09ZMlh1Y2xSNGRHT1IveXBOVHZwU3IzSFFCMk8wYUFY?=
+ =?utf-8?B?bHA4N1ovYTduczg3c2dVUUxhUnpVOTh0VjRlTDBPYmIxRGJWS1hNOTA5RitX?=
+ =?utf-8?B?ODBCWFBoNkVCOU1BZEF3SHY5YURNdGpBQmpZejR4MEREUlgrZHN2cWtQRkh3?=
+ =?utf-8?B?clgybWJoVkEzdWpROUpqRnppRkg3TTNzZ1A0eW0zZ1BFMTNIWXpHL1F5aG1G?=
+ =?utf-8?B?aDV3by9FRmM1TTVmcm1NaHBldnczalV4dEk5aGhEbDlWcm9TNnFzUWtSNXhy?=
+ =?utf-8?B?OCs3Ty9VNjI3dVBMcUthT3RjWkhaY1h3VEI5enVoZndNcEluQlM0TXpNWFdB?=
+ =?utf-8?B?RkxBQU1wQjhwdU52dVVROWtPckZETkppQ0VTMmV0YXVLbDlCV2tGVm9OUEov?=
+ =?utf-8?B?U0VJMGRLVkszVDJydHJuY095RTU4TkErMVU1WHFmbERsLy9wTFVZSitSMEEx?=
+ =?utf-8?B?T1dlMDJMaU9oR0RrWGZmc2hrc3JkZ08zREZJbnpZaUVMdW40M1pBM2Y1ODFC?=
+ =?utf-8?B?OWt5dngzc3RENVlwVTR5MEc4dEtUSkVtR0pVYlBwRHRKa0N6Y2Zad3NzVWV1?=
+ =?utf-8?B?eUcvYzl1YUowbEt3Wit4NUZvWk5JU29oQmZBd21mRXliYUhCdkQ2azd4Yzkx?=
+ =?utf-8?B?MzBFOVkzY29RbjhtMHBxMzNhQVY2UDdGQ3F5a3FFeGUxYkd2NkI1M0RRY0p1?=
+ =?utf-8?B?Wkcybkg2UUZrK2dsZ25xMlJ0WlVidTRPeS9YekdMdVhjZDRNVXNidDFJT3NZ?=
+ =?utf-8?B?V0RZRFFuNXRmTGlrNEtDTEhQZkNDZzBNazJ5UVZrYzdsWUM0SFlRNFd5ei9E?=
+ =?utf-8?B?MTk2Sit1VjNWUi9jQ2VZOVEvR1ZSOUQ1aEE4ZzJKN3Y1ZTlBOUFKQ2hvWHVl?=
+ =?utf-8?Q?9/oKTn+Z9LFDwEPisS5DYUgjk?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53c90fdd-e1f0-4009-e56d-08dab8da8ce4
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB2900.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 11:49:44.2934
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 11:50:03.7069
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bA6Djxa5ShB+D1nzgUXr9qZ/WLgHdG9CitT/HxgFVBRs80j19BlxEGqIAyLh0nHHOLwraO7yeLCA5tanOY/xE+fnQ1tzw+ETpGSon01Tc7oZcHw1vRIz79WZvTI0OHVpMDM1YGWhnwymChLBkU50vQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8106
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: sJ+CXneAuUSTd4jqRnjSHxlMxQKRIWwiyZhNCwOqzrqfq0HXXn6gtwfn94o4GsT7xtmbzkQxKvmzNG4LInSETQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6153
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.10.22 05:59, Theodore Ts'o wrote:
+Thanks for the review and yes please go ahead and apply.
+
+Thanks,
+Vidya Sagar
+
+On 10/28/2022 5:12 PM, Vinod Koul wrote:
+> External email: Use caution opening links or attachments
 > 
-> Thanks for the reproducer!  The following patch should fix things.
 > 
->         	       		      		- Ted
+> On 14-10-22, 00:08, Vidya Sagar wrote:
+>> Set ENABLE_L2_EXIT_RATE_CHANGE register bit to request UPHY PLL rate change
+>> to Gen1 during initialization. This helps in the below surprise link down
+>> cases,
+>>    - Surprise link down happens at Gen3/Gen4 link speed.
+>>    - Surprise link down happens and external REFCLK is cut off, which causes
+>> UPHY PLL rate to deviate to an invalid rate.
 > 
->  From 9a8c5b0d061554fedd7dbe894e63aa34d0bac7c4 Mon Sep 17 00:00:00 2001
-> From: Theodore Ts'o <tytso@mit.edu>
-> Date: Thu, 27 Oct 2022 16:04:36 -0400
-> Subject: [PATCH] ext4: update the backup superblock's at the end of the online
->   resize
-
-Hi Theodore,
-
-I tested the patch on arm64 and it fixes the issue. Now the kernel 
-messages are just this:
-
-> [   14.769997] EXT4-fs (mmcblk2p1): resizing filesystem from 139771 to 3888507 blocks
-> [   15.020593] EXT4-fs (mmcblk2p1): resized filesystem to 3888507
-fsck after the resize is happy too.
-
-Thank you!
-Jakob
+> This looks okay to me and I can go ahead and apply, PCI patches can come
+> thru PCI tree and whenever ready use .calibrate() ?
+> 
+>>
+>> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+>> ---
+>> V3:
+>> * Removed "Reported-by: kernel test robot <lkp@intel.com>" based on Bjorn's review comment
+>> * Reworded the commit message
+>>
+>> V2:
+>> * Addressed review comment from test bot and Vinod
+>>
+>>   drivers/phy/tegra/phy-tegra194-p2u.c | 14 ++++++++++++++
+>>   1 file changed, 14 insertions(+)
+>>
+>> diff --git a/drivers/phy/tegra/phy-tegra194-p2u.c b/drivers/phy/tegra/phy-tegra194-p2u.c
+>> index 1415ca71de38..633e6b747275 100644
+>> --- a/drivers/phy/tegra/phy-tegra194-p2u.c
+>> +++ b/drivers/phy/tegra/phy-tegra194-p2u.c
+>> @@ -15,6 +15,7 @@
+>>   #include <linux/phy/phy.h>
+>>
+>>   #define P2U_CONTROL_CMN                      0x74
+>> +#define P2U_CONTROL_CMN_ENABLE_L2_EXIT_RATE_CHANGE           BIT(13)
+>>   #define P2U_CONTROL_CMN_SKP_SIZE_PROTECTION_EN                       BIT(20)
+>>
+>>   #define P2U_PERIODIC_EQ_CTRL_GEN3    0xc0
+>> @@ -85,8 +86,21 @@ static int tegra_p2u_power_on(struct phy *x)
+>>        return 0;
+>>   }
+>>
+>> +static int tegra_p2u_calibrate(struct phy *x)
+>> +{
+>> +     struct tegra_p2u *phy = phy_get_drvdata(x);
+>> +     u32 val;
+>> +
+>> +     val = p2u_readl(phy, P2U_CONTROL_CMN);
+>> +     val |= P2U_CONTROL_CMN_ENABLE_L2_EXIT_RATE_CHANGE;
+>> +     p2u_writel(phy, val, P2U_CONTROL_CMN);
+>> +
+>> +     return 0;
+>> +}
+>> +
+>>   static const struct phy_ops ops = {
+>>        .power_on = tegra_p2u_power_on,
+>> +     .calibrate = tegra_p2u_calibrate,
+>>        .owner = THIS_MODULE,
+>>   };
+>>
+>> --
+>> 2.17.1
+> 
+> --
+> ~Vinod
+> 
