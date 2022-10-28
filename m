@@ -2,90 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 114626118D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 717B76118B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbiJ1RGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 13:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
+        id S231171AbiJ1REd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 13:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbiJ1REm (ORCPT
+        with ESMTP id S230379AbiJ1RD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 13:04:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63FC2303DC
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:02:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666976530;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/IYuohmEO1F/L2EkVBn4KSHqgkaps/PV3lH1XEHBh2w=;
-        b=GdH0eWLbQIIoW5MORpk+91uMKcw3jz+vMyDlQz6Eir68FT/u0eO2076vq5QgbAA6EUFHnw
-        aZIeXYWyflA/xVx1m1RRLZjuYKHJ4o8KNIpb1xrqxEFi8WMPWG70lrqgynaM+4sayq3ZOm
-        Ef2hH4k5chNr71llkRh1uAailGOwN98=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-319-cCmbhtwaMMW9r-ymwGBz8Q-1; Fri, 28 Oct 2022 13:02:06 -0400
-X-MC-Unique: cCmbhtwaMMW9r-ymwGBz8Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B5E602A5957D;
-        Fri, 28 Oct 2022 17:02:05 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.73])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3777640C6EC3;
-        Fri, 28 Oct 2022 17:02:03 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wibPKfv7mpReMj5PjKBQi4OsAQ8uwW_7=6VCVnaM-p_Dw@mail.gmail.com>
-References: <CAHk-=wibPKfv7mpReMj5PjKBQi4OsAQ8uwW_7=6VCVnaM-p_Dw@mail.gmail.com> <Y1btOP0tyPtcYajo@ZenIV> <20221028023352.3532080-1-viro@zeniv.linux.org.uk> <20221028023352.3532080-12-viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>, willy@infradead.org,
-        dchinner@redhat.com, Steve French <smfrench@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 12/12] use less confusing names for iov_iter direction initializers
+        Fri, 28 Oct 2022 13:03:56 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AC57A773
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:02:24 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id e15so4455040qvo.4
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:02:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8Vt2NRfPYoZ2LtBVbnQGBt2MOSimjRuiE+rlZh3+5+g=;
+        b=jPdqWef5RqLJJwMWlMCL6Yputv2Coc+NkBGsrEHXX6tbmnDpP2NtnvxtTSP6fRdSq3
+         9Kqz/c71UIa4gQ+A2LP6PMOTjv0toDO9Wbv24q8Hi0vvzBmXumFDNfw9ZLYIwiEjZOJ8
+         tWNjQ3tHwc9WfYtIkV9WiIhYUQunkYzUK40ZvlMd1aAkb7yjfS8eWBVm04flWli+1qZa
+         LsSLi79kWqEp7HNoQgl4Fari2Zxp91qcZm24d/SnU/0pvHXGnlsVVzcCi79dUNo/9tVG
+         JqDBVt9Yu1hENE81e2/abORwdPlEIwgnb9Sked0wA9H4R3ttr5u75sNyIpAQ/PXngxml
+         Sazg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8Vt2NRfPYoZ2LtBVbnQGBt2MOSimjRuiE+rlZh3+5+g=;
+        b=WW2HiY6QiTJYTz0pb2vZlmax+yExgsJisnf8gzo3ueDino49Ucg8zRHG6BJxXbQYt5
+         6qccTUwVZKT3JAaTzOTTh58afJl6mD4D5LkkxI0R2cEpM63iWLTMJmfDTGWpBrlIr3Fy
+         KWa1G6oSB92x1gDDqj/fCuU005dCQPA+oyb3wxnwU3iioqRBpYhqAPrVTgovAeQSXjrh
+         VnQzSSnRX7pGS2raqPBOBhyP3C+cXdyKN7ffSA8yQrurLXAhZEz+SmAOJEoYoO75gL3G
+         sCTlAkLC4y+MD+hRcGsgrgspsEO+bz02h8u36fTMXcKREl5UcgHF/U2kHucSAu4yLPsH
+         dUpw==
+X-Gm-Message-State: ACrzQf2gz4lEBQeECyfnpJTbw1rTRMN/vegPweXU28aUxd9qpkUIg6Tk
+        9+OuRBbtKZrdgjs49KH81gRdw5Fo+VKgLg==
+X-Google-Smtp-Source: AMsMyM7WI6/C5Bbg8LE38AWlmWBGVBzI2D+TeBS/UIIXN5bby8fjbj0k0m/zk8IVDHE2noidzevKhw==
+X-Received: by 2002:a05:6214:2b06:b0:4bb:5716:d1c3 with SMTP id jx6-20020a0562142b0600b004bb5716d1c3mr365680qvb.85.1666976543183;
+        Fri, 28 Oct 2022 10:02:23 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id bn1-20020a05620a2ac100b006b5c061844fsm3223584qkb.49.2022.10.28.10.02.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 10:02:22 -0700 (PDT)
+Message-ID: <97b462ea-e283-60ee-e272-b136ca08a251@linaro.org>
+Date:   Fri, 28 Oct 2022 13:02:13 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <65440.1666976522.1@warthog.procyon.org.uk>
-Date:   Fri, 28 Oct 2022 18:02:02 +0100
-Message-ID: <65441.1666976522@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v10 1/7] dt-bindings: remoteproc: qcom: Add SC7280 ADSP
+ support
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        linux-remoteproc@vger.kernel.org, agross@kernel.org,
+        andersson@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, quic_plai@quicinc.com, bgoswami@quicinc.com,
+        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
+        quic_rohkumar@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org, devicetree@vger.kernel.org
+References: <1664368073-13659-1-git-send-email-quic_srivasam@quicinc.com>
+ <1664368073-13659-2-git-send-email-quic_srivasam@quicinc.com>
+ <a1a78c72-2067-1ea8-a50e-0dcf4ae4bb83@linaro.org>
+In-Reply-To: <a1a78c72-2067-1ea8-a50e-0dcf4ae4bb83@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
-
-> Honestly, I think the *real* fix would be a type-based one. Don't do
+On 29/09/2022 03:32, Krzysztof Kozlowski wrote:
+> On 28/09/2022 14:27, Srinivasa Rao Mandadapu wrote:
+>> Add ADSP PIL loading support for SC7280 SoCs.
+>>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+>> ---
+>> Changes since V9:
+>> 	-- Add missing unevaluatedProperties in glink-edge.
+>> Changes since V8:
+>> 	-- Add glink-edge reference.
+>> 	-- Remove redundant glinke-edge properties.
 > 
->         iov_iter_kvec(&iter, ITER_DEST, ...
 > 
-> at all, but instead have two different kinds of 'struct iov_iter': one
-> as a destination (iov_iter_dst), and one as a source (iov_iter_src),
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
 
-Or maybe something along the lines of iov_iter_into_kvec() and
-iov_iter_from_kvec()?
+Actually not... you still do not Cc all necessary maintainers. I don't
+understand why.
 
-Also, would it make sense to disallow asking the iterator for its direction
-entirely and only use it for internal sanity checking?  In many of the places
-it is looked at, the information is also available in another form (the
-IOCB_WRITE flag, for example).
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-David
+Best regards,
+Krzysztof
 
