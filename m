@@ -2,60 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2FEA610E80
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2C9610E83
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiJ1KbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 06:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
+        id S230184AbiJ1Kcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 06:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiJ1KbL (ORCPT
+        with ESMTP id S229826AbiJ1Kcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 06:31:11 -0400
-Received: from mxout4.routing.net (mxout4.routing.net [IPv6:2a03:2900:1:a::9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5631826D0;
-        Fri, 28 Oct 2022 03:31:10 -0700 (PDT)
-Received: from mxbox1.masterlogin.de (unknown [192.168.10.88])
-        by mxout4.routing.net (Postfix) with ESMTP id 8C9711009AC;
-        Fri, 28 Oct 2022 10:31:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1666953067;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PZ0ls0S2a/efmbZzUvXCvMEN9e16JQ1qjyHBOdmh020=;
-        b=q/RpwxhgGQQKA4BlPp0SXwD0QqTgV22m63u0T6sflNbxvZ2Bl3rC7pIfeYtzoL+d/4Plka
-        nBg6YbaIChu3PVgt3ComMofjBxmlFS7aqsmm4CuOe4xJ6V3NH1sROoElX+hnt7Y2gGo4df
-        5eOGIGoevtqDdSR2d1qRfR8CY7ETwkQ=
-Received: from [127.0.0.1] (fttx-pool-217.61.151.20.bambit.de [217.61.151.20])
-        by mxbox1.masterlogin.de (Postfix) with ESMTPSA id BBF444071F;
-        Fri, 28 Oct 2022 10:31:06 +0000 (UTC)
-Date:   Fri, 28 Oct 2022 12:31:00 +0200
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     Jianjun Wang <jianjun.wang@mediatek.com>,
-        linux-mediatek@lists.infradead.org
-CC:     Frank Wunderlich <frank-w@public-files.de>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh@kernel.org>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_1/2=5D_dt-bindings=3A_PCI=3A_me?= =?US-ASCII?Q?diatek-gen3=3A_add_SoC_based_clock_config?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <61c0b62af62ddd0e98378159db2b7d94022c9bf5.camel@mediatek.com>
-References: <20221025072837.16591-1-linux@fw-web.de> <20221025072837.16591-2-linux@fw-web.de> <61c0b62af62ddd0e98378159db2b7d94022c9bf5.camel@mediatek.com>
-Message-ID: <29E908AC-3313-4A12-BD98-362803D51C12@fw-web.de>
+        Fri, 28 Oct 2022 06:32:48 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E7F186D4E;
+        Fri, 28 Oct 2022 03:32:46 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29SAWUq8067367;
+        Fri, 28 Oct 2022 05:32:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666953150;
+        bh=o8nT2/2rUODqSZbBDTj1WsC9qr3f4FxqGs/VuExA9ZM=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=n1lFw3/i08IGVUiRT2zvo2D8a3Z9N44jH45YxH9jbPenxOzb01UC4oMyLCRk4PX5w
+         xKtUgiHJW5I6/KS8Bp3hIkBTkmYt7MwK1TdhgX/Qu6vW3Bo81khX0E9OO50fI9nkPx
+         sjDteAfM0u6u7s1k0S0ApXCKz1snWIwVklCJ2xf0=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29SAWUcJ051954
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 28 Oct 2022 05:32:30 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 28
+ Oct 2022 05:32:30 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Fri, 28 Oct 2022 05:32:30 -0500
+Received: from [172.24.145.87] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29SAWQBP107190;
+        Fri, 28 Oct 2022 05:32:26 -0500
+Message-ID: <73df3de9-7f41-1164-b492-b96d6e73d306@ti.com>
+Date:   Fri, 28 Oct 2022 16:02:25 +0530
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Mail-ID: f37f2ece-abf2-4114-81ef-4a8ba4b5b03d
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+CC:     <robh+dt@kernel.org>, <lee@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <kishon@kernel.org>,
+        <vkoul@kernel.org>, <dan.carpenter@oracle.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <s-vadapalli@ti.com>
+Subject: Re: [PATCH v3 2/3] phy: ti: gmii-sel: Update methods for fetching and
+ using qsgmii main port
+To:     Roger Quadros <rogerq@kernel.org>
+References: <20221026074532.109220-1-s-vadapalli@ti.com>
+ <20221026074532.109220-3-s-vadapalli@ti.com>
+ <ad852357-98a3-b8b9-e9eb-d65c28947ed5@kernel.org>
+Content-Language: en-US
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <ad852357-98a3-b8b9-e9eb-d65c28947ed5@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,98 +74,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 28=2E Oktober 2022 11:24:36 MESZ schrieb Jianjun Wang <jianjun=2Ewang@me=
-diatek=2Ecom>:
->Hi Frank,
->
->After apply this patch, we found some dtbs_check error with the
->following patch which adds the PCIe node for MT8195:
->
->https://lore=2Ekernel=2Eorg/linux-pci/20221020111925=2E30002-3-tinghan=2E=
-shen@mediatek=2Ecom/
->
->arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2=2Edtb: pcie@112f0000
->: clock-names:        5: 'top_133m' was expected
->    From schema: Documentation/devicetree/bindings/pci/mediatek-pcie-
->gen3=2Eyaml
->arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2=2Edtb: pcie@112f8000
->: clock-names:        5: 'top_133m' was expected
->    From schema: Documentation/devicetree/bindings/pci/mediatek-pcie-
->gen3=2Eyaml
->
->Did you get the same error when adding the PCIe node for MT7986?
->
->Thanks=2E=20
->
->On Tue, 2022-10-25 at 09:28 +0200, Frank Wunderlich wrote:
->> From: Frank Wunderlich <frank-w@public-files=2Ede>
->>=20
+Hello Roger,
 
-As far as i see the problem is the fallback-node which requires different =
-clockconfig than the main compatible=2E
-
-6th clock was defined as this enum
-  - top_133m        # for MT8192
-  - peri_mem        # for MT8188/MT8195
-
-By using lower compatible as main compatible and first one as fallback you=
- cannot success all parts of allOf=2E
-
->>    clock-names:
->> -    items:
->> -      - const: pl_250m
->> -      - const: tl_26m
->> -      - const: tl_96m
->> -      - const: tl_32k
->> -      - const: peri_26m
->> -      - enum:
->> -          - top_133m        # for MT8192
->> -          - peri_mem        # for MT8188/MT8195
-
-From=20my PoV the dts is wrong as the 2 SoC are not compatible to each other=
-=2E=2E=2Emt8192 needs top_133m as 6th clock whereas mt8195 needs peri_mem=
-=2E Of course we can change it back to enum in both branches,but imho fallb=
-ack does not match to main compatible in the dts=2E
-
->> +allOf:
->> +  - $ref: /schemas/pci/pci-bus=2Eyaml#
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: mediatek,mt8192-pcie
->> +    then:
->> +      properties:
->> +        clock-names:
->> +          items:
->> +            - const: pl_250m
->> +            - const: tl_26m
->> +            - const: tl_96m
->> +            - const: tl_32k
->> +            - const: peri_26m
->> +            - const: top_133m
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - mediatek,mt8188-pcie
->> +              - mediatek,mt8195-pcie
->> +    then:
->> +      properties:
->> +        clock-names:
->> +          items:
->> +            - const: pl_250m
->> +            - const: tl_26m
->> +            - const: tl_96m
->> +            - const: tl_32k
->> +            - const: peri_26m
->> +            - const: peri_mem
+On 28/10/22 15:53, Roger Quadros wrote:
+> Hi Siddharth,
+> 
+> On 26/10/2022 10:45, Siddharth Vadapalli wrote:
+>> The number of QSGMII main ports are specific to the device. TI's J7200 for
+>> which the QSGMII main port property is fetched from the device-tree has
+>> only one QSGMII main port. However, devices like TI's J721e support up to
+>> two QSGMII main ports. Thus, the existing methods for fetching and using
+>> the QSGMII main port are not scalable.
+>>
+>> Update the existing methods for handling the QSGMII main ports and its
+>> associated requirements to make it scalable for future devices.
+>>
+>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>> ---
+>>  drivers/phy/ti/phy-gmii-sel.c | 29 ++++++++++++++++++++++-------
+>>  1 file changed, 22 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/phy/ti/phy-gmii-sel.c b/drivers/phy/ti/phy-gmii-sel.c
+>> index 0bcfd6d96b4d..c8f30d2e1f46 100644
+>> --- a/drivers/phy/ti/phy-gmii-sel.c
+>> +++ b/drivers/phy/ti/phy-gmii-sel.c
+>> @@ -50,6 +50,7 @@ struct phy_gmii_sel_soc_data {
+>>  	const struct reg_field (*regfields)[PHY_GMII_SEL_LAST];
+>>  	bool use_of_data;
+>>  	u64 extra_modes;
+>> +	u32 num_qsgmii_main_ports;
+>>  };
+>>  
+>>  struct phy_gmii_sel_priv {
+>> @@ -213,6 +214,8 @@ struct phy_gmii_sel_soc_data phy_gmii_sel_cpsw5g_soc_j7200 = {
+>>  	.use_of_data = true,
+>>  	.regfields = phy_gmii_sel_fields_am654,
+>>  	.extra_modes = BIT(PHY_INTERFACE_MODE_QSGMII),
+>> +	.num_ports = 4,
+>> +	.num_qsgmii_main_ports = 1,
+>>  };
+>>  
+>>  static const struct of_device_id phy_gmii_sel_id_table[] = {
+>> @@ -378,11 +381,13 @@ static int phy_gmii_sel_init_ports(struct phy_gmii_sel_priv *priv)
+>>  static int phy_gmii_sel_probe(struct platform_device *pdev)
+>>  {
+>>  	struct device *dev = &pdev->dev;
+>> +	const struct phy_gmii_sel_soc_data *soc_data;
+>>  	struct device_node *node = dev->of_node;
+>>  	const struct of_device_id *of_id;
+>>  	struct phy_gmii_sel_priv *priv;
+>>  	u32 main_ports = 1;
+>>  	int ret;
+>> +	u32 i;
+>>  
+>>  	of_id = of_match_node(phy_gmii_sel_id_table, pdev->dev.of_node);
+>>  	if (!of_id)
+>> @@ -394,16 +399,26 @@ static int phy_gmii_sel_probe(struct platform_device *pdev)
+>>  
+>>  	priv->dev = &pdev->dev;
+>>  	priv->soc_data = of_id->data;
+>> +	soc_data = priv->soc_data;
+>>  	priv->num_ports = priv->soc_data->num_ports;
+>> -	of_property_read_u32(node, "ti,qsgmii-main-ports", &main_ports);
+>> +	priv->qsgmii_main_ports = 0;
 >> +
->>  unevaluatedProperties: false
->> =20
->>  examples:
->
+>>  	/*
+>> -	 * Ensure that main_ports is within bounds. If the property
+>> -	 * ti,qsgmii-main-ports is not mentioned, or the value mentioned
+>> -	 * is out of bounds, default to 1.
+>> +	 * Based on the compatible, try to read the appropriate number of
+>> +	 * QSGMII main ports from the "ti,qsgmii-main-ports" property from
+>> +	 * the device-tree node.
+>>  	 */
+>> -	if (main_ports < 1 || main_ports > 4)
+>> -		main_ports = 1;
+>> -	priv->qsgmii_main_ports = PHY_GMII_PORT(main_ports);
+>> +	for (i = 0; i < soc_data->num_qsgmii_main_ports; i++) {
+>> +		of_property_read_u32_index(node, "ti,qsgmii-main-ports", i, &main_ports);
+>> +		/*
+>> +		 * Ensure that main_ports is within bounds.
+>> +		 */
+>> +		if (main_ports < 1 || main_ports > soc_data->num_ports) {
+>> +			dev_err(dev, "Invalid qsgmii main port provided\n");
+> 
+> nit: This message is a bit misleading if the property does not exist in DT.
+> 
+> How about just "Invalid ti,qsgmii-main-ports"
 
+Thank you for reviewing the patch. The variable "main_ports" has been
+initialized to 1 at the top. Thus, the only way the error condition is
+entered is if "ti,qsgmii-main-ports" is mentioned in the device-tree
+with an invalid value. If "ti,qsgmii-main-ports" is not mentioned in the
+device-tree, then "main_ports" continues being 1, since the function
+"of_property_read_u32_index()" does not modify "main_ports" if
+"ti,qsgmii-main-ports" is not present in the device-tree. Thus, in this
+case, the error condition isn't reached.
 
-regards Frank
+Regards,
+Siddharth.
