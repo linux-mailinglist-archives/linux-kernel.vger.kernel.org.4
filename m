@@ -2,116 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A08611AB9
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B679E611AB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiJ1TOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 15:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
+        id S230004AbiJ1TNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 15:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiJ1TN5 (ORCPT
+        with ESMTP id S229592AbiJ1TN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 15:13:57 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F6D242CA0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 12:13:55 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id k2so15227425ejr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 12:13:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mind.be; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pbLU8G2nPUHM4Aab1zDWh7+8gBmTVjh77cKTi8zqoN8=;
-        b=iB/0wWsjCnaggGgC/IT/FEvhnyhXnoD47LxIjJOB1HtLYBtTNgbRYrnvcSTVG659yR
-         40c7ER61HF7eRuVIKqMstbMzUP1iSh6aCvp8Zx5ZfU0yyyF/98c0SncHaxIicILYnrk7
-         gvkB4yXgIU9D7CD1UXfOMGShMGPIVvYTqkU+DcBYvHNsmrtoF3ez4Y23JDYiM13TE6t2
-         +vAqNaUITbL9z+EnwnMt7D0c0Ve5r1rz/s1xwOYgC8zYcWK28vJ1mS/5FA4tZEMMG7O3
-         6HwR512UXMTC0Af8L1CCXU2KyeAYDXds3FazhwL/Q4ZdSbWCnU7jhm01GuN42O0RYCL1
-         2GPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pbLU8G2nPUHM4Aab1zDWh7+8gBmTVjh77cKTi8zqoN8=;
-        b=q3F3leurbZuq+1efHepe0xIEqlmPmwEZJ4o2KSyod4A60PP3z2UOhks7M1UGPRXmlp
-         S2lkosptvMjuw4HHyF92p9lp/fep8sayc6a5/jktj73fa1c/G7B1NwvEgVf1ZznBKf9R
-         rVwWDVJTx6Nl6jqaelknvbrfVP1/e11g0hmT7t+aKJaGUk4TFxD2opkYLm08HPLYTZK9
-         ymAO1WCydmmOu6BDxRu6H1S0Ilg9jfeUR9HLRTroUScQGVjtAlDITdZGuDAVLcFdiSMZ
-         FUECpGXFiiog1jsJfPK5lTPDWObxoqbXGJBsLI5bbUdt44DeXbrfW8zFu/NkU5APqdEq
-         M0SA==
-X-Gm-Message-State: ACrzQf13B5A23yBCQFSmWrpSO1rYco4gINBwvke9no2fDCuht0Yq8jIo
-        IbHiJC0GX9l0r0uglccqqTvKRQ==
-X-Google-Smtp-Source: AMsMyM5uCxbSrhg0tSnHUKHalAicTtK/sVJNhz5Eofzc65Oicx6YsX2ct3ebblLWKywVW+0w+4Vufg==
-X-Received: by 2002:a17:906:d550:b0:7ad:a0df:d4c1 with SMTP id cr16-20020a170906d55000b007ada0dfd4c1mr780615ejc.210.1666984434295;
-        Fri, 28 Oct 2022 12:13:54 -0700 (PDT)
-Received: from dtpc.zanders.be (78-22-137-109.access.telenet.be. [78.22.137.109])
-        by smtp.gmail.com with ESMTPSA id hr25-20020a1709073f9900b007aacfce2a91sm2568922ejc.27.2022.10.28.12.13.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 12:13:53 -0700 (PDT)
-From:   Maarten Zanders <maarten.zanders@mind.be>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     Maarten Zanders <maarten.zanders@mind.be>,
-        alexandre.belloni@bootlin.com,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: simple-mux: add read function
-Date:   Fri, 28 Oct 2022 21:13:01 +0200
-Message-Id: <20221028191303.166115-1-maarten.zanders@mind.be>
-X-Mailer: git-send-email 2.37.3
+        Fri, 28 Oct 2022 15:13:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04E52347A7;
+        Fri, 28 Oct 2022 12:13:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56C6A62A2D;
+        Fri, 28 Oct 2022 19:13:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B9C7C433D6;
+        Fri, 28 Oct 2022 19:13:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666984390;
+        bh=7Hbg6mxqM2uqB/T0MyYeLF6xSwC/ZvQUkAf3AqjEKoI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=cmauykmgU7NKXbb4JfE6TJZsHaZlmXtXSMjpbyeAaGunufhpEeh48jcpEYhGu3miD
+         eK9LDN/mnNn0i6vknMoKqpHsvCc8PRW210RzEWeQegUDS4awDfacm5JcVxUTbHBXni
+         VyvTSMG9EleP3aW8apZUOMcwDcI51iiq/qiFZPArTOznCOqD2TMHO6r5c7XEtI4LXM
+         4ucFmfasRSYHzwIR00JoQ2rxcqkCz5jYIX9vkziCYqvVpX1OmrEpAKz6YBtEp7S5AS
+         ZmXxKcjE+FjeA7xKWEIrjYLKJzk9zG/i0B+b43iC927lX/7YZnLlHXJKy58woB9nVS
+         jHv744ho7zF9A==
+Date:   Fri, 28 Oct 2022 14:13:08 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "David E. Box" <david.e.box@linux.intel.com>
+Cc:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
+        robh@kernel.org, bhelgaas@google.com, michael.a.bottini@intel.com,
+        rafael@kernel.org, me@adhityamohan.in, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V7 3/4] PCI: vmd: Add vmd_device_data
+Message-ID: <20221028191308.GA903098@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221025004411.2910026-4-david.e.box@linux.intel.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During initialisation DAPM tries to read the state of the MUX
-being connected, resulting in this error log:
-input-mux: ASoC: error at soc_component_read_no_lock on input-mux: -5
+On Mon, Oct 24, 2022 at 05:44:10PM -0700, David E. Box wrote:
+> Add vmd_device_data to allow adding additional info for driver data.
 
-Provide a read function which allows DAPM to read the state of the
-MUX.
+>  	{PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
+> -		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> -				VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> -				VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> +		(kernel_ulong_t)&(struct vmd_device_data) {
+> +			.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> +				    VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> +				    VMD_FEAT_OFFSET_FIRST_VECTOR,
+> +		},
+> +	},
 
-Signed-off-by: Maarten Zanders <maarten.zanders@mind.be>
----
- sound/soc/codecs/simple-mux.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+It looks like these devices come in families where several device IDs
+share the same features.  I think this would be more readable if you
+defined each family outside this table and simply referenced the
+family here.  E.g., you could do something like:
 
-diff --git a/sound/soc/codecs/simple-mux.c b/sound/soc/codecs/simple-mux.c
-index d30c0d24d90a..bf67de12d20b 100644
---- a/sound/soc/codecs/simple-mux.c
-+++ b/sound/soc/codecs/simple-mux.c
-@@ -55,6 +55,14 @@ static int simple_mux_control_put(struct snd_kcontrol *kcontrol,
- 					     e, NULL);
- }
- 
-+static unsigned int simple_mux_read(struct snd_soc_component *component,
-+				    unsigned int reg)
-+{
-+	struct simple_mux *priv = snd_soc_component_get_drvdata(component);
-+
-+	return priv->mux;
-+}
-+
- static const struct snd_kcontrol_new simple_mux_mux =
- 	SOC_DAPM_ENUM_EXT("Muxer", simple_mux_enum, simple_mux_control_get, simple_mux_control_put);
- 
-@@ -76,6 +84,7 @@ static const struct snd_soc_component_driver simple_mux_component_driver = {
- 	.num_dapm_widgets	= ARRAY_SIZE(simple_mux_dapm_widgets),
- 	.dapm_routes		= simple_mux_dapm_routes,
- 	.num_dapm_routes	= ARRAY_SIZE(simple_mux_dapm_routes),
-+	.read			= simple_mux_read,
- };
- 
- static int simple_mux_probe(struct platform_device *pdev)
--- 
-2.37.3
+  static struct vmd_device_data vmd_v1 = {
+    .features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+		VMD_FEAT_HAS_BUS_RESTRICTIONS |
+		VMD_FEAT_OFFSET_FIRST_VECTOR,
+  };
 
+  {PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
+    .driver_data = (kernel_ulong_t) &vmd_v1,
+
+Then you can add VMD_FEAT_BIOS_PM_QUIRK and the .ltr value in one place
+instead of repeating it a half dozen times.
+
+>  	{0,}
+>  };
+>  MODULE_DEVICE_TABLE(pci, vmd_ids);
+> -- 
+> 2.25.1
+> 
