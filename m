@@ -2,112 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445C7611CAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 23:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA89611CB0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 23:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbiJ1Vs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 17:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55360 "EHLO
+        id S230063AbiJ1VtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 17:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiJ1VsX (ORCPT
+        with ESMTP id S230049AbiJ1VtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 17:48:23 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162B224C111
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 14:48:21 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id o8so4944773qvw.5
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 14:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SBJznIFzWZyEQbZ4eSSNW6gDtZq5LgNV4oKX/YjGZaU=;
-        b=S1rpEcjOVlvANLl0lKIzyQw2/HKiR+gzWh/C1KxmlLUp0TymDAoBBY8Ul+cVdpkdD1
-         Qb+bWUawxtnOwh0PeIYsVu+AtzModJPMUMpySwO18TKpURRJCEaWD2UxXDZtkCbTj80K
-         kxoqBKC7J3qx9FOP4/N+MzwlGjX2xZocCYVImbCiIPJZBz59J33i7tRXHqlwImhCpS6r
-         Xc3omikSPEMPvz741LYlnWLNrU5bPK6HMts1n1I4APzrtQdgsB2sd7z89KuD+OsuRFfE
-         Inht9Swb9s7xcvFyzVUOdCUuv8xTNyBBJ9mqwMZKr6At2fkJN5SJC231U7AP+YGuxVuG
-         0JLQ==
+        Fri, 28 Oct 2022 17:49:22 -0400
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B7824C945;
+        Fri, 28 Oct 2022 14:49:21 -0700 (PDT)
+Received: by mail-pl1-f171.google.com with SMTP id p21so2081704plr.7;
+        Fri, 28 Oct 2022 14:49:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SBJznIFzWZyEQbZ4eSSNW6gDtZq5LgNV4oKX/YjGZaU=;
-        b=pvwdQkPSAKMoKZcNzUjD3BveDOD2itBM6JYX9Vuflby8RGC+M5K2eCi7DypsEGWm2S
-         3H9Sx84gBlYWMTzVd52DcCqpe2S0CyKD2r4PsVJiGrFnsYbyz+S4qYLOLfp2+Sru89hz
-         wBqBddIOObj9a00O2cMFWegMxcMZCt54WsluYNH1Hvo9hNv+Wa9SwJhtKkc+AOCFy8oq
-         dxss8nOJhLry6BLdbwa72uU9J78eAqi0UPz4LC2+HhDIM5950b5GqeMbl+mgoPDOt+Wu
-         9G2Q/BXpHV1wk6wkhhkLrXagRaGHW3vLxvLn5+pCRS+mhJ1J6qfDCA5NM8brEFECJJVM
-         OtBA==
-X-Gm-Message-State: ACrzQf2bUgRF4hGFd3WnIIv6yCEGsSdr5i0OzZhOsljpJk/qNZb4msQ7
-        SuKnHMxZbvcXzMS3nYnJToNiPQ==
-X-Google-Smtp-Source: AMsMyM7RVnXDhVMel24hc/A2lGTULvxRB93QAfaenSC9hzmYAcuI1qSvsj4Kp1lV+hm1ywpWSMbBPw==
-X-Received: by 2002:a05:6214:29c9:b0:4bb:b957:cd4a with SMTP id gh9-20020a05621429c900b004bbb957cd4amr1364459qvb.108.1666993700285;
-        Fri, 28 Oct 2022 14:48:20 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id m22-20020a05620a291600b006f926a0572asm3847258qkp.27.2022.10.28.14.48.18
+        bh=tJODnJHrzUQ0dJuxRpB7z2CDN1C20lkbwqTM9JUYhfw=;
+        b=ENujUU5MBhOxVJKpYJJQHf4avdc5kfxk8bsEftrP3QC2XehWZ9v+T4dJV/P7mDuSFT
+         6dEF6pUPmdOJpAWJomSrUu/OUbYPtYoD6Yl/4fGf5TgYHS/8iFVK7daDZGmrm0/1czjD
+         HeRmEJ2Qn0UqStwttHb5prSp2WaC+k+rYMsyluwXYBgCdiSuSXJxizhA+qP85hLgdakQ
+         2VwC0E/0xjNfd9eeIhsXblMDoO7svA3K5X+olEj4kWPTTdOw2mEptBVq2M4s2Ioy0yNk
+         abAfBNDN64uPZKZDKZLyAS36fdpj5cPgNX8ZzrjmGzSawI0JFdRPBtpHio4gWrJkQK7c
+         cpJg==
+X-Gm-Message-State: ACrzQf0MogwuC5CE26UZxu7RgH35q8XyQsSVV2zp/jHXXHe/4d6Wj8nc
+        GGsuiF7ukO0OI9mjDGejndU=
+X-Google-Smtp-Source: AMsMyM5P2LZ8aSwfa5LdH2ue6RAAbIfPpu+99Klju67VAEE5toHo494tXyRAWIZi/fM84K7FJOQ0lA==
+X-Received: by 2002:a17:90a:df91:b0:213:8a69:c504 with SMTP id p17-20020a17090adf9100b002138a69c504mr7001564pjv.82.1666993761200;
+        Fri, 28 Oct 2022 14:49:21 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id o12-20020a170902d4cc00b001830ed575c3sm3528860plg.117.2022.10.28.14.49.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 14:48:19 -0700 (PDT)
-Message-ID: <5392d0d9-ab8c-8945-169f-264114017c1f@linaro.org>
-Date:   Fri, 28 Oct 2022 17:48:17 -0400
+        Fri, 28 Oct 2022 14:49:20 -0700 (PDT)
+Message-ID: <777e523e-1a6f-2b4d-0470-3e293b28c110@acm.org>
+Date:   Fri, 28 Oct 2022 14:49:18 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 04/11] arm64: tegra: Enable XUSB host and device on Jetson
- AGX Orin
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v3 11/17] ufs: core: Prepare ufshcd_send_command for mcq
 Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jon Hunter <jonathanh@nvidia.com>, Wayne Chang <waynec@nvidia.com>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
-        heikki.krogerus@linux.intel.com, ajayg@nvidia.com, kishon@ti.com,
-        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
-        mathias.nyman@intel.com, jckuo@nvidia.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-References: <20221024074128.1113554-1-waynec@nvidia.com>
- <20221024074128.1113554-5-waynec@nvidia.com>
- <2059dfe5-b084-42a4-7f35-9da9561fc12b@linaro.org>
- <b803bcf9-fc47-5239-ffe9-707925f324de@nvidia.com>
- <5676bcd2-14fc-4e1d-643e-89e575d190c3@linaro.org> <Y1vNU1KeUH8LvG0r@orome>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y1vNU1KeUH8LvG0r@orome>
-Content-Type: text/plain; charset=UTF-8
+To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        stanley.chu@mediatek.com, eddie.huang@mediatek.com,
+        daejun7.park@samsung.com, avri.altman@wdc.com, mani@kernel.org,
+        beanhuo@micron.com, quic_richardp@quicinc.com,
+        linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1666288432.git.quic_asutoshd@quicinc.com>
+ <c06dfe2ec39f2f1d4914ee3330188a41f1c4408e.1666288432.git.quic_asutoshd@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <c06dfe2ec39f2f1d4914ee3330188a41f1c4408e.1666288432.git.quic_asutoshd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/10/2022 08:38, Thierry Reding wrote:
->>>
->>> I understand you may not like this approach, however, this comment is 
->>> not really relevant to just this patch, but a general comment. But yes 
->>> we will ensure that this is correct.
->>>
->>
->> Just to clarify - this status looks redundant, but I have no way to tell
->> for sure...
-> 
-> But that's independent of whether we specify this using the full path or
-> reference the node by label, isn't it? The only way to make sure that a
-> status = "okay" is not redundant is by manual inspection. I don't know
-> of an automated way to do that. Perhaps it's something that could be
-> added as a check to DTC?
+On 10/20/22 11:03, Asutosh Das wrote:
+> Add support to send commands using multiple submission
+> queues in MCQ mode.
+> Modify the functions that use ufshcd_send_command().
 
-With overrides/extends pattern it is easy to spot one case of mistakes -
-you see override, then status might be needed might not. You see new
-node (like here!) - then status=okay is redundant.
-
-Best regards,
-Krzysztof
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
