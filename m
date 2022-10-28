@@ -2,92 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA87610FA1
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F38610FA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbiJ1L0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 07:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
+        id S230156AbiJ1L1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 07:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiJ1L01 (ORCPT
+        with ESMTP id S229822AbiJ1L1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 07:26:27 -0400
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C541C2093;
-        Fri, 28 Oct 2022 04:26:26 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 20E1720573;
-        Fri, 28 Oct 2022 13:26:24 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id kGeEpoinJo8B; Fri, 28 Oct 2022 13:26:23 +0200 (CEST)
-Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id A04DF20569;
-        Fri, 28 Oct 2022 13:26:23 +0200 (CEST)
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-        by mailout2.secunet.com (Postfix) with ESMTP id 9A62280004A;
-        Fri, 28 Oct 2022 13:26:23 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 28 Oct 2022 13:26:23 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 28 Oct
- 2022 13:26:23 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id 078CA3182D7B; Fri, 28 Oct 2022 13:26:23 +0200 (CEST)
-Date:   Fri, 28 Oct 2022 13:26:22 +0200
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Eric Dumazet <edumazet@google.com>
-CC:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Sabrina Dubroca <sd@queasysnail.net>,
-        syzbot <syzbot+1e9af9185d8850e2c2fa@syzkaller.appspotmail.com>,
-        <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <syzkaller-bugs@googlegroups.com>
-Subject: Re: [v3 PATCH] af_key: Fix send_acquire race with pfkey_register
-Message-ID: <20221028112622.GK2602992@gauss3.secunet.de>
-References: <000000000000fd9a4005ebbeac67@google.com>
- <Y1YeSj2vwPvRAW61@gondor.apana.org.au>
- <CANn89i+41Whp=ACQo393s_wPx_MtWAZgL9DqG9aoLomN4ddwTg@mail.gmail.com>
- <Y1YrVGP+5TP7V1/R@gondor.apana.org.au>
- <Y1Y8oN5xcIoMu+SH@hog>
- <Y1d8+FdfgtVCaTDS@gondor.apana.org.au>
- <Y1k4T/rgRz4rkvcl@hog>
- <Y1n+LM57U3HUHMJa@gondor.apana.org.au>
- <CANn89iLVRq28iMzjKBovyDvytH1ssW_Tp0AjoUbv74dFg2wXWQ@mail.gmail.com>
+        Fri, 28 Oct 2022 07:27:14 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAF81D0D79
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 04:27:13 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id z30so3159364qkz.13
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 04:27:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n27P9fQzAea5JJ3rcyXtQsWTxD0urj62so3demloRqQ=;
+        b=s3VsWG//KkD/UGRA5ywODMgnFjgOsElESRo8QPf8XegqHktP0/qfkb8meHjwzOWjSf
+         Quq2ROyt8VFaPIeB+1xj6oI72gAuBcNZ5+rJZ4VAtCFpV15SoOVyzXo7H4OfzXTc+xMj
+         MRGbsvy61qw9FzMmxbYYiP9+piZt39XblXjYoV6DXnwlStS10/O1ZHYZ7oBvzBauQHoy
+         utP8L2g93zI+vErg9j684msLNCKn0Jbt5L6R00DAP3X9WmMDAAuRfsgq8m44I+ErlLQk
+         2oDrig9l72iCUk2/aKTshcG3eY2qemwJM2I2HVTZeq7a42Xf7iUABHninoGSUpit8xyN
+         jYew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n27P9fQzAea5JJ3rcyXtQsWTxD0urj62so3demloRqQ=;
+        b=MoJ/o+cQ7Iy/2ez2V3ybL5bFueZccqqlMsdNXGqzzTx993ZkYb5U5aD2Jk84CLlTxg
+         PfgerfpkwTl5c+uLC9YQnTJPdu6lfZyQJWfmYYReZf2KqKvueyMsV+3tfwVnug94mjEO
+         /7l3/uumZdMpAbPwGOzYHM8DuH7xbyL0Z9unWkETBvFrj9ISFqT49ZEV7x8CnBDoGktT
+         zi/TSC/fKgBcIB6LlK/6jbj2bmPEvAxr2bG+y5D+z+MvoHQSTmub5DBUx3J0YKFrJMNC
+         +I6WEkm8yb5aMgfBIDYMrhF2y/wwttweEaSqYVFAwqiPsDeXnzymSdc8We55mbxsaqkl
+         iKHg==
+X-Gm-Message-State: ACrzQf0cRap2HAY8nYR/KIii8wIV/u9fl1uPVc5zt5sYHslN/fskpyx7
+        uB5pB+cH7UmLrH9ondf/rlYxPQ==
+X-Google-Smtp-Source: AMsMyM4oWiDhP7JzCJKC5Vj52NzocxJ+zmvdbOC+BFV0wwy5MqyYFVo6KZ9q5UpuKFDMXqnwowNswQ==
+X-Received: by 2002:a37:bb82:0:b0:6fa:e8d:534 with SMTP id l124-20020a37bb82000000b006fa0e8d0534mr297964qkf.738.1666956432590;
+        Fri, 28 Oct 2022 04:27:12 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id w24-20020ac86b18000000b0039764587192sm2223661qts.57.2022.10.28.04.27.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 04:27:11 -0700 (PDT)
+Message-ID: <5676bcd2-14fc-4e1d-643e-89e575d190c3@linaro.org>
+Date:   Fri, 28 Oct 2022 07:27:09 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CANn89iLVRq28iMzjKBovyDvytH1ssW_Tp0AjoUbv74dFg2wXWQ@mail.gmail.com>
-X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 04/11] arm64: tegra: Enable XUSB host and device on Jetson
+ AGX Orin
+Content-Language: en-US
+To:     Jon Hunter <jonathanh@nvidia.com>, Wayne Chang <waynec@nvidia.com>,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
+        thierry.reding@gmail.com, heikki.krogerus@linux.intel.com,
+        ajayg@nvidia.com, kishon@ti.com, vkoul@kernel.org,
+        p.zabel@pengutronix.de, balbi@kernel.org, mathias.nyman@intel.com,
+        jckuo@nvidia.com
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-tegra@vger.kernel.org
+References: <20221024074128.1113554-1-waynec@nvidia.com>
+ <20221024074128.1113554-5-waynec@nvidia.com>
+ <2059dfe5-b084-42a4-7f35-9da9561fc12b@linaro.org>
+ <b803bcf9-fc47-5239-ffe9-707925f324de@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b803bcf9-fc47-5239-ffe9-707925f324de@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 08:45:57PM -0700, Eric Dumazet wrote:
-> On Wed, Oct 26, 2022 at 8:42 PM Herbert Xu <herbert@gondor.apana.org.au> wrote:
-> >
-> > On Wed, Oct 26, 2022 at 03:38:23PM +0200, Sabrina Dubroca wrote:
-> > >
-> > > LGTM, thanks.
-> > >
-> > > Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
-> >
-> > Thanks for the review and comments!
+On 28/10/2022 05:33, Jon Hunter wrote:
+>>> +			ucsi_ccg: ucsi_ccg@8 {
+>>
+>> No underscores in node names.
+>>
+>>> +				compatible = "cypress,cypd4226";
+>>> +				cypress,firmware-build = "gn";
+>>> +				interrupt-parent = <&gpio>;
+>>> +				interrupts = <TEGRA234_MAIN_GPIO(Y, 4) IRQ_TYPE_LEVEL_LOW>;
+>>> +				reg = <0x08>;
+>>> +				status = "okay";
+>>
+>> The pattern of redefining full path in Tegra is confusing - I have no
+>> clue which of these status=okay are correct which are redundant.
+>>
+>> Do you?
 > 
-> SGTM, thanks for the fix.
+> I understand you may not like this approach, however, this comment is 
+> not really relevant to just this patch, but a general comment. But yes 
+> we will ensure that this is correct.
 > 
-> Reviewed-by: Eric Dumazet <edumazet@google.com>
 
-Applied, thanks everyone!
+Just to clarify - this status looks redundant, but I have no way to tell
+for sure...
+
+Best regards,
+Krzysztof
+
