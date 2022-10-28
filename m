@@ -2,107 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF340611751
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 533C861175B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiJ1QQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
+        id S229833AbiJ1QRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiJ1QPo (ORCPT
+        with ESMTP id S230367AbiJ1QQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:15:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A47C1B1C4
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:14:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8CF962940
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:14:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02AC9C4314D;
-        Fri, 28 Oct 2022 16:14:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666973680;
-        bh=hPulKsWfwmPS12vC8SipmsqMezI1Fy/nKCO0cEWbjbw=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=AwfmZaL49GbbKADMrHKMnSR4f8L6gDd7gYK+muQWnFx+nq5hB7Zetnlq90s9jvqtH
-         h+Rt5C3MlVeEzz57EVBxSJqR9z5i9yVcl5uP7yXsZ+O/NeB8EmO1uv/5tDx8UEd5OP
-         DnxHq9BSpn8H7VYxYVHc3Sc2oAz2yYWdQ+ONpyytV03wqPzez1ohg5cuD56Qk3+ria
-         fIvghKVyII0Eo5+vNL+YvKysbUxfKr/knS+P1PoS/xxSSEGJV2idWG8u5jeDy5RctS
-         XraqgYTvFh8X0uT1WepaBkMk2HxHymcrahRwNPCV+CANILBOUK1iGFjJX9Bk11hDgN
-         SOeNIE23zAJ4A==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        alsa-devel@alsa-project.org
-Cc:     tiwai@suse.com, perex@perex.cz, lgirdwood@gmail.com
-In-Reply-To: <20221028031603.59416-1-chenzhongjin@huawei.com>
-References: <20221028031603.59416-1-chenzhongjin@huawei.com>
-Subject: Re: [PATCH] ASoC: core: Fix use-after-free in snd_soc_exit()
-Message-Id: <166697367874.746166.7503879951900455151.b4-ty@kernel.org>
-Date:   Fri, 28 Oct 2022 17:14:38 +0100
+        Fri, 28 Oct 2022 12:16:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9943F10B8;
+        Fri, 28 Oct 2022 09:15:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A53FA1FB;
+        Fri, 28 Oct 2022 09:15:50 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 706363F534;
+        Fri, 28 Oct 2022 09:15:43 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 17:15:41 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 7/8] hwmon: (scmi) Register explicitly with Thermal
+ Framework
+Message-ID: <Y1wAHyV/tLKQmo7l@e120937-lin>
+References: <20221028140833.280091-1-cristian.marussi@arm.com>
+ <20221028140833.280091-7-cristian.marussi@arm.com>
+ <b914ea25-a9a8-f443-2ba0-615bdd6cc04f@roeck-us.net>
+ <Y1v2ozURFdIk1PfU@e120937-lin>
+ <e4040686-851c-d8b0-b274-ac71d38685e1@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e4040686-851c-d8b0-b274-ac71d38685e1@roeck-us.net>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Oct 2022 11:16:03 +0800, Chen Zhongjin wrote:
-> KASAN reports a use-after-free:
+On Fri, Oct 28, 2022 at 08:58:58AM -0700, Guenter Roeck wrote:
+> On 10/28/22 08:35, Cristian Marussi wrote:
+> [ ... ]
+> > > > +	/*
+> > > > +	 * Try to register a temperature sensor with the Thermal Framework:
+> > > > +	 * skip sensors not defined as part of any thermal zone (-ENODEV) but
+> > > > +	 * report any other errors related to misconfigured zones/sensors.
+> > > > +	 */
+> > > > +	tzd = devm_thermal_of_zone_register(dev, th_sensor->info->id, th_sensor,
+> > > > +					    &scmi_hwmon_thermal_ops);
+> > > > +	if (IS_ERR(tzd)) {
+> > > > +		devm_kfree(dev, th_sensor);
+> > > > +
+> > > > +		if (PTR_ERR(tzd) != -ENODEV)
+> > > > +			return PTR_ERR(tzd);
+> > > > +
+> > > > +		dev_info(dev, "Sensor '%s' not attached to any thermal zone.\n",
+> > > > +			 sensor->name);
+> > > 
+> > > There were complaints about this message as it is noisy. If you send
+> > > another version, please drop it unless attaching each sensor to a thermal
+> > > zone is strongly expected. If you don't send another version, I'll drop it
+> > > while applying.
+> > > 
+> > 
+> > Ok fine for me. I am waiting to have some feedback from Sudeep too, but
+> > I do not have plan for another version as of now.
+> > 
+> > As a side note, though, I understand the 'noisiness' argument, but,
+> > sincerely this same message in the original HWMON code was the only
+> > reason why I spotted that something was wrong with the SCMI/HWMON
+> > interactions and discovered the indexes/ids mismatch...if not for
+> > that it would have gone un-noticed that a perfectly configured
+> > ThermalZone/Sensor was not working properly...
+> > (un-noticed at least until something would have been burnt to fire
+> >   in my house .. joking :P)
+> > 
 > 
-> BUG: KASAN: use-after-free in device_del+0xb5b/0xc60
-> Read of size 8 at addr ffff888008655050 by task rmmod/387
-> CPU: 2 PID: 387 Comm: rmmod
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
-> Call Trace:
-> <TASK>
-> dump_stack_lvl+0x79/0x9a
-> print_report+0x17f/0x47b
-> kasan_report+0xbb/0xf0
-> device_del+0xb5b/0xc60
-> platform_device_del.part.0+0x24/0x200
-> platform_device_unregister+0x2e/0x40
-> snd_soc_exit+0xa/0x22 [snd_soc_core]
-> __do_sys_delete_module.constprop.0+0x34f/0x5b0
-> do_syscall_64+0x3a/0x90
-> entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> ...
-> </TASK>
+> Good point.
 > 
-> [...]
+> Did you ever check the returned error code ? Maybe we could use it to
+> distinguish "it is not attached to a thermal zone because it is not
+> associated with one" from "attaching to a thermal zone failed because
+> its configuration is bad/incomplete".
+> 
 
-Applied to
+Yes, it is what I do already indeed, in this regards I mimicked what
+the hwmon-thermal bridge was doing.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+In scmi_thermal_sensor_register() this message is printed out only
+if Thermal registration returned -ENODEV and no err is reported
+(which means teh specified sensor was not found attached to any TZ),
+while in the caller of scmi_thermal_sensor_register() for any error
+returned but -ENOMEM I print:
 
-Thanks!
+	"Thermal zone misconfigured for %s. err=%d\n",
 
-[1/1] ASoC: core: Fix use-after-free in snd_soc_exit()
-      commit: 6ec27c53886c8963729885bcf2dd996eba2767a7
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+since any error reported by Thermal other than ENODEV and ENOMEM
+means the DT parsing unveiled some configuration anomaly.
 
 Thanks,
-Mark
+Cristian
+
