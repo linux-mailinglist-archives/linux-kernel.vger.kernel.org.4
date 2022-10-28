@@ -2,130 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135E661157F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E19611583
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiJ1PGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 11:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53180 "EHLO
+        id S229727AbiJ1PIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 11:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiJ1PGg (ORCPT
+        with ESMTP id S229714AbiJ1PIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:06:36 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED04203574
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:06:30 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id y16so6932312wrt.12
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:06:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/1Bni2amD0jAR8XTAOGCUubFB4RfYi0aSzsPqrZfAy0=;
-        b=HkO6OxN6qsix7ydLktv9/mCo31nYQGtwB2WYmbr6zkVjf33/wGMKE91v0wcCP2ltjp
-         h5XPSN0oWx1x7mf5ppIwtq4BnT5hwpr/Rz6MqBxXz+EWiTLC8vjANXLkyAmCVDBLu9u8
-         TaeuZS4YHn/uq8AUrrRKbtX8MZIHpVMEK6P/0=
+        Fri, 28 Oct 2022 11:08:42 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84528208832;
+        Fri, 28 Oct 2022 08:08:38 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id r19so3609449qtx.6;
+        Fri, 28 Oct 2022 08:08:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/1Bni2amD0jAR8XTAOGCUubFB4RfYi0aSzsPqrZfAy0=;
-        b=aTNtKRsCNvEaXTDVj9B5Sp5mf7lQmXs0bOJ0k94JdEbuUXNnPZVEHbS3mVPUx7TqxY
-         8gurTtE8HgqtKHD5B634/CyZxY5VR1zBzIY01Xc6er7LBShCbzDhcvJcCO47kCIB0/+b
-         tMyp9GVwhuo1iClsAoMWNxjFOGTz+SD13q8kk1T/jCckopIMnysnNGAexYMCvEmAeCm3
-         jJm6dsG5lpGY8fs2hpsF4qd1k3Myg/oK+WLrCQcxabNDgtVefAEbV4+vnYThqnChRHN4
-         4Jqj3vhgO1Umr9s/uBn5Xf4sfBF3ji+TW6LmptsWCptz6KuzBh1eFYsqpGDKBwuRzKS6
-         JRRw==
-X-Gm-Message-State: ACrzQf1Aub2wKIr2FdslD3gGoxVSk/VQwCsSRgRkggj5xm6xBrKHW72j
-        dZo3bf50WVZIQ6rvx1qfo4Qstg==
-X-Google-Smtp-Source: AMsMyM549Vj2K2MQt/E/1QlxV19rVfi086Dk5jtlJRWE0kj89yeiwtVyzMwbiIdHy8BW1WmAFNGWPg==
-X-Received: by 2002:a05:6000:54e:b0:236:5818:d432 with SMTP id b14-20020a056000054e00b002365818d432mr24648306wrf.37.1666969589179;
-        Fri, 28 Oct 2022 08:06:29 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-54-207.cust.vodafonedsl.it. [188.217.54.207])
-        by smtp.gmail.com with ESMTPSA id h8-20020adffa88000000b0023538fb27c1sm3908096wrr.85.2022.10.28.08.06.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 08:06:28 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 17:06:26 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        linux-media@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: dvb-core: remove variable n, turn for-loop to
- while-loop
-Message-ID: <20221028150626.GA165737@tom-ThinkPad-T14s-Gen-2i>
-References: <20221024142954.2162920-1-colin.i.king@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NYii+0fW0gEKCWGN+D7BxbLvb2ZrmudcEIDGIcfsEBs=;
+        b=lxdkkRzhhdN5w6Q12sb9uZzvWAZxG3MxGZo9iXqP6QUTA7/7E/xckczlwQSMlRmZ2n
+         2QJM+9i8uD5E2rfA/J7rJPA8YzD+PGZD4w5laHWbP5S8+bcyFD/iLzNUxHqEyQa8Tk8W
+         Cmv/9kvlEbxW1mSC7BssqkOMdsdej+VXUXi7PGRgO7+fnjCgGrjvtxdttJknzK+7weN8
+         FdlqI3KwXlMZOu/kOI0/a+jjN57eSDOiazFCA01L4aHsqM6mXYeK3Ys8DciFA3MRjNm0
+         USuyJudj/qmBVucuFIEhmM+HfeTVgjqR1lVeX6z9CIj7bsAqwlAHmhcPPTi6Bmv7PnYi
+         8tdw==
+X-Gm-Message-State: ACrzQf1NjBJi41eNwpRBtkljnzsekZBy3ywsT+EN84RXJqxAeW4tigRU
+        irE/tG5vx4EnPH5ILx3VqA2GrULDYffvmUdYy3p0r4yE
+X-Google-Smtp-Source: AMsMyM7oYD83QNmGbnNTLaNVUXqpU/34cwf3LMweStOy4pBRdXXttiV/RN14ltJFbmmMQ5L05ce61fr71s7gmW2vCbA=
+X-Received: by 2002:a05:622a:44d:b0:39c:f7a4:5ee0 with SMTP id
+ o13-20020a05622a044d00b0039cf7a45ee0mr45218839qtx.48.1666969717630; Fri, 28
+ Oct 2022 08:08:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024142954.2162920-1-colin.i.king@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221003144914.160547-1-kajetan.puchalski@arm.com>
+ <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com>
+ <Y0fymW5LOoIHstE2@e126311.manchester.arm.com> <CAJZ5v0gvAtpzdQo0Tj13ZGFcop8fdNht7e_Nc_UNYCgbU1zZLA@mail.gmail.com>
+ <Y1vum4BECMf2BXQW@e126311.manchester.arm.com> <CAJZ5v0hZbw18BuG64046DiG2_dWOFk9gcg0bD+X3rQknwp0xsA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hZbw18BuG64046DiG2_dWOFk9gcg0bD+X3rQknwp0xsA@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 28 Oct 2022 17:08:26 +0200
+Message-ID: <CAJZ5v0iGM84i72m2eJkF6k8PkFqHw4gTDQhYV-K9D_VPWNKW7A@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional util-awareness
+To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
+Cc:     daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
+        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Colin,
+On Fri, Oct 28, 2022 at 5:04 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Fri, Oct 28, 2022 at 5:01 PM Kajetan Puchalski
+> <kajetan.puchalski@arm.com> wrote:
+> >
+> > On Fri, Oct 28, 2022 at 03:12:43PM +0200, Rafael J. Wysocki wrote:
+> >
+> > > > The result being that this util-aware TEO variant while using much less
+> > > > C1 and decreasing the percentage of too deep sleeps from ~24% to ~3% in
+> > > > PCMark Web Browsing also uses almost 2% less power. Clearly the power is
+> > > > being wasted on not hitting C1 residency over and over.
+> > >
+> > > Hmm.  The PCMark Web Browsing table in your cover letter doesn't indicate that.
+> > >
+> > > The "gmean power usage" there for "teo + util-aware" is 205, whereas
+> > > for "teo" alone it is 187.8.  This is still arguably balanced by the
+> > > latency difference (~100 us vs ~185 us, respectively), but this looks
+> > > like trading energy for performance.
+> >
+> > In this case yes, I meant 2% less compared to menu but you're right of
+> > course.
+> >
+> > [...]
+> >
+> > > Definitely it should not be changed if the previous state is a polling
+> > > one which can be checked right away.  That would take care of the
+> > > "Intel case" automatically.
+> >
+> > Makes sense, I already used the polling flag to implement this in this other
+> > governor I mentioned.
+> >
+> > >
+> > > > Should make it much less intense for Intel systems.
+> > >
+> > > So I think that this adjustment only makes sense if the current
+> > > candidate state is state 1 and state 0 is not polling.  In the other
+> > > cases the cost of missing an opportunity to save energy would be too
+> > > high for the observed performance gain.
+> >
+> > Interesting, but only applying it to C1 and only when C0 isn't polling would
+> > make it effectively not do anything on Intel systems, right?
+>
+> Indeed.
+>
+> > From what I've seen on Doug's plots even C1 is hardly ever used on his platform, most
+> > sleeps end up in the deepest possible state.
+>
+> That depends a lot on the workload.  There are workloads in which C1
+> is mostly used and the deeper idle states aren't.
+>
+> > Checking for the polling flag is a good idea regardless so I can send a
+> > v3 with that. If you'd like me to also restrict the entire mechanism to
+> > only working on C1 as you suggested then I'm okay with including that in
+> > the v3 as well. What do you think?
+>
+> It would be good to do that and see if there are any significant
+> differences in the results.
 
-On Mon, Oct 24, 2022 at 03:29:54PM +0100, Colin Ian King wrote:
-> Variable n is just being incremented and it's never used
-> anywhere else. The variable and the increment are redundant so
-> remove it. This allows the for-loop to be replaced with a
-> while-loop.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  drivers/media/dvb-core/dvb_demux.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
-> index 83cc32ad7e12..398c86279b5b 100644
-> --- a/drivers/media/dvb-core/dvb_demux.c
-> +++ b/drivers/media/dvb-core/dvb_demux.c
-> @@ -233,7 +233,7 @@ static int dvb_dmx_swfilter_section_copy_dump(struct dvb_demux_feed *feed,
->  {
->  	struct dvb_demux *demux = feed->demux;
->  	struct dmx_section_feed *sec = &feed->feed.sec;
-> -	u16 limit, seclen, n;
-> +	u16 limit, seclen;
->  
->  	if (sec->tsfeedp >= DMX_MAX_SECFEED_SIZE)
->  		return 0;
-> @@ -262,7 +262,7 @@ static int dvb_dmx_swfilter_section_copy_dump(struct dvb_demux_feed *feed,
->  	/* to be sure always set secbuf */
->  	sec->secbuf = sec->secbuf_base + sec->secbufp;
->  
-> -	for (n = 0; sec->secbufp + 2 < limit; n++) {
-> +	while (sec->secbufp + 2 < limit) {
->  		seclen = section_length(sec->secbuf);
->  		if (seclen <= 0 || seclen > DMX_MAX_SECTION_SIZE
->  		    || seclen + sec->secbufp > limit)
-> -- 
-> 2.37.3
-> 
-
-Looks good to me.
-We save some space into function stack :)
-
-Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-
-Regards,
-Tommaso
-
-
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
-
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+BTW, you may as well drop the extra #ifdeffery from the v3, I don't
+think that it is particularly useful.
