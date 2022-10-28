@@ -2,230 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0206109B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 07:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7A86109B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 07:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiJ1FYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 01:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
+        id S229642AbiJ1F1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 01:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJ1FYK (ORCPT
+        with ESMTP id S229379AbiJ1F1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 01:24:10 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3A41B5755;
-        Thu, 27 Oct 2022 22:24:08 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 13:24:03 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1666934647;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=evkrfU8M7lS6f6osyStLD3EBTkWiH4GFXsYwG5PEnv4=;
-        b=ttfFZQQ4PqHN+WetD7fgC42MEF/HHIfYNfEgo/up8DwkwVz+rhqL4j/CuYiKENBlLXdq/j
-        GYVR7y7TJEzrs6eHZqZetaBQWtnu14SL6QsnB2qNc7tQD4KvETB0l+MQHY14Fa/+q3T2LT
-        leym7HealbwU2fe/SOPDGvzQQ2W6BHU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     shaozhengchao <shaozhengchao@huawei.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bin Chen <bin.chen@corigine.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Peter Chen <peter.chen@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] net: hinic: Add control command support for VF PMD
- driver in DPDK
-Message-ID: <20221028052403.GC3164@chq-T47>
-References: <20221026125922.34080-1-cai.huoqing@linux.dev>
- <20221026125922.34080-2-cai.huoqing@linux.dev>
- <491aea68-bee6-3bd5-903d-1071b6c1cb73@huawei.com>
+        Fri, 28 Oct 2022 01:27:20 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED62B1B574B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 22:27:18 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8AxStg1aFtjtwUDAA--.9723S3;
+        Fri, 28 Oct 2022 13:27:17 +0800 (CST)
+Received: from [10.130.0.63] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxBlc0aFtj8S0GAA--.3614S3;
+        Fri, 28 Oct 2022 13:27:17 +0800 (CST)
+Subject: Re: [PATCH v5 10/10] LoongArch/ftrace: Fix unwind state when option
+ func_stack_trace
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Jeff Xie <xiehuan09@gmail.com>,
+        Jinyang He <hejinyang@loongson.cn>
+References: <20220919031910.15512-1-zhangqing@loongson.cn>
+ <CAAhV-H7G53unX8CBN637kmpKBfYuJb4RZnFXOuVnPCq4xNav3Q@mail.gmail.com>
+From:   Qing Zhang <zhangqing@loongson.cn>
+Message-ID: <9e4e00b1-f252-ce89-05f2-6f4ab31a225b@loongson.cn>
+Date:   Fri, 28 Oct 2022 13:27:16 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <CAAhV-H7G53unX8CBN637kmpKBfYuJb4RZnFXOuVnPCq4xNav3Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <491aea68-bee6-3bd5-903d-1071b6c1cb73@huawei.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,UPPERCASE_50_75 autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8AxBlc0aFtj8S0GAA--.3614S3
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxXw17KF4rWF4xWFyUuw43GFg_yoWrurWrpF
+        95CF95Ca1FgryI9rnFqrn09r95Crnayr12gryDta4rCFnFqF4fArnYv3s8uan8JrWkGF1x
+        ZF1rCrya9w45ta7anT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8_gA5UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28 10月 22 09:21:09, shaozhengchao wrote:
+
+
+On 2022/10/28 上午10:56, Huacai Chen wrote:
+> Hi, Qing,
 > 
+> Can this patch be squashed to a previous one?
+>
+ok, I'll combine this patch with the previous patch.
+
+Thanks
+- Qing
+
+> Huacai
 > 
-> On 2022/10/26 20:59, Cai Huoqing wrote:
-> > HINIC has a mailbox for PF-VF communication and the VF driver
-> > could send port control command to PF driver via mailbox.
-> > 
-> > The control command only can be set to register in PF,
-> > so add support in PF driver for VF PMD driver control
-> > command when VF PMD driver work with linux PF driver.
-> > 
-> > Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
-> > ---
-> >   .../net/ethernet/huawei/hinic/hinic_hw_dev.h  | 64 +++++++++++++++++++
-> >   .../net/ethernet/huawei/hinic/hinic_sriov.c   | 18 ++++++
-> >   2 files changed, 82 insertions(+)
-> > 
-> > diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.h b/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.h
-> > index abffd967a791..4f561e4e849a 100644
-> > --- a/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.h
-> > +++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.h
-> > @@ -53,11 +53,15 @@ enum hinic_port_cmd {
-> >   	HINIC_PORT_CMD_SET_PFC = 0x5,
-> > +	HINIC_PORT_CMD_SET_ETS = 0x7,
-> > +	HINIC_PORT_CMD_GET_ETS = 0x8,
-> > +
-> >   	HINIC_PORT_CMD_SET_MAC = 0x9,
-> >   	HINIC_PORT_CMD_GET_MAC = 0xA,
-> >   	HINIC_PORT_CMD_DEL_MAC = 0xB,
-> >   	HINIC_PORT_CMD_SET_RX_MODE = 0xC,
-> > +	HINIC_PORT_CMD_SET_ANTI_ATTACK_RATE = 0xD,
-> >   	HINIC_PORT_CMD_GET_PAUSE_INFO = 0x14,
-> >   	HINIC_PORT_CMD_SET_PAUSE_INFO = 0x15,
-> > @@ -81,6 +85,7 @@ enum hinic_port_cmd {
-> >   	HINIC_PORT_CMD_GET_RSS_TEMPLATE_INDIR_TBL = 0x25,
-> >   	HINIC_PORT_CMD_SET_PORT_STATE = 0x29,
-> > +	HINIC_PORT_CMD_GET_PORT_STATE = 0x30,
-> >   	HINIC_PORT_CMD_SET_RSS_TEMPLATE_TBL = 0x2B,
-> >   	HINIC_PORT_CMD_GET_RSS_TEMPLATE_TBL = 0x2C,
-> > @@ -97,17 +102,29 @@ enum hinic_port_cmd {
-> >   	HINIC_PORT_CMD_RSS_CFG = 0x42,
-> > +	HINIC_PORT_CMD_GET_PHY_TYPE = 0x44,
-> > +
-> >   	HINIC_PORT_CMD_FWCTXT_INIT = 0x45,
-> >   	HINIC_PORT_CMD_GET_LOOPBACK_MODE = 0x48,
-> >   	HINIC_PORT_CMD_SET_LOOPBACK_MODE = 0x49,
-> > +	HINIC_PORT_CMD_GET_JUMBO_FRAME_SIZE = 0x4A,
-> > +	HINIC_PORT_CMD_SET_JUMBO_FRAME_SIZE = 0x4B,
-> > +
-> >   	HINIC_PORT_CMD_ENABLE_SPOOFCHK = 0x4E,
-> >   	HINIC_PORT_CMD_GET_MGMT_VERSION = 0x58,
-> > +	HINIC_PORT_CMD_GET_PORT_TYPE = 0x5B,
-> > +
-> >   	HINIC_PORT_CMD_SET_FUNC_STATE = 0x5D,
-> > +	HINIC_PORT_CMD_GET_PORT_ID_BY_FUNC_ID = 0x5E,
-> > +
-> > +	HINIC_PORT_CMD_GET_DMA_CS = 0x64,
-> > +	HINIC_PORT_CMD_SET_DMA_CS = 0x65,
-> > +
-> >   	HINIC_PORT_CMD_GET_GLOBAL_QPN = 0x66,
-> >   	HINIC_PORT_CMD_SET_VF_RATE = 0x69,
-> > @@ -121,25 +138,72 @@ enum hinic_port_cmd {
-> >   	HINIC_PORT_CMD_SET_RQ_IQ_MAP = 0x73,
-> > +	HINIC_PORT_CMD_SET_PFC_THD = 0x75,
-> > +
-> >   	HINIC_PORT_CMD_LINK_STATUS_REPORT = 0xA0,
-> > +	HINIC_PORT_CMD_SET_LOSSLESS_ETH	= 0xA3,
-> > +
-> >   	HINIC_PORT_CMD_UPDATE_MAC = 0xA4,
-> >   	HINIC_PORT_CMD_GET_CAP = 0xAA,
-> > +	HINIC_PORT_CMD_UP_TC_ADD_FLOW = 0xAF,
-> > +	HINIC_PORT_CMD_UP_TC_DEL_FLOW = 0xB0,
-> > +	HINIC_PORT_CMD_UP_TC_GET_FLOW = 0xB1,
-> > +
-> > +	HINIC_PORT_CMD_UP_TC_FLUSH_TCAM = 0xB2,
-> > +
-> > +	HINIC_PORT_CMD_UP_TC_CTRL_TCAM_BLOCK = 0xB3,
-> > +
-> > +	HINIC_PORT_CMD_UP_TC_ENABLE = 0xB4,
-> > +
-> > +	HINIC_PORT_CMD_UP_TC_GET_TCAM_BLOCK = 0xB5,
-> > +
-> > +	HINIC_PORT_CMD_SET_IPSU_MAC = 0xCB,
-> > +	HINIC_PORT_CMD_GET_IPSU_MAC = 0xCC,
-> > +
-> > +	HINIC_PORT_CMD_SET_XSFP_STATUS = 0xD4,
-> >   	HINIC_PORT_CMD_GET_LINK_MODE = 0xD9,
-> >   	HINIC_PORT_CMD_SET_SPEED = 0xDA,
-> >   	HINIC_PORT_CMD_SET_AUTONEG = 0xDB,
-> > +	HINIC_PORT_CMD_CLEAR_QP_RES = 0xDD,
-> > +
-> > +	HINIC_PORT_CMD_SET_SUPER_CQE = 0xDE,
-> > +
-> > +	HINIC_PORT_CMD_SET_VF_COS = 0xDF,
-> > +	HINIC_PORT_CMD_GET_VF_COS = 0xE1,
-> > +
-> > +	HINIC_PORT_CMD_CABLE_PLUG_EVENT	= 0xE5,
-> > +
-> > +	HINIC_PORT_CMD_LINK_ERR_EVENT = 0xE6,
-> > +
-> > +	HINIC_PORT_CMD_SET_COS_UP_MAP = 0xE8,
-> > +
-> > +	HINIC_PORT_CMD_RESET_LINK_CFG = 0xEB,
-> > +
-> >   	HINIC_PORT_CMD_GET_STD_SFP_INFO = 0xF0,
-> > +	HINIC_PORT_CMD_FORCE_PKT_DROP = 0xF3,
-> > +
-> >   	HINIC_PORT_CMD_SET_LRO_TIMER = 0xF4,
-> > +	HINIC_PORT_CMD_SET_VHD_CFG = 0xF7,
-> > +
-> > +	HINIC_PORT_CMD_SET_LINK_FOLLOW = 0xF8,
-> > +
-> >   	HINIC_PORT_CMD_SET_VF_MAX_MIN_RATE = 0xF9,
-> >   	HINIC_PORT_CMD_GET_SFP_ABS = 0xFB,
-> > +
-> > +	HINIC_PORT_CMD_Q_FILTER	= 0xFC,
-> > +
-> > +	HINIC_PORT_CMD_TCAM_FILTER = 0xFE,
-> > +
-> > +	HINIC_PORT_CMD_SET_VLAN_FILTER = 0xFF
-> >   };
-> >   /* cmd of mgmt CPU message for HILINK module */
-> > diff --git a/drivers/net/ethernet/huawei/hinic/hinic_sriov.c b/drivers/net/ethernet/huawei/hinic/hinic_sriov.c
-> > index a5f08b969e3f..bba41994dee6 100644
-> > --- a/drivers/net/ethernet/huawei/hinic/hinic_sriov.c
-> > +++ b/drivers/net/ethernet/huawei/hinic/hinic_sriov.c
-> > @@ -489,6 +489,24 @@ static struct vf_cmd_check_handle nic_cmd_support_vf[] = {
-> >   	{HINIC_PORT_CMD_UPDATE_MAC, hinic_mbox_check_func_id_8B},
-> >   	{HINIC_PORT_CMD_GET_CAP, hinic_mbox_check_func_id_8B},
-> >   	{HINIC_PORT_CMD_GET_LINK_MODE, hinic_mbox_check_func_id_8B},
-> > +	{HINIC_PORT_CMD_GET_VF_COS, NULL},
-> > +	{HINIC_PORT_CMD_SET_VHD_CFG, hinic_mbox_check_func_id_8B},
-> > +	{HINIC_PORT_CMD_SET_VLAN_FILTER, hinic_mbox_check_func_id_8B},
-> > +	{HINIC_PORT_CMD_Q_FILTER, hinic_mbox_check_func_id_8B},
-> > +	{HINIC_PORT_CMD_TCAM_FILTER, NULL},
-> > +	{HINIC_PORT_CMD_UP_TC_ADD_FLOW, NULL},
-> > +	{HINIC_PORT_CMD_UP_TC_DEL_FLOW, NULL},
-> > +	{HINIC_PORT_CMD_UP_TC_FLUSH_TCAM, hinic_mbox_check_func_id_8B},
-> > +	{HINIC_PORT_CMD_UP_TC_CTRL_TCAM_BLOCK, hinic_mbox_check_func_id_8B},
-> > +	{HINIC_PORT_CMD_UP_TC_ENABLE, hinic_mbox_check_func_id_8B},
-> > +	{HINIC_PORT_CMD_CABLE_PLUG_EVENT, NULL},
-> > +	{HINIC_PORT_CMD_LINK_ERR_EVENT, NULL},
-> > +	{HINIC_PORT_CMD_SET_PORT_STATE, hinic_mbox_check_func_id_8B},
-> > +	{HINIC_PORT_CMD_SET_ETS, NULL},
-> > +	{HINIC_PORT_CMD_SET_ANTI_ATTACK_RATE, NULL},
-> > +	{HINIC_PORT_CMD_RESET_LINK_CFG, hinic_mbox_check_func_id_8B},
-> > +	{HINIC_PORT_CMD_SET_LINK_FOLLOW, NULL},
-> > +	{HINIC_PORT_CMD_CLEAR_QP_RES, NULL},
-> >   };
-> >   #define CHECK_IPSU_15BIT	0X8000
-> Hi Cai:
-> 	I guess how do you get the opcodes of these commands? Have they
-> all been tested? Is the test result consistent with the driver released
-> on the Huawei support website?
-Hi Shao,
-	Thanks for your reply.
+> On Mon, Sep 19, 2022 at 11:19 AM Qing Zhang <zhangqing@loongson.cn> wrote:
+>>
+>> Ftrace plays like function head exception, prologue analysis will stop soon
+>> because PC is at entry.
+>>
+>>     90000000004c5a54 <callee>:
+>>     90000000004c5a54:    03400000  andi   $zero, $zero, 0x0   ==>move  t0, ra
+>>     90000000004c5a58:    03400000  andi   $zero, $zero, 0x0   ==>bl callsite
+>> ==>90000000004c5a5c:    02fcc063  addi.d $sp, $sp, -208(0xf30)
+>>     ...
+>>
+>> When encountering ftrace_call, save trace function ra at PT_ERA, save
+>> parent ra at PT_R1, At this time, pc is the position after the two nops
+>> of callee. There is no conventional prologue operation between this
+>> position and the function entry, so we need to reset the first flag to
+>> make the caller continue to unwind.
+>>
+>> testing method:
+>>    echo path_openat > ./set_ftrace_filter
+>>    echo 1 > ./options/func_stack_trace
+>>    echo function > ./current_tracer
+>>
+>> Reported-by: Jeff Xie <xiehuan09@gmail.com>
+>> Tested-by: Jinyang He <hejinyang@loongson.cn>
+>> Tested-by: Jeff Xie <xiehuan09@gmail.com>
+>> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+>> ---
+>>   arch/loongarch/include/asm/unwind.h     |  2 +-
+>>   arch/loongarch/kernel/unwind_prologue.c | 35 +++++++++++++++++++++----
+>>   2 files changed, 31 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/arch/loongarch/include/asm/unwind.h b/arch/loongarch/include/asm/unwind.h
+>> index f66b07c3e6a1..f2b52b9ea93d 100644
+>> --- a/arch/loongarch/include/asm/unwind.h
+>> +++ b/arch/loongarch/include/asm/unwind.h
+>> @@ -20,7 +20,7 @@ struct unwind_state {
+>>          char type; /* UNWINDER_XXX */
+>>          struct stack_info stack_info;
+>>          struct task_struct *task;
+>> -       bool first, error;
+>> +       bool first, error, is_ftrace;
+>>          int graph_idx;
+>>          unsigned long sp, pc, ra;
+>>   };
+>> diff --git a/arch/loongarch/kernel/unwind_prologue.c b/arch/loongarch/kernel/unwind_prologue.c
+>> index f77f3b6f3f06..4fb4923b68cc 100644
+>> --- a/arch/loongarch/kernel/unwind_prologue.c
+>> +++ b/arch/loongarch/kernel/unwind_prologue.c
+>> @@ -14,9 +14,7 @@ unsigned long unwind_get_return_address(struct unwind_state *state)
+>>
+>>          if (unwind_done(state))
+>>                  return 0;
+>> -       else if (state->type)
+>> -               return state->pc;
+>> -       else if (state->first)
+>> +       else if (state->type || state->first)
+>>                  return state->pc;
+>>
+>>          return *(unsigned long *)(state->sp);
+>> @@ -42,16 +40,41 @@ static bool unwind_by_guess(struct unwind_state *state)
+>>          return false;
+>>   }
+>>
+>> +static inline void unwind_state_fixup(struct unwind_state *state)
+>> +{
+>> +#ifdef CONFIG_FUNCTION_TRACER
+>> +       static unsigned long ftrace_case = (unsigned long)ftrace_call + 4;
+>> +
+>> +       if (state->pc == ftrace_case)
+>> +               state->is_ftrace = true;
+>> +#endif
+>> +}
+>> +
+>>   static bool unwind_by_prologue(struct unwind_state *state)
+>>   {
+>>          struct stack_info *info = &state->stack_info;
+>>          union loongarch_instruction *ip, *ip_end;
+>>          unsigned long frame_size = 0, frame_ra = -1;
+>>          unsigned long size, offset, pc = state->pc;
+>> +       struct pt_regs *regs;
+>>
+>>          if (state->sp >= info->end || state->sp < info->begin)
+>>                  return false;
+>>
+>> +       if (state->is_ftrace) {
+>> +               /*
+>> +                * As we meet ftrace_regs_entry, reset first flag like first doing
+>> +                * tracing, Prologue analysis will stop soon because PC is at entry.
+>> +                */
+>> +               regs = (struct pt_regs *)state->sp;
+>> +               state->pc = regs->csr_era;
+>> +               state->ra = regs->regs[1];
+>> +               state->sp = regs->regs[3];
+>> +               state->first = true;
+>> +               state->is_ftrace = false;
+>> +               return true;
+>> +       }
+>> +
+>>          if (!kallsyms_lookup_size_offset(pc, &size, &offset))
+>>                  return false;
+>>
+>> @@ -97,7 +120,7 @@ static bool unwind_by_prologue(struct unwind_state *state)
+>>
+>>          state->pc = *(unsigned long *)(state->sp + frame_ra);
+>>          state->sp = state->sp + frame_size;
+>> -       return !!__kernel_text_address(state->pc);
+>> +       goto out;
+>>
+>>   first:
+>>          state->first = false;
+>> @@ -106,7 +129,9 @@ static bool unwind_by_prologue(struct unwind_state *state)
+>>
+>>          state->pc = state->ra;
+>>
+>> -       return !!__kernel_text_address(state->ra);
+>> +out:
+>> +       unwind_state_fixup(state);
+>> +       return !!__kernel_text_address(state->pc);
+>>   }
+>>
+>>   void unwind_start(struct unwind_state *state, struct task_struct *task,
+>> --
+>> 2.36.1
+>>
 
-	I try to keep this PF part support to recv hinic VF PMD driver in DPDK
-	upstream.
-	the command comes from here,
-	https://github.com/DPDK/dpdk/blob/main/drivers/net/hinic/base/hinic_pmd_niccfg.c
-
-	send by the DPDK-hinic function 'l2nic_msg_to_mgmt_sync' when
-	'hinic_func_type(hwdev) == TYPE_VF'.
-
-	for the test, the DPDK part is tested, I also test this part in SP582 NIC
-
-Thanks.
-Cai
-> 
-> Zhengchao Shao
