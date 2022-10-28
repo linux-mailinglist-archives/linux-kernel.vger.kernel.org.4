@@ -2,128 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1E361144D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F10611441
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiJ1OQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
+        id S229802AbiJ1OPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbiJ1OQh (ORCPT
+        with ESMTP id S230119AbiJ1OPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:16:37 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF8E1D639E;
-        Fri, 28 Oct 2022 07:16:35 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29SDVcBv032409;
-        Fri, 28 Oct 2022 14:15:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=dUwCBBBVioqpv4W9fJp7HCTTNgfmZzayTqkqExmwh8I=;
- b=XB1kcbbyNTtE+cla4nTuuHFIH4v5Jbu191f1H9Y41OKPKmY6hw4LP2vlofpj3al+rUPf
- sMdqaUvQlz8xD1nn9xgJJc6Sqv666nTr8BWZ/BTmisq13TLwX0isoap5zEf4n/FB7gBF
- WVvFrDxdtgJh4JrqZvRmstp71+1FuH51CHyXZLBLueW+fQFMpZ8l3rkdtWUB2gIQamlo
- VwAVhpv33RCFfH8VpGpWy2vNJCZgGs5DnUMEYTWolIGEdpcOiiXBujk1/A3WQiHELabp
- I65d0bQT9WXBBrUzybDvF6Hz+EdNntQyEipLAxOd7Gfz8gKo6SQdmwT1LNQiulqYmT56 tw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kg9tys325-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 14:15:40 +0000
-Received: from pps.filterd (NALASPPMTA04.qualcomm.com [127.0.0.1])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 29SE7t27017934;
-        Fri, 28 Oct 2022 14:14:49 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 3kf9vsghn6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 14:14:49 +0000
-Received: from NALASPPMTA04.qualcomm.com (NALASPPMTA04.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29SEEmT9024560;
-        Fri, 28 Oct 2022 14:14:48 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 29SEEmQX024559
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 14:14:48 +0000
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 28 Oct
- 2022 07:14:45 -0700
-Message-ID: <a8df4485-36f0-171f-5569-9e6bac190a1b@quicinc.com>
-Date:   Fri, 28 Oct 2022 08:14:44 -0600
+        Fri, 28 Oct 2022 10:15:06 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C0E3E779
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:14:59 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id z24so8539321ljn.4
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:14:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FLuVgFuyXtA4BjMb6aWESdb63RSek4GWqHw+eMz+VJY=;
+        b=Ld/jYiac0keX/KCiIBrM9d8Ar+pGP1UFFDF+uLNY29FuWBKOhGoCPc37eifuVOLM3H
+         daAxCxygSAhoz3bnoq8b+TvdSGIeeowuA5NyhXpGi1T1zNhqwUUV8jAzqS1lPP1tD2AF
+         DUUD23Uue8NwuHWWElO3iIZYYBZsy3escmm0TvPFG9bq/TWu2rurUZjxpuyEvF3b2qAx
+         4/b7II9c/7fbjkpEairkH62RwOjKJo+jdK06ohJJm2erilheTZDiKC6qIFD4CVEfNqWE
+         rJmB8tQIlAb7f2tF9HFdXTFuwZ8f65dG9i49DsUrvNbNXhBGoG+NH2xZA4UQ2wfRVVns
+         qJ3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FLuVgFuyXtA4BjMb6aWESdb63RSek4GWqHw+eMz+VJY=;
+        b=AYEw315Gez4whysLQbh1MJ82x/cq7GawXFWsZHmS2IKji6NtPKf0ouapetN0oa42MG
+         qk1l6fNTXOHmvaRCRc2x7hW5FX9TE4kLDL/JxDy0V7x6LER9t/akk3cAzLruOXB7oHLY
+         +YJCgDZLHngEFhsXyCOUM78O0KcZGlWAX3Hr34QhK3CQq6eOxuv8BZA9uK9tLanpH0ze
+         OQ407CCobGMQUX7dUrf5mxjVhQJ6B/Vvwv2T74SzxW9VOx/K0XGYa8kFcqGTHBwowGpZ
+         tQzWCcUKNww7LJqpsg38wELVv1PWxsyEl4l00Dl0pKN0/mHGOM618xUeRVLGRgr9fKqK
+         g/dg==
+X-Gm-Message-State: ACrzQf0F7UlcQqjHhQ3czXFrY4GylHYUIPbq/7ExXTcpa/rvhJDdFuEn
+        mcXsKQ8kdsE3N5+TJ+EmNwrcQw==
+X-Google-Smtp-Source: AMsMyM5WuNvDt6NgstTUOFUL5zNU81R4kQgZexWO7XdLm8DjdmYrHzLUcJYsw6pPpq5bwAziTo47+A==
+X-Received: by 2002:a05:651c:98a:b0:26d:fd1f:10 with SMTP id b10-20020a05651c098a00b0026dfd1f0010mr21187718ljq.323.1666966497546;
+        Fri, 28 Oct 2022 07:14:57 -0700 (PDT)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id w7-20020a05651c118700b0027628240ff7sm647551ljo.135.2022.10.28.07.14.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 07:14:57 -0700 (PDT)
+Message-ID: <2efc7c44-12f2-7547-6c3d-9eda5a09660d@linaro.org>
+Date:   Fri, 28 Oct 2022 17:14:56 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 2/2] dt-bindings: clock: qcom: cleanup
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v4 04/16] phy: qcom-qmp-pcie: clean up device-tree parsing
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Martin Botka <martin.botka@somainline.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        "Stephan Gerhold" <stephan@gerhold.net>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        Iskren Chernev <iskren.chernev@gmail.com>,
-        Del Regno <angelogioacchino.delregno@somainline.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Govind Singh <govinds@codeaurora.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-renesas-soc@vger.kernel.org>
-References: <20221028140326.43470-1-krzysztof.kozlowski@linaro.org>
- <20221028140326.43470-3-krzysztof.kozlowski@linaro.org>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20221028140326.43470-3-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20221028133603.18470-1-johan+linaro@kernel.org>
+ <20221028133603.18470-5-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221028133603.18470-5-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: tpV2KDS-qvlbojaReTiHGCklDeoD7ZM2
-X-Proofpoint-GUID: tpV2KDS-qvlbojaReTiHGCklDeoD7ZM2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-28_07,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- impostorscore=0 malwarescore=0 bulkscore=0 adultscore=0 suspectscore=0
- spamscore=0 clxscore=1011 lowpriorityscore=0 phishscore=0 mlxlogscore=820
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2210280089
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -131,19 +81,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/28/2022 8:03 AM, Krzysztof Kozlowski wrote:
-> Clean the Qualcomm SoCs clock bindings:
-> 1. Drop redundant "bindings" in title.
-> 2. Correct language grammar "<independent clause without verb>, which
->     supports" -> "provides".
-> 3. Use full path to the bindings header, so tools can validate it.
-> 4. Drop quotes where not needed.
+On 28/10/2022 16:35, Johan Hovold wrote:
+> Since the QMP driver split there will be at most a single child node so
+> drop the obsolete iteration construct.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> While at it, drop the verbose error logging that would have been
+> printed also on probe deferrals.
+> 
+> Note that there's no need to check if there are additional child nodes
+> (the kernel is not a devicetree validator), but let's return an error if
+> there are no child nodes at all for now.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
+>   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 34 +++++++-----------------
+>   1 file changed, 9 insertions(+), 25 deletions(-)
 
-For 8998 bits -
-Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-For MMCC bit -
-Acked-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+-- 
+With best wishes
+Dmitry
+
