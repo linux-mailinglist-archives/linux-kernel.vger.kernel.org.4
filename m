@@ -2,92 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE23E611A64
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 20:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3016611A73
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 20:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbiJ1SpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 14:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
+        id S230258AbiJ1St7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 14:49:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbiJ1SpM (ORCPT
+        with ESMTP id S229995AbiJ1Sty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 14:45:12 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2853044496;
-        Fri, 28 Oct 2022 11:45:11 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id g12so9716477lfh.3;
-        Fri, 28 Oct 2022 11:45:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7q2OB//2hf9lUeahKYT3i6qbY00fQQMbGM4w7OVkbIc=;
-        b=SZ4XUKfHaI8T1FxSok6Z79YUgsNwcY4xaw8GBd+tmIKFvz9cR0JakKPt5noszTQogG
-         SvNurd1sq9s7aFjHA4RkFb258YmUKz3iAzkj7Op8smoGJYCypubBH3+0M1iNCsLZ5gs1
-         s6ztwuy8Q2mAYiBJBOh5iGo4/8qW7I/TCpmV0SqPtViWdwkYEopdML+Ip13R/QzQSz8U
-         JFl47XXlwkM46RVraBjtSdiTJ2YhcXINjoAD8Ae7MDJmgkslMVS9s0+QmjB34bGNVpm9
-         E9hsyYzyY/bQuufjtEGfNe0UxJ2hWSiy4MILr63AOY2qKLrpS2gzzYJeL4GzZcDsv4wj
-         0//w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7q2OB//2hf9lUeahKYT3i6qbY00fQQMbGM4w7OVkbIc=;
-        b=MK7/hLQ0FuQx/jL3TmBAVm0eedPyRJlIubLYouyh2Xq8dTAceGX10v1FwOE/NhYbmY
-         dK/OIxxtaqn2f6P1WdIYIs95qZ/Yi+DL0UkSGqMA7E6PeIOSlFiXAteijKWKPsDqrNXu
-         XQQQna1wan/ttaZPOrbPslwtuKy8rllPpeyPkD1l5woImDvvIgM4r/7YEtZ7I0jpE/vR
-         6nKtq2Zk2x0YhWrYvYx3iOZ8+aIF5yPo8o5cJ7ZJUy6t1RAOtLSwIi4K3h5FRBs0/7AG
-         jwak4oSzqlfUSdb16ivz2D1cTYzRO8/cvEJQ7hSyic+W6pQlC1FKWYvkzxs062bFAIhz
-         hB6Q==
-X-Gm-Message-State: ACrzQf1lhTbjIl3LJkOWTWBKascblLM254CtIzc81llhMrZ8deInpKuh
-        VziHkBW6Nmy0E6wTIYo/8guD+AAts07iv6H9Jk7duVQ/LedkD5C/
-X-Google-Smtp-Source: AMsMyM5hB5vHw5irh4m8H9U/NidFo6WSQwcEdaHTHBns4LI10bhMMEbZU1JhOWV8M3vUd26wJDIWIDSuTeeyFXEcBRY=
-X-Received: by 2002:a05:6512:75:b0:4a4:6c3e:a75d with SMTP id
- i21-20020a056512007500b004a46c3ea75dmr256491lfo.408.1666982709426; Fri, 28
- Oct 2022 11:45:09 -0700 (PDT)
+        Fri, 28 Oct 2022 14:49:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FEE1274E;
+        Fri, 28 Oct 2022 11:49:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56DCF6281C;
+        Fri, 28 Oct 2022 18:49:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1AC0C433C1;
+        Fri, 28 Oct 2022 18:49:49 +0000 (UTC)
+Date:   Fri, 28 Oct 2022 14:50:05 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>, linux-nfs@vger.kernel.org
+Subject: Re: [RFC][PATCH v2 00/31] timers: Use del_timer_shutdown() before
+ freeing timers
+Message-ID: <20221028145005.28bc324d@gandalf.local.home>
+In-Reply-To: <20221027150525.753064657@goodmis.org>
+References: <20221027150525.753064657@goodmis.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20221028165215.43662-1-fnkl.kernel@gmail.com> <20221028165215.43662-2-fnkl.kernel@gmail.com>
- <5b194c93-48df-055a-f532-abd98657dc41@linaro.org>
-In-Reply-To: <5b194c93-48df-055a-f532-abd98657dc41@linaro.org>
-From:   Sasha Finkelstein <fnkl.kernel@gmail.com>
-Date:   Fri, 28 Oct 2022 21:44:57 +0300
-Message-ID: <CAMT+MTQAe_eKoiNvmL4fje0__V16VDFWDGzehkN6M-jRuuMn7A@mail.gmail.com>
-Subject: Re: [PATCH 1/4] dt-bindings: pwm: Add Apple PWM controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     thierry.reding@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcan@marcan.st,
-        sven@svenpeter.dev, alyssa@rosenzweig.io, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Oct 2022 at 20:53, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 28/10/2022 12:52, Sasha Finkelstein wrote:
-> > +  PWM controller used for keyboard backlight on ARM Macs
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - enum:
-> > +          - apple,t8103-fpwm
-> > +          - apple,t6000-fpwm
-> > +          - apple,t8112-fpwm
-> > +      - const: apple,s5l-fpwm
->
-> Is it then derived from Samsung platform? If yes, it is candidate for
-> merging.
-Apple calls it the 'AppleS5L8920XFPWM' which suggests some samsung
-lineage, but the register interface is different from the one in
-pwm-samsung driver.
+Trond,
+
+I'm looking at a commit from 2005:
+
+0f9dc2b16884b ("RPC: Clean up socket autodisconnect")
+
+     Cancel autodisconnect requests inside xprt_transmit() in order to avoid
+     races.
+     Use more efficient del_singleshot_timer_sync()
+
+
+I'm working on adding a "shutdown" state to timers, making it required for
+freeing the timer. This is to address the numerous bugs we hit where timers
+get rearmed just before freeing and then cause a crash in the timer code,
+without knowing what timer it was that caused it.
+
+Having a specific shutdown state for timers will remove this problem
+because if something tries to rearm a shutdown timer, it will fail and a
+WARN_ON_ONCE() is triggered. See below in the "reply" part for a
+description of this effort.
+
+The reason for this email, is because that WARN_ON_ONCE() triggered on the
+mod_timer() from:
+
+static void
+xprt_schedule_autodisconnect(struct rpc_xprt *xprt)
+	__must_hold(&xprt->transport_lock)
+{
+	xprt->last_used = jiffies;
+	if (RB_EMPTY_ROOT(&xprt->recv_queue) && xprt_has_timer(xprt))
+		mod_timer(&xprt->timer, xprt->last_used + xprt->idle_timeout);
+}
+
+That's because xptr->timer was shutdown due to:
+
+int
+xprt_request_enqueue_receive(struct rpc_task *task)
+{
+	[..]
+	/* Turn off autodisconnect */
+	del_singleshot_timer_sync(&xprt->timer);
+	return 0;
+}
+
+Now singleshot means just that. It's a single shot and calling
+del_singleshot_timer_sync() will shut it down so that it can be freed. That
+also means that it can no longer be re-armed.
+
+I'm not sure what you meant by "Use more efficient del_singleshot_timer_sync()"
+but I'm guessing since that was written in 2005, it is no longer relevant,
+and del_timer_sync() should now be used.
+
+After replacing that with del_timer_sync(), the warning goes away.
+
+I just want to confirm that's OK with you.
+
+Thanks,
+
+-- Steve
+
+
+On Thu, 27 Oct 2022 11:05:25 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> Back in April, I posted an RFC patch set to help mitigate a common issue
+> where a timer gets armed just before it is freed, and when the timer
+> goes off, it crashes in the timer code without any evidence of who the
+> culprit was. I got side tracked and never finished up on that patch set.
+> Since this type of crash is still our #1 crash we are seeing in the field,
+> it has become a priority again to finish it.
+> 
+> This is v2 of that patch set. Thomas Gleixner posted an untested version
+> that makes timer->function NULL as the flag that it is shutdown. I took that
+> code, tested it (fixed it up), added more comments, and changed the
+> name to del_timer_shutdown() as Linus had asked. I also converted it to use
+> WARN_ON_ONCE() instead of just WARN_ON() as Linus asked for that too.
+> 
+> (Thomas, you never added a SoB, so I only added a link to your email
+>  in that commit. But as this will likely go through your tree anyway,
+>  I'm sure you'll have your SoB on all these).
+> 
+> I then created a trivial coccinelle script to find where del_timer*()
+> is called before being freed, and converted them all to del_timer_shutdown()
+> (There was a couple that still used del_timer() instead of del_timer_sync()).
+> 
+> I also updated DEBUG_OBJECTS_TIMERS to check from where the timer is ever
+> armed, to calling of del_timer_shutdown(), and it will trigger if a timer
+> is freed in between. The current way is to only check if the timer is armed,
+> but that means it only triggers if the race condition is hit, and with
+> experience, it's not run on enough machines to catch all of them. By triggering
+> it from the time the timer is armed to the time it is shutdown, it catches
+> all potential cases even if the race condition is not hit.
+> 
+> I went though the result of the cocinelle script, and updated the locations.
+> Some locations were caught by DEBUG_OBJECTS_TIMERS as the coccinelle script
+> only checked for timers being freed in the same function as the del_timer*().
+> 
+> V1 is found here: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
+> 
+> Here's the original text of that version:
+> 
+>    [
+>      This is an RFC patch. As we hit a few bugs were del_timer() is called
+>      instead of del_timer_sync() before the timer is freed, and there could
+>      be bugs where even del_timer_sync() is used, but the timer gets rearmed,
+>      I decided to introduce a "del_timer_free()" function that can be used
+>      instead. This will at least educate developers on what to call before they
+>      free a structure that holds a timer.
+> 
+>      In this RFC, I modified hci_qca.c as a use case, even though that change
+>      needs some work, because the workqueue could still rearm it (I'm looking
+>      to see if I can trigger the warning).
+> 
+>      If this approach is acceptable, then I will remove the hci_qca.c portion
+>      from this patch, and create a series of patches to use the
+>      del_timer_free() in all the locations in the kernel that remove the timer
+>      before freeing.
+>    ]
+> 
+>    We are hitting a common bug were a timer is being triggered after it is
+>    freed. This causes a corruption in the timer link list and crashes the
+>    kernel. Unfortunately it is not easy to know what timer it was that was
+>    freed. Looking at the code, it appears that there are several cases that
+>    del_timer() is used when del_timer_sync() should have been.
+> 
+>    Add a del_timer_free() that not only does a del_timer_sync() but will mark
+>    the timer as freed in case it gets rearmed, it will trigger a WARN_ON. The
+>    del_timer_free() is more likely to be used by developers that are about to
+>    free a timer, then using del_timer_sync() as the latter is not as obvious
+>    to being needed for freeing. Having the word "free" in the name of the
+>    function will hopefully help developers know that that function needs to
+>    be called before freeing.
+> 
+>    The added bonus is the marking of the timer as being freed such that it
+>    will trigger a warning if it gets rearmed. At least that way if the system
+>    crashes on a freed timer, at least we may see which timer it was that was
+>    freed.
+> 
