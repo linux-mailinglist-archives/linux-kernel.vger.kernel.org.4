@@ -2,120 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD4F7611109
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F31611119
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbiJ1MTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 08:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
+        id S230306AbiJ1MUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 08:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbiJ1MTp (ORCPT
+        with ESMTP id S230241AbiJ1MUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 08:19:45 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A03B496
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:19:38 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id o4so8127295ljp.8
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:19:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QqZ/Qc1FnrWIUAUi2q99TKdUttjkOnjxxLO746k/+Bc=;
-        b=xQIEY0TpD09A33rkhem0UoVZkMXzm8P+7zxsKyfZ/5USRnotlVdQidMQ/sGyxSfPAn
-         DAGt2yw5sjOOk6aAdNl7AWNUHKLXPzauaO5FnoO0gE9IINBKpc8+NSNOtqEOoe4D/LRR
-         J77JJhA0SiSsmMCW3DZ/nY1O7+2GBpQNwI8H34aR/GHqsD+XMCyUFVX3PZpP5byBVO3A
-         gdoTU1w0kCwOnobDWwdZtjxx5WUM20hZTSpmwfeU21FKJuHdqFcGcrGrDW/pQnkJwTUc
-         wW234XtCtjy7o2e54x3+ijdRYyZUycCiIhh7cWnNoEIMkxNja/UiO2dFRoY3SuIB+L4b
-         Drlg==
+        Fri, 28 Oct 2022 08:20:13 -0400
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F850317CC;
+        Fri, 28 Oct 2022 05:20:08 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id o64so5909009oib.12;
+        Fri, 28 Oct 2022 05:20:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QqZ/Qc1FnrWIUAUi2q99TKdUttjkOnjxxLO746k/+Bc=;
-        b=XgZWrOCc8OQ57Ii18M/Wa3l15fiJrfxKr3fXiaWuV6xFFGjz5hQKtguhWxdAK6LBGT
-         DnAXJsANaeJ2/HRk/GfqlRdSCJFEIwDjThsDH5HDhfR0dM9E29mcx3WS5LN47bSI17wH
-         yxEiAgRz2z+4pSF3IefYHoQ7c5bAQs6Bj7hur0+kizcqP7iwkgrW72IgOS8PQq2C4Hi/
-         OM2qI5hiPDWbA3tTqH1II2L1MFUrl/d8lGZ0NMTfiUAWuFnmBkUEQRkWw64hyj24CxYg
-         tF5mj/pK6pioSbYxmnsadfKvJSGOegMTJMU+w5ij+VA7bMNGM/BkBHW9dIfa9bGGJYS+
-         VFeA==
-X-Gm-Message-State: ACrzQf2d6A0/W+zIJXdiLYrrxoBbAigOqWKYn9IlNzSu6EIFgJo4tbYX
-        OPfY9A3Ij/WHviRdnXoqvU5XZQ==
-X-Google-Smtp-Source: AMsMyM411sNvmz92ardTeuC0ToSlfgrGqncLtbJKx2D+HYetFJMO9ZYRene6rqwku/khHxngvmjs/g==
-X-Received: by 2002:a2e:b60a:0:b0:26e:50f:2870 with SMTP id r10-20020a2eb60a000000b0026e050f2870mr20706767ljn.162.1666959577212;
-        Fri, 28 Oct 2022 05:19:37 -0700 (PDT)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id w21-20020a194915000000b00498fd423cc3sm540119lfa.295.2022.10.28.05.19.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 05:19:36 -0700 (PDT)
-Message-ID: <0f8e73f6-d005-7e0b-ba38-c4d0161c1acd@linaro.org>
-Date:   Fri, 28 Oct 2022 15:19:35 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v1 1/9] drm/msm: Add compatibles for SM8350 display
-Content-Language: en-GB
-To:     Robert Foss <robert.foss@linaro.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robdclark@gmail.com, quic_abhinavk@quicinc.com, sean@poorly.run,
-        airlied@linux.ie, daniel@ffwll.ch, quic_kalyant@quicinc.com,
-        swboyd@chromium.org, angelogioacchino.delregno@somainline.org,
-        loic.poulain@linaro.org, quic_vpolimer@quicinc.com,
-        vkoul@kernel.org, dianders@chromium.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org,
-        Jonathan Marek <jonathan@marek.ca>, vinod.koul@linaro.org,
-        quic_jesszhan@quicinc.com
-References: <20221028120812.339100-1-robert.foss@linaro.org>
- <20221028120812.339100-2-robert.foss@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221028120812.339100-2-robert.foss@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        bh=4dmFRfHeOegE5+bpQefgHIJnNQwHhQbV7Ukrk2pAq+A=;
+        b=JMfGkiBCyKiFTCuBHGxICUrQbfZYrTBbcV4ZAPIjhqPogXkofdEE+6c0gi8cHG3cY0
+         Snl7EFX9REIb0dXcSkfXRLAhNem6FFZnF5KPdE8HJ6RUD1ZlngRt2iYok2ohaNXRJUco
+         +zVs211Qvlu2q2cKd4c6oq6PWh2wJ2fxOgKHBFXdtNJefeZumE8JSMWXahyX1N9M0T8h
+         EoMAiSLPbjFjhktqA0hBdYe5ZV4FTnwQU3O5Emh8FP4cFN45CNx6p11iXCTuAx3CWqId
+         CZwAbT59F+itLQmwq5Nwv5f2BLG9OlX8BRwA8UMn+hlJCEz6b4qz5Xc1CgtUWuQRZaal
+         As+g==
+X-Gm-Message-State: ACrzQf0Mfz45GBkajlmbj4uDuTCTQLgpgcdKkX3WtdAcTnllq2EvbYAI
+        BZNQzM9AWV/QadxBGGKNgw==
+X-Google-Smtp-Source: AMsMyM6cKt0KcpbmIifbatyxqCPEd6Pz5r7yvNlhqxNm415ojTZlVQjyH5r0iSI57y48fTiJvgzy0w==
+X-Received: by 2002:aca:f102:0:b0:359:a7d8:3748 with SMTP id p2-20020acaf102000000b00359a7d83748mr7469355oih.164.1666959608160;
+        Fri, 28 Oct 2022 05:20:08 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s19-20020a056870e6d300b0011f400edb17sm1983410oak.4.2022.10.28.05.20.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 05:20:07 -0700 (PDT)
+Received: (nullmailer pid 1079535 invoked by uid 1000);
+        Fri, 28 Oct 2022 12:20:05 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        linux-kernel@vger.kernel.org, Marcin Wojtas <mw@semihalf.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        netdev@vger.kernel.org
+In-Reply-To: <20221028092337.822840-3-miquel.raynal@bootlin.com>
+References: <20221028092337.822840-1-miquel.raynal@bootlin.com> <20221028092337.822840-3-miquel.raynal@bootlin.com>
+Message-Id: <166695949292.1076993.16137208250373047416.robh@kernel.org>
+Subject: Re: [PATCH 2/5] dt-bindings: nvmem: add YAML schema for the ONIE tlv layout
+Date:   Fri, 28 Oct 2022 07:20:05 -0500
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/10/2022 15:08, Robert Foss wrote:
-> Add compatible string for "qcom,sm8350-dpu" and
-> "qcom,sm8350-mdss".
+On Fri, 28 Oct 2022 11:23:34 +0200, Miquel Raynal wrote:
+> Add a schema for the ONIE tlv NVMEM layout that can be found on any ONIE
+> compatible networking device.
 > 
-> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 > ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 1 +
->   drivers/gpu/drm/msm/msm_mdss.c          | 1 +
->   2 files changed, 2 insertions(+)
+>  .../nvmem/layouts/onie,tlv-layout.yaml        | 96 +++++++++++++++++++
+>  1 file changed, 96 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-layout.yaml
+> 
 
-[skipped]
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
-> index e13c5c12b775..fd5a95cace16 100644
-> --- a/drivers/gpu/drm/msm/msm_mdss.c
-> +++ b/drivers/gpu/drm/msm/msm_mdss.c
-> @@ -447,6 +447,7 @@ static const struct of_device_id mdss_dt_match[] = {
->   	{ .compatible = "qcom,sc8180x-mdss" },
->   	{ .compatible = "qcom,sm8150-mdss" },
->   	{ .compatible = "qcom,sm8250-mdss" },
-> +	{ .compatible = "qcom,sm8350-mdss" },
->   	{}
->   };
->   MODULE_DEVICE_TABLE(of, mdss_dt_match);
+yamllint warnings/errors:
 
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-layout.example.dtb:0:0: /example-0/onie: failed to match any schema with compatible: ['onie,tlv-layout', 'vendor,device']
 
-BTW: you probably also have to update the msm_mdss_enable() function 
-with the 8350-specific code.
+doc reference errors (make refcheckdocs):
 
--- 
-With best wishes
-Dmitry
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
