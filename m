@@ -2,82 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4482D61085A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 04:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A2B61085E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 04:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236463AbiJ1CnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 22:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
+        id S234920AbiJ1Cpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 22:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235656AbiJ1CnT (ORCPT
+        with ESMTP id S235668AbiJ1Cpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 22:43:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F69D9D510
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 19:43:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF60F625F1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 02:43:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBC9BC433D7;
-        Fri, 28 Oct 2022 02:43:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666924998;
-        bh=yP9Mp7mnc/566BWrPMyhrgwrKWfXYoU3X9h4DV4JM5U=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TlN8lYNcQG70MpuVcJc9DXLflVqSysjT3LfAS4QfhsURfSziohSws/k07QWudIVpm
-         yloqZt0crw8+9uAemWBocU3JcJL28rj4A/h9fx95jyCFGnjNev4W8UQDMayLherkP2
-         uFSte6ai7qMFwHCpPHDN4Q3Wyld5hMJftTxHTveaQvy7eFEA6U81R6fBSUkHOkjKJr
-         4dCVpEcdYuSM7FFP3CmhZZ8Vsw32yPJTLOfNS+8sUlIUlSKwxYW4M5iZSG8uhaaEJa
-         gU2gHHLJpX8eZYUn+oMssw04ZznDeNg4TdYtUQCsQgenGg/H4wJEZt/KAxXFryHZO9
-         mHK8PR/WHLerQ==
-Message-ID: <85b6be9b-5c5b-ace0-8084-4bd52ef64996@kernel.org>
-Date:   Fri, 28 Oct 2022 10:43:13 +0800
+        Thu, 27 Oct 2022 22:45:31 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F73638EA
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 19:45:29 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1666925127;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LtyNe/u0nvFC2TL9u+lpCBPQlPtLBOrWOAoa3P8Ei4Q=;
+        b=qP/NzNJcQxOSxSm2A1wDZ4YPJtUJyJDcU3DJtiqmfnO48k9YlfJwVfJBMk8DRW3pJM/CnL
+        Id8djApnsbm0Yb9U1syxXwSRSTTkAKMM/yu8ueqa9OQVc30WlcaXnZXrd0Vu3Vpzg9ayBb
+        uYGODmB7zB/byr4ngwn4EgB0dKGDDhI=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 3/3] f2fs: fix to f2fs_handle_critical_error when
- errors=remount-ro
-Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
+Subject: Re: [PATCH -next 1/1] mm: hugetlb_vmemmap: Fix WARN_ON in
+ vmemmap_remap_pte
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <Y1piguJXagcxiTpn@arm.com>
+Date:   Fri, 28 Oct 2022 10:45:09 +0800
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Wupeng Ma <mawupeng1@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Linux Memory Management List <linux-mm@kvack.org>,
         linux-kernel@vger.kernel.org
-References: <ab2f3576-bedd-8c27-5549-f9ff5462aee3@kernel.org>
- <20221028023303.28020-1-frank.li@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20221028023303.28020-1-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <ED740104-0A97-44C1-839F-407F221070BB@linux.dev>
+References: <20221025014215.3466904-1-mawupeng1@huawei.com>
+ <614E3E83-1EAB-4C39-AF9C-83C0CCF26218@linux.dev>
+ <35dd51eb-c266-f221-298a-21309c17971a@arm.com>
+ <3D6FDA43-A812-4907-B9C8-C2B25567DBBC@linux.dev>
+ <3c545133-71aa-9a8d-8a13-09186c4fa767@arm.com> <Y1piguJXagcxiTpn@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/28 10:33, Yangtao Li wrote:
->> It won't pollute global namespace since it's a static function just be used in f2fs/super.c...
-> 
-> emm, I think it would be nice to see the f2fs_record_error_work symbol
-> in the stack, it can be explicitly a function of f2fs. personal opinion for reference only.
 
-Oh, yes, let me update in original patch as well.
 
-> 
->> Do you mind letting me merge these two patches into original patch?
->> since original patch is still in dev branch, rather than mainline.
-> 
-> Glad to see, if resend.
+> On Oct 27, 2022, at 18:50, Catalin Marinas <catalin.marinas@arm.com> =
+wrote:
+>=20
+> On Wed, Oct 26, 2022 at 02:06:00PM +0530, Anshuman Khandual wrote:
+>> On 10/26/22 12:31, Muchun Song wrote:
+>>>> On 10/25/22 12:06, Muchun Song wrote:
+>>>>>> On Oct 25, 2022, at 09:42, Wupeng Ma <mawupeng1@huawei.com> =
+wrote:
+>>>>>> From: Ma Wupeng <mawupeng1@huawei.com>
+>>>>>>=20
+>>>>>> Commit f41f2ed43ca5 ("mm: hugetlb: free the vmemmap pages =
+associated with
+>>>>>> each HugeTLB page") add vmemmap_remap_pte to remap the tail pages =
+as
+>>>>>> read-only to catch illegal write operation to the tail page.
+>>>>>>=20
+>>>>>> However this will lead to WARN_ON in arm64 in =
+__check_racy_pte_update()
+>>>>>=20
+>>>>> Thanks for your finding this issue.
+>>>>>=20
+>>>>>> since this may lead to dirty state cleaned. This check is =
+introduced by
+>>>>>> commit 2f4b829c625e ("arm64: Add support for hardware updates of =
+the
+>>>>>> access and dirty pte bits") and the initial check is as follow:
+>>>>>>=20
+>>>>>> BUG_ON(pte_write(*ptep) && !pte_dirty(pte));
+>>>>>>=20
+>>>>>> Since we do need to mark this pte as read-only to catch illegal =
+write
+>>>>>> operation to the tail pages, use set_pte  to replace set_pte_at =
+to bypass
+>>>>>> this check.
+>>>>>=20
+>>>>> In theory, the waring does not affect anything since the tail =
+vmemmap
+>>>>> pages are supposed to be read-only. So, skipping this check for =
+vmemmap
+>>>>=20
+>>>> Tails vmemmap pages are supposed to be read-only, in practice but =
+their
+>>>> backing pages do have pte_write() enabled. Otherwise the =
+VM_WARN_ONCE()
+>>>> warning would not have triggered.
+>>>=20
+>>> Right.
+>>>=20
+>>>>=20
+>>>>       VM_WARN_ONCE(pte_write(old_pte) && !pte_dirty(pte),
+>>>>                    "%s: racy dirty state clearing: 0x%016llx -> =
+0x%016llx",
+>>>>                    __func__, pte_val(old_pte), pte_val(pte));
+>>>>=20
+>>>> Also, is not it true that the pte being remapped into a different =
+page
+>>>> as read only, than what it had originally (which will be freed up) =
+i.e=20
+>>>> the PFN in 'old_pte' and 'pte' will be different. Hence is there =
+still
+>>>=20
+>>> Right.
+>>>=20
+>>>> a possibility for a race condition even when the PFN changes ?
+>>>=20
+>>> Sorry, I didn't get this question. Did you mean the PTE is changed =
+from
+>>> new (pte) to the old one (old_pte) by the hardware because of the =
+update
+>>> of dirty bit when a concurrent write operation to the tail vmemmap =
+page?
+>>=20
+>> No, but is not vmemmap_remap_pte() reuses walk->reuse_page for all =
+remaining
+>> tails pages ? Is not there a PFN change, along with access permission =
+change
+>> involved in this remapping process ?
+>=20
+> For the record, as we discussed offline, changing the output address
+> (pfn) of a pte is not safe without break-before-make if at least one =
+of
+> the mappings was writeable. The caller (vmemmap_remap_pte()) would =
+need
+> to be fixed to first invalidate the pte and then write the new pte. I
 
-Thanks, :)
+Hi Catalin,
 
-> 
->> I guess it needs to stop ckpt thread as well...
-> 
-> agree, :)
-> 
-> Thanks,
+Could you expose more details about what issue it will be caused? I am
+not familiar with arm64.
+
+> assume no other CPU accesses this part of the vmemmap while the pte is
+> being remapped.
+
+However, there is no guarantee that no other CPU accesses this pte.
+E.g. memory failure or memory compaction, both can obtain head page
+from any tail struct pages (only read) anytime.
+
+Thanks.
+
+>=20
+> --=20
+> Catalin
+
+
