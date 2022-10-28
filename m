@@ -2,173 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DBE9610ABB
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09276610ABE
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiJ1Gvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
+        id S229652AbiJ1GwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiJ1Gv0 (ORCPT
+        with ESMTP id S230013AbiJ1GwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:51:26 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6999D50BA1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:50:15 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id q71so4050836pgq.8
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:50:15 -0700 (PDT)
+        Fri, 28 Oct 2022 02:52:04 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DEC101EF;
+        Thu, 27 Oct 2022 23:52:02 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id d6so6756922lfs.10;
+        Thu, 27 Oct 2022 23:52:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SgH/phpYbE84Z31EwtYw+gNYZq/SDuJAWaCdxWL+Xmw=;
-        b=r/zAD2DEhYd+s/ZWlXm/42+TSMDwZSg3vJkrGRLR4rpN+T0aWLvs/FoRKcdTm3jsAi
-         UoFiYjtp/oSGan2UH0wr5wyML5FX/O4PdiaCNtn+E7vUsN0jtk5Cny5bdH3WxOVEtfcz
-         WwJkJ9ufQ2NudD1uv2Ms0gN68W0TBZ/Q2LUfv+kVlTLHHJgFQhSp/W4vYCxRDrPiPIA9
-         f38ZCpYdTrILH9xQRa+BWo0l8dNk4cwU17T/tAsFsevn7jupzP4YcR3N8uz5kIQJ2Crz
-         igkiq9JSoRuf/XU7laROxCrFubEwcKwtbRfirRSJ1zZI2oG/T64grGo9OWqZFKH9ze35
-         E9Pw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gs4Nw3TorDT8ueT7qP3f5rmMZ2nJoqgVxN+G5n/Vf5c=;
+        b=fSUOkyKVCXMtimE8+bPYbGoX8LbXu7eHsP+MX91yLr4uFG3i5d3CxLW8sMP8EIUnsy
+         7z5VQ8DCcRXIqxDCzgZBaE2QGLPVeTGCSQT35j4DdJTSuZ7RZZjZssBkjBXzcPELOd8d
+         YZHFzkscuDx7TfCwML6L7Q+z45N6blaktzaxuPYTuCRm2evmbwxYgnCAZXku0SDrEesL
+         bJfS0r91BEqjrFQu85bY6sztV9jNRfjzMQYeLsCOlX9jYHA6RhD4SeHcjHGjf59Ff82K
+         G4UrK1QLyGuFTaxS77wKxJdBZ6eW2y8QroZy1qZXSLzV0x9lKeBLJt9k3duBbYPO/cTX
+         8ulw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SgH/phpYbE84Z31EwtYw+gNYZq/SDuJAWaCdxWL+Xmw=;
-        b=p/vMAtlkHTVhNGduAc97a5TMDMtx3Ze3hf+KvtE1x0fpe1BV9INrxF+H/OOTn0mQ4v
-         oRoa7jFACrfP1Vq2GUsUEYHMi5pqp+pLKojIQJuesT7pWtMAbK9EMqN+v3a1u5gFhnDQ
-         8kIiQsbHtfRecgQ2ofX21wq0R/1jLJs+qV/Z3iRLagtLQTr/KtYY9/dAyQHJrxe7c1Td
-         OzHNnvutWS9gG8YI70QwvSY5nvtRQHY7i3ehNa940De9KLhShKTRmaH6Kkhx1nFfUI9P
-         eNFe/xJfydi4UYMh3ApUN6UWztx674ttca21REljmdldAh2bmvmHNcNA4XaMflAT3JfZ
-         P81w==
-X-Gm-Message-State: ACrzQf3Im9eLincPVbmsuDFAylQq0KSwnVOtWijj75WeY6Y5o4Z9aGeq
-        GGeZS7WUe/YS+I/qOMDM3kuBFw==
-X-Google-Smtp-Source: AMsMyM7RDKIaig7rU8rqo+RBaVgYeSZrcn/SGodM3rheo4DCvMQswWRTyVB4zvss9b5sJA/9rjheJg==
-X-Received: by 2002:a63:4042:0:b0:43b:ddc8:235 with SMTP id n63-20020a634042000000b0043bddc80235mr45898425pga.498.1666939814863;
-        Thu, 27 Oct 2022 23:50:14 -0700 (PDT)
-Received: from [10.255.236.92] ([139.177.225.252])
-        by smtp.gmail.com with ESMTPSA id x7-20020a1709027c0700b00172fad607b3sm2232443pll.207.2022.10.27.23.50.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 23:50:14 -0700 (PDT)
-Message-ID: <f990a324-e28e-6de1-acb0-ba764808a56a@bytedance.com>
-Date:   Fri, 28 Oct 2022 14:50:09 +0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gs4Nw3TorDT8ueT7qP3f5rmMZ2nJoqgVxN+G5n/Vf5c=;
+        b=rm5+2sRPWa6hrGSnWKv85i6hm4w85y6GWkOF0SXHcU8XdSJkFFFXzhPo1hHp5k3m+a
+         P0V3qKGEpYkMaB+f7OhqsQ2YhgJSKWel4PgsgOrOW5Ps+imPVlXlcVe00x7pemmnjMZ7
+         0AwgbLmwnJiVLNDfS8J6JJLdjR6G1IwMnDHPi/23eZhKIzz3Y4OZED91dEqONYunqIti
+         nI0zblRRDvupKyPn273vRdiydp7Zs+nHxkaJaiyyGLM7BZm0z/WbnpIHfayTHzrIHrhM
+         DZGdxiHSoogpddK22SgC224tjL1Mt8YtTMqJujm5opoS6VRdGcheYSQYY6Ef1l43t/gd
+         fTFg==
+X-Gm-Message-State: ACrzQf2c82omBPy8HNDaNOslCDcdTlXqv6wlDqiSgSAE8m6XsO9th6UA
+        8lJtPGVYcE7doiNw+MtK2ogPLkOIc4K7m3A02aU=
+X-Google-Smtp-Source: AMsMyM6uaHZ7WZBI2PJSJdKl7lRWeiM+fC5b8O14doKAGYJHJStfURBic60XzGqiUt0dXrnUQABcFW0vp42fNRM0GGo=
+X-Received: by 2002:ac2:5f97:0:b0:4b0:144:a243 with SMTP id
+ r23-20020ac25f97000000b004b00144a243mr2143762lfe.394.1666939920919; Thu, 27
+ Oct 2022 23:52:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.0
-Subject: Re: [External] [tip: sched/core] sched/psi: Fix avgs_work re-arm in
- psi_avgs_work()
-Content-Language: en-US
-To:     linux-tip-commits@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc:     Pavan Kondeti <quic_pkondeti@quicinc.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        "surenb@google.com" <surenb@google.com>
-References: <20221010104206.12184-1-zhouchengming@bytedance.com>
- <166693932887.29415.17016910542871419770.tip-bot2@tip-bot2>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <166693932887.29415.17016910542871419770.tip-bot2@tip-bot2>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221027124528.2487025-1-zengheng4@huawei.com> <CAH2r5mu2-jfhFBTJDf8Td7yF5e4QEJbG85wVpxyePK1q8bMjAg@mail.gmail.com>
+In-Reply-To: <CAH2r5mu2-jfhFBTJDf8Td7yF5e4QEJbG85wVpxyePK1q8bMjAg@mail.gmail.com>
+From:   Shyam Prasad N <nspmangalore@gmail.com>
+Date:   Fri, 28 Oct 2022 12:21:49 +0530
+Message-ID: <CANT5p=qBFdFB84xh=6WQtdYhAKhrXaF09Py=bn8eGgoS3jhqtA@mail.gmail.com>
+Subject: Re: [PATCH v4] cifs: fix use-after-free caused by invalid pointer `hostname`
+To:     Steve French <smfrench@gmail.com>
+Cc:     Zeng Heng <zengheng4@huawei.com>, sfrench@samba.org,
+        tom@talpey.com, sprasad@microsoft.com, pc@cjr.nz,
+        lsahlber@redhat.com, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-kernel@vger.kernel.org,
+        liwei391@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Oct 28, 2022 at 11:29 AM Steve French <smfrench@gmail.com> wrote:
+>
+> merged into cifs-2.6 for-next
+>
+> thx
+>
+> On Thu, Oct 27, 2022 at 7:49 AM Zeng Heng <zengheng4@huawei.com> wrote:
+> >
+> > `hostname` needs to be set as null-pointer after free in
+> > `cifs_put_tcp_session` function, or when `cifsd` thread attempts
+> > to resolve hostname and reconnect the host, the thread would deref
+> > the invalid pointer.
+> >
+> > Here is one of practical backtrace examples as reference:
+> >
+> > Task 477
+> > ---------------------------
+> >  do_mount
+> >   path_mount
+> >    do_new_mount
+> >     vfs_get_tree
+> >      smb3_get_tree
+> >       smb3_get_tree_common
+> >        cifs_smb3_do_mount
+> >         cifs_mount
+> >          mount_put_conns
+> >           cifs_put_tcp_session
+> >           --> kfree(server->hostname)
+> >
+> > cifsd
+> > ---------------------------
+> >  kthread
+> >   cifs_demultiplex_thread
+> >    cifs_reconnect
+> >     reconn_set_ipaddr_from_hostname
+> >     --> if (!server->hostname)
+> >     --> if (server->hostname[0] == '\0')  // !! UAF fault here
+> >
+> > CIFS: VFS: cifs_mount failed w/return code = -112
+> > mount error(112): Host is down
+> > BUG: KASAN: use-after-free in reconn_set_ipaddr_from_hostname+0x2ba/0x310
+> > Read of size 1 at addr ffff888108f35380 by task cifsd/480
+> > CPU: 2 PID: 480 Comm: cifsd Not tainted 6.1.0-rc2-00106-gf705792f89dd-dirty #25
+> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+> > Call Trace:
+> >  <TASK>
+> >  dump_stack_lvl+0x68/0x85
+> >  print_report+0x16c/0x4a3
+> >  kasan_report+0x95/0x190
+> >  reconn_set_ipaddr_from_hostname+0x2ba/0x310
+> >  __cifs_reconnect.part.0+0x241/0x800
+> >  cifs_reconnect+0x65f/0xb60
+> >  cifs_demultiplex_thread+0x1570/0x2570
+> >  kthread+0x2c5/0x380
+> >  ret_from_fork+0x22/0x30
+> >  </TASK>
+> > Allocated by task 477:
+> >  kasan_save_stack+0x1e/0x40
+> >  kasan_set_track+0x21/0x30
+> >  __kasan_kmalloc+0x7e/0x90
+> >  __kmalloc_node_track_caller+0x52/0x1b0
+> >  kstrdup+0x3b/0x70
+> >  cifs_get_tcp_session+0xbc/0x19b0
+> >  mount_get_conns+0xa9/0x10c0
+> >  cifs_mount+0xdf/0x1970
+> >  cifs_smb3_do_mount+0x295/0x1660
+> >  smb3_get_tree+0x352/0x5e0
+> >  vfs_get_tree+0x8e/0x2e0
+> >  path_mount+0xf8c/0x1990
+> >  do_mount+0xee/0x110
+> >  __x64_sys_mount+0x14b/0x1f0
+> >  do_syscall_64+0x3b/0x90
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > Freed by task 477:
+> >  kasan_save_stack+0x1e/0x40
+> >  kasan_set_track+0x21/0x30
+> >  kasan_save_free_info+0x2a/0x50
+> >  __kasan_slab_free+0x10a/0x190
+> >  __kmem_cache_free+0xca/0x3f0
+> >  cifs_put_tcp_session+0x30c/0x450
+> >  cifs_mount+0xf95/0x1970
+> >  cifs_smb3_do_mount+0x295/0x1660
+> >  smb3_get_tree+0x352/0x5e0
+> >  vfs_get_tree+0x8e/0x2e0
+> >  path_mount+0xf8c/0x1990
+> >  do_mount+0xee/0x110
+> >  __x64_sys_mount+0x14b/0x1f0
+> >  do_syscall_64+0x3b/0x90
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > The buggy address belongs to the object at ffff888108f35380
+> >  which belongs to the cache kmalloc-16 of size 16
+> > The buggy address is located 0 bytes inside of
+> >  16-byte region [ffff888108f35380, ffff888108f35390)
+> > The buggy address belongs to the physical page:
+> > page:00000000333f8e58 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888108f350e0 pfn:0x108f35
+> > flags: 0x200000000000200(slab|node=0|zone=2)
+> > raw: 0200000000000200 0000000000000000 dead000000000122 ffff8881000423c0
+> > raw: ffff888108f350e0 000000008080007a 00000001ffffffff 0000000000000000
+> > page dumped because: kasan: bad access detected
+> > Memory state around the buggy address:
+> >  ffff888108f35280: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
+> >  ffff888108f35300: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
+> > >ffff888108f35380: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
+> >                    ^
+> >  ffff888108f35400: fa fb fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> >  ffff888108f35480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> >
+> > Fixes: 7be3248f3139 ("cifs: To match file servers, make sure the server hostname matches")
+> > Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+> > Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+> > ---
+> > changes in v4:
+> >  - correct fix tag
+> >  - add reviewed-by
+> > ---
+> >  fs/cifs/connect.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+> > index ffb291579bb9..1cc47dd3b4d6 100644
+> > --- a/fs/cifs/connect.c
+> > +++ b/fs/cifs/connect.c
+> > @@ -1584,6 +1584,7 @@ cifs_put_tcp_session(struct TCP_Server_Info *server, int from_reconnect)
+> >         server->session_key.response = NULL;
+> >         server->session_key.len = 0;
+> >         kfree(server->hostname);
+> > +       server->hostname = NULL;
+> >
+> >         task = xchg(&server->tsk, NULL);
+> >         if (task)
+> > --
+> > 2.25.1
+> >
+>
+>
+> --
+> Thanks,
+>
+> Steve
 
-Thanks for picking this up. There is a newer version which has been acked:
-https://lore.kernel.org/all/20221014110551.22695-1-zhouchengming@bytedance.com/
+What I mean is something like this:
+https://github.com/sprasad-microsoft/smb3-kernel-client/commit/07abfbeb01d3cb8d55d76c1937bd4cde46063e5d.patch
 
-As well another PSI patch that has been acked by Johannes:
-https://lore.kernel.org/all/20220926081931.45420-1-zhouchengming@bytedance.com/
-
-Thanks!
-
-
-On 2022/10/28 14:42, tip-bot2 for Chengming Zhou wrote:
-> The following commit has been merged into the sched/core branch of tip:
-> 
-> Commit-ID:     7d89d7bb921c5ae5a428df282e64ee5692e26fe0
-> Gitweb:        https://git.kernel.org/tip/7d89d7bb921c5ae5a428df282e64ee5692e26fe0
-> Author:        Chengming Zhou <zhouchengming@bytedance.com>
-> AuthorDate:    Mon, 10 Oct 2022 18:42:06 +08:00
-> Committer:     Peter Zijlstra <peterz@infradead.org>
-> CommitterDate: Thu, 27 Oct 2022 11:01:23 +02:00
-> 
-> sched/psi: Fix avgs_work re-arm in psi_avgs_work()
-> 
-> Pavan reported a problem that PSI avgs_work idle shutoff is not
-> working at all. Because PSI_NONIDLE condition would be observed in
-> psi_avgs_work()->collect_percpu_times()->get_recent_times() even if
-> only the kworker running avgs_work on the CPU.
-> 
-> Although commit 1b69ac6b40eb ("psi: fix aggregation idle shut-off")
-> avoided the ping-pong wake problem when the worker sleep, psi_avgs_work()
-> still will always re-arm the avgs_work, so shutoff is not working.
-> 
-> This patch changes to consider current CPU groupc as IDLE if the
-> kworker running avgs_work is the only task running and no IOWAIT
-> or MEMSTALL sleep tasks, in which case we will shut off the avgs_work
-> if other CPUs' groupc are also IDLE.
-> 
-> One potential problem is that the brief period of non-idle time
-> incurred between the aggregation run and the kworker's dequeue will
-> be stranded in the per-cpu buckets until avgs_work run next time.
-> The buckets can hold 4s worth of time, and future activity will wake
-> the avgs_work with a 2s delay, giving us 2s worth of data we can leave
-> behind when shut off the avgs_work. If the kworker run other works after
-> avgs_work shut off and doesn't have any scheduler activities for 2s,
-> this maybe a problem.
-> 
-> Reported-by: Pavan Kondeti <quic_pkondeti@quicinc.com>
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Link: https://lore.kernel.org/r/20221010104206.12184-1-zhouchengming@bytedance.com
-> ---
->  kernel/sched/psi.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> index ee2ecc0..f4cdf6f 100644
-> --- a/kernel/sched/psi.c
-> +++ b/kernel/sched/psi.c
-> @@ -242,6 +242,8 @@ static void get_recent_times(struct psi_group *group, int cpu,
->  			     u32 *pchanged_states)
->  {
->  	struct psi_group_cpu *groupc = per_cpu_ptr(group->pcpu, cpu);
-> +	int current_cpu = raw_smp_processor_id();
-> +	bool only_avgs_work = false;
->  	u64 now, state_start;
->  	enum psi_states s;
->  	unsigned int seq;
-> @@ -256,6 +258,15 @@ static void get_recent_times(struct psi_group *group, int cpu,
->  		memcpy(times, groupc->times, sizeof(groupc->times));
->  		state_mask = groupc->state_mask;
->  		state_start = groupc->state_start;
-> +		/*
-> +		 * This CPU has only avgs_work kworker running, snapshot the
-> +		 * newest times then don't need to re-arm for this groupc.
-> +		 * Normally this kworker will sleep soon and won't wake
-> +		 * avgs_work back up in psi_group_change().
-> +		 */
-> +		if (current_cpu == cpu && groupc->tasks[NR_RUNNING] == 1 &&
-> +		    !groupc->tasks[NR_IOWAIT] && !groupc->tasks[NR_MEMSTALL])
-> +			only_avgs_work = true;
->  	} while (read_seqcount_retry(&groupc->seq, seq));
->  
->  	/* Calculate state time deltas against the previous snapshot */
-> @@ -280,6 +291,10 @@ static void get_recent_times(struct psi_group *group, int cpu,
->  		if (delta)
->  			*pchanged_states |= (1 << s);
->  	}
-> +
-> +	/* Clear PSI_NONIDLE so avgs_work won't be re-armed for this groupc */
-> +	if (only_avgs_work)
-> +		*pchanged_states &= ~(1 << PSI_NONIDLE);
->  }
->  
->  static void calc_avgs(unsigned long avg[3], int missed_periods,
+-- 
+Regards,
+Shyam
