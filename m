@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D976119CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 20:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E37A6119CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 20:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbiJ1SBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 14:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
+        id S229973AbiJ1SBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 14:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiJ1SBd (ORCPT
+        with ESMTP id S229716AbiJ1SBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 14:01:33 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8F61E8B84;
-        Fri, 28 Oct 2022 11:01:32 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id l6so5342409pjj.0;
-        Fri, 28 Oct 2022 11:01:32 -0700 (PDT)
+        Fri, 28 Oct 2022 14:01:36 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B918320FB19;
+        Fri, 28 Oct 2022 11:01:34 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id f23so5485763plr.6;
+        Fri, 28 Oct 2022 11:01:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=E5Fawjdz//CY913JJ5jwFxvwPuQZcfdesxaOJNGqcAY=;
-        b=o+GFBerinI2XeQJSXO2qlJ5+Du+CeHTM9pXn2DZeJNlGYjzpa5pAqbVUuN67AfrRmS
-         N45NOKjC8F1cIWVHLxCv1Vobk0gPZbiZNWXiDO0vePMHt6ubtCed+StgebAf8NumhDQL
-         4o2EEEotQw7chMXocG3G0nX/Vr0ctP+OKNetj5EIaXuC0m6h9mIgdOGCjaKD6k8Vr1oZ
-         Q6QDTTpExSmzd+V2W99oIxZ9sSc6azIrbL3o/iGVViTAYMQbO933epSAqRp7DDjy0ybS
-         lKzJnioXaQ4g1VG6kC1AzQIfseSSfzuuWFGVVb3h7XQNdfKHRCUd28ofKlvI72HtOETG
-         yYcA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NmGyjkUI3Jx6s05ye5A4TzB4tPD0VcBwkqsa8EyR1XQ=;
+        b=hD6Z0lr0qNzTb/h7xWEEo4kab7blvNR1dkhEaQcP+TQbguozLm/pd3/Wt/YmB4P7VN
+         zVIhEM+5h48c3QkGE9zQvi9LVupqNaK2dYG+Fjcj3Pr7aL4ezJQvVeYbhMFgLxrVws4k
+         +/U90S2XvRrJ/fjOz5Aj6jOZ/7czeOddZDXBXn/Si6nlOVhVnCIDgVibEdsBpWXxKKUu
+         SSE/mFx6NJ3+KSrlM0jnpeBc9ltZsFAL+diDGr6YfNqElfMWiWPcZRC9WYXolLcGNZgW
+         ppVj33Jp3cZ/d+WH9MrzS683eYX9A93CeqZWkFOY1saHh6BMkN5Marchffqlr3qop3zp
+         IF5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E5Fawjdz//CY913JJ5jwFxvwPuQZcfdesxaOJNGqcAY=;
-        b=J0vj2qM6RsKEnb/qGmsJvnaePlAm1GndJmK8D8or+wiBS/EC8wrHCrjNMUVy1EtMj8
-         raW5+83WV3cM0RGChwqYzU/A+bG2zfgybpv006xlfVH9WNleHgqvWRHuVmJm8GgUEaD4
-         itv3wTmVk4SPUGs8nq9Ki54ZVOvXyMvxChFfhsSSoaKRKiwpLqO9JjFxa0s1VbsXFLmc
-         QEhD93gIE4flfFP+vLShyGjiHJxWAlLldQUKMcP4uIuN8jjScMyW77/er3g8qIXk5sRE
-         wKmD8K3D0mhWv+PuLoZJZRSKlGptVvzZEQ+2gtRRYxbGiGTDt1OGGg5OuQfK+9FgLA7N
-         gDWw==
-X-Gm-Message-State: ACrzQf1H22ZcLvil2Y5gLHA7O2lSVvdrxsFNHz7ss/3dRhcdSU2EnzAQ
-        m4VFZpz6mQJNSR6Dv0dKfKc=
-X-Google-Smtp-Source: AMsMyM4Yz+hWIamQ2+lA+U58v4U0s1y77GCqHp+7UcWi8sepqbBImbOH+JfT+TdORqkeQzCKSyfUIQ==
-X-Received: by 2002:a17:90b:4b46:b0:20a:e906:426d with SMTP id mi6-20020a17090b4b4600b0020ae906426dmr533181pjb.48.1666980091847;
-        Fri, 28 Oct 2022 11:01:31 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=NmGyjkUI3Jx6s05ye5A4TzB4tPD0VcBwkqsa8EyR1XQ=;
+        b=NCkPKbE+jacPLisBJQAxuiH964muzLFrpXZGN0zp8pgn1cntnFw5bJS5pYROn5H+pn
+         9ssnONagho2m3f1NijusOS3W2mG924YxjW6NK0bmHC+2+VALwV8f5QWMfG5MBh6rMl1D
+         5qiN4WqhMxNMqFE10wUMNXjZC2IDY2o8C6m0FPBlOupGxTe4Saq8PSquGICsdcTAWaqz
+         zZHkBeShxaLdxuI1ZZY/5D4mOpvb3PCO0s/HajvAYK2FqJdSu6Twkbbh6sUwHUhwm8LQ
+         nE5KHbh8by1iLRGRLrxzhXaTc6c5lq6oO31baHhW01dTZ1/iOOHjWjV6WvtJRJATRTB9
+         iS2Q==
+X-Gm-Message-State: ACrzQf11HOA4z6M7N9ZNJ2i08yr4rh5R7NAr12ezDYcRBy/EWdxwcvpa
+        Hr2b2XZKFWo4PM2cgP65IbI=
+X-Google-Smtp-Source: AMsMyM6oJIlbvojF6YXXEDr6isWduRhmVUwWJu6d5tRV2QMhZqYRLjbfnnA7R2sf/n2tVE8xjtvFVw==
+X-Received: by 2002:a17:90b:4f4a:b0:20c:64e2:2bee with SMTP id pj10-20020a17090b4f4a00b0020c64e22beemr18093806pjb.32.1666980093820;
+        Fri, 28 Oct 2022 11:01:33 -0700 (PDT)
 Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:976f:f075:7c14:87a2])
-        by smtp.gmail.com with ESMTPSA id n3-20020a170903110300b00186b86ed450sm3400236plh.156.2022.10.28.11.01.30
+        by smtp.gmail.com with ESMTPSA id n3-20020a170903110300b00186b86ed450sm3400236plh.156.2022.10.28.11.01.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 11:01:30 -0700 (PDT)
+        Fri, 28 Oct 2022 11:01:32 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -59,10 +60,12 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Ian Rogers <irogers@google.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         linux-perf-users@vger.kernel.org
-Subject: [PATCH 0/4] perf lock contention: Small random fixes
-Date:   Fri, 28 Oct 2022 11:01:24 -0700
-Message-Id: <20221028180128.3311491-1-namhyung@kernel.org>
+Subject: [PATCH 1/4] perf lock contention: Fix memory sanitizer issue
+Date:   Fri, 28 Oct 2022 11:01:25 -0700
+Message-Id: <20221028180128.3311491-2-namhyung@kernel.org>
 X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
+In-Reply-To: <20221028180128.3311491-1-namhyung@kernel.org>
+References: <20221028180128.3311491-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,37 +78,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The msan reported a use-of-uninitialized-value warning for the struct
+lock_contention_data in lock_contention_read().  While it'd be filled
+by bpf_map_lookup_elem(), let's just initialize it to silence the
+warning.
 
-This is a small update for the perf lock contention command.
+  ==12524==WARNING: MemorySanitizer: use-of-uninitialized-value
+  #0 0x562b0f16b1cd in lock_contention_read  util/bpf_lock_contention.c:139:7
+  #1 0x562b0ef65ec6 in __cmd_contention  builtin-lock.c:1737:3
+  #2 0x562b0ef65ec6 in cmd_lock  builtin-lock.c:1992:8
+  #3 0x562b0ee7f50b in run_builtin  perf.c:322:11
+  #4 0x562b0ee7efc1 in handle_internal_command  perf.c:376:8
+  #5 0x562b0ee7e1e9 in run_argv  perf.c:420:2
+  #6 0x562b0ee7e1e9 in main  perf.c:550:3
+  #7 0x7f065f10e632 in __libc_start_main (/usr/lib64/libc.so.6+0x61632)
+  #8 0x562b0edf2fa9 in _start (perf+0xfa9)
+  SUMMARY: MemorySanitizer: use-of-uninitialized-value (perf+0xe15160) in lock_contention_read
 
-The first issue is from msan (memory sanitizer) related to uninitialized
-memory access and use of variable length array.
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/util/bpf_lock_contention.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The other is to increase the default stack skip count to find appropriate
-callers in most cases.
-
-You can get it from 'perf/lock-con-fix-v1' branch in
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-
-Thanks,
-Namhyung
-
-
-Namhyung Kim (4):
-  perf lock contention: Fix memory sanitizer issue
-  perf lock contention: Check --max-stack option
-  perf lock contention: Avoid variable length arrays
-  perf lock contention: Increase default stack skip to 4
-
- tools/perf/builtin-lock.c             | 30 +++++++++++++++++--
- tools/perf/util/bpf_lock_contention.c | 43 ++++++++++++++++++---------
- tools/perf/util/lock-contention.h     |  2 +-
- 3 files changed, 57 insertions(+), 18 deletions(-)
-
-
-base-commit: a3a365655a28f12f07eddf4f3fd596987b175e1d
+diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
+index fc4d613cb979..06466da792e4 100644
+--- a/tools/perf/util/bpf_lock_contention.c
++++ b/tools/perf/util/bpf_lock_contention.c
+@@ -110,7 +110,7 @@ int lock_contention_read(struct lock_contention *con)
+ {
+ 	int fd, stack;
+ 	s32 prev_key, key;
+-	struct lock_contention_data data;
++	struct lock_contention_data data = {};
+ 	struct lock_stat *st;
+ 	struct machine *machine = con->machine;
+ 	u64 stack_trace[con->max_stack];
 -- 
 2.38.1.273.g43a17bfeac-goog
 
