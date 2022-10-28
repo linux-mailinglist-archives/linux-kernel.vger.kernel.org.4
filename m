@@ -2,75 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56413610B79
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C5B0610B7B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbiJ1HmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 03:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53872 "EHLO
+        id S230244AbiJ1HnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 03:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiJ1HmG (ORCPT
+        with ESMTP id S230236AbiJ1HnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 03:42:06 -0400
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B05EFA001
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 00:42:05 -0700 (PDT)
-Received: by mail-vk1-xa33.google.com with SMTP id p9so2091218vkf.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 00:42:05 -0700 (PDT)
+        Fri, 28 Oct 2022 03:43:04 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1DC1BB963
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 00:43:04 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id q127so4356991vsa.7
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 00:43:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ennOQKFOTwsP0hyLNdo0z1k0y6OG1jhsLXFhNIam/zE=;
-        b=RMQWpuATlVIwbvb2c5IDualoj7xt9KjdY8SfP6kH7GH6Rp7kM+RSjQktoo5ZRwNoaN
-         axAfzAi/ppoWLQp0umuuDbqW9yCjsQNeZM8w9TYJvN5Ii6RV6mpeS/CTkabzbjdUK2li
-         4X9IuQetRuS7p0MMH7l6Uy7FSUCubxgHn2Y8bZoGoUVfew3y7Ovs8+kU39ZtyK++w8o3
-         pFUMWM5Eh73tpsrFT5p7DWui+9qU3mA/k+7rZgQOgVL2YL65Oe4cPdMSR54rEKCvNx94
-         TeZ2RRWBFDZ8y6oPlOlc2Et+dSDVErFGIyNH1X7yqQ1/7eiMMit2dHaUXSAWOgmSOSEM
-         3w3g==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KFL9adKihekM8F4k25d98PC2Ll0xHE9L3wfiEmdcsI8=;
+        b=ja4yWZKyRolktBga8ujdVEg5//IwG7IHFxFwFCKwBbuCsZT82D3fGh8l4z1YaRu2rc
+         FtlLWEr09PyYdtIl/Jk+RlGoSFX7PvvRO8VomL0QYmFiB9/Trv6nuXbLLJgsX1qlWoll
+         6YIfEplsbqikpMStY8KLTY8hFfouX6VMvRIPpGt4VHcYxEawlZ79ddo4uEJSXtOLOUHV
+         b2sDEJztYSA304XkegQ90g5MbHvhohx3cqIbT8nCl4qR+7qFDw4SJri4Es57Yx9mT8r8
+         H6KrPjhQOVetwenmhL1Kg486RH7YIYSORaKvMroM3Sfq+2aVDHkNIbeSusOxV1P1oEG8
+         v3tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ennOQKFOTwsP0hyLNdo0z1k0y6OG1jhsLXFhNIam/zE=;
-        b=nb3KuW8SLMQBXRU6Hk9B9pyMGkht2m2/zhYp91PJX4siNf63WXERA7+x+QC9ZvX+C9
-         tOsbk1VznibgQqbwda4C62ycbsQMDHBSBP2H05EziRYHYiPY5hgwsNCobfSmfd2svTUv
-         7GfvowGQRuUrwEVndhYyvmnHAe7MZTJntspLOUo/y6tRJFk5D8ibq+RR5qq+B7kNJSCS
-         c48KiC7vcVGjU6pHR3PY490tQaGfN39/D5UODbnr3+Djua8HjFBjKiYjoodbLur786ML
-         Otsmx8Z+RFk0mFBIjhH6NGbOA4H783D1CPIPen801UiLp5L3iDE0w7wbcoS/m9KbshF3
-         8c9g==
-X-Gm-Message-State: ACrzQf0krztQA1CM2b0dLMUTBmq3Y4uE3cZjywvqGJaYWyxJvV+CtayG
-        nkeK53Sx+AE61LjY/t07NQZaPzYxf6EOYcTzeNyoHLG00S8Ms0WNq6U=
-X-Google-Smtp-Source: AMsMyM5OGqik8I98x+1T7m1YLDt44URvqhh31TER1G3asikOjsHwkZ5yg4Q1WSqd7twier+Ny5ZP2j+htkuzjLnc/QU=
-X-Received: by 2002:ac5:c981:0:b0:3b7:c85d:cfeb with SMTP id
- e1-20020ac5c981000000b003b7c85dcfebmr4176168vkm.30.1666942924249; Fri, 28 Oct
- 2022 00:42:04 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KFL9adKihekM8F4k25d98PC2Ll0xHE9L3wfiEmdcsI8=;
+        b=IyJxeQUTHCt/yHfnnpAIqmHIrPP1Zq5ZZ36BPN+k8ErKva/dXLkyIenJbxL8XS9NWA
+         fyhIBGNKwAnw4gdZO4KXvabHW6zxW/o4nzeG3wEqg0b7jrfeu4aG/2J60O7tZJ71o2mi
+         wn+bmyVlr2P8XWWWDUXbDMHQsPS8Psiiv0hpoSHhgH5orQTBa9wFnyHu37DvmTXM/JiH
+         bKFJse+Zg6XI5mAQhwGmoJtUABuJtU0McoTGeyf2k80zQI0f73eLymbBUSmmjupw1C2R
+         egmJjhL8b1oxuc2DiDYPk6b4QWBYfMQmMYk77ZSPuhfQGlITR1dnrPH+GZNjPCn19uXx
+         TpjQ==
+X-Gm-Message-State: ACrzQf2HwO1jU1eZ248AeDWLam3crxgFVqRUbEDt6/LoIfGjzyNA8mGP
+        uMziTxWTZBcBnJx+cnsBnr23s2ATjUwJZOAqjzg4Cj7jHT6FEb6a
+X-Google-Smtp-Source: AMsMyM7tXiJc82o76JD4AaikiR4k2fSve2dBxpFxJoHlHd2ppquul8tY7yZ3tXhlK8qHYge4JwfGKS3I0TlFU7uvpYg=
+X-Received: by 2002:a67:1902:0:b0:3aa:3c4c:72c4 with SMTP id
+ 2-20020a671902000000b003aa3c4c72c4mr8457483vsz.67.1666942983231; Fri, 28 Oct
+ 2022 00:43:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221024094853.2877441-1-yulei.sh@bytedance.com> <HK0PR06MB32022348EA65805C7109B7D080329@HK0PR06MB3202.apcprd06.prod.outlook.com>
-In-Reply-To: <HK0PR06MB32022348EA65805C7109B7D080329@HK0PR06MB3202.apcprd06.prod.outlook.com>
-From:   Lei Yu <yulei.sh@bytedance.com>
-Date:   Fri, 28 Oct 2022 15:41:53 +0800
-Message-ID: <CAGm54UExHOBw61DJNqxvW67OSr60fQ+Q247t63RzymiMOmHmFg@mail.gmail.com>
-Subject: RE: [PATCH] usb: gadget: aspeed: fix buffer overflow
-To:     Neal Liu <neal_liu@aspeedtech.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Henry Tian <tianxiaofeng@bytedance.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
+References: <20221028063711.GA35659@rdm> <alpine.DEB.2.22.394.2210280918550.2845@hadrien>
+In-Reply-To: <alpine.DEB.2.22.394.2210280918550.2845@hadrien>
+From:   jovial umwari <umwarijovial@gmail.com>
+Date:   Fri, 28 Oct 2022 10:42:52 +0300
+Message-ID: <CAMk1CBN2Vf7XLw-J_XLTyZwASg3WHNXdnv7NxKSJDGszvu2kwQ@mail.gmail.com>
+Subject: Re: [PATCH] Remove Unnecessary typecast of c90 int constant
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,42 +67,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 2:59 PM Neal Liu <neal_liu@aspeedtech.com> wrote:
+let me again look in deep into it and see why
+Thank you for the comment
+
+On Fri, 28 Oct 2022 at 10:22, Julia Lawall <julia.lawall@inria.fr> wrote:
 >
-> Thanks for your feedback.
-> I tried to reproduce it on my side, and it cannot be reproduce it.
-> Here are my test sequences:
-> 1. emulate one of the vhub port to usb ethernet through Linux gadget (ncm=
-)
-
-We are using rndis instead of ncm.
-
-> 2. connect BMC vhub to Host
-> 3. BMC & Host can ping each other (both usb eth dev default mtu is 1500)
-> 4. Set BMC mtu to 1000 (Host OS cannot set usb eth dev mtu to 2000, it's =
-maxmtu is 1500)
-
-Not sure if it's related, but in my case (USB rndis, Debian 10 OS) it
-should be able to set MTU to 2000.
-
-> 5. ping BMC with `s -1500` argument from Host OS
-> 6. BMC kernel no oops
 >
-> I dumped the `req` related members in ast_vhub_epn_handle_ack() to see if=
- whether the received data length exceeds the buffer length.
-> In my case `req.length` is 16384 bytes, so it never exceeds it in this ca=
-se.
-> I'm wondering what's the value of `req.length` in your test scenario? And=
- how can I reproduce it?
-
-The last 3 calls of ast_vhub_epn_handle_ack():
-
-ast_vhub_epn_handle_ack=EF=BC=9Areq->last_desc=3D-1
-req.actual=3D1024,req.length=3D1578,ep->ep.maxpacket=3D512
-ast_vhub_epn_handle_ack=EF=BC=9Areq->last_desc=3D-1
-req.actual=3D1536,req.length=3D1578,ep->ep.maxpacket=3D512
-ast_vhub_epn_handle_ack=EF=BC=9Areq->last_desc=3D1
-req.actual=3D1634,req.length=3D1578,ep->ep.maxpacket=3D512
-
-We can see the last packet 1634 exceeds the req.legnth 1578, and
-that's when the buffer overflow occurs.
+>
+> On Fri, 28 Oct 2022, UMWARI JOVIAL wrote:
+>
+> > According to Linux kernel coding style.
+> >
+> > Reported by checkpatch:
+> > WARNING: Unnecessary typecast of c90 int constant - '(int)2.412e8' could be '2.412e8'
+> > WARNING: Unnecessary typecast of c90 int constant - '(int)2.487e8' could be '2.487e8'
+>
+> It's not ideal to just include the checkpatch messges verbatim in your log
+> message.  It woudl be better to say what you are doing and why, in
+> complete sentences ("According to the Linux coding style" is not a
+> complete sentence).
+>
+> I also suspect that the checkpatch message is wrong.  Floating point
+> numbers cannot be used in the kernel, and the case of the constant ensures
+> that the value will be converted to an integer at compile time.
+>
+> julia
+>
+> >
+> > Signed-off-by: UMWARI JOVIAL <umwarijovial@gmail.com>
+> > ---
+> >  drivers/staging/rtl8192e/rtllib_softmac_wx.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/staging/rtl8192e/rtllib_softmac_wx.c b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+> > index fdf867a5dd7a..4fc4fb25d8d6 100644
+> > --- a/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+> > +++ b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+> > @@ -41,8 +41,8 @@ int rtllib_wx_set_freq(struct rtllib_device *ieee, struct iw_request_info *a,
+> >
+> >       /* if setting by freq convert to channel */
+> >       if (fwrq->e == 1) {
+> > -             if ((fwrq->m >= (int)2.412e8 &&
+> > -                  fwrq->m <= (int)2.487e8)) {
+> > +             if ((fwrq->m >= 2.412e8 &&
+> > +                  fwrq->m <= 2.487e8)) {
+> >                       int f = fwrq->m / 100000;
+> >                       int c = 0;
+> >
+> > --
+> > 2.25.1
+> >
+> >
+> >
