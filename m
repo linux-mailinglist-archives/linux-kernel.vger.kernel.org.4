@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C58610CA2
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3796610CA4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiJ1JBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 05:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
+        id S229914AbiJ1JBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 05:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiJ1JBl (ORCPT
+        with ESMTP id S229905AbiJ1JBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 28 Oct 2022 05:01:41 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2075.outbound.protection.outlook.com [40.107.220.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56E91C4EFE;
-        Fri, 28 Oct 2022 02:01:37 -0700 (PDT)
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2052.outbound.protection.outlook.com [40.107.220.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026D11C5A51;
+        Fri, 28 Oct 2022 02:01:41 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V9IkueWX9L6Idof2Ejo/29l2effwmLircsbsXmcDH2z8bBjlcDXcjM1EGrWeck1Jv7hy9XYg0QbmsqZOws23GJgsPCsrdURgVg47J2Pwe0b6Kyfe7XfxXtI4ytysdJCzFC0mQ62kiFTiUzzSPF7oxr+ozGt/DCXpOy8yWcAuwI+b7urOtwESDl3BxwovX53uVkX0I9/6pN/NNfbFdeAM7HIWY6o7wPfrdIyJ8U7E1r6wlTYfK159zhtoAn9TO1EVk/Ma44Cvr3o0d/fexvyspZJ3mfmUrygYWcqmVDB2MtFt+cdDdJBfr+uYaePahXf+1YeiPaUEEONkbVmuSJXQiw==
+ b=i5Bm1oS9pD28/XhHJrRDKKPfp28x+z8f2KfqKiprIax1JP3Bo7/lf4nkiwGpmV7n6HZailm/uofztQWnwiFgn8s9mkNN7eoBEzdPyd+gkc0lwtl/Q8zSm+D4Ve3HPuP73vmDALkKoAMq2h2WQqwCuZAkLi/ibp6UKhrso8qfXCcP+JGBEiO3s6AlQyZjft5AqrwFIL9GVd0MbxD51hv0PPApdeSQHSleBYnJOqYTCQaM3DfJMzgq/HOPJe26GIBw6dALp0tlF7GKGlwzVqIlct3aDRWTgF2uHLRb9CAb8yr8viB8juGlP5Ctm4YuqA2A4KrMxtCV15laB7cqs2mzuw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I31OyBuvAdSLahBlVjIF1Woo99oNUvyTUO/zr+MUxJ4=;
- b=e4NHkRdCBAv8i8H7omlRNMhaScIWdwsJ3YBxlaFtwZHuE5JJqedrNVAce+N0xEhtBcSyYlrP/2CgralYxkmjPt1VyqA171304VbzGbaK8xX6HOZTbzbNbvh//8PCiWyk/EwjpvmQfslXesFgC7F8m+eBb168m0ypT2KPDoV/dCigCJ9U8m67JHQeXH0zJPEFELN+AUcDm9G+QoYqXZ8itXkmIMLKVaJ8694xWZgwADr14RHlGW5dnSVc0kN31rcR3JYTkhtSP+VB26A+ioRL+GQa69Ll5XXlywTrFKkyY5SUJ3nS2Jw/iRr1iGYVxDiReDG677joUihIEIdVEkzmhw==
+ bh=/0glP/0nIs/nLD9xItcKJd3m+haoxVBho7FsTDRMjF0=;
+ b=kVo+SZrtCZyl56KcxXZHXauW5EVlHpWtp1dhPLtoT0tOPPhQoM9Xxua6RJU0fKIAGmx6dNoGh6Y4DAkmub9RMTOPWV8T99Ce3UvRAag52qlzlP491EtBMRdv+T/K5EXRDXTvMPhYYF3/AjrJDpFiJrwWZkD4FKr7lb9bXtEMS8+Egj5RiuZ1lKPSqLgzx0R5n0lLWIq5zq/exEsCJFLTniIreE/gt22rbf4hTac5T2hleHb52O46yVVjqgEVQdXI9FVQOG2GMtjEc/dmnxcDGUnnjs0ZUmcxRkQGO8FtZSHU9RD18bQllLT2NF9pvDG73Ii2vmeQ544yJiGDZjEwYA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I31OyBuvAdSLahBlVjIF1Woo99oNUvyTUO/zr+MUxJ4=;
- b=GM4ZfP0NoJ+YXbKK/sYXO1n6wp2ugkL0SpNuJFNiy2C2Hgya1zeI3BiVFVe8eo2bnP4Z8JeDHN2BpqbvL9mnS5pXZlv47g7xgVXeiQWubd8jPBE45gelOYZx6jvxj77dqGeTxmA9GmtWo7//qiwOWpD19xZFa1w97ox/83TE7aE=
-Received: from BN9PR03CA0392.namprd03.prod.outlook.com (2603:10b6:408:111::7)
- by CH2PR12MB4956.namprd12.prod.outlook.com (2603:10b6:610:69::11) with
+ bh=/0glP/0nIs/nLD9xItcKJd3m+haoxVBho7FsTDRMjF0=;
+ b=qJym5RrYGyblaZyNPne5AocYJN6fYRyz0Ej426mwymvwvSdunHRBf+mX/tJdL/J3zcu6aV3J1WE6dhe8YEB5sKc6sjgc2ZNGmfHA6LgoI2eLl9GXzN9uXmFQgNo1o3cs6PN8SmbF2h9iOzjbURAS+UrzDqgIU8b8CqyQNbxjQ4U=
+Received: from BN9PR03CA0945.namprd03.prod.outlook.com (2603:10b6:408:108::20)
+ by PH7PR12MB7140.namprd12.prod.outlook.com (2603:10b6:510:200::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Fri, 28 Oct
- 2022 09:01:35 +0000
-Received: from BN8NAM11FT041.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:111:cafe::a5) by BN9PR03CA0392.outlook.office365.com
- (2603:10b6:408:111::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15 via Frontend
- Transport; Fri, 28 Oct 2022 09:01:35 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15; Fri, 28 Oct
+ 2022 09:01:39 +0000
+Received: from BN8NAM11FT034.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:108:cafe::c0) by BN9PR03CA0945.outlook.office365.com
+ (2603:10b6:408:108::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28 via Frontend
+ Transport; Fri, 28 Oct 2022 09:01:38 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT041.mail.protection.outlook.com (10.13.177.18) with Microsoft SMTP
+ BN8NAM11FT034.mail.protection.outlook.com (10.13.176.139) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5769.14 via Frontend Transport; Fri, 28 Oct 2022 09:01:35 +0000
+ 15.20.5769.14 via Frontend Transport; Fri, 28 Oct 2022 09:01:38 +0000
 Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 28 Oct
- 2022 04:01:33 -0500
+ 2022 04:01:37 -0500
 From:   Appana Durga Kedareswara rao 
         <appana.durga.kedareswara.rao@amd.com>
 To:     <appanad@amd.com>, <robh+dt@kernel.org>,
@@ -62,11 +62,14 @@ To:     <appanad@amd.com>, <robh+dt@kernel.org>,
         <michal.simek@xilinx.com>, <derek.kiernan@xilinx.com>,
         <dragan.cvetic@xilinx.com>, <arnd@arndb.de>,
         <gregkh@linuxfoundation.org>
-CC:     <linux-arm-kernel@lists.infradead.org>, <git@amd.com>
-Subject: [RESEND PATCH v5 0/4] drivers: misc: Add support for TMR Manager and Inject IPs
-Date:   Fri, 28 Oct 2022 14:31:02 +0530
-Message-ID: <20221028090106.1456940-1-appana.durga.kedareswara.rao@amd.com>
+CC:     <linux-arm-kernel@lists.infradead.org>, <git@amd.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [RESEND PATCH v5 1/4] dt-bindings: misc: tmr-manager: Add device-tree binding for TMR Manager
+Date:   Fri, 28 Oct 2022 14:31:03 +0530
+Message-ID: <20221028090106.1456940-2-appana.durga.kedareswara.rao@amd.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221028090106.1456940-1-appana.durga.kedareswara.rao@amd.com>
+References: <20221028090106.1456940-1-appana.durga.kedareswara.rao@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -75,26 +78,26 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT041:EE_|CH2PR12MB4956:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2aca1945-658c-4790-5c12-08dab8c30412
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT034:EE_|PH7PR12MB7140:EE_
+X-MS-Office365-Filtering-Correlation-Id: e6c888cb-2621-464c-b2f8-08dab8c3061e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: f/r69iEaGS68FlFl86vTIdmemaKiar3EsvDWBhyhWJjpyGz5ORySHXEqqIp/wkC8V67ut0Zeym8P5KqfxONoK7NE/EDKzOCnDVog7RTzGJ0+wclb0zCPn2P0Xl55aNtxU3DvQ+yC44/j7SL1kxO5za6U3iSthfI4TLtT+mFOEqQYeaJUU2wUGDPla+tCw/MgQBSG1fXQ4aZwBq3Jm2SDVWkJoxUIGyXl/Fl8rhxZBe7dNT5FNqFRtowgLMz+k5+UMkiZG5tjZNq9aL7KZkqM6YgMPF8C6byOAqpu8ecnu6GTWtFJmRJHHbZDOFtja13xkhkIbUWIwDtq3fh3c44mYOZ6ZpII7gJFPbkQ/sWbQ89Nmg/MPNyCuMaLLbzQKjbNIGb1YTSQm0wDcaIZIevVEO1D1qsQ52/hzWuVFPBVSfXladNg/BbTuaZhANvqGlNYpxk6KIw7XOYm3f6DQiz2XjhPaPObY5yWTM1cv7mnP51SoQTPXsbZi3gcxXYQaPrX2Miqu8qxGYSQ+qhHhqb6p7G702Lr9TlfHzb8Oc5tB0gKQUPzmxxMnulVcWtAC7tEnHXpAROWsQMgn11CAuNma1l9//JJgPqazNnCw2umGMKQGPAsJoiPznKvNThRuAUU2araXWdHMdayFr67dSlzs/esMuGA1tymnKljTwZGrCg7eoEsyoxoRGFJcUcsG6LvIwoFQKdWAb3gMFraZ7oB+nDe0DdfwO/pz9VtEj8qO1Nx+qk/4/2O2vnpdGyNwdhAQ1yyEaOihBnpqJI4qbPffw1UJBbSunka6zbXmeU/gs4/12PzUVJW1DuY1fa9J/LxnTS1eKPzUtrvjQ3Hucqm2K6WFO91n63CpYiw1EUY2Ag=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(396003)(39860400002)(136003)(451199015)(40470700004)(36840700001)(46966006)(16526019)(41300700001)(8936002)(5660300002)(36756003)(966005)(110136005)(8676002)(70586007)(36860700001)(316002)(82310400005)(26005)(478600001)(4326008)(54906003)(426003)(2906002)(82740400003)(103116003)(47076005)(70206006)(83380400001)(86362001)(6666004)(186003)(356005)(40480700001)(81166007)(336012)(40460700003)(921005)(2616005)(1076003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: IdPeUakhcgC36SFBctBOMlFwvfF28hkx9guvuJqb8wEHakWF+Y+JSrEe0hKurv594n5l6fKdvtQ5GUQ0n5MjOrKa3cJ2Or4ZdmhqFP8xF8xyVryXoQc/fmMqLClj6CwHSGzVXmmKj7kb5zmqcZqjJKvh4D6V1AFf59w6jLXWyRBKrqR+5J+L8ntTk8TZb0Q+yvr+1fZZJ1L8dub+h8KYEX4xwI+FuNBvI/kHtFZ+BdooLPiMOi0tki3dloAnFpIwIVTplIU5G3b2RppDK+x/yoczSD594xIA29sHJWTckXZE2lNrzYeoogBdYjM34y9CG832WiP0IJyoPX47k/W3I+Jm1MDDs5FcMnEnIsN+z4vrDwLbzN3z8nPny8K0jCp6Bht9d+ET5d8a2wIyDI8czxC6tc7+XXHlJnv1gFNGwn3bXoaxAXd973eE27+Z68/h2Nbpeti4A7CeV4OIFx4Ax7aStQudBiNsO7uc+GT0ZnSSekMTcurQDOut9GOwCFpAmX765PifgKHbDmuv3yoB2dg64k0lLALcolj0cOQk+9vModM/gVTAExPlGJNKBlGI78r32c8I8LxYanthqfhFtMqKuSC+mGrMMJnqQuWqrEAbbGkclFvStgCVOGvKEpJf5h6HZ+bWKL6VNfYzld333o03NpzS2oQJsK5fEfIx9XLrvKbtzrwbrxJGV4Ese0rFDzJnoZOPUrwLnUekN7fy+DLSLte0nAkIWzFz7MjwUW5lJwI6HcSujpEnfzMRNMRFOJPLxw1JgIJqHqlFLABOa8gv8mDMAQ1wP4le4Eq5RjxfbjidFlfrxThsIKZqb25FIjE6C3/Y4xMSSatMvKKRXC52EReI5vPehEvY/97iegDUOvSDpHx8y0LIW9iqxp5qUPgmFTGJSgglZGgdIaG+jg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(346002)(396003)(451199015)(40470700004)(46966006)(36840700001)(26005)(36860700001)(478600001)(6666004)(83380400001)(16526019)(186003)(2616005)(426003)(47076005)(2906002)(336012)(1076003)(40480700001)(40460700003)(82310400005)(316002)(54906003)(70586007)(110136005)(966005)(70206006)(8936002)(5660300002)(8676002)(4326008)(41300700001)(86362001)(36756003)(103116003)(921005)(82740400003)(81166007)(356005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 09:01:35.2479
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 09:01:38.6686
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2aca1945-658c-4790-5c12-08dab8c30412
+X-MS-Exchange-CrossTenant-Network-Message-Id: e6c888cb-2621-464c-b2f8-08dab8c3061e
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT041.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT034.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4956
-X-Spam-Status: No, score=0.2 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=no
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7140
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,42 +105,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series adds support for TMR Manager and TMR Inject IPs.
-The TMR Manager is responsible for handling the TMR subsystem state,
-including fault detection and error recovery. The core is triplicated
-in each of the sub-blocks in the TMR subsystem, and provides majority
-voting of its internal state.
-The TMR Inject core provides functional fault injection by changing
-selected MicroBlaze instructions, which provides the possibility to
-verify that the TMR subsystem error detection and fault recovery logic
-is working properly.
+Triple Modular Redundancy(TMR) subsystem contains three microblaze cores,
+subsystem is fault-tolerant and continues to operate nominally after
+encountering an error. Together with the capability to detect and recover
+from errors, the implementation ensures the reliability of the entire
+subsystem.  TMR Manager is responsible for performing recovery of the
+subsystem detects the fault via a break signal it invokes microblaze
+software break handler which calls the tmr manager driver api to
+update the error count and status.
 
-For more details about TMR Manager and Inject IPs please refer PG268[1].
+Signed-off-by: Appana Durga Kedareswara rao <appana.durga.kedareswara.rao@amd.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+Changes for v5:
+--> None.
+Changes for v4:
+--> None.
+Changes for v3:
+--> Added Krzysztof Reviewed by.
+Changes for v2:
+--> Added minimum and maximum values for xlnx,magic1 property as
+suggested
+by Michal.
+--> Fixed 80 char limit in description as suggested by Michal.
 
-[1]: https://docs.xilinx.com/r/en-US/pg268-tmr/Triple-Modular-Redundancy-TMR-v1.0-LogiCORE-IP-Product-Guide-PG268
-
-Appana Durga Kedareswara rao (4):
-  dt-bindings: misc: tmr-manager: Add device-tree binding for TMR
-    Manager
-  drivers: misc: Add Support for TMR Manager
-  dt-bindings: misc: tmr-inject: Add device-tree binding for TMR Inject
-  drivers: misc: Add Support for TMR Inject IP
-
- .../testing/sysfs-driver-xilinx-tmr-manager   |  16 ++
- .../bindings/misc/xlnx,tmr-inject.yaml        |  47 ++++
- .../bindings/misc/xlnx,tmr-manager.yaml       |  47 ++++
- MAINTAINERS                                   |  13 ++
- drivers/misc/Kconfig                          |  20 ++
- drivers/misc/Makefile                         |   2 +
- drivers/misc/xilinx_tmr_inject.c              | 171 ++++++++++++++
- drivers/misc/xilinx_tmr_manager.c             | 220 ++++++++++++++++++
- 8 files changed, 536 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-driver-xilinx-tmr-manager
- create mode 100644 Documentation/devicetree/bindings/misc/xlnx,tmr-inject.yaml
+ .../bindings/misc/xlnx,tmr-manager.yaml       | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/misc/xlnx,tmr-manager.yaml
- create mode 100644 drivers/misc/xilinx_tmr_inject.c
- create mode 100644 drivers/misc/xilinx_tmr_manager.c
 
+diff --git a/Documentation/devicetree/bindings/misc/xlnx,tmr-manager.yaml b/Documentation/devicetree/bindings/misc/xlnx,tmr-manager.yaml
+new file mode 100644
+index 000000000000..27de12147a52
+--- /dev/null
++++ b/Documentation/devicetree/bindings/misc/xlnx,tmr-manager.yaml
+@@ -0,0 +1,47 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/misc/xlnx,tmr-manager.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Xilinx Triple Modular Redundancy(TMR) Manager IP
++
++maintainers:
++  - Appana Durga Kedareswara rao <appana.durga.kedareswara.rao@amd.com>
++
++description: |
++  The Triple Modular Redundancy(TMR) Manager is responsible for handling the
++  TMR subsystem state, including fault detection and error recovery. The core
++  is triplicated in each of the sub-blocks in the TMR subsystem, and provides
++  majority voting of its internal state.
++
++properties:
++  compatible:
++    enum:
++      - xlnx,tmr-manager-1.0
++
++  reg:
++    maxItems: 1
++
++  xlnx,magic1:
++    minimum: 0
++    maximum: 255
++    description:
++      Magic byte 1, When configured it allows the controller to perform
++      recovery.
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++required:
++  - compatible
++  - reg
++  - xlnx,magic1
++
++additionalProperties: false
++
++examples:
++  - |
++    tmr-manager@44a10000 {
++        compatible = "xlnx,tmr-manager-1.0";
++        reg = <0x44a10000 0x10000>;
++        xlnx,magic1 = <0x46>;
++    };
 -- 
 2.25.1
 
