@@ -2,193 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29F0611DBB
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 187D2611DBA
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbiJ1WzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 18:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
+        id S229925AbiJ1WzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 18:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiJ1WzP (ORCPT
+        with ESMTP id S229756AbiJ1WzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 28 Oct 2022 18:55:15 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0243051431
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 15:55:14 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29SKxPSC013278;
-        Fri, 28 Oct 2022 22:55:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=DA084mNFA1PUdhcj9SEyp2d/+yoMfjECSLLLVWqefX8=;
- b=a5N2hoL3WNKVs2LqquuZYAoC3oWYExrRxVutONRI40jCgXfDnSIXAzdTsVIyfj4/828t
- fJRfJDfOlhO7mWcDMPNQqsi+Ld72hgQo5CmzoNEz1aJb60bniQ1xuhwix9HeuUHmfLMB
- 6exj44/dySubgcdcdIgYWiHXZJaarT+dV3J851DtB4ltoFqNyKIm3VLXz8dkn6A3OCbJ
- qhMSyhbHCzAtQ1ZIKcHcZzA3xDNnK52cZl5ML+r29Bi9AavhxHetAvR9YYQY7y9huoP7
- YsSNicAze5pGtlElbUGLa61f8F9nyvA2PK7xvKsYkqkvp9gNg437mbMLd9Qh+MmRSZGT hw== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kgmsd8fnu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Oct 2022 22:55:03 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29SJFxjA017495;
-        Fri, 28 Oct 2022 22:55:03 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2175.outbound.protection.outlook.com [104.47.56.175])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kfagj0u25-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Oct 2022 22:55:03 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K19VLoqxJXbhWqXrdGFzV1nckZWHsjN24oLyNSV6dArI83E2CY2DKljhDBgHdUm7wwceyBL/P9ysH2cvuG2tuepLu2XKwqWj+SjgX1Wbcxfmlt/gruNN1AeOclZkA9jiqjtDOmrcHp8yZqC9J+JM6+75Dvrw7j2udxMXxcKlsf7YDbtaxV7mPun6j5LE6A/TvMUGe9oJPtfucaaeg+d06dUCF7LThrN+96T5r/NTBc8DwXaNZk3CxomNHP0smYDP+ay1k1O5tcBc/rjsxugsHsD52Abo591FKqbEIAAtdZS/qoWXiMktjIZQlolTyLxOdSnqsphckFgcNkJt87aqRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DA084mNFA1PUdhcj9SEyp2d/+yoMfjECSLLLVWqefX8=;
- b=JLvO7SFlWDT2JsoOpQtv26bGlkWy7S1uRHRmXT58B3ruS596obBr7G3kFRcrXwirgSaQppxENSMzMNp3RwUu0AIfk4TezXrp+KIK2O+3wVufOtYCi2/QKfqvahMn01YgEXi7FiQq+ZLKspeMNOYznlFzM/KE0M7ovqleLbqpqdY6e9xKBV22RnfLiPbOBaWzOZipIPnweiYgEHVheiTthzUV8yUaotW40zjAG17q4M4/GD/TBo0zrrYzPa0O8kwJ7Y5I2JsrK8Ks0/YD0SU8BXYbJyKzL9g6Svba3xw9GpWgrAFXQI+D8C1+3m791Arrnnzo8JYVs0PAocZGQwbIlQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DA084mNFA1PUdhcj9SEyp2d/+yoMfjECSLLLVWqefX8=;
- b=PCwnTOxADjqePEyGedB5Nbl4rcFM1A+tQobjiUVAZ391TBBJz+oA3lWnhXXf5p450+yizOpW2EKuEfauBM5qzo1BmqafWVNxYGTsaZHAd/ayW0WZXteKrCISXxJsbLoNxsfXtXhpMr/1xA6GBBP/26dO+ZqMOWdNWVIDTVCBf9I=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by PH8PR10MB6339.namprd10.prod.outlook.com (2603:10b6:510:1ce::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15; Fri, 28 Oct
- 2022 22:55:01 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::f378:f1d0:796a:55a1]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::f378:f1d0:796a:55a1%3]) with mapi id 15.20.5769.015; Fri, 28 Oct 2022
- 22:55:01 +0000
-From:   Liam Howlett <liam.howlett@oracle.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v2] maple_tree: Reorganize testing to restore module
- testing
-Thread-Topic: [PATCH v2] maple_tree: Reorganize testing to restore module
- testing
-Thread-Index: AQHY6ve6jfsBZBFYnUiA2MS4cFCD5q4kWvGAgAAPtIA=
-Date:   Fri, 28 Oct 2022 22:55:00 +0000
-Message-ID: <20221028225453.m5vgj7tkpxt6or7c@revolver>
-References: <20221028180415.3074673-1-Liam.Howlett@oracle.com>
- <20221028145841.4b0eaa422cbc775c3c074962@linux-foundation.org>
-In-Reply-To: <20221028145841.4b0eaa422cbc775c3c074962@linux-foundation.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN6PR10MB3022:EE_|PH8PR10MB6339:EE_
-x-ms-office365-filtering-correlation-id: 30c900d4-3f33-46ca-f00b-08dab93771e5
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +nMpCj8oKC4tlaJzLAHwVDWD2Ro/rnRcPWhkagsyLK6K2Xr8k4CpoL9RNTTczkbYprYUizqq5aJtLzWR9ljhHEtQzYgu4qUZVVP6Ok6yHF0uabxc6hm74fTeujHYAA6NYhclYodHMpFREwMeHO/mu7b5LB/GI6v7r5CRwXtvvxCIX13Qx/Wj+OBsDAtoGEGlPT4NgeFc5b6UO333p5ae/muZjbdH6RUcw3kRai8il7Ps6vYAKP5Qb9WEMhN55iAxof3SIlF2RlSLsHFamQDIs2WdosoQIXWfzdOitHV9j/kozHYFdiyXj9K8p2mWUZqY3gSbZvBcFvX4RotIEIYxk9xVvsP8eSeTXtgYaZn/42b1o76A6F/Lbb3DDEDgQHX9Y2gcK5DDQBUZp6mdxOGmwwE4+N9sMSeGKYAi1wggYO2mO7sdrsBM6I6cKsqIx5RlF8W6c8wh9AZb+lec2I3BdRg2jkF8i5caFg5KBKG+MON9BAY2eC3Kz7HbbbaRihoZ+jooF2f836KS7ucBaaj4dzRZDxDoFVp1YlcNJFSpXWXub9CJjqy9QadGr5Cyzn1s8mVJcBBS4MBLvzMqCT6iXiEQZQQvasEFZD92K54PWfWfoiQy+hspiIoIehPmSbYx9af7V6cs67GQrKy9TsIFQeFYnwD11XBafsNl8csIv87wRsrp5vMlFMrbnAqTE0Y3uGBLKVyseNiBQPsflS0AqY8cAv9E65LMQgJ19VjVlJmhK3Dz/c3OrEzdtm6GnYjXYWmaQVdbBPkbR8vMRVR8Yw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(346002)(376002)(39860400002)(136003)(396003)(451199015)(38100700002)(122000001)(86362001)(38070700005)(6916009)(54906003)(316002)(66946007)(66556008)(66476007)(66446008)(64756008)(8676002)(91956017)(76116006)(4326008)(71200400001)(33716001)(2906002)(44832011)(41300700001)(5660300002)(8936002)(6486002)(186003)(1076003)(83380400001)(478600001)(9686003)(6512007)(26005)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?kaQPaFCSfN7UWTMu2JVmhhyJfqQEYP7u2M0W7kd7C2e7WHh9qn+iWHXwcdRq?=
- =?us-ascii?Q?OTUDM2xNn9gvmSFNN8xa33LFkXFxFnMD94eOMpcV2/vUZsPY5CFQsoiRal1v?=
- =?us-ascii?Q?njmJHlXda6hnKdkUVw8KZ6VLYTrBJf4GPYdILAaEKQvA3GuaQGs40Ra6Ld++?=
- =?us-ascii?Q?UwH2ODJTTijrw6RWoTEoj8feuQ/hkpXpCcCEbRAlExcHaH2sM2B1uEB0Zzyx?=
- =?us-ascii?Q?5aeD7QylxhbYL5uW/XgLIsCbMgp/pxWKUj+8DHXYx6u0m1z/QX8RTdOajkSi?=
- =?us-ascii?Q?7WVtFzB/WrzltlSz3MMVpwhvXoAoq4Zc/igdw9j+plsy9aLny8krD+tEA4RE?=
- =?us-ascii?Q?pYOOv0w9Q7mR48Gn5Kp5Fmm+l6n/KtOOBNvihNhDFSvmEaWQkOWcFmtaqh7/?=
- =?us-ascii?Q?Nlr3pn7qyqicJbicknrqi2VHaaobi1GkcK+Xz74XMWrkZ2e0lBQi3hTi0NBH?=
- =?us-ascii?Q?C8yKOsPS6Xla+xnbYUhxspvda3NkliOS+M1Fc2lpX/o4olXyp/oLY115Ye+k?=
- =?us-ascii?Q?D6JBUqkEWohXBgmvLjFHwAK1ygPjq42RxUcR/On6+DiLM7dqfHzRPmqlttXe?=
- =?us-ascii?Q?4at/ui83ESRRswK7GTIuZ12NCEGed1GEC6H732Taf6cItb65XaRV56mVBG08?=
- =?us-ascii?Q?sE5Av1SWLQan0eivHXGnCAZ7s1MFRqWZ0ftrdcyJYcWY18Y97bdncFIOSK+X?=
- =?us-ascii?Q?vYw12pHks5Q68Z7bEZISDtveDpFHVcQ+IeR7aTRrNC/ngvmD5ifRICrTBwqk?=
- =?us-ascii?Q?FtzxbPTNBMRrmX2IKLmmkIRa9S/ACb2p2S2bIQvuAaWOQdDzCUokKw3vFhG0?=
- =?us-ascii?Q?OcaXCfQjTldwJrZprXPv2H/hWwsYeguFDo8uP2TPPgAxiC/Y6Af3WWDZrteq?=
- =?us-ascii?Q?qqTPgFvdNmphyohcmtcSrx5631IgWTZ+Cu5NdICgEWWa9kM1utjdXkmb/A2v?=
- =?us-ascii?Q?iW3WtSrQdzIi2kDPoEjFi/7SE5GtbncI6xccBksj+hd0g4wXnpQQRgNWWhLV?=
- =?us-ascii?Q?BB4cbhT1kpUsvMl91F/D4Zc8yFv/tkWs6K5Da6YUouB0qZREZVSBKaesfxLD?=
- =?us-ascii?Q?MRXQGp3Ew0qQdkh8514Ay32zMk7tBr+yZ4BIoz0w73JMUKPyZTEU6A5r1Lz/?=
- =?us-ascii?Q?0uoqkO5g93qkW/9AtXPNKZ96ZTzzRkU6PinAQFvbfYnMtmcWeK/vQ0c5XBuF?=
- =?us-ascii?Q?GLQCwOQ85yV2uZ06zjuD+Uh5vn+xEoPSbJJh7KYPgCqyqxcj38xXh19cQ5e+?=
- =?us-ascii?Q?P3iSfb+PCimU248eOWvVXKmDj4o1Tnl+cOlOiM45auGP8CC2QpsGCVFa0pRK?=
- =?us-ascii?Q?k2L3JYbC84h5lVY6+mWaly1Gvqn6RwfLjJQ4ZZ5MeUNNnK9VzykLZdcpy1eP?=
- =?us-ascii?Q?a2IPK0Sf83phfbikh24o7JCBX3U7by1GAY7Qegc/m4qs1jQdPik5wVDAgBRq?=
- =?us-ascii?Q?KirhBPwXj7x2tvUXARs1fr4aPZvKarlqFv70pZavyuQMy1cgw9fHfUQnlfTa?=
- =?us-ascii?Q?31JVpuyLhSLn7VLAKj/BQCafshB+096A3jzDXeAeaV7u8OW2t6r0dPnC/RYF?=
- =?us-ascii?Q?pxYNldjq9//Z3UXLr38jyFkNjkxMjGz/KEiy8whgsW+L98c7L+SP974kqcB/?=
- =?us-ascii?Q?gA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <65F044190CE1E545A5CBB0A9A3F1A093@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE1F625D1;
+        Fri, 28 Oct 2022 15:55:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFDF562AC3;
+        Fri, 28 Oct 2022 22:55:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 375EEC433C1;
+        Fri, 28 Oct 2022 22:55:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666997712;
+        bh=Qx+Ar6Rx89QSE4eSqCXte9rvP+OpROy88fkjDeTVhQ4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=EhsdrU+GdlkPq3Oem82ZGnkkVXIxxoM34IU27mNFuMiLbvRIObPus34UZboNoT5Pm
+         C0AV0gQD+vjMbLSINUCm1709njJRJn3Yws4jiofNRsTh9debLXhwIkRoZUncdCqJTv
+         CXYcrcKsIWVvZPmgscfqHObE7mHXDARO0ABt3Gv0P6LfjARuBgOcqXXtHFRzCFsXLV
+         MPCl5wVi08M9nI4Sa+OM3nqGIVc7fYMm6uD/yGpOeliPxhbrxstrf+RW6hUTnoT1eU
+         Yrhf4EJ62S5ou4dCbUWjarIKqOewaNBOS0+VaOgrWRaZyKK87s+aEA0ig8USxZxuIx
+         besiEXGCdmRSQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BCBCF5C1040; Fri, 28 Oct 2022 15:55:11 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 15:55:11 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] rcu: Add RCU stall diagnosis information
+Message-ID: <20221028225511.GW5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221022124525.2080-1-thunder.leizhen@huawei.com>
+ <20221022124525.2080-4-thunder.leizhen@huawei.com>
+ <20221027173334.GB5600@paulmck-ThinkPad-P17-Gen-1>
+ <5a4acb9d-48ba-7f41-51c7-19f300a47f22@huawei.com>
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 30c900d4-3f33-46ca-f00b-08dab93771e5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2022 22:55:01.1424
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Y3UnkXafI+rRrEmatmzCb56b4Rsud9dEn61ADCTAD6nzhgz7WbAnFN/MR9XutSOsMtCqzvTvOSglI80/NYO9/Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR10MB6339
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-28_10,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 malwarescore=0
- phishscore=0 mlxlogscore=999 mlxscore=0 spamscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2210280145
-X-Proofpoint-ORIG-GUID: mSSwFxajRsbbKo7HQW447XQg1XPGKpo0
-X-Proofpoint-GUID: mSSwFxajRsbbKo7HQW447XQg1XPGKpo0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5a4acb9d-48ba-7f41-51c7-19f300a47f22@huawei.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Andrew Morton <akpm@linux-foundation.org> [221028 17:58]:
-> On Fri, 28 Oct 2022 18:04:30 +0000 Liam Howlett <liam.howlett@oracle.com>=
- wrote:
->=20
-> > Along the development cycle, the testing code support for
-> > module/in-kernel compiles was removed.  Restore this functionality by
-> > moving any internal API tests to the userspace side, as well as
-> > threading tests.  Fix the lockdep issues and add a way to reduce memory
-> > usage so the tests can complete with KASAN + memleak detection.  Make
-> > the tests work on 32 bit hosts where possible and detect 32 bit hosts i=
-n
-> > the radix test suite.
->=20
-> My x86_64 allmodconfig failed with
->=20
-> ERROR: modpost: "mas_find_rev" [lib/test_maple_tree.ko] undefined!
->=20
-> so I did this:
->=20
-> --- a/lib/maple_tree.c~maple_tree-reorganize-testing-to-restore-module-te=
-sting-fix
-> +++ a/lib/maple_tree.c
-> @@ -6059,7 +6059,7 @@ void *mas_find_rev(struct ma_state *mas,
->  	/* Retries on dead nodes handled by mas_next_entry */
->  	return mas_prev_entry(mas, min);
->  }
-> -EXPORT_SYMBOL_GPL(mas_find);
-> +EXPORT_SYMBOL_GPL(mas_find_rev);
-> =20
->  /**
->   * mas_erase() - Find the range in which index resides and erase the ent=
-ire
-> _
->=20
+On Fri, Oct 28, 2022 at 11:16:55AM +0800, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2022/10/28 1:33, Paul E. McKenney wrote:
+> > On Sat, Oct 22, 2022 at 08:45:25PM +0800, Zhen Lei wrote:
+> >> In some extreme cases, such as the I/O pressure test, the CPU usage may
+> >> be 100%, causing RCU stall. In this case, the printed information about
+> >> current is not useful. Displays the number and usage of hard interrupts,
+> >> soft interrupts, and context switches that are generated within half of
+> >> the CPU stall timeout, can help us make a general judgment. In other
+> >> cases, we can preliminarily determine whether an infinite loop occurs
+> >> when local_irq, local_bh or preempt is disabled.
+> >>
+> >> For example:
+> >> rcu: INFO: rcu_preempt self-detected stall on CPU
+> >> rcu:     0-....: (1250 ticks this GP) <omitted>
+> >> rcu:          hardirqs   softirqs   csw/system
+> >> rcu:  number:      624         45            0
+> >> rcu: cputime:       69          1         2425   ==> 2500(ms)
+> >>
+> >> The example above shows that the number of hard and soft interrupts is
+> >> small, there is zero context switching, and the system takes up a lot of
+> >> time. We can quickly conclude that the current task is infinitely looped
+> >> with preempt_disable().
+> >>
+> >> The impact on system performance is negligible because snapshot is
+> >> recorded only one time after 1/2 CPU stall timeout.
+> >>
+> >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> >> ---
+> >>  kernel/rcu/tree.c       | 16 ++++++++++++++++
+> >>  kernel/rcu/tree.h       | 11 +++++++++++
+> >>  kernel/rcu/tree_stall.h | 28 ++++++++++++++++++++++++++++
+> >>  3 files changed, 55 insertions(+)
+> >>
+> >> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> >> index 6bb8e72bc8151ef..56c49a3117e7a81 100644
+> >> --- a/kernel/rcu/tree.c
+> >> +++ b/kernel/rcu/tree.c
+> >> @@ -931,6 +931,22 @@ static int rcu_implicit_dynticks_qs(struct rcu_data *rdp)
+> >>  			rdp->rcu_iw_gp_seq = rnp->gp_seq;
+> >>  			irq_work_queue_on(&rdp->rcu_iw, rdp->cpu);
+> >>  		}
+> >> +
+> >> +		if (rdp->snap_record.gp_seq != rdp->gp_seq) {
+> >> +			u64 *cpustat;
+> >> +			struct rcu_snap_record *r;
+> >> +
+> >> +			cpustat = kcpustat_cpu(rdp->cpu).cpustat;
+> >> +
+> >> +			r = &rdp->snap_record;
+> >> +			r->cputime_irq     = cpustat[CPUTIME_IRQ];
+> >> +			r->cputime_softirq = cpustat[CPUTIME_SOFTIRQ];
+> >> +			r->cputime_system  = cpustat[CPUTIME_SYSTEM];
+> >> +			r->nr_hardirqs = kstat_cpu_irqs_sum(rdp->cpu);
+> >> +			r->nr_softirqs = kstat_cpu_softirqs_sum(rdp->cpu);
+> >> +			r->nr_csw = nr_context_switches_cpu(rdp->cpu);
+> >> +			r->gp_seq = rdp->gp_seq;
+> > 
+> > This needs to be optional.  Yes, it is normally rarely executed, but
+> > people who don't want the additional information should not pay the
+> > price for it.
+> > 
+> >> +		}
+> >>  	}
+> >>  
+> >>  	return 0;
+> >> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+> >> index d4a97e40ea9c3e2..fb3121d15cca6f8 100644
+> >> --- a/kernel/rcu/tree.h
+> >> +++ b/kernel/rcu/tree.h
+> >> @@ -158,6 +158,16 @@ union rcu_noqs {
+> >>  	u16 s; /* Set of bits, aggregate OR here. */
+> >>  };
+> >>  
+> >> +struct rcu_snap_record {
+> >> +	unsigned long	gp_seq;
+> >> +	u64		cputime_irq;
+> >> +	u64		cputime_softirq;
+> >> +	u64		cputime_system;
+> >> +	unsigned int	nr_hardirqs;
+> >> +	unsigned int	nr_softirqs;
+> >> +	unsigned long long nr_csw;
+> >> +};
+> > 
+> > Please add a comment saying what this is and what it is used for.
+> 
+> OK, I will do it.
+> 
+> > 
+> >> +
+> >>  /* Per-CPU data for read-copy update. */
+> >>  struct rcu_data {
+> >>  	/* 1) quiescent-state and grace-period handling : */
+> >> @@ -262,6 +272,7 @@ struct rcu_data {
+> >>  	short rcu_onl_gp_flags;		/* ->gp_flags at last online. */
+> >>  	unsigned long last_fqs_resched;	/* Time of last rcu_resched(). */
+> >>  	unsigned long last_sched_clock;	/* Jiffies of last rcu_sched_clock_irq(). */
+> >> +	struct rcu_snap_record snap_record;
+> > 
+> > And here as well, please.
+> 
+> OK
+> 
+> > 
+> >>  	int cpu;
+> >>  };
+> >> diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
+> >> index 5653560573e22d6..f8c9d0284d116a8 100644
+> >> --- a/kernel/rcu/tree_stall.h
+> >> +++ b/kernel/rcu/tree_stall.h
+> >> @@ -428,6 +428,32 @@ static bool rcu_is_rcuc_kthread_starving(struct rcu_data *rdp, unsigned long *jp
+> >>  	return j > 2 * HZ;
+> >>  }
+> >>  
+> >> +static void print_cpu_stat_info(int cpu)
+> >> +{
+> >> +	u64 *cpustat;
+> >> +	unsigned long half_timeout;
+> >> +	struct rcu_snap_record *r;
+> > 
+> > Let's please follow convention and call it "rsrp" rather than just "r".
+> 
+> OK
+> 
+> > 
+> >> +	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
+> >> +
+> >> +	r = &rdp->snap_record;
+> >> +	if (r->gp_seq != rdp->gp_seq)
+> >> +		return;
+> >> +
+> >> +	cpustat = kcpustat_cpu(cpu).cpustat;
+> >> +	half_timeout = rcu_jiffies_till_stall_check() / 2;
+> >> +
+> >> +	pr_err("         hardirqs   softirqs   csw/system\n");
+> >> +	pr_err(" number: %8d %10d %12lld\n",
+> >> +		kstat_cpu_irqs_sum(cpu) - r->nr_hardirqs,
+> >> +		kstat_cpu_softirqs_sum(cpu) - r->nr_softirqs,
+> >> +		nr_context_switches_cpu(cpu) - r->nr_csw);
+> >> +	pr_err("cputime: %8lld %10lld %12lld   ==> %lld(ms)\n",
+> >> +		div_u64(cpustat[CPUTIME_IRQ] - r->cputime_irq, NSEC_PER_MSEC),
+> >> +		div_u64(cpustat[CPUTIME_SOFTIRQ] - r->cputime_softirq, NSEC_PER_MSEC),
+> >> +		div_u64(cpustat[CPUTIME_SYSTEM] - r->cputime_system, NSEC_PER_MSEC),
+> >> +		jiffies64_to_msecs(half_timeout));
+> >> +}
+> >> +
+> >>  /*
+> >>   * Print out diagnostic information for the specified stalled CPU.
+> >>   *
+> >> @@ -484,6 +510,8 @@ static void print_cpu_stall_info(int cpu)
+> >>  	       data_race(rcu_state.n_force_qs) - rcu_state.n_force_qs_gpstart,
+> >>  	       rcuc_starved ? buf : "",
+> >>  	       falsepositive ? " (false positive?)" : "");
+> >> +
+> >> +	print_cpu_stat_info(cpu);
+> > 
+> > Again, please make this conditional.  One way to do that is with a
+> > Kconfig option.  Another is with a kernel boot parameter, as is done
+> > wtih module_param() elsewhere in tree_stall.h.  Or if the parsing needs
+> > to be fancy (it shouldn't) using kernel_param_ops as is done in tree.c.
+> > Distros tend to like kernel boot parameters, while people dealing with
+> > large numbers of devices tend to like Kconfig options.  Choose wisely.  ;-)
+> 
+> OK. I will add both Kconfig option and boot parameter, let the user
+> choose freely.
 
-Thanks.  It looks like I missed this in my squashing of commits.
+Works for me!  ;-)
 
-Sorry about that.
-Liam
+							Thanx, Paul
