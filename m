@@ -2,236 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D32AC611863
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F61611864
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbiJ1Q4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
+        id S230156AbiJ1Q4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiJ1Qzq (ORCPT
+        with ESMTP id S230269AbiJ1Qzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:55:46 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEB01CCCD1;
-        Fri, 28 Oct 2022 09:55:37 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MzT5x3dj4z9xFQb;
-        Sat, 29 Oct 2022 00:49:09 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwBX9XFOCVxj63ccAA--.45991S4;
-        Fri, 28 Oct 2022 17:55:14 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        revest@chromium.org, jackmanb@chromium.org, shuah@kernel.org,
-        paul@paul-moore.com, casey@schaufler-ca.com, zohar@linux.ibm.com
-Cc:     bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nicolas.bouchinet@clip-os.org
-Subject: [RESEND][RFC][PATCH 3/3] selftests/bpf: Check if return values of LSM programs are allowed
-Date:   Fri, 28 Oct 2022 18:54:23 +0200
-Message-Id: <20221028165423.386151-3-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221028165423.386151-1-roberto.sassu@huaweicloud.com>
-References: <20221028165423.386151-1-roberto.sassu@huaweicloud.com>
+        Fri, 28 Oct 2022 12:55:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4C8240A6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:54:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666976090;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VdcDk47USY1AAs2NC9Jgcp38nSNmzzXOjaUWiRf+Iv4=;
+        b=csQAQqvgIuO7PH+HLbqQCsQLIr8LxYvKsP4Uygs6VmJ+nv3BcAiBwpPudlnxneCJGrDR0s
+        36m2mk3HppuLmK3xIo/vUlcJX4JOK5xdxtkEM6GaCEhuRcd1KHBEvSOMV+cqWjKkZizh+N
+        MWTU5pQ33r3puljn00o2WvyZ3y7JcOM=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-98-8frFksXRN7mZ51xKjrqWow-1; Fri, 28 Oct 2022 12:54:48 -0400
+X-MC-Unique: 8frFksXRN7mZ51xKjrqWow-1
+Received: by mail-wr1-f70.google.com with SMTP id u13-20020adfa18d000000b00236566b5b40so1330871wru.9
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:54:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VdcDk47USY1AAs2NC9Jgcp38nSNmzzXOjaUWiRf+Iv4=;
+        b=MWGuG9/i421PFRPT73v/ed2K1vMIIOYUaisPKWaeWXkh6AGNgAOiPwedcqGHr1VVBN
+         PUJtQPSME65NlHyuNVGR7m2XQ6MPUQH/9OT1SAA/cqS1tf2UPjlzRa4Ljkd563epNXRt
+         Nw7fOHJzHeTZeSxJeZspwoW/qKI529Zw0bsaxLGnZpVy/sL4me1tbO4pg0PvqjlwSHmU
+         174dNgVyZDXu8pZxdjmFEwTfXuefiWtcDoJOC7ENob5IJWpuYb/WSzKOUY28fe7ZdESg
+         v/XMRm7WvdBFpxgtm/QL0oppJIpMwRxf6ZUpneHwaAJNZEL+ooJq4GizDlN9P2pBIm3M
+         uB7Q==
+X-Gm-Message-State: ACrzQf1DQuc9H8ne6uCH59zyabF0/wlEJeKX8otQIARPo2bMhCoZH42b
+        CvfCzTZBuEx3p07S2YsRE+00mBkWVj3aJ375zIEaFW6S5pAdoRLaYh/uIUCIs2w7HDxmTyatebD
+        W695l9AV2eaLhoT7XqQcZuRYH
+X-Received: by 2002:a05:600c:5252:b0:3c6:f478:96db with SMTP id fc18-20020a05600c525200b003c6f47896dbmr129958wmb.116.1666976087570;
+        Fri, 28 Oct 2022 09:54:47 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7f0szCZRq/AyWSF4FAbMLi4c+VZ61awGxbMQMux0B+kV44EN3ui369YGc5WFbD9TcBb6f5Wg==
+X-Received: by 2002:a05:600c:5252:b0:3c6:f478:96db with SMTP id fc18-20020a05600c525200b003c6f47896dbmr129938wmb.116.1666976087392;
+        Fri, 28 Oct 2022 09:54:47 -0700 (PDT)
+Received: from vschneid.remote.csb ([149.71.65.94])
+        by smtp.gmail.com with ESMTPSA id l2-20020a7bc342000000b003c6c182bef9sm9239733wmj.36.2022.10.28.09.54.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 09:54:46 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+Subject: [PATCH v6 2/3] sched/topology: Introduce for_each_numa_hop_mask()
+Date:   Fri, 28 Oct 2022 17:54:28 +0100
+Message-Id: <20221028165429.1368452-1-vschneid@redhat.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20221028164959.1367250-1-vschneid@redhat.com>
+References: <20221028164959.1367250-1-vschneid@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwBX9XFOCVxj63ccAA--.45991S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF1kAr4UAFyxAr48Cr17ZFb_yoWrZw1Dp3
-        WrZw1jkF40vF4avFWrK397uayS9FW7CrW5KwnxZwnrZa97JF4xW3W5tFy5Zr13Gr15Gr9Y
-        qr17Can5u3WUZa7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-        WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-        bVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7
-        AKxVWrXVW3AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wr
-        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
-        0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x
-        07jTbyZUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4DNkwAAs6
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+The recently introduced sched_numa_hop_mask() exposes cpumasks of CPUs
+reachable within a given distance budget, wrap the logic for iterating over
+all (distance, mask) values inside an iterator macro.
 
-Ensure that the eBPF verifier allows to load only LSM programs that return
-an allowed value depending on the LSM hook they attach to.
-
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+Reviewed-by: Yury Norov <yury.norov@gmail.com>
 ---
- .../testing/selftests/bpf/verifier/lsm_ret.c  | 148 ++++++++++++++++++
- 1 file changed, 148 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/verifier/lsm_ret.c
+ include/linux/topology.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/verifier/lsm_ret.c b/tools/testing/selftests/bpf/verifier/lsm_ret.c
-new file mode 100644
-index 000000000000..1a11f47fb24a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/lsm_ret.c
-@@ -0,0 +1,148 @@
-+{
-+	"lsm return value: positive not allowed, return -EPERM",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, -EPERM),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_permission",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: positive not allowed, return zero",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_permission",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: positive not allowed, return one",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_permission",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.errstr = "Invalid R0, cannot return positive value",
-+	.result = REJECT,
-+},
-+{
-+	"lsm return value: zero/positive not allowed, return -EPERM",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, -EPERM),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_init_security",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: zero/positive not allowed, return zero",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_init_security",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.errstr = "Invalid R0, cannot return zero value",
-+	.result = REJECT,
-+},
-+{
-+	"lsm return value: zero/positive not allowed, return one",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_init_security",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.errstr = "Invalid R0, cannot return positive value",
-+	.result = REJECT,
-+},
-+{
-+	"lsm return value: positive allowed, return one",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "getprocattr",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: positive allowed, return two",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "getprocattr",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: only one allowed, return one",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "audit_rule_match",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: only one allowed, return two",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "audit_rule_match",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.errstr = "Invalid R0, can return only one as positive value",
-+	.result = REJECT,
-+},
-+{
-+	"lsm return value: negative not allowed, return -EPERM",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, -EPERM),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "vm_enough_memory",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.errstr = "Invalid R0, cannot return negative value",
-+	.result = REJECT,
-+},
-+{
-+	"lsm return value: negative not allowed, return zero",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "vm_enough_memory",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: negative not allowed, return one",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "vm_enough_memory",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
+diff --git a/include/linux/topology.h b/include/linux/topology.h
+index 64199545d7cf6..2223c987a1383 100644
+--- a/include/linux/topology.h
++++ b/include/linux/topology.h
+@@ -255,5 +255,22 @@ sched_numa_hop_mask(unsigned int node, unsigned int hops)
+ }
+ #endif	/* CONFIG_NUMA */
+ 
++/**
++ * for_each_numa_hop_mask - iterate over cpumasks of increasing NUMA distance
++ *                          from a given node.
++ * @mask: the iteration variable.
++ * @node: the NUMA node to start the search from.
++ *
++ * Requires rcu_lock to be held.
++ *
++ * Yields cpu_online_mask for @node == NUMA_NO_NODE.
++ */
++#define for_each_numa_hop_mask(mask, node)				       \
++	for (unsigned int __hops = 0;					       \
++	     mask = (node != NUMA_NO_NODE || __hops) ?			       \
++		     sched_numa_hop_mask(node, __hops) :		       \
++		     cpu_online_mask,					       \
++	     !IS_ERR_OR_NULL(mask);					       \
++	     __hops++)
+ 
+ #endif /* _LINUX_TOPOLOGY_H */
 -- 
-2.25.1
+2.31.1
 
