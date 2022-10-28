@@ -2,87 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC70610943
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 06:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B175610950
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 06:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229441AbiJ1E1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 00:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
+        id S229663AbiJ1EdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 00:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiJ1E1M (ORCPT
+        with ESMTP id S229535AbiJ1EdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 00:27:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB80813FDCB
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 21:26:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666931178;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1cEAc7Hi237RKPiSEF0PtMgwXplwCqgvBPVDp1f9TTo=;
-        b=Bh6n1VyjJDCMzEq14Yvmo8LpQMaAUEfQCR5sxboXPlw+Yo49/jX+t0sYOoH/6u8qevciSG
-        Rb3jVCgDhKIUlQ99QijWx4AXF9F4c2cXYXWaoR1FQMYpTyGdZbC4PRSu2QwKm8WUS23v64
-        MiuQOTNSjeSEpS3Nf0kNv6e4TwZivYU=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-634-5sIdRXWdN0mEXXdD80qa5w-1; Fri, 28 Oct 2022 00:26:17 -0400
-X-MC-Unique: 5sIdRXWdN0mEXXdD80qa5w-1
-Received: by mail-wr1-f70.google.com with SMTP id n16-20020adfc610000000b0023650935090so905211wrg.5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 21:26:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1cEAc7Hi237RKPiSEF0PtMgwXplwCqgvBPVDp1f9TTo=;
-        b=SJiW/K56ktwIl2IVUE7JtvXn+k1RWLPs04pGJgzb40BL1ICUEhwqj6BmOF99GeOSMu
-         ts9lzAYALs8SYxmPGVnE56y8XDa/29PlOlkyxp3q3au+OmH8+cmMgSHzkRw2dEkfxwou
-         0xg+L/eXR0iXcdYWH6epppPxPdzQnXDEHVY2JktCiKBpHEVmbhlDZ2Ug1h0SppNAHQ/E
-         WLTf0LP8Be4mztYU32dcMJ0yYWgBL7pxjXw0v1kPKLAkzcLnLSELc5K7enMXq1O0qKLZ
-         fzqDnFTXl3ZkRH83uQ5hCAFeGsjbK5/1VQ/H2Pp7eBDQ0UPE7LYSWDQ82qA4zmlMhOi2
-         i7AA==
-X-Gm-Message-State: ACrzQf0aCAILsUjLm/DlVKM6G9PEW3axsa5K9fShLpDyb0NJJ1F9vnxA
-        qt+FJlmnjSobkjj65aXuGFU2nfxna4tGHaRHU25iK9nqWk0kt5fMzqSDZCDuWjFeCSvc+loJnU5
-        /eyi5hPG21me2M1yd+X+WKmMO
-X-Received: by 2002:a05:600c:474a:b0:3c8:3299:5ba9 with SMTP id w10-20020a05600c474a00b003c832995ba9mr8166640wmo.3.1666931176212;
-        Thu, 27 Oct 2022 21:26:16 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4Zv8+uSxnn7hDyJbhoEG4ao9e9S+br+6l/SCoLy9GsSBv11BVKx+wXcm58HTu4ykyFZ8UVxQ==
-X-Received: by 2002:a05:600c:474a:b0:3c8:3299:5ba9 with SMTP id w10-20020a05600c474a00b003c832995ba9mr8166625wmo.3.1666931175905;
-        Thu, 27 Oct 2022 21:26:15 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:c100:8448:bf98:23a4:ac94? (p200300cbc704c1008448bf9823a4ac94.dip0.t-ipconnect.de. [2003:cb:c704:c100:8448:bf98:23a4:ac94])
-        by smtp.gmail.com with ESMTPSA id o12-20020a5d58cc000000b00236705daefesm2577551wrf.39.2022.10.27.21.26.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 21:26:15 -0700 (PDT)
-Message-ID: <623247f8-6b1d-b517-2053-6d5fb2cb418c@redhat.com>
-Date:   Fri, 28 Oct 2022 06:26:14 +0200
+        Fri, 28 Oct 2022 00:33:07 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC2B18F0C0;
+        Thu, 27 Oct 2022 21:33:03 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mz8mY0zBzz4x1F;
+        Fri, 28 Oct 2022 15:33:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1666931581;
+        bh=duF9702P4Kzom/HhPkLEeI2cVM0U+aqzbpwIwr/XX40=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VuY8h+68qj0/m4O30RDrGAetEWP38A3IHW1ms6rbXDGgr3NCFbjDGgeBFCBIxL2fq
+         kG67BngT/uL9ttzTFs0KPakVw88MLaGBd00vwYkZPQVIvum/gxGHRUNpft+ftb7d98
+         OTp6jmnYLGcnwlcSuVSE8Jc0mQR13ZeK70nl4Vvl85VjufUnyOSXd7yH3gqugtzEwx
+         BPL1P5RY8fb8WJ7HqRZlDER/uDOVLkqWdo7KlwnRnq1ARk5tFppxGyHwoX9nsXHFnC
+         h1gvfi2jHrxQR5hpeT6ag5e+6UwuZnAlZyiL4vRmdDaArhLgs3aXocp6ye/YGrD7kL
+         w6owZP3R4ZAhg==
+Date:   Fri, 28 Oct 2022 15:32:59 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Mukesh Ojha <quic_mojha@quicinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the f2fs tree
+Message-ID: <20221028153259.5d3bb474@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH STABLE 5.10] mm/memory: add non-anonymous page check in
- the copy_present_page()
-To:     Hugh Dickins <hughd@google.com>, Peter Xu <peterx@redhat.com>
-Cc:     Yuanzheng Song <songyuanzheng@huawei.com>,
-        akpm@linux-foundation.org, gregkh@linuxfoundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20221024094911.3054769-1-songyuanzheng@huawei.com>
- <3823471f-6dda-256e-e082-718879c05449@google.com> <Y1nRiJ1LYB62uInn@x1n>
- <fffefe4-adce-a7d-23e0-9f8afc7ce6cf@google.com> <Y1qdY8oUlUvWl067@x1n>
- <8aad435-bdc6-816f-2fe4-efe53abd6e5@google.com> <Y1sMk30wS+1uH/hc@x1n>
- <432c4428-b6d4-f93-266-b920a854c3c@google.com>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <432c4428-b6d4-f93-266-b920a854c3c@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Type: multipart/signed; boundary="Sig_/2aS0AS0eijcoAUMeE3veGAi";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,41 +51,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.10.22 03:32, Hugh Dickins wrote:
-> Reinstating Cc stable, which I removed just before the discussion settled.
+--Sig_/2aS0AS0eijcoAUMeE3veGAi
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry for not reading the full thread before and considering Peters 
-mail; I had to take short cuts :)
+Hi all,
 
-> 
-> On Thu, 27 Oct 2022, Peter Xu wrote:
->> ...
->>
->> After a re-read and 2nd thought, I think David has a valid point in that we
->> shouldn't have special handling of !anon pages on CoW during fork(),
->> because that seems to be against the fundamental concept of fork().
->>
->> So now I think I agree the !Anon original check does look a bit cleaner,
->> and also make fork() behavior matching with the old/new kernels, irrelevant
->> of the pin mess.
-> 
-> Thanks Peter.  So Yuanzheng's patch for 5.10 is exactly right.
-> 
-> Sorry for leading everyone astray: my mistake was to suppose that
-> its !PageAnon check was simply to avoid the later BUG_ON(!anon_vma):
-> whereas David and Peter now agree that it actually corrects the
-> semantics for fork() on file pages.
-> 
-> I lift my hold on Yuanzheng's patch: nobody actually said "Acked-by",
-> but I think the discussion and resolution have given better than that.
-> (No 3rd thoughts please!)
+In commit
 
-Unless someone tells me why I am obviously wrong
+  4662849550f1 ("f2fs: fix the assign logic of iocb")
 
-Acked-by: David Hildenbrand <david@redhat.com>
+Fixes tag
 
--- 
-Thanks,
+  Fixes: 18ae8d12991b ("f2fs: show more DIO information in tracepoint")
 
-David / dhildenb
+has these problem(s):
 
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: bd984c03097b ("f2fs: show more DIO information in tracepoint")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/2aS0AS0eijcoAUMeE3veGAi
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNbW3wACgkQAVBC80lX
+0GyYjAgAl+9VEIHAvlrKoxMNcuAWQGeMEdQknibNjTFR3QESW+8klrPR4cAVuBDK
+6HWz7sdSWV4GxRSwymzfpxLsA2eFAJgX4JxIdzS0VzSDJPGteqK5mzBmFT5D2Ax7
+La/LGZKcxc4XTC8tSSOw6YRMF1Xv3FN1yX7TcsTI9v8WAfSRNJhlsU7fwGeiZA1A
+gdbtvqyFH/m8yS41SiB9G/U7mlQ+p84FRgYAHfXr2iNVb6qA6bExvi34/7u3zTEP
+hUpCy9Xe+XuSypYZ1/c4IYyAfvgtS/gIgePc4sDsmY+H8cDTf8T5mVl7Ov1+Ns2p
+uTBd7UYpc+mAE9M88X8MuH6pWpnmsg==
+=SOdI
+-----END PGP SIGNATURE-----
+
+--Sig_/2aS0AS0eijcoAUMeE3veGAi--
