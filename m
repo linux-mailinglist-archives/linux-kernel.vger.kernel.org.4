@@ -2,130 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD2C611E09
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 01:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6789611E0C
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 01:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiJ1XTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 19:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
+        id S229528AbiJ1XVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 19:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiJ1XTl (ORCPT
+        with ESMTP id S229536AbiJ1XVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 19:19:41 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757C7DED0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:19:39 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id f5-20020a17090a4a8500b002131bb59d61so8672221pjh.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:19:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l8si2vf2VR/0A71CmzV1b/E7teUHcCtPVdR2pRp+lY8=;
-        b=clKJ+Eg6+E0kRwaPzQAVWxthIdxES0GjL1p448fD6NVR6gLbX1eczAu4jxN0gWLWhv
-         TSjMCeFG++GL6H7sUQggoD5XRg/tQZvUecnWNMQ4jnwFlmG076w+t58t0sCmUF1V1FdQ
-         HV/3iQFh7fG7WgFOYH4I+amvHPuWEL2JD8UlA=
+        Fri, 28 Oct 2022 19:21:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B896115B135
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:20:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666999245;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oYIHvTeMwIb+K7W2HGaQbire9czNW42U37FGK9GoxFo=;
+        b=gzSO9j5QpoCYm4z4frElb5UaJw8BIjfNzYM5BKSK83GY2Mdy6Ami36ke5jAIGmAzkxxxxN
+        0hCwz1CynwkWJglzjhWtla83XAJBw8ebiRqWZiTsW/FAy10mI+dFOFrVrrufAXv+k8+o+n
+        /FMnRHuwcZzxTgcEEfGPv43bkrp4T20=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-322-Cose0MC3PRimiwnOWu7E1A-1; Fri, 28 Oct 2022 19:20:43 -0400
+X-MC-Unique: Cose0MC3PRimiwnOWu7E1A-1
+Received: by mail-qv1-f70.google.com with SMTP id l6-20020ad44446000000b004bb60364075so3722324qvt.13
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:20:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=l8si2vf2VR/0A71CmzV1b/E7teUHcCtPVdR2pRp+lY8=;
-        b=csDKCcJTCKqy7KJ1dv4NMFmoZ2gIrDkLa8WNNEjJWzf4ORicRZxaeuU2uWBVfpD2Vs
-         kUeg+IEPQDw7CbHDNoNhhHt6q0HLD35Mr/PO0pHaNkIyrldUZ7eauwvaau9vd+JsIzjj
-         dnF81Tsae0h1ZCXAGHoGwOLAP5Lt0E4tKyO1lAFsxcZ/S2u+ey8hIvJ87WNUYZvTyAcj
-         gGz9OeOFNr0hO5Jjyfn1viZM33F+SBw6pWNxoDGS26ID2ewcKFMRX86PDW29j08u11xj
-         BqX/dSRqWWK2WedMPTQrn9ZGuGKDv3Fhy9Gv0uAiy/GwWk1vM9trmJ/3fBrJTJYH2hGs
-         mE8w==
-X-Gm-Message-State: ACrzQf1+BwCTBAJ/3WvRdkpAiXE6TIZAZKJDVxBSbYydFEQhoGZ4T0Zk
-        yOOSCyoqE2miZrbgqT/p7mEm6A==
-X-Google-Smtp-Source: AMsMyM7NKSQxTDDDJ5e8zb24NoUJVrOTK3QcTM+sRWtNVFQsC4i6r85bfjefRevEt5AviWBG66gedw==
-X-Received: by 2002:a17:902:aa02:b0:186:9395:4e82 with SMTP id be2-20020a170902aa0200b0018693954e82mr1488384plb.5.1666999178970;
-        Fri, 28 Oct 2022 16:19:38 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f22-20020a63e316000000b0046ece12f042sm8119pgh.15.2022.10.28.16.19.37
+        bh=oYIHvTeMwIb+K7W2HGaQbire9czNW42U37FGK9GoxFo=;
+        b=RvGvSo70fnrGIbw5isLz2hrrgkfwT0rxyULzgMZgA0SXC6DTGKZTWVnkvzEYodJTjH
+         2XF4DFZiwI1YOeUrzaZ/I7zCP0IN+q5kVjxjU6t8zmNYBq+6ofEHnmX3NNI16R6qIyJo
+         gGjDSjWqLIwBnnVuJrPLw5gwizd69m129SmlI9mkWNE8TdvXqokRwVPB4u6iZ5VjuWeD
+         DeUmCzANmyiZfKUbjZ9KmD0KxXJMN0V6doydDTMJEmYcOGvQwzwDJMuTg495qIYcZ9xX
+         EWy+PLr6sptO/eibFOqJlMZsDwv/T0dlsTOaytd0YajXnDg9z7CnfmeulrCGPScJfZkI
+         GgvQ==
+X-Gm-Message-State: ACrzQf1XJu2bXKrbB67/WdIX828AqQ1szxbDsShyBUXmoliBIPmI/7k9
+        f+mulh0Y+RV0DCV/olabFVzEL4rOfa5LA4o/dUmznKLd8GKHAH+No8+a/vMhf+FQzAeqmGgpLnV
+        nFQiNvfSJuBU9CR3xoudTz2G7
+X-Received: by 2002:a05:622a:58f:b0:39d:10f3:cae4 with SMTP id c15-20020a05622a058f00b0039d10f3cae4mr1688262qtb.604.1666999242968;
+        Fri, 28 Oct 2022 16:20:42 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4ZhDbr+eJZH4OfX0v1B4vnH0cANm+KghIAOexsa39YQdBlxzfxxELs4LdzWu0JflpEcpuGsg==
+X-Received: by 2002:a05:622a:58f:b0:39d:10f3:cae4 with SMTP id c15-20020a05622a058f00b0039d10f3cae4mr1688238qtb.604.1666999242725;
+        Fri, 28 Oct 2022 16:20:42 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id i22-20020ac871d6000000b003431446588fsm17123qtp.5.2022.10.28.16.20.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 16:19:38 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 16:19:37 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] bpf: Use kmalloc_size_roundup() to match ksize() usage
-Message-ID: <202210281617.F35925A52@keescook>
-References: <20221018090550.never.834-kees@kernel.org>
- <Y07raim32wOBRGPi@google.com>
- <202210181110.CD92A00@keescook>
- <CAKH8qBvwKfhMYjHV=rizA0ZinArHKmBP6U_N63HTcZTmM=QQ+g@mail.gmail.com>
+        Fri, 28 Oct 2022 16:20:42 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 19:20:40 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        David Hildenbrand <david@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wei Chen <harperchen1110@gmail.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2] hugetlb: don't delete vma_lock in hugetlb
+ MADV_DONTNEED processing
+Message-ID: <Y1xjyLWNCK7p0XSv@x1n>
+References: <20221023025047.470646-1-mike.kravetz@oracle.com>
+ <Y1mpwKpwsiN6u6r7@x1n>
+ <Y1nImUVseAOpXwPv@monkey>
+ <Y1nbErXmHkyrzt8F@x1n>
+ <Y1vz7VvQ5zg5KTxk@monkey>
+ <Y1v/x5RRpRjU4b/W@x1n>
+ <Y1xGzR/nHQTJxTCj@monkey>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAKH8qBvwKfhMYjHV=rizA0ZinArHKmBP6U_N63HTcZTmM=QQ+g@mail.gmail.com>
+In-Reply-To: <Y1xGzR/nHQTJxTCj@monkey>
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 01:07:45PM -0700, Stanislav Fomichev wrote:
-> On Tue, Oct 18, 2022 at 11:19 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Tue, Oct 18, 2022 at 11:07:38AM -0700, sdf@google.com wrote:
-> > > On 10/18, Kees Cook wrote:
-> > > > Round up allocations with kmalloc_size_roundup() so that the verifier's
-> > > > use of ksize() is always accurate and no special handling of the memory
-> > > > is needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE. Pass the new size
-> > > > information back up to callers so they can use the space immediately,
-> > > > so array resizing to happen less frequently as well. Explicitly zero
-> > > > any trailing bytes in new allocations.
-> > >
-> > > > Additionally fix a memory allocation leak: if krealloc() fails, "arr"
-> > > > wasn't freed, but NULL was return to the caller of realloc_array() would
-> > > > be writing NULL to the lvalue, losing the reference to the original
-> > > > memory.
-> [...]
-> > > > -   arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
-> > > > -   if (!arr)
-> > > > +   alloc_size = kmalloc_size_roundup(size_mul(*new_n, size));
-> > > > +   arr = krealloc(old_arr, alloc_size, GFP_KERNEL);
-> > > > +   if (!arr) {
-> > > > +           kfree(old_arr);
-> > > >             return NULL;
-> > > > +   }
-> > >
-> > > Any reason not do hide this complexity behind krealloc_array? Why can't
-> > > it take care of those roundup details?
-> >
-> > It might be possible to do this with a macro, yes, but then callers
-> > aren't in a position to take advantage of the new size. Maybe we need
-> > something like:
-> >
-> >         arr = krealloc_up(old_arr, alloc_size, &new_size, GFP_KERNEL);
+On Fri, Oct 28, 2022 at 02:17:01PM -0700, Mike Kravetz wrote:
+> On 10/28/22 12:13, Peter Xu wrote:
+> > On Fri, Oct 28, 2022 at 08:23:25AM -0700, Mike Kravetz wrote:
+> > > On 10/26/22 21:12, Peter Xu wrote:
+> > > > On Wed, Oct 26, 2022 at 04:54:01PM -0700, Mike Kravetz wrote:
+> > > > > On 10/26/22 17:42, Peter Xu wrote:
+> > > diff --git a/mm/madvise.c b/mm/madvise.c
+> > > index c7105ec6d08c..d8b4d7e56939 100644
+> > > --- a/mm/madvise.c
+> > > +++ b/mm/madvise.c
+> > > @@ -790,7 +790,10 @@ static int madvise_free_single_vma(struct vm_area_struct *vma,
+> > >  static long madvise_dontneed_single_vma(struct vm_area_struct *vma,
+> > >  					unsigned long start, unsigned long end)
+> > >  {
+> > > -	zap_page_range(vma, start, end - start);
+> > > +	if (!is_vm_hugetlb_page(vma))
+> > > +		zap_page_range(vma, start, end - start);
+> > > +	else
+> > > +		clear_hugetlb_page_range(vma, start, end);
+> > 
+> > With the new ZAP_FLAG_UNMAP flag, clear_hugetlb_page_range() can be dropped
+> > completely?  As zap_page_range() won't be with ZAP_FLAG_UNMAP so we can
+> > identify things?
+> > 
+> > IIUC that's the major reason why I thought the zap flag could be helpful..
 > 
-> Maybe even krealloc_array_up(arr, &new_n, size, flags) or similar
-> where we return a new size?
-> Though I don't know if there are any other places in the kernel to
-> reuse it and warrant a new function..
+> Argh.  I went to drop clear_hugetlb_page_range() but there is one issue.
+> In zap_page_range() the MMU_NOTIFY_CLEAR notifier is certainly called.
+> However, we really need to have a 'adjust_range_if_pmd_sharing_possible'
+> call in there because the 'range' may be part of a shared pmd.  :(
+> 
+> I think we need to either have a separate routine like clear_hugetlb_page_range
+> that sets up the appropriate range, or special case hugetlb in zap_page_range.
+> What do you think?
+> I think clear_hugetlb_page_range is the least bad of the two options.
 
-Yeah, and it explicitly can't be a function, since GCC has broken
-attribute handling[1] for inlines. :(
+How about special case hugetlb as you mentioned?  If I'm not wrong, it
+should be 3 lines change:
 
-Regardless, I'll respin this with a macro and see how it looks.
+---8<---
+diff --git a/mm/memory.c b/mm/memory.c
+index c5599a9279b1..0a1632e44571 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -1706,11 +1706,13 @@ void zap_page_range(struct vm_area_struct *vma, unsigned long start,
+        lru_add_drain();
+        mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, vma->vm_mm,
+                                start, start + size);
++       if (is_vm_hugetlb_page(vma))
++               adjust_range_if_pmd_sharing_possible(vma, &range.start, &range.end);
+        tlb_gather_mmu(&tlb, vma->vm_mm);
+        update_hiwater_rss(vma->vm_mm);
+        mmu_notifier_invalidate_range_start(&range);
+        do {
+-               unmap_single_vma(&tlb, vma, start, range.end, NULL);
++               unmap_single_vma(&tlb, vma, start, start + size, NULL);
+        } while ((vma = mas_find(&mas, end - 1)) != NULL);
+        mmu_notifier_invalidate_range_end(&range);
+        tlb_finish_mmu(&tlb);
+---8<---
 
--Kees
-
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96503
+As zap_page_range() is already vma-oriented anyway.  But maybe I missed
+something important?
 
 -- 
-Kees Cook
+Peter Xu
+
