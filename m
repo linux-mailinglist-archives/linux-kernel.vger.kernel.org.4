@@ -2,99 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4EA6610C75
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 10:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C38610C7E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 10:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbiJ1Isa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 04:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59336 "EHLO
+        id S230072AbiJ1IuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 04:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiJ1IsZ (ORCPT
+        with ESMTP id S230055AbiJ1Itx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 04:48:25 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744241ACA98
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 01:48:24 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MzGMB4hJyzpW50;
-        Fri, 28 Oct 2022 16:44:54 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 28 Oct 2022 16:48:21 +0800
-To:     "mingo@redhat.com" <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, <juri.lelli@redhat.com>,
-        <vincent.guittot@linaro.org>, <rohit.k.jain@oracle.com>
-CC:     <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, linux-kernel <linux-kernel@vger.kernel.org>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Subject: Regression on vcpu_is_preempted()
-Message-ID: <89856431-e68b-ebe9-90cb-e46ed8065659@huawei.com>
-Date:   Fri, 28 Oct 2022 16:48:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Fri, 28 Oct 2022 04:49:53 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26514102F;
+        Fri, 28 Oct 2022 01:49:28 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MzGK11SwTz9xFfs;
+        Fri, 28 Oct 2022 16:43:01 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwC3o3B8l1tjSAUbAA--.18857S2;
+        Fri, 28 Oct 2022 09:49:08 +0100 (CET)
+Message-ID: <edf0ec89c61fbee68fd537981982e14b1674393d.camel@huaweicloud.com>
+Subject: Re: [RFC][PATCH] bpf: Check xattr name/value pair from
+ bpf_lsm_inode_init_security()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     KP Singh <kpsingh@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        nicolas.bouchinet@clip-os.org, Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Date:   Fri, 28 Oct 2022 10:48:56 +0200
+In-Reply-To: <CACYkzJ4ak4=qPNQxVckvn3c8CZpXkXSLSyYa_HCU-RJNyuLoZg@mail.gmail.com>
+References: <20221021164626.3729012-1-roberto.sassu@huaweicloud.com>
+         <CAADnVQJHDboosqTy5LTHJtJaWJCWn9rv09jmd_sMgeV_OVQjGg@mail.gmail.com>
+         <d7a17e482b7bbf945c92443b45de73f56afea08a.camel@huaweicloud.com>
+         <bb7a5986f3d25706269d0fec9906ea73c174b808.camel@huaweicloud.com>
+         <CAADnVQL1a2pPAJqzj6oUwupxxfaW38KQswzppAZeZPzmTFhjMg@mail.gmail.com>
+         <98353f6c82d3dabdb0d434d7ecf0bfc5295015ad.camel@huaweicloud.com>
+         <ffbdcfbe-0c63-2ced-62e3-a7248b7a24f0@schaufler-ca.com>
+         <CAADnVQLAXsZRNytPHG0KhYKar3K+=7bq2KPQG77VFOKbnTPHmg@mail.gmail.com>
+         <34357c96-fe58-ffe5-e464-4bded8f119d5@huaweicloud.com>
+         <CAADnVQKD5e9vKsSo1TPeBm5hr6j4GzQeHqRURoBJyB++VOwHCw@mail.gmail.com>
+         <CACYkzJ4ak4=qPNQxVckvn3c8CZpXkXSLSyYa_HCU-RJNyuLoZg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
+X-CM-TRANSID: LxC2BwC3o3B8l1tjSAUbAA--.18857S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCF1kXFWkuF4ruw4rZw45GFg_yoWrCrWDpF
+        W5tF1jkr4DJFy7Cr1Iqa15XrWIyryfKrsrXwn8Jr1UZFyqvr1ayr17Jr4Y9FWUur4UGw1F
+        vr4jvrW3Zw1DA3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBF1jj4TG5gAAsD
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all scheduler experts:
-  When we run java gc in our 8 vcpus guest *without KVM_FEATURE_STEAL_TIME enabled*, the output looks like below:
-    With ParallelGCThreads=4 and ConcGCThreads=4, we have:
-	G1 Young Generation: 1 times 1786 ms
-	G1 Old Generation: 1 times 1022 ms
-    With ParallelGCThreads=5 and ConcGCThreads=5, we have:
-	G1 Young Generation: 1 times 1557 ms
-	G1 Old Generation: 1 times 1020 ms
+On Thu, 2022-10-27 at 12:39 +0200, KP Singh wrote:
+> On Wed, Oct 26, 2022 at 7:14 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> > On Wed, Oct 26, 2022 at 1:42 AM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > On 10/26/2022 8:37 AM, Alexei Starovoitov wrote:
+> > > > On Tue, Oct 25, 2022 at 7:58 AM Casey Schaufler <
+> > > > casey@schaufler-ca.com> wrote:
+> > > > > On 10/25/2022 12:43 AM, Roberto Sassu wrote:
+> > > > > > On Mon, 2022-10-24 at 19:13 -0700, Alexei Starovoitov
+> > > > > > wrote:
+> > > > > > > I'm looking at security_inode_init_security() and it is
+> > > > > > > indeed messy.
+> > > > > > > Per file system initxattrs callback that processes
+> > > > > > > kmalloc-ed
+> > > > > > > strings.
+> > > > > > > Yikes.
+> > > > > > > 
+> > > > > > > In the short term we should denylist inode_init_security
+> > > > > > > hook to
+> > > > > > > disallow attaching bpf-lsm there. set/getxattr should be
+> > > > > > > done
+> > > > > > > through kfuncs instead of such kmalloc-a-string hack.
+> > > > > > Inode_init_security is an example. It could be that the
+> > > > > > other hooks are
+> > > > > > affected too. What happens if they get arbitrary positive
+> > > > > > values too?
+> > > > > 
+> > > > > TL;DR - Things will go cattywampus.
+> > > > > 
+> > > > > The LSM infrastructure is an interface that has "grown
+> > > > > organically",
+> > > > > and isn't necessarily consistent in what it requires of the
+> > > > > security
+> > > > > module implementations. There are cases where it assumes that
+> > > > > the
+> > > > > security module hooks are well behaved, as you've discovered.
+> > > > > I have
+> > > > > no small amount of fear that someone is going to provide an
+> > > > > eBPF
+> > > > > program for security_secid_to_secctx(). There has been an
+> > > > > assumption,
+> > > > > oft stated, that all security modules are going to be
+> > > > > reviewed as
+> > > > > part of the upstream process. The review process ought to
+> > > > > catch hooks
+> > > > > that return unacceptable values. Alas, we've lost that with
+> > > > > BPF.
+> > > > > 
+> > > > > It would take a(nother) major overhaul of the LSM
+> > > > > infrastructure to
+> > > > > make it safe against hooks that are not well behaved. From
+> > > > > what I have
+> > > > > seen so far it wouldn't be easy/convenient/performant to do
+> > > > > it in the
+> > > > > BPF security module either. I personally think that BPF needs
+> > > > > to
+> > > > > ensure that the eBPF implementations don't return
+> > > > > inappropriate values,
+> > > > > but I understand why that is problematic.
+> > > > 
+> > > > That's an accurate statement. Thank you.
+> > > > 
+> > > > Going back to the original question...
+> > > > We fix bugs when we discover them.
+> > > > Regardless of the subsystem they belong to.
+> > > > No finger pointing.
+> > > 
+> > > I'm concerned about the following situation:
+> > > 
+> > > struct <something> *function()
+> > > {
+> > > 
+> > >         ret = security_*();
+> > >         if (ret)
+> > >                 return ERR_PTR(ret);
+> > > 
+> > > }
+> > > 
+> > > int caller()
+> > > {
+> > >         ptr = function()
+> > >         if (IS_ERR(ptr)
+> > >                 goto out;
+> > > 
+> > >         <use of invalid pointer>
+> > > }
+> > > 
+> > > I quickly found an occurrence of this:
+> > > 
+> > > static int lookup_one_common()
+> > > {
+> > > 
+> > > [...]
+> > > 
+> > >         return inode_permission();
+> > > }
+> > > 
+> > > struct dentry *try_lookup_one_len()
+> > > {
+> > > 
+> > > [...]
+> > > 
+> > >          err = lookup_one_common(&init_user_ns, name, base, len,
+> > > &this);
+> > >          if (err)
+> > >                  return ERR_PTR(err);
+> > > 
+> > > 
+> > > Unfortunately, attaching to inode_permission causes the kernel
+> > > to crash immediately (it does not happen with negative return
+> > > values).
+> > > 
+> > > So, I think the fix should be broader, and not limited to the
+> > > inode_init_security hook. Will try to see how it can be fixed.
+> > 
+> > I see. Let's restrict bpf-lsm return values to IS_ERR_VALUE.
+> > Trivial verifier change.
+> 
+> Thanks, yes this indeed is an issue. We need to do a few things:
+> 
+> 1. Restrict some hooks that we know the BPF LSM will never need.
+> 2. A verifier function that checks return values of LSM
+> hooks.
+> For most LSK hooks IS_ERR_VALUE is fine, however, there are some
+> hooks
+> like *xattr hooks that use a return value of 1 to indicate a
+> capability check is required which might need special handling.
 
-  This meets our expectation. But *with KVM_FEATURE_STEAL_TIME enabled* in our guest, the output looks like this:
-    With ParallelGCThreads=4 and ConcGCThreads=4, we have:
-	G1 Young Generation: 1 times 1637 ms
-	G1 Old Generation: 1 times 1022 ms
-    With ParallelGCThreads=5 and ConcGCThreads=5, we have:
-	G1 Young Generation: 1 times 2164 ms
-				      ^^^^
-	G1 Old Generation: 1 times 1024 ms
+I looked at security.c:
 
-  The duration of G1 Young Generation is far beyond our expectation when gc threads = 5. And we found the root cause
-is that when KVM_FEATURE_STEAL_TIME is enabled *there are much more(3k+) cpu migrations for java gc threads*. It's due to
-the below commit:
+/*
+ * SELinux and Smack integrate the cap call,
+ * so assume that all LSMs supplying this call do so.
+ */
 
-  commit 247f2f6f3c706b40b5f3886646f3eb53671258bf
-  Author: Rohit Jain <rohit.k.jain@oracle.com>
-  Date:   Wed May 2 13:52:10 2018 -0700
+Other than checking the return value, probably we should also wrap
+bpf_lsm_inode_{set,remove}xattr() to do the capability check, right?
 
-    sched/core: Don't schedule threads on pre-empted vCPUs
-
-    In paravirt configurations today, spinlocks figure out whether a vCPU is
-    running to determine whether or not spinlock should bother spinning. We
-    can use the same logic to prioritize CPUs when scheduling threads. If a
-    vCPU has been pre-empted, it will incur the extra cost of VMENTER and
-    the time it actually spends to be running on the host CPU. If we had
-    other vCPUs which were actually running on the host CPU and idle we
-    should schedule threads there.
-
-  When scheduler tries to select a CPU to run the gc thread, available_idle_cpu() will check whether vcpu_is_preempted().
-It will choose other vcpu to run gc threads when the current vcpu is preempted. But the preempted vcpu has no other work
-to do except continuing to do gc. In our guest, there are more vcpus than java gc threads. So there could always be some
-available vcpus when scheduler tries to select a idle vcpu (runing on host). This leads to lots of cpu migrations and results
-in regression.
-
-  I'm not really familiar with this mechanism. Is this a problem that needs to be fixed or improved? Or is this just expected
-behavior? Any response would be really appreciated!
-
-Thanks!
-Miaohe Lin
+Roberto
 
