@@ -2,67 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CDB36109CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 07:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D63986109F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 07:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiJ1Frk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 01:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46094 "EHLO
+        id S229683AbiJ1Fzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 01:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiJ1Fri (ORCPT
+        with ESMTP id S229572AbiJ1Fzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 01:47:38 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E4219898A
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 22:47:37 -0700 (PDT)
+        Fri, 28 Oct 2022 01:55:40 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8699119DDA7;
+        Thu, 27 Oct 2022 22:55:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666936058; x=1698472058;
+  t=1666936539; x=1698472539;
   h=from:to:cc:subject:references:date:in-reply-to:
    message-id:mime-version;
-  bh=cXm77466EiN7lwIV5G1+cqSsH01WFY4+oxX/pQE11fc=;
-  b=DSsecvohF3kMy3dzpA3+7HixJYmJ2GKuWL+c1tptdoh/vsLSH0ou72Yc
-   8WsYSfZPMEyRhFvQJ2aIi7LXZ+4V1J+D9jnAjW4W3gFh+BAv4KZLuDJp4
-   704WSdPNDZ3JC79Dp21wPBFm7ZDaqHHalaorfxcNJpUCjSTdnuVfFUXOD
-   ngLiqhW7X/mRZpr6X7HEXVM4fRWC3evhvtI/hNRhJPPKFSNI8TkyXLjXf
-   5GXDPYJsnGrGJxa8gCR2aejOS5CVUGXOag//kthAJp9/QL215Ok+o7s9+
-   K34ki8fWebLGpAUHpxYU6IsoV990cboIIqdtXQsc5TO1MrBWvjp3DPR6A
+  bh=Xo5Bp9TEV4yhmyMtrA7KFkUbHGYJBTStr4zJyd73urs=;
+  b=nw5cQlzVNsVXn2HMz2FFsE2vIr9igzHtbL+ZsxcFVrEO1iiU1+2mr5KD
+   OE/71xpdiUG7tFSUoChavIyX945/ZBYco7PnCf7tSOwWvPqUJGKretjFR
+   XaOvpaP37EGB5x1sRL3nF1kbX3MVVTNbKg7kaf7oc3iN47FHnKEvum/23
+   B3w5d9J/4EBg24KawW1vP2Rgkq+4K1b3JpmdbTrG0su8uobiS9oevrumO
+   5cz8bkabMuY9RPyKT/gDfWRHrTjULlxAAIGBlvE3wIKjWv6p3EP8q0rRP
+   Szh4emyjV4rW7EYYG8wGx5iMLEiJibg7RSMDBFqec/lYfko1b6Cl45YZN
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="310113398"
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="370483495"
 X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
-   d="scan'208";a="310113398"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 22:47:36 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="721936241"
+   d="scan'208";a="370483495"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 22:55:39 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="877848613"
 X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
-   d="scan'208";a="721936241"
+   d="scan'208";a="877848613"
 Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 22:47:32 -0700
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 22:55:35 -0700
 From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Yang Shi <shy828301@gmail.com>, "Hocko, Michal" <mhocko@suse.com>,
+        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Jagdish Gediya <jvgediya.oss@gmail.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Tim Chen <tim.c.chen@intel.com>, Wei Xu <weixugc@google.com>,
-        Yang Shi <shy828301@gmail.com>
-Subject: Re: [RFC] memory tiering: use small chunk size and more tiers
-References: <20221027065925.476955-1-ying.huang@intel.com>
-        <578c9b89-10eb-1e23-8868-cdd6685d8d4e@linux.ibm.com>
-        <877d0kk5uf.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <59291b98-6907-0acf-df11-6d87681027cc@linux.ibm.com>
-Date:   Fri, 28 Oct 2022 13:46:47 +0800
-In-Reply-To: <59291b98-6907-0acf-df11-6d87681027cc@linux.ibm.com> (Aneesh
-        Kumar K. V.'s message of "Fri, 28 Oct 2022 10:35:44 +0530")
-Message-ID: <8735b8jy9k.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Waiman Long <longman@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Chen, Tim C" <tim.c.chen@intel.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>
+Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
+References: <20221026074343.6517-1-feng.tang@intel.com>
+        <dc453287-015d-fd1c-fe7f-6ee45772d6aa@linux.ibm.com>
+        <Y1jpDfwBQId3GkJC@feng-clx> <Y1j7tsj5M0Md/+Er@dhcp22.suse.cz>
+        <Y1kl8VbPE0RYdyEB@feng-clx> <Y1lZV6qHp3gIINGc@dhcp22.suse.cz>
+        <CAHbLzkppDPm87dx9-a7t3oP9DuZ0xCPC1UWr+E-s+vh12Gwb+w@mail.gmail.com>
+        <Y1ovOeEPXT1fxCuc@feng-clx>
+        <CAHbLzkqvh3ry=FjQGuG--As2yYF2NU+bfvORqk1FyfE_vvTwXw@mail.gmail.com>
+        <Y1tOigFZeDzjPGsv@feng-clx>
+Date:   Fri, 28 Oct 2022 13:54:55 +0800
+In-Reply-To: <Y1tOigFZeDzjPGsv@feng-clx> (Feng Tang's message of "Fri, 28 Oct
+        2022 11:37:46 +0800")
+Message-ID: <87y1t0ijbk.fsf@yhuang6-desk2.ccr.corp.intel.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=ascii
@@ -75,149 +77,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+Feng Tang <feng.tang@intel.com> writes:
 
-> On 10/28/22 8:33 AM, Huang, Ying wrote:
->> Hi, Aneesh,
+> On Thu, Oct 27, 2022 at 10:55:58AM -0700, Yang Shi wrote:
+>> On Thu, Oct 27, 2022 at 12:12 AM Feng Tang <feng.tang@intel.com> wrote:
+>> >
+>> > On Thu, Oct 27, 2022 at 01:57:52AM +0800, Yang Shi wrote:
+>> > > On Wed, Oct 26, 2022 at 8:59 AM Michal Hocko <mhocko@suse.com> wrote:
+>> > [...]
+>> > > > > > This all can get quite expensive so the primary question is, does the
+>> > > > > > existing behavior generates any real issues or is this more of an
+>> > > > > > correctness exercise? I mean it certainly is not great to demote to an
+>> > > > > > incompatible numa node but are there any reasonable configurations when
+>> > > > > > the demotion target node is explicitly excluded from memory
+>> > > > > > policy/cpuset?
+>> > > > >
+>> > > > > We haven't got customer report on this, but there are quite some customers
+>> > > > > use cpuset to bind some specific memory nodes to a docker (You've helped
+>> > > > > us solve a OOM issue in such cases), so I think it's practical to respect
+>> > > > > the cpuset semantics as much as we can.
+>> > > >
+>> > > > Yes, it is definitely better to respect cpusets and all local memory
+>> > > > policies. There is no dispute there. The thing is whether this is really
+>> > > > worth it. How often would cpusets (or policies in general) go actively
+>> > > > against demotion nodes (i.e. exclude those nodes from their allowes node
+>> > > > mask)?
+>> > > >
+>> > > > I can imagine workloads which wouldn't like to get their memory demoted
+>> > > > for some reason but wouldn't it be more practical to tell that
+>> > > > explicitly (e.g. via prctl) rather than configuring cpusets/memory
+>> > > > policies explicitly?
+>> > > >
+>> > > > > Your concern about the expensive cost makes sense! Some raw ideas are:
+>> > > > > * if the shrink_folio_list is called by kswapd, the folios come from
+>> > > > >   the same per-memcg lruvec, so only one check is enough
+>> > > > > * if not from kswapd, like called form madvise or DAMON code, we can
+>> > > > >   save a memcg cache, and if the next folio's memcg is same as the
+>> > > > >   cache, we reuse its result. And due to the locality, the real
+>> > > > >   check is rarely performed.
+>> > > >
+>> > > > memcg is not the expensive part of the thing. You need to get from page
+>> > > > -> all vmas::vm_policy -> mm -> task::mempolicy
+>> > >
+>> > > Yeah, on the same page with Michal. Figuring out mempolicy from page
+>> > > seems quite expensive and the correctness can't be guranteed since the
+>> > > mempolicy could be set per-thread and the mm->task depends on
+>> > > CONFIG_MEMCG so it doesn't work for !CONFIG_MEMCG.
+>> >
+>> > Yes, you are right. Our "working" psudo code for mem policy looks like
+>> > what Michal mentioned, and it can't work for all cases, but try to
+>> > enforce it whenever possible:
+>> >
+>> > static bool  __check_mpol_demotion(struct folio *folio, struct vm_area_struct *vma,
+>> >                 unsigned long addr, void *arg)
+>> > {
+>> >         bool *skip_demotion = arg;
+>> >         struct mempolicy *mpol;
+>> >         int nid, dnid;
+>> >         bool ret = true;
+>> >
+>> >         mpol = __get_vma_policy(vma, addr);
+>> >         if (!mpol) {
+>> >                 struct task_struct *task;
+>> >                 if (vma->vm_mm)
+>> >                         task = vma->vm_mm->owner;
 >> 
->> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->> 
->>> On 10/27/22 12:29 PM, Huang Ying wrote:
->>>> We need some way to override the system default memory tiers.  For
->>>> the example system as follows,
->>>>
->>>> type		abstract distance
->>>> ----		-----------------
->>>> HBM		300
->>>> DRAM		1000
->>>> CXL_MEM		5000
->>>> PMEM		5100
->>>>
->>>> Given the memory tier chunk size is 100, the default memory tiers
->>>> could be,
->>>>
->>>> tier		abstract distance	types
->>>>                 range
->>>> ----		-----------------       -----
->>>> 3		300-400			HBM
->>>> 10		1000-1100		DRAM
->>>> 50		5000-5100		CXL_MEM
->>>> 51		5100-5200		PMEM
->>>>
->>>> If we want to group CXL MEM and PMEM into one tier, we have 2 choices.
->>>>
->>>> 1) Override the abstract distance of CXL_MEM or PMEM.  For example, if
->>>> we change the abstract distance of PMEM to 5050, the memory tiers
->>>> become,
->>>>
->>>> tier		abstract distance	types
->>>>                 range
->>>> ----		-----------------       -----
->>>> 3		300-400			HBM
->>>> 10		1000-1100		DRAM
->>>> 50		5000-5100		CXL_MEM, PMEM
->>>>
->>>> 2) Override the memory tier chunk size.  For example, if we change the
->>>> memory tier chunk size to 200, the memory tiers become,
->>>>
->>>> tier		abstract distance	types
->>>>                 range
->>>> ----		-----------------       -----
->>>> 1		200-400			HBM
->>>> 5		1000-1200		DRAM
->>>> 25		5000-5200		CXL_MEM, PMEM
->>>>
->>>> But after some thoughts, I think choice 2) may be not good.  The
->>>> problem is that even if 2 abstract distances are almost same, they may
->>>> be put in 2 tier if they sit in the different sides of the tier
->>>> boundary.  For example, if the abstract distance of CXL_MEM is 4990,
->>>> while the abstract distance of PMEM is 5010.  Although the difference
->>>> of the abstract distances is only 20, CXL_MEM and PMEM will put in
->>>> different tiers if the tier chunk size is 50, 100, 200, 250, 500, ....
->>>> This makes choice 2) hard to be used, it may become tricky to find out
->>>> the appropriate tier chunk size that satisfying all requirements.
->>>>
->>>
->>> Shouldn't we wait for gaining experience w.r.t how we would end up
->>> mapping devices with different latencies and bandwidth before tuning these values? 
->> 
->> Just want to discuss the overall design.
->> 
->>>> So I suggest to abandon choice 2) and use choice 1) only.  This makes
->>>> the overall design and user space interface to be simpler and easier
->>>> to be used.  The overall design of the abstract distance could be,
->>>>
->>>> 1. Use decimal for abstract distance and its chunk size.  This makes
->>>>    them more user friendly.
->>>>
->>>> 2. Make the tier chunk size as small as possible.  For example, 10.
->>>>    This will put different memory types in one memory tier only if their
->>>>    performance is almost same by default.  And we will not provide the
->>>>    interface to override the chunk size.
->>>>
->>>
->>> this could also mean we can end up with lots of memory tiers with relative
->>> smaller performance difference between them. Again it depends how HMAT
->>> attributes will be used to map to abstract distance.
->> 
->> Per my understanding, there will not be many memory types in a system.
->> So, there will not be many memory tiers too.  In most systems, there are
->> only 2 or 3 memory tiers in the system, for example, HBM, DRAM, CXL,
->> etc. 
+>> But this task may not be the task you want IIUC. For example, the
+>> process has two threads, A and B. They have different mempolicy. The
+>> vmscan is trying to demote a page belonging to thread A, but the task
+>> may point to thread B, so you actually get the wrong mempolicy IIUC.
 >
-> So we don't need the chunk size to be 10 because we don't forsee us needing
-> to group devices into that many tiers. 
+> Yes, this is a valid concern! We don't have good solution for this.
+> For memory policy, we may only handle the per-vma policy for now whose
+> cost is relatively low, as a best-effort try.
 
-I suggest to use small chunk size to avoid to group 2 memory
-types into one memory tier accidently.
-
->> Do you know systems with many memory types?  The basic idea is to
->> put different memory types in different memory tiers by default.  If
->> users want to group them, they can do that via overriding the abstract
->> distance of some memory type.
->> 
->
-> with small chunk size and depending on how we are going to derive abstract distance,
-> I am wondering whether we would end up with lots of memory tiers with no 
-> real value. Hence my suggestion to wait making a change like this till we have
-> code that map HMAT/CDAT attributes to abstract distance. 
-
-Per my understanding, the NUMA nodes of the same memory type/tier will
-have the exact same latency and bandwidth in HMAT/CDAT for the CPU in
-the same socket.
-
-If my understanding were correct, you think the latency / bandwidth of
-these NUMA nodes will near each other, but may be different.
-
-Even if the latency / bandwidth of these NUMA nodes isn't exactly same,
-we should deal with that in memory types instead of memory tiers.
-There's only one abstract distance for each memory type.
-
-So, I still believe we will not have many memory tiers with my proposal.
-
-I don't care too much about the exact number, but want to discuss some
-general design choice,
-
-a) Avoid to group multiple memory types into one memory tier by default
-   at most times.
-
-b) Abandon customizing abstract distance chunk size.
+Yes.  The solution isn't perfect, especially for multiple-thread
+processes with thread specific memory policy.  But the proposed code
+above can support the most common cases at least, that is, run workload
+with `numactl`.
 
 Best Regards,
 Huang, Ying
-
->
->>>
->>>> 3. Make the abstract distance of normal DRAM large enough.  For
->>>>    example, 1000, then 100 tiers can be defined below DRAM, this is
->>>>    more than enough in practice.
->>>
->>> Why 100? Will we really have that many tiers below/faster than DRAM? As of now 
->>> I see only HBM below it.
->> 
->> Yes.  100 is more than enough.  We just want to avoid to group different
->> memory types by default.
->> 
->> Best Regards,
->> Huang, Ying
->> 
