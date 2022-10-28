@@ -2,140 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2807D611595
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D00611599
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiJ1PLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 11:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
+        id S230261AbiJ1PMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 11:12:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbiJ1PLp (ORCPT
+        with ESMTP id S230176AbiJ1PLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:11:45 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED9820B136
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:11:43 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id bp11so6968757wrb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:11:43 -0700 (PDT)
+        Fri, 28 Oct 2022 11:11:55 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC13920B12C;
+        Fri, 28 Oct 2022 08:11:54 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id t10so6441468oib.5;
+        Fri, 28 Oct 2022 08:11:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QYsYDN/9U77er5LwBW/7flkKgbzRyFNT02oZoD9+In4=;
-        b=HbC7E+FwUGdmEfhHnqMLLhXh061DSx67561QITOF82Mmf2C76MjQGDOF48NpXYdOSY
-         RKzjMUeLnwoDLB/RVgdhs8Yk86lV8HIVFxB+4porUhyBPMad7PIpBj4/ZbI4PfCf5gRR
-         OzqwUQiw497Yvf0PDeFj3hW3T7qZwA/fB/QuI=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=cu5lq0+6QCF+BQfiaiaRxPUIRB+CVrNKwv+C5DY2DeE=;
+        b=jrBrEVx/TWlLwC/EybmMjgT1gIVbiJljUHbETA5hqF92YxNbERFPM8SLV8vK+xyqHj
+         9jS6lbrYopAtUqlTWoxmEhrkvVuOVnKHs18xrfkN3sQdJWGdEM8ayfOV6/rcHN9MyDGS
+         idiwJN9NfCM2e8NN2NyJ75qSfH6Jw5L/noLRcBMacXiiXUYWcEoONMWesL4OC1T+SBSX
+         zRJEmoAlv5F1PTO0uNPS0M5lwoafv7bkttb/uiMKOTZ5pxkfWBm0uH+r/cEtQLtmdLZy
+         0aGvxyZT6rXQbiuz2oOdZEl+0+YjZU9rPHTO3PCCSEnn0aiYzAOnagzZG5lkxCKy6xOI
+         2NeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QYsYDN/9U77er5LwBW/7flkKgbzRyFNT02oZoD9+In4=;
-        b=q46yBQpmxHVavM1ejfLogklo6O5O92/Ie1mpebe7y05zrMJMjuUhZ/QY3gSHkV9+o0
-         UufhxPFCnM3w0/mWm1z6EflfQnHhOG61a7S0fsGoKywwuebpJLaKHpU64HwW7U3WmcKS
-         7U8awuHZo9sUQgj3aLxZ9npjkzBZDBlCw6v3Bmi9WM9ghcBgXsqvMLtBpMqOcMErop6K
-         IKKgc7bSlA7IpbfGoS1I0ezu6CsoU3McrtidoQwxLnKS3MIknrgawkOm5oYcesEusLOK
-         oleOubopwkYWj/MXANobh+msha4LVRun+PGBvL9EuBdUeGtE91XYDqTKyMvh9vkkYYnS
-         tHBA==
-X-Gm-Message-State: ACrzQf34UsdABn47UpkN+9I63wGuDx0jWLuICl+NlRqtSyfSanglZk11
-        zgWuNUi6u2dq/ZW6/2gE6QOTBQ==
-X-Google-Smtp-Source: AMsMyM692YCiSxcG76lFQQcRte83LusC1Q3bFUw+bKozbWIC/B6KBmpgx6sxqLUD+XRPVQ/i+FS8EQ==
-X-Received: by 2002:adf:e3cc:0:b0:235:95b1:2124 with SMTP id k12-20020adfe3cc000000b0023595b12124mr30110484wrm.693.1666969902249;
-        Fri, 28 Oct 2022 08:11:42 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-54-207.cust.vodafonedsl.it. [188.217.54.207])
-        by smtp.gmail.com with ESMTPSA id i6-20020adfdec6000000b002366ded5864sm3974926wrn.116.2022.10.28.08.11.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 08:11:41 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 17:11:39 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Slark Xiao <slark_xiao@163.com>, linux-media@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: saa7164: remove variable cnt
-Message-ID: <20221028151139.GB165737@tom-ThinkPad-T14s-Gen-2i>
-References: <20221024151354.2166343-1-colin.i.king@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cu5lq0+6QCF+BQfiaiaRxPUIRB+CVrNKwv+C5DY2DeE=;
+        b=Dd2rETFce9mElrsOojZlwlfYpjlZlU0DXgL0lvymg30LR0XsRvxBSi+ghxoehZDzGr
+         4hdEXF1rO+ukWz3oe39hDvH1rcXhmpC9Uz33HyrZ8sME1RDVqGZHdD8ssBUKNvY7vkSe
+         lDtX8PAlI7sOGFQQNIYtqhU2JSUbv4yKl/VJMpVyLoqRugNIltZWO0HSk7PGwH7S27ec
+         iUMcGJI013PFv7P1USZn/WYcSh8ejVwSnB/5sDkuBuvCCFhYQABYOf6UqusUpk7XJDCQ
+         KJ7ucN3DtMbxv3bi/0wenY1i/r6djX/rTZXjG3yBCANo9k+seAxUuEK2XnXL/AnasPLr
+         9pxw==
+X-Gm-Message-State: ACrzQf3j1jmQeafjuUIFZJ3NQsQXj5fqdPOLw7NVfgTAiocvw7Y7cQ1h
+        Kv43eBPtwkyPac8GA4nbKGlY1+YK2yg=
+X-Google-Smtp-Source: AMsMyM5ueVBq7cyjALr6qHrZIqC5QSucVyONEpEUiPzqEpDhX0YcC10pHst5clJUzxGlqh+WW2rQcw==
+X-Received: by 2002:aca:b443:0:b0:359:a4dd:c0 with SMTP id d64-20020acab443000000b00359a4dd00c0mr8575830oif.234.1666969914064;
+        Fri, 28 Oct 2022 08:11:54 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z21-20020a9d62d5000000b00666fdab9da7sm1739449otk.78.2022.10.28.08.11.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 08:11:52 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6f04aec5-bbff-6154-a0b1-8ad0aec97ec5@roeck-us.net>
+Date:   Fri, 28 Oct 2022 08:11:50 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024151354.2166343-1-colin.i.king@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [RFC][PATCH v2 04/31] timers: block: Use del_timer_shutdown()
+ before freeing timer
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        =?UTF-8?Q?Christoph_B=c3=b6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>,
+        drbd-dev@lists.linbit.com, Tejun Heo <tj@kernel.org>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org
+References: <20221027150525.753064657@goodmis.org>
+ <20221027150925.819019339@goodmis.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20221027150925.819019339@goodmis.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Colin,
-
-On Mon, Oct 24, 2022 at 04:13:54PM +0100, Colin Ian King wrote:
-> Variable cnt is just being incremented and it's never used
-> anywhere else. The variable and the increment are redundant so
-> remove it.
+On 10/27/22 08:05, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  drivers/media/pci/saa7164/saa7164-core.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/media/pci/saa7164/saa7164-core.c b/drivers/media/pci/saa7164/saa7164-core.c
-> index d5f32e3ff544..01d75ef2342d 100644
-> --- a/drivers/media/pci/saa7164/saa7164-core.c
-> +++ b/drivers/media/pci/saa7164/saa7164-core.c
-> @@ -352,7 +352,7 @@ static void saa7164_work_enchandler(struct work_struct *w)
->  		container_of(w, struct saa7164_port, workenc);
->  	struct saa7164_dev *dev = port->dev;
->  
-> -	u32 wp, mcb, rp, cnt = 0;
-> +	u32 wp, mcb, rp;
->  
->  	port->last_svc_msecs_diff = port->last_svc_msecs;
->  	port->last_svc_msecs = jiffies_to_msecs(jiffies);
-> @@ -405,7 +405,6 @@ static void saa7164_work_enchandler(struct work_struct *w)
->  
->  		saa7164_work_enchandler_helper(port, rp);
->  		port->last_svc_rp = rp;
-> -		cnt++;
->  
->  		if (rp == mcb)
->  			break;
-> @@ -429,7 +428,7 @@ static void saa7164_work_vbihandler(struct work_struct *w)
->  		container_of(w, struct saa7164_port, workenc);
->  	struct saa7164_dev *dev = port->dev;
->  
-> -	u32 wp, mcb, rp, cnt = 0;
-> +	u32 wp, mcb, rp;
->  
->  	port->last_svc_msecs_diff = port->last_svc_msecs;
->  	port->last_svc_msecs = jiffies_to_msecs(jiffies);
-> @@ -481,7 +480,6 @@ static void saa7164_work_vbihandler(struct work_struct *w)
->  
->  		saa7164_work_enchandler_helper(port, rp);
->  		port->last_svc_rp = rp;
-> -		cnt++;
->  
->  		if (rp == mcb)
->  			break;
-> -- 
-> 2.37.3
+> Before a timer is freed, del_timer_shutdown() must be called.
 > 
 
-Looks good to me.
+I also had to add the following, as you had already suggested.
 
-Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Just changing blk_sync_queue() was insufficient; I had to add the call from
+blk_release_queue() because otherwise blk_sync_queue() was not always called.
 
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
+Thanks,
+Guenter
 
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+---
+diff --git a/block/blk-core.c b/block/blk-core.c
+index 17667159482e..69b1daa2e91a 100644
+--- a/block/blk-core.c
++++ b/block/blk-core.c
+@@ -227,7 +227,7 @@ const char *blk_status_to_str(blk_status_t status)
+   */
+  void blk_sync_queue(struct request_queue *q)
+  {
+-       del_timer_sync(&q->timeout);
++       del_timer_shutdown(&q->timeout);
+         cancel_work_sync(&q->timeout_work);
+  }
+  EXPORT_SYMBOL(blk_sync_queue);
+diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
+index e71b3b43927c..12a1e46536ed 100644
+--- a/block/blk-sysfs.c
++++ b/block/blk-sysfs.c
+@@ -769,6 +769,8 @@ static void blk_release_queue(struct kobject *kobj)
+
+         percpu_ref_exit(&q->q_usage_counter);
+
++       blk_sync_queue(q);
++
+         if (q->poll_stat)
+                 blk_stat_remove_callback(q, q->poll_cb);
+         blk_stat_free_callback(q->poll_cb);
+
