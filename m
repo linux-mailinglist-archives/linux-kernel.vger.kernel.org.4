@@ -2,179 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C546119AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC1A6119B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiJ1Rzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 13:55:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47058 "EHLO
+        id S229902AbiJ1R4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 13:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiJ1Rza (ORCPT
+        with ESMTP id S229619AbiJ1R4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 13:55:30 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331133F33D
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:55:28 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id h9so7638492wrt.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:55:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=P9Aoft2L46k6FAy2C9YXo0KNf7YbEySajjvFoUwPMbI=;
-        b=G+O9KAKbALBFvQndowNq/s9CCQehs7ZVqQJ34gSuKO/LubzsGTVA1h/nGxjvrW3xV3
-         ZnhAxllvNwUEWoPFbdpbawDhOFvcGP5cwnsibCdfpKrtAzjsJNl72jHqSEvXNz7dRWKF
-         DAnXCqPKALRxx6Z+pG+mdbBNU5ufxO6lG2ulNEvwK9LP7KMrneJDwPHzOkGRStjWCptB
-         SNwcfaIU01gzacu3sokwOVDZgAvYYXaatKktXvCapsG+Tz2HjS2vALNGpR7fkhDbxgal
-         x7bs0e3rQ+eTwJKVAm1nVmOBM07fnRESxgFlk6icfv1dh+wMQbgG9ArCryzqYmNUtANV
-         hhDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P9Aoft2L46k6FAy2C9YXo0KNf7YbEySajjvFoUwPMbI=;
-        b=BVgE1oIKldlNW9ZZVRHkOeB4aS0VRMDxNgayZFlU0fwg3PuWgM8xu5bNQRoSnBdPvL
-         yEmUn8FGrjkOvxBqr5vTAyEebN/AXYwENvGGpj0Dg30S769yy7pfzmiKM5W/4o2GYzyI
-         4w9zLvOAgRLh6LU6Wir6PjVnU4u7EvxLUZVrnQ5t6pwB3/c1RkgVNmyg1BYZp0JoNkQ1
-         O4G/V43iUT2Sk71Cc3sMgdAxbLNMLu3BrhIEnQX0PCDhrGee+OglqqFB3vxbnedpqN70
-         IyiStMRqRS3SJFZXC5fMS0brP0zKoklWj8So4sTMa6t0HNBF8kC8SU0ar8xrUuK+Tl0r
-         lXoA==
-X-Gm-Message-State: ACrzQf0CumpxkU9uUmdHp1g1VlBBni1HzxwCxErrHxit6ZOslK+XXdYm
-        5ZUD786mowkC2ERi7uI+CQdMAsraDy6F0VSmz/OHFQ==
-X-Google-Smtp-Source: AMsMyM7xoZu5nREJVk0gA/6ljbgVyThdSCTzuScgdFU9IeMDm+4yxDXyqoyYpxLLBDHdNprFCCbsBJWDKDMqHk7V5lM=
-X-Received: by 2002:a5d:47a6:0:b0:236:7854:246d with SMTP id
- 6-20020a5d47a6000000b002367854246dmr344718wrb.300.1666979726410; Fri, 28 Oct
- 2022 10:55:26 -0700 (PDT)
+        Fri, 28 Oct 2022 13:56:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D06FB71C;
+        Fri, 28 Oct 2022 10:56:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A01A629F9;
+        Fri, 28 Oct 2022 17:56:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4EE6C433C1;
+        Fri, 28 Oct 2022 17:56:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666979765;
+        bh=Wlp0wy+aIPCdmybVNAMcWJ4RF9OAgXH+GCCz9N2qmuQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=bg6Gr1uP3lQVc319yWgc7sVOo3b7TF2Yca3ELPzK9xdqzDdnO5EPljY8P1AMeEFgY
+         fr1Djhrce+3ic3vozX9UN71kyskBoI+hZPozMCdVoGbN8je1GQZKB6RpdzdyuxvHKu
+         TuGX1uaVRkH821fjv6QmdUVbsVuoWWdESHL4dYeuDHPyRHjUNr1f11oeRarvrAr5AQ
+         7ROrJlJyXZqAcdLcgY8UTCe87GDXmR9NbBLhakdHFfR1+S4MOejQoeHJLwOeltfsjL
+         +CawrV+0L7/1ZxmkrD2uVRk/h1OyncIAcCb/O7Xwutv0/UrPkwrPQMgWmSy8++zSRr
+         JT5b/L1BXvBgA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 70AAC5C0692; Fri, 28 Oct 2022 10:56:05 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 10:56:05 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Parav Pandit <parav@nvidia.com>
+Cc:     bagasdotme@gmail.com, arnd@arndb.de, stern@rowland.harvard.edu,
+        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        dlustig@nvidia.com, joel@joelfernandes.org, corbet@lwn.net,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v5] locking/memory-barriers.txt: Improve documentation
+ for writel() example
+Message-ID: <20221028175605.GO5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221027201000.219731-1-parav@nvidia.com>
 MIME-Version: 1.0
-References: <20221013011205.3151391-1-irogers@google.com> <715c8e4a-f3c3-6521-778e-8ba8c2bf659e@huawei.com>
- <CAP-5=fVBSDPPFnBnLF775noQPyHnjbpu+hC=LiEJo5566oONrA@mail.gmail.com>
-In-Reply-To: <CAP-5=fVBSDPPFnBnLF775noQPyHnjbpu+hC=LiEJo5566oONrA@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 28 Oct 2022 10:55:14 -0700
-Message-ID: <CAP-5=fVmd-f=HAQPJ-UfG5EdnXMk5j6a-PdF5592LDrd8K8neA@mail.gmail.com>
-Subject: Re: [PATCH v1] perf test: Parse events workaround for dash/minus
-To:     John Garry <john.garry@huawei.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221027201000.219731-1-parav@nvidia.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 4:07 PM Ian Rogers <irogers@google.com> wrote:
->
-> On Thu, Oct 13, 2022 at 5:11 AM John Garry <john.garry@huawei.com> wrote:
-> >
-> > On 13/10/2022 02:12, Ian Rogers wrote:
-> > > Skip an event configuration for event names with a dash/minus in them.
-> > > Events with a dash/minus in their name cause parsing issues as legacy
-> > > encoding of events would use a dash/minus as a separator. The parser
-> > > separates events with dashes into prefixes and suffixes and then
-> > > recombines them. Unfortunately if an event has part of its name that
-> > > matches a legacy token then the recombining fails. This is seen for
-> > > branch-brs where branch is a legacy token. branch-brs was introduced
-> > > to sysfs in:
-> > > https://lore.kernel.org/all/20220322221517.2510440-5-eranian@google.com/
-> > > The failure is shown below as well as the workaround to use a config
-> > > where the dash/minus isn't treated specially:
-> > >
-> > > ```
-> > > $ perf stat -e branch-brs true
-> > > event syntax error: 'branch-brs'
-> > >                             \___ parser error
-> > >
-> > > $ perf stat -e cpu/branch-brs/ true
-> > >
-> > >   Performance counter stats for 'true':
-> > >
-> > >              46,179      cpu/branch-brs/
-> > > ```
-> > >
-> > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > ---
-> > >   tools/perf/tests/parse-events.c | 13 +++++++++++++
-> > >   1 file changed, 13 insertions(+)
-> > >
-> > > diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-events.c
-> > > index 459afdb256a1..3440dd2616b0 100644
-> > > --- a/tools/perf/tests/parse-events.c
-> > > +++ b/tools/perf/tests/parse-events.c
-> > > @@ -2237,6 +2237,19 @@ static int test__pmu_events(struct test_suite *test __maybe_unused, int subtest
-> > >                       pr_debug("Test PMU event failed for '%s'", name);
-> > >                       ret = combine_test_results(ret, test_ret);
-> > >
-> >
-> > Hi Ian,
-> >
-> > }
-> > > +             /*
-> > > +              * Names containing '-' are recognized as prefixes and suffixes
-> > > +              * due to '-' being a legacy PMU separator. This fails when the
-> > > +              * prefix or suffix collides with an existing legacy token. For
-> > > +              * example, branch-brs has a prefix (branch) that collides with
-> > > +              * a PE_NAME_CACHE_TYPE token causing a parse error as a suffix
-> > > +              * isn't expected after this.
-> >
-> > OK, so you want to skip anything with '-'. Will we now miss out on
-> > events which contain a '-' but don't clash with an existing legacy token?
->
-> Yes. The long term solution here is to ditch the current parse event
-> code and its legacy support. An idea is to create a simplified parser
-> as part of libperf2 (libperf but with a libbpf style license), use the
-> new parser for metrics and events. In the events case, if the new
-> parser fails then use the legacy parser and its weird handling of
-> dashes.
->
-> > >  As event names in the config
-> > > +              * slashes are allowed a '-' in the name we check this works
-> > > +              * above.
-> >
-> > Sorry, I can't follow what you mean here. Do you mean that
-> > "cpu/branch-brs/" works ok and we continue to test it?
->
-> Yep, as shown in the commit message. The comment isn't great, it
-> should be worded something like:
->
-> If an event name is in the config slashes, such as cpu/branch-brs/,  a
-> '-' in the name works as the dash doesn't separate the parts of the
-> name. This continues to be tested above.
+On Thu, Oct 27, 2022 at 11:10:00PM +0300, Parav Pandit wrote:
+> The cited commit describes that when using writel(), explicit wmb()
+> is not needed. wmb() is an expensive barrier. writel() uses the needed
+> platform specific barrier instead of wmb().
+> 
+> writeX() section of "KERNEL I/O BARRIER EFFECTS" already describes
+> ordering of I/O accessors with MMIO writes.
+> 
+> Hence add the comment for pseudo code of writel() and remove confusing
+> text around writel() and wmb().
+> 
+> commit 5846581e3563 ("locking/memory-barriers.txt: Fix broken DMA vs. MMIO ordering example")
+> 
+> Signed-off-by: Parav Pandit <parav@nvidia.com>
 
-Ping. It'd be nice to merge this as otherwise we have a perf test
-failure on AMD.
+Hearing no immediate objections, I have pulled this in for further
+review.  If all goes well, I intend to submit this during the upcoming
+v6.2 merge window.
 
-Thanks,
-Ian
+							Thanx, Paul
 
-> > > +              * above.
->
-> Thanks,
-> Ian
->
-> > > +              */
-> > > +             if (strchr(ent->d_name, '-'))
-> > > +                     continue;
-> >
-> > Thanks,
-> > John
-> >
-> > > +
-> > >               snprintf(name, sizeof(name), "%s:u,cpu/event=%s/u", ent->d_name, ent->d_name);
-> > >               e.name  = name;
-> > >               e.check = test__checkevent_pmu_events_mix;
-> >
+> ---
+> changelog:
+> v4->v5:
+> - Used suggested documentation update from Will
+> - Added comment to the writel() pseudo code example
+> - updated commit log for newer changes
+> v3->v4:
+> - further trimmed the documentation for redundant description
+> v2->v3:
+> - removed redundant description for writeX()
+> - updated text for alignment and smaller change lines
+> - updated commit log with blank line before signed-off-by line
+> v1->v2:
+> - Further improved description of writel() example
+> - changed commit subject from 'usage' to 'example'
+> v0->v1:
+> - Corrected to mention I/O barrier instead of dma_wmb().
+> - removed numbered references in commit log
+> - corrected typo 'explcit' to 'explicit' in commit log
+> ---
+>  Documentation/memory-barriers.txt | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+> index 06f80e3785c5..e698093bade1 100644
+> --- a/Documentation/memory-barriers.txt
+> +++ b/Documentation/memory-barriers.txt
+> @@ -1910,7 +1910,8 @@ There are some more advanced barrier functions:
+>  
+>       These are for use with consistent memory to guarantee the ordering
+>       of writes or reads of shared memory accessible to both the CPU and a
+> -     DMA capable device.
+> +     DMA capable device. See Documentation/core-api/dma-api.rst file for more
+> +     information about consistent memory.
+>  
+>       For example, consider a device driver that shares memory with a device
+>       and uses a descriptor status value to indicate if the descriptor belongs
+> @@ -1931,22 +1932,21 @@ There are some more advanced barrier functions:
+>  		/* assign ownership */
+>  		desc->status = DEVICE_OWN;
+>  
+> -		/* notify device of new descriptors */
+> +		/* Make descriptor status visible to the device followed by
+> +		 * notify device of new descriptor
+> +		 */
+>  		writel(DESC_NOTIFY, doorbell);
+>  	}
+>  
+> -     The dma_rmb() allows us guarantee the device has released ownership
+> +     The dma_rmb() allows us to guarantee that the device has released ownership
+>       before we read the data from the descriptor, and the dma_wmb() allows
+>       us to guarantee the data is written to the descriptor before the device
+>       can see it now has ownership.  The dma_mb() implies both a dma_rmb() and
+> -     a dma_wmb().  Note that, when using writel(), a prior wmb() is not needed
+> -     to guarantee that the cache coherent memory writes have completed before
+> -     writing to the MMIO region.  The cheaper writel_relaxed() does not provide
+> -     this guarantee and must not be used here.
+> -
+> -     See the subsection "Kernel I/O barrier effects" for more information on
+> -     relaxed I/O accessors and the Documentation/core-api/dma-api.rst file for
+> -     more information on consistent memory.
+> +     a dma_wmb().
+> +
+> +     Note that the dma_*() barriers do not provide any ordering guarantees for
+> +     accesses to MMIO regions.  See the later "KERNEL I/O BARRIER EFFECTS"
+> +     subsection for more information about I/O accessors and MMIO ordering.
+>  
+>   (*) pmem_wmb();
+>  
+> -- 
+> 2.26.2
+> 
