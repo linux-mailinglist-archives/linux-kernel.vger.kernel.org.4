@@ -2,121 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 383D3610A69
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67677610A6D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiJ1GmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
+        id S229934AbiJ1GmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiJ1Glj (ORCPT
+        with ESMTP id S229870AbiJ1Glw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:41:39 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D8DB1DCD;
-        Thu, 27 Oct 2022 23:41:35 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 06:41:32 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666939293;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=418PeG1m3KiESUjrABGHYXcYvntC5lkqgItingIMeP8=;
-        b=m4blkYTVRISE9h01oLV9GZUua+GHJSmoj6X8r/1p1W+1fbMc9IKf3uAtgW3I4Bno4/kJNS
-        MV/vaB2Cc/6LU+6/q/+Nn7am/k6Sz/du4Y8Le+i9t8dr9vwueyRPYkf5pgnvABnYfPGXYy
-        x8fo+Jpo6xNUtJJhwqgxF8WS+mwJ2Plb0Hq8o1lfijpRXqJ0TpIgD4ypqtqxQJ7HJfhcQn
-        xlTK8sFn/uZqStU01ycqfdmgzTSJ/Pp3+YTDYg9Z5iacuNLGrC8UbaUNK2/IrULUcEXHDd
-        6RQ8tEAIkkPHCh0X7g1lmqeG5sdOy4BggHNNZEnImM+ZMo94xvknM9aY3KDrlw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666939293;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=418PeG1m3KiESUjrABGHYXcYvntC5lkqgItingIMeP8=;
-        b=QIBf+Z9PgrlliPNlwsv+LK5jWP/olRmOyprkpIRaJhXg9HRsgMmmS2/b82RNhds8adi44m
-        nn3I74QEhvCXm8Dw==
-From:   "tip-bot2 for Uros Bizjak" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] jump_label: Use atomic_try_cmpxchg() in
- static_key_slow_inc_cpuslocked()
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221019140850.3395-1-ubizjak@gmail.com>
-References: <20221019140850.3395-1-ubizjak@gmail.com>
+        Fri, 28 Oct 2022 02:41:52 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1067415B305
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:41:49 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id bg9-20020a05600c3c8900b003bf249616b0so2849062wmb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:41:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pW67w54VW6hMiwBpE+8e4feStlkLZps5VX75c4wE11Q=;
+        b=vzESmk/pqrKW0wWW8snVPstmmTABNdIAlBU5Vnebpsdu9zEU/vvi0ukbWnHaddtL+j
+         1m1Hyk6dxr+NCsQL4QBnO05peXndx8IWFxZCIutHo1M/6cy23CQyJj71po6K/fWwXoC7
+         Poh2RFiv6FypKR/8IYfEVoeKWxYKi8qfy8W3RO6HEhbrXx1KJf7XRm2Svc8xE+EgU3R9
+         lOBKTbsvATwvgdVEY3ryAkMnxOZ46XVndz+AB1xnrJVMaO+fHCI8OR3y9mTlEpxre4Ke
+         Z8Ss2e45hN0Y6xzH15MgGRMf6bI5LfLFAW8tRYmtD2PDGlC9lYQKKB+uRKjQTs/6J8gm
+         1/LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pW67w54VW6hMiwBpE+8e4feStlkLZps5VX75c4wE11Q=;
+        b=jRhQcRGb78NeKFpzZ9pS8J1Pz1XspQRGxDHIrBbPVyj635RyqGb5TOgn+0uizHqyvw
+         oCSqgPne2hH7gxz0M45C7SSBzbYzW7XnRP/NAKv00ojNCZJJmktKSQ5OYLmJDIbsQ+zB
+         zKTcaW5+H4EjbH8MhMm9p5DaFWCYKuLY7he+B1Mu2n3rwhS+jQXlI+3EGrW8CjZlihPI
+         SMB3mMzu1sNUw6tm4jj1GwG2zQ7U6K8rh8dClvp6mjxD7R7RWNZon7OunsVMmZ0GgirI
+         FpKN5EmerBwat8N8BGYzQyWwf4yBhD7ld8VJL92W5i5XKzXlsAAQDfHLWFqYEeOKKoJP
+         B4gA==
+X-Gm-Message-State: ACrzQf0TYPnEDs3jVA1pR9zRBmF+TA2WxamgFL5AzksEblLt/cgvUZkr
+        vgDevUlv+rLwgweXyyHrqvEeFg==
+X-Google-Smtp-Source: AMsMyM6MF6iXF3Vbr8+9LVdv/dLucMkGE6IxQEIr1BfhoAdfJj2zxG0tSODIPtiImospUL3ffmOGSg==
+X-Received: by 2002:a7b:c34a:0:b0:3c6:e069:d41c with SMTP id l10-20020a7bc34a000000b003c6e069d41cmr8316994wmj.180.1666939307626;
+        Thu, 27 Oct 2022 23:41:47 -0700 (PDT)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id h17-20020a05600c351100b003c7087f6c9asm7253979wmq.32.2022.10.27.23.41.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 23:41:47 -0700 (PDT)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v3 1/2] dt-bindings: leds: common: add disk write/read and usb-host/usb-gadget
+Date:   Fri, 28 Oct 2022 06:41:40 +0000
+Message-Id: <20221028064141.2171405-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Message-ID: <166693929232.29415.8209039784382977219.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/core branch of tip:
+The triggers enum misses 3 cases used by gemini DT.
+usb-host was added via commit 0cfbd328d60f ("usb: Add LED triggers for USB activity")
+so we add also as valid trigger usb-gadget which was added along in this
+commit.
 
-Commit-ID:     d0c006402e7941558e5283ae434e2847c7999378
-Gitweb:        https://git.kernel.org/tip/d0c006402e7941558e5283ae434e2847c7999378
-Author:        Uros Bizjak <ubizjak@gmail.com>
-AuthorDate:    Wed, 19 Oct 2022 16:08:50 +02:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Thu, 27 Oct 2022 10:35:41 +02:00
+disk-read/disk-write were added by commit d1ed7c558612 ("leds: Extends disk trigger for reads and writes")
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Rob Herring <robh@kernel.org>
 
-jump_label: Use atomic_try_cmpxchg() in static_key_slow_inc_cpuslocked()
-
-Use atomic_try_cmpxchg() instead of atomic_cmpxchg (*ptr, old, new) ==
-old in static_key_slow_inc_cpuslocked().  x86 CMPXCHG instruction
-returns success in ZF flag, so this change saves a compare after
-cmpxchg (and related move instruction in front of cmpxchg).
-
-Also, atomic_try_cmpxchg() implicitly assigns old *ptr value to "old" when
-cmpxchg fails, enabling further code simplifications.
-
-No functional change intended.
-
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20221019140850.3395-1-ubizjak@gmail.com
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- kernel/jump_label.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+V1 can be seen at https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20210508193654.2596119-1-clabbe@baylibre.com/
+Changes since v1:
+- rebased on recent tree
 
-diff --git a/kernel/jump_label.c b/kernel/jump_label.c
-index 714ac4c..4d6c6f5 100644
---- a/kernel/jump_label.c
-+++ b/kernel/jump_label.c
-@@ -115,8 +115,6 @@ EXPORT_SYMBOL_GPL(static_key_count);
- 
- void static_key_slow_inc_cpuslocked(struct static_key *key)
- {
--	int v, v1;
--
- 	STATIC_KEY_CHECK_USE(key);
- 	lockdep_assert_cpus_held();
- 
-@@ -132,11 +130,9 @@ void static_key_slow_inc_cpuslocked(struct static_key *key)
- 	 * so it counts as "enabled" in jump_label_update().  Note that
- 	 * atomic_inc_unless_negative() checks >= 0, so roll our own.
- 	 */
--	for (v = atomic_read(&key->enabled); v > 0; v = v1) {
--		v1 = atomic_cmpxchg(&key->enabled, v, v + 1);
--		if (likely(v1 == v))
-+	for (int v = atomic_read(&key->enabled); v > 0; )
-+		if (likely(atomic_try_cmpxchg(&key->enabled, &v, v + 1)))
- 			return;
--	}
- 
- 	jump_label_lock();
- 	if (atomic_read(&key->enabled) == 0) {
+Changes since v2:
+- rebased on recent tree
+
+ Documentation/devicetree/bindings/leds/common.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/leds/common.yaml b/Documentation/devicetree/bindings/leds/common.yaml
+index f5c57a580078..8ebe602419b5 100644
+--- a/Documentation/devicetree/bindings/leds/common.yaml
++++ b/Documentation/devicetree/bindings/leds/common.yaml
+@@ -90,6 +90,8 @@ properties:
+           - heartbeat
+             # LED indicates disk activity
+           - disk-activity
++          - disk-read
++          - disk-write
+             # LED indicates IDE disk activity (deprecated), in new implementations
+             # use "disk-activity"
+           - ide-disk
+@@ -98,6 +100,8 @@ properties:
+             # LED alters the brightness for the specified duration with one software
+             # timer (requires "led-pattern" property)
+           - pattern
++          - usb-gadget
++          - usb-host
+         # LED is triggered by SD/MMC activity
+       - pattern: "^mmc[0-9]+$"
+       - pattern: "^cpu[0-9]*$"
+-- 
+2.37.4
+
