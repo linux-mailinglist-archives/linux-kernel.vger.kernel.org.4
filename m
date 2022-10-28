@@ -2,130 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CEB610B24
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98C20610B28
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbiJ1HRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 03:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
+        id S229909AbiJ1HSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 03:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiJ1HRU (ORCPT
+        with ESMTP id S229519AbiJ1HSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 03:17:20 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2056.outbound.protection.outlook.com [40.107.100.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BAD1A9108;
-        Fri, 28 Oct 2022 00:17:18 -0700 (PDT)
+        Fri, 28 Oct 2022 03:18:48 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2058.outbound.protection.outlook.com [40.107.220.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABD21B6C8B;
+        Fri, 28 Oct 2022 00:18:46 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WQJbaojrGXwu05Cro1f3ryIDtaT0nYcg9UXKALRuDH9GRLlbULLuppLbX/Xyw8CkUWwtigZEujDL1c6bot/ssJ8qCBEHKfMO9UK4Lx6Xz/tlx5DMWVZYOl67rxBb4MA+ze1ObIIJJZjiu4Q5H6FPOpRkwWlea75647iftG7Y45Db6TRXvuU0sIHBW2CUxHDc1TpDLjLrOWn6XN7u0DyWhwhOE1OtQucWTY9sOVCbgaCoarbJ25nrBLRJKRlI9ab8ljFyx2c4jhmqxQ6wX/xGYuZdTGsk188+Q3HlYeIDkiXVntN+r3WzcxUa9yRO0YNY6gNQhG3GDFyWSh3jGm30og==
+ b=bPqFcMA5tcTJ0qJysyf5cbtGiVm6QDRafH7lIoJy+3vVfehguzTn7WX0VpWucQUYtTymrbivbkZnNdmVcjBy5sfDJuXjQ552GPyGJX4GNurDK6Xu+Yj0rpOxw4Qe9wLzYaYXYjxZttdJQ2J4fOT3nDi0mjPziETIQubySZtxjaT0rSz5+//K0fGtUEEtPosrhWWrtLqhvW/UKucqxqdIgzf9JhmAXYqq2sqgicgP1Qc4lNUUzv85QEiedFe2tXeFkdKa0QdQRvhNKR0lEVNyJDItBiSPmraz62WPucPtyVLBhAjFhRtx6RtZ8Bjlxv2k6su23UdTnj2ypLPZp73nyw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ldxhZUpp/D8wLcAg3yIL/EoLXFIg5RcLLkJCjOcOD8E=;
- b=iCJdTlHvxLPcm+cGZy7mCACXtxfXbAegDtm5QthkYSBJUSTHGFHOPalxlyi/8uKL97L+5p9U77ynSBgJnfpt+8OMqQzvbUMu9Yt8YJtBFLkZ4JHmXpZpPiFh0itcTegfSwHYMTj22zT5CGOI9R5Ut/LKUXTsCxL4DNRqv6jXkdq/UjSkUscamgUgl942Yzq/2V+S+R42SM2XyojZ8Dtd5yuVH1a5W8LHiCbGbSS6aXzacJtfvy0OW0FymNf0XPiNN9m/9iy5+kbQsNZITLnZSNMqQEdyeBghhRrvBxpFHl+4h+Vto0lTm4OK11HwQF39JqTkMdMlFdQhlXFb7y2Scg==
+ bh=egPQCbKLzjcN7A8hd614nK/u0IGzk6xONpQyuPOJFrM=;
+ b=JrK8WoGYJETjgJWvEKfpS86kV7lXT/HyidMjAYyK5B0PJwalch1dVPniPqLvm3Um0OyTZj8iDOInpFbrtAGdDH6llDWfQGf85ELxiC/Mkw4aEbxqk5xi+eGoUea+Ipz5ZSUmw/rDAKEHmmpbAyZwKxKPb+IrkxF8Ani15j3mqC/58mSp50EzMDJWokIIjmqtyhmYUUjlDJPEq18O63KGhXNqsDa1f0l5ZfP9r4Qq/m/DO25O/2iLT20F+ZR0y7EfKz93SYKb7M24E3FoLG2GP+0luPIsGxMDN3BcSxZpoDlE20jr+WA/UPfHKQDU8ISJ0YRWRz0x97/Rzy7KYN8BLw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ldxhZUpp/D8wLcAg3yIL/EoLXFIg5RcLLkJCjOcOD8E=;
- b=ZWUoyX2zIrU4dLCioALEjQGhdnv8EIp+ubGMLdDITranXYoRDPIaTzLPUE0/MgfNGYcNdopKtH2yefsiDOR9QaoVLWteay0hCqc1kSzrch3HXtOogKc8XqcFlmtEr2TVcX3ire6uUtIGmJS4vxZ4MkPmUh5v88R/N5wGHIf387o=
-Received: from MN0PR12MB5953.namprd12.prod.outlook.com (2603:10b6:208:37c::15)
- by PH7PR12MB6444.namprd12.prod.outlook.com (2603:10b6:510:1f8::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Fri, 28 Oct
- 2022 07:17:15 +0000
-Received: from MN0PR12MB5953.namprd12.prod.outlook.com
- ([fe80::4f54:a52f:723c:1d67]) by MN0PR12MB5953.namprd12.prod.outlook.com
- ([fe80::4f54:a52f:723c:1d67%8]) with mapi id 15.20.5723.033; Fri, 28 Oct 2022
- 07:17:15 +0000
-From:   "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>
-To:     "Gaddam, Sarath Babu Naidu" <sarath.babu.naidu.gaddam@amd.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "adrianml@alumnos.upm.es" <adrianml@alumnos.upm.es>
-CC:     "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "Sarangi, Anirudha" <anirudha.sarangi@amd.com>,
-        "Katakam, Harini" <harini.katakam@amd.com>,
-        "Gaddam, Sarath Babu Naidu" <sarath.babu.naidu.gaddam@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>
-Subject: RE: [PATCH 3/5] dmaengine: xilinx_dma: Pass AXI4-Stream control words
- to dma client
-Thread-Topic: [PATCH 3/5] dmaengine: xilinx_dma: Pass AXI4-Stream control
- words to dma client
-Thread-Index: AQHY6ouenB8zPb61WU6H41JY0MiYA64jSE0g
-Date:   Fri, 28 Oct 2022 07:17:15 +0000
-Message-ID: <MN0PR12MB595316B007EB570013C367EAB7329@MN0PR12MB5953.namprd12.prod.outlook.com>
-References: <20221028050940.27888-1-sarath.babu.naidu.gaddam@amd.com>
- <20221028050940.27888-4-sarath.babu.naidu.gaddam@amd.com>
-In-Reply-To: <20221028050940.27888-4-sarath.babu.naidu.gaddam@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
+ bh=egPQCbKLzjcN7A8hd614nK/u0IGzk6xONpQyuPOJFrM=;
+ b=Lh9o2Ms/K7YO8CEXw7qO4q9ynqKtrdzgS3LjM8sBM3tYsu+a81OSCBSjKzM12664HrQwLtyjDDP84kh41ylmDDF7ZEMNjvsLzQZcldYp/SVhHTaX0crCqfzmfkDlx9mcEr4XLwTGDo+8l3m5jXoM9iGfrP8Ryz1LVWN+sm6S12E=
+Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR12MB5953:EE_|PH7PR12MB6444:EE_
-x-ms-office365-filtering-correlation-id: a3747310-0280-421e-c3e1-08dab8b470f0
-x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ejSXSJFhEFw3hRdm/RDQxukHSUvpr9zqNzAnVrluuOdZjngrzrM8qlZ1HyZ7tb5znLhBMhEqryJkSb4Qqc9f9LKEg6fQ9LDlywJOel7JL2Bter08U/T1DgvcxFL3X4oosPP+Mcboqe3BJS06Ox3X9hG/rSgsBPFI3ryrdEoWLoQefqr2ghybjxFAYcpPum/lqlvUwUriGaN+veEeVdfuPe0Q/TlMCJdrDm53VlbKWYc8s1yFMoEhlAc/QYcghje2iWdyMYJQxrosqUXoaueU1tEmsAlZ65ZA3Ye0A3ZF1ocjs3xCQQOhu0ae4mKkSOjKLrgSK49HQWF4HF6pprBJ4M6y4sKgPk2c8+OhzYLw75+pNIB4fwEUZFOLo5XkJ4C81tW5eYFHoy+F1XRFdn7mcWQhdpLTP03hEDbHqR3mbz+yiHApkuCs9sz5WTBGNhnS5VTdbBOgfK158gg3ya438Fiw+rKXM5sjc72vJzqOaIMv8UTqosdJvoEAGDDY2Rqh+u7QKGWcDoTfcUppQw/PMxdPZpsK9PfBroKcKr9T8IRAWAmFzzMtj7zWy9HP/GrndpkRR6mIlfq8ZQLIukqeATEsPg1Uj6MvpRHjDczzUj+iKjCqQ703DB3ZXvxihBPtKjD1tWrMjqQfdqjxr7+I+xGoisdEhTqDpLeopfdM5D3nFU31moAAA+0WRZjOPndUnTjj8i6TbjBmnwi1LHKvdNT+SF07DgqLR45c4GwZJ+wMUOWhDna+wUdz51+0rYp0CvcVzVKa1NU226YLVyFDlQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5953.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(39860400002)(136003)(346002)(396003)(451199015)(7416002)(55016003)(54906003)(110136005)(52536014)(41300700001)(38070700005)(8936002)(38100700002)(66446008)(8676002)(7696005)(2906002)(86362001)(66556008)(316002)(33656002)(5660300002)(83380400001)(9686003)(66476007)(64756008)(76116006)(122000001)(4326008)(53546011)(66946007)(6506007)(478600001)(186003)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?J2Rya7UJ/68DFLX3qsF3YLkCJ8GiYn0M8e5ZUILLMtXojBkWi6G2kOaDofbS?=
- =?us-ascii?Q?Kmb1Uo8HAZrPA26x2zt5DnKWxJAJCP0IwIsDNbBXHAnpcUIfION28v+Ii0Xc?=
- =?us-ascii?Q?XNaA0AkuNGTBffmh7or4PP6CJ5Coap00EZAHM/WxJeUsEInW8C0k7Q0JbKjK?=
- =?us-ascii?Q?KAEjYCkFOe54+QhUCWg4Cb8K0xJgQ4m4TLgd8NvZ/pok8LOQeZki0do0bDr2?=
- =?us-ascii?Q?fpO3D+14vZFjvZ0lufesw4PFznCIk0wQCAIpM9tVugZPTysykSpiTzaZsEnU?=
- =?us-ascii?Q?vSlkrPKFFY805xuWLK9Fj6g25W1TXHwzbkeAxiCk+uXH4jBYmpLkqYpba/2e?=
- =?us-ascii?Q?bhz+/S2tLWwtMOsPJ+Y35PC37v+0WwOelrpnv2TvTpZkwVh5ZXPuT98lHOpG?=
- =?us-ascii?Q?AdXUc4FaBXsZCVEDeEGD4azdwlrYL/Bhi/Y80vhoaXirC6htuLgrs57Rcjcb?=
- =?us-ascii?Q?dxIwxNa/qjhu6oQKtM8rzi3y1nA6n0Ejzx31cMs1SFhm7Ed5MC2AcaHtZRmo?=
- =?us-ascii?Q?QTp3sL1IZ8jiZ4p20QoGfiFAlNHhPmio48GGv7QW78VSzGg+B86FnRwLpeTv?=
- =?us-ascii?Q?Z9Ao0DDEcLLV/apGpY9fSOiApqTyrcnzJMGjNboY25MQjFRMnjw8oIEMktov?=
- =?us-ascii?Q?iWdJdDXXYRBDePNhg3nvZveFJaZlWtHxAi7b5Q+mlKToZhGyAQLiRTa3zYIf?=
- =?us-ascii?Q?FzJJCbO/C52ZMKxlzDAn5mrajT8JDsciHAxO/U8bIwhBx8LB5ar+lZOzOMaL?=
- =?us-ascii?Q?4RwNBui5JiQfq3FRSKhnXlDsADExMgNGWxDstuvlhjN311hUg7DG3s1vt1c9?=
- =?us-ascii?Q?JF8EaYfdInJfO/E7wscVTx4KyY3QGyx+6kNg7vg3JMAjCA7IQWmlxDgRPpz5?=
- =?us-ascii?Q?6mJC46p0zjfa+Wz7Be4SYzIkl/rBVtWbESdgzssBVUBXK32Y+PYPYQghmKzN?=
- =?us-ascii?Q?YTDimZXFl+LjVlh5M73G19j+m9vs2i9Cv/vlXNtDPFmLEhRDFeQm7MOAQVH9?=
- =?us-ascii?Q?PbFFfaAa0++avgTz3A1h4hGsEOvlE36Hr+tWRl/m2NUUc+PUisn4ndzpjzxi?=
- =?us-ascii?Q?uxTFJ1l6Nau4gb8hKz/EL0qCbxm2+4+o6C7eIh6V6NacaUmRjBn7KmPRCsh/?=
- =?us-ascii?Q?WCGS6y1+yIiCVeAqk/xrv+5DykpYSmoy9u3y9HqegN1RsqFTj1Eo4TbYsiAd?=
- =?us-ascii?Q?qkB8M6lKcOqNJfD/RcIBZZpMMyJSpJWHwfJLySSRqt771H0vCBCWHqppKpUM?=
- =?us-ascii?Q?/gfycye0EXDIOXnqWEHg7Dz9JWt5cWXP8NT0/aRdS1erlvjTNOfsT3dDBY+G?=
- =?us-ascii?Q?tETdai+om2nlL7AB58uENV1JTg/PgTda7s8/0bJ1m/DPBZ5CDZeyS0AsZ8rr?=
- =?us-ascii?Q?5vjHfDsWqoOaaMxJXqrgmQLz8wWZ27EUNvzlTfvkJaTLWNsXd63O9cZzvXzI?=
- =?us-ascii?Q?Um7eCz+cFBqUkfChd/rSh5Tox2Q+ITvU5yyP250R+6Xwvy9xsdGNvePDW2Y0?=
- =?us-ascii?Q?lg4gdMAsAd01nnooQ3nyrqyk4K11lTmYqlq9YrF1Bg2NfT6vA/CvCrB03bVW?=
- =?us-ascii?Q?zi4S6RPMUFw5t2Ygu40dhH/vKSz2f1a8RnkPUUe5YMEKXsYqj8noOmxY0xf0?=
- =?us-ascii?Q?xeLqFQjhc8T8zm//muvvSBN38rH7Kv2YK9Q8oyPWqL+9?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by SJ0PR12MB5664.namprd12.prod.outlook.com (2603:10b6:a03:42b::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Fri, 28 Oct
+ 2022 07:18:45 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::a350:f29a:f287:7279]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::a350:f29a:f287:7279%4]) with mapi id 15.20.5746.023; Fri, 28 Oct 2022
+ 07:18:44 +0000
+Message-ID: <04e37ee1-53b0-97ab-d6d7-a39edfbdc2ea@amd.com>
+Date:   Fri, 28 Oct 2022 09:18:39 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] [next] drm/amdgpu: Replace one-element array with
+ flexible-array member
+Content-Language: en-US
+To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Grigory Vasilyev <h0tc0d3@gmail.com>,
+        Claudio Suarez <cssk@net-c.es>,
+        Slark Xiao <slark_xiao@163.com>,
+        Rongguang Wei <weirongguang@kylinos.cn>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <Y1tkWdwPUp+UdpM0@mail.google.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <Y1tkWdwPUp+UdpM0@mail.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0077.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1f::10) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SJ0PR12MB5664:EE_
+X-MS-Office365-Filtering-Correlation-Id: 73b92184-8cc0-437f-a39b-08dab8b4a5f2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: O/sMUdHnDrQu5EQkDryr7PxuWsJlZDdXA961aGtpi7sK2kZy3GIRInTz2gt0RQeYymUAhzqLqLGyqdPbFqbWgy24xX4FLLeGj/LC6yeXxGYjtNHCHb6sX3WYoDxncj76Uw5En1Y7wo0Qe2Q4ULqkhJplZDwTzokx/aFI6f0xaV/TdZj4lQYTPfcRtG0ljMdx5nlrTN9jfbt8SwzyH/b3/Xa6I2KfRkrJi8sYqa1ZukC4lf0P05ok9t+wQtcPX63K89lK8ORKI7kKi22js8rDJEr9qDub6+ZeBdpA7MpCqbBHqMSZZ9zOXHDimIedWI5o+BmpUYfr/jGvwGipbgndrbHb/kCt+FXOuL4RKXrrCgQm6emsHLq5s4NJtIRaZShELns8uZb3gZ8kiU8zPUQ9MsKspdLdFSQ9IRlDiP/R5VF4zXBUyjbfznBCze6hQmLNQLClD+JJv/KslV/BY6XTBJ3RmpuetXuBFhYiebMA78VR2O3SCsV4HQM1a8Zk6yW2peNrapkhuicpSREnKa89cgz2cJx/iJYRomn6U9mVzwLsDupq8pdD0ycTLsuXCVY5BsSksKwFGwdZ+LUWnA7NFVzDf3SaIf2uJvrof6eL843wXYnAm5VxoEL4T0mpGiSp8evrmxat96oXyPr5GwghJ0w4nE1n/OJklYo5zKvNxAhtCfe63k5y8bTsmjjwSuQHyumbhSOgWWKxRu7k/AS32U8z3s8XSiuVcnUQ4bgDJUW7UVxXYTMgXTx/oIP4KthdnoOAulCrAL3g9xX9gQbJdk7buzki/O4c1H2cHxJ00pC9kfY8CvP2hD5tNZPKlpi5IkhldVB91dLLRpGTwxnmiKoQPThOa28T8g5Q1ePJ0YY/jcErocUodxxy38Mrs8S4
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(39860400002)(366004)(396003)(451199015)(2906002)(6506007)(66556008)(316002)(110136005)(4326008)(6512007)(38100700002)(41300700001)(66946007)(36756003)(921005)(966005)(8676002)(6486002)(8936002)(66476007)(6666004)(2616005)(83380400001)(86362001)(7416002)(186003)(31686004)(5660300002)(31696002)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VHVEaENrRkJIMXdxZGYxUVRpRVBnY2h0TUZCT0lmREdvZHNlaE9NaWhKSWNw?=
+ =?utf-8?B?dG10dGdpQXZ2VVJsazlkUkxjVDZleEtWMVNtdkIycnE2dXczNktyZ0ZTNENs?=
+ =?utf-8?B?OExOeEtYYXl4Y25zS2JsTTdKbW9tMXI2UUxIQUtGa1U5QWQ3VktVNGFhS2lG?=
+ =?utf-8?B?VW90ZSt5WlJLVmFGTytyQUJXQ09mQWh3ZytadGZ4SEx3RmtWaHZKd0pTZmJE?=
+ =?utf-8?B?UmhNZHNjNDJYcExYUXpKempNK3dXSVhVdEx4VjBGaFRmNEdESGcvUk14eFpv?=
+ =?utf-8?B?YU5jenRpYmtPeXZ5NUtXT01ja3J0ZFJKYUo4c0RyRVBnd0tkMENRODB2Q2g4?=
+ =?utf-8?B?WUhrc2ZOSzFlTTVNb3QwWVcyMEM1UXJPRmNWaVJtWFJIYUl1N0EyVDU3Yzhu?=
+ =?utf-8?B?SFpHSnliUkpsVkNxcHNWWFdNK0VOa1pLYlVjSHU2NzdCd1RjUTF4NkprUENr?=
+ =?utf-8?B?THY3d0wxNTJyY1BZQnF3ZmsyUktFa3c0TVYvcG1ybkg5cTVjQ3NKMXVBb3lx?=
+ =?utf-8?B?by8wSysxVWpYM0dHN2FQOUJsZ1dBelRmS2xXdFBOcnBxQUx5Ujc2aFJ6TVdr?=
+ =?utf-8?B?dXMrRk9mbVM0ajJzTXQ4MXVsakNTLzV0cUtlNVlpc3QvTkhkOElSZWNocldt?=
+ =?utf-8?B?NkZuazVlVGNWTDI1TTQ1NGFqVk4vTGFhemQvZGJ3Y3l6ZEhGenFYdkFJRGhN?=
+ =?utf-8?B?dE1VYkRlWXRNZzlpVklQL2FRR0ZkNUc3Mm1HUjlpOG8zSGtsRUM1ejlRc21U?=
+ =?utf-8?B?WTdNaU9FQkNkcHJUbVpCZjdyWGNLbHlCa3JmL2FPanpaVGZTbmtMZTl1UFdZ?=
+ =?utf-8?B?T24ycE5nc3g5UjRwcEs3TklFU1FIRjN3andEb3pLZm9jZzVMblFqL0Y0WUI4?=
+ =?utf-8?B?QXNvbnRPVVNoRE93RFErRldGSmVVdlpLYmxnVXNuOGVBTmxuZXA2ZHY0bjcr?=
+ =?utf-8?B?bW5OaHhYajdibjNuZWRZOXY0TUFkcGxZUmhHMTVYUHhwUDAzc1ByeDNQOHdm?=
+ =?utf-8?B?Vyt1Vkk5SWp0NTJHak1TSFZRN2pJZHMrOHkxSVhIZ1VGdU9PdEpueVdxZHRr?=
+ =?utf-8?B?ODZXeXZMWk5ZbHA4WVhoMkE3NndNSG11djAwMFZjL1ZWZkx2WDl4SFV0ZHE4?=
+ =?utf-8?B?b1ViY3IvQWt1eE5IcFk2UnRWTzZkajl0c2RGa0l2TkRIYUxCUWJCckR6WGVv?=
+ =?utf-8?B?enMzMnZpQWloM1JYQkcwOWFPMGhLRUNpTmNLS3psbnoxdjlidW5vL29BM0VG?=
+ =?utf-8?B?WEYydTFJbW9OSVY2ZUdlN2JXbE81T3RiNlZIcjVkdnhRenlXNDUzMHhyanpx?=
+ =?utf-8?B?T2ZqVytJSFFScm0xUVNQTVFYK2hKb1pTYXRVWE9acmN1M1dFd1RkaTJLKzVF?=
+ =?utf-8?B?S2wvUHJPNDdQV3VNc1pnak9DT1ZaR1c5U3djUHpvQ2tyTG00VGdkK3JJTG5v?=
+ =?utf-8?B?dFJyQS9kUldjOHNoUGg1cFd5THhnc3pzZG84N1ZRakFjNE81T3lPRnUyZUdP?=
+ =?utf-8?B?R1gxZEJ2VGllVHVrc3VxaEhXZXFKTFUxdUgrT3RNUFFWaTBTc1RTMUtkSlhl?=
+ =?utf-8?B?RTZnWGMzK2VuVTliSGFnRmFibTBRQy9lMlZhUHNYY2ZxcXhLWnRGc1N2dWxw?=
+ =?utf-8?B?YzJxN05kVXlJVHZ4MndJbHZYekxReWFIZEUxM1Z5UlBFTXF3Q290Y1FTWmd2?=
+ =?utf-8?B?Uy9PZ2tVcGN3cHErZ1hMeW9LdURjdzhGd2wxbkZGWlJlWDdGcGlka0d0cFli?=
+ =?utf-8?B?blh1eEhURjhXbDArUnY2a1hkU0ZSTnJPR3lVdTVVQzlaSFVEbDZ6L3cxczhL?=
+ =?utf-8?B?cW9VbDh2QjNlWDlsN2JyaTY5UzJ4OTgzYjVhdDVZVlJPMmFwWFBURU9OSzgw?=
+ =?utf-8?B?NTNQQ3VVbzFzQkUvT3JTc0FkT2xLdVZTajZVcDE0OUxBTGxBL2ZoYjNSMVda?=
+ =?utf-8?B?VXhPdnJIampINUFvN05QZElWVTRKUDR0M25NdSs0SjVtcllvVTFVbDVqREF1?=
+ =?utf-8?B?SkRjQkU1UXF0eVRuMHgzMzlqeGpxRW82N0F5eGk5SWU4QzhHSGhOWXRoZmRH?=
+ =?utf-8?B?Rlh4aWdXMFI0K1R6VEdKTmhOZlpYd2lFQlE1WGk2R2I4QTZNOWFnU0VUY2I5?=
+ =?utf-8?B?UUVWUm9SQ0Ywa1JwRGhuSFpGbWNzcGZPQTY0TVJySFFXOFhESVo1Yi95SGkv?=
+ =?utf-8?Q?1GDWwS8mDjYfbOb3tw5S70j8HJZQgmMwjFnv8wVhyiVD?=
 X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73b92184-8cc0-437f-a39b-08dab8b4a5f2
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5953.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3747310-0280-421e-c3e1-08dab8b470f0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2022 07:17:15.4484
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 07:18:44.6768
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3KGbaJXUY/QU/r0p6VjzdoB2CRV/UoLLSxmiWXYDYyW042FRO4AgTZ7bq1MA5/Zz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6444
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iK9kXa+bTlsSONqkfS9PzWou5oWz+vx+BLU+dJI7HQ87bzTDUWbIrdLxZ1SsgiIx
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5664
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -134,136 +136,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
-> Sent: Friday, October 28, 2022 10:40 AM
-> To: vkoul@kernel.org; robh+dt@kernel.org;
-> krzysztof.kozlowski+dt@linaro.org; lars@metafoo.de;
-> adrianml@alumnos.upm.es
-> Cc: dmaengine@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
-> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Simek, Michal
-> <michal.simek@amd.com>; Pandey, Radhey Shyam
-> <radhey.shyam.pandey@amd.com>; Sarangi, Anirudha
-> <anirudha.sarangi@amd.com>; Katakam, Harini
-> <harini.katakam@amd.com>; Gaddam, Sarath Babu Naidu
-> <sarath.babu.naidu.gaddam@amd.com>; git (AMD-Xilinx) <git@amd.com>
-> Subject: [PATCH 3/5] dmaengine: xilinx_dma: Pass AXI4-Stream control
-> words to dma client
->=20
-> From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
->=20
-> Read DT property to check if AXI DMA is connected to streaming IP i.e
-> axiethernet. If connected pass AXI4-Stream control words to dma client us=
-ing
-> metadata_ops dmaengine API.
->=20
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-> Signed-off-by: Sarath Babu Naidu Gaddam
-> <sarath.babu.naidu.gaddam@amd.com>
+Am 28.10.22 um 07:10 schrieb Paulo Miguel Almeida:
+> One-element arrays are deprecated, and we are replacing them with
+> flexible array members instead. So, replace one-element array with
+> flexible-array member in struct _ATOM_FAKE_EDID_PATCH_RECORD and
+> refactor the rest of the code accordingly.
+>
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays=3 [1].
+>
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/238
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
+
+I'm not sure if that's a good idea. We had multiple attempts to refactor 
+this now and it always caused a regression.
+
+Additional to that the header in question came from our BIOS team and 
+isn't following Linux styles in general.
+
+Alex what do you think?
+
+Regards,
+Christian.
+
+>
+> Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
 > ---
->  drivers/dma/xilinx/xilinx_dma.c | 37
-> +++++++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
->=20
-> diff --git a/drivers/dma/xilinx/xilinx_dma.c
-> b/drivers/dma/xilinx/xilinx_dma.c index 8cd4e69dc7b4..b69e0482a50f
-> 100644
-> --- a/drivers/dma/xilinx/xilinx_dma.c
-> +++ b/drivers/dma/xilinx/xilinx_dma.c
-> @@ -493,6 +493,7 @@ struct xilinx_dma_config {
->   * @s2mm_chan_id: DMA s2mm channel identifier
->   * @mm2s_chan_id: DMA mm2s channel identifier
->   * @max_buffer_len: Max buffer length
-> + * @has_axistream_connected: AXI DMA connected to AXI Stream IP
->   */
->  struct xilinx_dma_device {
->  	void __iomem *regs;
-> @@ -511,6 +512,7 @@ struct xilinx_dma_device {
->  	u32 s2mm_chan_id;
->  	u32 mm2s_chan_id;
->  	u32 max_buffer_len;
-> +	bool has_axistream_connected;
->  };
->=20
->  /* Macros */
-> @@ -623,6 +625,29 @@ static inline void xilinx_aximcdma_buf(struct
-> xilinx_dma_chan *chan,
->  	}
->  }
->=20
-> +/**
-> + * xilinx_dma_get_metadata_ptr- Populate metadata pointer and payload
-> +length
-> + * @tx: async transaction descriptor
-> + * @payload_len: metadata payload length
-> + * @max_len: metadata max length
-> + * Return: The app field pointer.
-> + */
-> +static void *xilinx_dma_get_metadata_ptr(struct dma_async_tx_descriptor
-> *tx,
-> +					 size_t *payload_len, size_t
-> *max_len) {
-> +	struct xilinx_dma_tx_descriptor *desc =3D to_dma_tx_descriptor(tx);
-> +	struct xilinx_axidma_tx_segment *seg;
+>   drivers/gpu/drm/amd/amdgpu/atombios_encoders.c | 10 +++++++---
+>   drivers/gpu/drm/amd/include/atombios.h         |  2 +-
+>   2 files changed, 8 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c b/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
+> index 6be9ac2b9c5b..6b5abf1249db 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
+> @@ -2079,10 +2079,14 @@ amdgpu_atombios_encoder_get_lcd_info(struct amdgpu_encoder *encoder)
+>   							} else
+>   								kfree(edid);
+>   						}
 > +
-> +	*max_len =3D *payload_len =3D sizeof(u32) *
-> XILINX_DMA_NUM_APP_WORDS;
-> +	seg =3D list_first_entry(&desc->segments,
-> +			       struct xilinx_axidma_tx_segment, node);
-> +	return seg->hw.app;
-> +}
-> +
-> +static struct dma_descriptor_metadata_ops xilinx_dma_metadata_ops =3D {
-> +	.get_ptr =3D xilinx_dma_get_metadata_ptr, };
-> +
->  /* ---------------------------------------------------------------------=
---------
->   * Descriptors and segments alloc and free
->   */
-> @@ -2326,6 +2351,9 @@ static struct dma_async_tx_descriptor
-> *xilinx_dma_prep_dma_cyclic(
->  		segment->hw.control |=3D XILINX_DMA_BD_EOP;
->  	}
->=20
-> +	if (chan->xdev->has_axistream_connected)
-> +		desc->async_tx.metadata_ops =3D &xilinx_dma_metadata_ops;
-> +
->  	return &desc->async_tx;
->=20
->  error:
-> @@ -3065,6 +3093,11 @@ static int xilinx_dma_probe(struct
-> platform_device *pdev)
->  		}
->  	}
->=20
-> +	if (xdev->dma_config->dmatype =3D=3D XDMA_TYPE_AXIDMA) {
-
-xlnx,axistream-connected is an optional property for both AXIDMA and
-MCDMA. Please extend its implementation for the MCDMA support.
-
-
-> +		xdev->has_axistream_connected =3D
-> +			of_property_read_bool(node, "xlnx,axistream-
-> connected");
-> +	}
-> +
->  	if (xdev->dma_config->dmatype =3D=3D XDMA_TYPE_VDMA) {
->  		err =3D of_property_read_u32(node, "xlnx,num-fstores",
->  					   &num_frames);
-> @@ -3090,6 +3123,10 @@ static int xilinx_dma_probe(struct
-> platform_device *pdev)
->  	else
->  		xdev->ext_addr =3D false;
->=20
-> +	/* Set metadata mode */
-> +	if (xdev->has_axistream_connected)
-> +		xdev->common.desc_metadata_modes =3D
-> DESC_METADATA_ENGINE;
-> +
->  	/* Set the dma mask bits */
->  	err =3D dma_set_mask_and_coherent(xdev->dev,
-> DMA_BIT_MASK(addr_width));
->  	if (err < 0) {
-> --
-> 2.25.1
+> +						record += struct_size(fake_edid_record,
+> +								      ucFakeEDIDString,
+> +								      fake_edid_record->ucFakeEDIDLength);
+> +					} else {
+> +						/* empty fake edid record must be 3 bytes long */
+> +						record += sizeof(ATOM_FAKE_EDID_PATCH_RECORD) + 1;
+>   					}
+> -					record += fake_edid_record->ucFakeEDIDLength ?
+> -						fake_edid_record->ucFakeEDIDLength + 2 :
+> -						sizeof(ATOM_FAKE_EDID_PATCH_RECORD);
+>   					break;
+>   				case LCD_PANEL_RESOLUTION_RECORD_TYPE:
+>   					panel_res_record = (ATOM_PANEL_RESOLUTION_PATCH_RECORD *)record;
+> diff --git a/drivers/gpu/drm/amd/include/atombios.h b/drivers/gpu/drm/amd/include/atombios.h
+> index 15943bc21bc5..b5b1d073f8e2 100644
+> --- a/drivers/gpu/drm/amd/include/atombios.h
+> +++ b/drivers/gpu/drm/amd/include/atombios.h
+> @@ -4107,7 +4107,7 @@ typedef struct _ATOM_FAKE_EDID_PATCH_RECORD
+>   {
+>     UCHAR ucRecordType;
+>     UCHAR ucFakeEDIDLength;       // = 128 means EDID length is 128 bytes, otherwise the EDID length = ucFakeEDIDLength*128
+> -  UCHAR ucFakeEDIDString[1];    // This actually has ucFakeEdidLength elements.
+> +  UCHAR ucFakeEDIDString[];     // This actually has ucFakeEdidLength elements.
+>   } ATOM_FAKE_EDID_PATCH_RECORD;
+>   
+>   typedef struct  _ATOM_PANEL_RESOLUTION_PATCH_RECORD
 
