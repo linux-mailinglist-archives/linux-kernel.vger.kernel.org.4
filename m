@@ -2,123 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A24B611371
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1DE611374
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbiJ1Npx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33640 "EHLO
+        id S229437AbiJ1NqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbiJ1Noz (ORCPT
+        with ESMTP id S231384AbiJ1No4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:44:55 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FCDB10;
-        Fri, 28 Oct 2022 06:44:37 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8247740008;
-        Fri, 28 Oct 2022 13:44:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1666964675;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=p+nLdRj+8OUj3qiwCvpQ1lxFy6TRepZB0071YCG29E8=;
-        b=imB9yEPn61l8qq77msz4sIun2w4ZFowREgZ1KGLqw0HpfzW22oyTt8UIJ2iCq2LZ6EXWW7
-        DpQeM3QKho8/TuGAjFrbRvGAccykwijKa4vJks31PHn/hJBR7Ts3T7/OdsEgaNA/uYuMGy
-        Z+ll5Rz10DhCAh0sqgUKTTqI+cE8aZu99SScC14NJLbppEeuvGjoOtRNBHR2f3M+eUxACz
-        ytGKlDHk7FMU4vyVMSgMRs+XOW/sWEx3l5FBn4vVwHXWM6F/AraZcURVvStTSGOyA/g81A
-        hPcqNRfLmGaBUfXuF6lalkjIfFS9kuTUAm8a1aHzQh9h4DBOyRakzco2dBRNlA==
-Date:   Fri, 28 Oct 2022 15:44:31 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        linux-kernel@vger.kernel.org, Marcin Wojtas <mw@semihalf.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 2/5] dt-bindings: nvmem: add YAML schema for the ONIE
- tlv layout
-Message-ID: <20221028154431.0096ab70@xps-13>
-In-Reply-To: <166695949292.1076993.16137208250373047416.robh@kernel.org>
-References: <20221028092337.822840-1-miquel.raynal@bootlin.com>
-        <20221028092337.822840-3-miquel.raynal@bootlin.com>
-        <166695949292.1076993.16137208250373047416.robh@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Fri, 28 Oct 2022 09:44:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBA132EF4;
+        Fri, 28 Oct 2022 06:44:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3BF0B82A32;
+        Fri, 28 Oct 2022 13:44:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64F03C4FF10;
+        Fri, 28 Oct 2022 13:44:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666964683;
+        bh=LcKz3O85jBpORVzoqD8hoLCMY+nPoqxJwOLtUvB36iA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r37lpyLRxXnxvD0akaCLv34DqqisYLps+u/LHPs3w1mwog9eES0udif1wSfocOSZO
+         pkVjJWtwjzvzG/BqCatD7SGYXYlDl7eLokaLMRIJVOLidhIQAJG1PF2+PsJSdGylgN
+         RdRW6X8S647MQ/mQUOCXhH/KJBQajjjQX9rnuuH3HXKUFy9Hle646o8Wei9dIJr6q5
+         cIWks98dOZAZ+SQJJi4e635yOhVT1rbiV/HM+urocmQbWlIcckPTZLOXbUb6iJqea5
+         2ycHu9aZGRaupG7zF/1CobmpTaPSGOATqfWziSh1PwA3ZLaVtF8u8qxIkUMXO/O5sO
+         DREHJfM+tVLLg==
+Date:   Fri, 28 Oct 2022 08:44:39 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        quic_kalyant@quicinc.com, swboyd@chromium.org,
+        angelogioacchino.delregno@somainline.org, loic.poulain@linaro.org,
+        quic_vpolimer@quicinc.com, vkoul@kernel.org, dianders@chromium.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org,
+        Jonathan Marek <jonathan@marek.ca>, vinod.koul@linaro.org,
+        quic_jesszhan@quicinc.com
+Subject: Re: [PATCH v1 6/9] arm64: dts: qcom: sm8350: Use 2 interconnect cells
+Message-ID: <20221028134439.ugja55guopmql4nk@baldur>
+References: <20221028120812.339100-1-robert.foss@linaro.org>
+ <20221028120812.339100-7-robert.foss@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221028120812.339100-7-robert.foss@linaro.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob & Krzysztof,
+On Fri, Oct 28, 2022 at 02:08:09PM +0200, Robert Foss wrote:
+> Use two interconnect cells in order to optionally
+> support a path tag.
+> 
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sm8350.dtsi | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> index 606fab087945..b6e44cd3b394 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> @@ -1543,56 +1543,56 @@ apps_smmu: iommu@15000000 {
+>  		config_noc: interconnect@1500000 {
+>  			compatible = "qcom,sm8350-config-noc";
+>  			reg = <0 0x01500000 0 0xa580>;
+> -			#interconnect-cells = <1>;
+> +			#interconnect-cells = <2>;
 
-robh@kernel.org wrote on Fri, 28 Oct 2022 07:20:05 -0500:
+You also need amend all the interconnects references with the additional
+tag cell.
 
-> On Fri, 28 Oct 2022 11:23:34 +0200, Miquel Raynal wrote:
-> > Add a schema for the ONIE tlv NVMEM layout that can be found on any ONIE
-> > compatible networking device.
-> >=20
-> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> > ---
-> >  .../nvmem/layouts/onie,tlv-layout.yaml        | 96 +++++++++++++++++++
-> >  1 file changed, 96 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/oni=
-e,tlv-layout.yaml
-> >  =20
->=20
-> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->=20
-> yamllint warnings/errors:
->=20
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-layout.example.d=
-tb:0:0: /example-0/onie: failed to match any schema with compatible: ['onie=
-,tlv-layout', 'vendor,device']
+Regards,
+Bjorn
 
-Oh right, I wanted to ask about this under the three --- but I forgot.
-Here was my question:
-
-How do we make the checker happy with an example where the second
-compatible can be almost anything (any nvmem-compatible device) but the
-first one should be the layout? (this is currently what Michael's
-proposal uses).
-
-> doc reference errors (make refcheckdocs):
->=20
-> See https://patchwork.ozlabs.org/patch/
->=20
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
->=20
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
->=20
-> pip3 install dtschema --upgrade
->=20
-> Please check and re-submit.
->=20
-
-
-Thanks,
-Miqu=C3=A8l
+>  			qcom,bcm-voters = <&apps_bcm_voter>;
+>  		};
+>  
+>  		mc_virt: interconnect@1580000 {
+>  			compatible = "qcom,sm8350-mc-virt";
+>  			reg = <0 0x01580000 0 0x1000>;
+> -			#interconnect-cells = <1>;
+> +			#interconnect-cells = <2>;
+>  			qcom,bcm-voters = <&apps_bcm_voter>;
+>  		};
+>  
+>  		system_noc: interconnect@1680000 {
+>  			compatible = "qcom,sm8350-system-noc";
+>  			reg = <0 0x01680000 0 0x1c200>;
+> -			#interconnect-cells = <1>;
+> +			#interconnect-cells = <2>;
+>  			qcom,bcm-voters = <&apps_bcm_voter>;
+>  		};
+>  
+>  		aggre1_noc: interconnect@16e0000 {
+>  			compatible = "qcom,sm8350-aggre1-noc";
+>  			reg = <0 0x016e0000 0 0x1f180>;
+> -			#interconnect-cells = <1>;
+> +			#interconnect-cells = <2>;
+>  			qcom,bcm-voters = <&apps_bcm_voter>;
+>  		};
+>  
+>  		aggre2_noc: interconnect@1700000 {
+>  			compatible = "qcom,sm8350-aggre2-noc";
+>  			reg = <0 0x01700000 0 0x33000>;
+> -			#interconnect-cells = <1>;
+> +			#interconnect-cells = <2>;
+>  			qcom,bcm-voters = <&apps_bcm_voter>;
+>  		};
+>  
+>  		mmss_noc: interconnect@1740000 {
+>  			compatible = "qcom,sm8350-mmss-noc";
+>  			reg = <0 0x01740000 0 0x1f080>;
+> -			#interconnect-cells = <1>;
+> +			#interconnect-cells = <2>;
+>  			qcom,bcm-voters = <&apps_bcm_voter>;
+>  		};
+>  
+>  		lpass_ag_noc: interconnect@3c40000 {
+>  			compatible = "qcom,sm8350-lpass-ag-noc";
+>  			reg = <0 0x03c40000 0 0xf080>;
+> -			#interconnect-cells = <1>;
+> +			#interconnect-cells = <2>;
+>  			qcom,bcm-voters = <&apps_bcm_voter>;
+>  		};
+>  
+>  		compute_noc: interconnect@a0c0000{
+>  			compatible = "qcom,sm8350-compute-noc";
+>  			reg = <0 0x0a0c0000 0 0xa180>;
+> -			#interconnect-cells = <1>;
+> +			#interconnect-cells = <2>;
+>  			qcom,bcm-voters = <&apps_bcm_voter>;
+>  		};
+>  
+> @@ -2420,14 +2420,14 @@ usb_2_ssphy: phy@88ebe00 {
+>  		dc_noc: interconnect@90c0000 {
+>  			compatible = "qcom,sm8350-dc-noc";
+>  			reg = <0 0x090c0000 0 0x4200>;
+> -			#interconnect-cells = <1>;
+> +			#interconnect-cells = <2>;
+>  			qcom,bcm-voters = <&apps_bcm_voter>;
+>  		};
+>  
+>  		gem_noc: interconnect@9100000 {
+>  			compatible = "qcom,sm8350-gem-noc";
+>  			reg = <0 0x09100000 0 0xb4000>;
+> -			#interconnect-cells = <1>;
+> +			#interconnect-cells = <2>;
+>  			qcom,bcm-voters = <&apps_bcm_voter>;
+>  		};
+>  
+> -- 
+> 2.34.1
+> 
