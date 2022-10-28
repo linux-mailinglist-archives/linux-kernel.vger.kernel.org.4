@@ -2,105 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA324610EDA
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15AA7610EE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbiJ1Kmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 06:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
+        id S230481AbiJ1KnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 06:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbiJ1Km1 (ORCPT
+        with ESMTP id S230525AbiJ1Kmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 06:42:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBA7252B8;
-        Fri, 28 Oct 2022 03:42:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3FD35B80139;
-        Fri, 28 Oct 2022 10:42:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781BCC433D6;
-        Fri, 28 Oct 2022 10:42:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666953744;
-        bh=Gam20qC1+7dITgaY1kkmww2hgnCHG9A1vU6xUX6LcIM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fx233X2td42L0ZoO57xGR6UMywW2sI1KvnhnEtIXv1XJuyroeYRAvxeODzENteKrr
-         Drk0Ks6kBoBVYnHAM1KLKNYAYmL8kfV29Rxa4RJpXg04TQLtnc5VBW/3XepaEbpI/d
-         CRJ+9XWDAKMzZLYgUXgV6JVRduRH7H7QnGKbaR7A=
-Date:   Fri, 28 Oct 2022 12:42:21 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: Re: [PATCH 5.15 00/79] 5.15.76-rc1 review
-Message-ID: <Y1uyDV3i2heNmyne@kroah.com>
-References: <20221027165054.917467648@linuxfoundation.org>
- <3624500e-8e07-ac95-8b15-2843a3c9d7c4@roeck-us.net>
+        Fri, 28 Oct 2022 06:42:55 -0400
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70D73D5B0;
+        Fri, 28 Oct 2022 03:42:53 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id c7-20020a05600c0ac700b003c6cad86f38so6343063wmr.2;
+        Fri, 28 Oct 2022 03:42:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kzy+UU3gjOa5g3ayQGLm9vYU6Ho6NVmbqvDVQZef+sU=;
+        b=EZTw1oFqpPOGucJh8pZoQOAYelVRPlve0taEJCuPc1iWF4u9BgSnITVqbS2TCBzzs0
+         nialgBmeQTXC1ALPFgyIgRgxCyu0uIb3KhrLRR/8ifbgfBmWJFscNwq9rschyOXPQG47
+         YamkzuT/bkhxjZX64AVFIe8IBPsKUEvsLOESoaNsHQvL2MNZ1zetQoIyftCiWrp0bMCU
+         ve4EKzaT0jyujG10yQ+OH8oNh1YAVCuu080dI+nvghGmTxdakszNXc0hD66I4+tzuWSz
+         Z+xdqW3+uL69ssAR5Y2ip/jLNyhJwVo8VTbn84lEy8UeKhOmqeemXi2kEiQ8J+0F8rCF
+         aOSw==
+X-Gm-Message-State: ACrzQf0O3XQG79aCFNIX8X93gKqZXUH/PwaM9AVC+c/aRQ2lFdPqW/MU
+        dURi7S81nKRkH2sJhLZ2fVM=
+X-Google-Smtp-Source: AMsMyM6Ylw6n0ZvtWJuew2c9Z0/W8+r4x3X4HOPsGQAfPZHO93f21qUr5AyBAkE7U+Cy6W2MBsdh/A==
+X-Received: by 2002:a05:600c:4f04:b0:3c6:fae5:b4d4 with SMTP id l4-20020a05600c4f0400b003c6fae5b4d4mr9150806wmq.103.1666953772302;
+        Fri, 28 Oct 2022 03:42:52 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id i15-20020a05600c354f00b003cdf141f363sm4336398wmq.11.2022.10.28.03.42.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 03:42:51 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 10:42:49 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Shradha Gupta <shradhagupta@linux.microsoft.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: Re: [PATCH v2 0/2] Configurable order free page reporting in hyper-v
+Message-ID: <Y1uyKXva4M9PoGWY@liuwe-devbox-debian-v2>
+References: <1664447081-14744-1-git-send-email-shradhagupta@linux.microsoft.com>
+ <1664517699-1085-1-git-send-email-shradhagupta@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3624500e-8e07-ac95-8b15-2843a3c9d7c4@roeck-us.net>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1664517699-1085-1-git-send-email-shradhagupta@linux.microsoft.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 11:18:42AM -0700, Guenter Roeck wrote:
-> On 10/27/22 09:54, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.15.76 release.
-> > There are 79 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Sat, 29 Oct 2022 16:50:35 +0000.
-> > Anything received after that time might be too late.
-> > 
-> Building arm64:allmodconfig ... failed
-> --------------
-> Error log:
-> In file included from drivers/cpufreq/tegra194-cpufreq.c:10:
-> drivers/cpufreq/tegra194-cpufreq.c:282:25: error: 'tegra194_cpufreq_of_match' undeclared here (not in a function); did you mean 'tegra194_cpufreq_data'?
->   282 | MODULE_DEVICE_TABLE(of, tegra194_cpufreq_of_match);
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
-> include/linux/module.h:244:15: note: in definition of macro 'MODULE_DEVICE_TABLE'
->   244 | extern typeof(name) __mod_##type##__##name##_device_table               \
->       |               ^~~~
-> include/linux/module.h:244:21: error: conflicting types for '__mod_of__tegra194_cpufreq_of_match_device_table'; have 'const struct of_device_id[2]'
->   244 | extern typeof(name) __mod_##type##__##name##_device_table               \
->       |                     ^~~~~~
-> drivers/cpufreq/tegra194-cpufreq.c:417:1: note: in expansion of macro 'MODULE_DEVICE_TABLE'
->   417 | MODULE_DEVICE_TABLE(of, tegra194_cpufreq_of_match);
->       | ^~~~~~~~~~~~~~~~~~~
-> include/linux/module.h:244:21: note: previous declaration of '__mod_of__tegra194_cpufreq_of_match_device_table' with type 'int'
->   244 | extern typeof(name) __mod_##type##__##name##_device_table               \
->       |                     ^~~~~~
-> drivers/cpufreq/tegra194-cpufreq.c:282:1: note: in expansion of macro 'MODULE_DEVICE_TABLE'
->   282 | MODULE_DEVICE_TABLE(of, tegra194_cpufreq_of_match);
->       | ^~~~~~~~~~~~~~~~~~~
-> make[3]: [scripts/Makefile.build:289: drivers/cpufreq/tegra194-cpufreq.o] Error 1 (ignored)
-> ERROR: modpost: missing MODULE_LICENSE() in drivers/cpufreq/tegra194-cpufreq.o
-> make[2]: [scripts/Makefile.modpost:133: modules-only.symvers] Error 1 (ignored)
+On Thu, Sep 29, 2022 at 11:01:37PM -0700, Shradha Gupta wrote:
+[...]
 > 
-> I don't know what exactly happened, but commit b281adc68db8 ("cpufreq:
-> tegra194: Fix module loading") introduces a second MODULE_DEVICE_TABLE
-> at the wrong location, causing the build failure.
+> Shradha Gupta (2):
+>   mm/page_reporting: Add checks for page_reporting_order param
+>   hv_balloon: Add support for configurable order free page reporting
+> 
 
-Ah, the "Fixes:" tag was wrong in the original commit in Linus's tree.
-It should have said:
-	Fixes: 0839ed1fd7ac ("cpufreq: tegra194: add soc data to support multiple soc")
-which removed the existing MODULE_DEVICE_TABLE() entry.
-
-So only kernels newer than 5.19 need this.  I'll go drop it from the
-5.10.y and 5.15.y queues, thanks!
-
-greg k-h
+Applied to hyperv-next. Thanks.
