@@ -2,88 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F0C610B49
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D760C610B4B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiJ1HaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 03:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
+        id S230142AbiJ1HaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 03:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiJ1HaJ (ORCPT
+        with ESMTP id S230137AbiJ1HaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 03:30:09 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C44F3CBDD
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 00:30:05 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29S7E3xa019527;
-        Fri, 28 Oct 2022 07:30:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=22ojzaejfatY0Mc3HvchrNvV8i8OCtp6rk/DAp/CDZU=;
- b=dmUbiYFutQrUplth8lgKLESBik4UjTG+a/aqjBi13wvdQId4f2GYmZxVQMnTLf1FWTBg
- qV+zwmnpzR52UhPYnGHYQCJ1DJz6QqCavRu/MgayoqsqdbfDkwQ07A5cuEBjEFRrBLa3
- MFYRmDWaC/EQuy5Otir08kuy3QJkeKDINJWQU61PfnhLCvXjrpB8B8Wb/1ZYG0pYVF5u
- MqqcLmNcRKRtDjU64W6nlkYkRTbNVpN3bpkTHZ0/NXWR1uewqrl+TZ+z/4fVTyAWS9FJ
- +Q62Enf8OJbq3uPUAJze1BFS6qgILRhDPx3JEgKMeGNkRt5pnwWWwteR6/Lxv7Cg9BUl Tw== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kgagvre8b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 07:30:01 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29S7KJ12009913;
-        Fri, 28 Oct 2022 07:29:59 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04ams.nl.ibm.com with ESMTP id 3kftf1sa2d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 07:29:59 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29S7TvaV34734708
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Oct 2022 07:29:57 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 161CC42041;
-        Fri, 28 Oct 2022 07:29:57 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EAE274203F;
-        Fri, 28 Oct 2022 07:29:55 +0000 (GMT)
-Received: from localhost (unknown [9.43.57.156])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 28 Oct 2022 07:29:55 +0000 (GMT)
-Date:   Fri, 28 Oct 2022 12:59:54 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH] selftests/ftrace: Limit number of lines processed in
- 'trace'
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Akanksha J N <akanksha@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Shuah Khan <shuah@kernel.org>
-References: <20221017105502.307506-1-naveen.n.rao@linux.vnet.ibm.com>
-        <20221017105103.540a87c7@gandalf.local.home>
-        <20221019001949.950fb044677f96c6cdd00fdf@kernel.org>
-        <20221018112224.372a3484@gandalf.local.home>
-        <1666172148.1jppmgndx2.naveen@linux.ibm.com>
-        <20221020004607.a78c771e12ad0f65c018220b@kernel.org>
-In-Reply-To: <20221020004607.a78c771e12ad0f65c018220b@kernel.org>
+        Fri, 28 Oct 2022 03:30:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD584F64C;
+        Fri, 28 Oct 2022 00:30:15 -0700 (PDT)
+Received: from eldfell (unknown [194.136.85.206])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pq)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4E5B8660290F;
+        Fri, 28 Oct 2022 08:30:13 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666942213;
+        bh=z+ciR8QtGyLRpkmTeUgYpn3tnblv69hXqxcsMx9CfIQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=g5fjiNOIUQHXnXBQsyffh8A5rK4ubwA4/hM4iWL8HwSNwR5/kqOicwEz3++/vDks7
+         35wb9X2J8qXynxhqgPMeSvzhUbtB0OxHftoEXm8OiPfzEMpV39CjYl9cCRuUnIcKh5
+         T/6L2YmugQuHUNvQVz6QqRqYq+/srLEI5wiaQYe/tK3s8/5L7zckTPCqlrMJ1i2seY
+         Wo8Ve7Qw8Zn6MGe2gic46RPNei1zMzAkBRCmL//qm5FFitCOxLBVs6Qw+guWaJ7Die
+         n4+4P8QkQxJ5Vxuofdo+zydJJ1UsnWNO9S9icoeZBmis1U9MnWwueF3YywZ0Gqx495
+         AkEqmozH2wGFg==
+Date:   Fri, 28 Oct 2022 10:30:10 +0300
+From:   Pekka Paalanen <pekka.paalanen@collabora.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, asahi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] drm/format-helper: Only advertise supported formats
+ for conversion
+Message-ID: <20221028103010.15994b06.pekka.paalanen@collabora.com>
+In-Reply-To: <20221027135711.24425-1-marcan@marcan.st>
+References: <20221027135711.24425-1-marcan@marcan.st>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1666941493.vogf5bjzvv.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: SbjuqP9yl8gKxTefSPWO9UAPYSQ2KAtG
-X-Proofpoint-ORIG-GUID: SbjuqP9yl8gKxTefSPWO9UAPYSQ2KAtG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-28_03,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- lowpriorityscore=0 mlxscore=0 priorityscore=1501 malwarescore=0
- adultscore=0 mlxlogscore=999 phishscore=0 suspectscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2210280044
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,56 +61,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Masami Hiramatsu wrote:
-> On Wed, 19 Oct 2022 15:15:09 +0530
-> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
->=20
->> Steven Rostedt wrote:
->> > On Wed, 19 Oct 2022 00:19:49 +0900
->> > Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
->> >=20
->> >> > You need to make sure that the "pause-on-trace" option is set or tr=
-acing_on
->> >> > is set to 0 (disabled). Otherwise, if the tracing is still active, =
-then the
->> >> > reading of the trace file could potentially never end. =20
->> >>=20
->> >> initialize_ftrace() does this setting. So it must be set.
->> >> If you run the ftracetest on old kernel, this feature is not there an=
-d
->> >> it may cause a trouble. Naveen, can you clarify it?
->>=20
->> Yes, the change to not pause on opening the trace file looks to be the=20
->> problem.
->>=20
->> >=20
->> > But for old kernels that do not have "pause-on-trace" it should be the
->> > default. The "pause-on-trace" was added when the default was changed t=
-o not
->> > pause the trace while reading it.
->>=20
->> It looks like the kernel patch was picked up, but Masami's patch for the=
-=20
->> selftest wasn't backported. I have requested a test with that applied.
->=20
-> Good! That should be backported too.
-> BTW, which kernel version do you test?
+On Thu, 27 Oct 2022 22:57:11 +0900
+Hector Martin <marcan@marcan.st> wrote:
 
-This was reported in internal tests with RHEL kernel.
+> drm_fb_build_fourcc_list() currently returns all emulated formats
+> unconditionally as long as the native format is among them, even though
+> not all combinations have conversion helpers. Although the list is
+> arguably provided to userspace in precedence order, userspace can pick
+> something out-of-order (and thus break when it shouldn't), or simply
+> only support a format that is unsupported (and thus think it can work,
+> which results in the appearance of a hang as FB blits fail later on,
+> instead of the initialization error you'd expect in this case).
+> 
+> Add checks to filter the list of emulated formats to only those
+> supported for conversion to the native format. This presumes that there
+> is a single native format (only the first is checked, if there are
+> multiple). Refactoring this API to drop the native list or support it
+> properly (by returning the appropriate emulated->native mapping table)
+> is left for a future patch.
+> 
+> The simpledrm driver is left as-is with a full table of emulated
+> formats. This keeps all currently working conversions available and
+> drops all the broken ones (i.e. this a strict bugfix patch, adding no
+> new supported formats nor removing any actually working ones). In order
+> to avoid proliferation of emulated formats, future drivers should
+> advertise only XRGB8888 as the sole emulated format (since some
+> userspace assumes its presence).
+> 
+> This fixes a real user regression where the ?RGB2101010 support commit
+> started advertising it unconditionally where not supported, and KWin
+> decided to start to use it over the native format and broke, but also
+> the fixes the spurious RGB565/RGB888 formats which have been wrongly
+> unconditionally advertised since the dawn of simpledrm.
+> 
+> Fixes: 6ea966fca084 ("drm/simpledrm: Add [AX]RGB2101010 formats")
+> Fixes: 11e8f5fd223b ("drm: Add simpledrm driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 
->=20
->>=20
->> Separately, before I saw your response, I came up with the below patch=20
->> to update the selftests to disable tracing before reading the trace=20
->> file. I have also requested this to be tested.
->=20
-> Yeah, OK. This also looks OK to me.
+Hi Hector,
 
-This patch doesn't seem to be enough - event/subsystem-enable.tc also=20
-needs updates. In light of that, I'm not sure if the large number of=20
-disable_tracing statements required makes sense. So, I'm inclined to=20
-drop this patch in favour of the existing pause-on-trace option.
+I completely agree with all the rationale here.
+
+Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
 
 
 Thanks,
-Naveen
+pq
+
+
+> ---
+> I'm proposing this alternative approach after a heated discussion on
+> IRC. I'm out of ideas, if y'all don't like this one you can figure it
+> out for yourseves :-)
+> 
+> Changes since v1:
+> This v2 moves all the changes to the helper (so they will apply to
+> the upcoming ofdrm, though ofdrm also needs to be fixed to trim its
+> format table to only formats that should be emulated, probably only
+> XRGB8888, to avoid further proliferating the use of conversions),
+> and avoids touching more than one file. The API still needs cleanup
+> as mentioned (supporting more than one native format is fundamentally
+> broken, since the helper would need to tell the driver *what* native
+> format to use for *each* emulated format somehow), but all current and
+> planned users only pass in one native format, so this can (and should)
+> be fixed later.
+> 
+> Aside: After other IRC discussion, I'm testing nuking the
+> XRGB2101010 <-> ARGB2101010 advertisement (which does not involve
+> conversion) by removing those entries from simpledrm in the Asahi Linux
+> downstream tree. As far as I'm concerned, it can be removed if nobody
+> complains (by removing those entries from the simpledrm array), if
+> maintainers are generally okay with removing advertised formats at all.
+> If so, there might be other opportunities for further trimming the list
+> non-native formats advertised to userspace.
+> 
+> Tested with KWin-X11, KWin-Wayland, GNOME-X11, GNOME-Wayland, and Weston
+> on both XRGB2101010 and RGB8888 simpledrm framebuffers.
+> 
+>  drivers/gpu/drm/drm_format_helper.c | 66 ++++++++++++++++++++---------
+>  1 file changed, 47 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_format_helper.c b/drivers/gpu/drm/drm_format_helper.c
+> index e2f76621453c..3ee59bae9d2f 100644
+> --- a/drivers/gpu/drm/drm_format_helper.c
+> +++ b/drivers/gpu/drm/drm_format_helper.c
+> @@ -807,6 +807,38 @@ static bool is_listed_fourcc(const uint32_t *fourccs, size_t nfourccs, uint32_t
+>  	return false;
+>  }
+>  
+> +static const uint32_t conv_from_xrgb8888[] = {
+> +	DRM_FORMAT_XRGB8888,
+> +	DRM_FORMAT_ARGB8888,
+> +	DRM_FORMAT_XRGB2101010,
+> +	DRM_FORMAT_ARGB2101010,
+> +	DRM_FORMAT_RGB565,
+> +	DRM_FORMAT_RGB888,
+> +};
+> +
+> +static const uint32_t conv_from_rgb565_888[] = {
+> +	DRM_FORMAT_XRGB8888,
+> +	DRM_FORMAT_ARGB8888,
+> +};
+> +
+> +static bool is_conversion_supported(uint32_t from, uint32_t to)
+> +{
+> +	switch (from) {
+> +	case DRM_FORMAT_XRGB8888:
+> +	case DRM_FORMAT_ARGB8888:
+> +		return is_listed_fourcc(conv_from_xrgb8888, ARRAY_SIZE(conv_from_xrgb8888), to);
+> +	case DRM_FORMAT_RGB565:
+> +	case DRM_FORMAT_RGB888:
+> +		return is_listed_fourcc(conv_from_rgb565_888, ARRAY_SIZE(conv_from_rgb565_888), to);
+> +	case DRM_FORMAT_XRGB2101010:
+> +		return to == DRM_FORMAT_ARGB2101010;
+> +	case DRM_FORMAT_ARGB2101010:
+> +		return to == DRM_FORMAT_XRGB2101010;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
+>  /**
+>   * drm_fb_build_fourcc_list - Filters a list of supported color formats against
+>   *                            the device's native formats
+> @@ -827,7 +859,9 @@ static bool is_listed_fourcc(const uint32_t *fourccs, size_t nfourccs, uint32_t
+>   * be handed over to drm_universal_plane_init() et al. Native formats
+>   * will go before emulated formats. Other heuristics might be applied
+>   * to optimize the order. Formats near the beginning of the list are
+> - * usually preferred over formats near the end of the list.
+> + * usually preferred over formats near the end of the list. Formats
+> + * without conversion helpers will be skipped. New drivers should only
+> + * pass in XRGB8888 and avoid exposing additional emulated formats.
+>   *
+>   * Returns:
+>   * The number of color-formats 4CC codes returned in @fourccs_out.
+> @@ -839,7 +873,7 @@ size_t drm_fb_build_fourcc_list(struct drm_device *dev,
+>  {
+>  	u32 *fourccs = fourccs_out;
+>  	const u32 *fourccs_end = fourccs_out + nfourccs_out;
+> -	bool found_native = false;
+> +	uint32_t native_format = 0;
+>  	size_t i;
+>  
+>  	/*
+> @@ -858,26 +892,18 @@ size_t drm_fb_build_fourcc_list(struct drm_device *dev,
+>  
+>  		drm_dbg_kms(dev, "adding native format %p4cc\n", &fourcc);
+>  
+> -		if (!found_native)
+> -			found_native = is_listed_fourcc(driver_fourccs, driver_nfourccs, fourcc);
+> +		/*
+> +		 * There should only be one native format with the current API.
+> +		 * This API needs to be refactored to correctly support arbitrary
+> +		 * sets of native formats, since it needs to report which native
+> +		 * format to use for each emulated format.
+> +		 */
+> +		if (!native_format)
+> +			native_format = fourcc;
+>  		*fourccs = fourcc;
+>  		++fourccs;
+>  	}
+>  
+> -	/*
+> -	 * The plane's atomic_update helper converts the framebuffer's color format
+> -	 * to a native format when copying to device memory.
+> -	 *
+> -	 * If there is not a single format supported by both, device and
+> -	 * driver, the native formats are likely not supported by the conversion
+> -	 * helpers. Therefore *only* support the native formats and add a
+> -	 * conversion helper ASAP.
+> -	 */
+> -	if (!found_native) {
+> -		drm_warn(dev, "Format conversion helpers required to add extra formats.\n");
+> -		goto out;
+> -	}
+> -
+>  	/*
+>  	 * The extra formats, emulated by the driver, go second.
+>  	 */
+> @@ -890,6 +916,9 @@ size_t drm_fb_build_fourcc_list(struct drm_device *dev,
+>  		} else if (fourccs == fourccs_end) {
+>  			drm_warn(dev, "Ignoring emulated format %p4cc\n", &fourcc);
+>  			continue; /* end of available output buffer */
+> +		} else if (!is_conversion_supported(fourcc, native_format)) {
+> +			drm_dbg_kms(dev, "Unsupported emulated format %p4cc\n", &fourcc);
+> +			continue; /* format is not supported for conversion */
+>  		}
+>  
+>  		drm_dbg_kms(dev, "adding emulated format %p4cc\n", &fourcc);
+> @@ -898,7 +927,6 @@ size_t drm_fb_build_fourcc_list(struct drm_device *dev,
+>  		++fourccs;
+>  	}
+>  
+> -out:
+>  	return fourccs - fourccs_out;
+>  }
+>  EXPORT_SYMBOL(drm_fb_build_fourcc_list);
+
