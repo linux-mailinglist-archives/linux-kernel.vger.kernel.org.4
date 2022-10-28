@@ -2,106 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5237611B61
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A056611B67
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiJ1UGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 16:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
+        id S230167AbiJ1UKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 16:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbiJ1UG0 (ORCPT
+        with ESMTP id S229934AbiJ1UJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 16:06:26 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988A78A7F1;
-        Fri, 28 Oct 2022 13:06:24 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id e15so259270qts.1;
-        Fri, 28 Oct 2022 13:06:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cpn6PgpH/B8a8nYankJVLNowGT2ZkREma3yqGiooSAQ=;
-        b=B+O1SK60peeYYFs3b2JAF4gyW90Zfo5Bg3AXn1pyODIHPCCXWOzNTLkyAQ4jz1MCYq
-         rTSG6EHhx4y1XzzlAShRZEwhJ5mTsL00KLxVg5Rk2VzfuMJggiQCfUaaujrDWEzL64zh
-         dNShAzxPPvtTihG75J9Usc/6YZwQS3aNDBEVZ7NyxcJYzibp/46sa2GI1/vxpNQjnbDv
-         JSChDTyzDGny6JZqvCdbtPPrfFBX6XsPd/87FtGptAqkGiXeYnp+ZkhUMImBbQOKMlYm
-         3ci35Mf7+oNZpr2kVvKT290jHS50epcODfPeAZqNGKqX/OGG4s+f703UpdyGJINfXL2E
-         vWCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cpn6PgpH/B8a8nYankJVLNowGT2ZkREma3yqGiooSAQ=;
-        b=xGfQ9tVy2XR9FK8MIDwllmAEO49r2gHvQmGL+CV8/nII35ZKjuAfVRc/UV6UTxmFCq
-         Wbh6glC7YJSMjpQYVPjkRreGjG/NKkSDgLl/ft3/D70PsmJcxLDL33a+o/C1HTKpThv2
-         tQZFT0CxIuTjWvb6uvPR4OLF4flGPcsgLcR7mxU5hAtxCpbZRQkbxNig6UsfRdvUokgL
-         +fqKbNuHU8P3x8Ksf1KDNSuMDm0MS4tei0kJNqe0AMCZTYu1l/Dpf9qJL3smlHxvzDEo
-         pctc1n4eLUSpa0U2mmghjY4KAKfN2TQwzvxS1IcCOa4mNIaRkY4c9jegu5ae5Faps/Oc
-         /+AQ==
-X-Gm-Message-State: ACrzQf16yCVX+MMaNtqGc5VIHdaM4BDQPwNNXvi6DcBtDru3wTp6wVaE
-        QsXCL7MGDUpVKRvOc08xjko=
-X-Google-Smtp-Source: AMsMyM4VGe5aWNBH5jRVYBWfOHWmm9O2JhL/QG1gyqpMfaD2w7AXAK43Lfd7LPByXKV4w6snM+xxgA==
-X-Received: by 2002:a05:622a:355:b0:39c:cb1c:e66a with SMTP id r21-20020a05622a035500b0039ccb1ce66amr1134903qtw.22.1666987583628;
-        Fri, 28 Oct 2022 13:06:23 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id k26-20020ac8605a000000b0039a55f78792sm2806569qtm.89.2022.10.28.13.06.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 13:06:22 -0700 (PDT)
-Message-ID: <3dd0af6d-af86-ab65-36a9-d5b068977641@gmail.com>
-Date:   Fri, 28 Oct 2022 13:06:15 -0700
+        Fri, 28 Oct 2022 16:09:23 -0400
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236751C906F
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:09:20 -0700 (PDT)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 804013F1D8;
+        Fri, 28 Oct 2022 22:09:16 +0200 (CEST)
+Date:   Fri, 28 Oct 2022 22:09:15 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 00/10] drm/msm: Fix math issues in MSM DSC
+ implementation
+Message-ID: <20221028200823.s5ygokpfy5jz25ge@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221026182824.876933-1-marijn.suijten@somainline.org>
+ <99744fda-a3b8-f97a-294c-78e512d865bc@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 5.4 00/53] 5.4.221-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
-References: <20221027165049.817124510@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221027165049.817124510@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <99744fda-a3b8-f97a-294c-78e512d865bc@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/27/22 09:55, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.221 release.
-> There are 53 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 29 Oct 2022 16:50:35 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.221-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Hi Abhinav,
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+On 2022-10-28 11:33:21, Abhinav Kumar wrote:
+> Hi Marijn
+> 
+> On 10/26/2022 11:28 AM, Marijn Suijten wrote:
+> > Various removals of complex yet unnecessary math, fixing all uses of
+> > drm_dsc_config::bits_per_pixel to deal with the fact that this field
+> > includes four fractional bits, and finally making sure that
+> > range_bpg_offset contains values 6-bits wide to prevent overflows in
+> > drm_dsc_pps_payload_pack().
+> > 
+> > Altogether this series is responsible for solving _all_ Display Stream
+> > Compression issues and artifacts on the Sony Tama (sdm845) Akatsuki
+> > smartphone (2880x1440p).
+> > 
+> > Changes since v3:
+> > - Swap patch 7 and 8 to make sure msm_host is available inside
+> >    dsi_populate_dsc_params();
+> > - Reword patch 6 (Migrate to drm_dsc_compute_rc_parameters()) to more
+> >    clearly explain why the FIXME wasn't solved initially, but why it can
+> >    (and should!) be resolved now.
+> > 
+> > v3: https://lore.kernel.org/linux-arm-msm/20221009184824.457416-1-marijn.suijten@somainline.org/T/#u
+> > 
+> > Changes since v2:
+> > - Generalize mux_word_size setting depending on bits_per_component;
+> > - Migrate DSI's DSC calculations to drm_dsc_compute_rc_parameters(),
+> >    implicitly addressing existing math issues;
+> > - Disallow any bits_per_component other than 8, until hardcoded values
+> >    are updated and tested to support such cases.
+> > 
+> > v2: https://lore.kernel.org/linux-arm-msm/20221005181657.784375-1-marijn.suijten@somainline.org/T/#u
+> > 
+> > Changes since v1:
+> > 
+> > - Propagate r-b's, except (obviously) in patches that were (heavily)
+> >    modified;
+> > - Remove accidental debug code in dsi_cmd_dma_add;
+> > - Move Range BPG Offset masking out of DCS PPS packing, back into the
+> >    DSI driver when it is assigned to drm_dsc_config (this series is now
+> >    strictly focusing on drm/msm again);
+> > - Replace modulo-check resulting in conditional increment with
+> >    DIV_ROUND_UP;
+> > - Remove repeated calculation of slice_chunk_size;
+> > - Use u16 instead of int when handling bits_per_pixel;
+> > - Use DRM_DEV_ERROR instead of pr_err in DSI code;
+> > - Also remove redundant target_bpp_x16 variable.
+> > 
+> > v1: https://lore.kernel.org/linux-arm-msm/20221001190807.358691-1-marijn.suijten@somainline.org/T/#u
+> > 
+> > Marijn Suijten (10):
+> >    drm/msm/dsi: Remove useless math in DSC calculations
+> >    drm/msm/dsi: Remove repeated calculation of slice_per_intf
+> >    drm/msm/dsi: Use DIV_ROUND_UP instead of conditional increment on
+> >      modulo
+> >    drm/msm/dsi: Reuse earlier computed dsc->slice_chunk_size
+> >    drm/msm/dsi: Appropriately set dsc->mux_word_size based on bpc
+> >    drm/msm/dsi: Migrate to drm_dsc_compute_rc_parameters()
+> >    drm/msm/dsi: Account for DSC's bits_per_pixel having 4 fractional bits
+> >    drm/msm/dsi: Disallow 8 BPC DSC configuration for alternative BPC
+> >      values
+> >    drm/msm/dpu1: Account for DSC's bits_per_pixel having 4 fractional
+> >      bits
+> >    drm/msm/dsi: Prevent signed BPG offsets from bleeding into adjacent
+> >      bits
+> > 
+> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c |  11 +-
+> >   drivers/gpu/drm/msm/dsi/dsi_host.c         | 121 ++++++---------------
+> >   2 files changed, 37 insertions(+), 95 deletions(-)
+> > 
+> > --
+> > 2.38.1
+> > 
+> 
+> To keep the -fixes cycle to have only critical fixes (others are 
+> important too but are cleanups), I was thinking of absorbing patches 
+> 7,8,9 and 10 alone in the -fixes cycle and for patches 1-6, will go 
+> through the 6.2 push.
+> 
+> Let me know if there are any concerns if we just take patches 7,8,9 and 
+> 10 separately.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Unfortunately that isn't going to cut it.  For starters patch 8 is only
+introducing additional validation but as long as no panel drivers set
+bpc != 8, this doesn't change anything: it is not a critical fix.
 
+Then, more importantly, as discussed in v2 reviews it was preferred to
+_not_ fix the broken code in dsi_populate_dsc_params() but migrate to
+drm_dsc_compute_rc_parameters() directly [1].  As such patch 6 (which
+performs the migration) is definitely a requirement for the fixes to be
+complete.  Then again this patch looks weird when 5 is not applied,
+since both refactor how dsc->mux_word_size is assigned.  At the same
+time it cannot be cleanly applied without patch 1 (Remove useless math
+in DSC calculations) nor patch 3 (Use DIV_ROUND_UP instead of
+conditional increment on modulo), but I just realized that patch 3 is
+now also useless as the code is being removed altogether while migrating
+to drm_dsc_compute_rc_parameters().
+
+Same for patch 4 (Reuse earlier computed dsc->slice_chunk_size): while
+it may not seem obvious at first, the original code uses bits_per_pixel
+without considering the fractional bits, again resulting invalid values.
+Perhaps this should have been mentioned in the patch description, but I
+did not want to create an even larger chain of references pointing back
+and forth to future patches fixing the exact same bug.  Unfortunately
+this patch doesn't apply cleanly without patch 2 (Remove repeated
+calculation of slice_per_intf) either.
+
+All in all, applying this series piecemeal requires careful
+consideration which of the patches are actually fixing issues, and is
+terribly tricky considering code cleanups touching the same code and
+sitting right before the fixes (done intentionally to not distract diffs
+in bugfixes being surrounded by odd looking code).
+
+[1]: https://lore.kernel.org/linux-arm-msm/CAA8EJpr=0w0KReqNW2jP8DzvXLgo_o6bKmwMOed2sXb6d8HKhg@mail.gmail.com/
+
+- Marijn
