@@ -2,130 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE256116B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30ECA6116C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbiJ1QBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
+        id S230259AbiJ1QDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbiJ1P74 (ORCPT
+        with ESMTP id S230386AbiJ1QD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:59:56 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36F5214657;
-        Fri, 28 Oct 2022 08:59:01 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id n83so6549650oif.11;
-        Fri, 28 Oct 2022 08:59:01 -0700 (PDT)
+        Fri, 28 Oct 2022 12:03:29 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C4C219FED
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:00:38 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id y13so5120724pfp.7
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:00:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kGV5CRuXO/AflfNqwOyb3q124XfnO4+Le7SUJ2VJU3I=;
-        b=YEtveQ5geZPkTIxyIW1RGzgwGnwFThDcL8Wv8vKpWOWescIp3AKZvU140u86bHSctS
-         /WHC/hmjpHBos5Hsg0sNydLxJm4tylUPI8AzWzyWluY1vVuXG/7OjgnTWV2zDOBQ2tgh
-         2YIIErFMOMyFYdwhQ285czT3VOJpUm8T9YJgxEQvLj1Rd4ZX/bFyImyiSJ0Mc/1okjkI
-         JcInEEarNY+WFTfmOAsL5smiQld4j8i/XdWjxxwznnvmmqB6CYjLjXOT73p7CvI2Dnwr
-         CTHW1+tadB0YLfZ02AD8Tk0QlPInG43fpuM7w8eLUkFLnrVfJ3NmH2HDECrKJlDIDVuA
-         oNlg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RxnT79sprMj1qcVVm8Tt8+tmzuujR2ZjMHrctvNUZVI=;
+        b=iHfq4sz7PsBNS/x1d5sLnZLVZAADuy1QWqxSDrNge/QOs195ZUBaeJ+Ijx2ur0Bfoa
+         /6U3625VxTOqVP46SxbIXsrgsj5RoxisJcQ9YWahhT4/WEpeSlsTZdjysIRL2U2e+HrS
+         2/xUEG40xdbo510P2Pgn4V2GmpORNSrLvOjhFT+49b/HUHflCvwTje5ypniQvFR5XjMu
+         ChvICuqINajglxouUlnx2fD7f3Y3syvtnba0OUz44/YyT9zcnl9EUnnR4jKOwzBws3+v
+         kbptZNREQxg3hk44ffl/s28TV/20/V1TaGfTqTohQwe+vTe9iO3o4Tye0RZRoqpaX2FG
+         z7rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kGV5CRuXO/AflfNqwOyb3q124XfnO4+Le7SUJ2VJU3I=;
-        b=XjEW36iyuH1+PNyWU3bocMDYjqjjws7diM14xC6V5JAGS56vQDZJW5o/Fe5nYkVHAD
-         X3/zlxPRFmp91T6A7Bz5Ae6YXXVfRTxicKn9CQOLjhJbUEY3GmEoVGwrB92xuut8H4La
-         nOFZLxdXhZFpkfaospJ+4/VyL2Ay7B6qhJrKQBSOcqV7YjIaTBooFDqO5KGRrL3FpPy7
-         zMpwhuRwMXJSuEy2x3jLs8MeOr5Y6E8wsKV7u7LRh024nC/KSFg4c1Md1Gaku8UaXwII
-         URiUS0JwewA8MVQYJlYI5exi/OFwLPZijlKdF+t1MT1rY7vpIX2JSkTkvVd5PANML5BO
-         JHHw==
-X-Gm-Message-State: ACrzQf2rc4G/+GP5zNXLeIbuKb9oQHl91g3kjUWyPDugXArEqI8ekjNM
-        jDw4Q3A0Uj0+e03wJq5gUiVCajXYwR4=
-X-Google-Smtp-Source: AMsMyM4SI17djKyPfTO294g8vpTQAc+lvUiYSSoWh5QXmXPQBgV9ybiftpT43M5gbq2CZaSK3grXfg==
-X-Received: by 2002:a05:6808:2083:b0:355:2c71:7e58 with SMTP id s3-20020a056808208300b003552c717e58mr8578008oiw.168.1666972740889;
-        Fri, 28 Oct 2022 08:59:00 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l23-20020a544517000000b00359ba124b07sm1626854oil.36.2022.10.28.08.58.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 08:59:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e4040686-851c-d8b0-b274-ac71d38685e1@roeck-us.net>
-Date:   Fri, 28 Oct 2022 08:58:58 -0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RxnT79sprMj1qcVVm8Tt8+tmzuujR2ZjMHrctvNUZVI=;
+        b=n3B+pbMI5es/xmbrQoSUMWFHU+k735B21CpUsPapA6hkm+9TTDvROzJLKDjjSGiEfq
+         6v2M8ugdWqNuwrKpqKyg603r/K6m2QLd3S465gC8ebOjkYUdAqhX6sB/zRnXZDEpM6Y/
+         rD4AH2IA05s8njqhe0l1MA+dGFeeDZL3ACTsdg3KQFl2fX1eUlRan1bY4hOCGR9OCAWh
+         ngnj7ru0oWPa8oMmskrPvkpenkNvS1vgqFQ1FAAh77SLCUdEX4d7zlICneY4hs7CZzdd
+         NVedhxGEmp8sPHVIga0KGt7SB5kOrcmhbf6U86zdWOgxNmYY1UA0PXlfAP4GQ3pQOIZH
+         ay2Q==
+X-Gm-Message-State: ACrzQf3ATNwYR29ONwTXjN6029O8C2lPWxL27lKK+DDc034yUa1hwSmh
+        Xw4MZMZuQwHnoVnqLKBLAqRN
+X-Google-Smtp-Source: AMsMyM5RZegx1F/jDKjl0LqHKaFoo4B9bakBP7rjENvEjRkXOBnVqIITfE/gbiuQvchjLpBBG40WIg==
+X-Received: by 2002:a05:6a00:a96:b0:558:8915:2f0e with SMTP id b22-20020a056a000a9600b0055889152f0emr55055453pfl.38.1666972837757;
+        Fri, 28 Oct 2022 09:00:37 -0700 (PDT)
+Received: from localhost.localdomain ([59.92.103.167])
+        by smtp.gmail.com with ESMTPSA id d190-20020a6236c7000000b005627ddbc7a4sm2992265pfa.191.2022.10.28.09.00.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 09:00:36 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     lpieralisi@kernel.org
+Cc:     stanimir.varbanov@linaro.org, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>
+Subject: [PATCH] MAINTAINERS: Add Manivannan Sadhasivam as the Qcom PCIe RC maintainer
+Date:   Fri, 28 Oct 2022 21:30:29 +0530
+Message-Id: <20221028160029.44483-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sudeep.holla@arm.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-hwmon@vger.kernel.org
-References: <20221028140833.280091-1-cristian.marussi@arm.com>
- <20221028140833.280091-7-cristian.marussi@arm.com>
- <b914ea25-a9a8-f443-2ba0-615bdd6cc04f@roeck-us.net>
- <Y1v2ozURFdIk1PfU@e120937-lin>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 7/8] hwmon: (scmi) Register explicitly with Thermal
- Framework
-In-Reply-To: <Y1v2ozURFdIk1PfU@e120937-lin>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/28/22 08:35, Cristian Marussi wrote:
-[ ... ]
->>> +	/*
->>> +	 * Try to register a temperature sensor with the Thermal Framework:
->>> +	 * skip sensors not defined as part of any thermal zone (-ENODEV) but
->>> +	 * report any other errors related to misconfigured zones/sensors.
->>> +	 */
->>> +	tzd = devm_thermal_of_zone_register(dev, th_sensor->info->id, th_sensor,
->>> +					    &scmi_hwmon_thermal_ops);
->>> +	if (IS_ERR(tzd)) {
->>> +		devm_kfree(dev, th_sensor);
->>> +
->>> +		if (PTR_ERR(tzd) != -ENODEV)
->>> +			return PTR_ERR(tzd);
->>> +
->>> +		dev_info(dev, "Sensor '%s' not attached to any thermal zone.\n",
->>> +			 sensor->name);
->>
->> There were complaints about this message as it is noisy. If you send
->> another version, please drop it unless attaching each sensor to a thermal
->> zone is strongly expected. If you don't send another version, I'll drop it
->> while applying.
->>
-> 
-> Ok fine for me. I am waiting to have some feedback from Sudeep too, but
-> I do not have plan for another version as of now.
-> 
-> As a side note, though, I understand the 'noisiness' argument, but,
-> sincerely this same message in the original HWMON code was the only
-> reason why I spotted that something was wrong with the SCMI/HWMON
-> interactions and discovered the indexes/ids mismatch...if not for
-> that it would have gone un-noticed that a perfectly configured
-> ThermalZone/Sensor was not working properly...
-> (un-noticed at least until something would have been burnt to fire
->   in my house .. joking :P)
-> 
+Stan is moving out of mm-sol and decided not to carry on the maintainership
+duties of the Qcom PCIe RC driver. Since I'm already maintaining the Qcom
+PCIe EP driver, I'm volunteering myself to maintain the RC driver also.
 
-Good point.
+Cc: Stanimir Varbanov <svarbanov@mm-sol.com>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Did you ever check the returned error code ? Maybe we could use it to
-distinguish "it is not attached to a thermal zone because it is not
-associated with one" from "attaching to a thermal zone failed because
-its configuration is bad/incomplete".
-
-Thanks,
-Guenter
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cf0f18502372..05ca3a7f6967 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16036,7 +16036,7 @@ F:	Documentation/devicetree/bindings/pci/microchip*
+ F:	drivers/pci/controller/*microchip*
+ 
+ PCIE DRIVER FOR QUALCOMM MSM
+-M:	Stanimir Varbanov <svarbanov@mm-sol.com>
++M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+ L:	linux-pci@vger.kernel.org
+ L:	linux-arm-msm@vger.kernel.org
+ S:	Maintained
+-- 
+2.25.1
 
