@@ -2,117 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E898A610E43
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00542610E47
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbiJ1KTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 06:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
+        id S229766AbiJ1KU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 06:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiJ1KT2 (ORCPT
+        with ESMTP id S230036AbiJ1KUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 06:19:28 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84601C25C6
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 03:19:22 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7ce329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ce:329c:23ff:fea6:a903])
+        Fri, 28 Oct 2022 06:20:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257EE543D4;
+        Fri, 28 Oct 2022 03:20:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 369E51EC0523;
-        Fri, 28 Oct 2022 12:19:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1666952361;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=pnKOGkzAqYTHQEPw8aoAjfmGZ1+iB9PnhYVRmuE0Q+s=;
-        b=UNvJ7Vp2kgarN+/wDOtP8BOPFsBNaaHPA1NI5oCgjBJ9RAFITLDoZSaTh1oTF8EC14K3cw
-        rlE1QqX50TPrcfya1eMFzgk9/FDndlTUXLGAot114Ul/iuwJJbMnNePqwCKt9K0d9IJ8ck
-        T93Fq3KVC9ezYRr1EIvrHobwC7hAcnA=
-Date:   Fri, 28 Oct 2022 12:19:16 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     Baoquan He <bhe@redhat.com>, david@redhat.com,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
-        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
-        sourabhjain@linux.ibm.com, linux-mm@kvack.org
-Subject: Re: [PATCH v12 7/7] x86/crash: Add x86 crash hotplug support
-Message-ID: <Y1uspLb7fLdtnQq+@zn.tnic>
-References: <d6386653-eb71-188c-8a09-5db46b4e42d4@oracle.com>
- <YzcqE1RVtPcuLlxN@zn.tnic>
- <Y0Dh4ieUUZ4oXa1/@MiWiFi-R3L-srv>
- <Y0b9apyIs+RpSo1e@zn.tnic>
- <53aed03e-2eed-09b1-9532-fe4e497ea47d@oracle.com>
- <Y0cmaPTKQuWtwIRh@zn.tnic>
- <Y0d+mFivS+88+Chr@MiWiFi-R3L-srv>
- <Y1e7Hw0PRDI9NxU9@zn.tnic>
- <Y1lIoTBNvHrKX5K9@MiWiFi-R3L-srv>
- <35c98ca6-10f8-b248-78c5-99fce7e66c65@oracle.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED91DB8292F;
+        Fri, 28 Oct 2022 10:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8DABCC433D7;
+        Fri, 28 Oct 2022 10:20:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666952417;
+        bh=OYm9zLdGD8q62vWhGx9/cAa9hxjXMs+1vgWaph6hOpg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=RJHTQVNj+JOa4P9imykkojbhnf5Zcsz6Lnbk1vceGP7xdaP6Z3aj30JeMAN2WVO5R
+         s3BaZERd8JOud5D0CZFwFQM93BvYC+HXxmuPPPfyVbmuNwCqMCgtO1B8K13L3Vwp1b
+         pvDvbKcds6kL30oQ3i4wjj+lMpwnH1FqO8y6qt+ZobjcSiKeSTgPkXmvIOq35MNQmZ
+         EjLZlaYYPx73JX6ksDw56mjzGfYgZQe6c3w+ISUjgCV02wvT3WQwBbw4an7QOkilGk
+         u1FBxPPvBlSJfWW/lN7l7du4I7667NVWVsNT9DQGwuja3Rfai+yBr3725MAa6n+kf2
+         y+9AF1wq08EXA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 72B67C4314C;
+        Fri, 28 Oct 2022 10:20:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <35c98ca6-10f8-b248-78c5-99fce7e66c65@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next V1 0/2] net: phy: mxl-gpy: Add MDI-X 
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166695241746.31704.11349157920416012770.git-patchwork-notify@kernel.org>
+Date:   Fri, 28 Oct 2022 10:20:17 +0000
+References: <20221026055918.4225-1-Raju.Lakkaraju@microchip.com>
+In-Reply-To: <20221026055918.4225-1-Raju.Lakkaraju@microchip.com>
+To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, lxu@maxlinear.com,
+        hkallweit1@gmail.com, pabeni@redhat.com, edumazet@google.com,
+        linux@armlinux.org.uk, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, Ian.Saturley@microchip.com
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 02:24:11PM -0500, Eric DeVolder wrote:
-> Be aware, in reality, that if the system was fully populated, it would not
-> actually consume all 8192 phdrs. Rather /proc/iomem would essentially show a
-> large contiguous address space which would require just a single phdr.
+Hello:
 
-Then that from below:
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-	pnum += CONFIG_CRASH_MAX_MEMORY_RANGES;
-
-which then would end up allocating 8192 would be a total waste.
-
-So why don't you make that number dynamic then?
-
-You start with something sensible:
-
-	total_num_pheaders = num_online_cpus() + "some number of regions" + "some few others"
-
-I.e., a number which is a good compromise on the majority of machines.
-
-Then, on hotplug events you count how many new regions are coming in
-and when you reach the total_num_pheaders number, you double it (or some
-other increase stragegy), reallocate the ELF header buffers etc needed
-for kdump and you're good.
-
-This way, you don't waste memory unnecessarily on the majority of
-systems and those who need more, get to allocate more.
-
-> I'd prefer keeping CRASH_MAX_MEMORY_RANGES as that allow the maximum phdr
-> number value to be reflective of CPUs and/or memory; not all systems support
-> both CPU and memory hotplug. For example, I have queued up this change to
-> reflect this:
+On Wed, 26 Oct 2022 11:29:16 +0530 you wrote:
+> This patch series add the MDI-X feature to GPY211 PHYs and
+> Also Change return type to gpy_update_interface() function
 > 
->     if (IS_ENABLED(CONFIG_HOTPLUG_CPU) || IS_ENABLED(CONFIG_MEMORY_HOTPLUG)) {
+> Raju Lakkaraju (2):
+>   net: phy: mxl-gpy: Change gpy_update_interface() function return type
+>   net: phy: mxl-gpy: Add PHY Auto/MDI/MDI-X set driver for GPY211 chips
+> 
+> [...]
 
-If you're going to keep CRASH_MAX_MEMORY_RANGES, then you can test only
-that thing as it expresses the dependency on CONFIG_HOTPLUG_CPU and
-CONFIG_MEMORY_HOTPLUG already.
+Here is the summary with links:
+  - [net-next,V1,1/2] net: phy: mxl-gpy: Change gpy_update_interface() function return type
+    https://git.kernel.org/netdev/net-next/c/7a495dde27eb
+  - [net-next,V1,2/2] net: phy: mxl-gpy: Add PHY Auto/MDI/MDI-X set driver for GPY211 chips
+    https://git.kernel.org/netdev/net-next/c/fd8825cd8c6f
 
-If you end up making the number dynamic, then you could make that a
-different Kconfig item which contains all that crash code as most of the
-people won't need it anyway.
-
-Hmm?
-
+You are awesome, thank you!
 -- 
-Regards/Gruss,
-    Boris.
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
