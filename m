@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D254610B74
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE7A610B75
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbiJ1HlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 03:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
+        id S230214AbiJ1Hla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 03:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbiJ1Hk4 (ORCPT
+        with ESMTP id S230111AbiJ1HlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 03:40:56 -0400
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C0AE8C59
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 00:40:54 -0700 (PDT)
-Received: by mail-qk1-f177.google.com with SMTP id k4so46298qkj.8
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 00:40:54 -0700 (PDT)
+        Fri, 28 Oct 2022 03:41:17 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94E31B4C5E
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 00:41:16 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id 192so4156924pfx.5
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 00:41:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nZcVVJXKTudcoaW1Xnbq9pVmL+jhwnIjYb5pjiAaeoA=;
+        b=QaXhQr7GVmG5cXT3xnRLXJMwMfritNwyKut8TX/b+3+SMMuVyy1s5IKBWNANIpT8w/
+         aGx1CRVj7MR8Hz+CNU9CkPqF3TjoL3yChYRfXvbUCDc+aNIsW+xRcNd2lREvOa/+AZMs
+         MS0Zl6Opbc8GriOEpfGXSfk8LTLtGLGThCnhdjxvn4aknIGNErqGd0O0NFTg2spAmxJO
+         90tBe5AbaYRvAegmHdj3D/EKq9nPWrcadb9jPwhCBQnEsEr/vwj/cwGXSnamBehP/tyG
+         0egUXidjWo5N+DplZfc8r7wIc2HLnxNICeQ85JPHVQzYFN7AVJgN/2/oNN0xQ/4xo7EH
+         rfbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UK2gJkk+H9nNRpDLDuVeuznmC5JMgjPaOxjNr5txsvY=;
-        b=hhH9+V9EdN9rl+/Gu0CWYbcib/xfCq0soM4RO3p2yi+tnL1097JbI2xSyRWNQ380HC
-         i9t5PhvLniRqU2VHSo4X6IAEihYnWU1iEuZNOe0lAaICJz2IRqI5LWoHx05U5mZRlYxC
-         IoR9j3lL1iuc7jv3dSfUhKM7zuC6kmyDkF9P9eWmq3L6crW1ZoziL/gUW+R2HBZ3D8gW
-         mllIyD1iP4riEk6PYTDwzDiQEnl1SgCV/UHgCCnCMtAN8h1Jay5GKfhRr42OwtRPnOE/
-         o1tGZSsKe9TZ3W1hBFbF6smH9Dyy9hCXcKX3xGhyOBJjdx5dInYSvL3yHyA8NqlhLzAi
-         FFcg==
-X-Gm-Message-State: ACrzQf0Krel94zB2oyDoOPWAtz5YopgWImQaqsEFJvMSDP3oQ0wvw+Os
-        2vbQsHQmCDyX4AMFzHEnwaAMDhY9d3Bbig==
-X-Google-Smtp-Source: AMsMyM6Hg6BKvZKXnxyEWtp8qGrEh1+QOhZM0jLxXzu0L3fcicunW3E6qfiCFjQ+aRKdP9AnA3RT3g==
-X-Received: by 2002:a05:620a:946:b0:6fa:9b0:6756 with SMTP id w6-20020a05620a094600b006fa09b06756mr804216qkw.359.1666942853286;
-        Fri, 28 Oct 2022 00:40:53 -0700 (PDT)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id d184-20020ae9efc1000000b006ce9e880c6fsm193506qkg.111.2022.10.28.00.40.51
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 00:40:52 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id 187so5284022ybe.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 00:40:51 -0700 (PDT)
-X-Received: by 2002:a5b:34c:0:b0:6cb:b329:e103 with SMTP id
- q12-20020a5b034c000000b006cbb329e103mr10053217ybp.543.1666942851560; Fri, 28
- Oct 2022 00:40:51 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nZcVVJXKTudcoaW1Xnbq9pVmL+jhwnIjYb5pjiAaeoA=;
+        b=Jzsuy2U34BeGVPgvofpJl3435YutCn1yRLM6DslqxSCOWF3MM6q58cIMVpvdur204e
+         m7YXQwMqUniu8s0iBZRnxsDV/iQ9KOSlFOfWIcjwv9QKU/a4OWWNcVx12KNE4mUwSF5c
+         d/uuX3Sj7zusl24v65eSXcIDm6o9u8YI8vCxWZ+NaWov9H/lIAzA3LmvY5DOkCgDyz+v
+         QUFxe5qlqhHkm+JNfMeX9nIseibRcLsTgs/bKOlxLgE2pe/XgPAW5hX1xh2nwDXhQTwF
+         oBs36eE4UpRppaXT5V2/7eNcjWYDYAni2itBZV+oJxATsvbrPv6+qaKiqeZXv8i4ePjC
+         40/w==
+X-Gm-Message-State: ACrzQf299MtTrEM0U+DSTnf26B7UjeRI/Yd54xOhOB3PgThOZIiJtoIx
+        VnQEWO60mDjA7e5Yche10DE=
+X-Google-Smtp-Source: AMsMyM6uGmuwwathfUeizITkDy/6ZqZ8PnQv1b/pvPaOhTv12ET7Tgufmbiy+GBk3WfsTUx64ZAkzw==
+X-Received: by 2002:a63:2b53:0:b0:439:34d9:5d47 with SMTP id r80-20020a632b53000000b0043934d95d47mr44910652pgr.283.1666942876329;
+        Fri, 28 Oct 2022 00:41:16 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-85.three.co.id. [180.214.233.85])
+        by smtp.gmail.com with ESMTPSA id k137-20020a62848f000000b0056bb21cd7basm2303639pfd.51.2022.10.28.00.41.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 00:41:15 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 5396810411D; Fri, 28 Oct 2022 14:41:12 +0700 (WIB)
+Date:   Fri, 28 Oct 2022 14:41:11 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     UMWARI JOVIAL <umwarijovial@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH]  Possible repeated word: 'very'
+Message-ID: <Y1uHl4di6R0pFA/i@debian.me>
+References: <20221028070439.GA36889@rdm>
 MIME-Version: 1.0
-References: <Y1tlgUVWLBRSIt5U@dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi>
-In-Reply-To: <Y1tlgUVWLBRSIt5U@dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 28 Oct 2022 09:40:38 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWawWM0damaJQiXNqkSMCWTs1qh+PLojXeYJFUvW_KXkw@mail.gmail.com>
-Message-ID: <CAMuHMdWawWM0damaJQiXNqkSMCWTs1qh+PLojXeYJFUvW_KXkw@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Change myself to a maintainer
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matt.vaittinen@fi.rohmeurope.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, Lee Jones <lee@kernel.org>,
-        Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="5AHVENxkMm6djXWN"
+Content-Disposition: inline
+In-Reply-To: <20221028070439.GA36889@rdm>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,31 +74,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 7:21 AM Matti Vaittinen
-<mazziesaccount@gmail.com> wrote:
-> After some off-list discussion with Marek Vasut and Geert Uytterhoeven
-> and finally a kx022a driver related discussion with Joe Perches
-> https://lore.kernel.org/lkml/92c3f72e60bc99bf4a21da259b4d78c1bdca447d.camel@perches.com/
-> it seems that my status as a reviewer has been wrong. I do look after
-> the ROHM/Kionix drivers I've authored and currently I am also paid to do
-> so as is reflected by the 'S: Supported'. According to Joe, the reviewer
-> entry in MAINTAINERS do not indicate such level of support and having a
-> reviewer supporting an IC is a contradiction.
->
-> Switch undersigned from a reviewer to a maintainer for IC drivers I am
-> taking care of.
->
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+--5AHVENxkMm6djXWN
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Gr{oetje,eeting}s,
+On Fri, Oct 28, 2022 at 10:04:39AM +0300, UMWARI JOVIAL wrote:
+> Reported By checkpatch.pl script
+>=20
+> WARNING: Possible repeated word: 'very'
+>=20
+> Repetition of the same word in one sentence same line
+>=20
+> Signed-off-by: UMWARI JOVIAL <umwarijovial@gmail.com>
+> ---
+>  drivers/staging/rtl8712/rtl871x_xmit.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/staging/rtl8712/rtl871x_xmit.c b/drivers/staging/rtl=
+8712/rtl871x_xmit.c
+> index 090345bad223..30a0276b8b58 100644
+> --- a/drivers/staging/rtl8712/rtl871x_xmit.c
+> +++ b/drivers/staging/rtl8712/rtl871x_xmit.c
+> @@ -766,7 +766,7 @@ void r8712_free_xmitbuf(struct xmit_priv *pxmitpriv, =
+struct xmit_buf *pxmitbuf)
+>   * If we turn on USE_RXTHREAD, then, no need for critical section.
+>   * Otherwise, we must use _enter/_exit critical to protect free_xmit_que=
+ue...
+>   *
+> - * Must be very very cautious...
+> + * Must be very cautious...
+>   *
+>   */
+>  struct xmit_frame *r8712_alloc_xmitframe(struct xmit_priv *pxmitpriv)
 
-                        Geert
+NAK!
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+You send patch with the same content as [1], for which Greg already replied
+as [2].
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+The code and its comments imply that calling r8712_alloc_xmitframe() must be
+done with extreme caution, isn't it?
+
+Thanks.
+
+[1]: https://lore.kernel.org/lkml/20221028051420.GA30073@rdm/
+[2]: https://lore.kernel.org/lkml/Y1tx8XjmR5QKV9lQ@kroah.com/
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--5AHVENxkMm6djXWN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY1uHkgAKCRD2uYlJVVFO
+ozJfAP98k83IoBbLOqKYVGBcCIKTV1wDGbH2y5M14189nsgH0QD6AzbdUjKDI/UW
+jvhe3t0vTOYRclrj8RRDIG2ttn2iNQQ=
+=jU/M
+-----END PGP SIGNATURE-----
+
+--5AHVENxkMm6djXWN--
