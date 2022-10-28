@@ -2,190 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3ABF611788
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC56361178D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbiJ1Qb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
+        id S229763AbiJ1Qbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiJ1QbX (ORCPT
+        with ESMTP id S229785AbiJ1Qbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:31:23 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F195C1C73D1;
-        Fri, 28 Oct 2022 09:31:21 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29SGVIRV009012;
-        Fri, 28 Oct 2022 11:31:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666974678;
-        bh=7aMKQAHE01RLpeN36QolcinSJvyqvU8P9/9KHcHaxbs=;
-        h=From:To:CC:Subject:Date;
-        b=EOsGul9P/eZJIOHjJjAv0rKGBcr80fUv/Fc9NVqzFDyTY0JKXcSke94pGV8ls1b2t
-         QFi9jIRMQg7aKSdSblnpWGEWOoIbMYiaYik/WCQbobXPI5lG3sgUFJIxkZwYySv9Ki
-         4jXIAC1Dbifa9K5gl9QXS6jowX3SRac6ZiSspx9A=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29SGVIjX130499
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 28 Oct 2022 11:31:18 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 28
- Oct 2022 11:31:18 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Fri, 28 Oct 2022 11:31:18 -0500
-Received: from jti.ent.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29SGVBYf003448;
-        Fri, 28 Oct 2022 11:31:13 -0500
-From:   Georgi Vlaev <g-vlaev@ti.com>
-To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>
-CC:     Nishanth Menon <nm@ti.com>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Georgi Vlaev <g-vlaev@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Subject: [PATCH] dmaengine: k3-udma: Add system suspend/resume support
-Date:   Fri, 28 Oct 2022 19:30:50 +0300
-Message-ID: <20221028163050.248074-1-g-vlaev@ti.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 28 Oct 2022 12:31:47 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB2C1C73FD
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:31:47 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id 17so947815pfv.4
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:31:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wWm33mQ3hvWArBxOrJMcZ+DdCTdsoZAKdB1hEJ9v+uI=;
+        b=L+bcmCymxk9w5qxk3BccZMGbd1j/bVOq7BA/62RvrHfdcEzYnx9y4jDlCLXW2w4aE6
+         PiL8kTkRTKVtKkr5ZfHzkPmCem6lIb7Zv2KlV18+IppUoMn7j2wwqIVA9Iy+33N80H2u
+         9VNqZvj+4B/4UNtRrrfpQtrHV8Io9WISVtChY+oxim33+LnRYSWZfu+WAcUwWJ67fQ0s
+         W2mrCsZGCnAkjMfbZJi51IkbvQL2QJE03sKCYXBDYLOpVyofMXpQm7ho8uusq+EDYkJG
+         MTcIiYMdcNoEs9E0ydLtDnfZ1Hzck/0PNK8gKvCITH5sW6AMG8c4EFbTYxGBjId//kXP
+         k6Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wWm33mQ3hvWArBxOrJMcZ+DdCTdsoZAKdB1hEJ9v+uI=;
+        b=aPZMzUP1pocB6R2mNeTEqJ4THOmPcwRSoc6mgzrnqOgfxU93rj6xARmC9V49YDIHvn
+         7ecCJ8SggR0fv5bcK9yc/Z9XDw+xsB0tq84h43Ow+MLyug0O1qUoaL1MCPWSiOXeJ/Mz
+         bqbx8utJj883kzJSlzQc6TBCcOxZuBDFXVZ/nee6N9cI+CiEHe2pb2CKCnYI0nJgivII
+         tLWPNMLJbpLeBqtKgBYGVUzwkn95ruoZ8juazDfj7jvJxssAzSmPWeDAdH7IeMxUOlv3
+         bi5dQWNB77pJYa9Ij+b+Pmn54pWnf6w7ph9iI0EwtGmbFNYbj0K9izBKTA2e2+/bSQnP
+         6xrA==
+X-Gm-Message-State: ACrzQf3ZkW1jZrNCKwPlEe10kRNNWwfLOhAO4mVLwCWujksDdCNTFjp0
+        4GoHgZ1sACZQPHM7Nohjf1NAoA==
+X-Google-Smtp-Source: AMsMyM45rCIbAJsMXY1hsypPcowAH/2zuvoqq61QCokvbSt1bG18qvvWLe3rPTzzrpp+3TiJ7RDdMA==
+X-Received: by 2002:a05:6a00:851:b0:563:6c6a:2b7b with SMTP id q17-20020a056a00085100b005636c6a2b7bmr55178956pfk.45.1666974706684;
+        Fri, 28 Oct 2022 09:31:46 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id d125-20020a623683000000b0056c0b472c09sm3022854pfa.211.2022.10.28.09.31.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 09:31:46 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 16:31:42 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     "Woodhouse, David" <dwmw@amazon.co.uk>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org, mhal@rbox.co
+Subject: Re: [PATCH 03/16] KVM: x86: set gfn-to-pfn cache length consistently
+ with VM word size
+Message-ID: <Y1wD7hcY/GSA/zHP@google.com>
+References: <20221027161849.2989332-1-pbonzini@redhat.com>
+ <20221027161849.2989332-4-pbonzini@redhat.com>
+ <Y1q+a3gtABqJPmmr@google.com>
+ <c61f6089-57b7-e00f-d5ed-68e62237eab0@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c61f6089-57b7-e00f-d5ed-68e62237eab0@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vignesh Raghavendra <vigneshr@ti.com>
+On Fri, Oct 28, 2022, Paolo Bonzini wrote:
+> On 10/27/22 19:22, Sean Christopherson wrote:
+> > On Thu, Oct 27, 2022, Paolo Bonzini wrote:
+> > > So, use the short size at activation time as well.  This means
+> > > re-activating the cache if the guest requests the hypercall page
+> > > multiple times with different word sizes (this can happen when
+> > > kexec-ing, for example).
+> > 
+> > I don't understand the motivation for allowing a conditionally valid GPA.  I see
+> > a lot of complexity and sub-optimal error handling for a use case that no one
+> > cares about.  Realistically, userspace is never going to provide a GPA that only
+> > works some of the time, because doing otherwise is just asking for a dead guest.
+> 
+> We _should_ be following the Xen API, which does not even say that the
+> areas have to fit in a single page.
 
-The K3 platforms configure the DMA resources with the
-help of the TI's System Firmware's Device Manager(DM)
-over TISCI. The group of DMA related Resource Manager[1]
-TISCI messages includes: INTA, RINGACC, UDMAP, and PSI-L.
-This configuration however, does not persist in the DM
-after leaving from Suspend-to-RAM state. We have to restore
-the DMA channel configuration over TISCI for all configured
-channels when entering suspend.
+Ah, I didn't realize these are hypercall => userspace => ioctl() paths.
 
-The TISCI resource management calls for each DMA type (UDMA,
-PKTDMA, BCDMA) happen in device_free_chan_resources() and
-device_alloc_chan_resources(). In pm_suspend() we store
-the current udma_chan_config for channels that still have
-attached clients and call device_free_chan_resources().
-In pm_resume() restore the udma_channel_config from backup
-and call device_alloc_chan_resources() for those channels.
-Drivers like CPSW can do their own DMA resource management,
-so use the late system suspend/resume hooks.
+> In fact, even Linux's
+> 
+>         struct vcpu_register_runstate_memory_area area;
+> 
+>         area.addr.v = &per_cpu(xen_runstate, cpu);
+>         if (HYPERVISOR_vcpu_op(VCPUOP_register_runstate_memory_area,
+>                                xen_vcpu_nr(cpu), &area))
+> 
+> could fail or not just depending on the linker's whims, if I'm not
+> very confused.
+> 
+> Other data structures *do* have to fit in a page, but the runstate area
+> does not and it's exactly the one where the cache comes the most handy.
+> For this I'm going to wait for David to answer.
+> 
+> That said, the whole gpc API is really messy 
 
-[1] https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/index.html#resource-management-rm
+No argument there.
 
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-[g-vlaev@ti.com: Add patch description and config backup]
-[g-vlaev@ti.com: Supend only channels with clients]
-Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
----
- drivers/dma/ti/k3-udma.c | 55 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+> and needs to be cleaned up beyond what this series does.  For example,
+> 
+>         read_lock_irqsave(&gpc->lock, flags);
+>         while (!kvm_gfn_to_pfn_cache_check(v->kvm, gpc, gpc->gpa,
+>                                            sizeof(x))) {
+>                 read_unlock_irqrestore(&gpc->lock, flags);
+> 
+>                 if (kvm_gfn_to_pfn_cache_refresh(v->kvm, gpc, gpc->gpa, sizeof(x)))
+>                         return;
+> 
+>                 read_lock_irqsave(&gpc->lock, flags);
+>         }
+> 	...
+>         read_unlock_irqrestore(&gpc->lock, flags);
+> 
+> should really be simplified to
+> 
+> 	khva = kvm_gpc_lock(gpc);
+> 	if (IS_ERR(khva))
+> 		return;
+> 	...
+> 	kvm_gpc_unlock(gpc);
+> 
+> Only the special preempt-notifier cases would have to use check/refresh
+> by hand.  If needed they could even pass whatever length they want to
+> __kvm_gpc_refresh with, explicit marking that it's a here-be-dragons __API.
+> 
+> Also because we're using the gpc from non-preemptible regions the rwlock
+> critical sections should be enclosed in preempt_disable()/preempt_enable().
+> Fortunately they're pretty small.
+> 
+> For now I think the best course of action is to quickly get the bugfix
+> patches to Linus, and for 6.2 drop this one but otherwise keep the length
+> in kvm_gpc_activate().
 
-diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-index ce8b80bb34d7..efcc1c5ddb2d 100644
---- a/drivers/dma/ti/k3-udma.c
-+++ b/drivers/dma/ti/k3-udma.c
-@@ -194,6 +194,7 @@ struct udma_dev {
- 	int rchan_cnt;
- 	int rflow_cnt;
- 	int tflow_cnt;
-+	int ch_count;
- 	unsigned long *bchan_map;
- 	unsigned long *tchan_map;
- 	unsigned long *rchan_map;
-@@ -304,6 +305,8 @@ struct udma_chan {
- 
- 	/* Channel configuration parameters */
- 	struct udma_chan_config config;
-+	/* Channel configuration parameters (backup) */
-+	struct udma_chan_config backup_config;
- 
- 	/* dmapool for packet mode descriptors */
- 	bool use_dma_pool;
-@@ -4999,6 +5002,7 @@ static int setup_resources(struct udma_dev *ud)
- 	if (!ch_count)
- 		return -ENODEV;
- 
-+	ud->ch_count = ch_count;
- 	ud->channels = devm_kcalloc(dev, ch_count, sizeof(*ud->channels),
- 				    GFP_KERNEL);
- 	if (!ud->channels)
-@@ -5491,11 +5495,62 @@ static int udma_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
-+static int udma_pm_suspend(struct device *dev)
-+{
-+	struct udma_dev *ud = dev_get_drvdata(dev);
-+	struct dma_chan *chan;
-+	int i;
-+
-+	for (i = 0; i < ud->ch_count; i++) {
-+		chan = &ud->channels[i].vc.chan;
-+		if (chan->client_count) {
-+			/* backup the channel configuration */
-+			memcpy(&ud->channels[i].backup_config,
-+			       &ud->channels[i].config,
-+			       sizeof(struct udma_chan_config));
-+			dev_dbg(dev, "Suspending channel %s\n",
-+				dma_chan_name(chan));
-+			ud->ddev.device_free_chan_resources(chan);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int udma_pm_resume(struct device *dev)
-+{
-+	struct udma_dev *ud = dev_get_drvdata(dev);
-+	struct dma_chan *chan;
-+	int ret, i;
-+
-+	for (i = 0; i < ud->ch_count; i++) {
-+		chan = &ud->channels[i].vc.chan;
-+		if (chan->client_count) {
-+			/* restore the channel configuration */
-+			memcpy(&ud->channels[i].config,
-+			       &ud->channels[i].backup_config,
-+			       sizeof(struct udma_chan_config));
-+			dev_dbg(dev, "Resuming channel %s\n",
-+				dma_chan_name(chan));
-+			ret = ud->ddev.device_alloc_chan_resources(chan);
-+			if (ret)
-+				return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops udma_pm_ops = {
-+	SET_LATE_SYSTEM_SLEEP_PM_OPS(udma_pm_suspend, udma_pm_resume)
-+};
-+
- static struct platform_driver udma_driver = {
- 	.driver = {
- 		.name	= "ti-udma",
- 		.of_match_table = udma_of_match,
- 		.suppress_bind_attrs = true,
-+		.pm = &udma_pm_ops,
- 	},
- 	.probe		= udma_probe,
- };
--- 
-2.30.2
-
+Works for me.
