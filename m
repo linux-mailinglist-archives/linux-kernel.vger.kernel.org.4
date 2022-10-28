@@ -2,75 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5640611BE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0FB9611BE2
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiJ1Uz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 16:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60666 "EHLO
+        id S229971AbiJ1Uzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 16:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiJ1UzZ (ORCPT
+        with ESMTP id S229944AbiJ1Uzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 16:55:25 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9747E3471E;
-        Fri, 28 Oct 2022 13:55:23 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id bb5so4231957qtb.11;
-        Fri, 28 Oct 2022 13:55:23 -0700 (PDT)
+        Fri, 28 Oct 2022 16:55:37 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D841C97CC
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:55:33 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id b2so15758803eja.6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:55:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RYycDhbuHQh8p8GW+UONgFPTOdE3a8n45OrXqMo9C5k=;
-        b=BiCYuJrP+N9tJFYpz/8kPtms6xQoqLSI2xfGLGTlQ8Ibq3MVOaZHztTSjdSNd4e3r0
-         kBMIod+ECYvETJkSelTo/DN0gA4uAkamRLjkw8vlXSGP/pVIGlPg782Anqk7jwC6FIh+
-         7uhHHfqpB6F9UD5oRPagKuKg+nrbrHxlhWZdesuEORNH7oSu3Gpy7RC64LI6cU/ngoF8
-         Km5j+JtfeEUsQ357ra/u1xYRhklwymKJZp9Vu2TGwlAiQCn8gJKO2f4kNWvB//dpN47h
-         yHgJrDMRLDFjGNHNQXXik9yATKlQA87RQy7E6/+m7mqeYRYIJfHPrs+UKl/r7Gx3onLl
-         sRpA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2kNdeRVDq3L5op+Fxz0QQwN3+MO+sNKBJU9syvyNI8Y=;
+        b=YWc+v8IENqLqoB0neFzDuwkYIkK8SmwinZVFJcCpjl1S+OEGHNHiRjGUl5kilo6lw9
+         2d+SN1s99Wz11sK013Cz2bK/ojPQ5ZAcmJBM8M4qCvCGcznoNPE3GdXI/B0yMmddI3yo
+         aA/tcPt1+zDXQYtTd1dWesWngAHxI25lN4zzyNZxi3aCetxwHdS9Q01K8LuPpU1w5xly
+         a5+J8ycbluMz0UizVLEGeLljQslZKyJoAdeKxxPc3InN344mioCrnLLbh/tg3YTfccca
+         FyO8y2GVcMyrVR2ZIvKCTZDo7T+JGvhGLtjQEgrOGwe2GULOsA5PO0wN6a3mJ6NPtGDG
+         sO0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RYycDhbuHQh8p8GW+UONgFPTOdE3a8n45OrXqMo9C5k=;
-        b=AKYAwKNCCgi7EyM9mNtq89peKyh35ObHuJVQu2ofNP6oBD1kEGWk2QzZsfG2fSH5Tg
-         k+/Y9sVTJJQo2CmKy1n/pC0QpS/uvlzfKapHUoX8pOGc3UzI1W5v/0P0TTqiJirGBXbC
-         +uGPZUjdLxQmDqhgBDCjkYb3pScSC4BDHxCLJLl3hG5KNtX15mkr7mmrvUFQEuffAB51
-         JJ5z1mkf6MJxdmzqHIf/fdC5awMYNq7WzXNnZ/BL7BJD2i7AoCXYiUr3H6CXJS3jSVvd
-         JXxovz4Df/QXt0uwbunQcwZcPAmf7xjdMQVpsDhQk3qM4kXLBR5vUAw0qOllGe/5/y1n
-         BXwg==
-X-Gm-Message-State: ACrzQf3/H+3MNVHEoC6PpeRkyipfCpwm/OtKHDzLIn5cucphdo5I6UTv
-        PLNSrF38+0Cv1HMbTMTgT0M=
-X-Google-Smtp-Source: AMsMyM6K9ov/NtC1jJuoptk1NaSA5S7LFc3Mip5j4V7vj/9+ocEaUC6Fu0sgVoHB7y2ctI5Y7+vVog==
-X-Received: by 2002:ac8:5707:0:b0:39d:c40:cf51 with SMTP id 7-20020ac85707000000b0039d0c40cf51mr1276287qtw.102.1666990522699;
-        Fri, 28 Oct 2022 13:55:22 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id g19-20020a05620a40d300b006eeb3165565sm3687064qko.80.2022.10.28.13.55.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 13:55:22 -0700 (PDT)
-Message-ID: <461060c1-8d5f-3585-1e3a-43d0e0c5e87e@gmail.com>
-Date:   Fri, 28 Oct 2022 13:55:15 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2kNdeRVDq3L5op+Fxz0QQwN3+MO+sNKBJU9syvyNI8Y=;
+        b=2r0OJnzHcWNCXxZWRNVRyH4rQrQsqmriqkC826HTXxpaI+LIkzeE0BRODJDcnikWvq
+         wdSg8SJffb2MiSxIj9sfYmO04ShXOniqcwRbTwwFziTesuRPlxCVAc4AN38y88eSqzm2
+         Gaj1hVT5tLQ1INS7oHSjFS/0G9qnjK6QCabTvzqBBWpwsqXD4C3mWFy+3HLw4ub3e5iS
+         KhulK4+EOnYHK7fQchDp4AqeR4e7WIV/vh7zlKILLZTM38Gr4PtnQ0qD4FD78NEG3vjc
+         hKrb4vIxCqvecAzlDxP2VIMbT5hjbb8w0pQKYQmGPqM5qDWSqmp1x3OikfDo06IohYze
+         jLsQ==
+X-Gm-Message-State: ACrzQf1T6WOa4xExSbGbJrZD3U9CU6RLmtjlUI1mymJgzRsMGNfqq5qN
+        pbJvm1BA+AC2iGIDYHI7m0SE1YDPnQ==
+X-Google-Smtp-Source: AMsMyM7MP1TmCGNFuLwpDI6i66LDtXZwDXsbrpR4mkE/NT7M6jL90pzGFH9mBwvHed6fSEHJJn+ECg==
+X-Received: by 2002:a17:906:99c3:b0:78d:9cc9:deda with SMTP id s3-20020a17090699c300b0078d9cc9dedamr1100949ejn.712.1666990531961;
+        Fri, 28 Oct 2022 13:55:31 -0700 (PDT)
+Received: from p183 ([46.53.251.139])
+        by smtp.gmail.com with ESMTPSA id d7-20020a170906304700b007ad4a555499sm2596134ejd.204.2022.10.28.13.55.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 13:55:31 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 23:55:29 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        catalin.marinas@arm.com, will@kernel.org,
+        rafael.j.wysocki@intel.com, masahiroy@kernel.org
+Subject: Re: [PATCH] kbuild: drop -Wdeclaration-after-statement
+Message-ID: <Y1xBwRCHoQtMyPf8@p183>
+References: <Y1w031iI6Ld29IVT@p183>
+ <CAHk-=wiEXm3y7BrFnymC_6icE7seicGyyML+Oxd_BP9t=ztNKg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 5.10 00/73] 5.10.152-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
-References: <20221028120232.344548477@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221028120232.344548477@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiEXm3y7BrFnymC_6icE7seicGyyML+Oxd_BP9t=ztNKg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,29 +73,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/28/22 05:02, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.152 release.
-> There are 73 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Fri, Oct 28, 2022 at 01:29:08PM -0700, Linus Torvalds wrote:
+> On Fri, Oct 28, 2022 at 1:00 PM Alexey Dobriyan <adobriyan@gmail.com> wrote:
+> >
+> > Putting declarations in the beginning of the block is an afterfact from
+> > single pass compiler era. Compiler would parse all declarations, layout
+> > stack frame and proceed to generate code.
 > 
-> Responses should be made by Sun, 30 Oct 2022 12:02:13 +0000.
-> Anything received after that time might be too late.
+> No, putting declarations at the beginning is still kernel syntax.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.152-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> Don't declare variables in multiple places. It gets really confusing.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+It is not. Somehow millions of programmers manage to find their
+variables just fine in C and other programming languages.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> Put all declarations at the top of the block they are contained in.
 
+I tried it the other way after years of LK style. Universe didn't collapse.
+
+> IOW, -Wdeclaration-after-statement does exactly the right thing, and stays.
+> 
+> This is not about "old compilers", this is about coding rules.
+> 
+>                 Linus
