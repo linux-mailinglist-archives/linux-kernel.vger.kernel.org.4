@@ -2,139 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5387D610A73
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6249E610A77
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiJ1Gm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
+        id S229993AbiJ1Gm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiJ1Glz (ORCPT
+        with ESMTP id S229832AbiJ1Gl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:41:55 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C528315B315
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:41:49 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id bh7-20020a05600c3d0700b003c6fb3b2052so2861380wmb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FOXFaSkWoyrw6Tt6vNYB3VyEMNdaD+r0RNnUIhwjbV4=;
-        b=hlBRFUsLCdqMdTgZgiy8f2LWBebmnYV7rKsjNbrWKuXIv3R/p2b/1i0zrEemBe9RRv
-         vhm3hqD2tFpHWJpEm8wIamSktSw+2g5kNddNqfDChYHHpCARKBph32HwQtXNagQFvluO
-         xrBByMrNN22DC0KBBEqi3dQdmUiNdVc+KQERxKlRaVk3kn53yWxZfVoJauaop7wrNAT2
-         mQmdWYK1sYzH5XMdzFDjSb3Hpu6vFE2s6VcyqBsQmL1OMeZhPhDyybjnlpTa0Ici/ywf
-         hDORZPPU9KlMhOMNmpF4GNT3W/SUvspujJXxwpwWHUTSXKGPaIXjVP3XUjd+Lcny6lLW
-         G9pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FOXFaSkWoyrw6Tt6vNYB3VyEMNdaD+r0RNnUIhwjbV4=;
-        b=c1gV1JjbXFBMEXRDksuj0MtbsywfC33pVBNKfcwaoEpHMcYfVXQZPH2Cr4T+VlSYxS
-         dc4MXOrA9zPpP7HEkdSMmEoiuE27of6EOKX/YZ/H5wUDF6Ig/mY1qA0voQbg9Z7uqhco
-         URZ2AoFB12JTDsHxcjvw9M1AbbIDtpe40ExA5i3U2wkLu2q6WH2zjBVCKZQq/Asiq6An
-         P0n4ROfRfg5Gsie9UzXbuQE3csk66tTWt1pNmeqYelAcHOk9i4cgbWyEnSAmKfV/fDS1
-         Q4kLHGURIEFuDYvL3xhMu/xf6R6rRA4cnrMp+jzKB2+0HNaE/32TyLso4pkxDliTT2j7
-         umNw==
-X-Gm-Message-State: ACrzQf3/w9NYdhbWbdbJwdL0F+cMyKVhIwFNYe2rRKo801j6P32P3q3Y
-        Pfce4TB6yjVOiveWMKN8bJUTlg==
-X-Google-Smtp-Source: AMsMyM41qCS4mNKA58mLIKzckELZo4v8n6J3P17M7Hj6TEhQ7UqBUcXQ6bOItzwdX2dLYY794GCf4w==
-X-Received: by 2002:a05:600c:4f84:b0:3c8:3424:8b1 with SMTP id n4-20020a05600c4f8400b003c8342408b1mr8189083wmq.53.1666939308338;
-        Thu, 27 Oct 2022 23:41:48 -0700 (PDT)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id h17-20020a05600c351100b003c7087f6c9asm7253979wmq.32.2022.10.27.23.41.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 23:41:48 -0700 (PDT)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 2/2] leds: remove ide-disk trigger
-Date:   Fri, 28 Oct 2022 06:41:41 +0000
-Message-Id: <20221028064141.2171405-2-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221028064141.2171405-1-clabbe@baylibre.com>
-References: <20221028064141.2171405-1-clabbe@baylibre.com>
+        Fri, 28 Oct 2022 02:41:56 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B333D54C9C;
+        Thu, 27 Oct 2022 23:41:54 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 06:41:51 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1666939313;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=b2E5M+sgM0Kbu4YgEFm8ONBFN7/B3Kqd34YndSvKUIg=;
+        b=kK7Ia7ntz8ZgxPOf0i+Ixd6Ezik7S02LHSxvCd7FMT0Od0jYxxQC1OOnu57fhwOeSDNF3H
+        6JZyIF5tezjeR2mHNGnCrd1/ylmAZir5UNBmYuebLm1PMR/vqn9ewOQ37f+IJTjY7RIXmZ
+        /pzJs5TGEtZjrpBsWm4VJ02AO6jy+TVjoWpJKi7LOklHpeV1+C/RZiclBgS+PlXw86or0p
+        44gzeNA2bsA4O9/qCOOWM1HC/H7BQ6wOX7RUyfnMz6MjJqj6atRSXoimWOKcIcU4elwJiK
+        4fvOpq/IfylbkoR7ucZlL3MzDRlFk1szTBYQa+t4cU2EiV231jWA/UKK/mNJVQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1666939313;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=b2E5M+sgM0Kbu4YgEFm8ONBFN7/B3Kqd34YndSvKUIg=;
+        b=xdg3WG+loDl9lp83xYcq9XE2qiZ3SctVb6IBkqixRqygnDTrE2IWgsE9FyeW9UlwgKzTCc
+        8PKUyJNPGIwZmCDw==
+From:   "tip-bot2 for Ravi Bangoria" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/core] perf: Optimize perf_tp_event()
+Cc:     Ravi Bangoria <ravi.bangoria@amd.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Message-ID: <166693931196.29415.10760252115710736746.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No user of ide-disk remains, so remove this deprecated trigger.
-Only a few platforms used this and were fixed in 2016.
+The following commit has been merged into the perf/core branch of tip:
 
-Acked-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Commit-ID:     571f97f7d51fa81e6cc0e00f0f6314792ce533a3
+Gitweb:        https://git.kernel.org/tip/571f97f7d51fa81e6cc0e00f0f6314792ce533a3
+Author:        Ravi Bangoria <ravi.bangoria@amd.com>
+AuthorDate:    Mon, 10 Oct 2022 12:17:50 +02:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Thu, 27 Oct 2022 20:12:17 +02:00
+
+perf: Optimize perf_tp_event()
+
+Use the event group trees to iterate only perf_tracepoint events.
+
+Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
-Change since v1:
-- remove also DEFINE_LED_TRIGGER(ledtrig_ide)
-Changes since v2:
-- Added the fact that few platforms used this and it was fixed old ago.
-- Added Rob's ack
-V3 can be seen at https://lore.kernel.org/lkml/20220208104601.3751852-1-clabbe@baylibre.com/T/
-Changes since v3:
-- rebased on recent tree
+ kernel/events/core.c | 134 ++++++++++++++++++++++++------------------
+ 1 file changed, 79 insertions(+), 55 deletions(-)
 
- Documentation/devicetree/bindings/leds/common.yaml | 3 ---
- drivers/leds/trigger/ledtrig-disk.c                | 4 ----
- 2 files changed, 7 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/leds/common.yaml b/Documentation/devicetree/bindings/leds/common.yaml
-index 8ebe602419b5..7081c7b64b94 100644
---- a/Documentation/devicetree/bindings/leds/common.yaml
-+++ b/Documentation/devicetree/bindings/leds/common.yaml
-@@ -92,9 +92,6 @@ properties:
-           - disk-activity
-           - disk-read
-           - disk-write
--            # LED indicates IDE disk activity (deprecated), in new implementations
--            # use "disk-activity"
--          - ide-disk
-             # LED flashes at a fixed, configurable rate
-           - timer
-             # LED alters the brightness for the specified duration with one software
-diff --git a/drivers/leds/trigger/ledtrig-disk.c b/drivers/leds/trigger/ledtrig-disk.c
-index 0741910785bb..0b7dfbd04273 100644
---- a/drivers/leds/trigger/ledtrig-disk.c
-+++ b/drivers/leds/trigger/ledtrig-disk.c
-@@ -16,7 +16,6 @@
- DEFINE_LED_TRIGGER(ledtrig_disk);
- DEFINE_LED_TRIGGER(ledtrig_disk_read);
- DEFINE_LED_TRIGGER(ledtrig_disk_write);
--DEFINE_LED_TRIGGER(ledtrig_ide);
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 640f0a5..ec2abc5 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -9944,6 +9944,44 @@ static struct pmu perf_swevent = {
  
- void ledtrig_disk_activity(bool write)
+ #ifdef CONFIG_EVENT_TRACING
+ 
++static void tp_perf_event_destroy(struct perf_event *event)
++{
++	perf_trace_destroy(event);
++}
++
++static int perf_tp_event_init(struct perf_event *event)
++{
++	int err;
++
++	if (event->attr.type != PERF_TYPE_TRACEPOINT)
++		return -ENOENT;
++
++	/*
++	 * no branch sampling for tracepoint events
++	 */
++	if (has_branch_stack(event))
++		return -EOPNOTSUPP;
++
++	err = perf_trace_init(event);
++	if (err)
++		return err;
++
++	event->destroy = tp_perf_event_destroy;
++
++	return 0;
++}
++
++static struct pmu perf_tracepoint = {
++	.task_ctx_nr	= perf_sw_context,
++
++	.event_init	= perf_tp_event_init,
++	.add		= perf_trace_add,
++	.del		= perf_trace_del,
++	.start		= perf_swevent_start,
++	.stop		= perf_swevent_stop,
++	.read		= perf_swevent_read,
++};
++
+ static int perf_tp_filter_match(struct perf_event *event,
+ 				struct perf_sample_data *data)
  {
-@@ -24,8 +23,6 @@ void ledtrig_disk_activity(bool write)
- 
- 	led_trigger_blink_oneshot(ledtrig_disk,
- 				  &blink_delay, &blink_delay, 0);
--	led_trigger_blink_oneshot(ledtrig_ide,
--				  &blink_delay, &blink_delay, 0);
- 	if (write)
- 		led_trigger_blink_oneshot(ledtrig_disk_write,
- 					  &blink_delay, &blink_delay, 0);
-@@ -40,7 +37,6 @@ static int __init ledtrig_disk_init(void)
- 	led_trigger_register_simple("disk-activity", &ledtrig_disk);
- 	led_trigger_register_simple("disk-read", &ledtrig_disk_read);
- 	led_trigger_register_simple("disk-write", &ledtrig_disk_write);
--	led_trigger_register_simple("ide-disk", &ledtrig_ide);
- 
- 	return 0;
+@@ -9993,6 +10031,44 @@ void perf_trace_run_bpf_submit(void *raw_data, int size, int rctx,
  }
--- 
-2.37.4
-
+ EXPORT_SYMBOL_GPL(perf_trace_run_bpf_submit);
+ 
++static void __perf_tp_event_target_task(u64 count, void *record,
++					struct pt_regs *regs,
++					struct perf_sample_data *data,
++					struct perf_event *event)
++{
++	struct trace_entry *entry = record;
++
++	if (event->attr.config != entry->type)
++		return;
++	/* Cannot deliver synchronous signal to other task. */
++	if (event->attr.sigtrap)
++		return;
++	if (perf_tp_event_match(event, data, regs))
++		perf_swevent_event(event, count, data, regs);
++}
++
++static void perf_tp_event_target_task(u64 count, void *record,
++				      struct pt_regs *regs,
++				      struct perf_sample_data *data,
++				      struct perf_event_context *ctx)
++{
++	unsigned int cpu = smp_processor_id();
++	struct pmu *pmu = &perf_tracepoint;
++	struct perf_event *event, *sibling;
++
++	perf_event_groups_for_cpu_pmu(event, &ctx->pinned_groups, cpu, pmu) {
++		__perf_tp_event_target_task(count, record, regs, data, event);
++		for_each_sibling_event(sibling, event)
++			__perf_tp_event_target_task(count, record, regs, data, sibling);
++	}
++
++	perf_event_groups_for_cpu_pmu(event, &ctx->flexible_groups, cpu, pmu) {
++		__perf_tp_event_target_task(count, record, regs, data, event);
++		for_each_sibling_event(sibling, event)
++			__perf_tp_event_target_task(count, record, regs, data, sibling);
++	}
++}
++
+ void perf_tp_event(u16 event_type, u64 count, void *record, int entry_size,
+ 		   struct pt_regs *regs, struct hlist_head *head, int rctx,
+ 		   struct task_struct *task)
+@@ -10023,29 +10099,15 @@ void perf_tp_event(u16 event_type, u64 count, void *record, int entry_size,
+ 	 */
+ 	if (task && task != current) {
+ 		struct perf_event_context *ctx;
+-		struct trace_entry *entry = record;
+ 
+ 		rcu_read_lock();
+ 		ctx = rcu_dereference(task->perf_event_ctxp);
+ 		if (!ctx)
+ 			goto unlock;
+ 
+-		// XXX iterate groups instead, we should be able to
+-		// find the subtree for the perf_tracepoint pmu and CPU.
+-
+-		list_for_each_entry_rcu(event, &ctx->event_list, event_entry) {
+-			if (event->cpu != smp_processor_id())
+-				continue;
+-			if (event->attr.type != PERF_TYPE_TRACEPOINT)
+-				continue;
+-			if (event->attr.config != entry->type)
+-				continue;
+-			/* Cannot deliver synchronous signal to other task. */
+-			if (event->attr.sigtrap)
+-				continue;
+-			if (perf_tp_event_match(event, &data, regs))
+-				perf_swevent_event(event, count, &data, regs);
+-		}
++		raw_spin_lock(&ctx->lock);
++		perf_tp_event_target_task(count, record, regs, &data, ctx);
++		raw_spin_unlock(&ctx->lock);
+ unlock:
+ 		rcu_read_unlock();
+ 	}
+@@ -10054,44 +10116,6 @@ unlock:
+ }
+ EXPORT_SYMBOL_GPL(perf_tp_event);
+ 
+-static void tp_perf_event_destroy(struct perf_event *event)
+-{
+-	perf_trace_destroy(event);
+-}
+-
+-static int perf_tp_event_init(struct perf_event *event)
+-{
+-	int err;
+-
+-	if (event->attr.type != PERF_TYPE_TRACEPOINT)
+-		return -ENOENT;
+-
+-	/*
+-	 * no branch sampling for tracepoint events
+-	 */
+-	if (has_branch_stack(event))
+-		return -EOPNOTSUPP;
+-
+-	err = perf_trace_init(event);
+-	if (err)
+-		return err;
+-
+-	event->destroy = tp_perf_event_destroy;
+-
+-	return 0;
+-}
+-
+-static struct pmu perf_tracepoint = {
+-	.task_ctx_nr	= perf_sw_context,
+-
+-	.event_init	= perf_tp_event_init,
+-	.add		= perf_trace_add,
+-	.del		= perf_trace_del,
+-	.start		= perf_swevent_start,
+-	.stop		= perf_swevent_stop,
+-	.read		= perf_swevent_read,
+-};
+-
+ #if defined(CONFIG_KPROBE_EVENTS) || defined(CONFIG_UPROBE_EVENTS)
+ /*
+  * Flags in config, used by dynamic PMU kprobe and uprobe
