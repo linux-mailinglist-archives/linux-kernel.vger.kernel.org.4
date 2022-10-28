@@ -2,158 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E839610DC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE337610DBF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbiJ1Jw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 05:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35960 "EHLO
+        id S230304AbiJ1Jwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 05:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbiJ1JwV (ORCPT
+        with ESMTP id S230080AbiJ1JwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 28 Oct 2022 05:52:21 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B61C25E8;
-        Fri, 28 Oct 2022 02:50:51 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id b2so11726037eja.6;
-        Fri, 28 Oct 2022 02:50:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QRV25s9Qm3E2KmaH3Vn0CkgQOv24MvESysG5K9ccwNs=;
-        b=k8hrnQsQ6bs8YzJC+yCNSzYUtxFYpdweIf2g15nT7484v1xuinESOvJjSSL5RfFIVh
-         +I++z8gfItfNpGsGNQdcoGQK0HVah0IC0CJdfTiLdfG0i7M5pIDbsvQm20WYJ5KKywoA
-         +JGSIZoMMnMDXBCiib1DY8uBXPrWPRnHoGjQ2Vv5Vd77dOJO63Q5H6/WRWoBCRyN4c5E
-         3HBqxZ8uHPcdSApnJJgSwQyOLlsYK4di8AoQU3PqmedMJLXMT/+WwHxxpcjURzpEl4Md
-         2Y/5MQr+luoS0w8rljOJ4bia6Dt3ix99Y/06X/PDKT+vY9CN3+jBfnjozFcRjqCWc+n7
-         OF2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QRV25s9Qm3E2KmaH3Vn0CkgQOv24MvESysG5K9ccwNs=;
-        b=MEN4fb56Od5bFnaeZntjQfKPA4eQxNPpS6loIKDcGZtHgTM6zoqy1juMmzWitq8k4S
-         6YecWQkXTi4YsTQl8Z07ICU+uMODmXSTU4Wn5Bv7PvS4rP7obMCE56iqYno1Legxa6/F
-         bocKuOvjf6dVpnxq5zD0xZvT2nazOyoZOBY1tmZBSA9cAQ8HgsRpzAfkX7KdlNHFhqIj
-         RbOkFm0VplUhgDZzQXyhHe4Q58/JXoAu9xOjiLCXz6esD1EH/X79slBgkFGV2TVIPvQD
-         PoGah4FURv3ILwa92oYF/m4elAGiv2PZKS7xH+796OUqBUhrG78dhk5xADkq+DSNwWxd
-         udFA==
-X-Gm-Message-State: ACrzQf1+lrVTa1Ea4ULjjOEIVIWYAZcB1SaTg2ohO+pUPXxwcS1AlrO3
-        cP9vRo/qJ6xmjZ1MqFCCh2g=
-X-Google-Smtp-Source: AMsMyM5xDH41UpDZ1p8bA2U2ywFhVwF/We7xW1fXCGHuMmJgz51HihdjpoffEsQBoS73pu1yzlfGlA==
-X-Received: by 2002:a17:907:2c4a:b0:78d:f5c2:70d1 with SMTP id hf10-20020a1709072c4a00b0078df5c270d1mr46758731ejc.198.1666950649521;
-        Fri, 28 Oct 2022 02:50:49 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ry13-20020a1709068d8d00b007ab1b4cab9bsm2129870ejc.224.2022.10.28.02.50.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 02:50:48 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 11:50:47 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     Jim Lin <jilin@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v5 1/3] xhci: hub: export symbol on xhci_hub_control
-Message-ID: <Y1ul9zU2wmbJo3x7@orome>
-References: <20221027133127.27592-1-jilin@nvidia.com>
- <20221027133127.27592-2-jilin@nvidia.com>
- <Y1qOhjOXM4sQW+a/@kroah.com>
- <3c3b175d2031b8e440bfdef9b4c23c0272a5f607.camel@nvidia.com>
- <Y1txBtRZAJ5vpItj@kroah.com>
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2082.outbound.protection.outlook.com [40.107.104.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DC82B602;
+        Fri, 28 Oct 2022 02:50:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T7u1IDth4dBC7QFN/PTNFRgAkmPatByAatAsov0G0Ri8bg/8KNfmxjE0x+b2cRuneNYLPLK3Uy9+Eu/KS/UzeSvxhp63EOv9aiMlKCRhoyGyvklmv5qOStvRZ3Qs3oU1OUqEs4FbmJA0AC5vR2sSKcgq9zOiDMABdnA1ghykwe3kqnwV4pFavskg+mzJiOwwVG46swlBMq+t/3KsGkQ1I1I5StCjNsMyHdE21SXRcGAMnaWjR+NVbVXHT3dEnDorPLHWoRPsNWNR7izAw2Shq8Y8yP8ZK/sWk4KBBQN2TThMsQ0F4OpvHGEFVjjpDl3xyxcNRcIhCuAayrUljyoF8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YTAJH/n/0birU4jqMMlLt2ByZOBSv9bdV4+k9Zqdrrs=;
+ b=cSRV+Lq2Wwstc4zVU88gan6PBSkRjPsPTCW7qH/Ab3j9hlXSYEJ6H9fKJHEZODCoA1IMB+nSRv2wCRqlzZ+5MO8zxRMT4f+Rr29pLvLU1nuKcDsMt9QHzI2fQOTCU2QLv7dYESeRDsYTCh+4SsKNPvyFdub56Q/2ZnGXoT9U7xZAiKkVjtPEeQ+Dka7bgE0jj98T7mqKSeaogOOJ/v7M3n11AxU7EhlHnicQ/c2H6h0AA4KVEZZWqHXCoooYBxbnjCC/d7VZLmn1cNTjUGedG5lKAlmEy3uQjIE3gAHuQfd1EEC7iO+bn5sXty/CMy7MxbMtIlP5NJJJASpLAsAlYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YTAJH/n/0birU4jqMMlLt2ByZOBSv9bdV4+k9Zqdrrs=;
+ b=NC8kjnTxzgFO7sK25OE8gZcaGDUnq8Ld900UVTO3TJiORTHjop1fCa8WEVOO6GYd+cilhdEdBMGOKYmorYiLzavxqn1bSp/4mjI/udYOTOy9KeD8WC2oB4hixfVnouNDFNoq9Ju83hAwdGPV4vL4xiJAxeomFqpBzEGmcWcg6Qk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DU2PR04MB8853.eurprd04.prod.outlook.com (2603:10a6:10:2e0::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Fri, 28 Oct
+ 2022 09:50:48 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::1587:379:da06:2f18]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::1587:379:da06:2f18%5]) with mapi id 15.20.5746.028; Fri, 28 Oct 2022
+ 09:50:47 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     abelvesa@kernel.org, abel.vesa@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-imx@nxp.com, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH 0/6] clk: imx93: fix and update
+Date:   Fri, 28 Oct 2022 17:52:05 +0800
+Message-Id: <20221028095211.2598312-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0050.apcprd02.prod.outlook.com
+ (2603:1096:4:196::11) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="4zhN+v8SOOmzSdBq"
-Content-Disposition: inline
-In-Reply-To: <Y1txBtRZAJ5vpItj@kroah.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|DU2PR04MB8853:EE_
+X-MS-Office365-Filtering-Correlation-Id: c6ec03bf-e7ca-4455-c306-08dab8c9e3b1
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: C0NgYYyh/f8xGIBJQQYDwB8cluBPhbHa9cGxCsmjVCIMTLWcV4VtsanQkpbaC33kxS62ejEAW+6x8eMjG8+rxcLgIGUF/H+QZBb8fqxD2Hw8DcXJZI2UGPn7THeEQFKZ6NAMLNXGM/+jw4G0qXFDjN21PkCBCkiqZC1/8/uxSBw/5Z8q/ytC/RHKyL9NciWaIZ26F1h8tkoEj2Z0eC5h/9PeJvUAfAWm1++/bwll3lemziT2tcli2VfaAxEde0NPa0S7f3hYneyblZI4l9+opPofVQ/tzcFWpnedKw3JMa4pgqGobHSbIVswEQ2o7fe/wmv5mMwFy/u1MYkVh7cr7A4p2R2R3XWRzwm+HDH76MUubgBVEr7C+d9RGdXWMoU1dHJHxWnF/LtW7zHdmtlrEEHSICFc2LJJNKKXAuRSCCtXLcfRrgbk1Mz4P7ybEHiVD0XQuJa6gvN2aSulPY5RYRj4NPYMk0Bibgc1o1Udw6neza1XN+bahywPtkACQOVAmOzIyL9q66seiwabHP+nsTF1UJOh4Ni1iv5FifJTsHevvOe/BkZGKCV7UAqE0ZgqyfFLXAmF15I5yTnzoHwv3TcUbLzsAkUMFuMo6XL7lPDDMYoOKJYa/3cUEoZH6j+Xws7PVwaoTQ21Hq2RpmDYwv6EBnL1XmC2F9gSJDWZ+ysTEBHBig6UkXtuWSXX61h/MbF8q6cPJ6xkTyLdjFrbWlsaI6CXLUOPkdbf4ehzfQxL5bSOWozikfMR9lDxiXB8T0/J41++cr3mmw5Hx5jYT95ol7EnbB+e3K2IMgwscWE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(366004)(376002)(396003)(136003)(451199015)(478600001)(38100700002)(38350700002)(6486002)(921005)(1076003)(316002)(6666004)(4326008)(8936002)(186003)(52116002)(6506007)(26005)(83380400001)(41300700001)(86362001)(66946007)(15650500001)(2906002)(6512007)(8676002)(66476007)(66556008)(2616005)(7416002)(4744005)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zeOTQb9C5NUgYaUpgPo/gMZ4jVvaK6Efh8+gKg6bTLZc/1tyKk8wkt6G+gv7?=
+ =?us-ascii?Q?cFnVBZ3U6+ZXE+ruQdITbM5uH1zZiqqcNdIxRNzu5OSl+qorBRIZpv55dU7c?=
+ =?us-ascii?Q?pk39AM8sTHD4eKF81qAWbcL/3QyHGwY+SBgrw9lPacPclVmE3St3vxeKgFVk?=
+ =?us-ascii?Q?nlKG9eBYYqZE7Wg1IddDygw2TxnMtQz5lbk5f4WKHXyENQcE4txgQstm5t2x?=
+ =?us-ascii?Q?KkdRs0hqEGpltAtPMDh/+RuX2mrZE2SZfrfcQiduzvygWwWlsMVmsNje2Hrl?=
+ =?us-ascii?Q?F83WcanTW3wKveFoBsUNbCEvUwapKjrq2ZBJz+1ugZ8TXqnGMOcC+2LYbwnq?=
+ =?us-ascii?Q?8s8cRqJDDte5InYSW7gfWu5gMtxcc2jv3irPFcbzkAGW8DX+OU+NByb1WEkj?=
+ =?us-ascii?Q?CRKwJRVYowZ4JW+qTE6bDOpqKLihQwefxHF0pNQTtt2wwuzUQUw2L0UMTO0F?=
+ =?us-ascii?Q?gvQy2n6VqtiVMYOsudcNyDrVRSnR/R1G9Z157y4Q3aOvZxoOg5f+LBNvvBAS?=
+ =?us-ascii?Q?YxRiWunxRpKHJOWcDKTqGvW72y69cfLSEI+CEwEXjx+b9dG6UdveVpjmZQhy?=
+ =?us-ascii?Q?DHM4FDcrFwRLe68IX6vLqUGowRNcTuoKrtWyEVykh8dy1XgLJ68JmA5GHLm7?=
+ =?us-ascii?Q?/vdJthp0Q15b1Gs8F3IGDEjAoyYKenOHKAbQ3f/4How071zNVhnNGyIsgJsR?=
+ =?us-ascii?Q?vcb/UL264DnAWYE1DtAtn4aoyy7DvEmaP2EnDroMcUlFGX2nYTqlqXI15L8n?=
+ =?us-ascii?Q?8bC4IZ8n81i46TnxYGczIcfgszcIxMRRJ53iZpH7pVEBv0sDt2NUtf4E3N2J?=
+ =?us-ascii?Q?BYTT7cajAHth+LCFm0wUahCNk67S90WduGFX58b21oCUwaNHsLHV5WXF/Prk?=
+ =?us-ascii?Q?F0giQfnp40ehksAJudK7tf4VS2pECXautfZDyVx7rn5Dd+m3qCv+UNvdxYEs?=
+ =?us-ascii?Q?naAS1i38zDi/oxPcSycBt0+NiK1aPe9uSBYD4eiY6oaJRWoMMxd+tzGWCGUN?=
+ =?us-ascii?Q?tuWFLhe9OYWMnil2DavMQqi0z7Tv9iuFYquDoklFI1v+ce4jt76sXo3qab3p?=
+ =?us-ascii?Q?YZvoOWLgJ7oIzwFToahWCNr/T8YW9ixOWY2F7AIbTPhbGa3AuobyZFYLIjo4?=
+ =?us-ascii?Q?pKEnjA4ojTD3E1Fs8U0pIo3iBDIuDoE6UqM4cKM8GgZhSeWMfvtD7Eta3fTR?=
+ =?us-ascii?Q?kRxnwh8lFsXXhL5TJMtCTIhOlico/HT1v71ILu/Q7pMD9sWOIuh6mc7InrzY?=
+ =?us-ascii?Q?trtWV6Gef9oPxo/810TzDRtD4uaZP7lWhqHcNav6IgqIl2mphvJpoPkdw+IH?=
+ =?us-ascii?Q?EB5FxRcXNhjJ6e4g9Og+MLqHNkveLAGD8T85GE1FFP0GF1lZo/KEwWH8ZDDc?=
+ =?us-ascii?Q?UvEpSFPF1GJ37h+nm8r1xALIKFEEvngtVYRG8RC4b23KeSJQq3ByT63ilDT1?=
+ =?us-ascii?Q?KN7QDZ65QY76W57iOA0X0UkZeSLJGCnXLAxgN4oLle/EWqUB7L4jfXQcOzKU?=
+ =?us-ascii?Q?c8nw+lpmpBy4Qzsm4u/X+KyiEmNENLsYhaPUcvX4e+URmppXzxtmmA7CMtHa?=
+ =?us-ascii?Q?KAeikC1v4M/oGZGpU+LxuNcLTSyDlpWcAhqeTwEo?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c6ec03bf-e7ca-4455-c306-08dab8c9e3b1
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 09:50:47.8267
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YuZKQJgP+nfZ7P0Y5Tm+pyrSZCJz/zMcM31SbpPBWICgHXqHGaWFxuHN+gisCfGPvSwdCjNxtE2RX2baPAgcsg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8853
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Peng Fan <peng.fan@nxp.com>
 
---4zhN+v8SOOmzSdBq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+V2:
+ Update commit log for patch 3
+ Add comment for critial clock for patch 5,6
 
-On Fri, Oct 28, 2022 at 08:04:54AM +0200, gregkh@linuxfoundation.org wrote:
-> On Fri, Oct 28, 2022 at 05:36:41AM +0000, Jim Lin wrote:
-> > On Thu, 2022-10-27 at 15:58 +0200, Greg KH wrote:
-> > > External email: Use caution opening links or attachments
-> > >=20
-> > >=20
-> > > On Thu, Oct 27, 2022 at 09:31:25PM +0800, Jim Lin wrote:
-> > > > Add EXPORT_SYMBOL_GPL on xhci_hub_control() for other driver module
-> > > > to invoke and avoid linking error.
-> > >=20
-> > > What other driver module?
-> > >=20
-> > > There is no user here :(
-> > >=20
-> > > confused,
-> > >=20
-> >=20
-> > In arch/arm/configs/multi_v7_defconfig
-> > It defines
-> > CONFIG_USB_XHCI_TEGRA=3Dm
-> >=20
-> > If I don't add EXPORT_SYMBOL_GPL on xhci_hub_control()
-> > , I will get compile/linking error like
-> >=20
-> > ERROR: modpost: "xhci_hub_control" [drivers/usb/host/xhci-tegra.ko]
-> > undefined!
-> >=20
-> > if patch
-> > "[PATCH v5,3/3] xhci: tegra: USB2 pad power controls"
-> >=20
-> > https://patchwork.kernel.org/project/linux-usb/patch/20221027133127.275=
-92-4-jilin@nvidia.com/
-> > is added in xhci-tegra.c to invoke xhci_hub_control()
-> >=20
-> > Should I integrate this patch with [PATCH v5,3/3] as one?
->=20
-> Yes, do not add something that is not needed for that specific commit,
-> otherwise it causes reviewers to be confused.
+patch 1 is reported by Dan and marked as fix
 
-Other subsystem maintainers prefer core changes to be split from driver
-changes, so this type of split is commonly encountered elsewhere.
+During our development, per updated reference mannual and design
+information, correct enet and drop tpm 1/3, lpit 1/2.
 
-Obviously, since this is your turf you get to make the rules. I'm just
-trying to say that this kind of advice can be confusing for contributors
-because when they then sent driver and code changes mixed for their next
-submission, the subsystem maintainer might tell them otherwise.
+The TPM/LPIT patch 3,4 are not marked as fixes, there is no user,
+so update binding and driver both.
 
-Thierry
+Patch 5 enable HSIO root always on
+Patch 6 enable sysctr always on for cpuidle
 
---4zhN+v8SOOmzSdBq
-Content-Type: application/pgp-signature; name="signature.asc"
+Jacky Bai (2):
+  clk: imx: keep hsio bus clock always on
+  clk: imx93: keep sys ctr clock always on
 
------BEGIN PGP SIGNATURE-----
+Peng Fan (4):
+  clk: imx93: unmap anatop base in error handling path
+  clk: imx93: correct enet clock
+  dt-bindings: clock: imx93: drop TPM1/3 LPIT1/2 entry
+  clk: imx93: drop tpm1/3, lpit1/2 clk
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNbpfQACgkQ3SOs138+
-s6HvtA/9HmyQGlNtvFzSY3rQZmOBzX+P6ldztwBEp2MTeyGhl++83iCBJmKdyGx/
-ZpxPXTH9bWb9P1jspNyxV7vYp7rBoqtMTJG4m494V0Nwt4JyvdnD7ORUnawaqQfI
-0KMqtiAjobaTXAGGf17SrdqAlL8FtwnC3uIMGresPnqL/1n126e83rJhdJNyfjRc
-ytPJ3Fm/HIlnWMuzE+uuJO326K8fOxm/FR9GrYx9O/bD4v7FgDJSNLdYxiflMuiB
-SEaLSuObUOtyw8kJTZI/APVii6Ri1Ie7gIS4iG1X/w/zeIsqsj7Dd4AV7ZoupS//
-ctMwehSilsLUbeeH/qz7SY4nTRbJAp69+pgf+NdSK10O0Zk+Rl7ufYv4MFoDfhei
-kur5inGe/mVxmLdyclrgq5kb0rKdLKsMkxfDTK1EgvQ3MP5Oui+q7M30cJMP32Ek
-eWbH0mteCxJ+mP0i6o6Xl852mx1tsDdcriYI3CDsbmaAF9TYbuhYYDoz/27pX0R3
-8U3kO5UGLqTQCkPc2txbgicWYoZbVyqkuNwZ1y1iWGxczkyddBcku6t6gWJB1POa
-9PplX+LGm2ZEoC8svVuWDtf7HbfyUjiUhIwC/qcog3lWlqvDeFURx9Vg21j9R0v8
-B/NTboyCCBgK5q3dbgzDsrLYUkE5/38VafEFD9qFDKgdhfHdfqo=
-=wRkt
------END PGP SIGNATURE-----
+ drivers/clk/imx/clk-imx93.c             | 38 ++++++++++++++-----------
+ include/dt-bindings/clock/imx93-clock.h |  4 ---
+ 2 files changed, 21 insertions(+), 21 deletions(-)
 
---4zhN+v8SOOmzSdBq--
+-- 
+2.37.1
+
