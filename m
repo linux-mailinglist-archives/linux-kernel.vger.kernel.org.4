@@ -2,114 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCD0B61197B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E92611988
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbiJ1RmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 13:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
+        id S230171AbiJ1RnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 13:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiJ1RmD (ORCPT
+        with ESMTP id S230090AbiJ1RnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 13:42:03 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028B32303F8
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:41:47 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so10477928pjc.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:41:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hNe7pE0mhcXWjeA1QJJOqi6qRTPP7vQdPSrMPQVQDUY=;
-        b=WWXeTG719aYppZcdSDvyKb0sCpdiMkoobyUAhBjGDiFrEOoFdZ+lI92HvhG1p0+6gO
-         9djcyQs65SEWlZYJnUDMepy/Diwtjgot/FgAKaZh2iYAy3K2XXF3M/GotHfnWd+apoZJ
-         DxDu1pt/aAkUfPRsohEBwgSLZRq/UICYxWTZs=
+        Fri, 28 Oct 2022 13:43:03 -0400
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10405228CD1;
+        Fri, 28 Oct 2022 10:43:03 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id g16so3925239qtu.2;
+        Fri, 28 Oct 2022 10:43:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hNe7pE0mhcXWjeA1QJJOqi6qRTPP7vQdPSrMPQVQDUY=;
-        b=j+DOM6wm3qsZdxBd81l9C1y8f2bFr9rNPmf1oXSYxBsM9vPi34QikbgLxZPiUMy9qz
-         HPx7vdhzChCru3ttdUxtaCqdaTgmKzFHym8WiJpC0iyzoGMH0SQKum1FT+nNj/aplGB5
-         DMRpxfo1YFHvz2J2e4exKznINoTuNCsKe05m9jPN3y8HRHn1owNdFCYd7KVMRES8LiL8
-         vpD5g9SSH9yilBqesYt+JvQ7aJmwmblsOzza/h4Wq2QyTYY8GBBFHMrkOem2gTP1tTjV
-         whvEvdUYxB/FkgrVlAFvJdGOipFiH6O4odw0YXeU9jHffjI6POwA9fgfcQ+Bfd4FTHKz
-         uSvA==
-X-Gm-Message-State: ACrzQf2BXBijlc89yHDd30LokxbShq4LzyQOvZ5IrZX48f+rhqkVpyBi
-        eTWEXDM/hUstuwy5LU7ZPcsbzA==
-X-Google-Smtp-Source: AMsMyM4QlHu5Uy9cE0OmCJGFr97CA5TgIs12zg9qBbTU2Up4AEsAS8SORs6VAy7ta/YBwY3RcyI3EQ==
-X-Received: by 2002:a17:902:d2cf:b0:17f:7b65:862f with SMTP id n15-20020a170902d2cf00b0017f7b65862fmr117613plc.168.1666978906459;
-        Fri, 28 Oct 2022 10:41:46 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f11-20020a170902684b00b00186b1bfbe79sm3317208pln.66.2022.10.28.10.41.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 10:41:45 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 10:41:44 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH 2/4] x86/ibt: Implement FineIBT
-Message-ID: <202210281041.3BD97D9@keescook>
-References: <20221027092812.185993858@infradead.org>
- <20221027092842.634714496@infradead.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Eah8WFgQUColVrZzNPgF2lY+dbjpV+ZLpOQgdNyOUHE=;
+        b=UT6BwzgCyP7TUVyJu3Nsgd7Ng06rHtnucwVUQpC8d6MLq1pinO+aIoa0gyM6LAoms+
+         pQGpzVxfUN7YotuTh2DuQv0e3qSCreo071euewtKK+gVE4BD9WF+McAI/K6H4U25uE1I
+         izeTGXxUqvEGBvvmJ2UjoJsmvsuFE7vfF1fianmZnDJXSimoZPDwTeD/dqvYvDVMbzy7
+         Ahmk+U5lTZRpOrCRNWQ8jfBSL4FpbQ/dXvYvTFQCE3Bf+iv5tLWNgLqDp3XgLpIKZKe8
+         5S97fT7pfIKrKQJmeYQSi3cQjJP1ykWg0FSrFjzRirE18uozDyV/22ao0vLYA9Z8kxp8
+         lGyA==
+X-Gm-Message-State: ACrzQf3pnaxDiYpCvv5pbdNwBiPX9ygqtBqo55BeQjAIYhRSYKrLvQH6
+        XRiueB7N3aQAO45g0Yam5nnli6xq2UZ3s6kiDFk=
+X-Google-Smtp-Source: AMsMyM6OzHAUPtj73rfL8xjuNalrUrW/YmoClhm/6plK5pfLXawyKFhC7mKcWigsq90bhW8nRRUdquH+EAMo0c4HrOA=
+X-Received: by 2002:a05:622a:1a25:b0:39c:b862:7318 with SMTP id
+ f37-20020a05622a1a2500b0039cb8627318mr544644qtb.147.1666978982216; Fri, 28
+ Oct 2022 10:43:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221027092842.634714496@infradead.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221027031648.2452-1-huangqibo.tech@gmail.com>
+In-Reply-To: <20221027031648.2452-1-huangqibo.tech@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 28 Oct 2022 19:42:51 +0200
+Message-ID: <CAJZ5v0gFTmJY0TzYkPeEWeeUVz+zMccnYEXHyvk-mV2ypWUwRg@mail.gmail.com>
+Subject: Re: [PATCH] thermal/core: cooling device duplicate creation check
+To:     Qibo Huang <huangqibo.tech@gmail.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 11:28:14AM +0200, Peter Zijlstra wrote:
-> Implement an alternative CFI scheme that merges both the fine-grained
-> nature of kCFI but also takes full advantage of the coarse grained
-> hardware CFI as provided by IBT.
-> 
-> To contrast:
-> 
->   kCFI is a pure software CFI scheme and relies on being able to read
-> text -- specifically the instruction *before* the target symbol, and
-> does the hash validation *before* doing the call (otherwise control
-> flow is compromised already).
-> 
->   FineIBT is a software and hardware hybrid scheme; by ensuring every
-> branch target starts with a hash validation it is possible to place
-> the hash validation after the branch. This has several advantages:
-> 
->    o the (hash) load is avoided; no memop; no RX requirement.
-> 
->    o IBT WAIT-FOR-ENDBR state is a speculation stop; by placing
->      the hash validation in the immediate instruction after
->      the branch target there is a minimal speculation window
->      and the whole is a viable defence against SpectreBHB.
-> 
->    o Kees feels obliged to mention it is slightly more vulnerable
->      when the attacker can write code.
-> 
-> Obviously this patch relies on kCFI, but additionally it also relies
-> on the padding from the call-depth-tracking patches. It uses this
-> padding to place the hash-validation while the call-sites are
-> re-written to modify the indirect target to be 16 bytes in front of
-> the original target, thus hitting this new preamble.
-> 
-> Notably, there is no hardware that needs call-depth-tracking (Skylake)
-> and supports IBT (Tigerlake and onwards).
-> 
-> Suggested-by: Joao Moreira (Intel) <joao@overdrivepizza.com>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+On Thu, Oct 27, 2022 at 5:17 AM Qibo Huang <huangqibo.tech@gmail.com> wrote:
+>
+> Because creating a cooling device may have duplicate names.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Why is this a problem?
 
--- 
-Kees Cook
+> When creating, first check thermal_cdev_list whether
+> there is a device with the same name. If it has the same name,
+> it returns a reference to the cooling device.
+
+Why is this a correct and the best possible solution?
+
+> Signed-off-by: Qibo Huang <huangqibo.tech@gmail.com>
+> ---
+>  drivers/thermal/thermal_core.c | 34 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 7e669b60a065..f38f9464e9f4 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -844,6 +844,34 @@ static void bind_cdev(struct thermal_cooling_device *cdev)
+>         mutex_unlock(&thermal_list_lock);
+>  }
+>
+> +struct thermal_cooling_device *thermal_cdev_get_zone_by_name(const char *name)
+> +{
+> +       struct thermal_cooling_device *pos = NULL, *ref = ERR_PTR(-EINVAL);
+> +       unsigned int found = 0;
+> +
+> +       if (!name)
+> +               goto exit;
+> +
+> +       mutex_lock(&thermal_list_lock);
+> +       list_for_each_entry(pos, &thermal_cdev_list, node)
+> +               if (!strncasecmp(name, pos->type, THERMAL_NAME_LENGTH)) {
+> +                       found++;
+> +                       ref = pos;
+> +               }
+> +       mutex_unlock(&thermal_list_lock);
+> +
+> +       /* nothing has been found, thus an error code for it */
+> +       if (found == 0)
+> +               ref = ERR_PTR(-ENODEV);
+> +       else if (found > 1)
+> +       /* Success only when an unique zone is found */
+> +               ref = ERR_PTR(-EEXIST);
+> +
+> +exit:
+> +       return ref;
+> +}
+> +EXPORT_SYMBOL_GPL(thermal_cdev_get_zone_by_name);
+> +
+>  /**
+>   * __thermal_cooling_device_register() - register a new thermal cooling device
+>   * @np:                a pointer to a device tree node.
+> @@ -873,6 +901,12 @@ __thermal_cooling_device_register(struct device_node *np,
+>             !ops->set_cur_state)
+>                 return ERR_PTR(-EINVAL);
+>
+> +       if (type) {
+> +               cdev = thermal_cdev_get_zone_by_name(type);
+> +               if (!IS_ERR(cdev))
+> +                       return cdev;
+> +       }
+> +
+>         cdev = kzalloc(sizeof(*cdev), GFP_KERNEL);
+>         if (!cdev)
+>                 return ERR_PTR(-ENOMEM);
+> --
+> 2.37.1
+>
