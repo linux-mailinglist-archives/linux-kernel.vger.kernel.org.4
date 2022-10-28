@@ -2,113 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A1A6116AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09368611693
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbiJ1QAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
+        id S229667AbiJ1P6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 11:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbiJ1P7E (ORCPT
+        with ESMTP id S230209AbiJ1P5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:59:04 -0400
-Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2067.outbound.protection.outlook.com [40.107.249.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D22C21CD61;
-        Fri, 28 Oct 2022 08:57:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b2JMW1zYqOhLEa0+aSSsy+DfHAiw5Gw0PiiScvMTpKIvchoTzZWxrwfx6qBaP9arna8rIaamMfdgZmogKl62bqn/Jq0tUN3x8b8Ehqf4w0O0evxAPRDR4SP903YoaoWLoLq+np+AePUFVtNI5od5kQWWsWirgOsS5hEAK1pnCusaYnFZLz5woalUzb5GES7mp22grkxaSeIV0maWJdB1ViTlnkHSfxrTW3a3zlvqZ3RgmJA009CZf3FSl0aXrIjX5I9dBdR0qpZ5Kd0frq0D7JiF3ECyNIb91G73+3jRcQ8BQ5EhJ6XN58tzIR5Qrqu38YyhrllJuVlyyEoIx8+vOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3qTLObPZYQoAp7sIAf7mRsGpATwWKqn/VhwZAPD//lQ=;
- b=aBys9l/s21q/w6n+635kCi1+EXpBMXCNNvOqlB1v/BwNKAvUwSK/Hu6Op/Z2BC8po9gSet94dXqJv16HY0r2YiEuO/socklW51t8e5rIVjjT89Q1kgdBYDyikqgxO05gIVxu7DX7BtYoRFWn9HIJoEWFA1Ie9jzX229Tx07pD+WI1MGupxGD2IQHiwABbo7stdm3gRwPgKu9bxhr7VlFGAlNkfEydRItLHs0z+iVKNZYXTa2UFmfmHBSnpZhnebF5B4zGz+MeXIo0zPjmq6ViQeTyV9JqxVpO3ug4FQW5oJJXgO7WmpFG84jiZ/xie50I0Oio+54OrdOn4JrH1/Z+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3qTLObPZYQoAp7sIAf7mRsGpATwWKqn/VhwZAPD//lQ=;
- b=FJlwNHXkunkP6vqX14ElRx0lvfR+kgtpKdqsbttVo8lwIsKZgeKIYENCkVhFKP8NbYxGd+ayGHBbehpYA7AUIhJ9PGABmg1QW2L1I3+wHaZbswq6J1m1dFb3dtBfagt/wB6MT8wxln6IuK/7tQFvD2W0jAiDCGAM+6nOPf9ztis=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
- by AM9PR04MB8323.eurprd04.prod.outlook.com (2603:10a6:20b:3e5::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15; Fri, 28 Oct
- 2022 15:57:53 +0000
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::44bb:8387:8f4b:6a28]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::44bb:8387:8f4b:6a28%10]) with mapi id 15.20.5746.028; Fri, 28 Oct
- 2022 15:57:53 +0000
-From:   Frank Li <Frank.Li@nxp.com>
-To:     frank.li@nxp.com
-Cc:     allenbh@gmail.com, bhelgaas@google.com, dave.jiang@intel.com,
-        helgaas@kernel.org, imx@lists.linux.dev, jdmason@kudzu.us,
-        kw@linux.com, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, lpieralisi@kernel.org, mani@kernel.org,
-        ntb@lists.linux.dev
-Subject: [PATCH v14 7/7] PCI: endpoint: pci-epf-vntb: fix sparse build warning at ntb->reg
-Date:   Fri, 28 Oct 2022 11:57:03 -0400
-Message-Id: <20221028155703.318928-8-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221028155703.318928-1-Frank.Li@nxp.com>
-References: <20221028155703.318928-1-Frank.Li@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR02CA0010.namprd02.prod.outlook.com
- (2603:10b6:a02:ee::23) To HE1PR0401MB2331.eurprd04.prod.outlook.com
- (2603:10a6:3:24::22)
+        Fri, 28 Oct 2022 11:57:34 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003D1214679;
+        Fri, 28 Oct 2022 08:57:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1666972632;
+        bh=nRKXV0qvwDL9I8bHXNjzoNeda8BPvLXBGzFqDz1CBK0=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=rbdqX0YrRDhoPFb7Rzty7m/2TwVTiEmuqegCUaWnjajspXIGzxAqR0sBNVTklGYp/
+         seNtpuvwXZsVLeaGkIHFEeqA27n9KL8Lpd6go9uD8nniqtb3wEMfvqtG+MZXFwZoBx
+         5qAoNbX1TtepJS/NSA1oFOInNc+xeVloVGeuWdQUXIg2liPBUjiytR8lRxs/k3OfNh
+         HqecD3mbYI7rN89yQE1oAvVby1zVDfkdkgK6bwMqURn6llgTuCzdgLpnTPN7jG5++M
+         ww+ta3SZXtWw/WtyPTsDA4PIXm3qRs9Se6CrdIsJvdliHUx6au7Roha8xYhk2XPZ+f
+         eMUbXULfOVYaQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.151.20] ([217.61.151.20]) by web-mail.gmx.net
+ (3c-app-gmx-bs17.server.lan [172.19.170.69]) (via HTTP); Fri, 28 Oct 2022
+ 17:57:12 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HE1PR0401MB2331:EE_|AM9PR04MB8323:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7d0791b3-0e2b-4f8f-a9b9-08dab8fd2c17
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eebcoRqqlVnPDNBfEx7u1pnb42pfrROLtrYYahkOaHVKrAYp2JHwXk5QCUnu43NZVDzpZoQTvHswcEppZ1nToJDr3durM3SeU6GfxpaOvnO7cVMTzKgVW6BWFsmJQFUBsLwfD/LIBGwNxgT5IKle5rjUfRa6bzbVwCRlkvzQTtpTdQ5fwtv2Kf8ADOFO2I+zRxbPjf/PxxKNLjQFTyAYmZVLFnr3DpoedcOE5/lJrIyLj4nBKRjzN4AP14GjjXuI8OHES7V1aaGhARksEZBMkfzbOsUGagV3yKyFiEneBJAGTXpX8yYyKdXfipYH5q+fiMh0m68IdkUgeMC1PIx88wOe2lVhWIBOuXByFsS2AixLlGFxJUt4Ga9/hCYG8m/IEZiA2TKyVhea3iIlqXp+3W1Upv6HHaL5JhugS8QQiAW+BINzvZq7JT2g1pjk8iKK9yHPwdOM3xS+7ChoF1A5HzThq5rnAhISvm6p7LbZL67NIHgtU66PaftsEHd4C1IjsW61C6/tymDaFcL3DTIAxMAqf7e9O+x8598M8esMZmSH6wN34UaJ1zRtNOzrXAGr4odrgvAgVy902RREnmwCDGB2LwTZa8nsgOJqMSJcUBtY2QGoyK/jobwKb9K36xH0KOrlUl4kbp7qlPRzE27ETdLvhTJhZFatE44n+CLo5eEIArWukPVzNb2dz6/RdvWFhpkBDKi5KN2m7NNdA3kp55tTBKvTqwW9Rat8DXnmY007AbHv+bU6RGovEF/CVLTbfP2JkBqzHUH8qTXTu62FJA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(366004)(396003)(39860400002)(376002)(451199015)(6666004)(316002)(37006003)(34206002)(8936002)(5660300002)(4326008)(2616005)(186003)(1076003)(7416002)(8676002)(52116002)(36756003)(6506007)(66476007)(66946007)(66556008)(6512007)(26005)(41300700001)(83380400001)(86362001)(38100700002)(2906002)(38350700002)(6486002)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?P5IoyyP20+CYLuBUFOoAA/EDGhRNs2ZwytDCKbi/lMvRvRgoU/1lg1GeohBc?=
- =?us-ascii?Q?VpITiOZPRTJJb57Snu6x3hyuZjku/yOSimn1gku1X4qNQC1pw7Iq5lbdDMFT?=
- =?us-ascii?Q?j9MDj1viXA+VfBmjSKLcI+NAEk0gfyge5S0AldiD5zxAwanhkEoek/nG8kHP?=
- =?us-ascii?Q?MY0fIor+vzhkAviM/My1cQ2njrIFM17GQzktdFdLrlirae584YeNn2S5wW1q?=
- =?us-ascii?Q?VBfQp3xOwXgtZLTrxoyC6rArhxZTIJwJUJZBbYo4jnewJfiWSbhxIqJ31Hus?=
- =?us-ascii?Q?gsVNQ0h8l5zMUVcWtaWP5XceJW+qIGohUqAFZnpRlzH6Rvdtu3gwnoSrTloY?=
- =?us-ascii?Q?5tcOgOkhexT0EcRFP2p9R9ifFkWdJLQPzeXkPcjcIXgTQqFaA/aM4Zy5ZzRr?=
- =?us-ascii?Q?npYEEtKJ18vU1p6hiI0R1BB4b1N8UK1ShkkyrbvjmPjqHRWHjj37flZW5sNV?=
- =?us-ascii?Q?8zLC63X+mHMvIe1XWUqA6ifWvlNOA3MFyMZlQMf0hzE4tYZX2dEymUQ/2DQI?=
- =?us-ascii?Q?cBjBLNo0fYjuPixegqo1PFPE7bdqbQWO75bEb7XrnTqESyQpfVxobw30+db4?=
- =?us-ascii?Q?MfoeRo/DDC/6eJaKB/Dd/w/kS6RtgQSkImAh3d09BzavPxboEnveSLwmEFH1?=
- =?us-ascii?Q?fGKkTbDpjNpZZow2/ZiHEb/fJ5vqcs8Ird42uqif1cKFGU2EtJNGW5Qd0ZWM?=
- =?us-ascii?Q?PW7xNTj/b8vETxTyCmz78S3VUM4yWdsoDineifdrWlzJpAMXOOXVVlJmQIKp?=
- =?us-ascii?Q?EF3LxUYTrFH6uD8scYAMcz7Oy2H2t61z5WBEYxc8d9CGJOeG55xveHFrowZp?=
- =?us-ascii?Q?6Q43xZV1alV5bqYUjAxx28lmYhNu/0q1EwOEl4qkXXIodXwykW2EYX9d89vo?=
- =?us-ascii?Q?XalWDXaCkZRATm6UGPog444hGYUJqBrzgd1doCt72uUmbkz4yMMe8tibtgrS?=
- =?us-ascii?Q?LhzP03odJQvsGfMQkJETYPveRkhDZrOA9eRvEFfTpY5JzbqnKNrYTH3+27US?=
- =?us-ascii?Q?kJUiE6NUJZv4YRcJd5xPiMPIHGa1u66eyHJW6fwglSQ8Yefm2/wGVzc4KU7S?=
- =?us-ascii?Q?xhKfsi9KpN9jw5FU72KkIol0US5EA7/ih9VxNEOSfFyJLKMr2lJDABmQqgNj?=
- =?us-ascii?Q?dnXaRRF1KI9Do7BqeV/ReAo8q47xJ4JzjE4CPt5Fg8H4sIQlV4E2v4iDZGHC?=
- =?us-ascii?Q?S8kgqU2cAosP0Nk4a8P74h1gxHHiXBp9JEizPL43gROP3nbDTMefYfWlanPu?=
- =?us-ascii?Q?XUKqNA5KYA15rlOx2Z9Y2r+UkGzn4dLMYLJLnOFghvWxhMs4p1Pty1D+ADX4?=
- =?us-ascii?Q?5ffon44FYlaHUuX081enBRVnvE6+AIGd9L0E6rF9Ik09fMaNjvwYu5kB/6qf?=
- =?us-ascii?Q?XzMt4R/Q9ODahdUIDGeBS5IwSU7/LMjZREs8hYAdDhAsZBSRqQDcaSAut7Us?=
- =?us-ascii?Q?3mKh6xCeYjztnGRtyUIe7Wr3CU9/CruUUrYOQcayu4Ak5vjvtAtOR6TQXJpZ?=
- =?us-ascii?Q?qq/X/KoYBho1Jc/8JyCw1s6q2epcjVSREJu1mBgomEr6GXTuvsOKCgDV5zk9?=
- =?us-ascii?Q?7qZUePSTqLMXWD6Mnv8=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d0791b3-0e2b-4f8f-a9b9-08dab8fd2c17
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 15:57:53.4206
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Bp8/kq5a2D0TA8Jf/12e48ZKHasLuvAVv9v6/vvN+71gJxPVvmplBrXtDK/JyXBx7yhcGX4wyaAuVpHiuxbT7g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8323
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Message-ID: <trinity-6e94e8e9-4b31-4d93-ac21-f51aee3b790a-1666972632153@3c-app-gmx-bs17>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     "Frank Wunderlich (linux)" <linux@fw-web.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, Felix Fietkau <nbd@nbd.name>
+Subject: Aw: Re: [RFC v2 7/7] arm64: dts: mt7986: add Bananapi R3
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 28 Oct 2022 17:57:12 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <Y1vd9+q2PzG5DIKa@makrotopia.org>
+References: <20221026093650.110290-1-linux@fw-web.de>
+ <20221026093650.110290-8-linux@fw-web.de>
+ <64daf96b-b2b5-6f02-91aa-58d19083ee01@collabora.com>
+ <a97aa98a6230e7f33a6b5f5e2c9e54ce@fw-web.de>
+ <Y1vd9+q2PzG5DIKa@makrotopia.org>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:2Jf5uCm93TCrRRVMUpsdNxtQIL/d0QsSjHv7fNClGY/TTCHAn9Z0DqfxZ2UnKkGFaRMbG
+ m/W0B1uIQqbknKQHn8cnuQ1KJAUggdcFYIo6FlnjkelLLU38iBMHEtuby6EEklxe94weXDWyj91Q
+ 68/ZaLszOjo5pAScv4TowYn4zT6gBhVehcUUZePjdhFVFAW4qYe4c+gUBaJUNGiVp1Xg8AkrKCz4
+ z5i3HTCKoGF99/aY/WMNmvKXbdk47WSPj2RZnl2SDJkzjVfo2ZRtOGrT0EzZ9heO/mwME/v3NQ+l
+ p0=
+UI-OutboundReport: notjunk:1;M01:P0:YkrS8YEqMno=;IIodNu81S8JdrNW4QABw2sg5KjV
+ dhBUui4yBhUJI/hH9bhssPgbGD0f/g0lhJQ52kEM9aHpCf4QJTyW/S38L7hWdc8tVdQRYLwEx
+ sYgoKRXtiuXRnclg/8jTwYGjGWmdxQKmmOEOwXSWv9URD/95gTUPz0ecsbtgCHV8pd1AJVx98
+ b2BMoTFddpvEqFfEyIUs2V0waGT/C4xD5I5F/fogsrAXw5Dll6K6Vz3cdE9FrvcPljfdc2PjM
+ ZuqMNjVh+OzdlYs35NcgDTa4qm5VR4S9A2HPhXLz5couWxDpJiQVATrX8L9rx9gyBNLOEshN/
+ 1/uecBn+t2oPJTOGqXHM2mmajoc4IAiee7J5PsL8PRH9+4Zd9XmA17+Me0NSza1iIkdlpQ03j
+ XlDgf/V7AE0BOmq7Vw7vniEiZ/UnKGvWjkWGoQwd8TJIiB0dlcKit0j5oasb34314goa7exof
+ j+MMxrxzgNEoEwcQICMvAROfrQkvqzkSTDs4+poz5lPMAYWLtpmYdCBMUBjtmA7YA6oM0iuZe
+ xYxuD+EJREfASLq+paHx66VKQf7J2+UbvFGvv8dW86pmz6CNrKraslXIjT8t/T3mwEMolPe8t
+ N7W0mn5lZm48ss+rAS8nDOgvqvtd3ge8mRuzieq8Xgx2QA5FJpFotKB9KOuoPweGONVxltcri
+ oLEahQpfCt7NSFl7FPDhe8s64zsgy3y1N2Ngzmk9WLHbAunS9X7LJO++JBgk1raf3AtCMWKi4
+ oxOH7rR5Yhc6WHthsorbIMCPODY/7tIM+m9cYtx5HebgoFOrNBHEHf/WbQd1cgF+Om2+PPrXn
+ 3GgqxKTXG194m5iWYYhUT0MQ==
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,59 +83,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Li <frank.li@nxp.com>
+Hi
+> Gesendet: Freitag, 28. Oktober 2022 um 15:49 Uhr
+> Von: "Daniel Golle" <daniel@makrotopia.org>
 
-  pci-epf-vntb.c:1128:33: sparse:     expected void [noderef] __iomem *base
-  pci-epf-vntb.c:1128:33: sparse:     got struct epf_ntb_ctrl *reg
+> On Fri, Oct 28, 2022 at 12:57:44PM +0200, Frank Wunderlich (linux) wrote=
+:
+> > Am 2022-10-28 11:19, schrieb AngeloGioacchino Del Regno:
+> > > Il 26/10/22 11:36, Frank Wunderlich ha scritto:
+> > > > From: Frank Wunderlich <frank-w@public-files.de>
 
-Add __iomem type convert in vntb_epf_peer_spad_read() and
-vntb_epf_peer_spad_write().
+> You could also use device tree overlays to select SDMMC or eMMC just
+> like for the NOR vs. NAND choice on this board.
 
-Signed-off-by: Frank Li <frank.li@nxp.com>
----
- drivers/pci/endpoint/functions/pci-epf-vntb.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+i recently found a way to compile dtbo via kernel compile-tools
 
-diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-index db3455c1589b..55b7599345c6 100644
---- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-+++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-@@ -1120,7 +1120,7 @@ static u32 vntb_epf_spad_read(struct ntb_dev *ndev, int idx)
- 	struct epf_ntb *ntb = ntb_ndev(ndev);
- 	int off = ntb->reg->spad_offset, ct = ntb->reg->spad_count * sizeof(u32);
- 	u32 val;
--	void __iomem *base = ntb->reg;
-+	void __iomem *base = (void __iomem *)ntb->reg;
- 
- 	val = readl(base + off + ct + idx * sizeof(u32));
- 	return val;
-@@ -1131,7 +1131,7 @@ static int vntb_epf_spad_write(struct ntb_dev *ndev, int idx, u32 val)
- 	struct epf_ntb *ntb = ntb_ndev(ndev);
- 	struct epf_ntb_ctrl *ctrl = ntb->reg;
- 	int off = ctrl->spad_offset, ct = ctrl->spad_count * sizeof(u32);
--	void __iomem *base = ntb->reg;
-+	void __iomem *base = (void __iomem *)ntb->reg;
- 
- 	writel(val, base + off + ct + idx * sizeof(u32));
- 	return 0;
-@@ -1142,7 +1142,7 @@ static u32 vntb_epf_peer_spad_read(struct ntb_dev *ndev, int pidx, int idx)
- 	struct epf_ntb *ntb = ntb_ndev(ndev);
- 	struct epf_ntb_ctrl *ctrl = ntb->reg;
- 	int off = ctrl->spad_offset;
--	void __iomem *base = ntb->reg;
-+	void __iomem *base = (void __iomem *)ntb->reg;
- 	u32 val;
- 
- 	val = readl(base + off + idx * sizeof(u32));
-@@ -1154,7 +1154,7 @@ static int vntb_epf_peer_spad_write(struct ntb_dev *ndev, int pidx, int idx, u32
- 	struct epf_ntb *ntb = ntb_ndev(ndev);
- 	struct epf_ntb_ctrl *ctrl = ntb->reg;
- 	int off = ctrl->spad_offset;
--	void __iomem *base = ntb->reg;
-+	void __iomem *base = (void __iomem *)ntb->reg;
- 
- 	writel(val, base + off + idx * sizeof(u32));
- 	return 0;
--- 
-2.34.1
+https://github.com/frank-w/BPI-R2-4.14/commit/8a0d96d0932e71dd226b4cca641d=
+cc097b23247c
 
+is this the right way?
+
+imho adding the mmc-node in base dts is better than getting device to boot=
+ only
+with at least one overlay.
+
+> > > > +		factory-key {
+> > >
+> > > I'd say that this is not "factory-key" but "reset-key"?
+> >
+> > okay i rename it.
+> >
+> > > > +			label =3D "reset";
+> > > > +			linux,code =3D <KEY_RESTART>;
+> > > > +			gpios =3D <&pio 9 GPIO_ACTIVE_LOW>;
+>
+> At least on my V1.0 board and reportedly also on V1.1 boards the RST
+> button doesn't work. As soon as a NVME/M.2 module is inserted this
+> also connects the GPIO just like if the button was pressed all the
+> time. This issue has also been discussed in BananaPi forums.
+
+maybe drop it for now till we can test it?
+
+> > > > +	mmc0_pins_default: mmc0-pins {
+> > > > +		mux {
+> > > > +			function =3D "emmc";
+> > > > +			groups =3D "emmc_51";
+> > > > +		};
+> > > > +		conf-cmd-dat {
+> > > > +			pins =3D "EMMC_DATA_0", "EMMC_DATA_1", "EMMC_DATA_2",
+> > > > +			       "EMMC_DATA_3", "EMMC_DATA_4", "EMMC_DATA_5",
+> > > > +			       "EMMC_DATA_6", "EMMC_DATA_7", "EMMC_CMD";
+> > > > +			input-enable;
+> > > > +			drive-strength =3D <4>;
+> > > > +			mediatek,pull-up-adv =3D <1>;	/* pull-up 10K */
+> > >
+> > > Can we please stop using these custom pull-{up,down}-adv properties?
+> > > Check what was done on pinctrl-mt8192.c (and dt schema) for more
+> > > information
+> > > and examples.
+
+as far as i see it defines array mt8192_pull_type with multiple MTK_PULL_P=
+U_PD_TYPE / MTK_PULL_PUPD_R1R0_TYPE / MTK_PULL_PU_PD_RSEL_TYPE, but have n=
+ot yet found out how it is working (array only put into mt8192_data.pull_t=
+ype, no usage of this memeber, see no reference in mt8192.dtsi).
+
+maybe with the
+
+bias-pull-up =3D <MTK_PULL_SET_RSEL_011>;
+
+in arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi is pointing to this ar=
+ray?
+
+> > need to check these with MTK.
+> >
+> > > > +		};
+> > > > +		conf-clk {
+
+> > > > +&wifi {
+> > > > +	status =3D "okay";
+> > > > +	pinctrl-names =3D "default", "dbdc";
+> > > > +	pinctrl-0 =3D <&wf_2g_5g_pins>, <&wf_led_pins>;
+> > > > +	pinctrl-1 =3D <&wf_dbdc_pins>, <&wf_led_pins>;
+> > > > +
+> > > > +	mediatek,eeprom-data =3D <0x86790900 0xc4326 0x60000000 0x00 0x0=
+0
+> > > > 0x00 0x00 0x00
+> > >
+> > > Ouch! This looks like firmware unrolled in a devicetree property - t=
+hat
+> > > can't
+> > > be right.
+> > >
+> > > Please dump that in a binary file and load it as firmware from
+> > > userspace.
+> >
+> > it uses the mt76 driver and here eeprom can only be loaded from
+> > mtd-partition or from device tree. Previous attempts loading eeprom da=
+ta
+> > from userspace file (like it's done for "normal" firmware) were reject=
+ed.
+>
+> Note that strictly speaking this is not firmware but rather calibration
+> data (ie. board-specific configuration, not code).
+>
+> In case you don't like the large amount of data in the DTS file, you
+> can use the /incbin/ statement to include it from a file instead.
+
+but this file needs to be inside the kernels tree to get the dts compiled.
+As this is basicly a blob (and firmware is stored outside) this is tricky.
+
+> As there is no physical EEPROM nor calibration data stored anywhere in
+> he flash there is no easy way the driver could request a board-specific
+> filename, unlike e.g. ath10k requesting BDF from userspace.
+> In the past (e.g. out-of-tree patches for rt2x00 driver allowing it's
+> use on Rt305x WiSoC) this lack of a board-specific filename has lead to
+> people treating the file just like a generic firmware file: ignoring
+> the board-specific nature of calibration data and just copying it from
+> another board... As a work-around to prevent that, we could at least
+> embed the filename in the dts or hack the driver to request a filename
+> based on the top level 'compatible' string of the board's device tree.
+>
+> I've added Felix to Cc: as he suggested that solution back then.
+
+maybe i should drop it for now to get basic support of the board without w=
+ifi till this is solved?
+
+or adding wifi without the eeprom-data property and add firmware (file or =
+directly like now) in my
+own repo, but this needs to be done in every sourcebase as mainline is the=
+n non-functional.
+
+regards Frank
