@@ -2,99 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9C1610F9C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA87610FA1
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbiJ1LYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 07:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
+        id S230058AbiJ1L0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 07:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiJ1LYt (ORCPT
+        with ESMTP id S229755AbiJ1L01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 07:24:49 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB5A32B98
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 04:24:47 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id i10so3026576qkl.12
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 04:24:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=UVCSqRvpdzckFxd7y7PQdq7tMzzKz979ees9Dc/OcZM=;
-        b=qzOhOWRaDR+py00khrOBG7vTWLAxH1NyrAaKwKYW6DUpmvXHbfrbln1Te4gAnTJweD
-         nklKGEH+Bx0SYRkxs5t7wTDGSgXPMHNl6taESZQSXJHy9gcyTlc9EvfTRFZxKR441zBN
-         TH/ZH3ysIWAKBPqM5noxDhtNi7532HZ+XMAP8froKMiX1yS0pynVqy3E7vZqKgpLI/Oo
-         wb6aBCCYwG20sd4pMVEJVmFSgxeKboyp+YRrvOyPqRmK6rM1fWwsQWJlc4CsKnqWuSbv
-         w+Vro6rwFpMBfMRUOk9onbmkRlbstjleWSFag2CjQIKa63tHHSpOi1uZaCAaVKh7ecCu
-         UFbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UVCSqRvpdzckFxd7y7PQdq7tMzzKz979ees9Dc/OcZM=;
-        b=0lKc+YHSxFrDyyMOdo2fN4JFORUzru8iy+cHDz2Wt980a7HGyEW7VoV+TBI/lHIlGS
-         FWY4CR2lLSr1ZtfUrUvLyK4JM+1TxvMB09bY9Lp4ounvcOqtZ3WwkONHgSy5QBHcO3cV
-         3rJWIQFmrZMm2Vm5U6rLtaQ1myMelIMPlJj74Eis8iAhv4GrbV6/qYxDpX8GjDzPBLEn
-         MhECFy6AfMpH1LH8kEBA3DyQOAYgF/y/GpDgSJDPKePZThLjZqkt+UvCzilY9xGeCfuc
-         W07ZAyY0vDZwSPqjOPw+8ek5WDwR0Q4SGSKCVDCdvkopneqxHJAPM1S2X4IbE8KiMECl
-         99Sw==
-X-Gm-Message-State: ACrzQf0QczW92riJT54bK43PR0FvEjiyv1i3LSbChgK/IB0KC53KvuCL
-        BspuyBlqO75+JCgN6z0B7aQh3A==
-X-Google-Smtp-Source: AMsMyM4C82LHFcU+7Rfpy1Vy0cQUhk8GIhuKDgfZzsv9t5IPd5pB2z2Wg1PNJjJleHDV7zzzTTuPpw==
-X-Received: by 2002:a05:620a:458d:b0:6ee:e940:4a6a with SMTP id bp13-20020a05620a458d00b006eee9404a6amr38226828qkb.235.1666956286902;
-        Fri, 28 Oct 2022 04:24:46 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id dm21-20020a05620a1d5500b006b95b0a714esm2765532qkb.17.2022.10.28.04.24.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 04:24:46 -0700 (PDT)
-Message-ID: <b75718d3-a177-c41b-da2f-659694c4d27e@linaro.org>
-Date:   Fri, 28 Oct 2022 07:24:44 -0400
+        Fri, 28 Oct 2022 07:26:27 -0400
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C541C2093;
+        Fri, 28 Oct 2022 04:26:26 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by a.mx.secunet.com (Postfix) with ESMTP id 20E1720573;
+        Fri, 28 Oct 2022 13:26:24 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id kGeEpoinJo8B; Fri, 28 Oct 2022 13:26:23 +0200 (CEST)
+Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by a.mx.secunet.com (Postfix) with ESMTPS id A04DF20569;
+        Fri, 28 Oct 2022 13:26:23 +0200 (CEST)
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+        by mailout2.secunet.com (Postfix) with ESMTP id 9A62280004A;
+        Fri, 28 Oct 2022 13:26:23 +0200 (CEST)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 28 Oct 2022 13:26:23 +0200
+Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 28 Oct
+ 2022 13:26:23 +0200
+Received: by gauss2.secunet.de (Postfix, from userid 1000)
+        id 078CA3182D7B; Fri, 28 Oct 2022 13:26:23 +0200 (CEST)
+Date:   Fri, 28 Oct 2022 13:26:22 +0200
+From:   Steffen Klassert <steffen.klassert@secunet.com>
+To:     Eric Dumazet <edumazet@google.com>
+CC:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Sabrina Dubroca <sd@queasysnail.net>,
+        syzbot <syzbot+1e9af9185d8850e2c2fa@syzkaller.appspotmail.com>,
+        <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <syzkaller-bugs@googlegroups.com>
+Subject: Re: [v3 PATCH] af_key: Fix send_acquire race with pfkey_register
+Message-ID: <20221028112622.GK2602992@gauss3.secunet.de>
+References: <000000000000fd9a4005ebbeac67@google.com>
+ <Y1YeSj2vwPvRAW61@gondor.apana.org.au>
+ <CANn89i+41Whp=ACQo393s_wPx_MtWAZgL9DqG9aoLomN4ddwTg@mail.gmail.com>
+ <Y1YrVGP+5TP7V1/R@gondor.apana.org.au>
+ <Y1Y8oN5xcIoMu+SH@hog>
+ <Y1d8+FdfgtVCaTDS@gondor.apana.org.au>
+ <Y1k4T/rgRz4rkvcl@hog>
+ <Y1n+LM57U3HUHMJa@gondor.apana.org.au>
+ <CANn89iLVRq28iMzjKBovyDvytH1ssW_Tp0AjoUbv74dFg2wXWQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] dt-bindings: interconnect: qcom,msm8998-bwmon: Correct
- SC7280 CPU compatible
-To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221011140744.29829-1-krzysztof.kozlowski@linaro.org>
- <d2600fef-0313-551e-b175-40edfbf1acd4@kernel.org>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <d2600fef-0313-551e-b175-40edfbf1acd4@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CANn89iLVRq28iMzjKBovyDvytH1ssW_Tp0AjoUbv74dFg2wXWQ@mail.gmail.com>
+X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/10/2022 03:14, Georgi Djakov wrote:
-> On 11.10.22 17:07, Krzysztof Kozlowski wrote:
->> Two different compatibles for SC7280 CPU BWMON instance were used
->> in DTS and bindings.  Correct the bindings to use the same one as in
->> DTS, because it is more specific.
->>
->> Fixes: b7c84ae757c2 ("dt-bindings: interconnect: qcom,msm8998-bwmon: Add support for sc7280 BWMONs")
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Wed, Oct 26, 2022 at 08:45:57PM -0700, Eric Dumazet wrote:
+> On Wed, Oct 26, 2022 at 8:42 PM Herbert Xu <herbert@gondor.apana.org.au> wrote:
+> >
+> > On Wed, Oct 26, 2022 at 03:38:23PM +0200, Sabrina Dubroca wrote:
+> > >
+> > > LGTM, thanks.
+> > >
+> > > Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
+> >
+> > Thanks for the review and comments!
 > 
-> I assume that this will be picked by Bjorn. Please let me know otherwise.
+> SGTM, thanks for the fix.
 > 
+> Reviewed-by: Eric Dumazet <edumazet@google.com>
 
-Bjorn marked it as not applicable, so please pick it up for interconnect.
-
-Best regards,
-Krzysztof
-
+Applied, thanks everyone!
