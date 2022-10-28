@@ -2,103 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32292611AFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B38611AFC
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiJ1Tj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 15:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
+        id S230016AbiJ1TkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 15:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiJ1Tjw (ORCPT
+        with ESMTP id S229576AbiJ1TkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 15:39:52 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3943214D39;
-        Fri, 28 Oct 2022 12:39:45 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-13ae8117023so7395068fac.9;
-        Fri, 28 Oct 2022 12:39:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gO2vxqm78QhPt3F83EEw+gwkQklZjajmJIRAkN8DiHo=;
-        b=VoPcL13olOURLgREPIKUrmc3MLzRfSAY16wHqYnB/7WdVFJQKJ7Stma4sT5WSGn5ht
-         i51snYDV1+jkMSSQ4fqtdutPumYFOVYElrAXRQ5nMNd7uWzJ+8R/aPsE8md7VoahHCoE
-         85SriZr3S3p8LRmcAvM1Leskfh5CiM1ijrYPK9vTV/AU0sYRWd8N5s0gYFQElcJWPCQw
-         AlRFXgetVY6zQXHAa3FYjELM7DLYG4cry131Wyg9rWnEFwBh0u2oeb/nNC/68sj5ACPu
-         0LRMO28WAyh5yXS2kbTJLIE3BYTDVpXFfLDbZV5+RHGPk0eCe1ZxTBNV616caJzGdybE
-         nEjg==
-X-Gm-Message-State: ACrzQf2fzFKAM4/2/J+a07SDghokdlTwaPkZWh3l0igdHXGYm/3jDWRm
-        TmAeIUhc/uQM3qcBasKmR5QFcE4vbw==
-X-Google-Smtp-Source: AMsMyM6Xj1iu4oGXFzZGjKiVrQBh8AQZKNOax1t8inO/Roy6hBuh8rXVQ0FHFrTLlEPlJecGS865Ug==
-X-Received: by 2002:a05:6870:c155:b0:136:3bfd:4df with SMTP id g21-20020a056870c15500b001363bfd04dfmr452806oad.221.1666985984477;
-        Fri, 28 Oct 2022 12:39:44 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g13-20020a544f8d000000b0035437f4deefsm1833001oiy.26.2022.10.28.12.39.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 12:39:43 -0700 (PDT)
-Received: (nullmailer pid 2192832 invoked by uid 1000);
-        Fri, 28 Oct 2022 19:39:45 -0000
-Date:   Fri, 28 Oct 2022 14:39:45 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Fri, 28 Oct 2022 15:40:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB161659FC;
+        Fri, 28 Oct 2022 12:40:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BBF362A35;
+        Fri, 28 Oct 2022 19:40:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E6E2C433D6;
+        Fri, 28 Oct 2022 19:40:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666986016;
+        bh=tCr4ep6IhYWtSpd0JgwUQaZdtyZWwzd9CnwpUTaEYO0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=CddWAUtB3ItQ4yjjXyqcnnI8X1+63w0KKyiLOokBGnYr8mKSX4olV3o9TVeGEN3It
+         2h4XZfI2udczfWt5ivRqwb9QOg8sYbwWgq5ogt2EhiVQ+VREH3Ppxu64OkZNJv9hcv
+         tPk/rz1C2tAKCm0bOsvWuduXskBJtdLta8F7Olk2WBSs1UlbckMeaV7CUFPvzHoZZs
+         P60HYjaM+2fhWl9hFnDwXCFTKaeDIRY5YpkVCriSYPC10RcnpqQsSvm4uR4/3GIqHl
+         r1eJPjHaDtvE9OVy/+Q9GdwaC2RR4ndPsuOnOQoFsLJZS03reAoaIlqchh5Ku/oPJT
+         Zd1UGuHgRlcNQ==
+Date:   Fri, 28 Oct 2022 14:40:14 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jonathan Derrick <jonathan.derrick@linux.dev>
+Cc:     "David E. Box" <david.e.box@linux.intel.com>,
+        nirmal.patel@linux.intel.com, lorenzo.pieralisi@arm.com,
+        hch@infradead.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, michael.a.bottini@intel.com,
+        rafael@kernel.org, me@adhityamohan.in, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] ASoC: dt-bindings: wcd938x: fix codec reset line
- polarity in example
-Message-ID: <20221028193945.GA2192436-robh@kernel.org>
-References: <20221027074652.1044235-1-dmitry.torokhov@gmail.com>
- <20221027074652.1044235-6-dmitry.torokhov@gmail.com>
+Subject: Re: [PATCH V7 3/4] PCI: vmd: Add vmd_device_data
+Message-ID: <20221028194014.GA907046@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221027074652.1044235-6-dmitry.torokhov@gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <5c0a8a41-db58-ac73-da08-681b20156786@linux.dev>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 12:46:52AM -0700, Dmitry Torokhov wrote:
-> The driver for the codec, when resetting the chip, first drives the line
-> low, and then high. This means that the line is active low. Change the
-> annotation in the example DTS accordingly.
-> 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
->  Documentation/devicetree/bindings/sound/qcom,wcd938x.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/qcom,wcd938x.yaml b/Documentation/devicetree/bindings/sound/qcom,wcd938x.yaml
-> index 51547190f709..2f5e0df93872 100644
-> --- a/Documentation/devicetree/bindings/sound/qcom,wcd938x.yaml
-> +++ b/Documentation/devicetree/bindings/sound/qcom,wcd938x.yaml
-> @@ -112,7 +112,7 @@ examples:
->    - |
->      codec {
->          compatible = "qcom,wcd9380-codec";
-> -        reset-gpios = <&tlmm 32 0>;
-> +        reset-gpios = <&tlmm 32 GPIO_ACTIVE_LOW>;
+On Fri, Oct 28, 2022 at 02:18:48PM -0500, Jonathan Derrick wrote:
+> On 10/28/2022 2:13 PM, Bjorn Helgaas wrote:
+> > On Mon, Oct 24, 2022 at 05:44:10PM -0700, David E. Box wrote:
+> >> Add vmd_device_data to allow adding additional info for driver data.
+> > 
+> >>  	{PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
+> >> -		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> >> -				VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> >> -				VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> >> +		(kernel_ulong_t)&(struct vmd_device_data) {
+> >> +			.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> >> +				    VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> >> +				    VMD_FEAT_OFFSET_FIRST_VECTOR,
+> >> +		},
+> >> +	},
+> > 
+> > It looks like these devices come in families where several device IDs
+> > share the same features.  I think this would be more readable if you
+> > defined each family outside this table and simply referenced the
+> > family here.  E.g., you could do something like:
+> > 
+> >   static struct vmd_device_data vmd_v1 = {
+> >     .features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> > 		VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> > 		VMD_FEAT_OFFSET_FIRST_VECTOR,
+> >   };
+>
+> I seem to recall it being similar to this in one of the previous revisions
+> It's fine with me either way
 
-Missing a header for this.
+Indeed it was:
+https://lore.kernel.org/r/366a9602-555f-7a1b-a8db-bbcbf84b7b08@linux.dev
+I'd forgotten that.
 
->          #sound-dai-cells = <1>;
->          qcom,tx-device = <&wcd938x_tx>;
->          qcom,rx-device = <&wcd938x_rx>;
-> -- 
-> 2.38.0.135.g90850a2211-goog
-> 
-> 
+At the time there were four devices (0x467f 0x4c3d 0xa77f 0x9a0b)
+that used the 467f data.  The current series adds two more (0x7d0b
+0x0ad0b).  Maybe the "vmd_467f_data" name could have been more
+descriptive, but the code was definitely shorter:
+
+  +     { PCI_VDEVICE(INTEL, 0x467f), (kernel_ulong_t)&vmd_467f_data },
+  +     { PCI_VDEVICE(INTEL, 0x4c3d), (kernel_ulong_t)&vmd_467f_data },
+  +     { PCI_VDEVICE(INTEL, 0xa77f), (kernel_ulong_t)&vmd_467f_data },
+  +     { PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B), (kernel_ulong_t)&vmd_467f_data },
+
+I do wish pci_device_id.driver_data were a void pointer, as it is for
+of_device_id, which makes it much more natural to express [1], but
+that ship has long sailed.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/controller/dwc/pcie-kirin.c?id=v6.0#n768
+
+> >   {PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
+> >     .driver_data = (kernel_ulong_t) &vmd_v1,
+> > 
+> > Then you can add VMD_FEAT_BIOS_PM_QUIRK and the .ltr value in one place
+> > instead of repeating it a half dozen times.
+> > 
+> >>  	{0,}
+> >>  };
+> >>  MODULE_DEVICE_TABLE(pci, vmd_ids);
+> >> -- 
+> >> 2.25.1
+> >>
