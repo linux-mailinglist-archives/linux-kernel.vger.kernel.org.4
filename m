@@ -2,138 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7786B6118FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E29B6118FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbiJ1RLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 13:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
+        id S231390AbiJ1RL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 13:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbiJ1RK1 (ORCPT
+        with ESMTP id S231365AbiJ1RKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 13:10:27 -0400
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A051679634;
-        Fri, 28 Oct 2022 10:08:25 -0700 (PDT)
-Received: by mail-qk1-f181.google.com with SMTP id k4so939015qkj.8;
-        Fri, 28 Oct 2022 10:08:25 -0700 (PDT)
+        Fri, 28 Oct 2022 13:10:48 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39325190E60;
+        Fri, 28 Oct 2022 10:08:39 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id z18so3780564edb.9;
+        Fri, 28 Oct 2022 10:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dvfGQP4rEg3Kw5lEX3ZtIQ80dTIYCeCUaIYb9XGpr/k=;
+        b=cb7GzC2LOMi2HhBTaPvR5AaOzavwMgVz+NZbfwHKwNRcM6fXi1A80WsbFn7ohk6ixh
+         KiBO060pfwirL26Ikmt1dKQKccxlcIiP9n7JiRSByONWP1ZxDKLVJTT8CXKd6a9KxbqE
+         lQh8XOD3G8kfyIv586Kqsf6SzQS3m9Qhisr+MHGDV5DI13m/4U29o44v7dK5HnvLnioN
+         fK15pRyu5AyHYKoLipfjv/+0WDqMCyKwU3xAVX4WAIxHNh7cbyNGJzObNo1oUrCIgL/p
+         fwaaN2n4onbCzWX+qO4vINqOycBfesVQFGRnDnyZiXgvL1Yo3UzskM92p+iMDLvJX73H
+         i+Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ACYDNRFbUSp7i+jczQsEaccisHzmM8JzMkLPkBS56xA=;
-        b=5vDmIOQf81ZFU5qBvZSjqx7AAnhKoYtT2vR36fSW4Y6td7r7pf+G69dti9r0CEEC5a
-         lk62meRaHfTNon+bmVd00kKn0gmzG/YF17yZfdLxxaxPJUD3xJq9uZ/Ny1MPqCWoJ6bT
-         iuO1ydEBeC+qGxVjK4kfUKN9rcJLG3SblbaP2Zhw6exXOU3GxXqkkFkhi2GT8LauY2/P
-         MkYqA4uBDfstvZf9ZJsE6NE6jPFobR8T7R3mDCnI6O4n53icntDgDqsc0fZvinDAB64R
-         jxKQWSJ+YKii1c4HiNpZNWHzxr9htg0QxOIlChXykoqdQ9nHrrhHCPtgDjYdVnpjcH/p
-         ig9Q==
-X-Gm-Message-State: ACrzQf0Kd5BIaIZB+g2SLAIlhwSmsqQkdu3cSefKsXu8Z7lfq0jZFRPa
-        q2XsQ+LbJ68rgHvMt68iEu1XyOfS9BUQ2ze371s=
-X-Google-Smtp-Source: AMsMyM6GirJGOCAxq2HD+MvgRGOX0aUHEUf8UPJWN5E1NV/YOWm4CZ7W0aezKcaOZwjW07YOs1f70zgtPQoCpcq932Y=
-X-Received: by 2002:a37:b1c2:0:b0:6fa:1185:4dbf with SMTP id
- a185-20020a37b1c2000000b006fa11854dbfmr177991qkf.764.1666976904692; Fri, 28
- Oct 2022 10:08:24 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dvfGQP4rEg3Kw5lEX3ZtIQ80dTIYCeCUaIYb9XGpr/k=;
+        b=b9RPD+7Pmya7N0OJSpkm/6vLdCXhyy3xDsBTtvT4i38IraTDzMBy6jkRLFddUdEo1Z
+         gVVQjE1mOlqWOtIIiISz22urnrbId0mESSZRfoP5pTykxM3Wk5gzMZjIOKj9rhaoJH2M
+         ruVgN0aubnygC2y/AktzGQjMk7KGFIzOLHX4piB+zu7urxlyRpWhT8nmuxZYVD5Uof2R
+         EBnggmPicqA53bSFKgtNRM7W/biait2q98jYDg6gRv6CcTPmNr8n+Js0rIX1p87WbHdf
+         GtTDi+/cSCZbC49AsIW9uTKx9VRUee/hh7SHVViixxKAvx255YSOn1TX1jWpUggkGoeK
+         z9QA==
+X-Gm-Message-State: ACrzQf3sKoTfRR5R4bwlFkgN2fP3bis0TnmEZ5OrhGwdlzQpIiF6OKVd
+        KD7MZ1PlZ1w7u8bIRltiRTKugryktVTJRTS8RS4=
+X-Google-Smtp-Source: AMsMyM73DDBTb/37IgY8U4uAkjDXpD1SHFZ7Pv5EOMO6OVXaecY+4kd0FuaftXvRtchfac9FwrV7biq8VpNfEyCeSq8=
+X-Received: by 2002:aa7:c504:0:b0:461:122b:882b with SMTP id
+ o4-20020aa7c504000000b00461122b882bmr456141edq.14.1666976917671; Fri, 28 Oct
+ 2022 10:08:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
-In-Reply-To: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Oct 2022 19:08:13 +0200
-Message-ID: <CAJZ5v0hdgxsDiXqOmeqBQoZUQJ1RssM=3jpYpWt3qzy0n2eyaA@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: APEI: set memory failure flags as
- MF_ACTION_REQUIRED on action required events
-To:     Shuai Xue <xueshuai@linux.alibaba.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, james.morse@arm.com,
-        tony.luck@intel.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        jarkko@kernel.org, naoya.horiguchi@nec.com, linmiaohe@huawei.com,
-        akpm@linux-foundation.org, stable@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cuibixuan@linux.alibaba.com, baolin.wang@linux.alibaba.com,
-        zhuo.song@linux.alibaba.com
+References: <CAEf4Bzbq0PSsc6xCGSF=Af-pcysjt8Lv76-4N65AJMpXOOpOcg@mail.gmail.com>
+ <tencent_CD22930180507496CE65B30ACBABC4681506@qq.com>
+In-Reply-To: <tencent_CD22930180507496CE65B30ACBABC4681506@qq.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 28 Oct 2022 10:08:25 -0700
+Message-ID: <CAEf4BzazYVkVKrKzPD8a7tRZrcWDvvgoVksJHYk3+46V=8kZhw@mail.gmail.com>
+Subject: Re: Re: [PATCH] selftests/bpf: Fix strncpy() fortify warning
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, martin.lau@linux.dev,
+        mykolal@fb.com, rongtao@cestc.cn, sdf@google.com, shuah@kernel.org,
+        song@kernel.org, yhs@fb.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 6:25 AM Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+On Thu, Oct 27, 2022 at 5:26 PM Rong Tao <rtoax@foxmail.com> wrote:
 >
-> There are two major types of uncorrected error (UC) :
+> Thanks for your reply, `enable[0] =3D '\0';` at the beginning and then
+> strncat() still has the same compile warning
 >
-> - Action Required: The error is detected and the processor already consumes the
->   memory. OS requires to take action (for example, offline failure page/kill
->   failure thread) to recover this uncorrectable error.
+> --- a/tools/testing/selftests/bpf/cgroup_helpers.c
+> +++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+> @@ -77,7 +77,8 @@ static int __enable_controllers(const char *cgroup_path=
+, const char *controllers
+>                 enable[len] =3D 0;
+>                 close(fd);
+>         } else {
+> -               strncpy(enable, controllers, sizeof(enable));
+> +               enable[0] =3D '\0';
+> +               strncat(enable, controllers, sizeof(enable));
+>         }
 >
-> - Action Optional: The error is detected out of processor execution context.
->   Some data in the memory are corrupted. But the data have not been consumed.
->   OS is optional to take action to recover this uncorrectable error.
+> In function =E2=80=98__enable_controllers=E2=80=99:
+> tools/testing/selftests/bpf/cgroup_helpers.c:81:17: warning: =E2=80=98str=
+ncat=E2=80=99 specified bound 4097 equals destination size [-Wstringop-trun=
+cation]
+>    81 |                 strncat(enable, controllers, sizeof(enable));
+>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> tools/testing/selftests/bpf/cgroup_helpers.c:81:17: warning: =E2=80=98str=
+ncat=E2=80=99 specified bound 4097 equals destination size [-Wstringop-over=
+flow=3D]
 >
-> For X86 platforms, we can easily distinguish between these two types
-> based on the MCA Bank. While for arm64 platform, the memory failure
-> flags for all UCs which severity are GHES_SEV_RECOVERABLE are set as 0,
-> a.k.a, Action Optional now.
->
-> If UC is detected by a background scrubber, it is obviously an Action
-> Optional error.  For other errors, we should conservatively regard them
-> as Action Required.
->
-> cper_sec_mem_err::error_type identifies the type of error that occurred
-> if CPER_MEM_VALID_ERROR_TYPE is set. So, set memory failure flags as 0
-> for Scrub Uncorrected Error (type 14). Otherwise, set memory failure
-> flags as MF_ACTION_REQUIRED.
->
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> So, i think just add '-1' for strncpy() is a good way.
 
-I need input from the APEI reviewers on this.
+no, it's not, see my previous email about ending up with
+non-zero-terminated C string.
 
-Thanks!
-
-> ---
->  drivers/acpi/apei/ghes.c | 10 ++++++++--
->  include/linux/cper.h     |  3 +++
->  2 files changed, 11 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index 80ad530583c9..6c03059cbfc6 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -474,8 +474,14 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
->         if (sec_sev == GHES_SEV_CORRECTED &&
->             (gdata->flags & CPER_SEC_ERROR_THRESHOLD_EXCEEDED))
->                 flags = MF_SOFT_OFFLINE;
-> -       if (sev == GHES_SEV_RECOVERABLE && sec_sev == GHES_SEV_RECOVERABLE)
-> -               flags = 0;
-> +       if (sev == GHES_SEV_RECOVERABLE && sec_sev == GHES_SEV_RECOVERABLE) {
-> +               if (mem_err->validation_bits & CPER_MEM_VALID_ERROR_TYPE)
-> +                       flags = mem_err->error_type == CPER_MEM_SCRUB_UC ?
-> +                                       0 :
-> +                                       MF_ACTION_REQUIRED;
-> +               else
-> +                       flags = MF_ACTION_REQUIRED;
-> +       }
->
->         if (flags != -1)
->                 return ghes_do_memory_failure(mem_err->physical_addr, flags);
-> diff --git a/include/linux/cper.h b/include/linux/cper.h
-> index eacb7dd7b3af..b77ab7636614 100644
-> --- a/include/linux/cper.h
-> +++ b/include/linux/cper.h
-> @@ -235,6 +235,9 @@ enum {
->  #define CPER_MEM_VALID_BANK_ADDRESS            0x100000
->  #define CPER_MEM_VALID_CHIP_ID                 0x200000
->
-> +#define CPER_MEM_SCRUB_CE                      13
-> +#define CPER_MEM_SCRUB_UC                      14
-> +
->  #define CPER_MEM_EXT_ROW_MASK                  0x3
->  #define CPER_MEM_EXT_ROW_SHIFT                 16
->
-> --
-> 2.20.1.9.gb50a0d7
->
+check strncat() API, it leaves the dst string zero terminated, and
+yes, you need -1 for strncat as well, your compiler is right
