@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3456114D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C046A6114DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiJ1Olg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
+        id S230218AbiJ1OmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbiJ1OlX (ORCPT
+        with ESMTP id S230453AbiJ1Olt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:41:23 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF640E9873;
-        Fri, 28 Oct 2022 07:41:15 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id b2so13440076eja.6;
-        Fri, 28 Oct 2022 07:41:15 -0700 (PDT)
+        Fri, 28 Oct 2022 10:41:49 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B278D1EEF1A;
+        Fri, 28 Oct 2022 07:41:43 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id kt23so13376041ejc.7;
+        Fri, 28 Oct 2022 07:41:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=SVxJ12c1A+xM0aCvd/9/hnx+Wg8Tkv2AsxQ0FKrV7Fo=;
-        b=e8PuIJKYvVwZG8pMIVdsuACZ9hgCDCdCOOm6qZ9QEXRFloflT70eDzvCkEx02u8Eda
-         A9wmqY1bfVxFQ7oZGfaGC/LFp3NhBBLwH91Llp1msKGVILazbrSIe6cz1PnC2rbhAWuG
-         Lap2dQLywubkbNeFVdmBrX4fKMuAJfbKnLCuICMcD8nqoeoeEBFL6zO7Juarwj1CcA4A
-         vaCof7MQlpnqykdvT6ZcdfNYA4jnC9IAuW5VPOKgSFKZzBvnU3qQta5s3ZkcRxzvG5H4
-         5QCPzg0derVXMseJUguLo1RS7bwdblG31/bqP9a92i8FRKom98aLXGBHzvsYcTDY88Cm
-         URYQ==
+        bh=neowCr6oVr3vuPg1WjdiJZukZ1wtscf+gZ4yxqYQOrI=;
+        b=SHZTjrmp9L29dDhO6NAh0ZPr0eez3l/Oxd5GjIFS18GwLCGLpjYvOk0miK/lOxzIZQ
+         7Bb0siqxcEdzp0W3oRSh8Io0s0AMwR20GENJHCne0egP6cqfBfYMFWnTNwuNsknN2aC+
+         j0Q4cFeH8clH73Ej4qqWRQJYb+L96vPXHJEipua3ZVlsj3PfPZmCBQ/WXhXyZ3m9xczM
+         DnRwgdP+imsiKs/e+bW4TZfq6EaTivmNI7Dk5OcQ+gn8+2ezHmFAKUmX2SEF2zIADMr2
+         wdF6cm+Q6pp0Q4MH8TVgsUtZkhsjPVFNvbCg3GNhUqtB1ST7RcDl8ErxvH0GcqHn14OM
+         9uuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SVxJ12c1A+xM0aCvd/9/hnx+Wg8Tkv2AsxQ0FKrV7Fo=;
-        b=bMG3LW+73wtJZfc0tj5VtZWnJWYBass6XvuXNdpvQlAJHPQtbLFosVP85D8LSrQQO4
-         +0x2aa7zjhXhqUPL5C3GyEns0slJBqInACNrPMGcIExkFVZFdCT0MRYIxWexuxK4Wx2M
-         9b2RDi/RY6Lm+UIp5F+EQpz9ZjulwLxjiVIQiGpS//RUg+CTU0MD/pdshuVT+wzRKVWS
-         McMrdWebyIFxXi3zy468WKYyTD+XrVG29Ikuj1OyX0XpSZFV+YsEWbs1I98IHGV050Sg
-         JgmLh0aBp1ey1Den7pIY7N7jEQzaFg/HOVap32cSwa0opK0T130Qrvk7XNLi5egtun6G
-         uOyw==
-X-Gm-Message-State: ACrzQf0vKRMk2Ty7OzTXsuDBL6TmIt83CGRLSmE+l2SBuQL/89IVpzxR
-        DXxl1s50t0TrmT5gUosS8zA=
-X-Google-Smtp-Source: AMsMyM7HXQ72bbrXuPMgRLSwI+e9C5ONtGcWO383f1AvM3xeoYFRDCq0hKSnjGHViuvp1OXIqoWYtw==
-X-Received: by 2002:a17:906:730f:b0:791:9b75:2ca1 with SMTP id di15-20020a170906730f00b007919b752ca1mr45292306ejc.140.1666968074370;
-        Fri, 28 Oct 2022 07:41:14 -0700 (PDT)
+        bh=neowCr6oVr3vuPg1WjdiJZukZ1wtscf+gZ4yxqYQOrI=;
+        b=zBeO329YHJ41oA8paF4D1e+B7GFsrW6gJAtjENqLbq3a5gPYseTj1xskHpIE56MfC3
+         ri+8ElSITmWdEct0KoVX2rhHkYsaC/eGLWPiD+squQC9eh6DufPsW6+SlFPV/jyCxriJ
+         NXdhcN8x63TzEbVV83Nqx9HorfQ5Xc+Q1360XstWVXAznyieqJLVpZ51YEKEst7Up9e3
+         uByliYxO0PlASOHPdap1u/YMxpYtRXzXjvcDK/jPcpRzYWQaAtFVoXzhXgmZYCk1b02k
+         3ay7cZVCCvOdA4NFtJLXRXq9IV+wm9l/SSOW2f5IyVejXID1Yg9BQ0USo/eJcFRzoVeR
+         ML0Q==
+X-Gm-Message-State: ACrzQf0cgpKObLLdgnvZjHVFs2EA50093nwdXBXH6jcl10Z7zl1/qU7D
+        IiiTK98sTYBFKZKLuLP3wooIG//hNsg=
+X-Google-Smtp-Source: AMsMyM5OBcO+LDLOQHxISLu95CbLOxbNR+n9EWCWrV/yBJI/GkvE+GKGE/5SNpSkKQ4JuXH8kKV5yw==
+X-Received: by 2002:a17:907:8a24:b0:78d:cd60:1022 with SMTP id sc36-20020a1709078a2400b0078dcd601022mr46727644ejc.384.1666968092017;
+        Fri, 28 Oct 2022 07:41:32 -0700 (PDT)
 Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id my7-20020a1709065a4700b007417041fb2bsm2237114ejc.116.2022.10.28.07.41.13
+        by smtp.gmail.com with ESMTPSA id qh3-20020a170906eca300b0078dd4c89781sm2239439ejb.35.2022.10.28.07.41.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 07:41:14 -0700 (PDT)
-Message-ID: <dca18633-54d4-1264-725c-213d82fdf1c5@gmail.com>
-Date:   Fri, 28 Oct 2022 16:41:12 +0200
+        Fri, 28 Oct 2022 07:41:31 -0700 (PDT)
+Message-ID: <0e57f38f-bace-8556-7258-aa0b3c0ac103@gmail.com>
+Date:   Fri, 28 Oct 2022 16:41:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
 From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v2 1/4] dt-bindings: arm: rockchip: Add Rockchip RK3128
- Evaluation board
+Subject: [PATCH v2 2/4] dt-bindings: timer: rockchip: add
+ rockchip,rk3128-timer
 To:     kever.yang@rock-chips.com, heiko@sntech.de
 Cc:     sjg@chromium.org, philipp.tomsich@vrull.eu,
         zhangqing@rock-chips.com, hjc@rock-chips.com, robh+dt@kernel.org,
@@ -81,30 +81,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Rockchip RK3128 Evaluation board.
+Add rockchip,rk3128-timer compatible string.
 
 Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 ---
- Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-index 72bf2fbfe..e81d9d1ef 100644
---- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-+++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-@@ -662,6 +662,11 @@ properties:
-           - const: rockchip,rk3036-evb
-           - const: rockchip,rk3036
-
-+      - description: Rockchip RK3128 Evaluation board
-+        items:
-+          - const: rockchip,rk3128-evb
-+          - const: rockchip,rk3128
-+
-       - description: Rockchip RK3228 Evaluation board
-         items:
-           - const: rockchip,rk3228-evb
+diff --git a/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml b/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
+index dc3bc1e62..b61ed1a43 100644
+--- a/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
++++ b/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
+@@ -18,6 +18,7 @@ properties:
+           - enum:
+               - rockchip,rv1108-timer
+               - rockchip,rk3036-timer
++              - rockchip,rk3128-timer
+               - rockchip,rk3188-timer
+               - rockchip,rk3228-timer
+               - rockchip,rk3229-timer
 --
 2.20.1
 
