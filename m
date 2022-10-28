@@ -2,132 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF5F61165F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF03611660
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiJ1PxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 11:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37166 "EHLO
+        id S229875AbiJ1PxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 11:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJ1PxH (ORCPT
+        with ESMTP id S229528AbiJ1PxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:53:07 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986FF40BCA
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:53:06 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id 130so5110161pfu.8
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:53:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2RapN0FTxN0zsMZ08z7ppgL1l1wyHKn49LaZIgsPjjY=;
-        b=g57PKyGkXUSjFuuJXbpUb8o0hZzb0pSDdLmQ0suvld/9O/Q0Zr2XM4eDKPqyJWUUoQ
-         jFOg2gH9teVe2ny/kt7qB+WwYLlxnEGRwnB/2ntgiH0GEayB4vdVH0fPGykEr/b5VFdC
-         ZenFcOnYoxGAKrORcvhogQoYs7mJaA2v5uNt0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2RapN0FTxN0zsMZ08z7ppgL1l1wyHKn49LaZIgsPjjY=;
-        b=LzurDVQXy9QpSez8R+9vT3ljX1h6Psj2RM+6exr795qJDhYFoL1oOQtvz0dnsjj7Hz
-         YE9/wcOtR5P984HajKgsTo7LaFcwRJTIYPZvxyKfZ3Oe3R8Gu6TwMUiDylVkzplOtT63
-         vV+89X/qTerZ4+IEvQTQwLrV/WIq120M/88uY6nSOGiVj6TUXH/F3Xih6rxPuidroO/d
-         /VpPZG42/Ptk3jgfejYtlqCi1hhYzHgBofNx8Pbsj6CjFu/zbBEhWewF/jKwNy2NLuCw
-         i06i4vobQEPl26Dk2+VozUGu1V+PvA4fmEDEQs2fFEJL62a3JODWoSHyUm8yYyJP3zGI
-         BWDw==
-X-Gm-Message-State: ACrzQf19wVSRD1dtTsJwgwjWfRXVHq8aCBiWxmRYMjNwDDAS3qeNB4TK
-        Pkpt31/S22JTNTJkMoytTmG4rg==
-X-Google-Smtp-Source: AMsMyM6AI4VTAtK8hxaa4lpLNKTA8GWdsFpVy9579gMbjiE7P/0qXp5nawV03T22J+f7cp7qn8CF/Q==
-X-Received: by 2002:a65:5c0c:0:b0:46e:f582:7378 with SMTP id u12-20020a655c0c000000b0046ef5827378mr195653pgr.120.1666972386070;
-        Fri, 28 Oct 2022 08:53:06 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h4-20020a056a00000400b0053e4baecc14sm3024810pfk.108.2022.10.28.08.53.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 08:53:05 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        Marco Elver <elver@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-mm@kvack.org, Andrey Konovalov <andreyknvl@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v4] mempool: Do not use ksize() for poisoning
-Date:   Fri, 28 Oct 2022 08:53:01 -0700
-Message-Id: <20221028154823.you.615-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 28 Oct 2022 11:53:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C1340E0E
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:53:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BE6A62949
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 15:53:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5419C433D7;
+        Fri, 28 Oct 2022 15:53:09 +0000 (UTC)
+Date:   Fri, 28 Oct 2022 16:53:06 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Muchun Song <muchun.song@linux.dev>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Wupeng Ma <mawupeng1@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next 1/1] mm: hugetlb_vmemmap: Fix WARN_ON in
+ vmemmap_remap_pte
+Message-ID: <Y1v64lILNN2woIcu@arm.com>
+References: <20221025014215.3466904-1-mawupeng1@huawei.com>
+ <614E3E83-1EAB-4C39-AF9C-83C0CCF26218@linux.dev>
+ <35dd51eb-c266-f221-298a-21309c17971a@arm.com>
+ <3D6FDA43-A812-4907-B9C8-C2B25567DBBC@linux.dev>
+ <3c545133-71aa-9a8d-8a13-09186c4fa767@arm.com>
+ <Y1piguJXagcxiTpn@arm.com>
+ <ED740104-0A97-44C1-839F-407F221070BB@linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2729; h=from:subject:message-id; bh=GsDEuQtQBehTnbCGH+DSrMKEOKg+OzR12RyNGPx7PEg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjW/rde6AlUoHw2yv4ICZYBd0pOTO/KK1WOZNXH+JX McX6voGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY1v63QAKCRCJcvTf3G3AJofhEA CPPoNca2ZmUW3btRJPcPRFmWI7syDPpe2FAISaMnR9iRv/QVVTD2mr455X1lyFOIYVhH4DTPcux+k0 sEZhsoukzUH9IruZbDUxIZcGHWrfx/Ql1K37O73ygMV70nplbn0vsXXhL9Bjrql8yQbhHLhZB55F7E uhzIVjJtt1WmWjZmCTkLfnqBh0khW0nPBGZmGA2H8xKj9rGWfkdvQOvRxmAjInn+8tS1C8G3qvg4Aa x5A3uD40YTYb39yrB35KCZAZ3AAK/2HpRGJXhDRwf+KKr8UBuv/ZKwtl0uc8EGrxqzTd0wvij78ORU 7Sp32tJUDTVHixO5mf0u4ualW4epFWQEJyBRmLDhTeYjIaY59F7v8mGkmOCgBTB6e1ynLDErk+7dPt LgA5q/TAD19RDO1H/20IYnaYsJAwh9u1lQb5DF2q1gVxOcIwmG1rMq5qPRsLJMn5hXja9JSWCNLgWg CgZtaGq7G5e++BP2sgPYHw3+vxGhm8hcCXsoU/+8xrs52MwdkOjAVgk+WRdHSfzvPd60b5ELHZRNCx SOCaxipTY6GG0e+TsCJgtR3Ne8+0sDA5MVEFh+582MNGSECHMJwUwpRwYMscwr7BYrWg+WQcWUp7GR aq9xH/OtBDw7g+ImGw8UfnkI2o8xpvMAt98io1m6aisddmYX9/ZSMM6PmfYQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ED740104-0A97-44C1-839F-407F221070BB@linux.dev>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nothing appears to be using ksize() within the kmalloc-backed mempools
-except the mempool poisoning logic. Use the actual pool size instead
-of the ksize() to avoid needing any special handling of the memory as
-needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE.
+On Fri, Oct 28, 2022 at 10:45:09AM +0800, Muchun Song wrote:
+> On Oct 27, 2022, at 18:50, Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > On Wed, Oct 26, 2022 at 02:06:00PM +0530, Anshuman Khandual wrote:
+> >> On 10/26/22 12:31, Muchun Song wrote:
+> >>>> On 10/25/22 12:06, Muchun Song wrote:
+> >>>>>> On Oct 25, 2022, at 09:42, Wupeng Ma <mawupeng1@huawei.com> wrote:
+> >>>>>> From: Ma Wupeng <mawupeng1@huawei.com>
+> >>>>>> 
+> >>>>>> Commit f41f2ed43ca5 ("mm: hugetlb: free the vmemmap pages associated with
+> >>>>>> each HugeTLB page") add vmemmap_remap_pte to remap the tail pages as
+> >>>>>> read-only to catch illegal write operation to the tail page.
+> >>>>>> 
+> >>>>>> However this will lead to WARN_ON in arm64 in __check_racy_pte_update()
+> >>>>> 
+> >>>>> Thanks for your finding this issue.
+> >>>>> 
+> >>>>>> since this may lead to dirty state cleaned. This check is introduced by
+> >>>>>> commit 2f4b829c625e ("arm64: Add support for hardware updates of the
+> >>>>>> access and dirty pte bits") and the initial check is as follow:
+> >>>>>> 
+> >>>>>> BUG_ON(pte_write(*ptep) && !pte_dirty(pte));
+> >>>>>> 
+> >>>>>> Since we do need to mark this pte as read-only to catch illegal write
+> >>>>>> operation to the tail pages, use set_pte  to replace set_pte_at to bypass
+> >>>>>> this check.
+> >>>>> 
+> >>>>> In theory, the waring does not affect anything since the tail vmemmap
+> >>>>> pages are supposed to be read-only. So, skipping this check for vmemmap
+> >>>> 
+> >>>> Tails vmemmap pages are supposed to be read-only, in practice but their
+> >>>> backing pages do have pte_write() enabled. Otherwise the VM_WARN_ONCE()
+> >>>> warning would not have triggered.
+> >>> 
+> >>> Right.
+> >>> 
+> >>>> 
+> >>>>       VM_WARN_ONCE(pte_write(old_pte) && !pte_dirty(pte),
+> >>>>                    "%s: racy dirty state clearing: 0x%016llx -> 0x%016llx",
+> >>>>                    __func__, pte_val(old_pte), pte_val(pte));
+> >>>> 
+> >>>> Also, is not it true that the pte being remapped into a different page
+> >>>> as read only, than what it had originally (which will be freed up) i.e 
+> >>>> the PFN in 'old_pte' and 'pte' will be different. Hence is there still
+> >>> 
+> >>> Right.
+> >>> 
+> >>>> a possibility for a race condition even when the PFN changes ?
+> >>> 
+> >>> Sorry, I didn't get this question. Did you mean the PTE is changed from
+> >>> new (pte) to the old one (old_pte) by the hardware because of the update
+> >>> of dirty bit when a concurrent write operation to the tail vmemmap page?
+> >> 
+> >> No, but is not vmemmap_remap_pte() reuses walk->reuse_page for all remaining
+> >> tails pages ? Is not there a PFN change, along with access permission change
+> >> involved in this remapping process ?
+> > 
+> > For the record, as we discussed offline, changing the output address
+> > (pfn) of a pte is not safe without break-before-make if at least one of
+> > the mappings was writeable. The caller (vmemmap_remap_pte()) would need
+> > to be fixed to first invalidate the pte and then write the new pte. I
+> 
+> Could you expose more details about what issue it will be caused? I am
+> not familiar with arm64.
 
-Suggested-by: Vlastimil Babka <vbabka@suse.cz>
-Link: https://lore.kernel.org/lkml/f4fc52c4-7c18-1d76-0c7a-4058ea2486b9@suse.cz/
-Cc: David Rientjes <rientjes@google.com>
-Cc: Marco Elver <elver@google.com>
-Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-mm@kvack.org
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-This replaces mempool-use-kmalloc_size_roundup-to-match-ksize-usage.patch
-v4: add review/ack tags, explicitly call out subject change
-v3: https://lore.kernel.org/lkml/20221025233421.you.825-kees@kernel.org/
-v2: https://lore.kernel.org/lkml/20221018090323.never.897-kees@kernel.org/
-v1: https://lore.kernel.org/lkml/20220923202822.2667581-14-keescook@chromium.org/
----
- mm/mempool.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Well, it's not allowed by the architecture, so some CPU implementations
+may do weird things like accessing incorrect memory or triggering TLB
+conflict aborts if, for some reason, they end up with two entries in
+the TLB for the same VA but pointing to different pfns. The hardware
+expects an invalid PTE and TLB invalidation between such changes. In
+practice most likely nothing happens and this works fine but we need to
+stick to the architecture requirements in case some CPUs take advantage
+of this requirement.
 
-diff --git a/mm/mempool.c b/mm/mempool.c
-index 96488b13a1ef..54204065037d 100644
---- a/mm/mempool.c
-+++ b/mm/mempool.c
-@@ -58,7 +58,7 @@ static void check_element(mempool_t *pool, void *element)
- {
- 	/* Mempools backed by slab allocator */
- 	if (pool->free == mempool_free_slab || pool->free == mempool_kfree) {
--		__check_element(pool, element, ksize(element));
-+		__check_element(pool, element, (size_t)pool->pool_data);
- 	} else if (pool->free == mempool_free_pages) {
- 		/* Mempools backed by page allocator */
- 		int order = (int)(long)pool->pool_data;
-@@ -81,7 +81,7 @@ static void poison_element(mempool_t *pool, void *element)
- {
- 	/* Mempools backed by slab allocator */
- 	if (pool->alloc == mempool_alloc_slab || pool->alloc == mempool_kmalloc) {
--		__poison_element(element, ksize(element));
-+		__poison_element(element, (size_t)pool->pool_data);
- 	} else if (pool->alloc == mempool_alloc_pages) {
- 		/* Mempools backed by page allocator */
- 		int order = (int)(long)pool->pool_data;
-@@ -112,7 +112,7 @@ static __always_inline void kasan_poison_element(mempool_t *pool, void *element)
- static void kasan_unpoison_element(mempool_t *pool, void *element)
- {
- 	if (pool->alloc == mempool_alloc_slab || pool->alloc == mempool_kmalloc)
--		kasan_unpoison_range(element, __ksize(element));
-+		kasan_unpoison_range(element, (size_t)pool->pool_data);
- 	else if (pool->alloc == mempool_alloc_pages)
- 		kasan_unpoison_pages(element, (unsigned long)pool->pool_data,
- 				     false);
+> > assume no other CPU accesses this part of the vmemmap while the pte is
+> > being remapped.
+> 
+> However, there is no guarantee that no other CPU accesses this pte.
+> E.g. memory failure or memory compaction, both can obtain head page
+> from any tail struct pages (only read) anytime.
+
+Oh, so we cannot safely go through a break-before-make sequence here
+(zero the PTE, flush the TLB, write the new PTE) as some CPU may access
+this pte.
+
 -- 
-2.34.1
-
+Catalin
