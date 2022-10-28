@@ -2,315 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF137611A88
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 20:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B74E611A89
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 20:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbiJ1Szu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 14:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
+        id S230087AbiJ1S44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 14:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiJ1Szr (ORCPT
+        with ESMTP id S229455AbiJ1S4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 14:55:47 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C49BC8201
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 11:55:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666983345; x=1698519345;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mbASiVGvErzkpUdFk2i4WMCyzZgdpNopIv441Gv81DY=;
-  b=E/IQFCNZKykulE8U3MS27xxhwwFjAVbKFDPWTby94qxAgIRA9G+wsrug
-   g4AuazAZRmNe27KSnlJ5lTYmCy+SCuq8YdTRHpfYRnrEYT6VMGshuWjWE
-   cx1LgLaZN/R+CAvWuKfSKE9Kq8qFWYHFPq8VI3BeRIqiWKwG8JeV9OnN6
-   RtjVgymoDe3HkqZo+HcfTZqHfUKyZWBOi1gnfjyyWq3+tZEOvMsE8RGuK
-   n/3qV2lFcz/Rr/VKnIiaJrQZq0mFQYwstlYBSgvbJeLc/CDEIGxxVpBA3
-   Jw3loVOnLDz+hJCaOpOu0aMfLrYKYo42pUHVgwhoerhAn1Uk1Mm5XhK4v
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="394879026"
-X-IronPort-AV: E=Sophos;i="5.95,222,1661842800"; 
-   d="scan'208";a="394879026"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 11:55:42 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="758181868"
-X-IronPort-AV: E=Sophos;i="5.95,222,1661842800"; 
-   d="scan'208";a="758181868"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.175.207])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 11:55:38 -0700
-Date:   Fri, 28 Oct 2022 11:55:36 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH] staging: vt6655: fix lines of code ending in a '('
-Message-ID: <Y1wlqKIwe8LmyntH@aschofie-mobl2>
-References: <Y1wfTiYL897fJ18x@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+        Fri, 28 Oct 2022 14:56:54 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B83A1ABA3B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 11:56:51 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29SIumrX080897;
+        Fri, 28 Oct 2022 13:56:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666983408;
+        bh=d0Fa/qSkmZVddvA/MazQq0F2Vsj9eLc7Jjdg60CK2Hw=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=H6KLNGekoLRw4R4gK4RAhjzY60wkx7jHp69mLpWaDTxk0RiCrrvioGp1JwrJ1kD7N
+         f0KuG+RayBiEy7h2pRUyH6zCm4g/5ZJgEP0OMwKnj+WrkFlHCNkNFlyz426d/IbGz6
+         /P59N+YB3byGqhOzD48dTwW/Bky3JmSyB9oZP6fI=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29SIumac082951
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 28 Oct 2022 13:56:48 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 28
+ Oct 2022 13:56:48 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Fri, 28 Oct 2022 13:56:47 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29SIumIG017861;
+        Fri, 28 Oct 2022 13:56:48 -0500
+Date:   Fri, 28 Oct 2022 13:56:48 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Nicolas Frayer <nfrayer@baylibre.com>
+CC:     <ssantosh@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <khilman@baylibre.com>, <glaroque@baylibre.com>
+Subject: Re: [PATCH v3] soc: ti: Convert allocations to devm
+Message-ID: <20221028185647.d74ncedmocfbr2s4@debating>
+References: <20221028180033.606362-1-nfrayer@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <Y1wfTiYL897fJ18x@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+In-Reply-To: <20221028180033.606362-1-nfrayer@baylibre.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 06:28:30PM +0000, Tanjuate Brunostar wrote:
-> fix checkpatch errors related to lines ending with a '(' 
-> by joining splitted lines of code and indenting properly to improve
-> visibility
+On 20:00-20221028, Nicolas Frayer wrote:
+
+Quick cosmetics:
+linux-arm-kernel@lists.infradead.org (moderated list:TI KEYSTONE MULTICORE NAVIGATOR DRIVERS)
+is part of the results of get_maintainers.pl  why drop not CC it?
+
+ git log --oneline drivers/soc/ti/k3-socinfo.c
+soc: ti: k3-socinfo:
+
+Please fix the $subject
+
+> Changed the memory and resource allocations in the probe function
+> to devm. Also added a remove callback.
+
+Yes, but why are we doing this change, what benefit do we get by doing
+this change?
+
+
 > 
-> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com
-
-I suspect you need to carry forward the version number, so this
-would have been a v9, otherwise it's going to mess up the
-patchwork bot.
-
-I'm not sure, GregKH will let us know.
-
-Commit msg:
-Stop saying 'fix'. What did you actually do?
-
-Commit log:
-Use proper punctuation. Say why you made the change without
-repeating the commit msg.
-
-
+> Signed-off-by: Nicolas Frayer <nfrayer@baylibre.com>
 > ---
->  drivers/staging/vt6655/rxtx.c | 165 ++++++++++++++--------------------
->  1 file changed, 69 insertions(+), 96 deletions(-)
 > 
-> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-> index 1e5036121665..7eb7c6eb5cf0 100644
-> --- a/drivers/staging/vt6655/rxtx.c
-> +++ b/drivers/staging/vt6655/rxtx.c
-> @@ -139,15 +139,11 @@ static __le16 vnt_time_stamp_off(struct vnt_private *priv, u16 rate)
->   * PK_TYPE_11GB    2
->   * PK_TYPE_11GA    3
->   */
-> -static
-> -unsigned int
-> -s_uGetTxRsvTime(
-> -	struct vnt_private *pDevice,
-> -	unsigned char byPktType,
-> -	unsigned int cbFrameLength,
-> -	unsigned short wRate,
-> -	bool bNeedAck
-> -)
-> +static unsigned int s_uGetTxRsvTime(struct vnt_private *pDevice,
-> +				    unsigned char byPktType,
-> +				    unsigned int cbFrameLength,
-> +				    unsigned short wRate,
-> +				    bool bNeedAck)
->  {
->  	unsigned int uDataTime, uAckTime;
+> v2->v3:
+> dropped module conversion part of this series while other driver dependencies
+> on socinfo are worked out.
+> A dependency issue is introduced by changing subsys_initcall()
+> to module_platform_driver(). Some drivers using the socinfo information probe
+> before the socinfo driver itself and it makes their probe fail.
+> 
+> Dropped series:
+> https://lore.kernel.org/all/20221010131538.7333-1-nfrayer@baylibre.com/
+
+OK - if we are'nt going to convert this into modules, then is there a
+reason for this patch?
+
+> 
+>  drivers/soc/ti/k3-socinfo.c | 36 +++++++++++++++++++-----------------
+>  1 file changed, 19 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/soc/ti/k3-socinfo.c b/drivers/soc/ti/k3-socinfo.c
+> index 91f441ee6175..19f3e74f5376 100644
+> --- a/drivers/soc/ti/k3-socinfo.c
+> +++ b/drivers/soc/ti/k3-socinfo.c
+> @@ -96,21 +96,18 @@ static int k3_chipinfo_probe(struct platform_device *pdev)
+>  	partno_id = (jtag_id & CTRLMMR_WKUP_JTAGID_PARTNO_MASK) >>
+>  		 CTRLMMR_WKUP_JTAGID_PARTNO_SHIFT;
 >  
-> @@ -214,20 +210,16 @@ static __le16 get_rtscts_time(struct vnt_private *priv,
->  }
+> -	soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
+> +	soc_dev_attr = devm_kzalloc(&pdev->dev, sizeof(*soc_dev_attr), GFP_KERNEL);
+>  	if (!soc_dev_attr)
+>  		return -ENOMEM;
 >  
->  /* byFreqType 0: 5GHz, 1:2.4Ghz */
-> -static
-> -unsigned int
-> -s_uGetDataDuration(
-> -	struct vnt_private *pDevice,
-> -	unsigned char byDurType,
-> -	unsigned int cbFrameLength,
-> -	unsigned char byPktType,
-> -	unsigned short wRate,
-> -	bool bNeedAck,
-> -	unsigned int uFragIdx,
-> -	unsigned int cbLastFragmentSize,
-> -	unsigned int uMACfragNum,
-> -	unsigned char byFBOption
-> -)
-> +static unsigned int s_uGetDataDuration(struct vnt_private *pDevice,
-> +				       unsigned char byDurType,
-> +				       unsigned int cbFrameLength,
-> +				       unsigned char byPktType,
-> +				       unsigned short wRate,
-> +				       bool bNeedAck,
-> +				       unsigned int uFragIdx,
-> +				       unsigned int cbLastFragmentSize,
-> +				       unsigned int uMACfragNum,
-> +				       unsigned char byFBOption)
->  {
->  	bool bLastFrag = false;
->  	unsigned int uAckTime = 0, uNextPktTime = 0, len;
-> @@ -316,17 +308,13 @@ s_uGetDataDuration(
->  }
+> -	soc_dev_attr->revision = kasprintf(GFP_KERNEL, "SR%x.0", variant);
+> -	if (!soc_dev_attr->revision) {
+> -		ret = -ENOMEM;
+> -		goto err;
+> -	}
+> +	soc_dev_attr->revision = devm_kasprintf(&pdev->dev, GFP_KERNEL, "SR%x.0", variant);
+> +	if (!soc_dev_attr->revision)
+> +		return -ENOMEM;
 >  
->  /* byFreqType: 0=>5GHZ 1=>2.4GHZ */
-> -static
-> -__le16
-> -s_uGetRTSCTSDuration(
-> -	struct vnt_private *pDevice,
-> -	unsigned char byDurType,
-> -	unsigned int cbFrameLength,
-> -	unsigned char byPktType,
-> -	unsigned short wRate,
-> -	bool bNeedAck,
-> -	unsigned char byFBOption
-> -)
-> +static __le16 s_uGetRTSCTSDuration(struct vnt_private *pDevice,
-> +				   unsigned char byDurType,
-> +				   unsigned int cbFrameLength,
-> +				   unsigned char byPktType,
-> +				   unsigned short wRate,
-> +				   bool bNeedAck,
-> +				   unsigned char byFBOption)
->  {
->  	unsigned int uCTSTime = 0, uDurTime = 0;
->  
-> @@ -409,22 +397,18 @@ s_uGetRTSCTSDuration(
->  	return cpu_to_le16((u16)uDurTime);
->  }
->  
-> -static
-> -__le16
-> -s_uFillDataHead(
-> -	struct vnt_private *pDevice,
-> -	unsigned char byPktType,
-> -	void *pTxDataHead,
-> -	unsigned int cbFrameLength,
-> -	unsigned int uDMAIdx,
-> -	bool bNeedAck,
-> -	unsigned int uFragIdx,
-> -	unsigned int cbLastFragmentSize,
-> -	unsigned int uMACfragNum,
-> -	unsigned char byFBOption,
-> -	unsigned short wCurrentRate,
-> -	bool is_pspoll
-> -)
-> +static __le16 s_uFillDataHead(struct vnt_private *pDevice,
-> +			      unsigned char byPktType,
-> +			      void *pTxDataHead,
-> +			      unsigned int cbFrameLength,
-> +			      unsigned int uDMAIdx,
-> +			      bool bNeedAck,
-> +			      unsigned int uFragIdx,
-> +			      unsigned int cbLastFragmentSize,
-> +			      unsigned int uMACfragNum,
-> +			      unsigned char byFBOption,
-> +			      unsigned short wCurrentRate,
-> +			      bool is_pspoll)
->  {
->  	struct vnt_tx_datahead_ab *buf = pTxDataHead;
->  
-> @@ -555,19 +539,15 @@ s_uFillDataHead(
->  	return buf->duration;
->  }
->  
-> -static
-> -void
-> -s_vFillRTSHead(
-> -	struct vnt_private *pDevice,
-> -	unsigned char byPktType,
-> -	void *pvRTS,
-> -	unsigned int cbFrameLength,
-> -	bool bNeedAck,
-> -	bool bDisCRC,
-> -	struct ieee80211_hdr *hdr,
-> -	unsigned short wCurrentRate,
-> -	unsigned char byFBOption
-> -)
-> +static void s_vFillRTSHead(struct vnt_private *pDevice,
-> +			   unsigned char byPktType,
-> +			   void *pvRTS,
-> +			   unsigned int cbFrameLength,
-> +			   bool bNeedAck,
-> +			   bool bDisCRC,
-> +			   struct ieee80211_hdr *hdr,
-> +			   unsigned short wCurrentRate,
-> +			   unsigned char byFBOption)
->  {
->  	unsigned int uRTSFrameLen = 20;
->  
-> @@ -750,19 +730,15 @@ s_vFillRTSHead(
+>  	ret = k3_chipinfo_partno_to_names(partno_id, soc_dev_attr);
+>  	if (ret) {
+>  		dev_err(dev, "Unknown SoC JTAGID[0x%08X]\n", jtag_id);
+> -		ret = -ENODEV;
+> -		goto err_free_rev;
+> +		return -ENODEV;
 >  	}
+>  
+>  	node = of_find_node_by_path("/");
+> @@ -118,22 +115,26 @@ static int k3_chipinfo_probe(struct platform_device *pdev)
+>  	of_node_put(node);
+>  
+>  	soc_dev = soc_device_register(soc_dev_attr);
+> -	if (IS_ERR(soc_dev)) {
+> -		ret = PTR_ERR(soc_dev);
+> -		goto err_free_rev;
+> -	}
+> +	if (IS_ERR(soc_dev))
+> +		return PTR_ERR(soc_dev);
+> +
+> +	platform_set_drvdata(pdev, soc_dev);
+>  
+>  	dev_info(dev, "Family:%s rev:%s JTAGID[0x%08x] Detected\n",
+>  		 soc_dev_attr->family,
+>  		 soc_dev_attr->revision, jtag_id);
+>  
+>  	return 0;
+> +}
+> +
+> +static int k3_chipinfo_remove(struct platform_device *pdev)
+> +{
+> +	struct soc_device *soc_dev = platform_get_drvdata(pdev);
+>  
+> -err_free_rev:
+> -	kfree(soc_dev_attr->revision);
+> -err:
+> -	kfree(soc_dev_attr);
+> -	return ret;
+> +	if (soc_dev)
+> +		soc_device_unregister(soc_dev);
+> +
+> +	return 0;
 >  }
 >  
-> -static
-> -void
-> -s_vFillCTSHead(
-> -	struct vnt_private *pDevice,
-> -	unsigned int uDMAIdx,
-> -	unsigned char byPktType,
-> -	void *pvCTS,
-> -	unsigned int cbFrameLength,
-> -	bool bNeedAck,
-> -	bool bDisCRC,
-> -	unsigned short wCurrentRate,
-> -	unsigned char byFBOption
-> -)
-> +static void s_vFillCTSHead(struct vnt_private *pDevice,
-> +			   unsigned int uDMAIdx,
-> +			   unsigned char byPktType,
-> +			   void *pvCTS,
-> +			   unsigned int cbFrameLength,
-> +			   bool bNeedAck,
-> +			   bool bDisCRC,
-> +			   unsigned short wCurrentRate,
-> +			   unsigned char byFBOption)
->  {
->  	unsigned int uCTSFrameLen = 14;
+>  static const struct of_device_id k3_chipinfo_of_match[] = {
+> @@ -147,6 +148,7 @@ static struct platform_driver k3_chipinfo_driver = {
+>  		.of_match_table = k3_chipinfo_of_match,
+>  	},
+>  	.probe = k3_chipinfo_probe,
+> +	.remove = k3_chipinfo_remove,
+>  };
 >  
-> @@ -868,21 +844,17 @@ s_vFillCTSHead(
->   -
->   * unsigned int cbFrameSize, Hdr+Payload+FCS
->   */
-> -static
-> -void
-> -s_vGenerateTxParameter(
-> -	struct vnt_private *pDevice,
-> -	unsigned char byPktType,
-> -	struct vnt_tx_fifo_head *tx_buffer_head,
-> -	void *pvRrvTime,
-> -	void *pvRTS,
-> -	void *pvCTS,
-> -	unsigned int cbFrameSize,
-> -	bool bNeedACK,
-> -	unsigned int uDMAIdx,
-> -	void *psEthHeader,
-> -	unsigned short wCurrentRate
-> -)
-> +static void s_vGenerateTxParameter(struct vnt_private *pDevice,
-> +				   unsigned char byPktType,
-> +				   struct vnt_tx_fifo_head *tx_buffer_head,
-> +				   void *pvRrvTime,
-> +				   void *pvRTS,
-> +				   void *pvCTS,
-> +				   unsigned int cbFrameSize,
-> +				   bool bNeedACK,
-> +				   unsigned int uDMAIdx,
-> +				   void *psEthHeader,
-> +				   unsigned short wCurrentRate)
->  {
->  	u16 fifo_ctl = le16_to_cpu(tx_buffer_head->fifo_ctl);
->  	bool bDisCRC = false;
-> @@ -954,11 +926,12 @@ s_vGenerateTxParameter(
->  	}
->  }
->  
-> -static unsigned int
-> -s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
-> -		  unsigned char *pbyTxBufferAddr,
-> -		  unsigned int uDMAIdx, struct vnt_tx_desc *pHeadTD,
-> -		  unsigned int is_pspoll)
-> +static unsigned int s_cbFillTxBufHead(struct vnt_private *pDevice,
-> +				      unsigned char byPktType,
-> +				      unsigned char *pbyTxBufferAddr,
-> +				      unsigned int uDMAIdx,
-> +				      struct vnt_tx_desc *pHeadTD,
-> +				      unsigned int is_pspoll)
->  {
->  	struct vnt_td_info *td_info = pHeadTD->td_info;
->  	struct sk_buff *skb = td_info->skb;
+>  static int __init k3_chipinfo_init(void)
 > -- 
-> 2.34.1
+> 2.25.1
 > 
-> 
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
