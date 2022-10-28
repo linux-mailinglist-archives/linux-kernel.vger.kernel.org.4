@@ -2,97 +2,545 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A5666118E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9924D6118E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbiJ1RIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 13:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57488 "EHLO
+        id S231341AbiJ1RIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 13:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbiJ1RIF (ORCPT
+        with ESMTP id S231317AbiJ1RIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 13:08:05 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5091123081C
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:05:54 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id bb5so3828390qtb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:05:54 -0700 (PDT)
+        Fri, 28 Oct 2022 13:08:25 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20973F17;
+        Fri, 28 Oct 2022 10:06:17 -0700 (PDT)
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 962E8218D;
+        Fri, 28 Oct 2022 17:03:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=o1wP8XSqyxONpYZllhjBchmhfCHPdbS+n9nGRAQYAjo=;
-        b=hrq4vT5E4EBa1mZNQHXa8qMQaRdiK+9TB9sDEbGIbXqTGJK7w/Q/AbwqBwRFTTaLWu
-         3FOBwfpiugo55xPkhPmNoMgsFo4ZHKCaQlX8NhoXJnWdWWMdazNZ47iVGoRiM5WULYam
-         IRQ/0cUfTpQO0nAWE0ADtOGAQVMikHbaJagdw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o1wP8XSqyxONpYZllhjBchmhfCHPdbS+n9nGRAQYAjo=;
-        b=7kW0fj67eaMLD9aO+3DO649+7hZomciY9lwIXyvzWriyJwWtwCR+hjqc9ymL97fACy
-         aHTIweZejHRmHtaAwEN9QHqsJHyAisP2IWiGdIKa6xZXpxRMjjss8MSgiqpvT8vNgsun
-         4en7M7u0sddzfN0vU889h8l2zmd2yfdP4O2jFE5xomkvsg2WkHTU9vYw3FulPEOQxI33
-         LWEa3e1ZTf4Z+nNlOn5DEYjiEbkt9ZGLf9RGwO60FGIExOeNHhK4OGe6eGm6UsdUXzrM
-         ZQd8WjQYxjXv2lFx9FXwDAzTSsGRaK0Sg5OGPPjSvTC+FXOnCsKM4eQaPVdAWtJCyt3t
-         40iA==
-X-Gm-Message-State: ACrzQf0DKzqPiXmVnzR4AZbLd1HPVZxcEqO/vMBP9NFBSD0wnz1W2oIn
-        m/+okKr0nelkJ6uCRu/kvFtEmV6jc1XJzA==
-X-Google-Smtp-Source: AMsMyM5BslORVkf2W22GI9BAJhqjzhnl+djT3hbzW+jCYcXvbK1q/7dAKO7uxNY2WBMZg35GvyC7nQ==
-X-Received: by 2002:ac8:59cb:0:b0:39a:dbc7:2424 with SMTP id f11-20020ac859cb000000b0039adbc72424mr421562qtf.304.1666976747829;
-        Fri, 28 Oct 2022 10:05:47 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id x29-20020a05620a0b5d00b006b615cd8c13sm3193081qkg.106.2022.10.28.10.05.46
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 10:05:47 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id n130so6786282yba.10
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:05:46 -0700 (PDT)
-X-Received: by 2002:a25:bb44:0:b0:6bb:a336:7762 with SMTP id
- b4-20020a25bb44000000b006bba3367762mr172576ybk.501.1666976745431; Fri, 28 Oct
- 2022 10:05:45 -0700 (PDT)
+        d=paragon-software.com; s=mail; t=1666976597;
+        bh=1RIl0qzpJnMi+2+dH4z4jpT23+ZMHz1t7tDXrl1ZrQc=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=c4hqfpf7yWXHSaSXqqknbXuh2DNay4FC/rErSJ4GLONniPXf7esj4AttHTLVjYZwE
+         HoE3ksVGC8//FeF6kjVdjRqUpfxodlUe0cA+QCCpUbEF11OSGKDygVdhzVfZumeSMy
+         65QlbTXMQF2Mb0dYNjAH09f9aClNN+vFgJtD4uCg=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 28 Oct 2022 20:05:56 +0300
+Message-ID: <0ec81044-062c-29e0-c081-dff9484f0368@paragon-software.com>
+Date:   Fri, 28 Oct 2022 20:05:56 +0300
 MIME-Version: 1.0
-References: <Y1wHlSE0S5QZ+QCI@shell.armlinux.org.uk> <E1ooSWP-000FDy-5t@rmk-PC.armlinux.org.uk>
-In-Reply-To: <E1ooSWP-000FDy-5t@rmk-PC.armlinux.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 28 Oct 2022 10:05:29 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi63Sw3vNJ86gzg1Tdr=_xGwGyj+mH-eT0UgaAfGAHX+A@mail.gmail.com>
-Message-ID: <CAHk-=wi63Sw3vNJ86gzg1Tdr=_xGwGyj+mH-eT0UgaAfGAHX+A@mail.gmail.com>
-Subject: Re: [PATCH 1/5] ARM: findbit: document ARMv5 bit offset calculation
-To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: [PATCH 09/14] fs/ntfs3: Check fields while reading
+Content-Language: en-US
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+To:     <ntfs3@lists.linux.dev>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+References: <fc5957cc-a71b-cfa3-f291-cb63b23800d1@paragon-software.com>
+In-Reply-To: <fc5957cc-a71b-cfa3-f291-cb63b23800d1@paragon-software.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_FILL_THIS_FORM_SHORT autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 9:47 AM Russell King (Oracle)
-<rmk+kernel@armlinux.org.uk> wrote:
->
-> Document the ARMv5 bit offset calculation code.
+Added new functions index_hdr_check and index_buf_check.
+Now we check all stuff for correctness while reading from disk.
+Also fixed bug with stale nfs data.
 
-Hmm. Don't the generic bitop functions end up using this? We do have a
-comment in the code that says
+Reported-by: van fantasy <g1042620637@gmail.com>
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+---
+  fs/ntfs3/index.c   |  84 ++++++++++++++++++++++++++++++----
+  fs/ntfs3/inode.c   |  18 ++++----
+  fs/ntfs3/ntfs_fs.h |   4 +-
+  fs/ntfs3/run.c     |   7 ++-
+  fs/ntfs3/xattr.c   | 109 +++++++++++++++++++++++++++++----------------
+  5 files changed, 164 insertions(+), 58 deletions(-)
 
- * On ARMv5 and above, the gcc built-ins may rely on the clz instruction
- * and produce optimal inlined code in all cases. On ARMv7 it is even
- * better by also using the rbit instruction.
+diff --git a/fs/ntfs3/index.c b/fs/ntfs3/index.c
+index 35369ae5c438..51ab75954640 100644
+--- a/fs/ntfs3/index.c
++++ b/fs/ntfs3/index.c
+@@ -605,11 +605,58 @@ static const struct NTFS_DE *hdr_insert_head(struct INDEX_HDR *hdr,
+  	return e;
+  }
+  
++/*
++ * index_hdr_check
++ *
++ * return true if INDEX_HDR is valid
++ */
++static bool index_hdr_check(const struct INDEX_HDR *hdr, u32 bytes)
++{
++	u32 end = le32_to_cpu(hdr->used);
++	u32 tot = le32_to_cpu(hdr->total);
++	u32 off = le32_to_cpu(hdr->de_off);
++
++	if (!IS_ALIGNED(off, 8) || tot > bytes || end > tot ||
++	    off + sizeof(struct NTFS_DE) > end) {
++		/* incorrect index buffer. */
++		return false;
++	}
++
++	return true;
++}
++
++/*
++ * index_buf_check
++ *
++ * return true if INDEX_BUFFER seems is valid
++ */
++static bool index_buf_check(const struct INDEX_BUFFER *ib, u32 bytes,
++			    const CLST *vbn)
++{
++	const struct NTFS_RECORD_HEADER *rhdr = &ib->rhdr;
++	u16 fo = le16_to_cpu(rhdr->fix_off);
++	u16 fn = le16_to_cpu(rhdr->fix_num);
++
++	if (bytes <= offsetof(struct INDEX_BUFFER, ihdr) ||
++	    rhdr->sign != NTFS_INDX_SIGNATURE ||
++	    fo < sizeof(struct INDEX_BUFFER)
++	    /* Check index buffer vbn. */
++	    || (vbn && *vbn != le64_to_cpu(ib->vbn)) || (fo % sizeof(short)) ||
++	    fo + fn * sizeof(short) >= bytes ||
++	    fn != ((bytes >> SECTOR_SHIFT) + 1)) {
++		/* incorrect index buffer. */
++		return false;
++	}
++
++	return index_hdr_check(&ib->ihdr,
++			       bytes - offsetof(struct INDEX_BUFFER, ihdr));
++}
++
+  void fnd_clear(struct ntfs_fnd *fnd)
+  {
+  	int i;
+  
+-	for (i = 0; i < fnd->level; i++) {
++	for (i = fnd->level - 1; i >= 0; i--) {
+  		struct indx_node *n = fnd->nodes[i];
+  
+  		if (!n)
+@@ -819,9 +866,16 @@ int indx_init(struct ntfs_index *indx, struct ntfs_sb_info *sbi,
+  	u32 t32;
+  	const struct INDEX_ROOT *root = resident_data(attr);
+  
++	t32 = le32_to_cpu(attr->res.data_size);
++	if (t32 <= offsetof(struct INDEX_ROOT, ihdr) ||
++	    !index_hdr_check(&root->ihdr,
++			     t32 - offsetof(struct INDEX_ROOT, ihdr))) {
++		goto out;
++	}
++
+  	/* Check root fields. */
+  	if (!root->index_block_clst)
+-		return -EINVAL;
++		goto out;
+  
+  	indx->type = type;
+  	indx->idx2vbn_bits = __ffs(root->index_block_clst);
+@@ -833,19 +887,19 @@ int indx_init(struct ntfs_index *indx, struct ntfs_sb_info *sbi,
+  	if (t32 < sbi->cluster_size) {
+  		/* Index record is smaller than a cluster, use 512 blocks. */
+  		if (t32 != root->index_block_clst * SECTOR_SIZE)
+-			return -EINVAL;
++			goto out;
+  
+  		/* Check alignment to a cluster. */
+  		if ((sbi->cluster_size >> SECTOR_SHIFT) &
+  		    (root->index_block_clst - 1)) {
+-			return -EINVAL;
++			goto out;
+  		}
+  
+  		indx->vbn2vbo_bits = SECTOR_SHIFT;
+  	} else {
+  		/* Index record must be a multiple of cluster size. */
+  		if (t32 != root->index_block_clst << sbi->cluster_bits)
+-			return -EINVAL;
++			goto out;
+  
+  		indx->vbn2vbo_bits = sbi->cluster_bits;
+  	}
+@@ -853,7 +907,14 @@ int indx_init(struct ntfs_index *indx, struct ntfs_sb_info *sbi,
+  	init_rwsem(&indx->run_lock);
+  
+  	indx->cmp = get_cmp_func(root);
+-	return indx->cmp ? 0 : -EINVAL;
++	if (!indx->cmp)
++		goto out;
++
++	return 0;
++
++out:
++	ntfs_set_state(sbi, NTFS_DIRTY_DIRTY);
++	return -EINVAL;
+  }
+  
+  static struct indx_node *indx_new(struct ntfs_index *indx,
+@@ -1011,6 +1072,13 @@ int indx_read(struct ntfs_index *indx, struct ntfs_inode *ni, CLST vbn,
+  		goto out;
+  
+  ok:
++	if (!index_buf_check(ib, bytes, &vbn)) {
++		ntfs_inode_err(&ni->vfs_inode, "directory corrupted");
++		ntfs_set_state(ni->mi.sbi, NTFS_DIRTY_ERROR);
++		err = -EINVAL;
++		goto out;
++	}
++
+  	if (err == -E_NTFS_FIXUP) {
+  		ntfs_write_bh(ni->mi.sbi, &ib->rhdr, &in->nb, 0);
+  		err = 0;
+@@ -1601,9 +1669,9 @@ static int indx_insert_into_root(struct ntfs_index *indx, struct ntfs_inode *ni,
+  
+  	if (err) {
+  		/* Restore root. */
+-		if (mi_resize_attr(mi, attr, -ds_root))
++		if (mi_resize_attr(mi, attr, -ds_root)) {
+  			memcpy(attr, a_root, asize);
+-		else {
++		} else {
+  			/* Bug? */
+  			ntfs_set_state(sbi, NTFS_DIRTY_ERROR);
+  		}
+diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
+index 78ec3e6bbf67..719cf6fbb5ed 100644
+--- a/fs/ntfs3/inode.c
++++ b/fs/ntfs3/inode.c
+@@ -81,7 +81,7 @@ static struct inode *ntfs_read_mft(struct inode *inode,
+  			 le16_to_cpu(ref->seq), le16_to_cpu(rec->seq));
+  		goto out;
+  	} else if (!is_rec_inuse(rec)) {
+-		err = -EINVAL;
++		err = -ESTALE;
+  		ntfs_err(sb, "Inode r=%x is not in use!", (u32)ino);
+  		goto out;
+  	}
+@@ -92,8 +92,10 @@ static struct inode *ntfs_read_mft(struct inode *inode,
+  		goto out;
+  	}
+  
+-	if (!is_rec_base(rec))
+-		goto Ok;
++	if (!is_rec_base(rec)) {
++		err = -EINVAL;
++		goto out;
++	}
+  
+  	/* Record should contain $I30 root. */
+  	is_dir = rec->flags & RECORD_FLAG_DIR;
+@@ -465,7 +467,6 @@ static struct inode *ntfs_read_mft(struct inode *inode,
+  		inode->i_flags |= S_NOSEC;
+  	}
+  
+-Ok:
+  	if (ino == MFT_REC_MFT && !sb->s_root)
+  		sbi->mft.ni = NULL;
+  
+@@ -519,6 +520,9 @@ struct inode *ntfs_iget5(struct super_block *sb, const struct MFT_REF *ref,
+  		_ntfs_bad_inode(inode);
+  	}
+  
++	if (IS_ERR(inode) && name)
++		ntfs_set_state(sb->s_fs_info, NTFS_DIRTY_ERROR);
++
+  	return inode;
+  }
+  
+@@ -1652,10 +1656,8 @@ struct inode *ntfs_create_inode(struct user_namespace *mnt_userns,
+  		ntfs_remove_reparse(sbi, IO_REPARSE_TAG_SYMLINK, &new_de->ref);
+  
+  out5:
+-	if (S_ISDIR(mode) || run_is_empty(&ni->file.run))
+-		goto out4;
+-
+-	run_deallocate(sbi, &ni->file.run, false);
++	if (!S_ISDIR(mode))
++		run_deallocate(sbi, &ni->file.run, false);
+  
+  out4:
+  	clear_rec_inuse(rec);
+diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
+index d73d1c837ba7..c9b8a6f1ba0b 100644
+--- a/fs/ntfs3/ntfs_fs.h
++++ b/fs/ntfs3/ntfs_fs.h
+@@ -795,12 +795,12 @@ int run_pack(const struct runs_tree *run, CLST svcn, CLST len, u8 *run_buf,
+  	     u32 run_buf_size, CLST *packed_vcns);
+  int run_unpack(struct runs_tree *run, struct ntfs_sb_info *sbi, CLST ino,
+  	       CLST svcn, CLST evcn, CLST vcn, const u8 *run_buf,
+-	       u32 run_buf_size);
++	       int run_buf_size);
+  
+  #ifdef NTFS3_CHECK_FREE_CLST
+  int run_unpack_ex(struct runs_tree *run, struct ntfs_sb_info *sbi, CLST ino,
+  		  CLST svcn, CLST evcn, CLST vcn, const u8 *run_buf,
+-		  u32 run_buf_size);
++		  int run_buf_size);
+  #else
+  #define run_unpack_ex run_unpack
+  #endif
+diff --git a/fs/ntfs3/run.c b/fs/ntfs3/run.c
+index aaaa0d3d35a2..12d8682f33b5 100644
+--- a/fs/ntfs3/run.c
++++ b/fs/ntfs3/run.c
+@@ -919,12 +919,15 @@ int run_pack(const struct runs_tree *run, CLST svcn, CLST len, u8 *run_buf,
+   */
+  int run_unpack(struct runs_tree *run, struct ntfs_sb_info *sbi, CLST ino,
+  	       CLST svcn, CLST evcn, CLST vcn, const u8 *run_buf,
+-	       u32 run_buf_size)
++	       int run_buf_size)
+  {
+  	u64 prev_lcn, vcn64, lcn, next_vcn;
+  	const u8 *run_last, *run_0;
+  	bool is_mft = ino == MFT_REC_MFT;
+  
++	if (run_buf_size < 0)
++		return -EINVAL;
++
+  	/* Check for empty. */
+  	if (evcn + 1 == svcn)
+  		return 0;
+@@ -1046,7 +1049,7 @@ int run_unpack(struct runs_tree *run, struct ntfs_sb_info *sbi, CLST ino,
+   */
+  int run_unpack_ex(struct runs_tree *run, struct ntfs_sb_info *sbi, CLST ino,
+  		  CLST svcn, CLST evcn, CLST vcn, const u8 *run_buf,
+-		  u32 run_buf_size)
++		  int run_buf_size)
+  {
+  	int ret, err;
+  	CLST next_vcn, lcn, len;
+diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
+index aeee5fb12092..385c50831a8d 100644
+--- a/fs/ntfs3/xattr.c
++++ b/fs/ntfs3/xattr.c
+@@ -42,28 +42,26 @@ static inline size_t packed_ea_size(const struct EA_FULL *ea)
+   * Assume there is at least one xattr in the list.
+   */
+  static inline bool find_ea(const struct EA_FULL *ea_all, u32 bytes,
+-			   const char *name, u8 name_len, u32 *off)
++			   const char *name, u8 name_len, u32 *off, u32 *ea_sz)
+  {
+-	*off = 0;
++	u32 ea_size;
+  
+-	if (!ea_all || !bytes)
++	*off = 0;
++	if (!ea_all)
+  		return false;
+  
+-	for (;;) {
++	for (; *off < bytes; *off += ea_size) {
+  		const struct EA_FULL *ea = Add2Ptr(ea_all, *off);
+-		u32 next_off = *off + unpacked_ea_size(ea);
+-
+-		if (next_off > bytes)
+-			return false;
+-
++		ea_size = unpacked_ea_size(ea);
+  		if (ea->name_len == name_len &&
+-		    !memcmp(ea->name, name, name_len))
++		    !memcmp(ea->name, name, name_len)) {
++			if (ea_sz)
++				*ea_sz = ea_size;
+  			return true;
+-
+-		*off = next_off;
+-		if (next_off >= bytes)
+-			return false;
++		}
+  	}
++
++	return false;
+  }
+  
+  /*
+@@ -74,12 +72,12 @@ static inline bool find_ea(const struct EA_FULL *ea_all, u32 bytes,
+  static int ntfs_read_ea(struct ntfs_inode *ni, struct EA_FULL **ea,
+  			size_t add_bytes, const struct EA_INFO **info)
+  {
+-	int err;
++	int err = -EINVAL;
+  	struct ntfs_sb_info *sbi = ni->mi.sbi;
+  	struct ATTR_LIST_ENTRY *le = NULL;
+  	struct ATTRIB *attr_info, *attr_ea;
+  	void *ea_p;
+-	u32 size;
++	u32 size, off, ea_size;
+  
+  	static_assert(le32_to_cpu(ATTR_EA_INFO) < le32_to_cpu(ATTR_EA));
+  
+@@ -96,24 +94,31 @@ static int ntfs_read_ea(struct ntfs_inode *ni, struct EA_FULL **ea,
+  
+  	*info = resident_data_ex(attr_info, sizeof(struct EA_INFO));
+  	if (!*info)
+-		return -EINVAL;
++		goto out;
+  
+  	/* Check Ea limit. */
+  	size = le32_to_cpu((*info)->size);
+-	if (size > sbi->ea_max_size)
+-		return -EFBIG;
++	if (size > sbi->ea_max_size) {
++		err = -EFBIG;
++		goto out;
++	}
++
++	if (attr_size(attr_ea) > sbi->ea_max_size) {
++		err = -EFBIG;
++		goto out;
++	}
+  
+-	if (attr_size(attr_ea) > sbi->ea_max_size)
+-		return -EFBIG;
++	if (!size) {
++		/* EA info persists, but xattr is empty. Looks like EA problem. */
++		goto out;
++	}
+  
+  	/* Allocate memory for packed Ea. */
+  	ea_p = kmalloc(size_add(size, add_bytes), GFP_NOFS);
+  	if (!ea_p)
+  		return -ENOMEM;
+  
+-	if (!size) {
+-		/* EA info persists, but xattr is empty. Looks like EA problem. */
+-	} else if (attr_ea->non_res) {
++	if (attr_ea->non_res) {
+  		struct runs_tree run;
+  
+  		run_init(&run);
+@@ -124,24 +129,52 @@ static int ntfs_read_ea(struct ntfs_inode *ni, struct EA_FULL **ea,
+  		run_close(&run);
+  
+  		if (err)
+-			goto out;
++			goto out1;
+  	} else {
+  		void *p = resident_data_ex(attr_ea, size);
+  
+-		if (!p) {
+-			err = -EINVAL;
+-			goto out;
+-		}
++		if (!p)
++			goto out1;
+  		memcpy(ea_p, p, size);
+  	}
+  
+  	memset(Add2Ptr(ea_p, size), 0, add_bytes);
++
++	/* Check all attributes for consistency. */
++	for (off = 0; off < size; off += ea_size) {
++		const struct EA_FULL *ef = Add2Ptr(ea_p, off);
++		u32 bytes = size - off;
++
++		/* Check if we can use field ea->size. */
++		if (bytes < sizeof(ef->size))
++			goto out1;
++
++		if (ef->size) {
++			ea_size = le32_to_cpu(ef->size);
++			if (ea_size > bytes)
++				goto out1;
++			continue;
++		}
++
++		/* Check if we can use fields ef->name_len and ef->elength. */
++		if (bytes < offsetof(struct EA_FULL, name))
++			goto out1;
++
++		ea_size = ALIGN(struct_size(ef, name,
++					    1 + ef->name_len +
++						    le16_to_cpu(ef->elength)),
++				4);
++		if (ea_size > bytes)
++			goto out1;
++	}
++
+  	*ea = ea_p;
+  	return 0;
+  
+-out:
++out1:
+  	kfree(ea_p);
+-	*ea = NULL;
++out:
++	ntfs_set_state(sbi, NTFS_DIRTY_DIRTY);
+  	return err;
+  }
+  
+@@ -163,6 +196,7 @@ static ssize_t ntfs_list_ea(struct ntfs_inode *ni, char *buffer,
+  	const struct EA_FULL *ea;
+  	u32 off, size;
+  	int err;
++	int ea_size;
+  	size_t ret;
+  
+  	err = ntfs_read_ea(ni, &ea_all, 0, &info);
+@@ -175,8 +209,9 @@ static ssize_t ntfs_list_ea(struct ntfs_inode *ni, char *buffer,
+  	size = le32_to_cpu(info->size);
+  
+  	/* Enumerate all xattrs. */
+-	for (ret = 0, off = 0; off < size; off += unpacked_ea_size(ea)) {
++	for (ret = 0, off = 0; off < size; off += ea_size) {
+  		ea = Add2Ptr(ea_all, off);
++		ea_size = unpacked_ea_size(ea);
+  
+  		if (buffer) {
+  			if (ret + ea->name_len + 1 > bytes_per_buffer) {
+@@ -227,7 +262,8 @@ static int ntfs_get_ea(struct inode *inode, const char *name, size_t name_len,
+  		goto out;
+  
+  	/* Enumerate all xattrs. */
+-	if (!find_ea(ea_all, le32_to_cpu(info->size), name, name_len, &off)) {
++	if (!find_ea(ea_all, le32_to_cpu(info->size), name, name_len, &off,
++		     NULL)) {
+  		err = -ENODATA;
+  		goto out;
+  	}
+@@ -269,7 +305,7 @@ static noinline int ntfs_set_ea(struct inode *inode, const char *name,
+  	struct EA_FULL *new_ea;
+  	struct EA_FULL *ea_all = NULL;
+  	size_t add, new_pack;
+-	u32 off, size;
++	u32 off, size, ea_sz;
+  	__le16 size_pack;
+  	struct ATTRIB *attr;
+  	struct ATTR_LIST_ENTRY *le;
+@@ -304,9 +340,8 @@ static noinline int ntfs_set_ea(struct inode *inode, const char *name,
+  		size_pack = ea_info.size_pack;
+  	}
+  
+-	if (info && find_ea(ea_all, size, name, name_len, &off)) {
++	if (info && find_ea(ea_all, size, name, name_len, &off, &ea_sz)) {
+  		struct EA_FULL *ea;
+-		size_t ea_sz;
+  
+  		if (flags & XATTR_CREATE) {
+  			err = -EEXIST;
+@@ -329,8 +364,6 @@ static noinline int ntfs_set_ea(struct inode *inode, const char *name,
+  		if (ea->flags & FILE_NEED_EA)
+  			le16_add_cpu(&ea_info.count, -1);
+  
+-		ea_sz = unpacked_ea_size(ea);
+-
+  		le16_add_cpu(&ea_info.size_pack, 0 - packed_ea_size(ea));
+  
+  		memmove(ea, Add2Ptr(ea, ea_sz), size - off - ea_sz);
+-- 
+2.37.0
 
-but that 'may' makes me wonder...
 
-IOW, what is it in the hand-written code that doesn't get done by the
-generic code these days?
-
-                     Linus
