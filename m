@@ -2,52 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F06661091F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 05:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4683E610922
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 06:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234420AbiJ1D7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 23:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
+        id S229765AbiJ1EA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 00:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234558AbiJ1D7p (ORCPT
+        with ESMTP id S229522AbiJ1EAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 23:59:45 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5733E2191;
-        Thu, 27 Oct 2022 20:59:35 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 29S3xG3B011991
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Oct 2022 23:59:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1666929558; bh=D6n1qJ4LHISPaWhvzP4a8VfLw6tC5tM2tSD7ab37LEo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=gI48J5zSFKf+VqjM+3o/PzDIn8gHjyxGLM34zwHfFodoRvS4O6U7CjONzWrrBTrWR
-         EmYf3OEINVP8SSQV/NA/K9ABBom7ih2Yt4O7vgAiNBdiaV12V2r+XR080azENacClQ
-         GqdNfvKtYZ8cJe1kmS+CKFopwHF9ni9b88ks51PAtGgfZjq1RpU1oIgaRXH/rOfM0c
-         +joe4kgJTysS6eJIwdsxUbEl2aHYNqBWBbpQXQlwFtwNouGg/16V4zeqfEqdv+jXyL
-         4jIr0xEO1BTAb0ScleJlpOH+JaS4yJ5XzoGHq4BihG5k7HGXGTlyCVrynifee20dmm
-         IaEz670ZoTMJA==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id EBCC415C34C3; Thu, 27 Oct 2022 23:59:15 -0400 (EDT)
-Date:   Thu, 27 Oct 2022 23:59:15 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     "Unterwurzacher, Jakob" <jakob.unterwurzacher@theobroma-systems.com>
-Cc:     "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Schulz, Quentin" <quentin.schulz@theobroma-systems.com>
-Subject: Re: ext4 online resize -> EXT4-fs error (device loop0) in
- ext4_update_backup_sb:174: Filesystem failed CRC
-Message-ID: <Y1tTk5ILKICjJL82@mit.edu>
-References: <AM6PR04MB63111922B96138C374A39C68C7309@AM6PR04MB6311.eurprd04.prod.outlook.com>
+        Fri, 28 Oct 2022 00:00:52 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E973E43E70;
+        Thu, 27 Oct 2022 21:00:48 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so3429558pjd.4;
+        Thu, 27 Oct 2022 21:00:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M/sY8/XuQ70nuVCzQi7NxMpbTZgfzD5+fQZtTGl0LGY=;
+        b=NKHh8W6HOJE8Z9Qv8QMMb0IesHBCvPBqNLNkieOKDzTCqM8IeP1zBXxpA33gLwH2e8
+         4EhE4TWVWuVdVQd1LyBupuRMuDWFyTONwLaIn7aPVUX45x+gVYlXTJxSQsqt8JaAr/3r
+         Fhg0nSW6lYkjEmEgc/zVyaRhlRK/6GraEXtHEKHi7MuT4XNwQa/3ENrQiCTPwgTqrDMi
+         pVjX9UyYgtEQdQW5mABoycIab8rdQqGl5npnql9Bp0C2g/t+S4pXm+rKZlY86XAwV/39
+         zNJwpcxuE/NnF0ZeTZSTG95lB9/UvBKuHg8olAo4oYLRhy3Gyi6VVux85F4hbRsxZrC6
+         ZCyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M/sY8/XuQ70nuVCzQi7NxMpbTZgfzD5+fQZtTGl0LGY=;
+        b=kXEtzRY6HLcp4SRL6EMvuSPgg2j2AaqLXOGpK9aQG3kI583kXkMS2BiZFtElDnxBtG
+         dF2SYtEWij8+C8ay89NW6cgjXijfpiZ1Om3qiWLot1KC5cM/PPIG7aw/jpgONRDIS2lo
+         NoWOHxdCP/e9pGLQ/JT390W8QLpxJJGeEVD4Tjnk0g+PMVrjp98KjPknkExGbcs0tizG
+         fHCXJbjVwjv/oCCfImZPL+cAPHdbHit6plPDlVcefkg7iyx1AjyUrSx3bLYmhguhwa62
+         VbQi0s4S0XGtiNAEGZ4xmgiJF+IHdbsBc79p6uCgaek47FBz7T923FghYbQvWi5lWcdf
+         ntQg==
+X-Gm-Message-State: ACrzQf1wY2oj1rMl/HiOhfc+eZLfvw8OrxQhtrf2G6yuMDqOUasxvVVz
+        Dd82FFrHbz4epAQJ8BVmCirP+1cJZ8k=
+X-Google-Smtp-Source: AMsMyM4vUAzx7LnBm3SO32s0BgWuHbjvkZCvlajvhGr9CII4v2hhcjPgWI1f6Ad7mv1VPT1JeL1Rbw==
+X-Received: by 2002:a17:903:2447:b0:186:e200:6109 with SMTP id l7-20020a170903244700b00186e2006109mr10657759pls.104.1666929648462;
+        Thu, 27 Oct 2022 21:00:48 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-58.three.co.id. [116.206.28.58])
+        by smtp.gmail.com with ESMTPSA id z7-20020a626507000000b0056bd6b14144sm1886987pfb.180.2022.10.27.21.00.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 21:00:48 -0700 (PDT)
+Message-ID: <8d97d668-b967-563b-28d0-54982b1bbeb0@gmail.com>
+Date:   Fri, 28 Oct 2022 11:00:43 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM6PR04MB63111922B96138C374A39C68C7309@AM6PR04MB6311.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2] PCI: Add vendor ID for Quectel and Cinterion
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221028023711.4196-1-slark_xiao@163.com>
+ <Y1tRu3SFMrS3su56@debian.me>
+ <9ec6b2e.17e9.1841cbcf83b.Coremail.slark_xiao@163.com>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <9ec6b2e.17e9.1841cbcf83b.Coremail.slark_xiao@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,104 +77,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 07:49:56PM +0000, Unterwurzacher, Jakob wrote:
+On 10/28/22 10:57, Slark Xiao wrote:
+> At 2022-10-28 11:51:23, "Bagas Sanjaya" <bagasdotme@gmail.com> wrote:
+>> On Fri, Oct 28, 2022 at 10:37:11AM +0800, Slark Xiao wrote:
+>>> In MHI driver, there are some companies product still do not have their
+>>>  own PCI vendor macro. So we add it here to make the code neat. Ref ID
+>>>  could be found in link https://pcisig.com/membership/member-companies
+>>>  and https://pciids.sourceforge.net/pci.ids . Thales use Cinterion as
+>>> their IOT modem card's trademark. So you will find 0x1269 belongs to
+>>> Thales. Actually, Cinterion belongs to Gemalto, and Gemalto belongs to
+>>>  Thales.
+>>>
+>>
+>> The patch description is confusing me.
+>>
+>> What about below instead?
+>>
+>> ```
+>> Add missing vendor ID for Cinterion (which is 0x1269).
+>> ```
+
+Oops, I mean also for Quectel (0x1eac).
+
+>>
+> As you said 0x1269 belongs to Thales (not Cinterion), So I write it about the details.
 > 
-> it looks like I am hitting a similar issue as reported by Borislav Petkov
-> in April 2022 ( https://lore.kernel.org/lkml/YmqOqGKajOOx90ZY@zn.tnic/ ).
-> 
-> I'm on kernel 6.0.5 and see this on arm64 as well as x86_64.
-> I have a 100% reproducer using a loop mount, here it is:
-> 
-> 	truncate -s 16g ext4.img
-> 	mkfs.ext4 ext4.img 500m
-> 	mkdir ext4.mnt
-> 	mount ext4.img ext4.mnt
-> 	resize2fs ext4.img
+>>> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+>>> ---
+>>>  include/linux/pci_ids.h | 4 ++++
+>>>  1 file changed, 4 insertions(+)
+>>>
+>>> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+>>> index b362d90eb9b0..9e2b6286f53f 100644
+>>> --- a/include/linux/pci_ids.h
+>>> +++ b/include/linux/pci_ids.h
+>>> @@ -1765,6 +1765,8 @@
+>>>  #define PCI_VENDOR_ID_SATSAGEM		0x1267
+>>>  #define PCI_DEVICE_ID_SATSAGEM_NICCY	0x1016
+>>>  
+>>> +#define PCI_VENDOR_ID_CINTERION		0x1269	/* Celluar Modules*/
+>>> +
+>>>  #define PCI_VENDOR_ID_ENSONIQ		0x1274
+>>>  #define PCI_DEVICE_ID_ENSONIQ_CT5880	0x5880
+>>>  #define PCI_DEVICE_ID_ENSONIQ_ES1370	0x5000
+>>> @@ -2585,6 +2587,8 @@
+>>>  #define PCI_VENDOR_ID_TEKRAM		0x1de1
+>>>  #define PCI_DEVICE_ID_TEKRAM_DC290	0xdc29
+>>>  
+>>> +#define PCI_VENDOR_ID_QUECTEL		0x1eac
+>>> +
+>>
+>> Why pourring in Quectel ID while this patch is about Cinterion?
+>>
+>> Thanks. 
+>>
+> Patch title is for 2 vendors,  Quectel and Cinterion. May I add 2 different VID at the 
+> same time?
 
-Thanks for the reproducer!  The following patch should fix things.
+Ah! I don't see the patch subject.
 
-       	       		      		- Ted
+Next time, please just send plain-text email, not HTML.
 
-From 9a8c5b0d061554fedd7dbe894e63aa34d0bac7c4 Mon Sep 17 00:00:00 2001
-From: Theodore Ts'o <tytso@mit.edu>
-Date: Thu, 27 Oct 2022 16:04:36 -0400
-Subject: [PATCH] ext4: update the backup superblock's at the end of the online
- resize
+Thanks.
 
-When expanding a file system using online resize, various fields in
-the superblock (e.g., s_blocks_count, s_inodes_count, etc.) change.
-To update the backup superblocks, the online resize uses the function
-update_backups() in fs/ext4/resize.c.  This function was not updating
-the checksum field in the backup superblocks.  This wasn't a big deal
-previously, because e2fsck didn't care about the checksum field in the
-backup superblock.  (And indeed, update_backups() goes all the way
-back to the ext3 days, well before we had support for metadata
-checksums.)
-
-However, there is an alternate, more general way of updating
-superblock fields, ext4_update_primary_sb() in fs/ext4/ioctl.c.  This
-function does check the checksum of the backup superblock, and if it
-doesn't match will mark the file system as corrupted.  That was
-clearly not the intent, so avoid to aborting the resize when a bad
-superblock is found.
-
-In addition, teach update_backups() to properly update the checksum in
-the backup superblocks.  We will eventually want to unify
-updapte_backups() with the infrasture in ext4_update_primary_sb(), but
-that's for another day.
-
-Note: The problem has been around for a while; it just didn't really
-matter until ext4_update_primary_sb() was added by commit bbc605cdb1e1
-("ext4: implement support for get/set fs label").  And it became
-trivially easy to reproduce after commit 827891a38acc ("ext4: update
-the s_overhead_clusters in the backup sb's when resizing") in v6.0.
-
-Cc: stable@kernel.org # 5.17+
-Fixes: bbc605cdb1e1 ("ext4: implement support for get/set fs label")
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
----
- fs/ext4/ioctl.c  | 3 +--
- fs/ext4/resize.c | 5 +++++
- 2 files changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/fs/ext4/ioctl.c b/fs/ext4/ioctl.c
-index 4d49c5cfb690..790d5ffe8559 100644
---- a/fs/ext4/ioctl.c
-+++ b/fs/ext4/ioctl.c
-@@ -145,9 +145,8 @@ static int ext4_update_backup_sb(struct super_block *sb,
- 	if (ext4_has_metadata_csum(sb) &&
- 	    es->s_checksum != ext4_superblock_csum(sb, es)) {
- 		ext4_msg(sb, KERN_ERR, "Invalid checksum for backup "
--		"superblock %llu\n", sb_block);
-+		"superblock %llu", sb_block);
- 		unlock_buffer(bh);
--		err = -EFSBADCRC;
- 		goto out_bh;
- 	}
- 	func(es, arg);
-diff --git a/fs/ext4/resize.c b/fs/ext4/resize.c
-index 6dfe9ccae0c5..46b87ffeb304 100644
---- a/fs/ext4/resize.c
-+++ b/fs/ext4/resize.c
-@@ -1158,6 +1158,7 @@ static void update_backups(struct super_block *sb, sector_t blk_off, char *data,
- 	while (group < sbi->s_groups_count) {
- 		struct buffer_head *bh;
- 		ext4_fsblk_t backup_block;
-+		struct ext4_super_block *es;
- 
- 		/* Out of journal space, and can't get more - abort - so sad */
- 		err = ext4_resize_ensure_credits_batch(handle, 1);
-@@ -1186,6 +1187,10 @@ static void update_backups(struct super_block *sb, sector_t blk_off, char *data,
- 		memcpy(bh->b_data, data, size);
- 		if (rest)
- 			memset(bh->b_data + size, 0, rest);
-+		es = (struct ext4_super_block *) bh->b_data;
-+		es->s_block_group_nr = cpu_to_le16(group);
-+		if (ext4_has_metadata_csum(sb))
-+			es->s_checksum = ext4_superblock_csum(sb, es);
- 		set_buffer_uptodate(bh);
- 		unlock_buffer(bh);
- 		err = ext4_handle_dirty_metadata(handle, NULL, bh);
 -- 
-2.31.0
+An old man doll... just what I always wanted! - Clara
 
