@@ -2,105 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7457C6106A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 02:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5E66106A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 02:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235121AbiJ1ADx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 20:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41696 "EHLO
+        id S235261AbiJ1AGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 20:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233548AbiJ1ADu (ORCPT
+        with ESMTP id S233548AbiJ1AGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 20:03:50 -0400
-Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C20774368
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 17:03:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1666915425;
-        bh=dl6yBMYwe2DpRerjx1DwIpqPoeEi77jJTwJJ4yakXcw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=BQVBffIiI/5QS4W0/kOUAAlOZmMlFtlRBCUpmdAkLl5XLUI40DFEYu7MEOyry6yAK
-         jA8dScFX39B3tG+5rPo4iGVkF/cLruITsCW41zOyZb/7jNGJs6kf5EK5p4XINf0nYE
-         RgxjZrHmWdnPzzjd/pgebs+NYxxkK0ett2aFkBn0=
-Received: from localhost.localdomain ([39.156.73.13])
-        by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
-        id EA272E7; Fri, 28 Oct 2022 08:03:42 +0800
-X-QQ-mid: xmsmtpt1666915422tyxflzaif
-Message-ID: <tencent_1E036FA19AACC8CB3915EBD7AA5127C42107@qq.com>
-X-QQ-XMAILINFO: N+tZcXNNUKPOx9aF/32esR5b5Obql5Yi4lm//cVYJcwGbLo9alD9QoYI3afM5j
-         vCp2hNQcBrJZpFPWoSHrFL+jF4VRrhUfYY4TjvaBt/8o3VpcktWSAFqRNlf3LspM4uvmczGGsDe4
-         lhgtSuxu20DoTmTTMXddhZ8GzWCCexWcmVdV5/3ZFA6CtH84szVfvK5QCRQuF23PEzT0ewqcG1pb
-         UoThM90R4ndki4rc+TruJP09wes4kc4XwzI9FIyNVMTQngFPH1vj++34TdwxoLDaS7gq9h5ByRua
-         81bDoRJiMjzACJ+MRyt8RFeb5U6+AGdXxfwiN2FtFJLp9anZ4d/2Exi3UcMT5D5+w2OBuYdUKD86
-         3hDFGtfevVVaO3QX97F+ZY9QyFmHGtDi6L8b9Rj0RcXsE2HNbNiijMS+m1YwZAzi0SL2n8SM+eCM
-         kikO8ngkum/YoFIWW1BOG06ZKBjiuZdMyutA1xWRnBY3ic5KQxdC61O6GBQOdpChyYk0Vdr3PVrv
-         CtWv75n0RY/vJ2G7WRz4hPT/tPZgXSlHIWJr4czUn+M2hiWsLcqKEfwyDjV6WsHszhS0sCSxOsdl
-         HRu8mHkH1tERFdo0GBQ4YKKyNBDx7R+6VTX8dWGRZaIzIqFiiKFt/06PBXeExtGBrSQRK1Hfl4sw
-         RI01NgrAlp1ITnDGCHofZDTQbAemBVJA4oM1cY98IO6Q2Xt4ykeEI5ificUZLBaG/WbS+T1qnxFO
-         ldwyNRKXOAlruE2lI4iIrZU2byn+soc0F/SB726CbBxwrfsShTlxu81xw03dSgtP/m9BjsXVY/CU
-         U5wvpsy5h6qOzzTUuctyONSSuqMFbstyTaZu4Dfta4Ecy7+HolcEMT/w259IA/MB8BzBEIW2b9uN
-         LC6+NC/5JXISyFaZ4plFOBTmNRkAoMajDQIiFRACviIDoK347/8EcKx1YQSOckhy2Nau9ZEYokIZ
-         MHUE4ZmnM4B2RoNR/qnsrJGi2MbfIu
-From:   Rong Tao <rtoax@foxmail.com>
-To:     seanjc@google.com
-Cc:     Rong Tao <rongtao@cestc.cn>, Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        "H. Peter Anvin" <hpa@zytor.com>,
-        kvm@vger.kernel.org (open list:KERNEL VIRTUAL MACHINE FOR X86 (KVM/x86)),
-        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
-        64-BIT))
-Subject: [PATCH] KVM: VMX: Use tabs instead of spaces for indentation
-Date:   Fri, 28 Oct 2022 08:03:40 +0800
-X-OQ-MSGID: <20221028000340.86450-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <Y1sMPJvZDj6hGvih@google.com>
-References: <Y1sMPJvZDj6hGvih@google.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Thu, 27 Oct 2022 20:06:02 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA137963B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 17:06:00 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20221028000557epoutp021a8f29aa0f28eb7fe46a753188a33acf~iEt4ZYqza2004720047epoutp02R
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 00:05:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20221028000557epoutp021a8f29aa0f28eb7fe46a753188a33acf~iEt4ZYqza2004720047epoutp02R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1666915557;
+        bh=W4vEb0RpV7zSfH+2x6pcpo31LhO6vyzOs3ZF8z/vowk=;
+        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
+        b=ab6aFYlXsO3O3HjT+ChR5VyBKk+Agjo5tkKZi1d8UZov1RqpfqA1ij+gCI9YJs6Q6
+         XnShYywUhr8TO8L6MtxuFY+bIJiQJrcI5OAPqaVL13QkgHiHhEn/qJAuk5FBgcMdtL
+         G9bwt9f1irLlAcNRHEDnd65d87ANT9EsuxZ4gJWU=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20221028000556epcas2p24fe69a712c225da2ac81bb47300eb042~iEt3whXx90981009810epcas2p29;
+        Fri, 28 Oct 2022 00:05:56 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.97]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Mz2rN1Z1Dz4x9Pp; Fri, 28 Oct
+        2022 00:05:56 +0000 (GMT)
+X-AuditID: b6c32a47-ac5b870000002127-37-635b1ce42458
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        AA.3D.08487.4EC1B536; Fri, 28 Oct 2022 09:05:56 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE: [PATCH] scsi: ufs: core: Use 'else' in ufshcd_hba_enable()
+Reply-To: keosung.park@samsung.com
+Sender: Keoseong Park <keosung.park@samsung.com>
+From:   Keoseong Park <keosung.park@samsung.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        Jinyoung CHOI <j-young.choi@samsung.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <87a0d265-f9b3-dbc6-edff-396c5a354f92@acm.org>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20221028000555epcms2p7f1660c757d0af8399af64fa31bd87cb1@epcms2p7>
+Date:   Fri, 28 Oct 2022 09:05:55 +0900
+X-CMS-MailID: 20221028000555epcms2p7f1660c757d0af8399af64fa31bd87cb1
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrDJsWRmVeSWpSXmKPExsWy7bCmme4Tmehkg63fOC1OPlnDZvFg3jY2
+        i5c/r7JZHHzYyWIx7cNPZouXhzQtHt1+xmjR27+VzWLRjW1MFpd3zWGz6L6+g81i+fF/TA48
+        HpeveHss3vOSyWPCogOMHt/Xd7B5fHx6i8Wjb8sqRo/Pm+Q82g90MwVwRGXbZKQmpqQWKaTm
+        JeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gAdq6RQlphTChQKSCwuVtK3
+        synKLy1JVcjILy6xVUotSMkpMC/QK07MLS7NS9fLSy2xMjQwMDIFKkzIzni38AJzwS3+inXT
+        97E2MO7j6WLk5JAQMJH41nSBvYuRi0NIYAejxL+Hx1i7GDk4eAUEJf7uEAapERZwl3izaTEr
+        iC0koCTRtXArM0TcQGLd9D1gNpuAnsSU33cYQeaICHxhluh8uJ8dYgGvxIz2pywQtrTE9uVb
+        GUFsTgFriRNT/0HVaEj8WNbLDGGLStxc/ZYdxn5/bD4jhC0i0XrvLFSNoMSDn7uh4pISrWe2
+        skHY+RJPbvZD7aqRWLD9M1RcX+Jax0awOK+Ar8S1x8/BbBYBVYmfE1+wQtS4SLzpbQGrZxaQ
+        l9j+dg4zKByYBTQl1u/SBzElBJQljtxigfmqYeNvdnQ2swCfRMfhv3DxHfOeMEHYahKPFmyB
+        2iQjcXHOOeYJjEqzEAE9C8neWQh7FzAyr2IUSy0ozk1PLTYqMIbHbXJ+7iZGcLLVct/BOOPt
+        B71DjEwcjIcYJTiYlUR4z94ITxbiTUmsrEotyo8vKs1JLT7EaAr08URmKdHkfGC6zyuJNzSx
+        NDAxMzM0NzI1MFcS5+2aoZUsJJCeWJKanZpakFoE08fEwSnVwLRhX0rW71PH+Bh81uputfnz
+        4cxPe8NPSpMYk3rczLzEbtz9UPH4SGkwo8lRrpaGY61HXmYV9F0/FfTLosbnV94vFqZjxSwc
+        f+cEnjnbHp82P5DDxLH5z/svShdPpv/n2nJh086JchUTJrh/zqsPjbizWUv1xMKIrq7ZW4VV
+        CoUO8+9MDPUXfs/4a/3rpf+mnrm3vbX+nViC90J5TrP2+b9erZ550kA2xU2Ld+VH9217dM6F
+        Wyz0smZYWMPOwt64eMLqWdceNjR+nOE7i4+nbMLVsp6cxm8W+65Kmqv+kRR4e4Sd6W21g3eK
+        CEPEj/0fajbcMeITmG2vFVN8q3qCyvLtJQKeR9surpxyfonUyQ4lluKMREMt5qLiRAAizHzh
+        PwQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221027062013epcms2p7af8fbc60caaba50686233492fb3dfd93
+References: <87a0d265-f9b3-dbc6-edff-396c5a354f92@acm.org>
+        <20221027062013epcms2p7af8fbc60caaba50686233492fb3dfd93@epcms2p7>
+        <CGME20221027062013epcms2p7af8fbc60caaba50686233492fb3dfd93@epcms2p7>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+Hi Bart,
 
-Code indentation should use tabs where possible and miss a '*'.
+>On 10/26/22 23:20, Keoseong Park wrote:
+>> Convert if (!ret) { ... } if (ret) { ... } into
+>> if (!ret) { ... } else { ... }.
+>> 
+>> Signed-off-by: Keoseong Park <keosung.park@samsung.com>
+>> ---
+>>   drivers/ufs/core/ufshcd.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>> 
+>> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+>> index 7256e6c43ca6..3b794be53287 100644
+>> --- a/drivers/ufs/core/ufshcd.c
+>> +++ b/drivers/ufs/core/ufshcd.c
+>> @@ -4670,7 +4670,7 @@ int ufshcd_hba_enable(struct ufs_hba *hba)
+>>   			ret = ufshcd_dme_enable(hba);
+>>   			if (!ret)
+>>   				ufshcd_vops_hce_enable_notify(hba, POST_CHANGE);
+>> -			if (ret)
+>> +			else
+>>   				dev_err(hba->dev,
+>>   					"Host controller enable failed with non-hce\n");
+>>   		}
+>
+>If ufshcd_hba_enable() is modified it should be converted into the widely
+>used "if error return" style. How about the untested patch below?
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- arch/x86/kvm/vmx/vmenter.S | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks for your feedback.
+That seems to be better.
+I will apply it to the next version.
 
-diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
-index 8477d8bdd69c..f09e3aaab102 100644
---- a/arch/x86/kvm/vmx/vmenter.S
-+++ b/arch/x86/kvm/vmx/vmenter.S
-@@ -229,7 +229,7 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
- 	 * eIBRS has its own protection against poisoned RSB, so it doesn't
- 	 * need the RSB filling sequence.  But it does need to be enabled, and a
- 	 * single call to retire, before the first unbalanced RET.
--         */
-+	 */
- 
- 	FILL_RETURN_BUFFER %_ASM_CX, RSB_CLEAR_LOOPS, X86_FEATURE_RSB_VMEXIT,\
- 			   X86_FEATURE_RSB_VMEXIT_LITE
-@@ -273,7 +273,7 @@ SYM_FUNC_END(__vmx_vcpu_run)
-  * vmread_error_trampoline - Trampoline from inline asm to vmread_error()
-  * @field:	VMCS field encoding that failed
-  * @fault:	%true if the VMREAD faulted, %false if it failed
--
-+ *
-  * Save and restore volatile registers across a call to vmread_error().  Note,
-  * all parameters are passed on the stack.
-  */
--- 
-2.31.1
+Best Regards,
+Keoseong
 
+>
+>diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+>index 05feec10fad3..89f8b86c3f85 100644
+>--- a/drivers/ufs/core/ufshcd.c
+>+++ b/drivers/ufs/core/ufshcd.c
+>@@ -4668,14 +4668,16 @@ int ufshcd_hba_enable(struct ufs_hba *hba)
+>  		/* enable UIC related interrupts */
+>  		ufshcd_enable_intr(hba, UFSHCD_UIC_MASK);
+>  		ret = ufshcd_dme_reset(hba);
+>-		if (!ret) {
+>-			ret = ufshcd_dme_enable(hba);
+>-			if (!ret)
+>-				ufshcd_vops_hce_enable_notify(hba, POST_CHANGE);
+>-			if (ret)
+>-				dev_err(hba->dev,
+>-					"Host controller enable failed with non-hce\n");
+>+		if (ret) {
+>+			dev_err(hba->dev, "DME_RESET failed\n");
+>+			return ret;
+>+		}
+>+		ret = ufshcd_dme_enable(hba);
+>+		if (ret) {
+>+			dev_err(hba->dev, "Enabling DME failed\n");
+>+			return ret;
+>  		}
+>+		ufshcd_vops_hce_enable_notify(hba, POST_CHANGE);
+>  	} else {
+>  		ret = ufshcd_hba_execute_hce(hba);
+>  	}
