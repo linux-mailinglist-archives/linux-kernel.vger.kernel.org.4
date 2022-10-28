@@ -2,89 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C58611A28
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 20:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FFD7611A2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 20:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbiJ1Sdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 14:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44976 "EHLO
+        id S230138AbiJ1Sdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 14:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJ1Sdl (ORCPT
+        with ESMTP id S230073AbiJ1Sds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 14:33:41 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BB5229E6A;
-        Fri, 28 Oct 2022 11:33:40 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29SAsqh1016745;
-        Fri, 28 Oct 2022 18:33:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=D0lmQtYsP2sAfYk9mMKID7PcUZDPOUW3YzJiwXK2JzE=;
- b=G7xuzpIe+o+RtP1kNlaXmiWnRzm1/SbP439CrEd9o6micKe5IyTzdOMmwDrOW2L7+EC5
- 8uxyv2GxmhbEq7RAUXhl5DUo1xeUaCkB/5RpExT3UGkAAkhQZ8ZT2QSL+fUjfSy06ZMT
- vTczZSXd9Vn0WCtaRp3a3z0gGKf+FV63X3EjulCOR0dLXXCEX705jDYSqycMjZacWMSM
- P8ynIfzGyoX0Kap1GtHZZZdfahLsNDQ6JdiJRdarJZ2UraQ84CL9ZPO8cpiQunKHATck
- IdYuALWyP0hHhap6Gpeh5N1QInKd0WXevtplitOI1eq16jc1K9bXi4rwxHbDIU7DBlcz 2w== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kfw05c6t3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 18:33:27 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29SIXQ98019269
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 18:33:26 GMT
-Received: from [10.38.246.117] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 28 Oct
- 2022 11:33:23 -0700
-Message-ID: <99744fda-a3b8-f97a-294c-78e512d865bc@quicinc.com>
-Date:   Fri, 28 Oct 2022 11:33:21 -0700
+        Fri, 28 Oct 2022 14:33:48 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16786241B0B;
+        Fri, 28 Oct 2022 11:33:48 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id B94F760C;
+        Fri, 28 Oct 2022 18:33:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net B94F760C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1666982027; bh=JgRPKdDOJTD3cZEutGoGOcnPFgVvlBkF5Yc8qJPY5mw=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=J8kDaFCHTFi+J1qpYsCxgNLmx09lPFbQSySz7UlEJ5Gw3z74vH87Y1jywXVEpQ5pC
+         SA4AMtS+WWKb+cbBG/+73Ekg4TP1xoSpbsOgk30h8kdyBwX/UP9pvcxjkPQ67A6YiV
+         E7DAaYAxUjIgFU+CzAQkdjJxGirnZJEM1g6v7U85vhc/Jtw7A9SCfS7fBCXrBPBKcu
+         5/Gef1bOS7ojxvwUh1U2/vY38LfC86gjSRy0ASbsrb2UURqlqGcxlb7RPL+8vnhJJ0
+         IBqZg1GAmfkpmmdCxYnr5G2fBJScbAPm85McgpZ8UjUTfqau1jE0nJ8XaXRx7CEW2T
+         eaNze6/n37Ybw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Rui Li <me@lirui.org>, Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>
+Cc:     Wu XiangCheng <wu.xiangcheng@linux.dev>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rui Li <me@lirui.org>
+Subject: Re: [PATCH] docs/zh_CN: Add userspace-api/no_new_privs Chinese
+ translation
+In-Reply-To: <20221022120557.381115-1-me@lirui.org>
+References: <20221022120557.381115-1-me@lirui.org>
+Date:   Fri, 28 Oct 2022 12:33:47 -0600
+Message-ID: <87czab6bn8.fsf@meer.lwn.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v4 00/10] drm/msm: Fix math issues in MSM DSC
- implementation
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        <phone-devel@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-CC:     <~postmarketos/upstreaming@lists.sr.ht>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20221026182824.876933-1-marijn.suijten@somainline.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20221026182824.876933-1-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: mHQt4GtM411GT24KVna7PtTSVR7uxgxe
-X-Proofpoint-ORIG-GUID: mHQt4GtM411GT24KVna7PtTSVR7uxgxe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-28_10,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- spamscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999 mlxscore=0
- priorityscore=1501 adultscore=0 impostorscore=0 clxscore=1011
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2210280116
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,86 +52,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marijn
+Rui Li <me@lirui.org> writes:
 
-On 10/26/2022 11:28 AM, Marijn Suijten wrote:
-> Various removals of complex yet unnecessary math, fixing all uses of
-> drm_dsc_config::bits_per_pixel to deal with the fact that this field
-> includes four fractional bits, and finally making sure that
-> range_bpg_offset contains values 6-bits wide to prevent overflows in
-> drm_dsc_pps_payload_pack().
-> 
-> Altogether this series is responsible for solving _all_ Display Stream
-> Compression issues and artifacts on the Sony Tama (sdm845) Akatsuki
-> smartphone (2880x1440p).
-> 
-> Changes since v3:
-> - Swap patch 7 and 8 to make sure msm_host is available inside
->    dsi_populate_dsc_params();
-> - Reword patch 6 (Migrate to drm_dsc_compute_rc_parameters()) to more
->    clearly explain why the FIXME wasn't solved initially, but why it can
->    (and should!) be resolved now.
-> 
-> v3: https://lore.kernel.org/linux-arm-msm/20221009184824.457416-1-marijn.suijten@somainline.org/T/#u
-> 
-> Changes since v2:
-> - Generalize mux_word_size setting depending on bits_per_component;
-> - Migrate DSI's DSC calculations to drm_dsc_compute_rc_parameters(),
->    implicitly addressing existing math issues;
-> - Disallow any bits_per_component other than 8, until hardcoded values
->    are updated and tested to support such cases.
-> 
-> v2: https://lore.kernel.org/linux-arm-msm/20221005181657.784375-1-marijn.suijten@somainline.org/T/#u
-> 
-> Changes since v1:
-> 
-> - Propagate r-b's, except (obviously) in patches that were (heavily)
->    modified;
-> - Remove accidental debug code in dsi_cmd_dma_add;
-> - Move Range BPG Offset masking out of DCS PPS packing, back into the
->    DSI driver when it is assigned to drm_dsc_config (this series is now
->    strictly focusing on drm/msm again);
-> - Replace modulo-check resulting in conditional increment with
->    DIV_ROUND_UP;
-> - Remove repeated calculation of slice_chunk_size;
-> - Use u16 instead of int when handling bits_per_pixel;
-> - Use DRM_DEV_ERROR instead of pr_err in DSI code;
-> - Also remove redundant target_bpp_x16 variable.
-> 
-> v1: https://lore.kernel.org/linux-arm-msm/20221001190807.358691-1-marijn.suijten@somainline.org/T/#u
-> 
-> Marijn Suijten (10):
->    drm/msm/dsi: Remove useless math in DSC calculations
->    drm/msm/dsi: Remove repeated calculation of slice_per_intf
->    drm/msm/dsi: Use DIV_ROUND_UP instead of conditional increment on
->      modulo
->    drm/msm/dsi: Reuse earlier computed dsc->slice_chunk_size
->    drm/msm/dsi: Appropriately set dsc->mux_word_size based on bpc
->    drm/msm/dsi: Migrate to drm_dsc_compute_rc_parameters()
->    drm/msm/dsi: Account for DSC's bits_per_pixel having 4 fractional bits
->    drm/msm/dsi: Disallow 8 BPC DSC configuration for alternative BPC
->      values
->    drm/msm/dpu1: Account for DSC's bits_per_pixel having 4 fractional
->      bits
->    drm/msm/dsi: Prevent signed BPG offsets from bleeding into adjacent
->      bits
-> 
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c |  11 +-
->   drivers/gpu/drm/msm/dsi/dsi_host.c         | 121 ++++++---------------
->   2 files changed, 37 insertions(+), 95 deletions(-)
-> 
-> --
-> 2.38.1
-> 
+> Translate the following documents into Chinese:
+>
+> - userspace-api/no_new_privs.rst
+>
+> Signed-off-by: Rui Li <me@lirui.org>
+> ---
+>  .../zh_CN/userspace-api/index.rst             |  2 +-
+>  .../zh_CN/userspace-api/no_new_privs.rst      | 57 +++++++++++++++++++
+>  2 files changed, 58 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/translations/zh_CN/userspace-api/no_new_privs.rst
 
-To keep the -fixes cycle to have only critical fixes (others are 
-important too but are cleanups), I was thinking of absorbing patches 
-7,8,9 and 10 alone in the -fixes cycle and for patches 1-6, will go 
-through the 6.2 push.
+Applied, thanks.
 
-Let me know if there are any concerns if we just take patches 7,8,9 and 
-10 separately.
-
-Thanks
-
-Abhinav
+jon
