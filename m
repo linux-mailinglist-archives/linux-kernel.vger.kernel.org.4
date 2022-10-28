@@ -2,59 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0301D611494
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F5D61149A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbiJ1OaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        id S230475AbiJ1ObQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiJ1OaT (ORCPT
+        with ESMTP id S230364AbiJ1ObN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:30:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C036F551;
-        Fri, 28 Oct 2022 07:30:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 28 Oct 2022 10:31:13 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158CB194233;
+        Fri, 28 Oct 2022 07:31:13 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7ce329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ce:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5DB7CB82A89;
-        Fri, 28 Oct 2022 14:30:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76CFAC433C1;
-        Fri, 28 Oct 2022 14:30:12 +0000 (UTC)
-Date:   Fri, 28 Oct 2022 10:30:28 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Christoph =?UTF-8?B?QsO2aG13YWxk?= =?UTF-8?B?ZXI=?= 
-        <christoph.boehmwalder@linbit.com>, drbd-dev@lists.linbit.com,
-        Tejun Heo <tj@kernel.org>, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org
-Subject: Re: [RFC][PATCH v2 04/31] timers: block: Use del_timer_shutdown()
- before freeing timer
-Message-ID: <20221028103028.636072e3@gandalf.local.home>
-In-Reply-To: <9bb423f8-5910-494d-2522-2fcf8e41c2e4@kernel.dk>
-References: <20221027150525.753064657@goodmis.org>
-        <20221027150925.819019339@goodmis.org>
-        <20221027111944.39b3a80c@gandalf.local.home>
-        <Y1uSG/7VXWLNlxlt@infradead.org>
-        <20221028062414.7859f787@gandalf.local.home>
-        <60b91c39-1e54-ac8b-5e9e-db7e46ca2d60@kernel.dk>
-        <20221028100656.00a4d537@gandalf.local.home>
-        <9bb423f8-5910-494d-2522-2fcf8e41c2e4@kernel.dk>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B2BF21EC026E;
+        Fri, 28 Oct 2022 16:31:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1666967471;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=XRoCyNRuJ43vkRm4DOj6nGnh/K/4b+27L1YT+luEkEo=;
+        b=ZPcppmyi/j3XBzUPjiDK2yC13+JTKvFuz6ZSVq4lFMoT3qP0mx1v6ODzwA4Bicfki/Q4kC
+        Tnqc3YAJfdwnMhc4fSwc5rn64488Zwvy0YkkahvphJz9Dr19A6uHNtmlqadIsTS2AV6QCS
+        WNPpDYyRX4Sy7v7rb3BxxBTvisiTsV4=
+Date:   Fri, 28 Oct 2022 16:31:11 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] MAINTAINERS: Make Mauro reviewer
+Message-ID: <Y1vnr11yG5b0nyA8@zn.tnic>
+References: <20220926180343.23346-1-bp@alien8.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220926180343.23346-1-bp@alien8.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,18 +50,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Oct 2022 08:11:27 -0600
-Jens Axboe <axboe@kernel.dk> wrote:
+On Mon, Sep 26, 2022 at 08:03:43PM +0200, Borislav Petkov wrote:
+> From: Borislav Petkov <bp@suse.de>
+> 
+> Mauro hasn't really been maintaining EDAC for a long while now. Make him
+> a reviewer instead.
+> 
+> Signed-off-by: Borislav Petkov <bp@suse.de>
+> ---
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 9d7f64dc0efe..935b42c7f52f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7314,9 +7314,9 @@ F:	drivers/edac/thunderx_edac*
+>  
+>  EDAC-CORE
+>  M:	Borislav Petkov <bp@alien8.de>
+> -M:	Mauro Carvalho Chehab <mchehab@kernel.org>
+>  M:	Tony Luck <tony.luck@intel.com>
+>  R:	James Morse <james.morse@arm.com>
+> +R:	Mauro Carvalho Chehab <mchehab@kernel.org>
+>  R:	Robert Richter <rric@kernel.org>
+>  L:	linux-edac@vger.kernel.org
+>  S:	Supported
+> -- 
 
-> This is pretty common for tree wide changes. The relevant lists need
-> to see the full context, patch 4/31 by itself is useless and may as well
-> not be sent at this point then.
+Queued.
 
-Ah, I didn't think about just including the mailing lists. The Cc lists
-were auto-generated, and I didn't think about just taking out the lists.
+-- 
+Regards/Gruss,
+    Boris.
 
-Will do that for v2.
-
-Thanks,
-
--- Steve
+https://people.kernel.org/tglx/notes-about-netiquette
