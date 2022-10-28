@@ -2,77 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F116114C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC71B6114D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiJ1OkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37794 "EHLO
+        id S229967AbiJ1OlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiJ1Ojp (ORCPT
+        with ESMTP id S229877AbiJ1OlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:39:45 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8030C1A39E
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:39:41 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id j6so4153050qvn.12
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:39:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dBCtjSxtj1jp0cjAy0wlS6C+ZFHd66+P95yTGOU8r4I=;
-        b=edzmOuuY3YIwYEwDSYZfp6u2vQbVY9m85M3yA9Z6k1GH7Cx3U4Mr8YF7BYf1LQKc/c
-         7aSzB5JyRLguKzMy2j7ANrS/KJULur1dH0RL4S1FrhYhwwbQD7gwZmo00JeH/r9HiCO5
-         +tXdyuwfXDCiMFZrgQKRi3wXi08AV9bmbQQyv5v7Z0v4TMWfFEXKJtRzkdBm6Z7SxR3H
-         XlJU9vO5k+fNcvZrfoJMIhdLuPBpF6RsrsBusRyUpAksFRQNxc3CjNZYVnubtDTGpkN2
-         Wr9T/8LwvAK7uQzWErg55cOeRwA9iyOmSorh7y9KISqs6QIVQfhYmqCqhhSiRGzlUr8F
-         AQgg==
+        Fri, 28 Oct 2022 10:41:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85278D123
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:40:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666968004;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D8u03zJ9W/9aPpgScCpedLnCuBIcs476DTocYuAgwTQ=;
+        b=MsI90uqhsa0YrFXIyXrlSXPrfOc4u5g6N+ZcbKjvHO/LBBvypdtQL/zkEiJQsN0cAMOp5c
+        NTZ4lEGYwrwRIl83bWStzJEBcYDWEFYc9clXmisnuriSZuDp2oAP9fsblwUkaYR9qMGeeW
+        R6ZTBtdvJJLzEwdbd2rogdKqVdK0TWg=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-595-5igu3YbxOgSxpndkx9YOIQ-1; Fri, 28 Oct 2022 10:40:02 -0400
+X-MC-Unique: 5igu3YbxOgSxpndkx9YOIQ-1
+Received: by mail-io1-f70.google.com with SMTP id u11-20020a6b490b000000b006bbcc07d893so4465249iob.9
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:40:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dBCtjSxtj1jp0cjAy0wlS6C+ZFHd66+P95yTGOU8r4I=;
-        b=4IF/WvN2CORBpCabweTyGV536zjbSMI1YRm8Dr7SbWV9lqWoPSgJHu4pUnDR0+qcCQ
-         qAO7EpwMiWELypl2syOd/mo7Nt2nnrX4dR4KHxEOzNPQsXtOe8T2t5nWJCo36c+/thZd
-         tnAJeNtvzcyVgH9tagHZVQSNVXACQW5cb0SJk5mwm0wSdRvDP1fL7hBhkYOvM1UG10qq
-         2Yoo+1v0ijwWaW6wQ8ys/aQBcAX0ojcfBuAYQtEZvC4laKR5Q2AsJVi/AwmVo9Fe7hd1
-         s5hrZ3GLoXvG+RgW+8AgqgzZ1i+8LGyIb6bjKv/HIe5W5x+YhpLkNJrd7UIdBpTBP0d9
-         15Lg==
-X-Gm-Message-State: ACrzQf3LlBrHyhAoGwORK1me+KEHT5KKh3G6gn1NJ3tn4B6RXRMnGpHN
-        +GU6t0gUP+YOt7Ufl3iCRQMgYZDaT9MPTA==
-X-Google-Smtp-Source: AMsMyM7ZMF8C2IdV3u0R8roPa1lWIi39iEVAGYABmSKIQLm0dA3mCkwgONkiC5lWSV12aiYnccmPaA==
-X-Received: by 2002:ad4:574c:0:b0:4bb:7477:f13d with SMTP id q12-20020ad4574c000000b004bb7477f13dmr21410870qvx.39.1666967980492;
-        Fri, 28 Oct 2022 07:39:40 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::25f1])
-        by smtp.gmail.com with ESMTPSA id f2-20020ac84702000000b003a50c9993e1sm509704qtp.16.2022.10.28.07.39.39
+        bh=D8u03zJ9W/9aPpgScCpedLnCuBIcs476DTocYuAgwTQ=;
+        b=StVzY5KlaT6PKBKbXXn8buDjcKhwWtD3RCPnvvh5B/NcE+HU8rEHl0fIq37kA71u3g
+         jRf6fVfAt7bYJ6Px7cw7GZb/+aH17IOk/vUHV7M7kEcUAqe2CEOfPLMa1R+Z0WKyi6UM
+         JXpX7Ll8rfxFpvMMpLuvIOh9bc3X905pelReFuwhM9luprZ5iCeN+H2LSaQs543fjx4d
+         DuLDGbhxTLb6JaZY1FbN+qV6QGdAwTo58X5AL7uAoXWvQ2RtFf1Wwdewvebyj8rbzoKE
+         G3C9PdjJGFFElsBXXlqnMtKTygt4Z0cTvIIIEndYuS4Rt89cWYMLCRopSVygsC5cTIgk
+         2W0w==
+X-Gm-Message-State: ACrzQf2cdv2FsrdlcrrZeH1VZI0bdUyZAvg1XpCJeS4BvW/+7ZOEzgp4
+        XpM8424tSihenMhrf0CTZSL8bES2wC7UjKokO0hgCO3EazXjgijGQZu5pMHU295M0Tiy1wrM1ih
+        PMTxng3wJ0LTh//+Ua82hcCag
+X-Received: by 2002:a6b:3ed4:0:b0:6b6:9e4b:4c40 with SMTP id l203-20020a6b3ed4000000b006b69e4b4c40mr33778060ioa.11.1666968001860;
+        Fri, 28 Oct 2022 07:40:01 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7BP97wXNo6tvFx31on64A0evagjI1RVqWCRAz+6aF8sGPc1Byafy0wFnz/lBsANsOPjWzrUA==
+X-Received: by 2002:a6b:3ed4:0:b0:6b6:9e4b:4c40 with SMTP id l203-20020a6b3ed4000000b006b69e4b4c40mr33778040ioa.11.1666968001559;
+        Fri, 28 Oct 2022 07:40:01 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id e18-20020a026d52000000b003740de9fb65sm1803968jaf.46.2022.10.28.07.40.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 07:39:39 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 10:39:40 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Eric Bergen <ebergen@meta.com>
-Subject: Re: [PATCH] mm: vmscan: split khugepaged stats from direct reclaim
- stats
-Message-ID: <Y1vprODaLJLk0dka@cmpxchg.org>
-References: <20221025170519.314511-1-hannes@cmpxchg.org>
- <CAHbLzkoXzbHRJxb9DkjGkKQ8TAO08ctvz7wvjyPA8Gy2Skm+2g@mail.gmail.com>
- <Y1hM6sMRpBGUPRyo@cmpxchg.org>
- <CAHbLzkpaoN37camSLYVDU7p9AXzQjYcvHnWm3K87iwae-YyZiQ@mail.gmail.com>
- <Y1lvJBnVx1Fv5WHz@cmpxchg.org>
- <CAHbLzkqQ=6U3uerEkypsCHnmsXerEZi5erMSYK-kp8-vJNk89Q@mail.gmail.com>
- <CAJD7tkb5y9oqgVauVPiS0KbiL2Wnsu7jhK7Q44oUBZzBXwKUYA@mail.gmail.com>
- <Y1qSZHK/U0SpNqNa@cmpxchg.org>
- <CAJD7tkYt-KL=jDEy6pSOc5tDij=3SWmbhFeco39pjJuOmEAH0g@mail.gmail.com>
+        Fri, 28 Oct 2022 07:40:00 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 10:39:59 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Yuanzheng Song <songyuanzheng@huawei.com>,
+        akpm@linux-foundation.org, gregkh@linuxfoundation.org,
+        david@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH STABLE 5.10] mm/memory: add non-anonymous page check in
+ the copy_present_page()
+Message-ID: <Y1vpvzaU322ENcEc@x1n>
+References: <20221024094911.3054769-1-songyuanzheng@huawei.com>
+ <3823471f-6dda-256e-e082-718879c05449@google.com>
+ <Y1nRiJ1LYB62uInn@x1n>
+ <fffefe4-adce-a7d-23e0-9f8afc7ce6cf@google.com>
+ <Y1qdY8oUlUvWl067@x1n>
+ <8aad435-bdc6-816f-2fe4-efe53abd6e5@google.com>
+ <Y1sMk30wS+1uH/hc@x1n>
+ <432c4428-b6d4-f93-266-b920a854c3c@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAJD7tkYt-KL=jDEy6pSOc5tDij=3SWmbhFeco39pjJuOmEAH0g@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <432c4428-b6d4-f93-266-b920a854c3c@google.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,60 +87,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 01:43:24PM -0700, Yosry Ahmed wrote:
-> On Thu, Oct 27, 2022 at 7:15 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> > On Wed, Oct 26, 2022 at 07:41:21PM -0700, Yosry Ahmed wrote:
-> > > My 2c, if we care about direct reclaim as in reclaim that may stall
-> > > user space application allocations, then there are other reclaim
-> > > contexts that may pollute the direct reclaim stats. For instance,
-> > > proactive reclaim, or reclaim done by writing a limit lower than the
-> > > current usage to memory.max or memory.high, as they are not done in
-> > > the context of the application allocating memory.
-> > >
-> > > At Google, we have some internal direct reclaim memcg statistics, and
-> > > the way we handle this is by passing a flag from such contexts to
-> > > try_to_free_mem_cgroup_pages() in the reclaim_options arg. This flag
-> > > is echod into a scan_struct bit, which we then use to filter out
-> > > direct reclaim operations that actually cause latencies in user space
-> > > allocations.
-> > >
-> > > Perhaps something similar might be more generic here? I am not sure
-> > > what context khugepaged reclaims memory from, but I think it's not a
-> > > memcg context, so maybe we want to generalize the reclaim_options arg
-> > > to try_to_free_pages() or whatever interface khugepaged uses to free
-> > > memory.
-> >
-> > So at the /proc/vmstat level, I'm not sure it matters much because it
-> > doesn't count any cgroup_reclaim() activity.
-> >
-> > But at the cgroup level, it sure would be nice to split out proactive
-> > reclaim churn. Both in terms of not polluting direct reclaim counts,
-> > but also for *knowing* how much proactive reclaim is doing.
-> >
-> > Do you have separate counters for this?
+On Thu, Oct 27, 2022 at 06:32:01PM -0700, Hugh Dickins wrote:
+> Sorry for leading everyone astray: my mistake was to suppose that
+> its !PageAnon check was simply to avoid the later BUG_ON(!anon_vma):
+> whereas David and Peter now agree that it actually corrects the
+> semantics for fork() on file pages.
+
+Thanks for raising this from the start, Hugh.  It's definitely worthwhile
+to discuss this topic which is not obvious at all at least to me, and merge
+even the same patch would be different before/after such a discussion,
+since we're clearer on the side effects.
+
 > 
-> Not yet. Currently we only have the first part, not polluting direct
-> reclaim counts.
-> 
-> We basically exclude reclaim coming from memory.reclaim, setting
-> memory.max/memory.limit_in_bytes, memory.high (on write, not hitting
-> the high limit), and memory.force_empty from direct reclaim stats.
-> 
-> As for having a separate counter for proactive reclaim, do you think
-> it should be limited to reclaim coming from memory.reclaim (and
-> potentially memory.force_empty), or should it include reclaim coming
-> from limit-setting as well?
+> I lift my hold on Yuanzheng's patch: nobody actually said "Acked-by",
+> but I think the discussion and resolution have given better than that.
+> (No 3rd thoughts please!)
 
-A combined counter seems reasonable to me. We *have* used the limit
-knobs to drive proactive reclaim in production in the past, so it's
-not a stretch. And I can't think of a scenario where you'd like them
-to be separate.
+I've acked directly on v2, note that after this discussion IMHO the comment
+of !Anon check can be slightly improved (e.g. add some more information on
+why we decided to not copy the page even if anon_vma existed), but I don't
+want to be harsh on any stable backports that helps resolving problems
+already in correct ways.
 
-I could think of two ways of describing it:
+Thanks,
 
-pgscan_user: User-requested reclaim. Could be confusing if we ever
-have an in-kernel proactive reclaim driver - unless that would then go
-to another counter (new or kswapd).
+-- 
+Peter Xu
 
-pgscan_ext: Reclaim activity from extraordinary/external
-requests. External as in: outside the allocation context.
