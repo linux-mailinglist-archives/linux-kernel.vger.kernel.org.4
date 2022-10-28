@@ -2,71 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E694D6118F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B8D6118F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbiJ1RKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 13:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58022 "EHLO
+        id S231236AbiJ1RKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 13:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbiJ1RJ7 (ORCPT
+        with ESMTP id S231363AbiJ1RJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 13:09:59 -0400
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1B1317D0;
-        Fri, 28 Oct 2022 10:07:28 -0700 (PDT)
-Received: by mail-qt1-f177.google.com with SMTP id h24so3848731qta.7;
-        Fri, 28 Oct 2022 10:07:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EADvVtie7X3d7ebp7w7C9BHI1pXSuINKX3NYj3HDseI=;
-        b=TQCxWa7WUGaJNfmeH11sqf7bADIHG8Lekh008N+q08crxTxzz4srJOQUfmv3eOGjUi
-         Jsc+P7cm4ity+kSM3NXYzOBMhDxwNzzq2CB/jOfSdeCjPRJlklzcWUufx9mQ6nHEem+P
-         WVHirV0GZfcxBNCCrO/bN3G1Xa6wHKiFHer2adN7WibsuLPUO1ecf4hAj0VVUAlS4d4o
-         EzrNxJY0KUgOxmljf/mQBRHwL2cOWPfOEqN4ATHkeAReEtgcnfN0UsHGGSBB93Zxk3sN
-         5VS2cCwavulBta4FjCsbz8kt9WNNXXMKS0c21GguLEfSGV8ieq/Md4fC8+vZH9aE8Bsf
-         3PBQ==
-X-Gm-Message-State: ACrzQf2TEOGegYC7SLHyqS0yB0QVtesL2qcc0FVJ+tDPj6qMGQJvnjJ5
-        qSQrX6R78M0kB/NBWJ35DixB34BQqqlcBr0DW3Y=
-X-Google-Smtp-Source: AMsMyM79LRDg4BzYp/csv6h7kcqfXPWZFqP+CyBl/LyfIVQEAMSVn5AwR0IdbYgyUiMDhpbxDqEK7Zq/f+scRud6Q30=
-X-Received: by 2002:a05:622a:44d:b0:39c:f7a4:5ee0 with SMTP id
- o13-20020a05622a044d00b0039cf7a45ee0mr458213qtx.48.1666976847379; Fri, 28 Oct
- 2022 10:07:27 -0700 (PDT)
+        Fri, 28 Oct 2022 13:09:53 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF0C23AB70;
+        Fri, 28 Oct 2022 10:07:24 -0700 (PDT)
+Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 470E5218D;
+        Fri, 28 Oct 2022 17:04:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1666976683;
+        bh=U5rbfGUDH6ccvvDNl8615tsqE6RiTSqFhdpj1nt8ic0=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=hwSGfoen1bMnhsSlVk8x6dEwrUSpuNPsLhvXJnARtw5MNCA1r1KWx5dao/d9v3eoK
+         3Vu0+WppGF6nw8xAtqoIFmKwUeTp4O6J0hWqj4kSYi6HnXd+awtcyeNNgCn3tlbZKA
+         1t3QcY0SwItky4YG4Lokvq28mmbaDSV/EgRIpuxc=
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 43FAADD;
+        Fri, 28 Oct 2022 17:07:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1666976842;
+        bh=U5rbfGUDH6ccvvDNl8615tsqE6RiTSqFhdpj1nt8ic0=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=YE23VZEzseXPeW66Goh/t49OwxklhqLY0j5wtbGtZJlmHCCVtuQILU9sJbZDgZGhe
+         V/SolDCexSsbF+eOmm2OHKN394ShVLf+z5SdQP1IImgkDMogC/9hLKgi6dk6LjIZ2F
+         hkSWbWe2tNdvhcDZnm+36N8X+jIZs0VEiOD0EAyM=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 28 Oct 2022 20:07:21 +0300
+Message-ID: <ffaff797-0424-5aef-6ad7-d7e999f83198@paragon-software.com>
+Date:   Fri, 28 Oct 2022 20:07:21 +0300
 MIME-Version: 1.0
-References: <20221025061437.17571-1-zhangzekun11@huawei.com>
-In-Reply-To: <20221025061437.17571-1-zhangzekun11@huawei.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Oct 2022 19:07:16 +0200
-Message-ID: <CAJZ5v0hpYodc_fd1DtBM-VEmhxepq7eQcQkbDXvWn0uMQ_yGNA@mail.gmail.com>
-Subject: Re: [PATCH RFC] ACPI: container: Add power domain control methods
-To:     Zhang Zekun <zhangzekun11@huawei.com>
-Cc:     lenb@kernel.org, rafael@kernel.org, patchwork@huawei.com,
-        wangkefeng.wang@huawei.com, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: [PATCH 12/14] fs/ntfs3: Fix wrong if in hdr_first_de
+Content-Language: en-US
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+To:     <ntfs3@lists.linux.dev>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+References: <fc5957cc-a71b-cfa3-f291-cb63b23800d1@paragon-software.com>
+In-Reply-To: <fc5957cc-a71b-cfa3-f291-cb63b23800d1@paragon-software.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 8:17 AM Zhang Zekun <zhangzekun11@huawei.com> wrote:
->
-> Platform devices which supports power control are often required to be
-> power off/on together with the devices in the same power domain. However,
-> there isn't a generic driver that support the power control logic of
-> these devices.
+We need to check used bytes instead of total.
 
-Not true.
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+---
+  fs/ntfs3/ntfs.h | 5 +++--
+  1 file changed, 3 insertions(+), 2 deletions(-)
 
-There is the ACPI power resources interface designed to represent
-power domains that is well supported and used in the industry.
+diff --git a/fs/ntfs3/ntfs.h b/fs/ntfs3/ntfs.h
+index 9f764bf4ed0a..86ea1826d099 100644
+--- a/fs/ntfs3/ntfs.h
++++ b/fs/ntfs3/ntfs.h
+@@ -714,12 +714,13 @@ static inline struct NTFS_DE *hdr_first_de(const struct INDEX_HDR *hdr)
+  {
+  	u32 de_off = le32_to_cpu(hdr->de_off);
+  	u32 used = le32_to_cpu(hdr->used);
+-	struct NTFS_DE *e = Add2Ptr(hdr, de_off);
++	struct NTFS_DE *e;
+  	u16 esize;
+  
+-	if (de_off >= used || de_off >= le32_to_cpu(hdr->total))
++	if (de_off >= used || de_off + sizeof(struct NTFS_DE) > used )
+  		return NULL;
+  
++	e = Add2Ptr(hdr, de_off);
+  	esize = le16_to_cpu(e->size);
+  	if (esize < sizeof(struct NTFS_DE) || de_off + esize > used)
+  		return NULL;
+-- 
+2.37.0
 
-If it doesn't work for you, explain why.
+
