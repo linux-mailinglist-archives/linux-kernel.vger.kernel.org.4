@@ -2,224 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B58A61090B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 05:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9896761090E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 05:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235856AbiJ1Dwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 23:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
+        id S234802AbiJ1Dxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 23:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235160AbiJ1Dw0 (ORCPT
+        with ESMTP id S234558AbiJ1Dxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 23:52:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1787C9A2B3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 20:52:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6A57625F9
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 03:52:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E314FC433D7;
-        Fri, 28 Oct 2022 03:52:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666929144;
-        bh=Q4DKoNPvzRhivZtxPB5oSRX7qfhQN5vPphiIGt2Sbuo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=deKWpJoNIwRPY/rWiyncXn4p2qpH65gQekVrdd0OjnWmpki2ajmeCeELRZY+4w4UL
-         LhSS8qjjXOa10zaJ8HRr0pU8ZSt9jDyMa6hNKbgdyXOKiNGrL4s0XuTBzU4xirXOUs
-         eseJnIgEHw95AAoIQxFOMcXMbI7O8gNoh0VEVKsLp5ghZoX0hjfOWQGaCvpZ5/cleZ
-         kyqP4IRvMVdwTekpRzD/3W5dEHSEVxi5fEadiUAxtPKid0csTfSdUbDAqI1J4pytk5
-         wT0iiRGezCSNLx7b1r1DxIuYIIvRa+JEAqGLF/5Ad+KnPHlvzxE843K6XYbhd+PgyY
-         7EZrCJn2j2DOw==
-Date:   Thu, 27 Oct 2022 20:52:22 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] f2fs: introducr gc_urgent_idle_remaining sysfs
- node and mark gc_urgent_high_remaining node deprecated
-Message-ID: <Y1tR9ofJS5qFA4Y/@google.com>
-References: <20221025065025.35017-1-frank.li@vivo.com>
- <20221025065025.35017-2-frank.li@vivo.com>
- <cd6d15e3-b692-d3c1-0f01-33e632f5f94c@kernel.org>
- <Y1tLEVYQjj2qC3I7@google.com>
- <5128189c-a90c-717e-45e1-9c05f51e50a6@kernel.org>
+        Thu, 27 Oct 2022 23:53:38 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC241D7E3A
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 20:53:36 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id j21so2717983qkk.9
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 20:53:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=csxtsYMGCIx4YxDQEX2STyxOPQoLuAotv7RhjPzEXxE=;
+        b=frQgc4X++G6pmWKbB5E7HFSvwUjbTnmw5Nz4yKkVH9abORXczCbIqxJLWNaiJzBdiu
+         Srsn3dM8jWiRoWmIj7RI59E4DnshQ6XnHmLFL/sn1uMEkTvBnWn0UKoEZNZSdIqSKqFY
+         +ZyIMW108NkqP/VxqNbpwm2FwRUTomUYEDjFoviXJG3hg8LBUobPU1VsunqsfchlEpkE
+         BAU5+k5a5SnrVi2oMzhI0vqhb3ZqOwNAr4nxeo/9d4Gk2KmhF1gshhVVeoukklj79q4V
+         Vaf4nsK1nQKQzy+7Bt+poRzMqUW3b1P+YfRFjmN4YjJlXmbv0fsbswT65VNmSMwLqaAz
+         MvTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=csxtsYMGCIx4YxDQEX2STyxOPQoLuAotv7RhjPzEXxE=;
+        b=uvvnfLlAm95cQoJ9lctcUjPEfZiG+Cl8aqlZW8qLNGDRQ9urwMbLi91ov7tY1ga+7X
+         YsZxLdneZ9/vVayeUvHE6lsicTLn2e6r3JpsXZ/8Ahuk/FKlnmdeXjWUPGy5l7VQyh1r
+         yOwBmoGx7X3s59Npmoux7E1911nrarIVqsJhJmxuzDvvKrNjDJzFQ7mBtYHONctRTXdr
+         CtAHqw3jeQEuWGeMTyBV555wHrq74utdkLm1uAt52QHZFlIBoA992i1ixHlK0SzF/Dug
+         EryFq74neAYfLA774yzK3Q0bA20vuu9AGn7ofDLql2R6UAwRMAXXZ7uWiaKrpVIAFI2B
+         jjVw==
+X-Gm-Message-State: ACrzQf0Y/JIliZ8b5Pe0ZLAgeywNe5aEoRdJ1vOxDGyFWrgL6wDgDkmE
+        G0saIJMVQ8uVEi+3ZJMk+qNtlo2mJTnvk9PK4Bg=
+X-Google-Smtp-Source: AMsMyM733oU4o4uxNY7fagMoGdT8I7WBIseobv9GurseIBaTQDJNhBXPp2HNOgsZUWXKpoN4fdChGNFVJC7K4m84YcY=
+X-Received: by 2002:a37:5a46:0:b0:6f9:ffc5:a9cb with SMTP id
+ o67-20020a375a46000000b006f9ffc5a9cbmr3667042qkb.638.1666929215862; Thu, 27
+ Oct 2022 20:53:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5128189c-a90c-717e-45e1-9c05f51e50a6@kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 28 Oct 2022 13:53:24 +1000
+Message-ID: <CAPM=9tz-_RXszedVsU-Wx64==1dihXzoMLzT6ghOD8ATwJ8rWA@mail.gmail.com>
+Subject: [git pull] drm fixes for 6.1-rc3
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/28, Chao Yu wrote:
-> On 2022/10/28 11:22, Jaegeuk Kim wrote:
-> > On 10/28, Chao Yu wrote:
-> > > On 2022/10/25 14:50, Yangtao Li wrote:
-> > > > Added a new sysfs node called gc_urgent_idle_remaining.
-> > > > The user can set the trial count limit for GC urgent and
-> > > > idle mode with this value. If GC thread gets to the limit,
-> > > > the mode will turn back to GC normal mode finally.
-> > > > 
-> > > > This method is not only applicable to gc_urgent_high,
-> > > > but applicable to all gc modes. Also mark
-> > > > gc_urgent_high_remaining as deprecated, so that the node
-> > > > can be removed in the future.
-> > > > 
-> > > > Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> > > > ---
-> > > >    Documentation/ABI/testing/sysfs-fs-f2fs |  8 ++++++++
-> > > >    fs/f2fs/f2fs.h                          |  6 ++++--
-> > > >    fs/f2fs/gc.c                            | 12 ++++++------
-> > > >    fs/f2fs/super.c                         |  2 +-
-> > > >    fs/f2fs/sysfs.c                         | 14 ++++++++++----
-> > > >    5 files changed, 29 insertions(+), 13 deletions(-)
-> > > > 
-> > > > diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
-> > > > index 483639fb727b..859c4e53a846 100644
-> > > > --- a/Documentation/ABI/testing/sysfs-fs-f2fs
-> > > > +++ b/Documentation/ABI/testing/sysfs-fs-f2fs
-> > > > @@ -598,6 +598,14 @@ Contact:	"Daeho Jeong" <daehojeong@google.com>
-> > > >    Description:	You can set the trial count limit for GC urgent high mode with this value.
-> > > >    		If GC thread gets to the limit, the mode will turn back to GC normal mode.
-> > > >    		By default, the value is zero, which means there is no limit like before.
-> > > > +		<deprecated>
-> > > > +
-> > > > +What:		/sys/fs/f2fs/<disk>/gc_urgent_idle_remaining
-> > > > +Date:		October 2022
-> > > > +Contact:	"Yangtao Li" <frank.li@vivo.com>
-> > > > +Description:	You can set the trial count limit for GC urgent and idle mode with this value.
-> > > > +		If GC thread gets to the limit, the mode will turn back to GC normal mode.
-> > > > +		By default, the value is zero, which means there is no limit like before.
-> > > >    What:		/sys/fs/f2fs/<disk>/max_roll_forward_node_blocks
-> > > >    Date:		January 2022
-> > > > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> > > > index e6355a5683b7..2bad69cf9fd9 100644
-> > > > --- a/fs/f2fs/f2fs.h
-> > > > +++ b/fs/f2fs/f2fs.h
-> > > > @@ -1734,8 +1734,10 @@ struct f2fs_sb_info {
-> > > >    	unsigned int cur_victim_sec;		/* current victim section num */
-> > > >    	unsigned int gc_mode;			/* current GC state */
-> > > >    	unsigned int next_victim_seg[2];	/* next segment in victim section */
-> > > > -	spinlock_t gc_urgent_high_lock;
-> > > > -	unsigned int gc_urgent_high_remaining;	/* remaining trial count for GC_URGENT_HIGH */
-> > > > +	spinlock_t gc_urgent_idle_lock;
-> > > > +	/* remaining trial count for GC_URGENT_* and GC_IDLE_* */
-> > > > +	unsigned int gc_urgent_idle_remaining;
-> > > > +	unsigned int gc_urgent_high_remaining;	/* deprecated */
-> > > >    	/* for skip statistic */
-> > > >    	unsigned long long skipped_gc_rwsem;		/* FG_GC only */
-> > > > diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-> > > > index e0ff99c7e3f2..0ed5b3c5922c 100644
-> > > > --- a/fs/f2fs/gc.c
-> > > > +++ b/fs/f2fs/gc.c
-> > > > @@ -152,14 +152,14 @@ static int gc_thread_func(void *data)
-> > > >    		/* balancing f2fs's metadata periodically */
-> > > >    		f2fs_balance_fs_bg(sbi, true);
-> > > >    next:
-> > > > -		if (sbi->gc_mode == GC_URGENT_HIGH) {
-> > > > -			spin_lock(&sbi->gc_urgent_high_lock);
-> > > > -			if (sbi->gc_urgent_high_remaining) {
-> > > > -				sbi->gc_urgent_high_remaining--;
-> > > > -				if (!sbi->gc_urgent_high_remaining)
-> > > > +		if (sbi->gc_mode != GC_NORMAL) {
-> > > > +			spin_lock(&sbi->gc_urgent_idle_lock);
-> > > > +			if (sbi->gc_urgent_idle_remaining) {
-> > > > +				sbi->gc_urgent_idle_remaining--;
-> > > > +				if (!sbi->gc_urgent_idle_remaining)
-> > > >    					sbi->gc_mode = GC_NORMAL;
-> > > >    			}
-> > > > -			spin_unlock(&sbi->gc_urgent_high_lock);
-> > > > +			spin_unlock(&sbi->gc_urgent_idle_lock);
-> > > >    		}
-> > > >    		sb_end_write(sbi->sb);
-> > > > diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> > > > index 3834ead04620..f90a8c0a53ec 100644
-> > > > --- a/fs/f2fs/super.c
-> > > > +++ b/fs/f2fs/super.c
-> > > > @@ -3616,7 +3616,7 @@ static void init_sb_info(struct f2fs_sb_info *sbi)
-> > > >    	sbi->seq_file_ra_mul = MIN_RA_MUL;
-> > > >    	sbi->max_fragment_chunk = DEF_FRAGMENT_SIZE;
-> > > >    	sbi->max_fragment_hole = DEF_FRAGMENT_SIZE;
-> > > > -	spin_lock_init(&sbi->gc_urgent_high_lock);
-> > > > +	spin_lock_init(&sbi->gc_urgent_idle_lock);
-> > > >    	atomic64_set(&sbi->current_atomic_write, 0);
-> > > >    	sbi->dir_level = DEF_DIR_LEVEL;
-> > > > diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-> > > > index df27afd71ef4..2b1c653b37cf 100644
-> > > > --- a/fs/f2fs/sysfs.c
-> > > > +++ b/fs/f2fs/sysfs.c
-> > > > @@ -531,10 +531,14 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
-> > > >    		return count;
-> > > >    	}
-> > > > -	if (!strcmp(a->attr.name, "gc_urgent_high_remaining")) {
-> > > > -		spin_lock(&sbi->gc_urgent_high_lock);
-> > > > -		sbi->gc_urgent_high_remaining = t;
-> > > > -		spin_unlock(&sbi->gc_urgent_high_lock);
-> > > > +	/* deprecated */
-> > > > +	if (!strcmp(a->attr.name, "gc_urgent_high_remaining"))
-> > > > +		return -EINVAL;
-> > > 
-> > > How about those users who has already used these interface... it breaks
-> > > the usage.
-> > > 
-> > > It needs to keep old interface and tag as deprecated, and recommend user
-> > > to use new interface you introduced.
-> > 
-> > I feel that this is not a super critical node, so how about just removing it?
-> 
-> Only Android is using this inferface, right?
-> 
-> Any plan to adjust related code from Android side?
+Hi Linus,
 
-There's no place to use this yet, but just need to modify internal tests.
+Regularly scheduled fixes for drm, live from a Red Hat office for the
+first time in a while.
 
-> 
-> Thanks,
-> 
-> > 
-> > > 
-> > > e.g.:
-> > > 
-> > > What:           /sys/fs/f2fs/<disk>/features
-> > > Date:           July 2017
-> > > Contact:        "Jaegeuk Kim" <jaegeuk@kernel.org>
-> > > Description:    <deprecated: should use /sys/fs/f2fs/<disk>/feature_list/
-> > >                  Shows all enabled features in current device.
-> > >                  Supported features:
-> > >                  encryption, blkzoned, extra_attr, projquota, inode_checksum,
-> > >                  flexible_inline_xattr, quota_ino, inode_crtime, lost_found,
-> > >                  verity, sb_checksum, casefold, readonly, compression, pin_file.
-> > > 
-> > > Thanks,
-> > > 
-> > > > +
-> > > > +	if (!strcmp(a->attr.name, "gc_urgent_idle_remaining")) {
-> > > > +		spin_lock(&sbi->gc_urgent_idle_lock);
-> > > > +		sbi->gc_urgent_idle_remaining = t;
-> > > > +		spin_unlock(&sbi->gc_urgent_idle_lock);
-> > > >    		return count;
-> > > >    	}
-> > > > @@ -826,6 +830,7 @@ F2FS_RW_ATTR(FAULT_INFO_TYPE, f2fs_fault_info, inject_type, inject_type);
-> > > >    F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, data_io_flag, data_io_flag);
-> > > >    F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, node_io_flag, node_io_flag);
-> > > >    F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_urgent_high_remaining, gc_urgent_high_remaining);
-> > > > +F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_urgent_idle_remaining, gc_urgent_idle_remaining);
-> > > >    F2FS_RW_ATTR(CPRC_INFO, ckpt_req_control, ckpt_thread_ioprio, ckpt_thread_ioprio);
-> > > >    F2FS_GENERAL_RO_ATTR(dirty_segments);
-> > > >    F2FS_GENERAL_RO_ATTR(free_segments);
-> > > > @@ -953,6 +958,7 @@ static struct attribute *f2fs_attrs[] = {
-> > > >    	ATTR_LIST(data_io_flag),
-> > > >    	ATTR_LIST(node_io_flag),
-> > > >    	ATTR_LIST(gc_urgent_high_remaining),
-> > > > +	ATTR_LIST(gc_urgent_idle_remaining),
-> > > >    	ATTR_LIST(ckpt_thread_ioprio),
-> > > >    	ATTR_LIST(dirty_segments),
-> > > >    	ATTR_LIST(free_segments),
+The core has two fixes, one for scheduler leak and one for aperture
+uninit read. Otherwise a single bridge fix, and msm, amdgpu/kfd and
+i915 have a set of fixes each.
+
+Regards,
+Dave
+
+drm-fixes-2022-10-28:
+drm fixes for 6.1-rc3
+
+sched:
+- Stop leaking fences when killing a sched entity.
+
+aperture:
+- Avoid uninitialized read in aperture_remove_conflicting_pci_device()
+
+bridge:
+- Fix HPD on bridge/ps8640.
+
+msm:
+- Fix shrinker deadlock
+- Fix crash during suspend after unbind
+- Fix IRQ lifetime issues
+- Fix potential memory corruption with too many bridges
+- Fix memory corruption on GPU state capture
+
+amdgpu:
+- Stable pstate fix
+- SMU 13.x updates
+- SR-IOV fixes
+- PCI AER fix
+- GC 11.x fixes
+- Display fixes
+- Expose IMU firmware version for debugging
+- Plane modifier fix
+- S0i3 fix
+
+amdkfd:
+- Fix possible memory leak
+- Fix GC 10.x cache info reporting
+
+i915:
+- Extend Wa_1607297627 to Alderlake-P
+- Keep PCI autosuspend control 'on' by default on all dGPU
+- Reset frl trained flag before restarting FRL training
+The following changes since commit 247f34f7b80357943234f93f247a1ae6b6c3a740=
+:
+
+  Linux 6.1-rc2 (2022-10-23 15:27:33 -0700)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-10-28
+
+for you to fetch changes up to b2196401949ed2517bec676928f837e6bbd01a65:
+
+  Merge tag 'drm-misc-fixes-2022-10-27' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes (2022-10-28
+13:00:15 +1000)
+
+----------------------------------------------------------------
+drm fixes for 6.1-rc3
+
+sched:
+- Stop leaking fences when killing a sched entity.
+
+aperture:
+- Avoid uninitialized read in aperture_remove_conflicting_pci_device()
+
+bridge:
+- Fix HPD on bridge/ps8640.
+
+msm:
+- Fix shrinker deadlock
+- Fix crash during suspend after unbind
+- Fix IRQ lifetime issues
+- Fix potential memory corruption with too many bridges
+- Fix memory corruption on GPU state capture
+
+amdgpu:
+- Stable pstate fix
+- SMU 13.x updates
+- SR-IOV fixes
+- PCI AER fix
+- GC 11.x fixes
+- Display fixes
+- Expose IMU firmware version for debugging
+- Plane modifier fix
+- S0i3 fix
+
+amdkfd:
+- Fix possible memory leak
+- Fix GC 10.x cache info reporting
+
+i915:
+- Extend Wa_1607297627 to Alderlake-P
+- Keep PCI autosuspend control 'on' by default on all dGPU
+- Reset frl trained flag before restarting FRL training
+
+----------------------------------------------------------------
+Aashish Sharma (1):
+      drm/msm: Remove redundant check for 'submit'
+
+Akhil P Oommen (2):
+      drm/msm/a6xx: Replace kcalloc() with kvzalloc()
+      drm/msm/gpu: Fix crash during system suspend after unbind
+
+Alvin Lee (1):
+      drm/amd/display: Don't return false if no stream
+
+Ankit Nautiyal (1):
+      drm/i915/dp: Reset frl trained flag before restarting FRL training
+
+Anshuman Gupta (1):
+      drm/i915/dgfx: Keep PCI autosuspend control 'on' by default on all dG=
+PU
+
+Chengming Gui (1):
+      drm/amdgpu: fix pstate setting issue
+
+Christian K=C3=B6nig (1):
+      drm/scheduler: fix fence ref counting
+
+Colin Ian King (1):
+      drm/msm: Kconfig: Fix spelling mistake "throught" -> "through"
+
+Dave Airlie (4):
+      Merge tag 'drm-msm-fixes-2022-10-24' of
+https://gitlab.freedesktop.org/drm/msm into drm-fixes
+      Merge tag 'amd-drm-fixes-6.1-2022-10-26-1' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
+      Merge tag 'drm-intel-fixes-2022-10-27-1' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
+      Merge tag 'drm-misc-fixes-2022-10-27' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+
+David Francis (1):
+      drm/amd: Add IMU fw version to fw version queries
+
+Douglas Anderson (1):
+      drm/bridge: ps8640: Add back the 50 ms mystery delay after HPD
+
+Jesse Zhang (1):
+      drm/amdkfd: correct the cache info for gfx1036
+
+Joaqu=C3=ADn Ignacio Aramend=C3=ADa (1):
+      drm/amd/display: Revert logic for plane modifiers
+
+Johan Hovold (8):
+      drm/msm: fix use-after-free on probe deferral
+      drm/msm/dp: fix memory corruption with too many bridges
+      drm/msm/dsi: fix memory corruption with too many bridges
+      drm/msm/hdmi: fix memory corruption with too many bridges
+      drm/msm/dp: fix IRQ lifetime
+      drm/msm/dp: fix aux-bus EP lifetime
+      drm/msm/dp: fix bridge lifetime
+      drm/msm/hdmi: fix IRQ lifetime
+
+Jos=C3=A9 Roberto de Souza (1):
+      drm/i915: Extend Wa_1607297627 to Alderlake-P
+
+Kenneth Feng (2):
+      drm/amd/pm: update driver-if header for smu_v13_0_10
+      drm/amd/pm: allow gfxoff on gc_11_0_3
+
+Kuogee Hsieh (2):
+      drm/msm/dp: add atomic_check to bridge ops
+      drm/msm/dp: cleared DP_DOWNSPREAD_CTRL register before start link tra=
+ining
+
+Lijo Lazar (1):
+      drm/amdgpu: Remove ATC L2 access for MMHUB 2.1.x
+
+Maarten Lankhorst (1):
+      Merge remote-tracking branch 'drm/drm-fixes' into drm-misc-fixes
+
+Micha=C5=82 Miros=C5=82aw (1):
+      fbdev/core: Avoid uninitialized read in
+aperture_remove_conflicting_pci_device()
+
+Nathan Huckleberry (1):
+      drm/msm: Fix return type of mdp4_lvds_connector_mode_valid
+
+Prike Liang (2):
+      drm/amdkfd: update gfx1037 Lx cache setting
+      drm/amdgpu: disallow gfxoff until GC IP blocks complete s2idle resume
+
+Rafael Mendonca (1):
+      drm/amdkfd: Fix memory leak in kfd_mem_dmamap_userptr()
+
+Rob Clark (4):
+      drm/msm/gem: Unpin objects slightly later
+      drm/msm/a6xx: Fix kvzalloc vs state_kcalloc usage
+      drm/msm/a6xx: Skip snapshotting unused GMU buffers
+      drm/msm/a6xx: Remove state objects from list before freeing
+
+Rodrigo Siqueira (1):
+      drm/amd/display: Remove wrong pipe control lock
+
+Yiqing Yao (1):
+      drm/amdgpu: Adjust MES polling timeout for sriov
+
+YuBiao Wang (1):
+      drm/amdgpu: skip mes self test for gc 11.0.3 in recover
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c   |   6 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c            |   5 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         |  18 +++-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c            |  13 +++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c          |   4 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c           |   1 +
+ drivers/gpu/drm/amd/amdgpu/amdgv_sriovmsg.h        |   1 +
+ drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c             |   1 +
+ drivers/gpu/drm/amd/amdgpu/mes_v11_0.c             |   9 +-
+ drivers/gpu/drm/amd/amdgpu/mmhub_v2_0.c            |  28 ++----
+ drivers/gpu/drm/amd/amdkfd/kfd_crat.c              | 106 +++++++++++++++++=
+++-
+ .../drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c    |  50 ++--------
+ drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c |  12 +--
+ .../amd/display/dc/dcn32/dcn32_resource_helpers.c  |   2 +-
+ .../pm/swsmu/inc/pmfw_if/smu13_driver_if_v13_0_0.h | 111 +++++++++++++++--=
+----
+ drivers/gpu/drm/amd/pm/swsmu/inc/smu_v13_0.h       |   2 +-
+ drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c     |   7 +-
+ drivers/gpu/drm/bridge/parade-ps8640.c             |  25 ++++-
+ drivers/gpu/drm/i915/display/intel_dp.c            |   2 +
+ drivers/gpu/drm/i915/gt/intel_workarounds.c        |   4 +-
+ drivers/gpu/drm/i915/intel_runtime_pm.c            |  11 +-
+ drivers/gpu/drm/msm/Kconfig                        |   2 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c        |  14 ++-
+ drivers/gpu/drm/msm/adreno/adreno_device.c         |  10 +-
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c            |   7 +-
+ .../gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c    |   5 +-
+ drivers/gpu/drm/msm/dp/dp_ctrl.c                   |  13 +--
+ drivers/gpu/drm/msm/dp/dp_display.c                |  23 ++++-
+ drivers/gpu/drm/msm/dp/dp_drm.c                    |  34 +++++++
+ drivers/gpu/drm/msm/dp/dp_parser.c                 |   6 +-
+ drivers/gpu/drm/msm/dp/dp_parser.h                 |   5 +-
+ drivers/gpu/drm/msm/dsi/dsi.c                      |   6 ++
+ drivers/gpu/drm/msm/hdmi/hdmi.c                    |   7 +-
+ drivers/gpu/drm/msm/msm_drv.c                      |   1 +
+ drivers/gpu/drm/msm/msm_gem_submit.c               |   9 +-
+ drivers/gpu/drm/msm/msm_gpu.c                      |   2 +
+ drivers/gpu/drm/msm/msm_gpu.h                      |   4 +
+ drivers/gpu/drm/msm/msm_ringbuffer.c               |   3 +-
+ drivers/gpu/drm/scheduler/sched_entity.c           |   6 +-
+ drivers/video/aperture.c                           |   5 +-
+ include/uapi/drm/amdgpu_drm.h                      |   2 +
+ 41 files changed, 421 insertions(+), 161 deletions(-)
