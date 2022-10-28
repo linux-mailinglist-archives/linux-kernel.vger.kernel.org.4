@@ -2,150 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D6B611A02
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 20:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC64611A06
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 20:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbiJ1SSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 14:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
+        id S229867AbiJ1STD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 14:19:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJ1SSJ (ORCPT
+        with ESMTP id S230244AbiJ1SS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 14:18:09 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A998642EE
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 11:18:09 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id 8so3977325qka.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 11:18:09 -0700 (PDT)
+        Fri, 28 Oct 2022 14:18:56 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93091242CBC;
+        Fri, 28 Oct 2022 11:18:55 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id a14so7663363wru.5;
+        Fri, 28 Oct 2022 11:18:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jg+y5pJXJAf+IzCBhzE1K677QTmOHQ5t2GVhpetBIjQ=;
-        b=DVpDLqmrpX7h2ApFtsuwad32KusLtdyYe2rCADXhN4FhRmHK8KGC7pKv879tYEZ7RK
-         3bT+7j21M/MKbmZO+ELDT9TH9QaIDMkro+7ES/hnqCV0h8QAWiiSE79meBPnixtluR6m
-         G/SCmZNO08uVR+CVcg2Ld+54+Agg8m+erJclrnOr25SDxSZDLlJyztAcXump6zY94V+P
-         Q0lfb8XUGDalb6eWwDwNqchuZ+lEYQ0eCF0sQHkel8UZxEw/Kf1MBP/qpENvwwlmGO0u
-         1h1nRrOLFMrFHKy+JowzjLMebVVBNmKR8cvU2WmPUNeiYl0HrHN4f2gTQVHBs1h6g659
-         7OOQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xTd7QHpRwaFlwM3D6sCRxq+myWnOhn/dTLU+GwmNwfk=;
+        b=itB+P1b1zBZGfDEpZN8M9NNhLm57lG05jZqTWw+FVQ7ERHFIP62aeSs+hLS8U2D+Oh
+         uItUtbTv2mgTAgRrb0VUeL6Vm1yjEbB4mxTQOBlb0+KjC+vzrKkLpbSHDJDfdcMWqhe8
+         8LxQZtrKl/cVRPF78JYHiGkz4IkvB1eir6kAk/bhpk5+kLcfg5zemUQhK1hTcvt91Xyi
+         T8PZpQEqoWwjmysDQU0LgAFvGQlM3XF0CRroq7BfBGVTp8Gz52nu34g/73Tf8SVr1rvt
+         OsG1Ciri2xVHoS7GxLP0PuMSP75eQXyGDNfedxXg63MMLCkDGT1aJubJ7YMke0oJpqwW
+         aNzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Jg+y5pJXJAf+IzCBhzE1K677QTmOHQ5t2GVhpetBIjQ=;
-        b=jVRjkXDQbihg+TUMqKN1RRR0BXMWi4NeVKyReiOJ/jU4kKtj++Toh7CfhPR9VgSPn0
-         ShD6Do6NwcJrOliQJ0NiGfkYAJAy5NqFo9bE5iw+0n6DDH10pOnhh2AhEBS33/yXGQvQ
-         uw7RnXPpBFrVo9YYlq4blmz1Se/KIPEXYJSrBnqvRK6AFsVLegbjo53q56aTSp29SnI4
-         9VrPo+IEQo6unKIo8LvAbWh7jo2YZL/DlH17R7XEza6PMfEsSymDioHzAEOQlZZ6Fq2n
-         Q8kGSEbHKB4ul9hGsVRbFKsaRtagBBkkeiad/Ux6FnEB0NG8eWDeG6np7Iq0W4ulJKj9
-         Uq3A==
-X-Gm-Message-State: ACrzQf0Pp9EAImCkxEWuEZucQxoqV7KHp8XdbBkc2MHuItTlnhEp+G94
-        3fLNgCVVG9AWafAHb4e5uyZO+Y/mnhpLvY3W6O06sbB9vONhWMni
-X-Google-Smtp-Source: AMsMyM6hhYRY/DeQ9ApjbZDeIVz3lq0pMjYCdOI8iPfsPUGNNfgCJBZjsw1ZlaO2aNZ/w6caxjQUeV8WqnSBzVgBpAM=
-X-Received: by 2002:a05:620a:22c3:b0:6ec:53bb:d296 with SMTP id
- o3-20020a05620a22c300b006ec53bbd296mr465616qki.158.1666981088311; Fri, 28 Oct
- 2022 11:18:08 -0700 (PDT)
+        bh=xTd7QHpRwaFlwM3D6sCRxq+myWnOhn/dTLU+GwmNwfk=;
+        b=1j8/z/FR4UzPFiYQGid8s0PJzpX4jnLUhwpCQ8SMLuk0QdbWVnpok7JHNCg+N/y1Wf
+         Lfn/3VbdblbEzHXaD3ijnlDnpo/87wC2SOfMoYfFoJQ8x5DCfqACpGXY08eAM892Fwkz
+         Z/XpGHazwV/8rOiIief4wq1iq0gn+nPvT4hSaC+Sxf6YCjPGfB2jKDLVwYsB9tjAQCst
+         RsR5EGn0MnZGg9nHL0XmcSnv/AMRK5q/KDFQIH5Lt5/awZbdCy9XhIXDRgQrgS+PjnrF
+         b4k396lX85zYpw7r9e2C9PRUShkZ61TofZktnBjZvCXuHkBxHWKvGS+P66EysxNOAg3X
+         10xw==
+X-Gm-Message-State: ACrzQf0tm1EATSRYMwTVWRNIYXEVHnIljTE5/AXeFtFcWAlgvL/zTIQg
+        f9Yd6Bx61lpb6zl7syg14nU=
+X-Google-Smtp-Source: AMsMyM76JTY/PtQ3imnoTKBLTf988R7i0RUukewLRwDKDKIC7zqHN2Vh+67mMrM2aEjgavyIf2WcJA==
+X-Received: by 2002:adf:e3cc:0:b0:235:95b1:2124 with SMTP id k12-20020adfe3cc000000b0023595b12124mr380838wrm.693.1666981134010;
+        Fri, 28 Oct 2022 11:18:54 -0700 (PDT)
+Received: from localhost.localdomain ([94.73.35.109])
+        by smtp.gmail.com with ESMTPSA id iv9-20020a05600c548900b003cf483ee8e0sm8689221wmb.24.2022.10.28.11.18.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 11:18:53 -0700 (PDT)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, rydberg@bitmath.org,
+        chad@redpilled.dev, davidgow@google.com,
+        linux-input@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH 0/1] HID: input: map battery system charging
+Date:   Fri, 28 Oct 2022 20:18:48 +0200
+Message-Id: <20221028181849.23157-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <cover.1666978292.git.tanjubrunostar0@gmail.com> <Y1wbVeLCLZClEQ6L@aschofie-mobl2>
-In-Reply-To: <Y1wbVeLCLZClEQ6L@aschofie-mobl2>
-From:   Tanju Brunostar <tanjubrunostar0@gmail.com>
-Date:   Fri, 28 Oct 2022 19:17:56 +0100
-Message-ID: <CAHJEyKURpAYT-2a3wA9aqO2=wYRK=4MQ9sq3SBCg5yoSNKFo1Q@mail.gmail.com>
-Subject: Re: [PATCH v8 0/6] staging: vt6655: a series of checkpatch fixes on
- the file: rxtx.c
-To:     Alison Schofield <alison.schofield@intel.com>
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 7:11 PM Alison Schofield
-<alison.schofield@intel.com> wrote:
->
-> We know it's a patchset or series, saying so in subject line is
-> redundant. Perhaps - 'Checkpatch cleanup in rxtx.c'
->
-> On Fri, Oct 28, 2022 at 05:40:52PM +0000, Tanjuate Brunostar wrote:
-> > The fixes are similar, mostly long lines splitting. I had to make
-> > serveral patches to ease the work of inspectors
->   ^
-> Please use a spell checker.
->
-> >
-> > v2: fixed a compilation error found by the kernel test robot and
-> > recompiled the code
->
-> Expected to be in reverse order, with latest changes first.
-> ie. Here you would start with v8
->
-> > v3: tends out the error persisted in the second version. this version is
-> > a correction of that
->
-> ?
->
-> >
-> > v4: did some corrections as recommended by Greg KH
->
-> State what changed. Do not expect your review to go back
-> hunting for past review comments.
->
-> Same for all below.
->
-> >
-> > v5: shortend changelog comments as recommended by Greg KH
-> >
-> > v6: did some corrections as recommended by Greg KH
-> >
-> > v7: fixed some errors on my changelog comments
-> >
-> > v8: fixed some errors pointed out by Philipp Hortmann
-> >
-> > Tanjuate Brunostar (6):
-> >   staging: vt6655: fix lines ending in a '('
->
-> Move ( to end of line
->
-> >   staging: vt6655: fix long lines of code in s_uGetRTSCTSDuration
->
-> This doesn't match what was actually done
->
-> >   staging: vt6655: fix long lines of code in s_uFillDataHead
-> >   staging: vt6655: fix long lines of code in s_vGenerateTxParamete
-> >   staging: vt6655: fix long lines of code in the rest of the file
->
-> Each commit msg needs to stand alone. The one above only makes
-> sense (still it's a poor message) when viewed in this patchset.
-> Once the patches are applied, it must stand alone.
->
-> The commit msg should read like a directive. Fix is too general.
-> Commit msg states what you did, commit log states why you did it.
->
-> I see you took 'refactoring' out of the commit messages, but left it
-> in the commit logs. It doesn't belong in the logs. As another
-> reviewer pointed out, this is not a refactor.
->
-> Alison
-The commit logs I changed  too but they did not show in the
-patches when I sent them. I don't get how that happened.
-Thanks for the corrections. like i said, I will be sticking with single patches
-for now.
-Thanks,
-Tanju
-> >
-> >  drivers/staging/vt6655/rxtx.c | 542 ++++++++++++++++++++--------------
-> >  1 file changed, 324 insertions(+), 218 deletions(-)
-> >
-> > --
-> > 2.34.1
-> >
-> >
->
+Hi everyone,
+
+This patch adds support for reporting battery status (charging/discharging)
+for devices with a charging usage in their HID descriptor:
+
+	0x05, 0x85,         /*      Usage Page (Battery System),    */
+	0x09, 0x44,         /*      Usage Page (Charging),          */
+
+I tested it on Apple hardware (mouse, trackpad and keyboard) as well as
+on UCLogic tablets with battery [1].
+
+On other hardware (HID_DC_BATTERYSTRENGTH or digitizers with battery)
+discharging should be reported for backwards compatibility.
+I did my best to keep the old behaviour by adding KUnit tests; However,
+I don't own any of those devices, so I'd appreciate any help testing
+the patch from someone with the actual hardware.
+
+Best wishes,
+José Expósito
+
+[1] https://lore.kernel.org/linux-input/20221028082348.22386-1-jose.exposito89@gmail.com/T/
+
+José Expósito (1):
+  HID: input: map battery system charging
+
+ drivers/hid/.kunitconfig     |  1 +
+ drivers/hid/Kconfig          |  1 +
+ drivers/hid/hid-input-test.c | 80 ++++++++++++++++++++++++++++++++++++
+ drivers/hid/hid-input.c      | 36 +++++++++++++++-
+ include/linux/hid.h          |  2 +
+ 5 files changed, 118 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/hid/hid-input-test.c
+
+-- 
+2.25.1
+
