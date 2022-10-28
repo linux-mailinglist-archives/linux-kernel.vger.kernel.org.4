@@ -2,101 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0B7610EB9
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B653C610ECB
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbiJ1Kj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 06:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43834 "EHLO
+        id S230439AbiJ1KlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 06:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbiJ1Kio (ORCPT
+        with ESMTP id S231146AbiJ1Kkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 06:38:44 -0400
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824FF1C8410;
-        Fri, 28 Oct 2022 03:38:43 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id v130-20020a1cac88000000b003bcde03bd44so6332426wme.5;
-        Fri, 28 Oct 2022 03:38:43 -0700 (PDT)
+        Fri, 28 Oct 2022 06:40:32 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E80564F7
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 03:40:27 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-13ae8117023so5809043fac.9
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 03:40:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tyImlhW5U/w4r3CMUcSsRxgN2Bc9Db0y6N98q/2n1E0=;
+        b=6wl2xAI8Kw/bybkWUSqlJIkmtYMiO4vD8mzAOrtLGcat04/Lbo+hGTkyu7kEq2Vc7B
+         ZEuWK/Q8Vr/gceFj85auLDbm9HdgImFszZUfz1pHT+caIJAEplOxJgekjZVmPm34tS1d
+         P2Y/qZ1tNywM4IezQYvWpRkZQEqdveIFqYi/IMGB997KzqqfGl1DB7+Ewn8FwVuonimt
+         Xk0P/XZVX2l+ZyLi1uB6qhKhyQAS/8zrluRwRq5IR38ZGf10cszvxPmDQA4YWzB4hp3k
+         rKcTycSPuAtizgAjzym08hOwvsUXIjsiAKExxUD3eWc5FKh+4K5HBnJ9yR93K5j6RApi
+         Z8rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kyduwU+qbCAifE/OEo9fpCfyJvonnxXGOOWJeQlafrk=;
-        b=vWEweUCxiARKFSPphqDRa0RxVSWbqdZP3hPQhWnL0nfIumsvwu3gFl2UQHnGCBoQKV
-         NM5jX5Koij0IBk42vVLF3HD93WMNPk/sCJDC/KNhWoIF4qFQ7AAq2GHNl54MFxkNR+IJ
-         MX56z/ymnce2jbCbZfCgRKzORJXxuT4M96XuaN6mRswG8QGfLyT73TAOIv3CY72LZn9G
-         pdweomurKj23eq6orSArj+WI1TYouOrphhybM05l1cA4b5/gwutSSO1Iep6nVu7M+D0s
-         OeHYHW7+o7wSVoe4BoxSpvsDNn9JdeKFTGCMW7VMJ+xapNumYJtwIY/HLPJ5UEeCCPyl
-         dPLg==
-X-Gm-Message-State: ACrzQf3qlcvdWisTpn9QoQQGmHrRKGjJwQbhPpmlUPi2RPUKDbuE4hrG
-        pGK6ezb9jyqLG0Ak3MIMQw4=
-X-Google-Smtp-Source: AMsMyM6+r0/UdXjkcGQZIm+YyMf8VdMFCya9QSxoMVd6/EmHzp/NQ//5ZfB0f7jWKFMWZcO/FdaC1A==
-X-Received: by 2002:a1c:a102:0:b0:3cf:4792:d3a2 with SMTP id k2-20020a1ca102000000b003cf4792d3a2mr8742630wme.55.1666953521904;
-        Fri, 28 Oct 2022 03:38:41 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id r9-20020a05600c458900b003b4ac05a8a4sm9171691wmo.27.2022.10.28.03.38.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 03:38:41 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 10:38:39 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Wei Liu <wei.liu@kernel.org>,
-        Shradha Gupta <shradhagupta@linux.microsoft.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: Re: [PATCH v2 1/2] mm/page_reporting: Add checks for
- page_reporting_order param
-Message-ID: <Y1uxLyaLlKp2sfkD@liuwe-devbox-debian-v2>
-References: <1664447081-14744-1-git-send-email-shradhagupta@linux.microsoft.com>
- <1664517699-1085-1-git-send-email-shradhagupta@linux.microsoft.com>
- <1664517699-1085-2-git-send-email-shradhagupta@linux.microsoft.com>
- <Y1lTWxMnk3lnS+3V@liuwe-devbox-debian-v2>
- <20221027132207.bb4e9408e1ca94b3dfaca405@linux-foundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tyImlhW5U/w4r3CMUcSsRxgN2Bc9Db0y6N98q/2n1E0=;
+        b=LwivAocANZ8nohXSYTlaSDr0fgGTw86fgvv80G22hm7D6BhfCdMyzXyaAq4R1ctV5P
+         85b1Zl59brAxg/FTht6tL6KVH0E/evbkBI0DapEhqewbcQGzhI7c1xuyRm9qef9iHCQn
+         j+PIDGJwf3IqzyBHxoggVO/aDxVoSOmkbLSHfXebMkikrgrqiIy24FTb8FP+BcxW7B58
+         XMihFkn3eJktTsn2B9CLUEBDeua5w3EO7SWaoXZHkTe8sjdw2nPyaCsPRnHFB6Pdmp2/
+         bwq6UssnZzOcvAOH5jfke9izP5BJdaDl4W9wi8nhD6Z34KmfEazSiCT2CGgYgTKIWBNf
+         J+iQ==
+X-Gm-Message-State: ACrzQf0mbAn2po+OsNkszwGRMwWna1FPKl/9tgjIxIBj/iyBcjBDUj9w
+        UBt+rpYUc8gjLFcKpb8o6JKOzYTnsrkgNWBUeRW7
+X-Google-Smtp-Source: AMsMyM4ZevGFeBpqW+DJ8S3551bIe2a35cE4Xe2RC2CsugCmZ45K57nKjHHFzt6+kh9nP6Z+ExWMYg0XY8SA8MF3fIw=
+X-Received: by 2002:a05:6870:f299:b0:13b:ad21:934d with SMTP id
+ u25-20020a056870f29900b0013bad21934dmr8665556oap.172.1666953626712; Fri, 28
+ Oct 2022 03:40:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221027132207.bb4e9408e1ca94b3dfaca405@linux-foundation.org>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221026010634.2936-1-liubo03@inspur.com>
+In-Reply-To: <20221026010634.2936-1-liubo03@inspur.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 28 Oct 2022 06:40:15 -0400
+Message-ID: <CAHC9VhT7-tHw=Pn-Ha=6T2X8E4U3wjxDOGFKcJAS2zx7XP-Wrg@mail.gmail.com>
+Subject: Re: [PATCH v2] audit: Fix some kernel-doc warnings
+To:     Bo Liu <liubo03@inspur.com>
+Cc:     jmorris@namei.org, serge@hallyn.com,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 01:22:07PM -0700, Andrew Morton wrote:
-> On Wed, 26 Oct 2022 15:33:47 +0000 Wei Liu <wei.liu@kernel.org> wrote:
-> 
-> > On Thu, Sep 29, 2022 at 11:01:38PM -0700, Shradha Gupta wrote:
-> > > Current code allows the page_reporting_order parameter to be changed
-> > > via sysfs to any integer value.  The new value is used immediately
-> > > in page reporting code with no validation, which could cause incorrect
-> > > behavior.  Fix this by adding validation of the new value.
-> > > Export this parameter for use in the driver that is calling the
-> > > page_reporting_register().
-> > > This is needed by drivers like hv_balloon to know the order of the
-> > > pages reported. Traditionally the values provided in the kernel boot
-> > > line or subsequently changed via sysfs take priority therefore, if
-> > > page_reporting_order parameter's value is set, it takes precedence
-> > > over the value passed while registering with the driver.
-> > > 
-> > > Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
-> > 
-> > Andrew and other MM reviewers, can I get an ack / nack for this patch?
-> 
-> Looks OK to me.  Can this be merged via the hyperv tree?
+On Tue, Oct 25, 2022 at 9:06 PM Bo Liu <liubo03@inspur.com> wrote:
+>
+> The current code provokes some kernel-doc warnings:
+>     security/lsm_audit.c:198: warning: Function parameter or member 'ab' not described in 'dump_common_audit_data'
+>
+> Signed-off-by: Bo Liu <liubo03@inspur.com>
+> ---
+>  security/lsm_audit.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-Yes, I can take of merging it.
+Merged into lsm/next, thanks.
 
-I will add your acked-by to the patch.
-
-Thanks,
-Wei.
+-- 
+paul-moore.com
