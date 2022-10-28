@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C204611B5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5237611B61
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiJ1UFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 16:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
+        id S230140AbiJ1UGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 16:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbiJ1UFF (ORCPT
+        with ESMTP id S229707AbiJ1UG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 16:05:05 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6AE1FC;
-        Fri, 28 Oct 2022 13:05:00 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id ud5so15509188ejc.4;
-        Fri, 28 Oct 2022 13:04:59 -0700 (PDT)
+        Fri, 28 Oct 2022 16:06:26 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988A78A7F1;
+        Fri, 28 Oct 2022 13:06:24 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id e15so259270qts.1;
+        Fri, 28 Oct 2022 13:06:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=98ZH6bxaeHTtNqFE8fsLgZCssjQAnRpbtSPQxMvUivw=;
-        b=NI0fAVJsuMZeFCF9mP1Btmeodw0bx5/GurFR3ZGfZwj+c8L8qWLm6BtbNpe5ZoU/HN
-         JxyXTMnQF5wQMHh2jotO4/KDsmiid4v18utEf8Mwr4IqNu1Xo0An9hRJxf3cbngzLZ2D
-         jXznW7OaViSYXnVSadr6+nz2bKdMk5ySJ++NhC2sKhEUVUl5TPSyvAKk0f5ppK5SW3p+
-         ZJWxydxIXm6mBkJqXvGE7Wm1YA5+SQsdcDOhr42s4tFRCAqhDW1Q9qivfRuGhdX8Fehw
-         zHI+ULDBZdg+ZyOxoXro2G4xGV7n8tsitxKUa8KEvLaaapRPgzDwFJyJwB/VNairnQzQ
-         wvXg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cpn6PgpH/B8a8nYankJVLNowGT2ZkREma3yqGiooSAQ=;
+        b=B+O1SK60peeYYFs3b2JAF4gyW90Zfo5Bg3AXn1pyODIHPCCXWOzNTLkyAQ4jz1MCYq
+         rTSG6EHhx4y1XzzlAShRZEwhJ5mTsL00KLxVg5Rk2VzfuMJggiQCfUaaujrDWEzL64zh
+         dNShAzxPPvtTihG75J9Usc/6YZwQS3aNDBEVZ7NyxcJYzibp/46sa2GI1/vxpNQjnbDv
+         JSChDTyzDGny6JZqvCdbtPPrfFBX6XsPd/87FtGptAqkGiXeYnp+ZkhUMImBbQOKMlYm
+         3ci35Mf7+oNZpr2kVvKT290jHS50epcODfPeAZqNGKqX/OGG4s+f703UpdyGJINfXL2E
+         vWCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=98ZH6bxaeHTtNqFE8fsLgZCssjQAnRpbtSPQxMvUivw=;
-        b=DwPrNNonSnr1L6MaOdMK2UjQ3pP4CMjL0aNeM9PLoSUGJS/P3fuu/okjZnYMvTe3wk
-         /0wWux34pN78i25MXaveNcXy9uTUsGRSw7huQ0bZAufC7Z56RDr6Pz20AlCdQCQVJhWh
-         TbQcY462dFEE1qb0MtCvOclRV8s4ZwWO0Vz4Z4t5wCHglgskIYnllUcEF28j2ZvlWFms
-         HuZh8f3IRYH76fguvyquaXx7i1wW/l7Wh5sXyjaQTer3HKbYGqyPxj9DpsL+BlXU4kjj
-         yXhPyMptq4EYqJQVUeSnoGLcObCjiL/l3fVwrICDRsgSkZSub5Rk2tlEnozsIcpy+luk
-         rXKw==
-X-Gm-Message-State: ACrzQf21y4Kwu5+q/qzj9tBa7E6y9LTD+u/ju6IcghtG6aaElC8lXKzB
-        ksaoKrJMQPCQIxch2Y+yfamgYeVyhhOMPxNrorY=
-X-Google-Smtp-Source: AMsMyM7Fa0dwCZTDURB0YKKa8I7Z1YN1AzqEzF8KXo81jw3NWsY3RtR8pIGQDFEo+3ESMObflkOkF9Xf6RMz5Oc1+KI=
-X-Received: by 2002:a17:907:c208:b0:7ad:a0df:d4c7 with SMTP id
- ti8-20020a170907c20800b007ada0dfd4c7mr942244ejc.312.1666987498608; Fri, 28
- Oct 2022 13:04:58 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cpn6PgpH/B8a8nYankJVLNowGT2ZkREma3yqGiooSAQ=;
+        b=xGfQ9tVy2XR9FK8MIDwllmAEO49r2gHvQmGL+CV8/nII35ZKjuAfVRc/UV6UTxmFCq
+         Wbh6glC7YJSMjpQYVPjkRreGjG/NKkSDgLl/ft3/D70PsmJcxLDL33a+o/C1HTKpThv2
+         tQZFT0CxIuTjWvb6uvPR4OLF4flGPcsgLcR7mxU5hAtxCpbZRQkbxNig6UsfRdvUokgL
+         +fqKbNuHU8P3x8Ksf1KDNSuMDm0MS4tei0kJNqe0AMCZTYu1l/Dpf9qJL3smlHxvzDEo
+         pctc1n4eLUSpa0U2mmghjY4KAKfN2TQwzvxS1IcCOa4mNIaRkY4c9jegu5ae5Faps/Oc
+         /+AQ==
+X-Gm-Message-State: ACrzQf16yCVX+MMaNtqGc5VIHdaM4BDQPwNNXvi6DcBtDru3wTp6wVaE
+        QsXCL7MGDUpVKRvOc08xjko=
+X-Google-Smtp-Source: AMsMyM4VGe5aWNBH5jRVYBWfOHWmm9O2JhL/QG1gyqpMfaD2w7AXAK43Lfd7LPByXKV4w6snM+xxgA==
+X-Received: by 2002:a05:622a:355:b0:39c:cb1c:e66a with SMTP id r21-20020a05622a035500b0039ccb1ce66amr1134903qtw.22.1666987583628;
+        Fri, 28 Oct 2022 13:06:23 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id k26-20020ac8605a000000b0039a55f78792sm2806569qtm.89.2022.10.28.13.06.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 13:06:22 -0700 (PDT)
+Message-ID: <3dd0af6d-af86-ab65-36a9-d5b068977641@gmail.com>
+Date:   Fri, 28 Oct 2022 13:06:15 -0700
 MIME-Version: 1.0
-References: <Y1vZKg6UHjdUZt1W@debian> <202210280940.D7A7330@keescook>
-In-Reply-To: <202210280940.D7A7330@keescook>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Fri, 28 Oct 2022 21:04:22 +0100
-Message-ID: <CADVatmNwZUtR5qoWEvSuM6mH1v8PPYePLZKC2Wx2UGZrDNiFRA@mail.gmail.com>
-Subject: Re: boot failure of linux-next due to 1248fb6a8201 ("x86/mm:
- Randomize per-cpu entry area")
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 5.4 00/53] 5.4.221-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+References: <20221027165049.817124510@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221027165049.817124510@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,50 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 5:41 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Fri, Oct 28, 2022 at 02:29:14PM +0100, Sudip Mukherjee (Codethink) wro=
-te:
-> > Hi All,
-> >
-> > Our qemu boots were failing since next-20221024, and a git bisect of
-> > next-20221028 showed the bad commit as 1248fb6a8201 ("x86/mm: Randomize=
- per-cpu entry area")
-> >
-> > After reverting the commit I could boot qemu again with next-20221028.
-> >
-> > This is my config:
-> >
-> > make defconfig
-> > make kvm_guest.config
-> > scripts/config -e KCOV -e KCOV_INSTRUMENT_ALL -e KCOV_ENABLE_COMPARISON=
-S -e DEBUG_FS -e DEBUG_KMEMLEAK -e DEBUG_INFO -e KALLSYMS -e KALLSYMS_ALL -=
-e NAMESPACES -e UTS_NS -e IPC_NS -e PID_NS -e NET_NS -e CGROUP_PIDS -e MEMC=
-G -e USER_NS -e CONFIGFS_FS -e SECURITYFS -e KASAN -e KASAN_INLINE -e FAULT=
-_INJECTION -e FAULT_INJECTION_DEBUG_FS -e FAULT_INJECTION_USERCOPY -e FAILS=
-LAB -e FAIL_PAGE_ALLOC -e FAIL_MAKE_REQUEST -e FAIL_IO_TIMEOUT -e FAIL_FUTE=
-X -e LOCKDEP -e PROVE_LOCKING -e DEBUG_ATOMIC_SLEEP -e PROVE_RCU -e DEBUG_V=
-M -e REFCOUNT_FULL -e FORTIFY_SOURCE -e HARDENED_USERCOPY -e LOCKUP_DETECTO=
-R -e SOFTLOCKUP_DETECTOR -e HARDLOCKUP_DETECTOR -e BOOTPARAM_HARDLOCKUP_PAN=
-IC -e DETECT_HUNG_TASK -e WQ_WATCHDOG -e USB_GADGET -e USB_RAW_GADGET -e TU=
-N -e KCSAN -d RANDOMIZE_BASE -e MAC80211_HWSIM -e IEEE802154 -e MAC802154 -=
-e IEEE802154_DRIVERS -e IEEE802154_HWSIM -e BT -e BT_HCIVHCI
-> > echo "CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=3D140" >> .config
-> > echo "CONFIG_RCU_CPU_STALL_TIMEOUT=3D100" >> .config
-> >
-> > I will be happy to test any patch or provide any extra log if needed.
-> > Though I am not sure how I will collect extra logs (if needed) as there
-> > was no output from qemu.
->
-> I see KASAN in your config, does this fix it?
->
-> https://lore.kernel.org/lkml/166693938482.29415.7034851115705424459.tip-b=
-ot2@tip-bot2/
+On 10/27/22 09:55, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.221 release.
+> There are 53 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 29 Oct 2022 16:50:35 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.221-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Yes, it does. Thanks.
-I can see qemu booting up again. Also, looks like thats already merged
-to x86/mm, so I am not sending a Tested-by in reply to that patch.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
---=20
-Regards
-Sudip
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
+
