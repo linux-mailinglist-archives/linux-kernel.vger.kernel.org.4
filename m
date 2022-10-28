@@ -2,105 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B359B61121E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 067CF611268
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbiJ1NBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47022 "EHLO
+        id S230308AbiJ1NLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiJ1NBs (ORCPT
+        with ESMTP id S230175AbiJ1NLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:01:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585C55FDD2;
-        Fri, 28 Oct 2022 06:01:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E8E286284E;
-        Fri, 28 Oct 2022 13:01:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E99C433D6;
-        Fri, 28 Oct 2022 13:01:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666962106;
-        bh=sZ4ZNjf/cBaX1w4dLi8MwgTB0O0ug+mmFH/68/wbeBQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gmUDYsblOxDs80NsXHKuUFuycP2tAGkpdpu10+draWkdkiUZ9AwyxOazRzfYhivhP
-         QHOekOla/y0+0tCm547GHITIA842fwUeDRAJBTfxek8v3gDl0zyC2mIQJdDAmsBtWj
-         1Gd+Y4t/wxGQH9lGrkpz7qfS4gcIw/BFhrDlC9w+iEFaRaE+wbR7wvO8sNEJGHuz1i
-         WXpbN6IkUx+va3SVtdlUsDi2rlHkuHl0dI+ur7XU3hzBwQ+1/OkPzQulJz6cnG8BRC
-         dleOZqSyzenWbcT6flZ00TbZeFX9voP/cjdxzG4dzZ8RynxARP9FeNXhVcqm2B1TIX
-         OzjdgDtCYavSw==
-Date:   Fri, 28 Oct 2022 14:01:40 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-Cc:     linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, robh@kernel.org,
-        Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        angelogioacchino.delregno@collabora.corp-partner.google.com,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v1 2/2] ASoC: dmic: Add optional dmic selection
-Message-ID: <Y1vStD8vNYmdvPH1@sirena.org.uk>
-References: <20221028102450.1161382-1-ajye_huang@compal.corp-partner.google.com>
- <20221028102450.1161382-3-ajye_huang@compal.corp-partner.google.com>
- <Y1vDxtdNGURAT850@sirena.org.uk>
- <CALprXBbTkj0Q_-3AL81Q1okRD5ZyDf_c=daPrkQstkM4_CNgGQ@mail.gmail.com>
+        Fri, 28 Oct 2022 09:11:50 -0400
+X-Greylist: delayed 551 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Oct 2022 06:11:46 PDT
+Received: from mail.cock.li (unknown [37.120.193.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047611C2EAD;
+        Fri, 28 Oct 2022 06:11:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Fc5e//HBGfgKdc7B"
-Content-Disposition: inline
-In-Reply-To: <CALprXBbTkj0Q_-3AL81Q1okRD5ZyDf_c=daPrkQstkM4_CNgGQ@mail.gmail.com>
-X-Cookie: Life -- Love It or Leave It.
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tfwno.gf; s=mail;
+        t=1666962143; bh=DtqNWOtFT8hw8nEEdF0WNtUoPrpPIt01zfqy5oCYP98=;
+        h=Date:From:To:Subject:From;
+        b=HFXv+/6hCmM4TKSJ1FVpzgYQgQ05+CzT6N83RncfSJI5p/5NoB7F5BycLwFfO627h
+         NPKc+nhle+14LrcO8CpuE2DhIQwe6cv5PUPKXj6Zr7oU2ZIxOk+xjbj51T/+t6hHIN
+         3Vqq/i1noAP9mJRAQdEfeD3JC5eyk3RttfIUDbENEr7FdFGoMdcxmtwA3ZQNVFyGHc
+         9y2Ho64yPjz5beRlVbYAJa0uoDy2qhuUtB4zM5hit+7DiD8axQcMe/cze3kpb/7lSX
+         q3gRFm0Cv5YcdOIaiJzqZM4KfHq6EN22QWxOWCx9bINWR3S6rJZHG4aBnEqaeYuNop
+         XlwBpoQ+6wJHQ==
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 28 Oct 2022 13:02:23 +0000
+From:   ns@tfwno.gf
+To:     Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi@vger.kernel.org
+Subject: Bug: kexec on Lenovo ThinkPad T480 disables EFI mode
+Message-ID: <3acf1cc7a974cb4fb9b77b39311c6714@tfwno.gf>
+X-Sender: ns@tfwno.gf
+User-Agent: Roundcube Webmail/1.3.17
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Greetings,
 
---Fc5e//HBGfgKdc7B
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I've been hitting a bug on my Lenovo ThinkPad T480 where kexecing will
+cause EFI mode (if that's the right term for it) to be unconditionally
+disabled, even when not using the --noefi option to kexec.
 
-On Fri, Oct 28, 2022 at 08:59:54PM +0800, Ajye Huang wrote:
+What I mean by "EFI mode" being disabled, more than just EFI runtime
+services, is that basically nothing about the system's EFI is visible
+post-kexec. Normally you have a message like this in dmesg when the
+system is booted in EFI mode:
 
-> Thank you for review,
-> I think it is appropriate to implement on audio machine side, like
-> this I did before,
-> commit 3cfbf07c6d27
-> ("ASoC: qcom: sc7180: Modify machine driver for 2mic")
+[    0.000000] efi: EFI v2.70 by EDK II
+[    0.000000] efi: SMBIOS=0x7f98a000 ACPI=0x7fb7e000 ACPI 
+2.0=0x7fb7e014 MEMATTR=0x7ec63018
+(obviously not the real firmware of the machine I'm talking about, but I
+can also send that if it would be of any help)
 
-> What is your suggestion?  Thank you.
+No such message pops up in my dmesg as a result of this bug, & this
+causes some fallout like being unable to find the system's DMI
+information:
 
-Doing that seems fine.
+<6>[    0.000000] DMI not present or invalid.
 
-Please don't top post, reply in line with needed context.  This allows
-readers to readily follow the flow of conversation and understand what
-you are talking about and also helps ensure that everything in the
-discussion is being addressed.
+The efivarfs module also fails to load with -ENODEV.
 
---Fc5e//HBGfgKdc7B
-Content-Type: application/pgp-signature; name="signature.asc"
+I've tried also booting with efi=runtime explicitly but it doesn't
+change anything. The kernel still does not print the name of the EFI
+firmware, DMI is still missing, & efivarfs still fails to load.
 
------BEGIN PGP SIGNATURE-----
+I've been using the kexec_load syscall for all these tests, if it's
+important.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNb0rMACgkQJNaLcl1U
-h9A95Qf/RAWnE6Y2m+kzFQRiw0jEfmsInSLiQXOqfF8ByYGq5HxCsEoOJQUz8FCT
-OrYN6znnN0/Cj2vZP6ZMCyQP+Tawetbrn1XX2YU9RUgLQS35sPUrSTMXgyBuXEn6
-2xrSN0IwzRR3TpmTGKUdDb3YtzvrFUCsQXvlbt37/CIlI3xSEPVSQCych7yUEnt3
-yVEKP2kg8G2aHN+3aEygCNC8OvH98gUYPTil2wHAou2sa8/WBD5yP0+iJHKs5tY2
-Uni784arkAKm5Pr2CYhS79Swx/Wzrf+r0skHgoEL/Ml4Gu2Y6xTbHaVfBITd+v1L
-kGiIgWVmSbPSTv+jt6CjGcaj66zzVQ==
-=iTcB
------END PGP SIGNATURE-----
+Also, to make it very clear, all this only ever happens post-kexec. When
+booting straight from UEFI (with the EFI stub), all the aforementioned
+stuff that fails works perfectly fine (i.e. name of firmware is printed,
+DMI is properly found, & efivarfs loads & mounts just fine).
 
---Fc5e//HBGfgKdc7B--
+This is reproducible with a vanilla 6.1-rc2 kernel. I've been trying to
+bisect it, but it seems like it goes pretty far back. I've got vanilla
+mainline kernel builds dating back to 5.17 that have the exact same
+issue. It might be worth noting that during this testing, I made sure
+the version of the kernel being kexeced & the kernel kexecing were the
+same version. It may not have been a problem in older kernels, but that
+would be difficult to test for me (a pretty important driver for this
+machine was only merged during v5.17-rc4). So it may not have been a
+regression & just a hidden problem since time immemorial.
+
+I am willing to test any patches I may get to further debug or fix
+this issue, preferably based on the current state of torvalds/linux.git.
+I can build & test kernels quite a few times per day.
+
+I can also send any important materials (kernel config, dmesg, firmware
+information, so on & so forth) on request. I'll also just mention I'm
+using kexec-tools 2.0.24 upfront, if it matters.
+
+Regards,
