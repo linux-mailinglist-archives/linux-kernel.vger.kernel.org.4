@@ -2,112 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D82DC61186A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72446611877
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbiJ1Q5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
+        id S230417AbiJ1Q6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbiJ1Q4n (ORCPT
+        with ESMTP id S229460AbiJ1Q6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:56:43 -0400
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA011EB56B;
-        Fri, 28 Oct 2022 09:56:16 -0700 (PDT)
-Received: by mail-qt1-f181.google.com with SMTP id r19so3820921qtx.6;
-        Fri, 28 Oct 2022 09:56:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rDfK2H1aBftmwIp77bKuXrrx29hMSNAG+g0WQdlgDPo=;
-        b=GLZznfFYDpdyS5bB46y/wQetcZkKqEa6NmLfYlz3egVlqF4OmTEKv0SRxbffJNsIXq
-         SRJXPpgwOH2d9jUroR5S4zITCId8K1SuhgnRjBSF+EpTgMjFVBaI7poX+NZn0sDr3tOm
-         z57nybwksEVWTqBwGXJ3BhbjGKNCsUj/v5/Zv5KaWpN3SWPNIeFJS7lw03DkBUyHAk3C
-         Rvo7sTtQmyFK4Kk7V0FhaVmz1dNup/dx/Dlb+93RQxmPD5hZlfKB6DzQBZ0ADrj5mMfw
-         kIxwwtyHxJS/99aJQnvQF2jipy5cvV1+PuUomf8JhJmvBeN0lwFZ7CSxNN+tzjn0dt8s
-         j2yQ==
-X-Gm-Message-State: ACrzQf3lfR/Y5nTD6vGLVcv1Ay6z6CP9ItCI2a3dXoKzgrrRyLc7yeYa
-        Z31lAod95xf7Fyj8AdLmA9AtVg9y1adMKzOLznw=
-X-Google-Smtp-Source: AMsMyM67fuSLwLA17n2MGGaxc8z04FhqqGkYApd52+dq8IDxDDRCv84+9RgjLd5vQBMN1zc6dJQersxY5xtKY6PLFlU=
-X-Received: by 2002:a05:622a:1a25:b0:39c:b862:7318 with SMTP id
- f37-20020a05622a1a2500b0039cb8627318mr350823qtb.147.1666976174432; Fri, 28
- Oct 2022 09:56:14 -0700 (PDT)
+        Fri, 28 Oct 2022 12:58:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F341CC76F;
+        Fri, 28 Oct 2022 09:57:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0BBBB82BAF;
+        Fri, 28 Oct 2022 16:57:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23436C433B5;
+        Fri, 28 Oct 2022 16:57:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666976275;
+        bh=f6QxoPZM16FkHAtZfmG9jqMgLXfpHxawFf5SQdBOWC4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=V6rlBW4rH0wMLLonaaEynw4AvVpx8OGAG7Po7M8owcLQpNi7LF4QXhNF/e35y5aEK
+         lcoBjR89hcnbdjDJK0934TiAXM1ljogZZq7lDXV8nt7CgVUk2LGakUa35rcn+wpbm+
+         PZZ9Rh7Asdo0QFMwbpZl/vuPheoIeExxj4hRzfAAnez2Oae+zW8rmdzfjGRsB16QT2
+         thnUvPeskXQfdRbUAu/QmH7mDyZ0DVTfsA2QRZ07T/jCwR5yThO62kzZfC9b/eJPGY
+         vhymvrYuXY4S6S2tt3msmdckqcDqffhavAuRPWRBOOtAd/rrMyeN+i9hHALUOeDCRL
+         IQhrvBd+vLdeA==
+Date:   Fri, 28 Oct 2022 11:57:53 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     jingoohan1@gmail.com, gustavo.pimentel@synopsys.com,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com
+Subject: Re: [PATCH V1 2/2] PCI: designware-ep: Disable PTM capabilities for
+ EP mode
+Message-ID: <20221028165753.GA897928@bhelgaas>
 MIME-Version: 1.0
-References: <20221027150525.753064657@goodmis.org> <20221027150926.006142977@goodmis.org>
-In-Reply-To: <20221027150926.006142977@goodmis.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Oct 2022 18:56:03 +0200
-Message-ID: <CAJZ5v0gbhc-03JwS7T2sKKhNQWa56UUOYGtgc2Zc8nM-Max7jA@mail.gmail.com>
-Subject: Re: [RFC][PATCH v2 05/31] timers: ACPI: Use del_timer_shutdown()
- before freeing timer
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919143340.4527-3-vidyas@nvidia.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 5:09 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
->
-> Before a timer is freed, del_timer_shutdown() must be called.
->
-> Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: James Morse <james.morse@arm.com>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Shuai Xue <xueshuai@linux.alibaba.com>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: linux-acpi@vger.kernel.org
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
-Please add "APEI: ghes:" to the subject after "ACPI:".
-
-Apart from this
-
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-
+On Mon, Sep 19, 2022 at 08:03:40PM +0530, Vidya Sagar wrote:
+> Dual mode DesignWare PCIe IP has PTM capability enabled (if supported) even
+> in the EP mode. The PCIe compliance for the EP mode expects PTM
+> capabilities (ROOT_CAPABLE, RES_CAPABLE, CLK_GRAN) be disabled.
+> Hence disable PTM for the EP mode.
+> 
+> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
 > ---
->  drivers/acpi/apei/ghes.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index 80ad530583c9..916b952b14d0 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -1405,7 +1405,7 @@ static int ghes_remove(struct platform_device *ghes_dev)
->         ghes->flags |= GHES_EXITING;
->         switch (generic->notify.type) {
->         case ACPI_HEST_NOTIFY_POLLED:
-> -               del_timer_sync(&ghes->timer);
-> +               del_timer_shutdown(&ghes->timer);
->                 break;
->         case ACPI_HEST_NOTIFY_EXTERNAL:
->                 free_irq(ghes->irq, ghes);
-> --
-> 2.35.1
+>  .../pci/controller/dwc/pcie-designware-ep.c   | 19 ++++++++++++++++++-
+>  1 file changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> index 7e9529ae3824..dc3057b18f36 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> @@ -646,7 +646,7 @@ int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
+>  	struct dw_pcie_ep_func *ep_func;
+>  	struct device *dev = pci->dev;
+>  	struct pci_epc *epc = ep->epc;
+> -	unsigned int offset;
+> +	unsigned int offset, ptm_cap_base;
+>  	unsigned int nbars;
+>  	u8 hdr_type;
+>  	u8 func_no;
+> @@ -698,6 +698,7 @@ int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
+>  	}
+>  
+>  	offset = dw_pcie_ep_find_ext_capability(pci, PCI_EXT_CAP_ID_REBAR);
+> +	ptm_cap_base = dw_pcie_ep_find_ext_capability(pci, PCI_EXT_CAP_ID_PTM);
+>  
+>  	dw_pcie_dbi_ro_wr_en(pci);
+>  
+> @@ -710,6 +711,22 @@ int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
+>  			dw_pcie_writel_dbi(pci, offset + PCI_REBAR_CAP, 0x0);
+>  	}
+>  
+> +	/*
+> +	 * PTM responder capability can be disabled only after disabling
+> +	 * PTM root capability.
+> +	 */
+> +	if (ptm_cap_base) {
+> +		dw_pcie_dbi_ro_wr_en(pci);
+> +		reg = dw_pcie_readl_dbi(pci, ptm_cap_base + PCI_PTM_CAP);
+> +		reg &= ~PCI_PTM_CAP_ROOT;
+> +		dw_pcie_writel_dbi(pci, ptm_cap_base + PCI_PTM_CAP, reg);
+> +
+> +		reg = dw_pcie_readl_dbi(pci, ptm_cap_base + PCI_PTM_CAP);
+> +		reg &= ~(PCI_PTM_CAP_RES | PCI_PTM_GRANULARITY_MASK);
+> +		dw_pcie_writel_dbi(pci, ptm_cap_base + PCI_PTM_CAP, reg);
+> +		dw_pcie_dbi_ro_wr_dis(pci);
+
+Per spec, PTM Responder Capable, PTM Root Capable, and Local Clock
+Granularity may only be set for Root Ports, RCRBs, and Switches (PCIe
+r6.0, sec 7.9.15.2).
+
+And this is just a matter of making an Endpoint comply with the spec,
+i.e., configures the Endpoint so it doesn't advertise that it can be a
+PTM Responder, right?
+
+But the Endpoint probably still *can* be a PTM Requester?
+
+> +	}
+> +
+>  	dw_pcie_setup(pci);
+>  	dw_pcie_dbi_ro_wr_dis(pci);
+>  
+> -- 
+> 2.17.1
+> 
