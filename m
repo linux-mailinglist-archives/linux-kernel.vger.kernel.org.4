@@ -2,151 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF993610C43
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 10:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC413610C28
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 10:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiJ1Icl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 04:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59678 "EHLO
+        id S229765AbiJ1I2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 04:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiJ1Icd (ORCPT
+        with ESMTP id S229510AbiJ1I2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 04:32:33 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D1C17250C
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 01:32:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1666945953; x=1698481953;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=yGry/pWRS/1GiHAkDYvoBhKHjVKsf3tr/q6GIlXe/Vw=;
-  b=O1d9Zg+MH5yoVm0jEBUkiuMupdstBorTVI5JtZCrUGO+brSUOnuB+MWy
-   VJ95sXjidxjjRCVpxYevLNECmwaToPKd5Urohw5UYdFFjWtH+yF55iVeT
-   kZlinAL+qMKp0JCwODt4t9uHFKtPezb3CvviwY65XN5SBDEzhZCJwD1QM
-   zi6TDvjcA6y+S0f0EasFGk7iwrxQ4jvpWp9Nw+0dcEkAYae1lRBVYclG6
-   k2cWBL0jNaEEGzxRKPyEzN6N7WtrjHunaTjCSyGgLk0Lo8PJyiUIB/A7f
-   EqV0pISaqY8zCmDIaVsuRD6A4hENjXM99KWpUCcxEP4X4L8D3p8rfHdFI
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.95,220,1661788800"; 
-   d="scan'208";a="215312272"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Oct 2022 16:32:30 +0800
-IronPort-SDR: v0ezxqZwsoO3WESLl94/Tla/pLnvVwa7mAyb9HmSPL2JPeUYkA6a7+rZEKkaQWj6U7j082q6Vf
- pK3BZTDUrzU+SPrUphUadqFf0tN0+8QlhvDfhrGF2dsPMxdq+40NqrHUMCTfNO0H1BVuK61uoq
- eG0yo/STcc73LXf7IX1X+F1/61+Pw2mJffwY0KfqdXmU2i4/bFs3ZzUtjxx09oAqQy49jUuKJ8
- Oiu83QCjp9qo86TolAvy4w+tnaZhQqiaGC55n+HedXg33aHQyVJ7S1b/oW5Y4k0/KyJJ7BF3a/
- kC8CkP5kK3MlKcP4nbEA99Xe
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Oct 2022 00:51:50 -0700
-IronPort-SDR: n6fxHrUlovb24PAoaFuxz+3ejpokf64cKBpR7guB4OGt1LHQd09osZhib78JD5Bij5W12T55gK
- DL++ueOiIKTcepHOdCYCmBoRV9zuiX/Vil3hzIQmyJMcoCw+M/fM43NGG/uS1x9hH6czjBnyqA
- lQ117x0VYJqhAbGkx3dMAXMioWHtow6LDf3Edmh3vrK2DMxxfwkBz6c4WulFnMY9TD9R+Hn8Rz
- re22tEhQCskhpl+NTbGbiZp1v0eAcwqPAFtFHhAl0TwSUnUVwz7eX/FVeERWwDwnXN/cZ+LpQP
- WSY=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Oct 2022 01:26:30 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MzFxx52YWz1Rx15
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 01:26:29 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1666945588; x=1669537589; bh=yGry/pWRS/1GiHAkDYvoBhKHjVKsf3tr/q6
-        GIlXe/Vw=; b=q5Sx/LtWSabxkzRGhwH2yAohQhHudeTrjwQgdk6dltsjzS9sU3h
-        a6Tg3+16AlYQl+2o9vWTB9MribElyzuensUFfRWBCW16VLO1j72U4XrwTyIFZm0J
-        7DWWAPxXiYP2co3w6i7Ci6CAGW3He/l14M7oia7xBpfnymCDpGQ4EJxmt896Q5Wx
-        xpnC7xQIeVIHMUZFIDPJClDfbRosOJvpQ2YLJIdfxSyCYWIxiCYtpvQBgGHRtwIC
-        A03UIkSEVBX2K/qYjBYtV7Fe1SAvCC5eaj0eTHyFENS11v/S0IrvRrBww3Pp3SVM
-        z7JYCHwGZ4lHnjRH0UbcQ6UhDWuA+e8rbJg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id SAKAEaRd3YUf for <linux-kernel@vger.kernel.org>;
-        Fri, 28 Oct 2022 01:26:28 -0700 (PDT)
-Received: from [10.225.163.15] (unknown [10.225.163.15])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MzFxs52r9z1RvLy;
-        Fri, 28 Oct 2022 01:26:25 -0700 (PDT)
-Message-ID: <0bb40ab2-2e80-44a5-79c2-fa4bfe2560d1@opensource.wdc.com>
-Date:   Fri, 28 Oct 2022 17:26:24 +0900
+        Fri, 28 Oct 2022 04:28:22 -0400
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140047.outbound.protection.outlook.com [40.107.14.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32421C3E70;
+        Fri, 28 Oct 2022 01:28:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dInrPjHXt7fQcOilH5oY4aX+hMI2K97QkBo+ndRSfcDPqwJsAGCUOh+FY0E+0smdvMF/2P8QwnQmpftL5+FYq1uvW5i9H1hXcMxE4vgMK2lQeS9Q2IAmzV1lCGGc2RRaV2fJ35jmj7ak0OkdoPIkEXvE9Rs7MFq0IZPLbEsRJivqMKky6kXy5IZlUph8R1SA53Gka1f1m/CwKAbngsZ/epuzciAPm24CGLDYnk0cEutqs9IO5lcGieSJ60H3Lpf4xlUkyf0CKSpkJNJ0dJF4TGCiGOfA3uVjmq5kU1DV1hsufcs4/88tZrbdHUqQGxJzHztcEE3+OPTsF6Ut9zPWcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/ElbBtTD6uLwAkpkL+VKeeBVjXwKEVaLkeNtsoGirC8=;
+ b=QQC1PkuzQCblzNye1oZW+BXGOltqYpteNZ/Ww9k5UoMPphyx4k+hl9bmpC5Qvpl4XMRVeLD7UFibjjyNTYGstBPJxuWTBvfKXolK2fSSf/OzEBDjEOdfcDma/YV1AtLpFKbZ7bUhNh/xuAal+Ifo6brEx8NqSYoZX9MC8T2puU6INLQ1fowPu08ouE9LIgITdwgxci3H6sYrP0gSysmO4gL4P8hOTmf/6+MGbVueLsVwHc8bAw3rCopgwwTLmPmxVMTd3ddnUiqshkTi91C1nQwzlZhWLIMt5qSGatd3fHHMAlq0Kaft8Ze1g8iY0L2tIA1+AahXOVTXC4AxCD7PQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/ElbBtTD6uLwAkpkL+VKeeBVjXwKEVaLkeNtsoGirC8=;
+ b=flC9jFgBHu66DgDQsfToytafj96dvaFPYqlAy7Sp+zC0m3DcOSWGvK3rufLYSIsS8XyLyKAnJLJHJqraVE7sNz3bhR2p3tLKEIkGa/rei7HClwxijTpdCj2z/lfp8Co3t2YJqrCij6nisrxX03Rqu6EEEUs6U1exlUGyyXoGuCc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB4213.eurprd04.prod.outlook.com (2603:10a6:209:4a::21)
+ by DBBPR04MB7755.eurprd04.prod.outlook.com (2603:10a6:10:1e7::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Fri, 28 Oct
+ 2022 08:28:19 +0000
+Received: from AM6PR04MB4213.eurprd04.prod.outlook.com
+ ([fe80::1991:3060:d022:a541]) by AM6PR04MB4213.eurprd04.prod.outlook.com
+ ([fe80::1991:3060:d022:a541%4]) with mapi id 15.20.5746.021; Fri, 28 Oct 2022
+ 08:28:19 +0000
+From:   Chancel Liu <chancel.liu@nxp.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shengjiu.wang@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
+        nicoleotsuka@gmail.com, linuxppc-dev@lists.ozlabs.org
+Cc:     Chancel Liu <chancel.liu@nxp.com>
+Subject: [PATCH 0/3] Add support for MICFIL on i.MX93 platform
+Date:   Fri, 28 Oct 2022 16:27:47 +0800
+Message-Id: <20221028082750.991822-1-chancel.liu@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR04CA0210.apcprd04.prod.outlook.com
+ (2603:1096:4:187::7) To AM6PR04MB4213.eurprd04.prod.outlook.com
+ (2603:10a6:209:4a::21)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH RFC v3 2/7] ata: libata-scsi: Add
- ata_internal_queuecommand()
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, Hannes Reinecke <hare@suse.de>,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, bvanassche@acm.org,
-        hch@lst.de, ming.lei@redhat.com, niklas.cassel@wdc.com
-Cc:     axboe@kernel.dk, jinpu.wang@cloud.ionos.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linuxarm@huawei.com, john.garry2@mail.dcu.ie
-References: <1666693976-181094-1-git-send-email-john.garry@huawei.com>
- <1666693976-181094-3-git-send-email-john.garry@huawei.com>
- <08fdb698-0df3-7bc8-e6af-7d13cc96acfa@opensource.wdc.com>
- <83d9dc82-ea37-4a3c-7e67-1c097f777767@huawei.com>
- <3ef0347f-f3e2-cf08-2b27-f65a7afe82a2@suse.de>
- <ea0be367-a4e0-3cc2-c4c7-04d8db1714cd@huawei.com>
- <07028dac-d6cc-d707-db08-b92c365a6220@opensource.wdc.com>
- <a3fe8284-d002-36b0-7e09-67f132353088@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <a3fe8284-d002-36b0-7e09-67f132353088@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4213:EE_|DBBPR04MB7755:EE_
+X-MS-Office365-Filtering-Correlation-Id: 68698188-c51e-4173-607b-08dab8be5e2d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iigU3qgEwK0eKam6P+6c9Yb/oeKwHvmtQzs/a8DF4qsc99MSpX8B2tNqw+IHeB94+H8GfV2lHfNT3MumfC2PyJWBagpGN+QBOtdriO4oWGON8z2IeSUD/vQCTNDs4e1LxypWEskpNAk6X6wUoxvyoVMsYuDK/T86xJ/9ncgjDXwhaAgGkzeOMLAEyLe5T1bHfctS69rnMdtIXbifXF4I46uATUUp1N5xMI58sZUWG7CK/eUzdQKiZORizSauVnsOzNBMlRYVCsHJvKanNHnEH7/OgoMea1vfa039pXXXKEncskJFdOexPBPkYsJQtC3MF6dgSGoTeodM1QbBl0nF+AweIjb+ag6GjWW9lVyIkWcFNKfBhErwO7N0yccu4rvrkE01mXZwQEbAX2WLmOvWvIy6vB/vRYDqdWdx+i44Sg2FgU3eZfC+5Jhhm2X0t12CK2JIlNH+ehDwzfk3KjiVtj8h4bD1+5/P1bbk5rJwr0rWMyLGf1cqmgefIrHX91kEZ6kBZDMV0rwCyr2C66CVPaqiep/hoU9TAa+/cKevcLeit3qn1P/SjU2Eh9vMMcx9TsK9idimCWwSYfLfz+C1yJANwhZxLc/JMJMETVvKfs3wW1tL5tRDfIJqoUaV5dIeaeJBCW7D5WG4AO/YOO3KQtw3mI0LT2EjkzQnk6wAFuqz78pxOpZ7L9Oxr0epBmAih1iH2lqaDOQyejozHqbS+2PwqjIZh6cbE+Cl0ksA6ka0NQm1MO+5T9GnZJQR6dolmyvSY/VJTOh2RGwNWy7XT7j8pWHrw+bVJt8fS0P3KaQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4213.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(376002)(366004)(346002)(136003)(451199015)(44832011)(66946007)(7416002)(38100700002)(4326008)(2906002)(66556008)(316002)(4744005)(8936002)(41300700001)(66476007)(5660300002)(478600001)(8676002)(921005)(36756003)(38350700002)(6506007)(6486002)(2616005)(26005)(52116002)(6666004)(1076003)(186003)(6512007)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?paY2/GVVZ0SA8xeLLhH7aQ4XnZFcQHQO9rOaudXzgX/oWRVCZzen5XnW2/bM?=
+ =?us-ascii?Q?1w3FtJ5xDZ37k60ZpM4qhVwgPkuMOFyft70+odgylkZ3my5M9Kcn8oM4UeBR?=
+ =?us-ascii?Q?ZozbH4XPaIFr1bp0PE4LhfU9ApJwRXwWyaQTylSV+unPT96rRApzUy7ePlC+?=
+ =?us-ascii?Q?xEVZU0gdRTUxLMvsRnY2jLFHwS1K9/royHqnmZ90YE/fgmkGbZkXcRyCd2su?=
+ =?us-ascii?Q?WNo/noGdGa+BW4uZQ/r0/+of/VyqdRcHWezDCqn7RCyOXZm81plV0YrE/aCO?=
+ =?us-ascii?Q?GBlJ+AN/lGnelPCKsGcC6IumjzEVodiQyOMW+CmriAI5nKFKrsb+S8zSvASM?=
+ =?us-ascii?Q?4ZZVorsy1UkVvo84wN/YTgh7KqW0w/F4erkj+RR+0yFpuzhL/qoU7R5JwMj9?=
+ =?us-ascii?Q?1AdXE3J73pE5W9vzkYdC8948lkGqR0s5a74WYNZ/wL6VZCuUdMbx8066jfGv?=
+ =?us-ascii?Q?oa+hI4eaP+dsiSihXJPUpqxLtUJ45m5bLVvIXXV9rpngMGqh7nKOW9RYmIwv?=
+ =?us-ascii?Q?xHaRyyspNX/SVgV4SqYyzXe+xDcg1080MsKQ/8YILWsMTFyAGooC785hCvY5?=
+ =?us-ascii?Q?Wt5vAjXfUWuUn6JtvT3hFx1HBssnKZeWkPqhHQGlpmgPwSlfOkoldvS2Hyj+?=
+ =?us-ascii?Q?5QyS7VGBff9fq5NejQL6j02xoUVjWkNQcHEmJ7Onh844y/JPrJkoBcqmsdnV?=
+ =?us-ascii?Q?b7Vmioig4NtRxv4iwkWB16gqSwvnkUUe2ZPa+IGE7VaDIVU2cOT9kBDSIhjw?=
+ =?us-ascii?Q?o3QU8sh/hmDKq8Q2B2OIzbamFVMX9AjIYC1rBX4KJgKI1koAbb7DvrLQ7onu?=
+ =?us-ascii?Q?rF2Su4bNBxCiKnal08TmyoN8qzEfJeL66txhuEL09ANeZc4LrRTpk2fXUP9M?=
+ =?us-ascii?Q?RxTnBAZZF/lS8SmbL8QBmbMtE2/qamtiLVDy5963tT8G+o37dWqEYLSudXVM?=
+ =?us-ascii?Q?rmLEedfDIoO//0lFRvC79vEtSJEb6V3pF6rKaCm9K6hphOaPhAZDctjgMOAo?=
+ =?us-ascii?Q?d1mk5hyv452I2RJNZKwW4j1RiigAt2EnTlxtW7dXRszr9FyAyD9/NVyZsUUB?=
+ =?us-ascii?Q?Pe1TWsFUVyCNdNWs4ELxBpv7nmAWZP+Rn+uo2vTP3desoq+BTwuhOyEBBqct?=
+ =?us-ascii?Q?F0toz6H97E+7Upy118KZe7/dMyoxVurUj6bddQScUR6s+fhXx5Soz5cXAvgn?=
+ =?us-ascii?Q?02e0T7yVDsqb/Gg/lo9IFouA8lZUArwog9o+BxNXO9zqTT6/N+AxxFTWCq3O?=
+ =?us-ascii?Q?v5VpwDjXi8emLFWa12t2cuw3uC01f5l6itUeP9T0uxwJyceYqdfnrnh4McBW?=
+ =?us-ascii?Q?+SAr/T4dZxWHe44RFDYPg3aUMMBABMYE8VpIKykIO8WDe07Hz3kxq6T+AtED?=
+ =?us-ascii?Q?Ps3nnP4Zdgj/mg5/Ms25dronCCAzDrRgRKR5819wt4xOs5OTtskCBxb0K8QI?=
+ =?us-ascii?Q?lri8MPB+xjB7KkehxAAMW/+0wJ6AxwnZajgOjkZcpXfrBfNxi6gPdXyluSXq?=
+ =?us-ascii?Q?OWpAYHZdK/wkN9IxMpSMJeFYahH5IcZvrUR2Vlsbnek4OAc3gEy1p/gxQEaE?=
+ =?us-ascii?Q?zvYXGHnYMVvP51PwT2iNl5O6qV6riyNYEruxrB1f?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68698188-c51e-4173-607b-08dab8be5e2d
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4213.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 08:28:19.3269
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: StP7zgLzABdmzSIDBEthaonq0pPdEpRUBUw5Hhj6rwqRLRir62hjZ4QYzLyHX5YFP9pRwAk6bh6NVZ0mcqd5Fg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7755
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/28/22 17:14, John Garry wrote:
-> On 27/10/2022 23:35, Damien Le Moal wrote:
->>> At what stage do you want to send these commands? The tags for the shost
->>> are not setup until scsi_add_host() -> scsi_mq_setup_tags() is called,
->>> so can't expect blk-mq to manage reserved tags before then.
->>>
->>> If you are required to send commands prior to scsi_add_host(), then I
->>> suppose the low-level driver still needs to manage tags until the shost
->>> is ready. I guess that some very simple scheme can be used, like always
->>> use tag 0, since most probe is done serially per-host. But that's not a
->>> case which I have had to deal with yet.
->> In libata case, ata_dev_configure() will cause a lot of
->> ata_exec_internal_sg() calls for IDENTIFY and various READ LOG commands.
->> That is all done with non-ncq commands, which means that we do not require
->> a hw tag. But given that you are changing ata_exec_internal_sg() to call
->> alloc_request + blk_execute_rq_nowait(), how would these work without a
->> tag, at least a soft one ? Or we would need to keep the current code to
->> use ata_qc_issue() directly for probe time ? That will look very ugly...
->>
-> 
-> I am not sure if there is really a problem. So libata/libsas allocs the 
-> shost quite early, and that is before we try using 
-> ata_exec_internal_sg(). Also note that I added patch "ata: libata-scsi: 
-> Allocate sdev early in port probe" so that we have ata_device.sdev ready 
-> before issuing ata_exec_internal_sg() (sorry if I'm stating the obvious).
-> 
-> I think Hannes' issue is that some SCSI HBA driver needs to send 
-> "internal" commands to probe the HW for info, and this would be before 
-> shost is ready. He can tell us more.
+This patchset supports MICFIL on i.MX93 platform.
 
-OK. Understood.
+Chancel Liu (3):
+  ASoC: dt-bindings: fsl,micfil: Add compatible string for i.MX93
+    platform
+  ASoC: fsl_micfil: Add support for i.MX93 platform
+  ASoC: fsl_micfil: Add support when using eDMA
 
-> 
-> Thanks,
-> John
+ .../devicetree/bindings/sound/fsl,micfil.yaml       |  1 +
+ sound/soc/fsl/fsl_micfil.c                          | 13 +++++++++++++
+ 2 files changed, 14 insertions(+)
 
--- 
-Damien Le Moal
-Western Digital Research
+--
+2.25.1
 
