@@ -2,72 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E274E61091A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 05:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F69B61091D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 05:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236277AbiJ1D6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 23:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
+        id S229645AbiJ1D7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 23:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235890AbiJ1D5u (ORCPT
+        with ESMTP id S229379AbiJ1D7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 23:57:50 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D25D57E8
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 20:57:49 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id f9so3767650pgj.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 20:57:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RJnDODp9nrsY8O14H4fiETvFtrmNa+NjbJOgCCnAd7I=;
-        b=EjRvC08krxthWC/7+Wi58igQece9yaX+Z2Yo1tD36GPKckmk8zqECNyWxR+65rrCDn
-         6kL07F5C8ny8Fb4L1+qwnPFFI1kMf5C0sYFcjAmqDtjp8hlkrPJ4DPG+THAK7I58RTIz
-         2Hef/Wm/x/0VE2/A0K/JYGnetgloc6Y+7nW6jmj3vs7dKeb159zWqhXcVhTfLl7RtvLN
-         bByV2Z/iER2E5LKXMwFpRnY8erlx/ZoHS5l6cxfPKyaeOA8EBRlnTnJfzaSu4AOiLnqm
-         y7QrfQlADlzs0VBE0k54fve3WIhgJpbSnJTtVp8aOlymURMK53uxruqoZqEt8PyFxGGf
-         GK+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RJnDODp9nrsY8O14H4fiETvFtrmNa+NjbJOgCCnAd7I=;
-        b=YVBBJAtLgD0eniAHM19RBel6SJ6KE3hNJr+1QTVGuv4F10UeF0gJGslj6Ska2dAXiM
-         t3TyNcsF3f5zhYldOspJiQ41lMz4ifmhSj82l1BJyHbSKVvSTNJ8HNZxF4sMeYJBhaV0
-         kASHwKbp9ZpM+uq4k5khPPJo2h7nfAmD3yIa95SYuZCAGv5s/Q85A+XMR2BGuZgxH9/d
-         Rq5jn6xpHOT6CFVKGlekyrIzx/+EjQIT8MFkhtzle5RjyDPZ9nO2IoiSBrKd7WMgmpU3
-         2kJ+LrBp5sh0puU9HiGTEfyFLTsLS27pGzuR4lS15oG+JzX9coDFM+QMbVWmlb/SSJeE
-         d4sQ==
-X-Gm-Message-State: ACrzQf2/DGP+trOoJ73fO3o0j0VAxDo2PkTCAkBsVq+tsGv2K77SDjrH
-        eyYhObGIM7L8G0Z4k/Zst2S9EnxAMDpYRw==
-X-Google-Smtp-Source: AMsMyM7F3+OkMIjCFDS6cDYBnKUeG/TWqinO2Z2F3UqBiZx5NVLwWKPFI+AGB1c0Tc0AeXJt+eJQcw==
-X-Received: by 2002:a65:6ccd:0:b0:439:2033:6ee with SMTP id g13-20020a656ccd000000b00439203306eemr45836543pgw.271.1666929469341;
-        Thu, 27 Oct 2022 20:57:49 -0700 (PDT)
-Received: from [10.85.117.81] ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id x7-20020aa79567000000b00528a097aeffsm1882966pfq.118.2022.10.27.20.57.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 20:57:49 -0700 (PDT)
-Message-ID: <64d963b6-2d9c-3f93-d427-a1ff705fb65a@bytedance.com>
-Date:   Fri, 28 Oct 2022 11:57:43 +0800
+        Thu, 27 Oct 2022 23:59:16 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DB2D8EF9;
+        Thu, 27 Oct 2022 20:59:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=K1/gI77txMJLPkROI87IUmxSmbtC8Y01sqPV2sTbDxZgD3oSYL7w5k73DAWoknopYjNnwL7NWdsbDjqIzvtXMYdpr/L+p/yJkOfqqltPBsZtVQoQjL2xduXJ9ZiNJD/HRyw8EDrNtVbfFcguC2usYG5lbFACb2EhuSd5lmnD7HNcbTnRuRWrBJWkk+8iGvHJxU934+UkPZL1EZU2v6xJo8509/nA7pa49Y9xqn9vSl5+csFzd1DJAvqoOAvyQGIbIW88dFUsSaxq8FReRsw9DlhOro9N4FzhJ3GYwysQOaGrILEKGAAM8zY6H9oxhc9I1an/Fli6AOW7puQpi493Lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4CSm36fiStGfSgInpiL5KsSYhlJ4DILXnoqSzThhQ1Q=;
+ b=QogPgitGJ+soTVSJgS6EfIGcADIxXKJnMd70Eq+3Y+pmTjIVavgHvCd7QfTTF0c2+naSdPcJx8uB8f4IAEGUJK6CbRN6nL2WXAh3LaPAKk/TDQRGIIf/fPb5aj+s6gyKVORTLn4dIqFRMzCH0hXqGKVl7zmmzjCjdC55gKGD9kWNT94BFPoxKP+rP7rA0NcYcm1wqSmKIovv5AjqKg3JuldyF8HOuJ3y9CHkcm6XRQx6d6Xbj8hJP3B4i2FQfw4Z/xgucHR/l66Z/9VJ/3fM893pih+dg4aj/CYTsn2L/J6234IBR3CafPxiVOHlXSXvsocHsgmM2JZbf8Lk6SjXxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4CSm36fiStGfSgInpiL5KsSYhlJ4DILXnoqSzThhQ1Q=;
+ b=yf/iOU0O+GvGm6h4mn//YuuQ/3MKlpiql3xMLtpxFfwuINyv9MIg01ZTz/EmCtNCF9bWEepn2yaKXBGErmnpHYqFbFqfmDz9O+6tIPLVZ0rG9zC9uSZ4Js9ikAc0HXkTRJq3t1cojh7/4pQU/Qt7Qc9wj77Z0aZiIdmP7YU3wig=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5176.namprd12.prod.outlook.com (2603:10b6:208:311::19)
+ by CH2PR12MB4152.namprd12.prod.outlook.com (2603:10b6:610:a7::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15; Fri, 28 Oct
+ 2022 03:59:13 +0000
+Received: from BL1PR12MB5176.namprd12.prod.outlook.com
+ ([fe80::5ce0:abf9:fe08:f42e]) by BL1PR12MB5176.namprd12.prod.outlook.com
+ ([fe80::5ce0:abf9:fe08:f42e%4]) with mapi id 15.20.5746.023; Fri, 28 Oct 2022
+ 03:59:12 +0000
+Message-ID: <9b5a3d42-eb98-404a-50be-6112266c978c@amd.com>
+Date:   Fri, 28 Oct 2022 09:28:55 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH] i2c: amd-mp2: use msix/msi if the hardware supports
+To:     Raju Rangoju <Raju.Rangoju@amd.com>, syniurge@gmail.com
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rajesh1.kumar@amd.com,
+        Basavaraj Natikar <basavaraj.natikar@amd.com>
+References: <20221025181124.421628-1-Raju.Rangoju@amd.com>
+From:   Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+In-Reply-To: <20221025181124.421628-1-Raju.Rangoju@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0058.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:99::17) To BL1PR12MB5176.namprd12.prod.outlook.com
+ (2603:10b6:208:311::19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-From:   Chuyi Zhou <zhouchuyi@bytedance.com>
-Subject: Re: [PATCH] sched/fair: favor non-idle group in tick preemption
-To:     Josh Don <joshdon@google.com>
-Cc:     peterz@infradead.org, juri.lelli@redhat.com, mingo@redhat.com,
-        vincent.guittot@linaro.org, linux-kernel@vger.kernel.org
-References: <20221027081630.34081-1-zhouchuyi@bytedance.com>
- <CABk29NtDny9qKZbZZ_i8Brwjtqs5GA0G4_SffzK4HzG3RrXVhQ@mail.gmail.com>
-In-Reply-To: <CABk29NtDny9qKZbZZ_i8Brwjtqs5GA0G4_SffzK4HzG3RrXVhQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5176:EE_|CH2PR12MB4152:EE_
+X-MS-Office365-Filtering-Correlation-Id: b6a8a4c6-223f-4cb9-5629-08dab898c620
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nYVNwJI7H4rSvKhMb7U+CpzvR/Ejt7LnpZLwum5nh2kk3B1Yi1Fl4gsOKMhPJ81z7siJ3+ahUU3M5n0Q2AimeUZCjJ9R+VBleuMvF2VfLgt+OPd5FCcXNsl7Wrr8qUIHUHknUZ7eF5mmyrFum1/Ho1Z2phe3paLEb/oIuyJbD4880ucOgPoF6CWqcUzjfY55TAXtNBcMcb58p1UQsm+N7tZp++bv3CJojobjW3cImpDEafE7ojVY3rt+t1eeh4A2G2xn6IxReRq0wnMajN+yc2kb/7AsyZZLmHhmXF2BFXZ3FAKvvEwIDJh6jAZz19oehxeYmvrrpe3l8whYzC02II87mTmJoYC6AfQYG16yYYHvnXGwtrviX9gRLBORIU1geqYhiEVVuzB70/JaykLDWVLHfEdbKa+vBRbvFshBwSIvuc8qh2RBga7HmTTUeKpXId11kId2CxMKLqQLlOcurQe7JPkhkvyMcIoLJ4ZqFReNmUB+MYYEq/mLZUObsPga5HoJgSznNS41xfPO1ny/MwJWbR5qdu3loRQQEhKRR79SOGFVNCIdtB5NUhbeuazDGF2HjUvRjIIj4ZSSZEceBASxazOmeut6e+LXDqbBxiegm0PMhDfPv4n8Blry+AWoPFu5BdH03Y7UTnF5PkSbMqBrE3G3aOcevOJbDLfFNQj8jUMUzRH/nJbUTHSCUMViVPfI7fDym30UltEiHX9PqShsmjEfXi4USd6ncE0Q+cQC6EPn7J4PSnf/2/3HUIrXBHqsiriM2cnql88bLy996xuBHcsfu+YsV+WyryqbRuM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(396003)(366004)(346002)(451199015)(83380400001)(66556008)(66946007)(66476007)(8676002)(4326008)(186003)(2616005)(316002)(41300700001)(2906002)(6486002)(6666004)(478600001)(38100700002)(8936002)(6512007)(31686004)(26005)(6506007)(53546011)(86362001)(36756003)(5660300002)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WUhWc0hYRG9hbkpXY1cwdUNLZEtkSXhHSXhTM1I3Y2xGSmxqamRuczl0WGFV?=
+ =?utf-8?B?cUVqR2FqNUxwYUE0VEI0V0dPV2ZSSHZPUWprNVZyZUhVQ20xVEVHajhwRGlH?=
+ =?utf-8?B?azVGaERwcnBEN1RyekZ5N3JRNy9MRjBjcUIvVFYzTlE2dTdvOEIyUGVhai8y?=
+ =?utf-8?B?RmNNcHYvOVhhNzFFNzNScmRyZ2V6azI4UlZzT3RLaGQrV29wUGFzT1hMUUNP?=
+ =?utf-8?B?eXZKWllMcWVYLzZLTFF3R05uMklvTDVuTHJHa1hCRGVRSG1VaVhwdWtVOUt0?=
+ =?utf-8?B?OUpRRXdJWlVhd1hqVnhTWEVlSEZQNTdJM3N2M2QvOXJDQWJBUWVPWmJwVSty?=
+ =?utf-8?B?Q20vK1Jmd2VTamFMZTE2dDRkMFBGS2x5VVJwaXF5eGNRSnRFUU01VlBmOTN3?=
+ =?utf-8?B?NjJGOVl6VFJ4cFExODNiUytnSUVMWkk2TCttN2dLR3U3ajNCOVEwL0g5a3Vl?=
+ =?utf-8?B?YmdiNXFUdEZKYUIrNWd4V0YyQ0w0dnBZNGxUZngxbTM3VTVzUlAyaS9LbXVD?=
+ =?utf-8?B?NlR0S0t6cVRoSzN6LzVja2FIVTh3REpKTENjRURaZHJZa0ZJU3YxYk5jeFp6?=
+ =?utf-8?B?RWxSazRJbnZYa1BtZG1GYVJUY2VDN1hkMjFJV3AvVUpWdjZvSmhvQ25mbmwz?=
+ =?utf-8?B?YVFMb29UcFlmcmN2bERManlyVlVlM0lTRVFjdnpxWWFjUzBOWlRsOHRkUGFo?=
+ =?utf-8?B?TmxKYnFwRHlQL2h5cTA3MlF0VCtnZkp6ZnNrR0tIOEpHVHZlMHpPZHo2c24w?=
+ =?utf-8?B?Z0lhdC9tU1VYMnlMaWdkZ1ZkUkxoZitmM0thUG9LNUw2NlI3U2pwYmdmV2tF?=
+ =?utf-8?B?bGZWN1JBTklES0VsOG5vRkltbGtkd1BZMDg3bllXMWxZVU5rRkpJQXYxdm5O?=
+ =?utf-8?B?K0tDV2VNTGxMOEZFZ1N6WlZSVXRiYUxUa3dkOEU2VXRTZDIweVB0ZmtwRGdS?=
+ =?utf-8?B?Rms3UmhUTjBxaHlTbEdIYXpQOGNpdFM4cEhJdkdlT1AzMThieE54MVBYQmla?=
+ =?utf-8?B?T3dpZitXWCtNLzk4ZThFVlo1V0ljRjVXOUp4ZmgvN1RiT21NZzU5dkVPY3JK?=
+ =?utf-8?B?anExVU42NlRtU1QwbStQU1FiVjBPM1RxdzNaVmNYQ0xQSkcrSmc1R2h2T1kw?=
+ =?utf-8?B?VGo3T2dyQzJvdDBUaUN4b1VTcGovSkxjT01pYU5BYW9jUE5tOE41WUdJMk5C?=
+ =?utf-8?B?UE5heCtWY0ZITkxvSVNaTEFSVlRYZWxsTEVCc3ZmWkFSS2tINTJpdnQxS1Mv?=
+ =?utf-8?B?RFV0STlOZW90YnlxcDk2ODE3UmJnZXJlcW9YZGpHRmY0QnMweHhBdCtUTDFq?=
+ =?utf-8?B?QzZBRmpNdnlHdjdOTWVXbzdEUHVlWHluVVF3UEt0elpLUmxHVmNObG4wWjlO?=
+ =?utf-8?B?eExhQnhxOGRJUGZsaGtWM0xjeXVEL2JkSDFKUmd0ZkhVUGhjbkxoV0R4cTRG?=
+ =?utf-8?B?bTRjOWRoNnI0NDJ1ampiTXU3SGtveGkwWEw2Y2ZYTzBXa2czaW10N25ydFQ2?=
+ =?utf-8?B?dXpUV3BGcXlRSVRmSk9BMmxZZWJuQlN2TGZueFRGenMyUk5aZDM1aXNCcG80?=
+ =?utf-8?B?ZjdMRHNWNHZFZUdCdlI0Q0oyZW5Xb1hjMFpseUFHL0ZyVUdMNFdYMHVadTls?=
+ =?utf-8?B?aDBIZExub3hNMWg1UXZiRkM3Ym9hbmlIRkx0MUN3UThhdmQ1UWxMSmhrN1JU?=
+ =?utf-8?B?WmxFTmZrWjJBNHZtVHdpRXRvNjgxUFNWaTE1dzhMWjlCeWVTMEFUWkxEK0lF?=
+ =?utf-8?B?RWh5VG9jRTRVZlhodDB2OURoNEhzZENDeTJGRXdRSlk4OVdXNXJMVmJLbDEv?=
+ =?utf-8?B?Ny96Wk9ONmhmRDZ0Z2pyM0ZOM1EzZFh3SktjQ1JnbllITE1saTRrcGtnbmt5?=
+ =?utf-8?B?L1c4UGhPNDdEY1owOFpXL3BWZHE3cTFRMldmZjY5dGZ2amRybXNzZHRyU2xZ?=
+ =?utf-8?B?TzVXcnJzV3JmR1diWE9hSjlieUR2VmxKdTEwR1pnUlcxaDVFMDJEaFhLOENS?=
+ =?utf-8?B?QnllMFZNTnVEZFZYY2VMRUJTUDNiRmNKTGVJT3paTHJLQ3MwbkJSQ21jbWEx?=
+ =?utf-8?B?ZnRoWVFqWkhNM214OHhXcFdPWmc1eDEySXV3ZUFUM0ZiU3hPUmtJK2pyRUVC?=
+ =?utf-8?Q?yP1fPWZaxKIrgR0OFAwabBGZm?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b6a8a4c6-223f-4cb9-5629-08dab898c620
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 03:59:12.8811
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hrq15w7jRuR4Jt0dzEIRZo+k41OSv1pvzV5ivvtYxk+6uzbA1X57NMWUP5sKypggZL/6UuLqBJgwwHF0Bk+/iQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4152
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,92 +126,93 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-在 2022/10/28 07:34, Josh Don 写道:
-> Hi Chuyi,
+On 10/25/2022 11:41 PM, Raju Rangoju wrote:
+> Use msix or msi interrupts if the hardware supports it. Else, fallback to
+> legacy interrupts.
 > 
-> On Thu, Oct 27, 2022 at 1:16 AM Chuyi Zhou <zhouchuyi@bytedance.com> wrote:
->>
->> The non-idle se dominates competition vs the idle se when they
->> are belong to the same group. We ensure that idle groups would not
->> preempt non-idle group in wakeup preemption(see check_preempt_wakeup()).
->> However, this can happen in tick preemption, since check_preempt_tick()
->> dose not check current/se is idle or not. This patch adds this check.
->>
->> Signed-off-by: Chuyi Zhou <zhouchuyi@bytedance.com>
->> ---
->>   kernel/sched/fair.c | 12 +++++++++++-
->>   1 file changed, 11 insertions(+), 1 deletion(-)
->>
->> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->> index e4a0b8bd941c..f3324b8753b3 100644
->> --- a/kernel/sched/fair.c
->> +++ b/kernel/sched/fair.c
->> @@ -4750,6 +4750,7 @@ static void
->>   check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
->>   {
->>          unsigned long ideal_runtime, delta_exec;
->> +       int cse_is_idle, pse_is_idle;
->>          struct sched_entity *se;
->>          s64 delta;
->>
->> @@ -4779,8 +4780,17 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
->>          if (delta < 0)
->>                  return;
->>
->> -       if (delta > ideal_runtime)
->> +       if (delta > ideal_runtime) {
->> +               /*
->> +                * Favor non-idle group even in tick preemption
->> +                */
->> +               cse_is_idle = se_is_idle(curr);
->> +               pse_is_idle = se_is_idle(se);
->> +               if (unlikely(!cse_is_idle && pse_is_idle))
->> +                       return;
-> 
-Hi Josh, thanks for your reply,
-> This would make it so that we never have tick based preemption of a
-> non-idle entity by an idle entity. That's a recipe for starvation of
-> the idle entity, if the non-idle entity is cpu bound.
-> 
-> Beyond that though, I'm not quite sure the issue being solved here.
-> The large difference in weight between the idle and non-idle entity
-> means that the non-idle entity will not be preempted for quite a while
-> due to its ideal_runtime being quite high. The idle entity will
-> quickly be preempted on the next tick it takes due to the smaller
-> value of sysctl_sched_idle_min_granularity.
-> 
-Actually, I did some tests and traced this issue. the result shows that 
-this can happen with small probability. I also do some benchmarks. The 
-result seems it has no performance harm, and we can reduce 2%～3% 
-context switch when idle group & non-idle group are present at the same 
-time. In addition, for throughput concern, I think we better let 
-non-idle entity consume it's ideal_runtime. However, as you said, it may 
-cause starvation of the idle entity.....
+> Fixes: 529766e0a011 ("i2c: Add drivers for the AMD PCIe MP2 I2C controller")
+> Co-developed-by: Basavaraj Natikar <basavaraj.natikar@amd.com>
+> Signed-off-by: Basavaraj Natikar <basavaraj.natikar@amd.com>
+> Signed-off-by: Raju Rangoju <Raju.Rangoju@amd.com>
 
-There is another question I would like to take this opportunity to 
-consult you. In our production environment, in some cases, we want to 
-adjust the weight/shares of the idle-cgroup which means we need to 
-change the logic of sched_group_set_shares(), and it can increase the 
-probability of the above issue. So, for what reasons did you prohibit 
-users from changing weights of idle cgroup.
+Looks good to me.
 
-Thanks again for your review.
+Acked-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
 
-Best,
-Chuyi
-> The wakeup check is useful for latency sensitive non-idle tasks.
-> However, in steady state competition between idle and non-idle, we
-> must allow some amount of round-robin.
+> ---
+>  drivers/i2c/busses/i2c-amd-mp2-pci.c | 30 +++++++++++++++++++---------
+>  drivers/i2c/busses/i2c-amd-mp2.h     |  1 +
+>  2 files changed, 22 insertions(+), 9 deletions(-)
 > 
->> +
->>                  resched_curr(rq_of(cfs_rq));
->> +       }
->>   }
->>
->>   static void
->> --
->> 2.20.1
->>
+> diff --git a/drivers/i2c/busses/i2c-amd-mp2-pci.c b/drivers/i2c/busses/i2c-amd-mp2-pci.c
+> index f57077a7448d..143165300949 100644
+> --- a/drivers/i2c/busses/i2c-amd-mp2-pci.c
+> +++ b/drivers/i2c/busses/i2c-amd-mp2-pci.c
+> @@ -288,7 +288,7 @@ static void amd_mp2_clear_reg(struct amd_mp2_dev *privdata)
+>  static int amd_mp2_pci_init(struct amd_mp2_dev *privdata,
+>  			    struct pci_dev *pci_dev)
+>  {
+> -	int rc;
+> +	int irq_flag = 0, rc;
+>  
+>  	pci_set_drvdata(pci_dev, privdata);
+>  
+> @@ -311,17 +311,29 @@ static int amd_mp2_pci_init(struct amd_mp2_dev *privdata,
+>  	if (rc)
+>  		goto err_dma_mask;
+>  
+> -	/* Set up intx irq */
+> +	/* request and enable interrupt */
+>  	writel(0, privdata->mmio + AMD_P2C_MSG_INTEN);
+> -	pci_intx(pci_dev, 1);
+> -	rc = devm_request_irq(&pci_dev->dev, pci_dev->irq, amd_mp2_irq_isr,
+> -			      IRQF_SHARED, dev_name(&pci_dev->dev), privdata);
+> -	if (rc)
+> -		pci_err(pci_dev, "Failure requesting irq %i: %d\n",
+> -			pci_dev->irq, rc);
+> +	rc = pci_alloc_irq_vectors(pci_dev, 1, 1, PCI_IRQ_ALL_TYPES);
+> +	if (rc < 0) {
+> +		dev_err(&pci_dev->dev, "Failed to allocate single IRQ err=%d\n", rc);
+> +		goto err_dma_mask;
+> +	}
+> +
+> +	privdata->dev_irq = pci_irq_vector(pci_dev, 0);
+> +	if (!pci_dev->msix_enabled && !pci_dev->msi_enabled)
+> +		irq_flag = IRQF_SHARED;
+> +
+> +	rc = devm_request_irq(&pci_dev->dev, privdata->dev_irq,
+> +			      amd_mp2_irq_isr, irq_flag, dev_name(&pci_dev->dev), privdata);
+> +	if (rc) {
+> +		pci_err(pci_dev, "Failure requesting irq %i: %d\n", privdata->dev_irq, rc);
+> +		goto free_irq_vectors;
+> +	}
+>  
+>  	return rc;
+>  
+> +free_irq_vectors:
+> +	free_irq(privdata->dev_irq, privdata);
+>  err_dma_mask:
+>  	pci_clear_master(pci_dev);
+>  err_pci_enable:
+> @@ -364,7 +376,7 @@ static void amd_mp2_pci_remove(struct pci_dev *pci_dev)
+>  	pm_runtime_forbid(&pci_dev->dev);
+>  	pm_runtime_get_noresume(&pci_dev->dev);
+>  
+> -	pci_intx(pci_dev, 0);
+> +	free_irq(privdata->dev_irq, privdata);
+>  	pci_clear_master(pci_dev);
+>  
+>  	amd_mp2_clear_reg(privdata);
+> diff --git a/drivers/i2c/busses/i2c-amd-mp2.h b/drivers/i2c/busses/i2c-amd-mp2.h
+> index ddecd0c88656..018a42de8b1e 100644
+> --- a/drivers/i2c/busses/i2c-amd-mp2.h
+> +++ b/drivers/i2c/busses/i2c-amd-mp2.h
+> @@ -183,6 +183,7 @@ struct amd_mp2_dev {
+>  	struct mutex c2p_lock;
+>  	u8 c2p_lock_busid;
+>  	unsigned int probed;
+> +	int dev_irq;
+>  };
+>  
+>  /* PCIe communication driver */
 > 
-> Best,
-> Josh
