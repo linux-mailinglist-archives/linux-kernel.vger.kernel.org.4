@@ -2,355 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D17610AE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF8B610AD2
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbiJ1HAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 03:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
+        id S229871AbiJ1G5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiJ1HAb (ORCPT
+        with ESMTP id S229671AbiJ1G45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 03:00:31 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147041863E9;
-        Fri, 28 Oct 2022 00:00:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666940426; x=1698476426;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=rZH19hLtCXkt/XIwK4407iWl9P8woRCeaD24M869DYw=;
-  b=Y7SiFy3Y2OzcK43kRrUQN4UpG/qtJRrDMocMQPIuNnFSaemQqTQ3b1yE
-   9z+lVsSm8lhbeGN+FflihG3qPPFIHYVn3daa3nWMbrbYhTuIeOi/WCbW/
-   lBAzAq9VBJZ3bVwbf1duzrvZ9i60wN/BKDAPSMi2bYwnP5asp49is4zpm
-   f7qVMRtoWif43SYwrpv8i5I66P56lkszcSQys82MHG48JOkS65v70YKW4
-   jWJ8Ohs8FzEE3AYLbX8MUTHYmmEsBXWRMbBf6+vR2w5hh6h7lapXOvecy
-   gN8OcWrZn67X+grYiUkxxRFuL4v2Gkgt5Yhy8gbvAlJjB3rb6T3Flb6Mc
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="310124673"
-X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
-   d="scan'208";a="310124673"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 00:00:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="627437380"
-X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
-   d="scan'208";a="627437380"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga007.jf.intel.com with ESMTP; 28 Oct 2022 00:00:14 -0700
-Date:   Fri, 28 Oct 2022 14:55:45 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v9 7/8] KVM: Handle page fault for private memory
-Message-ID: <20221028065545.GD3885130@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-8-chao.p.peng@linux.intel.com>
- <20221026215425.GC3819453@ls.amr.corp.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026215425.GC3819453@ls.amr.corp.intel.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 28 Oct 2022 02:56:57 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5762AB803
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:56:53 -0700 (PDT)
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20221028065650epoutp04061486cb92ee26e8ebf36a7e3b21c280~iKUoOqeQT2418624186epoutp04M
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:56:50 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20221028065650epoutp04061486cb92ee26e8ebf36a7e3b21c280~iKUoOqeQT2418624186epoutp04M
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1666940210;
+        bh=f5AeGuQ91kgMx+p1pLQmTx7L0CdNWT5cP5Evk4stoEw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qiOWMybRgq3FJ9o9w2R71LGH7d1Ze2at/oTtYmhJ0DkXHgt4uHFIvtXONAV+vZmdk
+         Gh60NfM+QVNc+tut4ss5jxyRbIqK6KJYi5el90vtSSVmiVB5cfeqH/0WNknAdPV47J
+         VW6UuoxMnHdYYxL2mrXIT7oinC2d2cXzH7DI//cA=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20221028065649epcas1p1009eb03e96ba85836aecb846f22f40d4~iKUnmJrvD0386903869epcas1p1n;
+        Fri, 28 Oct 2022 06:56:49 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.38.235]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4MzCyS16qZz4x9Q7; Fri, 28 Oct
+        2022 06:56:48 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        21.45.07146.A2D7B536; Fri, 28 Oct 2022 15:56:42 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20221028065642epcas1p19a36e65931dc8e1a5fc56724c3852f40~iKUhLtIKI0604406044epcas1p1J;
+        Fri, 28 Oct 2022 06:56:42 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20221028065642epsmtrp2f569670b38dc450cbde5b7e9ea32ffdf~iKUhKeoVO2721527215epsmtrp2g;
+        Fri, 28 Oct 2022 06:56:42 +0000 (GMT)
+X-AuditID: b6c32a35-47bfe70000021bea-a7-635b7d2a01d9
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        75.54.14392.A2D7B536; Fri, 28 Oct 2022 15:56:42 +0900 (KST)
+Received: from jiho-chu04.tn.corp.samsungelectronics.net (unknown
+        [10.113.112.236]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20221028065642epsmtip2583922363b8ea09946dcd287d6000d2e~iKUg3orPI0626306263epsmtip2h;
+        Fri, 28 Oct 2022 06:56:42 +0000 (GMT)
+Date:   Fri, 28 Oct 2022 15:56:42 +0900
+From:   Jiho Chu <jiho.chu@samsung.com>
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
+Subject: Re: [RFC PATCH 3/3] drm: add dedicated minor for accelerator
+ devices
+Message-Id: <20221028155642.460c2ece8a7abbfa52eb4539@samsung.com>
+In-Reply-To: <CAFCwf11kg-ZvYjEKf=VrvgvM03QZp7GejFhJ=gbCp4up++4h2w@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Tf1CTdRzH77tnezY07GFofKOC+aDnwTW2yQZfPfA0PXs6uZgZpdVJazwB
+        N9jmnqH8qOSn8dMYYSIHhgRBJBFzLBg/7OBOEpEE50UkIXcpify04MQ5a+OR7L/35/N9fb7v
+        7+fzua8AE+bxfQUJWiNt0KoSSXwN19obKBFLPn5XLV0oFKOffqnhoC9udvCQs/QSH/1jNWHI
+        nnuah+yLczjK/qoZR1dKXEjZoJOH/jaX4Mj+uBOglts1fDRX2IGh5U8tHHTdVomjcwutXJSZ
+        PYKhE/lf81B30QJAA+ceYKjvcRqyTJtcd04qd/pQTQvjPCp32IlTjoelgJobyeVTXUvVXOrP
+        RStGtVeM8akLDUGUuTEfp85e3k9drDrPp8YL+zhUcfYsTpk6P6FOWhoBdeFKulL4jiY8nlbF
+        0gYRrVXrYhO0cRHkvgMxu2MUoVKZWLYNhZEirSqJjiD3RCrFexMSXYMgRUdVicmulFLFMKRk
+        R7hBl2ykRfE6xhhB0vrYRL1CH8yokphkbVywljZul0mlWxUu8H1N/PKZVo7+mjjl5ugNfga4
+        JCoAHgJIyKHdMQEKwBqBkGgD8PfF1eA+gINDWTgbLAFYv9jPWy2xjnTx2IMuAE/3XeWyQR4H
+        tg11r1BcYjOss90Bbo279Jny8/wCIBCsJzbBoTq5m8eIeRxOt5ziufPeRBS0dcnduCexCzZn
+        WTG39iD2w+mZaQ5rjOBYUcMK7kl4QWebtzuNEf7wh5lKjEU6PKC5NcCNQGIPLLilZ9PecKrP
+        wme1L/xrtgtntQaW5dVwWa2Hg5OtGFsaAocaYt0SIwJhs03CEhthu6MKsKbr4OxiEY+lPWHe
+        CSGLkLD2Ue8TIwhPlS89eToFxwe+WzFyjZkDJy8TJUBU8bSTiv91UvHUtxpgjeA5Ws8kxdGM
+        TC/7b7dqXZIZrHyJIEUbMM3MB/cAjgD0ACjAyPWeV0feVgs9Y1WpabRBF2NITqSZHqBwbcWE
+        +W5Q61x/SmuMkcm3SeWhW0PkSBYqI308M8qD1EIiTmWkNTStpw2rdRyBh28GJ/MDx+Sj6PRj
+        f7yxOcQR5lUaF3KLa2l86G2zN5yVH1N+fiPnaGoC4//z8Icpd6kXuz77yDzxZnH5RclI//KX
+        r/4ICqtHi7YsjO0zWsx6+VTBM+JNv5qjo5r8pmqfrxd0Kw/dS2/7dsr2fUsoXRuUdaikKqDe
+        1n/krSxrddrxKq+XXtOFxy71wTv3f+vNUpWV1OZrd5OVnRHD1ZKA+uBgTXHIC8cjMfthrmi+
+        Tvys5N5hcufLvDTSakySDftnTmxUTO3YFTBoMh4ZeN3Z/l7ggbBMpS8e6ePXet1RePda5Tc5
+        Gw4O1DXd9lsrcAJNQudo6va1J9f1bjn4SnROinSc8YlqeMCQXCZeJQvCDIzqX7MY016bBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDIsWRmVeSWpSXmKPExsWy7bCSvK5WbXSywarzMhYnri9isph2Zzer
+        xd9Jx9gt/m+byGxxpXU6q8WVr+/ZLJoXr2ezOD0BqGTKub+sFl82TWCzuPJvD6PFxqeL2C3e
+        d+9mtvjZvoXJ4vKuOWwWCz9uZbFobL7BbNHWuYzVYl/PR0aLMwt/MFsc/1dlseXNRKCZzwMc
+        xD3WfrzP6tF66S+bx+9fkxg93t9oZffY+20Bi8eLr9uYPXbOusvusXmFlsemVZ1sHvNOBnrs
+        n7uG3eN+93Emj97md2weE/fUefRtWcXosfl0dYBQFJdNSmpOZllqkb5dAlfGz5lbmQou6Fbc
+        uXWVvYHxmEIXIyeHhICJxLYbe1lBbCGB3YwSa6ZyQcQlJDbdW87cxcgBZAtLHD5c3MXIBVTS
+        xiSxs+MmM0gNi4CqxNJdzxhBbDYge+aMNewg9SICKhIXl5qA1DMLfGCT2Ld9JitIXFjAX2LX
+        XhOQcl4BR4n1TdvAxnAKBEq8efuGCeKEHUwSz08KQJxgIXG3ZwVYK6+AoMTfHcIgYWYBLYmH
+        v26xQNjyEtvfzmGewCg4C6FqFpKqWUiqFjAyr2KUTC0ozk3PLTYsMMxLLdcrTswtLs1L10vO
+        z93ECE4AWpo7GLev+qB3iJGJg/EQowQHs5II79kb4clCvCmJlVWpRfnxRaU5qcWHGKU5WJTE
+        eS90nYwXEkhPLEnNTk0tSC2CyTJxcEo1MFWHHs2d9pVrsuFO68N7a89bn0ju+/Fxy/9vZ42a
+        Vhnx2Ditbru5tdNR5clvYz+1DTvmnIkILlbvFN4o8GPvJo2/pWErH83Vv7D777v9mpXfprb3
+        c64QnWIh9FAkRPjOpsdrzlp88F1+WoHnY5U4f9i7+3Wvch+4T+FSl2DWN5BKOh4n0eLrW8sQ
+        Lnn/Z6PkEd1jeaHSZjwfZOUmxbU/nd0XFbLz5O8DnF/8Sh089FI0Tm+7rWr+iu3UI8fUj95F
+        mossRTea6l3d+/jDxmSNp2EPLwtefaZnuTR/9+bu6sWB+YePNF1Q7U++lBn02v1r7X/vBuWy
+        tt1S6dskF93aK37MIWOtWJvDkpn3D838b6bEUpyRaKjFXFScCABeoe+0bwMAAA==
+X-CMS-MailID: 20221028065642epcas1p19a36e65931dc8e1a5fc56724c3852f40
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221022214657epcas1p18a2625c84cd6470b5404cb71f9836cc8
+References: <20221022214622.18042-1-ogabbay@kernel.org>
+        <CGME20221022214657epcas1p18a2625c84cd6470b5404cb71f9836cc8@epcas1p1.samsung.com>
+        <20221022214622.18042-4-ogabbay@kernel.org>
+        <20221025154330.a3a839357363da6d5de96c89@samsung.com>
+        <CAFCwf11kg-ZvYjEKf=VrvgvM03QZp7GejFhJ=gbCp4up++4h2w@mail.gmail.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 02:54:25PM -0700, Isaku Yamahata wrote:
-> On Tue, Oct 25, 2022 at 11:13:43PM +0800,
-> Chao Peng <chao.p.peng@linux.intel.com> wrote:
-> 
-> > A memslot with KVM_MEM_PRIVATE being set can include both fd-based
-> > private memory and hva-based shared memory. Architecture code (like TDX
-> > code) can tell whether the on-going fault is private or not. This patch
-> > adds a 'is_private' field to kvm_page_fault to indicate this and
-> > architecture code is expected to set it.
-> > 
-> > To handle page fault for such memslot, the handling logic is different
-> > depending on whether the fault is private or shared. KVM checks if
-> > 'is_private' matches the host's view of the page (maintained in
-> > mem_attr_array).
-> >   - For a successful match, private pfn is obtained with
-> >     restrictedmem_get_page () from private fd and shared pfn is obtained
-> >     with existing get_user_pages().
-> >   - For a failed match, KVM causes a KVM_EXIT_MEMORY_FAULT exit to
-> >     userspace. Userspace then can convert memory between private/shared
-> >     in host's view and retry the fault.
-> > 
-> > Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> > ---
-> >  arch/x86/kvm/mmu/mmu.c          | 56 +++++++++++++++++++++++++++++++--
-> >  arch/x86/kvm/mmu/mmu_internal.h | 14 ++++++++-
-> >  arch/x86/kvm/mmu/mmutrace.h     |  1 +
-> >  arch/x86/kvm/mmu/spte.h         |  6 ++++
-> >  arch/x86/kvm/mmu/tdp_mmu.c      |  3 +-
-> >  include/linux/kvm_host.h        | 28 +++++++++++++++++
-> >  6 files changed, 103 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 67a9823a8c35..10017a9f26ee 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -3030,7 +3030,7 @@ static int host_pfn_mapping_level(struct kvm *kvm, gfn_t gfn,
-> >  
-> >  int kvm_mmu_max_mapping_level(struct kvm *kvm,
-> >  			      const struct kvm_memory_slot *slot, gfn_t gfn,
-> > -			      int max_level)
-> > +			      int max_level, bool is_private)
-> >  {
-> >  	struct kvm_lpage_info *linfo;
-> >  	int host_level;
-> > @@ -3042,6 +3042,9 @@ int kvm_mmu_max_mapping_level(struct kvm *kvm,
-> >  			break;
-> >  	}
-> >  
-> > +	if (is_private)
-> > +		return max_level;
-> 
-> Below PG_LEVEL_NUM is passed by zap_collapsible_spte_range().  It doesn't make
-> sense.
-> 
-> > +
-> >  	if (max_level == PG_LEVEL_4K)
-> >  		return PG_LEVEL_4K;
-> >  
-> > @@ -3070,7 +3073,8 @@ void kvm_mmu_hugepage_adjust(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
-> >  	 * level, which will be used to do precise, accurate accounting.
-> >  	 */
-> >  	fault->req_level = kvm_mmu_max_mapping_level(vcpu->kvm, slot,
-> > -						     fault->gfn, fault->max_level);
-> > +						     fault->gfn, fault->max_level,
-> > +						     fault->is_private);
-> >  	if (fault->req_level == PG_LEVEL_4K || fault->huge_page_disallowed)
-> >  		return;
-> >  
-> > @@ -4141,6 +4145,32 @@ void kvm_arch_async_page_ready(struct kvm_vcpu *vcpu, struct kvm_async_pf *work)
-> >  	kvm_mmu_do_page_fault(vcpu, work->cr2_or_gpa, 0, true);
-> >  }
-> >  
-> > +static inline u8 order_to_level(int order)
-> > +{
-> > +	BUILD_BUG_ON(KVM_MAX_HUGEPAGE_LEVEL > PG_LEVEL_1G);
-> > +
-> > +	if (order >= KVM_HPAGE_GFN_SHIFT(PG_LEVEL_1G))
-> > +		return PG_LEVEL_1G;
-> > +
-> > +	if (order >= KVM_HPAGE_GFN_SHIFT(PG_LEVEL_2M))
-> > +		return PG_LEVEL_2M;
-> > +
-> > +	return PG_LEVEL_4K;
-> > +}
-> > +
-> > +static int kvm_faultin_pfn_private(struct kvm_page_fault *fault)
-> > +{
-> > +	int order;
-> > +	struct kvm_memory_slot *slot = fault->slot;
-> > +
-> > +	if (kvm_restricted_mem_get_pfn(slot, fault->gfn, &fault->pfn, &order))
-> > +		return RET_PF_RETRY;
-> > +
-> > +	fault->max_level = min(order_to_level(order), fault->max_level);
-> > +	fault->map_writable = !(slot->flags & KVM_MEM_READONLY);
-> > +	return RET_PF_CONTINUE;
-> > +}
-> > +
-> >  static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-> >  {
-> >  	struct kvm_memory_slot *slot = fault->slot;
-> > @@ -4173,6 +4203,22 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-> >  			return RET_PF_EMULATE;
-> >  	}
-> >  
-> > +	if (kvm_slot_can_be_private(slot) &&
-> > +	    fault->is_private != kvm_mem_is_private(vcpu->kvm, fault->gfn)) {
-> > +		vcpu->run->exit_reason = KVM_EXIT_MEMORY_FAULT;
-> > +		if (fault->is_private)
-> > +			vcpu->run->memory.flags = KVM_MEMORY_EXIT_FLAG_PRIVATE;
-> > +		else
-> > +			vcpu->run->memory.flags = 0;
-> > +		vcpu->run->memory.padding = 0;
-> > +		vcpu->run->memory.gpa = fault->gfn << PAGE_SHIFT;
-> > +		vcpu->run->memory.size = PAGE_SIZE;
-> > +		return RET_PF_USER;
-> > +	}
-> > +
-> > +	if (fault->is_private)
-> > +		return kvm_faultin_pfn_private(fault);
-> > +
-> >  	async = false;
-> >  	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, &async,
-> >  					  fault->write, &fault->map_writable,
-> > @@ -5557,6 +5603,9 @@ int noinline kvm_mmu_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa, u64 err
-> >  			return -EIO;
-> >  	}
-> >  
-> > +	if (r == RET_PF_USER)
-> > +		return 0;
-> > +
-> >  	if (r < 0)
-> >  		return r;
-> >  	if (r != RET_PF_EMULATE)
-> > @@ -6408,7 +6457,8 @@ static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
-> >  		 */
-> >  		if (sp->role.direct &&
-> >  		    sp->role.level < kvm_mmu_max_mapping_level(kvm, slot, sp->gfn,
-> > -							       PG_LEVEL_NUM)) {
-> > +							       PG_LEVEL_NUM,
-> > +							       false)) {
-> >  			kvm_zap_one_rmap_spte(kvm, rmap_head, sptep);
-> >  
-> >  			if (kvm_available_flush_tlb_with_range())
-> > diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> > index 582def531d4d..5cdff5ca546c 100644
-> > --- a/arch/x86/kvm/mmu/mmu_internal.h
-> > +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> > @@ -188,6 +188,7 @@ struct kvm_page_fault {
-> >  
-> >  	/* Derived from mmu and global state.  */
-> >  	const bool is_tdp;
-> > +	const bool is_private;
-> >  	const bool nx_huge_page_workaround_enabled;
-> >  
-> >  	/*
-> > @@ -236,6 +237,7 @@ int kvm_tdp_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault);
-> >   * RET_PF_RETRY: let CPU fault again on the address.
-> >   * RET_PF_EMULATE: mmio page fault, emulate the instruction directly.
-> >   * RET_PF_INVALID: the spte is invalid, let the real page fault path update it.
-> > + * RET_PF_USER: need to exit to userspace to handle this fault.
-> >   * RET_PF_FIXED: The faulting entry has been fixed.
-> >   * RET_PF_SPURIOUS: The faulting entry was already fixed, e.g. by another vCPU.
-> >   *
-> > @@ -252,6 +254,7 @@ enum {
-> >  	RET_PF_RETRY,
-> >  	RET_PF_EMULATE,
-> >  	RET_PF_INVALID,
-> > +	RET_PF_USER,
-> >  	RET_PF_FIXED,
-> >  	RET_PF_SPURIOUS,
-> >  };
-> > @@ -309,7 +312,7 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
-> >  
-> >  int kvm_mmu_max_mapping_level(struct kvm *kvm,
-> >  			      const struct kvm_memory_slot *slot, gfn_t gfn,
-> > -			      int max_level);
-> > +			      int max_level, bool is_private);
-> >  void kvm_mmu_hugepage_adjust(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault);
-> >  void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_level);
-> >  
-> > @@ -318,4 +321,13 @@ void *mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
-> >  void account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
-> >  void unaccount_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
-> >  
-> > +#ifndef CONFIG_HAVE_KVM_RESTRICTED_MEM
-> > +static inline int kvm_restricted_mem_get_pfn(struct kvm_memory_slot *slot,
-> > +					gfn_t gfn, kvm_pfn_t *pfn, int *order)
-> > +{
-> > +	WARN_ON_ONCE(1);
-> > +	return -EOPNOTSUPP;
-> > +}
-> > +#endif /* CONFIG_HAVE_KVM_RESTRICTED_MEM */
-> > +
-> >  #endif /* __KVM_X86_MMU_INTERNAL_H */
-> > diff --git a/arch/x86/kvm/mmu/mmutrace.h b/arch/x86/kvm/mmu/mmutrace.h
-> > index ae86820cef69..2d7555381955 100644
-> > --- a/arch/x86/kvm/mmu/mmutrace.h
-> > +++ b/arch/x86/kvm/mmu/mmutrace.h
-> > @@ -58,6 +58,7 @@ TRACE_DEFINE_ENUM(RET_PF_CONTINUE);
-> >  TRACE_DEFINE_ENUM(RET_PF_RETRY);
-> >  TRACE_DEFINE_ENUM(RET_PF_EMULATE);
-> >  TRACE_DEFINE_ENUM(RET_PF_INVALID);
-> > +TRACE_DEFINE_ENUM(RET_PF_USER);
-> >  TRACE_DEFINE_ENUM(RET_PF_FIXED);
-> >  TRACE_DEFINE_ENUM(RET_PF_SPURIOUS);
-> >  
-> > diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
-> > index 7670c13ce251..9acdf72537ce 100644
-> > --- a/arch/x86/kvm/mmu/spte.h
-> > +++ b/arch/x86/kvm/mmu/spte.h
-> > @@ -315,6 +315,12 @@ static inline bool is_dirty_spte(u64 spte)
-> >  	return dirty_mask ? spte & dirty_mask : spte & PT_WRITABLE_MASK;
-> >  }
-> >  
-> > +static inline bool is_private_spte(u64 spte)
-> > +{
-> > +	/* FIXME: Query C-bit/S-bit for SEV/TDX. */
-> > +	return false;
-> > +}
-> > +
-> 
-> PFN encoded in spte doesn't make sense.  In VMM for TDX, private-vs-shared is
-> determined by S-bit of GFN.
+On Wed, 26 Oct 2022 09:38:13 +0300
+Oded Gabbay <ogabbay@kernel.org> wrote:
 
-My understanding is we will have software bit in the spte, will we? In
-current TDX code I see we have SPTE_SHARED_MASK bit defined.
-
+> On Tue, Oct 25, 2022 at 9:43 AM Jiho Chu <jiho.chu@samsung.com> wrote:
+> >
+> >
+> > On Sun, 23 Oct 2022 00:46:22 +0300
+> > Oded Gabbay <ogabbay@kernel.org> wrote:
+> >
+> > > diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
+> > > index b58ffb1433d6..c13701a8d4be 100644
+> > > --- a/drivers/gpu/drm/drm_drv.c
+> > > +++ b/drivers/gpu/drm/drm_drv.c
+> > > @@ -56,6 +56,9 @@ MODULE_LICENSE("GPL and additional rights");
+> > >  static DEFINE_SPINLOCK(drm_minor_lock);
+> > >  static struct idr drm_minors_idr;
+> > >
+> > > +static DEFINE_SPINLOCK(accel_minor_lock);
+> > > +static struct idr accel_minors_idr;
+> > > +
+> > >  /*
+> > >   * If the drm core fails to init for whatever reason,
+> > >   * we should prevent any drivers from registering with it.
+> > > @@ -94,6 +97,8 @@ static struct drm_minor **drm_minor_get_slot(struct drm_device *dev,
+> > >               return &dev->primary;
+> > >       case DRM_MINOR_RENDER:
+> > >               return &dev->render;
+> > > +     case DRM_MINOR_ACCEL:
+> > > +             return &dev->accel;
+> > >       default:
+> > >               BUG();
+> > >       }
+> > > @@ -108,9 +113,15 @@ static void drm_minor_alloc_release(struct drm_device *dev, void *data)
+> > >
+> > >       put_device(minor->kdev);
+> > >
+> > > -     spin_lock_irqsave(&drm_minor_lock, flags);
+> > > -     idr_remove(&drm_minors_idr, minor->index);
+> > > -     spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > > +     if (minor->type == DRM_MINOR_ACCEL) {
+> > > +             spin_lock_irqsave(&accel_minor_lock, flags);
+> > > +             idr_remove(&accel_minors_idr, minor->index);
+> > > +             spin_unlock_irqrestore(&accel_minor_lock, flags);
+> > > +     } else {
+> > > +             spin_lock_irqsave(&drm_minor_lock, flags);
+> > > +             idr_remove(&drm_minors_idr, minor->index);
+> > > +             spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > > +     }
+> > >  }
+> > >
+> > >  static int drm_minor_alloc(struct drm_device *dev, unsigned int type)
+> > > @@ -127,13 +138,23 @@ static int drm_minor_alloc(struct drm_device *dev, unsigned int type)
+> > >       minor->dev = dev;
+> > >
+> > >       idr_preload(GFP_KERNEL);
+> > > -     spin_lock_irqsave(&drm_minor_lock, flags);
+> > > -     r = idr_alloc(&drm_minors_idr,
+> > > -                   NULL,
+> > > -                   64 * type,
+> > > -                   64 * (type + 1),
+> > > -                   GFP_NOWAIT);
+> > > -     spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > > +     if (type == DRM_MINOR_ACCEL) {
+> > > +             spin_lock_irqsave(&accel_minor_lock, flags);
+> > > +             r = idr_alloc(&accel_minors_idr,
+> > > +                     NULL,
+> > > +                     64 * (type - DRM_MINOR_ACCEL),
+> > > +                     64 * (type - DRM_MINOR_ACCEL + 1),
+> > > +                     GFP_NOWAIT);
+> > > +             spin_unlock_irqrestore(&accel_minor_lock, flags);
+> > > +     } else {
+> > > +             spin_lock_irqsave(&drm_minor_lock, flags);
+> > > +             r = idr_alloc(&drm_minors_idr,
+> > > +                     NULL,
+> > > +                     64 * type,
+> > > +                     64 * (type + 1),
+> > > +                     GFP_NOWAIT);
+> > > +             spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > > +     }
+> >
+> > Hi,
+> > There are many functions which checks drm type and decides its behaviors. It's good to
+> > re-use exiting codes, but accel devices use totally different major/minor, and so it needs to be moved to
+> > /drvier/accel/ (maybe later..). How about seperating functions for alloc/release minor (accel_minor_alloc..)?
+> > also, for others which have drm type related codes.
+> My feeling was moving the minor code handling to a different file (in
+> addition to moving the major code handling) will cause too much
+> duplication.
+> My main theme is that an accel minor is another minor in drm, even if
+> a bit different. i.e. It uses the same drm_minor structure.
+> The driver declares he wants to use this minor using a drm driver feature flag.
+> imo, all of that indicates the code should be inside drm.
+> >
+> >
+> >
+> >
+> > > @@ -607,6 +652,14 @@ static int drm_dev_init(struct drm_device *dev,
+> > >       /* no per-device feature limits by default */
+> > >       dev->driver_features = ~0u;
+> > >
+> > > +     if (drm_core_check_feature(dev, DRIVER_COMPUTE_ACCEL) &&
+> > > +                             (drm_core_check_feature(dev, DRIVER_RENDER) ||
+> > > +                             drm_core_check_feature(dev, DRIVER_MODESET))) {
+> > > +
+> > > +             DRM_ERROR("DRM driver can't be both a compute acceleration and graphics driver\n");
+> > > +             return -EINVAL;
+> > > +     }
+> > > +
+> >
+> > It's fine for the device only for acceleration, but can't graphic devices have acceleration feature?
+> Of course they can :) In that case, and if they want to expose an
+> accel device char, they should write an accel driver and connect it to
+> their main graphics driver via auxiliary bus.
 > 
+> I could have added two flags - compute_accel, and compute_accel_only
+> (similar to a patch that was sent to add render only flag), but imo it
+> would make the code more convoluted. I prefer the clean separation and
+> using standard auxiliary bus.
 > 
-> >  static inline u64 get_rsvd_bits(struct rsvd_bits_validate *rsvd_check, u64 pte,
-> >  				int level)
-> >  {
-> > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> > index 672f0432d777..9f97aac90606 100644
-> > --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> > @@ -1768,7 +1768,8 @@ static void zap_collapsible_spte_range(struct kvm *kvm,
-> >  			continue;
-> >  
-> >  		max_mapping_level = kvm_mmu_max_mapping_level(kvm, slot,
-> > -							      iter.gfn, PG_LEVEL_NUM);
-> > +						iter.gfn, PG_LEVEL_NUM,
-> > +						is_private_spte(iter.old_spte));
-> >  		if (max_mapping_level < iter.level)
-> >  			continue;
+> Thanks,
+> Oded
 > 
-> This is to merge pages into a large page on the next kvm page fault.  large page
-> support is not yet supported.  Let's skip the private slot until large page
-> support is done.
 
-So what your suggestion is passing in a 'false' at this time for
-'is_private'? Unless we will decide not use the above is_private_spte,
-this code does not hurt, right? is_private_spte() return false before
-we finally get chance to add the large page support.
+I understood. Seperation would be good as you mentioned in other mail.
+This subsystem would be better choice for acceleration only devices, who need some features
+of drm, but deoesnot want to include whole graphics related considerations.
+I'll prepare Samsung's NPU driver using this after your reference driver is presented (maybe habana').
 
-Thanks,
-Chao
-> -- 
-> Isaku Yamahata <isaku.yamahata@gmail.com>
+Thanks.
+Jiho Chu
+
+
