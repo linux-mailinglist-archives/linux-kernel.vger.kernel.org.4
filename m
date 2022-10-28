@@ -2,98 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF5C610BE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 10:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC09610C01
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 10:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiJ1IJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 04:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
+        id S229938AbiJ1IOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 04:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiJ1IIp (ORCPT
+        with ESMTP id S229456AbiJ1IOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 04:08:45 -0400
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56ABE1C25EA;
-        Fri, 28 Oct 2022 01:08:18 -0700 (PDT)
-Received: by mail-qk1-f176.google.com with SMTP id 8so2968485qka.1;
-        Fri, 28 Oct 2022 01:08:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RHNjVYF81lO8OdfUhIpcIslc6s39L/2If9j6fPR0Er0=;
-        b=DaXVOfTDdDMadaF/ZK7laxnQM2sKapmMQBI3nA9o0DyCYM1ICZWtCR2h9eaabPBFFb
-         r1jbWfFvrwNdJyhxZnDeU3lfJObA6TWBE2d6bmSwJg2RgpnS/nCNbhuze5W6KdXH8rRT
-         3drG9z7GXdauwWQg7NH9XAZGF928qHnh9CJWpnpjLLhBSKjqpB+ktj6AJOSxlOz/BEDU
-         LdwWrHMEJa2n8dPIknpQnBj8J4Dd2w2YqCynAjGGHfmphJ36UoG1qz7E44Un7NZag2Ra
-         TN0o5/PSmxA8KaTixVwdQ3mn9Tgopz4gAW6m8Vne8NhmbsnuJdLmAgaoXGCE+YhWTngB
-         Wsbw==
-X-Gm-Message-State: ACrzQf0A1Xt+WjGVrqfhE96FbcgkbJEwE332xrRPvsSWxqEzljNZdUto
-        GCeu8ZhdPRfPywmWxgu4qE1kVGI8OLrtyw==
-X-Google-Smtp-Source: AMsMyM6B0Zvhg/3+hQiDA3wN3OAOrnjzoRDzVHipo91MlSZS09ZzX3SqXO3Jo85RLavSa6unJgESBQ==
-X-Received: by 2002:a05:620a:288b:b0:6b6:4f9b:85c6 with SMTP id j11-20020a05620a288b00b006b64f9b85c6mr37384383qkp.614.1666944486405;
-        Fri, 28 Oct 2022 01:08:06 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id n16-20020ac85a10000000b0039cc82a319asm2050152qta.76.2022.10.28.01.08.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 01:08:06 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-3321c2a8d4cso40718317b3.5;
-        Fri, 28 Oct 2022 01:08:06 -0700 (PDT)
-X-Received: by 2002:a81:3d2:0:b0:36b:6772:75a3 with SMTP id
- 201-20020a8103d2000000b0036b677275a3mr29098444ywd.383.1666944485753; Fri, 28
- Oct 2022 01:08:05 -0700 (PDT)
+        Fri, 28 Oct 2022 04:14:00 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D9A1C2F2A;
+        Fri, 28 Oct 2022 01:13:58 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MzFYn2V7KzmV5j;
+        Fri, 28 Oct 2022 16:09:01 +0800 (CST)
+Received: from localhost.localdomain (10.67.164.66) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 28 Oct 2022 16:13:56 +0800
+From:   Yicong Yang <yangyicong@huawei.com>
+To:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-arm-kernel@lists.infradead.org>, <x86@kernel.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <anshuman.khandual@arm.com>, <linux-doc@vger.kernel.org>
+CC:     <corbet@lwn.net>, <peterz@infradead.org>, <arnd@arndb.de>,
+        <punit.agrawal@bytedance.com>, <linux-kernel@vger.kernel.org>,
+        <darren@os.amperecomputing.com>, <yangyicong@hisilicon.com>,
+        <huzhanyuan@oppo.com>, <lipeifeng@oppo.com>,
+        <zhangshiming@oppo.com>, <guojian@oppo.com>, <realmz6@gmail.com>,
+        <linux-mips@vger.kernel.org>, <openrisc@lists.librecores.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
+        <linux-s390@vger.kernel.org>, Barry Song <21cnbao@gmail.com>,
+        <wangkefeng.wang@huawei.com>, <xhao@linux.alibaba.com>,
+        <prime.zeng@hisilicon.com>
+Subject: [PATCH v5 0/2] arm64: support batched/deferred tlb shootdown during page reclamation
+Date:   Fri, 28 Oct 2022 16:12:53 +0800
+Message-ID: <20221028081255.19157-1-yangyicong@huawei.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-References: <20221027112459.77413-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221027112459.77413-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 28 Oct 2022 10:07:53 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX0Nmi1_UY6xJa5Keje5WJt4grnTeUDnhhy_HPa-7EpOw@mail.gmail.com>
-Message-ID: <CAMuHMdX0Nmi1_UY6xJa5Keje5WJt4grnTeUDnhhy_HPa-7EpOw@mail.gmail.com>
-Subject: Re: [PATCH] arm64: renesas: Drop selecting GPIOLIB and PINCTRL
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.164.66]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 1:25 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Don't automatically select the GPIOLIB and PINCTRL config options as we
-> already have automatically selected it as part of the SOC_RENESAS config
-> option [0].
->
-> [0] drivers/soc/renesas/Kconfig
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Yicong Yang <yangyicong@hisilicon.com>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.2.
+Though ARM64 has the hardware to do tlb shootdown, the hardware
+broadcasting is not free.
+A simplest micro benchmark shows even on snapdragon 888 with only
+8 cores, the overhead for ptep_clear_flush is huge even for paging
+out one page mapped by only one process:
+5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
 
-Note to self: beware dependencies, as commit b3acbca3c80e6124 ("soc:
-renesas: Kconfig: Explicitly select GPIOLIB and PINCTRL config under
-SOC_RENESAS") is queued in a different branch.
+While pages are mapped by multiple processes or HW has more CPUs,
+the cost should become even higher due to the bad scalability of
+tlb shootdown.
 
-Gr{oetje,eeting}s,
+The same benchmark can result in 16.99% CPU consumption on ARM64
+server with around 100 cores according to Yicong's test on patch
+4/4.
 
-                        Geert
+This patchset leverages the existing BATCHED_UNMAP_TLB_FLUSH by
+1. only send tlbi instructions in the first stage -
+	arch_tlbbatch_add_mm()
+2. wait for the completion of tlbi by dsb while doing tlbbatch
+	sync in arch_tlbbatch_flush()
+Testing on snapdragon shows the overhead of ptep_clear_flush
+is removed by the patchset. The micro benchmark becomes 5% faster
+even for one page mapped by single process on snapdragon 888.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+With this support we're possible to do more optimization for memory
+reclamation and migration[*].
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+[*] https://lore.kernel.org/lkml/393d6318-aa38-01ed-6ad8-f9eac89bf0fc@linux.alibaba.com/
+
+-v5:
+1. Make ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH depends on EXPERT for this stage on arm64.
+2. Make a threshhold of CPU numbers for enabling batched TLP flush on arm64
+Link: https://lore.kernel.org/linux-arm-kernel/20220921084302.43631-1-yangyicong@huawei.com/T/
+
+-v4:
+1. Add tags from Kefeng and Anshuman, Thanks.
+2. Limit the TLB batch/defer on systems with >4 CPUs, per Anshuman
+3. Merge previous Patch 1,2-3 into one, per Anshuman
+Link: https://lore.kernel.org/linux-mm/20220822082120.8347-1-yangyicong@huawei.com/
+
+-v3:
+1. Declare arch's tlbbatch defer support by arch_tlbbatch_should_defer() instead
+   of ARCH_HAS_MM_CPUMASK, per Barry and Kefeng
+2. Add Tested-by from Xin Hao
+Link: https://lore.kernel.org/linux-mm/20220711034615.482895-1-21cnbao@gmail.com/
+
+-v2:
+1. Collected Yicong's test result on kunpeng920 ARM64 server;
+2. Removed the redundant vma parameter in arch_tlbbatch_add_mm()
+   according to the comments of Peter Zijlstra and Dave Hansen
+3. Added ARCH_HAS_MM_CPUMASK rather than checking if mm_cpumask
+   is empty according to the comments of Nadav Amit
+
+Thanks, Peter, Dave and Nadav for your testing or reviewing
+, and comments.
+
+-v1:
+https://lore.kernel.org/lkml/20220707125242.425242-1-21cnbao@gmail.com/
+
+Anshuman Khandual (1):
+  mm/tlbbatch: Introduce arch_tlbbatch_should_defer()
+
+Barry Song (1):
+  arm64: support batched/deferred tlb shootdown during page reclamation
+
+ .../features/vm/TLB/arch-support.txt          |  2 +-
+ arch/arm64/Kconfig                            |  6 +++
+ arch/arm64/include/asm/tlbbatch.h             | 12 +++++
+ arch/arm64/include/asm/tlbflush.h             | 46 ++++++++++++++++++-
+ arch/x86/include/asm/tlbflush.h               | 15 +++++-
+ mm/rmap.c                                     | 19 +++-----
+ 6 files changed, 84 insertions(+), 16 deletions(-)
+ create mode 100644 arch/arm64/include/asm/tlbbatch.h
+
+-- 
+2.24.0
+
