@@ -2,73 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC56361178D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 576EC611791
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiJ1Qbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
+        id S229927AbiJ1QeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiJ1Qbr (ORCPT
+        with ESMTP id S229460AbiJ1QeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:31:47 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB2C1C73FD
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:31:47 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id 17so947815pfv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:31:47 -0700 (PDT)
+        Fri, 28 Oct 2022 12:34:11 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F5B1DE3CE;
+        Fri, 28 Oct 2022 09:34:09 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id i7so6692566oif.4;
+        Fri, 28 Oct 2022 09:34:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wWm33mQ3hvWArBxOrJMcZ+DdCTdsoZAKdB1hEJ9v+uI=;
-        b=L+bcmCymxk9w5qxk3BccZMGbd1j/bVOq7BA/62RvrHfdcEzYnx9y4jDlCLXW2w4aE6
-         PiL8kTkRTKVtKkr5ZfHzkPmCem6lIb7Zv2KlV18+IppUoMn7j2wwqIVA9Iy+33N80H2u
-         9VNqZvj+4B/4UNtRrrfpQtrHV8Io9WISVtChY+oxim33+LnRYSWZfu+WAcUwWJ67fQ0s
-         W2mrCsZGCnAkjMfbZJi51IkbvQL2QJE03sKCYXBDYLOpVyofMXpQm7ho8uusq+EDYkJG
-         MTcIiYMdcNoEs9E0ydLtDnfZ1Hzck/0PNK8gKvCITH5sW6AMG8c4EFbTYxGBjId//kXP
-         k6Fg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nwbPjBZmRyyK77zC/9SPzBIJETh2C9WOSbSEnKhMCwY=;
+        b=B7YHTFsyLRTHAa4c9U0mEWUART9I0BHpU4ccCD8Rv4/9/2Gz4blKiCoeq/eQjUvLDS
+         wAjQQgcZ2EiCofM6YtJYvK/gW8tQHoRjVTMvxc4my/tWnn4rOaYybarnPmjMU8ZTK6RP
+         NmQQY67kfEluF9iJzf4pdwmnz6p5cGrv7pZiYP8b6uEiOc+WR0BkVsNy/fF+sjBBzNnA
+         7ThUKAvQZNfVOA9miMgMsiovoNFkYU2/F4pKdFYd5HHyK3CvHBlyh0QMH0gWPem8riLM
+         j5iSLuntEaRuqmGtMNRVCAiRl9p9gjdj3szv9/MlDb9q23TYJCS7duxZ43X31qX08epj
+         mbRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wWm33mQ3hvWArBxOrJMcZ+DdCTdsoZAKdB1hEJ9v+uI=;
-        b=aPZMzUP1pocB6R2mNeTEqJ4THOmPcwRSoc6mgzrnqOgfxU93rj6xARmC9V49YDIHvn
-         7ecCJ8SggR0fv5bcK9yc/Z9XDw+xsB0tq84h43Ow+MLyug0O1qUoaL1MCPWSiOXeJ/Mz
-         bqbx8utJj883kzJSlzQc6TBCcOxZuBDFXVZ/nee6N9cI+CiEHe2pb2CKCnYI0nJgivII
-         tLWPNMLJbpLeBqtKgBYGVUzwkn95ruoZ8juazDfj7jvJxssAzSmPWeDAdH7IeMxUOlv3
-         bi5dQWNB77pJYa9Ij+b+Pmn54pWnf6w7ph9iI0EwtGmbFNYbj0K9izBKTA2e2+/bSQnP
-         6xrA==
-X-Gm-Message-State: ACrzQf3ZkW1jZrNCKwPlEe10kRNNWwfLOhAO4mVLwCWujksDdCNTFjp0
-        4GoHgZ1sACZQPHM7Nohjf1NAoA==
-X-Google-Smtp-Source: AMsMyM45rCIbAJsMXY1hsypPcowAH/2zuvoqq61QCokvbSt1bG18qvvWLe3rPTzzrpp+3TiJ7RDdMA==
-X-Received: by 2002:a05:6a00:851:b0:563:6c6a:2b7b with SMTP id q17-20020a056a00085100b005636c6a2b7bmr55178956pfk.45.1666974706684;
-        Fri, 28 Oct 2022 09:31:46 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id d125-20020a623683000000b0056c0b472c09sm3022854pfa.211.2022.10.28.09.31.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 09:31:46 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 16:31:42 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     "Woodhouse, David" <dwmw@amazon.co.uk>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org, mhal@rbox.co
-Subject: Re: [PATCH 03/16] KVM: x86: set gfn-to-pfn cache length consistently
- with VM word size
-Message-ID: <Y1wD7hcY/GSA/zHP@google.com>
-References: <20221027161849.2989332-1-pbonzini@redhat.com>
- <20221027161849.2989332-4-pbonzini@redhat.com>
- <Y1q+a3gtABqJPmmr@google.com>
- <c61f6089-57b7-e00f-d5ed-68e62237eab0@redhat.com>
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nwbPjBZmRyyK77zC/9SPzBIJETh2C9WOSbSEnKhMCwY=;
+        b=tDN06vPGibDEVlU5VI84sS5SW6aXS+Dnrw7Kk5rlIrSCT9PF0yDEbLdr7KgtIqJRPZ
+         LyAchDmFNnCwyQ8dHry4RzZ0MCqKGsNIy/lgAmnaOipMTPpjm72qDG48nIloV0DAoRND
+         fXeFEehGzH4QPP8OpSwkpLrvuZUbuB8B7MH2m9ji40gt6GVoXY+agoVQ6qLPr8om64Es
+         3FkxIalQv9i7AoOzP/3MsU8cmsIpNCZejcyu8Y72Rzb9h/lcNoFd9eOd+rHGGideMuvI
+         2ra0ciSjGGYZioOb06BTN2RR4iv5q7JikVnQpU0zfmte/FREhxKexc5dZOlvjwaHnQl2
+         cTDw==
+X-Gm-Message-State: ACrzQf0bLaDj5m+dN/BB1R+YBuZoUeAff3C6cISU1WQO+DmOpLcRFkey
+        Yc/+deQ25IejB7qwZLtymrc=
+X-Google-Smtp-Source: AMsMyM57F2e1pkir5cLcENr/NGv8gZVjUbB/97CEMjfcnFPYB7ZnEwiO4FsIsZ9jyOvZjWsnqNhBfg==
+X-Received: by 2002:a05:6808:f01:b0:354:2d95:3f96 with SMTP id m1-20020a0568080f0100b003542d953f96mr155387oiw.41.1666974848978;
+        Fri, 28 Oct 2022 09:34:08 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d24-20020a9d5e18000000b0066c312b044dsm733848oti.27.2022.10.28.09.34.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 09:34:07 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <7acc7a49-debb-abdb-f01c-f8adef4c1f0e@roeck-us.net>
+Date:   Fri, 28 Oct 2022 09:34:05 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c61f6089-57b7-e00f-d5ed-68e62237eab0@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Content-Language: en-US
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-hwmon@vger.kernel.org
+References: <20221028140833.280091-1-cristian.marussi@arm.com>
+ <20221028140833.280091-7-cristian.marussi@arm.com>
+ <b914ea25-a9a8-f443-2ba0-615bdd6cc04f@roeck-us.net>
+ <Y1v2ozURFdIk1PfU@e120937-lin>
+ <e4040686-851c-d8b0-b274-ac71d38685e1@roeck-us.net>
+ <Y1wAHyV/tLKQmo7l@e120937-lin>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 7/8] hwmon: (scmi) Register explicitly with Thermal
+ Framework
+In-Reply-To: <Y1wAHyV/tLKQmo7l@e120937-lin>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,76 +84,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022, Paolo Bonzini wrote:
-> On 10/27/22 19:22, Sean Christopherson wrote:
-> > On Thu, Oct 27, 2022, Paolo Bonzini wrote:
-> > > So, use the short size at activation time as well.  This means
-> > > re-activating the cache if the guest requests the hypercall page
-> > > multiple times with different word sizes (this can happen when
-> > > kexec-ing, for example).
-> > 
-> > I don't understand the motivation for allowing a conditionally valid GPA.  I see
-> > a lot of complexity and sub-optimal error handling for a use case that no one
-> > cares about.  Realistically, userspace is never going to provide a GPA that only
-> > works some of the time, because doing otherwise is just asking for a dead guest.
+On 10/28/22 09:15, Cristian Marussi wrote:
+> On Fri, Oct 28, 2022 at 08:58:58AM -0700, Guenter Roeck wrote:
+>> On 10/28/22 08:35, Cristian Marussi wrote:
+>> [ ... ]
+>>>>> +	/*
+>>>>> +	 * Try to register a temperature sensor with the Thermal Framework:
+>>>>> +	 * skip sensors not defined as part of any thermal zone (-ENODEV) but
+>>>>> +	 * report any other errors related to misconfigured zones/sensors.
+>>>>> +	 */
+>>>>> +	tzd = devm_thermal_of_zone_register(dev, th_sensor->info->id, th_sensor,
+>>>>> +					    &scmi_hwmon_thermal_ops);
+>>>>> +	if (IS_ERR(tzd)) {
+>>>>> +		devm_kfree(dev, th_sensor);
+>>>>> +
+>>>>> +		if (PTR_ERR(tzd) != -ENODEV)
+>>>>> +			return PTR_ERR(tzd);
+>>>>> +
+>>>>> +		dev_info(dev, "Sensor '%s' not attached to any thermal zone.\n",
+>>>>> +			 sensor->name);
+>>>>
+>>>> There were complaints about this message as it is noisy. If you send
+>>>> another version, please drop it unless attaching each sensor to a thermal
+>>>> zone is strongly expected. If you don't send another version, I'll drop it
+>>>> while applying.
+>>>>
+>>>
+>>> Ok fine for me. I am waiting to have some feedback from Sudeep too, but
+>>> I do not have plan for another version as of now.
+>>>
+>>> As a side note, though, I understand the 'noisiness' argument, but,
+>>> sincerely this same message in the original HWMON code was the only
+>>> reason why I spotted that something was wrong with the SCMI/HWMON
+>>> interactions and discovered the indexes/ids mismatch...if not for
+>>> that it would have gone un-noticed that a perfectly configured
+>>> ThermalZone/Sensor was not working properly...
+>>> (un-noticed at least until something would have been burnt to fire
+>>>    in my house .. joking :P)
+>>>
+>>
+>> Good point.
+>>
+>> Did you ever check the returned error code ? Maybe we could use it to
+>> distinguish "it is not attached to a thermal zone because it is not
+>> associated with one" from "attaching to a thermal zone failed because
+>> its configuration is bad/incomplete".
+>>
 > 
-> We _should_ be following the Xen API, which does not even say that the
-> areas have to fit in a single page.
+> Yes, it is what I do already indeed, in this regards I mimicked what
+> the hwmon-thermal bridge was doing.
+> 
+> In scmi_thermal_sensor_register() this message is printed out only
+> if Thermal registration returned -ENODEV and no err is reported
+> (which means teh specified sensor was not found attached to any TZ),
+> while in the caller of scmi_thermal_sensor_register() for any error
+> returned but -ENOMEM I print:
+> 
+> 	"Thermal zone misconfigured for %s. err=%d\n",
+> 
+> since any error reported by Thermal other than ENODEV and ENOMEM
+> means the DT parsing unveiled some configuration anomaly.
+> 
 
-Ah, I didn't realize these are hypercall => userspace => ioctl() paths.
+Ok, then let's hope that this finds misconfigurations and drop the
+info message.
 
-> In fact, even Linux's
-> 
->         struct vcpu_register_runstate_memory_area area;
-> 
->         area.addr.v = &per_cpu(xen_runstate, cpu);
->         if (HYPERVISOR_vcpu_op(VCPUOP_register_runstate_memory_area,
->                                xen_vcpu_nr(cpu), &area))
-> 
-> could fail or not just depending on the linker's whims, if I'm not
-> very confused.
-> 
-> Other data structures *do* have to fit in a page, but the runstate area
-> does not and it's exactly the one where the cache comes the most handy.
-> For this I'm going to wait for David to answer.
-> 
-> That said, the whole gpc API is really messy 
+I just noticed another problem in your code:
 
-No argument there.
++		if (ret == -ENOMEM)
++			return ret;
++		else if (ret)
++			dev_warn(dev,
++				 "Thermal zone misconfigured for %s. err=%d\n",
++				 sensor->name, ret);
 
-> and needs to be cleaned up beyond what this series does.  For example,
-> 
->         read_lock_irqsave(&gpc->lock, flags);
->         while (!kvm_gfn_to_pfn_cache_check(v->kvm, gpc, gpc->gpa,
->                                            sizeof(x))) {
->                 read_unlock_irqrestore(&gpc->lock, flags);
-> 
->                 if (kvm_gfn_to_pfn_cache_refresh(v->kvm, gpc, gpc->gpa, sizeof(x)))
->                         return;
-> 
->                 read_lock_irqsave(&gpc->lock, flags);
->         }
-> 	...
->         read_unlock_irqrestore(&gpc->lock, flags);
-> 
-> should really be simplified to
-> 
-> 	khva = kvm_gpc_lock(gpc);
-> 	if (IS_ERR(khva))
-> 		return;
-> 	...
-> 	kvm_gpc_unlock(gpc);
-> 
-> Only the special preempt-notifier cases would have to use check/refresh
-> by hand.  If needed they could even pass whatever length they want to
-> __kvm_gpc_refresh with, explicit marking that it's a here-be-dragons __API.
-> 
-> Also because we're using the gpc from non-preemptible regions the rwlock
-> critical sections should be enclosed in preempt_disable()/preempt_enable().
-> Fortunately they're pretty small.
-> 
-> For now I think the best course of action is to quickly get the bugfix
-> patches to Linus, and for 6.2 drop this one but otherwise keep the length
-> in kvm_gpc_activate().
+Static analyzers will rightfully notice that else after return is unnecessary.
+Please rewrite and drop the else. I think something like
 
-Works for me.
+		if (ret) {
+			if (ret == -ENOMEM)
+				return ret;
+			dev_warn(dev,
+				 "Thermal zone misconfigured for %s. err=%d\n",
+				 sensor->name, ret);
+		}
+
+would be better since ret would only be evaluated once in the no-error case.
+
+Thanks,
+Guenter
+
