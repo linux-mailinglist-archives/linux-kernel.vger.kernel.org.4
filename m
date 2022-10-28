@@ -2,119 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B38611AFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2BD611B22
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbiJ1TkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 15:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
+        id S230123AbiJ1TsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 15:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiJ1TkT (ORCPT
+        with ESMTP id S230041AbiJ1Trz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 15:40:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB161659FC;
-        Fri, 28 Oct 2022 12:40:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BBF362A35;
-        Fri, 28 Oct 2022 19:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E6E2C433D6;
-        Fri, 28 Oct 2022 19:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666986016;
-        bh=tCr4ep6IhYWtSpd0JgwUQaZdtyZWwzd9CnwpUTaEYO0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=CddWAUtB3ItQ4yjjXyqcnnI8X1+63w0KKyiLOokBGnYr8mKSX4olV3o9TVeGEN3It
-         2h4XZfI2udczfWt5ivRqwb9QOg8sYbwWgq5ogt2EhiVQ+VREH3Ppxu64OkZNJv9hcv
-         tPk/rz1C2tAKCm0bOsvWuduXskBJtdLta8F7Olk2WBSs1UlbckMeaV7CUFPvzHoZZs
-         P60HYjaM+2fhWl9hFnDwXCFTKaeDIRY5YpkVCriSYPC10RcnpqQsSvm4uR4/3GIqHl
-         r1eJPjHaDtvE9OVy/+Q9GdwaC2RR4ndPsuOnOQoFsLJZS03reAoaIlqchh5Ku/oPJT
-         Zd1UGuHgRlcNQ==
-Date:   Fri, 28 Oct 2022 14:40:14 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jonathan Derrick <jonathan.derrick@linux.dev>
-Cc:     "David E. Box" <david.e.box@linux.intel.com>,
-        nirmal.patel@linux.intel.com, lorenzo.pieralisi@arm.com,
-        hch@infradead.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, michael.a.bottini@intel.com,
-        rafael@kernel.org, me@adhityamohan.in, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V7 3/4] PCI: vmd: Add vmd_device_data
-Message-ID: <20221028194014.GA907046@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5c0a8a41-db58-ac73-da08-681b20156786@linux.dev>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 28 Oct 2022 15:47:55 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197AD241B0B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 12:47:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=WE0U9W6dwiOwdUAAWamaejYu7mRh00CBAA+DvQdSjfE=; b=eaYeJOI/JkIUgdDdMN+N831oxC
+        Q8byy3AieM7i/k0417HGZBppWRL1GjNYp7/PEykj6mqsngsEoS+mF3bbp0GRJye5EhbFf+/eN56Qo
+        RqbTwvgI0b7bDnzbOIBQTtrXOFvUJP9OrJYo9gJaKDEB0C6bg+tFKtRZ4uTUBp51YxstMjFkywQIp
+        7euD1FQDsI6BklpWqzALTpgYo5YsjFEfzB0UusP4+K5pV8MStLhEtoou6gZ7U9z21gNeKZrYbG4Vf
+        GA44h7I9KBpyvHZge9QjykXYmvCeMRvLa9bUAQ3+FueenInF6hyuq9QaD6X8hRqv/RDvfhfqaIco4
+        RdPYCm9g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ooVKV-001V5o-VS; Fri, 28 Oct 2022 19:47:48 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B387130010B;
+        Fri, 28 Oct 2022 21:47:41 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 9314C2C26AB85; Fri, 28 Oct 2022 21:47:41 +0200 (CEST)
+Message-ID: <20221028194022.388521751@infradead.org>
+User-Agent: quilt/0.66
+Date:   Fri, 28 Oct 2022 21:40:22 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        djwong@kernel.org, yujie.liu@intel.com, tglx@linutronix.de,
+        jpoimboe@kernel.org, joao.moreira@intel.com,
+        samitolvanen@google.com
+Subject: [PATCH 0/5] x86/kallsyms: Fix the call-thunk kallsyms fail
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 02:18:48PM -0500, Jonathan Derrick wrote:
-> On 10/28/2022 2:13 PM, Bjorn Helgaas wrote:
-> > On Mon, Oct 24, 2022 at 05:44:10PM -0700, David E. Box wrote:
-> >> Add vmd_device_data to allow adding additional info for driver data.
-> > 
-> >>  	{PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
-> >> -		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
-> >> -				VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> >> -				VMD_FEAT_OFFSET_FIRST_VECTOR,},
-> >> +		(kernel_ulong_t)&(struct vmd_device_data) {
-> >> +			.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
-> >> +				    VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> >> +				    VMD_FEAT_OFFSET_FIRST_VECTOR,
-> >> +		},
-> >> +	},
-> > 
-> > It looks like these devices come in families where several device IDs
-> > share the same features.  I think this would be more readable if you
-> > defined each family outside this table and simply referenced the
-> > family here.  E.g., you could do something like:
-> > 
-> >   static struct vmd_device_data vmd_v1 = {
-> >     .features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
-> > 		VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> > 		VMD_FEAT_OFFSET_FIRST_VECTOR,
-> >   };
->
-> I seem to recall it being similar to this in one of the previous revisions
-> It's fine with me either way
+Hi all,
 
-Indeed it was:
-https://lore.kernel.org/r/366a9602-555f-7a1b-a8db-bbcbf84b7b08@linux.dev
-I'd forgotten that.
+As reported here:
 
-At the time there were four devices (0x467f 0x4c3d 0xa77f 0x9a0b)
-that used the 467f data.  The current series adds two more (0x7d0b
-0x0ad0b).  Maybe the "vmd_467f_data" name could have been more
-descriptive, but the code was definitely shorter:
+  https://lkml.kernel.org/r/202210241614.2ae4c1f5-yujie.liu@intel.com
 
-  +     { PCI_VDEVICE(INTEL, 0x467f), (kernel_ulong_t)&vmd_467f_data },
-  +     { PCI_VDEVICE(INTEL, 0x4c3d), (kernel_ulong_t)&vmd_467f_data },
-  +     { PCI_VDEVICE(INTEL, 0xa77f), (kernel_ulong_t)&vmd_467f_data },
-  +     { PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B), (kernel_ulong_t)&vmd_467f_data },
+The kallsyms change for call-thunks doesn't really work out as expected. These
+patches revert that change and propose an alternative.
 
-I do wish pci_device_id.driver_data were a void pointer, as it is for
-of_device_id, which makes it much more natural to express [1], but
-that ship has long sailed.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/controller/dwc/pcie-kirin.c?id=v6.0#n768
 
-> >   {PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
-> >     .driver_data = (kernel_ulong_t) &vmd_v1,
-> > 
-> > Then you can add VMD_FEAT_BIOS_PM_QUIRK and the .ltr value in one place
-> > instead of repeating it a half dozen times.
-> > 
-> >>  	{0,}
-> >>  };
-> >>  MODULE_DEVICE_TABLE(pci, vmd_ids);
-> >> -- 
-> >> 2.25.1
-> >>
+
