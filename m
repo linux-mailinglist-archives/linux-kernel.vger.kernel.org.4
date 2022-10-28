@@ -2,148 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D97611DD1
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F40611DE9
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 01:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbiJ1W5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 18:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41392 "EHLO
+        id S229602AbiJ1XGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 19:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiJ1W4l (ORCPT
+        with ESMTP id S229552AbiJ1XGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 18:56:41 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9E0228CE6
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 15:56:39 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id v17so3037090plo.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 15:56:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rQVwlOrzjvZiwM1yWaKuSc9d6GkFqbVluxP+1zRoo5U=;
-        b=eU8VLE4GEjE+APWuWM6WRrEfDSltFZWeZlSXHgeGp5TncgAyuPYWq7hMBq0IfiTrC8
-         DZVXxlLkRH6qA+M+RNmZYXcvXR46nDJ18CyPAht469DmLhfezSz3AJYGBA0IaOqn+csV
-         2eVii3ad+U/qMLpjwXtpwdBEaGNoJ9vWoTF2c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rQVwlOrzjvZiwM1yWaKuSc9d6GkFqbVluxP+1zRoo5U=;
-        b=zggR/3HlwjR63qpefIpZtONuOohLyhvWRCOz7bEL316bELzz8itPWzCiIyqB8BSc75
-         qWksBYbN9g0XorRzImBusnh3grll5/kTdS8SRjMCCUrdYJ1hd9TgjCVW0XalNOt/Cv02
-         7KMk+YcayaxK8FDkic/xjeoJ6/uTnXsszyzPTqOsSGSA7JBf9w2QlOVRvgHfLn4v8bfB
-         B/nYKgdae8/4HZDorAegjsCbr9GRWdkBczG1j3VdC5lnGedHwIrZeGwapUZEWE1H7y4R
-         oDmnNvmj7XUf/GRZxKNmUlxDS9f4GObKBsQ7H5BBzOjFJFE+EwmllvMZkJFuJuUNAtjS
-         Lqug==
-X-Gm-Message-State: ACrzQf2vZysw9SagN0U6mY1eDpWs++jgXL7mwThlO6d/WS56y17NAGf/
-        pw0xhh36J11u2NwPXS0iA4PeSg==
-X-Google-Smtp-Source: AMsMyM71FiYjLx0f78sa5ClLCKOCsteQvvfwYpKRsKxw8Q9/oGoGzeAAt58B/ZtFZEwdoblo2PGEqg==
-X-Received: by 2002:a17:90b:1804:b0:213:1a9c:5ae with SMTP id lw4-20020a17090b180400b002131a9c05aemr19031610pjb.81.1666997799152;
-        Fri, 28 Oct 2022 15:56:39 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f130-20020a623888000000b0056c06d583fasm3289439pfa.219.2022.10.28.15.56.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 15:56:38 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 15:56:37 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Dr. David Alan Gilbert" <linux@treblig.org>
-Cc:     shaggy@kernel.org, jfs-discussion@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org,
-        syzbot+5fc38b2ddbbca7f5c680@syzkaller.appspotmail.com
-Subject: Re: [PATCH] jfs: Fix fortify moan in symlink
-Message-ID: <202210281526.B32C79C4@keescook>
-References: <20221022203913.264855-1-linux@treblig.org>
- <202210241021.6E9E1EF65@keescook>
- <Y1beLWto/J2W1Stu@gallifrey>
+        Fri, 28 Oct 2022 19:06:12 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367A31DA350;
+        Fri, 28 Oct 2022 16:06:11 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id A998C5C017D;
+        Fri, 28 Oct 2022 19:06:08 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Fri, 28 Oct 2022 19:06:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1666998368; x=
+        1667084768; bh=6ErzU4gGH8yU302IzT7x6da7AL+aZ5llrq9RKS5ab+o=; b=m
+        4KE7OmqbQjEH6Dw7ERDVmB6GefrXwfUe7oysqCxp3133igpTqTk1ZoW9smT1XyVM
+        Hs0AUPK3HuPLBjX+oN8UfFPD4oP6wwUUitFUXyXVM9keADNGtoM/NLJU+AjTPxcL
+        lyuBYKhtXcfPqK3wFLwH/CtKQ8hjI1xcBdYWMgTzyxbJbmfOsdl/tWQZgDkfB7/4
+        OSwTsBPpe/8O4588iyhaXtUgjNrzzavsI4hzVaHMY7IpzgnF6JnGSqhS8k1O3qO8
+        DI+0NqIq50m4O/pNFFkwoGTnEpCWRgnSnR2rYWNqmFOba5xRWs/3Y9FkFeES/LCT
+        F7W8T6VQklOZgLaD1qH1A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666998368; x=
+        1667084768; bh=6ErzU4gGH8yU302IzT7x6da7AL+aZ5llrq9RKS5ab+o=; b=r
+        3oYnFdEmdZp5pkHqVuUmxM4VBDFEnBscB3R/qKU3Oy5uJD8GJs6XM1SucbhJuVqM
+        MUrnPHMByyJzoX9ZxNfuqXYwJ8Txz2DL0jAL5baPKqT2TwfJvf/FC6iizK/dmtc7
+        XOFeTkw90EStN6MZJb79+6J7Er/3MT97cAnE8tO32mwWoeZay5yZ1al5qre2M3NC
+        jU7SQzzlvn5CuG9JQc/e/WTsslUWu9hu+xmrbUhBZgXImGn5SyBhckPUnd2AKnI0
+        KK6ckukK4ADwX8G5DhhN1H/gD/vDHh79OxbseuVhqiyv2zIw0SnCU6ucQjKYtJKD
+        M2z/PLxlMpv6x9Diwd6Gw==
+X-ME-Sender: <xms:YGBcY7xe3yfeZjsCWtvfyiCCoEKEqJcxfMYf6D1zv6jNhh2KwqBjRg>
+    <xme:YGBcYzRafk6PU8IVgJpQ6u9ewraMSHpDCQc26uWcxQhFAeIhfl85AX0vZRXxtxr4q
+    87xiZ65XfnEnI5Y0A>
+X-ME-Received: <xmr:YGBcY1V4JyheSNZtpaHGF4OIv-lvOHQqAyxq5QPz2c1tayTybzyYYTPlgjcLxy0MDW_IIY3P0rp6tuZnqGDnyJtVGbsVbZJysvZCa9rcqOcwEpWWpqT-3kgMbQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdejgddukecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepkeejleelfeeitdfhtdfgkeeghedufeduueegffdvhfdukeelleef
+    tdetjeehuddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:YGBcY1gGKngsAa3EiqfAC_uuZakxRfHY9sRzsBhK1eDP98Ap56Fy3Q>
+    <xmx:YGBcY9CH-1C7N_yfuTW3btaZe09km3mwHSU7v39NvYlOcA5QfjopYA>
+    <xmx:YGBcY-JPxItgIvBNRhraPcJRjvPEAoTWlA5ZECp5D2765St7tECQ0w>
+    <xmx:YGBcY8MPPsGMVtp6xZUgeJ2t18IQjl1XOJ7UFSKbrlJtoYqgEV_Z8w>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 28 Oct 2022 19:06:08 -0400 (EDT)
+Message-ID: <6b23af14-340d-b7b5-7d20-14fae03f724c@sholland.org>
+Date:   Fri, 28 Oct 2022 18:06:07 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1beLWto/J2W1Stu@gallifrey>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH] power: supply: ip5xxx: Fix integer overflow in
+ current_now calculation
+Content-Language: en-US
+To:     Ondrej Jirman <megi@xff.cz>, Sebastian Reichel <sre@kernel.org>
+Cc:     "open list:POWER SUPPLY CLASS/SUBSYSTEM and DRIVERS" 
+        <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-rockchip@lists.infradead.org
+References: <20221028224052.293693-1-megi@xff.cz>
+From:   Samuel Holland <samuel@sholland.org>
+In-Reply-To: <20221028224052.293693-1-megi@xff.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 07:49:17PM +0100, Dr. David Alan Gilbert wrote:
-> * Kees Cook (keescook@chromium.org) wrote:
-> > On Sat, Oct 22, 2022 at 09:39:14PM +0100, linux@treblig.org wrote:
-> > > From: "Dr. David Alan Gilbert" <linux@treblig.org>
-> > > 
-> > > JFS has in jfs_incore.h:
-> > > 
-> > >       /* _inline may overflow into _inline_ea when needed */
-> > >       /* _inline_ea may overlay the last part of
-> > >        * file._xtroot if maxentry = XTROOTINITSLOT
-> > >        */
-> > >       union {
-> > >         struct {
-> > >           /* 128: inline symlink */
-> > >           unchar _inline[128];
-> > >           /* 128: inline extended attr */
-> > >           unchar _inline_ea[128];
-> > >         };
-> > >         unchar _inline_all[256];
-> > > 
-> > > and currently the symlink code copies into _inline;
-> > > if this is larger than 128 bytes it triggers a fortify warning of the
-> > > form:
-> > > 
-> > >   memcpy: detected field-spanning write (size 132) of single field
-> > >      "ip->i_link" at fs/jfs/namei.c:950 (size 18446744073709551615)
-> > 
-> > Which compiler are you using for this build?
+On 10/28/22 17:40, Ondrej Jirman wrote:
+> When current is larger than ~2A, the multiplication in current_now
+> property overflows and the kernel reports invalid negative current
+> value. Change the numerator and denominator while preserving their
+> ratio to allow up to +-6A before the overflow.
 > 
-> I think that report was the same on gcc on Fedora 37 and whatever
-> syzkaller was running.
+> Fixes: 75853406fa27 ("power: supply: Add a driver for Injoinic power bank ICs")
+> Signed-off-by: Ondrej Jirman <megi@xff.cz>
+
+Reviewed-by: Samuel Holland <samuel@sholland.org>
+
+> ---
+>  drivers/power/supply/ip5xxx_power.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> > This size report (SIZE_MAX)
-> > should be impossible to reach. But also, the size is just wrong --
-> > i_inline is 128 bytes, not SIZE_MAX. So, the detection is working
-> > (132 > 128), but the report is broken, and I can't see how...
-> 
-> Yeh, and led me down a blind alley for a while thinking something had
-> really managed to screwup the strlen somehow.
+> diff --git a/drivers/power/supply/ip5xxx_power.c b/drivers/power/supply/ip5xxx_power.c
+> index 02ee4d252a3e..f39cb2f7aa11 100644
+> --- a/drivers/power/supply/ip5xxx_power.c
+> +++ b/drivers/power/supply/ip5xxx_power.c
+> @@ -398,7 +398,7 @@ static int ip5xxx_battery_get_property(struct power_supply *psy,
+>  		ret = ip5xxx_battery_read_adc(ip5xxx, IP5XXX_BATIADC_DAT0,
+>  					      IP5XXX_BATIADC_DAT1, &raw);
+>  
+> -		val->intval = DIV_ROUND_CLOSEST(raw * 745985, 1000);
+> +		val->intval = DIV_ROUND_CLOSEST(raw * 261095, 350);
 
-This looks like a GCC bug (going at least back to GCC 10.2)[1], but some
-extra care around the macro appears to make it go away, so the reporting
-variable doesn't get confused/re-evaluated:
+DIV_ROUND_CLOSEST(raw * 149197, 200) would be marginally more accurate,
+but it doesn't matter in practice.
 
-diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-index 09a032f6ce6b..9e2d96993c30 100644
---- a/include/linux/fortify-string.h
-+++ b/include/linux/fortify-string.h
-@@ -550,13 +550,18 @@ __FORTIFY_INLINE bool fortify_memcpy_chk(__kernel_size_t size,
- 
- #define __fortify_memcpy_chk(p, q, size, p_size, q_size,		\
- 			     p_size_field, q_size_field, op) ({		\
--	size_t __fortify_size = (size_t)(size);				\
--	WARN_ONCE(fortify_memcpy_chk(__fortify_size, p_size, q_size,	\
--				     p_size_field, q_size_field, #op),	\
-+	const size_t __fortify_size = (size_t)(size);			\
-+	const size_t __p_size = (p_size);				\
-+	const size_t __q_size = (q_size);				\
-+	const size_t __p_size_field = (p_size_field);			\
-+	const size_t __q_size_field = (q_size_field);			\
-+	WARN_ONCE(fortify_memcpy_chk(__fortify_size, __p_size,		\
-+				     __q_size, __p_size_field,		\
-+				     __q_size_field, #op),		\
- 		  #op ": detected field-spanning write (size %zu) of single %s (size %zu)\n", \
- 		  __fortify_size,					\
- 		  "field \"" #p "\" at " __FILE__ ":" __stringify(__LINE__), \
--		  p_size_field);					\
-+		  __p_size_field);					\
- 	__underlying_##op(p, q, __fortify_size);			\
- })
- 
+>  		return 0;
+>  
+>  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
 
-
-[1] https://syzkaller.appspot.com/bug?id=23d613df5259b977dac1696bec77f61a85890e3d
-
--- 
-Kees Cook
