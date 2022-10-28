@@ -2,199 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB84610D3A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D101C610D3B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbiJ1J3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 05:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47560 "EHLO
+        id S230144AbiJ1J3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 05:29:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiJ1J3b (ORCPT
+        with ESMTP id S230058AbiJ1J3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 05:29:31 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BE319DD95;
-        Fri, 28 Oct 2022 02:29:19 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29S9D9dM004186;
-        Fri, 28 Oct 2022 09:29:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=uLFhNBsoYwHR3Eq8nBH5VOZ2zu8ZTme63QKaYCM+QLY=;
- b=liY+pHKioyatRCYaB1bxSdbP2syCd81k/L/dGl2aYSjz4vWsW7xHclgjSum/Cx9naeVT
- LGR0GCAK/9Ia/bYjWkGGuzL7siylXX8y8PRm2SgCIAWwe23qTB5yT/gVS1HdKF6gRJNP
- CCN8l7d0qrm0l4WRGOKDDTXyWkHc5ALUJm/6I/wRTVfm/tnHrlDEIwlmZGyMBKuALngk
- p/7bXC2N6/qkbfgJg5ym+cw+byjram8HZN6Jr0nANlsdZ0M60pACJ2XisX3AHDgMyKOo
- hYlLjcv27qICpwu2llGA9P8d+CH0Gx02jWMgCUmrfe0zC0o1fiUWbIqennt7LWVxXPue Rw== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kgc8p8gkv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 09:29:06 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29S9KYKM023857;
-        Fri, 28 Oct 2022 09:29:04 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma05fra.de.ibm.com with ESMTP id 3kfahd2fb2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 09:29:04 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29S9T1Sp30933362
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Oct 2022 09:29:01 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 663D74C04E;
-        Fri, 28 Oct 2022 09:29:01 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 868C24C046;
-        Fri, 28 Oct 2022 09:29:00 +0000 (GMT)
-Received: from sig-9-145-187-50.de.ibm.com (unknown [9.145.187.50])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 28 Oct 2022 09:29:00 +0000 (GMT)
-Message-ID: <1e10c0605e65f43acf6d2b5e71c7c74d6ff980b5.camel@linux.ibm.com>
-Subject: Re: [PATCH 3/5] iommu/s390: Use RCU to allow concurrent domain_list
- iteration
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org
-Date:   Fri, 28 Oct 2022 11:29:00 +0200
-In-Reply-To: <Y1qPvg+g6EEaayF6@nvidia.com>
-References: <Y1ErcEe82yjJI+ET@nvidia.com>
-         <68d91d7a5aadbd46dc34470eccd6b86a84c9e47b.camel@linux.ibm.com>
-         <Y1KgX8EwH8T+FgWC@nvidia.com>
-         <89a748fb5caee8be5d91806aa5dfd131e92d5d82.camel@linux.ibm.com>
-         <Y1K1AqVWEyY0/Uqy@nvidia.com>
-         <cef734b9f9b33380c1bbff40b56bb67b3de29341.camel@linux.ibm.com>
-         <Y1a8qM4c2ZAM9glJ@nvidia.com>
-         <3c2249fc7abf481b15d4988c2bd6456c48154c44.camel@linux.ibm.com>
-         <Y1p/7YS338ghykGz@nvidia.com>
-         <c98fa11d4efa86ca676a9d164893db8af8ab3693.camel@linux.ibm.com>
-         <Y1qPvg+g6EEaayF6@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: c5DXM0sJle-tqorYLEZmLXgC8wtcrONS
-X-Proofpoint-ORIG-GUID: c5DXM0sJle-tqorYLEZmLXgC8wtcrONS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-28_04,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- phishscore=0 spamscore=0 priorityscore=1501 impostorscore=0
- mlxlogscore=999 lowpriorityscore=0 adultscore=0 clxscore=1015 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2210280057
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 28 Oct 2022 05:29:38 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F328E626B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 02:29:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9184F21A04;
+        Fri, 28 Oct 2022 09:29:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1666949373; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=v89bHymXpN/0ksZQ378fNnIWQp9WqEuCRY8Wi/1nIYU=;
+        b=RTWQFdq+s5qsYmT3amF6mboXzeS14wUHrg6C2lvEWqV5VIqckhaDMdIbI6tepjqx5j81tX
+        8GYW1VvnZ5fgE6gaG3osCKK7pjXh1wJCiy/fagpFJuiyVprYhe6cxA9JAFdxtnUDpWA25s
+        15l1sdmKMWYAIC+Nl7L90aEp3SDORxo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1666949373;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=v89bHymXpN/0ksZQ378fNnIWQp9WqEuCRY8Wi/1nIYU=;
+        b=06M2yr7KM6Sz8zFb15PWPoKD7bCOwB2weGs/ZNEIOa4TrX6sw4inmMk3V9HlNwx1QV+KRQ
+        f26ihFbLr2kZ8TBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 71B8A1377D;
+        Fri, 28 Oct 2022 09:29:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id I3n5Gv2gW2MJHAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 28 Oct 2022 09:29:33 +0000
+Date:   Fri, 28 Oct 2022 11:29:32 +0200
+Message-ID: <87edusmh37.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 6.1-rc3
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-10-27 at 11:03 -0300, Jason Gunthorpe wrote:
-> On Thu, Oct 27, 2022 at 03:35:57PM +0200, Niklas Schnelle wrote:
-> > On Thu, 2022-10-27 at 09:56 -0300, Jason Gunthorpe wrote:
-> > > On Thu, Oct 27, 2022 at 02:44:49PM +0200, Niklas Schnelle wrote:
-> > > > On Mon, 2022-10-24 at 13:26 -0300, Jason Gunthorpe wrote:
-> > > > > On Mon, Oct 24, 2022 at 05:22:24PM +0200, Niklas Schnelle wrote:
-> > > > > 
-> > > > > > Thanks for the explanation, still would like to grok this a bit more if
-> > > > > > you don't mind. If I do read things correctly synchronize_rcu() should
-> > > > > > run in the conext of the VFIO ioctl in this case and shouldn't block
-> > > > > > anything else in the kernel, correct? At least that's how I understand
-> > > > > > the synchronize_rcu() comments and the fact that e.g.
-> > > > > > net/vmw_vsock/virtio_transport.c:virtio_vsock_remove() also does a
-> > > > > > synchronize_rcu() and can be triggered from user-space too.
-> > > > > 
-> > > > > Yes, but I wouldn't look in the kernel to understand if things are OK
-> > > > >  
-> > > > > > So we're
-> > > > > > more worried about user-space getting slowed down rather than a Denial-
-> > > > > > of-Service against other kernel tasks.
-> > > > > 
-> > > > > Yes, functionally it is OK, but for something like vfio with vIOMMU
-> > > > > you could be looking at several domains that have to be detached
-> > > > > sequentially and with grace periods > 1s you can reach multiple
-> > > > > seconds to complete something like a close() system call. Generally it
-> > > > > should be weighed carefully
-> > > > > 
-> > > > > Jason
-> > > > 
-> > > > Thanks for the detailed explanation. Then let's not put a
-> > > > synchronize_rcu() in detach, as I said as long as the I/O translation
-> > > > tables are there an IOTLB flush after zpci_unregister_ioat() should
-> > > > result in an ignorable error. That said, I think if we don't have the
-> > > > synchronize_rcu() in detach we need it in s390_domain_free() before
-> > > > freeing the I/O translation tables.
-> > > 
-> > > Yes, it would be appropriate to free those using one of the rcu
-> > > free'rs, (eg kfree_rcu) not synchronize_rcu()
-> > > 
-> > > Jason
-> > 
-> > They are allocated via kmem_cache_alloc() from caches shared by all
-> > IOMMU's so can't use kfree_rcu() directly. Also we're only freeing the
-> > entire I/O translation table of one IOMMU at once after it is not used
-> > anymore. Before that it is only grown. So I think synchronize_rcu() is
-> > the obvious and simple choice since we only need one grace period.
-> 
-> It has the same issue as doing it for the other reason, adding
-> synchronize_rcu() to the domain free path is undesirable.
-> 
-> The best thing is to do as kfree_rcu() does now, basically:
-> 
-> rcu_head = kzalloc(rcu_head, GFP_NOWAIT, GFP_NOWARN)
-> if (!rcu_head)
->    synchronize_rcu()
-> else
->    call_rcu(rcu_head)
-> 
-> And then call kmem_cache_free() from the rcu callback
+Linus,
 
-Hmm, maybe a stupid question but why can't I just put the rcu_head in
-struct s390_domain and then do a call_rcu() on that with a callback
-that does:
+please pull sound fixes for v6.1-rc3 from:
 
-	dma_cleanup_tables(s390_domain->dma_table);
-	kfree(s390_domain);
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.1-rc3
 
-I.e. the rest of the current s390_domain_free().
-Then I don't have to worry about failing to allocate the rcu_head and
-it's simple enough. Basically just do the actual freeing of the
-s390_domain via call_rcu().
+The topmost commit is f1fae475f10a26b7e34da4ff2e2f19b7feb3548e
 
-> 
-> But this is getting very complicated, you might be better to refcount
-> the domain itself and acquire the refcount under RCU. This turns the
-> locking problem into a per-domain-object lock instead of a global lock
-> which is usually good enough and simpler to understand.
-> 
-> Jason
+----------------------------------------------------------------
 
-Sorry I might be a bit slow as I'm new to RCU but I don't understand
-this yet, especially the last part. Before this patch we do have a per-
-domain lock but I'm sure that's not the kind of "per-domain-object
-lock" you're talking about or else we wouldn't need RCU at all. Is this
-maybe a different way of expressing the above idea using the analogy
-with reference counting from whatisRCU.rst? Meaning we treat the fact
-that there may still be RCU readers as "there are still references to
-s390_domain"? 
+sound fixes for 6.1-rc3
 
-Or do you mean to use a kref that is taken by RCU readers together with
-rcu_read_lock() and dropped at rcu_read_unlock() such that during the
-RCU read critical sections the refcount can't fall below 1 and the
-domain is actually freed once we have a) put the initial reference
-during s390_domain_free() and b) put all temporary references on
-exiting the RCU read critical sections?
+A collection of small fixes:
+- A series of fixes for regressions by the recent ALSA control
+  hash usages
+- Fixes for UAF with del_timer() at removals in a few drivers
+- Char signedness fixes
+- A few memory leak fixes at error paths
+- Device-specific fixes / quirks for Intel SOF, AMD, HD-audio,
+  USB-audio, and various ASoC codecs
+
+----------------------------------------------------------------
+
+Aidan MacDonald (1):
+      ASoC: simple-card: Fix up checks for HW param fixups
+
+Colin Ian King (1):
+      ASoC: codecs: jz4725b: Fix spelling mistake "Sourc" -> "Source", "Routee" -> "Route"
+
+Derek Fang (2):
+      ASoC: rt5682s: Fix the TDM Tx settings
+      ASoC: rt1019: Fix the TDM settings
+
+Geert Uytterhoeven (1):
+      ASoC: codecs: tlv320adc3xxx: Wrap adc3xxx_i2c_remove() in __exit_p()
+
+Jason A. Donenfeld (2):
+      ALSA: au88x0: use explicitly signed char
+      ALSA: rme9652: use explicitly signed char
+
+Jiangshan Yi (1):
+      ASoC: cx2072x: fix spelling typo in comment
+
+Kai Vehmanen (1):
+      ASoC: SOF: ipc4-mtrace: protect per-core nodes against multiple open
+
+Leohearts (1):
+      ASoC: amd: yc: Add Lenovo Thinkbook 14+ 2022 21D0 to quirks table
+
+Maciej S. Szmigiero (6):
+      ALSA: control: add snd_ctl_rename()
+      ALSA: usb-audio: Use snd_ctl_rename() to rename a control
+      ALSA: hda/realtek: Use snd_ctl_rename() to rename a control
+      ALSA: emu10k1: Use snd_ctl_rename() to rename a control
+      ALSA: ca0106: Use snd_ctl_rename() to rename a control
+      ALSA: ac97: Use snd_ctl_rename() to rename a control
+
+Peter Ujfalusi (1):
+      Revert "ASoC: soc-component: using pm_runtime_resume_and_get instead of pm_runtime_get_sync"
+
+Pierre-Louis Bossart (3):
+      ASoC: Intel: sof_sdw: add quirk variant for LAPBC710 NUC15
+      ASoC: SOF: Intel: pci-mtl: fix firmware name
+      ASoC: SOF: Intel: pci-tgl: fix ADL-N descriptor
+
+Randy Dunlap (2):
+      ASoC: codec: tlv320adc3xxx: add GPIOLIB dependency
+      ASoC: qcom: SND_SOC_SC7180 optionally depends on SOUNDWIRE
+
+Shuming Fan (2):
+      ASoC: rt1308-sdw: update the preset settings
+      ASoC: rt1308-sdw: add the default value of some registers
+
+Siarhei Volkau (4):
+      ASoC: codecs: jz4725b: add missed Line In power control bit
+      ASoC: codecs: jz4725b: fix reported volume for Master ctl
+      ASoC: codecs: jz4725b: use right control for Capture Volume
+      ASoC: codecs: jz4725b: fix capture selector naming
+
+Srinivasa Rao Mandadapu (2):
+      ASoC: qcom: lpass-cpu: mark HDMI TX registers as volatile
+      ASoC: qcom: lpass-cpu: Mark HDMI TX parity register as volatile
+
+Stefan Binding (1):
+      ALSA: hda/realtek: Add quirk for ASUS Zenbook using CS35L41
+
+Steven Rostedt (Google) (1):
+      ALSA: Use del_timer_sync() before freeing timer
+
+Takashi Iwai (3):
+      ALSA: usb-audio: Add quirks for M-Audio Fast Track C400/600
+      ALSA: hda/realtek: Add another HP ZBook G9 model quirks
+      ALSA: aoa: Fix I2S device accounting
+
+Xiaolei Wang (1):
+      ASoC: wm8962: Add an event handler for TEMP_HP and TEMP_SPK
+
+Yang Yingliang (5):
+      ALSA: hda/realtek: simplify the return of comp_bind()
+      ALSA: ac97: fix possible memory leak in snd_ac97_dev_register()
+      ASoC: Intel: Skylake: fix possible memory leak in skl_codec_device_init()
+      ASoC: SOF: Intel: hda-codec: fix possible memory leak in hda_codec_device_init()
+      ALSA: aoa: i2sbus: fix possible memory leak in i2sbus_add_dev()
+
+Yong Zhi (1):
+      ASoC: Intel: sof_rt5682: Add quirk for Rex board
+
+Zhang Qilong (7):
+      ASoC: wm8997: Fix PM disable depth imbalance in wm8997_probe
+      ASoC: wm5110: Fix PM disable depth imbalance in wm5110_probe
+      ASoC: wm5102: Fix PM disable depth imbalance in wm5102_probe
+      ASoC: wm5102: Revert "ASoC: wm5102: Fix PM disable depth imbalance in wm5102_probe"
+      ASoC: wm5110: Revert "ASoC: wm5110: Fix PM disable depth imbalance in wm5110_probe"
+      ASoC: wm8997: Revert "ASoC: wm8997: Fix PM disable depth imbalance in wm8997_probe"
+      ASoC: mt6660: Keep the pm_runtime enables before component stuff in mt6660_i2c_probe
+
+linkt (1):
+      ASoC: amd: yc: Adding Lenovo ThinkBook 14 Gen 4+ ARA and Lenovo ThinkBook 16 Gen 4+ ARA to the Quirks List
+
+---
+ include/sound/control.h               |  1 +
+ include/sound/simple_card_utils.h     |  1 +
+ sound/aoa/soundbus/i2sbus/core.c      |  7 ++++-
+ sound/core/control.c                  | 23 +++++++++++++++
+ sound/pci/ac97/ac97_codec.c           | 33 +++++++++++++++------
+ sound/pci/au88x0/au88x0.h             |  6 ++--
+ sound/pci/au88x0/au88x0_core.c        |  2 +-
+ sound/pci/ca0106/ca0106_mixer.c       |  2 +-
+ sound/pci/emu10k1/emumixer.c          |  2 +-
+ sound/pci/hda/patch_realtek.c         | 12 ++++----
+ sound/pci/rme9652/hdsp.c              | 26 ++++++++---------
+ sound/pci/rme9652/rme9652.c           | 22 +++++++-------
+ sound/soc/amd/yc/acp6x-mach.c         | 21 ++++++++++++++
+ sound/soc/codecs/Kconfig              |  1 +
+ sound/soc/codecs/cx2072x.h            |  2 +-
+ sound/soc/codecs/jz4725b.c            | 34 ++++++++++++----------
+ sound/soc/codecs/mt6660.c             |  8 +++---
+ sound/soc/codecs/rt1019.c             | 20 +++++++------
+ sound/soc/codecs/rt1019.h             |  6 ++++
+ sound/soc/codecs/rt1308-sdw.c         | 17 +++++++++--
+ sound/soc/codecs/rt1308-sdw.h         |  3 ++
+ sound/soc/codecs/rt1308.h             |  5 ++++
+ sound/soc/codecs/rt5682s.c            | 15 ++++++++--
+ sound/soc/codecs/rt5682s.h            |  1 +
+ sound/soc/codecs/tlv320adc3xxx.c      |  2 +-
+ sound/soc/codecs/wm5102.c             |  7 +++--
+ sound/soc/codecs/wm5110.c             |  7 +++--
+ sound/soc/codecs/wm8962.c             | 54 +++++++++++++++++++++++++++++++++--
+ sound/soc/codecs/wm8997.c             |  7 +++--
+ sound/soc/generic/audio-graph-card.c  |  2 +-
+ sound/soc/generic/simple-card-utils.c | 15 ++++++++++
+ sound/soc/generic/simple-card.c       |  3 +-
+ sound/soc/intel/boards/sof_rt5682.c   | 12 ++++++++
+ sound/soc/intel/boards/sof_sdw.c      | 11 +++++++
+ sound/soc/intel/skylake/skl.c         |  8 +-----
+ sound/soc/qcom/Kconfig                |  1 +
+ sound/soc/qcom/lpass-cpu.c            | 10 +++++++
+ sound/soc/soc-component.c             |  6 ++--
+ sound/soc/sof/intel/hda-codec.c       |  8 +-----
+ sound/soc/sof/intel/pci-mtl.c         |  2 +-
+ sound/soc/sof/intel/pci-tgl.c         | 30 ++++++++++++++++++-
+ sound/soc/sof/ipc4-mtrace.c           | 20 +++++++++++--
+ sound/synth/emux/emux.c               |  7 +----
+ sound/usb/implicit.c                  |  2 ++
+ sound/usb/mixer.c                     |  2 +-
+ 45 files changed, 364 insertions(+), 122 deletions(-)
 
