@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85A2610A8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7D1610A8F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbiJ1Gnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
+        id S229961AbiJ1GoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiJ1GmV (ORCPT
+        with ESMTP id S229954AbiJ1GmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:42:21 -0400
+        Fri, 28 Oct 2022 02:42:22 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A606E1BA1DC;
-        Thu, 27 Oct 2022 23:42:18 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 06:42:15 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681B91BA1F4;
+        Thu, 27 Oct 2022 23:42:19 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 06:42:16 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666939336;
+        s=2020; t=1666939337;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=usVaBD3S4YKESMxSvqwWUJhemM6IgHEeu1Rml8DoK3g=;
-        b=m1WDaRQtZ5VHxdeYKJnYlc3o+Msa4daA3HS/QOsLmos3mWybxIEMy616GRsxg2xohiD7Xw
-        GAZnCdehrwfOYTlpNzLYK2utaya+aKGHvs/tDO4sdYw9RlWF2jTihUB9ic7KXsi29lJT71
-        FQs5gr7cIaF1abS49fL95oY0QPpcVcULt6aj2eHiKYn2QlEMjX3Q81I6u0lyFaSe4ivVHS
-        QZq29NxkRDIQda7dAJbgjCHCuXeOZw/MJP7D30fqdoxg7wlaqw27PV9/BVAIWZNLlNYtVt
-        3+yws8huxJCoWmvMUVa1BNF5AYR9JkOdqX16b5vq/1VyKaechDJz14IgIqjpEg==
+        bh=HyeRwTx9QE2PvrbjNs8IROLnWS2slvMmLoZ1ptritHY=;
+        b=tONwv+eYyYe+WRYSNNannwL0fBDteHu9Ty9WMhwj1XUV9kU/nrcD3C/SQqINAMfli939et
+        0A9QYf6+U0GKUoBt3I/0f9vYQvdPg55Wjin/l/mhvZom55A9NvlBJU3zjOhc/gi5bZ9S8/
+        Rfl/WfRhhlRljtmfhbeXw/DpR0rvSFyXU2ue3Vq/mwfq/tDP63yjxZt6XJrttgW2L7cvfK
+        tPn0ZjQb/oTC56VLZoR6GoJfG8cfblPhNMHRFNPz9tdocHvZb39V+VWnpvrGte0jMv7ncU
+        V/7Du6uE+EWfGiDQ6blR2aILox+i8f2t1P00rSFk85WcMJWaLzWs88k3j+0YrQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666939336;
+        s=2020e; t=1666939337;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=usVaBD3S4YKESMxSvqwWUJhemM6IgHEeu1Rml8DoK3g=;
-        b=oQ1kM/QfI0A9SkdVbLmtATOyXzZTDUBbJi3ulYxmlga2nbrgW49pwrWwgJxBz0ksS9UoZG
-        pyylGgoLhf9rgmBA==
-From:   "tip-bot2 for Pierre Gondois" <tip-bot2@linutronix.de>
+        bh=HyeRwTx9QE2PvrbjNs8IROLnWS2slvMmLoZ1ptritHY=;
+        b=vBrUM9YFgM3i99e64u5hgUj0NSVawCqLJyB4s03uEKLV3xxDsaVmczYfULvsfIkw6BUZ5k
+        0NPJzh3tZ4WLuWAg==
+From:   "tip-bot2 for Qais Yousef" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/fair: Check if prev_cpu has highest spare cap
- in feec()
-Cc:     Pierre Gondois <pierre.gondois@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>, x86@kernel.org,
+Subject: [tip: sched/core] sched/fair: Consider capacity inversion in util_fits_cpu()
+Cc:     Qais Yousef <qais.yousef@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221006081052.3862167-2-pierre.gondois@arm.com>
-References: <20221006081052.3862167-2-pierre.gondois@arm.com>
+In-Reply-To: <20220804143609.515789-10-qais.yousef@arm.com>
+References: <20220804143609.515789-10-qais.yousef@arm.com>
 MIME-Version: 1.0
-Message-ID: <166693933555.29415.8010748161395990501.tip-bot2@tip-bot2>
+Message-ID: <166693933665.29415.17740207940084118097.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,96 +66,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     ad841e569f5c88e3332b32a000f251f33ff32187
-Gitweb:        https://git.kernel.org/tip/ad841e569f5c88e3332b32a000f251f33ff32187
-Author:        Pierre Gondois <pierre.gondois@arm.com>
-AuthorDate:    Thu, 06 Oct 2022 10:10:52 +02:00
+Commit-ID:     aa69c36f31aadc1669bfa8a3de6a47b5e6c98ee8
+Gitweb:        https://git.kernel.org/tip/aa69c36f31aadc1669bfa8a3de6a47b5e6c98ee8
+Author:        Qais Yousef <qais.yousef@arm.com>
+AuthorDate:    Thu, 04 Aug 2022 15:36:09 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Thu, 27 Oct 2022 11:01:20 +02:00
 
-sched/fair: Check if prev_cpu has highest spare cap in feec()
+sched/fair: Consider capacity inversion in util_fits_cpu()
 
-When evaluating the CPU candidates in the perf domain (pd) containing
-the previously used CPU (prev_cpu), find_energy_efficient_cpu()
-evaluates the energy of the pd:
-- without the task (base_energy)
-- with the task placed on prev_cpu (if the task fits)
-- with the task placed on the CPU with the highest spare capacity,
-  prev_cpu being excluded from this set
+We do consider thermal pressure in util_fits_cpu() for uclamp_min only.
+With the exception of the biggest cores which by definition are the max
+performance point of the system and all tasks by definition should fit.
 
-If prev_cpu is already the CPU with the highest spare capacity,
-max_spare_cap_cpu will be the CPU with the second highest spare
-capacity.
+Even under thermal pressure, the capacity of the biggest CPU is the
+highest in the system and should still fit every task. Except when it
+reaches capacity inversion point, then this is no longer true.
 
-On an Arm64 Juno-r2, with a workload of 10 tasks at a 10% duty cycle,
-when prev_cpu and max_spare_cap_cpu are both valid candidates,
-prev_spare_cap > max_spare_cap at ~82%.
-Thus the energy of the pd when placing the task on max_spare_cap_cpu
-is computed with no possible positive outcome 82% most of the time.
+We can handle this by using the inverted capacity as capacity_orig in
+util_fits_cpu(). Which not only addresses the problem above, but also
+ensure uclamp_max now considers the inverted capacity. Force fitting
+a task when a CPU is in this adverse state will contribute to making the
+thermal throttling last longer.
 
-Do not consider max_spare_cap_cpu as a valid candidate if
-prev_spare_cap > max_spare_cap.
-
-Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+Signed-off-by: Qais Yousef <qais.yousef@arm.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-Link: https://lore.kernel.org/r/20221006081052.3862167-2-pierre.gondois@arm.com
+Link: https://lore.kernel.org/r/20220804143609.515789-10-qais.yousef@arm.com
 ---
- kernel/sched/fair.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ kernel/sched/fair.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 919d016..4cc56c9 100644
+index 4c4ea47..919d016 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -7221,7 +7221,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 		unsigned long cur_delta, max_spare_cap = 0;
- 		unsigned long rq_util_min, rq_util_max;
- 		unsigned long util_min, util_max;
--		bool compute_prev_delta = false;
-+		unsigned long prev_spare_cap = 0;
- 		int max_spare_cap_cpu = -1;
- 		unsigned long base_energy;
+@@ -4465,12 +4465,16 @@ static inline int util_fits_cpu(unsigned long util,
+ 	 * For uclamp_max, we can tolerate a drop in performance level as the
+ 	 * goal is to cap the task. So it's okay if it's getting less.
+ 	 *
+-	 * In case of capacity inversion, which is not handled yet, we should
+-	 * honour the inverted capacity for both uclamp_min and uclamp_max all
+-	 * the time.
++	 * In case of capacity inversion we should honour the inverted capacity
++	 * for both uclamp_min and uclamp_max all the time.
+ 	 */
+-	capacity_orig = capacity_orig_of(cpu);
+-	capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
++	capacity_orig = cpu_in_capacity_inversion(cpu);
++	if (capacity_orig) {
++		capacity_orig_thermal = capacity_orig;
++	} else {
++		capacity_orig = capacity_orig_of(cpu);
++		capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
++	}
  
-@@ -7283,18 +7283,19 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 
- 			if (cpu == prev_cpu) {
- 				/* Always use prev_cpu as a candidate. */
--				compute_prev_delta = true;
-+				prev_spare_cap = cpu_cap;
- 			} else if (cpu_cap > max_spare_cap) {
- 				/*
- 				 * Find the CPU with the maximum spare capacity
--				 * in the performance domain.
-+				 * among the remaining CPUs in the performance
-+				 * domain.
- 				 */
- 				max_spare_cap = cpu_cap;
- 				max_spare_cap_cpu = cpu;
- 			}
- 		}
- 
--		if (max_spare_cap_cpu < 0 && !compute_prev_delta)
-+		if (max_spare_cap_cpu < 0 && prev_spare_cap == 0)
- 			continue;
- 
- 		eenv_pd_busy_time(&eenv, cpus, p);
-@@ -7302,7 +7303,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 		base_energy = compute_energy(&eenv, pd, cpus, p, -1);
- 
- 		/* Evaluate the energy impact of using prev_cpu. */
--		if (compute_prev_delta) {
-+		if (prev_spare_cap > 0) {
- 			prev_delta = compute_energy(&eenv, pd, cpus, p,
- 						    prev_cpu);
- 			/* CPU utilization has changed */
-@@ -7313,7 +7314,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 		}
- 
- 		/* Evaluate the energy impact of using max_spare_cap_cpu. */
--		if (max_spare_cap_cpu >= 0) {
-+		if (max_spare_cap_cpu >= 0 && max_spare_cap > prev_spare_cap) {
- 			cur_delta = compute_energy(&eenv, pd, cpus, p,
- 						   max_spare_cap_cpu);
- 			/* CPU utilization has changed */
+ 	/*
+ 	 * We want to force a task to fit a cpu as implied by uclamp_max.
