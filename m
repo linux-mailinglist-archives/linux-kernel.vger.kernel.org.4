@@ -2,199 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06F1611259
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE14A61125D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbiJ1NIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
+        id S230271AbiJ1NIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbiJ1NHu (ORCPT
+        with ESMTP id S229826AbiJ1NI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:07:50 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2106.outbound.protection.outlook.com [40.107.255.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1760D259D
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:07:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FX3rP8eIe1Wm1qd+kEYVB3HGo6GGnmA1H2h+s/S49Nz/ugLCUyquS9GDtwkvzPJteYvkqz00nGhe9EriNBw7aNwHfjEAhcVHY1HBOozXmDL9IMgwF009+SVfeMsmIvqoeLQG/7Evx6MTFCLXHqbI5Ga2jCyzwNFZPjH2qDrbYNbYEmXECMpoej9ZKGxVmb9AiRNrgzz1IbgO+sCJduaCAWJFQEI0rq+YUZ1LQQfzlptaKLvSYPppLH7Z5C4+SGux4IzWJ0PGm6VlucBaDufObqkKCMexFSrptFOS66EgNzMhE6Xa7frzGWumZJk/SW/zh76DZCOV5rV3wPPOoow3ZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z30fCu+gkZutfLemycgrch/uaJtL/rxBmqIOx/bW5Io=;
- b=OmmQATqnDnBkaX//7IKNnmhP4fhpC8Jhs61xTClQ449gCCXZB43aeuEUGt/Zlu3gWcOccYgXePaEur2fAls3sY7NL/4IOt9Zb4YPAvTDJ/A+p5VEymvT/O73hRjkvBQyXOpTQR28i+QVc9I9boFqM1RZK1gy5zScurkDhdT1RKpP1ZoAKunq3dJEOlYpA3/D8JnXPCMxW3MtQAisTgfVq5YlR0zw5DVK2m1X9qZPaprUGJSB8LlmxgrpEnBep98IFquuy6sLgKdOAnYdZhmnTiF2Ao1F2IWcn3vN3SalhKc7oOFRrZDzhJIjsD1z8TbF+wjmNJOGoqqopJfu36/34g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z30fCu+gkZutfLemycgrch/uaJtL/rxBmqIOx/bW5Io=;
- b=Rcn4jsISrQXKDywgmK58yCXIppgls7tF9lIcE6xwfw3xmNsuCyp3+8nsA+QaHv3KLAp8HW8yPMhMC921V5GiJTnVkx8fFK0AU1HU9EO24T44uhQIqGMFKFUIG3vWfYpkfd7xQV2eFLu2/M7LRWVKStUJ5/vdHDZtcScvLFZz0fcwMWdx8uO3g6CMLoOn1BiUuhnR2Ja4KnuwWVK3/hVuoA0NTNFKSi3Op/NkOv5cxJOD+9KJ52E68xkeBnJkzmmaCQBHin8+qe6nUiCDhoPraH4ndek3ib+PEJu01+y2WGieupRe3KaoCBI7TOmRiawPiaxTHVvKZOhC5xbzqsfw7Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by KL1PR0601MB4146.apcprd06.prod.outlook.com (2603:1096:820:29::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Fri, 28 Oct
- 2022 13:07:26 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::c84b:5a6c:d66f:c0fd]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::c84b:5a6c:d66f:c0fd%3]) with mapi id 15.20.5769.015; Fri, 28 Oct 2022
- 13:07:25 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH] f2fs: remove gc_urgent_high_remaining node
-Date:   Fri, 28 Oct 2022 21:07:16 +0800
-Message-Id: <20221028130716.80850-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SGXP274CA0019.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::31)
- To SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+        Fri, 28 Oct 2022 09:08:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589D76C74B;
+        Fri, 28 Oct 2022 06:08:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DEEFF62856;
+        Fri, 28 Oct 2022 13:08:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF53C433D6;
+        Fri, 28 Oct 2022 13:08:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666962506;
+        bh=ECi5ZL9/CovQrvlXRqJIBv8wWvMwdtva2tmSf8ayGz8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YHCV8/xrqJ4VydITOXS6s0km2idgLo5DtBEjthmVLki9+Blqo7INGNTqczdDJm2sT
+         mK767JbQIE7BlOVsk0Z5DZ8H/HLzqQMMVT9rO+aynsEWPr5PmN6r7WDQtFPPKbpq0x
+         lTlTZbQoS9DQ3OSYADBVZ8xT2iyWjj2esS1qSG9KqC0sEUrXlJ5/xyyYZHoLlO+vkg
+         jfqPyEPZO6BBpZAqrOXB4zmKiSar/7WatDoceZJVlQ6UWFAQ35vZhijJQyeLjy82Fl
+         S8T0WP/bRw9VxtHA/k+Dshomv9ornM7Dbz6ThoDAJwMuTVNNwbU3yaS+DKybALYX0w
+         xOYxbceKs4/iw==
+Date:   Fri, 28 Oct 2022 18:38:22 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 08/15] phy: qcom-qmp-pcie: add register init helper
+Message-ID: <Y1vURr4xPZD5/bh0@matsya>
+References: <20221021110947.28103-1-johan+linaro@kernel.org>
+ <20221021110947.28103-9-johan+linaro@kernel.org>
+ <932765e0-ecbc-8c9b-69c5-ce0bb0c8de68@linaro.org>
+ <Y1KDXD9n0cCqjTGy@hovoldconsulting.com>
+ <Y1vRDv+hrMmnqwPj@matsya>
+ <Y1vT94blD9PJHKDp@hovoldconsulting.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR0601MB4146:EE_
-X-MS-Office365-Filtering-Correlation-Id: 151e8d69-3c7c-4bdf-b024-08dab8e55bd1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: C1O60snBvtKtwYDV7YFRSfU0WhcgoHcNwET/LGGmGBMTz0GcLv/lfTti0u4XububX0wS8sF6Ndi7T46iDs+y97U5AjodpN74pBwQk/RoJIyneb5yHwRqk8jYVXg4QEKd8LsuyWeKCr+CB0cKxwaksYbV3CSCBaHBmJJJhQlXhJm3LYVN/O/9sH/nB7ia0XYQDQQB596uknpdoEKR014PRGqY930zT+TSM2sWnXD02ouOhREYben2VweTU8s+CTHtGObaXMXwWQwhUUuxgkzzcZW1cybkhNYD/NkW3bzyMnuPYQ4ZcH9p5hLtS87dl7GL5FmERfACGJy9TQ+MlJnkw6BU/8A+PMv/lWWArB0LxO97SnA4UAqi4sNNKedQZDQuEP0ZWvsWQv99YD/1bCWUdv5euunV0t5aOJ34VitLqepdJA3+KUeIZDx/KgFMNJv4CVPGFe5f3F6aK/PRvy6b9k9FJ4pcjX7uS7V5wz72iSbrE6E95+OBy8Db85MP1iFAfiM6AQ0XU5fLn9ZqjUmbRMDpM239sQjCxt/+ihRIZLNy75eIIjzCuUlCPYVllx0fC/JsJIwLkJsBmMWqj5IRxVOTHg5nxkhmgHI86Ipy3RnoQBYeZafEcrMO3h5Wkr6fGMN1I28W5b5Dl3yUiEhq5vE25iW2OZCphhIFbrLlF0vnVOShpd5xk2OrJ4AiWA0QZWVFrVNCnGKdNaf+pZRnhI3Aa0J4EHbbsACn4Fzos3emKHdVJexSNNNnghI+u/xJkNSflG0/ouLcohh2iOP9Qg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(346002)(376002)(366004)(39860400002)(451199015)(66556008)(66476007)(66946007)(8676002)(4326008)(41300700001)(83380400001)(5660300002)(8936002)(6486002)(478600001)(316002)(36756003)(19627235002)(2906002)(1076003)(186003)(2616005)(38100700002)(6506007)(107886003)(38350700002)(86362001)(6666004)(6512007)(52116002)(26005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Teo/9B0ykBZy5IHmOFclVzP6u1bdO9RvK1Ejgq+gTvuQdYXW9MoOiJ2He0zq?=
- =?us-ascii?Q?ETtdTZBA03dcgiC+uKXagjSMxJRIdaPm/IpYYd1H0GB1rr9ZxQQSxBOLpo+Y?=
- =?us-ascii?Q?epcNVpEZ+j+i7tkTtPFrrdtr/l4AcoohNA0LMsWXdtaLYRa408UHhaOl+lFy?=
- =?us-ascii?Q?hkFacnTL8Deek/CsHIfEfDolJzxL8qc0XYM/Tj11lNSg7Fv2wVu349c3+Ml3?=
- =?us-ascii?Q?tepx3YTejaCZYXb9YVZjyKIxUUDANmhS6/o0fxitXAEcaBJTZ2JNvTvOzRk/?=
- =?us-ascii?Q?5CchIJLsLlL/l7gY9HfibM+hk1m8/Kh9L9I/31/AdoOhJKBOrPl5Eb0zgnSG?=
- =?us-ascii?Q?8M2jeCNyU4TJhMgO40vch1sbVV4F3HQdtJY2OBp3DV9pqBv5F3rwM+9/SiyA?=
- =?us-ascii?Q?n9DaYsHJChFdao2/XyeCZA3etJ6oLsW9tJVi9m4lBrCe0KJOAGrrQtrHa64n?=
- =?us-ascii?Q?3g4DM/VnF3SqAVhwclgxzadj+RJCtFvV8e9cDKBakzUeQv81AyME5HVNY6yL?=
- =?us-ascii?Q?BCnKliUJ/kIrz1l/fBxgz4qaNpNrY8kchP5IEAaCM/JSnCWltMtBFNFHX3Dm?=
- =?us-ascii?Q?MGAri4UevT+CalGQ1TlpWL+xNG36LQVHbwGkOQ9FqqzyWywnZqIHynY1RtfJ?=
- =?us-ascii?Q?LkohWoeQndW3NcXyjQKZ+Y7OTzvk5Nf6YhhrIqCrYACgCzXgpcIomhrO41er?=
- =?us-ascii?Q?pmRLu9FHns5G9BSESB/Nqf2fCwSTRf24TRYRhvFRvo6+YUxc6rfr7Z+Pes6p?=
- =?us-ascii?Q?PB7WumVjZi+Q6iDDkkNJZWQYPoc27pK3BTdRS/y/DE4Q8s0cpSW4Q2v1hFaR?=
- =?us-ascii?Q?8oBtNk7paXzrnl5Tn/jrsSdsm14pFFQgcEhc4cVNX45/KxUvnV2UG7JXZzf+?=
- =?us-ascii?Q?k7FUvylHJHDL3vXXTC6H7+bfg91DnXxvQpiHuJoAXehPkdJroHu7jZRpXGCa?=
- =?us-ascii?Q?dp4WGoddYf3/ayw1RXlZxByOWsD/w1kWy0+WPEqhhgJKcnELVej6IgzWUuYD?=
- =?us-ascii?Q?CDpuLrQCpCM8BiQBQ++Dgo3ObrIJAmeisdFCOBj6f2B5xuJkARyaT3JEnyuo?=
- =?us-ascii?Q?54bOYmqRTtkq8EaM161LPyPFBLdr/DkfGxaSvZ9quXqaVSM4CHSYvi84ZR7U?=
- =?us-ascii?Q?KVbCFPwh7HnBJa8yyU+ib7jr3+Fg4h6k8jC0IN4s2uO10FYxsuj3rAXjtQl3?=
- =?us-ascii?Q?Sx9Zhc1DSAdu7AYQlnxpdRXpN5lFhe4cO1TyOKJ7yHqjKrJPQhotEvFcyMVx?=
- =?us-ascii?Q?WqUa9CMP3avgY9rWBhzUcJYVbHiYfufZBmCIqCr0tKmcwGqL+WVKWbwfrcpW?=
- =?us-ascii?Q?jCkEg4qCvPTgnfmdJwZVJHYJz5xjV7DUM1hrEhr5F1F7x/o5gMX9EmNnHVnW?=
- =?us-ascii?Q?Mh+kGv9CxwKt7VytsvCH1rBBu9SCWda0DxTQ5N3f0nRAXCjDuJFLKaz8kyYm?=
- =?us-ascii?Q?9VxbJaa3lPMdnrBDQZcmq4EFyfqOozfXpAEXySZp9WKop/Z7pVX6E/GCx+xY?=
- =?us-ascii?Q?D0wKKXgODECEH/VdO8AceHe42M64hJCUVCjNlJoIvHddVUp2wWk3DxAa2ic7?=
- =?us-ascii?Q?25Ra97s3TPXfCm0jSySQidggoFwcFVi6AK+YJ4ul?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 151e8d69-3c7c-4bdf-b024-08dab8e55bd1
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 13:07:25.6180
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xFsBXHJ63B49BC8syci6GSY1UgYO7JYqcgMQfZhfPT0ZAfiPsVJ2y5yhL2wF3omg6cH/76QeV1RNNYOu/O83xg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4146
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1vT94blD9PJHKDp@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As Jaegeuk suggested to remove it. And it is not a super critical node,
-which just for internal tests now.
+On 28-10-22, 15:07, Johan Hovold wrote:
+> On Fri, Oct 28, 2022 at 06:24:38PM +0530, Vinod Koul wrote:
+> > On 21-10-22, 13:32, Johan Hovold wrote:
+> 
+> > > [...] This is not about keeping the
+> > > diff small, this is about readability of the new helper function as I
+> > > already told you.
+> > > 
+> > > And this is a *local* identifier, not some state member that needs a
+> > > super descriptive name. And the rest of the driver used "tbl"
+> > > consistently until your EP/RC mode patches for that matter.
+> > 
+> > I would disagree here... You can change tbls/tables but then it does not
+> > help _this_ patch
+> > 
+> > Right thing would be to change tbls to tables first and then add init
+> > helper... For a reviewer seeing an undocumented change and unnecessary
+> > diff is not right..
+> 
+> I still think that it belongs in the patch adding the new helper
+> because it is essentially only in that new function that the improved
+> readability due to the shorter identifier matters (the earlier helpers
+> where per table type).
+>  
+> > Pls split if you would still like the rename
+> 
+> But if you prefer I'll split it out in a preparatory patch.
 
-Let's remove the testing gc_urgent_high_remaining sysfs node.
-As well as updating the description in the documentation to indicate
-that readers need to use the new node.
+That would be good thanks
 
-BTW, fill in a missing '>', :)
-
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- Documentation/ABI/testing/sysfs-fs-f2fs | 6 +++---
- fs/f2fs/f2fs.h                          | 1 -
- fs/f2fs/sysfs.c                         | 6 ------
- 3 files changed, 3 insertions(+), 10 deletions(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
-index 374f0c98f8a9..e6b87522518d 100644
---- a/Documentation/ABI/testing/sysfs-fs-f2fs
-+++ b/Documentation/ABI/testing/sysfs-fs-f2fs
-@@ -241,7 +241,7 @@ Description:	Shows total written kbytes issued to disk.
- What:		/sys/fs/f2fs/<disk>/features
- Date:		July 2017
- Contact:	"Jaegeuk Kim" <jaegeuk@kernel.org>
--Description:	<deprecated: should use /sys/fs/f2fs/<disk>/feature_list/
-+Description:	<deprecated>: should use /sys/fs/f2fs/<disk>/feature_list/
- 		Shows all enabled features in current device.
- 		Supported features:
- 		encryption, blkzoned, extra_attr, projquota, inode_checksum,
-@@ -601,10 +601,10 @@ Description:	With "mode=fragment:block" mount options, we can scatter block allo
- What:		/sys/fs/f2fs/<disk>/gc_urgent_high_remaining
- Date:		December 2021
- Contact:	"Daeho Jeong" <daehojeong@google.com>
--Description:	You can set the trial count limit for GC urgent high mode with this value.
-+Description:	<deprecated>: should use /sys/fs/f2fs/<disk>/gc_urgent_idle_remaining
-+		You can set the trial count limit for GC urgent high mode with this value.
- 		If GC thread gets to the limit, the mode will turn back to GC normal mode.
- 		By default, the value is zero, which means there is no limit like before.
--		<deprecated>
- 
- What:		/sys/fs/f2fs/<disk>/gc_urgent_idle_remaining
- Date:		October 2022
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index b467c0ca1118..d0a279605f20 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -1747,7 +1747,6 @@ struct f2fs_sb_info {
- 	spinlock_t gc_urgent_idle_lock;
- 	/* remaining trial count for GC_URGENT_* and GC_IDLE_* */
- 	unsigned int gc_urgent_idle_remaining;
--	unsigned int gc_urgent_high_remaining;	/* deprecated */
- 
- 	/* for skip statistic */
- 	unsigned long long skipped_gc_rwsem;		/* FG_GC only */
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index 9312954ec03b..9db77f18e8a7 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -538,10 +538,6 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
- 		return count;
- 	}
- 
--	/* deprecated */
--	if (!strcmp(a->attr.name, "gc_urgent_high_remaining"))
--		return -EINVAL;
--
- 	if (!strcmp(a->attr.name, "gc_urgent_idle_remaining")) {
- 		spin_lock(&sbi->gc_urgent_idle_lock);
- 		sbi->gc_urgent_idle_remaining = t;
-@@ -836,7 +832,6 @@ F2FS_RW_ATTR(FAULT_INFO_TYPE, f2fs_fault_info, inject_type, inject_type);
- #endif
- F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, data_io_flag, data_io_flag);
- F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, node_io_flag, node_io_flag);
--F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_urgent_high_remaining, gc_urgent_high_remaining);
- F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_urgent_idle_remaining, gc_urgent_idle_remaining);
- F2FS_RW_ATTR(CPRC_INFO, ckpt_req_control, ckpt_thread_ioprio, ckpt_thread_ioprio);
- F2FS_GENERAL_RO_ATTR(dirty_segments);
-@@ -966,7 +961,6 @@ static struct attribute *f2fs_attrs[] = {
- #endif
- 	ATTR_LIST(data_io_flag),
- 	ATTR_LIST(node_io_flag),
--	ATTR_LIST(gc_urgent_high_remaining),
- 	ATTR_LIST(gc_urgent_idle_remaining),
- 	ATTR_LIST(ckpt_thread_ioprio),
- 	ATTR_LIST(dirty_segments),
 -- 
-2.25.1
-
+~Vinod
