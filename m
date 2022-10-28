@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF9A610A89
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D85A2610A8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbiJ1Gni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
+        id S229950AbiJ1Gnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbiJ1GmT (ORCPT
+        with ESMTP id S229890AbiJ1GmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:42:19 -0400
+        Fri, 28 Oct 2022 02:42:21 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3725D1BA1FC;
-        Thu, 27 Oct 2022 23:42:17 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 06:42:14 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A606E1BA1DC;
+        Thu, 27 Oct 2022 23:42:18 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 06:42:15 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666939335;
+        s=2020; t=1666939336;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EDLKi+FR9oLa+dB38spl3lqT0imIoZKy5gwaFYje73A=;
-        b=GFDEWk26Fi6G9EfrotAPmMG+IipvAgOGi81ll86kVEcDw7zxq2JafMs5BA4MAl6XVB8dF3
-        WmUDdje4UC8b5rBfcaE9W9yiuG0UKe+vPwqXGLZnEQ+1POiHBh3DiGk0d6Vgq3DeKby0IF
-        U09e6HxodxddKtVcHVKT1pv7Gy3QOOCEdgL2ezraPYd/YrYPM8YTxfjDohBbNAmoLIW8DH
-        Bue3gHcg88sqGQz3GZJo+ZPlSFiYrTBpFTFFeORordzJTSF+Ia9ld+ZKZlmUAORmIknXU6
-        PGSXAcKCh/DsJnhn0WrsFLOSvh3UtVQJADfPtZRWNicPo8LPtJsfaEFiIRZ5xw==
+        bh=usVaBD3S4YKESMxSvqwWUJhemM6IgHEeu1Rml8DoK3g=;
+        b=m1WDaRQtZ5VHxdeYKJnYlc3o+Msa4daA3HS/QOsLmos3mWybxIEMy616GRsxg2xohiD7Xw
+        GAZnCdehrwfOYTlpNzLYK2utaya+aKGHvs/tDO4sdYw9RlWF2jTihUB9ic7KXsi29lJT71
+        FQs5gr7cIaF1abS49fL95oY0QPpcVcULt6aj2eHiKYn2QlEMjX3Q81I6u0lyFaSe4ivVHS
+        QZq29NxkRDIQda7dAJbgjCHCuXeOZw/MJP7D30fqdoxg7wlaqw27PV9/BVAIWZNLlNYtVt
+        3+yws8huxJCoWmvMUVa1BNF5AYR9JkOdqX16b5vq/1VyKaechDJz14IgIqjpEg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666939335;
+        s=2020e; t=1666939336;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EDLKi+FR9oLa+dB38spl3lqT0imIoZKy5gwaFYje73A=;
-        b=wbyU5WjyyQ+2VdmDRqVN97GTyiWjmYQrxY9fnOd/901GF/pYTODanlW6p2zSkkJ9mfqSPu
-        EEXJ58PFc5vGWZBg==
-From:   "tip-bot2 for Waiman Long" <tip-bot2@linutronix.de>
+        bh=usVaBD3S4YKESMxSvqwWUJhemM6IgHEeu1Rml8DoK3g=;
+        b=oQ1kM/QfI0A9SkdVbLmtATOyXzZTDUBbJi3ulYxmlga2nbrgW49pwrWwgJxBz0ksS9UoZG
+        pyylGgoLhf9rgmBA==
+From:   "tip-bot2 for Pierre Gondois" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched: Add __releases annotations to affine_move_task()
-Cc:     Waiman Long <longman@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: sched/core] sched/fair: Check if prev_cpu has highest spare cap
+ in feec()
+Cc:     Pierre Gondois <pierre.gondois@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220922180041.1768141-2-longman@redhat.com>
-References: <20220922180041.1768141-2-longman@redhat.com>
+In-Reply-To: <20221006081052.3862167-2-pierre.gondois@arm.com>
+References: <20221006081052.3862167-2-pierre.gondois@arm.com>
 MIME-Version: 1.0
-Message-ID: <166693933445.29415.8756864522023842425.tip-bot2@tip-bot2>
+Message-ID: <166693933555.29415.8010748161395990501.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,47 +69,96 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     5584e8ac2c68280e5ac31d231c23cdb7dfa225db
-Gitweb:        https://git.kernel.org/tip/5584e8ac2c68280e5ac31d231c23cdb7dfa225db
-Author:        Waiman Long <longman@redhat.com>
-AuthorDate:    Thu, 22 Sep 2022 14:00:37 -04:00
+Commit-ID:     ad841e569f5c88e3332b32a000f251f33ff32187
+Gitweb:        https://git.kernel.org/tip/ad841e569f5c88e3332b32a000f251f33ff32187
+Author:        Pierre Gondois <pierre.gondois@arm.com>
+AuthorDate:    Thu, 06 Oct 2022 10:10:52 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Thu, 27 Oct 2022 11:01:21 +02:00
+CommitterDate: Thu, 27 Oct 2022 11:01:20 +02:00
 
-sched: Add __releases annotations to affine_move_task()
+sched/fair: Check if prev_cpu has highest spare cap in feec()
 
-affine_move_task() assumes task_rq_lock() has been called and it does
-an implicit task_rq_unlock() before returning. Add the appropriate
-__releases annotations to make this clear.
+When evaluating the CPU candidates in the perf domain (pd) containing
+the previously used CPU (prev_cpu), find_energy_efficient_cpu()
+evaluates the energy of the pd:
+- without the task (base_energy)
+- with the task placed on prev_cpu (if the task fits)
+- with the task placed on the CPU with the highest spare capacity,
+  prev_cpu being excluded from this set
 
-A typo error in comment is also fixed.
+If prev_cpu is already the CPU with the highest spare capacity,
+max_spare_cap_cpu will be the CPU with the second highest spare
+capacity.
 
-Signed-off-by: Waiman Long <longman@redhat.com>
+On an Arm64 Juno-r2, with a workload of 10 tasks at a 10% duty cycle,
+when prev_cpu and max_spare_cap_cpu are both valid candidates,
+prev_spare_cap > max_spare_cap at ~82%.
+Thus the energy of the pd when placing the task on max_spare_cap_cpu
+is computed with no possible positive outcome 82% most of the time.
+
+Do not consider max_spare_cap_cpu as a valid candidate if
+prev_spare_cap > max_spare_cap.
+
+Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220922180041.1768141-2-longman@redhat.com
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+Link: https://lore.kernel.org/r/20221006081052.3862167-2-pierre.gondois@arm.com
 ---
- kernel/sched/core.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ kernel/sched/fair.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 069da4a..f6f2807 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2690,6 +2690,8 @@ void release_user_cpus_ptr(struct task_struct *p)
-  */
- static int affine_move_task(struct rq *rq, struct task_struct *p, struct rq_flags *rf,
- 			    int dest_cpu, unsigned int flags)
-+	__releases(rq->lock)
-+	__releases(p->pi_lock)
- {
- 	struct set_affinity_pending my_pending = { }, *pending = NULL;
- 	bool stop_pending, complete = false;
-@@ -2999,7 +3001,7 @@ err_unlock:
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 919d016..4cc56c9 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -7221,7 +7221,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 		unsigned long cur_delta, max_spare_cap = 0;
+ 		unsigned long rq_util_min, rq_util_max;
+ 		unsigned long util_min, util_max;
+-		bool compute_prev_delta = false;
++		unsigned long prev_spare_cap = 0;
+ 		int max_spare_cap_cpu = -1;
+ 		unsigned long base_energy;
  
- /*
-  * Restrict the CPU affinity of task @p so that it is a subset of
-- * task_cpu_possible_mask() and point @p->user_cpu_ptr to a copy of the
-+ * task_cpu_possible_mask() and point @p->user_cpus_ptr to a copy of the
-  * old affinity mask. If the resulting mask is empty, we warn and walk
-  * up the cpuset hierarchy until we find a suitable mask.
-  */
+@@ -7283,18 +7283,19 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 
+ 			if (cpu == prev_cpu) {
+ 				/* Always use prev_cpu as a candidate. */
+-				compute_prev_delta = true;
++				prev_spare_cap = cpu_cap;
+ 			} else if (cpu_cap > max_spare_cap) {
+ 				/*
+ 				 * Find the CPU with the maximum spare capacity
+-				 * in the performance domain.
++				 * among the remaining CPUs in the performance
++				 * domain.
+ 				 */
+ 				max_spare_cap = cpu_cap;
+ 				max_spare_cap_cpu = cpu;
+ 			}
+ 		}
+ 
+-		if (max_spare_cap_cpu < 0 && !compute_prev_delta)
++		if (max_spare_cap_cpu < 0 && prev_spare_cap == 0)
+ 			continue;
+ 
+ 		eenv_pd_busy_time(&eenv, cpus, p);
+@@ -7302,7 +7303,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 		base_energy = compute_energy(&eenv, pd, cpus, p, -1);
+ 
+ 		/* Evaluate the energy impact of using prev_cpu. */
+-		if (compute_prev_delta) {
++		if (prev_spare_cap > 0) {
+ 			prev_delta = compute_energy(&eenv, pd, cpus, p,
+ 						    prev_cpu);
+ 			/* CPU utilization has changed */
+@@ -7313,7 +7314,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 		}
+ 
+ 		/* Evaluate the energy impact of using max_spare_cap_cpu. */
+-		if (max_spare_cap_cpu >= 0) {
++		if (max_spare_cap_cpu >= 0 && max_spare_cap > prev_spare_cap) {
+ 			cur_delta = compute_energy(&eenv, pd, cpus, p,
+ 						   max_spare_cap_cpu);
+ 			/* CPU utilization has changed */
