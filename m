@@ -2,115 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A0B61139A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF166113A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229441AbiJ1Nvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
+        id S229674AbiJ1NwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiJ1NvL (ORCPT
+        with ESMTP id S229929AbiJ1NwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:51:11 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C643DAEA1F;
-        Fri, 28 Oct 2022 06:51:06 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id m6so4881461pfb.0;
-        Fri, 28 Oct 2022 06:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gVR7uLVEIb14+gIUsjABrQEQi2BsRftXIio3cVFwFYQ=;
-        b=mXLZFNyNtymeMlvxGAoMhzfwbQyjIXXXM12ojwNCUV47agltlck9ZxdWTShPILGCsY
-         Ok4eyCLHrcgI7cYTvova61YIGnDsbhuX/RJE6FBKRTDBBl8v6UVyt7ffZapDkrrYeVoK
-         TQZz/dTXzN70mxdy81R03x6s/+TuFsXGg5KnmIdPnnt6JL7/eS0kST4ARj8HfFSvrFGe
-         FGyoANksj/IVaF8tYRYBXPusInU6OA1MmCr645RD0636ynWrmZAZPtAmkHkENzJrX4sS
-         WLITgHitn4SIUWIlxGaZRuuSVM2kZptNwenCN4S6DufjZg7Jc33vFjoqRhOeFZeQkWCI
-         jnjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gVR7uLVEIb14+gIUsjABrQEQi2BsRftXIio3cVFwFYQ=;
-        b=hFgRNHqFlu0cfV9ViChCZdgcf1t2gzSMGXVIfXyCrT6jn592TZvWp9UZKL1szfO6M5
-         xXocLcqoN9p9YgUictybA/jeV0tjIStzo/Tns30TnqPZgWL3H9CpkRMCP9BDB4pbf7Od
-         uQ99e65Hj0Akl0WftxEWxCmlzKZnq5jUoJ46bcm9+7U5kX7t5XkOlgYXWsdFmhUST2TF
-         ru155IoZcClEzkTguYhMHMfynsfKXh8z5ncl6xaNuc7sXGrBnsRZY1JcD4hsqEVuxa3W
-         /IL9fHFv/fx5ngiOwKlxkGIdJXFryJKNK7aoiubHf03PIYLocyS0TgQfSJbKmhhHG0Xu
-         VmYg==
-X-Gm-Message-State: ACrzQf3rUOAykZDnAqeW6heWU14UvT+nEnSEdPsa+yFGGwUQo5Z3Ae/G
-        5Wov2N0cyNvGhFR4a0QxLA0=
-X-Google-Smtp-Source: AMsMyM6if4CBEcjN2RGRqt4eY19a8v/sOOaQYnzPkWhBOTpAgAtb7eX963Y9r6IJG/vjBS81PVWSGA==
-X-Received: by 2002:a63:7704:0:b0:464:3985:8963 with SMTP id s4-20020a637704000000b0046439858963mr48420258pgc.154.1666965066258;
-        Fri, 28 Oct 2022 06:51:06 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-72.three.co.id. [180.214.233.72])
-        by smtp.gmail.com with ESMTPSA id p18-20020a170902ead200b00176a6ba5969sm3074274pld.98.2022.10.28.06.51.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 06:51:05 -0700 (PDT)
-Message-ID: <61febb47-28a4-3343-081c-4c06b87ba870@gmail.com>
-Date:   Fri, 28 Oct 2022 20:50:59 +0700
+        Fri, 28 Oct 2022 09:52:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1F71C073A;
+        Fri, 28 Oct 2022 06:51:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B12706288D;
+        Fri, 28 Oct 2022 13:51:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 241EEC433C1;
+        Fri, 28 Oct 2022 13:51:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666965115;
+        bh=8LGyRSk3SzWLea/SocQw2KYwe2/s43N0zn66ZL8tl3w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ocZDdUVBp9IQpEIWrO89mtv1ATbEs0Eyw3QCvjwXDwKu8rEU585hPJeUPquXYXb0c
+         E1ryS39iHtVvHHnYXb/kiTKxA7NJ6UETpmJtRBvXEZ4T/Q6d+Gey3Vzl7lNC98/Zw3
+         ONWGqUtio6PeKcJOYunHWtjntQ27XotjpZTnmq+xv+8Buswq0rskVxviWz8/+jQbQX
+         EMPPcjBqs1Zb//8p4dN0O8+DDI4iXPYFNxUHsH63yU8UnYB2Em2bN49ZCD+SxqCL5t
+         u0B1hxwIRwUkPK4nx9KbCfBJD8fuHINT0cao8JGLnfnONuGhoYOij79HlELi1ZB6mj
+         IFD/F/zqBUjZg==
+Date:   Fri, 28 Oct 2022 08:51:51 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        quic_kalyant@quicinc.com, swboyd@chromium.org,
+        angelogioacchino.delregno@somainline.org, loic.poulain@linaro.org,
+        quic_vpolimer@quicinc.com, vkoul@kernel.org, dianders@chromium.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org,
+        Jonathan Marek <jonathan@marek.ca>, vinod.koul@linaro.org,
+        quic_jesszhan@quicinc.com
+Subject: Re: [PATCH v1 8/9] arm64: dts: qcom: sm8350-hdk: Enable display &
+ dsi nodes
+Message-ID: <20221028135150.6rkih4d67trs23h4@baldur>
+References: <20221028120812.339100-1-robert.foss@linaro.org>
+ <20221028120812.339100-9-robert.foss@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 01/15] hamradio: baycom: remove BAYCOM_MAGIC
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     =?UTF-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Thomas Sailer <t.sailer@alumni.ethz.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        =?UTF-8?Q?Jakub_Kici=c5=84ski?= <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-hams@vger.kernel.org, netdev@vger.kernel.org
-References: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
- <47c2bffb-6bfe-7f5d-0d2d-3cbb99d31019@gmail.com> <Y1vccrsHSnF1QOIb@kadam>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <Y1vccrsHSnF1QOIb@kadam>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221028120812.339100-9-robert.foss@linaro.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/28/22 20:43, Dan Carpenter wrote:
->>
->> Also, s/Kill it/Remove BAYCOM_MAGIC from magic numbers table/ (your
->> wording is kinda mature).
->>
+On Fri, Oct 28, 2022 at 02:08:11PM +0200, Robert Foss wrote:
+> Enable the display subsystem and the dsi0 output for
+> the sm8350-hdk board.
 > 
-> The kernel has almost 13 thousand kills...
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sm8350-hdk.dts | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
 > 
-> $ git grep -i kill | wc -l
-> 12975
-> $
+> diff --git a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+> index e6deb08c6da0..6e07feb4b3b2 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+> @@ -213,10 +213,32 @@ &cdsp {
+>  	firmware-name = "qcom/sm8350/cdsp.mbn";
+>  };
+>  
+> +&dispcc {
+> +	status = "okay";
+> +};
+> +
+> +&dsi0 {
+
+If you prefix the label for the dsi controller and phy with mdss_ they
+sort nicely together with the other display nodes.
+
+Regards,
+Bjorn
+
+> +	status = "okay";
+> +	vdda-supply = <&vreg_l6b_1p2>;
+> +};
+> +
+> +&dsi0_phy  {
+> +	status = "okay";
+> +	vdds-supply = <&vreg_l5b_0p88>;
+> +};
+> +
+>  &gpi_dma1 {
+>  	status = "okay";
+>  };
+>  
+> +&mdss {
+> +	status = "okay";
+> +};
+> +
+> +&mdss_mdp {
+> +	status = "okay";
+> +};
+> +
+>  &mpss {
+>  	status = "okay";
+>  	firmware-name = "qcom/sm8350/modem.mbn";
+> -- 
+> 2.34.1
 > 
-> It's fine.
-> 
-
-The word meaning depends on context. In this case, the author means
-removing SOME_MAGIC magic number from the table, one by one until
-the magic number documentation is removed (due to historical cruft).
-
-Thanks.
-
--- 
-An old man doll... just what I always wanted! - Clara
-
