@@ -2,239 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFAD3610B9A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 947FF610B9F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbiJ1Hvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 03:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
+        id S229938AbiJ1Hv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 03:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbiJ1Hv1 (ORCPT
+        with ESMTP id S229636AbiJ1Hvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 03:51:27 -0400
-Received: from mailrelay2-1.pub.mailoutpod1-cph3.one.com (mailrelay2-1.pub.mailoutpod1-cph3.one.com [46.30.210.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BAF41AAE62
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 00:51:22 -0700 (PDT)
-Received: from mailrelay2.pub.mailoutpod2-cph3.one.com (mailrelay2.pub.mailoutpod2-cph3.one.com [104.37.34.7])
-        by mailrelay2.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPS
-        id 4fdb925d-5695-11ed-a925-d0431ea8a290;
-        Fri, 28 Oct 2022 07:51:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=berginkonsult.se; s=rsa1;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:message-id:date:
-         subject:cc:to:from:from;
-        bh=JJ6RTURksiY/7wtii2ETOjZWEd74cAxGjOUvplYXsgw=;
-        b=b1rslmFILNBtyqhDkzhUEO+JWuEHukVMm77cTKP+J2a1QvaOlMr6jGM0pRvWdkXEAgI/aBoHOb3vC
-         1Ej5SaTMREFCRZAzeaH0VpBGfnblnsc//N29ZFN4Y6R0WW0YNf1M6PFLLWnbZ5RXJojtcX+KBckOtT
-         BiTQ7tbb5yWXUNIsNIfS8TRH0qRVVZVopCZjZFNP9LV2t9DWkKMEEU8x5fbAQ/nliwxGxWZUQG1s75
-         q0azxWCcyzDtzhaTr/SORgjAyK6WYCCS6FuTvhxu4p5HlP2uunl/6rQZaXEFUE7W5mENhyKRNjt9xd
-         DsaqGSjQbi9/OVYZyamxGkya4FJIg/g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=berginkonsult.se; s=ed1;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:message-id:date:
-         subject:cc:to:from:from;
-        bh=JJ6RTURksiY/7wtii2ETOjZWEd74cAxGjOUvplYXsgw=;
-        b=bxjeMmv9KkfHQ+q8/VzHWFSOT11QI2qNpyIzg1nR4ajqy0gqGLdcpZKn3DXAX2WeOvdplje1ciSDY
-         Pi4Q/i4Dw==
-X-HalOne-ID: 4d01e38b-5695-11ed-aa1c-335755252108
-Received: from pbergin-7420.. (ua-213-113-159-147.bbcust.telenor.se [213.113.159.147])
-        by mailrelay2 (Halon) with ESMTPSA
-        id 4d01e38b-5695-11ed-aa1c-335755252108;
-        Fri, 28 Oct 2022 07:51:20 +0000 (UTC)
-From:   Peter Bergin <peter@berginkonsult.se>
-To:     james.schulman@cirrus.com, david.rhodes@cirrus.com,
-        tanureal@opensource.cirrus.com, rf@opensource.cirrus.com,
-        broonie@kernel.org
-Cc:     Peter Bergin <peter@berginkonsult.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ASoC: cs42xx8-i2c.c: add module device table for of
-Date:   Fri, 28 Oct 2022 09:50:44 +0200
-Message-Id: <20221028075045.493191-1-peter@berginkonsult.se>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221027115057.442925-1-peter@berginkonsult.se>
-References: <20221027115057.442925-1-peter@berginkonsult.se>
+        Fri, 28 Oct 2022 03:51:55 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E321BF23C;
+        Fri, 28 Oct 2022 00:51:51 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MzF4F32MSzmVN7;
+        Fri, 28 Oct 2022 15:46:53 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 28 Oct 2022 15:51:49 +0800
+Received: from localhost.localdomain (10.67.165.2) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 28 Oct 2022 15:51:48 +0800
+From:   Haoyue Xu <xuhaoyue1@hisilicon.com>
+To:     <jgg@nvidia.com>, <leon@kernel.org>, <zyjzyj2000@gmail.com>
+CC:     <linux-rdma@vger.kernel.org>, <linuxarm@huawei.com>,
+        <linux-kernel@vger.kernel.org>, <xuhaoyue1@hisilicon.com>
+Subject: [PATCH v2 for-next] RDMA/rxe: cleanup some error handling in rxe_verbs.c
+Date:   Fri, 28 Oct 2022 15:50:53 +0800
+Message-ID: <20221028075053.3990467-1-xuhaoyue1@hisilicon.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.2]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When trying to connect the device with the driver through
-device-tree it is not working. The of_device_id is defined in
-cs42xx8.c but is not correctly included in cs42xx8-i2c.c.
+From: Yunsheng Lin <linyunsheng@huawei.com>
 
-Move of_device_id table to cs42xx8-i2c.c. Get cs42xx8_driver_data
-in cs42xx8_i2c_probe() and pass as argument to cs42xx8_probe(). Move
-error check if no driver data found to cs42xx8_i2c_probe().
+Instead of 'goto and return', just return directly to
+simplify the error handling, and avoid some unnecessary
+return value check.
 
-Matching of device in cs42xx8_i2c_probe() is coded with inspiration
-from tlv320aic32x4-i2c.c.
-
-Signed-off-by: Peter Bergin <peter@berginkonsult.se>
+Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+Signed-off-by: Haoyue Xu <xuhaoyue1@hisilicon.com>
 ---
-v2: reworked and removed duplication of cs42xx8_of_match
+Changes since v1:
+	Rebased to fix some conflict in the patch.
 
- sound/soc/codecs/cs42xx8-i2c.c | 49 +++++++++++++++++++++++++++++++---
- sound/soc/codecs/cs42xx8.c     | 33 +++--------------------
- sound/soc/codecs/cs42xx8.h     |  5 +---
- 3 files changed, 50 insertions(+), 37 deletions(-)
+ drivers/infiniband/sw/rxe/rxe_verbs.c | 80 ++++++++-------------------
+ 1 file changed, 23 insertions(+), 57 deletions(-)
 
-diff --git a/sound/soc/codecs/cs42xx8-i2c.c b/sound/soc/codecs/cs42xx8-i2c.c
-index bd80e9fc907f..9f9e57398272 100644
---- a/sound/soc/codecs/cs42xx8-i2c.c
-+++ b/sound/soc/codecs/cs42xx8-i2c.c
-@@ -17,10 +17,32 @@
+diff --git a/drivers/infiniband/sw/rxe/rxe_verbs.c b/drivers/infiniband/sw/rxe/rxe_verbs.c
+index 88825edc7dce..3bc0448f56de 100644
+--- a/drivers/infiniband/sw/rxe/rxe_verbs.c
++++ b/drivers/infiniband/sw/rxe/rxe_verbs.c
+@@ -238,7 +238,6 @@ static int rxe_destroy_ah(struct ib_ah *ibah, u32 flags)
  
- #include "cs42xx8.h"
- 
-+static const struct i2c_device_id cs42xx8_i2c_id[];
-+static const struct of_device_id cs42xx8_of_match[];
-+
- static int cs42xx8_i2c_probe(struct i2c_client *i2c)
+ static int post_one_recv(struct rxe_rq *rq, const struct ib_recv_wr *ibwr)
  {
--	int ret = cs42xx8_probe(&i2c->dev,
--			devm_regmap_init_i2c(i2c, &cs42xx8_regmap_config));
-+	int ret;
-+	struct cs42xx8_driver_data *drvdata;
-+
-+	if (i2c->dev.of_node) {
-+		const struct of_device_id *oid;
-+
-+		oid = of_match_node(cs42xx8_of_match, i2c->dev.of_node);
-+		if (!oid)
-+			goto err_not_found;
-+		drvdata = (struct cs42xx8_driver_data *)oid->data;
-+	} else {
-+		const struct i2c_device_id *id;
-+
-+		id = i2c_match_id(cs42xx8_i2c_id, i2c);
-+		if (!id)
-+			goto err_not_found;
-+		drvdata = (struct cs42xx8_driver_data *)id->driver_data;
-+	}
-+
-+	ret = cs42xx8_probe(&i2c->dev,
-+		devm_regmap_init_i2c(i2c, &cs42xx8_regmap_config), drvdata);
- 	if (ret)
- 		return ret;
+-	int err;
+ 	int i;
+ 	u32 length;
+ 	struct rxe_recv_wqe *recv_wqe;
+@@ -246,15 +245,11 @@ static int post_one_recv(struct rxe_rq *rq, const struct ib_recv_wr *ibwr)
+ 	int full;
  
-@@ -28,6 +50,10 @@ static int cs42xx8_i2c_probe(struct i2c_client *i2c)
- 	pm_request_idle(&i2c->dev);
+ 	full = queue_full(rq->queue, QUEUE_TYPE_TO_DRIVER);
+-	if (unlikely(full)) {
+-		err = -ENOMEM;
+-		goto err1;
+-	}
++	if (unlikely(full))
++		return -ENOMEM;
+ 
+-	if (unlikely(num_sge > rq->max_sge)) {
+-		err = -EINVAL;
+-		goto err1;
+-	}
++	if (unlikely(num_sge > rq->max_sge))
++		return -EINVAL;
+ 
+ 	length = 0;
+ 	for (i = 0; i < num_sge; i++)
+@@ -275,9 +270,6 @@ static int post_one_recv(struct rxe_rq *rq, const struct ib_recv_wr *ibwr)
+ 	queue_advance_producer(rq->queue, QUEUE_TYPE_TO_DRIVER);
  
  	return 0;
-+
-+err_not_found:
-+	dev_err(&i2c->dev, "failed to find driver data\n");
-+	return -EINVAL;
+-
+-err1:
+-	return err;
  }
  
- static void cs42xx8_i2c_remove(struct i2c_client *i2c)
-@@ -35,7 +61,24 @@ static void cs42xx8_i2c_remove(struct i2c_client *i2c)
- 	pm_runtime_disable(&i2c->dev);
+ static int rxe_create_srq(struct ib_srq *ibsrq, struct ib_srq_init_attr *init,
+@@ -343,10 +335,7 @@ static int rxe_modify_srq(struct ib_srq *ibsrq, struct ib_srq_attr *attr,
+ 	if (err)
+ 		return err;
+ 
+-	err = rxe_srq_from_attr(rxe, srq, attr, mask, &ucmd, udata);
+-	if (err)
+-		return err;
+-	return 0;
++	return rxe_srq_from_attr(rxe, srq, attr, mask, &ucmd, udata);
  }
  
--static struct i2c_device_id cs42xx8_i2c_id[] = {
-+static const struct cs42xx8_driver_data cs42448_data = {
-+	.name = "cs42448",
-+	.num_adcs = 3,
-+};
-+
-+static const struct cs42xx8_driver_data cs42888_data = {
-+	.name = "cs42888",
-+	.num_adcs = 2,
-+};
-+
-+static const struct of_device_id cs42xx8_of_match[] = {
-+	{ .compatible = "cirrus,cs42448", .data = &cs42448_data, },
-+	{ .compatible = "cirrus,cs42888", .data = &cs42888_data, },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, cs42xx8_of_match);
-+
-+static const struct i2c_device_id cs42xx8_i2c_id[] = {
- 	{"cs42448", (kernel_ulong_t)&cs42448_data},
- 	{"cs42888", (kernel_ulong_t)&cs42888_data},
- 	{}
-diff --git a/sound/soc/codecs/cs42xx8.c b/sound/soc/codecs/cs42xx8.c
-index d14eb2f6e1dd..957ae08bcf7c 100644
---- a/sound/soc/codecs/cs42xx8.c
-+++ b/sound/soc/codecs/cs42xx8.c
-@@ -499,29 +499,8 @@ static const struct snd_soc_component_driver cs42xx8_driver = {
- 	.endianness		= 1,
- };
+ static int rxe_query_srq(struct ib_srq *ibsrq, struct ib_srq_attr *attr)
+@@ -453,11 +442,11 @@ static int rxe_modify_qp(struct ib_qp *ibqp, struct ib_qp_attr *attr,
  
--const struct cs42xx8_driver_data cs42448_data = {
--	.name = "cs42448",
--	.num_adcs = 3,
--};
--EXPORT_SYMBOL_GPL(cs42448_data);
+ 	err = rxe_qp_chk_attr(rxe, qp, attr, mask);
+ 	if (err)
+-		goto err1;
++		return err;
+ 
+ 	err = rxe_qp_from_attr(qp, attr, mask, udata);
+ 	if (err)
+-		goto err1;
++		return err;
+ 
+ 	if ((mask & IB_QP_AV) && (attr->ah_attr.ah_flags & IB_AH_GRH))
+ 		qp->src_port = rdma_get_udp_sport(attr->ah_attr.grh.flow_label,
+@@ -465,9 +454,6 @@ static int rxe_modify_qp(struct ib_qp *ibqp, struct ib_qp_attr *attr,
+ 						  qp->attr.dest_qp_num);
+ 
+ 	return 0;
 -
--const struct cs42xx8_driver_data cs42888_data = {
--	.name = "cs42888",
--	.num_adcs = 2,
--};
--EXPORT_SYMBOL_GPL(cs42888_data);
+-err1:
+-	return err;
+ }
+ 
+ static int rxe_query_qp(struct ib_qp *ibqp, struct ib_qp_attr *attr,
+@@ -501,24 +487,21 @@ static int validate_send_wr(struct rxe_qp *qp, const struct ib_send_wr *ibwr,
+ 	struct rxe_sq *sq = &qp->sq;
+ 
+ 	if (unlikely(num_sge > sq->max_sge))
+-		goto err1;
++		return -EINVAL;
+ 
+ 	if (unlikely(mask & WR_ATOMIC_MASK)) {
+ 		if (length < 8)
+-			goto err1;
++			return -EINVAL;
+ 
+ 		if (atomic_wr(ibwr)->remote_addr & 0x7)
+-			goto err1;
++			return -EINVAL;
+ 	}
+ 
+ 	if (unlikely((ibwr->send_flags & IB_SEND_INLINE) &&
+ 		     (length > sq->max_inline)))
+-		goto err1;
++		return -EINVAL;
+ 
+ 	return 0;
 -
--const struct of_device_id cs42xx8_of_match[] = {
--	{ .compatible = "cirrus,cs42448", .data = &cs42448_data, },
--	{ .compatible = "cirrus,cs42888", .data = &cs42888_data, },
--	{ /* sentinel */ }
--};
--MODULE_DEVICE_TABLE(of, cs42xx8_of_match);
--EXPORT_SYMBOL_GPL(cs42xx8_of_match);
+-err1:
+-	return -EINVAL;
+ }
+ 
+ static void init_send_wr(struct rxe_qp *qp, struct rxe_send_wr *wr,
+@@ -735,14 +718,12 @@ static int rxe_post_recv(struct ib_qp *ibqp, const struct ib_recv_wr *wr,
+ 
+ 	if (unlikely((qp_state(qp) < IB_QPS_INIT) || !qp->valid)) {
+ 		*bad_wr = wr;
+-		err = -EINVAL;
+-		goto err1;
++		return -EINVAL;
+ 	}
+ 
+ 	if (unlikely(qp->srq)) {
+ 		*bad_wr = wr;
+-		err = -EINVAL;
+-		goto err1;
++		return -EINVAL;
+ 	}
+ 
+ 	spin_lock_irqsave(&rq->producer_lock, flags);
+@@ -761,7 +742,6 @@ static int rxe_post_recv(struct ib_qp *ibqp, const struct ib_recv_wr *wr,
+ 	if (qp->resp.state == QP_STATE_ERROR)
+ 		rxe_run_task(&qp->resp.task, 1);
+ 
+-err1:
+ 	return err;
+ }
+ 
+@@ -826,16 +806,9 @@ static int rxe_resize_cq(struct ib_cq *ibcq, int cqe, struct ib_udata *udata)
+ 
+ 	err = rxe_cq_chk_attr(rxe, cq, cqe, 0);
+ 	if (err)
+-		goto err1;
 -
--int cs42xx8_probe(struct device *dev, struct regmap *regmap)
-+int cs42xx8_probe(struct device *dev, struct regmap *regmap, struct cs42xx8_driver_data *drvdata)
- {
--	const struct of_device_id *of_id;
- 	struct cs42xx8_priv *cs42xx8;
- 	int ret, val, i;
+-	err = rxe_cq_resize_queue(cq, cqe, uresp, udata);
+-	if (err)
+-		goto err1;
+-
+-	return 0;
++		return err;
  
-@@ -535,17 +514,11 @@ int cs42xx8_probe(struct device *dev, struct regmap *regmap)
- 	if (cs42xx8 == NULL)
- 		return -ENOMEM;
+-err1:
+-	return err;
++	return rxe_cq_resize_queue(cq, cqe, uresp, udata);
+ }
  
--	cs42xx8->regmap = regmap;
- 	dev_set_drvdata(dev, cs42xx8);
+ static int rxe_poll_cq(struct ib_cq *ibcq, int num_entries, struct ib_wc *wc)
+@@ -921,26 +894,22 @@ static struct ib_mr *rxe_reg_user_mr(struct ib_pd *ibpd,
+ 	struct rxe_mr *mr;
  
--	of_id = of_match_device(cs42xx8_of_match, dev);
--	if (of_id)
--		cs42xx8->drvdata = of_id->data;
-+	cs42xx8->regmap = regmap;
- 
--	if (!cs42xx8->drvdata) {
--		dev_err(dev, "failed to find driver data\n");
--		return -EINVAL;
+ 	mr = rxe_alloc(&rxe->mr_pool);
+-	if (!mr) {
+-		err = -ENOMEM;
+-		goto err2;
 -	}
-+	cs42xx8->drvdata = drvdata;
+-
++	if (!mr)
++		return ERR_PTR(-ENOMEM);
  
- 	cs42xx8->gpiod_reset = devm_gpiod_get_optional(dev, "reset",
- 							GPIOD_OUT_HIGH);
-diff --git a/sound/soc/codecs/cs42xx8.h b/sound/soc/codecs/cs42xx8.h
-index d36c61b6df74..938e21d92ac2 100644
---- a/sound/soc/codecs/cs42xx8.h
-+++ b/sound/soc/codecs/cs42xx8.h
-@@ -19,11 +19,8 @@ struct cs42xx8_driver_data {
- };
+ 	rxe_get(pd);
+ 	mr->ibmr.pd = ibpd;
  
- extern const struct dev_pm_ops cs42xx8_pm;
--extern const struct cs42xx8_driver_data cs42448_data;
--extern const struct cs42xx8_driver_data cs42888_data;
- extern const struct regmap_config cs42xx8_regmap_config;
--extern const struct of_device_id cs42xx8_of_match[];
--int cs42xx8_probe(struct device *dev, struct regmap *regmap);
-+int cs42xx8_probe(struct device *dev, struct regmap *regmap, struct cs42xx8_driver_data *drvdata);
+ 	err = rxe_mr_init_user(rxe, start, length, iova, access, mr);
+ 	if (err)
+-		goto err3;
++		goto err1;
  
- /* CS42888 register map */
- #define CS42XX8_CHIPID				0x01	/* Chip ID */
+ 	rxe_finalize(mr);
+ 
+ 	return &mr->ibmr;
+ 
+-err3:
++err1:
+ 	rxe_cleanup(mr);
+-err2:
+ 	return ERR_PTR(err);
+ }
+ 
+@@ -956,25 +925,22 @@ static struct ib_mr *rxe_alloc_mr(struct ib_pd *ibpd, enum ib_mr_type mr_type,
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	mr = rxe_alloc(&rxe->mr_pool);
+-	if (!mr) {
+-		err = -ENOMEM;
+-		goto err1;
+-	}
++	if (!mr)
++		return ERR_PTR(-ENOMEM);
+ 
+ 	rxe_get(pd);
+ 	mr->ibmr.pd = ibpd;
+ 
+ 	err = rxe_mr_init_fast(max_num_sg, mr);
+ 	if (err)
+-		goto err2;
++		goto err1;
+ 
+ 	rxe_finalize(mr);
+ 
+ 	return &mr->ibmr;
+ 
+-err2:
+-	rxe_cleanup(mr);
+ err1:
++	rxe_cleanup(mr);
+ 	return ERR_PTR(err);
+ }
+ 
 -- 
-2.34.1
+2.30.0
 
