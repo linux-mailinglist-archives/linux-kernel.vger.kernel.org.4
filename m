@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F504611476
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A98B61147B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbiJ1OZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
+        id S230421AbiJ1OYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbiJ1OYi (ORCPT
+        with ESMTP id S230173AbiJ1OYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 28 Oct 2022 10:24:38 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE9FE41;
-        Fri, 28 Oct 2022 07:24:31 -0700 (PDT)
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444C5E78;
+        Fri, 28 Oct 2022 07:24:32 -0700 (PDT)
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29SEOLcl023819;
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29SEOL3k026556;
         Fri, 28 Oct 2022 09:24:21 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1666967061;
-        bh=Co7awRy3Xz2XTZgEsm+7R4njsey9lJWTDZmbVB0K4DA=;
+        bh=wR7WtVfUk3Wy5tBENQDtrurWBf3f7bKdDuZQXhqJOp0=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Hq39yu6FLWt48WmQL03y3it86mUiIZ5oyuizWMGPk10c4R3AHKWD9pycONUCF+5rt
-         sYJsnBuVOeLI7pRkQHpUC6wfFei4SxSMXIgJlbD2g3GXFT0415j+0oSEEyS5/3klz+
-         ffYib+QAO80fnYa51zqlewEsHc3bWolCn2zgDrZ4=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29SEOK6v062524
+        b=OVTyWNjBDQGQuW+udEoKf6PDm+gcmwnwgEZzK3TZwihGDRAIm5gkuBsmeAtp8JcDT
+         7uZ8MxB4vS71pEvtRaEP3/7SyuFsA+sJ2E0Lf0p7JJWg8iw7qu8GvV4mvnAeI1LEFV
+         Qpt4usodYVA1tFzM3xVjPu4wNbijPix/7SIwXniU=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29SEOLw8062530
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 28 Oct 2022 09:24:20 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 28 Oct 2022 09:24:21 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 28
- Oct 2022 09:24:20 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ Oct 2022 09:24:21 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Fri, 28 Oct 2022 09:24:20 -0500
+ Frontend Transport; Fri, 28 Oct 2022 09:24:21 -0500
 Received: from ula0226330.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29SEOHfS039275;
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29SEOHfT039275;
         Fri, 28 Oct 2022 09:24:20 -0500
 From:   Andrew Davis <afd@ti.com>
 To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
@@ -50,9 +50,9 @@ To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         <linux-arm-kernel@lists.infradead.org>
 CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Andrew Davis <afd@ti.com>
-Subject: [PATCH 03/11] arm64: dts: ti: k3-am65: Enable SPI nodes at the board level
-Date:   Fri, 28 Oct 2022 09:24:09 -0500
-Message-ID: <20221028142417.10642-4-afd@ti.com>
+Subject: [PATCH 04/11] arm64: dts: ti: k3-am65: Enable EPWM nodes at the board level
+Date:   Fri, 28 Oct 2022 09:24:10 -0500
+Message-ID: <20221028142417.10642-5-afd@ti.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221028142417.10642-1-afd@ti.com>
 References: <20221028142417.10642-1-afd@ti.com>
@@ -69,120 +69,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SPI nodes defined in the top-level AM65x SoC dtsi files are incomplete
+EPWM nodes defined in the top-level AM65x SoC dtsi files are incomplete
 and will not be functional unless they are extended with pinmux
 information.
 
 As the pinmux is only known at the board integration level, these
 nodes should only be enabled when provided with this information.
 
-Disable the SPI nodes in the dtsi files and only enable the ones that
+Disable the EPWM nodes in the dtsi files and only enable the ones that
 are actually pinned out on a given board.
 
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi | 1 +
- arch/arm64/boot/dts/ti/k3-am65-main.dtsi           | 5 +++++
- arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi            | 3 +++
- arch/arm64/boot/dts/ti/k3-am654-base-board.dts     | 1 +
- 4 files changed, 10 insertions(+)
+ arch/arm64/boot/dts/ti/k3-am65-main.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
-index 945a8a70332e9..fa4b6eb02fa57 100644
---- a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
-@@ -574,6 +574,7 @@ &usb1 {
- };
- 
- &mcu_spi0 {
-+	status = "okay";
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&mcu_spi0_pins_default>;
- 
 diff --git a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-index feef5fdb46886..74fd807d47396 100644
+index 74fd807d47396..49287f8493aea 100644
 --- a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
 +++ b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-@@ -217,6 +217,7 @@ main_spi0: spi@2100000 {
- 		#size-cells = <0>;
- 		dmas = <&main_udmap 0xc500>, <&main_udmap 0x4500>;
- 		dma-names = "tx0", "rx0";
+@@ -886,6 +886,7 @@ ehrpwm0: pwm@3000000 {
+ 		power-domains = <&k3_pds 40 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&ehrpwm_tbclk 0>, <&k3_clks 40 0>;
+ 		clock-names = "tbclk", "fck";
 +		status = "disabled";
  	};
  
- 	main_spi1: spi@2110000 {
-@@ -229,6 +230,7 @@ main_spi1: spi@2110000 {
- 		#size-cells = <0>;
- 		assigned-clocks = <&k3_clks 137 1>;
- 		assigned-clock-rates = <48000000>;
+ 	ehrpwm1: pwm@3010000 {
+@@ -895,6 +896,7 @@ ehrpwm1: pwm@3010000 {
+ 		power-domains = <&k3_pds 41 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&ehrpwm_tbclk 1>, <&k3_clks 41 0>;
+ 		clock-names = "tbclk", "fck";
 +		status = "disabled";
  	};
  
- 	main_spi2: spi@2120000 {
-@@ -239,6 +241,7 @@ main_spi2: spi@2120000 {
- 		power-domains = <&k3_pds 139 TI_SCI_PD_EXCLUSIVE>;
- 		#address-cells = <1>;
- 		#size-cells = <0>;
+ 	ehrpwm2: pwm@3020000 {
+@@ -904,6 +906,7 @@ ehrpwm2: pwm@3020000 {
+ 		power-domains = <&k3_pds 42 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&ehrpwm_tbclk 2>, <&k3_clks 42 0>;
+ 		clock-names = "tbclk", "fck";
 +		status = "disabled";
  	};
  
- 	main_spi3: spi@2130000 {
-@@ -249,6 +252,7 @@ main_spi3: spi@2130000 {
- 		power-domains = <&k3_pds 140 TI_SCI_PD_EXCLUSIVE>;
- 		#address-cells = <1>;
- 		#size-cells = <0>;
+ 	ehrpwm3: pwm@3030000 {
+@@ -913,6 +916,7 @@ ehrpwm3: pwm@3030000 {
+ 		power-domains = <&k3_pds 43 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&ehrpwm_tbclk 3>, <&k3_clks 43 0>;
+ 		clock-names = "tbclk", "fck";
 +		status = "disabled";
  	};
  
- 	main_spi4: spi@2140000 {
-@@ -259,6 +263,7 @@ main_spi4: spi@2140000 {
- 		power-domains = <&k3_pds 141 TI_SCI_PD_EXCLUSIVE>;
- 		#address-cells = <1>;
- 		#size-cells = <0>;
+ 	ehrpwm4: pwm@3040000 {
+@@ -922,6 +926,7 @@ ehrpwm4: pwm@3040000 {
+ 		power-domains = <&k3_pds 44 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&ehrpwm_tbclk 4>, <&k3_clks 44 0>;
+ 		clock-names = "tbclk", "fck";
 +		status = "disabled";
  	};
  
- 	sdhci0: mmc@4f80000 {
-diff --git a/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi
-index dc0f439d2dacb..7a11501bad0bc 100644
---- a/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi
-@@ -58,6 +58,7 @@ mcu_spi0: spi@40300000 {
- 		power-domains = <&k3_pds 142 TI_SCI_PD_EXCLUSIVE>;
- 		#address-cells = <1>;
- 		#size-cells = <0>;
+ 	ehrpwm5: pwm@3050000 {
+@@ -931,6 +936,7 @@ ehrpwm5: pwm@3050000 {
+ 		power-domains = <&k3_pds 45 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&ehrpwm_tbclk 5>, <&k3_clks 45 0>;
+ 		clock-names = "tbclk", "fck";
 +		status = "disabled";
  	};
  
- 	mcu_spi1: spi@40310000 {
-@@ -68,6 +69,7 @@ mcu_spi1: spi@40310000 {
- 		power-domains = <&k3_pds 143 TI_SCI_PD_EXCLUSIVE>;
- 		#address-cells = <1>;
- 		#size-cells = <0>;
-+		status = "disabled";
- 	};
- 
- 	mcu_spi2: spi@40320000 {
-@@ -78,6 +80,7 @@ mcu_spi2: spi@40320000 {
- 		power-domains = <&k3_pds 144 TI_SCI_PD_EXCLUSIVE>;
- 		#address-cells = <1>;
- 		#size-cells = <0>;
-+		status = "disabled";
- 	};
- 
- 	tscadc0: tscadc@40200000 {
-diff --git a/arch/arm64/boot/dts/ti/k3-am654-base-board.dts b/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
-index 991a8559b4c3b..3f5a5ebfc8f3c 100644
---- a/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
-@@ -342,6 +342,7 @@ &ecap0 {
- };
- 
- &main_spi0 {
-+	status = "okay";
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&main_spi0_pins_default>;
- 	#address-cells = <1>;
+ 	icssg0: icssg@b000000 {
 -- 
 2.37.3
 
