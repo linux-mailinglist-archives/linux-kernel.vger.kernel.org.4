@@ -2,110 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0486112EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB116112E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbiJ1Nfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
+        id S230428AbiJ1NfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiJ1Nfr (ORCPT
+        with ESMTP id S230323AbiJ1Neu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:35:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8A529C97
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:34:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666964079;
+        Fri, 28 Oct 2022 09:34:50 -0400
+Received: from mxout4.routing.net (mxout4.routing.net [IPv6:2a03:2900:1:a::9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8163E12AAE;
+        Fri, 28 Oct 2022 06:34:41 -0700 (PDT)
+Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
+        by mxout4.routing.net (Postfix) with ESMTP id A100D100635;
+        Fri, 28 Oct 2022 13:34:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1666964079;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vFqYz8MMVuDJ4sSoQ0v9rsso2qX+yaIQ4KXzcvg1mhc=;
-        b=Hl+7v52gNYDyckNRQORtX5ilGYGv/YO/zAiWQnhzjtew1bXUqU8q+6MX00xTb50xfbk+ys
-        lweEJr6bLCk2qE5+zM7gUSwUZn4v/fYrGrPNBFretNuVXZvxa8FFkQvn4WJpMAtqGU40ZL
-        NPu+OL/u4pqgXrGxbxeYMSOhvVpQ6pk=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-191-1EAjn9ycMqCnRgFg41n2Kw-1; Fri, 28 Oct 2022 09:34:36 -0400
-X-MC-Unique: 1EAjn9ycMqCnRgFg41n2Kw-1
-Received: by mail-wm1-f72.google.com with SMTP id f1-20020a1cc901000000b003cf475763b6so1448718wmb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:34:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vFqYz8MMVuDJ4sSoQ0v9rsso2qX+yaIQ4KXzcvg1mhc=;
-        b=KBpq1hvl2pMu/Jv9SSMZNcqYWx2zgwg8QkbdHw7GuXwMmMk4fH8MvptllwyRLKRWcj
-         PeW2cL1xGkaQWRv9su5jaFpC66pXWKQNjc37nKf9ozetLT9byGzS82HDJZxG8igDXBhp
-         JbDCwfXvlGK4QLgYi6S3cre7RO/AU0pz1kPDJKIkzIMxH0ziYZyWMpBpIol62uEKgpon
-         rRSFcUI/x8ZRec/mzKcKIo2rwjW/R9cDbUaTK2ub9FSut2vlA6Mj2KKo2aT6rrnLV7Mh
-         KIDYaWE0MiDj54pxxxWOCV8tjGdF01KgfF1J94Tx+gN/OjubUKcixpOXC5B6Gjfc1Lbt
-         iiCQ==
-X-Gm-Message-State: ACrzQf0wq94SrRByksaifOEwtBtwdhqvc86/n+kO0TgDNbX5Ga+yGqa7
-        b3vLMoHLsw+ASmydm6pNhQzy8AoJIoKgrPtuiPOpbmBr8KH5VTwmupzLGUSYpqkFRcjpSQJ1dou
-        Bvt04IK3ffcxTC9zWNQN9hR0v
-X-Received: by 2002:a5d:5142:0:b0:236:5d8d:6254 with SMTP id u2-20020a5d5142000000b002365d8d6254mr22326937wrt.514.1666964075458;
-        Fri, 28 Oct 2022 06:34:35 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4qPWmRdmYeva1c0+81ekf4TqzWM8LrMLcjdZN9VgV4/YuhTz4wVkJR4JMmkiMCMKDREkRZhQ==
-X-Received: by 2002:a5d:5142:0:b0:236:5d8d:6254 with SMTP id u2-20020a5d5142000000b002365d8d6254mr22326919wrt.514.1666964075238;
-        Fri, 28 Oct 2022 06:34:35 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id m64-20020a1ca343000000b003b49ab8ff53sm4266963wme.8.2022.10.28.06.34.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 06:34:34 -0700 (PDT)
-Message-ID: <c0e342ac-32a3-4f92-65c1-e4c990af7698@redhat.com>
-Date:   Fri, 28 Oct 2022 15:34:32 +0200
+        bh=vzFISnOJoxeZRNek4kJWueyVz+SxWc263Mc65Fe+C0k=;
+        b=dmtU8EPwtQLf5a73mPMAmG02+P5UgUFSWCKWMng8FvxNEks4Kb6588A1MTDodk4404mVUb
+        skCBCNy8tKeQB0VdwdL9tLIxxKtGrOKCy2gaRm1FqzqTjddxh1t0P1sZDxbvwu6i/qu/qO
+        L2boYyviSzI09jdkAg85R1xN6bwTcO0=
+Received: from webmail.hosting.de (unknown [134.0.26.148])
+        by mxbox3.masterlogin.de (Postfix) with ESMTPA id 11A78360392;
+        Fri, 28 Oct 2022 13:34:39 +0000 (UTC)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH RESEND v4 16/23] KVM: x86: smm: add structs for KVM's
- smram layout
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Guang Zeng <guang.zeng@intel.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Wei Wang <wei.w.wang@intel.com>,
-        Borislav Petkov <bp@alien8.de>
-References: <20221025124741.228045-1-mlevitsk@redhat.com>
- <20221025124741.228045-17-mlevitsk@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20221025124741.228045-17-mlevitsk@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date:   Fri, 28 Oct 2022 15:34:38 +0200
+From:   "Frank Wunderlich (linux)" <linux@fw-web.de>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [RFC v2 7/7] arm64: dts: mt7986: add Bananapi R3
+In-Reply-To: <64daf96b-b2b5-6f02-91aa-58d19083ee01@collabora.com>
+References: <20221026093650.110290-1-linux@fw-web.de>
+ <20221026093650.110290-8-linux@fw-web.de>
+ <64daf96b-b2b5-6f02-91aa-58d19083ee01@collabora.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <022c1168b9ca2f6a3ca8a60a1379dee6@fw-web.de>
+X-Sender: linux@fw-web.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mail-ID: 6f306042-60dc-4209-a341-0b506d1c4009
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/25/22 14:47, Maxim Levitsky wrote:
-> +	u32 cr4; /* CR4 is not present in Intel/AMD SMRAM image */
-> +	u32 reserved3[5];
-> +
-> +	/*
-> +	 * Segment state is not present/documented in the Intel/AMD SMRAM image
-> +	 * Instead this area on Intel/AMD contains IO/HLT restart flags.
-> +	 */
+Hi
 
-Both of these are based on the Intel P6 layout at 
-https://www.sandpile.org/x86/smm.htm.
+looked now on the keys and regulators comments...
 
-Paolo
+Am 2022-10-28 11:19, schrieb AngeloGioacchino Del Regno:
+> Il 26/10/22 11:36, Frank Wunderlich ha scritto:
+>> From: Frank Wunderlich <frank-w@public-files.de>
+>> +&mmc0 {
+>> +	//sdcard
+> 
+> C-style comments please
 
+i drop it completely if still using the way of an separate sd dts.
+
+>> +	gpio-keys {
+>> +		compatible = "gpio-keys";
+>> +
+>> +		factory-key {
+> 
+> I'd say that this is not "factory-key" but "reset-key"?
+> 
+>> +			label = "reset";
+>> +			linux,code = <KEY_RESTART>;
+>> +			gpios = <&pio 9 GPIO_ACTIVE_LOW>;
+>> +		};
+
+i kept definition similar to mt7622-bpi-r64,in shematic it is defined as 
+"reset/factory default" and openwrt wants to use it for "factory" 
+function (afair booting some kind of rescue-system for reflashing 
+nand/nor). basicly it is a gpio connected to different reset-lines 
+(including m.2 slot where it has some side-effects in my board-version).
+
+>> +	};
+>> +
+>> +	reg_1p8v: regulator-1p8v {
+>> +		compatible = "regulator-fixed";
+>> +		regulator-name = "fixed-1.8V";
+> 
+> This is "avdd18", isn't it?
+
+no it is the 1.8VD used for emmc.
+
+>> +		regulator-min-microvolt = <1800000>;
+>> +		regulator-max-microvolt = <1800000>;
+>> +		regulator-boot-on;
+>> +		regulator-always-on;
+> 
+> All these regulators have a vin-supply: please fill it in.
+> Moreover, in the schematics, I can also see other LDOs: 0.9VD (input 
+> +12VD),
+> AVDD12 (input 1.8VD), DDRV_VPP (input 3.3VD)...
+
+i have not looked for which the others are defined in shematic only 
+added the ones i need to get the board running.
+
+> Of course, this means that you have one more 1.8V regulator, called 
+> 1.8vd.
+
+this is the right one
+
+>> +	};
+>> +
+>> +	reg_3p3v: regulator-3p3v {
+>> +		compatible = "regulator-fixed";
+>> +		regulator-name = "fixed-3.3V";
+> 
+> regulator-name = "3.3vd";
+> 
+>> +		regulator-min-microvolt = <3300000>;
+>> +		regulator-max-microvolt = <3300000>;
+>> +		regulator-boot-on;
+>> +		regulator-always-on;
+> 
+> vin-supply = <&dcin>; (dcin: regulator-12vd { ... })
+> 
+>> +	};
+>> +
+>> +	reg_5v: regulator-5v {
+>> +		compatible = "regulator-fixed";
+>> +		regulator-name = "fixed-5V";
+> 
+> regulator-name  = "fixed-5p1";
+
+why this regulator name and not regulator-name = "5.1vd"; here (or 5vd)?
+
+>> +		regulator-min-microvolt = <5000000>;
+>> +		regulator-max-microvolt = <5000000>;
+> 
+> Schematics say "+5V: 5.1V/3A", so this is not 5000000.
+> 
+>> +		regulator-boot-on;
+>> +		regulator-always-on;
+> 
+> 
+> vin-supply = <&dcin>;
+
+basicly i will change the regulator to this:
+/* dcin above gpio-keys to preserve alphabetic order - or should i name 
+it reg_dcin to have all regulators together? but dcin should be always 
+above the others which breaks ordering */
+
+	dcin: regulator-12vd {
+		compatible = "regulator-fixed";
+		regulator-name = "12vd";
+		regulator-min-microvolt = <12000000>;
+		regulator-max-microvolt = <12000000>;
+		regulator-boot-on;
+		regulator-always-on;
+	};
+
+/* as far as i see in my shematic all regulators here are powered from 
++12v */
+	reg_1p8v: regulator-1p8v {
+		compatible = "regulator-fixed";
+		regulator-name = "1.8vd";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		regulator-boot-on;
+		regulator-always-on;
+		vin-supply = <&dcin>;
+	};
+
+	reg_3p3v: regulator-3p3v {
+		compatible = "regulator-fixed";
+		regulator-name = "3.3vd";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		regulator-boot-on;
+		regulator-always-on;
+		vin-supply = <&dcin>;
+	};
+
+	reg_5v: regulator-5v {
+		compatible = "regulator-fixed";
+		regulator-name  = "fixed-5p1";
+		regulator-min-microvolt = <5100000>;
+		regulator-max-microvolt = <5100000>;
+		regulator-boot-on;
+		regulator-always-on;
+		vin-supply = <&dcin>;
+	};
+
+using a different naming sheme for reg_5v (regulator-name) does not 
+makes sense to me.
+
+regards Frank
