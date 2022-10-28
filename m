@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192306114C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F116114C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbiJ1Ojh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36590 "EHLO
+        id S229562AbiJ1OkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbiJ1OjT (ORCPT
+        with ESMTP id S229935AbiJ1Ojp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:39:19 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D08E1CCCFB;
-        Fri, 28 Oct 2022 07:39:18 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id f37so8599208lfv.8;
-        Fri, 28 Oct 2022 07:39:18 -0700 (PDT)
+        Fri, 28 Oct 2022 10:39:45 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8030C1A39E
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:39:41 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id j6so4153050qvn.12
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:39:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=438MwCH9BTrA9BcLzWtnTn0JobWEvRhTpMnkj9ZVmww=;
-        b=D6fblxQFn5vZbZOLKFcWYLtI+c5zEeyTAZFyxcD1/OuwZbjwiAe7Rx2XzqRykO7NB4
-         FD3Urrlg6EwzXqeeeBNgNG9L6NGUf7kpLhdjTANcQw2PJyshDO1qdJS3j9dfllmSO+iF
-         fitc0zBqXUiIdk3ZmY3elt03yduCSbxd8TDrrJ1EPruopt/jKNNHQf9V/ACPqJHvlXia
-         Ai7z3Ow9ZFsPEGz/dt5LHnZDFLU7Lw/HQV2e3+9Ta1gfOhN3LHYGmslCk+z29lv0Ds2J
-         5pdseKa35npP7brfhnpTl9nLjdYEbwiDiXAD3Kh7VYpGwghSFsUEAkd94mmCWgh+PtT3
-         hWLA==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dBCtjSxtj1jp0cjAy0wlS6C+ZFHd66+P95yTGOU8r4I=;
+        b=edzmOuuY3YIwYEwDSYZfp6u2vQbVY9m85M3yA9Z6k1GH7Cx3U4Mr8YF7BYf1LQKc/c
+         7aSzB5JyRLguKzMy2j7ANrS/KJULur1dH0RL4S1FrhYhwwbQD7gwZmo00JeH/r9HiCO5
+         +tXdyuwfXDCiMFZrgQKRi3wXi08AV9bmbQQyv5v7Z0v4TMWfFEXKJtRzkdBm6Z7SxR3H
+         XlJU9vO5k+fNcvZrfoJMIhdLuPBpF6RsrsBusRyUpAksFRQNxc3CjNZYVnubtDTGpkN2
+         Wr9T/8LwvAK7uQzWErg55cOeRwA9iyOmSorh7y9KISqs6QIVQfhYmqCqhhSiRGzlUr8F
+         AQgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=438MwCH9BTrA9BcLzWtnTn0JobWEvRhTpMnkj9ZVmww=;
-        b=hObzsKI+/gn4XdTkxVOnOsfRptOch0qMr+fUwsDBykzSxjRdsdXAOJkt+LVPoF7CC4
-         H0xi3SEn78ELXk9oZVvNpDxld80QeCRvBI+lO7sHYQlS5tToVfBb7eJDUyWm1EI2qFos
-         45mPCUhZDMbjYWt1Frs6r0czNE5rfUZJThC+86KG2e43ZxbTmfNZytZmz1Kn8gfRLdOo
-         zFM3fybu5uwnHzIypcK1uqDrfTU1bq9rZ4/LO7wt28hS5gJ6VWJz+tAlPHFT5JzSkqQH
-         kyjAo+3B7y34Jll/8Y2va089JQUSpse24lNdN4p5uV4hKTGUOrk1CayHf9h59NWjERKk
-         lGQg==
-X-Gm-Message-State: ACrzQf2uYPTeoY0VagGw7HGag4GsOhHg7V5lxu0+TaWt5jLN1l92Ui4y
-        kgR/wkIvKIwMbQXz7IMwVm8RmJM1IkE=
-X-Google-Smtp-Source: AMsMyM62WjvitZ/M1z2g9r8bWwHww4iANV4p1qKSM1aGXF74m8W47uJXLz8akxUC5+rl6g/WQgKGBg==
-X-Received: by 2002:a17:907:6288:b0:78d:ab30:c374 with SMTP id nd8-20020a170907628800b0078dab30c374mr48265363ejc.266.1666967946292;
-        Fri, 28 Oct 2022 07:39:06 -0700 (PDT)
-Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id e2-20020a170906314200b0077e6be40e4asm2293971eje.175.2022.10.28.07.39.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 07:39:05 -0700 (PDT)
-Message-ID: <e83964fe-ad87-0905-4586-e235757c6b2b@gmail.com>
-Date:   Fri, 28 Oct 2022 16:39:04 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dBCtjSxtj1jp0cjAy0wlS6C+ZFHd66+P95yTGOU8r4I=;
+        b=4IF/WvN2CORBpCabweTyGV536zjbSMI1YRm8Dr7SbWV9lqWoPSgJHu4pUnDR0+qcCQ
+         qAO7EpwMiWELypl2syOd/mo7Nt2nnrX4dR4KHxEOzNPQsXtOe8T2t5nWJCo36c+/thZd
+         tnAJeNtvzcyVgH9tagHZVQSNVXACQW5cb0SJk5mwm0wSdRvDP1fL7hBhkYOvM1UG10qq
+         2Yoo+1v0ijwWaW6wQ8ys/aQBcAX0ojcfBuAYQtEZvC4laKR5Q2AsJVi/AwmVo9Fe7hd1
+         s5hrZ3GLoXvG+RgW+8AgqgzZ1i+8LGyIb6bjKv/HIe5W5x+YhpLkNJrd7UIdBpTBP0d9
+         15Lg==
+X-Gm-Message-State: ACrzQf3LlBrHyhAoGwORK1me+KEHT5KKh3G6gn1NJ3tn4B6RXRMnGpHN
+        +GU6t0gUP+YOt7Ufl3iCRQMgYZDaT9MPTA==
+X-Google-Smtp-Source: AMsMyM7ZMF8C2IdV3u0R8roPa1lWIi39iEVAGYABmSKIQLm0dA3mCkwgONkiC5lWSV12aiYnccmPaA==
+X-Received: by 2002:ad4:574c:0:b0:4bb:7477:f13d with SMTP id q12-20020ad4574c000000b004bb7477f13dmr21410870qvx.39.1666967980492;
+        Fri, 28 Oct 2022 07:39:40 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::25f1])
+        by smtp.gmail.com with ESMTPSA id f2-20020ac84702000000b003a50c9993e1sm509704qtp.16.2022.10.28.07.39.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 07:39:39 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 10:39:40 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Eric Bergen <ebergen@meta.com>
+Subject: Re: [PATCH] mm: vmscan: split khugepaged stats from direct reclaim
+ stats
+Message-ID: <Y1vprODaLJLk0dka@cmpxchg.org>
+References: <20221025170519.314511-1-hannes@cmpxchg.org>
+ <CAHbLzkoXzbHRJxb9DkjGkKQ8TAO08ctvz7wvjyPA8Gy2Skm+2g@mail.gmail.com>
+ <Y1hM6sMRpBGUPRyo@cmpxchg.org>
+ <CAHbLzkpaoN37camSLYVDU7p9AXzQjYcvHnWm3K87iwae-YyZiQ@mail.gmail.com>
+ <Y1lvJBnVx1Fv5WHz@cmpxchg.org>
+ <CAHbLzkqQ=6U3uerEkypsCHnmsXerEZi5erMSYK-kp8-vJNk89Q@mail.gmail.com>
+ <CAJD7tkb5y9oqgVauVPiS0KbiL2Wnsu7jhK7Q44oUBZzBXwKUYA@mail.gmail.com>
+ <Y1qSZHK/U0SpNqNa@cmpxchg.org>
+ <CAJD7tkYt-KL=jDEy6pSOc5tDij=3SWmbhFeco39pjJuOmEAH0g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v2 0/4] Add basic Rockchip rk3128 DT support
-To:     kever.yang@rock-chips.com, heiko@sntech.de
-Cc:     sjg@chromium.org, philipp.tomsich@vrull.eu,
-        zhangqing@rock-chips.com, hjc@rock-chips.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJD7tkYt-KL=jDEy6pSOc5tDij=3SWmbhFeco39pjJuOmEAH0g@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,99 +80,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add basic Rockchip rk3128 DT support.
+On Thu, Oct 27, 2022 at 01:43:24PM -0700, Yosry Ahmed wrote:
+> On Thu, Oct 27, 2022 at 7:15 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> > On Wed, Oct 26, 2022 at 07:41:21PM -0700, Yosry Ahmed wrote:
+> > > My 2c, if we care about direct reclaim as in reclaim that may stall
+> > > user space application allocations, then there are other reclaim
+> > > contexts that may pollute the direct reclaim stats. For instance,
+> > > proactive reclaim, or reclaim done by writing a limit lower than the
+> > > current usage to memory.max or memory.high, as they are not done in
+> > > the context of the application allocating memory.
+> > >
+> > > At Google, we have some internal direct reclaim memcg statistics, and
+> > > the way we handle this is by passing a flag from such contexts to
+> > > try_to_free_mem_cgroup_pages() in the reclaim_options arg. This flag
+> > > is echod into a scan_struct bit, which we then use to filter out
+> > > direct reclaim operations that actually cause latencies in user space
+> > > allocations.
+> > >
+> > > Perhaps something similar might be more generic here? I am not sure
+> > > what context khugepaged reclaims memory from, but I think it's not a
+> > > memcg context, so maybe we want to generalize the reclaim_options arg
+> > > to try_to_free_pages() or whatever interface khugepaged uses to free
+> > > memory.
+> >
+> > So at the /proc/vmstat level, I'm not sure it matters much because it
+> > doesn't count any cgroup_reclaim() activity.
+> >
+> > But at the cgroup level, it sure would be nice to split out proactive
+> > reclaim churn. Both in terms of not polluting direct reclaim counts,
+> > but also for *knowing* how much proactive reclaim is doing.
+> >
+> > Do you have separate counters for this?
+> 
+> Not yet. Currently we only have the first part, not polluting direct
+> reclaim counts.
+> 
+> We basically exclude reclaim coming from memory.reclaim, setting
+> memory.max/memory.limit_in_bytes, memory.high (on write, not hitting
+> the high limit), and memory.force_empty from direct reclaim stats.
+> 
+> As for having a separate counter for proactive reclaim, do you think
+> it should be limited to reclaim coming from memory.reclaim (and
+> potentially memory.force_empty), or should it include reclaim coming
+> from limit-setting as well?
 
-Features:
-  Quad-core ARM Cortex-A7MP Core processor
-  Clock & reset unit
-  Power management unit
-  Interrupt controller
-  DMAC
-  6x 64 bits Timers
-  4x PWMs
-  1x 32 bits watchdog
+A combined counter seems reasonable to me. We *have* used the limit
+knobs to drive proactive reclaim in production in the past, so it's
+not a stretch. And I can't think of a scenario where you'd like them
+to be separate.
 
-Internal memory:
-  Internal BootRom
-  Internal SRAM 8KB
+I could think of two ways of describing it:
 
-External memory:
-  Dynamic Memory Interface (DDR3/DDR3L/LPDDR2)
-  Nand Flash Interface
-  eMMC Interface
-  SD/MMC Interface
+pgscan_user: User-requested reclaim. Could be confusing if we ever
+have an in-kernel proactive reclaim driver - unless that would then go
+to another counter (new or kswapd).
 
-Connectivity:
-  SDIO interface
-  SPI Controller
-  3x UART controller
-  4x I2C controllers
-  4x groups of GPIO (GPIO0~GPIO3), 32 GPIOs per group
-  USB Host2.0
-  USB OTG2.0
-
-===
-
-The Linux kernel has added a rk3128 clock driver in the past,
-but the DT is still missing.
-
-In U-boot the rk3128 DT doesn't conform the latest bindings
-and also the pin definition don't match the TRM.
-
-On request from the U-boot maintainers I submit a basic rk3128 DT.
-https://lore.kernel.org/u-boot/258c2dbf-436d-5935-83f5-a2dbb8cf62d7@rock-chips.com/
-
-Based on:
-https://source.denx.de/u-boot/u-boot/-/blob/master/arch/arm/dts/rk3128.dtsi
-https://github.com/rockchip-linux/kernel/blob/develop-4.4/arch/arm/boot/dts/rk312x.dtsi
-
-rk3128 TRM:
-https://rockchip.fr/RK312X%20TRM/
-
-rk3128 datasheet:
-https://rockchip.fr/RK3128%20datasheet%20V1.2.pdf
-
-===
-
-NOT TESTED WITH HARDWARE
-NO THERMAL PROTECTION
-
-===
-
-Request:
-  Help with testing on hardware.
-
-===
-
-Changed V2:
-  rk3128.dtsi:
-    remove aliases
-    add gic interrupts mask defines
-    add virtual timer interrupts
-
-  rk3128-evb.dts:
-    use generic node names
-    remove underscores in node names
-    add more aliases
-    sort
-
-===
-
-Johan Jonker (4):
-  dt-bindings: arm: rockchip: Add Rockchip RK3128 Evaluation board
-  dt-bindings: timer: rockchip: add rockchip,rk3128-timer
-  ARM: dts: rockchip: add rk3128.dtsi
-  ARM: dts: rockchip: add rk3128-evb.dts
-
- .../devicetree/bindings/arm/rockchip.yaml     |   5 +
- .../bindings/timer/rockchip,rk-timer.yaml     |   1 +
- arch/arm/boot/dts/Makefile                    |   1 +
- arch/arm/boot/dts/rk3128-evb.dts              | 110 +++
- arch/arm/boot/dts/rk3128.dtsi                 | 916 ++++++++++++++++++
- 5 files changed, 1033 insertions(+)
- create mode 100644 arch/arm/boot/dts/rk3128-evb.dts
- create mode 100644 arch/arm/boot/dts/rk3128.dtsi
-
---
-2.20.1
-
+pgscan_ext: Reclaim activity from extraordinary/external
+requests. External as in: outside the allocation context.
