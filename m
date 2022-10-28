@@ -2,134 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43522610F95
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9C1610F9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbiJ1LXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 07:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56074 "EHLO
+        id S230146AbiJ1LYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 07:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiJ1LXj (ORCPT
+        with ESMTP id S230131AbiJ1LYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 07:23:39 -0400
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731761B157B
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 04:23:38 -0700 (PDT)
-X-ASG-Debug-ID: 1666956215-1eb14e7e625a6e0001-xx1T2L
-Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id COoKn7aXrtQcQk2X (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Fri, 28 Oct 2022 19:23:35 +0800 (CST)
-X-Barracuda-Envelope-From: LeoLiu-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX1.zhaoxin.com
- (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Fri, 28 Oct
- 2022 19:23:35 +0800
-Received: from [10.32.56.18] (125.76.214.122) by ZXBJMBX03.zhaoxin.com
- (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Fri, 28 Oct
- 2022 19:23:33 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-Message-ID: <be1c96d6-7c2e-d3a0-1ae9-05babd49ab09@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.32.56.18
-Date:   Fri, 28 Oct 2022 19:23:33 +0800
+        Fri, 28 Oct 2022 07:24:49 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB5A32B98
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 04:24:47 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id i10so3026576qkl.12
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 04:24:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UVCSqRvpdzckFxd7y7PQdq7tMzzKz979ees9Dc/OcZM=;
+        b=qzOhOWRaDR+py00khrOBG7vTWLAxH1NyrAaKwKYW6DUpmvXHbfrbln1Te4gAnTJweD
+         nklKGEH+Bx0SYRkxs5t7wTDGSgXPMHNl6taESZQSXJHy9gcyTlc9EvfTRFZxKR441zBN
+         TH/ZH3ysIWAKBPqM5noxDhtNi7532HZ+XMAP8froKMiX1yS0pynVqy3E7vZqKgpLI/Oo
+         wb6aBCCYwG20sd4pMVEJVmFSgxeKboyp+YRrvOyPqRmK6rM1fWwsQWJlc4CsKnqWuSbv
+         w+Vro6rwFpMBfMRUOk9onbmkRlbstjleWSFag2CjQIKa63tHHSpOi1uZaCAaVKh7ecCu
+         UFbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UVCSqRvpdzckFxd7y7PQdq7tMzzKz979ees9Dc/OcZM=;
+        b=0lKc+YHSxFrDyyMOdo2fN4JFORUzru8iy+cHDz2Wt980a7HGyEW7VoV+TBI/lHIlGS
+         FWY4CR2lLSr1ZtfUrUvLyK4JM+1TxvMB09bY9Lp4ounvcOqtZ3WwkONHgSy5QBHcO3cV
+         3rJWIQFmrZMm2Vm5U6rLtaQ1myMelIMPlJj74Eis8iAhv4GrbV6/qYxDpX8GjDzPBLEn
+         MhECFy6AfMpH1LH8kEBA3DyQOAYgF/y/GpDgSJDPKePZThLjZqkt+UvCzilY9xGeCfuc
+         W07ZAyY0vDZwSPqjOPw+8ek5WDwR0Q4SGSKCVDCdvkopneqxHJAPM1S2X4IbE8KiMECl
+         99Sw==
+X-Gm-Message-State: ACrzQf0QczW92riJT54bK43PR0FvEjiyv1i3LSbChgK/IB0KC53KvuCL
+        BspuyBlqO75+JCgN6z0B7aQh3A==
+X-Google-Smtp-Source: AMsMyM4C82LHFcU+7Rfpy1Vy0cQUhk8GIhuKDgfZzsv9t5IPd5pB2z2Wg1PNJjJleHDV7zzzTTuPpw==
+X-Received: by 2002:a05:620a:458d:b0:6ee:e940:4a6a with SMTP id bp13-20020a05620a458d00b006eee9404a6amr38226828qkb.235.1666956286902;
+        Fri, 28 Oct 2022 04:24:46 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id dm21-20020a05620a1d5500b006b95b0a714esm2765532qkb.17.2022.10.28.04.24.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 04:24:46 -0700 (PDT)
+Message-ID: <b75718d3-a177-c41b-da2f-659694c4d27e@linaro.org>
+Date:   Fri, 28 Oct 2022 07:24:44 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 0/5] Parse the PCIE AER structure and set to relevant
- registers
-To:     Bjorn Helgaas <helgaas@kernel.org>
-X-ASG-Orig-Subj: Re: [PATCH 0/5] Parse the PCIE AER structure and set to relevant
- registers
-CC:     <rafael@kernel.org>, <lenb@kernel.org>, <james.morse@arm.com>,
-        <tony.luck@intel.com>, <bp@alien8.de>, <robert.moore@intel.com>,
-        <ying.huang@intel.com>, <rdunlap@infradead.org>,
-        <bhelgaas@google.com>, <linux-acpi@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devel@acpica.org>, <CobeChen@zhaoxin.com>,
-        <TonyWWang@zhaoxin.com>, <ErosZhang@zhaoxin.com>
-References: <20221027220931.GA843829@bhelgaas>
-From:   LeoLiuoc <LeoLiu-oc@zhaoxin.com>
-In-Reply-To: <20221027220931.GA843829@bhelgaas>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [125.76.214.122]
-X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
- ZXBJMBX03.zhaoxin.com (10.29.252.7)
-X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
-X-Barracuda-Start-Time: 1666956215
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 2173
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.4963 1.0000 0.0000
-X-Barracuda-Spam-Score: 0.00
-X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.101736
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] dt-bindings: interconnect: qcom,msm8998-bwmon: Correct
+ SC7280 CPU compatible
+To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221011140744.29829-1-krzysztof.kozlowski@linaro.org>
+ <d2600fef-0313-551e-b175-40edfbf1acd4@kernel.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <d2600fef-0313-551e-b175-40edfbf1acd4@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/10/28 6:09, Bjorn Helgaas 写道:
-> On Thu, Oct 27, 2022 at 11:14:58AM +0800, LeoLiu-oc wrote:
->> From: leoliu-oc <leoliu-oc@zhaoxin.com>
+On 28/10/2022 03:14, Georgi Djakov wrote:
+> On 11.10.22 17:07, Krzysztof Kozlowski wrote:
+>> Two different compatibles for SC7280 CPU BWMON instance were used
+>> in DTS and bindings.  Correct the bindings to use the same one as in
+>> DTS, because it is more specific.
 >>
->> HEST PCIE AER error source information describes the Uncorrectable Error
->> Severity, CorrectableError Mask and other aer register's value to write to the
->> bridge's Correctable Error Mask register.
+>> Fixes: b7c84ae757c2 ("dt-bindings: interconnect: qcom,msm8998-bwmon: Add support for sc7280 BWMONs")
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> I guess the point is to extract register values from HEST PCI Express
-> AER structures (ACPI r6.5, sec 18.3.2.4, etc.) and program them into
-> AER Capabilities?
+> I assume that this will be picked by Bjorn. Please let me know otherwise.
 > 
-Yes, the purpose of the patch sets is to extract register values from 
-HEST PCI Express AER structures and program them into AER Capabilities
 
-Thanks
-leoliu-oc
+Bjorn marked it as not applicable, so please pick it up for interconnect.
 
->> leoliu-oc (5):
->>    ACPI/APEI: Add apei_hest_parse_aer()
->>    ACPI/APEI: remove static from apei_hest_parse()
->>    ACPI/PCI: Add AER bits #defines for PCIE/PCI-X bridges
->>    ACPI/PCI: Add pci_acpi_program_hest_aer_params()
->>    ACPI/PCI: config pcie devices's aer register
-> 
-> If/when you repost this, it would be nice if the patches ([1/5],
-> [2/5], etc) were responses to the cover letter ([0/5]).  Since they're
-> not responses, b4 doesn't know they're connected and can't grab the
-> whole series at once.
-> 
-> Also capitalize the subject lines consistently and s/PCIE/PCIe/ and
-> s/pcie/PCIe/ and s/aer/AER/, e.g., >
->    ACPI/APEI: Add apei_hest_parse_aer()
->    ACPI/APEI: Remove static from apei_hest_parse()
->    PCI: Add AER #defines for PCIe/PCI-X bridges
->    ACPI/PCI: Add pci_acpi_program_hest_aer_params()
->    ACPI/PCI: Configure devices AER registers based on HEST
+Best regards,
+Krzysztof
 
-Got it. I will modify this in the next version patch set.
-
-Thanks
-leoliu-oc
-> 
->>   drivers/acpi/apei/hest.c      | 121 +++++++++++++++++++++++++++++++++-
->>   drivers/pci/pci-acpi.c        |  92 ++++++++++++++++++++++++++
->>   drivers/pci/pci.h             |   5 ++
->>   drivers/pci/probe.c           |   1 +
->>   include/acpi/actbl1.h         |  69 +++++++++++++++++++
->>   include/acpi/apei.h           |   9 +++
->>   include/uapi/linux/pci_regs.h |   5 ++
->>   7 files changed, 300 insertions(+), 2 deletions(-)
->>
->> -- 
->> 2.20.1
->>
