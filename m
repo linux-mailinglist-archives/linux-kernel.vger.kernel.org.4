@@ -2,107 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EBD61119C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF806111AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbiJ1Mga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 08:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
+        id S229923AbiJ1Mih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 08:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiJ1Mg2 (ORCPT
+        with ESMTP id S229597AbiJ1Mie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 08:36:28 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0C61BC17D;
-        Fri, 28 Oct 2022 05:36:27 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id v1so6410183wrt.11;
-        Fri, 28 Oct 2022 05:36:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wycqnBb9yJKDEW3bJJPSC5fzrru3Jf1qAMB2d8ApDxo=;
-        b=gzkjkw5P/S/NQ5bDEx5+kVzA2gyLzAYxK4tR2JIj6cXczSIqSaEzzQU037hVBIL16a
-         PusCBQhOM0J7teGkkkVh3OfznGGF9Q6L5mfyCBXOOH+0GMS3yO0YpeNesuNqCLIYBHdg
-         yea77P70ifuxmvgbVk0Mt6cTVrI6GCNzmDZEva7+vd6a4FzbymsXcWQ2DYwziUvdMZJB
-         i26mvrLzTimZ4TtA6FRC2Y5o3VJPdzlpFfNAIYWW8AevfLJjbQzO1qQtPfKNZiV2ADCZ
-         h75K5qE2lqhTM3RfjQiGMZxhJ0fyavFWeB+cHWGKCemZxtMhbJrdIAcMcSr3p9V9pA+0
-         Xvzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wycqnBb9yJKDEW3bJJPSC5fzrru3Jf1qAMB2d8ApDxo=;
-        b=0J8Ip/y3TBNSRSCuaAgPz/vR+OE441uJNWkr9KLQHn9ZHOCnAn4aJ9WxYtcjAzDB2W
-         UU+A/J+Mva75wFoXJvt1Lo1Lsa4R7sXw+VOHe9Vm1Yhm+XDqAxetbIS1SZooNErWzSR4
-         Qp6I6JPeB43YEa09Nnd0Enoagnk1K+O6Q06FonaIM1aby/S0LYbcqZw3JdkA8He9Dg1V
-         UPx67Zbq/+PrdqsiUGE10tLlpRo+q4SGcQfWg6x8Ns1s6zDInnuz2WwrsMeHZwiEor6X
-         2UAQzNWaZDyIw18mGVEn6wH+qzo1tyj4oPEPgQKEYFft33kQg2andtAsNK3acobGtZjS
-         s/Kw==
-X-Gm-Message-State: ACrzQf0DATWXs7pTp9S4dJum3TNXM1BX4FrbV9224TIOICwHxEK8aJjd
-        inm+yhUfb3fm00fw6JZBYmc=
-X-Google-Smtp-Source: AMsMyM6EAHFcT3yApGhskQ5vTnRyjDcjeNd3iqGjuID+2QCUVl97vKfRdRAgqE//BMZUHK7ccuYQlQ==
-X-Received: by 2002:a5d:584d:0:b0:230:c250:603e with SMTP id i13-20020a5d584d000000b00230c250603emr34325437wrf.143.1666960585600;
-        Fri, 28 Oct 2022 05:36:25 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id 6-20020a05600c230600b003cf37c5ddc0sm4029403wmo.22.2022.10.28.05.36.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 05:36:25 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: mvneta: Remove unused variable i
-Date:   Fri, 28 Oct 2022 13:36:24 +0100
-Message-Id: <20221028123624.529483-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Fri, 28 Oct 2022 08:38:34 -0400
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B26C01D4DCC
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:38:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666960698; bh=B5OaSZ8HsPRmrMQQFyz9KT8sdbr9Ub7sfHqu4Tovee8=;
+        h=X-EA-Auth:Date:From:To:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=Ekxlr7DrdfyemSZ0COtOM0B0w5kwQriCAHGa4y4lvSmfe4CMBWu+DzjOc2Hl7+uLx
+         GUoK3UGw7L/9luMrAgX2ObKa0rHloNNIQUS0OpZgc6j1JN2XzpoMHrSqZUt9xDZzOX
+         E4ODFRtppCXlPDwyGcimnB9fHbSgiGVvzisG62Xs=
+Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
+        via [213.182.55.206]
+        Fri, 28 Oct 2022 14:38:18 +0200 (CEST)
+X-EA-Auth: VkRt+j6nGRWQq6EtMOp8yVWLs+3ZU5k2Lm4NBQLPnnZrKfXl+WSKVQSq7rMV6nqg+He7Dm8gvOBToPU9ngJiMtCWFCKBgdLm
+Date:   Fri, 28 Oct 2022 18:08:13 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: wlan-ng: Use flexible-array for one / zero-length
+ arrays
+Message-ID: <Y1vNNSSWK1EkcohT@ubunlion>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable i is just being incremented and it's never used anywhere else. The
-variable and the increment are redundant so remove it.
+Flexible-array member should be used instead of one or zero member to
+meet the need for having a dynamically sized trailing elements in a
+structure. Refer to links [1] and [2] for detailed guidance on this
+suggestion.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+[1] https://en.wikipedia.org/wiki/Flexible_array_member
+[2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
+
+Issue identified using coccicheck.
+
+Signed-off-by: Deepak R Varma <drv@mailo.com>
 ---
- drivers/net/ethernet/marvell/mvneta.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/staging/wlan-ng/p80211mgmt.h  | 8 ++++----
+ drivers/staging/wlan-ng/p80211types.h | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
-index ff3e361e06e7..1822796f8498 100644
---- a/drivers/net/ethernet/marvell/mvneta.c
-+++ b/drivers/net/ethernet/marvell/mvneta.c
-@@ -4266,7 +4266,7 @@ static void mvneta_mdio_remove(struct mvneta_port *pp)
-  */
- static void mvneta_percpu_elect(struct mvneta_port *pp)
- {
--	int elected_cpu = 0, max_cpu, cpu, i = 0;
-+	int elected_cpu = 0, max_cpu, cpu;
- 
- 	/* Use the cpu associated to the rxq when it is online, in all
- 	 * the other cases, use the cpu 0 which can't be offline.
-@@ -4306,8 +4306,6 @@ static void mvneta_percpu_elect(struct mvneta_port *pp)
- 		 */
- 		smp_call_function_single(cpu, mvneta_percpu_unmask_interrupt,
- 					 pp, true);
--		i++;
--
- 	}
- };
- 
--- 
-2.37.3
+diff --git a/drivers/staging/wlan-ng/p80211mgmt.h b/drivers/staging/wlan-ng/p80211mgmt.h
+index 1ef30d3f3159..d6fe52de2c8f 100644
+--- a/drivers/staging/wlan-ng/p80211mgmt.h
++++ b/drivers/staging/wlan-ng/p80211mgmt.h
+@@ -229,14 +229,14 @@ struct wlan_ie {
+ struct wlan_ie_ssid {
+ 	u8 eid;
+ 	u8 len;
+-	u8 ssid[1];		/* may be zero, ptrs may overlap */
++	u8 ssid[];		/* may be zero, ptrs may overlap */
+ } __packed;
+
+ /*-- Supported Rates  -----------------------------*/
+ struct wlan_ie_supp_rates {
+ 	u8 eid;
+ 	u8 len;
+-	u8 rates[1];		/* had better be at LEAST one! */
++	u8 rates[];		/* had better be at LEAST one! */
+ } __packed;
+
+ /*-- FH Parameter Set  ----------------------------*/
+@@ -274,7 +274,7 @@ struct wlan_ie_tim {
+ 	u8 dtim_cnt;
+ 	u8 dtim_period;
+ 	u8 bitmap_ctl;
+-	u8 virt_bm[1];
++	u8 virt_bm[];
+ } __packed;
+
+ /*-- IBSS Parameter Set ---------------------------*/
+@@ -288,7 +288,7 @@ struct wlan_ie_ibss_parms {
+ struct wlan_ie_challenge {
+ 	u8 eid;
+ 	u8 len;
+-	u8 challenge[1];
++	u8 challenge[];
+ } __packed;
+
+ /*-------------------------------------------------*/
+diff --git a/drivers/staging/wlan-ng/p80211types.h b/drivers/staging/wlan-ng/p80211types.h
+index 6486612a8f31..b2ffd09881b0 100644
+--- a/drivers/staging/wlan-ng/p80211types.h
++++ b/drivers/staging/wlan-ng/p80211types.h
+@@ -234,7 +234,7 @@ struct p80211pstr32 {
+ /* MAC address array */
+ struct p80211macarray {
+ 	u32 cnt;
+-	u8 data[1][MAXLEN_PSTR6];
++	u8 data[][MAXLEN_PSTR6];
+ } __packed;
+
+ /* prototype template */
+--
+2.34.1
+
+
 
