@@ -2,111 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE767611B0B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE6C611B0D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbiJ1Tos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 15:44:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
+        id S230085AbiJ1To5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 15:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJ1Top (ORCPT
+        with ESMTP id S229597AbiJ1Toy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 15:44:45 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0917F265F;
-        Fri, 28 Oct 2022 12:44:43 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id y16so7857448wrt.12;
-        Fri, 28 Oct 2022 12:44:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7GMIU8DmmkMh1/JCI17fB9sAKppQWftzASqvslzNmxs=;
-        b=TbudKJU0ktV7bQwxoi778vjsYATy/4hGssDvljqaNhGBTy8jhVYKVOsjBjSw+P9ZJ/
-         OV2Vf9scBOOIv6qhczVCmdAn5BgIw/yLtJi1lc9lYUogw6vt+wQnO3BrBgDxxoy6lwOz
-         8Px1uAUxlPXKbUiou2zX03tbnNrT3IL+0sRsjCaFDZ1//XJd4sTBMMLWrjQqgT7qaNX5
-         G6nTZW5ROCmS4xv9VnPV4zfddnNXDiHwGfH7eBdiL+sPwB/UlQ8huzKVwV46GKsRA0I2
-         oYpDV+G1Gyv6UwCPB6k/A9X7UDi3m+rA1U0SEH67V8I0NbecJGj+xgu0BEzn9nhacTtj
-         tK8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7GMIU8DmmkMh1/JCI17fB9sAKppQWftzASqvslzNmxs=;
-        b=jPqXrsTcTpHyehfxH7tggqkR/Kn/E5oJDDQmppBtlFX0pCIxBu6YHk+TUimfbQGPJu
-         UrRCX5w+Zrs6zfS/jbUVfeiPpvPGfSiQsax9z0f7+/68S1hCeYdz6qDrHzrx3JM7HRIO
-         cvRtc0CzF6igxpzig06dy1y3uvDFSCR1+0x5EoeNO/ZnyaPpaIrUPsQn+OEl79xXBe2m
-         TN5Q7bIAPHt5wSEdndTZxWGV+/IjYZTNdluFDqxjaLWXlEsYTKYsK+pKqdsOor08kXN0
-         FnG6vBpWIkznrzlUMqvkFfLfPeVr/pcfE+5SVO4nrN/b3wBZL99nJg8LLf7G2Brv4S8j
-         kHng==
-X-Gm-Message-State: ACrzQf1mDT8Glfddg0ZAMABtqZgVsfYlOBKhloKCwZE60Q5eSIHnnwty
-        xxaM2isIxMqFSAvWq20RFtk=
-X-Google-Smtp-Source: AMsMyM4xwxMtFyBku5K6q8YJA6LuKtqBa45TUwXD8fwrGprU0cjlIRwlKki8EVlJVamMiDM132zGmg==
-X-Received: by 2002:adf:df03:0:b0:236:78cb:b6e5 with SMTP id y3-20020adfdf03000000b0023678cbb6e5mr529994wrl.269.1666986281571;
-        Fri, 28 Oct 2022 12:44:41 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id bp23-20020a5d5a97000000b00236740c6e6fsm4512361wrb.100.2022.10.28.12.44.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 12:44:41 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 20:44:39 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net
-Subject: Re: [PATCH 5.10 00/73] 5.10.152-rc1 review
-Message-ID: <Y1wxJ07McQVO8ABM@debian>
-References: <20221028120232.344548477@linuxfoundation.org>
+        Fri, 28 Oct 2022 15:44:54 -0400
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D4E386A5;
+        Fri, 28 Oct 2022 12:44:51 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (97-113-250-99.tukw.qwest.net [97.113.250.99])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 502B3344;
+        Fri, 28 Oct 2022 12:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1666986291;
+        bh=nQoRjrEsUO89yM+Es8sfAk3knuKjH07TV0H0W08nsVw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=onq3SIl4LSZwOvPld42fB+1ZU/V+G9XEjPO7wOsux3spVTEGe2Dzp0YFId3UGOyzS
+         yAGiDmnpbTEQCr1NnshE1us+H2TPhKvQ7geywlkNsG1Ncw5fqca6DIkBw6WheH3ejq
+         6v0b3rVmuhyMtAJ/UbgAd3nRw8zUq2J2kzQGF3GQ=
+Date:   Fri, 28 Oct 2022 12:44:50 -0700
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        openbmc@lists.ozlabs.org
+Subject: Re: [PATCH 2/3] dt-bindings: regulator: Add regulator-output bindingg
+Message-ID: <Y1wxMk2x25AeRwLr@hatter.bewilderbeest.net>
+References: <20220925220319.12572-1-zev@bewilderbeest.net>
+ <20220925220319.12572-3-zev@bewilderbeest.net>
+ <20220929210714.GA2684335-robh@kernel.org>
+ <YzYNt+IQRomycRLs@hatter.bewilderbeest.net>
+ <Y1rRCq9Kdd2zPPkw@hatter.bewilderbeest.net>
+ <ee37b5a1-5afc-71b3-f777-add295d9ce17@linaro.org>
+ <Y1tWpikPogEtV0+x@hatter.bewilderbeest.net>
+ <Y1v6migO2PNV4ksW@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20221028120232.344548477@linuxfoundation.org>
+In-Reply-To: <Y1v6migO2PNV4ksW@sirena.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Fri, Oct 28, 2022 at 08:51:54AM PDT, Mark Brown wrote:
+>On Thu, Oct 27, 2022 at 09:12:22PM -0700, Zev Weiss wrote:
+>
+>> I can see why it might look that way, but I'd argue it's actually not.  The
+>> systems this is intended to support provide power to entirely separate
+>> external devices -- think of a power distribution unit that might have
+>> arbitrary things plugged into it.  It seems to me like a property of the
+>> hardware that those things shouldn't have their power supply turned off (or
+>> on) just because a controller in the PDU rebooted.
+>
+>We don't turn things off on reboot?  We don't do anything in particular
+>on reboot...
+>
 
-On Fri, Oct 28, 2022 at 02:02:57PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.152 release.
-> There are 73 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 30 Oct 2022 12:02:13 +0000.
-> Anything received after that time might be too late.
-
-Build test (gcc version 11.3.1 20221016):
-mips: 63 configs -> no failure
-arm: 104 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/2057
-[2]. https://openqa.qa.codethink.co.uk/tests/2060
+Okay, perhaps not on reboot specifically, but the userspace-consumer 
+driver has a regulator_bulk_disable() in its .remove function, so it 
+would be triggered at least by a module unload (which is sort of why I 
+ended up with the "when software relinquishes control" wording in the 
+patch).  If we're going to continue with the plan of using that driver 
+for this functionality (which seems overall quite reasonable to me), we 
+need a way to express that that must not happen on this hardware.
 
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Thanks,
+Zev
 
--- 
-Regards
-Sudip
