@@ -2,81 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B653C610ECB
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C080B610EC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbiJ1KlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 06:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53552 "EHLO
+        id S230469AbiJ1Kk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 06:40:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiJ1Kkc (ORCPT
+        with ESMTP id S230456AbiJ1KkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 06:40:32 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E80564F7
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 03:40:27 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-13ae8117023so5809043fac.9
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 03:40:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tyImlhW5U/w4r3CMUcSsRxgN2Bc9Db0y6N98q/2n1E0=;
-        b=6wl2xAI8Kw/bybkWUSqlJIkmtYMiO4vD8mzAOrtLGcat04/Lbo+hGTkyu7kEq2Vc7B
-         ZEuWK/Q8Vr/gceFj85auLDbm9HdgImFszZUfz1pHT+caIJAEplOxJgekjZVmPm34tS1d
-         P2Y/qZ1tNywM4IezQYvWpRkZQEqdveIFqYi/IMGB997KzqqfGl1DB7+Ewn8FwVuonimt
-         Xk0P/XZVX2l+ZyLi1uB6qhKhyQAS/8zrluRwRq5IR38ZGf10cszvxPmDQA4YWzB4hp3k
-         rKcTycSPuAtizgAjzym08hOwvsUXIjsiAKExxUD3eWc5FKh+4K5HBnJ9yR93K5j6RApi
-         Z8rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tyImlhW5U/w4r3CMUcSsRxgN2Bc9Db0y6N98q/2n1E0=;
-        b=LwivAocANZ8nohXSYTlaSDr0fgGTw86fgvv80G22hm7D6BhfCdMyzXyaAq4R1ctV5P
-         85b1Zl59brAxg/FTht6tL6KVH0E/evbkBI0DapEhqewbcQGzhI7c1xuyRm9qef9iHCQn
-         j+PIDGJwf3IqzyBHxoggVO/aDxVoSOmkbLSHfXebMkikrgrqiIy24FTb8FP+BcxW7B58
-         XMihFkn3eJktTsn2B9CLUEBDeua5w3EO7SWaoXZHkTe8sjdw2nPyaCsPRnHFB6Pdmp2/
-         bwq6UssnZzOcvAOH5jfke9izP5BJdaDl4W9wi8nhD6Z34KmfEazSiCT2CGgYgTKIWBNf
-         J+iQ==
-X-Gm-Message-State: ACrzQf0mbAn2po+OsNkszwGRMwWna1FPKl/9tgjIxIBj/iyBcjBDUj9w
-        UBt+rpYUc8gjLFcKpb8o6JKOzYTnsrkgNWBUeRW7
-X-Google-Smtp-Source: AMsMyM4ZevGFeBpqW+DJ8S3551bIe2a35cE4Xe2RC2CsugCmZ45K57nKjHHFzt6+kh9nP6Z+ExWMYg0XY8SA8MF3fIw=
-X-Received: by 2002:a05:6870:f299:b0:13b:ad21:934d with SMTP id
- u25-20020a056870f29900b0013bad21934dmr8665556oap.172.1666953626712; Fri, 28
- Oct 2022 03:40:26 -0700 (PDT)
+        Fri, 28 Oct 2022 06:40:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0610532DAE;
+        Fri, 28 Oct 2022 03:40:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFE87B8293F;
+        Fri, 28 Oct 2022 10:40:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 583FCC43143;
+        Fri, 28 Oct 2022 10:40:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666953616;
+        bh=IJyBYDxay90ZJp+1StFmm1xZPl7zZsGLnqmrtCAMJiw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=AR9hsocZvfcrG58GeeGITrqgmdsnRlaB6Gg6PZSXxHDT3NPRP54Ed+0mGUx5iXI4K
+         XPaJP7i2RqfaxvCU2GsgvHZ+826hgFbWW1IVAzSqxYf2f/AYqYeVJFTP1fjNVPNORc
+         WjBdZ7tuKn31Lj5mWhT35SeaHc0RCgZLwfa6nabuPG68vBcQ4v4YypBR0Irrx0XI0C
+         GS7ntzXgqHO9UygVVambe7hbRGTtndoy0YD7s+KQR1G1PFU3ZADmPwl1MPNyfXYS0o
+         EmDgRtwYRQ11hjczu3P/gtBJNDVrkj/vdDRRX5SiDOujCBJEedgen6wUlyCr6yoVLq
+         mHgeRQlkCOa8g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3F2B0C4314C;
+        Fri, 28 Oct 2022 10:40:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20221026010634.2936-1-liubo03@inspur.com>
-In-Reply-To: <20221026010634.2936-1-liubo03@inspur.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 28 Oct 2022 06:40:15 -0400
-Message-ID: <CAHC9VhT7-tHw=Pn-Ha=6T2X8E4U3wjxDOGFKcJAS2zx7XP-Wrg@mail.gmail.com>
-Subject: Re: [PATCH v2] audit: Fix some kernel-doc warnings
-To:     Bo Liu <liubo03@inspur.com>
-Cc:     jmorris@namei.org, serge@hallyn.com,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2] nfc: s3fwrn5: use
+ devm_clk_get_optional_enabled() helper
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166695361625.9848.5067044718345042459.git-patchwork-notify@kernel.org>
+Date:   Fri, 28 Oct 2022 10:40:16 +0000
+References: <Y1o0ahD+AisRA+Qk@google.com>
+In-Reply-To: <Y1o0ahD+AisRA+Qk@google.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     krzysztof.kozlowski@linaro.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 9:06 PM Bo Liu <liubo03@inspur.com> wrote:
->
-> The current code provokes some kernel-doc warnings:
->     security/lsm_audit.c:198: warning: Function parameter or member 'ab' not described in 'dump_common_audit_data'
->
-> Signed-off-by: Bo Liu <liubo03@inspur.com>
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 27 Oct 2022 00:34:02 -0700 you wrote:
+> Because we enable the clock immediately after acquiring it in probe,
+> we can combine the 2 operations and use devm_clk_get_optional_enabled()
+> helper.
+> 
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 > ---
->  security/lsm_audit.c | 1 +
->  1 file changed, 1 insertion(+)
+> 
+> [...]
 
-Merged into lsm/next, thanks.
+Here is the summary with links:
+  - [net-next,v2] nfc: s3fwrn5: use devm_clk_get_optional_enabled() helper
+    https://git.kernel.org/netdev/net-next/c/f8f797f35a9a
 
+You are awesome, thank you!
 -- 
-paul-moore.com
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
