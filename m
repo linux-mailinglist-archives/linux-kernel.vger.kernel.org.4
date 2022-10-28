@@ -2,74 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86749611B7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5466E611B8B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiJ1U0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 16:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
+        id S229789AbiJ1U3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 16:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiJ1U0m (ORCPT
+        with ESMTP id S229720AbiJ1U32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 16:26:42 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A385F1D3744
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:26:41 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id ay12so3551565qtb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:26:41 -0700 (PDT)
+        Fri, 28 Oct 2022 16:29:28 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96784B877
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:29:27 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id x13so4817083qvn.6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:29:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gTPXa66WScCOD+TihgL/pelOfuGybpZw4Q2zgEn6Uks=;
-        b=axc9wCWQbNp9cqW208cThSPQcuPUVsA/Gg/sB6x4kEvy0MCwUDn+ZiUPD/NYefPwCR
-         QWspaFxy1kcipJH1yuwnwVpIuMA7131f+fjZl9J5LuQR5Llv3GzbqeiBajePD9+hT660
-         JZAa5bbWivuy5cu4qJu147E1UqC8BZaP5IGMc=
+        bh=B/0q7x7+qjN99OJ/2oEOEybhUKk96jVS5LgZ/DYyGqM=;
+        b=HZQaVEg7A3nWhTltLxXM1tqni+i4mHJRSmqM4zwQct4rXvc7HT6MFXXcVOYaQO6GSp
+         pxy+IS83Qi1hWhPdE+ClDKzIf6qzYLHLf8A2k8vDrk67lfegdeJHwDQ4HQ5c61N/eeJD
+         Jnfm4sYHegcxjMwzvjUz684rUfJcR2W63g1uM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gTPXa66WScCOD+TihgL/pelOfuGybpZw4Q2zgEn6Uks=;
-        b=FyhodqTxhD9xKyK0wvsL78/zt+8V7Kli+KWSXCz/negAjTT8r2T3bPFbVKNGXAZiQX
-         Tgf3BQWk4ja0qSmUHZjH0jG9TfFrfHw+R/m6Lz1zqskIu9Z+f6JlzJV2ppEdNn/LoLE3
-         6+qgIi7ZxUKii471G7+CUHVhWVlOJ6UORqI2bVPyP5b2TetXNv0yiLEio3s5rBp+8B28
-         qIoJT3TkxqwUwR85rjfBfEOtbtRE1+JzzRapnNGfibPB+F9o1ITZBiO7+w3zB74nupHu
-         61BtQV7fKr5a6LKIXqYVBKtbd7q55hoTnjaTrPRLnDV5SrQh08QgRN5+cYuvQHgiSX6F
-         IURA==
-X-Gm-Message-State: ACrzQf3zaGG52+s/GdsM8bldGV/axhZF5v0PgfFowUepVvI/SgPpi/9O
-        rHmjc+IkgWqhVcLP+/lYMq72vR/ZZIFjYw==
-X-Google-Smtp-Source: AMsMyM6aMenZvRB8RMWrE0su5lGhxpYfERIEmvhDwCfpEGt+uFBral5VvfSivo5f1aHYdVK4ufDDWg==
-X-Received: by 2002:ac8:7fc6:0:b0:39c:fdf3:6540 with SMTP id b6-20020ac87fc6000000b0039cfdf36540mr1176392qtk.185.1666988800563;
-        Fri, 28 Oct 2022 13:26:40 -0700 (PDT)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id x10-20020a05620a258a00b006ceb933a9fesm3669793qko.81.2022.10.28.13.26.39
+        bh=B/0q7x7+qjN99OJ/2oEOEybhUKk96jVS5LgZ/DYyGqM=;
+        b=dcbQRPmigMF19oTrri2VWaof/mnugQORSM53d6uwibnThslSLF7pU6q9LAdEhmBn4F
+         Jauzwwo7DMK7bCuqCUKq3xpganoNnuPqJVqVUyyeezw2H4ktzPGhIiPjJmfeErjjL7e3
+         cAeabIgB4VWGDR3KrAjgDLbfBzU3JozZGhtrHNn2JoTa7O0Vabq0gkoiVX+6IAmpXgRy
+         fuYJ4gq0sNuBE82IyKbcVgNb7g9SuLGyFTCLNrlzWDSBBhSpVndU96XF44f6Hrjzlna6
+         QELA10Z4UxXv303Mf+9PWRFKsuHEq4BGewNo7g7cIKLTbKOhmooQx2HuGoEm4qB096oR
+         Ht0w==
+X-Gm-Message-State: ACrzQf2ICoQWC+Q4D9aYbOxdEKuKUjNEP9fm54AlhFtxt9iMi4o5d4tR
+        q+6sHpLpFMR0WCoHRSAe7t1ekoGCIhFisg==
+X-Google-Smtp-Source: AMsMyM68OWBkFXLJl2G0bCRT4mBzxhHo0v3JIWVb1Ll98hep/oJQgTL1V9lVFTsgrFkXU+eEPb7h1A==
+X-Received: by 2002:a05:6214:20aa:b0:4bb:7e1a:9df0 with SMTP id 10-20020a05621420aa00b004bb7e1a9df0mr1131246qvd.34.1666988966480;
+        Fri, 28 Oct 2022 13:29:26 -0700 (PDT)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id bq8-20020a05620a468800b006ee77f1ecc3sm3637244qkb.31.2022.10.28.13.29.24
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 13:26:39 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id 187so7412411ybe.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:26:39 -0700 (PDT)
-X-Received: by 2002:a05:6902:124f:b0:66e:e3da:487e with SMTP id
- t15-20020a056902124f00b0066ee3da487emr1075970ybu.310.1666988799325; Fri, 28
- Oct 2022 13:26:39 -0700 (PDT)
+        Fri, 28 Oct 2022 13:29:25 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-35befab86a4so57366977b3.8
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:29:24 -0700 (PDT)
+X-Received: by 2002:a81:555:0:b0:36b:2d71:5861 with SMTP id
+ 82-20020a810555000000b0036b2d715861mr1254502ywf.340.1666988964567; Fri, 28
+ Oct 2022 13:29:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <Y1wHlSE0S5QZ+QCI@shell.armlinux.org.uk> <E1ooSWP-000FDy-5t@rmk-PC.armlinux.org.uk>
- <CAHk-=wi63Sw3vNJ86gzg1Tdr=_xGwGyj+mH-eT0UgaAfGAHX+A@mail.gmail.com>
- <Y1wVTkIZjoMVfxOK@shell.armlinux.org.uk> <CAHk-=wh75aOWvaEhYsAcCJSRzhy8MO_SdvDzB6zmvVs+FeAr6w@mail.gmail.com>
- <Y1wxqPccRE+biAfw@shell.armlinux.org.uk>
-In-Reply-To: <Y1wxqPccRE+biAfw@shell.armlinux.org.uk>
+References: <Y1w031iI6Ld29IVT@p183>
+In-Reply-To: <Y1w031iI6Ld29IVT@p183>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 28 Oct 2022 13:26:23 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj6KH0yK3EKEbnFCDgnD9prf3C8d9vQS0hadusR+EspaQ@mail.gmail.com>
-Message-ID: <CAHk-=wj6KH0yK3EKEbnFCDgnD9prf3C8d9vQS0hadusR+EspaQ@mail.gmail.com>
-Subject: Re: [PATCH 1/5] ARM: findbit: document ARMv5 bit offset calculation
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org
+Date:   Fri, 28 Oct 2022 13:29:08 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiEXm3y7BrFnymC_6icE7seicGyyML+Oxd_BP9t=ztNKg@mail.gmail.com>
+Message-ID: <CAHk-=wiEXm3y7BrFnymC_6icE7seicGyyML+Oxd_BP9t=ztNKg@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: drop -Wdeclaration-after-statement
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        catalin.marinas@arm.com, will@kernel.org,
+        rafael.j.wysocki@intel.com, masahiroy@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -81,11 +75,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 12:46 PM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
+On Fri, Oct 28, 2022 at 1:00 PM Alexey Dobriyan <adobriyan@gmail.com> wrote:
 >
-> You've missed how the min() is coded.
+> Putting declarations in the beginning of the block is an afterfact from
+> single pass compiler era. Compiler would parse all declarations, layout
+> stack frame and proceed to generate code.
 
-Yes, I realised that and sent another email about my mea culpa.
+No, putting declarations at the beginning is still kernel syntax.
 
-           Linus
+Don't declare variables in multiple places. It gets really confusing.
+Put all declarations at the top of the block they are contained in.
+
+IOW, -Wdeclaration-after-statement does exactly the right thing, and stays.
+
+This is not about "old compilers", this is about coding rules.
+
+                Linus
