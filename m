@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3FC61147F
+	by mail.lfdr.de (Postfix) with ESMTP id 3002161147D
 	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbiJ1OZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
+        id S231197AbiJ1OZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbiJ1OYj (ORCPT
+        with ESMTP id S230236AbiJ1OYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 28 Oct 2022 10:24:39 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC77F1C;
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07246F4A;
         Fri, 28 Oct 2022 07:24:33 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29SEOOR6026570;
-        Fri, 28 Oct 2022 09:24:24 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29SEOPQP112739;
+        Fri, 28 Oct 2022 09:24:25 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666967064;
-        bh=thI8gY7TszK4NMBgRo4Ut9XjHt2FFaPnIVg5c5tAsmU=;
+        s=ti-com-17Q1; t=1666967065;
+        bh=2LMWQyP+bgjUmm7WcOjgs5fr29QpsF7kVkLDaI7K+YQ=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=jAW/ANC/7+nwS8jbx3d878PgBXoPxQ4/mykKWVa8QXIA5U9pbsquYRr0XjA4IHwQT
-         Cgm9u0z/ZWniGzxLFfLVCM6mArlEMk0kd2x6dM1OQNIFHY+7LcGfyvX376vnNGjWY/
-         hvV8KaOEcQjQxnrZkuH3sfpJmVoQsPUX5hoc37gQ=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29SEOOlr062546
+        b=cih8tGxTRFthtrNp5VVFRR2hECktZ6RmLsO5s0vFW4GC9K50V2PqTWJrRPwDwovSv
+         aIriggGBknPQ5hQz2z0b3QQknDqmSrv4DhT53EV5smIbkeOKbAdeqzAeZD+Z6k/MDB
+         aMlS/wCvJ7+4T8hErIBuvBiXbdeyJT8Rj9E6eceQ=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29SEOP2d045505
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 28 Oct 2022 09:24:24 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 28 Oct 2022 09:24:25 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 28
- Oct 2022 09:24:24 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ Oct 2022 09:24:25 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Fri, 28 Oct 2022 09:24:24 -0500
+ Frontend Transport; Fri, 28 Oct 2022 09:24:25 -0500
 Received: from ula0226330.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29SEOHfY039275;
-        Fri, 28 Oct 2022 09:24:23 -0500
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29SEOHfZ039275;
+        Fri, 28 Oct 2022 09:24:24 -0500
 From:   Andrew Davis <afd@ti.com>
 To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         Tero Kristo <kristo@kernel.org>,
@@ -50,9 +50,9 @@ To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         <linux-arm-kernel@lists.infradead.org>
 CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Andrew Davis <afd@ti.com>
-Subject: [PATCH 09/11] arm64: dts: ti: k3-am65: Enable PCIe nodes at the board level
-Date:   Fri, 28 Oct 2022 09:24:15 -0500
-Message-ID: <20221028142417.10642-10-afd@ti.com>
+Subject: [PATCH 10/11] arm64: dts: ti: k3-am65: Enable Mailbox nodes at the board level
+Date:   Fri, 28 Oct 2022 09:24:16 -0500
+Message-ID: <20221028142417.10642-11-afd@ti.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221028142417.10642-1-afd@ti.com>
 References: <20221028142417.10642-1-afd@ti.com>
@@ -69,119 +69,258 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PCIe nodes defined in the top-level AM65x SoC dtsi files are incomplete
-and will not be functional unless they are extended with a SerDes PHY.
-And usually only one of the two modes can be used at a time as they
-share a SerDes link.
+Mailbox nodes defined in the top-level AM65x SoC dtsi files are incomplete
+and may not be functional unless they are extended with a chosen interrupt
+and connection to a remote processor.
 
-As the PHY and mode is only known at the board integration level, these
-nodes should only be enabled when provided with this information.
+As the remote processors depend on memory nodes which are only known at
+the board integration level, these nodes should only be enabled when
+provided with the above information.
 
-Disable the PCIe nodes in the dtsi files and only enable the ones that
-are actually pinned out on a given board.
+Disable the Mailbox nodes in the dtsi files and only enable the ones that
+are actually used on a given board.
 
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- .../boot/dts/ti/k3-am65-iot2050-common.dtsi      | 13 +------------
- arch/arm64/boot/dts/ti/k3-am65-main.dtsi         |  4 ++++
- arch/arm64/boot/dts/ti/k3-am654-base-board.dts   | 16 ----------------
- 3 files changed, 5 insertions(+), 28 deletions(-)
+ .../boot/dts/ti/k3-am65-iot2050-common.dtsi   | 42 +------------------
+ arch/arm64/boot/dts/ti/k3-am65-main.dtsi      | 12 ++++++
+ .../arm64/boot/dts/ti/k3-am654-base-board.dts | 42 +------------------
+ 3 files changed, 16 insertions(+), 80 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
-index c431d670757ba..dd7c6aee8c613 100644
+index dd7c6aee8c613..c6c79dde79c52 100644
 --- a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
 +++ b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
-@@ -632,15 +632,8 @@ dpi_out: endpoint {
+@@ -644,6 +644,7 @@ &pcie1_rc {
+ };
+ 
+ &mailbox0_cluster0 {
++	status = "okay";
+ 	interrupts = <436>;
+ 
+ 	mbox_mcu_r5fss0_core0: mbox-mcu-r5fss0-core0 {
+@@ -653,6 +654,7 @@ mbox_mcu_r5fss0_core0: mbox-mcu-r5fss0-core0 {
+ };
+ 
+ &mailbox0_cluster1 {
++	status = "okay";
+ 	interrupts = <432>;
+ 
+ 	mbox_mcu_r5fss0_core1: mbox-mcu-r5fss0-core1 {
+@@ -661,46 +663,6 @@ mbox_mcu_r5fss0_core1: mbox-mcu-r5fss0-core1 {
  	};
  };
  
--&pcie0_rc {
+-&mailbox0_cluster2 {
 -	status = "disabled";
 -};
 -
--&pcie0_ep {
+-&mailbox0_cluster3 {
 -	status = "disabled";
 -};
 -
- &pcie1_rc {
-+	status = "okay";
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&minipcie_pins_default>;
- 
-@@ -650,10 +643,6 @@ &pcie1_rc {
- 	reset-gpios = <&wkup_gpio0 27 GPIO_ACTIVE_HIGH>;
- };
- 
--&pcie1_ep {
+-&mailbox0_cluster4 {
 -	status = "disabled";
 -};
 -
- &mailbox0_cluster0 {
- 	interrupts = <436>;
- 
+-&mailbox0_cluster5 {
+-	status = "disabled";
+-};
+-
+-&mailbox0_cluster6 {
+-	status = "disabled";
+-};
+-
+-&mailbox0_cluster7 {
+-	status = "disabled";
+-};
+-
+-&mailbox0_cluster8 {
+-	status = "disabled";
+-};
+-
+-&mailbox0_cluster9 {
+-	status = "disabled";
+-};
+-
+-&mailbox0_cluster10 {
+-	status = "disabled";
+-};
+-
+-&mailbox0_cluster11 {
+-	status = "disabled";
+-};
+-
+ &mcu_r5fss0_core0 {
+ 	memory-region = <&mcu_r5fss0_core0_dma_memory_region>,
+ 			<&mcu_r5fss0_core0_memory_region>;
 diff --git a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-index 9cdde6e25e7de..9081c791a3123 100644
+index 9081c791a3123..3dc624a379c5f 100644
 --- a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
 +++ b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-@@ -720,6 +720,7 @@ pcie0_rc: pcie@5500000 {
- 		interrupts = <GIC_SPI 340 IRQ_TYPE_EDGE_RISING>;
- 		msi-map = <0x0 &gic_its 0x0 0x10000>;
- 		device_type = "pci";
-+		status = "disabled";
- 	};
+@@ -514,6 +514,7 @@ mailbox0_cluster0: mailbox@31f80000 {
+ 			ti,mbox-num-users = <4>;
+ 			ti,mbox-num-fifos = <16>;
+ 			interrupt-parent = <&intr_main_navss>;
++			status = "disabled";
+ 		};
  
- 	pcie0_ep: pcie-ep@5500000 {
-@@ -733,6 +734,7 @@ pcie0_ep: pcie-ep@5500000 {
- 		max-link-speed = <2>;
- 		dma-coherent;
- 		interrupts = <GIC_SPI 340 IRQ_TYPE_EDGE_RISING>;
-+		status = "disabled";
- 	};
+ 		mailbox0_cluster1: mailbox@31f81000 {
+@@ -523,6 +524,7 @@ mailbox0_cluster1: mailbox@31f81000 {
+ 			ti,mbox-num-users = <4>;
+ 			ti,mbox-num-fifos = <16>;
+ 			interrupt-parent = <&intr_main_navss>;
++			status = "disabled";
+ 		};
  
- 	pcie1_rc: pcie@5600000 {
-@@ -753,6 +755,7 @@ pcie1_rc: pcie@5600000 {
- 		interrupts = <GIC_SPI 355 IRQ_TYPE_EDGE_RISING>;
- 		msi-map = <0x0 &gic_its 0x10000 0x10000>;
- 		device_type = "pci";
-+		status = "disabled";
- 	};
+ 		mailbox0_cluster2: mailbox@31f82000 {
+@@ -532,6 +534,7 @@ mailbox0_cluster2: mailbox@31f82000 {
+ 			ti,mbox-num-users = <4>;
+ 			ti,mbox-num-fifos = <16>;
+ 			interrupt-parent = <&intr_main_navss>;
++			status = "disabled";
+ 		};
  
- 	pcie1_ep: pcie-ep@5600000 {
-@@ -766,6 +769,7 @@ pcie1_ep: pcie-ep@5600000 {
- 		max-link-speed = <2>;
- 		dma-coherent;
- 		interrupts = <GIC_SPI 355 IRQ_TYPE_EDGE_RISING>;
-+		status = "disabled";
- 	};
+ 		mailbox0_cluster3: mailbox@31f83000 {
+@@ -541,6 +544,7 @@ mailbox0_cluster3: mailbox@31f83000 {
+ 			ti,mbox-num-users = <4>;
+ 			ti,mbox-num-fifos = <16>;
+ 			interrupt-parent = <&intr_main_navss>;
++			status = "disabled";
+ 		};
  
- 	mcasp0: mcasp@2b00000 {
+ 		mailbox0_cluster4: mailbox@31f84000 {
+@@ -550,6 +554,7 @@ mailbox0_cluster4: mailbox@31f84000 {
+ 			ti,mbox-num-users = <4>;
+ 			ti,mbox-num-fifos = <16>;
+ 			interrupt-parent = <&intr_main_navss>;
++			status = "disabled";
+ 		};
+ 
+ 		mailbox0_cluster5: mailbox@31f85000 {
+@@ -559,6 +564,7 @@ mailbox0_cluster5: mailbox@31f85000 {
+ 			ti,mbox-num-users = <4>;
+ 			ti,mbox-num-fifos = <16>;
+ 			interrupt-parent = <&intr_main_navss>;
++			status = "disabled";
+ 		};
+ 
+ 		mailbox0_cluster6: mailbox@31f86000 {
+@@ -568,6 +574,7 @@ mailbox0_cluster6: mailbox@31f86000 {
+ 			ti,mbox-num-users = <4>;
+ 			ti,mbox-num-fifos = <16>;
+ 			interrupt-parent = <&intr_main_navss>;
++			status = "disabled";
+ 		};
+ 
+ 		mailbox0_cluster7: mailbox@31f87000 {
+@@ -577,6 +584,7 @@ mailbox0_cluster7: mailbox@31f87000 {
+ 			ti,mbox-num-users = <4>;
+ 			ti,mbox-num-fifos = <16>;
+ 			interrupt-parent = <&intr_main_navss>;
++			status = "disabled";
+ 		};
+ 
+ 		mailbox0_cluster8: mailbox@31f88000 {
+@@ -586,6 +594,7 @@ mailbox0_cluster8: mailbox@31f88000 {
+ 			ti,mbox-num-users = <4>;
+ 			ti,mbox-num-fifos = <16>;
+ 			interrupt-parent = <&intr_main_navss>;
++			status = "disabled";
+ 		};
+ 
+ 		mailbox0_cluster9: mailbox@31f89000 {
+@@ -595,6 +604,7 @@ mailbox0_cluster9: mailbox@31f89000 {
+ 			ti,mbox-num-users = <4>;
+ 			ti,mbox-num-fifos = <16>;
+ 			interrupt-parent = <&intr_main_navss>;
++			status = "disabled";
+ 		};
+ 
+ 		mailbox0_cluster10: mailbox@31f8a000 {
+@@ -604,6 +614,7 @@ mailbox0_cluster10: mailbox@31f8a000 {
+ 			ti,mbox-num-users = <4>;
+ 			ti,mbox-num-fifos = <16>;
+ 			interrupt-parent = <&intr_main_navss>;
++			status = "disabled";
+ 		};
+ 
+ 		mailbox0_cluster11: mailbox@31f8b000 {
+@@ -613,6 +624,7 @@ mailbox0_cluster11: mailbox@31f8b000 {
+ 			ti,mbox-num-users = <4>;
+ 			ti,mbox-num-fifos = <16>;
+ 			interrupt-parent = <&intr_main_navss>;
++			status = "disabled";
+ 		};
+ 
+ 		ringacc: ringacc@3c000000 {
 diff --git a/arch/arm64/boot/dts/ti/k3-am654-base-board.dts b/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
-index bf6a6fe3d7ba3..a61060c6bc198 100644
+index a61060c6bc198..d1c8047d96726 100644
 --- a/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
 +++ b/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
-@@ -415,22 +415,6 @@ &serdes1 {
- 	status = "disabled";
+@@ -416,6 +416,7 @@ &serdes1 {
  };
  
--&pcie0_rc {
--	status = "disabled";
--};
--
--&pcie0_ep {
--	status = "disabled";
--};
--
--&pcie1_rc {
--	status = "disabled";
--};
--
--&pcie1_ep {
--	status = "disabled";
--};
--
  &mailbox0_cluster0 {
++	status = "okay";
  	interrupts = <436>;
  
+ 	mbox_mcu_r5fss0_core0: mbox-mcu-r5fss0-core0 {
+@@ -425,6 +426,7 @@ mbox_mcu_r5fss0_core0: mbox-mcu-r5fss0-core0 {
+ };
+ 
+ &mailbox0_cluster1 {
++	status = "okay";
+ 	interrupts = <432>;
+ 
+ 	mbox_mcu_r5fss0_core1: mbox-mcu-r5fss0-core1 {
+@@ -433,46 +435,6 @@ mbox_mcu_r5fss0_core1: mbox-mcu-r5fss0-core1 {
+ 	};
+ };
+ 
+-&mailbox0_cluster2 {
+-	status = "disabled";
+-};
+-
+-&mailbox0_cluster3 {
+-	status = "disabled";
+-};
+-
+-&mailbox0_cluster4 {
+-	status = "disabled";
+-};
+-
+-&mailbox0_cluster5 {
+-	status = "disabled";
+-};
+-
+-&mailbox0_cluster6 {
+-	status = "disabled";
+-};
+-
+-&mailbox0_cluster7 {
+-	status = "disabled";
+-};
+-
+-&mailbox0_cluster8 {
+-	status = "disabled";
+-};
+-
+-&mailbox0_cluster9 {
+-	status = "disabled";
+-};
+-
+-&mailbox0_cluster10 {
+-	status = "disabled";
+-};
+-
+-&mailbox0_cluster11 {
+-	status = "disabled";
+-};
+-
+ &mcu_r5fss0_core0 {
+ 	memory-region = <&mcu_r5fss0_core0_dma_memory_region>,
+ 			<&mcu_r5fss0_core0_memory_region>;
 -- 
 2.37.3
 
