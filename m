@@ -2,183 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F015F611456
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1212611568
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiJ1OSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
+        id S231189AbiJ1PD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 11:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiJ1OSa (ORCPT
+        with ESMTP id S229519AbiJ1PDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:18:30 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21F91D79B4;
-        Fri, 28 Oct 2022 07:18:29 -0700 (PDT)
-Received: from mercury (unknown [37.84.150.129])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6FC946602925;
-        Fri, 28 Oct 2022 15:18:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666966708;
-        bh=sSytXEZ9e5b02eEiUXjT4cPkNC0qO9sd2fptksEdkqk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eJMlUK2qbL6Y2lz8LfbzrMhhOseaqn+kRBX91zpjJlhXbEdkd8GL3OkHyJ+5rgNJm
-         ESR8yuyu1jx+Hs4mxJ5CzLPHTf5kVQPcqp/7Xxf2d06tyqNpETcBWpqgfxB9IXwihK
-         XFGEg6OWRDmpGI405/rs5knZZQb7Tz5/Hu9Z/RipojEfWwQJ2LyAbGrCIAVa718CcY
-         y0kvvj6kNor0q9MXa0ExXTMAObWse43RoL+DOs3KKy6LebW9p8vkVCX0nhNfbATysj
-         A/2ZU4BMjJVmOWqzmaMT6ICyAyLIXDMto1HPIDUDKTPvro980QAKvT7UiaGaAeN4BY
-         8Y0wdnl4tcz5Q==
-Received: by mercury (Postfix, from userid 1000)
-        id ED9E010607E8; Fri, 28 Oct 2022 16:18:25 +0200 (CEST)
-Date:   Fri, 28 Oct 2022 16:18:25 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Joe Perches <joe@perches.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Lee Jones <lee@kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 07/21] power: remove s3c adc battery driver
-Message-ID: <20221028141825.z2hct63dzzguzds5@mercury.elektranox.org>
-References: <20221021202254.4142411-1-arnd@kernel.org>
- <20221021203329.4143397-7-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hwefcm3vjwimuv4y"
-Content-Disposition: inline
-In-Reply-To: <20221021203329.4143397-7-arnd@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 28 Oct 2022 11:03:54 -0400
+Received: from spamfilter04.delta.nl (spamfilter04.delta.nl [217.102.255.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F69207532;
+        Fri, 28 Oct 2022 08:03:49 -0700 (PDT)
+Received: from host-ubmmyvj.static.zeelandnet.nl ([217.102.255.198] helo=mail.zeelandnet.nl)
+        by spamfilter04.delta.nl with esmtp (Exim 4.92)
+        (envelope-from <glasveze@delta.nl>)
+        id 1ooQDC-0000TK-P7; Fri, 28 Oct 2022 16:19:58 +0200
+X-Sender-IP: 204.168.188.16
+Received: from phenom.domain_not_set.invalid (016-188-168-204.dynamic.caiway.nl [204.168.188.16])
+        (Authenticated sender: glasveze@delta.nl)
+        by mail.zeelandnet.nl (Postfix) with ESMTPA;
+        Fri, 28 Oct 2022 16:19:42 +0200 (CEST)
+From:   glasveze@delta.nl
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-rtc@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Mike Looijmans <mike.looijmans@topic.nl>
+Subject: [PATCH 1/2] dt-bindings: rtc: ds1307: Add support for Epson RX8111
+Date:   Fri, 28 Oct 2022 16:19:41 +0200
+Message-Id: <20221028141942.10442-1-glasveze@delta.nl>
+X-Mailer: git-send-email 2.17.1
+X-Originating-IP: 217.102.255.198
+X-DELTA-Domain: zeelandnet.nl
+X-DELTA-Username: 217.102.255.198
+Authentication-Results: delta.nl; auth=pass smtp.auth=217.102.255.198@zeelandnet.nl
+X-DELTA-Outgoing-Class: ham
+X-DELTA-Outgoing-Evidence: SB/global_tokens (0.00196518661148)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT+JXbjng4B8KCaTq3NTvS14PUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5wr4cCRmG2oKTFnKAAvDWJPvjDSqTwBCKJA01U6S0IF3CG1
+ TXgY2TYLA02EG+6b19hUwqWpTVihCNBf6Y0ngLN9W55S5Odoi2XRRfrzh43Mii9G2t8Q2UJdUrYK
+ bqcQwkqhSENMlzwkX5dwDoKhqGrqW1ZaarE32k/fZS9WDJcJpYZGB+n268qSza3XvlKKEFTbC8dt
+ /CV3fELBVC/AS5PvDdqpp0PwvA0T6h+PF2lQM+UptZeMWqwM87Sr86NOUNNXJcphKwwtkJ0il/aM
+ E1JAuAZvvM53msAYiwEKD8v9MuKVse1sVhWabI0/+PN3sIJkYWvWNZaZ0U+2WAj4IohtB5Wku8Z+
+ HjscnTdG7OzuuhO9UWZR6DygHL2uL+fpoKfkmbmoofKALtn/uXeLjRifqraCXgGgCDOczZcC0s+1
+ rMP5P71XxSY6Bud0I4P+npSUhdUKb/ejZlGAm5aYDC522S9lxf1W0a5eEMc7eunFGmvh9GiopPC0
+ UD6wcbWJMl9n+3TblTAKGom+tz90NlkS2XisTmNxpUcDTKRyhJJrVG18n/RbDuZUqQqTgt7VC9CP
+ AtwL+re6Uz43RIVa9gaV9SxdNCEKGT/Znx3aa/MYykHvm3Pq/TMVhLiLVSlbDnIwjZjn7QogpmK0
+ eNWmS0n931/E3ahF5MMcDI7KdpjQKTxLZ9y9gIsjefalsT+at7OgkXa3w91ZfeRDvUeK4qGp36oy
+ bTZpB4Wv6ElyTZU8c8TJRwRvw2AEVD26W3GQDiXO7ujGdCQPoAa02/HGzYqRDuOlu0DGJJ/yi3xl
+ Qv+7Ye5iAwG6iqW74zZvnRHNN8yRiVjjk+nqGoPj2ahc7Nr7g8f4ANeGelsjxQhkhOscjNc7xQ2h
+ dHEckmcQGOuBPq9rt4dOEn9WJA7yfGK6BkBGG0mLtmuzbfeFGb2hZWsDt/fmCo6d12yvI0wed/0Q
+ udAWg/9etw9TIOEergZFaJ91hnCJ4odIJjOae1BAYoct5kI/cxiIQMFEDBGcoZ8K51uNKuJ4zqgJ
+ 4SeU8y5Ph884ctgzcDoFd+96Xw4QUNtTnctHmbpOK0RKd6E2YmmZo3u87jDsfKYWdCAewd7hjSHD
+ v1yU8GDv9kO7wH7K9y8hX1+STHELjwkcdmgWo2JoBLv+psOGtMjI9qGEbmhFtfi+crcUX31Co0Zg
+ NRr7F4I7T5HIIbgqOGhNKCbnOkqTNOYxCCw6fqSlOTqlv1QhfFxXVbH+G+02TrybDOP2Co+U5w==
+X-Report-Abuse-To: spam@spamfilter03.delta.nl
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Mike Looijmans <mike.looijmans@topic.nl>
 
---hwefcm3vjwimuv4y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The rx_8111 is quite similar to the rx_8030. This adds support for this
+chip to the ds1307 driver.
 
-Hi,
+This adds the entry to the devicetree bindings.
 
-On Fri, Oct 21, 2022 at 10:27:40PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> The s3c-adc driver is removed along with the s3c24xx platform,
-> so the battery driver is no longer needed either.
->=20
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
+Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+---
+ Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-I suppose queuing this via power-supply will result in temporary
-build failures because the header is included in s3c24xx arch code.
-So better to merge via the same tree that is killing the arch code:
+diff --git a/Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml b/Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml
+index 98d10e680144..a9590da64b84 100644
+--- a/Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml
++++ b/Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml
+@@ -30,6 +30,7 @@ properties:
+           - pericom,pt7c4338
+           - epson,rx8025
+           - isil,isl12057
++          - epson,rx8111
+           - epson,rx8130
+ 
+       - items:
+-- 
+2.17.1
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
--- Sebastian
-
->  MAINTAINERS                            |   7 -
->  drivers/power/supply/Kconfig           |   6 -
->  drivers/power/supply/Makefile          |   1 -
->  drivers/power/supply/s3c_adc_battery.c | 453 -------------------------
->  include/linux/s3c_adc_battery.h        |  39 ---
->  5 files changed, 506 deletions(-)
->  delete mode 100644 drivers/power/supply/s3c_adc_battery.c
->  delete mode 100644 include/linux/s3c_adc_battery.h
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 071d64e2a7ca..2caf42b0328a 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17920,13 +17920,6 @@ S:	Supported
->  W:	http://www.ibm.com/developerworks/linux/linux390/
->  F:	drivers/s390/scsi/zfcp_*
-> =20
-> -S3C ADC BATTERY DRIVER
-> -M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> -L:	linux-samsung-soc@vger.kernel.org
-> -S:	Odd Fixes
-> -F:	drivers/power/supply/s3c_adc_battery.c
-> -F:	include/linux/s3c_adc_battery.h
-> -
->  S3C24XX SD/MMC Driver
->  M:	Ben Dooks <ben-linux@fluff.org>
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> index 568b3ede993a..e2f8dfcdd2a9 100644
-> --- a/drivers/power/supply/Kconfig
-> +++ b/drivers/power/supply/Kconfig
-> @@ -406,12 +406,6 @@ config BATTERY_MAX1721X
->  	  Say Y here to enable support for the MAX17211/MAX17215 standalone
->  	  battery gas-gauge.
-> =20
-> -config BATTERY_S3C_ADC
-> -	tristate "Battery driver for Samsung ADC based monitoring"
-> -	depends on S3C_ADC
-> -	help
-> -	  Say Y here to enable support for iPAQ h1930/h1940/rx1950 battery
-> -
->  config BATTERY_TWL4030_MADC
->  	tristate "TWL4030 MADC battery driver"
->  	depends on TWL4030_MADC
-> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-> index af43866b3980..8cb3c7f5c111 100644
-> --- a/drivers/power/supply/Makefile
-> +++ b/drivers/power/supply/Makefile
-> @@ -54,7 +54,6 @@ obj-$(CONFIG_BATTERY_MAX17042)	+=3D max17042_battery.o
->  obj-$(CONFIG_BATTERY_MAX1721X)	+=3D max1721x_battery.o
->  obj-$(CONFIG_BATTERY_RT5033)	+=3D rt5033_battery.o
->  obj-$(CONFIG_CHARGER_RT9455)	+=3D rt9455_charger.o
-> -obj-$(CONFIG_BATTERY_S3C_ADC)	+=3D s3c_adc_battery.o
->  obj-$(CONFIG_BATTERY_TWL4030_MADC)	+=3D twl4030_madc_battery.o
->  obj-$(CONFIG_CHARGER_88PM860X)	+=3D 88pm860x_charger.o
->  obj-$(CONFIG_CHARGER_PCF50633)	+=3D pcf50633-charger.o
-> diff --git a/drivers/power/supply/s3c_adc_battery.c b/drivers/power/suppl=
-y/s3c_adc_battery.c
-> deleted file mode 100644
-> index 68d31a3bee48..000000000000
-> diff --git a/include/linux/s3c_adc_battery.h b/include/linux/s3c_adc_batt=
-ery.h
-> deleted file mode 100644
-> index 57f982c375f8..000000000000
-> --=20
-> 2.29.2
->=20
-
---hwefcm3vjwimuv4y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNb5LEACgkQ2O7X88g7
-+ppXihAAn49VyObGmxLIEAGrlmjo5FQ1Vpft85/+KtJmC8QWvyZyzXdO9tDEftda
-o0QxTkaN31dkhnqMqIQqHtPd8BwU1X2G+BdeCDNAH0GJ59Sj82WptaCi+QbfEBPA
-cyo/Ffi3JU5o7tQvafN+Bh81dlL7flEZCWpnbLGH1hVkeN5YRvkNAIi4DzqS1DHV
-1kIC1ubevpx5BA3YnYZaWq5aYpMWjhcQGANJxQ8Ppwv4+DilQaYS8SF9wbSDPwqF
-I+OO/AkZucu+YMNoRVViQ3S9t8uA6voibIO4lRZsU1ET2cnzjIvM3GIyXxN0NFRp
-osHaOkOolNPTC+ntMZ6OP/mPiZejh7OnzaW0TwZx+fkLrAZs2VOsILdNTnSjRphr
-3T7rsfkY+upU0aQF7SoWVhVywYD+BczKKHxe4McWw4jx7PlFrFLXGbchkeY0e6PX
-YFjFU2d+du+CQveB+Z2P40l3xB+wbVvfB1TmdUrzlb+Uok5/Hv3mp/kRBZXGrl0A
-pUQjJEzriy7PJQIToyzTw+owvxtCRIs7LXI1mYEuSWlp0XJneNscEEeWHItupUlE
-lN58v10knLN9D3u1qHzTbn9H9gRuDSOjj48TWfJfFOIXtEEVckCFcaygd57dvU36
-bdw8Z/VUPwpkwola9SXqAzk7oEN47wRuboJhJeo0sCXqajOpDvs=
-=zSFi
------END PGP SIGNATURE-----
-
---hwefcm3vjwimuv4y--
