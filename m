@@ -2,102 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA6F611932
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98888611935
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbiJ1RWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 13:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43208 "EHLO
+        id S230090AbiJ1RW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 13:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbiJ1RWN (ORCPT
+        with ESMTP id S231172AbiJ1RWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 13:22:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550D86CD3A;
-        Fri, 28 Oct 2022 10:22:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7883629D3;
-        Fri, 28 Oct 2022 17:22:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6164FC433C1;
-        Fri, 28 Oct 2022 17:22:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666977731;
-        bh=RCc4qKIHtkfxg/CFdtsU8GG54g7gSd6z0PMWBWissZs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hgrFOb/4HzKUvv7KCSfPG29Jk88l8NVf52ETzbuajDpZtDpK3IkzcC1BlCOe8/TwW
-         eA7AKPRABd3nb9E6GgduXlhnBrd6xb5+tWF9S+j9TpIzsfCp2/lpBGotm9IgGMbLbF
-         VekBR/bAebefY1Sqtg7KS/PFFh9ZtBpnMSw8CkadZGLtpIPobXDQF63nPmxc+OwAmU
-         Tay8GroEAdj4NKa9yKtVZ9/0wYL5PyGC20nvJEabKlQ+pK/3IoWCRjaf7YiVovKJIH
-         WxvxkX8gt4JG0JVegYJsZWbWylcxm/V4Z7fEmkPwbBdWcrn41Z8ASSZqR9RhbtDQ2K
-         R3uDFIGMvJeFA==
-Date:   Fri, 28 Oct 2022 22:52:03 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Qiang Yu <quic_qianyu@quicinc.com>
-Cc:     quic_hemantk@quicinc.com, loic.poulain@linaro.org,
-        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_cang@quicinc.com,
-        mrana@quicinc.com
-Subject: Re: [PATCH] bus: mhi: host: Use mhi_soc_reset() API in place of
- register write
-Message-ID: <20221028172203.GD13880@thinkpad>
-References: <1665376324-34258-1-git-send-email-quic_qianyu@quicinc.com>
+        Fri, 28 Oct 2022 13:22:24 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF5E226E7F
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:22:23 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id b11so5232168pjp.2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:22:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=compal-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dEA0uRMa8TxeJYRdNlWPFcX94wVGyCXF1Xf/+3rheBY=;
+        b=HHoLoNdPB0qkrK/smItvMUXw2MX16VkSG3Wb6Sq6wx1V5zCqD30UFGrBr6hXMJ2NtD
+         LmeLb+qv3HvSjyGgy12ZddE/iB7mNJ7JACuFtGcqPrzY8mHwKGHuriAvzs62BV4v2wG/
+         lPfKQGVJ1gcrxo5EH1kUey1p98r0h9hf44iALh02HzL9VrGySlyiw3AQ+jNgcgRhRChG
+         cgt7Dv10M9fjuoNaWYZCw0b9JYPbif7hrOOO7Tp7m9aSLnZ7q/rBt+LOb2B+D0Sxwz3H
+         DrtV+1G4JEpf+TtxaM5YmKKbcsbZ9g9PWX+5pkTs8zGbvhQtUxY0yDrsctYzapLpogQJ
+         tWHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dEA0uRMa8TxeJYRdNlWPFcX94wVGyCXF1Xf/+3rheBY=;
+        b=v9K1gaxOd8rG7sQt2NCvMJadqTksZj2MOHNlyKLLQ6WYGggp9+K6UWP/57lp150Kev
+         MuIBImjjwtgjfDl1Vwgpj42drjNKUM0jlsWEGjLvKy5u5Uz583vqCKWwvnhcO7+QlR8a
+         KUUY2Kuop4gbyD3wiaAqZ+LMunkoQg1IMOQWGSmix4U1HIBEquMc7MNlHqxiF0us12No
+         Qu/wwAIvebbVTfbjdb1Q2GR9DDiqRZE77fhC5j6muLfhpvHVbaZxPajdckv3j35YvpoI
+         0/MmhUfF/+19Sjw43XNVV00P4gMZcJYDQouj6XkvDTWnrbbcmOT+jrhRuZoIHDtzu69A
+         Pe1A==
+X-Gm-Message-State: ACrzQf1rbXDlac+Er/qaabim0RIQ+Oxvrzn05ZbJdCF6thu2GZuAuKa3
+        lmQM+9YMrMUSI4h+VSA61CHfyprpJEz4+Q==
+X-Google-Smtp-Source: AMsMyM5gtzHQRDvYEJ+/LqCO9vp/O/hO+OoVwkhVr64TlqUb8zjaWEuqctF2XEOxHfx05VuyUlixGw==
+X-Received: by 2002:a17:90b:3504:b0:213:5b03:639 with SMTP id ls4-20020a17090b350400b002135b030639mr15666082pjb.16.1666977742507;
+        Fri, 28 Oct 2022 10:22:22 -0700 (PDT)
+Received: from localhost.localdomain (118-167-210-30.dynamic-ip.hinet.net. [118.167.210.30])
+        by smtp.gmail.com with ESMTPSA id rm10-20020a17090b3eca00b0021282014066sm4604945pjb.9.2022.10.28.10.22.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 10:22:22 -0700 (PDT)
+From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        "chunxu . li" <chunxu.li@mediatek.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: [PATCH v2 0/2] Modify documentation and machine driver for mt8186_rt1019_rt5682s sound card
+Date:   Sat, 29 Oct 2022 01:22:13 +0800
+Message-Id: <20221028172215.1471235-1-ajye_huang@compal.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1665376324-34258-1-git-send-email-quic_qianyu@quicinc.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 12:32:04PM +0800, Qiang Yu wrote:
-> Currently, a direct register write is used when ramdump collection
-> in panic path occurs. Replace that with new mhi_soc_reset() API
-> such that a controller defined reset() function is exercised if
-> one is present and the regular SOC reset is done if it is not.
-> 
-> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
-> Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
-> Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+v2:
+- dmic codec driver: 
+  - Remove the unnecessary use of_property_read_bool()
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+v1:
+- Documentation: Add dmic-gpios optional prop for two DMICs case.
+- dmic codec driver: 
+  - "dmic-gpios" property is used for amixer control to switch
+     the dmic signal source between the Front and Rear Dmic.
 
-Btw, this patch is supposed to be v2... Please keep the version info and also
-add the changelog for future patches.
+Thanks for the review!
 
-Thanks,
-Mani
+Ajye Huang (2):
+  ASoC: mediatek: dt-bindings: modify machine bindings for two MICs case
+  ASoC: mediatek: mt8186-rt5682: Modify machine driver for two DMICs
+    case
 
-> ---
->  drivers/bus/mhi/host/boot.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/bus/mhi/host/boot.c b/drivers/bus/mhi/host/boot.c
-> index 26d0edd..1c69fee 100644
-> --- a/drivers/bus/mhi/host/boot.c
-> +++ b/drivers/bus/mhi/host/boot.c
-> @@ -118,9 +118,7 @@ static int __mhi_download_rddm_in_panic(struct mhi_controller *mhi_cntrl)
->  			/* Hardware reset so force device to enter RDDM */
->  			dev_dbg(dev,
->  				"Did not enter RDDM, do a host req reset\n");
-> -			mhi_write_reg(mhi_cntrl, mhi_cntrl->regs,
-> -				      MHI_SOC_RESET_REQ_OFFSET,
-> -				      MHI_SOC_RESET_REQ);
-> +			mhi_soc_reset(mhi_cntrl);
->  			udelay(delayus);
->  		}
->  
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
-> 
+ .../sound/mt8186-mt6366-rt1019-rt5682s.yaml   |   6 ++
+ .../mt8186/mt8186-mt6366-rt1019-rt5682s.c     | 102 +++++++++++++++++-
+ 2 files changed, 107 insertions(+), 1 deletion(-)
 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.25.1
+
