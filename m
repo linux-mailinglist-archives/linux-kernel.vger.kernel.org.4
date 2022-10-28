@@ -2,161 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DD56115C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3E96115CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbiJ1PYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 11:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
+        id S229946AbiJ1PZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 11:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiJ1PYi (ORCPT
+        with ESMTP id S229842AbiJ1PZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:24:38 -0400
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38FF5FDA;
-        Fri, 28 Oct 2022 08:24:31 -0700 (PDT)
-Received: by mail-qt1-f175.google.com with SMTP id g16so3653541qtu.2;
-        Fri, 28 Oct 2022 08:24:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qpmGBg3X0GaqgkHSwAA94pKJ0y8cJkgKJLejT4W7PEQ=;
-        b=dGvcV8OSg7+vG6gQuYRA3u0nDtscyxM44msjq2TfGfJUay8QRB1MZEiimilAjNhhUP
-         R4DTfh9RSqW0pMEe/8oAxjjUFP3n/U0IbNePuEvBev3PuY7CqckDOFBBFM6fxX6M5Kij
-         bgzpXsIwLk5TaHlBuLK2ijWPeIDTbGCyGcQdvMnGOTcKQZbbhKYXNGGhWWCDQ7Vk2LP0
-         l3pYmHlkPb08EAz11+CSckRFcXuM15Yo+xgUbCGBEsgf35wCVxTXiaVh0dIu/pMT6lW9
-         JGL1p/62+ZsBAVi1M74tvWgDPI/ncVbsRt96Pz+KnkFqkLdSpmJ72DwPEobKlnYcbr1X
-         YkDA==
-X-Gm-Message-State: ACrzQf0JpFEeyslP/ukupLRUhLmlRzHjT0EqSkEsNSYX5o13lrUhMlBY
-        gyXHksEbgsdz4x1royfGXr5FG49C4DYP8JA9Zm70kvJ5
-X-Google-Smtp-Source: AMsMyM7wn7LlwlxJepvgSXqnWyGFHz/fQZ9n6rDHJTC5HtEZfy2K2sPEfQEiBRPzQx+Tf6lY1SIU+aVQNF7eLvxmIZg=
-X-Received: by 2002:a05:622a:13c6:b0:39c:c34f:29ec with SMTP id
- p6-20020a05622a13c600b0039cc34f29ecmr46533066qtk.153.1666970670464; Fri, 28
- Oct 2022 08:24:30 -0700 (PDT)
+        Fri, 28 Oct 2022 11:25:32 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECAA1DA5B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:25:25 -0700 (PDT)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 743B73F114;
+        Fri, 28 Oct 2022 17:25:21 +0200 (CEST)
+Date:   Fri, 28 Oct 2022 17:25:19 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Kalyan Thota <quic_kalyant@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
+        quic_abhinavk@quicinc.com
+Subject: Re: [v6] drm/msm/disp/dpu1: add support for dspp sub block flush in
+ sc7280
+Message-ID: <20221028152519.szxtc635pcaectxp@SoMainline.org>
+References: <1664680506-8336-1-git-send-email-quic_kalyant@quicinc.com>
 MIME-Version: 1.0
-References: <20221027220056.1534264-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20221027220056.1534264-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Oct 2022 17:24:19 +0200
-Message-ID: <CAJZ5v0hVaO-j6PEZ0u+uz==0it3qvZ8XdkrXk4F2x692OfgBcQ@mail.gmail.com>
-Subject: Re: [PATCH] x86: intel_epb: Set Alder Lake N and Raptor Lake P normal EPB
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, rafael@kernel.org,
-        len.brown@intel.com, peterz@infradead.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1664680506-8336-1-git-send-email-quic_kalyant@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 12:01 AM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Intel processors support additional software hint called EPB ("Energy
-> Performance Bias") to guide the hardware heuristic of power management
-> features to favor increasing dynamic performance or conserve energy
-> consumption.
->
-> Since this EPB hint is processor specific, the same value of hint can
-> result in different behavior across generations of processors.
->
-> commit 4ecc933b7d1f ("x86: intel_epb: Allow model specific normal EPB
-> value")' introduced capability to update the default power up EPB
-> based on the CPU model and updated the default EPB to 7 for Alder Lake
-> mobile CPUs.
->
-> The same change is required for other Alder Lake-N and Raptor Lake-P
-> mobile CPUs as the current default of 6 results in higher uncore power
-> consumption. This increase in power is related to memory clock
-> frequency setting based on the EPB value.
->
-> Depending on the EPB the minimum memory frequency is set by the
-> firmware. At EPB = 7, the minimum memory frequency is 1/4th compared to
-> EPB = 6. This results in significant power saving for idle and
-> semi-idle workload on a Chrome platform.
->
-> For example Change in power and performance from EPB change from 6 to 7
-> on Alder Lake-N:
->
-> Workload    Performance diff (%)    power diff
-> ----------------------------------------------------
-> VP9 FHD30       0 (FPS)         -218 mw
-> Google meet     0 (FPS)         -385 mw
->
-> This 200+ mw power saving is very significant for mobile platform for
-> battery life and thermal reasons.
->
-> But as the workload demands more memory bandwidth, the memory frequency
-> will be increased very fast. There is no power savings for such busy
-> workloads.
->
-> For example:
->
-> Workload                Performance diff (%) from EPB 6 to 7
-> -------------------------------------------------------
-> Speedometer 2.0         -0.8
-> WebGL Aquarium 10K
-> Fish                    -0.5
-> Unity 3D 2018           0.2
-> WebXPRT3                -0.5
->
-> There are run to run variations for performance scores for
-> such busy workloads. So the difference is not significant.
->
-> Add a new define ENERGY_PERF_BIAS_NORMAL_POWERSAVE for EPB 7
-> and use it for Alder Lake-N and Raptor Lake-P mobile CPUs.
->
-> This modification is done originally by
-> Jeremy Compostella <jeremy.compostella@intel.com>.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
+On 2022-10-01 20:15:06, Kalyan Thota wrote:
+> Flush mechanism for DSPP blocks has changed in sc7280 family, it
+> allows individual sub blocks to be flushed in coordination with
+> master flush control.
+> 
+> Representation: master_flush && (PCC_flush | IGC_flush .. etc )
+> 
+> This change adds necessary support for the above design.
+> 
+> Changes in v1:
+> - Few nits (Doug, Dmitry)
+> - Restrict sub-block flush programming to dpu_hw_ctl file (Dmitry)
+> 
+> Changes in v2:
+> - Move the address offset to flush macro (Dmitry)
+> - Seperate ops for the sub block flush (Dmitry)
+> 
+> Changes in v3:
+> - Reuse the DPU_DSPP_xx enum instead of a new one (Dmitry)
+> 
+> Changes in v4:
+> - Use shorter version for unsigned int (Stephen)
+> 
+> Changes in v5:
+> - Spurious patch please ignore.
+> 
+> Changes in v6:
+> - Add SOB tag (Doug, Dmitry)
+> 
+> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
->  arch/x86/include/asm/msr-index.h | 1 +
->  arch/x86/kernel/cpu/intel_epb.c  | 7 ++++++-
->  2 files changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> index 10ac52705892..a3eb4d3e70b8 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -796,6 +796,7 @@
->  #define ENERGY_PERF_BIAS_PERFORMANCE           0
->  #define ENERGY_PERF_BIAS_BALANCE_PERFORMANCE   4
->  #define ENERGY_PERF_BIAS_NORMAL                        6
-> +#define ENERGY_PERF_BIAS_NORMAL_POWERSAVE      7
->  #define ENERGY_PERF_BIAS_BALANCE_POWERSAVE     8
->  #define ENERGY_PERF_BIAS_POWERSAVE             15
->
-> diff --git a/arch/x86/kernel/cpu/intel_epb.c b/arch/x86/kernel/cpu/intel_epb.c
-> index fbaf12e43f41..3b8476158236 100644
-> --- a/arch/x86/kernel/cpu/intel_epb.c
-> +++ b/arch/x86/kernel/cpu/intel_epb.c
-> @@ -204,7 +204,12 @@ static int intel_epb_offline(unsigned int cpu)
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c       |  2 +-
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  5 +++-
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  4 +++
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c     | 35 ++++++++++++++++++++++++--
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h     | 10 ++++++--
+>  5 files changed, 50 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> index 601d687..4170fbe 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> @@ -766,7 +766,7 @@ static void _dpu_crtc_setup_cp_blocks(struct drm_crtc *crtc)
+>  
+>  		/* stage config flush mask */
+>  		ctl->ops.update_pending_flush_dspp(ctl,
+> -			mixer[i].hw_dspp->idx);
+> +			mixer[i].hw_dspp->idx, DPU_DSPP_PCC);
+>  	}
 >  }
->
->  static const struct x86_cpu_id intel_epb_normal[] = {
-> -       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, 7),
-> +       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,
-> +                                  ENERGY_PERF_BIAS_NORMAL_POWERSAVE),
-> +       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,
-> +                                  ENERGY_PERF_BIAS_NORMAL_POWERSAVE),
-> +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,
-> +                                  ENERGY_PERF_BIAS_NORMAL_POWERSAVE),
->         {}
+>  
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> index 27f029f..0eecb2f 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> @@ -65,7 +65,10 @@
+>  	(PINGPONG_SDM845_MASK | BIT(DPU_PINGPONG_TE2))
+>  
+>  #define CTL_SC7280_MASK \
+> -	(BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) | BIT(DPU_CTL_VM_CFG))
+> +	(BIT(DPU_CTL_ACTIVE_CFG) | \
+> +	 BIT(DPU_CTL_FETCH_ACTIVE) | \
+> +	 BIT(DPU_CTL_VM_CFG) | \
+> +	 BIT(DPU_CTL_DSPP_SUB_BLOCK_FLUSH))
+>  
+>  #define MERGE_3D_SM8150_MASK (0)
+>  
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> index 38aa38a..8148e91 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> @@ -161,10 +161,12 @@ enum {
+>   * DSPP sub-blocks
+>   * @DPU_DSPP_PCC             Panel color correction block
+>   * @DPU_DSPP_GC              Gamma correction block
+> + * @DPU_DSPP_IGC             Inverse Gamma correction block
+
+Lowercase G? Otherwise capitalize Correction as well to match the IGC
+abbrev., and do the same for the other abbreviations above.
+
+>   */
+>  enum {
+>  	DPU_DSPP_PCC = 0x1,
+>  	DPU_DSPP_GC,
+> +	DPU_DSPP_IGC,
+>  	DPU_DSPP_MAX
 >  };
->
-> --
-> 2.31.1
->
+>  
+> @@ -191,6 +193,7 @@ enum {
+>   * @DPU_CTL_SPLIT_DISPLAY:	CTL supports video mode split display
+>   * @DPU_CTL_FETCH_ACTIVE:	Active CTL for fetch HW (SSPPs)
+>   * @DPU_CTL_VM_CFG:		CTL config to support multiple VMs
+> + * @DPU_CTL_DSPP_BLOCK_FLUSH: CTL config to support dspp sub-block flush
+>   * @DPU_CTL_MAX
+>   */
+>  enum {
+> @@ -198,6 +201,7 @@ enum {
+>  	DPU_CTL_ACTIVE_CFG,
+>  	DPU_CTL_FETCH_ACTIVE,
+>  	DPU_CTL_VM_CFG,
+> +	DPU_CTL_DSPP_SUB_BLOCK_FLUSH,
+>  	DPU_CTL_MAX
+>  };
+>  
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+> index a35ecb6..f26f484 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+> @@ -33,6 +33,7 @@
+>  #define   CTL_INTF_FLUSH                0x110
+>  #define   CTL_INTF_MASTER               0x134
+>  #define   CTL_FETCH_PIPE_ACTIVE         0x0FC
+> +#define   CTL_DSPP_n_FLUSH(n)		((0x13C) + ((n - 1) * 4))
+
+Use spaces for indentation just like the other defines.  Replace 1 with
+DSPP_0.
+
+>  
+>  #define CTL_MIXER_BORDER_OUT            BIT(24)
+>  #define CTL_FLUSH_MASK_CTL              BIT(17)
+> @@ -287,8 +288,9 @@ static void dpu_hw_ctl_update_pending_flush_merge_3d_v1(struct dpu_hw_ctl *ctx,
+>  }
+>  
+>  static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx,
+> -	enum dpu_dspp dspp)
+> +	enum dpu_dspp dspp, u32 dspp_sub_blk)
+>  {
+> +
+>  	switch (dspp) {
+>  	case DSPP_0:
+>  		ctx->pending_flush_mask |= BIT(13);
+> @@ -307,6 +309,31 @@ static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx,
+>  	}
+>  }
+>  
+> +static void dpu_hw_ctl_update_pending_flush_dspp_subblocks(
+> +	struct dpu_hw_ctl *ctx,	enum dpu_dspp dspp, u32 dspp_sub_blk)
+> +{
+> +	u32 flushbits = 0, active;
+> +
+> +	switch (dspp_sub_blk) {
+> +	case DPU_DSPP_IGC:
+> +		flushbits = BIT(2);
+> +		break;
+> +	case DPU_DSPP_PCC:
+> +		flushbits = BIT(4);
+> +		break;
+> +	case DPU_DSPP_GC:
+> +		flushbits = BIT(5);
+> +		break;
+> +	default:
+> +		return;
+> +	}
+> +
+> +	active = DPU_REG_READ(&ctx->hw, CTL_DSPP_n_FLUSH(dspp));
+> +	DPU_REG_WRITE(&ctx->hw, CTL_DSPP_n_FLUSH(dspp), active | flushbits);
+> +
+> +	ctx->pending_flush_mask |= BIT(29);
+> +}
+> +
+>  static u32 dpu_hw_ctl_poll_reset_status(struct dpu_hw_ctl *ctx, u32 timeout_us)
+>  {
+>  	struct dpu_hw_blk_reg_map *c = &ctx->hw;
+> @@ -675,7 +702,11 @@ static void _setup_ctl_ops(struct dpu_hw_ctl_ops *ops,
+>  	ops->setup_blendstage = dpu_hw_ctl_setup_blendstage;
+>  	ops->update_pending_flush_sspp = dpu_hw_ctl_update_pending_flush_sspp;
+>  	ops->update_pending_flush_mixer = dpu_hw_ctl_update_pending_flush_mixer;
+> -	ops->update_pending_flush_dspp = dpu_hw_ctl_update_pending_flush_dspp;
+> +	if (cap & BIT(DPU_CTL_DSPP_SUB_BLOCK_FLUSH))
+> +		ops->update_pending_flush_dspp = dpu_hw_ctl_update_pending_flush_dspp_subblocks;
+> +	else
+> +		ops->update_pending_flush_dspp = dpu_hw_ctl_update_pending_flush_dspp;
+> +
+>  	if (cap & BIT(DPU_CTL_FETCH_ACTIVE))
+>  		ops->set_active_pipes = dpu_hw_ctl_set_fetch_pipe_active;
+>  };
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+> index 96c012e..1743572 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+> @@ -149,12 +149,18 @@ struct dpu_hw_ctl_ops {
+>  
+>  	/**
+>  	 * OR in the given flushbits to the cached pending_flush_mask
+> -	 * No effect on hardware
+> +	 *
+> +	 * If the hardware supports dspp sub block flush, then sub-block
+
+sub[ -]block written with a space _and_ with a hyphen, what is it?
+
+> +	 * flushes are written to the hardware and main dspp flush will
+> +	 * be cached in the pending_flush_mask.
+> +	 *
+>  	 * @ctx       : ctl path ctx pointer
+>  	 * @blk       : DSPP block index
+> +	 * @dspp_sub_blk : DSPP sub-block index
+>  	 */
+>  	void (*update_pending_flush_dspp)(struct dpu_hw_ctl *ctx,
+> -		enum dpu_dspp blk);
+> +		enum dpu_dspp blk,  u32 dspp_sub_blk);
+
+Double space?
+
+- Marijn
+
+> +
+>  	/**
+>  	 * Write the value of the pending_flush_mask to hardware
+>  	 * @ctx       : ctl path ctx pointer
+> -- 
+> 2.7.4
+> 
