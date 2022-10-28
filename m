@@ -2,75 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2415611C58
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 23:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E8A611C59
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 23:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiJ1VTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 17:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45344 "EHLO
+        id S229707AbiJ1VT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 17:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiJ1VTS (ORCPT
+        with ESMTP id S229379AbiJ1VTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 17:19:18 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104A624AE1C
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 14:19:18 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id o7so2498580pjj.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 14:19:18 -0700 (PDT)
+        Fri, 28 Oct 2022 17:19:20 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD00B24AE1C
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 14:19:19 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id h185so5868842pgc.10
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 14:19:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+ReCGUZkiii68cxY5IFdEUSZ/im3lxKgaunLDv0fff4=;
-        b=dfyzPY26KbrgwSdtg2Eu9muTgcMpRXIMEJnsdw50KY+jAxf3zk92oBn8bsHdNzq1nb
-         iQQJEqJQaOQy8a/V1OTKldPw9obGnX3WoxPGSuiVLCVEQIw2aR5hgjPPFg2//6LRG2eD
-         /pgH8SqGafhbQnprbtIKIj9gW+eAi57yGg3l0=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l3rdludOurvC4fVB6DK3mkTjnKTmpaPqFr2e/WcU1PY=;
+        b=Ba7p35/O4HWTJ6gXbkKVc218UyBTKXLiCvsaBmMU9S9QH0SSlKGUaCiXW8I9NYRB33
+         EweO63dvPYeifzge13DmYlNPALfhSgTjMQR0KaVKRHjFlIbzijOPwCc/WlxEdAZFUG/P
+         bgx7kY6bca4Hfm3vWZGLThlemm7c0jMCm53RQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+ReCGUZkiii68cxY5IFdEUSZ/im3lxKgaunLDv0fff4=;
-        b=wvW+c3PehlLXzD9eGMJLmRU7nHVBco7OqFuyv1x47DVm8MRRne9Iqw2YLr479WEHIZ
-         bPy6rhoA1/i2ROeAkTqEFLvmGX4LRW/COceTx5CIJiMTXbA2WSez9ZfYAYONRURTkCei
-         QXn1wGzpkHw5/tm03c6EeF4Gl2dQhna9Br6esZub3zOqd1SP4UFMXbQZWT1nxlt8TJOc
-         VJeNgemc9p5px4EqiRZE3oMRcg4lcyJdLoklk9/1MgbbpZcQcXTC6jXTpK+Hs7xFc9ux
-         aYEoFCxXrrE985xPCOsQ3PRpkikKaZ76njBIsJVallEmY47wfVuKdycEfe7gIXDFSWEZ
-         U4fw==
-X-Gm-Message-State: ACrzQf3Khs2s0CwDmP3Bz8JhvVL+To9J0sYIInCVYzfzQrcbhfIXo10y
-        B8NJUYTYxeQ35hpX4A4bQy2F6g==
-X-Google-Smtp-Source: AMsMyM4LcUInNIq1ebdOfawk9BECCxtZxKZcoc2dMXxhIaXRx4dVQ59j6k13ylnw5jCih/8kWnXz6A==
-X-Received: by 2002:a17:902:dacf:b0:185:3735:ffc7 with SMTP id q15-20020a170902dacf00b001853735ffc7mr930436plx.147.1666991957575;
-        Fri, 28 Oct 2022 14:19:17 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l3rdludOurvC4fVB6DK3mkTjnKTmpaPqFr2e/WcU1PY=;
+        b=xCMdB7b23qq4yP4lYffwyN/YsG0ljZDQ9pyawbttySoPhUZJgTgc8zam9wH8SMxI/c
+         fP0MInPbwzMh/Ylty7F7X5V+tUvT0EcwY4+yLATq+n0L694b475/5YBNN+9ADwVHi/ZU
+         Tfp+mn9CZ0vSOopxewHFgWEFhOPfGG00thTM+QEYxwSgsNmu1Ieab9qiDRE+6WDRvI3G
+         zfXLtfGzfpOdEjKxhlcRKyA1Vrmm0msjqJOc3O2qs4ra6sMSj4VcevOA6RyQRnjxNaBh
+         t4iQd26A3xEHGYA3PH39qCu5jWxNLRsvU86ibElt1/fomT6jY+T2oRQUyhXTq9FeLAee
+         5/9g==
+X-Gm-Message-State: ACrzQf0p8Wf9eUHv8cWx5gou9CGYl09ZPMuLqT9qZQ6mYc/niUyu9e/s
+        GqpxlqGdgT1TJuBGh4N0hAzwdNtsFZFVbw==
+X-Google-Smtp-Source: AMsMyM6zyE4Kj02pCtPhqS5WKSQqcPsl7sXyYtaqdOEufXYwMr32tdQJVAgcIbgLy0QuXLyErok1Hw==
+X-Received: by 2002:a63:1a07:0:b0:46b:2825:f9cf with SMTP id a7-20020a631a07000000b0046b2825f9cfmr1342652pga.370.1666991959465;
+        Fri, 28 Oct 2022 14:19:19 -0700 (PDT)
 Received: from localhost ([2620:15c:9d:2:65f9:c180:249c:190f])
-        by smtp.gmail.com with UTF8SMTPSA id f5-20020a170902860500b00186c37270f6sm3452364plo.24.2022.10.28.14.19.16
+        by smtp.gmail.com with UTF8SMTPSA id f2-20020a623802000000b00550724f8ea0sm3250546pfa.128.2022.10.28.14.19.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 14:19:17 -0700 (PDT)
+        Fri, 28 Oct 2022 14:19:19 -0700 (PDT)
 From:   Brian Norris <briannorris@chromium.org>
 To:     Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mathias Nyman <mathias.nyman@intel.com>
 Cc:     Brian Norris <briannorris@chromium.org>,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH 1/2] usb: ehci-pci: Set PROBE_PREFER_ASYNCHRONOUS
-Date:   Fri, 28 Oct 2022 14:19:07 -0700
-Message-Id: <20221028141821.1.I9a5353f81d1509f85f3a04f0cdc9099f6fe60811@changeid>
+Subject: [PATCH 2/2] usb: xhci-pci: Set PROBE_PREFER_ASYNCHRONOUS
+Date:   Fri, 28 Oct 2022 14:19:08 -0700
+Message-Id: <20221028141821.2.I5a309231785d3a4e37118a25e84f5caa0136a343@changeid>
 X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
+In-Reply-To: <20221028141821.1.I9a5353f81d1509f85f3a04f0cdc9099f6fe60811@changeid>
+References: <20221028141821.1.I9a5353f81d1509f85f3a04f0cdc9099f6fe60811@changeid>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver often takes on the order of 8ms to start, but every little
-bit counts. It shouldn't have many cross-device dependencies to
-race with, nor racy access to shared state with other drivers, so this
-should be a relatively low risk change.
+This driver often takes on the order of 10ms to start, but in some cases
+takes more than 100ms. It shouldn't have many cross-device dependencies
+to race with, nor racy access to shared state with other drivers, so
+this should be a relatively low risk change.
 
 This driver was pinpointed as part of a survey of top slowest initcalls
 (i.e., are built in, and probing synchronously) on a lab of ChromeOS
@@ -79,29 +83,23 @@ systems.
 Signed-off-by: Brian Norris <briannorris@chromium.org>
 ---
 
- drivers/usb/host/ehci-pci.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/usb/host/xhci-pci.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
-index 17f8b6ea0c35..4b148fe5e43b 100644
---- a/drivers/usb/host/ehci-pci.c
-+++ b/drivers/usb/host/ehci-pci.c
-@@ -411,11 +411,12 @@ static struct pci_driver ehci_pci_driver = {
- 	.remove =	ehci_pci_remove,
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 40228a3d77a0..4da03de1be70 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -689,7 +689,8 @@ static struct pci_driver xhci_pci_driver = {
  	.shutdown = 	usb_hcd_pci_shutdown,
- 
--#ifdef CONFIG_PM
- 	.driver =	{
--		.pm =	&usb_hcd_pci_pm_ops
--	},
-+#ifdef CONFIG_PM
-+		.pm =	&usb_hcd_pci_pm_ops,
- #endif
+ #ifdef CONFIG_PM
+ 	.driver = {
+-		.pm = &usb_hcd_pci_pm_ops
++		.pm = &usb_hcd_pci_pm_ops,
 +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
-+	},
+ 	},
+ #endif
  };
- 
- static int __init ehci_pci_init(void)
 -- 
 2.38.1.273.g43a17bfeac-goog
 
