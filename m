@@ -2,790 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 921246119B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECA26119B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbiJ1R5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 13:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
+        id S230036AbiJ1R5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 13:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbiJ1R5V (ORCPT
+        with ESMTP id S229682AbiJ1R5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 13:57:21 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9DE1EB565
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:57:16 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so4384251wmb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:57:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=upv1Rm69UhpJoa3+qispfonQXjquGOWAZBU15ySMbDU=;
-        b=PcLFjWblV3kadacfNYZaJfYKuD7p5lTVDffwrj44xXJ08Tx6dqPef7VaO2xID1pzfY
-         munEqfj51yD+/NThiB3DcxImWkLTUA/vRosMarNIL02gPOvUumekSMEjmSOjZ52L8OIE
-         1Vz0Pi5+i52Xvb8IEZ8EHLVQat/N9Av/lutU7Ft0wCGW/uHkWoOAEyhBe348KNQYyCw+
-         V1vhwalHyrnzbI0IizhhAX7yVzkbayw09VaazUFIWJk3xaifHa/VrNdjipoLH3Y2nfHA
-         LC412PLx7urQfuPS4JGLQoSj8gRO+Oie50/BeKO+zYdnuRlNQPN6IwDpVMMPmvTRJGYC
-         pNsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=upv1Rm69UhpJoa3+qispfonQXjquGOWAZBU15ySMbDU=;
-        b=nsqDTTQ0tW28FchChUzUTp/T+ZdEOp30dEJLx0XAyh3YOaRkeot/O+CsI0b5WJXZTq
-         X8Gj9gJPqIm4sjq4GMwI/pBDGSzM2fKtz4BODnRPu0apZu7slcio79OioyH4/ndE3Sui
-         Op7sEcvIIeg56E4hcCkJpA/QISUeiCDKaSTan/5nAEdeyuiW9Y5eDNR0ZJRhDpE7HpfR
-         zsUkLIIJL/I81+bSvTEyzdTMOyUikaKduvmYJlqiaoZxoD9fz9+I2+aCgYy9VdfFP2Fj
-         By53d4f/Ps+kxuiu6gSc69aEDuC52OY0k9w6E+eMsNpksewF2x17dUp6sWxyJglxMmDx
-         EFNQ==
-X-Gm-Message-State: ACrzQf3fnShz1Ss6ck3Xt7MxvHMoTw5Plze6tWvNDveA/IUGeOaMGi8b
-        jUVEW7NkbVZCQZfxwwSlkaNFYhSUJF+/e6uFADdvXw==
-X-Google-Smtp-Source: AMsMyM6pt+hStkw8BL2yjW7Rkujpq+PIJmPOqQVFhEdyVsU5N2ylBMk5qwuyFrsZqGXCRU4/whxP1oB0WDK72IOH6QQ=
-X-Received: by 2002:a7b:c048:0:b0:3b4:fb26:f0f3 with SMTP id
- u8-20020a7bc048000000b003b4fb26f0f3mr10831060wmc.115.1666979834397; Fri, 28
- Oct 2022 10:57:14 -0700 (PDT)
+        Fri, 28 Oct 2022 13:57:10 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2049.outbound.protection.outlook.com [40.107.220.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44DF1EA57E;
+        Fri, 28 Oct 2022 10:57:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nO8vuqaU33e9ReAWz5eBj/ElTXiohVzigttyWgmezRdCS+DJiEPBshdEvVBFqZaPwd7nngmyUSzlDSLuxxUOa3sttsPma/CeEvWhTaGicB5nm9QyLcJlcJw9kYxCDmLpuXkkS/fP1b3Tu2bOdV2NaVknSFYxcWCoyvw8oELcmj3sPUAwXA5Gn5sSKqlIoMApgZPJEoY1whPLzzpF6PQjKocSB+jeMVloGDqU/u+GWvXNnhXhV/UWSP3Ej6b/Y07QmFVzGnvrbYw3LUkPrLopy4A+enCk5iLXrA6OWd3To3liwUitdJKxYOQEZSZqLfXPmUM7wIux1YbvmEYCnvUbcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G7R83CljAk9zJZCcVVcpCxGg+MFBn7vCSlojh/PCI0M=;
+ b=YTdcKizdaP4vTZ1wZHBHws3ltwkz7YsNHofgohx/egKKFlkgb/0DQrES71+1g9w7g6sqi82fjrrWsk0SGSQ3wixjQs7Y55bw/qaGakXFaiGWsLYqtAJua10fP4nesANzUqWUvP1yxgqbgMUzfxlggAFwgQBw+XJQ171+1Xv0rKkuZ3+wuk0DForIgSfnHArDsi7kuot+xinGq/pqN67mmogZMErighP3tZ6uw1XRiA3YqeVRsVpJBTMQD/NUcn6cLITFt0Od71takvhuXAfvOoB7SMFBaKv+HhIQSFT3PbpTP/HeZVf/8ZflAtX8u3xxh9YkkjZbsl6Wt5qiN0Z3Tw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G7R83CljAk9zJZCcVVcpCxGg+MFBn7vCSlojh/PCI0M=;
+ b=eIjdDA8g4x3b4bn2Felql5+HSHh+bSKFXIcFO0UwYj5xOtR9tclnPHrcawp7yh/WXdpIBNzMXd3+BBE9uOD8lr267k3l2LDPBPKEpij4NqV1Ikx1Cuc3E8nrnhdmyKOpsQqxLqHikXPu3z442HHUnka/4q00QpTj+6+GCndvAa7jz/Yn+8nIRZghrscG0qxY2p856f2j7+9v/HHCrkALf2ggOeG9WeLRX55a5jCzxrrFwGFHh3u2t22gR/KdDbJWH4DqTwtHDwCbboFryVxXeQA9LQZNMRz9QnuDtCUtjdyBLEbGD5fS8cAqe5w/7Zbe+Zs1noTOSeYehPYVBT1iUA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by BN9PR12MB5291.namprd12.prod.outlook.com (2603:10b6:408:104::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15; Fri, 28 Oct
+ 2022 17:57:07 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5769.015; Fri, 28 Oct 2022
+ 17:57:06 +0000
+Date:   Fri, 28 Oct 2022 14:57:06 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Li Zhijian <lizhijian@fujitsu.com>
+Cc:     Bob Pearson <rpearsonhpe@gmail.com>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        Zhu Yanjun <zyjzyj2000@gmail.com>, yangx.jy@fujitsu.com,
+        y-goto@fujitsu.com, mbloch@nvidia.com, liangwenpeng@huawei.com,
+        tom@talpey.com, tomasz.gromadzki@intel.com,
+        dan.j.williams@intel.com, linux-kernel@vger.kernel.org
+Subject: Re: [for-next PATCH v5 00/11] RDMA/rxe: Add RDMA FLUSH operation
+Message-ID: <Y1wX8n9R7dkLo0KU@nvidia.com>
+References: <20220927055337.22630-1-lizhijian@fujitsu.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927055337.22630-1-lizhijian@fujitsu.com>
+X-ClientProxiedBy: BLAPR05CA0039.namprd05.prod.outlook.com
+ (2603:10b6:208:335::20) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-References: <20221012164244.3027730-1-irogers@google.com>
-In-Reply-To: <20221012164244.3027730-1-irogers@google.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 28 Oct 2022 10:57:02 -0700
-Message-ID: <CAP-5=fW5+boUZqJV6-6VVa2bOcTrErHU3K5Fz-Z54j8uq_kfdw@mail.gmail.com>
-Subject: Re: [PATCH v2] perf jevents: Parse metrics during conversion
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BN9PR12MB5291:EE_
+X-MS-Office365-Filtering-Correlation-Id: fff326d9-3e59-425a-346d-08dab90dd3ed
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sThj+4jK0IKt9+k4Qg1o+5EALJRZfeisJpp51q6/E2Wg3mvgLZ+fkwO/D1Fi/6+Rymsf2SmNxHNnRNOIIb0b83rYRaaAEUFPpA92G6GNA40G1m7R/pqRCc2GDZAqnd2kVQZPjzoB/A1AOqe7wjtNM4fz1HTMYOqM6zkaGw5rv52yNcwb5MDq0W2p79QlmFUNRH85QU5XKy3DEhZcw3vrFhWMjxm3jMJHjiboSLpi2YL8j0xaO5j+kOHnhLQ7fiQMJ5xN135UFEsa2zMAA5ZtzCeArBdPpYHLR8ijMo96O1LMdsfz7cBsmEMZO6RJmgK+WbM7nqIRTK1V5IbEcQ+8SUig9R7+7sX44TBTyRrb86IyXUq5S8eJ9KQiFUwdiAkfZ+X5qiG8eDu9+qXNj/RQSsr5eNcXiOE1IQp7QuIrQb+Q1Dkvc3klkLwofRdf4lUFvUmrtBMqF/Vb0mC7cfT1IyceDC7/DaWlexW+23st0hTPR1P58Egz8VJlQkFtiXDWzi0U5x1WaKHGuT9XZhpVQ5PEopaBoGqowD5+dP4F476aF9F+3IV6diBSBHcTYHxLY5SR33lLlTpZCN4+ktCxXmX11MxcQq2SxwRGQl5gcMtq/4gd5qQUAXfojPdVMWXjlUqnHNdiucmJS8Ss2bhYb6teAJQl6MQEjJCbxvIfR9MY4uqEdjjWjAawqnatRlAcTyg6YZMAonp4SrZrIocjzw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(376002)(136003)(366004)(396003)(451199015)(2616005)(2906002)(478600001)(186003)(8676002)(4326008)(86362001)(6506007)(558084003)(8936002)(66946007)(316002)(6512007)(66476007)(36756003)(6916009)(54906003)(66556008)(5660300002)(26005)(7416002)(41300700001)(6486002)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ANJ9uGJvDtHfhP0wdp93t2LykVUXI6DtEWK2Jaz40vwqtJ8qaILsT02PX28z?=
+ =?us-ascii?Q?M4mkwpzVtgo7oyBxErP+iALFtaBqY7zE2iDTm3gDsg7emGu+E4RO/L4pager?=
+ =?us-ascii?Q?kEtHT+py25n+XvO7Su8OlAmkXEYJy9F56kR3+rRPUY/5ENhrAQyurPc66LUb?=
+ =?us-ascii?Q?XAgr1vuqJfFjBIt++C0ieGXxloOKqixchf60hSeC4w9FuKF0ehCOUy/09rxo?=
+ =?us-ascii?Q?VybT/voRM4NW7Fn8PitPP2+vjS8RyNN4qCvnakXMQ0W6uPQGYYWhSdfjvmFI?=
+ =?us-ascii?Q?PmoNbfMsN0+zI5X6lgqKU+AhH1fmZPOmJzvT9TKnHZfNjGh/ySCYsdH+ALgu?=
+ =?us-ascii?Q?uitfY1nmoeE4AhhO9LH7e2kIrilytIqWSZgsCFvXH5cq+QaYW477PxA0FBF0?=
+ =?us-ascii?Q?pajsRgnGPAvTE+MIxOPK888OdSGioB/AmaRTZ15+In7QKHijf5HDGsj3NdET?=
+ =?us-ascii?Q?89s+yT+nP2o/9Cr28u53sEOiJZEClJqdXd65zZpXkKhXUhoWdaHIHhXQsi4T?=
+ =?us-ascii?Q?hBP+YeKuPKsg/mgGUT6PSr27SghleVU9JadMXDGUuikwsXFlrc794Sw7mRF6?=
+ =?us-ascii?Q?GdD5XybpDKlUUOl6hIpJthaX57D0OwnOpt+6PCd03GXaYUrQGoewQ5OiFZRH?=
+ =?us-ascii?Q?6PAeNHnyTfm8/use1Ysd8I0mHZ6pML71Eg+KJFE+e+zET/sJDRmT+lYHAo4L?=
+ =?us-ascii?Q?FZJJxz0C5WnAtIxmEO5jrv/I8ytuG/wj/VMfl2X7OMsMc6G19jx/ntb46iNa?=
+ =?us-ascii?Q?nrKF4SLTzTiSHfCWHRJXyH+SpmEveaC18p6XF6fy0QaZ2tUq6yVDgjNfUD+N?=
+ =?us-ascii?Q?hC0sECdFSN4yv5hyP70QHWmVmTxjacENwWiCzy+ybvortUBu2ZSwjmH8StIq?=
+ =?us-ascii?Q?w9+QmQVVxz/stlGRcgg+UtzeYNfJ5VMuJMBKD+zBAd1aJhkOVi+n4IagQyCu?=
+ =?us-ascii?Q?lX8sGxbdv5CrFCvQERITzpx2fzltLiXuZkqogP0pZ6k5J6EOAYztnlDz1bbW?=
+ =?us-ascii?Q?LXUQvVSh5YBS1jeyhoWhEFtveqi/9f3DueWxvw05tAxayyY7xY33a6tqfX4/?=
+ =?us-ascii?Q?COsAHaLHJIc18u30BXxoHtnHFFV5+yvDA3Lq5jwqimbJXJYO68DlryjXkig3?=
+ =?us-ascii?Q?TUrpt3Df5InLwJHV87l+SCYZLs1wg6mJnY28MKZMxOHWCGL4CPpSpeGfWW+9?=
+ =?us-ascii?Q?miA25d+3BJUJSCzJDz80+9Rh7D7Xs2i4FRRztfjHhmsq682VqmqvF2V0Kpfr?=
+ =?us-ascii?Q?9De17Hy4FuWqwrwx4Q1HV1u9235PvtpaL5MFXw/0rnwwxRZOkva5Gw5QYAp+?=
+ =?us-ascii?Q?9yayUDDdnBG/4aEBogdrrEeWQhYTCmUn8WLDEVJ5OQ9l0XFzbLnULxwEXhAl?=
+ =?us-ascii?Q?prqmohxmax6PGlXreq06DGc1jLO5+Og3X8jSZD2zWX54zlxhMzhxDPiODn8h?=
+ =?us-ascii?Q?Abrsl4gNOhK3BY59Drs5q31hZ7kw5B9SA0peB0hepVimrJnj3jNkU9fvHwmt?=
+ =?us-ascii?Q?+G3oajZURXs+7RbnuTUyoEVh7DafKhGAeDZzRQHlrwaViyjY5GrcgXJG3K10?=
+ =?us-ascii?Q?yF9B03CtD2nwPWnohDE=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fff326d9-3e59-425a-346d-08dab90dd3ed
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 17:57:06.8535
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WJxf+vRWb3vJeKq0mjmCZXY/tUahn39FnteCFsZqM3Ep4Eg26k9XmERumHhkQq+S
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5291
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 9:42 AM Ian Rogers <irogers@google.com> wrote:
->
-> Currently the 'MetricExpr' json value is passed from the json
-> file to the pmu-events.c. This change introduces an expression
-> tree that is parsed into. The parsing is done largely by using
-> operator overloading and python's 'eval' function. Two advantages
-> in doing this are:
->
-> 1) Broken metrics fail at compile time rather than relying on
->    `perf test` to detect. `perf test` remains relevant for checking
->    event encoding and actual metric use.
->
-> 2) The conversion to a string from the tree can minimize the
->    metric's string size, for example, preferring 1e6 over 1000000
->    and removing unnecessary whitespace. On x86 this reduces the
->    string size by 2,823bytes (0.06%).
->
-> In future changes it would be possible to programmatically
-> generate the json expressions (a single line of text and so a
-> pain to write manually) for an architecture using the expression
-> tree. This could avoid copy-pasting metrics for all architecture
-> variants.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
+On Tue, Sep 27, 2022 at 01:53:26PM +0800, Li Zhijian wrote:
+> Hey folks,
+> 
+> Firstly i want to say thank you to all you guys, especially Bob, who in the
+> past 1+ month, gave me a lots of idea and inspiration.
 
-Ping, PTAL.
+I would like it if someone familiar with rxe could reviewed-by the
+protocol parts.
 
-Thanks,
-Ian
-
-> v2. Improvements to type information.
-> ---
->  tools/perf/pmu-events/Build          |   2 +-
->  tools/perf/pmu-events/jevents.py     |  11 +-
->  tools/perf/pmu-events/metric.py      | 466 +++++++++++++++++++++++++++
->  tools/perf/pmu-events/metric_test.py | 143 ++++++++
->  4 files changed, 618 insertions(+), 4 deletions(-)
->  create mode 100644 tools/perf/pmu-events/metric.py
->  create mode 100644 tools/perf/pmu-events/metric_test.py
->
-> diff --git a/tools/perf/pmu-events/Build b/tools/perf/pmu-events/Build
-> index 04ef95174660..15b9e8fdbffa 100644
-> --- a/tools/perf/pmu-events/Build
-> +++ b/tools/perf/pmu-events/Build
-> @@ -21,7 +21,7 @@ $(OUTPUT)pmu-events/pmu-events.c: pmu-events/empty-pmu-events.c
->         $(call rule_mkdir)
->         $(Q)$(call echo-cmd,gen)cp $< $@
->  else
-> -$(OUTPUT)pmu-events/pmu-events.c: $(JSON) $(JSON_TEST) $(JEVENTS_PY)
-> +$(OUTPUT)pmu-events/pmu-events.c: $(JSON) $(JSON_TEST) $(JEVENTS_PY) pmu-events/metric.py
->         $(call rule_mkdir)
->         $(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) pmu-events/arch $@
->  endif
-> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-> index 0daa3e007528..81bcbd15c962 100755
-> --- a/tools/perf/pmu-events/jevents.py
-> +++ b/tools/perf/pmu-events/jevents.py
-> @@ -4,6 +4,7 @@
->  import argparse
->  import csv
->  import json
-> +import metric
->  import os
->  import sys
->  from typing import (Callable, Dict, Optional, Sequence, Set, Tuple)
-> @@ -268,9 +269,9 @@ class JsonEvent:
->      self.metric_name = jd.get('MetricName')
->      self.metric_group = jd.get('MetricGroup')
->      self.metric_constraint = jd.get('MetricConstraint')
-> -    self.metric_expr = jd.get('MetricExpr')
-> -    if self.metric_expr:
-> -      self.metric_expr = self.metric_expr.replace('\\', '\\\\')
-> +    self.metric_expr = None
-> +    if 'MetricExpr' in jd:
-> +       self.metric_expr = metric.ParsePerfJson(jd.get('MetricExpr'))
->      arch_std = jd.get('ArchStdEvent')
->      if precise and self.desc and '(Precise Event)' not in self.desc:
->        extra_desc += ' (Must be precise)' if precise == '2' else (' (Precise '
-> @@ -322,6 +323,10 @@ class JsonEvent:
->      s = ''
->      for attr in _json_event_attributes:
->        x = getattr(self, attr)
-> +      if x and attr == 'metric_expr':
-> +        # Convert parsed metric expressions into a string. Slashes
-> +        # must be doubled in the file.
-> +        x = x.ToPerfJson().replace('\\', '\\\\')
->        s += f'{x}\\000' if x else '\\000'
->      return s
->
-> diff --git a/tools/perf/pmu-events/metric.py b/tools/perf/pmu-events/metric.py
-> new file mode 100644
-> index 000000000000..542d13300e80
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/metric.py
-> @@ -0,0 +1,466 @@
-> +# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-> +"""Parse or generate representations of perf metrics."""
-> +import ast
-> +import decimal
-> +import re
-> +import json
-> +from typing import (Optional, Set, Union)
-> +
-> +class Expression:
-> +  """Abstract base class of elements in a metric expression."""
-> +
-> +  def ToPerfJson(self) -> str:
-> +    """Returns a perf json file encoded representation."""
-> +    raise NotImplementedError()
-> +
-> +  def ToPython(self) -> str:
-> +    """Returns a python expr parseable representation."""
-> +    raise NotImplementedError()
-> +
-> +  def Simplify(self):
-> +    """Returns a simplified version of self."""
-> +    raise NotImplementedError()
-> +
-> +  def Equals(self, other) -> bool:
-> +    """Returns true when two expressions are the same."""
-> +    raise NotImplementedError()
-> +
-> +  def __str__(self) -> str:
-> +    return self.ToPerfJson()
-> +
-> +  def __or__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('|', self, other)
-> +
-> +  def __ror__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('|', other, self)
-> +
-> +  def __xor__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('^', self, other)
-> +
-> +  def __and__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('&', self, other)
-> +
-> +  def __lt__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('<', self, other)
-> +
-> +  def __gt__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('>', self, other)
-> +
-> +  def __add__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('+', self, other)
-> +
-> +  def __radd__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('+', other, self)
-> +
-> +  def __sub__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('-', self, other)
-> +
-> +  def __rsub__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('-', other, self)
-> +
-> +  def __mul__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('*', self, other)
-> +
-> +  def __rmul__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('*', other, self)
-> +
-> +  def __truediv__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('/', self, other)
-> +
-> +  def __rtruediv__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('/', other, self)
-> +
-> +  def __mod__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('%', self, other)
-> +
-> +
-> +def _Constify(val: Union[bool, int, float, Expression]) -> Expression:
-> +  """Used to ensure that the nodes in the expression tree are all Expression."""
-> +  if isinstance(val, bool):
-> +    return Constant(1 if val else 0)
-> +  if isinstance(val, int) or isinstance(val, float):
-> +    return Constant(val)
-> +  return val
-> +
-> +
-> +# Simple lookup for operator precedence, used to avoid unnecessary
-> +# brackets. Precedence matches that of python and the simple expression parser.
-> +_PRECEDENCE = {
-> +    '|': 0,
-> +    '^': 1,
-> +    '&': 2,
-> +    '<': 3,
-> +    '>': 3,
-> +    '+': 4,
-> +    '-': 4,
-> +    '*': 5,
-> +    '/': 5,
-> +    '%': 5,
-> +}
-> +
-> +
-> +class Operator(Expression):
-> +  """Represents a binary operator in the parse tree."""
-> +
-> +  def __init__(self, operator: str, lhs: Union[int, float, Expression],
-> +               rhs: Union[int, float, Expression]):
-> +    self.operator = operator
-> +    self.lhs = _Constify(lhs)
-> +    self.rhs = _Constify(rhs)
-> +
-> +  def Bracket(self,
-> +              other: Expression,
-> +              other_str: str,
-> +              rhs: bool = False) -> str:
-> +    """Returns whether to bracket ``other``
-> +
-> +    ``other`` is the lhs or rhs, ``other_str`` is ``other`` in the
-> +    appropriate string from. If ``other`` is an operator then a
-> +    bracket is necessary when this/self operator has higher
-> +    precedence. Consider: '(a + b) * c', ``other_str`` will be 'a +
-> +    b'. A bracket is necessary as without the bracket 'a + b * c' will
-> +    evaluate 'b * c' first. However, '(a * b) + c' doesn't need a
-> +    bracket as 'a * b' will always be evaluated first. For 'a / (b *
-> +    c)' (ie the same precedence level operations) then we add the
-> +    bracket to best match the original input, but not for '(a / b) *
-> +    c' where the bracket is unnecessary.
-> +    """
-> +    if isinstance(other, Operator):
-> +      if _PRECEDENCE.get(self.operator, -1) > _PRECEDENCE.get(
-> +          other.operator, -1):
-> +        return f'({other_str})'
-> +      if rhs and _PRECEDENCE.get(self.operator, -1) == _PRECEDENCE.get(
-> +          other.operator, -1):
-> +        return f'({other_str})'
-> +    return other_str
-> +
-> +  def ToPerfJson(self):
-> +    return f'{self.Bracket(self.lhs, self.lhs.ToPerfJson())} {self.operator} ' \
-> +      f'{self.Bracket(self.rhs, self.rhs.ToPerfJson(), True)}'
-> +
-> +  def ToPython(self):
-> +    return f'{self.Bracket(self.lhs, self.lhs.ToPython())} {self.operator} ' \
-> +      f'{self.Bracket(self.rhs, self.rhs.ToPython(), True)}'
-> +
-> +  def Simplify(self) -> Expression:
-> +    lhs = self.lhs.Simplify()
-> +    rhs = self.rhs.Simplify()
-> +    if isinstance(lhs, Constant) and isinstance(rhs, Constant):
-> +      return Constant(eval(lhs + self.operator + rhs))
-> +
-> +    if isinstance(self.lhs, Constant):
-> +      if (self.operator == '+' or self.operator == '|') and lhs.value == '0':
-> +        return rhs
-> +
-> +      if self.operator == '*' and lhs.value == '0':
-> +        return Constant(0)
-> +
-> +      if self.operator == '*' and lhs.value == '1':
-> +        return rhs
-> +
-> +    if isinstance(rhs, Constant):
-> +      if (self.operator == '+' or self.operator == '|') and rhs.value == '0':
-> +        return lhs
-> +
-> +      if self.operator == '*' and rhs.value == '0':
-> +        return Constant(0)
-> +
-> +      if self.operator == '*' and self.rhs.value == '1':
-> +        return lhs
-> +
-> +    return Operator(self.operator, lhs, rhs)
-> +
-> +  def Equals(self, other: Expression) -> bool:
-> +    if isinstance(other, Operator):
-> +      return self.operator == other.operator and self.lhs.Equals(
-> +          other.lhs) and self.rhs.Equals(other.rhs)
-> +    return False
-> +
-> +class Select(Expression):
-> +  """Represents a select ternary in the parse tree."""
-> +
-> +  def __init__(self, true_val: Union[int, float, Expression],
-> +               cond: Union[int, float, Expression],
-> +               false_val: Union[int, float, Expression]):
-> +    self.true_val = _Constify(true_val)
-> +    self.cond = _Constify(cond)
-> +    self.false_val = _Constify(false_val)
-> +
-> +  def ToPerfJson(self):
-> +    true_str = self.true_val.ToPerfJson()
-> +    cond_str = self.cond.ToPerfJson()
-> +    false_str = self.false_val.ToPerfJson()
-> +    return f'({true_str} if {cond_str} else {false_str})'
-> +
-> +  def ToPython(self):
-> +    return f'Select({self.true_val.ToPython()}, {self.cond.ToPython()}, ' \
-> +      f'{self.false_val.ToPython()})'
-> +
-> +  def Simplify(self) -> Expression:
-> +    cond = self.cond.Simplify()
-> +    true_val = self.true_val.Simplify()
-> +    false_val = self.false_val.Simplify()
-> +    if isinstance(cond, Constant):
-> +      return false_val if cond.value == '0' else true_val
-> +
-> +    if true_val.Equals(false_val):
-> +      return true_val
-> +
-> +    return Select(true_val, cond, false_val)
-> +
-> +  def Equals(self, other: Expression) -> bool:
-> +    if isinstance(other, Select):
-> +      return self.cond.Equals(other.cond) and self.false_val.Equals(
-> +          other.false_val) and self.true_val.Equals(other.true_val)
-> +    return False
-> +
-> +class Function(Expression):
-> +  """A function in an expression like min, max, d_ratio."""
-> +
-> +  def __init__(self,
-> +               fn: str,
-> +               lhs: Union[int, float, Expression],
-> +               rhs: Optional[Union[int, float, Expression]] = None):
-> +    self.fn = fn
-> +    self.lhs = _Constify(lhs)
-> +    self.rhs = _Constify(rhs)
-> +
-> +  def ToPerfJson(self):
-> +    if self.rhs:
-> +      return f'{self.fn}({self.lhs.ToPerfJson()}, {self.rhs.ToPerfJson()})'
-> +    else:
-> +      return f'{self.fn}({self.lhs.ToPerfJson()})'
-> +
-> +  def ToPython(self):
-> +    if self.rhs:
-> +      return f'{self.fn}({self.lhs.ToPython()}, {self.rhs.ToPython()})'
-> +    else:
-> +      return f'{self.fn}({self.lhs.ToPython()})'
-> +
-> +  def Simplify(self) -> Expression:
-> +    lhs = self.lhs.Simplify()
-> +    rhs = self.rhs.Simplify()
-> +    if isinstance(lhs, Constant) and isinstance(rhs, Constant):
-> +      if self.fn == 'd_ratio':
-> +        if rhs.value == '0':
-> +          return Constant(0)
-> +        Constant(eval(f'{lhs} / {rhs}'))
-> +      return Constant(eval(f'{self.fn}({lhs}, {rhs})'))
-> +
-> +    return Function(self.fn, lhs, rhs)
-> +
-> +  def Equals(self, other: Expression) -> bool:
-> +    if isinstance(other, Function):
-> +      return self.fn == other.fn and self.lhs.Equals(
-> +          other.lhs) and self.rhs.Equals(other.rhs)
-> +    return False
-> +
-> +
-> +class Event(Expression):
-> +  """An event in an expression."""
-> +
-> +  def __init__(self, name: str, legacy_name: str = ''):
-> +    self.name = name
-> +    self.legacy_name = legacy_name
-> +
-> +  def ToPerfJson(self):
-> +    result = re.sub('/', '@', self.name)
-> +    return result
-> +
-> +  def ToPython(self):
-> +    return f'Event(r"{self.name}")'
-> +
-> +  def Simplify(self) -> Expression:
-> +    return self
-> +
-> +  def Equals(self, other: Expression) -> bool:
-> +    return isinstance(other, Event) and self.name == other.name
-> +
-> +class Constant(Expression):
-> +  """A constant within the expression tree."""
-> +
-> +  def __init__(self, value: Union[float, str]):
-> +    ctx = decimal.Context()
-> +    ctx.prec = 20
-> +    dec = ctx.create_decimal(repr(value) if isinstance(value, float) else value)
-> +    self.value = dec.normalize().to_eng_string()
-> +    self.value = self.value.replace('+', '')
-> +    self.value = self.value.replace('E', 'e')
-> +
-> +  def ToPerfJson(self):
-> +    return self.value
-> +
-> +  def ToPython(self):
-> +    return f'Constant({self.value})'
-> +
-> +  def Simplify(self) -> Expression:
-> +    return self
-> +
-> +  def Equals(self, other: Expression) -> bool:
-> +    return isinstance(other, Constant) and self.value == other.value
-> +
-> +class Literal(Expression):
-> +  """A runtime literal within the expression tree."""
-> +
-> +  def __init__(self, value: str):
-> +    self.value = value
-> +
-> +  def ToPerfJson(self):
-> +    return self.value
-> +
-> +  def ToPython(self):
-> +    return f'Literal({self.value})'
-> +
-> +  def Simplify(self) -> Expression:
-> +    return self
-> +
-> +  def Equals(self, other: Expression) -> bool:
-> +    return isinstance(other, Literal) and self.value == other.value
-> +
-> +
-> +def min(lhs: Union[int, float, Expression], rhs: Union[int, float,
-> +                                                       Expression]) -> Function:
-> +  return Function('min', lhs, rhs)
-> +
-> +
-> +def max(lhs: Union[int, float, Expression], rhs: Union[int, float,
-> +                                                       Expression]) -> Function:
-> +  return Function('max', lhs, rhs)
-> +
-> +
-> +def d_ratio(lhs: Union[int, float, Expression],
-> +            rhs: Union[int, float, Expression]) -> Function:
-> +  return Function('d_ratio', lhs, rhs)
-> +
-> +
-> +def source_count(event: Event) -> Function:
-> +  return Function('source_count', event)
-> +
-> +class Metric:
-> +  """An individual metric that will specifiable on the perf command line."""
-> +  groups: Set[str]
-> +  expr: Expression
-> +  scale_unit: str
-> +  constraint: bool
-> +
-> +  def __init__(self,
-> +               name: str,
-> +               description: str,
-> +               expr: Expression,
-> +               scale_unit: str,
-> +               constraint: bool = False):
-> +    self.name = name
-> +    self.description = description
-> +    self.expr = expr.Simplify()
-> +    # Workraound valid_only_metric hiding certain metrics based on unit.
-> +    scale_unit = scale_unit.replace('/sec', ' per sec')
-> +    if scale_unit[0].isdigit():
-> +      self.scale_unit = scale_unit
-> +    else:
-> +      self.scale_unit = f'1{scale_unit}'
-> +    self.constraint = constraint
-> +    self.groups = set()
-> +
-> +  def __lt__(self, other):
-> +    """Sort order."""
-> +    return self.name < other.name
-> +
-> +  def AddToMetricGroup(self, group):
-> +    """Callback used when being added to a MetricGroup."""
-> +    self.groups.add(group.name)
-> +
-> +  def Flatten(self) -> set:
-> +    """Return a leaf metric."""
-> +    return set([self])
-> +
-> +  def ToPerfJson(self):
-> +    result = {
-> +        'MetricName': self.name,
-> +        'MetricGroup': ';'.join(sorted(self.groups)),
-> +        'BriefDescription': self.description,
-> +        'MetricExpr': self.expr.ToPerfJson(),
-> +        'ScaleUnit': self.scale_unit
-> +    }
-> +    if self.constraint:
-> +      result['MetricConstraint'] = 'NO_NMI_WATCHDOG'
-> +
-> +    return result
-> +
-> +
-> +class _MetricJsonEncoder(json.JSONEncoder):
-> +  """Special handling for Metric objects."""
-> +
-> +  def default(self, obj):
-> +    if isinstance(obj, Metric):
-> +      return obj.ToPerfJson()
-> +    return json.JSONEncoder.default(self, obj)
-> +
-> +
-> +class MetricGroup:
-> +  """A group of metrics.
-> +
-> +  Metric groups may be specificd on the perf command line, but within
-> +  the json they aren't encoded. Metrics may be in multiple groups
-> +  which can facilitate arrangements similar to trees.
-> +  """
-> +
-> +  def __init__(self, name: str, metric_list: list[Union[Metric,
-> +                                                        'MetricGroup']]):
-> +    self.name = name
-> +    self.metric_list = metric_list
-> +    for metric in metric_list:
-> +      metric.AddToMetricGroup(self)
-> +
-> +  def AddToMetricGroup(self, group):
-> +    """Callback used when a MetricGroup is added into another."""
-> +    for metric in self.metric_list:
-> +      metric.AddToMetricGroup(group)
-> +
-> +  def Flatten(self) -> set:
-> +    """Returns a set of all leaf metrics."""
-> +    result = set()
-> +    for x in self.metric_list:
-> +      result = result.union(x.Flatten())
-> +
-> +    return result
-> +
-> +  def ToPerfJson(self) -> str:
-> +    return json.dumps(sorted(self.Flatten()), indent=2, cls=_MetricJsonEncoder)
-> +
-> +  def __str__(self) -> str:
-> +    return self.ToPerfJson()
-> +
-> +
-> +class _RewriteIfExpToSelect(ast.NodeTransformer):
-> +
-> +  def visit_IfExp(self, node):
-> +    call = ast.Call(
-> +        func=ast.Name(id='Select', ctx=ast.Load()),
-> +        args=[node.body, node.test, node.orelse],
-> +        keywords=[])
-> +    ast.copy_location(call, node.test)
-> +    return call
-> +
-> +
-> +def ParsePerfJson(orig: str) -> Expression:
-> +  """A simple json metric expression decoder.
-> +
-> +  Converts a json encoded metric expression by way of python's ast and
-> +  eval routine. First tokens are mapped to Event calls, then
-> +  accidentally converted keywords or literals are mapped to their
-> +  appropriate calls. Python's ast is used to match if-else that can't
-> +  be handled via operator overloading. Finally the ast is evaluated.
-> +  """
-> +  py = orig.strip()
-> +  py = re.sub(r'([a-zA-Z][^-+/\* \\\(\),]*(?:\\.[^-+/\* \\\(\),]*)*)',
-> +              r'Event(r"\1")', py)
-> +  py = re.sub(r'#Event\(r"([^"]*)"\)', r'Literal("#\1")', py)
-> +  py = re.sub(r'([0-9]+)Event\(r"(e[0-9]+)"\)', r'\1\2', py)
-> +  keywords = ['if', 'else', 'min', 'max', 'd_ratio', 'source_count']
-> +  for kw in keywords:
-> +    py = re.sub(f'Event\(r"{kw}"\)', kw, py)
-> +
-> +  parsed = ast.parse(py, mode='eval')
-> +  _RewriteIfExpToSelect().visit(parsed)
-> +  parsed = ast.fix_missing_locations(parsed)
-> +  return _Constify(eval(compile(parsed, orig, 'eval')))
-> diff --git a/tools/perf/pmu-events/metric_test.py b/tools/perf/pmu-events/metric_test.py
-> new file mode 100644
-> index 000000000000..3909ca773ca1
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/metric_test.py
-> @@ -0,0 +1,143 @@
-> +# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-> +import unittest
-> +from metric import Constant, Event, ParsePerfJson
-> +
-> +
-> +class TestMetricExpressions(unittest.TestCase):
-> +
-> +  def test_Operators(self):
-> +    a = Event('a')
-> +    b = Event('b')
-> +    self.assertEqual((a | b).ToPerfJson(), 'a | b')
-> +    self.assertEqual((a ^ b).ToPerfJson(), 'a ^ b')
-> +    self.assertEqual((a & b).ToPerfJson(), 'a & b')
-> +    self.assertEqual((a < b).ToPerfJson(), 'a < b')
-> +    self.assertEqual((a > b).ToPerfJson(), 'a > b')
-> +    self.assertEqual((a + b).ToPerfJson(), 'a + b')
-> +    self.assertEqual((a - b).ToPerfJson(), 'a - b')
-> +    self.assertEqual((a * b).ToPerfJson(), 'a * b')
-> +    self.assertEqual((a / b).ToPerfJson(), 'a / b')
-> +    self.assertEqual((a % b).ToPerfJson(), 'a % b')
-> +
-> +  def test_Brackets(self):
-> +    a = Event('a')
-> +    b = Event('b')
-> +    c = Event('c')
-> +    self.assertEqual((a * b + c).ToPerfJson(), 'a * b + c')
-> +    self.assertEqual((a + b * c).ToPerfJson(), 'a + b * c')
-> +    self.assertEqual(((a + a) + a).ToPerfJson(), 'a + a + a')
-> +    self.assertEqual(((a + b) * c).ToPerfJson(), '(a + b) * c')
-> +    self.assertEqual((a + (b * c)).ToPerfJson(), 'a + b * c')
-> +    self.assertEqual(((a / b) * c).ToPerfJson(), 'a / b * c')
-> +    self.assertEqual((a / (b * c)).ToPerfJson(), 'a / (b * c)')
-> +
-> +  def test_ParsePerfJson(self):
-> +    # Based on an example of a real metric.
-> +    before = '(a + b + c + d) / (2 * e)'
-> +    after = before
-> +    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-> +
-> +    # Parsing should handle events with '-' in their name. Note, in
-> +    # the json file the '\' are doubled to '\\'.
-> +    before = r'topdown\-fe\-bound / topdown\-slots - 1'
-> +    after = before
-> +    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-> +
-> +    # Parsing should handle escaped modifiers. Note, in the json file
-> +    # the '\' are doubled to '\\'.
-> +    before = 'arb@event\=0x81\,umask\=0x1@ + arb@event\=0x84\,umask\=0x1@'
-> +    after = before
-> +    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-> +
-> +    # Parsing should handle exponents in numbers.
-> +    before = r'a + 1e12 + b'
-> +    after = before
-> +    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-> +
-> +  def test_IfElseTests(self):
-> +    # if-else needs rewriting to Select and back.
-> +    before = r'Event1 if #smt_on else Event2'
-> +    after = f'({before})'
-> +    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-> +
-> +    before = r'Event1 if 0 else Event2'
-> +    after = f'({before})'
-> +    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-> +
-> +    before = r'Event1 if 1 else Event2'
-> +    after = f'({before})'
-> +    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-> +
-> +    # Ensure the select is evaluate last.
-> +    before = r'Event1 + 1 if Event2 < 2 else Event3 + 3'
-> +    after = (r'Select(Event(r"Event1") + Constant(1), Event(r"Event2") < '
-> +             r'Constant(2), Event(r"Event3") + Constant(3))')
-> +    self.assertEqual(ParsePerfJson(before).ToPython(), after)
-> +
-> +    before = r'Event1 > 1 if Event2 < 2 else Event3 > 3'
-> +    after = (r'Select(Event(r"Event1") > Constant(1), Event(r"Event2") < '
-> +             r'Constant(2), Event(r"Event3") > Constant(3))')
-> +    self.assertEqual(ParsePerfJson(before).ToPython(), after)
-> +
-> +    before = r'min(a + b if c > 1 else c + d, e + f)'
-> +    after = r'min((a + b if c > 1 else c + d), e + f)'
-> +    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-> +
-> +  def test_ToPython(self):
-> +    # Based on an example of a real metric.
-> +    before = '(a + b + c + d) / (2 * e)'
-> +    py = ParsePerfJson(before).ToPython()
-> +    after = eval(py).ToPerfJson()
-> +    self.assertEqual(before, after)
-> +
-> +  def test_Simplify(self):
-> +    before = '1 + 2 + 3'
-> +    after = '6'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = 'a + 0'
-> +    after = 'a'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = '0 + a'
-> +    after = 'a'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = 'a | 0'
-> +    after = 'a'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = '0 | a'
-> +    after = 'a'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = 'a * 0'
-> +    after = '0'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = '0 * a'
-> +    after = '0'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = 'a * 1'
-> +    after = 'a'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = '1 * a'
-> +    after = 'a'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = 'a if 0 else b'
-> +    after = 'b'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = 'a if 1 else b'
-> +    after = 'a'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = 'a if b else a'
-> +    after = 'a'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +if __name__ == '__main__':
-> +  unittest.main()
-> --
-> 2.38.0.rc1.362.ged0d419d3c-goog
->
+Jason
