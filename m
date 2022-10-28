@@ -2,172 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B4D61076F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 03:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDB8610774
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 03:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236016AbiJ1BtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 21:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S235695AbiJ1Bws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 21:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235783AbiJ1Bsr (ORCPT
+        with ESMTP id S234030AbiJ1Bwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 21:48:47 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33B3ACA2D
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:48:45 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id ml12so3221739qvb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:48:45 -0700 (PDT)
+        Thu, 27 Oct 2022 21:52:45 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B3FAD995
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:52:44 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id c23so2710399qtw.8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:52:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ABM6Qj3NxZjFFbqew+a/nfxO7MCA2/sBgc75TPhkyfM=;
-        b=le7KQwhYNdT4o/G8faZuKZXaCQiXbXPzBmn798kEV24s0tzqVbeGPRvNyLryj9dAlj
-         pPuid4IZ28NwSfPeNRpfKwtRBYyChRs9krVINrXT6P425p7iKXtZg9SnSs9yUfb0xxsu
-         fFMJFPz1jG+sZ5c2m2SBaxXwFDX50BiR4FQOnT7Yriyl9sJNKS5ajPzcryjcyWZSJosn
-         eg4mlVdL2i7njhKs/KZoF//9ih8iepdsjOb2p65+PKgjFUZKRI75wel6G8JladusSbk7
-         tI6tJ1E2VbPB1b5MRRj0FzEQbivYfo07HZ0onwLeZQTL+4odD9kPgJhJ/M/e0AudE6FS
-         Wzxg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5yy8TNI0iIOeZCtVjRMbf3TjP3tDO+JbDFQL1ZgVllA=;
+        b=a3FXlBy9z5wu0caeZP7ZvrhebVK+PYnk00GobO2x2JsYEYo6lDsjLMrxx3+zPvgOUr
+         kIfZCU8Oc0DUut1EB/qYk+9yb5PEHjJ2bPyqM9Ma8d5wnK+27sjWztJckFuS+CavwBD8
+         sNu1A3xaMBa7QzbQNK4L9vCXvbiHbB3qEDaEZspK8KcVs93O2rn1SA6rFm7gpC7eU4bG
+         IJoQdtDHs0AW8FuxA0s+kua7zfawRxYfdBl+F3g+uRxiE4aJ6W3ol/kj4apeZnrD13W0
+         1l7oBAFn3XhDPWdx/lUBN1LCn1k37pLQ+OOvjJzDoZmGuEqA2TUY568OPpk+UGH0WnDz
+         i0gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ABM6Qj3NxZjFFbqew+a/nfxO7MCA2/sBgc75TPhkyfM=;
-        b=lrj7OxhgMrRRVdEOXbY+LgwL9z04udhy7DNjeH0IDjTLyci3RQIV7JH09Qj+c7gd/I
-         FdOMlzK4fbkbSr2fdtzhDP9o2TcQkPnFT3D7JksH06A6KzEmPuLOybWb8ypzaP5Oh2NC
-         sVqkcak8rJsubxPgcgEzZE1S3rvlVeUuof1V+tYyRV3o+9jiaRykoT0SPKT4lxLYxLmx
-         HErm36xafjXpB5LR5G95IJmojCHsxhhTt/7GMCG0SOcRtcHNDtJStqrkwEpKXUQ25grx
-         m6WWwFN4Xrf2RFLiZyeKWp+hMgzWgFgLzG/3k6UNy7SyoKOPEe1C14xsHzXiYXTwrIwF
-         XvBA==
-X-Gm-Message-State: ACrzQf2+YmLW1X9kvFdNFMB502PhHxd6D/FMRPZ4YSuehYUZSexnwyGY
-        TBo2MMkDw0SRzkTXq4HdgWP07yQhu1g=
-X-Google-Smtp-Source: AMsMyM6y5o2f6DKZDjf+gGHOkL8khewfMCHI7Y6dO4VQSwBoYqHYaZTUeck/sHhN2PpD0WPVsCCtlw==
-X-Received: by 2002:a0c:b256:0:b0:4b1:9f77:91da with SMTP id k22-20020a0cb256000000b004b19f7791damr44783109qve.84.1666921724552;
-        Thu, 27 Oct 2022 18:48:44 -0700 (PDT)
-Received: from localhost ([2601:589:4102:4c7c:d8d0:78d7:ad97:2651])
-        by smtp.gmail.com with ESMTPSA id o18-20020a05620a2a1200b006cddf59a600sm2086846qkp.34.2022.10.27.18.48.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 18:48:44 -0700 (PDT)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 6/6] bitmap: drop _reg_op()
-Date:   Thu, 27 Oct 2022 18:48:34 -0700
-Message-Id: <20221028014834.572819-7-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221028014834.572819-1-yury.norov@gmail.com>
-References: <20221028014834.572819-1-yury.norov@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5yy8TNI0iIOeZCtVjRMbf3TjP3tDO+JbDFQL1ZgVllA=;
+        b=Y6qXIT6oXZC7F7HwR8GcjpXA5v4Gg1nSXgP/wE1FUW6Ds3itogKxQjTM9mhRvPuS5j
+         mWGYpj9hAyBbM+jjGLGadZU7Hd/2DVETujM1cPzb6ccbeUl00ztkLatZ4E6mw6hCyIyj
+         8ZQW3W/cMvsZ/YI+6eDt5i07GZtMn5wqqosv3o876qPHvObEyTVtczqKwHOaRKKnkueF
+         AuOnRmPF53rznHXfb/uCyX8AL+FhkDN8twCU2oALNO9xiVb+BQCJX3VKY3lk03xYU4RL
+         a9rKCM3A0RgUkqEnCMt74eAuqe4/jPJz/w2wqWA72jnkVv1DX89x7PE1EbR+6xZ1KUtL
+         /iMw==
+X-Gm-Message-State: ACrzQf3S9zD1E+OSP26fHaO1hWo6WJj+pnivmtZ2t7eK9dCEGKb/8sxg
+        vh2Fp3Ltq8XkH455X1t9V1e0F2SrP14jag==
+X-Google-Smtp-Source: AMsMyM4koLkGjhZW3oXhqu+e+0pVR0w0wzPHgyh1kHQo+WobOSK2QlzqYGnUNjTcjtRYXZ+4bz/lqw==
+X-Received: by 2002:a05:622a:15c7:b0:39b:2791:cd44 with SMTP id d7-20020a05622a15c700b0039b2791cd44mr43752425qty.676.1666921953238;
+        Thu, 27 Oct 2022 18:52:33 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id r9-20020a05620a298900b006b61b2cb1d2sm2102295qkp.46.2022.10.27.18.52.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 18:52:32 -0700 (PDT)
+Message-ID: <31d129a4-50a5-dc5d-4d69-cddd7e1bca21@linaro.org>
+Date:   Thu, 27 Oct 2022 21:52:30 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v5 1/2] dt-bindings: it6505: add properties to restrict
+ output bandwidth
+Content-Language: en-US
+To:     Pin-yen Lin <treapking@chromium.org>, allen <allen.chen@ite.com.tw>
+Cc:     Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
+        Hermes Wu <Hermes.Wu@ite.com.tw>,
+        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
+References: <20221019093215.8204-1-allen.chen@ite.com.tw>
+ <20221019093215.8204-2-allen.chen@ite.com.tw>
+ <20221024163748.GA1874793-robh@kernel.org>
+ <CAEXTbpfpmAAaXOEkirMtuSJLopv-Us6w-46oE+GSxXiMGU-ZfQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAEXTbpfpmAAaXOEkirMtuSJLopv-Us6w-46oE+GSxXiMGU-ZfQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that all _reg_op() users are switched to alternative functions,
-_reg_op() is not needed anymore.
+On 26/10/2022 00:03, Pin-yen Lin wrote:
+>>> +                  - minItems: 4
+>>> +                    maxItems: 4
+>>> +                    uniqueItems: true
+>>> +                    items:
+>>> +                      enum:
+>>> +                        - 0
+>>> +                        - 1
+>>> +                        - 2
+>>> +                        - 3
+>>> +                    description: For four lanes operation.
+>>
+>> I would do just:
+>>
+>> data-lanes:
+>>   minItems: 1
+>>   items:
+>>     - enum: [ 0, 1 ]
+>>     - const: 1
+>>     - const: 2
+>>     - const: 3
+> 
+> I believe we also want a `uniqueItems: true` to prevent duplicate
+> items like `<1 1>`.
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
- lib/bitmap.c | 76 ----------------------------------------------------
- 1 file changed, 76 deletions(-)
+... and are <1 1> passing with Rob's proposal?
 
-diff --git a/lib/bitmap.c b/lib/bitmap.c
-index 2a85fe16f3fa..4aa4e871c95d 100644
---- a/lib/bitmap.c
-+++ b/lib/bitmap.c
-@@ -1220,82 +1220,6 @@ void bitmap_fold(unsigned long *dst, const unsigned long *orig,
- }
- #endif /* CONFIG_NUMA */
- 
--/*
-- * Common code for bitmap_*_region() routines.
-- *	bitmap: array of unsigned longs corresponding to the bitmap
-- *	pos: the beginning of the region
-- *	order: region size (log base 2 of number of bits)
-- *	reg_op: operation(s) to perform on that region of bitmap
-- *
-- * Can set, verify and/or release a region of bits in a bitmap,
-- * depending on which combination of REG_OP_* flag bits is set.
-- *
-- * A region of a bitmap is a sequence of bits in the bitmap, of
-- * some size '1 << order' (a power of two), aligned to that same
-- * '1 << order' power of two.
-- *
-- * Returns 1 if REG_OP_ISFREE succeeds (region is all zero bits).
-- * Returns 0 in all other cases and reg_ops.
-- */
--
--enum {
--	REG_OP_ISFREE,		/* true if region is all zero bits */
--	REG_OP_ALLOC,		/* set all bits in region */
--	REG_OP_RELEASE,		/* clear all bits in region */
--};
--
--static int __reg_op(unsigned long *bitmap, unsigned int pos, int order, int reg_op)
--{
--	int nbits_reg;		/* number of bits in region */
--	int index;		/* index first long of region in bitmap */
--	int offset;		/* bit offset region in bitmap[index] */
--	int nlongs_reg;		/* num longs spanned by region in bitmap */
--	int nbitsinlong;	/* num bits of region in each spanned long */
--	unsigned long mask;	/* bitmask for one long of region */
--	int i;			/* scans bitmap by longs */
--	int ret = 0;		/* return value */
--
--	/*
--	 * Either nlongs_reg == 1 (for small orders that fit in one long)
--	 * or (offset == 0 && mask == ~0UL) (for larger multiword orders.)
--	 */
--	nbits_reg = 1 << order;
--	index = pos / BITS_PER_LONG;
--	offset = pos - (index * BITS_PER_LONG);
--	nlongs_reg = BITS_TO_LONGS(nbits_reg);
--	nbitsinlong = min(nbits_reg,  BITS_PER_LONG);
--
--	/*
--	 * Can't do "mask = (1UL << nbitsinlong) - 1", as that
--	 * overflows if nbitsinlong == BITS_PER_LONG.
--	 */
--	mask = (1UL << (nbitsinlong - 1));
--	mask += mask - 1;
--	mask <<= offset;
--
--	switch (reg_op) {
--	case REG_OP_ISFREE:
--		for (i = 0; i < nlongs_reg; i++) {
--			if (bitmap[index + i] & mask)
--				goto done;
--		}
--		ret = 1;	/* all bits in region free (zero) */
--		break;
--
--	case REG_OP_ALLOC:
--		for (i = 0; i < nlongs_reg; i++)
--			bitmap[index + i] |= mask;
--		break;
--
--	case REG_OP_RELEASE:
--		for (i = 0; i < nlongs_reg; i++)
--			bitmap[index + i] &= ~mask;
--		break;
--	}
--done:
--	return ret;
--}
--
- /**
-  * bitmap_find_free_region - find a contiguous aligned mem region
-  *	@bitmap: array of unsigned longs corresponding to the bitmap
--- 
-2.34.1
+Best regards,
+Krzysztof
 
