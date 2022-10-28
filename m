@@ -2,112 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A02AB611B8E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B43611B8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiJ1Ucu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 16:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
+        id S229867AbiJ1Uay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 16:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiJ1Ucr (ORCPT
+        with ESMTP id S229738AbiJ1Uav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 16:32:47 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CB222BADF;
-        Fri, 28 Oct 2022 13:32:42 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-13c569e5ff5so7177933fac.6;
-        Fri, 28 Oct 2022 13:32:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aSqnTpNHbps1i+IUkYc3gnjPok+dbevRU0lz9a6eyvw=;
-        b=iTU6qv2ayh4eXbj4okGU3i75GySPyiKnsl+FlqMSW/CiislYhDz0qO6o0IQDHv0i5r
-         EYq+ENorLnir75FL2c/sdRs9R+icC1Ni1ufLAbGc1aTLTXBue86KP2YQErvbUP068M15
-         858Oauk0ck5eUtcAzDKwISV59G3M120dEWr6izi3gdKqUREQ6jH/Y/oT720+IS1o1wh/
-         0xM3fLHvuCA8lLKPS+7iAE0etRAK5yJz97qdrcqcihsjoXNL4wOTBpgNvAzypFx+QTV3
-         4+R5wUcG0eoG7Phpyh71TC57DY05o0GIZZi0/Pc3pwQjQV4ieBL0VMS7fIVqEuQqhQhG
-         gBAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aSqnTpNHbps1i+IUkYc3gnjPok+dbevRU0lz9a6eyvw=;
-        b=ArCUdEOpOtz0nmdfX7Tu5PksChOkHRnefupV/HpyNSzdbp8KGR/HQAK6Gay5INHafb
-         KnpPE7eqdd5ctq22crYN4DthvwK/nkjqxYkArdHKrlpIAg4wXmFm1G7wHCo1nhpWlBUa
-         XE5Rq2rQWVJIxJ40q2ipcMGSqUyWRx6weC5eBxsgD4XHpvDbMva8TJngZh6JuSp+C7eH
-         x+JnRWU1Pat2K0Njxm5RkZ66xOC/4VUi7tEQa5h4rlE3TqST0YUg2ZzYPPHQFYLn9UMT
-         XiaEALN0IceHKZCEcjvZ8to9P/sv0DWoauGM2AueHKmqZPrDz/unUUVC71ebKgCat8pE
-         Dj9w==
-X-Gm-Message-State: ACrzQf0ilYUgTi2eynZiqwsUOA1kiw8AL1QeN/zDk80XXU6fi8a4jvC8
-        hbTidoW8goUAGrvBdgm9sX985eOmlJ/hLA==
-X-Google-Smtp-Source: AMsMyM5a3oWEc//yptM8iRA1i9OMaraSBZntQF4oDygLxwNpgS9+yLR5gq+K9LFTnzYSqGKzqmvQiA==
-X-Received: by 2002:a05:6870:f221:b0:13b:254d:247a with SMTP id t33-20020a056870f22100b0013b254d247amr583828oao.173.1666989161995;
-        Fri, 28 Oct 2022 13:32:41 -0700 (PDT)
-Received: from macondo.. ([2804:431:e7cd:c2b:f36:b54d:df2:8623])
-        by smtp.gmail.com with ESMTPSA id a8-20020a056870e0c800b00130d060ce80sm2626247oab.31.2022.10.28.13.32.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 13:32:41 -0700 (PDT)
-From:   Rafael Mendonca <rafaelmendsr@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] perf/x86: remove unused variable 'cpu_type'
-Date:   Fri, 28 Oct 2022 17:30:05 -0300
-Message-Id: <20221028203006.976831-1-rafaelmendsr@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 28 Oct 2022 16:30:51 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AA095AED
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:30:48 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7ce329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ce:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 758D11EC06D8;
+        Fri, 28 Oct 2022 22:30:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1666989047;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=wV+E+/SMNeV699Rje9XOtWwOh+RoW8MB13Rtk2kIH54=;
+        b=Zgd42Z5SFTE8Xc3j3xc1VSLfYMBJFZVxHZyh6fjY141Qi+2badS1kc1kDjx2+dxSbyqIRK
+        dcu+8tgMur56gLjZL1CFgFjliSpNQn6T0MLV2JsrpxAhn/1OVcXtElWXfTcn+cHOFE2mFr
+        X7eDXclf2JgXUf9AC3BZRYyu1Kw+mig=
+Date:   Fri, 28 Oct 2022 22:30:33 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     Baoquan He <bhe@redhat.com>, david@redhat.com,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
+        sourabhjain@linux.ibm.com, linux-mm@kvack.org
+Subject: Re: [PATCH v12 7/7] x86/crash: Add x86 crash hotplug support
+Message-ID: <Y1w76RwZUKUvsS7A@zn.tnic>
+References: <53aed03e-2eed-09b1-9532-fe4e497ea47d@oracle.com>
+ <Y0cmaPTKQuWtwIRh@zn.tnic>
+ <Y0d+mFivS+88+Chr@MiWiFi-R3L-srv>
+ <Y1e7Hw0PRDI9NxU9@zn.tnic>
+ <Y1lIoTBNvHrKX5K9@MiWiFi-R3L-srv>
+ <35c98ca6-10f8-b248-78c5-99fce7e66c65@oracle.com>
+ <Y1uspLb7fLdtnQq+@zn.tnic>
+ <d91f8728-6a63-415d-577c-bd76e69ec7f6@oracle.com>
+ <Y1wL+ZrvD5gTZaKN@zn.tnic>
+ <ca43bd5f-8a74-9412-3d4b-52c7d5e54978@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ca43bd5f-8a74-9412-3d4b-52c7d5e54978@oracle.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the removal of function x86_pmu_update_cpu_context() by commit
-983bd8543b5a ("perf: Rewrite core context handling"), there is no need to
-query the type of the hybrid CPU inside function init_hw_perf_events().
+On Fri, Oct 28, 2022 at 02:26:58PM -0500, Eric DeVolder wrote:
+> config CRASH_MAX_MEMORY_RANGES
+>     depends on CRASH_DUMP && KEXEC_FILE && MEMORY_HOTPLUG
+>     int
+>     default 8192
+>     help
+>       For the kexec_file_load path, specify the maximum number of
+>       memory regions, eg. as represented by the 'System RAM' entries
+>       in /proc/iomem, that the elfcorehdr buffer/segment can accommodate.
+>       This value is combined with NR_CPUS and multiplied by Elf64_Phdr
+>       size to determine the final buffer size.
 
-Fixes: 983bd8543b5a ("perf: Rewrite core context handling")
-Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
----
- arch/x86/events/core.c | 4 ----
- 1 file changed, 4 deletions(-)
+No, do this:
 
-diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-index 337a99afe8..85a63a41c4 100644
---- a/arch/x86/events/core.c
-+++ b/arch/x86/events/core.c
-@@ -2161,13 +2161,9 @@ static int __init init_hw_perf_events(void)
- 		if (err)
- 			goto out2;
- 	} else {
--		u8 cpu_type = get_this_hybrid_cpu_type();
- 		struct x86_hybrid_pmu *hybrid_pmu;
- 		int i, j;
- 
--		if (!cpu_type && x86_pmu.get_hybrid_cpu_type)
--			cpu_type = x86_pmu.get_hybrid_cpu_type();
--
- 		for (i = 0; i < x86_pmu.num_hybrid_pmus; i++) {
- 			hybrid_pmu = &x86_pmu.hybrid_pmu[i];
- 
+config CRASH_MEMORY_HOTPLUG_SUPPORT
+    depends on CRASH_DUMP && KEXEC_FILE && MEMORY_HOTPLUG
+    help
+      Help text explaining what this feature is
+
+this thing will simply get enabled when the user enables MEMORY_HOTPLUG
+and CRASH_DUMP.
+
+and then you do in the code:
+
+/*
+ * A comment explaining how the 8192 value has been selected.
+ */
+#define CRASH_MAX_MEMORY_RANGES	8192
+
+Thx.
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
