@@ -2,89 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6215E611122
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2EE611127
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiJ1MVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 08:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
+        id S229949AbiJ1MWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 08:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiJ1MVW (ORCPT
+        with ESMTP id S229719AbiJ1MWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 08:21:22 -0400
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816D17B287;
-        Fri, 28 Oct 2022 05:21:21 -0700 (PDT)
-Received: by mail-qv1-f51.google.com with SMTP id x15so3934407qvp.1;
-        Fri, 28 Oct 2022 05:21:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uNWNDj2XHz/Hz59MrchMAuMDI5o9KuQ1jezmkkViv5E=;
-        b=DtRR1ITK+YfqY/64F5TIgDq1Y9iidQDMrzpnmojoWe38ACBeCI1BpjwljiOLX0ctdx
-         MdyXQURs+rHR6wZ0YW7VHFGhsFIwnvQ6uo6UIPkOmcoixTib1CQY0t6lSpa0IjcJkJ4R
-         vwcvWNjrEC+2wyluVFEBH8ca/oqzmz8nuSWzjOk2gIBZBJHqBh+Lt2TRX9CZ7v+Ln7xT
-         grWAn8jljZEoiu0MVsyKeL2mz2ed3HZGSrc6bXsk7J1kQXfghWwFeT822SegDmclG6gz
-         hnB88+kFpMqOhAGFM5kfTEuwfnvAnxHLujbegokeaauV0lHeuGB21sK0efRanRBv6JYe
-         m7BQ==
-X-Gm-Message-State: ACrzQf0oI1tF3rXqx2OWSJXhKOQWDVI3J0/B9TphkSvbX6FqQUUI8mkZ
-        vyEQXR2XCWMCXASIDswVJ0wlNJysvIJUsA==
-X-Google-Smtp-Source: AMsMyM6sEvtYx6kMVsprKkWz+xBUqUMqm9i/43kvKYPUu+pH/13m82jBOonRtAx1AxLECL2Ni/EKgQ==
-X-Received: by 2002:ad4:5be6:0:b0:4b3:ff39:7ad4 with SMTP id k6-20020ad45be6000000b004b3ff397ad4mr45325558qvc.126.1666959680451;
-        Fri, 28 Oct 2022 05:21:20 -0700 (PDT)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id h17-20020a05620a245100b006ecdfcf9d81sm2848791qkn.84.2022.10.28.05.21.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 05:21:20 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id f205so5947966yba.2;
-        Fri, 28 Oct 2022 05:21:19 -0700 (PDT)
-X-Received: by 2002:a25:d24a:0:b0:6ca:4a7a:75cd with SMTP id
- j71-20020a25d24a000000b006ca4a7a75cdmr39355446ybg.89.1666959679596; Fri, 28
- Oct 2022 05:21:19 -0700 (PDT)
+        Fri, 28 Oct 2022 08:22:13 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E8F42AD7;
+        Fri, 28 Oct 2022 05:22:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666959730; x=1698495730;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jyi2YPooioLK0F2LEjhYuRsxAS5UfvB2qcGTTVQ+86k=;
+  b=JhA32RIAAlQp0udyLlAYMh2ufytPoUhISB0CIDVzrbeUBKVzQfJDqTvN
+   VPif8ILODITkXMKTS644vKPcrlS0Nw/O4Y1d1r9KokNThFGMXDOWt9aGK
+   f2B9mYNCzqeO6SRiLFGGl0ViXSXH0Tc7jxhu6KrTwtulraePyvwJA+c/7
+   mZ7wWz5coCakG4SBvmicXXwNQA1C9//aImaF7Pf3H7m7i+VKa4mdqVxh3
+   ki0lCPsVUNFH4PxADCscq/sjSlFxiUJz5lIszuZnP5dnwx4w7KuLx6kuf
+   sHoHaWk9mv43STFjLN32tBQMh+ztwVi/dWwS/OMGig2jdk8Ssr4bkdkwW
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="335119535"
+X-IronPort-AV: E=Sophos;i="5.95,221,1661842800"; 
+   d="scan'208";a="335119535"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 05:22:10 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="758064551"
+X-IronPort-AV: E=Sophos;i="5.95,221,1661842800"; 
+   d="scan'208";a="758064551"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 05:22:06 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 0F1C020399;
+        Fri, 28 Oct 2022 15:22:04 +0300 (EEST)
+Date:   Fri, 28 Oct 2022 12:22:04 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v4 4/4] media: platform: Add Renesas RZ/G2L CRU driver
+Message-ID: <Y1vJbJfFjV9jRNzz@paasikivi.fi.intel.com>
+References: <20221027103104.74576-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221027103104.74576-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Y1qCbUoLrR6qlQwa@paasikivi.fi.intel.com>
+ <CA+V-a8seroka4YkyCnSYa2KMPDWMG1Zk8tyiqRntdPUQnc+nrA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221028115336.1052782-1-steve@sk2.org>
-In-Reply-To: <20221028115336.1052782-1-steve@sk2.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 28 Oct 2022 14:21:06 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXw0fG+gb0b8T6EvWcJRouTsO-LedpJcV+4-h7DTRqsTA@mail.gmail.com>
-Message-ID: <CAMuHMdXw0fG+gb0b8T6EvWcJRouTsO-LedpJcV+4-h7DTRqsTA@mail.gmail.com>
-Subject: Re: [PATCH] dmaengine: sh: Remove unused shdma-arm.h
-To:     steve@sk2.org
-Cc:     Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+V-a8seroka4YkyCnSYa2KMPDWMG1Zk8tyiqRntdPUQnc+nrA@mail.gmail.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 1:54 PM Stephen Kitt <steve@sk2.org> wrote:
-> shdma-arm.h was introduced with commit 1e69653d40f1 ("DMA: shdma: add
-> r8a73a4 DMAC data to the device ID table"), and its sole user was
-> removed with commit a19788612f51 ("dmaengine: sh: Remove R-Mobile APE6
-> support"). The latter mentions r8a73a4.dtsi but shdma support was
-> removed from that with commit cfda82037780 ("ARM: dts: r8a73a4: Remove
-> non-functional DMA support"), so it seems this is safe to remove.
->
-> Signed-off-by: Stephen Kitt <steve@sk2.org>
+Hi Prabhakar,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On Thu, Oct 27, 2022 at 08:04:40PM +0100, Lad, Prabhakar wrote:
+...
+> > > +static int rzg2l_cru_ip_s_stream(struct v4l2_subdev *sd, int enable)
+> > > +{
+> > > +     struct rzg2l_cru_dev *cru;
+> > > +     int ret;
+> > > +
+> > > +     cru = v4l2_get_subdevdata(sd);
+> > > +
+> > > +     if (!cru->is_csi)
+> > > +             return -EINVAL;
+> > > +
+> > > +     ret = v4l2_subdev_call(cru->ip.remote, video, s_stream, enable);
+> >
+> > It's up to the driver how call pre_streamon() and post_streamoff(), as long
+> > as it takes place on both sides of s_stream().
+> >
+> > In other words, as it seems your device doesn't need anything special, you
+> > could waive implemeting the callbacks yourself and call pre_streamon() and
+> > post_streamoff() here.
+> >
+> Here the cru->ip.remote = CSI, in the rzg2l_cru_set_stream(1) where we
+> are calling pre_streamon()/post_streamoff() callbacks the subdev is
+> CRU-IP. So the calls from rzg2l_cru_set_stream() land into
+> rzg2l_cru_ip_pre_streamon() and rzg2l_cru_ip_post_streamoff() which
+> are calling pre_streamon/post_streamoff for the CSI subdev.
 
-Gr{oetje,eeting}s,
+Again, you should call the source sub-device's pre_streamon and
+post_streamoff from the s_stream handler (not from
+rzg2l_cru_ip_pre_streamon or rzg2l_cru_ip_post_streamoff).
 
-                        Geert
+Starting streaming takes place link by link. This allows a driver to omit
+implementing pre_streamon and post_streamon callbacks if it doesn't need
+them.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-- 
+Kind regards,
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Sakari Ailus
