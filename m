@@ -2,108 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 512666111D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9360D6111D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbiJ1MqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 08:46:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
+        id S229947AbiJ1Mra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 08:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiJ1MqV (ORCPT
+        with ESMTP id S229494AbiJ1Mr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 08:46:21 -0400
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C8C1CEC07;
-        Fri, 28 Oct 2022 05:46:20 -0700 (PDT)
-Received: by mail-qt1-f170.google.com with SMTP id g16so3361165qtu.2;
-        Fri, 28 Oct 2022 05:46:20 -0700 (PDT)
+        Fri, 28 Oct 2022 08:47:26 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F84573322
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:47:25 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id 8so3300834qka.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:47:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m1zeisbWzfTRLqshyHyu2ONVYhtME7k5k9XJadTce2s=;
+        b=PFKyKgk7W8wOY0MRB/S6pACCrIjHCkTlMW+Yhg3RLzDCGfn2zH66SiaRGnDFFeNNpS
+         AaEGFW39LYwKXiQGZsgVVTIY2+ZyKPxoe8eP3Q633BpMZsCSOJwWOR0hb5ad3LYuHJSL
+         RAoSEhyRCATvIUtlvm+WsOtX10V7fHg5dNTQK5a4jEciPzwN5t/Wkye+8I/tdCmWX7QK
+         5pRM57LlOhRw+5TgEViDRB7aR1Pk0pIQEhWnugXoSTXI7DKCRdGXKRvTed2NLGt7A5Ro
+         5m6YRSgUewjzkZnzx9Ti005uE5lr9S84Yec6On5Y/Q94mBJhda73rlWT/iaggTcmG9iH
+         XCGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4PLs2L+UHYQFSiNXWVRX1eTlixniK4rGG++88ZUzDFM=;
-        b=iDGyrBv6XU4b7i74SyvWcF583rlj3OchhpTUjhWlcHmIhB5exC/nXRhraB1ukSN7BM
-         ROfknZZ4nLhoEvWIEcZstQ4I/tLLKGB/pK86hdKaSUQb7mbXOYQJV39qjlvHiSTL4x5w
-         vBzdkKQO6qz8+6oIbtUr2yMCQ5cCpQMlrlex6gpVmXO0LI8yJieDr6sQlP/7wIdnuQOu
-         p37fMeSKwFIo1SNnAuAR6AttHusvC1PHjZjYMRex8h6Ot3bSoBXrPxP1I0eYvwNbAePX
-         1NSji0Q//oCVa6aYzlQVUTkNdYv+XTg8QIT9JFgPZYhR54X24tW03zgjtjKubvKKtInf
-         mvlQ==
-X-Gm-Message-State: ACrzQf2/j8KJ2Ub7seo0yBTySiT+UXLBAfbQ5YvgLspjHcXdQKoj4zV2
-        aso/+mrdPNDxk7dwO8zENJNCdY0Qq1NDSA==
-X-Google-Smtp-Source: AMsMyM7umw66oHKnWvFfDUrs+bpvdvF5NQCo7lwMTmEBqPCPXyn0qvQRIqDF8tubCjezPUhMQs+MOQ==
-X-Received: by 2002:ac8:4e44:0:b0:399:efde:98c5 with SMTP id e4-20020ac84e44000000b00399efde98c5mr45464321qtw.640.1666961179564;
-        Fri, 28 Oct 2022 05:46:19 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id h24-20020ac846d8000000b0039cc22a2c49sm2293682qto.47.2022.10.28.05.46.18
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m1zeisbWzfTRLqshyHyu2ONVYhtME7k5k9XJadTce2s=;
+        b=YniMr7PCDozpRd6uTiUiPiKFX2ncrFOM3sgdFxkc61FaX8avUrlRJRPrOZIh1MqgA9
+         X6yOOpv1JcqFq2qoaUfPKvlSZYGOHsZ3TuAjgftqlgBP35S/PkT8lWtd/VmNbqwwPmko
+         1njHqqTvfKlzQW64c29LDkIWUZb7bX0889SDuQHk4JUWMQF8IIuHczsmjylVx8wPFTLx
+         o5B/n48FXOtQisgtg/EkIDUKi3RT//mfQs2nvW6K8TZLrXt8/IneMNwfP9mf0mS3LbXP
+         GSmUztS/FOEg9KmKXMt/N0jrRexhOO5QRrin6FTRjiVMCmcXgpKzJjeOIExmZDFwSmoz
+         fVqw==
+X-Gm-Message-State: ACrzQf1zx5sKxa1g0+VQ9wkY5JOsZOlBMih1T5RQ0y6YfDUyJMyTQS1X
+        v94x9nsnFBlWwzrZQsmnJiAx5w==
+X-Google-Smtp-Source: AMsMyM6L6NmlrETIJHnFwAuEJE3rylPlekFr1bnZnKO4P+98f/WChasuUtJEEWD3DcO89mw+mTE/gw==
+X-Received: by 2002:a37:5a42:0:b0:6ee:8f0a:9319 with SMTP id o63-20020a375a42000000b006ee8f0a9319mr37789772qkb.315.1666961244601;
+        Fri, 28 Oct 2022 05:47:24 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id w10-20020a05620a444a00b006f9e103260dsm2942489qkp.91.2022.10.28.05.47.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 05:46:18 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id t186so5963064yba.12;
-        Fri, 28 Oct 2022 05:46:18 -0700 (PDT)
-X-Received: by 2002:a25:cd01:0:b0:6c2:6f0d:f4ce with SMTP id
- d1-20020a25cd01000000b006c26f0df4cemr46239035ybf.365.1666961178681; Fri, 28
- Oct 2022 05:46:18 -0700 (PDT)
+        Fri, 28 Oct 2022 05:47:24 -0700 (PDT)
+Message-ID: <20019699-40a7-37d6-4b9b-06446183338f@linaro.org>
+Date:   Fri, 28 Oct 2022 08:47:22 -0400
 MIME-Version: 1.0
-References: <20220920184904.90495-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220920184904.90495-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220920184904.90495-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 28 Oct 2022 14:46:07 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWNq2J40jiC-TkEA23hVWsWTk483KXuDO9-bMe3CiGRcw@mail.gmail.com>
-Message-ID: <CAMuHMdWNq2J40jiC-TkEA23hVWsWTk483KXuDO9-bMe3CiGRcw@mail.gmail.com>
-Subject: Re: [PATCH v4 04/10] dt-bindings: soc: renesas: renesas.yaml:
- Document Renesas RZ/Five SoC
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Atish Patra <atishp@rivosinc.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH V1 1/2] dt-bindings: PCI: tegra234: Add ECAM support
+Content-Language: en-US
+To:     Vidya Sagar <vidyas@nvidia.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, mperttunen@nvidia.com
+Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com
+References: <20221027051214.22003-1-vidyas@nvidia.com>
+ <20221027051214.22003-2-vidyas@nvidia.com>
+ <4579404d-b3f7-8342-6704-2644f5cd489d@linaro.org>
+ <7229a2a6-d646-a8f5-50a2-cca6c44d16d5@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <7229a2a6-d646-a8f5-50a2-cca6c44d16d5@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 8:50 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Document Renesas RZ/Five (R9A07G043) SoC.
->
-> More info about RZ/Five SoC:
-> https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-mpus/rzfive-risc-v-general-purpose-microprocessors-risc-v-cpu-core-andes-ax45mp-single-10-ghz-2ch-gigabit-ethernet
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> v3 -> v4
-> * No change
+On 28/10/2022 08:09, Vidya Sagar wrote:
+> 
+> 
+> On 10/28/2022 2:48 AM, Krzysztof Kozlowski wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 27/10/2022 01:12, Vidya Sagar wrote:
+>>> Add support for ECAM aperture for Tegra234.
+>>>
+>>> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+>>> ---
+>>>   .../devicetree/bindings/pci/nvidia,tegra194-pcie.yaml  | 10 ++++++++--
+>>>   .../devicetree/bindings/pci/snps,dw-pcie.yaml          |  2 +-
+>>>   2 files changed, 9 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.yaml b/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.yaml
+>>> index 75da3e8eecb9..15cc2d2055bb 100644
+>>> --- a/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.yaml
+>>> +++ b/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.yaml
+>>> @@ -27,6 +27,7 @@ properties:
+>>>         - nvidia,tegra234-pcie
+>>>
+>>>     reg:
+>>> +    minItems: 4
+>>>       items:
+>>>         - description: controller's application logic registers
+>>>         - description: configuration registers
+>>> @@ -35,13 +36,17 @@ properties:
+>>>             available for software access.
+>>>         - description: aperture where the Root Port's own configuration
+>>>             registers are available.
+>>> +      - description: aperture to access the configuration space through ECAM.
+>>> +          This is applicable only for Tegra234.
+>>
+>> Then restrict it per compatible in allOf
+>>
+> 
+> Thanks Krzysztof for your review.
+> For a similar change here 
+> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20220707081301.29961-3-vidyas@nvidia.com/ 
+> Rob had said that may be it is not worth it.
+> Let me know if you really want this change and I'll push a new patch.
+> 
 
-Will queue in renesas-devel for v6.2.
+That's a bit different. Restricting it per variant works and should be
+trivial.
 
-Gr{oetje,eeting}s,
+Best regards,
+Krzysztof
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
