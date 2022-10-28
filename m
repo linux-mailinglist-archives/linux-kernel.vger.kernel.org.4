@@ -2,67 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B58611C14
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 23:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02C0611C1E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 23:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiJ1VDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 17:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46166 "EHLO
+        id S229652AbiJ1VFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 17:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJ1VDO (ORCPT
+        with ESMTP id S229458AbiJ1VFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 17:03:14 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AC7244C7E
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 14:03:08 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id s11-20020a056a00178b00b0056cb4545c3fso2483397pfg.5
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 14:03:08 -0700 (PDT)
+        Fri, 28 Oct 2022 17:05:35 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A041CEC0C;
+        Fri, 28 Oct 2022 14:05:29 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id y14so15778004ejd.9;
+        Fri, 28 Oct 2022 14:05:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7SXh0okIwiV6Ma7sPYTqdOlim1w0WkxuN7ZrR2Or+Zk=;
-        b=sMoW1VjscveV6hpN+gf0TGyCtjqBhB6rkQLUDWkT6TJIQDVnicRXENiLc1lewMZJar
-         4GsUxtoNkn2H4lBoXwTCmtzEU04exdCF8/06lItVqpwlz752bPH55HheTJ21XOwXImpS
-         T/xe6vXJy2QfEWHvCUP9lI/0D43YEST8/0U81nBabiErdYqKTiO3x74U6LMXJtwl2GU+
-         sc59v2GoeaSjNA7PALOGSYFz4XB61mbu+DiQBTHtZsynxQwaJDBxR8KwZyve3O7O8D59
-         jtNP11toD85lQCkSgLSMoOxP3W0zczBS+ERHlFHxyFywpwoZoWxFEH8lSfDE6wUA6wc6
-         94SA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pmg59QEvCvB7YDZ5n3GJNoCUMN1VloPth+aIiSQIEsA=;
+        b=pawWAwhqMyDCLnAVREPTezgYxlot5ZLzUpBs82QzdJOwckdBUMPBSiWgoIgUWa6fOJ
+         bIkM+9IKt8z5zMWOfkqWC62e9jD9hPznmpZAiF3Z92MZeXjZ2EXdp79mQFBCVVKX5RHA
+         d2+zNLKJGhTS2ZdBMoMOC3imBv8nkKsrN3MK3CQ6+UkRqm3/aNDa95JS30+KbnxYRv0I
+         ZRpzqO4bUs5sp2EoczKmCzdTqoi0W8aA3bAe8P19r7+WOjoga/3Q1KJpuX2TrSLngx4P
+         3YOqmp/4U7VJu2FpNwNJ5OSnzfiqISZTaXfAdz3kbaDigz3pxNYlsXc5UJu5iSmCMXFf
+         TjAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7SXh0okIwiV6Ma7sPYTqdOlim1w0WkxuN7ZrR2Or+Zk=;
-        b=79cP/I3EYaMoVEkmqC5UEYQjK/MNJ43Tg3X1H/VnkW05unAUTlrJzz3TVRGTEoGy4N
-         hqx4LXvrpguSuvTp/nWpnmHthfWeLIGLZkqvzH1jkdQQKOGOE7aQV6LVy3YsaS2F8GMY
-         OC/pSWd7Bhj/Lj7R980t3dinRpmzk3dJOmTAKJoWGhZh4Za85HnMqFaAUcZxgNJMnt7R
-         UHw9SNGvxvuPYVUfrD68POPt7OkMK6qwAf/X8+L0E58F827bhg0zaNoBjCdGtLE78Ery
-         rHCzHxsN7Q5H2soaWjX7g80j38fFzDIYXnmqGXSSPNhZxwSkujsQ84VHmdJrnj1N00bI
-         AwUA==
-X-Gm-Message-State: ACrzQf1FbmstdYN4OjjdTKfLs16+EaVWDIkVUl57ZA18qzc8Y4SKI/ba
-        7wcAyeiY1pVCfEzPAhegN41XdEVOixDoUw==
-X-Google-Smtp-Source: AMsMyM6pGpoVf42I7ciQCw32xAMqGwCqEIZBD5UfOHjgapypAgH5fEd/25f4EPr3AsZmDR/4VwBnE1mn1FcQ/Q==
-X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
- (user=dlatypov job=sendgmr) by 2002:a05:6a00:1707:b0:566:15a1:8b07 with SMTP
- id h7-20020a056a00170700b0056615a18b07mr1023804pfc.34.1666990987970; Fri, 28
- Oct 2022 14:03:07 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 14:02:56 -0700
-In-Reply-To: <20221028210256.3776835-1-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20221028210256.3776835-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-Message-ID: <20221028210256.3776835-2-dlatypov@google.com>
-Subject: [PATCH 2/2] kunit: tool: print summary of failed tests if a few
- failed out of a lot
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pmg59QEvCvB7YDZ5n3GJNoCUMN1VloPth+aIiSQIEsA=;
+        b=SfXKwpz1NAfJPACS4cvPk66RBifzVMAK6MdiMt1UJJoZSaf3FRpS/FAcAnkymSre0F
+         Lyi87WHJdhnF0ADB8Gfkk8gAOGJ78xUJSQ/P62CI4lMc4yO0mla0r1yIdOLOrWx/E/6w
+         VXHrAOteHPs2Q2o8tIzQTP4ZIMWUZgTFz0yle4vz0Css63chFoeETxfNEp5LswAxEQdz
+         7UT5APXcvIAlatD84cMLq/6Pa0+itpxvbQ1ukFNGWIPy8U1016iE6fe4NA7Imjq2wDY7
+         mcl3hI3HUa9P24ruHkojV9ivCxWhzS7lGC4nXGsb7euZ8fFowu5ZSuCAf+Zi1aNZOTJO
+         Kafg==
+X-Gm-Message-State: ACrzQf1+MpkBw23tAVrDvLuzvMbSh3KAmYvcxb2ml9wdPD1u2hV1qRde
+        9Yh0MmjXggrUqmuHRzV+gvUiPSH5wJdB4BUwxhw=
+X-Google-Smtp-Source: AMsMyM75Y5FZ82YEH9D4k42+Gt58baqs7YVwanOze6jxdEHQSjcNXVZn9yXWnEE31Trw2DPx1IUYVmLsER+xQW6KzNU=
+X-Received: by 2002:a17:906:c14f:b0:793:30e1:96be with SMTP id
+ dp15-20020a170906c14f00b0079330e196bemr1129553ejc.447.1666991127780; Fri, 28
+ Oct 2022 14:05:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221014183459.181567-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Y1pphVPw0J97AmW4@paasikivi.fi.intel.com> <CA+V-a8szaPjwumrBgOT9gzMKBjY7hk0zfP8RgzUUDfY+BAsogA@mail.gmail.com>
+ <Y1p91+XxPCB9NWwh@paasikivi.fi.intel.com> <CA+V-a8uhYymEVg7jdLVGNLsVD3=O1mk-_NVERu00W+gsv-7QXg@mail.gmail.com>
+ <Y1rQBmXj71C1RrwB@paasikivi.fi.intel.com>
+In-Reply-To: <Y1rQBmXj71C1RrwB@paasikivi.fi.intel.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 28 Oct 2022 22:05:01 +0100
+Message-ID: <CA+V-a8urGG-m-gn_sOhTJHhHws3X8zdgjq+YY8W7qy42VAdXgQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] media: i2c: ov5645: Use runtime PM
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,144 +80,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-E.g. all the hw_breakpoint tests are failing right now.
-So if I run `kunit.py run --altests --arch=x86_64`, then I see
-> Testing complete. Ran 408 tests: passed: 392, failed: 9, skipped: 7
+Hi Sakari,
 
-Seeing which 9 tests failed out of the hundreds is annoying.
-If my terminal doesn't have scrollback support, I have to resort to
-looking at `.kunit/test.log` for the `not ok` lines.
+On Thu, Oct 27, 2022 at 7:45 PM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
+>
+> Hi Prabhakar,
+>
+> On Thu, Oct 27, 2022 at 05:32:07PM +0100, Lad, Prabhakar wrote:
+> > Hi Sakari,
+> >
+> > On Thu, Oct 27, 2022 at 1:47 PM Sakari Ailus
+> > <sakari.ailus@linux.intel.com> wrote:
+> > >
+> > > Hi Prabhakar,
+> > >
+> > > On Thu, Oct 27, 2022 at 01:01:52PM +0100, Lad, Prabhakar wrote:
+> > > > Hi Sakari,
+> > > >
+> > > > On Thu, Oct 27, 2022 at 12:20 PM Sakari Ailus
+> > > > <sakari.ailus@linux.intel.com> wrote:
+> > > > >
+> > > > > Hi Prabhakar,
+> > > > >
+> > > > > One more comment.
+> > > > >
+> > > > > On Fri, Oct 14, 2022 at 07:34:56PM +0100, Prabhakar wrote:
+> > > > > > @@ -1209,12 +1190,16 @@ static int ov5645_probe(struct i2c_client *client)
+> > > > > >
+> > > > > >       dev_info(dev, "OV5645 detected at address 0x%02x\n", client->addr);
+> > > > > >
+> > > > > > +     pm_runtime_set_active(dev);
+> > > > > > +     pm_runtime_get_noresume(dev);
+> > > > > > +     pm_runtime_enable(dev);
+> > > > >
+> > > > > You won't gain anything by eanbling runtime PM here. Just move it to the
+> > > > > end of the function before the rest of the calls. Error handling becomes
+> > > > > more simple.
+> > > > >
+> > > > If I move the above calls below I get the below warning:
+> > > >
+> > > > [    2.633386] ov5645 0-003c: Runtime PM usage count underflow!
+> > > >
+> > > > This is because of the last patch which moves ov5645_entity_init_cfg()
+> > > > before registering the subdev. ov5645_entity_init_cfg() calls s_ctrl
+> > > > due to which we are seeing the above message. Please let me know how
+> > > > to proceed on this.
+> > >
+> > > Ah. Yes, this is a problem with the usage pattern of
+> > > pm_runtime_get_if_in_use(). But please don't change that.
+> > >
+> > > You can still move enabling runtime PM later in the function.
+> > >
+> > Agreed, the final version looks like below:
+> >
+> >     pm_runtime_set_active(dev);
+> >     pm_runtime_get_noresume(dev);
+> >
+>
+> You'll have to enable runtime PM here, before pm_runtime_get_if_in_use()
+> gets called.
+>
+> I'll see if it could be made to work in a sensible way when runtime PM
+> isn't enabled yet.
+>
+Agreed, I'll send out v3 after fixing the comments.
 
-Teach kunit.py to print a summarized list of failures if the # of tests
-reachs an arbitrary threshold (>=100 tests).
-
-To try and keep the output from being too long/noisy, this new logic
-a) just reports "parent_test failed" if every child test failed
-b) won't print anything if there are >10 failures (also arbitrary).
-
-With this patch, we get an extra line of output showing:
-> Testing complete. Ran 408 tests: passed: 392, failed: 9, skipped: 7
-> Failures: hw_breakpoint
-
-This also works with parameterized tests, e.g. if I add a fake failure
-> Failures: kcsan.test_atomic_builtins_missing_barrier.threads=6
-
-Note: we didn't have enough tests for this to be a problem before.
-But with commit 980ac3ad0512 ("kunit: tool: rename all_test_uml.config,
-use it for --alltests"), --alltests works and thus running >100 tests
-will probably become more common.
-
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- tools/testing/kunit/kunit_parser.py    | 47 ++++++++++++++++++++++++++
- tools/testing/kunit/kunit_tool_test.py | 22 ++++++++++++
- 2 files changed, 69 insertions(+)
-
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 1ae873e3e341..94dba66feec5 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -58,6 +58,10 @@ class Test:
- 		self.counts.errors += 1
- 		stdout.print_with_timestamp(stdout.red('[ERROR]') + f' Test: {self.name}: {error_message}')
- 
-+	def ok_status(self) -> bool:
-+		"""Returns true if the status was ok, i.e. passed or skipped."""
-+		return self.status in (TestStatus.SUCCESS, TestStatus.SKIPPED)
-+
- class TestStatus(Enum):
- 	"""An enumeration class to represent the status of a test."""
- 	SUCCESS = auto()
-@@ -565,6 +569,40 @@ def print_test_footer(test: Test) -> None:
- 	stdout.print_with_timestamp(format_test_divider(message,
- 		len(message) - stdout.color_len()))
- 
-+
-+
-+def _summarize_failed_tests(test: Test) -> str:
-+	"""Tries to summarize all the failing subtests in `test`."""
-+
-+	def failed_names(test: Test, parent_name: str) -> List[str]:
-+		# Note: we use 'main' internally for the top-level test.
-+		if not parent_name or parent_name == 'main':
-+			full_name = test.name
-+		else:
-+			full_name = parent_name + '.' + test.name
-+
-+		if not test.subtests:  # this is a leaf node
-+			return [full_name]
-+
-+		# If all the children failed, just say this subtest failed.
-+		# Don't summarize it down "the top-level test failed", though.
-+		failed_subtests = [sub for sub in test.subtests if not sub.ok_status()]
-+		if parent_name and len(failed_subtests) ==  len(test.subtests):
-+			return [full_name]
-+
-+		all_failures = []  # type: List[str]
-+		for t in failed_subtests:
-+			all_failures.extend(failed_names(t, full_name))
-+		return all_failures
-+
-+	failures = failed_names(test, '')
-+	# If there are too many failures, printing them out will just be noisy.
-+	if len(failures) > 10:  # this is an arbitrary limit
-+		return ''
-+
-+	return 'Failures: ' + ', '.join(failures)
-+
-+
- def print_summary_line(test: Test) -> None:
- 	"""
- 	Prints summary line of test object. Color of line is dependent on
-@@ -587,6 +625,15 @@ def print_summary_line(test: Test) -> None:
- 		color = stdout.red
- 	stdout.print_with_timestamp(color(f'Testing complete. {test.counts}'))
- 
-+	# Summarize failures that might have gone off-screen since we had a lot
-+	# of tests (arbitrarily defined as >=100 for now).
-+	if test.ok_status() or test.counts.total() < 100:
-+		return
-+	summarized = _summarize_failed_tests(test)
-+	if not summarized:
-+		return
-+	stdout.print_with_timestamp(color(summarized))
-+
- # Other methods:
- 
- def bubble_up_test_results(test: Test) -> None:
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index a6e53945656e..7dcd67003b23 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -312,6 +312,28 @@ class KUnitParserTest(unittest.TestCase):
- 				result.status)
- 			self.assertEqual('kunit-resource-test', result.subtests[0].name)
- 
-+	def test_summarize_failures(self):
-+		output = """
-+		KTAP version 1
-+		1..2
-+			# Subtest: all_failed_suite
-+			1..2
-+			not ok 1 - test1
-+			not ok 2 - test2
-+		not ok 1 - all_failed_suite
-+			# Subtest: some_failed_suite
-+			1..2
-+			ok 1 - test1
-+			not ok 2 - test2
-+		not ok 1 - some_failed_suite
-+		"""
-+		result = kunit_parser.parse_run_tests(output.splitlines())
-+		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
-+
-+		self.assertEqual(kunit_parser._summarize_failed_tests(result),
-+			'Failures: all_failed_suite, some_failed_suite.test2')
-+
-+
- def line_stream_from_strs(strs: Iterable[str]) -> kunit_parser.LineStream:
- 	return kunit_parser.LineStream(enumerate(strs, start=1))
- 
--- 
-2.38.1.273.g43a17bfeac-goog
-
+Cheers,
+Prabhakar
