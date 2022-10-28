@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED3261148C
+	by mail.lfdr.de (Postfix) with ESMTP id 930E261148D
 	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiJ1O2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
+        id S231160AbiJ1O2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbiJ1O1X (ORCPT
+        with ESMTP id S231244AbiJ1O1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 28 Oct 2022 10:27:23 -0400
 Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146F080BFE
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:26:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2508286B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:26:50 -0700 (PDT)
 Received: from zn.tnic (p200300ea9733e7ce329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ce:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BBBAD1EC0754;
-        Fri, 28 Oct 2022 16:26:47 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 423DE1EC0779;
+        Fri, 28 Oct 2022 16:26:48 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1666967207;
+        t=1666967208;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=awd9cZozCZs++lKu/R+oRT9FZWWyrMeXGKmrwed6L8c=;
-        b=lEiXigve4v6BmnN6n8o3AL+2QkwaLHt8EOnPNQdoZ+4k1KqONaZ0ljkxfJO6bb4vakAFrH
-        HsP2c7DxSPsuLc0BDsL3eSTBoNFo/4g4jG9NqCrktl7Xlasy3A8bP8pRVe2K7HyMT8Va4Y
-        O5PP6VClDkuh/yeoNyvqQEeeNshn7Yc=
+        bh=EUzepTEbA+PjW41liMbq12+QwoMLZTumivAWH3EYXPA=;
+        b=OTIjjUkTU+7DslvPHPJVlMGazN5sWoqfKdrHoNrgcBCLSxHeModOVgvfhpbAubQ+CLoG0x
+        uTUQxU6GhEj0viKoKlZU9bejAcl4Ss3sYOZt6hRBtN4+IPqPuT4od0ut+lhapaIFDPsWhF
+        civAaisHtMdTJS0rT+9WKGxvd7WTduc=
 From:   Borislav Petkov <bp@alien8.de>
 To:     Ashok Raj <ashok.raj@intel.com>
 Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 4/5] x86/microcode: Do some minor fixups
-Date:   Fri, 28 Oct 2022 16:26:37 +0200
-Message-Id: <20221028142638.28498-5-bp@alien8.de>
+Subject: [PATCH 5/5] x86/microcode: Drop struct ucode_cpu_info.valid
+Date:   Fri, 28 Oct 2022 16:26:38 +0200
+Message-Id: <20221028142638.28498-6-bp@alien8.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221028142638.28498-1-bp@alien8.de>
 References: <20221028142638.28498-1-bp@alien8.de>
@@ -52,52 +52,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Borislav Petkov <bp@suse.de>
 
-Improve debugging printks and fixup formatting.
+It is not needed anymore.
 
 Signed-off-by: Borislav Petkov <bp@suse.de>
 ---
- arch/x86/kernel/cpu/microcode/core.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ arch/x86/include/asm/microcode.h     | 1 -
+ arch/x86/kernel/cpu/intel.c          | 1 -
+ arch/x86/kernel/cpu/microcode/core.c | 4 ++--
+ 3 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index 7c41e0132fa1..ffb249c29f30 100644
---- a/arch/x86/kernel/cpu/microcode/core.c
-+++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -568,6 +568,8 @@ static int mc_cpu_starting(unsigned int cpu)
- {
- 	enum ucode_state err = microcode_ops->apply_microcode(cpu);
+diff --git a/arch/x86/include/asm/microcode.h b/arch/x86/include/asm/microcode.h
+index d4c36fbd1d39..d5a58bde091c 100644
+--- a/arch/x86/include/asm/microcode.h
++++ b/arch/x86/include/asm/microcode.h
+@@ -49,7 +49,6 @@ struct microcode_ops {
  
-+	pr_debug("%s: CPU%d, err: %d\n", __func__, cpu, err);
-+
- 	return err == UCODE_ERROR;
- }
+ struct ucode_cpu_info {
+ 	struct cpu_signature	cpu_sig;
+-	int			valid;
+ 	void			*mc;
+ };
+ extern struct ucode_cpu_info ucode_cpu_info[];
+diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+index 2d7ea5480ec3..beb8ca596784 100644
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -210,7 +210,6 @@ int intel_cpu_collect_info(struct ucode_cpu_info *uci)
+ 	csig.rev = intel_get_microcode_revision();
  
-@@ -590,7 +592,7 @@ static int mc_cpu_down_prep(unsigned int cpu)
- 
- 	/* Suspend is in progress, only remove the interface */
- 	sysfs_remove_group(&dev->kobj, &mc_attr_group);
--	pr_debug("CPU%d removed\n", cpu);
-+	pr_debug("%s: CPU%d\n", __func__, cpu);
+ 	uci->cpu_sig = csig;
+-	uci->valid = 1;
  
  	return 0;
  }
-@@ -639,14 +641,11 @@ static int __init microcode_init(void)
- 	if (!microcode_ops)
- 		return -ENODEV;
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index ffb249c29f30..712aafff96e0 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -554,9 +554,9 @@ void microcode_bsp_resume(void)
+ 	int cpu = smp_processor_id();
+ 	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
  
--	microcode_pdev = platform_device_register_simple("microcode", -1,
--							 NULL, 0);
-+	microcode_pdev = platform_device_register_simple("microcode", -1, NULL, 0);
- 	if (IS_ERR(microcode_pdev))
- 		return PTR_ERR(microcode_pdev);
+-	if (uci->valid && uci->mc)
++	if (uci->mc)
+ 		microcode_ops->apply_microcode(cpu);
+-	else if (!uci->mc)
++	else
+ 		reload_early_microcode();
+ }
  
--	error = sysfs_create_group(&cpu_subsys.dev_root->kobj,
--				   &cpu_root_microcode_group);
--
-+	error = sysfs_create_group(&cpu_subsys.dev_root->kobj, &cpu_root_microcode_group);
- 	if (error) {
- 		pr_err("Error creating microcode group!\n");
- 		goto out_pdev;
 -- 
 2.35.1
 
