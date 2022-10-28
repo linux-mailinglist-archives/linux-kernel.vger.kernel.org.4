@@ -2,51 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC7B610AA8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C60F7610AAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbiJ1Gqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
+        id S230000AbiJ1Gqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbiJ1GqK (ORCPT
+        with ESMTP id S229949AbiJ1GqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:46:10 -0400
+        Fri, 28 Oct 2022 02:46:17 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081DE1BE90B;
-        Thu, 27 Oct 2022 23:43:07 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 06:43:03 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F73C1BE92B;
+        Thu, 27 Oct 2022 23:43:09 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 06:43:04 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666939385;
+        s=2020; t=1666939386;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=Ix3l74K5a6QQMFq/Prx0vqbj1SroRjSG3cNNGwkaFQ4=;
-        b=xOqcRykepM9FExepY5+Qd4xaXGQ4261ZGHHHyhn8Nhql8fkSlZVhD6S6ETgE3j3hRWwDsI
-        mRNEZXL1yPgbswbhNC4cec//pLZkoBVKqOYSxHUR6ygseigu8MPFaKkoC7KMD/tQFwZdt1
-        MsaIL5vKj+IHrersIxwkmXuks8zh5EH5m90dSv4HqhIa2/st6323vL20o4CBcFvwFXHx83
-        r9e0widtwdC/BKN7BIFc0dgKn6XL683xsw/Ex/8Ct64H6uj0U57DSDEkK/m/Az64vtkCpD
-        KQMXsmLc6c0QuL+FEwWZHnodCaMJvQW3pL1OK5qM/9PZIqblrZMsv4SqxHuzvw==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qDx3NeXME9vlHi6hoEFj3TeAwMqdGUgWCn6jvXx4n0c=;
+        b=VRhmt2gMBNP9oKNHa5IM1FKwSG9kgZbZMOngA5oe1X+4/lFP4YpVKyY7eiet76ATATo0R9
+        PjQEP2zTW6M2FEezdvoNgEv+pf4+nbP5MnOHQ3+oEbinl5wMNyrT0JN8MF8fuonbWBxtZF
+        tvYBUHzQju29GfD1HWIyI1RAz4PTdqB4l0J6QnNl5pT1TCrw47pzJxNaMT2AlB77YsvU5C
+        5cZwOhZJRoCywqA37naZyl9F/aFtG0p8z4WLmc9UPxWpcKxx4LeonjfGNuLya13dzp3sG3
+        x75C0xbH8IpKMzPmtCdM5eeLxyGjJ1IC6HAf4Tlo2/TFGNKVjNV4VSXiyfQnSg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666939385;
+        s=2020e; t=1666939386;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=Ix3l74K5a6QQMFq/Prx0vqbj1SroRjSG3cNNGwkaFQ4=;
-        b=RDv6HtAGdo1sca0TRnmeCXOB5VVTIKmnkObYe0FgG8VGo0CNp5X8NoSEjV6xEBoGMfTp7N
-        NPF/CY80/pNjXoDg==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qDx3NeXME9vlHi6hoEFj3TeAwMqdGUgWCn6jvXx4n0c=;
+        b=Oy8bIoSIoQp5ACjoOmJnvXswIaADXRMUqYiZBA4N0Z10z9AYIVFPlqiOzTVEiZ5drrQm21
+        nqqKrSC6RwvO/dDg==
+From:   "tip-bot2 for Andrey Ryabinin" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm: Randomize per-cpu entry area
-Cc:     Seth Jenkins <sethjenkins@google.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+Subject: [tip: x86/mm] x86/kasan: Map shadow for percpu pages on demand
+Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>, x86@kernel.org,
+        Yujie Liu <yujie.liu@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
+In-Reply-To: <202210241508.2e203c3d-yujie.liu@intel.com>
+References: <202210241508.2e203c3d-yujie.liu@intel.com>
 MIME-Version: 1.0
-Message-ID: <166693938356.29415.10672976989880224171.tip-bot2@tip-bot2>
+Message-ID: <166693938482.29415.7034851115705424459.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -62,158 +67,115 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/mm branch of tip:
 
-Commit-ID:     d6d1a3923799d04f56cd644a9cb7ecf19de67949
-Gitweb:        https://git.kernel.org/tip/d6d1a3923799d04f56cd644a9cb7ecf19de67949
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 27 Oct 2022 14:54:41 -07:00
+Commit-ID:     9fd429c28073fa40f5465cd6e4769a0af80bf398
+Gitweb:        https://git.kernel.org/tip/9fd429c28073fa40f5465cd6e4769a0af80bf398
+Author:        Andrey Ryabinin <ryabinin.a.a@gmail.com>
+AuthorDate:    Fri, 28 Oct 2022 00:31:04 +03:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Thu, 27 Oct 2022 15:01:53 -07:00
+CommitterDate: Thu, 27 Oct 2022 15:00:24 -07:00
 
-x86/mm: Randomize per-cpu entry area
+x86/kasan: Map shadow for percpu pages on demand
 
-Seth found that the CPU-entry-area; the piece of per-cpu data that is
-mapped into the userspace page-tables for kPTI is not subject to any
-randomization -- irrespective of kASLR settings.
+KASAN maps shadow for the entire CPU-entry-area:
+  [CPU_ENTRY_AREA_BASE, CPU_ENTRY_AREA_BASE + CPU_ENTRY_AREA_MAP_SIZE]
 
-On x86_64 a whole P4D (512 GB) of virtual address space is reserved for
-this structure, which is plenty large enough to randomize things a
-little.
+This will explode once the per-cpu entry areas are randomized since it
+will increase CPU_ENTRY_AREA_MAP_SIZE to 512 GB and KASAN fails to
+allocate shadow for such big area.
 
-As such, use a straight forward randomization scheme that avoids
-duplicates to spread the existing CPUs over the available space.
+Fix this by allocating KASAN shadow only for really used cpu entry area
+addresses mapped by cea_map_percpu_pages()
 
-Reported-by: Seth Jenkins <sethjenkins@google.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Thanks to the 0day folks for finding and reporting this to be an issue.
+
+[ dhansen: tweak changelog since this will get committed before peterz's
+	   actual cpu-entry-area randomization ]
+
+Signed-off-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Tested-by: Yujie Liu <yujie.liu@intel.com>
+Cc: kernel test robot <yujie.liu@intel.com>
+Link: https://lore.kernel.org/r/202210241508.2e203c3d-yujie.liu@intel.com
 ---
- arch/x86/include/asm/cpu_entry_area.h |  4 +--
- arch/x86/include/asm/pgtable_areas.h  |  8 ++++-
- arch/x86/kernel/hw_breakpoint.c       |  2 +-
- arch/x86/mm/cpu_entry_area.c          | 46 +++++++++++++++++++++++---
- 4 files changed, 50 insertions(+), 10 deletions(-)
+ arch/x86/include/asm/kasan.h |  3 +++
+ arch/x86/mm/cpu_entry_area.c |  8 +++++++-
+ arch/x86/mm/kasan_init_64.c  | 15 ++++++++++++---
+ 3 files changed, 22 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/include/asm/cpu_entry_area.h b/arch/x86/include/asm/cpu_entry_area.h
-index 75efc4c..462fc34 100644
---- a/arch/x86/include/asm/cpu_entry_area.h
-+++ b/arch/x86/include/asm/cpu_entry_area.h
-@@ -130,10 +130,6 @@ struct cpu_entry_area {
- };
- 
- #define CPU_ENTRY_AREA_SIZE		(sizeof(struct cpu_entry_area))
--#define CPU_ENTRY_AREA_ARRAY_SIZE	(CPU_ENTRY_AREA_SIZE * NR_CPUS)
--
--/* Total size includes the readonly IDT mapping page as well: */
--#define CPU_ENTRY_AREA_TOTAL_SIZE	(CPU_ENTRY_AREA_ARRAY_SIZE + PAGE_SIZE)
- 
- DECLARE_PER_CPU(struct cpu_entry_area *, cpu_entry_area);
- DECLARE_PER_CPU(struct cea_exception_stacks *, cea_exception_stacks);
-diff --git a/arch/x86/include/asm/pgtable_areas.h b/arch/x86/include/asm/pgtable_areas.h
-index d34cce1..62e5ede 100644
---- a/arch/x86/include/asm/pgtable_areas.h
-+++ b/arch/x86/include/asm/pgtable_areas.h
-@@ -11,6 +11,12 @@
- 
- #define CPU_ENTRY_AREA_RO_IDT_VADDR	((void *)CPU_ENTRY_AREA_RO_IDT)
- 
--#define CPU_ENTRY_AREA_MAP_SIZE		(CPU_ENTRY_AREA_PER_CPU + CPU_ENTRY_AREA_ARRAY_SIZE - CPU_ENTRY_AREA_BASE)
-+#ifdef CONFIG_X86_32
-+#define CPU_ENTRY_AREA_MAP_SIZE		(CPU_ENTRY_AREA_PER_CPU +		\
-+					 (CPU_ENTRY_AREA_SIZE * NR_CPUS) -	\
-+					 CPU_ENTRY_AREA_BASE
-+#else
-+#define CPU_ENTRY_AREA_MAP_SIZE		P4D_SIZE
-+#endif
- 
- #endif /* _ASM_X86_PGTABLE_AREAS_H */
-diff --git a/arch/x86/kernel/hw_breakpoint.c b/arch/x86/kernel/hw_breakpoint.c
-index 668a4a6..bbb0f73 100644
---- a/arch/x86/kernel/hw_breakpoint.c
-+++ b/arch/x86/kernel/hw_breakpoint.c
-@@ -266,7 +266,7 @@ static inline bool within_cpu_entry(unsigned long addr, unsigned long end)
- 
- 	/* CPU entry erea is always used for CPU entry */
- 	if (within_area(addr, end, CPU_ENTRY_AREA_BASE,
--			CPU_ENTRY_AREA_TOTAL_SIZE))
-+			CPU_ENTRY_AREA_MAP_SIZE))
- 		return true;
- 
- 	/*
-diff --git a/arch/x86/mm/cpu_entry_area.c b/arch/x86/mm/cpu_entry_area.c
-index d7081b1..dff9001 100644
---- a/arch/x86/mm/cpu_entry_area.c
-+++ b/arch/x86/mm/cpu_entry_area.c
-@@ -16,16 +16,53 @@ static DEFINE_PER_CPU_PAGE_ALIGNED(struct entry_stack_page, entry_stack_storage)
- #ifdef CONFIG_X86_64
- static DEFINE_PER_CPU_PAGE_ALIGNED(struct exception_stacks, exception_stacks);
- DEFINE_PER_CPU(struct cea_exception_stacks*, cea_exception_stacks);
--#endif
- 
--#ifdef CONFIG_X86_32
-+static DEFINE_PER_CPU_READ_MOSTLY(unsigned long, _cea_offset);
-+
-+static __always_inline unsigned int cea_offset(unsigned int cpu)
-+{
-+	return per_cpu(_cea_offset, cpu);
-+}
-+
-+static __init void init_cea_offsets(void)
-+{
-+	unsigned int max_cea;
-+	unsigned int i, j;
-+
-+	max_cea = (CPU_ENTRY_AREA_MAP_SIZE - PAGE_SIZE) / CPU_ENTRY_AREA_SIZE;
-+
-+	/* O(sodding terrible) */
-+	for_each_possible_cpu(i) {
-+		unsigned int cea;
-+
-+again:
-+		cea = prandom_u32_max(max_cea);
-+
-+		for_each_possible_cpu(j) {
-+			if (cea_offset(j) == cea)
-+				goto again;
-+
-+			if (i == j)
-+				break;
-+		}
-+
-+		per_cpu(_cea_offset, i) = cea;
-+	}
-+}
-+#else /* !X86_64 */
- DECLARE_PER_CPU_PAGE_ALIGNED(struct doublefault_stack, doublefault_stack);
-+
-+static __always_inline unsigned int cea_offset(unsigned int cpu)
-+{
-+	return cpu;
-+}
-+static inline void init_cea_offsets(void) { }
+diff --git a/arch/x86/include/asm/kasan.h b/arch/x86/include/asm/kasan.h
+index 13e70da..de75306 100644
+--- a/arch/x86/include/asm/kasan.h
++++ b/arch/x86/include/asm/kasan.h
+@@ -28,9 +28,12 @@
+ #ifdef CONFIG_KASAN
+ void __init kasan_early_init(void);
+ void __init kasan_init(void);
++void __init kasan_populate_shadow_for_vaddr(void *va, size_t size, int nid);
+ #else
+ static inline void kasan_early_init(void) { }
+ static inline void kasan_init(void) { }
++static inline void kasan_populate_shadow_for_vaddr(void *va, size_t size,
++						   int nid) { }
  #endif
  
- /* Is called from entry code, so must be noinstr */
- noinstr struct cpu_entry_area *get_cpu_entry_area(int cpu)
+ #endif
+diff --git a/arch/x86/mm/cpu_entry_area.c b/arch/x86/mm/cpu_entry_area.c
+index 6c2f1b7..d7081b1 100644
+--- a/arch/x86/mm/cpu_entry_area.c
++++ b/arch/x86/mm/cpu_entry_area.c
+@@ -9,6 +9,7 @@
+ #include <asm/cpu_entry_area.h>
+ #include <asm/fixmap.h>
+ #include <asm/desc.h>
++#include <asm/kasan.h>
+ 
+ static DEFINE_PER_CPU_PAGE_ALIGNED(struct entry_stack_page, entry_stack_storage);
+ 
+@@ -53,8 +54,13 @@ void cea_set_pte(void *cea_vaddr, phys_addr_t pa, pgprot_t flags)
+ static void __init
+ cea_map_percpu_pages(void *cea_vaddr, void *ptr, int pages, pgprot_t prot)
  {
--	unsigned long va = CPU_ENTRY_AREA_PER_CPU + cpu * CPU_ENTRY_AREA_SIZE;
-+	unsigned long va = CPU_ENTRY_AREA_PER_CPU + cea_offset(cpu) * CPU_ENTRY_AREA_SIZE;
- 	BUILD_BUG_ON(sizeof(struct cpu_entry_area) % PAGE_SIZE != 0);
- 
- 	return (struct cpu_entry_area *) va;
-@@ -211,7 +248,6 @@ static __init void setup_cpu_entry_area_ptes(void)
- 
- 	/* The +1 is for the readonly IDT: */
- 	BUILD_BUG_ON((CPU_ENTRY_AREA_PAGES+1)*PAGE_SIZE != CPU_ENTRY_AREA_MAP_SIZE);
--	BUILD_BUG_ON(CPU_ENTRY_AREA_TOTAL_SIZE != CPU_ENTRY_AREA_MAP_SIZE);
- 	BUG_ON(CPU_ENTRY_AREA_BASE & ~PMD_MASK);
- 
- 	start = CPU_ENTRY_AREA_BASE;
-@@ -227,6 +263,8 @@ void __init setup_cpu_entry_areas(void)
- {
- 	unsigned int cpu;
- 
-+	init_cea_offsets();
++	phys_addr_t pa = per_cpu_ptr_to_phys(ptr);
 +
- 	setup_cpu_entry_area_ptes();
++	kasan_populate_shadow_for_vaddr(cea_vaddr, pages * PAGE_SIZE,
++					early_pfn_to_nid(PFN_DOWN(pa)));
++
+ 	for ( ; pages; pages--, cea_vaddr+= PAGE_SIZE, ptr += PAGE_SIZE)
+-		cea_set_pte(cea_vaddr, per_cpu_ptr_to_phys(ptr), prot);
++		cea_set_pte(cea_vaddr, pa, prot);
+ }
  
- 	for_each_possible_cpu(cpu)
+ static void __init percpu_setup_debug_store(unsigned int cpu)
+diff --git a/arch/x86/mm/kasan_init_64.c b/arch/x86/mm/kasan_init_64.c
+index e7b9b46..d141692 100644
+--- a/arch/x86/mm/kasan_init_64.c
++++ b/arch/x86/mm/kasan_init_64.c
+@@ -316,6 +316,18 @@ void __init kasan_early_init(void)
+ 	kasan_map_early_shadow(init_top_pgt);
+ }
+ 
++void __init kasan_populate_shadow_for_vaddr(void *va, size_t size, int nid)
++{
++	unsigned long shadow_start, shadow_end;
++
++	shadow_start = (unsigned long)kasan_mem_to_shadow(va);
++	shadow_start = round_down(shadow_start, PAGE_SIZE);
++	shadow_end = (unsigned long)kasan_mem_to_shadow(va + size);
++	shadow_end = round_up(shadow_end, PAGE_SIZE);
++
++	kasan_populate_shadow(shadow_start, shadow_end, nid);
++}
++
+ void __init kasan_init(void)
+ {
+ 	int i;
+@@ -393,9 +405,6 @@ void __init kasan_init(void)
+ 		kasan_mem_to_shadow((void *)VMALLOC_END + 1),
+ 		shadow_cpu_entry_begin);
+ 
+-	kasan_populate_shadow((unsigned long)shadow_cpu_entry_begin,
+-			      (unsigned long)shadow_cpu_entry_end, 0);
+-
+ 	kasan_populate_early_shadow(shadow_cpu_entry_end,
+ 			kasan_mem_to_shadow((void *)__START_KERNEL_map));
+ 
