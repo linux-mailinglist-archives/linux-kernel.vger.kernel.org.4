@@ -2,149 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E37610F61
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B669B610F65
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbiJ1LH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 07:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
+        id S230259AbiJ1LIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 07:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiJ1LHx (ORCPT
+        with ESMTP id S229551AbiJ1LIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 07:07:53 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2080.outbound.protection.outlook.com [40.107.92.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D271D0D69;
-        Fri, 28 Oct 2022 04:07:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AZ1zvcIkYBt9w5C9Zy4OvltiR3Gmc1Qav8Y7Kg1s3+r3uXlZ1KU8VdzH+2Rtk9PMQLRFy4Ipto2xJAGct9chj2ejn+YAQwwsvWeP/r+wDYRDoAvTB7hffNzRgc+QnY+RhsB6fM/A8dTM5uiFUYvK3Js+pEOP7yLAiltUxQWvcOkb6wuoU3PcaDgkxw0ad28NurNprppxB1aDZOqyya1iQbnBO1uT1z80jcjxD9lMJlJKOIx7omM6eDqiRWvZ4MCXCdXEl8F+5eJHpnrwOEVntVdcjcNMFCnDy0BtS6E91h7w01I4vgWRVu/plGEGKFDPo23IRI416hnTeS7d8O4gNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lApyejVqt6hHtcvALQK1W3KoOuUJgix1T0U4LEADEic=;
- b=V7mHueBbs+fA1tZHFSBfL7X0KBdaERm2e4XBNi+DgwKotCmdsVhHvUDvJUYzBelsyU/M+i81AofGeYXMxV3raV/cZSIN5p3uHRcEsaZsU4pztYlUZsS1ghQ61BNAf9Gei8ZeYxpvu/pNldl3HBjUXAuZbJoO+jUQ2lH5hOoBVrMLFwylDQf5TeRAH4y+hRbp82HdcUeeXx7j9pKZIhGUecIVbDo+dw1yBn55STzcNdbCMnayQYzDHZDwG/1Xan/TLIMzZ+zO5K0XMTnjNEdjkFkbvjA0bj8ZexUKk9/6E/u8O8E1UWa/mj0Ooe7gUa8m2tHc1H9gi5EgCz7QMHCmcQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lApyejVqt6hHtcvALQK1W3KoOuUJgix1T0U4LEADEic=;
- b=lC6Tccdf6jGfzu3OZqO+J3zfx6oZTjWTnh05Q9B2zOTfPVl6EJlaCHpjSUafP1mJb0kkFkiYu3eBAUUwJZS0VwLJU78wuKi1j9tSz2mr0UTEqPKA2zhV4lZflOmt4tY/sd/qqyteMVzmiK44J4x2FEqE9HQ4Yb3ei900fSPGG5L82I8m7zdEDnv5w1EdQjXpBn2tvs3oHdJjFfnQLbumTqVRH9mV3dVkHOkDhVhhEpzSTZeE5cneVgB6kqwr1sKZwa2+XFhKw0b6q1g0DfVA2rpkAoGKjgReA5Nx6yzbYObnhPARQ/97SUVKHRdpScinuQnTW8GpzCSFRO4hQnPJQg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- PH7PR12MB6563.namprd12.prod.outlook.com (2603:10b6:510:211::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Fri, 28 Oct
- 2022 11:07:48 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::c0e5:f111:3e59:7c66]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::c0e5:f111:3e59:7c66%6]) with mapi id 15.20.5769.015; Fri, 28 Oct 2022
- 11:07:47 +0000
-Message-ID: <8194796b-9845-cd02-a542-0bc0d66b4617@nvidia.com>
-Date:   Fri, 28 Oct 2022 12:07:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 02/11] dt-bindings: usb: Add NVIDIA Tegra XUSB host
- controller binding
-Content-Language: en-US
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Wayne Chang <waynec@nvidia.com>, Rob Herring <robh@kernel.org>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <treding@nvidia.com>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        Ajay Gupta <ajayg@nvidia.com>, "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        Jui Chang Kuo <jckuo@nvidia.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Fri, 28 Oct 2022 07:08:09 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB7F1D1005;
+        Fri, 28 Oct 2022 04:08:06 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z18so2348483edb.9;
+        Fri, 28 Oct 2022 04:08:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IozlHscLjpLwJyHsLSyhcI+XmPovR0MZOhHVQZCtsA8=;
+        b=fr2wi2JZTDYzvWpHZjjA+Zc1b7umYk39fA5/USu4s3QzAO7N8Wi+cP6lCvNPZbJbed
+         EySHCFsyH/YKzt+OYTTzbf5WZmyjt7EnD7KJwswQoQ4d2h+HliXjnSho0ituCNg3D+Uz
+         8z+P/EqnM3O3Ba4ASElyazReO8uKrSyUyaU/jWMjFRxgrLee45tMfs6zG/FqRlOR8EEF
+         UPVW+KQabT2FfX++hGkGT14KRXTiVmXD+CZCxXN5bQgtdhgW0IPrvAQ2ri2LJRgneypk
+         hUzcffpnKDdcbmbUGxVfxXNVpWlH5SNT294pt9RFLtEbkP8h+IJchmV9HjRoL1pCFsWl
+         +aXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IozlHscLjpLwJyHsLSyhcI+XmPovR0MZOhHVQZCtsA8=;
+        b=XAWGn2iZXbkFxb6ZLOWFa4qgD1h9JU7byYr9FNQILmsa/pTKPA3+jmS5wMdR1A0NcL
+         UvZeAJtK/ic7QV2pri6y/uaVZBMNxd6jhnSxsVcuMC+bDXejsWb6DCJtOgNYC8Ol164J
+         8euCOqBpFEWzaMpcc4Siudc3uJFlnH5JpLESWULIxlZ2DVBchatp84Z26wTrwK8WR+9r
+         li8QLY0mPLJHdx5XBNOEVnEm9aLLzQYOt5pGqBEtDzR+u2lBEDFyl/7YA7k4hTE0gerM
+         NYA+LT2HTGkjYiqrSd335Lfd4M+lEjjPPcWLHrjPrfHI0BzOLxYdcjq650JvMZho0ejU
+         qNvQ==
+X-Gm-Message-State: ACrzQf0UKqUETUV0ftfCi4mbdOPkex1zQio3KFRDGmll6SIeNPqisH9b
+        uvgVBT2jQjAO29dLPUhuB1Q=
+X-Google-Smtp-Source: AMsMyM4eU4Fxar8xkWV4vt4ckwoxWojY2QN6KHRHYLclIUt72hYropJGj0cFVOGyVEcQuKegJevkPA==
+X-Received: by 2002:a05:6402:440c:b0:43a:1124:e56a with SMTP id y12-20020a056402440c00b0043a1124e56amr51393928eda.134.1666955285152;
+        Fri, 28 Oct 2022 04:08:05 -0700 (PDT)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id bd9-20020a056402206900b004610899742asm2433877edb.13.2022.10.28.04.08.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 04:08:04 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 13:08:02 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Jim Lin <jilin@nvidia.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sing-Han Chen <singhanc@nvidia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <20221024074128.1113554-1-waynec@nvidia.com>
- <20221024074128.1113554-3-waynec@nvidia.com>
- <20221024145446.GA1763588-robh@kernel.org>
- <52ae737e-eb4f-9eb7-8b79-d58251062276@nvidia.com>
- <f5d2c979-a61c-e0d4-7a08-5b6f5b38dffb@linaro.org>
- <c8039494-9fb7-c72e-a852-8bde13c0a61d@nvidia.com>
-In-Reply-To: <c8039494-9fb7-c72e-a852-8bde13c0a61d@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO4P123CA0467.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1aa::22) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v5 1/3] xhci: hub: export symbol on xhci_hub_control
+Message-ID: <Y1u4Ei1SUq39CGPW@orome>
+References: <20221027133127.27592-1-jilin@nvidia.com>
+ <20221027133127.27592-2-jilin@nvidia.com>
+ <Y1qOhjOXM4sQW+a/@kroah.com>
+ <3c3b175d2031b8e440bfdef9b4c23c0272a5f607.camel@nvidia.com>
+ <Y1txBtRZAJ5vpItj@kroah.com>
+ <Y1ul9zU2wmbJo3x7@orome>
+ <Y1uw2zp/XnUdgEwJ@kroah.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|PH7PR12MB6563:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3fca6933-bc77-483f-0ddb-08dab8d4a559
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dQ7VviA+XcIobKl8Ly9omMgTzBgVYY61YiKAezYGgQl1jUUYVTyTdTvwnHrcJiK0V4qmkL119p2sd75Q/EDNBnkhRcN/Dp/sh/6lubGgE1Sdh1yMWCq86OpGQKKqQrk+uwVdqE45af/rzavPytg6IOUcfxlXHIuIEN2T4qPfrBi3Esm0HebVtcjvXyrkRnXLo3zm+8xM9zsa+82DP8H5z57HiAopi9ZrYKV81ro/5GEsyYM12z2OYIisTSQwZGAGvzJT9ZfkmD+1h+lrE+IBEtaXLcN8vs8UHFHllNIWPS6nGn6Vp5Mw0gbSoiubM69dtQvYXmk0ucXbIUKnNc8uBtlBVSKI8+IBSuUGwFX/92W0R1YebA5YEy3NHafMgd9P5U97OhqgodGpkCO8gBB+JeZb1xqCPB/Mzdn4xezdPzM87ZaDYQ0lYY7rEkoI7WYLuxz2fqPYa5isJSCqV3eUivaJ0Lmn/OUc4JW/EpSKEmTigG0oeOd+I6l88PTxw4e6vacbdn5sfuYVVNLWcRyHIoXxLA3r0qB/MuTMTwGy1ob1o1N+Scj0nIn1HFQy9iSawbDhRe06pWjzsIsUBfLoPAoQTP4yWy/vFRbalN6rQz1TcdnMpvuWn96NbuVfycqexNEJqxchq4LFL7zglTAzEeEO2FkouZP9VRGzWOtBqqxpFWC7QTeNnAjmC7Z+tyebcZK6bKzmuFzPQS4A/Qu1GifqjN8kFjWR+safJEyFYKQAH9EXqymLHADOgsbbFh3OxMbSBowxwbzbavuYimsU/OY4sM+5FGhF7jXmPFH0s6clvGZbO2tNT6orJpaWT+oiYj0CcwgtS/VS1ugmG7BLXQbTzjtbHfv8V+dghQF4VKdEsI3KFH77VS0cAz5fGi3f
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(376002)(366004)(39860400002)(136003)(451199015)(4326008)(966005)(8676002)(53546011)(2906002)(41300700001)(66946007)(38100700002)(6666004)(5660300002)(54906003)(6506007)(6486002)(66476007)(110136005)(86362001)(66556008)(316002)(31686004)(36756003)(6512007)(478600001)(2616005)(8936002)(31696002)(7416002)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZFpVVU5NZm4rYXNsTjdIZUZCNktweW5za3h5SDFnQzk1cHp6Ujc3RDk5MUJT?=
- =?utf-8?B?N1hpMEdKTE1lclYyeUNIYTBaREwvS3Fmd2sxcmdRdE1wZzNqR0haUjFTU3pQ?=
- =?utf-8?B?aFVUdGZxZDIybk11K0hUTkcyYnUvOGVGYkl1b0lxTXcrT0lORkFKSXg5NzFk?=
- =?utf-8?B?N2VOSVBUVDFiZTVBb3FocWZ5UllnY1cyWSsrNWh1ZUliM1lyUFNnb1Jzc3Rk?=
- =?utf-8?B?NWFIeGlPc3lZQ1JFZlJVR0pHdU01K0JIbENsTjgxTFcrRmtYZ3FOTGl1ZVMv?=
- =?utf-8?B?QXVheU9qZXhWTjYzYU5wc2d0ZmlxczRuVFE0dHNtcUc1dmplWkk3MFdodTQy?=
- =?utf-8?B?S09teXA1b3M1alVCMncvdFZCRmQxbTViQmpMN0VJWFBKQzUzNUJ6UDgzUmtU?=
- =?utf-8?B?Ylk3WW9oNDdXeFdjOW5zcXJsdDVnaDhUN21xNnVWOWw0MGZxOGhjZWREdVRN?=
- =?utf-8?B?YTRSNC81U1h6cjFLT2FTQmI2aDM3dkhvRzRsV1huNFVsRmJrdlRtRlFWcXcx?=
- =?utf-8?B?ZzNDcmRZaFpGZC90bDl5Zk10WnNLRTVnbmdPZE52VEZQMWp3WCtVejZYZXJO?=
- =?utf-8?B?VDA1MWlyMU5hckF2Vys4MTFZV0RETlBWUDN2cE1mZThSdXpBN2cxZDNTSW9T?=
- =?utf-8?B?d0VIQ1pkTzBZVHVzcDF1MXNrYnZYK1ZYZXp2U0t6ZkRvWUxjaXV2TmhEM0pD?=
- =?utf-8?B?M00veUZ0Q3VOSmY2UDV5ZVMxV1FNMGdmKzNHQ2FUN1I2dHIvSERCSU9DV2Z2?=
- =?utf-8?B?eVZWR1ZTdjZ3MWJVSmFQTktuS09LaEVWTHJVYko4UUM5enVRclU1MUtJZFdu?=
- =?utf-8?B?UVFqaGpVR2VhSm5pY0NRRnF2NURnbWpxSDlTTVp3azhvL0c1WTNwUisxS0do?=
- =?utf-8?B?ZlRhMXdtYlZucCtLbytDd3ExWDl3ZG1TS24zaUtnalBkaXk3aHNWRUFLR2lS?=
- =?utf-8?B?N254OTFBaUdsZENyaDhvWFBYZTRQTzBZRDhwd3V3Yk9TM1FCRmhGQ2grcG1u?=
- =?utf-8?B?bnVOY2pWMnphWVVEZXNLc2thTmdSc1NETklIMllTelJHRjJsVlhGT29Dc2tW?=
- =?utf-8?B?emlOTFdpOTRCZCtRUDd5RmtIak9pYUxUaXRCcGRxYkxpWjN6LzFHUVlVRzhl?=
- =?utf-8?B?YmNoQmF4S3Jsd0hId25uc2EvTjFob2ZXdFdTNUpiNytLd0J5WURaSDY1M2hh?=
- =?utf-8?B?UzlLYzdwL1RRMU5ZQ2QrS2p3UVB6YmQ5aENWMzdZOG9zaG5tOGduUGZFQnli?=
- =?utf-8?B?dElxSEdwMXNBWFlxL3FxQ0ZjdElCVk51dXpwT0FlajlxczRlMFBuNDEzclFl?=
- =?utf-8?B?LzJMQVJqakNwRWF0RFo1enZEb0I1R0tqK25yOHNpSkM0elA3L09Za0MzV214?=
- =?utf-8?B?dVBzMG5FYUJqNkVNa2xYbnp1cy9PSEV1QUhDVW9uVmwwSkxXd3psYjlrZEF4?=
- =?utf-8?B?cEQwZ0VFODR6OWxsUUM4anJoMFBuMU5qSERNSmdqZE05bUtud1lieWV1SUts?=
- =?utf-8?B?MTgrV29MZ29rRXArcmdOUTc2YWNzYlZ0RkhydGsxOWRTWkE1OGF3aENiVXov?=
- =?utf-8?B?NE91M2swdkVLeGl2SWdMSkkxZVdXTGNxNjArZkhPakdTdDFOZjlOWjd1Q1FZ?=
- =?utf-8?B?U2dQUGpQOHBRSlllV3JVU3I4b1V1MVNlTWN4cnZoM0tDUit6VS96OFV0b0ta?=
- =?utf-8?B?cUI1UGNYckhKb3FVOWdSRlpwanNOdGhnOGsxbTNzNzljV1FsYkkyc0g4cklt?=
- =?utf-8?B?Z3VUQkZlR2lsa1h0V2laNXBLc1B2U3ZiMU5NcEM1Um5JWUpmbFkwb3NPTW1u?=
- =?utf-8?B?SXR6UHJ6eVpPdldnV1pFL0dHbzBVS0M5LzBxYldQanpCRFo2TVNaOEUzYld0?=
- =?utf-8?B?MFM1SkZuL3ZaN2dUSzFDb3ZUY0dsZ2tGMnc3QWxXWm9DL2grc0hqMllvZTVT?=
- =?utf-8?B?ZWJoWGJGMkM2ZWsrYXVQUThVOUNPS0xsRXZxY0ZNWmhpT3Y0SHo3UC9LYk5y?=
- =?utf-8?B?dlhXbmFUTHFSaEZVczRxcW9US0ZaWEUzR2ZmQUtERHRzVDFQeThaRUZjOFU2?=
- =?utf-8?B?dmNneWw5UTR1Q0lsQmZHSzdKb2JaRWdCMDVmTHdnQjVyaDBnYjBsbWRZbFJF?=
- =?utf-8?B?UUpNTnE3TTc2elUvdmhSSVdrczluRlgzZmpveWpZZEUva1A5RGNmZ1hOOHdz?=
- =?utf-8?B?L09jS2F6NVdPMFZ4b3lYQ3pWcVhtSm4rWXpHbXZLK3NwR2E0L2pYaWdPYzE5?=
- =?utf-8?B?clcvMVhHR2RZMFNkbW90ZHlKRmtRPT0=?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3fca6933-bc77-483f-0ddb-08dab8d4a559
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 11:07:47.6593
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8S59g0tsClJqUc3Vqw2JsqmOrGaY0PuB5cDGg3fjSQog5FMnTeohEQc5iGa03Vi8GQbdgVfJjwMn8mjeWCcmrQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6563
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="5cRpSgsOPvmvY0+n"
+Content-Disposition: inline
+In-Reply-To: <Y1uw2zp/XnUdgEwJ@kroah.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -152,43 +85,101 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 28/10/2022 10:25, Jon Hunter wrote:
-> 
-> On 28/10/2022 03:19, Krzysztof Kozlowski wrote:
->> On 25/10/2022 04:02, Wayne Chang wrote:
->>>
->>>>> +  power-domain-names:
->>>>> +    items:
->>>>> +      - const: xusb_host
->>>>> +      - const: xusb_ss
->>>>
->>>> Drop 'xusb_'.
->>>
->>> The properties are constant and we use the name to get the power domain.
->>>
->>>     tegra->genpd_dev_host = dev_pm_domain_attach_by_name(dev, 
->>> "xusb_host");
->>>
->>>     tegra->genpd_dev_ss = dev_pm_domain_attach_by_name(dev, "xusb_ss");
->>>
->>> we might not be able to drop the xusb_
->>
->> These are new bindings, so why do say they are "constant"? New bindings
->> means you did not use them. If you used them before bindings... what can
->> we say? Don't?
-> 
-> Not exactly. However, what we should do here is convert the legacy 
-> binding doc [0] and replace with this one. But yes we are stuck with the 
-> 'xusb_host' naming.
+--5cRpSgsOPvmvY0+n
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Oct 28, 2022 at 12:37:15PM +0200, gregkh@linuxfoundation.org wrote:
+> On Fri, Oct 28, 2022 at 11:50:47AM +0200, Thierry Reding wrote:
+> > On Fri, Oct 28, 2022 at 08:04:54AM +0200, gregkh@linuxfoundation.org wr=
+ote:
+> > > On Fri, Oct 28, 2022 at 05:36:41AM +0000, Jim Lin wrote:
+> > > > On Thu, 2022-10-27 at 15:58 +0200, Greg KH wrote:
+> > > > > External email: Use caution opening links or attachments
+> > > > >=20
+> > > > >=20
+> > > > > On Thu, Oct 27, 2022 at 09:31:25PM +0800, Jim Lin wrote:
+> > > > > > Add EXPORT_SYMBOL_GPL on xhci_hub_control() for other driver mo=
+dule
+> > > > > > to invoke and avoid linking error.
+> > > > >=20
+> > > > > What other driver module?
+> > > > >=20
+> > > > > There is no user here :(
+> > > > >=20
+> > > > > confused,
+> > > > >=20
+> > > >=20
+> > > > In arch/arm/configs/multi_v7_defconfig
+> > > > It defines
+> > > > CONFIG_USB_XHCI_TEGRA=3Dm
+> > > >=20
+> > > > If I don't add EXPORT_SYMBOL_GPL on xhci_hub_control()
+> > > > , I will get compile/linking error like
+> > > >=20
+> > > > ERROR: modpost: "xhci_hub_control" [drivers/usb/host/xhci-tegra.ko]
+> > > > undefined!
+> > > >=20
+> > > > if patch
+> > > > "[PATCH v5,3/3] xhci: tegra: USB2 pad power controls"
+> > > >=20
+> > > > https://patchwork.kernel.org/project/linux-usb/patch/20221027133127=
+=2E27592-4-jilin@nvidia.com/
+> > > > is added in xhci-tegra.c to invoke xhci_hub_control()
+> > > >=20
+> > > > Should I integrate this patch with [PATCH v5,3/3] as one?
+> > >=20
+> > > Yes, do not add something that is not needed for that specific commit,
+> > > otherwise it causes reviewers to be confused.
+> >=20
+> > Other subsystem maintainers prefer core changes to be split from driver
+> > changes, so this type of split is commonly encountered elsewhere.
+> >=20
+> > Obviously, since this is your turf you get to make the rules. I'm just
+> > trying to say that this kind of advice can be confusing for contributors
+> > because when they then sent driver and code changes mixed for their next
+> > submission, the subsystem maintainer might tell them otherwise.
+>=20
+> Sure, but if you do split it up like this, DOCUMENT WHY THE EXPORT IS
+> NEEDED.  That didn't happen here so I had no idea why this was even an
+> issue.
+>=20
+> And yes, I am very sensitive to this, we have had LOTS of people trying
+> to export xhci symbols in the past few years for no in-kernel users,
+> despite us constantly telling them that this is not allowed.  It
+> happened again, just yesterday:
+> 	https://lore.kernel.org/r/20221027004050.4192111-1-albertccwang@google.c=
+om
+>=20
+> And at first glance, I assumed this was much the same as there was no
+> description of why this was needed at all.
 
-Thierry already has a patch to do this [0]. So we should fix that up and 
-included in this series.
+Agreed. I suppose this could've been spelled out more explicitly in the
+cover letter or in patch 1.
 
-Jon
+Jim, please make sure to describe this dependency explicitly in v6.
 
-[0] 
-https://lore.kernel.org/linux-tegra/20211209165339.614498-3-thierry.reding@gmail.com/
+Thierry
 
--- 
-nvpublic
+--5cRpSgsOPvmvY0+n
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNbuBIACgkQ3SOs138+
+s6FhUxAAhHI43sw1W9y8qsWj9Z2WvDNhDrLUHDhLJTx85BLK8Elgl9cKhWCPSqqP
+FMZz0Q5+DzNyuOXBwN/JnFOf2k0Wr/VrWoKPjyVMyptn0Rp07ihg1WL8FlyduzXV
+uVijpfX7oQHH/a57uR1/Z0SSI1+Gw3LNY5hPKCIt8WfYbbEk+lp52d7gn7ubetZI
+HhTfJ3JOGVdNE1gP99o7vl9yZLU0vAeYuFGNeRnwX0qdzWZU8w3xrXobfZ70rWml
+o9mx0HoRVU3Ct3ED1Wgcv2lfcT2b2FGfiFzyDMVDlkobB8onxWZJwcAmPR8POz+q
+nvqhMvboFOtbVm4wb8BRs8Mu99mP7Ts+VPZNeDQunlYsF3lC5t8cx9edATohDEmn
+Ikl5xCHVwYBk/9Z2yWKAaTgSiCPIU83o0EcOKZAvmj2Xfg5ayGVESnnOoUfzJOym
+haubbuAsMnpJVDBe7dM4Pjeq4pCSh+uhwMPAt2pTauwibzPCJirhgQhDK/BZvJQ7
+mPVklzsq0Y61lHoHcKgOBmAJLiYS8qyL+s0rzjcHFLfSOd1vS+j+fWKir7pv33TN
+QWE7x5EYxis//rVYd/l00xc7URIOg2uNpLTnCbl9TXKdsk8OkREmENVuI0r3k/G0
+CykkgySCrgr+u09oJa00BonyvA9l6Q1r2f7xY2KKo3JGara6a9k=
+=Pl2R
+-----END PGP SIGNATURE-----
+
+--5cRpSgsOPvmvY0+n--
