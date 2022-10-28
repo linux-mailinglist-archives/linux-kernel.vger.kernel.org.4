@@ -2,66 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6F461150B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C342A611509
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbiJ1OrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
+        id S231318AbiJ1Oqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbiJ1Oq1 (ORCPT
+        with ESMTP id S231173AbiJ1OqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:46:27 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109E91F5268
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:46:15 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id t25so13455483ejb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:46:15 -0700 (PDT)
+        Fri, 28 Oct 2022 10:46:20 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DD91EF079;
+        Fri, 28 Oct 2022 07:46:10 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id i10so3385876qkl.12;
+        Fri, 28 Oct 2022 07:46:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KESgtxp98yTHUoZtlQU4tbNiD6fIKzl1fVdZR1xYpYg=;
-        b=CREjyA8iKBGLrlScxh1MaZcu5JW1Eaclq9/mWkUrqcirUTHEuerOj6LJNS98dEH485
-         x/3tJ4el/hzWs3zDY2z4494TbS/XS/As+ZsdFatVbc8o00L8yJsyVSvtcmF7opWM3efi
-         btaOl5H6a9FRYYtHnbKODvAzL23JLPoKteUpYxpnTzccOgY6JQcBVlqYxMN1FF68P/Ju
-         DQco4x47+9VnXGtp3e2ECngJOPkiW+AAKQOAmK5Y7KApvQ2TAbOGHSCEVGERS0mS+6Ru
-         h/ycWT2PK3iLLXa2s09SwbRlVFXjdBcB3xO2Crsh7jpCKY1/J19Zcde6HBO+HOEhFbYv
-         D4Yg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Eap9vgCOo567XBoaqrJtjJTPOneofbaWXwjzfOt/ko=;
+        b=U9faWpM7anfFBwf3lzGgjWdNMgzIZ5MaBAebT8n2v2OUJY1IMy0pME/pjQqGG+QCfK
+         7bZUQVJbFh+CxKQQwQ9R5DDx2LWJYCh9bHvuVmZHPmCZPkMxsq4v3oJXCIxrEtU2wyRC
+         xULShKwG4KVA/V/y2mm6RzTgzuuWv442t/NvFxc8iUofWRjpiTJmB9Up3DOffi9xJubj
+         RR/im5wg2HXy+AthCzdp6tuonbTc2TjHap3B8Gg0F07kxqFgPa43HIxP9DkvUH0elOgY
+         5p7rsu2JPPbc+4Yasp+tik93X6+d2C8f2E2ZaK63ox8JmrIPJbDeHqmIGgxLkGGsIsze
+         bCDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KESgtxp98yTHUoZtlQU4tbNiD6fIKzl1fVdZR1xYpYg=;
-        b=JFQIyD9tdmELW+PQ4+pYy6NTnnoghpMdoml8jP7QDFZQ+bMxZO2CMxNh+mNcy9rDTv
-         gVG/mezCmXKeGtOPrifmGjiaUXZlRsGLNewagB9l1ZGyaZCD/xAdiI2dCzTUXeV3OU3h
-         F2bDsvzSUeE5wUR/zc6ne/Oor6F2DTIIs607f8TEqgVMZEKvi/xKnvght1iL/5T9/a2v
-         oTVPPJKVgNCojg47rEPCy8vc6drDdXxFdF1KYq4Nma3Qr6oZi0qj86FOXJ6RjL2OFbfg
-         nNo7iL50wxDxrrXlyWdQNOE9H2kuP6YrU5o9uD9W3RuVL7TC8zDmZQbtQyapQMWb/A9c
-         OnhQ==
-X-Gm-Message-State: ACrzQf3EbqTaq7nl6E9EQd6UaZeyZbeOJsURs85dSvkbpjzb6Yyoh3Y0
-        dc5/IKzgbgDwO6iA4XTnBDtFx8RTtThmR5FmjCyPAw==
-X-Google-Smtp-Source: AMsMyM4c+jz9XP+w/jlcPjuQFKcHTiI57Ya7OGNFA+kO/tG8L0ZPHIf3166jtslk3EZHPl3mfQFm5XZRMutOpzCZzhc=
-X-Received: by 2002:a17:907:2705:b0:7ad:8460:7d30 with SMTP id
- w5-20020a170907270500b007ad84607d30mr10658222ejk.693.1666968374179; Fri, 28
- Oct 2022 07:46:14 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0Eap9vgCOo567XBoaqrJtjJTPOneofbaWXwjzfOt/ko=;
+        b=Cq43TlEWe94yEgUIxUG65orvDbuQomSNfTN011ANk5mzS6Dlx+YxBL0pcE5r23RfHV
+         j9pBdn5ibH0W57vSPqTgk+Y/c1+N2SrUaN7dWhBD6rsSESAhSQVF+lZZSdYxmvqoFgvz
+         3rImFseLi2zN5kfHHZj8YBGFExHPUf/pC5P1KK+3XWV4W8bZHPRpaQFQev5v705ZEJQy
+         aNod2/KLMmilJk9fse0tCIMcL202eSPcZfNP3AOJFKRELz40kMxXKGbBvvdQFTVRulzP
+         +ntMRgmEEmoAp/NSTmgBjjSBpa4Xzj66hdof1yIVP7OInfYL/bYxNI+E0HsAILPz4XN6
+         Jhcw==
+X-Gm-Message-State: ACrzQf23hYH62+QSgHA0n+u0SxT41vmC81UCw84HYLKq4nJMhwoRsJgI
+        GTwSMXwcPFac+I7dR0tI4QY=
+X-Google-Smtp-Source: AMsMyM57AgHD6SgkTqjWVZle9kdelFZLgih4OaFJ7oUhyOHHF+SxLTt1A5EyJr2xvmD6EBJZRyNRIw==
+X-Received: by 2002:ae9:ebce:0:b0:6f9:ff07:7295 with SMTP id b197-20020ae9ebce000000b006f9ff077295mr5459491qkg.655.1666968369100;
+        Fri, 28 Oct 2022 07:46:09 -0700 (PDT)
+Received: from localhost ([2601:589:4102:5fd2:5b94:d8b:99bf:707a])
+        by smtp.gmail.com with ESMTPSA id x3-20020a05620a448300b006bbc09af9f5sm3032932qkp.101.2022.10.28.07.46.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 07:46:08 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 07:46:08 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     x86@kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        openrisc@lists.librecores.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] x86: Fix /proc/cpuinfo cpumask warning
+Message-ID: <Y1vrMMtRwb0Lekl0@yury-laptop>
+References: <20221014155845.1986223-1-ajones@ventanamicro.com>
+ <20221014155845.1986223-3-ajones@ventanamicro.com>
+ <20221028074828.b66uuqqfbrnjdtab@kamzik>
 MIME-Version: 1.0
-References: <20221028063055.2817-1-liubo03@inspur.com>
-In-Reply-To: <20221028063055.2817-1-liubo03@inspur.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 28 Oct 2022 07:46:02 -0700
-Message-ID: <CAGS_qxrzd5MnPgu0wTNiLaPKx-w_5BK2f=i8fuUFXTQcMQi9wA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Include missing header
-To:     Bo Liu <liubo03@inspur.com>
-Cc:     brendan.higgins@linux.dev, davidgow@google.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221028074828.b66uuqqfbrnjdtab@kamzik>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,49 +87,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 11:31 PM Bo Liu <liubo03@inspur.com> wrote:
->
-> The file debugfs.c missed the header debugfs.h, which
-> resulted on the following warning:
->
-> lib/kunit/debugfs.c:28:6: warning: no previous prototype for 'kunit_debugfs_cleanup' [-Wmissing-prototypes]
->  void kunit_debugfs_cleanup(void)
->       ^~~~~~~~~~~~~~~~~~~~~
-> lib/kunit/debugfs.c:33:6: warning: no previous prototype for 'kunit_debugfs_init' [-Wmissing-prototypes]
->  void kunit_debugfs_init(void)
->       ^~~~~~~~~~~~~~~~~~
-> lib/kunit/debugfs.c:92:6: warning: no previous prototype for 'kunit_debugfs_create_suite' [-Wmissing-prototypes]
->  void kunit_debugfs_create_suite(struct kunit_suite *suite)
->       ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> lib/kunit/debugfs.c:108:6: warning: no previous prototype for 'kunit_debugfs_destroy_suite' [-Wmissing-prototypes]
->  void kunit_debugfs_destroy_suite(struct kunit_suite *suite)
->
-> Signed-off-by: Bo Liu <liubo03@inspur.com>
+On Fri, Oct 28, 2022 at 09:48:28AM +0200, Andrew Jones wrote:
+> Hi x86 maintainers,
+> 
+> I realize 78e5a3399421 has now been reverted, so this fix is no longer
+> urgent. I don't believe it's wrong, though, so if it's still of interest,
+> then please consider this a friendly ping.
+> 
+> Thanks,
+> drew
 
-Tested-by: Daniel Latypov <dlatypov@google.com>
+Hi Andrew,
 
-Looks good to me, one minor nit below.
-Brendan, can you take a look when you get a moment?
+I'll take it in bitmap-for-next this weekend.
 
-Question for context: is there a plan to enable this flag by default
-or something like that?
-I was a bit surprised that -Wall doesn't seem to enable this flag when
-I was testing locally.
-
-> ---
->  lib/kunit/debugfs.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-> index 1048ef1b8d6e..83411075f614 100644
-> --- a/lib/kunit/debugfs.c
-> +++ b/lib/kunit/debugfs.c
-> @@ -10,6 +10,7 @@
->  #include <kunit/test.h>
->
->  #include "string-stream.h"
-> +#include "debugfs.h"
-
-Very minor nit: could we swap the order of these?
-#include "debugfs.h"
-#include "string-stream.h"
+Thanks,
+Yury
