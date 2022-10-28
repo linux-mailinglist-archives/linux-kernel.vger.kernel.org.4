@@ -2,76 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15AA7610EE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62EB610EE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbiJ1KnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 06:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
+        id S230500AbiJ1Kov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 06:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbiJ1Kmz (ORCPT
+        with ESMTP id S230456AbiJ1Kok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 06:42:55 -0400
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70D73D5B0;
-        Fri, 28 Oct 2022 03:42:53 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id c7-20020a05600c0ac700b003c6cad86f38so6343063wmr.2;
-        Fri, 28 Oct 2022 03:42:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kzy+UU3gjOa5g3ayQGLm9vYU6Ho6NVmbqvDVQZef+sU=;
-        b=EZTw1oFqpPOGucJh8pZoQOAYelVRPlve0taEJCuPc1iWF4u9BgSnITVqbS2TCBzzs0
-         nialgBmeQTXC1ALPFgyIgRgxCyu0uIb3KhrLRR/8ifbgfBmWJFscNwq9rschyOXPQG47
-         YamkzuT/bkhxjZX64AVFIe8IBPsKUEvsLOESoaNsHQvL2MNZ1zetQoIyftCiWrp0bMCU
-         ve4EKzaT0jyujG10yQ+OH8oNh1YAVCuu080dI+nvghGmTxdakszNXc0hD66I4+tzuWSz
-         Z+xdqW3+uL69ssAR5Y2ip/jLNyhJwVo8VTbn84lEy8UeKhOmqeemXi2kEiQ8J+0F8rCF
-         aOSw==
-X-Gm-Message-State: ACrzQf0O3XQG79aCFNIX8X93gKqZXUH/PwaM9AVC+c/aRQ2lFdPqW/MU
-        dURi7S81nKRkH2sJhLZ2fVM=
-X-Google-Smtp-Source: AMsMyM6Ylw6n0ZvtWJuew2c9Z0/W8+r4x3X4HOPsGQAfPZHO93f21qUr5AyBAkE7U+Cy6W2MBsdh/A==
-X-Received: by 2002:a05:600c:4f04:b0:3c6:fae5:b4d4 with SMTP id l4-20020a05600c4f0400b003c6fae5b4d4mr9150806wmq.103.1666953772302;
-        Fri, 28 Oct 2022 03:42:52 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id i15-20020a05600c354f00b003cdf141f363sm4336398wmq.11.2022.10.28.03.42.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 03:42:51 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 10:42:49 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Shradha Gupta <shradhagupta@linux.microsoft.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: Re: [PATCH v2 0/2] Configurable order free page reporting in hyper-v
-Message-ID: <Y1uyKXva4M9PoGWY@liuwe-devbox-debian-v2>
-References: <1664447081-14744-1-git-send-email-shradhagupta@linux.microsoft.com>
- <1664517699-1085-1-git-send-email-shradhagupta@linux.microsoft.com>
+        Fri, 28 Oct 2022 06:44:40 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F026AD111
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 03:44:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666953874; x=1698489874;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9rIv6tGZ/biObzV9fIJT/+3bPEx7LR+XItAQ6I+mAGU=;
+  b=cDz3S2soWO7pS/2djPmERewRvytcuz3HhjSpMm7M1tVp4bJQJ7Qc5ZEh
+   Ihw4kzuSeRkCXa/3BLGK1qyuzLHGMliHvPJX6hFqleEe2vVEeppRQ2533
+   8RwfULmaeoheZBCsAXrEathKjUeBooHXS9Il4B7EpQys/vq2BU0UzQOen
+   Zh1XFgGdQkKJQyN1Ci5W7nlVWUgebIlncRRcu2W1NaCJIHV/PiW4VF+9F
+   Mu3D8/66sI4u080ZLmH+CGpgbYkekySG4833G+eVQnIWYB6yo/J6wNs6R
+   wLofcYJbIYpgHpuY6zbunv9DBLKV85LUk+jpL3XQ2Y8z351Xa8fYcavbo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="307191148"
+X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
+   d="scan'208";a="307191148"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 03:44:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="738063672"
+X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
+   d="scan'208";a="738063672"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 28 Oct 2022 03:44:33 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ooMqm-0009p3-38;
+        Fri, 28 Oct 2022 10:44:32 +0000
+Date:   Fri, 28 Oct 2022 18:43:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/mm] BUILD SUCCESS
+ d6d1a3923799d04f56cd644a9cb7ecf19de67949
+Message-ID: <635bb25d.kIZ4hyLxAOSIzaHL%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1664517699-1085-1-git-send-email-shradhagupta@linux.microsoft.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 11:01:37PM -0700, Shradha Gupta wrote:
-[...]
-> 
-> Shradha Gupta (2):
->   mm/page_reporting: Add checks for page_reporting_order param
->   hv_balloon: Add support for configurable order free page reporting
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/mm
+branch HEAD: d6d1a3923799d04f56cd644a9cb7ecf19de67949  x86/mm: Randomize per-cpu entry area
 
-Applied to hyperv-next. Thanks.
+Unverified Warning (likely false positive, please contact us if interested):
+
+arch/x86/kernel/hw_breakpoint.c:265:13: warning: unused variable 'cpu' [-Wunused-variable]
+arch/x86/mm/cpu_entry_area.c:247:23: warning: unused variable 'start' [-Wunused-variable]
+arch/x86/mm/cpu_entry_area.c:247:30: warning: unused variable 'end' [-Wunused-variable]
+
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- i386-allyesconfig
+|   |-- arch-x86-kernel-hw_breakpoint.c:warning:unused-variable-cpu
+|   |-- arch-x86-mm-cpu_entry_area.c:warning:unused-variable-end
+|   `-- arch-x86-mm-cpu_entry_area.c:warning:unused-variable-start
+|-- i386-defconfig
+|   |-- arch-x86-kernel-hw_breakpoint.c:warning:unused-variable-cpu
+|   |-- arch-x86-mm-cpu_entry_area.c:warning:unused-variable-end
+|   `-- arch-x86-mm-cpu_entry_area.c:warning:unused-variable-start
+|-- i386-randconfig-a001
+|   |-- arch-x86-kernel-hw_breakpoint.c:warning:unused-variable-cpu
+|   |-- arch-x86-mm-cpu_entry_area.c:warning:unused-variable-end
+|   `-- arch-x86-mm-cpu_entry_area.c:warning:unused-variable-start
+|-- i386-randconfig-a003
+|   |-- arch-x86-kernel-hw_breakpoint.c:warning:unused-variable-cpu
+|   |-- arch-x86-mm-cpu_entry_area.c:warning:unused-variable-end
+|   `-- arch-x86-mm-cpu_entry_area.c:warning:unused-variable-start
+|-- i386-randconfig-a005
+|   |-- arch-x86-kernel-hw_breakpoint.c:warning:unused-variable-cpu
+|   |-- arch-x86-mm-cpu_entry_area.c:warning:unused-variable-end
+|   `-- arch-x86-mm-cpu_entry_area.c:warning:unused-variable-start
+|-- i386-randconfig-a012
+|   |-- arch-x86-kernel-hw_breakpoint.c:warning:unused-variable-cpu
+|   |-- arch-x86-mm-cpu_entry_area.c:warning:unused-variable-end
+|   `-- arch-x86-mm-cpu_entry_area.c:warning:unused-variable-start
+|-- i386-randconfig-a014
+|   |-- arch-x86-kernel-hw_breakpoint.c:warning:unused-variable-cpu
+|   |-- arch-x86-mm-cpu_entry_area.c:warning:unused-variable-end
+|   `-- arch-x86-mm-cpu_entry_area.c:warning:unused-variable-start
+`-- i386-randconfig-a016
+    |-- arch-x86-kernel-hw_breakpoint.c:warning:unused-variable-cpu
+    |-- arch-x86-mm-cpu_entry_area.c:warning:unused-variable-end
+    `-- arch-x86-mm-cpu_entry_area.c:warning:unused-variable-start
+
+elapsed time: 745m
+
+configs tested: 62
+configs skipped: 69
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+x86_64                              defconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                        randconfig-a015
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-kvm
+x86_64                           allyesconfig
+i386                                defconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+i386                             allyesconfig
+i386                          randconfig-a014
+i386                          randconfig-a012
+x86_64                        randconfig-a004
+i386                          randconfig-a016
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+powerpc                          allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+ia64                             allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                             allyesconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+sh                               allmodconfig
+arc                  randconfig-r043-20221026
+arc                  randconfig-r043-20221028
+s390                 randconfig-r044-20221028
+s390                 randconfig-r044-20221026
+riscv                randconfig-r042-20221026
+riscv                randconfig-r042-20221028
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+
+clang tested configs:
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+arm                         hackkit_defconfig
+arm                         socfpga_defconfig
+mips                      bmips_stb_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
