@@ -2,73 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D22361133C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3776561133B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbiJ1NnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
+        id S231311AbiJ1NnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbiJ1Nmw (ORCPT
+        with ESMTP id S231200AbiJ1Nmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:42:52 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A24C130D71;
-        Fri, 28 Oct 2022 06:42:18 -0700 (PDT)
-X-QQ-mid: bizesmtp79t1666964523t4hfihhr
-Received: from localhost.localdomain ( [182.148.13.81])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 28 Oct 2022 21:42:02 +0800 (CST)
-X-QQ-SSF: 01000000000000F0J000000A0000000
-X-QQ-FEAT: hEgsg0a1R29entsb7H0r/VDA8PcvuIJllYztK3wMsF2TUFT2YFz9FY1aa2M+7
-        /5uef3/SNmZQL53GGGYGzfn5sZ79oJ6ooHD2F0gn13xFVf8aT7qDRy4cW0fLbMKErqd/RT9
-        IcJJ4MD6ul8y59fWDdF9DHZAmjioqNy5YRGMc5dkn/E23TABHKew855bGmCgsMLsTFvgK1C
-        Iv3XaAZ2XgWaM+hXwWuf0H73ysx9U+x0hOYiuh4lMZLs0eLsWu+TJaMOF9siP4ha3kUvHcv
-        +GJ26b+Q2pJrXWl82GOAMssNDhs5J754WPg4PGD96YFdoMlWQbLCa0XL9ZZSFw2eB3RjWO+
-        wRiZnW5sEHylcnpn6uXdGrpfPvl+As0YN97dJqE/9ULqjildYhg9ZkOr1bjhw==
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     neil.armstrong@linaro.org, jbrunet@baylibre.com,
-        mturquette@baylibre.com, sboyd@kernel.org, khilman@baylibre.com
-Cc:     linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] clk: meson: fix repeated words in comments
-Date:   Fri, 28 Oct 2022 21:41:56 +0800
-Message-Id: <20221028134156.64042-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 28 Oct 2022 09:42:44 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D89127409;
+        Fri, 28 Oct 2022 06:42:13 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id h2so4874993pgp.4;
+        Fri, 28 Oct 2022 06:42:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7TzN8u9qaXkNZI85rkj+YULdYiSU+6znD3acTZbi9bk=;
+        b=PgzFaoyFnP79dB2M15z+16QqS9kVHYPCuK2FGUaXIoAbDF71LzJpyYzs42SBLjQaDk
+         wXNHii2lhxZSoyjfHSo6QcspyGL2eww1xBxB+08HZEeS/23JAJIGq78RXQbByJ4BzJhN
+         wlKeVIrZQAJLZ3ERQSW9spGskea5nN+iKC0FMp4bD67oWnYJ9lUgKHTmg21fprl5HJgR
+         BOD7Hq6ok1ya0hlmJfFyRfHSeI7Ej/ZjwtGmlkbbD2akm7A4uMAxkDisilVKiB3unvVS
+         PWIBQUVlXWTFuTOrtD58uYbqdHFSjtgGIVMzKSqBVyty7Nqo6VbcTRsE+sWnonXNlIo6
+         fOhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7TzN8u9qaXkNZI85rkj+YULdYiSU+6znD3acTZbi9bk=;
+        b=YLi3M44P+1OofmJpp3PjhpwYKcKBN3jSG3Y7sum9jLEBMsli9sLWdHjw/q6mShfyaV
+         ODT8yXZajWLCW5VU4Sr0JuP5YrsQhdbNP3pUlrKc3l5x0x7kmPVMlDGWmOQ8vaUdnCWl
+         L8KJ3EI+HOqXHPf0yO01HMhQ1SIlZgnh6251wh5QiGzYrYreHMZtBcBrqzgef5OYc/bS
+         WEyYOFpD2YIfjPzHQm988KHP7wbadh1j/JJuyvN3sm79BYrsIqZWiWFn4R1kAp8y3MyF
+         OQ2l1EJEC4vzcQHZP+1BanLXohxVjW7/kP4ndHCeZWHNJi03irp7fF4rJXlE1a+iT/Nf
+         Q1Hw==
+X-Gm-Message-State: ACrzQf1KIR1L/7m7izD96WcsB5ScKcXVfE64H89lbAsZMcq2QsSdNXhK
+        RYK4x4/D0xuKaTFWp4ObTuU=
+X-Google-Smtp-Source: AMsMyM61E7h+FsczP3WkOaBGojiLbuZ4mwmo4kMQzQSLNDcLC522YO7hh4OND8lkc7pttapi6mzRQA==
+X-Received: by 2002:aa7:9ece:0:b0:56c:5afe:67f7 with SMTP id r14-20020aa79ece000000b0056c5afe67f7mr14538295pfq.55.1666964533093;
+        Fri, 28 Oct 2022 06:42:13 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-72.three.co.id. [180.214.233.72])
+        by smtp.gmail.com with ESMTPSA id w11-20020a170902e88b00b00186b5c1a715sm3112265plg.182.2022.10.28.06.42.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 06:42:12 -0700 (PDT)
+Message-ID: <43169c1c-0745-989d-0ec8-f0ff0152f683@gmail.com>
+Date:   Fri, 28 Oct 2022 20:42:08 +0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 08/15] MIPS: IP27: remove KV_MAGIC
+Content-Language: en-US
+To:     =?UTF-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-mips@vger.kernel.org
+References: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
+ <ebf854f94d7a33c744202efb31cbb61087a33e44.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <ebf854f94d7a33c744202efb31cbb61087a33e44.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'of'.
+On 10/27/22 05:43, наб wrote:
+> It appeared in the original import of SGI code in 2.4.0-test3pre8
+> and has never been used anywhere
+> 
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/clk/meson/clk-regmap.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+LGTM, thanks.
 
-diff --git a/drivers/clk/meson/clk-regmap.h b/drivers/clk/meson/clk-regmap.h
-index e365312da54e..e08a9fa0cc36 100644
---- a/drivers/clk/meson/clk-regmap.h
-+++ b/drivers/clk/meson/clk-regmap.h
-@@ -18,7 +18,7 @@
-  * @data:	data specific to the clock type
-  *
-  * Clock which is controlled by regmap backed registers. The actual type of
-- * of the clock is controlled by the clock_ops and data.
-+ * the clock is controlled by the clock_ops and data.
-  */
- struct clk_regmap {
- 	struct clk_hw	hw;
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
 -- 
-2.36.1
+An old man doll... just what I always wanted! - Clara
 
