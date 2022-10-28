@@ -2,165 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81B69610852
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 04:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6546108B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 05:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236369AbiJ1Clm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 22:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40082 "EHLO
+        id S235700AbiJ1D1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 23:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235700AbiJ1Clk (ORCPT
+        with ESMTP id S235886AbiJ1D1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 22:41:40 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526C49AFDE
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 19:41:39 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id 14-20020a05660220ce00b006c1bdc8ef72so3122179ioz.23
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 19:41:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=awXigRTWzy6BSQJsV32OYDv8G0LoVqiSVgNhrScYdpU=;
-        b=vQluVnxbLnJZEolKxfQV3Pv8A0vuQi1k67OheXDh/Vs/oLFkFh4y+S1qhJQq/4ma0i
-         D34sFcoHBybfT7MAT7pzY2eBQ7l4L8Py562IgSID95VKVL2lVpqhb8FSrnZ9LL4XnKYu
-         IdIXVcoW7H1pMlGbqOCZB8abOz/t5/ZWqKmKNIcSTIYMgATMAmK6D9Nwmc5gZd2cWwmg
-         Pw1LJgSGFmWoX1XCccE5OyWtLunyeS8IdBS5SSwvPR0OL3eDIgK/lXgReTrPNcMV4k6c
-         UyszK2FUauyrRTFIj551eafr2rSQX7g12hIaQVNOwyay6oODpdpXxyaEpA1KMgttui0D
-         mQUA==
-X-Gm-Message-State: ACrzQf1fpmjilzkxN0xgwWFhncgwM60qVfWKH76EPBfOVlwAGEtI+jO2
-        DQtm2+tgdI/1g66XrXkoKO8DOB29jpX3tz+uTNb8xTL+nE88
-X-Google-Smtp-Source: AMsMyM4Oi1gB3R+J6g3Kn1xN+HEPH/HMWXXOKmw0BrZTNQkMa3SuBjQQgc5daPXOIzUiU0jYZgLaX8nGFfc4qh77YGwGtwYlqNGc
+        Thu, 27 Oct 2022 23:27:37 -0400
+X-Greylist: delayed 1809 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Oct 2022 20:27:35 PDT
+Received: from m1390.mail.163.com (m1390.mail.163.com [220.181.13.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADC1C6B64B;
+        Thu, 27 Oct 2022 20:27:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=ChfsP
+        hSBHVJpAeVptbDBbTdrVkeaHzjzfQ3nICLGKio=; b=N6DxnqDcqoh6BOjxHU/d9
+        9E6U3xIXBHq6HGvvafe8E1EGtk3DejzvlX/DqDc6OcxzzyML9VUrHe6dp4qtDH+7
+        cJw68H8+K55//DmnqWr21yB9frBucqzVlHmvXFz8dUIZLnNc50cNvIstGuY2ZJ9x
+        +80aKhfQe9mn88TPC/SqYU=
+Received: from slark_xiao$163.com ( [223.104.77.214] ) by
+ ajax-webmail-wmsvr90 (Coremail) ; Fri, 28 Oct 2022 10:41:55 +0800 (CST)
+X-Originating-IP: [223.104.77.214]
+Date:   Fri, 28 Oct 2022 10:41:55 +0800 (CST)
+From:   "Slark Xiao" <slark_xiao@163.com>
+To:     "Bjorn Helgaas" <helgaas@kernel.org>
+Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH] PCI: Add vendor ID for Quectel and Cinterion
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
+In-Reply-To: <20221027142742.GA826519@bhelgaas>
+References: <20221027142742.GA826519@bhelgaas>
+X-NTES-SC: AL_QuydBPWZu0Eq4yaRZekWkkcRjuo+UMC0vfgh249fPJs0pSr/www5QX57MEDZ1t2MOymVsRmZbTJx0slFZrhoU5nmRCR0rlnB/9q+lWjAvlKH
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1ca5:b0:2fa:bee0:32ad with SMTP id
- x5-20020a056e021ca500b002fabee032admr33931592ill.136.1666924898506; Thu, 27
- Oct 2022 19:41:38 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 19:41:38 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000715f6f05ec0f32d3@google.com>
-Subject: [syzbot] upstream boot error: WARNING in genl_register_family
-From:   syzbot <syzbot+40eb8c0447c0e47a7e9b@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, gnault@redhat.com,
-        jiri@nvidia.com, johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, razor@blackwall.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Message-ID: <5ef2b67c.fb2.1841c77abf2.Coremail.slark_xiao@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: WsGowABnJv10QVtjkdVEAA--.15727W
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbCdQSoZGBbF8ys6AACsb
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    23758867219c Merge tag 'net-6.1-rc3-2' of git://git.kernel..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=135d15ce880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
-dashboard link: https://syzkaller.appspot.com/bug?extid=40eb8c0447c0e47a7e9b
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/20e53c5d9806/disk-23758867.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7c05afb0709a/vmlinux-23758867.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/687dcd5504ea/bzImage-23758867.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+40eb8c0447c0e47a7e9b@syzkaller.appspotmail.com
-
-can: controller area network core
-NET: Registered PF_CAN protocol family
-can: raw protocol
-can: broadcast manager protocol
-can: netlink gateway - max_hops=1
-can: SAE J1939
-can: isotp protocol
-Bluetooth: RFCOMM TTY layer initialized
-Bluetooth: RFCOMM socket layer initialized
-Bluetooth: RFCOMM ver 1.11
-Bluetooth: BNEP (Ethernet Emulation) ver 1.3
-Bluetooth: BNEP filters: protocol multicast
-Bluetooth: BNEP socket layer initialized
-Bluetooth: CMTP (CAPI Emulation) ver 1.0
-Bluetooth: CMTP socket layer initialized
-Bluetooth: HIDP (Human Interface Emulation) ver 1.2
-Bluetooth: HIDP socket layer initialized
-NET: Registered PF_RXRPC protocol family
-Key type rxrpc registered
-Key type rxrpc_s registered
-NET: Registered PF_KCM protocol family
-lec:lane_module_init: lec.c: initialized
-mpoa:atm_mpoa_init: mpc.c: initialized
-l2tp_core: L2TP core driver, V2.0
-l2tp_ppp: PPPoL2TP kernel driver, V2.0
-l2tp_ip: L2TP IP encapsulation support (L2TPv3)
-l2tp_netlink: L2TP netlink interface
-l2tp_eth: L2TP ethernet pseudowire support (L2TPv3)
-l2tp_ip6: L2TP IP encapsulation support for IPv6 (L2TPv3)
-NET: Registered PF_PHONET protocol family
-8021q: 802.1Q VLAN Support v1.8
-DCCP: Activated CCID 2 (TCP-like)
-DCCP: Activated CCID 3 (TCP-Friendly Rate Control)
-sctp: Hash tables configured (bind 32/56)
-NET: Registered PF_RDS protocol family
-Registered RDS/infiniband transport
-Registered RDS/tcp transport
-tipc: Activated (version 2.0.0)
-NET: Registered PF_TIPC protocol family
-tipc: Started in single node mode
-NET: Registered PF_SMC protocol family
-9pnet: Installing 9P2000 support
-NET: Registered PF_CAIF protocol family
-NET: Registered PF_IEEE802154 protocol family
-Key type dns_resolver registered
-Key type ceph registered
-libceph: loaded (mon/osd proto 15/24)
-batman_adv: B.A.T.M.A.N. advanced 2022.3 (compatibility version 15) loaded
-openvswitch: Open vSwitch switching datapath
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1 at net/netlink/genetlink.c:383 genl_register_family+0x13c0/0x1540 net/netlink/genetlink.c:414
-Modules linked in:
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc2-syzkaller-00189-g23758867219c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:genl_validate_ops net/netlink/genetlink.c:383 [inline]
-RIP: 0010:genl_register_family+0x13c0/0x1540 net/netlink/genetlink.c:414
-Code: 5d 41 5e 41 5f 5d c3 e8 5e 74 1b f9 0f 0b 41 be ea ff ff ff eb a2 e8 4f 74 1b f9 0f 0b 41 be ea ff ff ff eb 93 e8 40 74 1b f9 <0f> 0b 41 be ea ff ff ff eb 84 44 89 e1 80 e1 07 38 c1 0f 8c bd ec
-RSP: 0000:ffffc90000067820 EFLAGS: 00010293
-RAX: ffffffff886c5ba0 RBX: 0000000000000001 RCX: ffff888140170000
-RDX: 0000000000000000 RSI: 0000000000000003 RDI: 0000000000000000
-RBP: ffffc90000067950 R08: ffffffff886c4bd3 R09: fffffbfff1c1b606
-R10: fffffbfff1c1b606 R11: 1ffffffff1c1b605 R12: dffffc0000000000
-R13: ffffffff8c582448 R14: 0000000000000000 R15: 0000000000000003
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000c88e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- dp_register_genl+0x40/0x136 net/openvswitch/datapath.c:2578
- dp_init+0x11a/0x140 net/openvswitch/datapath.c:2707
- do_one_initcall+0x1c9/0x400 init/main.c:1303
- do_initcall_level+0x168/0x218 init/main.c:1376
- do_initcalls+0x4b/0x8c init/main.c:1392
- kernel_init_freeable+0x428/0x5d5 init/main.c:1631
- kernel_init+0x19/0x2b0 init/main.c:1519
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+CgoKCgoKCgoKCgoKCgoKCkF0IDIwMjItMTAtMjcgMjI6Mjc6NDIsICJCam9ybiBIZWxnYWFzIiA8
+aGVsZ2Fhc0BrZXJuZWwub3JnPiB3cm90ZToKPk9uIFRodSwgT2N0IDI3LCAyMDIyIGF0IDA3OjUx
+OjIzUE0gKzA4MDAsIFNsYXJrIFhpYW8gd3JvdGU6Cj4+IEluIE1ISSBkcml2ZXIsIHRoZXJlIGFy
+ZSBzb21lIGNvbXBhbmllcyBwcm9kdWN0IHN0aWxsCj4+IGRvIG5vdCBoYXZlIHRoZWlyIG93biBQ
+Q0kgdmVuZG9yIG1hY3JvLiBTbyB3ZSBhZGQgaXQKPj4gaGVyZSB0byBtYWtlIHRoZSBjb2RlIG5l
+YXQuIFJlZiBJRCBjb3VsZCBiZSBmb3VuZCBpbgo+PiBsaW5rIGh0dHBzOi8vcGNpc2lnLmNvbS9t
+ZW1iZXJzaGlwL21lbWJlci1jb21wYW5pZXMuCj4KPlJld3JhcCB0byBmaWxsIDc1IGNvbHVtbnMu
+Cj4KPlBvc3QgYWxvbmcgd2l0aCB0aGUgcGF0Y2ggdGhhdCB1c2VzIHRoZSBkZWZpbml0aW9ucy4K
+Pgo+PiBTaWduZWQtb2ZmLWJ5OiBTbGFyayBYaWFvIDxzbGFya194aWFvQDE2My5jb20+Cj4+IC0t
+LQo+PiAgaW5jbHVkZS9saW51eC9wY2lfaWRzLmggfCA0ICsrKysKPj4gIDEgZmlsZSBjaGFuZ2Vk
+LCA0IGluc2VydGlvbnMoKykKPj4gCj4+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3BjaV9p
+ZHMuaCBiL2luY2x1ZGUvbGludXgvcGNpX2lkcy5oCj4+IGluZGV4IGIzNjJkOTBlYjliMC4uZTNi
+ZmVhMDZiOTBlIDEwMDY0NAo+PiAtLS0gYS9pbmNsdWRlL2xpbnV4L3BjaV9pZHMuaAo+PiArKysg
+Yi9pbmNsdWRlL2xpbnV4L3BjaV9pZHMuaAo+PiBAQCAtMTcyLDYgKzE3MiwxMCBAQAo+PiAgI2Rl
+ZmluZSBQQ0lfREVWSUNFX0lEX0JFUktPTV9BNFQJCTB4ZmZhNAo+PiAgI2RlZmluZSBQQ0lfREVW
+SUNFX0lEX0JFUktPTV9TQ0lURUxfUVVBRFJPCTB4ZmZhOAo+PiAgCj4+ICsjZGVmaW5lIFBDSV9W
+RU5ET1JfSURfQ0lOVEVSSU9OCQkweDEyNjkKPgo+VGhlIFVSTCBhYm92ZSBzYXlzIDB4MTI2OSBi
+ZWxvbmdzIHRvIFRoYWxlcy4gIE1heWJlIGFkZCBhIGNvbW1lbnQgdG8KPnRoYXQgZWZmZWN0LCBz
+aW1pbGFyIHRvIHRoZSBvbmUgZm9yIFBDSV9WRU5ET1JfSURfQ0IuCj4KPj4gKyNkZWZpbmUgUENJ
+X1ZFTkRPUl9JRF9RVUVDVEVMCQkweDFlYWMKPgo+Qm90aCBuZXcgZGVmaW5pdGlvbnMgbG9vayBs
+aWtlIHRoZXkncmUgZHJvcHBlZCBpbiBhIHJhbmRvbSBsb2NhdGlvbi4KPlBsZWFzZSBtb3ZlIHRo
+ZW0gc28gdGhlIHZlbmRvciBJRHMgaW4gdGhlIGZpbGUgcmVtYWluIHNvcnRlZCBieQo+bnVtZXJp
+YyB2YWx1ZS4KPgpIaSBCam9ybiwKICBWMiB2ZXJzaW9uIGlzIHNlbnQuIEkgYWRkIGV4cGxhbmF0
+aW9uIGFib3V0IHRoZSByZWxhdGlvbnNoaXAgYmV0d2VlbiBUaGFsZXMgCmFuZCBDSW50ZXJpb24u
+IEFuZCBJIGp1c3QgIGZpbmQgdGhlc2UgVklEcyBhcmUgc29ydGVkIGJ5IG51bWVyaWMsIHNvIEkg
+Zml4IGl0IGluIHYyLgoKVGhhbmtzLiAKPj4gICNkZWZpbmUgUENJX1ZFTkRPUl9JRF9DT01QQVEJ
+CTB4MGUxMQo+PiAgI2RlZmluZSBQQ0lfREVWSUNFX0lEX0NPTVBBUV9UT0tFTlJJTkcJMHgwNTA4
+Cj4+ICAjZGVmaW5lIFBDSV9ERVZJQ0VfSURfQ09NUEFRX1RBQ0hZT04JMHhhMGZjCj4+IC0tIAo+
+PiAyLjM0LjEKPj4gCg==
