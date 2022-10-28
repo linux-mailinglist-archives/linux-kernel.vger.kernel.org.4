@@ -2,228 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E46F610C8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 10:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAADB610C91
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 10:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiJ1I4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 04:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47394 "EHLO
+        id S229832AbiJ1I6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 04:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiJ1I4g (ORCPT
+        with ESMTP id S229450AbiJ1I6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 04:56:36 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E770D1ABA1E;
-        Fri, 28 Oct 2022 01:56:34 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8AxjrdBmVtjhA8DAA--.6777S3;
-        Fri, 28 Oct 2022 16:56:33 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxb+I6mVtjy0cGAA--.22327S3;
-        Fri, 28 Oct 2022 16:56:32 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v4 2/2] dt-bindings: pinctrl: add loongson2 pinctrl
-Date:   Fri, 28 Oct 2022 16:56:25 +0800
-Message-Id: <20221028085625.24217-2-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221028085625.24217-1-zhuyinbo@loongson.cn>
-References: <20221028085625.24217-1-zhuyinbo@loongson.cn>
+        Fri, 28 Oct 2022 04:58:20 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A43F19C05E;
+        Fri, 28 Oct 2022 01:58:19 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id p4so4480385vsa.11;
+        Fri, 28 Oct 2022 01:58:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=x7MKpIufpLcL39tQ6/GD/80oOXBjR+2MPM2htBRFC1c=;
+        b=IPRj1BpIxM5HppTptt3vyghRZ/7kjubfGTSaRZPi52dVMfGh5mhCSYbT+UrCEle1zs
+         /81PaEko/bNlAQi7wqGxyMQxZI/vQtE/aypQCsNjUtqbPIg2pIu/uks2F/FfVV+A2yr/
+         J6eapR1t3rIP0EQFU6gX08nfqU/KrWIUAGEOhF9A473wDRN3KQxlh1/3Qk13L/YhxsKG
+         zF55QLAhfLZ1qt1cvqxnU2RRe9RBQnsJ9iQTZenceFN5DYdApBk/vmkAHVpCgZikMjWT
+         XCYP1jqiPeMEJL5VIW7rlOjsikSw3s5rNbarb8RJzOR71r0Yr21yoK3SA5o3x4jSh7C4
+         4stw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x7MKpIufpLcL39tQ6/GD/80oOXBjR+2MPM2htBRFC1c=;
+        b=G+L34XOcjv8Qc+enwV/AeEiaHTH5vCHCh/2YL9Ry6hGPRPo6jk3kPgiYQrLdEQDi1i
+         YYJQEXp+4lwIp27f50plM8/3Q42/jznzUHoiGYunsWGs98fhukRktN4gz3lo9GkFO70w
+         wCBriuyFtM1C+KLDmZrUHQB10zr1aVVCY6dcU7LvrTdVX9Dz2s6TpDafsPLiJAFyR8TB
+         IGnKpLf74rQ/NpY4vjs/DTACUjMMHQ4rkJEOCZ86gGDeFJnCY1uVfuQ79hFydhxE5wzm
+         qdXcxnAfkuSil2MshAcXp6Lt5o/4qIvxlZHITZ7OIRyHOSG3ygfe8EmG2AitgbkdI7+X
+         oefw==
+X-Gm-Message-State: ACrzQf3A+PkZx454mMOpDP+aR43gpawLelScp52nSvCU9yAdhuQ34I2/
+        KbQU4LWtZIdb7rLCSMGeWBbiewT5a9nAmbC6KJ0=
+X-Google-Smtp-Source: AMsMyM5Jlod8DkZkJEONA8WSngasWeiCJF0+L27dIppZY11+fv5GDh8jdeFXNXYZvH7krUwioqOqxBCOl35IsMIFvmc=
+X-Received: by 2002:a67:a24e:0:b0:3a5:38a0:b610 with SMTP id
+ t14-20020a67a24e000000b003a538a0b610mr29257436vsh.2.1666947498265; Fri, 28
+ Oct 2022 01:58:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cxb+I6mVtjy0cGAA--.22327S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF47tFy8Kr4fJF43AFW8JFb_yoW5tw1xpF
-        43C3sxGr1IqF4xX3y3Aa40vw1fGan7AF9rCasFv34jqr4qqa4vyay5Krn0q3yDCF47ArW5
-        WFy5u342qF1UAr7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b7AFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0ow
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l
-        57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
-        vE14v26r126r1DMcIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxV
-        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
-        6r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
-        WUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG
-        6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJV
-        WxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1wFxUUUUUU==
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+References: <20221013222719.277923-1-stephen.s.brennan@oracle.com>
+ <20221018041233.376977-1-stephen.s.brennan@oracle.com> <CAOQ4uxgnW1An-3FJvUfYoixeycZ0w=XDfU0fh6RdV4KM9DzX_g@mail.gmail.com>
+ <87edv44rll.fsf@oracle.com> <CAOQ4uxhwFGddgJP5xPYDysoa4GFPYu6Bj7rgHVXTEuZk+QKYQQ@mail.gmail.com>
+ <87czachqfb.fsf@oracle.com>
+In-Reply-To: <87czachqfb.fsf@oracle.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Fri, 28 Oct 2022 11:58:06 +0300
+Message-ID: <CAOQ4uxgiFf_zpuaj2cXy3jM7omsfW3aOfHEwnSHFLi7y-BQEJw@mail.gmail.com>
+Subject: Re: [PATCH 0/2] fsnotify: fix softlockups iterating over d_subdirs
+To:     Stephen Brennan <stephen.s.brennan@oracle.com>
+Cc:     Jan Kara <jack@suse.cz>, Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Loongson-2 pinctrl binding with DT schema format using
-json-schema.
+>
+> Well I feel stupid. The reason behind this seems to be... that
+> d_find_any_alias() returns a reference to the dentry, and I promptly
+> leaked that. I'll have it fixed in v3 which I'm going through testing
+> now.
+>
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
-Change in v4:
-		1. Replace Loongson2 with Loongson-2.
+I reckon if you ran the LTP fsnotify tests you would have seen this
+warning a lot more instead of just one random pseudo filesystem
+that some process is probably setting a watch on...
 
- .../pinctrl/loongson,ls2k-pinctrl.yaml        | 129 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 2 files changed, 130 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
+You should run the existing LTP test to check for regressions.
+The fanotify/inotify test cases in LTP are easy to run, for example:
+run make in testcases/kernel/syscalls/fanotify and execute individual
+./fanotify* executable.
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
-new file mode 100644
-index 000000000000..3236a6c2943e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
-@@ -0,0 +1,129 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pinctrl/loongson,ls2k-pinctrl.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson-2 SoC Pinctrl Controller
-+
-+maintainers:
-+  - zhanghongchen <zhanghongchen@loongson.cn>
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+allOf:
-+  - $ref: pinctrl.yaml#
-+
-+properties:
-+  compatible:
-+    const: loongson,ls2k-pinctrl
-+
-+  reg:
-+    maxItems: 1
-+
-+patternProperties:
-+  '-pins$':
-+    type: object
-+
-+    additionalProperties: false
-+
-+    patternProperties:
-+      'pinmux$':
-+        type: object
-+        description: node for pinctrl.
-+        $ref: pinmux-node.yaml#
-+
-+        unevaluatedProperties: false
-+
-+        properties:
-+          groups:
-+            description:
-+              One or more groups of pins to mux to a certain function
-+            items:
-+              enum: [gpio, sdio, can1, can0, pwm3, pwm2, pwm1, pwm0, i2c1, i2c0,
-+                     nand, sata_led, lio, i2s, hda, uart2, uart1, camera, dv01,
-+                     dvo0]
-+          function:
-+            description:
-+              The function that a group of pins is muxed to
-+            enum: [gpio, sdio, can1, can0, pwm3, pwm2, pwm1, pwm0, i2c1, i2c0,
-+                   nand, sata_led, lio, i2s, hda, uart2, uart1, camera, dv01,
-+                   dvo0]
-+
-+        dependencies:
-+          groups: [function]
-+          function: [groups]
-+
-+        required:
-+          - groups
-+          - function
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    pctrl: pinctrl@1fe00420 {
-+        compatible = "loongson,ls2k-pinctrl";
-+        reg = <0x1fe00420 0x18>;
-+        sdio_pins_default: sdio-pins {
-+            sdio-pinmux {
-+                groups ="sdio";
-+                function ="sdio";
-+            };
-+
-+            sdio-det-pinmux {
-+                groups ="pwm2";
-+                function ="gpio";
-+            };
-+        };
-+
-+        pwm1_pins_default: pwm1-pins {
-+            pinmux {
-+                groups ="pwm1";
-+                function ="pwm1";
-+            };
-+        };
-+
-+        pwm0_pins_default: pwm0-pins {
-+            pinmux {
-+                groups ="pwm0";
-+                function ="pwm0";
-+            };
-+        };
-+
-+        i2c1_pins_default: i2c1-pins {
-+            pinmux {
-+                groups ="i2c1";
-+                function ="i2c1";
-+            };
-+        };
-+
-+        i2c0_pins_default: i2c0-pins {
-+            pinmux {
-+                groups ="i2c0";
-+                function ="i2c0";
-+            };
-+        };
-+
-+        nand_pins_default: nand-pins {
-+            pinmux {
-+                groups ="nand";
-+                function ="nand";
-+            };
-+        };
-+
-+        hda_pins_default: hda-pins {
-+            grp0-pinmux {
-+                groups ="hda";
-+                function ="hda";
-+            };
-+
-+            grp1-pinmux {
-+                groups ="i2s";
-+                function ="gpio";
-+            };
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8afa53595124..4fc949c36a44 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11927,6 +11927,7 @@ M:	zhanghongchen <zhanghongchen@loongson.cn>
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-gpio@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
- F:	drivers/pinctrl/pinctrl-loongson2.c
- 
- LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
--- 
-2.31.1
+If you point me to a branch, I can run the tests until you get
+your LTP setup ready.
 
+Thanks,
+Amir.
