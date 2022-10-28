@@ -2,99 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B023611A0A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 20:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D50611A0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 20:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbiJ1STk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 14:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
+        id S229971AbiJ1SWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 14:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiJ1STi (ORCPT
+        with ESMTP id S229455AbiJ1SWH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 14:19:38 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FCF55B1;
-        Fri, 28 Oct 2022 11:19:29 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 9B1A560C;
-        Fri, 28 Oct 2022 18:19:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 9B1A560C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1666981169; bh=Oc5cMdKanGrG3AiQdbRR/5dfJXVOInrFY/Y/d7mf19w=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=O9z8oKHanbEgjMaZ5jB56/4e8hU4siOlE4MdLZQ7i/bC80VBFyv31JKvfCVXXJJRN
-         n/tVLhiXBdKD9cotPj/qnf2f8sT/bFyEmJPpPH5ZWkiOzJrZ8oM7C/J8mI+WTmVNGS
-         wVJW34Lp4U5tz+rYfWRMK6kE4svVrXdo1qxGDMhLmHVA1ZjhUpwe8d6Bm8zivPkdtl
-         tTQvd8paOeAy58OKgeay6w2XvPgiyoF6Ofz7By961g2vTqoah197pDN5BQOM1InjGb
-         QPv+7lS8NlkUlMICCM3ajsUDIDIEG7frKrDuApsbVSWtcSwnA2gbNk4BWArWgCPV+K
-         AEBadMbq1Upjg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH] docs/sphinx: More depth in the rtd sidebar toc
-In-Reply-To: <20221027104406.549734-1-daniel.vetter@ffwll.ch>
-References: <20221027104406.549734-1-daniel.vetter@ffwll.ch>
-Date:   Fri, 28 Oct 2022 12:19:29 -0600
-Message-ID: <87tu3n6cb2.fsf@meer.lwn.net>
+        Fri, 28 Oct 2022 14:22:07 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3754241B0E
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 11:22:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666981325; x=1698517325;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WdtycWAj7ZZzF2NnGQ8L1k0yKjh4DNQY2nx3zhBw42o=;
+  b=VTTxUG0uePQxTWA3J7RPHs9QsXaDbnb27fnmf6YA7Kd5zHvOV+nUsJZ1
+   IaM3jgY58pqVa6r0GKTlBkNPhtDbZSA53uUsqWuO2NorLvPXLx+F4iJqe
+   n+mI9SXFDaP0szbdO2f71eDE2W8Xl17HxzynbYQ44oqvfdiLMWmxm2F2z
+   edMaol+K44GmDDuc71613j7vN4l8Q9TITcKJGlJAZNTg5MUoKuAhPcDZa
+   3maDxHhxitRwMnhX/gY3QShaoBIwsvF0zXPxtQGNNDuZDc+5XfdpqfBMH
+   L6fbbHqkTw1dvX+8Y4YE2SYZPn3r9C9IIEyhaZL+d2nmPgP5aIWeGD7mT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="307287231"
+X-IronPort-AV: E=Sophos;i="5.95,221,1661842800"; 
+   d="scan'208";a="307287231"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 11:21:57 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="722145510"
+X-IronPort-AV: E=Sophos;i="5.95,221,1661842800"; 
+   d="scan'208";a="722145510"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.175.207])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 11:21:57 -0700
+Date:   Fri, 28 Oct 2022 11:21:55 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Tanju Brunostar <tanjubrunostar0@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev, Julia Lawall <julia.lawall@inria.fr>
+Subject: Re: Outreachy first patch wiki modification proposal
+Message-ID: <Y1wdw5GC8ZUhXFKj@aschofie-mobl2>
+References: <CAHJEyKU8YhVLg2k4c6H_B9YJo=Va=V8ea+vkgDKH8aUZBou0wA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHJEyKU8YhVLg2k4c6H_B9YJo=Va=V8ea+vkgDKH8aUZBou0wA@mail.gmail.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Daniel Vetter <daniel.vetter@ffwll.ch> writes:
+On Fri, Oct 28, 2022 at 09:35:48AM +0100, Tanju Brunostar wrote:
+> After setting up my mutt with Gmail, I tested it by sending an email
+> but it did not go through. After some research, I realized that Gmail
+> no longer allows less secure apps. The way around this is to set up
+> two step verification, then generate and use "App password". I would
+> like to add this to the wiki, as this will save others from the
+> additional work. Please let me know if I can proceed.
 
-> We love to nest our documenation for good structure, but that means
-> the table of contents needs to keep up or you can't navigate them.
->
-> Realized this trying to find the drm property documentation, which
-> with some shuffling around disappeared. Why I didn't realize we can do
-> this earlier, no idea.
->
-> Since the relevant parts of the toc are only loaded if you're in the
-> right .html file there's no harm in going all the way to unlimited.
->
-> Note that this has no impact on the classic theme (which doesn't have
-> the sidebar) nor on the various :toctree: rendered inline in the
-> output.
->
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> ---
->  Documentation/conf.py | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/Documentation/conf.py b/Documentation/conf.py
-> index 934727e23e0e..5dc141c66726 100644
-> --- a/Documentation/conf.py
-> +++ b/Documentation/conf.py
-> @@ -240,6 +240,10 @@ if html_theme == 'sphinx_rtd_theme' or html_theme == 'sphinx_rtd_dark_mode':
->                  # Add color-specific RTD normal mode
->                  html_css_files.append('theme_rtd_colors.css')
->  
-> +        html_theme_options = {
-> +            'navigation_depth': -1,
-> +        }
-> +
->      except ImportError:
->          html_theme = 'classic'
+Hi Tanju,
 
-So this patch isn't against docs-next, and applies to the RTD theme,
-which is no longer the default.  I have no objection to it, but have you
-looked at how your docs come out with the alabaster theme?
+This is an Outreachy specific question.
+Please resend it to the Outreachy list only.
 
 Thanks,
+Alison
 
-jon
+> 
+> Thanks,
+> 
+> Tanju
+> 
