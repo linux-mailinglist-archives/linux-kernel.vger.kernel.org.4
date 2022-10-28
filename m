@@ -2,129 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FB2610E48
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B67610E56
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiJ1KV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 06:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45876 "EHLO
+        id S229905AbiJ1KXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 06:23:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiJ1KVV (ORCPT
+        with ESMTP id S230064AbiJ1KX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 06:21:21 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C971C6111E
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 03:21:19 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso9483162pjc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 03:21:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jqdm7wRWhZuHaCk2KrCdOw88pP9TeeCM5JGbiZSkavs=;
-        b=bzjaDeoKtCBF2LCxBdZjqfEmx06nUguRtnY8CYaMH/CLYIkuU3ow45g7dXGWfAQ8Os
-         5XKYGVZwwurk8Sg+iF8ieCZijwdjWjZ6h9GNksjAaGUSNjHdQIP389mHJDGbkGaagSar
-         otdpDnZPvYvcdrzfTcVQobtpuGOjGvUNAvPw78sdX2avG55bl699HHlqK3hxtBAEEHve
-         CMpHjDo/FEA5S+RnHDmKVDHkq/Asb4/jC9h7W8A0hehEttOyOXRmJPe0Cy9IkkWwXbxs
-         tDyR4nd9hruvYNF519hl4Pdla96UrJEU3TEHesftjeqqJZu4omaNhrJFRBuvlI1faH3s
-         r4IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jqdm7wRWhZuHaCk2KrCdOw88pP9TeeCM5JGbiZSkavs=;
-        b=wi6qFdehs40hgF7FDjxhodjqSBOezU/23Rb0n2E35CHC9EQKM3NaMzTyxkLZStm6dp
-         VIfl87VTHKizdhwFVN/PfaUgCNuqeOuc33t5H3DXY1MnnK0I1+VadyJDzasLUrztSOOt
-         6AgbRys5YCTZtIMOeQJ15afPPrL6Q6CHPc0f0RYALy+bvDKro3lyP9RuHQXe1lpfTD22
-         de58iWYS79AQnHtjVrN9F6cl0n2/9vQz/Up/0KhakIpPsgkFOO3sKfmp3f/W+CvIm+gN
-         kQ5IZ4ei4FeLEiel45tsF3ASAmZ/GNqtPZ6puSdYHupHLUeuZJ2TnkOFG4xdJK65nMUu
-         gxvg==
-X-Gm-Message-State: ACrzQf0uhW7KZmyadQGaUI0sNuxlzxvybOOA3CRvg0RmN8PXs/QOKYL9
-        I/uwA9D8s9zFMKKQ6dEcnK+1oQ==
-X-Google-Smtp-Source: AMsMyM4zW7mA5EXn00j8WljYIS8NIyzp8hGR31q3ninFTGJ1kZ93z/RgFmxVUMO6TfIlSogFbwOmzw==
-X-Received: by 2002:a17:90a:e7d1:b0:213:1db:c87f with SMTP id kb17-20020a17090ae7d100b0021301dbc87fmr14642726pjb.26.1666952479318;
-        Fri, 28 Oct 2022 03:21:19 -0700 (PDT)
-Received: from [10.94.58.189] ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id t5-20020a654b85000000b00460d89df1f1sm2415680pgq.57.2022.10.28.03.21.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 03:21:19 -0700 (PDT)
-Message-ID: <625ce99b-8ec3-f807-99ac-1dc32695deca@bytedance.com>
-Date:   Fri, 28 Oct 2022 18:21:11 +0800
+        Fri, 28 Oct 2022 06:23:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43751CB52C;
+        Fri, 28 Oct 2022 03:23:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EA2962762;
+        Fri, 28 Oct 2022 10:23:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED3E5C433D7;
+        Fri, 28 Oct 2022 10:23:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666952605;
+        bh=pBCdGb929chY5ppQKuDgVYnGog6hqh/6E2N9jwb1/Zc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CK14ehMMVSXCsyikJLRvsO703TSBA8hqBDTbHmB56WimZGqIliGCQ1TWofoZSDoCr
+         t6/KsOtbaegq8xYk4ebOZgF9CcDB3s7586rzQHivwFpOGMmlUjgqvoun8vpJr+4jFn
+         YhfILNBOUKzylZp6ud4Yzuo1sVZgd1eciJniazjy12vcMOZ2N1VwvW7yXpUvUkFf7O
+         F53a48BF4p9aOPto6Ft5NUoKonXeRbRrCO+gqK+xMmQv0dnXcJb/7QtCXaofZntwSP
+         4ZmlXl4yibOboMPcPGehGwKvgyVGmXsVSP42/BGXJMyKdY4TxacyBfPiEhsgX97rh3
+         BJDnM2eOXBnMw==
+Message-ID: <ad852357-98a3-b8b9-e9eb-d65c28947ed5@kernel.org>
+Date:   Fri, 28 Oct 2022 13:23:20 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.0
-Subject: Re: Regression on vcpu_is_preempted()
-To:     Miaohe Lin <linmiaohe@huawei.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rohit.k.jain@oracle.com
-Cc:     dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel <linux-kernel@vger.kernel.org>
-References: <89856431-e68b-ebe9-90cb-e46ed8065659@huawei.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 2/3] phy: ti: gmii-sel: Update methods for fetching and
+ using qsgmii main port
 Content-Language: en-US
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <89856431-e68b-ebe9-90cb-e46ed8065659@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>, robh+dt@kernel.org,
+        lee@kernel.org, krzysztof.kozlowski@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, kishon@kernel.org,
+        vkoul@kernel.org, dan.carpenter@oracle.com
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+References: <20221026074532.109220-1-s-vadapalli@ti.com>
+ <20221026074532.109220-3-s-vadapalli@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20221026074532.109220-3-s-vadapalli@ti.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miaohe,
+Hi Siddharth,
 
-On 10/28/22 4:48 PM, Miaohe Lin wrote:
-> Hi all scheduler experts:
->    When we run java gc in our 8 vcpus guest *without KVM_FEATURE_STEAL_TIME enabled*, the output looks like below:
->      With ParallelGCThreads=4 and ConcGCThreads=4, we have:
-> 	G1 Young Generation: 1 times 1786 ms
-> 	G1 Old Generation: 1 times 1022 ms
->      With ParallelGCThreads=5 and ConcGCThreads=5, we have:
-> 	G1 Young Generation: 1 times 1557 ms
-> 	G1 Old Generation: 1 times 1020 ms
+On 26/10/2022 10:45, Siddharth Vadapalli wrote:
+> The number of QSGMII main ports are specific to the device. TI's J7200 for
+> which the QSGMII main port property is fetched from the device-tree has
+> only one QSGMII main port. However, devices like TI's J721e support up to
+> two QSGMII main ports. Thus, the existing methods for fetching and using
+> the QSGMII main port are not scalable.
 > 
->    This meets our expectation. But *with KVM_FEATURE_STEAL_TIME enabled* in our guest, the output looks like this:
->      With ParallelGCThreads=4 and ConcGCThreads=4, we have:
-> 	G1 Young Generation: 1 times 1637 ms
-> 	G1 Old Generation: 1 times 1022 ms
->      With ParallelGCThreads=5 and ConcGCThreads=5, we have:
-> 	G1 Young Generation: 1 times 2164 ms
-> 				      ^^^^
-> 	G1 Old Generation: 1 times 1024 ms
+> Update the existing methods for handling the QSGMII main ports and its
+> associated requirements to make it scalable for future devices.
 > 
->    The duration of G1 Young Generation is far beyond our expectation when gc threads = 5. And we found the root cause
-> is that when KVM_FEATURE_STEAL_TIME is enabled *there are much more(3k+) cpu migrations for java gc threads*. It's due to
-> the below commit:
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> ---
+>  drivers/phy/ti/phy-gmii-sel.c | 29 ++++++++++++++++++++++-------
+>  1 file changed, 22 insertions(+), 7 deletions(-)
 > 
->    commit 247f2f6f3c706b40b5f3886646f3eb53671258bf
->    Author: Rohit Jain <rohit.k.jain@oracle.com>
->    Date:   Wed May 2 13:52:10 2018 -0700
-> 
->      sched/core: Don't schedule threads on pre-empted vCPUs
-> 
->      In paravirt configurations today, spinlocks figure out whether a vCPU is
->      running to determine whether or not spinlock should bother spinning. We
->      can use the same logic to prioritize CPUs when scheduling threads. If a
->      vCPU has been pre-empted, it will incur the extra cost of VMENTER and
->      the time it actually spends to be running on the host CPU. If we had
->      other vCPUs which were actually running on the host CPU and idle we
->      should schedule threads there.
-> 
->    When scheduler tries to select a CPU to run the gc thread, available_idle_cpu() will check whether vcpu_is_preempted().
-> It will choose other vcpu to run gc threads when the current vcpu is preempted. But the preempted vcpu has no other work
-> to do except continuing to do gc. In our guest, there are more vcpus than java gc threads. So there could always be some
-> available vcpus when scheduler tries to select a idle vcpu (runing on host). This leads to lots of cpu migrations and results
-> in regression.
+> diff --git a/drivers/phy/ti/phy-gmii-sel.c b/drivers/phy/ti/phy-gmii-sel.c
+> index 0bcfd6d96b4d..c8f30d2e1f46 100644
+> --- a/drivers/phy/ti/phy-gmii-sel.c
+> +++ b/drivers/phy/ti/phy-gmii-sel.c
+> @@ -50,6 +50,7 @@ struct phy_gmii_sel_soc_data {
+>  	const struct reg_field (*regfields)[PHY_GMII_SEL_LAST];
+>  	bool use_of_data;
+>  	u64 extra_modes;
+> +	u32 num_qsgmii_main_ports;
+>  };
+>  
+>  struct phy_gmii_sel_priv {
+> @@ -213,6 +214,8 @@ struct phy_gmii_sel_soc_data phy_gmii_sel_cpsw5g_soc_j7200 = {
+>  	.use_of_data = true,
+>  	.regfields = phy_gmii_sel_fields_am654,
+>  	.extra_modes = BIT(PHY_INTERFACE_MODE_QSGMII),
+> +	.num_ports = 4,
+> +	.num_qsgmii_main_ports = 1,
+>  };
+>  
+>  static const struct of_device_id phy_gmii_sel_id_table[] = {
+> @@ -378,11 +381,13 @@ static int phy_gmii_sel_init_ports(struct phy_gmii_sel_priv *priv)
+>  static int phy_gmii_sel_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> +	const struct phy_gmii_sel_soc_data *soc_data;
+>  	struct device_node *node = dev->of_node;
+>  	const struct of_device_id *of_id;
+>  	struct phy_gmii_sel_priv *priv;
+>  	u32 main_ports = 1;
+>  	int ret;
+> +	u32 i;
+>  
+>  	of_id = of_match_node(phy_gmii_sel_id_table, pdev->dev.of_node);
+>  	if (!of_id)
+> @@ -394,16 +399,26 @@ static int phy_gmii_sel_probe(struct platform_device *pdev)
+>  
+>  	priv->dev = &pdev->dev;
+>  	priv->soc_data = of_id->data;
+> +	soc_data = priv->soc_data;
+>  	priv->num_ports = priv->soc_data->num_ports;
+> -	of_property_read_u32(node, "ti,qsgmii-main-ports", &main_ports);
+> +	priv->qsgmii_main_ports = 0;
+> +
+>  	/*
+> -	 * Ensure that main_ports is within bounds. If the property
+> -	 * ti,qsgmii-main-ports is not mentioned, or the value mentioned
+> -	 * is out of bounds, default to 1.
+> +	 * Based on the compatible, try to read the appropriate number of
+> +	 * QSGMII main ports from the "ti,qsgmii-main-ports" property from
+> +	 * the device-tree node.
+>  	 */
+> -	if (main_ports < 1 || main_ports > 4)
+> -		main_ports = 1;
+> -	priv->qsgmii_main_ports = PHY_GMII_PORT(main_ports);
+> +	for (i = 0; i < soc_data->num_qsgmii_main_ports; i++) {
+> +		of_property_read_u32_index(node, "ti,qsgmii-main-ports", i, &main_ports);
+> +		/*
+> +		 * Ensure that main_ports is within bounds.
+> +		 */
+> +		if (main_ports < 1 || main_ports > soc_data->num_ports) {
+> +			dev_err(dev, "Invalid qsgmii main port provided\n");
 
-So you want the preempted idle cpus to run gc threads to maximize the
-gc throughput, but available_idle_cpu() keeps them from being selected.
-In theory, load balancing will help spreading load to these cpus (and
-make them VMENTERed), so have you checked that the gc threads showed a
-tendency to stack on same cpus?
+nit: This message is a bit misleading if the property does not exist in DT.
+
+How about just "Invalid ti,qsgmii-main-ports"
+
+> +			return -EINVAL;
+> +		}
+> +		priv->qsgmii_main_ports |= PHY_GMII_PORT(main_ports);
+> +	}
+>  
+>  	priv->regmap = syscon_node_to_regmap(node->parent);
+>  	if (IS_ERR(priv->regmap)) {
+
+Reviewed-by: Roger Quadros <rogerq@kernel.org>
+
+cheers,
+-roger
