@@ -2,111 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D093611D69
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4C8A611D6A
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiJ1Wbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 18:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47212 "EHLO
+        id S229678AbiJ1WfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 18:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiJ1Wbi (ORCPT
+        with ESMTP id S229587AbiJ1WfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 18:31:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1269BDFB78;
-        Fri, 28 Oct 2022 15:31:36 -0700 (PDT)
+        Fri, 28 Oct 2022 18:35:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F5D69F7A;
+        Fri, 28 Oct 2022 15:35:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D94D62AC3;
-        Fri, 28 Oct 2022 22:31:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A8BFC433D6;
-        Fri, 28 Oct 2022 22:31:33 +0000 (UTC)
-Date:   Fri, 28 Oct 2022 18:31:49 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mirko Lindner <mlindner@marvell.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net
-Subject: Re: [RFC][PATCH v2 19/31] timers: net: Use del_timer_shutdown()
- before freeing timer
-Message-ID: <20221028183149.2882a29b@gandalf.local.home>
-In-Reply-To: <20221027183511.66b058c4@gandalf.local.home>
-References: <20221027150525.753064657@goodmis.org>
-        <20221027150928.780676863@goodmis.org>
-        <20221027155513.60b211e2@gandalf.local.home>
-        <CAHk-=wjAjW2P5To82+CAM0Rx8RexQBHPTVZBWBPHyEPGm37oFA@mail.gmail.com>
-        <20221027163453.383bbf8e@gandalf.local.home>
-        <CAHk-=whoS+krLU7JNe=hMp2VOcwdcCdTXhdV8qqKoViwzzJWfA@mail.gmail.com>
-        <20221027170720.31497319@gandalf.local.home>
-        <20221027183511.66b058c4@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48D77B828F8;
+        Fri, 28 Oct 2022 22:35:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD613C433D6;
+        Fri, 28 Oct 2022 22:35:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666996514;
+        bh=7fjuvPKA0vAPJznN/TY2LeFqZmEvMZgy+SDt0KY2T3U=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=oVs1kltzrwaGTEYxOAy2+1kuEIEyiI9FxqV4MBIEMPxv6chtgE9LNv+IYmqrXB+0y
+         Rpp9/GDJ42cB8LB2ucM6jGyN3MJB+kewAzGzJ9ynWrqN9NwXF6wL4EwsnFGeU1HCOS
+         gdIKVi5ynZrZf7MHh81rSF02pVVtGgkPwNV/Uayqvbxzzc4CKVLBu0SSodsF2uiR8J
+         562ckUIVJziQ1A3p6vjOjZwUNraCz+BJpBxghnqAM8IuvZ54PEaVjOrP+yb1dFw684
+         VVTz/O2ju8GfEgJhUyFqSZ8Cc/0K9JYD9ck5/Waegpyo6HRQSSgdZbpxKbNOu5zk4A
+         0k6Ch8Ue/PxnA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 79C765C1040; Fri, 28 Oct 2022 15:35:14 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 15:35:14 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     "Elliott, Robert (Servers)" <elliott@hpe.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] sched: Add helper kstat_cpu_softirqs_sum()
+Message-ID: <20221028223514.GV5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221022124525.2080-1-thunder.leizhen@huawei.com>
+ <20221022124525.2080-2-thunder.leizhen@huawei.com>
+ <MW5PR84MB18423C3F30D3F789EB48D0A5AB339@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+ <e15cd40f-6613-ba44-cc54-0d00f3c7eab1@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e15cd40f-6613-ba44-cc54-0d00f3c7eab1@huawei.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Oct 28, 2022 at 10:38:15AM +0800, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2022/10/28 3:04, Elliott, Robert (Servers) wrote:
+> > 
+> >> Similar to kstat_cpu_irqs_sum(), it counts the sum of all software
+> >> interrupts on a specified CPU.
+> >>
+> >> diff --git a/include/linux/kernel_stat.h b/include/linux/kernel_stat.h
+> >> @@ -67,6 +67,17 @@ static inline unsigned int kstat_softirqs_cpu(unsigned int irq, int cpu)
+> >>         return kstat_cpu(cpu).softirqs[irq];
+> >>  }
+> >>
+> >> +static inline unsigned int kstat_cpu_softirqs_sum(int cpu)
+> >> +{
+> >> +	int i;
+> >> +	unsigned int sum = 0;
+> >> +
+> >> +	for (i = 0; i < NR_SOFTIRQS; i++)
+> >> +		sum += kstat_softirqs_cpu(i, cpu);
+> >> +
+> >> +	return sum;
+> >> +}
+> > 
+> > In the function upon which this is based:
+> > 
+> > struct kernel_stat {
+> >         unsigned long irqs_sum;
+> >         unsigned int softirqs[NR_SOFTIRQS];
+> > };
+> > 
+> > static inline unsigned int kstat_cpu_irqs_sum(unsigned int cpu)
+> > {
+> >         return kstat_cpu(cpu).irqs_sum;
+> > }
+> > 
+> > kstat_cpu_irqs_sum returns an unsigned long as an unsigned int, which
+> > could cause large values to be truncated. Should that return
+> > unsigned long? The only existing caller is fs/proc/stat.c which
+> 
+> This should be a mistake on:
+> commit f2c66cd8eeddedb4 ("/proc/stat: scalability of irq num per cpu")
+> 
+> I'll correct it to "unsigned long" in the next version. Thanks.
+> 
+> > puts it into a u64:
+> >         u64 sum = 0;
+> >         ...
+> >         sum             += kstat_cpu_irqs_sum(i);
+> > 
+> > The softirqs field is an unsigned int, so the new function doesn't have
+> > this inconsistency.
+> 
+> OK.
+> 
+> To be honest, I did the math. CONFIG_HZ=250
+> 2^32 / 250 / 3600 / 24 / 365 = 0.545 < 1 year
 
-Could someone from networking confirm (or deny) that the timer being
-removed in sk_stop_timer() will no longer be used even if del_timer()
-returns false?
+For this to be a problem, our RCU CPU stall warning would have to be
+for a months-long grace period, even on systems with HZ=1000.  In almost
+all cases, the system would have OOMed long before then.
 
-net/core/sock.c:
+> So, in theory, for those 32-bit processors, we should use "unsigned long long".
+> Of course, from a programming point of view, 64-bit consists of two 32-bits,
+> and there is an atomicity problem. I think that's probably why members of
+> struct kernel_stat don't use u64.
+> 
+> However, it seems that the type of member softirqs can currently be changed to
+> unsigned long. So, at least on a 64-bit processor, it won't have a count
+> overflow problem.
 
-void sk_stop_timer(struct sock *sk, struct timer_list* timer)
-{
-	if (del_timer(timer))
-		__sock_put(sk);
-}
+An unsigned long should suffice.  ;-)
 
-If this is the case, then I'll add the following interface:
-
-   del_timer_sync_shutdown() // the common case which syncs
-
-   del_timer_shutdown() // the uncommon case, that returns immediately
-                        // used for those cases that add extra code to
-                        // handle it, like sk_stop_timer()
-
-
-Which has the same semantics as del_timer_sync() and del_timer()
-respectively, but will prevent the timer from being rearmed again.
-
-This way we can convert the sk_stop_timer() to:
-
-void sk_stop_timer(struct sock *sk, struct timer_list* timer)
-{
-	if (del_timer_shutdown(timer))
-		__sock_put(sk);
-}
-
-
-We can also add the del_timer_shutdown() to other locations that need to
-put a timer into a shutdown state before freeing, and where it's in a
-context that can not call del_timer_sync_shutdown().
-
--- Steve
+							Thanx, Paul
