@@ -2,57 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87227610FEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174CA610FED
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbiJ1LmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 07:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
+        id S230088AbiJ1Lmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 07:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbiJ1LmQ (ORCPT
+        with ESMTP id S229714AbiJ1Lme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 07:42:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79791D1E2E;
-        Fri, 28 Oct 2022 04:42:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C2C5627EB;
-        Fri, 28 Oct 2022 11:42:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF58DC433C1;
-        Fri, 28 Oct 2022 11:42:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666957334;
-        bh=j5oyUBGYEDvyaMjSOM8jXa9mUm9PaDf/2SpF9C28fug=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TTE5UUdfIiUDky5NmRxijg+BuPNiIOp9asdTm3Rz6Mup/Loeeliyw4zUzXSH0/ZOb
-         z2JjC28Z5aBJtgkofForKoMLzv8H0lAz+q0+DvUiL9OKt/8kzImY6jMFs+FI1S7uZS
-         mGjMANlZ8Eak2MePpmqKLpKfcpVtvbjPcXmKnI45sVl4QmFpVsBnM0O7+92OFToqWb
-         xhfpvi5j+px/xS/WdWu2DHEPWlwVbJa3llaxgsQgVawHLGGwUI9ebLvsTmkoqMkAH5
-         jNidf/+7fR33jdoaAGygyTBgG6HxWeghuyFsQH2no8IhpKvJcOneG1bNPuKbZCd5FN
-         x4vti3KeUkwQg==
-Date:   Fri, 28 Oct 2022 17:12:10 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, kishon@ti.com, mani@kernel.org,
-        Sergey.Semin@baikalelectronics.ru, ffclaire1224@gmail.com,
-        linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V3 08/21] phy: tegra: p2u: Set ENABLE_L2_EXIT_RATE_CHANGE
- in calibration
-Message-ID: <Y1vAEh3NRiB5mrM7@matsya>
-References: <20221013183854.21087-1-vidyas@nvidia.com>
- <20221013183854.21087-9-vidyas@nvidia.com>
+        Fri, 28 Oct 2022 07:42:34 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F288D1C69F8
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 04:42:32 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id x26so3217717qki.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 04:42:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V4nl/yqB7JCdClSGpG/ZOGD2vqHnwuwrCcASM1BkB0c=;
+        b=a57mpQWbEEJOhp9YUTYfDTMzoO4ot3lAYdhjhKi+bBYvrmTBoU4El50dearP5eiKdX
+         mbSvm8xbnaYmu509n+YAZOBPvRJ9Oq+2Jp7EtXpzMeFhYvA2Ri8rwuFyVyG2jHJp2g3w
+         NwPymRHgpOKde85D2mQh8oHtPI1H9+9AGG+5dXxMQahBKu8OiJ+m0pJItXKfpi8U26KW
+         auxF7A44kEcA6F0/LZvJAmLaZyOkHxNRd/+bf8GOwEHDBVwC/Ktbi9jUb9xUF3wMFHpY
+         xSshQnZhdD4PDKpdV7wv6G2/AEj4E2l5A7I65tIHZ4pJNHvMH5/Ui0Wm64aMtsbP5V+w
+         N/jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V4nl/yqB7JCdClSGpG/ZOGD2vqHnwuwrCcASM1BkB0c=;
+        b=d0YvK+v7Due+2JeguX3gbV7CwCaeiLdxyLYAClLcIbuEQKxJzpt19QcdrPzwGJ8KHJ
+         o4ikdv1HwYwooV3yosexEfEROOVrbcmv35N2JYsOR0W1SV1i6fZxzZZrmOgj7/zOLsd+
+         oVeiS06j1d5hZiMU5oVrhU3qR5jkwGflq89onqwkfjKLsDybbxLSpwnAcG2s3hNm6igW
+         VWFRlKKEKwX1L7xf56V46zFu2uOOIVq3xUAc36/aIip8a1PprDmU+aiq+VZzFDN9/tOG
+         Q3WICnXgEF/gp1BI+opMXlK3V26ndtPDr9UzdiovQdktQ3ESSDZg9IxhXdz/XaqqrdXw
+         wVhA==
+X-Gm-Message-State: ACrzQf0xWq963fyUBstZrABoz0uN4q8PjLSg6kzC6c144Hbs7WYiUWfW
+        RAISrkf2oZgfxUw6m8Lc+YMbgg==
+X-Google-Smtp-Source: AMsMyM4sd0CoRJgxFJv2RpxVf3ohbMa+KmVGqtd5yUL9dA2lUFymsH4viwvhEtZpnzQ60EpapBBYHg==
+X-Received: by 2002:a05:620a:22c3:b0:6ec:53bb:d296 with SMTP id o3-20020a05620a22c300b006ec53bbd296mr38031213qki.158.1666957352120;
+        Fri, 28 Oct 2022 04:42:32 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id bl7-20020a05620a1a8700b006b5cc25535fsm2719103qkb.99.2022.10.28.04.42.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 04:42:31 -0700 (PDT)
+Message-ID: <b63f7fde-4e51-00c5-b060-335e54f73f46@linaro.org>
+Date:   Fri, 28 Oct 2022 07:42:28 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221013183854.21087-9-vidyas@nvidia.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v6 2/3] clk: clk-loongson2: add clock controller driver
+ support
+Content-Language: en-US
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+References: <20221028061922.19045-1-zhuyinbo@loongson.cn>
+ <20221028061922.19045-2-zhuyinbo@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221028061922.19045-2-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,66 +85,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14-10-22, 00:08, Vidya Sagar wrote:
-> Set ENABLE_L2_EXIT_RATE_CHANGE register bit to request UPHY PLL rate change
-> to Gen1 during initialization. This helps in the below surprise link down
-> cases,
->   - Surprise link down happens at Gen3/Gen4 link speed.
->   - Surprise link down happens and external REFCLK is cut off, which causes
-> UPHY PLL rate to deviate to an invalid rate.
+On 28/10/2022 02:19, Yinbo Zhu wrote:
+> This driver provides support for clock controller on Loongson-2 SoC
+> , the Loongson-2 SoC uses a 100MHz clock as the PLL reference clock
+> , there are five independent PLLs inside, each of which PLL can
 
-This looks okay to me and I can go ahead and apply, PCI patches can come
-thru PCI tree and whenever ready use .calibrate() ?
+Same problem as in other patch - no new lines before commas.
 
+> provide up to three sets of frequency dependent clock outputs.
 > 
-> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 > ---
-> V3:
-> * Removed "Reported-by: kernel test robot <lkp@intel.com>" based on Bjorn's review comment
-> * Reworded the commit message
+>  MAINTAINERS                  |   1 +
+>  arch/loongarch/Kconfig       |   1 +
+>  arch/loongarch/kernel/time.c |   3 +
+>  drivers/clk/Kconfig          |   9 ++
+>  drivers/clk/Makefile         |   1 +
+>  drivers/clk/clk-loongson2.c  | 285 +++++++++++++++++++++++++++++++++++
+>  6 files changed, 300 insertions(+)
+>  create mode 100644 drivers/clk/clk-loongson2.c
 > 
-> V2:
-> * Addressed review comment from test bot and Vinod
-> 
->  drivers/phy/tegra/phy-tegra194-p2u.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/drivers/phy/tegra/phy-tegra194-p2u.c b/drivers/phy/tegra/phy-tegra194-p2u.c
-> index 1415ca71de38..633e6b747275 100644
-> --- a/drivers/phy/tegra/phy-tegra194-p2u.c
-> +++ b/drivers/phy/tegra/phy-tegra194-p2u.c
-> @@ -15,6 +15,7 @@
->  #include <linux/phy/phy.h>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 14af7ebf2be1..5136684fb6c6 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -11911,6 +11911,7 @@ LOONGSON-2 SOC SERIES CLOCK DRIVER
+>  M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+>  L:	linux-clk@vger.kernel.org
+>  S:	Maintained
+> +F:	drivers/clk/clk-loongson2.c
+>  F:	include/dt-bindings/clock/loongson,ls2k-clk.h
 >  
->  #define P2U_CONTROL_CMN			0x74
-> +#define P2U_CONTROL_CMN_ENABLE_L2_EXIT_RATE_CHANGE		BIT(13)
->  #define P2U_CONTROL_CMN_SKP_SIZE_PROTECTION_EN			BIT(20)
+>  LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index 26aeb1408e56..8b65f349cd6e 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -122,6 +122,7 @@ config LOONGARCH
+>  	select USE_PERCPU_NUMA_NODE_ID
+>  	select USER_STACKTRACE_SUPPORT
+>  	select ZONE_DMA32
+> +	select COMMON_CLK
 >  
->  #define P2U_PERIODIC_EQ_CTRL_GEN3	0xc0
-> @@ -85,8 +86,21 @@ static int tegra_p2u_power_on(struct phy *x)
->  	return 0;
->  }
+>  config 32BIT
+>  	bool
+> diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.c
+> index 786735dcc8d6..09f20bc81798 100644
+> --- a/arch/loongarch/kernel/time.c
+> +++ b/arch/loongarch/kernel/time.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/sched_clock.h>
+>  #include <linux/spinlock.h>
+> +#include <linux/of_clk.h>
 >  
-> +static int tegra_p2u_calibrate(struct phy *x)
-> +{
-> +	struct tegra_p2u *phy = phy_get_drvdata(x);
-> +	u32 val;
+>  #include <asm/cpu-features.h>
+>  #include <asm/loongarch.h>
+> @@ -214,6 +215,8 @@ int __init constant_clocksource_init(void)
+>  
+>  void __init time_init(void)
+>  {
+> +	of_clk_init(NULL);
 > +
-> +	val = p2u_readl(phy, P2U_CONTROL_CMN);
-> +	val |= P2U_CONTROL_CMN_ENABLE_L2_EXIT_RATE_CHANGE;
-> +	p2u_writel(phy, val, P2U_CONTROL_CMN);
-> +
-> +	return 0;
-> +}
-> +
->  static const struct phy_ops ops = {
->  	.power_on = tegra_p2u_power_on,
-> +	.calibrate = tegra_p2u_calibrate,
->  	.owner = THIS_MODULE,
->  };
+>  	if (!cpu_has_cpucfg)
+>  		const_clock_freq = cpu_clock_freq;
+>  	else
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index 48f8f4221e21..e85a3ed88d4c 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -428,6 +428,15 @@ config COMMON_CLK_K210
+>  	help
+>  	  Support for the Canaan Kendryte K210 RISC-V SoC clocks.
 >  
-> -- 
-> 2.17.1
+> +config COMMON_CLK_LOONGSON2
 
--- 
-~Vinod
+Messed up order.
+
+> +	bool "Clock driver for Loongson-2 SoC"
+> +	depends on COMMON_CLK && OF
+> +	help
+> +	  This driver provides support for Clock Controller that base on
+> +	  Common Clock Framework Controller (CCF) on Loongson-2 SoC. The
+> +	  Clock Controller can generates and supplies clock to various
+> +	  peripherals within the SoC.
+> +
+>  source "drivers/clk/actions/Kconfig"
+>  source "drivers/clk/analogbits/Kconfig"
+>  source "drivers/clk/baikal-t1/Kconfig"
+> diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+> index d5db170d38d2..8ccc7436052f 100644
+> --- a/drivers/clk/Makefile
+> +++ b/drivers/clk/Makefile
+> @@ -75,6 +75,7 @@ obj-$(CONFIG_COMMON_CLK_RS9_PCIE)	+= clk-renesas-pcie.o
+>  obj-$(CONFIG_COMMON_CLK_VC5)		+= clk-versaclock5.o
+>  obj-$(CONFIG_COMMON_CLK_WM831X)		+= clk-wm831x.o
+>  obj-$(CONFIG_COMMON_CLK_XGENE)		+= clk-xgene.o
+> +obj-$(CONFIG_COMMON_CLK_LOONGSON2)	+= clk-loongson2.o
+
+Messed up order.
+
+>  
+>  # please keep this section sorted lexicographically by directory path name
+>  obj-y					+= actions/
+> diff --git a/drivers/clk/clk-loongson2.c b/drivers/clk/clk-loongson2.c
+> new file mode 100644
+> index 000000000000..359fede40112
+> --- /dev/null
+> +++ b/drivers/clk/clk-loongson2.c
+> @@ -0,0 +1,285 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
+> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <linux/clkdev.h>
+> +#include <linux/err.h>
+> +#include <linux/init.h>
+> +#include <linux/of.h>
+> +#include <linux/of_address.h>
+> +#include <dt-bindings/clock/loongson,ls2k-clk.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/slab.h>
+> +#include <linux/clk.h>
+> +
+> +#define LOONGSON2_PLL_MULT_SHIFT		32
+> +#define LOONGSON2_PLL_MULT_WIDTH		10
+> +#define LOONGSON2_PLL_DIV_SHIFT			26
+> +#define LOONGSON2_PLL_DIV_WIDTH			6
+> +#define LOONGSON2_APB_FREQSCALE_SHIFT		20
+> +#define LOONGSON2_APB_FREQSCALE_WIDTH		3
+> +#define LOONGSON2_USB_FREQSCALE_SHIFT		16
+> +#define LOONGSON2_USB_FREQSCALE_WIDTH		3
+> +#define LOONGSON2_SATA_FREQSCALE_SHIFT		12
+> +#define LOONGSON2_SATA_FREQSCALE_WIDTH		3
+> +
+> +void __iomem *loongson2_pll_base;
+
+This must be static.
+
+> +static DEFINE_SPINLOCK(loongson2_clk_lock);
+> +static struct clk_hw **hws;
+> +static struct clk_hw_onecell_data *clk_hw_data;
+
+You have way too many file-scope variables. I would expect 0 and this
+being a driver.
+
+Best regards,
+Krzysztof
+
