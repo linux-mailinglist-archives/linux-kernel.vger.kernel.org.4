@@ -2,74 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A437611BA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2270A611BAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiJ1UhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 16:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
+        id S229632AbiJ1UkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 16:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJ1UhX (ORCPT
+        with ESMTP id S229608AbiJ1UkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 16:37:23 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6BC234780
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:37:22 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id bx19-20020a056602419300b006bcbf3b91fdso5031454iob.13
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:37:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P1r/rIShP/bP72XX3Sqvx4nW6j6PsMJ8W5Bq6b3IPQI=;
-        b=zzR6NfhM8PydCBXwyQKjQXIfOTNoRvT2uYpn61CboOKbgDEVFlSV0+o8FjGMAzirnZ
-         D+UuSs8KCbo4FLGH9KA+Rr3PUgzpQRlExVmWlPmOfvIPf5xaeHpYVNHLd2bqMWa7RVXJ
-         VjnL1SJgJ1MSC4mEc5+39V2R4ZPHn6uyZMt245LXtuzyV78ZIOBADMLlUKnVH0A/S6tj
-         XoGWQy9qP9InwxSV4cWpiJ1gdYETwu1D0g5ah6nFddHGIadDS147mo3ZlJWZLCGuwNlq
-         NTqkJNUfowdVAperY2pY28YHPtdlEQ93oJnEmg8//LJisyLjgtpORq3pcZDwCRWN0g5r
-         xlLw==
-X-Gm-Message-State: ACrzQf2AzhyWkd+8rKtKs87rgFDb71a/wyIIdM3Stn+VNZ+kKy1ZeiKC
-        wAvt8pffuFW+6pFrruqcqqZmXloPLy/C4ypGXWl6MmWS7QyQ
-X-Google-Smtp-Source: AMsMyM5Qwu6878P32GV17hEJui0vZdzBmKoIpnlWSTuMo+AzqgpFsG90tuODB8kD+YNDODGlFiMV6pvljl0zxTXvR5RjR1uM8lNO
+        Fri, 28 Oct 2022 16:40:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0152F026;
+        Fri, 28 Oct 2022 13:40:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8984CB8274E;
+        Fri, 28 Oct 2022 20:40:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B699C433D6;
+        Fri, 28 Oct 2022 20:40:08 +0000 (UTC)
+Date:   Fri, 28 Oct 2022 16:40:24 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-usb@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        John Stultz <jstultz@google.com>
+Subject: Re: [RFC][PATCH v2 20/31] timers: usb: Use del_timer_shutdown()
+ before freeing timer
+Message-ID: <20221028164024.2ab39cc1@gandalf.local.home>
+In-Reply-To: <20221028195959.GA1073367@roeck-us.net>
+References: <20221027150525.753064657@goodmis.org>
+        <20221027150928.983388020@goodmis.org>
+        <4e61935b-b06b-1f2d-6c2b-79bdfd569cd6@roeck-us.net>
+        <20221028140129.040d9acc@gandalf.local.home>
+        <20221028141007.05f5c490@gandalf.local.home>
+        <20221028195959.GA1073367@roeck-us.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:4c7:b0:300:8d6d:286a with SMTP id
- f7-20020a056e0204c700b003008d6d286amr606125ils.164.1666989442269; Fri, 28 Oct
- 2022 13:37:22 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 13:37:22 -0700
-In-Reply-To: <20221028094920.3200-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008d0beb05ec1e39e7@google.com>
-Subject: Re: [syzbot] WARNING in alloc_charge_hpage
-From:   syzbot <syzbot+0044b22d177870ee974f@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, 28 Oct 2022 12:59:59 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+> I'll test again with the following changes on top of your published
+> patch series. I hope this is the current status, but I may have lost
+> something.
+> 
+> Looking into it ... deactivate_timer() doesn't do anything 
+> and seems wrong. Did I miss something ?
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-INFO: rcu detected stall in corrupted
-
-rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4090 } 2674 jiffies s: 2637 root: 0x0/T
-rcu: blocking rcu_node structures (internal RCU debug):
+You mean debug_deactivate_timer() or debug_deactivate?
 
 
-Tested on:
+> --- a/kernel/time/timer.c
+> +++ b/kernel/time/timer.c
 
-commit:         a7038524 Merge tag 'perf_urgent_for_v6.1_rc2' of git:/..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=1543d716880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ea03ca45176080bc
-dashboard link: https://syzkaller.appspot.com/bug?extid=0044b22d177870ee974f
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1401516e880000
 
+>  
+> -static inline void debug_timer_deactivate(struct timer_list *timer)
+> +static inline void debug_timer_deactivate(struct timer_list *timer, bool free)
+>  {
+> -	if (timer->enabled)
+> -		debug_object_deactivate(timer, &timer_debug_descr);
+> +	switch (timer->enabled) {
+> +	case TIMER_DEBUG_DISABLED:
+
+DISABLE is set before an activate happens (before it is ever armed).
+
+> +		return;
+> +	case TIMER_DEBUG_ENABLED:
+> +		if (!free)
+> +			return;
+
+This is called by del_timer{,_sync}() where free is false, or
+del_timer_shutdown() where free is true.
+
+We only want to deactivate when free is true.
+
+> +		timer->enabled = TIMER_DEBUG_DISABLED;
+
+And we allow for initialization of a "freed" timer again.
+
+> +		break;
+> +	case TIMER_DEBUG_WORK:
+
+This is part of the delayed_work timers, were we keep the old behavior
+(del_timer() and del_timer_sync() both deactivate the timer.
+
+> +		break;
+> +	}
+> +	debug_object_deactivate(timer, &timer_debug_descr);
+
+Here we call the debug object code to deactivate it.
+
+>  }
+>  
+>  static inline void debug_timer_assert_init(struct timer_list *timer)
+> @@ -833,6 +854,7 @@ static inline void debug_init(struct timer_list *timer)
+>  
+>  static inline void debug_deactivate(struct timer_list *timer)
+>  {
+> +	debug_timer_deactivate(timer, false);
+
+This calls the above code.
+
+>  	trace_timer_cancel(timer);
+>  }
+
+
+Or am I confused and you meant something else?
+
+-- Steve
