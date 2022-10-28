@@ -2,78 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF896117BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 438F96117B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbiJ1QmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
+        id S229925AbiJ1Qln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiJ1Ql6 (ORCPT
+        with ESMTP id S229528AbiJ1Qll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:41:58 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACB31D6384
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:41:57 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id n18so4405783qvt.11
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:41:57 -0700 (PDT)
+        Fri, 28 Oct 2022 12:41:41 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F8010CFBF
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:41:39 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id p3so5304299pld.10
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:41:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=R2O57OBzpb8FA+DnVcdKrC0pUlI+m8T71gxg18g9ML0=;
-        b=KiggagMYrTu7SdTQf7qYTjBuh7Vgh0DLPpwOBg8u9qpWv7WzBIc/UO/p3ds0BQ10Y2
-         twYZGkSmA7kxGJkxMhsJuQftz9pMY+b7t5qOEkdTuyRtagTPZL/MxUkxUaekrc5Qnqz8
-         TGwfbYloJxbCkPQdW88sUCBtcQCOvMnJfcMNI=
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YPrinMLVNzECVQltiDii+U9zMSeYiKwIhwl+Yg7fNi0=;
+        b=lLT4xXcEMHeKecsFUQt5aQE117UJikYeysInwNoeJtT/Ya5TgE12yAfc2BXwT9dqkF
+         T3hQcAdhpxHDqYY8XHY51xbs4Y8oK9RUvTbkTIqO3kWIEHpFLbSb5eg5IPYoEHtR975E
+         lO2htdt3xCNK4/Z4fQyHdx4hm03FF75jFU/jg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R2O57OBzpb8FA+DnVcdKrC0pUlI+m8T71gxg18g9ML0=;
-        b=a+66T10GQjOQQKvtJj488cJ3Q/wQSRiAW05jFoY3dEmvJE/QHcjOMSZgme49DX9BMN
-         3whuE4NojNX84TPu3CRDmLtTY5TTvTBuOLwpmIlIclFzHJ5uJ1ON70ZwE4WKmZY2ag2j
-         DWp4xEU/MSMaVUbcl5uB26M/RzMWT9qQ/7vaB7h+dgtAkmurqxaDai5CkPSJDv7iFxH3
-         40dPLPS9texp87pxwo1HVBQtKfooO2Dm79DjZvV2ZWntRW+zPzvapedMfWGWdAkgb7wp
-         klbCYnpMG9ZSQ9lKBrfkbCal66tW+dCy1XUAR1dO1hsTFlH1JZQtadqYQnLLGqGb0vrH
-         H+Dg==
-X-Gm-Message-State: ACrzQf2SPvfIT28o962+IKrralBRS8x6mtoBdDpfIRBleG9kYff3Ae4u
-        zWn6YiE1yjsVLih1Vqrf6vIoG903M6MrfA==
-X-Google-Smtp-Source: AMsMyM43Txn9CRLZKdCY7WuaQ5rYRWE4/MY0AcPsr2hpLRBuleqxMyph3nMtDPZiOP/sDXPO4Uek8Q==
-X-Received: by 2002:a05:6214:29eb:b0:4af:b287:8ff6 with SMTP id jv11-20020a05621429eb00b004afb2878ff6mr283678qvb.65.1666975315907;
-        Fri, 28 Oct 2022 09:41:55 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id g20-20020ac87754000000b0039d085a2571sm2566820qtu.55.2022.10.28.09.41.53
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 09:41:53 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id n130so6710474yba.10
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:41:53 -0700 (PDT)
-X-Received: by 2002:a05:6902:124f:b0:66e:e3da:487e with SMTP id
- t15-20020a056902124f00b0066ee3da487emr144065ybu.310.1666975312766; Fri, 28
- Oct 2022 09:41:52 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YPrinMLVNzECVQltiDii+U9zMSeYiKwIhwl+Yg7fNi0=;
+        b=TLl9b+lzGB0VF15gn8Zn223IfEQ4beoMVoJ43+VLqk8TDRvyAUNtBiaONZsz8jKBua
+         /rW7QyVMtKv5pKrc9UoL9HeveAAbCDjR5WLiSyQntPW/cTYTvZHSgx4Xu26e0e9Z+faT
+         OmDM0qk2Cpuu0vyDMgQye0gsqFgz633G5sQHDbueqIwcBxferpvlWfrUJyl4owiWV4+D
+         t50b5twt2CSswqMdZgLifQFriIoCsJX6TPYIj2+2EKnHNLAgCFx+g//scQ4H5EJDpZR3
+         ekFfaIyuNz1UdvGhYa9Qvo4Kq2maZRkUCVUgDVpDnj3539IljniWv+3KZbfduaB4P/rC
+         KFNw==
+X-Gm-Message-State: ACrzQf0v+GKCN+1872cIH8cSdIcQnq048mMU6epU6az8SfSiRSMLPLhC
+        Bb2qCutPuaHk5KlT/xRn+byU3Q==
+X-Google-Smtp-Source: AMsMyM6lj2aDxuDBQXoD6NHuHKFr9f6is2r8HgfVf24lMs7ZyEQOaHQ5VS2UOe+2yQHWGJhj5bFxQw==
+X-Received: by 2002:a17:902:ea0f:b0:186:ffba:882d with SMTP id s15-20020a170902ea0f00b00186ffba882dmr205249plg.21.1666975299419;
+        Fri, 28 Oct 2022 09:41:39 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x18-20020aa79ad2000000b0056bfd387c97sm3069430pfp.39.2022.10.28.09.41.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 09:41:38 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 09:41:37 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Re: boot failure of linux-next due to 1248fb6a8201 ("x86/mm:
+ Randomize per-cpu entry area")
+Message-ID: <202210280940.D7A7330@keescook>
+References: <Y1vZKg6UHjdUZt1W@debian>
 MIME-Version: 1.0
-References: <Y1btOP0tyPtcYajo@ZenIV> <20221028023352.3532080-1-viro@zeniv.linux.org.uk>
- <20221028023352.3532080-12-viro@zeniv.linux.org.uk>
-In-Reply-To: <20221028023352.3532080-12-viro@zeniv.linux.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 28 Oct 2022 09:41:35 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wibPKfv7mpReMj5PjKBQi4OsAQ8uwW_7=6VCVnaM-p_Dw@mail.gmail.com>
-Message-ID: <CAHk-=wibPKfv7mpReMj5PjKBQi4OsAQ8uwW_7=6VCVnaM-p_Dw@mail.gmail.com>
-Subject: Re: [PATCH v2 12/12] use less confusing names for iov_iter direction initializers
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        David Howells <dhowells@redhat.com>, willy@infradead.org,
-        dchinner@redhat.com, Steve French <smfrench@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1vZKg6UHjdUZt1W@debian>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,122 +74,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 7:34 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> READ/WRITE proved to be actively confusing
+On Fri, Oct 28, 2022 at 02:29:14PM +0100, Sudip Mukherjee (Codethink) wrote:
+> Hi All,
+> 
+> Our qemu boots were failing since next-20221024, and a git bisect of
+> next-20221028 showed the bad commit as 1248fb6a8201 ("x86/mm: Randomize per-cpu entry area")
+> 
+> After reverting the commit I could boot qemu again with next-20221028.
+> 
+> This is my config:
+> 
+> make defconfig
+> make kvm_guest.config
+> scripts/config -e KCOV -e KCOV_INSTRUMENT_ALL -e KCOV_ENABLE_COMPARISONS -e DEBUG_FS -e DEBUG_KMEMLEAK -e DEBUG_INFO -e KALLSYMS -e KALLSYMS_ALL -e NAMESPACES -e UTS_NS -e IPC_NS -e PID_NS -e NET_NS -e CGROUP_PIDS -e MEMCG -e USER_NS -e CONFIGFS_FS -e SECURITYFS -e KASAN -e KASAN_INLINE -e FAULT_INJECTION -e FAULT_INJECTION_DEBUG_FS -e FAULT_INJECTION_USERCOPY -e FAILSLAB -e FAIL_PAGE_ALLOC -e FAIL_MAKE_REQUEST -e FAIL_IO_TIMEOUT -e FAIL_FUTEX -e LOCKDEP -e PROVE_LOCKING -e DEBUG_ATOMIC_SLEEP -e PROVE_RCU -e DEBUG_VM -e REFCOUNT_FULL -e FORTIFY_SOURCE -e HARDENED_USERCOPY -e LOCKUP_DETECTOR -e SOFTLOCKUP_DETECTOR -e HARDLOCKUP_DETECTOR -e BOOTPARAM_HARDLOCKUP_PANIC -e DETECT_HUNG_TASK -e WQ_WATCHDOG -e USB_GADGET -e USB_RAW_GADGET -e TUN -e KCSAN -d RANDOMIZE_BASE -e MAC80211_HWSIM -e IEEE802154 -e MAC802154 -e IEEE802154_DRIVERS -e IEEE802154_HWSIM -e BT -e BT_HCIVHCI
+> echo "CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=140" >> .config
+> echo "CONFIG_RCU_CPU_STALL_TIMEOUT=100" >> .config
+> 
+> I will be happy to test any patch or provide any extra log if needed.
+> Though I am not sure how I will collect extra logs (if needed) as there
+> was no output from qemu.
 
-I agree, we had the same issue with rw_verify_area()
+I see KASAN in your config, does this fix it?
 
-However:
+https://lore.kernel.org/lkml/166693938482.29415.7034851115705424459.tip-bot2@tip-bot2/
 
-> Call them ITER_DEST and ITER_SOURCE - at least that is harder
-> to misinterpret...
 
-I'm not sure this really helps, or is less likely to cause issues.
-
-The old naming at least had some advantages (yes, yes, this is the
-_source_ of the old naming):
-
-> @@ -243,7 +243,7 @@ static int lo_write_bvec(struct file *file, struct bio_vec *bvec, loff_t *ppos)
->         struct iov_iter i;
->         ssize_t bw;
->
-> -       iov_iter_bvec(&i, WRITE, bvec, 1, bvec->bv_len);
->
->         file_start_write(file);
->         bw = vfs_iter_write(file, &i, ppos, 0);
-> @@ -286,7 +286,7 @@ static int lo_read_simple(struct loop_device *lo, struct request *rq,
->         ssize_t len;
->
->         rq_for_each_segment(bvec, rq, iter) {
-> -               iov_iter_bvec(&i, READ, &bvec, 1, bvec.bv_len);
->                 len = vfs_iter_read(lo->lo_backing_file, &i, &pos, 0);
->                 if (len < 0)
->                         return len;
-
-where WRITE is used in the 'write()' function, and READ is used in the
-read() function.
-
-So that naming is not great, but it has a fairly obvious pattern in a
-lot of code.
-
-Not all code, no, as clearly shown by the other eleven patches in this
-series, but still..
-
-The new naming doesn't strike me as being obviously less confusing.
-It's not horrible, but I'm also not seeing it as being any less likely
-in the long run to then cause the same issues we had with READ/WRITE.
-It's not like
-
-                iov_iter_bvec(&i, ITER_DEST, &bvec, 1, bvec.bv_len);
-
-is somehow obviously really clear.
-
-I can see the logic: "the destination is the iter, so the source is
-the bvec". I understand. But that was pretty much exactly the logic
-behind READ too: "this is a read from the device, so the source is the
-bvec". I can well imagine that the new one is clearer for some cases,
-and in the context of seeing all these other changes it's all quite
-straightforward, but I'm trying to think as a driver writer that is
-dealing with one random case at a time, and ITER_DEST doesn't strike
-me as hugely intuitive either.
-
-I think the real fix for this is your 11/12, which at least makes the
-iter movement helpers warn about mis-use. That said, I hate 11/12 too,
-but for a minor technicality: please make the WARN_ON() be a
-WARN_ON_ONCE(), and please don't make it abort.
-
-Because otherwise somebody who has a random - but important enough -
-driver that does this wrong will just have an unbootable machine.
-
-So your 11/12 is conceptually the right thing, but practically
-horribly wrong. While this 12/12 mainly makes me go "If we have a
-patch this big, I think we should be able to do better than change
-from one ambiguous name to another possibly slightly less ambiguous".
-
-Honestly, I think the *real* fix would be a type-based one. Don't do
-
-        iov_iter_kvec(&iter, ITER_DEST, ...
-
-at all, but instead have two different kinds of 'struct iov_iter': one
-as a destination (iov_iter_dst), and one as a source (iov_iter_src),
-and then just force all the use-cases to use the right version. The
-actual *underlying" struct could still be the same
-(iov_iter_implementation), but you'd force people to always use the
-right version - kind of the same way a 'const void *' is always a
-source, and a 'void *' is always a destination for things like memcpy.
-
-That would catch mis-uses much earlier.
-
-That would also make the patch much bigger, but I do think 99.9% of
-all users are very distinct. When you pass a iter source around, that
-'iov_iter_src' is basically *always* a source of the data through the
-whole call-chain. No?
-
-Maybe I'm 100% wrong and that type-based one has some fundamental
-problem in it, but it really feels to me like your dynamic WARN_ON()
-calls in 11/12 could have been type-based. Because they are entirely
-static based on 'data_source'.
-
-In fact, in a perfect world, 'data_source' as a dynamic flag goes away
-entirely, and becomes the compile-time static type. If anything really
-needs to change the data_source, it would be done as an inline
-function that does a type-cast instead.
-
-And yes, yes, I'm sure we have lots of code that currently is of the
-type "just pass it an iov_iter, and depending on data_source it does
-something different. I'm looking at __blkdev_direct_IO_simple(), which
-seems to be exactly that. So I guess the whole "->direct_IO interface
-breaks this, because - as usual - DIRECT_IO is a steaming pile of sh*t
-that couldn't do separate read/write functions, but had to be
-"special".
-
-Oh well.
-
-I still think that a type-based interface would be better, maybe
-together with the bad paths having a "iov_iter_confused" thing that
-then needs the runtime checking of ->data_source (aka iov_iter_rw()).
-But maybe DIRECT_IO isn't the only thing that thought that it's a good
-idea to use the same function for both reads and writes.
-
-                         Linus
+-- 
+Kees Cook
