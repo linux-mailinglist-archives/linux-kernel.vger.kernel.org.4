@@ -2,127 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFCA611A32
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 20:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45903611A35
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 20:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbiJ1Sfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 14:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
+        id S230049AbiJ1Sfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 14:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbiJ1Sf0 (ORCPT
+        with ESMTP id S230140AbiJ1Sfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 14:35:26 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776CD63362
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 11:35:25 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id b25so4010328qkk.7
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 11:35:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=554KCjWn8qBcAcBVpoouhKeUYG/Iw1xaVWw3M5KddOs=;
-        b=DCzroOtVcESn8/j0p2284O1c8+f71f2wa1HhtWbyeBVb5KrtXtesUm1DKY6tLO/CqX
-         oBob/TSHMKmFbqkcAbw8pVZOUno4hI+NzeRw7haRuA1X/fp9UYA0EEKK34zd9GG+8Fmn
-         h0agPHPClfZ8rFS2LoP6wiZ0asEbvErvPOO6Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=554KCjWn8qBcAcBVpoouhKeUYG/Iw1xaVWw3M5KddOs=;
-        b=IpYM0UBZLNICOboR+KaZIpTGvjju0oL3jDkJQKoN9AS2lquKOeqPlbRSVtZ3Q9yvyX
-         1U/zj1sFeQ3gdnaJCrMdv9D2B1UOi8S5I9YDzV5ZBWossNik9dVZeQF7gLoM9WVbnoQF
-         JXlckS9Pev1ntjkuwJrBIEd7CPhAEbBbAlRYRArxaUAp9KGsrgLI9I3MNNxi5fkUfS1t
-         gT0Mpye/KCqLlfy/1Y5Dl5NbY86/0QvAMDE5lyxLdBDjjbgV1d2gE/Q81R+npuLtzBSp
-         v0uzrB82ULED3YJ7BopoSmEXsRMYicT8NJT9VrxEhbZHdI6e/yZxm0m3HgfYiX6sC029
-         UkXQ==
-X-Gm-Message-State: ACrzQf07ikZ6GaKHF3zLF/1SZvOxThhQJRPfXisl7enU0DFWuE5ZxHuv
-        X73rxWyns4b0fGidY1uKiQd0ZuAcm6qUzw==
-X-Google-Smtp-Source: AMsMyM5mE/IFBzZ1aaGiZMvl+rC56PhMEBcXqYMqDf0N3FvoZC6xUvNrgd5OzWqTi/jVvhbSjNVPRw==
-X-Received: by 2002:a05:620a:1d0d:b0:6ee:3a2e:d225 with SMTP id dl13-20020a05620a1d0d00b006ee3a2ed225mr550740qkb.10.1666982124422;
-        Fri, 28 Oct 2022 11:35:24 -0700 (PDT)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id m8-20020a05620a24c800b006ce515196a7sm3460267qkn.8.2022.10.28.11.35.22
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 11:35:23 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id y72so7054276yby.13
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 11:35:22 -0700 (PDT)
-X-Received: by 2002:a25:5389:0:b0:6bc:f12c:5d36 with SMTP id
- h131-20020a255389000000b006bcf12c5d36mr619498ybb.184.1666982122579; Fri, 28
- Oct 2022 11:35:22 -0700 (PDT)
+        Fri, 28 Oct 2022 14:35:30 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F336E2D2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 11:35:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666982128; x=1698518128;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e6tXyHXcx1wINDytML2ECkyfhcbu00FuKqs+1j13wTc=;
+  b=MdCYzAZ3cnPChGilIhryR3Dtvbdl9ynRpxBG+mrDAspVAYiBW7UOi7LX
+   qH97aw1iltp5uH/rTOKWEtSbyKC9t9BLqqgxUATsULbi3qpJHX6zNkDus
+   2UCKfnv9uP0Dr+Ua7i3PzMZHCs8eab/dnnACb+k4YSqz4ItWGVmKi8ENu
+   BWa4kFFXolU6uw/VgG7fo3+EEUL1XEyggsSmN9OS4XtbRaKKtA0o9fdQj
+   z9GSfFLLW3n/oq0inLJOc+caqIzCtxfCghXBFzQLjENT316L12YunEH71
+   B7xP6Uv+Kh81/NOMV3NkmVVrOyjCsCO9oU1bz3II3qbheufS4Mbv9fh5N
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="310260051"
+X-IronPort-AV: E=Sophos;i="5.95,221,1661842800"; 
+   d="scan'208";a="310260051"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 11:35:17 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="758174577"
+X-IronPort-AV: E=Sophos;i="5.95,221,1661842800"; 
+   d="scan'208";a="758174577"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.175.207])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 11:35:17 -0700
+Date:   Fri, 28 Oct 2022 11:35:15 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     UMWARI JOVIAL <umwarijovial@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH] WARNING: Possible repeated word: 'very'
+Message-ID: <Y1wg4y6k1fe/TF0d@aschofie-mobl2>
+References: <20221028051420.GA30073@rdm>
 MIME-Version: 1.0
-References: <Y1btOP0tyPtcYajo@ZenIV> <20221028023352.3532080-1-viro@zeniv.linux.org.uk>
- <20221028023352.3532080-12-viro@zeniv.linux.org.uk> <CAHk-=wibPKfv7mpReMj5PjKBQi4OsAQ8uwW_7=6VCVnaM-p_Dw@mail.gmail.com>
- <Y1wOR7YmqK8iBYa8@ZenIV>
-In-Reply-To: <Y1wOR7YmqK8iBYa8@ZenIV>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 28 Oct 2022 11:35:06 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi_iDAugqFZxTiscsRCNbtARMFiugWtBKO=NqgM-vCVAQ@mail.gmail.com>
-Message-ID: <CAHk-=wi_iDAugqFZxTiscsRCNbtARMFiugWtBKO=NqgM-vCVAQ@mail.gmail.com>
-Subject: Re: [PATCH v2 12/12] use less confusing names for iov_iter direction initializers
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        David Howells <dhowells@redhat.com>, willy@infradead.org,
-        dchinner@redhat.com, Steve French <smfrench@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221028051420.GA30073@rdm>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 10:15 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > I can see the logic: "the destination is the iter, so the source is
-> > the bvec".
->
-> ???
->
-> Wait a sec; bvec is destination - we are going to store data into the page
-> hanging off that bvec.
+On Fri, Oct 28, 2022 at 08:14:20AM +0300, UMWARI JOVIAL wrote:
+> i used checkpatch.pl script to identify the above
+> Repetition of the same word in one sentence same line
+> 
+> Signed-off-by: UMWARI JOVIAL <umwarijovial@gmail.com>
 
-Yeah, no, I'm confused and used confusing language. The bvec is the
-only "source" in the sense that it's the original destination.  They
-are both the destination for the data itself.
+This is my (not yet automated) response:
 
-> Umm...  How are you going to e.g. copy from ITER_DISCARD?  I've no problem
-> with WARN_ON_ONCE(), but when the operation really can't be done, what
-> can we do except returning an error?
+You are sending patches to the Outreachy list, in a way
+that makes me suspect you have overlooked the Outreachy
+Project Contribution Information.
 
-Fair enough. But it's the "people got the direction wrong, but the
-code worked" case that I would want tyo make sure still works - just
-with a warning.
+Please review:
+https://www.outreachy.org/outreachy-december-2022-internship-round/communities/linux-kernel/  (only accepted applicants can see this link)
 
-Clearly the ITER_DISCARD didn't work before either, but all the cases
-in patches 1-10 were things that _worked_, just with entirely the
-wrong ->data_source (aka iov_iter_rw()) value.
+https://lore.kernel.org/outreachy/Y0D+dzbjRtuc0KT4@aschofie-mobl2/
 
-So things like copy_to_iter() should warn if it's not a READ (or
-ITER_DEST), but it should still copy into the destination described by
-the iter, in order to keep broken code working.
+Alison
 
-That's simply because I worry that your patches 1-10 didn't actually
-catch every single case. I'm not actually sure how you found them all
-- did you have some automation, or was it with "boot and find warnings
-from the first version of patch 11/12"?
-
-
-> No.  If nothing else, you'll get to split struct msghdr (msg->msg_iter
-> different for sendmsg and recvmsg that way) *and* you get to split
-> every helper in net/* that doesn't give a damn about the distinction
-> (as in "doesn't even look at ->msg_iter", for example).
-
-Gah. Ok. So it's more than just direct_io. Annoying.
-
-              Linus
+> ---
+>  drivers/staging/rtl8712/rtl871x_xmit.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/rtl8712/rtl871x_xmit.c b/drivers/staging/rtl8712/rtl871x_xmit.c
+> index 090345bad223..30a0276b8b58 100644
+> --- a/drivers/staging/rtl8712/rtl871x_xmit.c
+> +++ b/drivers/staging/rtl8712/rtl871x_xmit.c
+> @@ -766,7 +766,7 @@ void r8712_free_xmitbuf(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
+>   * If we turn on USE_RXTHREAD, then, no need for critical section.
+>   * Otherwise, we must use _enter/_exit critical to protect free_xmit_queue...
+>   *
+> - * Must be very very cautious...
+> + * Must be very cautious...
+>   *
+>   */
+>  struct xmit_frame *r8712_alloc_xmitframe(struct xmit_priv *pxmitpriv)
+> -- 
+> 2.25.1
+> 
+> 
