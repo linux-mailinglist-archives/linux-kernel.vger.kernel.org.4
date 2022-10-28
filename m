@@ -2,113 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0AB8611025
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D053661102A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbiJ1L5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 07:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
+        id S229720AbiJ1L5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 07:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbiJ1L5E (ORCPT
+        with ESMTP id S229696AbiJ1L5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 07:57:04 -0400
-Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABCA1D2F60
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 04:57:01 -0700 (PDT)
-X-ASG-Debug-ID: 1666958216-086e23532754130001-xx1T2L
-Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx1.zhaoxin.com with ESMTP id xPvKL4IXIYgT3cjC (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Fri, 28 Oct 2022 19:56:57 +0800 (CST)
-X-Barracuda-Envelope-From: LeoLiu-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX3.zhaoxin.com
- (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Fri, 28 Oct
- 2022 19:56:56 +0800
-Received: from [10.32.56.18] (125.76.214.122) by ZXBJMBX03.zhaoxin.com
- (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Fri, 28 Oct
- 2022 19:56:54 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Message-ID: <8472b248-11ac-2148-e39f-12647044332b@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.32.56.18
-Date:   Fri, 28 Oct 2022 19:56:43 +0800
+        Fri, 28 Oct 2022 07:57:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1871D2F53
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 04:57:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24CA6B829B5
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 11:57:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A713C433C1;
+        Fri, 28 Oct 2022 11:57:29 +0000 (UTC)
+Date:   Fri, 28 Oct 2022 12:57:25 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
+        steve.kang@unisoc.com
+Subject: Re: [RFC PATCH] mm: track bad page via kmemleak
+Message-ID: <Y1vDpfGrG1biTGoC@arm.com>
+References: <1663679468-16757-1-git-send-email-zhaoyang.huang@unisoc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 3/5] ACPI/PCI: Add AER bits #defines for PCIE/PCI-X
- bridges
-To:     Bjorn Helgaas <helgaas@kernel.org>
-X-ASG-Orig-Subj: Re: [PATCH 3/5] ACPI/PCI: Add AER bits #defines for PCIE/PCI-X
- bridges
-CC:     <rafael@kernel.org>, <lenb@kernel.org>, <james.morse@arm.com>,
-        <tony.luck@intel.com>, <bp@alien8.de>, <robert.moore@intel.com>,
-        <ying.huang@intel.com>, <rdunlap@infradead.org>,
-        <bhelgaas@google.com>, <linux-acpi@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devel@acpica.org>, <CobeChen@zhaoxin.com>,
-        <TonyWWang@zhaoxin.com>, <ErosZhang@zhaoxin.com>
-References: <20221027215644.GA844326@bhelgaas>
-From:   LeoLiuoc <LeoLiu-oc@zhaoxin.com>
-In-Reply-To: <20221027215644.GA844326@bhelgaas>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [125.76.214.122]
-X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
- ZXBJMBX03.zhaoxin.com (10.29.252.7)
-X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
-X-Barracuda-Start-Time: 1666958217
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 1390
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.4999 1.0000 0.0000
-X-Barracuda-Spam-Score: 0.00
-X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.101737
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1663679468-16757-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+(sorry, I missed this last month when it was posted)
 
-
-在 2022/10/28 5:56, Bjorn Helgaas 写道:
-> On Thu, Oct 27, 2022 at 11:15:54AM +0800, LeoLiu-oc wrote:
->> From: leoliu-oc <leoliu-oc@zhaoxin.com>
->>
->> Define PCI Express Advanced Error Reporting Extended Capabilities bits.
->>
->> Signed-off-by: leoliu-oc <leoliu-oc@zhaoxin.com>
->> ---
->>   include/uapi/linux/pci_regs.h | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/include/uapi/linux/pci_regs.h b/include/uapi/linux/pci_regs.h
->> index 57b8e2ffb1dd..3662106fd8dc 100644
->> --- a/include/uapi/linux/pci_regs.h
->> +++ b/include/uapi/linux/pci_regs.h
->> @@ -799,6 +799,11 @@
->>   #define  PCI_ERR_ROOT_AER_IRQ		0xf8000000 /* Advanced Error Interrupt Message Number */
->>   #define PCI_ERR_ROOT_ERR_SRC	0x34	/* Error Source Identification */
->>   
->> +/* PCI Express Advanced Error Reporting Extended Capabilities for Bridges */
->> +#define PCI_ERR_UNCOR_MASK2		0x30	/* Secondary Uncorrectable Error Mask */
->> +#define PCI_ERR_UNCOR_SEVER2	0x34	/* Secondary Uncorrectable Error Severit */
->> +#define PCI_ERR_CAP2			0x38	/* Secondary Advanced Error Capabilities */
+On Tue, Sep 20, 2022 at 09:11:08PM +0800, zhaoyang.huang wrote:
+> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 > 
-> Can you include a spec reference for these?  I'm looking at PCIe r6.0,
-> sec 7.8.4, and I don't see anything I can match up with these.
+> Bad pages will failed go back to allocator and leaved as orphan pages, track
+> them down via kmemleak.
 > 
-> Bjorn
-Please refer to PCI Express to PCI/PCI-X Bridge Specification, sec 
-5.2.3.2, 5.2.3.3 and 5.2.3.4.
+> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> ---
+>  mm/page_alloc.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index e5486d4..24f682e 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1408,7 +1408,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
+>  			__memcg_kmem_uncharge_page(page, order);
+>  		reset_page_owner(page, order);
+>  		page_table_check_free(page, order);
+> -		return false;
+> +		goto err;
+>  	}
+>  
+>  	/*
+> @@ -1442,7 +1442,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
+>  	if (check_free)
+>  		bad += check_free_page(page);
+>  	if (bad)
+> -		return false;
+> +		goto err;
+>  
+>  	page_cpupid_reset_last(page);
+>  	page->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
+> @@ -1486,6 +1486,10 @@ static __always_inline bool free_pages_prepare(struct page *page,
+>  	debug_pagealloc_unmap_pages(page, 1 << order);
+>  
+>  	return true;
+> +err:
+> +	kmemleak_alloc(page_address(page), PAGE_SIZE << order, 1, GFP_KERNEL);
+> +	return false;
+> +
+>  }
 
-Thanks
-leoliu-oc
+What's the aim of this tracking? First of all, that's a HWPoison page
+and it should note be touched, so the min_count should be -1 otherwise
+kmemleak will try to read it for references to other objects.
+
+Now, if all you need is a list of the bad pages, I don't think that's
+kmemleak's job. Maybe add them to a list and expose it somewhere else
+via debugfs.
+
+-- 
+Catalin
