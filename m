@@ -2,104 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FAFD61123E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3660A61124C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:06:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiJ1NF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
+        id S230380AbiJ1NGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbiJ1NFK (ORCPT
+        with ESMTP id S230364AbiJ1NGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:05:10 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDCA31F89
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:04:57 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id f22so3388379qto.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:04:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TVUWwaHw02W9cOy0F44SflIYoXa5sfjHCnsNHHyNsmM=;
-        b=uLwyTjieD2aQGDmbRWc2qDIjTxvkLbf5DIONHZCutNo1715k8bb3ya9h/2H4/QBB0d
-         SjtBZAMTdmQzTOEK4da741s3P+vSXWyLLyAzERWCghod+S3zXv7eyOP4QIF31a3qCn1Z
-         d6aWy9UHBWajsHN0ZSV3k0Za/v2Q+VvGoPP/sayqMY+/0poBAF+VcxrdPPJM1OLbRheS
-         CXNt/uCfKE2T3qWRfbjm5nb/NpyvuGhMjQ2lNSQC1jwT9XAzCum7IHCHy5mNC7A4nXM2
-         GttwDhJ9nJEheMWtEktuZ/jIuV00PivpKigL8kAgeCC4+xh1pBdAhqnY/KbJ9xG31Tkn
-         eTGw==
-X-Gm-Message-State: ACrzQf3/u3nW2W9q41gkyHh3NmOY9DnHpR46qWTdNePWHLsqVvQy+Wmu
-        GL76LEBEz6j638m3FX+/T4+OVhXmQqVpGQ==
-X-Google-Smtp-Source: AMsMyM7k2H5RI2yTM5cjfRlUieumyCt7oqQlSab2uEIHJnHo9jIhaHUxMTqbryOybPyv6Ekau/6r1A==
-X-Received: by 2002:a05:622a:410:b0:39d:8ed:33e with SMTP id n16-20020a05622a041000b0039d08ed033emr38772524qtx.43.1666962296296;
-        Fri, 28 Oct 2022 06:04:56 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id j66-20020a37b945000000b006f87d28ea3asm2836718qkf.54.2022.10.28.06.04.55
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 06:04:55 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id j130so6027983ybj.9
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:04:55 -0700 (PDT)
-X-Received: by 2002:a25:4fc2:0:b0:6be:afb4:d392 with SMTP id
- d185-20020a254fc2000000b006beafb4d392mr46623716ybb.604.1666962295225; Fri, 28
- Oct 2022 06:04:55 -0700 (PDT)
+        Fri, 28 Oct 2022 09:06:15 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C0C1C19E5;
+        Fri, 28 Oct 2022 06:05:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5A8F9CE2B25;
+        Fri, 28 Oct 2022 13:05:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5C0FC433D6;
+        Fri, 28 Oct 2022 13:05:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666962343;
+        bh=fWTLQkHg0kXZkdXLU2JEa23QeLvNM23OHgnTkuCfUdg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ww0pFcRilUvnjfM4W+Dgyi8JNYcnfF1lQkgbl81ew0dyq4gmRj2xnPrxxL/K50aH9
+         L/xgzIEAl/V5Z1BEBflHVwqUTdtnWigsD9dvLATqhpHDQy3cSRqnqjQfV2fevKD0Ah
+         4Y0yF+JgtdWNgb008x2szhQqlp/KmNFl35W1WYxnMyGaRP8Coy9CJcqpia+JQdmftu
+         +I9La6FTeU8Z0AD7UI37cHgPd8IU9Bzb+DsrkzjAjuE1ahqXdfUnsuI3mJ4Qm2fpIQ
+         2Q1wAOv33KTSASt/fIqgqTCyEER/x+R6M6WGPpuIrulNqF880NdzhSIrfPgoj2OYLT
+         3lIO6DRDOwdjw==
+Date:   Fri, 28 Oct 2022 18:35:39 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/13] dt-bindings: phy: qcom,qmp-usb: fix sc8280xp
+ binding
+Message-ID: <Y1vTo1JG8ZxeDMCX@matsya>
+References: <20221024100632.20549-1-johan+linaro@kernel.org>
+ <20221024100632.20549-12-johan+linaro@kernel.org>
+ <c9940701-8486-5a0c-4c7d-9c85b9460a7f@linaro.org>
+ <Y1tyBw2iQvV89+UB@hovoldconsulting.com>
 MIME-Version: 1.0
-References: <0229879ee3e2d8828707d291cddbb89ac18a10c2.1666945731.git.geert@linux-m68k.org>
- <Y1vSjQfkDfPINUBo@debian.me>
-In-Reply-To: <Y1vSjQfkDfPINUBo@debian.me>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 28 Oct 2022 15:04:42 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV2WAnhFWJFEGOqch4h8mQ31w459ejOmn=39KWj1wAXsQ@mail.gmail.com>
-Message-ID: <CAMuHMdV2WAnhFWJFEGOqch4h8mQ31w459ejOmn=39KWj1wAXsQ@mail.gmail.com>
-Subject: Re: [PATCH] m68k: mac: Reword comment using double "in"
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
-        Michael Schmitz <schmitzmic@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1tyBw2iQvV89+UB@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bagas,
+On 28-10-22, 08:09, Johan Hovold wrote:
+> On Thu, Oct 27, 2022 at 10:15:45PM -0400, Krzysztof Kozlowski wrote:
+> > On 24/10/2022 06:06, Johan Hovold wrote:
+> > > The current QMP USB PHY bindings are based on the original MSM8996 PCIe
+> > > PHY binding which provided multiple PHYs per IP block and these in turn
+> > > were described by child nodes.
+> > > 
+> > > The QMP USB PHY block only provide a single PHY and the remnant child
+> > > node does not really reflect the hardware.
+> > > 
+> > > The original MSM8996 binding also ended up describing the individual
+> > > register blocks as belonging to either the wrapper node or the PHY child
+> > > nodes.
+> > > 
+> > 
+> > (...)
+> > 
+> > >      then:
+> > > diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb-phy.yaml
+> > > new file mode 100644
+> > > index 000000000000..95ee81d782f9
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb-phy.yaml
+> > 
+> > Filename based on compatible, so in this case
+> > "qcom,sc8280xp-qmp-usb3-uni-phy.yaml", unless it's like the PCI case?
+> 
+> Yes, you're right. Thanks for catching that. This should be the only
+> sc8280xp USB PHY compatible so the file name should be updates as you
+> suggested.
+> 
+> I'll wait a bit and see if Vinod has any comments before respinning this
+> series.
 
-On Fri, Oct 28, 2022 at 3:01 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
-> On Fri, Oct 28, 2022 at 10:30:26AM +0200, Geert Uytterhoeven wrote:
-> > People keep on sending (incorrect) patches to remove the second
-> > occurrence of the word "in".  Reword the comment to stop the inflood.
->
-> Ah! People who aren't fluent in English think that duplicated "in" below
-> isn't OK, which after stripping that become nonsense without reading the
-> actual code.
->
-> > Suggested-by: Michael Schmitz <schmitzmic@gmail.com>
-> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > ---
-> > To be queued in the m68k branch for v6.2.
->
-> Should this patch be Cc: stable'ed so that no more trivial patches as
-> you mentioned?
+lgtm, pls respin
 
-People should not be sending patches against stable in the first place.
-Once this makes it upstream, the inflow should stop (hopefully ;-)
 
-> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+~Vinod
