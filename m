@@ -2,171 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0351E610DEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D78A610DA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbiJ1Jzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 05:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
+        id S229938AbiJ1JtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 05:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbiJ1Jyp (ORCPT
+        with ESMTP id S229792AbiJ1JtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 05:54:45 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAA065AC;
-        Fri, 28 Oct 2022 02:54:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1666950873; x=1698486873;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rVdNzdBQO+N6n0DeTiUUzVhpCEMcLGmACZM8CQ8W5rc=;
-  b=aOkEEG7Y29FfRMhpjCLnRr2nta6ITmvQ6s0CW3KffJTs7XjZkMPIF1gF
-   kwTyUaIZgVUpMUpYs84b6/jZU14j31CPJ0GXLRjiC0l9pOaWa+mmRokES
-   oPezExb7Pflk3jlJA785X28Irc8SMm/WR0moVnF2tihVcxpPDO8v63Zdm
-   GIrjPPWuBVznsFd/aV5B99R2+emiQ/9b6xCbdi7w4hknfVzqvbhicw2tT
-   ySCAweBj4AxWBD2hA9H23SU3tGTgMlNt8Fb5LmG+IpxeT0aXE8SNBp7j5
-   QXqh2ovtDkIQXtfjZ4fRql70k9sNe+fYJJwuATgrcI7wxx/wXCL71EpZm
-   g==;
-X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
-   d="scan'208";a="186674645"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Oct 2022 02:54:32 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 28 Oct 2022 02:54:26 -0700
-Received: from DEN-LT-70577.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Fri, 28 Oct 2022 02:54:22 -0700
-From:   Daniel Machon <daniel.machon@microchip.com>
-To:     <netdev@vger.kernel.org>
-CC:     <davem@davemloft.net>, <petrm@nvidia.com>,
-        <maxime.chevallier@bootlin.com>, <thomas.petazzoni@bootlin.com>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <lars.povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
-        <daniel.machon@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <joe@perches.com>, <linux@armlinux.org.uk>,
-        <horatiu.vultur@microchip.com>, <Julia.Lawall@inria.fr>,
-        <vladimir.oltean@nxp.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH net-next v4 6/6] net: microchip: sparx5: add support for offloading default prio
-Date:   Fri, 28 Oct 2022 12:03:20 +0200
-Message-ID: <20221028100320.786984-7-daniel.machon@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221028100320.786984-1-daniel.machon@microchip.com>
-References: <20221028100320.786984-1-daniel.machon@microchip.com>
+        Fri, 28 Oct 2022 05:49:09 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A0F1C4EC8;
+        Fri, 28 Oct 2022 02:49:08 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MzHkP4cbDz6T8st;
+        Fri, 28 Oct 2022 17:46:37 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP4 (Coremail) with SMTP id gCh0CgCntOaQpVtjHAtNAQ--.59885S4;
+        Fri, 28 Oct 2022 17:49:06 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
+        yukuai3@huawei.com
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai1@huaweicloud.com,
+        yi.zhang@huawei.com
+Subject: [PATCH -next 0/5] blk-iocost: random patches to improve configuration
+Date:   Fri, 28 Oct 2022 18:10:51 +0800
+Message-Id: <20221028101056.1971715-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: gCh0CgCntOaQpVtjHAtNAQ--.59885S4
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUU5_7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for offloading default prio {ETHERTYPE, 0, prio}.
+From: Yu Kuai <yukuai3@huawei.com>
 
-Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
----
- .../ethernet/microchip/sparx5/sparx5_dcb.c    | 12 ++++++++++
- .../ethernet/microchip/sparx5/sparx5_port.c   | 23 +++++++++++++++++++
- .../ethernet/microchip/sparx5/sparx5_port.h   |  5 ++++
- 3 files changed, 40 insertions(+)
+Yu Kuai (5):
+  blk-iocost: cleanup ioc_qos_write() and ioc_cost_model_write()
+  blk-iocost: improve hanlder of match_u64()
+  blk-iocost: don't allow to configure bio based device
+  blk-iocost: fix sleeping in atomic context warnning in ioc_qos_write()
+  blk-iocost: fix sleeping in atomic context warnning in
+    ioc_cost_model_write()
 
-diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_dcb.c b/drivers/net/ethernet/microchip/sparx5/sparx5_dcb.c
-index 283d5f338e0e..df2374e64b72 100644
---- a/drivers/net/ethernet/microchip/sparx5/sparx5_dcb.c
-+++ b/drivers/net/ethernet/microchip/sparx5/sparx5_dcb.c
-@@ -34,6 +34,13 @@ static int sparx5_dcb_app_validate(struct net_device *dev,
- 	int err = 0;
- 
- 	switch (app->selector) {
-+	/* Default priority checks */
-+	case IEEE_8021QAZ_APP_SEL_ETHERTYPE:
-+		if (app->protocol != 0)
-+			err = -EINVAL;
-+		else if (app->priority >= SPX5_PRIOS)
-+			err = -ERANGE;
-+		break;
- 	/* Dscp checks */
- 	case IEEE_8021QAZ_APP_SEL_DSCP:
- 		if (app->protocol > 63)
-@@ -122,6 +129,11 @@ static int sparx5_dcb_app_update(struct net_device *dev)
- 	dscp_map = &qos.dscp.map;
- 	pcp_map = &qos.pcp.map;
- 
-+	/* Get default prio. */
-+	qos.default_prio = dcb_ieee_getapp_default_prio_mask(dev);
-+	if (qos.default_prio)
-+		qos.default_prio = fls(qos.default_prio) - 1;
-+
- 	/* Get dscp ingress mapping */
- 	for (i = 0; i < ARRAY_SIZE(dscp_map->map); i++) {
- 		app_itr.selector = IEEE_8021QAZ_APP_SEL_DSCP;
-diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_port.c b/drivers/net/ethernet/microchip/sparx5/sparx5_port.c
-index fb5e321c4896..73ebe76d7e50 100644
---- a/drivers/net/ethernet/microchip/sparx5/sparx5_port.c
-+++ b/drivers/net/ethernet/microchip/sparx5/sparx5_port.c
-@@ -1151,6 +1151,7 @@ int sparx5_port_qos_set(struct sparx5_port *port,
- {
- 	sparx5_port_qos_dscp_set(port, &qos->dscp);
- 	sparx5_port_qos_pcp_set(port, &qos->pcp);
-+	sparx5_port_qos_default_set(port, qos);
- 
- 	return 0;
- }
-@@ -1220,3 +1221,25 @@ int sparx5_port_qos_dscp_set(const struct sparx5_port *port,
- 
- 	return 0;
- }
-+
-+int sparx5_port_qos_default_set(const struct sparx5_port *port,
-+				const struct sparx5_port_qos *qos)
-+{
-+	struct sparx5 *sparx5 = port->sparx5;
-+
-+	/* Set default prio and dp level */
-+	spx5_rmw(ANA_CL_QOS_CFG_DEFAULT_QOS_VAL_SET(qos->default_prio) |
-+		 ANA_CL_QOS_CFG_DEFAULT_DP_VAL_SET(0),
-+		 ANA_CL_QOS_CFG_DEFAULT_QOS_VAL |
-+		 ANA_CL_QOS_CFG_DEFAULT_DP_VAL,
-+		 sparx5, ANA_CL_QOS_CFG(port->portno));
-+
-+	/* Set default pcp and dei for untagged frames */
-+	spx5_rmw(ANA_CL_VLAN_CTRL_PORT_PCP_SET(0) |
-+		 ANA_CL_VLAN_CTRL_PORT_DEI_SET(0),
-+		 ANA_CL_VLAN_CTRL_PORT_PCP |
-+		 ANA_CL_VLAN_CTRL_PORT_DEI,
-+		 sparx5, ANA_CL_VLAN_CTRL(port->portno));
-+
-+	return 0;
-+}
-diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_port.h b/drivers/net/ethernet/microchip/sparx5/sparx5_port.h
-index a0cd53fa3ad0..588eecff59f8 100644
---- a/drivers/net/ethernet/microchip/sparx5/sparx5_port.h
-+++ b/drivers/net/ethernet/microchip/sparx5/sparx5_port.h
-@@ -114,6 +114,7 @@ struct sparx5_port_qos_dscp {
- struct sparx5_port_qos {
- 	struct sparx5_port_qos_pcp pcp;
- 	struct sparx5_port_qos_dscp dscp;
-+	u8 default_prio;
- };
- 
- int sparx5_port_qos_set(struct sparx5_port *port, struct sparx5_port_qos *qos);
-@@ -123,4 +124,8 @@ int sparx5_port_qos_pcp_set(const struct sparx5_port *port,
- 
- int sparx5_port_qos_dscp_set(const struct sparx5_port *port,
- 			     struct sparx5_port_qos_dscp *qos);
-+
-+int sparx5_port_qos_default_set(const struct sparx5_port *port,
-+				const struct sparx5_port_qos *qos);
-+
- #endif	/* __SPARX5_PORT_H__ */
+ block/blk-iocost.c | 328 +++++++++++++++++++++++++++++----------------
+ 1 file changed, 216 insertions(+), 112 deletions(-)
+
 -- 
-2.34.1
+2.31.1
 
