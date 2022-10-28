@@ -2,84 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2867B6111B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C04126111B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbiJ1MjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 08:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33730 "EHLO
+        id S229915AbiJ1Mkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 08:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiJ1Mi7 (ORCPT
+        with ESMTP id S229608AbiJ1Mkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 08:38:59 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923BF1D52FE;
-        Fri, 28 Oct 2022 05:38:58 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id q9so12724690ejd.0;
-        Fri, 28 Oct 2022 05:38:58 -0700 (PDT)
+        Fri, 28 Oct 2022 08:40:51 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75AD8A7E7
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:40:50 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 185so6000895ybc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:40:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R6b7kwg2WdDmY6cz9AakvTDLGqm+2/XRfuZcHo4JzlI=;
-        b=edsoFRNhow/344HliqnP78Nu6McqtN0HTJNgsIUWyOp7wcqLGZrRmFA0ReEx5yhUOD
-         drAU+pubF3GbxOcNo98+s4tjxNvrZZm3ovUE6xCgNBWKln3d1UggSKFeHG4VnU3n4rPp
-         VAnFdOKGxOPSlLGWHCbkN/9kspeI+K7YWDf2YduR35stoHRzpdmCKjAhG/3Qp/zXSt6K
-         V11AHANMQ7KgC8X81S53RBwF+UcFsGebZSRM+lKbnFxETvh4SX3WxilbhUmeFBBF/+w4
-         A2LEWO/soXzEYGnKYr6HPr4AkTM511tgEyIzHEw2h9Vzf8M48tMVUEOl+JZ9nF3aCvTi
-         +vbg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=d5qpLLU9ealz0k8qQMMTyV56YTc5b0apoIByczFtzmg=;
+        b=eANACC4xiHYJE6fFPT82kV6FN7SzHJX8A02ky39653ph7kxPqSll4DnYeRsW2TGb1L
+         18IyEmaURS2lyHtYp6HRX2doKdjX07Yp9m6lwz4KK5Iao6A/U8h5Y2OzUbH/ZpYkuSsy
+         Z7JmI7RCutczyGWDU2EdHdha5Gkz2GKIe5qsng+V/ibZsjcZvecf0i/XXRsfgn8eQKvU
+         Sw2p8OqXTn6j6BAHfH4KSdaweKinoKk8xYSUGZqcDtJYhpwQ2UoXHiFwEC1VZTpp8/Nb
+         smMe5cNiwqf61UPS6ySf+A33jNMV2HOpu0N1Nxw9ZZKxtPaVZFr1caQ6UiojMXiDP13q
+         ww2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R6b7kwg2WdDmY6cz9AakvTDLGqm+2/XRfuZcHo4JzlI=;
-        b=DUoQ2mHlNpsIIXx5NyaeOoflOE992eSqsa0BQ2nIEqkRA1w1kMlpaGoxCaDZfJlSPF
-         qHqyjrsh1+6HhI5xf18FTjhCgKH5yRGhk4jepEebZu16IaiBgmdplViJaWpBC4UYqjTm
-         uwspRNOXh0nKMZxCYYEjISIYNlNJfHC1qctYbVJM8UPDewIZmMAyhvc+a0iFK8mCIIAU
-         CpuPDs0nqapUJ35CDtGiBz6c4o1ayWTZ1cLQHhVw6EMxXMP1l+EJ5GTriHcN3nzIgKpE
-         LJ2tAWKLSQwdaCtioHFU5QeCIGJeaXK1/5t7KcWWVl8IUhgoEMTAccwHI4CAFvTpWHJ0
-         0n7w==
-X-Gm-Message-State: ACrzQf1M9sh51jgg4zAEwY1oP1s/vW2YSMpQVWiZspVCnqouNcz/mA4o
-        F6yo3g9lciFPQGky6+MWQszQeFdvzrk=
-X-Google-Smtp-Source: AMsMyM5KnL1wkxqYW6p6I6VHF1z1SahRA1W6Hhu9pGmq0/xsQhltyL8KFY/7jc2NLhLwrk9+dKqNrg==
-X-Received: by 2002:a17:907:5ce:b0:730:bae0:deb with SMTP id wg14-20020a17090705ce00b00730bae00debmr48272599ejb.181.1666960726223;
-        Fri, 28 Oct 2022 05:38:46 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id pv3-20020a170907208300b0074134543f82sm2075974ejb.90.2022.10.28.05.38.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 05:38:45 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 14:38:43 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>, Wayne Chang <waynec@nvidia.com>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
-        heikki.krogerus@linux.intel.com, ajayg@nvidia.com, kishon@ti.com,
-        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
-        mathias.nyman@intel.com, jckuo@nvidia.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 04/11] arm64: tegra: Enable XUSB host and device on
- Jetson AGX Orin
-Message-ID: <Y1vNU1KeUH8LvG0r@orome>
-References: <20221024074128.1113554-1-waynec@nvidia.com>
- <20221024074128.1113554-5-waynec@nvidia.com>
- <2059dfe5-b084-42a4-7f35-9da9561fc12b@linaro.org>
- <b803bcf9-fc47-5239-ffe9-707925f324de@nvidia.com>
- <5676bcd2-14fc-4e1d-643e-89e575d190c3@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d5qpLLU9ealz0k8qQMMTyV56YTc5b0apoIByczFtzmg=;
+        b=Z0DAavwvWDzwTojA5LL96aqdqudde0D1nqPjp0QsmsRV19sVjKMxXfynX1sxrCTVye
+         1UKGzjXDSqJ9cU21YzzWiCHSm+ZbrZMeAaVKSxEfUbP4tBL1iYfxbW/hbJ0gvuIJWTvw
+         +UL4SHeEJuqO+QshTUrqCYYLYOn/hzWdGdbmk7crVrFfjZXCQWrhR3HxOofwmSY7CPHJ
+         Sm1RMCjrO3aBhJ0NmFzCTnvpMgzslGCYRrtNmVDvI/+6cokSRwDYkyk7vBogTZE+7UKa
+         fl9v/fUXriQlqTkyk9vV6hgFfCgSODzfr68pds7dIv6I2fnQbcrrxTGMRRq0lBHxwHBF
+         RItQ==
+X-Gm-Message-State: ACrzQf3FT1mMa54OQ3RaO5eHk2CPEmKULOU5HVssoNIjp7Z8xIK9vY06
+        HmaeQjNHkNHH08lM00pjZiHQhbTa5Tk3xXRhPkb0wg==
+X-Google-Smtp-Source: AMsMyM6fzlWHqOO55M6DkkRJ3hpXgCc9vncKmeY0LuaFkAM9OAG7r1AJq3cjAzhHnAoQuKVck2MYFVhFMORLQZCVJhY=
+X-Received: by 2002:a25:3187:0:b0:6c1:822b:eab1 with SMTP id
+ x129-20020a253187000000b006c1822beab1mr46975206ybx.427.1666960849872; Fri, 28
+ Oct 2022 05:40:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/hNVoH5xZwyCFIYG"
-Content-Disposition: inline
-In-Reply-To: <5676bcd2-14fc-4e1d-643e-89e575d190c3@linaro.org>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221027102449.926410-1-william.xuanziyang@huawei.com>
+ <CANn89iJkKJ3-b8vncrxgawWTtaLphYERhVma7+1qgdSEXn8tiQ@mail.gmail.com>
+ <8523b754-992d-0d72-ecd1-4f076e57ebde@huawei.com> <CANn89i+FYGkR5_-C3wp7GdpW=JT8V5LELwMNcHg9Gt6=e877JA@mail.gmail.com>
+ <4ce1a942-db88-3d20-b377-ade9b4fc997d@huawei.com>
+In-Reply-To: <4ce1a942-db88-3d20-b377-ade9b4fc997d@huawei.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 28 Oct 2022 05:40:38 -0700
+Message-ID: <CANn89iLtMK7uRaXJai3-PocJnuOrB5KMS=L=sbF7egUB-d_6UQ@mail.gmail.com>
+Subject: Re: [PATCH net] ipv6/gro: fix an out of bounds memory bug in ipv6_gro_receive()
+To:     "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, herbert@gondor.apana.org.au
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,70 +72,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Oct 28, 2022 at 3:11 AM Ziyang Xuan (William)
+<william.xuanziyang@huawei.com> wrote:
+> Hi Eric,
+>
+> Thank you for your suggestion.
+>
+> I have analyzed the problem more deeply. The odd IPv6 packet and
+> big packet length value(IPv6 payload length more than 65535)
+> together cause the problem.
+>
+> skb->network_header and skb->transport_header are all u16 type.
+> They would occuer overflow errors during ipv6_gro_receive() processing.
+> That cause the value error for __skb_push(skb, value).
+>
+> So the problem is a bug in tun device.
+>
+> I will combine my previous problem "net: tun: limit first seg size to avoid oversized linearization"
+> together to give the fix patch later.
 
---/hNVoH5xZwyCFIYG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Oct 28, 2022 at 07:27:09AM -0400, Krzysztof Kozlowski wrote:
-> On 28/10/2022 05:33, Jon Hunter wrote:
-> >>> +			ucsi_ccg: ucsi_ccg@8 {
-> >>
-> >> No underscores in node names.
-> >>
-> >>> +				compatible =3D "cypress,cypd4226";
-> >>> +				cypress,firmware-build =3D "gn";
-> >>> +				interrupt-parent =3D <&gpio>;
-> >>> +				interrupts =3D <TEGRA234_MAIN_GPIO(Y, 4) IRQ_TYPE_LEVEL_LOW>;
-> >>> +				reg =3D <0x08>;
-> >>> +				status =3D "okay";
-> >>
-> >> The pattern of redefining full path in Tegra is confusing - I have no
-> >> clue which of these status=3Dokay are correct which are redundant.
-> >>
-> >> Do you?
-> >=20
-> > I understand you may not like this approach, however, this comment is=
-=20
-> > not really relevant to just this patch, but a general comment. But yes=
-=20
-> > we will ensure that this is correct.
-> >=20
->=20
-> Just to clarify - this status looks redundant, but I have no way to tell
-> for sure...
-
-But that's independent of whether we specify this using the full path or
-reference the node by label, isn't it? The only way to make sure that a
-status =3D "okay" is not redundant is by manual inspection. I don't know
-of an automated way to do that. Perhaps it's something that could be
-added as a check to DTC?
-
-In this particular case I don't think the status is needed. As Jon
-mentioned, this device is first defined here and status =3D "okay" is the
-default, so this is redundant.
-
-Thierry
-
---/hNVoH5xZwyCFIYG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNbzVMACgkQ3SOs138+
-s6E9wRAAvxEstA7fsndJGHjQBJ1VnmgD/ut80RMq/RbIlNqAXTvWdomp7Kg0qf/z
-HicY0UPrvJyw+8gSLQJ6Pi5syvsYlT15ORzmmui1lTylQ37EwD/z+gh1YoW5ajws
-8K/p8ax7ivzd1O1ARWfdP7NCdocn3HJqgrIFvgcYC1wjlf5tqoxklBU3YVqrlTDI
-TeULZVqjsV85W9x7Bi0BSbkRbiHcyCbRMRnlz3rjBynmydO/Um6CDZvpGysukVik
-oz4uS7PGfMm7yDcVSEiVaqXfa551Z3AckA/trp2Py+8/K5qMc5PI58EOzQMQhHF6
-6SNSdmmPhFWK6HcYx6XMB7q7retFEdAJErNXK9ko6izVmXmJ5sPjHCg00vxElGCm
-jnVajKP3Okc59tWcxOauCw5ATbyqsifxF2d5AnPWgflEIpjZuAUWdhYZOich+YcE
-7hyCZaQ73kUhVMJkiTTVaI22Va3Aql7UWoPS2ZfJhV/U0NbMykhG+rlqz+JHGo+o
-ya+3Fp5nStQCGAUyNcsxDsEycsRRwhCKWNvI2EaqrWmMOg+tSfV+AjZVyOcXyPuy
-nqtLr6u+wJ3dob/P9dza5p/RepoeqpxEsaEHa5AUQs32ckFdltiT2pSZT4WxUggA
-dyOMFtaNlN83jb74q22ny7ie3OUSyi1TtmriJRFw19+gnNmCsd4=
-=PpVN
------END PGP SIGNATURE-----
-
---/hNVoH5xZwyCFIYG--
+SGTM, thanks !
