@@ -2,45 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E983C610A0B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B413E610A0F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbiJ1GIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46006 "EHLO
+        id S229792AbiJ1GJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiJ1GH6 (ORCPT
+        with ESMTP id S229536AbiJ1GJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:07:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3891B76CB
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:07:56 -0700 (PDT)
+        Fri, 28 Oct 2022 02:09:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272C4C7F;
+        Thu, 27 Oct 2022 23:09:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B8416266C
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:07:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 551F8C433D6;
-        Fri, 28 Oct 2022 06:07:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666937275;
-        bh=8GlBl/rE3PNGNLsO5yRSu8lq7b+oiLgB9BYbdsHZcr0=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2064F62670;
+        Fri, 28 Oct 2022 06:09:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AEA9C433C1;
+        Fri, 28 Oct 2022 06:09:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666937367;
+        bh=UuiTRQk+7GReGbCZDOgtZ7lgyZlujMjbgmrzbepu8Xk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LF1TZZEK52VICO7LECT4i97YjgMFwaHnR+wkjMFMEqoxlCnG/w2xbrH4y3ODL64ih
-         9zHWxwRnF10YXQMeTEHlgPTUB1F82JrLGdQnkyYs3lfBaBupnNnozU1RaBRVWj9BvK
-         1ZHx+QHBZ+WWuE8ZxW5nccmhjdaU7n4KKEzFvkw8=
-Date:   Fri, 28 Oct 2022 08:08:49 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     UMWARI JOVIAL <umwarijovial@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH] WARNING: Possible repeated word: 'very'
-Message-ID: <Y1tx8XjmR5QKV9lQ@kroah.com>
-References: <20221028051420.GA30073@rdm>
+        b=eHQUOqee88v8iCfjOZ2CPFb5YlM53mWWj5Ok0KL2pun8rat0+daypr40Y+y5MKpUq
+         ABX+HsUoonKyodFi2MUkpcrCLLL/dxFH3D6H7EyT+6KhjUcfqyEtgqBcLIdmbndQ1i
+         cM1Oy627YyW9jKVgoUgJnk1JjHL6u7s7SwTHOysyHkssa3q8P09+YvDsltQoJirquF
+         v5B3+GwqllIOHkqwl61iCmRb89GHWf8HsFHgOMNbY9bWruROAEFnQ3px2xqmMgvmJV
+         sFWUMQykws5bZADx5WATTucBRRV3uZqkZQKbvnOttf6Ioe8xNeKJf07zAGkdcvkYcA
+         9sSLVRLC43xtw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ooIYJ-0005Km-Uy; Fri, 28 Oct 2022 08:09:12 +0200
+Date:   Fri, 28 Oct 2022 08:09:11 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/13] dt-bindings: phy: qcom,qmp-usb: fix sc8280xp
+ binding
+Message-ID: <Y1tyBw2iQvV89+UB@hovoldconsulting.com>
+References: <20221024100632.20549-1-johan+linaro@kernel.org>
+ <20221024100632.20549-12-johan+linaro@kernel.org>
+ <c9940701-8486-5a0c-4c7d-9c85b9460a7f@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221028051420.GA30073@rdm>
+In-Reply-To: <c9940701-8486-5a0c-4c7d-9c85b9460a7f@linaro.org>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -50,35 +66,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 08:14:20AM +0300, UMWARI JOVIAL wrote:
-> i used checkpatch.pl script to identify the above
-> Repetition of the same word in one sentence same line
-
-Please read the documentation for how to write a good changelog text.
-Hint, "i" is not something you see in a text, right?
-
-Also, why do you have WARNING in the subject line and not the driver
-name?  Again, read the documentation please.
-
+On Thu, Oct 27, 2022 at 10:15:45PM -0400, Krzysztof Kozlowski wrote:
+> On 24/10/2022 06:06, Johan Hovold wrote:
+> > The current QMP USB PHY bindings are based on the original MSM8996 PCIe
+> > PHY binding which provided multiple PHYs per IP block and these in turn
+> > were described by child nodes.
+> > 
+> > The QMP USB PHY block only provide a single PHY and the remnant child
+> > node does not really reflect the hardware.
+> > 
+> > The original MSM8996 binding also ended up describing the individual
+> > register blocks as belonging to either the wrapper node or the PHY child
+> > nodes.
+> > 
 > 
-> Signed-off-by: UMWARI JOVIAL <umwarijovial@gmail.com>
-> ---
->  drivers/staging/rtl8712/rtl871x_xmit.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> (...)
 > 
-> diff --git a/drivers/staging/rtl8712/rtl871x_xmit.c b/drivers/staging/rtl8712/rtl871x_xmit.c
-> index 090345bad223..30a0276b8b58 100644
-> --- a/drivers/staging/rtl8712/rtl871x_xmit.c
-> +++ b/drivers/staging/rtl8712/rtl871x_xmit.c
-> @@ -766,7 +766,7 @@ void r8712_free_xmitbuf(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
->   * If we turn on USE_RXTHREAD, then, no need for critical section.
->   * Otherwise, we must use _enter/_exit critical to protect free_xmit_queue...
->   *
-> - * Must be very very cautious...
-> + * Must be very cautious...
+> >      then:
+> > diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb-phy.yaml
+> > new file mode 100644
+> > index 000000000000..95ee81d782f9
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb-phy.yaml
+> 
+> Filename based on compatible, so in this case
+> "qcom,sc8280xp-qmp-usb3-uni-phy.yaml", unless it's like the PCI case?
 
-The original text here is correct.
+Yes, you're right. Thanks for catching that. This should be the only
+sc8280xp USB PHY compatible so the file name should be updates as you
+suggested.
 
-thanks,
+I'll wait a bit and see if Vinod has any comments before respinning this
+series.
 
-greg k-h
+Johan
