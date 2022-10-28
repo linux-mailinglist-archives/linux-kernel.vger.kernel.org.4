@@ -2,108 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D057611842
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 864CE611836
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 18:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiJ1QyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 12:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55314 "EHLO
+        id S229718AbiJ1Qx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 12:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbiJ1QyF (ORCPT
+        with ESMTP id S229562AbiJ1QxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:54:05 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE8E21CD41;
-        Fri, 28 Oct 2022 09:54:03 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id kt23so14268728ejc.7;
-        Fri, 28 Oct 2022 09:54:02 -0700 (PDT)
+        Fri, 28 Oct 2022 12:53:23 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15151F5273
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:53:21 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id l9so3788326qkk.11
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:53:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9VlWXXhBJnoc4ngEOzP/zoEPXuNu3Pcb27/diH3nA+U=;
-        b=LZzR4NF5aoNbliaJSdl30q2EeC7dveHrEZucBmr23Nlq4IrlxZQkMjIW7sDrxWvoN8
-         ZH+klDe6aAHzQATRGHz8yf+Fl2GXzKKKD+yilDoMpyjCqEnn4pX5MQ+o0mI8TeeQbmdW
-         oKvLqfzKbhkewDLcdKdmr0Z7bIw6jwfZghXizSP5p1eELZwPrC+wmHoCRZwgd+PwCIN6
-         IzcAWNLUIJ6LJOjRm9brUnjpjrcAVWBhMX2HrZXFKVt79h9x1ktnCcRths+1BgWnv45P
-         H8y96CMGIIHJv+U2qnkiyINb8a/MwbEuwLN0SjVV1OTnjP/xHtAH+tBcnBwsqKdtw/XC
-         037A==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pS2bJeXXT06AFFeuqTEmblG396E9ENt2zIPLMqMrcVc=;
+        b=WTUQKY9BYXSR5sxjZPQsTMF4y1c0ZYOJzqUdsGaqYe+p/B6Nt7IoyzxULeM/759P1o
+         UZXutu2q/e0zcjNH1gOm8AXgE6AATzgXfntHGezYDEn8UhP90n7Qb0p7ll+ZutI+8KTz
+         +Z3deCUTm+jK5myD3ZMteKw2KDAVusImHYaJY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9VlWXXhBJnoc4ngEOzP/zoEPXuNu3Pcb27/diH3nA+U=;
-        b=pfCm+hGzFb8YeDVzDLYEN0x5kR8JwpGt1UIp3bX0/WSEmaF0UrYDR9qcUgoIvO47cp
-         3xLfaxdxpGh/9yd1n7J8WldV4BBej2gX8UlL6yA1cbsjt+aUsq/v8wrqGD2O6soTz6rB
-         QCHqFSEZFQG+5+89iugV3HuF2mDdq0HLdS5/hCN2GwKScbc3tBHYW6c/AfuTo1/0NldP
-         YwQxkDtza9K6tNKVHoug5DmCun/lhy4+A1aowngLFGQ+h9adLBAK0OFIFt6OWLZbkWCs
-         vrSMtq0TRu4vENvRaRmlFbpasdDUILKtHEFzCwrc35I6pI3Dg88bG15sNN8rGeDIZ9m/
-         4yRg==
-X-Gm-Message-State: ACrzQf2PmfSzKTpSMsqBk10e2SR8uVGZEVsNO1GzEquLnr41sBrMzGlr
-        P+0V9EoHUB+7tl5q097QTMI=
-X-Google-Smtp-Source: AMsMyM5cCSODkVuBwT/DJJYlpmYX8i7CSbA1kEFYW/4yDxRGIAM38PVcrW56Lv4bA3NjSchaBDai7Q==
-X-Received: by 2002:a17:907:6d84:b0:78d:f2b0:14c8 with SMTP id sb4-20020a1709076d8400b0078df2b014c8mr202721ejc.749.1666976041659;
-        Fri, 28 Oct 2022 09:54:01 -0700 (PDT)
-Received: from localhost ([88.227.58.131])
-        by smtp.gmail.com with UTF8SMTPSA id p17-20020a17090653d100b0077826b92d99sm2417677ejo.12.2022.10.28.09.54.00
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pS2bJeXXT06AFFeuqTEmblG396E9ENt2zIPLMqMrcVc=;
+        b=zK3s+PIzP+Y7UQ3GWW0k0U3pV1sEraft6zHXq0QSJI7MWjh9qKvIHsw3hFSatABz5q
+         KYZAL7+eyR7usntVY0YmmZW4WSlG3U9fWs6noeJr/pOqlbvsbyeXSXup9U2KcXlRJs0f
+         NJuyh01z/Oc2GHsgGipW4gSt6dDmR+PLFQbs0L/a8Z1FLRx6yMDCejN3jie2fcU+7Wlu
+         0E4Ak/L//oYLSF+1WaKWfBjpslXOSIVuGJ5gcTMJZTmEyxkJyLLXbpolYROGNTgVPEpG
+         PNXq0XM7JHBNxRco6mIUrsmiW6f2TuOL60aLmbIfmtkS1u8BaDDaK4kdM4CrVAd8Fqvp
+         OIQA==
+X-Gm-Message-State: ACrzQf36ohPt49n7s07HtSd3Hp/WL7GqOMi72l+HySO00h/E9+JR3MrT
+        QOZAbLxGimw0rC6MoJO4cGgpzVCNM4csJg==
+X-Google-Smtp-Source: AMsMyM6bFwkH4fIXl11weiYM2OTcUrAuR9jWWsbWptF622gh7ctmjucQ4jpzgaZCrinjociYDHZ2yg==
+X-Received: by 2002:ae9:ed06:0:b0:6f9:efd2:9b96 with SMTP id c6-20020ae9ed06000000b006f9efd29b96mr96497qkg.651.1666976000657;
+        Fri, 28 Oct 2022 09:53:20 -0700 (PDT)
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
+        by smtp.gmail.com with ESMTPSA id x29-20020a05620a0b5d00b006b615cd8c13sm3173779qkg.106.2022.10.28.09.53.19
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 09:54:01 -0700 (PDT)
-From:   Sasha Finkelstein <fnkl.kernel@gmail.com>
-To:     thierry.reding@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sasha Finkelstein <fnkl.kernel@gmail.com>
-Subject: [PATCH 4/4] MAINTAINERS: Add entries for Apple PWM driver
-Date:   Fri, 28 Oct 2022 19:52:16 +0300
-Message-Id: <20221028165215.43662-5-fnkl.kernel@gmail.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <20221028165215.43662-1-fnkl.kernel@gmail.com>
-References: <20221028165215.43662-1-fnkl.kernel@gmail.com>
+        Fri, 28 Oct 2022 09:53:19 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id i127so6735376ybc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 09:53:19 -0700 (PDT)
+X-Received: by 2002:a05:6902:1352:b0:6bb:3f4b:9666 with SMTP id
+ g18-20020a056902135200b006bb3f4b9666mr143622ybu.101.1666975999213; Fri, 28
+ Oct 2022 09:53:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <Y1oPDy2mpOd91+Ii@sol.localdomain> <CAHk-=wjDQiJn6YUJ18Nb=L82qsgx3LBLtQu0xANeVoc6OAzFtQ@mail.gmail.com>
+ <Y1tI1ek80kCrsi2R@sol.localdomain>
+In-Reply-To: <Y1tI1ek80kCrsi2R@sol.localdomain>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 28 Oct 2022 09:53:03 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgud4Bc_um+htgfagYpZAnOoCb3NUoW67hc9LhOKsMtJg@mail.gmail.com>
+Message-ID: <CAHk-=wgud4Bc_um+htgfagYpZAnOoCb3NUoW67hc9LhOKsMtJg@mail.gmail.com>
+Subject: Re: [GIT PULL] fscrypt fix for 6.1-rc3
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the MAINTAINERS entries for the driver
+On Thu, Oct 27, 2022 at 8:13 PM Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> Thanks Linus.  That makes sense in general, but in this case ->s_master_keys
+> gets used in the middle of the function, in fscrypt_put_master_key_activeref().
 
-Signed-off-by: Sasha Finkelstein <fnkl.kernel@gmail.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+Ouch. I tried to look for things like that, but it's clearly indirect
+through 'mk' so I missed it.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e04d944005ba..4c9719a2439a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1908,6 +1908,7 @@ F:	Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
- F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
- F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
- F:	Documentation/devicetree/bindings/power/apple*
-+F:	Documentation/devicetree/bindings/pwm/pwm-apple.yaml
- F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
- F:	arch/arm64/boot/dts/apple/
- F:	drivers/clk/clk-apple-nco.c
-@@ -1921,6 +1922,7 @@ F:	drivers/mailbox/apple-mailbox.c
- F:	drivers/nvme/host/apple.c
- F:	drivers/nvmem/apple-efuses.c
- F:	drivers/pinctrl/pinctrl-apple-gpio.c
-+F:	drivers/pwm/pwm-apple.c
- F:	drivers/soc/apple/*
- F:	drivers/watchdog/apple_wdt.c
- F:	include/dt-bindings/interrupt-controller/apple-aic.h
--- 
-2.37.3
+All the callers except for put_crypt_info() do seem to have the 'sb'
+pointer, and I _think_ sb is inode->i_sb in that case. And this seems
+to *literally* be the only use of 'mk->mk_sb' in the whole data
+structure, so I think it's all wrong, and that field just shouldn't
+exist at all, but be passed into the (only) user as an argument.
 
+Oh well. Whatever. I think the code is ugly, but it is what it is. It
+may not be worth the churn of fixing.
+
+              Linus
