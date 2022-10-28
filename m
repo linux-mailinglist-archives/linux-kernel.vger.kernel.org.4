@@ -2,51 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C3361083E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 04:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40119610832
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 04:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236650AbiJ1Cid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 22:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
+        id S236281AbiJ1CiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 22:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236415AbiJ1Ch7 (ORCPT
+        with ESMTP id S236185AbiJ1Ch3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 22:37:59 -0400
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBC745202;
-        Thu, 27 Oct 2022 19:37:53 -0700 (PDT)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 29S2D5KH054600;
-        Fri, 28 Oct 2022 10:13:06 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 28 Oct
- 2022 10:35:59 +0800
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
-        <andrew@aj.id.au>, <hverkuil-cisco@xs4all.nl>,
-        <laurent.pinchart@ideasonboard.com>, <xavier.roumegue@oss.nxp.com>,
-        <ezequiel@vanguardiasur.com.ar>, <stanimir.varbanov@linaro.org>,
-        <nicolas.dufresne@collabora.com>, <sakari.ailus@linux.intel.com>,
-        <ming.qian@nxp.com>, <andrzej.p@collabora.com>,
-        <linux-media@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v11 5/5] media: aspeed: Extend debug message
-Date:   Fri, 28 Oct 2022 10:35:54 +0800
-Message-ID: <20221028023554.928-6-jammy_huang@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221028023554.928-1-jammy_huang@aspeedtech.com>
-References: <20221028023554.928-1-jammy_huang@aspeedtech.com>
+        Thu, 27 Oct 2022 22:37:29 -0400
+Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 766E0A474;
+        Thu, 27 Oct 2022 19:37:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=zqkmr
+        0wA7VhQA95CKLsLqZlQw5p80Szn0PM+lT5Es9U=; b=Jn2N7yUuCkWpV+D6wJUsq
+        QlXBH73ICQNd2e74cmEbhfANjsZaNAsAHPGP5ff8cZbmlkBkHEuCFfII5/RQJr8B
+        LAlsKha++y6hz6lIJFpa3rfu11Cwji7Ag7TDFuigYIgPAiqCk5n5qgFrqM1p3F5A
+        US09HfBkKlFJ2IM4MrZPpY=
+Received: from jbd-ThinkPad-X1-Nano-Gen-1.. (unknown [223.104.77.214])
+        by smtp7 (Coremail) with SMTP id C8CowADXe9VaQFtjLOfMOQ--.4894S2;
+        Fri, 28 Oct 2022 10:37:16 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     bhelgaas@google.com
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH v2] PCI: Add vendor ID for Quectel and Cinterion
+Date:   Fri, 28 Oct 2022 10:37:11 +0800
+Message-Id: <20221028023711.4196-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 29S2D5KH054600
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: C8CowADXe9VaQFtjLOfMOQ--.4894S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZF1UWw47tFy5CF4DZF4rAFb_yoW8GryfpF
+        s8CrWktr48JFW7Gw1vyr1DWF9FvFs0kFn8AF1agw4F9F47Xw48XryUArs0kryagFs2qrW5
+        XF1DCws0ga4DXw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pioUDkUUUUU=
+X-Originating-IP: [223.104.77.214]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiRxyoZFc7ZFzyLAAAsd
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,121 +51,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-updated as below:
+In MHI driver, there are some companies product still do not have their
+ own PCI vendor macro. So we add it here to make the code neat. Ref ID
+ could be found in link https://pcisig.com/membership/member-companies
+ and https://pciids.sourceforge.net/pci.ids . Thales use Cinterion as
+their IOT modem card's trademark. So you will find 0x1269 belongs to
+Thales. Actually, Cinterion belongs to Gemalto, and Gemalto belongs to
+ Thales.
 
-Capture:
-  Mode                : Direct fetch
-  VGA bpp mode        : 32
-  Signal              : lock
-  Width               : 1920
-  Height              : 1080
-  FRC                 : 0
-
-Compression:
-  Format              : JPEG
-  Subsampling         : 444
-  Quality             : 4
-
-Performance:
-  Frame#              : 4
-  Frame Duration(ms)  :
-    Now               : 22
-    Min               : 21
-    Max               : 22
-  FPS                 : 45
-
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
 ---
-v11:
-  - no update
-v10:
-  - no update
-v9:
-  - no update
-v8:
-  - no update
-v7:
-  - update debugfs message. Aspeed-jpeg's compression parameters only shown
-    if it's aspeed jpeg now
-v6:
-  - no update
-v5:
-  - no update
-v4:
-  - update debugfs log
-v3:
-  - no update
-v2:
-  - update commit message
----
- drivers/media/platform/aspeed/aspeed-video.c | 38 +++++++++++++++++++-
- 1 file changed, 37 insertions(+), 1 deletion(-)
+ include/linux/pci_ids.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/platform/aspeed/aspeed-video.c b/drivers/media/platform/aspeed/aspeed-video.c
-index 0b3605ebefc3..cf76aeee8cb6 100644
---- a/drivers/media/platform/aspeed/aspeed-video.c
-+++ b/drivers/media/platform/aspeed/aspeed-video.c
-@@ -1905,9 +1905,29 @@ static const struct vb2_ops aspeed_video_vb2_ops = {
- static int aspeed_video_debugfs_show(struct seq_file *s, void *data)
- {
- 	struct aspeed_video *v = s->private;
-+	u32 val08;
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index b362d90eb9b0..9e2b6286f53f 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -1765,6 +1765,8 @@
+ #define PCI_VENDOR_ID_SATSAGEM		0x1267
+ #define PCI_DEVICE_ID_SATSAGEM_NICCY	0x1016
  
- 	seq_puts(s, "\n");
- 
-+	seq_puts(s, "Capture:\n");
-+	val08 = aspeed_video_read(v, VE_CTRL);
-+	if (FIELD_GET(VE_CTRL_DIRECT_FETCH, val08)) {
-+		seq_printf(s, "  %-20s:\tDirect fetch\n", "Mode");
-+		seq_printf(s, "  %-20s:\t%s\n", "VGA bpp mode",
-+			   FIELD_GET(VE_CTRL_INT_DE, val08) ? "16" : "32");
-+	} else {
-+		seq_printf(s, "  %-20s:\tSync\n", "Mode");
-+		seq_printf(s, "  %-20s:\t%s\n", "Video source",
-+			   FIELD_GET(VE_CTRL_SOURCE, val08) ?
-+			   "external" : "internal");
-+		seq_printf(s, "  %-20s:\t%s\n", "DE source",
-+			   FIELD_GET(VE_CTRL_INT_DE, val08) ?
-+			   "internal" : "external");
-+		seq_printf(s, "  %-20s:\t%s\n", "Cursor overlay",
-+			   FIELD_GET(VE_CTRL_AUTO_OR_CURSOR, val08) ?
-+			   "Without" : "With");
-+	}
++#define PCI_VENDOR_ID_CINTERION		0x1269	/* Celluar Modules*/
 +
- 	seq_printf(s, "  %-20s:\t%s\n", "Signal",
- 		   v->v4l2_input_status ? "Unlock" : "Lock");
- 	seq_printf(s, "  %-20s:\t%d\n", "Width", v->pix_fmt.width);
-@@ -1916,13 +1936,29 @@ static int aspeed_video_debugfs_show(struct seq_file *s, void *data)
+ #define PCI_VENDOR_ID_ENSONIQ		0x1274
+ #define PCI_DEVICE_ID_ENSONIQ_CT5880	0x5880
+ #define PCI_DEVICE_ID_ENSONIQ_ES1370	0x5000
+@@ -2585,6 +2587,8 @@
+ #define PCI_VENDOR_ID_TEKRAM		0x1de1
+ #define PCI_DEVICE_ID_TEKRAM_DC290	0xdc29
  
- 	seq_puts(s, "\n");
- 
-+	seq_puts(s, "Compression:\n");
-+	seq_printf(s, "  %-20s:\t%s\n", "Format", format_str[v->format]);
-+	seq_printf(s, "  %-20s:\t%s\n", "Subsampling",
-+		   v->yuv420 ? "420" : "444");
-+	seq_printf(s, "  %-20s:\t%d\n", "Quality", v->jpeg_quality);
-+	if (v->format == VIDEO_FMT_ASPEED) {
-+		seq_printf(s, "  %-20s:\t%s\n", "HQ Mode",
-+			   v->hq_mode ? "on" : "off");
-+		seq_printf(s, "  %-20s:\t%d\n", "HQ Quality",
-+			   v->hq_mode ? v->jpeg_hq_quality : 0);
-+	}
++#define PCI_VENDOR_ID_QUECTEL		0x1eac
 +
-+	seq_puts(s, "\n");
-+
- 	seq_puts(s, "Performance:\n");
- 	seq_printf(s, "  %-20s:\t%d\n", "Frame#", v->sequence);
- 	seq_printf(s, "  %-20s:\n", "Frame Duration(ms)");
- 	seq_printf(s, "    %-18s:\t%d\n", "Now", v->perf.duration);
- 	seq_printf(s, "    %-18s:\t%d\n", "Min", v->perf.duration_min);
- 	seq_printf(s, "    %-18s:\t%d\n", "Max", v->perf.duration_max);
--	seq_printf(s, "  %-20s:\t%d\n", "FPS", 1000 / (v->perf.totaltime / v->sequence));
-+	seq_printf(s, "  %-20s:\t%d\n", "FPS",
-+		   (v->perf.totaltime && v->sequence) ?
-+		   1000/(v->perf.totaltime/v->sequence) : 0);
- 
- 	return 0;
- }
+ #define PCI_VENDOR_ID_TEHUTI		0x1fc9
+ #define PCI_DEVICE_ID_TEHUTI_3009	0x3009
+ #define PCI_DEVICE_ID_TEHUTI_3010	0x3010
 -- 
-2.25.1
+2.34.1
 
