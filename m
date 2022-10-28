@@ -2,470 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F337E611394
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0455611396
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiJ1NvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
+        id S230047AbiJ1NvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiJ1Nus (ORCPT
+        with ESMTP id S230012AbiJ1Nuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:50:48 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3204AD59;
-        Fri, 28 Oct 2022 06:50:01 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.94.2)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1ooPk8-0000YI-IJ; Fri, 28 Oct 2022 15:49:52 +0200
-Date:   Fri, 28 Oct 2022 14:49:43 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     "Frank Wunderlich (linux)" <linux@fw-web.de>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, Felix Fietkau <nbd@nbd.name>
-Subject: Re: [RFC v2 7/7] arm64: dts: mt7986: add Bananapi R3
-Message-ID: <Y1vd9+q2PzG5DIKa@makrotopia.org>
-References: <20221026093650.110290-1-linux@fw-web.de>
- <20221026093650.110290-8-linux@fw-web.de>
- <64daf96b-b2b5-6f02-91aa-58d19083ee01@collabora.com>
- <a97aa98a6230e7f33a6b5f5e2c9e54ce@fw-web.de>
+        Fri, 28 Oct 2022 09:50:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B05543C5;
+        Fri, 28 Oct 2022 06:50:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D710B82A38;
+        Fri, 28 Oct 2022 13:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B24F6C433C1;
+        Fri, 28 Oct 2022 13:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666965013;
+        bh=1mwCU2l86oW+AY5ci8JrwkgzX5tLCXsSWvdV74cxsfY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ee96sRInjDDIEir+DRfuN80SY76K3Ji7PDdAeYsDEB5noFsmhcjMARzlBmrUKsToF
+         dQ4a3oO9v7XxXdbPDJrDzE2jrSYgJtsJqqjctSranRA2RbuduacYCBYFYIOEon45SK
+         tJvDYxMXXUzNcGfXcAleudeHeRY4GQGR9oQvkU18jzb5wsediD3gMNks6v56eOeDcJ
+         gQP/NQi8qe+3+9WKBbQnbnXbZyk2hxquCvDtOCDNSrschxBLAhVpPsRByFq9i/ho2C
+         O5m7A182DdZu/XYF/hFb5ryheuYpxE/QtV0bgIGArjKFOorzMpyDXxQp8qHGPKky+3
+         zjHiseXOypC0g==
+Date:   Fri, 28 Oct 2022 08:50:09 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        quic_kalyant@quicinc.com, swboyd@chromium.org,
+        angelogioacchino.delregno@somainline.org, loic.poulain@linaro.org,
+        quic_vpolimer@quicinc.com, vkoul@kernel.org, dianders@chromium.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org,
+        Jonathan Marek <jonathan@marek.ca>, vinod.koul@linaro.org,
+        quic_jesszhan@quicinc.com
+Subject: Re: [PATCH v1 7/9] arm64: dts: qcom: sm8350: Add display system nodes
+Message-ID: <20221028135009.t4zaypnfoymmao6j@baldur>
+References: <20221028120812.339100-1-robert.foss@linaro.org>
+ <20221028120812.339100-8-robert.foss@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a97aa98a6230e7f33a6b5f5e2c9e54ce@fw-web.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221028120812.339100-8-robert.foss@linaro.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 12:57:44PM +0200, Frank Wunderlich (linux) wrote:
-> Am 2022-10-28 11:19, schrieb AngeloGioacchino Del Regno:
-> > Il 26/10/22 11:36, Frank Wunderlich ha scritto:
-> > > From: Frank Wunderlich <frank-w@public-files.de>
-> > > 
-> > > Add support for Bananapi R3 SBC.
-> > > 
-> > > - SD/eMMC support (switching first 4 bits of data-bus with sw6/D)
-> > > - all rj45 ports and both SFP working (eth1/lan4)
-> > > - all USB-Ports + SIM-Slot tested
-> > > - i2c and all uarts tested
-> > > - wifi tested
-> > > 
-> > > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> > > ---
-> > > SPI-NAND/NOR switched (CS by sw5/C) not yet included
-> > >    this is done with DT-Overlays in my tree, but i have no idea yet,
-> > >    how to upstream
-> > > 
-> > > break some lines in wifi-eeprom-data because of checkpatch warnings.
-> > > originally there were 8 x int32 per line
-> > > 
-> > > changes:
-> > > 
-> > > v2:
-> > > - remove pcie to be added later (discussion about clocks)
-> > > - some fixes based on suggestions on ML
-> > >    - add key suffix like it's done in mt7622-bpi-r64 devicetree
-> > >    - add dash in sfp node names
-> > >    - use reg as unit for switch-node
-> > >    - drop "-3-4" suffix from i2c-pins node name
-> > >    - fix order in Makefile
-> > > ---
-> > >   arch/arm64/boot/dts/mediatek/Makefile         |   2 +
-> > >   .../mediatek/mt7986a-bananapi-bpi-r3-emmc.dts |  34 +
-> > >   .../mediatek/mt7986a-bananapi-bpi-r3-sd.dts   |  29 +
-> > >   .../dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi | 593
-> > > ++++++++++++++++++
-> > >   4 files changed, 658 insertions(+)
-> > >   create mode 100644
-> > > arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts
-> > >   create mode 100644
-> > > arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts
-> > >   create mode 100644
-> > > arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
-> > > 
-> > > diff --git a/arch/arm64/boot/dts/mediatek/Makefile
-> > > b/arch/arm64/boot/dts/mediatek/Makefile
-> > > index 0ec90cb3ef28..e8902f2cc58f 100644
-> > > --- a/arch/arm64/boot/dts/mediatek/Makefile
-> > > +++ b/arch/arm64/boot/dts/mediatek/Makefile
-> > > @@ -7,6 +7,8 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-evb.dtb
-> > >   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-x20-dev.dtb
-> > >   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
-> > >   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-bananapi-bpi-r64.dtb
-> > > +dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-emmc.dtb
-> > > +dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-sd.dtb
-> > >   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-rfb.dtb
-> > >   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986b-rfb.dtb
-> > >   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8167-pumpkin.dtb
-> > > diff --git
-> > > a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts
-> > > b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts
-> > > new file mode 100644
-> > > index 000000000000..859b4180ca11
-> > > --- /dev/null
-> > > +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts
-> > > @@ -0,0 +1,34 @@
-> > > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> > > +/*
-> > > + * Copyright (C) 2021 MediaTek Inc.
-> > > + * Author: Sam.Shih <sam.shih@mediatek.com>
-> > > + */
-> > > +
-> > > +/dts-v1/;
-> > > +#include <dt-bindings/input/input.h>
-> > > +#include <dt-bindings/gpio/gpio.h>
-> > > +
-> > > +#include "mt7986a-bananapi-bpi-r3.dtsi"
-> > > +
-> > > +/ {
-> > > +	model = "Bananapi BPI-R3 (emmc)";
-> > > +};
-> > > +
-> > > +&mmc0 {
-> > > +	pinctrl-names = "default", "state_uhs";
-> > > +	pinctrl-0 = <&mmc0_pins_default>;
-> > > +	pinctrl-1 = <&mmc0_pins_uhs>;
-> > 
-> > pinctrl properties and power supply properties can go to the shared
-> > mt7986a-bananapi-bpi-r3.dtsi file.
+On Fri, Oct 28, 2022 at 02:08:10PM +0200, Robert Foss wrote:
+> Add mdss, mdss_mdp, dsi0, dsi0_phy nodes. With these
+> nodes the display subsystem is configured to support
+> one DSI output.
 > 
-> OK
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sm8350.dtsi | 196 ++++++++++++++++++++++++++-
+>  1 file changed, 192 insertions(+), 4 deletions(-)
 > 
-> > Also, I have a question here... so your hardware can take either eMMC
-> > or MicroSD... and... is there really no way to build in both devicetrees
-> > and having the bootloader to select the right one based on hardware
-> > version
-> > or on machine compatible?
-> 
-> as i wrote in description the board has both, an emmc-chip and microsd-slot,
-> but they cannot be used simultanously as mt7986 has only 1 mmc-controller.
-> BPI-R3 has a switch that changes the first 4 data-lines either to emmc or
-> microsd-slot. You have only 1 mmc-node that has to be configured to which
-> mmc-device you have connected, so i have to use 2 different devicetrees
-> here.
+> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> index b6e44cd3b394..eaa3cdee1860 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> @@ -3,6 +3,7 @@
+>   * Copyright (c) 2020, Linaro Limited
+>   */
+>  
+> +#include <dt-bindings/interconnect/qcom,sm8350.h>
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/clock/qcom,dispcc-sm8350.h>
+>  #include <dt-bindings/clock/qcom,gcc-sm8350.h>
+> @@ -2535,14 +2536,200 @@ usb_2_dwc3: usb@a800000 {
+>  			};
+>  		};
+>  
+> +		mdss: mdss@ae00000 {
 
-You could also use device tree overlays to select SDMMC or eMMC just
-like for the NOR vs. NAND choice on this board.
+display-subsystem@ae00000 please.
 
-> 
-> > I can see, on the wiki, that both bootloader and ATF can be customized
-> > (so,
-> > can be compiled and flashed just fine), so I would say that even if the
-> > "original" U-Boot doesn't distinguish devicetrees, you can definitely
-> > easily
-> > implement that.
-> 
-> i already boot a fit-image with 2 dts (and 2 overlays for spi-nand/nor) and
-> my uboot can check with "mmc partconf" if emmc is available and if not
-> choose the sd-dts.
+> +			compatible = "qcom,sm8350-mdss";
+> +			reg = <0 0x0ae00000 0 0x1000>;
+> +			reg-names = "mdss";
+> +
+> +			interconnects = <&mmss_noc MASTER_MDP0 0 &mc_virt SLAVE_EBI1 0>,
+> +					<&mmss_noc MASTER_MDP1 0 &mc_virt SLAVE_EBI1 0>;
+> +			interconnect-names = "mdp0-mem", "mdp1-mem";
+> +
+> +			power-domains = <&dispcc MDSS_GDSC>;
+> +			resets = <&dispcc DISP_CC_MDSS_CORE_BCR>;
+> +
+> +			clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +				 <&gcc GCC_DISP_HF_AXI_CLK>,
+> +				 <&gcc GCC_DISP_SF_AXI_CLK>,
+> +				 <&dispcc DISP_CC_MDSS_MDP_CLK>;
+> +			clock-names = "iface", "bus", "nrt_bus", "core";
+> +
+> +			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <1>;
+> +
+> +			status = "ok";
 
-Exactly. This is how it's done in OpenWrt as well.
+You want "disabled" here, and then "okay" in the .dts.
 
-> 
-> > If you have no idea how to recognize the boards, from a fast look at the
-> > board schematics, I can see that there's a bootstrap setting based on
-> > the
-> > state of GPIO0 and GPIO1... you can perhaps use that somehow?
-> > Otherwise, remember that, most of the times, there are other ways to
-> > determine
-> > the board version, like Board ID resistors...
-> 
-> but how should this effect the dts files here? originally i had the sd-card
-> dts as base and the emmc had overridden/deleted some properties there (so
-> only 2 dts-files). Had talked to Matthias and he suggested having a base
-> dtsi and 2 dts for the 2 mmc-configs.
-> 
-> > Also, still on the wiki, I can't see any no-eMMC version of this board:
-> > is
-> > the sd-only a pre-production version or..?
-> 
-> no sd/emmc-only version...1 board with 1 mmc-controller, but 2 "storages"
-> connected (only 1 functional based on hw switch setting)
-> 
-> > > +	bus-width = <8>;
-> > > +	max-frequency = <200000000>;
-> > > +	cap-mmc-highspeed;
-> > > +	mmc-hs200-1_8v;
-> > > +	mmc-hs400-1_8v;
-> > > +	hs400-ds-delay = <0x14014>;
-> > > +	vmmc-supply = <&reg_3p3v>;
-> > > +	vqmmc-supply = <&reg_1p8v>;
-> > > +	non-removable;
-> > > +	no-sd;
-> > > +	no-sdio;
-> > > +	status = "okay";
-> > > +};
-> > > +
-> > > diff --git
-> > > a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts
-> > > b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts
-> > > new file mode 100644
-> > > index 000000000000..57200407ab86
-> > > --- /dev/null
-> > > +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts
-> > > @@ -0,0 +1,29 @@
-> > > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> > > +/*
-> > > + * Copyright (C) 2021 MediaTek Inc.
-> > > + * Author: Sam.Shih <sam.shih@mediatek.com>
-> > > + */
-> > > +
-> > > +/dts-v1/;
-> > > +#include <dt-bindings/input/input.h>
-> > > +#include <dt-bindings/gpio/gpio.h>
-> > > +
-> > > +#include "mt7986a-bananapi-bpi-r3.dtsi"
-> > > +
-> > > +/ {
-> > > +	model = "Bananapi BPI-R3 (sdmmc)";
-> > > +};
-> > > +
-> > > +&mmc0 {
-> > > +	//sdcard
-> > 
-> > C-style comments please
-> 
-> ok
-> 
-> > > +	pinctrl-names = "default", "state_uhs";
-> > > +	pinctrl-0 = <&mmc0_pins_default>;
-> > > +	pinctrl-1 = <&mmc0_pins_uhs>;
-> > > +	bus-width = <4>;
-> > > +	max-frequency = <52000000>;
-> > > +	cap-sd-highspeed;
-> > > +	vmmc-supply = <&reg_3p3v>;
-> > > +	vqmmc-supply = <&reg_1p8v>;
-> > > +	status = "okay";
-> > > +};
-> > > +
-> > > diff --git
-> > > a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
-> > > b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
-> > > new file mode 100644
-> > > index 000000000000..fc100c3a6415
-> > > --- /dev/null
-> > > +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
-> > > @@ -0,0 +1,593 @@
-> > > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> > > +/*
-> > > + * Copyright (C) 2021 MediaTek Inc.
-> > > + * Authors: Sam.Shih <sam.shih@mediatek.com>
-> > > + *          Frank Wunderlich <frank-w@public-files.de>
-> > > + *          Daniel Golle <daniel@makrotopia.org>
-> > > + */
-> > > +
-> > > +/dts-v1/;
-> > > +#include <dt-bindings/input/input.h>
-> > > +#include <dt-bindings/gpio/gpio.h>
-> > > +#include <dt-bindings/leds/common.h>
-> > > +
-> > > +#include "mt7986a.dtsi"
-> > > +
-> > > +/ {
-> > > +	model = "Bananapi BPI-R3";
-> > > +	compatible = "bananapi,bpi-r3", "mediatek,mt7986a";
-> > > +
-> > > +	aliases {
-> > > +		serial0 = &uart0;
-> > > +		ethernet0 = &gmac0;
-> > > +		ethernet1 = &gmac1;
-> > > +	};
-> > > +
-> > > +	chosen {
-> > > +		stdout-path = "serial0:115200n8";
-> > > +	};
-> > > +
-> > > +	gpio-keys {
-> > > +		compatible = "gpio-keys";
-> > > +
-> > > +		factory-key {
-> > 
-> > I'd say that this is not "factory-key" but "reset-key"?
-> 
-> okay i rename it.
-> 
-> > > +			label = "reset";
-> > > +			linux,code = <KEY_RESTART>;
-> > > +			gpios = <&pio 9 GPIO_ACTIVE_LOW>;
+> +
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +
+> +			mdss_mdp: mdp@ae01000 {
 
-At least on my V1.0 board and reportedly also on V1.1 boards the RST
-button doesn't work. As soon as a NVME/M.2 module is inserted this
-also connects the GPIO just like if the button was pressed all the
-time. This issue has also been discussed in BananaPi forums.
+display-controller@ae01000 please.
 
+> +				compatible = "qcom,sm8350-dpu";
+> +				reg = <0 0x0ae01000 0 0x8f000>,
+> +				      <0 0x0aeb0000 0 0x2008>;
+> +				reg-names = "mdp", "vbif";
+> +				iommus = <&apps_smmu 0x820 0x402>;
+> +
+> +				clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
+> +					<&gcc GCC_DISP_SF_AXI_CLK>,
+> +					<&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +					<&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
+> +					<&dispcc DISP_CC_MDSS_MDP_CLK>,
+> +					<&dispcc DISP_CC_MDSS_VSYNC_CLK>;
+> +				clock-names = "bus",
+> +					      "nrt_bus",
+> +					      "iface",
+> +					      "lut",
+> +					      "core",
+> +					      "vsync";
+> +
+> +				assigned-clocks = <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
+> +				assigned-clock-rates = <19200000>;
+> +
+> +				operating-points-v2 = <&mdp_opp_table>;
+> +				power-domains = <&rpmhpd SM8350_MMCX>;
+> +
+> +				interrupt-parent = <&mdss>;
+> +				interrupts = <0>;
+> +
+> +				status = "ok";
 
-> > > +		};
-> > > +
-> > > +		wps-key {
-> > > +			label = "wps";
-> > > +			linux,code = <KEY_WPS_BUTTON>;
-> > > +			gpios = <&pio 10 GPIO_ACTIVE_LOW>;
-> > > +		};
-> > > +	};
-> > > +
-> > 
-> > ..snip..
-> > 
-> > > +
-> > > +	memory@40000000 {
-> > > +		device_type = "memory";
-> > > +		reg = <0 0x40000000 0 0x40000000>;
-> > 
-> > Doesn't your bootloader fill-in the memory size automatically?
+"okay", but this is the default, so you can skip it in the .dtsi
+
+> +
+> +				ports {
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +
+> +					port@0 {
+> +						reg = <0>;
+> +						dpu_intf1_out: endpoint {
+> +							remote-endpoint = <&dsi0_in>;
+> +						};
+> +					};
+> +				};
+> +
+> +				mdp_opp_table: mdp-opp-table {
+> +					compatible = "operating-points-v2";
+> +
+> +					opp-200000000 {
+> +						opp-hz = /bits/ 64 <200000000>;
+> +						required-opps = <&rpmhpd_opp_low_svs>;
+> +					};
+> +
+> +					opp-300000000 {
+> +						opp-hz = /bits/ 64 <300000000>;
+> +						required-opps = <&rpmhpd_opp_svs>;
+> +					};
+> +
+> +					opp-345000000 {
+> +						opp-hz = /bits/ 64 <345000000>;
+> +						required-opps = <&rpmhpd_opp_svs_l1>;
+> +					};
+> +
+> +					opp-460000000 {
+> +						opp-hz = /bits/ 64 <460000000>;
+> +						required-opps = <&rpmhpd_opp_nom>;
+> +					};
+> +				};
+> +			};
+> +
+> +			dsi0: dsi@ae94000 {
+> +				compatible = "qcom,mdss-dsi-ctrl";
+> +				reg = <0 0x0ae94000 0 0x400>;
+> +				reg-names = "dsi_ctrl";
+> +
+> +				interrupt-parent = <&mdss>;
+> +				interrupts = <4>;
+> +
+> +				clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_ESC0_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +					 <&gcc GCC_DISP_HF_AXI_CLK>;
+> +				clock-names = "byte",
+> +					      "byte_intf",
+> +					      "pixel",
+> +					      "core",
+> +					      "iface",
+> +					      "bus";
+> +
+> +				assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>,
+> +						  <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
+> +				assigned-clock-parents = <&dsi0_phy 0>,
+> +							 <&dsi0_phy 1>;
+> +
+> +				operating-points-v2 = <&dsi_opp_table>;
+> +				power-domains = <&rpmhpd SM8350_MMCX>;
+> +
+> +				phys = <&dsi0_phy>;
+> +				phy-names = "dsi";
+> +
+> +				status = "disabled";
+> +
+> +				ports {
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +
+> +					port@0 {
+> +						reg = <0>;
+> +						dsi0_in: endpoint {
+> +							remote-endpoint = <&dpu_intf1_out>;
+> +						};
+> +					};
+> +
+> +					port@1 {
+> +						reg = <1>;
+> +						dsi0_out: endpoint {
+> +						};
+> +					};
+> +				};
+> +			};
+> +
+> +			dsi0_phy: dsi-phy@ae94400 {
+> +				compatible = "qcom,dsi-phy-5nm-8350";
+> +				reg = <0 0x0ae94400 0 0x200>,
+> +				      <0 0x0ae94600 0 0x280>,
+> +				      <0 0x0ae94900 0 0x260>;
+> +				reg-names = "dsi_phy",
+> +					    "dsi_phy_lane",
+> +					    "dsi_pll";
+> +
+> +				#clock-cells = <1>;
+> +				#phy-cells = <0>;
+> +
+> +				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +					 <&rpmhcc RPMH_CXO_CLK>;
+> +				clock-names = "iface", "ref";
+> +
+> +				status = "disabled";
+> +
+> +				dsi_opp_table: dsi-opp-table {
+> +					compatible = "operating-points-v2";
+> +
+> +					opp-187500000 {
+> +						opp-hz = /bits/ 64 <187500000>;
+> +						required-opps = <&rpmhpd_opp_low_svs>;
+> +					};
+> +
+> +					opp-300000000 {
+> +						opp-hz = /bits/ 64 <300000000>;
+> +						required-opps = <&rpmhpd_opp_svs>;
+> +					};
+> +
+> +					opp-358000000 {
+> +						opp-hz = /bits/ 64 <358000000>;
+> +						required-opps = <&rpmhpd_opp_svs_l1>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+>  		dispcc: clock-controller@af00000 {
+>  			compatible = "qcom,sm8350-dispcc";
+>  			reg = <0 0x0af00000 0 0x10000>;
+>  			clocks = <&rpmhcc RPMH_CXO_CLK>,
+> -				 <0>,
+> -				 <0>,
+> -				 <0>,
+> -				 <0>,
+> +				 <&dsi0_phy 0>, <&dsi0_phy 1>,
+> +				 <0>, <0>,
+>  				 <0>,
+>  				 <0>;
+>  			clock-names = "bi_tcxo",
+> @@ -2557,6 +2744,7 @@ dispcc: clock-controller@af00000 {
+>  			#power-domain-cells = <1>;
+>  
+>  			power-domains = <&rpmhpd SM8350_MMCX>;
+> +			required-opps = <&rpmhpd_opp_turbo>;
+
+That seems a little bit aggressive, is the opp-based voting from within
+the mdss/dpu not sufficient?
+
+Regards,
+Bjorn
+
+>  		};
+>  
+>  		adsp: remoteproc@17300000 {
+> -- 
+> 2.34.1
 > 
-> have not tried yet.
-> 
-> > > +	};
-> > > +
-> > > +	reg_1p8v: regulator-1p8v {
-> > > +		compatible = "regulator-fixed";
-> > > +		regulator-name = "fixed-1.8V";
-> > 
-> > This is "avdd18", isn't it?
-> 
-> need to check
-> 
-> > > +		regulator-min-microvolt = <1800000>;
-> > > +		regulator-max-microvolt = <1800000>;
-> > > +		regulator-boot-on;
-> > > +		regulator-always-on;
-> > 
-> > All these regulators have a vin-supply: please fill it in.
-> > Moreover, in the schematics, I can also see other LDOs: 0.9VD (input
-> > +12VD),
-> > AVDD12 (input 1.8VD), DDRV_VPP (input 3.3VD)...
-> 
-> ok
-> 
-> > Of course, this means that you have one more 1.8V regulator, called
-> > 1.8vd.
-> > 
-> > > +	};
-> > > +
-> > > +	reg_3p3v: regulator-3p3v {
-> > > +		compatible = "regulator-fixed";
-> > > +		regulator-name = "fixed-3.3V";
-> > 
-> > regulator-name = "3.3vd";
-> > 
-> > > +		regulator-min-microvolt = <3300000>;
-> > > +		regulator-max-microvolt = <3300000>;
-> > > +		regulator-boot-on;
-> > > +		regulator-always-on;
-> > 
-> > vin-supply = <&dcin>; (dcin: regulator-12vd { ... })
-> > 
-> > > +	};
-> > > +
-> > > +	reg_5v: regulator-5v {
-> > > +		compatible = "regulator-fixed";
-> > > +		regulator-name = "fixed-5V";
-> > 
-> > regulator-name  = "fixed-5p1";
-> > 
-> > > +		regulator-min-microvolt = <5000000>;
-> > > +		regulator-max-microvolt = <5000000>;
-> > 
-> > Schematics say "+5V: 5.1V/3A", so this is not 5000000.
-> > 
-> > > +		regulator-boot-on;
-> > > +		regulator-always-on;
-> > 
-> > 
-> > vin-supply = <&dcin>;
-> > 
-> > > +	};
-> > > +
-> > 
-> > ..snip..
-> > 
-> > > +
-> > > +&pio {
-> > > +	i2c_pins: i2c-pins {
-> > > +		mux {
-> > > +			function = "i2c";
-> > > +			groups = "i2c";
-> > > +		};
-> > > +	};
-> > > +
-> > > +	mmc0_pins_default: mmc0-pins {
-> > > +		mux {
-> > > +			function = "emmc";
-> > > +			groups = "emmc_51";
-> > > +		};
-> > > +		conf-cmd-dat {
-> > > +			pins = "EMMC_DATA_0", "EMMC_DATA_1", "EMMC_DATA_2",
-> > > +			       "EMMC_DATA_3", "EMMC_DATA_4", "EMMC_DATA_5",
-> > > +			       "EMMC_DATA_6", "EMMC_DATA_7", "EMMC_CMD";
-> > > +			input-enable;
-> > > +			drive-strength = <4>;
-> > > +			mediatek,pull-up-adv = <1>;	/* pull-up 10K */
-> > 
-> > Can we please stop using these custom pull-{up,down}-adv properties?
-> > Check what was done on pinctrl-mt8192.c (and dt schema) for more
-> > information
-> > and examples.
-> 
-> need to check these with MTK.
-> 
-> > > +		};
-> > > +		conf-clk {
-> > 
-> > ..snip..
-> > 
-> > > +
-> > > +&wifi {
-> > > +	status = "okay";
-> > > +	pinctrl-names = "default", "dbdc";
-> > > +	pinctrl-0 = <&wf_2g_5g_pins>, <&wf_led_pins>;
-> > > +	pinctrl-1 = <&wf_dbdc_pins>, <&wf_led_pins>;
-> > > +
-> > > +	mediatek,eeprom-data = <0x86790900 0xc4326 0x60000000 0x00 0x00
-> > > 0x00 0x00 0x00
-> > 
-> > Ouch! This looks like firmware unrolled in a devicetree property - that
-> > can't
-> > be right.
-> > 
-> > Please dump that in a binary file and load it as firmware from
-> > userspace.
-> 
-> it uses the mt76 driver and here eeprom can only be loaded from
-> mtd-partition or from device tree. Previous attempts loading eeprom data
-> from userspace file (like it's done for "normal" firmware) were rejected.
-
-Note that strictly speaking this is not firmware but rather calibration
-data (ie. board-specific configuration, not code).
-
-In case you don't like the large amount of data in the DTS file, you
-can use the /incbin/ statement to include it from a file instead.
-
-As there is no physical EEPROM nor calibration data stored anywhere in
-he flash there is no easy way the driver could request a board-specific
-filename, unlike e.g. ath10k requesting BDF from userspace.
-In the past (e.g. out-of-tree patches for rt2x00 driver allowing it's
-use on Rt305x WiSoC) this lack of a board-specific filename has lead to
-people treating the file just like a generic firmware file: ignoring
-the board-specific nature of calibration data and just copying it from
-another board... As a work-around to prevent that, we could at least
-embed the filename in the dts or hack the driver to request a filename
-based on the top level 'compatible' string of the board's device tree.
-
-I've added Felix to Cc: as he suggested that solution back then.
-
-
-Cheers
-
-
-Daniel
