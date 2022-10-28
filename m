@@ -2,81 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9AD1610A59
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 131B4610A5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiJ1GbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
+        id S229832AbiJ1GfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiJ1GbQ (ORCPT
+        with ESMTP id S229808AbiJ1GfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:31:16 -0400
-Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FBA10C4E8;
-        Thu, 27 Oct 2022 23:31:12 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id WGH00009;
-        Fri, 28 Oct 2022 14:31:09 +0800
-Received: from localhost.localdomain (10.200.104.97) by
- jtjnmail201607.home.langchao.com (10.100.2.7) with Microsoft SMTP Server id
- 15.1.2507.12; Fri, 28 Oct 2022 14:31:08 +0800
-From:   Bo Liu <liubo03@inspur.com>
-To:     <brendan.higgins@linux.dev>, <davidgow@google.com>
-CC:     <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
-        <linux-kernel@vger.kernel.org>, Bo Liu <liubo03@inspur.com>
-Subject: [PATCH] kunit: Include missing header
-Date:   Fri, 28 Oct 2022 02:30:55 -0400
-Message-ID: <20221028063055.2817-1-liubo03@inspur.com>
-X-Mailer: git-send-email 2.18.2
+        Fri, 28 Oct 2022 02:35:17 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20ABB4E868
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:35:11 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id j16so6694388lfe.12
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:35:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pb7xGr5fuIL0NtgblTv6xk3hHUrL7glkJIQ1IQxfKe0=;
+        b=LGKirD4g4sEgrYlAgmBzFtanqc37blQX7pVANXmUEABnGRnY8Gnhu+snFNg0jtcOVA
+         YaBIDYN6P3azAhOhFP2VFHhjH++1PB+BLGNftuxPleXdycA4aDS9YOLN+wChsscxxJZg
+         1XaehjH+Yv1b3mAd5t6WkH4ESR7jAxsl/sa09FAuHpu+siIrk0paojW8++r4JVrNqFRP
+         aJ0JnQadFy9vwd8QTTsYk+wBHMDzXzOTKqknORAPdgI0M1w6Y894G4VPoSlTzMORpha6
+         eSyb3DkTxm6EE5lZtO56GyGv4uLxcIoZ1Iayal5BGHfuxU54yU9vYoaHb+Y7EwBeKXvB
+         Js7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pb7xGr5fuIL0NtgblTv6xk3hHUrL7glkJIQ1IQxfKe0=;
+        b=kgd+DAGblpGqBVbbgmTM/ErgoKj/vw+qL9j/dXAAknp2Q2qs7Fck/y86NRbRT2qxXs
+         V9nMiVkdvl3jlB3jx4g8tkYbimCztiUHpOUzwFzmJn6YgM4zCti09XNcIgQhk1BRhBeT
+         suOoDm2+Ct1BBzjpNHazKibbpNj3ONwt7xOf45NKMgfmp1yYnmM6OwWdNPX/RF3+K5zM
+         4ukxZ6IjIH4T0oiHUDrecV3QXu3Yp0x6O+ngc6GIt5vgA5VW0EZBUaGzms5vHIr+Yhoh
+         d+fub2aC31JBg5TIag+XzPO/SBGylQzLKMW6NW7UdZLsrLzgmt21KkqJr1jU92gyYGYX
+         KpvA==
+X-Gm-Message-State: ACrzQf1o28ixQfuUAblrhoUYeQK3xO3CWKwYvaqvq2nEt93Qgn0iEyZg
+        ODbUAZSlkf9L3WTcHh1V4vg=
+X-Google-Smtp-Source: AMsMyM5ce5Dwx9A9W0LAtuDx5Y8cJ+Ijh5AUsBbrGsXPkOfIY1uAdZBBp/3xYcUPUMibJR8f9HbgFQ==
+X-Received: by 2002:a05:6512:3049:b0:4a2:7daa:cca5 with SMTP id b9-20020a056512304900b004a27daacca5mr18575041lfb.44.1666938909326;
+        Thu, 27 Oct 2022 23:35:09 -0700 (PDT)
+Received: from elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net ([20.240.130.248])
+        by smtp.googlemail.com with ESMTPSA id y16-20020a199150000000b004aa8cae6889sm440210lfj.262.2022.10.27.23.35.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 23:35:08 -0700 (PDT)
+From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev,
+        Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+Subject: [PATCH v5 0/6] staging: vt6655: a series of checkpatch fixes on the file: rxtx.c
+Date:   Fri, 28 Oct 2022 06:34:59 +0000
+Message-Id: <cover.1666849707.git.tanjubrunostar0@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.200.104.97]
-tUid:   20221028143109f24a302985491c280d98218309c435e6
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The file debugfs.c missed the header debugfs.h, which
-resulted on the following warning:
+The fixes are similar, mostly long lines splitting. I had to make
+serveral patches to ease the work of inspectors
 
-lib/kunit/debugfs.c:28:6: warning: no previous prototype for 'kunit_debugfs_cleanup' [-Wmissing-prototypes]
- void kunit_debugfs_cleanup(void)
-      ^~~~~~~~~~~~~~~~~~~~~
-lib/kunit/debugfs.c:33:6: warning: no previous prototype for 'kunit_debugfs_init' [-Wmissing-prototypes]
- void kunit_debugfs_init(void)
-      ^~~~~~~~~~~~~~~~~~
-lib/kunit/debugfs.c:92:6: warning: no previous prototype for 'kunit_debugfs_create_suite' [-Wmissing-prototypes]
- void kunit_debugfs_create_suite(struct kunit_suite *suite)
-      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-lib/kunit/debugfs.c:108:6: warning: no previous prototype for 'kunit_debugfs_destroy_suite' [-Wmissing-prototypes]
- void kunit_debugfs_destroy_suite(struct kunit_suite *suite)
+v2: fixed a compilation error found by the kernel test robot and
+recompiled the code
 
-Signed-off-by: Bo Liu <liubo03@inspur.com>
----
- lib/kunit/debugfs.c | 1 +
- 1 file changed, 1 insertion(+)
+v3: tends out the error persisted in the second version. this version is
+a correction of that
 
-diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-index 1048ef1b8d6e..83411075f614 100644
---- a/lib/kunit/debugfs.c
-+++ b/lib/kunit/debugfs.c
-@@ -10,6 +10,7 @@
- #include <kunit/test.h>
- 
- #include "string-stream.h"
-+#include "debugfs.h"
- 
- #define KUNIT_DEBUGFS_ROOT             "kunit"
- #define KUNIT_DEBUGFS_RESULTS          "results"
+v4: did some corrections as recommended by Greg KH
+
+v5: shortend changelog comments as recommended by Greg KH
+
+Tanjuate Brunostar (6):
+  staging: vt6655: fix lines ending in a '('
+  staging: vt6655: refactor code in s_uGetRTSCTSDuration
+  staging: vt6655: refactor code in s_uFillDataHead
+  staging: vt6655: refactor code in s_vGenerateTxParamete
+  staging: vt6655: refactor code in the rest of the file
+  staging: vt6655: refactor code to avoid a line ending in '('
+
+ drivers/staging/vt6655/rxtx.c | 542 ++++++++++++++++++++--------------
+ 1 file changed, 324 insertions(+), 218 deletions(-)
+
 -- 
-2.27.0
+2.34.1
 
