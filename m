@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBC761076E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 03:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B4D61076F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 03:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235872AbiJ1BtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 21:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49624 "EHLO
+        id S236016AbiJ1BtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 21:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235808AbiJ1Bsp (ORCPT
+        with ESMTP id S235783AbiJ1Bsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 21:48:45 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F58AC2B8
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:48:44 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id m6so2609112qkm.4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:48:44 -0700 (PDT)
+        Thu, 27 Oct 2022 21:48:47 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33B3ACA2D
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:48:45 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id ml12so3221739qvb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:48:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=B4DUoigKs4i4MiSm7mPBHdj9bSfZn7HJiVErqHP64bE=;
-        b=UP9smFtqIJjIO979pi3gSZOEWo/rG0oI4HF9M0LEHAkvHp0V+9yCj+EFIWT+WIobvN
-         RfXWB5vQJOGlcZIpP5JRkmeKnkUGDAPNU8TE9KKqlYfpywXW7A4opkitijzTa7Dg7Q6l
-         fRRc7iK57T0KY6v/5JyGUtzB0dVtv54gf9vhTNn0BTQkbUo54qO3ozfQxN+Lqe7a0+me
-         P5/7Q/JRXLtmh2jZ3G+pzxKK4D8uQ56ag8AB6iWUh+hWBZljw85ghQF4Hk+QyWmHrOLk
-         +27V0GcsMkSKqYLgMfpF163SYYnLlGY+BNn/bgGUlSWHdWp510X8wk4rVUCqBj7lFfVw
-         1POQ==
+        bh=ABM6Qj3NxZjFFbqew+a/nfxO7MCA2/sBgc75TPhkyfM=;
+        b=le7KQwhYNdT4o/G8faZuKZXaCQiXbXPzBmn798kEV24s0tzqVbeGPRvNyLryj9dAlj
+         pPuid4IZ28NwSfPeNRpfKwtRBYyChRs9krVINrXT6P425p7iKXtZg9SnSs9yUfb0xxsu
+         fFMJFPz1jG+sZ5c2m2SBaxXwFDX50BiR4FQOnT7Yriyl9sJNKS5ajPzcryjcyWZSJosn
+         eg4mlVdL2i7njhKs/KZoF//9ih8iepdsjOb2p65+PKgjFUZKRI75wel6G8JladusSbk7
+         tI6tJ1E2VbPB1b5MRRj0FzEQbivYfo07HZ0onwLeZQTL+4odD9kPgJhJ/M/e0AudE6FS
+         Wzxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=B4DUoigKs4i4MiSm7mPBHdj9bSfZn7HJiVErqHP64bE=;
-        b=4Uhoz6VK+QQ+qUV6HKimQY5bBvOWYP3gEz+jV0gznPm3EGEVCEfg+EI6b2mBTqf3Rn
-         oNFU7Tn4JxTTYpLE1EMAJvfIvsW/SOW3rJezMzDZ1VP6OoKfGCt19qQmWiu1GDPSjvJW
-         VXLpRJp5m4kcgHzOwYPj3oSZmYUXCDy9CBFyFFW7mgk4wzrmouP6qu/HKSrCPadeK99D
-         lln80lMGuBbtEk8Qo5Jxa5gO2rp7CuKqhTSMJaNtDaYIpwxx+VFBnxbqreAX6qHpWvRL
-         7is7No7sUhhKH3WldUZrbazeNzb9R+h9QDeWJ555ERdp7QyFdBnXgtFH7ablfAkFpU8c
-         55MQ==
-X-Gm-Message-State: ACrzQf0Kw2nqktin+WX9p4sv20zZraTJYDqtjdmGxWByo1e4OLqpj4iY
-        qXodrFYDEI0gV4prEGtRe48Z4OIVvhw=
-X-Google-Smtp-Source: AMsMyM62bQm2oaXxoSO0wsgEfbitbvsBYBDq7GQ+ii63cmFBLU9QqGhopJZuWn3ehRSFDIZuxGUAdA==
-X-Received: by 2002:a05:620a:2629:b0:6ee:b2cf:aeb5 with SMTP id z41-20020a05620a262900b006eeb2cfaeb5mr36464857qko.62.1666921723522;
-        Thu, 27 Oct 2022 18:48:43 -0700 (PDT)
+        bh=ABM6Qj3NxZjFFbqew+a/nfxO7MCA2/sBgc75TPhkyfM=;
+        b=lrj7OxhgMrRRVdEOXbY+LgwL9z04udhy7DNjeH0IDjTLyci3RQIV7JH09Qj+c7gd/I
+         FdOMlzK4fbkbSr2fdtzhDP9o2TcQkPnFT3D7JksH06A6KzEmPuLOybWb8ypzaP5Oh2NC
+         sVqkcak8rJsubxPgcgEzZE1S3rvlVeUuof1V+tYyRV3o+9jiaRykoT0SPKT4lxLYxLmx
+         HErm36xafjXpB5LR5G95IJmojCHsxhhTt/7GMCG0SOcRtcHNDtJStqrkwEpKXUQ25grx
+         m6WWwFN4Xrf2RFLiZyeKWp+hMgzWgFgLzG/3k6UNy7SyoKOPEe1C14xsHzXiYXTwrIwF
+         XvBA==
+X-Gm-Message-State: ACrzQf2+YmLW1X9kvFdNFMB502PhHxd6D/FMRPZ4YSuehYUZSexnwyGY
+        TBo2MMkDw0SRzkTXq4HdgWP07yQhu1g=
+X-Google-Smtp-Source: AMsMyM6y5o2f6DKZDjf+gGHOkL8khewfMCHI7Y6dO4VQSwBoYqHYaZTUeck/sHhN2PpD0WPVsCCtlw==
+X-Received: by 2002:a0c:b256:0:b0:4b1:9f77:91da with SMTP id k22-20020a0cb256000000b004b19f7791damr44783109qve.84.1666921724552;
+        Thu, 27 Oct 2022 18:48:44 -0700 (PDT)
 Received: from localhost ([2601:589:4102:4c7c:d8d0:78d7:ad97:2651])
-        by smtp.gmail.com with ESMTPSA id l13-20020a05620a28cd00b006f8665f483fsm2120991qkp.85.2022.10.27.18.48.43
+        by smtp.gmail.com with ESMTPSA id o18-20020a05620a2a1200b006cddf59a600sm2086846qkp.34.2022.10.27.18.48.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 18:48:43 -0700 (PDT)
+        Thu, 27 Oct 2022 18:48:44 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 5/6] bitmap: fix opencoded bitmap_allocate_region()
-Date:   Thu, 27 Oct 2022 18:48:33 -0700
-Message-Id: <20221028014834.572819-6-yury.norov@gmail.com>
+Subject: [PATCH 6/6] bitmap: drop _reg_op()
+Date:   Thu, 27 Oct 2022 18:48:34 -0700
+Message-Id: <20221028014834.572819-7-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221028014834.572819-1-yury.norov@gmail.com>
 References: <20221028014834.572819-1-yury.norov@gmail.com>
@@ -73,30 +73,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bitmap_find_region() opencodes bitmap_allocate_region(). Fix it.
+Now that all _reg_op() users are switched to alternative functions,
+_reg_op() is not needed anymore.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- lib/bitmap.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ lib/bitmap.c | 76 ----------------------------------------------------
+ 1 file changed, 76 deletions(-)
 
 diff --git a/lib/bitmap.c b/lib/bitmap.c
-index 389446b6f248..2a85fe16f3fa 100644
+index 2a85fe16f3fa..4aa4e871c95d 100644
 --- a/lib/bitmap.c
 +++ b/lib/bitmap.c
-@@ -1315,10 +1315,8 @@ int bitmap_find_free_region(unsigned long *bitmap, unsigned int bits, int order)
- 	unsigned int pos, end;		/* scans bitmap by regions of size order */
- 
- 	for (pos = 0 ; (end = pos + (1U << order)) <= bits; pos = end) {
--		if (!bitmap_empty_from(bitmap, pos, pos + BIT(order)))
--			continue;
--		bitmap_set(bitmap, pos, pos + BIT(order));
--		return pos;
-+		if (!bitmap_allocate_region(bitmap, pos, order))
-+			return pos;
- 	}
- 	return -ENOMEM;
+@@ -1220,82 +1220,6 @@ void bitmap_fold(unsigned long *dst, const unsigned long *orig,
  }
+ #endif /* CONFIG_NUMA */
+ 
+-/*
+- * Common code for bitmap_*_region() routines.
+- *	bitmap: array of unsigned longs corresponding to the bitmap
+- *	pos: the beginning of the region
+- *	order: region size (log base 2 of number of bits)
+- *	reg_op: operation(s) to perform on that region of bitmap
+- *
+- * Can set, verify and/or release a region of bits in a bitmap,
+- * depending on which combination of REG_OP_* flag bits is set.
+- *
+- * A region of a bitmap is a sequence of bits in the bitmap, of
+- * some size '1 << order' (a power of two), aligned to that same
+- * '1 << order' power of two.
+- *
+- * Returns 1 if REG_OP_ISFREE succeeds (region is all zero bits).
+- * Returns 0 in all other cases and reg_ops.
+- */
+-
+-enum {
+-	REG_OP_ISFREE,		/* true if region is all zero bits */
+-	REG_OP_ALLOC,		/* set all bits in region */
+-	REG_OP_RELEASE,		/* clear all bits in region */
+-};
+-
+-static int __reg_op(unsigned long *bitmap, unsigned int pos, int order, int reg_op)
+-{
+-	int nbits_reg;		/* number of bits in region */
+-	int index;		/* index first long of region in bitmap */
+-	int offset;		/* bit offset region in bitmap[index] */
+-	int nlongs_reg;		/* num longs spanned by region in bitmap */
+-	int nbitsinlong;	/* num bits of region in each spanned long */
+-	unsigned long mask;	/* bitmask for one long of region */
+-	int i;			/* scans bitmap by longs */
+-	int ret = 0;		/* return value */
+-
+-	/*
+-	 * Either nlongs_reg == 1 (for small orders that fit in one long)
+-	 * or (offset == 0 && mask == ~0UL) (for larger multiword orders.)
+-	 */
+-	nbits_reg = 1 << order;
+-	index = pos / BITS_PER_LONG;
+-	offset = pos - (index * BITS_PER_LONG);
+-	nlongs_reg = BITS_TO_LONGS(nbits_reg);
+-	nbitsinlong = min(nbits_reg,  BITS_PER_LONG);
+-
+-	/*
+-	 * Can't do "mask = (1UL << nbitsinlong) - 1", as that
+-	 * overflows if nbitsinlong == BITS_PER_LONG.
+-	 */
+-	mask = (1UL << (nbitsinlong - 1));
+-	mask += mask - 1;
+-	mask <<= offset;
+-
+-	switch (reg_op) {
+-	case REG_OP_ISFREE:
+-		for (i = 0; i < nlongs_reg; i++) {
+-			if (bitmap[index + i] & mask)
+-				goto done;
+-		}
+-		ret = 1;	/* all bits in region free (zero) */
+-		break;
+-
+-	case REG_OP_ALLOC:
+-		for (i = 0; i < nlongs_reg; i++)
+-			bitmap[index + i] |= mask;
+-		break;
+-
+-	case REG_OP_RELEASE:
+-		for (i = 0; i < nlongs_reg; i++)
+-			bitmap[index + i] &= ~mask;
+-		break;
+-	}
+-done:
+-	return ret;
+-}
+-
+ /**
+  * bitmap_find_free_region - find a contiguous aligned mem region
+  *	@bitmap: array of unsigned longs corresponding to the bitmap
 -- 
 2.34.1
 
