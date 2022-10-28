@@ -2,154 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF7A611AD0
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3461611AD6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbiJ1TUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 15:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45278 "EHLO
+        id S229992AbiJ1TYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 15:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJ1TUE (ORCPT
+        with ESMTP id S229473AbiJ1TYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 15:20:04 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3F6C07;
-        Fri, 28 Oct 2022 12:20:02 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id o28so1440018qkl.4;
-        Fri, 28 Oct 2022 12:20:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XFtzDp1GmCsTv7CuMlTyHutAb+I5WP7vletAv2HWDNc=;
-        b=EpEDr6Ey6WfAXuzpa4OZrcb2T5JyYMgqDvYRgnKe5QjROwWYyUDbl5XL7UlTlCcDOT
-         ubcIGNK3xYa5pgURVJ2ur1lrulnFssCwYhEdSCD19ATc3tTjyVlXvDYpvhfLkuTiUfn5
-         adqbdblIMRG+vdv/YyDzV2QQ8HztVP+GivJX74mcUgy+x7QuCIgdQoijWes81oaDJvBZ
-         PubF0EXcWPu1FMzYm4uMb+niofLQ4VX/er0acUiMZjhmQLktTYPxaIVpZU9R4HEyo//T
-         4wMU9Q3XB/w5dIpMiFGjy2w4NL0412VmuQIsNhapKJSh1Vyci7MkT5F5aJ7ghGZ78bFq
-         wJUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XFtzDp1GmCsTv7CuMlTyHutAb+I5WP7vletAv2HWDNc=;
-        b=KYIjNDk+D+gwcVjP+tDoZ2NH3xbGLL4UKp1A7kQdYlHlOLa7RI+nBpCDwOHy3JD8fP
-         vPWWX+ECoYdWr0tMNJWnBebXdFxvhjkxctaNRmlveiFlFuMw+vNaZjbjeByiN8CQZBpw
-         5GC2pIaGUM2OoTlwwPf/cuWfy4pyd4tjzqCx3PSpMrc5OAfR3Vw0IAVpB/Pt39WYiIY1
-         yp5WwIGk2WSqUm4a/UGywlQZCg4OF+4qV6txq6WxSBiw0uwCq/ZXx5+NGbYMa7FbHzzQ
-         AVpYrjw1OwTBzCVhvY1s0eRXi+o9RYgwinITIdqjQ2qfGujUShc5oEzQLI2cLTh/GizR
-         cr3w==
-X-Gm-Message-State: ACrzQf0jSaHqwSa/O0Q5VhIdF+JdN9Hi1sv12nR5PQMqyAhNKNL+bLVr
-        aj4KK3denjpjQVaXInFBeZB7cHVC/r4dmw==
-X-Google-Smtp-Source: AMsMyM5oZr8OPAlWj4c3h/ga6550MUS6ZhwfBdY9Ty3fAWElG5gkSSJGyXnHzommGtawZMqllL7utw==
-X-Received: by 2002:a05:620a:2601:b0:6bc:70bb:c56b with SMTP id z1-20020a05620a260100b006bc70bbc56bmr665970qko.416.1666984801430;
-        Fri, 28 Oct 2022 12:20:01 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id d20-20020ac851d4000000b00399fe4aac3esm2783285qtn.50.2022.10.28.12.19.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 12:20:00 -0700 (PDT)
-Message-ID: <28a8fccb-508c-7a49-a79a-5167da8fba81@gmail.com>
-Date:   Fri, 28 Oct 2022 12:19:48 -0700
+        Fri, 28 Oct 2022 15:24:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3172303FF;
+        Fri, 28 Oct 2022 12:24:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37BA56281C;
+        Fri, 28 Oct 2022 19:24:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA3EFC433C1;
+        Fri, 28 Oct 2022 19:24:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666985051;
+        bh=ot5Sa9Mlp08Yo/46BwMaqi/qloDRG4Ii89sgfRGOd54=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=ojd1RVNw6hyaCCrYdsqnQgEpBn6ofM9IfNeBwiFPt1RQXzavRtsRoouFedFSCkv0B
+         XF2PFc4N5tLNeNqZKLxMbn0TWFiVJeWF8qw4OCzV/QwioO6f//BlxEBlv941jj/MDj
+         NAG0+64eerSXeiwFXtmTJLutHb4G61oEYACGK+TOppuWFA5FCMngtMrXSxvpez7F+w
+         xYBvtFp2399YT7/hqBa7BLyhrf9/cuJ3n0uJ3mkL09+iUJPEL1ZENNZEoeDVl6TREk
+         pcoif7BTuZgesclLg4cfnuNAxzHcWPNRX5WODORRlgtDsxdrWapBA7+70Kp1vQ+qnM
+         VVvjJ09wxESzw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     perex@perex.cz, lgirdwood@gmail.com, bgoswami@quicinc.com,
+        alsa-devel@alsa-project.org, tiwai@suse.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220915123837.11591-1-srinivas.kandagatla@linaro.org>
+References: <20220915123837.11591-1-srinivas.kandagatla@linaro.org>
+Subject: Re: [PATCH 0/9] ASoC: qdsp6: audioreach: add multi-port, SAL and MFC support
+Message-Id: <166698504930.1386510.17260012636035709007.b4-ty@kernel.org>
+Date:   Fri, 28 Oct 2022 20:24:09 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] include/uapi/linux/swab: Fix potentially missing
- __always_inline
-Content-Language: en-US
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Petr_Van=c4=9bk?= <arkamar@atlas.cz>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Justin Stitt <jstitt007@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Denys Vlasenko <dvlasenk@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>, mmayer@broadcom.com,
-        Khem Raj <raj.khem@gmail.com>,
-        Philippe Ombredanne <pombredanne@nexb.com>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20220927215256.528619-1-f.fainelli@gmail.com>
- <YzTMUpd6HbHmZu8f@dev-arch.thelio-3990X>
- <ed9b8268-0128-0486-04a3-54f343afd38b@gmail.com>
-In-Reply-To: <ed9b8268-0128-0486-04a3-54f343afd38b@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/6/22 13:33, Florian Fainelli wrote:
-> Hi Nathan,
+On Thu, 15 Sep 2022 13:38:28 +0100, Srinivas Kandagatla wrote:
+> This patchset adds support to multi-port connections between AudioReach Modules
+> which is required for sophisticated graphs like ECNS or Speaker Protection.
+> Also as part of ECNS testing new module support for SAL and MFC are added.
 > 
-> On 9/28/2022 3:36 PM, Nathan Chancellor wrote:
->> Hi Florian,
->>
->> On Tue, Sep 27, 2022 at 02:52:56PM -0700, Florian Fainelli wrote:
->>> From: Matt Redfearn <matt.redfearn@mips.com>
->>>
->>> Commit bc27fb68aaad ("include/uapi/linux/byteorder, swab: force inlining
->>> of some byteswap operations") added __always_inline to swab functions
->>> and commit 283d75737837 ("uapi/linux/stddef.h: Provide 
->>> __always_inline to
->>> userspace headers") added a definition of __always_inline for use in
->>> exported headers when the kernel's compiler.h is not available.
->>>
->>> However, since swab.h does not include stddef.h, if the header soup does
->>> not indirectly include it, the definition of __always_inline is missing,
->>> resulting in a compilation failure, which was observed compiling the
->>> perf tool using exported headers containing this commit:
->>>
->>> In file included from /usr/include/linux/byteorder/little_endian.h:12:0,
->>>                   from /usr/include/asm/byteorder.h:14,
->>>                   from tools/include/uapi/linux/perf_event.h:20,
->>>                   from perf.h:8,
->>>                   from builtin-bench.c:18:
->>> /usr/include/linux/swab.h:160:8: error: unknown type name 
->>> `__always_inline'
->>>   static __always_inline __u16 __swab16p(const __u16 *p)
->>>
->>> Fix this by replacing the inclusion of linux/compiler.h with
->>> linux/stddef.h to ensure that we pick up that definition if required,
->>> without relying on it's indirect inclusion. compiler.h is then included
->>> indirectly, via stddef.h.
->>>
->>> Fixes: 283d75737837 ("uapi/linux/stddef.h: Provide __always_inline to 
->>> userspace headers")
->>> Signed-off-by: Matt Redfearn <matt.redfearn@mips.com>
->>> Reviewed-by: Petr Vaněk <arkamar@atlas.cz>
->>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->>
->> I took this through my kernel build matrix and did not see any new
->> issues.
->>
->> Tested-by: Nathan Chancellor <nathan@kernel.org>
 > 
-> Great thanks! Since this is really useful for kernel-headers in 
-> toolchains, it would be great to get this picked up. Arnd is this 
-> something that would go via your tree?
+> Tested on SM8450 with ECNS.
+> 
+> [...]
 
-Arnd, is this a patch you can merge? Thanks
--- 
-Florian
+Applied to
 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/9] ASoC: qdsp6: audioreach: topology use idr_alloc_u32
+      commit: af7ed7eb70e8964514c706f8498623a2a3696657
+[2/9] ASoC: qdsp6: audioreach: remove unused connection_list
+      commit: 5b488e80078f09bbc197d766babf014dd52c30bf
+[3/9] ASoC: qdsp6: audioreach: update dapm kcontrol private data
+      commit: 1c87d3817b74b895933e9940b9de09b17c674b9b
+[4/9] ASoC: qdsp6: audioreach: Simplify handing FE and BE graph connections
+      commit: e4977b91cff8b00cdeb310735ef34fa4dee9485c
+[5/9] ASoC: qdsp6: audioreach: simplify module_list sz calculation
+      commit: 4efb98e9635b9919f2cb72cddae97b7231cf96ef
+[6/9] ASoC: qdsp6: audioreach: add support for more port connections
+      commit: 03365d6a58c47b3a3f2f964d0777493e293d7da4
+[7/9] ASoC: qdsp6: audioreach: add support to enable SAL Module
+      commit: a934afdbb022d5a7b1d20251875ecefcaf48536a
+[8/9] ASoC: qdsp6: audioreach: add support for MFC Module
+      commit: cf0de67d954db21002fd7521364f2ac89aabae35
+[9/9] ASoC: qdsp6: audioreach: add support to enable module command
+      commit: 6648a6dcfe40ae8c5e7cb5c1d7b9e59f010e285d
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
