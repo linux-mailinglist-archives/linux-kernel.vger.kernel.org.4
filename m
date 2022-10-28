@@ -2,186 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C61A610999
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 07:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7AC61098E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 07:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiJ1FKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 01:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
+        id S229761AbiJ1FJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 01:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiJ1FKH (ORCPT
+        with ESMTP id S229457AbiJ1FJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 01:10:07 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7D92B636;
-        Thu, 27 Oct 2022 22:10:04 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29S4g4Gj029904;
-        Fri, 28 Oct 2022 05:09:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=mC2HFC3gAoqIozZrCZ1GBd6I46486FF/GbrfZbHoDJs=;
- b=sORyH0u7NNmXJ2xhjH2ho9CGfQC2uXTTsV6CCo/wUNjh93gWjsOOergxQFNQ0dGJ+brs
- Sk6ThQx3eCPe0YtR0s/fvl2YLEW4Pb095jSEbrVjXEG5wJ0NVIwkCI7GCLEz/QetJtYF
- q9Yn6cvxHNMTsFgojdXw7jBRBgY89a3aXoRMsdeAoQFrmP0FyI+/ndrpcT/6Fg8k6+Az
- FNLGrmbdQSSW+qhAmSWP9E2Foqa5+MAz3T4g2qPzCD5t+9iL0sZBmVZugSwsMOrwL/NZ
- tvbr6nv4A2EAS7p1Nq8EIvRDMOF4TR+Fmq40JGckJnJGoGaMGYdweYMIM6DRk0pJrF8O vQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kg89m0tf2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 05:09:42 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29S4gBlO030364;
-        Fri, 28 Oct 2022 05:09:40 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kg89m0t8n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 05:09:40 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29S563XT023854;
-        Fri, 28 Oct 2022 05:09:36 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3kftf1s332-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 05:09:36 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29S59YYd2228778
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Oct 2022 05:09:34 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 50367A4040;
-        Fri, 28 Oct 2022 05:09:34 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C8ABBA404D;
-        Fri, 28 Oct 2022 05:09:31 +0000 (GMT)
-Received: from [9.109.205.170] (unknown [9.109.205.170])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 28 Oct 2022 05:09:31 +0000 (GMT)
-Message-ID: <7b5f533d-4b2e-b45b-ee42-5e1cc3e8a279@linux.ibm.com>
-Date:   Fri, 28 Oct 2022 10:39:31 +0530
+        Fri, 28 Oct 2022 01:09:51 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2060.outbound.protection.outlook.com [40.107.102.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3043B13DCF;
+        Thu, 27 Oct 2022 22:09:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U6xXqnDAUY28wa+GXsiPgKUJflXTGph2b80CVmqsKsutiUelF2HdGi6NVzCof71dXFf7uU7bfDqN+6TzgTmKeYB5mz9EZM45SCgRp+00A3WWmqDbNVATPtxJY2RVe7UREXwmqhFjBq8yEGkM0BkPhSdRgW0Ku5qT+AaHUa88Aqjd1VCn4x1YW42zlfep/p0rggItJ/+noDoPIyWZEusKa35YtldCo9aQmT8NxVRljlwO0XSJij6G9Dl6Xp036c5L6XDuBBNpQG4E0TEmaU1PcmeSEipDXolKMLdr6lSBd2T2HNlmqyIWP/LFTiUmphHvJPWwyYoHq4P7zcHZ2zi39g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SU+5zjSrk414ddhcpz58EiPfYp16nflE3OXJD0CQ4e8=;
+ b=nLqVyIbXPu2KZztcEudS6Da5IX9YELOukBvUp07W5gYkzd1AMTrLfjkIRaY/TilDEpnZv+EVxMXCI5o/n5cGY7NxshQD1JUU7nsrtKMnHLvZ0sarp8fUrRFqVhwHOvcSTI3qbdFv/oPg3dPh5BULU5hHzhc8APKCV9qignh4HmH92muUGl7FjOMMmAOFJ5sapWjG63OWcCnOx+QrzPpAmwHtMc4wGG0vdfoq7XYW0bWgbR4JK0cmWOfS+4vqiiaWiHXix0cg0dLsOlMD3D3XcaaM+RDTcKsuRPeKCfAMNdSr8OMXccI1tYAaVciGzpWZryLC5xpLFNn0r9TdMn0/dg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SU+5zjSrk414ddhcpz58EiPfYp16nflE3OXJD0CQ4e8=;
+ b=uHfIM5eleao8N2+B0ekVHdtB7F1ngziuuFFUQuOf+hJ3AQZi/dHYNOmKWlLgiy7thZBpHKtiIffvdkriZLgQc8r789b4qeE8GLHkxrce2m+fUvpf9SoQjWk8Hanu7ZdEniLNgcxEX+yXNyUKuf4J/vFCGx3PXwIf4H/FmR+v7SQ=
+Received: from BN9PR03CA0498.namprd03.prod.outlook.com (2603:10b6:408:130::23)
+ by MW4PR12MB7167.namprd12.prod.outlook.com (2603:10b6:303:225::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Fri, 28 Oct
+ 2022 05:09:46 +0000
+Received: from BN8NAM11FT007.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:130:cafe::b) by BN9PR03CA0498.outlook.office365.com
+ (2603:10b6:408:130::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.29 via Frontend
+ Transport; Fri, 28 Oct 2022 05:09:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BN8NAM11FT007.mail.protection.outlook.com (10.13.177.109) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5769.14 via Frontend Transport; Fri, 28 Oct 2022 05:09:46 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 28 Oct
+ 2022 00:09:46 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 28 Oct
+ 2022 00:09:45 -0500
+Received: from xhdpranavis40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.31 via Frontend
+ Transport; Fri, 28 Oct 2022 00:09:41 -0500
+From:   Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+To:     <vkoul@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <lars@metafoo.de>,
+        <adrianml@alumnos.upm.es>
+CC:     <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <michal.simek@amd.com>,
+        <radhey.shyam.pandey@amd.com>, <anirudha.sarangi@amd.com>,
+        <harini.katakam@amd.com>, <sarath.babu.naidu.gaddam@amd.com>,
+        <git@amd.com>
+Subject: [PATCH 0/5] Xilinx DMA enhancements and optimization 
+Date:   Thu, 27 Oct 2022 23:09:35 -0600
+Message-ID: <20221028050940.27888-1-sarath.babu.naidu.gaddam@amd.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
-Content-Language: en-US
-To:     Yang Shi <shy828301@gmail.com>, Feng Tang <feng.tang@intel.com>
-Cc:     "Hocko, Michal" <mhocko@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Waiman Long <longman@redhat.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Chen, Tim C" <tim.c.chen@intel.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>
-References: <20221026074343.6517-1-feng.tang@intel.com>
- <dc453287-015d-fd1c-fe7f-6ee45772d6aa@linux.ibm.com>
- <Y1jpDfwBQId3GkJC@feng-clx> <Y1j7tsj5M0Md/+Er@dhcp22.suse.cz>
- <Y1kl8VbPE0RYdyEB@feng-clx> <Y1lZV6qHp3gIINGc@dhcp22.suse.cz>
- <CAHbLzkppDPm87dx9-a7t3oP9DuZ0xCPC1UWr+E-s+vh12Gwb+w@mail.gmail.com>
- <Y1ovOeEPXT1fxCuc@feng-clx>
- <CAHbLzkqvh3ry=FjQGuG--As2yYF2NU+bfvORqk1FyfE_vvTwXw@mail.gmail.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <CAHbLzkqvh3ry=FjQGuG--As2yYF2NU+bfvORqk1FyfE_vvTwXw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ASFUWSHe5MjllGjLmOisvHNof7sieJp4
-X-Proofpoint-GUID: BJChHJSB3LO7Isg854w_XwBD54gS9x6z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-28_02,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- impostorscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0 suspectscore=0
- phishscore=0 priorityscore=1501 lowpriorityscore=0 clxscore=1015
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2210280031
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT007:EE_|MW4PR12MB7167:EE_
+X-MS-Office365-Filtering-Correlation-Id: d14c0224-2622-4621-b8d2-08dab8a2a1c3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 17SHuxuJLdVGBJJe/p5VreRfKM3aHOZe4ECY1qdrBdOQr8mdQdLI3hDOJoLfLHkJ2Nkd8x77P/Afz8sb8g40GBES61KR9umSrf1LR9UjU22rDN4xVGw3YY24Wpn8KJcgyypGqc/UbfvYP+sG6wjdvTo3aMo0eyDZRkAYIuVB3ZCiHLoIyocBhbRhSAtklDTFAq3CSpLk54JIRfh0WngntFAKoneLVFgN4QmE9GBqMrWp5FgQPLqKPIn5t5tPkm3kjxiVtw9whumR14Z0yITEU/gIK2T5/MEtbak1JK4AFwwzy8avOl/0QEgTdU88yqZkhU7C+VEAEilfDliI0cbrJAFvfCWk/Hyyqd8M+QzNY0t6xTYgClvWw5uoDg6ONuaQO0sNjfPCKvzNgH3W8R4/NFLX0LE3JrEo+SkGN1T29SIC4kjDLP1k+1H2rJHFPlnQHRuwjfnzl0fZGXzHfmFAkPPUtO1w2A41NSGnx8SqADRJ1Q7THCn3kM4bb488Vs8t3g6znI/8qy4ClPsQs+lnbETTOWe/hBb8aoTznPZ/H3M4VbtJED6iSUQpjq4bKnfYy4FlBnVHuYZPkDc1xE3oNAWCzIq+/DfjkOcXy71dpH6Tabg/E4muuds5yz9xsA+iRkC0yCMa5N4mrCnXiOSINI71NNHcoxRsplwr6g0RK9HaD9TcIh+NQQSOOVQaN3p46n1zVeeTJMf3VzqA6Ut3nnEJsIWJQLkdBiOOVxPoTx5kCEj4XVnSInGmCim1k6mylXBKB4qYZWHLFlXqrZOO/d/FWtSERFn74YuJRtw/DLHOOvL8NdQXQoq6rp76OQbi
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(396003)(376002)(39860400002)(451199015)(40470700004)(36840700001)(46966006)(82310400005)(1076003)(54906003)(83380400001)(316002)(426003)(110136005)(8936002)(478600001)(356005)(81166007)(86362001)(47076005)(36756003)(26005)(40480700001)(82740400003)(4743002)(70206006)(41300700001)(6666004)(40460700003)(5660300002)(103116003)(4744005)(4326008)(2906002)(70586007)(36860700001)(186003)(8676002)(336012)(2616005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 05:09:46.4049
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d14c0224-2622-4621-b8d2-08dab8a2a1c3
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT007.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7167
+X-Spam-Status: No, score=0.2 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/27/22 11:25 PM, Yang Shi wrote:
-> On Thu, Oct 27, 2022 at 12:12 AM Feng Tang <feng.tang@intel.com> wrote:
->>
->> On Thu, Oct 27, 2022 at 01:57:52AM +0800, Yang Shi wrote:
->>> On Wed, Oct 26, 2022 at 8:59 AM Michal Hocko <mhocko@suse.com> wrote:
->> [...]
->>>>>> This all can get quite expensive so the primary question is, does the
->>>>>> existing behavior generates any real issues or is this more of an
->>>>>> correctness exercise? I mean it certainly is not great to demote to an
->>>>>> incompatible numa node but are there any reasonable configurations when
->>>>>> the demotion target node is explicitly excluded from memory
->>>>>> policy/cpuset?
->>>>>
->>>>> We haven't got customer report on this, but there are quite some customers
->>>>> use cpuset to bind some specific memory nodes to a docker (You've helped
->>>>> us solve a OOM issue in such cases), so I think it's practical to respect
->>>>> the cpuset semantics as much as we can.
->>>>
->>>> Yes, it is definitely better to respect cpusets and all local memory
->>>> policies. There is no dispute there. The thing is whether this is really
->>>> worth it. How often would cpusets (or policies in general) go actively
->>>> against demotion nodes (i.e. exclude those nodes from their allowes node
->>>> mask)?
->>>>
->>>> I can imagine workloads which wouldn't like to get their memory demoted
->>>> for some reason but wouldn't it be more practical to tell that
->>>> explicitly (e.g. via prctl) rather than configuring cpusets/memory
->>>> policies explicitly?
->>>>
->>>>> Your concern about the expensive cost makes sense! Some raw ideas are:
->>>>> * if the shrink_folio_list is called by kswapd, the folios come from
->>>>>   the same per-memcg lruvec, so only one check is enough
->>>>> * if not from kswapd, like called form madvise or DAMON code, we can
->>>>>   save a memcg cache, and if the next folio's memcg is same as the
->>>>>   cache, we reuse its result. And due to the locality, the real
->>>>>   check is rarely performed.
->>>>
->>>> memcg is not the expensive part of the thing. You need to get from page
->>>> -> all vmas::vm_policy -> mm -> task::mempolicy
->>>
->>> Yeah, on the same page with Michal. Figuring out mempolicy from page
->>> seems quite expensive and the correctness can't be guranteed since the
->>> mempolicy could be set per-thread and the mm->task depends on
->>> CONFIG_MEMCG so it doesn't work for !CONFIG_MEMCG.
->>
->> Yes, you are right. Our "working" psudo code for mem policy looks like
->> what Michal mentioned, and it can't work for all cases, but try to
->> enforce it whenever possible:
->>
->> static bool  __check_mpol_demotion(struct folio *folio, struct vm_area_struct *vma,
->>                 unsigned long addr, void *arg)
->> {
->>         bool *skip_demotion = arg;
->>         struct mempolicy *mpol;
->>         int nid, dnid;
->>         bool ret = true;
->>
->>         mpol = __get_vma_policy(vma, addr);
->>         if (!mpol) {
->>                 struct task_struct *task;
->>                 if (vma->vm_mm)
->>                         task = vma->vm_mm->owner;
-> 
-> But this task may not be the task you want IIUC. For example, the
-> process has two threads, A and B. They have different mempolicy. The
-> vmscan is trying to demote a page belonging to thread A, but the task
-> may point to thread B, so you actually get the wrong mempolicy IIUC.
-> 
+Some background about the patch series: Xilinx Axi Ethernet device driver
+(xilinx_axienet_main.c) currently has axi-dma code inside it. The goal is
+to refactor axiethernet driver and use existing AXI DMA driver using
+DMAEngine API.
 
-But if we swap out this page and fault back in via thread B the page would
-get allocated as per thread B mempolicy. So if we demote based on thread B
-policy are we breaking anything? 
+This patchset does feature addition and optimization to support axidma
+integration with axiethernet network driver. Once axidma version is
+accepted mcdma specific changes will be added in followup version.
 
--aneesh
+Radhey Shyam Pandey (5):
+  dt-bindings: dmaengine: xilinx_dma: Add xlnx,axistream-connected
+    property
+  dt-bindings: dmaengine: xilinx_dma: Add xlnx,irq-delay property
+  dmaengine: xilinx_dma: Pass AXI4-Stream control words to dma client
+  dmaengine: xilinx_dma: Increase AXI DMA transaction segment count
+  dmaengine: xilinx_dma: Use tasklet_hi_schedule for timing critical
+    usecase
 
+ .../bindings/dma/xilinx/xilinx_dma.txt        |  4 ++
+ drivers/dma/xilinx/xilinx_dma.c               | 41 ++++++++++++++++++-
+ 2 files changed, 43 insertions(+), 2 deletions(-)
+
+-- 
+2.25.1
 
