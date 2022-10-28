@@ -2,137 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216126119A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D04FE6119A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiJ1RwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 13:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
+        id S230088AbiJ1Rwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 13:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiJ1RwL (ORCPT
+        with ESMTP id S229891AbiJ1Rw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 13:52:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3851285D0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:52:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C4BEB82BE2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 17:52:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D851BC433D6;
-        Fri, 28 Oct 2022 17:52:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666979527;
-        bh=NMhfxBggYpCBsOUbB3G/6qw4BBdvNzcv96zYd+scd/0=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=CEUidl/VaIA5gNNq7vpXOrvuxTzrhGxeEJb6HvwEFDvF3HIc06jmdbDobjgw4cBLL
-         gTvKqCqjsX0tJeeN9yWjIvNy1Dbvswb7uWi9CD3Ro4i+rMAsurNHeBNiyrWm2q52V3
-         RXU/4Zd5yB9JByshRdF19TOF5wt/GDw9av1hGigYVXKy+WUAzVajXfBLRxWwScnvkz
-         djn6j/fAC3y+W37UJZKdAOaCZhDqOvzpnc/zk64ms4ND6ii/WooMpqNvx7gYlHxGa9
-         UoIh4GnJ44yaFWRbxKRZb9j7R4AenPc55MudrUm2mKVXSIdKybjXplMpLH3/TSvTA8
-         3yXpr4ozv1oEQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 81E665C0692; Fri, 28 Oct 2022 10:52:07 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 10:52:07 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, clm@meta.com, jstultz@google.com,
-        tglx@linutronix.de, sboyd@kernel.org, longman@redhat.com
-Subject: Re: [PATCH clocksource] Reject bogus watchdog clocksource
- measurements
-Message-ID: <20221028175207.GM5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221019230904.GA2502730@paulmck-ThinkPad-P17-Gen-1>
- <Y1ECHVUHilqgKD9o@feng-clx>
- <20221020140944.GK5600@paulmck-ThinkPad-P17-Gen-1>
- <Y1Hr6PNy9EJk245f@feng-clx>
+        Fri, 28 Oct 2022 13:52:28 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6D41C841E
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:52:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666979547; x=1698515547;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nLmozB7GOAOtC7pWQaEOBV1pltbyYLeHKZoEUgY/lIM=;
+  b=P+nd51Q+7ymRMMxKT2r8oU2/TrvMmv0dMEwQORz0ZNpVxcwGWWMIyXnx
+   dCAplPbB46HKGG6Jh0V1jUVWHgPk1yPpMORsUGt/gNYZyBHdbexpNYPN9
+   945C5wwoUSbGdCZXVA1W8AdaBuK5W0qBabq2mcsQu4xQYck3FAVEjhFLC
+   P4N5aUTFEF+PHDLWrCZlxDEodAzjmOoFVrvv2mfRzTrshLMlZyuT93If2
+   ETeecng0RBsqpovvHrRDKIbZRbq0wdgiHVRF3XuwRiOMTDD70FVCthBJT
+   5Y2J3r0E8ali3OcxoMUDoF3Uq1zL9N2qYpmaKj0DDLxzvxOXRk19kRMjM
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="288947060"
+X-IronPort-AV: E=Sophos;i="5.95,221,1661842800"; 
+   d="scan'208";a="288947060"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 10:52:27 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="775452021"
+X-IronPort-AV: E=Sophos;i="5.95,221,1661842800"; 
+   d="scan'208";a="775452021"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.175.207])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 10:52:27 -0700
+Date:   Fri, 28 Oct 2022 10:52:25 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH v7 1/6] staging: vt6655: fix lines of code ending in a '('
+Message-ID: <Y1wW2WNpBMAYPwLA@aschofie-mobl2>
+References: <cover.1666849707.git.tanjubrunostar0@gmail.com>
+ <6742e42999e05ddf09318a0a3bda9ce23b6ae562.1666849707.git.tanjubrunostar0@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1Hr6PNy9EJk245f@feng-clx>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <6742e42999e05ddf09318a0a3bda9ce23b6ae562.1666849707.git.tanjubrunostar0@gmail.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 08:46:32AM +0800, Feng Tang wrote:
-> On Thu, Oct 20, 2022 at 07:09:44AM -0700, Paul E. McKenney wrote:
-> [...]
-> > > >  static void clocksource_watchdog(struct timer_list *unused)
-> > > >  {
-> > > > -	u64 csnow, wdnow, cslast, wdlast, delta;
-> > > > +	u64 csnow, wdnow, cslast, wdlast, delta, wdi;
-> > > >  	int next_cpu, reset_pending;
-> > > >  	int64_t wd_nsec, cs_nsec;
-> > > >  	struct clocksource *cs;
-> > > > @@ -440,6 +440,17 @@ static void clocksource_watchdog(struct timer_list *unused)
-> > > >  		if (atomic_read(&watchdog_reset_pending))
-> > > >  			continue;
-> > > >  
-> > > > +		/* Check for bogus measurements. */
-> > > > +		wdi = jiffies_to_nsecs(WATCHDOG_INTERVAL);
-> > > > +		if (wd_nsec < (wdi >> 2)) {
-> > > > +			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced only %lld ns during %d-jiffy time interval, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
-> > > > +			continue;
-> > > > +		}
-> > > 
-> > > If this happens (500ms timer happens only after less than 125ms),
-> > > there is some severe problem with timer/interrupt system. 
-> > 
-> > Should I add ", suspect timer/interrupt bug" just after "jiffy time
-> > interval"?  Or would a comment before that pr_warn() work better for you?
+On Fri, Oct 28, 2022 at 06:39:24AM +0000, Tanjuate Brunostar wrote:
+> fix several checkpatch errors related to lines ending with a '(' by
+> joining splitted lines of code and indenting properly to increase
+> visibility
 > 
-> Both are fine for me.
+> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
 
-Here is the patch, which just adds comments.  (The exponential-backoff
-patch is on its way.)
+Hi Tanjuate,
 
-Thoughts?
+Thanks for your interest in the kernel community!
 
-							Thanx, Paul
+The threading on the multiple versions of this patch series
+is unconventional. Please take a look at the archives of 
+any mailing list, or the Outreachy mailing list archive.
+I don't expect a new version of the patch set to be sent
+as a reply to a prior version.
 
-------------------------------------------------------------------------
+Perhaps scale this back to a single patch to see if this
+kind of fix is going to be well received, and to work on
+your patch creation skills. 
 
-commit 59d9db36dc15b3b40a30d7a3d733dbd412c8557a
-Author: Paul E. McKenney <paulmck@kernel.org>
-Date:   Thu Oct 27 11:58:27 2022 -0700
+Greg has pointed you to docs, and of course the First
+Patch Tutorial covers all of this too. 
 
-    clocksource: Add comments to classify bogus measurements
-    
-    An extremely busy system can delay the clocksource watchdog, so that
-    the corresponding too-long bogus-measurement error does not necessarily
-    imply an error in the system.  However, a too-short bogus-measurement
-    error likely indicates a bug in hardware, firmware or software.
-    
-    Therefore, add comments clarifying these bogus-measurement pr_warn()s.
-    
-    Reported-by: Feng Tang <feng.tang@intel.com>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-    Cc: John Stultz <jstultz@google.com>
-    Cc: Thomas Gleixner <tglx@linutronix.de>
-    Cc: Stephen Boyd <sboyd@kernel.org>
-    Cc: Feng Tang <feng.tang@intel.com>
-    Cc: Waiman Long <longman@redhat.com>
+Thanks,
+Alison
 
-diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-index dcaf38c062161..3f5317faf891f 100644
---- a/kernel/time/clocksource.c
-+++ b/kernel/time/clocksource.c
-@@ -443,10 +443,12 @@ static void clocksource_watchdog(struct timer_list *unused)
- 		/* Check for bogus measurements. */
- 		wdi = jiffies_to_nsecs(WATCHDOG_INTERVAL);
- 		if (wd_nsec < (wdi >> 2)) {
-+			/* This usually indicates broken timer code or hardware. */
- 			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced only %lld ns during %d-jiffy time interval, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
- 			continue;
- 		}
- 		if (wd_nsec > (wdi << 2)) {
-+			/* This can happen on busy systems, which can delay the watchdog. */
- 			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced an excessive %lld ns during %d-jiffy time interval, probable CPU overutilization, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
- 			continue;
- 		}
+
+> ---
+>  drivers/staging/vt6655/rxtx.c | 165 ++++++++++++++--------------------
+>  1 file changed, 69 insertions(+), 96 deletions(-)
+> 
+> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+> index 1e5036121665..7eb7c6eb5cf0 100644
+> --- a/drivers/staging/vt6655/rxtx.c
+> +++ b/drivers/staging/vt6655/rxtx.c
+> @@ -139,15 +139,11 @@ static __le16 vnt_time_stamp_off(struct vnt_private *priv, u16 rate)
+>   * PK_TYPE_11GB    2
+>   * PK_TYPE_11GA    3
+>   */
+> -static
+> -unsigned int
+> -s_uGetTxRsvTime(
+> -	struct vnt_private *pDevice,
+> -	unsigned char byPktType,
+> -	unsigned int cbFrameLength,
+> -	unsigned short wRate,
+> -	bool bNeedAck
+> -)
+> +static unsigned int s_uGetTxRsvTime(struct vnt_private *pDevice,
+> +				    unsigned char byPktType,
+> +				    unsigned int cbFrameLength,
+> +				    unsigned short wRate,
+> +				    bool bNeedAck)
+>  {
+>  	unsigned int uDataTime, uAckTime;
+>  
+> @@ -214,20 +210,16 @@ static __le16 get_rtscts_time(struct vnt_private *priv,
+>  }
+>  
+>  /* byFreqType 0: 5GHz, 1:2.4Ghz */
+> -static
+> -unsigned int
+> -s_uGetDataDuration(
+> -	struct vnt_private *pDevice,
+> -	unsigned char byDurType,
+> -	unsigned int cbFrameLength,
+> -	unsigned char byPktType,
+> -	unsigned short wRate,
+> -	bool bNeedAck,
+> -	unsigned int uFragIdx,
+> -	unsigned int cbLastFragmentSize,
+> -	unsigned int uMACfragNum,
+> -	unsigned char byFBOption
+> -)
+> +static unsigned int s_uGetDataDuration(struct vnt_private *pDevice,
+> +				       unsigned char byDurType,
+> +				       unsigned int cbFrameLength,
+> +				       unsigned char byPktType,
+> +				       unsigned short wRate,
+> +				       bool bNeedAck,
+> +				       unsigned int uFragIdx,
+> +				       unsigned int cbLastFragmentSize,
+> +				       unsigned int uMACfragNum,
+> +				       unsigned char byFBOption)
+>  {
+>  	bool bLastFrag = false;
+>  	unsigned int uAckTime = 0, uNextPktTime = 0, len;
+> @@ -316,17 +308,13 @@ s_uGetDataDuration(
+>  }
+>  
+>  /* byFreqType: 0=>5GHZ 1=>2.4GHZ */
+> -static
+> -__le16
+> -s_uGetRTSCTSDuration(
+> -	struct vnt_private *pDevice,
+> -	unsigned char byDurType,
+> -	unsigned int cbFrameLength,
+> -	unsigned char byPktType,
+> -	unsigned short wRate,
+> -	bool bNeedAck,
+> -	unsigned char byFBOption
+> -)
+> +static __le16 s_uGetRTSCTSDuration(struct vnt_private *pDevice,
+> +				   unsigned char byDurType,
+> +				   unsigned int cbFrameLength,
+> +				   unsigned char byPktType,
+> +				   unsigned short wRate,
+> +				   bool bNeedAck,
+> +				   unsigned char byFBOption)
+>  {
+>  	unsigned int uCTSTime = 0, uDurTime = 0;
+>  
+> @@ -409,22 +397,18 @@ s_uGetRTSCTSDuration(
+>  	return cpu_to_le16((u16)uDurTime);
+>  }
+>  
+> -static
+> -__le16
+> -s_uFillDataHead(
+> -	struct vnt_private *pDevice,
+> -	unsigned char byPktType,
+> -	void *pTxDataHead,
+> -	unsigned int cbFrameLength,
+> -	unsigned int uDMAIdx,
+> -	bool bNeedAck,
+> -	unsigned int uFragIdx,
+> -	unsigned int cbLastFragmentSize,
+> -	unsigned int uMACfragNum,
+> -	unsigned char byFBOption,
+> -	unsigned short wCurrentRate,
+> -	bool is_pspoll
+> -)
+> +static __le16 s_uFillDataHead(struct vnt_private *pDevice,
+> +			      unsigned char byPktType,
+> +			      void *pTxDataHead,
+> +			      unsigned int cbFrameLength,
+> +			      unsigned int uDMAIdx,
+> +			      bool bNeedAck,
+> +			      unsigned int uFragIdx,
+> +			      unsigned int cbLastFragmentSize,
+> +			      unsigned int uMACfragNum,
+> +			      unsigned char byFBOption,
+> +			      unsigned short wCurrentRate,
+> +			      bool is_pspoll)
+>  {
+>  	struct vnt_tx_datahead_ab *buf = pTxDataHead;
+>  
+> @@ -555,19 +539,15 @@ s_uFillDataHead(
+>  	return buf->duration;
+>  }
+>  
+> -static
+> -void
+> -s_vFillRTSHead(
+> -	struct vnt_private *pDevice,
+> -	unsigned char byPktType,
+> -	void *pvRTS,
+> -	unsigned int cbFrameLength,
+> -	bool bNeedAck,
+> -	bool bDisCRC,
+> -	struct ieee80211_hdr *hdr,
+> -	unsigned short wCurrentRate,
+> -	unsigned char byFBOption
+> -)
+> +static void s_vFillRTSHead(struct vnt_private *pDevice,
+> +			   unsigned char byPktType,
+> +			   void *pvRTS,
+> +			   unsigned int cbFrameLength,
+> +			   bool bNeedAck,
+> +			   bool bDisCRC,
+> +			   struct ieee80211_hdr *hdr,
+> +			   unsigned short wCurrentRate,
+> +			   unsigned char byFBOption)
+>  {
+>  	unsigned int uRTSFrameLen = 20;
+>  
+> @@ -750,19 +730,15 @@ s_vFillRTSHead(
+>  	}
+>  }
+>  
+> -static
+> -void
+> -s_vFillCTSHead(
+> -	struct vnt_private *pDevice,
+> -	unsigned int uDMAIdx,
+> -	unsigned char byPktType,
+> -	void *pvCTS,
+> -	unsigned int cbFrameLength,
+> -	bool bNeedAck,
+> -	bool bDisCRC,
+> -	unsigned short wCurrentRate,
+> -	unsigned char byFBOption
+> -)
+> +static void s_vFillCTSHead(struct vnt_private *pDevice,
+> +			   unsigned int uDMAIdx,
+> +			   unsigned char byPktType,
+> +			   void *pvCTS,
+> +			   unsigned int cbFrameLength,
+> +			   bool bNeedAck,
+> +			   bool bDisCRC,
+> +			   unsigned short wCurrentRate,
+> +			   unsigned char byFBOption)
+>  {
+>  	unsigned int uCTSFrameLen = 14;
+>  
+> @@ -868,21 +844,17 @@ s_vFillCTSHead(
+>   -
+>   * unsigned int cbFrameSize, Hdr+Payload+FCS
+>   */
+> -static
+> -void
+> -s_vGenerateTxParameter(
+> -	struct vnt_private *pDevice,
+> -	unsigned char byPktType,
+> -	struct vnt_tx_fifo_head *tx_buffer_head,
+> -	void *pvRrvTime,
+> -	void *pvRTS,
+> -	void *pvCTS,
+> -	unsigned int cbFrameSize,
+> -	bool bNeedACK,
+> -	unsigned int uDMAIdx,
+> -	void *psEthHeader,
+> -	unsigned short wCurrentRate
+> -)
+> +static void s_vGenerateTxParameter(struct vnt_private *pDevice,
+> +				   unsigned char byPktType,
+> +				   struct vnt_tx_fifo_head *tx_buffer_head,
+> +				   void *pvRrvTime,
+> +				   void *pvRTS,
+> +				   void *pvCTS,
+> +				   unsigned int cbFrameSize,
+> +				   bool bNeedACK,
+> +				   unsigned int uDMAIdx,
+> +				   void *psEthHeader,
+> +				   unsigned short wCurrentRate)
+>  {
+>  	u16 fifo_ctl = le16_to_cpu(tx_buffer_head->fifo_ctl);
+>  	bool bDisCRC = false;
+> @@ -954,11 +926,12 @@ s_vGenerateTxParameter(
+>  	}
+>  }
+>  
+> -static unsigned int
+> -s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
+> -		  unsigned char *pbyTxBufferAddr,
+> -		  unsigned int uDMAIdx, struct vnt_tx_desc *pHeadTD,
+> -		  unsigned int is_pspoll)
+> +static unsigned int s_cbFillTxBufHead(struct vnt_private *pDevice,
+> +				      unsigned char byPktType,
+> +				      unsigned char *pbyTxBufferAddr,
+> +				      unsigned int uDMAIdx,
+> +				      struct vnt_tx_desc *pHeadTD,
+> +				      unsigned int is_pspoll)
+>  {
+>  	struct vnt_td_info *td_info = pHeadTD->td_info;
+>  	struct sk_buff *skb = td_info->skb;
+> -- 
+> 2.34.1
+> 
+> 
