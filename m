@@ -2,166 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0888610A3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD6C610A41
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbiJ1GTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
+        id S229629AbiJ1GWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiJ1GTf (ORCPT
+        with ESMTP id S229450AbiJ1GWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:19:35 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 979905F54;
-        Thu, 27 Oct 2022 23:19:30 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8Axz7dxdFtjFAgDAA--.6665S3;
-        Fri, 28 Oct 2022 14:19:29 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axf+BrdFtj_zQGAA--.22314S4;
-        Fri, 28 Oct 2022 14:19:28 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v6 3/3] dt-bindings: clock: add loongson-2 clock
-Date:   Fri, 28 Oct 2022 14:19:22 +0800
-Message-Id: <20221028061922.19045-3-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221028061922.19045-1-zhuyinbo@loongson.cn>
-References: <20221028061922.19045-1-zhuyinbo@loongson.cn>
+        Fri, 28 Oct 2022 02:22:04 -0400
+Received: from symantec4.comsats.net.pk (symantec4.comsats.net.pk [203.124.41.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DDD1B865A
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:22:02 -0700 (PDT)
+X-AuditID: cb7c291e-7a5ff700000061a5-15-635b62ff8812
+Received: from iesco.comsatshosting.com (Unknown_Domain [210.56.28.12])
+        (using TLS with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        by symantec4.comsats.net.pk (Symantec Messaging Gateway) with SMTP id 9C.7C.24997.FF26B536; Fri, 28 Oct 2022 10:05:03 +0500 (PKT)
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns;
+        d=iesco.com.pk; s=default;
+        h=received:content-type:mime-version:content-transfer-encoding
+          :content-description:subject:to:from:date:reply-to;
+        b=h4ttgPyoFyiv1rwtQghZT6+PBNCNqIkkUt1bMiN6u2HkW6R0Cq3pG2hmZsDDmUzvG
+          GBCRPULiIL+zi/3KBfl5dgHKQKFNoesZcXrI2sqrV8R5ivo0ELC9VrXsWuSBJl/XF
+          FLrzuANDN27hI2wvXOCkcsVLPvy3ahKCm8lpB9C5s=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=iesco.com.pk; s=default;
+        h=reply-to:date:from:to:subject:content-description
+          :content-transfer-encoding:mime-version:content-type;
+        bh=wllpc/XfyZmsBCyizquF3lY9v5vVV2E17Wyv7qk2g2g=;
+        b=EjmvcS6swVNmslxPZZ5bROMV1CTLvfDKRTTpZaKqHX7zgbbhX8HjYEAPijnppqF7o
+          zQ35lDwfLQAn6vrBgF4Jd8ExSkemBdMV2TV5p2LKO4vu25qqrqt1F0RrS1oQbtaip
+          qplgQVTFMHL2+zzlfmO0XM43WbUqO1gqDwBSjoeNY=
+Received: from [103.145.253.52] (UnknownHost [103.145.253.52]) by iesco.comsatshosting.com with SMTP;
+   Fri, 28 Oct 2022 10:51:35 +0500
+Message-ID: <9C.7C.24997.FF26B536@symantec4.comsats.net.pk>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axf+BrdFtj_zQGAA--.22314S4
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF47tF4kJw4fKFyfWF1kuFg_yoW5GrWDpF
-        sxC343GryIvF17Zws5Ka4xA3Z5u3Z7CF17ZwnrCa42kr98W3W5XF17K34DZa9rAFy7Za9r
-        ZFWfCr4jka1Ikw7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bS8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x
-        0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_
-        Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVWxJVW8Jr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
-        YxBIdaVFxhVjvjDU0xZFpf9x07UNjjkUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Compliment,
+To:     linux-kernel@vger.kernel.org
+From:   "Wahid Majrooh" <nms-ibs2@iesco.com.pk>
+Date:   Thu, 27 Oct 2022 23:21:08 -0700
+Reply-To: whmjhaf@gmail.com
+X-Brightmail-Tracker: H4sIAAAAAAAAA02TXUgUURTHuzvjOtrevM6aXsePaqHQUsuQkoowqTCD6CEKNchxd9zdXHe3
+        mdH86EMopBY0tSLasjIpSqNMyUrYioUIK0nUVOihpNpQHyy0Hnyo7qy77rxcLr9zzv+c879c
+        hmI94RxjtcuCaOdtBm0kPZSdqEv/V1Jk3PB9VJ893HddmwPyZruT94PCyG0mwWatFMT124sj
+        LT9v9NLOFlA1OXA/rA6Uu0AEg1EWbm94r3GBSIZF3Ro8OnQPKAEadVJ4pi5TCdBogsK+maHw
+        hazzAI/UzZMshoFoKx77Xq0UUCgDj1++pFXuEEXj/qvf6AW+Dt9tm6aUdAqtwb9dsoL1KAZP
+        Nrn8KTFoJe5p8IUpdy1Kxw86vmkXZliNL7rGw5U7ixJwR3sj3QSi3KpublU3t6qbO9TtFqA7
+        AJaqy3nimTErw+gol3hZyrALcoazrBsQB9+dSE1+Bu4M8V6AGGDQwWJroZEN4ytJlRfsZTSG
+        5fDw7iIju6zEYaq28JLliFhhEyRDDBQkguEiLqmwlRk4yDkJ1S9Su3BcsgkyeTIvwAxFygbG
+        D5EyE19dI4iOBTEvSGBoQxw8sOkjzyIzLwtlguAUxGC0lGHQk67OQYC8feTkaLvDLhgw7BJJ
+        r2hRMAtVpVabHCwgSvw82QKpI/7xkmBEPQnEqgPqCTVMhBfkMToypmOvsp3k5Mslqzmgq4ex
+        xwjVBalfMx722QlkgzCk9xbUMl1tHg/F9PjPgacvyfl5ZJCcv3tdryjWvwgXB82KlUhRsFTY
+        F/fgYuGOO2TcKFVAacklwlVthC9X8VDX4L+YArvIg+rhhH9k8mtCe7BwxkLg0gD0r4FhmpIY
+        HWAhvSliiIYYYm4pVAyReVltiOdcoWJIgAYM6VEgG4QhKa4OaK+cPf1i1pPZzr65zf3pfN1c
+        MFJ7siy3pX9O1/m3qzbfNzb9+NOHm0e7a3NQ06/M/Juncntb+0YLNqcueb5zX83Xe9eipNnk
+        lPi/G6MfNe5LSWh+ymNuLmn86OoLB59XeMSS/N6C7D1607D7B70lzJd0q3V+2LoizXSw/ssZ
+        X8fDFAMtWfjMtZQo8f8BJmS19FAEAAA=
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Loongson-2 clock binding with DT schema format using
-json-schema.
+Compliment,
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/clock/loongson,ls2k-clk.yaml     | 63 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 64 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+It will be a pleasure to discuss an important issue with you on area of Inv=
+estment. My name is Wahid from Kabul
 
-diff --git a/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
-new file mode 100644
-index 000000000000..63a59015987e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/loongson,ls2k-clk.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson-2 SoC Clock Control Module
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+description: |
-+  Loongson-2 SoC clock control module is an integrated clock controller, which
-+  generates and supplies to all modules.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - loongson,ls2k-clk
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: 100m ref
-+
-+  clock-names:
-+    items:
-+      - const: ref_100m
-+
-+  '#clock-cells':
-+    const: 1
-+    description:
-+      The clock consumer should specify the desired clock by having the clock
-+      ID in its "clocks" phandle cell. See include/dt-bindings/clock/loongson,ls2k-clk.h
-+      for the full list of Loongson-2 SoC clock IDs.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - '#clock-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    ref_100m: clock-ref-100m {
-+        compatible = "fixed-clock";
-+        #clock-cells = <0>;
-+        clock-frequency = <100000000>;
-+        clock-output-names = "ref_100m";
-+    };
-+
-+    clk: clock-controller@1fe00480 {
-+        compatible = "loongson,ls2k-clk";
-+        reg = <0x1fe00480 0x58>;
-+        #clock-cells = <1>;
-+        clocks = <&ref_100m>;
-+        clock-names = "ref_100m";
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5136684fb6c6..e5fb270dd363 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11911,6 +11911,7 @@ LOONGSON-2 SOC SERIES CLOCK DRIVER
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-clk@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
- F:	drivers/clk/clk-loongson2.c
- F:	include/dt-bindings/clock/loongson,ls2k-clk.h
- 
--- 
-2.31.1
+
+Majrooh
 
