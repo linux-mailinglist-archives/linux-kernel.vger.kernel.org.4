@@ -2,109 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA96611377
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 287B8611387
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbiJ1Nqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
+        id S229706AbiJ1NsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbiJ1Nq0 (ORCPT
+        with ESMTP id S231401AbiJ1Nr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:46:26 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCD01BC161;
-        Fri, 28 Oct 2022 06:45:30 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id f193so4916844pgc.0;
-        Fri, 28 Oct 2022 06:45:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3nCBeqNhxGHNAOTB5X4QzGaGY7ElJNzraVUZzOfIwnw=;
-        b=OWFjRJDjG0hZfvLzLrLn6gcWEpwMr7W8FRJQuFzilZqybD6zTxuQ/dOTSuDSp74DlW
-         XbJ7LBJWephs36XZZIKfDOet/m5Xh8ebOdZvkxuoJ5GiGe1g0usITsw8q9GVwTu57SEs
-         xqzMYMz3g82LTZ8drLAVoV4XqyhL9SXvPKBaFUj+NpToaHGMpuZRRLoHo0woJYcIqBX0
-         WREf3kQyaEaJB5K0pxMr+tAxLDnb2hVAPw5tMOXBhD9i+kpdnIar2Dja2db2ZWtodHIV
-         jGuhf8s2RsswctZd4SUzWuJfOlRn2CIO1e4dNazBUFQWuy5ORoNrONvxaWsPvZJ35A2m
-         a41w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3nCBeqNhxGHNAOTB5X4QzGaGY7ElJNzraVUZzOfIwnw=;
-        b=FlCOj8oIo1zHhM0w/ggctkQPCp5OJdCBVocCxgIUGUNmd54jeXcznBDqXprsuvv3bm
-         +6H7kztQnWmGMF0O2P6b1UqdHyjDrGmtftdjPh04xqmWfsSf0zEsLFKI+mR0QOQrpp0p
-         C6vRTE2R8xUlxFCQpcj+bRd7Xyw4RH7pP7OlqQ9l2wF2QLQICpuyfy8w9+bMN5TXp1+Q
-         56Cgf1gSg+1f/zHw3kasNixU5qaZR35nV0mQpZ9DCXlWrhoapYn4oom1oE9fQSPrgCML
-         DJvz1o807etUe+hy9ssyR8nOEEC+ATHLQhFWvuKhmaLpFz68mEhcAq6MKbbxwY836WVa
-         ou0w==
-X-Gm-Message-State: ACrzQf2wr9QN0dZa99w9aDmKqlKpTk17ra6BdncC4nLhOfVHtL5GR4nw
-        74JocMPbhz204WPZSF3mlt0=
-X-Google-Smtp-Source: AMsMyM6AEhB7L7ZMphKIJJWq0vrsiEJSZ+mJNPPyytr0Dzis4Hli3RA9hImOcXsh8f2jyj9NRE4S5A==
-X-Received: by 2002:aa7:9e1c:0:b0:56c:78fa:2a2 with SMTP id y28-20020aa79e1c000000b0056c78fa02a2mr12079092pfq.65.1666964729960;
-        Fri, 28 Oct 2022 06:45:29 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-72.three.co.id. [180.214.233.72])
-        by smtp.gmail.com with ESMTPSA id b14-20020a1709027e0e00b00187022627d7sm319743plm.36.2022.10.28.06.45.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 06:45:29 -0700 (PDT)
-Message-ID: <80c998ec-435f-158c-9b45-4e6844f7861b@gmail.com>
-Date:   Fri, 28 Oct 2022 20:45:23 +0700
+        Fri, 28 Oct 2022 09:47:56 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC4E1DCCFF
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:46:06 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20221028134603euoutp012d9d7738d1b19572ed82ccc53a89e8ee~iP57SlYnq2081120811euoutp01D
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:46:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20221028134603euoutp012d9d7738d1b19572ed82ccc53a89e8ee~iP57SlYnq2081120811euoutp01D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1666964763;
+        bh=RMlwSajiI9aOhuFaMtICTVZnXT/QmMki7tEP8CkRFGc=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=AnkxQBCr7f+guwtjo5lGn5YpjPqaLw4lCe90Y08bOUi12kSyTk3YEjbRm73x98KjL
+         Z4IZryk4vjizbBXYejzFOoM97bPPeZf/aNk4NpMKY3qKCSickQ3ELGB0fvsJ0drs7W
+         Z2PlgZzyXI4sgNa//HgcApH0kcx/F2ReE/aiZR1Q=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20221028134602eucas1p162a9231f7bc64982ca3653ba7b55ac4b~iP561ityV0609506095eucas1p1V;
+        Fri, 28 Oct 2022 13:46:02 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 0F.BE.19378.A1DDB536; Fri, 28
+        Oct 2022 14:46:02 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20221028134602eucas1p263f5b1972295650ae2708a44f9e9cae7~iP56IptEZ1545415454eucas1p24;
+        Fri, 28 Oct 2022 13:46:02 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221028134602eusmtrp1ed3e3f82e21a46c84fcb1a7d6bf21e7d~iP56GmWbY3233032330eusmtrp1B;
+        Fri, 28 Oct 2022 13:46:02 +0000 (GMT)
+X-AuditID: cbfec7f5-a4dff70000014bb2-a3-635bdd1ac55b
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 40.DE.07473.A1DDB536; Fri, 28
+        Oct 2022 14:46:02 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20221028134601eusmtip2ac4c0c2f9a0cd60b885db2c3fc6cb10d~iP55ZGlg01295712957eusmtip2L;
+        Fri, 28 Oct 2022 13:46:01 +0000 (GMT)
+Message-ID: <ac7918ea-ae67-fd0d-bb0f-b0093908f6d7@samsung.com>
+Date:   Fri, 28 Oct 2022 15:46:01 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 09/15] x86/APM: remove APM_BIOS_MAGIC
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH stable-5.15 3/3] usb: dwc3: disable USB core PHY
+ management
+To:     Stefan Agner <stefan@agner.ch>, Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        stable <stable@kernel.org>, regressions@lists.linux.dev,
+        krzk@kernel.org
 Content-Language: en-US
-To:     =?UTF-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>, Jiri Kosina <jikos@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net
-References: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
- <ff5e936ea657d9197a9c13404b9fd880dffc9fbb.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <ff5e936ea657d9197a9c13404b9fd880dffc9fbb.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <808bdba846bb60456adf10a3016911ee@agner.ch>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrPKsWRmVeSWpSXmKPExsWy7djPc7pSd6OTDT7fM7ZoXryezWJFpUXT
+        jR5Wi/PnN7BbXN41h83i84bHjBYb33awW3w6f4HNYsHGR4wWm9e1sztweSz+fo/ZY3bDRRaP
+        Tas62Tz2z13D7vFi80xGj8+b5ALYorhsUlJzMstSi/TtErgy7tzfyVpwjLviVN8DpgbGlZxd
+        jBwcEgImEg0rUroYuTiEBFYwSsw+dY0ZwvnCKLH8xCUo5zOjxOK1E5i6GDnBOk69WMgOkVjO
+        KLFzxyZWCOcjo8Sq5wvYQap4Bewk7j6eyQayg0VAVeLILiaIsKDEyZlPWEBsUYEUid3d28Bs
+        YYFAiUn7X4HViAg4S1y/u40NZCazQDuTxPZH8xhBEswC4hK3nswHK2ITMJToetvFBmJzClhI
+        /D/2nA2iRl5i+9s5YGdLCPzgkHj09hwjxNkuEvMu34J6QVji1fEt7BC2jMTpyT0sEA3tjBIL
+        ft9ngnAmMEo0PL8F1W0tcefcL7B3mAU0Jdbv0oeEnqPE3s0mECafxI23ghA38ElM2jadGSLM
+        K9HRJgQxQ01i1vF1cFsPXrjEPIFRaRZSsMxC8uUsJN/MQli7gJFlFaN4amlxbnpqsXFearle
+        cWJucWleul5yfu4mRmCaOv3v+NcdjCtefdQ7xMjEwXiIUYKDWUmEt/5sdLIQb0piZVVqUX58
+        UWlOavEhRmkOFiVxXrYZWslCAumJJanZqakFqUUwWSYOTqkGpihLn66Wyu/3zJxTHtw5dpjH
+        Yf3rna4Vae/3HNpWoGz+7ImYbxHPtzv7Qt6ENt2r+H3/0fNdiatr/UzvVcnmZAvqcx2UcWx6
+        v4f1to+O/wGnH4ZPVDgy0m/4nfS1rGjQenaRlUuiw+jgrPO7r6+wqqxO5GPrupFt4Jvwbcuy
+        1n0rb/yYOiHJkf9oxue0uidNT4uLX2hkMOuu/L391U3tum0B17m//vZJK/B7En3LqDRkj+ot
+        9e8MDf+DCk8KBYae7ZSwu27Y+rjVPXqB2dOq2df2+NqYPGSq6DlzOnD3SRt94QcmttMuygtr
+        1UlfbznUv3N147LXs+7vOJR4QG1fSfa/qKgwjWLHBM71thHhSizFGYmGWsxFxYkAEaGc2sID
+        AAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrIIsWRmVeSWpSXmKPExsVy+t/xe7pSd6OTDfb/YrNoXryezWJFpUXT
+        jR5Wi/PnN7BbXN41h83i84bHjBYb33awW3w6f4HNYsHGR4wWm9e1sztweSz+fo/ZY3bDRRaP
+        Tas62Tz2z13D7vFi80xGj8+b5ALYovRsivJLS1IVMvKLS2yVog0tjPQMLS30jEws9QyNzWOt
+        jEyV9O1sUlJzMstSi/TtEvQy7tzfyVpwjLviVN8DpgbGlZxdjJwcEgImEqdeLGTvYuTiEBJY
+        yiixed1adoiEjMTJaQ2sELawxJ9rXWwgtpDAe0aJ3pfVIDavgJ3E3cczgeIcHCwCqhJHdjFB
+        hAUlTs58wgISFhVIkfh2rg4kLCwQKDFp/yuwEhEBZ4nrd7exgaxlFmhnknj8bAULxA2PGSXm
+        f5wNdgOzgLjErSfzwTrYBAwlut5C3MApYCHx/9hzNogaM4murV2MELa8xPa3c5gnMArNQnLH
+        LCSjZiFpmYWkZQEjyypGkdTS4tz03GJDveLE3OLSvHS95PzcTYzAuNx27OfmHYzzXn3UO8TI
+        xMF4iFGCg1lJhLf+bHSyEG9KYmVValF+fFFpTmrxIUZTYFhMZJYSTc4HJoa8knhDMwNTQxMz
+        SwNTSzNjJXFez4KORCGB9MSS1OzU1ILUIpg+Jg5OqQamna6CPbw3Z7Ybs7M95bt/4trpfsml
+        CSm9+2+Yxmqt5HiYq8Dr3flmxdnSyedePlN80GrWa/elrE1a8zTbQ6H3c7ONmZ8rMnsKvop/
+        ya27epuLcrNyyYqHk1OleRrL3py8wBKx/KOSHov5t1Ovzh+u2XuK7U7srfmHDha4Bxu5Lrkb
+        0n6QX+/KHD6db68XME60eKrXL35kweNdHXNizXL/7eruFmEW0T6z5I+vgWJW4/5VTYVS7zzX
+        7jD73XZOvzj6GeOCqNXzFt737Vmem+My/2tq60rtwvCyQwfjfO9vXfhTdb+Gc1lO/3ZGH/GN
+        Txn2XF1idNXny02VrSsDOubWBryUy6q53K9Y+NK02zVciaU4I9FQi7moOBEA+R/syFQDAAA=
+X-CMS-MailID: 20221028134602eucas1p263f5b1972295650ae2708a44f9e9cae7
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20221018152853eucas1p2bd3531388625cf11f8b514bb9cc35e76
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20221018152853eucas1p2bd3531388625cf11f8b514bb9cc35e76
+References: <20220906120702.19219-1-johan@kernel.org>
+        <20220906120702.19219-4-johan@kernel.org>
+        <CGME20221018152853eucas1p2bd3531388625cf11f8b514bb9cc35e76@eucas1p2.samsung.com>
+        <808bdba846bb60456adf10a3016911ee@agner.ch>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/27/22 05:43, наб wrote:
-> We have largely moved away from this approach,
-> and we have better debugging instrumentation nowadays: kill it
-> 
+Dear All,
 
-Again, see [1] and [2].
+On 18.10.2022 17:27, Stefan Agner wrote:
+> Hi Johan,
+>
+> On 2022-09-06 14:07, Johan Hovold wrote:
+>> From: Johan Hovold <johan+linaro@kernel.org>
+>>
+>> commit 6000b8d900cd5f52fbcd0776d0cc396e88c8c2ea upstream.
+>>
+>> The dwc3 driver manages its PHYs itself so the USB core PHY management
+>> needs to be disabled.
+>>
+>> Use the struct xhci_plat_priv hack added by commits 46034a999c07 ("usb:
+>> host: xhci-plat: add platform data support") and f768e718911e ("usb:
+>> host: xhci-plat: add priv quirk for skip PHY initialization") to
+>> propagate the setting for now.
+> [adding also Samsung/ODROID device tree authors Krzysztof and Marek]
+>
+> For some reason, this commit seems to break detection of the USB to
+> S-ATA controller on ODROID-HC1 devices (Exynos 5422).
+>
+> We have a known to work OS release of v5.15.60, and known to not be
+> working of v5.15.67. By reverting suspicious commits, I was able to
+> pinpoint the problem to this particular commit.
+>
+> >From what I understand, on that particular hardware the S-ATA controller
+> power is controlled via the V-BUS signal VBUSCTRL_U2 (Schematic [1]).
+> Presumably this signal is no longer controlled with this change.
+>
+> This came up in our HAOS issue #2153 [2].
 
-Also, please write the patch description in imperative mood, not
-descriptive not even in first-person POV.
+I confirm this issue and I've managed to reproduce it locally. The 
+mainline is also affected. I will try to prepare a proper patch soon.
 
-[1]: https://lore.kernel.org/linux-doc/47c2bffb-6bfe-7f5d-0d2d-3cbb99d31019@gmail.com/
-[2]: https://lore.kernel.org/linux-doc/9d96c96d-dfc7-7749-07d4-2601c00661c2@gmail.com/
-
-Thanks.
-
+Best regards
 -- 
-An old man doll... just what I always wanted! - Clara
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
