@@ -2,52 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D5B611CB3
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 23:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB07611CB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 23:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiJ1Vup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 17:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
+        id S230108AbiJ1VxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 17:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbiJ1Vuk (ORCPT
+        with ESMTP id S229515AbiJ1VxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 17:50:40 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E943820C9BA
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 14:50:37 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id f17-20020a5d8591000000b006bcbe59b6cdso5164631ioj.14
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 14:50:37 -0700 (PDT)
+        Fri, 28 Oct 2022 17:53:05 -0400
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C288724C978;
+        Fri, 28 Oct 2022 14:53:04 -0700 (PDT)
+Received: by mail-pl1-f181.google.com with SMTP id p21so2087831plr.7;
+        Fri, 28 Oct 2022 14:53:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qTT5yVHbI3cRvy7cj7RM85ugbVqlsjULyFzBJneDTsQ=;
-        b=GqJLdPDWg3OKz9OUR3QUITMFLrA8DwhygXI979V3rSvxcApS42a/YzzCJBpnFSs84d
-         HylELOSNOwqTBgi+nEKHeYjEsxz9/rJGTQXFtwkR+i+gxajGy15haU8y+/Rtf8EcaC6q
-         K+3Wuiy9+ZlOiddBDdvC92lAW9TPPc4yS34ay1um3XsflG0tdSLrDXmNYy+LXKV1be97
-         FPqfw47gb44v7PXT+/tI5vlB2Nf8+72OjyxHXf5KPgcAmPjaYTI3fX4Bz59p7KicLg2f
-         XOZ8LUOP93osAKdeeiKsg/UixS5yOE6/HXes5n6uMO/q0+Flczvk2ZsAITK1GwhhY2wB
-         F1fw==
-X-Gm-Message-State: ACrzQf34ZgSOI4AvEl+DaGsUQTWsfN0bsQiJwV0hhTTwhQGDS+OuRBbt
-        9HXaJdty9ciHPNP7tSuPcERrC6oRs+wNhczB1byF/VIuerxE
-X-Google-Smtp-Source: AMsMyM4CqM4wTKB8EY7iDLrJHptNnEglkyhWl/77ILewUSD5YGIf1Ft6WnOOLlYythZCEjRa+WdefD2nlpGl0Z2Xzoty0yxIMpAE
+        bh=aHW0VpCYFExt/yJYXKv4CHfVB0y8NEIPRLasE5/M9fU=;
+        b=oNoLsF0h9+0rbURD9pboRjTuA+0uJ7hoBPwsk/7OPNAdK09P5ycee2yThc/zEs+9FC
+         TR8BBgUIJdvcOLxLolVfheRNEOY0J7a7J1MLHkVOwp3uc2TxAMhFuJAhS28S+4lcpHtv
+         sN46PZc/bG4Jclv65+4T6FQ8f+EBFNKc6TEuH+ehLJBAKWm4FdT1fhFuc6fTYSFNsTjO
+         cewzp7rt1nVLy/ai/W8Q5RjT6WueTPQIFu/zat+qKzArodaQWvrot0aTHuWUjNVretcP
+         IM+5t2vANjpqD4JHnyfq+k0e8dzsRTBGMIRm7LCLhBhqKc0i9uNvVAWuX8tAPrJdc9Mf
+         TMZQ==
+X-Gm-Message-State: ACrzQf2crsu+MA7PYL+CuHpbR8Bsu99l2qUcm+3xTo7xMCQSbPdHXVmb
+        Ccu5MIGKCeQMeuHtrqBC/SM=
+X-Google-Smtp-Source: AMsMyM7B3Xyir5PKlTiNvIB9P3ZB8N9O1f8bxaCqGk3PwosEpzTJTt5dyRPVqzbE8EEaHRM0LJ0dbQ==
+X-Received: by 2002:a17:902:b092:b0:186:9dc3:dc44 with SMTP id p18-20020a170902b09200b001869dc3dc44mr1167576plr.112.1666993984173;
+        Fri, 28 Oct 2022 14:53:04 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id l13-20020a17090a660d00b00212e8945d97sm4618065pjj.56.2022.10.28.14.53.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 14:53:03 -0700 (PDT)
+Message-ID: <817ec99a-b28e-6fb7-383d-f8a3ac578686@acm.org>
+Date:   Fri, 28 Oct 2022 14:53:01 -0700
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1688:b0:2fc:50d7:6961 with SMTP id
- f8-20020a056e02168800b002fc50d76961mr694493ila.230.1666993837040; Fri, 28 Oct
- 2022 14:50:37 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 14:50:37 -0700
-In-Reply-To: <00000000000095ab2705eb49b484@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007ff3e705ec1f3f90@google.com>
-Subject: Re: [syzbot] WARNING in btrfs_add_link
-From:   syzbot <syzbot+b531e31d583db14070d4@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v3 12/17] ufs: core: mcq: Find hardware queue to queue
+ request
+Content-Language: en-US
+To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        stanley.chu@mediatek.com, eddie.huang@mediatek.com,
+        daejun7.park@samsung.com, avri.altman@wdc.com, mani@kernel.org,
+        beanhuo@micron.com, quic_richardp@quicinc.com,
+        linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1666288432.git.quic_asutoshd@quicinc.com>
+ <c70e6972daf3bb1cef6fbf157b8549bfc365f674.1666288432.git.quic_asutoshd@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <c70e6972daf3bb1cef6fbf157b8549bfc365f674.1666288432.git.quic_asutoshd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,67 +73,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On 10/20/22 11:03, Asutosh Das wrote:
+> +struct ufs_hw_queue *ufshcd_mcq_req_to_hwq(struct ufs_hba *hba,
+> +					 struct request *req)
+> +{
+> +	u32 utag, hwq;
+> +
+> +	utag = blk_mq_unique_tag(req);
+> +	hwq = blk_mq_unique_tag_to_hwq(utag);
 
-HEAD commit:    b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=11afbf6a880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
-dashboard link: https://syzkaller.appspot.com/bug?extid=b531e31d583db14070d4
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=124ae5f6880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1008c991880000
+A minor stylistic nit: please combine declaration and assignment as follows:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/24728b72a896/disk-b229b6ca.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/10a3c40c60e1/vmlinux-b229b6ca.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/69f963b02b7e/bzImage-b229b6ca.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/fefdce45ff1c/mount_0.gz
+         u32 utag = blk_mq_unique_tag(req);
+         u32 hwq = blk_mq_unique_tag_to_hwq(utag);
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b531e31d583db14070d4@syzkaller.appspotmail.com
+> +	/* uhq[0] is to serve device commands */
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3605 at fs/btrfs/inode.c:6568 btrfs_add_link+0x862/0xca0 fs/btrfs/inode.c:6568
-Modules linked in:
-CPU: 0 PID: 3605 Comm: syz-executor377 Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:btrfs_add_link+0x862/0xca0 fs/btrfs/inode.c:6568
-Code: 40 f8 da 8a 8b 54 24 08 31 c0 e8 7b 50 a7 06 e9 21 ff ff ff e8 8f 55 fd fd 48 c7 c7 40 f7 da 8a 44 89 e6 31 c0 e8 de f3 c4 fd <0f> 0b 41 b4 01 45 0f b6 c4 48 89 df 48 c7 c6 00 ff da 8a ba a8 19
-RSP: 0018:ffffc90003cff460 EFLAGS: 00010246
-RAX: ade94f10cf44a400 RBX: ffff888072095150 RCX: ffff888024b7ba80
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffffc90003cff588 R08: ffffffff816b8dfd R09: ffffed1017364f13
-R10: ffffed1017364f13 R11: 1ffff11017364f12 R12: 00000000fffffff4
-R13: 00000000fffffff4 R14: ffff8880720951a0 R15: 1ffff1100e412a34
-FS:  0000555556786300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000557c351539e0 CR3: 0000000076ed0000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_create_new_inode+0x1778/0x2270 fs/btrfs/inode.c:6504
- btrfs_create_common+0x2eb/0x420 fs/btrfs/inode.c:6639
- lookup_open fs/namei.c:3413 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x12d0/0x2df0 fs/namei.c:3710
- do_filp_open+0x264/0x4f0 fs/namei.c:3740
- do_sys_openat2+0x124/0x4e0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_openat fs/open.c:1342 [inline]
- __se_sys_openat fs/open.c:1337 [inline]
- __x64_sys_openat+0x243/0x290 fs/open.c:1337
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0d1504bdd9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff9971cc08 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f0d1504bdd9
-RDX: 000000000000275a RSI: 00000000200001c0 RDI: 00000000ffffff9c
-RBP: 00007fff9971cc40 R08: 0000000000000002 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
-R13: 00007f0d1508bf00 R14: 00007fff9971cc90 R15: 0000000000000001
- </TASK>
+is -> is used?
 
+> +	return &hba->uhq[hwq + UFSHCD_MCQ_IO_QUEUE_OFFSET];
+
+Otherwise this patch looks good to me. Hence:
+
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
