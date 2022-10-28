@@ -2,124 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719F6610AB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A273D610B6A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbiJ1Gv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40104 "EHLO
+        id S230193AbiJ1Hin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 03:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbiJ1GvG (ORCPT
+        with ESMTP id S230308AbiJ1HiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:51:06 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BF81A1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:48:39 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MzCj13RstzpWHq;
-        Fri, 28 Oct 2022 14:45:09 +0800 (CST)
-Received: from huawei.com (10.67.175.21) by kwepemi500012.china.huawei.com
- (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 28 Oct 2022 03:38:22 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EB41BF861;
+        Fri, 28 Oct 2022 00:38:21 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29S15iSN013328;
+        Fri, 28 Oct 2022 09:38:08 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=Ls6XpX4UfWNReha8+iqxNKjy/N+ngxJZgqPEgE1QHsg=;
+ b=5ShIB/gID5SL1hkzcP5DcrnxioKBHTO1Ydsuo/J052grC4OY7BTxRW43g2mxEzjpWffM
+ 0lsEBG64Dqk2+dX2Lo85HLDcBC9zYqqItMq7k0G0bcrAO4WMZsU3UlsrJgNSMCTqAdN+
+ SniB9XS3uxjs5hc6xx99qjVohu0jtPTpBE+rdsBIuWS4zIPv1tw4eGUIZRAl59bWmJXw
+ W1k7Cx8laBgCSQDAQ7/5cLc9CbsXVaYD0Cy3zQPo/RKhjiacMiTQgEvPXfb6+g95U6UC
+ 0N3lt2qNSQAdt6/lNDGNU7rt+rxBUJkknEwFB0SVs+JgH2lQNbIPn04yP2MKGm4q99nu qQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kfahu2u0d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Oct 2022 09:38:08 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 325DF100039;
+        Fri, 28 Oct 2022 09:38:02 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2AB1621160F;
+        Fri, 28 Oct 2022 09:38:02 +0200 (CEST)
+Received: from localhost (10.201.20.201) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 28 Oct
- 2022 14:48:36 +0800
-From:   Li Zetao <lizetao1@huawei.com>
-To:     <liam.howlett@oracle.com>
-CC:     <akpm@linux-foundation.org>, <catalin.marinas@arm.com>,
-        <cmllamas@google.com>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <lizetao1@huawei.com>,
-        <mike.kravetz@oracle.com>, <willy@infradead.org>
-Subject: [PATCH v2] mm/mmap: Fix memory leak in mmap_region()
-Date:   Fri, 28 Oct 2022 15:37:17 +0800
-Message-ID: <20221028073717.1179380-1-lizetao1@huawei.com>
+ 2022 09:38:01 +0200
+From:   Yann Gautier <yann.gautier@foss.st.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <christophe.kerello@foss.st.com>,
+        Yann Gautier <yann.gautier@foss.st.com>
+Subject: [PATCH] mmc: core: properly select voltage range without power cycle
+Date:   Fri, 28 Oct 2022 09:37:40 +0200
+Message-ID: <20221028073740.7259-1-yann.gautier@foss.st.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221027073029.dyo2p2kearlutizq@revolver>
-References: <20221027073029.dyo2p2kearlutizq@revolver>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.21]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.201.20.201]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-28_04,2022-10-27_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a memory leak reported by kmemleak:
+In mmc_select_voltage(), if there is no full power cycle, the voltage
+range selected at the end of the function will be on a single range
+(e.g. 3.3V/3.4V). To keep a range around the selected voltage (3.2V/3.4V),
+the mask shift should be reduced by 1.
 
-  unreferenced object 0xffff88817231ce40 (size 224):
-    comm "mount.cifs", pid 19308, jiffies 4295917571 (age 405.880s)
-    hex dump (first 32 bytes):
-      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-      60 c0 b2 00 81 88 ff ff 98 83 01 42 81 88 ff ff  `..........B....
-    backtrace:
-      [<ffffffff81936171>] __alloc_file+0x21/0x250
-      [<ffffffff81937051>] alloc_empty_file+0x41/0xf0
-      [<ffffffff81937159>] alloc_file+0x59/0x710
-      [<ffffffff81937964>] alloc_file_pseudo+0x154/0x210
-      [<ffffffff81741dbf>] __shmem_file_setup+0xff/0x2a0
-      [<ffffffff817502cd>] shmem_zero_setup+0x8d/0x160
-      [<ffffffff817cc1d5>] mmap_region+0x1075/0x19d0
-      [<ffffffff817cd257>] do_mmap+0x727/0x1110
-      [<ffffffff817518b2>] vm_mmap_pgoff+0x112/0x1e0
-      [<ffffffff83adf955>] do_syscall_64+0x35/0x80
-      [<ffffffff83c0006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+This issue was triggered by using a specific SD-card (Verbatim Premium
+16GB UHS-1) on an STM32MP157C-DK2 board. This board cannot do UHS modes
+and there is no power cycle. And the card was failing to switch to
+high-speed mode. When adding the range 3.2V/3.3V for this card with the
+proposed shift change, the card can switch to high-speed mode.
 
-The root cause was traced to an error handing path in mmap_region()
-when arch_validate_flags() or mas_preallocate() fails. In the shared
-anonymous mapping sence, vma will be setuped and mapped with a new
-shared anonymous file via shmem_zero_setup(). So in this case, the
-file resource needs to be released.
-
-Fix it by calling fput(vma->vm_file) and unmap_region() when
-arch_validate_flags() or mas_preallocate() returns an error in
-the shared anonymous mapping sence.
-
-Fixes: d4af56c5c7c6 ("mm: start tracking VMAs with maple tree")
-Fixes: c462ac288f2c ("mm: Introduce arch_validate_flags()")
-Signed-off-by: Li Zetao <lizetao1@huawei.com>
+Fixes: ce69d37b7d8f ("mmc: core: Prevent violation of specs while initializing cards")
+Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
 ---
-v1 was posted at: https://lore.kernel.org/all/20221027025837.136492-1-lizetao1@huawei.com/
-v1 -> v2: Drop the new goto label, and jump to unmap_and_free_vma "if (vma->vm_file)"
+ drivers/mmc/core/core.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
- mm/mmap.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/mm/mmap.c b/mm/mmap.c
-index e270057ed04e..77846d8cf9d4 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2674,6 +2674,8 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
- 		error = -EINVAL;
- 		if (file)
- 			goto close_and_free_vma;
-+		else if (vma->vm_file)
-+			goto unmap_and_free_vma;
- 		else
- 			goto free_vma;
+diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
+index 95fa8fb1d45f..c5de202f530a 100644
+--- a/drivers/mmc/core/core.c
++++ b/drivers/mmc/core/core.c
+@@ -1134,7 +1134,13 @@ u32 mmc_select_voltage(struct mmc_host *host, u32 ocr)
+ 		mmc_power_cycle(host, ocr);
+ 	} else {
+ 		bit = fls(ocr) - 1;
+-		ocr &= 3 << bit;
++		/*
++		 * The bit variable represents the highest voltage bit set in
++		 * the OCR register.
++		 * To keep a range of 2 values (e.g. 3.2V/3.3V and 3.3V/3.4V),
++		 * we must shift the mask '3' with (bit - 1).
++		 */
++		ocr &= 3 << (bit - 1);
+ 		if (bit != host->ios.vdd)
+ 			dev_warn(mmc_dev(host), "exceeding card's volts\n");
  	}
-@@ -2682,6 +2684,8 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
- 		error = -ENOMEM;
- 		if (file)
- 			goto close_and_free_vma;
-+		else if (vma->vm_file)
-+			goto unmap_and_free_vma;
- 		else
- 			goto free_vma;
- 	}
-@@ -2751,7 +2755,7 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
- 
- 	/* Undo any partial mapping done by a device driver. */
- 	unmap_region(mm, mas.tree, vma, prev, next, vma->vm_start, vma->vm_end);
--	if (vm_flags & VM_SHARED)
-+	if (file && (vm_flags & VM_SHARED))
- 		mapping_unmap_writable(file->f_mapping);
- free_vma:
- 	vm_area_free(vma);
 -- 
 2.25.1
 
