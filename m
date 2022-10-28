@@ -2,47 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87EDC611D54
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E5D611D57
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbiJ1WRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 18:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
+        id S230163AbiJ1WSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 18:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiJ1WRg (ORCPT
+        with ESMTP id S229571AbiJ1WSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 18:17:36 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D439249D2D;
-        Fri, 28 Oct 2022 15:17:35 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.50.127])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 27D3420B929B;
-        Fri, 28 Oct 2022 15:17:35 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 27D3420B929B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1666995455;
-        bh=+pV23nWckVn/wTOHqMgILAsrEga2k7t0NAINVBKLQvs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R/HzSKmvDWuOorx9xaNrLRK0MO5cbHPveqqmKw167gbhdQvCsZAcxFiiWqPx4/r1n
-         c0yu0xwIGctBQR2dg5FE6ShTpc1c9zMV6KGAsjOix+ijEoYlC8T23GbEOUGfdG7n/f
-         kblL/lUo1wR/gKwdD8mHHTWJxXVXk/7EcfwTdhzc=
-Date:   Fri, 28 Oct 2022 15:17:28 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org,
-        dcook@linux.microsoft.com, alanau@linux.microsoft.com,
-        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] tracing/user_events: Remote write ABI
-Message-ID: <20221028221728.GA162@W11-BEAU-MD.localdomain>
-References: <20221027224011.2075-1-beaub@linux.microsoft.com>
- <96d9f066-2f39-78e6-9be7-f9c69235615e@efficios.com>
+        Fri, 28 Oct 2022 18:18:07 -0400
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB95224C967
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 15:18:06 -0700 (PDT)
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4MzcPV0cgMzDqFC;
+        Fri, 28 Oct 2022 22:18:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1666995486; bh=o+QznyhV3hIjjr8HLNlww/g7V5QGQpu6+kYN6wHY96s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mcMgNT5eZO9EjynIMSq4ViVA44gocxY8FJQDv1k6zofCNXOqWwXN7puzTam+FAfv8
+         NUEEGkWt7TiMRBPZTgPotOD8jW/1D6sA7bpdSmIBazi4+cFA0u7Sn/uq6K4lcTXjDo
+         hnG0eGof4NbG1ugrsqjGth9gKep6D/wufIZoK3Kk=
+X-Riseup-User-ID: 84B3480913F1F914D1A1C52E14951CFE0F8957CA37B981EE12A82DD8D2519D67
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4MzcPQ0pflz1yZp;
+        Fri, 28 Oct 2022 22:18:01 +0000 (UTC)
+From:   Arthur Grillo <arthurgrillo@riseup.net>
+To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>, andrealmeid@riseup.net,
+        melissa.srw@gmail.com, Arthur Grillo <arthurgrillo@riseup.net>,
+        =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>
+Subject: [PATCH v5] drm/tests: Add back seed value information
+Date:   Fri, 28 Oct 2022 19:17:54 -0300
+Message-Id: <20221028221755.340487-1-arthurgrillo@riseup.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <96d9f066-2f39-78e6-9be7-f9c69235615e@efficios.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,79 +59,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 05:50:04PM -0400, Mathieu Desnoyers wrote:
-> On 2022-10-27 18:40, Beau Belgrave wrote:
-> > As part of the discussions for user_events aligned with user space
-> > tracers, it was determined that user programs should register a 32-bit
-> > value to set or clear a bit when an event becomes enabled. Currently a
-> > shared page is being used that requires mmap().
-> > 
-> > In this new model during the event registration from user programs 2 new
-> > values are specified. The first is the address to update when the event
-> > is either enabled or disabled. The second is the bit to set/clear to
-> > reflect the event being enabled. This allows for a local 32-bit value in
-> > user programs to support both kernel and user tracers. As an example,
-> > setting bit 31 for kernel tracers when the event becomes enabled allows
-> > for user tracers to use the other bits for ref counts or other flags.
-> > The kernel side updates the bit atomically, user programs need to also
-> > update these values atomically.
-> 
-> Nice!
-> 
-> > 
-> > User provided addresses must be aligned on a 32-bit boundary, this
-> > allows for single page checking and prevents odd behaviors such as a
-> > 32-bit value straddling 2 pages instead of a single page.
-> > 
-> > When page faults are encountered they are done asyncly via a workqueue.
-> > If the page faults back in, the write update is attempted again. If the
-> > page cannot fault-in, then we log and wait until the next time the event
-> > is enabled/disabled. This is to prevent possible infinite loops resulting
-> > from bad user processes unmapping or changing protection values after
-> > registering the address.
-> 
-> I'll have a close look at this workqueue page fault scheme, probably next
-> week.
-> 
+As reported by Michał the drm_mm and drm_buddy unit tests lost the
+printk with seed value after they were refactored into KUnit.
 
-Excellent.
+Add kunit_info with seed value information to assure reproducibility.
 
-> > 
-> > NOTE:
-> > User programs that wish to have the enable bit shared across forks
-> > either need to use a MAP_SHARED allocated address or register a new
-> > address and file descriptor. If MAP_SHARED cannot be used or new
-> > registrations cannot be done, then it's allowable to use MAP_PRIVATE
-> > as long as the forked children never update the page themselves. Once
-> > the page has been updated, the page from the parent will be copied over
-> > to the child. This new copy-on-write page will not receive updates from
-> > the kernel until another registration has been performed with this new
-> > address.
-> 
-> This seems rather odd. I would expect that if a parent process registers
-> some instrumentation using private mappings for enabled state through the
-> user events ioctl, and then forks, the child process would seamlessly be
-> traced by the user events ABI while being able to also change the enabled
-> state from the userspace tracer libraries (which would trigger COW).
-> Requiring the child to re-register to user events is rather odd.
-> 
+Reported-by: Michał Winiarski <michal.winiarski@intel.com>
+Signed-off-by: Arthur Grillo <arthurgrillo@riseup.net>
+---
+v1->v2: https://lore.kernel.org/all/20221026211458.68432-1-arthurgrillo@riseup.net/
+- Correct compilation issues
+- Change tags order
+- Remove useless line change
+- Write commit message in imperative form
+- Remove redundant message part
+- Correct some grammars nits
+- Correct checkpatch issues
 
-It's the COW that is the problem, see below.
+v2->v3: https://lore.kernel.org/all/20221027142903.200169-1-arthurgrillo@riseup.net/
+- Change .init to .suite_init
+- Correct some grammars nits
 
-> What is preventing us from tracing the child without re-registration in this
-> scenario ?
-> 
+v3->v4: https://lore.kernel.org/all/20221028141246.280079-1-arthurgrillo@riseup.net/
+- Correct compilation issues
 
-Largely knowing when the COW occurs on a specific page. We don't make
-the mappings, so I'm unsure if we can ask to be notified easily during
-these times or not. If we could, that would solve this. I'm glad you are
-thinking about this. The note here was exactly to trigger this
-discussion :)
+v4->v5: https://lore.kernel.org/all/20221028141715.290903-1-arthurgrillo@riseup.net/
+- Change functions names from init_suite to suite_init
+---
+ drivers/gpu/drm/tests/drm_buddy_test.c | 6 ++++--
+ drivers/gpu/drm/tests/drm_mm_test.c    | 8 ++++++--
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
-I believe this is the same as a Futex, I'll take another look at that
-code to see if they've come up with anything regarding this.
+diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
+index 62f69589a72d..f8ee714df396 100644
+--- a/drivers/gpu/drm/tests/drm_buddy_test.c
++++ b/drivers/gpu/drm/tests/drm_buddy_test.c
+@@ -726,11 +726,13 @@ static void drm_test_buddy_alloc_limit(struct kunit *test)
+ 	drm_buddy_fini(&mm);
+ }
+ 
+-static int drm_buddy_init_test(struct kunit *test)
++static int drm_buddy_suite_init(struct kunit_suite *suite)
+ {
+ 	while (!random_seed)
+ 		random_seed = get_random_u32();
+ 
++	kunit_info(suite, "Testing DRM buddy manager, with random_seed=0x%x\n", random_seed);
++
+ 	return 0;
+ }
+ 
+@@ -746,7 +748,7 @@ static struct kunit_case drm_buddy_tests[] = {
+ 
+ static struct kunit_suite drm_buddy_test_suite = {
+ 	.name = "drm_buddy",
+-	.init = drm_buddy_init_test,
++	.suite_init = drm_buddy_suite_init,
+ 	.test_cases = drm_buddy_tests,
+ };
+ 
+diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
+index c4b66eeae203..89f12d3b4a21 100644
+--- a/drivers/gpu/drm/tests/drm_mm_test.c
++++ b/drivers/gpu/drm/tests/drm_mm_test.c
+@@ -2209,11 +2209,15 @@ static void drm_test_mm_color_evict_range(struct kunit *test)
+ 	vfree(nodes);
+ }
+ 
+-static int drm_mm_init_test(struct kunit *test)
++static int drm_mm_suite_init(struct kunit_suite *suite)
+ {
+ 	while (!random_seed)
+ 		random_seed = get_random_u32();
+ 
++	kunit_info(suite,
++		   "Testing DRM range manager, with random_seed=0x%x max_iterations=%u max_prime=%u\n",
++		   random_seed, max_iterations, max_prime);
++
+ 	return 0;
+ }
+ 
+@@ -2246,7 +2250,7 @@ static struct kunit_case drm_mm_tests[] = {
+ 
+ static struct kunit_suite drm_mm_test_suite = {
+ 	.name = "drm_mm",
+-	.init = drm_mm_init_test,
++	.suite_init = drm_mm_suite_init,
+ 	.test_cases = drm_mm_tests,
+ };
+ 
+-- 
+2.37.3
 
-Any ideas?
-
-Thanks,
--Beau
