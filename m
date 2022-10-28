@@ -2,256 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26524610AB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5684C610A5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbiJ1Grh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38954 "EHLO
+        id S229663AbiJ1GkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:40:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiJ1Gq7 (ORCPT
+        with ESMTP id S229460AbiJ1Gj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:46:59 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5C715B31E;
-        Thu, 27 Oct 2022 23:43:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666939405; x=1698475405;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=8NnFR5a6Ov4GS57k7NcQ6r9rc2t1vYt8WPecZyaK0cQ=;
-  b=M+doX1X/NFa5YSyRRXs1GZCSJZgsZ7wRChFO2Wylvx1ZDECW8psDEKLo
-   O80rwYAz2VcqybEVJLerEvRl8uP0BGQmSwDLXjBv+fVtrhMyDt8aO//t3
-   g8WkHSSMdFqpKeaLXsZAN8BfBqcM54CYNIoUMOTAVfvkCh9o8wBTnC3jm
-   erdq6vBr4NK4XMhU+vF2ysjKYuqv2QN5eDUCG9m7Y4vOkZTWlulKqkmAp
-   2/285QTJaeePNQgXoiOzqmGbzcilgCaV3VYcyRJ8lw4nwykwS9LXqN1kh
-   YwK/0BqgaibJFKRzkFmYbzjZO0PfzM0eKuofnOIHj0chH2XwLWjtt0OXQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="288139755"
-X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
-   d="scan'208";a="288139755"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 23:43:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="696111933"
-X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
-   d="scan'208";a="696111933"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Oct 2022 23:42:55 -0700
-Date:   Fri, 28 Oct 2022 14:38:26 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v9 6/8] KVM: Update lpage info when private/shared memory
- are mixed
-Message-ID: <20221028063826.GC3885130@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-7-chao.p.peng@linux.intel.com>
- <20221026204620.GB3819453@ls.amr.corp.intel.com>
+        Fri, 28 Oct 2022 02:39:59 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF4526132
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:39:53 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id x21so5773320ljg.10
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:39:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=27pePNIj19CQbJnYskEFw7IGPoxaQe9Wni6AF7YBIV8=;
+        b=c1KzihwCC9EspRvZADyV2umuUDdsoX+mAr1CwubEXK4phpzgEht4xdyCNMHC8NJC13
+         Y9c4b4WuwgkkSufo9HY7wZxQbl2Odevke2cyHQiMjeevsRpLCBuUHbuO3mFG2hIpwVSR
+         d+3/2JEOQr8GVoACiEB9BpL4YcWcCidp+MjSMnhwLkR3OOn3/6MrP0T4YDvV83cblcQ+
+         ih/i2b0NEYpbdr0cGbIzCnqfzbS9DeYoPSpq0N/aHcOOS6Onk31eNlRiVC+EQoxP4a/j
+         1SvQADwgtlKevsNDILLG5mDUokcMQ9Ok6JVinfXgYVkyI3/8dUGxcT1rESFAyd7VesQu
+         /Zlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=27pePNIj19CQbJnYskEFw7IGPoxaQe9Wni6AF7YBIV8=;
+        b=pVoc1Jblwwq8s2R6SBI8h+q8W3+E64IRGLpJpzIRmp0SrGn7FPmSCRxEvsj81Qbvs/
+         5vmKLoS4NCo9nHWde41v7c9Dp10BK4uzqUTQ9g7Wkz7OL8650nhDsP3Y3xjR+uySsNb7
+         ktMbuT4IpkyzUtd8Sivn3eAQZAob3hVz7JaYs1rYpwdsMMpb9A4N18gabl4zfrEZH5SJ
+         tZafwgU8hhYqKOqhPSfqz+AaXjvZ+WVcvq9SFE75iyYZK6vmqjKh8KQI0u3WYTkS+76H
+         IMdSYc2rQhNGbTHCoGNxCGfR8wHR4mG1nP6w0zB3owP7OobLxoe2ONFF4uT0EwDZjHSD
+         7hmg==
+X-Gm-Message-State: ACrzQf3BKhO+mqSs8BOowOjQ0A6m/gTRpUYthaTU0Ew+8OEoBi6Lq6rO
+        hWuk+icb3nHs3hrLs93GrFGfSheJ8NyDfg==
+X-Google-Smtp-Source: AMsMyM7fImXcCFKVsaxICEM+2wTgP5jvmwEWgMz0gMD1Tgo6MGBiA/3rKJ97tmBrzx56XzzSLJem7Q==
+X-Received: by 2002:a2e:7005:0:b0:277:1cfb:95c6 with SMTP id l5-20020a2e7005000000b002771cfb95c6mr6116242ljc.146.1666939191597;
+        Thu, 27 Oct 2022 23:39:51 -0700 (PDT)
+Received: from elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net ([20.240.130.248])
+        by smtp.googlemail.com with ESMTPSA id t7-20020a05651c204700b0026dced9840dsm498509ljo.61.2022.10.27.23.39.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 23:39:51 -0700 (PDT)
+From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev,
+        Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+Subject: [PATCH v7 1/6] staging: vt6655: fix lines of code ending in a '('
+Date:   Fri, 28 Oct 2022 06:39:24 +0000
+Message-Id: <6742e42999e05ddf09318a0a3bda9ce23b6ae562.1666849707.git.tanjubrunostar0@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1666849707.git.tanjubrunostar0@gmail.com>
+References: <cover.1666849707.git.tanjubrunostar0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026204620.GB3819453@ls.amr.corp.intel.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 01:46:20PM -0700, Isaku Yamahata wrote:
-> On Tue, Oct 25, 2022 at 11:13:42PM +0800,
-> Chao Peng <chao.p.peng@linux.intel.com> wrote:
-> 
-> > When private/shared memory are mixed in a large page, the lpage_info may
-> > not be accurate and should be updated with this mixed info. A large page
-> > has mixed pages can't be really mapped as large page since its
-> > private/shared pages are from different physical memory.
-> > 
-> > Update lpage_info when private/shared memory attribute is changed. If
-> > both private and shared pages are within a large page region, it can't
-> > be mapped as large page. It's a bit challenge to track the mixed
-> > info in a 'count' like variable, this patch instead reserves a bit in
-> > 'disallow_lpage' to indicate a large page has mixed private/share pages.
-> > 
-> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> > ---
-> >  arch/x86/include/asm/kvm_host.h |   8 +++
-> >  arch/x86/kvm/mmu/mmu.c          | 112 +++++++++++++++++++++++++++++++-
-> >  arch/x86/kvm/x86.c              |   2 +
-> >  include/linux/kvm_host.h        |  19 ++++++
-> >  virt/kvm/kvm_main.c             |  16 +++--
-> >  5 files changed, 152 insertions(+), 5 deletions(-)
-> > 
-> ...
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 33b1aec44fb8..67a9823a8c35 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> ...
-> > @@ -6910,3 +6915,108 @@ void kvm_mmu_pre_destroy_vm(struct kvm *kvm)
-> >  	if (kvm->arch.nx_lpage_recovery_thread)
-> >  		kthread_stop(kvm->arch.nx_lpage_recovery_thread);
-> >  }
-> > +
-> > +static inline bool linfo_is_mixed(struct kvm_lpage_info *linfo)
-> > +{
-> > +	return linfo->disallow_lpage & KVM_LPAGE_PRIVATE_SHARED_MIXED;
-> > +}
-> > +
-> > +static inline void linfo_update_mixed(struct kvm_lpage_info *linfo, bool mixed)
-> > +{
-> > +	if (mixed)
-> > +		linfo->disallow_lpage |= KVM_LPAGE_PRIVATE_SHARED_MIXED;
-> > +	else
-> > +		linfo->disallow_lpage &= ~KVM_LPAGE_PRIVATE_SHARED_MIXED;
-> > +}
-> > +
-> > +static bool mem_attr_is_mixed_2m(struct kvm *kvm, unsigned int attr,
-> > +				 gfn_t start, gfn_t end)
-> > +{
-> > +	XA_STATE(xas, &kvm->mem_attr_array, start);
-> > +	gfn_t gfn = start;
-> > +	void *entry;
-> > +	bool shared = attr == KVM_MEM_ATTR_SHARED;
-> > +	bool mixed = false;
-> > +
-> > +	rcu_read_lock();
-> > +	entry = xas_load(&xas);
-> > +	while (gfn < end) {
-> > +		if (xas_retry(&xas, entry))
-> > +			continue;
-> > +
-> > +		KVM_BUG_ON(gfn != xas.xa_index, kvm);
-> > +
-> > +		if ((entry && !shared) || (!entry && shared)) {
-> > +			mixed = true;
-> > +			goto out;
-> 
-> nitpick: goto isn't needed. break should work.
+fix several checkpatch errors related to lines ending with a '(' by
+joining splitted lines of code and indenting properly to increase
+visibility
 
-Thanks.
+Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+---
+ drivers/staging/vt6655/rxtx.c | 165 ++++++++++++++--------------------
+ 1 file changed, 69 insertions(+), 96 deletions(-)
 
-> 
-> > +		}
-> > +
-> > +		entry = xas_next(&xas);
-> > +		gfn++;
-> > +	}
-> > +out:
-> > +	rcu_read_unlock();
-> > +	return mixed;
-> > +}
-> > +
-> > +static bool mem_attr_is_mixed(struct kvm *kvm, struct kvm_memory_slot *slot,
-> > +			      int level, unsigned int attr,
-> > +			      gfn_t start, gfn_t end)
-> > +{
-> > +	unsigned long gfn;
-> > +	void *entry;
-> > +
-> > +	if (level == PG_LEVEL_2M)
-> > +		return mem_attr_is_mixed_2m(kvm, attr, start, end);
-> > +
-> > +	entry = xa_load(&kvm->mem_attr_array, start);
-> > +	for (gfn = start; gfn < end; gfn += KVM_PAGES_PER_HPAGE(level - 1)) {
-> > +		if (linfo_is_mixed(lpage_info_slot(gfn, slot, level - 1)))
-> > +			return true;
-> > +		if (xa_load(&kvm->mem_attr_array, gfn) != entry)
-> > +			return true;
-> > +	}
-> > +	return false;
-> > +}
-> > +
-> > +void kvm_arch_update_mem_attr(struct kvm *kvm, struct kvm_memory_slot *slot,
-> > +			      unsigned int attr, gfn_t start, gfn_t end)
-> > +{
-> > +
-> > +	unsigned long lpage_start, lpage_end;
-> > +	unsigned long gfn, pages, mask;
-> > +	int level;
-> > +
-> > +	WARN_ONCE(!(attr & (KVM_MEM_ATTR_PRIVATE | KVM_MEM_ATTR_SHARED)),
-> > +			"Unsupported mem attribute.\n");
-> > +
-> > +	/*
-> > +	 * The sequence matters here: we update the higher level basing on the
-> > +	 * lower level's scanning result.
-> > +	 */
-> > +	for (level = PG_LEVEL_2M; level <= KVM_MAX_HUGEPAGE_LEVEL; level++) {
-> > +		pages = KVM_PAGES_PER_HPAGE(level);
-> > +		mask = ~(pages - 1);
-> 
-> nitpick: KVM_HPAGE_MASK(level).  Maybe matter of preference.
+diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+index 1e5036121665..7eb7c6eb5cf0 100644
+--- a/drivers/staging/vt6655/rxtx.c
++++ b/drivers/staging/vt6655/rxtx.c
+@@ -139,15 +139,11 @@ static __le16 vnt_time_stamp_off(struct vnt_private *priv, u16 rate)
+  * PK_TYPE_11GB    2
+  * PK_TYPE_11GA    3
+  */
+-static
+-unsigned int
+-s_uGetTxRsvTime(
+-	struct vnt_private *pDevice,
+-	unsigned char byPktType,
+-	unsigned int cbFrameLength,
+-	unsigned short wRate,
+-	bool bNeedAck
+-)
++static unsigned int s_uGetTxRsvTime(struct vnt_private *pDevice,
++				    unsigned char byPktType,
++				    unsigned int cbFrameLength,
++				    unsigned short wRate,
++				    bool bNeedAck)
+ {
+ 	unsigned int uDataTime, uAckTime;
+ 
+@@ -214,20 +210,16 @@ static __le16 get_rtscts_time(struct vnt_private *priv,
+ }
+ 
+ /* byFreqType 0: 5GHz, 1:2.4Ghz */
+-static
+-unsigned int
+-s_uGetDataDuration(
+-	struct vnt_private *pDevice,
+-	unsigned char byDurType,
+-	unsigned int cbFrameLength,
+-	unsigned char byPktType,
+-	unsigned short wRate,
+-	bool bNeedAck,
+-	unsigned int uFragIdx,
+-	unsigned int cbLastFragmentSize,
+-	unsigned int uMACfragNum,
+-	unsigned char byFBOption
+-)
++static unsigned int s_uGetDataDuration(struct vnt_private *pDevice,
++				       unsigned char byDurType,
++				       unsigned int cbFrameLength,
++				       unsigned char byPktType,
++				       unsigned short wRate,
++				       bool bNeedAck,
++				       unsigned int uFragIdx,
++				       unsigned int cbLastFragmentSize,
++				       unsigned int uMACfragNum,
++				       unsigned char byFBOption)
+ {
+ 	bool bLastFrag = false;
+ 	unsigned int uAckTime = 0, uNextPktTime = 0, len;
+@@ -316,17 +308,13 @@ s_uGetDataDuration(
+ }
+ 
+ /* byFreqType: 0=>5GHZ 1=>2.4GHZ */
+-static
+-__le16
+-s_uGetRTSCTSDuration(
+-	struct vnt_private *pDevice,
+-	unsigned char byDurType,
+-	unsigned int cbFrameLength,
+-	unsigned char byPktType,
+-	unsigned short wRate,
+-	bool bNeedAck,
+-	unsigned char byFBOption
+-)
++static __le16 s_uGetRTSCTSDuration(struct vnt_private *pDevice,
++				   unsigned char byDurType,
++				   unsigned int cbFrameLength,
++				   unsigned char byPktType,
++				   unsigned short wRate,
++				   bool bNeedAck,
++				   unsigned char byFBOption)
+ {
+ 	unsigned int uCTSTime = 0, uDurTime = 0;
+ 
+@@ -409,22 +397,18 @@ s_uGetRTSCTSDuration(
+ 	return cpu_to_le16((u16)uDurTime);
+ }
+ 
+-static
+-__le16
+-s_uFillDataHead(
+-	struct vnt_private *pDevice,
+-	unsigned char byPktType,
+-	void *pTxDataHead,
+-	unsigned int cbFrameLength,
+-	unsigned int uDMAIdx,
+-	bool bNeedAck,
+-	unsigned int uFragIdx,
+-	unsigned int cbLastFragmentSize,
+-	unsigned int uMACfragNum,
+-	unsigned char byFBOption,
+-	unsigned short wCurrentRate,
+-	bool is_pspoll
+-)
++static __le16 s_uFillDataHead(struct vnt_private *pDevice,
++			      unsigned char byPktType,
++			      void *pTxDataHead,
++			      unsigned int cbFrameLength,
++			      unsigned int uDMAIdx,
++			      bool bNeedAck,
++			      unsigned int uFragIdx,
++			      unsigned int cbLastFragmentSize,
++			      unsigned int uMACfragNum,
++			      unsigned char byFBOption,
++			      unsigned short wCurrentRate,
++			      bool is_pspoll)
+ {
+ 	struct vnt_tx_datahead_ab *buf = pTxDataHead;
+ 
+@@ -555,19 +539,15 @@ s_uFillDataHead(
+ 	return buf->duration;
+ }
+ 
+-static
+-void
+-s_vFillRTSHead(
+-	struct vnt_private *pDevice,
+-	unsigned char byPktType,
+-	void *pvRTS,
+-	unsigned int cbFrameLength,
+-	bool bNeedAck,
+-	bool bDisCRC,
+-	struct ieee80211_hdr *hdr,
+-	unsigned short wCurrentRate,
+-	unsigned char byFBOption
+-)
++static void s_vFillRTSHead(struct vnt_private *pDevice,
++			   unsigned char byPktType,
++			   void *pvRTS,
++			   unsigned int cbFrameLength,
++			   bool bNeedAck,
++			   bool bDisCRC,
++			   struct ieee80211_hdr *hdr,
++			   unsigned short wCurrentRate,
++			   unsigned char byFBOption)
+ {
+ 	unsigned int uRTSFrameLen = 20;
+ 
+@@ -750,19 +730,15 @@ s_vFillRTSHead(
+ 	}
+ }
+ 
+-static
+-void
+-s_vFillCTSHead(
+-	struct vnt_private *pDevice,
+-	unsigned int uDMAIdx,
+-	unsigned char byPktType,
+-	void *pvCTS,
+-	unsigned int cbFrameLength,
+-	bool bNeedAck,
+-	bool bDisCRC,
+-	unsigned short wCurrentRate,
+-	unsigned char byFBOption
+-)
++static void s_vFillCTSHead(struct vnt_private *pDevice,
++			   unsigned int uDMAIdx,
++			   unsigned char byPktType,
++			   void *pvCTS,
++			   unsigned int cbFrameLength,
++			   bool bNeedAck,
++			   bool bDisCRC,
++			   unsigned short wCurrentRate,
++			   unsigned char byFBOption)
+ {
+ 	unsigned int uCTSFrameLen = 14;
+ 
+@@ -868,21 +844,17 @@ s_vFillCTSHead(
+  -
+  * unsigned int cbFrameSize, Hdr+Payload+FCS
+  */
+-static
+-void
+-s_vGenerateTxParameter(
+-	struct vnt_private *pDevice,
+-	unsigned char byPktType,
+-	struct vnt_tx_fifo_head *tx_buffer_head,
+-	void *pvRrvTime,
+-	void *pvRTS,
+-	void *pvCTS,
+-	unsigned int cbFrameSize,
+-	bool bNeedACK,
+-	unsigned int uDMAIdx,
+-	void *psEthHeader,
+-	unsigned short wCurrentRate
+-)
++static void s_vGenerateTxParameter(struct vnt_private *pDevice,
++				   unsigned char byPktType,
++				   struct vnt_tx_fifo_head *tx_buffer_head,
++				   void *pvRrvTime,
++				   void *pvRTS,
++				   void *pvCTS,
++				   unsigned int cbFrameSize,
++				   bool bNeedACK,
++				   unsigned int uDMAIdx,
++				   void *psEthHeader,
++				   unsigned short wCurrentRate)
+ {
+ 	u16 fifo_ctl = le16_to_cpu(tx_buffer_head->fifo_ctl);
+ 	bool bDisCRC = false;
+@@ -954,11 +926,12 @@ s_vGenerateTxParameter(
+ 	}
+ }
+ 
+-static unsigned int
+-s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
+-		  unsigned char *pbyTxBufferAddr,
+-		  unsigned int uDMAIdx, struct vnt_tx_desc *pHeadTD,
+-		  unsigned int is_pspoll)
++static unsigned int s_cbFillTxBufHead(struct vnt_private *pDevice,
++				      unsigned char byPktType,
++				      unsigned char *pbyTxBufferAddr,
++				      unsigned int uDMAIdx,
++				      struct vnt_tx_desc *pHeadTD,
++				      unsigned int is_pspoll)
+ {
+ 	struct vnt_td_info *td_info = pHeadTD->td_info;
+ 	struct sk_buff *skb = td_info->skb;
+-- 
+2.34.1
 
-Yes, haven't noticed there is a KVM_HPAGE_MASK defined. Have no
-strong preference here, since I already have KVM_PAGES_PER_HPAGE(level),
-getting mask is straightforward.
-
-A single KVM_HPAGE_MASK(level) will not give me what I need since here
-is gfn, KVM_HPAGE_MASK(level)>> PAGE_SHIFT should be the right
-equivalent.
-
-Chao
-> 
-> 
-> > +		lpage_start = max(start & mask, slot->base_gfn);
-> > +		lpage_end = (end - 1) & mask;
-> > +
-> > +		/*
-> > +		 * We only need to scan the head and tail page, for middle pages
-> > +		 * we know they are not mixed.
-> > +		 */
-> > +		linfo_update_mixed(lpage_info_slot(lpage_start, slot, level),
-> > +				   mem_attr_is_mixed(kvm, slot, level, attr,
-> > +						     lpage_start, start));
-> > +
-> > +		if (lpage_start == lpage_end)
-> > +			return;
-> > +
-> > +		for (gfn = lpage_start + pages; gfn < lpage_end; gfn += pages)
-> > +			linfo_update_mixed(lpage_info_slot(gfn, slot, level),
-> > +					   false);
-> > +
-> > +		linfo_update_mixed(lpage_info_slot(lpage_end, slot, level),
-> > +				   mem_attr_is_mixed(kvm, slot, level, attr,
-> > +						     end, lpage_end + pages));
-> > +	}
-> > +}
-> 
-> -- 
-> Isaku Yamahata <isaku.yamahata@gmail.com>
