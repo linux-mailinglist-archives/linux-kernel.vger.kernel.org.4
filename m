@@ -2,147 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B2A611B02
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DDA611B04
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbiJ1Tmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 15:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34758 "EHLO
+        id S230037AbiJ1TnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 15:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiJ1Tmc (ORCPT
+        with ESMTP id S229894AbiJ1TnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 15:42:32 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5AE1F180D
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 12:42:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=+np9QiDBm5OX72zqnX/JkVZoxFFoy5PO1D9fyLa2J/g=; b=lR7/bwA+xivuEesUhh0er/aFry
-        5hoSjRQMdoa5evgk8MhANcB2UrhCCgsa1IwY4m08cHOz+f8Q8rGNw8BH5MAotJr20yObyY54Fci3J
-        tdHxCYgm/7WnkJvWPIRerrL97tJZ5D+4TMie6eKM7OuvamH7pG2OmPCWAKb+lquzo49vSkN3+//Sb
-        zFqr7Gz7Hrg2GNQg7BSJCWYGp/oUgbgDkmohbzjREFFxtgHMIlFctVldht07remYp67elMZ6gW6lf
-        MY+TzoyZjDyxrtM7Ag+1DkNvRJdQSeih2gVgCPBjS7IYQ7BUCUmDXC1Fz1gWJE86b1+Hgm3Wtxu8V
-        krTNARdw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35016)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1ooVFL-0000LE-Hc; Fri, 28 Oct 2022 20:42:27 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1ooVFJ-0002q0-Km; Fri, 28 Oct 2022 20:42:25 +0100
-Date:   Fri, 28 Oct 2022 20:42:25 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Alexey Klimov <klimov.linux@gmail.com>
-Subject: Re: [PATCH 1/5] ARM: findbit: document ARMv5 bit offset calculation
-Message-ID: <Y1wwoTIjn3dBdLzX@shell.armlinux.org.uk>
-References: <Y1wHlSE0S5QZ+QCI@shell.armlinux.org.uk>
- <E1ooSWP-000FDy-5t@rmk-PC.armlinux.org.uk>
- <CAHk-=wi63Sw3vNJ86gzg1Tdr=_xGwGyj+mH-eT0UgaAfGAHX+A@mail.gmail.com>
- <Y1wVTkIZjoMVfxOK@shell.armlinux.org.uk>
- <Y1wheOT4yP7VCZ0p@yury-laptop>
+        Fri, 28 Oct 2022 15:43:12 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36346226E69;
+        Fri, 28 Oct 2022 12:43:11 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id j15so7902354wrq.3;
+        Fri, 28 Oct 2022 12:43:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=80FlYR4ra67WxSs9hG7X4/v7MPicXs8P7V1IbHZmi6U=;
+        b=AFmoHX+zTSVWJ/FPNTT7aiVVklllmTVbnNvip/xTAVAd190pw8syBPclWFQiDITFdw
+         TJe+h+zO+eoxmhwihRk5RkKLlc6TuUVht9dRQQD205/7jtKrqx1/pVDveXOkq/l9JQm6
+         bEbrmj8UMIJDXJWkKLe46uTM+WQTw0SWbw1DoX4qMVLwDZJMIt4xinLZOgvmi5Vm02zP
+         mN6oeW7UwRc3UCvJS0w0xSl9gpsvjQLkLpbxoaWRphEwTqWmenOEBgom7a+od7MnGnbV
+         Nz17JAyI23+WOg9EYH6FHP9jHovk2Qzw7MRRA+TANLoGD+i0HiLRJsn5W7KlNQcy6W2E
+         O+8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=80FlYR4ra67WxSs9hG7X4/v7MPicXs8P7V1IbHZmi6U=;
+        b=IEQHI5wAcS8zNQrJeMjuvDv4hVwpGanzznQx7YD2aFr384Gz7iBgfLjIW7K8pp3F5K
+         J2O9jS9/FDylrV1s1MpEG5LMMQ3BP+/r0BB5yaxrGS5/BvPD+E/biu+GLVl9DptA7O1R
+         BGQJ6qHarVs+tn7vfV0VHFc/BQ5PdMnnhSkU6C49n8Qr6y/1lm1f4ofKJ2ur17vZmFou
+         2uXmHebBnFc1g6UX7dQOfY09J7FpFFK3b2pS4G0LFL6fj/3Csyf6n8BcawQkWf0ikukd
+         2RZNKF0wNbaSgvsUgO+0T1yCRqyLAknugB0f1mZ5fmYjH7xidXAvQgaGr8vTMeCmrF9h
+         vOKQ==
+X-Gm-Message-State: ACrzQf1/5N7RqV24pR7kJDlfpfQpiTllAGrnEmhMRp7pPtm8J4CwsRYu
+        9k+L56YhJDrHRhgaJxuUgPaxtp7zfxM=
+X-Google-Smtp-Source: AMsMyM7M7lqjoiGpYhS7NRkp4swbbzyv8eD1Jxf0VfzmLRHUirEHIM0KthXXrmNmjjZYXpkcNgqsLQ==
+X-Received: by 2002:a5d:6488:0:b0:22b:3b0b:5e72 with SMTP id o8-20020a5d6488000000b0022b3b0b5e72mr567153wri.138.1666986189672;
+        Fri, 28 Oct 2022 12:43:09 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id j21-20020a05600c42d500b003b492753826sm4779470wme.43.2022.10.28.12.43.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 12:43:09 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 20:43:07 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net
+Subject: Re: [PATCH 5.15 00/78] 5.15.76-rc2 review
+Message-ID: <Y1wwyzl/2ZX7G4VD@debian>
+References: <20221028120302.594918388@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1wheOT4yP7VCZ0p@yury-laptop>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <20221028120302.594918388@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 11:37:44AM -0700, Yury Norov wrote:
-> + Alexey Klimov
+Hi Greg,
+
+On Fri, Oct 28, 2022 at 02:04:05PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.76 release.
+> There are 78 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> On Fri, Oct 28, 2022 at 06:45:50PM +0100, Russell King (Oracle) wrote:
-> > On Fri, Oct 28, 2022 at 10:05:29AM -0700, Linus Torvalds wrote:
-> > > On Fri, Oct 28, 2022 at 9:47 AM Russell King (Oracle)
-> > > <rmk+kernel@armlinux.org.uk> wrote:
-> > > >
-> > > > Document the ARMv5 bit offset calculation code.
-> > > 
-> > > Hmm. Don't the generic bitop functions end up using this? We do have a
-> > > comment in the code that says
-> > > 
-> > >  * On ARMv5 and above, the gcc built-ins may rely on the clz instruction
-> > >  * and produce optimal inlined code in all cases. On ARMv7 it is even
-> > >  * better by also using the rbit instruction.
-> > 
-> > It's true that the generic code also makes use of the rbit and clz
-> > instructions - but in terms of the speed of the functions these only
-> > get used once we've found a word that is interesting to locate the
-> > bit we want in.
-> > 
-> > > but that 'may' makes me wonder...
-> > > 
-> > > IOW, what is it in the hand-written code that doesn't get done by the
-> > > generic code these days?
-> > 
-> > For the _find_first_bit, there isn't much difference in the number
-> > of instructions or really what is going on, only the organisation
-> > and flow of the code is more inline - but that shouldn't make much
-> > of a difference. Yet, there is a definite repeatable measurable
-> > difference between the two:
-> > 
-> > random-filled:
-> > arm    : find_first_bit:               17778911 ns,  16448 iterations
-> > generic: find_first_bit:               18596622 ns,  16401 iterations
-> > 
-> > sparse:
-> > arm    : find_first_bit:                7301363 ns,    656 iterations
-> > generic: find_first_bit:                7589120 ns,    655 iterations
-> > 
-> > The bigger difference is in the find_next_bit operations, and this
-> > likely comes from the arm32 code not having the hassles of the "_and"
-> > and other conditionals that the generic code has:
-> > 
-> > random-filled:
-> > arm    : find_next_bit:                 2242618 ns, 163949 iterations
-> > generic: find_next_bit:                 2632859 ns, 163743 iterations
-> > 
-> > sparse:
-> > arm    : find_next_bit:                   40078 ns,    656 iterations
-> > generic: find_next_bit:                   69943 ns,    655 iterations
-> > 
-> > find_next_zero_bit show a greater difference:
-> > 
-> > random-filled:
-> > arm    : find_next_zero_bit:            2049129 ns, 163732 iterations
-> > generic: find_next_zero_bit:            2844221 ns, 163938 iterations
-> > 
-> > sparse:
-> > arm    : find_next_zero_bit:            3939309 ns, 327025 iterations
-> > generic: find_next_zero_bit:            5529553 ns, 327026 iterations
-> 
-> Those numbers disagree with what Alexey has measured on Odroid board
-> for A15 but somewhat in line with what he had for A7:
+> Responses should be made by Sun, 30 Oct 2022 12:02:44 +0000.
+> Anything received after that time might be too late.
 
-Considering no one has seen these patches until I've just posted
-them, frankly I don't think there's any point me looking at anyone
-elses results.
+Build test (gcc version 12.2.1 20221016):
+mips: 62 configs -> no failure
+arm: 99 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-These changes make substantial improvements to the arm32 assembly
-code versions.
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
 
-If you want a like-for-like comparison, then please get Alexey to
-test with these patches applied. I am confident that he will confirm
-my results.
+[1]. https://openqa.qa.codethink.co.uk/tests/2058
+[2]. https://openqa.qa.codethink.co.uk/tests/2061
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Regards
+Sudip
