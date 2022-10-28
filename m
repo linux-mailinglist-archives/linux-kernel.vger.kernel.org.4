@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477ED611319
+	by mail.lfdr.de (Postfix) with ESMTP id 9333461131A
 	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbiJ1NiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S231331AbiJ1NiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231124AbiJ1Ngy (ORCPT
+        with ESMTP id S231127AbiJ1Ngy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 28 Oct 2022 09:36:54 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A151D8F33;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3DB1D8F3F;
         Fri, 28 Oct 2022 06:36:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2F04B82A33;
-        Fri, 28 Oct 2022 13:36:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C96FC43151;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05C01B82A2E;
+        Fri, 28 Oct 2022 13:36:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31A4BC4167D;
         Fri, 28 Oct 2022 13:36:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1666964209;
-        bh=zRz+xGr3qfzBHmqhYcHtUOAO+a77B5PUV9OisEOT424=;
+        bh=GiJmZNg8T5O5/fCxOI/o4taQRIeOyB6kSPSO4qZDxu8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NGwjL6BUqzf4qmUkH5RKP2HzYrjJv+TeCLW0MnsOPLlWz8BcrM7/qzpl90OjOoPnr
-         3KmQGEfbkHOh4x341ygFqo14frXR4VD/rFF+f3CBqxKWgHLi6lty6eCugeOBEb+vLW
-         Zvb3FVE+EcnNWnwvBfVvIWcN7+hLiQhMVvj/bT7XkTw2NOcu6H/Pwvwkl6IjRdr+T1
-         BXHPddWl2wPREB1TZi41kLvK47s7oQOA0CpYyxYdRls2adqEM6dhw1N8tGrtleghOf
-         Yhi3HNR3Njl5h4G5hqQpCc7xyLCK6cXXrDv4E8DECLnf+oe24SnYa3JcCQW9rNfFib
-         qO6cPomTiBsLg==
+        b=aRpCQcxNqO65X3OEJS41fQwz+ntOGgwekh4xk4UKWvPyMxse0kGdvIm4RjiP5elXj
+         /l046r4Mr0Jo/OFXscUmDhLGR4dcXFPxSu3nEsOpzOHRkfjz0svusUt/Q+ICKHZAHz
+         qT8s8lGsM6U+rUoWs/7YWynNd9pURNFIHteC9RhhvmbsOwH4HBdcolF/d8SrI7tkN+
+         lvgBUlUhU69mAC8lEOekm960V8h/58F1APPxP+OtNiK2VuF93KKeCO96RhqcO5hH1Z
+         b55t9NQ4QCsJ3bjGFqz2uj0W+dSNXQxmeomd2u06FNJ1OKOIeualFDDF9F8pPjkRXF
+         1GAeFpwdveT4A==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1ooPXH-0004rG-Hw; Fri, 28 Oct 2022 15:36:35 +0200
+        id 1ooPXH-0004rK-KR; Fri, 28 Oct 2022 15:36:35 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -45,10 +45,11 @@ Cc:     Andy Gross <agross@kernel.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v4 09/16] phy: qcom-qmp-pcie: add register init helper
-Date:   Fri, 28 Oct 2022 15:35:56 +0200
-Message-Id: <20221028133603.18470-10-johan+linaro@kernel.org>
+        Johan Hovold <johan+linaro@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 10/16] dt-bindings: phy: qcom,qmp-pcie: rename current bindings
+Date:   Fri, 28 Oct 2022 15:35:57 +0200
+Message-Id: <20221028133603.18470-11-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221028133603.18470-1-johan+linaro@kernel.org>
 References: <20221028133603.18470-1-johan+linaro@kernel.org>
@@ -63,96 +64,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Generalise the serdes initialisation helper so that it can be used to
-initialise all the PHY registers (e.g. serdes, tx, rx, pcs).
+The current QMP PCIe PHY bindings are based on the original MSM8996
+binding which provided multiple PHYs per IP block and these in turn were
+described by child nodes.
 
-Note that this defers the ungating of the PIPE clock somewhat, which is
-fine as it isn't needed until starting the PHY.
+Later QMP PCIe PHY blocks only provide a single PHY and the remnant
+child node does not really reflect the hardware.
 
+The original MSM8996 binding also ended up describing the individual
+register blocks as belonging to either the wrapper node or the PHY child
+nodes.
+
+This is an unnecessary level of detail which has lead to problems when
+later IP blocks using different register layouts have been forced to fit
+the original mould rather than updating the binding. The bindings are
+arguable also incomplete as they only the describe register blocks used
+by the current Linux drivers (e.g. does not include the per lane PCS
+registers).
+
+In preparation for adding new bindings for SC8280XP which further
+bindings can be based on, rename the current schema file after IPQ8074,
+which was the first SoC added to the bindings after MSM8996 (which has
+already been split out), and add a reference to the SC8280XP bindings.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 37 +++++-------------------
- 1 file changed, 8 insertions(+), 29 deletions(-)
+ ...om,qmp-pcie-phy.yaml => qcom,ipq8074-qmp-pcie-phy.yaml} | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+ rename Documentation/devicetree/bindings/phy/{qcom,qmp-pcie-phy.yaml => qcom,ipq8074-qmp-pcie-phy.yaml} (96%)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-index 791ed7ef0eab..f57d10f20277 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-@@ -1820,27 +1820,22 @@ static void qmp_pcie_configure(void __iomem *base,
- 	qmp_pcie_configure_lane(base, tbl, num, 0xff);
- }
+diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,ipq8074-qmp-pcie-phy.yaml
+similarity index 96%
+rename from Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
+rename to Documentation/devicetree/bindings/phy/qcom,ipq8074-qmp-pcie-phy.yaml
+index 324ad7d03a38..62045dcfb20c 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,ipq8074-qmp-pcie-phy.yaml
+@@ -1,10 +1,10 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: http://devicetree.org/schemas/phy/qcom,qmp-pcie-phy.yaml#
++$id: http://devicetree.org/schemas/phy/qcom,ipq8074-qmp-pcie-phy.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
  
--static void qmp_pcie_serdes_init(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tbls)
--{
--	void __iomem *serdes = qmp->serdes;
--
--	if (!tbls)
--		return;
--
--	qmp_pcie_configure(serdes, tbls->serdes, tbls->serdes_num);
--}
--
--static void qmp_pcie_lanes_init(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tbls)
-+static void qmp_pcie_init_registers(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tbls)
- {
- 	const struct qmp_phy_cfg *cfg = qmp->cfg;
-+	void __iomem *serdes = qmp->serdes;
- 	void __iomem *tx = qmp->tx;
- 	void __iomem *rx = qmp->rx;
- 	void __iomem *tx2 = qmp->tx2;
- 	void __iomem *rx2 = qmp->rx2;
-+	void __iomem *pcs = qmp->pcs;
-+	void __iomem *pcs_misc = qmp->pcs_misc;
+-title: Qualcomm QMP PHY controller (PCIe)
++title: Qualcomm QMP PHY controller (PCIe, IPQ8074)
  
- 	if (!tbls)
- 		return;
+ maintainers:
+   - Vinod Koul <vkoul@kernel.org>
+@@ -13,6 +13,9 @@ description:
+   QMP PHY controller supports physical layer functionality for a number of
+   controllers on Qualcomm chipsets, such as, PCIe, UFS, and USB.
  
-+	qmp_pcie_configure(serdes, tbls->serdes, tbls->serdes_num);
++  Note that these bindings are for SoCs up to SC8180X. For newer SoCs, see
++  qcom,sc8280xp-qmp-pcie-phy.yaml.
 +
- 	qmp_pcie_configure_lane(tx, tbls->tx, tbls->tx_num, 1);
- 	qmp_pcie_configure_lane(rx, tbls->rx, tbls->rx_num, 1);
- 
-@@ -1848,15 +1843,6 @@ static void qmp_pcie_lanes_init(struct qmp_pcie *qmp, const struct qmp_phy_cfg_t
- 		qmp_pcie_configure_lane(tx2, tbls->tx, tbls->tx_num, 2);
- 		qmp_pcie_configure_lane(rx2, tbls->rx, tbls->rx_num, 2);
- 	}
--}
--
--static void qmp_pcie_pcs_init(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tbls)
--{
--	void __iomem *pcs = qmp->pcs;
--	void __iomem *pcs_misc = qmp->pcs_misc;
--
--	if (!tbls)
--		return;
- 
- 	qmp_pcie_configure(pcs, tbls->pcs, tbls->pcs_num);
- 	qmp_pcie_configure(pcs_misc, tbls->pcs_misc, tbls->pcs_misc_num);
-@@ -1932,8 +1918,8 @@ static int qmp_pcie_power_on(struct phy *phy)
- 	else
- 		mode_tables = cfg->tables_ep;
- 
--	qmp_pcie_serdes_init(qmp, &cfg->tables);
--	qmp_pcie_serdes_init(qmp, mode_tables);
-+	qmp_pcie_init_registers(qmp, &cfg->tables);
-+	qmp_pcie_init_registers(qmp, mode_tables);
- 
- 	ret = clk_prepare_enable(qmp->pipe_clk);
- 	if (ret) {
-@@ -1941,13 +1927,6 @@ static int qmp_pcie_power_on(struct phy *phy)
- 		return ret;
- 	}
- 
--	/* Tx, Rx, and PCS configurations */
--	qmp_pcie_lanes_init(qmp, &cfg->tables);
--	qmp_pcie_lanes_init(qmp, mode_tables);
--
--	qmp_pcie_pcs_init(qmp, &cfg->tables);
--	qmp_pcie_pcs_init(qmp, mode_tables);
--
- 	/* Pull PHY out of reset state */
- 	qphy_clrbits(pcs, cfg->regs[QPHY_SW_RESET], SW_RESET);
- 
+ properties:
+   compatible:
+     enum:
 -- 
 2.37.3
 
