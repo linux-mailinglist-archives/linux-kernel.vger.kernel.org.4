@@ -2,85 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8F5611AA3
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 409D9611AA9
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiJ1THV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 15:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
+        id S229727AbiJ1TKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 15:10:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiJ1THS (ORCPT
+        with ESMTP id S229531AbiJ1TKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 15:07:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A28F13A7FB;
-        Fri, 28 Oct 2022 12:07:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AB9762A0B;
-        Fri, 28 Oct 2022 19:07:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C90EC433D6;
-        Fri, 28 Oct 2022 19:07:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666984037;
-        bh=ervC6ARXQQ75MdsA8OL4ZgPAvhRgLXYEJOmpIVIk9PM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Qwa3QUBIxYIkqpBLAMz/CoVKnJAFJXovNuQS/JLnNFs/AG7S6ecUM7qigbU1RR3mW
-         rt/2eRXhC8dL7JbaSkpNm8nllgm2HFuBOv+1nLMJS/7cmDcLPHdW40S1TKCqM6rzw2
-         SzwFkZGy39njtqwYKWE6GF9QrFEwJVEs++PZjg9WKLH9lh+L523Pv46M99D42iQvrH
-         iADFqBUmfHsbxohiTk6yCF4w3S/iVC07TpjgYfmaQZp0UXZDoaAzcayuhjRG2KYRZS
-         lUip+9CcEGBI66zyMMwQng3dPaWnM+EIWeoknK8oU5SXtUmKEcIPzHgPlWlrHb2ymi
-         amolGhv3ciRLg==
-Date:   Fri, 28 Oct 2022 12:07:15 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "Sit, Michael Wei Hong" <michael.wei.hong.sit@intel.com>
-Cc:     Vee Khee Wong <veekhee@apple.com>,
-        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "Looi, Hong Aun" <hong.aun.looi@intel.com>,
-        "joabreu@synopsys.com" <joabreu@synopsys.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "Zulkifli, Muhammad Husaini" <muhammad.husaini.zulkifli@intel.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "peppe.cavallaro@st.com" <peppe.cavallaro@st.com>,
-        "Tan, Tee Min" <tee.min.tan@intel.com>,
-        "Voon, Weifeng" <weifeng.voon@intel.com>,
-        "Gan, Yi Fang" <yi.fang.gan@intel.com>,
-        "Song, Yoong Siang" <yoong.siang.song@intel.com>
-Subject: Re: [PATCH net-next 1/1] stmmac: intel: Separate ADL-N and RPL-P
- device ID from TGL
-Message-ID: <20221028120715.1dc12fc1@kernel.org>
-In-Reply-To: <DM5PR11MB15935E3AF06794F523DB48C69D329@DM5PR11MB1593.namprd11.prod.outlook.com>
-References: <A23A7058-5598-46EB-8007-C401ADC33149@apple.com>
-        <DM5PR11MB15935E3AF06794F523DB48C69D329@DM5PR11MB1593.namprd11.prod.outlook.com>
+        Fri, 28 Oct 2022 15:10:37 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F7F578B6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 12:10:35 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id o28so1421992qkl.4
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 12:10:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ovE5YzrgrqjUaqk1z5SrG916L1YKgz031z7kIQxrJ8o=;
+        b=A6FvUYZMIbmkWpQQWCDpM5Ci38l0NzF+kXhGSvNAuNLlgQ3mgBvtotnvA/Jc+vFtTG
+         r28VWYRwpy3/taPygrXuHFWdADnLNSukjmoj7UIr3zVBLuKkx5eoUt4HwQD6yM+GauPL
+         jfY3M0u41BZtxwEC4GEsJCUr4Z7u7hCJwy6cE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ovE5YzrgrqjUaqk1z5SrG916L1YKgz031z7kIQxrJ8o=;
+        b=VAAZ+DS6cvAMQZnkzs3usLsysMNsd1zxhZSrGJi+aHrxYJPYkv+hxhaSKDgjAa0QYx
+         Yanusw3k/jyscd+f52HmfZQYOKigYw4uIqGfJ2nty0W3ltOA+VO1nWAfpIUG5K78/yfX
+         DrSreQII8alsAk2Dc3L/yzz/jISkZkiRnkTV0tewK2kwMsi2TlhSh9s24K1nTRjtFj5E
+         HPYGxco3q5YUxN8Org1PQtlSASVBmQhTGB5VxggKBki7eiIB/sn2lwJE/KSOhwRp6dVS
+         VLcHSJWEsvb0XQxs2SIxkv6VCtQggYSQLXaBCxleD1mlfGIFAIAtOdEpABWkUIGE7wfQ
+         71mA==
+X-Gm-Message-State: ACrzQf0SYi30zIZz9m8Eexj6CvFj3Flm1ieabY2WQtd8JsJDAopHCP05
+        qj8wTR+cIw3aUwlalRqxhePXYjA+kdCJYw==
+X-Google-Smtp-Source: AMsMyM6ToRi6/85wHhQsJYedd+HjBbqvi/btDiuc+aEYMdIJ3l01rRWtdWeY2y5ECaiPkaizwY6MeQ==
+X-Received: by 2002:a05:620a:4606:b0:6ee:e73b:aecb with SMTP id br6-20020a05620a460600b006eee73baecbmr544309qkb.681.1666984234330;
+        Fri, 28 Oct 2022 12:10:34 -0700 (PDT)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id j66-20020a37b945000000b006f87d28ea3asm3393075qkf.54.2022.10.28.12.10.32
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 12:10:32 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-3691e040abaso55700307b3.9
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 12:10:32 -0700 (PDT)
+X-Received: by 2002:a81:1902:0:b0:36b:2578:f6e2 with SMTP id
+ 2-20020a811902000000b0036b2578f6e2mr930931ywz.352.1666984232488; Fri, 28 Oct
+ 2022 12:10:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y1wHlSE0S5QZ+QCI@shell.armlinux.org.uk> <E1ooSWP-000FDy-5t@rmk-PC.armlinux.org.uk>
+ <CAHk-=wi63Sw3vNJ86gzg1Tdr=_xGwGyj+mH-eT0UgaAfGAHX+A@mail.gmail.com>
+ <Y1wVTkIZjoMVfxOK@shell.armlinux.org.uk> <CAHk-=wh75aOWvaEhYsAcCJSRzhy8MO_SdvDzB6zmvVs+FeAr6w@mail.gmail.com>
+In-Reply-To: <CAHk-=wh75aOWvaEhYsAcCJSRzhy8MO_SdvDzB6zmvVs+FeAr6w@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 28 Oct 2022 12:10:16 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi5Ud30Od-=buKvrvinemR7uVuTUkbKqCGu_ySZPjLVfA@mail.gmail.com>
+Message-ID: <CAHk-=wi5Ud30Od-=buKvrvinemR7uVuTUkbKqCGu_ySZPjLVfA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] ARM: findbit: document ARMv5 bit offset calculation
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Oct 2022 10:44:24 +0000 Sit, Michael Wei Hong wrote:
-> This is to allow finer control on platform specific features for ADL and =
-RPL.
-> There are some features that ADL and RPL doesn=E2=80=99t support and TGL =
-supports vice versa.
+On Fri, Oct 28, 2022 at 12:01 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> In contrast, the arm code doesn't do the "min()" at all, and if there
+> are bits after the bitmap (in a partial byte), it will just return
+> those bits.
 
-But if they are the same _right_ _now_ what's the point?
-Please repost as part of a series which actually modifies
-the contents.
+No, I did misread the code. It returns 'size' for the no bits case,
+and the 'movlo r0, r1'; does the right thing for the "bits past the
+end" case too.
 
-Please remember not to top post on the ML.
+I guess I need to get better at reading arm asm.
+
+                Linus
