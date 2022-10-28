@@ -2,110 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2CD610EF7
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82ED1610EFB
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:50:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbiJ1Kt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 06:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42204 "EHLO
+        id S231161AbiJ1KuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 06:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbiJ1KtX (ORCPT
+        with ESMTP id S231150AbiJ1KuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 06:49:23 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E011CEC35;
-        Fri, 28 Oct 2022 03:49:21 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id t4so2993935wmj.5;
-        Fri, 28 Oct 2022 03:49:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RwtKvIgsWQUddFyHA+7csn8T24MsDcLDATdxH1tSNJ8=;
-        b=qEtykyq7ZvlO93mFb2Ywy/JBkySHuWNDYocv706zVgePaaOa/XLO5TkBMmSNDRJyXu
-         hLwAGZxfH9s28CufzHSxGiRXnABebBTWkg4ByhYf+lqWoYbVSxNa1m0LL+suHYle47Rd
-         7hOE/mLHwhwIWMSqXZyrcX0IQy3kod6QXmAUGbwY7qsHIUy4hhdfWlBFbHfz36O/TKTz
-         zVer0OJl8rrhGR4hMjUHNgPewBLRZ5z4O5w821xK1oN8luNl19C6K2jZkxUnGxxsKFYC
-         hvQTuAvOUAwYq8e0uU9FaDYXVIUUO2BaoMD5itzzgzlOf9VlAjDl9NavHqhD2z+/4QvE
-         7Ofg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RwtKvIgsWQUddFyHA+7csn8T24MsDcLDATdxH1tSNJ8=;
-        b=gZcVqGdBBwTtFVRO5hOsgCAPCeRMJneRNts+lMM8rxA9IBggKQ/T9Uwr/zYPdHKBii
-         jFWfz+E69OCUjc7wKig2pTHLEpIwflN7Pt4SO8gkLIJFBBVD/opQYol8XwVrLuNGZVCa
-         mEfSWep+mMn4TEnNrxtTG2B6fC7hwHmk0lEPQpRutR6JnTlaRobYSFO9R/YRQWBRkw6w
-         GIwJhJ1Yx/ATwRstLoMSHSIWqcFfZeTR6azm09uyFSYLqHzfg7uuId8gwfwMm6tMPwFP
-         5Qgg3FwAlb+antjkfZCniaFZ92ymcCigoPE74cCZ4od9zoeIBmiljpxGAlFr+uGhpo4j
-         dOdw==
-X-Gm-Message-State: ACrzQf1C5owqTFtPkc6JKONZZSFQp0fmVCrsHID/XpmWmVCvbrux8ESS
-        TT5j7jZp08MQNsVPrL/EpHM=
-X-Google-Smtp-Source: AMsMyM7jSlHdfzuiC68SehMUaVUkbXBv4TZCGrKBMpKl8QxJy4rJUWpA2XnSoh6mso4cH/fgDyQTng==
-X-Received: by 2002:a05:600c:35cf:b0:3c6:e957:b403 with SMTP id r15-20020a05600c35cf00b003c6e957b403mr9488581wmq.162.1666954160237;
-        Fri, 28 Oct 2022 03:49:20 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id m5-20020adffe45000000b002238ea5750csm4024602wrs.72.2022.10.28.03.49.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 03:49:19 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 11:49:18 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net
-Subject: Re: [PATCH 5.4 00/53] 5.4.221-rc1 review
-Message-ID: <Y1uzrvWMM/lZBlBS@debian>
-References: <20221027165049.817124510@linuxfoundation.org>
+        Fri, 28 Oct 2022 06:50:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF3E5073C;
+        Fri, 28 Oct 2022 03:50:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E244AB82950;
+        Fri, 28 Oct 2022 10:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8D40CC433C1;
+        Fri, 28 Oct 2022 10:50:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666954215;
+        bh=ZxXioDfVkXsgBZIisE7RUwBlBfkuXIE9EtRaC0E0uD0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=phZoO9j6GBlNOBYNbmh1EzJzYjq73jPLhN+aY0VFDEwwLqxHco2m3uK+M1AJ2yiNK
+         S0JJt7UPrwYPBG53Y745dKE9LhAMKRriabZhwf+AMdnoqy6SK2zpBwcoCyqFW9abBe
+         qoF1YBh++AO3/mqOpQ1Lt80zJalmV5MK9oRXSxfdRTxFs50ZRg/TWA+3DAxVcHZgQr
+         DzbIpm8QxgmkZmdf6jnIqAc+IqxlKPgEcZzVmgYdFbAuwqPbfYkNqmn9KyXZnNu16R
+         7kV1+dwFI4E4F4+x/rb6eruRb3fNV0WbbnuCsIrSoh/CAY4M53sOl732pMdr6pti8Z
+         kkykw6H5umSsw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6DEAEC41670;
+        Fri, 28 Oct 2022 10:50:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221027165049.817124510@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: emaclite: update reset_lock member documentation
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166695421544.17248.14616815887812482981.git-patchwork-notify@kernel.org>
+Date:   Fri, 28 Oct 2022 10:50:15 +0000
+References: <1666797324-1780-1-git-send-email-radhey.shyam.pandey@amd.com>
+In-Reply-To: <1666797324-1780-1-git-send-email-radhey.shyam.pandey@amd.com>
+To:     Pandey@ci.codeaurora.org,
+        Radhey Shyam <radhey.shyam.pandey@amd.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, michal.simek@xilinx.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, git@amd.com
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Hello:
 
-On Thu, Oct 27, 2022 at 06:55:48PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.221 release.
-> There are 53 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Wed, 26 Oct 2022 20:45:24 +0530 you wrote:
+> Instead of generic description, mention what reset_lock actually
+> protects i.e. lock to serialize xmit and tx_timeout execution.
 > 
-> Responses should be made by Sat, 29 Oct 2022 16:50:35 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> ---
+>  drivers/net/ethernet/xilinx/xilinx_emaclite.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Build test (gcc version 11.3.1 20221016):
-mips: 65 configs -> no failure
-arm: 106 configs -> no failure
-arm64: 2 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Here is the summary with links:
+  - net: emaclite: update reset_lock member documentation
+    https://git.kernel.org/netdev/net/c/8fdf3f6aba7c
 
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/2046
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
+You are awesome, thank you!
 -- 
-Regards
-Sudip
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
