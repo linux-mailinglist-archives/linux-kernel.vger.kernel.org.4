@@ -2,63 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBCB16119B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61CBF6119BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbiJ1R5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 13:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
+        id S229489AbiJ1R6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 13:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbiJ1R5M (ORCPT
+        with ESMTP id S229668AbiJ1R6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 13:57:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DFFC1EA57D;
-        Fri, 28 Oct 2022 10:57:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D10E0629A0;
-        Fri, 28 Oct 2022 17:57:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38A06C433D7;
-        Fri, 28 Oct 2022 17:57:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666979830;
-        bh=C9+YCGC1n24X+HLB2Ag9bB27vqjvZDxZ4l2jLCIpHnM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=g5p2QmVPjiHfDV6KtfaHaTaEyksRUljwjIsdl9/TCabZ3VwoXaqr86R5N6vEM529m
-         33eVMtGmwT3U+MzwIVKTYnI7UHYijLsFSYj2Q3seospsZxA4WJ46iBRj+Sa8tuqnTu
-         QPyCPGbrsNDzYprPSwgEF621KxZ4hZRuded3ezWRIxjRenmDCuWVtX+9iJYkj05K3T
-         u53wukn8SIReKPu+UD/Hec9vXyDWVj++yb8g6kX/jFR423bRjk6BzQAt7i1cOODgGw
-         Luc4eqheG936kyU6zZm9l+/w9IiIbmuYmSAriECqm9Yxh/iq5S+yYwCzfsntjaxt4G
-         fA3tSt9xbeW1A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id DDBB25C0692; Fri, 28 Oct 2022 10:57:09 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 10:57:09 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Elliott, Robert (Servers)" <elliott@hpe.com>
-Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] sched: Add helper kstat_cpu_softirqs_sum()
-Message-ID: <20221028175709.GP5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221022124525.2080-1-thunder.leizhen@huawei.com>
- <20221022124525.2080-2-thunder.leizhen@huawei.com>
- <MW5PR84MB18423C3F30D3F789EB48D0A5AB339@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+        Fri, 28 Oct 2022 13:58:20 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2701EB576
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:58:19 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id u7so4527364qvn.13
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:58:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Z2rrxegvFg2FU9tdiMVnm2F7JFLebLK8/DzrkdwOia8=;
+        b=fraNEttcjrbsQWUwMp/J+ZIx1bUNFBiwkQcyDOQ95PrT/Ks0L8ibhqyrNNhv+O299F
+         A6ygkQQlI+xYVk440AFZ+hE3xghWHIBwToMAOFiBqv/00BlolCA8DouG4Mu54Y9tTKh+
+         xlROBBFVesNR5GN94eEclsuL2A8mFYnWaSuk/1e0Q+jgACzlyq2SoWxUu0YDy6Rr9UpC
+         lMPibTya5CqLdgxez8XUv2QadYFSuD9hDqNRnZeAWrPgM5hEjvGBBTsU1xE6tQEepu4L
+         4QXW0AsPMWadTl/iAoAiaK53L8EMsKWejyZGupqUJKGuH1ANvotGiMJZ3O1kVuLOan+K
+         7UFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z2rrxegvFg2FU9tdiMVnm2F7JFLebLK8/DzrkdwOia8=;
+        b=LhR9iZQp+GzzKmfGzBBeJ3iAan4BE77eaxG+xz1H3/Lwnb6zldEZKqwu5jw0yN0o56
+         VqT0WldOVV6mIee6SYCwqIXiIwCTcgEJlCg4oImL59WYehpXIIwbj9tv9FeWq/53coFy
+         xjIoTw6SGklAJJv25L5gAt5fhZjqwLpDpGFN5p47ecLit2MzybMiSvug2Wf62gCOJDeq
+         fGVS/Pivb2m6gKLAr29QiqgRm3f+6IxTPJI2lalEXscXegOx6w/hW25/zj5Z9E8c/JLi
+         +9MhVbBU0fDMrKsoxrRi+8Xjn/h//V8iOXOmn/h5tjkQbBr5ydBpj/pA2aFtjvy9cVrr
+         tquw==
+X-Gm-Message-State: ACrzQf2Gz087s9viWxszda/3mabLbCtZ1TAPvacLa6WZvtHpfi4stJD5
+        vfEh6Fy9VwEcjWkaG0b25ZJl0w==
+X-Google-Smtp-Source: AMsMyM6quImhJlk5cn6eegtdWzH8grrjs4wtY1GdGHe9oHTnd9M/5Z7LjS0jMuspsFZFxBZYG0eHRg==
+X-Received: by 2002:a05:6214:3005:b0:4ad:8042:128a with SMTP id ke5-20020a056214300500b004ad8042128amr545569qvb.66.1666979898742;
+        Fri, 28 Oct 2022 10:58:18 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id w26-20020a05620a0e9a00b006bb82221013sm3426268qkm.0.2022.10.28.10.58.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 10:58:18 -0700 (PDT)
+Message-ID: <628ac98c-0755-e6f6-e010-f1e772c4b71a@linaro.org>
+Date:   Fri, 28 Oct 2022 13:58:10 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MW5PR84MB18423C3F30D3F789EB48D0A5AB339@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v2 1/2] ASoC: mediatek: dt-bindings: modify machine
+ bindings for two MICs case
+Content-Language: en-US
+To:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        "chunxu . li" <chunxu.li@mediatek.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
+        <nfraprado@collabora.com>, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
+References: <20221028172215.1471235-1-ajye_huang@compal.corp-partner.google.com>
+ <20221028172215.1471235-2-ajye_huang@compal.corp-partner.google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221028172215.1471235-2-ajye_huang@compal.corp-partner.google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,52 +90,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 07:04:53PM +0000, Elliott, Robert (Servers) wrote:
-> 
-> > Similar to kstat_cpu_irqs_sum(), it counts the sum of all software
-> > interrupts on a specified CPU.
-> > 
-> > diff --git a/include/linux/kernel_stat.h b/include/linux/kernel_stat.h
-> > @@ -67,6 +67,17 @@ static inline unsigned int kstat_softirqs_cpu(unsigned int irq, int cpu)
-> >         return kstat_cpu(cpu).softirqs[irq];
-> >  }
-> > 
-> > +static inline unsigned int kstat_cpu_softirqs_sum(int cpu)
-> > +{
-> > +	int i;
-> > +	unsigned int sum = 0;
-> > +
-> > +	for (i = 0; i < NR_SOFTIRQS; i++)
-> > +		sum += kstat_softirqs_cpu(i, cpu);
-> > +
-> > +	return sum;
-> > +}
-> 
-> In the function upon which this is based:
-> 
-> irqs_sumstruct kernel_stat {
->         unsigned long irqs_sum;
->         unsigned int softirqs[NR_SOFTIRQS];
-> };
-> 
-> static inline unsigned int kstat_cpu_irqs_sum(unsigned int cpu)
-> {
->         return kstat_cpu(cpu).irqs_sum;
-> }
-> 
-> kstat_cpu_irqs_sum returns an unsigned long as an unsigned int, which
-> could cause large values to be truncated. Should that return
-> unsigned long? The only existing caller is fs/proc/stat.c which
-> puts it into a u64:
->         u64 sum = 0;
->         ...
->         sum             += kstat_cpu_irqs_sum(i);
-> 
-> The softirqs field is an unsigned int, so the new function doesn't have
-> this inconsistency.
+On 28/10/2022 13:22, Ajye Huang wrote:
+> Add a property "dmic-gpios" for switching between two MICs.
 
-Good point!
+Use subject prefixes matching the subsystem (git log --oneline -- ...).
 
-Zhen Lei, thoughts?
+> 
+> Signed-off-by: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+> ---
+>  .../bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml        | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml b/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
+> index 4fc5b045d3cf..212d2982590a 100644
+> --- a/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
+> +++ b/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
+> @@ -21,6 +21,10 @@ properties:
+>      $ref: "/schemas/types.yaml#/definitions/phandle"
+>      description: The phandle of MT8186 ASoC platform.
+>  
+> +  dmic-gpios:
+> +    maxItems: 1
+> +    description: GPIO for switching between DMICs
 
-							Thanx, Paul
+Switching how? Enabling? What is the meaning of each GPIO pin value?
+
+> +
+>    headset-codec:
+>      type: object
+>      additionalProperties: false
+> @@ -72,6 +76,8 @@ examples:
+>          pinctrl-0 = <&aud_clk_mosi_off>;
+>          pinctrl-1 = <&aud_clk_mosi_on>;
+>  
+> +        dmic-gpios = <&pio 23 0>;
+
+Use defines for flags.
+
+Best regards,
+Krzysztof
+
