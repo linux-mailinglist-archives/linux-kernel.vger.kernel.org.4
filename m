@@ -2,180 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21EAD610782
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 03:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC96610789
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 03:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235121AbiJ1B42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 21:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
+        id S235368AbiJ1B5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 21:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234664AbiJ1B4W (ORCPT
+        with ESMTP id S234467AbiJ1B45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 21:56:22 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95757F109
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:56:20 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id cr19so2743895qtb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:56:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QFSp8Gx4w5A/kz9i8MLnQOAGdc+1wRun3PEnvhLdY94=;
-        b=Y6RrE+pmTF/dQH8SABMBeNtSpSRZA2e6R+brGqO9hQZMeYaaEVPHhfS71KE8VnvegY
-         OxbHVdCaYLpPLqJgvzjptumMzCEIo8V9aEUscBDIHrSgD1YSRi2rLCtjDApfcx9KkM2s
-         C8FG5iVGmQtXIyBs3yFPyk7b+qQ5vQGzvtFzuHGWvBU1JfCencMOJnL4n7Za7f6oqUJ/
-         IB07lhkV94YIVVCkZVnUfSfIuPBH2DzBM16E35SA/Gj5TlTxSZw4jxDcv17J9rXzItx6
-         qMo1t5Zf6fL1Y/G5Ji7PupJGMAZVhiI7OrXzlLGNkPfvmK6i+bCvPBo/UO2Bj3HSsT+k
-         htog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QFSp8Gx4w5A/kz9i8MLnQOAGdc+1wRun3PEnvhLdY94=;
-        b=AI1IXM7nan7WSHDinhk05ZewbXFFa7OwPRUwiIGxEv2u5pioxBaES8QSBW1whbAHTu
-         6rck46/2kErtBUtiRw3BLypqKRa9JPv2yl95iJqXJBjiaBnc4pGL9Av9t1lVrCRMOwaB
-         CuIK4bwUf9Nv4Hj/8qKEODjphmW0LLJoGYNcISxqw3CT0FmwJvpv1qXP/I30VmCST8Hi
-         Yj+sZvykBO/eb32gBD75Rt1Nn1kWf/VsUw/XJKAcJEIDOyiGh+w0VlbWzm5iE7VxBG2g
-         5WtCu3uH+Id0FgwwWhQlf3k53varCdZLa86/7chqQCx6NtkdU9uS622PTNEC8hUo2TIR
-         v57w==
-X-Gm-Message-State: ACrzQf0M+2sEimodluL6fp4x0XsMuLuxPBtdxyBoyER7RKIKVd/AkXlT
-        a8sEHYCc75Ue3vWQD/GUYphlMQ==
-X-Google-Smtp-Source: AMsMyM7Xo9W5zqlgQeOl61qFWDZWAQZKaYla7Bady0M41BCekgMax0lwbN7ph8twDwnM/cI9vq0i3g==
-X-Received: by 2002:a05:622a:15d3:b0:39d:dd6:3a31 with SMTP id d19-20020a05622a15d300b0039d0dd63a31mr34285810qty.37.1666922179821;
-        Thu, 27 Oct 2022 18:56:19 -0700 (PDT)
-Received: from krzk-bin.. ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id ay17-20020a05620a179100b006bb78d095c5sm2021816qkb.79.2022.10.27.18.56.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 18:56:19 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2] dt-bindings: net: constrain number of 'reg' in ethernet ports
-Date:   Thu, 27 Oct 2022 21:56:16 -0400
-Message-Id: <20221028015616.101750-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 27 Oct 2022 21:56:57 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F04EAEA1F;
+        Thu, 27 Oct 2022 18:56:54 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7287123A;
+        Thu, 27 Oct 2022 18:57:00 -0700 (PDT)
+Received: from [192.168.0.146] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 86D553F445;
+        Thu, 27 Oct 2022 18:56:44 -0700 (PDT)
+Message-ID: <55256df4-fff1-fa78-97bc-7aaa9efb7255@arm.com>
+Date:   Fri, 28 Oct 2022 07:26:44 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4 2/2] arm64: support batched/deferred tlb shootdown
+ during page reclamation
+Content-Language: en-US
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     Yicong Yang <yangyicong@huawei.com>, yangyicong@hisilicon.com,
+        corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, darren@os.amperecomputing.com,
+        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
+        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-mm@kvack.org, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, akpm@linux-foundation.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        wangkefeng.wang@huawei.com, xhao@linux.alibaba.com,
+        prime.zeng@hisilicon.com, Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>,
+        catalin.marinas@arm.com, will@kernel.org, linux-doc@vger.kernel.org
+References: <20220921084302.43631-1-yangyicong@huawei.com>
+ <20220921084302.43631-3-yangyicong@huawei.com>
+ <168eac93-a6ee-0b2e-12bb-4222eff24561@arm.com>
+ <8e391962-4e3a-5a56-64b4-78e8637e3b8c@huawei.com>
+ <CAGsJ_4z=dZbrAUD9jczT08S3qi_ep-h+EK35UfayVk1S+Cnp2A@mail.gmail.com>
+ <ecd161db-b290-7997-a81e-a0a00bd1c599@arm.com>
+ <CAGsJ_4x0KhEjm5a9jhtS+YK1AT49u3sHnp2rHZVSuTGZp4nKzA@mail.gmail.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <CAGsJ_4x0KhEjm5a9jhtS+YK1AT49u3sHnp2rHZVSuTGZp4nKzA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'reg' without any constraints allows multiple items which is not the
-intention for Ethernet controller's port number.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
----
+On 10/28/22 03:37, Barry Song wrote:
+> On Thu, Oct 27, 2022 at 11:42 PM Anshuman Khandual
+> <anshuman.khandual@arm.com> wrote:
+>>
+>>
+>>
+>> On 9/28/22 05:53, Barry Song wrote:
+>>> On Tue, Sep 27, 2022 at 10:15 PM Yicong Yang <yangyicong@huawei.com> wrote:
+>>>>
+>>>> On 2022/9/27 14:16, Anshuman Khandual wrote:
+>>>>> [...]
+>>>>>
+>>>>> On 9/21/22 14:13, Yicong Yang wrote:
+>>>>>> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
+>>>>>> +{
+>>>>>> +    /* for small systems with small number of CPUs, TLB shootdown is cheap */
+>>>>>> +    if (num_online_cpus() <= 4)
+>>>>>
+>>>>> It would be great to have some more inputs from others, whether 4 (which should
+>>>>> to be codified into a macro e.g ARM64_NR_CPU_DEFERRED_TLB, or something similar)
+>>>>> is optimal for an wide range of arm64 platforms.
+>>>>>
+>>>
+>>> I have tested it on a 4-cpus and 8-cpus machine. but i have no machine
+>>> with 5,6,7
+>>> cores.
+>>> I saw improvement on 8-cpus machines and I found 4-cpus machines don't need
+>>> this patch.
+>>>
+>>> so it seems safe to have
+>>> if (num_online_cpus()  < 8)
+>>>
+>>>>
+>>>> Do you prefer this macro to be static or make it configurable through kconfig then
+>>>> different platforms can make choice based on their own situations? It maybe hard to
+>>>> test on all the arm64 platforms.
+>>>
+>>> Maybe we can have this default enabled on machines with 8 and more cpus and
+>>> provide a tlbflush_batched = on or off to allow users enable or
+>>> disable it according
+>>> to their hardware and products. Similar example: rodata=on or off.
+>>
+>> No, sounds bit excessive. Kernel command line options should not be added
+>> for every possible run time switch options.
+>>
+>>>
+>>> Hi Anshuman, Will,  Catalin, Andrew,
+>>> what do you think about this approach?
+>>>
+>>> BTW, haoxin mentioned another important user scenarios for tlb bach on arm64:
+>>> https://lore.kernel.org/lkml/393d6318-aa38-01ed-6ad8-f9eac89bf0fc@linux.alibaba.com/
+>>>
+>>> I do believe we need it based on the expensive cost of tlb shootdown in arm64
+>>> even by hardware broadcast.
+>>
+>> Alright, for now could we enable ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH selectively
+>> with CONFIG_EXPERT and for num_online_cpus()  > 8 ?
+> 
+> Sounds good to me. It is a good start to bring up tlb batched flush in
+> ARM64. Later on, we
+> might want to see it in both memory reclamation and migration.
 
-Changes since v1:
-1. Drop change to non-accepted renesas,r8a779f0-ether-switch.
-
-Please give it a time for Rob's bot to process this.
----
- Documentation/devicetree/bindings/net/asix,ax88178.yaml       | 4 +++-
- Documentation/devicetree/bindings/net/microchip,lan95xx.yaml  | 4 +++-
- .../devicetree/bindings/net/microchip,lan966x-switch.yaml     | 4 ++--
- .../devicetree/bindings/net/microchip,sparx5-switch.yaml      | 3 ++-
- .../devicetree/bindings/net/mscc,vsc7514-switch.yaml          | 3 ++-
- 5 files changed, 12 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/net/asix,ax88178.yaml b/Documentation/devicetree/bindings/net/asix,ax88178.yaml
-index 1af52358de4c..a81dbc4792f6 100644
---- a/Documentation/devicetree/bindings/net/asix,ax88178.yaml
-+++ b/Documentation/devicetree/bindings/net/asix,ax88178.yaml
-@@ -27,7 +27,9 @@ properties:
-           - usbb95,772b   # ASIX AX88772B
-           - usbb95,7e2b   # ASIX AX88772B
- 
--  reg: true
-+  reg:
-+    maxItems: 1
-+
-   local-mac-address: true
-   mac-address: true
- 
-diff --git a/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml b/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
-index cf91fecd8909..3715c5f8f0e0 100644
---- a/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
-+++ b/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
-@@ -39,7 +39,9 @@ properties:
-           - usb424,9e08   # SMSC LAN89530 USB Ethernet Device
-           - usb424,ec00   # SMSC9512/9514 USB Hub & Ethernet Device
- 
--  reg: true
-+  reg:
-+    maxItems: 1
-+
-   local-mac-address: true
-   mac-address: true
- 
-diff --git a/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml b/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
-index dc116f14750e..583d70c51be6 100644
---- a/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
-+++ b/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
-@@ -83,8 +83,8 @@ properties:
-             const: 0
- 
-           reg:
--            description:
--              Switch port number
-+            items:
-+              - description: Switch port number
- 
-           phys:
-             description:
-diff --git a/Documentation/devicetree/bindings/net/microchip,sparx5-switch.yaml b/Documentation/devicetree/bindings/net/microchip,sparx5-switch.yaml
-index 57ffeb8fc876..ccb912561446 100644
---- a/Documentation/devicetree/bindings/net/microchip,sparx5-switch.yaml
-+++ b/Documentation/devicetree/bindings/net/microchip,sparx5-switch.yaml
-@@ -89,7 +89,8 @@ properties:
- 
-         properties:
-           reg:
--            description: Switch port number
-+            items:
-+              - description: Switch port number
- 
-           phys:
-             maxItems: 1
-diff --git a/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml b/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
-index ee0a504bdb24..1cf82955d75e 100644
---- a/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
-+++ b/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
-@@ -109,7 +109,8 @@ properties:
- 
-         properties:
-           reg:
--            description: Switch port number
-+            items:
-+              - description: Switch port number
- 
-           phy-handle: true
- 
--- 
-2.34.1
-
+Right, that is the idea, CONFIG_EXPERT gives an way to test this out for some time
+on various platforms, and later it can be dropped off. Regarding num_online_cpus()
+= '8' as the threshold which would potentially give benefit of batched TLB should
+be defined as a macro e.g NR_CPUS_FOR_BATCHED_TLB or internal (non user selectable)
+config , with a proper in-code comment, explaining the rationale.
