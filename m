@@ -2,108 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4055E611211
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8201C611213
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbiJ1NAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
+        id S229494AbiJ1NAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiJ1NAC (ORCPT
+        with ESMTP id S230158AbiJ1NAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:00:02 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69BD1B78A
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:00:01 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id r3so6027151yba.5
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:00:01 -0700 (PDT)
+        Fri, 28 Oct 2022 09:00:20 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C849B3641A
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:00:18 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso4391566pjc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:00:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e0j5a5iZpNQG2DdryJGScbsirrQGx4kQi1zIOe47cxY=;
-        b=suju3c6Rt3GNQfsmDz9TEYyaxosQcCrMgZlU+pCUZkhi9SwG4iwP+SSe+45yLvOQ8U
-         RyDc0NI0O0DKLdtrP4SJuISxk0qmOtx0LDwHMQVJJa5X32FTRxZBwxgBAjD6BZ+a+33H
-         DkZanVr5g7acshGVfjCCUlEdJQbkEUNTSxJuenN2a4RDfDlQFiNt91ITGe/4cvng/VgR
-         ZT1OFBiWaowmlDfJqy9b+Us6JeiG4uZ9sSkiBEYHHlrIG2jKGgOZZLz7ZbS0wBP5kWfk
-         Z10gGAKySzTtx8qKpA+zReQbdTfRGivnmdcBc7hHU/MzeHL0//wrUql+0DjaW/H3HRQA
-         RkjQ==
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5iJgtqpqiJVn//zhOfDmx7Kv+t48Z9oElzV8cQV4k8Q=;
+        b=OYyI1D0//SYHg7b9sDx9vjzWuMkJE0shNqa2Ap8f/NCqkVLJzjc+VklmLtIPloaXN/
+         bcAk4bSk4VpzlPj13/R1bBnPUM5Qm8iMvZq8utmw3hiV1k1tRJwDYZBeAOJsOVPTm75I
+         CKSRzSfgiTeWhtkm5GuQVZpD+1iTHJp6chiq+v7s0ZFpqU53u4FTWEMoLqUFCnL/KqCl
+         x0nm9C4ORjC47udpZ2tXLPfgAA28yQHwo9lh29uFutgVJ4jdNWR8r4qtc+xVra76ILdX
+         QMwFkn5XQReuxrsDbdnzfuCipMkOxzzpTFJNiNbGt5NWk16rMldf2cpA5MYmxASsmzn9
+         QPOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=e0j5a5iZpNQG2DdryJGScbsirrQGx4kQi1zIOe47cxY=;
-        b=r/sfwMni6q1X5Bm+LWwk+66iHYJm/vLECXaAR4yrez2jF5ppX93kC4vT0U9/wINoSV
-         PpiswMzDUBtfzVICkL9tRIDVtEtjGwsfNHaSVdPSxHRjVwYkxG/tM5cRYx2K89AD8jVu
-         q5kZxXCdjPyJI/xuOOC7m+6efFWq2cGYts1wNCOQVKjWU1ZtqzLaGUDlPNg0l7D06D4D
-         utZAz0OadFO9jbeXDhbAK1dv1Pn0nWqcYLwfiJOi7Gq4ELAT0Fj9rkcSwPO0QPqL6b/A
-         G7ZZggUch/P8fkdxFm+U1Kt3YgbgpGmcUzqzpLT/jKqQwCdAmkfMW7WuWSj5/Lo0p2M/
-         XS8Q==
-X-Gm-Message-State: ACrzQf3wx7YwtgC0tzvEYDtFpxL1r/2MMzq5ihAKF4WnKFdwSwV49doj
-        l8QNkjC/dtSX7ELsp98HwSJZ37t8jjKy2USASsTEQg==
-X-Google-Smtp-Source: AMsMyM5yjFHMIfBdC0dH8EX4MhS+aaPemWVhJjUiNK2UCVeMOmyfOGcs/y8XSPc4MzOkCpK8GttTuXPSmeSaypSU1l0=
-X-Received: by 2002:a25:bc3:0:b0:6ca:6427:f00d with SMTP id
- 186-20020a250bc3000000b006ca6427f00dmr33872090ybl.62.1666962000888; Fri, 28
- Oct 2022 06:00:00 -0700 (PDT)
+        bh=5iJgtqpqiJVn//zhOfDmx7Kv+t48Z9oElzV8cQV4k8Q=;
+        b=5z3panGyYMb1zkE9Tw3fBp5Secqtadd1wmQMccUteFLLSzfvK1c/GtD/L4iLQWCB+r
+         8ECeZkFtex69z2O1dtBEWns4NkUHT9g6Y+94zno111KLl/eNyML3q7mO9qMFXV7lif2c
+         5174ZTCvf7j4Vo8/MzJOou9QPYlPdHvfQcY/1qBgMatDp39CwfUsxRooVWmIArsuqQ4a
+         54ysQ65FBEhMex7utEwfg1zcgOSC5ieeuf0vlXPgc4G4JJtzFhQLCgGrpCddzOQ9ghV4
+         sjhNfPSCwMhdG4kVOJgeDIZmDHS/RteZMOUEDo98CMFcopECPr/zVy5Xw/pPk9QnkyND
+         yJpg==
+X-Gm-Message-State: ACrzQf2TJ4bjeHlzdlc+byObPw5VTXUb1kS4WaYg2+XKTQL1KbMqdMS8
+        0I49ZNGU2eAYbXNlT017erX3lA==
+X-Google-Smtp-Source: AMsMyM7PmTVcA7PMinrbHKlUjxdSN3EiXgN4d3rE8Fu3scAMRdj2UzkM3odDl9Tmj7UjN9XWOSa9DA==
+X-Received: by 2002:a17:902:b90b:b0:186:8a4d:d4b7 with SMTP id bf11-20020a170902b90b00b001868a4dd4b7mr33134131plb.129.1666962015777;
+        Fri, 28 Oct 2022 06:00:15 -0700 (PDT)
+Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id v19-20020a17090ac91300b002036006d65bsm2512524pjt.39.2022.10.28.06.00.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 06:00:15 -0700 (PDT)
+From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Yuri Benditovich <yuri.benditovich@daynix.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yan Vugenfirer <yan@daynix.com>,
+        intel-wired-lan@lists.osuosl.org, Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Akihiko Odaki <akihiko.odaki@daynix.com>
+Subject: [PATCH v2] e1000e: Fix TX dispatch condition
+Date:   Fri, 28 Oct 2022 22:00:00 +0900
+Message-Id: <20221028130000.7318-1-akihiko.odaki@daynix.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20221028102450.1161382-1-ajye_huang@compal.corp-partner.google.com>
- <20221028102450.1161382-3-ajye_huang@compal.corp-partner.google.com> <Y1vDxtdNGURAT850@sirena.org.uk>
-In-Reply-To: <Y1vDxtdNGURAT850@sirena.org.uk>
-From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-Date:   Fri, 28 Oct 2022 20:59:54 +0800
-Message-ID: <CALprXBbTkj0Q_-3AL81Q1okRD5ZyDf_c=daPrkQstkM4_CNgGQ@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] ASoC: dmic: Add optional dmic selection
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, robh@kernel.org,
-        Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        angelogioacchino.delregno@collabora.corp-partner.google.com,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark Brown,
+e1000_xmit_frame is expected to stop the queue and dispatch frames to
+hardware if there is not sufficient space for the next frame in the
+buffer, but sometimes it failed to do so because the estimated maxmium
+size of frame was wrong. As the consequence, the later invocation of
+e1000_xmit_frame failed with NETDEV_TX_BUSY, and the frame in the buffer
+remained forever, resulting in a watchdog failure.
 
-Thank you for review,
-I think it is appropriate to implement on audio machine side, like
-this I did before,
-commit 3cfbf07c6d27
-("ASoC: qcom: sc7180: Modify machine driver for 2mic")
+This change fixes the estimated size by making it match with the
+condition for NETDEV_TX_BUSY. Apparently, the old estimation failed to
+account for the following lines which determines the space requirement
+for not causing NETDEV_TX_BUSY:
+    ```
+    	/* reserve a descriptor for the offload context */
+    	if ((mss) || (skb->ip_summed == CHECKSUM_PARTIAL))
+    		count++;
+    	count++;
 
-What is your suggestion?  Thank you.
+    	count += DIV_ROUND_UP(len, adapter->tx_fifo_limit);
+    ```
 
-On Fri, Oct 28, 2022 at 7:58 PM Mark Brown <broonie@kernel.org> wrote:
->
-> On Fri, Oct 28, 2022 at 06:24:50PM +0800, Ajye Huang wrote:
->
-> > +     dmic->dmic_sel = devm_gpiod_get_optional(component->dev,
-> > +                                             "dmic_sel", GPIOD_OUT_LOW);
-> > +     if (IS_ERR(dmic->dmic_sel))
-> > +             return PTR_ERR(dmic->dmic_sel);
-> > +
-> >       snd_soc_component_set_drvdata(component, dmic);
-> >
-> >       return 0;
-> > @@ -125,10 +172,15 @@ static const struct snd_soc_dapm_widget dmic_dapm_widgets[] = {
-> >                              SND_SOC_NOPM, 0, 0, dmic_aif_event,
-> >                              SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_POST_PMD),
-> >       SND_SOC_DAPM_INPUT("DMic"),
-> > +     SND_SOC_DAPM_MIC("DMIC", NULL),
-> > +     SND_SOC_DAPM_MUX("Dmic Mux", SND_SOC_NOPM, 0, 0, &dmic_mux_control),
->
-> If we are doing this then adding the mux needs to be conditional on
-> having the GPIO, without the GPIO the control is at best confusing to
-> users.
+This issue was found when running http-stress02 test included in Linux
+Test Project 20220930 on QEMU with the following commandline:
+```
+qemu-system-x86_64 -M q35,accel=kvm -m 8G -smp 8
+	-drive if=virtio,format=raw,file=root.img,file.locking=on
+	-device e1000e,netdev=netdev
+	-netdev tap,script=ifup,downscript=no,id=netdev
+```
+
+Fixes: bc7f75fa9788 ("[E1000E]: New pci-express e1000 driver (currently for ICH9 devices only)")
+Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+---
+ drivers/net/ethernet/intel/e1000e/netdev.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
+index 49e926959ad3..55cf2f62bb30 100644
+--- a/drivers/net/ethernet/intel/e1000e/netdev.c
++++ b/drivers/net/ethernet/intel/e1000e/netdev.c
+@@ -5936,9 +5936,9 @@ static netdev_tx_t e1000_xmit_frame(struct sk_buff *skb,
+ 		e1000_tx_queue(tx_ring, tx_flags, count);
+ 		/* Make sure there is space in the ring for the next send. */
+ 		e1000_maybe_stop_tx(tx_ring,
+-				    (MAX_SKB_FRAGS *
++				    ((MAX_SKB_FRAGS + 1) *
+ 				     DIV_ROUND_UP(PAGE_SIZE,
+-						  adapter->tx_fifo_limit) + 2));
++						  adapter->tx_fifo_limit) + 4));
+ 
+ 		if (!netdev_xmit_more() ||
+ 		    netif_xmit_stopped(netdev_get_tx_queue(netdev, 0))) {
+-- 
+2.37.3
+
