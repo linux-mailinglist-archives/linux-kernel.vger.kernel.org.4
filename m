@@ -2,67 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F52E610F29
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4567C610F2D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiJ1K46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 06:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
+        id S230094AbiJ1K6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 06:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbiJ1K4x (ORCPT
+        with ESMTP id S229683AbiJ1K5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 06:56:53 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFA5C09A0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 03:56:49 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id g12so6082997wrs.10
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 03:56:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mind.be; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mybn9+3Djhak9wQ9DmBiM46mD4JHeRWPgXYCo3h5f5w=;
-        b=Q/+GNkhTtkLn0ybO6bFbX3iOCxcV5fyw/9MuV0v5MMjsp1XDrO2Y+EC0A2RNJnA2VJ
-         JHpf46HOduMlEnYgixSscesqrTf0CKNYeLEWYG4s6cv+C8eCrPSSaxB9/AK05v8wl5z1
-         iX5HAxVOVXLJiLwslWeHm/k96HNDP5E/viZco55XgIXkjit2T/8LqwpFTSfrb5jJdg5Z
-         VI3YSW0GFIFRZVnqpguoipul3MqI1w8wdHUqmHH2I/+PuX565O9E38CIgrkhSkHdHJXT
-         Kj7RFVUdld2LRUrlA0+pj8l3ogDAkGKt2WVkj/2qXb9LEZ2kyg61jC+oBh7ENelylDY0
-         kSYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mybn9+3Djhak9wQ9DmBiM46mD4JHeRWPgXYCo3h5f5w=;
-        b=aBdxRfQjVL2fxzM14QN1DI2GxBWnkNU+OatikYVpqktUsqmXDncbDl+oxemDAFoknS
-         4UCby9fk6qI2JDymsPvV93Kf6n8DyH+0TQKtc6bOlbZQ8JLvVddxl/K1mZflqf5veTMg
-         HJ+bwJ6E40cPpgSPRNl1HZTEJDNq/71YkjDFNlQ2ozqzK/FmdLyETWKl3bzI0tTrVdc5
-         O0tgMuvkWg42Akgn31X75oBnIDlmTknNrzt8YnupdBuzlibUCf0cQX7L/Ajd1KTsi0LP
-         yJ46czj0UVo0NtRORtOiLXNOeQVCYeH/vfqQ7r0zsGvzDNyPu+3cV9uL6ToNoJhFCznd
-         mjKw==
-X-Gm-Message-State: ACrzQf3cXqXRPvSCfPzDf148mdC+S6B0wT1j8t6AYuA0WjD6z9Av51ar
-        xCxmYl/GeyKCVb7k4ZtmdlSNgw==
-X-Google-Smtp-Source: AMsMyM7MpmCsvPQEd7FYVkmRjOE4Wft0AXUPXYN8BOmP4u7Qym5ebJPKeWw3IzetZWbGmly5kygvTQ==
-X-Received: by 2002:a05:6000:1a8d:b0:236:4810:9966 with SMTP id f13-20020a0560001a8d00b0023648109966mr27100200wry.366.1666954608551;
-        Fri, 28 Oct 2022 03:56:48 -0700 (PDT)
-Received: from dtpc.zanders.be (78-22-137-109.access.telenet.be. [78.22.137.109])
-        by smtp.gmail.com with ESMTPSA id r10-20020a05600c35ca00b003cf4ec90938sm4375956wmq.21.2022.10.28.03.56.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 03:56:48 -0700 (PDT)
-From:   Maarten Zanders <maarten.zanders@mind.be>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Maarten Zanders <maarten.zanders@mind.be>,
-        Arne Staessen <a.staessen@televic.com>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] leds: lp5523: fix out-of-bounds bug in lp5523_selftest()
-Date:   Fri, 28 Oct 2022 12:56:43 +0200
-Message-Id: <20221028105643.45300-1-maarten.zanders@mind.be>
-X-Mailer: git-send-email 2.37.3
+        Fri, 28 Oct 2022 06:57:50 -0400
+Received: from mxout2.routing.net (mxout2.routing.net [IPv6:2a03:2900:1:a::b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ACF197F83;
+        Fri, 28 Oct 2022 03:57:47 -0700 (PDT)
+Received: from mxbox1.masterlogin.de (unknown [192.168.10.88])
+        by mxout2.routing.net (Postfix) with ESMTP id 5A38F5FF91;
+        Fri, 28 Oct 2022 10:57:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1666954665;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=45U4JNMPzdhCKxqPyu/vblXV0uvneI0UY12mqqikmNY=;
+        b=qYKXa4p1a/mfedbUiCOoRY73YxiNLK5k2wUfxc/gMihZXF2P++EOfXckS6Ipr35feNZ3hU
+        GCOHd1S3ehvX9Ks26/zkTp4PlqcxFhlBl+qejn5h3FeLxM8pkgY3qsE9hfh1k8X/8fdDvy
+        jbKwxXbjVEv5iEuvI9DrfJgxs3qI5g8=
+Received: from webmail.hosting.de (unknown [134.0.26.148])
+        by mxbox1.masterlogin.de (Postfix) with ESMTPA id D10C3403ED;
+        Fri, 28 Oct 2022 10:57:44 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Date:   Fri, 28 Oct 2022 12:57:44 +0200
+From:   "Frank Wunderlich (linux)" <linux@fw-web.de>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [RFC v2 7/7] arm64: dts: mt7986: add Bananapi R3
+In-Reply-To: <64daf96b-b2b5-6f02-91aa-58d19083ee01@collabora.com>
+References: <20221026093650.110290-1-linux@fw-web.de>
+ <20221026093650.110290-8-linux@fw-web.de>
+ <64daf96b-b2b5-6f02-91aa-58d19083ee01@collabora.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <a97aa98a6230e7f33a6b5f5e2c9e54ce@fw-web.de>
+X-Sender: linux@fw-web.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mail-ID: a0790789-d43a-4d9d-b1a0-321851b4552d
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,96 +62,388 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When not all LED channels of the led chip are configured, the
-sysfs selftest functionality gives erroneous results and tries to
-test all channels of the chip.
-There is a potential for LED overcurrent conditions since the
-test current will be set to values from out-of-bound regions.
+Am 2022-10-28 11:19, schrieb AngeloGioacchino Del Regno:
+> Il 26/10/22 11:36, Frank Wunderlich ha scritto:
+>> From: Frank Wunderlich <frank-w@public-files.de>
+>> 
+>> Add support for Bananapi R3 SBC.
+>> 
+>> - SD/eMMC support (switching first 4 bits of data-bus with sw6/D)
+>> - all rj45 ports and both SFP working (eth1/lan4)
+>> - all USB-Ports + SIM-Slot tested
+>> - i2c and all uarts tested
+>> - wifi tested
+>> 
+>> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+>> ---
+>> SPI-NAND/NOR switched (CS by sw5/C) not yet included
+>>    this is done with DT-Overlays in my tree, but i have no idea yet,
+>>    how to upstream
+>> 
+>> break some lines in wifi-eeprom-data because of checkpatch warnings.
+>> originally there were 8 x int32 per line
+>> 
+>> changes:
+>> 
+>> v2:
+>> - remove pcie to be added later (discussion about clocks)
+>> - some fixes based on suggestions on ML
+>>    - add key suffix like it's done in mt7622-bpi-r64 devicetree
+>>    - add dash in sfp node names
+>>    - use reg as unit for switch-node
+>>    - drop "-3-4" suffix from i2c-pins node name
+>>    - fix order in Makefile
+>> ---
+>>   arch/arm64/boot/dts/mediatek/Makefile         |   2 +
+>>   .../mediatek/mt7986a-bananapi-bpi-r3-emmc.dts |  34 +
+>>   .../mediatek/mt7986a-bananapi-bpi-r3-sd.dts   |  29 +
+>>   .../dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi | 593 
+>> ++++++++++++++++++
+>>   4 files changed, 658 insertions(+)
+>>   create mode 100644 
+>> arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts
+>>   create mode 100644 
+>> arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts
+>>   create mode 100644 
+>> arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
+>> 
+>> diff --git a/arch/arm64/boot/dts/mediatek/Makefile 
+>> b/arch/arm64/boot/dts/mediatek/Makefile
+>> index 0ec90cb3ef28..e8902f2cc58f 100644
+>> --- a/arch/arm64/boot/dts/mediatek/Makefile
+>> +++ b/arch/arm64/boot/dts/mediatek/Makefile
+>> @@ -7,6 +7,8 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-evb.dtb
+>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-x20-dev.dtb
+>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
+>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-bananapi-bpi-r64.dtb
+>> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-emmc.dtb
+>> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-sd.dtb
+>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-rfb.dtb
+>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986b-rfb.dtb
+>>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8167-pumpkin.dtb
+>> diff --git 
+>> a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts 
+>> b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts
+>> new file mode 100644
+>> index 000000000000..859b4180ca11
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts
+>> @@ -0,0 +1,34 @@
+>> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+>> +/*
+>> + * Copyright (C) 2021 MediaTek Inc.
+>> + * Author: Sam.Shih <sam.shih@mediatek.com>
+>> + */
+>> +
+>> +/dts-v1/;
+>> +#include <dt-bindings/input/input.h>
+>> +#include <dt-bindings/gpio/gpio.h>
+>> +
+>> +#include "mt7986a-bananapi-bpi-r3.dtsi"
+>> +
+>> +/ {
+>> +	model = "Bananapi BPI-R3 (emmc)";
+>> +};
+>> +
+>> +&mmc0 {
+>> +	pinctrl-names = "default", "state_uhs";
+>> +	pinctrl-0 = <&mmc0_pins_default>;
+>> +	pinctrl-1 = <&mmc0_pins_uhs>;
+> 
+> pinctrl properties and power supply properties can go to the shared
+> mt7986a-bananapi-bpi-r3.dtsi file.
 
-It is wrong to use pdata->led_config[i].led_current to skip absent
-channels as led_config[] only contains the configured LED channels.
+OK
 
-Instead of iterating over all the physical channels of the device,
-loop over the available LED configurations and use led->chan_nr to
-access the correct i2c registers. Keep the zero-check for the LED
-current as existing users might depend on this to disable a channel.
+> Also, I have a question here... so your hardware can take either eMMC
+> or MicroSD... and... is there really no way to build in both 
+> devicetrees
+> and having the bootloader to select the right one based on hardware 
+> version
+> or on machine compatible?
 
-Reported-by: Arne Staessen <a.staessen@televic.com>
-Signed-off-by: Maarten Zanders <maarten.zanders@mind.be>
----
- drivers/leds/leds-lp5523.c | 27 +++++++++++++++------------
- 1 file changed, 15 insertions(+), 12 deletions(-)
+as i wrote in description the board has both, an emmc-chip and 
+microsd-slot, but they cannot be used simultanously as mt7986 has only 1 
+mmc-controller. BPI-R3 has a switch that changes the first 4 data-lines 
+either to emmc or microsd-slot. You have only 1 mmc-node that has to be 
+configured to which mmc-device you have connected, so i have to use 2 
+different devicetrees here.
 
-diff --git a/drivers/leds/leds-lp5523.c b/drivers/leds/leds-lp5523.c
-index 369d40b0b65b..e08e3de1428d 100644
---- a/drivers/leds/leds-lp5523.c
-+++ b/drivers/leds/leds-lp5523.c
-@@ -581,8 +581,8 @@ static ssize_t lp5523_selftest(struct device *dev,
- 	struct lp55xx_led *led = i2c_get_clientdata(to_i2c_client(dev));
- 	struct lp55xx_chip *chip = led->chip;
- 	struct lp55xx_platform_data *pdata = chip->pdata;
--	int i, ret, pos = 0;
--	u8 status, adc, vdd;
-+	int ret, pos = 0;
-+	u8 status, adc, vdd, i;
- 
- 	mutex_lock(&chip->lock);
- 
-@@ -612,20 +612,21 @@ static ssize_t lp5523_selftest(struct device *dev,
- 
- 	vdd--;	/* There may be some fluctuation in measurement */
- 
--	for (i = 0; i < LP5523_MAX_LEDS; i++) {
--		/* Skip non-existing channels */
-+	for (i = 0; i < pdata->num_channels; i++) {
-+		/* Skip disabled channels */
- 		if (pdata->led_config[i].led_current == 0)
- 			continue;
- 
- 		/* Set default current */
--		lp55xx_write(chip, LP5523_REG_LED_CURRENT_BASE + i,
-+		lp55xx_write(chip, LP5523_REG_LED_CURRENT_BASE + led->chan_nr,
- 			pdata->led_config[i].led_current);
- 
--		lp55xx_write(chip, LP5523_REG_LED_PWM_BASE + i, 0xff);
-+		lp55xx_write(chip, LP5523_REG_LED_PWM_BASE + led->chan_nr,
-+			     0xff);
- 		/* let current stabilize 2 - 4ms before measurements start */
- 		usleep_range(2000, 4000);
- 		lp55xx_write(chip, LP5523_REG_LED_TEST_CTRL,
--			     LP5523_EN_LEDTEST | i);
-+			     LP5523_EN_LEDTEST | led->chan_nr);
- 		/* ADC conversion time is 2.7 ms typically */
- 		usleep_range(3000, 6000);
- 		ret = lp55xx_read(chip, LP5523_REG_STATUS, &status);
-@@ -633,20 +634,22 @@ static ssize_t lp5523_selftest(struct device *dev,
- 			goto fail;
- 
- 		if (!(status & LP5523_LEDTEST_DONE))
--			usleep_range(3000, 6000);/* Was not ready. Wait. */
-+			usleep_range(3000, 6000); /* Was not ready. Wait. */
- 
- 		ret = lp55xx_read(chip, LP5523_REG_LED_TEST_ADC, &adc);
- 		if (ret < 0)
- 			goto fail;
- 
- 		if (adc >= vdd || adc < LP5523_ADC_SHORTCIRC_LIM)
--			pos += sprintf(buf + pos, "LED %d FAIL\n", i);
-+			pos += sprintf(buf + pos, "LED %d FAIL\n",
-+				       led->chan_nr);
- 
--		lp55xx_write(chip, LP5523_REG_LED_PWM_BASE + i, 0x00);
-+		lp55xx_write(chip, LP5523_REG_LED_PWM_BASE + led->chan_nr,
-+			     0x00);
- 
- 		/* Restore current */
--		lp55xx_write(chip, LP5523_REG_LED_CURRENT_BASE + i,
--			led->led_current);
-+		lp55xx_write(chip, LP5523_REG_LED_CURRENT_BASE + led->chan_nr,
-+			     led->led_current);
- 		led++;
- 	}
- 	if (pos == 0)
--- 
-2.37.3
+> I can see, on the wiki, that both bootloader and ATF can be customized 
+> (so,
+> can be compiled and flashed just fine), so I would say that even if the
+> "original" U-Boot doesn't distinguish devicetrees, you can definitely 
+> easily
+> implement that.
 
+i already boot a fit-image with 2 dts (and 2 overlays for spi-nand/nor) 
+and my uboot can check with "mmc partconf" if emmc is available and if 
+not choose the sd-dts.
+
+> If you have no idea how to recognize the boards, from a fast look at 
+> the
+> board schematics, I can see that there's a bootstrap setting based on 
+> the
+> state of GPIO0 and GPIO1... you can perhaps use that somehow?
+> Otherwise, remember that, most of the times, there are other ways to 
+> determine
+> the board version, like Board ID resistors...
+
+but how should this effect the dts files here? originally i had the 
+sd-card dts as base and the emmc had overridden/deleted some properties 
+there (so only 2 dts-files). Had talked to Matthias and he suggested 
+having a base dtsi and 2 dts for the 2 mmc-configs.
+
+> Also, still on the wiki, I can't see any no-eMMC version of this board: 
+> is
+> the sd-only a pre-production version or..?
+
+no sd/emmc-only version...1 board with 1 mmc-controller, but 2 
+"storages" connected (only 1 functional based on hw switch setting)
+
+>> +	bus-width = <8>;
+>> +	max-frequency = <200000000>;
+>> +	cap-mmc-highspeed;
+>> +	mmc-hs200-1_8v;
+>> +	mmc-hs400-1_8v;
+>> +	hs400-ds-delay = <0x14014>;
+>> +	vmmc-supply = <&reg_3p3v>;
+>> +	vqmmc-supply = <&reg_1p8v>;
+>> +	non-removable;
+>> +	no-sd;
+>> +	no-sdio;
+>> +	status = "okay";
+>> +};
+>> +
+>> diff --git 
+>> a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts 
+>> b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts
+>> new file mode 100644
+>> index 000000000000..57200407ab86
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts
+>> @@ -0,0 +1,29 @@
+>> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+>> +/*
+>> + * Copyright (C) 2021 MediaTek Inc.
+>> + * Author: Sam.Shih <sam.shih@mediatek.com>
+>> + */
+>> +
+>> +/dts-v1/;
+>> +#include <dt-bindings/input/input.h>
+>> +#include <dt-bindings/gpio/gpio.h>
+>> +
+>> +#include "mt7986a-bananapi-bpi-r3.dtsi"
+>> +
+>> +/ {
+>> +	model = "Bananapi BPI-R3 (sdmmc)";
+>> +};
+>> +
+>> +&mmc0 {
+>> +	//sdcard
+> 
+> C-style comments please
+
+ok
+
+>> +	pinctrl-names = "default", "state_uhs";
+>> +	pinctrl-0 = <&mmc0_pins_default>;
+>> +	pinctrl-1 = <&mmc0_pins_uhs>;
+>> +	bus-width = <4>;
+>> +	max-frequency = <52000000>;
+>> +	cap-sd-highspeed;
+>> +	vmmc-supply = <&reg_3p3v>;
+>> +	vqmmc-supply = <&reg_1p8v>;
+>> +	status = "okay";
+>> +};
+>> +
+>> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi 
+>> b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
+>> new file mode 100644
+>> index 000000000000..fc100c3a6415
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
+>> @@ -0,0 +1,593 @@
+>> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+>> +/*
+>> + * Copyright (C) 2021 MediaTek Inc.
+>> + * Authors: Sam.Shih <sam.shih@mediatek.com>
+>> + *          Frank Wunderlich <frank-w@public-files.de>
+>> + *          Daniel Golle <daniel@makrotopia.org>
+>> + */
+>> +
+>> +/dts-v1/;
+>> +#include <dt-bindings/input/input.h>
+>> +#include <dt-bindings/gpio/gpio.h>
+>> +#include <dt-bindings/leds/common.h>
+>> +
+>> +#include "mt7986a.dtsi"
+>> +
+>> +/ {
+>> +	model = "Bananapi BPI-R3";
+>> +	compatible = "bananapi,bpi-r3", "mediatek,mt7986a";
+>> +
+>> +	aliases {
+>> +		serial0 = &uart0;
+>> +		ethernet0 = &gmac0;
+>> +		ethernet1 = &gmac1;
+>> +	};
+>> +
+>> +	chosen {
+>> +		stdout-path = "serial0:115200n8";
+>> +	};
+>> +
+>> +	gpio-keys {
+>> +		compatible = "gpio-keys";
+>> +
+>> +		factory-key {
+> 
+> I'd say that this is not "factory-key" but "reset-key"?
+
+okay i rename it.
+
+>> +			label = "reset";
+>> +			linux,code = <KEY_RESTART>;
+>> +			gpios = <&pio 9 GPIO_ACTIVE_LOW>;
+>> +		};
+>> +
+>> +		wps-key {
+>> +			label = "wps";
+>> +			linux,code = <KEY_WPS_BUTTON>;
+>> +			gpios = <&pio 10 GPIO_ACTIVE_LOW>;
+>> +		};
+>> +	};
+>> +
+> 
+> ..snip..
+> 
+>> +
+>> +	memory@40000000 {
+>> +		device_type = "memory";
+>> +		reg = <0 0x40000000 0 0x40000000>;
+> 
+> Doesn't your bootloader fill-in the memory size automatically?
+
+have not tried yet.
+
+>> +	};
+>> +
+>> +	reg_1p8v: regulator-1p8v {
+>> +		compatible = "regulator-fixed";
+>> +		regulator-name = "fixed-1.8V";
+> 
+> This is "avdd18", isn't it?
+
+need to check
+
+>> +		regulator-min-microvolt = <1800000>;
+>> +		regulator-max-microvolt = <1800000>;
+>> +		regulator-boot-on;
+>> +		regulator-always-on;
+> 
+> All these regulators have a vin-supply: please fill it in.
+> Moreover, in the schematics, I can also see other LDOs: 0.9VD (input 
+> +12VD),
+> AVDD12 (input 1.8VD), DDRV_VPP (input 3.3VD)...
+
+ok
+
+> Of course, this means that you have one more 1.8V regulator, called 
+> 1.8vd.
+> 
+>> +	};
+>> +
+>> +	reg_3p3v: regulator-3p3v {
+>> +		compatible = "regulator-fixed";
+>> +		regulator-name = "fixed-3.3V";
+> 
+> regulator-name = "3.3vd";
+> 
+>> +		regulator-min-microvolt = <3300000>;
+>> +		regulator-max-microvolt = <3300000>;
+>> +		regulator-boot-on;
+>> +		regulator-always-on;
+> 
+> vin-supply = <&dcin>; (dcin: regulator-12vd { ... })
+> 
+>> +	};
+>> +
+>> +	reg_5v: regulator-5v {
+>> +		compatible = "regulator-fixed";
+>> +		regulator-name = "fixed-5V";
+> 
+> regulator-name  = "fixed-5p1";
+> 
+>> +		regulator-min-microvolt = <5000000>;
+>> +		regulator-max-microvolt = <5000000>;
+> 
+> Schematics say "+5V: 5.1V/3A", so this is not 5000000.
+> 
+>> +		regulator-boot-on;
+>> +		regulator-always-on;
+> 
+> 
+> vin-supply = <&dcin>;
+> 
+>> +	};
+>> +
+> 
+> ..snip..
+> 
+>> +
+>> +&pio {
+>> +	i2c_pins: i2c-pins {
+>> +		mux {
+>> +			function = "i2c";
+>> +			groups = "i2c";
+>> +		};
+>> +	};
+>> +
+>> +	mmc0_pins_default: mmc0-pins {
+>> +		mux {
+>> +			function = "emmc";
+>> +			groups = "emmc_51";
+>> +		};
+>> +		conf-cmd-dat {
+>> +			pins = "EMMC_DATA_0", "EMMC_DATA_1", "EMMC_DATA_2",
+>> +			       "EMMC_DATA_3", "EMMC_DATA_4", "EMMC_DATA_5",
+>> +			       "EMMC_DATA_6", "EMMC_DATA_7", "EMMC_CMD";
+>> +			input-enable;
+>> +			drive-strength = <4>;
+>> +			mediatek,pull-up-adv = <1>;	/* pull-up 10K */
+> 
+> Can we please stop using these custom pull-{up,down}-adv properties?
+> Check what was done on pinctrl-mt8192.c (and dt schema) for more 
+> information
+> and examples.
+
+need to check these with MTK.
+
+>> +		};
+>> +		conf-clk {
+> 
+> ..snip..
+> 
+>> +
+>> +&wifi {
+>> +	status = "okay";
+>> +	pinctrl-names = "default", "dbdc";
+>> +	pinctrl-0 = <&wf_2g_5g_pins>, <&wf_led_pins>;
+>> +	pinctrl-1 = <&wf_dbdc_pins>, <&wf_led_pins>;
+>> +
+>> +	mediatek,eeprom-data = <0x86790900 0xc4326 0x60000000 0x00 0x00 0x00 
+>> 0x00 0x00
+> 
+> Ouch! This looks like firmware unrolled in a devicetree property - that 
+> can't
+> be right.
+> 
+> Please dump that in a binary file and load it as firmware from 
+> userspace.
+
+it uses the mt76 driver and here eeprom can only be loaded from 
+mtd-partition or from device tree. Previous attempts loading eeprom data 
+from userspace file (like it's done for "normal" firmware) were 
+rejected.
+
+regards Frank
