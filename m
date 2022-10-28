@@ -2,218 +2,500 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24AF0610B4F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA2B610B55
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbiJ1Hax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 03:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
+        id S230168AbiJ1Hce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 03:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiJ1Hat (ORCPT
+        with ESMTP id S229739AbiJ1Hcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 03:30:49 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2119.outbound.protection.outlook.com [40.107.255.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593AB7F133;
-        Fri, 28 Oct 2022 00:30:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WY7XoMvHK318PI6SqKodl1sgbXutFJo1rP7wd8sjkh9qzHs/fjzzpbDVRZ8PNt4fFl6ersGYobEv1jhxT67I84L7KyHH3Cz7ZBEhjOxxRwqQDVyZ7PcCuJziUdsTHgd1ywBc/a2yZAHCaTkzOYrhoYJIwnGKygs+bGYeez6roo6qm8aRN4ybWbHNfEBnrudiPuF/79/2wG5Bfxc7BqvyRyaT/0l5qBqQecruy/wvesIVY7DMmoT4ByjK3tA6R8DIBqYHZv58EsTBOutO4eWBMFonwmJoVnsZP6Uh0UM6b1iotqwJUPHqqv+txf99OEjgUPAPc6fPE1hRMnH92GwxIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ckLfrT3u9bCppYGrd7OfAwp3WaLtPNCOgF6Ny/wXcmg=;
- b=cwVZQM+i3ZURNrTojIo3ieiig66KB/ZbiBfZh6zu6TvpCyCoc415mu7EbU6J4rZHWKtfudefJiWjTPt31epl09LirOdLkVF8FhSueg4q+6W+m7514SwoSPHIKLP3XPgtQg/iudF6TdcgiWpxZcy9SXv8r5Df7MRfoD0poGWvUDFPFBbviO4S+r961qvC0FdephJ6+CIRwmcfLOqpDM+jXsiziPV/pNJ4mk145w7Czp5zTIt0fXN1Gek9RG51rOCZizXg0xk5DWRLRDNS/kwNwbDnh6MeDf0D7cGnxY0DBsltO0AEjia+fzSQEDF76UDJ3cvubPhE/HeV9d96WnHoKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ckLfrT3u9bCppYGrd7OfAwp3WaLtPNCOgF6Ny/wXcmg=;
- b=Psyr1FYCzYbUI7Q7Km+LZMW6LAXHcgkLXVu8cLWYZrOX8yFShkVscS+Im9b/jGBdDDuffnkcSaZLZiKbCxR8wHMWHaRjdOCloBLmdczMkmbqPdaaCCCixuOw1Rfvx60nCWKgoDU0J2/Wm4sFHYm62eZbak6fbha0dB84U54jkxfQ060vukXnhlWwG4ZWqtjay2EOicf4fxQTmMU6jzs6s1XkAY9TBsRjlCE/R8SCqxUoNhBx1JHt+9TJStIUW0d8dZ3xIXBe8Xw7D1HHgROBioPO5a8Zdu/3KCpDJorfjH4Gwo91NdWAZFtbIG75XVtO7T9ABNuHb9v61CywChbq3g==
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
- by SEYPR06MB5719.apcprd06.prod.outlook.com (2603:1096:101:b9::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Fri, 28 Oct
- 2022 07:30:40 +0000
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::9ae1:4f06:2773:f8dc]) by HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::9ae1:4f06:2773:f8dc%4]) with mapi id 15.20.5769.015; Fri, 28 Oct 2022
- 07:30:40 +0000
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
+        Fri, 28 Oct 2022 03:32:31 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 742431B2B8E;
+        Fri, 28 Oct 2022 00:32:29 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8DxPdmMhVtjcwsDAA--.11509S3;
+        Fri, 28 Oct 2022 15:32:28 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxd1eHhVtj6j0GAA--.3727S2;
+        Fri, 28 Oct 2022 15:32:27 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ChiaWei Wang <chiawei_wang@aspeedtech.com>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 4/4] dt-bindings: bus: add documentation for Aspeed
- AHBC
-Thread-Topic: [PATCH v2 4/4] dt-bindings: bus: add documentation for Aspeed
- AHBC
-Thread-Index: AQHY16FydoFvy/tRik2dFUNH8arC163/yrUAgADxsdCAItIJUA==
-Date:   Fri, 28 Oct 2022 07:30:40 +0000
-Message-ID: <HK0PR06MB3202285F061E0DFD0967395380329@HK0PR06MB3202.apcprd06.prod.outlook.com>
-References: <20221004032841.3714928-1-neal_liu@aspeedtech.com>
- <20221004032841.3714928-5-neal_liu@aspeedtech.com>
- <20221005131840.GA3256371-robh@kernel.org>
- <HK0PR06MB32020E4C2124FDD9C68F811A805C9@HK0PR06MB3202.apcprd06.prod.outlook.com>
-In-Reply-To: <HK0PR06MB32020E4C2124FDD9C68F811A805C9@HK0PR06MB3202.apcprd06.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: HK0PR06MB3202:EE_|SEYPR06MB5719:EE_
-x-ms-office365-filtering-correlation-id: d1d1bf34-8ce3-4620-9aef-08dab8b650cb
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7N87U4vT9RmIvtF/lEOgWA9CYd3SlZDbGN+okxH32/3L5oQiRbxUX2rSipwSmBe9+YP2R/TTjn0Jjg+65pWLj79Ljap4/6dEQ6TxG6X7ICt3TYT4m+h3CASa6wpOYE7CBKQVQKDZn+ussy+c/qr/x7hkA3VWMM0hB043sSOzlE/GSzL6EmwBpBIX7uiRsgzL3tCejJV/LqWqIzi0N/fSfLkyb1x9CF40sr4qJ8/q+mcMoF4KP0A0KtZ0nONbOyF0eoSzq/eJChUNrpdY9EilhYO06VSYflFVyhyztWXD31f1ZY41YIsc15p3pDy+EvHly3xt4yiIInTytKfzvXe3XDPEzoEiJMC0L3Askf8+0YvicgsiNBZkoo7vUQejMH47xZ4lTcymU/3C3JNlkrni64puC7Grwt63SoctMUXYcXUqm5sDB8iRpkZgCglAiv7rUjGvG7VnXWG+y6XzUNZbXyFndx6XhJi4LuiSslOlU0Ytn4HiZFZOJD1tx3T+6qtu9NIsCxC6z3OFlNmqioh4KVlmG4dNuPStVTpufMSVmFYQaDRgwNPD+Ti287xF0HmsQRGFs0ecvrmSPgSRaIDPT5ycLwtpIEUqs0mhynnHN3i1fS6bOfGLEiyXr7vw3Ves0+XtBQRNiyKaGy+RvhtOXtMlFIqS5zN2TLoPiEk32NsvOChP+lsG2nSId5i4uioaEBVKbkTZpZeg5+P0P1ZFDZjII0CmPEsi2b6YU2z7MgnajSZQUHDvSL36QyI+R9uuT0rh4X+Z+C0E49QnLpZaqiDoTJYQE9EyDtsBggOgWCk=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(39850400004)(366004)(376002)(136003)(451199015)(478600001)(6916009)(33656002)(54906003)(66556008)(71200400001)(38070700005)(2906002)(7416002)(4326008)(76116006)(38100700002)(41300700001)(55016003)(8936002)(66476007)(8676002)(52536014)(64756008)(966005)(66946007)(316002)(66446008)(5660300002)(9686003)(186003)(86362001)(122000001)(26005)(6506007)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uduGAWhyMZePaaQ5CN1qrzBJBWMMa8sCOFOdKQeQOGHp/bQFSaHegPmeRS8y?=
- =?us-ascii?Q?p+zOLekcvp1QSCI2CMUqUsVG/Hd1zLUgnIS3nzwMvJyl5eBGfHMacyqNJbz0?=
- =?us-ascii?Q?VPquRaOiKU/6L5PZRHrhCp/ZyHMyhZazw26lIDAwvTLN9ayrmoVutfmJOLPI?=
- =?us-ascii?Q?l4xrBo6e+XLflgrQpT1HSQQDlpYEmiEeyTYnmOdjMJ2fP8rQX5e8WvwPzzPZ?=
- =?us-ascii?Q?vUwteSTZ/K1MGeruEbxp9Imnleh052aC0J/IlUQIlPywBBa/h1b5ZN1e9GLP?=
- =?us-ascii?Q?MLDxL8ZpUSYiCyDgVvt5TWWuF8cp+hRzFE+vW5b1c7EXIMCZQQg1FOf8gdV0?=
- =?us-ascii?Q?KhFZpeKijKOWbKEGdnfrurJ3+fk574FjjikcV9NiXTSiMmDOVaMc2wjydBBZ?=
- =?us-ascii?Q?xf2GDDCHk6hZQnvgoGXf0TH6p7fW3X0DgJqpvJkF22YlTlIMYwxgSjCZjuh5?=
- =?us-ascii?Q?6ebuI6Rx9jT6ga8FiRmo+dGl5kvvxifl2wVa1V5Nevk7OWwejlJlO9fQbRXc?=
- =?us-ascii?Q?yam+oUPPuXQKLJ6a70wgCbIwu8C0bzcuBDtHKhG4BWbyKbb32DyYquEygAI1?=
- =?us-ascii?Q?X7G91r7/ULjxCzHdD3U8fiYFEI+dGqQTg6AB0+R1tTjvsi29hHi/pCTzot3e?=
- =?us-ascii?Q?3wcYRIf5t8NzH+61W+Kx7NXt6q+7zl6TgvNySI2L5vQ+Njxl4g9NAIz1bepj?=
- =?us-ascii?Q?t/gSPtozBmO/cHnYzU+IKQKr6+/YlRTmWZdfOVeL7JdbjL5ZL6y53D7DazVp?=
- =?us-ascii?Q?sHedjJlHsZK7oRbBr5I2WeyPzbzfr7WhHdkSHth9N47pugLvksRho40aqJRh?=
- =?us-ascii?Q?UAFA4RgskM3sAZQSwtZpaU8/dD19SEUGWJNlmT4rph2S8L2IBJJwOQ1xYiDl?=
- =?us-ascii?Q?op9A/JQ0G/a40uLy4F0VsXMzaC2WpoNxe3EylIax3xlUi83fPTJt2o9tY2yU?=
- =?us-ascii?Q?oxQyHba422scyJCyL65JytHIdQ/h/qp3Q/VIBL45WRIbk5U3cpd/onVRplph?=
- =?us-ascii?Q?pVnWaSdNBNro5R5Bi7FZ8p/OB0HtfksbRYxFBfo2gPY4ZJrPJgyLMyNsyn2g?=
- =?us-ascii?Q?aQ7CBcwCJwELqlNGAZjZ61pkDt58CSky9KoRROqdUEOj/f8vnTUiEoa/kWSD?=
- =?us-ascii?Q?wFomxdfIs1DsYK1ZMTntVolJo3/xA4sx1y83W+OGyZKomDFLZjnq0jVrK9C7?=
- =?us-ascii?Q?x16UYc5tjXuv3Nr/RWyn4CfjCVv2UTtGExdtrxKJ3sw2HsNj/5WaXisnnF/q?=
- =?us-ascii?Q?ys7k4oye2MbtixFsxqRPb0dhLiQkcS0k0/Wn29aHKnOkZfRdFbtT8ATGbOtj?=
- =?us-ascii?Q?nAk9OQ77rgqFSrKYMorGn89ZnWXLLZsuMUuBlX4zT6BjSQdj71hENWcF/bxI?=
- =?us-ascii?Q?K4Pt0J0F3Xa5aXojZuLiV9tMgfrnXX/r055J1mazujapqsOV3x4Ok7dNtu5M?=
- =?us-ascii?Q?edqskWTePkDXAnxUSPHdMWeIlMsQbgkMB+GROnrzO91yRilTsW+ke6hLh9Ga?=
- =?us-ascii?Q?ZOjLARNwwTvvYHCsRHBoN87N+cYDZNEd2VVrj850uiDnnaUdmV/Bkw6NEJ8y?=
- =?us-ascii?Q?M4MfyL2OUKX7Iy4k9V/PnmeR2GKmNwyLrMCJBVQ1?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yun Liu <liuyun@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        loongarch@lists.linux.dev, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v5 1/2] clocksource: loongson2_hpet: add hpet driver support
+Date:   Fri, 28 Oct 2022 15:32:21 +0800
+Message-Id: <20221028073222.21609-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1d1bf34-8ce3-4620-9aef-08dab8b650cb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2022 07:30:40.5113
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /PMHnwVcAKXq2Uy9c3TpFW0avahZTD1T/3Gw9w7qflOOA4MsfebO7hRNTSB7/Nqb2Rt3s2x5Yu4wUruSp80QKQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5719
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dxd1eHhVtj6j0GAA--.3727S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3ZF4UuF4UCw4DKr1fZw18Xwb_yoWkZry5pr
+        Wxua43JrW5XrnFvws5tr1DCF98Zw48ur9rG343t3yUAw1kJr1rXF40q342vF12yrWxZwsI
+        ga98Kay8CFyqyaDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bS8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x
+        0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
+        xVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
+        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_
+        Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
+        WUCwCI42IY6I8E87Iv67AKxVWxJVW8Jr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
+        YxBIdaVFxhVjvjDU0xZFpf9x07U_fHUUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > Add device tree binding documentation for the Aspeed Advanced
-> > > High-Performance Bus (AHB) Controller.
-> > >
-> > > Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-> > > ---
-> > >  .../bindings/bus/aspeed,ast2600-ahbc.yaml     | 46
-> > +++++++++++++++++++
-> > >  1 file changed, 46 insertions(+)
-> > >  create mode 100644
-> > > Documentation/devicetree/bindings/bus/aspeed,ast2600-ahbc.yaml
-> > >
-> > > diff --git
-> > > a/Documentation/devicetree/bindings/bus/aspeed,ast2600-ahbc.yaml
-> > > b/Documentation/devicetree/bindings/bus/aspeed,ast2600-ahbc.yaml
-> > > new file mode 100644
-> > > index 000000000000..c42a350d30a1
-> > > --- /dev/null
-> > > +++
-> b/Documentation/devicetree/bindings/bus/aspeed,ast2600-ahbc.yaml
-> > > @@ -0,0 +1,46 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/bus/aspeed,ast2600-ahbc.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: ASPEED Advanced High-Performance Bus Controller (AHBC)
-> > > +Device Tree Bindings
-> > > +
-> > > +maintainers:
-> > > +  - Neal Liu <neal_liu@aspeedtech.com>
-> > > +  - Chia-Wei Wang <chiawei_wang@aspeedtech.com>
-> > > +
-> > > +description: |
-> > > +  Advanced High-performance Bus Controller (AHBC) supports plenty
-> > > +of mechanisms
-> > > +  including a priority arbiter, an address decoder and a data
-> > > +multiplexer
-> > > +  to control the overall operations of Advanced High-performance
-> > > +  Bus (AHB). AHB is the main system bus for ARM CPU to communicate
-> > > +with the
-> > > +  related peripherals.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - aspeed,ast2600-ahbc
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +
-> > > +additionalProperties: false
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    bus {
-> > > +        compatible =3D "simple-bus";
-> > > +        #address-cells =3D <1>;
-> > > +        #size-cells =3D <1>;
-> > > +        ranges;
-> > > +
-> > > +        ahbc: bus@1e600000 {
-> > > +            compatible =3D "aspeed,ast2600-ahbc";
-> > > +            reg =3D <0x1e600000 0x100>;
-> >
-> > Devices on the AHB bus should be child nodes here. Unless this is just
-> > for device master interface to memory, but that's not what the descript=
-ion
-> says.
->=20
-> Sorry, I don't understand. "ahbc" device is already a child node here und=
-er
-> AHB bus.
-> "ahbc" is a controller to control the overall operations of AHB, which is
-> described in the description.
-> Could you explain more details?
-> Thanks.
+HPET (High Precision Event Timer) defines a new set of timers, which
+are used by the operating system to schedule threads, interrupt the
+kernel and interrupt the multimedia timer server. The operating
+system can assign different timers to different applications. By
+configuration, each timer can generate interrupt independently.
 
-Hi Rob,
+The Loongson-2 HPET module includes a main count and three comparators
+ , all of which are 32 bits wide. Among the three comparators, only
+one comparator supports periodic interrupt, all three comparators
+support non periodic interrupts.
 
-This controller is a device master interface to memory, not the bus itself.=
- Maybe the description confuse it, I'll try to revise it.
-Thanks.
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+Change in v5:
+		1. Replace string loongson2 with Loongson-2 in commit message
+		   and Kconfig file.
+		2. Replace string LOONGSON2 with LOONGSON-2 in MAINTAINERS.
+		3. Make include asm headers after all linux headers.
+		4. Add blank place before comma if comma when the comma is at
+		   the beginning of the line.
+
+ MAINTAINERS                          |   6 +
+ arch/loongarch/kernel/time.c         |   4 +-
+ drivers/clocksource/Kconfig          |   9 +
+ drivers/clocksource/Makefile         |   1 +
+ drivers/clocksource/loongson2_hpet.c | 335 +++++++++++++++++++++++++++
+ 5 files changed, 354 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/clocksource/loongson2_hpet.c
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e5fb270dd363..21c455d7a99a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11915,6 +11915,12 @@ F:	Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+ F:	drivers/clk/clk-loongson2.c
+ F:	include/dt-bindings/clock/loongson,ls2k-clk.h
+ 
++LOONGSON-2 SOC SERIES HPET DRIVER
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	linux-kernel@vger.kernel.org
++S:	Maintained
++F:	drivers/clocksource/loongson2_hpet.c
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.c
+index 09f20bc81798..0d8b37763086 100644
+--- a/arch/loongarch/kernel/time.c
++++ b/arch/loongarch/kernel/time.c
+@@ -216,7 +216,9 @@ int __init constant_clocksource_init(void)
+ void __init time_init(void)
+ {
+ 	of_clk_init(NULL);
+-
++#ifdef CONFIG_TIMER_PROBE
++	timer_probe();
++#endif
+ 	if (!cpu_has_cpucfg)
+ 		const_clock_freq = cpu_clock_freq;
+ 	else
+diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+index 4f2bb7315b67..ac5eb67e464d 100644
+--- a/drivers/clocksource/Kconfig
++++ b/drivers/clocksource/Kconfig
+@@ -721,4 +721,13 @@ config GOLDFISH_TIMER
+ 	help
+ 	  Support for the timer/counter of goldfish-rtc
+ 
++config LOONGSON2_HPET
++	bool "Loongson-2 High Precision Event Timer (HPET)"
++	select TIMER_PROBE
++	select TIMER_OF
++	help
++	  This option enables Loongson-2 High Precision Event Timer
++	  (HPET) module driver. It supports the oneshot, the periodic
++	  modes and high resolution. It is used as a clocksource and
++	  a clockevent.
+ endmenu
+diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
+index 64ab547de97b..1a3abb770f11 100644
+--- a/drivers/clocksource/Makefile
++++ b/drivers/clocksource/Makefile
+@@ -88,3 +88,4 @@ obj-$(CONFIG_MICROCHIP_PIT64B)		+= timer-microchip-pit64b.o
+ obj-$(CONFIG_MSC313E_TIMER)		+= timer-msc313e.o
+ obj-$(CONFIG_GOLDFISH_TIMER)		+= timer-goldfish.o
+ obj-$(CONFIG_GXP_TIMER)			+= timer-gxp.o
++obj-$(CONFIG_LOONGSON2_HPET)		+= loongson2_hpet.o
+diff --git a/drivers/clocksource/loongson2_hpet.c b/drivers/clocksource/loongson2_hpet.c
+new file mode 100644
+index 000000000000..a111578a6539
+--- /dev/null
++++ b/drivers/clocksource/loongson2_hpet.c
+@@ -0,0 +1,335 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
++ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
++ */
++
++#include <linux/init.h>
++#include <linux/percpu.h>
++#include <linux/delay.h>
++#include <linux/spinlock.h>
++#include <linux/interrupt.h>
++#include <linux/of_irq.h>
++#include <linux/of_address.h>
++#include <linux/clk.h>
++#include <asm/time.h>
++
++/* HPET regs */
++#define HPET_CFG                0x010
++#define HPET_STATUS             0x020
++#define HPET_COUNTER            0x0f0
++#define HPET_T0_IRS             0x001
++#define HPET_T0_CFG             0x100
++#define HPET_T0_CMP             0x108
++#define HPET_CFG_ENABLE         0x001
++#define HPET_TN_LEVEL           0x0002
++#define HPET_TN_ENABLE          0x0004
++#define HPET_TN_PERIODIC        0x0008
++#define HPET_TN_SETVAL          0x0040
++#define HPET_TN_32BIT           0x0100
++
++#define HPET_MIN_CYCLES		16
++#define HPET_MIN_PROG_DELTA	(HPET_MIN_CYCLES * 12)
++#define HPET_COMPARE_VAL	((hpet_freq + HZ / 2) / HZ)
++
++void __iomem			*hpet_mmio_base;
++unsigned int			hpet_freq;
++unsigned int			hpet_t0_irq;
++unsigned int			hpet_irq_flags;
++unsigned int			hpet_t0_cfg;
++
++static DEFINE_SPINLOCK(hpet_lock);
++DEFINE_PER_CPU(struct clock_event_device, hpet_clockevent_device);
++
++static int hpet_read(int offset)
++{
++	return readl(hpet_mmio_base + offset);
++}
++
++static void hpet_write(int offset, int data)
++{
++	writel(data, hpet_mmio_base + offset);
++}
++
++static void hpet_start_counter(void)
++{
++	unsigned int cfg = hpet_read(HPET_CFG);
++
++	cfg |= HPET_CFG_ENABLE;
++	hpet_write(HPET_CFG, cfg);
++}
++
++static void hpet_stop_counter(void)
++{
++	unsigned int cfg = hpet_read(HPET_CFG);
++
++	cfg &= ~HPET_CFG_ENABLE;
++	hpet_write(HPET_CFG, cfg);
++}
++
++static void hpet_reset_counter(void)
++{
++	hpet_write(HPET_COUNTER, 0);
++	hpet_write(HPET_COUNTER + 4, 0);
++}
++
++static void hpet_restart_counter(void)
++{
++	hpet_stop_counter();
++	hpet_reset_counter();
++	hpet_start_counter();
++}
++
++static void hpet_enable_legacy_int(void)
++{
++	/* Do nothing on Loongson2 */
++}
++
++static int hpet_set_state_periodic(struct clock_event_device *evt)
++{
++	int cfg;
++
++	spin_lock(&hpet_lock);
++
++	pr_info("set clock event to periodic mode!\n");
++	/* stop counter */
++	hpet_stop_counter();
++	hpet_reset_counter();
++	hpet_write(HPET_T0_CMP, 0);
++
++	/* enables the timer0 to generate a periodic interrupt */
++	cfg = hpet_read(HPET_T0_CFG);
++	cfg &= ~HPET_TN_LEVEL;
++	cfg |= HPET_TN_ENABLE | HPET_TN_PERIODIC | HPET_TN_SETVAL |
++		HPET_TN_32BIT | hpet_irq_flags;
++	hpet_write(HPET_T0_CFG, cfg);
++
++	/* set the comparator */
++	hpet_write(HPET_T0_CMP, HPET_COMPARE_VAL);
++	udelay(1);
++	hpet_write(HPET_T0_CMP, HPET_COMPARE_VAL);
++
++	/* start counter */
++	hpet_start_counter();
++
++	spin_unlock(&hpet_lock);
++	return 0;
++}
++
++static int hpet_set_state_shutdown(struct clock_event_device *evt)
++{
++	int cfg;
++
++	spin_lock(&hpet_lock);
++
++	cfg = hpet_read(HPET_T0_CFG);
++	cfg &= ~HPET_TN_ENABLE;
++	hpet_write(HPET_T0_CFG, cfg);
++
++	spin_unlock(&hpet_lock);
++	return 0;
++}
++
++static int hpet_set_state_oneshot(struct clock_event_device *evt)
++{
++	int cfg;
++
++	spin_lock(&hpet_lock);
++
++	pr_info("set clock event to one shot mode!\n");
++	cfg = hpet_read(HPET_T0_CFG);
++	/*
++	 * set timer0 type
++	 * 1 : periodic interrupt
++	 * 0 : non-periodic(oneshot) interrupt
++	 */
++	cfg &= ~HPET_TN_PERIODIC;
++	cfg |= HPET_TN_ENABLE | HPET_TN_32BIT |
++		hpet_irq_flags;
++	hpet_write(HPET_T0_CFG, cfg);
++
++	/* start counter */
++	hpet_start_counter();
++
++	spin_unlock(&hpet_lock);
++	return 0;
++}
++
++static int hpet_tick_resume(struct clock_event_device *evt)
++{
++	spin_lock(&hpet_lock);
++	hpet_enable_legacy_int();
++	spin_unlock(&hpet_lock);
++
++	return 0;
++}
++
++static int hpet_next_event(unsigned long delta,
++		struct clock_event_device *evt)
++{
++	u32 cnt;
++	s32 res;
++
++	cnt = hpet_read(HPET_COUNTER);
++	cnt += (u32) delta;
++	hpet_write(HPET_T0_CMP, cnt);
++
++	res = (s32)(cnt - hpet_read(HPET_COUNTER));
++
++	return res < HPET_MIN_CYCLES ? -ETIME : 0;
++}
++
++static irqreturn_t hpet_irq_handler(int irq, void *data)
++{
++	int is_irq;
++	struct clock_event_device *cd;
++	unsigned int cpu = smp_processor_id();
++
++	is_irq = hpet_read(HPET_STATUS);
++	if (is_irq & HPET_T0_IRS) {
++		/* clear the TIMER0 irq status register */
++		hpet_write(HPET_STATUS, HPET_T0_IRS);
++		cd = &per_cpu(hpet_clockevent_device, cpu);
++		cd->event_handler(cd);
++		return IRQ_HANDLED;
++	}
++	return IRQ_NONE;
++}
++
++static struct irqaction hpet_irq_str = {
++	.handler = hpet_irq_handler,
++	.flags = IRQD_NO_BALANCING | IRQF_TIMER,
++	.name = "hpet",
++};
++
++/*
++ * HPET address assignation and irq setting should be done in bios.
++ * But, sometimes bios don't do this, we just setup here directly.
++ */
++static void hpet_setup(void)
++{
++	hpet_enable_legacy_int();
++}
++
++static int hpet_setup_irq(struct clock_event_device *cd)
++{
++	setup_irq(cd->irq, &hpet_irq_str);
++
++	disable_irq(cd->irq);
++	irq_set_affinity(cd->irq, cd->cpumask);
++	enable_irq(cd->irq);
++
++	return 0;
++}
++
++static int __init loongson2_hpet_clockevent_init(void)
++{
++	unsigned int cpu = smp_processor_id();
++	struct clock_event_device *cd;
++
++	hpet_setup();
++
++	cd = &per_cpu(hpet_clockevent_device, cpu);
++	cd->name = "hpet";
++	cd->rating = 300;
++	cd->features = CLOCK_EVT_FEAT_PERIODIC | CLOCK_EVT_FEAT_ONESHOT;
++	cd->set_state_shutdown = hpet_set_state_shutdown;
++	cd->set_state_periodic = hpet_set_state_periodic;
++	cd->set_state_oneshot = hpet_set_state_oneshot;
++	cd->tick_resume = hpet_tick_resume;
++	cd->set_next_event = hpet_next_event;
++	cd->irq = hpet_t0_irq;
++	cd->cpumask = cpumask_of(cpu);
++	clockevent_set_clock(cd, hpet_freq);
++	cd->max_delta_ns = clockevent_delta2ns(0x7fffffff, cd);
++	cd->max_delta_ticks = 0x7fffffff;
++	cd->min_delta_ns = clockevent_delta2ns(HPET_MIN_PROG_DELTA, cd);
++	cd->min_delta_ticks = HPET_MIN_PROG_DELTA;
++
++	clockevents_register_device(cd);
++	hpet_setup_irq(cd);
++
++	pr_info("hpet clock event device register\n");
++
++	return 0;
++}
++
++static u64 hpet_read_counter(struct clocksource *cs)
++{
++	return (u64)hpet_read(HPET_COUNTER);
++}
++
++static void hpet_suspend(struct clocksource *cs)
++{
++	hpet_t0_cfg = hpet_read(HPET_T0_CFG);
++}
++
++static void hpet_resume(struct clocksource *cs)
++{
++	hpet_write(HPET_T0_CFG, hpet_t0_cfg);
++	hpet_setup();
++	hpet_restart_counter();
++}
++
++struct clocksource csrc_hpet = {
++	.name = "hpet",
++	.rating = 300,
++	.read = hpet_read_counter,
++	.mask = CLOCKSOURCE_MASK(32),
++	/* oneshot mode work normal with this flag */
++	.flags = CLOCK_SOURCE_IS_CONTINUOUS,
++	.suspend = hpet_suspend,
++	.resume = hpet_resume,
++	.mult = 0,
++	.shift = 10,
++};
++
++static int __init loongson2_hpet_clocksource_init(void)
++{
++	csrc_hpet.mult = clocksource_hz2mult(hpet_freq, csrc_hpet.shift);
++
++	/* start counter */
++	hpet_start_counter();
++
++	return clocksource_register_hz(&csrc_hpet, hpet_freq);
++}
++
++static int __init loongson2_hpet_init(struct device_node *np)
++{
++	int ret;
++	struct clk *clk;
++
++	hpet_mmio_base = of_iomap(np, 0);
++	if (!hpet_mmio_base) {
++		pr_err("hpet: unable to map loongson2 hpet registers\n");
++		goto err;
++	}
++
++	ret = -EINVAL;
++	hpet_t0_irq = irq_of_parse_and_map(np, 0);
++	if (hpet_t0_irq <= 0) {
++		pr_err("hpet: unable to get IRQ from DT, %d\n", hpet_t0_irq);
++		goto err;
++	}
++
++	clk = of_clk_get(np, 0);
++	if (!IS_ERR(clk)) {
++		hpet_freq = clk_get_rate(clk);
++		clk_put(clk);
++	} else
++		goto err;
++
++	hpet_irq_flags = HPET_TN_LEVEL;
++
++	loongson2_hpet_clocksource_init();
++
++	loongson2_hpet_clockevent_init();
++
++	return 0;
++
++err:
++	iounmap(hpet_mmio_base);
++	return ret;
++}
++
++TIMER_OF_DECLARE(loongson2_hpet, "loongson,ls2k-hpet", loongson2_hpet_init);
+-- 
+2.31.1
+
