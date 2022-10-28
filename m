@@ -2,308 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2895A61097F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 07:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7B27610983
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 07:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiJ1FFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 01:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54280 "EHLO
+        id S229729AbiJ1FGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 01:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiJ1FFl (ORCPT
+        with ESMTP id S229543AbiJ1FGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 01:05:41 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CDE96221
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 22:05:40 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id c2so3876338plz.11
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 22:05:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uyMK7y8RQqNmNtG3Q5ktkxVubz+gBEtfWLQrdJqX2zo=;
-        b=gErV0eXBCE/xHbxTMfsdEvDxGOEn3fGY/8zejUHjfMv3FrLyfBoFOQBzLJJrN1RVYM
-         od04CkKdyLcUWs3j/YIrSlhipPOUBVGuJn4oQx3weiiOIniaAYnpn63W/vYVlcrI6w6/
-         36zjQjMcGjdOyckUR+WWBGzqp606NphecQkFtF9DQxpHeFNKeq2gLrKmcGpNRCICML9s
-         w7YUtbZZTugKuQnEOCAsuef+Sy5mwVZ410aXGsPdulRVPPYPd5wpiBFCoaHoh9MGpwgA
-         G59uo4LOug8QZxy9MmSkv7hdFuKWGLnvH5zJCSWboZzRBdSInH304kSDKaVLyk18H8zF
-         UKtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uyMK7y8RQqNmNtG3Q5ktkxVubz+gBEtfWLQrdJqX2zo=;
-        b=B/9ogKfyNFyKCk7taYNNjbHtfFTrbJadSBWqp9dlQdfOgFzHmUulpmaX+KzUwhJB5D
-         KlwGoD/GS3jrotq412VTm6+LPlnEtanydY/yZ5NqA9ELt4XRhSiNVpqIdKWjuOR6Orw6
-         2vym4QheSr7P8Fj92Mdju6SpYS1CVr/PLV/JIpLvJIAERu3px9D99K7fH3lYI3r1eXR1
-         8UtCs8ime0A7uljHMywVft1sGZ4QH1ihgpDqL6DGiyKNnlDbyQWS/ELFsYBlIZkvlsKm
-         7wc3uT0bUIFIj7roLf36rb3isX+gtR2b1DRJgxq73xx3TmuxlRRylx/jbr4M5mPncnvL
-         ZIjQ==
-X-Gm-Message-State: ACrzQf0sYURxYBmcGo4s0N/OFz2arWTw6cC76H4KmvGTTal3Pyhdbe2p
-        QPTHLie5eIdCDi9aNVHp/ztykiShfno=
-X-Google-Smtp-Source: AMsMyM5Hrxu+dB6bgfe7cCuQnitxTrwwQynOFFJMD2+fwZ+wwoOFbwZ6omcSSAE1Uoamrp4D7U57Kg==
-X-Received: by 2002:a17:902:ec8e:b0:186:de89:7f66 with SMTP id x14-20020a170902ec8e00b00186de897f66mr11629707plg.160.1666933540074;
-        Thu, 27 Oct 2022 22:05:40 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:ea9a:801b:ed52:2db1])
-        by smtp.gmail.com with ESMTPSA id z12-20020a63b90c000000b004277f43b736sm1829407pge.92.2022.10.27.22.05.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 22:05:39 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 22:05:36 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] powerpc/warp: switch to using gpiod API
-Message-ID: <Y1tjIOCohHF3faQb@google.com>
-References: <YzKSLcrYmV5kjyeX@google.com>
+        Fri, 28 Oct 2022 01:06:30 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2D597D54
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 22:06:26 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29S4g2vh029832;
+        Fri, 28 Oct 2022 05:05:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=7Gmvpkjc6jY2xEC5y+Kh/tkZ9ISWjOSHKCfGL8gGIGE=;
+ b=Ghqv5R+u2eHsuJlxeBNkEdQFUldPkIUf3+rBnaA8kXHhz0znEYsQaMMoxUYPak7urjsz
+ wuJ0xT3nnzhQGivLojDQS969dtU7otPE4dJGomxGVGyEjRz6v0EUDmsgSq8RA0dHT+Mp
+ U5dsHwpfu2UdJInN/7gwtVYpCnnbm29BE3b82cXfOGQYZzbwme8ETpUg8cGYgDCiCPn5
+ VA9KQEEz17qzbwp357XLIH2r5ZiklM9ya1Ld4/LCG7Ny8vOOITn/CcHzENLc8a6s4VAf
+ 6oU6SnobceYnNZd/tvX+xmJVkg39Q/zhmjoX7PpxXs+jguVnZzfnhSl42ubOPSuaX0w+ pQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kg89m0ksu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Oct 2022 05:05:54 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29S4h1xq034620;
+        Fri, 28 Oct 2022 05:05:53 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kg89m0kn9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Oct 2022 05:05:53 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29S557MU005708;
+        Fri, 28 Oct 2022 05:05:50 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3kfaht2603-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Oct 2022 05:05:50 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29S55lr817564124
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 28 Oct 2022 05:05:47 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D317CA4040;
+        Fri, 28 Oct 2022 05:05:47 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 15385A4092;
+        Fri, 28 Oct 2022 05:05:45 +0000 (GMT)
+Received: from [9.109.205.170] (unknown [9.109.205.170])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 28 Oct 2022 05:05:44 +0000 (GMT)
+Message-ID: <59291b98-6907-0acf-df11-6d87681027cc@linux.ibm.com>
+Date:   Fri, 28 Oct 2022 10:35:44 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzKSLcrYmV5kjyeX@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [RFC] memory tiering: use small chunk size and more tiers
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Jagdish Gediya <jvgediya.oss@gmail.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Tim Chen <tim.c.chen@intel.com>, Wei Xu <weixugc@google.com>,
+        Yang Shi <shy828301@gmail.com>
+References: <20221027065925.476955-1-ying.huang@intel.com>
+ <578c9b89-10eb-1e23-8868-cdd6685d8d4e@linux.ibm.com>
+ <877d0kk5uf.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Language: en-US
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <877d0kk5uf.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: U7R2Bb33ph324x6JVL2wa-Eq7YV6JmxF
+X-Proofpoint-GUID: 2daodrFf5J-Y6fpthTV-eAfE8F3DV_sN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-28_02,2022-10-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ impostorscore=0 bulkscore=0 mlxlogscore=890 mlxscore=0 suspectscore=0
+ phishscore=0 priorityscore=1501 lowpriorityscore=0 clxscore=1015
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2210280031
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 11:03:25PM -0700, Dmitry Torokhov wrote:
-> This switches PIKA Warp away from legacy gpio API and to newer gpiod
-> API, so that we can eventually deprecate the former.
+On 10/28/22 8:33 AM, Huang, Ying wrote:
+> Hi, Aneesh,
 > 
-> Because LEDs are normally driven by leds-gpio driver, but the
-> platform code also wants to access the LEDs during thermal shutdown,
-> and gpiod API does not allow locating GPIO without requesting it,
-> the platform code is now responsible for locating GPIOs through device
-> tree and requesting them. It then constructs platform data for
-> leds-gpio platform device and registers it. This allows platform
-> code to retain access to LED GPIO descriptors and use them when needed.
+> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
 > 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+>> On 10/27/22 12:29 PM, Huang Ying wrote:
+>>> We need some way to override the system default memory tiers.  For
+>>> the example system as follows,
+>>>
+>>> type		abstract distance
+>>> ----		-----------------
+>>> HBM		300
+>>> DRAM		1000
+>>> CXL_MEM		5000
+>>> PMEM		5100
+>>>
+>>> Given the memory tier chunk size is 100, the default memory tiers
+>>> could be,
+>>>
+>>> tier		abstract distance	types
+>>>                 range
+>>> ----		-----------------       -----
+>>> 3		300-400			HBM
+>>> 10		1000-1100		DRAM
+>>> 50		5000-5100		CXL_MEM
+>>> 51		5100-5200		PMEM
+>>>
+>>> If we want to group CXL MEM and PMEM into one tier, we have 2 choices.
+>>>
+>>> 1) Override the abstract distance of CXL_MEM or PMEM.  For example, if
+>>> we change the abstract distance of PMEM to 5050, the memory tiers
+>>> become,
+>>>
+>>> tier		abstract distance	types
+>>>                 range
+>>> ----		-----------------       -----
+>>> 3		300-400			HBM
+>>> 10		1000-1100		DRAM
+>>> 50		5000-5100		CXL_MEM, PMEM
+>>>
+>>> 2) Override the memory tier chunk size.  For example, if we change the
+>>> memory tier chunk size to 200, the memory tiers become,
+>>>
+>>> tier		abstract distance	types
+>>>                 range
+>>> ----		-----------------       -----
+>>> 1		200-400			HBM
+>>> 5		1000-1200		DRAM
+>>> 25		5000-5200		CXL_MEM, PMEM
+>>>
+>>> But after some thoughts, I think choice 2) may be not good.  The
+>>> problem is that even if 2 abstract distances are almost same, they may
+>>> be put in 2 tier if they sit in the different sides of the tier
+>>> boundary.  For example, if the abstract distance of CXL_MEM is 4990,
+>>> while the abstract distance of PMEM is 5010.  Although the difference
+>>> of the abstract distances is only 20, CXL_MEM and PMEM will put in
+>>> different tiers if the tier chunk size is 50, 100, 200, 250, 500, ....
+>>> This makes choice 2) hard to be used, it may become tricky to find out
+>>> the appropriate tier chunk size that satisfying all requirements.
+>>>
+>>
+>> Shouldn't we wait for gaining experience w.r.t how we would end up
+>> mapping devices with different latencies and bandwidth before tuning these values? 
+> 
+> Just want to discuss the overall design.
+> 
+>>> So I suggest to abandon choice 2) and use choice 1) only.  This makes
+>>> the overall design and user space interface to be simpler and easier
+>>> to be used.  The overall design of the abstract distance could be,
+>>>
+>>> 1. Use decimal for abstract distance and its chunk size.  This makes
+>>>    them more user friendly.
+>>>
+>>> 2. Make the tier chunk size as small as possible.  For example, 10.
+>>>    This will put different memory types in one memory tier only if their
+>>>    performance is almost same by default.  And we will not provide the
+>>>    interface to override the chunk size.
+>>>
+>>
+>> this could also mean we can end up with lots of memory tiers with relative
+>> smaller performance difference between them. Again it depends how HMAT
+>> attributes will be used to map to abstract distance.
+> 
+> Per my understanding, there will not be many memory types in a system.
+> So, there will not be many memory tiers too.  In most systems, there are
+> only 2 or 3 memory tiers in the system, for example, HBM, DRAM, CXL,
+> etc. 
 
-Gentle ping on this... Could I get a feedback if this is acceptable or
-if you want me to rework this somehow?
+So we don't need the chunk size to be 10 because we don't forsee us needing
+to group devices into that many tiers. 
 
-Thanks!
+> Do you know systems with many memory types?  The basic idea is to
+> put different memory types in different memory tiers by default.  If
+> users want to group them, they can do that via overriding the abstract
+> distance of some memory type.
+> 
 
-> ---
-> 
-> Compiled only, no hardware to test this.
-> 
->  arch/powerpc/boot/dts/warp.dts    |   4 +-
->  arch/powerpc/platforms/44x/warp.c | 105 ++++++++++++++++++++++++++----
->  2 files changed, 94 insertions(+), 15 deletions(-)
-> 
-> diff --git a/arch/powerpc/boot/dts/warp.dts b/arch/powerpc/boot/dts/warp.dts
-> index b4f32740870e..aa62d08e97c2 100644
-> --- a/arch/powerpc/boot/dts/warp.dts
-> +++ b/arch/powerpc/boot/dts/warp.dts
-> @@ -258,14 +258,12 @@ GPIO1: gpio@ef600c00 {
->  			};
->  
->  			power-leds {
-> -				compatible = "gpio-leds";
-> +				compatible = "warp-power-leds";
->  				green {
->  					gpios = <&GPIO1 0 0>;
-> -					default-state = "keep";
->  				};
->  				red {
->  					gpios = <&GPIO1 1 0>;
-> -					default-state = "keep";
->  				};
->  			};
->  
-> diff --git a/arch/powerpc/platforms/44x/warp.c b/arch/powerpc/platforms/44x/warp.c
-> index f03432ef010b..cefa313c09f0 100644
-> --- a/arch/powerpc/platforms/44x/warp.c
-> +++ b/arch/powerpc/platforms/44x/warp.c
-> @@ -5,15 +5,17 @@
->   * Copyright (c) 2008-2009 PIKA Technologies
->   *   Sean MacLennan <smaclennan@pikatech.com>
->   */
-> +#include <linux/err.h>
->  #include <linux/init.h>
->  #include <linux/of_platform.h>
->  #include <linux/kthread.h>
-> +#include <linux/leds.h>
->  #include <linux/i2c.h>
->  #include <linux/interrupt.h>
->  #include <linux/delay.h>
->  #include <linux/of_address.h>
->  #include <linux/of_irq.h>
-> -#include <linux/of_gpio.h>
-> +#include <linux/gpio/consumer.h>
->  #include <linux/slab.h>
->  #include <linux/export.h>
->  
-> @@ -92,8 +94,6 @@ static int __init warp_post_info(void)
->  
->  static LIST_HEAD(dtm_shutdown_list);
->  static void __iomem *dtm_fpga;
-> -static unsigned green_led, red_led;
-> -
->  
->  struct dtm_shutdown {
->  	struct list_head list;
-> @@ -101,7 +101,6 @@ struct dtm_shutdown {
->  	void *arg;
->  };
->  
-> -
->  int pika_dtm_register_shutdown(void (*func)(void *arg), void *arg)
->  {
->  	struct dtm_shutdown *shutdown;
-> @@ -132,6 +131,35 @@ int pika_dtm_unregister_shutdown(void (*func)(void *arg), void *arg)
->  	return -EINVAL;
->  }
->  
-> +#define WARP_GREEN_LED	0
-> +#define WARP_RED_LED	1
-> +
-> +static struct gpio_led warp_gpio_led_pins[] = {
-> +	[WARP_GREEN_LED] = {
-> +		.name		= "green",
-> +		.default_state	= LEDS_DEFSTATE_KEEP,
-> +		.gpiod		= NULL, /* to be filled by pika_setup_leds() */
-> +	},
-> +	[WARP_RED_LED] = {
-> +		.name		= "red",
-> +		.default_state	= LEDS_DEFSTATE_KEEP,
-> +		.gpiod		= NULL, /* to be filled by pika_setup_leds() */
-> +	},
-> +};
-> +
-> +static struct gpio_led_platform_data warp_gpio_led_data = {
-> +	.leds		= warp_gpio_led_pins,
-> +	.num_leds	= ARRAY_SIZE(warp_gpio_led_pins),
-> +};
-> +
-> +static struct platform_device warp_gpio_leds = {
-> +	.name	= "leds-gpio",
-> +	.id	= -1,
-> +	.dev	= {
-> +		.platform_data = &warp_gpio_led_data,
-> +	},
-> +};
-> +
->  static irqreturn_t temp_isr(int irq, void *context)
->  {
->  	struct dtm_shutdown *shutdown;
-> @@ -139,7 +167,7 @@ static irqreturn_t temp_isr(int irq, void *context)
->  
->  	local_irq_disable();
->  
-> -	gpio_set_value(green_led, 0);
-> +	gpiod_set_value(warp_gpio_led_pins[WARP_GREEN_LED].gpiod, 0);
->  
->  	/* Run through the shutdown list. */
->  	list_for_each_entry(shutdown, &dtm_shutdown_list, list)
-> @@ -153,7 +181,7 @@ static irqreturn_t temp_isr(int irq, void *context)
->  			out_be32(dtm_fpga + 0x14, reset);
->  		}
->  
-> -		gpio_set_value(red_led, value);
-> +		gpiod_set_value(warp_gpio_led_pins[WARP_RED_LED].gpiod, value);
->  		value ^= 1;
->  		mdelay(500);
->  	}
-> @@ -162,25 +190,78 @@ static irqreturn_t temp_isr(int irq, void *context)
->  	return IRQ_HANDLED;
->  }
->  
-> +/*
-> + * Because green and red power LEDs are normally driven by leds-gpio driver,
-> + * but in case of critical temperature shutdown we want to drive them
-> + * ourselves, we acquire both and then create leds-gpio platform device
-> + * ourselves, instead of doing it through device tree. This way we can still
-> + * keep access to the gpios and use them when needed.
-> + */
->  static int pika_setup_leds(void)
->  {
->  	struct device_node *np, *child;
-> +	struct gpio_desc *gpio;
-> +	struct gpio_led *led;
-> +	int led_count = 0;
-> +	int error;
-> +	int i;
->  
-> -	np = of_find_compatible_node(NULL, NULL, "gpio-leds");
-> +	np = of_find_compatible_node(NULL, NULL, "warp-power-leds");
->  	if (!np) {
->  		printk(KERN_ERR __FILE__ ": Unable to find leds\n");
->  		return -ENOENT;
->  	}
->  
-> -	for_each_child_of_node(np, child)
-> -		if (of_node_name_eq(child, "green"))
-> -			green_led = of_get_gpio(child, 0);
-> -		else if (of_node_name_eq(child, "red"))
-> -			red_led = of_get_gpio(child, 0);
-> +	for_each_child_of_node(np, child) {
-> +		for (i = 0; i < ARRAY_SIZE(warp_gpio_led_pins); i++) {
-> +			led = &warp_gpio_led_pins[i];
-> +
-> +			if (!of_node_name_eq(child, led->name))
-> +				continue;
-> +
-> +			if (led->gpiod) {
-> +				printk(KERN_ERR __FILE__ ": %s led has already been defined\n",
-> +				       led->name);
-> +				continue;
-> +			}
-> +
-> +			gpio = fwnode_gpiod_get_index(of_fwnode_handle(child),
-> +						      NULL, 0, GPIOD_ASIS,
-> +						      led->name);
-> +			error = PTR_ERR_OR_ZERO(gpio);
-> +			if (error) {
-> +				printk(KERN_ERR __FILE__ ": Failed to get %s led gpio: %d\n",
-> +				       led->name, error);
-> +				of_node_put(child);
-> +				goto err_cleanup_pins;
-> +			}
-> +
-> +			led->gpiod = gpio;
-> +			led_count++;
-> +		}
-> +	}
->  
->  	of_node_put(np);
->  
-> +	/* Skip device registration if no leds have been defined */
-> +	if (led_count) {
-> +		error = platform_device_register(&warp_gpio_leds);
-> +		if (error) {
-> +			printk(KERN_ERR __FILE__ ": Unable to add leds-gpio: %d\n",
-> +			       error);
-> +			goto err_cleanup_pins;
-> +		}
-> +	}
-> +
->  	return 0;
-> +
-> +err_cleanup_pins:
-> +	for (i = 0; i < ARRAY_SIZE(warp_gpio_led_pins); i++) {
-> +		led = &warp_gpio_led_pins[i];
-> +		gpiod_put(led->gpiod);
-> +		led->gpiod = NULL;
-> +	}
-> +	return error;
->  }
->  
->  static void pika_setup_critical_temp(struct device_node *np,
-> -- 
-> 2.38.0.rc1.362.ged0d419d3c-goog
-> 
-> 
-> -- 
-> Dmitry
+with small chunk size and depending on how we are going to derive abstract distance,
+I am wondering whether we would end up with lots of memory tiers with no 
+real value. Hence my suggestion to wait making a change like this till we have
+code that map HMAT/CDAT attributes to abstract distance. 
 
--- 
-Dmitry
+
+
+
+>>
+>>> 3. Make the abstract distance of normal DRAM large enough.  For
+>>>    example, 1000, then 100 tiers can be defined below DRAM, this is
+>>>    more than enough in practice.
+>>
+>> Why 100? Will we really have that many tiers below/faster than DRAM? As of now 
+>> I see only HBM below it.
+> 
+> Yes.  100 is more than enough.  We just want to avoid to group different
+> memory types by default.
+> 
+> Best Regards,
+> Huang, Ying
+> 
+
