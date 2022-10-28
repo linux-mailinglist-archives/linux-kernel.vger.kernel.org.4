@@ -2,188 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419E1611BB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6234611BB8
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 22:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiJ1Umx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 16:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
+        id S229510AbiJ1Uoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 16:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiJ1Umr (ORCPT
+        with ESMTP id S229519AbiJ1Uoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 16:42:47 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DC323922B
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:42:45 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id x19-20020a0566022c5300b006c7e5c33b6eso4222083iov.7
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:42:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+RJmYcVdDq8KxDZxpRtEnpnur5rE3IEOXgOv5w8AZK8=;
-        b=l8E7TwZTGKw8B+MiMmslrB0DbXBMNGolbztMvoNI0j2oU2xt734aZRWaQAZjVcNrVj
-         IHpGK6kvrRrmDNbmfuyby3OS1K87P1/rJWcBaMNF5xOZn9KjasEdAqxtScGsvMobtAPS
-         /X5rug+GU32tScCs2SyyX0oVrhMKLRa8/XW5n2NeI+McOK6Cu+nC8t3+pUcMaw1ZnqCP
-         NLuOwATmvZ+9y/DlfMdiWMsSZ6aY4ztiZgluQt9DnNbfy34qC6BmsGz3AKVVGORRl7Cd
-         ekt1zmxGuOfn1Rj+VMqQ52atkhu6kITm2oNjAjbHKF0S+TmN1iStBVpGP0I64VJcim4I
-         GdTw==
-X-Gm-Message-State: ACrzQf3yvL5Bytezdpra4mprxNEbNjNj50QoqyatmiC0TX9r68VP2+/y
-        y5BwuY201Tt5rfwpC+RFbvfUMTluJ10ZbCrxvGUbNZxJVVdl
-X-Google-Smtp-Source: AMsMyM7XGLqVBjNvBLjNM4DUC7oibxYdFhbE/h9bhCtgQg76dGxY16o9Wzdiz2gWTHna/+/JtMbhEIdw7u9U19Jf9m6uLGuj9DEH
+        Fri, 28 Oct 2022 16:44:39 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2053.outbound.protection.outlook.com [40.107.220.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63007657
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 13:44:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XkUeYHXQLIXCBRzbs5OY6PkRnRi9o70oHLYYtjTLDQN0To42a7o0ciht5F3J3jT1fHyM3ALyFmOAJnFyEXM5fueV0Zs0mr0IAAxGa94s6GYGUKPkudo3SDeknfD6JrjcMb4tRjreCuvE/vD2U+cuJo1XbvGhLYCxPP6HGRafI3zetEBM7xFBkRZ//08TgAprPySkPsp+CmT+m7+2hWSYE9mu2mmbAcQWfwddWZmVcSf+baZbTN9BqkBTMlWiAk7qGEksvDYdWmkudmr0L3EAYpuum3uVWkHSthlF29h5ssJaengMg41KM3DtWGk9BC7xerEXACi3Felwc0XPU7eB/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=e4k8HfM2PWAi/GFFFr9yfKKJxq7nWyyGvT0ysx+xvX0=;
+ b=noFNh++gPNqeKKpLWxjO3DcSDIUkNfbNiKLZjV465VXZ7cpt+5AZSn38wkc5dz3GkXEkBOfC4zkMkEgXMiY6ZsYSwSHYOCxMUkZZAXRtjesQ2sjR791kUzc8gbMxF/JMn/htQz700vVCGcuWGvsl7YO1MuiDOif936u0QWM4TgUjmD5TTz3eufnQ0jl4Hyv49yMQWzYbRGjPLNO6P4+NMxtN1vLJqSWaD+vfukKKHEoJ7S6WZ1KaGU0a4BmocDNR+AY+8c5bkMaUHvUzWaH+rjKr0qw2INQ+rBjD3vP7Muc+ROZOhUQ9+v36fHI0+xc8ibPArBHoEAreNgASuAG1TA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=e4k8HfM2PWAi/GFFFr9yfKKJxq7nWyyGvT0ysx+xvX0=;
+ b=asGapFmMs5ef76m675zcOLKLJKzsTntWp5ZbaIOcY1s5kDsbqDfcd8md7xV2GJGMj8kELg20Hfo1WP0TgHUoVKPclWrAycKy2dLrBvZNeO3iri7lBWroGSDtvx/B9YVtBZWydDo3fLW0Js3EfHzBjO+Of+8k8kZpCNjJjrSuvmA=
+Received: from DS7PR03CA0021.namprd03.prod.outlook.com (2603:10b6:5:3b8::26)
+ by CY8PR12MB7539.namprd12.prod.outlook.com (2603:10b6:930:96::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Fri, 28 Oct
+ 2022 20:44:34 +0000
+Received: from DM6NAM11FT090.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b8:cafe::d0) by DS7PR03CA0021.outlook.office365.com
+ (2603:10b6:5:3b8::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15 via Frontend
+ Transport; Fri, 28 Oct 2022 20:44:34 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT090.mail.protection.outlook.com (10.13.172.184) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5769.14 via Frontend Transport; Fri, 28 Oct 2022 20:44:34 +0000
+Received: from hamza-pc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 28 Oct
+ 2022 15:44:32 -0500
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+To:     <amd-gfx@lists.freedesktop.org>
+CC:     Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        "Alex Deucher" <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Roman Li <roman.li@amd.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        hersen wu <hersenxs.wu@amd.com>, Wayne Lin <Wayne.Lin@amd.com>,
+        Shirish S <shirish.s@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Alex Hung <alex.hung@amd.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/amd/display: drop vblank_lock from struct amdgpu_display_manager
+Date:   Fri, 28 Oct 2022 16:44:53 -0400
+Message-ID: <20221028204454.193752-1-hamza.mahfooz@amd.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:14c1:b0:689:34d0:a0ef with SMTP id
- b1-20020a05660214c100b0068934d0a0efmr656677iow.69.1666989765194; Fri, 28 Oct
- 2022 13:42:45 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 13:42:45 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cc796105ec1e4c7b@google.com>
-Subject: [syzbot] KASAN: vmalloc-out-of-bounds Read in cleanup_bitmap_list
-From:   syzbot <syzbot+174ea873dedcd7fb6de3@syzkaller.appspotmail.com>
-To:     bvanassche@acm.org, damien.lemoal@opensource.wdc.com, jack@suse.cz,
-        jlayton@kernel.org, linux-kernel@vger.kernel.org, neilb@suse.de,
-        reiserfs-devel@vger.kernel.org, song@kernel.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org,
-        yi.zhang@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT090:EE_|CY8PR12MB7539:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7092ee68-e985-40a2-dc04-08dab92538ee
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8VrcmTc6XqQ1cLwahIcGGXcR05N6ZCWWMK9vc8KfylcXFXorYGicqI7zcvuCTQMKuUWur6OsT4mL2Lk7PpmAUmazRmGGSQtPfMuJxaeA5NZ5xlCFxxxQn+CywzxQO4QNkQA7y6FjEpQIlJt5Q0HpAUgVxGmnRT5mTyDx6L2jNEUqXgezLLpCS1e25dd5QqnAUe5+TJ9bHAezBq8CB/T51koYnW1TTdK2jyXRsOIN6SUkSPY3jGZvUqNfqC+ob1otJ7yOB6h8jf4dHms+eYIs6GcYtJohzsx683hRyisrFDW5S3K1FC4wbkFFgNcXt2CYh8qeRrqzDB5H1vG38ZbqzYA4M+o42mhwOTdKMI2lyABXQh2x+frSRBXS9+eKf3sxG8mqNgkOfyQMRDNg1V180segqSNfiufnOoAnRqvWNM2XiObuz4M5PtT3EFdhr3Faq/O4onXFOZf9sgtFAvPQiWLFlp8PNtpF4p9klGY8YXPMIciCuwBkkVFS9Dfs8La1nWvy/MHCCS6ZkbIu/rHpAUblcEiUm3M5k2hUAERX1mkrgHzTF+QLsFlE+CIjCQrktYrCHirqVDN5GYvuEhf8tbwujRKPnKYgjjfT9zhXnX8OW26QpJJeOT+/I3I1B6IJh1aepDRP2i199Cfhg+QoU8W1R2RNLTuwp2+9KVdGNocTg7wxXvNxW9OoOgeL+2iP8a9XeBjy+zF6UhWWRpo91tSJRonf5MDT3RIOKP3piPnqE85P3gUlU71nW4ebHrbw8Ys1JzsDIitRSfmWy1e2/ldQxBBgjhR5m0TGOimn8Cxw8+bJc+f0uO9V7Dcb3oNGZBR4mL7kEbLqw0P/s8QvPQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(396003)(346002)(136003)(451199015)(40470700004)(36840700001)(46966006)(5660300002)(41300700001)(70206006)(44832011)(6666004)(40460700003)(2616005)(16526019)(70586007)(186003)(4326008)(2906002)(336012)(8676002)(36860700001)(426003)(8936002)(316002)(82310400005)(83380400001)(54906003)(1076003)(36756003)(47076005)(40480700001)(82740400003)(26005)(7696005)(478600001)(356005)(86362001)(6916009)(81166007)(16060500005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 20:44:34.5671
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7092ee68-e985-40a2-dc04-08dab92538ee
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT090.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7539
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+As of commit 09a5df6c444c ("drm/amd/display: Fix multi-display support
+for idle opt workqueue"), vblank_lock is no longer being used. So, don't
+init it in amdgpu_dm_init() and remove it from struct
+amdgpu_display_manager.
 
-syzbot found the following issue on:
-
-HEAD commit:    b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=17752b36880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
-dashboard link: https://syzkaller.appspot.com/bug?extid=174ea873dedcd7fb6de3
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1377875a880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=160063ce880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/24728b72a896/disk-b229b6ca.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/10a3c40c60e1/vmlinux-b229b6ca.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/69f963b02b7e/bzImage-b229b6ca.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/bf92a420a87f/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+174ea873dedcd7fb6de3@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: vmalloc-out-of-bounds in cleanup_bitmap_list+0x181/0x520 fs/reiserfs/journal.c:231
-Read of size 8 at addr ffffc90000b1e008 by task syz-executor487/3616
-
-CPU: 1 PID: 3616 Comm: syz-executor487 Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- print_address_description+0x74/0x340 mm/kasan/report.c:284
- print_report+0x107/0x1f0 mm/kasan/report.c:395
- kasan_report+0xcd/0x100 mm/kasan/report.c:495
- cleanup_bitmap_list+0x181/0x520 fs/reiserfs/journal.c:231
- free_list_bitmaps+0x48/0x1a0 fs/reiserfs/journal.c:249
- free_journal_ram+0xf7/0x400 fs/reiserfs/journal.c:1887
- do_journal_release fs/reiserfs/journal.c:1960 [inline]
- journal_release_error+0x76/0x90 fs/reiserfs/journal.c:1978
- reiserfs_fill_super+0x1115/0x24a0 fs/reiserfs/super.c:2223
- mount_bdev+0x26c/0x3a0 fs/super.c:1400
- legacy_get_tree+0xea/0x180 fs/fs_context.c:610
- vfs_get_tree+0x88/0x270 fs/super.c:1530
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc6ca28fd1a
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 a8 00 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fc6ca23b0e8 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fc6ca28fd1a
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007fc6ca23b100
-RBP: 0000000000000004 R08: 00007fc6ca23b140 R09: 00007fc6ca23b6b8
-R10: 000000000020040a R11: 0000000000000286 R12: 00007fc6ca23b140
-R13: 0000000000000008 R14: 00007fc6ca23b100 R15: 0000000020000600
- </TASK>
-
-The buggy address belongs to the virtual mapping at
- [ffffc90000b1e000, ffffc90000b20000) created by:
- reiserfs_allocate_list_bitmaps+0x4c/0x220 fs/reiserfs/journal.c:290
-
-The buggy address belongs to the physical page:
-page:ffffea0001dbff40 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x76ffd
-flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000000 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2dc2(GFP_KERNEL|__GFP_HIGHMEM|__GFP_NOWARN|__GFP_ZERO), pid 3616, tgid 3611 (syz-executor487), ts 38397863032, free_ts 29187098302
- prep_new_page mm/page_alloc.c:2538 [inline]
- get_page_from_freelist+0x742/0x7c0 mm/page_alloc.c:4287
- __alloc_pages+0x259/0x560 mm/page_alloc.c:5554
- __alloc_pages_bulk+0x7e0/0xe70 mm/page_alloc.c:5502
- vm_area_alloc_pages mm/vmalloc.c:2947 [inline]
- __vmalloc_area_node mm/vmalloc.c:3043 [inline]
- __vmalloc_node_range+0x74b/0x1290 mm/vmalloc.c:3213
- __vmalloc_node mm/vmalloc.c:3278 [inline]
- vzalloc+0x75/0x80 mm/vmalloc.c:3351
- reiserfs_allocate_list_bitmaps+0x4c/0x220 fs/reiserfs/journal.c:290
- journal_init+0x2de/0x2510 fs/reiserfs/journal.c:2733
- reiserfs_fill_super+0xf4b/0x24a0 fs/reiserfs/super.c:2022
- mount_bdev+0x26c/0x3a0 fs/super.c:1400
- legacy_get_tree+0xea/0x180 fs/fs_context.c:610
- vfs_get_tree+0x88/0x270 fs/super.c:1530
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1458 [inline]
- free_pcp_prepare+0x80c/0x8f0 mm/page_alloc.c:1508
- free_unref_page_prepare mm/page_alloc.c:3386 [inline]
- free_unref_page+0x7d/0x5f0 mm/page_alloc.c:3482
- pipe_buf_release include/linux/pipe_fs_i.h:183 [inline]
- pipe_read+0x718/0x1340 fs/pipe.c:324
- call_read_iter include/linux/fs.h:2185 [inline]
- new_sync_read fs/read_write.c:389 [inline]
- vfs_read+0x7ac/0xbf0 fs/read_write.c:470
- ksys_read+0x177/0x2a0 fs/read_write.c:613
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffffc90000b1df00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90000b1df80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->ffffc90000b1e000: 00 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-                      ^
- ffffc90000b1e080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90000b1e100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-==================================================================
-
-
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 1 -
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h | 7 -------
+ 2 files changed, 8 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index eb4ce7216104..11afb4b24fd9 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -1394,7 +1394,6 @@ static int amdgpu_dm_init(struct amdgpu_device *adev)
+ 
+ 	mutex_init(&adev->dm.dc_lock);
+ 	mutex_init(&adev->dm.audio_lock);
+-	spin_lock_init(&adev->dm.vblank_lock);
+ 
+ 	if(amdgpu_dm_irq_init(adev)) {
+ 		DRM_ERROR("amdgpu: failed to initialize DM IRQ support.\n");
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h
+index b5ce15c43bcc..b618b2586e7b 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h
+@@ -365,13 +365,6 @@ struct amdgpu_display_manager {
+ 	 */
+ 	struct mutex audio_lock;
+ 
+-	/**
+-	 * @vblank_lock:
+-	 *
+-	 * Guards access to deferred vblank work state.
+-	 */
+-	spinlock_t vblank_lock;
+-
+ 	/**
+ 	 * @audio_component:
+ 	 *
+-- 
+2.38.0
+
