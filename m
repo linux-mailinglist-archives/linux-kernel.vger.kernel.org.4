@@ -2,173 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 058D061078D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 03:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD521610796
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 04:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234642AbiJ1B7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 21:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43652 "EHLO
+        id S235236AbiJ1CBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 22:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235236AbiJ1B66 (ORCPT
+        with ESMTP id S234667AbiJ1CBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 21:58:58 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1D0B03D4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:58:58 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id 8so2619782qka.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 18:58:58 -0700 (PDT)
+        Thu, 27 Oct 2022 22:01:35 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2D2B14E4;
+        Thu, 27 Oct 2022 19:01:31 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id o7so258872pjj.1;
+        Thu, 27 Oct 2022 19:01:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BAW17+BRYm/H3b4WvRIwEV8kXOxv/g6sG9smsLfq3p0=;
-        b=vjd0f8z/krQCI2mZcirxzMwClkzC3Hldszir9m1PcZNl5VAXYBpmRo2ls+Z3CZSInj
-         j4tlmLK67v0MVs4OGpDoutATgrFPQpizafC6XVVlW6Q3zLxufNHl1PGBQUzwX9TKXjTR
-         HoldiZLnPe9s9oDlHkCzvqFs3hd+InNKIqhNPuExt/l/QgTjfuoUPXJloLu8yjn9/ZgP
-         Sowaw+Qq+aV17bOJwf5M/Y0Eb4Dmais0JAAaTsNXfpSXdS0XcROkC9mNvC/lGijnFlHn
-         o8pNyukvX8+tgODVDBeXz1KGUy5W5PQCukWv4M8CxFGbeoSOL74P+9RVugWtQXf6VIF5
-         cLoA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XH/Bsc+ps62oZnMk7LYtROZBsze0wCa4nGYaW1qqRJw=;
+        b=kihFLUU44zYXjYRB6ucW/RTKD9F3kj4ffqVA8nlq2RvnRCyNmo5MqLtX55u+mHVbPH
+         L4q1BSKny0ZMMGTfkOf0Ks4cmbHDDRgwZZhEEiv6ec/PLMLrn72QLKZyqf+KpPRja4Dn
+         5kfH+Gy35RiX8W6MdYABYZIi8fAPEoDEyB4IICJzPJeg5RSWHv8yEK8Ny8XTH1oLk79W
+         2NQlMWF61ln4XCoWnmTuFGlh6R5r63mD+HY+7sJITrlgYNfVB6uCpOZUIGzMzcJrhyyi
+         tx+sJJ+hon3JjBzge2pFIQpclRQzfYIC3XCxgBEe9+TCvgoofZsN7J+9OURHTY591UAb
+         z9+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BAW17+BRYm/H3b4WvRIwEV8kXOxv/g6sG9smsLfq3p0=;
-        b=yD7Ns3zXw4AH3ieMOfHjMxT6EC6rcvZ+UwmzY10xJxSCyzwdKzENkVdVZVEqsapsek
-         QzfxSC8qBzu32ZiTGURLcxGvF0yKMKlaTKXJntQpgYkYIzy7Iwe5NyNGbieWUn2SRX1L
-         WGgH74+OemtymrpFg1+6wNfbGF6X9df9KSCuSWlSh4fQW5KACpSmsdZjriuxUe7/F4Cf
-         RxA3kH+1HPhgMSKt5zcBH4WZxR6IiDAuus0EYisl+XDyl1oOvyzoUv4pqMYBqTgKJipy
-         T+ECKeaHlApGmZuQFV2REFig7UQV34RJCUzKdITAw6h2a8c4oKbAMbBZ9BiKr9NqOmWO
-         4Bpw==
-X-Gm-Message-State: ACrzQf1dDvmPb/lCkm6uGitaQ1C5+As9s5qbZ+ZOBX/yFCCgiy2NQqKw
-        twGpp0PcVK9dJgCmWEpC4yKP7w==
-X-Google-Smtp-Source: AMsMyM4KNauk+P3PKPfVNAfv2imHHQZUKu47Ls8+K3ykGh6ymSZlm9Yn/lb4RSQzLktpCTirbNrTUQ==
-X-Received: by 2002:a05:620a:1452:b0:6ec:3f82:522b with SMTP id i18-20020a05620a145200b006ec3f82522bmr36080682qkl.402.1666922337187;
-        Thu, 27 Oct 2022 18:58:57 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id h18-20020ac87d52000000b003998bb7b83asm1694147qtb.90.2022.10.27.18.58.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 18:58:56 -0700 (PDT)
-Message-ID: <d6f14e09-0c24-e19a-0951-bb3ca2219e79@linaro.org>
-Date:   Thu, 27 Oct 2022 21:58:54 -0400
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XH/Bsc+ps62oZnMk7LYtROZBsze0wCa4nGYaW1qqRJw=;
+        b=0XufZXI6zANi3qxe9ES3Prk+70hwfE3U26IcGYA27l7XBLylAPzexQrB8iXLUbUVg6
+         4L1aH+oTy/ADeVAz7jN9N7hB3/960nhRH2q/SA4KR1gnuIgN0Urvz32NgJWWUvy5tHJw
+         esikjo4cVHIfiBg2L8hOUUxnaOXi/xYpOcXkQkNK3CHHd34bWdab8tRvJ1Kn49R0Wkso
+         QTdQwLhgqQ6SgdrWUPvxrDEuiX/T7EKCru7UtSHsnGbfEdYxxX9JXwADPLhy2rK5Xqcp
+         KViG33QnGY3cFQdKWjVuIlSykSBhtaU3UFR9lhUf4U1lGBYIjOUxSkIP1t1kovpKYjbv
+         2bbA==
+X-Gm-Message-State: ACrzQf3xny8Eaix12ax/hMruINTnnzvFUx2B2GEPtBj3Qsw2Oolhyxav
+        7IJYOHbcSEpNCmBI4vLWXF/0ONFQU6bGZ7xFQM10lA==
+X-Google-Smtp-Source: AMsMyM4s6wTgy/B8Cm2RGZVZu4ZGWc+CsFUseqc62yungFGyPitni1blSu/IopH96p8P6fOktq9Jnw==
+X-Received: by 2002:a17:903:2284:b0:178:349b:d21b with SMTP id b4-20020a170903228400b00178349bd21bmr52568990plh.49.1666922491413;
+        Thu, 27 Oct 2022 19:01:31 -0700 (PDT)
+Received: from y.home.yangfl.dn42 ([104.28.213.203])
+        by smtp.gmail.com with ESMTPSA id z10-20020a6553ca000000b0041c0c9c0072sm1629380pgr.64.2022.10.27.19.01.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 19:01:30 -0700 (PDT)
+From:   David Yang <mmyangfl@gmail.com>
+To:     mmyangfl@gmail.com
+Cc:     Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6] net: mv643xx_eth: support MII/GMII/RGMII modes for Kirkwood
+Date:   Fri, 28 Oct 2022 10:01:01 +0800
+Message-Id: <20221028020104.347329-1-mmyangfl@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221004073619.49fd84be@kernel.org>
+References: <20221004073619.49fd84be@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v6 1/2] dt-bindings: it6505: add properties to restrict
- output bandwidth
-Content-Language: en-US
-To:     allen <allen.chen@ite.com.tw>
-Cc:     Pin-Yen Lin <treapking@chromium.org>,
-        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221027030155.59238-1-allen.chen@ite.com.tw>
- <20221027030155.59238-2-allen.chen@ite.com.tw>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221027030155.59238-2-allen.chen@ite.com.tw>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/10/2022 23:01, allen wrote:
-> From: allen chen <allen.chen@ite.com.tw>
-> 
-> Add properties to restrict dp output data-lanes and clock.
+Support mode switch properly, which is not available before.
 
-This is a friendly reminder during the review process.
+If SoC has two Ethernet controllers, by setting both of them into MII
+mode, the first controller enters GMII mode, while the second
+controller is effectively disabled. This requires configuring (and
+maybe enabling) the second controller in the device tree, even though
+it cannot be used.
 
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
+Signed-off-by: David Yang <mmyangfl@gmail.com>
+---
+v2: clarify modes work on controllers, read default value from PSC1
+v3: Kirkwood only
+v4: cleanup
+v5: test on 88f6282
+v6: fix missing header reported by kernel test robot
+  repost after merge window
+ drivers/net/ethernet/marvell/mv643xx_eth.c | 49 ++++++++++++++++++----
+ include/linux/mv643xx_eth.h                |  2 +
+ 2 files changed, 44 insertions(+), 7 deletions(-)
 
-Thank you.
-
-Rob asked - Commit msg should explain reason for breaking users.
-
-> 
-> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
-> Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
-> ---
->  .../bindings/display/bridge/ite,it6505.yaml   | 68 +++++++++++++++++--
->  1 file changed, 62 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
-> index 833d11b2303a7..b16a9d9127ddb 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
-> @@ -52,9 +52,49 @@ properties:
->      maxItems: 1
->      description: extcon specifier for the Power Delivery
->  
-> -  port:
-> -    $ref: /schemas/graph.yaml#/properties/port
-> -    description: A port node pointing to DPI host port node
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: A port node pointing to DPI host port node
-> +
-> +        properties:
-> +          endpoint:
-> +            $ref: /schemas/graph.yaml#/$defs/endpoint-base
-> +            unevaluatedProperties: false
-> +
-> +            properties:
-> +              link-frequencies:
-> +                minItems: 1
-> +                maxItems: 1
-> +                description: Allowed max link frequencies in Hz
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
-> +        description: Video port for DP output
-> +
-> +        properties:
-> +          endpoint:
-> +            $ref: /schemas/graph.yaml#/$defs/endpoint-base
-> +            unevaluatedProperties: false
-> +
-> +            properties:
-> +              data-lanes:
-> +                minItems: 1
-> +                uniqueItems: true
-> +                items:
-> +                  - enum: [ 0, 1 ]
-> +                  - const: 1
-> +                  - const: 2
-> +                  - const: 3
-> +
-
-This looks ok.
-
-Best regards,
-Krzysztof
+diff --git a/drivers/net/ethernet/marvell/mv643xx_eth.c b/drivers/net/ethernet/marvell/mv643xx_eth.c
+index b6be0552a..ed674c512 100644
+--- a/drivers/net/ethernet/marvell/mv643xx_eth.c
++++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
+@@ -108,6 +108,7 @@ static char mv643xx_eth_driver_version[] = "1.4";
+ #define TXQ_COMMAND			0x0048
+ #define TXQ_FIX_PRIO_CONF		0x004c
+ #define PORT_SERIAL_CONTROL1		0x004c
++#define  RGMII_EN			0x00000008
+ #define  CLK125_BYPASS_EN		0x00000010
+ #define TX_BW_RATE			0x0050
+ #define TX_BW_MTU			0x0058
+@@ -2761,6 +2762,8 @@ static int mv643xx_eth_shared_of_add_port(struct platform_device *pdev,
+ 	mv643xx_eth_property(pnp, "rx-sram-addr", ppd.rx_sram_addr);
+ 	mv643xx_eth_property(pnp, "rx-sram-size", ppd.rx_sram_size);
+ 
++	of_get_phy_mode(pnp, &ppd.interface);
++
+ 	ppd.phy_node = of_parse_phandle(pnp, "phy-handle", 0);
+ 	if (!ppd.phy_node) {
+ 		ppd.phy_addr = MV643XX_ETH_PHY_NONE;
+@@ -3092,6 +3095,7 @@ static int mv643xx_eth_probe(struct platform_device *pdev)
+ 	struct mv643xx_eth_private *mp;
+ 	struct net_device *dev;
+ 	struct phy_device *phydev = NULL;
++	u32 psc1r;
+ 	int err, irq;
+ 
+ 	pd = dev_get_platdata(&pdev->dev);
+@@ -3119,14 +3123,45 @@ static int mv643xx_eth_probe(struct platform_device *pdev)
+ 
+ 	mp->dev = dev;
+ 
+-	/* Kirkwood resets some registers on gated clocks. Especially
+-	 * CLK125_BYPASS_EN must be cleared but is not available on
+-	 * all other SoCs/System Controllers using this driver.
+-	 */
+ 	if (of_device_is_compatible(pdev->dev.of_node,
+-				    "marvell,kirkwood-eth-port"))
+-		wrlp(mp, PORT_SERIAL_CONTROL1,
+-		     rdlp(mp, PORT_SERIAL_CONTROL1) & ~CLK125_BYPASS_EN);
++				    "marvell,kirkwood-eth-port")) {
++		psc1r = rdlp(mp, PORT_SERIAL_CONTROL1);
++
++		/* Kirkwood resets some registers on gated clocks. Especially
++		 * CLK125_BYPASS_EN must be cleared but is not available on
++		 * all other SoCs/System Controllers using this driver.
++		 */
++		psc1r &= ~CLK125_BYPASS_EN;
++
++		/* On Kirkwood with two Ethernet controllers, if both of them
++		 * have RGMII_EN disabled, the first controller will be in GMII
++		 * mode and the second one is effectively disabled, instead of
++		 * two MII interfaces.
++		 *
++		 * To enable GMII in the first controller, the second one must
++		 * also be configured (and may be enabled) with RGMII_EN
++		 * disabled too, even though it cannot be used at all.
++		 */
++		switch (pd->interface) {
++		/* Use internal to denote second controller being disabled */
++		case PHY_INTERFACE_MODE_INTERNAL:
++		case PHY_INTERFACE_MODE_MII:
++		case PHY_INTERFACE_MODE_GMII:
++			psc1r &= ~RGMII_EN;
++			break;
++		case PHY_INTERFACE_MODE_RGMII:
++		case PHY_INTERFACE_MODE_RGMII_ID:
++		case PHY_INTERFACE_MODE_RGMII_RXID:
++		case PHY_INTERFACE_MODE_RGMII_TXID:
++			psc1r |= RGMII_EN;
++			break;
++		default:
++			/* Unknown; don't touch */
++			break;
++		}
++
++		wrlp(mp, PORT_SERIAL_CONTROL1, psc1r);
++	}
+ 
+ 	/*
+ 	 * Start with a default rate, and if there is a clock, allow
+diff --git a/include/linux/mv643xx_eth.h b/include/linux/mv643xx_eth.h
+index 3682ae75c..145169be2 100644
+--- a/include/linux/mv643xx_eth.h
++++ b/include/linux/mv643xx_eth.h
+@@ -8,6 +8,7 @@
+ 
+ #include <linux/mbus.h>
+ #include <linux/if_ether.h>
++#include <linux/phy.h>
+ 
+ #define MV643XX_ETH_SHARED_NAME		"mv643xx_eth"
+ #define MV643XX_ETH_NAME		"mv643xx_eth_port"
+@@ -59,6 +60,7 @@ struct mv643xx_eth_platform_data {
+ 	 */
+ 	int			speed;
+ 	int			duplex;
++	phy_interface_t		interface;
+ 
+ 	/*
+ 	 * How many RX/TX queues to use.
+-- 
+2.35.1
 
