@@ -2,187 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0143611CA4
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 23:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E89611CA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 23:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbiJ1Vqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 17:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51640 "EHLO
+        id S229997AbiJ1Vrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 17:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbiJ1Vqc (ORCPT
+        with ESMTP id S229515AbiJ1Vro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 17:46:32 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A6F22E0F8
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 14:46:30 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id 130so5857507pfu.8
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 14:46:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jP4OklSgp2rBYG93I9xkWgmdPj5Tm2D9ixHbtE5w1tw=;
-        b=GooZYJODF71P9kFJ18YDcbyyZua5fkCYPfhs35i1a4McB/mV4JLSM6iBeY9kz/8SYq
-         HF8RjeTeFwZj45GGyBnaiv5g2kIFSEqdcsdRAXgEB0vTwr77u6tAcw3ISKvDmF9+9Gk2
-         tw0yDyzapxC4DDuFOU+hkQfIwH97BXkebsHlL2oUkggcG5fl0/Y2N97iGSHToOl+qz0T
-         dvpWlivrSfbz/lwsPqafdKtqF7Dj5AqWHq8PmUu4R7MB8WeG1R0VaKpEB3eMSp48+wBT
-         ExylS2Y//uM205PxqVjuY1IqAH0LydtHog917zy5uT4iIsk/uuT1OdS9W1rQto05mxxe
-         t7Rg==
+        Fri, 28 Oct 2022 17:47:44 -0400
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C1E24BAB6;
+        Fri, 28 Oct 2022 14:47:44 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id l2so5921885pld.13;
+        Fri, 28 Oct 2022 14:47:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jP4OklSgp2rBYG93I9xkWgmdPj5Tm2D9ixHbtE5w1tw=;
-        b=1GeYLJpaR3BJrWiHwW2zQYNLHoT+92DPVbadKJTLK+4ccFjhg+2meURl4BKfpCOuLz
-         9QqEXox7dS3iU/GL06W2mGadYiYRGJYXpswqvPyYkQicSKqwFW16yj4a3LAjuhiADto4
-         Kqanu6zDU7lrlQMwQnOqE/CGBQgNAOry5Olct4u5O8vt7c2wCFdGRH4+/L/i8t5nFKgk
-         V/tumS60CApRXJfC386qBf/Ls/1BC+f0TexPNCGtsNbGQQ0qGGNv6AeZalFISVYLz0FU
-         T3YoK2vB4UH/zeAomA5O/kq53HRzCgOUXNeNCv1ETnlk9GCBbHvoOH8JzGVkDxc7cDV4
-         Zgvw==
-X-Gm-Message-State: ACrzQf3Kz6t44Rwtb4pRvw5ZVt7GRg761Llo9hLe4l0MwsaW0dEEVLHi
-        9V1rksKWetLEr8dDMY7JvM6xQQ==
-X-Google-Smtp-Source: AMsMyM7+Cns6sJyvsFXtuRTBDiU0EfQF4XhQK9UETILz8tH756VBjCacvu/len0aEysjMpr4kjo6Ow==
-X-Received: by 2002:a63:80c7:0:b0:46e:c7be:b56f with SMTP id j190-20020a6380c7000000b0046ec7beb56fmr1377113pgd.382.1666993590284;
-        Fri, 28 Oct 2022 14:46:30 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id a17-20020a170902ecd100b00176b3d7db49sm3593804plh.0.2022.10.28.14.46.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 14:46:29 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 21:46:26 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
-        mlevitsk@redhat.com
-Subject: Re: [PATCH 04/10] KVM: x86: do not go through ctxt->ops when
- emulating rsm
-Message-ID: <Y1xNso2nYZkSSZ0T@google.com>
-References: <20221027164944.3031588-5-pbonzini@redhat.com>
- <202210281538.c5NukqBx-lkp@intel.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DFrGHfetuBgL/SnOurCB1y7VCm5G+cM3KwFDzCof9iI=;
+        b=0Yjb8Fnr4jKaoV6sZ2TnDZ8s/Gky89SMhVAx+k6CgAJgIAPaxi0j2kkJI37iGitEdb
+         0KLTqd6DP5kr4mzBaSJaUMTumUD8VHNpkfri0WnS4/zrC+wyUvx30BWfaXIGvU3r+ZmM
+         A/IHd1/jjVJAYadsMYgqJJjZCbx6ZyDVzob1xWZmt1N3GKYSxQJWepsB1qVCVDFneFKC
+         nIpKszZo9KZ7wi4KjwCBzQ/9Onln+yAf3BMWr9sB86YF16qQTb2AQZw1Yb5wiy2TWjf/
+         eM70ykdXOpw+0+0358He/uBn9vmm/wtfBJxeOHsEN4qd6AB5ogpU4N8qgY3pQ8bHLEQI
+         Ym1Q==
+X-Gm-Message-State: ACrzQf1AihdV4tphrcjJkJItkyOD0Ue997u8gYfa4ld3oHevR1jbdGng
+        RAvzMsWIiyKnKTG5cK13KzXq/hjWlyo=
+X-Google-Smtp-Source: AMsMyM4iWB2Mojn7T5n2sI1tb4EqtFT0stMNgH03wtyAZ0x38sRGmjUUFAFpl97KH9PWbk9HES4bfQ==
+X-Received: by 2002:a17:902:8491:b0:183:c3d2:2112 with SMTP id c17-20020a170902849100b00183c3d22112mr1059833plo.133.1666993663559;
+        Fri, 28 Oct 2022 14:47:43 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id y6-20020a17090322c600b001869f2120a6sm3571947plg.108.2022.10.28.14.47.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 14:47:42 -0700 (PDT)
+Message-ID: <035082d1-af66-3938-59f5-e4730e4516bb@acm.org>
+Date:   Fri, 28 Oct 2022 14:47:40 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202210281538.c5NukqBx-lkp@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v3 10/17] ufs: core: mcq: Use shared tags for MCQ mode
+Content-Language: en-US
+To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        stanley.chu@mediatek.com, eddie.huang@mediatek.com,
+        daejun7.park@samsung.com, avri.altman@wdc.com, mani@kernel.org,
+        beanhuo@micron.com, quic_richardp@quicinc.com,
+        linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1666288432.git.quic_asutoshd@quicinc.com>
+ <2fea9d4f0b8dfc2e2c82d176f0c928b0525d8110.1666288432.git.quic_asutoshd@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <2fea9d4f0b8dfc2e2c82d176f0c928b0525d8110.1666288432.git.quic_asutoshd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022, kernel test robot wrote:
-> All warnings (new ones prefixed by >>):
-> 
->    arch/x86/kvm/smm.c: In function 'emulator_leave_smm':
-> >> arch/x86/kvm/smm.c:503:33: warning: unused variable 'efer' [-Wunused-variable]
->      503 |         unsigned long cr0, cr4, efer;
->          |                                 ^~~~
-> >> arch/x86/kvm/smm.c:503:28: warning: unused variable 'cr4' [-Wunused-variable]
->      503 |         unsigned long cr0, cr4, efer;
->          |                            ^~~
-> 
-> 
-> vim +/efer +503 arch/x86/kvm/smm.c
-> 
-> e2881deb76e87c Paolo Bonzini 2022-10-27  499  
-> e2881deb76e87c Paolo Bonzini 2022-10-27  500  int emulator_leave_smm(struct x86_emulate_ctxt *ctxt)
-> e2881deb76e87c Paolo Bonzini 2022-10-27  501  {
-> e2881deb76e87c Paolo Bonzini 2022-10-27  502  	struct kvm_vcpu *vcpu = ctxt->vcpu;
-> e2881deb76e87c Paolo Bonzini 2022-10-27 @503  	unsigned long cr0, cr4, efer;
-> e2881deb76e87c Paolo Bonzini 2022-10-27  504  	char buf[512];
-> e2881deb76e87c Paolo Bonzini 2022-10-27  505  	u64 smbase;
-> e2881deb76e87c Paolo Bonzini 2022-10-27  506  	int ret;
-> e2881deb76e87c Paolo Bonzini 2022-10-27  507  
-> 9842725ac4bb94 Paolo Bonzini 2022-10-27  508  	smbase = vcpu->arch.smbase;
-> e2881deb76e87c Paolo Bonzini 2022-10-27  509  
-> 9842725ac4bb94 Paolo Bonzini 2022-10-27  510  	ret = kvm_vcpu_read_guest(vcpu, smbase + 0xfe00, buf, sizeof(buf));
-> 9842725ac4bb94 Paolo Bonzini 2022-10-27  511  	if (ret < 0)
-> e2881deb76e87c Paolo Bonzini 2022-10-27  512  		return X86EMUL_UNHANDLEABLE;
-> e2881deb76e87c Paolo Bonzini 2022-10-27  513  
-> 9842725ac4bb94 Paolo Bonzini 2022-10-27  514  	if ((vcpu->arch.hflags & HF_SMM_INSIDE_NMI_MASK) == 0)
-> 9842725ac4bb94 Paolo Bonzini 2022-10-27  515  		static_call(kvm_x86_set_nmi_mask)(vcpu, false);
-> e2881deb76e87c Paolo Bonzini 2022-10-27  516  
-> e2881deb76e87c Paolo Bonzini 2022-10-27  517  	kvm_smm_changed(vcpu, false);
-> e2881deb76e87c Paolo Bonzini 2022-10-27  518  
-> e2881deb76e87c Paolo Bonzini 2022-10-27  519  	/*
-> e2881deb76e87c Paolo Bonzini 2022-10-27  520  	 * Get back to real mode, to prepare a safe state in which to load
-> e2881deb76e87c Paolo Bonzini 2022-10-27  521  	 * CR0/CR3/CR4/EFER.  It's all a bit more complicated if the vCPU
-> e2881deb76e87c Paolo Bonzini 2022-10-27  522  	 * supports long mode.
-> e2881deb76e87c Paolo Bonzini 2022-10-27  523  	 */
-> 9842725ac4bb94 Paolo Bonzini 2022-10-27  524  #ifdef CONFIG_X86_64
-> 9842725ac4bb94 Paolo Bonzini 2022-10-27  525  	if (guest_cpuid_has(vcpu, X86_FEATURE_LM)) {
+On 10/20/22 11:03, Asutosh Das wrote:
+> Enable shared taggs for MCQ. For UFS, this should
 
-My suggestion from the previous version[*] should still work.  Copy+pasted below
-for convenience, may or may not apply cleanly.
+taggs -> tags
 
-https://lore.kernel.org/all/Y0nO0quQnVFQruPM@google.com
+Otherwise this patch looks good to me. Hence:
 
----
- arch/x86/kvm/smm.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/kvm/smm.c b/arch/x86/kvm/smm.c
-index 41ca128478fc..740fca1cf3a3 100644
---- a/arch/x86/kvm/smm.c
-+++ b/arch/x86/kvm/smm.c
-@@ -500,6 +500,8 @@ static int rsm_load_state_64(struct x86_emulate_ctxt *ctxt,
- int emulator_leave_smm(struct x86_emulate_ctxt *ctxt)
- {
- 	struct kvm_vcpu *vcpu = ctxt->vcpu;
-+	bool is_64bit_vcpu = IS_ENABLED(CONFIG_X86_64) &&
-+			     guest_cpuid_has(vcpu, X86_FEATURE_LM);
- 	unsigned long cr0, cr4, efer;
- 	char buf[512];
- 	u64 smbase;
-@@ -521,8 +523,7 @@ int emulator_leave_smm(struct x86_emulate_ctxt *ctxt)
- 	 * CR0/CR3/CR4/EFER.  It's all a bit more complicated if the vCPU
- 	 * supports long mode.
- 	 */
--#ifdef CONFIG_X86_64
--	if (guest_cpuid_has(vcpu, X86_FEATURE_LM)) {
-+	if (is_64bit_vcpu) {
- 		struct kvm_segment cs_desc;
- 
- 		/* Zero CR4.PCIDE before CR0.PG.  */
-@@ -536,15 +537,13 @@ int emulator_leave_smm(struct x86_emulate_ctxt *ctxt)
- 		cs_desc.s = cs_desc.g = cs_desc.present = 1;
- 		kvm_set_segment(vcpu, &cs_desc, VCPU_SREG_CS);
- 	}
--#endif
- 
- 	/* For the 64-bit case, this will clear EFER.LMA.  */
- 	cr0 = kvm_read_cr0(vcpu);
- 	if (cr0 & X86_CR0_PE)
- 		kvm_set_cr0(vcpu, cr0 & ~(X86_CR0_PG | X86_CR0_PE));
- 
--#ifdef CONFIG_X86_64
--	if (guest_cpuid_has(vcpu, X86_FEATURE_LM)) {
-+	if (is_64bit_vcpu) {
- 		/* Clear CR4.PAE before clearing EFER.LME. */
- 		cr4 = kvm_read_cr4(vcpu);
- 		if (cr4 & X86_CR4_PAE)
-@@ -554,7 +553,6 @@ int emulator_leave_smm(struct x86_emulate_ctxt *ctxt)
- 		efer = 0;
- 		kvm_set_msr(vcpu, MSR_EFER, efer);
- 	}
--#endif
- 
- 	/*
- 	 * Give leave_smm() a chance to make ISA-specific changes to the vCPU
-@@ -565,7 +563,7 @@ int emulator_leave_smm(struct x86_emulate_ctxt *ctxt)
- 		return X86EMUL_UNHANDLEABLE;
- 
- #ifdef CONFIG_X86_64
--	if (guest_cpuid_has(vcpu, X86_FEATURE_LM))
-+	if (is_64bit_vcpu)
- 		return rsm_load_state_64(ctxt, buf);
- 	else
- #endif
-
-base-commit: 8b86d27cc60a150252b04989de818ad4ec85f899
--- 
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
