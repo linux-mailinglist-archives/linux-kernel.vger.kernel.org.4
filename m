@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE17611432
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB94611436
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbiJ1ONG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
+        id S230038AbiJ1ONm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbiJ1OM7 (ORCPT
+        with ESMTP id S229587AbiJ1ONk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:12:59 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48891D5E34;
-        Fri, 28 Oct 2022 07:12:57 -0700 (PDT)
+        Fri, 28 Oct 2022 10:13:40 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7861E0463;
+        Fri, 28 Oct 2022 07:13:39 -0700 (PDT)
 Received: from mercury (unknown [37.84.150.129])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 891096602925;
-        Fri, 28 Oct 2022 15:12:56 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 22D2B6602925;
+        Fri, 28 Oct 2022 15:13:38 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666966376;
-        bh=Q8Sm90eLz9bcTykS5udA2a2769DuI7dhaihk1DL2/OI=;
+        s=mail; t=1666966418;
+        bh=nM5tFpA0TeTXJ/Ok53S2f4MGmJ15PZ4YbuZYY3wW38c=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EK1YwROS5o/I/+6D0cAcus4o9M3IpJ+GyQOSkamLQsZ0xM8FLzoIyB2i4UFBS2Epf
-         65VT71GdpZGOzMfrmeA0V+IKZlMAyF4lBc2qv5iGzhsAKgSPIWiLCa2tPokyBZi8eG
-         x3HCxC1A/TtVUW8Ckm3mlo72jy4wTY6QOqOnaDKVtWziI1pSyhHXekamSnc8/YuRl8
-         h1MQizX/9VZj3pP9gHOtmcrDAnlPF5OKYjs/o1AuGW2ZwHL2eIJX9dZhhMBFXnJUsW
-         cm81EzdMXWC2Pb/2CiNO5D36bqQbHoppkNwyDGkKsjjJDw4cFh9cidvT3PIxvDCnYU
-         83VnMTxo80AQQ==
+        b=g7tLHyZNuJV4WSuR2oKHx43F6+z47icAIob1weaSB1G4B+JWPvACyjOX13q43X5Yy
+         dlsgaiJl2FSE8zq7tQAQDEt1/x77L74W44yoQShD6XzLuwdbi8agFY5l0kczPPlGNO
+         oIYivf/bPpl2gcqyJiXXLapPqlkHRYdOUQ9XmU5Wl9o402Lqx1QZdWVEngDCFLpuSd
+         DV5fgRHvvZdU7W7D/ygyusPiEl24YMXARKDwBSDtKIL5Qay0NCPMNEEamq6uLnrji2
+         wbM4I5y488h8avMJGy8YanIH/IKZ4tdJJxuyaghq4kVhAGBGK+K7YBaMRoKkos+7+A
+         KKa/SGpssfKag==
 Received: by mercury (Postfix, from userid 1000)
-        id AEB8B10607E8; Fri, 28 Oct 2022 16:12:53 +0200 (CEST)
-Date:   Fri, 28 Oct 2022 16:12:53 +0200
+        id D918010607E8; Fri, 28 Oct 2022 16:13:35 +0200 (CEST)
+Date:   Fri, 28 Oct 2022 16:13:35 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     wangjianli <wangjianli@cdjrlc.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power/supply: fix repeated words in comments
-Message-ID: <20221028141253.scedsv7neimehpec@mercury.elektranox.org>
-References: <20221022054544.35121-1-wangjianli@cdjrlc.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: lp8788: make const array name static
+Message-ID: <20221028141335.zqzr5p4ludmpnxse@mercury.elektranox.org>
+References: <20221005161348.321971-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="toctd2ayv5efoqap"
+        protocol="application/pgp-signature"; boundary="isucbwil5mwzhop7"
 Content-Disposition: inline
-In-Reply-To: <20221022054544.35121-1-wangjianli@cdjrlc.com>
+In-Reply-To: <20221005161348.321971-1-colin.i.king@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -56,65 +57,65 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---toctd2ayv5efoqap
+--isucbwil5mwzhop7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sat, Oct 22, 2022 at 01:45:44PM +0800, wangjianli wrote:
-> Delete the redundant word 'the'.
+On Wed, Oct 05, 2022 at 05:13:48PM +0100, Colin Ian King wrote:
+> Don't populate the read-only array name on the stack but instead make
+> it static. Since the data and the pointers don't change also add in
+> a missing const. Also makes the object code a little smaller.
 >=20
-> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 > ---
 
 Thanks, queued.
 
 -- Sebastian
 
->  drivers/power/supply/ab8500_charger.c | 2 +-
+>  drivers/power/supply/lp8788-charger.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
-> diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply=
-/ab8500_charger.c
-> index d04d087caa50..2af83643508c 100644
-> --- a/drivers/power/supply/ab8500_charger.c
-> +++ b/drivers/power/supply/ab8500_charger.c
-> @@ -1963,7 +1963,7 @@ static int ab8500_charger_get_ext_psy_data(struct d=
-evice *dev, void *data)
->   *
->   * Due to a asic bug it is necessary to lower the input current to the v=
-bus
->   * charger when charging with at some specific levels. This issue is onl=
-y valid
-> - * for below a certain battery voltage. This function makes sure that the
-> + * for below a certain battery voltage. This function makes sure that
->   * the allowed current limit isn't exceeded.
->   */
->  static void ab8500_charger_check_vbat_work(struct work_struct *work)
+> diff --git a/drivers/power/supply/lp8788-charger.c b/drivers/power/supply=
+/lp8788-charger.c
+> index 56c57529c228..802c9491fcdb 100644
+> --- a/drivers/power/supply/lp8788-charger.c
+> +++ b/drivers/power/supply/lp8788-charger.c
+> @@ -520,7 +520,7 @@ static int lp8788_set_irqs(struct platform_device *pd=
+ev,
+>  static int lp8788_irq_register(struct platform_device *pdev,
+>  				struct lp8788_charger *pchg)
+>  {
+> -	const char *name[] =3D {
+> +	static const char * const name[] =3D {
+>  		LP8788_CHG_IRQ, LP8788_PRSW_IRQ, LP8788_BATT_IRQ
+>  	};
+>  	int i;
 > --=20
-> 2.36.1
+> 2.37.3
 >=20
 
---toctd2ayv5efoqap
+--isucbwil5mwzhop7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNb42UACgkQ2O7X88g7
-+pq1NQ/7BWd4wz61to42/m++n27nu3LTmeg0j8zeocQh683rSyx/93o8Dz4/H6qm
-gHklvpELCKGpz0Q+mDMrhpMdFE0mz2CxiQTZOCFziXgMFHfbHKQaIWasYQadSdH1
-78rJkEGVbyU0XkV29vG29cMVbjZ+7QT/AemgMmLpGe1BtHfQRKOFphXRAsxfQAq1
-0J6FS+2xspt5Am+bjMOvgsIaAN7w72vCNjptwyex6p1qAPlY1FFixweCxp7EOXMD
-+5LcCqAASMnUFJTl1qNiacr0F7Rfa3xB6gzaeeIsrt/vBz1VcKpBQxi4a1mAT4tl
-cyvkdRuT1q79M7kJIKA0rPzUFBy96goO1IaFa+oN1CZrhBMQOOraLmc2cfZ1buKQ
-q6lQMlDRZqOKp9osaHbWRP4H5jcxYxKCuSOI8ZTiLOaPhIpwB/aRr4f5m7TtF7iB
-Gk54nZen9iFrlzFl+gN19xXrmw6NsHtHJdsA3AmVSgb5fxn1rlG1mNTXuIq35a2d
-EEcQpVAyHJTTQs7zyjhh+nXmzMYUcU9MsuslKtvsl0hPQJF1YZNct+UBQTmLYhgH
-KOMf9uB03F5UFvFKi2CKK+QGcFEGs9hSMGRee4dZQTpcdI+sBD+1/VoSLBBOPOrq
-vPHokTxOs8WqpWbwV2o4pzdL8jcxmBAxSlZGMF8eNX65mwKHwpQ=
-=hw1n
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNb448ACgkQ2O7X88g7
++ppQ6xAAotyuOrN0/HRsHEJr6M3Hm2T+Ol0BItzGauQWFEYjP3N/b0eKOUL5bW4J
+RnVvwaNw9Z3BjxvCt9y3VR58oJ/zHTSzIUCAMrFs9YAMOTDfvbkFvF6kCv/iC2QP
+nwhQjOzmeA6t/FlGG5F4fITCgI068feeaTImSiL1omNYkAy3lFr1DnuYthtA3ovD
+nFlbnxf8oKT6Jet0vMhNAfnDMn2ar+TXPJpr8Mnly+LJBR0dKv6+nVEE0/Ohp8He
+gul7FTlqhsWH8XB6+k9b09fJZQz6doJF39ke0XRBr56gFwqz8P3ztCQaKKLXch7p
+sXzyCXVF1Mo6o2QPGharOf1Bo23tHKVsnx6QJBhqgwFUADdwl25MPepQzZhRQt7I
+n+Y59Yk1LuelH5fI+QFuw8VIw1shJmY3GK/ELukIfqgh1ALpu+qd4/IKzQEaqt5Z
+eG160/CCzcDLtNeCTYazdY8AItWbRZyAakBQ9xMFRde7q8w0N0g3QylM7lBWhy5D
+u9FpZWr+yhnFD9UwUIS0kHDIeVVzwv5B2BLUTqgAQPkqmVL2RivDm7OY1cv4Nq3k
+9HJFDcJtobIa9PaiYEdbYntMgB9jtm2AKlTaVEePPNaY1qDlAqSAb5LNMLwSnTzv
+7n/ZX8zQHwmMIyrmAYLvR5/2r9ukqu+znvMHvEtNBYPmFhqh97k=
+=aTzf
 -----END PGP SIGNATURE-----
 
---toctd2ayv5efoqap--
+--isucbwil5mwzhop7--
