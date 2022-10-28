@@ -2,138 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A8D2610A64
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00244610A67
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 08:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbiJ1Gkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 02:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
+        id S229895AbiJ1GmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 02:42:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiJ1GkY (ORCPT
+        with ESMTP id S229665AbiJ1Glc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 02:40:24 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76C05019C
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:40:14 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id o12so6720027lfq.9
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Oct 2022 23:40:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gobEsrmePL4+N4TGxYJCOu1pMn//ERVI3Xu6DuFbms8=;
-        b=DrAql0F+RKOMWcw4yKgJMxE1la1WvS3y0HccrNw90mtIRYDj15TM+bUB1RjLgywP7S
-         DCPhJ82dnikHFekk+8FY70oBBUZ5jEfRh9WHxB1qjawW/9kTP6QD7BJLtxf31Ve/edtq
-         tF6uIODoh5dvqUJlx3D56BL3T3ZklqPq6s7SOH2FHWIiXAiWLgS04JzUc9Ijd2I/dF/x
-         /gRHe4LArvy40apOWGKibq24nEWxNC/D30NzO5chlOVGDDTmLbJ/PZVCEZ9hYNOz7S2O
-         5FQGkKk5q33J8OMIQxatxRxyEDB5uI42CeJfvBLwNvJ+doypkL2h8qRzenLVnQktJRiX
-         yaDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gobEsrmePL4+N4TGxYJCOu1pMn//ERVI3Xu6DuFbms8=;
-        b=sKqiigkAp8o/q+GSQwtMcb8jUxNUOYRa/8/ChxJlHxrhm8yELkUuXOaDCPB1Nq+xtZ
-         VvLzaZ4qJTgPJ+RSfOysGcJumMCQoWEQg83Lf0FEnzqU/W5g3sretnzMh3S1vTg0Z837
-         0mxLqHUikDZKyX4D9+uTYHh74isKaAiehuZAPZJXfjxbf04Cq+So/XrPIgzYhQ0StMCt
-         kXfh8Z1aCpNqJVLjUZev0qZ8qmNS5GLkSlfmFV+EdInII3FMkIVFjUqYmfDQXgSje+3b
-         eaQY+whkRdQDAXUh4GX5eUoPh/3ND7yWIHTP1wizMW+rWqoImhbcUyMsTWBKEonegSgN
-         M/Fw==
-X-Gm-Message-State: ACrzQf3jUZBsIkQImUVhZM08rqcC0D6AP5pdxEK16dorQ3wqrSo6u64y
-        Lw1JUyC4xtX1i8cgIFpLTPw=
-X-Google-Smtp-Source: AMsMyM72Npgklwq6Vqs+SdtDAwZpJmpOGHzAYR59FxRnIqfQ/XFO++4wKi4Vi7P2n3myr6suxnM70w==
-X-Received: by 2002:a05:6512:1154:b0:4a2:7d6f:7814 with SMTP id m20-20020a056512115400b004a27d6f7814mr18224425lfg.342.1666939212993;
-        Thu, 27 Oct 2022 23:40:12 -0700 (PDT)
-Received: from elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net ([20.240.130.248])
-        by smtp.googlemail.com with ESMTPSA id t7-20020a05651c204700b0026dced9840dsm498509ljo.61.2022.10.27.23.40.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 23:40:12 -0700 (PDT)
-From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev,
-        Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-Subject: [PATCH v7 6/6] staging: vt6655: fix lines of code ending in a '('
-Date:   Fri, 28 Oct 2022 06:39:29 +0000
-Message-Id: <43693eef6afe24973ed28f8b26e2d5117f5d35f1.1666849707.git.tanjubrunostar0@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1666849707.git.tanjubrunostar0@gmail.com>
-References: <cover.1666849707.git.tanjubrunostar0@gmail.com>
+        Fri, 28 Oct 2022 02:41:32 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E476B8F2;
+        Thu, 27 Oct 2022 23:41:21 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 06:41:16 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1666939279;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G66XG9gLBxL7ayzwcWq/23hJvItsciCHWB9RfR+j2i4=;
+        b=FUMEyRbm3jWkbleEcg+oEr0KhLAOceC3tjtjDDflRHBN07EOkWNt72NQaCjynARJ283r/O
+        6KC5UtXMHwOYWKL8Eggfp1Wv4bwDIwjk735nHVCeUDKihTQFNt6MeEsge5DGZZZSmeCHky
+        Mq0nxvOgp3QiFAz73tOY/gcSPtgCzGIkT3rXye5NNv8xlZiCTpR8e72XdphaePz32W6/+m
+        roDARgsgNBmRn1A21Rzp5M2jzRpXz9E6pC6t/vUMQitV66r6OdUnmo1wzlQnilA7quvuMQ
+        UbDmHQPho6Y2wTKa6fsFSUJyAlZyUdOZmPFJ2kzmKhzCm81zQqmPWTWUX5ePZw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1666939279;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G66XG9gLBxL7ayzwcWq/23hJvItsciCHWB9RfR+j2i4=;
+        b=1gTDZ4GRJ0JhSKHFD0FQSMDNLWhbcNJSpGGuqTPm5vbGITbgfI33lyNWPWV+ZT0yjL8GaI
+        RqMsv0aOJDDzgLBA==
+From:   "tip-bot2 for Yazen Ghannam" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: ras/core] x86/MCE/AMD: Clear DFR errors found in THR handler
+Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        Borislav Petkov <bp@suse.de>, stable@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220621155943.33623-1-yazen.ghannam@amd.com>
+References: <20220621155943.33623-1-yazen.ghannam@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <166693927682.29415.17717990197566504986.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fix checkpatch errors related to lines ending with a '(' by
-joining splitted lines of code and indenting properly to increase
-visibility
+The following commit has been merged into the ras/core branch of tip:
 
-Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+Commit-ID:     bc1b705b0eee4c645ad8b3bbff3c8a66e9688362
+Gitweb:        https://git.kernel.org/tip/bc1b705b0eee4c645ad8b3bbff3c8a66e9688362
+Author:        Yazen Ghannam <yazen.ghannam@amd.com>
+AuthorDate:    Tue, 21 Jun 2022 15:59:43 
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Thu, 27 Oct 2022 17:01:25 +02:00
+
+x86/MCE/AMD: Clear DFR errors found in THR handler
+
+AMD's MCA Thresholding feature counts errors of all severity levels, not
+just correctable errors. If a deferred error causes the threshold limit
+to be reached (it was the error that caused the overflow), then both a
+deferred error interrupt and a thresholding interrupt will be triggered.
+
+The order of the interrupts is not guaranteed. If the threshold
+interrupt handler is executed first, then it will clear MCA_STATUS for
+the error. It will not check or clear MCA_DESTAT which also holds a copy
+of the deferred error. When the deferred error interrupt handler runs it
+will not find an error in MCA_STATUS, but it will find the error in
+MCA_DESTAT. This will cause two errors to be logged.
+
+Check for deferred errors when handling a threshold interrupt. If a bank
+contains a deferred error, then clear the bank's MCA_DESTAT register.
+
+Define a new helper function to do the deferred error check and clearing
+of MCA_DESTAT.
+
+  [ bp: Simplify, convert comment to passive voice. ]
+
+Fixes: 37d43acfd79f ("x86/mce/AMD: Redo error logging from APIC LVT interrupt handlers")
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220621155943.33623-1-yazen.ghannam@amd.com
 ---
- drivers/staging/vt6655/rxtx.c | 20 +++++++++-----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
+ arch/x86/kernel/cpu/mce/amd.c | 33 ++++++++++++++++++++-------------
+ 1 file changed, 20 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-index 6a4fcb16b674..d585435520b3 100644
---- a/drivers/staging/vt6655/rxtx.c
-+++ b/drivers/staging/vt6655/rxtx.c
-@@ -1118,7 +1118,7 @@ static unsigned int s_cbFillTxBufHead(struct vnt_private *pDevice,
- 				pMICHDR = (struct vnt_mic_hdr *)(pbyTxBufferAddr + wTxBufSize +
- 								 sizeof(struct vnt_rrv_time_cts));
- 				pvRTS = NULL;
--				pvCTS = (void *) (pbyTxBufferAddr + wTxBufSize +
-+				pvCTS = (void *)(pbyTxBufferAddr + wTxBufSize +
- 						  sizeof(struct vnt_rrv_time_cts) + cbMICHDR);
- 				pvTxDataHd = (void *)(pbyTxBufferAddr + wTxBufSize +
- 						      sizeof(struct vnt_rrv_time_cts) + cbMICHDR +
-@@ -1296,10 +1296,8 @@ static void vnt_fill_txkey(struct ieee80211_hdr *hdr, u8 *key_buffer,
- 		ether_addr_copy(mic_hdr->addr2, hdr->addr2);
- 		ether_addr_copy(mic_hdr->addr3, hdr->addr3);
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index 1c87501..10fb5b5 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -788,6 +788,24 @@ _log_error_bank(unsigned int bank, u32 msr_stat, u32 msr_addr, u64 misc)
+ 	return status & MCI_STATUS_DEFERRED;
+ }
  
--		mic_hdr->frame_control = cpu_to_le16(
--			le16_to_cpu(hdr->frame_control) & 0xc78f);
--		mic_hdr->seq_ctrl = cpu_to_le16(
--				le16_to_cpu(hdr->seq_ctrl) & 0xf);
-+		mic_hdr->frame_control = cpu_to_le16(le16_to_cpu(hdr->frame_control) & 0xc78f);
-+		mic_hdr->seq_ctrl = cpu_to_le16(le16_to_cpu(hdr->seq_ctrl) & 0xf);
++static bool _log_error_deferred(unsigned int bank, u32 misc)
++{
++	if (!_log_error_bank(bank, mca_msr_reg(bank, MCA_STATUS),
++			     mca_msr_reg(bank, MCA_ADDR), misc))
++		return false;
++
++	/*
++	 * Non-SMCA systems don't have MCA_DESTAT/MCA_DEADDR registers.
++	 * Return true here to avoid accessing these registers.
++	 */
++	if (!mce_flags.smca)
++		return true;
++
++	/* Clear MCA_DESTAT if the deferred error was logged from MCA_STATUS. */
++	wrmsrl(MSR_AMD64_SMCA_MCx_DESTAT(bank), 0);
++	return true;
++}
++
+ /*
+  * We have three scenarios for checking for Deferred errors:
+  *
+@@ -799,19 +817,8 @@ _log_error_bank(unsigned int bank, u32 msr_stat, u32 msr_addr, u64 misc)
+  */
+ static void log_error_deferred(unsigned int bank)
+ {
+-	bool defrd;
+-
+-	defrd = _log_error_bank(bank, mca_msr_reg(bank, MCA_STATUS),
+-				mca_msr_reg(bank, MCA_ADDR), 0);
+-
+-	if (!mce_flags.smca)
+-		return;
+-
+-	/* Clear MCA_DESTAT if we logged the deferred error from MCA_STATUS. */
+-	if (defrd) {
+-		wrmsrl(MSR_AMD64_SMCA_MCx_DESTAT(bank), 0);
++	if (_log_error_deferred(bank, 0))
+ 		return;
+-	}
  
- 		if (ieee80211_has_a4(hdr->frame_control))
- 			ether_addr_copy(mic_hdr->addr4, hdr->addr4);
-@@ -1470,9 +1468,9 @@ static int vnt_beacon_xmit(struct vnt_private *priv,
+ 	/*
+ 	 * Only deferred errors are logged in MCA_DE{STAT,ADDR} so just check
+@@ -832,7 +839,7 @@ static void amd_deferred_error_interrupt(void)
  
- 		/* Get Duration and TimeStampOff */
- 		short_head->duration =
--			cpu_to_le16((u16)s_uGetDataDuration(priv, DATADUR_B,
--				    frame_size, PK_TYPE_11A, current_rate,
--				    false, 0, 0, 1, AUTO_FB_NONE));
-+			cpu_to_le16((u16)s_uGetDataDuration(priv, DATADUR_B, frame_size,
-+							    PK_TYPE_11A, current_rate, false,
-+							    0, 0, 1, AUTO_FB_NONE));
+ static void log_error_thresholding(unsigned int bank, u64 misc)
+ {
+-	_log_error_bank(bank, mca_msr_reg(bank, MCA_STATUS), mca_msr_reg(bank, MCA_ADDR), misc);
++	_log_error_deferred(bank, misc);
+ }
  
- 		short_head->time_stamp_off =
- 				vnt_time_stamp_off(priv, current_rate);
-@@ -1486,9 +1484,9 @@ static int vnt_beacon_xmit(struct vnt_private *priv,
- 
- 		/* Get Duration and TimeStampOff */
- 		short_head->duration =
--			cpu_to_le16((u16)s_uGetDataDuration(priv, DATADUR_B,
--				    frame_size, PK_TYPE_11B, current_rate,
--				    false, 0, 0, 1, AUTO_FB_NONE));
-+			cpu_to_le16((u16)s_uGetDataDuration(priv, DATADUR_B, frame_size,
-+							    PK_TYPE_11B, current_rate, false,
-+							    0, 0, 1, AUTO_FB_NONE));
- 
- 		short_head->time_stamp_off =
- 			vnt_time_stamp_off(priv, current_rate);
--- 
-2.34.1
-
+ static void log_and_reset_block(struct threshold_block *block)
