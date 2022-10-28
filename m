@@ -2,251 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF9761089E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 05:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1AA6108A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 05:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235662AbiJ1DRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Oct 2022 23:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
+        id S235957AbiJ1DRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Oct 2022 23:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234965AbiJ1DRB (ORCPT
+        with ESMTP id S235743AbiJ1DRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Oct 2022 23:17:01 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767D1578AB;
-        Thu, 27 Oct 2022 20:16:58 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mz70n0wkmzpW4f;
-        Fri, 28 Oct 2022 11:13:29 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 28 Oct 2022 11:16:56 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 28 Oct 2022 11:16:56 +0800
-Subject: Re: [PATCH v2 3/3] rcu: Add RCU stall diagnosis information
-To:     <paulmck@kernel.org>
-CC:     Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221022124525.2080-1-thunder.leizhen@huawei.com>
- <20221022124525.2080-4-thunder.leizhen@huawei.com>
- <20221027173334.GB5600@paulmck-ThinkPad-P17-Gen-1>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <5a4acb9d-48ba-7f41-51c7-19f300a47f22@huawei.com>
-Date:   Fri, 28 Oct 2022 11:16:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Thu, 27 Oct 2022 23:17:22 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DCA59E9B;
+        Thu, 27 Oct 2022 20:17:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4D975CE1346;
+        Fri, 28 Oct 2022 03:17:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E01D7C433D6;
+        Fri, 28 Oct 2022 03:17:11 +0000 (UTC)
+Date:   Thu, 27 Oct 2022 23:17:27 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [RFC][PATCH v2 20/31] timers: usb: Use del_timer_shutdown()
+ before freeing timer
+Message-ID: <20221027231727.4469d81c@gandalf.local.home>
+In-Reply-To: <20221028021815.3130-1-hdanton@sina.com>
+References: <20221027150525.753064657@goodmis.org>
+        <20221028021815.3130-1-hdanton@sina.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20221027173334.GB5600@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 28 Oct 2022 10:18:15 +0800
+Hillf Danton <hdanton@sina.com> wrote:
+
+> On 27 Oct 2022 11:05:45 -0400 Steven Rostedt (Google) <rostedt@goodmis.org>
+> > 
+> > --- a/drivers/usb/core/hub.c
+> > +++ b/drivers/usb/core/hub.c
+> > @@ -1261,6 +1261,9 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+> >  
+> >  		/* Don't do a long sleep inside a workqueue routine */
+> >  		if (type == HUB_INIT2) {
+> > +			/* Timers must be shutdown before they are re-initialized */
+> > +			if (hub->init_work.work.func)
+> > +				del_timer_shutdown(&hub->init_work.timer);  
+> 
+> This is not needed in the workqueue callback as the timer in question
+> is not pending.
+
+This was added because of the updates to DEBUG_OBJECTS_TIMERS that changed
+it to require a shutdown to remove the activation of the timer. This is to
+detect the possibility that a timer may become active just before freeing
+(there's way too many bugs that show that code logic is not enough).
+
+This code in particular is troubling because it re-initializes an already
+initialized timer with a new function. This causes the debug-objects to
+trigger an "object activated while initializing" warning.
+
+I originally added the "shutdown" to deactivate the object before you
+re-initialize it. But I have since updated the code to keep track of if it
+was ever activated, and if so, not to call the init code again, so this may
+not be required anymore.
+
+I'm still trying to work out the kinks as the users of timers have become
+adapted to the implementation, and may need to add some other helpers to
+make this work.
+
+-- Steve
 
 
-On 2022/10/28 1:33, Paul E. McKenney wrote:
-> On Sat, Oct 22, 2022 at 08:45:25PM +0800, Zhen Lei wrote:
->> In some extreme cases, such as the I/O pressure test, the CPU usage may
->> be 100%, causing RCU stall. In this case, the printed information about
->> current is not useful. Displays the number and usage of hard interrupts,
->> soft interrupts, and context switches that are generated within half of
->> the CPU stall timeout, can help us make a general judgment. In other
->> cases, we can preliminarily determine whether an infinite loop occurs
->> when local_irq, local_bh or preempt is disabled.
->>
->> For example:
->> rcu: INFO: rcu_preempt self-detected stall on CPU
->> rcu:     0-....: (1250 ticks this GP) <omitted>
->> rcu:          hardirqs   softirqs   csw/system
->> rcu:  number:      624         45            0
->> rcu: cputime:       69          1         2425   ==> 2500(ms)
->>
->> The example above shows that the number of hard and soft interrupts is
->> small, there is zero context switching, and the system takes up a lot of
->> time. We can quickly conclude that the current task is infinitely looped
->> with preempt_disable().
->>
->> The impact on system performance is negligible because snapshot is
->> recorded only one time after 1/2 CPU stall timeout.
->>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> ---
->>  kernel/rcu/tree.c       | 16 ++++++++++++++++
->>  kernel/rcu/tree.h       | 11 +++++++++++
->>  kernel/rcu/tree_stall.h | 28 ++++++++++++++++++++++++++++
->>  3 files changed, 55 insertions(+)
->>
->> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
->> index 6bb8e72bc8151ef..56c49a3117e7a81 100644
->> --- a/kernel/rcu/tree.c
->> +++ b/kernel/rcu/tree.c
->> @@ -931,6 +931,22 @@ static int rcu_implicit_dynticks_qs(struct rcu_data *rdp)
->>  			rdp->rcu_iw_gp_seq = rnp->gp_seq;
->>  			irq_work_queue_on(&rdp->rcu_iw, rdp->cpu);
->>  		}
->> +
->> +		if (rdp->snap_record.gp_seq != rdp->gp_seq) {
->> +			u64 *cpustat;
->> +			struct rcu_snap_record *r;
->> +
->> +			cpustat = kcpustat_cpu(rdp->cpu).cpustat;
->> +
->> +			r = &rdp->snap_record;
->> +			r->cputime_irq     = cpustat[CPUTIME_IRQ];
->> +			r->cputime_softirq = cpustat[CPUTIME_SOFTIRQ];
->> +			r->cputime_system  = cpustat[CPUTIME_SYSTEM];
->> +			r->nr_hardirqs = kstat_cpu_irqs_sum(rdp->cpu);
->> +			r->nr_softirqs = kstat_cpu_softirqs_sum(rdp->cpu);
->> +			r->nr_csw = nr_context_switches_cpu(rdp->cpu);
->> +			r->gp_seq = rdp->gp_seq;
 > 
-> This needs to be optional.  Yes, it is normally rarely executed, but
-> people who don't want the additional information should not pay the
-> price for it.
-> 
->> +		}
->>  	}
->>  
->>  	return 0;
->> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
->> index d4a97e40ea9c3e2..fb3121d15cca6f8 100644
->> --- a/kernel/rcu/tree.h
->> +++ b/kernel/rcu/tree.h
->> @@ -158,6 +158,16 @@ union rcu_noqs {
->>  	u16 s; /* Set of bits, aggregate OR here. */
->>  };
->>  
->> +struct rcu_snap_record {
->> +	unsigned long	gp_seq;
->> +	u64		cputime_irq;
->> +	u64		cputime_softirq;
->> +	u64		cputime_system;
->> +	unsigned int	nr_hardirqs;
->> +	unsigned int	nr_softirqs;
->> +	unsigned long long nr_csw;
->> +};
-> 
-> Please add a comment saying what this is and what it is used for.
+> >  			INIT_DELAYED_WORK(&hub->init_work, hub_init_func3);
+> >  			queue_delayed_work(system_power_efficient_wq,
+> >  					&hub->init_work,  
 
-OK, I will do it.
-
-> 
->> +
->>  /* Per-CPU data for read-copy update. */
->>  struct rcu_data {
->>  	/* 1) quiescent-state and grace-period handling : */
->> @@ -262,6 +272,7 @@ struct rcu_data {
->>  	short rcu_onl_gp_flags;		/* ->gp_flags at last online. */
->>  	unsigned long last_fqs_resched;	/* Time of last rcu_resched(). */
->>  	unsigned long last_sched_clock;	/* Jiffies of last rcu_sched_clock_irq(). */
->> +	struct rcu_snap_record snap_record;
-> 
-> And here as well, please.
-
-OK
-
-> 
->>  	int cpu;
->>  };
->> diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
->> index 5653560573e22d6..f8c9d0284d116a8 100644
->> --- a/kernel/rcu/tree_stall.h
->> +++ b/kernel/rcu/tree_stall.h
->> @@ -428,6 +428,32 @@ static bool rcu_is_rcuc_kthread_starving(struct rcu_data *rdp, unsigned long *jp
->>  	return j > 2 * HZ;
->>  }
->>  
->> +static void print_cpu_stat_info(int cpu)
->> +{
->> +	u64 *cpustat;
->> +	unsigned long half_timeout;
->> +	struct rcu_snap_record *r;
-> 
-> Let's please follow convention and call it "rsrp" rather than just "r".
-
-OK
-
-> 
->> +	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
->> +
->> +	r = &rdp->snap_record;
->> +	if (r->gp_seq != rdp->gp_seq)
->> +		return;
->> +
->> +	cpustat = kcpustat_cpu(cpu).cpustat;
->> +	half_timeout = rcu_jiffies_till_stall_check() / 2;
->> +
->> +	pr_err("         hardirqs   softirqs   csw/system\n");
->> +	pr_err(" number: %8d %10d %12lld\n",
->> +		kstat_cpu_irqs_sum(cpu) - r->nr_hardirqs,
->> +		kstat_cpu_softirqs_sum(cpu) - r->nr_softirqs,
->> +		nr_context_switches_cpu(cpu) - r->nr_csw);
->> +	pr_err("cputime: %8lld %10lld %12lld   ==> %lld(ms)\n",
->> +		div_u64(cpustat[CPUTIME_IRQ] - r->cputime_irq, NSEC_PER_MSEC),
->> +		div_u64(cpustat[CPUTIME_SOFTIRQ] - r->cputime_softirq, NSEC_PER_MSEC),
->> +		div_u64(cpustat[CPUTIME_SYSTEM] - r->cputime_system, NSEC_PER_MSEC),
->> +		jiffies64_to_msecs(half_timeout));
->> +}
->> +
->>  /*
->>   * Print out diagnostic information for the specified stalled CPU.
->>   *
->> @@ -484,6 +510,8 @@ static void print_cpu_stall_info(int cpu)
->>  	       data_race(rcu_state.n_force_qs) - rcu_state.n_force_qs_gpstart,
->>  	       rcuc_starved ? buf : "",
->>  	       falsepositive ? " (false positive?)" : "");
->> +
->> +	print_cpu_stat_info(cpu);
-> 
-> Again, please make this conditional.  One way to do that is with a
-> Kconfig option.  Another is with a kernel boot parameter, as is done
-> wtih module_param() elsewhere in tree_stall.h.  Or if the parsing needs
-> to be fancy (it shouldn't) using kernel_param_ops as is done in tree.c.
-> Distros tend to like kernel boot parameters, while people dealing with
-> large numbers of devices tend to like Kconfig options.  Choose wisely.  ;-)
-
-OK. I will add both Kconfig option and boot parameter, let the user
-choose freely.
-
-> 
-> Please make this initially default-off.  If enough people enable it for
-> long enough, we can later switch it to default-on and maybe even later
-> to unconditional.  But let's start carefully.
-
-Right. You're so far-sighted.
-
-> 
-> 							Thanx, Paul
-> 
->>  }
->>  
->>  /* Complain about starvation of grace-period kthread.  */
->> -- 
->> 2.25.1
->>
-> .
-> 
-
--- 
-Regards,
-  Zhen Lei
