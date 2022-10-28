@@ -2,281 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947FF610B9F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3BE4610B99
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiJ1Hv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 03:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47460 "EHLO
+        id S230003AbiJ1HvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 03:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiJ1Hvz (ORCPT
+        with ESMTP id S229948AbiJ1HvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 03:51:55 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E321BF23C;
-        Fri, 28 Oct 2022 00:51:51 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MzF4F32MSzmVN7;
-        Fri, 28 Oct 2022 15:46:53 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 28 Oct 2022 15:51:49 +0800
-Received: from localhost.localdomain (10.67.165.2) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 28 Oct 2022 15:51:48 +0800
-From:   Haoyue Xu <xuhaoyue1@hisilicon.com>
-To:     <jgg@nvidia.com>, <leon@kernel.org>, <zyjzyj2000@gmail.com>
-CC:     <linux-rdma@vger.kernel.org>, <linuxarm@huawei.com>,
-        <linux-kernel@vger.kernel.org>, <xuhaoyue1@hisilicon.com>
-Subject: [PATCH v2 for-next] RDMA/rxe: cleanup some error handling in rxe_verbs.c
-Date:   Fri, 28 Oct 2022 15:50:53 +0800
-Message-ID: <20221028075053.3990467-1-xuhaoyue1@hisilicon.com>
-X-Mailer: git-send-email 2.30.0
+        Fri, 28 Oct 2022 03:51:15 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0984485AB9;
+        Fri, 28 Oct 2022 00:51:13 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29S6lQ80023975;
+        Fri, 28 Oct 2022 07:51:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=FUOkIyLd1KkITdni1CtAq8I3dI94667xNj2Ue+unSpU=;
+ b=YF9tD7MqFdEcg7iH132qjRTQKVyDiJv0LqXCKSDHBKY2pO0QWSAB1FA1QqRjbe+p31EF
+ /Oumxv90sZhYglezFh0VvEzRdoA/FwkHEcpVzsGhoHgsEVionUWMzqISGo+jvfnv3DRH
+ CiBf945TpbTlNnGtWM+mDs7Iq2mfP6CR8fSyHt42191uggjt0MBQxDMvaGAQw4n14/uw
+ +TJ96Dp3MXhpm7/gtNMSHUiZPjX3QzDRpHHINBi7A8ia18CR2+gwfK5xPuKaW3BCC9Ez
+ CDRE5gaif56TJlpFofIU/OYzT2v4WN1o/HC0sARpMtGMGDyEW6qHtbymOITmiUrTUpBA sA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kg59agx8t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Oct 2022 07:51:07 +0000
+Received: from pps.filterd (NALASPPMTA05.qualcomm.com [127.0.0.1])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 29S7m1tq009085;
+        Fri, 28 Oct 2022 07:51:07 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 3kf9urq5ea-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Oct 2022 07:51:07 +0000
+Received: from NALASPPMTA05.qualcomm.com (NALASPPMTA05.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29S7nWBk010017;
+        Fri, 28 Oct 2022 07:51:06 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 29S7p6BG011702
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Oct 2022 07:51:06 +0000
+Received: from hu-ppareek-blr.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Fri, 28 Oct 2022 00:51:03 -0700
+Date:   Fri, 28 Oct 2022 13:20:59 +0530
+From:   Parikshit Pareek <quic_ppareek@quicinc.com>
+To:     <konrad.dybcio@somainline.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        Shazad Hussain <quic_shazhuss@quicinc.com>,
+        "Brian Masney" <bmasney@redhat.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH v6 2/2] arm64: dts: qcom: add SA8540P ride(Qdrive-3)
+Message-ID: <20221028075059.GA15101@hu-ppareek-blr.qualcomm.com>
+References: <20221020073036.16656-1-quic_ppareek@quicinc.com>
+ <20221020073036.16656-3-quic_ppareek@quicinc.com>
+ <7a62dd552c02e2b83fabaf9ff55a7c6c@somainline.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.2]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <7a62dd552c02e2b83fabaf9ff55a7c6c@somainline.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: BNlJnMlT2jzr7tJQHOKrWUIHFqqr54qT
+X-Proofpoint-ORIG-GUID: BNlJnMlT2jzr7tJQHOKrWUIHFqqr54qT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-28_04,2022-10-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ clxscore=1015 mlxscore=0 suspectscore=0 mlxlogscore=757 bulkscore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2210280049
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yunsheng Lin <linyunsheng@huawei.com>
+On Thu, Oct 20, 2022 at 01:49:23PM +0200, konrad.dybcio@somainline.org wrote:
+> On 2022-10-20 09:30, Parikshit Pareek wrote:
+> > Introduce the Qualcomm SA8540P ride automotive platform, also known as
+> > Qdrive-3 development board.
+> > 
+> > This initial contribution supports SMP, CPUFreq, cluster idle, UFS, RPMh
+> > regulators, debug UART, PMICs, remoteprocs and USB.
+> > 
+> > The SA8540P ride contains four PM8450 PMICs.
+> > 
+> > Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+> > ---
+> 
+> Hi!
+> 
+> [...[
+> 
+> > +		vreg_l3c: ldo3 {
+> > +			regulator-name = "vreg_l3c";
+> > +			regulator-min-microvolt = <1200000>;
+> > +			regulator-max-microvolt = <1200000>;
+> > +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> > +			regulator-allow-set-load;
+> Not sure if setting load is desired after recent rpmh regulator changes.
+May I know the exact patch being refered here?
+> 
+> [...]
+> 
+> > +
+> > +&spmi_bus {
+> > +	pm8450a: pmic@0 {
+> > +		compatible = "qcom,pm8150", "qcom,spmi-pmic";
+> Please add a pm8450[aceg].dtsi instead, as other boards would probably like
+> to
+> reuse this. Also, move the spmi.h inclusion there.
+> 
+> [...]
+> 
+> > +};
+> > +
+> > +/* PINCTRL */
+> Not sure if it's useful if there's nothing there for now.
+> 
+> Konrad
 
-Instead of 'goto and return', just return directly to
-simplify the error handling, and avoid some unnecessary
-return value check.
-
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-Signed-off-by: Haoyue Xu <xuhaoyue1@hisilicon.com>
----
-Changes since v1:
-	Rebased to fix some conflict in the patch.
-
- drivers/infiniband/sw/rxe/rxe_verbs.c | 80 ++++++++-------------------
- 1 file changed, 23 insertions(+), 57 deletions(-)
-
-diff --git a/drivers/infiniband/sw/rxe/rxe_verbs.c b/drivers/infiniband/sw/rxe/rxe_verbs.c
-index 88825edc7dce..3bc0448f56de 100644
---- a/drivers/infiniband/sw/rxe/rxe_verbs.c
-+++ b/drivers/infiniband/sw/rxe/rxe_verbs.c
-@@ -238,7 +238,6 @@ static int rxe_destroy_ah(struct ib_ah *ibah, u32 flags)
- 
- static int post_one_recv(struct rxe_rq *rq, const struct ib_recv_wr *ibwr)
- {
--	int err;
- 	int i;
- 	u32 length;
- 	struct rxe_recv_wqe *recv_wqe;
-@@ -246,15 +245,11 @@ static int post_one_recv(struct rxe_rq *rq, const struct ib_recv_wr *ibwr)
- 	int full;
- 
- 	full = queue_full(rq->queue, QUEUE_TYPE_TO_DRIVER);
--	if (unlikely(full)) {
--		err = -ENOMEM;
--		goto err1;
--	}
-+	if (unlikely(full))
-+		return -ENOMEM;
- 
--	if (unlikely(num_sge > rq->max_sge)) {
--		err = -EINVAL;
--		goto err1;
--	}
-+	if (unlikely(num_sge > rq->max_sge))
-+		return -EINVAL;
- 
- 	length = 0;
- 	for (i = 0; i < num_sge; i++)
-@@ -275,9 +270,6 @@ static int post_one_recv(struct rxe_rq *rq, const struct ib_recv_wr *ibwr)
- 	queue_advance_producer(rq->queue, QUEUE_TYPE_TO_DRIVER);
- 
- 	return 0;
--
--err1:
--	return err;
- }
- 
- static int rxe_create_srq(struct ib_srq *ibsrq, struct ib_srq_init_attr *init,
-@@ -343,10 +335,7 @@ static int rxe_modify_srq(struct ib_srq *ibsrq, struct ib_srq_attr *attr,
- 	if (err)
- 		return err;
- 
--	err = rxe_srq_from_attr(rxe, srq, attr, mask, &ucmd, udata);
--	if (err)
--		return err;
--	return 0;
-+	return rxe_srq_from_attr(rxe, srq, attr, mask, &ucmd, udata);
- }
- 
- static int rxe_query_srq(struct ib_srq *ibsrq, struct ib_srq_attr *attr)
-@@ -453,11 +442,11 @@ static int rxe_modify_qp(struct ib_qp *ibqp, struct ib_qp_attr *attr,
- 
- 	err = rxe_qp_chk_attr(rxe, qp, attr, mask);
- 	if (err)
--		goto err1;
-+		return err;
- 
- 	err = rxe_qp_from_attr(qp, attr, mask, udata);
- 	if (err)
--		goto err1;
-+		return err;
- 
- 	if ((mask & IB_QP_AV) && (attr->ah_attr.ah_flags & IB_AH_GRH))
- 		qp->src_port = rdma_get_udp_sport(attr->ah_attr.grh.flow_label,
-@@ -465,9 +454,6 @@ static int rxe_modify_qp(struct ib_qp *ibqp, struct ib_qp_attr *attr,
- 						  qp->attr.dest_qp_num);
- 
- 	return 0;
--
--err1:
--	return err;
- }
- 
- static int rxe_query_qp(struct ib_qp *ibqp, struct ib_qp_attr *attr,
-@@ -501,24 +487,21 @@ static int validate_send_wr(struct rxe_qp *qp, const struct ib_send_wr *ibwr,
- 	struct rxe_sq *sq = &qp->sq;
- 
- 	if (unlikely(num_sge > sq->max_sge))
--		goto err1;
-+		return -EINVAL;
- 
- 	if (unlikely(mask & WR_ATOMIC_MASK)) {
- 		if (length < 8)
--			goto err1;
-+			return -EINVAL;
- 
- 		if (atomic_wr(ibwr)->remote_addr & 0x7)
--			goto err1;
-+			return -EINVAL;
- 	}
- 
- 	if (unlikely((ibwr->send_flags & IB_SEND_INLINE) &&
- 		     (length > sq->max_inline)))
--		goto err1;
-+		return -EINVAL;
- 
- 	return 0;
--
--err1:
--	return -EINVAL;
- }
- 
- static void init_send_wr(struct rxe_qp *qp, struct rxe_send_wr *wr,
-@@ -735,14 +718,12 @@ static int rxe_post_recv(struct ib_qp *ibqp, const struct ib_recv_wr *wr,
- 
- 	if (unlikely((qp_state(qp) < IB_QPS_INIT) || !qp->valid)) {
- 		*bad_wr = wr;
--		err = -EINVAL;
--		goto err1;
-+		return -EINVAL;
- 	}
- 
- 	if (unlikely(qp->srq)) {
- 		*bad_wr = wr;
--		err = -EINVAL;
--		goto err1;
-+		return -EINVAL;
- 	}
- 
- 	spin_lock_irqsave(&rq->producer_lock, flags);
-@@ -761,7 +742,6 @@ static int rxe_post_recv(struct ib_qp *ibqp, const struct ib_recv_wr *wr,
- 	if (qp->resp.state == QP_STATE_ERROR)
- 		rxe_run_task(&qp->resp.task, 1);
- 
--err1:
- 	return err;
- }
- 
-@@ -826,16 +806,9 @@ static int rxe_resize_cq(struct ib_cq *ibcq, int cqe, struct ib_udata *udata)
- 
- 	err = rxe_cq_chk_attr(rxe, cq, cqe, 0);
- 	if (err)
--		goto err1;
--
--	err = rxe_cq_resize_queue(cq, cqe, uresp, udata);
--	if (err)
--		goto err1;
--
--	return 0;
-+		return err;
- 
--err1:
--	return err;
-+	return rxe_cq_resize_queue(cq, cqe, uresp, udata);
- }
- 
- static int rxe_poll_cq(struct ib_cq *ibcq, int num_entries, struct ib_wc *wc)
-@@ -921,26 +894,22 @@ static struct ib_mr *rxe_reg_user_mr(struct ib_pd *ibpd,
- 	struct rxe_mr *mr;
- 
- 	mr = rxe_alloc(&rxe->mr_pool);
--	if (!mr) {
--		err = -ENOMEM;
--		goto err2;
--	}
--
-+	if (!mr)
-+		return ERR_PTR(-ENOMEM);
- 
- 	rxe_get(pd);
- 	mr->ibmr.pd = ibpd;
- 
- 	err = rxe_mr_init_user(rxe, start, length, iova, access, mr);
- 	if (err)
--		goto err3;
-+		goto err1;
- 
- 	rxe_finalize(mr);
- 
- 	return &mr->ibmr;
- 
--err3:
-+err1:
- 	rxe_cleanup(mr);
--err2:
- 	return ERR_PTR(err);
- }
- 
-@@ -956,25 +925,22 @@ static struct ib_mr *rxe_alloc_mr(struct ib_pd *ibpd, enum ib_mr_type mr_type,
- 		return ERR_PTR(-EINVAL);
- 
- 	mr = rxe_alloc(&rxe->mr_pool);
--	if (!mr) {
--		err = -ENOMEM;
--		goto err1;
--	}
-+	if (!mr)
-+		return ERR_PTR(-ENOMEM);
- 
- 	rxe_get(pd);
- 	mr->ibmr.pd = ibpd;
- 
- 	err = rxe_mr_init_fast(max_num_sg, mr);
- 	if (err)
--		goto err2;
-+		goto err1;
- 
- 	rxe_finalize(mr);
- 
- 	return &mr->ibmr;
- 
--err2:
--	rxe_cleanup(mr);
- err1:
-+	rxe_cleanup(mr);
- 	return ERR_PTR(err);
- }
- 
--- 
-2.30.0
+Regards,
+Parikshit Pareek
 
