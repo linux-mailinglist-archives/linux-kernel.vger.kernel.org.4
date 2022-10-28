@@ -2,170 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 726936114E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554C86114E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbiJ1OnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53298 "EHLO
+        id S230076AbiJ1Ong (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiJ1Ome (ORCPT
+        with ESMTP id S230370AbiJ1OnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:42:34 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41E61B8646
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:42:33 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1ooQYy-0005tX-WB; Fri, 28 Oct 2022 16:42:25 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1ooQYy-0000X8-JX; Fri, 28 Oct 2022 16:42:24 +0200
-Date:   Fri, 28 Oct 2022 16:42:24 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de,
-        Sherry Sun <sherry.sun@nxp.com>, devicetree@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH V2 13/15] arm64: dts: imx8mm-evk: Enable usdhc1 to
- support wifi
-Message-ID: <20221028144224.dthligupldj2wift@pengutronix.de>
-References: <20221024031351.4135651-1-peng.fan@oss.nxp.com>
- <20221024031351.4135651-14-peng.fan@oss.nxp.com>
+        Fri, 28 Oct 2022 10:43:20 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C411F8128;
+        Fri, 28 Oct 2022 07:43:10 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id n18so4170317qvt.11;
+        Fri, 28 Oct 2022 07:43:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zRwJKEcQ0Hj/RT3YqJ8AoMPqLaWpCYHYaDCqc/JUl2s=;
+        b=bS/EmyhIlDXTTzU2EwcUthfcDkvObqeh3OWmsvxHBclDyuHQYMSCUVFco4PBybMGPu
+         UBqzSQFg8fLPeY7kuO04h2nL95CDqqb8tM+F8ocWtrYoLZdnnizDgBkVJ6Km4CqidEF4
+         h9KYEQZ40WTqf/P6SS2c5qTCx3WYkF9KTr11eJAnxAj1nispUFS1g/QQTN+1i2wQwuW0
+         BKclEI2DeAz3HSMkidbgacW2+qSVgJj9VC799qMUCS5fJ38H57ESCgedL9JDpiNLxgkG
+         wcs0SWEgkakMWf5LyiJAiK0vJVFecfQarQW0itSSbhuMNkms1wsAX9qmO+iD/BGOSELR
+         ZRrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zRwJKEcQ0Hj/RT3YqJ8AoMPqLaWpCYHYaDCqc/JUl2s=;
+        b=OGJcK6SgJr433bO5aOuuaTFXlEdEkYUTKXMO/IOU1DkjjGGkvctZU3arRC6vg5gq9d
+         A083UlBWim/jktHZp+lvb7kbUyTaNIaM+zqoMOszMTSvlBxJpiWjjX4TcKAoeb/byk72
+         Jc4YvvGTnfuGAOY0CVgajR/w61uwWa9u+sP9FDL/kNJvcdzst1h3J4ptUcquwI/1kPsR
+         iGFG8+bqUMx+8lXk12bf+5Tu3mK5bVkGdTyvq+CD4yljDBMrXuF5rYmamAJMVBnLS1A1
+         mAfzq6Qk0oaPzZaSGUYqwfyktNcDIf2EabWT2Gc5Do3zr8QFOtcddsfAiSGxnO1EV0bQ
+         tVwA==
+X-Gm-Message-State: ACrzQf1VfopyHNPtBptWKlPqC3flaxd9MeKQgWcXWLPjbYUza0Dx+Q44
+        BHzI3lRosXoFqJmJmoE6bjQyUPIYMzE=
+X-Google-Smtp-Source: AMsMyM5vsQoDOU9mLhdm2+tItfsnCa84lmoF1FIHME5DhVQuuK9fQkxCaku0c2/l2k+sMd8/tL1Q1Q==
+X-Received: by 2002:a17:902:b402:b0:179:e5b0:96d3 with SMTP id x2-20020a170902b40200b00179e5b096d3mr54453723plr.142.1666968178448;
+        Fri, 28 Oct 2022 07:42:58 -0700 (PDT)
+Received: from ubuntu.localdomain ([1.221.137.166])
+        by smtp.gmail.com with ESMTPSA id z13-20020a170902d54d00b00186ad73e2d5sm3137922plf.208.2022.10.28.07.42.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 07:42:57 -0700 (PDT)
+From:   "YoungJun.park" <her0gyugyu@gmail.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>
+Cc:     David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        "YoungJun.park" <her0gyugyu@gmail.com>
+Subject: [PATCH] kunit: alloc_string_stream_fragment error handling bug fix
+Date:   Fri, 28 Oct 2022 07:42:41 -0700
+Message-Id: <20221028144241.634012-1-her0gyugyu@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024031351.4135651-14-peng.fan@oss.nxp.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-10-24, Peng Fan (OSS) wrote:
-> From: Sherry Sun <sherry.sun@nxp.com>
-> 
-> Enable usdhc1 which is used for wifi.
-> 
-> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx8mm-evk.dts  | 23 +++++++++++
->  arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi | 39 +++++++++++++++++++
->  2 files changed, 62 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> index a2b24d4d4e3e..c93387fcd498 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> @@ -15,6 +15,17 @@ / {
->  	aliases {
->  		spi0 = &flexspi;
->  	};
-> +
-> +	reg_sd1_vmmc: sd1_regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "WLAN_EN";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		gpio = <&gpio2 10 GPIO_ACTIVE_HIGH>;
-> +		off-on-delay = <20000>;
+When it fails to allocate fragment, it does not free and return error.
+And check the pointer inappropriately.
 
-This is wrong and also unnecessary for wifi?
+Signed-off-by: YoungJun.park <her0gyugyu@gmail.com>
+---
+ lib/kunit/string-stream.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Regards,
-  Marco
+diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
+index 72659a9773e3..0228fe814e96 100644
+--- a/lib/kunit/string-stream.c
++++ b/lib/kunit/string-stream.c
+@@ -23,8 +23,10 @@ static struct string_stream_fragment *alloc_string_stream_fragment(
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	frag->fragment = kunit_kmalloc(test, len, gfp);
+-	if (!frag->fragment)
++	if (!frag->fragment) {
++		kunit_kfree(test, frag);
+ 		return ERR_PTR(-ENOMEM);
++	}
+ 
+ 	return frag;
+ }
+@@ -56,7 +58,7 @@ int string_stream_vadd(struct string_stream *stream,
+ 	frag_container = alloc_string_stream_fragment(stream->test,
+ 						      len,
+ 						      stream->gfp);
+-	if (!frag_container)
++	if (IS_ERR(frag_container))
+ 		return -ENOMEM;
+ 
+ 	len = vsnprintf(frag_container->fragment, len, fmt, args);
+-- 
+2.25.1
 
-> +		startup-delay-us = <100>;
-> +		enable-active-high;
-> +	};
->  };
->  
->  &ddrc {
-> @@ -53,6 +64,18 @@ flash@0 {
->  	};
->  };
->  
-> +&usdhc1 {
-> +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-> +	pinctrl-0 = <&pinctrl_usdhc1>, <&pinctrl_usdhc1_gpio>;
-> +	pinctrl-1 = <&pinctrl_usdhc1_100mhz>, <&pinctrl_usdhc1_gpio>;
-> +	pinctrl-2 = <&pinctrl_usdhc1_200mhz>, <&pinctrl_usdhc1_gpio>;
-> +	bus-width = <4>;
-> +	vmmc-supply = <&reg_sd1_vmmc>;
-> +	keep-power-in-suspend;
-> +	non-removable;
-> +	status = "okay";
-> +};
-> +
->  &usdhc3 {
->  	assigned-clocks = <&clk IMX8MM_CLK_USDHC3_ROOT>;
->  	assigned-clock-rates = <400000000>;
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> index 7d6317d95b13..ce450965e837 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> @@ -559,6 +559,45 @@ MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX	0x140
->  		>;
->  	};
->  
-> +	pinctrl_usdhc1_gpio: usdhc1grpgpio {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_SD1_RESET_B_GPIO2_IO10	0x41
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc1: usdhc1grp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK		0x190
-> +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD		0x1d0
-> +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0	0x1d0
-> +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1	0x1d0
-> +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2	0x1d0
-> +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d0
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc1_100mhz: usdhc1grp100mhz {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK		0x194
-> +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD		0x1d4
-> +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0	0x1d4
-> +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1	0x1d4
-> +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2	0x1d4
-> +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d4
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc1_200mhz: usdhc1grp200mhz {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK		0x196
-> +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD		0x1d6
-> +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0	0x1d6
-> +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1	0x1d6
-> +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2	0x1d6
-> +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d6
-> +		>;
-> +	};
-> +
->  	pinctrl_usdhc2_gpio: usdhc2grpgpiogrp {
->  		fsl,pins = <
->  			MX8MM_IOMUXC_GPIO1_IO15_GPIO1_IO15	0x1c4
-> -- 
-> 2.37.1
-> 
-> 
-> 
