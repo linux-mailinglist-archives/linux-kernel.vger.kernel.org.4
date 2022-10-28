@@ -2,108 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48306611D37
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7174611D36
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbiJ1WHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 18:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
+        id S230143AbiJ1WHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 18:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbiJ1WHU (ORCPT
+        with ESMTP id S230036AbiJ1WHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 18:07:20 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BF324D894
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 15:07:19 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id j6so4945290qvn.12
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 15:07:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=l4Zjzz+NmO6ZHHFaizEHCjrG04Xj0VbUFmDsHVrZ9aU=;
-        b=c4nDWMablbhQJCxDEPvgkxypSIQLq4xcT3gmYe+nK6OTGhNY2Zs7Bgsqtm4O/X4ARV
-         yyIfgh3doG28AvK52GL9kW1jyEs5Y/yCN9afEoKZ/sXD/M4/L96Idojf52gCL86lqnzi
-         ilK/0+BQGchPX2PRvQMgnbaryCSBhc78Jf+rHpsR1PlHxuAh4DxSV+YvqMd3NNR5kldW
-         Ij+Ffn3jV7ZGomF3l7PRSZLyzmsdl/pPCblv8Fr4gWHOZa0x1k2lvwugbULp/Z+MkJWw
-         smF6wiUEMmDg7MguA6JBrvarjDBgF4+oVgVYE9o24y+bmYUWgrV5sYpiIXJbrVjkMuKi
-         Fixw==
+        Fri, 28 Oct 2022 18:07:31 -0400
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D2124D892;
+        Fri, 28 Oct 2022 15:07:30 -0700 (PDT)
+Received: by mail-pg1-f173.google.com with SMTP id q1so5937209pgl.11;
+        Fri, 28 Oct 2022 15:07:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l4Zjzz+NmO6ZHHFaizEHCjrG04Xj0VbUFmDsHVrZ9aU=;
-        b=ZfETVZ87uUHCczeRHRMgNJCyN15vSCEaZ9V2S0jXpT4xktH/K0G27DhAWdkwZ+o8TK
-         jbGqrVLAQnUA7p0psmeKblEYnvQi7LaAHeIV0tRQZfVk3WVFR+vP99Y+A2E5t/pY07dL
-         GGbTbVxhzZJlLV2Buhxu1fibZSmOoX4kbLWs/2LfDvU2U0Ou8aR2my8tyqaD1V4zRnJq
-         pnOJaoioSN537KpLWBab7Y/ah7p0L1YAoQRIRY5dxJACoz1guPPWfmxqHnun/Sn4esT1
-         T5s8pRzmxE7fptlCyC5wypdEuUgQdx7NVRoRmE/pJU0RexKS7KU5sMRpmG28zx5u3Lw8
-         eCYg==
-X-Gm-Message-State: ACrzQf0apjiMIPAbnmfQ3tVeBUdN33krmoIkhaA6antBgUEKktINmLCc
-        9HFFS3jE/vhD/vqC/B6AXH/+Iw==
-X-Google-Smtp-Source: AMsMyM7qdsCaCR3n2UT1c8MifaiLfbwiITEqLguFAdOAnkkneQ5LNEJtabdAtXUtryo2KVicgQHefA==
-X-Received: by 2002:a05:6214:c2a:b0:4ba:170c:1929 with SMTP id a10-20020a0562140c2a00b004ba170c1929mr1435139qvd.21.1666994838746;
-        Fri, 28 Oct 2022 15:07:18 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id br16-20020a05620a461000b006bbb07ebd83sm3701555qkb.108.2022.10.28.15.07.17
+        bh=jcpk8CmaMkGFoybxiTAHyQGaGi/qPUntpcpAOZKAFN0=;
+        b=rjx3M8PDZLXIcEWpLwPo9k0dL44wtLIw1aiJyibSTvifT4utvBMi3nBDVgWTGQoIxx
+         qoYSUzoGO4NRY1SnkZRMTbPGwUicjA58ELkgcT3HVetVfpztRDEeN3fwLgY872yYcRpz
+         JVKFzrbxTKEmmYqAWPmHAI1dX01M+OYy2wrHYxGZH2oPkqWRW9gNvu9BmKKBbkESIlYC
+         2t2ByqZItJYbFPEMwVd7mCe7ZXQeHvRHF5aiQz2IZI3dDadGSVP+6IJ2KXhGqdRgpmmP
+         vOdHpfi+e70BUrd51hHkKH3apD47PCFqVIoHbSNI6Jqaqiq2QAsydlGVSAw28zpQg+nx
+         fjDA==
+X-Gm-Message-State: ACrzQf1TJfcHvd9jsYutaAJhkhsJW4WysxU7GMpcuGsnZGa8xskcLu0M
+        m7kLPhTgiLc83MzOTXAuWb0s2MRJJo8=
+X-Google-Smtp-Source: AMsMyM7q5jdgy66puytik9g5+Lb6M9f+36JxwW+qB34UjjwetMgf6YTetQX0VCWuEzod2J5PBCZ4UQ==
+X-Received: by 2002:a05:6a00:14d2:b0:56c:b1c5:c5da with SMTP id w18-20020a056a0014d200b0056cb1c5c5damr1326952pfu.2.1666994849556;
+        Fri, 28 Oct 2022 15:07:29 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id p7-20020a170902780700b001714c36a6e7sm3464387pll.284.2022.10.28.15.07.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 15:07:18 -0700 (PDT)
-Message-ID: <34c4037b-d152-412d-e551-dd3ea27b6b46@linaro.org>
-Date:   Fri, 28 Oct 2022 18:07:16 -0400
+        Fri, 28 Oct 2022 15:07:28 -0700 (PDT)
+Message-ID: <a3cf0510-a502-b623-4abc-cd02b9074501@acm.org>
+Date:   Fri, 28 Oct 2022 15:07:26 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 1/2] dt-bindings: leds-lp55xx: add ti,disable-charge-pump
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v3 16/17] ufs: core: mcq: Enable Multi Circular Queue
 Content-Language: en-US
-To:     Maarten Zanders <maarten.zanders@mind.be>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221028133501.95833-1-maarten.zanders@mind.be>
- <20221028133501.95833-2-maarten.zanders@mind.be>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221028133501.95833-2-maarten.zanders@mind.be>
-Content-Type: text/plain; charset=UTF-8
+To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        stanley.chu@mediatek.com, eddie.huang@mediatek.com,
+        daejun7.park@samsung.com, avri.altman@wdc.com, mani@kernel.org,
+        beanhuo@micron.com, quic_richardp@quicinc.com,
+        linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1666288432.git.quic_asutoshd@quicinc.com>
+ <4c7e03d7d99e305a8e5ae0547fa9648a2a910fe2.1666288432.git.quic_asutoshd@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <4c7e03d7d99e305a8e5ae0547fa9648a2a910fe2.1666288432.git.quic_asutoshd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/10/2022 09:34, Maarten Zanders wrote:
-> Add a binding to disable the internal charge pump for lp55xx.
-> 
-> Signed-off-by: Maarten Zanders <maarten.zanders@mind.be>
-> ---
->  Documentation/devicetree/bindings/leds/leds-lp55xx.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml b/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml
-> index 7ec676e53851..9eb8d1017402 100644
-> --- a/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml
-> +++ b/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml
-> @@ -64,6 +64,11 @@ properties:
->    '#size-cells':
->      const: 0
->  
-> +  ti,disable-charge-pump:
-> +    description: |
+On 10/20/22 11:03, Asutosh Das wrote:
+> Enable MCQ in the Host Controller.
 
-Drop |
-
-> +      Disable the internal charge pump.
-
-Does it mean that it is enabled by default?
-
-Best regards,
-Krzysztof
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
