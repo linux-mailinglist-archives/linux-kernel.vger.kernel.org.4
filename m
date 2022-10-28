@@ -2,63 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EDF3610CEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4548610CF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 11:19:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbiJ1JTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 05:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
+        id S230022AbiJ1JTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 05:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiJ1JS7 (ORCPT
+        with ESMTP id S229880AbiJ1JTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 05:18:59 -0400
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9411C69EA;
-        Fri, 28 Oct 2022 02:18:57 -0700 (PDT)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 28 Oct 2022 05:19:46 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9581181A;
+        Fri, 28 Oct 2022 02:19:42 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4MzH6P5DY0z9sWR;
-        Fri, 28 Oct 2022 11:18:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1666948733;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Eis4BHp6rV4DuI32+/hJJDIeNrqEW30VXCIBbxfDosQ=;
-        b=Moq/6jp5+T8DQK1h1wG+o+TgTWVFLL6rUV9i4B1j0+NphVi6q7r2pZ98SyL0/u1TVEo+xI
-        JY14bk+wBgpdWXKVfsZYz8gJOtkMcxYKbZ1QpqZregow6xOtU9Yl46LEjaRmJyZ1GePtPM
-        PQD22sQjze2E6vGFA7EkvWmkxNAEibyETX4BHb6qz9r1+gO9C8wY2pkromSfAbVrF7xOBc
-        MfJ7o2AcoYAJtcK9v3E4Bfp8qlDZ2uU0dlZsq/LYxbl4C7E09mXuvWjGvzpLU34XLGAxzo
-        iUYT7fl/mS17p3vbbveX88mUQj80WmSPRTaqpMPt8TX75BMdYEwiItkJCekIYA==
-Message-ID: <54ee5dcb-d573-ade6-9132-8b165fbc875c@mailbox.org>
-Date:   Fri, 28 Oct 2022 11:18:51 +0200
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 89A146602910;
+        Fri, 28 Oct 2022 10:19:40 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666948781;
+        bh=dtnceuSfrqjxHu5xEJ8dEOnPPlrplVmUrR2fGovJYEo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=PXLGKW06GbzwNTmLvx8BTyJ/6Udcf5qfEzvHON5D6C4MsN3whz2XFTk2BzgSaWeyK
+         gLjuLY1t8MGmy3kZyfDag54c3yHZIph3oExfoCSgdPDZ6OJjgeEaLmbbJI1MMDAZG2
+         x3FssjI19/HaX6S7ssDacd12fDHGLwCA2b2m92/nLkjnoHqa/aLc4sPVCWXZgdHjjj
+         EKxczp8TzKCYm8ajz0XIbZLSJ86H2nx6VtLI2QZQvZku26/k5jG1/wHPCvXYbqVuiK
+         v+x8IehWJ3K1P+pM3HVmoHo4jcLws/HlBI9vFap7Rr3JQtoIoZ19+3dcclaWIG/Hv6
+         qSVPsdU4zjYnA==
+Message-ID: <64daf96b-b2b5-6f02-91aa-58d19083ee01@collabora.com>
+Date:   Fri, 28 Oct 2022 11:19:37 +0200
 MIME-Version: 1.0
-Subject: Re: [PATCH] drm/simpledrm: Only advertise formats that are supported
-Content-Language: en-CA
-To:     Hector Martin <marcan@marcan.st>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Cc:     stable@vger.kernel.org,
-        Pekka Paalanen <pekka.paalanen@collabora.com>,
-        asahi@lists.linux.dev, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20221027101327.16678-1-marcan@marcan.st>
- <cfe65da9-497d-b825-7332-874b6e87c087@marcan.st>
-From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>
-In-Reply-To: <cfe65da9-497d-b825-7332-874b6e87c087@marcan.st>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: 55bpuhqga5u63eixficdps4prshzwmo6
-X-MBO-RS-ID: 0b09ffe32abd9141eff
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [RFC v2 7/7] arm64: dts: mt7986: add Bananapi R3
+Content-Language: en-US
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20221026093650.110290-1-linux@fw-web.de>
+ <20221026093650.110290-8-linux@fw-web.de>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221026093650.110290-8-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,32 +62,326 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-27 12:53, Hector Martin wrote:
+Il 26/10/22 11:36, Frank Wunderlich ha scritto:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> Q: Why not just add a conversion from XRGB2101010 to XRGB8888?
-> A: Because that would only fix KDE, and would make it slower vs. not
-> advertising XRGB2101010 at all (double conversions, plus kernel
-> conversion can be slower). Plus, it doesn't make any sense as it only
-> fills in one entry in the conversion matrix. If we wanted to actually
-> fill out the conversion matrix, and thus support everything simpledrm
-> has advertised to day correctly, we would need helpers for:
+> Add support for Bananapi R3 SBC.
 > 
-> rgb565->rgb888
-> rgb888->rgb565
-> rgb565->xrgb2101010
-> rgb888->xrgb2101010
-> xrgb2101010->rgb565
-> xrgb2101010->rgb888
-> xrgb2101010->xrgb8888
+> - SD/eMMC support (switching first 4 bits of data-bus with sw6/D)
+> - all rj45 ports and both SFP working (eth1/lan4)
+> - all USB-Ports + SIM-Slot tested
+> - i2c and all uarts tested
+> - wifi tested
 > 
-> That seems like overkill and unlikely to actually help anyone, it'd just
-> give userspace more options to shoot itself in the foot with a
-> sub-optimal format choice. And it's a pile of code.
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+> SPI-NAND/NOR switched (CS by sw5/C) not yet included
+>    this is done with DT-Overlays in my tree, but i have no idea yet,
+>    how to upstream
+> 
+> break some lines in wifi-eeprom-data because of checkpatch warnings.
+> originally there were 8 x int32 per line
+> 
+> changes:
+> 
+> v2:
+> - remove pcie to be added later (discussion about clocks)
+> - some fixes based on suggestions on ML
+>    - add key suffix like it's done in mt7622-bpi-r64 devicetree
+>    - add dash in sfp node names
+>    - use reg as unit for switch-node
+>    - drop "-3-4" suffix from i2c-pins node name
+>    - fix order in Makefile
+> ---
+>   arch/arm64/boot/dts/mediatek/Makefile         |   2 +
+>   .../mediatek/mt7986a-bananapi-bpi-r3-emmc.dts |  34 +
+>   .../mediatek/mt7986a-bananapi-bpi-r3-sd.dts   |  29 +
+>   .../dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi | 593 ++++++++++++++++++
+>   4 files changed, 658 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts
+>   create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts
+>   create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
+> index 0ec90cb3ef28..e8902f2cc58f 100644
+> --- a/arch/arm64/boot/dts/mediatek/Makefile
+> +++ b/arch/arm64/boot/dts/mediatek/Makefile
+> @@ -7,6 +7,8 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-evb.dtb
+>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-x20-dev.dtb
+>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
+>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-bananapi-bpi-r64.dtb
+> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-emmc.dtb
+> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-sd.dtb
+>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-rfb.dtb
+>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986b-rfb.dtb
+>   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8167-pumpkin.dtb
+> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts
+> new file mode 100644
+> index 000000000000..859b4180ca11
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts
+> @@ -0,0 +1,34 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * Copyright (C) 2021 MediaTek Inc.
+> + * Author: Sam.Shih <sam.shih@mediatek.com>
+> + */
+> +
+> +/dts-v1/;
+> +#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +
+> +#include "mt7986a-bananapi-bpi-r3.dtsi"
+> +
+> +/ {
+> +	model = "Bananapi BPI-R3 (emmc)";
+> +};
+> +
+> +&mmc0 {
+> +	pinctrl-names = "default", "state_uhs";
+> +	pinctrl-0 = <&mmc0_pins_default>;
+> +	pinctrl-1 = <&mmc0_pins_uhs>;
 
-In addition to everything you mentioned, converting from XRGB2101010 to XRGB8888 loses the additional information, defeating the only point of using XRGB2101010 instead of XRGB8888 in the first place.
+pinctrl properties and power supply properties can go to the shared
+mt7986a-bananapi-bpi-r3.dtsi file.
+
+Also, I have a question here... so your hardware can take either eMMC
+or MicroSD... and... is there really no way to build in both devicetrees
+and having the bootloader to select the right one based on hardware version
+or on machine compatible?
+
+I can see, on the wiki, that both bootloader and ATF can be customized (so,
+can be compiled and flashed just fine), so I would say that even if the
+"original" U-Boot doesn't distinguish devicetrees, you can definitely easily
+implement that.
+
+If you have no idea how to recognize the boards, from a fast look at the
+board schematics, I can see that there's a bootstrap setting based on the
+state of GPIO0 and GPIO1... you can perhaps use that somehow?
+Otherwise, remember that, most of the times, there are other ways to determine
+the board version, like Board ID resistors...
+
+Also, still on the wiki, I can't see any no-eMMC version of this board: is
+the sd-only a pre-production version or..?
+
+> +	bus-width = <8>;
+> +	max-frequency = <200000000>;
+> +	cap-mmc-highspeed;
+> +	mmc-hs200-1_8v;
+> +	mmc-hs400-1_8v;
+> +	hs400-ds-delay = <0x14014>;
+> +	vmmc-supply = <&reg_3p3v>;
+> +	vqmmc-supply = <&reg_1p8v>;
+> +	non-removable;
+> +	no-sd;
+> +	no-sdio;
+> +	status = "okay";
+> +};
+> +
+> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts
+> new file mode 100644
+> index 000000000000..57200407ab86
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts
+> @@ -0,0 +1,29 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * Copyright (C) 2021 MediaTek Inc.
+> + * Author: Sam.Shih <sam.shih@mediatek.com>
+> + */
+> +
+> +/dts-v1/;
+> +#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +
+> +#include "mt7986a-bananapi-bpi-r3.dtsi"
+> +
+> +/ {
+> +	model = "Bananapi BPI-R3 (sdmmc)";
+> +};
+> +
+> +&mmc0 {
+> +	//sdcard
+
+C-style comments please
+
+> +	pinctrl-names = "default", "state_uhs";
+> +	pinctrl-0 = <&mmc0_pins_default>;
+> +	pinctrl-1 = <&mmc0_pins_uhs>;
+> +	bus-width = <4>;
+> +	max-frequency = <52000000>;
+> +	cap-sd-highspeed;
+> +	vmmc-supply = <&reg_3p3v>;
+> +	vqmmc-supply = <&reg_1p8v>;
+> +	status = "okay";
+> +};
+> +
+> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
+> new file mode 100644
+> index 000000000000..fc100c3a6415
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
+> @@ -0,0 +1,593 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * Copyright (C) 2021 MediaTek Inc.
+> + * Authors: Sam.Shih <sam.shih@mediatek.com>
+> + *          Frank Wunderlich <frank-w@public-files.de>
+> + *          Daniel Golle <daniel@makrotopia.org>
+> + */
+> +
+> +/dts-v1/;
+> +#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/leds/common.h>
+> +
+> +#include "mt7986a.dtsi"
+> +
+> +/ {
+> +	model = "Bananapi BPI-R3";
+> +	compatible = "bananapi,bpi-r3", "mediatek,mt7986a";
+> +
+> +	aliases {
+> +		serial0 = &uart0;
+> +		ethernet0 = &gmac0;
+> +		ethernet1 = &gmac1;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
+> +
+> +	gpio-keys {
+> +		compatible = "gpio-keys";
+> +
+> +		factory-key {
+
+I'd say that this is not "factory-key" but "reset-key"?
+
+> +			label = "reset";
+> +			linux,code = <KEY_RESTART>;
+> +			gpios = <&pio 9 GPIO_ACTIVE_LOW>;
+> +		};
+> +
+> +		wps-key {
+> +			label = "wps";
+> +			linux,code = <KEY_WPS_BUTTON>;
+> +			gpios = <&pio 10 GPIO_ACTIVE_LOW>;
+> +		};
+> +	};
+> +
+
+..snip..
+
+> +
+> +	memory@40000000 {
+> +		device_type = "memory";
+> +		reg = <0 0x40000000 0 0x40000000>;
+
+Doesn't your bootloader fill-in the memory size automatically?
+
+> +	};
+> +
+> +	reg_1p8v: regulator-1p8v {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "fixed-1.8V";
+
+This is "avdd18", isn't it?
+
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +		regulator-boot-on;
+> +		regulator-always-on;
+
+All these regulators have a vin-supply: please fill it in.
+Moreover, in the schematics, I can also see other LDOs: 0.9VD (input +12VD),
+AVDD12 (input 1.8VD), DDRV_VPP (input 3.3VD)...
+
+Of course, this means that you have one more 1.8V regulator, called 1.8vd.
+
+> +	};
+> +
+> +	reg_3p3v: regulator-3p3v {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "fixed-3.3V";
+
+regulator-name = "3.3vd";
+
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-boot-on;
+> +		regulator-always-on;
+
+vin-supply = <&dcin>; (dcin: regulator-12vd { ... })
+
+> +	};
+> +
+> +	reg_5v: regulator-5v {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "fixed-5V";
+
+regulator-name  = "fixed-5p1";
+
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+
+Schematics say "+5V: 5.1V/3A", so this is not 5000000.
+
+> +		regulator-boot-on;
+> +		regulator-always-on;
 
 
--- 
-Earthling Michel Dänzer            |                  https://redhat.com
-Libre software enthusiast          |         Mesa and Xwayland developer
+vin-supply = <&dcin>;
 
+> +	};
+> +
+
+..snip..
+
+> +
+> +&pio {
+> +	i2c_pins: i2c-pins {
+> +		mux {
+> +			function = "i2c";
+> +			groups = "i2c";
+> +		};
+> +	};
+> +
+> +	mmc0_pins_default: mmc0-pins {
+> +		mux {
+> +			function = "emmc";
+> +			groups = "emmc_51";
+> +		};
+> +		conf-cmd-dat {
+> +			pins = "EMMC_DATA_0", "EMMC_DATA_1", "EMMC_DATA_2",
+> +			       "EMMC_DATA_3", "EMMC_DATA_4", "EMMC_DATA_5",
+> +			       "EMMC_DATA_6", "EMMC_DATA_7", "EMMC_CMD";
+> +			input-enable;
+> +			drive-strength = <4>;
+> +			mediatek,pull-up-adv = <1>;	/* pull-up 10K */
+
+Can we please stop using these custom pull-{up,down}-adv properties?
+Check what was done on pinctrl-mt8192.c (and dt schema) for more information
+and examples.
+
+> +		};
+> +		conf-clk {
+
+..snip..
+
+> +
+> +&wifi {
+> +	status = "okay";
+> +	pinctrl-names = "default", "dbdc";
+> +	pinctrl-0 = <&wf_2g_5g_pins>, <&wf_led_pins>;
+> +	pinctrl-1 = <&wf_dbdc_pins>, <&wf_led_pins>;
+> +
+> +	mediatek,eeprom-data = <0x86790900 0xc4326 0x60000000 0x00 0x00 0x00 0x00 0x00
+
+Ouch! This looks like firmware unrolled in a devicetree property - that can't
+be right.
+
+Please dump that in a binary file and load it as firmware from userspace.
+
+Regards,
+Angelo
