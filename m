@@ -2,71 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8FF611333
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8E5611334
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbiJ1NmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
+        id S231298AbiJ1NmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 09:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231316AbiJ1Nlp (ORCPT
+        with ESMTP id S231176AbiJ1Nl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:41:45 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AACC159D7D
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:40:49 -0700 (PDT)
-X-QQ-mid: bizesmtp62t1666964444tg65c2f4
-Received: from localhost.localdomain ( [182.148.13.81])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 28 Oct 2022 21:40:42 +0800 (CST)
-X-QQ-SSF: 01000000000000F0J000000A0000000
-X-QQ-FEAT: +e7paLVVZUnbgx/ACZMyiBePvRE/WiYvFsnGVOPH7K6Hz+evUztgSSUOpqx49
-        +5dTHojD52dA6cQY8Y16agXXyhEO9UB68MBB1X1tmpocImzp9r/PXlVbnRiTRWKL34/TVzW
-        od9I09GkYYA4PgG/moVZDEKSikIejP0+t4EiECo1TRt5SMIT4g4uIzJwAWwIE8bno7X2mmb
-        NaA7Y0tg9PT1YXRPFExIdNhQZ3b2ivA7pzoY0NXw7X6fGYVaCQ7dvMo/IncbNvdxSYQWjX0
-        Pp04OqLYwxJrpYCQheoXu/S5CmjpvCPkuUV7D5yuD3H08J8ACuMOP/cOxfqvpIQh7l6Xy7Z
-        Lbjl/XT4Ed4Mb6rbEQY/18ens+/2IcUQV0JBnoJ1vswcBaI7RXbIqnlLIcGAcThIRaSzujk
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] mtd: inftlcore: fix repeated words in comments
-Date:   Fri, 28 Oct 2022 21:40:36 +0800
-Message-Id: <20221028134036.63000-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 28 Oct 2022 09:41:59 -0400
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A558E1D79B2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 06:41:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666964465; bh=dn3QC759JYSbdACAbjB+1SsJHL5LPhszMOHvnTxlp2w=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=BuiTchFxwmMu50w2A1Gk7O5uorgN0Egt4VIWDmHCUxOezqWSX1TL6MV2fySdDIRR/
+         cfS8TdPTYmdcPJzIw4vXy1jimJZu16I3YEbDOXGgH/4CKG8q8Pqm1eootTMe2XdZI3
+         yuG2kQgtmBQhGEQfLzsg6o0ydaHzy1Io+eD4j0D0=
+Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
+        via [213.182.55.206]
+        Fri, 28 Oct 2022 15:41:05 +0200 (CEST)
+X-EA-Auth: zjD3JWTuqW65h7OUlWQt+bac8mNfQPBdWtxbP4lNIW7AbDNyWoG0bkvLonVx/zdZDq6GcPCSy3C56muCCKIQ3DX2aRhZjmRq
+Date:   Fri, 28 Oct 2022 19:11:00 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: wlan-ng: Use flexible-array for one /
+ zero-length arrays
+Message-ID: <Y1vb7OoJqVK3C5bc@ubunlion>
+References: <Y1vNNSSWK1EkcohT@ubunlion>
+ <Y1vaR0olLH9+bJbk@kadam>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1vaR0olLH9+bJbk@kadam>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'it'.
+On Fri, Oct 28, 2022 at 04:33:59PM +0300, Dan Carpenter wrote:
+> On Fri, Oct 28, 2022 at 06:08:13PM +0530, Deepak R Varma wrote:
+> > Flexible-array member should be used instead of one or zero member to
+> > meet the need for having a dynamically sized trailing elements in a
+> > structure. Refer to links [1] and [2] for detailed guidance on this
+> > suggestion.
+> >
+> > [1] https://en.wikipedia.org/wiki/Flexible_array_member
+> > [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
+> >
+> > Issue identified using coccicheck.
+> >
+> > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > ---
+> >  drivers/staging/wlan-ng/p80211mgmt.h  | 8 ++++----
+> >  drivers/staging/wlan-ng/p80211types.h | 2 +-
+> >  2 files changed, 5 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/staging/wlan-ng/p80211mgmt.h b/drivers/staging/wlan-ng/p80211mgmt.h
+> > index 1ef30d3f3159..d6fe52de2c8f 100644
+> > --- a/drivers/staging/wlan-ng/p80211mgmt.h
+> > +++ b/drivers/staging/wlan-ng/p80211mgmt.h
+> > @@ -229,14 +229,14 @@ struct wlan_ie {
+> >  struct wlan_ie_ssid {
+> >  	u8 eid;
+> >  	u8 len;
+> > -	u8 ssid[1];		/* may be zero, ptrs may overlap */
+> > +	u8 ssid[];		/* may be zero, ptrs may overlap */
+>
+> How have you ensured that changing this from a 1 byte array to a zero
+> byte array does not break anything?  It's not uncommon for a people
+> to do math like "size - 1 + length".  The "- 1" would be to take the
+> 1 element into consideration.
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/mtd/inftlcore.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Dan,
+I did a code review to understand how this structure member is used and did not
+find any computations you mentioned. I would certainly like to receive your feedback
+as well.
 
-diff --git a/drivers/mtd/inftlcore.c b/drivers/mtd/inftlcore.c
-index 58ca1c21ebe6..9739387cff8c 100644
---- a/drivers/mtd/inftlcore.c
-+++ b/drivers/mtd/inftlcore.c
-@@ -356,7 +356,7 @@ static u16 INFTL_foldchain(struct INFTLrecord *inftl, unsigned thisVUC, unsigned
- 	 * Newest unit in chain now contains data from _all_ older units.
- 	 * So go through and erase each unit in chain, oldest first. (This
- 	 * is important, by doing oldest first if we crash/reboot then it
--	 * it is relatively simple to clean up the mess).
-+	 * is relatively simple to clean up the mess).
- 	 */
- 	pr_debug("INFTL: want to erase virtual chain %d\n", thisVUC);
- 
--- 
-2.36.1
+>
+> I was trying to read through this code to check your work, but then
+> you sent a second patch which also does not explain how you are auditing
+> your changes.  Can you go a bit slower?
+
+My apologies for rushing patches in. I will hold on for feedback on these
+patches before turning in any new patch involving similar change. I hope it is
+okay to send a different type of patch though. Please correct if I am wrong.
+
+Thank you for looking into the patches. Appreciate your time and feedback.
+
+./drv
+
+
+>
+> regards,
+> dan carpenter
+>
+
 
