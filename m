@@ -2,105 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930E261148D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C4361148F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 16:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbiJ1O2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 10:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
+        id S231171AbiJ1O2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 10:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbiJ1O1X (ORCPT
+        with ESMTP id S229455AbiJ1O1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 10:27:23 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2508286B
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 07:26:50 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7ce329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ce:329c:23ff:fea6:a903])
+        Fri, 28 Oct 2022 10:27:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1225132D95;
+        Fri, 28 Oct 2022 07:27:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 423DE1EC0779;
-        Fri, 28 Oct 2022 16:26:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1666967208;
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0FD2B82971;
+        Fri, 28 Oct 2022 14:27:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B904BC433D6;
+        Fri, 28 Oct 2022 14:27:27 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="PFepB4YP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666967245;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EUzepTEbA+PjW41liMbq12+QwoMLZTumivAWH3EYXPA=;
-        b=OTIjjUkTU+7DslvPHPJVlMGazN5sWoqfKdrHoNrgcBCLSxHeModOVgvfhpbAubQ+CLoG0x
-        uTUQxU6GhEj0viKoKlZU9bejAcl4Ss3sYOZt6hRBtN4+IPqPuT4od0ut+lhapaIFDPsWhF
-        civAaisHtMdTJS0rT+9WKGxvd7WTduc=
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ashok Raj <ashok.raj@intel.com>
-Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 5/5] x86/microcode: Drop struct ucode_cpu_info.valid
-Date:   Fri, 28 Oct 2022 16:26:38 +0200
-Message-Id: <20221028142638.28498-6-bp@alien8.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221028142638.28498-1-bp@alien8.de>
-References: <20221028142638.28498-1-bp@alien8.de>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gD+ZFnxbIhSu4CHS6E4Tlv4ldzK84O8SYLBYJTRnbkA=;
+        b=PFepB4YPb+usJ8MA6K3aAyzI+Hyn824xAIQIehgc8or1tF8P4KqYQKHWiUzzdW4CXE0wFV
+        rLaYP2XnSuEx7En0n5Ii0TFjHRMhRGcoUji8nXMF1/qOS/U1mt+1QUVI0qrwYXk1A1LJh3
+        dhvskCyJRA5TOArw3j1fkgSH6tVxxmM=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 62688d8d (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 28 Oct 2022 14:27:24 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: [PATCH] sparc: sbus: treat CPU index as integer
+Date:   Fri, 28 Oct 2022 16:27:15 +0200
+Message-Id: <20221028142715.2021166-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+Using a `char` to fit a CPU index is too small, and assigning -1 to it
+isn't correct either, since `char` is sometimes signed and sometimes
+not. In this case, it's been fine since this driver only works on sparc,
+but that will soon be changing when chars become unsigned everywhere. So
+instead, use a normal `int` type, which matches the `int cpu` function
+argument that this is being compared against.
 
-It is not needed anymore.
-
-Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: David S. Miller <davem@davemloft.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- arch/x86/include/asm/microcode.h     | 1 -
- arch/x86/kernel/cpu/intel.c          | 1 -
- arch/x86/kernel/cpu/microcode/core.c | 4 ++--
- 3 files changed, 2 insertions(+), 4 deletions(-)
+DaveM - this is part of the -funsigned-char work I've been accumulating
+in my unsigned-char branch. If you want to take this as a fix for 6.1,
+go ahead. Otherwise, Linus asked me to keep the 6.2 unsigned-char
+patches together in my branch, so I'll take this, pending your Ack.
+-Jason
 
-diff --git a/arch/x86/include/asm/microcode.h b/arch/x86/include/asm/microcode.h
-index d4c36fbd1d39..d5a58bde091c 100644
---- a/arch/x86/include/asm/microcode.h
-+++ b/arch/x86/include/asm/microcode.h
-@@ -49,7 +49,6 @@ struct microcode_ops {
+ drivers/sbus/char/envctrl.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/sbus/char/envctrl.c b/drivers/sbus/char/envctrl.c
+index 843e830b5f87..ea914a7eaa7f 100644
+--- a/drivers/sbus/char/envctrl.c
++++ b/drivers/sbus/char/envctrl.c
+@@ -363,8 +363,8 @@ static int envctrl_read_cpu_info(int cpu, struct i2c_child_t *pchild,
+ 				 char mon_type, unsigned char *bufdata)
+ {
+ 	unsigned char data;
+-	int i;
+-	char *tbl, j = -1;
++	int i, j = -1;
++	char *tbl;
  
- struct ucode_cpu_info {
- 	struct cpu_signature	cpu_sig;
--	int			valid;
- 	void			*mc;
- };
- extern struct ucode_cpu_info ucode_cpu_info[];
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index 2d7ea5480ec3..beb8ca596784 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -210,7 +210,6 @@ int intel_cpu_collect_info(struct ucode_cpu_info *uci)
- 	csig.rev = intel_get_microcode_revision();
- 
- 	uci->cpu_sig = csig;
--	uci->valid = 1;
- 
- 	return 0;
- }
-diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index ffb249c29f30..712aafff96e0 100644
---- a/arch/x86/kernel/cpu/microcode/core.c
-+++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -554,9 +554,9 @@ void microcode_bsp_resume(void)
- 	int cpu = smp_processor_id();
- 	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
- 
--	if (uci->valid && uci->mc)
-+	if (uci->mc)
- 		microcode_ops->apply_microcode(cpu);
--	else if (!uci->mc)
-+	else
- 		reload_early_microcode();
- }
- 
+ 	/* Find the right monitor type and channel. */
+ 	for (i = 0; i < PCF8584_MAX_CHANNELS; i++) {
 -- 
-2.35.1
+2.38.1
 
