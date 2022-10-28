@@ -2,151 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B2A4611A93
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B45611A97
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 21:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiJ1TB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 15:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34362 "EHLO
+        id S229882AbiJ1TBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 15:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJ1TBW (ORCPT
+        with ESMTP id S229763AbiJ1TBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 15:01:22 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FE57C1CB
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 12:01:19 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id n18so4658330qvt.11
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 12:01:19 -0700 (PDT)
+        Fri, 28 Oct 2022 15:01:47 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2ED1DC09C
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 12:01:39 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id f22so4067884qto.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 12:01:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YIwwzQ52IEhNmyzDAzU0ih5As/W0jQ4hNeXK+64Ku7o=;
-        b=dAaQfzFs+SdCLAPkoyqFQIxIHJaSfBF9EyPjoJYiYLJIYncHJPDC1AWNbmW4uKEyDH
-         9NxhKwER2hWbwLcAf0VUSfJp2GSfcFGTXkdOf+Ad5p5A2iJpb+zT0GT02cDaxmuZb7YM
-         3hKQMYYTEs6dzVW4pUbdS5zLhKBT2QivIHTcQ=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TrrrPiEsaJjz2I4gZR9uDg73/3QRK40o8WZc68H+SKU=;
+        b=hs34YtzgAoaQFOxylLaY3WS1CFJ99MNS6mPLJ8PcAv9PY4GsNKzUUpTPGt/YlynNLE
+         d/2rY/wciydJ7WoHuyTIYHRDs9n+2coQ5aUaZdvNDIQIxxb3oOkkVsDuSON9JnvQhxxG
+         Pg3XGwO/Ap3XOTZHlYHmaODBoHyi0DRusGXUaDB9e+IF0v/jCV7RLhcl8uLSW2uMJ7jP
+         +HOS94qG+7Tn2KV8pz6wJ3GjWPxvGVll1Dfz55XLObU8p/HgyVrAzyVWyOJzzk64qW9x
+         aljAjZJ3BqEo/6VCasVZ19UsuxCtcNdD0prd+IiCVp2Np7gMQl71jVqQy5D6ps+lSxSz
+         SIMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YIwwzQ52IEhNmyzDAzU0ih5As/W0jQ4hNeXK+64Ku7o=;
-        b=KugSwvJEBOTlt1XEgYnL2Vlsx91cSTp7lx0sXm2CKaKcqp8gHAStZKBswZoKGI9u9K
-         hyVvMppbDUa/iWJuWiUUG/bVs+ExqmgBRRlBvH4Az4idCwFmihLOKOaZb6BudqOua39x
-         TRt7a1k6P2J41Xj0tJCCWKxcTT+fAE51eRpImeqZ1CUriNqrNLaaBpHu3HVPjoj2HCAN
-         ZL9Kn8U5Jx9Xa0zmSIjNaKThh/M/hLNclmmtOXMQO1erADAEY/QusbGMo7hECLPDEt3t
-         aCSn+22DtwW8xClfYLM1Z7bpDTF3iEiJu9GwjpaAi6mc6RcMgiVwsx69RK3qQOpg/Z0G
-         z6Lg==
-X-Gm-Message-State: ACrzQf0dSbyx8ylPx39aKMg+b8hqlagaw88MsxJxt8Jg08RIdXR5SWBw
-        cPlYbhtWKO9J4QXw0lRSRybUcnfltHXSFA==
-X-Google-Smtp-Source: AMsMyM5eKNjeZpiUkqGMZkTi/BhjLkwcUjGTXvU5xDsc/UaLLpSPKS3z3eIvgLP7amj9MX0k7dge6g==
-X-Received: by 2002:ad4:5bee:0:b0:4bb:a365:2da8 with SMTP id k14-20020ad45bee000000b004bba3652da8mr817205qvc.81.1666983677849;
-        Fri, 28 Oct 2022 12:01:17 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id h16-20020a05620a401000b006aedb35d8a1sm3554644qko.74.2022.10.28.12.01.16
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TrrrPiEsaJjz2I4gZR9uDg73/3QRK40o8WZc68H+SKU=;
+        b=XC2z3hjBjpF9jD/CmqohKstQ5LSbgQIkLrwfk9NUb9Ohrk19ZZ9mOm0B1eE1ohoNFK
+         xB/q5tFNEmsxn5WWKLG8stH2m72epVf/WdlWqvzTgbK4jQ7QnQ63xL+mDxNuRlZsyEWd
+         PNyOwMLCGloDRf0aLsBHgznIufY+v01QJLVBUnqrkUlAFzmz29qAP7OQPUn+PXNFn1TF
+         JhZ8yUFUW9LO67bpVnp3ORf3bdpf74UNeeytpmEdivHF3BdcyXFrtm0UgvyEi0qwZNsW
+         auXq+GSRnxNXRji7a0mtnmRXRDgGzSOOldnHrR/0by80p1AwFO++WMrw0MM1iGFFaOJH
+         Q/nQ==
+X-Gm-Message-State: ACrzQf3dFDFYaCt8JyXzmxoogDzH0BPnZlNy3sgULHVn0BevIRTTM4NM
+        e/pYSmXcoEzJv6YERpF8H0hggg==
+X-Google-Smtp-Source: AMsMyM5tI6t61tGPJX4Qmat7c8bhg7M4dZUK39Hr9ggtRlcSvI36L6NCrf8GcentL/vnPly4sejj6Q==
+X-Received: by 2002:ac8:7fd5:0:b0:3a4:ec00:ad14 with SMTP id b21-20020ac87fd5000000b003a4ec00ad14mr856426qtk.56.1666983696901;
+        Fri, 28 Oct 2022 12:01:36 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id f18-20020a05620a409200b006cdd0939ffbsm3523651qko.86.2022.10.28.12.01.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 12:01:17 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-369426664f9so55215017b3.12
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 12:01:16 -0700 (PDT)
-X-Received: by 2002:a81:1902:0:b0:36b:2578:f6e2 with SMTP id
- 2-20020a811902000000b0036b2578f6e2mr887557ywz.352.1666983676543; Fri, 28 Oct
- 2022 12:01:16 -0700 (PDT)
+        Fri, 28 Oct 2022 12:01:36 -0700 (PDT)
+Message-ID: <0a5446a4-ec28-6a91-f7b3-35a920546474@linaro.org>
+Date:   Fri, 28 Oct 2022 15:01:33 -0400
 MIME-Version: 1.0
-References: <Y1wHlSE0S5QZ+QCI@shell.armlinux.org.uk> <E1ooSWP-000FDy-5t@rmk-PC.armlinux.org.uk>
- <CAHk-=wi63Sw3vNJ86gzg1Tdr=_xGwGyj+mH-eT0UgaAfGAHX+A@mail.gmail.com> <Y1wVTkIZjoMVfxOK@shell.armlinux.org.uk>
-In-Reply-To: <Y1wVTkIZjoMVfxOK@shell.armlinux.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 28 Oct 2022 12:01:00 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh75aOWvaEhYsAcCJSRzhy8MO_SdvDzB6zmvVs+FeAr6w@mail.gmail.com>
-Message-ID: <CAHk-=wh75aOWvaEhYsAcCJSRzhy8MO_SdvDzB6zmvVs+FeAr6w@mail.gmail.com>
-Subject: Re: [PATCH 1/5] ARM: findbit: document ARMv5 bit offset calculation
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH net-next v6 5/5] ARM: dts: qcom: ipq4019: Add description
+ for the IPQESS Ethernet controller
+Content-Language: en-US
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+References: <20221028154924.789116-1-maxime.chevallier@bootlin.com>
+ <20221028154924.789116-6-maxime.chevallier@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221028154924.789116-6-maxime.chevallier@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 10:45 AM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> For the _find_first_bit, there isn't much difference in the number
-> of instructions or really what is going on, only the organisation
-> and flow of the code is more inline - but that shouldn't make much
-> of a difference. Yet, there is a definite repeatable measurable
-> difference between the two:
+On 28/10/2022 11:49, Maxime Chevallier wrote:
+> The Qualcomm IPQ4019 includes an internal 5 ports switch, which is
+> connected to the CPU through the internal IPQESS Ethernet controller.
+> 
+> Add support for this internal interface, which is internally connected to a
+> modified version of the QCA8K Ethernet switch.
+> 
+> This Ethernet controller only support a specific internal interface mode
+> for connection to the switch.
+> 
+> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Hmm. Interestingly, your _find_first_zero_bit_le() (which
-find_next_bit ends up using except for the first byte) ends up doing
-an optimization that is technically not valid.
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-In particular, the *generic* code does
+You skipped the actual maintainers of the file.
 
-                        sz = min(idx * BITS_PER_LONG + __ffs(MUNGE(val)), sz);
+Best regards,
+Krzysztof
 
-for the final result.
-
-In contrast, the arm code doesn't do the "min()" at all, and if there
-are bits after the bitmap (in a partial byte), it will just return
-those bits.
-
-So the arm code ends up avoiding some operations. Which works most of
-the time, because
-
- (a) usually bitmaps are byte-aligned anyway
-
- (b) most users do "find_first_bit(.., size) >= size" as the "found no
-bits" test
-
-but it actually looks to me like your handcoded arm code is simply
-wrong. At least going by our docbook comments for find_first_bit:
-
- * Returns the bit number of the first set bit.
- * If no bits are set, returns @size.
-
-And look here: bitmap_empty() does
-
-        return find_first_bit(src, nbits) == nbits;
-
-and now imagine that 'nbits' is not a small constant value (which we
-handle separately) and is also not byte aligned.
-
-Maybe I'm mis-reading your assembly (I "know" arm assembly, but I
-can't read it fluently like x86). But I don't think so.
-
-So I think your code is actually buggy, but probably the bug is quite
-hard to trigger in practice due to (a)/(b) above.
-
-We do have bitmaps that aren't byte-aligned. The cpumask ones are the
-most common ones. But in the cpumask_first() implementation (which is
-just a wrapper for find_first_bit()), our documentation actually says
-
- * Returns >= nr_cpu_ids if no cpus set.
-
-and I think that may have been what we historically did elsewhere too,
-and may be the source of the arm situation.
-
-Anyway, this can be fixed by either
-
- (a) fixing the arm code
-
- (b) changing the docs and making that ">= size" be the right thing to do
-
-but I do think this is a very strong example of why having
-architecture-specific code like this is very very dangerous. Because
-as it stands now, that arm code really looks like it's actively buggy
-to me.
-
-         Linus
