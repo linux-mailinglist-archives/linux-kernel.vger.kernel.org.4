@@ -2,176 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FF9610B9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0247610B43
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 09:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbiJ1Hvo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 28 Oct 2022 03:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
+        id S230030AbiJ1H1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 03:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbiJ1Hvh (ORCPT
+        with ESMTP id S229602AbiJ1H1S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 03:51:37 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7711BF856
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 00:51:33 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-32-5DrEyXUYNVeSOoVba2Mbxw-1; Fri, 28 Oct 2022 08:51:30 +0100
-X-MC-Unique: 5DrEyXUYNVeSOoVba2Mbxw-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 28 Oct
- 2022 08:51:28 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.042; Fri, 28 Oct 2022 08:51:28 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Jozsef Kadlecsik' <kadlec@netfilter.org>,
-        Daniel Xu <dxu@dxuuu.xyz>
-CC:     Pablo Neira Ayuso <pablo@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
-        "coreteam@netfilter.org" <coreteam@netfilter.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ppenkov@aviatrix.com" <ppenkov@aviatrix.com>
-Subject: RE: ip_set_hash_netiface
-Thread-Topic: ip_set_hash_netiface
-Thread-Index: AQHY6Td/ZX+DEWvLgEGa9nnokIvRm64jbupg
-Date:   Fri, 28 Oct 2022 07:51:28 +0000
-Message-ID: <4a0da0bfe87b4e10a83b97508d3c853e@AcuMS.aculab.com>
-References: <9a91603a-7b8f-4c6d-9012-497335e4373b@app.fastmail.com>
- <7fcf3bbb-95d2-a286-e3a-4d4dd87f713a@netfilter.org>
-In-Reply-To: <7fcf3bbb-95d2-a286-e3a-4d4dd87f713a@netfilter.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 28 Oct 2022 03:27:18 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9DD1B1555
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 00:27:17 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MzDdK1CM2zHvRC;
+        Fri, 28 Oct 2022 15:27:01 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 28 Oct 2022 15:27:15 +0800
+From:   Yuanzheng Song <songyuanzheng@huawei.com>
+To:     <sj@kernel.org>, <akpm@linux-foundation.org>
+CC:     <damon@lists.linux.dev>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH STABLE 5.15] mm/memory: add non-anonymous page check in the copy_present_page()
+Date:   Fri, 28 Oct 2022 07:52:44 +0000
+Message-ID: <20221028075244.3112566-1-songyuanzheng@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jozsef Kadlecsik
-> Sent: 26 October 2022 13:26
-> 
-> On Tue, 25 Oct 2022, Daniel Xu wrote:
-> 
-> > I'm following up with our hallway chat yesterday about how ipset
-> > hash:net,iface can easily OOM.
-> >
-> > Here's a quick reproducer (stolen from
-> > https://bugzilla.kernel.org/show_bug.cgi?id=199107):
-> >
-> >         $ ipset create ACL.IN.ALL_PERMIT hash:net,iface hashsize 1048576 timeout 0
-> >         $ for i in $(seq 0 100); do /sbin/ipset add ACL.IN.ALL_PERMIT 0.0.0.0/0,kaf_$i timeout 0 -
-> exist; done
-> >
-> > This used to cause a NULL ptr deref panic before
-> > https://github.com/torvalds/linux/commit/2b33d6ffa9e38f344418976b06 .
-> >
-> > Now it'll either allocate a huge amount of memory or fail a
-> > vmalloc():
-> >
-> >         [Tue Oct 25 00:13:08 2022] ipset: vmalloc error: size 1073741848, exceeds total pages
-> >         <...>
-> >         [Tue Oct 25 00:13:08 2022] Call Trace:
-> >         [Tue Oct 25 00:13:08 2022]  <TASK>
-> >         [Tue Oct 25 00:13:08 2022]  dump_stack_lvl+0x48/0x60
-> >         [Tue Oct 25 00:13:08 2022]  warn_alloc+0x155/0x180
-> >         [Tue Oct 25 00:13:08 2022]  __vmalloc_node_range+0x72a/0x760
-> >         [Tue Oct 25 00:13:08 2022]  ? hash_netiface4_add+0x7c0/0xb20
-> >         [Tue Oct 25 00:13:08 2022]  ? __kmalloc_large_node+0x4a/0x90
-> >         [Tue Oct 25 00:13:08 2022]  kvmalloc_node+0xa6/0xd0
-> >         [Tue Oct 25 00:13:08 2022]  ? hash_netiface4_resize+0x99/0x710
-> >         <...>
-> >
-> > Note that this behavior is somewhat documented
-> > (https://ipset.netfilter.org/ipset.man.html):
-> >
-> > >  The internal restriction of the hash:net,iface set type is that the same
-> > >  network prefix cannot be stored with more than 64 different interfaces
-> > >  in a single set.
-> >
-> > I'm not sure how hard it would be to enforce a limit, but I think it would
-> > be a bit better to error than allocate many GBs of memory.
-> 
-> That's a bug, actually the limit is not enforced in spite of the
-> documentation. The next patch fixes it and I'm going to submit to Pablo:
-> 
-> diff --git a/net/netfilter/ipset/ip_set_hash_gen.h b/net/netfilter/ipset/ip_set_hash_gen.h
-> index 6e391308431d..3f8853ed32e9 100644
-> --- a/net/netfilter/ipset/ip_set_hash_gen.h
-> +++ b/net/netfilter/ipset/ip_set_hash_gen.h
-> @@ -61,10 +61,6 @@ tune_bucketsize(u8 curr, u32 multi)
->  	 */
->  	return n > curr && n <= AHASH_MAX_TUNED ? n : curr;
->  }
-> -#define TUNE_BUCKETSIZE(h, multi)	\
-> -	((h)->bucketsize = tune_bucketsize((h)->bucketsize, multi))
-> -#else
-> -#define TUNE_BUCKETSIZE(h, multi)
->  #endif
-> 
->  /* A hash bucket */
-> @@ -936,7 +932,11 @@ mtype_add(struct ip_set *set, void *value, const struct ip_set_ext *ext,
->  		goto set_full;
->  	/* Create a new slot */
->  	if (n->pos >= n->size) {
-> -		TUNE_BUCKETSIZE(h, multi);
-> +#ifdef IP_SET_HASH_WITH_MULTI
-> +		if (h->bucketsize >= AHASH_MAX_TUNED)
-> +			goto set_full;
-> +		h->bucketsize = tune_bucketsize(h->bucketsize, multi);
-> +#endif
+The vma->anon_vma of the child process may be NULL because
+the entire vma does not contain anonymous pages. In this
+case, a BUG will occur when the copy_present_page() passes
+a copy of a non-anonymous page of that vma to the
+page_add_new_anon_rmap() to set up new anonymous rmap.
 
-AFAICT this is the only call of tune_bucketsize().
-It is defined just above TUNE_BUCKETSIZE as:
-static u8
-tune_bucketsize(u8 curr, u32 multi)
-{
-	u32 n;
+------------[ cut here ]------------
+kernel BUG at mm/rmap.c:1052!
+Internal error: Oops - BUG: 0 [#1] SMP
+Modules linked in:
+CPU: 4 PID: 4652 Comm: test Not tainted 5.15.75 #1
+Hardware name: linux,dummy-virt (DT)
+pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __page_set_anon_rmap+0xc0/0xe8
+lr : __page_set_anon_rmap+0xc0/0xe8
+sp : ffff80000e773860
+x29: ffff80000e773860 x28: fffffc13cf006ec0 x27: ffff04f3ccd68000
+x26: ffff04f3c5c33248 x25: 0000000010100073 x24: ffff04f3c53c0a80
+x23: 0000000020000000 x22: 0000000000000001 x21: 0000000020000000
+x20: fffffc13cf006ec0 x19: 0000000000000000 x18: 0000000000000000
+x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+x11: 0000000000000000 x10: 0000000000000000 x9 : ffffdddc5581377c
+x8 : 0000000000000000 x7 : 0000000000000011 x6 : ffff2717a8433000
+x5 : ffff80000e773810 x4 : ffffdddc55400000 x3 : 0000000000000000
+x2 : ffffdddc56b20000 x1 : ffff04f3c9a48040 x0 : 0000000000000000
+Call trace:
+ __page_set_anon_rmap+0xc0/0xe8
+ page_add_new_anon_rmap+0x13c/0x200
+ copy_pte_range+0x6b8/0x1018
+ copy_page_range+0x3a8/0x5e0
+ dup_mmap+0x3a0/0x6e8
+ dup_mm+0x78/0x140
+ copy_process+0x1528/0x1b08
+ kernel_clone+0xac/0x610
+ __do_sys_clone+0x78/0xb0
+ __arm64_sys_clone+0x30/0x40
+ invoke_syscall+0x68/0x170
+ el0_svc_common.constprop.0+0x80/0x250
+ do_el0_svc+0x48/0xb8
+ el0_svc+0x48/0x1a8
+ el0t_64_sync_handler+0xb0/0xb8
+ el0t_64_sync+0x1a0/0x1a4
+Code: 97f899f4 f9400273 17ffffeb 97f899f1 (d4210000)
+---[ end trace dc65e5edd0f362fa ]---
+Kernel panic - not syncing: Oops - BUG: Fatal exception
+SMP: stopping secondary CPUs
+Kernel Offset: 0x5ddc4d400000 from 0xffff800008000000
+PHYS_OFFSET: 0xfffffb0c80000000
+CPU features: 0x44000cf1,00000806
+Memory Limit: none
+---[ end Kernel panic - not syncing: Oops - BUG: Fatal exception ]---
 
-	if (multi < curr)
-		return curr;
+This problem has been fixed by the commit <fb3d824d1a46>
+("mm/rmap: split page_dup_rmap() into page_dup_file_rmap()
+and page_try_dup_anon_rmap()"), but still exists in the
+linux-5.15.y branch.
 
-	n = curr + AHASH_INIT_SIZE;
-	/* Currently, at listing one hash bucket must fit into a message.
-	 * Therefore we have a hard limit here.
-	 */
-	return n > curr && n <= AHASH_MAX_TUNED ? n : curr;
-}
+This patch is not applicable to this version because
+of the large version differences. Therefore, fix it by
+adding non-anonymous page check in the copy_present_page().
 
-If I'm reading it correctly this is just:
-	return curr >= multi || curr >= 64 ? curr : curr + 2;
-(the 'n > curr' test is unconditionally true).
-The extra check is limiting it to 12 (AHASH_MAX_TUNED) not 64.
+Cc: stable@vger.kernel.org
+Fixes: 70e806e4e645 ("mm: Do early cow for pinned pages during fork() for ptes")
+Signed-off-by: Yuanzheng Song <songyuanzheng@huawei.com>
+---
+ mm/memory.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Quite why the change makes a significant difference to the validity
-of the kvalloc() is another matter.
-Changing a multiplier from 64 to 12 seems unlikely to be that
-significant - if it is you wouldn't want to be multiplying by 12.
-
-I've not looked what 'multi' is, but I'm sort of surprised it isn't
-used as the new bucketsize.
-
-Also it doesn't really look right to have lots of static functions
-in a .h file?
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+diff --git a/mm/memory.c b/mm/memory.c
+index a4d0f744a458..5f98778cfff2 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -903,6 +903,17 @@ copy_present_page(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma
+ 	if (likely(!page_needs_cow_for_dma(src_vma, page)))
+ 		return 1;
+ 
++	/*
++	 * The vma->anon_vma of the child process may be NULL
++	 * because the entire vma does not contain anonymous pages.
++	 * A BUG will occur when the copy_present_page() passes
++	 * a copy of a non-anonymous page of that vma to the
++	 * page_add_new_anon_rmap() to set up new anonymous rmap.
++	 * Return 1 if the page is not an anonymous page.
++	 */
++	if (!PageAnon(page))
++		return 1;
++
+ 	new_page = *prealloc;
+ 	if (!new_page)
+ 		return -EAGAIN;
+-- 
+2.25.1
 
