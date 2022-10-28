@@ -2,102 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4C8611249
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 15:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B574D6110E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 14:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbiJ1NGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 09:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
+        id S230456AbiJ1MKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 08:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbiJ1NGO (ORCPT
+        with ESMTP id S230443AbiJ1MKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 09:06:14 -0400
-X-Greylist: delayed 1379 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Oct 2022 06:05:44 PDT
-Received: from ma1-aaemail-dr-lapp02.apple.com (ma1-aaemail-dr-lapp02.apple.com [17.171.2.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431201C77C0;
-        Fri, 28 Oct 2022 06:05:43 -0700 (PDT)
-Received: from pps.filterd (ma1-aaemail-dr-lapp02.apple.com [127.0.0.1])
-        by ma1-aaemail-dr-lapp02.apple.com (8.16.0.42/8.16.0.42) with SMTP id 29S9u46C016057;
-        Fri, 28 Oct 2022 02:58:06 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=apple.com; h=from : content-type :
- content-transfer-encoding : mime-version : subject : message-id : date :
- cc : to; s=20180706; bh=Xjc094u+AENYAy780wiOIS7Vu4csTEusafewG04ZfLk=;
- b=rGfIzaEiP9tADaTvuOLfYE2pgsuMC5cb+qiwBMdkZgjTDgVgxbNy1g0fN3wkyMpgYUTl
- /heKsKdnMoq6dT9A0qmUtPOtVJ09yi7YIRYeANjAbZGN0qf9i1VY+/QeE5iz/v0ZM3Q0
- 6AmU3TrLKY7TBl+jHYBec1SCDnpcz2NxRrAxl9Uslo3SJkYJbjKepq7fJZVs/Ols4SgN
- pDHSCmF29wJUSkM5FqkmfOxmzM+GmZve/4fQBVQb0yCMrCaTAOklCeYKBYyQ6ICyZJal
- 1PASLN/1vvZET+9GQgA1m5dnQizczpM1kwYrCssOAefGXXyJ/3a6+wOaSuekDa4DDDEL Ww== 
-Received: from sg-mailsvcp-mta-lapp04.asia.apple.com (sg-mailsvcp-mta-lapp04.asia.apple.com [17.84.67.72])
-        by ma1-aaemail-dr-lapp02.apple.com with ESMTP id 3kfareubhp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Fri, 28 Oct 2022 02:58:06 -0700
-Received: from sg-mailsvcp-mmp-lapp03.asia.apple.com
- (sg-mailsvcp-mmp-lapp03.asia.apple.com [17.84.71.203])
- by sg-mailsvcp-mta-lapp04.asia.apple.com
- (Oracle Communications Messaging Server 8.1.0.19.20220711 64bit (built Jul 11
- 2022))
- with ESMTPS id <0RKG00WGEJOSD500@sg-mailsvcp-mta-lapp04.asia.apple.com>; Fri,
- 28 Oct 2022 17:58:04 +0800 (+08)
-Received: from process_milters-daemon.sg-mailsvcp-mmp-lapp03.asia.apple.com by
- sg-mailsvcp-mmp-lapp03.asia.apple.com
- (Oracle Communications Messaging Server 8.1.0.19.20220711 64bit (built Jul 11
- 2022)) id <0RKG00700J9FQ700@sg-mailsvcp-mmp-lapp03.asia.apple.com>; Fri,
- 28 Oct 2022 17:58:04 +0800 (+08)
-X-Va-A: 
-X-Va-T-CD: f0a22bb548ee5a27b547ffb857e18dd9
-X-Va-E-CD: c97f448c63d97b3cfb2d969c8ae164a2
-X-Va-R-CD: 93ae6d4824a01f2bf1a497fa17aabd03
-X-Va-CD: 0
-X-Va-ID: c6ad71e9-3350-45ad-a0c1-eb8893672283
-X-V-A:  
-X-V-T-CD: f0a22bb548ee5a27b547ffb857e18dd9
-X-V-E-CD: c97f448c63d97b3cfb2d969c8ae164a2
-X-V-R-CD: 93ae6d4824a01f2bf1a497fa17aabd03
-X-V-CD: 0
-X-V-ID: 2a6940f2-5a7b-4957-803b-fa54b013e3a3
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.545,18.0.895
- definitions=2022-10-28_04:2022-10-26,2022-10-28 signatures=0
-Received: from smtpclient.apple (unknown [17.235.153.88])
- by sg-mailsvcp-mmp-lapp03.asia.apple.com
- (Oracle Communications Messaging Server 8.1.0.19.20220711 64bit (built Jul 11
- 2022))
- with ESMTPSA id <0RKG00XG1JOO9F00@sg-mailsvcp-mmp-lapp03.asia.apple.com>; Fri,
- 28 Oct 2022 17:58:03 +0800 (+08)
-From:   Vee Khee Wong <veekhee@apple.com>
-Content-type: text/plain; charset=utf-8
-Content-transfer-encoding: quoted-printable
-MIME-version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
-Subject: Re: [PATCH net-next 1/1] stmmac: intel: Separate ADL-N and RPL-P
- device ID from TGL
-Message-id: <A23A7058-5598-46EB-8007-C401ADC33149@apple.com>
-Date:   Fri, 28 Oct 2022 17:57:49 +0800
-Cc:     alexandre.torgue@foss.st.com, davem@davemloft.net,
-        edumazet@google.com, hong.aun.looi@intel.com, joabreu@synopsys.com,
-        kuba@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        mcoquelin.stm32@gmail.com, muhammad.husaini.zulkifli@intel.com,
-        netdev@vger.kernel.org, pabeni@redhat.com, peppe.cavallaro@st.com,
-        tee.min.tan@intel.com, weifeng.voon@intel.com,
-        yi.fang.gan@intel.com, yoong.siang.song@intel.com
-To:     michael.wei.hong.sit@intel.com
-X-Mailer: Apple Mail (2.3731.200.110.1.12)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.545,18.0.895
- definitions=2022-10-28_04:2022-10-26,2022-10-28 signatures=0
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 28 Oct 2022 08:10:10 -0400
+X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Oct 2022 05:09:30 PDT
+Received: from 14.mo584.mail-out.ovh.net (14.mo584.mail-out.ovh.net [46.105.40.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759D146857
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 05:09:29 -0700 (PDT)
+Received: from player792.ha.ovh.net (unknown [10.110.103.195])
+        by mo584.mail-out.ovh.net (Postfix) with ESMTP id 3107F26292
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 11:54:03 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player792.ha.ovh.net (Postfix) with ESMTPSA id AFB223030BAFD;
+        Fri, 28 Oct 2022 11:53:58 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-109S00381dfec32-158c-4e50-a43f-6652ca230d89,
+                    064883BA926DE173662F194B93470FD4AA5384D5) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        Stephen Kitt <steve@sk2.org>
+Subject: [PATCH] dmaengine: sh: Remove unused shdma-arm.h
+Date:   Fri, 28 Oct 2022 13:53:36 +0200
+Message-Id: <20221028115336.1052782-1-steve@sk2.org>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 14040816263407896198
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeigdeggecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeelgeetueejffejfeejvefhtddufeejgfetleegtddukeelieelvddvteduveejtdenucfkphepuddvjedrtddrtddruddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeoshhtvghvvgesshhkvddrohhrgheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkeegpdhmohguvgepshhmthhpohhuth
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-What is the purpose of this patch?
+shdma-arm.h was introduced with commit 1e69653d40f1 ("DMA: shdma: add
+r8a73a4 DMAC data to the device ID table"), and its sole user was
+removed with commit a19788612f51 ("dmaengine: sh: Remove R-Mobile APE6
+support"). The latter mentions r8a73a4.dtsi but shdma support was
+removed from that with commit cfda82037780 ("ARM: dts: r8a73a4: Remove
+non-functional DMA support"), so it seems this is safe to remove.
 
-The function definition looks exactly the same as =
-=E2=80=98tgl_sgmii_phy0_data=E2=80=99.
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+---
+ drivers/dma/sh/shdma-arm.h | 48 --------------------------------------
+ 1 file changed, 48 deletions(-)
+ delete mode 100644 drivers/dma/sh/shdma-arm.h
 
+diff --git a/drivers/dma/sh/shdma-arm.h b/drivers/dma/sh/shdma-arm.h
+deleted file mode 100644
+index 7459f9a13b5b..000000000000
+--- a/drivers/dma/sh/shdma-arm.h
++++ /dev/null
+@@ -1,48 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * Renesas SuperH DMA Engine support
+- *
+- * Copyright (C) 2013 Renesas Electronics, Inc.
+- */
+-
+-#ifndef SHDMA_ARM_H
+-#define SHDMA_ARM_H
+-
+-#include "shdma.h"
+-
+-/* Transmit sizes and respective CHCR register values */
+-enum {
+-	XMIT_SZ_8BIT		= 0,
+-	XMIT_SZ_16BIT		= 1,
+-	XMIT_SZ_32BIT		= 2,
+-	XMIT_SZ_64BIT		= 7,
+-	XMIT_SZ_128BIT		= 3,
+-	XMIT_SZ_256BIT		= 4,
+-	XMIT_SZ_512BIT		= 5,
+-};
+-
+-/* log2(size / 8) - used to calculate number of transfers */
+-#define SH_DMAE_TS_SHIFT {		\
+-	[XMIT_SZ_8BIT]		= 0,	\
+-	[XMIT_SZ_16BIT]		= 1,	\
+-	[XMIT_SZ_32BIT]		= 2,	\
+-	[XMIT_SZ_64BIT]		= 3,	\
+-	[XMIT_SZ_128BIT]	= 4,	\
+-	[XMIT_SZ_256BIT]	= 5,	\
+-	[XMIT_SZ_512BIT]	= 6,	\
+-}
+-
+-#define TS_LOW_BIT	0x3 /* --xx */
+-#define TS_HI_BIT	0xc /* xx-- */
+-
+-#define TS_LOW_SHIFT	(3)
+-#define TS_HI_SHIFT	(20 - 2)	/* 2 bits for shifted low TS */
+-
+-#define TS_INDEX2VAL(i) \
+-	((((i) & TS_LOW_BIT) << TS_LOW_SHIFT) |\
+-	 (((i) & TS_HI_BIT)  << TS_HI_SHIFT))
+-
+-#define CHCR_TX(xmit_sz) (DM_FIX | SM_INC | RS_ERS | TS_INDEX2VAL((xmit_sz)))
+-#define CHCR_RX(xmit_sz) (DM_INC | SM_FIX | RS_ERS | TS_INDEX2VAL((xmit_sz)))
+-
+-#endif
 
-Regards,
-Vee Khee=
+base-commit: 23758867219c8d84c8363316e6dd2f9fd7ae3049
+-- 
+2.31.1
+
