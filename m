@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5674610E44
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E898A610E43
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 12:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiJ1KTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 06:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
+        id S230347AbiJ1KTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 06:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbiJ1KTs (ORCPT
+        with ESMTP id S230315AbiJ1KT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 06:19:48 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A858115FDC
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 03:19:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666952385; x=1698488385;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5Gzk75kHetdiKoHOlqEumcUhsSJjycSVuYIDWM7RMqE=;
-  b=k512FOOR6fiKwbvKJI13Z07rAnstAjichYELXtOMBJwZ0FdxOhugHlpE
-   LlVB3/P32Kzbn4lMOsLR2yfnnQfgt9hKDVyjShOWgjaJimDhKIsUgIXLw
-   LmviQ8wmZaDd8xfRMjHJt9E9nhCA0KcuXMxuwSufxDWWwlqtJgLE75vag
-   Yi2/IsZMn2u99FTpudONnl4TXgSqczoYtY0f1lCltWB5dXYaKXVMkzCl3
-   DI9xsDhWGp9N6bNZzW33giThrz1qnnt4N1h89KhMfiMvImAQrtG8oETzp
-   scignNjp872zFWRuhaF5GF9AS/s6pbtLt4rIKxrInmNTRVrX+9EcA2amh
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="335101008"
-X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
-   d="scan'208";a="335101008"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 03:19:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="877917403"
-X-IronPort-AV: E=Sophos;i="5.95,220,1661842800"; 
-   d="scan'208";a="877917403"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Oct 2022 03:19:32 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ooMSa-0009nd-0l;
-        Fri, 28 Oct 2022 10:19:32 +0000
-Date:   Fri, 28 Oct 2022 18:19:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:perf/core] BUILD SUCCESS
- 571f97f7d51fa81e6cc0e00f0f6314792ce533a3
-Message-ID: <635baca2.FbTo2SASwyC2/D0/%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 28 Oct 2022 06:19:28 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84601C25C6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 03:19:22 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7ce329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ce:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 369E51EC0523;
+        Fri, 28 Oct 2022 12:19:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1666952361;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=pnKOGkzAqYTHQEPw8aoAjfmGZ1+iB9PnhYVRmuE0Q+s=;
+        b=UNvJ7Vp2kgarN+/wDOtP8BOPFsBNaaHPA1NI5oCgjBJ9RAFITLDoZSaTh1oTF8EC14K3cw
+        rlE1QqX50TPrcfya1eMFzgk9/FDndlTUXLGAot114Ul/iuwJJbMnNePqwCKt9K0d9IJ8ck
+        T93Fq3KVC9ezYRr1EIvrHobwC7hAcnA=
+Date:   Fri, 28 Oct 2022 12:19:16 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     Baoquan He <bhe@redhat.com>, david@redhat.com,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
+        sourabhjain@linux.ibm.com, linux-mm@kvack.org
+Subject: Re: [PATCH v12 7/7] x86/crash: Add x86 crash hotplug support
+Message-ID: <Y1uspLb7fLdtnQq+@zn.tnic>
+References: <d6386653-eb71-188c-8a09-5db46b4e42d4@oracle.com>
+ <YzcqE1RVtPcuLlxN@zn.tnic>
+ <Y0Dh4ieUUZ4oXa1/@MiWiFi-R3L-srv>
+ <Y0b9apyIs+RpSo1e@zn.tnic>
+ <53aed03e-2eed-09b1-9532-fe4e497ea47d@oracle.com>
+ <Y0cmaPTKQuWtwIRh@zn.tnic>
+ <Y0d+mFivS+88+Chr@MiWiFi-R3L-srv>
+ <Y1e7Hw0PRDI9NxU9@zn.tnic>
+ <Y1lIoTBNvHrKX5K9@MiWiFi-R3L-srv>
+ <35c98ca6-10f8-b248-78c5-99fce7e66c65@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <35c98ca6-10f8-b248-78c5-99fce7e66c65@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,87 +67,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/core
-branch HEAD: 571f97f7d51fa81e6cc0e00f0f6314792ce533a3  perf: Optimize perf_tp_event()
+On Thu, Oct 27, 2022 at 02:24:11PM -0500, Eric DeVolder wrote:
+> Be aware, in reality, that if the system was fully populated, it would not
+> actually consume all 8192 phdrs. Rather /proc/iomem would essentially show a
+> large contiguous address space which would require just a single phdr.
 
-elapsed time: 721m
+Then that from below:
 
-configs tested: 66
-configs skipped: 2
+	pnum += CONFIG_CRASH_MAX_MEMORY_RANGES;
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+which then would end up allocating 8192 would be a total waste.
 
-gcc tested configs:
-arc                                 defconfig
-alpha                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-s390                                defconfig
-s390                             allmodconfig
-x86_64                              defconfig
-s390                             allyesconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64                           rhel-8.3-kvm
-x86_64                         rhel-8.3-kunit
-arc                              allyesconfig
-x86_64                           rhel-8.3-syz
-alpha                            allyesconfig
-x86_64                          rhel-8.3-func
-i386                                defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                        randconfig-a004
-m68k                             allmodconfig
-x86_64                        randconfig-a002
-m68k                             allyesconfig
-i386                             allyesconfig
-i386                          randconfig-a001
-x86_64                        randconfig-a006
-i386                          randconfig-a003
-powerpc                           allnoconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-i386                          randconfig-a014
-powerpc                          allmodconfig
-i386                          randconfig-a005
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-sh                               allmodconfig
-mips                             allyesconfig
-i386                          randconfig-a016
-ia64                             allmodconfig
-arm                                 defconfig
-arc                  randconfig-r043-20221028
-arm                              allyesconfig
-arm64                            allyesconfig
-riscv                randconfig-r042-20221026
-arc                  randconfig-r043-20221026
-riscv                randconfig-r042-20221028
-s390                 randconfig-r044-20221028
-s390                 randconfig-r044-20221026
+So why don't you make that number dynamic then?
 
-clang tested configs:
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a013
-x86_64                        randconfig-a016
-i386                          randconfig-a002
-x86_64                        randconfig-a012
-i386                          randconfig-a011
-i386                          randconfig-a006
-x86_64                        randconfig-a014
-i386                          randconfig-a004
-i386                          randconfig-a015
-hexagon              randconfig-r041-20221028
-hexagon              randconfig-r045-20221026
-hexagon              randconfig-r045-20221028
-hexagon              randconfig-r041-20221026
-arm                         hackkit_defconfig
-arm                         socfpga_defconfig
-mips                      bmips_stb_defconfig
+You start with something sensible:
+
+	total_num_pheaders = num_online_cpus() + "some number of regions" + "some few others"
+
+I.e., a number which is a good compromise on the majority of machines.
+
+Then, on hotplug events you count how many new regions are coming in
+and when you reach the total_num_pheaders number, you double it (or some
+other increase stragegy), reallocate the ELF header buffers etc needed
+for kdump and you're good.
+
+This way, you don't waste memory unnecessarily on the majority of
+systems and those who need more, get to allocate more.
+
+> I'd prefer keeping CRASH_MAX_MEMORY_RANGES as that allow the maximum phdr
+> number value to be reflective of CPUs and/or memory; not all systems support
+> both CPU and memory hotplug. For example, I have queued up this change to
+> reflect this:
+> 
+>     if (IS_ENABLED(CONFIG_HOTPLUG_CPU) || IS_ENABLED(CONFIG_MEMORY_HOTPLUG)) {
+
+If you're going to keep CRASH_MAX_MEMORY_RANGES, then you can test only
+that thing as it expresses the dependency on CONFIG_HOTPLUG_CPU and
+CONFIG_MEMORY_HOTPLUG already.
+
+If you end up making the number dynamic, then you could make that a
+different Kconfig item which contains all that crash code as most of the
+people won't need it anyway.
+
+Hmm?
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
