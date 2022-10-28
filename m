@@ -2,151 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B95A611DCF
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47EDF611DD3
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 00:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbiJ1W4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 18:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
+        id S229894AbiJ1W5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 18:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbiJ1W4I (ORCPT
+        with ESMTP id S230189AbiJ1W4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 18:56:08 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8C91F5246;
-        Fri, 28 Oct 2022 15:56:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666997730; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RvJj+3xY9RbhTi17+j1hh7xVviAFKRxXo4nyj02tbpM=;
-        b=HZOqXXpfdzNX6zPLA4Js1X6WpuSNU4ALdzg43R66pCt/RenTadFhbMEsdRZcYygTQ1AL3u
-        0c6IvJqM2oPiJc5hzZih4B90wWxQWosKbEqk8yofZDHTU8xO/sG2nzBbQcgfYoWqxfSNyA
-        BvuGgGA12b2iW26xvKZqhPdbMe5qoEw=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        od@opendingux.net, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 4/4] rtc: jz4740: Support for fine-tuning the RTC clock
-Date:   Fri, 28 Oct 2022 23:55:19 +0100
-Message-Id: <20221028225519.89210-5-paul@crapouillou.net>
-In-Reply-To: <20221028225519.89210-1-paul@crapouillou.net>
-References: <20221028225519.89210-1-paul@crapouillou.net>
+        Fri, 28 Oct 2022 18:56:44 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B98122E0C5
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 15:56:41 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso11212666pjc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 15:56:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rzSJgKy5DjDXCyAQwtZ/P57gLVTMALzGk3IGcvzcMzw=;
+        b=UjNUyP9zPuD187EGRc7XI956s4WuAYRtR1UbWLr8aTyWMm4IEloDh5HMwjKboxiqg7
+         DyockKVKwkIubAf89tNR3SbG3ChSdknkf0LghBIi/IJVPQ8KcLXcQa/iPA8FQHkJ2nL3
+         dzuTWMl76ElEAJ5ozjRq8caid2tWQVZNXwYRc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rzSJgKy5DjDXCyAQwtZ/P57gLVTMALzGk3IGcvzcMzw=;
+        b=xop0cwbDUPsV55TORe0ksCuhCtlwOAvPKfr+0PfUCQdY6WBjK+OBf8XHIIX8m6skk8
+         LEqlADrsyMa6PNUYi+rTg5pPBmgCdwIdiN2y2yEwYmsmYeYOyEg5/f6/OCgS5HULQ+v/
+         7y3lCzHrt12357H32j53VcOirKZMx+2w2jiHKYemzqU+gh838uLt4GccokJFoOfs1jlU
+         jfSUPCkfRQAXf2mEcKS89/G5TYYtQaefLPAACgRvV+lSufC70DWipLiD/Cq/06UVX2uv
+         Z6AB3vzFBdFqcZFiVSgCNaHJvXrRVZqIkh7YT56AqTQYzB3qOt6DpuR7Bnk8KA+pu7kt
+         iHHw==
+X-Gm-Message-State: ACrzQf3io6aY4QuOlV+r4qQodeMBRmFBAowBRbwW0Ay3hnjBD3EUZ0lT
+        6Oq+37dcv/FXr1owXy1N6yZ5anpRrqZfaQ==
+X-Google-Smtp-Source: AMsMyM4s+tgLT5YHN+KRfu/cEyv9cF8dTXCPT9Wdhv8zqmmdl0lvFSrfZrZKPnTL0Esib3hWUKg09A==
+X-Received: by 2002:a17:902:f791:b0:17c:c1dd:a3b5 with SMTP id q17-20020a170902f79100b0017cc1dda3b5mr1336253pln.141.1666997800882;
+        Fri, 28 Oct 2022 15:56:40 -0700 (PDT)
+Received: from localhost ([2620:15c:9d:2:65f9:c180:249c:190f])
+        by smtp.gmail.com with UTF8SMTPSA id u10-20020a170902bf4a00b001754064ac31sm3492890pls.280.2022.10.28.15.56.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 15:56:40 -0700 (PDT)
+From:   Brian Norris <briannorris@chromium.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH] mmc: sdhci-pci: Set PROBE_PREFER_ASYNCHRONOUS
+Date:   Fri, 28 Oct 2022 15:56:37 -0700
+Message-Id: <20221028155633.1.I6c4bfb31e88fad934e7360242cb662e01612c1bb@changeid>
+X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Write the NC1HZ and ADJC register fields, which allow to tweak the
-frequency of the RTC clock, so that it can run as accurately as
-possible.
+This driver often takes on the order of 10ms to start, but in some cases
+as much as 190ms. It shouldn't have many cross-device dependencies to
+race with, nor racy access to shared state with other drivers, so this
+should be a relatively low risk change. We've done similarly with a
+variety of other MMC host drivers already.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+This driver was pinpointed as part of a survey of top slowest initcalls
+(i.e., are built in, and probing synchronously) on a lab of ChromeOS
+systems.
+
+Signed-off-by: Brian Norris <briannorris@chromium.org>
 ---
- drivers/rtc/rtc-jz4740.c | 45 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
 
-diff --git a/drivers/rtc/rtc-jz4740.c b/drivers/rtc/rtc-jz4740.c
-index 1602e8a4283a..70b63ce75e21 100644
---- a/drivers/rtc/rtc-jz4740.c
-+++ b/drivers/rtc/rtc-jz4740.c
-@@ -5,6 +5,7 @@
-  *	 JZ4740 SoC RTC driver
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/clk-provider.h>
- #include <linux/io.h>
-@@ -41,6 +42,9 @@
- #define JZ_RTC_CTRL_AE		BIT(2)
- #define JZ_RTC_CTRL_ENABLE	BIT(0)
- 
-+#define JZ_RTC_REGULATOR_NC1HZ_MASK	GENMASK(15, 0)
-+#define JZ_RTC_REGULATOR_ADJC_MASK	GENMASK(25, 16)
-+
- /* Magic value to enable writes on jz4780 */
- #define JZ_RTC_WENR_MAGIC	0xA55A
- 
-@@ -61,6 +65,7 @@ struct jz4740_rtc {
- 	enum jz4740_rtc_type type;
- 
- 	struct rtc_device *rtc;
-+	struct clk *clk;
- 
- 	struct clk_hw clk32k;
- 
-@@ -217,12 +222,51 @@ static int jz4740_rtc_alarm_irq_enable(struct device *dev, unsigned int enable)
- 	return jz4740_rtc_ctrl_set_bits(rtc, JZ_RTC_CTRL_AF_IRQ, enable);
- }
- 
-+static int jz4740_rtc_read_offset(struct device *dev, long *offset)
-+{
-+	struct jz4740_rtc *rtc = dev_get_drvdata(dev);
-+	long rate = clk_get_rate(rtc->clk);
-+	s32 nc1hz, adjc, offset1k;
-+	u32 reg;
-+
-+	reg = jz4740_rtc_reg_read(rtc, JZ_REG_RTC_REGULATOR);
-+	nc1hz = FIELD_GET(JZ_RTC_REGULATOR_NC1HZ_MASK, reg);
-+	adjc = FIELD_GET(JZ_RTC_REGULATOR_ADJC_MASK, reg);
-+
-+	offset1k = (nc1hz - rate + 1) * 1024L + adjc;
-+	*offset = offset1k * 1000000L / (rate * 1024L);
-+
-+	return 0;
-+}
-+
-+static int jz4740_rtc_set_offset(struct device *dev, long offset)
-+{
-+	struct jz4740_rtc *rtc = dev_get_drvdata(dev);
-+	long rate = clk_get_rate(rtc->clk);
-+	s32 offset1k, adjc, nc1hz;
-+
-+	offset1k = div_s64_rem(offset * rate * 1024LL, 1000000LL, &adjc);
-+	nc1hz = rate - 1 + offset1k / 1024L;
-+
-+	if (adjc < 0) {
-+		nc1hz--;
-+		adjc += 1024;
-+	}
-+
-+	nc1hz = FIELD_PREP(JZ_RTC_REGULATOR_NC1HZ_MASK, nc1hz);
-+	adjc = FIELD_PREP(JZ_RTC_REGULATOR_ADJC_MASK, adjc);
-+
-+	return jz4740_rtc_reg_write(rtc, JZ_REG_RTC_REGULATOR, nc1hz | adjc);
-+}
-+
- static const struct rtc_class_ops jz4740_rtc_ops = {
- 	.read_time	= jz4740_rtc_read_time,
- 	.set_time	= jz4740_rtc_set_time,
- 	.read_alarm	= jz4740_rtc_read_alarm,
- 	.set_alarm	= jz4740_rtc_set_alarm,
- 	.alarm_irq_enable = jz4740_rtc_alarm_irq_enable,
-+	.read_offset	= jz4740_rtc_read_offset,
-+	.set_offset	= jz4740_rtc_set_offset,
+ drivers/mmc/host/sdhci-pci-core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
+index 34ea1acbb3cc..0449630acbb3 100644
+--- a/drivers/mmc/host/sdhci-pci-core.c
++++ b/drivers/mmc/host/sdhci-pci-core.c
+@@ -2281,7 +2281,8 @@ static struct pci_driver sdhci_driver = {
+ 	.probe =	sdhci_pci_probe,
+ 	.remove =	sdhci_pci_remove,
+ 	.driver =	{
+-		.pm =   &sdhci_pci_pm_ops
++		.pm =   &sdhci_pci_pm_ops,
++		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+ 	},
  };
  
- static irqreturn_t jz4740_rtc_irq(int irq, void *data)
-@@ -353,6 +397,7 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
- 
- 	spin_lock_init(&rtc->lock);
- 
-+	rtc->clk = clk;
- 	platform_set_drvdata(pdev, rtc);
- 
- 	device_init_wakeup(dev, 1);
 -- 
-2.35.1
+2.38.1.273.g43a17bfeac-goog
 
