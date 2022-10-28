@@ -2,144 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C417611633
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94BCD611639
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiJ1PqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 11:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50966 "EHLO
+        id S229973AbiJ1Pqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 11:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiJ1PqJ (ORCPT
+        with ESMTP id S229864AbiJ1Pqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:46:09 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33AF1B5764
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:46:05 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id x2so8471988edd.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 08:46:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mind.be; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K9dtDrkTtJDWiY55QD7A/AEXd7H01h6LFKl1oWBL6fQ=;
-        b=b7KpZsfqzkutWlZGik4MAB1Tx6dfC3eHgxL5t+NdtcgaRf3bRJlJmpysb/wWaxN3uV
-         O4fiJWluRqxiZGZkVAeZN95K960I3FdolJKeE6hrTrREE/C1FWpCylkLwjAnL5eUy+Rm
-         cu51JQj0wsZSQz5IhNg22FlJln2wsMmaUqJKXyZgyiT7jIAh3EIEaNMUYx/fm5yK+XhH
-         qD/NUodEX9yxxkKKY+s/cVr6feGYrVfzuhvT0g/lDAEJHkiXqqcIgeoa64GshzeL6c+O
-         V4FxWupBqrgnm9yejdqyzW6K9Cv139uVN5D5WJNQUFm+9eWR162wnk8PPJ7a6LMlE8B6
-         gDkg==
+        Fri, 28 Oct 2022 11:46:34 -0400
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9941E046F;
+        Fri, 28 Oct 2022 08:46:33 -0700 (PDT)
+Received: by mail-qk1-f179.google.com with SMTP id l9so3655901qkk.11;
+        Fri, 28 Oct 2022 08:46:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K9dtDrkTtJDWiY55QD7A/AEXd7H01h6LFKl1oWBL6fQ=;
-        b=ft5QPiaHF4TFHAxt1FkaxSDeXnh8lDSGNughQwOqEnYnoTW4jY2cZT/rHgyyoCP4c8
-         SAriy6hZLnaqTFP75sDJA+jdojyg9WBI+NFyoM7pi1kZZ5+cXyH9mMNmZukOqNc1VYSy
-         afwUifor9EijMcu+ksGFgq9/4bGPpmJ+0bcYWImnCYwT6zFVdC59EiLlWBJv7X+CP45U
-         r2TcgJxmQKgbhmFJwxOe1MfeSjhUUTy26iTZxIC9+MBimCbqd9uXKN/AKvsEzNo4v/wV
-         22ElROX2styQ+4tlMpptOgfSjWa4C3LVbuAK+dhUfMMuq1eH6bL7s5Jt/PcUtAT6ceXk
-         3Hjg==
-X-Gm-Message-State: ACrzQf2Oqhi3HActgGDCfqhGLRVyPWh66TOPqrf/m4dRzR9rCI8lp9tu
-        mQORWrIbm1VmOWmRg+3vRh0lGA==
-X-Google-Smtp-Source: AMsMyM5dyCd1eEohQv62c02F5R5xcIrjosFu9rz+3oYRdB87GVstKjFzAVec4TcpCWzH0Wqqpc7mRg==
-X-Received: by 2002:a50:eb05:0:b0:457:c6f5:5f65 with SMTP id y5-20020a50eb05000000b00457c6f55f65mr26705edp.311.1666971964506;
-        Fri, 28 Oct 2022 08:46:04 -0700 (PDT)
-Received: from dtpc.zanders.be (78-22-137-109.access.telenet.be. [78.22.137.109])
-        by smtp.gmail.com with ESMTPSA id 18-20020a170906309200b007a23fe14442sm2329092ejv.195.2022.10.28.08.46.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 08:46:04 -0700 (PDT)
-From:   Maarten Zanders <maarten.zanders@mind.be>
-To:     Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     Maarten Zanders <maarten.zanders@mind.be>,
-        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ASoC: fsl_asrc fsl_esai fsl_sai: allow CONFIG_PM=N
-Date:   Fri, 28 Oct 2022 17:45:34 +0200
-Message-Id: <20221028154534.112175-1-maarten.zanders@mind.be>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <Y1vyMQ8Jj7/smeC6@sirena.org.uk>
-References: <Y1vyMQ8Jj7/smeC6@sirena.org.uk>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BKQqdCWDDAGGP8gb8rCqO8l0puH1w2x+5jwsSPT3dH8=;
+        b=T6KSc//YaVzwvKMk9mK9qFbojevZ2W/a0hrjNZm6T6/X21GdqRDKydTTuvrSdfL3vV
+         RXepDFEERtxeaTwjKBUBKF+6gBl4YYaTHBbnrgGgoTKbLSVwpuDSox82iikoflekAHhX
+         UpJ4PuGs5DJ2FspMRtlXzsOKvOSM2eaiGf1OHTcvSxEqvWY8qJN57/08xrYybDvWpeob
+         0+jLbc+o2WHnuw2g6MCjXMVxizDtYcKKBtZ9AL+k3dkBwjB0rFbo3NnjpSzejrj373xp
+         dxRvRrLYLzFUXdwsXyMSPJ6GXRt4pkWUCuZ974C14nWNG9QNOihKhdOyXGDC/IYNXkQb
+         42OA==
+X-Gm-Message-State: ACrzQf2Q8SKDruRn+YgmWH1oqZ3mEBeYButiCaF+DMkIhXvHza832wPf
+        jgzle+pnYXewYS6tcZ+Jzo+zsMJTIA+E8vaHi14=
+X-Google-Smtp-Source: AMsMyM7JGKws7/zx7E8lbz506/vh57h5RoEHBHCrQMMQwd1SsZeEo1RWTkguImcsTHuJy2nPGjgsEVR8wAfAV/8Il0M=
+X-Received: by 2002:a37:b1c2:0:b0:6fa:1185:4dbf with SMTP id
+ a185-20020a37b1c2000000b006fa11854dbfmr138484qkf.764.1666971993053; Fri, 28
+ Oct 2022 08:46:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221019073443.248215-1-chenzhongjin@huawei.com>
+In-Reply-To: <20221019073443.248215-1-chenzhongjin@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 28 Oct 2022 17:46:22 +0200
+Message-ID: <CAJZ5v0hV2AFEgiuxxbDFUWLa0ZthSz3a=-9U4pjXm-GmmSgexw@mail.gmail.com>
+Subject: Re: [PATCH] ACPICA: Fix use-after-free in acpi_ps_parse_aml()
+To:     Chen Zhongjin <chenzhongjin@huawei.com>, robert.moore@intel.com
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        devel@acpica.org, rafael.j.wysocki@intel.com, lenb@kernel.org,
+        lv.zheng@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_PM=N, pm_runtime_put_sync() returns -ENOSYS
-which breaks the probe function of these drivers.
+On Wed, Oct 19, 2022 at 9:38 AM Chen Zhongjin <chenzhongjin@huawei.com> wrote:
+>
+> KASAN reports a use-after-free problem and causes kernel panic
+> triggered by: modprobe acpiphp_ibm
+>
+> BUG: KASAN:
+> use-after-free in acpi_ds_dump_method_stack (drivers/acpi/acpica/dsdebug.c:145)
+> Read of size 8 at addr ffff888002f843f0 by task modprobe/519
+>
+> CPU: 2 PID: 519 Comm: modprobe Not tainted 6.0.0+
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+>     Call Trace:
+>     <TASK>
+>     acpi_ds_dump_method_stack (drivers/acpi/acpica/dsdebug.c:145)
+>     acpi_ds_method_error (drivers/acpi/acpica/dsmethod.c:232)
+>     acpi_ps_parse_aml (drivers/acpi/acpica/psparse.c:607)
+>     ...
+>     </TASK>
+>
+>     Allocated by task 519:
+>     ...
+>     __kasan_kmalloc (mm/kasan/common.c:526)
+>     acpi_ds_create_walk_state (drivers/acpi/acpica/dswstate.c:519)
+>     acpi_ds_call_control_method (drivers/acpi/acpica/dsmethod.c:498)
+>     acpi_ps_parse_aml (drivers/acpi/acpica/psparse.c:607)
+>     ...
+>
+>     Freed by task 519:
+>     ...
+>     __kmem_cache_free+0xb6/0x3c0
+>     acpi_ds_delete_walk_state (drivers/acpi/acpica/dswstate.c:722)
+>     acpi_ds_call_control_method (drivers/acpi/acpica/dsmethod.c:586)
+>     acpi_ps_parse_aml (drivers/acpi/acpica/psparse.c:607)
+>     ...
+> ---[ end Kernel panic - not syncing: Fatal exception ]---
+>
+> In the error path in acpi_ps_parse_aml():
+>
+>     acpi_ds_call_control_method()
+>         acpi_ds_create_walk_state()
+>             acpi_ds_push_walk_state()
+>             # thread->walk_state_list = walk_state
+>
+>         acpi_ds_init_aml_walk # *fail*
+>         goto cleanup:
+>         acpi_ds_delete_walk_state() # ACPI_FREE(walk_state)
+>
+>     acpi_ds_method_error()
+>         acpi_ds_dump_method_stack()
+>         # using freed thread->walk_state_list
+>
+> Briefly, the walk_state is pushed to thread, and freed without being poped.
+> Then it is used in acpi_ds_dump_method_stack() and causes use-after-free.
+>
+> Add acpi_ds_pop_walk_state(thread) to the error path to fix the problem.
+>
+> Fixes: 0bac4295526c ("ACPICA: Dispatcher: Move stack traversal code to dispatcher")
+>
+> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 
-Other users of pm_runtime_put_sync() typically don't check
-the return value. In order to keep the program flow as
-intended, check for -ENOSYS.
+This should be submitted to the upstream project on GitHub, but it
+looks bad enough, so I'll take care of this.
 
-This commit is similar to
-commit 0434d3f4525a ("mailbox/omap: Handle if CONFIG_PM is disabled")
+Applied as 6.1-rc material, thanks!
 
-This commit fixes
-commit cab04ab5900f ("ASoC: fsl_asrc: Don't use devm_regmap_init_mmio_clk")
-commit 203773e39347 ("ASoC: fsl_esai: Don't use devm_regmap_init_mmio_clk")
-commit 2277e7e36b4b ("ASoC: fsl_sai: Don't use devm_regmap_init_mmio_clk")
+> ---
+>  drivers/acpi/acpica/dsmethod.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/acpi/acpica/dsmethod.c b/drivers/acpi/acpica/dsmethod.c
+> index ae2e768830bf..19da7fc73186 100644
+> --- a/drivers/acpi/acpica/dsmethod.c
+> +++ b/drivers/acpi/acpica/dsmethod.c
+> @@ -581,6 +581,7 @@ acpi_ds_call_control_method(struct acpi_thread_state *thread,
+>
+>         acpi_ds_terminate_control_method(obj_desc, next_walk_state);
+>         acpi_ds_delete_walk_state(next_walk_state);
+> +       acpi_ds_pop_walk_state(thread);
+>
+>         return_ACPI_STATUS(status);
+>  }
+> --
 
-Signed-off-by: Maarten Zanders <maarten.zanders@mind.be>
----
- sound/soc/fsl/fsl_asrc.c | 2 +-
- sound/soc/fsl/fsl_esai.c | 2 +-
- sound/soc/fsl/fsl_sai.c  | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/sound/soc/fsl/fsl_asrc.c b/sound/soc/fsl/fsl_asrc.c
-index 936aef5d2767..e16e7b3fa96c 100644
---- a/sound/soc/fsl/fsl_asrc.c
-+++ b/sound/soc/fsl/fsl_asrc.c
-@@ -1232,7 +1232,7 @@ static int fsl_asrc_probe(struct platform_device *pdev)
- 	}
- 
- 	ret = pm_runtime_put_sync(&pdev->dev);
--	if (ret < 0)
-+	if (ret < 0 && ret != -ENOSYS)
- 		goto err_pm_get_sync;
- 
- 	ret = devm_snd_soc_register_component(&pdev->dev, &fsl_asrc_component,
-diff --git a/sound/soc/fsl/fsl_esai.c b/sound/soc/fsl/fsl_esai.c
-index 5c21fc490fce..17fefd27ec90 100644
---- a/sound/soc/fsl/fsl_esai.c
-+++ b/sound/soc/fsl/fsl_esai.c
-@@ -1069,7 +1069,7 @@ static int fsl_esai_probe(struct platform_device *pdev)
- 	regmap_write(esai_priv->regmap, REG_ESAI_RSMB, 0);
- 
- 	ret = pm_runtime_put_sync(&pdev->dev);
--	if (ret < 0)
-+	if (ret < 0 && ret != -ENOSYS)
- 		goto err_pm_get_sync;
- 
- 	/*
-diff --git a/sound/soc/fsl/fsl_sai.c b/sound/soc/fsl/fsl_sai.c
-index 81f89f6767a2..e60c7b344562 100644
---- a/sound/soc/fsl/fsl_sai.c
-+++ b/sound/soc/fsl/fsl_sai.c
-@@ -1446,7 +1446,7 @@ static int fsl_sai_probe(struct platform_device *pdev)
- 	}
- 
- 	ret = pm_runtime_put_sync(dev);
--	if (ret < 0)
-+	if (ret < 0 && ret != -ENOSYS)
- 		goto err_pm_get_sync;
- 
- 	/*
--- 
-2.37.3
-
+Bob, this looks correct to me, but I may be missing something in which
+case please let me know.
