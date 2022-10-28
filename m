@@ -2,122 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B64E611E3F
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 01:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27086611E41
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 01:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiJ1Xpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 19:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
+        id S229913AbiJ1XqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 19:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiJ1Xpf (ORCPT
+        with ESMTP id S229926AbiJ1Xpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 19:45:35 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A1374DCA
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:45:33 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id d6-20020a056e02214600b002fa23a188ebso6105530ilv.6
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:45:33 -0700 (PDT)
+        Fri, 28 Oct 2022 19:45:53 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9348D80F63
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:45:49 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id x15so5102671qvp.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:45:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1gQLmBIcjnNwDxMMIUUxHnCdSXcoabEviMMvl3ldFps=;
+        b=k7pJ9Xw9veeuK3YXuZTVvSVmRV4OPsWQETIy9YQs4t3jxxkTTSNf1jsahpmEEi/dOf
+         IgWbQY6zkPWYPm4CqCCgUULhT7qrs8sXCkMppzUVwMPP7qrTTj3xbb749cdVh/+dmd3U
+         MJbNKiJIr31X97CbHoWWX5kx/KwwTI6wwxGIClGwsWDrGT1406fNOx8cHyK8bEpYCZ/f
+         klMq+Op81x7P1iF+v48IMvGgrAh7CSTHX/3YF3zRg1kAvc8/9qS7dLNCt+QLbge1jv/b
+         s8Kxw0Ads6GQkE/Y3uPmt/rnlF/dSKgLCuS7RxiTGKVBd6XE9NGaA/CbRMapW6FiaPjF
+         K5AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H60CO/7ESD8qYAR25JqKtv1QA/7SsWIOSgVv3mhXfqY=;
-        b=2SvJoHhIwEzfM/L3keQWqL2U9MnAO+crtLhCQFWwsHVY+OSqTLD44Gt/kZMA60GSnV
-         b+iuo/kH532yhJ7m/xbK/ZgP7H8M81Rk5xPm/KsWS6Jjhk8DahNForZHoy0HP2I6gHLv
-         6Bc5vdaYl4uvLSbr6MFS+z+tnpkMYTHVBoIxOFer354+kvtbqggsXcy0qeT6Y14u1Hyi
-         /rAYZ/Go5NPkLbv1lsScO08nDRWkUURYSteXzGcXfciZwmYW8RwZJ1m4CuAZqIf+9jfP
-         uhF4G3b41ewBxuWSUyTQH/Hc/Yekcg47sgujpxHBUlA3gU3kD2DtAjxAevtjSITSnmfO
-         sI7g==
-X-Gm-Message-State: ACrzQf3tc1VEIbWnGVtcBsnSBh9HgbH6bChyGhgvtfJag8DF/xXF+Y3g
-        bqgbZ7mF9A7DGcP3KRZtgKEmeuYUBUqHj6MZeHy8JbVNS8Ul
-X-Google-Smtp-Source: AMsMyM4JWcj4ZzNZUcc9Ft4kLvCmNODOGL0M5AXbM8q37wEto5tD876N2CZkKPqPI+DRndw565l6Pg9wlWRJ2vQdCoWA3e9RLLhr
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1gQLmBIcjnNwDxMMIUUxHnCdSXcoabEviMMvl3ldFps=;
+        b=yBRz+m6Y0WkFTxihb3vnBu98eoFviFLOveZuQm/Re8tad/0F3qR8dHSRGx8U76PB1p
+         8y6V4u0Fsi39CCuyGZL1BIFt5A+eSQztWfuef8lyC5xlo7e0d1IupDPa3w+6T05BvQGs
+         16s9pFEG/OkhW4zMV/liIWFxzM96T8YNXtV7CRrScBc/dEeQNTIX7AHMFvJaASC5RB48
+         WnqgKW7RqGJVGRyVp4e9fkredkCalSoHODs+qEYDWbvbWOtqBciCMmzEQ65MaIr1aTeH
+         SQ2gKE1zxjNDb+E+OK3qyZ3N6hcF6mkPbSQE7rqyzO4n6ug2fx8DLmT9A17TUzNEC7yx
+         BcWA==
+X-Gm-Message-State: ACrzQf3l+2l+8ueJhEVo5OWqKmxaXYHVEeKO80rvYTrnXQGdykVkBvY2
+        gq6QzLM+sFeKisQLm/I9ecopxA==
+X-Google-Smtp-Source: AMsMyM5PDqhzdN5zEC6ntlDWWSSJwQP9ZZzLjU7JL3+J5NIFOU89QjOUm7OyEg3q+6jhnGOCUC9adA==
+X-Received: by 2002:a05:6214:2342:b0:473:e142:f758 with SMTP id hu2-20020a056214234200b00473e142f758mr1702056qvb.83.1667000748688;
+        Fri, 28 Oct 2022 16:45:48 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id f11-20020a05620a280b00b006f8665f483fsm20867qkp.85.2022.10.28.16.45.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 16:45:47 -0700 (PDT)
+Message-ID: <491837d1-4e81-496c-8442-7c1cae670907@linaro.org>
+Date:   Fri, 28 Oct 2022 19:45:46 -0400
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:380f:b0:363:cb7f:4fb8 with SMTP id
- i15-20020a056638380f00b00363cb7f4fb8mr981737jav.227.1667000733222; Fri, 28
- Oct 2022 16:45:33 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 16:45:33 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008b529305ec20dacc@google.com>
-Subject: [syzbot] kernel BUG in dnotify_free_mark
-From:   syzbot <syzbot+06cc05ddc896f12b7ec5@syzkaller.appspotmail.com>
-To:     amir73il@gmail.com, jack@suse.cz, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH next v7 2/2] dt-bindings: i2c: add entry for
+ hisilicon,i2c-ascend910
+Content-Language: en-US
+To:     Weilong Chen <chenweilong@huawei.com>, yangyicong@hisilicon.com,
+        xuwei5@huawei.com, wsa@kernel.org, robh+dt@kernel.org,
+        robh@kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20221021035638.203929-1-chenweilong@huawei.com>
+ <20221021035638.203929-2-chenweilong@huawei.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221021035638.203929-2-chenweilong@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 20/10/2022 23:56, Weilong Chen wrote:
+> Add the new compatible for HiSilicon i2c.
+> 
+> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+> ---
+> Change since v6:
+> - Rename to hisilicon,i2c-ascend910.yaml
+> - Change all IIC to I2C
+> - Add maintainer name
+> Link: https://lore.kernel.org/lkml/7520818b-de40-7f2a-1b03-b1dcd29a2023@huawei.com/T/#ma89d78cef45e7ac6f2c6251ed958e8658e5c1eb5
+> 
 
-syzbot found the following issue on:
-
-HEAD commit:    247f34f7b803 Linux 6.1-rc2
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=157f594a880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
-dashboard link: https://syzkaller.appspot.com/bug?extid=06cc05ddc896f12b7ec5
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15585936880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14ec85ba880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/a5f39164dea4/disk-247f34f7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/8d1b92f5a01f/vmlinux-247f34f7.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/1a4d2943796c/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+06cc05ddc896f12b7ec5@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-kernel BUG at fs/notify/dnotify/dnotify.c:136!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 56 Comm: kworker/u4:4 Not tainted 6.1.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-Workqueue: events_unbound fsnotify_mark_destroy_workfn
-RIP: 0010:dnotify_free_mark+0x53/0x60 fs/notify/dnotify/dnotify.c:136
-Code: 48 89 df e8 ff b3 dd ff 48 83 3b 00 75 17 e8 e4 bc 89 ff 48 8b 3d 4d ce 0f 0c 4c 89 f6 5b 41 5e e9 a2 de dc ff e8 cd bc 89 ff <0f> 0b cc cc cc cc cc cc cc cc cc cc cc 55 41 57 41 56 41 55 41 54
-RSP: 0018:ffffc90001577b68 EFLAGS: 00010293
-RAX: ffffffff81fe1253 RBX: ffff888075d2b080 RCX: ffff888018d40000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888075d2b000
-RBP: ffffc90001577c30 R08: dffffc0000000000 R09: fffffbfff2325fe4
-R10: fffffbfff2325fe4 R11: 1ffffffff2325fe3 R12: ffff888145e77800
-R13: ffffc90001577bc0 R14: ffff888075d2b000 R15: ffff888075d2b000
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f127cdcaa38 CR3: 000000001dd46000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- fsnotify_final_mark_destroy fs/notify/mark.c:278 [inline]
- fsnotify_mark_destroy_workfn+0x2cc/0x340 fs/notify/mark.c:902
- process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:dnotify_free_mark+0x53/0x60 fs/notify/dnotify/dnotify.c:136
-Code: 48 89 df e8 ff b3 dd ff 48 83 3b 00 75 17 e8 e4 bc 89 ff 48 8b 3d 4d ce 0f 0c 4c 89 f6 5b 41 5e e9 a2 de dc ff e8 cd bc 89 ff <0f> 0b cc cc cc cc cc cc cc cc cc cc cc 55 41 57 41 56 41 55 41 54
-RSP: 0018:ffffc90001577b68 EFLAGS: 00010293
-RAX: ffffffff81fe1253 RBX: ffff888075d2b080 RCX: ffff888018d40000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888075d2b000
-RBP: ffffc90001577c30 R08: dffffc0000000000 R09
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+>  .../bindings/i2c/hisilicon,i2c-ascend910.yaml | 70 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 71 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,i2c-ascend910.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,i2c-ascend910.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,i2c-ascend910.yaml
+> new file mode 100644
+> index 000000000000..f4f532d69670
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/hisilicon,i2c-ascend910.yaml
+> @@ -0,0 +1,70 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/i2c/hisilicon,i2c-xxx.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Drop quotes
+
+> +
+> +title: HiSilicon common I2C controller Device Tree Bindings
+
+Drop "Device Tree bindings"
+
+> +
+> +maintainers:
+> +  - Yicong Yang <yangyicong@hisilicon.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: hisilicon,i2c-ascend910
+> +    description:
+> +      The HiSilicon common I2C controller can be used for many different
+> +      types of SoC such as Huawei Ascend AI series chips.
+
+Description goes to top level description.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-frequency:
+> +    default: 400000
+> +
+> +  i2c-sda-falling-time-ns:
+> +    default: 343
+> +
+> +  i2c-scl-falling-time-ns:
+> +    default: 203
+> +
+> +  i2c-sda-hold-time-ns:
+> +    default: 830
+> +
+> +  i2c-scl-rising-time-ns:
+> +    default: 365
+> +
+> +  i2c-digital-filter-width-ns:
+> +    default: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c@5038b0000 {
+> +      compatible = "hisilicon,i2c-ascend910";
+> +      reg = <0x38b0000 0x10000>;
+> +      interrupts = <0x0 120 0x4>;
+
+Use defines for constants.
+
+Best regards,
+Krzysztof
+
