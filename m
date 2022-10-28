@@ -2,75 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B0D61157C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C5C611575
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 17:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbiJ1PGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 11:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52242 "EHLO
+        id S230167AbiJ1PFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 11:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbiJ1PGN (ORCPT
+        with ESMTP id S230320AbiJ1PFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 11:06:13 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6021D1AA5;
-        Fri, 28 Oct 2022 08:06:12 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id h185so5058076pgc.10;
-        Fri, 28 Oct 2022 08:06:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6Pn++XpjxkHey4dxIJ68gBiqTcOkK8VYxUFou/lwjQA=;
-        b=QrqVvHdbii4u+vv2Ej8qAKv/sfnCiVsZfBI9e6unxff5srtAZCjE3CIZpvuuApDKC8
-         MVmDSD4spXgM8R93a2AcYipYicF3Yn4whDb4OgJWDeUrykEdHf99cvEQD/kA3Dfz6n4J
-         mu47MG9SOXrFqy+hxi2idF9qdXZ3VZNEU2EnBkigEAbwmowrvl5QuoZEDa0WFDOyqCo7
-         5VYnQPsYBesRT+j4IoB9lnK1R79+jhBti1H4RlGhdYPkg6zyHbLbXmifaVmJLoyHErJX
-         zgdi1p7kLdVAlCTl4BLrrea6W2Fzxx6gVcfr3eEedE0RtkSZNHcZNibdYsXqz8QdRtrG
-         OZ9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6Pn++XpjxkHey4dxIJ68gBiqTcOkK8VYxUFou/lwjQA=;
-        b=OBACwZpqNYXRGvcZVsn1M+Jj9F/aCRQDQuMg2MeO/ZmQJzN2yCCueiy53YT2s3AnIP
-         gVyPZfkep232SqnYtj+oywsTYrpyF+A+96uICI8ShqUlWNwA6QQxfXzTe28hjyT+5gHc
-         4Nxh6B/bDiuxICZEI0k4p/8xp3/SZGwOAwdN2I545nUAIOXtXcZ6y2ztI7ra6d1kM2Ub
-         LxQQArimF5oj6kOFo7mIpsrF4KbnDrfCey4yxG7Mg6LjkFe0p6tE/mMO4OYrvD2A+37n
-         cWzc9kh8VbQNYFsPIeq4I99rNbh9Fk0Ir431gqPEOKhE1HO5BYoLeEbkDcacN7+G5eij
-         vDSw==
-X-Gm-Message-State: ACrzQf3P/JWL6m48TokXOFp+EfJ7bU2+LwHoN7okpfFZsd6rb/DZVBf2
-        EHCxhaPYuc71R8BGjzRnn/o=
-X-Google-Smtp-Source: AMsMyM7B55XAKynNnFtFextuwjkOO5jqYBuZsIYo3FwyE89Ln0B28zZ/gZVbRG4KRhC4mdv0NRme7g==
-X-Received: by 2002:a63:ff4f:0:b0:439:61d6:197 with SMTP id s15-20020a63ff4f000000b0043961d60197mr46695602pgk.67.1666969572194;
-        Fri, 28 Oct 2022 08:06:12 -0700 (PDT)
-Received: from localhost ([183.242.254.175])
-        by smtp.gmail.com with ESMTPSA id q12-20020a170902eb8c00b0017f5ad327casm3158950plg.103.2022.10.28.08.06.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 08:06:11 -0700 (PDT)
-From:   Hawkins Jiawei <yin31149@gmail.com>
-To:     syzbot+dde7e853812ed57835ea@syzkaller.appspotmail.com,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-Cc:     18801353760@163.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com, yin31149@gmail.com
-Subject: Re: [syzbot] WARNING in btrfs_block_rsv_release
-Date:   Fri, 28 Oct 2022 23:05:01 +0800
-Message-Id: <20221028150501.5159-1-yin31149@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <000000000000c5461a05ec18b4e6@google.com>
-References: <000000000000c5461a05ec18b4e6@google.com>
-MIME-Version: 1.0
+        Fri, 28 Oct 2022 11:05:21 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2082.outbound.protection.outlook.com [40.107.20.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554FF5DF13;
+        Fri, 28 Oct 2022 08:05:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aAGb4QcTFIC/PHeJNiecftN7Zh2sCgtCZSUIaWf3jpRXsiOfYt7i9M30z3xqx/Irbq1d1LbT1nzV27//yhBebnLSnYVum7PxIthlqGWm5yZInNJUvH7O0u2jZKfNNCFhFfsMYWquMMkK19VvugCAOEU2JrvC0+L73ik6znpYHfRBJ4E3SnpQfVb9WaFgYrQdsuEBzTpok1+hx7jQhgt5asioD1T0EaFuC4BYoIa7tUCuKol+juDuyEzb3me5tmdbQ4yD1YvNOMYQhexBAqmDiqRoStJ0hxipqJnP9J4cSnZR32sJJ25ZPSTLY/76mRwkOLwLgfpbHij6KkYbtqBt5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=peUgVSeIu60LE35eGnTn6KqeTYgw7Q8J8eO99QIGNVk=;
+ b=muuKAULGsFnLudniZq/N7GvCUyt9iDaLeXG3pXIC9df6Rq2tNDRUUPPqkA9SuGUf9ioc5lOSuHvV1ZDLd3v/uMVmWAiYsZqNUYkFm1/NsRwKiCznynM+x2uKv8WM+MDftb9S4k5VuS6ik353FXh/Y5oE8fMcsNg0R4FZClIpFwVNMHJbbtdjmnYez9exslTLKPDc2AO6pWN8AL4ry2FjsNxk2S9GVJWA+yr0tUJQD1/0qD0deNeoAk3ZkAq7XIEcmXM6cN4vrBRDAmFzHVHbw/UCbqHxhDWhrQCvn4c+tlGZdOmr5rImDryyva1zhXS5o/kUpPNT0aIS0kAO1qtmBw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=peUgVSeIu60LE35eGnTn6KqeTYgw7Q8J8eO99QIGNVk=;
+ b=jc4Twc8Nz0ayViFSjpzXvGAYg/UyBnPuCRI/a0hZLVbR6xbD353KfHJOoYn3XOJVscVZRbfG6FbOY9Tyr5DijOcnLc3uJAZZ8T5zQVPr41+FozeCqETqw4Sz2beUVA4kLf9obnzpgX4TyzmqMx4PPRIyq+2RpF2yJK1hI5pgzMFNfDol9ub2JhMPD3LU4ffA/7Voz9QtgPkl1Z9jrCXufq7kpv8QxYZLJ3kn/S1r8RPiE+Y0yNzRGDeR401XzVlyAqTbSJ8RdIffZiI6RnVp6fCFTrlF46MwaFlzVJF0ziPgArJ4Lk18wen1H7b5L+WIrZRtcyK9FpEB4rpaLyQ76Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from AM5PR04MB3089.eurprd04.prod.outlook.com (2603:10a6:206:b::28)
+ by VI1PR04MB7167.eurprd04.prod.outlook.com (2603:10a6:800:12a::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Fri, 28 Oct
+ 2022 15:05:10 +0000
+Received: from AM5PR04MB3089.eurprd04.prod.outlook.com
+ ([fe80::543e:4af3:415e:4848]) by AM5PR04MB3089.eurprd04.prod.outlook.com
+ ([fe80::543e:4af3:415e:4848%4]) with mapi id 15.20.5746.028; Fri, 28 Oct 2022
+ 15:05:10 +0000
+Message-ID: <c90423a5-b89a-6c51-20f5-4945b85349b2@suse.com>
+Date:   Fri, 28 Oct 2022 08:05:04 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v5] scsi:iscsi: Fix multiple iscsi session unbind event
+ sent to userspace
+Content-Language: en-US
+To:     Wenchao Hao <haowenchao@huawei.com>,
+        Chris Leech <cleech@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Steffen Maier <maier@linux.ibm.com>, liuzhiqiang26@huawei.com,
+        linfeilong@huawei.com
+References: <20221028020026.2870104-1-haowenchao@huawei.com>
+ <e6f03525-aad5-c20d-bd8c-a5647898bcf1@suse.com>
+ <79683c37-904e-562f-fc18-98ffda777d08@huawei.com>
+From:   Lee Duncan <lduncan@suse.com>
+In-Reply-To: <79683c37-904e-562f-fc18-98ffda777d08@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-ClientProxiedBy: FR0P281CA0049.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:48::15) To AM5PR04MB3089.eurprd04.prod.outlook.com
+ (2603:10a6:206:b::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM5PR04MB3089:EE_|VI1PR04MB7167:EE_
+X-MS-Office365-Filtering-Correlation-Id: bc4221ce-1b56-49cc-ef12-08dab8f5cec0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jpSr8/CJZkT/jP6NiKgqYK504z5w8MUCq6jwPU9lYMbTMF0Tec2yFprfKSNY8U8yUSOZ4zOojNVr3Mki5jjM5SWZVZFhrwju0VcxzZLgxfiDkp/BbUfSV5qFcrjmNsnlBbZSblkUz5//8oCKz5zbAHMILf2970xGc60XJX6EezJNhvNUCceQvWPQQwjCA7oNQePWTuaWUFby+n2kyXDCWMIAajZSN8s95nGcpds1I4qenqAemH8QRuxwoDFisEyZ9zmLEMfurJuqKOnhgM4bUn80fWtQMvrXOZJgkz9TX6aJ5BjMYW5KGs5mAJCQwD3U2U34sOWIVB03cP0EYOrXTzlXhxezR7jYTKVjJzMktxQTsPCayff1gU7CM0a1DFFClmkNROdP0A5O7YFlkgkzNE7u18c/BhzVQoQfNT5UBtQxpuPnN8QrzqOtkjrx4JoDP1jP8wxE7zEwjyZd6jLoEkkaIfmPMJARoPAurG+hcva15t0/qhFVzwo3FQMHf29qy+6mBP8NEGCaaAFgmDv3Z/JkMITyNY9S9tFZ7HO6OLTjAQcuqylpCOmihXlL3IPRqDZJV/jRC9a3OWZ/hSOEPTYa8NbS0g9MFF7LYwMwaERa5fql728YTj6MO1G7J/A7EEKw3X3kyuNuk0zKFRIy/5LXFSZTeTDaHcu265aoEG2u6R1r3j6gK9SsUEXwuttGN/5HgA/K6XhmaWFE5ZooahGv0O4Zu3R0XwfhnO0sKHmYAqj4cwqNAY4h/b4+xLP9hIfywa5QlGY7EGCS4AaTcgu9DRjOwRJlBO0qknzfhR8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3089.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(376002)(136003)(346002)(39860400002)(366004)(451199015)(38100700002)(7416002)(36756003)(5660300002)(316002)(110136005)(8676002)(2906002)(2616005)(86362001)(6506007)(53546011)(6512007)(26005)(6666004)(6486002)(4326008)(478600001)(83380400001)(41300700001)(66556008)(31686004)(31696002)(66946007)(186003)(8936002)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NlZyNzIvT0ZGaXkvcFhicnhsRS9VRjJZcGRTdHVLVEZhM0xBQmVBNnlDOHpN?=
+ =?utf-8?B?a1JLTGZxNDNkMmdwY2thbUhBYWF1eXE0YU9LcGdOR0k2RnlEUE5BZXVQa1lO?=
+ =?utf-8?B?WjJZSzRvcGE0SWwralp5aEcrQlBIeEkzVmNEOXd6bVF5ZTVYZkF2TDZZeWlB?=
+ =?utf-8?B?Ylo4b1RIc3lKemtDRk90UlJyRDhVQ3g0cnlhcGU1UHBSSGU2YkJJQklwRENC?=
+ =?utf-8?B?SkFrWUVZUlFnTk5zQjFLT3A5RE5yQXZZcGNNN0l0K0QrN1pCbkxjNEw3elBi?=
+ =?utf-8?B?blF6M2lFWWJvRmhSUnhpOUhSWm1Welg0VWIxa0syTS84UEhkQkQ2UE5nVG1P?=
+ =?utf-8?B?UEFmUy9pcWFsaDQ0QkFyZUF4aGdLV1dLWFBWU1d3SFdXRW5lWHA5Vk1pdDNV?=
+ =?utf-8?B?Ujd4K0YzZlhUWEhHMG9NN3pXNWl4VFhmZ2RFbGx6MEZBUTVGM0lOSUZJZlpj?=
+ =?utf-8?B?Umo4aXlBTVpycWdNVnR3TmlEazhEcUpOcG1OL0J2c2hROGo1OHIyTEJOVTAz?=
+ =?utf-8?B?Y3JCanErNE5DY2NGYUYrcllkalozWWNIZzFlbldlOERrVlNURVVlb2dGZmQ4?=
+ =?utf-8?B?bFIzcTI5SzZwSi9VcWtlTEdWN1lHYXFaRzFIYjZidW5rQXJ5NjhVMWIrNGZj?=
+ =?utf-8?B?MVg4UTIzU2ltdlZuUjdnbTgwVUlrSEVNdnNGRW1kZUF5bExYb010ckpVNy9L?=
+ =?utf-8?B?c1UwNFlVMVFxRGVXcjByd3c2L3NmUHlvTFNlcmJRRnNCVjR5R21IaXpONXZW?=
+ =?utf-8?B?WXZnK1g3VjVkbC8wVnJEODNaRngzVUJmRVlsa2cwZSthTGljeGJIWjlFbE1H?=
+ =?utf-8?B?Z3ltQzhFd3dTTHhBQldxc0NYazQvU29VTkI4bFlIQzVyTUNiaVhMUWttZnlo?=
+ =?utf-8?B?Y2NnWjRITVUwdFJLNUUrOWtMRExDR0lMcjBrUVJpSXhVT0N4U2p5VmlGS3BC?=
+ =?utf-8?B?NFl0OVJUaE13WEN6ZFM2RVUrT3BtZThtbkdROWxidlpQeTlwN3daWkFYczN6?=
+ =?utf-8?B?c1NOQVhKcWUwc1MxWGhQWDNTdFIzM25nYUxHKyt4SDg3MndmTTRwSk1HQVhi?=
+ =?utf-8?B?bmRvMFU1ZmpYSDFIWGZjMVFnWjQrN3NFVlFDMEo2ZkJTRDZhV1NFM0V0ZUM5?=
+ =?utf-8?B?QVpxU3JtNmZxY05qZlhhQlBRWW9seGM3MExub1NQVEpHbCtMeTN1eGZ2ZUJ3?=
+ =?utf-8?B?S01HT3FJQXV1RytOWVVhSTNZUnlta2Jac1RsWHlWRWN3VTk0V1NzMTlxb3BB?=
+ =?utf-8?B?emZycTlsT0FuQjBjTUQ3Z3lKay9pUGpNdW9iWEVsdnkzQUx0ZEhaRE9Iekwx?=
+ =?utf-8?B?Ti9lZXh6R2ZEcWs0aDVyWFNnUlREYVBxVnZtdGJCRFd3dzNqTm93bnUwWUNK?=
+ =?utf-8?B?cHlnTzVBVlZ4djd1VnM3a280YzNSdm1PMEgyUmhPcTIyYnNKL2VuaVR5MWlE?=
+ =?utf-8?B?RkFmTlJLaEt4ZzBQZm5jZ1piR1hxa2tGZm81Y1FKNGQ0d2ptM1BKSU5salBa?=
+ =?utf-8?B?bk1IK1A1MGlJTVlUbkdTZkhLUVVuMlZjR0IrVzJ6UWQxcFlDZkg4SEptQXJY?=
+ =?utf-8?B?dE1UcmtzNWdqS25UdldSNFVCZ3gzZnhVRU92SkQ3bXhqeEVVMGk4aVEzRGw2?=
+ =?utf-8?B?MnRxL2RwUzkyOTVyTGNvcFhIbnRITnlCN2ppZWpjVS9GOGJNcS9JS0NjYnVJ?=
+ =?utf-8?B?TTFkemJsUmZQRmlKVk01dXhqWUF1V2xFNjJLWDdJTUxEWTVNZS9PV0xBdHhs?=
+ =?utf-8?B?ZE5MWisvUTR6V3JRRW42ZnZJdFVLSis5WHdzZyt3M3kxMzdtbEViRUlhU2dZ?=
+ =?utf-8?B?UklmNmFaVFRZemo2dDlXMnpKcTd2N1ZkaHE1bUNmTVEyVUFpQW50RC9ONWFN?=
+ =?utf-8?B?bkl1WTZ1OHJhOFU0azBlclNxSUJicFZKVndiNTRHN1grOGo4SHBMZ2U5eDNQ?=
+ =?utf-8?B?akt2TGRkUTFDNjQvTkVQMzE1VWZ1djZUbThkYUdOaENRb05YNEt3bjJzaHdz?=
+ =?utf-8?B?dDZKKzZmYVBWUjZOTWpkVmtGOXBsamRXeVBva1dLQ2ZnWHN3QU16MmdiTS82?=
+ =?utf-8?B?YXpBT2poYzlZOEx0UE1QQkFCSnduREpIVWlRVXdFOFZ5SjNlYWd5ai9zWlo1?=
+ =?utf-8?Q?X4/wMWzRcamLwIQzQLGa/AD4v?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bc4221ce-1b56-49cc-ef12-08dab8f5cec0
+X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3089.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2022 15:05:10.2689
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: a8uO/XRMYpWr4jXb0qaxJQG2NCyCDng/sTJbojcyGIUvP9pYg4pD0Aw7hkGJw7BNrZ5k1pfgvcU7etr1Qosimw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7167
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,122 +132,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Oct 2022 at 19:14, Hawkins Jiawei <yin31149@gmail.com> wrote:
->
-> Hi,
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    493ffd6605b2 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
-> > git tree:       upstream
-> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=1025dd72880000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=dde7e853812ed57835ea
-> > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17d16e6e880000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1672873c880000
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/f1ff6481e26f/disk-493ffd66.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/101bd3c7ae47/vmlinux-493ffd66.xz
-> > mounted in repro: https://storage.googleapis.com/syzbot-assets/df89d50ed284/mount_0.gz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+dde7e853812ed57835ea@syzkaller.appspotmail.com
-> >
-> > ------------[ cut here ]------------
-> > WARNING: CPU: 0 PID: 3612 at fs/btrfs/space-info.h:122 btrfs_space_info_free_bytes_may_use fs/btrfs/space-info.h:154 [inline]
-> > WARNING: CPU: 0 PID: 3612 at fs/btrfs/space-info.h:122 block_rsv_release_bytes fs/btrfs/block-rsv.c:151 [inline]
-> > WARNING: CPU: 0 PID: 3612 at fs/btrfs/space-info.h:122 btrfs_block_rsv_release+0x5d1/0x730 fs/btrfs/block-rsv.c:295
-> > Modules linked in:
-> > CPU: 0 PID: 3612 Comm: syz-executor894 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-> > RIP: 0010:btrfs_space_info_update_bytes_may_use fs/btrfs/space-info.h:122 [inline]
-> > RIP: 0010:btrfs_space_info_free_bytes_may_use fs/btrfs/space-info.h:154 [inline]
-> > RIP: 0010:block_rsv_release_bytes fs/btrfs/block-rsv.c:151 [inline]
-> > RIP: 0010:btrfs_block_rsv_release+0x5d1/0x730 fs/btrfs/block-rsv.c:295
-> > Code: 8b 7c 24 10 74 08 4c 89 f7 e8 2b 94 33 fe 49 8b 1e 48 89 df 48 8b 2c 24 48 89 ee e8 a9 2b e0 fd 48 39 eb 73 0b e8 5f 29 e0 fd <0f> 0b 31 db eb 25 e8 54 29 e0 fd 48 b8 00 00 00 00 00 fc ff df 41
-> > RSP: 0000:ffffc90003baf9e8 EFLAGS: 00010293
-> > RAX: ffffffff83a657f1 RBX: 00000000000d0000 RCX: ffff888020c59d80
-> > RDX: 0000000000000000 RSI: 00000000000e0000 RDI: 00000000000d0000
-> > RBP: 00000000000e0000 R08: ffffffff83a657e7 R09: fffffbfff1c19fde
-> > R10: fffffbfff1c19fde R11: 1ffffffff1c19fdd R12: 1ffff11004f2190c
-> > R13: 00000000000e0000 R14: ffff88802790c860 R15: 0000000000000000
-> > FS:  000055555651b300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007f207ed54000 CR3: 0000000026ea2000 CR4: 00000000003506f0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  <TASK>
-> >  btrfs_release_global_block_rsv+0x2f/0x250 fs/btrfs/block-rsv.c:463
-> >  btrfs_free_block_groups+0xb67/0xfd0 fs/btrfs/block-group.c:4053
-> >  close_ctree+0x6c5/0xbde fs/btrfs/disk-io.c:4710
-> >  generic_shutdown_super+0x130/0x310 fs/super.c:491
-> >  kill_anon_super+0x36/0x60 fs/super.c:1085
-> >  btrfs_kill_super+0x3d/0x50 fs/btrfs/super.c:2441
-> >  deactivate_locked_super+0xa7/0xf0 fs/super.c:331
-> >  cleanup_mnt+0x4ce/0x560 fs/namespace.c:1186
-> >  task_work_run+0x146/0x1c0 kernel/task_work.c:177
-> >  ptrace_notify+0x29a/0x340 kernel/signal.c:2354
-> >  ptrace_report_syscall include/linux/ptrace.h:420 [inline]
-> >  ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
-> >  syscall_exit_work+0x8c/0xe0 kernel/entry/common.c:249
-> >  syscall_exit_to_user_mode_prepare+0x63/0xc0 kernel/entry/common.c:276
-> >  __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
-> >  syscall_exit_to_user_mode+0xa/0x60 kernel/entry/common.c:294
-> >  do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > RIP: 0033:0x7f694614c2f7
-> > Code: 07 00 48 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007ffee1dcd8e8 EFLAGS: 00000206 ORIG_RAX: 00000000000000a6
-> > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f694614c2f7
-> > RDX: 00007ffee1dcd9a9 RSI: 000000000000000a RDI: 00007ffee1dcd9a0
-> > RBP: 00007ffee1dcd9a0 R08: 00000000ffffffff R09: 00007ffee1dcd780
-> > R10: 000055555651c653 R11: 0000000000000206 R12: 00007ffee1dcea20
-> > R13: 000055555651c5f0 R14: 00007ffee1dcd910 R15: 0000000000000004
-> >  </TASK>
->
-> According to my analysis, this bug seems to be related to
-> btrfs_free_reserved_bytes()(Please correct me if I am wrong).
->
-> To be more specific, in btrfs_new_extent_direct(), kernel will
-> reserves space for extent by btrfs_reserve_extent(), and
-> frees those space by btrfs_free_reserved_extent() if
-> btrfs_create_dio_extent() fails(such as inject_fault in the syzkaller)
->
-> Yet the problem is that when reserving space for extent, kernel will
-> converts it from * ->bytes_may_use to ->bytes_reserved, in
-> btrfs_add_reserved_bytes(). But in freeing those space,
-> kernel does not convert it from ->bytes_reserved back to
-> * ->bytes_may_use in btrfs_free_reserved_bytes(),
-> which triggers the above warning.(Please correct me if I am wrong)
->
-> So I think we can convert space from ->bytes_reserved back to
-> * ->bytes_may_use in btrfs_free_reserved_bytes() to solve this bug,
-> as below:
->
+On 10/28/22 02:45, Wenchao Hao wrote:
+> 
+> On 2022/10/28 0:18, Lee Duncan wrote:
+>> On 10/27/22 19:00, Wenchao Hao wrote:
+>>> diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+>>> index cd3db9684e52..2e0d1cd6d4ea 100644
+>>> --- a/drivers/scsi/scsi_transport_iscsi.c
+>>> +++ b/drivers/scsi/scsi_transport_iscsi.c
+>>> @@ -1676,6 +1676,30 @@ static const char *iscsi_session_state_name(int state)
+>>>        return name;
+>>>    }
+>>>    +static struct {
+>>> +    int value;
+>>> +    char *name;
+>>> +} iscsi_session_target_state_names[] = {
+>>> +    { ISCSI_SESSION_TARGET_UNBOUND,        "UNBOUND" },
+>>> +    { ISCSI_SESSION_TARGET_ALLOCATED,    "ALLOCATED" },
+>>> +    { ISCSI_SESSION_TARGET_BOUND,        "BOUND" },
+>>> +    { ISCSI_SESSION_TARGET_UNBINDING,    "UNBINDING" },
+>>> +};
+>>> +
+>>> +static const char *iscsi_session_target_state_name(int state)
+>>> +{
+>>> +    int i;
+>>> +    char *name = NULL;
+>>> +
+>>> +    for (i = 0; i < ARRAY_SIZE(iscsi_session_target_state_names); i++) {
+>>> +        if (iscsi_session_target_state_names[i].value == state) {
+>>> +            name = iscsi_session_target_state_names[i].name;
+>>> +            break;
+>>> +        }
+>>> +    }
+>>> +    return name;
+>>> +}
+>>
+>> It seems like it might be more efficient to use the target state as the array index, so you don't have to loop to find the name, e.g. something like:
+>>
+>>> static char* iscsi_session_target_state_names[] = {
+>>>       .ISCSI_SESSION_TARGET_UNBOUND = "UNBOUND",
+>>>       .ISCSI_SESSION_TARGET_ALLOCATED = "ALLOCATED",
+>>>       .ISCSI_SESSION_TARGET_BOUND = "BOUND",
+>>>       .ISCSI_SESSION_TARGET_UNBINDING = "UNBINDING",
+>>> };
+>>
+>> I know there are only 4 states, and it's only used for sysfs, so not sure it matters much.
+>>
+> 
+> It's a better implement, I would update it.
+> 
+>>> @@ -1961,6 +1987,15 @@ static void __iscsi_unbind_session(struct work_struct *work)
+>>>        unsigned long flags;
+>>>        unsigned int target_id;
+>>>    +    spin_lock_irqsave(&session->lock, flags);
+>>> +    if (session->target_state != ISCSI_SESSION_TARGET_BOUND) {
+>>> +        spin_unlock_irqrestore(&session->lock, flags);
+>>> +        ISCSI_DBG_TRANS_SESSION(session, "Abort unbind sesison\n");
+>>
+>> It'd be nice if this said more, since debugging "Abort unbind sessions" would require finding the sources. How about "Abort unbind session: not bound", for example?
+>>
+> 
+> Of course, I would updated.
+> 
+>>> @@ -264,6 +271,7 @@ struct iscsi_cls_session {
+>>>         */
+>>>        pid_t creator;
+>>>        int state;
+>>> +    int target_state;            /* session target bind state */
+>>>        int sid;                /* session id */
+>>>        void *dd_data;                /* LLD private data */
+>>>        struct device dev;    /* sysfs transport/container device */
+>>
+>> Thank you for sticking with this. It is very much appreciated.
+> 
+> I should apologize for taking this issue off for a long time because of my slow response.
+> 
+> What's more, should I add an acked-by or reviewed-by in my next patch?
 
-It seems that syzbot build/boot failed because of some
-irrelevant reason. Try the specific kernel version.
+Please add my Reviewed-by tag after you make these changes.
 
-#syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-493ffd6605b2d3d4dc7008ab927dba319f36671f
-
-diff --git a/fs/btrfs/block-group.c b/fs/btrfs/block-group.c
-index deebc8ddbd93..cb74fcbf7aaf 100644
---- a/fs/btrfs/block-group.c
-+++ b/fs/btrfs/block-group.c
-@@ -3415,6 +3415,11 @@ void btrfs_free_reserved_bytes(struct btrfs_block_group *cache,
-        space_info->bytes_reserved -= num_bytes;
-        space_info->max_extent_size = 0;
-
-+       trace_btrfs_space_reservation(cache->fs_info, "space_info",
-+                                     space_info->flags, -num_bytes, 1);
-+       btrfs_space_info_update_bytes_may_use(cache->fs_info,
-+                                             space_info, num_bytes);
-+
-        if (delalloc)
-                cache->delalloc_bytes -= num_bytes;
-        spin_unlock(&cache->lock);
+And no problem taking a while. I appreciate your effort!
+-- 
+Lee Duncan
