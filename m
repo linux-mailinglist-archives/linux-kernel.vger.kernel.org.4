@@ -2,82 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0083B611939
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE09761193D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 19:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231371AbiJ1RWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 13:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
+        id S229441AbiJ1RYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 13:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbiJ1RWn (ORCPT
+        with ESMTP id S229501AbiJ1RYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 13:22:43 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC0E22B392
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:22:33 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id io19so5393918plb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 10:22:33 -0700 (PDT)
+        Fri, 28 Oct 2022 13:24:07 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C02822AB58;
+        Fri, 28 Oct 2022 10:24:06 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso10501504pjc.0;
+        Fri, 28 Oct 2022 10:24:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=compal-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wBzTxDjyto5LMQswRTp7KBmkgk5W/wTuc9ACHOfSi38=;
-        b=JG4Bz2Xt7TpUN2+LJ1cuM3aGSLn5E38fvyTlnpd+HZqOkrNsWQqFfHBJgVet95OwS6
-         crQziBTP8KRRFagUdV3nFX/sYlaGGwpBrLhvDsgzADtNGe/mswTcdbOb8Hm8T65tBmg6
-         GLSydsw0BnI0Y97y7UjHC+E7D4pR7NMxml6FcUIfnw4SUCxhUAR2U+rX64sxYHyr7+oi
-         RWDSqa5SEBX+Ac1hkb9/9xQ7En5Gio0tvG6u329Ow1adVh5L6pg2hf5LGP1gQaqpT42y
-         G8bnwgaBo8FdMW5f2poNr3lWbjkQ+FVmDJRd6/oBjmynCxvJKRWsSaVSrFVM8MyX1Gck
-         yvcg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uWRk2+cg4JD0YlEG67ex3jOV5izVRgHvNcMy0hsBnco=;
+        b=prHkLIu5cEuWwbChfnUxhVQzBCXk/zyL6eJyK/Wb7otKwjaCrzIq3XW2UK2JzyS4Iw
+         VO4x7PSyBtEh4QkOXnHq/Lchf8ySh5Aup5b999/W+GXjfDiCBa9zKxEzIVLmyrFfkU6b
+         SxLhNhELaKSgqrlGHWUogD+HSabs65jM9+4kHVbrp6ET9tYi2P7z5K1nXsct2AjsxHF3
+         vdNFvKJv3dmyRqhBxeOLIIYaE0Av+7Da2kGBtCNqhGpKN+30L8jrC0x8FkOv2RACZ0s3
+         lp6K36RgYhat5D86/qQ7UbZmmLFIRiHR2RS0D/IBLYMUBqcsEXndnME3dYJ4SMTy+a0i
+         Fh7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wBzTxDjyto5LMQswRTp7KBmkgk5W/wTuc9ACHOfSi38=;
-        b=SdTCtY8oEWsjyiHJuJ5JzULfSP6dhnywWfS3KA9CJWCCUOXCBNhPBnh5/RqJCjQ7dI
-         TEBvmaKqTkWqA+i09HYoenZcNDF6dP+A0mDapDJQvGLccQ6oisfx89IODMe/sGNdPdr9
-         /vtP8mab7y4NmM/Cq9QkSSqehDfziMVxRIqP5vq47Izj3JBuwbj10v0MC2tWnspX9ENE
-         moM4lWk4wnDYo3jnx2J9qBvQf63VA4SNoS+KJY2VMh/LNRjhcNUnnr2ssrFnzN6aJHBv
-         OE7u2BBio/nIoib3d/lMp5+/v1GIk7vr6bBCXxENjF/I8IsCCzRtrPh13c6UD9VrwDMA
-         d82Q==
-X-Gm-Message-State: ACrzQf0M/jVu5ZStqf/Q2AQx8C4YBYaq8dlBuLy8GKA1GPp7WcbSPX/A
-        s1e+sNNjZLco3tD1+nLcurGSucXpjPZRKQ==
-X-Google-Smtp-Source: AMsMyM6DPrBHcZgw0FfDAPonOtDjiUr4/LhdgLvqWh99+d+DYIHGfBg4evRMFrHi+DnkRKoF2rA42A==
-X-Received: by 2002:a17:902:da8e:b0:186:9869:adfa with SMTP id j14-20020a170902da8e00b001869869adfamr20040plx.57.1666977752566;
-        Fri, 28 Oct 2022 10:22:32 -0700 (PDT)
-Received: from localhost.localdomain (118-167-210-30.dynamic-ip.hinet.net. [118.167.210.30])
-        by smtp.gmail.com with ESMTPSA id rm10-20020a17090b3eca00b0021282014066sm4604945pjb.9.2022.10.28.10.22.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 10:22:32 -0700 (PDT)
-From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        "chunxu . li" <chunxu.li@mediatek.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH v2 2/2] ASoC: mediatek: mt8186-rt5682: Modify machine driver for two DMICs case
-Date:   Sat, 29 Oct 2022 01:22:15 +0800
-Message-Id: <20221028172215.1471235-3-ajye_huang@compal.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221028172215.1471235-1-ajye_huang@compal.corp-partner.google.com>
-References: <20221028172215.1471235-1-ajye_huang@compal.corp-partner.google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uWRk2+cg4JD0YlEG67ex3jOV5izVRgHvNcMy0hsBnco=;
+        b=3ALP5fvrmmfa0GyuEkyVfid4qYUSGOLLedSdwQJSn6MW3qa6zhQmcCM4wd7TBVjhKv
+         HZG7R62fLCDWOuprBKsMY6s54LPwT6mGNZBa+6Jb7S5Rc8bnd45s/HKA+AEsS//yOn3z
+         tYLosxivVsRhs6K3gg/miRAwrzlixLY9ITrQC4/ZIVPpmu8PZX1KPamfBBfQgFUbUYK8
+         DAykpVZwrtrl8rDKcaSvgJkYIc02wdKSdktdfHru9u2nz6EmiNFBWCxGRySrhiNpRGX8
+         RTsRnUxtbOzXJccaqER4A2FRblCinumAeIJJnf2iNCcnu19FAciVzb3aeu3st8DU1c7y
+         3tjA==
+X-Gm-Message-State: ACrzQf2/wYAEHv0qgm8GF+Wq0StGblDq1gtM0w4FhuO8yOLVnQUzIIT0
+        UourUokuD8QdDak/3gmwcuIFiweyr8EaiDd3zD0=
+X-Google-Smtp-Source: AMsMyM4XcalM18oGVqqNW++pIXW4u2xD24d1lXvmoCR4zi6MoMUO15NIU8IpCwvDd/SilDSs/oM2Aipx+j1Q95CDMFY=
+X-Received: by 2002:a17:902:e88a:b0:183:9ecb:ff85 with SMTP id
+ w10-20020a170902e88a00b001839ecbff85mr3434plg.169.1666977846069; Fri, 28 Oct
+ 2022 10:24:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221026074343.6517-1-feng.tang@intel.com> <dc453287-015d-fd1c-fe7f-6ee45772d6aa@linux.ibm.com>
+ <Y1jpDfwBQId3GkJC@feng-clx> <Y1j7tsj5M0Md/+Er@dhcp22.suse.cz>
+ <Y1kl8VbPE0RYdyEB@feng-clx> <Y1lZV6qHp3gIINGc@dhcp22.suse.cz>
+ <CAHbLzkppDPm87dx9-a7t3oP9DuZ0xCPC1UWr+E-s+vh12Gwb+w@mail.gmail.com>
+ <Y1ovOeEPXT1fxCuc@feng-clx> <CAHbLzkqvh3ry=FjQGuG--As2yYF2NU+bfvORqk1FyfE_vvTwXw@mail.gmail.com>
+ <Y1tOigFZeDzjPGsv@feng-clx> <87y1t0ijbk.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87y1t0ijbk.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Fri, 28 Oct 2022 10:23:53 -0700
+Message-ID: <CAHbLzkpO46yTiSVrKWRnABNW_PutuudEkB3RD-_YKxamW9SyaA@mail.gmail.com>
+Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Feng Tang <feng.tang@intel.com>, "Hocko, Michal" <mhocko@suse.com>,
+        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Waiman Long <longman@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Chen, Tim C" <tim.c.chen@intel.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,161 +82,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Having two DMICs, a front DMIC and a Rear DMIC,
-but only host audio input AUX port0 is used for these two Dmics.
-A "dmic-gpios" property is used for a mixer control to switch
-the dmic signal source between the Front and Rear Dmic.
+On Thu, Oct 27, 2022 at 10:55 PM Huang, Ying <ying.huang@intel.com> wrote:
+>
+> Feng Tang <feng.tang@intel.com> writes:
+>
+> > On Thu, Oct 27, 2022 at 10:55:58AM -0700, Yang Shi wrote:
+> >> On Thu, Oct 27, 2022 at 12:12 AM Feng Tang <feng.tang@intel.com> wrote:
+> >> >
+> >> > On Thu, Oct 27, 2022 at 01:57:52AM +0800, Yang Shi wrote:
+> >> > > On Wed, Oct 26, 2022 at 8:59 AM Michal Hocko <mhocko@suse.com> wrote:
+> >> > [...]
+> >> > > > > > This all can get quite expensive so the primary question is, does the
+> >> > > > > > existing behavior generates any real issues or is this more of an
+> >> > > > > > correctness exercise? I mean it certainly is not great to demote to an
+> >> > > > > > incompatible numa node but are there any reasonable configurations when
+> >> > > > > > the demotion target node is explicitly excluded from memory
+> >> > > > > > policy/cpuset?
+> >> > > > >
+> >> > > > > We haven't got customer report on this, but there are quite some customers
+> >> > > > > use cpuset to bind some specific memory nodes to a docker (You've helped
+> >> > > > > us solve a OOM issue in such cases), so I think it's practical to respect
+> >> > > > > the cpuset semantics as much as we can.
+> >> > > >
+> >> > > > Yes, it is definitely better to respect cpusets and all local memory
+> >> > > > policies. There is no dispute there. The thing is whether this is really
+> >> > > > worth it. How often would cpusets (or policies in general) go actively
+> >> > > > against demotion nodes (i.e. exclude those nodes from their allowes node
+> >> > > > mask)?
+> >> > > >
+> >> > > > I can imagine workloads which wouldn't like to get their memory demoted
+> >> > > > for some reason but wouldn't it be more practical to tell that
+> >> > > > explicitly (e.g. via prctl) rather than configuring cpusets/memory
+> >> > > > policies explicitly?
+> >> > > >
+> >> > > > > Your concern about the expensive cost makes sense! Some raw ideas are:
+> >> > > > > * if the shrink_folio_list is called by kswapd, the folios come from
+> >> > > > >   the same per-memcg lruvec, so only one check is enough
+> >> > > > > * if not from kswapd, like called form madvise or DAMON code, we can
+> >> > > > >   save a memcg cache, and if the next folio's memcg is same as the
+> >> > > > >   cache, we reuse its result. And due to the locality, the real
+> >> > > > >   check is rarely performed.
+> >> > > >
+> >> > > > memcg is not the expensive part of the thing. You need to get from page
+> >> > > > -> all vmas::vm_policy -> mm -> task::mempolicy
+> >> > >
+> >> > > Yeah, on the same page with Michal. Figuring out mempolicy from page
+> >> > > seems quite expensive and the correctness can't be guranteed since the
+> >> > > mempolicy could be set per-thread and the mm->task depends on
+> >> > > CONFIG_MEMCG so it doesn't work for !CONFIG_MEMCG.
+> >> >
+> >> > Yes, you are right. Our "working" psudo code for mem policy looks like
+> >> > what Michal mentioned, and it can't work for all cases, but try to
+> >> > enforce it whenever possible:
+> >> >
+> >> > static bool  __check_mpol_demotion(struct folio *folio, struct vm_area_struct *vma,
+> >> >                 unsigned long addr, void *arg)
+> >> > {
+> >> >         bool *skip_demotion = arg;
+> >> >         struct mempolicy *mpol;
+> >> >         int nid, dnid;
+> >> >         bool ret = true;
+> >> >
+> >> >         mpol = __get_vma_policy(vma, addr);
+> >> >         if (!mpol) {
+> >> >                 struct task_struct *task;
+> >> >                 if (vma->vm_mm)
+> >> >                         task = vma->vm_mm->owner;
+> >>
+> >> But this task may not be the task you want IIUC. For example, the
+> >> process has two threads, A and B. They have different mempolicy. The
+> >> vmscan is trying to demote a page belonging to thread A, but the task
+> >> may point to thread B, so you actually get the wrong mempolicy IIUC.
+> >
+> > Yes, this is a valid concern! We don't have good solution for this.
+> > For memory policy, we may only handle the per-vma policy for now whose
+> > cost is relatively low, as a best-effort try.
+>
+> Yes.  The solution isn't perfect, especially for multiple-thread
+> processes with thread specific memory policy.  But the proposed code
+> above can support the most common cases at least, that is, run workload
+> with `numactl`.
 
-Refer to this one as an example,
-commit 3cfbf07c6d27
-("ASoC: qcom: sc7180: Modify machine driver for 2mic")
+Not only multi threads, but also may be broken for shared pages. When
+you do rmap walk, you may get multiple contradict mempolicy, which one
+would you like to obey?
 
-Signed-off-by: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
----
- .../mt8186/mt8186-mt6366-rt1019-rt5682s.c     | 102 +++++++++++++++++-
- 1 file changed, 101 insertions(+), 1 deletion(-)
+TBH I'm not sure whether such half-baked solution is worth it or not,
+at least at this moment. The cost is not cheap, but the gain may not
+be worth it IMHO.
 
-diff --git a/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c b/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
-index 2414c5b77233..b5c25d1247be 100644
---- a/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
-+++ b/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
-@@ -7,6 +7,8 @@
- // Author: Jiaxin Yu <jiaxin.yu@mediatek.com>
- //
- 
-+#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/input.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
-@@ -39,6 +41,8 @@
- 
- struct mt8186_mt6366_rt1019_rt5682s_priv {
- 	struct snd_soc_jack headset_jack, hdmi_jack;
-+	struct gpio_desc *dmic_sel;
-+	int dmic_switch;
- };
- 
- /* Headset jack detection DAPM pins */
-@@ -68,6 +72,94 @@ static struct snd_soc_codec_conf mt8186_mt6366_rt1019_rt5682s_codec_conf[] = {
- 	},
- };
- 
-+static int dmic_get(struct snd_kcontrol *kcontrol,
-+		    struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_dapm_context *dapm = snd_soc_dapm_kcontrol_dapm(kcontrol);
-+	struct mtk_soc_card_data *soc_card_data =
-+		snd_soc_card_get_drvdata(dapm->card);
-+	struct mt8186_mt6366_rt1019_rt5682s_priv *priv = soc_card_data->mach_priv;
-+
-+	ucontrol->value.integer.value[0] = priv->dmic_switch;
-+	return 0;
-+}
-+
-+static int dmic_set(struct snd_kcontrol *kcontrol,
-+		    struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_dapm_context *dapm = snd_soc_dapm_kcontrol_dapm(kcontrol);
-+	struct mtk_soc_card_data *soc_card_data =
-+		snd_soc_card_get_drvdata(dapm->card);
-+	struct mt8186_mt6366_rt1019_rt5682s_priv *priv = soc_card_data->mach_priv;
-+
-+	priv->dmic_switch = ucontrol->value.integer.value[0];
-+	if (priv->dmic_sel) {
-+		gpiod_set_value(priv->dmic_sel, priv->dmic_switch);
-+		dev_info(dapm->card->dev, "dmic_set_value %d\n",
-+		priv->dmic_switch);
-+	}
-+	return 0;
-+}
-+
-+static const char * const dmic_mux_text[] = {
-+	"FrontMic",
-+	"RearMic",
-+};
-+
-+static SOC_ENUM_SINGLE_DECL(mt8186_dmic_enum,
-+			    SND_SOC_NOPM, 0, dmic_mux_text);
-+
-+static const struct snd_kcontrol_new mt8186_dmic_mux_control =
-+	SOC_DAPM_ENUM_EXT("DMIC Select Mux", mt8186_dmic_enum,
-+			  dmic_get, dmic_set);
-+
-+static const struct snd_soc_dapm_widget dmic_widgets[] = {
-+	SND_SOC_DAPM_MIC("DMIC", NULL),
-+	SND_SOC_DAPM_MUX("Dmic Mux", SND_SOC_NOPM, 0, 0, &mt8186_dmic_mux_control),
-+};
-+
-+static const struct snd_soc_dapm_route dmic_map[] = {
-+	/* digital mics */
-+	{"Dmic Mux", "FrontMic", "DMIC"},
-+	{"Dmic Mux", "RearMic", "DMIC"},
-+};
-+
-+static int primary_codec_init(struct snd_soc_pcm_runtime *rtd)
-+{
-+	struct snd_soc_card *card = rtd->card;
-+	struct mtk_soc_card_data *soc_card_data = snd_soc_card_get_drvdata(card);
-+	struct mt8186_mt6366_rt1019_rt5682s_priv *priv = soc_card_data->mach_priv;
-+	int ret;
-+
-+	ret = mt8186_mt6366_init(rtd);
-+
-+	if (ret) {
-+		dev_err(card->dev, "mt8186_mt6366_init failed: %d\n", ret);
-+		return ret;
-+	}
-+
-+	if (!priv->dmic_sel) {
-+		dev_info(card->dev, "dmic_sel is null\n");
-+		return ret;
-+	}
-+
-+	ret = snd_soc_dapm_new_controls(&card->dapm, dmic_widgets,
-+					ARRAY_SIZE(dmic_widgets));
-+	if (ret) {
-+		dev_err(card->dev, "DMic widget addition failed: %d\n", ret);
-+		/* Don't need to add routes if widget addition failed */
-+		return ret;
-+	}
-+
-+	ret = snd_soc_dapm_add_routes(&card->dapm, dmic_map,
-+				      ARRAY_SIZE(dmic_map));
-+
-+	if (ret)
-+		dev_err(card->dev, "DMic map addition failed: %d\n", ret);
-+
-+	return ret;
-+}
-+
- static int mt8186_rt5682s_init(struct snd_soc_pcm_runtime *rtd)
- {
- 	struct snd_soc_component *cmpnt_afe =
-@@ -775,7 +867,7 @@ static struct snd_soc_dai_link mt8186_mt6366_rt1019_rt5682s_dai_links[] = {
- 		.dpcm_playback = 1,
- 		.dpcm_capture = 1,
- 		.ignore_suspend = 1,
--		.init = mt8186_mt6366_init,
-+		.init = primary_codec_init,
- 		SND_SOC_DAILINK_REG(adda),
- 	},
- 	{
-@@ -1015,6 +1107,14 @@ static int mt8186_mt6366_rt1019_rt5682s_dev_probe(struct platform_device *pdev)
- 
- 	soc_card_data->mach_priv = mach_priv;
- 
-+	mach_priv->dmic_sel = devm_gpiod_get_optional(&pdev->dev,
-+						"dmic", GPIOD_OUT_LOW);
-+	if (IS_ERR(mach_priv->dmic_sel)) {
-+		dev_err(&pdev->dev, "DMIC gpio failed err=%ld\n",
-+			PTR_ERR(mach_priv->dmic_sel));
-+		return PTR_ERR(mach_priv->dmic_sel);
-+	}
-+
- 	adsp_node = of_parse_phandle(pdev->dev.of_node, "mediatek,adsp", 0);
- 	if (adsp_node) {
- 		struct mtk_sof_priv *sof_priv;
--- 
-2.25.1
-
+>
+> Best Regards,
+> Huang, Ying
