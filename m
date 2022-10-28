@@ -2,103 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6541611017
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4D161102E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Oct 2022 13:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbiJ1L40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 07:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
+        id S230143AbiJ1L54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 07:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiJ1L4Y (ORCPT
+        with ESMTP id S230177AbiJ1L5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 07:56:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B96F1C8D48;
-        Fri, 28 Oct 2022 04:56:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 351F86268C;
-        Fri, 28 Oct 2022 11:56:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB70CC433C1;
-        Fri, 28 Oct 2022 11:56:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666958182;
-        bh=GajkIQuzrXIIDnBsaZvhN+ecuRXsqOWV5zsQ+wIwrZw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AE0J/FU24uj2MBHn9UKB06iauoLTCYWYWPC81msDpshmPXPB1LYtdXl7XVj+je7Yq
-         DP27Q6rkf7r2lxMHPbGNAIMajkevaZ8CCXnVsYDBri2b0fKA4SRJpaNzwYoESzV0KP
-         6nntRtx11lz4UmsbkZP7v11aLyKiCzKvzNgmuYcf6Gkt2QULmMor4SwKdS72vmSUpG
-         +IxnnVOR1glgwyjZ1kyD/RVVRMDrsCzSwQxCfEcuc00fgMQGCW2jWpN1fZEVq5WnE0
-         waVTUbiny3BfTG59K91selF+MDJPuov8GFSFskn2PCd+OUJvLWucAc/6vXv9E1efk7
-         BW8uFfueYPmwQ==
-Date:   Fri, 28 Oct 2022 12:56:16 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-Cc:     linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, robh@kernel.org,
-        Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        angelogioacchino.delregno@collabora.corp-partner.google.com,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v1 1/2] ASoC: dt-bindings: Document dmic_sel-gpios
- optional prop for two DMICs case
-Message-ID: <Y1vDYNOwZNOco1hq@sirena.org.uk>
-References: <20221028102450.1161382-1-ajye_huang@compal.corp-partner.google.com>
- <20221028102450.1161382-2-ajye_huang@compal.corp-partner.google.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="M+JJnzUDip9rx8JE"
-Content-Disposition: inline
-In-Reply-To: <20221028102450.1161382-2-ajye_huang@compal.corp-partner.google.com>
-X-Cookie: Life -- Love It or Leave It.
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 28 Oct 2022 07:57:47 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9BA1D2F53;
+        Fri, 28 Oct 2022 04:57:46 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id bp11so6279399wrb.9;
+        Fri, 28 Oct 2022 04:57:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d6TXMetWnpVwYHSPTFYs3mT2fLaW0Up+55RjBCRl8KU=;
+        b=mvmaK9T8qwPNPB+J7se1Ff9zTxxeP5LLtleQPQy2l7Ig/MCTEFsrnWFwWD7izpJuDX
+         OFjdnlq66bH7TMJzIUW2jFH/t+JtAqni85de4XJRnsuyWahj4y7ZQef9hvkcilHKIwJX
+         9CBpP0OTuUDodmFUqc4VNfUlJzuzkJnzp/CTbLRQsT3Er27hbpQO7Af9jhUnpZn8Cw/7
+         O9+hK8QKIRtVOUnvAlaMaRJhuj0GNA3qbF2cR78tBUoUk8ELZCMDWTZ7clljMjsNJqT0
+         tHqkbcxREOVf0xpWkXPvJYZj63Hdx1+MxdBeJlfxIjK1ewNECpMl/LcVh+pxL0oS22N6
+         R06w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=d6TXMetWnpVwYHSPTFYs3mT2fLaW0Up+55RjBCRl8KU=;
+        b=dammCV1/erP2hD3tUesLqG+u9ixNgQnuhAt7gtGijQryAKcBJ6Hkt3jMOdIjHjYDBs
+         BQs0BQAhAWQ4WKtT5nv6N/JD2cCNnyGRX9L+sIOjCp54RjHJMkW3W88qmWnVMeyNoSXS
+         3yful2Vx2dp6LmdpNEuQD2UV+3MeiF7+0nppjcvweQj//lY7EqXrqaPYCJKsozYhE2GP
+         zPzMYslMxGDEog9rjwncpgk5a7IViu1vdIVS21Fj9SDgswUh1y50SJrYK6bZZ0p5U0+a
+         vqubpQVbxbdyu5/MChFkcXjhM7gjK/HptWH82D/azTi0rySzIFa26jDoHVPuuJNOV5T/
+         3Jbg==
+X-Gm-Message-State: ACrzQf177XCJKQUXZexTqf2kVegFnj+c6v1KdG7DWytinlVP2/bsqNAm
+        eouYfeglqfrcIdJafGXBeiQ=
+X-Google-Smtp-Source: AMsMyM5hRnYbweXL1+XX4tNLxBdLLaib/s1w7MLS8s8E1AxKI0PtEVr2IixL3tBFIsXYWvEkZo2/Mg==
+X-Received: by 2002:a5d:47a4:0:b0:230:20a1:2054 with SMTP id 4-20020a5d47a4000000b0023020a12054mr35753467wrb.299.1666958264871;
+        Fri, 28 Oct 2022 04:57:44 -0700 (PDT)
+Received: from felia.fritz.box (200116b826565c00108e11a5f898944c.dip.versatel-1u1.de. [2001:16b8:2656:5c00:108e:11a5:f898:944c])
+        by smtp.gmail.com with ESMTPSA id h8-20020adffa88000000b0023538fb27c1sm3547623wrr.85.2022.10.28.04.57.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 04:57:43 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: adjust entry after arm64 efi-entry.S file movement
+Date:   Fri, 28 Oct 2022 13:56:19 +0200
+Message-Id: <20221028115619.2814-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 6ed27461c9c8 ("arm64: efi: Move efi-entry.S into the libstub source
+directory") moves arch/arm64/kernel/efi-entry.S to
+drivers/firmware/efi/libstub/arm64-entry.S, but misses to adjust the
+MAINTAINERS file.
 
---M+JJnzUDip9rx8JE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+broken file pattern.
 
-On Fri, Oct 28, 2022 at 06:24:49PM +0800, Ajye Huang wrote:
-> Document dmic_sel-gpios optional prop for switching between two DMICs.
-> Ex, the GPIO can control a MUX to select Front or Rear dmic.
+Adjust the file entry in EXTENSIBLE FIRMWARE INTERFACE (EFI) to this file
+movement.
 
-> +  dmic_sel-gpios:
-> +    maxItems: 1
-> +    description: GPIO for switching between DMICs, ex Front/Rear dmic
-> +
+As the file drivers/firmware/efi/libstub/arm64-entry.S is already covered
+by the entry drivers/firmware/efi/, simply remove the arm64 file entry.
 
-If we're going to do this we should also allow the bindings to label the
-mics appropriately so that the control presented can reflect the actual
-hardware.  It does feel like it might fit better to do this separately
-to the DMIC driver as a mux between the DMIC and the DAI it's connected
-to but equally with the way things are at the minute that feels like
-it's probably disproportionate effort.
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ MAINTAINERS | 1 -
+ 1 file changed, 1 deletion(-)
 
---M+JJnzUDip9rx8JE
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f4f908c28d7e..194ae5dd952e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7806,7 +7806,6 @@ F:	Documentation/admin-guide/efi-stub.rst
+ F:	arch/*/include/asm/efi.h
+ F:	arch/*/kernel/efi.c
+ F:	arch/arm/boot/compressed/efi-header.S
+-F:	arch/arm64/kernel/efi-entry.S
+ F:	arch/x86/platform/efi/
+ F:	drivers/firmware/efi/
+ F:	include/linux/efi*.h
+-- 
+2.17.1
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNbw18ACgkQJNaLcl1U
-h9A7JQf+MkRMavqrw/+lt93KD/xfx0zvIziXhJJ3+MlsSpvWpJmxEX1nDEEu2I2g
-C3wW4SWf4Um/Y1k/eHZYy/KpGJe0ceGE3pmMdrZynpXT2CIWFnGAyLkZAtlRajY9
-3wn7V68sQ/A+py5pQOPY1/uDrOkQH2NwHjR9lLvUE8uT/yF1fKmDSMfQTPqHXIVJ
-osuU/f+QuIC6JRvu1KcLLk4k0e+Urkm8Y6rck9P3qmbSFM2JqvTm7ZGIIFnmIakd
-U4r5I/ex9DN8Qnc002dKHTVM+1Q3AmE6TCnrtnh6F009WvQV7XFLiFQck1b7P5HQ
-CIoF98dhQQ/K07h+K2mhTr9xu1ScjQ==
-=QJF2
------END PGP SIGNATURE-----
-
---M+JJnzUDip9rx8JE--
