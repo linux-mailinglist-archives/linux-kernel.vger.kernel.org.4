@@ -2,49 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E1F611F59
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 04:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F268611F5A
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 04:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiJ2CiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 22:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44642 "EHLO
+        id S229767AbiJ2Cid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 22:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiJ2CiW (ORCPT
+        with ESMTP id S229744AbiJ2Cib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 22:38:22 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B4B20F78;
-        Fri, 28 Oct 2022 19:38:20 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Mzk425T5gz15MDD;
-        Sat, 29 Oct 2022 10:33:22 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 29 Oct 2022 10:38:18 +0800
-Subject: Re: [PATCH net] ipv4: fix source address and gateway mismatch under
- multiple default gateways
-To:     Julian Anastasov <ja@ssi.bg>
-CC:     <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20221026032017.3675060-1-william.xuanziyang@huawei.com>
- <5e0249d-b6e1-44fa-147b-e2af65e56f64@ssi.bg>
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-Message-ID: <dd75da01-ef55-cd4f-4e8c-12c6b5cc4ab7@huawei.com>
-Date:   Sat, 29 Oct 2022 10:38:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Fri, 28 Oct 2022 22:38:31 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA60F1C4EED
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 19:38:29 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id i10so4499041qkl.12
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 19:38:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TPMGFP4WsRn5RhnkYFMzq7QYqhO9Igv5Sk67nHNTQRo=;
+        b=MJwCFk+aRBBC8yd7D+5PFoGt0kiSGdcuGlh3JIifzrsC1i8jU4jPAyCvkS+RmyTHMd
+         45IzP/KjzBK4Zn5lBL3Zg4YPSP8KGvJ/kh0mPvfvESYuWobXLwLCt2YItNJzBiZOCFU8
+         54rdgdznGC9NcSrvXQi6ngFnU2KWM0M/moQ3oZJXncIgMSNp4CJc//Pf57UrH85UXpEl
+         trotKbRjumdkACTez/+EOcMRyPaHeHBNCINaRnu7KOZTmZnPb5MKz+7uTjdE2XgrtdUM
+         rwndRbiObLn5022CBO6Hz8XCD8odbZNUDNwy8cq+mEhEEoxtqgI4rD+NwUT8uOXs3U3m
+         9WUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TPMGFP4WsRn5RhnkYFMzq7QYqhO9Igv5Sk67nHNTQRo=;
+        b=PpVBmVrHSBauxGYsuIEXIfDqMWXz7b3OpXgsyTqCJw1f/Uz5Hly1eRYbbwk6OjCO4E
+         FF5pXMwWo64OlmmeT+SWoNUl7lrWWN8qz66LgLEifL3jEuXdupUnIlkK9ZA8AoIZQFKp
+         +1y1XW3WfhedFw6iXuLQGTNLpYroOYNsX1vi/x+DnYWQiQyZYF6bzfZsb9HwMbiNC6gu
+         p2Uo0Y4TZltoAy6gf1hQKnWTTmQanhM13g3X/8aHFHnjN+BqwRMA5o5LE9q/kzQM7cPA
+         A6xNvgvsNsCVJkiDcQqyMMqo8yGxWRE4L+ypKRz79e8B9ljwVj3pmh8DlfwGT5zWJzNo
+         qK0A==
+X-Gm-Message-State: ACrzQf3jDkfDUnn/D7IbMUjXrj134LOxTPHCqlkI8ZgOAWK4NTm3ZEGi
+        Ehi9MZfDOiWHNduMmycNJf0=
+X-Google-Smtp-Source: AMsMyM7AzOH6l57xDEEegyODYLZVLdheWGCQnXWR8evxDZaSt595rcEy9FcNF0NxUt6zhj3TO7DBeQ==
+X-Received: by 2002:a05:620a:4606:b0:6ee:e73b:aecb with SMTP id br6-20020a05620a460600b006eee73baecbmr1635401qkb.681.1667011108994;
+        Fri, 28 Oct 2022 19:38:28 -0700 (PDT)
+Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id x10-20020ac84d4a000000b0039ccbf75f92sm224764qtv.11.2022.10.28.19.38.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 19:38:28 -0700 (PDT)
+Message-ID: <fc09a68c-bd6d-0328-4052-88d40b50077d@gmail.com>
+Date:   Fri, 28 Oct 2022 19:38:25 -0700
 MIME-Version: 1.0
-In-Reply-To: <5e0249d-b6e1-44fa-147b-e2af65e56f64@ssi.bg>
-Content-Type: text/plain; charset="gbk"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v4 0/11] Introduce a unified API for SCMI Server testing
 Content-Language: en-US
+To:     Cristian Marussi <cristian.marussi@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@Huawei.com, etienne.carriere@linaro.org,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com,
+        wleavitt@marvell.com, peter.hilber@opensynergy.com,
+        nicola.mazzucato@arm.com, tarek.el-sherbiny@arm.com,
+        quic_kshivnan@quicinc.com
+References: <20221019204626.3813043-1-cristian.marussi@arm.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221019204626.3813043-1-cristian.marussi@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,145 +80,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> 
-> 	Hello,
-> 
-> On Wed, 26 Oct 2022, Ziyang Xuan wrote:
-> 
->> We found a problem that source address doesn't match with selected gateway
->> under multiple default gateways. The reproducer is as following:
->>
->> Setup in client as following:
->>
->> $ ip link add link eth2 dev eth2.71 type vlan id 71
->> $ ip link add link eth2 dev eth2.72 type vlan id 72
->> $ ip addr add 192.168.71.41/24 dev eth2.71
->> $ ip addr add 192.168.72.41/24 dev eth2.72
->> $ ip link set eth2.71 up
->> $ ip link set eth2.72 up
->> $ route add -net default gw 192.168.71.1 dev eth2.71
->> $ route add -net default gw 192.168.72.1 dev eth2.72
-> 
-> 	Second route goes to first position due to the
-> prepend operation for the route add command. That is
-> why 192.168.72.41 is selected.
-> 
->> Add a nameserver configuration in the following file:
->> $ cat /etc/resolv.conf
->> nameserver 8.8.8.8
->>
->> Setup in peer server as following:
->>
->> $ ip link add link eth2 dev eth2.71 type vlan id 71
->> $ ip link add link eth2 dev eth2.72 type vlan id 72
->> $ ip addr add 192.168.71.1/24 dev eth2.71
->> $ ip addr add 192.168.72.1/24 dev eth2.72
->> $ ip link set eth2.71 up
->> $ ip link set eth2.72 up
->>
->> Use the following command trigger DNS packet in client:
->> $ ping www.baidu.com
->>
->> Capture packets with tcpdump in client when ping:
->> $ tcpdump -i eth2 -vne
->> ...
->> 20:30:22.996044 52:54:00:20:23:a9 > 52:54:00:d2:4f:e3, ethertype 802.1Q (0x8100), length 77: vlan 71, p 0, ethertype IPv4, (tos 0x0, ttl 64, id 25407, offset 0, flags [DF], proto UDP (17), length 59)
->>     192.168.72.41.42666 > 8.8.8.8.domain: 58562+ A? www.baidu.com. (31)
->> ...
->>
->> We get the problem that IPv4 saddr "192.168.72.41" do not match with
->> selected VLAN device "eth2.71".
-> 
-> 	The problem could be that source address is selected
-> once and later used as source address in following routing lookups.
-> 
-> 	And your routing rules do not express the restriction that
-> both addresses can not be used for specific route. If you have
-> such restriction which is common, you should use source-specific routes:
+Hi Christian,
 
-Hi Julian,
+On 10/19/2022 1:46 PM, Cristian Marussi wrote:
+[snip]
 
-Thank you for your quick reply.
+> In V2 the runtime enable/disable switching capability has been removed
+> (for now) since still not deemed to be stable/reliable enough: as a
+> consequence when SCMI Raw support is compiled in, the regular SCMI stack
+> drivers are now inhibited permanently for that Kernel.
 
-Can we make some work to make the restriction "both addresses can not be used for specific route" in code but in consciousness?
+For our platforms (ARCH_BRCMSTB) we would need to have the ability to 
+start with the regular SCMI stack to satisfy if nothing else, all clock 
+consumers otherwise it makes it fairly challenging for us to boot to a 
+prompt as we purposely turn off all unnecessary peripherals to conserve 
+power. We could introduce a "full on" mode to remove the clock provider 
+dependency, but I suspect others on "real" silicon may suffer from the 
+same short comings.
 
-Thanks.
+Once user-space is reached, I suppose we could find a way to unbind from 
+all SCMI consumers, and/or ensure that runtime PM is disabled, cpufreq 
+is in a governor that won't do any active frequency switching etc.
 
-> 
-> 1. ip rule to consider table main only for link routes,
-> no default routes here
-> 
-> ip rule add prio 10 table main
-> 
-> 2. source-specific routes:
-> 
-> ip rule add prio 20 from 192.168.71.0/24 table 20
-> ip route append default via 192.168.71.1 dev eth2.71 src 192.168.71.41 table 20
-> ip rule add prio 30 from 192.168.72.0/24 table 30
-> ip route append default via 192.168.72.1 dev eth2.72 src 192.168.72.41 table 30
-> 
-> 3. Store default alternative routes not in table main:
-> ip rule add prio 200 table 200
-> ip route append default via 192.168.71.1 dev eth2.71 src 192.168.71.41 table 200
-> ip route append default via 192.168.72.1 dev eth2.72 src 192.168.72.41 table 200
-> 
-> 	Above routes should work even without specifying prefsrc.
-> 
-> 	As result, table 200 is used only for routing lookups
-> without specific source address, usually for first packet in
-> connection, next packets should hit tables 20/30.
-> 
-> 	You can check https://ja.ssi.bg/dgd-usage.txt for such
-> examples, see under 2. Alternative routes and dead gateway detection
-> 
->> In above scenario, the process does __ip_route_output_key() twice in
->> ip_route_connect(), the two processes have chosen different default gateway,
->> and the last choice is not the best.
->>
->> Add flowi4->saddr and fib_nh_common->nhc_gw.ipv4 matching consideration in
->> fib_select_default() to fix that.
-> 
-> 	Other setups may not have such restriction, they can
-> prefer any gateway in reachable state no matter the saddr.
-> 
->> Fixes: 19baf839ff4a ("[IPV4]: Add LC-Trie FIB lookup algorithm.")
->> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
->> ---
->>  net/ipv4/fib_semantics.c | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/net/ipv4/fib_semantics.c b/net/ipv4/fib_semantics.c
->> index e9a7f70a54df..8bd94875a009 100644
->> --- a/net/ipv4/fib_semantics.c
->> +++ b/net/ipv4/fib_semantics.c
->> @@ -2046,6 +2046,7 @@ static void fib_select_default(const struct flowi4 *flp, struct fib_result *res)
->>  	int order = -1, last_idx = -1;
->>  	struct fib_alias *fa, *fa1 = NULL;
->>  	u32 last_prio = res->fi->fib_priority;
->> +	u8 prefix, max_prefix = 0;
->>  	dscp_t last_dscp = 0;
->>  
->>  	hlist_for_each_entry_rcu(fa, fa_head, fa_list) {
->> @@ -2078,6 +2079,11 @@ static void fib_select_default(const struct flowi4 *flp, struct fib_result *res)
->>  		if (!nhc->nhc_gw_family || nhc->nhc_scope != RT_SCOPE_LINK)
->>  			continue;
->>  
->> +		prefix = __ffs(flp->saddr ^ nhc->nhc_gw.ipv4);
->> +		if (prefix < max_prefix)
->> +			continue;
->> +		max_prefix = max_t(u8, prefix, max_prefix);
->> +
->>  		fib_alias_accessed(fa);
->>  
->>  		if (!fi) {
->> -- 
->> 2.25.1
-> 
-> Regards
-> 
-> --
-> Julian Anastasov <ja@ssi.bg>
-> 
-> 
-> .
-> 
+What do you think?
+-- 
+Florian
