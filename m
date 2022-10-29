@@ -2,81 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A76E4612429
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 17:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 717AF612420
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 17:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiJ2PYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 11:24:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38116 "EHLO
+        id S229828AbiJ2PKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 11:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiJ2PYH (ORCPT
+        with ESMTP id S229789AbiJ2PKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 11:24:07 -0400
-Received: from jari.cn (unknown [218.92.28.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACC7D52087
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 08:24:04 -0700 (PDT)
-Received: by ajax-webmail-localhost.localdomain (Coremail) ; Sat, 29 Oct
- 2022 23:19:27 +0800 (GMT+08:00)
-X-Originating-IP: [182.148.13.81]
-Date:   Sat, 29 Oct 2022 23:19:27 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   wangkailong@jari.cn
-To:     harry.wentland@amd.com, sunpeng.li@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, HaoPing.Liu@amd.com, nicholas.kazlauskas@amd.com
-Cc:     mario.limonciello@amd.com, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/amd/display: replace ternary operator with max()
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
- Copyright (c) 2002-2022 www.mailtech.cn
- mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Sat, 29 Oct 2022 11:10:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA082FC31;
+        Sat, 29 Oct 2022 08:10:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2715B80939;
+        Sat, 29 Oct 2022 15:10:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9853BC433D6;
+        Sat, 29 Oct 2022 15:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667056210;
+        bh=mOHOFPnUIanOt/8CZe7yg7vprJJpkdiXWEot67QgAvg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oGdvnYtTW3+D7LUZmwdjXEsD875n5caNW0pefVQhEWNA6ZXTe9aurvQJiL2T/ArP1
+         /pVSsL5VU/pVExwZGxYH837fonmsy8nb2y3HxhXBGeOK5wc3vl12ygGH5KXTx4OSf1
+         SkKqpysUz1EOw9Olgym2kdwIyCzzVyp+8h6EepCVcGloWHo9Ws5H4fNFHp3NGYELMr
+         ec/e/pcuUNQpK2dwkZkJgFUDsUCuHQJrWKo17jhvgrfzvKFmbAkpQSfom5eoPZIofh
+         agYXrTDPccx1aqVflKwkg/rN7CVJk4wdKllNYu7z0+3tsvG/6DHp0enYUpz4Kb5rF9
+         6PQfHbfZzrwAw==
+Date:   Sat, 29 Oct 2022 16:22:07 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Ramona Bolboaca <ramona.bolboaca@analog.com>
+Cc:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings:iio:accel: Add docs for ADXL359
+Message-ID: <20221029162207.76311679@jic23-huawei>
+In-Reply-To: <20221028134454.669509-2-ramona.bolboaca@analog.com>
+References: <20221028134454.669509-1-ramona.bolboaca@analog.com>
+        <20221028134454.669509-2-ramona.bolboaca@analog.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Message-ID: <9d641b0.3d.184245391ec.Coremail.wangkailong@jari.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAfwCXq+F_RF1jA+AAAA--.19W
-X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQAKB2FEYx0AVwALsL
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
-        T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rml4IHRoZSBmb2xsb3dpbmcgY29jY2ljaGVjayB3YXJuaW5nOgoKZGNuMjBfY2xrX21nci5jOjMx
-NDpXQVJOSU5HIG9wcG9ydHVuaXR5IGZvciBtYXgoKQpkY24yMF9jbGtfbWdyLmM6MzUxOldBUk5J
-Tkcgb3Bwb3J0dW5pdHkgZm9yIG1heCgpCgpTaWduZWQtb2ZmLWJ5OiBLYWlMb25nIFdhbmcgPHdh
-bmdrYWlsb25nQGphcmkuY24+Ci0tLQogZHJpdmVycy9ncHUvZHJtL2FtZC9kaXNwbGF5L2RjL2Ns
-a19tZ3IvZGNuMjAvZGNuMjBfY2xrX21nci5jIHwgNCArKy0tCiAxIGZpbGUgY2hhbmdlZCwgMiBp
-bnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2Ry
-bS9hbWQvZGlzcGxheS9kYy9jbGtfbWdyL2RjbjIwL2RjbjIwX2Nsa19tZ3IuYyBiL2RyaXZlcnMv
-Z3B1L2RybS9hbWQvZGlzcGxheS9kYy9jbGtfbWdyL2RjbjIwL2RjbjIwX2Nsa19tZ3IuYwppbmRl
-eCA2NTBmM2I0YjU2MmUuLjFhZWNkYzVmNzNiNiAxMDA2NDQKLS0tIGEvZHJpdmVycy9ncHUvZHJt
-L2FtZC9kaXNwbGF5L2RjL2Nsa19tZ3IvZGNuMjAvZGNuMjBfY2xrX21nci5jCisrKyBiL2RyaXZl
-cnMvZ3B1L2RybS9hbWQvZGlzcGxheS9kYy9jbGtfbWdyL2RjbjIwL2RjbjIwX2Nsa19tZ3IuYwpA
-QCAtMzExLDcgKzMxMSw3IEBAIHZvaWQgZGNuMl91cGRhdGVfY2xvY2tzKHN0cnVjdCBjbGtfbWdy
-ICpjbGtfbWdyX2Jhc2UsCiAJCW5ld19jbG9ja3MtPmRpc3BfZHBwX3ZvbHRhZ2VfbGV2ZWxfa2h6
-ID0gbmV3X2Nsb2Nrcy0+ZHBwY2xrX2toejsKIAogCQlpZiAodXBkYXRlX2Rpc3BjbGspCi0JCQlu
-ZXdfY2xvY2tzLT5kaXNwX2RwcF92b2x0YWdlX2xldmVsX2toeiA9IG5ld19jbG9ja3MtPmRpc3Bj
-bGtfa2h6ID4gbmV3X2Nsb2Nrcy0+ZHBwY2xrX2toeiA/IG5ld19jbG9ja3MtPmRpc3BjbGtfa2h6
-IDogbmV3X2Nsb2Nrcy0+ZHBwY2xrX2toejsKKwkJCW5ld19jbG9ja3MtPmRpc3BfZHBwX3ZvbHRh
-Z2VfbGV2ZWxfa2h6ID0gbWF4KG5ld19jbG9ja3MtPmRpc3BjbGtfa2h6LCBuZXdfY2xvY2tzLT5k
-cHBjbGtfa2h6KTsKIAogCQljbGtfbWdyX2Jhc2UtPmNsa3MuZGlzcF9kcHBfdm9sdGFnZV9sZXZl
-bF9raHogPSBuZXdfY2xvY2tzLT5kaXNwX2RwcF92b2x0YWdlX2xldmVsX2toejsKIAkJaWYgKHBw
-X3NtdSAmJiBwcF9zbXUtPnNldF92b2x0YWdlX2J5X2ZyZXEpCkBAIC0zNDgsNyArMzQ4LDcgQEAg
-dm9pZCBkY24yX3VwZGF0ZV9jbG9ja3NfZnBnYShzdHJ1Y3QgY2xrX21nciAqY2xrX21nciwKIAog
-CXN0cnVjdCBkY19jbG9ja3MgKm5ld19jbG9ja3MgPSAmY29udGV4dC0+YndfY3R4LmJ3LmRjbi5j
-bGs7CiAJLyogTWluIGZjbGsgPSAxLjJHSHogc2luY2UgYWxsIHRoZSBleHRyYSBzY2VtaSBsb2dp
-YyBzZWVtcyB0byBydW4gb2ZmIG9mIGl0ICovCi0JaW50IGZjbGtfYWRqID0gbmV3X2Nsb2Nrcy0+
-ZmNsa19raHogPiAxMjAwMDAwID8gbmV3X2Nsb2Nrcy0+ZmNsa19raHogOiAxMjAwMDAwOworCWlu
-dCBmY2xrX2FkaiA9IG1heChuZXdfY2xvY2tzLT5mY2xrX2toeiwgMTIwMDAwMCk7CiAKIAlpZiAo
-c2hvdWxkX3NldF9jbG9jayhzYWZlX3RvX2xvd2VyLCBuZXdfY2xvY2tzLT5waHljbGtfa2h6LCBj
-bGtfbWdyLT5jbGtzLnBoeWNsa19raHopKSB7CiAJCWNsa19tZ3ItPmNsa3MucGh5Y2xrX2toeiA9
-IG5ld19jbG9ja3MtPnBoeWNsa19raHo7Ci0tIAoyLjI1LjEK
+On Fri, 28 Oct 2022 16:44:53 +0300
+Ramona Bolboaca <ramona.bolboaca@analog.com> wrote:
+
+> Update ADXL355 existing documentation with documentation
+> for ADXL359 dedvice.
+> 
+> Signed-off-by: Ramona Bolboaca <ramona.bolboaca@analog.com>
+> ---
+>  .../devicetree/bindings/iio/accel/adi,adxl355.yaml        | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/accel/adi,adxl355.yaml b/Documentation/devicetree/bindings/iio/accel/adi,adxl355.yaml
+> index 14b487088ab4..93ad7ff6b355 100644
+> --- a/Documentation/devicetree/bindings/iio/accel/adi,adxl355.yaml
+> +++ b/Documentation/devicetree/bindings/iio/accel/adi,adxl355.yaml
+> @@ -4,20 +4,22 @@
+>  $id: http://devicetree.org/schemas/iio/accel/adi,adxl355.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Analog Devices ADXL355 3-Axis, Low noise MEMS Accelerometer
+> +title: Analog Devices ADXL355 and ADXL359 3-Axis, Low noise MEMS Accelerometer
+trivial: Accelerometers
+>  
+>  maintainers:
+>    - Puranjay Mohan <puranjay12@gmail.com>
+>  
+>  description: |
+> -  Analog Devices ADXL355 3-Axis, Low noise MEMS Accelerometer that supports
+> -  both I2C & SPI interfaces
+> +  Analog Devices ADXL355 and ADXL359 3-Axis, Low noise MEMS Accelerometer that
+trivial: Accelerometers
+
+Fix it if we need a v2 for other reasons. If not I can do it whilst applying.
+
+Jonathan
+
+> +  supports both I2C & SPI interfaces
+>      https://www.analog.com/en/products/adxl355.html
+> +    https://www.analog.com/en/products/adxl359.html
+>  
+>  properties:
+>    compatible:
+>      enum:
+>        - adi,adxl355
+> +      - adi,adxl359
+>  
+>    reg:
+>      maxItems: 1
+
