@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E2E6125B7
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 23:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6B26125BB
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 23:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiJ2Vzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 17:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
+        id S229500AbiJ2V42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 17:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiJ2Vzs (ORCPT
+        with ESMTP id S229574AbiJ2V4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 17:55:48 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61951A07F
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 14:55:46 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id s24so12465506ljs.11
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 14:55:46 -0700 (PDT)
+        Sat, 29 Oct 2022 17:56:20 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE29127FF4
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 14:56:18 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id d6so13653232lfs.10
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 14:56:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ebz8DsXHyuMRTypjp3FqQKi0fJVFR4oscki6XfcLec0=;
-        b=YqaMaYH1R4LKhk9GVQ3J931j7/r1rJ67dJwly1lLUDCUIiIkjM2uSrXore5RHz8yxv
-         c8ql2/Yuju0KKbHgzz871gz2EAV1QkG31q/TctGsLfvGmg0kdUL2mXo8+ul6Jph5jCuB
-         Zoye5dBs4/Y1XOLOIwkaJvMRdgLfyCotcwIqk2xtIPJC7XRnMhKAFHVKtrm91C92MhjJ
-         PtdG/9cewwy/7JQDmAz7J1AUlN2w3gosltqtJjNBSM1IIi4UvZnOYtpUtTQLPyo6nvkT
-         2yEYiOVMjX45Q1B1bHiv8z5Rji346bck3ee9GIRRj4JFKxEJCQdcCNDAQRZwHeNW7joU
-         kcYw==
+        bh=cZpw4f7LAUGvF4cSAbPz5CyMSMlcyLXGFUZk34oAqwk=;
+        b=e3gHyWh79z0KE5mRU/J/MMBAmTjW8qWmUrc2++BjK4YxMq4J8S64pZFPL6Po2IR6Pp
+         VT2hrOHKcu4Pn/jYo4Jotb0roRp0orFbcVErMa5hph1ZeGed2CUVzG4FyqeOtzvzCwCq
+         jnpp7jrqEHpWNGcAb/jn0pG6vn2rYNOmHg/EScAm9VMAEQjRpQPdkYMO+rnnMZCbDo9r
+         mBaNvA2sn9AaP9J40dXrI9YOzinvXWooAocFXvMVmLZ5lnvNwd5zE65fy5niewhS7riH
+         15veiAGwLSIWaL3NnWlpBSi3CDelcpfd5OHeQsAWFC309+rAbC4mKHMVSi+YrybO8d++
+         D0Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ebz8DsXHyuMRTypjp3FqQKi0fJVFR4oscki6XfcLec0=;
-        b=x7tP4denQIzovTEc30MS8urLuBf40NHuBt8lhf1dZh/Y/ZtgCcUiCnSgfJKndFgcZ4
-         XS8o4VIkH2G1Ch8WumeEVDI5i2RfFNMT4LhhM5Ujvu+o7yFGMl1NfS02v0NY4GYNVC5X
-         y2rSV7bgya7X8NKMAZOs10X2Aq9bzo0JlUe+GMVKWMbWKT5DO9uePMFTTSFPo+vq0PEp
-         +7skePzR94pdYVxkVwRGtyLkOjikBvBh94v1I4wI8QlIqPmIVe62/XKn4U8XJ62NuLOn
-         wcC0NA64ATTNYO0UiNb7cWv3yaDO/dXDDWKSlCTh/V2Vr1bLTg8dDgd2/xuHPy0s1yX6
-         4ZzA==
-X-Gm-Message-State: ACrzQf3xnoaf9nF/LxMhKndxqyZzOS6CUrjVGV0nElXyycNv17VCxxqD
-        0YP1nY2e7Yo7Cg+MwG2t9UVMrA==
-X-Google-Smtp-Source: AMsMyM4L6oUpTFI/a8+rVzmSsZFf2B3JCLO/0xWk74TyXBM09quMwSJgLXXMflt9QCzw0D48TG52/w==
-X-Received: by 2002:a05:651c:907:b0:26e:9a6d:a55d with SMTP id e7-20020a05651c090700b0026e9a6da55dmr2402691ljq.192.1667080545216;
-        Sat, 29 Oct 2022 14:55:45 -0700 (PDT)
+        bh=cZpw4f7LAUGvF4cSAbPz5CyMSMlcyLXGFUZk34oAqwk=;
+        b=RLSYuY53okvmqqQS5GtqCUXBLwuy7KXlQp0ggeO4IPPcAKQfVYBsp6HmLze3ATrQ4n
+         fUfVGvUAJunkvlP4f597jgfwUb9xzVGSlTUrl4CvmYpFzy9gShzLh8uE1sHqVI5R0BJ6
+         EhOM7graxj56ClIjnm1eSs6oKa35Co8m1M9Zg5fdpt7auq1Ds/A2eAKJlIRF50aYQpiW
+         uz+qXUEAFzS+Lg0gKnVAHM7+1FNW13LhK2OWr7WAFzna2HbVfTUEc2LilHdjGhpqaZ82
+         CXpH8CEPJW8WMthIBQu/5dOUek/gXni8/PQ9umMl2XtpKeCkLOvn2YV0BzkKsuGC66rT
+         d3rg==
+X-Gm-Message-State: ACrzQf3/LNT/qAEsX2Qe1TI0Q2ohm/NqqTQWtRxceaMeJIjR58KMnJwh
+        Fg6rdDrULJG48vInSoYjPPaWjQ==
+X-Google-Smtp-Source: AMsMyM50A4M6LSsxWacFB2rvuxaNawYjAGDccOogtj9cOVnciCpBaYi/aDIG05dElT3EALIbP3fkTg==
+X-Received: by 2002:a05:6512:2c88:b0:4a9:4051:79a1 with SMTP id dw8-20020a0565122c8800b004a9405179a1mr2131082lfb.331.1667080577306;
+        Sat, 29 Oct 2022 14:56:17 -0700 (PDT)
 Received: from [10.27.10.248] ([195.165.23.90])
-        by smtp.gmail.com with ESMTPSA id r15-20020ac24d0f000000b00485caa0f5dfsm456469lfi.44.2022.10.29.14.55.44
+        by smtp.gmail.com with ESMTPSA id 5-20020ac25f45000000b004a03fd4476esm443654lfz.287.2022.10.29.14.56.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Oct 2022 14:55:44 -0700 (PDT)
-Message-ID: <09f21c66-1673-fbf2-9626-aa7ed800ee74@linaro.org>
-Date:   Sun, 30 Oct 2022 00:55:43 +0300
+        Sat, 29 Oct 2022 14:56:17 -0700 (PDT)
+Message-ID: <5d846ed8-e1c3-701f-6b92-a0bd2a9670cb@linaro.org>
+Date:   Sun, 30 Oct 2022 00:56:15 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.3
-Subject: Re: [PATCH 05/15] phy: qcom-qmp-ufs: Move HS Rate B register setting
- to tables_hs_b
+Subject: Re: [PATCH 08/15] scsi: ufs: ufs-qcom: Remove un-necessary goto
+ statements
 Content-Language: en-GB
 To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         martin.petersen@oracle.com, jejb@linux.ibm.com,
@@ -67,9 +67,9 @@ Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org
 References: <20221029141633.295650-1-manivannan.sadhasivam@linaro.org>
- <20221029141633.295650-6-manivannan.sadhasivam@linaro.org>
+ <20221029141633.295650-9-manivannan.sadhasivam@linaro.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221029141633.295650-6-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20221029141633.295650-9-manivannan.sadhasivam@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,14 +83,18 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 29/10/2022 17:16, Manivannan Sadhasivam wrote:
-> Since now there is support for configuring the HS Rate B mode properly,
-> let's move the register setting to tables_hs_b struct for all SoCs.
+> goto in error path is useful if the function needs to do cleanup other
+> than returning the error code. But in this driver, goto statements are
+> used for just returning the error code in many places. This really
+> makes it hard to read the code.
 > 
-> This allows the PHY to be configured in Rate A initially and then in
-> Rate B if requested by the UFS driver.
+> So let's get rid of those goto statements and just return the error code
+> directly.
 > 
 > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
+>   drivers/ufs/host/ufs-qcom.c | 100 +++++++++++++++---------------------
+>   1 file changed, 41 insertions(+), 59 deletions(-)
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
