@@ -2,82 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1633D611F30
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 03:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4619D611F42
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 04:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiJ2Bzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 21:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
+        id S229571AbiJ2COw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 22:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiJ2Bz2 (ORCPT
+        with ESMTP id S229379AbiJ2COu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 21:55:28 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C7E57BFF
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 18:55:26 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MzjCw6xmTzHvSW;
-        Sat, 29 Oct 2022 09:55:08 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 29 Oct 2022 09:55:23 +0800
-Subject: Re: [PATCH v3 2/2] mm, hwpoison: When copy-on-write hits poison, take
- page offline
-To:     "Luck, Tony" <tony.luck@intel.com>
-CC:     Matthew Wilcox <willy@infradead.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20221019170835.155381-1-tony.luck@intel.com>
- <20221021200120.175753-1-tony.luck@intel.com>
- <20221021200120.175753-3-tony.luck@intel.com>
- <c5ade8ea-6349-7ade-f245-273de69888a4@huawei.com>
- <SJ1PR11MB608354A1D8817902D7FC9DFAFC329@SJ1PR11MB6083.namprd11.prod.outlook.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <4de52973-7590-8ba8-62ca-c78e42f36a63@huawei.com>
-Date:   Sat, 29 Oct 2022 09:55:23 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Fri, 28 Oct 2022 22:14:50 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD64021E17
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 19:14:48 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id m2so6094230pjr.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 19:14:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xDK8T5NmQ15T3Y3MhW5583PsMeSXizv7saLpZEgSi5w=;
+        b=lQ9++78IboKXH8BW9gPaX72w1C3a/CVdzZFWOnZxu5hv/gYMwXrQAorRyUcqen0QAI
+         XEZmskNWstd9JKQiZ4+xYHsnqBdFJw513NvMAibfTDttrAUB82+H7OL9fcq8Oevo904I
+         9VAs9vNtX9h5JpSGCXTGt6Ox1AzHBT8nvEw3wQ7/oNaLoNPZTNSC19YVGRoinusL0vby
+         bdRjHe45BwOLyCtrjOlL4mU9WLV9ozmGdq2C6tuFwxfbvQN77SPjOS6Y1KF838xpK8bB
+         gHlopJqGM8UoIj7pWkGpbEIxbneGxGyk9K5Sz4XYrqUg0x9IEmDzhrTiR2PEN7T8oaGY
+         qLlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xDK8T5NmQ15T3Y3MhW5583PsMeSXizv7saLpZEgSi5w=;
+        b=dqfRCIriTwuGu7m8AThMfyh+/MXhGuc/aEL+2u1UXsXP5l11fEHgwBFv8QUb89Mfh1
+         qdGPNHI/OgX85XG5sHmNle54UPnDGBNNXdf0DqVoisqny4kaiKTCzFTbQqQtTR/4RZBn
+         h2QsE9YcnoRktZ8P9qxrU//ZiWweqKOUtCpGrhbdsQWccSLvo766nUORqNCvDW+1WHsQ
+         estphm606Rheo5mmN5b9ZzAfPATj1OKr/fHK48eJHIjln6s3OsxiHfdEuLP6ldOSKy6v
+         HYBUMAbJqm65xuyd43hl1Rbqk0Y/MYcL9pdEqlcjirS6hJzQFgvZ9JqAvt2Vw8iHXnuf
+         az/w==
+X-Gm-Message-State: ACrzQf0iHKJNSHLGjdV9Il4HJ4bcEKZeH4f73gVhNbn2JY5ozNTEoI16
+        HEk6LE69cbEHS1Ag7cfZlrg=
+X-Google-Smtp-Source: AMsMyM6N0ZjKDOYAOuQLBc88T/xw2Lpx9gad2mMk/7c2+y7ptNvZRt8IiiupIhDy53rXFG01t0E8zQ==
+X-Received: by 2002:a17:902:6ac2:b0:184:7a4c:fdd6 with SMTP id i2-20020a1709026ac200b001847a4cfdd6mr2122388plt.54.1667009688168;
+        Fri, 28 Oct 2022 19:14:48 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-25.three.co.id. [180.214.232.25])
+        by smtp.gmail.com with ESMTPSA id h28-20020aa79f5c000000b0056c058ab000sm121277pfr.155.2022.10.28.19.14.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 19:14:47 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 8A62C10411D; Sat, 29 Oct 2022 09:14:44 +0700 (WIB)
+Date:   Sat, 29 Oct 2022 09:14:44 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH] selftests/x86: add "ffff8" -- kernel memory scanner
+Message-ID: <Y1yMlEqtiQwUoy9m@debian.me>
+References: <Y1wunXB2iv0QHr22@p183>
 MIME-Version: 1.0
-In-Reply-To: <SJ1PR11MB608354A1D8817902D7FC9DFAFC329@SJ1PR11MB6083.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Ze2qEGWK2BfWr8kw"
+Content-Disposition: inline
+In-Reply-To: <Y1wunXB2iv0QHr22@p183>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/29 0:13, Luck, Tony wrote:
->>> Cannot call memory_failure() directly from the fault handler because
->>> mmap_lock (and others) are held.
->>
->> Could you please explain which lock makes it unfeasible to call memory_failure() directly and
->> why? I'm somewhat confused. But I agree using memory_failure_queue() should be a good idea.
-> 
-> I tried calling memory_failure() directly, and my system just hung. I made the assumption
-> that it had deadlocked based somewhat on the comments in mm/memory.c about mmap_lock
-> being held ... but I didn't dig into what had gone wrong.
 
-I see. Thanks for your explanation. :)
+--Ze2qEGWK2BfWr8kw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> -Tony
-> 
+On Fri, Oct 28, 2022 at 10:33:49PM +0300, Alexey Dobriyan wrote:
+>=20
+> I've tested it with kernel patch which installs rogue page and it was fou=
+nd.
+>=20
+> 	$ ./a.out -h
+> 	usage: ./a.out [-f] [-r] [-n N] [-s S]
+> 	        -f: sequential scan
+> 	        -r: random scan (default)
+> 	        -n: use N threads (default: $(nproc))
+> 	        -s: lowest address shift (default: 47)
+> 	        -t: time to run (default: 256 seconds)
+>=20
+> Intended usages are:
+>=20
+> 	$ ./a.out -f		# full scan on all cores
+> or
+> 	$ ./a.out -r -t ...	# time limited random scan for QA test
+>=20
 
+The executable name is a.out, really?
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--Ze2qEGWK2BfWr8kw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY1yMjwAKCRD2uYlJVVFO
+o6mtAQCu0+zj4PV2pSMfeUC9FbSzy9sTUb9HmKuUhW/dO15H8QD/TaxlV1f0aWye
+AR5AxTINTLVs7C+8iTNyxh0hzch8vwM=
+=rJ64
+-----END PGP SIGNATURE-----
+
+--Ze2qEGWK2BfWr8kw--
