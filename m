@@ -2,75 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA1D611EA4
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 02:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 960DA611EAA
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 02:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiJ2APn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 20:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57396 "EHLO
+        id S229668AbiJ2ARP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 20:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiJ2APe (ORCPT
+        with ESMTP id S229457AbiJ2ARN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 20:15:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8835766A53;
-        Fri, 28 Oct 2022 17:15:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 28 Oct 2022 20:17:13 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105D05AA33;
+        Fri, 28 Oct 2022 17:17:13 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55EF562B35;
-        Sat, 29 Oct 2022 00:15:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B42AFC433C1;
-        Sat, 29 Oct 2022 00:15:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667002527;
-        bh=DT39x58SA98DxPQuDM8lZRU/NhAMZ/UEZGxOyCwD18k=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Z9YsM0ttjROBafXYbEsov+V/sjbfg9SEarMgarIFUkuEMtgA0DEC7kbxDA/C8Qr3Z
-         4y7AtfOE9TT3wgAvW9wIeE59jb9MCIXbqOThyUAzKQ6AGgN0ZCSbEmE5o7kBBf6XOs
-         EPBE1epkkmpPKIVxV6qpgn303pFswtui5vMqt4OtTnkYirqFRxhW2LaGfpcOsoDXRx
-         ybmn6EGUAh4nTsI6CfcR8ebL8WtkpCyrX/N3du01FgyBkFz7vgeAtJfK17vUH9+eTK
-         rSg439zhwlDRnIcgbiv6Vv9l8N0zYI1wiqj/j5uqPEs+cRfAPikDyPWmxFa92CUL+x
-         OoB6DDQ4CR6uQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9FF9BC41676;
-        Sat, 29 Oct 2022 00:15:27 +0000 (UTC)
-Subject: Re: [GIT PULL] s390 updates for 6.1-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <your-ad-here.call-01666989278-ext-6142@work.hours>
-References: <your-ad-here.call-01666989278-ext-6142@work.hours>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <your-ad-here.call-01666989278-ext-6142@work.hours>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.1-3
-X-PR-Tracked-Commit-Id: e38de4804421b064a9c73c5a9b7f3df96b863e4b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 576e61cea1e4b66f52f164dee0edbe4b1c999997
-Message-Id: <166700252765.12440.3406754733571646460.pr-tracker-bot@kernel.org>
-Date:   Sat, 29 Oct 2022 00:15:27 +0000
-To:     Vasily Gorbik <gor@linux.ibm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A56AD6602942;
+        Sat, 29 Oct 2022 01:17:11 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667002631;
+        bh=w7ba4X8MPyTvkQ4A4Oz6t+sl29x7NcjWiX53veUPMxU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DnEAYVtQRYd1ASJ7VI/RTnHddguySG369ooOablWWfMhrVPSZa5q3h/TBeV8sV7p6
+         pXVZgMD/7UGSmIZjS9nJkU6jcVmwN4QdxjkhexamCqE7ShQ2dOCf6xkn6Vsx97xR8C
+         ypK/o/jbi8UEMA2cYi0mD+vrWENICBo3OdmpD0A2bNIdWY81v7QR9JkZbIBhxzItrC
+         WQr64LGaIQk6TH0F6KKHCcS3VYKCP9A05SphZSnmF8kSS0zkHfjnUvaIn2rsHpWSOM
+         W2Bfa1bifqnk5MfXTRJE7/EEx+LU0OkBU9TMFBjEaAnAKRdWT9V4USM/6ZtzgbpXnk
+         qQBwXAzktzR7w==
+Received: by mercury (Postfix, from userid 1000)
+        id DD9451060757; Sat, 29 Oct 2022 02:17:08 +0200 (CEST)
+Date:   Sat, 29 Oct 2022 02:17:08 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     kernel@collabora.com, kernel-janitors@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>
+Subject: Re: [PATCH] power: supply: remove less-than-zero comparison of
+ unsigned variables
+Message-ID: <20221029001708.fxu6he7pbv7voiy2@mercury.elektranox.org>
+References: <20221004064521.498510-1-usama.anjum@collabora.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kpqij2bctgflog2o"
+Content-Disposition: inline
+In-Reply-To: <20221004064521.498510-1-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 28 Oct 2022 22:34:38 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.1-3
+--kpqij2bctgflog2o
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/576e61cea1e4b66f52f164dee0edbe4b1c999997
+Hi,
 
-Thank you!
+On Tue, Oct 04, 2022 at 11:45:21AM +0500, Muhammad Usama Anjum wrote:
+> max_chg_vol_reg and max_chg_cur_reg are unsigned variables. The
+> less-than-zero comparison of an unsigned value is never true. Remove
+> these checks.
+>=20
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+I'm a bit hesitant to apply this. While the analysis is correct
+max_chg_cur_reg is sourced from rk817_chg_cur_to_reg(). That has
+has a 'u8' return value as function signature, but tries to return
+-EINVAL. I think it makes sense to either fix this at the same
+time or change the variable type to signed. Also please Cc the
+driver author (done now).
+
+-- Sebastian
+
+>  drivers/power/supply/rk817_charger.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/=
+rk817_charger.c
+> index 635f051b0821..aa4b33f1bb83 100644
+> --- a/drivers/power/supply/rk817_charger.c
+> +++ b/drivers/power/supply/rk817_charger.c
+> @@ -951,12 +951,12 @@ static int rk817_battery_init(struct rk817_charger =
+*charger,
+> =20
+>  	max_chg_cur_reg =3D rk817_chg_cur_to_reg(max_chg_cur_ma);
+> =20
+> -	if (max_chg_vol_reg < 0 || max_chg_vol_reg > 7) {
+> +	if (max_chg_vol_reg > 7) {
+>  		return dev_err_probe(charger->dev, -EINVAL,
+>  		       "invalid max charger voltage, value %u unsupported\n",
+>  		       max_chg_vol_mv * 1000);
+>  	}
+> -	if (max_chg_cur_reg < 0 || max_chg_cur_reg > 7) {
+> +	if (max_chg_cur_reg > 7) {
+>  		return dev_err_probe(charger->dev, -EINVAL,
+>  		       "invalid max charger current, value %u unsupported\n",
+>  		       max_chg_cur_ma * 1000);
+> --=20
+> 2.30.2
+>=20
+
+--kpqij2bctgflog2o
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNccQAACgkQ2O7X88g7
++pqYLA//VBqbwe7TYlleJXz7Cmqb0nUb+ZG9Pc6wmlWSTpitKPkc1+eAEqJ0azCY
+DDZB35scSvAZAyhu/RA1W4+P/v3CW6K172UYSd3xi6IHtwLA9yBNN+k5c/bdpiBH
+9nAB/FB2qVN22AHsOeYYRlQ1mTVtvqvvy4DicrM4+AH6WjakJ17QpR/g0xBfjXi/
+ZYvYwpzGSGgyBL30IZqFT90dbKlUOTBU6vxsd8bDp448tPhehzfdh0oM0r8lxI34
+0d8LDecZlWWY1lbFE7ChDYQ84O5AxEnPABqC3bBVAFUz0pklmAjh0c8rZU8IZcKp
+Z6lkETVqwCMLb6auyZfpsbG69JmwnNa53I3qDBB7ub1BauGptcvG0vByqLS6Q7Uc
+8kazcsNqiQ+Xmq9ca1rV/p/vSRfraaJJNxGb5zYID0chrsjr7QsirY2AezwgrDi9
+x6XzJ1XngE7oTAzdWCfNln0TZ3vUSYOeq+oRduFj4hEEnAuIK1iLTqCUBDS9+Py6
+pSho+U2PigHwnh+XTrCHJDIcU1R0By+KLOLUeXvC1k3bvw2uiUsvo2kfDXyecu+v
+gsGDTwGwkf4AnMaVKUCPDFPEKhsrIGimP8Pf7I4bR+8zLRxbETznqsBIL0NX2aXa
+WRviqu7C1jt3+qYX5Hd3uZgibIyE5Ovtfifa6yiJwG0VTc/ViFA=
+=Ig94
+-----END PGP SIGNATURE-----
+
+--kpqij2bctgflog2o--
