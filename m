@@ -2,132 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C6646123E7
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 16:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A57426123EA
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 16:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiJ2O3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 10:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
+        id S229853AbiJ2OiT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 29 Oct 2022 10:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiJ2O3J (ORCPT
+        with ESMTP id S229565AbiJ2OiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 10:29:09 -0400
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5341863375;
-        Sat, 29 Oct 2022 07:29:08 -0700 (PDT)
-Received: from [192.168.1.101] (95.49.29.156.neoplus.adsl.tpnet.pl [95.49.29.156])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 316E83EE8A;
-        Sat, 29 Oct 2022 16:29:06 +0200 (CEST)
-Message-ID: <90b7e0e0-a354-f64d-8c53-aa80df684a3a@somainline.org>
-Date:   Sat, 29 Oct 2022 16:29:05 +0200
+        Sat, 29 Oct 2022 10:38:17 -0400
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3416CD0B
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 07:38:16 -0700 (PDT)
+Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay10.hostedemail.com (Postfix) with ESMTP id 783E3C0110;
+        Sat, 29 Oct 2022 14:38:14 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf12.hostedemail.com (Postfix) with ESMTPA id DCF0717;
+        Sat, 29 Oct 2022 14:37:55 +0000 (UTC)
+Message-ID: <efab1f11d5008188988813e3f3c27ce1297e71c0.camel@perches.com>
+Subject: Re: [PATCH] Remove Unnecessary typecast of c90 int constant
+From:   Joe Perches <joe@perches.com>
+To:     Julia Lawall <julia.lawall@inria.fr>,
+        UMWARI JOVIAL <umwarijovial@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Date:   Sat, 29 Oct 2022 07:38:10 -0700
+In-Reply-To: <alpine.DEB.2.22.394.2210280918550.2845@hadrien>
+References: <20221028063711.GA35659@rdm>
+         <alpine.DEB.2.22.394.2210280918550.2845@hadrien>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 12/12] arm64: dts: qcom: sc8280xp-x13s: Add thermal
- zone support
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        johan+linaro@kernel.org, quic_jprakash@quicinc.com,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, steev@kali.org
-References: <20221029051449.30678-1-manivannan.sadhasivam@linaro.org>
- <20221029051449.30678-13-manivannan.sadhasivam@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20221029051449.30678-13-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Rspamd-Queue-Id: DCF0717
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Stat-Signature: 3kpugo777z3hb3xfdrd5mryxt7uasajh
+X-Rspamd-Server: rspamout02
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18BJ6iGaBQ/gDxUl5GMVObh7DN5jwxKBPo=
+X-HE-Tag: 1667054275-197456
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 29.10.2022 07:14, Manivannan Sadhasivam wrote:
-> Add thermal zone support by making use of the thermistor SYS_THERM6.
-> Based on experiments, this thermistor seems to reflect the actual
-> surface temperature of the laptop.
+On Fri, 2022-10-28 at 09:22 +0200, Julia Lawall wrote:
 > 
-> For the cooling device, all BIG CPU cores are throttle down to keep the
-s/throttle/throttled
-
-Is it okay to let the 4xA78C run at full throttle in thermal emergencies though?
-> temperature at a sane level.
+> On Fri, 28 Oct 2022, UMWARI JOVIAL wrote:
 > 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 46 +++++++++++++++++++
->  1 file changed, 46 insertions(+)
+> > According to Linux kernel coding style.
+> > 
+> > Reported by checkpatch:
+> > WARNING: Unnecessary typecast of c90 int constant - '(int)2.412e8' could be '2.412e8'
+> > WARNING: Unnecessary typecast of c90 int constant - '(int)2.487e8' could be '2.487e8'
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> index ca77c19c6d0d..96e2fa72f782 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> @@ -29,6 +29,52 @@ backlight {
->  		pinctrl-0 = <&edp_bl_en>, <&edp_bl_pwm>;
->  	};
->  
-> +	thermal-zones {
-> +		skin-temp-thermal {
-> +			polling-delay-passive = <250>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&pmk8280_adc_tm 5>;
-> +
-> +			trips {
-> +				skin_temp_alert0: trip-point0 {
-> +					temperature = <55000>;
-> +					hysteresis = <1000>;
-> +					type = "passive";
-> +				};
-> +
-> +				skin_temp_alert1: trip-point1 {
-> +					temperature = <58000>;
-> +					hysteresis = <1000>;
-> +					type = "passive";
-> +				};
-> +
-> +				skin-temp-crit {
-> +					temperature = <73000>;
-Ouch, I didn't know we were serving burnt fingers at the cafeteria today :D
+> It's not ideal to just include the checkpatch messges verbatim in your log
+> message.  It woudl be better to say what you are doing and why, in
+> complete sentences ("According to the Linux coding style" is not a
+> complete sentence).
+> 
+> I also suspect that the checkpatch message is wrong.  Floating point
+> numbers cannot be used in the kernel, and the case of the constant ensures
+> that the value will be converted to an integer at compile time.
 
-Or maybe this just looks scary.. The laptop looks plastic, so maybe it won't cause instant
-burns?
+Yes, it's a checkpatch defect.
 
-Konrad
-> +					hysteresis = <1000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +
-> +			cooling-maps {
-> +				map0 {
-> +					trip = <&skin_temp_alert0>;
-> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-> +				};
-> +
-> +				map1 {
-> +					trip = <&skin_temp_alert1>;
-> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
->  	vreg_edp_bl: regulator-edp-bl {
->  		compatible = "regulator-fixed";
->  
+checkpatch should have this:
+---
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 4e187202e77a6..9958a774efaf1 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -6758,7 +6759,8 @@ sub process {
+                }
+ 
+ # check for cast of C90 native int or longer types constants
+-               if ($line =~ /(\(\s*$C90_int_types\s*\)\s*)($Constant)\b/) {
++               if ($line =~ /(\(\s*$C90_int_types\s*\)\s*)($Constant)\b/ &&
++                   $2 !~ /^$Float$/) {
+                        my $cast = $1;
+                        my $const = $2;
+                        my $suffix = "";
+
