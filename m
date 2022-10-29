@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF66C612220
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 12:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA920612224
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 12:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbiJ2KHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 06:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
+        id S229819AbiJ2KHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 06:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiJ2KHI (ORCPT
+        with ESMTP id S229816AbiJ2KHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 06:07:08 -0400
+        Sat, 29 Oct 2022 06:07:19 -0400
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1764F7B7AA;
-        Sat, 29 Oct 2022 03:07:07 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id DECFE5C015A;
-        Sat, 29 Oct 2022 06:07:03 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B665157F70;
+        Sat, 29 Oct 2022 03:07:18 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id D9A2A5C017D;
+        Sat, 29 Oct 2022 06:07:17 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Sat, 29 Oct 2022 06:07:03 -0400
+  by compute5.internal (MEProxy); Sat, 29 Oct 2022 06:07:17 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1667038023; x=1667124423; bh=X1
-        FoTzqNKN1Kmjdz4a3YhRLFY9KNaucDFaWdfFf2th0=; b=VIsSSJmS3SJ1oleOa5
-        ykSLvEHrT/7b2P4YKN9oDFAxX81qyEzZDbzZWicVm9rhMzSBH44lgEkwivgpcd50
-        Ap6qDtLvw2jhoSgsvz+fonG8mXnc/RvThtXBuqAb+6a44jL+ck6zPdcy4siN0z1L
-        NTmNHk9tH87kRIh//ksytGP0HiBpmcx0xEqPwhLImB8mO7lWpznpbKH77hti9eGW
-        9UJZQ2JA1rv2fVw+4mheQYy3tpOG47/WYWB8WVWuVjUuZyj4t/XQdcnt1npg+3S4
-        g71Un2Gl42KYwuDW45VBURKhsFFQnTIqbhtpZAkOkPp6bBzSA7nEh7gIxqz2zZbs
-        etBg==
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1667038037; x=
+        1667124437; bh=wUID88ywaENfHCuE/a1VQCI+CY2X7CDgvVIC94l8daE=; b=C
+        rmxa+RbBpQDQ+LW9OITU/iP6+S46ku70j0sxR4uga1ov20UBXUGoSzzSdV5LZAjE
+        u9h0xAB6ysbENQ85IJgNJdhcRuxglKFB6dehlUkdmz/A1sz3qhS3X7wqRZT7bUzC
+        LLY6koxxZmtCwiWFRooV3hN/bzGiuy7XVizFydRyQfqNhFzKRTxEQxezeMSwmhmP
+        Et7mhk31f7zSblvnYHjaTiIdRX4+juqu6EDSnfJAzW/550fdtmjyUyEelRS4+jS3
+        IqAgj2aFVziNdGa1JQ+T2yb6mBzS4s8+YpXuYZ3XsCv88JvkzQ4r0m4EKCEb5i+I
+        i4fkERfTLy262ETwSb0Ew==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1667038023; x=1667124423; bh=X1FoTzqNKN1Km
-        jdz4a3YhRLFY9KNaucDFaWdfFf2th0=; b=SyU/3aqKGtEVofaulqnCHmPyGqHlF
-        co4j771E6n4PSuVUh0kz1cgJJMMfiWOpwc9rBdDf9yudb9MC4hbE7b8VBu3Vq72N
-        abGOEqaZKlV8QMYcfO/b1t2uKgJXIyMtmbMGC+hE+ydinWfF+070GIXBtpxdSRjm
-        GWdVF20gVBqgM8E1CyZv6DqNQiWHGNPrAM6uWGzQFsYE+QYUOs6msO2k7ZsKY1S2
-        nSbz8gRFGd7F0JTxONBFuF3fBVuGUDFChIO6+PxoRHz7lcCiLQE+g6IUYumZNHyz
-        la7NQXTy4HxfksJTIQtWkPjRWXcZU8cW/RG0+opadpGZY6J+UAFsxQOXw==
-X-ME-Sender: <xms:R_tcY5QoSxnvDf4bA9ZWDC5r1i-ghIeL_0KblDCxeB1KYcBs1Y5asw>
-    <xme:R_tcYyxb21PBAlIx8Ib71PXqyOJyrejegTrp2gqzEmJI0q3GLVDuATcuKYkRK1k_E
-    SoBtpiNazO5r5sU17I>
-X-ME-Received: <xmr:R_tcY-2xP_RYAVY4Z1i0Zi5h29KAwMjM3doEKrTwoc2P7PjbexfMVzzUC5C7rDU7cHBDK3ADLXjI>
+        :x-sasl-enc; s=fm3; t=1667038037; x=1667124437; bh=wUID88ywaENfH
+        CuE/a1VQCI+CY2X7CDgvVIC94l8daE=; b=aaONu0qm+RxneOSGTQDQ9kFncKg2J
+        UvWFNfsA9QNtlQvBW3SY7w7y1DGjZBkJadRb3WNYulslbgXpMdz22oCwdig0luQ4
+        i9AZcVY7XCd+lx8VGxPJLjIVVNr4/E35stS5WkFo7LnqxsvBiR3O9pzmZIlvCvwS
+        nFWyoSdf1/PLCTlsi3+PpadGG95MMU992+Ds0Ig49BI2olbeQXH4WyLc0LS7YpB0
+        RLQ+IawvZoM0eId2ZfxwIqC06ATAWkF/LSX627BFcu0T35Q7r4ZB9gAUf+UNbC6Z
+        qxfeMzrh4rBzvmWoRpMS192oS0bWx5tx28FXWSzpZe8yiq9dZiTCXvGdA==
+X-ME-Sender: <xms:VftcYxUO7kyJbrVCPLOyPv8qXpac1Z_rQnLHifyX6cEX8S5B7oqpXw>
+    <xme:VftcYxn5VBu2qnvQdhd6BHe3kmXc97LMHYTruUVgQLLv_pI-7sD7MV4YQt0dpoh_C
+    Cemi9L6vSQ5yVMQJwU>
+X-ME-Received: <xmr:VftcY9bdZkOzj07LHLSDrNjPqNJB5FD4KgKh4Sn6tlI1YyGL4qSE0dEzHdLD72cQhJiPDqfmS0un>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdekgddvgecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgtggfgsehtkeertd
-    ertdejnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
-    rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepffekhfelteeggf
-    etieekteekhedtffekvddtveetgeffgfelffeftdehuefgheefnecuvehluhhsthgvrhfu
-    ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhish
-    htrghirhdvfedrmhgv
-X-ME-Proxy: <xmx:R_tcYxAcWQp_LlrVmo3eTZruES8G7rC-0zA-hy_1IiyvjRUAJr9u1w>
-    <xmx:R_tcYygXK3J6K0hEoUqxKGRZn1avSbkaN5i9b4LSlBYghKQ7Yd3C1w>
-    <xmx:R_tcY1po7dxk7m22OY7v4XlCEaaUoAFa8n-6nsH8_7yqrWpUn0ELlw>
-    <xmx:R_tcY7Ztl3VmoNENOasV4Ur-xttiF9G8pNCqdLREqeTMWDThesRSVQ>
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestdekre
+    dtredttdenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgr
+    ihhrsegrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeeitdefkeetle
+    dvleevveeuueejffeugfeuvdetkeevjeejueetudeftefhgfehheenucevlhhushhtvghr
+    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlih
+    hsthgrihhrvdefrdhmvg
+X-ME-Proxy: <xmx:VftcY0UkRngPBaS_M2yihL0_tb2khiuPGcTRIMEU4TbrHc1A0Ijmsw>
+    <xmx:VftcY7kzU7yZWieBWz9OlT8JzBwsDUeOLUls1tnaC0NxL8s25t855Q>
+    <xmx:VftcYxfYV40daW265huILPtCF5NFnR7ZhypxDOcYmJL2uhR42FljcA>
+    <xmx:VftcY6f51Gf9Kt3PNGkapJF6Xoj8L58Foz1Z3cq62J9Dn-C_YD4TFg>
 Feedback-ID: ifd214418:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 29 Oct 2022 06:06:52 -0400 (EDT)
+ 29 Oct 2022 06:07:05 -0400 (EDT)
 From:   Alistair Francis <alistair@alistair23.me>
 To:     lgirdwood@gmail.com, robh+dt@kernel.org, broonie@kernel.org,
         kernel@pengutronix.de, lee.jones@linaro.org
@@ -72,11 +72,12 @@ Cc:     linux-arm-kernel@lists.infradead.org, alistair23@gmail.com,
         linux-hwmon@vger.kernel.org, shawnguo@kernel.org,
         andreas@kemnade.info, linux-kernel@vger.kernel.org,
         geert@linux-m68k.org
-Subject: [PATCH v23 0/2] Add support for the silergy,sy7636a
-Date:   Sat, 29 Oct 2022 20:06:44 +1000
-Message-Id: <20221029100646.294583-1-alistair@alistair23.me>
+Subject: [PATCH v23 1/2] ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a
+Date:   Sat, 29 Oct 2022 20:06:45 +1000
+Message-Id: <20221029100646.294583-2-alistair@alistair23.me>
 X-Mailer: git-send-email 2.38.1
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20221029100646.294583-1-alistair@alistair23.me>
+References: <20221029100646.294583-1-alistair@alistair23.me>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -89,49 +90,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v23:
- - Cleanup device tree changes
-v22:
- - Rebase on master
- - Drop `ARM: dts: imx7d-remarkable2: Enable lcdif`
-v21:
- - Rebase on master
-v20:
- - Remove merged patches
- - Fixup Kconfig selection based on previous discussions
-v19:
- - Rebase on linux-next
-v18:
- - Rebase
-v17:
- - Rebase and fix build issues
-v16:
- - Improve vdd regulator comments
-v15:
- - Address comments on the patches
-v14:
- - Merge the thermal driver and hwmon
-v13:
- - Address comments on thermal driver
- - Rebase on master (without other patches)
-v12:
- - Rebase
-v11:
- - Address comments on hwmon
- - Improve "mfd: simple-mfd-i2c: Add a Kconfig name" commit message
-v10:
- - Use dev_get_regmap() instead of dev_get_drvdata()
-v9:
- - Convert to use the simple-mfd-i2c instead
+Enable the silergy,sy7636a and silergy,sy7636a-regulator for the
+reMarkable2.
 
-Alistair Francis (2):
-  ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a
-  ARM: dts: imx7d-remarkable2: Enable silergy,sy7636a
+Signed-off-by: Alistair Francis <alistair@alistair23.me>
+---
+ arch/arm/configs/imx_v6_v7_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
- arch/arm/boot/dts/imx7d-remarkable2.dts | 63 +++++++++++++++++++++++++
- arch/arm/configs/imx_v6_v7_defconfig    |  3 ++
- 2 files changed, 66 insertions(+)
-
+diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
+index 078d61b758a9..81b0c674977f 100644
+--- a/arch/arm/configs/imx_v6_v7_defconfig
++++ b/arch/arm/configs/imx_v6_v7_defconfig
+@@ -222,6 +222,7 @@ CONFIG_RN5T618_POWER=m
+ CONFIG_SENSORS_MC13783_ADC=y
+ CONFIG_SENSORS_GPIO_FAN=y
+ CONFIG_SENSORS_IIO_HWMON=y
++CONFIG_SENSORS_SY7636A=y
+ CONFIG_THERMAL_STATISTICS=y
+ CONFIG_THERMAL_WRITABLE_TRIPS=y
+ CONFIG_CPU_THERMAL=y
+@@ -237,6 +238,7 @@ CONFIG_MFD_DA9062=y
+ CONFIG_MFD_DA9063=y
+ CONFIG_MFD_MC13XXX_SPI=y
+ CONFIG_MFD_MC13XXX_I2C=y
++CONFIG_MFD_SY7636A=y
+ CONFIG_MFD_RN5T618=y
+ CONFIG_MFD_STMPE=y
+ CONFIG_REGULATOR_FIXED_VOLTAGE=y
+@@ -250,6 +252,7 @@ CONFIG_REGULATOR_MC13783=y
+ CONFIG_REGULATOR_MC13892=y
+ CONFIG_REGULATOR_PFUZE100=y
+ CONFIG_REGULATOR_RN5T618=y
++CONFIG_REGULATOR_SY7636A=y
+ CONFIG_RC_CORE=y
+ CONFIG_RC_DEVICES=y
+ CONFIG_IR_GPIO_CIR=y
 -- 
 2.38.1
 
