@@ -2,203 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98792611FC3
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 05:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF97611FC4
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 05:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiJ2Db0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 23:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47656 "EHLO
+        id S229632AbiJ2DcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 23:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiJ2DbS (ORCPT
+        with ESMTP id S229489AbiJ2DcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 23:31:18 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4665FC7077
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 20:31:16 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id l9so4674259qkk.11
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 20:31:16 -0700 (PDT)
+        Fri, 28 Oct 2022 23:32:16 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358FA109D40;
+        Fri, 28 Oct 2022 20:32:15 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id m6so6369922pfb.0;
+        Fri, 28 Oct 2022 20:32:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EF1zpD5BOyTq7o1Q088kDG9r4IK1Pn2H8NFlWhQILKc=;
-        b=qZgKYsRzd3kTkgl8c4QnZxvvDIz6nEe5+wFXsvekvEKHq0TyOa3Nw3MtADg0clXY5L
-         QeLh9HF2NmFT7A6G5DE4r4o8SBSpMWHILqvTjgd6Fsyqv+yeERAKye7+NWMPM/TO97pG
-         sq7u47qbpIW3Q2VqjbuCcmnGCkUuQCvZ+/zHk=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VHF9euNOOmuwTSh72fVwWU/hhjv7B36F6rq6GHbm0Ws=;
+        b=jK5E1boC3hu8E7IKKZ6CHa/8w55eH6o4SWLIwK/DleiUhoRlRDg0nhbUtjDD76L7q5
+         93OjujLRcE31fBxMQ2A0Gq0z7tfH3bVlJrRbhHYggtjqQOD3sXuqsv9rLVy3tUHpT+Yc
+         VdPaxC13yA9VPuPQa1jUO32XmDCgV05Qw6tk86KFBLTLTEi1+16B2KRw/EOFxOQhUxRd
+         23NpFy8Er4yVa2BlmTYeUNvzKWgQPO81xAkxWaP0kL+zrWMnGOgCmpkjnHdOb3S3ECSE
+         9rmz+S8TZ8vjt7qSFnvAXDJHEa/g8fsHS8FkZdPyqZsJl1Sk4yoAL+/UVz9wjHiUBH4h
+         TpeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EF1zpD5BOyTq7o1Q088kDG9r4IK1Pn2H8NFlWhQILKc=;
-        b=eGp4DlJ1wCSVlU2dS7sML8MURW2XM2mbuMSzzCMbEWNdtOMslSZECd7kKVm/nRLPhl
-         GnkvHk+1pbUWwzeiiOKP0MVkKEl1DPt4T8pj1b/qS9cnCVPYtMR9QYaASTZFKJDMYg6l
-         MyEKaUD5abMhlMlRCYqUWNSvCRgDkllW00w5NVoI7vEYaYQMS851X1gQ1zB5H0G1qVEu
-         xIup9dlMAzP+zCOt/kBF1rNdgF6QrbXOO0NTuQYUbMzskuA6cpNzspIhJxxEMgj4MfwH
-         jqDs9m7cTJS6RFANxGtQNmE5MtqWngqHexqgcD73MGS9WPXgFNo0DKEJVrLy2MA8L4vS
-         38GA==
-X-Gm-Message-State: ACrzQf0xUNrvvtKrkIj/lCq3zzsFUs9nPsFgLYr5Yv0D1HEeMBHCgpYT
-        vtZuhdH52JzI+OBR5RtpjioZEg==
-X-Google-Smtp-Source: AMsMyM56T3TVc0urjlevQBeo43mGWmFeDDERgmVQRRT5xnpBfaCCzmxTk4NrMLjPuFRWmVmzPI8WOA==
-X-Received: by 2002:a05:620a:9d5:b0:6fa:d03:aa03 with SMTP id y21-20020a05620a09d500b006fa0d03aa03mr1815473qky.453.1667014275370;
-        Fri, 28 Oct 2022 20:31:15 -0700 (PDT)
-Received: from smtpclient.apple ([2600:1003:b137:2fbb:f416:6248:fd9f:d1bb])
-        by smtp.gmail.com with ESMTPSA id y27-20020a37f61b000000b006b8e8c657ccsm292380qkj.117.2022.10.28.20.31.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 20:31:14 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [RFC PATCH 07/11] sched: Add proxy execution
-Date:   Fri, 28 Oct 2022 23:31:13 -0400
-Message-Id: <34B2D8B9-A0C1-4280-944D-17224FB24339@joelfernandes.org>
-References: <dab347c1-3724-8ac6-c051-9d2caea20101@arm.com>
-Cc:     Connor O'Brien <connoro@google.com>, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, John Stultz <jstultz@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-In-Reply-To: <dab347c1-3724-8ac6-c051-9d2caea20101@arm.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-X-Mailer: iPhone Mail (19G82)
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VHF9euNOOmuwTSh72fVwWU/hhjv7B36F6rq6GHbm0Ws=;
+        b=kA7DITuHr4/ncGOpM2w2vhY9R60L9IQQnw0z56tJkBsHt3eQ+RNBrw8yUqYDpxKmI1
+         Frg6JzkYpOfiv9qwNGW2tsSlFXGR3CX0IL+1p4spxGCclnsnMPTn1eXKRyHdVXAW/v7c
+         tHL3V3SRTtaVxY9/LGQHGBBfuytBePj3y2S+UqCpzda/r1ofXJ7Vhb+4UJ6qsoRheajr
+         Dg2vr7PZkwCvILkL8EGNnz2e4fw3W6W8MusCN/MAGrUTc1RnprqNXIBtyoFy5rAgq3n5
+         QKGFwl8QMbcP//rvP7NMOyWcE0QFqduNmu/J1g+rNfPzZFc3NdwAaFLFyd3z60w2+vQa
+         MPNw==
+X-Gm-Message-State: ACrzQf1bDMdiAz9lbAE1JMEp2xVOxBxDUp5MYjNfdn+XPI9vylpldjdI
+        A3oMmfAFIytiDbwwpRE6EzU=
+X-Google-Smtp-Source: AMsMyM4/G+OuCQ0NgmhKRELRXL1n+O5c6TyxtS8A7lOlSNpmzBFb7z6dw442d6bOx/QJA+JG8vf/tQ==
+X-Received: by 2002:aa7:8b46:0:b0:56c:349f:191e with SMTP id i6-20020aa78b46000000b0056c349f191emr2663102pfd.29.1667014334674;
+        Fri, 28 Oct 2022 20:32:14 -0700 (PDT)
+Received: from mail.google.com (122-58-209-93-fibre.sparkbb.co.nz. [122.58.209.93])
+        by smtp.gmail.com with ESMTPSA id r2-20020a17090a2e8200b002086ac07041sm166491pjd.44.2022.10.28.20.32.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 20:32:13 -0700 (PDT)
+Date:   Sat, 29 Oct 2022 16:32:05 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        paulo.miguel.almeida.rodenas@gmail.com
+Subject: [PATCH v2] [next] drm/radeon: Replace one-element array with
+ flexible-array member
+Message-ID: <Y1yetX1CHsr+fibp@mail.google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1trhRE3nK5iAY6q@mail.google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dietmar,
+One-element arrays are deprecated, and we are replacing them with
+flexible array members instead. So, replace one-element array with
+flexible-array member in struct _ATOM_FAKE_EDID_PATCH_RECORD and
+refactor the rest of the code accordingly.
 
-> On Oct 24, 2022, at 6:13 AM, Dietmar Eggemann <dietmar.eggemann@arm.com> w=
-rote:
->=20
-> =EF=BB=BFOn 03/10/2022 23:44, Connor O'Brien wrote:
->> From: Peter Zijlstra <peterz@infradead.org>
->=20
-> [...]
->=20
->> + * Returns the task that is going to be used as execution context (the o=
-ne
->> + * that is actually going to be put to run on cpu_of(rq)).
->> + */
->> +static struct task_struct *
->> +proxy(struct rq *rq, struct task_struct *next, struct rq_flags *rf)
->> +{
->=20
-> [...]
->=20
->> +migrate_task:
->=20
-> [...]
->=20
->> +    /*
->> +     * Since we're going to drop @rq, we have to put(@next) first,
->> +     * otherwise we have a reference that no longer belongs to us.  Use
->> +     * @fake_task to fill the void and make the next pick_next_task()
->           ^^^^^^^^^^
->=20
-> There was a `static struct task_struct fake_task` in
-> https://lkml.kernel.org/r/20181009092434.26221-6-juri.lelli@redhat.com
-> but now IMHO we use `rq->idle` <-- (1)
+It's worth mentioning that doing a build before/after this patch results
+in no binary output differences.
 
-Ok.
+This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+routines on memcpy() and help us make progress towards globally
+enabling -fstrict-flex-arrays=3 [1].
 
->> +     * invocation happy.
->> +     *
->> +     * XXX double, triple think about this.
->> +     * XXX put doesn't work with ON_RQ_MIGRATE
->> +     *
->> +     * CPU0                CPU1
->> +     *
->> +     *                B mutex_lock(X)
->> +     *
->> +     * A mutex_lock(X) <- B
->> +     * A __schedule()
->> +     * A pick->A
->> +     * A proxy->B
->> +     * A migrate A to CPU1
->> +     *                B mutex_unlock(X) -> A
->> +     *                B __schedule()
->> +     *                B pick->A
->> +     *                B switch_to (A)
->> +     *                A ... does stuff
->> +     * A ... is still running here
->> +     *
->> +     *        * BOOM *
->> +     */
->> +    put_prev_task(rq, next);
->> +    if (curr_in_chain) {
->> +        rq->proxy =3D rq->idle;
->> +        set_tsk_need_resched(rq->idle);
->> +        /*
->> +         * XXX [juril] don't we still need to migrate @next to
->> +         * @owner's CPU?
->> +         */
->> +        return rq->idle;
->> +    }
->=20
-> --> (1)
+Link: https://github.com/KSPP/linux/issues/79
+Link: https://github.com/KSPP/linux/issues/239
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
 
-Sorry but what has this got to do with your comment below?
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+---
+Changelog:
 
->> +    rq->proxy =3D rq->idle;
->> +
->> +    for (; p; p =3D p->blocked_proxy) {
->> +        int wake_cpu =3D p->wake_cpu;
->> +
->> +        WARN_ON(p =3D=3D rq->curr);
->> +
->> +        deactivate_task(rq, p, 0);
->> +        set_task_cpu(p, that_cpu);
->> +        /*
->> +         * We can abuse blocked_entry to migrate the thing, because @p i=
-s
->> +         * still on the rq.
->> +         */
->> +        list_add(&p->blocked_entry, &migrate_list);
->> +
->> +        /*
->> +         * Preserve p->wake_cpu, such that we can tell where it
->> +         * used to run later.
->> +         */
->> +        p->wake_cpu =3D wake_cpu;
->> +    }
->> +
->> +    rq_unpin_lock(rq, rf);
->> +    raw_spin_rq_unlock(rq);
->=20
-> Don't we run into rq_pin_lock()'s:
->=20
-> SCHED_WARN_ON(rq->balance_callback && rq->balance_callback !=3D
-> &balance_push_callback)
->=20
-> by releasing rq lock between queue_balance_callback(, push_rt/dl_tasks)
-> and __balance_callbacks()?
+v2: no binary output differences patch; report binary changes findings
+    on commit log. Res: Kees Cook.
+    
+    This request was made in an identical, yet different, patch but the
+    same feedback applies.
+    https://lore.kernel.org/lkml/Y1x3MtRJ8ckXxlJn@mail.google.com/
 
-Apologies, I=E2=80=99m a bit lost here. The code you are responding to inlin=
-e does not call rq_pin_lock, it calls rq_unpin_lock.  So what scenario does t=
-he warning trigger according to you?
+v1: https://lore.kernel.org/lkml/Y1trhRE3nK5iAY6q@mail.google.com/
+---
+ drivers/gpu/drm/radeon/atombios.h        | 2 +-
+ drivers/gpu/drm/radeon/radeon_atombios.c | 7 +++++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-Thanks,
+diff --git a/drivers/gpu/drm/radeon/atombios.h b/drivers/gpu/drm/radeon/atombios.h
+index da35a970fcc0..235e59b547a1 100644
+--- a/drivers/gpu/drm/radeon/atombios.h
++++ b/drivers/gpu/drm/radeon/atombios.h
+@@ -3615,7 +3615,7 @@ typedef struct _ATOM_FAKE_EDID_PATCH_RECORD
+ {
+   UCHAR ucRecordType;
+   UCHAR ucFakeEDIDLength;
+-  UCHAR ucFakeEDIDString[1];    // This actually has ucFakeEdidLength elements.
++  UCHAR ucFakeEDIDString[];    // This actually has ucFakeEdidLength elements.
+ } ATOM_FAKE_EDID_PATCH_RECORD;
+ 
+ typedef struct  _ATOM_PANEL_RESOLUTION_PATCH_RECORD
+diff --git a/drivers/gpu/drm/radeon/radeon_atombios.c b/drivers/gpu/drm/radeon/radeon_atombios.c
+index 204127bad89c..4ad5a328d920 100644
+--- a/drivers/gpu/drm/radeon/radeon_atombios.c
++++ b/drivers/gpu/drm/radeon/radeon_atombios.c
+@@ -1727,8 +1727,11 @@ struct radeon_encoder_atom_dig *radeon_atombios_get_lvds_info(struct
+ 						}
+ 					}
+ 					record += fake_edid_record->ucFakeEDIDLength ?
+-						fake_edid_record->ucFakeEDIDLength + 2 :
+-						sizeof(ATOM_FAKE_EDID_PATCH_RECORD);
++						  struct_size(fake_edid_record,
++							      ucFakeEDIDString,
++							      fake_edid_record->ucFakeEDIDLength) :
++						  /* empty fake edid record must be 3 bytes long */
++						  sizeof(ATOM_FAKE_EDID_PATCH_RECORD) + 1;
+ 					break;
+ 				case LCD_PANEL_RESOLUTION_RECORD_TYPE:
+ 					panel_res_record = (ATOM_PANEL_RESOLUTION_PATCH_RECORD *)record;
+-- 
+2.37.3
 
-- Joel=20
-
-
->=20
-> [...]
