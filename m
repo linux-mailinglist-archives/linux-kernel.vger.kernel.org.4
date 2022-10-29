@@ -2,200 +2,376 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5808612156
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 10:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6B761215C
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 10:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiJ2ISr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 04:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48138 "EHLO
+        id S229941AbiJ2IVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 04:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiJ2ISp (ORCPT
+        with ESMTP id S229457AbiJ2IVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 04:18:45 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48C1A52EA;
-        Sat, 29 Oct 2022 01:18:42 -0700 (PDT)
-X-QQ-mid: bizesmtp87t1667031502tp57gzwl
-Received: from [192.168.1.231] ( [183.27.97.92])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 29 Oct 2022 16:18:20 +0800 (CST)
-X-QQ-SSF: 01000000000000B0B000B00A0000000
-X-QQ-FEAT: Xz3VOcA7Mr0ufGvzXNoh6TuMbfMiHqSs6DvufBwTWeiVDGCqal+16D3xUcS7i
-        q9kSmz8gLzMGhc8x8OoKNlpzjIq0e8/fH3+5jlI9NSeobDa9jGYkSQbFKkg4H0gJWh9/G23
-        7tw+RvBRwMl0FX9FrPxMqJq5r6xVUvqx+QOpktPeyA8l/Y/3Gf95fd1UhMZNbzT06JZNZ5b
-        v0zY/R2sDa28NowoPGrmKkegKld3MOhCBxE3jBs+EWTAq1pAZxh31RXB3wb583vqs59F0BN
-        EIhECwE/YFE5BOXou4yXGRpnS6k4ydyHq2AJpe1LkDAbkQwbjn2cXaCEOCqSsgN8KiZMNoq
-        NzMJnGWICgOSvXbErIKUikk96KsLQXHEoGc3PyD0X/oa3hf4Nw=
-X-QQ-GoodBg: 0
-Message-ID: <45F9A056FE1D6D23+fa337149-3574-1687-0695-15e554e24cbd@linux.starfivetech.com>
-Date:   Sat, 29 Oct 2022 16:18:19 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v1 28/30] RISC-V: Add StarFive JH7110 VisionFive2 board
- device tree
-To:     Conor Dooley <conor@kernel.org>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
+        Sat, 29 Oct 2022 04:21:47 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E89A3C90EC;
+        Sat, 29 Oct 2022 01:21:44 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8CxbbeX4lxjYj4DAA--.7205S3;
+        Sat, 29 Oct 2022 16:21:43 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxR1eQ4lxjKWcHAA--.6252S2;
+        Sat, 29 Oct 2022 16:21:40 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hector Martin <marcan@marcan.st>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Conor Dooley <conor.dooley@microchip.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        linux-kernel@vger.kernel.org
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
- <20220930075353.6842-1-hal.feng@linux.starfivetech.com>
- <YzghKZ2E8AN1ajnI@spud>
-Content-Language: en-US
-From:   Hal Feng <hal.feng@linux.starfivetech.com>
-In-Reply-To: <YzghKZ2E8AN1ajnI@spud>
-Content-Type: text/plain; charset=UTF-8
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Brian Norris <briannorris@chromium.org>,
+        Sven Peter <sven@svenpeter.dev>, loongarch@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v3 1/2] soc: loongson: add GUTS driver for loongson-2 platforms
+Date:   Sat, 29 Oct 2022 16:21:34 +0800
+Message-Id: <20221029082135.31096-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: AQAAf8AxR1eQ4lxjKWcHAA--.6252S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3AF4xKw1DCr1DJw13GFykZrb_yoWfurWUpa
+        1fC34rGrWUJF45urs8Ja48uFyY9as7CasruF4xWwn8ur97A34UXas7JFyUZrs7ZrykA342
+        qF95GayjkFWUA3DanT9S1TB71UUUUbJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bSxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUAVWUZwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jw0_GFyle2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26F4j6r4UJwAm72CE4IkC
+        6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2
+        Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
+        1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
+        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j
+        6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr
+        0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4U
+        JbIYCTnIWIevJa73UjIFyTuYvjxUcxhLUUUUU
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 1 Oct 2022 12:14:49 +0100, Conor Dooley wrote:
-> On Fri, Sep 30, 2022 at 03:53:53PM +0800, Hal Feng wrote:
-> > From: Emil Renner Berthing <kernel@esmil.dk>
-> > 
-> > Add a minimal device tree for StarFive JH7110 VisionFive2 board.
-> > Support booting and basic clock/reset/pinctrl/uart drivers.
-> >
-> 
-> I would like to see a link to the publicly available datasheet or
-> documentation for the board (and for the SoC in patch 28) please.
+The global utilities block controls PCIE device enabling, alternate
+function selection for multiplexed signals, consistency of HDA, USB
+and PCIE, configuration of memory controller, rtc controller, lio
+controller, and clock control.
 
-All documents can be found at RVspace Documentation Center maintained
-by StarFive. The related documents of JH7110 SoC and VisionFive2 board
-are as follows.
+This patch adds a driver to manage and access global utilities block
+for loongarch architecture Loongson-2 SoCs. Initially only reading SVR
+and registering soc device are supported. Other guts accesses, such
+as reading PMON configuration by default, should eventually be added
+into this driver as well.
 
-StarFive JH7110 SoC:
-https://doc-en.rvspace.org/Doc_Center/jh7110.html
-StarFive VisionFive2 board:
-https://doc-en.rvspace.org/Doc_Center/visionfive_2.html
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+Change in v3:
+		1. Replace string loongson2/Loongson2 with Loongson-2/loongson-2
+	           in commit message, Kconfig, Makefile file.
+		2. Replace string LOONGSON2 with LOONGSON-2.
 
-> 
-> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> > Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-> 
-> Ditto from patch 28 re: the SoB chain.
-> 
-> > Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
-> > ---
-> 
-> > diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-> > new file mode 100644
-> > index 000000000000..6b9fe32c7eac
-> > --- /dev/null
-> > +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-> > @@ -0,0 +1,91 @@
-> > +// SPDX-License-Identifier: GPL-2.0 OR MIT
-> > +/*
-> > + * Copyright (C) 2022 StarFive Technology Co., Ltd.
-> > + * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
-> > + */
-> > +
-> > +/dts-v1/;
-> > +#include "jh7110.dtsi"
-> > +#include <dt-bindings/gpio/gpio.h>
-> > +#include <dt-bindings/pinctrl/pinctrl-starfive-jh7110.h>
-> > +
-> > +/ {
-> > +	model = "StarFive VisionFive V2";
-> > +	compatible = "starfive,visionfive-v2", "starfive,jh7110";
-> > +
-> > +	aliases {
-> > +		serial0 = &uart0;
-> > +	};
-> 
-> Should we also have a chosen node here?
+ MAINTAINERS                           |   6 +
+ drivers/soc/Kconfig                   |   1 +
+ drivers/soc/Makefile                  |   1 +
+ drivers/soc/loongson/Kconfig          |  20 +++
+ drivers/soc/loongson/Makefile         |   6 +
+ drivers/soc/loongson/loongson2_guts.c | 189 ++++++++++++++++++++++++++
+ 6 files changed, 223 insertions(+)
+ create mode 100644 drivers/soc/loongson/Kconfig
+ create mode 100644 drivers/soc/loongson/Makefile
+ create mode 100644 drivers/soc/loongson/loongson2_guts.c
 
-Will add it. Thanks.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 4fc949c36a44..a02d45dd21ce 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11930,6 +11930,12 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
+ F:	drivers/pinctrl/pinctrl-loongson2.c
+ 
++LOONGSON-2 SOC SERIES GUTS DRIVER
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	loongarch@lists.linux.dev
++S:	Maintained
++F:	drivers/soc/loongson/loongson2_guts.c
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+index e461c071189b..5dbb09f843f7 100644
+--- a/drivers/soc/Kconfig
++++ b/drivers/soc/Kconfig
+@@ -13,6 +13,7 @@ source "drivers/soc/fujitsu/Kconfig"
+ source "drivers/soc/imx/Kconfig"
+ source "drivers/soc/ixp4xx/Kconfig"
+ source "drivers/soc/litex/Kconfig"
++source "drivers/soc/loongson/Kconfig"
+ source "drivers/soc/mediatek/Kconfig"
+ source "drivers/soc/microchip/Kconfig"
+ source "drivers/soc/pxa/Kconfig"
+diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+index 69ba6508cf2c..fff513bd522d 100644
+--- a/drivers/soc/Makefile
++++ b/drivers/soc/Makefile
+@@ -18,6 +18,7 @@ obj-y				+= imx/
+ obj-y				+= ixp4xx/
+ obj-$(CONFIG_SOC_XWAY)		+= lantiq/
+ obj-$(CONFIG_LITEX_SOC_CONTROLLER) += litex/
++obj-y				+= loongson/
+ obj-y				+= mediatek/
+ obj-y				+= microchip/
+ obj-y				+= pxa/
+diff --git a/drivers/soc/loongson/Kconfig b/drivers/soc/loongson/Kconfig
+new file mode 100644
+index 000000000000..64e813962bb0
+--- /dev/null
++++ b/drivers/soc/loongson/Kconfig
+@@ -0,0 +1,20 @@
++# SPDX-License-Identifier: GPL-2.0+
++#
++# Loongson-2 series SoC drivers
++#
++
++menu "Loongson-2 series SoC drivers"
++
++config LOONGSON2_GUTS
++	tristate "Loongson-2 GUTS"
++	depends on LOONGARCH || COMPILE_TEST
++	select SOC_BUS
++	help
++	  The global utilities block controls PCIE device enabling, alternate
++	  function selection for multiplexed signals, consistency of HDA, USB
++	  and PCIE, configuration of memory controller, rtc controller, lio
++	  controller, and clock control. This patch adds a driver to manage
++	  and access global utilities block for loongarch architecture Loongson-2
++	  SoCs. Initially only reading SVR and registering soc device are
++	  supported. Other guts accesses, such as reading PMON configuration by
++	  default, should eventually be added into this driver as well.
+diff --git a/drivers/soc/loongson/Makefile b/drivers/soc/loongson/Makefile
+new file mode 100644
+index 000000000000..263c486df638
+--- /dev/null
++++ b/drivers/soc/loongson/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0+
++#
++# Makefile for the Linux Kernel SoC Loongson-2 specific device drivers
++#
++
++obj-$(CONFIG_LOONGSON2_GUTS)		+= loongson2_guts.o
+diff --git a/drivers/soc/loongson/loongson2_guts.c b/drivers/soc/loongson/loongson2_guts.c
+new file mode 100644
+index 000000000000..8f3d5465c7e8
+--- /dev/null
++++ b/drivers/soc/loongson/loongson2_guts.c
+@@ -0,0 +1,189 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
++ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
++ */
++
++#include <linux/io.h>
++#include <linux/slab.h>
++#include <linux/module.h>
++#include <linux/of_fdt.h>
++#include <linux/sys_soc.h>
++#include <linux/of_address.h>
++#include <linux/platform_device.h>
++
++static struct soc_device_attribute soc_dev_attr;
++static struct soc_device *soc_dev;
++
++/*
++ * Global Utility Registers.
++ *
++ * Not all registers defined in this structure are available on all chips, so
++ * you are expected to know whether a given register actually exists on your
++ * chip before you access it.
++ *
++ * Also, some registers are similar on different chips but have slightly
++ * different names.  In these cases, one name is chosen to avoid extraneous
++ * #ifdefs.
++ */
++struct scfg_guts {
++	u32     svr;            /* Version Register */
++	u8      res0[4];
++	u16     feature;        /* Feature Register */
++	u32     vendor;         /* Vendor Register */
++	u8      res1[6];
++	u32     id;
++	u8      res2[0x3ff8 - 0x18];
++	u32     chip;
++};
++
++static struct guts {
++	struct scfg_guts __iomem *regs;
++	bool little_endian;
++} *guts;
++
++struct loongson2_soc_die_attr {
++	char	*die;
++	u32	svr;
++	u32	mask;
++};
++
++/* SoC die attribute definition for Loongson-2 platform */
++static const struct loongson2_soc_die_attr loongson2_soc_die[] = {
++
++	/*
++	 * LA-based SoCs Loongson-2 Series
++	 */
++
++	/* Die: 2k1000la, SoC: 2k1000la */
++	{ .die		= "2K1000LA",
++	  .svr		= 0x00000013,
++	  .mask		= 0x000000ff,
++	},
++	{ },
++};
++
++static const struct loongson2_soc_die_attr *loongson2_soc_die_match(
++	u32 svr, const struct loongson2_soc_die_attr *matches)
++{
++	while (matches->svr) {
++		if (matches->svr == (svr & matches->mask))
++			return matches;
++		matches++;
++	};
++
++	return NULL;
++}
++
++static u32 loongson2_guts_get_svr(void)
++{
++	u32 svr = 0;
++
++	if (!guts || !guts->regs)
++		return svr;
++
++	if (guts->little_endian)
++		svr = ioread32(&guts->regs->svr);
++	else
++		svr = ioread32be(&guts->regs->svr);
++
++	return svr;
++}
++
++static int loongson2_guts_probe(struct platform_device *pdev)
++{
++	struct device_node *root, *np = pdev->dev.of_node;
++	struct device *dev = &pdev->dev;
++	struct resource *res;
++	const struct loongson2_soc_die_attr *soc_die;
++	const char *machine;
++	u32 svr;
++
++	/* Initialize guts */
++	guts = devm_kzalloc(dev, sizeof(*guts), GFP_KERNEL);
++	if (!guts)
++		return -ENOMEM;
++
++	guts->little_endian = of_property_read_bool(np, "little-endian");
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	guts->regs = ioremap(res->start, res->end - res->start + 1);
++	if (IS_ERR(guts->regs))
++		return PTR_ERR(guts->regs);
++
++	/* Register soc device */
++	root = of_find_node_by_path("/");
++	if (of_property_read_string(root, "model", &machine))
++		of_property_read_string_index(root, "compatible", 0, &machine);
++	of_node_put(root);
++	if (machine)
++		soc_dev_attr.machine = devm_kstrdup(dev, machine, GFP_KERNEL);
++
++	svr = loongson2_guts_get_svr();
++	soc_die = loongson2_soc_die_match(svr, loongson2_soc_die);
++	if (soc_die) {
++		soc_dev_attr.family = devm_kasprintf(dev, GFP_KERNEL,
++						     "Loongson %s", soc_die->die);
++	} else {
++		soc_dev_attr.family = devm_kasprintf(dev, GFP_KERNEL, "Loongson");
++	}
++	if (!soc_dev_attr.family)
++		return -ENOMEM;
++	soc_dev_attr.soc_id = devm_kasprintf(dev, GFP_KERNEL,
++					     "svr:0x%08x", svr);
++	if (!soc_dev_attr.soc_id)
++		return -ENOMEM;
++	soc_dev_attr.revision = devm_kasprintf(dev, GFP_KERNEL, "%d.%d",
++					       (svr >>  4) & 0xf, svr & 0xf);
++	if (!soc_dev_attr.revision)
++		return -ENOMEM;
++
++	soc_dev = soc_device_register(&soc_dev_attr);
++	if (IS_ERR(soc_dev))
++		return PTR_ERR(soc_dev);
++
++	pr_info("Machine: %s\n", soc_dev_attr.machine);
++	pr_info("SoC family: %s\n", soc_dev_attr.family);
++	pr_info("SoC ID: %s, Revision: %s\n",
++		soc_dev_attr.soc_id, soc_dev_attr.revision);
++
++	return 0;
++}
++
++static int loongson2_guts_remove(struct platform_device *dev)
++{
++	soc_device_unregister(soc_dev);
++
++	return 0;
++}
++
++/*
++ * Table for matching compatible strings, for device tree
++ * guts node, for Loongson-2 SoCs.
++ */
++static const struct of_device_id loongson2_guts_of_match[] = {
++	{ .compatible = "loongson,ls2k-chipid", },
++	{}
++};
++MODULE_DEVICE_TABLE(of, loongson2_guts_of_match);
++
++static struct platform_driver loongson2_guts_driver = {
++	.driver = {
++		.name = "loongson2-guts",
++		.of_match_table = loongson2_guts_of_match,
++	},
++	.probe = loongson2_guts_probe,
++	.remove = loongson2_guts_remove,
++};
++
++static int __init loongson2_guts_init(void)
++{
++	return platform_driver_register(&loongson2_guts_driver);
++}
++core_initcall(loongson2_guts_init);
++
++static void __exit loongson2_guts_exit(void)
++{
++	platform_driver_unregister(&loongson2_guts_driver);
++}
++module_exit(loongson2_guts_exit);
+-- 
+2.31.1
 
-> 
-> > +
-> > +	cpus {
-> > +		timebase-frequency = <4000000>;
-> > +	};
-> > +
-> > +	memory@40000000 {
-> > +		device_type = "memory";
-> > +		reg = <0x0 0x40000000 0x1 0x0>;
-> 
-> What is going to happen to the 2 GB variant if they attempt to use this
-> devicetree?
-
-The VisionFive2 board now has 4GB version and 8GB version only. Before
-linux startup, we will change this property in dtb through u-boot to
-make sure the board can boot up with the correct memory size.
-
-> 
-> > +	};
-> > +
-> > +	reserved-memory {
-> > +		#address-cells = <2>;
-> > +		#size-cells = <2>;
-> > +		ranges;
-> > +
-> > +		linux,cma {
-> > +			compatible = "shared-dma-pool";
-> > +			reusable;
-> > +			size = <0x0 0x20000000>;
-> > +			alignment = <0x0 0x1000>;
-> > +			alloc-ranges = <0x0 0xa0000000 0x0 0x20000000>;
-> > +			linux,cma-default;
-> > +		};
-> > +
-> > +		e24_mem: e24@c0000000 {
-> 
-> I had a conversation previously with Icenowy [0] about the e24 on the
-> jh7100 that didn't really come to a conclusion about how to represent
-> it there - but looks like you've decided that it should be a remoteproc
-> for the jh7100?
-
-Yes, we treat it as a remoteproc outside the cpus node. But after
-communication with my colleagues, I found that all nodes in
-"reserved-memory" are not used in the minimal support for VisionFive2
-board. So for this series, I would like to remove "reserved-memory"
-in v2.
-
-> 
-> Is this another situation where peripherals appear at different
-> addresses for the e24 compared to the u74s? Or has that changed for the> jh7100, and really the e24 should be described in the CPUs node? If it
-> is the latter, you can pick the first patch from [0] into your series.
-> 
-> 0 - https://lore.kernel.org/linux-riscv/e8543838cd221ab6699da16c985eed7514daa786.camel@icenowy.me> > +			reg = <0x0 0xc0110000 0x0 0xf0000>;
-> > +			no-map;
-> > +		};
-> > +
-> > +		xrp_reserved: xrpbuffer@f0000000 {
-> 
-> "Following the generic-names recommended practice, node names should
-> reflect the purpose of the node (ie. “framebuffer” or “dma-pool”)."
-> 
-> I tried googling around for an explanation for what the xrp was, and all
-> I could find was this out-of-tree text binding:
-> https://github.com/foss-xtensa/xrp/blob/master/xrp-kernel/cdns%2Cxrp-hw-simple%2Cv1.txt
-
-The name is from the device driver of HiFi4 DSP provided by Cadence,
-which is not in the mainline. "xrp" is a short name of
-"Xtensa Remote Processing".
-
-Best regards,
-Hal
