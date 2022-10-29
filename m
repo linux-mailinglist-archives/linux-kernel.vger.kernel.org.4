@@ -2,173 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3DC1611F10
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 03:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CACD8611F19
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 03:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiJ2B1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 21:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
+        id S229610AbiJ2Ba7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 21:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiJ2B1m (ORCPT
+        with ESMTP id S229522AbiJ2Ba5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 21:27:42 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C131CBABF
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 18:27:41 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id q9so16939772ejd.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 18:27:41 -0700 (PDT)
+        Fri, 28 Oct 2022 21:30:57 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D37E202716;
+        Fri, 28 Oct 2022 18:30:56 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id r18so6227147pgr.12;
+        Fri, 28 Oct 2022 18:30:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SB8cXsJ6cSiGdyMloRjmKV5mlYek2j619QkGusLH93k=;
-        b=OIignES46Kbt8O1G/D8CE5LCzf4liD+TVCHTDYlD1UbO7ZV00At2PgUGiLzRcjcRoP
-         KDz7BunLbRO8b7QvzRLiyOYUoHvTfU9FCx65vWf3xgqvOJfA9iwsnxzTSjLjFF9sYFPW
-         oYjD0DXfz6gTvYLzJGRJbZK+G+AXCUGpHlhghba5fZUJvAy/kS6ffd4YC9jxzDunFcSf
-         vFV9nR1IVVFNTZQXpa+glCngHUChxUtAowEyJGhQRCTxA5BuzVj4ZMRpqk49kbNedsjN
-         j+nCAT3fysljbaAoQW9f4RydBrH+FUr24DZEeAVV9w+0jE2sDNkP80yZyp1RAxuojKBH
-         q1xg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ljlq0wzNYgqZzF5mdTWeFZiAlKPfpNDbugOhA1C4lDM=;
+        b=Usvn4pjF8UaseNiP1nOoO16Ro9ZiA0ZOISOYmwgLehKa4bT2egg41osfClkVncVUQy
+         4NfKfO8o4bK5UnxAb4H9XvjKODdFuK4+idk3dKS+wjCQsnKCtJQ5uDLVCqNxDCHeSnVJ
+         lyhVMlcu7aibWoRgO6A3/FwsZNe48B5EnYyMBFdZCSpHdBl84r59UBYKkiAsF7fCRgO0
+         D+WlD2rBYnK+Ff48EJf1xOgJQHiFO7T0AJbF8EG4Uv8Ugmb17v6dZJtY9ft2mXGdACRU
+         +ho2IhzRkZx7XdXCuuyV8PbEF39c537enhvePSB6EE/V1RHroFJZ1I8Klf3q5Tk/scBU
+         y8ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SB8cXsJ6cSiGdyMloRjmKV5mlYek2j619QkGusLH93k=;
-        b=lKjKkrjgHPXH1ejWXswWZLULO8tu9s7SG0V0I0wqd5izDh8x7femXAvn7q2FwItRFw
-         NQox31EqL19qkPV0Y0lk4d8OtVjhbHS+gFDYjojlOCSTLlpvQhK9wV0s1V0mgLg0tHIk
-         1O7gsNONaYsWn6ESoAm+S45v/yvjOTNbTci3in9JaDsxRxvV4GhfUgKWrqbk0W8Of2qQ
-         XMXWkF6rT7WG1CzLUtC4rsd7vGWPRvBDMg6BqCWRtL/FsUlzo0PmL/qWCohQhODhqa5T
-         gg3fPpDde7Ah2SkllNVyWzZMv0NmCwfOB8hhQdvswLGRazbqmwkQX3S2Ut0HYhJs+RZu
-         7gtQ==
-X-Gm-Message-State: ACrzQf0rQJzAtqKQOIxLwg2CAC7uFfni3Ern3LG60hTmIxk7Zp8yMyOr
-        WzgB8kRbjkWb3/8z5hMtkJxDUcwJxa8QMncX+QPPfg==
-X-Google-Smtp-Source: AMsMyM6MGnF2TSbEaIjrBzL/n0tAG+PSMkH6yiE/pY/08UqBhcIIpMPKhMmviToeyNxz+zsaPbVSgur3Lfy83BExNZM=
-X-Received: by 2002:a17:907:75c1:b0:79b:f804:c081 with SMTP id
- jl1-20020a17090775c100b0079bf804c081mr1857415ejc.381.1667006860118; Fri, 28
- Oct 2022 18:27:40 -0700 (PDT)
+        bh=Ljlq0wzNYgqZzF5mdTWeFZiAlKPfpNDbugOhA1C4lDM=;
+        b=ww3GlX7K5Wb/VgDWzEnnClybHLADHX3l089GMqpBDtuxwx9jRPyZ5F/D+aVaTwwXtN
+         +PwDY96/JdI6AjK5+PP11yAz2O6Lu9enyfMBILZod0ufkfUG8RfFj/+vKGYBMcWS2IdK
+         oP9sl94YzZ/xjh4yssxYaSypZzuPCHhEKjowlDyJPjFCxSa6MgLbQGNMcP0DsNqEFlAQ
+         vGNSlmDtjuORahlWdjhw/oHVAA8/RSuHlgRvbVyS4bnGOogHbAVQSp/zj6BjgOi8AtOV
+         klARwIqqB5UR3W49B9cSPG5B7rNfJRMI4mciD9J+cwpSmNfER332zy3KmGQ1qY4TEMFB
+         WY3g==
+X-Gm-Message-State: ACrzQf1BeuNmXeFi02L6W97v35nlW6FwlPtD+1Reomo4wR6EhZNSmB3E
+        9uo6E0CZralwseoA451l0Ho=
+X-Google-Smtp-Source: AMsMyM5syXaucmQoxfMV0w2n6EFA7QVHRHRLVaD6hhVGmXqZgpqqfhy3f/oHTSCt85ZKkJzWadmI4A==
+X-Received: by 2002:a63:cc43:0:b0:43a:2f12:d326 with SMTP id q3-20020a63cc43000000b0043a2f12d326mr2084263pgi.320.1667007055418;
+        Fri, 28 Oct 2022 18:30:55 -0700 (PDT)
+Received: from mail.google.com (122-58-209-93-fibre.sparkbb.co.nz. [122.58.209.93])
+        by smtp.gmail.com with ESMTPSA id o7-20020a17090a4b4700b002137d3da760sm70187pjl.39.2022.10.28.18.30.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 18:30:54 -0700 (PDT)
+Date:   Sat, 29 Oct 2022 14:30:44 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
+        Claudio Suarez <cssk@net-c.es>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Grigory Vasilyev <h0tc0d3@gmail.com>,
+        Slark Xiao <slark_xiao@163.com>,
+        Rongguang Wei <weirongguang@kylinos.cn>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        paulo.miguel.almeida.rodenas@gmail.com
+Subject: [PATCH v2] [next] drm/amdgpu: Replace one-element array with
+ flexible-array member
+Message-ID: <Y1yCRHgx15ZOiCL4@mail.google.com>
 MIME-Version: 1.0
-References: <20221028034155.5580-1-quic_bjorande@quicinc.com>
-In-Reply-To: <20221028034155.5580-1-quic_bjorande@quicinc.com>
-From:   Steev Klimaszewski <steev@kali.org>
-Date:   Fri, 28 Oct 2022 20:27:27 -0500
-Message-ID: <CAKXuJqhOH1Ts0Nde5WB0-bVHUv=_As23eJRsH=VnCxxjtkNB_A@mail.gmail.com>
-Subject: Re: [PATCH 00/10] interconnect: osm-l3: SC8280XP L3 and DDR scaling
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1x3MtRJ8ckXxlJn@mail.google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 10:42 PM Bjorn Andersson
-<quic_bjorande@quicinc.com> wrote:
->
-> The SC8280XP currently shows depressing results in memory benchmarks.
-> Fix this by introducing support for the platform in the OSM (and EPSS)
-> L3 driver and support for the platform in the bwmon binding.
->
-> Then add the necessary nodes and values throughout the sc8280xp and
-> sa8540p dtsi files to make the various devices on these platforms scale
-> both L3, memory bus and DDR.
->
-> Bjorn Andersson (10):
->   interconnect: qcom: osm-l3: Use platform-independent node ids
->   interconnect: qcom: osm-l3: Squash common descriptors
->   interconnect: qcom: osm-l3: Add per-core EPSS L3 support
->   interconnect: qcom: osm-l3: Simplify osm_l3_set()
->   dt-bindings: interconnect: Add sm8350, sc8280xp and generic OSM L3
->     compatibles
->   arm64: dts: qcom: Align with generic osm-l3/epss-l3
->   arm64: dts: qcom: sc8280xp: Add epss_l3 node
->   arm64: dts: qcom: sc8280xp: Set up L3 scaling
->   dt-bindings: interconnect: qcom,msm8998-bwmon: Add sc8280xp bwmon
->     instances
->   arm64: dts: qcom: sc8280xp: Add bwmon instances
->
->  .../interconnect/qcom,msm8998-bwmon.yaml      |   5 +
->  .../bindings/interconnect/qcom,osm-l3.yaml    |  22 ++-
->  arch/arm64/boot/dts/qcom/sa8540p.dtsi         |  39 +++++
->  arch/arm64/boot/dts/qcom/sc7180.dtsi          |   2 +-
->  arch/arm64/boot/dts/qcom/sc7280.dtsi          |   2 +-
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi        | 152 ++++++++++++++++++
->  arch/arm64/boot/dts/qcom/sdm845.dtsi          |   2 +-
->  arch/arm64/boot/dts/qcom/sm8150.dtsi          |   2 +-
->  arch/arm64/boot/dts/qcom/sm8250.dtsi          |   2 +-
->  drivers/interconnect/qcom/osm-l3.c            | 126 ++++-----------
->  10 files changed, 251 insertions(+), 103 deletions(-)
->
-> --
-> 2.37.3
->
-Prior to this series being applied:
+One-element arrays are deprecated, and we are replacing them with
+flexible array members instead. So, replace one-element array with
+flexible-array member in struct _ATOM_FAKE_EDID_PATCH_RECORD and
+refactor the rest of the code accordingly.
 
-steev@cho:~/temp/mybw$ ./mybw
-    64: 21043.42MB/s
-   128: 22511.90MB/s
-   256: 23190.96MB/s
-   512: 23532.00MB/s
-  1024: 23537.36MB/s
-    2K: 23730.19MB/s
-    4K: 23307.45MB/s
-    8K: 23603.36MB/s
-   16K: 23752.39MB/s
-   32K: 23819.91MB/s
-   64K: 23871.28MB/s
-  128K: 23890.10MB/s
-  256K: 23851.90MB/s
-  512K: 23759.65MB/s
- 1024K: 15956.73MB/s
-    2M: 8418.88MB/s
-    4M: 6385.06MB/s
-    8M: 5959.11MB/s
-   16M: 5892.18MB/s
-   32M: 6109.78MB/s
+Important to mention is that doing a build before/after this patch
+results in no binary output differences.
 
+This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+routines on memcpy() and help us make progress towards globally
+enabling -fstrict-flex-arrays=3 [1].
 
-With this series applied:
-steev@cho:~/temp/mybw$ ./mybw
-    64: 21193.63MB/s
-   128: 22513.64MB/s
-   256: 23196.15MB/s
-   512: 23554.33MB/s
-  1024: 23555.31MB/s
-    2K: 23738.53MB/s
-    4K: 23310.13MB/s
-    8K: 23616.14MB/s
-   16K: 23768.47MB/s
-   32K: 23847.16MB/s
-   64K: 23881.61MB/s
-  128K: 23901.33MB/s
-  256K: 23910.21MB/s
-  512K: 23839.70MB/s
- 1024K: 23577.47MB/s
-    2M: 23836.08MB/s
-    4M: 23798.35MB/s
-    8M: 23759.23MB/s
-   16M: 22887.62MB/s
-   32M: 22491.87MB/s
+Link: https://github.com/KSPP/linux/issues/79
+Link: https://github.com/KSPP/linux/issues/238
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
 
-Additionally, if anyone is curious, geekbench 5.4 comparison, with
-this patchset applied on 6.0.5:
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+---
+Changelog:
 
-https://browser.geekbench.com/v5/cpu/compare/18284519?baseline=18076980
+v2: no binary output differences patch; report binary changes findings
+    on commit log. Res: Kees Cook
+v1: https://lore.kernel.org/lkml/Y1tkWdwPUp+UdpM0@mail.google.com/
+---
+ drivers/gpu/drm/amd/amdgpu/atombios_encoders.c | 7 +++++--
+ drivers/gpu/drm/amd/include/atombios.h         | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-This change is very welcomed :)
+diff --git a/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c b/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
+index 6be9ac2b9c5b..18ae9433e463 100644
+--- a/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
++++ b/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
+@@ -2081,8 +2081,11 @@ amdgpu_atombios_encoder_get_lcd_info(struct amdgpu_encoder *encoder)
+ 						}
+ 					}
+ 					record += fake_edid_record->ucFakeEDIDLength ?
+-						fake_edid_record->ucFakeEDIDLength + 2 :
+-						sizeof(ATOM_FAKE_EDID_PATCH_RECORD);
++						  struct_size(fake_edid_record,
++							      ucFakeEDIDString,
++							      fake_edid_record->ucFakeEDIDLength) :
++						  /* empty fake edid record must be 3 bytes long */
++						  sizeof(ATOM_FAKE_EDID_PATCH_RECORD) + 1;
+ 					break;
+ 				case LCD_PANEL_RESOLUTION_RECORD_TYPE:
+ 					panel_res_record = (ATOM_PANEL_RESOLUTION_PATCH_RECORD *)record;
+diff --git a/drivers/gpu/drm/amd/include/atombios.h b/drivers/gpu/drm/amd/include/atombios.h
+index 15943bc21bc5..b5b1d073f8e2 100644
+--- a/drivers/gpu/drm/amd/include/atombios.h
++++ b/drivers/gpu/drm/amd/include/atombios.h
+@@ -4107,7 +4107,7 @@ typedef struct _ATOM_FAKE_EDID_PATCH_RECORD
+ {
+   UCHAR ucRecordType;
+   UCHAR ucFakeEDIDLength;       // = 128 means EDID length is 128 bytes, otherwise the EDID length = ucFakeEDIDLength*128
+-  UCHAR ucFakeEDIDString[1];    // This actually has ucFakeEdidLength elements.
++  UCHAR ucFakeEDIDString[];     // This actually has ucFakeEdidLength elements.
+ } ATOM_FAKE_EDID_PATCH_RECORD;
+ 
+ typedef struct  _ATOM_PANEL_RESOLUTION_PATCH_RECORD
+-- 
+2.37.3
 
-Tested on the Lenovo Thinkpad X13s
-
-Tested-by: Steev Klimaszewski <steev@kali.org>
