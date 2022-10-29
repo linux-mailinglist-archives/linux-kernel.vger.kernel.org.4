@@ -2,134 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53BC1612405
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 16:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDBFD61240E
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 16:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbiJ2Owr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 10:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
+        id S230141AbiJ2Ozb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 10:55:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiJ2Owo (ORCPT
+        with ESMTP id S229962AbiJ2OzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 10:52:44 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CE2640C;
-        Sat, 29 Oct 2022 07:52:43 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-13bef14ea06so9362296fac.3;
-        Sat, 29 Oct 2022 07:52:43 -0700 (PDT)
+        Sat, 29 Oct 2022 10:55:17 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50EB20F7E;
+        Sat, 29 Oct 2022 07:55:15 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id k4so596245wri.9;
+        Sat, 29 Oct 2022 07:55:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lwnCAiei1whE+Be7EoJMLh4TL6YCuvqKCJBzgqzGqOc=;
-        b=eFE1tYG+WmHIhwxjpqC8OAG0cBEHvsJraLzPuHakg0hPooD/nGNhGQHVU//kzoEcNs
-         TO/3ZhQR0N2Bh5luyXh7FfsgDStYQ6K2Yxv5LQzXsgjdpUn50y4qvQmlhO+N4t7EJwgV
-         amMo9YMxEAL89rNwB13nOXMZgGaBQuFd/cfk8LKu+FukGiDR3pz401z3SMVrqvY8pN/T
-         azpf1Lakpv3ArNP1/gF61vpYvIeFqQudUpP1Mh706W2IuSRp3LugfYtcxYvUXxNdZkWS
-         pPch2jmQTPuRGVSx4xvMcVvaYt3aSgyNdZQEWvQ78EJkvFLclCqzkgRMLucp7YNCeITx
-         QQxw==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mz5TY/LtkLWNd5ySUogpHG94P5HHBB7Mk5dPpz+NcdA=;
+        b=IWk7W49jd16h4QCOdKnC2dqhR81Zwa7m7wflpedDLqja8GppdvSwxvODl0MneU14dn
+         93D92I5s08ScbNXyXU9ZXA2HKjlHu4q2vZQ4AcAIX4P2MOEEWjelDNYuHlPfV3OlzKuw
+         2fYy9Q48rngw015jWwdTplLkvmsWKu65WF36F74he+vD47Mc+ruD5dWiVuUszIXpVoKC
+         UaFOWdU7F34sbPW9syMRddHiDF5VXoZ2RobfmfReufnRYyRc2wiAoYv2IB36k6Ksfmtm
+         ySWAK/v3NaN6FaVqYxLMsCW/dYuVKiRcyE+k51xsWVQg/9MJ3nyJZVmh4y7MiAtXSm/X
+         GYgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lwnCAiei1whE+Be7EoJMLh4TL6YCuvqKCJBzgqzGqOc=;
-        b=VaYmEfPUaev2MTzzEA9pVocLqwfVIVFPQiMKSRQAxRg3IWWwatVzqeZGSuv8d6MtHv
-         iODjY/PdYNYrkuq83DCVjbR9r45JsA9kkpTL7E/rA2OpLRkBS77flcX4/gZjI63Xl7mh
-         PF8KWYeWCa6qvTazjBXNKqOJEDEZgeg0FQEgZQz8pR2O/jas4hifWZAn4mLu5QyTDIsd
-         4wpSYLxRbrQlqTuskpxeZ64MYki3tq7CRIscZ1cLLaeaAEblrObRXG3BPTfh0gGz6eqr
-         LBnbpLVH/kozEBJjhn/94CD7ckngJNiG0IAfdcfFUR+51UKn2is8jGLcp62mog6GItRY
-         Y80g==
-X-Gm-Message-State: ACrzQf3QZDhw2T8/JAydV8kAt7NBuAF6TACMjusC4+n5wxRm/Ko8GQH3
-        YuQ9WwrYOJMJDTFUJ5pO4Ls=
-X-Google-Smtp-Source: AMsMyM4R6nB9g+5TpuFK/Quhv8UgAR4fbog4Ou/8bXvQI2EioWAaHA8yrPLGi8p6yn7a5Em4gs5vGQ==
-X-Received: by 2002:a05:6870:350e:b0:13c:37cd:dc32 with SMTP id k14-20020a056870350e00b0013c37cddc32mr9821144oah.185.1667055163211;
-        Sat, 29 Oct 2022 07:52:43 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d13-20020a056870e24d00b0013b1301ce42sm723920oac.47.2022.10.29.07.52.42
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Mz5TY/LtkLWNd5ySUogpHG94P5HHBB7Mk5dPpz+NcdA=;
+        b=NYL2wjslOaWof6mH2/eoWOcxf+yDgo/JsIPFCIdGcXuRXdPa4vqB6QT9VDS0CW3An/
+         c0e3AlnJDVS4a80EqgkjwWlDukirDejDQVxjRSqEoK2BMgX8G6nc2abptoUrHP1X6DeI
+         OEdeL3z9lTcPhxIV+BPiE4b2xkzS4Kc6lx2sklbsTgrRsqVaRStClCZZIuh4zmVWVhje
+         gYT5mq0WzKxx2+0lNnuVcZ4BBm/Z+1+vathtoCLs/I24p4m+JfXIfmNLQD6LpX7xkmSl
+         gHUlr2DwvK9KnVFNGhZvGOkbbLjWT9gAIizNPJW4HXx+FwUJQVYiDcRyGiezvDAr7+EO
+         olqA==
+X-Gm-Message-State: ACrzQf3jrA3lbofN1lkXYl/68XmTchyfd4bAnX0HTZQHb9FVrhQ3QjVx
+        F3gXmU0tRR/gHrdGcQnActY=
+X-Google-Smtp-Source: AMsMyM6Uw3Qv74zlCkQOCLMvFSfGFSH0JnLnK/yjUbnQWdCgHYz3QQtSa8EKFBnqGEHnCHic3EAu3g==
+X-Received: by 2002:a5d:61c9:0:b0:236:781a:8d7e with SMTP id q9-20020a5d61c9000000b00236781a8d7emr2572305wrv.576.1667055314058;
+        Sat, 29 Oct 2022 07:55:14 -0700 (PDT)
+Received: from elementary ([94.73.35.109])
+        by smtp.gmail.com with ESMTPSA id t12-20020adff60c000000b002366ded5864sm1644157wrp.116.2022.10.29.07.55.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Oct 2022 07:52:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 29 Oct 2022 07:52:41 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-usb@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        John Stultz <jstultz@google.com>
-Subject: Re: [RFC][PATCH v2 20/31] timers: usb: Use del_timer_shutdown()
- before freeing timer
-Message-ID: <20221029145241.GA3296895@roeck-us.net>
-References: <20221027150525.753064657@goodmis.org>
- <20221027150928.983388020@goodmis.org>
- <4e61935b-b06b-1f2d-6c2b-79bdfd569cd6@roeck-us.net>
- <20221028140129.040d9acc@gandalf.local.home>
- <20221028141007.05f5c490@gandalf.local.home>
- <20221028195959.GA1073367@roeck-us.net>
+        Sat, 29 Oct 2022 07:55:13 -0700 (PDT)
+Date:   Sat, 29 Oct 2022 16:55:11 +0200
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     Mia Kanashi <chad@redpilled.dev>
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com, spbnick@gmail.com,
+        pobrn@protonmail.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andreas Grosse <andig.mail@t-online.de>
+Subject: Re: [PATCH v2] HID: uclogic: Add support for XP-PEN Deco LW
+Message-ID: <20221029145511.GA7941@elementary>
+References: <20221028082348.22386-1-jose.exposito89@gmail.com>
+ <ED1CBF63-A70C-44FF-9F0B-80090EB347EA@redpilled.dev>
+ <20221029075832.GA8790@elementary>
+ <21CA0A00-1B9F-4E97-B942-A3B7CAA2B52E@redpilled.dev>
+ <C7FD0EC0-899A-4D29-8363-D2FAD8E89BBD@redpilled.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221028195959.GA1073367@roeck-us.net>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <C7FD0EC0-899A-4D29-8363-D2FAD8E89BBD@redpilled.dev>
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 01:00:02PM -0700, Guenter Roeck wrote:
-> On Fri, Oct 28, 2022 at 02:10:07PM -0400, Steven Rostedt wrote:
-> > On Fri, 28 Oct 2022 14:01:29 -0400
-> > Steven Rostedt <rostedt@goodmis.org> wrote:
-> > 
-> > > @@ -813,6 +839,14 @@ void destroy_timer_on_stack(struct timer_list *timer)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(destroy_timer_on_stack);
-> > >  
-> > > +static struct timer_base *lock_timer_base(struct timer_list *timer,
-> > > +					  unsigned long *flags);
-> > > +
-> > > +void __timer_reinit_debug_objects(struct timer_list *timer)
-> > > +{
-> > > +	return;
-> > > +}
-> > > +
-> > >  #else
-> > >  static inline void debug_timer_init(struct timer_list *timer) { }
-> > >  static inline void debug_timer_activate(struct timer_list *timer) { }
-> > 
-> > Bah, the above chunk was leftover from some debugging.
-> > 
+Hi!
+
+On Sat, Oct 29, 2022 at 04:55:21PM +0300, Mia Kanashi wrote:
+> >>[1] Actually it should be set to discharging until this gets merged:
+> >>    https://lore.kernel.org/linux-input/20221028181849.23157-1-jose.exposito89@gmail.com/T/
+> >
+> >But i also currently applied this ^ patch, i will try testing without it and then report.
 > 
-> I'll test again with the following changes on top of your published
-> patch series. I hope this is the current status, but I may have lost
-> something.
-> 
+> Tested without it, same issue.
+> So yeah it seems that hid-input driver can set supply status to discharging before setting a battery capacity? 
 
-With the diffs I sent earlier applied, the warning still seen is
+Very good catch. I managed to reproduce it using the USB dongle. I
+didn't notice it before because I was running upower after connecting
+the device, which isn't fast enough. However, using watch as you
+suggested makes the issue pretty noticeable.
 
-WARNING: CPU: 0 PID: 9 at lib/debugobjects.c:502 debug_print_object+0xd0/0x100
-ODEBUG: free active (active state 0) object type: timer_list hint: neigh_timer_handler+0x0/0x480
+The problem is that the battery is fetched when the USB dongle is
+connected. However, the tablet might not be paired at that point.
 
-That happens with almost every test, so I may have missed some others
-in the noise.
+To explain it with the actual code:
 
-Guenter
+
+  if (dev->battery_status != HID_BATTERY_REPORTED &&
+      !dev->battery_avoid_query) {
+	value = hidinput_query_battery_capacity(dev);
+                ^ Here the battery is fetched, but because the tabled
+                  is not paired and this function returns garbage
+	if (value < 0)
+		return value;
+
+	dev->battery_capacity = value;
+	dev->battery_status = HID_BATTERY_QUERIED;
+                            ^ Now the battery is set as queried
+  }
+
+  if (dev->battery_status == HID_BATTERY_UNKNOWN)
+	val->intval = POWER_SUPPLY_STATUS_UNKNOWN;
+  else
+	val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
+                    ^ And therefore the battery is reported
+
+
+Thankfully, there is already a flag (battery_avoid_query) used to solve
+the same issue on stylus. The battery percentage is unknown until the
+stylus is in proximity.
+
+So I guess I could use the same flag to avoid this problem.
+
+I'll add a fix in a second revision of this patch.
+
+Thanks!!
