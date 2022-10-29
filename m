@@ -2,63 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F1C612200
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 11:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1CA61220E
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 11:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiJ2Jv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 05:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60260 "EHLO
+        id S229707AbiJ2Jzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 05:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiJ2Jv5 (ORCPT
+        with ESMTP id S229510AbiJ2Jzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 05:51:57 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31421107A92;
-        Sat, 29 Oct 2022 02:51:54 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MzvhH4TpVz15Lx9;
-        Sat, 29 Oct 2022 17:46:55 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 29 Oct 2022 17:51:52 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 29 Oct 2022 17:51:51 +0800
-Subject: Re: [PATCH v2 1/3] sched: Add helper kstat_cpu_softirqs_sum()
-To:     <paulmck@kernel.org>
-CC:     "Elliott, Robert (Servers)" <elliott@hpe.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        "Josh Triplett" <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221022124525.2080-1-thunder.leizhen@huawei.com>
- <20221022124525.2080-2-thunder.leizhen@huawei.com>
- <MW5PR84MB18423C3F30D3F789EB48D0A5AB339@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
- <e15cd40f-6613-ba44-cc54-0d00f3c7eab1@huawei.com>
- <20221028223514.GV5600@paulmck-ThinkPad-P17-Gen-1>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <40cf1a2c-821d-51da-14b1-cdf6d5b8aeef@huawei.com>
-Date:   Sat, 29 Oct 2022 17:51:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Sat, 29 Oct 2022 05:55:35 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015B11211ED
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 02:55:32 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id k2so18381508ejr.2
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 02:55:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MKJUE5PpesUMlPthy/7jtsxIpyrFHszU8MX24w0iOqw=;
+        b=UQUhwGNdq0X8tJkc80e+VXF2JiCAC+hljscaym6YZHYmKkRd7s9WNAbNwOoPs0zioL
+         O912aEajqb0ElP99hptUFINYDjMPr7FQXdrGyGvxF97EcNXhYdIpBSOx9RWlOKWLyEMh
+         D1GvA4/vu5hsPUm9ShFJNryw/uXTMqmd8sk2VXa+5O/NcO4x9KAYI2kAb1+bEkkUlV8l
+         FIq+f+gFegl9QkDaXqAGA5h0VNGlp8QP9Iy1tE9wVDIG8vXP9RjJ6A6pEAbEhKMKkhaE
+         iGraO2WkGExIfAlN4IR765FRX7dBKGEecEWxPzaiBeWypG/ofEZQZPZfocSkOPu7cpnX
+         gBog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MKJUE5PpesUMlPthy/7jtsxIpyrFHszU8MX24w0iOqw=;
+        b=dmELbiwUiZ14VQWfBrihrGB3cF/TdAQKjqHsXSqlvkm3V4dcWW3mqx74iuqj2YkL8v
+         d6yJqfIF6DS7f4BLTkWG9iP5f1/0RFyDvBHCluT3xDcujDxzkHBicz/eRHdWy9IHHpH3
+         cA5uC9pbZm9ccW/ZuYqIjx7YP51K7eMINMNBx6OZ05+PbtREgDqaTY0ykFGeSNk+zViG
+         Vsh6ruc38/3NIJ3zFE+5Rh5hO7/3zEOa4bDhbjHvPE79IwUKNLQGJod70trQlT61slJy
+         +AV4nvA3S8qcLxSAbIT6OjicCg5a17fHAsvrfxHi2QQXArwHFMce2du10L0zDxBeK+aD
+         xrCA==
+X-Gm-Message-State: ACrzQf3icX2FAHdkWWlc94Y8Y0mszuZ6TF8WCO5UWDS4FU2Gm1n/YVgM
+        YYzxS2M/hvNb94t6IPkEHg==
+X-Google-Smtp-Source: AMsMyM6qCEaPdFHqeroWiQEeNlkBCBqah9XQTY+YvggxH2hfZfacTg5kPBDQd3ig8gZYoPEBfjaLQg==
+X-Received: by 2002:a17:907:6d88:b0:7ad:b5f1:8ffc with SMTP id sb8-20020a1709076d8800b007adb5f18ffcmr1008984ejc.727.1667037331560;
+        Sat, 29 Oct 2022 02:55:31 -0700 (PDT)
+Received: from p183 ([46.53.250.206])
+        by smtp.gmail.com with ESMTPSA id 7-20020a170906318700b00783f32d7eaesm473968ejy.164.2022.10.29.02.55.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Oct 2022 02:55:31 -0700 (PDT)
+Date:   Sat, 29 Oct 2022 12:55:29 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH] selftests/x86: add "ffff8" -- kernel memory scanner
+Message-ID: <Y1z4kZVRmX33GJ0F@p183>
+References: <Y1wunXB2iv0QHr22@p183>
+ <84E9CFF2-760D-4A5D-9B19-11CA804E1FE8@zytor.com>
 MIME-Version: 1.0
-In-Reply-To: <20221028223514.GV5600@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <84E9CFF2-760D-4A5D-9B19-11CA804E1FE8@zytor.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,99 +73,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/10/29 6:35, Paul E. McKenney wrote:
-> On Fri, Oct 28, 2022 at 10:38:15AM +0800, Leizhen (ThunderTown) wrote:
->>
->>
->> On 2022/10/28 3:04, Elliott, Robert (Servers) wrote:
->>>
->>>> Similar to kstat_cpu_irqs_sum(), it counts the sum of all software
->>>> interrupts on a specified CPU.
->>>>
->>>> diff --git a/include/linux/kernel_stat.h b/include/linux/kernel_stat.h
->>>> @@ -67,6 +67,17 @@ static inline unsigned int kstat_softirqs_cpu(unsigned int irq, int cpu)
->>>>         return kstat_cpu(cpu).softirqs[irq];
->>>>  }
->>>>
->>>> +static inline unsigned int kstat_cpu_softirqs_sum(int cpu)
->>>> +{
->>>> +	int i;
->>>> +	unsigned int sum = 0;
->>>> +
->>>> +	for (i = 0; i < NR_SOFTIRQS; i++)
->>>> +		sum += kstat_softirqs_cpu(i, cpu);
->>>> +
->>>> +	return sum;
->>>> +}
->>>
->>> In the function upon which this is based:
->>>
->>> struct kernel_stat {
->>>         unsigned long irqs_sum;
->>>         unsigned int softirqs[NR_SOFTIRQS];
->>> };
->>>
->>> static inline unsigned int kstat_cpu_irqs_sum(unsigned int cpu)
->>> {
->>>         return kstat_cpu(cpu).irqs_sum;
->>> }
->>>
->>> kstat_cpu_irqs_sum returns an unsigned long as an unsigned int, which
->>> could cause large values to be truncated. Should that return
->>> unsigned long? The only existing caller is fs/proc/stat.c which
->>
->> This should be a mistake on:
->> commit f2c66cd8eeddedb4 ("/proc/stat: scalability of irq num per cpu")
->>
->> I'll correct it to "unsigned long" in the next version. Thanks.
->>
->>> puts it into a u64:
->>>         u64 sum = 0;
->>>         ...
->>>         sum             += kstat_cpu_irqs_sum(i);
->>>
->>> The softirqs field is an unsigned int, so the new function doesn't have
->>> this inconsistency.
->>
->> OK.
->>
->> To be honest, I did the math. CONFIG_HZ=250
->> 2^32 / 250 / 3600 / 24 / 365 = 0.545 < 1 year
+On Fri, Oct 28, 2022 at 03:14:31PM -0700, H. Peter Anvin wrote:
+> On October 28, 2022 12:33:49 PM PDT, Alexey Dobriyan <adobriyan@gmail.com> wrote:
+> >During Meltdown drama Microsoft managed to screw up pagetables and give
+> >full kernel memory access to userspace:
+> >
+> >	https://blog.frizk.net/2018/03/total-meltdown.html
+> >
+> >We don't want _any_ of that.
+> >
+> >This utility named ffff8 tries to read upper half of virtual address space
+> >and report access that went through (excluding vsyscall page if present).
+> >
+> >It works by doing access and rewriting RDI in the SIGSEGV handler.
+> >
+> >I've tested it with kernel patch which installs rogue page and it was found.
+> >
+> >	$ ./a.out -h
+> >	usage: ./a.out [-f] [-r] [-n N] [-s S]
+> >	        -f: sequential scan
+> >	        -r: random scan (default)
+> >	        -n: use N threads (default: $(nproc))
+> >	        -s: lowest address shift (default: 47)
+> >	        -t: time to run (default: 256 seconds)
+> >
+> >Intended usages are:
+> >
+> >	$ ./a.out -f		# full scan on all cores
+> >or
+> >	$ ./a.out -r -t ...	# time limited random scan for QA test
+> >
+> >Features include:
+> >* multithreading
+> >* auto spreads over CPUs given by taskset
+> >* full sequential scan / random scan
+> >* auto split work for full scan
+> >* smaller than 47-bit scanning (for benchmarking)
+> >* time limit
+> >
+> >Note 1:
+> >HT appears to make scanning slower. If this is the case use taskset(1)
+> >to exclude HT siblings.
+> >
+> >Note 2:
+> >Full 47-bit window scan takes a long time. My 16c/32t potato can do it
+> >in ~8 hours. Benchmark with smaller shifts first.
 > 
-> For this to be a problem, our RCU CPU stall warning would have to be
-> for a months-long grace period, even on systems with HZ=1000.  In almost
-> all cases, the system would have OOMed long before then.
+> Good initiative!
 
-Yes.
+Thanks!
 
-> 
->> So, in theory, for those 32-bit processors, we should use "unsigned long long".
->> Of course, from a programming point of view, 64-bit consists of two 32-bits,
->> and there is an atomicity problem. I think that's probably why members of
->> struct kernel_stat don't use u64.
->>
->> However, it seems that the type of member softirqs can currently be changed to
->> unsigned long. So, at least on a 64-bit processor, it won't have a count
->> overflow problem.
-> 
-> An unsigned long should suffice.  ;-)
+> Only complaint I have is the name and the limit to LA48. LA57 (5-level
+> page tables) have the same potential issue.
 
-include/linux/irqdesc.h:58:     unsigned int __percpu   *kstat_irqs;
+Yes. It would take only half a year to scan 57-bit space if my system
+had one. :-)
 
-I found another place where the hard interrupt count was stored with type "unsigned int",
-it's used by "/proc/interrupts". Maybe the user-mode program gets it periodically and
-accumulates it to a 64-bit value. Of course, maybe half a year later, no one cares about
-the specific interrupts count anymore.
+> You may want to consider doing a breadth-first sweep scanning
+> by decreasing powers of 2 as that will more quickly catch errors caused
+> by problems in the upper levels of the page table hierarchy.
 
-So, apart from what Elliott mentioned, I won't change the rest.
-
-> 
-> 							Thanx, Paul
-> .
-> 
-
--- 
-Regards,
-  Zhen Lei
+It can scan from top to bottom so that fixmap space is easily covered.
