@@ -2,132 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B97611FAE
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 05:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E2F611FB6
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 05:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiJ2DPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 23:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
+        id S229720AbiJ2DRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 23:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJ2DPk (ORCPT
+        with ESMTP id S229441AbiJ2DRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 23:15:40 -0400
-Received: from mail1.bemta34.messagelabs.com (mail1.bemta34.messagelabs.com [195.245.231.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA29B3D598;
-        Fri, 28 Oct 2022 20:15:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-        s=170520fj; t=1667013336; i=@fujitsu.com;
-        bh=N9UlAQL52K8DlauZDIfKvNoDwJZcdmog4BpC05SNtqM=;
-        h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-         In-Reply-To:Content-Type:Content-Transfer-Encoding;
-        b=RAMFxah2plSBOp2+BnO9g1p+OhTiSpOuXynUWPDkM/ihW4j8o/fF1LmdkOiafS2SU
-         oOObWIvryOO0NU9wUtIry8hI2f0vsVEtwjcsqKnvDE1DX+moHL9UkfO5IMtxfEohUs
-         9+cB2MsDFMdUyfYxSC9wbZVPJPH8n5gZr1RKmw9/nPiiwsF/agHDBdKIQCbyp0GLkQ
-         vfS8eHstd7IExMJe1A9DELmk3/H0pNl7nlqknw5c1+N6ONdMh9RpY8fvuDSzWKi27u
-         DQQJnjusZ0ShARIpEPIFl5BzR779MYBZghOao71pSXLQzHVFrO6Kw+SefvYF11PPJe
-         vioq/jEU4RKtg==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCKsWRWlGSWpSXmKPExsViZ8ORqHt1Vky
-  ywarX4hbTp15gtLjybw+jxZRfS5ktzv31s7i8aw6bxbNDvSwWH6YeYbb4MnUas8WpX6eYLP5e
-  +sdmcf5YP7sDt8fOWXfZPVqOvGX1WLznJZPHplWdbB69ze/YPC4/ucLo8XmTXAB7FGtmXlJ+R
-  QJrxs99j9kKDnNUHJ61n7GB8SNbFyMXh5DAFkaJJbNfMEM4y5kktk/fAORwAjnbGCWOLawHsX
-  kF7CQ+3VzJ2MXIwcEioCqxcbMnRFhQ4uTMJywgtqhAhMTDR5PAbGGBaIkFn+cxgtjMAuISt57
-  MZwKxRQRUJE6cOMMOsotZ4CaTxNE3t5kgFncwSixsXsMOUsUmoCFxr+Um2DJOAS2JA82ZEIMs
-  JBa/OcgOYctLNG+dDXanhICixJHOvywQdoXErFltTBC2msTVc5uYJzAKz0Jy6ywkN81CMnYWk
-  rELGFlWMZoVpxaVpRbpGhroJRVlpmeU5CZm5uglVukm6qWW6panFpfoGukllhfrpRYX6xVX5i
-  bnpOjlpZZsYgRGbkqxSt8OxrfL/ugdYpTkYFIS5e01i0kW4kvKT6nMSCzOiC8qzUktPsQow8G
-  hJMGrOw0oJ1iUmp5akZaZA0wiMGkJDh4lEd7YCUBp3uKCxNzizHSI1ClGRSlx3nPTgRICIImM
-  0jy4NljiusQoKyXMy8jAwCDEU5BalJtZgir/ilGcg1FJmLdsCtAUnsy8Erjpr4AWMwEtTp8UB
-  bK4JBEhJdXANIHliumdGcwyc6LF9C/6asZPXRo+j/X5ptxbsdVuTwK+9Ug/nB285Z36L4btfW
-  IHvn7+07duyZ6sxHrPGJf1bnJqf/rzdFU6mUSMbW/YRTc1ZXfYiBpl+kj8rNcp8lkvsMb4lXb
-  r9/8yJ5a+SI6fEWrVKzvx38fTO7ZIKiX2HfRmZQ7ZtvvYro6DulmtEwQtLHU4vniq3Wmb7P5l
-  akrGEVODJRxy+zU+aCU9thI0MkwU2Km9uftWcmJQ0+0QTolnW6aY3Trt6lbnWPLj+Iw9rzL6n
-  pRLmmbPjV0hr+cnZap99JnyK6/Lr7mefXNL0+1tUSzNCrQ93VmRrH3f0yUo+POX1pxma26/r1
-  lH+ZRYijMSDbWYi4oTAYnjuF/XAwAA
-X-Env-Sender: lizhijian@fujitsu.com
-X-Msg-Ref: server-20.tower-571.messagelabs.com!1667013333!676692!1
-X-Originating-IP: [62.60.8.97]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.100.1; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 10590 invoked from network); 29 Oct 2022 03:15:33 -0000
-Received: from unknown (HELO n03ukasimr01.n03.fujitsu.local) (62.60.8.97)
-  by server-20.tower-571.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 29 Oct 2022 03:15:33 -0000
-Received: from n03ukasimr01.n03.fujitsu.local (localhost [127.0.0.1])
-        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTP id 0D39510018D;
-        Sat, 29 Oct 2022 04:15:33 +0100 (BST)
-Received: from R01UKEXCASM126.r01.fujitsu.local (R01UKEXCASM126 [10.183.43.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTPS id 00D75100043;
-        Sat, 29 Oct 2022 04:15:33 +0100 (BST)
-Received: from [10.167.226.45] (10.167.226.45) by
- R01UKEXCASM126.r01.fujitsu.local (10.183.43.178) with Microsoft SMTP Server
- (TLS) id 15.0.1497.32; Sat, 29 Oct 2022 04:15:23 +0100
-Message-ID: <63c3eec8-bef3-f9c4-a552-0c075cd51b46@fujitsu.com>
-Date:   Sat, 29 Oct 2022 11:15:15 +0800
+        Fri, 28 Oct 2022 23:17:45 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D592A9AFE0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 20:17:36 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id f5-20020a17090a4a8500b002131bb59d61so8911158pjh.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 20:17:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kd4BB28ylqUVziHfqM61lajVeO2UdyApWimbqI2dNa4=;
+        b=BGguppnicqHjW8WfEUzt0WRt/BtvsQBZ/hFQYeUQt7L0+j5PxnRag2L+5pR7ldJmYU
+         fxSlt+6U+ssbdD6d90ZD3GEEvaArZ9CItsMeiHNkML+W/y/hV8zS7Fu7/Ma2ZBZyGjwF
+         fRFvgWG2IXOYzu8hoN0h3BHns4z72AzKnFWX4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Kd4BB28ylqUVziHfqM61lajVeO2UdyApWimbqI2dNa4=;
+        b=IldHZBtc8pH0WGlm5nErDLUFpiUouU7xhfirMkGTDyse4KdkR9ysEHfF5MWFA0NtXj
+         V7Wg8fqTUDvWi1PUw8OlVMB9IUwvU91H79IJo3d2oNJknYX/sxNJ3RR9qLvR1/MQUa3c
+         sNNYjHyCNicCnbo9K+x2HDmrNKsLEEU2HUm63PR4fnz7v0K+p8hWtBJ7V2GKVgYivEvU
+         OXErTsmjg+ox2wtVzxGxvXxFfHjhtw7He+p/SSBh9K56wAbSNl9NJ+RkS/COyMZ/2rSS
+         zDQLLlIBtPx4SF4qfuhp6qF/PMpLs+1yZzZrX+Dx4G0yOyJi5YxedTaVQ1cOeBvuVjXs
+         hyNA==
+X-Gm-Message-State: ACrzQf3V9uUumUl54U6rvfG54hftsqobFZ40bmCy/h5E8FTLDapktDla
+        fW7pxT6UVoBu/evmoGPBGrx0WQ==
+X-Google-Smtp-Source: AMsMyM5me638ftMDuCR+ussBeXMeJ3H30jUxnuNmVqvD/NnEcnVWySgFAFBzkL8kvpWSPHr7p2FbHg==
+X-Received: by 2002:a17:90b:3803:b0:213:9911:5efd with SMTP id mq3-20020a17090b380300b0021399115efdmr2546152pjb.94.1667013456327;
+        Fri, 28 Oct 2022 20:17:36 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b12-20020a170903228c00b00186b55e3cd6sm187649plh.133.2022.10.28.20.17.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 20:17:35 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 20:17:34 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Ruhl, Michael J" <michael.j.ruhl@intel.com>
+Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] igb: Proactively round up to kmalloc bucket size
+Message-ID: <202210282013.82F28AE92@keescook>
+References: <20221018092340.never.556-kees@kernel.org>
+ <20221018092526.4035344-2-keescook@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [for-next PATCH v5 03/11] RDMA: Extend RDMA kernel verbs ABI to
- support flush
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     Bob Pearson <rpearsonhpe@gmail.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        <linux-rdma@vger.kernel.org>, Zhu Yanjun <zyjzyj2000@gmail.com>,
-        <yangx.jy@fujitsu.com>, <y-goto@fujitsu.com>, <mbloch@nvidia.com>,
-        <liangwenpeng@huawei.com>, <tom@talpey.com>,
-        <tomasz.gromadzki@intel.com>, <dan.j.williams@intel.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20220927055337.22630-1-lizhijian@fujitsu.com>
- <20220927055337.22630-4-lizhijian@fujitsu.com> <Y1wVFm2SVQ/ZLUpU@nvidia.com>
-From:   Li Zhijian <lizhijian@fujitsu.com>
-In-Reply-To: <Y1wVFm2SVQ/ZLUpU@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.167.226.45]
-X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
- R01UKEXCASM126.r01.fujitsu.local (10.183.43.178)
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018092526.4035344-2-keescook@chromium.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 29/10/2022 01:44, Jason Gunthorpe wrote:
-> On Tue, Sep 27, 2022 at 01:53:29PM +0800, Li Zhijian wrote:
->> @@ -4321,6 +4330,8 @@ int ib_dealloc_xrcd_user(struct ib_xrcd *xrcd, struct ib_udata *udata);
->>   static inline int ib_check_mr_access(struct ib_device *ib_dev,
->>   				     unsigned int flags)
->>   {
->> +	u64 device_cap = ib_dev->attrs.device_cap_flags;
->> +
->>   	/*
->>   	 * Local write permission is required if remote write or
->>   	 * remote atomic permission is also requested.
->> @@ -4335,6 +4346,13 @@ static inline int ib_check_mr_access(struct ib_device *ib_dev,
->>   	if (flags & IB_ACCESS_ON_DEMAND &&
->>   	    !(ib_dev->attrs.kernel_cap_flags & IBK_ON_DEMAND_PAGING))
->>   		return -EINVAL;
->> +
->> +	if ((flags & IB_ACCESS_FLUSH_GLOBAL &&
->> +	    !(device_cap & IB_DEVICE_FLUSH_GLOBAL)) ||
->> +	    (flags & IB_ACCESS_FLUSH_PERSISTENT &&
->> +	    !(device_cap & IB_DEVICE_FLUSH_PERSISTENT)))
->> +		return -EINVAL;
-> This should be -EOPNOTSUPP as the above is changed to in for-next
-Yes,  my local tree(V6) had updated this. will repost this later.
-
-
-
+On Tue, Oct 18, 2022 at 02:25:25AM -0700, Kees Cook wrote:
+> In preparation for removing the "silently change allocation size"
+> users of ksize(), explicitly round up all q_vector allocations so that
+> allocations can be correctly compared to ksize().
 >
-> Jason
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
+Hi! Any feedback on this part of the patch pair?
+
+> ---
+>  drivers/net/ethernet/intel/igb/igb_main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+> index 6256855d0f62..7a3a41dc0276 100644
+> --- a/drivers/net/ethernet/intel/igb/igb_main.c
+> +++ b/drivers/net/ethernet/intel/igb/igb_main.c
+> @@ -1195,7 +1195,7 @@ static int igb_alloc_q_vector(struct igb_adapter *adapter,
+>  		return -ENOMEM;
+>  
+>  	ring_count = txr_count + rxr_count;
+> -	size = struct_size(q_vector, ring, ring_count);
+> +	size = kmalloc_size_roundup(struct_size(q_vector, ring, ring_count));
+>  
+>  	/* allocate q_vector and rings */
+>  	q_vector = adapter->q_vector[v_idx];
+
+Thanks! :)
+
+-Kees
+
+-- 
+Kees Cook
