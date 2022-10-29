@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F2D612318
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 15:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA2361231A
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 15:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiJ2NBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 09:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
+        id S229871AbiJ2NBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 09:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiJ2NBC (ORCPT
+        with ESMTP id S229861AbiJ2NBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 09:01:02 -0400
+        Sat, 29 Oct 2022 09:01:10 -0400
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AF75B725;
-        Sat, 29 Oct 2022 06:01:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E605FDD0
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 06:01:07 -0700 (PDT)
 Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
         by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <heiko@sntech.de>)
-        id 1oolSE-0006ID-AS; Sat, 29 Oct 2022 15:00:50 +0200
+        id 1oolSE-0006ID-NZ; Sat, 29 Oct 2022 15:00:50 +0200
 From:   Heiko Stuebner <heiko@sntech.de>
-To:     Brian Norris <briannorris@chromium.org>
+To:     John Keeping <john@metanate.com>, dri-devel@lists.freedesktop.org
 Cc:     Heiko Stuebner <heiko@sntech.de>,
-        linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        dri-devel@lists.freedesktop.org,
-        Helen Koike <helen.koike@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Johan Jonker <jbx6244@gmail.com>,
         linux-rockchip@lists.infradead.org,
-        Sandy Huang <hjc@rock-chips.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] drm/rockchip: dsi: Clean up 'usage_mode' when failing to attach
-Date:   Sat, 29 Oct 2022 15:00:45 +0200
-Message-Id: <166704843775.1532410.17134222926830396000.b4-ty@sntech.de>
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sandy Huang <hjc@rock-chips.com>, linux-kernel@vger.kernel.org,
+        David Airlie <airlied@gmail.com>
+Subject: Re: [PATCH] drm/rockchip: fix fbdev on non-IOMMU devices
+Date:   Sat, 29 Oct 2022 15:00:46 +0200
+Message-Id: <166704843772.1532410.11915201216204142960.b4-ty@sntech.de>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221019170255.1.Ia68dfb27b835d31d22bfe23812baf366ee1c6eac@changeid>
-References: <20221019170255.1.Ia68dfb27b835d31d22bfe23812baf366ee1c6eac@changeid>
+In-Reply-To: <20221020181248.2497065-1-john@metanate.com>
+References: <20221020181248.2497065-1-john@metanate.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -46,25 +47,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Oct 2022 17:03:48 -0700, Brian Norris wrote:
-> If we fail to attach the first time (especially: EPROBE_DEFER), we fail
-> to clean up 'usage_mode', and thus will fail to attach on any subsequent
-> attempts, with "dsi controller already in use".
+On Thu, 20 Oct 2022 19:12:47 +0100, John Keeping wrote:
+> When switching to the generic fbdev infrastructure, it was missed that
+> framebuffers were created with the alloc_kmap parameter to
+> rockchip_gem_create_object() set to true.  The generic infrastructure
+> calls this via the .dumb_create() driver operation and thus creates a
+> buffer without an associated kmap.
 > 
-> Re-set to DW_DSI_USAGE_IDLE on attach failure.
-> 
-> This is especially common to hit when enabling asynchronous probe on a
-> duel-DSI system (such as RK3399 Gru/Scarlet), such that we're more
-> likely to fail dw_mipi_dsi_rockchip_find_second() the first time.
+> alloc_kmap only makes a difference on devices without an IOMMU, but when
+> it is missing rockchip_gem_prime_vmap() fails and the framebuffer cannot
+> be used.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/2] drm/rockchip: dsi: Clean up 'usage_mode' when failing to attach
-      commit: 0be67e0556e469c57100ffe3c90df90abc796f3b
-[2/2] drm/rockchip: dsi: Force synchronous probe
-      commit: 81e592f86f7afdb76d655e7fbd7803d7b8f985d8
+[1/1] drm/rockchip: fix fbdev on non-IOMMU devices
+      commit: ab78c74cfc5a3caa2bbb7627cb8f3bca40bb5fb0
 
 Best regards,
 -- 
