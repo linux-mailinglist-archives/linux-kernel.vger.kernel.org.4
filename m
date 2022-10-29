@@ -2,100 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D973361265F
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 01:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A18612663
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 01:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiJ2XQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 19:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
+        id S229766AbiJ2XRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 19:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ2XQx (ORCPT
+        with ESMTP id S229441AbiJ2XRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 19:16:53 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21962EF24;
-        Sat, 29 Oct 2022 16:16:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=LImzIWyWeyV4UtuipZzTE0blZZG9s3NFxdeKryOx2nA=; b=XdawGtzhCWEuhGGAUzwVWInbBs
-        UWiS8I1AK15Br0oB3cVIha5mscbudSbzZtKTm03EP4l3dfTTD5Sk+oVOuyJyUtsLa1YknihzNSYrZ
-        GRIR86H1APz4fJvAP/plfHic5Za1cfihUGDe2jL3ofAkvQrbq4ifKjmP8o3GhxmXwf7/sR1dczu5o
-        L14CaCLwOkTXOqPPuU/YLEbBMJWD5HzbyFdGVkusKLpEdUQKOWr5spUEKJqk5d4ObHSHvK5FjPabU
-        QQ7vB1bbu4rktOi6Q1oL+TRnu6PNYZH/mHdawqHkvP+9fbp55m+rwM2jmTqg4cJjo6r9H0zmyJjaf
-        9Q+dq+TQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1oov4J-00FOGN-2Y;
-        Sat, 29 Oct 2022 23:16:47 +0000
-Date:   Sun, 30 Oct 2022 00:16:47 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     linux-arch@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [RFC][PATCHSET] coredump unification for regset and non-regset
- architectures
-Message-ID: <Y120X8dWqe15FPPG@ZenIV>
+        Sat, 29 Oct 2022 19:17:41 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC732EF73;
+        Sat, 29 Oct 2022 16:17:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667085460; x=1698621460;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ZWyz83Ng/7FZvaGgwW6td6tKaOxX5oJfVXpiK7HPDLo=;
+  b=ixdTBnAqrVBC0YM0QkR5j+o7ThlKB3eac26qulLMOJWZJS0+1BerEJu3
+   w9rtX31yZEGY6QhWpYZcegeGc9zHIdr6FyOwCvWN72cd9V3X8EFJiJJ+G
+   AJMj2Aqy/NpQHc0VSvo3TlBpiZXE7+cJcGuCXZ79aLfTwdAgJ+TTlB9Qq
+   TirCwi+uNR4Mw2g22Z+sGCHoMKvujJZTko27hbpn3SiNZ4lW5pRnjK4+W
+   HVLRRLfDpPqNl1cDk6ycB4dG0mP2OIgdplKCFM3/alsZbN9N+q+cXLSu6
+   3SJpwLDmm4F4m8czzbYpWp+n9apdGAStuADrUYWpvOqi20EI5+IQyWCrl
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="289093934"
+X-IronPort-AV: E=Sophos;i="5.95,224,1661842800"; 
+   d="scan'208";a="289093934"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 16:17:40 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="664388070"
+X-IronPort-AV: E=Sophos;i="5.95,224,1661842800"; 
+   d="scan'208";a="664388070"
+Received: from guangna1-mobl.amr.corp.intel.com (HELO [10.209.109.108]) ([10.209.109.108])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 16:17:39 -0700
+Message-ID: <01f437c1-9330-6fb5-d692-6cd500d8adf8@linux.intel.com>
+Date:   Sat, 29 Oct 2022 16:17:39 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.2.2
+Subject: Re: [PATCH v16 2/3] virt: Add TDX guest driver
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20221028002820.3303030-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20221028002820.3303030-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <Y1t18Aw2RbP+oj9D@kroah.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <Y1t18Aw2RbP+oj9D@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-	Resurrecting an old work - elf coredumps mess reduction.
-Back in 2008 some of the architectures have switched to use of
-regsets for elf coredumps.  Unfortunately, back then the helpers
-used by other architectures used to be shared with a.out coredump
-support, which made their calling conventions, etc. hard to
-modify.  As the result, Roland went for duplicating quite a bit
-of coredump-generating logics, with ifdef selecting the right
-variant.
+Hi Greg
 
-	Since then the copies had drifted apart - changes made
-to one of them and applicable to both had not been propagated,
-etc.  Many (but not all) architectures have switched to regset
-variant.  And a.out coredump support had been removed, which
-made it easier to modify the primitives on non-regset architectures.
+On 10/27/22 11:25 PM, Greg Kroah-Hartman wrote:
+> On Thu, Oct 27, 2022 at 05:28:19PM -0700, Kuppuswamy Sathyanarayanan wrote:
 
-	Series below attempts to make use of that; it had been
-started about 4 years ago, but got stalled several times.
+>> +
+>> +static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
+>> +			    unsigned long arg)
+>> +{
+>> +	switch (cmd) {
+>> +	case TDX_CMD_GET_REPORT:
+>> +		return tdx_get_report((void __user *)arg);
+> 
+> You know the type of this pointer here, why not cast it instead of
+> having to cast it from void * again?
 
-	Review and testing would be very appreciated.  Individual
-patches - in followups.  Alternatively, it can be found in
-git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.gitd #work.elfcore.
+The only place we use arg pointer is in copy_from_user() function,
+which expects void __user * pointer. So why cast it as struct
+tdx_report_req * here?
 
-Al Viro (10):
-      kill signal_pt_regs()
-      kill coredump_params->regs
-      kill extern of vsyscall32_sysctl
-      [elf][regset] clean fill_note_info() a bit
-      [elf][regset] simplify thread list handling in fill_note_info()
-      elf_core_copy_task_regs(): task_pt_regs is defined everywhere
-      [elf][non-regset] uninline elf_core_copy_task_fpregs() (and lose pt_regs argument)
-      [elf][non-regset] use elf_core_copy_task_regs() for dumper as well
-      [elf] unify regset and non-regset cases
-      [elf] get rid of get_note_info_size()
 
- arch/alpha/include/asm/elf.h     |   6 -
- arch/alpha/include/asm/ptrace.h  |   1 -
- arch/alpha/kernel/process.c      |   8 +-
- arch/csky/kernel/process.c       |   3 +-
- arch/m68k/kernel/process.c       |   3 +-
- arch/microblaze/kernel/process.c |   2 +-
- arch/um/kernel/process.c         |   2 +-
- arch/x86/include/asm/elf.h       |   1 -
- arch/x86/um/asm/elf.h            |   4 -
- fs/binfmt_elf.c                  | 271 ++++++++-------------------------------
- fs/coredump.c                    |   1 -
- include/linux/coredump.h         |   1 -
- include/linux/elfcore.h          |  13 +-
- include/linux/ptrace.h           |   9 --
- kernel/signal.c                  |   2 +-
- 15 files changed, 61 insertions(+), 266 deletions(-)
+>> +
+>> +MODULE_AUTHOR("Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>");
+>> +MODULE_DESCRIPTION("TDX Guest Driver");
+>> +MODULE_LICENSE("GPL");
+>> diff --git a/include/uapi/linux/tdx-guest.h b/include/uapi/linux/tdx-guest.h
+>> new file mode 100644
+>> index 000000000000..29453e6a7ced
+>> --- /dev/null
+>> +++ b/include/uapi/linux/tdx-guest.h
+>> @@ -0,0 +1,55 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+>> +/*
+>> + * Userspace interface for TDX guest driver
+>> + *
+>> + * Copyright (C) 2022 Intel Corporation
+>> + */
+>> +
+>> +#ifndef _UAPI_LINUX_TDX_GUEST_H_
+>> +#define _UAPI_LINUX_TDX_GUEST_H_
+>> +
+>> +#include <linux/ioctl.h>
+>> +#include <linux/types.h>
+>> +
+>> +/* Length of the REPORTDATA used in TDG.MR.REPORT TDCALL */
+>> +#define TDX_REPORTDATA_LEN              64
+>> +
+>> +/* Length of TDREPORT used in TDG.MR.REPORT TDCALL */
+>> +#define TDX_REPORT_LEN                  1024
+> 
+> As these are fixed values, why do you have to say them again in the
+> structure?
+
+These length recommendations are provided by the TDX Module, and there is
+a slight possibility that the TDX Module will increase the maximum size
+of the REPORTDATA and TDREPORT in the future. To handle such length
+changes, rather than inventing a new IOCTL for it in the future, making
+the current one flexible to handle such changes seems better. One less ABI
+to maintain is always better, right? My initial design did use fixed size
+buffers like you have recommended, but later changed it as per review
+suggestion to make the ABI flexible.
+
+
+> 
+> If you ever change them, wonderful, make a new ioctl.  You can't change
+> this one as userspace would have to also change, there is no way you
+> could mix/match kernel versions and userspace and not have problems.
+
+
+Removing the length based checks in the kernel (in tdx_get_report()) and
+directly passing the user input to the TDX Module can also avoid the 
+usespace/kernel version mix/match issues you have mentioned. Does such
+a solution acceptable?
+
+> 
+> So just fix these values, like you have, and remove them from the
+> structure definition as there's no way you can change them anyway.
+> 
+
+With above details, if you think it is still better to remove the length
+params, I can make the change.
+
+
+>> +
+>> +/**
+>> + * struct tdx_report_req - Request struct for TDX_CMD_GET_REPORT IOCTL.
+>> + *
+>> + * @reportdata: User-defined REPORTDATA to be included into TDREPORT.
+>> + *              Typically it can be some nonce provided by attestation
+>> + *              service, so the generated TDREPORT can be uniquely verified.
+>> + * @tdreport: TDREPORT output from TDCALL[TDG.MR.REPORT].
+> 
+> These are userspace pointers, document them as such please.
+
+Will following change do?
+
+@reportdata: Address of the user buffer with user-defined REPORTDATA to be
+             included into TDREPORT.
+@tdreport: Address of the user buffer to store TDREPORT output from TDCALL[TDG.MR.REPORT]
+
+
+> 
+> thanks,
+> 
+> greg k-h
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
