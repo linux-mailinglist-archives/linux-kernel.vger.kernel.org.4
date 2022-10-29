@@ -2,145 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3DC6121AE
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 11:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13B8E6121B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 11:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiJ2JEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 05:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
+        id S229695AbiJ2JLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 05:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiJ2JEk (ORCPT
+        with ESMTP id S229483AbiJ2JLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 05:04:40 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADD65FE5;
-        Sat, 29 Oct 2022 02:04:37 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id f9so6776652pgj.2;
-        Sat, 29 Oct 2022 02:04:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YRn1A+WL1jPxIpvEG2LgNiWp5qXbKdGgQitgU+8dRwE=;
-        b=h1+/xZhoXaOn0ibpZS2AaI34ufCN+lhYvvnAs8bhvyg3XayXlkprkE6V/1QirCETfV
-         0rvie4kgCL1SEYAYiQnB+Ciy5ZntspLx7eS6iPJ1T/MHRQOYl2V0JBqE1XQCVWFnsrXp
-         tPfmrqR51gTw7VYG9ACaDPZ0TImmal4SoRY7VOcVRXgVnQy8Oa5Xb2bRd/TgzPk1SbWh
-         jxgb+tJF+kI8w7Cs7LVbkomemH9v3vr+vKxgu8Xr6ETgHwAzQq3bv0/x0WLCw9mNdfKO
-         8Fnelh5/HDMpWDv80TGYJgNBg5cGiq298ZLcGKX5beXOnAUiqyDpESjJubOzwg3qc8iT
-         LLGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YRn1A+WL1jPxIpvEG2LgNiWp5qXbKdGgQitgU+8dRwE=;
-        b=2DBZuUvva+HeTUSNkbY8/Mi8Ylt9m+kTHm0c1Vv5BQEWGivgGwGlSLewVK57NNKPuA
-         7CKVNu4u7aPG4RqEzGKky3BWLNwKylyQQT3gM3B2STEFOaKmXbjSYDDWWC4EFF48Xcls
-         izuqsSLHympTxRa7bkYFNKJNkCsKzR5iZWkwC5DHS0rbldWSfrYhxPIkiC9FlQfLDwEt
-         tyMY4QJS1LtZr6lazLKvw619zLbyEZ7hwyeLfuYJ8KZ4TeNT0L+WjLSPtpdDHgrmUk17
-         UtMnmx3s7k8pQ7hxQQoHPV3VDx4vAOsyi3PpcnYyg8L0kYRh1iaJMbsqxfT19aKdX9uT
-         EPPQ==
-X-Gm-Message-State: ACrzQf2QSIu+KZUVsRjSwsD7BUC1yQkTk7jziiwRV0mneHADlwVviPPB
-        eVRKo17RqsZOOewSZY8iyuY=
-X-Google-Smtp-Source: AMsMyM5lpFX7w4z7uTVjN9rzpM3U9yyj65T1fQtXlWcMfItOZIBNA0dq5cZGD9sP16mrztvpGrzQEg==
-X-Received: by 2002:a05:6a00:78f:b0:56c:8c22:79d6 with SMTP id g15-20020a056a00078f00b0056c8c2279d6mr3569847pfu.16.1667034276648;
-        Sat, 29 Oct 2022 02:04:36 -0700 (PDT)
-Received: from localhost.localdomain ([2601:601:9100:9230:37fc:258f:1646:1aea])
-        by smtp.googlemail.com with ESMTPSA id t4-20020a17090ad50400b002130c269b6fsm683535pju.1.2022.10.29.02.04.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Oct 2022 02:04:35 -0700 (PDT)
-From:   Shane Parslow <shaneparslow808@gmail.com>
-To:     loic.poulain@linaro.org
-Cc:     Shane Parslow <shaneparslow808@gmail.com>,
-        M Chetan Kumar <m.chetan.kumar@intel.com>,
-        Intel Corporation <linuxwwan@intel.com>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2] net: wwan: iosm: add rpc interface for xmm modems
-Date:   Sat, 29 Oct 2022 02:03:56 -0700
-Message-Id: <20221029090355.565200-1-shaneparslow808@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Sat, 29 Oct 2022 05:11:22 -0400
+Received: from out203-205-251-53.mail.qq.com (out203-205-251-53.mail.qq.com [203.205.251.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C021722BA;
+        Sat, 29 Oct 2022 02:11:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1667034678;
+        bh=fNynhBfsJSrVgxBStXqjE0ZsAFTRZO0C+KgRTcOOYzg=;
+        h=From:To:Cc:Subject:Date;
+        b=jvGea3SPzbqSHnnciehNxChg5qnB1B1mKggpUlsA4aMm0+Y+5r0NbXwRWJM6Q5nsV
+         aWWW7ddau6EGAHCn5fCaM837tjU7Mj4JtH0BBrAlYrnGz1ItCF4ZJaLnbxCsfbcc+3
+         WeNXrudqTsjSNWYtBVR1Elsn5q2Ff695Ai6DM46w=
+Received: from localhost.localdomain ([111.199.189.86])
+        by newxmesmtplogicsvrszc1-0.qq.com (NewEsmtp) with SMTP
+        id 2CF31E82; Sat, 29 Oct 2022 17:11:15 +0800
+X-QQ-mid: xmsmtpt1667034675tchmb4gsx
+Message-ID: <tencent_0F0DAE84C0B3C42E0B550E5E9F47A9114D09@qq.com>
+X-QQ-XMAILINFO: NC/J3CrDtaBb96H+BrL5KREHlHPKeuVYn+vbaEYhifPlYSliv3Bq0HJfjAFmRZ
+         yyNtt4LOCsexUOzTzo18crotok5B7vl1+UR/PW3M+qP0eXvQPgtbBfRFjUEweukDwS0yIW/t6Oa5
+         h9WqnN79EwDrxH653in/HqouOz2gT5nHDVb3Kxsezvitgw+/aB8zCQ9t7WsjAVQ5mv4qclp/Upnf
+         z9SU0avAacg0OZ27cbNB6Gpf+irMx6wKmHbJYLX8y1OCHzU2wDj1J3Yd3JykRr/aOM400zLrtNZ/
+         6zNbBmDHFEnwT3B8p3J1CSZVlG16BXQPcWw5f/jQnPxYunhsMCVjD1RiJw5bcQ1fSvZr0OQEhk5p
+         3Dzo7K7lJV8HdtFNRHYJqD1BEz+/gJ6O+PczhVsTwFLoNP9onBKMhcJUJebdwdTKy8u/YE/uGQ20
+         6C2aSpcwsNcDlJ7nl2OnNfQpS0kV42sv8g1oflJQ/6fzh5s3fbSVLMJnKuDPoqIpJghAVtMA/E0R
+         m4g9vnbIsnxmQsa0WJcpeKHubzL690pPfgHoBksGK8PGpU+pogJhjWgsQ5HZoSRglNMDssdximOD
+         kMPzY6R0DP6AavZxzddnCCgPz3s4IxPvfCXjPJxQdjAfcKANvvLu/wGgVA920P7chys9asB9zS8X
+         h0MtJldGYGBFa+yd/GZLihXGKMUShFKc4kreLMhPvT4F5rsgTan+0e0VEariW38Gwc/xHLzGYyl7
+         nexV/cv5qsAAAMYB5Bfb3YHaL0m4SIp16iyTEviFAfq56I42EN8XROG4j5is/Mh9Uy0zvp25+NWu
+         1nINFdg7NpRKLdQAOCYE81RnnHqtM8taZDC16haP/ohw8hJxb6Q9omW++FKRBs2G5EH3hvEqWY31
+         HG5Y7RELroHj4RHcppUFtgeetIM6rjLptAxzLpgr1GXZaoXVg37rqR080Z4HmEuywm0ulGlHmd91
+         isHBniDi9jH9qZl+KWjQl9Yrf+S07keIW3DxbmCQ3bFr6wDehb6g==
+From:   Rong Tao <rtoax@foxmail.com>
+Cc:     Rong Tao <rongtao@cestc.cn>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
+        Tools)), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH bpf-next] samples/bpf: Fix tracex2 error: No such file or directory
+Date:   Sat, 29 Oct 2022 17:11:13 +0800
+X-OQ-MSGID: <20221029091113.62518-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new iosm wwan port that connects to the modem rpc interface. This
-interface provides a configuration channel, and in the case of the 7360, is
-the only way to configure the modem (as it does not support mbim).
+From: Rong Tao <rongtao@cestc.cn>
 
-The new interface is compatible with existing software, such as
-open_xdatachannel.py from the xmm7360-pci project [1].
+since commit c504e5c2f964("net: skb: introduce kfree_skb_reason()")
+kfree_skb() is replaced by kfree_skb_reason() and kfree_skb() is set to
+the inline function. So, we replace kprobe/kfree_skb with
+kprobe/kfree_skb_reason to solve the tracex2 error.
 
-[1] https://github.com/xmm7360/xmm7360-pci
+ $ cd samples/bpf
+ $ sudo ./tracex2
+ libbpf: prog 'bpf_prog2': failed to create kprobe 'kfree_skb+0x0' perf event: No such file or directory
+ ERROR: bpf_program__attach failed
 
-Signed-off-by: Shane Parslow <shaneparslow808@gmail.com>
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
- drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.c | 2 +-
- drivers/net/wwan/wwan_core.c              | 4 ++++
- include/linux/wwan.h                      | 2 ++
- 3 files changed, 7 insertions(+), 1 deletion(-)
+ samples/bpf/tracex2_kern.c | 4 ++--
+ samples/bpf/tracex2_user.c | 3 ++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.c b/drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.c
-index 128c999e08bb..bcfbc6b3d617 100644
---- a/drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.c
-+++ b/drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.c
-@@ -39,7 +39,7 @@ static struct ipc_chnl_cfg modem_cfg[] = {
- 	/* RPC - 0 */
- 	{ IPC_MEM_CTRL_CHL_ID_1, IPC_MEM_PIPE_2, IPC_MEM_PIPE_3,
- 	  IPC_MEM_MAX_TDS_RPC, IPC_MEM_MAX_TDS_RPC,
--	  IPC_MEM_MAX_DL_RPC_BUF_SIZE, WWAN_PORT_UNKNOWN },
-+	  IPC_MEM_MAX_DL_RPC_BUF_SIZE, WWAN_PORT_XMMRPC },
- 	/* IAT0 */
- 	{ IPC_MEM_CTRL_CHL_ID_2, IPC_MEM_PIPE_4, IPC_MEM_PIPE_5,
- 	  IPC_MEM_MAX_TDS_AT, IPC_MEM_MAX_TDS_AT, IPC_MEM_MAX_DL_AT_BUF_SIZE,
-diff --git a/drivers/net/wwan/wwan_core.c b/drivers/net/wwan/wwan_core.c
-index 62e9f7d6c9fe..4988d91d00bb 100644
---- a/drivers/net/wwan/wwan_core.c
-+++ b/drivers/net/wwan/wwan_core.c
-@@ -319,6 +319,10 @@ static const struct {
- 		.name = "FIREHOSE",
- 		.devsuf = "firehose",
- 	},
-+	[WWAN_PORT_XMMRPC] = {
-+		.name = "XMMRPC",
-+		.devsuf = "xmmrpc",
-+	},
- };
+diff --git a/samples/bpf/tracex2_kern.c b/samples/bpf/tracex2_kern.c
+index 5bc696bac27d..93e0b7680b4f 100644
+--- a/samples/bpf/tracex2_kern.c
++++ b/samples/bpf/tracex2_kern.c
+@@ -22,14 +22,14 @@ struct {
+ /* kprobe is NOT a stable ABI. If kernel internals change this bpf+kprobe
+  * example will no longer be meaningful
+  */
+-SEC("kprobe/kfree_skb")
++SEC("kprobe/kfree_skb_reason")
+ int bpf_prog2(struct pt_regs *ctx)
+ {
+ 	long loc = 0;
+ 	long init_val = 1;
+ 	long *value;
  
- static ssize_t type_show(struct device *dev, struct device_attribute *attr,
-diff --git a/include/linux/wwan.h b/include/linux/wwan.h
-index 5ce2acf444fb..24d76500b1cc 100644
---- a/include/linux/wwan.h
-+++ b/include/linux/wwan.h
-@@ -15,6 +15,7 @@
-  * @WWAN_PORT_QMI: Qcom modem/MSM interface for modem control
-  * @WWAN_PORT_QCDM: Qcom Modem diagnostic interface
-  * @WWAN_PORT_FIREHOSE: XML based command protocol
-+ * @WWAN_PORT_XMMRPC: Control protocol for Intel XMM modems
-  *
-  * @WWAN_PORT_MAX: Highest supported port types
-  * @WWAN_PORT_UNKNOWN: Special value to indicate an unknown port type
-@@ -26,6 +27,7 @@ enum wwan_port_type {
- 	WWAN_PORT_QMI,
- 	WWAN_PORT_QCDM,
- 	WWAN_PORT_FIREHOSE,
-+	WWAN_PORT_XMMRPC,
+-	/* read ip of kfree_skb caller.
++	/* read ip of kfree_skb_reason caller.
+ 	 * non-portable version of __builtin_return_address(0)
+ 	 */
+ 	BPF_KPROBE_READ_RET_IP(loc, ctx);
+diff --git a/samples/bpf/tracex2_user.c b/samples/bpf/tracex2_user.c
+index dd6205c6b6a7..089e408abd7a 100644
+--- a/samples/bpf/tracex2_user.c
++++ b/samples/bpf/tracex2_user.c
+@@ -146,7 +146,8 @@ int main(int ac, char **argv)
+ 	signal(SIGINT, int_exit);
+ 	signal(SIGTERM, int_exit);
  
- 	/* Add new port types above this line */
+-	/* start 'ping' in the background to have some kfree_skb events */
++	/* start 'ping' in the background to have some kfree_skb_reason
++	 * events */
+ 	f = popen("ping -4 -c5 localhost", "r");
+ 	(void) f;
  
 -- 
-2.38.1
+2.31.1
 
