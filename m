@@ -2,77 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAAFD612658
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 01:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D973361265F
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 01:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiJ2XDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 19:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51052 "EHLO
+        id S229682AbiJ2XQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 19:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ2XDA (ORCPT
+        with ESMTP id S229441AbiJ2XQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 19:03:00 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B7739A;
-        Sat, 29 Oct 2022 16:02:58 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id y67so9709367oiy.1;
-        Sat, 29 Oct 2022 16:02:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mf5ySJI//PO0oeNWRzQ4DWs3ZWqSUDcz0CoIWTuwqEw=;
-        b=J7O/M8yFPqBgZxXEFTI2MY9rI5Y/6iPLrH0G3sF+S/vXXCryK4453NDNOup97yRtQQ
-         IJJygWT+gHXMVgdiW3GsQI61dM2ufX5eTsswVmYDNA8wizp6z5JuUuUfUKAHeo8GVCYP
-         Zx20P4KasFdj7clj6J2IffdmLtS3qoE9GuRpieyVHxd3dNXAx39OPXiApChDsiojf+Nx
-         QyLQyaOS7S3zZf+ea3Om5+LZJcJmuGyKzk5oi6BvKFLj9pQ+q922ts7nYBzp/+9rCGWl
-         vZqXtlt7ZYS4WYkR1Pe7OKQRgHmCQBi/LhDRlZygkme0ugEDsjbkVTfH9og1YSlFoIMn
-         Q6aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mf5ySJI//PO0oeNWRzQ4DWs3ZWqSUDcz0CoIWTuwqEw=;
-        b=rueaL3aZRj/lzyTxU1Cn+kFVzrlygmdAMJtIxpJDTOn6brVWol3g9rWmw3xCsAjs1v
-         HW31NaEps/5S+5BrF8pQZZRYSaurkx6l3Qp9jXfOuFniOnkl3fgvIP5H9fGkLpsX82N+
-         n2TWPbNmeYTidZw1tQ3zan87GIMtAY0gdYn0epGq61MfdFp/918QyHWj3IJloOftvqBa
-         0c+5kFgcLdCOBdHeAArN6bEwAr1t7UNo9lS7uBmjFXOT89kPSdkdQ9Shg2nsDJWt4cn0
-         R+ICvdlzjQgVcTTiu7a07argnXTp3x9vkruon/XNFZcD+8paaYT3jpAXprYXYT3JDiZ3
-         NYPw==
-X-Gm-Message-State: ACrzQf2YYBdrA86kuXcE+ToF+z5nvtJVBInn0dMQbSx8StSAQRXayxmi
-        kACA8QPhsPX/CCFquDhcNzA=
-X-Google-Smtp-Source: AMsMyM6Gtp+Gx7ZNtNrLYnfflrhf/1/oyYT179rItWKq+HgJy3iBjkkaITHwe2jfvKkJFSbg37iQ0g==
-X-Received: by 2002:a05:6808:2105:b0:359:e810:e4d3 with SMTP id r5-20020a056808210500b00359e810e4d3mr2201401oiw.194.1667084578283;
-        Sat, 29 Oct 2022 16:02:58 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z17-20020a056808029100b0035493cbd9absm916997oic.21.2022.10.29.16.02.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Oct 2022 16:02:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <086d381d-bc6f-7dd3-35b6-d05afe742b9e@roeck-us.net>
-Date:   Sat, 29 Oct 2022 16:02:56 -0700
+        Sat, 29 Oct 2022 19:16:53 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21962EF24;
+        Sat, 29 Oct 2022 16:16:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=LImzIWyWeyV4UtuipZzTE0blZZG9s3NFxdeKryOx2nA=; b=XdawGtzhCWEuhGGAUzwVWInbBs
+        UWiS8I1AK15Br0oB3cVIha5mscbudSbzZtKTm03EP4l3dfTTD5Sk+oVOuyJyUtsLa1YknihzNSYrZ
+        GRIR86H1APz4fJvAP/plfHic5Za1cfihUGDe2jL3ofAkvQrbq4ifKjmP8o3GhxmXwf7/sR1dczu5o
+        L14CaCLwOkTXOqPPuU/YLEbBMJWD5HzbyFdGVkusKLpEdUQKOWr5spUEKJqk5d4ObHSHvK5FjPabU
+        QQ7vB1bbu4rktOi6Q1oL+TRnu6PNYZH/mHdawqHkvP+9fbp55m+rwM2jmTqg4cJjo6r9H0zmyJjaf
+        9Q+dq+TQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1oov4J-00FOGN-2Y;
+        Sat, 29 Oct 2022 23:16:47 +0000
+Date:   Sun, 30 Oct 2022 00:16:47 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     linux-arch@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [RFC][PATCHSET] coredump unification for regset and non-regset
+ architectures
+Message-ID: <Y120X8dWqe15FPPG@ZenIV>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220923184632.2157-1-andriy.shevchenko@linux.intel.com>
- <20220923184632.2157-2-andriy.shevchenko@linux.intel.com>
- <20221029142551.GA3222119@roeck-us.net> <Y12o+Hk2qsIsDQUo@google.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v1 2/2] Input: matrix_keypad - replace header inclusions
- by forward declarations
-In-Reply-To: <Y12o+Hk2qsIsDQUo@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,51 +49,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/29/22 15:28, Dmitry Torokhov wrote:
-> On Sat, Oct 29, 2022 at 07:25:51AM -0700, Guenter Roeck wrote:
->> On Fri, Sep 23, 2022 at 09:46:32PM +0300, Andy Shevchenko wrote:
->>> When the data structure is only referred by pointer, compiler may not need
->>> to see the contents of the data type. Thus, we may replace header inclusions
->>> by respective forward declarations.
->>>
->>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->>> ---
->>>   include/linux/input/matrix_keypad.h | 5 +++--
->>>   1 file changed, 3 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/include/linux/input/matrix_keypad.h b/include/linux/input/matrix_keypad.h
->>> index 9476768c3b90..b8d8d69eba29 100644
->>> --- a/include/linux/input/matrix_keypad.h
->>> +++ b/include/linux/input/matrix_keypad.h
->>> @@ -3,8 +3,9 @@
->>>   #define _MATRIX_KEYPAD_H
->>>   
->>>   #include <linux/types.h>
->>> -#include <linux/input.h>
->>
->> Possibly, but may other drivers rely on those includes.
->> This results in widespread build failures such as
->>
->> Building arm:allmodconfig ... failed
->> --------------
->> Error log:
->> In file included from include/linux/input/samsung-keypad.h:12,
->>                   from arch/arm/mach-s3c/keypad.h:12,
->>                   from arch/arm/mach-s3c/mach-crag6410.c:57:
->> arch/arm/mach-s3c/mach-crag6410.c:183:19: error: 'KEY_VOLUMEUP' undeclared here
-> 
-> I fixed this particular instance, hopefully it is one of the very
-> last of them...
-> 
+	Resurrecting an old work - elf coredumps mess reduction.
+Back in 2008 some of the architectures have switched to use of
+regsets for elf coredumps.  Unfortunately, back then the helpers
+used by other architectures used to be shared with a.out coredump
+support, which made their calling conventions, etc. hard to
+modify.  As the result, Roland went for duplicating quite a bit
+of coredump-generating logics, with ifdef selecting the right
+variant.
 
-Sorry, I didn't bother listing all of them. There is at least one more.
+	Since then the copies had drifted apart - changes made
+to one of them and applicable to both had not been propagated,
+etc.  Many (but not all) architectures have switched to regset
+variant.  And a.out coredump support had been removed, which
+made it easier to modify the primitives on non-regset architectures.
 
-Error log:
-arch/arm/mach-pxa/spitz.c:410:11: error: 'EV_PWR' undeclared here (not in a function)
-   410 |   .type = EV_PWR,
-       |           ^~~~~~
+	Series below attempts to make use of that; it had been
+started about 4 years ago, but got stalled several times.
 
-with arm:pxa_defconfig.
+	Review and testing would be very appreciated.  Individual
+patches - in followups.  Alternatively, it can be found in
+git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.gitd #work.elfcore.
 
-Guenter
+Al Viro (10):
+      kill signal_pt_regs()
+      kill coredump_params->regs
+      kill extern of vsyscall32_sysctl
+      [elf][regset] clean fill_note_info() a bit
+      [elf][regset] simplify thread list handling in fill_note_info()
+      elf_core_copy_task_regs(): task_pt_regs is defined everywhere
+      [elf][non-regset] uninline elf_core_copy_task_fpregs() (and lose pt_regs argument)
+      [elf][non-regset] use elf_core_copy_task_regs() for dumper as well
+      [elf] unify regset and non-regset cases
+      [elf] get rid of get_note_info_size()
 
+ arch/alpha/include/asm/elf.h     |   6 -
+ arch/alpha/include/asm/ptrace.h  |   1 -
+ arch/alpha/kernel/process.c      |   8 +-
+ arch/csky/kernel/process.c       |   3 +-
+ arch/m68k/kernel/process.c       |   3 +-
+ arch/microblaze/kernel/process.c |   2 +-
+ arch/um/kernel/process.c         |   2 +-
+ arch/x86/include/asm/elf.h       |   1 -
+ arch/x86/um/asm/elf.h            |   4 -
+ fs/binfmt_elf.c                  | 271 ++++++++-------------------------------
+ fs/coredump.c                    |   1 -
+ include/linux/coredump.h         |   1 -
+ include/linux/elfcore.h          |  13 +-
+ include/linux/ptrace.h           |   9 --
+ kernel/signal.c                  |   2 +-
+ 15 files changed, 61 insertions(+), 266 deletions(-)
