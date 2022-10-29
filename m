@@ -2,225 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4678612149
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 10:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2375661214B
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 10:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiJ2ILD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 04:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S229678AbiJ2IMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 04:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiJ2ILA (ORCPT
+        with ESMTP id S229457AbiJ2IMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 04:11:00 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CA37B297;
-        Sat, 29 Oct 2022 01:10:59 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MzsVH3rgzzFqSR;
-        Sat, 29 Oct 2022 16:08:07 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 29 Oct 2022 16:10:57 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 29 Oct 2022 16:10:56 +0800
-Subject: Re: [PATCH v7 00/11] kallsyms: Optimizes the performance of lookup
- symbols
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-modules@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Ingo Molnar" <mingo@redhat.com>
-References: <20221017064950.2038-1-thunder.leizhen@huawei.com>
- <Y0/nEngJF6bbINEx@bombadil.infradead.org>
- <ad9e51c6-f77d-d9e9-9c13-42fcbbde7147@huawei.com>
- <Y1gisUFzgt1D1Jle@bombadil.infradead.org>
- <77f1c8f0-5e67-0e57-9285-15ba613044fb@huawei.com>
- <Y1mEiIvbld4SX1lx@bombadil.infradead.org>
- <4f06547b-456f-e1ec-c535-16577f502ff1@huawei.com>
- <d7393d45-84bb-9e7b-99f4-412eb9223208@huawei.com>
-Message-ID: <712fae84-aadc-7d29-f311-a3352bab6346@huawei.com>
-Date:   Sat, 29 Oct 2022 16:10:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Sat, 29 Oct 2022 04:12:10 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B437C5C9F9
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 01:12:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667031129; x=1698567129;
+  h=message-id:date:mime-version:cc:to:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=0l8conNN1TjxcoCVVzLHCVgHjFaZt6Qyb2532sp6hBU=;
+  b=aaavpMVJvBJAyntBjbba0VWwyKf8IZ8fURbwF+L+wLN6IeHoZ313qqiK
+   TgPkSISxYDCwZ8YpIHnH/dJCCSlG9jckfmsto3kx9SnrwC1Gwq0wIjFW6
+   f3q8qsfn5vNwZQSVPaZuBs2NLeF/806AYuXSYZk3z/MQslH/d39dA/sLY
+   N6HV05xIj1nfFjM36Wx9F/7Jj2MFNiQzqtu/6nM8NWEycdDiYvzaywE19
+   V0F68zfj2A9PS3s0JdXNU2RP6gP2Av5sN/DHHcrYB6o6LmQD/i8P6XoZU
+   QGg7No0mFNZqSSYAriDqzp4/HTK1S0VZ0+SUPtfThfDGHvz0nC3DjGlm1
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="335297537"
+X-IronPort-AV: E=Sophos;i="5.95,223,1661842800"; 
+   d="scan'208";a="335297537"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 01:12:08 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="878230034"
+X-IronPort-AV: E=Sophos;i="5.95,223,1661842800"; 
+   d="scan'208";a="878230034"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.215.211]) ([10.254.215.211])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 01:12:06 -0700
+Message-ID: <1ea0d41c-906a-38a0-adb8-60a7b63ad65b@linux.intel.com>
+Date:   Sat, 29 Oct 2022 16:12:04 +0800
 MIME-Version: 1.0
-In-Reply-To: <d7393d45-84bb-9e7b-99f4-412eb9223208@huawei.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Cc:     baolu.lu@linux.intel.com, David Woodhouse <dwmw2@infradead.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Scarlett Gourley <scarlett@arista.com>,
+        James Sewart <jamessewart@arista.com>,
+        Jack O'Sullivan <jack@arista.com>
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Lennert Buytenhek <buytenh@wantstofly.org>
+References: <Y1eZbXKdJDoS8loC@wantstofly.org>
+ <028e2c63-939b-af31-88b9-b479b41ce67c@linux.intel.com>
+ <Y1o/EhV+XLgA9s2r@wantstofly.org>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH,RFC] iommu/vt-d: Convert dmar_fault IRQ to a threaded IRQ
+In-Reply-To: <Y1o/EhV+XLgA9s2r@wantstofly.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/10/27 14:27, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2022/10/27 11:26, Leizhen (ThunderTown) wrote:
->>
->>
->> On 2022/10/27 3:03, Luis Chamberlain wrote:
->>> On Wed, Oct 26, 2022 at 02:44:36PM +0800, Leizhen (ThunderTown) wrote:
->>>> On 2022/10/26 1:53, Luis Chamberlain wrote:
->>>>> This answers how we don't use a hash table, the question was *should* we
->>>>> use one?
->>>>
->>>> I'm not the original author, and I can only answer now based on my understanding. Maybe
->>>> the original author didn't think of the hash method, or he has weighed it out.
->>>>
->>>> Hash is a good solution if only performance is required and memory overhead is not
->>>> considered. Using hash will increase the memory size by up to "4 * kallsyms_num_syms +
->>>> 4 * ARRAY_SIZE(hashtable)" bytes, kallsyms_num_syms is about 1-2 million.
-> 
-> Sorry, 1-2 million ==> 0.1~0.2 million
-> 
->>>>
->>>> Because I don't know what hash algorithm will be used, the cost of generating the
->>>> hash value corresponding to the symbol name is unknown now. But I think it's gonna
->>>> be small. But it definitely needs a simpler algorithm, the tool needs to implement
->>>> the same hash algorithm.
+On 2022/10/27 16:19, Lennert Buytenhek wrote:
+>>> iommu/amd already uses a threaded IRQ handler for its I/O page fault
+>>> reporting, and so it already has this advantage.
 >>>
->>> For instance, you can look at evaluating if alloc_large_system_hash() would help.
->>
-
-The following three hash algorithms are compared. The kernel is compiled by defconfig
-on arm64.
-
-|---------------------------------------------------------------------------------------|
-|                           |             hash &= HASH_TABLE_SIZE - 1                   |
-|                           |             number of conflicts >= 1000                   |
-|---------------------------------------------------------------------------------------|
-|   ARRAY_SIZE(hash_table)  |       crc16        | jhash_one_at_a_time | string hash_32 |
-|---------------------------------------------------------------------------------------|
-|                           |     345b: 3905     |     0d40: 1013      |   4a4c: 6548   |
-|                           |     35bb: 1016     |     35ce: 6549      |   883a: 1015   |
-|        0x10000            |     385b: 6548     |     4440: 19126     |   d05f: 19129  |
-|                           |     f0ba: 19127    |     7ebe: 3916      |   ecda: 3903   |
-|---------------------------------------------------------------------------------------|
-|                           |      0ba: 19168    |      440: 19165     |    05f: 19170  |
-|                           |      45b: 3955     |      5ce: 6577      |    83a: 1066   |
-|        0x1000             |      5bb: 1069     |      d40: 1052      |    a4c: 6609   |
-|                           |      85b: 6582     |      ebe: 3938      |    cda: 3924   |
-|---------------------------------------------------------------------------------------|
-
-Based on the above test results, I conclude that:
-1. For the worst-case scenario, the three algorithms are not much different. But the kernel
-   only implements crc16 and string hash_32. The latter is not processed byte-by-byte, so
-   it is coupled with byte order and sizeof(long). So crc16 is the best choice.
-2. For the worst-case scenario, there are almost 19K strings are mapped to the same hash
-   value，just over 1/10 of the total. And with my current compression-then-comparison
-   approach, it's 25-30 times faster. So there's still a need for my current approach, and
-   they can be combined.
-   if (nr_conflicts(key) >= CONST_N) {
-       newname = compress(name);
-       for_each_name_in_slot(key): compare(new_name)
-   } else {
-       for_each_name_in_slot(key): compare(name)
-   }
-
-   Above CONST_N can be roughly calculated:
-   time_of_compress(name) + N * time_of_compare(new_name) <= N * time_of_compare(name)
-3. For the worst-case scenario, there is no obvious difference between ARRAY_SIZE(hash_table)
-   0x10000 and 0x1000. So ARRAY_SIZE(hash_table)=0x1000 is enough.
-   Statistic information:
-   |------------------------------------------------------|
-   |   nr_conflicts(key)  |     ARRAY_SIZE(hash_table)    |
-   |------------------------------------------------------|
-   |         <= ?         |     0x1000    |    0x10000    |
-   |------------------------------------------------------|
-   |             0        |         0     |      7821     |
-   |            20        |        19     |     57375     |
-   |            40        |      2419     |       124     |
-   |            60        |      1343     |        70     |
-   |            80        |       149     |        73     |
-   |           100        |        38     |        49     |
-   |           200        |       108     |        16     |
-   |           400        |        14     |         2     |
-   |           600        |         2     |         2     |
-   |           800        |         0     |         0     |
-   |          1000        |         0     |         0     |
-   |        100000        |         4     |         4     |
-   |------------------------------------------------------|
-
-
-Also, I re-calculated:
-Using hash will increase the memory size by up to "6 * kallsyms_num_syms + 4 * ARRAY_SIZE(hashtable)"
-                                                   |---- What I said earlier was 4
-The increased size is close to 1 MB if CONFIG_KALLSYMS_ALL=y.
-
-Hi, Luis:
-  For the reasons of the above-mentioned second conclusion. And except for patches 4-6,
-even if only the hash method is used, other patches and option "--lto-clang" in patch 6/11
-are also needed. If you don't mind, I'd like to use hash at the next stage. The current
-patch set is already huge.
-
-
->> OK, I found the right hash function. In this way, the tool does not need to consider
->> the byte order.
+>>> When IRQ remapping is enabled, iommu/vt-d will try to set up its
+>>> dmar_fault IRQ handler from start_kernel() -> x86_late_time_init()
+>>> -> apic_intr_mode_init() -> apic_bsp_setup() ->
+>>> irq_remap_enable_fault_handling() -> enable_drhd_fault_handling(),
+>>> which happens before kthreadd is started, and trying to set up a
+>>> threaded IRQ handler this early on will oops.  However, there
+>>> doesn't seem to be a reason why iommu/vt-d needs to set up its fault
+>>> reporting IRQ handler this early, and if we remove the IRQ setup code
+>>> from enable_drhd_fault_handling(), the IRQ will be registered instead
+>>> from pci_iommu_init() -> intel_iommu_init() -> init_dmars(), which
+>>> seems to work just fine.
+>> At present, we cannot do so. Because the VT-d interrupt remapping and
+>> DMA remapping can be independently enabled. In another words, it's a
+>> possible case where interrupt remapping is enabled while DMA remapping
+>> is not.
+> Is there a way I can test this easily?
 > 
-> https://en.wikipedia.org/wiki/Jenkins_hash_function
-> 
-> Let's go with jenkins_one_at_a_time_hash(), which looks simpler and doesn't even
-> have to think about sizeof(long). It seems to be closest to our current needs.
-> 
-> uint32_t jenkins_one_at_a_time_hash(const uint8_t* key, size_t length) {
-> 	size_t i = 0;
-> 	uint32_t hash = 0;
-> 
-> 	while (i != length) {
-> 		hash += key[i++];
-> 		hash += hash << 10;
-> 		hash ^= hash >> 6;
-> 	}
-> 	hash += hash << 3;
-> 	hash ^= hash >> 11;
-> 	hash += hash << 15;
-> 
-> 	return hash;
-> }
-> 
->>
->> include/linux/stringhash.h
->>
->> /*
->>  * Version 1: one byte at a time.  Example of use:
->>  *
->>  * unsigned long hash = init_name_hash;
->>  * while (*p)
->>  *      hash = partial_name_hash(tolower(*p++), hash);
->>  * hash = end_name_hash(hash);
->>
->>
->>>
->>>   Luis
->>> .
->>>
->>
-> 
+> I think we should be able to handle the "interrupt remapping enabled
+> but DMA remapping disabled" case in the same way, by registering the
+> dmar_fault IRQ sometime after kthreadd has been started.  I don't think
+> the dmar_fault handler performs any function that is critical for the
+> operation of the IOMMU, and I think that we can defer setting it up
+> until whenever is convenient.
 
--- 
-Regards,
-  Zhen Lei
+Another possible way is not to split VT-d DMA remapping and interrupt
+remapping. The possible case of "intr remapping enabled but DMA
+remapping not" that I can imagine is that the guest VM doesn't want DMA
+translation because of poor efficiency. If so, the overhead impacted by
+DMA translation can be eliminated through "iommu=pt" or kernel build
+configuration. Of course, there may also be some special needs that I
+did not think of.
+
+Best regards,
+baolu
