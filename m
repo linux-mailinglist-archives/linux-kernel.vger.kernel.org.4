@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D76611F72
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 04:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0AA611F76
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 04:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiJ2CzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 22:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40082 "EHLO
+        id S229500AbiJ2CzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 22:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiJ2CzE (ORCPT
+        with ESMTP id S229817AbiJ2CzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 22:55:04 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C111EC6C
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 19:54:36 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 128so6373640pga.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 19:54:36 -0700 (PDT)
+        Fri, 28 Oct 2022 22:55:16 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590812494B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 19:54:38 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso6045328pjc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 19:54:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8qJ7S49lyvTDwTt3B9pGKn80j22VNRERALv+i33GLIM=;
-        b=a46NttKTxFJVeKEP0dM7f1ceG9rDOhMGHKQnxUUJMFVzoMrz3QWrUqBt38mmTWnQGA
-         8G1JSVaxdV2ultNUYGygLC1wslfCRLrH79sALmI8ORz1+jGNFsRL611hD53/yntVNw4B
-         Zkdm1wBz/oX3OLbzldKPiIaZUw9YL8uJwjLBg=
+        bh=8tl37lwqGAPyFTOLYOb65cx9juvzNTvoWHjwD7xYuFQ=;
+        b=Cd9tmgsJJdWf0loxgAfE2HPeppCYbVz4D5gJ5tQcKB6L+ovA12Ew9mChsqPQXbuSUK
+         P+EKoy+7WwL8q2rj931dqINtyZh6kEENAED1WS3uD8thf4KfTiTnMhSt3//hP3fVmfyz
+         3nim0DVM7yPvIiHCyNEkq1nGp3MR8CSWdqGbo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8qJ7S49lyvTDwTt3B9pGKn80j22VNRERALv+i33GLIM=;
-        b=gnNZl1C2+dIziq249JXL8+A8S46z6cSKUNFn/9OvsxUCmm565m8t34cesL3ns50rwt
-         gQGFPL369zdS+NIhQepFAvlaZVE6InMv9XfpVGK+MDpS5XH8W7p5pEhIAT8EDyd89nkK
-         BbOy8Hf5zy15BYNmooBXvj5E6iHTBiJ5SBi1GVsX+XPYlVFD+iAdFEyp7hAGMl0gBp7j
-         J5iBuRDZrjLxM7YblGlekUmeMqLs/brIzWzptFTVwjQN0C7pLNd50v6h3RgIZsj4w8Fa
-         U653MgnBPYFKD/lndAKzQkTMXddv+VyqpKK/STLaU9PtNkhq0AuDsUzWkwnx+Vbvve80
-         k3+Q==
-X-Gm-Message-State: ACrzQf2/UiN7k/aRNHn6tnPU2Hw2IcuZ6cpGo24sB9YE06M32TzbZEfz
-        HboXrlLBNSZIFCuS+wvd06MVvA==
-X-Google-Smtp-Source: AMsMyM6uHJfLJTmqpTUJGpVT4+/uLAGaB6HoSdxLoSHvhmHZwW2kNEnJvIGSouS1s5ZG+ccVJbZ7tA==
-X-Received: by 2002:a05:6a00:1ac9:b0:56c:e35b:3ce with SMTP id f9-20020a056a001ac900b0056ce35b03cemr2405674pfv.76.1667012075865;
-        Fri, 28 Oct 2022 19:54:35 -0700 (PDT)
+        bh=8tl37lwqGAPyFTOLYOb65cx9juvzNTvoWHjwD7xYuFQ=;
+        b=xDv2/7YxGUmV5JbvKfc42+m/6ZGdWzkv4wKDfoZXialVI0rJNW3mPVuUOOvIqD8XU3
+         Dfk8fyjbCiEV7wxwAqJBMHw5mVcf4OiR6nnpx8FuEKnNBHkPY/454TgPg+vJTi7GdlI3
+         qgPu9U8WfMnI0qUg/W1MdX6ytUoq7eg5985bv3qdlELKb0R6H5qAkb3fPZQUgCLoJNHw
+         chqba8QKGKz0J2s73yRvCOSrz81c6KKHvmdMUSVPqgz448rh6ZlLad6mGFuIiEtHBsVT
+         28fAWetd7oFpHXHwKuCiSvLvNBYsp32aw9gqxUk1Mn4u0Nk2vIg4xG1kJrEZkLY3IMOM
+         jA4g==
+X-Gm-Message-State: ACrzQf1oLgd6ay4twia00/07Az7wXX/xgC8eanPfR33o1Ml8gQiHfS0f
+        uobg4SGZU3UgzZJjYJZ5OArpRg==
+X-Google-Smtp-Source: AMsMyM4pP7ShODaS+Vv2buYU2g/jVJzW9tIyo/uOr9kvGNsRBVt6bMvVzIkugYCjOKGHoyJnVIuKXA==
+X-Received: by 2002:a17:902:6b45:b0:186:878e:3b92 with SMTP id g5-20020a1709026b4500b00186878e3b92mr2222756plt.173.1667012077781;
+        Fri, 28 Oct 2022 19:54:37 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k3-20020a170902ce0300b00176b63535adsm144895plg.260.2022.10.28.19.54.34
+        by smtp.gmail.com with ESMTPSA id p68-20020a625b47000000b0056b9c2699cesm170223pfb.46.2022.10.28.19.54.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 28 Oct 2022 19:54:34 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
@@ -60,14 +60,14 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hardening@vger.kernel.org
-Subject: [PATCH bpf-next v2 1/3] bpf/verifier: Fix potential memory leak in array reallocation
-Date:   Fri, 28 Oct 2022 19:54:30 -0700
-Message-Id: <20221029025433.2533810-1-keescook@chromium.org>
+Subject: [PATCH bpf-next v2 2/3] bpf/verifier: Use kmalloc_size_roundup() to match ksize() usage
+Date:   Fri, 28 Oct 2022 19:54:31 -0700
+Message-Id: <20221029025433.2533810-2-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221029024444.gonna.633-kees@kernel.org>
 References: <20221029024444.gonna.633-kees@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1619; h=from:subject; bh=R3dgFp0WNEaE5DyG4WxLN0RrYSteV9dcGhEkWDiXzvE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjXJXnp3Ea19E3WkEr9o8FAh2necyessJ+7If2U/2x vL4vvxyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY1yV5wAKCRCJcvTf3G3AJkffD/ 495y2Ah8ie6a9DRLJ56z541wAuD1q1LglGfd3C1cbGoOR76OU5kPPGuDGY8Npallv6VrFij94Z81sA 4zyFjmaROOGYwctXbNfnfbp5rKO7FMsPe+NZ72GoCxuE6dWHc9XOsS2KRMAc4SaeDz8ZgZSVr3hZTX CeMuHtwh0BnXQ8JR4WstYUjUpLWQy4S9kpJJJ2KicSVC8iEWYWkavGVV3zZT4gDE1j4bKhq0FH1iwa iBZ+KB4Ubg7hEgqx/2o6raZKsUlCQLv5C0krkqAeKTisXS/5x4cqu1LYGxE4KKXvKjMyfv+/lXp6XR GXYnwp7rReKyUA+ajg3BVlvXPvGkLW3R1Zd3vUbg4HpFEGF+MkTCsRz5Tvbb4B/M7J9PnIWBEL4g4I dccXIQa3RVocJ/4jixQTLo8BBqkTub/60/5zl5mJVCUdD0Vz7XTh52FqroKRh1Vy1TSDYseP+AZfh+ p0WkmHXJKX9n31sJSgSB7J+rz1bu1syxfbeQf8jMKFgQ+EeH1SxGlNnTbS2DBF2Akh0vNbJMsVNuRr tDAVlwSuRS9YURTtlMBMpJ27+Sqb6mGhKWpkHoqo3hfTM5rjKK8caNpk+TFmRkiXcyFHaNHIAYf33j xCahoS/rV03jEY2g6AYq81K4kUoYC+3ycJMhysPhSQn5B04YHUtjliF3oaEg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2473; h=from:subject; bh=cAZzQf4nJI/2AavYPElJQqPl11xZNu41P29+G33SJ9M=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjXJXnQGC8fPZwalh9l14/jG4kobQw8yjDcH8NbjSJ /XPIE3yJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY1yV5wAKCRCJcvTf3G3AJtu9EA CXJjb2SNBE0dlmaXWQ51VUbBpWbuJYO6erazxkwDl20aLVHHY3Axth5HAjZff0RAgI1VuEgK0XZp1r RE0TT1eYl9G5ixdAC59qd1CyEHIcrq8+ifEZo8FgjuCM+csjbDGyrKYcgszia+gdt0jTBIbTc9RPDk h49CV0gy5UmirPGgX8dGIyGnpKI4FNyJSxPrtKEYB1NNT0NKDCYYx+RfELfzFCEUHszzQjq2QGPcoS MQCDLvOy6b2RiQLtsraXNMaGqb45mx9P5O9CTysRsnzDMvCA7NXwCuQuXsdjO/2HsBfxhz7Ar/YR9W Q9PmyZ/L0otSPcROBpRG2q6CUmDpOthzfBzcW58TTyDeLip32DmQpFbyiXtSgKMujj/DUh8fnY/DR8 2j1VH+mqdaYP7FiWIMA+ed88554A/22x76JzNS5Caj75Gk5klIWA9DRXxqyAIhkWj0AZZY0oDA+/bI BaXI9irmdN/ojaCMS7GiewpfSz1XqXzoo+a2/IHb6qtOmcwGzuRXjvvCvZc3nO7FmlQUzB23V63ndC YIDPWXj/8EpTHHzYIkslH/ROZny/WlLvaMSrDlNnM8CWhQz5RGWiBaLDqtr2+lr8CzFydwOd9JaxoT 275n7Yb5433TpvdeSuKo/IQkPJI9tpzIZx8/08+btiQkdvPTHYsFe9hnV9Iw==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -80,11 +80,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If an error (NULL) is returned by krealloc(), callers of realloc_array()
-were setting their allocation pointers to NULL, but on error krealloc()
-does not touch the original allocation. This would result in a memory
-resource leak. Instead, free the old allocation on the error handling
-path.
+Round up allocations with kmalloc_size_roundup() so that the verifier's
+use of ksize() is always accurate and no special handling of the memory
+is needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE. Pass the new size
+information back up to callers so they can use the space immediately,
+so array resizing to happen less frequently as well.
 
 Cc: Alexei Starovoitov <ast@kernel.org>
 Cc: Daniel Borkmann <daniel@iogearbox.net>
@@ -100,33 +100,54 @@ Cc: Jiri Olsa <jolsa@kernel.org>
 Cc: bpf@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- kernel/bpf/verifier.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ kernel/bpf/verifier.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 014ee0953dbd..eb8c34db74c7 100644
+index eb8c34db74c7..1c040d27b8f6 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -1027,12 +1027,17 @@ static void *copy_array(void *dst, const void *src, size_t n, size_t size, gfp_t
+@@ -1008,9 +1008,9 @@ static void *copy_array(void *dst, const void *src, size_t n, size_t size, gfp_t
+ 	if (unlikely(check_mul_overflow(n, size, &bytes)))
+ 		return NULL;
+ 
+-	if (ksize(dst) < bytes) {
++	if (ksize(dst) < ksize(src)) {
+ 		kfree(dst);
+-		dst = kmalloc_track_caller(bytes, flags);
++		dst = kmalloc_track_caller(kmalloc_size_roundup(bytes), flags);
+ 		if (!dst)
+ 			return NULL;
+ 	}
+@@ -1027,12 +1027,14 @@ static void *copy_array(void *dst, const void *src, size_t n, size_t size, gfp_t
   */
  static void *realloc_array(void *arr, size_t old_n, size_t new_n, size_t size)
  {
-+	void *new_arr;
-+
++	size_t alloc_size;
+ 	void *new_arr;
+ 
  	if (!new_n || old_n == new_n)
  		goto out;
  
--	arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
--	if (!arr)
-+	new_arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
-+	if (!new_arr) {
-+		kfree(arr);
+-	new_arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
++	alloc_size = kmalloc_size_roundup(size_mul(new_n, size));
++	new_arr = krealloc(arr, alloc_size, GFP_KERNEL);
+ 	if (!new_arr) {
+ 		kfree(arr);
  		return NULL;
-+	}
-+	arr = new_arr;
+@@ -2504,9 +2506,11 @@ static int push_jmp_history(struct bpf_verifier_env *env,
+ {
+ 	u32 cnt = cur->jmp_history_cnt;
+ 	struct bpf_idx_pair *p;
++	size_t alloc_size;
  
- 	if (new_n > old_n)
- 		memset(arr + old_n * size, 0, (new_n - old_n) * size);
+ 	cnt++;
+-	p = krealloc(cur->jmp_history, cnt * sizeof(*p), GFP_USER);
++	alloc_size = kmalloc_size_roundup(size_mul(cnt, sizeof(*p)));
++	p = krealloc(cur->jmp_history, alloc_size, GFP_USER);
+ 	if (!p)
+ 		return -ENOMEM;
+ 	p[cnt - 1].idx = env->insn_idx;
 -- 
 2.34.1
 
