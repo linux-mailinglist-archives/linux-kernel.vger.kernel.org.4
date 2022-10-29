@@ -2,98 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003EA612272
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 13:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9263A612260
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 13:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbiJ2Lfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 07:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
+        id S229682AbiJ2L2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 07:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiJ2Lfm (ORCPT
+        with ESMTP id S229500AbiJ2L2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 07:35:42 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9025A5A2C6
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 04:35:41 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so12111777pji.1
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 04:35:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aHrf4/ua/bP2fhJLYsi8YFH+OWTvuSQYXS/+2VW1Ev0=;
-        b=I9g+VCSV+zesHYNJbKc0yUccjLk+eGuoOnslD2rsd70ar/2uFJMsBaW0frPa64wRLe
-         QDg6ZpHO7EyYw2zXffiRuarpAS6Z+j2p2We44drdVTMS37msLfy4EfjEN4PqcicHiToW
-         K85/dU0TAaYSBXuEuJWSi9Sv3XbSAoz38KtZ7UZOvTjGZkia4T4c2u9GPtlVv6RuYvly
-         yhGdkTfznbcncwWJefsxChmiaadeH072yj9Z90p7Txzggf6R4iYs++4rjc9nDeqoAE95
-         Db3QVeHoc7emPHPBhGWz+SrwkugflA8G1+vTegg5lL6kX1afMkLzMwMctxcUE5T02aB/
-         LQ8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aHrf4/ua/bP2fhJLYsi8YFH+OWTvuSQYXS/+2VW1Ev0=;
-        b=JGWZ3OiSb6ul3GZXQekhFSukw7Ve6sTLIRr0l6+4WzFy6KFBP2zZHkW0osyucU/Hru
-         H2zv3tCjchRm1lcdUEpjY76DbieoWHcZQxgiuzPQP0LZtY9+CCYD0FtCs2yc5OJNO5tE
-         Pn8stDoVd4zvzER00YlEGhw7ZIbCXjgzoaoyU4RqlY1jVFtsq7mnC6FgIqSA4C2dUGNI
-         rZShSISxq1Zsg8d4Rg9Qsj2gpF/2OT5rqgB/9qLwJfSIfQ000r/6XOOsEM56P7Q0Dw7X
-         Mag7ftMVWbnWv+BqWVXyd7j8mewbUiYwACmb+PJBOcy2yyFOG/TH8F4RRtTSVT9HaC5a
-         LMPQ==
-X-Gm-Message-State: ACrzQf2TMk4+Smm+M4cuDFrs/wrjdvRufrydEkVTOEHFE9McWAZ0IsHm
-        3+nNCnyezpL+G9U9SOu1htZU
-X-Google-Smtp-Source: AMsMyM71NxDrO34qEW6NTTZhgP2jTUdSMzjgUKJGZTImNZWgB5kLuzzT+FIYqH5UnqXJvBhQv8FVNA==
-X-Received: by 2002:a17:90a:5781:b0:20a:9962:bb4a with SMTP id g1-20020a17090a578100b0020a9962bb4amr20838383pji.185.1667043340967;
-        Sat, 29 Oct 2022 04:35:40 -0700 (PDT)
-Received: from localhost.localdomain ([117.193.208.18])
-        by smtp.gmail.com with ESMTPSA id y189-20020a6264c6000000b00540f96b7936sm1045888pfb.30.2022.10.29.04.35.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Oct 2022 04:35:39 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     lpieralisi@kernel.org
-Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, johan+linaro@kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH] PCI: qcom: Add async probe support
-Date:   Sat, 29 Oct 2022 17:05:20 +0530
-Message-Id: <20221029113520.242970-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Sat, 29 Oct 2022 07:28:17 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459806888E;
+        Sat, 29 Oct 2022 04:28:12 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mzxwp5knPzHvHZ;
+        Sat, 29 Oct 2022 19:27:54 +0800 (CST)
+Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
+ (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 29 Oct
+ 2022 19:28:10 +0800
+From:   Weilong Chen <chenweilong@huawei.com>
+To:     <chenweilong@huawei.com>, <linus.walleij@linaro.org>,
+        <brgl@bgdev.pl>, <f.fangjian@huawei.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: [PATCH next v3 1/2] gpio: hisi: Add initial device tree support
+Date:   Sat, 29 Oct 2022 19:35:41 +0800
+Message-ID: <20221029113542.170210-1-chenweilong@huawei.com>
+X-Mailer: git-send-email 2.31.GIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qcom PCIe RC driver waits for the PHY link to be up during the probe. This
-consumes several milliseconds during boot. So add async probe support so
-that other drivers can load in parallel while this driver waits for the
-link to be up.
+Add support for HiSilicon GPIO controller in embedded platform, which
+boot from devicetree.
 
-Suggested-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Weilong Chen <chenweilong@huawei.com>
 ---
- drivers/pci/controller/dwc/pcie-qcom.c | 1 +
- 1 file changed, 1 insertion(+)
+Change since v2:
+- No change
+Link: https://lore.kernel.org/lkml/20221028022453.163186-1-chenweilong@huawei.com/#r
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index f711acacaeaf..e0b8d6dc4ce2 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -1768,6 +1768,7 @@ static struct platform_driver qcom_pcie_driver = {
- 		.name = "qcom-pcie",
- 		.suppress_bind_attrs = true,
- 		.of_match_table = qcom_pcie_match,
-+		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
- 	},
+ drivers/gpio/Kconfig     |  2 +-
+ drivers/gpio/gpio-hisi.c | 15 ++++++++++++++-
+ 2 files changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index e034f752e7ce..71a7880af59d 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -310,7 +310,7 @@ config GPIO_GRGPIO
+ 
+ config GPIO_HISI
+ 	tristate "HiSilicon GPIO controller driver"
+-	depends on (ARM64 && ACPI) || COMPILE_TEST
++	depends on ARM64 || COMPILE_TEST
+ 	select GPIO_GENERIC
+ 	select GPIOLIB_IRQCHIP
+ 	help
+diff --git a/drivers/gpio/gpio-hisi.c b/drivers/gpio/gpio-hisi.c
+index 3caabef5c7a2..92cf575f2eab 100644
+--- a/drivers/gpio/gpio-hisi.c
++++ b/drivers/gpio/gpio-hisi.c
+@@ -1,8 +1,10 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /* Copyright (c) 2020 HiSilicon Limited. */
++#include <linux/acpi.h>
+ #include <linux/gpio/driver.h>
+ #include <linux/module.h>
+ #include <linux/mod_devicetable.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+ 
+@@ -215,11 +217,21 @@ static void hisi_gpio_init_irq(struct hisi_gpio *hisi_gpio)
+ 	hisi_gpio_write_reg(chip, HISI_GPIO_INTCOMB_MASK_WX, 1);
+ }
+ 
++#ifdef CONFIG_ACPI
+ static const struct acpi_device_id hisi_gpio_acpi_match[] = {
+ 	{"HISI0184", 0},
+ 	{}
  };
- builtin_platform_driver(qcom_pcie_driver);
+ MODULE_DEVICE_TABLE(acpi, hisi_gpio_acpi_match);
++#endif
++
++#ifdef CONFIG_OF
++static const struct of_device_id hisi_gpio_dts_match[] = {
++	{ .compatible = "hisilicon,ascend910-gpio", },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, hisi_gpio_dts_match);
++#endif
+ 
+ static void hisi_gpio_get_pdata(struct device *dev,
+ 				struct hisi_gpio *hisi_gpio)
+@@ -310,7 +322,8 @@ static int hisi_gpio_probe(struct platform_device *pdev)
+ static struct platform_driver hisi_gpio_driver = {
+ 	.driver		= {
+ 		.name	= HISI_GPIO_DRIVER_NAME,
+-		.acpi_match_table = hisi_gpio_acpi_match,
++		.acpi_match_table = ACPI_PTR(hisi_gpio_acpi_match),
++		.of_match_table = of_match_ptr(hisi_gpio_dts_match),
+ 	},
+ 	.probe		= hisi_gpio_probe,
+ };
 -- 
-2.25.1
+2.31.GIT
 
