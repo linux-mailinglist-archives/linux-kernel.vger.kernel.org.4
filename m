@@ -2,236 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D70E36120B3
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 08:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 654606120B5
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 08:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbiJ2G16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 02:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59528 "EHLO
+        id S229531AbiJ2G2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 02:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiJ2G14 (ORCPT
+        with ESMTP id S229460AbiJ2G2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 02:27:56 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C2F81C883B;
-        Fri, 28 Oct 2022 23:27:53 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8CxLLfox1xjCjsDAA--.420S3;
-        Sat, 29 Oct 2022 14:27:52 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxiFfmx1xjfh4HAA--.5806S2;
-        Sat, 29 Oct 2022 14:27:51 +0800 (CST)
-Subject: Re: [PATCH v6 2/3] clk: clk-loongson2: add clock controller driver
- support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
-References: <20221028061922.19045-1-zhuyinbo@loongson.cn>
- <20221028061922.19045-2-zhuyinbo@loongson.cn>
- <b63f7fde-4e51-00c5-b060-335e54f73f46@linaro.org>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <652959be-e29a-b312-d67d-dd7b7cb6c147@loongson.cn>
-Date:   Sat, 29 Oct 2022 14:27:50 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Sat, 29 Oct 2022 02:28:20 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A228B1CCCCC
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 23:28:19 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id q16-20020a5e9410000000b006bfe9222a2aso5549073ioj.15
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 23:28:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nSgscWgSb1VL8tdx5OblC2vGgJTXmbMo6WXu2dV5OrY=;
+        b=O6cX2NOd0kEbQquIZpVPbrIEkF+oczfYSI5CDa6PKb8AKBX02dA/gGfhZklPWuftCu
+         rsGmIQhibf/vjKjP3gRhiDUxzPf53FwMrCXY+LlEOBngzOt8r0WZ4KEoo92t6n/VCM7Y
+         iS0xk9dhuL7CiLrNESB5XkOCTkJWZdaJE2BvuJmvcQMm3ytNpiY1gZw4l859JAFHUJOU
+         sWm7CGhQimX8kGsE1fdJ6OJ0n+9ZI89W2pdcZPHgqUrNtd4Q5INe+/oV4K0C1QRUUeNF
+         5YVJhJBLhaIdMCJFbb4Nw9DfZM2ylL6OmGtV1HDaQN36AXXMUJT6AN9X+cZVEVcb7Mie
+         /a7w==
+X-Gm-Message-State: ACrzQf3jRQk+mdxyndWXvhrXGKlr0LyT4b9qBnELJ/pSOBcAorSnXE52
+        W0YK/HIDYrzJ73zz5LQcXvs7KljT7xN47TJDPgUL6Vh7zTLc
+X-Google-Smtp-Source: AMsMyM4dX41QqobjYKQMyRSTjGJcCT+oAP9x1/YLhgneAkFjbPMV5GrDsNJmxTK+hRFPQKRhvrc9K4DZ8XI3YXlGAyPhlQKalYBk
 MIME-Version: 1.0
-In-Reply-To: <b63f7fde-4e51-00c5-b060-335e54f73f46@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxiFfmx1xjfh4HAA--.5806S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxtw48Xw4xZr4DAF45Kw4kZwb_yoW7Ar1kpF
-        4DAF45CF4DtF47Xw4Sv34akFn8Xws3GFy2kFy2v34UZr9Fvwn7Xr1kXF93ZFyqqF4kJFWI
-        vFZ3uw4SkF4YgaDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
-        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
-        7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
-        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jYnmiUUUUU=
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+X-Received: by 2002:a05:6602:2c47:b0:6bf:df74:fa5e with SMTP id
+ x7-20020a0566022c4700b006bfdf74fa5emr1449922iov.177.1667024898928; Fri, 28
+ Oct 2022 23:28:18 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 23:28:18 -0700
+In-Reply-To: <20221029060343.3425-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000eeb4ed05ec267ad8@google.com>
+Subject: Re: [syzbot] kernel BUG in dnotify_free_mark
+From:   syzbot <syzbot+06cc05ddc896f12b7ec5@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in fsnotify_put_mark
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 4068 at fs/notify/mark.c:336 fsnotify_put_mark+0x8b6/0x9c0
+Modules linked in:
+CPU: 0 PID: 4068 Comm: syz-executor.0 Not tainted 6.1.0-rc2-syzkaller-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+RIP: 0010:fsnotify_put_mark+0x8b6/0x9c0 fs/notify/mark.c:336
+Code: 0c b9 01 00 00 00 bf 08 00 00 00 48 c7 c2 e0 9b c4 8c 48 83 c4 40 5b 41 5c 41 5d 41 5e 41 5f 5d e9 2f c7 58 ff e8 fa 34 8a ff <0f> 0b e9 02 ff ff ff e8 ee 34 8a ff 0f 0b e9 24 f9 ff ff e8 e2 34
+RSP: 0018:ffffc90004d1fb48 EFLAGS: 00010293
+RAX: ffffffff81fd9a26 RBX: 0000000000000001 RCX: ffff888020cd9d40
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: ffff88806eda6000 R08: ffffffff81fd991b R09: fffffbfff1c1b5e6
+R10: fffffbfff1c1b5e6 R11: 1ffffffff1c1b5e5 R12: dffffc0000000000
+R13: 0000000000000000 R14: ffff88807efa7900 R15: 1ffff1100ddb4c0e
+FS:  0000555556a00400(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000056399dba2950 CR3: 000000006d41b000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ fsnotify_destroy_marks+0x57d/0x6f0 fs/notify/mark.c:868
+ fsnotify_clear_marks_by_inode fs/notify/fsnotify.h:60 [inline]
+ __fsnotify_inode_delete fs/notify/fsnotify.c:22 [inline]
+ fsnotify_inode_delete include/linux/fsnotify.h:176 [inline]
+ fsnotify_unmount_inodes fs/notify/fsnotify.c:78 [inline]
+ fsnotify_sb_delete+0x287/0x4e0 fs/notify/fsnotify.c:92
+ generic_shutdown_super+0x9c/0x310 fs/super.c:481
+ kill_block_super+0x79/0xd0 fs/super.c:1427
+ deactivate_locked_super+0xa7/0xf0 fs/super.c:331
+ cleanup_mnt+0x494/0x520 fs/namespace.c:1186
+ task_work_run+0x243/0x300 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:171
+ exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:296
+ do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f7892a8ca67
+Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe3a5680c8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f7892a8ca67
+RDX: 00007ffe3a568199 RSI: 000000000000000a RDI: 00007ffe3a568190
+RBP: 00007ffe3a568190 R08: 00000000ffffffff R09: 00007ffe3a567f60
+R10: 0000555556a018b3 R11: 0000000000000246 R12: 00007f7892ae5826
+R13: 00007ffe3a569250 R14: 0000555556a01810 R15: 00007ffe3a569290
+ </TASK>
 
 
-在 2022/10/28 下午7:42, Krzysztof Kozlowski 写道:
-> On 28/10/2022 02:19, Yinbo Zhu wrote:
->> This driver provides support for clock controller on Loongson-2 SoC
->> , the Loongson-2 SoC uses a 100MHz clock as the PLL reference clock
->> , there are five independent PLLs inside, each of which PLL can
-> 
-> Same problem as in other patch - no new lines before commas.
-> 
->> provide up to three sets of frequency dependent clock outputs.
->>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->>   MAINTAINERS                  |   1 +
->>   arch/loongarch/Kconfig       |   1 +
->>   arch/loongarch/kernel/time.c |   3 +
->>   drivers/clk/Kconfig          |   9 ++
->>   drivers/clk/Makefile         |   1 +
->>   drivers/clk/clk-loongson2.c  | 285 +++++++++++++++++++++++++++++++++++
->>   6 files changed, 300 insertions(+)
->>   create mode 100644 drivers/clk/clk-loongson2.c
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 14af7ebf2be1..5136684fb6c6 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -11911,6 +11911,7 @@ LOONGSON-2 SOC SERIES CLOCK DRIVER
->>   M:	Yinbo Zhu <zhuyinbo@loongson.cn>
->>   L:	linux-clk@vger.kernel.org
->>   S:	Maintained
->> +F:	drivers/clk/clk-loongson2.c
->>   F:	include/dt-bindings/clock/loongson,ls2k-clk.h
->>   
->>   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
->> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
->> index 26aeb1408e56..8b65f349cd6e 100644
->> --- a/arch/loongarch/Kconfig
->> +++ b/arch/loongarch/Kconfig
->> @@ -122,6 +122,7 @@ config LOONGARCH
->>   	select USE_PERCPU_NUMA_NODE_ID
->>   	select USER_STACKTRACE_SUPPORT
->>   	select ZONE_DMA32
->> +	select COMMON_CLK
->>   
->>   config 32BIT
->>   	bool
->> diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.c
->> index 786735dcc8d6..09f20bc81798 100644
->> --- a/arch/loongarch/kernel/time.c
->> +++ b/arch/loongarch/kernel/time.c
->> @@ -12,6 +12,7 @@
->>   #include <linux/kernel.h>
->>   #include <linux/sched_clock.h>
->>   #include <linux/spinlock.h>
->> +#include <linux/of_clk.h>
->>   
->>   #include <asm/cpu-features.h>
->>   #include <asm/loongarch.h>
->> @@ -214,6 +215,8 @@ int __init constant_clocksource_init(void)
->>   
->>   void __init time_init(void)
->>   {
->> +	of_clk_init(NULL);
->> +
->>   	if (!cpu_has_cpucfg)
->>   		const_clock_freq = cpu_clock_freq;
->>   	else
->> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
->> index 48f8f4221e21..e85a3ed88d4c 100644
->> --- a/drivers/clk/Kconfig
->> +++ b/drivers/clk/Kconfig
->> @@ -428,6 +428,15 @@ config COMMON_CLK_K210
->>   	help
->>   	  Support for the Canaan Kendryte K210 RISC-V SoC clocks.
->>   
->> +config COMMON_CLK_LOONGSON2
-> 
-> Messed up order.
-okay, I got it.
-> 
->> +	bool "Clock driver for Loongson-2 SoC"
->> +	depends on COMMON_CLK && OF
->> +	help
->> +	  This driver provides support for Clock Controller that base on
->> +	  Common Clock Framework Controller (CCF) on Loongson-2 SoC. The
->> +	  Clock Controller can generates and supplies clock to various
->> +	  peripherals within the SoC.
->> +
->>   source "drivers/clk/actions/Kconfig"
->>   source "drivers/clk/analogbits/Kconfig"
->>   source "drivers/clk/baikal-t1/Kconfig"
->> diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
->> index d5db170d38d2..8ccc7436052f 100644
->> --- a/drivers/clk/Makefile
->> +++ b/drivers/clk/Makefile
->> @@ -75,6 +75,7 @@ obj-$(CONFIG_COMMON_CLK_RS9_PCIE)	+= clk-renesas-pcie.o
->>   obj-$(CONFIG_COMMON_CLK_VC5)		+= clk-versaclock5.o
->>   obj-$(CONFIG_COMMON_CLK_WM831X)		+= clk-wm831x.o
->>   obj-$(CONFIG_COMMON_CLK_XGENE)		+= clk-xgene.o
->> +obj-$(CONFIG_COMMON_CLK_LOONGSON2)	+= clk-loongson2.o
-> 
-> Messed up order.
-> 
-okay, I got it.
->>   
->>   # please keep this section sorted lexicographically by directory path name
->>   obj-y					+= actions/
->> diff --git a/drivers/clk/clk-loongson2.c b/drivers/clk/clk-loongson2.c
->> new file mode 100644
->> index 000000000000..359fede40112
->> --- /dev/null
->> +++ b/drivers/clk/clk-loongson2.c
->> @@ -0,0 +1,285 @@
->> +// SPDX-License-Identifier: GPL-2.0+
->> +/*
->> + * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
->> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
->> + */
->> +
->> +#include <linux/clkdev.h>
->> +#include <linux/err.h>
->> +#include <linux/init.h>
->> +#include <linux/of.h>
->> +#include <linux/of_address.h>
->> +#include <dt-bindings/clock/loongson,ls2k-clk.h>
->> +#include <linux/clk-provider.h>
->> +#include <linux/slab.h>
->> +#include <linux/clk.h>
->> +
->> +#define LOONGSON2_PLL_MULT_SHIFT		32
->> +#define LOONGSON2_PLL_MULT_WIDTH		10
->> +#define LOONGSON2_PLL_DIV_SHIFT			26
->> +#define LOONGSON2_PLL_DIV_WIDTH			6
->> +#define LOONGSON2_APB_FREQSCALE_SHIFT		20
->> +#define LOONGSON2_APB_FREQSCALE_WIDTH		3
->> +#define LOONGSON2_USB_FREQSCALE_SHIFT		16
->> +#define LOONGSON2_USB_FREQSCALE_WIDTH		3
->> +#define LOONGSON2_SATA_FREQSCALE_SHIFT		12
->> +#define LOONGSON2_SATA_FREQSCALE_WIDTH		3
->> +
->> +void __iomem *loongson2_pll_base;
-> 
-> This must be static.
-okay, I will add it.
-> 
->> +static DEFINE_SPINLOCK(loongson2_clk_lock);
->> +static struct clk_hw **hws;
->> +static struct clk_hw_onecell_data *clk_hw_data;
-> 
-> You have way too many file-scope variables. I would expect 0 and this
-> being a driver.
-okay, I will move it in probe.
-> 
-> Best regards,
-> Krzysztof
-> 
+Tested on:
+
+commit:         247f34f7 Linux 6.1-rc2
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=1479cab6880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
+dashboard link: https://syzkaller.appspot.com/bug?extid=06cc05ddc896f12b7ec5
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=11cb6f5e880000
 
