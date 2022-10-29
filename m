@@ -2,64 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D02461244D
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 17:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350C3612445
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 17:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiJ2Ppr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 11:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36344 "EHLO
+        id S229588AbiJ2Pmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 11:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiJ2Ppf (ORCPT
+        with ESMTP id S229483AbiJ2Pmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 11:45:35 -0400
-Received: from jari.cn (unknown [218.92.28.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3524D631ED
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 08:45:33 -0700 (PDT)
-Received: by ajax-webmail-localhost.localdomain (Coremail) ; Sat, 29 Oct
- 2022 23:40:58 +0800 (GMT+08:00)
-X-Originating-IP: [182.148.13.81]
-Date:   Sat, 29 Oct 2022 23:40:58 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   wangkailong@jari.cn
-To:     Kai.Makisara@kolumbus.fi, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: st: replace ternary operator with max()
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
- Copyright (c) 2002-2022 www.mailtech.cn
- mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Sat, 29 Oct 2022 11:42:49 -0400
+Received: from mxout1.routing.net (mxout1.routing.net [IPv6:2a03:2900:1:a::a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B0161B30;
+        Sat, 29 Oct 2022 08:42:48 -0700 (PDT)
+Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
+        by mxout1.routing.net (Postfix) with ESMTP id 2099A403E3;
+        Sat, 29 Oct 2022 15:42:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1667058166;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=F28icF3t/ZJZnzJ1jYpuHgDKBjTOtvEe+03X+Age5+w=;
+        b=iQwpRoeuL1M5N78QvYS6ScSXvstS9WycunzN1i3DKaDCyFcSCqeCKJ+5ZkULjMrm2R/0v5
+        J7+ynWZzxGq8OBMeFQRyuQQvQjb4XuNzXU2/IZ60PGGNUk65mIlmI7RrULUhtTOTd4eD1t
+        aYMVKeWpI2oqivbCtZF/1Zw+N1LAh88=
+Received: from frank-G5.. (fttx-pool-217.61.156.178.bambit.de [217.61.156.178])
+        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id 37C273600A1;
+        Sat, 29 Oct 2022 15:42:45 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 0/2] rework mtk pcie-gen3 bindings and support mt7986
+Date:   Sat, 29 Oct 2022 17:42:17 +0200
+Message-Id: <20221029154219.4833-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Message-ID: <317f9e05.40.18424674406.Coremail.wangkailong@jari.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAfwCXq+GKSV1jUOEAAA--.20W
-X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQAOB2FEYx0BKAADs5
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
-        T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: 9d1853c2-04a8-4447-aaa2-a41ba2a3b9e1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rml4IHRoZSBmb2xsb3dpbmcgY29jY2ljaGVjayB3YXJuaW5nOgoKZHJpdmVycy9zY3NpL3N0LmM6
-MTU3NzogV0FSTklORyBvcHBvcnR1bml0eSBmb3IgbWF4KCkKClNpZ25lZC1vZmYtYnk6IEthaUxv
-bmcgV2FuZyA8d2FuZ2thaWxvbmdAamFyaS5jbj4KLS0tCiBkcml2ZXJzL3Njc2kvc3QuYyB8IDMg
-Ky0tCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDIgZGVsZXRpb25zKC0pCgpkaWZm
-IC0tZ2l0IGEvZHJpdmVycy9zY3NpL3N0LmMgYi9kcml2ZXJzL3Njc2kvc3QuYwppbmRleCBiOTBh
-NDQwZTEzNWQuLjU0Nzc4OTdhYTkyMCAxMDA2NDQKLS0tIGEvZHJpdmVycy9zY3NpL3N0LmMKKysr
-IGIvZHJpdmVycy9zY3NpL3N0LmMKQEAgLTE1NzQsOCArMTU3NCw3IEBAIHN0YXRpYyBpbnQgc2V0
-dXBfYnVmZmVyaW5nKHN0cnVjdCBzY3NpX3RhcGUgKlNUcCwgY29uc3QgY2hhciBfX3VzZXIgKmJ1
-ZiwKIAogCWlmICghU1RicC0+ZG9fZGlvKSB7CiAJCWlmIChTVHAtPmJsb2NrX3NpemUpCi0JCQli
-dWZzaXplID0gU1RwLT5ibG9ja19zaXplID4gc3RfZml4ZWRfYnVmZmVyX3NpemUgPwotCQkJCVNU
-cC0+YmxvY2tfc2l6ZSA6IHN0X2ZpeGVkX2J1ZmZlcl9zaXplOworCQkJYnVmc2l6ZSA9IG1heChT
-VHAtPmJsb2NrX3NpemUsIHN0X2ZpeGVkX2J1ZmZlcl9zaXplKTsKIAkJZWxzZSB7CiAJCQlidWZz
-aXplID0gY291bnQ7CiAJCQkvKiBNYWtlIHN1cmUgdGhhdCBkYXRhIGZyb20gcHJldmlvdXMgdXNl
-ciBpcyBub3QgbGVha2VkIGV2ZW4gaWYKLS0gCjIuMjUuMQo=
+From: Frank Wunderlich <frank-w@public-files.de>
+
+This Series prepares support for mt7986 PCIe which is basicly gen3 PCIe
+but with slightly differnt clock configuration.
+
+To make differences better to read i split the exiting bindings which
+has already different settings with a compatible switch and then add a
+new one for mt7986.
+
+v2:
+- fixed typo in part 1 (SoC based config)
+- squashed part2+3 (compatible and clock config for mt7986)
+
+v3:
+- fixed problem with fallback-compatible not compatible to main
+
+Frank Wunderlich (2):
+  dt-bindings: PCI: mediatek-gen3: add SoC based clock config
+  dt-bindings: PCI: mediatek-gen3: add support for mt7986
+
+ .../bindings/pci/mediatek-pcie-gen3.yaml      | 64 +++++++++++++++----
+ 1 file changed, 52 insertions(+), 12 deletions(-)
+
+-- 
+2.34.1
+
