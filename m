@@ -2,88 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53BAB611EC1
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 02:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52DC3611EC2
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 02:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbiJ2AnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 20:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
+        id S229714AbiJ2Ann (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 20:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiJ2Am7 (ORCPT
+        with ESMTP id S229450AbiJ2Anl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 20:42:59 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A92180AF9
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 17:42:58 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id z30so4527104qkz.13
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 17:42:58 -0700 (PDT)
+        Fri, 28 Oct 2022 20:43:41 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C837180AF9;
+        Fri, 28 Oct 2022 17:43:40 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d24so6220636pls.4;
+        Fri, 28 Oct 2022 17:43:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UoT94j6DZH53rf5IYTyRvpqIs59NBO4pO7++wqZmn18=;
-        b=Amx8rn61XHcImW4r+dJE2U388Yq/l/dtEA79H3HKWr5xbhx0X9uGz0UE8MpLuqr6/Q
-         gugVpQEKbUBAOecxZ8iW8mOxtp9aryEcH6WPVLGziqEDtex20VtNM59PcChAf/TzITyd
-         paEEPJ9rh5IQeIeQ+SBPrnAi2XUa2R69rbSaY=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=emP2KuZFwj43eFZPPui8vytef4MIQe1Qy4avTg2orQg=;
+        b=jL/I05N9IZ4Mufeh10+xFyT6RfOPoytViWgMLC/woi3Ch5bYYBbbIoVsLZxPpuGB6E
+         oFkR0UqOo/t/UlSzX0qxVeFbL0XVkLxVh/NF4PFn/FgdsjBPZlyXpBZPHydb0aQMDJn0
+         mGzuhrtOcScBvmPjkcGPwdcLpDMdgV8p5LhkqR2rJN9JMtW00AaxJx4KClQPw3sCbuRS
+         WXs+tu1qUcRh4vGXiknLEg0uC3RpQf15HGFlnhSAcKTz/Ub3eI+uzYjrnZNEdjy7C680
+         PK5oJtjkRpYdWG6bHVLeDrEID/9fH8UG7smKr16CJb08jP9kII/Tdn0vUqDZLQZoEE2c
+         V0XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UoT94j6DZH53rf5IYTyRvpqIs59NBO4pO7++wqZmn18=;
-        b=5PDlSNTBgFzj62q6fQtYvl4873lI726Q0RZJ1DAhzAnxonHIG4H8xKVoNaApUnUSfn
-         IAMV1iqG8RbXWMV33w3x/sbrYO29alWjnnjIuSaAY5cupnwd4UyXLESNmaWks9dbVWEo
-         YZJ2oH5XtTM7EnByK74tQJSgzQPkLFWHPP8JCOSCmvO0BqPXZa9uCMmR5OQxROCjAZ94
-         zK9S98+VTTw3sPTNIOAr818gw+PES35cQbAmODISsQEmYUGKX4fmFB/k0/8I90NMw464
-         ig8iGfqc67YtzBgRw2MJZcADEj2pa0Yejbsf72m+Yr+uk0QVbw0nK8ywa4inf5jbnbtv
-         yBQw==
-X-Gm-Message-State: ACrzQf2lDRuWSyZ39osdfR5p9rgOxhE7/Z1uSGSHvMKc4trBbdy97vUQ
-        ycDwmZfhhDIutBueHC1kNrmtFCww0clyPA==
-X-Google-Smtp-Source: AMsMyM4Pd+Y3/8LIGc8nQ2QRZjZJur7R02xYlIvYhZKYx+pCgsLlEbQK/VEecO6imwlmDJcfDAsxxQ==
-X-Received: by 2002:a37:bd47:0:b0:6e1:be21:e6e1 with SMTP id n68-20020a37bd47000000b006e1be21e6e1mr1517645qkf.473.1667004177230;
-        Fri, 28 Oct 2022 17:42:57 -0700 (PDT)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id u10-20020a37ab0a000000b006ecb9dfdd15sm95063qke.92.2022.10.28.17.42.56
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 17:42:56 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-369426664f9so61150087b3.12
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 17:42:56 -0700 (PDT)
-X-Received: by 2002:a81:1902:0:b0:36b:2578:f6e2 with SMTP id
- 2-20020a811902000000b0036b2578f6e2mr2005164ywz.352.1667004175867; Fri, 28 Oct
- 2022 17:42:55 -0700 (PDT)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=emP2KuZFwj43eFZPPui8vytef4MIQe1Qy4avTg2orQg=;
+        b=Tn80kVz+ahLxt7pLmZtbz+2u1rEGf14cUn5S9O4s0DjQxMu38oq39TlWZq+BXPKIn9
+         e08CAZbexzHfAiv8tgnrSzL63rIirkyZiFzEyboGJoUgy5Nvj8afNJfEMjUUHFyTisJf
+         r4GIJDfbYNLy+Xb7BmdWplZ54/2zw3QCFxDBz32ltZi1OLuTYrdzwDsm0MzCBED5ANed
+         XHixBhEDXyp4q10U9c49slpgFVALNaMBxQSqlX54hqJnpJYFgwJfCrVCx+DEsYDrTtsO
+         s+5x3K8YDhptdJrfOumZ2BjzrNpVQiEdwI5W20bW8Lu2p/9bdCaBkWGYkUesf+0cu0h8
+         Islg==
+X-Gm-Message-State: ACrzQf24Ak9mM+3lf3LyLZcvWreFJ0zvwe0cSkz91NWf1pQkniqzloVq
+        bRZpmvdIQ4m40yUG5Xt7TYkRxlGJzXEhGcHT
+X-Google-Smtp-Source: AMsMyM64/WABEHWKiRZHSiSa7EhGnCTWdeRCZzpmdY8svnnd1cYqe59ICTB7Kf3PEvSIaWXs/GTFkg==
+X-Received: by 2002:a17:902:f791:b0:17c:c1dd:a3b5 with SMTP id q17-20020a170902f79100b0017cc1dda3b5mr1751822pln.141.1667004219965;
+        Fri, 28 Oct 2022 17:43:39 -0700 (PDT)
+Received: from mail.google.com (122-58-209-93-fibre.sparkbb.co.nz. [122.58.209.93])
+        by smtp.gmail.com with ESMTPSA id a2-20020a170902900200b0017f9db0236asm62880plp.82.2022.10.28.17.43.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 17:43:39 -0700 (PDT)
+Date:   Sat, 29 Oct 2022 13:43:30 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Grigory Vasilyev <h0tc0d3@gmail.com>,
+        Claudio Suarez <cssk@net-c.es>,
+        Slark Xiao <slark_xiao@163.com>,
+        Rongguang Wei <weirongguang@kylinos.cn>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] [next] drm/amdgpu: Replace one-element array with
+ flexible-array member
+Message-ID: <Y1x3MtRJ8ckXxlJn@mail.google.com>
+References: <Y1tkWdwPUp+UdpM0@mail.google.com>
+ <04e37ee1-53b0-97ab-d6d7-a39edfbdc2ea@amd.com>
+ <202210280855.9DF8E4D72@keescook>
+ <1052fba8-11ac-cec8-92e7-b994266c6970@amd.com>
 MIME-Version: 1.0
-References: <20221022111403.531902164@infradead.org> <20221022114424.515572025@infradead.org>
- <2c800ed1-d17a-def4-39e1-09281ee78d05@nvidia.com> <Y1ZGNwUEdm15W6Xz@hirez.programming.kicks-ass.net>
- <CAG48ez3fG=WnvbiE5mJaD66_gJj_hohnV8CqBG9eNdjd7pJW3A@mail.gmail.com>
- <Y1fsYwshJ93FT21r@hirez.programming.kicks-ass.net> <CAG48ez3VE+3dVdUMK+Pg_942gR+h_TCcSaFxGwCbNfh3W+mfOA@mail.gmail.com>
- <Y1f7YvKuwOl1XEwU@hirez.programming.kicks-ass.net> <CAG48ez05gBiB2w7bL_3O_OUoBWazmHnRwMiuni_wQyXBUcaxbQ@mail.gmail.com>
- <Y1oub9MvqwGBlHkq@hirez.programming.kicks-ass.net> <CAHk-=wihPdOtXgJ32pLB6Xd-UvnaZW9YvOOjM24JGYRjNHeykA@mail.gmail.com>
- <6C548A9A-3AF3-4EC1-B1E5-47A7FFBEB761@gmail.com> <CAHk-=wh8oi0qQtYDFTfm7d1s5C8mG7ig=NfzGWt4zbjXMzcdqQ@mail.gmail.com>
- <F9E42822-DA1D-4192-8410-3BAE42E9E4A9@gmail.com> <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
-In-Reply-To: <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 28 Oct 2022 17:42:39 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
-Message-ID: <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
-Subject: Re: [PATCH 01/13] mm: Update ptep_get_lockless()s comment
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Jann Horn <jannh@google.com>,
-        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        jroedel@suse.de, ubizjak@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1052fba8-11ac-cec8-92e7-b994266c6970@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,64 +87,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 4:57 PM Nadav Amit <nadav.amit@gmail.com> wrote:
->
-> The problem is in the following code of zap_pte_range():
->
->         if (!PageAnon(page)) {
->                 if (pte_dirty(ptent)) {
->                         force_flush =3D 1;
->                         set_page_dirty(page);
->                 }
->                 =E2=80=A6
->         }
->         page_remove_rmap(page, vma, false);
->
-> Once we remove the rmap, rmap_walk() would not acquire the page-table loc=
-k
-> anymore. As a result, nothing prevents the kernel from performing writeba=
-ck
-> and cleaning the page-struct dirty-bit before the TLB is actually flushed=
-.
+On Fri, Oct 28, 2022 at 07:33:17PM +0200, Christian König wrote:
+> Am 28.10.22 um 18:36 schrieb Kees Cook:
+> 
+> > All that said, converting away from them can be tricky, and I think such
+> > conversions need to explicitly show how they were checked for binary
+> > differences[2].
+> 
+> Oh, that's a great idea! Yes, if this can be guaranteed then the change is
+> obviously perfectly ok.
+> 
+> > 
+> > Paulo, can you please check for deltas and report your findings in the
+> > commit log? Note that add struct_size() use in the same patch may result
+> > in binary differences, so for more complex cases, you may want to split
+> > the 1-element conversion from the struct_size() conversions.
+> > 
+> > -Kees
 
-Hah.
+Noted. I will reporting my findings on commit logs from now onwards. 
 
-The original reason for force_flush there was similar, with a race wrt
-page_mkclean() because this code doesn't take the page lock that would
-normally serialize things, because the page lock is so painful and
-ends up having nasty nasty interactions with slow IO operations.
+Given that I split the if-ternary to avoid checking "fake_edid_record->ucFakeEDIDLength"
+twice then (for the current patch), yes, there will be changes to *.o|ko files.
 
-So all the page-dirty handling really *wants* to use the page lock,
-and for the IO side (writeback) that ends up being acceptable and
-works well, but from that "serialize VM state" it's horrendous.
+Knowing that Christian would feel more confident with no binary changes
+at this point, I will send a different patch aiming solely on the
+replacement of 1-elem array without incurring binary changes.
 
-So instead the code intentionally serialized on the rmap data
-structures which page_mkclean() also walks, and as you point out,
-that's broken. It's not broken at the point where we do
-set_page_dirty(), but it *comes* broken when we drop the rmap, and the
-problem is exactly that "we still have the dirty bit hidden in the TLB
-state" issue that you pinpoint.
+--
+Paulo A.
 
-I think the proper fix (or at least _a_ proper fix) would be to
-actually carry the dirty bit along to the __tlb_remove_page() point,
-and actually treat it exactly the same way as the page pointer itself
-- set the page dirty after the TLB flush, the same way we can free the
-page after the TLB flush.
-
-We could easiy hide said dirty bit in the low bits of the
-"batch->pages[]" array or something like that. We'd just have to add
-the 'dirty' argument to __tlb_remove_page_size() and friends.
-
-Hmm?
-
-Your idea of "do the page_remove_rmap() late instead" would also work,
-but the reason I think just squirrelling away the dirty bit is the
-"proper" fix is that it would get rid of the whole need for
-'force_flush' in this area entirely. So we'd not only fix that race
-you noticed, we'd actually do so and reduce the number of TLB flushes
-too.
-
-I don't know. Maybe I'm missing something fundamental, and my idea is
-just stupid.
-
-               Linus
