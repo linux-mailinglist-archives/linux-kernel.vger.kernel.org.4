@@ -2,100 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA51612452
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 17:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5B6612456
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 18:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiJ2PxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 11:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
+        id S229716AbiJ2QBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 12:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiJ2PxA (ORCPT
+        with ESMTP id S229491AbiJ2QA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 11:53:00 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBDB2BE19;
-        Sat, 29 Oct 2022 08:52:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1667058753;
-        bh=Kycf1XZFridgEvLb9sjdHDeiaD0OdfNkXClfb9amqkM=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=hw0j53BVtFbC1xnqlHkNqtba6jEmor1AECidmrkh3ggV/tYuIXNsb8DlqLOBpKPUW
-         qCWZo+dk/rPSKumoAY/NC0zkXxDY5wUdATd7JhGrjWuNHiOWF/KMjA9CJZDhsikVji
-         cv9zyWW+2NbST3BAi67O9QIqegtE7QctujJUP47s5mhxwPAsqBEokJsWep8BCIdbqH
-         3Pa8np+C5TMVSc1gsq+O4BepvCsB1Drrz/+dxf700LTOdmKVmwIAiT+T53men9WeMK
-         T7b2guUVjmFG/VDi74Jz/cH18ymAKWoyclI0GScHy1hKulDNheWxyYwGt5BOirElK4
-         1B6uzTaVebU9A==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from frank-G5 ([217.61.156.178]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N33ET-1pBism26KD-013Kf9; Sat, 29
- Oct 2022 17:52:33 +0200
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 0/2] rework mtk pcie-gen3 bindings and support mt7986
-Date:   Sat, 29 Oct 2022 17:52:23 +0200
-Message-Id: <20221029155225.7104-1-frank-w@public-files.de>
-X-Mailer: git-send-email 2.34.1
+        Sat, 29 Oct 2022 12:00:59 -0400
+Received: from jari.cn (unknown [218.92.28.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D88F12CCB5
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 09:00:44 -0700 (PDT)
+Received: by ajax-webmail-localhost.localdomain (Coremail) ; Sat, 29 Oct
+ 2022 23:56:03 +0800 (GMT+08:00)
+X-Originating-IP: [182.148.13.81]
+Date:   Sat, 29 Oct 2022 23:56:03 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   wangkailong@jari.cn
+To:     harry.wentland@amd.com, daniel@ffwll.ch, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, airlied@gmail.com, jun.lei@amd.com,
+        Alvin.Lee2@amd.com, Nevenko.Stupar@amd.com, samson.tam@amd.com
+Cc:     rdunlap@infradead.org, David.Galiffi@amd.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject:  [PATCH] drm/amd/display: replace ternary operator with max()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
+ Copyright (c) 2002-2022 www.mailtech.cn
+ mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:diT2Gefmafn/nZ+zWz2K9Sc7U/zf7MWKJVX6SrzI9Fk1bXLYPHD
- o1XqCd1Ag1j6hIDROr6UzLx43dkgDd+7JZu8NSLvyAnG0dWiBqAt6v6JouGaJnzBzBOHM0z
- 8rpAcRv0Lvsx/BrnBOQ0xX8cIUBToqff+sTKW5AFQlVRIsTpRLRNNhRBw1uJKGOP2cQz7R1
- jvWHNfvQf7mBWY31E5Gag==
-UI-OutboundReport: notjunk:1;M01:P0:n9GfSGB0G2w=;ZjGUNKuL/LJM8mRrT1iGH82btnK
- OAESaaRGx0UxdcBWNW8gvgEleJGJ7JSxpxUDkfzScm4UyQx960VlXBPZdnn277knBdtd75ZFN
- JAqdy+H7R7LdBgDqhaRg5jDwtLulhJkDLOKFBWc2CdJ+xHQnHrQbhYhQUykQQ8hD+LtNADit2
- k9GHCzwCSg1ff0+QzbJ3IhqhdT8Zbj/3wN2juKSfKm9C/Yguq4JDfPxEqP1vss+5yt8Pyv+Bj
- OV+KDHtSb4nKE2ZzkGR4d/N+VMSFd5pxdlHv/oDFShf0w762npceEPhwgCoCsf9AC8ipPq2ix
- MI0tByo+oUv+q8qKF7lyV5o80T+mmnTYABJKXKIzUUR8pfD8QZkJ5Axv5To9iiPPtr9ppEf2l
- 6ORf0/7bn5WIsuPFTl6cem2Oq45KyKNfrhVy1BTPvRbbw2eHIB8p/hChp08eR1tsjgeO93eME
- koNIk4u/VaE5wT681X+m3YuBjdWUT2llAEb1H2kqfshYkLOGYD3N49lsNwPjOfMhQqYVYdmYg
- UnYArzVoC0Nfb6KBbZJdZHuCQpCYcUf43kCZJU7+BHsTVm3pFRqv/8JIF8gRuQIhKPtF6GfHn
- a61q1Gu67yI1BZU0TwYcLngRqfPHomE2B/e+7qtFZTHlWXwzeNHEy/qvpA4HS8WDdc6ibuk+Q
- 9hhmlvZElw+EVqNVlTK67K245fQelDUOQHScvnadyeUTMO6JZKqLslJ4DJgO88zjdKkwGlgcH
- id4TO/fGhHwPb6sq9TsDvxrjb8isAbB2XSPSRwlJt5Z0q+s7F5M2R5HDg82QOnYh/uVEyoOcC
- 61Ci5VJhKnH/Llqixke9UI1RPR/DQJK3HhYkG3B7+wo+NYwD0j+Gvo2QqVgHGNx8I4xSxwPg+
- KCd0Ow5Fy0ulNWXqEd+TwkpUVe6vHsT8V0Oda9gRQI7TkSDHzDKoW47tto9M9R1gj+jwyd1tq
- 3RyW6rsdbQB/IO2sBzMomyTlX9c=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Message-ID: <20f55cfc.42.1842475135f.Coremail.wangkailong@jari.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAfwB3jOITTV1jjuIAAA--.21W
+X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQAOB2FEYx0BKAAHs9
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
+        T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This Series prepares support for mt7986 PCIe which is basicly gen3 PCIe
-but with slightly differnt clock configuration.
-
-To make differences better to read i split the exiting bindings which
-has already different settings with a compatible switch and then add a
-new one for mt7986.
-
-v2:
-- fixed typo in part 1 (SoC based config)
-- squashed part2+3 (compatible and clock config for mt7986)
-
-v3:
-- fixed problem with fallback-compatible not compatible to main
-
-Frank Wunderlich (2):
-  dt-bindings: PCI: mediatek-gen3: add SoC based clock config
-  dt-bindings: PCI: mediatek-gen3: add support for mt7986
-
- .../bindings/pci/mediatek-pcie-gen3.yaml      | 64 +++++++++++++++----
- 1 file changed, 52 insertions(+), 12 deletions(-)
-
-=2D-
-2.34.1
-
+Rml4IHRoZSBmb2xsb3dpbmcgY29jY2ljaGVjayB3YXJuaW5nOgoKZHJpdmVycy9ncHUvZHJtL2Ft
+ZC9kaXNwbGF5L2RjL2RtbC9kY24zMi9kY24zMl9mcHUuYzo4ODc6NDktNTA6CldBUk5JTkcgb3Bw
+b3J0dW5pdHkgZm9yIG1heCgpCmRyaXZlcnMvZ3B1L2RybS9hbWQvZGlzcGxheS9kYy9kbWwvZGNu
+MzIvZGNuMzJfZnB1LmM6OTc4OjQyLTQzOgpXQVJOSU5HIG9wcG9ydHVuaXR5IGZvciBtYXgoKQoK
+U2lnbmVkLW9mZi1ieTogS2FpTG9uZyBXYW5nIDx3YW5na2FpbG9uZ0BqYXJpLmNuPgotLS0KIGRy
+aXZlcnMvZ3B1L2RybS9hbWQvZGlzcGxheS9kYy9kbWwvZGNuMzIvZGNuMzJfZnB1LmMgfCA0ICsr
+LS0KIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCgpkaWZm
+IC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2FtZC9kaXNwbGF5L2RjL2RtbC9kY24zMi9kY24zMl9m
+cHUuYyBiL2RyaXZlcnMvZ3B1L2RybS9hbWQvZGlzcGxheS9kYy9kbWwvZGNuMzIvZGNuMzJfZnB1
+LmMKaW5kZXggYjZjZDEwZjMxODFjLi41ZmRiYmRjYTk3ZTAgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMv
+Z3B1L2RybS9hbWQvZGlzcGxheS9kYy9kbWwvZGNuMzIvZGNuMzJfZnB1LmMKKysrIGIvZHJpdmVy
+cy9ncHUvZHJtL2FtZC9kaXNwbGF5L2RjL2RtbC9kY24zMi9kY24zMl9mcHUuYwpAQCAtODg0LDcg
+Kzg4NCw3IEBAIHN0YXRpYyBib29sIHN1YnZwX2Rycl9zY2hlZHVsYWJsZShzdHJ1Y3QgZGMgKmRj
+LCBzdHJ1Y3QgZGNfc3RhdGUgKmNvbnRleHQsIHN0cnVjCiAJc3RyZXRjaGVkX2Rycl91cyA9IGRy
+cl9mcmFtZV91cyArIG1hbGxfcmVnaW9uX3VzICsgU1VCVlBfRFJSX01BUkdJTl9VUzsKIAlkcnJf
+c3RyZXRjaGVkX3ZibGFua191cyA9IChkcnJfdGltaW5nLT52X3RvdGFsIC0gZHJyX3RpbWluZy0+
+dl9hZGRyZXNzYWJsZSkgKiBkcnJfdGltaW5nLT5oX3RvdGFsIC8KIAkJCShkb3VibGUpKGRycl90
+aW1pbmctPnBpeF9jbGtfMTAwaHogKiAxMDApICogMTAwMDAwMCArIChzdHJldGNoZWRfZHJyX3Vz
+IC0gZHJyX2ZyYW1lX3VzKTsKLQltYXhfdmJsYW5rX21hbGxyZWdpb24gPSBkcnJfc3RyZXRjaGVk
+X3ZibGFua191cyA+IG1hbGxfcmVnaW9uX3VzID8gZHJyX3N0cmV0Y2hlZF92YmxhbmtfdXMgOiBt
+YWxsX3JlZ2lvbl91czsKKwltYXhfdmJsYW5rX21hbGxyZWdpb24gPSBtYXgoZHJyX3N0cmV0Y2hl
+ZF92YmxhbmtfdXMsIG1hbGxfcmVnaW9uX3VzKTsKIAogCS8qIFdlIGNvbnNpZGVyIFN1YlZQICsg
+RFJSIHNjaGVkdWxhYmxlIGlmIHRoZSBzdHJldGNoZWQgZnJhbWUgZHVyYXRpb24gb2YgdGhlIERS
+UiBkaXNwbGF5IChpLmUuIHRoZQogCSAqIGhpZ2hlc3QgcmVmcmVzaCByYXRlICsgbWFyZ2luIHRo
+YXQgY2FuIHN1cHBvcnQgVUNMSyBQLVN0YXRlIHN3aXRjaCkgcGFzc2VzIHRoZSBzdGF0aWMgYW5h
+bHlzaXMKQEAgLTk3NSw3ICs5NzUsNyBAQCBzdGF0aWMgYm9vbCBzdWJ2cF92Ymxhbmtfc2NoZWR1
+bGFibGUoc3RydWN0IGRjICpkYywgc3RydWN0IGRjX3N0YXRlICpjb250ZXh0KQogCQkJCShkb3Vi
+bGUpKHZibGFua190aW1pbmctPnBpeF9jbGtfMTAwaHogKiAxMDApICogMTAwMDAwMDsKIAkJc3Vi
+dnBfYWN0aXZlX3VzID0gbWFpbl90aW1pbmctPnZfYWRkcmVzc2FibGUgKiBtYWluX3RpbWluZy0+
+aF90b3RhbCAvCiAJCQkJKGRvdWJsZSkobWFpbl90aW1pbmctPnBpeF9jbGtfMTAwaHogKiAxMDAp
+ICogMTAwMDAwMDsKLQkJbWF4X3ZibGFua19tYWxscmVnaW9uID0gdmJsYW5rX2JsYW5rX3VzID4g
+bWFsbF9yZWdpb25fdXMgPyB2YmxhbmtfYmxhbmtfdXMgOiBtYWxsX3JlZ2lvbl91czsKKwkJbWF4
+X3ZibGFua19tYWxscmVnaW9uID0gbWF4KHZibGFua19ibGFua191cywgbWFsbF9yZWdpb25fdXMp
+OwogCiAJCS8vIFNjaGVkdWxhYmxlIGlmIFZBQ1RJVkUgcmVnaW9uIG9mIHRoZSBTdWJWUCBwaXBl
+IGNhbiBmaXQgdGhlIE1BTEwgcHJlZmV0Y2gsIFZCTEFOSyBmcmFtZSB0aW1lLAogCQkvLyBhbmQg
+dGhlIG1heCBvZiAoVkJMQU5LIGJsYW5raW5nIHRpbWUsIE1BTEwgcmVnaW9uKQotLSAKMi4yNS4x
+Cg==
