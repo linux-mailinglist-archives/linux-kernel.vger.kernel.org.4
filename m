@@ -2,49 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 822EE612159
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 10:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E43612195
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 10:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiJ2IVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 04:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
+        id S229766AbiJ2IsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 04:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiJ2IVj (ORCPT
+        with ESMTP id S229718AbiJ2IsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 04:21:39 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3295C45A0
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 01:21:37 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mzsh66qX0zmVJY;
-        Sat, 29 Oct 2022 16:16:38 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 29 Oct 2022 16:21:35 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 29 Oct 2022 16:21:35 +0800
-From:   Tong Tiangen <tongtiangen@huawei.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        "Tong Tiangen" <tongtiangen@huawei.com>,
-        <wangkefeng.wang@huawei.com>, Guohanjun <guohanjun@huawei.com>
-Subject: [PATCH -next v2] riscv/mm/fault: simplify code for do_page_fault()
-Date:   Sat, 29 Oct 2022 08:47:15 +0000
-Message-ID: <20221029084715.3669204-1-tongtiangen@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 29 Oct 2022 04:48:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A282258B4C;
+        Sat, 29 Oct 2022 01:48:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A420B80B19;
+        Sat, 29 Oct 2022 08:48:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAF89C433C1;
+        Sat, 29 Oct 2022 08:48:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667033284;
+        bh=qAB44AW9l7MBg3PipZA9gp8hcRBcbWZ2uPxGK7uAZ0k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hj9EHjO9OTXV1nd8TMHapdEkPKuS1I1SAr0E/MPHdkLWnjuijP2cgi5Y+Acm4SJFF
+         1TL9TQq/s9gK0F7VTDHiksxoom9bHUgBvHxY53QFEec6nwxKVamuNrs0eJ7spw6HU1
+         luXDV39kM/dbJ9W7mM2VLTDnFomcfHRjkWqaT0OlB/TzrXZoLfYV06UVLkb2tVKlVl
+         ATTVHRZ/dTomj7FtA5al8cvUvfBxBnZ6BKnqxR4HjJZhxQ6LUTtrGBD/0YSvih44Co
+         PcW6+B/uUxtMkkd5YIhXnFbmS1KoDQl2JUeMHYZo8H5NnXiQx+Z8xDvttSyZF2n5N5
+         jnpwTAVdloU0g==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oohVP-00008o-Av; Sat, 29 Oct 2022 10:47:51 +0200
+Date:   Sat, 29 Oct 2022 10:47:51 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 10/16] dt-bindings: phy: qcom,qmp-pcie: rename current
+ bindings
+Message-ID: <Y1zot8aJ1WXnbrwF@hovoldconsulting.com>
+References: <20221028133603.18470-1-johan+linaro@kernel.org>
+ <20221028133603.18470-11-johan+linaro@kernel.org>
+ <33b13789-33d6-a22f-82c9-4c5691d0737d@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <33b13789-33d6-a22f-82c9-4c5691d0737d@linaro.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,131 +66,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To make the code more hierarchical and readable, we fold vma related
-judgments into __do_page_fault(). And to simplify the code, move the
-tsk->thread.bad_cause's setting into bad_area(). No functional change
-intended.
+On Fri, Oct 28, 2022 at 05:57:01PM -0400, Krzysztof Kozlowski wrote:
+> On 28/10/2022 09:35, Johan Hovold wrote:
+> > The current QMP PCIe PHY bindings are based on the original MSM8996
+> > binding which provided multiple PHYs per IP block and these in turn were
+> > described by child nodes.
+> > 
+> > Later QMP PCIe PHY blocks only provide a single PHY and the remnant
+> > child node does not really reflect the hardware.
+> > 
+> > The original MSM8996 binding also ended up describing the individual
+> > register blocks as belonging to either the wrapper node or the PHY child
+> > nodes.
+> > 
+> > This is an unnecessary level of detail which has lead to problems when
+> > later IP blocks using different register layouts have been forced to fit
+> > the original mould rather than updating the binding. The bindings are
+> > arguable also incomplete as they only the describe register blocks used
+> > by the current Linux drivers (e.g. does not include the per lane PCS
+> > registers).
+> > 
+> > In preparation for adding new bindings for SC8280XP which further
+> > bindings can be based on, rename the current schema file after IPQ8074,
+> > which was the first SoC added to the bindings after MSM8996 (which has
+> > already been split out), and add a reference to the SC8280XP bindings.
+> > 
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> 
+> Also missing cc devicetree list.
 
-Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
----
-v1 -> v2:
-  Fixed incorrect use of macro VM_FAULT_BADMAP.
+Yes, I know, but as I mentioned in my reply to Rob on the QMP USB
+series, I do not intend to repost this series unless someone insists as
+there were no binding-related changes in v4 (or v3).
 
- arch/riscv/mm/fault.c | 77 +++++++++++++++++++++++--------------------
- 1 file changed, 41 insertions(+), 36 deletions(-)
-
-diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-index d86f7cebd4a7..3fdc2eebdd36 100644
---- a/arch/riscv/mm/fault.c
-+++ b/arch/riscv/mm/fault.c
-@@ -85,6 +85,8 @@ static inline void mm_fault_error(struct pt_regs *regs, unsigned long addr, vm_f
- 
- static inline void bad_area(struct pt_regs *regs, struct mm_struct *mm, int code, unsigned long addr)
- {
-+	current->thread.bad_cause = regs->cause;
-+
- 	/*
- 	 * Something tried to access memory that isn't in our memory map.
- 	 * Fix it, but check if it's kernel or user first.
-@@ -200,6 +202,38 @@ static inline bool access_error(unsigned long cause, struct vm_area_struct *vma)
- 	return false;
- }
- 
-+#define VM_FAULT_BADMAP		((__force vm_fault_t)0x010000)
-+#define VM_FAULT_BADACCESS	((__force vm_fault_t)0x020000)
-+
-+static vm_fault_t __do_page_fault(struct mm_struct *mm, unsigned long addr,
-+				unsigned int mm_flags, struct pt_regs *regs)
-+{
-+	struct vm_area_struct *vma = find_vma(mm, addr);
-+
-+	if (unlikely(!vma))
-+		return VM_FAULT_BADMAP;
-+
-+	if (unlikely(vma->vm_start > addr)) {
-+		if (unlikely(!(vma->vm_flags & VM_GROWSDOWN) ||
-+				expand_stack(vma, addr)))
-+			return VM_FAULT_BADMAP;
-+	}
-+
-+	/*
-+	 * Ok, we have a good vm_area for this memory access, so
-+	 * we can handle it.
-+	 */
-+	if (unlikely(access_error(regs->cause, vma)))
-+		return VM_FAULT_BADACCESS;
-+
-+	/*
-+	 * If for any reason at all we could not handle the fault,
-+	 * make sure we exit gracefully rather than endlessly redo
-+	 * the fault.
-+	 */
-+	return handle_mm_fault(vma, addr, mm_flags, regs);
-+}
-+
- /*
-  * This routine handles page faults.  It determines the address and the
-  * problem, and then passes it off to one of the appropriate routines.
-@@ -207,7 +241,6 @@ static inline bool access_error(unsigned long cause, struct vm_area_struct *vma)
- asmlinkage void do_page_fault(struct pt_regs *regs)
- {
- 	struct task_struct *tsk;
--	struct vm_area_struct *vma;
- 	struct mm_struct *mm;
- 	unsigned long addr, cause;
- 	unsigned int flags = FAULT_FLAG_DEFAULT;
-@@ -280,44 +313,16 @@ asmlinkage void do_page_fault(struct pt_regs *regs)
- 		flags |= FAULT_FLAG_INSTRUCTION;
- retry:
- 	mmap_read_lock(mm);
--	vma = find_vma(mm, addr);
--	if (unlikely(!vma)) {
--		tsk->thread.bad_cause = cause;
--		bad_area(regs, mm, code, addr);
--		return;
--	}
--	if (likely(vma->vm_start <= addr))
--		goto good_area;
--	if (unlikely(!(vma->vm_flags & VM_GROWSDOWN))) {
--		tsk->thread.bad_cause = cause;
--		bad_area(regs, mm, code, addr);
--		return;
--	}
--	if (unlikely(expand_stack(vma, addr))) {
--		tsk->thread.bad_cause = cause;
--		bad_area(regs, mm, code, addr);
--		return;
--	}
- 
--	/*
--	 * Ok, we have a good vm_area for this memory access, so
--	 * we can handle it.
--	 */
--good_area:
--	code = SEGV_ACCERR;
-+	fault = __do_page_fault(mm, addr, flags, regs);
- 
--	if (unlikely(access_error(cause, vma))) {
--		tsk->thread.bad_cause = cause;
--		bad_area(regs, mm, code, addr);
--		return;
--	}
-+	if (unlikely(fault & VM_FAULT_BADMAP))
-+		return bad_area(regs, mm, code, addr);
- 
--	/*
--	 * If for any reason at all we could not handle the fault,
--	 * make sure we exit gracefully rather than endlessly redo
--	 * the fault.
--	 */
--	fault = handle_mm_fault(vma, addr, flags, regs);
-+	if (unlikely(fault & VM_FAULT_BADACCESS)) {
-+		code = SEGV_ACCERR;
-+		return bad_area(regs, mm, code, addr);
-+	}
- 
- 	/*
- 	 * If we need to retry but a fatal signal is pending, handle the
--- 
-2.25.1
-
+Johan
