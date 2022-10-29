@@ -2,149 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D053B61215D
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 10:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F888612163
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 10:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbiJ2IVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 04:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
+        id S229536AbiJ2I1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 04:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiJ2IVr (ORCPT
+        with ESMTP id S229379AbiJ2I1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 04:21:47 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E81DDC355B;
-        Sat, 29 Oct 2022 01:21:44 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8AxbdqX4lxjZj4DAA--.12368S3;
-        Sat, 29 Oct 2022 16:21:43 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxR1eQ4lxjKWcHAA--.6252S3;
-        Sat, 29 Oct 2022 16:21:41 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hector Martin <marcan@marcan.st>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Brian Norris <briannorris@chromium.org>,
-        Sven Peter <sven@svenpeter.dev>, loongarch@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v3 2/2] dt-bindings: soc: add loongson-2 chipid
-Date:   Sat, 29 Oct 2022 16:21:35 +0800
-Message-Id: <20221029082135.31096-2-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221029082135.31096-1-zhuyinbo@loongson.cn>
-References: <20221029082135.31096-1-zhuyinbo@loongson.cn>
+        Sat, 29 Oct 2022 04:27:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96CFFAA63;
+        Sat, 29 Oct 2022 01:27:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EB1760DFE;
+        Sat, 29 Oct 2022 08:27:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C20A6C433D6;
+        Sat, 29 Oct 2022 08:27:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667032063;
+        bh=QvXj1BCxefSJG8Han1wFrs6CanrWgeaMURoZXb/YyKA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I3a3db3xD8IjCsUMnb1p8xHYZrEjEvdIyO8BmajOaL4xkB73VinNsncDHaXlBbwy+
+         LrsIAbDUxb/E4RTq+RbilqpzIBJFH3H2fiuXPtpi1DJZlvhLuh6r5D0D3tlCQMbO4f
+         1ae6WNiQlCxAkx1aqqMFkImU6+V0411mdepvJi2Xq6bx7LJYP4YqIvICU3MflpYCUl
+         rKcDqOkUt7yCDeB/37ow89Fl4eG7HyKPmrE9ZpwQGMgK1OhJ+ViNsGvIEYcjnueDfd
+         CWS0bVvZ0YtfK3lrmG8z2BoZhknDkxFMpikoaHRT1PvSMSdhfV2wg6/JGjjEycaVqp
+         Ng/X8OHNl8VQw==
+Date:   Sat, 29 Oct 2022 16:27:38 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Cc:     "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the imx-mxs tree
+Message-ID: <20221029082738.GS125525@dragon>
+References: <20221024153720.5e387e34@canb.auug.org.au>
+ <e111222f3c3157ad6c81022fa66e6cbc9072f9af.camel@toradex.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxR1eQ4lxjKWcHAA--.6252S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7uF15Xw1fArW7KFyfJryfXrb_yoW8tFykpa
-        13Cr95KF4xtF17uws5Ka4Ik3W5Zr95AFsFgFZrZw13KrWqg3WFqw43K3WDZanrZr1UJayU
-        uFWfGrW5GF4xCr7anT9S1TB71UUUUbJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bSxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jw0_GFyle2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26F4j6r4UJwAm72CE4IkC
-        6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2
-        Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
-        1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj
-        6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr
-        0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4U
-        JbIYCTnIWIevJa73UjIFyTuYvjxUciL0UUUUU
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <e111222f3c3157ad6c81022fa66e6cbc9072f9af.camel@toradex.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Loongson-2 SoC chipid binding with DT schema format using
-json-schema.
+On Mon, Oct 24, 2022 at 07:07:26AM +0000, Marcel Ziswiler wrote:
+> Hi Stephen
+> 
+> On Mon, 2022-10-24 at 15:37 +1100, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > In commit
+> > 
+> >   c9545754e9a7 ("arm64: dts: verdin-imx8mp: fix ctrl_sleep_moci")
+> > 
+> > Fixes tag
+> > 
+> >   Fixes: 1d8df9c74bff ("arm64: dts: freescale: add initial support for verdin imx8m plus")
+> 
+> Oh shoot, I guess Max referenced the commit from our downstream branch and while I checked the commit to exist
+> on my end I missed it being a downstream one:
+> 
+> ⬢[zim@toolbox linux-toradex-imx.git]$ git branch --contains 1d8df9c74bff5d36d755324be1e695abf9cdeca8
+>   toradex_5.15-2.0.x-imx
+> 
+> > has these problem(s):
+> > 
+> >   - Target SHA1 does not exist
+> > 
+> > Maybe you meant
+> > 
+> > Fixes: a39ed23bdf6e ("arm64: dts: freescale: add initial support for verdin imx8m plus")
+> 
+> Yes, Indeed, that must be the correct one:
+> 
+> ⬢[zim@toolbox linux-next.git]$ git branch --contains a39ed23bdf6ec7eb0f093b6ef0391e1f3d152f71
+>   v5.19
+>   v6.0
+> 
+> Sorry about that!
+> 
+> @Shawn: Can you fix this up or do I need to re-send anything?
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
-Change in v3:
-		1. Drop "driver" and describe instead what is GUTS, including
-		   its acronym.
-		2. Add desciption about the SoC register.
-		3. Fixup dts node name.
-		4. Replace string loongson2/Loongson2 with loongson-2/Loongson-2
-                   in binding file and commit message.
+Fixed.
 
- .../bindings/hwinfo/loongson,ls2k-chipid.yaml | 38 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 39 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
-
-diff --git a/Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml b/Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
-new file mode 100644
-index 000000000000..9d0c36ec1982
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
-@@ -0,0 +1,38 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwinfo/loongson,ls2k-chipid.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson-2 SoC ChipID
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+description: |
-+  Loongson-2 SoC contains many groups of global utilities register
-+  blocks, of which the ChipID group registers record SoC version,
-+  feature, vendor and id information.
-+
-+properties:
-+  compatible:
-+    const: loongson,ls2k-chipid
-+
-+  reg:
-+    maxItems: 1
-+
-+  little-endian: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    chipid: chipid@1fe00000 {
-+        compatible = "loongson,ls2k-chipid";
-+        reg = <0x1fe00000 0x3ffc>;
-+        little-endian;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a02d45dd21ce..072da0f47f14 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11934,6 +11934,7 @@ LOONGSON-2 SOC SERIES GUTS DRIVER
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	loongarch@lists.linux.dev
- S:	Maintained
-+F:	Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
- F:	drivers/soc/loongson/loongson2_guts.c
- 
- LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
--- 
-2.31.1
-
+Shawn
