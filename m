@@ -2,87 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55678611EEE
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 03:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C9D611EF9
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 03:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbiJ2BNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 21:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35752 "EHLO
+        id S229819AbiJ2BQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 21:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiJ2BNR (ORCPT
+        with ESMTP id S229776AbiJ2BPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 21:13:17 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id CEC781D4406
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 18:13:15 -0700 (PDT)
-Received: (qmail 100580 invoked by uid 1000); 28 Oct 2022 21:13:14 -0400
-Date:   Fri, 28 Oct 2022 21:13:14 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/2] usb: ehci-pci: Set PROBE_PREFER_ASYNCHRONOUS
-Message-ID: <Y1x+KmXhzikbEm8U@rowland.harvard.edu>
-References: <20221028141821.1.I9a5353f81d1509f85f3a04f0cdc9099f6fe60811@changeid>
+        Fri, 28 Oct 2022 21:15:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08C91C9071;
+        Fri, 28 Oct 2022 18:15:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A30E5B82DFA;
+        Sat, 29 Oct 2022 01:15:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18489C433D6;
+        Sat, 29 Oct 2022 01:15:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667006150;
+        bh=G5DfkOYR4GEKvpQ1aCgkGIW+8LgRyBABtCSTZJPZAeU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U2QnWe2DTnTz3ta8WVtIq72nabdAL4o7okHGbi0zmiAfLniXSF9Xp+IZnwvwADb+R
+         qyzHeIg0H1kRbScHfs22K1zH5ovxWYgiVetcyhl3XmgVHcXF+Vbef5qEglI4c+sCZU
+         ldA42qH2n+hNavq57A15lP1Acxz6sYBd0EA4wOPcnQ8w8ddZ5X8TgVnOL49LMmAzud
+         ipqAYh4Zsd0y3xCM5yBGYxExevxI0NyCESXtP8AYjkHwkNf1ngVRtx+Dqgzo3IYsTp
+         JcUY4F23bSdLKXvKcZ2/V4uhSTMnL28Cr7HMdc6IyittAS+guOK4RxHr/0pq7rlD+l
+         I1TjKpo0jJNcw==
+Date:   Sat, 29 Oct 2022 09:15:40 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        phone-devel@vger.kernel.org, kernel@puri.sm
+Subject: Re: [PATCH v1 2/3] arm64: dts: librem5-devkit: Make LED use PWM
+Message-ID: <20221029011540.GF125525@dragon>
+References: <cover.1665318256.git.agx@sigxcpu.org>
+ <fac9bc2b1a7c5505d863783726a9b4110e518a8f.1665318256.git.agx@sigxcpu.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221028141821.1.I9a5353f81d1509f85f3a04f0cdc9099f6fe60811@changeid>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fac9bc2b1a7c5505d863783726a9b4110e518a8f.1665318256.git.agx@sigxcpu.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 02:19:07PM -0700, Brian Norris wrote:
-> This driver often takes on the order of 8ms to start, but every little
-> bit counts. It shouldn't have many cross-device dependencies to
-> race with, nor racy access to shared state with other drivers, so this
-> should be a relatively low risk change.
+On Sun, Oct 09, 2022 at 02:26:54PM +0200, Guido Günther wrote:
+> We can use PWM instead of just GPIO allowing us to control brightness.
 > 
-> This driver was pinpointed as part of a survey of top slowest initcalls
-> (i.e., are built in, and probing synchronously) on a lab of ChromeOS
-> systems.
-> 
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
-> ---
+> Signed-off-by: Guido Günther <agx@sigxcpu.org>
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
-However, I'm curious to know why this patch makes ehci-pci use 
-PROBE_PREFER_ASYNCHRONOUS even when CONFIG_PM isn't set, whereas the 2/2 
-patch makes xhci-pci use PROBE_PREFER_ASYNCHRONOUS only when CONFIG_PM 
-is set.
-
-Alan Stern
-
->  drivers/usb/host/ehci-pci.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
-> index 17f8b6ea0c35..4b148fe5e43b 100644
-> --- a/drivers/usb/host/ehci-pci.c
-> +++ b/drivers/usb/host/ehci-pci.c
-> @@ -411,11 +411,12 @@ static struct pci_driver ehci_pci_driver = {
->  	.remove =	ehci_pci_remove,
->  	.shutdown = 	usb_hcd_pci_shutdown,
->  
-> -#ifdef CONFIG_PM
->  	.driver =	{
-> -		.pm =	&usb_hcd_pci_pm_ops
-> -	},
-> +#ifdef CONFIG_PM
-> +		.pm =	&usb_hcd_pci_pm_ops,
->  #endif
-> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
-> +	},
->  };
->  
->  static int __init ehci_pci_init(void)
-> -- 
-> 2.38.1.273.g43a17bfeac-goog
-> 
+Applied, thanks!
