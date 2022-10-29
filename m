@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C790612216
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 12:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D14D612219
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 12:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiJ2KCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 06:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48470 "EHLO
+        id S229777AbiJ2KCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 06:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiJ2KCl (ORCPT
+        with ESMTP id S229743AbiJ2KCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 06:02:41 -0400
+        Sat, 29 Oct 2022 06:02:44 -0400
 Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D0DF6A517;
-        Sat, 29 Oct 2022 03:02:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89A026B154;
+        Sat, 29 Oct 2022 03:02:41 -0700 (PDT)
 Received: from localhost.localdomain (unknown [10.14.30.251])
-        by mail-app3 (Coremail) with SMTP id cC_KCgCHjQwl+lxjdEpxCA--.43876S4;
-        Sat, 29 Oct 2022 18:02:33 +0800 (CST)
+        by mail-app3 (Coremail) with SMTP id cC_KCgCHjQwl+lxjdEpxCA--.43876S5;
+        Sat, 29 Oct 2022 18:02:34 +0800 (CST)
 From:   Jinlong Chen <nickyc975@zju.edu.cn>
 To:     axboe@kernel.dk, kbusch@kernel.org, hch@lst.de, sagi@grimberg.me
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-nvme@lists.infradead.org, nickyc975@zju.edu.cn
-Subject: [PATCH 2/3] blk-mq: remove blk_freeze_queue
-Date:   Sat, 29 Oct 2022 18:02:10 +0800
-Message-Id: <2e75f23dbefec4c7f056ee1d867fa00b7172c3cd.1667035519.git.nickyc975@zju.edu.cn>
+Subject: [PATCH 3/3] block: hide back blk_freeze_queue_start and export its blk-mq alias
+Date:   Sat, 29 Oct 2022 18:02:11 +0800
+Message-Id: <cd17c59074c222892d3642a05b0fba1a8eb85d37.1667035519.git.nickyc975@zju.edu.cn>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1667035519.git.nickyc975@zju.edu.cn>
 References: <cover.1667035519.git.nickyc975@zju.edu.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cC_KCgCHjQwl+lxjdEpxCA--.43876S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFy3AF4rXr18ZrWruFyrtFb_yoW8Zr1xpF
-        ZxJF47Cw1Iqr4UXrW8Jw47Xr9Iga18Kry7C3ySy3yYvrnIkFn2vF18A3W8uF40yrZ5JFsr
-        ZrWqgrZxAr18CrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: cC_KCgCHjQwl+lxjdEpxCA--.43876S5
+X-Coremail-Antispam: 1UD129KBjvJXoW3Xr1xCw1UZF4rGF45Ary5Arb_yoW7Kry8pF
+        ZxXa13Aw10gr4UXrW8Jw47Zr9xKw4vg347C3yftryYvrn8Kas3ZF17A3W5XF48ArWkCFs8
+        ArWDKrsrCr18JrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUvq1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
         w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
         IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
@@ -47,7 +47,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7uFy3AF4rXr18ZrWruFyrtFb_yoW8Zr1xpF
         v20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
         jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
         ZFpf9x0JUQZ23UUUUU=
-X-CM-SenderInfo: qssqjiaqqzq6lmxovvfxof0/1tbiAgwSB1ZdtcJ3NwADsk
+X-CM-SenderInfo: qssqjiaqqzq6lmxovvfxof0/1tbiAgwSB1ZdtcJ3NwAFsi
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,59 +56,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nobody is calling blk_freeze_queue except its alias, so remove it.
+blk_freeze_queue_start is used internally for universal queue draining and
+externally for blk-mq specific queue freezing. Keep the non-blk-mq name
+private and export a blk-mq alias to users.
 
 Signed-off-by: Jinlong Chen <nickyc975@zju.edu.cn>
 ---
- block/blk-mq.c | 18 +-----------------
- block/blk.h    |  1 -
- 2 files changed, 1 insertion(+), 18 deletions(-)
+ block/blk-core.c              | 13 +++++++++++++
+ block/blk-mq.c                | 27 ++++++++++++++-------------
+ block/blk-pm.c                |  2 +-
+ block/blk.h                   |  1 +
+ drivers/nvme/host/core.c      |  2 +-
+ drivers/nvme/host/multipath.c |  2 +-
+ include/linux/blk-mq.h        |  2 +-
+ 7 files changed, 32 insertions(+), 17 deletions(-)
 
+diff --git a/block/blk-core.c b/block/blk-core.c
+index 5d50dd16e2a5..d3dd439a8ed4 100644
+--- a/block/blk-core.c
++++ b/block/blk-core.c
+@@ -269,6 +269,19 @@ void blk_put_queue(struct request_queue *q)
+ }
+ EXPORT_SYMBOL(blk_put_queue);
+ 
++void blk_freeze_queue_start(struct request_queue *q)
++{
++	mutex_lock(&q->mq_freeze_lock);
++	if (++q->mq_freeze_depth == 1) {
++		percpu_ref_kill(&q->q_usage_counter);
++		mutex_unlock(&q->mq_freeze_lock);
++		if (queue_is_mq(q))
++			blk_mq_run_hw_queues(q, false);
++	} else {
++		mutex_unlock(&q->mq_freeze_lock);
++	}
++}
++
+ void blk_queue_start_drain(struct request_queue *q)
+ {
+ 	/*
 diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 14c4165511b9..e0654a2e80b9 100644
+index e0654a2e80b9..d638bd0fb4d8 100644
 --- a/block/blk-mq.c
 +++ b/block/blk-mq.c
-@@ -194,27 +194,11 @@ EXPORT_SYMBOL_GPL(blk_mq_freeze_queue_wait_timeout);
-  * Guarantee no request is in use, so we can change any data structure of
-  * the queue afterward.
-  */
--void blk_freeze_queue(struct request_queue *q)
-+void blk_mq_freeze_queue(struct request_queue *q)
+@@ -161,19 +161,20 @@ void blk_mq_in_flight_rw(struct request_queue *q, struct block_device *part,
+ 	inflight[1] = mi.inflight[1];
+ }
+ 
+-void blk_freeze_queue_start(struct request_queue *q)
++void blk_mq_freeze_queue_start(struct request_queue *q)
  {
--	/*
--	 * In the !blk_mq case we are only calling this to kill the
--	 * q_usage_counter, otherwise this increases the freeze depth
--	 * and waits for it to return to zero.  For this reason there is
--	 * no blk_unfreeze_queue(), and blk_freeze_queue() is not
--	 * exported to drivers as the only user for unfreeze is blk_mq.
--	 */
- 	blk_freeze_queue_start(q);
+-	mutex_lock(&q->mq_freeze_lock);
+-	if (++q->mq_freeze_depth == 1) {
+-		percpu_ref_kill(&q->q_usage_counter);
+-		mutex_unlock(&q->mq_freeze_lock);
+-		if (queue_is_mq(q))
+-			blk_mq_run_hw_queues(q, false);
+-	} else {
+-		mutex_unlock(&q->mq_freeze_lock);
+-	}
++	/*
++	 * Warn on non-blk-mq usages.
++	 */
++	WARN_ON_ONCE(!queue_is_mq(q));
++
++	/*
++	 * Just an alias of blk_freeze_queue_start to keep the consistency of the
++	 * blk_mq_* namespace.
++	 */
++	blk_freeze_queue_start(q);
+ }
+-EXPORT_SYMBOL_GPL(blk_freeze_queue_start);
++EXPORT_SYMBOL_GPL(blk_mq_freeze_queue_start);
+ 
+ void blk_mq_freeze_queue_wait(struct request_queue *q)
+ {
+@@ -196,7 +197,7 @@ EXPORT_SYMBOL_GPL(blk_mq_freeze_queue_wait_timeout);
+  */
+ void blk_mq_freeze_queue(struct request_queue *q)
+ {
+-	blk_freeze_queue_start(q);
++	blk_mq_freeze_queue_start(q);
  	blk_mq_freeze_queue_wait(q);
  }
--
--void blk_mq_freeze_queue(struct request_queue *q)
--{
--	/*
--	 * ...just an alias to keep freeze and unfreeze actions balanced
--	 * in the blk_mq_* namespace
--	 */
--	blk_freeze_queue(q);
--}
  EXPORT_SYMBOL_GPL(blk_mq_freeze_queue);
- 
- void __blk_mq_unfreeze_queue(struct request_queue *q, bool force_atomic)
+@@ -1570,7 +1571,7 @@ static void blk_mq_timeout_work(struct work_struct *work)
+ 	 * percpu_ref_tryget directly, because we need to be able to
+ 	 * obtain a reference even in the short window between the queue
+ 	 * starting to freeze, by dropping the first reference in
+-	 * blk_freeze_queue_start, and the moment the last request is
++	 * blk_mq_freeze_queue_start, and the moment the last request is
+ 	 * consumed, marked by the instant q_usage_counter reaches
+ 	 * zero.
+ 	 */
+diff --git a/block/blk-pm.c b/block/blk-pm.c
+index 2dad62cc1572..ae2b950ed45d 100644
+--- a/block/blk-pm.c
++++ b/block/blk-pm.c
+@@ -80,7 +80,7 @@ int blk_pre_runtime_suspend(struct request_queue *q)
+ 	blk_set_pm_only(q);
+ 	ret = -EBUSY;
+ 	/* Switch q_usage_counter from per-cpu to atomic mode. */
+-	blk_freeze_queue_start(q);
++	blk_mq_freeze_queue_start(q);
+ 	/*
+ 	 * Wait until atomic mode has been reached. Since that
+ 	 * involves calling call_rcu(), it is guaranteed that later
 diff --git a/block/blk.h b/block/blk.h
-index 7f9e089ab1f7..e9addea2838a 100644
+index e9addea2838a..ee576bb74382 100644
 --- a/block/blk.h
 +++ b/block/blk.h
-@@ -37,7 +37,6 @@ struct blk_flush_queue *blk_alloc_flush_queue(int node, int cmd_size,
+@@ -37,6 +37,7 @@ struct blk_flush_queue *blk_alloc_flush_queue(int node, int cmd_size,
  					      gfp_t flags);
  void blk_free_flush_queue(struct blk_flush_queue *q);
  
--void blk_freeze_queue(struct request_queue *q);
++void blk_freeze_queue_start(struct request_queue *q);
  void __blk_mq_unfreeze_queue(struct request_queue *q, bool force_atomic);
  void blk_queue_start_drain(struct request_queue *q);
  int __bio_queue_enter(struct request_queue *q, struct bio *bio);
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index 0090dc0b3ae6..e2d5c54c651a 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -5199,7 +5199,7 @@ void nvme_start_freeze(struct nvme_ctrl *ctrl)
+ 
+ 	down_read(&ctrl->namespaces_rwsem);
+ 	list_for_each_entry(ns, &ctrl->namespaces, list)
+-		blk_freeze_queue_start(ns->queue);
++		blk_mq_freeze_queue_start(ns->queue);
+ 	up_read(&ctrl->namespaces_rwsem);
+ }
+ EXPORT_SYMBOL_GPL(nvme_start_freeze);
+diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/multipath.c
+index 0ea7e441e080..3bb358bd0cde 100644
+--- a/drivers/nvme/host/multipath.c
++++ b/drivers/nvme/host/multipath.c
+@@ -77,7 +77,7 @@ void nvme_mpath_start_freeze(struct nvme_subsystem *subsys)
+ 	lockdep_assert_held(&subsys->lock);
+ 	list_for_each_entry(h, &subsys->nsheads, entry)
+ 		if (h->disk)
+-			blk_freeze_queue_start(h->disk->queue);
++			blk_mq_freeze_queue_start(h->disk->queue);
+ }
+ 
+ void nvme_failover_req(struct request *req)
+diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
+index 569053ed959d..8600d4b4aa80 100644
+--- a/include/linux/blk-mq.h
++++ b/include/linux/blk-mq.h
+@@ -887,7 +887,7 @@ void blk_mq_tagset_busy_iter(struct blk_mq_tag_set *tagset,
+ void blk_mq_tagset_wait_completed_request(struct blk_mq_tag_set *tagset);
+ void blk_mq_freeze_queue(struct request_queue *q);
+ void blk_mq_unfreeze_queue(struct request_queue *q);
+-void blk_freeze_queue_start(struct request_queue *q);
++void blk_mq_freeze_queue_start(struct request_queue *q);
+ void blk_mq_freeze_queue_wait(struct request_queue *q);
+ int blk_mq_freeze_queue_wait_timeout(struct request_queue *q,
+ 				     unsigned long timeout);
 -- 
 2.31.1
 
