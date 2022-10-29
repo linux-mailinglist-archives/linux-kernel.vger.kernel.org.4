@@ -2,87 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7776121BB
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 11:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BB86121E3
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 11:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiJ2JPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 05:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55092 "EHLO
+        id S229528AbiJ2Jet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 05:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiJ2JPU (ORCPT
+        with ESMTP id S229456AbiJ2Jen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 05:15:20 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310784661C
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 02:15:18 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mztt31T62zmVWx;
-        Sat, 29 Oct 2022 17:10:19 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 29 Oct 2022 17:15:15 +0800
-Subject: Re: Regression on vcpu_is_preempted()
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     "mingo@redhat.com" <mingo@redhat.com>, <juri.lelli@redhat.com>,
-        <vincent.guittot@linaro.org>, <rohit.k.jain@oracle.com>,
-        <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, linux-kernel <linux-kernel@vger.kernel.org>
-References: <89856431-e68b-ebe9-90cb-e46ed8065659@huawei.com>
- <Y1zrNKEUPRem/UUI@hirez.programming.kicks-ass.net>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <d00f7b30-4b34-3d3d-98c5-d0db1a5d9c4f@huawei.com>
-Date:   Sat, 29 Oct 2022 17:15:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Sat, 29 Oct 2022 05:34:43 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDA117049
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 02:34:39 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id v130-20020a1cac88000000b003bcde03bd44so7894208wme.5
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 02:34:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0s7cusbjRhvfSFjBw6Lx4DFnE28qr99VM/89xctrXcY=;
+        b=R8r9MYiVR/n1QCShgiCRjvlsyCmGxIth8d68WOBKuFwGFdpvU0hLifsKHXaA0i7R7T
+         FATSb70x39JDuCr+RFIEMHkzCbXWDBVXLQrDeb9y7eB4/OehDirtQMwmoI+nEp+BrN0G
+         u/fUtaHezDnpUbrRdrgmORy9rD4FhXGYMCmjG/LapRowSvd+EZrEGPnCIBo1dsmqrQzE
+         esyFj2o/J+WqlmQTU+aoX79Wvn1x2MTGTvXbk00TQxNzSp0U4mMc+L1GZbZv4260jlSX
+         DI4iK78azGeF6BR5yBioI4MAexmAQiV7qakqP16N3f0ibROLougrJyoyhWfCUkuqRZ00
+         Lydw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0s7cusbjRhvfSFjBw6Lx4DFnE28qr99VM/89xctrXcY=;
+        b=25vfB19PYz3EZ3QYszyFKnt+t5tvUPJGoYqCdemPIHjw832vt13thOqcpS8eYvWKk3
+         x1X5WVWQ9rc6BtV4EEb9medZKJKewLl+DVFZ+NR4/cRQ9gTdF6DUW9BiVLaXR8/tXBn9
+         LjCrWnc+D1A9Nn9uhECQVHYCW1tcWfX8k85V8/noigQqYz6SlFOqXmP+G4P/Zj9yT/QK
+         PrtRzl69qsJs/VlUf0558g796YEyQeJ9dg2Z0Tz4k/bZ2CkwnKQVUSSDlQgafoXDyVEY
+         UixinLOt/6n/9Eot07YmFBVTXdZOqNDWjcTt90jLaBbb2Nnb6wfAgx1RflkW0B/qGM+A
+         izkw==
+X-Gm-Message-State: ACrzQf1UmkKnSbYEY6DW8r//rrqOq6yADbiXX/Z2bU2no+4IY1yF5yVz
+        pO6L2CPzenbXFZdBKnsajCc=
+X-Google-Smtp-Source: AMsMyM6Amig+erFbtqG7wwXSWmzDP5vkjeNyXS8CvHdnIWkIsJz9SDcz1bFmgAx7ObVYinv/0KmjpA==
+X-Received: by 2002:a05:600c:310f:b0:3c6:ff0a:c41 with SMTP id g15-20020a05600c310f00b003c6ff0a0c41mr11820655wmo.91.1667036078032;
+        Sat, 29 Oct 2022 02:34:38 -0700 (PDT)
+Received: from localhost.localdomain ([94.73.35.109])
+        by smtp.gmail.com with ESMTPSA id k18-20020adfe3d2000000b00236705daefesm1053785wrm.39.2022.10.29.02.34.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Oct 2022 02:34:37 -0700 (PDT)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     mripard@kernel.org
+Cc:     emma@anholt.net, airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH] drm/vc4: hdmi: Fix pointer dereference before check
+Date:   Sat, 29 Oct 2022 11:34:13 +0200
+Message-Id: <20221029093413.546103-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <Y1zrNKEUPRem/UUI@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/29 16:58, Peter Zijlstra wrote:
-> On Fri, Oct 28, 2022 at 04:48:21PM +0800, Miaohe Lin wrote:
->>   When scheduler tries to select a CPU to run the gc thread,
->>   available_idle_cpu() will check whether vcpu_is_preempted().  It
->>   will choose other vcpu to run gc threads when the current vcpu is
->>   preempted. But the preempted vcpu has no other work to do except
->>   continuing to do gc. In our guest, there are more vcpus than java gc
->>   threads. So there could always be some available vcpus when
->>   scheduler tries to select a idle vcpu (runing on host). This leads
->>   to lots of cpu migrations and results in regression.
->>
->>   I'm not really familiar with this mechanism. Is this a problem that
->>   needs to be fixed or improved? Or is this just expected behavior?
->>   Any response would be really appreciated!
-> 
-> This is pretty much expected behaviour. When a vCPU is preempted the
-> guest cannot know it's state or latency. Typically in the overcomitted
-> case another vCPU will be running on the CPU and getting our vCPU thread
-> back will take a considerable amount of time.
+Commit 6bed2ea3cb38 ("drm/vc4: hdmi: Reset link on hotplug") introduced
+the vc4_hdmi_reset_link() function. This function dereferences the
+"connector" pointer before checking whether it is NULL or not.
 
-I see. Many thanks for your kindly reply and explanation. :)
+Rework variable assignment to avoid this issue.
 
-> 
-> If you know you're not over-committed, perhaps you should configure your
-> VM differently.
+Fixes: 6bed2ea3cb38 ("drm/vc4: hdmi: Reset link on hotplug")
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+---
+ drivers/gpu/drm/vc4/vc4_hdmi.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-Do you have any suggestion about how should I configure my VM when it's not over-committed?
-
-Thanks,
-Miaohe Lin
-
+diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+index 4a73fafca51b..07d058b6afb7 100644
+--- a/drivers/gpu/drm/vc4/vc4_hdmi.c
++++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+@@ -319,9 +319,9 @@ static int reset_pipe(struct drm_crtc *crtc,
+ static int vc4_hdmi_reset_link(struct drm_connector *connector,
+ 			       struct drm_modeset_acquire_ctx *ctx)
+ {
+-	struct drm_device *drm = connector->dev;
+-	struct vc4_hdmi *vc4_hdmi = connector_to_vc4_hdmi(connector);
+-	struct drm_encoder *encoder = &vc4_hdmi->encoder.base;
++	struct drm_device *drm;
++	struct vc4_hdmi *vc4_hdmi;
++	struct drm_encoder *encoder;
+ 	struct drm_connector_state *conn_state;
+ 	struct drm_crtc_state *crtc_state;
+ 	struct drm_crtc *crtc;
+@@ -332,6 +332,10 @@ static int vc4_hdmi_reset_link(struct drm_connector *connector,
+ 	if (!connector)
+ 		return 0;
+ 
++	drm = connector->dev;
++	vc4_hdmi = connector_to_vc4_hdmi(connector);
++	encoder = &vc4_hdmi->encoder.base;
++
+ 	ret = drm_modeset_lock(&drm->mode_config.connection_mutex, ctx);
+ 	if (ret)
+ 		return ret;
+-- 
+2.25.1
 
