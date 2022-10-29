@@ -2,272 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BFF2612463
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 18:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DBE612465
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 18:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiJ2QM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 12:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S229763AbiJ2QN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 12:13:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiJ2QMs (ORCPT
+        with ESMTP id S229571AbiJ2QNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 12:12:48 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B0529344;
-        Sat, 29 Oct 2022 09:12:47 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id w14so10230469wru.8;
-        Sat, 29 Oct 2022 09:12:47 -0700 (PDT)
+        Sat, 29 Oct 2022 12:13:21 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2378C33A38
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 09:13:20 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id d59-20020a17090a6f4100b00213202d77e1so12485727pjk.2
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 09:13:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TSFlkVa4uZT7WAqGVAQDW7nXJPJ44iMTkg4mDYwcPRo=;
-        b=H1xNPSkdkW2iYMtvuSLbbcM+C5mQyjfFNoPwAq4moBjLFjfe7/57W2HVQBrNRVY7ay
-         D5QDMCbtcwwRxuIjKm7RewsucFm07w2ch1zpukicpxzBLnOde6XqLYDmNrUPiyuTprZ/
-         j/foTstUCDZqETQkfYTMrkuNuhLO+89BT+QfBX2O9z4PxEKBSkvt25gny9/GyBkA0fkp
-         LEn5C1wzoGtypLS1m1f2xY9124IuEzSDOlUw+/OkBgquuXchosUU5Tn+jjSj4+DzEJXl
-         4NxemxEg6JlQnoGj6X1HT0WOKWE6C2/EgMFRJJaEEqg0ukl4vrTQ2xnEn9PDStO4/sXS
-         kb5A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3x0jiWcFWFmlhFBUgMb/KV3f2D1GeO0pHu9fsc01t/c=;
+        b=oh1fOxrXrHC1s7Xx/PRQIpepIGCcPhMFGriWCy6k7pwIZedMIRMqP2sZlVxV3KHvxe
+         wAR9wKr20eolR6fz3BxmjYwCaw23dAZ+0h3cAtwH1Df0qcBVKSSLI+Cc7L3WG5/+8yWg
+         xpt3gFgp6elqtCaxmu07IP1wv0pak33E1jkEovMn24PyvJEO0fJEhMengp7EQU6k0gbZ
+         e1Ci7X0f+4WSn7zmuO4bJ7J3DU0QFQA9urW7C3MCl329pXCoJ8nNFjRDJOYRf40Q/L9P
+         kbFAtIC6A8uYsUOMlbuUJX4KWdjnUAJJX86WaKfRvKbnRYIrl9pNj6qVlIsHf0F9JIbJ
+         ooLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TSFlkVa4uZT7WAqGVAQDW7nXJPJ44iMTkg4mDYwcPRo=;
-        b=mYR6jQrlCWA3JkJf7hDXwCMGfutDwO61KTw7t58cRwnOdWMxBalHDrFES8wKFcKgvJ
-         FzNml255ar3i2Es90J7cZI9ewWWq4Th67LdyRCrYePfPmMcsmwgvyBxceuk9W/+aRPlo
-         qniIgL+s0GZPmq5Lh4qijAfkPyCbVaqyc/Jk/Js/5Prd8ssTWy6xgHHtJQN7eHwnDN42
-         I94JIeGFXsmvwZ8ShaPP+3dgvyx7bdY+aTaWq86NmseJ/KCjK6jxk3Q3CE2Xz6k4ouoy
-         XDZrfvVW0hoJj/FKTc/fvrSzcx8jS5Hc6ap7U00fmlNkLWUTQvVEQaqpP1NhV5pT+gUv
-         cl0g==
-X-Gm-Message-State: ACrzQf0AtyIhGBz7w124bpEmqpOBPvzz6KO383qzGjY0lMvJUYKC7wnH
-        fU79wAg62kaObAPQeBUawk8=
-X-Google-Smtp-Source: AMsMyM61ZKxsx4APV76IQ2cmo0PDXU3fbp7jC1SrEewdnmmC0i14ZDXVtuadGPDDcEmGHH2mlxRUiA==
-X-Received: by 2002:a05:6000:689:b0:236:6c3e:ec88 with SMTP id bo9-20020a056000068900b002366c3eec88mr2660190wrb.346.1667059966309;
-        Sat, 29 Oct 2022 09:12:46 -0700 (PDT)
-Received: from localhost.localdomain ([94.73.35.109])
-        by smtp.gmail.com with ESMTPSA id f28-20020a5d58fc000000b0022efc4322a9sm1858471wrd.10.2022.10.29.09.12.45
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3x0jiWcFWFmlhFBUgMb/KV3f2D1GeO0pHu9fsc01t/c=;
+        b=mHXvscm2CMEo3eEIDi8rbSWNRtN4e8/AWcVs0jWCkSa48SU/B/0Nny5zrjwDLWut02
+         yq1CnxXFE5JIt3lqwARajcGfCYIMbFZ7cfy7j1rX5Beb76IRxV0e6mZyluRMXVmBNs+6
+         rfn4yfG1c24YimTu4R39RDUyf3tg6Rw9Q6rLCkpm2Gr1LtYSt/Km41ZW0Mt07sWdcI+U
+         VjLmUyDJgTcXtzval/KSkE/q68d6gz5UYtyJ+MK2GTDFrYtP4K+yg2qhRx1z76fo4MqF
+         whBye+FUuP38wP+IG6L8YGwlBbmyrpOTi8H/KOhOC7j7sWSXxojjQPvElG0AJ1c34gtz
+         ONtA==
+X-Gm-Message-State: ACrzQf2Z4Oyu80LlA8mtGr5u2ZyhEkfYSguRseOFPuQ6Hq7nxO1KHbvH
+        ANnz8cLMvfEgN8QzFtmJan5JInurJwk8iPwv
+X-Google-Smtp-Source: AMsMyM5qvCexR8P6Czc0gi95DaOQGd/qFVTsoanDO5UvShtkh4hopAR7+6iL1odgoLX6b+ECumPSNQ==
+X-Received: by 2002:a17:90a:ad08:b0:212:d5f1:e0c6 with SMTP id r8-20020a17090aad0800b00212d5f1e0c6mr21996458pjq.228.1667059999324;
+        Sat, 29 Oct 2022 09:13:19 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c5e:d478:7aa5:ae24:3b52:b714])
+        by smtp.gmail.com with ESMTPSA id a75-20020a621a4e000000b005624e9b3e10sm1361308pfa.210.2022.10.29.09.13.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Oct 2022 09:12:45 -0700 (PDT)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
-        pobrn@protonmail.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        Mia Kanashi <chad@redpilled.dev>,
-        Andreas Grosse <andig.mail@t-online.de>
-Subject: [PATCH v3 2/2] HID: uclogic: Add support for XP-PEN Deco LW
-Date:   Sat, 29 Oct 2022 18:12:40 +0200
-Message-Id: <20221029161240.15548-3-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221029161240.15548-1-jose.exposito89@gmail.com>
-References: <20221029161240.15548-1-jose.exposito89@gmail.com>
+        Sat, 29 Oct 2022 09:13:18 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] tools: usb: ffs-aio-example: Fix build error with aarch64-*-gnu-gcc toolchain(s)
+Date:   Sat, 29 Oct 2022 21:43:12 +0530
+Message-Id: <20221029161312.171165-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The XP-PEN Deco LW is a UGEE v2 device with a frame with 8 buttons.
-Its pen has 2 buttons, supports tilt and pressure.
+The tools/usb/aio_simple.c file when cross-compiled with
+aarch64-*-gnu-gcc toolchain(s) leads to the following errors:
 
-It can be connected by USB cable or using a USB Bluetooth dongle to use
-it in wireless mode. When it is connected using the dongle, the device
-battery is used to power it.
+  aio_simple.c:30:10: fatal error: endian.h: No such file or directory
+  30 | #include <endian.h>
+      |          ^~~~~~~~~~
 
-Its vendor, product and version are identical to the Deco L. The only
-difference reported by its firmware is the product name.
-In order to add support for battery reporting, add a new HID descriptor
-and a quirk to detect the wireless version of the tablet.
+  aio_simple.c:88:14: note: (near initialization for
+                      'descriptors.fs_count')
+  aio_simple.c:110:14: error: initializer element is not constant
+  110 |  .hs_count = htole32(3),
+      |              ^~~~~~~
+  aio_simple.c:110:14: note: (near initialization for
+                      'descriptors.hs_count')
+  aio_simple.c:124:22: error: initializer element is not constant
+  124 |    .wMaxPacketSize = htole16(512),
+      |                      ^~~~~~~
+  aio_simple.c:124:22: note: (near initialization for
+                       'descriptors.hs_descs.bulk_sink.wMaxPacketSize')
 
-Link: https://github.com/DIGImend/digimend-kernel-drivers/issues/635
-Tested-by: Mia Kanashi <chad@redpilled.dev>
-Tested-by: Andreas Grosse <andig.mail@t-online.de>
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Fix these compilation issues by:
+ - Switching to _DEFAULT_SOURCE:
+    _BSD_SOURCE is deprecated and gives a build warning. Let's use
+    _DEFAULT_SOURCE instead.
+ - Currently this file uses library htole16/32 function calls.
+   Replace these with equivalent 'cpu_to_le16/32' calls.
+
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 ---
- drivers/hid/hid-uclogic-params.c | 73 ++++++++++++++++++++++++++++++++
- drivers/hid/hid-uclogic-rdesc.c  | 34 +++++++++++++++
- drivers/hid/hid-uclogic-rdesc.h  |  7 +++
- 3 files changed, 114 insertions(+)
+ .../simple/device_app/aio_simple.c            | 44 +++++++++++++------
+ 1 file changed, 31 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
-index 34fa991e6267..cd1233d7e253 100644
---- a/drivers/hid/hid-uclogic-params.c
-+++ b/drivers/hid/hid-uclogic-params.c
-@@ -18,6 +18,7 @@
- #include "usbhid/usbhid.h"
- #include "hid-ids.h"
- #include <linux/ctype.h>
-+#include <linux/string.h>
- #include <asm/unaligned.h>
+diff --git a/tools/usb/ffs-aio-example/simple/device_app/aio_simple.c b/tools/usb/ffs-aio-example/simple/device_app/aio_simple.c
+index 1f44a29818bf..96616eb4600b 100644
+--- a/tools/usb/ffs-aio-example/simple/device_app/aio_simple.c
++++ b/tools/usb/ffs-aio-example/simple/device_app/aio_simple.c
+@@ -25,7 +25,9 @@
+  * For more information, please refer to <http://unlicense.org/>
+  */
  
- /**
-@@ -1211,6 +1212,69 @@ static int uclogic_params_ugee_v2_init_frame_mouse(struct uclogic_params *p)
- 	return rc;
- }
+-#define _BSD_SOURCE /* for endian.h */
++/* $(CROSS_COMPILE)cc -g -o aio_simple aio_simple.c -laio */
++
++#define _DEFAULT_SOURCE /* for endian.h */
  
-+/**
-+ * uclogic_params_ugee_v2_has_battery() - check whether a UGEE v2 device has
-+ * battery or not.
-+ * @hdev:	The HID device of the tablet interface.
-+ *
-+ * Returns:
-+ *	True if the device has battery, false otherwise.
+ #include <endian.h>
+ #include <errno.h>
+@@ -49,6 +51,22 @@
+ 
+ #define BUF_LEN		8192
+ 
++/*
++ * cpu_to_le16/32 are used when initializing structures, a context where a
++ * function call is not allowed. To solve this, we code cpu_to_le16/32 in a way
++ * that allows them to be used when initializing structures.
 + */
-+static bool uclogic_params_ugee_v2_has_battery(struct hid_device *hdev)
-+{
-+	/* The XP-PEN Deco LW vendor, product and version are identical to the
-+	 * Deco L. The only difference reported by their firmware is the product
-+	 * name. Add a quirk to support battery reporting on the wireless
-+	 * version.
-+	 */
-+	if (hdev->vendor == USB_VENDOR_ID_UGEE &&
-+	    hdev->product == USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO_L) {
-+		struct usb_device *udev = hid_to_usb_dev(hdev);
 +
-+		if (strstarts(udev->product, "Deco LW"))
-+			return true;
-+	}
++#if BYTE_ORDER == __LITTLE_ENDIAN
++#define cpu_to_le16(x)  (x)
++#define cpu_to_le32(x)  (x)
++#else
++#define cpu_to_le16(x)  ((((x) >> 8) & 0xffu) | (((x) & 0xffu) << 8))
++#define cpu_to_le32(x)  \
++	((((x) & 0xff000000u) >> 24) | (((x) & 0x00ff0000u) >>  8) | \
++	(((x) & 0x0000ff00u) <<  8) | (((x) & 0x000000ffu) << 24))
++#endif
 +
-+	return false;
-+}
-+
-+/**
-+ * uclogic_params_ugee_v2_init_battery() - initialize UGEE v2 battery reporting.
-+ * @hdev:	The HID device of the tablet interface, cannot be NULL.
-+ * @p:		Parameters to fill in, cannot be NULL.
-+ *
-+ * Returns:
-+ *	Zero, if successful. A negative errno code on error.
-+ */
-+static int uclogic_params_ugee_v2_init_battery(struct hid_device *hdev,
-+					       struct uclogic_params *p)
-+{
-+	int rc = 0;
-+
-+	if (!hdev || !p)
-+		return -EINVAL;
-+
-+	/* Some tablets contain invalid characters in hdev->uniq, throwing a
-+	 * "hwmon: '<name>' is not a valid name attribute, please fix" error.
-+	 * Use the device vendor and product IDs instead.
-+	 */
-+	snprintf(hdev->uniq, sizeof(hdev->uniq), "%x-%x", hdev->vendor,
-+		 hdev->product);
-+
-+	rc = uclogic_params_frame_init_with_desc(&p->frame_list[1],
-+						 uclogic_rdesc_ugee_v2_battery_template_arr,
-+						 uclogic_rdesc_ugee_v2_battery_template_size,
-+						 UCLOGIC_RDESC_UGEE_V2_BATTERY_ID);
-+	if (rc)
-+		return rc;
-+
-+	p->frame_list[1].suffix = "Battery";
-+	p->pen.subreport_list[1].value = 0xf2;
-+	p->pen.subreport_list[1].id = UCLOGIC_RDESC_UGEE_V2_BATTERY_ID;
-+
-+	return rc;
-+}
-+
- /**
-  * uclogic_params_ugee_v2_init() - initialize a UGEE graphics tablets by
-  * discovering their parameters.
-@@ -1334,6 +1398,15 @@ static int uclogic_params_ugee_v2_init(struct uclogic_params *params,
- 	if (rc)
- 		goto cleanup;
+ /******************** Descriptors and Strings *******************************/
  
-+	/* Initialize the battery interface*/
-+	if (uclogic_params_ugee_v2_has_battery(hdev)) {
-+		rc = uclogic_params_ugee_v2_init_battery(hdev, &p);
-+		if (rc) {
-+			hid_err(hdev, "error initializing battery: %d\n", rc);
-+			goto cleanup;
-+		}
-+	}
-+
- output:
- 	/* Output parameters */
- 	memcpy(params, &p, sizeof(*params));
-diff --git a/drivers/hid/hid-uclogic-rdesc.c b/drivers/hid/hid-uclogic-rdesc.c
-index 4bd54c4fb5b0..6524b4b61b25 100644
---- a/drivers/hid/hid-uclogic-rdesc.c
-+++ b/drivers/hid/hid-uclogic-rdesc.c
-@@ -1035,6 +1035,40 @@ const __u8 uclogic_rdesc_ugee_v2_frame_mouse_template_arr[] = {
- const size_t uclogic_rdesc_ugee_v2_frame_mouse_template_size =
- 			sizeof(uclogic_rdesc_ugee_v2_frame_mouse_template_arr);
- 
-+/* Fixed report descriptor template for UGEE v2 battery reports */
-+const __u8 uclogic_rdesc_ugee_v2_battery_template_arr[] = {
-+	0x05, 0x01,         /*  Usage Page (Desktop),                   */
-+	0x09, 0x07,         /*  Usage (Keypad),                         */
-+	0xA1, 0x01,         /*  Collection (Application),               */
-+	0x85, UCLOGIC_RDESC_UGEE_V2_BATTERY_ID,
-+			    /*      Report ID,                          */
-+	0x75, 0x08,         /*      Report Size (8),                    */
-+	0x95, 0x02,         /*      Report Count (2),                   */
-+	0x81, 0x01,         /*      Input (Constant),                   */
-+	0x05, 0x84,         /*      Usage Page (Power Device),          */
-+	0x05, 0x85,         /*      Usage Page (Battery System),        */
-+	0x09, 0x65,         /*      Usage Page (AbsoluteStateOfCharge), */
-+	0x75, 0x08,         /*      Report Size (8),                    */
-+	0x95, 0x01,         /*      Report Count (1),                   */
-+	0x15, 0x00,         /*      Logical Minimum (0),                */
-+	0x26, 0xff, 0x00,   /*      Logical Maximum (255),              */
-+	0x81, 0x02,         /*      Input (Variable),                   */
-+	0x75, 0x01,         /*      Report Size (1),                    */
-+	0x95, 0x01,         /*      Report Count (1),                   */
-+	0x15, 0x00,         /*      Logical Minimum (0),                */
-+	0x25, 0x01,         /*      Logical Maximum (1),                */
-+	0x09, 0x44,         /*      Usage Page (Charging),              */
-+	0x81, 0x02,         /*      Input (Variable),                   */
-+	0x95, 0x07,         /*      Report Count (7),                   */
-+	0x81, 0x01,         /*      Input (Constant),                   */
-+	0x75, 0x08,         /*      Report Size (8),                    */
-+	0x95, 0x07,         /*      Report Count (7),                   */
-+	0x81, 0x01,         /*      Input (Constant),                   */
-+	0xC0                /*  End Collection                          */
-+};
-+const size_t uclogic_rdesc_ugee_v2_battery_template_size =
-+			sizeof(uclogic_rdesc_ugee_v2_battery_template_arr);
-+
- /* Fixed report descriptor for Ugee EX07 frame */
- const __u8 uclogic_rdesc_ugee_ex07_frame_arr[] = {
- 	0x05, 0x01,             /*  Usage Page (Desktop),                   */
-diff --git a/drivers/hid/hid-uclogic-rdesc.h b/drivers/hid/hid-uclogic-rdesc.h
-index 0502a0656496..a1f78c07293f 100644
---- a/drivers/hid/hid-uclogic-rdesc.h
-+++ b/drivers/hid/hid-uclogic-rdesc.h
-@@ -161,6 +161,9 @@ extern const size_t uclogic_rdesc_v2_frame_dial_size;
- /* Device ID byte offset in v2 frame dial reports */
- #define UCLOGIC_RDESC_V2_FRAME_DIAL_DEV_ID_BYTE	0x4
- 
-+/* Report ID for tweaked UGEE v2 battery reports */
-+#define UCLOGIC_RDESC_UGEE_V2_BATTERY_ID 0xba
-+
- /* Fixed report descriptor template for UGEE v2 pen reports */
- extern const __u8 uclogic_rdesc_ugee_v2_pen_template_arr[];
- extern const size_t uclogic_rdesc_ugee_v2_pen_template_size;
-@@ -177,6 +180,10 @@ extern const size_t uclogic_rdesc_ugee_v2_frame_dial_template_size;
- extern const __u8 uclogic_rdesc_ugee_v2_frame_mouse_template_arr[];
- extern const size_t uclogic_rdesc_ugee_v2_frame_mouse_template_size;
- 
-+/* Fixed report descriptor template for UGEE v2 battery reports */
-+extern const __u8 uclogic_rdesc_ugee_v2_battery_template_arr[];
-+extern const size_t uclogic_rdesc_ugee_v2_battery_template_size;
-+
- /* Fixed report descriptor for Ugee EX07 frame */
- extern const __u8 uclogic_rdesc_ugee_ex07_frame_arr[];
- extern const size_t uclogic_rdesc_ugee_ex07_frame_size;
+ static const struct {
+@@ -62,12 +80,12 @@ static const struct {
+ 	} __attribute__ ((__packed__)) fs_descs, hs_descs;
+ } __attribute__ ((__packed__)) descriptors = {
+ 	.header = {
+-		.magic = htole32(FUNCTIONFS_DESCRIPTORS_MAGIC_V2),
+-		.flags = htole32(FUNCTIONFS_HAS_FS_DESC |
++		.magic = cpu_to_le32(FUNCTIONFS_DESCRIPTORS_MAGIC_V2),
++		.flags = cpu_to_le32(FUNCTIONFS_HAS_FS_DESC |
+ 				     FUNCTIONFS_HAS_HS_DESC),
+-		.length = htole32(sizeof(descriptors)),
++		.length = cpu_to_le32(sizeof(descriptors)),
+ 	},
+-	.fs_count = htole32(3),
++	.fs_count = cpu_to_le32(3),
+ 	.fs_descs = {
+ 		.intf = {
+ 			.bLength = sizeof(descriptors.fs_descs.intf),
+@@ -89,7 +107,7 @@ static const struct {
+ 			.bmAttributes = USB_ENDPOINT_XFER_BULK,
+ 		},
+ 	},
+-	.hs_count = htole32(3),
++	.hs_count = cpu_to_le32(3),
+ 	.hs_descs = {
+ 		.intf = {
+ 			.bLength = sizeof(descriptors.hs_descs.intf),
+@@ -103,14 +121,14 @@ static const struct {
+ 			.bDescriptorType = USB_DT_ENDPOINT,
+ 			.bEndpointAddress = 1 | USB_DIR_IN,
+ 			.bmAttributes = USB_ENDPOINT_XFER_BULK,
+-			.wMaxPacketSize = htole16(512),
++			.wMaxPacketSize = cpu_to_le16(512),
+ 		},
+ 		.bulk_source = {
+ 			.bLength = sizeof(descriptors.hs_descs.bulk_source),
+ 			.bDescriptorType = USB_DT_ENDPOINT,
+ 			.bEndpointAddress = 2 | USB_DIR_OUT,
+ 			.bmAttributes = USB_ENDPOINT_XFER_BULK,
+-			.wMaxPacketSize = htole16(512),
++			.wMaxPacketSize = cpu_to_le16(512),
+ 		},
+ 	},
+ };
+@@ -125,13 +143,13 @@ static const struct {
+ 	} __attribute__ ((__packed__)) lang0;
+ } __attribute__ ((__packed__)) strings = {
+ 	.header = {
+-		.magic = htole32(FUNCTIONFS_STRINGS_MAGIC),
+-		.length = htole32(sizeof(strings)),
+-		.str_count = htole32(1),
+-		.lang_count = htole32(1),
++		.magic = cpu_to_le32(FUNCTIONFS_STRINGS_MAGIC),
++		.length = cpu_to_le32(sizeof(strings)),
++		.str_count = cpu_to_le32(1),
++		.lang_count = cpu_to_le32(1),
+ 	},
+ 	.lang0 = {
+-		htole16(0x0409), /* en-us */
++		cpu_to_le16(0x0409), /* en-us */
+ 		STR_INTERFACE,
+ 	},
+ };
 -- 
-2.25.1
+2.37.3
 
