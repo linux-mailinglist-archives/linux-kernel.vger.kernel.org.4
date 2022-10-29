@@ -2,117 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9BC6122E9
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 14:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F02F6122EC
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 14:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbiJ2M0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 08:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
+        id S229663AbiJ2M2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 08:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiJ2M0e (ORCPT
+        with ESMTP id S229456AbiJ2M2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 08:26:34 -0400
-Received: from mail-m118205.qiye.163.com (mail-m118205.qiye.163.com [115.236.118.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9629645D9
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 05:26:30 -0700 (PDT)
-Received: from localhost.localdomain (unknown [221.212.176.48])
-        by mail-m118205.qiye.163.com (HMail) with ESMTPA id 081482C15D6;
-        Sat, 29 Oct 2022 20:26:28 +0800 (CST)
-From:   YingChi Long <me@inclyc.cn>
-To:     me@inclyc.cn
-Cc:     bp@alien8.de, chang.seok.bae@intel.com,
-        dave.hansen@linux.intel.com, david.laight@aculab.com,
-        hpa@zytor.com, linux-kernel@vger.kernel.org, mingo@redhat.com,
-        ndesaulniers@google.com, pbonzini@redhat.com, tglx@linutronix.de,
-        x86@kernel.org
-Subject: [PATCH RESEND v3] x86/fpu: use _Alignof to avoid UB in TYPE_ALIGN
-Date:   Sat, 29 Oct 2022 20:25:52 +0800
-Message-Id: <20221029122552.2855941-1-me@inclyc.cn>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221006141442.2475978-1-me@inclyc.cn>
-References: <20221006141442.2475978-1-me@inclyc.cn>
+        Sat, 29 Oct 2022 08:28:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259F1647C7;
+        Sat, 29 Oct 2022 05:28:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CCC93B80B71;
+        Sat, 29 Oct 2022 12:28:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76E57C433D6;
+        Sat, 29 Oct 2022 12:28:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667046496;
+        bh=VVwvlVygdKwTbHKrtKh28DGiG0bxit5DZwviW7+DTKQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=tfoKtddsfNLSfZ1vM/moqVhqoxD3fLJlncvyNUqfCUqOZGI4GtUXVSiXIJdTuHXjj
+         PQ2IVgQ3KKt5zmITJUcuuaJsq/QVrdWyjY6xfZ0tgcRBtKsUJmBiuVOfOFMnqF2JOB
+         GFqEOWnP+5MX79pHuy7xyogNFbRpFXJIfzbZH0pWHAdEGMiPRnGRmquxg8ffS9R/HY
+         KbhuiD4OvYrTzl12mg6Hi41O7jwK92lW5HJ9tBJvDAdo6rbBsZX41oRWKl/g1fIIiR
+         4P0K1MEBDAMep/LSeEKtZUw/QOUH8rIlQ57JiQXmDM06xEtl3Nasc7aVvBQey+4AOY
+         D6ZZGOc+Vxiow==
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-13bef14ea06so9126133fac.3;
+        Sat, 29 Oct 2022 05:28:16 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0D7rYGGfNi9m/babSxbMrNh+JftRIDpXwyRkNcASand8QGUJp+
+        RXkzWuyPH07v0Jhyfqym1uz5GTlxdMumU10klVA=
+X-Google-Smtp-Source: AMsMyM5DizOgzDMGfZpH5zCYphhNFuQj0tYt1nOuhcJ3RIhLSkbHR0Ama0k8b3YkbF/XttXuHM0XMl0mCMQWxtqTVHo=
+X-Received: by 2002:a05:6870:e98c:b0:131:8940:e7b with SMTP id
+ r12-20020a056870e98c00b0013189400e7bmr2187832oao.53.1667046495632; Sat, 29
+ Oct 2022 05:28:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFPN1dZLVlBSVdZDwkaFQgSH1lBWUIdQh1WQx9OGEkYQx9DTUtDVQIWExYaEhckFA4PWV
-        dZGBILWUFZSUlKVUlKSVVKTE1VT0NZV1kWGg8SFR0UWUFZT0tIVUpJS0NOTVVKS0tVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Kyo6Hyo*LDlOKzQRMxIYHxQz
-        KVYwCxRVSlVKTU1MS09NSEJLS0pJVTMWGhIXVRYeOxIVGBcCGFUYFUVZV1kSC1lBWUlJSlVJSklV
-        SkxNVU9DWVdZCAFZQUhOQ083Bg++
-X-HM-Tid: 0a8423b5374e2d27kusn081482c15d6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221024111902.1338095-1-heiko.thiery@gmail.com> <20221029122326.GV125525@dragon>
+In-Reply-To: <20221029122326.GV125525@dragon>
+From:   Shawn Guo <shawnguo@kernel.org>
+Date:   Sat, 29 Oct 2022 20:28:04 +0800
+X-Gmail-Original-Message-ID: <CAJBJ56JoubZ_XMWbgC-BVWtf_79ZJLaHwYsEjFWqAtxwAjFKSw@mail.gmail.com>
+Message-ID: <CAJBJ56JoubZ_XMWbgC-BVWtf_79ZJLaHwYsEjFWqAtxwAjFKSw@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: imx8mq-kontron-pitx-imx8m: remove
+ off-on-delay-us for regulator-usdhc2-vmmc
+To:     Heiko Thiery <heiko.thiery@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-WG14 N2350 made very clear that it is an UB having type definitions with
-in "offsetof". This patch change the implementation of macro
-"TYPE_ALIGN" to builtin "_Alignof" to avoid undefined behavior.
+On Sat, Oct 29, 2022 at 8:23 PM Shawn Guo <shawnguo@kernel.org> wrote:
+>
+> On Mon, Oct 24, 2022 at 01:19:03PM +0200, Heiko Thiery wrote:
+> > The delay is not required and can be remove.
+> >
+> > Fixes: 5dbadc848259 (arm64: dts: fsl: add support for Kontron pitx-imx8m board)
+>
+> It looks more like a clean-up than bug fix.
 
-I've grepped all source files to find any type definitions within
-"offsetof".
+Never mind.  Just saw the discussion on v3.
 
-    offsetof\(struct .*\{ .*,
-
-This implementation of macro "TYPE_ALIGN" seemes to be the only case of
-type definitions within offsetof in the kernel codebase.
-
-I've made a clang patch that rejects any definitions within
-__builtin_offsetof (usually #defined with "offsetof"), and tested
-compiling with this patch, there are no error if this patch applied.
-
-ISO C11 _Alignof is subtly different from the GNU C extension
-__alignof__. __alignof__ is the preferred alignment and _Alignof the
-minimal alignment. For 'long long' on x86 these are 8 and 4
-respectively.
-
-The macro TYPE_ALIGN we're replacing has behavior that matches
-_Alignof rather than __alignof__.
-
-Signed-off-by: YingChi Long <me@inclyc.cn>
-Link: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2350.htm
-Link: https://godbolt.org/z/sPs1GEhbT
-Link: https://gcc.gnu.org/onlinedocs/gcc/Alignment.html
-Link: https://reviews.llvm.org/D133574
----
-v3:
-- commit message changes suggested by Nick and David
-
-v2: https://lore.kernel.org/all/20220927153338.4177854-1-me@inclyc.cn/
-Signed-off-by: YingChi Long <me@inclyc.cn>
----
- arch/x86/kernel/fpu/init.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/kernel/fpu/init.c b/arch/x86/kernel/fpu/init.c
-index 8946f89761cc..851eb13edc01 100644
---- a/arch/x86/kernel/fpu/init.c
-+++ b/arch/x86/kernel/fpu/init.c
-@@ -133,9 +133,6 @@ static void __init fpu__init_system_generic(void)
- 	fpu__init_system_mxcsr();
- }
-
--/* Get alignment of the TYPE. */
--#define TYPE_ALIGN(TYPE) offsetof(struct { char x; TYPE test; }, test)
--
- /*
-  * Enforce that 'MEMBER' is the last field of 'TYPE'.
-  *
-@@ -143,8 +140,8 @@ static void __init fpu__init_system_generic(void)
-  * because that's how C aligns structs.
-  */
- #define CHECK_MEMBER_AT_END_OF(TYPE, MEMBER) \
--	BUILD_BUG_ON(sizeof(TYPE) != ALIGN(offsetofend(TYPE, MEMBER), \
--					   TYPE_ALIGN(TYPE)))
-+	BUILD_BUG_ON(sizeof(TYPE) !=         \
-+		     ALIGN(offsetofend(TYPE, MEMBER), _Alignof(TYPE)))
-
- /*
-  * We append the 'struct fpu' to the task_struct:
---
-2.37.4
-
+Shawn
