@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0103C611ECD
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 02:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA35611ED1
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 02:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiJ2AwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 20:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
+        id S229692AbiJ2AyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 20:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiJ2AwD (ORCPT
+        with ESMTP id S229482AbiJ2AyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 20:52:03 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39B2D0185;
-        Fri, 28 Oct 2022 17:52:00 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id ay12so3878314qtb.12;
-        Fri, 28 Oct 2022 17:52:00 -0700 (PDT)
+        Fri, 28 Oct 2022 20:54:06 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35901AFA97;
+        Fri, 28 Oct 2022 17:54:05 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id x13so5151959qvn.6;
+        Fri, 28 Oct 2022 17:54:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=v5RiV+Px8WS2ShlcDdYeA2/trOi8fP9YvmZ25k/CKak=;
-        b=g02qEJsW4N4aEjtM2laW+nJCEU2K+n+vd3qaVpXcdBqYfi35cSrb3J3RhQhtftmcpj
-         7Sw42lNEJuQJl4x0yoJ3nc+1xtoXk9y2NWCHBbEPGN1jUPz82/lddDcLogq7H/pYt6Wd
-         7jR21fg86kFw6FI99VHNURki10cISy3GEFpKpdAZUa+7le46Nz6rRd/d0SviYF7hthIi
-         6ryQBP76Vsa2qA+AVxLu4pxRbhA+sXdDp3CLlCB3M9FsgEYO567PpOyr2TQRho8cesCu
-         RwfDRjeABE64l5SRnc6xmdEJw62+9Crx31nLjWi+PZSnoMU6bq95n3O/xhrk8mn3giY8
-         ljzQ==
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=EusSo/p3BKtiGbC/ZHm4yuPM5rgXDVCJOfRp7hcyVL0=;
+        b=BjPRGbJrXrkI4GSls3ex8AXtwiUAz475vrmRxv8lGZQIwmABkLry0KqaI3pxTnuR9F
+         o79kt2zbH2I6UmaMIh0eBbBg3CWR3ONnAdIscLIf4SeY5ahqOCr3AwXybYVLACi2MhX/
+         VqKhWgVgyyx/Ajxp801awIN/2PEuRO6LPfRLYkoKmEjG+NCoQIYST2wGkFm+wadQDt0n
+         DWZDu3GWgAE+HWKW0AWYy3y+uzPOGwKsHfZBgsgDa9j3lqHH0HpfKUXD1vVix4e2iZPA
+         xDyW10LzZVLKE72o5hxswTjvQzu34Y+IJRg4SNWuopC+TfRUyhPAmOME6GIHq0hdOYL0
+         qkLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v5RiV+Px8WS2ShlcDdYeA2/trOi8fP9YvmZ25k/CKak=;
-        b=VFxa9D0TF4M1N/jWArU1nOxlr27Tt3fTildtXBVmlxN65krywv9oSGcBsjKPIG3Jue
-         lYTpW5gSTF3m1tgy9ssKV4RsVCuH5w79DV+qlCHsSDwpZeCJH4YEnuDQo131CxPKakUc
-         px6PH5UyUOIq/7AoF/g4x6p+jzDSasXKk9HOEuOxdU2RIywdso6oyZe+FLeu1W11tKgV
-         RRMb/TfvENxAhCKaW2vluLRUIMvIINvz9Yafw9bNqWlNQ3IrqEilYPP0aZbPubpkqaOi
-         tZcvQoE3QVjaTlCgpfJTSq9w6BfSwwO47CBmIR7HV/HmpOzR/R4uB1kxJ7+mTgutKZTy
-         ymIA==
-X-Gm-Message-State: ACrzQf1oVGvDGTKAd07WEE98jLK6coak6Zujoizlyr01OrLScn0YphBD
-        qPoTWicpuaiZ2whK+iV8TQ==
-X-Google-Smtp-Source: AMsMyM5eeaDRtJt9jT3X61qvR4FC2q4BQYVIJ7LYQY71VUdG/c1hXQ/tivkJUa6sYYPqh/O4ISgQZw==
-X-Received: by 2002:a05:622a:198e:b0:39c:e98c:d3e1 with SMTP id u14-20020a05622a198e00b0039ce98cd3e1mr1934014qtc.378.1667004719888;
-        Fri, 28 Oct 2022 17:51:59 -0700 (PDT)
-Received: from bytedance.attlocal.net ([130.44.212.155])
-        by smtp.gmail.com with ESMTPSA id bs6-20020a05620a470600b006b61b2cb1d2sm133935qkb.46.2022.10.28.17.51.57
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EusSo/p3BKtiGbC/ZHm4yuPM5rgXDVCJOfRp7hcyVL0=;
+        b=IPaOb3SUGp2BEDcFSnp2Kah921c5DmkQ9SATQxQk+KNS8Tvj/RxaEmdQWZB+iGdcUb
+         OKcowxgjyIMfbNjMWwwJxfOEE5Sz6SBcbrVy3WoveJ60GoDIPWJwte5cMVPaRAwLE0la
+         J+uvHxLAV6lU/y7kDIeMjG6d0v+TnvDgXmmMCx3lQO4cTxC1H3iRTwn9qWU7GzyHk9Ut
+         2dFHktS3mjGQTHQGKM+rpnoezIxy8TP8TmuMkAqwQQrE1U19kG5j/ZFGjDRI1YYdQC6k
+         FFWBvVGrBQzH6gofTO+tMWD48np4MfpxH8uXpDvdVst8bYv8qTLHjcqmK0ZwGhITD9qd
+         Bh/A==
+X-Gm-Message-State: ACrzQf1e7WQftJePkf2Mojy0E+04hIUoD1zHQ2FyXmRYJjSmWPbYRJ9q
+        2YiOymAQX6khlSoMVKB3APZ6A98jxRA=
+X-Google-Smtp-Source: AMsMyM5yLnEPfW3W9rizu5gbKqgGEVmNI+R8PFCSBTnddUgw09TPfDCbXM+5kstLxKKQ9rQHZyAzNw==
+X-Received: by 2002:ad4:5b8b:0:b0:4bb:a86e:d7b4 with SMTP id 11-20020ad45b8b000000b004bba86ed7b4mr1951782qvp.108.1667004844848;
+        Fri, 28 Oct 2022 17:54:04 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x18-20020a05620a259200b006bc192d277csm163388qko.10.2022.10.28.17.54.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 17:51:59 -0700 (PDT)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH v1] coredump: Use vmsplice_to_pipe() for pipes in dump_emit_page()
-Date:   Fri, 28 Oct 2022 17:51:47 -0700
-Message-Id: <20221029005147.2553-1-yepeilin.cs@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 28 Oct 2022 17:54:04 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Benson Leung <bleung@chromium.org>, linux-rtc@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH] rtc: cros-ec: Limit RTC alarm range if needed
+Date:   Fri, 28 Oct 2022 17:54:00 -0700
+Message-Id: <20221029005400.2712577-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.36.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,89 +74,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+RTC chips on some older Chromebooks can only handle alarms less than 24
+hours in the future. Attempts to set an alarm beyond that range fails.
+The most severe impact of this limitation is that suspend requests fail
+if alarmtimer_suspend() tries to set an alarm for more than 24 hours
+in the future.
 
-Currently, there is a copy for each page when dumping VMAs to pipe
-handlers using dump_emit_page().  For example:
+Try to set the real-time alarm to just below 24 hours if setting it to
+a larger value fails to work around the problem. While not perfect, it
+is better than just failing the call. A similar workaround is already
+implemented in the rtc-tps6586x driver.
 
-  fs/binfmt_elf.c:elf_core_dump()
-      fs/coredump.c:dump_user_range()
-                     :dump_emit_page()
-        fs/read_write.c:__kernel_write_iter()
-                fs/pipe.c:pipe_write()
-             lib/iov_iter.c:copy_page_from_iter()
+Drop error messages in cros_ec_rtc_get() and cros_ec_rtc_set() since the
+calling code also logs an error and to avoid spurious error messages if
+setting the alarm ultimately succeeds.
 
-Use vmsplice_to_pipe() instead of __kernel_write_iter() to avoid this
-copy for pipe handlers.
-
-Tested by dumping a 40-GByte core into a simple handler that splice()s
-from stdin to disk in a loop, PIPE_DEF_BUFFERS (16) pages at a time.
-
-                              Before           After   Improved by
-  Time to Completion   52.04 seconds   46.30 seconds        11.03%
-  CPU Usage                   89.43%          84.90%         5.07%
-
-Suggested-by: Cong Wang <cong.wang@bytedance.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+Cc: Brian Norris <briannorris@chromium.org>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- fs/coredump.c          | 7 ++++++-
- fs/splice.c            | 4 ++--
- include/linux/splice.h | 2 ++
- 3 files changed, 10 insertions(+), 3 deletions(-)
+ drivers/rtc/rtc-cros-ec.c | 35 ++++++++++++++++++++---------------
+ 1 file changed, 20 insertions(+), 15 deletions(-)
 
-diff --git a/fs/coredump.c b/fs/coredump.c
-index 7bad7785e8e6..a6ef406dee43 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -42,6 +42,7 @@
- #include <linux/timekeeping.h>
- #include <linux/sysctl.h>
- #include <linux/elf.h>
-+#include <linux/splice.h>
+diff --git a/drivers/rtc/rtc-cros-ec.c b/drivers/rtc/rtc-cros-ec.c
+index 887f5193e253..a3ec066d8066 100644
+--- a/drivers/rtc/rtc-cros-ec.c
++++ b/drivers/rtc/rtc-cros-ec.c
+@@ -14,6 +14,8 @@
  
- #include <linux/uaccess.h>
- #include <asm/mmu_context.h>
-@@ -854,7 +855,11 @@ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
- 		return 0;
- 	pos = file->f_pos;
- 	iov_iter_bvec(&iter, WRITE, &bvec, 1, PAGE_SIZE);
--	n = __kernel_write_iter(cprm->file, &iter, &pos);
+ #define DRV_NAME	"cros-ec-rtc"
+ 
++#define SECS_PER_DAY	(24 * 60 * 60)
 +
-+	n = vmsplice_to_pipe(file, &iter, 0);
-+	if (n == -EBADF)
-+		n = __kernel_write_iter(cprm->file, &iter, &pos);
-+
- 	if (n != PAGE_SIZE)
- 		return 0;
- 	file->f_pos = pos;
-diff --git a/fs/splice.c b/fs/splice.c
-index 0878b852b355..2051700cda79 100644
---- a/fs/splice.c
-+++ b/fs/splice.c
-@@ -1234,8 +1234,8 @@ static long vmsplice_to_user(struct file *file, struct iov_iter *iter,
-  * as splice-from-memory, where the regular splice is splice-from-file (or
-  * to file). In both cases the output is a pipe, naturally.
-  */
--static long vmsplice_to_pipe(struct file *file, struct iov_iter *iter,
--			     unsigned int flags)
-+long vmsplice_to_pipe(struct file *file, struct iov_iter *iter,
-+		      unsigned int flags)
+ /**
+  * struct cros_ec_rtc - Driver data for EC RTC
+  *
+@@ -43,13 +45,8 @@ static int cros_ec_rtc_get(struct cros_ec_device *cros_ec, u32 command,
+ 	msg.msg.insize = sizeof(msg.data);
+ 
+ 	ret = cros_ec_cmd_xfer_status(cros_ec, &msg.msg);
+-	if (ret < 0) {
+-		dev_err(cros_ec->dev,
+-			"error getting %s from EC: %d\n",
+-			command == EC_CMD_RTC_GET_VALUE ? "time" : "alarm",
+-			ret);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	*response = msg.data.time;
+ 
+@@ -59,7 +56,7 @@ static int cros_ec_rtc_get(struct cros_ec_device *cros_ec, u32 command,
+ static int cros_ec_rtc_set(struct cros_ec_device *cros_ec, u32 command,
+ 			   u32 param)
  {
- 	struct pipe_inode_info *pipe;
- 	long ret = 0;
-diff --git a/include/linux/splice.h b/include/linux/splice.h
-index a55179fd60fc..0cd955cf5ee2 100644
---- a/include/linux/splice.h
-+++ b/include/linux/splice.h
-@@ -81,6 +81,8 @@ extern ssize_t splice_direct_to_actor(struct file *, struct splice_desc *,
- extern long do_splice(struct file *in, loff_t *off_in,
- 		      struct file *out, loff_t *off_out,
- 		      size_t len, unsigned int flags);
-+extern long vmsplice_to_pipe(struct file *file, struct iov_iter *iter,
-+			     unsigned int flags);
+-	int ret = 0;
++	int ret;
+ 	struct {
+ 		struct cros_ec_command msg;
+ 		struct ec_response_rtc data;
+@@ -71,13 +68,8 @@ static int cros_ec_rtc_set(struct cros_ec_device *cros_ec, u32 command,
+ 	msg.data.time = param;
  
- extern long do_tee(struct file *in, struct file *out, size_t len,
- 		   unsigned int flags);
+ 	ret = cros_ec_cmd_xfer_status(cros_ec, &msg.msg);
+-	if (ret < 0) {
+-		dev_err(cros_ec->dev, "error setting %s on EC: %d\n",
+-			command == EC_CMD_RTC_SET_VALUE ? "time" : "alarm",
+-			ret);
++	if (ret < 0)
+ 		return ret;
+-	}
+-
+ 	return 0;
+ }
+ 
+@@ -190,8 +182,21 @@ static int cros_ec_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+ 
+ 	ret = cros_ec_rtc_set(cros_ec, EC_CMD_RTC_SET_ALARM, alarm_offset);
+ 	if (ret < 0) {
+-		dev_err(dev, "error setting alarm: %d\n", ret);
+-		return ret;
++		if (ret == -EINVAL && alarm_offset >= SECS_PER_DAY) {
++			/*
++			 * RTC chips on some older Chromebooks can only handle
++			 * alarms up to 24h in the future. Try to set an alarm
++			 * below that limit to avoid suspend failures.
++			 */
++			ret = cros_ec_rtc_set(cros_ec, EC_CMD_RTC_SET_ALARM,
++					      SECS_PER_DAY - 1);
++		}
++
++		if (ret < 0) {
++			dev_err(dev, "error setting alarm in %u seconds: %d\n",
++				alarm_offset, ret);
++			return ret;
++		}
+ 	}
+ 
+ 	return 0;
 -- 
-2.20.1
+2.36.2
 
