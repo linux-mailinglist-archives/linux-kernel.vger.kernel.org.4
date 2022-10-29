@@ -2,144 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF97611FC4
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 05:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FFF611FC7
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 05:33:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiJ2DcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 23:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
+        id S229658AbiJ2Dc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 23:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJ2DcQ (ORCPT
+        with ESMTP id S229489AbiJ2Dcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 23:32:16 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358FA109D40;
-        Fri, 28 Oct 2022 20:32:15 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id m6so6369922pfb.0;
-        Fri, 28 Oct 2022 20:32:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VHF9euNOOmuwTSh72fVwWU/hhjv7B36F6rq6GHbm0Ws=;
-        b=jK5E1boC3hu8E7IKKZ6CHa/8w55eH6o4SWLIwK/DleiUhoRlRDg0nhbUtjDD76L7q5
-         93OjujLRcE31fBxMQ2A0Gq0z7tfH3bVlJrRbhHYggtjqQOD3sXuqsv9rLVy3tUHpT+Yc
-         VdPaxC13yA9VPuPQa1jUO32XmDCgV05Qw6tk86KFBLTLTEi1+16B2KRw/EOFxOQhUxRd
-         23NpFy8Er4yVa2BlmTYeUNvzKWgQPO81xAkxWaP0kL+zrWMnGOgCmpkjnHdOb3S3ECSE
-         9rmz+S8TZ8vjt7qSFnvAXDJHEa/g8fsHS8FkZdPyqZsJl1Sk4yoAL+/UVz9wjHiUBH4h
-         TpeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VHF9euNOOmuwTSh72fVwWU/hhjv7B36F6rq6GHbm0Ws=;
-        b=kA7DITuHr4/ncGOpM2w2vhY9R60L9IQQnw0z56tJkBsHt3eQ+RNBrw8yUqYDpxKmI1
-         Frg6JzkYpOfiv9qwNGW2tsSlFXGR3CX0IL+1p4spxGCclnsnMPTn1eXKRyHdVXAW/v7c
-         tHL3V3SRTtaVxY9/LGQHGBBfuytBePj3y2S+UqCpzda/r1ofXJ7Vhb+4UJ6qsoRheajr
-         Dg2vr7PZkwCvILkL8EGNnz2e4fw3W6W8MusCN/MAGrUTc1RnprqNXIBtyoFy5rAgq3n5
-         QKGFwl8QMbcP//rvP7NMOyWcE0QFqduNmu/J1g+rNfPzZFc3NdwAaFLFyd3z60w2+vQa
-         MPNw==
-X-Gm-Message-State: ACrzQf1bDMdiAz9lbAE1JMEp2xVOxBxDUp5MYjNfdn+XPI9vylpldjdI
-        A3oMmfAFIytiDbwwpRE6EzU=
-X-Google-Smtp-Source: AMsMyM4/G+OuCQ0NgmhKRELRXL1n+O5c6TyxtS8A7lOlSNpmzBFb7z6dw442d6bOx/QJA+JG8vf/tQ==
-X-Received: by 2002:aa7:8b46:0:b0:56c:349f:191e with SMTP id i6-20020aa78b46000000b0056c349f191emr2663102pfd.29.1667014334674;
-        Fri, 28 Oct 2022 20:32:14 -0700 (PDT)
-Received: from mail.google.com (122-58-209-93-fibre.sparkbb.co.nz. [122.58.209.93])
-        by smtp.gmail.com with ESMTPSA id r2-20020a17090a2e8200b002086ac07041sm166491pjd.44.2022.10.28.20.32.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 20:32:13 -0700 (PDT)
-Date:   Sat, 29 Oct 2022 16:32:05 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        paulo.miguel.almeida.rodenas@gmail.com
-Subject: [PATCH v2] [next] drm/radeon: Replace one-element array with
- flexible-array member
-Message-ID: <Y1yetX1CHsr+fibp@mail.google.com>
+        Fri, 28 Oct 2022 23:32:50 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3460D132DFD;
+        Fri, 28 Oct 2022 20:32:49 -0700 (PDT)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MzlGt6shgz15MDZ;
+        Sat, 29 Oct 2022 11:27:50 +0800 (CST)
+Received: from localhost.localdomain (10.175.104.82) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 29 Oct 2022 11:32:46 +0800
+From:   Ziyang Xuan <william.xuanziyang@huawei.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <peterpenkov96@gmail.com>,
+        <maheshb@google.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <hawk@kernel.org>, <john.fastabend@gmail.com>
+Subject: [PATCH net] net: tun: fix bugs for oversize packet when napi frags enabled
+Date:   Sat, 29 Oct 2022 11:32:43 +0800
+Message-ID: <20221029033243.1577015-1-william.xuanziyang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1trhRE3nK5iAY6q@mail.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.82]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One-element arrays are deprecated, and we are replacing them with
-flexible array members instead. So, replace one-element array with
-flexible-array member in struct _ATOM_FAKE_EDID_PATCH_RECORD and
-refactor the rest of the code accordingly.
+Recently, we got two syzkaller problems because of oversize packet
+when napi frags enabled.
 
-It's worth mentioning that doing a build before/after this patch results
-in no binary output differences.
+One of the problems is because the first seg size of the iov_iter
+from user space is very big, it is 2147479538 which is bigger than
+the threshold value for bail out early in __alloc_pages(). And
+skb->pfmemalloc is true, __kmalloc_reserve() would use pfmemalloc
+reserves without __GFP_NOWARN flag. Thus we got a warning as following:
 
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-routines on memcpy() and help us make progress towards globally
-enabling -fstrict-flex-arrays=3 [1].
+========================================================
+WARNING: CPU: 1 PID: 17965 at mm/page_alloc.c:5295 __alloc_pages+0x1308/0x16c4 mm/page_alloc.c:5295
+...
+Call trace:
+ __alloc_pages+0x1308/0x16c4 mm/page_alloc.c:5295
+ __alloc_pages_node include/linux/gfp.h:550 [inline]
+ alloc_pages_node include/linux/gfp.h:564 [inline]
+ kmalloc_large_node+0x94/0x350 mm/slub.c:4038
+ __kmalloc_node_track_caller+0x620/0x8e4 mm/slub.c:4545
+ __kmalloc_reserve.constprop.0+0x1e4/0x2b0 net/core/skbuff.c:151
+ pskb_expand_head+0x130/0x8b0 net/core/skbuff.c:1654
+ __skb_grow include/linux/skbuff.h:2779 [inline]
+ tun_napi_alloc_frags+0x144/0x610 drivers/net/tun.c:1477
+ tun_get_user+0x31c/0x2010 drivers/net/tun.c:1835
+ tun_chr_write_iter+0x98/0x100 drivers/net/tun.c:2036
 
-Link: https://github.com/KSPP/linux/issues/79
-Link: https://github.com/KSPP/linux/issues/239
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
+The other problem is because odd IPv6 packets without NEXTHDR_NONE
+extension header and have big packet length, it is 2127925 which is
+bigger than ETH_MAX_MTU(65535). After ipv6_gso_pull_exthdrs() in
+ipv6_gro_receive(), network_header offset and transport_header offset
+are all bigger than U16_MAX. That would trigger skb->network_header
+and skb->transport_header overflow error, because they are all '__u16'
+type. Eventually, it would affect the value for __skb_push(skb, value),
+and make it be a big value. After __skb_push() in ipv6_gro_receive(),
+skb->data would less than skb->head, an out of bounds memory bug occurred.
+That would trigger the problem as following:
 
-Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+==================================================================
+BUG: KASAN: use-after-free in eth_type_trans+0x100/0x260
+...
+Call trace:
+ dump_backtrace+0xd8/0x130
+ show_stack+0x1c/0x50
+ dump_stack_lvl+0x64/0x7c
+ print_address_description.constprop.0+0xbc/0x2e8
+ print_report+0x100/0x1e4
+ kasan_report+0x80/0x120
+ __asan_load8+0x78/0xa0
+ eth_type_trans+0x100/0x260
+ napi_gro_frags+0x164/0x550
+ tun_get_user+0xda4/0x1270
+ tun_chr_write_iter+0x74/0x130
+ do_iter_readv_writev+0x130/0x1ec
+ do_iter_write+0xbc/0x1e0
+ vfs_writev+0x13c/0x26c
+
+Restrict the packet size less than ETH_MAX_MTU to fix the problems.
+Add len check in tun_napi_alloc_frags() simply. Athough that makes
+some kinds of packets payload size slightly smaller than the length
+allowed by the protocol, for example, ETH_HLEN + sizeof(struct ipv6hdr)
+smaller when the tun device type is IFF_TAP and the packet is IPv6. But
+I think that the effect is small and can be ignored.
+
+Fixes: 90e33d459407 ("tun: enable napi_gro_frags() for TUN/TAP driver")
+Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
 ---
-Changelog:
+ drivers/net/tun.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v2: no binary output differences patch; report binary changes findings
-    on commit log. Res: Kees Cook.
-    
-    This request was made in an identical, yet different, patch but the
-    same feedback applies.
-    https://lore.kernel.org/lkml/Y1x3MtRJ8ckXxlJn@mail.google.com/
-
-v1: https://lore.kernel.org/lkml/Y1trhRE3nK5iAY6q@mail.google.com/
----
- drivers/gpu/drm/radeon/atombios.h        | 2 +-
- drivers/gpu/drm/radeon/radeon_atombios.c | 7 +++++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/radeon/atombios.h b/drivers/gpu/drm/radeon/atombios.h
-index da35a970fcc0..235e59b547a1 100644
---- a/drivers/gpu/drm/radeon/atombios.h
-+++ b/drivers/gpu/drm/radeon/atombios.h
-@@ -3615,7 +3615,7 @@ typedef struct _ATOM_FAKE_EDID_PATCH_RECORD
- {
-   UCHAR ucRecordType;
-   UCHAR ucFakeEDIDLength;
--  UCHAR ucFakeEDIDString[1];    // This actually has ucFakeEdidLength elements.
-+  UCHAR ucFakeEDIDString[];    // This actually has ucFakeEdidLength elements.
- } ATOM_FAKE_EDID_PATCH_RECORD;
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 27c6d235cbda..98d3160fcae2 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -1459,7 +1459,7 @@ static struct sk_buff *tun_napi_alloc_frags(struct tun_file *tfile,
+ 	int err;
+ 	int i;
  
- typedef struct  _ATOM_PANEL_RESOLUTION_PATCH_RECORD
-diff --git a/drivers/gpu/drm/radeon/radeon_atombios.c b/drivers/gpu/drm/radeon/radeon_atombios.c
-index 204127bad89c..4ad5a328d920 100644
---- a/drivers/gpu/drm/radeon/radeon_atombios.c
-+++ b/drivers/gpu/drm/radeon/radeon_atombios.c
-@@ -1727,8 +1727,11 @@ struct radeon_encoder_atom_dig *radeon_atombios_get_lvds_info(struct
- 						}
- 					}
- 					record += fake_edid_record->ucFakeEDIDLength ?
--						fake_edid_record->ucFakeEDIDLength + 2 :
--						sizeof(ATOM_FAKE_EDID_PATCH_RECORD);
-+						  struct_size(fake_edid_record,
-+							      ucFakeEDIDString,
-+							      fake_edid_record->ucFakeEDIDLength) :
-+						  /* empty fake edid record must be 3 bytes long */
-+						  sizeof(ATOM_FAKE_EDID_PATCH_RECORD) + 1;
- 					break;
- 				case LCD_PANEL_RESOLUTION_RECORD_TYPE:
- 					panel_res_record = (ATOM_PANEL_RESOLUTION_PATCH_RECORD *)record;
+-	if (it->nr_segs > MAX_SKB_FRAGS + 1)
++	if (it->nr_segs > MAX_SKB_FRAGS + 1 || len > ETH_MAX_MTU)
+ 		return ERR_PTR(-EMSGSIZE);
+ 
+ 	local_bh_disable();
 -- 
-2.37.3
+2.25.1
 
