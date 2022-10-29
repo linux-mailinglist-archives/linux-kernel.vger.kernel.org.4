@@ -2,138 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3FF612351
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 15:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5684A612354
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 15:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiJ2Nfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 09:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
+        id S229721AbiJ2NgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 09:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJ2Nfl (ORCPT
+        with ESMTP id S229739AbiJ2Nf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 09:35:41 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B508858B44
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 06:35:40 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id e15-20020a056e020b2f00b002ff99582d01so6905544ilu.0
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 06:35:40 -0700 (PDT)
+        Sat, 29 Oct 2022 09:35:56 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00EB5B7A1
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 06:35:53 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id f140so7070021pfa.1
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 06:35:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PYT2H+asttmGrnTEbtBs6S26N69cVRe/oe+P3/aHN04=;
+        b=JxoNvEi/7SInu7EfRCCtxS3rAffvOFXRChbpSPf5S77yHi6xffAsqVQlmpRu9GVqW/
+         0jYhUEtgj1YkK+vZOAQ6iF6mhir6+1o8caGfeVBQsLIMw9VuoZWF2U9De8ZyXZKOcira
+         9vqzsi9T4MZMimg0kbRDoNSBXyWu+b7Cv9iVZ8RFk58y5VVbxle67SJUyYVU5d8gf72E
+         Ys/4uAK7sUp/GPxY+XVFzfFP5dy2d4sUWrlRXxLa8HQvs75oBFbgHNMvrD+E/3zntpZ1
+         ZbpdeY+lSec9seex4aMOsBA4Klvf5jJ9WXwy1nE8xW2j/T6xTevNMxeP2nXMZEr/offt
+         tO3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4UWBCeT2JcZxndCciouGOF6RNQJlwhgrY0jabwvrRGE=;
-        b=RQbKq9jPAqXkHpMzS1cEC666hn0+pMnCbMoPpL5jXH7BTc/YeCoAdRlj8oNEKOWs8f
-         ulZS9lq2SznTRme6A5ppHOXnKEx7KoTC18ycprnYBFr//Ib2y3Js5LeRlQ2fSIZE9TeP
-         NJ11pkLA5S4dJVNryEpMHBt9S1bxVa4uWODXwxEfPh4BAg+udkpc/wVGS5LW3izdBlVO
-         KupYnNyg5SvbkSz1mV0/MOUNAr0vlLWeo4h93AKt3AIpVOOD1rPLugHmsEJ+ZANESGd9
-         xL+b6q7zAFHbF+REHg9TCZMMhZuwbkIEY+kkyqRxQuulGjRpnOhADgwEVGQbd8iHKY6n
-         9ulg==
-X-Gm-Message-State: ACrzQf1zKrvecd5cr3UKHlA1u09EOjZHa52T7GJqLn/3TAPKvuPQb8Mg
-        T6weXO+P2M1Z0qY8wICpJAHuWzvfsTf4/6Upu/J72lcwvN1G
-X-Google-Smtp-Source: AMsMyM7xHAVY050ZB0EmsmQSQqtJ3CNjlQzPn9thZrbE6fTQo1eHvXVscqHkok0dLUWnx5qJTpPZdnIGUEMV4aYc3ZtsTZmJBTOK
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PYT2H+asttmGrnTEbtBs6S26N69cVRe/oe+P3/aHN04=;
+        b=VuUu+vGL6w6OUIGizwiHSVsetf3Hnk1EKWYxv4qfxhCbUnQ4VznJQ0EaXfTTVAadF/
+         1Rp6kIxX3afMDZyZBx+mo/ovaeGqj45RhbZKsl4DfJOFJcjV8/cIjb7XBen+Opfy+MdL
+         Br9spAxTta8GjuMbymWV8aOJRzoldbGDXoaW+UgeKDvQfAnRcbC55KVAhfoqd8ID6O5c
+         fTmdu1epI7RLF7Ctrf1V/WzJezhhGgoP+q9uWkGS4zaIgfpMmdFHeBOBho5f/zRW/ePJ
+         vi8a07mKeJAzjDlYn15hqfeFniJdWfR/JkZcG7jZ/elmO+kBbU6vVqRqaUGLO9ruMC3Q
+         WQ7Q==
+X-Gm-Message-State: ACrzQf22YJLuR2vcDmnUl+1/cHEnW745VYtN7S/UOLKRRBsMz/ECA8Hr
+        yz9wY3x9lwNp6YGMcomHfeDvc9tQYOOW7iQs
+X-Google-Smtp-Source: AMsMyM7T5oMuG1G25BLrr8bFnwqtikZdyyDBCaGum9l7T2BEsORdo6iv+Yrdvtsd64TaUA3mA2sMkg==
+X-Received: by 2002:a05:6a00:cd1:b0:563:8df5:2b8b with SMTP id b17-20020a056a000cd100b005638df52b8bmr4495137pfv.67.1667050553274;
+        Sat, 29 Oct 2022 06:35:53 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-19.three.co.id. [180.214.233.19])
+        by smtp.gmail.com with ESMTPSA id m1-20020a170902db0100b00186a2274382sm1297027plx.76.2022.10.29.06.35.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Oct 2022 06:35:52 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 246EE103D9A; Sat, 29 Oct 2022 20:35:50 +0700 (WIB)
+Date:   Sat, 29 Oct 2022 20:35:49 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
+        broonie@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] arm64: entry: Fix typo
+Message-ID: <Y10sNSE6/B2p95+I@debian.me>
+References: <1667027268-1255-1-git-send-email-quic_mojha@quicinc.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1905:b0:2ff:a163:8497 with SMTP id
- w5-20020a056e02190500b002ffa1638497mr2137287ilu.147.1667050540059; Sat, 29
- Oct 2022 06:35:40 -0700 (PDT)
-Date:   Sat, 29 Oct 2022 06:35:40 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004353bc05ec2c73f4@google.com>
-Subject: [syzbot] WARNING in find_free_extent_update_loop
-From:   syzbot <syzbot+1ab183c4029913aa8e4c@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="jd+hTkK2iZEDLYlo"
+Content-Disposition: inline
+In-Reply-To: <1667027268-1255-1-git-send-email-quic_mojha@quicinc.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+--jd+hTkK2iZEDLYlo
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit:    b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12c0475a880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
-dashboard link: https://syzkaller.appspot.com/bug?extid=1ab183c4029913aa8e4c
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+On Sat, Oct 29, 2022 at 12:37:48PM +0530, Mukesh Ojha wrote:
+> diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-c=
+ommon.c
+> index 9173fad..b694d8f 100644
+> --- a/arch/arm64/kernel/entry-common.c
+> +++ b/arch/arm64/kernel/entry-common.c
+> @@ -30,7 +30,7 @@
+>  /*
+>   * Handle IRQ/context state management when entering from kernel mode.
+>   * Before this function is called it is not safe to call regular kernel =
+code,
+> - * intrumentable code, or any code which may trigger an exception.
+> + * instrumentable code, or any code which may trigger an exception.
+>   *
+>   * This is intended to match the logic in irqentry_enter(), handling the=
+ kernel
+>   * mode transitions only.
+> @@ -63,7 +63,7 @@ static void noinstr enter_from_kernel_mode(struct pt_re=
+gs *regs)
+>  /*
+>   * Handle IRQ/context state management when exiting to kernel mode.
+>   * After this function returns it is not safe to call regular kernel cod=
+e,
+> - * intrumentable code, or any code which may trigger an exception.
+> + * instrumentable code, or any code which may trigger an exception.
+>   *
+>   * This is intended to match the logic in irqentry_exit(), handling the =
+kernel
+>   * mode transitions only, and with preemption handled elsewhere.
+> @@ -97,7 +97,7 @@ static void noinstr exit_to_kernel_mode(struct pt_regs =
+*regs)
+>  /*
+>   * Handle IRQ/context state management when entering from user mode.
+>   * Before this function is called it is not safe to call regular kernel =
+code,
+> - * intrumentable code, or any code which may trigger an exception.
+> + * instrumentable code, or any code which may trigger an exception.
+>   */
+>  static __always_inline void __enter_from_user_mode(void)
+>  {
+> @@ -116,7 +116,7 @@ static __always_inline void enter_from_user_mode(stru=
+ct pt_regs *regs)
+>  /*
+>   * Handle IRQ/context state management when exiting to user mode.
+>   * After this function returns it is not safe to call regular kernel cod=
+e,
+> - * intrumentable code, or any code which may trigger an exception.
+> + * instrumentable code, or any code which may trigger an exception.
+>   */
+>  static __always_inline void __exit_to_user_mode(void)
+>  {
+> @@ -152,7 +152,7 @@ asmlinkage void noinstr asm_exit_to_user_mode(struct =
+pt_regs *regs)
+>  /*
+>   * Handle IRQ/context state management when entering an NMI from user/ke=
+rnel
+>   * mode. Before this function is called it is not safe to call regular k=
+ernel
+> - * code, intrumentable code, or any code which may trigger an exception.
+> + * code, instrumentable code, or any code which may trigger an exception.
+>   */
+>  static void noinstr arm64_enter_nmi(struct pt_regs *regs)
+>  {
+> @@ -170,7 +170,7 @@ static void noinstr arm64_enter_nmi(struct pt_regs *r=
+egs)
+>  /*
+>   * Handle IRQ/context state management when exiting an NMI from user/ker=
+nel
+>   * mode. After this function returns it is not safe to call regular kern=
+el
+> - * code, intrumentable code, or any code which may trigger an exception.
+> + * code, instrumentable code, or any code which may trigger an exception.
+>   */
+>  static void noinstr arm64_exit_nmi(struct pt_regs *regs)
+>  {
+> @@ -192,7 +192,7 @@ static void noinstr arm64_exit_nmi(struct pt_regs *re=
+gs)
+>  /*
+>   * Handle IRQ/context state management when entering a debug exception f=
+rom
+>   * kernel mode. Before this function is called it is not safe to call re=
+gular
+> - * kernel code, intrumentable code, or any code which may trigger an exc=
+eption.
+> + * kernel code, instrumentable code, or any code which may trigger an ex=
+ception.
+>   */
+>  static void noinstr arm64_enter_el1_dbg(struct pt_regs *regs)
+>  {
+> @@ -207,7 +207,7 @@ static void noinstr arm64_enter_el1_dbg(struct pt_reg=
+s *regs)
+>  /*
+>   * Handle IRQ/context state management when exiting a debug exception fr=
+om
+>   * kernel mode. After this function returns it is not safe to call regul=
+ar
+> - * kernel code, intrumentable code, or any code which may trigger an exc=
+eption.
+> + * kernel code, instrumentable code, or any code which may trigger an ex=
+ception.
+>   */
+>  static void noinstr arm64_exit_el1_dbg(struct pt_regs *regs)
+>  {
 
-Unfortunately, I don't have any reproducer for this issue yet.
+What about "... it is unsafe to call regular kernel, instrumentable, or
+any other code ..." instead?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/24728b72a896/disk-b229b6ca.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/10a3c40c60e1/vmlinux-b229b6ca.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/69f963b02b7e/bzImage-b229b6ca.xz
+Thanks.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1ab183c4029913aa8e4c@syzkaller.appspotmail.com
+--=20
+An old man doll... just what I always wanted! - Clara
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 31718 at fs/btrfs/extent-tree.c:4118 find_free_extent_update_loop+0xa1a/0xd00 fs/btrfs/extent-tree.c:4118
-Modules linked in:
-CPU: 0 PID: 31718 Comm: syz-executor.1 Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:find_free_extent_update_loop+0xa1a/0xd00 fs/btrfs/extent-tree.c:4118
-Code: 00 48 c7 c6 a0 33 da 8a 44 89 f2 31 c0 e8 b0 a1 ad 06 eb 1a e8 c7 a6 03 fe 48 c7 c7 a0 32 da 8a 44 89 f6 31 c0 e8 16 45 cb fd <0f> 0b b3 01 4c 8b 6c 24 08 44 0f b6 c3 4c 89 ff 48 c7 c6 40 48 da
-RSP: 0018:ffffc9000354e950 EFLAGS: 00010246
-RAX: 9bc899dcf6ac9a00 RBX: 00000000fffffff4 RCX: 0000000000040000
-RDX: ffffc9000d255000 RSI: 000000000000f22a RDI: 000000000000f22b
-RBP: ffff888088f3e050 R08: ffffffff816b8dfd R09: ffffed1017344f13
-R10: ffffed1017344f13 R11: 1ffff11017344f12 R12: 0000000000000000
-R13: 1ffff110111e7c0a R14: 00000000fffffff4 R15: ffff888088f3e000
-FS:  00007f875efde700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020701000 CR3: 00000000271de000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- find_free_extent+0x1740/0x4230 fs/btrfs/extent-tree.c:4470
- btrfs_reserve_extent+0x421/0x800 fs/btrfs/extent-tree.c:4563
- cow_file_range+0x52e/0xfa0 fs/btrfs/inode.c:1276
- btrfs_run_delalloc_range+0xed4/0x11a0 fs/btrfs/inode.c:2229
- writepage_delalloc+0x25e/0x540 fs/btrfs/extent_io.c:1968
- __extent_writepage+0x5d6/0x14d0 fs/btrfs/extent_io.c:2272
- extent_write_cache_pages+0x9e7/0x12d0 fs/btrfs/extent_io.c:3186
- extent_writepages+0x228/0x550 fs/btrfs/extent_io.c:3308
- do_writepages+0x3c3/0x680 mm/page-writeback.c:2469
- filemap_fdatawrite_wbc+0x11e/0x170 mm/filemap.c:388
- __filemap_fdatawrite_range mm/filemap.c:421 [inline]
- filemap_fdatawrite_range+0x175/0x200 mm/filemap.c:439
- btrfs_fdatawrite_range fs/btrfs/file.c:4140 [inline]
- start_ordered_ops fs/btrfs/file.c:2026 [inline]
- btrfs_sync_file+0x39e/0x1140 fs/btrfs/file.c:2102
- generic_write_sync include/linux/fs.h:2883 [inline]
- btrfs_do_write_iter+0xa6f/0x1370 fs/btrfs/file.c:1975
- call_write_iter include/linux/fs.h:2191 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x7dc/0xc50 fs/read_write.c:584
- ksys_write+0x177/0x2a0 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f875fc8b5a9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f875efde168 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00007f875fdac050 RCX: 00007f875fc8b5a9
-RDX: 0000000000000010 RSI: 0000000020000bc0 RDI: 0000000000000003
-RBP: 00007f875efde1d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
-R13: 00007ffd6082437f R14: 00007f875efde300 R15: 0000000000022000
- </TASK>
+--jd+hTkK2iZEDLYlo
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY10sMgAKCRD2uYlJVVFO
+o2znAQDROD4B4MW/h2UtIpvM/S8ULS2o+L+Q6c5XC6UzJV6Y8gEA/or0r7pjXDwN
+IfH5LgYp0u+3xs/bzhUc3SakWtYtKgA=
+=mREl
+-----END PGP SIGNATURE-----
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--jd+hTkK2iZEDLYlo--
