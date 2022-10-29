@@ -2,200 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9239612436
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 17:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5AF612430
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 17:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiJ2Pd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 11:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
+        id S229943AbiJ2Pa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 11:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiJ2PdY (ORCPT
+        with ESMTP id S229629AbiJ2PaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 11:33:24 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7113C5C9E6;
-        Sat, 29 Oct 2022 08:33:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667057603; x=1698593603;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mHuDuDNNRUovT7qPxWeRLywh7Ez+3FPl+XwoW9eBfPY=;
-  b=Z0NWIqlEgU8Wl1x6r/v9bMNEZYNhPKTycCU5YgaW/B5eK5YVbcmgiA5d
-   dYbPG+D8I4qy0B3qMgUcFQsf+6SCOppu2kyuH1q866s7I73EJgUGMXl2V
-   5CrMbrBMPjxjhp9LvaCpo209ty/4b9RbBJIzV5OSNOVXxgVm1ulbH4JJx
-   3fhDXqkMq9HFOHSQQrUL5HwyQN0DevYFPORwsBRW1UP8qfCwbIH2x8EQK
-   2pj9zpRq4UCclIHjnIa4OMKWRfM46Iifpgh1Itflo099FieBUQ/ISjcYp
-   RKkjgAiSTF/R8ZL4XI4QviJ27aIInUQs+hH++aBZuDSgPLEAdq9EoLH8O
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="309761404"
-X-IronPort-AV: E=Sophos;i="5.95,224,1661842800"; 
-   d="scan'208";a="309761404"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 08:33:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="738464276"
-X-IronPort-AV: E=Sophos;i="5.95,224,1661842800"; 
-   d="scan'208";a="738464276"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga002.fm.intel.com with ESMTP; 29 Oct 2022 08:33:18 -0700
-Date:   Sat, 29 Oct 2022 23:24:10 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        linux-serial@vger.kernel.org, jirislaby@kernel.org,
-        geert+renesas@glider.be, andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com
-Subject: Re: [PATCH v4 4/4] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-Message-ID: <Y11FmiDeVhGir+7z@yilunxu-OptiPlex-7050>
-References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com>
- <20221020212610.697729-5-matthew.gerlach@linux.intel.com>
+        Sat, 29 Oct 2022 11:30:25 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9217357DCD
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 08:30:23 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 185so9236455ybc.3
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 08:30:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8dYAr+qr1R6Xo9zoSFNEOc560F/LbrOVb8a+d7kwqp4=;
+        b=SFBCqSFcPyEKhaC6bkuFqJYnUd9DED1eyM0qEKYKOdozhtCgd966FWyCAL95L0D80h
+         50sNgHFjWZZw0Yq12HL9aG2X8zwmhWvBIZJdN7jY9P8/4PHIFaSwZ3dT3pLwa2TYYTb0
+         Sae9dgnu11OQwrC3KqFpHDK5AFeZk0ilcz8TIhucXVVf75orNE4l0S4SfiIZK93wnh82
+         vuUA8W5fJT1WZuWsWujX8kjO2m5ksrQ2hpxUeEeYTBmWdM6TJXz8KrLxwnbIsFcObwcN
+         ehnw/G0cLjpCe8k/EeeNAZ7Nh4YfHUn9JB3dVrZF4pZHkbQQIKm5tVYh90J6Dpa1kbDn
+         TKow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8dYAr+qr1R6Xo9zoSFNEOc560F/LbrOVb8a+d7kwqp4=;
+        b=5AyND/wOSDG+svSKLVoI3WgOqJtUdDffKPQVwI4SlMBBb9Y/yhW2bVGfw9nwVYqd5f
+         oQXz7sbrAdSJGTQwiqNQxUpK+twftlBEkQnn/1Q/RQ/Gq+J0X5QcN6Spt7ndjvH8LOds
+         wm/mfeTGIe+WNeVzh8MJOJdOqhZMIuj2a+4vIuujro9Efw9qR3jG0shZOxKH1Zi9rl1L
+         EkzDCmKAy76nMEOmb3LZ41tEtTstZ2F7NsNbfnQXFhcQS8QJOreM87fj7Uytnz8i9SSd
+         9C+tmM+p9xTzQa+NTWZ/SxdFPvQYqS9BkWKf4qu9pFHJrjpxR6d+Y2dP3vPRSG2wJBNW
+         83Zg==
+X-Gm-Message-State: ACrzQf00/KJ68L98Z81RYJNmIdOok5ZFXQFWmhXEGxixX0zM7qqGh0pV
+        bG2FTd6Tyhy6sqHqGfqo+KfgdEhMV8JqNXaWKkDytg==
+X-Google-Smtp-Source: AMsMyM73h7ZbDekt1hGMupZsp2EZn7x4uoWxgNh4bzc3kG6F/X45BUXmzYgl+V85DoMiyRh+L1t/mCN+hZqE7itClSE=
+X-Received: by 2002:a25:aa2c:0:b0:6cc:16c2:5385 with SMTP id
+ s41-20020a25aa2c000000b006cc16c25385mr4201849ybi.55.1667057422552; Sat, 29
+ Oct 2022 08:30:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221020212610.697729-5-matthew.gerlach@linux.intel.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221029130957.1292060-1-imagedong@tencent.com> <20221029130957.1292060-2-imagedong@tencent.com>
+In-Reply-To: <20221029130957.1292060-2-imagedong@tencent.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Sat, 29 Oct 2022 08:30:11 -0700
+Message-ID: <CANn89iK60VLmy3Y_7TZC-pXMZCho=W=uKPV2uf2tUmLdzJ1oFg@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/9] net: skb: introduce try_kfree_skb()
+To:     menglong8.dong@gmail.com
+Cc:     kuba@kernel.org, davem@davemloft.net, pabeni@redhat.com,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org, imagedong@tencent.com,
+        kafai@fb.com, asml.silence@gmail.com, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-20 at 14:26:10 -0700, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> 
-> Add a Device Feature List (DFL) bus driver for the Altera
-> 16550 implementation of UART.
-> 
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+On Sat, Oct 29, 2022 at 6:11 AM <menglong8.dong@gmail.com> wrote:
+>
+> From: Menglong Dong <imagedong@tencent.com>
+>
+> In order to simply the code, introduce try_kfree_skb(), which allow
+> SKB_NOT_DROPPED_YET to be passed. When the reason is SKB_NOT_DROPPED_YET,
+> consume_skb() will be called to free the skb normally. Otherwise,
+> kfree_skb_reason() will be called.
+>
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
 > ---
-> v4: use dev_err_probe() everywhere that is appropriate
->     clean up noise
->     change error messages to use the word, unsupported
->     tried again to sort Makefile and KConfig better
->     reorder probe function for easier error handling
->     use new dfh_find_param API
-> 
-> v3: use passed in location of registers
->     use cleaned up functions for parsing parameters
-> 
-> v2: clean up error messages
->     alphabetize header files
->     fix 'missing prototype' error by making function static
->     tried to sort Makefile and Kconfig better
-> ---
->  drivers/tty/serial/8250/8250_dfl.c | 149 +++++++++++++++++++++++++++++
->  drivers/tty/serial/8250/Kconfig    |  12 +++
->  drivers/tty/serial/8250/Makefile   |   1 +
->  3 files changed, 162 insertions(+)
->  create mode 100644 drivers/tty/serial/8250/8250_dfl.c
-> 
-> diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
-> new file mode 100644
-> index 000000000000..f02f0ba2a565
-> --- /dev/null
-> +++ b/drivers/tty/serial/8250/8250_dfl.c
-> @@ -0,0 +1,149 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Driver for FPGA UART
-> + *
-> + * Copyright (C) 2022 Intel Corporation, Inc.
-> + *
-> + * Authors:
-> + *   Ananda Ravuri <ananda.ravuri@intel.com>
-> + *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/dfl.h>
-> +#include <linux/io-64-nonatomic-lo-hi.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/serial.h>
-> +#include <linux/serial_8250.h>
-> +
-> +struct dfl_uart {
-> +	int line;
-> +};
-> +
-> +static int dfl_uart_get_params(struct dfl_device *dfl_dev, struct uart_8250_port *uart)
+>  include/linux/skbuff.h | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index 59c9fd55699d..f722accc054e 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -1236,6 +1236,15 @@ static inline void consume_skb(struct sk_buff *skb)
+>  }
+>  #endif
+>
+> +static inline void try_kfree_skb(struct sk_buff *skb,
+> +                                enum skb_drop_reason reason)
 > +{
-> +	struct device *dev = &dfl_dev->dev;
-> +	u64 v, fifo_len, reg_width;
-> +	u64 *p;
+> +       if (reason != SKB_NOT_DROPPED_YET)
+> +               kfree_skb_reason(skb, reason);
+> +       else
+> +               consume_skb(skb);
+> +}
 > +
-> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ);
-> +	if (!p)
-> +		return dev_err_probe(dev, -EINVAL, "missing CLK_FRQ param\n");
-> +
-> +	uart->port.uartclk = *p;
-> +	dev_dbg(dev, "UART_CLK_ID %u Hz\n", uart->port.uartclk);
-> +
-> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_FIFO_LEN);
-> +	if (!p)
-> +		return dev_err_probe(dev, -EINVAL, "missing FIFO_LEN param\n");
-> +
-> +	fifo_len = *p;
-> +	dev_dbg(dev, "UART_FIFO_ID fifo_len %llu\n", fifo_len);
-> +
-> +	switch (fifo_len) {
-> +	case 32:
-> +		uart->port.type = PORT_ALTR_16550_F32;
-> +		break;
-> +
-> +	case 64:
-> +		uart->port.type = PORT_ALTR_16550_F64;
-> +		break;
-> +
-> +	case 128:
-> +		uart->port.type = PORT_ALTR_16550_F128;
-> +		break;
-> +
-> +	default:
-> +		return dev_err_probe(dev, -EINVAL, "unsupported fifo_len %llu\n", fifo_len);
-> +	}
-> +
-> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_REG_LAYOUT);
-> +	if (!p)
-> +		return dev_err_probe(dev, -EINVAL, "missing REG_LAYOUT param\n");
-> +
-> +	v = *p;
-> +	uart->port.regshift = FIELD_GET(DFHv1_PARAM_ID_REG_SHIFT, v);
-> +	reg_width = FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v);
 
-I have concern that the raw layout inside the parameter block is
-still exposed to drivers and need to be parsed by each driver.
+My proposal looks better IMO
 
-How about we define HW agnostic IDs for parameter specific fields like:
-
-PARAM_ID		FIELD_ID
-================================
-MSIX			STARTV
-			NUMV
---------------------------------
-CLK			FREQ
---------------------------------
-FIFO			LEN
---------------------------------
-REG_LAYOUT		WIDTH
-			SHIFT
-
-And define like u64 dfl_find_param(struct dfl_device *, int param_id, int field_id)
-
-Think further, if we have to define HW agnostic property - value pairs,
-why don't we just use "Software nodes for the firmware node", see
-drivers/base/swnode.c. I think this may be a better choice.
-
-Thanks,
-Yilun
+https://patchwork.kernel.org/project/netdevbpf/patch/20221028133043.2312984-2-edumazet@google.com/
