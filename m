@@ -2,141 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E58B6124DD
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 20:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF376124E1
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 20:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiJ2SRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 14:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42080 "EHLO
+        id S229682AbiJ2SXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 14:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ2SRs (ORCPT
+        with ESMTP id S229441AbiJ2SXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 14:17:48 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6DA3742A;
-        Sat, 29 Oct 2022 11:17:39 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 050BE32003D3;
-        Sat, 29 Oct 2022 14:17:36 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sat, 29 Oct 2022 14:17:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1667067456; x=
-        1667153856; bh=kVBk6N/yGZ9tAGNJ6kSU4aOivyafZXMayzGUcpw6CFI=; b=p
-        io7zuhv6wY/6zkAwk7bGRGrAr8q5rMpdg7h94jJ2EOs63vVJx70GbMGmM5veUsyv
-        m1gRWhGVrW3s5wV7Ml5TwBSew/tc7BYNpWrhFzKYtPx4lkFA1BCHbFo10s6Lu1R1
-        GmV3N2kMNAbRCYNgYIobJROqY7v4jqcw2WIYZVEU57uR2xNmpjAQt9uW6OLYFBEx
-        431dDpUS0P0kps2NCjcg2hfKUUBRIy1LGUA52KsMOA+S2jdtSYW67mJaV6XicAsa
-        2pVZujJQkCD/ReTTdjT3pin+sTm4LiHd/XDOQQ8xOPg4kIAMh2d7TjyyRuBd0SyF
-        sziVkAqVc/GxNxxOfgdxA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1667067456; x=
-        1667153856; bh=kVBk6N/yGZ9tAGNJ6kSU4aOivyafZXMayzGUcpw6CFI=; b=s
-        D4G5jWT+qjOh4PqBo8LwTpDuY9nQ3LLQQwV1GkoiUvPSFJl4LnxH3WCfOT8zvoUQ
-        ZNPsW58lsHf+ZCBpNC08YH0I28x+YiStvIIxs5kkcsDdNhkfTntKlx2k8yZ75D3f
-        H7Crgz11LvYBA8okmBQ6A1h2p8/yJOWmTrcqBOCUt6xptAMDbgEUUwFgX/ZiONcB
-        GEUizEJIPaAj0and+PX0Obh+t7uGUGl78Ch4U33YysCQkiSRw+sGs8vGEFxbT/bw
-        nYUREoOLiY9+VWORCZzuQc/mwcsPLBLEQ2arSMNQ2zyUc2VsckiooyqXtWZEpIat
-        shIkwZcGVVXCgmm3U+I/w==
-X-ME-Sender: <xms:O25dY_5HBOYYoqdzRljTYCC8oAumGPppoAtkmKqAthrB6M0Wh3xgmQ>
-    <xme:O25dY073nrKLhl-GN0GI0pPVnS894eyX8Yp0MdfR15D0_wgUg7ykr46SrJyK1uzPi
-    _1EKS-EaHlSrrAWow>
-X-ME-Received: <xmr:O25dY2e4J3ep4qV8vzgpNdbA0n8-Z5-rwldP3LoUvA7YzqzqHsgo1BUXJpfdzgZCItXe3fRi4wrhcWItjjy0y6aHWFWBIg4p2sUVtbh3luNZQ9WicrwVCHupUQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdekgdduvdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfvfevfhfhufgjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeegudekuedukeduhedthfdtueeujeekleeiveduvefhuefhkeff
-    vedtueelhfeftdenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhkvghrnhgvlhdroh
-    hrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehs
-    rghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:O25dYwJ6bQEzUwkripURDzw6fgzrALMUSx-WNyqMv6Y9LzKbTs98oQ>
-    <xmx:O25dYzKDVmkiLngVYQtkQ-bGteDlXYpvr5it9_7EPZeap2mu75ENRA>
-    <xmx:O25dY5xks2IMhMIF47UH7VfWN62nc9XYHLpCnVRopB4N1KR3NIBdXg>
-    <xmx:QG5dY0UfvV1RNRLqyImkSyCbm1K1sWMFADUJyvzlEWjXb5KLJ9aLFw>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 29 Oct 2022 14:17:30 -0400 (EDT)
-Message-ID: <f09812a7-5d7e-f8f8-aba4-7645810a8c52@sholland.org>
-Date:   Sat, 29 Oct 2022 13:17:29 -0500
+        Sat, 29 Oct 2022 14:23:34 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42D52A954;
+        Sat, 29 Oct 2022 11:23:33 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id r187so9289438oia.8;
+        Sat, 29 Oct 2022 11:23:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gxoLAPS+9Ecu1s/8uDx34AXuA9lpWU9Z2smUFzhiANI=;
+        b=FK30Xs8FfjGtUVZ701Q/u/E0K1xxm8c9h+UkHm2O3zOMPKAqIQn1h9Fmk1DzlhrNJY
+         D7nWbR/fOZYEbLnPP7FF9oqz45BfN6sv37CKqyeFH55U2nsdbY0CjDWVTPjRpMyEmKIh
+         Us53b1zCHyMg2DKt150e1V7XHIkZ3EumCqwi4vLSOlTGCXsIc1BPCim2stkACt/yxYPm
+         YUHk86gUYe83QNj8MsHauRHwUBuMyApRY3sDucRtN5TxSY+LkX+yHn9IEe9wWkGe+7FG
+         f5iO2owRwcStzOsTjw22iwgAfHfngVPKZdB/wf2LS16SruDIaHSC76qIoD3Y3cXkIMiE
+         DmBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gxoLAPS+9Ecu1s/8uDx34AXuA9lpWU9Z2smUFzhiANI=;
+        b=7KppWvzAf2WKhTjR5btObqvg51X3vqxhPf61kWKJAH4hEstorrp0SJOsqFAsaBqsUz
+         z8wRZgm30TWs6xNB8j7ibrJoa7K2GAH0zG2ryyjxXgIOJI3N0X9tKRVmsnrYcrQGBcQ9
+         eIXgRdJ0BnbSlpe6kkILRVc5NGNeTH38ofAMEoYXaYUVZzGcm7SsiD7J+Zkph+8VOwIN
+         BkMDMSGkcy4Iu11i4GUIBQEjJbUs8ZGNQWniICDBz4ilRX3Wbekqu3eACYwLJA+Wi0ar
+         ODkXfNGt0YpTsNcM/JCVu9prjrn3R8TwZwciNb4mbgF6otOcg+HCorZt3LT4ijY4bqG4
+         oxpw==
+X-Gm-Message-State: ACrzQf1Z69UtycEJ6vnuys+3Di4/NvocWaIrAOEzk2g4eZaQuFXU/VBk
+        GT+YfgyECXnQSo86ij5QW9k=
+X-Google-Smtp-Source: AMsMyM64g3+ESxXBhNt55ABceWhd+VO4/vMH3BZ88BwJouOpyU7NkhgGB2mYjf8nfDYsgaKxWigPdA==
+X-Received: by 2002:aca:3d55:0:b0:355:1ced:909f with SMTP id k82-20020aca3d55000000b003551ced909fmr10680391oia.60.1667067813195;
+        Sat, 29 Oct 2022 11:23:33 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o4-20020acabe04000000b0035494c1202csm712709oif.42.2022.10.29.11.23.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Oct 2022 11:23:32 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 29 Oct 2022 11:23:31 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH v10 04/27] kallsyms: support "big" kernel symbols
+Message-ID: <20221029182331.GA3324354@roeck-us.net>
+References: <20220927131518.30000-1-ojeda@kernel.org>
+ <20220927131518.30000-5-ojeda@kernel.org>
+ <20221029174147.GA3322058@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Content-Language: en-US
-To:     Max Fierke <max@maxfierke.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        thierry.reding@gmail.com, sam@ravnborg.org, airlied@linux.ie,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-References: <20220918034415.74641-1-max@maxfierke.com>
- <20220918034415.74641-2-max@maxfierke.com>
-From:   Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH v3 1/4] dt-bindings: vendor-prefixes: Add prefix for
- ClockworkPi
-In-Reply-To: <20220918034415.74641-2-max@maxfierke.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221029174147.GA3322058@roeck-us.net>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
-
-On 9/17/22 22:44, Max Fierke wrote:
-> Add a prefix for Clockwork Tech LLC, known as ClockworkPi. They
-> produce a number of hobbyist devices, including the ClockworkPi
-> DevTerm and GameShell.
+On Sat, Oct 29, 2022 at 10:41:49AM -0700, Guenter Roeck wrote:
+> On Tue, Sep 27, 2022 at 03:14:35PM +0200, Miguel Ojeda wrote:
+> > Rust symbols can become quite long due to namespacing introduced
+> > by modules, types, traits, generics, etc.
+> > 
+> > Increasing to 255 is not enough in some cases, therefore
+> > introduce longer lengths to the symbol table.
+> > 
+> > In order to avoid increasing all lengths to 2 bytes (since most
+> > of them are small, including many Rust ones), use ULEB128 to
+> > keep smaller symbols in 1 byte, with the rest in 2 bytes.
+> > 
+> > Reviewed-by: Kees Cook <keescook@chromium.org>
+> > Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> > Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+> > Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
+> > Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+> > Co-developed-by: Gary Guo <gary@garyguo.net>
+> > Signed-off-by: Gary Guo <gary@garyguo.net>
+> > Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > Co-developed-by: Matthew Wilcox <willy@infradead.org>
+> > Signed-off-by: Matthew Wilcox <willy@infradead.org>
+> > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >  kernel/kallsyms.c  | 26 ++++++++++++++++++++++----
+> >  scripts/kallsyms.c | 29 ++++++++++++++++++++++++++---
+> >  2 files changed, 48 insertions(+), 7 deletions(-)
+> > 
 > 
-> Signed-off-by: Max Fierke <max@maxfierke.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> This patch results in the following spurious build error.
+> 
+> Building powerpc:allnoconfig ... failed
+> --------------
+> Error log:
+> Inconsistent kallsyms data
+> Try make KALLSYMS_EXTRA_PASS=1 as a workaround
+
+I should have added: KALLSYMS_EXTRA_PASS=1 does not help.
+
+Guenter
+
+> 
+> Symbol file differences:
+> 10c10
+> < 00009720 g       .rodata	00000000 kallsyms_relative_base
 > ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+> > 0000971c g       .rodata	00000000 kallsyms_relative_base
+> 12,16c12,16
+> < 00009724 g       .rodata	00000000 kallsyms_num_syms
+> < 00009728 g       .rodata	00000000 kallsyms_names
+> < 00022628 g       .rodata	00000000 kallsyms_markers
+> < 000226c0 g       .rodata	00000000 kallsyms_token_table
+> < 00022a2c g       .rodata	00000000 kallsyms_token_index
+> ---
+> > 00009720 g       .rodata	00000000 kallsyms_num_syms
+> > 00009724 g       .rodata	00000000 kallsyms_names
+> > 00022618 g       .rodata	00000000 kallsyms_markers
+> > 000226b0 g       .rodata	00000000 kallsyms_token_table
+> > 00022a1c g       .rodata	00000000 kallsyms_token_index
 > 
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index 2f0151e9f6be..64f4b899c40c 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -258,6 +258,8 @@ patternProperties:
->      description: Cirrus Logic, Inc.
->    "^cisco,.*":
->      description: Cisco Systems, Inc.
-> +  "^clockworkpi,.*":
-> +    description: Clockwork Tech LLC
-
-The vendor uses "clockwork" as the prefix in their downstream
-devicetrees[1][2][3], so I would suggest using the same here. I think
-there is a distinction between "Clockwork" the company and "ClockworkPi"
-the product. This is what I did for the board devicetree I sent[4].
-
-Regards,
-Samuel
-
-[1]:
-https://github.com/clockworkpi/DevTerm/blob/main/Code/patch/armbian_build_a04/userpatches/kernel/sunxi-current/kernel_001_dts.patch#L31
-[2]:
-https://github.com/clockworkpi/DevTerm/blob/main/Code/patch/armbian_build_a04/userpatches/kernel/sunxi-current/kernel_001_dts.patch#L127
-[3]:
-https://github.com/clockworkpi/DevTerm/blob/main/Code/patch/armbian_build_a06/patch/kernel-001-a06-dts.patch#L37
-[4]:
-https://lore.kernel.org/lkml/20220815050815.22340-12-samuel@sholland.org/
-
->    "^cloudengines,.*":
->      description: Cloud Engines, Inc.
->    "^cnm,.*":
-
+> This is the only difference. There are no additional symbols.
+> 
+> Reverting this patch fixes the problem.
+> 
+> Guenter
