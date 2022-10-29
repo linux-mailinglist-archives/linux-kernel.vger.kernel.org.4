@@ -2,53 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 651CC611EF8
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 03:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21054611EFE
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 03:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiJ2BP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 21:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
+        id S229788AbiJ2BSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 21:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiJ2BPw (ORCPT
+        with ESMTP id S229500AbiJ2BSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 21:15:52 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CEB19ABC9;
-        Fri, 28 Oct 2022 18:15:48 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MzhGV1GqdzpW75;
-        Sat, 29 Oct 2022 09:12:18 +0800 (CST)
-Received: from [10.40.193.166] (10.40.193.166) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 29 Oct 2022 09:15:46 +0800
-Subject: Re: [PATCH RFC v3 21/22] scsi: libsas: Queue internal abort commands
- as requests
-To:     John Garry <john.garry@huawei.com>, <axboe@kernel.dk>,
-        <damien.lemoal@opensource.wdc.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <jinpu.wang@cloud.ionos.com>,
-        <hare@suse.de>, <bvanassche@acm.org>, <hch@lst.de>,
-        <ming.lei@redhat.com>, <niklas.cassel@wdc.com>
-References: <1666693096-180008-1-git-send-email-john.garry@huawei.com>
- <1666693096-180008-22-git-send-email-john.garry@huawei.com>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <linuxarm@huawei.com>
-From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
-Message-ID: <0cbc86ea-09c9-2654-a795-9230e4b00a1e@hisilicon.com>
-Date:   Sat, 29 Oct 2022 09:15:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.2.0
+        Fri, 28 Oct 2022 21:18:50 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AD620FB16
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 18:18:49 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id y72so7921941yby.13
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 18:18:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=slDZbTLn5r+CoQsZvxjlRQM4l7ZQz2W3wx+JfLaqr98=;
+        b=cIlLq6PAwkqiXXXn6c67z8whCKspaofSQ/9DWTDJQvK9tl5rsZ/BjJCsTbNWj0w5iP
+         odlwi1BYuuFhculoBCwUEQXqvn1i3jcwqNEyFdwQt6kukql6v0f3MXml9zinWlHV5h7h
+         8IgowAWu8xfEK6tc19cHWbymkcn1GswMfHHyVE6kjK0O9KIaq0FMjmCbO5vK1LxSwkyT
+         wWXoLSrpgHUZJIbKKsOxaZULSoq2cv4Yhn2nrOY/tKU9LRE3bP6RLhD/lnxaRewMSpqQ
+         xHuR2BgB3dHcbpvXj4v5mJz41KiejJ6gLOjX/YbgvQJXTuyIV22UtuaLgePvYWjOa3NS
+         OL7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=slDZbTLn5r+CoQsZvxjlRQM4l7ZQz2W3wx+JfLaqr98=;
+        b=RgZd48Zv8spiuZk/7lxYZbeDE5eG3rF1b5oWAtWO7WORyk6wA9GKpOyTlj5MqejoGZ
+         HbrJcIe/2B+hrjl6VEoSeyks0u7CCd84NsajSs6PtS54bSc1MgskG5qNUGtoS6UDGdbb
+         cT1K6LA+8JLUQUTYMRsM9EAr0cHpsPzBgSajaNowLFhh2p7BmUrob3skytc//O/+yCip
+         unehXLU0h1gb0yaUM6hNe7XxiMnU/DqvYfNML8tC3jBdorXfbeQn7zfd9Tf9QUskTpBG
+         FEiXgsbcET4tznegqjNwp3kCSnI6F/qSo0B1k7mbQytYLd1L/+IJuUBiaTx6pYuY+XJU
+         iySw==
+X-Gm-Message-State: ACrzQf1sNdILq0lj1uOB8A1brQ+pQ93PJ+3XfkvKMnObbRMweTc5P3OC
+        yGYsfrgwWWyzMAwfgAdlyvMCx233paG27tLrXSGsOQ==
+X-Google-Smtp-Source: AMsMyM4My+8are69qRAY9S2gtxp8RO+EhLpWtO0plmEiR5VvpH6Qbugf5IG3Oz6ORHJlrHJl0CCrBjx6WpNavq9iVVg=
+X-Received: by 2002:a25:e207:0:b0:6ca:268b:10c3 with SMTP id
+ h7-20020a25e207000000b006ca268b10c3mr1763060ybe.407.1667006328347; Fri, 28
+ Oct 2022 18:18:48 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1666693096-180008-22-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.40.193.166]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500016.china.huawei.com (7.221.188.220)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221024113005.376059449@linuxfoundation.org> <20221029011211.4049810-1-ovt@google.com>
+In-Reply-To: <20221029011211.4049810-1-ovt@google.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 28 Oct 2022 18:18:36 -0700
+Message-ID: <CANn89iLVb+zHBXhPrD7JAdawLwAAYP_Fc3Vt3YB1AAy1fj=F4w@mail.gmail.com>
+Subject: Re: [PATCH 5.4 086/255] once: add DO_ONCE_SLOW() for sleepable contexts
+To:     Oleksandr Tymoshenko <ovt@google.com>
+Cc:     gregkh@linuxfoundation.org, christophe.leroy@csgroup.eu,
+        davem@davemloft.net, linux-kernel@vger.kernel.org,
+        sashal@kernel.org, stable@vger.kernel.org, w@1wt.eu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,273 +69,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
-
-For internal abort commands, it allocates and deliver requests through 
-sdev->request_queue.
-
-Is it possible that we still need to send internal abort commands even 
-if sdev is freed?
-
-I  notices that in sas_destruct_devices, it calls sas_rphy_delete() to 
-remove target, and then call i->dft->lldd_dev_gone()
-
-which will call internal abort commands.
-
-
-
-在 2022/10/25 18:18, John Garry 写道:
-> Like what we did for SMP commands, send internal abort commands through
-> the block layer.
+On Fri, Oct 28, 2022 at 6:12 PM Oleksandr Tymoshenko <ovt@google.com> wrote:
 >
-> At this point we can delete special handling in sas_task_abort() for SAS
-> "internal" commands, as every slow task now has a request associated.
+> Hello,
 >
-> Function sas_task_internal_timedout() is no longer referenced, so delete
-> it.
+> This commit causes the following panic in kernel built with clang
+> (GCC build is not affected):
 >
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> ---
->   drivers/scsi/hisi_sas/hisi_sas_main.c | 36 +++++++++----------
->   drivers/scsi/libsas/sas_expander.c    |  2 +-
->   drivers/scsi/libsas/sas_init.c        | 12 +++++--
->   drivers/scsi/libsas/sas_internal.h    |  3 +-
->   drivers/scsi/libsas/sas_scsi_host.c   | 52 ++++++---------------------
->   include/scsi/libsas.h                 |  1 -
->   6 files changed, 38 insertions(+), 68 deletions(-)
+> [    8.320308] BUG: unable to handle page fault for address: ffffffff97216c6a                                        [26/4066]
+> [    8.330029] #PF: supervisor write access in kernel mode
+> [    8.337263] #PF: error_code(0x0003) - permissions violation
+> [    8.344816] PGD 12e816067 P4D 12e816067 PUD 12e817063 PMD 800000012e2001e1
+> [    8.354337] Oops: 0003 [#1] SMP PTI
+> [    8.359178] CPU: 2 PID: 437 Comm: curl Not tainted 5.4.220 #15
+> [    8.367241] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015
+> [    8.378529] RIP: 0010:__do_once_slow_done+0xf/0xa0
+> [    8.384962] Code: 1b 84 db 74 0c 48 c7 c7 80 ce 8d 97 e8 fa e9 4a 00 84 db 0f 94 c0 5b 5d c3 66 90 55 48 89 e5 41 57 41 56
+> 53 49 89 d7 49 89 f6 <c6> 07 01 48 c7 c7 80 ce 8d 97 e8 d2 e9 4a 00 48 8b 3d 9b de c9 00
+> [    8.409066] RSP: 0018:ffffb764c02d3c90 EFLAGS: 00010246
+> [    8.415697] RAX: 4f51d3d06bc94000 RBX: d474b86ddf7162eb RCX: 000000007229b1d6
+> [    8.424805] RDX: 0000000000000000 RSI: ffffffff9791b4a0 RDI: ffffffff97216c6a
+> [    8.434108] RBP: ffffb764c02d3ca8 R08: 0e81c130f1159fc1 R09: 1d19d60ce0b52c77
+> [    8.443408] R10: 8ea59218e6892b1f R11: d5260237a3c1e35c R12: ffff9c3dadd42600
+> [    8.452468] R13: ffffffff97910f80 R14: ffffffff9791b4a0 R15: 0000000000000000
+> [    8.461416] FS:  00007eff855b40c0(0000) GS:ffff9c3db7a80000(0000) knlGS:0000000000000000
+> [    8.471632] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    8.478763] CR2: ffffffff97216c6a CR3: 000000022ded0000 CR4: 00000000000006a0
+> [    8.487789] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [    8.496684] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [    8.505443] Call Trace:
+> [    8.508568]  __inet_hash_connect+0x523/0x530
+> [    8.513839]  ? inet_hash_connect+0x50/0x50
+> [    8.518818]  ? secure_ipv4_port_ephemeral+0x69/0xe0
+> [    8.525003]  tcp_v4_connect+0x2c5/0x410
+> [    8.529858]  __inet_stream_connect+0xd7/0x360
+> [    8.535329]  ? _raw_spin_unlock+0xe/0x10
+> ... skipped ...
 >
-> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-> index fe2752d24fe8..65475775c844 100644
-> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-> @@ -465,7 +465,7 @@ static int hisi_sas_queue_command(struct sas_task *task, gfp_t gfp_flags)
->   	struct hisi_sas_port *port;
->   	struct hisi_hba *hisi_hba;
->   	struct hisi_sas_slot *slot;
-> -	struct request *rq = NULL;
-> +	struct request *rq;
->   	struct device *dev;
->   	int rc;
->   
-> @@ -485,6 +485,21 @@ static int hisi_sas_queue_command(struct sas_task *task, gfp_t gfp_flags)
->   
->   	hisi_hba = dev_to_hisi_hba(device);
->   	dev = hisi_hba->dev;
-> +	rq = sas_task_find_rq(task);
-> +	if (rq) {
-> +		unsigned int dq_index;
-> +		u32 blk_tag;
-> +
-> +		blk_tag = blk_mq_unique_tag(rq);
-> +		dq_index = blk_mq_unique_tag_to_hwq(blk_tag);
-> +		dq = &hisi_hba->dq[dq_index];
-> +	} else {
-> +		struct Scsi_Host *shost = hisi_hba->shost;
-> +		struct blk_mq_queue_map *qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
-> +		int queue = qmap->mq_map[raw_smp_processor_id()];
-> +
-> +		dq = &hisi_hba->dq[queue];
-> +	}
->   
->   	switch (task->task_proto) {
->   	case SAS_PROTOCOL_SSP:
-> @@ -519,22 +534,6 @@ static int hisi_sas_queue_command(struct sas_task *task, gfp_t gfp_flags)
->   
->   				return -ECOMM;
->   		}
-> -
-> -		rq = sas_task_find_rq(task);
-> -		if (rq) {
-> -			unsigned int dq_index;
-> -			u32 blk_tag;
-> -
-> -			blk_tag = blk_mq_unique_tag(rq);
-> -			dq_index = blk_mq_unique_tag_to_hwq(blk_tag);
-> -			dq = &hisi_hba->dq[dq_index];
-> -		} else {
-> -			struct Scsi_Host *shost = hisi_hba->shost;
-> -			struct blk_mq_queue_map *qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
-> -			int queue = qmap->mq_map[raw_smp_processor_id()];
-> -
-> -			dq = &hisi_hba->dq[queue];
-> -		}
->   		break;
->   	case SAS_PROTOCOL_INTERNAL_ABORT:
->   		if (!hisi_hba->hw->prep_abort)
-> @@ -543,13 +542,10 @@ static int hisi_sas_queue_command(struct sas_task *task, gfp_t gfp_flags)
->   		if (test_bit(HISI_SAS_HW_FAULT_BIT, &hisi_hba->flags))
->   			return -EIO;
->   
-> -		hisi_hba = dev_to_hisi_hba(device);
-> -
->   		if (unlikely(test_bit(HISI_SAS_REJECT_CMD_BIT, &hisi_hba->flags)))
->   			return -EINVAL;
->   
->   		port = to_hisi_sas_port(sas_port);
-> -		dq = &hisi_hba->dq[task->abort_task.qid];
->   		break;
->   	default:
->   		dev_err(hisi_hba->dev, "task prep: unknown/unsupported proto (0x%x)\n",
-> diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
-> index cc41127ea5cc..e852f1565fe7 100644
-> --- a/drivers/scsi/libsas/sas_expander.c
-> +++ b/drivers/scsi/libsas/sas_expander.c
-> @@ -50,7 +50,7 @@ static int smp_execute_task_sg(struct domain_device *dev,
->   			break;
->   		}
->   
-> -		task = sas_alloc_slow_task_rq(dev, GFP_KERNEL);
-> +		task = sas_alloc_slow_task_rq(dev, GFP_KERNEL, -1U);
->   		if (!task) {
->   			res = -ENOMEM;
->   			break;
-> diff --git a/drivers/scsi/libsas/sas_init.c b/drivers/scsi/libsas/sas_init.c
-> index 5f9e71a54799..c3f602bd2c4c 100644
-> --- a/drivers/scsi/libsas/sas_init.c
-> +++ b/drivers/scsi/libsas/sas_init.c
-> @@ -56,7 +56,7 @@ struct sas_task *sas_alloc_slow_task(gfp_t flags)
->   	return task;
->   }
->   
-> -struct sas_task *sas_alloc_slow_task_rq(struct domain_device *device, gfp_t flags)
-> +struct sas_task *sas_alloc_slow_task_rq(struct domain_device *device, gfp_t flags, unsigned int qid)
->   {
->   	struct sas_ha_struct *sas_ha = device->port->ha;
->   	struct Scsi_Host *shost = sas_ha->core.shost;
-> @@ -86,8 +86,14 @@ struct sas_task *sas_alloc_slow_task_rq(struct domain_device *device, gfp_t flag
->   	task->dev = device;
->   	task->task_done = sas_task_complete_internal;
->   
-> -	rq = scsi_alloc_request(sdev->request_queue, REQ_OP_DRV_IN,
-> -				BLK_MQ_REQ_RESERVED | BLK_MQ_REQ_NOWAIT);
-> +	if (qid == -1U) {
-> +		rq = scsi_alloc_request(sdev->request_queue, REQ_OP_DRV_IN,
-> +					BLK_MQ_REQ_RESERVED | BLK_MQ_REQ_NOWAIT);
-> +	} else {
-> +		rq = scsi_alloc_request_hwq(sdev->request_queue, REQ_OP_DRV_IN,
-> +					BLK_MQ_REQ_RESERVED | BLK_MQ_REQ_NOWAIT,
-> +					qid);
-> +	}
->   	if (IS_ERR(rq)) {
->   		sas_free_task(task);
->   		return NULL;
-> diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
-> index 9b58948c57c2..af4a4bf88830 100644
-> --- a/drivers/scsi/libsas/sas_internal.h
-> +++ b/drivers/scsi/libsas/sas_internal.h
-> @@ -54,7 +54,8 @@ void sas_free_event(struct asd_sas_event *event);
->   
->   struct sas_task *sas_alloc_task(gfp_t flags);
->   struct sas_task *sas_alloc_slow_task(gfp_t flags);
-> -struct sas_task *sas_alloc_slow_task_rq(struct domain_device *device, gfp_t flags);
-> +struct sas_task *sas_alloc_slow_task_rq(struct domain_device *device, gfp_t flags,
-> +				      unsigned int qid);
->   void sas_free_task(struct sas_task *task);
->   
->   int  sas_register_ports(struct sas_ha_struct *sas_ha);
-> diff --git a/drivers/scsi/libsas/sas_scsi_host.c b/drivers/scsi/libsas/sas_scsi_host.c
-> index e6ee8dd56a45..a93e019a7dbf 100644
-> --- a/drivers/scsi/libsas/sas_scsi_host.c
-> +++ b/drivers/scsi/libsas/sas_scsi_host.c
-> @@ -920,23 +920,6 @@ void sas_task_complete_internal(struct sas_task *task)
->   	scsi_done(scmd);
->   }
->   
-> -void sas_task_internal_timedout(struct timer_list *t)
-> -{
-> -	struct sas_task_slow *slow = from_timer(slow, t, timer);
-> -	struct sas_task *task = slow->task;
-> -	bool is_completed = true;
-> -	unsigned long flags;
-> -
-> -	spin_lock_irqsave(&task->task_state_lock, flags);
-> -	if (!(task->task_state_flags & SAS_TASK_STATE_DONE)) {
-> -		task->task_state_flags |= SAS_TASK_STATE_ABORTED;
-> -		is_completed = false;
-> -	}
-> -	spin_unlock_irqrestore(&task->task_state_lock, flags);
-> -
-> -	if (!is_completed)
-> -		complete(&task->slow_task->completion);
-> -}
->   enum blk_eh_timer_return sas_internal_timeout(struct scsi_cmnd *scmd)
->   {
->   	struct sas_task *task = TO_SAS_TASK(scmd);
-> @@ -978,28 +961,23 @@ static int sas_execute_internal_abort(struct domain_device *device,
->   	int res, retry;
->   
->   	for (retry = 0; retry < TASK_RETRY; retry++) {
-> -		task = sas_alloc_slow_task(GFP_KERNEL);
-> +		struct request *rq;
-> +
-> +		task = sas_alloc_slow_task_rq(device, GFP_KERNEL, qid);
->   		if (!task)
->   			return -ENOMEM;
->   
->   		task->dev = device;
->   		task->task_proto = SAS_PROTOCOL_INTERNAL_ABORT;
-> -		task->task_done = sas_task_internal_done;
-> -		task->slow_task->timer.function = sas_task_internal_timedout;
-> -		task->slow_task->timer.expires = jiffies + TASK_TIMEOUT;
-> -		add_timer(&task->slow_task->timer);
-> +		task->task_done = sas_task_complete_internal;
->   
->   		task->abort_task.tag = tag;
->   		task->abort_task.type = type;
-> -		task->abort_task.qid = qid;
->   
-> -		res = i->dft->lldd_execute_task(task, GFP_KERNEL);
-> -		if (res) {
-> -			del_timer_sync(&task->slow_task->timer);
-> -			pr_err("Executing internal abort failed %016llx (%d)\n",
-> -			       SAS_ADDR(device->sas_addr), res);
-> -			break;
-> -		}
-> +		rq = scsi_cmd_to_rq(task->uldd_task);
-> +		rq->timeout = TASK_TIMEOUT;
-> +
-> +		blk_execute_rq_nowait(rq, true);
->   
->   		wait_for_completion(&task->slow_task->completion);
->   		res = TMF_RESP_FUNC_FAILED;
-> @@ -1069,7 +1047,7 @@ int sas_execute_tmf(struct domain_device *device, void *parameter,
->   	for (retry = 0; retry < TASK_RETRY; retry++) {
->   		struct request *rq;
->   
-> -		task = sas_alloc_slow_task_rq(device, GFP_KERNEL);
-> +		task = sas_alloc_slow_task_rq(device, GFP_KERNEL, -1U);
->   		if (!task)
->   			return -ENOMEM;
->   
-> @@ -1251,17 +1229,7 @@ void sas_task_abort(struct sas_task *task)
->   {
->   	struct scsi_cmnd *sc = task->uldd_task;
->   
-> -	/* Escape for libsas internal commands */
-> -	if (!sc) {
-> -		struct sas_task_slow *slow = task->slow_task;
-> -
-> -		if (!slow)
-> -			return;
-> -		if (!del_timer(&slow->timer))
-> -			return;
-> -		slow->timer.function(&slow->timer);
-> -		return;
-> -	}
-> +	WARN_ON_ONCE(!sc);
->   
->   	if (dev_is_sata(task->dev) && !task->slow_task)
->   		sas_ata_task_abort(task);
-> diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-> index f02156ccd376..60543d8b01d4 100644
-> --- a/include/scsi/libsas.h
-> +++ b/include/scsi/libsas.h
-> @@ -565,7 +565,6 @@ enum sas_internal_abort {
->   
->   struct sas_internal_abort_task {
->   	enum sas_internal_abort type;
-> -	unsigned int qid;
->   	u16 tag;
->   };
->   
+>
+> The root cause is the difference in __section macro semantics between 5.4 and
+> later LTS releases. On 5.4 it stringifies the argument so the ___done
+> symbol is created in a bogus section ".data.once", with double quotes:
+>
+> % readelf -S vmlinux | grep data.once
+>   [ 5] ".data.once"      PROGBITS         ffffffff82216c6a  01416c6a
 
+Yes, this has been discovered earlier today.
+
+Look at Google-Bug-Id 256204637
+
+(include/linux/mmdebug.h has a similar issue)
+
+Thanks.
