@@ -2,113 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B037D6124B4
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 19:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D1F6124B5
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 19:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiJ2RfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 13:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
+        id S229849AbiJ2Rf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 13:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiJ2Re4 (ORCPT
+        with ESMTP id S229819AbiJ2RfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 13:34:56 -0400
-Received: from redpilled.dev (redpilled.dev [IPv6:2a01:4f8:1c1c:f8e2::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92EC10FCC;
-        Sat, 29 Oct 2022 10:34:51 -0700 (PDT)
-Date:   Sat, 29 Oct 2022 20:34:46 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redpilled.dev;
-        s=mail; t=1667064889;
-        bh=h3mGwizRktjW9xsjaOG3vg/Kh6l2SlXpVsNYlVEB6Ig=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References;
-        b=WCmOSJPh1IPrj1M5MhGQU5TNW+qJCtok//7gmFlCbO5VfR7HK1d8GYcoTfMwt/CCZ
-         oVmCXpBkPXAD+fyZVCU2GY34tiYxXQSpJVV+fSjZMQpQ/F/9c2NgJkH076HHcMcuVx
-         tVVaWybV1gNA0TUkSTa8L7MFPIthVY7Erdl9AVZ4=
-From:   Mia Kanashi <chad@redpilled.dev>
-To:     =?ISO-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        jikos@kernel.org
-CC:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
-        pobrn@protonmail.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] HID: input: do not query XP-PEN Deco LW battery
-In-Reply-To: <20221029161240.15548-2-jose.exposito89@gmail.com>
-References: <20221029161240.15548-1-jose.exposito89@gmail.com> <20221029161240.15548-2-jose.exposito89@gmail.com>
-Message-ID: <1701DB3A-5538-4B58-8232-E6705B9C70DF@redpilled.dev>
+        Sat, 29 Oct 2022 13:35:21 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF2124084
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 10:35:20 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id h24so5304920qta.7
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 10:35:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GqpQmjad+jHpdMyOWzvRhWOYCEqrGvCFu9OYewrFBNQ=;
+        b=EOq0roFccIxde/xokGChC5X/vq1RwLTKqaDlXunQmKD0kkzthh2sdKDqH9guzvm7DH
+         7hRMbbtQr6Z9L2arZWR8HGnM77MO3eWKB3R65ArkgoH10MY+yMYhUPI5UjCVwNuMIJ3n
+         L/hZ00WN4gghSpyLI4b9Qg8QLkdTZ+Hv/E1Nc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GqpQmjad+jHpdMyOWzvRhWOYCEqrGvCFu9OYewrFBNQ=;
+        b=bGtaGCM1B/dSxifahfGoXGPXUaaBwDGNQoKx9miW53xltxoW+OQcSh4Ntm2iohhxN1
+         /83GqiQamUO9FfPCcVSye8cTK4OqWa9jPc8r/1coTU59NzUAmSqTNa/4lXu7dwEOmxi6
+         joHudQXOnRqEbL6f5QayWODxpr0A4aB6gwe+3Q2l/UbonEHh2GePQ5xdfPu5ZhKSbn18
+         Xu9Q6wibvW2uM14BS2e9K3hLcL0PdUupRCJasoWz8j6lMFuG0JtqwuZDmGpwzsSIsBR0
+         4CElfFP2jKr++5CRtyHc2c6JYF1p660AiC7MB/UwENL8KInJpKBnXy5xTq5eD8OMC/Kh
+         KZ/Q==
+X-Gm-Message-State: ACrzQf0ecP8QqcsGHzQolbXehkr2/J+b0Jsd88GIBYQq2bklI+uVgrQE
+        48uIBvr8P6k2gOrGaiSh1jC0w3vMmnaQlw==
+X-Google-Smtp-Source: AMsMyM6KU42zW038v/Ci49Qf3ZZ8tSTvQFDerSGPOCa8TCMBoT3mvZ8oruoH4bu5C0NpkyYU7w5S8Q==
+X-Received: by 2002:ac8:5a16:0:b0:39c:efc6:b370 with SMTP id n22-20020ac85a16000000b0039cefc6b370mr4374423qta.374.1667064918931;
+        Sat, 29 Oct 2022 10:35:18 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id c23-20020a05620a269700b006f84ee3a4f3sm1441070qkp.48.2022.10.29.10.35.18
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 29 Oct 2022 10:35:18 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id f205so9454705yba.2
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 10:35:18 -0700 (PDT)
+X-Received: by 2002:a25:5389:0:b0:6bc:f12c:5d36 with SMTP id
+ h131-20020a255389000000b006bcf12c5d36mr4655898ybb.184.1667064917770; Sat, 29
+ Oct 2022 10:35:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221025200656.951281799@infradead.org> <CAHk-=wjBn=jThQ4drqgorDQFR3i2QUi9PeOG1tH2uWVkN8+6mQ@mail.gmail.com>
+ <Y1jek64pXOsougmz@hirez.programming.kicks-ass.net> <CAHk-=wjaoB+9pJ1ouLbKuqgadqDxdhyCHi0rO-u-5bOi1qUv=w@mail.gmail.com>
+ <Y1osYVoLrpCabNrR@hirez.programming.kicks-ass.net> <Y10OyLCLAAS6rsZv@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y10OyLCLAAS6rsZv@hirez.programming.kicks-ass.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 29 Oct 2022 10:35:01 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whgT_4xCPuAkz=w1zw_Y6F5GH7QPVPUtvhOxAPweSDRkw@mail.gmail.com>
+Message-ID: <CAHk-=whgT_4xCPuAkz=w1zw_Y6F5GH7QPVPUtvhOxAPweSDRkw@mail.gmail.com>
+Subject: Re: [PATCH 0/5] x86/ftrace: Cure boot time W+X mapping
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rostedt@goodmis.org, dave.hansen@intel.com,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        keescook@chromium.org, seanjc@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29 October 2022 19:12:39 EEST, "Jos=C3=A9 Exp=C3=B3sito" <jose=2Eexposit=
-o89@gmail=2Ecom> wrote:
->The XP-PEN Deco LW drawing tablet can be connected by USB cable or using
->a USB Bluetooth dongle=2E When it is connected using the dongle, there
->might be a small delay until the tablet is paired with the dongle=2E
+On Sat, Oct 29, 2022 at 4:30 AM Peter Zijlstra <peterz@infradead.org> wrote:
 >
->Fetching the device battery during this delay results in random battery
->percentage values=2E
->
->Add a quirk to avoid actively querying the battery percentage and wait
->for the device to report it on its own=2E
->
->Reported-by: Mia Kanashi <chad@redpilled=2Edev>
->Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose=2Eexposito89@gmail=2Ecom>
->---
-> drivers/hid/hid-input=2Ec | 6 ++++++
-> 1 file changed, 6 insertions(+)
->
->diff --git a/drivers/hid/hid-input=2Ec b/drivers/hid/hid-input=2Ec
->index 859aeb07542e=2E=2Ed728a94c642e 100644
->--- a/drivers/hid/hid-input=2Ec
->+++ b/drivers/hid/hid-input=2Ec
->@@ -340,6 +340,7 @@ static enum power_supply_property hidinput_battery_pr=
-ops[] =3D {
-> #define HID_BATTERY_QUIRK_PERCENT	(1 << 0) /* always reports percent */
-> #define HID_BATTERY_QUIRK_FEATURE	(1 << 1) /* ask for feature report */
-> #define HID_BATTERY_QUIRK_IGNORE	(1 << 2) /* completely ignore the batte=
-ry */
->+#define HID_BATTERY_QUIRK_AVOID_QUERY	(1 << 3) /* do not query the batte=
-ry */
->=20
-> static const struct hid_device_id hid_battery_quirks[] =3D {
-> 	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE,
->@@ -373,6 +374,8 @@ static const struct hid_device_id hid_battery_quirks[=
-] =3D {
-> 	  HID_BATTERY_QUIRK_IGNORE },
-> 	{ HID_USB_DEVICE(USB_VENDOR_ID_ELAN, USB_DEVICE_ID_ASUS_UX550VE_TOUCHSC=
-REEN),
-> 	  HID_BATTERY_QUIRK_IGNORE },
->+	{ HID_USB_DEVICE(USB_VENDOR_ID_UGEE, USB_DEVICE_ID_UGEE_XPPEN_TABLET_DE=
-CO_L),
->+	  HID_BATTERY_QUIRK_AVOID_QUERY },
-> 	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_HP_ENVY_X360_15),
-> 	  HID_BATTERY_QUIRK_IGNORE },
-> 	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_HP_ENVY_X360_15T_DR1=
-00),
->@@ -554,6 +557,9 @@ static int hidinput_setup_battery(struct hid_device *=
-dev, unsigned report_type,
-> 	dev->battery_avoid_query =3D report_type =3D=3D HID_INPUT_REPORT &&
-> 				   field->physical =3D=3D HID_DG_STYLUS;
->=20
->+	if (quirks & HID_BATTERY_QUIRK_AVOID_QUERY)
->+		dev->battery_avoid_query =3D true;
->+
-> 	dev->battery =3D power_supply_register(&dev->dev, psy_desc, &psy_cfg);
-> 	if (IS_ERR(dev->battery)) {
-> 		error =3D PTR_ERR(dev->battery);
+> Got around to it; I added the below patch on top and things seem to
+> still boot so it must be good :-)
 
-I've tested this patch and now power supply status is correctly set to Unk=
-nown and capacity is set to 0 initially=2E
+Thanks, looks good to me, and as I see your simpler version, I
+realized that my broken MUA version wasn't "rox", it was "ronx".
 
-Just a note that that issue occured not only with the dongle, but a cable =
-also=2E
-It seems that tablet just doesn't respond to the query=2E
-
-Thank you for the work!
+                Linus
