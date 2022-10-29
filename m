@@ -2,74 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D1F6124B5
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 19:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F346124B6
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 19:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiJ2Rf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 13:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
+        id S229714AbiJ2Rfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 13:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiJ2RfV (ORCPT
+        with ESMTP id S229839AbiJ2Rf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 13:35:21 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF2124084
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 10:35:20 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id h24so5304920qta.7
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 10:35:20 -0700 (PDT)
+        Sat, 29 Oct 2022 13:35:26 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BE82AC62
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 10:35:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GqpQmjad+jHpdMyOWzvRhWOYCEqrGvCFu9OYewrFBNQ=;
-        b=EOq0roFccIxde/xokGChC5X/vq1RwLTKqaDlXunQmKD0kkzthh2sdKDqH9guzvm7DH
-         7hRMbbtQr6Z9L2arZWR8HGnM77MO3eWKB3R65ArkgoH10MY+yMYhUPI5UjCVwNuMIJ3n
-         L/hZ00WN4gghSpyLI4b9Qg8QLkdTZ+Hv/E1Nc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GqpQmjad+jHpdMyOWzvRhWOYCEqrGvCFu9OYewrFBNQ=;
-        b=bGtaGCM1B/dSxifahfGoXGPXUaaBwDGNQoKx9miW53xltxoW+OQcSh4Ntm2iohhxN1
-         /83GqiQamUO9FfPCcVSye8cTK4OqWa9jPc8r/1coTU59NzUAmSqTNa/4lXu7dwEOmxi6
-         joHudQXOnRqEbL6f5QayWODxpr0A4aB6gwe+3Q2l/UbonEHh2GePQ5xdfPu5ZhKSbn18
-         Xu9Q6wibvW2uM14BS2e9K3hLcL0PdUupRCJasoWz8j6lMFuG0JtqwuZDmGpwzsSIsBR0
-         4CElfFP2jKr++5CRtyHc2c6JYF1p660AiC7MB/UwENL8KInJpKBnXy5xTq5eD8OMC/Kh
-         KZ/Q==
-X-Gm-Message-State: ACrzQf0ecP8QqcsGHzQolbXehkr2/J+b0Jsd88GIBYQq2bklI+uVgrQE
-        48uIBvr8P6k2gOrGaiSh1jC0w3vMmnaQlw==
-X-Google-Smtp-Source: AMsMyM6KU42zW038v/Ci49Qf3ZZ8tSTvQFDerSGPOCa8TCMBoT3mvZ8oruoH4bu5C0NpkyYU7w5S8Q==
-X-Received: by 2002:ac8:5a16:0:b0:39c:efc6:b370 with SMTP id n22-20020ac85a16000000b0039cefc6b370mr4374423qta.374.1667064918931;
-        Sat, 29 Oct 2022 10:35:18 -0700 (PDT)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id c23-20020a05620a269700b006f84ee3a4f3sm1441070qkp.48.2022.10.29.10.35.18
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Oct 2022 10:35:18 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id f205so9454705yba.2
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 10:35:18 -0700 (PDT)
-X-Received: by 2002:a25:5389:0:b0:6bc:f12c:5d36 with SMTP id
- h131-20020a255389000000b006bcf12c5d36mr4655898ybb.184.1667064917770; Sat, 29
- Oct 2022 10:35:17 -0700 (PDT)
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=u8OiKICe3FtMF3Aua0AmfkX/86XOOv3X8TCH3zNeLhU=;
+  b=syNpMhvlIWgyltAS/DbjuexL8QR36URSgWcCRu50Lkl9rOp8CNTkO+q6
+   79UFYS/aBYzrgSvKMG3loK712sRRA8b7DO4mbG2Xly2oFYUkY5h8nmnkb
+   Wpx2CDJy0NHgTJqZuwsYrG1/A1tQtXYAECAxHIa6oRc5dGlZoHYKcxKA3
+   0=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.95,224,1661810400"; 
+   d="scan'208";a="72171987"
+Received: from 51.123.68.85.rev.sfr.net (HELO hadrien) ([85.68.123.51])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 19:35:22 +0200
+Date:   Sat, 29 Oct 2022 19:35:22 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     jovial umwari <umwarijovial@gmail.com>
+cc:     Alison Schofield <alison.schofield@intel.com>,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH] WARNING: Possible repeated word: 'very'
+In-Reply-To: <CAMk1CBOgUPjeMw9NmCthsQsDJXY8U4WCBTmNi-3h_BroGnh_QQ@mail.gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2210291934400.2917@hadrien>
+References: <20221028051420.GA30073@rdm> <Y1wg4y6k1fe/TF0d@aschofie-mobl2> <CAMk1CBOgUPjeMw9NmCthsQsDJXY8U4WCBTmNi-3h_BroGnh_QQ@mail.gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-References: <20221025200656.951281799@infradead.org> <CAHk-=wjBn=jThQ4drqgorDQFR3i2QUi9PeOG1tH2uWVkN8+6mQ@mail.gmail.com>
- <Y1jek64pXOsougmz@hirez.programming.kicks-ass.net> <CAHk-=wjaoB+9pJ1ouLbKuqgadqDxdhyCHi0rO-u-5bOi1qUv=w@mail.gmail.com>
- <Y1osYVoLrpCabNrR@hirez.programming.kicks-ass.net> <Y10OyLCLAAS6rsZv@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y10OyLCLAAS6rsZv@hirez.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 29 Oct 2022 10:35:01 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whgT_4xCPuAkz=w1zw_Y6F5GH7QPVPUtvhOxAPweSDRkw@mail.gmail.com>
-Message-ID: <CAHk-=whgT_4xCPuAkz=w1zw_Y6F5GH7QPVPUtvhOxAPweSDRkw@mail.gmail.com>
-Subject: Re: [PATCH 0/5] x86/ftrace: Cure boot time W+X mapping
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rostedt@goodmis.org, dave.hansen@intel.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        keescook@chromium.org, seanjc@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,12 +53,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 4:30 AM Peter Zijlstra <peterz@infradead.org> wrote:
+
+
+On Sat, 29 Oct 2022, jovial umwari wrote:
+
+> Noted. Thank you sir
+
+Please don't top post.  Your reponse should appear below the text that you
+are responding to.
+
+julia
+
+
 >
-> Got around to it; I added the below patch on top and things seem to
-> still boot so it must be good :-)
-
-Thanks, looks good to me, and as I see your simpler version, I
-realized that my broken MUA version wasn't "rox", it was "ronx".
-
-                Linus
+> On Fri, 28 Oct 2022 at 21:35, Alison Schofield
+> <alison.schofield@intel.com> wrote:
+> >
+> > On Fri, Oct 28, 2022 at 08:14:20AM +0300, UMWARI JOVIAL wrote:
+> > > i used checkpatch.pl script to identify the above
+> > > Repetition of the same word in one sentence same line
+> > >
+> > > Signed-off-by: UMWARI JOVIAL <umwarijovial@gmail.com>
+> >
+> > This is my (not yet automated) response:
+> >
+> > You are sending patches to the Outreachy list, in a way
+> > that makes me suspect you have overlooked the Outreachy
+> > Project Contribution Information.
+> >
+> > Please review:
+> > https://www.outreachy.org/outreachy-december-2022-internship-round/communities/linux-kernel/  (only accepted applicants can see this link)
+> >
+> > https://lore.kernel.org/outreachy/Y0D+dzbjRtuc0KT4@aschofie-mobl2/
+> >
+> > Alison
+> >
+> > > ---
+> > >  drivers/staging/rtl8712/rtl871x_xmit.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/staging/rtl8712/rtl871x_xmit.c b/drivers/staging/rtl8712/rtl871x_xmit.c
+> > > index 090345bad223..30a0276b8b58 100644
+> > > --- a/drivers/staging/rtl8712/rtl871x_xmit.c
+> > > +++ b/drivers/staging/rtl8712/rtl871x_xmit.c
+> > > @@ -766,7 +766,7 @@ void r8712_free_xmitbuf(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
+> > >   * If we turn on USE_RXTHREAD, then, no need for critical section.
+> > >   * Otherwise, we must use _enter/_exit critical to protect free_xmit_queue...
+> > >   *
+> > > - * Must be very very cautious...
+> > > + * Must be very cautious...
+> > >   *
+> > >   */
+> > >  struct xmit_frame *r8712_alloc_xmitframe(struct xmit_priv *pxmitpriv)
+> > > --
+> > > 2.25.1
+> > >
+> > >
+>
+>
