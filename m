@@ -2,130 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDBFD61240E
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 16:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EEC2612414
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 16:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbiJ2Ozb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 10:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57470 "EHLO
+        id S230002AbiJ2O5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 10:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiJ2OzR (ORCPT
+        with ESMTP id S229497AbiJ2O4v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 10:55:17 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50EB20F7E;
-        Sat, 29 Oct 2022 07:55:15 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id k4so596245wri.9;
-        Sat, 29 Oct 2022 07:55:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mz5TY/LtkLWNd5ySUogpHG94P5HHBB7Mk5dPpz+NcdA=;
-        b=IWk7W49jd16h4QCOdKnC2dqhR81Zwa7m7wflpedDLqja8GppdvSwxvODl0MneU14dn
-         93D92I5s08ScbNXyXU9ZXA2HKjlHu4q2vZQ4AcAIX4P2MOEEWjelDNYuHlPfV3OlzKuw
-         2fYy9Q48rngw015jWwdTplLkvmsWKu65WF36F74he+vD47Mc+ruD5dWiVuUszIXpVoKC
-         UaFOWdU7F34sbPW9syMRddHiDF5VXoZ2RobfmfReufnRYyRc2wiAoYv2IB36k6Ksfmtm
-         ySWAK/v3NaN6FaVqYxLMsCW/dYuVKiRcyE+k51xsWVQg/9MJ3nyJZVmh4y7MiAtXSm/X
-         GYgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Mz5TY/LtkLWNd5ySUogpHG94P5HHBB7Mk5dPpz+NcdA=;
-        b=NYL2wjslOaWof6mH2/eoWOcxf+yDgo/JsIPFCIdGcXuRXdPa4vqB6QT9VDS0CW3An/
-         c0e3AlnJDVS4a80EqgkjwWlDukirDejDQVxjRSqEoK2BMgX8G6nc2abptoUrHP1X6DeI
-         OEdeL3z9lTcPhxIV+BPiE4b2xkzS4Kc6lx2sklbsTgrRsqVaRStClCZZIuh4zmVWVhje
-         gYT5mq0WzKxx2+0lNnuVcZ4BBm/Z+1+vathtoCLs/I24p4m+JfXIfmNLQD6LpX7xkmSl
-         gHUlr2DwvK9KnVFNGhZvGOkbbLjWT9gAIizNPJW4HXx+FwUJQVYiDcRyGiezvDAr7+EO
-         olqA==
-X-Gm-Message-State: ACrzQf3jrA3lbofN1lkXYl/68XmTchyfd4bAnX0HTZQHb9FVrhQ3QjVx
-        F3gXmU0tRR/gHrdGcQnActY=
-X-Google-Smtp-Source: AMsMyM6Uw3Qv74zlCkQOCLMvFSfGFSH0JnLnK/yjUbnQWdCgHYz3QQtSa8EKFBnqGEHnCHic3EAu3g==
-X-Received: by 2002:a5d:61c9:0:b0:236:781a:8d7e with SMTP id q9-20020a5d61c9000000b00236781a8d7emr2572305wrv.576.1667055314058;
-        Sat, 29 Oct 2022 07:55:14 -0700 (PDT)
-Received: from elementary ([94.73.35.109])
-        by smtp.gmail.com with ESMTPSA id t12-20020adff60c000000b002366ded5864sm1644157wrp.116.2022.10.29.07.55.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Oct 2022 07:55:13 -0700 (PDT)
-Date:   Sat, 29 Oct 2022 16:55:11 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Mia Kanashi <chad@redpilled.dev>
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com, spbnick@gmail.com,
-        pobrn@protonmail.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andreas Grosse <andig.mail@t-online.de>
-Subject: Re: [PATCH v2] HID: uclogic: Add support for XP-PEN Deco LW
-Message-ID: <20221029145511.GA7941@elementary>
-References: <20221028082348.22386-1-jose.exposito89@gmail.com>
- <ED1CBF63-A70C-44FF-9F0B-80090EB347EA@redpilled.dev>
- <20221029075832.GA8790@elementary>
- <21CA0A00-1B9F-4E97-B942-A3B7CAA2B52E@redpilled.dev>
- <C7FD0EC0-899A-4D29-8363-D2FAD8E89BBD@redpilled.dev>
+        Sat, 29 Oct 2022 10:56:51 -0400
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA5127DF8;
+        Sat, 29 Oct 2022 07:56:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
+        t=1667055391; bh=Rjnk2GfEtjhc7aPN1HinZjHZRnbPWaoByT5yL4fs8vY=;
+        h=X-EA-Auth:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
+         MIME-Version:Content-Transfer-Encoding;
+        b=KQVEns2j3bnqIGavDI94PVQtVcUmOhfJ2CgzISs3tHKmeNqCKIsTfz4CqvMk0m0hm
+         LQ0nUYAUg6WfEo/d0qBD3pxqldEfdZt5/IHo/uIo2Birs7iuTUKT8ue74bVTMurB7b
+         T5u+KqpKCHgoBfw5R03dS3gQ7VNa+LM3X6pVP0NI=
+Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
+        via [213.182.55.207]
+        Sat, 29 Oct 2022 16:56:31 +0200 (CEST)
+X-EA-Auth: ffC9z5VMk1EziQcyiKwrCnIHjLobvY6isyGnBPrFPMjwQU8iLOhLQsjJ+rgjWc3rKFkDJnz7m3fzshX4JKVV/EnakQzGs4eEFIoHfeMap7Q=
+From:   Vincent Knecht <vincent.knecht@mailoo.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Vincent Knecht <vincent.knecht@mailoo.org>
+Subject: [PATCH v1 1/2] arm64: dts: qcom: msm8916-alcatel-idol347: add GPIO torch LED
+Date:   Sat, 29 Oct 2022 16:55:56 +0200
+Message-Id: <20221029145557.106920-1-vincent.knecht@mailoo.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <C7FD0EC0-899A-4D29-8363-D2FAD8E89BBD@redpilled.dev>
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+Add support for torch LED on GPIO 32.
 
-On Sat, Oct 29, 2022 at 04:55:21PM +0300, Mia Kanashi wrote:
-> >>[1] Actually it should be set to discharging until this gets merged:
-> >>    https://lore.kernel.org/linux-input/20221028181849.23157-1-jose.exposito89@gmail.com/T/
-> >
-> >But i also currently applied this ^ patch, i will try testing without it and then report.
-> 
-> Tested without it, same issue.
-> So yeah it seems that hid-input driver can set supply status to discharging before setting a battery capacity? 
+Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
+---
+ .../boot/dts/qcom/msm8916-alcatel-idol347.dts | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-Very good catch. I managed to reproduce it using the USB dongle. I
-didn't notice it before because I was running upower after connecting
-the device, which isn't fast enough. However, using watch as you
-suggested makes the issue pretty noticeable.
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts b/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
+index 3dc9619fde6e..3a0a593899ae 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
++++ b/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
+@@ -5,6 +5,7 @@
+ #include "msm8916-pm8916.dtsi"
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/input/input.h>
++#include <dt-bindings/leds/common.h>
+ 
+ / {
+ 	model = "Alcatel OneTouch Idol 3 (4.7)";
+@@ -34,6 +35,19 @@ button-volume-up {
+ 		};
+ 	};
+ 
++	gpio-leds {
++		compatible = "gpio-leds";
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&gpio_leds_default>;
++
++		led-0 {
++			gpios = <&msmgpio 32 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "torch";
++			function = LED_FUNCTION_TORCH;
++		};
++	};
++
+ 	usb_id: usb-id {
+ 		compatible = "linux,extcon-usb-gpio";
+ 		id-gpio = <&msmgpio 69 GPIO_ACTIVE_HIGH>;
+@@ -276,6 +290,14 @@ gpio_keys_default: gpio-keys-default {
+ 		bias-pull-up;
+ 	};
+ 
++	gpio_leds_default: gpio-leds-default {
++		pins = "gpio32";
++		function = "gpio";
++
++		drive-strength = <2>;
++		bias-disable;
++	};
++
+ 	gyro_int_default: gyro-int-default {
+ 		pins = "gpio97", "gpio98";
+ 		function = "gpio";
+-- 
+2.37.3
 
-The problem is that the battery is fetched when the USB dongle is
-connected. However, the tablet might not be paired at that point.
-
-To explain it with the actual code:
 
 
-  if (dev->battery_status != HID_BATTERY_REPORTED &&
-      !dev->battery_avoid_query) {
-	value = hidinput_query_battery_capacity(dev);
-                ^ Here the battery is fetched, but because the tabled
-                  is not paired and this function returns garbage
-	if (value < 0)
-		return value;
-
-	dev->battery_capacity = value;
-	dev->battery_status = HID_BATTERY_QUERIED;
-                            ^ Now the battery is set as queried
-  }
-
-  if (dev->battery_status == HID_BATTERY_UNKNOWN)
-	val->intval = POWER_SUPPLY_STATUS_UNKNOWN;
-  else
-	val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
-                    ^ And therefore the battery is reported
-
-
-Thankfully, there is already a flag (battery_avoid_query) used to solve
-the same issue on stylus. The battery percentage is unknown until the
-stylus is in proximity.
-
-So I guess I could use the same flag to avoid this problem.
-
-I'll add a fix in a second revision of this patch.
-
-Thanks!!
