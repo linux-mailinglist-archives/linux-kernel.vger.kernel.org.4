@@ -2,69 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4169D611F7E
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 04:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B130C611F8D
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 05:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiJ2C5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 22:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
+        id S229616AbiJ2DFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 23:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiJ2C5B (ORCPT
+        with ESMTP id S229667AbiJ2DEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 22:57:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BB11863FD
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 19:56:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D88FB82AA2
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 02:56:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC577C433D6;
-        Sat, 29 Oct 2022 02:56:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667012179;
-        bh=FE4pQKEIZlmevs+ZupCbUJ5veYZf1bpoqhRwXjXFKjg=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=AMxiismJPYdb46P+jKLp8h2AZVErGb9zG4MND7DQHEo3HdB8aUw3HZplIpzE/ku2a
-         hAyARLG6fmMQus22Uw7lO1B/+fjouRmT7Lzt5kt35cz8vX/n5tco/4+nfs7jatVC24
-         1EwKJepY1vkL6BYu6sF1EOzTGxUFT3iLBLSayN4ihDOpM9Est+kQV+xAEleZJ1ttEv
-         PJevhRSq3zeSeja7jBEO4Gn7W4AGOYNlUoaLk1Q3ywA/rUu3syDqZY3pBnr1K7LAnv
-         Ty1ebWx3s+B18E6hV/BtXz+jXDIxOi6tx8WMVZgF14qmpqsu6OiZL87b604XyLnR86
-         PLt/sd5Slu+1g==
-Message-ID: <6b069b19-fd33-9783-e497-9499b53668f0@kernel.org>
-Date:   Sat, 29 Oct 2022 10:56:19 +0800
+        Fri, 28 Oct 2022 23:04:40 -0400
+Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5173FBE1;
+        Fri, 28 Oct 2022 20:04:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1667012656;
+        bh=yzgljApEq0qdIxlgB5hEgOKNze+VaVoW3rIffIgUM7U=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=E9nfr1GQ/LWzObN6hICNCZmzPmnm1EfDUkICoCTR3lZpftwCSM8ORt0P/doiUuBtr
+         tPdC2sk4z9ed8FMfgxc3H5sv1dtOrapzJjkHuFiKEV/uY2fsLQUspDGsSkHWIDKNjJ
+         6WagOkxEN0lfL+dQhHJ4ACmx9qBCRmiwDtCzST2w=
+Received: from localhost.localdomain ([111.199.189.86])
+        by newxmesmtplogicsvrszc1-0.qq.com (NewEsmtp) with SMTP
+        id EF589CDA; Sat, 29 Oct 2022 10:59:53 +0800
+X-QQ-mid: xmsmtpt1667012393tuia2uaof
+Message-ID: <tencent_BA460110770C008560B21A2E3555405E9F09@qq.com>
+X-QQ-XMAILINFO: N7h1OCCDntujuAp5mqx8XHGzuesj9Bu6ZPwpAViukBow+hzL2HWcPWqqa7gFMF
+         TjhfQifJ/YvXVwrMpYQyf6ofAAzK/brsjY06p8SpPd5uVP6GMj6aaz6xZL8buLBLWB0RMG3gEo75
+         OkdpKSRIHWtxIwsJdMjY3nZwLOAG/qMXjcIG5L8UJ2+LnsixUYEBogcjXAarsWns8kozvihdQpf0
+         43wJLOgWCZYWekP8pcF26gnMhDIUfbOgQJZiAAcWDaqzwmOa21uXFTrcqgJaMibQo5voqFxdZvPP
+         p6qX+NDPF3iUrZMJ88Zo1RCxgdaw5N81pwZpN+th/V/yr+0I+sGOhQc0JcrF7IdDld/vem2qhUUt
+         +Y6u1SyPmQG2k0Wy0SBpGgv5GE58o+iPJwIYM0eAWHHgENdXPNM6c2ASU30Dzx2HHRfnA4sWC/9B
+         hzHPLyLPpDddB2Z+Iu9GYZJvgfNfvtuzpVjE8oFXfn/W1umv2O9NJWBSegOZJPL9iEVp4vWMCXqa
+         um6mu/C+ENQu6J9+WbtojzAugRwaonmwKq9q41lFkbs1WazAJvbEiC3b8I259pKjH/8jInKCFEpj
+         1R7yjCIsXZoTlYjgFuYITYFpzuB2rdR5ZZlhyCdNoc7YYGP60KhxozLd6eHzGc8bHAU8s0EEUXU+
+         3ZiM0iCJn8DSpLCrdPn+vPjyYWhjIqD+uiBHlBTf/WHc6D7ARlUZO58gJC1BS/mVAX6hWHfPQWV4
+         KGEQfW1BA8IxxZBeDDHHxzss/uut7Zt5IhhVJfanPpeuvyX6Eyhgod2xv/IKr304uRVjcP2MQTfz
+         PdyIakpKOYP8dVRLLP8ll5m/ily4Db7CwtzX8gPW/KxeRA+B7J38upFGowraPuq+0uRrydWkKw6A
+         ma2c2Nfyxf1MluIkG4lU4Dg3vAUdclxPRaEmfPcJISemCf00fPC5Zlv/Lx63fP/uMrKWpH3tj/ML
+         Vs301TZKX3YvlPMWDGCN+5QsXEPcERWc7IQIJ/a3TWiKILkrL3ELaaLzpBLHkl2ZE4a0ll93s=
+From:   Rong Tao <rtoax@foxmail.com>
+To:     andrii.nakryiko@gmail.com
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, martin.lau@linux.dev,
+        mykolal@fb.com, rongtao@cestc.cn, rtoax@foxmail.com,
+        sdf@google.com, shuah@kernel.org, song@kernel.org, yhs@fb.com
+Subject: [PATCH bpf-next] selftests/bpf: Fix strncpy() fortify warning
+Date:   Sat, 29 Oct 2022 10:59:52 +0800
+X-OQ-MSGID: <20221029025952.22566-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <CAEf4BzazYVkVKrKzPD8a7tRZrcWDvvgoVksJHYk3+46V=8kZhw@mail.gmail.com>
+References: <CAEf4BzazYVkVKrKzPD8a7tRZrcWDvvgoVksJHYk3+46V=8kZhw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [f2fs-dev] [PATCH] f2fs: Fix typo in comments
-Content-Language: en-US
-To:     keosung.park@samsung.com,
-        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <CGME20221027110105epcms2p10a8cc7e0e7c3b2960a8db4efaa574ae3@epcms2p1>
- <20221027110105epcms2p10a8cc7e0e7c3b2960a8db4efaa574ae3@epcms2p1>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20221027110105epcms2p10a8cc7e0e7c3b2960a8db4efaa574ae3@epcms2p1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/27 19:01, Keoseong Park wrote:
-> Change "truncateion" to "truncation".
-> 
-> Signed-off-by: Keoseong Park <keosung.park@samsung.com>
+From: Rong Tao <rongtao@cestc.cn>
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+Replace strncpy() with strncat(), strncat() leaves the dst string zero
+terminated. Compile samples/bpf warning:
 
-Thanks,
+$ cd samples/bpf
+$ make
+...
+In function ‘__enable_controllers’:
+samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:80:17: warning: ‘strncpy’ specified bound 4097 equals destination size [-Wstringop-truncation]
+   80 |                 strncpy(enable, controllers, sizeof(enable));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ tools/testing/selftests/bpf/cgroup_helpers.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index a70e873b267e..912e6522c7c5 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -77,7 +77,8 @@ static int __enable_controllers(const char *cgroup_path, const char *controllers
+ 		enable[len] = 0;
+ 		close(fd);
+ 	} else {
+-		strncpy(enable, controllers, sizeof(enable) - 1);
++		enable[0] = '\0';
++		strncat(enable, controllers, sizeof(enable) - 1);
+ 	}
+ 
+ 	snprintf(path, sizeof(path), "%s/cgroup.subtree_control", cgroup_path);
+-- 
+2.31.1
+
