@@ -2,92 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0675611E7C
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 02:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BDC4611E95
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 02:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbiJ2AAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 20:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
+        id S229648AbiJ2AE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 20:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiJ2AAB (ORCPT
+        with ESMTP id S229536AbiJ2AEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 20:00:01 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2FD1900A
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 16:59:58 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 875615C0150;
-        Fri, 28 Oct 2022 19:59:56 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 28 Oct 2022 19:59:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1667001596; x=1667087996; bh=zj
-        BnnxCg2s3u2OEL2zBfwRo+gzyrCLrduFCDRppnXtc=; b=JLj3jszwEfK7BIrZ4X
-        kQFx3g2iTCXMOTfycRszDiHTFvxkJVp7M2TSEO50F90ZfFTJb0069lRUswi3MSZJ
-        btXKoE7hkG5e91TvAh32SS8V+Bd1R77mTTENYjRz6QsKuCqcmH7ZLjffyVT0ld+Z
-        Hpv/s8+8kxLPgsIARLyPY4DRoy/2EW4bBVyTdjly8/PxxY4ALO/4z4iKmG5i1h1o
-        1bdHK4qG6TlCGhi38ESHUZTLZIP8jr1769452JiCGyGFPpkC1aW8DZYLLu17XZb7
-        Js8OericLwTG78GFcHjN9JZxGb+kNnfU1BvR7mcU0L+w/EBjCk96yAcd9Zk6n2Ac
-        ceVA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1667001596; x=1667087996; bh=zjBnnxCg2s3u2OEL2zBfwRo+gzyr
-        CLrduFCDRppnXtc=; b=DgYPxUj98YBuSpkG6BOlDbyeWbgOnSgOl74gs3z/x9Cp
-        Y9MaHgGFgvOprM7Lg0SeCtsioqgw6LFAJZHlTRpYMx2LSaEWc6vaLsmfRW1popRD
-        5fHc99CqSRJLEQAcKUY9jXnJvBlKL8e+mc918Vm4TcS36RNQARIf+xM7BJS+QzIf
-        svaMrRfXuJ3yqAEWc3/VYzW+ExL+sG2ugOStZkjQFwyR8l3ZWM3SKOflMsy3vOzi
-        ArtgMTDrA0w4IDtQh7epoHPgSkbW2DZzBF2pQZQtRcTPQKuC4WrrAzPkomqRnyet
-        5dCWHb4qF4INMfzajjD4ioqH+WtVOAU54G4D9l+kVQ==
-X-ME-Sender: <xms:-2xcY6J1-de1KOPSlJJqe_cDmLIaMKmWngb-JKtYRxnv0kD0V3Ou7Q>
-    <xme:-2xcYyK-NEoXKGYrBVVow1Q8xHGw8ihKuwosATsNBFm0BZkeFR62yF-OjwP9cfcVs
-    AoOAWQKPIUv-7jreqo>
-X-ME-Received: <xmr:-2xcY6vY_7X_wbc1wObjg8ohboJarMhKMQFHbzFn2Ptk1MW3oKLO3O26rsANCmS-yr0f7A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdejgdeftdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnheplefghfefteelhfevffelveffgfetffefleefuddu
-    hfejudetgefgieehfeetheejnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlh
-    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehkihhrihhllhes
-    shhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:-2xcY_ZOIKfuK9EnYpIi4_NoCdtEeF5c6kPTLDfA9AW4yEhc8b3j9g>
-    <xmx:-2xcYxZnvorGz7wnk7oH39Gx8eEB96pwcRSlV7-MYgeBO7JKyPaxpg>
-    <xmx:-2xcY7BE3sCWNGB0wZpHJuWM64LQ90-3cTUevcqTwVkfaMP6CfE8rA>
-    <xmx:_GxcY6Ke3vlz6BvcL9UB0RJMePoh32kXUv1ZI3wlEIA_xv91fC46ww>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 28 Oct 2022 19:59:55 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 89A9A1036F9; Sat, 29 Oct 2022 02:59:51 +0300 (+03)
-Date:   Sat, 29 Oct 2022 02:59:51 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        dan.j.williams@intel.com, david@redhat.com, hpa@zytor.com,
-        seanjc@google.com, thomas.lendacky@amd.com,
-        elena.reshetova@intel.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] x86/tdx: Extract GET_INFO call from get_cc_mask()
-Message-ID: <20221028235951.p2vdu7drbbf3ccg7@box.shutemov.name>
-References: <20221028141220.29217-1-kirill.shutemov@linux.intel.com>
- <20221028141220.29217-2-kirill.shutemov@linux.intel.com>
- <c97e9273-60b6-2ca7-1993-05bfbf471f3f@intel.com>
+        Fri, 28 Oct 2022 20:04:54 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8448F3740D;
+        Fri, 28 Oct 2022 17:04:52 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4B1E06602942;
+        Sat, 29 Oct 2022 01:04:51 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667001891;
+        bh=N/y7U/Okdvo3CXVLovtSFdb9ULZV0KM7M5mV6wzzd+A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=od03TChcm26PnFRBuIxGENz/XdB14TrhfNjelcIfoS0F1hwZBW0yz5f8L1VES0KJE
+         bvSxMV8oyglk8hCfqaBXuxttQQJtCNhOF2uuDNdrVtYYWXxA/cEYs+hsrC0NKAR/XA
+         UBTDQlgppmxudInnokcyDHj2FJoGDlIeM1lLatBaFtYWdX3RlVFTdTSY9un5Tbj/3m
+         8LlH5qPocYrsrecWhQ57MQADlE2S88nBW5gZSo7uLY9m52ONfH6RJkkNg/DK4p7sjm
+         jG3BDZPaWxrGVTdfptBZcJtA7eGHDZ3Psi6fFJvLXooKXQmqu7bduep65EG3TkrUf3
+         4lrcS4EkOLbYA==
+Received: by mercury (Postfix, from userid 1000)
+        id 94E241060757; Sat, 29 Oct 2022 02:04:48 +0200 (CEST)
+Date:   Sat, 29 Oct 2022 02:04:48 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     kernel@collabora.com, kernel-janitors@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: remove dead code
+Message-ID: <20221029000448.zanbx2cdb6woxw36@mercury.elektranox.org>
+References: <20221004073652.568681-1-usama.anjum@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zpqim7ikonix4hlu"
 Content-Disposition: inline
-In-Reply-To: <c97e9273-60b6-2ca7-1993-05bfbf471f3f@intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+In-Reply-To: <20221004073652.568681-1-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,62 +56,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 04:27:10PM -0700, Dave Hansen wrote:
-> I looked at this a bit more closely.  The code is just bonkers now.  It
-> can't go in like this.
-> 
-> tdx_parse_tdinfo() stashes two global variables.  Then, about three
-> lines later in the function, it calls get_cc_mask() which just returns
-> one of those variables, modulo a little masking.
-> 
-> Ditto for the td_attr.  It's stashed in a global variable and then read
-> one time.
-> 
-> There is *ZERO* reason to store 'td_attr'.  There's also zero reason to
-> have 'gpa_width' as a global variable.  It's only used *ONE* *TIME* from
-> the scope of *ONE* *FUNCTION*.
-> 
-> Even the comment is bonkers:
-> 
->         /*
->          * Initializes gpa_width and td_attr. Must be called before
->          * get_cc_mask() or attribute checks.
->          */
->         tdx_parse_tdinfo();
-> 
-> Comments are great.  But comments that are only there because the code
-> is obtuse are not.  I changed it to:
-> 
->         tdx_parse_tdinfo(&cc_mask);
-> 
-> It doesn't even need a comment now.  Why?  Because it's obvious from the
-> naming and calling convention that it initializes cc_mask and what the
-> ordering dependency is.  Plus, even *if* I missed the call, or screwed
-> up the order, the compiler would tell me that I'm a dolt.
-> 
-> The whole global variable thing actually makes the code objectively
-> worse in almost every possible way.
 
-I agree. Sorry about that.
+--zpqim7ikonix4hlu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-We have more code in our tree that want to check attributes. And it is
-after initialization, so the code structure derived from there.
+Hi,
 
-But, yes, I should have rework it before sending upstream.
+On Tue, Oct 04, 2022 at 12:36:51PM +0500, Muhammad Usama Anjum wrote:
+> tmp is an unsigned variable. It can never be less than zero. Remove the
+> dead code.
+>=20
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
 
-> Can you please take a look through this and make sure I didn't botch
-> anything:
-> 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git/log/?h=tdxbadve
-> 
-> The end result is about 50 lines less than what was there before.  Most
-> of it is comment removal but the code is simpler too.
-> 
-> Acks and Tested-by's would be appreciated.
+Right, but the return value of regmap_bulk_read() should be checked
+instead.
 
-Looks good and works fine:
+-- Sebastian
 
-Acked-and-Tested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+>  drivers/power/supply/rk817_charger.c | 4 ----
+>  1 file changed, 4 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/=
+rk817_charger.c
+> index aa4b33f1bb83..ba3f5ccaeacd 100644
+> --- a/drivers/power/supply/rk817_charger.c
+> +++ b/drivers/power/supply/rk817_charger.c
+> @@ -785,8 +785,6 @@ rk817_read_or_set_full_charge_on_boot(struct rk817_ch=
+arger *charger,
+>  		regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_Q_PRES_H3,
+>  				 bulk_reg, 4);
+>  		tmp =3D get_unaligned_be32(bulk_reg);
+> -		if (tmp < 0)
+> -			tmp =3D 0;
+>  		boot_charge_mah =3D ADC_TO_CHARGE_UAH(tmp,
+>  						    charger->res_div) / 1000;
+>  		/*
+> @@ -825,8 +823,6 @@ rk817_read_or_set_full_charge_on_boot(struct rk817_ch=
+arger *charger,
+>  	regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_Q_PRES_H3,
+>  			 bulk_reg, 4);
+>  	tmp =3D get_unaligned_be32(bulk_reg);
+> -	if (tmp < 0)
+> -		tmp =3D 0;
+>  	boot_charge_mah =3D ADC_TO_CHARGE_UAH(tmp, charger->res_div) / 1000;
+>  	regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_OCV_VOL_H,
+>  			 bulk_reg, 2);
+> --=20
+> 2.30.2
+>=20
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+--zpqim7ikonix4hlu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNcbh0ACgkQ2O7X88g7
++prK4xAAp6R66xdKiJ+FGOpxmJeMQwpCWEbEbP6OQms2yhUH7sC8gAf4hJVIt+Ee
+68BsaBG+FElQP1Ocj7aWn+6Up2ZXpX9oEpJ3DFr9zzD6Pw+zQqXl2Wc4TEldQVjq
+u3/vc0vcSpxVrCbGcaedKjXt2yvTWN0Wrr7S2SljalxV8XhgeypeTW0ZvxGDB6pR
+RXyf1qSwvOrNuv5sf816DbS27TaN/ALr8fjjVRTH3frn7K778a3tWVf7TdBXeq70
+y87rwQaPAa1TY4bgk5Cai5a80h7VlVmzznCl4HDqwMoe0DlFZnX2Zq6YzfxmPDer
+x1+PDqarZTxDO/EmA6fyWAXi/UD1zBsEYAaMOb0P/HBplagio6FoUw4/LIz/P3+y
+iPFV7GxIPjLwzyz7gRE517dKI4WVnkiyV8cAgfbR7cLpqgFq4G9vIbMHE8tNNvPp
+XcIwwEjPxSSic0G8aWQHW537BceBBX/INZxgnOFKO9lVKJUf3qzc/m20ylL4N918
+2uG/LHffzoXVOFQv2XuOr6ECwW+SppZ/uauv+7HA7UVxWc5zyswDhUThx47PpW8f
+x+cShq3izB13CMKEvndmXMxccjhd39MTZEw2V9vZMNbMzT7oFWJWtUh9C0bjDRWx
+MPTBUfZGN2jMI9NM6YWUrIV5D62LXW7VXCC4O2+DKPV/MWzM8y4=
+=UJ8c
+-----END PGP SIGNATURE-----
+
+--zpqim7ikonix4hlu--
