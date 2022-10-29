@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DBF6124ED
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 20:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FB26124EF
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 20:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiJ2Sn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 14:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
+        id S229717AbiJ2SqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 14:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiJ2SnZ (ORCPT
+        with ESMTP id S229441AbiJ2SqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 14:43:25 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B650C40BC6
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 11:43:23 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-13c2cfd1126so9707083fac.10
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 11:43:23 -0700 (PDT)
+        Sat, 29 Oct 2022 14:46:21 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D37F45227
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 11:46:20 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-36cbcda2157so74599467b3.11
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 11:46:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=57RVFwJZ3iFyz/7pgcHKldBgiU0NMfJt4GoVXyg5tyw=;
-        b=SjDvVlPBZ2PiKAi+9C6+buDBdSeaLu2FPV7dopY6H2t/EzsyqOVceneXRO6uq7jVZU
-         7nTEiRra7/HOgK/ro0ucbD+RRKmzb/tphWhcwBiGB7EU6J2ZZDGpNSZL6kmgS7mq+3El
-         lTSSOnxPfeZtvHzDA93lggQ4RJRCuOEvZYJTvVUr0pwMNRAS7iEbFSPK7+DzPW3I2O3D
-         ggQ2ntiR+8hiVBqmmJAmPQNmwUALUoAVGod0ql2y0WM/rQOcKO3EJgVKIUB45fIEvten
-         aBBJAsp021jcg92bFUbd+jUKm4PVPO6UVb9QZpz/+JY+5FH12iI25zfO8aL8aHXBaV3b
-         Wrhw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=I5M42xH956VA0eEVqAgck6Km6Zbq9KHp3UzoX8yEhtk=;
+        b=OCdmA01964Z5GWe0fQVjPd9Km6OgUshXB5kpYJnoMvRAWYSF8nI0hFhx8UltF3Pdlj
+         +DSchlPvrlVUlhE8dEMx/AoU6Q18t8VY+9cMuxR39s+k4f8jyFFIW4kVgJHvDdoelFFQ
+         Ihfl6cz9rQKMU9Ca8h86iRkQvs4rQZ1A8aye7KQyhu0SNiOvJkscskueLU5v6xKsHzkP
+         GF63bTfHQ880Ttfm6TpW+bZf769CHVau8dPuuOi7IBk+oOM6oH1QTCX6zAoRJZG37YPh
+         qN6nSq208OE7eYBLn+908Nizlx31qyjVJbIQbLyd8dgWx3CSBFxBrieYSgOz9DKj9zig
+         eQ0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=57RVFwJZ3iFyz/7pgcHKldBgiU0NMfJt4GoVXyg5tyw=;
-        b=mcWtEI3c24yOmi38flJ86lT8ObGdAeRmL1yOnMyNVgX52P2XJUC6atVVnEFLYi7kV6
-         ynNsOpqW3JuDWzxx7rzmg7fLD8EuqR2TOxIXCiTp8fBz+7PPwuSLXUHtwRYd3mi4Ubfg
-         Vji31qVNrMuOixQOvqy4yg9c5yRgymzfE9EF/ic9jUKJr+Nu5r3Sh9gfI65yAZ2dSyfO
-         X5r2wxhWtycUMn/IFYZMDFATvccHzcwkqHf54VxfFVjx4l3NSVRQyceqLvFq6YsjiDgC
-         SzxQeB4VvpM+bGLAOSHGZGQdvu3FB3PDdJv9l1cI+2EVwEIw+vqeG64TG8ivwXtecvRm
-         afMQ==
-X-Gm-Message-State: ACrzQf2tltWjfSoLEnxISYk9LgyJQ0yFBBgdSfFzQa+QNL33DuUZxVvS
-        qzbNma69KJMXcgHoaT+d488oE5+p0ywzm2Sj
-X-Google-Smtp-Source: AMsMyM50ufWSgBjfzZB6/E6vwfiM1/oZHheFjGzT0+KACVd090SUDpidYuUQA/FCYl90RsFjrF83QA==
-X-Received: by 2002:a05:6870:612c:b0:132:a4d3:e0d8 with SMTP id s44-20020a056870612c00b00132a4d3e0d8mr2970057oae.95.1667069002990;
-        Sat, 29 Oct 2022 11:43:22 -0700 (PDT)
-Received: from antonio-Lenovo-Legion-5-15IMH05H.multilaserwifi.com.br ([45.163.246.1])
-        by smtp.googlemail.com with ESMTPSA id o22-20020a9d7656000000b006619533d1ddsm855436otl.76.2022.10.29.11.43.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Oct 2022 11:43:22 -0700 (PDT)
-From:   antoniospg <antoniospg100@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     antoniospg <antoniospg100@gmail.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA
-        GEFORCE/QUADRO GPUS),
-        nouveau@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA
-        GEFORCE/QUADRO GPUS)
-Subject: [PATCH] drm/nouveau: Adding support to control backlight using bl_power for nva3.
-Date:   Sat, 29 Oct 2022 15:42:55 -0300
-Message-Id: <20221029184255.24041-1-antoniospg100@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=I5M42xH956VA0eEVqAgck6Km6Zbq9KHp3UzoX8yEhtk=;
+        b=1o6lvPSX4jPBrLCWNJnyURsDzQsQ8ADxPI2yr4QqLukN2Jp79L0EfJtaGhJVu0dcDh
+         mchV70ZBcJ3EfTpnTmIEyz4aQeItX1patEvQQ5S3vR0RBOhhoF10eAES898jtf7XbKoJ
+         irHrklbpaX+Qk6qPGj+8v0NZDnWZik23QSXWHEi9a9DyXu8j1G+SewqIWVU8DDPHh6Zi
+         w8P/U9/hE2rY3O+SDFm0ndZ8Hh0S62bSeOn20uUwaD/SBj+gF2ZVbsIp6p/W9zy1ryax
+         1edWq8pM4m8av25wxtAFOw8yhyNgAdvX2ljhSHxlAz5CMhGNm5mwl571AuHGvhMhcbKL
+         uOjA==
+X-Gm-Message-State: ACrzQf3S4e7zU7onP+prP2FZDK2WYYbhMmaMJCtLTOMmegH4+RHymmIW
+        igmUjM13SZXdwIP/T8IrTRobBbRPG78IoFKJwO7XwrMjLj0=
+X-Google-Smtp-Source: AMsMyM6fOyIsTHK/Hv2UW8rwWkFw0UyWwfCclzmg/qL4gE8hPYBxuKlINVwu/nxq3NBo5gtt8TEOZeqCEtcI5HNMKjw=
+X-Received: by 2002:a81:8a81:0:b0:36a:4785:ab9f with SMTP id
+ a123-20020a818a81000000b0036a4785ab9fmr5206758ywg.218.1667069179033; Sat, 29
+ Oct 2022 11:46:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221010104206.12184-1-zhouchengming@bytedance.com>
+ <166693932887.29415.17016910542871419770.tip-bot2@tip-bot2>
+ <f990a324-e28e-6de1-acb0-ba764808a56a@bytedance.com> <CAJuCfpHOt1Vfc=ZtAYt_2QamOujfuFtNHAdJe7iBMmDgTLGtyw@mail.gmail.com>
+ <Y1wzVeCYDFSO0KYe@hirez.programming.kicks-ass.net> <Y10UpNIGtffsZHXr@hirez.programming.kicks-ass.net>
+ <6ea3a2ca-85d7-b338-f516-c91ec5e7a128@bytedance.com>
+In-Reply-To: <6ea3a2ca-85d7-b338-f516-c91ec5e7a128@bytedance.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Sat, 29 Oct 2022 11:46:07 -0700
+Message-ID: <CAJuCfpHrm-BtpLyS-b-PQbnMiSpuLfVjtzwWxWDbFz__1Jb8Mg@mail.gmail.com>
+Subject: Re: [tip: sched/core] sched/psi: Fix avgs_work re-arm in psi_avgs_work()
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-tip-commits@vger.kernel.org,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,41 +74,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test plan:
+On Sat, Oct 29, 2022 at 5:42 AM Chengming Zhou
+<zhouchengming@bytedance.com> wrote:
+>
+> On 2022/10/29 19:55, Peter Zijlstra wrote:
+> > On Fri, Oct 28, 2022 at 09:53:57PM +0200, Peter Zijlstra wrote:
+> >> On Fri, Oct 28, 2022 at 08:58:03AM -0700, Suren Baghdasaryan wrote:
+> >>
+> >>> Not sure what went wrong. Peter, could you please replace this one
+> >>
+> >> Probably me being an idiot and searching on subject instead of msgid :/
+> >>
+> >> I'll go fix up -- tomorrow though, it's late and I'm likely to mess it
+> >> up again.
+> >
+> > Can you please check queue.git/sched/core ; did I get it right this
+> > time?
+>
+> I just checked that three patches, LGTM.
 
-* Turn off:
-echo 1 > /sys/class/backlight/nv_backlight/bl_power
+Yep, all three patches are correct. Thanks!
 
-* Turn on:
-echo 0 > /sys/class/backlight/nv_backlight/bl_power
-
-Signed-off-by: antoniospg <antoniospg100@gmail.com>
----
- drivers/gpu/drm/nouveau/nouveau_backlight.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/nouveau/nouveau_backlight.c b/drivers/gpu/drm/nouveau/nouveau_backlight.c
-index a2141d3d9b1d..855d0ce9f7fa 100644
---- a/drivers/gpu/drm/nouveau/nouveau_backlight.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_backlight.c
-@@ -263,7 +263,16 @@ nva3_set_intensity(struct backlight_device *bd)
- 	u32 div, val;
- 
- 	div = nvif_rd32(device, NV50_PDISP_SOR_PWM_DIV(or));
--	val = (bd->props.brightness * div) / 100;
-+
-+	switch (bd->props.power) {
-+	case FB_BLANK_UNBLANK:
-+		val = (bd->props.brightness * div) / 100;
-+		break;
-+	default:
-+		val = 0;
-+		break;
-+	}
-+
- 	if (div) {
- 		nvif_wr32(device, NV50_PDISP_SOR_PWM_CTL(or),
- 			  val |
--- 
-2.25.1
-
+>
+> And would you mind picking up this, by the way?
+>
+> https://lore.kernel.org/all/20220926081931.45420-1-zhouchengming@bytedance.com/
+>
+> Thanks!
