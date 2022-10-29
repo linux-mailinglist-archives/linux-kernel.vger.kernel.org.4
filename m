@@ -2,116 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79BB86121E3
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 11:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD22C6121F2
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 11:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbiJ2Jet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 05:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60640 "EHLO
+        id S229483AbiJ2JlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 05:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJ2Jen (ORCPT
+        with ESMTP id S229441AbiJ2JlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 05:34:43 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDA117049
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 02:34:39 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id v130-20020a1cac88000000b003bcde03bd44so7894208wme.5
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 02:34:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0s7cusbjRhvfSFjBw6Lx4DFnE28qr99VM/89xctrXcY=;
-        b=R8r9MYiVR/n1QCShgiCRjvlsyCmGxIth8d68WOBKuFwGFdpvU0hLifsKHXaA0i7R7T
-         FATSb70x39JDuCr+RFIEMHkzCbXWDBVXLQrDeb9y7eB4/OehDirtQMwmoI+nEp+BrN0G
-         u/fUtaHezDnpUbrRdrgmORy9rD4FhXGYMCmjG/LapRowSvd+EZrEGPnCIBo1dsmqrQzE
-         esyFj2o/J+WqlmQTU+aoX79Wvn1x2MTGTvXbk00TQxNzSp0U4mMc+L1GZbZv4260jlSX
-         DI4iK78azGeF6BR5yBioI4MAexmAQiV7qakqP16N3f0ibROLougrJyoyhWfCUkuqRZ00
-         Lydw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0s7cusbjRhvfSFjBw6Lx4DFnE28qr99VM/89xctrXcY=;
-        b=25vfB19PYz3EZ3QYszyFKnt+t5tvUPJGoYqCdemPIHjw832vt13thOqcpS8eYvWKk3
-         x1X5WVWQ9rc6BtV4EEb9medZKJKewLl+DVFZ+NR4/cRQ9gTdF6DUW9BiVLaXR8/tXBn9
-         LjCrWnc+D1A9Nn9uhECQVHYCW1tcWfX8k85V8/noigQqYz6SlFOqXmP+G4P/Zj9yT/QK
-         PrtRzl69qsJs/VlUf0558g796YEyQeJ9dg2Z0Tz4k/bZ2CkwnKQVUSSDlQgafoXDyVEY
-         UixinLOt/6n/9Eot07YmFBVTXdZOqNDWjcTt90jLaBbb2Nnb6wfAgx1RflkW0B/qGM+A
-         izkw==
-X-Gm-Message-State: ACrzQf1UmkKnSbYEY6DW8r//rrqOq6yADbiXX/Z2bU2no+4IY1yF5yVz
-        pO6L2CPzenbXFZdBKnsajCc=
-X-Google-Smtp-Source: AMsMyM6Amig+erFbtqG7wwXSWmzDP5vkjeNyXS8CvHdnIWkIsJz9SDcz1bFmgAx7ObVYinv/0KmjpA==
-X-Received: by 2002:a05:600c:310f:b0:3c6:ff0a:c41 with SMTP id g15-20020a05600c310f00b003c6ff0a0c41mr11820655wmo.91.1667036078032;
-        Sat, 29 Oct 2022 02:34:38 -0700 (PDT)
-Received: from localhost.localdomain ([94.73.35.109])
-        by smtp.gmail.com with ESMTPSA id k18-20020adfe3d2000000b00236705daefesm1053785wrm.39.2022.10.29.02.34.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Oct 2022 02:34:37 -0700 (PDT)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     mripard@kernel.org
-Cc:     emma@anholt.net, airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH] drm/vc4: hdmi: Fix pointer dereference before check
-Date:   Sat, 29 Oct 2022 11:34:13 +0200
-Message-Id: <20221029093413.546103-1-jose.exposito89@gmail.com>
+        Sat, 29 Oct 2022 05:41:08 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F311FCF7;
+        Sat, 29 Oct 2022 02:41:06 -0700 (PDT)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MzvYF4W9HzHvRr;
+        Sat, 29 Oct 2022 17:40:49 +0800 (CST)
+Received: from localhost.localdomain (10.175.104.82) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 29 Oct 2022 17:41:04 +0800
+From:   Ziyang Xuan <william.xuanziyang@huawei.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <peterpenkov96@gmail.com>,
+        <maheshb@google.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <hawk@kernel.org>, <john.fastabend@gmail.com>
+Subject: [PATCH net v2] net: tun: fix bugs for oversize packet when napi frags enabled
+Date:   Sat, 29 Oct 2022 17:41:01 +0800
+Message-ID: <20221029094101.1653855-1-william.xuanziyang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.82]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 6bed2ea3cb38 ("drm/vc4: hdmi: Reset link on hotplug") introduced
-the vc4_hdmi_reset_link() function. This function dereferences the
-"connector" pointer before checking whether it is NULL or not.
+Recently, we got two syzkaller problems because of oversize packet
+when napi frags enabled.
 
-Rework variable assignment to avoid this issue.
+One of the problems is because the first seg size of the iov_iter
+from user space is very big, it is 2147479538 which is bigger than
+the threshold value for bail out early in __alloc_pages(). And
+skb->pfmemalloc is true, __kmalloc_reserve() would use pfmemalloc
+reserves without __GFP_NOWARN flag. Thus we got a warning as following:
 
-Fixes: 6bed2ea3cb38 ("drm/vc4: hdmi: Reset link on hotplug")
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+========================================================
+WARNING: CPU: 1 PID: 17965 at mm/page_alloc.c:5295 __alloc_pages+0x1308/0x16c4 mm/page_alloc.c:5295
+...
+Call trace:
+ __alloc_pages+0x1308/0x16c4 mm/page_alloc.c:5295
+ __alloc_pages_node include/linux/gfp.h:550 [inline]
+ alloc_pages_node include/linux/gfp.h:564 [inline]
+ kmalloc_large_node+0x94/0x350 mm/slub.c:4038
+ __kmalloc_node_track_caller+0x620/0x8e4 mm/slub.c:4545
+ __kmalloc_reserve.constprop.0+0x1e4/0x2b0 net/core/skbuff.c:151
+ pskb_expand_head+0x130/0x8b0 net/core/skbuff.c:1654
+ __skb_grow include/linux/skbuff.h:2779 [inline]
+ tun_napi_alloc_frags+0x144/0x610 drivers/net/tun.c:1477
+ tun_get_user+0x31c/0x2010 drivers/net/tun.c:1835
+ tun_chr_write_iter+0x98/0x100 drivers/net/tun.c:2036
+
+The other problem is because odd IPv6 packets without NEXTHDR_NONE
+extension header and have big packet length, it is 2127925 which is
+bigger than ETH_MAX_MTU(65535). After ipv6_gso_pull_exthdrs() in
+ipv6_gro_receive(), network_header offset and transport_header offset
+are all bigger than U16_MAX. That would trigger skb->network_header
+and skb->transport_header overflow error, because they are all '__u16'
+type. Eventually, it would affect the value for __skb_push(skb, value),
+and make it be a big value. After __skb_push() in ipv6_gro_receive(),
+skb->data would less than skb->head, an out of bounds memory bug occurred.
+That would trigger the problem as following:
+
+==================================================================
+BUG: KASAN: use-after-free in eth_type_trans+0x100/0x260
+...
+Call trace:
+ dump_backtrace+0xd8/0x130
+ show_stack+0x1c/0x50
+ dump_stack_lvl+0x64/0x7c
+ print_address_description.constprop.0+0xbc/0x2e8
+ print_report+0x100/0x1e4
+ kasan_report+0x80/0x120
+ __asan_load8+0x78/0xa0
+ eth_type_trans+0x100/0x260
+ napi_gro_frags+0x164/0x550
+ tun_get_user+0xda4/0x1270
+ tun_chr_write_iter+0x74/0x130
+ do_iter_readv_writev+0x130/0x1ec
+ do_iter_write+0xbc/0x1e0
+ vfs_writev+0x13c/0x26c
+
+To fix the problems, restrict the packet size less than
+(ETH_MAX_MTU - NET_SKB_PAD - NET_IP_ALIGN) which has considered reserved
+skb space in napi_alloc_skb() because transport_header is an offset from
+skb->head. Add len check in tun_napi_alloc_frags() simply.
+
+Fixes: 90e33d459407 ("tun: enable napi_gro_frags() for TUN/TAP driver")
+Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
 ---
- drivers/gpu/drm/vc4/vc4_hdmi.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+v2:
+  - Use (ETH_MAX_MTU - NET_SKB_PAD - NET_IP_ALIGN) instead of ETH_MAX_MTU.
+---
+ drivers/net/tun.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-index 4a73fafca51b..07d058b6afb7 100644
---- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-+++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-@@ -319,9 +319,9 @@ static int reset_pipe(struct drm_crtc *crtc,
- static int vc4_hdmi_reset_link(struct drm_connector *connector,
- 			       struct drm_modeset_acquire_ctx *ctx)
- {
--	struct drm_device *drm = connector->dev;
--	struct vc4_hdmi *vc4_hdmi = connector_to_vc4_hdmi(connector);
--	struct drm_encoder *encoder = &vc4_hdmi->encoder.base;
-+	struct drm_device *drm;
-+	struct vc4_hdmi *vc4_hdmi;
-+	struct drm_encoder *encoder;
- 	struct drm_connector_state *conn_state;
- 	struct drm_crtc_state *crtc_state;
- 	struct drm_crtc *crtc;
-@@ -332,6 +332,10 @@ static int vc4_hdmi_reset_link(struct drm_connector *connector,
- 	if (!connector)
- 		return 0;
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 27c6d235cbda..946628050f28 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -1459,7 +1459,8 @@ static struct sk_buff *tun_napi_alloc_frags(struct tun_file *tfile,
+ 	int err;
+ 	int i;
  
-+	drm = connector->dev;
-+	vc4_hdmi = connector_to_vc4_hdmi(connector);
-+	encoder = &vc4_hdmi->encoder.base;
-+
- 	ret = drm_modeset_lock(&drm->mode_config.connection_mutex, ctx);
- 	if (ret)
- 		return ret;
+-	if (it->nr_segs > MAX_SKB_FRAGS + 1)
++	if (it->nr_segs > MAX_SKB_FRAGS + 1 ||
++	    len > (ETH_MAX_MTU - NET_SKB_PAD - NET_IP_ALIGN))
+ 		return ERR_PTR(-EMSGSIZE);
+ 
+ 	local_bh_disable();
 -- 
 2.25.1
 
