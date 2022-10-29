@@ -2,198 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F1061259F
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 23:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E6A6125A1
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 23:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbiJ2Vs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 17:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60344 "EHLO
+        id S229738AbiJ2Vsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 17:48:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJ2Vs0 (ORCPT
+        with ESMTP id S229727AbiJ2Vsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 17:48:26 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F36541B2
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 14:48:24 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id bn35so12481254ljb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 14:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=60gE0VpcoGAPlbRv1xoX9SZPevsEIxkl5Hy3ZJtcGLM=;
-        b=MAtfuTHl4dtfu3T77+nZgTnE7t3bSENdQJryoXbdhhVaonf/mbK8WoPIj9pmr8Q4CD
-         DO3kqyYsY6EctI6xxXhuNIhg/xkTyttwKO2HNgUh/JU1ScMHfG5o4tXClupgc97uCNP1
-         vaagYkVuaQdqrhKFtMOFYQT4a2cZO0bG9RfbvNHuyW0wCpCWJSti7mZD6GNjt6wHCs0D
-         RoPR+z2BqTFaCEEY3lmUeiLB0vj8rGB8eudbVH5kcsiibKCfOHCtX9cOih+TXIR1QmHk
-         uGUqK913/lIQd/WYTN0fqEOtF8WpkhrzAN6UHoUYbp6rMaQGpHzkrohhMKNxd4tvQ+To
-         1xjg==
+        Sat, 29 Oct 2022 17:48:40 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EDC4558E0
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 14:48:38 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id i8-20020a056e0212c800b002f9a4c75658so7376224ilm.3
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 14:48:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=60gE0VpcoGAPlbRv1xoX9SZPevsEIxkl5Hy3ZJtcGLM=;
-        b=qLndhCrUyA9yPAT9agj8OjJhQv3GjOGmFDSQqsboeBlc7AJXHDKPB9GeoaCYggzT57
-         2WoE+nbu5TdChE5AmIky2qRYAgFnhXusF0sNp5tXRFIZKPSJQYtGC/UPzJTjv99ZuHwd
-         0diHLPVMqa1DTNzXiftSzoKCnPhbeIBQ23R/iVgD88bNwWEzyxQ3PsDJMQo4iTNJBDwy
-         BVbYo38qY4HyCOCsEBZzh8OfMaPjyldQ0ym22DNxOz9RXLveIsYbBW0UfcQXVjP4SjOk
-         okQ0J+ejrUEDwk+dC4ibIIwgl3nsQu9371s2UD5ycmhsqrDELJ+IYQuF701zfuUdSYoy
-         vwkg==
-X-Gm-Message-State: ACrzQf0tvE9tJIR6M7VanVuiTlBSbf6l1J/QlNiFl11ltEOgfsPzTNR0
-        sCx2NAIPG1NJ0zSZXxkSzbefWg==
-X-Google-Smtp-Source: AMsMyM6yzSiQ96HOcDj/ORv3kfBljuuQYibHSlOCiCEiivXOHwWoN/gIdjwW9GvlC69HZGmF5O+thg==
-X-Received: by 2002:a2e:8397:0:b0:277:35fa:84d6 with SMTP id x23-20020a2e8397000000b0027735fa84d6mr2126944ljg.429.1667080103304;
-        Sat, 29 Oct 2022 14:48:23 -0700 (PDT)
-Received: from [10.27.10.248] ([195.165.23.90])
-        by smtp.gmail.com with ESMTPSA id h4-20020ac24da4000000b004a45ed1ae21sm443956lfe.224.2022.10.29.14.48.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Oct 2022 14:48:22 -0700 (PDT)
-Message-ID: <cf8dcf53-f131-68f4-c6aa-d41e02ac6d5c@linaro.org>
-Date:   Sun, 30 Oct 2022 00:48:21 +0300
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lzBJMc0CRF6kfy2Vo+DpKb0KWuYr/bmkQ8JLU9as1e0=;
+        b=mrwkpOmMXT3ilAwDOs2DQLwDldG3W7o5T6QCZdyUiQmMz0Fsn1IKP0TCnGgvc48qgp
+         CuYPellSvdVUWkutZxLARR5V6n41SX+XyDBVakT6ljQAU/xHSvN8eRdeES5TYhZ6lptZ
+         zlANSr2gmb8KAgxRPnl3//P/jshWIndCZPSbf9LVMKvrdtQR6jFU7n7l9UTbvStcptrj
+         bN+Woz1yHCD6mTOXhSuuW2Q6Jzfgl9d+qWGIuH/YFS26bKFZK9T8Wk5UJiUxPKfWBrO3
+         weaIW+MBnozLKZaIrt/KJbCgnhJ6TqR+ZWcggtoVSZiDNLWNjZtDJHs0fjyffIv8XWck
+         E+EA==
+X-Gm-Message-State: ACrzQf1GFIy0yszYlj6iGeMYYVC1SsHwnzRgulHdH2YXHiCrYffdXxhn
+        mMgdhXSpReBgjNd+9XUjemDpiDP/5EI8Op408r60jioVXm/x
+X-Google-Smtp-Source: AMsMyM6Bxo6Y502AQveT7dakY1dFgAUwtnO90ckFjY87hrZZa5IQY7aO8huZOocj6ZhzAvN0LfJaDJ7M+02j4+RQ4cYNe5o7mzq+
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 14/15] scsi: ufs: ufs-qcom: Add support for finding HS
- gear on new UFS versions
-Content-Language: en-GB
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        martin.petersen@oracle.com, jejb@linux.ibm.com,
-        andersson@kernel.org, vkoul@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        quic_cang@quicinc.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org
-References: <20221029141633.295650-1-manivannan.sadhasivam@linaro.org>
- <20221029141633.295650-15-manivannan.sadhasivam@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221029141633.295650-15-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1091:b0:2ff:f2ee:a7a2 with SMTP id
+ r17-20020a056e02109100b002fff2eea7a2mr2631597ilj.85.1667080117644; Sat, 29
+ Oct 2022 14:48:37 -0700 (PDT)
+Date:   Sat, 29 Oct 2022 14:48:37 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000039763c05ec335636@google.com>
+Subject: [syzbot] INFO: trying to register non-static key in ext4_do_update_inode
+From:   syzbot <syzbot+b2865f6558d604522545@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/10/2022 17:16, Manivannan Sadhasivam wrote:
-> Starting from UFS controller v4, Qcom supports dual gear mode (i.e., the
-> controller/PHY can be configured to run in two gear speeds). But that
-> requires an agreement between the UFS controller and the UFS device.
-> This commit finds the max gear supported by both controller and device
-> then decides which one to use.
-> 
-> UFS controller's max gear can be read from the REG_UFS_PARAM0 register and
-> UFS device's max gear can be read from the "max-gear" devicetree property.
-> 
-> The UFS PHY also needs to be configured with the decided gear using the
-> phy_set_mode_ext() API.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->   drivers/ufs/host/ufs-qcom.c | 35 ++++++++++++++++++++++++++++++++---
->   drivers/ufs/host/ufs-qcom.h |  4 ++++
->   2 files changed, 36 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-> index f952cc76919f..268463e92d67 100644
-> --- a/drivers/ufs/host/ufs-qcom.c
-> +++ b/drivers/ufs/host/ufs-qcom.c
-> @@ -281,6 +281,9 @@ static int ufs_qcom_host_reset(struct ufs_hba *hba)
->   static u32 ufs_qcom_get_hs_gear(struct ufs_hba *hba, u32 hs_gear)
->   {
->   	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
-> +	struct device *dev = hba->dev;
-> +	u32 max_gear, hcd_max_gear, reg;
-> +	int ret;
->   
->   	if (host->hw_ver.major == 0x1) {
->   		/*
-> @@ -292,8 +295,33 @@ static u32 ufs_qcom_get_hs_gear(struct ufs_hba *hba, u32 hs_gear)
->   		 */
->   		if (hs_gear > UFS_HS_G2)
->   			return UFS_HS_G2;
-> +	} else if (host->hw_ver.major > 0x3) {
-> +		/*
-> +		 * Starting from UFS controller v4, Qcom supports dual gear mode (i.e., the
-> +		 * controller/PHY can be configured to run in two gear speeds). But that
-> +		 * requires an agreement between the UFS controller and the device. Below
-> +		 * code tries to find the max gear of both and decides which gear to use.
-> +		 *
-> +		 * First get the max gear supported by the UFS device if available.
-> +		 * If the property is not defined in devicetree, then use the default gear.
-> +		 */
-> +		ret = of_property_read_u32(dev->of_node, "max-gear", &max_gear);
-> +		if (ret)
-> +			goto err_out;
+Hello,
 
-Can we detect the UFS device's max gear somehow? If not, the 'max-gear' 
-property name doesn't sound good. Maybe calling it 'device-gear' would 
-be better.
+syzbot found the following issue on:
 
-> +
-> +		/* Next get the max gear supported by the UFS controller */
-> +		reg = ufshcd_readl(hba, REG_UFS_PARAM0);
-> +		hcd_max_gear = UFS_QCOM_MAX_GEAR(reg);
-> +
-> +		/*
-> +		 * Now compare both the gears. If the max gear supported by the UFS device
-> +		 * is compatible with UFS controller, then use the UFS device's max gear
-> +		 * speed. Otherwise, use the UFS controller supported max gear speed.
-> +		 */
-> +		return (max_gear <= hcd_max_gear) ? max_gear : hcd_max_gear;
+HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=132f53ce880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
+dashboard link: https://syzkaller.appspot.com/bug?extid=b2865f6558d604522545
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
-return max(max_gear, hcd_max_gear); ?
+Unfortunately, I don't have any reproducer for this issue yet.
 
->   	}
->   
-> +err_out:
->   	/* Default is HS-G3 */
->   	return UFS_HS_G3;
->   }
-> @@ -303,7 +331,7 @@ static int ufs_qcom_power_up_sequence(struct ufs_hba *hba)
->   	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
->   	struct phy *phy = host->generic_phy;
->   	int ret;
-> -	bool is_rate_B = UFS_QCOM_LIMIT_HS_RATE == PA_HS_MODE_B;
-> +	u32 hs_gear;
->   
->   	/* Reset UFS Host Controller and PHY */
->   	ret = ufs_qcom_host_reset(hba);
-> @@ -311,8 +339,9 @@ static int ufs_qcom_power_up_sequence(struct ufs_hba *hba)
->   		dev_warn(hba->dev, "%s: host reset returned %d\n",
->   				  __func__, ret);
->   
-> -	if (is_rate_B)
-> -		phy_set_mode(phy, PHY_MODE_UFS_HS_B);
-> +	/* UFS_HS_G2 is used here since that's the least gear supported by legacy Qcom platforms */
-> +	hs_gear = ufs_qcom_get_hs_gear(hba, UFS_HS_G2);
-> +	phy_set_mode_ext(phy, PHY_MODE_UFS_HS_B, hs_gear);
->   
->   	/* phy initialization - calibrate the phy */
->   	ret = phy_init(phy);
-> diff --git a/drivers/ufs/host/ufs-qcom.h b/drivers/ufs/host/ufs-qcom.h
-> index 214ea50acab9..c93bc52ea848 100644
-> --- a/drivers/ufs/host/ufs-qcom.h
-> +++ b/drivers/ufs/host/ufs-qcom.h
-> @@ -89,6 +89,10 @@ enum {
->   #define TMRLUT_HW_CGC_EN	BIT(6)
->   #define OCSC_HW_CGC_EN		BIT(7)
->   
-> +/* bit definitions for REG_UFS_PARAM0 */
-> +#define MAX_HS_GEAR_MASK	GENMASK(6, 4)
-> +#define UFS_QCOM_MAX_GEAR(x)	FIELD_GET(MAX_HS_GEAR_MASK, (x))
-> +
->   /* bit definition for UFS_UFS_TEST_BUS_CTRL_n */
->   #define TEST_BUS_SUB_SEL_MASK	GENMASK(4, 0)  /* All XXX_SEL fields are 5 bits wide */
->   
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
 
--- 
-With best wishes
-Dmitry
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b2865f6558d604522545@syzkaller.appspotmail.com
 
+EXT4-fs (loop1): mounted filesystem without journal. Quota mode: none.
+INFO: trying to register non-static key.
+The code is fine but needs lockdep annotation, or maybe
+you didn't initialize this object before use?
+turning off the locking correctness validator.
+CPU: 0 PID: 13965 Comm: syz-executor.1 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Call trace:
+ dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+ show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+ dump_stack+0x1c/0x58 lib/dump_stack.c:113
+ assign_lock_key+0x134/0x140 kernel/locking/lockdep.c:979
+ register_lock_class+0xc4/0x2f8 kernel/locking/lockdep.c:1292
+ __lock_acquire+0xa8/0x30a4 kernel/locking/lockdep.c:4932
+ lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x54/0x6c kernel/locking/spinlock.c:154
+ spin_lock include/linux/spinlock.h:349 [inline]
+ ext4_do_update_inode+0x50/0x8f8 fs/ext4/inode.c:5129
+ ext4_mark_iloc_dirty+0x118/0x1f0 fs/ext4/inode.c:5741
+ __ext4_mark_inode_dirty+0x138/0x194 fs/ext4/inode.c:5937
+ ext4_dirty_inode+0x74/0x98 fs/ext4/inode.c:5966
+ __mark_inode_dirty+0x74/0x348 fs/fs-writeback.c:2381
+ ext4_mb_new_blocks+0x814/0x9e4
+ ext4_new_meta_blocks+0x84/0x140 fs/ext4/balloc.c:700
+ ext4_xattr_block_set+0xce0/0x142c fs/ext4/xattr.c:2078
+ ext4_xattr_set_handle+0x724/0x994 fs/ext4/xattr.c:2394
+ ext4_xattr_set+0x100/0x1d0 fs/ext4/xattr.c:2495
+ ext4_xattr_trusted_set+0x4c/0x64 fs/ext4/xattr_trusted.c:38
+ __vfs_setxattr+0x250/0x260 fs/xattr.c:182
+ __vfs_setxattr_noperm+0xcc/0x320 fs/xattr.c:216
+ __vfs_setxattr_locked+0x16c/0x194 fs/xattr.c:277
+ vfs_setxattr+0x174/0x280 fs/xattr.c:313
+ do_setxattr fs/xattr.c:600 [inline]
+ setxattr fs/xattr.c:623 [inline]
+ path_setxattr+0x354/0x414 fs/xattr.c:642
+ __do_sys_setxattr fs/xattr.c:658 [inline]
+ __se_sys_setxattr fs/xattr.c:654 [inline]
+ __arm64_sys_setxattr+0x2c/0x40 fs/xattr.c:654
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
