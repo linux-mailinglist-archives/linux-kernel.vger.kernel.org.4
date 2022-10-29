@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F5D6122AB
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 14:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC746122B0
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 14:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiJ2MEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 08:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
+        id S229819AbiJ2MEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 08:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiJ2MEU (ORCPT
+        with ESMTP id S229789AbiJ2ME1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 08:04:20 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B87748E0;
-        Sat, 29 Oct 2022 05:04:19 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id bs21so9719985wrb.4;
-        Sat, 29 Oct 2022 05:04:19 -0700 (PDT)
+        Sat, 29 Oct 2022 08:04:27 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D7274B85;
+        Sat, 29 Oct 2022 05:04:24 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id c7-20020a05600c0ac700b003c6cad86f38so8033444wmr.2;
+        Sat, 29 Oct 2022 05:04:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ym++Yr1RANQjZT5Dn6yHeaV4FACrpo9YTFn69L+Enh8=;
-        b=QXMOjfGhEpdMNZo0kR9PJngxq2Pmha+ffBPgIGkJVREcHLGf6RXkIv9+qMvi3NluLB
-         XHhFTwZa/pY7CNAZPqxy80FGf9t8KMRddVAy/1suRdzyKNcisz3IFqsSb7fDNMO7dveQ
-         pqDNU5ljR0eMm/0ovmyyf11rmY/uZBHQqhGVT4ISi2kyXMMKcihpcAwu+LrigktoSJcu
-         WhH1pzjuBaR6Lk5wNy4Uu7ORcqJdcAFgBAo4u8nYKJexzH0xnbJcjagXz7HZAYtyaAEY
-         /aGYGZvJ+Q14+V6GqHEUfPkyBv9QmyvRLL5p1CKPydIy9Zjd6qzBRxIB9DaNUEE7EeoQ
-         A2pA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gzOvAyGDXhsFFUVp58xr8wzl/ct2UtB9GMmORTrIQvw=;
+        b=B1sbLOE0BM4c0GsdSFUmM6NZvGRW76oTkt7BxEPlqKUIwlBOoJJZ0HKla36bv/DnuF
+         KbsTbtMI0VLBBUuvWl0k2pQoNp6RLY2S2GUmtGVewbO+vW7vc8P015KC72a5QH2bD8xB
+         6Sq4H2DurFxuddYdKZ7WVZsBNTMqH5ZOkV4baF15MkBXbTA8CQtbZNApYzvLRASd9KVo
+         FrO0bbsIlyWO6+yxtbtRLRyPLH/1l2Ma+GDwtJOh8Wng/KNQDnHzXE7nyE2sbbm5eU7Z
+         HCjlugnC6Hjck61NtpKZfUGsXY2d08uOfXJSabWU+CTrlnqyNzUrnww6RTG++URhVyNe
+         qNQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ym++Yr1RANQjZT5Dn6yHeaV4FACrpo9YTFn69L+Enh8=;
-        b=lso361JemLgQXZjJ2VdRRR1gS95P4c8jW/JDk2ls3WOW7c//souirqo6k/lUD/+1EC
-         RLaVzlF0i2A0A/uP0fc7AHui/S9x1KLjzrQt76HCDhErosa9maov4PsvEdJrHyXTE+vL
-         cBR3xhL69fC59BUJrDdweMgS6j0JS0EBA+/DxWSoxm4VZr0MAl1tCY+nJec1osgNCluR
-         OQcYZdIltNEinNOiQajkHQdI/qRZPsE76uIwRSzlxU3F5fP+3qCQZQecJlt2jJffzffW
-         Uzv8Vpukvj9aSLQnylKtxVRgIsEKjFQ7VOaKqLLvzQtAgYmIVGODsgo+R5K4uZxQgzxr
-         nztw==
-X-Gm-Message-State: ACrzQf3+zJfvwcWNil0OFvLfOsxZOYKnBm0z26o+1u2OqGqDZtnrPthR
-        nevB8RVJUk7lZ0hOE9Tx9LNucRPwevhS+A==
-X-Google-Smtp-Source: AMsMyM6XEDab62Li5uM4KcE5jmlz5PKL9YIfwI//k97j+QSA8z1j9k0hqmK5ajxYKaj2p5lKSNfJqA==
-X-Received: by 2002:adf:dc4a:0:b0:236:5ba2:df2b with SMTP id m10-20020adfdc4a000000b002365ba2df2bmr2224530wrj.260.1667045057287;
-        Sat, 29 Oct 2022 05:04:17 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gzOvAyGDXhsFFUVp58xr8wzl/ct2UtB9GMmORTrIQvw=;
+        b=eq9sNAebE8IrJjUoVNdYYibCGVNdMZnfYSxR2IR8oP2XKZWdvmqu6mr9t+ZctwyzUl
+         czlE6vi/yQkzwERWQNSVaDG2LWqznSdGobGksS5yULNwACUlk1v3OJ0ia13PsS6g4U4q
+         zy1gT9Q+IuIrXDQyDRsJcDojOSmbjwgvLk9UaaOLvKNSgoIdPW1zjTpE63Lb2NOjxnDH
+         04u7tvqzZ0cYaUSKpKH1DNNENnEEOgDWTo4U9ObU2gDiJd5IPgQ3Rn03rcnhYiB2eKG1
+         fxadHSn6Nlq5FCjp7OR9LleHUMBjA0YaZz6ZcfJaoiEI+okVRfrsfEYEYa7JMMMKwNOb
+         gCKw==
+X-Gm-Message-State: ACrzQf2MEdUFSqP0MQe+5OG1y35R9AgWQsDCnm8uHgxPWQkaoiBJxWn/
+        N2Z/PIlFK0vD2N5X6aa4Q1XApiJ1fCxIMg==
+X-Google-Smtp-Source: AMsMyM5bYm+MdK/Txv55Qg9/EN1UUSHcdL5I6XiFB6bJLPl0/m+pITGbuyO0rwI5Iz9+ozgHuHxcfA==
+X-Received: by 2002:a1c:27c6:0:b0:3c2:e6df:c79b with SMTP id n189-20020a1c27c6000000b003c2e6dfc79bmr12025245wmn.14.1667045062904;
+        Sat, 29 Oct 2022 05:04:22 -0700 (PDT)
 Received: from eray-Lenovo-Z50-70.. ([188.132.247.187])
-        by smtp.googlemail.com with ESMTPSA id z17-20020a05600c0a1100b003b492753826sm1472439wmp.43.2022.10.29.05.04.14
+        by smtp.googlemail.com with ESMTPSA id z17-20020a05600c0a1100b003b492753826sm1472439wmp.43.2022.10.29.05.04.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Oct 2022 05:04:16 -0700 (PDT)
+        Sat, 29 Oct 2022 05:04:22 -0700 (PDT)
 From:   =?UTF-8?q?Eray=20Or=C3=A7unus?= <erayorcunus@gmail.com>
 To:     platform-driver-x86@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
@@ -56,10 +57,12 @@ Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
         benjamin.tissoires@redhat.com, dmitry.torokhov@gmail.com,
         hdegoede@redhat.com, mgross@linux.intel.com, pobrn@protonmail.com,
         =?UTF-8?q?Eray=20Or=C3=A7unus?= <erayorcunus@gmail.com>
-Subject: [PATCH v2 0/7] Add camera access keys, IdeaPad driver improvements
-Date:   Sat, 29 Oct 2022 15:03:05 +0300
-Message-Id: <20221029120311.11152-1-erayorcunus@gmail.com>
+Subject: [PATCH v2 1/7] Revert "platform/x86: ideapad-laptop: check for touchpad support in _CFG"
+Date:   Sat, 29 Oct 2022 15:03:06 +0300
+Message-Id: <20221029120311.11152-2-erayorcunus@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221029120311.11152-1-erayorcunus@gmail.com>
+References: <20221029120311.11152-1-erayorcunus@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -73,55 +76,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nowadays many laptops have camera access keys, yet there is no usage codes
-mapped to them, even though it's introduced in HUTRR72. Start point of
-this patch series was adding it and making IdeaPads send it to userspace.
-But later I discovered that camera_power attribute of ideapad-laptop
-driver on my IdeaPad 520-15IKB doesn't work, so I can't toggle it with
-that. I managed to find a way to check whether an IdeaPad supports
-camera_power attribute (which sends VPCCMD_W_CAMERA to EC), don't expose
-it to sysfs so userspace will know that it can't toggle camera access via
-camera_power, in my case, after receiving KEY_CAMERA_ACCESS_TOGGLE.
+Last 8 bit of _CFG started being used in later IdeaPads, thus 30th bit
+doesn't always show whether device supports touchpad or touchpad switch.
+Remove checking bit 30 of _CFG, so older IdeaPads like S10-3 can switch
+touchpad again via touchpad attribute.
 
-Along the way I discovered that old IdeaPads, like S10-3, may not be able
-to toggle their touchpad as a regression of a commit aimed for newer
-IdeaPads, so I reverted it.
+This reverts commit b3ed1b7fe3786c8fe795c16ca07cf3bda67b652f.
 
-Also I noticed that I can get/set the state of my keyboard light,
-so one of the patches also adds supports for this kind of keyboard lights,
-which I call "partially supported keyboard lights". I expect that commit
-to add keyboard light support for 520-15IKB, 330-17ICH, 5 (15) and more.
-Currently only tested on 520-15IKB.
+Signed-off-by: Eray Orçunus <erayorcunus@gmail.com>
 ---
-Changes in v2:
-  - Added Dmitry Torokhov's Acked-By to patch 2
-  - Applied Barnabás Pőcze's recommendations to patch 5:
-    - strncmp -> strstarts
-    - static global "CAM" string -> inlined "CAM" string
-    - move new variables to the scope they're used, and order them
-  - Added patch 7, which removes "touchpad" attr for SYNA2B33
+ drivers/platform/x86/ideapad-laptop.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
-Eray Orçunus (7):
-  Revert "platform/x86: ideapad-laptop: check for touchpad support in
-    _CFG"
-  HID: add mapping for camera access keys
-  platform/x86: ideapad-laptop: Report KEY_CAMERA_ACCESS_TOGGLE instead
-    of KEY_CAMERA
-  platform/x86: ideapad-laptop: Add new _CFG bit numbers for future use
-  platform/x86: ideapad-laptop: Expose camera_power only if supported
-  platform/x86: ideapad-laptop: Keyboard backlight support for more
-    IdeaPads
-  platform/x86: ideapad-laptop: Don't expose touchpad attr on IdeaPads
-    with SYNA2B33
-
- drivers/hid/hid-debug.c                |   3 +
- drivers/hid/hid-input.c                |   3 +
- drivers/platform/x86/ideapad-laptop.c  | 170 ++++++++++++++++++++++---
- include/uapi/linux/input-event-codes.h |   3 +
- 4 files changed, 162 insertions(+), 17 deletions(-)
-
-
-base-commit: d9db04c1dec6189413701c52b9498a7a56c96445
+diff --git a/drivers/platform/x86/ideapad-laptop.c b/drivers/platform/x86/ideapad-laptop.c
+index e7a1299e3776..b67bac457a7a 100644
+--- a/drivers/platform/x86/ideapad-laptop.c
++++ b/drivers/platform/x86/ideapad-laptop.c
+@@ -46,11 +46,10 @@ static const char *const ideapad_wmi_fnesc_events[] = {
+ #endif
+ 
+ enum {
+-	CFG_CAP_BT_BIT       = 16,
+-	CFG_CAP_3G_BIT       = 17,
+-	CFG_CAP_WIFI_BIT     = 18,
+-	CFG_CAP_CAM_BIT      = 19,
+-	CFG_CAP_TOUCHPAD_BIT = 30,
++	CFG_CAP_BT_BIT   = 16,
++	CFG_CAP_3G_BIT   = 17,
++	CFG_CAP_WIFI_BIT = 18,
++	CFG_CAP_CAM_BIT  = 19,
+ };
+ 
+ enum {
+@@ -367,8 +366,6 @@ static int debugfs_cfg_show(struct seq_file *s, void *data)
+ 		seq_puts(s, " wifi");
+ 	if (test_bit(CFG_CAP_CAM_BIT, &priv->cfg))
+ 		seq_puts(s, " camera");
+-	if (test_bit(CFG_CAP_TOUCHPAD_BIT, &priv->cfg))
+-		seq_puts(s, " touchpad");
+ 	seq_puts(s, "\n");
+ 
+ 	seq_puts(s, "Graphics: ");
+@@ -661,8 +658,7 @@ static umode_t ideapad_is_visible(struct kobject *kobj,
+ 	else if (attr == &dev_attr_fn_lock.attr)
+ 		supported = priv->features.fn_lock;
+ 	else if (attr == &dev_attr_touchpad.attr)
+-		supported = priv->features.touchpad_ctrl_via_ec &&
+-			    test_bit(CFG_CAP_TOUCHPAD_BIT, &priv->cfg);
++		supported = priv->features.touchpad_ctrl_via_ec;
+ 	else if (attr == &dev_attr_usb_charging.attr)
+ 		supported = priv->features.usb_charging;
+ 
 -- 
 2.34.1
 
