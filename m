@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6B26125BB
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 23:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7557612616
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 00:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbiJ2V42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 17:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
+        id S229441AbiJ2WCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 18:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiJ2V4U (ORCPT
+        with ESMTP id S229542AbiJ2WCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 17:56:20 -0400
+        Sat, 29 Oct 2022 18:02:37 -0400
 Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE29127FF4
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 14:56:18 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id d6so13653232lfs.10
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 14:56:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F6C2CC92
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 15:02:35 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id g12so13701851lfh.3
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 15:02:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=cZpw4f7LAUGvF4cSAbPz5CyMSMlcyLXGFUZk34oAqwk=;
-        b=e3gHyWh79z0KE5mRU/J/MMBAmTjW8qWmUrc2++BjK4YxMq4J8S64pZFPL6Po2IR6Pp
-         VT2hrOHKcu4Pn/jYo4Jotb0roRp0orFbcVErMa5hph1ZeGed2CUVzG4FyqeOtzvzCwCq
-         jnpp7jrqEHpWNGcAb/jn0pG6vn2rYNOmHg/EScAm9VMAEQjRpQPdkYMO+rnnMZCbDo9r
-         mBaNvA2sn9AaP9J40dXrI9YOzinvXWooAocFXvMVmLZ5lnvNwd5zE65fy5niewhS7riH
-         15veiAGwLSIWaL3NnWlpBSi3CDelcpfd5OHeQsAWFC309+rAbC4mKHMVSi+YrybO8d++
-         D0Pg==
+        bh=5E055D0LraQtXxVm7spy38VDfZkDycL7gLDgoeNA16o=;
+        b=j+7ijpO0/3KSJT8VqP7+9KbWRoZ/P+8Pt6ftg3RYrDzOQG/OoUV3jZOVwlzUM/mUoE
+         Omp1Y/opkSMuvoGniucEoYxxLubo8YorcLW3UC4oUz6VTsVEaHyQTMjT0ricldnbA0Kx
+         Q7XY6n1TR3nT4arq0EucIOCEApbF8g2lZ47I33YD9Z18W0PYYdY6EQ0y+Ym6rw2rtccA
+         w4RfDNWehGXZrzjOmFTrIzYZQT+uQGlanuCHvKts3N4YkiAR74fC9jSvI9aKI9pxPy6J
+         iJogk19yBiCAPzTiF0eH5T+eZ9Ut5hcoKdi8Sh1LETftUSkJcmmB1zHQSfRpb1JuTPiz
+         t6OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cZpw4f7LAUGvF4cSAbPz5CyMSMlcyLXGFUZk34oAqwk=;
-        b=RLSYuY53okvmqqQS5GtqCUXBLwuy7KXlQp0ggeO4IPPcAKQfVYBsp6HmLze3ATrQ4n
-         fUfVGvUAJunkvlP4f597jgfwUb9xzVGSlTUrl4CvmYpFzy9gShzLh8uE1sHqVI5R0BJ6
-         EhOM7graxj56ClIjnm1eSs6oKa35Co8m1M9Zg5fdpt7auq1Ds/A2eAKJlIRF50aYQpiW
-         uz+qXUEAFzS+Lg0gKnVAHM7+1FNW13LhK2OWr7WAFzna2HbVfTUEc2LilHdjGhpqaZ82
-         CXpH8CEPJW8WMthIBQu/5dOUek/gXni8/PQ9umMl2XtpKeCkLOvn2YV0BzkKsuGC66rT
-         d3rg==
-X-Gm-Message-State: ACrzQf3/LNT/qAEsX2Qe1TI0Q2ohm/NqqTQWtRxceaMeJIjR58KMnJwh
-        Fg6rdDrULJG48vInSoYjPPaWjQ==
-X-Google-Smtp-Source: AMsMyM50A4M6LSsxWacFB2rvuxaNawYjAGDccOogtj9cOVnciCpBaYi/aDIG05dElT3EALIbP3fkTg==
-X-Received: by 2002:a05:6512:2c88:b0:4a9:4051:79a1 with SMTP id dw8-20020a0565122c8800b004a9405179a1mr2131082lfb.331.1667080577306;
-        Sat, 29 Oct 2022 14:56:17 -0700 (PDT)
+        bh=5E055D0LraQtXxVm7spy38VDfZkDycL7gLDgoeNA16o=;
+        b=Hu1jgZeKyJdfbiplPAWD5p2simZn2d6zYZLnQAT35OWpgV0lINGnVaqymZcu/E3z1w
+         7QPAdPS6ADhD7oJaKp4FvPL4e9PWE0LNOpBLrwQTNlKVPA+EjFxnmoiYsqVQw55g915E
+         oWM+zpF3QKoB3hxDskJEdS0CSXtR4CtgObajrdV/sPMsrR564Ybi56xHSWbARWkpkCJT
+         wG/sOD2P8G9xauxJwfZZhifnBVtryqOVcA4rmNTrp5ItCN8LOG3hge5H96KWEOhLawk0
+         LG4ozdCMOXj7R91EX2Tso3OOMM82WbR4CQrS4THNZtykWOY6dKf8Aqep8QkV3cOeWQqT
+         XlKg==
+X-Gm-Message-State: ACrzQf1S4oXNnBrbaEwMYj1lrtUGB+5Cqb9LLuOkGOw5a/YuIfYu+aHV
+        40U3pmJzJ89+OLgSGXeq1hlONw==
+X-Google-Smtp-Source: AMsMyM4pm04TNdTofIp5vVw8Exv2fHuV0kBcqVC+ddmDOKxb5o54kJtyQCL/FSn1KaXk+T9gB25qYw==
+X-Received: by 2002:a05:6512:48f:b0:4a4:7988:b737 with SMTP id v15-20020a056512048f00b004a47988b737mr2152049lfq.28.1667080739088;
+        Sat, 29 Oct 2022 14:58:59 -0700 (PDT)
 Received: from [10.27.10.248] ([195.165.23.90])
-        by smtp.gmail.com with ESMTPSA id 5-20020ac25f45000000b004a03fd4476esm443654lfz.287.2022.10.29.14.56.16
+        by smtp.gmail.com with ESMTPSA id t8-20020a05651c204800b00277092c03e7sm437615ljo.33.2022.10.29.14.58.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Oct 2022 14:56:17 -0700 (PDT)
-Message-ID: <5d846ed8-e1c3-701f-6b92-a0bd2a9670cb@linaro.org>
-Date:   Sun, 30 Oct 2022 00:56:15 +0300
+        Sat, 29 Oct 2022 14:58:58 -0700 (PDT)
+Message-ID: <01a01fb3-2520-58ce-6432-b278bb8118f5@linaro.org>
+Date:   Sun, 30 Oct 2022 00:58:57 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.3
-Subject: Re: [PATCH 08/15] scsi: ufs: ufs-qcom: Remove un-necessary goto
- statements
+Subject: Re: [PATCH 10/15] scsi: ufs: ufs-qcom: Use bitfields where
+ appropriate
 Content-Language: en-GB
 To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         martin.petersen@oracle.com, jejb@linux.ibm.com,
@@ -67,9 +67,9 @@ Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org
 References: <20221029141633.295650-1-manivannan.sadhasivam@linaro.org>
- <20221029141633.295650-9-manivannan.sadhasivam@linaro.org>
+ <20221029141633.295650-11-manivannan.sadhasivam@linaro.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221029141633.295650-9-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20221029141633.295650-11-manivannan.sadhasivam@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,20 +83,132 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 29/10/2022 17:16, Manivannan Sadhasivam wrote:
-> goto in error path is useful if the function needs to do cleanup other
-> than returning the error code. But in this driver, goto statements are
-> used for just returning the error code in many places. This really
-> makes it hard to read the code.
-> 
-> So let's get rid of those goto statements and just return the error code
-> directly.
+> Use bitfield macros where appropriate to simplify the driver.
 > 
 > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->   drivers/ufs/host/ufs-qcom.c | 100 +++++++++++++++---------------------
->   1 file changed, 41 insertions(+), 59 deletions(-)
+>   drivers/ufs/host/ufs-qcom.h | 58 ++++++++++++++++---------------------
+>   1 file changed, 25 insertions(+), 33 deletions(-)
+> 
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+> diff --git a/drivers/ufs/host/ufs-qcom.h b/drivers/ufs/host/ufs-qcom.h
+> index 44466a395bb5..6cb0776456b3 100644
+> --- a/drivers/ufs/host/ufs-qcom.h
+> +++ b/drivers/ufs/host/ufs-qcom.h
+> @@ -17,12 +17,9 @@
+>   #define DEFAULT_CLK_RATE_HZ     1000000
+>   #define BUS_VECTOR_NAME_LEN     32
+>   
+> -#define UFS_HW_VER_MAJOR_SHFT	(28)
+> -#define UFS_HW_VER_MAJOR_MASK	(0x000F << UFS_HW_VER_MAJOR_SHFT)
+> -#define UFS_HW_VER_MINOR_SHFT	(16)
+> -#define UFS_HW_VER_MINOR_MASK	(0x0FFF << UFS_HW_VER_MINOR_SHFT)
+> -#define UFS_HW_VER_STEP_SHFT	(0)
+> -#define UFS_HW_VER_STEP_MASK	(0xFFFF << UFS_HW_VER_STEP_SHFT)
+> +#define UFS_HW_VER_MAJOR_MASK	GENMASK(31, 28)
+> +#define UFS_HW_VER_MINOR_MASK	GENMASK(27, 16)
+> +#define UFS_HW_VER_STEP_MASK	GENMASK(15, 0)
+>   
+>   /* vendor specific pre-defined parameters */
+>   #define SLOW 1
+> @@ -76,24 +73,24 @@ enum {
+>   #define UFS_CNTLR_3_x_x_VEN_REGS_OFFSET(x)	(0x400 + x)
+>   
+>   /* bit definitions for REG_UFS_CFG1 register */
+> -#define QUNIPRO_SEL		0x1
+> -#define UTP_DBG_RAMS_EN		0x20000
+> +#define QUNIPRO_SEL		BIT(0)
+> +#define UTP_DBG_RAMS_EN		BIT(17)
+>   #define TEST_BUS_EN		BIT(18)
+>   #define TEST_BUS_SEL		GENMASK(22, 19)
+>   #define UFS_REG_TEST_BUS_EN	BIT(30)
+>   
+>   /* bit definitions for REG_UFS_CFG2 register */
+> -#define UAWM_HW_CGC_EN		(1 << 0)
+> -#define UARM_HW_CGC_EN		(1 << 1)
+> -#define TXUC_HW_CGC_EN		(1 << 2)
+> -#define RXUC_HW_CGC_EN		(1 << 3)
+> -#define DFC_HW_CGC_EN		(1 << 4)
+> -#define TRLUT_HW_CGC_EN		(1 << 5)
+> -#define TMRLUT_HW_CGC_EN	(1 << 6)
+> -#define OCSC_HW_CGC_EN		(1 << 7)
+> +#define UAWM_HW_CGC_EN		BIT(0)
+> +#define UARM_HW_CGC_EN		BIT(1)
+> +#define TXUC_HW_CGC_EN		BIT(2)
+> +#define RXUC_HW_CGC_EN		BIT(3)
+> +#define DFC_HW_CGC_EN		BIT(4)
+> +#define TRLUT_HW_CGC_EN		BIT(5)
+> +#define TMRLUT_HW_CGC_EN	BIT(6)
+> +#define OCSC_HW_CGC_EN		BIT(7)
+>   
+>   /* bit definition for UFS_UFS_TEST_BUS_CTRL_n */
+> -#define TEST_BUS_SUB_SEL_MASK	0x1F  /* All XXX_SEL fields are 5 bits wide */
+> +#define TEST_BUS_SUB_SEL_MASK	GENMASK(4, 0)  /* All XXX_SEL fields are 5 bits wide */
+>   
+>   #define REG_UFS_CFG2_CGC_EN_ALL (UAWM_HW_CGC_EN | UARM_HW_CGC_EN |\
+>   				 TXUC_HW_CGC_EN | RXUC_HW_CGC_EN |\
+> @@ -101,17 +98,12 @@ enum {
+>   				 TMRLUT_HW_CGC_EN | OCSC_HW_CGC_EN)
+>   
+>   /* bit offset */
+> -enum {
+> -	OFFSET_UFS_PHY_SOFT_RESET           = 1,
+> -	OFFSET_CLK_NS_REG                   = 10,
+> -};
+> +#define OFFSET_CLK_NS_REG		0xa
+>   
+>   /* bit masks */
+> -enum {
+> -	MASK_UFS_PHY_SOFT_RESET             = 0x2,
+> -	MASK_TX_SYMBOL_CLK_1US_REG          = 0x3FF,
+> -	MASK_CLK_NS_REG                     = 0xFFFC00,
+> -};
+> +#define MASK_UFS_PHY_SOFT_RESET		BIT(1)
+> +#define MASK_TX_SYMBOL_CLK_1US_REG	GENMASK(9, 0)
+> +#define MASK_CLK_NS_REG			GENMASK(23, 10)
+>   
+>   /* QCOM UFS debug print bit mask */
+>   #define UFS_QCOM_DBG_PRINT_REGS_EN	BIT(0)
+> @@ -135,15 +127,15 @@ ufs_qcom_get_controller_revision(struct ufs_hba *hba,
+>   {
+>   	u32 ver = ufshcd_readl(hba, REG_UFS_HW_VERSION);
+>   
+> -	*major = (ver & UFS_HW_VER_MAJOR_MASK) >> UFS_HW_VER_MAJOR_SHFT;
+> -	*minor = (ver & UFS_HW_VER_MINOR_MASK) >> UFS_HW_VER_MINOR_SHFT;
+> -	*step = (ver & UFS_HW_VER_STEP_MASK) >> UFS_HW_VER_STEP_SHFT;
+> +	*major = FIELD_GET(UFS_HW_VER_MAJOR_MASK, ver);
+> +	*minor = FIELD_GET(UFS_HW_VER_MINOR_MASK, ver);
+> +	*step = FIELD_GET(UFS_HW_VER_STEP_MASK, ver);
+>   };
+>   
+>   static inline void ufs_qcom_assert_reset(struct ufs_hba *hba)
+>   {
+> -	ufshcd_rmwl(hba, MASK_UFS_PHY_SOFT_RESET,
+> -			1 << OFFSET_UFS_PHY_SOFT_RESET, REG_UFS_CFG1);
+> +	ufshcd_rmwl(hba, MASK_UFS_PHY_SOFT_RESET, FIELD_PREP(MASK_UFS_PHY_SOFT_RESET, 1),
+
+Nit: I'd just define the value too and use the defined name here.
+
+> +		    REG_UFS_CFG1);
+>   
+>   	/*
+>   	 * Make sure assertion of ufs phy reset is written to
+> @@ -154,8 +146,8 @@ static inline void ufs_qcom_assert_reset(struct ufs_hba *hba)
+>   
+>   static inline void ufs_qcom_deassert_reset(struct ufs_hba *hba)
+>   {
+> -	ufshcd_rmwl(hba, MASK_UFS_PHY_SOFT_RESET,
+> -			0 << OFFSET_UFS_PHY_SOFT_RESET, REG_UFS_CFG1);
+> +	ufshcd_rmwl(hba, MASK_UFS_PHY_SOFT_RESET, FIELD_PREP(MASK_UFS_PHY_SOFT_RESET, 0),
+
+Nit: FIELD_PREP is always 0.
+
+> +		    REG_UFS_CFG1);
+>   
+>   	/*
+>   	 * Make sure de-assertion of ufs phy reset is written to
 
 -- 
 With best wishes
