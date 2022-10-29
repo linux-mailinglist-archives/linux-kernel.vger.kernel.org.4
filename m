@@ -2,146 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CACD8611F19
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 03:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06726611F22
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 03:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiJ2Ba7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 21:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
+        id S229565AbiJ2Boj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 21:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiJ2Ba5 (ORCPT
+        with ESMTP id S229450AbiJ2Boh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 21:30:57 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D37E202716;
-        Fri, 28 Oct 2022 18:30:56 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id r18so6227147pgr.12;
-        Fri, 28 Oct 2022 18:30:56 -0700 (PDT)
+        Fri, 28 Oct 2022 21:44:37 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B822189
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 18:44:30 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id 130so6199276pfu.8
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 18:44:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ljlq0wzNYgqZzF5mdTWeFZiAlKPfpNDbugOhA1C4lDM=;
-        b=Usvn4pjF8UaseNiP1nOoO16Ro9ZiA0ZOISOYmwgLehKa4bT2egg41osfClkVncVUQy
-         4NfKfO8o4bK5UnxAb4H9XvjKODdFuK4+idk3dKS+wjCQsnKCtJQ5uDLVCqNxDCHeSnVJ
-         lyhVMlcu7aibWoRgO6A3/FwsZNe48B5EnYyMBFdZCSpHdBl84r59UBYKkiAsF7fCRgO0
-         D+WlD2rBYnK+Ff48EJf1xOgJQHiFO7T0AJbF8EG4Uv8Ugmb17v6dZJtY9ft2mXGdACRU
-         +ho2IhzRkZx7XdXCuuyV8PbEF39c537enhvePSB6EE/V1RHroFJZ1I8Klf3q5Tk/scBU
-         y8ug==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TOilMmjpabMBP6lbtmoPdAvGW0C2EX+ahZ9p24ZQQlI=;
+        b=lmLpsUA1Cvy+01SKRuVljHn8ljwtr5HWbkQY5Dsldo2NPanmhoJEOUYixPgpxspCkH
+         smsV2XBCrNqBdjs9No4ZFj58GewppuFM7R6Or9WofJUS/bMSrZK2vPQ6myjTljbIcUGM
+         FtbAb0BLnwe1LWbqwfySZyUfLDGdmh39E5MoM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ljlq0wzNYgqZzF5mdTWeFZiAlKPfpNDbugOhA1C4lDM=;
-        b=ww3GlX7K5Wb/VgDWzEnnClybHLADHX3l089GMqpBDtuxwx9jRPyZ5F/D+aVaTwwXtN
-         +PwDY96/JdI6AjK5+PP11yAz2O6Lu9enyfMBILZod0ufkfUG8RfFj/+vKGYBMcWS2IdK
-         oP9sl94YzZ/xjh4yssxYaSypZzuPCHhEKjowlDyJPjFCxSa6MgLbQGNMcP0DsNqEFlAQ
-         vGNSlmDtjuORahlWdjhw/oHVAA8/RSuHlgRvbVyS4bnGOogHbAVQSp/zj6BjgOi8AtOV
-         klARwIqqB5UR3W49B9cSPG5B7rNfJRMI4mciD9J+cwpSmNfER332zy3KmGQ1qY4TEMFB
-         WY3g==
-X-Gm-Message-State: ACrzQf1BeuNmXeFi02L6W97v35nlW6FwlPtD+1Reomo4wR6EhZNSmB3E
-        9uo6E0CZralwseoA451l0Ho=
-X-Google-Smtp-Source: AMsMyM5syXaucmQoxfMV0w2n6EFA7QVHRHRLVaD6hhVGmXqZgpqqfhy3f/oHTSCt85ZKkJzWadmI4A==
-X-Received: by 2002:a63:cc43:0:b0:43a:2f12:d326 with SMTP id q3-20020a63cc43000000b0043a2f12d326mr2084263pgi.320.1667007055418;
-        Fri, 28 Oct 2022 18:30:55 -0700 (PDT)
-Received: from mail.google.com (122-58-209-93-fibre.sparkbb.co.nz. [122.58.209.93])
-        by smtp.gmail.com with ESMTPSA id o7-20020a17090a4b4700b002137d3da760sm70187pjl.39.2022.10.28.18.30.48
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TOilMmjpabMBP6lbtmoPdAvGW0C2EX+ahZ9p24ZQQlI=;
+        b=H26X+9efnnSIfYmf/TIQ7FZE5taHzyeEcoL0FrZylut9IMfNQDaWevxSRQUx/KU7Pu
+         xqETlKSKe1Xg0M64ONbg1CC8t3vTM0ENNTLAq/zL7UAbf0ITEfMwty6LiUQ6/14i6NNl
+         WvCy3zXJ3FYJui2w7C+ohH3Mpqc2HibNggzzgyGJ3mH0wIhCRFRRTRIrPyMh37b7Dp50
+         Oi3TY9LZrulgFo0jkW/ZM/dP7ubhrPdJBOj3dzZe41FqbEql05H8zt7kSNwrGdJrKppz
+         7bF0Xy0bEWK31eDi38t0ezPs1rVlUA4kG4KblU3249RFn2IoeHAr+6FH/Oifa1dbyXL1
+         TydA==
+X-Gm-Message-State: ACrzQf0UvxvJ729IfCwx//zrXU6qQVD1ko5Dzn5Vy8pSsOJ2oJn4qYyZ
+        W8btrKQWeHGWccRPtJ2uS/RIrw==
+X-Google-Smtp-Source: AMsMyM7GrMDVnCAK61/LBqnfafk4zDoWcDpN6Y9d2KXnr9xk9xrXRf+n16gCEpTSzqs54S73/5h81g==
+X-Received: by 2002:a63:581e:0:b0:43c:29a0:6390 with SMTP id m30-20020a63581e000000b0043c29a06390mr2156483pgb.552.1667007869602;
+        Fri, 28 Oct 2022 18:44:29 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:65f9:c180:249c:190f])
+        by smtp.gmail.com with ESMTPSA id z190-20020a6365c7000000b0043014f9a4c9sm85791pgb.93.2022.10.28.18.44.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 18:30:54 -0700 (PDT)
-Date:   Sat, 29 Oct 2022 14:30:44 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
-        Claudio Suarez <cssk@net-c.es>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Grigory Vasilyev <h0tc0d3@gmail.com>,
-        Slark Xiao <slark_xiao@163.com>,
-        Rongguang Wei <weirongguang@kylinos.cn>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        paulo.miguel.almeida.rodenas@gmail.com
-Subject: [PATCH v2] [next] drm/amdgpu: Replace one-element array with
- flexible-array member
-Message-ID: <Y1yCRHgx15ZOiCL4@mail.google.com>
+        Fri, 28 Oct 2022 18:44:29 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 18:44:26 -0700
+From:   Brian Norris <briannorris@chromium.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/2] usb: ehci-pci: Set PROBE_PREFER_ASYNCHRONOUS
+Message-ID: <Y1yFejAhNogYVpIW@google.com>
+References: <20221028141821.1.I9a5353f81d1509f85f3a04f0cdc9099f6fe60811@changeid>
+ <Y1x+KmXhzikbEm8U@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1x3MtRJ8ckXxlJn@mail.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y1x+KmXhzikbEm8U@rowland.harvard.edu>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One-element arrays are deprecated, and we are replacing them with
-flexible array members instead. So, replace one-element array with
-flexible-array member in struct _ATOM_FAKE_EDID_PATCH_RECORD and
-refactor the rest of the code accordingly.
+On Fri, Oct 28, 2022 at 09:13:14PM -0400, Alan Stern wrote:
+> However, I'm curious to know why this patch makes ehci-pci use 
+> PROBE_PREFER_ASYNCHRONOUS even when CONFIG_PM isn't set, whereas the 2/2 
+> patch makes xhci-pci use PROBE_PREFER_ASYNCHRONOUS only when CONFIG_PM 
+> is set.
 
-Important to mention is that doing a build before/after this patch
-results in no binary output differences.
+That's definitely a bug in patch 2. This has nothing (or, little; probe
+order can technically affect the PM suspend/resume order) to do with
+CONFIG_PM, except that the .pm hooks tend to sit nearby, and repeated
+driver patching makes the author's eyes glaze over sometimes...
 
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-routines on memcpy() and help us make progress towards globally
-enabling -fstrict-flex-arrays=3 [1].
+Thanks. v2 coming.
 
-Link: https://github.com/KSPP/linux/issues/79
-Link: https://github.com/KSPP/linux/issues/238
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
-
-Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
----
-Changelog:
-
-v2: no binary output differences patch; report binary changes findings
-    on commit log. Res: Kees Cook
-v1: https://lore.kernel.org/lkml/Y1tkWdwPUp+UdpM0@mail.google.com/
----
- drivers/gpu/drm/amd/amdgpu/atombios_encoders.c | 7 +++++--
- drivers/gpu/drm/amd/include/atombios.h         | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c b/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
-index 6be9ac2b9c5b..18ae9433e463 100644
---- a/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
-+++ b/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
-@@ -2081,8 +2081,11 @@ amdgpu_atombios_encoder_get_lcd_info(struct amdgpu_encoder *encoder)
- 						}
- 					}
- 					record += fake_edid_record->ucFakeEDIDLength ?
--						fake_edid_record->ucFakeEDIDLength + 2 :
--						sizeof(ATOM_FAKE_EDID_PATCH_RECORD);
-+						  struct_size(fake_edid_record,
-+							      ucFakeEDIDString,
-+							      fake_edid_record->ucFakeEDIDLength) :
-+						  /* empty fake edid record must be 3 bytes long */
-+						  sizeof(ATOM_FAKE_EDID_PATCH_RECORD) + 1;
- 					break;
- 				case LCD_PANEL_RESOLUTION_RECORD_TYPE:
- 					panel_res_record = (ATOM_PANEL_RESOLUTION_PATCH_RECORD *)record;
-diff --git a/drivers/gpu/drm/amd/include/atombios.h b/drivers/gpu/drm/amd/include/atombios.h
-index 15943bc21bc5..b5b1d073f8e2 100644
---- a/drivers/gpu/drm/amd/include/atombios.h
-+++ b/drivers/gpu/drm/amd/include/atombios.h
-@@ -4107,7 +4107,7 @@ typedef struct _ATOM_FAKE_EDID_PATCH_RECORD
- {
-   UCHAR ucRecordType;
-   UCHAR ucFakeEDIDLength;       // = 128 means EDID length is 128 bytes, otherwise the EDID length = ucFakeEDIDLength*128
--  UCHAR ucFakeEDIDString[1];    // This actually has ucFakeEdidLength elements.
-+  UCHAR ucFakeEDIDString[];     // This actually has ucFakeEdidLength elements.
- } ATOM_FAKE_EDID_PATCH_RECORD;
- 
- typedef struct  _ATOM_PANEL_RESOLUTION_PATCH_RECORD
--- 
-2.37.3
-
+Brian
