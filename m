@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCAB46124BB
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 19:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0306124C2
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 19:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiJ2Rlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 13:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
+        id S229696AbiJ2Rz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 13:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiJ2Rlv (ORCPT
+        with ESMTP id S229483AbiJ2Rz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 13:41:51 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A1E4B0FA;
-        Sat, 29 Oct 2022 10:41:49 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id r83so9255502oih.2;
-        Sat, 29 Oct 2022 10:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uZvdF31LC8VEmM14x7xGiLTuqVkM63sQOLgHXVoVBzI=;
-        b=NkQnTJI0iUr2kPR1GnapnO9oLyFU4/X22orc6ZFoZwhiooiQy97fVEwcPTZvkJ0nDn
-         9D2wUbfBCYVD0laJJQI3RzFkVLtKtPecjYW89/bnkxzyq8SzLK/ZG7EZ0pIPtnD/RAaK
-         o08xgPfYGl6foqO8+gciIoXfr+f8zOmBOJpgdtkl+tUY4ctEzJMJJFfG7K34pfa/vBP+
-         FgdqIvK0IqJI0sxnOUDgYSi4QiYS6mdTQpERege0T7BxWrIlI22Z/d5pq6WNxQFebGNs
-         M4iEREA7J2IIX3F8Y4ztrTDqbAuaijwABpfE+bms15Ixur6x8MAenL2Lfto9PWvPs8V1
-         y3rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uZvdF31LC8VEmM14x7xGiLTuqVkM63sQOLgHXVoVBzI=;
-        b=2N9bKT5y1BA1aS60WTY05TekvMT0P3w5kRj1ZUZYLuVkI//lo8JDDJ0Vn+G8mFycOf
-         tF1IyHzrMWu5EmYNzgdLrUMPqtGksHo9WEMsBsxwjfhGNyqRGmBTawbXmZzjs1EyfMYD
-         vRlo+7lXPmEcrGf3wcgfWrhvtwhdgoNIKawn/YJHervPIguwH7+c16EZn/m5QHDAf+KU
-         URKshxG1U39gNqIGDcJGltW9CVXQ1H4iNCQPloVjhig2s5eWf9Uxmqu7kTz9g2oxuCiv
-         N8g9sXYEdN91fG0NyK5dX7Kug9Ig+VU0amT8TrY5FKIRI32hh7fHFOXf/JjL9zVrq8tc
-         QeFQ==
-X-Gm-Message-State: ACrzQf00rzSd/Jk74382aXz7g7AlDgetSqDp4rsRcvWhkMLPANaUL5jy
-        kYfgD811yXJHZXVviqJ3fI4=
-X-Google-Smtp-Source: AMsMyM5mMkBG1Gwv+jozQGrHxWn3biXJTmbq8UVa5xheGmmWykn+TfoIdLw7B+xZW56318OfuMhLfQ==
-X-Received: by 2002:a05:6808:1886:b0:354:b8ea:4ddb with SMTP id bi6-20020a056808188600b00354b8ea4ddbmr2681448oib.222.1667065309129;
-        Sat, 29 Oct 2022 10:41:49 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w7-20020a0568080d4700b003546fada8f6sm704370oik.12.2022.10.29.10.41.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Oct 2022 10:41:48 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 29 Oct 2022 10:41:47 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH v10 04/27] kallsyms: support "big" kernel symbols
-Message-ID: <20221029174147.GA3322058@roeck-us.net>
-References: <20220927131518.30000-1-ojeda@kernel.org>
- <20220927131518.30000-5-ojeda@kernel.org>
+        Sat, 29 Oct 2022 13:55:56 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE076B48;
+        Sat, 29 Oct 2022 10:55:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1667066124;
+        bh=Kycf1XZFridgEvLb9sjdHDeiaD0OdfNkXClfb9amqkM=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=a95ybDL6/m6NouR77Vfx/jrjpFe+vsBdD/+3panVqt9YNUw3PMjZysOt8njrj1aMt
+         iQpVwmgSmAPG3zy7QNXbzJpaPRI+yQQoxyf5bRsA9sW05OVtnOtqFgRRSdVgYRaozu
+         c5yrYq19bS46YJt5pcTTgKXFQlJnRJ1dGmZNFokvWRdZEex+pY/wvaxKXxc8IAfZxh
+         2SkeDqXOBR2oQhvclZ8JYRvltBviOjtbtLcP5rOkMoEXy1YDdi0Qad4IsB6Pmq7nfT
+         LgmIWHvf9eFnmQqUBWh0nWN5B9T0ao4Xs93bPOTgl2kcW9yzupreJbeRq8fPBCaJ1G
+         poNPNV1Ac8pRQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from frank-G5 ([217.61.156.178]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MIMfW-1os7qq0I7w-00EJMD; Sat, 29
+ Oct 2022 19:55:24 +0200
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 0/2] rework mtk pcie-gen3 bindings and support mt7986
+Date:   Sat, 29 Oct 2022 19:55:13 +0200
+Message-Id: <20221029175515.14526-1-frank-w@public-files.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927131518.30000-5-ojeda@kernel.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:KxEWb7itPFWpTFXDzdkAlZkhTG+OLCfGNO1UX1xRxoigacLZp9n
+ BHAdDh48FNV7BvYDFaZKZDAtM7nqke88BIiDjCNhLmveo9xisVCE3CzkDCw5JIxop09tCGn
+ Of5NB7MZNqULn+zl8Wa3RI8EJgXmUbdmSmEnOX0vqbcsBBCne0xeq0syWyZXq6zbgKQaOhx
+ qmr9cuOq9bdLj5o/oPjiw==
+UI-OutboundReport: notjunk:1;M01:P0:UgbdyR0oegs=;WsBLUDG5xSh2G2iV4ajaVN6GcL4
+ RxEPfjzboRWB7yNWnDB5IEJ1h+CD0fSkRtJYJXIaABYBJYdEBYi3a2gHL85n+yac2sgXPQVqh
+ 6st5Yuj+ipW3YPHU8DHQKAPH2avYDAwPd4aue9SKqFYaWwfcWgwd2IZRGJ1Qa0hbGlbb4Lcz1
+ 2IQdWus23mLM94MjwqSZlaCrODvisBHSLypch6jTUwJYH3m/BzvMz0UEY1pSp+6Sm/QilzOUm
+ hUm910tYeWJxWUyBtqAtddpV9HlyzQ+55ZKuTpgoMdCftvq2n2SPB9xMSrkDSp2idUXE0Wz8v
+ 0ZfF6n3UYi0qFJBsxvbhLvIiJjcVYOVw3RQKRpmKy1qLgLIiPn60Bq0KHXR0w2LkUhJII1u32
+ CFUl9EhdcnxdCmmRs48RwiCd23E388r66pgLb1qlH4PFjax9Ff16zoPD0BdyfKOEpMCNWw/b1
+ 0myOWaYZEZftAqJ8Jrif3zkr4DpJXY4jEYgH9IykGANnxzCJdHKAYbTSHLHsZs0d8iGIjvXv6
+ SfSG/M9SlUqZJlbGTt2g2HN4zg4m/USyGBwEKwgwdPjuUgIW8LWXo8t1soi1s+abWwT3IVPNt
+ N1rHMSB6rxr+oebOTrMrcCilwWJqLLuhWqiYGqqsCIO3pUJVx1NfGx8SvNR+noWNpsaxjZmor
+ JoaDvEz5huovWu9hBe6ukU54JpLVM1SUKuF5gvQNP5V++k9gV8f+uXuiDUbS//b6LOutVe+yN
+ IzoAGooUqgFONwiR/hD6kNjuH+dd/ZK9bXQgq17J/f7ZpaOa01hZ9zzEAxLGFmRiNqUPUGwcj
+ lgR8d1RtVMZV+nw9j+9hyQjLyRuwqVv+J3gzR0Pj4zmOU6fGR/perUtEm1dUbCDjIdSHf8Eq2
+ LDEuZdIvTi9j8KNkIUICEMGDWwSNkoZGAGqHIMN+9A9CYPaQktS1DWOSEUpDBQ2J8ouf4YOI0
+ 6d7U9g==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,64 +75,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 03:14:35PM +0200, Miguel Ojeda wrote:
-> Rust symbols can become quite long due to namespacing introduced
-> by modules, types, traits, generics, etc.
-> 
-> Increasing to 255 is not enough in some cases, therefore
-> introduce longer lengths to the symbol table.
-> 
-> In order to avoid increasing all lengths to 2 bytes (since most
-> of them are small, including many Rust ones), use ULEB128 to
-> keep smaller symbols in 1 byte, with the rest in 2 bytes.
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Co-developed-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> Co-developed-by: Matthew Wilcox <willy@infradead.org>
-> Signed-off-by: Matthew Wilcox <willy@infradead.org>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  kernel/kallsyms.c  | 26 ++++++++++++++++++++++----
->  scripts/kallsyms.c | 29 ++++++++++++++++++++++++++---
->  2 files changed, 48 insertions(+), 7 deletions(-)
-> 
+This Series prepares support for mt7986 PCIe which is basicly gen3 PCIe
+but with slightly differnt clock configuration.
 
-This patch results in the following spurious build error.
+To make differences better to read i split the exiting bindings which
+has already different settings with a compatible switch and then add a
+new one for mt7986.
 
-Building powerpc:allnoconfig ... failed
---------------
-Error log:
-Inconsistent kallsyms data
-Try make KALLSYMS_EXTRA_PASS=1 as a workaround
+v2:
+- fixed typo in part 1 (SoC based config)
+- squashed part2+3 (compatible and clock config for mt7986)
 
-Symbol file differences:
-10c10
-< 00009720 g       .rodata	00000000 kallsyms_relative_base
----
-> 0000971c g       .rodata	00000000 kallsyms_relative_base
-12,16c12,16
-< 00009724 g       .rodata	00000000 kallsyms_num_syms
-< 00009728 g       .rodata	00000000 kallsyms_names
-< 00022628 g       .rodata	00000000 kallsyms_markers
-< 000226c0 g       .rodata	00000000 kallsyms_token_table
-< 00022a2c g       .rodata	00000000 kallsyms_token_index
----
-> 00009720 g       .rodata	00000000 kallsyms_num_syms
-> 00009724 g       .rodata	00000000 kallsyms_names
-> 00022618 g       .rodata	00000000 kallsyms_markers
-> 000226b0 g       .rodata	00000000 kallsyms_token_table
-> 00022a1c g       .rodata	00000000 kallsyms_token_index
+v3:
+- fixed problem with fallback-compatible not compatible to main
 
-This is the only difference. There are no additional symbols.
+Frank Wunderlich (2):
+  dt-bindings: PCI: mediatek-gen3: add SoC based clock config
+  dt-bindings: PCI: mediatek-gen3: add support for mt7986
 
-Reverting this patch fixes the problem.
+ .../bindings/pci/mediatek-pcie-gen3.yaml      | 64 +++++++++++++++----
+ 1 file changed, 52 insertions(+), 12 deletions(-)
 
-Guenter
+=2D-
+2.34.1
+
