@@ -2,90 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C74612121
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 09:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB892612124
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 09:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiJ2Hvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 03:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54840 "EHLO
+        id S229379AbiJ2Hx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 03:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiJ2Hvq (ORCPT
+        with ESMTP id S229906AbiJ2HxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 03:51:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD731726A0;
-        Sat, 29 Oct 2022 00:51:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5728260CF2;
-        Sat, 29 Oct 2022 07:51:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5613DC433D6;
-        Sat, 29 Oct 2022 07:51:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667029904;
-        bh=IVYCEUyFNGvt9P7E4kn2YygjCjJ8FPO0YNOwwJNd4Rc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NAoV7eUB1tTRPhFcdphtmUuG851jzTwwnizNydu/GTOP2TWWHCf5K0b99J9gfHqRB
-         DCtN5/RunER84XlIqozB/bSgRywWxlCM+9WJtlJS6BZzdZg0FJSF8w691ts3yqRjPk
-         b1Lvp4A9mNtFHQAmELkv++afpX77794kgLSTYCeA=
-Date:   Sat, 29 Oct 2022 09:52:40 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     outreachy@lists.linux.dev, Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: iio: ad5933: Use div64_ul instead of do_div
-Message-ID: <Y1zbyJPF+YUY6xIh@kroah.com>
-References: <Y1r4EaDvEipzhaaf@ubunlion>
+        Sat, 29 Oct 2022 03:53:23 -0400
+X-Greylist: delayed 17127 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 29 Oct 2022 00:53:20 PDT
+Received: from out203-205-251-73.mail.qq.com (out203-205-251-73.mail.qq.com [203.205.251.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7030072872;
+        Sat, 29 Oct 2022 00:53:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1667029998;
+        bh=+DzGGmzgC+pXMjNXZtuoYW7aaeiptNxaQfitvxP5P1g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=FYYuTW8Rx4q7D+sLngTrGEU0lDL/uPlA1pWUdhwPnHWsW8f0TL9rOLEbJ9LmZgPvy
+         IvO8nmWDHK8XpkmvNpJIN4e73kPygjt7eaUPk3cVFbnUtFR3Y3beyW4Bw3FUAD6IFU
+         vB6hhLYC5aydu2mCZlwOf98q8eM3Lf8noUrkRjCU=
+Received: from localhost.localdomain ([111.199.189.86])
+        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
+        id D4E04CEB; Sat, 29 Oct 2022 15:53:14 +0800
+X-QQ-mid: xmsmtpt1667029994t99qqcvlu
+Message-ID: <tencent_7DD02046A8398BE3324F85E0F56ED41EB105@qq.com>
+X-QQ-XMAILINFO: MyIXMys/8kCtEqSkamGclXo01fwlP9MOoZDqUX1NWl3bDUhmuEGRou3hroWzZe
+         fO0zJSGcZRxO4A+m7kerwdTwJSAUcu2pYdv5RCJxjLsxRSH43nvVnb8DmU8bAg1pgf8FG0FRFA0b
+         H0E9RiE01svpNHEnVoVwJsYR5OLWjfoE1wEJRjG7lRKcNAb2oUt/s6Kehv1zAK6QdupLKl8DVQ0W
+         kO4xShdrhmbIT4cCLKz4TfFDtGF/lJnmW1dXZ3eX+DnPstLUgQVteesFY2MVEPF8lR49BdYBMrpr
+         voJoMpTGjsHk7lkfpTusbKrd3hB8PBTIXjDbkPis/PTnbJTX6IMOSO8UUVY1LJ6uXwW2Fdl72uuj
+         XVEE1Iu3KVB4w5c4e04Kp8CQxX7FYReIhTuD2LNCU7+91OtQzk77K1uUjpZMYHB6zz4ahGsyDM0T
+         mwPx5AEy1yhiS2sPXxJK0cTW/ipMSG1eTRAxIIFtsbI9BtvZieBPSBY2Gm4lqeZek34O5YEH32tn
+         Ts1IxoazaO5pg+9UGCC9+75GaTe+UV7Ef6LtCihjtfTlapqihjcipd1f0yr6OLnftEwlnzUAPSed
+         Gz8auusMeJLJ3P/RTLeQVtrmiTsBhZW14QpOkoPOOGALX+uKq4u3FyYjBEAb2w3Qqp7C05aDv9kr
+         MzoqY1RnwOqEK2YzpL01nFtlRlr0Os3uQmX0AInQMPlxldN4gqNozW/2QbYEhFeoQeqYSajt4zZz
+         YA8FEUjfkEu7XVzs4Iqu8Rv2ZI4Q9uyYEZG96aYKkL4ISIrzniPZMtIHVY0ABDJVy4Q7bfaCR+O/
+         FCZSZ89A8a2HJojr4/wcBZ0ax3bWLlNCRcYH/W5C8aMOob9kjtN5gPqAZZHn06JPpyLwKYnbdQbZ
+         qqPlJYozQZs+nABXfwmccEhoson0dZqOHvkYNZOQXUnFHbMxQPuNqPq2BocDqbfSOgHKUyy02gSB
+         3c0X7gUx/NxZXnGXhPk9y+lw1gjcA/frEoASpuA/zeO6Q7wpC5mvG29f4Z6kkwQsk5oIPK2zE=
+From:   Rong Tao <rtoax@foxmail.com>
+To:     andrii.nakryiko@gmail.com
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@linux.dev, rongtao@cestc.cn, rtoax@foxmail.com,
+        sdf@google.com, song@kernel.org, yhs@fb.com
+Subject: [PATCH bpf-next] samples/bpf: Fix sockex3: missing BPF prog type
+Date:   Sat, 29 Oct 2022 15:53:12 +0800
+X-OQ-MSGID: <20221029075312.45206-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <CAEf4Bza_6qND8iOuiur+xX0cBVkKJfKoJAOjihnVYRjoB3tWqw@mail.gmail.com>
+References: <CAEf4Bza_6qND8iOuiur+xX0cBVkKJfKoJAOjihnVYRjoB3tWqw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1r4EaDvEipzhaaf@ubunlion>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 02:58:49AM +0530, Deepak R Varma wrote:
-> do_div() does a 64-by-32 division. Here the divisor is an unsigned long
-> which on some platforms is 64 bit wide. So use div64_ul instead of do_div
-> to avoid a possible truncation. Issue was identified using the
-> coccicheck tool.
-> 
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
-> ---
->  drivers/staging/iio/impedance-analyzer/ad5933.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/iio/impedance-analyzer/ad5933.c b/drivers/staging/iio/impedance-analyzer/ad5933.c
-> index f177b20f0f2d..730bb31a20d8 100644
-> --- a/drivers/staging/iio/impedance-analyzer/ad5933.c
-> +++ b/drivers/staging/iio/impedance-analyzer/ad5933.c
-> @@ -196,7 +196,7 @@ static int ad5933_set_freq(struct ad5933_state *st,
->  	} dat;
-> 
->  	freqreg = (u64)freq * (u64)(1 << 27);
-> -	do_div(freqreg, st->mclk_hz / 4);
-> +	freqreg = div64_ul(freqreg, st->mclk_hz / 4);
-> 
->  	switch (reg) {
->  	case AD5933_REG_FREQ_START:
-> --
-> 2.34.1
+From: Rong Tao <rongtao@cestc.cn>
 
-No, this isn't ok, please read the mailing list archives for why these
-changes are not going to be accepted:
-	https://lore.kernel.org/r/e2ec77060cc84a33b49d5fd11d7867f6@AcuMS.aculab.com
+since commit 450b167fb9be("libbpf: clean up SEC() handling"),
+sec_def_matches() does not recognize "socket/xxx" as "socket", therefore,
+the BPF program type is not recognized, set "socket/xxx" to SOCKET_FILTER
+solves this error.
 
-Please always at least look at the archives of the past few weeks as to
-if changes like this are able to be accepted or not.
+ $ cd samples/bpf
+ $ sudo ./sockex3
+ libbpf: prog 'bpf_func_PARSE_IP': missing BPF prog type, check ELF section name 'socket/3'
+ libbpf: prog 'bpf_func_PARSE_IP': failed to load: -22
+ libbpf: failed to load object './sockex3_kern.o'
+ ERROR: loading BPF object file failed
 
-thanks,
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ samples/bpf/sockex3_user.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-greg k-h
+diff --git a/samples/bpf/sockex3_user.c b/samples/bpf/sockex3_user.c
+index cd6fa79df900..dc79c17ad195 100644
+--- a/samples/bpf/sockex3_user.c
++++ b/samples/bpf/sockex3_user.c
+@@ -39,6 +39,9 @@ int main(int argc, char **argv)
+ 		return 0;
+ 	}
+ 
++	bpf_object__for_each_program(prog, obj)
++		bpf_program__set_type(prog, BPF_PROG_TYPE_SOCKET_FILTER);
++
+ 	/* load BPF program */
+ 	if (bpf_object__load(obj)) {
+ 		fprintf(stderr, "ERROR: loading BPF object file failed\n");
+-- 
+2.31.1
+
