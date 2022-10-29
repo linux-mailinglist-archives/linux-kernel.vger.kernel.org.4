@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38A3612000
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 06:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED679612006
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 06:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiJ2EVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 00:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42704 "EHLO
+        id S229538AbiJ2EZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 00:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiJ2EVR (ORCPT
+        with ESMTP id S229629AbiJ2EZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 00:21:17 -0400
+        Sat, 29 Oct 2022 00:25:20 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3F76EF0F;
-        Fri, 28 Oct 2022 21:21:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A443A15E;
+        Fri, 28 Oct 2022 21:25:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C47A9B82CDB;
-        Sat, 29 Oct 2022 04:21:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 758FDC43470;
-        Sat, 29 Oct 2022 04:21:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 44375B82E03;
+        Sat, 29 Oct 2022 04:25:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD4ABC43141;
+        Sat, 29 Oct 2022 04:25:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667017270;
-        bh=DAQCxbXwMfg1p4G23fMdN/nNri7kMOq1RxK2JbdA5iw=;
+        s=k20201202; t=1667017514;
+        bh=/TyNm8r7XciBoT6CJYf4aBiDuqANUFlLnmCMI+cx/ew=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lAA8fUmpWpwGK7nAiRCN7c8bxUf7G4fwR2nsld0ekFqYZbosaGz9g5YfoXcoHGHRr
-         OWjtN83FaI0nFw/8R9A4h3cK4RXpFYc8cLp2lHupVpjUaU6CbjHm8NZlmig8AZ1riM
-         dgYHChefDc4EPHt2aQ/IXM4jjjsPkbnKPimWRRnORu4V/9rSgrbWH78JpycB8wODfa
-         nCcg912jYtrOEOhNUmnhJlP2xpUTuOC9a5sQGguXZ6rY7C1Rk3LCPhDhXr33Y8vtD5
-         5BGlIGs07bGcn/8+IcpcARE9WYrao2tAQZHKCxoVHLTk/yDVTX7lNaPTwxS65slsvP
-         T9/O8FWG+5NNQ==
-Received: by mail-oi1-f173.google.com with SMTP id y67so8158257oiy.1;
-        Fri, 28 Oct 2022 21:21:10 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2c36rVOE4Pjd8x2vDJbWCjfo3BipzT6MxV+FQ6hQMo1zd0tyv0
-        O7wouyBKE2TGac27tuXVUkfmwQjbD7QTYYL/zRM=
-X-Google-Smtp-Source: AMsMyM6FOABjTLDcw3RrE443Uzjnikyq9yGGZy+gLlTL3TwV3Lam38lhpojPimnyjLnasX0VFaVeg3G05mq2c7E4sPc=
-X-Received: by 2002:a05:6808:f0e:b0:359:b055:32ea with SMTP id
- m14-20020a0568080f0e00b00359b05532eamr9041256oiw.112.1667017269693; Fri, 28
- Oct 2022 21:21:09 -0700 (PDT)
+        b=HnoYnTOpZc3Yq/ztVzHXSckxmNqNv5qimaVo/uBCSnbFFCt/VnvlAUE6rz96Pjkwi
+         0ch98vAeMzEsVNgIThK0sPeLb6vt8aYQSTq6xo84peZJ2Mr4dbtZ+lFBjI5nGDfWXk
+         prUR6UhEVtt05IA4Wtrj7z1yqPBTuDpmprSFntyUjEF5Ol4My7z0msWaQkYdTIaXYX
+         dc3QUJZw34ZTBVF49MNu3eU4s1oIhK1ecVVk/7eVxTyjiYE/yWkkG7oz/nYP71VTSF
+         0YTkniohiRhEy8W2WwH6ID/9+LxFeGq1Ztkk+JhZoIpqMDgz1wgayg9ifwyWpVQB5O
+         SZUkmqB5W3JAg==
+Received: by mail-oo1-f50.google.com with SMTP id v7-20020a4aa507000000b00496e843fdfeso864844ook.7;
+        Fri, 28 Oct 2022 21:25:14 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1DyXT3ZHg9BElTMnf4fIAAKoLlxzFlAxhs9oCuRdKWv6hWw2j2
+        ibDSl+zI/7EgqgN2yJanrZI2YS6+BBmqUs0ejW8=
+X-Google-Smtp-Source: AMsMyM4U+XLGWneF25rSvG0PdhbqMRiauzCcUyYwLQozxUxetPJGDoBdTR7JO/wJ2kk58GWp0y2oWsZihOLcyTvwVg4=
+X-Received: by 2002:a4a:2144:0:b0:481:a4:d2b0 with SMTP id u65-20020a4a2144000000b0048100a4d2b0mr1153471oou.48.1667017514013;
+ Fri, 28 Oct 2022 21:25:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221028165921.94487-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221028165921.94487-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221028165921.94487-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20221028165921.94487-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221028165921.94487-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20221028165921.94487-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 29 Oct 2022 12:20:57 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSaEi=Hjy+57bxNFSKBj4-_ayeh+=9qtX9HXsK3pw3LUw@mail.gmail.com>
-Message-ID: <CAJF2gTSaEi=Hjy+57bxNFSKBj4-_ayeh+=9qtX9HXsK3pw3LUw@mail.gmail.com>
-Subject: Re: [PATCH v5 2/7] dt-bindings: riscv: Add Andes AX45MP core to the list
+Date:   Sat, 29 Oct 2022 12:25:01 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQPU0FGmeVt9jrNfOAQSA=04Vcm4U_wcC_dGMc5X2Bo7w@mail.gmail.com>
+Message-ID: <CAJF2gTQPU0FGmeVt9jrNfOAQSA=04Vcm4U_wcC_dGMc5X2Bo7w@mail.gmail.com>
+Subject: Re: [PATCH v5 4/7] riscv: dts: renesas: Add initial devicetree for
+ Renesas RZ/Five SoC
 To:     Prabhakar <prabhakar.csengg@gmail.com>
 Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -64,8 +64,7 @@ Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
         devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -80,47 +79,111 @@ On Sat, Oct 29, 2022 at 12:59 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
 >
 > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >
-> The Renesas RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP
-> Single) from Andes. In preparation to add support for RZ/Five SoC add
-> the Andes AX45MP core to the list.
+> Add initial device tree for Renesas RZ/Five RISC-V CPU Core (AX45MP
+> Single).
 >
-> More details about Andes AX45MP core can be found here:
-> [0] http://www.andestech.com/en/products-solutions/andescore-processors/riscv-ax45mp/
+> RZ/Five SoC is almost identical to RZ/G2UL Type-1 SoC (ARM64) hence we
+> will be reusing r9a07g043.dtsi [0] as a base DTSI for both the SoC's.
+> r9a07g043f.dtsi includes RZ/Five SoC specific blocks.
+>
+> Below are the RZ/Five SoC specific blocks added in the initial DTSI which
+> can be used to boot via initramfs on RZ/Five SMARC EVK:
+> - AX45MP CPU
+> - PLIC
+>
+> [0] arch/arm64/boot/dts/renesas/r9a07g043.dtsi
 >
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
 > v4 -> v5
-> * Included RB tag from Conor
+> * Fixed riscv,ndev value (should be 511)
+> * Reworked completely (sort of new patch)
 >
 > v3 -> v4
 > * No change
 >
 > v2 -> v3
-> * Included RB tag from Geert
+> * Fixed clock entry for CPU core
+> * Fixed timebase frequency to 12MHz
+> * Fixed sorting of the nodes
+> * Included RB tags
 >
 > v1 -> v2
-> * Included ack from Krzysztof
+> * Dropped including makefile change
+> * Updated ndev count
 > ---
->  Documentation/devicetree/bindings/riscv/cpus.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/riscv/boot/dts/renesas/r9a07g043f.dtsi | 57 +++++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 arch/riscv/boot/dts/renesas/r9a07g043f.dtsi
 >
-> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> index ae7963e99225..2bf91829c8de 100644
-> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> @@ -28,6 +28,7 @@ properties:
->      oneOf:
->        - items:
->            - enum:
-> +              - andestech,ax45mp
-Reviewed-by: Guo Ren <guoren@kernel.org>
+> diff --git a/arch/riscv/boot/dts/renesas/r9a07g043f.dtsi b/arch/riscv/boot/dts/renesas/r9a07g043f.dtsi
+> new file mode 100644
+> index 000000000000..50134be548f5
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/renesas/r9a07g043f.dtsi
+> @@ -0,0 +1,57 @@
+> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +/*
+> + * Device Tree Source for the RZ/Five SoC
+> + *
+> + * Copyright (C) 2022 Renesas Electronics Corp.
+> + */
+> +
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +#define SOC_PERIPHERAL_IRQ(nr) (nr + 32)
+> +
+> +#include <arm64/renesas/r9a07g043.dtsi>
+The initial patch shouldn't be broken. Combine them together with the
+minimal components and add others late. Don't separate the DTS files.
 
->                - canaan,k210
->                - sifive,bullet0
->                - sifive,e5
+> +
+> +/ {
+> +       cpus {
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               timebase-frequency = <12000000>;
+> +
+> +               cpu0: cpu@0 {
+> +                       compatible = "andestech,ax45mp", "riscv";
+> +                       device_type = "cpu";
+> +                       reg = <0x0>;
+> +                       status = "okay";
+> +                       riscv,isa = "rv64imafdc";
+> +                       mmu-type = "riscv,sv39";
+> +                       i-cache-size = <0x8000>;
+> +                       i-cache-line-size = <0x40>;
+> +                       d-cache-size = <0x8000>;
+> +                       d-cache-line-size = <0x40>;
+> +                       clocks = <&cpg CPG_CORE R9A07G043_CLK_I>;
+> +
+> +                       cpu0_intc: interrupt-controller {
+> +                               #interrupt-cells = <1>;
+> +                               compatible = "riscv,cpu-intc";
+> +                               interrupt-controller;
+> +                       };
+> +               };
+> +       };
+> +};
+> +
+> +&soc {
+> +       interrupt-parent = <&plic>;
+> +
+> +       plic: interrupt-controller@12c00000 {
+> +               compatible = "renesas,r9a07g043-plic", "andestech,nceplic100";
+> +               #interrupt-cells = <2>;
+> +               #address-cells = <0>;
+> +               riscv,ndev = <511>;
+> +               interrupt-controller;
+> +               reg = <0x0 0x12c00000 0 0x400000>;
+> +               clocks = <&cpg CPG_MOD R9A07G043_NCEPLIC_ACLK>;
+> +               power-domains = <&cpg>;
+> +               resets = <&cpg R9A07G043_NCEPLIC_ARESETN>;
+Ditto, Where is cpg? in r9a07g043.dtsi?
+
+> +               interrupts-extended = <&cpu0_intc 11 &cpu0_intc 9>;
+> +       };
+> +};
 > --
 > 2.25.1
 >
