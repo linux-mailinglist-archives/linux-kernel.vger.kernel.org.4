@@ -2,167 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FE56120C9
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 08:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A231B6120BD
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 08:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiJ2Gli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 02:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
+        id S229608AbiJ2Ggk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 02:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiJ2Gl3 (ORCPT
+        with ESMTP id S229450AbiJ2Ggi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 02:41:29 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADA306A4B6;
-        Fri, 28 Oct 2022 23:41:26 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8DxvrcVy1xjYzsDAA--.7274S3;
-        Sat, 29 Oct 2022 14:41:25 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx5VYPy1xjiSgHAA--.5709S4;
-        Sat, 29 Oct 2022 14:41:24 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v7 3/3] dt-bindings: clock: add loongson-2 clock
-Date:   Sat, 29 Oct 2022 14:41:18 +0800
-Message-Id: <20221029064118.27413-3-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221029064118.27413-1-zhuyinbo@loongson.cn>
-References: <20221029064118.27413-1-zhuyinbo@loongson.cn>
+        Sat, 29 Oct 2022 02:36:38 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4458DCEAC
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 23:36:37 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id p8so11527564lfu.11
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 23:36:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SX79OcFnzFmNh9O1kQChmt48pJKtZVdmieFsDvN9MK0=;
+        b=cxmnlgp4tbwqnXT6MRK29rBaH/MuzoXkpIEBbloRif7Ec7p2u5lSdBORvBldsp/yzE
+         e34eNxXb+cuBHYv3Y4WjqX1CmaWGbXcIKNVsQS6urciRCo3Wy05JUjG7/n0d99WUL9yk
+         Q4aPsupcuzzfZcBClu6z9m/I+VgjJE81Y9A9jCB8zDE5tvovCPheXKOm436AWA3Zjrkt
+         U3FTGOwTX5dwYGUqeppOMUbWlVkH9x0NbFu75+hvOfAXC63ZD1jwkl+r9VCwrPB/AffL
+         XW+3EdIz7+6a8wQV8LVK41JTt25WHKipQY8tlAmEDq62zfZykENW8KmoTAmHtN4OjXo1
+         MclA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SX79OcFnzFmNh9O1kQChmt48pJKtZVdmieFsDvN9MK0=;
+        b=VqKpqgYaXlNUnUdjqveKDAV8Kw92loCrkeqvPi4OBkDCVAvJs052drcNvPkPLWXKE+
+         0P27pFhTSXSMEli8rX/t7GCMCd9bo+cI5NbfUdZxvtuS3IWE59nX/pA89+3XSNV4D/Qb
+         5Sb1a46PaWFrApYsynnZByDWiQ0KFH8raSpj5zoBvfBaT1Umqp75Wb6Jc22ofddRsD5K
+         xr2Rxv3lqaYIhELAsmDYLJ38Q/o64ulo13M5xTRhOzdPYJBhbXkjA1Rm/cSaQiWEYr1l
+         1UgzAXRFIBUnJOMPEHYwG1X3EhwHEj/MQc+Bf/24zNIE/u5krvwEwNUDOltHtEHOWdws
+         sXPA==
+X-Gm-Message-State: ACrzQf1qOcqhPKjrh8h/2Q08YmNTbAJSyUO82gwTZ3GmMnDeDQ5gFjOB
+        TGg+/OrMcB3eV3qovOMFRHM=
+X-Google-Smtp-Source: AMsMyM45mJhyP7YjjOqTLTNcQNJTxPeqKLlKj0a9ZJfdhMkXmMHvfuz9vbbOYrhM9FdlNa1yUqFPJA==
+X-Received: by 2002:a05:6512:3501:b0:4a1:fa45:5008 with SMTP id h1-20020a056512350100b004a1fa455008mr1125634lfs.42.1667025395936;
+        Fri, 28 Oct 2022 23:36:35 -0700 (PDT)
+Received: from [10.0.0.42] (host-185-69-38-8.kaisa-laajakaista.fi. [185.69.38.8])
+        by smtp.gmail.com with ESMTPSA id h5-20020a2ea485000000b0026b2094f6fcsm96534lji.73.2022.10.28.23.36.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 23:36:35 -0700 (PDT)
+Message-ID: <6cc2948c-04eb-d62b-dfa0-5a94544ea6c9@gmail.com>
+Date:   Sat, 29 Oct 2022 09:45:53 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] soc: ti: k3-ringacc: Allow the driver to be built as
+ module
+To:     Nishanth Menon <nm@ti.com>
+Cc:     ssantosh@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, khilman@baylibre.com,
+        nfrayer@baylibre.com
+References: <20221021080231.1076-1-peter.ujfalusi@gmail.com>
+ <20221028005521.gzdo46oz65cxlthd@recent>
+Content-Language: en-US
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+In-Reply-To: <20221028005521.gzdo46oz65cxlthd@recent>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx5VYPy1xjiSgHAA--.5709S4
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF47tF4kJw4fKFyfWF1kuFg_yoW5GrWDpF
-        sxC343GryIvF17Zws5Ka4xA3Z5u3Z7CF17ZwnrCa42kr98W3W5XF17K34DZa9rAFy7Za9r
-        ZFWfCr4jka1Ikw7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bS8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26F4j6r4UJwAm72CE4IkC
-        6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2
-        Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
-        1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj
-        6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr
-        0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
-        YxBIdaVFxhVjvjDU0xZFpf9x07UNjjkUUUUU=
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Loongson-2 clock binding with DT schema format using
-json-schema.
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/clock/loongson,ls2k-clk.yaml     | 63 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 64 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
 
-diff --git a/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
-new file mode 100644
-index 000000000000..63a59015987e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/loongson,ls2k-clk.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson-2 SoC Clock Control Module
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+description: |
-+  Loongson-2 SoC clock control module is an integrated clock controller, which
-+  generates and supplies to all modules.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - loongson,ls2k-clk
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: 100m ref
-+
-+  clock-names:
-+    items:
-+      - const: ref_100m
-+
-+  '#clock-cells':
-+    const: 1
-+    description:
-+      The clock consumer should specify the desired clock by having the clock
-+      ID in its "clocks" phandle cell. See include/dt-bindings/clock/loongson,ls2k-clk.h
-+      for the full list of Loongson-2 SoC clock IDs.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - '#clock-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    ref_100m: clock-ref-100m {
-+        compatible = "fixed-clock";
-+        #clock-cells = <0>;
-+        clock-frequency = <100000000>;
-+        clock-output-names = "ref_100m";
-+    };
-+
-+    clk: clock-controller@1fe00480 {
-+        compatible = "loongson,ls2k-clk";
-+        reg = <0x1fe00480 0x58>;
-+        #clock-cells = <1>;
-+        clocks = <&ref_100m>;
-+        clock-names = "ref_100m";
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5136684fb6c6..e5fb270dd363 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11911,6 +11911,7 @@ LOONGSON-2 SOC SERIES CLOCK DRIVER
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-clk@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
- F:	drivers/clk/clk-loongson2.c
- F:	include/dt-bindings/clock/loongson,ls2k-clk.h
- 
+On 10/28/22 03:55, Nishanth Menon wrote:
+>> @@ -336,6 +336,11 @@ struct k3_ring *k3_ringacc_request_ring(struct k3_ringacc *ringacc,
+>>  
+>>  	mutex_lock(&ringacc->req_lock);
+>>  
+>> +	if (!try_module_get(ringacc->dev->driver->owner)) {
+> 
+> Does a cascaded error handling make sense instead?
+> 
+> goto error_mod_fail?
+
+I think it does not make the code nicer, but I can do that way
+
+> 
+>> +		mutex_unlock(&ringacc->req_lock);
+>> +		return NULL;
+>> +	}
+>> +
+>>  	if (id == K3_RINGACC_RING_ID_ANY) {
+>>  		/* Request for any general purpose ring */
+>>  		struct ti_sci_resource_desc *gp_rings =
+>> @@ -380,6 +385,7 @@ struct k3_ring *k3_ringacc_request_ring(struct k3_ringacc *ringacc,
+>>  	return &ringacc->rings[id];
+>>  
+>>  error:
+>> +	module_put(ringacc->dev->driver->owner);
+> 
+> error_mod_fail:
+> 
+>>  	mutex_unlock(&ringacc->req_lock);
+>>  	return NULL;
+>>  }
+>> @@ -616,6 +622,8 @@ int k3_ringacc_ring_free(struct k3_ring *ring)
+>>  no_init:
+>>  	clear_bit(ring->ring_id, ringacc->rings_inuse);
+>>  
+>> +	module_put(ringacc->dev->driver->owner);
+>> +
+>>  out:
+>>  	mutex_unlock(&ringacc->req_lock);
+>>  	return 0;
+>> @@ -1450,6 +1458,7 @@ static const struct of_device_id k3_ringacc_of_match[] = {
+>>  	{ .compatible = "ti,am654-navss-ringacc", .data = &k3_ringacc_data, },
+>>  	{},
+>>  };
+>> +MODULE_DEVICE_TABLE(of, k3_ringacc_of_match);
+>>  
+>>  struct k3_ringacc *k3_ringacc_dmarings_init(struct platform_device *pdev,
+>>  					    struct k3_ringacc_init_data *data)
+>> @@ -1544,12 +1553,26 @@ static int k3_ringacc_probe(struct platform_device *pdev)
+>>  	return 0;
+>>  }
+>>  
+>> +static int k3_ringacc_remove(struct platform_device *pdev)
+>> +{
+>> +	struct k3_ringacc *ringacc = dev_get_drvdata(&pdev->dev);
+>> +
+>> +	mutex_lock(&k3_ringacc_list_lock);
+>> +	list_del(&ringacc->list);
+>> +	mutex_unlock(&k3_ringacc_list_lock);
+>> +	return 0;
+>> +}
+>> +
+>>  static struct platform_driver k3_ringacc_driver = {
+>>  	.probe		= k3_ringacc_probe,
+>> +	.remove		= k3_ringacc_remove,
+>>  	.driver		= {
+>>  		.name	= "k3-ringacc",
+>>  		.of_match_table = k3_ringacc_of_match,
+>> -		.suppress_bind_attrs = true,
+> 
+> Might be good to note sysfs behavior change in commit log?
+
+Since the udma driver kept this I will keep it here as well.
+
+> 
+>>  	},
+>>  };
+>> -builtin_platform_driver(k3_ringacc_driver);
+>> +module_platform_driver(k3_ringacc_driver);
+>> +
+>> +MODULE_LICENSE("GPL v2");
+> 
+> GPL ? checkpatch should have complained?
+
+Yes, it complains if I run it ;)
+
+> 
+>> +MODULE_DESCRIPTION("TI Ringacc driver for K3 SOCs");
+>> +MODULE_AUTHOR("Grygorii Strashko <grygorii.strashko@ti.com>");
+>> -- 
+>> 2.38.1
+>>
+> 
+
 -- 
-2.31.1
-
+Péter
