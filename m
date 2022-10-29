@@ -2,104 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6048612238
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 12:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B47A61223D
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 12:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbiJ2Kfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 06:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
+        id S229536AbiJ2Ksz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 06:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJ2Kfl (ORCPT
+        with ESMTP id S229441AbiJ2Ksx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 06:35:41 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EF465270;
-        Sat, 29 Oct 2022 03:35:37 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        Sat, 29 Oct 2022 06:48:53 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366B782859
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 03:48:52 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4MzwmS53sKz9sNb;
-        Sat, 29 Oct 2022 10:35:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1667039736; bh=FXaHqBE8piSKzUlN37PhlW9f3D/eAeB2qZPMLHzY81I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TKQ5FX5ibcUaOFSPmJ9Q1n6X2B40QXNxU1UBHkGTgE6aomi5mfdan7Dj20O4HdjAl
-         u+o1RfminOXOyZOsdi/7Ro4d2Zc6uQghv8SUBTb747uA8DwR1d4Dy0a8xSbjzvztWQ
-         En6a56lT7INEBsx+6BeYdhvKQIT/OpetgE9CxIss=
-X-Riseup-User-ID: 5E46FA78F9295AE62B12862AC84E9FF8FC4711671C71289E7AA556C21037FE7C
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4MzwmQ2qyqz5vRh;
-        Sat, 29 Oct 2022 10:35:34 +0000 (UTC)
-Message-ID: <383a94bf-e9f1-49a9-9df9-1e72c51b5444@riseup.net>
-Date:   Sat, 29 Oct 2022 07:35:30 -0300
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mzx3f3jHJz4xGR;
+        Sat, 29 Oct 2022 21:48:46 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1667040527;
+        bh=w4Rmmw3RS24hXRNe+iPdpTEFwX0r7o0PH0nM1I/G3U0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PewceabmNMnMjE/7Tp7JPCcgXvMHwQAGd9AJdAALJmmhC2Rpzxgs8e4wYPf6MIpXz
+         rzYFty7Ibb4axiPwnC501svvWHwTnrqi6oY5kUR4PWFTzs86dZLDOXwF3DPdzwS3CR
+         bN3Hz0K0eZ8/KY/X23x76p3q+j8fynXwyrH6Wq/4MdS/W6BGNvgeDSI4iH6i2V+I+Q
+         inZiHh1RglMrQ410+2k4wbAocLFLI4t/wB6BqZ/zGcx/fNSMOSjAARoS6pMG8eX7hr
+         QwscPmIUxrjCiMJ86F3RpkmSC7MsiB6b3o/5K6fOJ0FvNNzbwdiP4+gRVx+vCCd2D2
+         8CzJSTfR2u6CA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     haren@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, npiggin@gmail.com
+Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-6.1-3 tag
+Date:   Sat, 29 Oct 2022 21:48:41 +1100
+Message-ID: <87zgdesy5y.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Subject: Re: [PATCH] kunit: alloc_string_stream_fragment error handling bug
- fix
-To:     "YoungJun.park" <her0gyugyu@gmail.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>
-Cc:     David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-References: <20221028144241.634012-1-her0gyugyu@gmail.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20221028144241.634012-1-her0gyugyu@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/28/22 11:42, YoungJun.park wrote:
-> When it fails to allocate fragment, it does not free and return error.
-> And check the pointer inappropriately.
-> 
-> Signed-off-by: YoungJun.park <her0gyugyu@gmail.com>
-> ---
->  lib/kunit/string-stream.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
-> index 72659a9773e3..0228fe814e96 100644
-> --- a/lib/kunit/string-stream.c
-> +++ b/lib/kunit/string-stream.c
-> @@ -23,8 +23,10 @@ static struct string_stream_fragment *alloc_string_stream_fragment(
->  		return ERR_PTR(-ENOMEM);
->  
->  	frag->fragment = kunit_kmalloc(test, len, gfp);
-> -	if (!frag->fragment)
-> +	if (!frag->fragment) {
-> +		kunit_kfree(test, frag);
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
 
-I don't believe that kunit_kfree is necessary here, because
-kunit_kmalloc is like kmalloc, but the allocation is test managed, which
-means that the allocation is managed by the test case and is
-automatically cleaned up after the test case concludes.
+Hi Linus,
 
-So, the original version seems correct: if the allocation fails,
-alloc_string_stream_fragment will return NULL and string_stream_vadd
-will check if frag_container is different than NULL.
+Please pull some more powerpc fixes for 6.1:
 
-Best Regards,
-- Maíra Canal
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
->  		return ERR_PTR(-ENOMEM);
-> +	}
->  
->  	return frag;
->  }
-> @@ -56,7 +58,7 @@ int string_stream_vadd(struct string_stream *stream,
->  	frag_container = alloc_string_stream_fragment(stream->test,
->  						      len,
->  						      stream->gfp);
-> -	if (!frag_container)
-> +	if (IS_ERR(frag_container))
->  		return -ENOMEM;
->  
->  	len = vsnprintf(frag_container->fragment, len, fmt, args);
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-6.1-3
+
+for you to fetch changes up to 65722736c3baf29e02e964a09e85c9ef71c48e8d:
+
+  powerpc/64s/interrupt: Fix clear of PACA_IRQS_HARD_DIS when returning to soft-masked context (2022-10-27 00:38:35 +1100)
+
+- ------------------------------------------------------------------
+powerpc fixes for 6.1 #3
+
+ - Fix a case of rescheduling with user access unlocked, when preempt is enabled.
+
+ - A follow-up fix for a recent fix, which could lead to IRQ state assertions firing
+   incorrectly.
+
+ - Two fixes for lockdep warnings seen when using kfence with the Hash MMU.
+
+ - Two fixes for preempt warnings seen when using the Hash MMU.
+
+ - Two fixes for the VAS coprocessor mechanism used on pseries.
+
+ - Prevent building some of our older KVM backends when CONTEXT_TRACKING_USER is enabled,
+   as it's known to cause crashes.
+
+ - A couple of fixes for issues seen with PMU NMIs.
+
+Thanks to: Nicholas Piggin, Guenter Roeck, Frederic Barrat Haren Myneni, Sachin Sant,
+Samuel Holland.
+
+- ------------------------------------------------------------------
+Haren Myneni (2):
+      powerpc/pseries/vas: Add VAS IRQ primary handler
+      powerpc/pseries: Use lparcfg to reconfig VAS windows for DLPAR CPU
+
+Nicholas Piggin (10):
+      powerpc/64s: Add lockdep for HPTE lock
+      powerpc/64s: make HPTE lock and native_tlbie_lock irq-safe
+      powerpc/64s: make linear_map_hash_lock a raw spinlock
+      powerpc/64s: Disable preemption in hash lazy mmu mode
+      powerpc/64s: Fix hash__change_memory_range preemption warning
+      powerpc: Fix reschedule bug in KUAP-unlocked user copy
+      KVM: PPC: BookS PR-KVM and BookE do not support context tracking
+      powerpc/64/interrupt: Prevent NMI PMI causing a dangerous warning
+      powerpc/64s/interrupt: Perf NMI should not take normal exit path
+      powerpc/64s/interrupt: Fix clear of PACA_IRQS_HARD_DIS when returning to soft-masked context
+
+
+ arch/powerpc/include/asm/book3s/64/tlbflush-hash.h |  6 ++
+ arch/powerpc/kernel/exceptions-64e.S               |  7 ++
+ arch/powerpc/kernel/exceptions-64s.S               | 14 +++-
+ arch/powerpc/kernel/interrupt.c                    | 14 +++-
+ arch/powerpc/kernel/interrupt_64.S                 | 13 ++-
+ arch/powerpc/kvm/Kconfig                           |  4 +
+ arch/powerpc/lib/vmx-helper.c                      | 12 ++-
+ arch/powerpc/mm/book3s64/hash_native.c             | 67 ++++++++++++++--
+ arch/powerpc/mm/book3s64/hash_pgtable.c            |  8 +-
+ arch/powerpc/mm/book3s64/hash_utils.c              | 12 +--
+ arch/powerpc/platforms/pseries/lparcfg.c           | 11 +++
+ arch/powerpc/platforms/pseries/vas.c               | 83 +++++++++++++++-----
+ arch/powerpc/platforms/pseries/vas.h               |  6 ++
+ 13 files changed, 212 insertions(+), 45 deletions(-)
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmNdBLMACgkQUevqPMjh
+pYBiVRAAmr/98OnqSULxJsuJHZnLGTZuMCnMOsk4sPYVEqfwiR2wF4GmQWV1EHG1
+hSk9nw46lZaPBtg5FLxp8VrmRsJLv9GTM81bvfIA40+nmpHwuljXckEtkVkTMO4M
+EPBMbrinLJhBczXNJ9etAK/Sm7zlBW4Zunyo8ejm04RfrbNdUTEzhzwV9uK0AE0S
+Leg2LAYsChcd1on0L+rcBIHLZUCFd3GJJz0i4MHGtLV/cBtbg+qrNRxYQMyHVZmG
+PlWUHywweya6mzyDi2WBU2rjzRz0ZjcNAEnMvqsihAmrnDQJcYGXc61gDH3lYuDk
+oGLcm7an2aElPnoJOCCmAugUk1IY7c9WVxgrHCQ08kBtHgPkuL0XGMJNGYRyNcUN
+azoz0VikviOLkECPP9MGrKUuYSewUXjk4DIYLEZclvvRbBKp7gM7hAAtJXJxghVH
+mynKr2zTGTJb73sGo7ey/kAgzXPBX6mre2BhSYR+odzSEcptg+Rd+6pDqwAw2Xkt
+ao8iTGZUA2Vrq+KutoXvWb1mtP/EKLTz7dhbJUid4+cTrNo7NCTiNj/jSKEVXI2p
+FNwLXpP16VihJNg2ttOxz2GPhB2+6TIk9TeVJDFytqZPqx2bhY9PVpZxt0ARm3tH
+m8cl0gI8zXfbpyhAT3Y6IGRwpEFEyJ7UEQk9ew+JnRol2uaPLiM=
+=Dccx
+-----END PGP SIGNATURE-----
