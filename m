@@ -2,89 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFF0612541
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 22:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 343D0612545
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 22:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiJ2Ua4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 16:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
+        id S229602AbiJ2Uf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 16:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJ2Uav (ORCPT
+        with ESMTP id S229456AbiJ2Uf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 16:30:51 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2E464D9
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 13:30:51 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id j6so6180437qvn.12
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 13:30:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AmPkk/DwkArLkWG5uoQkbZX2DU9/t0yTo8MPrUCBXeE=;
-        b=DTMdWthi0PzdcOxcA7HO6DkSTx4W8h7SUpNTilK0z2bhHHDm5W40mC8SedyFcIZa0m
-         EWBya40YPPeIKchNdZ/NIjMjaH3d41HJTYxR9a0ReYdjqKJoxJsrOGHgbmBt1XgmrbAy
-         D5vqQwwujljecpRMD04eiq0r/eTLg+xfKLqK4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AmPkk/DwkArLkWG5uoQkbZX2DU9/t0yTo8MPrUCBXeE=;
-        b=duX91RyKYbSYTphTC90ZB9IcFhpolz+VyfU076/AESL9jbKZfKxhXYHyeM0EU5WMg5
-         xQeZ8mjwKWaMUKBPuHGERg0dWCsBmDeemWsKlfyC4TGKW8ZWZhCUoufJGvuZX4bgA3pK
-         ZYsfXvvN8s3r0VApUs722GBgCHsHkG1UnVqH6hKQ8P/3AdsPBEpcQ8cE/BkXxIMn89Z8
-         SJv5iNywJA7SwzpRr0sVFfQ1ZOD8ETOZC8qxtyHYGNa+2RfX1vpy6hCrWUzyErb98Mah
-         45/xO37GqjhZ0o6AzgbSIHgdTZVb4U4MvwnEo5lFMw1I8bPSZe2ean7nom1PuBO9sgeb
-         30tg==
-X-Gm-Message-State: ACrzQf2m5PJKt5hSebiXzi69AY7tUE+59iskNt8tIgV0xQcsNfd3BYU+
-        aT5DRK5VJeQSvQRbN0fozdveIFnUZ0o5zw==
-X-Google-Smtp-Source: AMsMyM5ZgZH/aZSno7RcVEc+6F8WZSn3n+MBugT0Gljj+6VlZUcYhZpxWxSx7cjYoyLLSffRz2uuqQ==
-X-Received: by 2002:a0c:dd13:0:b0:4bb:664c:5aaa with SMTP id u19-20020a0cdd13000000b004bb664c5aaamr5008842qvk.121.1667075444827;
-        Sat, 29 Oct 2022 13:30:44 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id z16-20020ac87cb0000000b0039a372fbaa5sm1258033qtv.69.2022.10.29.13.30.43
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Oct 2022 13:30:43 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id o70so9708798yba.7
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 13:30:43 -0700 (PDT)
-X-Received: by 2002:a05:6902:124f:b0:66e:e3da:487e with SMTP id
- t15-20020a056902124f00b0066ee3da487emr5680132ybu.310.1667075442955; Sat, 29
- Oct 2022 13:30:42 -0700 (PDT)
+        Sat, 29 Oct 2022 16:35:57 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C537A326D5;
+        Sat, 29 Oct 2022 13:35:56 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id E87A03200406;
+        Sat, 29 Oct 2022 16:35:53 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sat, 29 Oct 2022 16:35:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; t=1667075753; x=1667162153; bh=bX5Gx15qqiX077Af+ndRf/Ggw
+        c6zZu6GTKM8qZRCjzQ=; b=ZtxPIVMDQvMOwWuhpYTtzgQfAUSRBD/2oE+FvGpNQ
+        Jxo7BP4Lph8nT9q119tV4GKq3XuOh8e43PjTtw+58oov5NnN4t75xmi9JNRFtsoM
+        snAG5EBdPAfg5h5wPaziYCs2a2VUhaypJ/i1HjylX1oJCONf1zvyadGMjD1iCn36
+        k03NE17mnXfaBJ5Rlmm24og33g36yYQbEO0s9lk+L4EPIKzP3edwDMQnPOwuTQOD
+        nRSwr+8CtwMrxoZVtQ6L0t3NHHfjIdAo7Nxdzvcqlc44k9AymwmvhJT/9PlFZdgf
+        trn4mgApIEOh6+Zlw1LXR/pzUS4rYBTgShB3YQDJuhGdw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1667075753; x=1667162153; bh=bX5Gx15qqiX077Af+ndRf/Ggwc6zZu6GTKM
+        8qZRCjzQ=; b=UmzD5dMBS6tuFFipZte6h+miioNDFbgsLCZl+Wstr1uLN/SCkgN
+        HNkYV/Bka0LXbxZq6e0gJNHHOqnhDVROiCh/5eLOkzLbKDjkvVSQrKQBOBwMPfE6
+        DVGvRxRdUo5nt10oKM1g62FE8xGBTVyPm8xbKNXAZ4gn9Y3qRC3+83/BCH5UaI8P
+        m8sPpUdEJL9uYmomZrCDE4+lXrqwkOXGAgsFQG5as2kT1ijDYzwak6KbOhTLaSA4
+        gSV0dlOq4re7g3XtkXKo74SDCGQtWW1WAQXDS34xj3PKqnMHSUum5LL+KHk1k4Hz
+        LYKBH19XVb6Kl1Pi5Gw4T1iib3DxoICHKpA==
+X-ME-Sender: <xms:qY5dY79VEzQSBVbl37Jwg5bQqzlu27xzSji6qOlbL8fOqEYdufMUjQ>
+    <xme:qY5dY3s4T4FshkSn6haF8ByrATWOKdLqz1kA828cpjNonRJN4oLbrpbEM3vSfnKB6
+    LO1_ZMleL1dkS5ibh8>
+X-ME-Received: <xmr:qY5dY5DmPe5n6GKDEBKYjXSCKZMjasHvnOHqo5x4YWGwljmmfA-RvZnwow>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdekgdduhedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:qY5dY3f3I79vD7X-kH7Oa9QzYI6QHYrHo8XacULpZgdQc9qYNYToCA>
+    <xmx:qY5dYwMMnUJCgNWPzvKLf6IDt86eQtYQqUUP6vZjMera8WD9TAzPzQ>
+    <xmx:qY5dY5lrU6Nqx86fJDLB80lDgAo0yb9dXeuGeQPEg9CALKwpgVK6KQ>
+    <xmx:qY5dY_1-kvJZuXKA_HANyGmjwZL3T4ubeIHUouHB48KqNonph1bFuQ>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 29 Oct 2022 16:35:51 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        ardb@kernel.org, rostedt@goodmis.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org
+Subject: [PATCH] MIPS: jump_label: Fix compat branch range check
+Date:   Sat, 29 Oct 2022 21:35:35 +0100
+Message-Id: <20221029203535.940231-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221022111403.531902164@infradead.org> <2c800ed1-d17a-def4-39e1-09281ee78d05@nvidia.com>
- <Y1ZGNwUEdm15W6Xz@hirez.programming.kicks-ass.net> <CAG48ez3fG=WnvbiE5mJaD66_gJj_hohnV8CqBG9eNdjd7pJW3A@mail.gmail.com>
- <Y1fsYwshJ93FT21r@hirez.programming.kicks-ass.net> <CAG48ez3VE+3dVdUMK+Pg_942gR+h_TCcSaFxGwCbNfh3W+mfOA@mail.gmail.com>
- <Y1f7YvKuwOl1XEwU@hirez.programming.kicks-ass.net> <CAG48ez05gBiB2w7bL_3O_OUoBWazmHnRwMiuni_wQyXBUcaxbQ@mail.gmail.com>
- <Y1oub9MvqwGBlHkq@hirez.programming.kicks-ass.net> <CAHk-=wihPdOtXgJ32pLB6Xd-UvnaZW9YvOOjM24JGYRjNHeykA@mail.gmail.com>
- <6C548A9A-3AF3-4EC1-B1E5-47A7FFBEB761@gmail.com> <CAHk-=wh8oi0qQtYDFTfm7d1s5C8mG7ig=NfzGWt4zbjXMzcdqQ@mail.gmail.com>
- <F9E42822-DA1D-4192-8410-3BAE42E9E4A9@gmail.com> <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
- <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
- <47678198-C502-47E1-B7C8-8A12352CDA95@gmail.com> <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
- <3a57cfc5-5db4-bdc9-1ddf-5305a37ffa62@nvidia.com> <CAHk-=wj6EJvTtTeYQvkX3aOw6Q1SRYRV6xJP1+uHNvfAocO1hw@mail.gmail.com>
-In-Reply-To: <CAHk-=wj6EJvTtTeYQvkX3aOw6Q1SRYRV6xJP1+uHNvfAocO1hw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 29 Oct 2022 13:30:26 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj2MFUfh0juVEeBkZ6hBjp=X_UC3jR5edmZ08mV5bztyg@mail.gmail.com>
-Message-ID: <CAHk-=wj2MFUfh0juVEeBkZ6hBjp=X_UC3jR5edmZ08mV5bztyg@mail.gmail.com>
-Subject: Re: [PATCH 01/13] mm: Update ptep_get_lockless()s comment
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Nadav Amit <nadav.amit@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jann Horn <jannh@google.com>, X86 ML <x86@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        jroedel@suse.de, ubizjak@gmail.com,
-        Alistair Popple <apopple@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,32 +82,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 1:15 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> I can think of three options:
->
->  (a) filesystems just deal with it
->
->  (b) we could move the "page_remove_rmap()" into the "flush-and-free" path too
->
->  (c) we could actually add a spinlock (hashed on the page?) for this
->
-> I think (a) is basically our current expectation.
+Cast upper bound of branch range to long to do signed compare,
+avoid negtive offset trigger this warning.
 
-Side note: anybody doing gup + set_page_dirty() won't be fixed by b/c
-anyway, so I think (a) is basically the only thing.
+Fixes: 9b6584e35f40 ("MIPS: jump_label: Use compact branches for >= r6")
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: stable@vger.kernel.org
+---
+ arch/mips/kernel/jump_label.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-And that's true even if you do a page pinning gup, since the source of
-the gup may be actively unmapped after the gup.
+diff --git a/arch/mips/kernel/jump_label.c b/arch/mips/kernel/jump_label.c
+index 71a882c8c6eb..f7978d50a2ba 100644
+--- a/arch/mips/kernel/jump_label.c
++++ b/arch/mips/kernel/jump_label.c
+@@ -56,7 +56,7 @@ void arch_jump_label_transform(struct jump_entry *e,
+ 			 * The branch offset must fit in the instruction's 26
+ 			 * bit field.
+ 			 */
+-			WARN_ON((offset >= BIT(25)) ||
++			WARN_ON((offset >= (long)BIT(25)) ||
+ 				(offset < -(long)BIT(25)));
+ 
+ 			insn.j_format.opcode = bc6_op;
+-- 
+2.34.1
 
-So a filesystem that thinks that only write, or a rmap-accessible mmap
-can turn the page dirty really seems to be fundamentally broken.
-
-And I think that has always been the case, it's just that filesystem
-writers may not have been happy with it, and may not have had
-test-cases for it.
-
-It's not surprising that the filesystem people then try to blame users.
-
-          Linus
