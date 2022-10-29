@@ -2,353 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F25F61200A
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 06:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C85B561200E
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 06:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbiJ2E0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 00:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
+        id S229544AbiJ2E2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 00:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiJ2E0e (ORCPT
+        with ESMTP id S229450AbiJ2E22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 00:26:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382A697ED8;
-        Fri, 28 Oct 2022 21:26:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 29 Oct 2022 00:28:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018E25BC18
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 21:27:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667017653;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cedcTZ1KpEk62+3k25jmR+oGeA+YiQNW5lkM4QZGEoQ=;
+        b=fkY2v4mjYoYn7FQw+hT7eOAEtUFBoi9dbtHH3NDbylfYYNt+fCw+K9IzGRKsCA6wMkU/mO
+        HwscBTeI5t2yhLp5r1IVen7NZ+1m+UCdk7bvABwBsEK81pxa/jqw+50SgO0Kzo1T14Od1F
+        bPzPCKJ5Me5AGqWSXUWl+tw5CIOXLPs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-91-xVGiBf9dPrKuARqV1j353A-1; Sat, 29 Oct 2022 00:27:22 -0400
+X-MC-Unique: xVGiBf9dPrKuARqV1j353A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3CE560A0B;
-        Sat, 29 Oct 2022 04:26:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FB1BC433D7;
-        Sat, 29 Oct 2022 04:26:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667017592;
-        bh=0X6sbdtU1ASk+HWNzupcd82PSckOfahyy4rWtTLlMTA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZZFyE7fo8/A4yTP6dAVseuo/g2ECeyLmtJzni7kzmj659Fpo0TVcvjohM3Oo4o7Ts
-         vClw8d4lyxWsOCs0CktVWLEXvyTQPyMg+45BLUAwoKJp9yewS6FfX17zM0GdcbzOTo
-         Wsao+2Ug+uiJl9engsjFBhQRdqH7OI67uq+lfG02TRMmDlQNvXFN76PMN4Wok1aSc6
-         uKZXtJ0Af3n9GJytWqINpjmItPYfJHn4ql0DJ+LM9XVLLAb5Rh3TGfmnhjQY8NJa3t
-         VOg50fpWbd3rkF1+3hO24ZpqapsdgdMMTBtf2gfVGydErqmz9zFFVIKj15llA7fKKU
-         s7773fa0QkVPQ==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-13bd2aea61bso8513239fac.0;
-        Fri, 28 Oct 2022 21:26:32 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2Yv+hYaEGcQuBYb6bfis3yPMaNInV2y/CgcyOawgVtOR3krrRF
-        u1l/eROBZuHHqoCypqt5HzqWLts/wooFCsjgvow=
-X-Google-Smtp-Source: AMsMyM5mjZe9wficSNhAST6aSDfyezl3xJRAYaY+R/snrGC4m2XLVZGdvcai6rDpfedZAxFIFqOPNmVBZTZUt/ONtcg=
-X-Received: by 2002:a05:6870:5803:b0:12c:c3e0:99dc with SMTP id
- r3-20020a056870580300b0012cc3e099dcmr10207277oap.19.1667017591346; Fri, 28
- Oct 2022 21:26:31 -0700 (PDT)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EC16329AA2F8;
+        Sat, 29 Oct 2022 04:27:21 +0000 (UTC)
+Received: from localhost (ovpn-12-24.pek2.redhat.com [10.72.12.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6FBCA40C6EC3;
+        Sat, 29 Oct 2022 04:27:14 +0000 (UTC)
+Date:   Sat, 29 Oct 2022 12:27:05 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
+        sourabhjain@linux.ibm.com, linux-mm@kvack.org
+Subject: Re: [PATCH v12 7/7] x86/crash: Add x86 crash hotplug support
+Message-ID: <Y1yrmbHnHeXTTiYn@MiWiFi-R3L-srv>
+References: <Y0Dh4ieUUZ4oXa1/@MiWiFi-R3L-srv>
+ <Y0b9apyIs+RpSo1e@zn.tnic>
+ <53aed03e-2eed-09b1-9532-fe4e497ea47d@oracle.com>
+ <Y0cmaPTKQuWtwIRh@zn.tnic>
+ <Y0d+mFivS+88+Chr@MiWiFi-R3L-srv>
+ <Y1e7Hw0PRDI9NxU9@zn.tnic>
+ <Y1lIoTBNvHrKX5K9@MiWiFi-R3L-srv>
+ <d2ce1bed-a053-4840-2e84-643b678392c1@redhat.com>
+ <Y1qNBDY99Ypan9Ok@MiWiFi-R3L-srv>
+ <368a61e7-818b-2ee4-8c8b-22218373622d@oracle.com>
 MIME-Version: 1.0
-References: <20221028165921.94487-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221028165921.94487-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221028165921.94487-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 29 Oct 2022 12:26:19 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQn+6pTjuiGf-febHhDHjVeJ78Zdywd+EkteeO0MEUGaw@mail.gmail.com>
-Message-ID: <CAJF2gTQn+6pTjuiGf-febHhDHjVeJ78Zdywd+EkteeO0MEUGaw@mail.gmail.com>
-Subject: Re: [PATCH v5 5/7] riscv: dts: renesas: Add minimal DTS for Renesas
- RZ/Five SMARC EVK
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <368a61e7-818b-2ee4-8c8b-22218373622d@oracle.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This should combine with the previous one, which makes the patch complete.
+On 10/27/22 at 02:28pm, Eric DeVolder wrote:
+> 
+> 
+> On 10/27/22 08:52, Baoquan He wrote:
+> > On 10/26/22 at 04:54pm, David Hildenbrand wrote:
+> > > On 26.10.22 16:48, Baoquan He wrote:
+> > > > On 10/25/22 at 12:31pm, Borislav Petkov wrote:
+> > > > > On Thu, Oct 13, 2022 at 10:57:28AM +0800, Baoquan He wrote:
+> > > > > > The concern to range number mainly is on Virt guest systems.
+> > > > > 
+> > > > > And why would virt emulate 1K hotpluggable DIMM slots and not emulate a
+> > > > > real machine?
+> > > 
+> > > IIRC, ACPI only allows for 256 slots. PPC dlpar might provide more.
+> > > 
+> > > > 
+> > > > Well, currently, mem hotpug is an important feature on virt system to
+> > > > dynamically increase/shrink memory on the system. If only emulating real
+> > > > machine, it won't be different than bare metal system.
+> > > > 
+> > > > IIRC, the ballon driver or virtio-mem feature can add memory board, e.g
+> > > > 1G, block size is 128M, 8 blocks added. When shrinking this 1G memory
+> > > > later, it will take best effort way to hot remove memory. Means if any
+> > > > memory block is occupied, it will be kept there. Finally we could only
+> > > > remove every second blocks, 4 blocks altogether. Then the left
+> > > > un-removed blocks will produce 4 separate memory regions. Like this, a
+> > > > virt guest could have many memory regions in kernel after memory
+> > > > being added/removed.
+> > > > 
+> > > > If I am wrong, Please correct me, David.
+> > > 
+> > > Yes, virtio-mem (but also PPC dlpar) can result in many individual memory
+> > > blocks with holes in between after hotunplug. Hotplug OTOH, usually tries to
+> > > "plug" these holes and reduce the total number of memory blocks. It might be
+> > > rare that our range will be heavily fragmented after unplug, but it's
+> > > certainly possible.
+> > > 
+> > > [...]
+> > > 
+> > > > 
+> > > > Yes, now assume we have a HPE SGI system and it has memory hotplug
+> > > > capacity. The system itself has already got memory regions more than
+> > > > 1024. Then when we hot add extra memory board, we want to include the
+> > > > newly added memory regions into elfcorehdr so that it will be dumped out
+> > > > in kdump kernel.
+> > > > 
+> > > > That's why I earlier suggested 2048 for number of memory regions.
+> > > 
+> > > The more the better, unless "it hurts". Assuming a single memory block is
+> > > 128 MiB, that would be 256 GiB.
+> > > 
+> > > Usually, on big systems, the memory block size is 2 GiB. So 4 TiB.
+> > 
+> > Thanks a lot for these valuable inputs, David.
+> > 
+> > Hi Boris, Eric
+> > 
+> > So what's your suggested value for the Kconfig option?
+> > 
+> > 1) cpu number, 1024?
+> > 2) memory regions, 2048?
+> > 
+> > About below draft, any comment? We can decide a value based on our
+> > knowledge, can adjust later if any real system has more than the number.
+> > 
+> > +config CRASH_ELF_CORE_PHDRS_NUM
+> > +       depends on CRASH_DUMP && KEXEC_FILE && (HOTPLUG_CPU || MEMORY_HOTPLUG)
+> > +       int
+> > +       default 3072
+> > +       help
+> > +         For the kexec_file_load path, specify the default number of
+> > +         phdr for the vmcore. E.g the memory regions represented by the
+> > +         'System RAM' entries in /proc/iomem, the cpu notes of each
+> > +         present cpu stored in /sys/devices/system/cpu/cpuX/crash_notes.
+> > 
+> > Thanks
+> > Baoquan
+> > 
+> 
+> I prefer to keep CRASH_MAX_MEMORY_RANGES, as explained in my response to your message on October 26.
+> eric
 
-On Sat, Oct 29, 2022 at 12:59 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
->
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Enable the minimal blocks required for booting the Renesas RZ/Five
-> SMARC EVK with initramfs.
->
-> Below are the blocks which are enabled:
-> - CPG
-> - CPU0
-> - DDR (memory regions)
-> - PINCTRL
-> - PLIC
-> - SCIF0
->
-> As we are reusing the RZ/G2UL SoC base DTSI [0], RZ/G2UL SMARC SoM [1] and
-> carrier [2] board DTSIs which enables almost all the blocks supported
-> by the RZ/G2UL SMARC EVK and whereas on RZ/Five SoC we will be gradually
-> enabling the blocks hence the aliases for ETH/I2C are deleted and rest
-> of the IP blocks are marked as disabled/deleted.
->
-> [0] arch/arm64/boot/dts/renesas/r9a07g043.dtsi
-> [1] arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi
-> [2] arch/arm64/boot/dts/renesas/rzg2ul-smarc.dtsi
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v4 -> v5
-> * Reworked completely (sort of new patch)
->
-> v3 -> v4
-> * Dropped deleting place holder nodes
-> * Updated SW1 settings comment
-> * Update commit message
->
-> v2 -> v3
-> * Dropped RB tags from Conor and Geert
-> * Now re-using the SoM and carrier board DTS/I from RZ/G2UL
->
-> v1 -> v2
-> * New patch
-> ---
->  arch/riscv/boot/dts/Makefile                  |  1 +
->  arch/riscv/boot/dts/renesas/Makefile          |  2 +
->  .../boot/dts/renesas/r9a07g043f01-smarc.dts   | 27 ++++++
->  .../boot/dts/renesas/rzfive-smarc-som.dtsi    | 58 ++++++++++++
->  arch/riscv/boot/dts/renesas/rzfive-smarc.dtsi | 91 +++++++++++++++++++
->  5 files changed, 179 insertions(+)
->  create mode 100644 arch/riscv/boot/dts/renesas/Makefile
->  create mode 100644 arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dts
->  create mode 100644 arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
->  create mode 100644 arch/riscv/boot/dts/renesas/rzfive-smarc.dtsi
->
-> diff --git a/arch/riscv/boot/dts/Makefile b/arch/riscv/boot/dts/Makefile
-> index ff174996cdfd..b0ff5fbabb0c 100644
-> --- a/arch/riscv/boot/dts/Makefile
-> +++ b/arch/riscv/boot/dts/Makefile
-> @@ -3,5 +3,6 @@ subdir-y += sifive
->  subdir-y += starfive
->  subdir-$(CONFIG_SOC_CANAAN_K210_DTB_BUILTIN) += canaan
->  subdir-y += microchip
-> +subdir-y += renesas
->
->  obj-$(CONFIG_BUILTIN_DTB) := $(addsuffix /, $(subdir-y))
-> diff --git a/arch/riscv/boot/dts/renesas/Makefile b/arch/riscv/boot/dts/renesas/Makefile
-> new file mode 100644
-> index 000000000000..2d3f5751a649
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/renesas/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +dtb-$(CONFIG_ARCH_R9A07G043) += r9a07g043f01-smarc.dtb
-> diff --git a/arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dts b/arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dts
-> new file mode 100644
-> index 000000000000..2aa8515451d3
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dts
-> @@ -0,0 +1,27 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +/*
-> + * Device Tree Source for the RZ/Five SMARC EVK
-> + *
-> + * Copyright (C) 2022 Renesas Electronics Corp.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +/*
-> + * DIP-Switch SW1 setting
-> + * 1 : High; 0: Low
-> + * SW1-2 : SW_SD0_DEV_SEL      (0: uSD; 1: eMMC)
-> + * SW1-3 : SW_ET0_EN_N         (0: ETHER0; 1: CAN0, CAN1, SSI1, RSPI1)
-> + * Please change below macros according to SW1 setting on the SoM
-> + */
-> +#define SW_SW0_DEV_SEL 1
-> +#define SW_ET0_EN_N    1
-> +
-> +#include "r9a07g043f.dtsi"
-> +#include "rzfive-smarc-som.dtsi"
-> +#include "rzfive-smarc.dtsi"
-> +
-> +/ {
-> +       model = "Renesas SMARC EVK based on r9a07g043f01";
-> +       compatible = "renesas,smarc-evk", "renesas,r9a07g043f01", "renesas,r9a07g043";
-> +};
-> diff --git a/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
-> new file mode 100644
-> index 000000000000..45a182fa3b4b
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
-> @@ -0,0 +1,58 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +/*
-> + * Device Tree Source for the RZ/Five SMARC EVK SOM
-> + *
-> + * Copyright (C) 2022 Renesas Electronics Corp.
-> + */
-> +
-> +#include <arm64/renesas/rzg2ul-smarc-som.dtsi>
-> +
-> +/ {
-> +       aliases {
-> +               /delete-property/ ethernet0;
-> +               /delete-property/ ethernet1;
-> +       };
-> +
-> +       chosen {
-> +               bootargs = "ignore_loglevel";
-> +       };
-> +
-> +       /delete-node/opp-table-0;
-> +       /delete-node/thermal-zones;
-> +};
-> +
-> +&adc {
-> +       status = "disabled";
-> +};
-> +
-> +&dmac {
-> +       status = "disabled";
-> +};
-> +
-> +&eth0 {
-> +       status = "disabled";
-> +};
-> +
-> +&eth1 {
-> +       status = "disabled";
-> +};
-> +
-> +&ostm1 {
-> +       status = "disabled";
-> +};
-> +
-> +&ostm2 {
-> +       status = "disabled";
-> +};
-> +
-> +&sdhi0 {
-> +       status = "disabled";
-> +};
-> +
-> +&tsu {
-> +       status = "disabled";
-> +};
-> +
-> +&wdt0 {
-> +       status = "disabled";
-> +};
-> diff --git a/arch/riscv/boot/dts/renesas/rzfive-smarc.dtsi b/arch/riscv/boot/dts/renesas/rzfive-smarc.dtsi
-> new file mode 100644
-> index 000000000000..e64f0e5f8e30
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/renesas/rzfive-smarc.dtsi
-> @@ -0,0 +1,91 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +/*
-> + * Device Tree Source for the RZ/Five SMARC EVK carrier board
-> + *
-> + * Copyright (C) 2022 Renesas Electronics Corp.
-> + */
-> +
-> +#include <arm64/renesas/rzg2ul-smarc.dtsi>
-> +
-> +/ {
-> +       aliases {
-> +               /delete-property/ i2c0;
-> +               /delete-property/ i2c1;
-> +       };
-> +};
-> +
-> +&canfd {
-> +       status = "disabled";
-> +
-> +       channel0 {
-> +               status = "disabled";
-> +       };
-> +
-> +       channel1 {
-> +               status = "disabled";
-> +       };
-> +};
-> +
-> +&ehci0 {
-> +       status = "disabled";
-> +};
-> +
-> +&ehci1 {
-> +       status = "disabled";
-> +};
-> +
-> +&hsusb {
-> +       status = "disabled";
-> +};
-> +
-> +&i2c0 {
-> +       status = "disabled";
-> +};
-> +
-> +&i2c1 {
-> +       status = "disabled";
-> +};
-> +
-> +&ohci0 {
-> +       status = "disabled";
-> +};
-> +
-> +&ohci1 {
-> +       status = "disabled";
-> +};
-> +
-> +&phyrst {
-> +       status = "disabled";
-> +};
-> +
-> +&sdhi1 {
-> +       status = "disabled";
-> +};
-> +
-> +&snd_rzg2l {
-> +       status = "disabled";
-> +};
-> +
-> +&spi1 {
-> +       status = "disabled";
-> +};
-> +
-> +&ssi1 {
-> +       status = "disabled";
-> +};
-> +
-> +&usb0_vbus_otg {
-> +       status = "disabled";
-> +};
-> +
-> +&usb2_phy0 {
-> +       status = "disabled";
-> +};
-> +
-> +&usb2_phy1 {
-> +       status = "disabled";
-> +};
-> +
-> +&vccq_sdhi1 {
-> +       status = "disabled";
-> +};
-> --
-> 2.25.1
->
+Ah, sorry, I mixed it up with NR_CPUS. I went on an office outing
+yesterday, glad to see you and Boris have made an agreement on the code
+change and value. Thanks.
 
 
--- 
-Best Regards
- Guo Ren
+> 
+
