@@ -2,112 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9500D612639
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 00:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC87612635
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 00:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiJ2W2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 18:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49410 "EHLO
+        id S229783AbiJ2WWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 18:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ2W2N (ORCPT
+        with ESMTP id S229441AbiJ2WWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 18:28:13 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E963F301;
-        Sat, 29 Oct 2022 15:28:13 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d24so7790753pls.4;
-        Sat, 29 Oct 2022 15:28:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tbcUW3EGHqZ1aUTPa7cgPRzB5H7yKCIyPyV7RLLkwaE=;
-        b=o7NRpJTcFIrBjvV1RUznTlSijFbuLNff9eO/2Uqy1luFkL4JGOL8oebnSj85/ckr4c
-         852X+jfBqMXHHDaeyrHR2Ij2gSzhPGgcvyAFLx1fFLRZhoOySpXxJG3RcSzdNhdDMAiB
-         bcBbAhBRn2QJy83rWdc9Hw5YWdOKL28GRTpcxeCUskSfSS8tZknmSRVMNIPmXAweRiM5
-         ab8Q0SwyhcE4RkazhbVvH3X42fpvZTFJCpQHAl/ZBkb3B4aLKxTGi04S10HRlzoGb6IQ
-         4NDlO2DdvfZN6tQvwozRYbNwVnC3OUgS6u9CCgmCUUvpKWtuGzxykmUMH72eehR8Ejh0
-         0uTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tbcUW3EGHqZ1aUTPa7cgPRzB5H7yKCIyPyV7RLLkwaE=;
-        b=DnhPvzeaVt1tRouKVPFXAJ/BUcWBp6guPiBinImxhr19YKUjtZ51hPOAIOd1k7o0oO
-         +j0oKrWLjG5bzeYgfEGctTLm0JZf9GbX4AtcrjmLnGAnZaL4s0iXftVimGqtpQb6kfEk
-         VlJhhVimzcquaANkNO/QV+Q5boE0C407VGEM8EewLgsMZ2KpKSRhEqzVHKKoOyqLlrqI
-         YAW2+1ebQgW0qVfvm32cW1rjK6Srj6mjxsl4yV3BpGUbA5hEuoVElhEeOHhRYQywsLcL
-         RPVRPAO/0SJ8/Tl2ELMWnjszf9cUBqAas2U7tslXbkeRHF+M2eDs9fgjMJNB5WilJKEn
-         wKaQ==
-X-Gm-Message-State: ACrzQf3kOCxQcBQn5lDRgNJvEkpDde3JapS/xxW5D7tU/muoy6es9pdi
-        31AjsED8PZ+Dw1jCvJQq8NKoYKgPI/0=
-X-Google-Smtp-Source: AMsMyM5bQdcW8NIPlmefqQV5VXfOA/9Z5cnsKjn/nnqOM7aIS0hCqUkM5tRqArXuNDCo9Q3bhICwLA==
-X-Received: by 2002:a17:90a:e7c5:b0:213:b7d8:1c4c with SMTP id kb5-20020a17090ae7c500b00213b7d81c4cmr3620046pjb.114.1667082492301;
-        Sat, 29 Oct 2022 15:28:12 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id w2-20020a62c702000000b0056186e8b29esm1706059pfg.96.2022.10.29.15.28.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Oct 2022 15:28:11 -0700 (PDT)
-Date:   Sat, 29 Oct 2022 15:28:08 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] Input: matrix_keypad - replace header inclusions
- by forward declarations
-Message-ID: <Y12o+Hk2qsIsDQUo@google.com>
-References: <20220923184632.2157-1-andriy.shevchenko@linux.intel.com>
- <20220923184632.2157-2-andriy.shevchenko@linux.intel.com>
- <20221029142551.GA3222119@roeck-us.net>
+        Sat, 29 Oct 2022 18:22:43 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E622133850;
+        Sat, 29 Oct 2022 15:22:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667082162; x=1698618162;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zArReFz0K4WZAU7MHhzMeJpctz+eoMR8V6T85As7MO8=;
+  b=eY8yrce/snCPALglB7j634xvg7ux8g4LBxwVRKEXxf4ltOsKFNjP0/NN
+   eLCcquL5Ib0k1LIfYxs5cbM3cwMvvrO0FPcbHufRKd9Upe7my0CTUg3sr
+   s9VlXoHAoT59JLLkuu/h+RffiFGLoNrYY5THcJy8b2qRgtp3WWIPHoU+U
+   Kt+famGlZrClthSq9dQfpEtbH+zQxids7hI4swDYGL9o9rU0N2BzwhqCH
+   3loHzo18v54u41bQMu0uEGMCMFE+zSsdozrHiv4b/R0kJnPAmAHQFXVFA
+   Nal1c7jdH172pDNCTJAG9ylIY6MqWUCOcEAfdjH2WBEzCZCOnhH2etd+W
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="296105542"
+X-IronPort-AV: E=Sophos;i="5.95,224,1661842800"; 
+   d="scan'208";a="296105542"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 15:22:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="808169545"
+X-IronPort-AV: E=Sophos;i="5.95,224,1661842800"; 
+   d="scan'208";a="808169545"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga005.jf.intel.com with ESMTP; 29 Oct 2022 15:22:33 -0700
+Date:   Sat, 29 Oct 2022 15:29:36 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Haowen Bai <baihaowen@meizu.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thermal: intel: hfi: Improve the type of
+ hfi_features::nr_table_pages
+Message-ID: <20221029222936.GD24473@ranerica-svr.sc.intel.com>
+References: <20221018112240.25647-1-ricardo.neri-calderon@linux.intel.com>
+ <CAJZ5v0hsWw2juPzLooVfDgykTwdepjgGSQGezhYeFBQN8yza_Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221029142551.GA3222119@roeck-us.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAJZ5v0hsWw2juPzLooVfDgykTwdepjgGSQGezhYeFBQN8yza_Q@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 07:25:51AM -0700, Guenter Roeck wrote:
-> On Fri, Sep 23, 2022 at 09:46:32PM +0300, Andy Shevchenko wrote:
-> > When the data structure is only referred by pointer, compiler may not need
-> > to see the contents of the data type. Thus, we may replace header inclusions
-> > by respective forward declarations.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Fri, Oct 28, 2022 at 08:13:15PM +0200, Rafael J. Wysocki wrote:
+> On Tue, Oct 18, 2022 at 1:16 PM Ricardo Neri
+> <ricardo.neri-calderon@linux.intel.com> wrote:
+> >
+> > A Coverity static code scan raised a potential overflow_before_widen
+> > warning when hfi_features::nr_table_pages is used as an argument to
+> > memcpy in intel_hfi_process_event().
+> >
+> > Even though the overflow can never happen (the maximum number of pages of
+> > the HFI table is 0x10 and 0x10 << PAGE_SHIFT = 0x10000), using size_t as
+> > the data type of hfi_features::nr_table_pages makes Coverity happy and
+> > matches the data type of the argument 'size' of memcpy().
+> >
+> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > Cc: Amit Kucheria <amitk@kernel.org>
+> > Cc: Zhang Rui <rui.zhang@intel.com>
+> > Cc: Len Brown <len.brown@intel.com>
+> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > Cc: Aubrey Li <aubrey.li@linux.intel.com>
+> > Cc: Haowen Bai <baihaowen@meizu.com>
+> > Cc: linux-pm@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 > > ---
-> >  include/linux/input/matrix_keypad.h | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/include/linux/input/matrix_keypad.h b/include/linux/input/matrix_keypad.h
-> > index 9476768c3b90..b8d8d69eba29 100644
-> > --- a/include/linux/input/matrix_keypad.h
-> > +++ b/include/linux/input/matrix_keypad.h
-> > @@ -3,8 +3,9 @@
-> >  #define _MATRIX_KEYPAD_H
-> >  
-> >  #include <linux/types.h>
-> > -#include <linux/input.h>
+> >  drivers/thermal/intel/intel_hfi.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+> > index a0640f762dc5..239afe02e518 100644
+> > --- a/drivers/thermal/intel/intel_hfi.c
+> > +++ b/drivers/thermal/intel/intel_hfi.c
+> > @@ -137,7 +137,7 @@ struct hfi_instance {
+> >   * Parameters and supported features that are common to all HFI instances
+> >   */
+> >  struct hfi_features {
+> > -       unsigned int    nr_table_pages;
+> > +       size_t          nr_table_pages;
+> >         unsigned int    cpu_stride;
+> >         unsigned int    hdr_size;
+> >  };
+> > --
 > 
-> Possibly, but may other drivers rely on those includes.
-> This results in widespread build failures such as
-> 
-> Building arm:allmodconfig ... failed
-> --------------
-> Error log:
-> In file included from include/linux/input/samsung-keypad.h:12,
->                  from arch/arm/mach-s3c/keypad.h:12,
->                  from arch/arm/mach-s3c/mach-crag6410.c:57:
-> arch/arm/mach-s3c/mach-crag6410.c:183:19: error: 'KEY_VOLUMEUP' undeclared here
+> Applied as 6.2 material, thanks!
 
-I fixed this particular instance, hopefully it is one of the very
-last of them...
-
--- 
-Dmitry
+Thank you Rafael!
