@@ -2,127 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A0D6121A7
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 10:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949E96121A6
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 10:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiJ2I7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 04:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
+        id S229689AbiJ2I7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 04:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiJ2I7f (ORCPT
+        with ESMTP id S229441AbiJ2I7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 04:59:35 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2E8D5D
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 01:59:28 -0700 (PDT)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MztYT2pgTzpVsR
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 16:55:57 +0800 (CST)
-Received: from dggpeml500003.china.huawei.com (7.185.36.200) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 29 Oct 2022 16:59:26 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500003.china.huawei.com
- (7.185.36.200) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 29 Oct
- 2022 16:59:25 +0800
-From:   Yu Liao <liaoyu15@huawei.com>
-To:     <tglx@linutronix.de>
-CC:     <liaoyu15@huawei.com>, <liwei391@huawei.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] posix-timers: Prevent overflow for clock_nanosleep
-Date:   Sat, 29 Oct 2022 16:58:24 +0800
-Message-ID: <20221029085824.3275987-1-liaoyu15@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 29 Oct 2022 04:59:01 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588288680C
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 01:58:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fSO3SPd0y/0Iw4V5qCxwWKWaNnU3HHauboB7ePJnKa8=; b=NCf8PES773iXGn0d+XatRgpjRH
+        moZ50plI1n3Mj8x3UGSPpI5y6fshaHNS3nGeMbC+9liBiT1t9fDiB4ODhVZOPd7wXZaJfvvFmSdKQ
+        piIGrumptqpWViG66e6Jp3UQuifd7LLQ+/BZGkBA5+UTzka5Q3E4+ZtzXAybK4EFm+nc3PrRp0LPO
+        cvxz7B1BWS6Gozj3ehC+uIHG0mB9bMgflVbqQpJM8xm4W3I60NGqltrui4mspdwniCz3beWuygaUB
+        c1MLYHw07vlOsrkznzUA3qw4Oj71D+l5szX40V0FvgwHIT9N5A/p1xI1NsuhGUZ+T7ZD21ybKF5Xf
+        PT7RmwEg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oohfj-007JNo-7m; Sat, 29 Oct 2022 08:58:32 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2497D30008D;
+        Sat, 29 Oct 2022 10:58:29 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 02B892B56B636; Sat, 29 Oct 2022 10:58:28 +0200 (CEST)
+Date:   Sat, 29 Oct 2022 10:58:28 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     "mingo@redhat.com" <mingo@redhat.com>, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, rohit.k.jain@oracle.com,
+        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: Regression on vcpu_is_preempted()
+Message-ID: <Y1zrNKEUPRem/UUI@hirez.programming.kicks-ass.net>
+References: <89856431-e68b-ebe9-90cb-e46ed8065659@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500003.china.huawei.com (7.185.36.200)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <89856431-e68b-ebe9-90cb-e46ed8065659@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UBSAN complains about signed-integer-overflow:
-[  127.044171] ================================================================================
-[  127.045183] UBSAN: signed-integer-overflow in ./include/linux/ktime.h:43:14
-[  127.046043] -9223372037 * 1000000000 cannot be represented in type 'long long int'
-[  127.046991] CPU: 5 PID: 218 Comm: a.out Not tainted 5.10.135 #20
-[  127.047443] Hardware name: linux,dummy-virt (DT)
-[  127.048290] Call trace:
-[  127.049600]  dump_backtrace+0x0/0x258
-[  127.050183]  show_stack+0x18/0x68
-[  127.050507]  dump_stack+0xd8/0x134
-[  127.050765]  ubsan_epilogue+0x10/0x58
-[  127.051038]  handle_overflow+0xdc/0x108
-[  127.051315]  __ubsan_handle_mul_overflow+0x14/0x20
-[  127.051660]  posix_cpu_timer_set+0x2f8/0x370
-[  127.052295]  do_cpu_nanosleep+0xc8/0x1e8
-[  127.052659]  posix_cpu_nsleep_restart+0x48/0x70
-[  127.053025]  __arm64_sys_restart_syscall+0x1c/0x28
-[  127.053353]  el0_svc_common.constprop.4+0x68/0x188
-[  127.053684]  do_el0_svc+0x24/0x90
-[  127.053926]  el0_svc+0x20/0x30
-[  127.054163]  el0_sync_handler+0x90/0xb8
-[  127.054424]  el0_sync+0x160/0x180
-[  127.054914] ================================================================================
+On Fri, Oct 28, 2022 at 04:48:21PM +0800, Miaohe Lin wrote:
+>   When scheduler tries to select a CPU to run the gc thread,
+>   available_idle_cpu() will check whether vcpu_is_preempted().  It
+>   will choose other vcpu to run gc threads when the current vcpu is
+>   preempted. But the preempted vcpu has no other work to do except
+>   continuing to do gc. In our guest, there are more vcpus than java gc
+>   threads. So there could always be some available vcpus when
+>   scheduler tries to select a idle vcpu (runing on host). This leads
+>   to lots of cpu migrations and results in regression.
+> 
+>   I'm not really familiar with this mechanism. Is this a problem that
+>   needs to be fixed or improved? Or is this just expected behavior?
+>   Any response would be really appreciated!
 
-This can be reproduced by the following code with UBSAN enabled:
+This is pretty much expected behaviour. When a vCPU is preempted the
+guest cannot know it's state or latency. Typically in the overcomitted
+case another vCPU will be running on the CPU and getting our vCPU thread
+back will take a considerable amount of time.
 
-	#include <unistd.h>
-	#include <syscall.h>
-	#include <sys/time.h>
-
-	int main(int argc, char* argv[]) {
-		struct timespec ts = {
-			.tv_sec = 9223372036854775807,
-			.tv_nsec = 0
-		};
-		syscall(__NR_clock_nanosleep, 2, 0, &ts, NULL);
-	}
-
-Compile and execute the following sequence, it makes syscall
-clock_nanosleep restart.
-
-	./a.out &
-	kill -STOP [pid]
-	kill -CONT [pid]
-
-This happens because parameter 'exp' of cpu_timer_setexpires consists of
-two parts: user input from clock_nanosleep() and cpu_clock_sample return
-value, both of which are s64 types, so 'exp' may be greater than S64_MAX.
-When cpu_timer_setexpires stores 'exp' in cpu_timer, it convert u64 to
-ktime_t resulting in expires of cpu_timer may be negative.
-
-Fix it by limiting the maximum value of 'exp'.
-
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Yu Liao <liaoyu15@huawei.com>
----
- include/linux/posix-timers.h | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/include/linux/posix-timers.h b/include/linux/posix-timers.h
-index 2c6e99ca48af..54ef0aedea3e 100644
---- a/include/linux/posix-timers.h
-+++ b/include/linux/posix-timers.h
-@@ -103,6 +103,9 @@ static inline u64 cpu_timer_getexpires(struct cpu_timer *ctmr)
- 
- static inline void cpu_timer_setexpires(struct cpu_timer *ctmr, u64 exp)
- {
-+	if (unlikely(exp > KTIME_MAX))
-+		exp = KTIME_MAX;
-+
- 	ctmr->node.expires = exp;
- }
- 
--- 
-2.25.1
-
+If you know you're not over-committed, perhaps you should configure your
+VM differently.
