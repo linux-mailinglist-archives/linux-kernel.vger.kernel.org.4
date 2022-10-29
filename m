@@ -2,52 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB5F612014
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 06:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E0E61201F
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 06:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiJ2Ee1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 00:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
+        id S229720AbiJ2Eps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 00:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiJ2EeZ (ORCPT
+        with ESMTP id S229580AbiJ2Epp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 00:34:25 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC5F92CEC
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 21:34:23 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MzmlL0mfGzHvL3;
-        Sat, 29 Oct 2022 12:34:06 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 29 Oct 2022 12:34:21 +0800
-Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 29 Oct
- 2022 12:34:21 +0800
-Message-ID: <b30fa009-9174-da95-5799-149837e199e6@huawei.com>
-Date:   Sat, 29 Oct 2022 12:34:19 +0800
+        Sat, 29 Oct 2022 00:45:45 -0400
+Received: from m12-15.163.com (m12-15.163.com [220.181.12.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B35357CE0B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 21:45:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=l25OX
+        4p/hAMYz0dk8GRFO4hLa90RHg3qZ20JBQUZdOI=; b=h9WyU5v+TUAdt1KbmNqGG
+        0nf4nXfV8oaHqYbp+jQhyakNMf29UrUcI3vLnQoXvn0+pwosEaADdZRP8rkF0ZP6
+        Y7q+43nyrmmlISFSHzkjOyA7ylOEIaToticpYzaLtbM3U8BIgRFE+oFCAFu9WWe6
+        AJOkViKoL/MFrz/tgQ30eo=
+Received: from ubuntu.localdomain (unknown [183.192.97.130])
+        by smtp11 (Coremail) with SMTP id D8CowAB3uDq2r1xj0IjmCg--.29305S4;
+        Sat, 29 Oct 2022 12:44:39 +0800 (CST)
+From:   Chao Xu <xuchao066@163.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Chao Xu <Chao.Xu9@zeekrlife.com>
+Subject: [PATCH] mm/vmstat: correct some wrong comments based-on fls()
+Date:   Sat, 29 Oct 2022 12:44:36 +0800
+Message-Id: <20221029044436.198169-1-xuchao066@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] ASoC: core: Fix use-after-free in snd_soc_exit()
-To:     Mark Brown <broonie@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>
-CC:     <tiwai@suse.com>, <perex@perex.cz>, <lgirdwood@gmail.com>
-References: <20221028031603.59416-1-chenzhongjin@huawei.com>
- <166697367874.746166.7503879951900455151.b4-ty@kernel.org>
-Content-Language: en-US
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <166697367874.746166.7503879951900455151.b4-ty@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-CM-TRANSID: D8CowAB3uDq2r1xj0IjmCg--.29305S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWruFWxCF1xJryxKF1kAFyDGFg_yoWDGrg_Ca
+        y0y3Wvvr45Aw1Yka4jv3Z0grWqqFWv9r15X3sYgFyYv34DtrsxAF97Ca1DWFyfWrWDtFZ0
+        k3WDJrW3Ar45AjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU066wJUUUUU==
+X-Originating-IP: [183.192.97.130]
+X-CM-SenderInfo: x0xfxtbrqwlqqrwthudrp/1tbiGRepRlyPfI2z4AAAsQ
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,92 +51,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Chao Xu <Chao.Xu9@zeekrlife.com>
 
-On 2022/10/29 0:14, Mark Brown wrote:
-> On Fri, 28 Oct 2022 11:16:03 +0800, Chen Zhongjin wrote:
->> KASAN reports a use-after-free:
->>
->> BUG: KASAN: use-after-free in device_del+0xb5b/0xc60
->> Read of size 8 at addr ffff888008655050 by task rmmod/387
->> CPU: 2 PID: 387 Comm: rmmod
->> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
->> Call Trace:
->> <TASK>
->> dump_stack_lvl+0x79/0x9a
->> print_report+0x17f/0x47b
->> kasan_report+0xbb/0xf0
->> device_del+0xb5b/0xc60
->> platform_device_del.part.0+0x24/0x200
->> platform_device_unregister+0x2e/0x40
->> snd_soc_exit+0xa/0x22 [snd_soc_core]
->> __do_sys_delete_module.constprop.0+0x34f/0x5b0
->> do_syscall_64+0x3a/0x90
->> entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> ...
->> </TASK>
->>
->> [...]
-> Applied to
->
->     https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
->
-> Thanks!
->
-> [1/1] ASoC: core: Fix use-after-free in snd_soc_exit()
->        commit: 6ec27c53886c8963729885bcf2dd996eba2767a7
+The threshold should grow logarithmically, using fls() as
+an easy approximation. But there are some errors in fls(mem)
+and fls(Processors). It is missleading so lets correct it.
 
-I noticed that there is a build warning introduced by this patch:
+Signed-off-by: Chao Xu <Chao.Xu9@zeekrlife.com>
+---
+ mm/vmstat.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in 
-reference: init_module (section: .init.text) -> snd_soc_util_exit 
-(section: .exit.text)
+diff --git a/mm/vmstat.c b/mm/vmstat.c
+index b2371d745e00..df44b6b9e447 100644
+--- a/mm/vmstat.c
++++ b/mm/vmstat.c
+@@ -241,17 +241,17 @@ int calculate_normal_threshold(struct zone *zone)
+ 	 * 28		2		2	4-8 GB		7
+ 	 * 32		2		2	8-16 GB		8
+ 	 * 4		2		2	<128M		1
+-	 * 30		4		3	2-4 GB		5
++	 * 30		4		3	2-4 GB		6
+ 	 * 48		4		3	8-16 GB		8
+-	 * 32		8		4	1-2 GB		4
++	 * 32		8		4	1-2 GB		5
+ 	 * 32		8		4	0.9-1GB		4
+ 	 * 10		16		5	<128M		1
+ 	 * 40		16		5	900M		4
+-	 * 70		64		7	2-4 GB		5
+-	 * 84		64		7	4-8 GB		6
+-	 * 108		512		9	4-8 GB		6
+-	 * 125		1024		10	8-16 GB		8
+-	 * 125		1024		10	16-32 GB	9
++	 * 70		64		7	2-4 GB		6
++	 * 84		64		7	4-8 GB		7
++	 * 108		512		10	4-8 GB		7
++	 * 125		1024		11	8-16 GB		8
++	 * 125		1024		11	16-32 GB	9
+ 	 */
+ 
+ 	mem = zone_managed_pages(zone) >> (27 - PAGE_SHIFT);
+-- 
+2.25.1
 
-It's because it calls _exit snd_soc_util_exit() inside _init snd_soc_init().
-
-Since snd_soc_util_exit is only used in snd_soc_init() and 
-snd_soc_exit(), could you please add this fix to the patch and delete 
-_exit for snd_soc_util_exit()?
-
-Or should I send a v2 version to replace current one?
-
-
-diff --git a/sound/soc/soc-utils.c b/sound/soc/soc-utils.c
-index a3b6df2378b4..a4dba0b751e7 100644
---- a/sound/soc/soc-utils.c
-+++ b/sound/soc/soc-utils.c
-@@ -264,7 +264,7 @@ int __init snd_soc_util_init(void)
-         return ret;
-  }
-
--void __exit snd_soc_util_exit(void)
-+void snd_soc_util_exit(void)
-  {
-         platform_driver_unregister(&soc_dummy_driver);
-         platform_device_unregister(soc_dummy_dev);
-
-
-Thanks!
-
-Best,
-
-Chen
-
-> All being well this means that it will be integrated into the linux-next
-> tree (usually sometime in the next 24 hours) and sent to Linus during
-> the next merge window (or sooner if it is a bug fix), however if
-> problems are discovered then the patch may be dropped or reverted.
->
-> You may get further e-mails resulting from automated or manual testing
-> and review of the tree, please engage with people reporting problems and
-> send followup patches addressing any issues that are reported if needed.
->
-> If any updates are required or you are submitting further changes they
-> should be sent as incremental updates against current git, existing
-> patches will not be replaced.
->
-> Please add any relevant lists and maintainers to the CCs when replying
-> to this mail.
->
-> Thanks,
-> Mark
