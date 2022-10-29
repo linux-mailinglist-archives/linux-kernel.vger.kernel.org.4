@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE53C61214F
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 10:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D88612151
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 10:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiJ2IMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 04:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
+        id S229741AbiJ2IQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 04:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiJ2IMk (ORCPT
+        with ESMTP id S229457AbiJ2IQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 04:12:40 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C0586810;
-        Sat, 29 Oct 2022 01:12:36 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oogx5-00055T-D4; Sat, 29 Oct 2022 10:12:23 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        Corentin Labbe <clabbe@baylibre.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org,
-        mturquette@baylibre.com, ardb@kernel.org
-Cc:     Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: (subset) [PATCH v10 00/33] crypto: rockchip: permit to pass self-tests
-Date:   Sat, 29 Oct 2022 10:12:21 +0200
-Message-Id: <166703105270.1426558.18336536991217213193.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220927075511.3147847-1-clabbe@baylibre.com>
-References: <20220927075511.3147847-1-clabbe@baylibre.com>
+        Sat, 29 Oct 2022 04:16:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAD692586;
+        Sat, 29 Oct 2022 01:16:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 938E9B80936;
+        Sat, 29 Oct 2022 08:16:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FFEAC433D6;
+        Sat, 29 Oct 2022 08:16:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667031379;
+        bh=JoYCL88mRATAPBkCXFf8OAMPZaND6No/VZOZajC4SrA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kLwcaFFiiRXzpcoR9KUEiv7xkOJeyuoe4ATRihn4xWNzsDI/mL0hFtyaXCn7i6iSu
+         ZEceT6tv13eEuPRMBMNAoRX1CJQubz3kqPlqi7ZKn1sh4PZtvCCaPIZ9M7yyMC+kdY
+         kRRxYfdq+bSoPw0Usc+QJ0GaPrfhqYv9DdsZow8D26JQf5trRdq6ZYWJVYjy9WEUwA
+         QfEHP6tnnsvAMhe5AlMAjzRJPnre9quaSGA7XM5EkxfVvAb6TmxSDqtfbQrBNbrnmp
+         TOpYYNZ3KLv/xQ6P8Mk7VpffOgJaMR1yU6xw4NdppX3IfAKxYYwIkIBjf8vCAq47By
+         0DvPvVOJdvOhg==
+Date:   Sat, 29 Oct 2022 16:16:13 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] soc: imx: imx93-pd: Fix the error handling path of
+ imx93_pd_probe()
+Message-ID: <20221029081613.GQ125525@dragon>
+References: <717cb5dee892bc01257d52b10bb9a1ee79ced87f.1666418916.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <717cb5dee892bc01257d52b10bb9a1ee79ced87f.1666418916.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Sep 2022 07:54:38 +0000, Corentin Labbe wrote:
-> The rockchip crypto driver is broken and do not pass self-tests.
-> This serie's goal is to permit to become usable and pass self-tests.
+On Sat, Oct 22, 2022 at 08:08:55AM +0200, Christophe JAILLET wrote:
+> In imx93_pd_probe(); if an error occurs, some resources need to be released
+> as done in the remove function.
 > 
-> This whole serie is tested on a rk3328-rock64, rk3288-miqi and
-> rk3399-khadas-edge-v with selftests (with CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y)
-> 
-> Regards
-> 
-> [...]
+> Fixes: 0a0f7cc25d4a ("soc: imx: add i.MX93 SRC power domain driver")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
 Applied, thanks!
-
-[26/33] clk: rk3399: use proper crypto0 name
-        commit: b136468a0024ea90c1259767c732eed12ce6edba
-[27/33] arm64: dts: rockchip: add rk3328 crypto node
-        commit: d1152bc533c941f7e267bf53d344cee510ea2808
-[28/33] arm64: dts: rockchip: rk3399: add crypto node
-        commit: 8c701fa6e38c43dba75282e4d919298a5cfc5b05
-
-Best regards,
--- 
-Heiko Stuebner <heiko@sntech.de>
