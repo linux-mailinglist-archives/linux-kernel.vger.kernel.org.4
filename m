@@ -2,43 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2EC06120EB
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 09:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A046120ED
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 09:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiJ2HRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 03:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
+        id S229716AbiJ2HRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 03:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiJ2HRR (ORCPT
+        with ESMTP id S229602AbiJ2HRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 03:17:17 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C9717FD53;
-        Sat, 29 Oct 2022 00:17:16 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MzrFz06WJzVjK5;
-        Sat, 29 Oct 2022 15:12:23 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+        Sat, 29 Oct 2022 03:17:48 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208F3180AF2;
+        Sat, 29 Oct 2022 00:17:48 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MzrGT3w59z15MFW;
+        Sat, 29 Oct 2022 15:12:49 +0800 (CST)
+Received: from cgs.huawei.com (10.244.148.83) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 29 Oct 2022 15:17:14 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 29 Oct 2022 15:17:14 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-block@vger.kernel.org>
-CC:     <axboe@kernel.dk>, <mcgrof@kernel.org>, <hare@suse.de>,
-        <chenzhongjin@huawei.com>
-Subject: [PATCH] block: Fix possible memory leak for rq_wb on add_disk failure
-Date:   Sat, 29 Oct 2022 15:13:55 +0800
-Message-ID: <20221029071355.35462-1-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
+ 15.1.2375.31; Sat, 29 Oct 2022 15:17:45 +0800
+From:   Gaosheng Cui <cuigaosheng1@huawei.com>
+To:     <viro@zeniv.linux.org.uk>, <dhowells@redhat.com>,
+        <cuigaosheng1@huawei.com>
+CC:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] fs: fix undefined behavior in bit shift for SB_NOUSER
+Date:   Sat, 29 Oct 2022 15:17:45 +0800
+Message-ID: <20221029071745.2836665-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500013.china.huawei.com (7.185.36.172)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.244.148.83]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -48,57 +45,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmemleak reported memory leaks in device_add_disk():
+Shifting signed 32-bit value by 31 bits is undefined, so changing most
+significant bit to unsigned. The UBSAN warning calltrace like below:
 
-kmemleak: 3 new suspected memory leaks
+UBSAN: shift-out-of-bounds in fs/namespace.c:2330:33
+left shift of 1 by 31 places cannot be represented in type 'int'
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x7d/0xa5
+ dump_stack+0x15/0x1b
+ ubsan_epilogue+0xe/0x4e
+ __ubsan_handle_shift_out_of_bounds+0x1e7/0x20c
+ graft_tree+0x36/0xf0
+ do_add_mount+0x98/0x100
+ path_mount+0xbd6/0xd50
+ init_mount+0x6a/0xa3
+ devtmpfs_setup+0x47/0x7e
+ devtmpfsd+0x1a/0x50
+ kthread+0x126/0x160
+ ret_from_fork+0x1f/0x30
+ </TASK>
 
-unreferenced object 0xffff88800f420800 (size 512):
-  comm "modprobe", pid 4275, jiffies 4295639067 (age 223.512s)
-  hex dump (first 32 bytes):
-    04 00 00 00 08 00 00 00 01 00 00 00 00 00 00 00  ................
-    00 e1 f5 05 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000d3662699>] kmalloc_trace+0x26/0x60
-    [<00000000edc7aadc>] wbt_init+0x50/0x6f0
-    [<0000000069601d16>] wbt_enable_default+0x157/0x1c0
-    [<0000000028fc393f>] blk_register_queue+0x2a4/0x420
-    [<000000007345a042>] device_add_disk+0x6fd/0xe40
-    [<0000000060e6aab0>] nbd_dev_add+0x828/0xbf0 [nbd]
-    ...
-
-It is because the memory allocated in wbt_enable_default() is not
-released in device_add_disk() error path.
-Normally, these memory are freed in:
-
-del_gendisk()
-  rq_qos_exit()
-    rqos->ops->exit(rqos);
-      wbt_exit()
-
-So rq_qos_exit() is called to free the rq_wb memory for wbt_init().
-However in the error path of device_add_disk(), only
-blk_unregister_queue() is called and make rq_wb memory leaked.
-
-Add rq_qos_exit() to the error path to fix it.
-
-Fixes: 83cbce957446 ("block: add error handling for device_add_disk / add_disk")
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+Fixes: e462ec50cb5f ("VFS: Differentiate mount flags (MS_*) from internal superblock flags")
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
 ---
- block/genhd.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/fs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/block/genhd.c b/block/genhd.c
-index fee90eb98b4a..0f9769db2de8 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -527,6 +527,7 @@ int __must_check device_add_disk(struct device *parent, struct gendisk *disk,
- 		bdi_unregister(disk->bdi);
- out_unregister_queue:
- 	blk_unregister_queue(disk);
-+	rq_qos_exit(disk->queue);
- out_put_slave_dir:
- 	kobject_put(disk->slave_dir);
- out_put_holder_dir:
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 85015e21b755..a68d5310be7b 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -1396,7 +1396,7 @@ extern int send_sigurg(struct fown_struct *fown);
+ #define SB_NOSEC	(1<<28)
+ #define SB_BORN		(1<<29)
+ #define SB_ACTIVE	(1<<30)
+-#define SB_NOUSER	(1<<31)
++#define SB_NOUSER	(1U<<31)
+ 
+ /* These flags relate to encoding and casefolding */
+ #define SB_ENC_STRICT_MODE_FL	(1 << 0)
 -- 
-2.17.1
+2.25.1
 
