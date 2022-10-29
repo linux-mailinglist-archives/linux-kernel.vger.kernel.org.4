@@ -2,71 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE21611FE4
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 06:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 363C8611FE8
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 06:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiJ2EFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 00:05:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
+        id S229706AbiJ2EIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 00:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiJ2EEz (ORCPT
+        with ESMTP id S229445AbiJ2EHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 00:04:55 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A198A3741F
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 21:04:53 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 128so6453622pga.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 21:04:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tMaMkImdQZaNqUgti1ui/K41+y+AL88pFosNOHMxJ84=;
-        b=Ux1QnJSFsPhlOZ53YWzFTayM+PUEQP5+/uXEqueNh0EqtsgtSI9Prvj9twfgh5pDXw
-         29+JZmQ5svNpUpDGhBNpo1dpbTcnNFcima2Y3Jg9Tc2OzMjiaQWtqgirDYvgaVHbOU/P
-         06oSPhDdtRxnWGg7n39UhlmDp4mL6X13qdmyM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tMaMkImdQZaNqUgti1ui/K41+y+AL88pFosNOHMxJ84=;
-        b=CfdBk9qA9OvLs+GRXlfeUHyWb/cMv/AXU/Z68KMFOf03FzPw58R7mIX69Fk2EOd/bG
-         7qcd4BYSYFxpjIg+La6bdxSCpqAjYHUDttmDX6ge578TcNCa4TKzQynSkl39wFLqQuG2
-         g+38BuQMwdw0pbHVobv2R9pv6E/AGXasuwSAxiw2rpVP3doMx12TMQn6JWkMkfXQHza9
-         NLJrT6zr/dz9BXNhHYC4OS24MwyqY+8hIzBfalYxxA9UxDs9f7+BNT6DXfzdit2j2Jfr
-         oq/ljh/4lMrh8nfsJcNKxo/3Uu5mGoMj90gt7TLnNyCLFl1phUz01upAeGGRpdfCq0Ch
-         Aikw==
-X-Gm-Message-State: ACrzQf2Z/76APrWMVzU/krNJALnfgxRM9MihPwb/Jcy1ylR31KOmnRy0
-        bLDqPqrCZkm3Ua2nWSkWuiVb8w==
-X-Google-Smtp-Source: AMsMyM7t6QlEKQZM+4owmDR0tkjanbFz+ACEy3fBIM1prLQKttFi7mMcho6fjf8O7bNpqkxQyhRzVA==
-X-Received: by 2002:a63:a06:0:b0:458:2853:45e4 with SMTP id 6-20020a630a06000000b00458285345e4mr2486144pgk.20.1667016293156;
-        Fri, 28 Oct 2022 21:04:53 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 4-20020a621404000000b0056c704abca7sm218661pfu.220.2022.10.28.21.04.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 21:04:52 -0700 (PDT)
-Date:   Fri, 28 Oct 2022 21:04:51 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] [next] drm/radeon: Replace one-element array with
- flexible-array member
-Message-ID: <202210282104.4981D58822@keescook>
-References: <Y1trhRE3nK5iAY6q@mail.google.com>
- <Y1yetX1CHsr+fibp@mail.google.com>
+        Sat, 29 Oct 2022 00:07:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192B31D463A;
+        Fri, 28 Oct 2022 21:07:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6D32B82BE2;
+        Sat, 29 Oct 2022 04:07:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22990C433D6;
+        Sat, 29 Oct 2022 04:07:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667016471;
+        bh=PUxVhkhHCWBR95ZcJLsy9eKo6iGmXv3k1ozIsxKz8jU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WmLx2vAelJAfBa7x0lmuq/3cy+CWV/Wiebk3dlQs28txdysKfVeu5q1oDKvxSDIda
+         aylUoCce/TJpW4/HtX0e4wUYEegLbsFcMU4bERXTropVZyqotNnvKaAZdJjbp8QCYT
+         rkp7PQZWU6aKdhPuFvPUxM5ZKhKI8UAEOAwuCztzDByfq6H6f4AtocxMAMcPjyrpB8
+         k6yA6rln1MfhYrKjDx5dgrNXkLCwrMDTOohDAgXKuMZoM8NkoT6xsQiJPLAhN4vj29
+         7FcUfy8nhteUaaPbGVOuJZW7NCpfCFq+W0VIQBEkvE5HKTWOx5QfjQzpYGtehPDqRJ
+         02tyeL4MvJjXw==
+Date:   Sat, 29 Oct 2022 12:07:44 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        j.neuschaefer@gmx.net
+Subject: Re: [PATCH 0/2] ARM: dts: imx6sl-tolino-shine2hd: Add backlight
+Message-ID: <20221029040744.GN125525@dragon>
+References: <20221019065159.969852-1-andreas@kemnade.info>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1yetX1CHsr+fibp@mail.google.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20221019065159.969852-1-andreas@kemnade.info>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,29 +56,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 04:32:05PM +1300, Paulo Miguel Almeida wrote:
-> One-element arrays are deprecated, and we are replacing them with
-> flexible array members instead. So, replace one-element array with
-> flexible-array member in struct _ATOM_FAKE_EDID_PATCH_RECORD and
-> refactor the rest of the code accordingly.
+On Wed, Oct 19, 2022 at 08:51:57AM +0200, Andreas Kemnade wrote:
+> Add a backlight here, it is a bit special situation. The vendor system
+> has an option to add some extra brightness together with a big warning
+> that power consumption is increased. Not sure, where it should fit,
+> but since the backlight is probably made of leds, this might be the most
+> convenient place.
 > 
-> It's worth mentioning that doing a build before/after this patch results
-> in no binary output differences.
+> Andreas Kemnade (2):
+>   ARM: dts: imx6sl-tolino-shine2hd: Add backlight
+>   ARM: dts: imx6sl-tolino-shine2hd: Add backlight boost
 
-Thanks for checking it!
-
-> 
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> routines on memcpy() and help us make progress towards globally
-> enabling -fstrict-flex-arrays=3 [1].
-> 
-> Link: https://github.com/KSPP/linux/issues/79
-> Link: https://github.com/KSPP/linux/issues/239
-> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
-> 
-> Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--- 
-Kees Cook
+Applied both, thanks!
