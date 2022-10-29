@@ -2,148 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 655EB612303
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 14:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 939D8612308
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 14:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiJ2MsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 08:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
+        id S229637AbiJ2MtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 08:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiJ2MsO (ORCPT
+        with ESMTP id S229682AbiJ2MtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 08:48:14 -0400
-Received: from mx.treblig.org (mx.treblig.org [46.43.15.161])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751695D725
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 05:48:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-        ; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
-        :Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-        :List-Post:List-Owner:List-Archive;
-        bh=HNZRQvJ17SI6CZ8q+B6eKT5nfyu7tN4BA1nyGluKsSk=; b=at9ZpwUAFCJZPj42nan5X3L1Rr
-        042sI+2l+PxQf0VrCZlM0HkgpHNuzOIJvdYPdIHkLNGWOQHyJJ09Ta3INYPj8OyWn5Iqd3j8glla6
-        E6OE/8gEse6QrMXR6uFYbEuvrECEFVrZo3K2Wdnw7BPPQPHB1pJwbSrxJd/Lev3VS0cRYXKnRrRhw
-        /6HD7aBuKNkGsmKo0/erYBEKM/63UXxtP8Md3sOf1QKcye7Cej/AmklzVG7TN8BbkGGAMXg/xCgUG
-        Bbs+lrZVNaPtU0R2e2mU979lCAffZ5znwTZsJ0N2OC0tqhPatx4/cb824e7J2HToX8YrsbpULlKht
-        m9Akmgog==;
-Received: from dg by mx.treblig.org with local (Exim 4.94.2)
-        (envelope-from <dg@treblig.org>)
-        id 1oolFt-00BWbo-Fu; Sat, 29 Oct 2022 13:48:05 +0100
-Date:   Sat, 29 Oct 2022 13:48:05 +0100
-From:   "Dr. David Alan Gilbert" <linux@treblig.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     shaggy@kernel.org, jfs-discussion@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org,
-        syzbot+5fc38b2ddbbca7f5c680@syzkaller.appspotmail.com
-Subject: Re: [PATCH] jfs: Fix fortify moan in symlink
-Message-ID: <Y10hBcMrAYPZzghw@gallifrey>
-References: <20221022203913.264855-1-linux@treblig.org>
- <202210241021.6E9E1EF65@keescook>
- <Y1beLWto/J2W1Stu@gallifrey>
- <202210281526.B32C79C4@keescook>
+        Sat, 29 Oct 2022 08:49:22 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8456F5EDF7
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 05:49:21 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-252-8G--BZdzMhu3J2EzxiGSXw-1; Sat, 29 Oct 2022 13:49:18 +0100
+X-MC-Unique: 8G--BZdzMhu3J2EzxiGSXw-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 29 Oct
+ 2022 13:49:17 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.042; Sat, 29 Oct 2022 13:49:17 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Leizhen (ThunderTown)'" <thunder.leizhen@huawei.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: RE: [PATCH v7 00/11] kallsyms: Optimizes the performance of lookup
+ symbols
+Thread-Topic: [PATCH v7 00/11] kallsyms: Optimizes the performance of lookup
+ symbols
+Thread-Index: AQHY623+53cs6bIWsU+vWlwnXrR/Ha4lTb6Q
+Date:   Sat, 29 Oct 2022 12:49:17 +0000
+Message-ID: <9e4892b540584b25aa5481cc40f1fb42@AcuMS.aculab.com>
+References: <20221017064950.2038-1-thunder.leizhen@huawei.com>
+ <Y0/nEngJF6bbINEx@bombadil.infradead.org>
+ <ad9e51c6-f77d-d9e9-9c13-42fcbbde7147@huawei.com>
+ <Y1gisUFzgt1D1Jle@bombadil.infradead.org>
+ <77f1c8f0-5e67-0e57-9285-15ba613044fb@huawei.com>
+ <Y1mEiIvbld4SX1lx@bombadil.infradead.org>
+ <4f06547b-456f-e1ec-c535-16577f502ff1@huawei.com>
+ <d7393d45-84bb-9e7b-99f4-412eb9223208@huawei.com>
+ <712fae84-aadc-7d29-f311-a3352bab6346@huawei.com>
+In-Reply-To: <712fae84-aadc-7d29-f311-a3352bab6346@huawei.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <202210281526.B32C79C4@keescook>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/5.10.0-12-amd64 (x86_64)
-X-Uptime: 13:47:38 up 231 days, 23:13,  1 user,  load average: 0.00, 0.00,
- 0.00
-User-Agent: Mutt/2.0.5 (2021-01-21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Kees Cook (keescook@chromium.org) wrote:
-> On Mon, Oct 24, 2022 at 07:49:17PM +0100, Dr. David Alan Gilbert wrote:
-> > * Kees Cook (keescook@chromium.org) wrote:
-> > > On Sat, Oct 22, 2022 at 09:39:14PM +0100, linux@treblig.org wrote:
-> > > > From: "Dr. David Alan Gilbert" <linux@treblig.org>
-> > > > 
-> > > > JFS has in jfs_incore.h:
-> > > > 
-> > > >       /* _inline may overflow into _inline_ea when needed */
-> > > >       /* _inline_ea may overlay the last part of
-> > > >        * file._xtroot if maxentry = XTROOTINITSLOT
-> > > >        */
-> > > >       union {
-> > > >         struct {
-> > > >           /* 128: inline symlink */
-> > > >           unchar _inline[128];
-> > > >           /* 128: inline extended attr */
-> > > >           unchar _inline_ea[128];
-> > > >         };
-> > > >         unchar _inline_all[256];
-> > > > 
-> > > > and currently the symlink code copies into _inline;
-> > > > if this is larger than 128 bytes it triggers a fortify warning of the
-> > > > form:
-> > > > 
-> > > >   memcpy: detected field-spanning write (size 132) of single field
-> > > >      "ip->i_link" at fs/jfs/namei.c:950 (size 18446744073709551615)
-> > > 
-> > > Which compiler are you using for this build?
-> > 
-> > I think that report was the same on gcc on Fedora 37 and whatever
-> > syzkaller was running.
-> > 
-> > > This size report (SIZE_MAX)
-> > > should be impossible to reach. But also, the size is just wrong --
-> > > i_inline is 128 bytes, not SIZE_MAX. So, the detection is working
-> > > (132 > 128), but the report is broken, and I can't see how...
-> > 
-> > Yeh, and led me down a blind alley for a while thinking something had
-> > really managed to screwup the strlen somehow.
-> 
-> This looks like a GCC bug (going at least back to GCC 10.2)[1], but some
-> extra care around the macro appears to make it go away, so the reporting
-> variable doesn't get confused/re-evaluated:
+PiA+PiBPbiAyMDIyLzEwLzI3IDM6MDMsIEx1aXMgQ2hhbWJlcmxhaW4gd3JvdGU6DQo+ID4+PiBP
+biBXZWQsIE9jdCAyNiwgMjAyMiBhdCAwMjo0NDozNlBNICswODAwLCBMZWl6aGVuIChUaHVuZGVy
+VG93bikgd3JvdGU6DQo+ID4+Pj4gT24gMjAyMi8xMC8yNiAxOjUzLCBMdWlzIENoYW1iZXJsYWlu
+IHdyb3RlOg0KPiA+Pj4+PiBUaGlzIGFuc3dlcnMgaG93IHdlIGRvbid0IHVzZSBhIGhhc2ggdGFi
+bGUsIHRoZSBxdWVzdGlvbiB3YXMgKnNob3VsZCogd2UNCj4gPj4+Pj4gdXNlIG9uZT8NCg0KKFBy
+b2JhYmx5IGJyYWluZmFydCkgdGhvdWdodC4uLg0KDQpJcyB0aGUgY3VycmVudCB0YWJsZSAoZWZm
+ZWN0aXZlbHkpIGEgc29ydGVkIGxpc3Qgb2Ygc3RyaW5ncz8NClNvIHRoZSBsb29rdXAgaXMgYSBi
+aW5hcnkgY2hvcCAtIHNvIE8obG9nKG4pKS4NCg0KQnV0IHlvdXIgaGFzaGVzIGFyZSBoYXZpbmcg
+J3Ryb3VibGUnIHN0b3BwaW5nIG9uZSBjaGFpbg0KYmVpbmcgdmVyeSBsb25nPw0KU28gYSBsaW5l
+YXIgc2VhcmNoIG9mIHRoYXQgaGFzaCBjaGFpbiBpcyBzbG93Lg0KSW4gZmFjdCB0aGF0IHNvcnQg
+b2YgaGFzaGVkIGxvb2t1cCBpbiBPKG4pLg0KDQpXaGF0IGlmIHRoZSBzeW1ib2xzIHdlcmUgc29y
+dGVkIGJ5IGhhc2ggdGhlbiBuYW1lPw0KKFdpdGhvdXQgcHV0dGluZyB0aGUgaGFzaCBpbnRvIGVh
+Y2ggZW50cnkuKQ0KVGhlbiB0aGUgY29kZSBjb3VsZCBkbyBhIGJpbmFyeSBjaG9wIHNlYXJjaCBv
+dmVyDQp0aGUgc3ltYm9scyB3aXRoIHRoZSBzYW1lIGhhc2ggdmFsdWUuDQpUaGUgYWRkaXRpb25h
+bCBkYXRhIGlzIHRoZW4gYW4gYXJyYXkgb2Ygc3ltYm9sIG51bWJlcnMNCmluZGV4ZWQgYnkgdGhl
+IGhhc2ggLSAzMiBiaXRzIGZvciBlYWNoIGJ1Y2tldC4NCg0KSWYgdGhlIGhhc2ggdGFibGUgaGFz
+IDB4MTAwMCBlbnRyaWVzIGl0IHNhdmVzIDEyIGNvbXBhcmVzLg0KKEFsbCBvZiB3aGljaCBhcmUg
+bGlrZWx5IHRvIGJlIGRhdGEgY2FjaGUgbWlzc2VzLikNCg0KSWYgeW91IGFkZCB0aGUgaGFzaCB0
+byBlYWNoIHRhYmxlIGVudHJ5IHRoZW4geW91IGNhbiBkbw0KYSBiaW5hcnkgY2hvcCBzZWFyY2gg
+Zm9yIHRoZSBoYXNoIGl0c2VsZi4NCldoaWxlIHRoaXMgaXMgdGhlIHNhbWUgc2VhcmNoIGFzIGlz
+IGRvbmUgZm9yIHRoZSBzdHJpbmdzDQp0aGUgY29tcGFyaXNvbiAoanVzdCBhIG51bWJlcikgd2ls
+bCBiZSBmYXN0ZXIgdGhhbiBhDQpzdHJpbmcgY29tcGFyZS4NCg0KCURhdmlkDQoNCi0NClJlZ2lz
+dGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24g
+S2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-Thanks for chasing that; are you also going to file a gcc bug?
-
-Dave
-
-> diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-> index 09a032f6ce6b..9e2d96993c30 100644
-> --- a/include/linux/fortify-string.h
-> +++ b/include/linux/fortify-string.h
-> @@ -550,13 +550,18 @@ __FORTIFY_INLINE bool fortify_memcpy_chk(__kernel_size_t size,
->  
->  #define __fortify_memcpy_chk(p, q, size, p_size, q_size,		\
->  			     p_size_field, q_size_field, op) ({		\
-> -	size_t __fortify_size = (size_t)(size);				\
-> -	WARN_ONCE(fortify_memcpy_chk(__fortify_size, p_size, q_size,	\
-> -				     p_size_field, q_size_field, #op),	\
-> +	const size_t __fortify_size = (size_t)(size);			\
-> +	const size_t __p_size = (p_size);				\
-> +	const size_t __q_size = (q_size);				\
-> +	const size_t __p_size_field = (p_size_field);			\
-> +	const size_t __q_size_field = (q_size_field);			\
-> +	WARN_ONCE(fortify_memcpy_chk(__fortify_size, __p_size,		\
-> +				     __q_size, __p_size_field,		\
-> +				     __q_size_field, #op),		\
->  		  #op ": detected field-spanning write (size %zu) of single %s (size %zu)\n", \
->  		  __fortify_size,					\
->  		  "field \"" #p "\" at " __FILE__ ":" __stringify(__LINE__), \
-> -		  p_size_field);					\
-> +		  __p_size_field);					\
->  	__underlying_##op(p, q, __fortify_size);			\
->  })
->  
-> 
-> 
-> [1] https://syzkaller.appspot.com/bug?id=23d613df5259b977dac1696bec77f61a85890e3d
-> 
-> -- 
-> Kees Cook
--- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
