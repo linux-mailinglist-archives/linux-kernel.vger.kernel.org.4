@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C763A61249B
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 19:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5421A61249C
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 19:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbiJ2RXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 13:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
+        id S229761AbiJ2RYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 13:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiJ2RXt (ORCPT
+        with ESMTP id S229727AbiJ2RX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 13:23:49 -0400
+        Sat, 29 Oct 2022 13:23:59 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146CE40009
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 10:23:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947F5402E5
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 10:23:57 -0700 (PDT)
 Received: from dslb-188-097-213-253.188.097.pools.vodafone-ip.de ([188.97.213.253] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1oopYe-00074v-3A; Sat, 29 Oct 2022 19:23:44 +0200
+        id 1oopYn-00074v-S8; Sat, 29 Oct 2022 19:23:53 +0200
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,10 +28,12 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 00/13] staging: r8188eu: clean up action frame handlers
-Date:   Sat, 29 Oct 2022 19:23:24 +0200
-Message-Id: <20221029172337.1574593-1-martin@kaiser.cx>
+Subject: [PATCH 01/13] staging: r8188eu: replace a GetAddr1Ptr call
+Date:   Sat, 29 Oct 2022 19:23:25 +0200
+Message-Id: <20221029172337.1574593-2-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221029172337.1574593-1-martin@kaiser.cx>
+References: <20221029172337.1574593-1-martin@kaiser.cx>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -42,30 +44,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up the handlers for action frames. Summarize common code, remove
-unnecessary return values.
+Define a struct ieee80211_mgmt and use it to read the destination address.
 
-Please apply this on top of the "remove the last get_da calls" series.
+This replaces one call to the driver-specific GetAddr1Ptr function, which
+should eventually be removed.
 
-Martin Kaiser (13):
-  staging: r8188eu: replace a GetAddr1Ptr call
-  staging: r8188eu: remove duplicate category check
-  staging: r8188eu: make on_action_public static void
-  staging: r8188eu: make OnAction_back static void
-  staging: r8188eu: make OnAction_p2p static void
-  staging: r8188eu: remove category check in OnAction_p2p
-  staging: r8188eu: replace switch-case with if
-  staging: r8188eu: replace GetAddr1Ptr call in OnAction_p2p
-  staging: r8188eu: clean up on_action_public
-  staging: r8188eu: remove return value from on_action_public_vendor
-  staging: r8188eu: remove return value from on_action_public_default
-  staging: r8188eu: rtw_action_public_decache's token is a u8
-  staging: r8188eu: check destination address in OnAction
+Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+---
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- drivers/staging/r8188eu/core/rtw_mlme_ext.c   | 116 +++++-------------
- .../staging/r8188eu/include/rtw_mlme_ext.h    |   7 --
- 2 files changed, 28 insertions(+), 95 deletions(-)
-
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+index 127dbc4e8b9a..5a366688a3f7 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+@@ -3815,13 +3815,14 @@ static unsigned int on_action_public_default(struct recv_frame *precv_frame)
+ 
+ unsigned int on_action_public(struct adapter *padapter, struct recv_frame *precv_frame)
+ {
++	struct ieee80211_mgmt *mgmt = (struct ieee80211_mgmt *)precv_frame->rx_data;
+ 	unsigned int ret = _FAIL;
+ 	u8 *pframe = precv_frame->rx_data;
+ 	u8 *frame_body = pframe + sizeof(struct ieee80211_hdr_3addr);
+ 	u8 category, action;
+ 
+ 	/* check RA matches or not */
+-	if (memcmp(myid(&padapter->eeprompriv), GetAddr1Ptr(pframe), ETH_ALEN))
++	if (memcmp(myid(&padapter->eeprompriv), mgmt->da, ETH_ALEN))
+ 		goto exit;
+ 
+ 	category = frame_body[0];
 -- 
 2.30.2
 
