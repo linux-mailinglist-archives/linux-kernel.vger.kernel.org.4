@@ -2,174 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432D4611F75
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 04:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5AFD611F79
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 04:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbiJ2CzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 22:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40486 "EHLO
+        id S229833AbiJ2Cze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 22:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiJ2CzK (ORCPT
+        with ESMTP id S229832AbiJ2Czc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 22:55:10 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E675C24099
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 19:54:37 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id y4so6392350plb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 19:54:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3aOLv5bd0FLV/mnE8/fEeex6Wf+bGxAwiWHAjCPeob8=;
-        b=F1CIddvjILhqwJkQTMNC9hHvJYNArr9ey/ZbzNYqitzzHQZy3r7uM2qGWEgnpwLm8D
-         2kScoECk2psL1KqyxHSF4Rd2eD8r7UkizqsMCsaURAOY8eTeMT9EhLycnkY/5dYIVixg
-         Phcsf1C/VDjddGLVWbrt40HOPyI0z5cfUGem0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3aOLv5bd0FLV/mnE8/fEeex6Wf+bGxAwiWHAjCPeob8=;
-        b=JBcJZYWqkXe4JOS+839pEsytLY0HKWCEzYQ8CHN6gGagcFLtfC323XW6pwQ/Isix7m
-         mfN3ryk0pkQ9egoGFhJiHbz7C9Iuo+nCIKEvx0Asm50vjspxDN3W9vBI4z3WuZiofB5l
-         k87ZKm7VtS+hH53gEQJx/Wh8yG2AU3r21S13SqkjMjbglqY1V7wRqTCzVYFNgZOQz9Dl
-         UgPWW9ALVSzpr8YY6r9zkICAeUgNXh45UH19PbSi35vx3ASBox0NyKjxrGEMqkTZXrmy
-         xGBCC4aYPs0Nrq+Fp6jGfV5HeCG+i7MaJJxNE8sKtnwrKwmnDDb4TvajIZ08yTKJyCzU
-         jVAg==
-X-Gm-Message-State: ACrzQf3ZQqcKWH4FK7eQMq1OpU1I4cDSDU70FGCqUs5/BsTl95Qs6pZQ
-        ggXAJgIAlFK1SiexEd30tfvFnQ==
-X-Google-Smtp-Source: AMsMyM6HJPQNNHUKo0hqSZ77eYX6lSBHvTuXFvuJmE1nVwBFZI8X4MsvRQFTWCL3yLz9vbqzCuWTBw==
-X-Received: by 2002:a17:902:dad1:b0:183:243c:d0d0 with SMTP id q17-20020a170902dad100b00183243cd0d0mr2229535plx.157.1667012077434;
-        Fri, 28 Oct 2022 19:54:37 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id p15-20020a634f4f000000b00429c5270710sm166610pgl.1.2022.10.28.19.54.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 19:54:34 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH bpf-next v2 3/3] bpf/verifier: Take advantage of full allocation sizes
-Date:   Fri, 28 Oct 2022 19:54:32 -0700
-Message-Id: <20221029025433.2533810-3-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221029024444.gonna.633-kees@kernel.org>
-References: <20221029024444.gonna.633-kees@kernel.org>
+        Fri, 28 Oct 2022 22:55:32 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A0A659C9;
+        Fri, 28 Oct 2022 19:54:56 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MzkSs4fPRzpVZw;
+        Sat, 29 Oct 2022 10:51:25 +0800 (CST)
+Received: from [10.174.179.163] (10.174.179.163) by
+ kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 29 Oct 2022 10:54:53 +0800
+Message-ID: <46fbef33-13a3-3909-0345-628e98a5b460@huawei.com>
+Date:   Sat, 29 Oct 2022 10:54:52 +0800
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3544; h=from:subject; bh=kUtgUSzjHG/StpxeZ/gAkJuSWQ81P7If0wKJuguKsQA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjXJXoKq5ZWOaEe0w9wu2rU5+gTlHcFnfDONzx5rl8 2MO2kVmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY1yV6AAKCRCJcvTf3G3AJjZFEA CbaiZHl1X/Eo7Q6u7OrXXEEu/Fc8P8Egz+2f9weQmvTFT6k8pHEJ646zRGYaElHNuF8dWLLFMJzM1Y uArHQVBqs6LQJ42PuY5l3YGl7j7pmWZwLgscvoR5jyYaXK+/r4zeRdhSbld8X/9cqZ6Jxk8SiPWveK dR/nJPs+tNkPLMdmyWbiEcz5A5+/tAzCBLmZjrgFBEokROEOl+TXx4IIpQbyqgzIDH3+gZ70I1NUhW lPjsvBvh52LVVOaWPV+GLV49VL/tK9veQLcWdWjSMzbnibeWn/xi9OCf94VNP/sAud9eO3w2PFBOij dA4dB88NxOwPgBSoN72V20mybNtqDdfmFCsI3osTyRAdnS+aFgUZ46I72yHpxd016UXEu6QcEUoTgu hKZz6nCyDNN/LfR5C6KER5YAYDzU+MC2uVFAdvE8GeabTsB5cO9kmujEadXdzd4j3C/ZCm6NsUSXG8 LtqGbSpbXDkuteqDDR8dhqIwYkp1t6sajZpOkWVSrKCyEaP65KGhzNwurPBOwlkjyg/K1aQxVys/l4 WVq86oBHhGxemD+KPFGaiLNBxljDw59+kpBi/I8VyCjT7lfHHIqmjFTKNREDkjg5izXZHA9wWJEJ7z CXrUKoUSAdUN08z2u+RbVOxApyfeLHAPi9Jty6yKPofgiYJneRRiZCO0gQjg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v4] cifs: fix use-after-free caused by invalid pointer
+ `hostname`
+Content-Language: en-US
+To:     Shyam Prasad N <nspmangalore@gmail.com>
+CC:     <sfrench@samba.org>, <tom@talpey.com>, <sprasad@microsoft.com>,
+        <pc@cjr.nz>, <lsahlber@redhat.com>, <linux-cifs@vger.kernel.org>,
+        <samba-technical@lists.samba.org>, <linux-kernel@vger.kernel.org>,
+        <liwei391@huawei.com>
+References: <20221027124528.2487025-1-zengheng4@huawei.com>
+ <CANT5p=q50Kt+eyVaxyh891sizFSzC=eUp5P46ON-odHFRjMsEQ@mail.gmail.com>
+From:   Zeng Heng <zengheng4@huawei.com>
+In-Reply-To: <CANT5p=q50Kt+eyVaxyh891sizFSzC=eUp5P46ON-odHFRjMsEQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.163]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the full kmalloc bucket size is being explicitly allocated, pass
-back the resulting details to take advantage of the full size so that
-reallocation checking will be needed less frequently.
+Make sure `cifsd` terminated to avoid race condition, it has to call 
+function like kthread_stop.
 
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Song Liu <song@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Hao Luo <haoluo@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- kernel/bpf/verifier.c | 27 ++++++++++++++++-----------
- 1 file changed, 16 insertions(+), 11 deletions(-)
+Then the whole `server` struct would be released by `cifsd` and another 
+UAF appears.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1c040d27b8f6..e58b554e862b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1020,20 +1020,23 @@ static void *copy_array(void *dst, const void *src, size_t n, size_t size, gfp_t
- 	return dst ? dst : ZERO_SIZE_PTR;
- }
- 
--/* resize an array from old_n items to new_n items. the array is reallocated if it's too
-- * small to hold new_n items. new items are zeroed out if the array grows.
-+/* Resize an array from old_n items to *new_n items. The array is
-+ * reallocated if it's too small to hold *new_n items. New items are
-+ * zeroed out if the array grows. Allocation is rounded up to next kmalloc
-+ * bucket size to reduce frequency of resizing. *new_n contains the new
-+ * total number of items that will fit.
-  *
-- * Contrary to krealloc_array, does not free arr if new_n is zero.
-+ * Contrary to krealloc, does not free arr if new_n is zero.
-  */
--static void *realloc_array(void *arr, size_t old_n, size_t new_n, size_t size)
-+static void *realloc_array(void *arr, size_t old_n, size_t *new_n, size_t size)
- {
- 	size_t alloc_size;
- 	void *new_arr;
- 
--	if (!new_n || old_n == new_n)
-+	if (!new_n || !*new_n || old_n == *new_n)
- 		goto out;
- 
--	alloc_size = kmalloc_size_roundup(size_mul(new_n, size));
-+	alloc_size = kmalloc_size_roundup(size_mul(*new_n, size));
- 	new_arr = krealloc(arr, alloc_size, GFP_KERNEL);
- 	if (!new_arr) {
- 		kfree(arr);
-@@ -1041,8 +1044,9 @@ static void *realloc_array(void *arr, size_t old_n, size_t new_n, size_t size)
- 	}
- 	arr = new_arr;
- 
--	if (new_n > old_n)
--		memset(arr + old_n * size, 0, (new_n - old_n) * size);
-+	*new_n = alloc_size / size;
-+	if (*new_n > old_n)
-+		memset(arr + old_n * size, 0, (*new_n - old_n) * size);
- 
- out:
- 	return arr ? arr : ZERO_SIZE_PTR;
-@@ -1074,7 +1078,7 @@ static int copy_stack_state(struct bpf_func_state *dst, const struct bpf_func_st
- 
- static int resize_reference_state(struct bpf_func_state *state, size_t n)
- {
--	state->refs = realloc_array(state->refs, state->acquired_refs, n,
-+	state->refs = realloc_array(state->refs, state->acquired_refs, &n,
- 				    sizeof(struct bpf_reference_state));
- 	if (!state->refs)
- 		return -ENOMEM;
-@@ -1090,11 +1094,12 @@ static int grow_stack_state(struct bpf_func_state *state, int size)
- 	if (old_n >= n)
- 		return 0;
- 
--	state->stack = realloc_array(state->stack, old_n, n, sizeof(struct bpf_stack_state));
-+	state->stack = realloc_array(state->stack, old_n, &n,
-+				     sizeof(struct bpf_stack_state));
- 	if (!state->stack)
- 		return -ENOMEM;
- 
--	state->allocated_stack = size;
-+	state->allocated_stack = n * BPF_REG_SIZE;
- 	return 0;
- }
- 
--- 
-2.34.1
 
+On 2022/10/28 13:41, Shyam Prasad N wrote:
+> On Thu, Oct 27, 2022 at 6:19 PM Zeng Heng <zengheng4@huawei.com> wrote:
+>> `hostname` needs to be set as null-pointer after free in
+>> `cifs_put_tcp_session` function, or when `cifsd` thread attempts
+>> to resolve hostname and reconnect the host, the thread would deref
+>> the invalid pointer.
+>>
+>> Here is one of practical backtrace examples as reference:
+>>
+>> Task 477
+>> ---------------------------
+>>   do_mount
+>>    path_mount
+>>     do_new_mount
+>>      vfs_get_tree
+>>       smb3_get_tree
+>>        smb3_get_tree_common
+>>         cifs_smb3_do_mount
+>>          cifs_mount
+>>           mount_put_conns
+>>            cifs_put_tcp_session
+>>            --> kfree(server->hostname)
+>>
+>> cifsd
+>> ---------------------------
+>>   kthread
+>>    cifs_demultiplex_thread
+>>     cifs_reconnect
+>>      reconn_set_ipaddr_from_hostname
+>>      --> if (!server->hostname)
+>>      --> if (server->hostname[0] == '\0')  // !! UAF fault here
+>>
+>> CIFS: VFS: cifs_mount failed w/return code = -112
+>> mount error(112): Host is down
+>> BUG: KASAN: use-after-free in reconn_set_ipaddr_from_hostname+0x2ba/0x310
+>> Read of size 1 at addr ffff888108f35380 by task cifsd/480
+>> CPU: 2 PID: 480 Comm: cifsd Not tainted 6.1.0-rc2-00106-gf705792f89dd-dirty #25
+>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+>> Call Trace:
+>>   <TASK>
+>>   dump_stack_lvl+0x68/0x85
+>>   print_report+0x16c/0x4a3
+>>   kasan_report+0x95/0x190
+>>   reconn_set_ipaddr_from_hostname+0x2ba/0x310
+>>   __cifs_reconnect.part.0+0x241/0x800
+>>   cifs_reconnect+0x65f/0xb60
+>>   cifs_demultiplex_thread+0x1570/0x2570
+>>   kthread+0x2c5/0x380
+>>   ret_from_fork+0x22/0x30
+>>   </TASK>
+>> Allocated by task 477:
+>>   kasan_save_stack+0x1e/0x40
+>>   kasan_set_track+0x21/0x30
+>>   __kasan_kmalloc+0x7e/0x90
+>>   __kmalloc_node_track_caller+0x52/0x1b0
+>>   kstrdup+0x3b/0x70
+>>   cifs_get_tcp_session+0xbc/0x19b0
+>>   mount_get_conns+0xa9/0x10c0
+>>   cifs_mount+0xdf/0x1970
+>>   cifs_smb3_do_mount+0x295/0x1660
+>>   smb3_get_tree+0x352/0x5e0
+>>   vfs_get_tree+0x8e/0x2e0
+>>   path_mount+0xf8c/0x1990
+>>   do_mount+0xee/0x110
+>>   __x64_sys_mount+0x14b/0x1f0
+>>   do_syscall_64+0x3b/0x90
+>>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> Freed by task 477:
+>>   kasan_save_stack+0x1e/0x40
+>>   kasan_set_track+0x21/0x30
+>>   kasan_save_free_info+0x2a/0x50
+>>   __kasan_slab_free+0x10a/0x190
+>>   __kmem_cache_free+0xca/0x3f0
+>>   cifs_put_tcp_session+0x30c/0x450
+>>   cifs_mount+0xf95/0x1970
+>>   cifs_smb3_do_mount+0x295/0x1660
+>>   smb3_get_tree+0x352/0x5e0
+>>   vfs_get_tree+0x8e/0x2e0
+>>   path_mount+0xf8c/0x1990
+>>   do_mount+0xee/0x110
+>>   __x64_sys_mount+0x14b/0x1f0
+>>   do_syscall_64+0x3b/0x90
+>>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> The buggy address belongs to the object at ffff888108f35380
+>>   which belongs to the cache kmalloc-16 of size 16
+>> The buggy address is located 0 bytes inside of
+>>   16-byte region [ffff888108f35380, ffff888108f35390)
+>> The buggy address belongs to the physical page:
+>> page:00000000333f8e58 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888108f350e0 pfn:0x108f35
+>> flags: 0x200000000000200(slab|node=0|zone=2)
+>> raw: 0200000000000200 0000000000000000 dead000000000122 ffff8881000423c0
+>> raw: ffff888108f350e0 000000008080007a 00000001ffffffff 0000000000000000
+>> page dumped because: kasan: bad access detected
+>> Memory state around the buggy address:
+>>   ffff888108f35280: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
+>>   ffff888108f35300: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
+>>> ffff888108f35380: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
+>>                     ^
+>>   ffff888108f35400: fa fb fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>>   ffff888108f35480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>>
+>> Fixes: 7be3248f3139 ("cifs: To match file servers, make sure the server hostname matches")
+>> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+>> Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+>> ---
+>> changes in v4:
+>>   - correct fix tag
+>>   - add reviewed-by
+>> ---
+>>   fs/cifs/connect.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+>> index ffb291579bb9..1cc47dd3b4d6 100644
+>> --- a/fs/cifs/connect.c
+>> +++ b/fs/cifs/connect.c
+>> @@ -1584,6 +1584,7 @@ cifs_put_tcp_session(struct TCP_Server_Info *server, int from_reconnect)
+>>          server->session_key.response = NULL;
+>>          server->session_key.len = 0;
+>>          kfree(server->hostname);
+>> +       server->hostname = NULL;
+>>
+>>          task = xchg(&server->tsk, NULL);
+>>          if (task)
+>> --
+>> 2.25.1
+>>
+> Good catch. But I think there can be a better fix.
+> How about moving the lines that follow i.e. cifsd thread kill to
+> before setting tcpStatus? That way, we don't leave scope for things to
+> race.
+>
