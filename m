@@ -2,132 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBA7611FEA
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 06:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C26A611FEC
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 06:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiJ2EIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 00:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
+        id S229553AbiJ2ELt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 00:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiJ2EIG (ORCPT
+        with ESMTP id S229500AbiJ2ELn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 00:08:06 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057371D52D9
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 21:08:05 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id o70so8174875yba.7
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 21:08:04 -0700 (PDT)
+        Sat, 29 Oct 2022 00:11:43 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E8F85A88
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 21:11:43 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id p141so6132187iod.6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 21:11:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=57jT6t9LVUQL8F7u3aUIh05FI0bzfei+aamYGlF6GLk=;
-        b=Ccb/clKCM4nY15aAxCsOLWHXbpR1FU3Yd+GPcXUDPBhwA0udyOeTue5L3csoLAZrlw
-         23D6dWhhXJwUI4m8uE8HoulwusEX4VEg69eMwR7RBfwhBvGtEppNyLJZNb0zBExQBI6p
-         XkyCIWxxtEOSkMiLCfQbKhl7eM/Wngq+xpHGEnXUvEctyeypP8rcL6To6+IbmwkMjMl+
-         OkjgIcHw92h3TU4StZ6lhufTGkQniV45mzs+ZN7vJr8Lsm2clNT7BpCTjdgqV7jekz4C
-         lMXQl3/mA/eopcKkr9ONzuFMnGySKoZeOu4jsoVENY0qt5tl6+82vbf+8dDD1ihmbNLC
-         W0kA==
+        bh=a05XFZRuF/egEfrk+8goUQtIMz5cRuT5WlopnCpocEA=;
+        b=kovLSyB8MPVeIrLXWhsv4ebR53tgy1CbZfJhjTODbTdNXDFJYhSS58l3eIrBPQloXb
+         X1pjzYRmxulUgTVO9lYnvjrDngx55x8ukqNGRn6r8jA1R2skNKQcbkyQvIXoP2mPTljg
+         sS1maOrMjVjwYgXlW9qK6HUrsLu+iIKpJOxKo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=57jT6t9LVUQL8F7u3aUIh05FI0bzfei+aamYGlF6GLk=;
-        b=FpDNXC2pXCvSaqootv9WXgoiOxyK2YgTIwyMAsJa0m9+UhxN1oqJbVJBmgdqSsUQ4L
-         TBcKemaxbfuacZWje3A92wD67mBtu2OkNTsvFgJYYD5trNpxS/1H6ylVEP5ae8uvNyIT
-         36Gtc/bTlGkoudEYKR0Vc+Xa6o8OVcmtpuVIP6i1/4iK/i7PqpXCH3hzX5cqxBVxHxjw
-         bpaneBRGhf+i/m2FfcT3ltWCUoLdd/xAaDhIwAFhJcVZVmhzvxk+4m3ImMRdwN1LIKDz
-         Of3AFIYqplW0l5lKHosneCRFUn+jP9xluHrcObX/Szc2OENig55En5fPqs93a93ATrwu
-         5g2A==
-X-Gm-Message-State: ACrzQf0aYKpbug6OFkXRl0Q6ODXLIGcaurZWmdfS3HJDYchCPrPCLy9Y
-        2M44nqO/svDM0uJekTnuS1fNrGDsnhPR88LVvxertVd8pMPxkg==
-X-Google-Smtp-Source: AMsMyM6r6emOlEEGYPVTlw+PT5Y3MAL9OB5+yrLl2f2Ip/XHTJU0Eq0IsSgGw0oBJjPCU78WHPbArGAKNjt6i76K6f4=
-X-Received: by 2002:a25:d914:0:b0:6cb:13e2:a8cb with SMTP id
- q20-20020a25d914000000b006cb13e2a8cbmr2340796ybg.231.1667016483960; Fri, 28
- Oct 2022 21:08:03 -0700 (PDT)
+        bh=a05XFZRuF/egEfrk+8goUQtIMz5cRuT5WlopnCpocEA=;
+        b=7nXljMCaMIt32kWTiX82OvWSyb7n/eb/Uxs10aHg3dqdh/B5eSAYfRaWWmxScdSJWU
+         UObzbYfgaSRLGqMgx5vx/k/8NbNhbs261gNMQTHT1a/C6SppKYYzLeNpsdLQznFXBiTe
+         eG02Ht1JojBNN34jyktiMzgC5l8rYE595g6nktLLpxGcWelMmRHHysStZOkbjqYxoZE2
+         EPnFy4ehLcKbd4Ql6EISBNUrKzZfNDo2Y4zy+HPotVvOzTmZIt9dpw8UskGQau5fIfvI
+         wZ+XUd0d2lN8RJANHPR8V2blR0+zMN2svJhBW88D1CNbQ61ZdN10mJQI0rTSAuoswyYi
+         n/cw==
+X-Gm-Message-State: ACrzQf2fZ7CIj/HqxcTnmQl+8xAlBel5ab8FVsL750TNtHCleLTEi0Hp
+        hr35LOgFm9JVtWfH1p8KG2yj5kU4LV7X20TpCPXuuw==
+X-Google-Smtp-Source: AMsMyM4Y55scCBOsz86/H1I8gLjPFFzF+wX16Ll/6KNE81tm9k6eqk5HNMIvLNKpxTO1zj9SQrri/vM5tOasSmUIFeY=
+X-Received: by 2002:a6b:4a01:0:b0:6bc:d4ae:321c with SMTP id
+ w1-20020a6b4a01000000b006bcd4ae321cmr1385305iob.59.1667016702459; Fri, 28 Oct
+ 2022 21:11:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221029033243.1577015-1-william.xuanziyang@huawei.com>
-In-Reply-To: <20221029033243.1577015-1-william.xuanziyang@huawei.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 28 Oct 2022 21:07:52 -0700
-Message-ID: <CANn89iLUMSHPZw0qNPxfoy3=Ao5JsRB8721L40YO48x9PDjWvQ@mail.gmail.com>
-Subject: Re: [PATCH net] net: tun: fix bugs for oversize packet when napi
- frags enabled
-To:     Ziyang Xuan <william.xuanziyang@huawei.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peterpenkov96@gmail.com, maheshb@google.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com
+References: <20221027151908.v1.1.I295e65357f06f162b46ea6fc6c03be37e3978bdc@changeid>
+ <4b7304c0-8dd5-9add-7c84-4e9f0aa9396b@redhat.com> <MN0PR12MB6101BCCA364437A76FED924AE2339@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <CAG-rBijvNoN3ppz6bdkEUofYPPBxCtFfo1nWBK5TdG69fcKMnA@mail.gmail.com> <CAE2upjS6qRGRcuVYuAB5DMf66A7VcfCKKYEkpsr1My7RnKDFtQ@mail.gmail.com>
+In-Reply-To: <CAE2upjS6qRGRcuVYuAB5DMf66A7VcfCKKYEkpsr1My7RnKDFtQ@mail.gmail.com>
+From:   Sven van Ashbrook <svenva@chromium.org>
+Date:   Sat, 29 Oct 2022 00:11:32 -0400
+Message-ID: <CAG-rBihDRq1y61tAp56yYCoTOSZXO9OZNzn7gXb_y8XaiO_zqg@mail.gmail.com>
+Subject: Re: [PATCH v1] platform/x86: intel_pmc_core: promote S0ix failure
+ warn() to WARN()
+To:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
+        "rrangel@chromium.org" <rrangel@chromium.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        Rajneesh Bhardwaj <rajneesh.bhardwaj@intel.com>,
+        Rafael J Wysocki <rjw@rjwysocki.net>,
+        Rajat Jain <rajatja@google.com>,
+        David E Box <david.e.box@intel.com>,
+        Mark Gross <markgross@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,THIS_AD autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 8:32 PM Ziyang Xuan
-<william.xuanziyang@huawei.com> wrote:
->
-> Recently, we got two syzkaller problems because of oversize packet
-> when napi frags enabled.
->
-> One of the problems is because the first seg size of the iov_iter
-> from user space is very big, it is 2147479538 which is bigger than
-> the threshold value for bail out early in __alloc_pages(). And
-> skb->pfmemalloc is true, __kmalloc_reserve() would use pfmemalloc
-> reserves without __GFP_NOWARN flag. Thus we got a warning as following:
->
-> ========================================================
->
+On Thu, Oct 27, 2022 at 12:02 PM Rajneesh Bhardwaj
+<irenic.rajneesh@gmail.com> wrote:
+> I'd advise against this promotion based on my experience with S0ix entry failures.
 
-> Restrict the packet size less than ETH_MAX_MTU to fix the problems.
-> Add len check in tun_napi_alloc_frags() simply. Athough that makes
-> some kinds of packets payload size slightly smaller than the length
-> allowed by the protocol, for example, ETH_HLEN + sizeof(struct ipv6hdr)
-> smaller when the tun device type is IFF_TAP and the packet is IPv6. But
-> I think that the effect is small and can be ignored.
+On Thu, Oct 27, 2022 at 11:40 AM Hans de Goede <hdegoede@redhat.com> wrote:
+> I'm not a fan of the change you are suggesting here.
 
-I am not sure about ETH_MAX_MTU being completely safe.
-
-napi_get_frags() / napi_alloc_skb() is reserving NET_SKB_PAD +
-NET_IP_ALIGN bytes.
-
-transport_header being an offset from skb->head,
-we probably want to use (ETH_MAX_MTU - NET_SKB_PAD - NET_IP_ALIGN)
-
-My objection to your initial patch was that you were using PAGE_SIZE,
-while Ethernet MTU can easily be ~9000
-
-But 0xFFFF is a bit too much/risky.
-
-Thanks.
-
->
-> Fixes: 90e33d459407 ("tun: enable napi_gro_frags() for TUN/TAP driver")
-> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
-> ---
->  drivers/net/tun.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> index 27c6d235cbda..98d3160fcae2 100644
-> --- a/drivers/net/tun.c
-> +++ b/drivers/net/tun.c
-> @@ -1459,7 +1459,7 @@ static struct sk_buff *tun_napi_alloc_frags(struct tun_file *tfile,
->         int err;
->         int i;
->
-> -       if (it->nr_segs > MAX_SKB_FRAGS + 1)
-> +       if (it->nr_segs > MAX_SKB_FRAGS + 1 || len > ETH_MAX_MTU)
->                 return ERR_PTR(-EMSGSIZE);
->
->         local_bh_disable();
-> --
-> 2.25.1
->
+Thanks everyone for the feedback. Looks like there is consensus that it's
+not advisable to promote the warning. We will move forward with changes to
+our monitoring infrastructure instead.
