@@ -2,42 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA909612560
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 23:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0970612564
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 23:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiJ2VA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 17:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
+        id S229647AbiJ2VDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 17:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiJ2VAk (ORCPT
+        with ESMTP id S229528AbiJ2VDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 17:00:40 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27D529CBA
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 14:00:38 -0700 (PDT)
-Received: from letrec.thunk.org ([142.44.75.242])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 29TKxXms024528
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 29 Oct 2022 16:59:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1667077177; bh=EZKkqCeXaLZ8T9HRw8I9LaqHcaQSMf+IL4bg8ajaLlA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=KoosaJyX9zI91btp1+85K5o0uLnH71GTcXpZSBZDpk8b5H7h6kosS66F3YxoZx4Gi
-         hOVJ3m4IJavsFvBREuh97JJA27i8y/cTE/plnmn9v9cz6PUx0kRjvUH/5iesCB/HCN
-         cauIMA+3IPh9edqP0VH08VGbdfOxp6HR0SdLG8LefJ9BdhQF677+EwFuHDFpHv0FMh
-         ll0+Ez0otlvNHLVX1Dw9+AbPeFjih5XCvTh658w7Tpuk0dIaOrgM7YbWmRQ6PneIA0
-         iZ7Z5NU0FHqd7ckaIQ9aCmRkA832CDKASCRoS5oTm0qp5Z8/XOsJpd+htkUVXi9Nbm
-         Did1wMpw2oVtQ==
-Received: by letrec.thunk.org (Postfix, from userid 15806)
-        id 3AC608C29FD; Sat, 29 Oct 2022 16:59:30 -0400 (EDT)
-Date:   Sat, 29 Oct 2022 16:59:30 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     John Hubbard <jhubbard@nvidia.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Sat, 29 Oct 2022 17:03:50 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B207A356C0
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 14:03:49 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id c2so7675472plz.11
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 14:03:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y0XCKXWN9AOEQpnItiZWYYfOLH2B1OdimWu6qHPiTXU=;
+        b=MykEozAVop9FYqjq/UBLWRl1qcpsM0d97FhuGVh4xlzm7nH9BAbge84ihX82QqvP2R
+         wjrT4jl7eNWsxi0mb2whRhQd6e3ZSYQda3P0Zd6mq6aIFCjuBy/m1VDk4q6YJMHfIH0Z
+         wsP+ECqSbxacXUS8s8FEltlOlpVtLHVHUvfl0ytUz1URqU6w0CWWJ0HUuBX8VpLrjwoT
+         ROgSlmGTJJqj+xBYBn7tgm25aOJx7iC+ZPEv+rOK0WNf9KPRFRazZ+hxjiQxnOx7dwKK
+         zHq6aC6XU9MScoTulis/1npK1cHvh10GL//s3oAGR/R0X5hihH/k87EhaesLVRIVXHSu
+         AZEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y0XCKXWN9AOEQpnItiZWYYfOLH2B1OdimWu6qHPiTXU=;
+        b=nfKZs0GN9Oll0GqLSoq+6k8RNoDHedX3AFIcQxdoHa8qsgqtIG4sUIVbAqQB+0M4oU
+         xh/9YG+n87+SgL+01QDHMDkNMm8byoMw0NKP5Bj1HL6qWPm8+NEEnej9VQA20XkGOK0M
+         QkWMqBhr9SBYfMAAQkROP0vnAeUV7Cwc4tk9WXnjv87R0+FqClx96g4u6YGP5r8Bsgsg
+         0aXM11SEt3Bsm6Te0hMB8kDBP+n9B1rDBOUbAZGvdw/aYBcCk484JYbbwYX5rEE5vQCW
+         u8FMkiArv7bwdBOVHNVjJietI/RVDyA7GQlqYtQAF/45AYJOY+MZMH6Angs/rt6mppda
+         80qg==
+X-Gm-Message-State: ACrzQf2R/JsKg04GNEFYjc0Qc4CUEyseeobxFFmK7TjbQTMKClk5P+8Q
+        rd150mrrlpirZ8nKkYEKbHw=
+X-Google-Smtp-Source: AMsMyM5fDQWwHZHOs8s2TFyQHhBJxKPtuLb2CJtfNHhL98e6pM1POFUn5M4K4TP/ltPW+rGTHkVpcw==
+X-Received: by 2002:a17:903:cd:b0:186:878e:3b08 with SMTP id x13-20020a17090300cd00b00186878e3b08mr5999887plc.93.1667077429009;
+        Sat, 29 Oct 2022 14:03:49 -0700 (PDT)
+Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
+        by smtp.gmail.com with ESMTPSA id 79-20020a621452000000b0056b9df2a15esm1590688pfu.62.2022.10.29.14.03.47
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 29 Oct 2022 14:03:48 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH 01/13] mm: Update ptep_get_lockless()s comment
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <B39368D9-7E5D-4864-819C-CDEEAB4BD92D@gmail.com>
+Date:   Sat, 29 Oct 2022 14:03:46 -0700
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Jann Horn <jannh@google.com>, X86 ML <x86@kernel.org>,
         Matthew Wilcox <willy@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -47,9 +67,18 @@ Cc:     John Hubbard <jhubbard@nvidia.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         jroedel@suse.de, ubizjak@gmail.com,
         Alistair Popple <apopple@nvidia.com>
-Subject: Re: [PATCH 01/13] mm: Update ptep_get_lockless()s comment
-Message-ID: <Y12UMjHOw9ZBaNMv@mit.edu>
-References: <CAHk-=wihPdOtXgJ32pLB6Xd-UvnaZW9YvOOjM24JGYRjNHeykA@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <9880C4F0-FF13-46BA-9044-30949D155158@gmail.com>
+References: <20221022111403.531902164@infradead.org>
+ <2c800ed1-d17a-def4-39e1-09281ee78d05@nvidia.com>
+ <Y1ZGNwUEdm15W6Xz@hirez.programming.kicks-ass.net>
+ <CAG48ez3fG=WnvbiE5mJaD66_gJj_hohnV8CqBG9eNdjd7pJW3A@mail.gmail.com>
+ <Y1fsYwshJ93FT21r@hirez.programming.kicks-ass.net>
+ <CAG48ez3VE+3dVdUMK+Pg_942gR+h_TCcSaFxGwCbNfh3W+mfOA@mail.gmail.com>
+ <Y1f7YvKuwOl1XEwU@hirez.programming.kicks-ass.net>
+ <CAG48ez05gBiB2w7bL_3O_OUoBWazmHnRwMiuni_wQyXBUcaxbQ@mail.gmail.com>
+ <Y1oub9MvqwGBlHkq@hirez.programming.kicks-ass.net>
+ <CAHk-=wihPdOtXgJ32pLB6Xd-UvnaZW9YvOOjM24JGYRjNHeykA@mail.gmail.com>
  <6C548A9A-3AF3-4EC1-B1E5-47A7FFBEB761@gmail.com>
  <CAHk-=wh8oi0qQtYDFTfm7d1s5C8mG7ig=NfzGWt4zbjXMzcdqQ@mail.gmail.com>
  <F9E42822-DA1D-4192-8410-3BAE42E9E4A9@gmail.com>
@@ -59,12 +88,13 @@ References: <CAHk-=wihPdOtXgJ32pLB6Xd-UvnaZW9YvOOjM24JGYRjNHeykA@mail.gmail.com>
  <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
  <3a57cfc5-5db4-bdc9-1ddf-5305a37ffa62@nvidia.com>
  <CAHk-=wj6EJvTtTeYQvkX3aOw6Q1SRYRV6xJP1+uHNvfAocO1hw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wj6EJvTtTeYQvkX3aOw6Q1SRYRV6xJP1+uHNvfAocO1hw@mail.gmail.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+ <B39368D9-7E5D-4864-819C-CDEEAB4BD92D@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        John Hubbard <jhubbard@nvidia.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,40 +102,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 01:15:26PM -0700, Linus Torvalds wrote:
-> On Sat, Oct 29, 2022 at 12:39 PM John Hubbard <jhubbard@nvidia.com> wrote:
-> >
-> > ext4 has since papered over the problem, by soldiering on if it finds a
-> > page without writeback buffers when it expected to be able to writeback
-> > a dirty page. But you get the idea.
-> 
-> I suspect that "soldiering on" is the right thing to do, but yes, our
-> 'mkdirty' vs 'mkclean' thing has always been problematic.
->
-> ...
->
->  (a) filesystems just deal with it
+On Oct 29, 2022, at 1:56 PM, Nadav Amit <nadav.amit@gmail.com> wrote:
 
-It should be noted that "soldiering on" just means that the kernel
-will not crash or BUG.  It may mean that the dirty page will not
-gotten written back (since at the time when it is discovered we are in
-a context we may not allocate memory or block if there is a need to
-allocate blocks if the file system uses delayed allocation).
+> On Oct 29, 2022, at 1:15 PM, Linus Torvalds =
+<torvalds@linux-foundation.org> wrote:
+>=20
+>> (b) we could move the "page_remove_rmap()" into the "flush-and-free" =
+path too
+>>=20
+>> And (b) would be fairly easy - same model as that dirty bit patch,
+>> just a 'do page_remove_rmap too' - except page_remove_rmap() wants =
+the
+>> vma as well (and we delay the TLB flush over multiple vma's, so it's
+>> not just a "save vma in mmu_gather=E2=80=9D).
+>=20
+> (b) sounds reasonable and may potentially allow future performance
+> improvements (batching, doing stuff without locks).
+>=20
+> It does appear to break a potential hidden assumption that rmap is =
+removed
+> while the ptl is acquired (at least in the several instances I =
+samples).
+> Yet, anyhow page_vma_mapped_walk() checks the PTE before calling the
+> function, so it should be fine.
+>=20
+> I=E2=80=99ll give it a try.
 
-Furthermore, since the file system does not know that one or more
-pages have dirtied behind it's back, if the file system is almost
-full, some writes may silently fail --- including writes where the
-usesrspace application was implicitly promised that the write would
-succeed by having the write(2) system call return without errors.
+I have just seen John=E2=80=99s and your emails. It seems (b) fell off. =
+(a) is out
+of my =E2=80=9Czone=E2=80=9D, and anyhow assuming it would not be solved =
+soon, deferring
+page_remove_rmap() might cause regressions.
 
-If people are OK with that, it's fine.  Just don't complain to the
-file system maintainers.  :-)
+(c) might be more intrusive and potentially induce overheads. If we need =
+a
+small backportable solution, I think the approach that I proposed =
+(marking
+the page dirty after the invalidation, before the PTL is released) is =
+the
+simplest one.
 
-						- Ted
+Please advise how to proceed.
 
-P.S.  The reason why this isn't an utter disaster is because normally
-users of remote RMA use preallocated and pre-written/initialized
-files.  And there aren't _that_ many other users of gup.  So long as
-this remains the case, we might be happy to let sleeping canines lie.
-Just please dear $DEITY, let's not have any additional users of gup
-until we have a better solution.
