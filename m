@@ -2,125 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736B76120D2
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 08:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD166120D6
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 09:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiJ2G6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 02:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
+        id S229730AbiJ2HBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 03:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiJ2G6j (ORCPT
+        with ESMTP id S229707AbiJ2HBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 02:58:39 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63A57B2A1;
-        Fri, 28 Oct 2022 23:58:38 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 5355C41A36;
-        Sat, 29 Oct 2022 06:58:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1667026717; bh=F8W2GWWaQfsG1i1jYMpQNaDmIOB/dmx8gWHvOZLamdc=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=AksB0uuH3gEWDI/ed5if0ziJPS8CrX8nGUSWMd8o2xDWksLM7rbZdFYSk0yTm89jK
-         3uA3H9ZHNsW5kdAh/QE+j9vcC/wJq2dWsb4izlZRhUDF6WBvTp4anESeXscyL7pWBU
-         rCFKXJ7Sv8t5ib7CrtrDfya38OrwV20B9NMl2hkyB7YxFQTJtR1LiLiO9JVowWOjND
-         J4scjPNuY3x3Jx5VLme5/XYWuBcq9OTX3nq0uWzGyajFFr3bN/OPwtIwNVPlR1fOxr
-         Kor0w+n9AMkQkE4MC4L+4XSsZd6T8zIicHHmiH4NsoLekl5yyswS7WvQkF4fRnIAyy
-         RbZHrazED8fEA==
-Message-ID: <40cf9da8-ce1e-4261-30b8-38580238c2b3@marcan.st>
-Date:   Sat, 29 Oct 2022 15:58:32 +0900
+        Sat, 29 Oct 2022 03:01:20 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E5180EA5
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 00:01:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667026877; x=1698562877;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vY21xq/PzIO7YtZrwNLwqFUBxlC+Y+mhiHf7FxZ1AHM=;
+  b=R/9w0bSZEA01bJblslziBdFNGXZs6VcbTuTkMmLAoBgNkx1LQZhLO2MQ
+   5DTvvwSYrIwA1gG0HrD++jKegzU2fY8XRl2UqLDyKwwj5IJ4Xk4IOg5yF
+   LeL5Bc0fro/hAA0dm90e0ZDXOCRIZgi18wWYcWwbwbuYQQ2e7HuaMXhZz
+   Sz2xzLIFbO5SMox8LgNmzAqYAsVtLlipW+WR2oK/Dr6alMAHJh2WmveV7
+   6ckZqSJO7W3ac2QZSb0V2V9fnod160gMlw47CN2GoMuOWUYvlZ2fHjj2a
+   lsEhw3byYBk4xkr/ftqLgJlPBEHbmNOE10E48Lrih8feH4sK6y1ZnZENn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="335293484"
+X-IronPort-AV: E=Sophos;i="5.95,223,1661842800"; 
+   d="scan'208";a="335293484"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 00:01:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="610985132"
+X-IronPort-AV: E=Sophos;i="5.95,223,1661842800"; 
+   d="scan'208";a="610985132"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 29 Oct 2022 00:01:13 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oofqD-000AjX-0R;
+        Sat, 29 Oct 2022 07:01:13 +0000
+Date:   Sat, 29 Oct 2022 15:00:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/mm] BUILD SUCCESS
+ 8844b5452d14ffd6c9d259d419842039ed656b7d
+Message-ID: <635ccfa1.ZVDOaA/WjlEJCRjP%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Pekka Paalanen <pekka.paalanen@collabora.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, asahi@lists.linux.dev
-References: <20221027135711.24425-1-marcan@marcan.st>
- <6102d131-fd3f-965b-cd52-d8d3286e0048@suse.de>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v2] drm/format-helper: Only advertise supported formats
- for conversion
-In-Reply-To: <6102d131-fd3f-965b-cd52-d8d3286e0048@suse.de>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/10/2022 17.07, Thomas Zimmermann wrote:
-> In yesterday's discussion on IRC, it was said that several devices 
-> advertise ARGB framebuffers when the hardware actually uses XRGB? Is 
-> there hardware that supports transparent primary planes?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/mm
+branch HEAD: 8844b5452d14ffd6c9d259d419842039ed656b7d  x86/mm: Randomize per-cpu entry area
 
-ARGB hardware probably exists in the form of embedded systems with
-preconfigured blending. For example, one could imagine an OSD-type setup
-where there is a hardware video scaler controlled entirely outside of
-DRM/KMS (probably by a horrible vendor driver), and the overlay
-framebuffer is exposed via simpledrm as a dumb memory region, and
-expects ARGB to work. So ideally, we wouldn't expose XRGB8888 on
-ARGB8888 systems.
+elapsed time: 803m
 
-But there is this problem:
+configs tested: 34
+configs skipped: 73
 
-arch/arm64/boot/dts/qcom/msm8998-oneplus-common.dtsi:
-   format = "a8r8g8b8";
-arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi:
-   format = "a8r8g8b8";
-arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dts:
-   format = "a8r8g8b8";
-arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts:
-format = "a8r8g8b8";
-arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts:
-format = "a8r8g8b8";
-arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts:
-           format = "a8r8g8b8";
-arch/arm64/boot/dts/qcom/sm6350-sony-xperia-lena-pdx213.dts:
-           format = "a8r8g8b8";
-arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts:
-format = "a8r8g8b8";
-arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi:
-   format = "a8r8g8b8";
-arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi:
-   format = "a8r8g8b8";
-arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi:
-   format = "a8r8g8b8";
-arch/arm64/boot/dts/socionext/uniphier-ld20-akebi96.dts:
-format = "a8r8g8b8";
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-I'm pretty sure those phones don't have transparent screens, nor
-magically put video planes below the firmware framebuffer. If there are
-12 device trees for phones in mainline which lie about having alpha
-support, who knows how many more exist outside? If we stop advertising
-pretend-XRGB8888 on them, I suspect we're going to break a lot of
-software...
+gcc tested configs:
+i386                                defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a006
+i386                             allyesconfig
+i386                          randconfig-a012
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a016
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
 
-Of course, there is one "correct" solution here: have an actual
-xrgb8888->argb8888 conversion helper that just clears the high byte.
-Then those platforms lying about having alpha and using xrgb8888 from
-userspace will take a performace hit, but they should arguably just fix
-their device tree in that case. Maybe this is the way to go in this
-case? Note that there would be no inverse conversion (no advertising
-argb8888 on xrgb8888 backends), so that one would be dropped vs. what we
-have today. This effectively keeps the "xrgb8888 helpers and nothing
-else" rule while actually supporting it for argb8888 backend
-framebuffers correctly. Any platforms actually wanting to use argb8888
-framebuffers with meaningful alpha should be configuring their userspace
-to preferentially render directly to argb8888 to avoid the perf hit anyway.
+clang tested configs:
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a012
+x86_64                        randconfig-a005
+i386                          randconfig-a013
+i386                          randconfig-a011
+x86_64                        randconfig-a016
+x86_64                        randconfig-a014
+i386                          randconfig-a015
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
 
-- Hector
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
