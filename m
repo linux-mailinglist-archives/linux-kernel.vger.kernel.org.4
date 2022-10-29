@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BDBF612263
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 13:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD8F612280
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 13:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbiJ2L25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 07:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40218 "EHLO
+        id S229729AbiJ2LlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 07:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiJ2L2z (ORCPT
+        with ESMTP id S229482AbiJ2LlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 07:28:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D6268893;
-        Sat, 29 Oct 2022 04:28:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C203F60C85;
-        Sat, 29 Oct 2022 11:28:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE4D5C433D6;
-        Sat, 29 Oct 2022 11:28:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667042934;
-        bh=DFj2qb6zfl0yMBOm4TqcZAJBhm4CB+DeYfezVBfdnU8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=of3d9sAmohCh+nH4/qjgKWHYrQ37o5CeBo9C+wbQSyeJ0mDrkV71fWkh0vWX4HJVO
-         34ZMrVZUuDNJ3kYtyNaRz4wz3MxODynwZVCBzQsXYZh1ZJ2UYaFtVc/V2SXmkqXVxn
-         VQTs339IH5Vax0uWvB1tD+IuFSaiahRPtb2IeTfLM9gmd28PfPAik1EJ+FmSgCz+UO
-         PDiHXHmgL/bdxL95n4Sz5iWtccjWRq8pOJ52lJBfioRomk4pRlVIErKAtq7kt6tPme
-         ch3vm9zQokKeMUYD9Mjux8OtV+mN28gRI5lIIyKfrTMy9UgiRXFY64VIolKHe9L4oL
-         s3ljGRbcP/2LA==
-Date:   Sat, 29 Oct 2022 12:40:48 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Mitja Spes <mitja@lxnav.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Tomasz Duszynski <tduszyns@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] ms5611 sensor value bug fix; dt-binding fix
-Message-ID: <20221029124048.372aed3b@jic23-huawei>
-In-Reply-To: <20221021135827.1444793-1-mitja@lxnav.com>
-References: <20221021135827.1444793-1-mitja@lxnav.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 29 Oct 2022 07:41:09 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C401691AD
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 04:40:59 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-59-tdaEMazbNHyIPPice42m6A-1; Sat, 29 Oct 2022 12:40:56 +0100
+X-MC-Unique: tdaEMazbNHyIPPice42m6A-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 29 Oct
+ 2022 12:40:56 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.042; Sat, 29 Oct 2022 12:40:55 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Kees Cook' <keescook@chromium.org>,
+        =?utf-8?B?SG9yaWEgR2VhbnTEgw==?= <horia.geanta@nxp.com>
+CC:     Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: RE: [PATCH] crypto/caam: Avoid GCC constprop bug warning
+Thread-Topic: [PATCH] crypto/caam: Avoid GCC constprop bug warning
+Thread-Index: AQHY6xELipAvmJyFFEuIWausI26LLa4lP1gQ
+Date:   Sat, 29 Oct 2022 11:40:55 +0000
+Message-ID: <560dd92c1f764005b519b038ae82d053@AcuMS.aculab.com>
+References: <20221028210527.never.934-kees@kernel.org>
+In-Reply-To: <20221028210527.never.934-kees@kernel.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,47 +62,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Oct 2022 15:58:19 +0200
-Mitja Spes <mitja@lxnav.com> wrote:
-
-> Subject: [PATCH 0/3] ms5611 sensor value bug fix; dt-binding fix
-> 
-> The first patch fixes a bug in ms5611 iio driver where PROM value
-> compensation table was overwritten by the last initialized sensor.
-> This in turn produced wrong values when multiple sensors were used.
-> 
-> Second patch removes the hardcoded SPI frequency and uses the setting
-> from dt-bindings.
-> 
-> Third patch outlines the change from the second patch in the bindings
-> example.
-
-1+2 applied to the fixes-togreg branch of iio.git and marked for
-stable.
-
-Thanks,
-
-Jonathan
-
-> 
-> v2:
-> 
-> [PATCH 1-2]
-> * no change
-> 
-> [PATCH 3]
-> * corrected patch subject
-> 
-> Mitja Spes (3):
->   iio: pressure: ms5611: fixed value compensation bug
->   iio: pressure: ms5611: changed hardcoded SPI speed to value limited
->   dt-bindings: iio: pressure: meas,ms5611: add max SPI frequency to the
->     example
-> 
->  .../bindings/iio/pressure/meas,ms5611.yaml    |  1 +
->  drivers/iio/pressure/ms5611.h                 | 12 ++---
->  drivers/iio/pressure/ms5611_core.c            | 51 ++++++++++---------
->  drivers/iio/pressure/ms5611_spi.c             |  2 +-
->  4 files changed, 33 insertions(+), 33 deletions(-)
-> 
+RnJvbTogS2VlcyBDb29rDQo+IFNlbnQ6IDI4IE9jdG9iZXIgMjAyMiAyMjowNg0KPiANCj4gR0ND
+IDEyIGFwcGVhcnMgdG8gcGVyZm9ybSBjb25zdGFudCBwcm9wYWdhdGlvbiBpbmNvbXBsZXRlbHko
+PykgYW5kIGNhbg0KPiBubyBsb25nZXIgbm90aWNlIHRoYXQgImxlbiIgaXMgYWx3YXlzIDAgd2hl
+biAiZGF0YSIgaXMgTlVMTC4gRXhwYW5kIHRoZQ0KPiBjaGVjayB0byBhdm9pZCB3YXJuaW5ncyBh
+Ym91dCBtZW1jcHkoKSBoYXZpbmcgYSBOVUxMIGFyZ3VtZW50Og0KLi4uDQo+IA0KPiBkaWZmIC0t
+Z2l0IGEvZHJpdmVycy9jcnlwdG8vY2FhbS9kZXNjX2NvbnN0ci5oIGIvZHJpdmVycy9jcnlwdG8v
+Y2FhbS9kZXNjX2NvbnN0ci5oDQo+IGluZGV4IDYyY2U2NDIxYmIzZi4uZGRiYmE4YjAwYWI3IDEw
+MDY0NA0KPiAtLS0gYS9kcml2ZXJzL2NyeXB0by9jYWFtL2Rlc2NfY29uc3RyLmgNCj4gKysrIGIv
+ZHJpdmVycy9jcnlwdG8vY2FhbS9kZXNjX2NvbnN0ci5oDQo+IEBAIC0xNjMsNyArMTYzLDcgQEAg
+c3RhdGljIGlubGluZSB2b2lkIGFwcGVuZF9kYXRhKHUzMiAqIGNvbnN0IGRlc2MsIGNvbnN0IHZv
+aWQgKmRhdGEsIGludCBsZW4pDQo+ICB7DQo+ICAJdTMyICpvZmZzZXQgPSBkZXNjX2VuZChkZXNj
+KTsNCj4gDQo+IC0JaWYgKGxlbikgLyogYXZvaWQgc3BhcnNlIHdhcm5pbmc6IG1lbWNweSB3aXRo
+IGJ5dGUgY291bnQgb2YgMCAqLw0KPiArCWlmIChkYXRhICYmIGxlbikgLyogYXZvaWQgc3BhcnNl
+IHdhcm5pbmc6IG1lbWNweSB3aXRoIGJ5dGUgY291bnQgb2YgMCAqLw0KPiAgCQltZW1jcHkob2Zm
+c2V0LCBkYXRhLCBsZW4pOw0KDQpJJ2QgZ3Vlc3Mgbm9uLWNvbnN0YW50IHplcm8gbGVuZ3RocyBh
+cmUgdW5saWtlbHk/DQpTbyBob3cgYWJvdXQ6DQoJLyogQXZvaWQgY2FsbGluZyBtZW1jcHkoKSB3
+aGVuIHRoZXJlIGlzIG5ldmVyIGEgYnVmZmVyICovDQoJaWYgKCFfX2J1aWx0aW5fY29uc3RhbnQo
+bGVuKSB8fCBsZW4pDQoJCW1lbWNweShvZmZzZXQsIGRhdGEsIGxlbik7DQoNClRoZW4gdGhlIHRl
+c3Qgc2hvdWxkIG5ldmVyIGFjdHVhbGx5IGVuZCB1cCBpbiB0aGUgb2JqZWN0IGNvZGUuDQoNCglE
+YXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91
+bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5
+NzM4NiAoV2FsZXMpDQo=
 
