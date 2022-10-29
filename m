@@ -2,106 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F268611F5A
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 04:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B38E611F5C
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 04:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbiJ2Cid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Oct 2022 22:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
+        id S229772AbiJ2Cjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Oct 2022 22:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiJ2Cib (ORCPT
+        with ESMTP id S229728AbiJ2Cjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Oct 2022 22:38:31 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA60F1C4EED
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 19:38:29 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id i10so4499041qkl.12
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Oct 2022 19:38:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TPMGFP4WsRn5RhnkYFMzq7QYqhO9Igv5Sk67nHNTQRo=;
-        b=MJwCFk+aRBBC8yd7D+5PFoGt0kiSGdcuGlh3JIifzrsC1i8jU4jPAyCvkS+RmyTHMd
-         45IzP/KjzBK4Zn5lBL3Zg4YPSP8KGvJ/kh0mPvfvESYuWobXLwLCt2YItNJzBiZOCFU8
-         54rdgdznGC9NcSrvXQi6ngFnU2KWM0M/moQ3oZJXncIgMSNp4CJc//Pf57UrH85UXpEl
-         trotKbRjumdkACTez/+EOcMRyPaHeHBNCINaRnu7KOZTmZnPb5MKz+7uTjdE2XgrtdUM
-         rwndRbiObLn5022CBO6Hz8XCD8odbZNUDNwy8cq+mEhEEoxtqgI4rD+NwUT8uOXs3U3m
-         9WUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TPMGFP4WsRn5RhnkYFMzq7QYqhO9Igv5Sk67nHNTQRo=;
-        b=PpVBmVrHSBauxGYsuIEXIfDqMWXz7b3OpXgsyTqCJw1f/Uz5Hly1eRYbbwk6OjCO4E
-         FF5pXMwWo64OlmmeT+SWoNUl7lrWWN8qz66LgLEifL3jEuXdupUnIlkK9ZA8AoIZQFKp
-         +1y1XW3WfhedFw6iXuLQGTNLpYroOYNsX1vi/x+DnYWQiQyZYF6bzfZsb9HwMbiNC6gu
-         p2Uo0Y4TZltoAy6gf1hQKnWTTmQanhM13g3X/8aHFHnjN+BqwRMA5o5LE9q/kzQM7cPA
-         A6xNvgvsNsCVJkiDcQqyMMqo8yGxWRE4L+ypKRz79e8B9ljwVj3pmh8DlfwGT5zWJzNo
-         qK0A==
-X-Gm-Message-State: ACrzQf3jDkfDUnn/D7IbMUjXrj134LOxTPHCqlkI8ZgOAWK4NTm3ZEGi
-        Ehi9MZfDOiWHNduMmycNJf0=
-X-Google-Smtp-Source: AMsMyM7AzOH6l57xDEEegyODYLZVLdheWGCQnXWR8evxDZaSt595rcEy9FcNF0NxUt6zhj3TO7DBeQ==
-X-Received: by 2002:a05:620a:4606:b0:6ee:e73b:aecb with SMTP id br6-20020a05620a460600b006eee73baecbmr1635401qkb.681.1667011108994;
-        Fri, 28 Oct 2022 19:38:28 -0700 (PDT)
-Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id x10-20020ac84d4a000000b0039ccbf75f92sm224764qtv.11.2022.10.28.19.38.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 19:38:28 -0700 (PDT)
-Message-ID: <fc09a68c-bd6d-0328-4052-88d40b50077d@gmail.com>
-Date:   Fri, 28 Oct 2022 19:38:25 -0700
+        Fri, 28 Oct 2022 22:39:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7C363A8;
+        Fri, 28 Oct 2022 19:39:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E205C62B46;
+        Sat, 29 Oct 2022 02:39:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8017EC433C1;
+        Sat, 29 Oct 2022 02:39:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667011169;
+        bh=csx8wmxxWUKnGS177UVXFMXaARE/rRs7rGyuI7jTgtc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u+O4yE+GFxGItHWd6Mvv7ejOn28W8rY3GgTN2hsv+zh4SO/Q3NjcrTiupSJb5AQ3q
+         GzhR0jyfxHKeq3Kirt19wjd0mQ8m2+0I06dcIe9u7cD4NqwGSj3KOh9+pg86gwphRY
+         nqqryADy1s2hLXrgnNHL3AuMFBUEj8qm+6l3XmMUk1P8F9oBsjn/2RQb3azTHwz/zO
+         KNck9d6CA0KczV04e0M7LhtmhGuJaQV4itxjKz/j6Q4aXGsNiGm0ubifhr9OogV5tL
+         32kfMXnMw0StMtPfo97TAVYG5qy2WH63bj/YyIt2O+AWJdWCf5gX8gJgyJEdbP2QME
+         Q8wRFkVEp6/+Q==
+Date:   Sat, 29 Oct 2022 10:39:21 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        ulf.hansson@linaro.org, l.stach@pengutronix.de,
+        andrew.smirnov@gmail.com, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH] dt-bindings: power: gpcv2: add power-domains property
+Message-ID: <20221029023921.GI125525@dragon>
+References: <20221010100958.290307-1-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v4 0/11] Introduce a unified API for SCMI Server testing
-Content-Language: en-US
-To:     Cristian Marussi <cristian.marussi@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@Huawei.com, etienne.carriere@linaro.org,
-        vincent.guittot@linaro.org, souvik.chakravarty@arm.com,
-        wleavitt@marvell.com, peter.hilber@opensynergy.com,
-        nicola.mazzucato@arm.com, tarek.el-sherbiny@arm.com,
-        quic_kshivnan@quicinc.com
-References: <20221019204626.3813043-1-cristian.marussi@arm.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221019204626.3813043-1-cristian.marussi@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221010100958.290307-1-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
+On Mon, Oct 10, 2022 at 06:09:58PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Some pgc power-domain requires a parent power domain, so
+> add an optional power-domains property, otherwise there will be
+> dt check warning:
+> gpc@303a0000: pgc:power-domain@1: 'power-domains' does not match
+> any of the regexes: 'pinctrl-[0-9]+'
+> 
+> Fixes: 30af8513bdb5 ("dt-bindings: power: add defines for i.MX8MM power domains")
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
-On 10/19/2022 1:46 PM, Cristian Marussi wrote:
-[snip]
-
-> In V2 the runtime enable/disable switching capability has been removed
-> (for now) since still not deemed to be stable/reliable enough: as a
-> consequence when SCMI Raw support is compiled in, the regular SCMI stack
-> drivers are now inhibited permanently for that Kernel.
-
-For our platforms (ARCH_BRCMSTB) we would need to have the ability to 
-start with the regular SCMI stack to satisfy if nothing else, all clock 
-consumers otherwise it makes it fairly challenging for us to boot to a 
-prompt as we purposely turn off all unnecessary peripherals to conserve 
-power. We could introduce a "full on" mode to remove the clock provider 
-dependency, but I suspect others on "real" silicon may suffer from the 
-same short comings.
-
-Once user-space is reached, I suppose we could find a way to unbind from 
-all SCMI consumers, and/or ensure that runtime PM is disabled, cpufreq 
-is in a governor that won't do any active frequency switching etc.
-
-What do you think?
--- 
-Florian
+Applied, thanks!
