@@ -2,82 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87B8612123
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 09:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB25612134
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 09:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiJ2Hx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 03:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
+        id S229691AbiJ2H6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 03:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiJ2HxX (ORCPT
+        with ESMTP id S229510AbiJ2H6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 03:53:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E057287D;
-        Sat, 29 Oct 2022 00:53:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6AE77B82E8A;
-        Sat, 29 Oct 2022 07:53:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C37E5C433C1;
-        Sat, 29 Oct 2022 07:53:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667030000;
-        bh=+6WVpF4K49pNId8+IaknC6gKbX8Hg9zp34C7h3dBSYc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UyuvhzqlHfYigkNjWL6BWEequGcW6HXDcoGJxxN9tnOrx2KRZ5fiCRLPxgpPvZRUL
-         XJMIe0bw9YwEsh9Trj27yMigb9hW0onY1dq/WWa7lGoMEOryLFl4XHBmiqdkWFein6
-         nM2CHcRCIQ+Muku2oCun/jhd7AP394fiCxM8nJlg=
-Date:   Sat, 29 Oct 2022 09:54:15 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Nishanth Menon <nm@ti.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] driver core: Add __alloc_size hint to devm allocators
-Message-ID: <Y1zcJxBBzivWh66K@kroah.com>
-References: <20221029074734.gonna.276-kees@kernel.org>
+        Sat, 29 Oct 2022 03:58:38 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF267C1C1;
+        Sat, 29 Oct 2022 00:58:36 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id a14so9266905wru.5;
+        Sat, 29 Oct 2022 00:58:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fXtTPSuITrg2+Wy4LunD0+G8ePAn5HRW3Hi/3aiQfg4=;
+        b=VL3s0jNQA7RA491qS7cZi7k8XgrFVYtNXkdFAxI0bFH4XDyUisdhMB1QqsKWnUiAP+
+         Vwnv4l9ydJy+W57wBUi2BimEG6eJqEnJIwgkK790YY7ZqjB23sj106QrS8pf6FHtm10D
+         X0AwmdNZMiqO1JoJTNv+/a5BJP1CcQ0mDA5w6A5NYF6yLFrLhTY2KOFgHuPDUnEKTWzr
+         ovs/CD2B1LqKmc+mE538qwGYJr6c42do22KvcFhOFXoEL5AFLu2LsP8vXzn/VdUfud5a
+         08d+IEly5kj+XfK8Z3sD4sz0yJDcf9vJKqq0I0rn4Kzxe1SnuYhdhudo/FRcXFKUFcYd
+         Q66w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fXtTPSuITrg2+Wy4LunD0+G8ePAn5HRW3Hi/3aiQfg4=;
+        b=b18IfXFdBVyDgX59cVpkfQzYIxeW8AbqsOOGJaTfGRDeAA6iwtD+uumaMHptLxzwI2
+         gY90LYyJYyFKB8MxFcQeuj5c4D3pZQP0acOsw62gWvrgGkOcFXfN8oedLWTr9Fk8rU1c
+         tVZR/aHsHAJ9hRJ32d2G2BLylZ6n6qH4i+yp1LxF6rpUVu2hDIpxJ+vjDuOKqzZL4w4W
+         JwZjoWpHmcoX3QP6AfKmmYSUaZDmuH3jwz0NtyHSjSQj16MMD1n3KBS1u2AyCr+VJFui
+         bvogUH5k9c7sldJL89Ft5IFBokBKZlyu56VKj1HBNf3W79ZPggpZM1HL+FTKcStGrJws
+         KZcw==
+X-Gm-Message-State: ACrzQf2vOpUixBCFTkNbMQJJZDsbCwSYMF/gKFSJfTu2yB/JhE2nNT0z
+        TSRpUYWvuFKUKudt0V+nFEU=
+X-Google-Smtp-Source: AMsMyM7x7N4SxHfnH95Ml8cZ4/P6kh2konHRNCxgN8S8anrkKdyJVfqQQcn3esvRiUB4DtDC4Dvl9A==
+X-Received: by 2002:adf:a1d4:0:b0:236:9adf:a2e9 with SMTP id v20-20020adfa1d4000000b002369adfa2e9mr1636406wrv.463.1667030315104;
+        Sat, 29 Oct 2022 00:58:35 -0700 (PDT)
+Received: from elementary ([94.73.35.109])
+        by smtp.gmail.com with ESMTPSA id q5-20020a5d6585000000b00228cd9f6349sm795646wru.106.2022.10.29.00.58.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Oct 2022 00:58:34 -0700 (PDT)
+Date:   Sat, 29 Oct 2022 09:58:32 +0200
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     Mia Kanashi <chad@redpilled.dev>
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com, spbnick@gmail.com,
+        pobrn@protonmail.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andreas Grosse <andig.mail@t-online.de>
+Subject: Re: [PATCH v2] HID: uclogic: Add support for XP-PEN Deco LW
+Message-ID: <20221029075832.GA8790@elementary>
+References: <20221028082348.22386-1-jose.exposito89@gmail.com>
+ <ED1CBF63-A70C-44FF-9F0B-80090EB347EA@redpilled.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221029074734.gonna.276-kees@kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ED1CBF63-A70C-44FF-9F0B-80090EB347EA@redpilled.dev>
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 12:47:34AM -0700, Kees Cook wrote:
-> Mark the devm_*alloc()-family of allocations with appropriate
-> __alloc_size()/__realloc_size() hints so the compiler can attempt to
-> reason about buffer lengths from allocations.
-> 
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Nishanth Menon <nm@ti.com>
-> Cc: Michael Kelley <mikelley@microsoft.com>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Won Chung <wonchung@google.com>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> I'm hoping to carry this via the hardening tree so I can add a
-> KUnit test that depends on it...
-> v2: use __realloc_size instead of __alloc_size
-> v1: https://lore.kernel.org/linux-hardening/20221018073430.never.551-kees@kernel.org/
-> ---
->  include/linux/device.h | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
+Hi Mia,
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Thanks for testing :D
+
+On Sat, Oct 29, 2022 at 03:28:10AM +0300, Mia Kanashi wrote:
+> Hello!
+> 
+> Before device sends a battery report, you can notice garbage values in a power supply capacity.
+> 
+> You can see this by running
+> `watch -n0.1 cat /sys/class/power_supply/hid-28bd-935-battery/uevent`
+> and then connecting the tablet.
+> 
+> You can set it to a value here, but i think this is a problem in the global hid driver?
+
+That shouldn't be problematic, because the charging status should be
+initially set to unknown and change to charging/discharging [1] once
+the device sends the first report.
+
+Your desktop environment shouldn't display the battery percentage
+while the status is unknown, so the initial values are ignored.
+
+Here is my output of my XP-Pen Deco SW before receiving the battery
+percentage:
+
+ POWER_SUPPLY_NAME=hid-28bd-933-battery
+ POWER_SUPPLY_TYPE=Battery
+ POWER_SUPPLY_PRESENT=1
+ POWER_SUPPLY_ONLINE=1
+ POWER_SUPPLY_MODEL_NAME=UGTABLET Deco Pro SW
+ POWER_SUPPLY_SCOPE=Device
+
+And after:
+
+ POWER_SUPPLY_NAME=hid-28bd-933-battery
+ POWER_SUPPLY_TYPE=Battery
+ POWER_SUPPLY_PRESENT=1
+ POWER_SUPPLY_ONLINE=1
+ POWER_SUPPLY_CAPACITY=99
+ POWER_SUPPLY_MODEL_NAME=UGTABLET Deco Pro SW
+ POWER_SUPPLY_STATUS=Discharging
+ POWER_SUPPLY_SCOPE=Device
+
+Jose
+
+[1] Actually it should be set to discharging until this gets merged:
+    https://lore.kernel.org/linux-input/20221028181849.23157-1-jose.exposito89@gmail.com/T/
