@@ -2,112 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB61A612427
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 17:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9239612436
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 17:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiJ2PXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 11:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
+        id S229716AbiJ2Pd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 11:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiJ2PXt (ORCPT
+        with ESMTP id S229761AbiJ2PdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 11:23:49 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FC651A0B
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 08:23:48 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id f27so19542965eje.1
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 08:23:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:mime-version:user-agent
-         :date:message-id:subject:from:cc:to:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LM0zNyCG6vu1EkX5rDqFjfE2Q0rAIzB1wYhK7YvnQns=;
-        b=juD2ya3o94qMIsY8wraqg+F+Qd2G6JeimGfqSmHC2B1NwGQ0B3tn65TlxYbQAu8iOe
-         sm/SU/BP21gVtp/zaXfagzyJPVRX2bJVtW1WPI9aF8/V+tS3+ErGABMslZgJUZle8Eru
-         J4avK/5g/EmAlL93IR7KcbCgIzjKuC+RTTsJhKspyG4pXD2JUOsZsrP/pSo3PGGvmlpK
-         L52/k8K6AUjBejickvlE5qICWZV4xDfvo+sftFbUSjW9XLL5vxzShdumRtJDwLDNCsjq
-         sjvP1fyfEKmJtIjY82ShMZD29FGDnSpIvncz7K57KfHytH/AI56iP9jIpXkc9Gb3S8KL
-         1g+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:mime-version:user-agent
-         :date:message-id:subject:from:cc:to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LM0zNyCG6vu1EkX5rDqFjfE2Q0rAIzB1wYhK7YvnQns=;
-        b=DVP6axDjIZqDKirxskWPje4JdWWIYhy96ZGjPbs6oCN6yEa6jjsC0ibrUZNQjZc562
-         cW3VcseP3l4o/0QDxZjBgw7B5o2EVRa+PafSh5JiKi1yVIA1+HoQfXzivMCi/4POaHC6
-         fgjQLK8eYg4N8N28p9rsXhuF754enWXaXV4HEqvFPzo+No6jZ/eM518f5wXyIn/Uz0gV
-         kXXvrMniM1cSgr6iESVlKAszFEkHZFSvlNQwDpZ2tsqUVgvoJSDc3+t6SEPP9d7kfWdV
-         SDqmfewjqBQud80cppID4IEUmHEH8est5t7KLWVywlzY4O4+eCHgcv5Mym6xMXl4me3u
-         6Aaw==
-X-Gm-Message-State: ACrzQf3LgdZgJq0ctfV3wSWnZSziteCyGPkT7HmOGeZ2XO0lpwdlhkX2
-        FFVVVLZ8a+9HAkkbH9Xyl7J6pLGByt/0FQ==
-X-Google-Smtp-Source: AMsMyM7cufHmJnEOFkb7HDOqoa+AK1me5MwoKmn499nTc0wfkM2nSYIF9kssabeYNCPeuCtZPTe9Ww==
-X-Received: by 2002:a17:907:97c3:b0:79b:3f8d:a354 with SMTP id js3-20020a17090797c300b0079b3f8da354mr4285123ejc.461.1667057026596;
-        Sat, 29 Oct 2022 08:23:46 -0700 (PDT)
-Received: from [192.168.1.10] ([46.249.74.23])
-        by smtp.googlemail.com with ESMTPSA id gg33-20020a17090689a100b0078b03d57fa7sm787034ejc.34.2022.10.29.08.23.45
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 29 Oct 2022 08:23:46 -0700 (PDT)
-To:     wens@csie.org, samuel@sholland.org
-Cc:     mripard@kernel.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Merlijn Wajer <merlijn@wizzup.org>
-From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Subject: [BISECTED] Allwinner A33 tablet does not fully power off
-Message-ID: <9f8a0fc3-1d9a-b271-3c26-4f7373b8a3e9@gmail.com>
-Date:   Sat, 29 Oct 2022 18:23:43 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Firefox/60.0 Thunderbird/60.6.1
+        Sat, 29 Oct 2022 11:33:24 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7113C5C9E6;
+        Sat, 29 Oct 2022 08:33:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667057603; x=1698593603;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mHuDuDNNRUovT7qPxWeRLywh7Ez+3FPl+XwoW9eBfPY=;
+  b=Z0NWIqlEgU8Wl1x6r/v9bMNEZYNhPKTycCU5YgaW/B5eK5YVbcmgiA5d
+   dYbPG+D8I4qy0B3qMgUcFQsf+6SCOppu2kyuH1q866s7I73EJgUGMXl2V
+   5CrMbrBMPjxjhp9LvaCpo209ty/4b9RbBJIzV5OSNOVXxgVm1ulbH4JJx
+   3fhDXqkMq9HFOHSQQrUL5HwyQN0DevYFPORwsBRW1UP8qfCwbIH2x8EQK
+   2pj9zpRq4UCclIHjnIa4OMKWRfM46Iifpgh1Itflo099FieBUQ/ISjcYp
+   RKkjgAiSTF/R8ZL4XI4QviJ27aIInUQs+hH++aBZuDSgPLEAdq9EoLH8O
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="309761404"
+X-IronPort-AV: E=Sophos;i="5.95,224,1661842800"; 
+   d="scan'208";a="309761404"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 08:33:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="738464276"
+X-IronPort-AV: E=Sophos;i="5.95,224,1661842800"; 
+   d="scan'208";a="738464276"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga002.fm.intel.com with ESMTP; 29 Oct 2022 08:33:18 -0700
+Date:   Sat, 29 Oct 2022 23:24:10 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        linux-serial@vger.kernel.org, jirislaby@kernel.org,
+        geert+renesas@glider.be, andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com
+Subject: Re: [PATCH v4 4/4] tty: serial: 8250: add DFL bus driver for Altera
+ 16550.
+Message-ID: <Y11FmiDeVhGir+7z@yilunxu-OptiPlex-7050>
+References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com>
+ <20221020212610.697729-5-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221020212610.697729-5-matthew.gerlach@linux.intel.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 2022-10-20 at 14:26:10 -0700, matthew.gerlach@linux.intel.com wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> 
+> Add a Device Feature List (DFL) bus driver for the Altera
+> 16550 implementation of UART.
+> 
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> ---
+> v4: use dev_err_probe() everywhere that is appropriate
+>     clean up noise
+>     change error messages to use the word, unsupported
+>     tried again to sort Makefile and KConfig better
+>     reorder probe function for easier error handling
+>     use new dfh_find_param API
+> 
+> v3: use passed in location of registers
+>     use cleaned up functions for parsing parameters
+> 
+> v2: clean up error messages
+>     alphabetize header files
+>     fix 'missing prototype' error by making function static
+>     tried to sort Makefile and Kconfig better
+> ---
+>  drivers/tty/serial/8250/8250_dfl.c | 149 +++++++++++++++++++++++++++++
+>  drivers/tty/serial/8250/Kconfig    |  12 +++
+>  drivers/tty/serial/8250/Makefile   |   1 +
+>  3 files changed, 162 insertions(+)
+>  create mode 100644 drivers/tty/serial/8250/8250_dfl.c
+> 
+> diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
+> new file mode 100644
+> index 000000000000..f02f0ba2a565
+> --- /dev/null
+> +++ b/drivers/tty/serial/8250/8250_dfl.c
+> @@ -0,0 +1,149 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Driver for FPGA UART
+> + *
+> + * Copyright (C) 2022 Intel Corporation, Inc.
+> + *
+> + * Authors:
+> + *   Ananda Ravuri <ananda.ravuri@intel.com>
+> + *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/dfl.h>
+> +#include <linux/io-64-nonatomic-lo-hi.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/serial.h>
+> +#include <linux/serial_8250.h>
+> +
+> +struct dfl_uart {
+> +	int line;
+> +};
+> +
+> +static int dfl_uart_get_params(struct dfl_device *dfl_dev, struct uart_8250_port *uart)
+> +{
+> +	struct device *dev = &dfl_dev->dev;
+> +	u64 v, fifo_len, reg_width;
+> +	u64 *p;
+> +
+> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ);
+> +	if (!p)
+> +		return dev_err_probe(dev, -EINVAL, "missing CLK_FRQ param\n");
+> +
+> +	uart->port.uartclk = *p;
+> +	dev_dbg(dev, "UART_CLK_ID %u Hz\n", uart->port.uartclk);
+> +
+> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_FIFO_LEN);
+> +	if (!p)
+> +		return dev_err_probe(dev, -EINVAL, "missing FIFO_LEN param\n");
+> +
+> +	fifo_len = *p;
+> +	dev_dbg(dev, "UART_FIFO_ID fifo_len %llu\n", fifo_len);
+> +
+> +	switch (fifo_len) {
+> +	case 32:
+> +		uart->port.type = PORT_ALTR_16550_F32;
+> +		break;
+> +
+> +	case 64:
+> +		uart->port.type = PORT_ALTR_16550_F64;
+> +		break;
+> +
+> +	case 128:
+> +		uart->port.type = PORT_ALTR_16550_F128;
+> +		break;
+> +
+> +	default:
+> +		return dev_err_probe(dev, -EINVAL, "unsupported fifo_len %llu\n", fifo_len);
+> +	}
+> +
+> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_REG_LAYOUT);
+> +	if (!p)
+> +		return dev_err_probe(dev, -EINVAL, "missing REG_LAYOUT param\n");
+> +
+> +	v = *p;
+> +	uart->port.regshift = FIELD_GET(DFHv1_PARAM_ID_REG_SHIFT, v);
+> +	reg_width = FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v);
 
-After commit 843107498f91e57d1d4b22cd8787112726fdaeb4 (bus: sunxi-rsb: 
-Implement suspend/resume/shutdown callbacks) Q8 A33 tablet I have here 
-cannot be powered-on after power-off, it needs press-and-hold of the 
-power button for 10 seconds (I guess some HW assisted power down 
-happens) before it can be powered-on again.
+I have concern that the raw layout inside the parameter block is
+still exposed to drivers and need to be parsed by each driver.
 
-The following patch makes it behave correctly:
+How about we define HW agnostic IDs for parameter specific fields like:
 
-diff --git a/drivers/bus/sunxi-rsb.c b/drivers/bus/sunxi-rsb.c
-index 60b082fe2ed0..30016d62044c 100644
---- a/drivers/bus/sunxi-rsb.c
-+++ b/drivers/bus/sunxi-rsb.c
-@@ -818,10 +818,7 @@ static int sunxi_rsb_remove(struct platform_device 
-*pdev)
+PARAM_ID		FIELD_ID
+================================
+MSIX			STARTV
+			NUMV
+--------------------------------
+CLK			FREQ
+--------------------------------
+FIFO			LEN
+--------------------------------
+REG_LAYOUT		WIDTH
+			SHIFT
 
-  static void sunxi_rsb_shutdown(struct platform_device *pdev)
-  {
--       struct sunxi_rsb *rsb = platform_get_drvdata(pdev);
--
-         pm_runtime_disable(&pdev->dev);
--       sunxi_rsb_hw_exit(rsb);
-  }
+And define like u64 dfl_find_param(struct dfl_device *, int param_id, int field_id)
 
-  static const struct dev_pm_ops sunxi_rsb_dev_pm_ops = {
+Think further, if we have to define HW agnostic property - value pairs,
+why don't we just use "Software nodes for the firmware node", see
+drivers/base/swnode.c. I think this may be a better choice.
 
-
-I guess the issue comes from the fact that by the time 'power off' 
-command to the power management IC has to be send, the bus it lives on 
-is already down, so the device is left in semi-powered down state. Ofc 
-this is a wild guess, however, preventing the bus being turned off on 
-shutdown fixes the issue.
-
-Please LMK if the above is the correct approach so I will send a proper 
-patch or something else shall be fixed.
-
-Ivo
+Thanks,
+Yilun
