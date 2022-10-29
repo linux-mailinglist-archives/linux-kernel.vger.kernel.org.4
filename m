@@ -2,89 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D79261252F
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 22:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 105B2612531
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 22:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiJ2UPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 16:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
+        id S229695AbiJ2UZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 16:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiJ2UPq (ORCPT
+        with ESMTP id S229565AbiJ2UZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 16:15:46 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1614846D8A
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 13:15:45 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id c8so6179738qvn.10
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 13:15:45 -0700 (PDT)
+        Sat, 29 Oct 2022 16:25:29 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8918E55C79;
+        Sat, 29 Oct 2022 13:25:24 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id o4so10797255wrq.6;
+        Sat, 29 Oct 2022 13:25:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pOXPiJ97dYIJF5yPIrXfj+CbshJ1dELixNePC6rvELQ=;
-        b=QuhkfR4DG5JSax+cs/4Iz+A4JTkwrDL98mjgZZJwGTBrfhi8q29mGRVGWLSgAqOeDQ
-         EZpgJqrD8KkrGhk77/r92K0hKjO8mLLMSpXTzkSFFrWhdMeDHM4davim/T5Pq8x0MRQ5
-         qoUEkHYof5agkUHAe5RZ1J/IBHxNXICf8IzeQ=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AjRHZ8fBkg3lgjizFn9B9hytM4UkuoK83SgqmM3ChZE=;
+        b=LGNwBNf8jYxk8Z6LrnZoxsnGAaI9QpTYNSEQdu9SpePwkwCi/RCEaIJjHT5WAmHTTV
+         eg+FHFOcaPOrU3QmPa7jy9i6KTNFiwLPe7F1MN20D4fMOcDkXXyUCj8n/a23gAN+Dwrf
+         ztYqtS1GL96hHrUE8DK/vyrbfkFRXBAIm0V4h2i7YAt/owq4exZd5ercimwyZJJI6R5G
+         JojWm7YiLxbdbtlMPXpUjM26ZK5eMkcgskeH/U0Sv1AMQMTkvUZSnr4nHb+8YOjBstEe
+         hGhN4QaibO7LoL7POEaNQz1dBQc755yJtESpGs92kC0/KGK2WtzUI7q34f8Er94hUaox
+         MhNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pOXPiJ97dYIJF5yPIrXfj+CbshJ1dELixNePC6rvELQ=;
-        b=SczXvT/EpFzANy1RbqVPK38U5Rabw+9ETfwviXTDwkpZlePzbRkiDpCXI+1FDwbGBo
-         HVn1thfQAgksxCvPyYDU0E7LnfoTqGquT4THMjRlZASGFp8qKaJaPU1a+viqDZGz7CZj
-         fyQKDj2gKU1LPcBOlWSQiou+OMXvdZFG+NWk80uX6jmyGSPoRsv4un6gZCKPBHVrpFki
-         /xxYPErz/lyyvdEl5L67EPo/h/ze7FE9unEXGtZBG6DP74/YHv4lSe5Beo3jK6CfPIv+
-         lvXawwqbAoFDswXBVr7/BnIWawrtsxCCSmCW1jxprkfm+1QgpwInw5pgmAGFtN/T39Oq
-         qj7A==
-X-Gm-Message-State: ACrzQf03rpJci0RgnmWO/D9OZedIfsCAGNs7fa8xvdPQpt/xOPudYdNe
-        EKk6/i0PrWSmmqXufK7k/x7+2QnQkkqScA==
-X-Google-Smtp-Source: AMsMyM6xKgQ3aHf4kOcsKONZGoaBoWmXIu1n6/ObNdkMT4mYn2tsmOdxCLiuqtVHC84+wEXhWRdAGw==
-X-Received: by 2002:a05:6214:2505:b0:4bb:8927:872e with SMTP id gf5-20020a056214250500b004bb8927872emr4853075qvb.93.1667074543880;
-        Sat, 29 Oct 2022 13:15:43 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id r16-20020ac87ef0000000b0039cc7ebf46bsm1233518qtc.93.2022.10.29.13.15.43
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Oct 2022 13:15:43 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-3704852322fso5508177b3.8
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 13:15:43 -0700 (PDT)
-X-Received: by 2002:a81:114e:0:b0:36a:fc80:fa62 with SMTP id
- 75-20020a81114e000000b0036afc80fa62mr5636780ywr.58.1667074542712; Sat, 29 Oct
- 2022 13:15:42 -0700 (PDT)
+        bh=AjRHZ8fBkg3lgjizFn9B9hytM4UkuoK83SgqmM3ChZE=;
+        b=bAe9MvXI/1P+GKyBCQpTa9jg8c5lnOQ0Xknk/IY905S/U6eSS3fhpuSUsXtZgCXhx9
+         SEcOQ94deeCBm0KO6oH+0vaQ1T/k9Tii1KaSBqL9c+HmY8Pu3fIc//j09Bk+oWinTWUX
+         BdEbvKoySQXd2XW0WMsTTY57DdgbrHdvJjWcWo8+8B+c6atfcPgnnxUFv3PB72HCIMi+
+         Dyj5kKrGKaB65PwIBS9WrDAX/Or9xNvx+s97sKf6ZyV8AK1eW/0gNh28G6rdselAwhjd
+         zAhzb8lMgbXUzSSeBin/N4op7R1nHCngw8nMkIrE5wQ/GF3yF3I8EbDlBVmzs2laNVF4
+         7jbg==
+X-Gm-Message-State: ACrzQf0Klmp4uKKPIjR3pEZlwCSmWm77WFN7bNH1sVEpELrF0dZ/J8pS
+        A+b5Gpa+03T9BoCq6PInRbMeDvZrp7O2HpRI
+X-Google-Smtp-Source: AMsMyM63HApAl5EyY21mbT9cgtvC76ltsknlLTRxfDi8U5bfACFANI/uFGLQYE36ILLcSg4KJ3GLYA==
+X-Received: by 2002:adf:e610:0:b0:236:737f:8e5d with SMTP id p16-20020adfe610000000b00236737f8e5dmr3230801wrm.316.1667075122985;
+        Sat, 29 Oct 2022 13:25:22 -0700 (PDT)
+Received: from osgiliath.lan (201.ip-51-68-45.eu. [51.68.45.201])
+        by smtp.gmail.com with ESMTPSA id k3-20020a05600c1c8300b003c6b7f5567csm16654829wms.0.2022.10.29.13.25.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Oct 2022 13:25:21 -0700 (PDT)
+From:   Ismael Ferreras Morezuelas <swyterzone@gmail.com>
+To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        luiz.von.dentz@intel.com, quic_zijuhu@quicinc.com,
+        hdegoede@redhat.com, swyterzone@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH 1/3] Bluetooth: btusb: Fix Chinese CSR dongles again by re-adding ERR_DATA_REPORTING quirk
+Date:   Sat, 29 Oct 2022 22:24:52 +0200
+Message-Id: <20221029202454.25651-1-swyterzone@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221022111403.531902164@infradead.org> <2c800ed1-d17a-def4-39e1-09281ee78d05@nvidia.com>
- <Y1ZGNwUEdm15W6Xz@hirez.programming.kicks-ass.net> <CAG48ez3fG=WnvbiE5mJaD66_gJj_hohnV8CqBG9eNdjd7pJW3A@mail.gmail.com>
- <Y1fsYwshJ93FT21r@hirez.programming.kicks-ass.net> <CAG48ez3VE+3dVdUMK+Pg_942gR+h_TCcSaFxGwCbNfh3W+mfOA@mail.gmail.com>
- <Y1f7YvKuwOl1XEwU@hirez.programming.kicks-ass.net> <CAG48ez05gBiB2w7bL_3O_OUoBWazmHnRwMiuni_wQyXBUcaxbQ@mail.gmail.com>
- <Y1oub9MvqwGBlHkq@hirez.programming.kicks-ass.net> <CAHk-=wihPdOtXgJ32pLB6Xd-UvnaZW9YvOOjM24JGYRjNHeykA@mail.gmail.com>
- <6C548A9A-3AF3-4EC1-B1E5-47A7FFBEB761@gmail.com> <CAHk-=wh8oi0qQtYDFTfm7d1s5C8mG7ig=NfzGWt4zbjXMzcdqQ@mail.gmail.com>
- <F9E42822-DA1D-4192-8410-3BAE42E9E4A9@gmail.com> <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
- <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
- <47678198-C502-47E1-B7C8-8A12352CDA95@gmail.com> <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
- <3a57cfc5-5db4-bdc9-1ddf-5305a37ffa62@nvidia.com>
-In-Reply-To: <3a57cfc5-5db4-bdc9-1ddf-5305a37ffa62@nvidia.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 29 Oct 2022 13:15:26 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj6EJvTtTeYQvkX3aOw6Q1SRYRV6xJP1+uHNvfAocO1hw@mail.gmail.com>
-Message-ID: <CAHk-=wj6EJvTtTeYQvkX3aOw6Q1SRYRV6xJP1+uHNvfAocO1hw@mail.gmail.com>
-Subject: Re: [PATCH 01/13] mm: Update ptep_get_lockless()s comment
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Nadav Amit <nadav.amit@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jann Horn <jannh@google.com>, X86 ML <x86@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        jroedel@suse.de, ubizjak@gmail.com,
-        Alistair Popple <apopple@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,45 +72,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 12:39 PM John Hubbard <jhubbard@nvidia.com> wrote:
->
-> ext4 has since papered over the problem, by soldiering on if it finds a
-> page without writeback buffers when it expected to be able to writeback
-> a dirty page. But you get the idea.
+A patch series by a Qualcomm engineer essentially removed my
+quirk/workaround because they thought it was unnecessary.
 
-I suspect that "soldiering on" is the right thing to do, but yes, our
-'mkdirty' vs 'mkclean' thing has always been problematic.
+It wasn't, and it broke everything again:
 
-I think we always needed a page lock for it, but PG_lock itself
-doesn't work (as mentioned earlier) because the VM can't serialize
-with IO, and needs the lock to basically be a spinlock.
+https://patchwork.kernel.org/project/netdevbpf/list/?series=661703&archive=both&state=*
 
-The page table lock kind of took its place, and then the rmap removal
-makes for problems (since it is what basically ends up being the
-shared place to look it upo).
+He argues that the quirk is not necessary because the code should check if the dongle
+says if it's supported or not. The problem is that for these Chinese CSR
+clones they say that it would work, but it's a lie. Take a look:
 
-I can think of three options:
+= New Index: 00:00:00:00:00:00 (Primary,USB,hci0)                              [hci0] 11.272194
+= Open Index: 00:00:00:00:00:00                                                [hci0] 11.272384
+< HCI Command: Read Local Version Information (0x04|0x0001) plen 0          #1 [hci0] 11.272400
+> HCI Event: Command Complete (0x0e) plen 12                                #2
+> [hci0] 11.276039
+      Read Local Version Information (0x04|0x0001) ncmd 1
+        Status: Success (0x00)
+        HCI version: Bluetooth 5.0 (0x09) - Revision 2064 (0x0810)
+        LMP version: Bluetooth 5.0 (0x09) - Subversion 8978 (0x2312)
+        Manufacturer: Cambridge Silicon Radio (10)
+...
+< HCI Command: Read Local Supported Features (0x04|0x0003) plen 0           #5 [hci0] 11.648370
+> HCI Event: Command Complete (0x0e) plen 68                               #12
+> [hci0] 11.668030
+      Read Local Supported Commands (0x04|0x0002) ncmd 1
+        Status: Success (0x00)
+        Commands: 163 entries
+          ...
+          Read Default Erroneous Data Reporting (Octet 18 - Bit 2)
+          Write Default Erroneous Data Reporting (Octet 18 - Bit 3)
+          ...
+...
+< HCI Command: Read Default Erroneous Data Reporting (0x03|0x005a) plen 0  #47 [hci0] 11.748352
+= Close Index: 00:1A:7D:DA:71:XX                                               [hci0] 13.776824
 
- (a) filesystems just deal with it
+So bring it back wholesale.
 
- (b) we could move the "page_remove_rmap()" into the "flush-and-free" path too
+Fixes: 63b1a7dd3 (Bluetooth: hci_sync: Remove HCI_QUIRK_BROKEN_ERR_DATA_REPORTING)
+Fixes: e168f69008 (Bluetooth: btusb: Remove HCI_QUIRK_BROKEN_ERR_DATA_REPORTING for fake CSR)
+Fixes: 766ae2422b (Bluetooth: hci_sync: Check LMP feature bit instead of quirk)
 
- (c) we could actually add a spinlock (hashed on the page?) for this
+Cc: stable@vger.kernel.org
+Cc: Zijun Hu <quic_zijuhu@quicinc.com>
+Cc: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Cc: Hans de Goede <hdegoede@redhat.com>
+Tested-by: Ismael Ferreras Morezuelas <swyterzone@gmail.com>
+Signed-off-by: Ismael Ferreras Morezuelas <swyterzone@gmail.com>
+---
+ drivers/bluetooth/btusb.c   |  1 +
+ include/net/bluetooth/hci.h | 11 +++++++++++
+ net/bluetooth/hci_sync.c    |  9 +++++++--
+ 3 files changed, 19 insertions(+), 2 deletions(-)
 
-I think (a) is basically our current expectation.
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index 3b269060e91f..1360b2163ec5 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -2174,6 +2174,7 @@ static int btusb_setup_csr(struct hci_dev *hdev)
+ 		 * without these the controller will lock up.
+ 		 */
+ 		set_bit(HCI_QUIRK_BROKEN_STORED_LINK_KEY, &hdev->quirks);
++		set_bit(HCI_QUIRK_BROKEN_ERR_DATA_REPORTING, &hdev->quirks);
+ 		set_bit(HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL, &hdev->quirks);
+ 		set_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks);
+ 
+diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
+index e004ba04a9ae..0fe789f6a653 100644
+--- a/include/net/bluetooth/hci.h
++++ b/include/net/bluetooth/hci.h
+@@ -228,6 +228,17 @@ enum {
+ 	 */
+ 	HCI_QUIRK_VALID_LE_STATES,
+ 
++	/* When this quirk is set, then erroneous data reporting
++	 * is ignored. This is mainly due to the fact that the HCI
++	 * Read Default Erroneous Data Reporting command is advertised,
++	 * but not supported; these controllers often reply with unknown
++	 * command and tend to lock up randomly. Needing a hard reset.
++	 *
++	 * This quirk can be set before hci_register_dev is called or
++	 * during the hdev->setup vendor callback.
++	 */
++	HCI_QUIRK_BROKEN_ERR_DATA_REPORTING,
++
+ 	/*
+ 	 * When this quirk is set, then the hci_suspend_notifier is not
+ 	 * registered. This is intended for devices which drop completely
+diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+index bd9eb713b26b..0a7abc817f10 100644
+--- a/net/bluetooth/hci_sync.c
++++ b/net/bluetooth/hci_sync.c
+@@ -3798,7 +3798,8 @@ static int hci_read_page_scan_activity_sync(struct hci_dev *hdev)
+ static int hci_read_def_err_data_reporting_sync(struct hci_dev *hdev)
+ {
+ 	if (!(hdev->commands[18] & 0x04) ||
+-	    !(hdev->features[0][6] & LMP_ERR_DATA_REPORTING))
++	    !(hdev->features[0][6] & LMP_ERR_DATA_REPORTING) ||
++	    test_bit(HCI_QUIRK_BROKEN_ERR_DATA_REPORTING, &hdev->quirks))
+ 		return 0;
+ 
+ 	return __hci_cmd_sync_status(hdev, HCI_OP_READ_DEF_ERR_DATA_REPORTING,
+@@ -4316,7 +4317,8 @@ static int hci_set_err_data_report_sync(struct hci_dev *hdev)
+ 	bool enabled = hci_dev_test_flag(hdev, HCI_WIDEBAND_SPEECH_ENABLED);
+ 
+ 	if (!(hdev->commands[18] & 0x08) ||
+-	    !(hdev->features[0][6] & LMP_ERR_DATA_REPORTING))
++	    !(hdev->features[0][6] & LMP_ERR_DATA_REPORTING) ||
++	    test_bit(HCI_QUIRK_BROKEN_ERR_DATA_REPORTING, &hdev->quirks))
+ 		return 0;
+ 
+ 	if (enabled == hdev->err_data_reporting)
+@@ -4475,6 +4477,9 @@ static const struct {
+ 	HCI_QUIRK_BROKEN(STORED_LINK_KEY,
+ 			 "HCI Delete Stored Link Key command is advertised, "
+ 			 "but not supported."),
++	HCI_QUIRK_BROKEN(ERR_DATA_REPORTING,
++			 "HCI Read Default Erroneous Data Reporting command is "
++			 "advertised, but not supported."),
+ 	HCI_QUIRK_BROKEN(READ_TRANSMIT_POWER,
+ 			 "HCI Read Transmit Power Level command is advertised, "
+ 			 "but not supported."),
+-- 
+2.38.1
 
-And (b) would be fairly easy - same model as that dirty bit patch,
-just a 'do page_remove_rmap too' - except page_remove_rmap() wants the
-vma as well (and we delay the TLB flush over multiple vma's, so it's
-not just a "save vma in mmu_gather").
-
-Doing (c) doesn't look hard, except for the "new lock" thing, which is
-always a potential huge disaster. If it's only across set_page_dirty()
-and page_mkclean(), though, and uses some simple page-based hash, it
-sounds fairly benign.
-
-                  Linus
-
-
-
-              Linus
