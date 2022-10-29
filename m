@@ -2,95 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E15E6122CC
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 14:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9BC6122E9
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Oct 2022 14:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiJ2MNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 08:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
+        id S229642AbiJ2M0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 08:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJ2MNS (ORCPT
+        with ESMTP id S229473AbiJ2M0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 08:13:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7735367064;
-        Sat, 29 Oct 2022 05:13:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24929B80B56;
-        Sat, 29 Oct 2022 12:13:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0071EC433D6;
-        Sat, 29 Oct 2022 12:13:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667045594;
-        bh=F3qWBTI+yvIFheV5lenosl5Dyx+Cl97Zk158NxZTZ/g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UclWApWNPCxfDoKVkcoa4XflI/vUYnKxTT1fbLdnmjB2ehJPZOv0lf2w91DylPDfU
-         MFORaH47F4cc6Te0mq+bXt5sz2AOKKKhDK9BW7cvlwm2SKzrDdudBpcetdgjtNjyVD
-         +5dYsCLcdK1+7Q1TKE/Wpa8HJV25TniMmtXkRbyaV3Wucb/Ow/A5lvyKf+6GXacSd6
-         NataCr77AHA5g7ZvVISstolsCCJAiC/js0Ttms5fdurqv1+TrdobOwe/vLyVIrUiti
-         e69RZhcUOkzzAvngcV4lGl0pJLnA/TP/CkKn9gjfVaNki8S/kd+2n9wHeoiE+/0DK4
-         471wAKUoK1T/A==
-Date:   Sat, 29 Oct 2022 13:25:08 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
-        lars@metafoo.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, ihkose@gmail.com,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rajat.khandelwal@intel.com
-Subject: Re: [PATCH v3] dt-bindings: iio: dac: Change the I2C slave address
- for ds4422/4424 to its correct value
-Message-ID: <20221029132508.515ad955@jic23-huawei>
-In-Reply-To: <3197497f-26ce-372f-6fb9-33e576cc786e@linaro.org>
-References: <20221024175008.196714-1-rajat.khandelwal@linux.intel.com>
-        <3197497f-26ce-372f-6fb9-33e576cc786e@linaro.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 29 Oct 2022 08:26:34 -0400
+Received: from mail-m118205.qiye.163.com (mail-m118205.qiye.163.com [115.236.118.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9629645D9
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 05:26:30 -0700 (PDT)
+Received: from localhost.localdomain (unknown [221.212.176.48])
+        by mail-m118205.qiye.163.com (HMail) with ESMTPA id 081482C15D6;
+        Sat, 29 Oct 2022 20:26:28 +0800 (CST)
+From:   YingChi Long <me@inclyc.cn>
+To:     me@inclyc.cn
+Cc:     bp@alien8.de, chang.seok.bae@intel.com,
+        dave.hansen@linux.intel.com, david.laight@aculab.com,
+        hpa@zytor.com, linux-kernel@vger.kernel.org, mingo@redhat.com,
+        ndesaulniers@google.com, pbonzini@redhat.com, tglx@linutronix.de,
+        x86@kernel.org
+Subject: [PATCH RESEND v3] x86/fpu: use _Alignof to avoid UB in TYPE_ALIGN
+Date:   Sat, 29 Oct 2022 20:25:52 +0800
+Message-Id: <20221029122552.2855941-1-me@inclyc.cn>
+X-Mailer: git-send-email 2.37.4
+In-Reply-To: <20221006141442.2475978-1-me@inclyc.cn>
+References: <20221006141442.2475978-1-me@inclyc.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFPN1dZLVlBSVdZDwkaFQgSH1lBWUIdQh1WQx9OGEkYQx9DTUtDVQIWExYaEhckFA4PWV
+        dZGBILWUFZSUlKVUlKSVVKTE1VT0NZV1kWGg8SFR0UWUFZT0tIVUpJS0NOTVVKS0tVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Kyo6Hyo*LDlOKzQRMxIYHxQz
+        KVYwCxRVSlVKTU1MS09NSEJLS0pJVTMWGhIXVRYeOxIVGBcCGFUYFUVZV1kSC1lBWUlJSlVJSklV
+        SkxNVU9DWVdZCAFZQUhOQ083Bg++
+X-HM-Tid: 0a8423b5374e2d27kusn081482c15d6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 23 Oct 2022 19:23:09 -0400
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+WG14 N2350 made very clear that it is an UB having type definitions with
+in "offsetof". This patch change the implementation of macro
+"TYPE_ALIGN" to builtin "_Alignof" to avoid undefined behavior.
 
-> On 24/10/2022 13:50, Rajat Khandelwal wrote:
-> > The datasheet states that the slave address for the device is 0x20
-> > when the pins A0 and A1 are ground. The DT binding has been using
-> > 0x10 as the value and I think it should be 0x20 as per datasheet.
-> > 
-> > Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-> > ---  
-> 
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
+I've grepped all source files to find any type definitions within
+"offsetof".
 
-hmm. This is curious. So the datasheet indeed provides a table saying
-grounding both pins sets the address to 0x20, however take a look at
-Figure 2 which says the address is
-A1 | A0 | 1 | 0 | 0 | 0 | 0
+    offsetof\(struct .*\{ .*,
 
-or 0x10 as per the example.  My guess is someone forgot that i2c addresses
-are 7 bits and the lowest bit of the first byte is used for R/W control.
+This implementation of macro "TYPE_ALIGN" seemes to be the only case of
+type definitions within offsetof in the kernel codebase.
 
-So unless we have this verified on hardware (implying that the address table
-is correct in this sense) I'm not keen to take this.
-I doubt that is the case given it has 8 bit addresses (0xe0) and i2c addresses
-are 7 bits.
+I've made a clang patch that rejects any definitions within
+__builtin_offsetof (usually #defined with "offsetof"), and tested
+compiling with this patch, there are no error if this patch applied.
 
-Jonathan
+ISO C11 _Alignof is subtly different from the GNU C extension
+__alignof__. __alignof__ is the preferred alignment and _Alignof the
+minimal alignment. For 'long long' on x86 these are 8 and 4
+respectively.
 
+The macro TYPE_ALIGN we're replacing has behavior that matches
+_Alignof rather than __alignof__.
 
-> Best regards,
-> Krzysztof
-> 
+Signed-off-by: YingChi Long <me@inclyc.cn>
+Link: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2350.htm
+Link: https://godbolt.org/z/sPs1GEhbT
+Link: https://gcc.gnu.org/onlinedocs/gcc/Alignment.html
+Link: https://reviews.llvm.org/D133574
+---
+v3:
+- commit message changes suggested by Nick and David
+
+v2: https://lore.kernel.org/all/20220927153338.4177854-1-me@inclyc.cn/
+Signed-off-by: YingChi Long <me@inclyc.cn>
+---
+ arch/x86/kernel/fpu/init.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/kernel/fpu/init.c b/arch/x86/kernel/fpu/init.c
+index 8946f89761cc..851eb13edc01 100644
+--- a/arch/x86/kernel/fpu/init.c
++++ b/arch/x86/kernel/fpu/init.c
+@@ -133,9 +133,6 @@ static void __init fpu__init_system_generic(void)
+ 	fpu__init_system_mxcsr();
+ }
+
+-/* Get alignment of the TYPE. */
+-#define TYPE_ALIGN(TYPE) offsetof(struct { char x; TYPE test; }, test)
+-
+ /*
+  * Enforce that 'MEMBER' is the last field of 'TYPE'.
+  *
+@@ -143,8 +140,8 @@ static void __init fpu__init_system_generic(void)
+  * because that's how C aligns structs.
+  */
+ #define CHECK_MEMBER_AT_END_OF(TYPE, MEMBER) \
+-	BUILD_BUG_ON(sizeof(TYPE) != ALIGN(offsetofend(TYPE, MEMBER), \
+-					   TYPE_ALIGN(TYPE)))
++	BUILD_BUG_ON(sizeof(TYPE) !=         \
++		     ALIGN(offsetofend(TYPE, MEMBER), _Alignof(TYPE)))
+
+ /*
+  * We append the 'struct fpu' to the task_struct:
+--
+2.37.4
 
