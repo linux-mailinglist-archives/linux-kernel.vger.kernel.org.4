@@ -2,170 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03761612B95
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 17:21:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2042B612B96
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 17:23:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiJ3QU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 12:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
+        id S229707AbiJ3QWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 12:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiJ3QU4 (ORCPT
+        with ESMTP id S229629AbiJ3QWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 12:20:56 -0400
-Received: from mout.web.de (mout.web.de [212.227.17.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91150A46F
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 09:20:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
-        t=1667146832; bh=fOBr9LiSqmHS9jainUOvZJ9zz096aPVD/DPP2cPL7+0=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=m/Et4NvKJ4VuYrsLV9f0Q+gdk258PzUnEH62RPXZa7Dnm/LL9EWV+jYjwfTXskaV3
-         rDcYgpVMUwrP20M+0HUxNAX7HnIIam81TI1uxV9vkkjo6R+b7J070+rxlWzja4EuTa
-         VQPlDcLg5hByMIrkPy8UCfi/+FwrIjK3UgGw7FHmx2wZz+axz0bKEoPqn/W2abxPp2
-         jrenfnx415r9+8OfLV6IdBYjDgerZq3X1tI+FP24thQHTIgtHXunIQfbsahdi9ZAEM
-         SfTwnpk3PgeA++XbbLLGJQ7LU4g/JucY8isgtLqOXOxKi6bnCw5Gh0kVEFonuOpuXH
-         1WoJJgk5CvyaQ==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from gecko.fritz.box ([82.207.254.101]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MJWoU-1oVSEJ4B56-00KKW5; Sun, 30
- Oct 2022 17:13:28 +0100
-Date:   Sun, 30 Oct 2022 16:13:15 +0000
-From:   Lukas Straub <lukasstraub2@web.de>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     "Hansen, Dave" <dave.hansen@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Joshua Ashton <joshua@froggi.es>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Pavel Machek <pavel@denx.de>,
-        Pierre-Loup Griffais <pgriffais@valvesoftware.com>,
-        "Melissa Wen" <mwen@igalia.com>
-Subject: Re: [PATCH] x86/split_lock: Restore warn mode (and add a new one)
- to avoid userspace regression
-Message-ID: <20221030160300.3a3e72c7@gecko.fritz.box>
-In-Reply-To: <SJ1PR11MB60839A08E01742321F8446BCFC579@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <20220928142109.150263-1-gpiccoli@igalia.com>
-        <24f31510-5b33-ada5-9f0e-117420403e8c@intel.com>
-        <1c742ae1-98cb-a5c1-ba3f-5e79b8861f0b@igalia.com>
-        <cc8d0101-73b9-b286-a7a7-e9305cdc1bd9@intel.com>
-        <SJ1PR11MB60839A08E01742321F8446BCFC579@SJ1PR11MB6083.namprd11.prod.outlook.com>
+        Sun, 30 Oct 2022 12:22:54 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FF5A462;
+        Sun, 30 Oct 2022 09:22:53 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id t10-20020a17090a4e4a00b0020af4bcae10so8424228pjl.3;
+        Sun, 30 Oct 2022 09:22:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BQn3ZUpbdgmJP28m8KFPs8Ve0nMUfYmCJ+MhZVJSwXU=;
+        b=WbOxiS5OS/PT1ygZRFlxBeA9ehxYmudDAnwUyppNGaFZx1br+xbMU0222rwjR/201U
+         DEJ+9MM1HrgLyT7cwDRIN/8nKU04AYQgLGqrYy3nd1OSR++6uB6PUTW83B8rOu2DK9wC
+         T+JG67U5jGxwgL11N/aVRXUqeccZjXtGJY3iCw/+QpIHDVIUC1JRMWoJX/wWYx6JcVs8
+         1ahKneGHbSqfIcNXr1VnPUashePEsr97Eq9kITkGRXjTDGuABHisNfyYuBYkHcpwXxu/
+         9uaHiFVlr9vz8XdwL/eexORIWynKISXxXByHErHqpzhNidPhzQXukDMiiW7MxcK8ILHb
+         F3Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BQn3ZUpbdgmJP28m8KFPs8Ve0nMUfYmCJ+MhZVJSwXU=;
+        b=Y1Hchf+WFeIfPJbVyKsZ7HNcS54NQ1dU84jZVgMhaKQhKCkPl4P7Aq8N7VtEdx1CDT
+         c/owYW/NVJ7NFFZt5bGGqW3MthIIlaxZpdOF+CWaxmnNbXVYTGDPDOJZ58euJ0LEWa5H
+         PGwAD2DyModORwpF5kLAsj/oq69HukV4D6JlfWDGCBPi/MXWskLArSMxPsTBDSKzpV72
+         GU9ayqBNN2gkUAmGJHZG8XsIFWgq8LRKyB7T4HzG7Q6ryIq/jq5Lw4CsKSjPjhIEgOW7
+         zFOlQIXKMelmBDDaW9XvGiXXXSBtiv6NvNanItYrKGdOy+Fs2Npr+uL7dKxf4q3pgEY5
+         GsxA==
+X-Gm-Message-State: ACrzQf2EVFe2Jwi/Hx3r/CvYbyKNhVUli5eymvPRRi0q1tjPKb/N6Te+
+        96JPKcG5nUNUbshOTbm8pto=
+X-Google-Smtp-Source: AMsMyM5Y6JirfSHIVaga90wK49q1LDWrq7sLydks8turZETasEqJZcUfjHZeq0VfyXniS62wF6RM4g==
+X-Received: by 2002:a17:90a:5517:b0:213:b122:41b3 with SMTP id b23-20020a17090a551700b00213b12241b3mr8070540pji.121.1667146972473;
+        Sun, 30 Oct 2022 09:22:52 -0700 (PDT)
+Received: from localhost ([183.242.254.175])
+        by smtp.gmail.com with ESMTPSA id c2-20020a631c02000000b0045ff216a0casm2576491pgc.3.2022.10.30.09.22.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Oct 2022 09:22:51 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     yin31149@gmail.com, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>
+Cc:     18801353760@163.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        nathan@kernel.org, ndesaulniers@google.com,
+        syzbot+dde7e853812ed57835ea@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
+Subject: [PATCH] btrfs: update bytes_may_use in btrfs_free_reserved_bytes()
+Date:   Mon, 31 Oct 2022 00:22:24 +0800
+Message-Id: <20221030162223.25970-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/blTXMv.pM3CzC.J8IB+IlVC";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Provags-ID: V03:K1:RUHxR/QHqnTecROiHhek1ZYiITE0325qS764zNasEt9tzxGCYxB
- hJTA8Ph5MraUHLWFuMZ1IKesU77RQ6NKJ48JZY6fhX+9fs+F/cqrOT22BZx/E9gYuRX3Bvu
- 0fsGSBWD4SG/s663DlHE5PpRT0G1G0xBZYt735mEATAq8WVhLcRTVwPHlO+cXOWx72LxZMl
- nxZutCfVt5mrkYxyzgX2g==
-UI-OutboundReport: notjunk:1;M01:P0:ip+199mkyQs=;8FhBjuAdcqTEQHSCvjbJVLrSNSm
- C+G1bG52BGEREQ9H29PUKRWRj3n/gH/stOQt000QXEgNttMlSdX3WTbflInlBg8lkEa2XxMCn
- a7wX8krgn4/h4SO8R3xnn8FkHEP2HpAlEk01+9XlGtlhbY5ZYApLXN9QGv94v+N+q3CaV2cRB
- G2XKYOOC/j1YMz9h8VvQnwbOLd2nkCvtht/kEHMv3SyFIQ+wf03XlmSvPinGj23pNPRDGvWmW
- iHfbHB54XSrxw1CMiA17uiCmiFG9PXJDMEd1sNSciQ4mL+f6EyIlgyQiOeefWoZQI0fnfONyF
- SbTFhJf8PVpg3N5IDolZiw2g/bKH0IScQlMWmhPPDfUTjw/EhvQxabGJU9RUoVhjNrohV2vt0
- fZxMNpyqQDEVsV8s2xwK+i4Zi84hlRvFo2zuaNAvY3JbK/6Vv5aAhnYtlHZKa9zIK4ZDuQwEs
- jPUBAC1XCRJAFfENgrjzHZzp+ISEBNTt+YkLQnCoTja5+TLX6m7GdeELpaXs09sGzB6U9ZwDV
- pI+4fq5ofM6ynyZuOFywjY+2GIJpJOnOaX9krLZHu2yL7/qOdtGaUhtTynQv9MCZV3REfP6C/
- U6fJRpfb/B+iV/t0JT6kZYqT+fQuCbJXP9QbsAn1toGHqtnzkrcke1H4iK0mlnD8VwazoqGRk
- dAkF0vzUNb+AXkCUqW/liR2qieKHDoEedWha3qcneASLi6pVp50ho8PfmfXDED1sdrXLG2eFx
- PXWzUNZBo699XZL3wNt7oJxFjsHn9rZe49vqDakk/xYwowKzFSfmDGa4bG7MgrmtdKBAQuQPH
- WetToRQrVr/Nb8ekCfy7qvVua/vCz+2cKzL0Q7OgSjwiCow8wtL2rFbSJq/pC1NrnGMf8ppQA
- SA8BSQb/l2fylZEjP35Q2wuphw28jSwHUAaoCvM/9+VYFKgPfbG/KhnnZPGNkovoa7gUNcbAF
- VVEEDu+R5lcpAcxqTZr2HEmD8ow=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/blTXMv.pM3CzC.J8IB+IlVC
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Syzkaller reports warning as follows:
+=====================================
+WARNING: CPU: 0 PID: 3612 at fs/btrfs/space-info.h:122
+  btrfs_space_info_free_bytes_may_use fs/btrfs/space-info.h:154 [inline]
+WARNING: CPU: 0 PID: 3612 at fs/btrfs/space-info.h:122
+  block_rsv_release_bytes fs/btrfs/block-rsv.c:151 [inline]
+WARNING: CPU: 0 PID: 3612 at fs/btrfs/space-info.h:122
+  btrfs_block_rsv_release+0x5d1/0x730 fs/btrfs/block-rsv.c:295
+Modules linked in:
+[...]
+RIP: 0010:btrfs_space_info_update_bytes_may_use
+  fs/btrfs/space-info.h:122 [inline]
+RIP: 0010:btrfs_space_info_free_bytes_may_use
+  fs/btrfs/space-info.h:154 [inline]
+RIP: 0010:block_rsv_release_bytes
+  fs/btrfs/block-rsv.c:151 [inline]
+RIP: 0010:btrfs_block_rsv_release+0x5d1/0x730
+  fs/btrfs/block-rsv.c:295
+[...]
+Call Trace:
+ <TASK>
+ btrfs_release_global_block_rsv+0x2f/0x250 fs/btrfs/block-rsv.c:463
+ btrfs_free_block_groups+0xb67/0xfd0 fs/btrfs/block-group.c:4053
+ close_ctree+0x6c5/0xbde fs/btrfs/disk-io.c:4710
+ generic_shutdown_super+0x130/0x310 fs/super.c:491
+ kill_anon_super+0x36/0x60 fs/super.c:1085
+ btrfs_kill_super+0x3d/0x50 fs/btrfs/super.c:2441
+ deactivate_locked_super+0xa7/0xf0 fs/super.c:331
+ cleanup_mnt+0x4ce/0x560 fs/namespace.c:1186
+ task_work_run+0x146/0x1c0 kernel/task_work.c:177
+ ptrace_notify+0x29a/0x340 kernel/signal.c:2354
+ ptrace_report_syscall include/linux/ptrace.h:420 [inline]
+ ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
+ syscall_exit_work+0x8c/0xe0 kernel/entry/common.c:249
+ syscall_exit_to_user_mode_prepare+0x63/0xc0 kernel/entry/common.c:276
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
+ syscall_exit_to_user_mode+0xa/0x60 kernel/entry/common.c:294
+ do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+ [...]
+ </TASK>
+=====================================
 
-On Thu, 29 Sep 2022 15:37:55 +0000
-"Luck, Tony" <tony.luck@intel.com> wrote:
+In btrfs_new_extent_direct(), kernel will reserves space for extent
+by btrfs_reserve_extent(), and frees those space by
+btrfs_free_reserved_extent() if btrfs_create_dio_extent() fails.
 
-> >> I have a revert removing the misery ready and tested, let me know if I
-> >> should submit it. =20
-> >
-> > I'm a bit of a late arrival to the split lock party, so I'm a bit
-> > hesitant to merge any changes immediately.
-> >
-> > How about we give it a few weeks and see if the current behavior impacts
-> > anyone else?  Maybe the best route will be more clear then. =20
->=20
-> Applying "misery" to the processes that are executing split-lock flows sa=
-ves
-> the rest of the system from a different level of misery (for the duration=
- of the
-> split lock other logical CPUs and I/O devices have access to memory block=
-ed).
->=20
-> So the "misery" serves a very useful purpose on multi-user systems.
+Yet the problem is that, it may not update the space
+info correctly. To be more specific, kernel will
+converts space from ->bytes_may_use to ->bytes_reserved, in
+btrfs_add_reserved_bytes() when reserving space.
+But when freeing those space in btrfs_free_reserved_bytes(),
+kernel does not convert space from ->bytes_reserved back to
+->bytes_may_use, which triggers the above warning.
 
-Hello Everyone,
-How about the following: The kernel traps the split-lock, but instead
-of punishing the process artificially it emulates it in a different way
-that won't harm the system as a whole. Of course this still will be
-slower than a non-split-lock but surely won't take 10ms.
+This patch solves it by converting space from ->bytes_reserved
+back to ->bytes_may_use in btrfs_free_reserved_bytes().
 
-For example, you could emulate the instruction without atomic semantics,
-but protected under a single global mutex for all split-lock operations
-instead. This is how atomics are done on on alpha AFAIK, which doesn't
-have atomic instructions.
+Link: https://lore.kernel.org/all/0000000000002a909705eb841dda@google.com
+Reported-by: syzbot+dde7e853812ed57835ea@syzkaller.appspotmail.com
+Tested-by: syzbot+dde7e853812ed57835ea@syzkaller.appspotmail.com
+Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+---
+ fs/btrfs/block-group.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-This is not as simple as the current solution. But I see the current
-solution more like a quick and dirty workaround for this security/DoS
-issue, until a proper solution (like my proposal) is implemented.
+diff --git a/fs/btrfs/block-group.c b/fs/btrfs/block-group.c
+index deebc8ddbd93..1b573ab5514b 100644
+--- a/fs/btrfs/block-group.c
++++ b/fs/btrfs/block-group.c
+@@ -3414,6 +3414,10 @@ void btrfs_free_reserved_bytes(struct btrfs_block_group *cache,
+ 	cache->reserved -= num_bytes;
+ 	space_info->bytes_reserved -= num_bytes;
+ 	space_info->max_extent_size = 0;
++	trace_btrfs_space_reservation(cache->fs_info, "space_info",
++				      space_info->flags, -num_bytes, 1);
++	btrfs_space_info_update_bytes_may_use(cache->fs_info,
++					      space_info, num_bytes);
+ 
+ 	if (delalloc)
+ 		cache->delalloc_bytes -= num_bytes;
+-- 
+2.25.1
 
-Regards,
-Lukas Straub
-
-> Maybe the decision of which mode to use could be dynamic based on
-> number of online CPUs? Laptops/desktops with low counts (<50???)
-> could just "warn", while servers could default to the "seq" mode.
->=20
-> Or perhaps there is some other heuristic to distinguish single-user
-> systems where the split-locks are not causing pain to other users?
->=20
-> -Tony
-
-
-
---=20
-
-
---Sig_/blTXMv.pM3CzC.J8IB+IlVC
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEg/qxWKDZuPtyYo+kNasLKJxdslgFAmNeopsACgkQNasLKJxd
-slgVpw/+PEzqpQPaoe28XCRiQz47VjeNxiB2Sr+O8ZSxC3wTk4SECW3TK0OwLF5H
-lKvw811pbJXjU08KjuHgyn34FsyfOBAvUE5Pi29CSCpnVxyOoLm1BS6JYxRT2Ypi
-ja98+O0+YuUZkOk6F/PGYBZPPzZXaCHsfA6kFhvWmC03tzCv/7/yFN9Ihe8rGBI6
-FdbsPZezh+MuinU/bJffTZQWIp6g46qv+Qj4RntFGy8efUkxDLWdjjy1ZdZu54vr
-X8pjhSw+f48WD52prMNpjdcLg7yqBbro+X5vb7qTTSIORxfwrf4RBNPWcIzLGbnJ
-4Eemp8Q/I0tfnNc1xEXlQHcvZazvlZ+k87JJzAXzYENOnf2voUMVXG4idKi1U1bo
-sPDubcoKMDhd3pQ9Ba0LttskRzfqb8qSqJzi2WxFnRvHMJJVW0rUI2W9+rI+3+KZ
-du9kOE9qwJ2djv+a+CYrsUMLj3i7U/KTo9QC4GVPR/kPSdY/G4D/J5JLdACiNlK6
-DwKfAk3VfdF/O5xCqwGT0iNSPAebicQH1PEixYsvhxTIXtCogaYWfQCIyduepUcV
-n2vklLTnnx0ctB0i8JJrR+QWoP5/3eRmqBt9B/kdGwAOn0Lv4HgxiXqbIBKiLHvw
-4S0WxEMEsirnxKHHDQy4o20adO5Sp+zyt6Sx3/V1HGvjgxMnGnI=
-=0ROh
------END PGP SIGNATURE-----
-
---Sig_/blTXMv.pM3CzC.J8IB+IlVC--
