@@ -2,96 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C56EE612C3B
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 19:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48255612C3C
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 19:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiJ3ScO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 14:32:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
+        id S229786AbiJ3SdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 14:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiJ3ScM (ORCPT
+        with ESMTP id S229556AbiJ3SdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 14:32:12 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70DC626C;
-        Sun, 30 Oct 2022 11:32:10 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4D19733A0B;
-        Sun, 30 Oct 2022 18:32:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1667154729; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ctx2ecB8mk87ajFyjy6myM7ABsa5iflpDws37hICbmU=;
-        b=uQmv86USpdad9Sm3bF7HJHqa2Y5dt6xoXsYoGiR2iFTVx5ZzD/V8BTW2zzyYQXTlevXSbL
-        NpMabeq3bokOrawR5vu9zvQHrdOxqyPZat+ewJjV+ai+y3/gD/P+nLApLoAqkB1JNnCHS+
-        WMh8cHmKr+2fR+p5Zv39lofeboQFGBE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CF61513A37;
-        Sun, 30 Oct 2022 18:32:08 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id rBHmLyjDXmPXdQAAMHmgww
-        (envelope-from <nborisov@suse.com>); Sun, 30 Oct 2022 18:32:08 +0000
-Message-ID: <4c92f908-f7e0-30d1-13a0-0230cc99f9ca@suse.com>
-Date:   Sun, 30 Oct 2022 20:32:08 +0200
+        Sun, 30 Oct 2022 14:33:09 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FDD626C
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 11:33:08 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id q5so5305317ilt.13
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 11:33:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
+        b=pGW6ajbhgaX9OPk/kkYQNCK+YHzDdaJHw80HNWBH7EQnj11o4Bcv+DuEL4tj/VEBb5
+         g8mwPJryXaQvlkiKDDchywe4I2FI8sIj8uEhPdxtvYiyKecBi3gCZtvCdQdyMGk01RL+
+         jJay2OXSDUG+8PhgXePkq77JPYUD4aD3cg8fZuZFtPILDmoonqN6KoEctgfWTejUWTt5
+         NRR5itY3FF1Mp3QT3G0tU8Ha1DlTO3CUYHifrTjL+1yI9D2mUxO0QqM0TRVH6mY1E2f/
+         q3XY4+/3eL93i4q7qBWnRa4G/X3a8vrlysc6jKIDY0bGYBuGnAnROCuqSmnDQYiYqsrJ
+         rW4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
+        b=Nu+rMwHgMK3s6IT1KoZCZdq7B26MJ3PeBbE9OAuOSkD/gVlcxogfUDxan2UaOd21+a
+         P7oDGyeCDRlqrN6/RPzGsdTw9uRQYfCNF5RRl+owrm5dBArYkEYUwxahkRoUyUNKu5FF
+         1CLzwgFEHsUraWJJyQZVPWg7DXpD0IFuPIED0u1MmFswKfEcZdhh2Jrd3CllS07Nedyw
+         Mh9whfdmo+0dRNGOT2XmO9j2+kLwSbGIC2k4FWy6m3fjtgY0dBqumO7Zm3K0XNnsKr0a
+         mFRsb1KOxWN0FCFhZrEtQDiHAWM2Nzys8VUmDPSt5lOKHqKCMLBbKaF7TCY8H1S56hte
+         AicQ==
+X-Gm-Message-State: ACrzQf0iwHSD82jqsS64wRmchVrj5HylTwOM9+K/iWM94+SxMNOLzEhv
+        boUbbVfHjzhgX7NMlsgz19EarMga67AJ2rwaaao=
+X-Google-Smtp-Source: AMsMyM4hf/jfcQATn9K9ecPTNNwucJEcAPfcAprisLkQjHtjbkGc+tY7A48hbrijiVl33HmgzWAXGqEx31ldypHY9I8=
+X-Received: by 2002:a05:6e02:156f:b0:2ff:775f:1efd with SMTP id
+ k15-20020a056e02156f00b002ff775f1efdmr5099550ilu.140.1667154787818; Sun, 30
+ Oct 2022 11:33:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] btrfs: Fix a memory allocation failure test
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-References: <34dff6b621770b1f8078ce6c715b61c5908e1ad1.1667115312.git.christophe.jaillet@wanadoo.fr>
-Content-Language: en-US
-From:   Nikolay Borisov <nborisov@suse.com>
-In-Reply-To: <34dff6b621770b1f8078ce6c715b61c5908e1ad1.1667115312.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6638:16d0:b0:363:fd0d:12d0 with HTTP; Sun, 30 Oct 2022
+ 11:33:07 -0700 (PDT)
+Reply-To: davidnelson7702626@gmail.com
+From:   Zekeriya Badou <zekeriyabadou@gmail.com>
+Date:   Sun, 30 Oct 2022 18:33:07 +0000
+Message-ID: <CAKgROLBYedV3=EMg7C0LO7h7-sg1r2wQDCHPtK-Dk69Ss4kO5g@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 30.10.22 г. 9:35 ч., Christophe JAILLET wrote:
-> 'dip' is tested instead of 'dip->csums'.
-> Fix it.
-> 
-> Fixes: 642c5d34da53 ("btrfs: allocate the btrfs_dio_private as part of the iomap dio bio")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-
-
-Reviewed-by: Nikolay Borisov <nborisov@suse.com>
-
-> ---
->   fs/btrfs/inode.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
-> index 966cc050cdbb..3bbd2dc6282f 100644
-> --- a/fs/btrfs/inode.c
-> +++ b/fs/btrfs/inode.c
-> @@ -8078,7 +8078,7 @@ static void btrfs_submit_direct(const struct iomap_iter *iter,
->   		 */
->   		status = BLK_STS_RESOURCE;
->   		dip->csums = kcalloc(nr_sectors, fs_info->csum_size, GFP_NOFS);
-> -		if (!dip)
-> +		if (!dip->csums)
->   			goto out_err;
->   
->   		status = btrfs_lookup_bio_sums(inode, dio_bio, dip->csums);
+Hello friend, I want to send money to you to enable me invest in your
+country get back to me if you are interested.
