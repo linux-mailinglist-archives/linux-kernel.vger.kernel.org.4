@@ -2,36 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663AD612B9A
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 17:23:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C233612B9D
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 17:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbiJ3QXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 12:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
+        id S229730AbiJ3Q2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 12:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ3QXV (ORCPT
+        with ESMTP id S229717AbiJ3Q2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 12:23:21 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 57F8018B
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 09:23:20 -0700 (PDT)
-Received: (qmail 162170 invoked by uid 1000); 30 Oct 2022 12:23:19 -0400
-Date:   Sun, 30 Oct 2022 12:23:19 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Eli Billauer <eli.billauer@gmail.com>
-Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        imv4bel@gmail.com
-Subject: Re: [PATCH v2] char: xillybus: Prevent use-after-free due to race
- condition
-Message-ID: <Y16k90Lk2fehKqRC@rowland.harvard.edu>
-References: <20221030094209.65916-1-eli.billauer@gmail.com>
+        Sun, 30 Oct 2022 12:28:01 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C14A462
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 09:27:59 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id m125so11340193ybb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 09:27:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Taekh8DQ0sOTqLRWjEVp1m61gFbcRkYBqONksbgx4xM=;
+        b=o7BTw98wk4RZwft0ChqZGwfvgFu89g4bZWtCYyFsxfXGfZU9ecSL3jRZS+00VeTkM6
+         t/VFRLCX7e75Q0bVXeawPtT0pyKPpBk/FYL1rz4LARJ6xN+9essU9ValA+oPJmWfmVHd
+         9mDoG3j9S+3ACO+WnZQmQusp/LGAjKwZRRPm2SX0InmUFNsc8eC6GaNzIq/GtYm8B0DN
+         DMtPQsopS0umSXGzqkoomaY1HQY99RCgN9Mymco9n44eaPv7RoIYbA6c9eWC93yWraSj
+         yHj0bzfba7ReoXoN9hN3EFSiGUyJfDSPdIRxLpCshT0PEjSSm9RxJtU3w0Gi8Hp2Myg7
+         toVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Taekh8DQ0sOTqLRWjEVp1m61gFbcRkYBqONksbgx4xM=;
+        b=7Nt3x0e7S56hIAzUNiA7RG5gD77cibTcKoLcEY2J9Xcoa54MBivNUhrybnizw84184
+         k2cBRrbQqYM+gWaqLewbs/JdZRZ0sGmIkOv0Dc36/Eeg/25FwqFH7KaglbMUaWEn1Iq1
+         1T6SiQzRViLUZXazFrCTUWy+0nM/iZmZBAs6qh/YZoTiHk7Ps865R7OHJoGVNMZGcpeD
+         U2thqO3VEoMRM6SPGVWgVVwBkPfTB+h5ZzIwOKYzoZnG1vN7pa6fjlkyMqtlm3s3x0/P
+         Jz453zAlReUxkbdQd7AIU2ryvtky3vrIQGwpP5wRwyS7VvqfjD47l4q55/+Ix3UfMiRT
+         hDzg==
+X-Gm-Message-State: ACrzQf3AAajsRDgoGcR2R6flIRqvQPn4/Qbfq+LRi90PckCtO/Mv5xUX
+        zVjRtT+zDpkNxSPvnffe6sXL0XW4/P5ScoiB22Wkrg==
+X-Google-Smtp-Source: AMsMyM6NUj1XbroRHuY5inYKWnwZYkRsEWb+4pmv5PykHpqYqlGAlxMewZCj2kfgVVbN0xO2TCnYvEv3JJc4JrjFrgE=
+X-Received: by 2002:a25:d64e:0:b0:6cb:7faa:af94 with SMTP id
+ n75-20020a25d64e000000b006cb7faaaf94mr9004777ybg.36.1667147278214; Sun, 30
+ Oct 2022 09:27:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221030094209.65916-1-eli.billauer@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+References: <CAO4mrfdifWvUdi7s30yHsbZkavjLuKF_=snSXUo_DtPX9ONjKQ@mail.gmail.com>
+In-Reply-To: <CAO4mrfdifWvUdi7s30yHsbZkavjLuKF_=snSXUo_DtPX9ONjKQ@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Sun, 30 Oct 2022 09:27:46 -0700
+Message-ID: <CANn89iLtpGkrujoxNVttRYWwq_QiUZAi2XmCLMRJruq1k1BALA@mail.gmail.com>
+Subject: Re: BUG: unable to handle kernel paging request in tcp_retransmit_timer
+To:     Wei Chen <harperchen1110@gmail.com>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -39,53 +72,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 11:42:09AM +0200, Eli Billauer wrote:
-> The driver for XillyUSB devices maintains a kref reference count on each
-> xillyusb_dev structure, which represents a physical device. This reference
-> count reaches zero when the device has been disconnected and there are no
-> open file descriptors that are related to the device. When this occurs,
-> kref_put() calls cleanup_dev(), which clears up the device's data,
-> including the structure itself.
-> 
-> However, when xillyusb_open() is called, this reference count becomes
-> tricky: This function needs to obtain the xillyusb_dev structure that
-> relates to the inode's major and minor (as there can be several such).
-> xillybus_find_inode() (which is defined in xillybus_class.c) is called
-> for this purpose. xillybus_find_inode() holds a mutex that is global in
-> xillybus_class.c to protect the list of devices, and releases this
-> mutex before returning. As a result, nothing protects the xillyusb_dev's
-> reference counter from being decremented to zero before xillyusb_open()
-> increments it on its own behalf. Hence the structure can be freed
-> due to a rare race condition.
-> 
-> To solve this, a mutex is added. It is locked by xillyusb_open() before
-> the call to xillybus_find_inode() and is released only after the kref
-> counter has been incremented on behalf of the newly opened inode. This
-> protects the kref reference counters of all xillyusb_dev structs from
-> being decremented by xillyusb_disconnect() during this time segment, as
-> the call to kref_put() in this function is done with the same lock held.
-> 
-> There is no need to hold the lock on other calls to kref_put(), because
-> if xillybus_find_inode() finds a struct, xillyusb_disconnect() has not
-> made the call to remove it, and hence not made its call to kref_put(),
-> which takes place afterwards. Hence preventing xillyusb_disconnect's
-> call to kref_put() is enough to ensure that the reference doesn't reach
-> zero before it's incremented by xillyusb_open().
-> 
-> It would have been more natural to increment the reference count in
-> xillybus_find_inode() of course, however this function is also called by
-> Xillybus' driver for PCIe / OF, which registers a completely different
-> structure. Therefore, xillybus_find_inode() treats these structures as
-> void pointers, and accordingly can't make any changes.
-> 
-> Reported-by: Hyunwoo Kim <imv4bel@gmail.com>
-> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
+On Sun, Oct 30, 2022 at 2:28 AM Wei Chen <harperchen1110@gmail.com> wrote:
+>
+> Dear Linux Developer,
+>
+> Recently when using our tool to fuzz kernel, the following crash was triggered:
+>
+> HEAD commit: 64570fbc14f8 Linux 5.15-rc5
 
-It looks like the xillybus driver already has a private mutex that would 
-have been very well suited for this task: unit_mutex defined in 
-xillybus_class.c.  Of course, there's nothing wrong with using a new 
-mutex instead -- just make sure there aren't any ABBA locking order 
-problems.
+This is a quite old kernel. Please do not send reports on old rc kernels.
 
-Alan Stern
+> git tree: upstream
+> compiler: gcc 8.0.1
+> console output:
+> https://drive.google.com/file/d/1wVTAdDoOo8KqTaGm1v8SaKuv1V8Pt9qs/view?usp=share_link
+> kernel config: https://drive.google.com/file/d/1uDOeEYgJDcLiSOrx9W8v2bqZ6uOA_55t/view?usp=share_link
+>
+> Unfortunately, I don't have any reproducer for this crash yet.
+
+We already have syzbot reports like this one.
+
+The important missing part is a reproducer, really.
+
+See recent work that has been done recently in order to find the root
+cause for these issue(s) in net-next.
+
+0cafd77dcd03 net: add a refcount tracker for kernel sockets
+d1e96cc4fbe0 mptcp: fix tracking issue in mptcp_subflow_create_socket()
+
+Make sure to use a recent tree, if you really want your fuzzer to
+participate in the effort.
+Also enable:
+
+CONFIG_NET_DEV_REFCNT_TRACKER=y
+
+
+Thanks.
+
+>
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: Wei Chen <harperchen1110@gmail.com>
+>
+> BUG: unable to handle page fault for address: ffffe8ff3fa5f268
+> #PF: supervisor write access in kernel mode
+> #PF: error_code(0x0002) - not-present page
+> PGD 983f067 P4D 983f067 PUD afce067 PMD 4e244067 PTE 0
+> Oops: 0002 [#1] PREEMPT SMP
+> CPU: 0 PID: 6544 Comm: syz-fuzzer Not tainted 5.15.0-rc5 #1
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+> rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+> RIP: 0010:tcp_retransmit_timer+0x4c5/0x1540
+> Code: 31 e7 ff ff e9 65 fd ff ff e8 b7 75 3c fd 48 c7 c7 26 1c ee 85
+> e8 8b fa bc 00 48 8b 43 30 bf 1f 00 00 00 48 8b 80 58 02 00 00 <65> 48
+> ff 80 40 01 00 00 44 0f b6 73 12 48 8b 43 30 44 89 f6 48 89
+> RSP: 0000:ffffc90000807cc0 EFLAGS: 00010202
+> RAX: 0000607ec1e5f128 RBX: ffff8880156c0000 RCX: ffff888011480000
+> RDX: 0000000000000000 RSI: 0000000000000101 RDI: 000000000000001f
+> RBP: ffff8880156c0120 R08: ffffffff8400fda9 R09: 0000000000000000
+> R10: 0000000000000005 R11: 0000000080000001 R12: 0000000080000001
+> R13: ffff88810cd1b280 R14: ffff888029b5f400 R15: ffff8880156c0278
+> FS:  000000c000030c90(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffe8ff3fa5f268 CR3: 0000000015c0b000 CR4: 00000000003506f0
+> Call Trace:
+>  tcp_write_timer_handler+0x132/0x420
+>  tcp_write_timer+0x179/0x230
+>  call_timer_fn+0xe8/0x510
+>  run_timer_softirq+0x423/0xa40
+>  __do_softirq+0xe2/0x56b
+>  irq_exit_rcu+0xb6/0xf0
+>  sysvec_apic_timer_interrupt+0x52/0xc0
+>  asm_sysvec_apic_timer_interrupt+0x12/0x20
+> RIP: 0033:0x415543
+> Code: 48 8b 1d a0 e8 76 01 84 03 48 8b 14 d3 48 85 d2 74 1d 48 89 c3
+> 48 c1 e8 0d 48 25 ff 1f 00 00 48 8b 8c c2 00 00 20 00 48 89 d8 <e9> 6c
+> fe ff ff 31 c9 e9 65 fe ff ff cc cc cc cc cc cc cc cc cc cc
+> RSP: 002b:000000c00003de70 EFLAGS: 00000202
+> RAX: 000000c004cc8600 RBX: 000000c004cc8600 RCX: 00007f27b2e23400
+> RDX: 00007f27b2e3b000 RSI: 0000000000000001 RDI: 00000000000dcf40
+> RBP: 000000c00003de98 R08: 00007f27b303afff R09: 000000c004beb6c0
+> R10: 000000c000021e98 R11: 0000000000000008 R12: 000000c004cc8600
+> R13: 000000c000001200 R14: 0000000000c4de75 R15: 0000000000000000
+> Modules linked in:
+> CR2: ffffe8ff3fa5f268
+> ---[ end trace 8795388675688c1b ]---
+> RIP: 0010:tcp_retransmit_timer+0x4c5/0x1540
+> Code: 31 e7 ff ff e9 65 fd ff ff e8 b7 75 3c fd 48 c7 c7 26 1c ee 85
+> e8 8b fa bc 00 48 8b 43 30 bf 1f 00 00 00 48 8b 80 58 02 00 00 <65> 48
+> ff 80 40 01 00 00 44 0f b6 73 12 48 8b 43 30 44 89 f6 48 89
+> RSP: 0000:ffffc90000807cc0 EFLAGS: 00010202
+> RAX: 0000607ec1e5f128 RBX: ffff8880156c0000 RCX: ffff888011480000
+> RDX: 0000000000000000 RSI: 0000000000000101 RDI: 000000000000001f
+> RBP: ffff8880156c0120 R08: ffffffff8400fda9 R09: 0000000000000000
+> R10: 0000000000000005 R11: 0000000080000001 R12: 0000000080000001
+> R13: ffff88810cd1b280 R14: ffff888029b5f400 R15: ffff8880156c0278
+> FS:  000000c000030c90(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffe8ff3fa5f268 CR3: 0000000015c0b000 CR4: 00000000003506f0
+> ----------------
+> Code disassembly (best guess), 4 bytes skipped:
+>    0: e9 65 fd ff ff        jmpq   0xfffffd6a
+>    5: e8 b7 75 3c fd        callq  0xfd3c75c1
+>    a: 48 c7 c7 26 1c ee 85 mov    $0xffffffff85ee1c26,%rdi
+>   11: e8 8b fa bc 00        callq  0xbcfaa1
+>   16: 48 8b 43 30          mov    0x30(%rbx),%rax
+>   1a: bf 1f 00 00 00        mov    $0x1f,%edi
+>   1f: 48 8b 80 58 02 00 00 mov    0x258(%rax),%rax
+> * 26: 65 48 ff 80 40 01 00 incq   %gs:0x140(%rax) <-- trapping instruction
+>   2d: 00
+>   2e: 44 0f b6 73 12        movzbl 0x12(%rbx),%r14d
+>   33: 48 8b 43 30          mov    0x30(%rbx),%rax
+>   37: 44 89 f6              mov    %r14d,%esi
+>   3a: 48                    rex.W
+>   3b: 89                    .byte 0x89
+>
+> Best,
+> Wei
