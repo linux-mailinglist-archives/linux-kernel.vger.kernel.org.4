@@ -2,89 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD34612AF8
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 15:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 805AF612AFE
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 15:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiJ3OZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 10:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
+        id S229730AbiJ3O2t convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 30 Oct 2022 10:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ3OZt (ORCPT
+        with ESMTP id S229549AbiJ3O2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 10:25:49 -0400
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4FAB4BB;
-        Sun, 30 Oct 2022 07:25:48 -0700 (PDT)
-Received: by mail-pj1-f43.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so3925116pjk.1;
-        Sun, 30 Oct 2022 07:25:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DlUsVXBEKnWSmUCDw//iMFATDePe/mdqp+ek5UTPNEE=;
-        b=hJdbgh6ctGN7mp4ogK32sS4uj4giZxKXtTs+ml1N754c2VXP8Z7MjapNLnkRwurkOl
-         o6J969hNgjTxKsYDDnQtKJNV/VsXXkriB+3H/bH0V7HGJBMtVaHLGFTswhp2qyZOAUJk
-         RDNtkWBJWVP0EgsnGCxem9ix+9kwgMgSjU/L/N5pYe8+ia06MqTWASuAe8Yrm3wwSUdO
-         AFUAacH2ThNWf7z+v8lI/xnhYOutwnrFmjvVNnWvbIbdiHbDgDZWq7WL/Bu8GWDR5Aqi
-         tjWSKR7uCviZlE6YaWSEFZagc3ckuiTSOL3jo06Lvd/nlqsv7JVtm9U5z8XNKUpj7Upi
-         5kxA==
-X-Gm-Message-State: ACrzQf1YxAj4fmHnioYhraNxmI87XgCrCrzkQDZAjcdLYJpv7pa1UTYl
-        gtd6kCEzu4Sxqn6B2ZnAM4XAhr1Bojo=
-X-Google-Smtp-Source: AMsMyM6kbsZX1AjQpVrp9L1PHMcJdfj4whBoZlmlCsbKzzpmVhCS34FDVE6CLk69TeseCfE6bfZMzw==
-X-Received: by 2002:a17:90a:6d22:b0:213:7e1e:9be0 with SMTP id z31-20020a17090a6d2200b002137e1e9be0mr9805926pjj.17.1667139948115;
-        Sun, 30 Oct 2022 07:25:48 -0700 (PDT)
-Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id s4-20020a170903214400b00177e5d83d3esm2789734ple.88.2022.10.30.07.25.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Oct 2022 07:25:47 -0700 (PDT)
-Message-ID: <9a758d91-42c5-d6b3-ddde-9c2b89d741a6@acm.org>
-Date:   Sun, 30 Oct 2022 07:25:45 -0700
+        Sun, 30 Oct 2022 10:28:47 -0400
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773EC211
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 07:28:46 -0700 (PDT)
+Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay03.hostedemail.com (Postfix) with ESMTP id 07927A04BD;
+        Sun, 30 Oct 2022 14:28:44 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf15.hostedemail.com (Postfix) with ESMTPA id 22ADE18;
+        Sun, 30 Oct 2022 14:28:24 +0000 (UTC)
+Message-ID: <b96575df57afd5f598b124c540063b698af10706.camel@perches.com>
+Subject: Re: [PATCH 2/2] staging: r8188eu: remove get_da
+From:   Joe Perches <joe@perches.com>
+To:     Martin Kaiser <martin@kaiser.cx>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Date:   Sun, 30 Oct 2022 07:28:41 -0700
+In-Reply-To: <20221029171011.1572091-3-martin@kaiser.cx>
+References: <20221029171011.1572091-1-martin@kaiser.cx>
+         <20221029171011.1572091-3-martin@kaiser.cx>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 1/3] blk-mq: remove redundant call to
- blk_freeze_queue_start in blk_mq_destroy_queue
-Content-Language: en-US
-To:     Jinlong Chen <nickyc975@zju.edu.cn>
-Cc:     axboe@kernel.dk, kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org
-References: <cover.1667035519.git.nickyc975@zju.edu.cn>
- <ebd3a47a1ebf4ab518c985cdbaa1ac3afd6dfb9f.1667035519.git.nickyc975@zju.edu.cn>
- <adaea16a-c7cd-5d68-50c8-d56de851061a@acm.org>
- <42681e4e.15223d.18426b71124.Coremail.nickyc975@zju.edu.cn>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <42681e4e.15223d.18426b71124.Coremail.nickyc975@zju.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Stat-Signature: uxh9eifab6njfoysu3ntwaouysfb6fcw
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: 22ADE18
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19tf9x7p6jWCbqsmvZ3+oLcIrpPI3DRclo=
+X-HE-Tag: 1667140104-145811
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/29/22 19:27, Jinlong Chen wrote:
->> I think this patch introduces a hang for every caller of
->> blk_mq_destroy_queue() other than blk_queue_start_drain().
- >> I don't see why the patch introduces a hang. The calling relationship in
-> blk_mq_destroy_queue is as follows: [ ... ]
+On Sat, 2022-10-29 at 19:10 +0200, Martin Kaiser wrote:
+> Replace the last get_da call with ieee80211_get_DA and remove the get_da
+> function.
+[]
+> diff --git a/drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c b/drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c
+[]
+> @@ -125,7 +126,7 @@ void update_recvframe_phyinfo_88e(struct recv_frame *precvframe, struct phy_stat
+>  		 get_bssid(&padapter->mlmepriv), ETH_ALEN));
+>  
+>  	pkt_info.bPacketToSelf = pkt_info.bPacketMatchBSSID &&
+> -				 (!memcmp(get_da(wlanhdr),
+> +				 (!memcmp(ieee80211_get_DA(hdr),
+>  				  myid(&padapter->eeprompriv), ETH_ALEN));
 
-Agreed - what I wrote is wrong.
+trivia:
 
-> So I think there is a redundant call to blk_freeze_queue_start(), we
-> just need to call blk_mq_freeze_queue_wait() after calling
-> blk_queue_start_drain().
+As both of the addresses returned are minimum __aligned(2),
+these memcmp uses could be ether_addr_equal
 
-I think it is on purpose that blk_queue_start_drain() freezes the 
-request queue and never unfreezes it. So if you want to change this 
-behavior it's up to you to motivate why you want to change this behavior 
-and also why it is safe to make that change. See also commit 
-d3cfb2a0ac0b ("block: block new I/O just after queue is set as dying").
+Look for ETH_ALEN
 
-Bart.
+$ git grep ETH_ALEN drivers/staging/r8188eu/
+
+Perhaps see if the memcpy/memcmp uses with ETH_ALEN could be
+converted to ether_addr_copy/ether_addr_equal or any of the
+other is_<foo>_ether_addr calls.
 
