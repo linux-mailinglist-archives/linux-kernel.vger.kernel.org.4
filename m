@@ -2,77 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4876126E1
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 03:29:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 729E76126E6
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 03:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbiJ3C1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 22:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
+        id S229637AbiJ3CjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 22:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ3C1i (ORCPT
+        with ESMTP id S229441AbiJ3CjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 22:27:38 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 595D527FC5;
-        Sat, 29 Oct 2022 19:27:35 -0700 (PDT)
-Received: by ajax-webmail-mail-app4 (Coremail) ; Sun, 30 Oct 2022 10:27:22
- +0800 (GMT+08:00)
-X-Originating-IP: [10.192.32.139]
-Date:   Sun, 30 Oct 2022 10:27:22 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "Jinlong Chen" <nickyc975@zju.edu.cn>
-To:     "Bart Van Assche" <bvanassche@acm.org>
-Cc:     axboe@kernel.dk, kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org
-Subject: Re: Re: [PATCH 1/3] blk-mq: remove redundant call to
- blk_freeze_queue_start in blk_mq_destroy_queue
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <adaea16a-c7cd-5d68-50c8-d56de851061a@acm.org>
-References: <cover.1667035519.git.nickyc975@zju.edu.cn>
- <ebd3a47a1ebf4ab518c985cdbaa1ac3afd6dfb9f.1667035519.git.nickyc975@zju.edu.cn>
- <adaea16a-c7cd-5d68-50c8-d56de851061a@acm.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Sat, 29 Oct 2022 22:39:12 -0400
+Received: from mail1.bemta34.messagelabs.com (mail1.bemta34.messagelabs.com [195.245.231.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC518220F7;
+        Sat, 29 Oct 2022 19:39:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1667097548; i=@fujitsu.com;
+        bh=YgG1PZAVbKu6K2xzo+W0VZeVRADlnniPu6NuKMHtYX0=;
+        h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=IIsAygRVI7hvUSFfS0OEO3p++1t11n4OQRAP2xOorwg578qU7MwbRJkr1B4x+4WUD
+         MSrNI2/e1e3P572QZO2hnrxsU+lA94yLVV8PHg91efZ+flPFpVYPfkPOASBCiIfF/C
+         qcMiydNdFOwy4HBzv+Ci8lLR+p2E5O5/b6tSu9TedzExiMAGCWFfXH9BSAdMqQ3qlo
+         X3DTejWK2lBWQoruQa7IV3UDwq+5DTTt5Z+Fauv0MPgAUTS/kntv/a6xTiGvBDgM6H
+         oMTlvmk1clPy6kHQpSaDE1igpKOcHUSMdOLKoGI9WtCfVm+zIB+TzRNPYMSWwo0bTP
+         IkYIkjYDxcjcw==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMIsWRWlGSWpSXmKPExsViZ8ORpHv6cWy
+  ywZGjihYzZ5xgtJjyaymzxeVdc9gsnh3qZbH4MnUas8X5Y/3sDmweO2fdZffYtKqTzePzJjmP
+  rZ9vswSwRLFm5iXlVySwZvyY2MVScESyonnpK7YGxr1iXYxcHEICGxklft1bxdbFyAnkLGGSW
+  NqqDZE4wChx98pFdpAEm4CGxL2Wm4wgtohAjMS/Y7/AbGaBPIk9j9tYQGxhAWuJn9umMIHYLA
+  KqEn9ONrN2MXJw8Ao4SnQsrwMJSwgoSEx5+J4ZxOYVEJQ4OfMJC8QYCYmDL14wg5RLCChJzOy
+  OhyivkJg1q40JwlaTuHpuE/MERv5ZSLpnIelewMi0itGsOLWoLLVI19BAL6koMz2jJDcxM0cv
+  sUo3US+1VLc8tbhE10gvsbxYL7W4WK+4Mjc5J0UvL7VkEyMwrFOKVfp2ML5d9kfvEKMkB5OSK
+  G9mZ2yyEF9SfkplRmJxRnxRaU5q8SFGGQ4OJQnew/eBcoJFqempFWmZOcAYg0lLcPAoifBGHw
+  NK8xYXJOYWZ6ZDpE4xKkqJ86aA9AmAJDJK8+DaYHF9iVFWSpiXkYGBQYinILUoN7MEVf4Vozg
+  Ho5Iw7+nbQFN4MvNK4Ka/AlrMBLQ4fVIUyOKSRISUVAOTQWZsDN+CX280TFIWs9vVGlm0Lltc
+  /ubUq1cHpT5NnFm1d2fNk1+ty0SuKDzw6JXdX3vBSVtt8h5Zzxi1jGapR8XVUWYxxWoHvT8+N
+  mNbOFWOf2+484z1gus+72sQivp+8ueBnjxX5yfvok5JbFrXInS2+drVuHZTyTdbGndFuSqGn9
+  99PCAjr/3lJ4/TsZNZS20Or09OsOifOWE5U8DbZzLcci1vf/insSjbG2dvXXJj6WO2b5OWHPH
+  3tXBwPT3tk8LU/P0LfiUrLp72Zo79QaO0z//2tASu9Lc0OlNSnWGTotOjLfhq/pbVt+oXhKkH
+  sp/iO/syIKLhWNJXPqeCRanrJGdmbytsm/Lmw6vpSizFGYmGWsxFxYkAh4gE0WYDAAA=
+X-Env-Sender: lizhijian@fujitsu.com
+X-Msg-Ref: server-22.tower-571.messagelabs.com!1667097547!191907!1
+X-Originating-IP: [62.60.8.98]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.100.1; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 2311 invoked from network); 30 Oct 2022 02:39:07 -0000
+Received: from unknown (HELO n03ukasimr03.n03.fujitsu.local) (62.60.8.98)
+  by server-22.tower-571.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 30 Oct 2022 02:39:07 -0000
+Received: from n03ukasimr03.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr03.n03.fujitsu.local (Postfix) with ESMTP id 3F00D1B5;
+        Sun, 30 Oct 2022 02:39:07 +0000 (GMT)
+Received: from R01UKEXCASM126.r01.fujitsu.local (R01UKEXCASM126 [10.183.43.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by n03ukasimr03.n03.fujitsu.local (Postfix) with ESMTPS id 337C51B4;
+        Sun, 30 Oct 2022 02:39:07 +0000 (GMT)
+Received: from 2c82d4b9897f.localdomain (10.167.225.141) by
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.32; Sun, 30 Oct 2022 02:39:04 +0000
+From:   Li Zhijian <lizhijian@fujitsu.com>
+To:     <zyjzyj2000@gmail.com>, <jgg@ziepe.ca>, <leon@kernel.org>,
+        <linux-rdma@vger.kernel.org>
+CC:     Bob Pearson <rpearsonhpe@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        "Li Zhijian" <lizhijian@fujitsu.com>
+Subject: [PATCH for-next] RDMA/rxe: Fix mr->map double free
+Date:   Sun, 30 Oct 2022 02:38:45 +0000
+Message-ID: <1667097525-2-1-git-send-email-lizhijian@fujitsu.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Message-ID: <42681e4e.15223d.18426b71124.Coremail.nickyc975@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgBXXP0K4V1j+p2eBw--.49366W
-X-CM-SenderInfo: qssqjiaqqzq6lmxovvfxof0/1tbiAggTB1ZdtcKM4AAAsO
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.167.225.141]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178)
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGksIEJhcnQuCgo+ID4gQ2FsbGluZyBibGtfZnJlZXplX3F1ZXVlIHJlc3VsdHMgaW4gYSByZWR1
-bmRhbnQgY2FsbCB0bwo+ID4gYmxrX2ZyZWV6ZV9xdWV1ZV9zdGFydCBhcyBpdCBoYXMgYmVlbiBj
-YWxsZWQgaW4gYmxrX3F1ZXVlX3N0YXJ0X2RyYWluLgo+ID4gCj4gPiBSZXBsYWNlIGJsa19mcmVl
-emVfcXVldWUgd2l0aCBibGtfbXFfZnJlZXplX3F1ZXVlX3dhaXQgdG8gYXZvaWQgdGhlCj4gPiBy
-ZWR1bmRhbnQgY2FsbC4KPiAKPiBibGtfbXFfZGVzdHJveV9xdWV1ZSgpIGhhcyBtb3JlIGNhbGxl
-cnMgdGhhbiBibGtfcXVldWVfc3RhcnRfZHJhaW4oKSBzbyAKPiB0aGUgYWJvdmUgZGVzY3JpcHRp
-b24gaXMgYXQgbGVhc3QgbWlzbGVhZGluZy4KPiAKPiBBZGRpdGlvbmFsbHksIHRoZSB3b3JkICJj
-bGVhbnVwIiBmcm9tIHRoZSBwYXRjaCBzZXJpZXMgdGl0bGUgaW5kaWNhdGVzIAo+IHRoYXQgbm8g
-cGF0Y2ggaW4gdGhpcyBzZXJpZXMgY2hhbmdlcyB0aGUgYmVoYXZpb3Igb2YgdGhlIGNvZGUuIFRo
-aXMgCj4gcGF0Y2ggaW52b2x2ZXMgYSBiZWhhdmlvciBjaGFuZ2UuCgpTb3JyeSBmb3IgbXkgcG9v
-ciBkZXNjcmlwdGlvbi4gSSdsbCBzZW5kIGEgbmV3IHNlcmllcyB3aXRoIHRoZXNlCmRlc2NyaXB0
-aW9uIHByb2JsZW1zIHJlc29sdmVkLgoKPiBJIHRoaW5rIHRoaXMgcGF0Y2ggaW50cm9kdWNlcyBh
-IGhhbmcgZm9yIGV2ZXJ5IGNhbGxlciBvZiAKPiBibGtfbXFfZGVzdHJveV9xdWV1ZSgpIG90aGVy
-IHRoYW4gYmxrX3F1ZXVlX3N0YXJ0X2RyYWluKCkuCj4gCj4gQmFydC4KCkkgZG9uJ3Qgc2VlIHdo
-eSB0aGUgcGF0Y2ggaW50cm9kdWNlcyBhIGhhbmcuIFRoZSBjYWxsaW5nIHJlbGF0aW9uc2hpcCBp
-bgpibGtfbXFfZGVzdHJveV9xdWV1ZSBpcyBhcyBmb2xsb3dzOgoKYmxrX21xX2Rlc3Ryb3lfcXVl
-dWUoKQogICAgLi4uCiAgICAtPiBibGtfcXVldWVfc3RhcnRfZHJhaW4oKQogICAgICAgIC0+IGJs
-a19mcmVlemVfcXVldWVfc3RhcnQoKSAgPC0gY2FsbGVkCiAgICAgICAgLi4uCiAgICAtPiBibGtf
-ZnJlZXplX3F1ZXVlKCkKICAgICAgICAtPiBibGtfZnJlZXplX3F1ZXVlX3N0YXJ0KCkgIDwtIGNh
-bGxlZCBhZ2FpbgogICAgICAgIC0+IGJsa19tcV9mcmVlemVfcXVldWVfd2FpdCgpCiAgICAuLi4K
-ClNvIEkgdGhpbmsgdGhlcmUgaXMgYSByZWR1bmRhbnQgY2FsbCB0byBibGtfZnJlZXplX3F1ZXVl
-X3N0YXJ0KCksIHdlCmp1c3QgbmVlZCB0byBjYWxsIGJsa19tcV9mcmVlemVfcXVldWVfd2FpdCgp
-IGFmdGVyIGNhbGxpbmcKYmxrX3F1ZXVlX3N0YXJ0X2RyYWluKCkuCgpUaGFua3MhCkppbmxvbmcg
-Q2hlbgoK
+rxe_mr_cleanup() which tries to free mr->map again will be called
+when rxe_mr_init_user() fails.
+
+[43895.939883] CPU: 0 PID: 4917 Comm: rdma_flush_serv Kdump: loaded Not tainted 6.1.0-rc1-roce-flush+ #25
+[43895.942341] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+[43895.945208] Call Trace:
+[43895.946130]  <TASK>
+[43895.946931]  dump_stack_lvl+0x45/0x5d
+[43895.948049]  panic+0x19e/0x349
+[43895.949010]  ? panic_print_sys_info.part.0+0x77/0x77
+[43895.950356]  ? asm_sysvec_apic_timer_interrupt+0x16/0x20
+[43895.952589]  ? preempt_count_sub+0x14/0xc0
+[43895.953809]  end_report.part.0+0x54/0x7c
+[43895.954993]  ? rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
+[43895.956406]  kasan_report.cold+0xa/0xf
+[43895.957668]  ? rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
+[43895.959090]  rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
+[43895.960502]  __rxe_cleanup+0x10a/0x1e0 [rdma_rxe]
+[43895.961983]  rxe_reg_user_mr+0xb7/0xd0 [rdma_rxe]
+[43895.963456]  ib_uverbs_reg_mr+0x26a/0x480 [ib_uverbs]
+[43895.964921]  ? __lock_acquire+0x876/0x31e0
+[43895.966182]  ? ib_uverbs_ex_create_wq+0x630/0x630 [ib_uverbs]
+[43895.967739]  ? uverbs_fill_udata+0x1c6/0x330 [ib_uverbs]
+[43895.969204]  ib_uverbs_handler_UVERBS_METHOD_INVOKE_WRITE+0x1a2/0x250 [ib_uverbs]
+[43895.971126]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
+[43895.973094]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
+[43895.975096]  ? uverbs_fill_udata+0x25f/0x330 [ib_uverbs]
+[43895.976466]  ib_uverbs_cmd_verbs+0x1397/0x15a0 [ib_uverbs]
+[43895.977930]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
+[43895.979937]  ? uverbs_fill_udata+0x330/0x330 [ib_uverbs]
+
+This issue was fistrly exposed since
+commit: b18c7da63fcb ("RDMA/rxe: Fix memory leak in error path code")
+and then we fixed it in
+commit: 8ff5f5d9d8cf ("RDMA/rxe: Prevent double freeing rxe_map_set()")
+but this fix was reverted together at last by
+commit: 1e75550648da (Revert "RDMA/rxe: Create duplicate mapping tables for FMRs")
+
+Fixes: 1e75550648da (Revert "RDMA/rxe: Create duplicate mapping tables for FMRs")
+Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+---
+ drivers/infiniband/sw/rxe/rxe_mr.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c b/drivers/infiniband/sw/rxe/rxe_mr.c
+index d4f10c2d1aa7..baa9d3be178a 100644
+--- a/drivers/infiniband/sw/rxe/rxe_mr.c
++++ b/drivers/infiniband/sw/rxe/rxe_mr.c
+@@ -99,6 +99,7 @@ static int rxe_mr_alloc(struct rxe_mr *mr, int num_buf)
+ 		kfree(mr->map[i]);
+ 
+ 	kfree(mr->map);
++	mr->map = NULL;
+ err1:
+ 	return -ENOMEM;
+ }
+@@ -163,9 +164,8 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
+ 				pr_warn("%s: Unable to get virtual address\n",
+ 						__func__);
+ 				err = -ENOMEM;
+-				goto err_cleanup_map;
++				goto err_release_umem;
+ 			}
+-
+ 			buf->addr = (uintptr_t)vaddr;
+ 			buf->size = PAGE_SIZE;
+ 			num_buf++;
+@@ -182,10 +182,6 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
+ 
+ 	return 0;
+ 
+-err_cleanup_map:
+-	for (i = 0; i < mr->num_map; i++)
+-		kfree(mr->map[i]);
+-	kfree(mr->map);
+ err_release_umem:
+ 	ib_umem_release(umem);
+ err_out:
+-- 
+1.8.3.1
+
