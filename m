@@ -2,74 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351D0612C46
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 19:35:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C39612C4B
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 19:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiJ3SfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 14:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
+        id S229556AbiJ3SgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 14:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiJ3Set (ORCPT
+        with ESMTP id S229552AbiJ3SgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 14:34:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373A8624E;
-        Sun, 30 Oct 2022 11:34:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C220060F23;
-        Sun, 30 Oct 2022 18:34:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 339C5C4347C;
-        Sun, 30 Oct 2022 18:34:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667154887;
-        bh=b+5iszjetwOI9mCpBV5UZqItVVGMLCOHEDmtLZopYyw=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=MWqpGV/RdvtmhIpgFKxhoQJvAx7ZGl2TRf+x87P8TitC0ehgCVk+mayB58tacgQpT
-         /jT2ifm4PltbCU3IHflhRYE3t/ydCf/sknHQ1yWKe1yELXKVdtihN4UCPNX9WSFgEp
-         orkeUByyMdxqaLrhUA5JW7u5MdAn81047iWHWXmY94QauTqYBhsXxAmCnCvCOrqpu8
-         s/Vr7ND+4WFG72EBM78wp/0aSFg1UmzRyXXQFy0Ft8YlqvEmgcsstg0pT+hoFdZbHe
-         UbIjL2GFUG11DwZnxwbOVVb1yHdM8nSAcX34agqaU2IuIEzxUEwLxUxOJhsXNYyFzd
-         GiW4fIznZix8w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1F350C41670;
-        Sun, 30 Oct 2022 18:34:47 +0000 (UTC)
-Subject: Re: [GIT PULL] USB driver fixes for 6.1-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y16F7fZSFrXupUU6@kroah.com>
-References: <Y16F7fZSFrXupUU6@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y16F7fZSFrXupUU6@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.1-rc3
-X-PR-Tracked-Commit-Id: 308c316d16cbad99bb834767382baa693ac42169
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c4d25ce6e9de47f6d9fb6cc1a34b47ce5f0a46ab
-Message-Id: <166715488712.31922.13632339161027072208.pr-tracker-bot@kernel.org>
-Date:   Sun, 30 Oct 2022 18:34:47 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 30 Oct 2022 14:36:05 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A0F63A1;
+        Sun, 30 Oct 2022 11:36:04 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id z14so13160128wrn.7;
+        Sun, 30 Oct 2022 11:36:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lrNDCNfu7ZM4dOdnaJgxpzE77S3pvCYPnM96o3tk4S4=;
+        b=AESNzqeJiKxl1IxfOpqDJ2H1k/FRxBVPKro5eYOHHM7YpejXu7wLw3XOsL4rcocAqt
+         5CBNVZuVo9U9RGv65pOt8JvncjL6DOzu8ewmJgjqYdEITbpmC24ZhA4J2eRj0uMC92oU
+         kKCNJpj9IMx3QJnhwgSuovtvkatUDaylF6zWEP27DBgfsnRTSzraLU04DgTfidfcBFtj
+         aa3bTLTL1b7ZFVRJCmava3N+zAGXEsDEkcqxOe8aqzIa8dvo98G/PMMHQZOZDZXNqjPV
+         Wrr70cJD+JKlPw/jpGogsEbebHhKKy/cXwHi9coZR8wI4znmZ5r7x+Wo0Hh0hG2nQFKe
+         SQTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lrNDCNfu7ZM4dOdnaJgxpzE77S3pvCYPnM96o3tk4S4=;
+        b=qSMNpvZeZGXXuY62iVZPlc662C2kFoxufRW2wi1aDXip0OloVDbtlPy6BJFA8Nc8sC
+         u/yNQlhvERCmdssv+G0QYdgujcWWnNOyH054GWRIAb46cXoqJm5VibsbkA7ElhxapUfI
+         KWzgPJP4j8dsoMPJznBzKZDlEIKvS+zVAEB6/evFJMmdgeo6++xOexBpZ084ipowzV1K
+         /4EQGWeulwz8A/aT/hACunKpLl/210I0qvp65+j9dNLsYft9USmMXvFDTjvlrfyQlkRZ
+         rKI2XXjAm5Qu5InQfJKm1li3zzOZVEVfU9+F74xGK7aP+oBr/vAuHrdEH2lhfoge6oYB
+         ndyA==
+X-Gm-Message-State: ACrzQf1I7/L9vwHOrz74ARiYXZx3E9Kxru9CMbT6jNb+FzdSz2LXiS/i
+        otAp4QBlJ5gVpx4wY1gq/U9QKEiAh2k=
+X-Google-Smtp-Source: AMsMyM6v15LvKnbZgCTZa8QwRsmiIY1KiecD0neqjsDCxkPUaoE2bVtKJxbo/R4DpSUL7JsqKoUpCg==
+X-Received: by 2002:adf:fc12:0:b0:236:9b2e:4843 with SMTP id i18-20020adffc12000000b002369b2e4843mr5535390wrr.620.1667154963240;
+        Sun, 30 Oct 2022 11:36:03 -0700 (PDT)
+Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id q8-20020a5d5748000000b0023677081f3asm4835322wrw.42.2022.10.30.11.36.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 30 Oct 2022 11:36:02 -0700 (PDT)
+Message-ID: <88e93a81-ef9f-adcc-db83-f8b5ba615c47@gmail.com>
+Date:   Sun, 30 Oct 2022 19:36:01 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v1 1/2] arm: rockchip: Kconfig: remove select ARM_GLOBAL_TIMER
+To:     heiko@sntech.de
+Cc:     linux@armlinux.org.uk, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 30 Oct 2022 15:10:53 +0100:
+The clocksource and the sched_clock provided by the arm_global_timer
+on Rockchip rk3066a/rk3188 are quite unstable because their rates
+depend on the cpu frequency.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.1-rc3
+Recent changes to the arm_global_timer driver makes it impossible to use.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c4d25ce6e9de47f6d9fb6cc1a34b47ce5f0a46ab
+On the other side, the arm_global_timer has a higher rating than the
+rockchip_timer, it will be selected by default by the time framework
+while we want to use the stable rockchip clocksource.
 
-Thank you!
+Let's disable the arm_global_timer in order to have the ROCKCHIP_TIMER
+(rk3188) or DW_APB_TIMER (rk3066a) selected by default.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+---
+
+ARM: dts: rockchip: disable arm-global-timer for rk3188
+https://lore.kernel.org/linux-rockchip/1492374441-23336-26-git-send-email-daniel.lezcano@linaro.org/
+
+clocksource: arm_global_timer: implement rate compensation whenever source clock changes
+https://lore.kernel.org/all/20210406130045.15491-2-andrea.merello@gmail.com/
+---
+ arch/arm/mach-rockchip/Kconfig | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/arch/arm/mach-rockchip/Kconfig b/arch/arm/mach-rockchip/Kconfig
+index b7855cc66..0432a4430 100644
+--- a/arch/arm/mach-rockchip/Kconfig
++++ b/arch/arm/mach-rockchip/Kconfig
+@@ -15,8 +15,6 @@ config ARCH_ROCKCHIP
+ 	select DW_APB_TIMER_OF
+ 	select REGULATOR if PM
+ 	select ROCKCHIP_TIMER
+-	select ARM_GLOBAL_TIMER
+-	select CLKSRC_ARM_GLOBAL_TIMER_SCHED_CLOCK
+ 	select ZONE_DMA if ARM_LPAE
+ 	select PM
+ 	help
+--
+2.20.1
+
