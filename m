@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DF8612BEB
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 18:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F25612BED
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 18:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiJ3Rdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 13:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
+        id S229988AbiJ3ReD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 13:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiJ3Rdu (ORCPT
+        with ESMTP id S229819AbiJ3Rdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 13:33:50 -0400
+        Sun, 30 Oct 2022 13:33:51 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3165595B4
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B688A44C
         for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 10:33:46 -0700 (PDT)
 Received: from ipservice-092-217-067-184.092.217.pools.vodafone-ip.de ([92.217.67.184] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1opCBp-000469-NY; Sun, 30 Oct 2022 18:33:41 +0100
+        id 1opCBq-000469-If; Sun, 30 Oct 2022 18:33:42 +0100
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,9 +28,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH v2 01/13] staging: r8188eu: replace a GetAddr1Ptr call
-Date:   Sun, 30 Oct 2022 18:33:14 +0100
-Message-Id: <20221030173326.1588647-2-martin@kaiser.cx>
+Subject: [PATCH v2 02/13] staging: r8188eu: remove duplicate category check
+Date:   Sun, 30 Oct 2022 18:33:15 +0100
+Message-Id: <20221030173326.1588647-3-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221030173326.1588647-1-martin@kaiser.cx>
 References: <20221030173326.1588647-1-martin@kaiser.cx>
@@ -44,36 +44,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Define a struct ieee80211_mgmt and use it to read the destination address.
-
-This replaces one call to the driver-specific GetAddr1Ptr function, which
-should eventually be removed.
+The caller of on_action_public has already checked the action category. We
+can remove the check in on_action_public.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/core/rtw_mlme_ext.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index 127dbc4e8b9a..5a366688a3f7 100644
+index 5a366688a3f7..7d4f208d161b 100644
 --- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
 +++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -3815,13 +3815,14 @@ static unsigned int on_action_public_default(struct recv_frame *precv_frame)
- 
- unsigned int on_action_public(struct adapter *padapter, struct recv_frame *precv_frame)
- {
-+	struct ieee80211_mgmt *mgmt = (struct ieee80211_mgmt *)precv_frame->rx_data;
+@@ -3819,16 +3819,12 @@ unsigned int on_action_public(struct adapter *padapter, struct recv_frame *precv
  	unsigned int ret = _FAIL;
  	u8 *pframe = precv_frame->rx_data;
  	u8 *frame_body = pframe + sizeof(struct ieee80211_hdr_3addr);
- 	u8 category, action;
+-	u8 category, action;
++	u8 action;
  
  	/* check RA matches or not */
--	if (memcmp(myid(&padapter->eeprompriv), GetAddr1Ptr(pframe), ETH_ALEN))
-+	if (memcmp(myid(&padapter->eeprompriv), mgmt->da, ETH_ALEN))
+ 	if (memcmp(myid(&padapter->eeprompriv), mgmt->da, ETH_ALEN))
  		goto exit;
  
- 	category = frame_body[0];
+-	category = frame_body[0];
+-	if (category != WLAN_CATEGORY_PUBLIC)
+-		goto exit;
+-
+ 	action = frame_body[1];
+ 	switch (action) {
+ 	case ACT_PUBLIC_VENDOR:
 -- 
 2.30.2
 
