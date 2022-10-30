@@ -2,40 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A73E612928
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 09:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB50F61292C
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 09:40:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiJ3Iiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 04:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
+        id S229846AbiJ3IkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 04:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJ3Iio (ORCPT
+        with ESMTP id S229667AbiJ3IkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 04:38:44 -0400
+        Sun, 30 Oct 2022 04:40:14 -0400
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6DDA0;
-        Sun, 30 Oct 2022 01:38:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0A6A0;
+        Sun, 30 Oct 2022 01:40:14 -0700 (PDT)
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id E56E968AFE; Sun, 30 Oct 2022 09:38:38 +0100 (CET)
-Date:   Sun, 30 Oct 2022 09:38:38 +0100
+        id 849A368AA6; Sun, 30 Oct 2022 09:40:11 +0100 (CET)
+Date:   Sun, 30 Oct 2022 09:40:11 +0100
 From:   Christoph Hellwig <hch@lst.de>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>, dave.jiang@intel.com,
-        alison.schofield@intel.com, bwidawsk@kernel.org,
-        vishal.l.verma@intel.com, a.manzanares@samsung.com,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH 1/2] cxl/pci: Add generic MSI-X/MSI irq support
-Message-ID: <20221030083838.GD4949@lst.de>
-References: <20221024133633.00000467@huawei.com> <20221025232535.GA579167@bhelgaas>
+To:     Jinlong Chen <nickyc975@zju.edu.cn>
+Cc:     axboe@kernel.dk, hch@lst.de, bvanassche@acm.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] blk-mq: remove redundant call to
+ blk_freeze_queue_start in blk_mq_destroy_queue
+Message-ID: <20221030084011.GA5262@lst.de>
+References: <20221030083212.1251255-1-nickyc975@zju.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221025232535.GA579167@bhelgaas>
+In-Reply-To: <20221030083212.1251255-1-nickyc975@zju.edu.cn>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -45,19 +39,6 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 06:25:35PM -0500, Bjorn Helgaas wrote:
-> Is this cxl code allocating vectors for devices that might also be
-> claimed by portdrv?  I assume not because that sounds like a problem.
-> 
-> Ugh.  I always feel like the portdrv design must be sub-optimal
-> because this seems so hard to do cleanly.
+Looks good:
 
-Yes, portdrv is a mess.  And I fear we really need to bite the bullet
-rather sooner than later to sort much of this out by lifting all the
-logic to the core and just keep the "drivers" around for sysfs
-pretence.
-
-And I think CXL is trying to run into a similar (but not quiete as bad)
-mess with it's overly modular approach.  In either case the right
-thing would be to do anough early setup to find the requird number of
-interrupts and highest interrupt number and just request that once.
+Reviewed-by: Christoph Hellwig <hch@lst.de>
