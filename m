@@ -2,105 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E848612C99
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 21:15:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92BCD612C9C
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 21:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiJ3UPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 16:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
+        id S229642AbiJ3UTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 16:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiJ3UPb (ORCPT
+        with ESMTP id S229476AbiJ3UTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 16:15:31 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594CAA185;
-        Sun, 30 Oct 2022 13:15:30 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 81C001C0049; Sun, 30 Oct 2022 21:15:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1667160928;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SRUdneXHxh/Cv6fvYSjs07wKwz7JXwgYVVxDoXQty8s=;
-        b=eqHxQA1emI0dt09Uf566QBHKNMWni+R6zQZbJvKogxPJquSKsnd+IPfrLMxFT7V//xgQmv
-        luoikPnbPz2F2gcOyhOL5MOvA4CutdR6miiuiGneuzQO6zTG6VGBVcw9QtlKF03rYdgPL7
-        YLddMeumTV/qvZ2GZyxlBBHz7nS8WoY=
-Date:   Sun, 30 Oct 2022 21:15:27 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v1 1/1] leds: support to use own workqueue for each
- LED
-Message-ID: <20221030201527.GA23195@duo.ucw.cz>
-References: <9a0a70a8-0886-1115-6151-72d2cba842cf@sberdevices.ru>
- <33d05330-7c52-e873-bf32-209d40c77632@sberdevices.ru>
- <20221030122029.GA8017@duo.ucw.cz>
- <b7304844-a654-2120-2159-29f6134dbadb@sberdevices.ru>
+        Sun, 30 Oct 2022 16:19:14 -0400
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F009A18F;
+        Sun, 30 Oct 2022 13:19:14 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id io19so9104715plb.8;
+        Sun, 30 Oct 2022 13:19:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CpcsaYxX2/iZPVTp5DAYjYaAQ7Q9mqzIBJhkkWXT9KI=;
+        b=vu0TPKGcdmlcF9FBWopcH8ixG6IMGpdlC7S5v8eebz5THEQq1TR9rHP0a0O/y/jLZg
+         kDjqwcGe7/Z/esXQdnJg7LuaUCk+UytSg+y+O15aNRKU8Hg1GzQstEGli4urFkffdg2S
+         uk5pb0JfFnuYGie4gkgVzQAIkJHgNtDLfFp4OiX99VKfmeO9Q7whHSPNNqH6IYzxFlvC
+         I8UneGzOtJ+Xs8ctPffo8Ft6sk9OMHuItFiBW8rbR2d6IyGAxFMnYWKChFLNlHq53mtQ
+         FSZeEEdgKXta+2TMxX+qJ0xv6Fv7j1dKM6y8SrM5vgoS3f10aLkWMK13LBwUyEf/fSfV
+         S3LQ==
+X-Gm-Message-State: ACrzQf3FseWQxoditB/avn05kTjupd0TjS1I0CX98xTdo7Oa4J4S7cLS
+        Es3O6rh97yjR9UqGxZl+jJ/+LC+XXAI=
+X-Google-Smtp-Source: AMsMyM6m6X1LDQAhui8BGKPfZ1MNzm6uykXWqEcVPHk/HTI+9TH+KyBI8USgMbD8mUXjQcrwLSY+ZQ==
+X-Received: by 2002:a17:902:f786:b0:180:6f9e:23b with SMTP id q6-20020a170902f78600b001806f9e023bmr10961455pln.37.1667161153435;
+        Sun, 30 Oct 2022 13:19:13 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id w2-20020a623002000000b00561beff1e09sm3010408pfw.164.2022.10.30.13.19.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 30 Oct 2022 13:19:12 -0700 (PDT)
+Message-ID: <036eb44a-fd6a-4460-49d0-5f596452d1e1@acm.org>
+Date:   Sun, 30 Oct 2022 13:19:10 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="ZGiS0Q5IWpPtfppv"
-Content-Disposition: inline
-In-Reply-To: <b7304844-a654-2120-2159-29f6134dbadb@sberdevices.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 1/3] blk-mq: remove redundant call to
+ blk_freeze_queue_start in blk_mq_destroy_queue
+Content-Language: en-US
+To:     Jinlong Chen <nickyc975@zju.edu.cn>
+Cc:     axboe@kernel.dk, hch@lst.de, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>
+References: <cover.1667035519.git.nickyc975@zju.edu.cn>
+ <ebd3a47a1ebf4ab518c985cdbaa1ac3afd6dfb9f.1667035519.git.nickyc975@zju.edu.cn>
+ <adaea16a-c7cd-5d68-50c8-d56de851061a@acm.org>
+ <42681e4e.15223d.18426b71124.Coremail.nickyc975@zju.edu.cn>
+ <9a758d91-42c5-d6b3-ddde-9c2b89d741a6@acm.org>
+ <fb1acbc.15062f.18429642056.Coremail.nickyc975@zju.edu.cn>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <fb1acbc.15062f.18429642056.Coremail.nickyc975@zju.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/30/22 07:55, Jinlong Chen wrote:
+>>> So I think there is a redundant call to blk_freeze_queue_start(), we
+>>> just need to call blk_mq_freeze_queue_wait() after calling
+>>> blk_queue_start_drain().
+>>
+>> I think it is on purpose that blk_queue_start_drain() freezes the
+>> request queue and never unfreezes it. So if you want to change this
+>> behavior it's up to you to motivate why you want to change this behavior
+>> and also why it is safe to make that change. See also commit
+>> d3cfb2a0ac0b ("block: block new I/O just after queue is set as dying").
+> 
+> I think there might be some misunderstanding. I didn't touch
+> blk_queue_start_drain(), so its behavior is not changed. What I have done
+> is just replacing blk_freeze_queue() with blk_mq_freeze_queue_wait() in
+> blk_mq_destroy_queue().
 
---ZGiS0Q5IWpPtfppv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Jinlong,
 
-Hi!
+Does this mean that you want me to provide more information about what I 
+wrote? Without this patch, blk_mq_destroy_queue() uses two mechanisms to 
+block future I/O requests:
+1. Set the flag QUEUE_FLAG_DYING.
+2. Freeze the request queue and leave it frozen.
 
-> >> This allows to set own workqueue for each LED. This may be useful, bec=
-ause
-> >> default 'system_wq' does not guarantee execution order of each work_st=
-ruct,
-> >> thus for several brightness update requests (for multiple leds), real
-> >> brightness switch could be in random order.
-> >=20
-> > So.. what?
-> >=20
-> > Even if execution order is switched, human eye will not be able to
-> > tell the difference.
-> Hello,
->=20
-> Problem arises on one of our boards where we have 14 triples of leds(each
-> triple contains R G B). Test case is to play complex animation on all led=
-s:
-> smooth switch from on RGB state to another. Sometimes there are glitches =
-in
-> this process - divergence from expectable RGB state. We fixed this by usi=
-ng
-> ordered workqueue.
+Your patch modifies blk_mq_destroy_queue() such that it unfreezes the 
+request queue after I/O has been quiesced instead of leaving it frozen. 
+I would appreciate it if Ming Lei (Cc-ed) could comment on this change 
+since I think that Ming introduced (2) in blk_mq_destroy_queue() 
+(formerly called blk_cleanup_queue()).
 
-Are there other solutions possible? Like batch and always apply _all_
-the updates you have queued from your the worker code?
+Thanks,
 
-Best regards,
-								Pavel
-
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---ZGiS0Q5IWpPtfppv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY17bXwAKCRAw5/Bqldv6
-8nHqAJ460FAvTohZFx62OjyLkAZzcTBWuwCdEuMPpqEQExkcrAlv3eJJ2vF6Yx4=
-=fMSI
------END PGP SIGNATURE-----
-
---ZGiS0Q5IWpPtfppv--
+Bart.
