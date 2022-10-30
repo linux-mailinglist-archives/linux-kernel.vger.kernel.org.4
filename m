@@ -2,56 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66CD4612B4D
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 16:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBE6612B54
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 16:48:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiJ3PpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 11:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
+        id S229665AbiJ3PsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 11:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiJ3Pox (ORCPT
+        with ESMTP id S229841AbiJ3PsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 11:44:53 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A03B1DE
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 08:44:53 -0700 (PDT)
-Received: from dimapc.. (unknown [109.252.112.196])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 30 Oct 2022 11:48:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E22B1FC;
+        Sun, 30 Oct 2022 08:48:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E00E066022A2;
-        Sun, 30 Oct 2022 15:44:50 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667144691;
-        bh=Jr+CDx/FOmbAS4EXsPeToboJf/vzEdDZoQONhOc44DE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D77hkyxoateNQYLF7wJaHR+9csvedoBuzF1VEUTMenUkMjtdSeyXUAhgE0j4RXuLL
-         Linbwa8HPzpUigLIVoxs7LY25ZnDHWu77L1e1Q7YGyXwmOKgD3BcSzOhrRNW06qo8h
-         vIMEKpXsMe8QU+z9CDPFk7/fR+FFtgzo3b4+FJjHQYU9K1kXH8ISUBV8sOjaF86c1g
-         oPB4Zkj4zO4tGmixIgmZ0m4jNShlzyv6vRfkWt4KlbW+uX+eJypQ916ceOZdx6DhKc
-         dbOzHIpE1tWqNwSK2G/EjpcU6QwFq2DrhD7r7oTmaWUaCYVeTLqy3SkZoLn2Oi//WB
-         i4qutZJMPkWVA==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, noralf@tronnes.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] drm/client: Prevent NULL dereference in drm_client_buffer_delete()
-Date:   Sun, 30 Oct 2022 18:44:12 +0300
-Message-Id: <20221030154412.8320-3-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221030154412.8320-1-dmitry.osipenko@collabora.com>
-References: <20221030154412.8320-1-dmitry.osipenko@collabora.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1BC65B80EC1;
+        Sun, 30 Oct 2022 15:48:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0402C433D6;
+        Sun, 30 Oct 2022 15:48:11 +0000 (UTC)
+Date:   Sun, 30 Oct 2022 11:48:28 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-usb@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        John Stultz <jstultz@google.com>
+Subject: Re: [RFC][PATCH v2 20/31] timers: usb: Use del_timer_shutdown()
+ before freeing timer
+Message-ID: <20221030114828.58fdd5d0@gandalf.local.home>
+In-Reply-To: <5ee0b72c-3942-8981-573f-73d97ea7ef08@roeck-us.net>
+References: <20221027150525.753064657@goodmis.org>
+        <20221027150928.983388020@goodmis.org>
+        <4e61935b-b06b-1f2d-6c2b-79bdfd569cd6@roeck-us.net>
+        <20221028140129.040d9acc@gandalf.local.home>
+        <20221028141007.05f5c490@gandalf.local.home>
+        <20221028195959.GA1073367@roeck-us.net>
+        <20221029145241.GA3296895@roeck-us.net>
+        <20221029151952.076821f2@gandalf.local.home>
+        <5ee0b72c-3942-8981-573f-73d97ea7ef08@roeck-us.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,39 +68,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The drm_gem_vunmap() will crash with a NULL dereference if the passed
-object pointer is NULL. It wasn't a problem before we added the locking
-support to drm_gem_vunmap function because the mapping argument was always
-NULL together with the object. Make drm_client_buffer_delete() to check
-whether GEM is NULL before trying to unmap the GEM, it will happen on
-framebuffer creation error.
+On Sat, 29 Oct 2022 15:56:25 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/dri-devel/Y1kFEGxT8MVlf32V@kili/
-Fixes: 79e2cf2e7a19 ("drm/gem: Take reservation lock for vmap/vunmap operations")
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
----
- drivers/gpu/drm/drm_client.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> >> WARNING: CPU: 0 PID: 9 at lib/debugobjects.c:502 debug_print_object+0xd0/0x100
+> >> ODEBUG: free active (active state 0) object type: timer_list hint: neigh_timer_handler+0x0/0x480
+> >>
+> >> That happens with almost every test, so I may have missed some others
+> >> in the noise.  
+> > 
+> > Can you add this?
+> >   
+> 
+> It doesn't make a difference.
 
-diff --git a/drivers/gpu/drm/drm_client.c b/drivers/gpu/drm/drm_client.c
-index 38e1be991caa..fd67efe37c63 100644
---- a/drivers/gpu/drm/drm_client.c
-+++ b/drivers/gpu/drm/drm_client.c
-@@ -235,10 +235,10 @@ static void drm_client_buffer_delete(struct drm_client_buffer *buffer)
- {
- 	struct drm_device *dev = buffer->client->dev;
+Ah, it also requires this (I have other debugging in that file, so it may
+only apply with some fuzzing):
+
+-- Steve
+
+
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index ac2e8beb4235..f2ccf24a8448 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -1282,6 +1296,11 @@ int __del_timer(struct timer_list *timer, bool free)
+ 			debug_timer_deactivate(timer, true);
+ 		}
+ 		raw_spin_unlock_irqrestore(&base->lock, flags);
++	} else if (free) {
++		base = lock_timer_base(timer, &flags);
++		timer->function = NULL;
++		debug_timer_deactivate(timer, true);
++		raw_spin_unlock_irqrestore(&base->lock, flags);
+ 	}
  
--	drm_gem_vunmap_unlocked(buffer->gem, &buffer->map);
--
--	if (buffer->gem)
-+	if (buffer->gem) {
-+		drm_gem_vunmap_unlocked(buffer->gem, &buffer->map);
- 		drm_gem_object_put(buffer->gem);
-+	}
- 
- 	if (buffer->handle)
- 		drm_mode_destroy_dumb(dev, buffer->handle, buffer->client->file);
--- 
-2.37.3
-
+ 	return ret;
