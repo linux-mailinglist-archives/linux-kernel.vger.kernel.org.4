@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F25612BED
+	by mail.lfdr.de (Postfix) with ESMTP id EE7D5612BEF
 	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 18:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbiJ3ReD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 13:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
+        id S229932AbiJ3Rd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 13:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiJ3Rdv (ORCPT
+        with ESMTP id S229727AbiJ3Rdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 30 Oct 2022 13:33:51 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B688A44C
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 10:33:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41772A44D
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 10:33:47 -0700 (PDT)
 Received: from ipservice-092-217-067-184.092.217.pools.vodafone-ip.de ([92.217.67.184] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1opCBq-000469-If; Sun, 30 Oct 2022 18:33:42 +0100
+        id 1opCBr-000469-CG; Sun, 30 Oct 2022 18:33:43 +0100
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -27,10 +27,11 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Michael Straube <straube.linux@gmail.com>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH v2 02/13] staging: r8188eu: remove duplicate category check
-Date:   Sun, 30 Oct 2022 18:33:15 +0100
-Message-Id: <20221030173326.1588647-3-martin@kaiser.cx>
+        Martin Kaiser <martin@kaiser.cx>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2 03/13] staging: r8188eu: make on_action_public static void
+Date:   Sun, 30 Oct 2022 18:33:16 +0100
+Message-Id: <20221030173326.1588647-4-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221030173326.1588647-1-martin@kaiser.cx>
 References: <20221030173326.1588647-1-martin@kaiser.cx>
@@ -44,36 +45,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The caller of on_action_public has already checked the action category. We
-can remove the check in on_action_public.
+The on_action_public function is called only by OnAction. This function
+also lives in rtw_mlme_ext.c and does not check the return value from
+on_action_public.
 
+We can make on_action_public a static void function.
+
+The ret variable is no longer needed if we don't return a value. It can
+be removed.
+
+Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/core/rtw_mlme_ext.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+Changes in v2
+- remove ret variable, it was written but never read
+
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c    | 12 ++++--------
+ drivers/staging/r8188eu/include/rtw_mlme_ext.h |  2 --
+ 2 files changed, 4 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index 5a366688a3f7..7d4f208d161b 100644
+index 7d4f208d161b..88600f62ffb4 100644
 --- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
 +++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -3819,16 +3819,12 @@ unsigned int on_action_public(struct adapter *padapter, struct recv_frame *precv
- 	unsigned int ret = _FAIL;
+@@ -3813,30 +3813,26 @@ static unsigned int on_action_public_default(struct recv_frame *precv_frame)
+ 	return ret;
+ }
+ 
+-unsigned int on_action_public(struct adapter *padapter, struct recv_frame *precv_frame)
++static void on_action_public(struct adapter *padapter, struct recv_frame *precv_frame)
+ {
+ 	struct ieee80211_mgmt *mgmt = (struct ieee80211_mgmt *)precv_frame->rx_data;
+-	unsigned int ret = _FAIL;
  	u8 *pframe = precv_frame->rx_data;
  	u8 *frame_body = pframe + sizeof(struct ieee80211_hdr_3addr);
--	u8 category, action;
-+	u8 action;
+ 	u8 action;
  
  	/* check RA matches or not */
  	if (memcmp(myid(&padapter->eeprompriv), mgmt->da, ETH_ALEN))
- 		goto exit;
- 
--	category = frame_body[0];
--	if (category != WLAN_CATEGORY_PUBLIC)
 -		goto exit;
--
++		return;
+ 
  	action = frame_body[1];
  	switch (action) {
  	case ACT_PUBLIC_VENDOR:
+-		ret = on_action_public_vendor(precv_frame);
++		on_action_public_vendor(precv_frame);
+ 		break;
+ 	default:
+-		ret = on_action_public_default(precv_frame);
++		on_action_public_default(precv_frame);
+ 		break;
+ 	}
+-
+-exit:
+-	return ret;
+ }
+ 
+ unsigned int OnAction_p2p(struct adapter *padapter, struct recv_frame *precv_frame)
+diff --git a/drivers/staging/r8188eu/include/rtw_mlme_ext.h b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+index c8beaa927cba..ec2e9352011b 100644
+--- a/drivers/staging/r8188eu/include/rtw_mlme_ext.h
++++ b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+@@ -538,8 +538,6 @@ void start_create_ibss(struct adapter *padapter);
+ 
+ unsigned int OnAction_back(struct adapter *padapter,
+ 			   struct recv_frame *precv_frame);
+-unsigned int on_action_public(struct adapter *padapter,
+-			      struct recv_frame *precv_frame);
+ unsigned int OnAction_p2p(struct adapter *padapter,
+ 			  struct recv_frame *precv_frame);
+ 
 -- 
 2.30.2
 
