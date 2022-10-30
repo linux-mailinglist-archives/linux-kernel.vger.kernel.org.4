@@ -2,53 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6474D612BA6
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 17:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B04CD612BA8
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 17:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiJ3QjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 12:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40864 "EHLO
+        id S229770AbiJ3QnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 12:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiJ3QjW (ORCPT
+        with ESMTP id S229494AbiJ3QnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 12:39:22 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F113BF1A
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 09:39:20 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e745329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e745:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4603A1EC054E;
-        Sun, 30 Oct 2022 17:39:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1667147959;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=BB1ePUNM1BbC8WRzI6/WKi8TDgsMIa4rj1HirQWEQTY=;
-        b=Ew756vwmyB1MD/KsS+mMBW0bBwaqmgNVsa6rgfkOwxWKtbmqQonScJVZcwXO48L9czGySu
-        mlhYKFLNkEhQeKmHLU3HJ6iElzkev9I2lImcrnKjBCO+sCkzUFoa51k4s7YmWSNSBlX7B1
-        uSRjQiV0PcJtz1rA4CBbgwZLtXkAbiA=
-Date:   Sun, 30 Oct 2022 17:39:14 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v4 16/16] x86/mtrr: simplify mtrr_ops initialization
-Message-ID: <Y16osqK3kbCz8Sf3@zn.tnic>
-References: <20221004081023.32402-1-jgross@suse.com>
- <20221004081023.32402-17-jgross@suse.com>
- <Y15o4o8j6zbQuaQJ@zn.tnic>
- <dbd5861a-aa12-ea4f-c076-974613fba51c@suse.com>
+        Sun, 30 Oct 2022 12:43:13 -0400
+Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52254F1A
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 09:43:12 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id pBOwoZYqRGYmzpBOwoclGr; Sun, 30 Oct 2022 17:43:10 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 30 Oct 2022 17:43:10 +0100
+X-ME-IP: 86.243.100.34
+Message-ID: <c0112b1d-e3bb-9f54-eb0d-f5d77275a323@wanadoo.fr>
+Date:   Sun, 30 Oct 2022 17:43:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <dbd5861a-aa12-ea4f-c076-974613fba51c@suse.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: BUG: unable to handle kernel NULL pointer dereference in
+ debug_check_no_obj_freed
+To:     Wei Chen <harperchen1110@gmail.com>, linux-kernel@vger.kernel.org
+References: <CAO4mrffA2tTwCKQ-objUH7BJ2GjSXaJdi=pq0vtqjicx8eH7wA@mail.gmail.com>
+Content-Language: fr, en-GB
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <CAO4mrffA2tTwCKQ-objUH7BJ2GjSXaJdi=pq0vtqjicx8eH7wA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,101 +45,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 04:05:29PM +0100, Juergen Gross wrote:
-> As the specific ops variables are available for X86_32 only, this
-> would require to add an "#ifdef CONFIG_X86_32" around the code block
-> doing the assignments. Otherwise the build would fail.
+Le 30/10/2022 à 10:23, Wei Chen a écrit :
+> Dear Linux Developer,
+> 
+> Recently when using our tool to fuzz kernel, the following crash was triggered:
+> 
+> HEAD commit: 64570fbc14f8 Linux 5.15-rc5
 
-Well, it looks like my compiler is smart enough and eliminates all that
-dead code, see diff below.
+Hi,
 
-I've added the asm markers "#begin" and "#end" and the resulting asm
-looks like this:
+any reason to run your fuzzer on 5.15-rc5?
 
-# arch/x86/kernel/cpu/mtrr/mtrr.c:666:          asm volatile("#begin");
-        call    __sanitizer_cov_trace_pc        #
-#APP
-# 666 "arch/x86/kernel/cpu/mtrr/mtrr.c" 1
-        #begin
-# 0 "" 2
-# arch/x86/kernel/cpu/mtrr/mtrr.c:693:          asm volatile("#end");
-# 693 "arch/x86/kernel/cpu/mtrr/mtrr.c" 1
-        #end
-# 0 "" 2
-# arch/x86/kernel/cpu/mtrr/mtrr.c:630:  phys_addr = 32;
-#NO_APP
+We are at 5.15.76 and many things have already been fixed in the 5.15 
+branch.
 
-which basically says that all between line 666 and 693 has been
-eliminated.
+5.15 is also old.
 
-I have the suspicion, though, that clang might not be that smart.
-
-Lemme test it a bit.
-
----
-
-diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
-index 7ba68356c0ff..d499c83b2ad7 100644
---- a/arch/x86/kernel/cpu/mtrr/mtrr.c
-+++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
-@@ -663,25 +663,26 @@ void __init mtrr_bp_init(void)
- 			phys_addr = 32;
- 		}
- 	} else {
-+		asm volatile("#begin");
- 		switch (boot_cpu_data.x86_vendor) {
- 		case X86_VENDOR_AMD:
- 			if (cpu_feature_enabled(X86_FEATURE_K6_MTRR)) {
- 				/* Pre-Athlon (K6) AMD CPU MTRRs */
--				mtrr_if = vendor_mtrr_ops(amd_mtrr_ops);
-+				mtrr_if = &amd_mtrr_ops;
- 				size_or_mask = SIZE_OR_MASK_BITS(32);
- 				size_and_mask = 0;
- 			}
- 			break;
- 		case X86_VENDOR_CENTAUR:
- 			if (cpu_feature_enabled(X86_FEATURE_CENTAUR_MCR)) {
--				mtrr_if = vendor_mtrr_ops(centaur_mtrr_ops);
-+				mtrr_if = &centaur_mtrr_ops;
- 				size_or_mask = SIZE_OR_MASK_BITS(32);
- 				size_and_mask = 0;
- 			}
- 			break;
- 		case X86_VENDOR_CYRIX:
- 			if (cpu_feature_enabled(X86_FEATURE_CYRIX_ARR)) {
--				mtrr_if = vendor_mtrr_ops(cyrix_mtrr_ops);
-+				mtrr_if = &cyrix_mtrr_ops;
- 				size_or_mask = SIZE_OR_MASK_BITS(32);
- 				size_and_mask = 0;
- 			}
-@@ -689,6 +690,7 @@ void __init mtrr_bp_init(void)
- 		default:
- 			break;
- 		}
-+		asm volatile("#end");
- 	}
- 
- 	if (mtrr_if) {
-diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.h b/arch/x86/kernel/cpu/mtrr/mtrr.h
-index 7a7387356192..02eb5871492d 100644
---- a/arch/x86/kernel/cpu/mtrr/mtrr.h
-+++ b/arch/x86/kernel/cpu/mtrr/mtrr.h
-@@ -68,11 +68,6 @@ void mtrr_wrmsr(unsigned, unsigned, unsigned);
- extern const struct mtrr_ops amd_mtrr_ops;
- extern const struct mtrr_ops cyrix_mtrr_ops;
- extern const struct mtrr_ops centaur_mtrr_ops;
--#ifdef CONFIG_X86_64
--#define vendor_mtrr_ops(x) NULL
--#else
--#define vendor_mtrr_ops(x) &(x)
--#endif
- 
- extern int changed_by_mtrr_cleanup;
- extern int mtrr_cleanup(unsigned address_bits);
-
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+CJ
