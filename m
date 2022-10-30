@@ -2,80 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3665B6129E3
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 11:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E56B66129E7
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 11:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbiJ3KGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 06:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
+        id S230093AbiJ3KGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 06:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ3KGL (ORCPT
+        with ESMTP id S229441AbiJ3KGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 06:06:11 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4FF1A0;
-        Sun, 30 Oct 2022 03:06:10 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id x2so13738114edd.2;
-        Sun, 30 Oct 2022 03:06:10 -0700 (PDT)
+        Sun, 30 Oct 2022 06:06:40 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA381A0;
+        Sun, 30 Oct 2022 03:06:39 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id b2so22863242eja.6;
+        Sun, 30 Oct 2022 03:06:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Uv/cptTfLtPvcsrktv/mW5+tMHWrOclQLGOQ7J33l4w=;
-        b=GWILsf6kT0LKOVvM+sv//uQTV3XO++uU+E0iuf1VMiiviFpkANLlmzGTC+U/vzu3sm
-         pniRmGLEfB/R4O9PTxZ3SdNDKBBddlMWm6C95FaK65McyLejGtTyFAg1tpkOWzaImKEj
-         /pw/A+J5SIZAmeM/R8VDDA2wBczSzjDlCEdDRRMnyiQF1N8AdDR+e5viYfk7PVEBsQX6
-         IFCHOwyH/ucVq2KdiPLTh1lHBuDFUTe+enx/eBJTvYAX+GKdGIf3K6WLK6sNNWsCHDnr
-         83b7KksNrL8+rrLpoQtqHkAekpL9OdyH3IQ+O16pJImO5/cp8Y+H251C81MeonoB7dMY
-         eoAQ==
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=KNk7ZNiVH3ImAqj0kSmZACI8FqLd5viyCJ9HhBYf3kQ=;
+        b=p34yqM+RHJ5uSSTbVyrdOICfqzpdUYnaa9sv7ZWD7rhBE+rLmFbqGfK0KmSlGRpIc+
+         zux3erF/Rb2AZ4Zk34rrR7v+M96VdbuC2FQ7Y/E8gn2q+t4Nj6lAgeSWYfKbA8k6YIuq
+         AcOOrtmmCMyAiutpajcTkmIjX7kUePHtsi8swFe96p65mPeAAfybYvqa0gWXcyYk9wSg
+         NYede4ux5uhdP13rx3l91Jz1hfYQlhgeTgriOx7BgNlvfnfgaXRVFaeFlGhKZ9HdWI6x
+         5qWsyhiMo1FTGzMibFadNLlgoQGV1rPf9hK/EwqeMhwqIU0Kr1fKPtIKTEec5QoTK/d3
+         17iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Uv/cptTfLtPvcsrktv/mW5+tMHWrOclQLGOQ7J33l4w=;
-        b=K46bMZtJ5XLi2vP/nqUHI944ju/6/OwygZnp7RKlUuFjrm34qFf99DlM2fVUWqVC88
-         2MOdW4SZbPUXQxLyswZHDPOOviKfSRAFiY9P8DCv8LbMphTBWBQKFUv52nVjpMofg9Mr
-         XS6hQShgDslLowf4h26pK8UPt4ucR+7UywiJy9a1IQVQaTqCitRtGA5w/mKFoG+ViZR0
-         6ABdArTq3aAUS3I57iRETcp/n6EJnaa9Wxb4AS05PCBAFplIsCiP2W+iLbZ5KpPzfPlZ
-         H19NqCBd4H8wiYePH1odf4xDFxwlpxIo/71tSLt0T/wLpd0PzHgY9AnuNfGpEjMV62qE
-         yt5w==
-X-Gm-Message-State: ACrzQf2XLknr78MZlBqy1AvdROWZrG35/mcfca44HYRLhewNzJyY3gS8
-        DWv4nRVh5U34dp0zhJhWbxKsyVBZGQ8=
-X-Google-Smtp-Source: AMsMyM5Z3Tx3yOXtQdRrcRKpj9zjMopo2MK2cDU9tj7aifFiqNiyvWKnYO5DSolS9/E2E5jUxlrdJA==
-X-Received: by 2002:a05:6402:1cc1:b0:453:1517:94e4 with SMTP id ds1-20020a0564021cc100b00453151794e4mr8106298edb.399.1667124369029;
-        Sun, 30 Oct 2022 03:06:09 -0700 (PDT)
-Received: from [10.32.3.204] ([95.183.227.98])
-        by smtp.gmail.com with ESMTPSA id qc9-20020a170906d8a900b0078b1ff41f05sm1669440ejb.43.2022.10.30.03.06.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Oct 2022 03:06:08 -0700 (PDT)
-Date:   Sun, 30 Oct 2022 13:05:59 +0300
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-Subject: Re: [PATCH v4 09/13] dt-bindings: pinctrl: mediatek,mt6779-pinctrl:
- Add MT6795
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Andy Teng <andy.teng@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <ZD9KKR.M2TT1QFA4FT92@gmail.com>
-In-Reply-To: <e34b35f4-4197-3973-0947-14ee577494e9@linaro.org>
-References: <20221028153505.23741-1-y.oudjana@protonmail.com>
-        <20221028153505.23741-10-y.oudjana@protonmail.com>
-        <e34b35f4-4197-3973-0947-14ee577494e9@linaro.org>
-X-Mailer: geary/40.0
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KNk7ZNiVH3ImAqj0kSmZACI8FqLd5viyCJ9HhBYf3kQ=;
+        b=IwZdIypNsdn5bkC22E/KTBCsBRBXyY/piLXhz9uqrOF8N6BQtLZnZdWLGBx5zLbGNo
+         EWXAcIcUenVrN6Heu90xAQIHlLIZEUgeXc5ZwbJN3wCxBl83rlbePRXHy5Lu45Vw/5xM
+         LEA28uEbjDyHAlSG/LeZhuYJX6eDdqWae08I6en6NhyrBsTlcywsFukpP7DaUik7LoAC
+         Kp3OEpwhXMROst9+5YjxZOoEhCT6ofzpB+hnN9cvBJPqQdxjMwexEH7rVJTHBSsaK4ph
+         zu0Z8csFvY6R1pyJPpu5CepE6l/vNB9fqCva92vbLgWqmC6di2Q43OIQAErpiDIFOEWw
+         +DEA==
+X-Gm-Message-State: ACrzQf1lZowquhBIBrjtR+NwVveTuNY7wC++IeuezcTnyo4BBwp5QeaH
+        Jnvd2zbK4dfXjK6Cdjj2AX6H9UWa/UNg30yyZQU=
+X-Google-Smtp-Source: AMsMyM6roRgpaPqYbU28anLsZgZVIb1DqO4lJiEc0aWffhM9qq2gzAIrMkq6mjwhGd3He+C1S1M5EkPw+mDpqdIM+2I=
+X-Received: by 2002:a17:907:2da6:b0:78d:3cf1:9132 with SMTP id
+ gt38-20020a1709072da600b0078d3cf19132mr7579393ejc.299.1667124397592; Sun, 30
+ Oct 2022 03:06:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+From:   Wei Chen <harperchen1110@gmail.com>
+Date:   Sun, 30 Oct 2022 18:05:59 +0800
+Message-ID: <CAO4mrfexGm_9=cLK+67ryXhG3bLtAwYn7j15iPV+KkMLKuOJPw@mail.gmail.com>
+Subject: INFO: task hung in ppp_ioctl
+To:     paulus@samba.org, davem@davemloft.net, kuba@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org
+Cc:     linux-ppp@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,289 +67,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dear Linux Developer,
 
-On Fri, Oct 28 2022 at 16:01:58 -04:00:00, Krzysztof Kozlowski 
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 28/10/2022 11:35, Yassine Oudjana wrote:
->>  From: Yassine Oudjana <y.oudjana@protonmail.com>
->> 
->>  Combine MT6795 pin controller document into MT6779 one. In the
->>  process, amend the example with comments and additional pinctrl
->>  nodes from the MT6795 example, replace the current interrupts
->>  property description with the one from the MT6795 document since
->>  it makes more sense and define its items using conditionals
->>  as they now vary between variants. Also use conditionals to define
->>  valid values for the drive-strength property for each variant.
->> 
->>  Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
->>  ---
->>   .../pinctrl/mediatek,mt6779-pinctrl.yaml      | 189 ++++++++++-----
->>   .../pinctrl/mediatek,pinctrl-mt6795.yaml      | 227 
->> ------------------
->>   2 files changed, 127 insertions(+), 289 deletions(-)
->>   delete mode 100644 
->> Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
->> 
->>  diff --git 
->> a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml 
->> b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
->>  index 70e4ffa2d897..6f2cffe50b11 100644
->>  --- 
->> a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
->>  +++ 
->> b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
->>  @@ -8,6 +8,7 @@ title: Mediatek MT6779 Pin Controller
->> 
->>   maintainers:
->>     - Andy Teng <andy.teng@mediatek.com>
->>  +  - AngeloGioacchino Del Regno 
->> <angelogioacchino.delregno@collabora.com>
->>     - Sean Wang <sean.wang@kernel.org>
->> 
->>   description:
->>  @@ -18,6 +19,7 @@ properties:
->>     compatible:
->>       enum:
->>         - mediatek,mt6779-pinctrl
->>  +      - mediatek,mt6795-pinctrl
->>         - mediatek,mt6797-pinctrl
->> 
->>     reg:
->>  @@ -43,9 +45,7 @@ properties:
->>     interrupt-controller: true
->> 
->>     interrupts:
->>  -    maxItems: 1
-> 
-> Leave the constraints.
-> 
-> Why? Because now you dropped it for mt6797... You bring here some 
-> random
-> changes and it is difficult to review it.
+Recently when using our tool to fuzz kernel, the following crash was triggered:
 
-Fair point. I'll undo this.
+HEAD commit: 64570fbc14f8 Linux 5.15-rc5
+git tree: upstream
+compiler: gcc 8.0.1
+console output:
+https://drive.google.com/file/d/1CZaZY-5qhU8R8Kx9yRxH3uk-Z-4Klr-H/view?usp=share_link
+kernel config: https://drive.google.com/file/d/1uDOeEYgJDcLiSOrx9W8v2bqZ6uOA_55t/view?usp=share_link
 
-I was thinking that MT6797 doesn't take any interrupts at the moment, 
-but I'm certain the hardware does in fact have interrupts, so leaving 
-the constraint should both keep the bindings more accurate and reduce 
-the DT compatibility breakage when someone implements interrupts later.
+Unfortunately, I don't have any reproducer for this crash yet.
 
-> 
->>  -    description: |
->>  -      Specifies the summary IRQ.
->>  +    description: Interrupt outputs to the system interrupt 
->> controller (sysirq).
->> 
->>     "#interrupt-cells":
->>       const: 2
->>  @@ -57,59 +57,6 @@ required:
->>     - gpio-controller
->>     - "#gpio-cells"
->> 
->>  -allOf:
->>  -  - $ref: "pinctrl.yaml#"
->>  -  - if:
->>  -      properties:
-> 
-> Make the move of this hunk in your description cleanup patch. Don't 
-> mix
-> functional changes and some cleanups.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: Wei Chen <harperchen1110@gmail.com>
 
-The idea was that drive-strength was to be defined first then have its 
-constraints set in the conditionals, so I moved this below the 
-patternProperties block to accomplish that. Now I'm thinking of putting 
-it here to begin with so that I wouldn't need to move it in this patch. 
-What do you think?
+INFO: task syz-executor.0:21121 blocked for more than 143 seconds.
+      Not tainted 5.15.0-rc5 #1
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.0  state:D stack:13736 pid:21121 ppid: 20431 flags:0x00004004
+Call Trace:
+ __schedule+0x4a1/0x1720
+ schedule+0x36/0xe0
+ schedule_preempt_disabled+0xf/0x20
+ __mutex_lock+0x67a/0x9a0
+ ppp_ioctl+0x1247/0x1ee0
+ __x64_sys_ioctl+0xe8/0x140
+ do_syscall_64+0x34/0xb0
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x4692c9
+RSP: 002b:00007f36d6808c38 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00000000004692c9
+RDX: 0000000020000040 RSI: 00000000c004743e RDI: 0000000000000004
+RBP: 000000000119bfb0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 000000000119bfac
+R13: 0000000000000000 R14: 000000000119bfa0 R15: 00007ffeb87bf8c0
 
->>  -        compatible:
->>  -          contains:
->>  -            const: mediatek,mt6779-pinctrl
->>  -    then:
->>  -      properties:
->>  -        reg:
->>  -          minItems: 9
->>  -          maxItems: 9
->>  -
->>  -        reg-names:
->>  -          items:
->>  -            - const: gpio
->>  -            - const: iocfg_rm
->>  -            - const: iocfg_br
->>  -            - const: iocfg_lm
->>  -            - const: iocfg_lb
->>  -            - const: iocfg_rt
->>  -            - const: iocfg_lt
->>  -            - const: iocfg_tl
->>  -            - const: eint
->>  -  - if:
->>  -      properties:
->>  -        compatible:
->>  -          contains:
->>  -            const: mediatek,mt6797-pinctrl
->>  -    then:
->>  -      properties:
->>  -        reg:
->>  -          minItems: 5
->>  -          maxItems: 5
->>  -
->>  -        reg-names:
->>  -          items:
->>  -            - const: gpio
->>  -            - const: iocfgl
->>  -            - const: iocfgb
->>  -            - const: iocfgr
->>  -            - const: iocfgt
->>  -  - if:
->>  -      properties:
->>  -        reg-names:
->>  -          contains:
->>  -            const: eint
->>  -    then:
->>  -      required:
->>  -        - interrupts
->>  -        - interrupt-controller
->>  -        - "#interrupt-cells"
->>  -
->>   patternProperties:
->>     '-pins$':
->>       type: object
->>  @@ -169,8 +116,7 @@ patternProperties:
->> 
->>             input-schmitt-disable: true
->> 
->>  -          drive-strength:
->>  -            enum: [2, 4, 8, 12, 16]
->>  +          drive-strength: true
->> 
->>             slew-rate:
->>               enum: [0, 1]
->>  @@ -202,6 +148,110 @@ patternProperties:
->> 
->>           additionalProperties: false
->> 
->>  +allOf:
->>  +  - $ref: "pinctrl.yaml#"
->>  +  - if:
->>  +      properties:
->>  +        compatible:
->>  +          contains:
->>  +            const: mediatek,mt6779-pinctrl
->>  +    then:
->>  +      properties:
->>  +        reg:
->>  +          minItems: 9
->>  +          maxItems: 9
->>  +
->>  +        reg-names:
->>  +          items:
->>  +            - const: gpio
->>  +            - const: iocfg_rm
->>  +            - const: iocfg_br
->>  +            - const: iocfg_lm
->>  +            - const: iocfg_lb
->>  +            - const: iocfg_rt
->>  +            - const: iocfg_lt
->>  +            - const: iocfg_tl
->>  +            - const: eint
->>  +
->>  +        interrupts:
->>  +          items:
->>  +            - description: EINT interrupt
->>  +
->>  +      patternProperties:
->>  +        '-pins$':
->>  +          patternProperties:
->>  +            '^pins':
->>  +              properties:
->>  +                drive-strength:
->>  +                  enum: [2, 4, 8, 12, 16]
->>  +
->>  +  - if:
->>  +      properties:
->>  +        compatible:
->>  +          contains:
->>  +            const: mediatek,mt6795-pinctrl
->>  +    then:
->>  +      properties:
->>  +        reg:
->>  +          minItems: 2
->>  +          maxItems: 2
->>  +
->>  +        reg-names:
->>  +          items:
->>  +            - const: base
->>  +            - const: eint
->>  +
->>  +        interrupts:
->>  +          items:
->>  +            - description: EINT interrupt
->>  +            - description: EINT event_b interrupt
->>  +
->>  +      patternProperties:
->>  +        '-pins$':
->>  +          patternProperties:
->>  +            '^pins':
->>  +              properties:
->>  +                drive-strength:
->>  +                  enum: [2, 4, 6, 8, 10, 12, 14, 16]
->>  +
->>  +  - if:
->>  +      properties:
->>  +        compatible:
->>  +          contains:
->>  +            const: mediatek,mt6797-pinctrl
->>  +    then:
->>  +      properties:
->>  +        reg:
->>  +          minItems: 5
->>  +          maxItems: 5
->>  +
->>  +        reg-names:
->>  +          items:
->>  +            - const: gpio
->>  +            - const: iocfgl
->>  +            - const: iocfgb
->>  +            - const: iocfgr
->>  +            - const: iocfgt
->>  +
->>  +      patternProperties:
->>  +        '-pins$':
->>  +          patternProperties:
->>  +            '^pins':
->>  +              properties:
->>  +                drive-strength:
->>  +                  enum: [2, 4, 8, 12, 16]
->>  +
->>  +  - if:
->>  +      properties:
->>  +        reg-names:
->>  +          contains:
->>  +            const: eint
->>  +    then:
->>  +      required:
->>  +        - interrupts
->>  +        - interrupt-controller
->>  +        - "#interrupt-cells"
->>  +
->>   additionalProperties: false
->> 
->>   examples:
->>  @@ -237,8 +287,9 @@ examples:
->>               #interrupt-cells = <2>;
->>               interrupts = <GIC_SPI 204 IRQ_TYPE_LEVEL_HIGH>;
->> 
->>  -            mmc0_pins_default: mmc0-0 {
->>  -                cmd-dat-pins {
-> 
-> How this is related to the patch?
-> 
-> Organize the patches so they are easy for review.
+Showing all locks held in the system:
+1 lock held by khungtaskd/29:
+ #0: ffffffff8641dee0 (rcu_read_lock){....}-{1:2}, at:
+debug_show_all_locks+0x15/0x17a
+1 lock held by in:imklog/6162:
+ #0: ffff88800f6a1af0 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x92/0xa0
+3 locks held by kworker/1:8/7427:
+ #0: ffff8881070edb38 ((wq_completion)ipv6_addrconf){+.+.}-{0:0}, at:
+process_one_work+0x327/0x9f0
+ #1: ffffc90005197e68 ((addr_chk_work).work){+.+.}-{0:0}, at:
+process_one_work+0x327/0x9f0
+ #2: ffffffff86897be8 (rtnl_mutex){+.+.}-{3:3}, at:
+addrconf_verify_work+0xa/0x20
+5 locks held by kworker/u4:4/2032:
+ #0: ffff888100046938 ((wq_completion)netns){+.+.}-{0:0}, at:
+process_one_work+0x327/0x9f0
+ #1: ffffc900050cfe68 (net_cleanup_work){+.+.}-{0:0}, at:
+process_one_work+0x327/0x9f0
+ #2: ffffffff86893750 (pernet_ops_rwsem){++++}-{3:3}, at: cleanup_net+0x4f/0x540
+ #3: ffffffff86897be8 (rtnl_mutex){+.+.}-{3:3}, at:
+default_device_exit_batch+0x81/0x1d0
+ #4: ffffffff864205b0 (rcu_state.barrier_mutex){+.+.}-{3:3}, at:
+rcu_barrier+0x2b/0x280
+3 locks held by kworker/0:54/20464:
+ #0: ffff888009856738 ((wq_completion)events){+.+.}-{0:0}, at:
+process_one_work+0x327/0x9f0
+ #1: ffffc9000177be68 ((linkwatch_work).work){+.+.}-{0:0}, at:
+process_one_work+0x327/0x9f0
+ #2: ffffffff86897be8 (rtnl_mutex){+.+.}-{3:3}, at: linkwatch_event+0xb/0x40
+3 locks held by kworker/0:55/20465:
+ #0: ffff888009856f38
+((wq_completion)events_power_efficient){+.+.}-{0:0}, at:
+process_one_work+0x327/0x9f0
+ #1: ffffc9000178be68 ((reg_check_chans).work){+.+.}-{0:0}, at:
+process_one_work+0x327/0x9f0
+ #2: ffffffff86897be8 (rtnl_mutex){+.+.}-{3:3}, at:
+reg_check_chans_work+0x37/0x7f0
+3 locks held by kworker/0:144/20554:
+ #0: ffff888009856738 ((wq_completion)events){+.+.}-{0:0}, at:
+process_one_work+0x327/0x9f0
+ #1: ffffc90002a73e68 (deferred_process_work){+.+.}-{0:0}, at:
+process_one_work+0x327/0x9f0
+ #2: ffffffff86897be8 (rtnl_mutex){+.+.}-{3:3}, at:
+switchdev_deferred_process_work+0xa/0x20
+2 locks held by syz-executor.0/21121:
+ #0: ffffffff866c6ec8 (ppp_mutex){+.+.}-{3:3}, at: ppp_ioctl+0x3c/0x1ee0
+ #1: ffffffff86897be8 (rtnl_mutex){+.+.}-{3:3}, at: ppp_ioctl+0x1247/0x1ee0
 
-Sorry, this was meant to be in the previous patch that changed the 
-subnode name patterns. I'll move it there for the next revision.
+=============================================
 
-Thanks,
-Yassine
+NMI backtrace for cpu 0
+CPU: 0 PID: 29 Comm: khungtaskd Not tainted 5.15.0-rc5 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+Call Trace:
+ dump_stack_lvl+0xcd/0x134
+ nmi_cpu_backtrace.cold.8+0xf3/0x118
+ nmi_trigger_cpumask_backtrace+0x18f/0x1c0
+ watchdog+0x9a0/0xb10
+ kthread+0x1a6/0x1e0
+ ret_from_fork+0x1f/0x30
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 PID: 2988 Comm: systemd-journal Not tainted 5.15.0-rc5 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+RIP: 0033:0x7f9ecd0d80f4
+Code: c0 0f 84 df 00 00 00 49 8d 2c 08 48 3b 6f 60 48 89 fb 77 42 8d
+7e ff 48 8d 43 30 83 ff 07 bf 00 00 00 00 0f 43 f7 48 83 ec 08 <48> 8b
+bb 48 01 00 00 41 51 49 89 c9 50 89 f1 41 50 44 0f b6 c2 8b
+RSP: 002b:00007ffc82797cd8 EFLAGS: 00000216
+RAX: 000056106a359cd0 RBX: 000056106a359ca0 RCX: 000000000024cc20
+RDX: 0000000000000000 RSI: 0000000000000006 RDI: 0000000000000000
+RBP: 00000000002591a8 R08: 000000000000c588 R09: 00007ffc82797d20
+R10: 00000000000a43ba R11: 00007f9ec8b7d760 R12: 0000000000000001
+R13: 00007ffc82797d98 R14: 0000000000000006 R15: 00007ffc82797d20
+FS:  00007f9ecd3e98c0 GS:  0000000000000000
 
-
-
+Best,
+Wei
