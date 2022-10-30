@@ -2,159 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B98A612AA6
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 14:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5C9612AA7
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 14:02:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiJ3NBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 09:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
+        id S229890AbiJ3NCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 09:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ3NBA (ORCPT
+        with ESMTP id S229441AbiJ3NB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 09:01:00 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44F0E73
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 06:00:58 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id y14so23377203ejd.9
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 06:00:58 -0700 (PDT)
+        Sun, 30 Oct 2022 09:01:58 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADAEB7ED;
+        Sun, 30 Oct 2022 06:01:58 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id b11so8325978pjp.2;
+        Sun, 30 Oct 2022 06:01:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cnm35rG8dnbniH3bAdsis2He6cISe2Pf5wrYV6j4Yuo=;
-        b=cBXwkIsKoN24vWlka5PMTG3c035GP+NNP31VTvKk/ovhdAguA9PbpUp6uDFTpc+1c6
-         3gnedIZ6l+tDi611G64eg4QQ5ceCfjHFuJAnoIllowDtcEyxO+RWGugtPxtISGjYjtpS
-         FGySmk4Q6UXqEnpwpOsb6BNHeeoT8Hh6DNIvc=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CGx9xgGlypD6vVPYmtIKlqqJfCzM1AZBhS44ab9RgX8=;
+        b=jQOTQEKGb+CIG41bB4XJioqsJ7kZmT8CSPy6y7afGzMQSiSUzigjjVXXnzNnGtBpie
+         XDGK4QNV9j0Q5nJ4NwjOopdzQBkRctDKCb5xiG34iK0iK6TASwTKT8z817KUGkgHwogG
+         aENRy8VOAMUJZsMr45PVeLeGxL5S26daCJKmXjkjK8wt3q27kcATyoFHW5EcMNcL5hLb
+         FSHh8zmC9Qc9dw+m9zW3xs8TtRlCw9DkJIbra0x2+LZUJAsNFfflBFcmvidch/zc9e7p
+         QvZg41KE62VJkqCS8IHPLHroI2twY4Dp6MDDFqE6oZ1MAXCiqGC3f4UtadVB0xsTr88T
+         AEiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cnm35rG8dnbniH3bAdsis2He6cISe2Pf5wrYV6j4Yuo=;
-        b=FJCJ0fdwLlg8qq/VeMStkqCE35taEFKrrXUYHNKho42PAq43lN/futBOQHWEZlu6F1
-         jkCPVRtL48zvt/qSJbOajFc9CszgcEflFb+hEh9WMRAZX2NOTk47rIYkHyoD2xDOCt88
-         cEXoLR1xcElI7IUUBIiERMth6OL4tWXilJWo5KJKuEO2NQDJDLo0Ra2sewdCSuXoAROY
-         lL90bNzxTkgRY0XVVFWIMsyfvUxb3vDd0+Chg/fK+daNnDr5FMRoOEYodT2mTQzdX27B
-         O3SvsL+FkQi96m6/hB8l7kxaw6f7pkr6kYdhdg+H2uw0ZKLbjEY6u8am0FwLWeib+osh
-         DMUQ==
-X-Gm-Message-State: ACrzQf0/fRpywJdIkMHFe9ozcAKPAnw3kuhCP7wLJQXOGqZ5gOqtKql4
-        tmU+vM9atFm7QrPT368tKeRaPOf3Zx9D9nUrQkE6jA==
-X-Google-Smtp-Source: AMsMyM4NetBq4ut/QzVWMIts/JGh74r3MvWVZbbPWGZD2uBgHT+KD14ty4JVz9cs6pVTghOuapmPpBHAw0T1nDpVIoc=
-X-Received: by 2002:a17:906:4c4b:b0:7ad:a197:b58e with SMTP id
- d11-20020a1709064c4b00b007ada197b58emr8190502ejw.203.1667134857432; Sun, 30
- Oct 2022 06:00:57 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CGx9xgGlypD6vVPYmtIKlqqJfCzM1AZBhS44ab9RgX8=;
+        b=CwaESYa1EYr7+XCj0/wbhNtDVHG7ajlaX0H+DQyOS/mp9xfOtR9anU+PGlWdpUkkRz
+         WoVQAM6UpgRAbjLu3RbmuRYciok19KDeL0CsimIkTMy53TU/g4M4rbLv5ujJrGY4JkiO
+         6vUaUoOv07Jj6MQCGesWBX6tmmVJ7vGI0GkJD7qc/aq2WpjQImvRTdX0E657BVEOXlyl
+         3A4+JntkpFFSt2qfWqz0PVEEpDO+dqe7PKD+h04KqXXvt+aIi8QE5g2GyMalHMrztbgQ
+         Q4KfEpu0JFw+My3w6HXketyZVIWnVL6fGRNZhv1jMs9BqbTenoKo6YsVhZMJY4cw9T4X
+         Hn8A==
+X-Gm-Message-State: ACrzQf3Y1j3WxDLsCH3RGcLLbcbn683NKCDXV+boXwgD1M8UrHm9r8WY
+        xGiNMyuLyfa8/HYM5/LDLOE=
+X-Google-Smtp-Source: AMsMyM6J9IPO9aGKH/fadSzI48k3nLGW6+R3RdwgRUHwae/Pdt8yZIQLkmzKcmpU8JSR0tMe+4o8CA==
+X-Received: by 2002:a17:90b:3b49:b0:213:854f:f796 with SMTP id ot9-20020a17090b3b4900b00213854ff796mr16181341pjb.216.1667134917921;
+        Sun, 30 Oct 2022 06:01:57 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-87.three.co.id. [180.214.233.87])
+        by smtp.gmail.com with ESMTPSA id i2-20020a170902cf0200b0016dbdf7b97bsm2664526plg.266.2022.10.30.06.01.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Oct 2022 06:01:57 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 9B342103D98; Sun, 30 Oct 2022 20:01:52 +0700 (WIB)
+Date:   Sun, 30 Oct 2022 20:01:52 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Kang Minchul <tegongkang@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] samples: bpf: fix typo in README
+Message-ID: <Y151wBUkhDHbhzzq@debian.me>
+References: <20221029211520.24033-1-tegongkang@gmail.com>
 MIME-Version: 1.0
-References: <20221018160352.1591428-1-dario.binacchi@amarulasolutions.com> <20221028002710.89A81C43470@smtp.kernel.org>
-In-Reply-To: <20221028002710.89A81C43470@smtp.kernel.org>
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date:   Sun, 30 Oct 2022 14:00:46 +0100
-Message-ID: <CABGWkvp1iMN-4XDN_ifg6uyvQbpRzNyat_eDziWY75Cf_hCpQw@mail.gmail.com>
-Subject: Re: [PATCH v2] clk: ti: dra7-atl: don't allocate `parent_names' variable
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com, kernel test robot <lkp@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Lindgren <tony@atomide.com>, linux-clk@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="CJGNwHFZsEtqqkbV"
+Content-Disposition: inline
+In-Reply-To: <20221029211520.24033-1-tegongkang@gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
 
-On Fri, Oct 28, 2022 at 2:27 AM Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Dario Binacchi (2022-10-18 09:03:52)
-> > diff --git a/drivers/clk/ti/clk-dra7-atl.c b/drivers/clk/ti/clk-dra7-atl.c
-> > index ff4d6a951681..78482d1a4a33 100644
-> > --- a/drivers/clk/ti/clk-dra7-atl.c
-> > +++ b/drivers/clk/ti/clk-dra7-atl.c
-> > @@ -188,24 +188,17 @@ static void __init of_dra7_atl_clock_setup(struct device_node *node)
-> >                 goto cleanup;
-> >         }
-> >
-> > -       parent_names = kzalloc(sizeof(char *), GFP_KERNEL);
-> > -
-> > -       if (!parent_names)
-> > -               goto cleanup;
-> > -
-> >         parent_names[0] = of_clk_get_parent_name(node, 0);
->
-> Can you use struct clk_parent_data instead and assign index to 0? Then
-> we don't even need to use of_clk_get_parent_name() here.
+--CJGNwHFZsEtqqkbV
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I tried to test your suggestions on another platform (I don't have the
-hw to test the driver change) but if I
-don't add pdata.name = of_clk_get_parent_name () the board boot up fails.
+On Sun, Oct 30, 2022 at 06:15:20AM +0900, Kang Minchul wrote:
+> This commit fixes a simple typo in samples/bpf/README.rst
+>=20
+> changed cofiguration to configuration.
 
-As far I can see from the clk_core_populate_parent_map()
+Better say "Fix 'cofiguration' typo in BPF samples README".
 
-....
-/* Copy everything over because it might be __initdata */
-for (i = 0, parent = parents; i < num_parents; i++, parent++) {
-    parent->index = -1;
-    if (parent_names) {
-        /* throw a WARN if any entries are NULL */
-       WARN(!parent_names[i],
-            "%s: invalid NULL in %s's .parent_names\n",
-            __func__, core->name);
-        ret = clk_cpy_name(&parent->name, parent_names[i],
-                                        true);
-    } else if (parent_data) {
-        parent->hw = parent_data[i].hw;
-        parent->index = parent_data[i].index;
-        ret = clk_cpy_name(&parent->fw_name,
-                                         parent_data[i].fw_name, false);
-        if (!ret)
-            ret = clk_cpy_name(&parent->name,
-                                            parent_data[i].name,
-                                            false);
-...
+And please write patch description in imperative mood instead of
+descriptive one.
 
+Thanks.
 
-The function clk_cpy_name() is called with the parameter "mus_exist"
-to true in the path "parent_names" and false
-in the path "parent_data". Therefore, in the path "parent_data" it is
-allowed that parent-> name is not set.
-In doing so, therefore, the change would not even be backward compatible.
+--=20
+An old man doll... just what I always wanted! - Clara
 
-So, IMHO, there are 2 possible options:
- 1 okay to use parent_data, but we keep using of_clk_get_parent_name
-() to set parent_data::name.
- 2 okay to use the version v2 of the patch.
+--CJGNwHFZsEtqqkbV
+Content-Type: application/pgp-signature; name="signature.asc"
 
-What do you think?
+-----BEGIN PGP SIGNATURE-----
 
-Thanks and regards,
-Dario
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY151uQAKCRD2uYlJVVFO
+ox/4AP4ni83os89lwGA309i2eGhaLOIJlFiGESqNNRR6bujGMgD/RCkttusAKxXN
+5HuMOkcgMpe7vdD0COjy/M05RHbW1gc=
+=Ljlk
+-----END PGP SIGNATURE-----
 
--- 
-
-Dario Binacchi
-
-Embedded Linux Developer
-
-dario.binacchi@amarulasolutions.com
-
-__________________________________
-
-
-Amarula Solutions SRL
-
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-
-T. +39 042 243 5310
-info@amarulasolutions.com
-
-www.amarulasolutions.com
+--CJGNwHFZsEtqqkbV--
