@@ -2,162 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D8F612D46
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 23:15:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4EF3612D40
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 23:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiJ3WPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 18:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42320 "EHLO
+        id S229602AbiJ3WJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 18:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiJ3WO6 (ORCPT
+        with ESMTP id S229500AbiJ3WJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 18:14:58 -0400
-X-Greylist: delayed 346 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 30 Oct 2022 15:14:56 PDT
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38996252;
-        Sun, 30 Oct 2022 15:14:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1667167733;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=5GKqb3fJ85fHPjXJt80eik+WVjp9pR4mDfmF41kXhHg=;
-    b=s9uXJgSv+HC6ad9c+vpI+b+5GQtBF3WGF5L3kMRqk4/84LDwPJYHlnbWGjyfkKLEY1
-    e4eyOa+uDhSejmmXQ/PtQp8GdzO28hUoDvmwiCBo3digVXneWO0TZkamgWXfyXLQpCpl
-    F34XK/YHqL3iMHQI2m3qAU4PoDx1LF+VWhMExFVYBPMa/KtBAkbeHry1vRrCXLb4i/Ii
-    WxoWm3pS3rlYGNhqBM8vOcZpcJzYPYL5RDgJe7vks/8GN8oXz7WD3FrM4cvmsjo2x0Tu
-    Svc/SaebelINoiSqbgw8+qzlsa/c94YLMuoMQQnY4l01Pi/8fQsei8/dxdGkXZQANEYU
-    CAaw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGeqXQ="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 48.2.1 DYNA|AUTH)
-    with ESMTPSA id v55d69y9UM8rLaY
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Sun, 30 Oct 2022 23:08:53 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 3/3] drm: omapdrm: Do no allocate non-scanout GEMs through
- DMM/TILER
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <1642587791-13222-4-git-send-email-ivo.g.dimitrov.75@gmail.com>
-Date:   Sun, 30 Oct 2022 23:08:52 +0100
-Cc:     tomba@kernel.org, airlied@linux.ie, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, merlijn@wizzup.org, tony@atomide.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <4B3F8E50-3472-4AED-9A77-3E265DF8C928@goldelico.com>
-References: <1642587791-13222-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <1642587791-13222-4-git-send-email-ivo.g.dimitrov.75@gmail.com>
-To:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 30 Oct 2022 18:09:09 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712213A9;
+        Sun, 30 Oct 2022 15:09:07 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N0r693zn4z4xDn;
+        Mon, 31 Oct 2022 09:09:05 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1667167745;
+        bh=NTQffs0vahflHbYvWvIj/tRjdu5q4+DRytE06b12Z90=;
+        h=Date:From:To:Cc:Subject:From;
+        b=iBP+S3cl0NvSajg0qd6B7PGVmsVBNAVxhtsRm+jae/RMNmp0ld4b3r0j4L01WBNYp
+         VVtoykXpl6bP5sh4mVvMJ+9C5PnBqGoo5AVSrdSxibiJWdDD9MLnW+dmb95nJbqcfz
+         FO3Bh/WBxU8mV5o1Ddjfna7Wgq6Az7kvS1WTbIzMr7wdb8/H3KPiQpXBp+qpD8+P7h
+         R6LrPPRG8utW6tZ7e4faCylOzZWZy+rDnSdrD4mQjUH2M+RE82DY9JfhF0uGNwnrEu
+         ft5u9/uBac92GiA6ktAMuWMIc93H517UC7evhMtZqcL4RDu0qIT6m1RY8/I5uOQaZi
+         QEp9ZT9YxSwlg==
+Date:   Mon, 31 Oct 2022 09:09:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Alistair Francis <alistair@alistair23.me>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the imx-mxs tree
+Message-ID: <20221031090904.7ce6ca3c@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/G+CLzd00wNTG3_o=uI.aitp";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ivaylo,
+--Sig_/G+CLzd00wNTG3_o=uI.aitp
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-it took a while until I found time to test newer kernels (mainline + =
-Letux additions)
-on the OMAP5 Pyra but unfortunately I did not get screen display for =
-v6.1. Even worse,
-the console was flooded by
+Hi all,
 
-[   39.419846] WARNING: CPU: 0 PID: 3673 at =
-drivers/bus/omap_l3_noc.c:139 l3_interrupt_handler+0x23c/0x330
-[   39.429914] 44000000.l3-noc:L3 Custom Error: MASTER MPU TARGET GPMC =
-(Idle): Data Access in Supervisor mode during Functional access
-...
+After merging the imx-mxs tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-making the system unuseable.
+arch/arm/boot/dts/imx7d-remarkable2.dts:26.15-44.5: ERROR (phandle_referenc=
+es): /thermal-zones/epd-thermal: Reference to non-existent node or label "e=
+pd_pmic"
 
-After doing some manual bisect by installing different kernel versions =
-on the boot SD card,
-I was able to identify that it crept in between v5.18 and v5.19-rc1. A =
-git bisect on this
-range (adding Letux patches on top of each bisect base) did reveal this =
-patch as the first bad one.
+ERROR: Input tree has errors, aborting (use -f to force output)
 
-After reverting it seems as if I can use any v5.19 .. v6.1-rc2 kernel =
-without issues.
+Caused by commit
 
-Now I wonder why this patch breaks my system?
+  b725fda78895 ("ARM: dts: imx7d-remarkable2: Enable silergy,sy7636a")
 
-BR and thanks,
-Nikolaus
+I have used the imx-mxs tree from next-20221028 for today.
 
+--=20
+Cheers,
+Stephen Rothwell
 
-> Am 19.01.2022 um 11:23 schrieb Ivaylo Dimitrov =
-<ivo.g.dimitrov.75@gmail.com>:
->=20
-> On devices with DMM, all allocations are done through either DMM or =
-TILER.
-> DMM/TILER being a limited resource means that such allocations will =
-start
-> to fail before actual free memory is exhausted. What is even worse is =
-that
-> with time DMM/TILER space gets fragmented to the point that even if we =
-have
-> enough free DMM/TILER space and free memory, allocation fails because =
-there
-> is no big enough free block in DMM/TILER space.
->=20
-> Such failures can be easily observed with OMAP xorg DDX, for example -
-> starting few GUI applications (so buffers for their windows are =
-allocated)
-> and then rotating landscape<->portrait while closing and opening new
-> windows soon results in allocation failures.
->=20
-> Fix that by mapping buffers through DMM/TILER only when really needed,
-> like, for scanout buffers.
->=20
-> Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-> ---
-> drivers/gpu/drm/omapdrm/omap_gem.c | 12 ++++++++----
-> 1 file changed, 8 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/omapdrm/omap_gem.c =
-b/drivers/gpu/drm/omapdrm/omap_gem.c
-> index 41c1a6d..cf57179 100644
-> --- a/drivers/gpu/drm/omapdrm/omap_gem.c
-> +++ b/drivers/gpu/drm/omapdrm/omap_gem.c
-> @@ -821,10 +821,12 @@ int omap_gem_pin(struct drm_gem_object *obj, =
-dma_addr_t *dma_addr)
-> 			if (ret)
-> 				goto fail;
->=20
-> -			if (priv->has_dmm) {
-> -				ret =3D omap_gem_pin_tiler(obj);
-> -				if (ret)
-> -					goto fail;
-> +			if (omap_obj->flags & OMAP_BO_SCANOUT) {
-> +				if (priv->has_dmm) {
-> +					ret =3D omap_gem_pin_tiler(obj);
-> +					if (ret)
-> +						goto fail;
-> +				}
-> 			}
-> 		} else {
-> 			refcount_inc(&omap_obj->pin_cnt);
-> @@ -861,6 +863,8 @@ static void omap_gem_unpin_locked(struct =
-drm_gem_object *obj)
-> 			kfree(omap_obj->sgt);
-> 			omap_obj->sgt =3D NULL;
-> 		}
-> +		if (!(omap_obj->flags & OMAP_BO_SCANOUT))
-> +			return;
-> 		if (priv->has_dmm) {
-> 			ret =3D tiler_unpin(omap_obj->block);
-> 			if (ret) {
-> --=20
-> 1.9.1
->=20
+--Sig_/G+CLzd00wNTG3_o=uI.aitp
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNe9gAACgkQAVBC80lX
+0GzYowgAkgreZgexi6/EQQ3oKw7I/oBrroNu4vo9srKEDt1UB5lJ2rkc2JEsF0ce
+HmO43gFeQDjV6ysk9AJLx0umnFeyrc3IhugFHYfIgomBY9gg02f2dLHCF+4zTzbN
+0wlZo5stYpK9LxujIKHeo9ZxSBeTiIQfz7iOG2btR+qwzwxO272uGIsZJUtN4V3o
+l9KR8rx6uSLxq+dCQGml3sjbiqDdvyu/aNJI8WLmYxB00KCi5U2n1AKDhzCFoStv
+CEZSz19h2g9DrTEIGxIxpbfLfxKtjkmuGxf3M+wjFfaSuXw+IwChmBoBGsvfds46
++XUeapz6wTW9BjBxTDu5xpbyNeWqvQ==
+=RSos
+-----END PGP SIGNATURE-----
+
+--Sig_/G+CLzd00wNTG3_o=uI.aitp--
