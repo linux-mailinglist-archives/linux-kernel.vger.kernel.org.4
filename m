@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50C1612A2B
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 11:40:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9590612A2C
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 11:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbiJ3KkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 06:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51362 "EHLO
+        id S229935AbiJ3KkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 06:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbiJ3KkJ (ORCPT
+        with ESMTP id S229938AbiJ3KkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 06:40:09 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A370B7E7
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 03:40:08 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id x2so13797472edd.2
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 03:40:08 -0700 (PDT)
+        Sun, 30 Oct 2022 06:40:21 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4619F2BB
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 03:40:20 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id k2so22980921ejr.2
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 03:40:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=fWh0jiw47wr5EpTblkOIk2Y0gZ5oFXjTyvGDtppfH6g=;
-        b=RvdX4EeB4VauGLFSIqplc5pDhWhiZW2n2yUHMU9dsTSPAKV4OwnyOcHfzJkpYzk/nQ
-         L6Zmdzi5HtlwmuQLHHZO8UnFuPMVaMEH38lYLXkky0MZO1Wg4Fy5Z6QI1X0Liubtb6ZC
-         zOijB7Ogv8CM9UVlgkORYNbd/SqguGVSenqbTv4q8sbyRcDJzwqk8cGGhmj06UGHPVqE
-         1n5BecfsKoYGmXWdlMa/3lRY0vaithZyjpDW56YNP4ZJklpLU2aA7ZlT+5x63jr0C2iL
-         hdyn62Y21IYQVATUdV+zPmZSQ1ANsRtIFDi8/XC4DJ3gTFTnGAc+NzFb7SsIiyWBVDxg
-         Gbzw==
+        bh=HGFd6yEFbbRiXKkguK7e/PC3bOLVDfqzNL+us0Fp3Nw=;
+        b=k1bbyvERjl2SJ7iZjkPa/XVKDX+KQH1w5Kw2KxyUGtiUo3FHtc1iIAYcP7La6leXmK
+         Jl9wKx2w+iwRYgoNcJjQLCJKc3Y+M+Jpg0+TW7rVodmiP82Tf7r/zP1Hb+f4wft3ePuS
+         A+xMezo1Fk3JewfYq5Z3CGfXbivBpfHkoRDCKNslpj3NSnYUZegN4riDCmRnMm5ojvTx
+         JB4qTKcGsazFomvzEevT0SDQB745r16osIj/Ghbagz8c31k/Ca8vjSn+w0GY/LnOpLyL
+         olxAFD5PTcAtaI34st8Zge3DwCPIRfMQIxrEuaWCs9MBmtqqrZm+unXwYyqqIOW8uFAx
+         kNKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fWh0jiw47wr5EpTblkOIk2Y0gZ5oFXjTyvGDtppfH6g=;
-        b=m+pAFagPCyLGwoHrcieE7Elx/bidrs/F5Niy+0wIWDD2x0QMN9HxidEyrEAZIA3X+d
-         QT8L5llyKNug8kNy404+wM2Q7Dx+gtmc70815xhNXUcnalmWyhh9sYa/tf6mQ8Iis2Om
-         gMi2wU47WEuTLf+LpYFWrZA2Cd1ROT7IIHZ7TcVr45OIbAtdUmCp5Q7lOYhkmcPRv0He
-         149WBrChWx3Hm6LzSBXB5wjKGpsdARq/V/d9P/Selkue7iQHg8XaUwkzlfHBbIgDaSWM
-         8LaKhX48uDA+LR0sV1hss9PGII6S+dviwS4E5EcaYPbG5T13kTvk13B5a83DfRP3a/I/
-         K+Cw==
-X-Gm-Message-State: ACrzQf1RaBMXz/HKms/Z2AtstMTArHRIiSf7/EsdVCcisotUb94/BY1n
-        uraGIFGtCQ3/jR+Sdz9Bxdw=
-X-Google-Smtp-Source: AMsMyM5CE1OQ9M24HRS7BXtxwFnHLbCMv4ssc2A+JyI1WUaFYZmEQk9j9AdBivPLgiC5eSDIvEVgqQ==
-X-Received: by 2002:a05:6402:2989:b0:44e:90d0:b9ff with SMTP id eq9-20020a056402298900b0044e90d0b9ffmr8049193edb.110.1667126406972;
-        Sun, 30 Oct 2022 03:40:06 -0700 (PDT)
+        bh=HGFd6yEFbbRiXKkguK7e/PC3bOLVDfqzNL+us0Fp3Nw=;
+        b=s6AG/VOvXM4esxhe2L7LV3QelfvRSjEstboNdLt++qy+fkzdq2+wL2usUUS6Ioy8JI
+         laVJOga2nN/n+bZCMxoNfBmwNs0Xtah2zZrK36fMDffca6D1+t9+cGgilj/MBsbVqHEn
+         IXpbArPzuG/YkS3yYSL9P5PT57U7h5/S//6DRBP7Eeruj4J0sNmSRjvKPVgIauE+y/iP
+         xFBqSKYr2d+HNLwvyuuVeGfnl5WFJssJ0/e+yIsUP5EKdzUOQ8pvsh7sorLFMP333CSk
+         CUv9oaCd9TLyMR+RhV9SkmqTiU8Ku6S39zTO5odishQ0jjdm3JLMFBpBJ+id8+cCd9pz
+         LAgw==
+X-Gm-Message-State: ACrzQf0EX1Pt4A9IKz+onJhZkehsSS+iEQdl+SzWYL1g2UcMDJGn0Mw/
+        X8c+d35OGZznOYA491RJRb0=
+X-Google-Smtp-Source: AMsMyM7Kb7ZzSXTbaaJeHzqj8oZ/v5QY3duAyytKC6PUEv42ZpHcu2spyBVa0eYv34wjauJ2x/w/8g==
+X-Received: by 2002:a17:907:78a:b0:78d:9ac7:b697 with SMTP id xd10-20020a170907078a00b0078d9ac7b697mr7499697ejb.457.1667126418899;
+        Sun, 30 Oct 2022 03:40:18 -0700 (PDT)
 Received: from [192.168.1.102] (p57935738.dip0.t-ipconnect.de. [87.147.87.56])
-        by smtp.gmail.com with ESMTPSA id i2-20020aa7c9c2000000b00458947539desm1906119edt.78.2022.10.30.03.40.06
+        by smtp.gmail.com with ESMTPSA id tx8-20020a1709078e8800b0078175601630sm1711531ejc.79.2022.10.30.03.40.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Oct 2022 03:40:06 -0700 (PDT)
-Message-ID: <b589cbce-87a2-d58c-72e0-3f334a026ea7@gmail.com>
-Date:   Sun, 30 Oct 2022 11:40:05 +0100
+        Sun, 30 Oct 2022 03:40:18 -0700 (PDT)
+Message-ID: <cc1c4548-984b-a40e-c93a-7e179d64912f@gmail.com>
+Date:   Sun, 30 Oct 2022 11:40:17 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 00/13] staging: r8188eu: clean up action frame handlers
+Subject: Re: [PATCH] staging: r8188eu: use min() instead of ternary operator
 Content-Language: en-US
-To:     Martin Kaiser <martin@kaiser.cx>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
+To:     Michael Straube <straube.linux@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20221029172337.1574593-1-martin@kaiser.cx>
+References: <20221030081020.8533-1-straube.linux@gmail.com>
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20221029172337.1574593-1-martin@kaiser.cx>
+In-Reply-To: <20221030081020.8533-1-straube.linux@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,30 +76,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/29/22 19:23, Martin Kaiser wrote:
-> Clean up the handlers for action frames. Summarize common code, remove
-> unnecessary return values.
+On 10/30/22 09:10, Michael Straube wrote:
+> Replace a ternary operator usage with the min() macro to improve
+> readability.
 > 
-> Please apply this on top of the "remove the last get_da calls" series.
+> Signed-off-by: Michael Straube <straube.linux@gmail.com>
+> ---
+>   drivers/staging/r8188eu/os_dep/ioctl_linux.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Martin Kaiser (13):
->    staging: r8188eu: replace a GetAddr1Ptr call
->    staging: r8188eu: remove duplicate category check
->    staging: r8188eu: make on_action_public static void
->    staging: r8188eu: make OnAction_back static void
->    staging: r8188eu: make OnAction_p2p static void
->    staging: r8188eu: remove category check in OnAction_p2p
->    staging: r8188eu: replace switch-case with if
->    staging: r8188eu: replace GetAddr1Ptr call in OnAction_p2p
->    staging: r8188eu: clean up on_action_public
->    staging: r8188eu: remove return value from on_action_public_vendor
->    staging: r8188eu: remove return value from on_action_public_default
->    staging: r8188eu: rtw_action_public_decache's token is a u8
->    staging: r8188eu: check destination address in OnAction
-> 
->   drivers/staging/r8188eu/core/rtw_mlme_ext.c   | 116 +++++-------------
->   .../staging/r8188eu/include/rtw_mlme_ext.h    |   7 --
->   2 files changed, 28 insertions(+), 95 deletions(-)
-> 
+> diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+> index 8516e253bb03..22aab3f986b4 100644
+> --- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+> +++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+> @@ -3568,7 +3568,7 @@ static int rtw_wx_set_priv(struct net_device *dev,
+>   
+>   		if ((_VENDOR_SPECIFIC_IE_ == probereq_wpsie[0]) &&
+>   		    (!memcmp(&probereq_wpsie[2], wps_oui, 4))) {
+> -			cp_sz = probereq_wpsie_len > MAX_WPS_IE_LEN ? MAX_WPS_IE_LEN : probereq_wpsie_len;
+> +			cp_sz = min(probereq_wpsie_len, MAX_WPS_IE_LEN);
+>   
+>   			pmlmepriv->wps_probe_req_ie_len = 0;
+>   			kfree(pmlmepriv->wps_probe_req_ie);
 
 Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
