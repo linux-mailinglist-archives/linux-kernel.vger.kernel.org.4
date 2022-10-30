@@ -2,53 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776DE6129C5
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 10:57:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FDE96129C8
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 11:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbiJ3J5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 05:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47604 "EHLO
+        id S229939AbiJ3KAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 06:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiJ3J5e (ORCPT
+        with ESMTP id S229500AbiJ3KAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 05:57:34 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087A4D102;
-        Sun, 30 Oct 2022 02:57:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=Es72KeOaZpA6K+UBk66htKhwB9
-        W16d4I0c25YGEypJc1CsX9tlzt8WNYTve1nYKGuq1mt9zPKwtp7hZitNTVY1RNTG0Ls7E9wqHg9S6
-        pQgWJcSUlfDCzLAeJQmGYKynuRWeIlTw//Tbtn49qSiHp1zv8GzpQKDwXkkFaC7tJ7jMAn77IhSi/
-        MQmbe91y4hDAA9t0kJ87Y99nEe1Bz7S7rlnK50UG0OAfHEi8IcrQNV6wSostj0SI56g1IWW8p6A1P
-        NrokoSNKiXYwOvnupCBH+XuzANKDQqGfAryxK+9Zrq3OaNrIWMCW/u3hA7aBa4qA9/+zD8Z3M0xH9
-        F4KdFRjA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1op54M-00F4ld-Ot; Sun, 30 Oct 2022 09:57:30 +0000
-Date:   Sun, 30 Oct 2022 02:57:30 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Jinlong Chen <nickyc975@zju.edu.cn>
-Cc:     axboe@kernel.dk, hch@lst.de, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] blk-mq: move queue_is_mq out of blk_mq_cancel_work_sync
-Message-ID: <Y15Kiq+Y5r63RLR3@infradead.org>
-References: <20221030094730.1275463-1-nickyc975@zju.edu.cn>
+        Sun, 30 Oct 2022 06:00:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAA2BE26
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 02:59:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667123964;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lperXuLkSOUMuSlgJ3I7ALgwdptxb42WxxooK0bP59s=;
+        b=RugE12po8nPLb7LrKrylU8ffHlbSwA7ogY8eNHYkO3R826SKpYNRDSatAemKRzp/zEx5mf
+        VyxJMPXcnIEMKdLuy9hENn6K5DbWVI05eWwBvSTEphYbdxEmDLen2hE20GCnzae1Z2d6xD
+        CoFcmqw8uonw8T3oSSIqYdqHyJRFSLQ=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-612-SayEczxtOcOMyAkJCteoxg-1; Sun, 30 Oct 2022 05:59:22 -0400
+X-MC-Unique: SayEczxtOcOMyAkJCteoxg-1
+Received: by mail-ed1-f70.google.com with SMTP id f16-20020a056402355000b00461cf923fdcso5940333edd.13
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 02:59:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lperXuLkSOUMuSlgJ3I7ALgwdptxb42WxxooK0bP59s=;
+        b=yAmoQbp+eRhKkHMQECejCPBSMZuZhWLxOqYEE71GcXNCoX0C6PVfxqQUCRfMAHNimW
+         Zd4B1gWXBb6OhrdfG/d8T7QJ4MbHaNsZRBexSkLF5O4+SrAiLKhs/tS4GW8mWy0vB9DX
+         d1uC1q95aV4JJwIfQt3tV5BKg2SqLTJm8mC1WMvPLLwEs5zKJx0jSsEyJQkhzPR+liFc
+         N7//uXomK5duUpkobHSAVJA96Lsc60Dum7R0EtG7NuXE4OV6Z+nWaWMWuC3fO8YrL6zy
+         lsbVb8fo4IkVMNeaXN3mfqdliPn5zIWDjmhvh1pzGAuFFvkmrMKrMs3N/slAW+yZts+b
+         pwJg==
+X-Gm-Message-State: ACrzQf2uxkgv6XGm+A99JFx0jY03itdhkKaX0WnM9mCbSnQ0w3lMAYuC
+        6ertysViRln66aEelJeft7aISgHPMm5Zif89eYDfiYsy/xFbcf8EdTbXVWAMorQmh3xzH2o1IWI
+        bZcdD9NpyXyTNGmYezFIy8OJ7
+X-Received: by 2002:a17:907:2c74:b0:7a1:d333:f214 with SMTP id ib20-20020a1709072c7400b007a1d333f214mr7732264ejc.14.1667123960855;
+        Sun, 30 Oct 2022 02:59:20 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5z9O9q09jz3IsSKd4hMBEsZJIqduETwCbwkmeHNeUBBPFIL1FFy/xhHwXrQ5bCCjaIPnQ2/A==
+X-Received: by 2002:a17:907:2c74:b0:7a1:d333:f214 with SMTP id ib20-20020a1709072c7400b007a1d333f214mr7732248ejc.14.1667123960618;
+        Sun, 30 Oct 2022 02:59:20 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id co6-20020a0564020c0600b00459e3a3f3ddsm1879270edb.79.2022.10.30.02.59.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 30 Oct 2022 02:59:19 -0700 (PDT)
+Message-ID: <0574f6d2-51dd-4962-40fe-9424a19cb3c7@redhat.com>
+Date:   Sun, 30 Oct 2022 10:59:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221030094730.1275463-1-nickyc975@zju.edu.cn>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 1/3] Bluetooth: btusb: Fix Chinese CSR dongles again by
+ re-adding ERR_DATA_REPORTING quirk
+To:     Ismael Ferreras Morezuelas <swyterzone@gmail.com>,
+        marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        luiz.von.dentz@intel.com, quic_zijuhu@quicinc.com
+Cc:     linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20221029202454.25651-1-swyterzone@gmail.com>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221029202454.25651-1-swyterzone@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good:
+Hi Ismael,
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+On 10/29/22 22:24, Ismael Ferreras Morezuelas wrote:
+> A patch series by a Qualcomm engineer essentially removed my
+> quirk/workaround because they thought it was unnecessary.
+> 
+> It wasn't, and it broke everything again:
+> 
+> https://patchwork.kernel.org/project/netdevbpf/list/?series=661703&archive=both&state=*
+> 
+> He argues that the quirk is not necessary because the code should check if the dongle
+> says if it's supported or not. The problem is that for these Chinese CSR
+> clones they say that it would work, but it's a lie. Take a look:
+> 
+> = New Index: 00:00:00:00:00:00 (Primary,USB,hci0)                              [hci0] 11.272194
+> = Open Index: 00:00:00:00:00:00                                                [hci0] 11.272384
+> < HCI Command: Read Local Version Information (0x04|0x0001) plen 0          #1 [hci0] 11.272400
+>> HCI Event: Command Complete (0x0e) plen 12                                #2
+>> [hci0] 11.276039
+>       Read Local Version Information (0x04|0x0001) ncmd 1
+>         Status: Success (0x00)
+>         HCI version: Bluetooth 5.0 (0x09) - Revision 2064 (0x0810)
+>         LMP version: Bluetooth 5.0 (0x09) - Subversion 8978 (0x2312)
+>         Manufacturer: Cambridge Silicon Radio (10)
+> ...
+> < HCI Command: Read Local Supported Features (0x04|0x0003) plen 0           #5 [hci0] 11.648370
+>> HCI Event: Command Complete (0x0e) plen 68                               #12
+>> [hci0] 11.668030
+>       Read Local Supported Commands (0x04|0x0002) ncmd 1
+>         Status: Success (0x00)
+>         Commands: 163 entries
+>           ...
+>           Read Default Erroneous Data Reporting (Octet 18 - Bit 2)
+>           Write Default Erroneous Data Reporting (Octet 18 - Bit 3)
+>           ...
+> ...
+> < HCI Command: Read Default Erroneous Data Reporting (0x03|0x005a) plen 0  #47 [hci0] 11.748352
+> = Close Index: 00:1A:7D:DA:71:XX                                               [hci0] 13.776824
+> 
+> So bring it back wholesale.
+> 
+> Fixes: 63b1a7dd3 (Bluetooth: hci_sync: Remove HCI_QUIRK_BROKEN_ERR_DATA_REPORTING)
+> Fixes: e168f69008 (Bluetooth: btusb: Remove HCI_QUIRK_BROKEN_ERR_DATA_REPORTING for fake CSR)
+> Fixes: 766ae2422b (Bluetooth: hci_sync: Check LMP feature bit instead of quirk)
+> 
+> Cc: stable@vger.kernel.org
+> Cc: Zijun Hu <quic_zijuhu@quicinc.com>
+> Cc: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Tested-by: Ismael Ferreras Morezuelas <swyterzone@gmail.com>
+> Signed-off-by: Ismael Ferreras Morezuelas <swyterzone@gmail.com>
+
+Thank you very much for your continued work on making these
+clones work with Linux!
+
+The entire series looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+for the series.
+
+Regards,
+
+Hans
+
+
+> ---
+>  drivers/bluetooth/btusb.c   |  1 +
+>  include/net/bluetooth/hci.h | 11 +++++++++++
+>  net/bluetooth/hci_sync.c    |  9 +++++++--
+>  3 files changed, 19 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+> index 3b269060e91f..1360b2163ec5 100644
+> --- a/drivers/bluetooth/btusb.c
+> +++ b/drivers/bluetooth/btusb.c
+> @@ -2174,6 +2174,7 @@ static int btusb_setup_csr(struct hci_dev *hdev)
+>  		 * without these the controller will lock up.
+>  		 */
+>  		set_bit(HCI_QUIRK_BROKEN_STORED_LINK_KEY, &hdev->quirks);
+> +		set_bit(HCI_QUIRK_BROKEN_ERR_DATA_REPORTING, &hdev->quirks);
+>  		set_bit(HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL, &hdev->quirks);
+>  		set_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks);
+>  
+> diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
+> index e004ba04a9ae..0fe789f6a653 100644
+> --- a/include/net/bluetooth/hci.h
+> +++ b/include/net/bluetooth/hci.h
+> @@ -228,6 +228,17 @@ enum {
+>  	 */
+>  	HCI_QUIRK_VALID_LE_STATES,
+>  
+> +	/* When this quirk is set, then erroneous data reporting
+> +	 * is ignored. This is mainly due to the fact that the HCI
+> +	 * Read Default Erroneous Data Reporting command is advertised,
+> +	 * but not supported; these controllers often reply with unknown
+> +	 * command and tend to lock up randomly. Needing a hard reset.
+> +	 *
+> +	 * This quirk can be set before hci_register_dev is called or
+> +	 * during the hdev->setup vendor callback.
+> +	 */
+> +	HCI_QUIRK_BROKEN_ERR_DATA_REPORTING,
+> +
+>  	/*
+>  	 * When this quirk is set, then the hci_suspend_notifier is not
+>  	 * registered. This is intended for devices which drop completely
+> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+> index bd9eb713b26b..0a7abc817f10 100644
+> --- a/net/bluetooth/hci_sync.c
+> +++ b/net/bluetooth/hci_sync.c
+> @@ -3798,7 +3798,8 @@ static int hci_read_page_scan_activity_sync(struct hci_dev *hdev)
+>  static int hci_read_def_err_data_reporting_sync(struct hci_dev *hdev)
+>  {
+>  	if (!(hdev->commands[18] & 0x04) ||
+> -	    !(hdev->features[0][6] & LMP_ERR_DATA_REPORTING))
+> +	    !(hdev->features[0][6] & LMP_ERR_DATA_REPORTING) ||
+> +	    test_bit(HCI_QUIRK_BROKEN_ERR_DATA_REPORTING, &hdev->quirks))
+>  		return 0;
+>  
+>  	return __hci_cmd_sync_status(hdev, HCI_OP_READ_DEF_ERR_DATA_REPORTING,
+> @@ -4316,7 +4317,8 @@ static int hci_set_err_data_report_sync(struct hci_dev *hdev)
+>  	bool enabled = hci_dev_test_flag(hdev, HCI_WIDEBAND_SPEECH_ENABLED);
+>  
+>  	if (!(hdev->commands[18] & 0x08) ||
+> -	    !(hdev->features[0][6] & LMP_ERR_DATA_REPORTING))
+> +	    !(hdev->features[0][6] & LMP_ERR_DATA_REPORTING) ||
+> +	    test_bit(HCI_QUIRK_BROKEN_ERR_DATA_REPORTING, &hdev->quirks))
+>  		return 0;
+>  
+>  	if (enabled == hdev->err_data_reporting)
+> @@ -4475,6 +4477,9 @@ static const struct {
+>  	HCI_QUIRK_BROKEN(STORED_LINK_KEY,
+>  			 "HCI Delete Stored Link Key command is advertised, "
+>  			 "but not supported."),
+> +	HCI_QUIRK_BROKEN(ERR_DATA_REPORTING,
+> +			 "HCI Read Default Erroneous Data Reporting command is "
+> +			 "advertised, but not supported."),
+>  	HCI_QUIRK_BROKEN(READ_TRANSMIT_POWER,
+>  			 "HCI Read Transmit Power Level command is advertised, "
+>  			 "but not supported."),
+
