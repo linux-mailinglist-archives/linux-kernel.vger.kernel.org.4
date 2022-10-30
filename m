@@ -2,89 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66DB6126F7
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 03:57:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 543C56126F9
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 03:59:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiJ3Cxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 22:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
+        id S229695AbiJ3C7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 22:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiJ3Cxg (ORCPT
+        with ESMTP id S229549AbiJ3C7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 22:53:36 -0400
-Received: from mail1.bemta37.messagelabs.com (mail1.bemta37.messagelabs.com [85.158.142.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF4648EB4;
-        Sat, 29 Oct 2022 19:53:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-        s=170520fj; t=1667098413; i=@fujitsu.com;
-        bh=PdGMq5jhTndn3C8TSzAZMy4sSkX9K8IOAvOSbW37nxk=;
-        h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-         In-Reply-To:Content-Type:Content-Transfer-Encoding;
-        b=uN45gEmmIs+7taQEsOMyCYwJdBvlDBjCW7WtXaLTEeJjNzsV2Xm6XcxF8X5EO6Vec
-         n4WD22tycJdBNM5fvC57VmfYoCoQoENkUxqZNUXRw5IHZC9v5GvmMwWhgbm++g43/c
-         TRbGdp5pDNnDPE/vlvw7bWMsXgOUWFf/u4rwZZ/+Tl1qs+7fHiLx72/jUoSS0T3qC+
-         HpaSgiufIGVlrgezzcWYeMkBNkMSsRuFdVdMnYDFoRbipsQLkucuWS0QFB/mrR5M2w
-         hrJwcFl2IJqBSpqgxQeOFP0sjxNCxV4E8MC0JtrbMjJC5FSxrNUDS3GQ9JE5rv26ot
-         9rfSYTpKJLOYg==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLKsWRWlGSWpSXmKPExsViZ8OxWVf7eWy
-  yweWlchYzZ5xgtJjyaymzxeVdc9gsnh3qZbH4MnUas8X5Y/3sDmweO2fdZffYtKqTzePzJjmP
-  rZ9vswSwRLFm5iXlVySwZjRcvcBe0CZT8frIAqYGxiaJLkYuDiGBjYwS849eYIdwFjNJPHown
-  Q3C2QaUOdTI2MXIycErYCdxaOFpZhCbRUBVYmbbYlaIuKDEyZlPWEBsUYEIiYePJoHZwgL2Eu
-  /aJ7KB2MwC4hK3nsxnArFFBGIk/h37xQgRd5fom7IPaA4H0DJHiab7+iBhNgENiXstN8FKOAW
-  cJCYd38AEUW4hsfjNQXYIW15i+9s5YOdICChKHOn8ywJhV0jMmtXGBGGrSVw9t4l5AqPwLCSX
-  zkJy0SwkY2chGbuAkWUVo1lxalFZapGuqV5SUWZ6RkluYmaOXmKVbqJeaqluXn5RSYauoV5ie
-  bFeanGxXnFlbnJOil5easkmRmCspRQnOO1gnLLsj94hRkkOJiVR3szO2GQhvqT8lMqMxOKM+K
-  LSnNTiQ4wyHBxKErxNj4BygkWp6akVaZk5wLiHSUtw8CiJ8EYfA0rzFhck5hZnpkOkTjEqSon
-  zOj4ESgiAJDJK8+DaYKnmEqOslDAvIwMDgxBPQWpRbmYJqvwrRnEORiVhXpHHQFN4MvNK4Ka/
-  AlrMBLQ4fVIUyOKSRISUVAPT2eIfyYsm2FrXh5Spd/tJqEnty+W5sWLK4fKnOj0TkpfH/2K4f
-  jZlwgqXr4deKRkcT9p6+ouYtWNPQWLTxzvNb6ZG9/3TPZWV719+6uKtGYd1y/WZd7jJZ9W3pj
-  JnHUw4d2CbsuPXymPev0teHDu+JvfLwmruly+m+Wybp9FU4nC49v3LV9P8vty5F67XHGSx6Z1
-  8lGUCa4qReNYjtjk7c/edmcJe41Rx/Juz3sKUqdtmnpx56NXH3jqGkDcbAsviqp+l3XtwvvRi
-  stdPn6DU5fWPP/xzVrnK2cS29/He6YmsLC+Xti/OuJoUwrbAZNmF+UwhS55c0M1bpHMhtihOK
-  feEYnD+vic7ayXfhSiUKLEUZyQaajEXFScCAByihl+wAwAA
-X-Env-Sender: lizhijian@fujitsu.com
-X-Msg-Ref: server-5.tower-732.messagelabs.com!1667098411!33197!1
-X-Originating-IP: [62.60.8.179]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.100.1; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 23476 invoked from network); 30 Oct 2022 02:53:31 -0000
-Received: from unknown (HELO n03ukasimr04.n03.fujitsu.local) (62.60.8.179)
-  by server-5.tower-732.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 30 Oct 2022 02:53:31 -0000
-Received: from n03ukasimr04.n03.fujitsu.local (localhost [127.0.0.1])
-        by n03ukasimr04.n03.fujitsu.local (Postfix) with ESMTP id E63CC142;
-        Sun, 30 Oct 2022 02:53:30 +0000 (GMT)
-Received: from R01UKEXCASM126.r01.fujitsu.local (R01UKEXCASM126 [10.183.43.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by n03ukasimr04.n03.fujitsu.local (Postfix) with ESMTPS id D947E73;
-        Sun, 30 Oct 2022 02:53:30 +0000 (GMT)
-Received: from [10.167.226.45] (10.167.226.45) by
- R01UKEXCASM126.r01.fujitsu.local (10.183.43.178) with Microsoft SMTP Server
- (TLS) id 15.0.1497.32; Sun, 30 Oct 2022 02:53:27 +0000
-Message-ID: <a0ab3805-3602-6037-b9b6-ddab88c424be@fujitsu.com>
-Date:   Sun, 30 Oct 2022 10:53:20 +0800
+        Sat, 29 Oct 2022 22:59:34 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C38C7C
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 19:59:32 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id z14so11431549wrn.7
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 19:59:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ViUX7nS+sMEeCyJpGqlawogkGghwNa0jyE1+CkQUpdc=;
+        b=qQ6rDtl8YogRVAxKyJvgUzMif7w/ZB2i3g7mK+pw6pYRNgxQTUsMyj8nPdMXEeXzLF
+         PXLS4IoVwFNta7RCuAAUYM1Ms2+nJyNo0HafTdH0SA83mBdA4RPJuPtXTKY/5D56dVm3
+         HTSR+mBo3ZX9sBybbjBm56aRQkVg+vUxgvp8xn9lOrdS6+9rPBME/OLt56ykODryouhU
+         DvDiQIC2IdYP+AOyBKmJLgWIHtjKzfAqJECgL9kMvSaX3dzv4+FwRH/p9XR3/oQPgsYe
+         OEq6CtMEWDtIV8n8lq526UsStYYB1l593S4s+aat/PW1A4HZzfUdkNM6NHqcL6RpkPNk
+         awpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ViUX7nS+sMEeCyJpGqlawogkGghwNa0jyE1+CkQUpdc=;
+        b=am3hP4cRSVHroGvaIWKU7+XyMku9hZa0sgXY9kN5PcbJD203D5WqMlm1kc1QI/6ojM
+         KWPQQV0rldBOWD86zLv6rPWxVNoNCZfp0NoZEmQqmQPxRI3zPKuk9BQ2sltpzQPXvJD+
+         I1PeSDOUwaOd1peq27lOieJL059zVZ3hMkIPHDdYUj93kw92kLK4DGj9vXL+b6DyYa8s
+         A1GKlHAXp1FS6pZSod/XXSNOTJ2mMNYAvsqZcaNzKw0zxrAp4pjXm8fP/YgXKiMBL3xY
+         oaKaPn8RUtVdg+jffKB369tlYP+CyEVQ847ugXxK02UyfGtqMD0saUWLWmVYW2eCLecl
+         orCg==
+X-Gm-Message-State: ACrzQf11qtFl3Wela4Zp+n9viqnvpoX7UVfeqwQ7ACn6HQQDURQakEqD
+        4v1uqQuf2VCKqJ8dOzyfTYjBJQ==
+X-Google-Smtp-Source: AMsMyM54r0IkR1bAn7ogIWoE8ouh6q0niMwfywhXqgvr4+7MeQo9sj+BwsUXkU9LbOWcYLnPZDWybg==
+X-Received: by 2002:adf:d1c4:0:b0:230:7771:f618 with SMTP id b4-20020adfd1c4000000b002307771f618mr3541746wrd.203.1667098770552;
+        Sat, 29 Oct 2022 19:59:30 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:9c:201:a6f7:9df9:f4cc:97c1])
+        by smtp.gmail.com with ESMTPSA id bi22-20020a05600c3d9600b003b31c560a0csm3240628wmb.12.2022.10.29.19.59.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Oct 2022 19:59:29 -0700 (PDT)
+Date:   Sun, 30 Oct 2022 03:59:22 +0100
+From:   Marco Elver <elver@google.com>
+To:     andrey.konovalov@linux.dev
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Florian Mayer <fmayer@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: Re: [PATCH] kasan: allow sampling page_alloc allocations for HW_TAGS
+Message-ID: <Y13oij+hiJgQ9BXj@elver.google.com>
+References: <c124467c401e9d44dd35a36fdae1c48e4e505e9e.1666901317.git.andreyknvl@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH for-next] RDMA/rxe: Fix mr->map double free
-Content-Language: en-US
-To:     <zyjzyj2000@gmail.com>, <jgg@ziepe.ca>, <leon@kernel.org>,
-        <linux-rdma@vger.kernel.org>
-CC:     Bob Pearson <rpearsonhpe@gmail.com>, <linux-kernel@vger.kernel.org>
-References: <1667097525-2-1-git-send-email-lizhijian@fujitsu.com>
-From:   Li Zhijian <lizhijian@fujitsu.com>
-In-Reply-To: <1667097525-2-1-git-send-email-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.167.226.45]
-X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
- R01UKEXCASM126.r01.fujitsu.local (10.183.43.178)
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c124467c401e9d44dd35a36fdae1c48e4e505e9e.1666901317.git.andreyknvl@google.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,89 +82,192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please ignore this one, which failed to compile because it was based on a wrong branch
-
-i will repost a new one later.
-
-
-
-On 30/10/2022 10:38, Li Zhijian wrote:
-> rxe_mr_cleanup() which tries to free mr->map again will be called
-> when rxe_mr_init_user() fails.
->
-> [43895.939883] CPU: 0 PID: 4917 Comm: rdma_flush_serv Kdump: loaded Not tainted 6.1.0-rc1-roce-flush+ #25
-> [43895.942341] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> [43895.945208] Call Trace:
-> [43895.946130]  <TASK>
-> [43895.946931]  dump_stack_lvl+0x45/0x5d
-> [43895.948049]  panic+0x19e/0x349
-> [43895.949010]  ? panic_print_sys_info.part.0+0x77/0x77
-> [43895.950356]  ? asm_sysvec_apic_timer_interrupt+0x16/0x20
-> [43895.952589]  ? preempt_count_sub+0x14/0xc0
-> [43895.953809]  end_report.part.0+0x54/0x7c
-> [43895.954993]  ? rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
-> [43895.956406]  kasan_report.cold+0xa/0xf
-> [43895.957668]  ? rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
-> [43895.959090]  rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
-> [43895.960502]  __rxe_cleanup+0x10a/0x1e0 [rdma_rxe]
-> [43895.961983]  rxe_reg_user_mr+0xb7/0xd0 [rdma_rxe]
-> [43895.963456]  ib_uverbs_reg_mr+0x26a/0x480 [ib_uverbs]
-> [43895.964921]  ? __lock_acquire+0x876/0x31e0
-> [43895.966182]  ? ib_uverbs_ex_create_wq+0x630/0x630 [ib_uverbs]
-> [43895.967739]  ? uverbs_fill_udata+0x1c6/0x330 [ib_uverbs]
-> [43895.969204]  ib_uverbs_handler_UVERBS_METHOD_INVOKE_WRITE+0x1a2/0x250 [ib_uverbs]
-> [43895.971126]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
-> [43895.973094]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
-> [43895.975096]  ? uverbs_fill_udata+0x25f/0x330 [ib_uverbs]
-> [43895.976466]  ib_uverbs_cmd_verbs+0x1397/0x15a0 [ib_uverbs]
-> [43895.977930]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
-> [43895.979937]  ? uverbs_fill_udata+0x330/0x330 [ib_uverbs]
->
-> This issue was fistrly exposed since
-> commit: b18c7da63fcb ("RDMA/rxe: Fix memory leak in error path code")
-> and then we fixed it in
-> commit: 8ff5f5d9d8cf ("RDMA/rxe: Prevent double freeing rxe_map_set()")
-> but this fix was reverted together at last by
-> commit: 1e75550648da (Revert "RDMA/rxe: Create duplicate mapping tables for FMRs")
->
-> Fixes: 1e75550648da (Revert "RDMA/rxe: Create duplicate mapping tables for FMRs")
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+On Thu, Oct 27, 2022 at 10:10PM +0200, andrey.konovalov@linux.dev wrote:
+> From: Andrey Konovalov <andreyknvl@google.com>
+> 
+> Add a new boot parameter called kasan.page_alloc.sample, which makes
+> Hardware Tag-Based KASAN tag only every Nth page_alloc allocation.
+> 
+> As Hardware Tag-Based KASAN is intended to be used in production, its
+> performance impact is crucial. As page_alloc allocations tend to be big,
+> tagging and checking all such allocations introduces a significant
+> slowdown in some testing scenarios. The new flag allows to alleviate
+> that slowdown.
+> 
+> Enabling page_alloc sampling has a downside: KASAN will miss bad accesses
+> to a page_alloc allocation that has not been tagged.
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 > ---
->   drivers/infiniband/sw/rxe/rxe_mr.c | 8 ++------
->   1 file changed, 2 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c b/drivers/infiniband/sw/rxe/rxe_mr.c
-> index d4f10c2d1aa7..baa9d3be178a 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_mr.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_mr.c
-> @@ -99,6 +99,7 @@ static int rxe_mr_alloc(struct rxe_mr *mr, int num_buf)
->   		kfree(mr->map[i]);
->   
->   	kfree(mr->map);
-> +	mr->map = NULL;
->   err1:
->   	return -ENOMEM;
->   }
-> @@ -163,9 +164,8 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
->   				pr_warn("%s: Unable to get virtual address\n",
->   						__func__);
->   				err = -ENOMEM;
-> -				goto err_cleanup_map;
-> +				goto err_release_umem;
->   			}
-> -
->   			buf->addr = (uintptr_t)vaddr;
->   			buf->size = PAGE_SIZE;
->   			num_buf++;
-> @@ -182,10 +182,6 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
->   
->   	return 0;
->   
-> -err_cleanup_map:
-> -	for (i = 0; i < mr->num_map; i++)
-> -		kfree(mr->map[i]);
-> -	kfree(mr->map);
->   err_release_umem:
->   	ib_umem_release(umem);
->   err_out:
+>  Documentation/dev-tools/kasan.rst |  4 +++
+>  include/linux/kasan.h             |  7 ++---
+>  mm/kasan/common.c                 |  9 +++++--
+>  mm/kasan/hw_tags.c                | 26 +++++++++++++++++++
+>  mm/kasan/kasan.h                  | 15 +++++++++++
+>  mm/page_alloc.c                   | 43 +++++++++++++++++++++----------
+>  6 files changed, 85 insertions(+), 19 deletions(-)
+> 
+> diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/kasan.rst
+> index 5c93ab915049..bd97301845ef 100644
+> --- a/Documentation/dev-tools/kasan.rst
+> +++ b/Documentation/dev-tools/kasan.rst
+> @@ -140,6 +140,10 @@ disabling KASAN altogether or controlling its features:
+>  - ``kasan.vmalloc=off`` or ``=on`` disables or enables tagging of vmalloc
+>    allocations (default: ``on``).
+>  
+> +- ``kasan.page_alloc.sample=<sampling frequency>`` makes KASAN tag only
 
+Frequency is number of samples per frame (unit time, or if used
+non-temporally like here, population size).
+
+[1] https://en.wikipedia.org/wiki/Systematic_sampling
+
+You're using it as an interval, so I'd just replace uses of frequency
+with "interval" appropriately here and elsewhere.
+
+> +  every Nth page_alloc allocation, where N is the value of the parameter
+> +  (default: ``1``).
+> +
+>  Error reports
+>  ~~~~~~~~~~~~~
+>  
+> diff --git a/include/linux/kasan.h b/include/linux/kasan.h
+> index d811b3d7d2a1..d45d45dfd007 100644
+> --- a/include/linux/kasan.h
+> +++ b/include/linux/kasan.h
+> @@ -120,12 +120,13 @@ static __always_inline void kasan_poison_pages(struct page *page,
+>  		__kasan_poison_pages(page, order, init);
+>  }
+>  
+> -void __kasan_unpoison_pages(struct page *page, unsigned int order, bool init);
+> -static __always_inline void kasan_unpoison_pages(struct page *page,
+> +bool __kasan_unpoison_pages(struct page *page, unsigned int order, bool init);
+> +static __always_inline bool kasan_unpoison_pages(struct page *page,
+>  						 unsigned int order, bool init)
+>  {
+>  	if (kasan_enabled())
+> -		__kasan_unpoison_pages(page, order, init);
+> +		return __kasan_unpoison_pages(page, order, init);
+> +	return false;
+>  }
+>  
+>  void __kasan_cache_create_kmalloc(struct kmem_cache *cache);
+> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+> index 833bf2cfd2a3..1f30080a7a4c 100644
+> --- a/mm/kasan/common.c
+> +++ b/mm/kasan/common.c
+> @@ -95,19 +95,24 @@ asmlinkage void kasan_unpoison_task_stack_below(const void *watermark)
+>  }
+>  #endif /* CONFIG_KASAN_STACK */
+>  
+> -void __kasan_unpoison_pages(struct page *page, unsigned int order, bool init)
+> +bool __kasan_unpoison_pages(struct page *page, unsigned int order, bool init)
+>  {
+>  	u8 tag;
+>  	unsigned long i;
+>  
+>  	if (unlikely(PageHighMem(page)))
+> -		return;
+> +		return false;
+> +
+> +	if (!kasan_sample_page_alloc())
+> +		return false;
+>  
+>  	tag = kasan_random_tag();
+>  	kasan_unpoison(set_tag(page_address(page), tag),
+>  		       PAGE_SIZE << order, init);
+>  	for (i = 0; i < (1 << order); i++)
+>  		page_kasan_tag_set(page + i, tag);
+> +
+> +	return true;
+>  }
+>  
+>  void __kasan_poison_pages(struct page *page, unsigned int order, bool init)
+> diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
+> index b22c4f461cb0..aa3b5a080297 100644
+> --- a/mm/kasan/hw_tags.c
+> +++ b/mm/kasan/hw_tags.c
+> @@ -59,6 +59,11 @@ EXPORT_SYMBOL_GPL(kasan_mode);
+>  /* Whether to enable vmalloc tagging. */
+>  DEFINE_STATIC_KEY_TRUE(kasan_flag_vmalloc);
+>  
+> +/* Frequency of page_alloc allocation poisoning. */
+> +unsigned long kasan_page_alloc_sample = 1;
+> +
+> +DEFINE_PER_CPU(unsigned long, kasan_page_alloc_count);
+> +
+>  /* kasan=off/on */
+>  static int __init early_kasan_flag(char *arg)
+>  {
+> @@ -122,6 +127,27 @@ static inline const char *kasan_mode_info(void)
+>  		return "sync";
+>  }
+>  
+> +/* kasan.page_alloc.sample=<sampling frequency> */
+> +static int __init early_kasan_flag_page_alloc_sample(char *arg)
+> +{
+> +	int rv;
+> +
+> +	if (!arg)
+> +		return -EINVAL;
+> +
+> +	rv = kstrtoul(arg, 0, &kasan_page_alloc_sample);
+> +	if (rv)
+> +		return rv;
+> +
+> +	if (!kasan_page_alloc_sample) {
+> +		kasan_page_alloc_sample = 1;
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +early_param("kasan.page_alloc.sample", early_kasan_flag_page_alloc_sample);
+> +
+>  /*
+>   * kasan_init_hw_tags_cpu() is called for each CPU.
+>   * Not marked as __init as a CPU can be hot-plugged after boot.
+> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+> index abbcc1b0eec5..ee67eb35f4a7 100644
+> --- a/mm/kasan/kasan.h
+> +++ b/mm/kasan/kasan.h
+> @@ -42,6 +42,9 @@ enum kasan_mode {
+>  
+>  extern enum kasan_mode kasan_mode __ro_after_init;
+>  
+> +extern unsigned long kasan_page_alloc_sample;
+> +DECLARE_PER_CPU(unsigned long, kasan_page_alloc_count);
+> +
+>  static inline bool kasan_vmalloc_enabled(void)
+>  {
+>  	return static_branch_likely(&kasan_flag_vmalloc);
+> @@ -57,6 +60,13 @@ static inline bool kasan_sync_fault_possible(void)
+>  	return kasan_mode == KASAN_MODE_SYNC || kasan_mode == KASAN_MODE_ASYMM;
+>  }
+>  
+> +static inline bool kasan_sample_page_alloc(void)
+> +{
+> +	unsigned long *count = this_cpu_ptr(&kasan_page_alloc_count);
+
+this_cpu_inc_return()
+
+without it, you need to ensure preemption is disabled around here.
+
+> +
+> +	return (*count)++ % kasan_page_alloc_sample == 0;
+
+Doing '%' is a potentially costly operation if called in a fast-path.
+
+We can generate better code with (rename 'count' -> 'skip'):
+
+	long skip_next = this_cpu_dec_return(kasan_page_alloc_skip);
+
+	if (skip_next < 0) {
+		this_cpu_write(kasan_page_alloc_skip, kasan_page_alloc_sample - 1);
+		return true;
+	}
+
+	return false;
+
+Important is also to switch the counter to a 'long', otherwise you'd
+have to pre-initialize all of them to something non-zero to avoid wrap.
