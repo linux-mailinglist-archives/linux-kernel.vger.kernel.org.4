@@ -2,135 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92433612CE7
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 21:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 965DB612CF1
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 22:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiJ3U4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 16:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37806 "EHLO
+        id S229556AbiJ3VFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 17:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ3U4d (ORCPT
+        with ESMTP id S229441AbiJ3VFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 16:56:33 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DB69595;
-        Sun, 30 Oct 2022 13:56:32 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id a5so14966895edb.11;
-        Sun, 30 Oct 2022 13:56:32 -0700 (PDT)
+        Sun, 30 Oct 2022 17:05:06 -0400
+X-Greylist: delayed 963 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 30 Oct 2022 14:05:00 PDT
+Received: from mailrelay1-1.pub.mailoutpod2-cph3.one.com (mailrelay1-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:400::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C2A6383
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 14:05:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KFcRfWRyXi5vlxA7mDVUDb68ztcKVUII1OhMaUKoMY0=;
-        b=mtBfSG9FABE66AWdcsxYQUCjkoyaplzytMcS9Lq3YCTKyHVnQ7Qi2+fR/khu+LsDDB
-         MntqbxYZxYfxj3SpABiOn71tJ3WvCRyMBc51UkPmliSpp0UkMb/O2WjGR4OoVzjoRPqk
-         NrQTrJ10nSr+NsMdiXAPsWsVhQacgsGJHClA42CrtmgtIKC7Kf5yAbeWBm7gpB8x9ZoG
-         WEw/Oyh22oW1Th4wselPl+flAM/7SW70t9cPHAqdL7gJl8VU7rfsfOfDtYa2OJmteOBk
-         PT5P3bWNdS8+I/ZLOBN/uLf62iD07/vryem2unJLA/J3tO6bo9GKTUxmQw7nL2BZkFgi
-         PCsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KFcRfWRyXi5vlxA7mDVUDb68ztcKVUII1OhMaUKoMY0=;
-        b=OLiLGD4RRwNr4YsikpZwnR2VStgcGyAYQUEHziz52Jv8Jc90K8QPe6GZekMHHBBIAh
-         OTA7xX2maMAdwRTBiDfFjYZhmEIfbeX5IAZJLzJvcrwesDzFI3ZKECTdtExKx/w5CL+6
-         3L7hwQhdwEKKVIwHMSdY7moiwC+FW/VaHQC1ygQjmpG35Mf2WvfNQXVjSmjGvEJu/3Km
-         Z2I/JX+bxlMmX2vi5m7/HC3BmhrI16KMq3uVS5D+pjyuQWKeRe3tDQZpGt2eUiqk3CIW
-         530sGzeKgti9XBxt1rQGc9DXRWCwZx9sxxYhPh3RoNn1vI2m7SRa0w/gv6K/bIgttUJh
-         80+w==
-X-Gm-Message-State: ACrzQf1wJgfNNLGlpbqLDy2NiHKa86iUv0z4iRcq8J/Dg6DxJeQEBRpc
-        x/o2dfIOvmq8yJ0D5PrmstGhoE5L/X0=
-X-Google-Smtp-Source: AMsMyM4nJ5rQBJWIcEkeQiP60ZzilqtOq785QEX5fls9YhzQE7qcm3GocrP/NsQEEcdGzobAqft/+Q==
-X-Received: by 2002:a05:6402:11c7:b0:462:549d:fbbe with SMTP id j7-20020a05640211c700b00462549dfbbemr10320925edw.199.1667163390852;
-        Sun, 30 Oct 2022 13:56:30 -0700 (PDT)
-Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id i14-20020a170906698e00b0078defb88b0dsm2211923ejr.73.2022.10.30.13.56.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Oct 2022 13:56:30 -0700 (PDT)
-Message-ID: <f275ca8d-fd0a-26e5-b978-b7f3df815e0a@gmail.com>
-Date:   Sun, 30 Oct 2022 21:56:29 +0100
+        d=ravnborg.org; s=rsa2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=57sc1zEaPoN7h4A46eYO7m7OBIbwdsJSNErw2oMh2i8=;
+        b=ExNOMhkVFJztTvZcxnvH3h4fqJbsQkgg+bLEfOuaDMvE1gWzf+x03ZVf9gCp8uwhCeU2x+q6nekWi
+         UMfVN39ir3tiH2OPaGvcsXRDQvpmQKHK3UuTp6v916Hd3c9eu8BAnGCKfFv5bGKDF/P9k9eqMzKaz3
+         YyNUCgEBiiyaZe6hupo2tczx7/snZxgERFISe14rqGEF3MLSehcW6uFvCTvTCzATO0Oq2qKub0zu+2
+         134gYtd6AYTmNhA/UKp4zhT678Ud601D0/AsB+uxyLjz/ajF3SKPi0XNAMhnCQdcLYMKT3t0b+QQDh
+         m5xZYu4P+05A45nJ0qf/BSXWMKcZ1Sw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=57sc1zEaPoN7h4A46eYO7m7OBIbwdsJSNErw2oMh2i8=;
+        b=tZrknHN/AT+yPRxITfnWcQoHnGW6VCifdzIareCpE0Xor8DK2nixpgY3yVhJk7aPL6M6bl/Bkor4y
+         vmrkmxMDQ==
+X-HalOne-ID: 43a73db0-5894-11ed-bedf-1b2345786432
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay1 (Halon) with ESMTPSA
+        id 43a73db0-5894-11ed-bedf-1b2345786432;
+        Sun, 30 Oct 2022 20:48:54 +0000 (UTC)
+Date:   Sun, 30 Oct 2022 21:48:53 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     antoniospg <antoniospg100@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Karol Herbst <kherbst@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
+        <nouveau@lists.freedesktop.org>,
+        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
+        <dri-devel@lists.freedesktop.org>, Ben Skeggs <bskeggs@redhat.com>
+Subject: Re: [PATCH] drm/nouveau: Adding support to control backlight using
+ bl_power for nva3.
+Message-ID: <Y17jNddKjZNk59EK@ravnborg.org>
+References: <20221029184851.25340-1-antoniospg100@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v2] ARM: dts: rockchip: rk3xx: disable arm_global_timer
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221029184851.25340-1-antoniospg100@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The clock source and the sched_clock provided by the arm_global_timer
-on Rockchip rk3066a/rk3188 are quite unstable because their rates
-depend on the CPU frequency.
+On Sat, Oct 29, 2022 at 03:48:50PM -0300, antoniospg wrote:
+> Test plan:
+> 
+> * Turn off:
+> echo 1 > /sys/class/backlight/nv_backlight/bl_power
+> 
+> * Turn on:
+> echo 0 > /sys/class/backlight/nv_backlight/bl_power
+> 
+> Signed-off-by: antoniospg <antoniospg100@gmail.com>
+> ---
+>  drivers/gpu/drm/nouveau/nouveau_backlight.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/nouveau/nouveau_backlight.c b/drivers/gpu/drm/nouveau/nouveau_backlight.c
+> index a2141d3d9b1d..855d0ce9f7fa 100644
+> --- a/drivers/gpu/drm/nouveau/nouveau_backlight.c
+> +++ b/drivers/gpu/drm/nouveau/nouveau_backlight.c
+> @@ -263,7 +263,16 @@ nva3_set_intensity(struct backlight_device *bd)
+>  	u32 div, val;
+>  
+>  	div = nvif_rd32(device, NV50_PDISP_SOR_PWM_DIV(or));
+> -	val = (bd->props.brightness * div) / 100;
+> +
+> +	switch (bd->props.power) {
+> +	case FB_BLANK_UNBLANK:
+> +		val = (bd->props.brightness * div) / 100;
+> +		break;
+> +	default:
+> +		val = 0;
+> +		break;
+> +	}
+> +
 
-Recent changes to the arm_global_timer driver makes it impossible to use.
+Consider the following change:
 
-On the other side, the arm_global_timer has a higher rating than the
-ROCKCHIP_TIMER, it will be selected by default by the time framework
-while we want to use the stable Rockchip clock source.
+	val = backlight_get_brightness(bd);
+	if (val)
+		val = (val * dev) / 100;
 
-Keep the arm_global_timer disabled in order to have the
-DW_APB_TIMER (rk3066a) or ROCKCHIP_TIMER (rk3188) selected by default.
+Then you avoid hard coding the use of FB_BLANK_UNBLANK.
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
-
-ARM: dts: rockchip: disable arm-global-timer for rk3188
-https://lore.kernel.org/linux-rockchip/1492374441-23336-26-git-send-email-daniel.lezcano@linaro.org/
-
-clocksource: arm_global_timer: implement rate compensation whenever source clock changes
-https://lore.kernel.org/all/20210406130045.15491-2-andrea.merello@gmail.com/
----
- arch/arm/boot/dts/rk3188.dtsi | 1 -
- arch/arm/boot/dts/rk3xxx.dtsi | 7 +++++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm/boot/dts/rk3188.dtsi b/arch/arm/boot/dts/rk3188.dtsi
-index cdd4a0bd5..486a96ce2 100644
---- a/arch/arm/boot/dts/rk3188.dtsi
-+++ b/arch/arm/boot/dts/rk3188.dtsi
-@@ -607,7 +607,6 @@
-
- &global_timer {
- 	interrupts = <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_EDGE_RISING)>;
--	status = "disabled";
- };
-
- &local_timer {
-diff --git a/arch/arm/boot/dts/rk3xxx.dtsi b/arch/arm/boot/dts/rk3xxx.dtsi
-index bf285091a..b0ec459ff 100644
---- a/arch/arm/boot/dts/rk3xxx.dtsi
-+++ b/arch/arm/boot/dts/rk3xxx.dtsi
-@@ -76,6 +76,13 @@
- 		reg = <0x1013c200 0x20>;
- 		interrupts = <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>;
- 		clocks = <&cru CORE_PERI>;
-+		status = "disabled";
-+		/* The clock source and the sched_clock provided by the arm_global_timer
-+		 * on Rockchip rk3066a/rk3188 are quite unstable because their rates
-+		 * depend on the CPU frequency.
-+		 * Keep the arm_global_timer disabled in order to have the
-+		 * DW_APB_TIMER (rk3066a) or ROCKCHIP_TIMER (rk3188) selected by default.
-+		 */
- 	};
-
- 	local_timer: local-timer@1013c600 {
---
-2.20.1
-
+	Sam
