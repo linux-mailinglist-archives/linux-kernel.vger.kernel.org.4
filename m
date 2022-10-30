@@ -2,330 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28864612D21
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 23:02:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 982B7612D25
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 23:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiJ3WCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 18:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34608 "EHLO
+        id S229909AbiJ3WCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 18:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJ3WB5 (ORCPT
+        with ESMTP id S229874AbiJ3WB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 18:01:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C35C6173;
-        Sun, 30 Oct 2022 15:01:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F18C1B8106E;
-        Sun, 30 Oct 2022 22:01:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0464C43470;
-        Sun, 30 Oct 2022 22:01:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667167313;
-        bh=PTddCbOvBcGoJz9y6uoPrxjHNey64Rs4moExDo18JNo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=oBj+p4LD61npVqFTDN/1z67vIhtPjMl3nm9Bw85cdKp2SsodE1hdREk/tDZ7SXfr2
-         MHMgNu9iKmezbLwTugt02OGnKJsaczKeaauODrE1ZxYOJxDCepsbkBMJJ5DISprNWt
-         gz/Cf3Ub6wQoJfR5bENJp3bXySIAwc2Q8nyP7gmUu5InE5N3LFj/+9s5rxeA8FxWV7
-         GIpb+Uluiu5oabZEdVuZH8zxx2mNnixkQKojweQLYpEGGAxYwclUYE2ywppcx6rWd0
-         6awfqJmVaO8FozNfmDFzWE4sqd68GKDGci9UxvpBqBgb5WJmcZSPnmmhzCls3YU4yu
-         Ht8ELXerH7yNg==
-Received: by mail-lf1-f41.google.com with SMTP id f37so16625228lfv.8;
-        Sun, 30 Oct 2022 15:01:53 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2ifE0WEKPkw66GY2cAgbAJ+8mC2JEZ/PcDGRlUZc9N+AgurfQp
-        PRFzc5jW7OQmFqnb4QvND5HxkFGSBBvHBFxhiQ==
-X-Google-Smtp-Source: AMsMyM7bW4oZVcI6LfaIeb+D2pMd4aIh+5780YF8WjoT6K4m0oJ3/Jwzr5TWckfqyNhNSgM9wxkKYBm/MKYXrTTj2L8=
-X-Received: by 2002:a19:f24b:0:b0:4ab:cd12:d282 with SMTP id
- d11-20020a19f24b000000b004abcd12d282mr4215098lfk.74.1667167311542; Sun, 30
- Oct 2022 15:01:51 -0700 (PDT)
+        Sun, 30 Oct 2022 18:01:58 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88473617D;
+        Sun, 30 Oct 2022 15:01:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667167317; x=1698703317;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Sg5G1FwIeTvWisFkxxykHY8fZl7hdfoO90oAJycg4mU=;
+  b=kvv+9rzG4Vwjy3QnP/u21UW+gTi1Cbb3MwXggJ+imBdoD4EKviQ4qH0F
+   U/TfcWfc06/m3VPc0QQ/GiyhqgJA7jK3vqyLwpBa12WKjoHxcGUwxhhZP
+   AoqtudpFJtu5na6TFqXlCh9W5AzFjZfqvEOe9hgaKcEO/ZbO8lVmRd8u/
+   2d6UUv48I8eG0QI2R+n5CFwcqOhqN5q/rlNGArtxKkK87B/5rQYquRg8A
+   /0B/3n0JljLEmI3CCDEPqbx16yaJ8xWiGYeuujRCdZgLE0M3/rBNCElAU
+   ncVNVVjb9bNqHbr8cxFaIKUjrPfMYZy1RrWSXjMHZ+eVrVInvdc9Motj8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="289172815"
+X-IronPort-AV: E=Sophos;i="5.95,226,1661842800"; 
+   d="scan'208";a="289172815"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2022 15:01:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="758643523"
+X-IronPort-AV: E=Sophos;i="5.95,226,1661842800"; 
+   d="scan'208";a="758643523"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 30 Oct 2022 15:01:52 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1opGNJ-004pcC-2F;
+        Mon, 31 Oct 2022 00:01:49 +0200
+Date:   Mon, 31 Oct 2022 00:01:49 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Weilong Chen <chenweilong@huawei.com>
+Cc:     yangyicong@hisilicon.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wsa@kernel.org,
+        f.fainelli@gmail.com, jarkko.nikula@linux.intel.com,
+        jdelvare@suse.de, william.zhang@broadcom.com, jsd@semihalf.com,
+        conor.dooley@microchip.com, phil.edworthy@renesas.com,
+        tharunkumar.pasumarthi@microchip.com, semen.protsenko@linaro.org,
+        kfting@nuvoton.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH next v9 1/4] i2c: hisi: Add initial device tree support
+Message-ID: <Y170TZoIp1WBIwU4@smile.fi.intel.com>
+References: <20221029115937.179788-1-chenweilong@huawei.com>
 MIME-Version: 1.0
-References: <20221030194311.197909-1-a39.skl@gmail.com> <20221030194311.197909-2-a39.skl@gmail.com>
-In-Reply-To: <20221030194311.197909-2-a39.skl@gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Sun, 30 Oct 2022 17:01:42 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqL3Yq53m6D_eELurkJjDCWZuvMtACbUnqpLymWAuFh=OQ@mail.gmail.com>
-Message-ID: <CAL_JsqL3Yq53m6D_eELurkJjDCWZuvMtACbUnqpLymWAuFh=OQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] arm64: dts: qcom: Add MSM8976 device tree
-To:     Adam Skladowski <a39.skl@gmail.com>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221029115937.179788-1-chenweilong@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 2:43 PM Adam Skladowski <a39.skl@gmail.com> wrote:
->
-> Add a base DT for MSM8976 SoC.
->
-> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
-> ---
->  arch/arm64/boot/dts/qcom/msm8976.dtsi | 1357 +++++++++++++++++++++++++
->  1 file changed, 1357 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/msm8976.dtsi
->
-> diff --git a/arch/arm64/boot/dts/qcom/msm8976.dtsi b/arch/arm64/boot/dts/qcom/msm8976.dtsi
-> new file mode 100644
-> index 0000000000000..461593eb04635
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/msm8976.dtsi
-> @@ -0,0 +1,1357 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/* Copyright (c) 2022, The Linux Foundation. All rights reserved. */
-> +
-> +#include <dt-bindings/clock/qcom,gcc-msm8976.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/power/qcom-rpmpd.h>
-> +#include <dt-bindings/thermal/thermal.h>
-> +
-> +/ {
-> +       interrupt-parent = <&intc>;
-> +
-> +       #address-cells = <2>;
-> +       #size-cells = <2>;
-> +
-> +       chosen { };
-> +
-> +       clocks {
+On Sat, Oct 29, 2022 at 07:59:36PM +0800, Weilong Chen wrote:
+> The HiSilicon I2C controller can be used on embedded platform, which
+> boot from devicetree.
 
-Drop the container node.
+...
 
-> +               sleep_clk: sleep-clk {
-> +                       compatible = "fixed-clock";
-> +                       #clock-cells = <0>;
-> +                       clock-frequency = <32768>;
-> +               };
-> +
-> +               xo_board: xo-board {
-> +                       compatible = "fixed-clock";
-> +                       #clock-cells = <0>;
-> +                       clock-frequency = <19200000>;
-> +                       clock-output-names = "xo";
-> +               };
-> +       };
-> +
-> +       cpus {
-> +               #address-cells = <1>;
-> +               #size-cells = <0>;
-> +
-> +               CPU0: cpu@0 {
-> +                       device_type = "cpu";
-> +                       compatible = "arm,cortex-a53";
-> +                       reg = <0x0>;
-> +                       enable-method = "psci";
-> +                       capacity-dmips-mhz = <1024>;
-> +                       next-level-cache = <&L2_0>;
-> +                       #cooling-cells = <2>;
-> +
-> +                       l1-icache {
-> +                               compatible = "cache";
-> +                       };
-> +                       l1-dcache {
-> +                               compatible = "cache";
-> +                       };
+> +#include <linux/acpi.h>
+> +#include <linux/of.h>
 
-The cpu node is also the L1 cache(s). You've got a mixture here with
-'next-level-cache' in the cpu node. Drop these nodes.
+Why?
 
-> +               };
-> +
-> +               CPU1: cpu@1 {
-> +                       device_type = "cpu";
-> +                       compatible = "arm,cortex-a53";
-> +                       reg = <0x1>;
-> +                       enable-method = "psci";
-> +                       capacity-dmips-mhz = <1024>;
-> +                       next-level-cache = <&L2_0>;
-> +                       #cooling-cells = <2>;
-> +
-> +                       l1-icache {
-> +                               compatible = "cache";
-> +                       };
-> +                       l1-dcache {
-> +                               compatible = "cache";
-> +                       };
-> +               };
-> +
-> +               CPU2: cpu@2 {
-> +                       device_type = "cpu";
-> +                       compatible = "arm,cortex-a53";
-> +                       reg = <0x2>;
-> +                       enable-method = "psci";
-> +                       capacity-dmips-mhz = <1024>;
-> +                       next-level-cache = <&L2_0>;
-> +                       #cooling-cells = <2>;
-> +
-> +                       l1-icache {
-> +                               compatible = "cache";
-> +                       };
-> +                       l1-dcache {
-> +                               compatible = "cache";
-> +                       };
-> +               };
-> +
-> +               CPU3: cpu@3 {
-> +                       device_type = "cpu";
-> +                       compatible = "arm,cortex-a53";
-> +                       reg = <0x3>;
-> +                       enable-method = "psci";
-> +                       capacity-dmips-mhz = <1024>;
-> +                       next-level-cache = <&L2_0>;
-> +                       #cooling-cells = <2>;
-> +
-> +                       l1-icache {
-> +                               compatible = "cache";
-> +                       };
-> +                       l1-dcache {
-> +                               compatible = "cache";
-> +                       };
-> +               };
-> +
-> +               CPU4: cpu@100 {
-> +                       device_type = "cpu";
-> +                       compatible = "arm,cortex-a72";
-> +                       reg = <0x100>;
-> +                       enable-method = "psci";
-> +                       capacity-dmips-mhz = <1830>;
-> +                       next-level-cache = <&L2_1>;
-> +                       #cooling-cells = <2>;
-> +
-> +                       l1-icache {
-> +                               compatible = "cache";
-> +                       };
-> +                       l1-dcache {
-> +                               compatible = "cache";
-> +                       };
-> +               };
-> +
-> +               CPU5: cpu@101 {
-> +                       device_type = "cpu";
-> +                       compatible = "arm,cortex-a72";
-> +                       reg = <0x101>;
-> +                       enable-method = "psci";
-> +                       capacity-dmips-mhz = <1830>;
-> +                       next-level-cache = <&L2_1>;
-> +                       #cooling-cells = <2>;
-> +
-> +                       l1-icache {
-> +                               compatible = "cache";
-> +                       };
-> +                       l1-dcache {
-> +                               compatible = "cache";
-> +                       };
-> +               };
-> +
-> +               CPU6: cpu@102 {
-> +                       device_type = "cpu";
-> +                       compatible = "arm,cortex-a72";
-> +                       reg = <0x102>;
-> +                       enable-method = "psci";
-> +                       capacity-dmips-mhz = <1830>;
-> +                       next-level-cache = <&L2_1>;
-> +                       #cooling-cells = <2>;
-> +
-> +                       l1-icache {
-> +                               compatible = "cache";
-> +                       };
-> +                       l1-dcache {
-> +                               compatible = "cache";
-> +                       };
-> +               };
-> +
-> +               CPU7: cpu@103 {
-> +                       device_type = "cpu";
-> +                       compatible = "arm,cortex-a72";
-> +                       reg = <0x103>;
-> +                       enable-method = "psci";
-> +                       capacity-dmips-mhz = <1830>;
-> +                       next-level-cache = <&L2_1>;
-> +                       #cooling-cells = <2>;
-> +
-> +                       l1-icache {
-> +                               compatible = "cache";
-> +                       };
-> +                       l1-dcache {
-> +                               compatible = "cache";
-> +                       };
-> +               };
-> +
-> +               cpu-map {
-> +                       cluster0 {
-> +                               core0 {
-> +                                       cpu = <&CPU0>;
-> +                               };
-> +                               core1 {
-> +                                       cpu = <&CPU1>;
-> +                               };
-> +                               core2 {
-> +                                       cpu = <&CPU2>;
-> +                               };
-> +                               core3 {
-> +                                       cpu = <&CPU3>;
-> +                               };
-> +                       };
-> +
-> +                       cluster1 {
-> +                               core0 {
-> +                                       cpu = <&CPU4>;
-> +                               };
-> +                               core1 {
-> +                                       cpu = <&CPU5>;
-> +                               };
-> +                               core2 {
-> +                                       cpu = <&CPU6>;
-> +                               };
-> +                               core3 {
-> +                                       cpu = <&CPU7>;
-> +                               };
-> +                       };
-> +               };
-> +
-> +               L2_0: l2-cache_0 {
-> +                       compatible = "cache";
-> +                       cache-level = <2>;
+...
 
-Unified? Needs 'unified-cache' property.
+> +#ifdef CONFIG_ACPI
 
-> +               };
-> +
-> +               L2_1: l2-cache_1 {
-> +                       compatible = "cache";
-> +                       cache-level = <2>;
-> +               };
-> +       };
-> +
-> +       firmware {
-> +               scm: scm {
-> +                       compatible = "qcom,scm-msm8976", "qcom,scm";
-> +                       clocks = <&gcc GCC_CRYPTO_CLK>,
-> +                                <&gcc GCC_CRYPTO_AXI_CLK>,
-> +                                <&gcc GCC_CRYPTO_AHB_CLK>;
-> +                       clock-names = "core", "bus", "iface";
-> +                       #reset-cells = <1>;
-> +               };
-> +       };
-> +
-> +       memory {
+Why?
 
-Needs a unit-address.
+...
 
-> +               device_type = "memory";
-> +               /* We expect the bootloader to fill in the reg */
+> +#ifdef CONFIG_OF
 
-Isn't the base address known?
+Why?
 
-> +               reg = <0 0 0 0>;
-> +       };
+...
+
+> -		.acpi_match_table = hisi_i2c_acpi_ids,
+> +		.acpi_match_table = ACPI_PTR(hisi_i2c_acpi_ids),
+
+Why?
+
+...
+
+> +		.of_match_table = of_match_ptr(hisi_i2c_dts_ids),
+
+Why of_match_ptr()?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
