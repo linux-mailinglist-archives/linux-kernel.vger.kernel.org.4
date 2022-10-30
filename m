@@ -2,78 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CB9612C92
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 21:08:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E848612C99
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 21:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiJ3UIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 16:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
+        id S229587AbiJ3UPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 16:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiJ3UIb (ORCPT
+        with ESMTP id S229476AbiJ3UPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 16:08:31 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6EE62FD;
-        Sun, 30 Oct 2022 13:08:30 -0700 (PDT)
-Received: from [185.156.123.69] (helo=phil.sntech)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1opEbX-0005ci-6p; Sun, 30 Oct 2022 21:08:23 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Kevin Hilman <khilman@baylibre.com>, linux-rtc@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        Jerome Brunet <jbrunet@baylibre.com>, kernel@collabora.com,
-        linux-kernel@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: (subset) [PATCHv2 0/6] Convert HYM8563 RTC binding to YAML
-Date:   Sun, 30 Oct 2022 21:08:17 +0100
-Message-Id: <166716040330.1678541.8752121289367549859.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221024165549.74574-1-sebastian.reichel@collabora.com>
-References: <20221024165549.74574-1-sebastian.reichel@collabora.com>
+        Sun, 30 Oct 2022 16:15:31 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594CAA185;
+        Sun, 30 Oct 2022 13:15:30 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 81C001C0049; Sun, 30 Oct 2022 21:15:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1667160928;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SRUdneXHxh/Cv6fvYSjs07wKwz7JXwgYVVxDoXQty8s=;
+        b=eqHxQA1emI0dt09Uf566QBHKNMWni+R6zQZbJvKogxPJquSKsnd+IPfrLMxFT7V//xgQmv
+        luoikPnbPz2F2gcOyhOL5MOvA4CutdR6miiuiGneuzQO6zTG6VGBVcw9QtlKF03rYdgPL7
+        YLddMeumTV/qvZ2GZyxlBBHz7nS8WoY=
+Date:   Sun, 30 Oct 2022 21:15:27 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v1 1/1] leds: support to use own workqueue for each
+ LED
+Message-ID: <20221030201527.GA23195@duo.ucw.cz>
+References: <9a0a70a8-0886-1115-6151-72d2cba842cf@sberdevices.ru>
+ <33d05330-7c52-e873-bf32-209d40c77632@sberdevices.ru>
+ <20221030122029.GA8017@duo.ucw.cz>
+ <b7304844-a654-2120-2159-29f6134dbadb@sberdevices.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="ZGiS0Q5IWpPtfppv"
+Content-Disposition: inline
+In-Reply-To: <b7304844-a654-2120-2159-29f6134dbadb@sberdevices.ru>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Oct 2022 18:55:43 +0200, Sebastian Reichel wrote:
-> This converts HYM8563 binding to YAML and fixes
-> the existing DTs.
-> 
-> Changes since PATCHv1:
->  * https://lore.kernel.org/all/20221021170605.85163-1-sebastian.reichel@collabora.com/
->  * Added patches fixing the existing devicetrees (Rob Herring)
->  * Dual licensed the binding (Krzysztof Kozlowski)
->  * Added maxItems for clock-output-names (Krzysztof Kozlowski)
-> 
-> [...]
 
-Applied, thanks!
+--ZGiS0Q5IWpPtfppv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[1/6] arm64: dts: rockchip: fix node name for hym8563 rtc
-      commit: 67a9aeef44e42b1ac2becf5e61eae0880f48d9db
-[2/6] arm64: dts: rockchip: remove clock-frequency from rtc
-      commit: 2af5bbe32f50d196dd680478a889d12429b3e8cf
-[3/6] arm: dts: rockchip: fix node name for hym8563 rtc
-      commit: 17b57beafccb4569accbfc8c11390744cf59c021
-[4/6] arm: dts: rockchip: remove clock-frequency from rtc
-      commit: 6122f3be70d90a1b2a1188d8910256fc218376a9
+Hi!
+
+> >> This allows to set own workqueue for each LED. This may be useful, bec=
+ause
+> >> default 'system_wq' does not guarantee execution order of each work_st=
+ruct,
+> >> thus for several brightness update requests (for multiple leds), real
+> >> brightness switch could be in random order.
+> >=20
+> > So.. what?
+> >=20
+> > Even if execution order is switched, human eye will not be able to
+> > tell the difference.
+> Hello,
+>=20
+> Problem arises on one of our boards where we have 14 triples of leds(each
+> triple contains R G B). Test case is to play complex animation on all led=
+s:
+> smooth switch from on RGB state to another. Sometimes there are glitches =
+in
+> this process - divergence from expectable RGB state. We fixed this by usi=
+ng
+> ordered workqueue.
+
+Are there other solutions possible? Like batch and always apply _all_
+the updates you have queued from your the worker code?
 
 Best regards,
--- 
-Heiko Stuebner <heiko@sntech.de>
+								Pavel
+
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--ZGiS0Q5IWpPtfppv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY17bXwAKCRAw5/Bqldv6
+8nHqAJ460FAvTohZFx62OjyLkAZzcTBWuwCdEuMPpqEQExkcrAlv3eJJ2vF6Yx4=
+=fMSI
+-----END PGP SIGNATURE-----
+
+--ZGiS0Q5IWpPtfppv--
