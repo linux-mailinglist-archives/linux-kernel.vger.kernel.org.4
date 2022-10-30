@@ -2,79 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6536B61275E
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 05:55:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 517EB61276A
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 06:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiJ3Ezl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 00:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
+        id S229658AbiJ3FB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 01:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiJ3Ezd (ORCPT
+        with ESMTP id S229489AbiJ3FB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 00:55:33 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D07221E21;
-        Sat, 29 Oct 2022 21:55:33 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id 46-20020a9d0631000000b00666823da25fso5202079otn.0;
-        Sat, 29 Oct 2022 21:55:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2sfpuJmtqs6zMYwE03/AjygLRDSLqQw/jFF2Sdl1I7U=;
-        b=OA71th6ZTAU/fk/AXbet3ULpOcipbM7y59cXdEZ7KglP1JE6QtwM5TU+ISpU/Re7bb
-         JQoiMcFRPOCyDTiaadm3N/zDwksTrOSM03wMwNWfY/zcE15FgkacTjZVQZLUAZdhzyLA
-         4XiMF5LHdqBNowPpB5md5yB9Ro6qFblxVOOTeMyJ/AA4MHxxJ8QW8ovKNPc3sgJ89Kae
-         SEtGjW9tLG8spcWRmEk4+Mzh71bm6vP51CADyzh4uEYNJ9SAyP/KHMEndXK4fM0FxEzo
-         FHLE6Mv7W1xgsb2VBb/cBS52cI2yZ3JsEqF3VtfP4tg34nRXrpX6fmoZPMMEH7NhXeft
-         AioQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2sfpuJmtqs6zMYwE03/AjygLRDSLqQw/jFF2Sdl1I7U=;
-        b=3IxDUqok5PnIS4QKPfN0cKVG1PwUnBZOqz5qzb2fUkzRgunt+/bcASUCckrYAY1jaA
-         Sy1c+2Zaq4sZJCOOiJuVUQ/twiZBG2ddcLjpnPIlIvSHoK2KSDAyRj3YrV86ZVY5KR2t
-         Udq9mBssbnXjU57vu8PWBDoJ1RBDrFiVCKGFPwPq1xtzq7dMe7sxNJ5CfIYcXysulrqI
-         Y4wSU0sEHyN2zsDy8phaqMYpAtK1ZUCBLdJCf/r9LQltfxhKK2/m1eA3fF+hqlzRVhJL
-         EIXTuRlauQIXKv5vnQPfZqT2C16qR9Xv93HdcYUtEeH6SkFnYaOiRLLhEm5ZEqEcwfD7
-         jEJA==
-X-Gm-Message-State: ACrzQf3uxN+0uuDP3tW4u8e6W7Yq5c8HQiXA3iGCEInJGl0sRDE/I7do
-        W4rM76tqiBgBVdm3BQRrXeo+bbf7MT4=
-X-Google-Smtp-Source: AMsMyM49ekDrrDaAO01eattiXVMqyqdte/fWJ867p1ZlZ4qxfvybLQ3TfJTpesl2DPlIjfcXGvyVlg==
-X-Received: by 2002:a9d:6496:0:b0:66c:4c59:8443 with SMTP id g22-20020a9d6496000000b0066c4c598443mr157410otl.347.1667105732282;
-        Sat, 29 Oct 2022 21:55:32 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v4-20020a056808004400b00354efb5be11sm1139522oic.15.2022.10.29.21.55.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Oct 2022 21:55:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9afef4dc-29a8-2f8a-84b3-897dc3b887aa@roeck-us.net>
-Date:   Sat, 29 Oct 2022 21:55:30 -0700
+        Sun, 30 Oct 2022 01:01:57 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EE34B98F;
+        Sat, 29 Oct 2022 22:01:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=snN+ahZB8RTEdCISFwrEpqTG30450n3SmkEIHv4+Nvs=; b=oCT8jdy8kiXLczS1q4R20j6sye
+        YgYw+8RrUJwph4pbyQAHRQ6lq62IoLqCBgP3FP1dYCOzVqIqq6AzHtOB2kRekwDxBhP7/pxrsplpx
+        YhNvq7jL6qEvTSmj+4kozHhBNkppCU6Tt1GyRKJjIKVbtxdWGpe6kmpoGyNW0wUWhUv8tHxBoB8pK
+        25zKtS+BCMxf3UKIngz2X5i+tAKrJul5rF5Gu0L5YhJgeRl0f96MhS28cwY54iOiQO4EcS4H5bM9L
+        aGsO3WSGCjcqxGcefu78Fc8H/pSCaooMAGV8QnuVp+RwffUf3POVhUKrdAHkLiIOEfX8OBMxEuqRa
+        BcVL5QGw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1op0S3-00FSPo-14;
+        Sun, 30 Oct 2022 05:01:39 +0000
+Date:   Sun, 30 Oct 2022 05:01:39 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>, willy@infradead.org,
+        dchinner@redhat.com, Steve French <smfrench@gmail.com>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 12/12] use less confusing names for iov_iter direction
+ initializers
+Message-ID: <Y14FM9svxLoaOOuS@ZenIV>
+References: <Y1btOP0tyPtcYajo@ZenIV>
+ <20221028023352.3532080-1-viro@zeniv.linux.org.uk>
+ <20221028023352.3532080-12-viro@zeniv.linux.org.uk>
+ <CAHk-=wibPKfv7mpReMj5PjKBQi4OsAQ8uwW_7=6VCVnaM-p_Dw@mail.gmail.com>
+ <Y1wOR7YmqK8iBYa8@ZenIV>
+ <CAHk-=wi_iDAugqFZxTiscsRCNbtARMFiugWtBKO=NqgM-vCVAQ@mail.gmail.com>
+ <Y1wt7uzL7vkBQ6Vm@ZenIV>
+ <CAHk-=wj4ndvhOFFsnNXRmwetwL9ZxE2QzcrLFTeJ7Yfh+pJ7Mw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220923184632.2157-1-andriy.shevchenko@linux.intel.com>
- <20220923184632.2157-2-andriy.shevchenko@linux.intel.com>
- <20221029142551.GA3222119@roeck-us.net> <Y12o+Hk2qsIsDQUo@google.com>
- <086d381d-bc6f-7dd3-35b6-d05afe742b9e@roeck-us.net>
- <Y13+pV6ga5DqXyQF@google.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v1 2/2] Input: matrix_keypad - replace header inclusions
- by forward declarations
-In-Reply-To: <Y13+pV6ga5DqXyQF@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wj4ndvhOFFsnNXRmwetwL9ZxE2QzcrLFTeJ7Yfh+pJ7Mw@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,62 +64,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/29/22 21:33, Dmitry Torokhov wrote:
-> On Sat, Oct 29, 2022 at 04:02:56PM -0700, Guenter Roeck wrote:
->> On 10/29/22 15:28, Dmitry Torokhov wrote:
->>> On Sat, Oct 29, 2022 at 07:25:51AM -0700, Guenter Roeck wrote:
->>>> On Fri, Sep 23, 2022 at 09:46:32PM +0300, Andy Shevchenko wrote:
->>>>> When the data structure is only referred by pointer, compiler may not need
->>>>> to see the contents of the data type. Thus, we may replace header inclusions
->>>>> by respective forward declarations.
->>>>>
->>>>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->>>>> ---
->>>>>    include/linux/input/matrix_keypad.h | 5 +++--
->>>>>    1 file changed, 3 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/include/linux/input/matrix_keypad.h b/include/linux/input/matrix_keypad.h
->>>>> index 9476768c3b90..b8d8d69eba29 100644
->>>>> --- a/include/linux/input/matrix_keypad.h
->>>>> +++ b/include/linux/input/matrix_keypad.h
->>>>> @@ -3,8 +3,9 @@
->>>>>    #define _MATRIX_KEYPAD_H
->>>>>    #include <linux/types.h>
->>>>> -#include <linux/input.h>
->>>>
->>>> Possibly, but may other drivers rely on those includes.
->>>> This results in widespread build failures such as
->>>>
->>>> Building arm:allmodconfig ... failed
->>>> --------------
->>>> Error log:
->>>> In file included from include/linux/input/samsung-keypad.h:12,
->>>>                    from arch/arm/mach-s3c/keypad.h:12,
->>>>                    from arch/arm/mach-s3c/mach-crag6410.c:57:
->>>> arch/arm/mach-s3c/mach-crag6410.c:183:19: error: 'KEY_VOLUMEUP' undeclared here
->>>
->>> I fixed this particular instance, hopefully it is one of the very
->>> last of them...
->>>
->>
->> Sorry, I didn't bother listing all of them. There is at least one more.
->>
->> Error log:
->> arch/arm/mach-pxa/spitz.c:410:11: error: 'EV_PWR' undeclared here (not in a function)
->>    410 |   .type = EV_PWR,
->>        |           ^~~~~~
->>
->> with arm:pxa_defconfig.
+On Fri, Oct 28, 2022 at 01:34:05PM -0700, Linus Torvalds wrote:
+> On Fri, Oct 28, 2022 at 12:30 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> >
+> > Went through the callers, replaced each with the right ITER_... (there's
+> > not that many of them and they are fairly easy to review), then went
+> > through mismatches and split their fixups into the beginning of the
+> > series (READ -> ITER_SOURCE becoming READ -> WRITE -> ITER_SOURCE, that
+> > is).
 > 
-> Ah, I see. Arnd is trying to delete bunch of PXA code, so I'll pull the
-> header change until after he merges his, and hopefully spitz will be
-> gone.
+> Oh, ok. So if you've actually reviewed each and every one of them,
+> then I'm ok with the "abort".
 > 
-> Do you have more examples by chance?
-> 
+> I still want it to be a WARN_ON_ONCE(), because of any future addition
+> that gets things wrong.
 
-No, but no guarantees - there are various other build failures in -next,
-and I may have missed some.
-
-Guenter
-
+Sure, np; branch updated and pushed out - the only difference is that
+11/12 adds WARN_ON_ONCE instead of WARN_ON, so no point reposting, IMO...
