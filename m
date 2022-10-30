@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182D2612D2A
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 23:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48AD1612D2C
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 23:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiJ3WCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 18:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34684 "EHLO
+        id S230000AbiJ3WCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 18:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbiJ3WCM (ORCPT
+        with ESMTP id S229954AbiJ3WCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 18:02:12 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E32A1BE
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 15:02:09 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id o7so5703363pjj.1
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 15:02:09 -0700 (PDT)
+        Sun, 30 Oct 2022 18:02:16 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E1FAE60
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 15:02:10 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id f23so9228740plr.6
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 15:02:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8PHeEQvI03GO1u4arOs5eKGxrrWj+QcJXenB1+d+Ev4=;
-        b=6l9nZSzxsOlgev3XI2BPsdlCYcxkwe86MfpEVfJczMSX1+0I/rH8AlHqSqBvvyUFD+
-         FLOo+9r+o+aWu5kEugJOUFPwjCw4I54idiEjMpMSPIltB8jPPCqhqN8P1bXH5sssnvQA
-         qkfQNjn4W48osJfV2juo6XvIlw9Z/Hure5Ix8EsJEn5JkL+e3nOK6wqxUNn8vX9vqmPp
-         rG+PyTTCQLqQ6k6pwkXoxeA+qz4Tgabrzzbj+3ooWXmaRO+62+Qi0xNSgA3F6qi5GTnj
-         gMK/ksFvl1WR/UPEciiD58drbBPYSQwTv7nUZ+wLrJehGnY27OoUj1IHxXCBypqKpjKr
-         qU9w==
+        bh=TCMSGu8wCAuxi+YEaeqt2Nm6ljarPNoUCebXSLfB1Fw=;
+        b=H1OQbWeLIKTClEI0Y18BCREEaUPyB4u9aov6gnRCwP3FMlWoDhoOyrQj9dTUw8f7Rl
+         Lnc+rX7GLGtNIG7+mOPq5mJ218zFKXipmPROig7C1ec18KZ542PUt0JccxGsjh5HO1a0
+         /z8kUmiSoWowwx6pl7CmnUz6U/WQmRT/NWSJGgn5Kjr93Rcz9iCWvN5ozoSLbcjCLLaW
+         vQSLjW+N399VOHIFg9wUxuq3+NKkDgXzX84jiBotca1ufvXrHs73a7xFaaZLJbSrPgpF
+         kI9+im4ilsx5ns6Kwr6KHXhyinzcJ9zfi1ofygZp48zSk618zFDCdZssNjQg3mnekR5P
+         YICw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8PHeEQvI03GO1u4arOs5eKGxrrWj+QcJXenB1+d+Ev4=;
-        b=kBXWnhdTONVxRWkrvozqzBWM15CSlYWET7nerFyxdW1toYQ/A9pWjIg4s4JFtBHY8s
-         rjcOA95PwZBSRNzJAE5C54UruTvPkfyYmJ8VTlNyUDGCAo0r7DrQFzVGHi8bJuBVLV/4
-         z+pslT5N1pgvY+a6FG/VVQsiYG0qOo73/NbJtxAd5f3a81kLLXBndgGUXrUo7BHFW+Z8
-         he2j7p4Q20MH3NzZMRTxLs/tPTUrSizqA1aIVKa7WAGZ9wuI95YA5CNrfFVepycTvtVB
-         OoWZ1HFWa50qZRddLiQHov153es6y+ZHrGe7UzTgkoI3nMCMJIB5eGrthbtrw+2LPhbb
-         xGug==
-X-Gm-Message-State: ACrzQf09nVe6bOjVX7WY1hIKbu4pQIN/+mD17TaF1FVhYcPjniaX3Bax
-        nbqMk/gf6Q/HU2/yLstJIqaBto8zpgoxs12F
-X-Google-Smtp-Source: AMsMyM6FFdgylcHCZmtH8I4OKTzEQHVeq1NVugx8akj7qK+2y0An0oYMAXlbDOSj+D4hmYwUynLsSA==
-X-Received: by 2002:a17:903:2452:b0:186:99e0:672d with SMTP id l18-20020a170903245200b0018699e0672dmr11199251pls.95.1667167328768;
-        Sun, 30 Oct 2022 15:02:08 -0700 (PDT)
+        bh=TCMSGu8wCAuxi+YEaeqt2Nm6ljarPNoUCebXSLfB1Fw=;
+        b=ZA0ePgo1TNywxC70BsmKi1e1pdahfCqQ1oTLebS2BtlaegboAMN0ZA2BxVxBz7yMeD
+         oOYq9N2BXme3XJ+EEAIO+7KTxFAXyP0JVn2/vcaCKQtyRofikhbv4jGBY2sb8jS+KLaa
+         Tn8h8yDN0XHDqlQQ2x7caAjdpEtcJGwk+ufJRLuRe9t3DxG2zAwI70JisY/c/AEB2ZP3
+         zjPpAsQkiThCNzKQDS1XexiShSjObJWp3cYE1ZsPEqbbNrH0D+X6oCVLzoBgBLxsgMdU
+         6ahRKVMucvxgaSGEQ+rA+a7VQAYOEXi8ZB4zfwFWXw0b1i149a38inqLRR1ckgAN4XN3
+         Y46g==
+X-Gm-Message-State: ACrzQf15v70fv0u+TjepNY7hi3ob/AyX57YZz81o8vJsEqyeaasAQz1q
+        A+fATDw+zf9B9J4idCsuqjxi9eswrb6NfCAs
+X-Google-Smtp-Source: AMsMyM4GdWVVzQsWPsWQHA0TiR71X3uUndA1mHuoEfLgekOPxznEf3CE25HyycOiKuLhhOXIat/5mw==
+X-Received: by 2002:a17:90a:ca87:b0:212:d2bd:82f5 with SMTP id y7-20020a17090aca8700b00212d2bd82f5mr11677337pjt.203.1667167329708;
+        Sun, 30 Oct 2022 15:02:09 -0700 (PDT)
 Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id y3-20020aa79e03000000b0056d73ef41fdsm562852pfq.75.2022.10.30.15.02.07
+        by smtp.gmail.com with ESMTPSA id y3-20020aa79e03000000b0056d73ef41fdsm562852pfq.75.2022.10.30.15.02.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Oct 2022 15:02:08 -0700 (PDT)
+        Sun, 30 Oct 2022 15:02:09 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 1/6] eventpoll: cleanup branches around sleeping for events
-Date:   Sun, 30 Oct 2022 16:01:58 -0600
-Message-Id: <20221030220203.31210-2-axboe@kernel.dk>
+Subject: [PATCH 2/6] eventpoll: don't pass in 'timed_out' to ep_busy_loop()
+Date:   Sun, 30 Oct 2022 16:01:59 -0600
+Message-Id: <20221030220203.31210-3-axboe@kernel.dk>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221030220203.31210-1-axboe@kernel.dk>
 References: <20221030220203.31210-1-axboe@kernel.dk>
@@ -70,40 +70,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than have two separate branches here, collapse them into a single
-one instead. No functional changes here, just a cleanup in preparation
-for changes in this area.
+It's known to be 'false' from the one call site we have, as we break
+out of the loop if it's not.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- fs/eventpoll.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ fs/eventpoll.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-index 52954d4637b5..3061bdde6cba 100644
+index 3061bdde6cba..64d7331353dd 100644
 --- a/fs/eventpoll.c
 +++ b/fs/eventpoll.c
-@@ -1869,14 +1869,15 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
- 		 * important.
- 		 */
- 		eavail = ep_events_available(ep);
--		if (!eavail)
-+		if (!eavail) {
- 			__add_wait_queue_exclusive(&ep->wq, &wait);
--
--		write_unlock_irq(&ep->lock);
--
--		if (!eavail)
-+			write_unlock_irq(&ep->lock);
- 			timed_out = !schedule_hrtimeout_range(to, slack,
- 							      HRTIMER_MODE_ABS);
-+		} else {
-+			write_unlock_irq(&ep->lock);
-+		}
-+
- 		__set_current_state(TASK_RUNNING);
+@@ -396,12 +396,12 @@ static bool ep_busy_loop_end(void *p, unsigned long start_time)
+  *
+  * we must do our busy polling with irqs enabled
+  */
+-static bool ep_busy_loop(struct eventpoll *ep, int nonblock)
++static bool ep_busy_loop(struct eventpoll *ep)
+ {
+ 	unsigned int napi_id = READ_ONCE(ep->napi_id);
  
- 		/*
+ 	if ((napi_id >= MIN_NAPI_ID) && net_busy_loop_on()) {
+-		napi_busy_loop(napi_id, nonblock ? NULL : ep_busy_loop_end, ep, false,
++		napi_busy_loop(napi_id, ep_busy_loop_end, ep, false,
+ 			       BUSY_POLL_BUDGET);
+ 		if (ep_events_available(ep))
+ 			return true;
+@@ -453,7 +453,7 @@ static inline void ep_set_busy_poll_napi_id(struct epitem *epi)
+ 
+ #else
+ 
+-static inline bool ep_busy_loop(struct eventpoll *ep, int nonblock)
++static inline bool ep_busy_loop(struct eventpoll *ep)
+ {
+ 	return false;
+ }
+@@ -1826,7 +1826,7 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
+ 		if (timed_out)
+ 			return 0;
+ 
+-		eavail = ep_busy_loop(ep, timed_out);
++		eavail = ep_busy_loop(ep);
+ 		if (eavail)
+ 			continue;
+ 
 -- 
 2.35.1
 
