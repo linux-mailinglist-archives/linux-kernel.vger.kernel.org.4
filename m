@@ -2,219 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623376126B2
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 02:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E496126B8
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 02:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiJ3AUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 20:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
+        id S229531AbiJ3Ae4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 20:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbiJ3ATI (ORCPT
+        with ESMTP id S229441AbiJ3Aey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 20:19:08 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2653D4F6B4
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 17:18:53 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id h206so3909649iof.10
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Oct 2022 17:18:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cEUlpLn6RuLc4Fo/uPSYCehvdn31euMXFsdMmyCklyk=;
-        b=SgQo6EF4wTm/UBaevZtlQYHMSlg7mAp5S8g0l0XvdCufc9TjYfk8eg50qb7ggL3r0+
-         musLPB0I22VqJZrSvjCgVwVYGvZNf5prBF0zZ+fBVXIMt+a7KjCieF8pGqSQ0qIjzkD1
-         9uoK2iP8Hz4rwvZqYh91jq2MsQrZgCDV9QSIY86oo2k7s0tn2epfkA0nEUHGdYfu/zfl
-         BduYuQWAYUGnfgfS8/cVLUhnmDAONGv97oB772BePT7HsJCs3+D/533siTlS9fhYbDyx
-         7MVOrpcGYlJlDtLeEtoqD6cRmVZ7dEcTAfYSRdiKjgJ2RPFKbAxYhljzKXkSJqIpUI7G
-         zXSA==
+        Sat, 29 Oct 2022 20:34:54 -0400
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6547D14087;
+        Sat, 29 Oct 2022 17:34:52 -0700 (PDT)
+Received: by mail-pf1-f174.google.com with SMTP id g62so7794268pfb.10;
+        Sat, 29 Oct 2022 17:34:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cEUlpLn6RuLc4Fo/uPSYCehvdn31euMXFsdMmyCklyk=;
-        b=DCOEopY55tizAuQg6wWkjA+qioNClTpH6wL5qOmyr2Hzlw0RRVg+sv5zWOO6LNXTi9
-         ptVg6h7HlPbqi0PQw8VvV7pnjC9BUDAKko3/dGFf8rvU1RpozvCa+kD1CT6S8ksk/Z4b
-         b0EpYS1VO8XaYKM0fj9N5XyObp2iOkbtUGz+AWzd2WClByQTRGfFPbfEXsl5Inko+4ri
-         WxKVluyuJTeWyZefFTuIQXFBBcIQLQ6ih7+xhVGbacyFn0lMrjSvVSijD+dqt+Hq8ixk
-         egZ1H0s43zZXsGG5EXG28sTyGhmfvwdCtCKfjDRh6YwlFuUlMcM4PkVj1mMpoYH2Kguc
-         XKFQ==
-X-Gm-Message-State: ACrzQf14EFpG/iN5IflIAamJXmHb16r1aqG3NvePAj7tWZr59pKfHhNR
-        qgbnEmlXZO3K1IOXIbduPxjAxg==
-X-Google-Smtp-Source: AMsMyM5JicI5H6e3IRZLxXLnhj7L4y9fUvtaoryjcSsgFFK+c547ySMaskYTWqNT4deOVsAKiqB/tg==
-X-Received: by 2002:a02:6d15:0:b0:375:3523:b643 with SMTP id m21-20020a026d15000000b003753523b643mr3579915jac.144.1667089132781;
-        Sat, 29 Oct 2022 17:18:52 -0700 (PDT)
-Received: from presto.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id co20-20020a0566383e1400b00375126ae55fsm1087519jab.58.2022.10.29.17.18.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Oct 2022 17:18:52 -0700 (PDT)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     mka@chromium.org, evgreen@chromium.org, andersson@kernel.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 9/9] net: ipa: use a bitmap for enabled endpoints
-Date:   Sat, 29 Oct 2022 19:18:28 -0500
-Message-Id: <20221030001828.754010-10-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221030001828.754010-1-elder@linaro.org>
-References: <20221030001828.754010-1-elder@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HEMUfMLVSAfkGsHTinQJUfZYW8AsZ7QM6NJJDNbHCFM=;
+        b=u733/S3o/qAxFlyEsjh1SXIrz43CKEg/x7N2m6DPZIVITZzt0uRys1blSOXWMcHhkz
+         or7bufDjtJaDAFF0Dwqsq+2qGxZPoZuSeEWlCE0eRMgJ+A6dMyeExai7kBDQDzpRzUgA
+         9hh/NyXpk3R5aWsWmW4o9vmBiE6ULOfSFB4uwlrSH1pztXOAxrmuctDXQNZcfeyXHnKL
+         G86mX4xlVVVBcQpzIalI1rcisTQ75fZ7BJBkv3v783kHlKZK7JB8QaKt/DU2osiMU/n7
+         uImhb7HFlUA1MDObR+yY2vKnbGe+gGhiC9bcRNT8CRqjjn+Q9O1NltPghcLVCWkJCQw9
+         a43Q==
+X-Gm-Message-State: ACrzQf2jKP8wNOuzJWF+EW2VOa6J5kwLXfpvuIsA8VqkxezluB3rgAUA
+        7xfR3gOlR/yIxNvmBheIyio=
+X-Google-Smtp-Source: AMsMyM6sHfWrHEaUlQIPjYDTfJMPVJPxvAM9Yf6JqXOKgiz5SbTEiH7twtGhwinB1J0PRVDvvmqL+g==
+X-Received: by 2002:a63:6f8a:0:b0:439:36bc:89f9 with SMTP id k132-20020a636f8a000000b0043936bc89f9mr5945904pgc.100.1667090091847;
+        Sat, 29 Oct 2022 17:34:51 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id w4-20020a170902e88400b0015e8d4eb26esm1825034plg.184.2022.10.29.17.34.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 29 Oct 2022 17:34:51 -0700 (PDT)
+Message-ID: <adaea16a-c7cd-5d68-50c8-d56de851061a@acm.org>
+Date:   Sat, 29 Oct 2022 17:34:49 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 1/3] blk-mq: remove redundant call to
+ blk_freeze_queue_start in blk_mq_destroy_queue
+Content-Language: en-US
+To:     Jinlong Chen <nickyc975@zju.edu.cn>, axboe@kernel.dk,
+        kbusch@kernel.org, hch@lst.de, sagi@grimberg.me
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org
+References: <cover.1667035519.git.nickyc975@zju.edu.cn>
+ <ebd3a47a1ebf4ab518c985cdbaa1ac3afd6dfb9f.1667035519.git.nickyc975@zju.edu.cn>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <ebd3a47a1ebf4ab518c985cdbaa1ac3afd6dfb9f.1667035519.git.nickyc975@zju.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the 32-bit unsigned used to track enabled endpoints with a
-Linux bitmap, to allow an arbitrary number of endpoints to be
-represented.
+On 10/29/22 03:02, Jinlong Chen wrote:
+> Calling blk_freeze_queue results in a redundant call to
+> blk_freeze_queue_start as it has been called in blk_queue_start_drain.
+> 
+> Replace blk_freeze_queue with blk_mq_freeze_queue_wait to avoid the
+> redundant call.
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/ipa.h          |  4 ++--
- drivers/net/ipa/ipa_endpoint.c | 28 ++++++++++++++++------------
- 2 files changed, 18 insertions(+), 14 deletions(-)
+blk_mq_destroy_queue() has more callers than blk_queue_start_drain() so 
+the above description is at least misleading.
 
-diff --git a/drivers/net/ipa/ipa.h b/drivers/net/ipa/ipa.h
-index f14d1bd34e7e5..5372db58b5bdc 100644
---- a/drivers/net/ipa/ipa.h
-+++ b/drivers/net/ipa/ipa.h
-@@ -67,7 +67,7 @@ struct ipa_interrupt;
-  * @available:		Bitmap of endpoints supported by hardware
-  * @filtered:		Bitmap of endpoints that support filtering
-  * @set_up:		Bitmap of endpoints that are set up for use
-- * @enabled:		Bit mask indicating endpoints enabled
-+ * @enabled:		Bitmap of currently enabled endpoints
-  * @modem_tx_count:	Number of defined modem TX endoints
-  * @endpoint:		Array of endpoint information
-  * @channel_map:	Mapping of GSI channel to IPA endpoint
-@@ -125,7 +125,7 @@ struct ipa {
- 	unsigned long *available;	/* Supported by hardware */
- 	u64 filtered;			/* Support filtering (AP and modem) */
- 	unsigned long *set_up;
--	u32 enabled;
-+	unsigned long *enabled;
- 
- 	u32 modem_tx_count;
- 	struct ipa_endpoint endpoint[IPA_ENDPOINT_MAX];
-diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.c
-index 564a209f75a0f..ea9ed2da4ff0c 100644
---- a/drivers/net/ipa/ipa_endpoint.c
-+++ b/drivers/net/ipa/ipa_endpoint.c
-@@ -1666,6 +1666,7 @@ static void ipa_endpoint_program(struct ipa_endpoint *endpoint)
- 
- int ipa_endpoint_enable_one(struct ipa_endpoint *endpoint)
- {
-+	u32 endpoint_id = endpoint->endpoint_id;
- 	struct ipa *ipa = endpoint->ipa;
- 	struct gsi *gsi = &ipa->gsi;
- 	int ret;
-@@ -1675,37 +1676,35 @@ int ipa_endpoint_enable_one(struct ipa_endpoint *endpoint)
- 		dev_err(&ipa->pdev->dev,
- 			"error %d starting %cX channel %u for endpoint %u\n",
- 			ret, endpoint->toward_ipa ? 'T' : 'R',
--			endpoint->channel_id, endpoint->endpoint_id);
-+			endpoint->channel_id, endpoint_id);
- 		return ret;
- 	}
- 
- 	if (!endpoint->toward_ipa) {
--		ipa_interrupt_suspend_enable(ipa->interrupt,
--					     endpoint->endpoint_id);
-+		ipa_interrupt_suspend_enable(ipa->interrupt, endpoint_id);
- 		ipa_endpoint_replenish_enable(endpoint);
- 	}
- 
--	ipa->enabled |= BIT(endpoint->endpoint_id);
-+	__set_bit(endpoint_id, ipa->enabled);
- 
- 	return 0;
- }
- 
- void ipa_endpoint_disable_one(struct ipa_endpoint *endpoint)
- {
--	u32 mask = BIT(endpoint->endpoint_id);
-+	u32 endpoint_id = endpoint->endpoint_id;
- 	struct ipa *ipa = endpoint->ipa;
- 	struct gsi *gsi = &ipa->gsi;
- 	int ret;
- 
--	if (!(ipa->enabled & mask))
-+	if (!test_bit(endpoint_id, ipa->enabled))
- 		return;
- 
--	ipa->enabled ^= mask;
-+	__clear_bit(endpoint_id, endpoint->ipa->enabled);
- 
- 	if (!endpoint->toward_ipa) {
- 		ipa_endpoint_replenish_disable(endpoint);
--		ipa_interrupt_suspend_disable(ipa->interrupt,
--					      endpoint->endpoint_id);
-+		ipa_interrupt_suspend_disable(ipa->interrupt, endpoint_id);
- 	}
- 
- 	/* Note that if stop fails, the channel's state is not well-defined */
-@@ -1713,7 +1712,7 @@ void ipa_endpoint_disable_one(struct ipa_endpoint *endpoint)
- 	if (ret)
- 		dev_err(&ipa->pdev->dev,
- 			"error %d attempting to stop endpoint %u\n", ret,
--			endpoint->endpoint_id);
-+			endpoint_id);
- }
- 
- void ipa_endpoint_suspend_one(struct ipa_endpoint *endpoint)
-@@ -1722,7 +1721,7 @@ void ipa_endpoint_suspend_one(struct ipa_endpoint *endpoint)
- 	struct gsi *gsi = &endpoint->ipa->gsi;
- 	int ret;
- 
--	if (!(endpoint->ipa->enabled & BIT(endpoint->endpoint_id)))
-+	if (!test_bit(endpoint->endpoint_id, endpoint->ipa->enabled))
- 		return;
- 
- 	if (!endpoint->toward_ipa) {
-@@ -1742,7 +1741,7 @@ void ipa_endpoint_resume_one(struct ipa_endpoint *endpoint)
- 	struct gsi *gsi = &endpoint->ipa->gsi;
- 	int ret;
- 
--	if (!(endpoint->ipa->enabled & BIT(endpoint->endpoint_id)))
-+	if (!test_bit(endpoint->endpoint_id, endpoint->ipa->enabled))
- 		return;
- 
- 	if (!endpoint->toward_ipa)
-@@ -1970,8 +1969,10 @@ void ipa_endpoint_exit(struct ipa *ipa)
- 	for_each_set_bit(endpoint_id, ipa->defined, ipa->endpoint_count)
- 		ipa_endpoint_exit_one(&ipa->endpoint[endpoint_id]);
- 
-+	bitmap_free(ipa->enabled);
- 	bitmap_free(ipa->set_up);
- 	bitmap_free(ipa->defined);
-+	ipa->enabled = NULL;
- 	ipa->set_up = NULL;
- 	ipa->defined = NULL;
- 
-@@ -1997,8 +1998,11 @@ int ipa_endpoint_init(struct ipa *ipa, u32 count,
- 	/* Set up the defined endpoint bitmap */
- 	ipa->defined = bitmap_zalloc(ipa->endpoint_count, GFP_KERNEL);
- 	ipa->set_up = bitmap_zalloc(ipa->endpoint_count, GFP_KERNEL);
-+	ipa->enabled = bitmap_zalloc(ipa->endpoint_count, GFP_KERNEL);
- 	if (!ipa->defined || !ipa->set_up) {
- 		dev_err(dev, "unable to allocate endpoint bitmaps\n");
-+		bitmap_free(ipa->set_up);
-+		ipa->set_up = NULL;
- 		bitmap_free(ipa->defined);
- 		ipa->defined = NULL;
- 		return -ENOMEM;
--- 
-2.34.1
+Additionally, the word "cleanup" from the patch series title indicates 
+that no patch in this series changes the behavior of the code. This 
+patch involves a behavior change.
 
+I think this patch introduces a hang for every caller of 
+blk_mq_destroy_queue() other than blk_queue_start_drain().
+
+Bart.
