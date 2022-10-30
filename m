@@ -2,116 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97ACB6126EC
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 03:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E66DB6126F7
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 03:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiJ3Cn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 22:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
+        id S229682AbiJ3Cxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 22:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiJ3Cnx (ORCPT
+        with ESMTP id S229549AbiJ3Cxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 22:43:53 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0D5481D3;
-        Sat, 29 Oct 2022 19:43:53 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id o7so4549479pjj.1;
-        Sat, 29 Oct 2022 19:43:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2ggnKUyDGzSh8VA712RZdHnC7EeozkTTB151R7EI0vc=;
-        b=AxktH6M6HembcbtUcw2e7dm1jU4rZ4V5w1dInI2pOM7Z3MVhPI/5TE8H7ZYg7qrk4+
-         eoshHs40IrICubHsVpLVkhysyXK01MdJkh7zvVUDBTG2vJqy2S2jPKsINmWZs4Dt2tAs
-         WI1YKzKPhMGCfG/lx+hWcI+J+fW0xjcgTVXwfLRepKil45VlhXJ33wyYxYuWYqLZLHbj
-         myPurIu/gBKT/wOSOx3FhkrRwP9cfpQx2jZZu2MeurxHd7wibY6j6v1kGFiq3tNIUjL9
-         dg/piWbIbs/Vb+Kw4nFLNWwu1AIJqCKZ84Zn9RVncfaWaycGVIDlnpwexv0TmAlfabPy
-         c9fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2ggnKUyDGzSh8VA712RZdHnC7EeozkTTB151R7EI0vc=;
-        b=3kqhdIm6M/ptP8f08TKOWwNipMZHoInm0biPDk752HkKIsvDzaDdBgUjw4RSlSXq0d
-         Yxpc6KWDUVlbXZo7JiozoRSSg75N3AWwPKdzf3nX4C3Nr6PzAe/zfsonZBtKvSbLl/Jy
-         8eZI6J2r1MTCBjOlvXPT2ZwlZADbKyURRehr0lh6ivVtj6VigqZzZSc+qBHYIEQXCOgo
-         2Nznf3Q7gbOc91l5DBcHBSu22sgy0LjFRvs4zm31tM7bxN0lXxBU6YTX81Oc9JnyrrWo
-         jkJaivRoSPywRPWGaBXcNKR4jMGB9dhFuXMLZujSgw8Ont1n8x3h/dxkY3fIC0IHcO8D
-         /awQ==
-X-Gm-Message-State: ACrzQf0uCUMLjzqWALHJEThCGVcfHFaKCvpywEnkG4ekcGvNGDWiRbkA
-        VhOicoh29X+s1X75hd+QXgQ=
-X-Google-Smtp-Source: AMsMyM4JhLEMjvo9skcbp6g+szVwSDHLrkiWnVSk3Y+eTN1lvn68Nr0kdADV4KGqo4Rh48PyOwgqAA==
-X-Received: by 2002:a17:902:b601:b0:186:9f20:f6a4 with SMTP id b1-20020a170902b60100b001869f20f6a4mr7380307pls.38.1667097832539;
-        Sat, 29 Oct 2022 19:43:52 -0700 (PDT)
-Received: from ?IPV6:2001:8003:d90f:f801:7164:b4e6:b90b:c4d5? ([2001:8003:d90f:f801:7164:b4e6:b90b:c4d5])
-        by smtp.gmail.com with ESMTPSA id a3-20020a170902ecc300b00186e34524e3sm1924242plh.136.2022.10.29.19.43.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Oct 2022 19:43:51 -0700 (PDT)
-Message-ID: <b874e6ff-6a19-410f-1fe8-2334a58f503a@gmail.com>
-Date:   Sun, 30 Oct 2022 13:43:46 +1100
+        Sat, 29 Oct 2022 22:53:36 -0400
+Received: from mail1.bemta37.messagelabs.com (mail1.bemta37.messagelabs.com [85.158.142.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF4648EB4;
+        Sat, 29 Oct 2022 19:53:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1667098413; i=@fujitsu.com;
+        bh=PdGMq5jhTndn3C8TSzAZMy4sSkX9K8IOAvOSbW37nxk=;
+        h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+         In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        b=uN45gEmmIs+7taQEsOMyCYwJdBvlDBjCW7WtXaLTEeJjNzsV2Xm6XcxF8X5EO6Vec
+         n4WD22tycJdBNM5fvC57VmfYoCoQoENkUxqZNUXRw5IHZC9v5GvmMwWhgbm++g43/c
+         TRbGdp5pDNnDPE/vlvw7bWMsXgOUWFf/u4rwZZ/+Tl1qs+7fHiLx72/jUoSS0T3qC+
+         HpaSgiufIGVlrgezzcWYeMkBNkMSsRuFdVdMnYDFoRbipsQLkucuWS0QFB/mrR5M2w
+         hrJwcFl2IJqBSpqgxQeOFP0sjxNCxV4E8MC0JtrbMjJC5FSxrNUDS3GQ9JE5rv26ot
+         9rfSYTpKJLOYg==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLKsWRWlGSWpSXmKPExsViZ8OxWVf7eWy
+  yweWlchYzZ5xgtJjyaymzxeVdc9gsnh3qZbH4MnUas8X5Y/3sDmweO2fdZffYtKqTzePzJjmP
+  rZ9vswSwRLFm5iXlVySwZjRcvcBe0CZT8frIAqYGxiaJLkYuDiGBjYwS849eYIdwFjNJPHown
+  Q3C2QaUOdTI2MXIycErYCdxaOFpZhCbRUBVYmbbYlaIuKDEyZlPWEBsUYEIiYePJoHZwgL2Eu
+  /aJ7KB2MwC4hK3nsxnArFFBGIk/h37xQgRd5fom7IPaA4H0DJHiab7+iBhNgENiXstN8FKOAW
+  cJCYd38AEUW4hsfjNQXYIW15i+9s5YOdICChKHOn8ywJhV0jMmtXGBGGrSVw9t4l5AqPwLCSX
+  zkJy0SwkY2chGbuAkWUVo1lxalFZapGuqV5SUWZ6RkluYmaOXmKVbqJeaqluXn5RSYauoV5ie
+  bFeanGxXnFlbnJOil5easkmRmCspRQnOO1gnLLsj94hRkkOJiVR3szO2GQhvqT8lMqMxOKM+K
+  LSnNTiQ4wyHBxKErxNj4BygkWp6akVaZk5wLiHSUtw8CiJ8EYfA0rzFhck5hZnpkOkTjEqSon
+  zOj4ESgiAJDJK8+DaYKnmEqOslDAvIwMDgxBPQWpRbmYJqvwrRnEORiVhXpHHQFN4MvNK4Ka/
+  AlrMBLQ4fVIUyOKSRISUVAPT2eIfyYsm2FrXh5Spd/tJqEnty+W5sWLK4fKnOj0TkpfH/2K4f
+  jZlwgqXr4deKRkcT9p6+ouYtWNPQWLTxzvNb6ZG9/3TPZWV719+6uKtGYd1y/WZd7jJZ9W3pj
+  JnHUw4d2CbsuPXymPev0teHDu+JvfLwmruly+m+Wybp9FU4nC49v3LV9P8vty5F67XHGSx6Z1
+  8lGUCa4qReNYjtjk7c/edmcJe41Rx/Juz3sKUqdtmnpx56NXH3jqGkDcbAsviqp+l3XtwvvRi
+  stdPn6DU5fWPP/xzVrnK2cS29/He6YmsLC+Xti/OuJoUwrbAZNmF+UwhS55c0M1bpHMhtihOK
+  feEYnD+vic7ayXfhSiUKLEUZyQaajEXFScCAByihl+wAwAA
+X-Env-Sender: lizhijian@fujitsu.com
+X-Msg-Ref: server-5.tower-732.messagelabs.com!1667098411!33197!1
+X-Originating-IP: [62.60.8.179]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.100.1; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 23476 invoked from network); 30 Oct 2022 02:53:31 -0000
+Received: from unknown (HELO n03ukasimr04.n03.fujitsu.local) (62.60.8.179)
+  by server-5.tower-732.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 30 Oct 2022 02:53:31 -0000
+Received: from n03ukasimr04.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr04.n03.fujitsu.local (Postfix) with ESMTP id E63CC142;
+        Sun, 30 Oct 2022 02:53:30 +0000 (GMT)
+Received: from R01UKEXCASM126.r01.fujitsu.local (R01UKEXCASM126 [10.183.43.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by n03ukasimr04.n03.fujitsu.local (Postfix) with ESMTPS id D947E73;
+        Sun, 30 Oct 2022 02:53:30 +0000 (GMT)
+Received: from [10.167.226.45] (10.167.226.45) by
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.32; Sun, 30 Oct 2022 02:53:27 +0000
+Message-ID: <a0ab3805-3602-6037-b9b6-ddab88c424be@fujitsu.com>
+Date:   Sun, 30 Oct 2022 10:53:20 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] staging: vchiq: add 'static' to function definition
-Content-Language: en-GB-large
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        kernel-janitors@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20221022043548.1671644-1-scottjcrouch@gmail.com>
- <Y1Okpjbi2kKU2GFz@kroah.com>
- <52599d6e-dc16-4186-9fb9-d17ce428fe9c@app.fastmail.com>
-From:   "Scott J. Crouch" <scottjcrouch@gmail.com>
-In-Reply-To: <52599d6e-dc16-4186-9fb9-d17ce428fe9c@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH for-next] RDMA/rxe: Fix mr->map double free
+Content-Language: en-US
+To:     <zyjzyj2000@gmail.com>, <jgg@ziepe.ca>, <leon@kernel.org>,
+        <linux-rdma@vger.kernel.org>
+CC:     Bob Pearson <rpearsonhpe@gmail.com>, <linux-kernel@vger.kernel.org>
+References: <1667097525-2-1-git-send-email-lizhijian@fujitsu.com>
+From:   Li Zhijian <lizhijian@fujitsu.com>
+In-Reply-To: <1667097525-2-1-git-send-email-lizhijian@fujitsu.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.167.226.45]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178)
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/10/22 01:08, Arnd Bergmann wrote:
-> On Sat, Oct 22, 2022, at 10:07, Greg Kroah-Hartman wrote:
->> On Sat, Oct 22, 2022 at 03:35:48PM +1100, Scott J. Crouch wrote:
-> 
->> Nice try, but this breaks the build in a very horrible and strange way
->> that no one has been able to figure out yet:
-> 
-> I got curious and figured out what happens:
-> 
-> Without CONFIG_OF, of_match_node() always returns NULL, so
-> vchiq_probe() returns -EINVAL unconditionally before calling
-> vchiq_platform_init(). 
-> 
-> If vchiq_platform_init() is marked 'static', gcc's dead code
-> elimination then eliminates it, which in turn means that
-> 'g_fragments_base' is never initialized and gets replaced
-> with a NULL pointer.
+Please ignore this one, which failed to compile because it was based on a wrong branch
 
-Good spotting.  Actually, I was clumsily learning how to run sparse on the
-staging directory and wasn't sure what config to use that didn't involve
-enabling everything manually.  But from what I can tell, it's OF_OVERLAY (or
-something downstream of that) that gets rid of the warning.  BCM2835_VCHIQ
-requires BCM_VIDEOCORE which already depends on OF.  I'm confused because I
-don't actually know how to reproduce the gcc warning without manually enabling
-the module such that OF is enabled but OF_OVERLAY isn't, since allmodconfig
-enables both -- maybe there's a way to do that.
+i will repost a new one later.
 
-I'm also confused why devm_rpi_firmware_get() doesn't have the same problem as
-of_match_node() just above it -- it returns NULL when RASPBERRYPI_FIRMWARE is
-unset, but gcc still builds without the warning.
 
-Scott.
+
+On 30/10/2022 10:38, Li Zhijian wrote:
+> rxe_mr_cleanup() which tries to free mr->map again will be called
+> when rxe_mr_init_user() fails.
+>
+> [43895.939883] CPU: 0 PID: 4917 Comm: rdma_flush_serv Kdump: loaded Not tainted 6.1.0-rc1-roce-flush+ #25
+> [43895.942341] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> [43895.945208] Call Trace:
+> [43895.946130]  <TASK>
+> [43895.946931]  dump_stack_lvl+0x45/0x5d
+> [43895.948049]  panic+0x19e/0x349
+> [43895.949010]  ? panic_print_sys_info.part.0+0x77/0x77
+> [43895.950356]  ? asm_sysvec_apic_timer_interrupt+0x16/0x20
+> [43895.952589]  ? preempt_count_sub+0x14/0xc0
+> [43895.953809]  end_report.part.0+0x54/0x7c
+> [43895.954993]  ? rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
+> [43895.956406]  kasan_report.cold+0xa/0xf
+> [43895.957668]  ? rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
+> [43895.959090]  rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
+> [43895.960502]  __rxe_cleanup+0x10a/0x1e0 [rdma_rxe]
+> [43895.961983]  rxe_reg_user_mr+0xb7/0xd0 [rdma_rxe]
+> [43895.963456]  ib_uverbs_reg_mr+0x26a/0x480 [ib_uverbs]
+> [43895.964921]  ? __lock_acquire+0x876/0x31e0
+> [43895.966182]  ? ib_uverbs_ex_create_wq+0x630/0x630 [ib_uverbs]
+> [43895.967739]  ? uverbs_fill_udata+0x1c6/0x330 [ib_uverbs]
+> [43895.969204]  ib_uverbs_handler_UVERBS_METHOD_INVOKE_WRITE+0x1a2/0x250 [ib_uverbs]
+> [43895.971126]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
+> [43895.973094]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
+> [43895.975096]  ? uverbs_fill_udata+0x25f/0x330 [ib_uverbs]
+> [43895.976466]  ib_uverbs_cmd_verbs+0x1397/0x15a0 [ib_uverbs]
+> [43895.977930]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
+> [43895.979937]  ? uverbs_fill_udata+0x330/0x330 [ib_uverbs]
+>
+> This issue was fistrly exposed since
+> commit: b18c7da63fcb ("RDMA/rxe: Fix memory leak in error path code")
+> and then we fixed it in
+> commit: 8ff5f5d9d8cf ("RDMA/rxe: Prevent double freeing rxe_map_set()")
+> but this fix was reverted together at last by
+> commit: 1e75550648da (Revert "RDMA/rxe: Create duplicate mapping tables for FMRs")
+>
+> Fixes: 1e75550648da (Revert "RDMA/rxe: Create duplicate mapping tables for FMRs")
+> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+> ---
+>   drivers/infiniband/sw/rxe/rxe_mr.c | 8 ++------
+>   1 file changed, 2 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c b/drivers/infiniband/sw/rxe/rxe_mr.c
+> index d4f10c2d1aa7..baa9d3be178a 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_mr.c
+> +++ b/drivers/infiniband/sw/rxe/rxe_mr.c
+> @@ -99,6 +99,7 @@ static int rxe_mr_alloc(struct rxe_mr *mr, int num_buf)
+>   		kfree(mr->map[i]);
+>   
+>   	kfree(mr->map);
+> +	mr->map = NULL;
+>   err1:
+>   	return -ENOMEM;
+>   }
+> @@ -163,9 +164,8 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
+>   				pr_warn("%s: Unable to get virtual address\n",
+>   						__func__);
+>   				err = -ENOMEM;
+> -				goto err_cleanup_map;
+> +				goto err_release_umem;
+>   			}
+> -
+>   			buf->addr = (uintptr_t)vaddr;
+>   			buf->size = PAGE_SIZE;
+>   			num_buf++;
+> @@ -182,10 +182,6 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
+>   
+>   	return 0;
+>   
+> -err_cleanup_map:
+> -	for (i = 0; i < mr->num_map; i++)
+> -		kfree(mr->map[i]);
+> -	kfree(mr->map);
+>   err_release_umem:
+>   	ib_umem_release(umem);
+>   err_out:
+
