@@ -2,258 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9738D61274E
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 05:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CCAC612750
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 05:33:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiJ3EWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 00:22:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
+        id S229636AbiJ3Edt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 00:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiJ3EWm (ORCPT
+        with ESMTP id S229451AbiJ3Edq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 00:22:42 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AA33CBF5;
-        Sat, 29 Oct 2022 21:22:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667103761; x=1698639761;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RjDOIrDPx+BCpNrk5veRhX8hIV4+O5o0/iEAyy4L7+8=;
-  b=CL8zI7SE17okIJ8crRD02fokaLJ6T5Qc56WslhU65c9bP5SHNnFYc+SA
-   gaJKsEqATv9pEctJxPT+SldV6OBOs+rbs2Pydbk7Ru0PgM63wF8LUG7Dh
-   KWktIWJtQWHNA3DChA63C6HTDUMGGyD2Yh2BhQgYSINFoB2JviQW2I3LR
-   lN/mJS6oHj4znHCQwjvKQxWU/8lWx64xn0KGdWxFY3aWcJT1qHunMqqLU
-   3JAjXHPFUV0O2RONRRrp0+p+7+z6VvUOukpyQ8e6Vchjp4uu2Gl/Z7S7T
-   /ID5VnwGIu2wMtfR9D/iDn4aJcReFmOPCktGDGKetr3lk0ovXiw5kcR5V
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="296121247"
-X-IronPort-AV: E=Sophos;i="5.95,225,1661842800"; 
-   d="scan'208";a="296121247"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 21:22:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="722463158"
-X-IronPort-AV: E=Sophos;i="5.95,225,1661842800"; 
-   d="scan'208";a="722463158"
-Received: from xpf.sh.intel.com ([10.239.182.130])
-  by FMSMGA003.fm.intel.com with ESMTP; 29 Oct 2022 21:22:31 -0700
-From:   Pengfei Xu <pengfei.xu@intel.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Cc:     Pengfei Xu <pengfei.xu@intel.com>, Heng Su <heng.su@intel.com>,
-        Hansen Dave <dave.hansen@intel.com>,
-        Luck Tony <tony.luck@intel.com>,
-        Mehta Sohil <sohil.mehta@intel.com>,
-        Chen Yu C <yu.c.chen@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bae Chang Seok <chang.seok.bae@intel.com>
-Subject: [PATCH v13 2/2] selftests/x86/xstate: Add xstate fork test for XSAVE feature
-Date:   Sun, 30 Oct 2022 12:22:45 +0800
-Message-Id: <c73344ff9bffdbcc764ae5b98b8efe9c5fbd51f0.1667102760.git.pengfei.xu@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1667102760.git.pengfei.xu@intel.com>
-References: <cover.1667102760.git.pengfei.xu@intel.com>
+        Sun, 30 Oct 2022 00:33:46 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF86B43AE4;
+        Sat, 29 Oct 2022 21:33:45 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id q1so8089532pgl.11;
+        Sat, 29 Oct 2022 21:33:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JE+Cpx8gz9CyCX2ai+Cb3t6Lx3puUd2mwGc7R/DG84g=;
+        b=f/FgDWRl2aWLKl5ZZxuNKZxmCKxjvbYSHt3iCCUxlUVoIh7fKvkgoHfUJ6UZlK6ztL
+         ObFO0jJqLnEOOq7Q8AsUMDuCv7M3IAGCdXR/vR49tB/MI55RW10X0ioKNlbVMUVrSMX7
+         cSEtkg6eJmF6rHDK50aIwPH/57NVGWzPCfv3tEAXX4LQqf4qf/+kUp8bCHy8rAtSO3uE
+         60j/tfonM+Ty8/9kl00kgAsQPedF5032YqQfqxsvlgBpG53TDpn1kHNVw3CVYjpdLy2Z
+         fjwwD7MHZonSZOtzas+kk2HU6zgrBsw5oqDz4D+LmcffBPTiegyeY4YSLh+0r9/JJA7s
+         aGTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JE+Cpx8gz9CyCX2ai+Cb3t6Lx3puUd2mwGc7R/DG84g=;
+        b=amn/bDh0heADC3A2V8gUkibWL6VSXFCyTjdhGrSjii4D6v2OnkL8OLJ6R6NmbWmux3
+         KrpCUm7FI8cAjAEwR7FJ18+Tq8O2wq2uZm1gvdDezIotYMuPy/JP6R8MPSlvNpeG0xLG
+         80+uJHNmPfBJvp0lV+88hcI+7MgvH+H09apZ2s5urcKa85AcIIzJmQt8hvz6M8Dma1c8
+         LqGPfXEfMnFMtZ2Aaa+y11H11CkHnjtr4FI5rHuocffnP8+XBjcwaJXmBDGMAtK+Oops
+         o8mkGgVTy51wHuNxsfv+wAoSTClaiip+z65E7DCsKz/ZRm5HdkvrO/9dKsx/xN0OwORx
+         UjpQ==
+X-Gm-Message-State: ACrzQf2D2+I30YGgq2MQnlT8ZEzorPdP/LFXXe5W8SR8WZuRSuEVFdaD
+        3x1AuJhYJ7o2WPMztk0ubGE=
+X-Google-Smtp-Source: AMsMyM5jZxv791wnCxf+9HnPPZLTOXAaiqvy8q8yLaSrwUJOR8AvtRRZ9GQ92iw4tRMDNhisL4WRWg==
+X-Received: by 2002:a62:19cd:0:b0:56b:6a55:ffba with SMTP id 196-20020a6219cd000000b0056b6a55ffbamr7412358pfz.85.1667104424647;
+        Sat, 29 Oct 2022 21:33:44 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:a6ae:11ff:fe11:fcc3])
+        by smtp.gmail.com with ESMTPSA id m18-20020a62a212000000b0056bd737fdf3sm1928193pff.123.2022.10.29.21.33.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Oct 2022 21:33:43 -0700 (PDT)
+Date:   Sat, 29 Oct 2022 21:33:41 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] Input: matrix_keypad - replace header inclusions
+ by forward declarations
+Message-ID: <Y13+pV6ga5DqXyQF@google.com>
+References: <20220923184632.2157-1-andriy.shevchenko@linux.intel.com>
+ <20220923184632.2157-2-andriy.shevchenko@linux.intel.com>
+ <20221029142551.GA3222119@roeck-us.net>
+ <Y12o+Hk2qsIsDQUo@google.com>
+ <086d381d-bc6f-7dd3-35b6-d05afe742b9e@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <086d381d-bc6f-7dd3-35b6-d05afe742b9e@roeck-us.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to ensure that XSAVE works correctly, add XSAVE most basic fork
-test:
-1. The contents of these xstates in the child process should be the same as
-   the contents of the xstate in the parent process after the fork syscall.
-2. The contents of xstates in the parent process should not change after
-   the context switch.
+On Sat, Oct 29, 2022 at 04:02:56PM -0700, Guenter Roeck wrote:
+> On 10/29/22 15:28, Dmitry Torokhov wrote:
+> > On Sat, Oct 29, 2022 at 07:25:51AM -0700, Guenter Roeck wrote:
+> > > On Fri, Sep 23, 2022 at 09:46:32PM +0300, Andy Shevchenko wrote:
+> > > > When the data structure is only referred by pointer, compiler may not need
+> > > > to see the contents of the data type. Thus, we may replace header inclusions
+> > > > by respective forward declarations.
+> > > > 
+> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > ---
+> > > >   include/linux/input/matrix_keypad.h | 5 +++--
+> > > >   1 file changed, 3 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/include/linux/input/matrix_keypad.h b/include/linux/input/matrix_keypad.h
+> > > > index 9476768c3b90..b8d8d69eba29 100644
+> > > > --- a/include/linux/input/matrix_keypad.h
+> > > > +++ b/include/linux/input/matrix_keypad.h
+> > > > @@ -3,8 +3,9 @@
+> > > >   #define _MATRIX_KEYPAD_H
+> > > >   #include <linux/types.h>
+> > > > -#include <linux/input.h>
+> > > 
+> > > Possibly, but may other drivers rely on those includes.
+> > > This results in widespread build failures such as
+> > > 
+> > > Building arm:allmodconfig ... failed
+> > > --------------
+> > > Error log:
+> > > In file included from include/linux/input/samsung-keypad.h:12,
+> > >                   from arch/arm/mach-s3c/keypad.h:12,
+> > >                   from arch/arm/mach-s3c/mach-crag6410.c:57:
+> > > arch/arm/mach-s3c/mach-crag6410.c:183:19: error: 'KEY_VOLUMEUP' undeclared here
+> > 
+> > I fixed this particular instance, hopefully it is one of the very
+> > last of them...
+> > 
+> 
+> Sorry, I didn't bother listing all of them. There is at least one more.
+> 
+> Error log:
+> arch/arm/mach-pxa/spitz.c:410:11: error: 'EV_PWR' undeclared here (not in a function)
+>   410 |   .type = EV_PWR,
+>       |           ^~~~~~
+> 
+> with arm:pxa_defconfig.
 
-  [ Dave Hansen; Chang S. Bae; Shuah Khan: bunches of cleanups ]
+Ah, I see. Arnd is trying to delete bunch of PXA code, so I'll pull the
+header change until after he merges his, and hopefully spitz will be
+gone.
 
-Reviewed-by: Chang S. Bae <chang.seok.bae@intel.com>
-Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
----
- tools/testing/selftests/x86/xstate.c         | 30 ++++++++-
- tools/testing/selftests/x86/xstate.h         |  1 +
- tools/testing/selftests/x86/xstate_helpers.c | 67 ++++++++++++++++++++
- tools/testing/selftests/x86/xstate_helpers.h |  2 +
- 4 files changed, 97 insertions(+), 3 deletions(-)
+Do you have more examples by chance?
 
-diff --git a/tools/testing/selftests/x86/xstate.c b/tools/testing/selftests/x86/xstate.c
-index a630427a472c..a45949b29f84 100644
---- a/tools/testing/selftests/x86/xstate.c
-+++ b/tools/testing/selftests/x86/xstate.c
-@@ -5,8 +5,12 @@
-  * The XSAVE feature set supports the saving and restoring of state components.
-  * It tests "FP, SSE(XMM), AVX2(YMM), AVX512_OPMASK/AVX512_ZMM_Hi256/
-  * AVX512_Hi16_ZMM and PKRU parts" xstates with following cases:
-- * The contents of these xstates in the process should not change after the
-- * signal handling.
-+ * 1. The contents of these xstates in the process should not change after the
-+ *    signal handling.
-+ * 2. The contents of these xstates in the child process should be the same as
-+ *    the contents of the xstate in the parent process after the fork syscall.
-+ * 3. The contents of xstates in the parent process should not change after
-+ *    the context switch.
-  *
-  * The regions and reserved bytes of the components tested for XSAVE feature
-  * are as follows:
-@@ -35,7 +39,7 @@
- #include "xstate_helpers.h"
- #include "../kselftest.h"
- 
--#define NUM_TESTS	1
-+#define NUM_TESTS	3
- #define xstate_test_array_init(idx, init_opt, fill_opt)		\
- 	do {							\
- 		xstate_tests[idx].init = init_opt;		\
-@@ -102,6 +106,25 @@ static void test_xstate_sig_handle(void)
- 	compare_buf_result(valid_xbuf, compared_xbuf, case_name1);
- }
- 
-+static void test_xstate_fork(void)
-+{
-+	const char *case_name2 = "xstate of child process should be same as xstate of parent";
-+	const char *case_name3 = "parent xstate should be same after context switch";
-+
-+	ksft_print_msg("[RUN]\tParent pid:%d check xstate around fork test.\n",
-+		       getpid());
-+	/* Child process xstate should be same as the parent process xstate. */
-+	if (xstate_fork(valid_xbuf, compared_xbuf, xstate_info.mask,
-+	    xstate_size)) {
-+		ksft_test_result_pass("The case: %s.\n", case_name2);
-+	} else {
-+		ksft_test_result_fail("The case: %s.\n", case_name2);
-+	}
-+
-+	/* The parent process xstate should not change after context switch. */
-+	compare_buf_result(valid_xbuf, compared_xbuf, case_name3);
-+}
-+
- static void prepare_xstate_test(void)
- {
- 	xstate_test_array_init(XFEATURE_FP, init_legacy_info,
-@@ -120,6 +143,7 @@ static void prepare_xstate_test(void)
- 			       fill_pkru_xstate_buf);
- 
- 	xstate_tests[XSTATE_CASE_SIG].xstate_case = test_xstate_sig_handle;
-+	xstate_tests[XSTATE_CASE_FORK].xstate_case = test_xstate_fork;
- }
- 
- static void test_xstate(void)
-diff --git a/tools/testing/selftests/x86/xstate.h b/tools/testing/selftests/x86/xstate.h
-index 14618996aee9..5f020cc1b33e 100644
---- a/tools/testing/selftests/x86/xstate.h
-+++ b/tools/testing/selftests/x86/xstate.h
-@@ -81,6 +81,7 @@ enum xfeature {
- 
- enum xstate_case {
- 	XSTATE_CASE_SIG,
-+	XSTATE_CASE_FORK,
- 	XSTATE_CASE_MAX,
- };
- 
-diff --git a/tools/testing/selftests/x86/xstate_helpers.c b/tools/testing/selftests/x86/xstate_helpers.c
-index c20651a2d6a3..0663954d7eea 100644
---- a/tools/testing/selftests/x86/xstate_helpers.c
-+++ b/tools/testing/selftests/x86/xstate_helpers.c
-@@ -73,6 +73,22 @@ inline void fill_fp_mxcsr_xstate_buf(void *buf, uint32_t xfeature_num,
- 	__xsave(buf, MASK_FP_SSE);
- }
- 
-+/*
-+ * Because xstate like XMM, YMM registers are not preserved across function
-+ * calls, so use inline function with assembly code only for fork syscall.
-+ */
-+static inline long __fork(void)
-+{
-+	long ret, nr = SYS_fork;
-+
-+	asm volatile("syscall"
-+		     : "=a" (ret)
-+		     : "a" (nr)
-+		     : "rcx", "r11", "memory", "cc");
-+
-+	return ret;
-+}
-+
- /*
-  * Because xstate like XMM, YMM registers are not preserved across function
-  * calls, so use inline function with assembly code only to raise signal.
-@@ -140,3 +156,54 @@ bool xstate_sig_handle(void *valid_xbuf, void *compared_xbuf, uint64_t mask,
- 
- 	return sigusr1_done;
- }
-+
-+bool xstate_fork(void *valid_xbuf, void *compared_xbuf, uint64_t mask,
-+		 uint32_t xstate_size)
-+{
-+	pid_t child;
-+	int status, fd[2];
-+	bool child_result;
-+
-+	memset(compared_xbuf, 0, xstate_size);
-+	/* Use pipe to transfer test result to parent process. */
-+	if (pipe(fd) < 0)
-+		fatal_error("create pipe failed");
-+	/*
-+	 * Xrstor the valid_xbuf and call syscall assembly instruction, then
-+	 * save the xstate to compared_xbuf in child process for comparison.
-+	 */
-+	__xrstor(valid_xbuf, mask);
-+	child = __fork();
-+	if (child < 0) {
-+		/* Fork syscall failed. */
-+		fatal_error("fork failed");
-+	} else if (child == 0) {
-+		/* Fork syscall succeeded, now in the child. */
-+		__xsave(compared_xbuf, mask);
-+
-+		if (memcmp(valid_xbuf, compared_xbuf, xstate_size))
-+			child_result = false;
-+		else
-+			child_result = true;
-+
-+		/*
-+		 * Transfer the child process test result to
-+		 * the parent process for aggregation.
-+		 */
-+		close(fd[0]);
-+		if (!write(fd[1], &child_result, sizeof(child_result)))
-+			fatal_error("write fd failed");
-+		_exit(0);
-+	} else {
-+		/* Fork syscall succeeded, now in the parent. */
-+		__xsave(compared_xbuf, mask);
-+		if (waitpid(child, &status, 0) != child || !WIFEXITED(status)) {
-+			fatal_error("Child exit with error status");
-+		} else {
-+			close(fd[1]);
-+			if (!read(fd[0], &child_result, sizeof(child_result)))
-+				fatal_error("read fd failed");
-+			return child_result;
-+		}
-+	}
-+}
-diff --git a/tools/testing/selftests/x86/xstate_helpers.h b/tools/testing/selftests/x86/xstate_helpers.h
-index f50a4c1d907f..c46d26ec6750 100644
---- a/tools/testing/selftests/x86/xstate_helpers.h
-+++ b/tools/testing/selftests/x86/xstate_helpers.h
-@@ -5,3 +5,5 @@ extern void fill_fp_mxcsr_xstate_buf(void *buf, uint32_t xfeature_num,
- 				     uint8_t ui8_fp);
- extern bool xstate_sig_handle(void *valid_xbuf, void *compared_xbuf,
- 			      uint64_t mask, uint32_t xstate_size);
-+extern bool xstate_fork(void *valid_xbuf, void *compared_xbuf,
-+			uint64_t mask, uint32_t xstate_size);
+Thanks.
+
 -- 
-2.31.1
-
+Dmitry
