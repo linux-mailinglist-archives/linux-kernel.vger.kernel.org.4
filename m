@@ -2,355 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B33661289C
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 08:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E12816128A4
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 08:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiJ3HNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 03:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
+        id S229877AbiJ3HRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 03:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbiJ3HNX (ORCPT
+        with ESMTP id S229763AbiJ3HRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 03:13:23 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F171026EE;
-        Sun, 30 Oct 2022 00:13:21 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6477E5C009A;
-        Sun, 30 Oct 2022 03:13:21 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Sun, 30 Oct 2022 03:13:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-transfer-encoding:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1667114001; x=1667200401; bh=Mo8RRVU/BCqu317V/TpNAiSZ8pju9kQTzGf
-        3AAdnqs4=; b=dfcMRjyrXKkQpQBS2ci3HT1FA9DjFGnBeJHxaHlC2YWMZyKXbcD
-        u4gflN0UpK3yanFBNARtumJ2QSY4VUFaOqJqqcndU4OdfsVgXvUz8O12EJHpj3xN
-        5YTs90DRWA0anrEVH6vRWr+mpzJ8KC0ieg+evYLhAwEkmt/tE16Jgnf8TQHmVB/M
-        LpCZDu/wzaVHfLYuTX843kIMdVjOFYwRI+eCdgs1184yyqm+lTeyEFZse9IsQ+eC
-        D1g9bXszG4JaO6eVP/2pr0Z2cXysBUDAkWcS3ZG5H8w1YN+9EVlnhH7EeiLiF7XA
-        Kk2jc7BwrKsWeeWYBbeVmf+Ta6TF34a4mzQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1667114001; x=1667200401; bh=Mo8RRVU/BCqu3
-        17V/TpNAiSZ8pju9kQTzGf3AAdnqs4=; b=NvntkGDBdJs9WghcSChl7hqL8t+fR
-        mSWTzvbiAn4NEPDaPwEz6hSPwP6o6byVOn5WN3RBfnqDwqHgbct9zVc8dyNmbPAP
-        aZQBBSIrBKqwx/04AZe9KC8YBAseu+lUH9Ky526b6Mq3hJCsQYvJsHmlNvqpvYGd
-        i+Mo5sotrWQfPAK2qDSQ2Ronm8DkUZ1iY4AvnAiRYfNLFOkxCwiqqUoXSpRU7tR0
-        IAAuOTqlqC9oBPeHnMJyI8x5aRYS84zZioG5liJHF2lbyAwKyTF4HuG8gGjyuZzc
-        a8ynS4nH2PsMw0FBZJfR+lpUYTDelfZS96M4eMdHvdcuFj3kbqKceObfg==
-X-ME-Sender: <xms:ESReY3fmnVwL94JEkzhDwa65hRTPc2FaSdW87HTrTJV9efEEJ1DADg>
-    <xme:ESReY9Mm9Dsm4FnNQTyM8B_qDv5jd7gJy1MOlOUPu043VCCULYJGK9UK0aHhPhhUs
-    AsI8IzGJl9Y0o4>
-X-ME-Received: <xmr:ESReYwhyup1UUjVCT3C5drltDC-tDoqHY2Jt0lXjdQRvwQz2QPzKG7R0U1nNCoVE0FvkFKOhs0mZ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdelgdduudekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgvmhhi
-    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
-    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnheptedtgeduleekleevjeehhfdvkefh
-    veeuvdevtdduhffhvdeltdegtdfgkeduudegnecuffhomhgrihhnpehgihhthhhusgdrtg
-    homhdpkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghm
-    pehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhslhgrsgdrtg
-    homh
-X-ME-Proxy: <xmx:ESReY48pGf_ssKyBeNnYBMA2IrJa7vPuyIBPHzhkIT5niEWQu655hQ>
-    <xmx:ESReYzvwJMdFOUzjAkTtidZ2I19TJKQwZyHjxYMNIdry76jBRiXuKA>
-    <xmx:ESReY3Hn2RsQhwTur-d0KjuR2S2CjAgQOkIWie59HsGro6btMgwfmQ>
-    <xmx:ESReY88LUcu9mvwZJ2Milelj5pQ2__0c3F7RVk4IsH-hmW04sjmx4Q>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 30 Oct 2022 03:13:20 -0400 (EDT)
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-Cc:     "M. Vefa Bicakci" <m.v.b@runbox.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH 3/3] xen/gntdev: Accommodate VMA splitting
-Date:   Sun, 30 Oct 2022 03:12:43 -0400
-Message-Id: <20221030071243.1580-4-demi@invisiblethingslab.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221030071243.1580-1-demi@invisiblethingslab.com>
-References: <20221030071243.1580-1-demi@invisiblethingslab.com>
+        Sun, 30 Oct 2022 03:17:16 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0732AF2
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 00:17:08 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id p3so8277072pld.10
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 00:17:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=a/6WjG/dX440R2RO6wLGBQFAWw0l4A8fGFfY6dPSRdk=;
+        b=Mg+zuw4new1q3qD5JLv0sng+Xzr0B9aaKuJVVMyROQg15GkfkdVUFar0pKR7lM5noA
+         XAxmOWH4JeJapdFWDD+cn4+TUDOXGSOOkHCs6jPi7bMaRrJ4Kbo3Mz1LIhzWkyILtaQQ
+         GVL1b86UAiWqtlsXiZ9eddGmLgoEvUr7HJlHZEuvAztKYH8s0POz2FN5CWKGTSTvMnSv
+         D4qsukxWiQj6gQ/gsfpd35xHFlS4xCOwXwG7FNefbipZ7dtuXzA5OtM+rKbzKfQDLwuh
+         GgYjelVud9QIK7BuDHA6y04/Afg9ggpM9TIOsLaILSiF/Za2DaJ9DC3FagIIoFSJ1PeZ
+         P4AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a/6WjG/dX440R2RO6wLGBQFAWw0l4A8fGFfY6dPSRdk=;
+        b=qjdhL1MVLNYzaW9fY/Exld9s8BTQJvQEed5V2Amjt1+zDZHUaXziEjFRrm7Xvr/9tb
+         GdjvWsuV3fu89pnxqO7Cx8jRhp3J0egxL38YHBBxIPkXQQlRwL57gB+b4IKohanWjXFQ
+         dIozi1ce+E3JdDlRbgqd2BGI8EHbR2Z22RimdoggsiVrZ6+jQ6VpT+z3vGv3t9MsvB1e
+         yHni7yugqAqetFqXojSEs8S+VJ1HokONguBjPWyZ/lj/EZMwLynCeAVsXhkECgtBYkdK
+         /5Ez9gViOXR4QllhY32to6Bm749CVljubOIySI7ZXHbZHZnCzNS6VXMcp5P7zcX9U5TA
+         XvfA==
+X-Gm-Message-State: ACrzQf3txhWqTIEqWofosEYVLhYgs3E/rIindC3TL1Ip8BF5kPWeCNDB
+        9sSv/Yo4Pn6HH+DO3Axg02lf
+X-Google-Smtp-Source: AMsMyM7wsfvc+EMO+FSSOGbqYotGNKN6ObjIJAVh/JYMc2kixEPR3MrUzel3AnaAx1M4DMOxBfAU9g==
+X-Received: by 2002:a17:90a:86c6:b0:213:36b6:1b4c with SMTP id y6-20020a17090a86c600b0021336b61b4cmr8494492pjv.7.1667114228178;
+        Sun, 30 Oct 2022 00:17:08 -0700 (PDT)
+Received: from thinkpad ([117.193.208.18])
+        by smtp.gmail.com with ESMTPSA id j16-20020a170902da9000b0017a0668befasm2249377plx.124.2022.10.30.00.17.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Oct 2022 00:17:06 -0700 (PDT)
+Date:   Sun, 30 Oct 2022 12:46:59 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     andersson@kernel.org, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        johan+linaro@kernel.org, quic_jprakash@quicinc.com,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/11] arm64: dts: qcom: sc8280xp-x13s: Add PM8280_{1/2}
+ VADC channels
+Message-ID: <20221030071659.GE5362@thinkpad>
+References: <20221027063006.9056-1-manivannan.sadhasivam@linaro.org>
+ <20221027063006.9056-10-manivannan.sadhasivam@linaro.org>
+ <5e66c095-898e-067e-1874-a3d2e5babf17@linaro.org>
+ <20221029044831.GC5362@thinkpad>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221029044831.GC5362@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "M. Vefa Bicakci" <m.v.b@runbox.com>
+On Sat, Oct 29, 2022 at 10:18:37AM +0530, Manivannan Sadhasivam wrote:
+> On Thu, Oct 27, 2022 at 10:09:21AM -0400, Krzysztof Kozlowski wrote:
+> > On 27/10/2022 02:30, Manivannan Sadhasivam wrote:
+> > > Add VADC channels of PM8280_{1/2} PMICs for measuring the on-chip die
+> > > temperature and external thermistors connected to the AMUX pins.
+> > > 
+> > > The measurements are collected by the primary PMIC PMK8280 from the
+> > > slave PMICs PM8280_{1/2} and exposed them over the PMK8280's VADC
+> > 
+> > secondary PMICs
+> > 
+> > Drop "them"
+> > 
+> > 
+> > > channels.
+> > > 
+> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > ---
+> > >  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 61 +++++++++++++++++++
+> > >  1 file changed, 61 insertions(+)
+> > > 
+> > > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> > > index 9ac5d5c22832..d300d217fdc6 100644
+> > > --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> > > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> > > @@ -7,6 +7,7 @@
+> > >  /dts-v1/;
+> > >  
+> > >  #include <dt-bindings/gpio/gpio.h>
+> > > +#include <dt-bindings/iio/qcom,spmi-adc7-pm8350.h>
+> > >  #include <dt-bindings/iio/qcom,spmi-adc7-pmk8350.h>
+> > >  #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+> > >  
+> > > @@ -189,6 +190,66 @@ pmk8280-xo-therm@44 {
+> > >  		qcom,ratiometric;
+> > >  		qcom,hw-settle-time = <200>;
+> > >  	};
+> > > +
+> > > +	pm8280-1-die-temp@103 {
+> > 
+> > pmic-die-temp? What pm8280 stands here?
+> > 
+> 
+> As agreed, will use "pmic-die-temp"
+> 
+> > 
+> > > +		reg = <PM8350_ADC7_DIE_TEMP(1)>;
+> > > +		label = "pm8280_1_die_temp";
+> > > +		qcom,pre-scaling = <1 1>;
+> > > +	};
+> > > +
+> > > +	sys-therm1@144 {
+> > 
+> > I would say sys-therm@... why do we need the "1" suffix in node name?
+> > 
+> 
+> Suffix represents the index of the thermistor as per the schematics but I guess
+> it can be dropped.
+> 
 
-Prior to this commit, the gntdev driver code did not handle the
-following scenario correctly with paravirtualized (PV) Xen domains:
+I was wrong. Suffix is necessary since IIO core registers the channel based on
+the node name, so it has to be unique.
 
-* User process sets up a gntdev mapping composed of two grant mappings
-  (i.e., two pages shared by another Xen domain).
-* User process munmap()s one of the pages.
-* User process munmap()s the remaining page.
-* User process exits.
+Thanks,
+Mani
 
-In the scenario above, the user process would cause the kernel to log
-the following messages in dmesg for the first munmap(), and the second
-munmap() call would result in similar log messages:
+> Thanks,
+> Mani
+> 
+> > > +		reg = <PM8350_ADC7_AMUX_THM1_100K_PU(1)>;
+> > > +		qcom,ratiometric;
+> > > +		qcom,hw-settle-time = <200>;
+> > > +	};
+> > 
+> > Best regards,
+> > Krzysztof
+> > 
+> 
+> -- 
+> மணிவண்ணன் சதாசிவம்
 
-  BUG: Bad page map in process doublemap.test  pte:... pmd:...
-  page:0000000057c97bff refcount:1 mapcount:-1 \
-    mapping:0000000000000000 index:0x0 pfn:...
-  ...
-  page dumped because: bad pte
-  ...
-  file:gntdev fault:0x0 mmap:gntdev_mmap [xen_gntdev] readpage:0x0
-  ...
-  Call Trace:
-   <TASK>
-   dump_stack_lvl+0x46/0x5e
-   print_bad_pte.cold+0x66/0xb6
-   unmap_page_range+0x7e5/0xdc0
-   unmap_vmas+0x78/0xf0
-   unmap_region+0xa8/0x110
-   __do_munmap+0x1ea/0x4e0
-   __vm_munmap+0x75/0x120
-   __x64_sys_munmap+0x28/0x40
-   do_syscall_64+0x38/0x90
-   entry_SYSCALL_64_after_hwframe+0x61/0xcb
-   ...
-
-For each munmap() call, the Xen hypervisor (if built with CONFIG_DEBUG)
-would print out the following and trigger a general protection fault in
-the affected Xen PV domain:
-
-  (XEN) d0v... Attempt to implicitly unmap d0's grant PTE ...
-  (XEN) d0v... Attempt to implicitly unmap d0's grant PTE ...
-
-As of this writing, gntdev_grant_map structure's vma field (referred to
-as map->vma below) is mainly used for checking the start and end
-addresses of mappings. However, with split VMAs, these may change, and
-there could be more than one VMA associated with a gntdev mapping.
-Hence, remove the use of map->vma and rely on map->pages_vm_start for
-the original start address and on (map->count << PAGE_SHIFT) for the
-original mapping size. Let the invalidate() and find_special_page()
-hooks use these.
-
-Also, given that there can be multiple VMAs associated with a gntdev
-mapping, move the "mmu_interval_notifier_remove(&map->notifier)" call to
-the end of gntdev_put_map, so that the MMU notifier is only removed
-after the closing of the last remaining VMA.
-
-Finally, use an atomic to prevent inadvertent gntdev mapping re-use,
-instead of using the map->live_grants atomic counter and/or the map->vma
-pointer (the latter of which is now removed). This prevents the
-userspace from mmap()'ing (with MAP_FIXED) a gntdev mapping over the
-same address range as a previously set up gntdev mapping. This scenario
-can be summarized with the following call-trace, which was valid prior
-to this commit:
-
-  mmap
-    gntdev_mmap
-  mmap (repeat mmap with MAP_FIXED over the same address range)
-    gntdev_invalidate
-      unmap_grant_pages (sets 'being_removed' entries to true)
-        gnttab_unmap_refs_async
-    unmap_single_vma
-    gntdev_mmap (maps the shared pages again)
-  munmap
-    gntdev_invalidate
-      unmap_grant_pages
-        (no-op because 'being_removed' entries are true)
-    unmap_single_vma (For PV domains, Xen reports that a granted page
-      is being unmapped and triggers a general protection fault in the
-      affected domain, if Xen was built with CONFIG_DEBUG)
-
-The fix for this last scenario could be worth its own commit, but we
-opted for a single commit, because removing the gntdev_grant_map
-structure's vma field requires guarding the entry to gntdev_mmap(), and
-the live_grants atomic counter is not sufficient on its own to prevent
-the mmap() over a pre-existing mapping.
-
-Link: https://github.com/QubesOS/qubes-issues/issues/7631
-Fixes: ab31523c2fca ("xen/gntdev: allow usermode to map granted pages")
-Cc: stable@vger.kernel.org
-Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
-Reviewed-by: Juergen Gross <jgross@suse.com>
-Link: https://lore.kernel.org/r/20221002222006.2077-3-m.v.b@runbox.com
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
- drivers/xen/gntdev-common.h |  3 +-
- drivers/xen/gntdev.c        | 58 ++++++++++++++++---------------------
- 2 files changed, 27 insertions(+), 34 deletions(-)
-
-diff --git a/drivers/xen/gntdev-common.h b/drivers/xen/gntdev-common.h
-index 40ef379c28ab01a3a11008cb0f85a1b3fde134ca..9c286b2a19001616ae0e9986be13905891b5f5ff 100644
---- a/drivers/xen/gntdev-common.h
-+++ b/drivers/xen/gntdev-common.h
-@@ -44,9 +44,10 @@ struct gntdev_unmap_notify {
- };
- 
- struct gntdev_grant_map {
-+	atomic_t in_use;
- 	struct mmu_interval_notifier notifier;
-+	bool notifier_init;
- 	struct list_head next;
--	struct vm_area_struct *vma;
- 	int index;
- 	int count;
- 	int flags;
-diff --git a/drivers/xen/gntdev.c b/drivers/xen/gntdev.c
-index 62a65122c73fbfe673405ce90a53c5f364b75082..862de00cfe89209cf28f7e7e87cf325e40f1fc4b 100644
---- a/drivers/xen/gntdev.c
-+++ b/drivers/xen/gntdev.c
-@@ -276,6 +276,9 @@ void gntdev_put_map(struct gntdev_priv *priv, struct gntdev_grant_map *map)
- 		 */
- 	}
- 
-+	if (use_ptemod && map->notifier_init)
-+		mmu_interval_notifier_remove(&map->notifier);
-+
- 	if (map->notify.flags & UNMAP_NOTIFY_SEND_EVENT) {
- 		notify_remote_via_evtchn(map->notify.event);
- 		evtchn_put(map->notify.event);
-@@ -288,7 +291,7 @@ void gntdev_put_map(struct gntdev_priv *priv, struct gntdev_grant_map *map)
- static int find_grant_ptes(pte_t *pte, unsigned long addr, void *data)
- {
- 	struct gntdev_grant_map *map = data;
--	unsigned int pgnr = (addr - map->vma->vm_start) >> PAGE_SHIFT;
-+	unsigned int pgnr = (addr - map->pages_vm_start) >> PAGE_SHIFT;
- 	int flags = map->flags | GNTMAP_application_map | GNTMAP_contains_pte;
- 	u64 pte_maddr;
- 
-@@ -513,11 +516,7 @@ static void gntdev_vma_close(struct vm_area_struct *vma)
- 	struct gntdev_priv *priv = file->private_data;
- 
- 	pr_debug("gntdev_vma_close %p\n", vma);
--	if (use_ptemod) {
--		WARN_ON(map->vma != vma);
--		mmu_interval_notifier_remove(&map->notifier);
--		map->vma = NULL;
--	}
-+
- 	vma->vm_private_data = NULL;
- 	gntdev_put_map(priv, map);
- }
-@@ -545,29 +544,30 @@ static bool gntdev_invalidate(struct mmu_interval_notifier *mn,
- 	struct gntdev_grant_map *map =
- 		container_of(mn, struct gntdev_grant_map, notifier);
- 	unsigned long mstart, mend;
-+	unsigned long map_start, map_end;
- 
- 	if (!mmu_notifier_range_blockable(range))
- 		return false;
- 
-+	map_start = map->pages_vm_start;
-+	map_end = map->pages_vm_start + (map->count << PAGE_SHIFT);
-+
- 	/*
- 	 * If the VMA is split or otherwise changed the notifier is not
- 	 * updated, but we don't want to process VA's outside the modified
- 	 * VMA. FIXME: It would be much more understandable to just prevent
- 	 * modifying the VMA in the first place.
- 	 */
--	if (map->vma->vm_start >= range->end ||
--	    map->vma->vm_end <= range->start)
-+	if (map_start >= range->end || map_end <= range->start)
- 		return true;
- 
--	mstart = max(range->start, map->vma->vm_start);
--	mend = min(range->end, map->vma->vm_end);
-+	mstart = max(range->start, map_start);
-+	mend = min(range->end, map_end);
- 	pr_debug("map %d+%d (%lx %lx), range %lx %lx, mrange %lx %lx\n",
--			map->index, map->count,
--			map->vma->vm_start, map->vma->vm_end,
--			range->start, range->end, mstart, mend);
--	unmap_grant_pages(map,
--				(mstart - map->vma->vm_start) >> PAGE_SHIFT,
--				(mend - mstart) >> PAGE_SHIFT);
-+		 map->index, map->count, map_start, map_end,
-+		 range->start, range->end, mstart, mend);
-+	unmap_grant_pages(map, (mstart - map_start) >> PAGE_SHIFT,
-+			  (mend - mstart) >> PAGE_SHIFT);
- 
- 	return true;
- }
-@@ -1047,18 +1047,15 @@ static int gntdev_mmap(struct file *flip, struct vm_area_struct *vma)
- 		return -EINVAL;
- 
- 	pr_debug("map %d+%d at %lx (pgoff %lx)\n",
--			index, count, vma->vm_start, vma->vm_pgoff);
-+		 index, count, vma->vm_start, vma->vm_pgoff);
- 
- 	mutex_lock(&priv->lock);
- 	map = gntdev_find_map_index(priv, index, count);
- 	if (!map)
- 		goto unlock_out;
--	if (use_ptemod && map->vma)
-+	if (!atomic_add_unless(&map->in_use, 1, 1))
- 		goto unlock_out;
--	if (atomic_read(&map->live_grants)) {
--		err = -EAGAIN;
--		goto unlock_out;
--	}
-+
- 	refcount_inc(&map->users);
- 
- 	vma->vm_ops = &gntdev_vmops;
-@@ -1079,15 +1076,16 @@ static int gntdev_mmap(struct file *flip, struct vm_area_struct *vma)
- 			map->flags |= GNTMAP_readonly;
- 	}
- 
-+	map->pages_vm_start = vma->vm_start;
-+
- 	if (use_ptemod) {
--		map->vma = vma;
- 		err = mmu_interval_notifier_insert_locked(
- 			&map->notifier, vma->vm_mm, vma->vm_start,
- 			vma->vm_end - vma->vm_start, &gntdev_mmu_ops);
--		if (err) {
--			map->vma = NULL;
-+		if (err)
- 			goto out_unlock_put;
--		}
-+
-+		map->notifier_init = true;
- 	}
- 	mutex_unlock(&priv->lock);
- 
-@@ -1104,7 +1102,6 @@ static int gntdev_mmap(struct file *flip, struct vm_area_struct *vma)
- 		 */
- 		mmu_interval_read_begin(&map->notifier);
- 
--		map->pages_vm_start = vma->vm_start;
- 		err = apply_to_page_range(vma->vm_mm, vma->vm_start,
- 					  vma->vm_end - vma->vm_start,
- 					  find_grant_ptes, map);
-@@ -1150,13 +1147,8 @@ static int gntdev_mmap(struct file *flip, struct vm_area_struct *vma)
- out_unlock_put:
- 	mutex_unlock(&priv->lock);
- out_put_map:
--	if (use_ptemod) {
-+	if (use_ptemod)
- 		unmap_grant_pages(map, 0, map->count);
--		if (map->vma) {
--			mmu_interval_notifier_remove(&map->notifier);
--			map->vma = NULL;
--		}
--	}
- 	gntdev_put_map(priv, map);
- 	return err;
- }
 -- 
-2.38.1
+மணிவண்ணன் சதாசிவம்
