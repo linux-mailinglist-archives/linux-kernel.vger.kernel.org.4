@@ -2,114 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8342B612ACA
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 14:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D72612AD0
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 14:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiJ3NtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 09:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
+        id S229832AbiJ3Nua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 09:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiJ3Ns5 (ORCPT
+        with ESMTP id S229636AbiJ3NuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 09:48:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3971116;
-        Sun, 30 Oct 2022 06:48:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94B0EB80DC1;
-        Sun, 30 Oct 2022 13:48:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B1CAC433D6;
-        Sun, 30 Oct 2022 13:48:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667137733;
-        bh=nNCzuG++iWS4MoBVYVs4QccQ/6fcWE2S9X50mqOQVjo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S71KeKI6OPNU6E0w6wtksOtTJzudGKKZjTGIzvqTMcKYSPYjkZYY0SJpnAVM5FqEd
-         3NclTBSqcw39Y4vwBduV/NZcUnZ++a2oV2hKaC63AlJcX8Sh68Lku+5aj7X597laxW
-         KPaZHfovvv505ofsBFMDWMwD09tI+4nNAVTLIz1M=
-Date:   Sun, 30 Oct 2022 14:49:48 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Oleksandr Tymoshenko <ovt@google.com>
-Cc:     christophe.leroy@csgroup.eu, davem@davemloft.net,
-        edumazet@google.com, linux-kernel@vger.kernel.org,
-        sashal@kernel.org, stable@vger.kernel.org, w@1wt.eu
-Subject: Re: [PATCH 5.4 086/255] once: add DO_ONCE_SLOW() for sleepable
- contexts
-Message-ID: <Y16A/ImgUCJX0HOB@kroah.com>
-References: <20221024113005.376059449@linuxfoundation.org>
- <20221029011211.4049810-1-ovt@google.com>
- <Y15+X1VJ5xdt1642@kroah.com>
+        Sun, 30 Oct 2022 09:50:25 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A397A55BC;
+        Sun, 30 Oct 2022 06:50:24 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-13b23e29e36so11160493fac.8;
+        Sun, 30 Oct 2022 06:50:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1QUpqSv8LSRsD1VYxzYGonzNWEdEEaZtwSxjwf3b2Fg=;
+        b=QJCxgQJ6PBPMK4/Gv9QTySBAAj0xygOZGtAHHz/rnsKoWR0I4ypbI6tw7F4onFS3Mx
+         25SipjrTTq34ovDOg5RHk+ldPkwSSXPdT+RGNzaQDYVpaKnrxd7uBl8AnjL6pL2SNGxh
+         IkNIV507jUTP0jz5Z1dio8x6ZU5XQHwqoWxk3cc45MTTv0F8Djwr1JiNpES2XFyGMsQV
+         teJZ1qTYU8bfb9e/CLwHXXo7yG91QBrdpv0mfy13aIGa8jZmGMhLl7RLgU9I+waqkU1K
+         5sa+pG2TG8iVUgxefjNaOobiOgEt04x5aVjYnVTpxDcAagICxujYAvc2ZMydnO9qVYGf
+         9wPw==
+X-Gm-Message-State: ACrzQf3JlRiCm/mfLzY8SZxaO277tQfyaeYskWg0dtwpsNGSKHVzi34C
+        bWaGygof/yui/QGEVaA1Vw==
+X-Google-Smtp-Source: AMsMyM4A4ituhLKMdNGU6GZbc0dsVd/UTLy9ttWdlGJXrzspN/uk3HqBWucUMAxeWy0eP8Y0ZZSnwQ==
+X-Received: by 2002:a05:6871:28a:b0:13b:cb8b:1ab7 with SMTP id i10-20020a056871028a00b0013bcb8b1ab7mr4755663oae.225.1667137823806;
+        Sun, 30 Oct 2022 06:50:23 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c4-20020a056870478400b0013320d9d9casm1836309oaq.44.2022.10.30.06.50.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Oct 2022 06:50:23 -0700 (PDT)
+Received: (nullmailer pid 992222 invoked by uid 1000);
+        Sun, 30 Oct 2022 13:50:23 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y15+X1VJ5xdt1642@kroah.com>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     devicetree@vger.kernel.org, loongarch@lists.linux.dev,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Yun Liu <liuyun@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Rob Herring <robh+dt@kernel.org>
+In-Reply-To: <20221029065222.27912-2-zhuyinbo@loongson.cn>
+References: <20221029065222.27912-1-zhuyinbo@loongson.cn>
+ <20221029065222.27912-2-zhuyinbo@loongson.cn>
+Message-Id: <166713668551.965836.8662861477016293697.robh@kernel.org>
+Subject: Re: [PATCH v6 2/2] dt-bindings: hpet: add loongson-2 hpet
+Date:   Sun, 30 Oct 2022 08:50:23 -0500
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 02:38:39PM +0100, Greg KH wrote:
-> On Sat, Oct 29, 2022 at 01:12:11AM +0000, Oleksandr Tymoshenko wrote:
-> > Hello,
-> > 
-> > This commit causes the following panic in kernel built with clang
-> > (GCC build is not affected): 
-> > 
-> > [    8.320308] BUG: unable to handle page fault for address: ffffffff97216c6a                                        [26/4066]
-> > [    8.330029] #PF: supervisor write access in kernel mode                                                                    
-> > [    8.337263] #PF: error_code(0x0003) - permissions violation 
-> > [    8.344816] PGD 12e816067 P4D 12e816067 PUD 12e817063 PMD 800000012e2001e1                                                 
-> > [    8.354337] Oops: 0003 [#1] SMP PTI                
-> > [    8.359178] CPU: 2 PID: 437 Comm: curl Not tainted 5.4.220 #15                                                             
-> > [    8.367241] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015                                   
-> > [    8.378529] RIP: 0010:__do_once_slow_done+0xf/0xa0   
-> > [    8.384962] Code: 1b 84 db 74 0c 48 c7 c7 80 ce 8d 97 e8 fa e9 4a 00 84 db 0f 94 c0 5b 5d c3 66 90 55 48 89 e5 41 57 41 56 
-> > 53 49 89 d7 49 89 f6 <c6> 07 01 48 c7 c7 80 ce 8d 97 e8 d2 e9 4a 00 48 8b 3d 9b de c9 00                                      
-> > [    8.409066] RSP: 0018:ffffb764c02d3c90 EFLAGS: 00010246
-> > [    8.415697] RAX: 4f51d3d06bc94000 RBX: d474b86ddf7162eb RCX: 000000007229b1d6                                              
-> > [    8.424805] RDX: 0000000000000000 RSI: ffffffff9791b4a0 RDI: ffffffff97216c6a                                              
-> > [    8.434108] RBP: ffffb764c02d3ca8 R08: 0e81c130f1159fc1 R09: 1d19d60ce0b52c77                                              
-> > [    8.443408] R10: 8ea59218e6892b1f R11: d5260237a3c1e35c R12: ffff9c3dadd42600                                              
-> > [    8.452468] R13: ffffffff97910f80 R14: ffffffff9791b4a0 R15: 0000000000000000                                            
-> > [    8.461416] FS:  00007eff855b40c0(0000) GS:ffff9c3db7a80000(0000) knlGS:0000000000000000                                   
-> > [    8.471632] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033                                                              
-> > [    8.478763] CR2: ffffffff97216c6a CR3: 000000022ded0000 CR4: 00000000000006a0                                              
-> > [    8.487789] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000                                              
-> > [    8.496684] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400                                              
-> > [    8.505443] Call Trace:                                                                                                    
-> > [    8.508568]  __inet_hash_connect+0x523/0x530                                                                               
-> > [    8.513839]  ? inet_hash_connect+0x50/0x50                                                                                 
-> > [    8.518818]  ? secure_ipv4_port_ephemeral+0x69/0xe0
-> > [    8.525003]  tcp_v4_connect+0x2c5/0x410
-> > [    8.529858]  __inet_stream_connect+0xd7/0x360
-> > [    8.535329]  ? _raw_spin_unlock+0xe/0x10
-> > ... skipped ...
-> > 
-> > 
-> > The root cause is the difference in __section macro semantics between 5.4 and
-> > later LTS releases. On 5.4 it stringifies the argument so the ___done
-> > symbol is created in a bogus section ".data.once", with double quotes:
-> > 
-> > % readelf -S vmlinux | grep data.once
-> >   [ 5] ".data.once"      PROGBITS         ffffffff82216c6a  01416c6a
-> 
-> This is really odd.  I just did a bunch of build tests, and this seems
-> to only show up on the latest version of clang (14) and the 5.4 kernel.
-> Newer kernel trees are fine, and I don't see the problem showing up on
-> older clang releases with 5.4 (i.e. Android builds of the Android 11
-> release)
-> 
-> So this is very compiler and version dependant, ugh...
 
-Nope, I now can see this on 5.4 with older versions of clang, Android 11
-does show this as a problem.
+On Sat, 29 Oct 2022 14:52:22 +0800, Yinbo Zhu wrote:
+> Add the Loongson-2 High Precision Event Timer (HPET) binding
+> with DT schema format using json-schema.
+> 
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/timer/loongson,ls2k-hpet.yaml    | 50 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 51 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
+> 
 
-So it's 5.4 specific, I wonder why all of the testing bots never saw
-this...
+
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.example.dts:21:18: fatal error: dt-bindings/clock/loongson,ls2k-clk.h: No such file or directory
+   21 |         #include <dt-bindings/clock/loongson,ls2k-clk.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1492: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
