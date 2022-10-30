@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD9E612C2F
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 19:17:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C62EC612C32
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 19:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiJ3SRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 14:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49048 "EHLO
+        id S229738AbiJ3SRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 14:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiJ3SRb (ORCPT
+        with ESMTP id S229695AbiJ3SRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 30 Oct 2022 14:17:31 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86371B484;
-        Sun, 30 Oct 2022 11:17:29 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id m6so8951486pfb.0;
-        Sun, 30 Oct 2022 11:17:29 -0700 (PDT)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C51B858
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 11:17:30 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id g12so13123436wrs.10
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 11:17:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FKiTxkhmW01FsjmqPtf+yJSPZRDfXBpZLYs+QLD1Y3s=;
-        b=KMjRbyUQbK/qMAqOzDmwGd/TIltucuP8unSi2yGMRWwxQnFAFAYdVm7N9hAX0wIRJr
-         I1JCALbf47hg2VJqa0kkG6Rqb683/E22lyNTEwLnjyjw1JmejfNWVLIi4LzTeBsM1bWd
-         2LxNw5VLs5Vs+fLPjVZyAyhVpJCUi82yRGlmUUoAEKGFBMNq9epPtKcUbjsWpBd5n86i
-         Dd451JC1aV3YS2Nf/O3yiUflkg3NvcRCm/IAR5lT4jH0OVMPvXgc1885NbeUfbdPzfu5
-         t4egUN2rMDR1EU5nCde0Tg2v48sIZkb9cfMH+qdV1zIXaKTN0h+wWmRwGDVCNQjZbOCv
-         BBig==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JVxs7NYu64wxvANBqbozzmJQF6UupHoc/YO/3Sjp/e0=;
+        b=jvVwJUfMjOQQY6otEGNtczrtai1xFfHxabQqMvu84R+lU9Atnt6YQQRaWUEAzk++qT
+         AFOeNKT0SOw7sdqtBfsww8a1aOBocFk7tVhiY8/8rzq1R1sdRIMKDiNgvZ7WdkcXIW/L
+         biy+HcZ48+CDEgjReA94S2N6nbA8VAU4NeAxj+LiM1yodA+aI2e0+Q1e0lOk+Px9yjvX
+         8SJfyQwc96nutL8hMxbsHH5VpNs0ForRPqiSbXesky1FwLBGe0FVDhTgUpC0pF2meQvg
+         OFqKn5IUgDOOMVhyUMwetV4OUxvOLtvcpvYOb8+58/1xx9dLRYu2VH8OnxPvOY+K4DcE
+         2NeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FKiTxkhmW01FsjmqPtf+yJSPZRDfXBpZLYs+QLD1Y3s=;
-        b=hvJbbax3rMdrAhuy3bOIICQV6jBDM2M2QlFqj3j+wNjBndVra3O6ZaZjjVhzdUYiXD
-         xXaNj+AjExNsjzKQ51emHiLo7Wnb4IKpMvrwJpuboPnbjI70xtmxh8RIA1oK+oGaeghR
-         qOlf6cHKAw5NuQtJm58DJPXxvPsl3flE4SLGrVs1CXXgvjVOKj3Hxg4CxWmSaQ7AePNh
-         /WbNPg5kbhU/ZamkzvfLCGZU0URclGYnmpCXPk3jcEToXmDYbUOYXr+UmTazNZTVfvyq
-         vS0EWUaKzwzAagEvP/oty4BhA1RlEKpHeS+HgsNOgJEATwD+0NYARQ+CF+LAQIlrcnkC
-         xoHA==
-X-Gm-Message-State: ACrzQf3SofgxWN7pv1fxUg4Epx78sE4Dimc6p6r2nuL+CQqgWnkuentC
-        dHXR4/SBHqIqmXeAqYMjn0s=
-X-Google-Smtp-Source: AMsMyM7Dq4r4eH0TBUc4++0r/HVdMb34IEY3xNIkkS+hbrE1SR6uRpXMS+qhiJ8Nd/QXukndKqEY7w==
-X-Received: by 2002:a63:8942:0:b0:46e:c02e:2eaf with SMTP id v63-20020a638942000000b0046ec02e2eafmr9271878pgd.394.1667153848974;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JVxs7NYu64wxvANBqbozzmJQF6UupHoc/YO/3Sjp/e0=;
+        b=1btOyNJ1ziRbjjn5cQadTfAxNYaCmdSKxoxTLxnepDud12lQJH1ekfkqauB4kQ1rYv
+         PckpKmp/HAYTE9SQ5vzewuSe9UibApWIetFDhZXmhpGJ1nVWxz6FzFIdK7whuM29yQto
+         +a6i/5d8XmU/brdIRGdK5rAY97hBg4em4zWZhsNLY+E4MJOnHuiueKR/RfHqXrEQa2wC
+         PjhYfj+h5VVfk6fcFnEvxUcOLxxYSFnVF5OOC96efEV07Xp4I0H63fsqTMx0bcsCkz5o
+         BkA8slzT4qLhsgenQhxKG1uVK1KypPjVpjAxxxEsxEaaPnOQHKn0belhhTmH1V+qh+rM
+         eYwQ==
+X-Gm-Message-State: ACrzQf1N7SWL3DVnub9yj0YWix4Ci4z6HdR5RaaImE8Gtj8qut5eoosR
+        eDF5UH8h/74NtxFLU1SevdA=
+X-Google-Smtp-Source: AMsMyM5dGsh1uyYsouQd6C4scjcw6ToHpMymAQsMVMkmtFd3eeB0QWHT+zV8bCnSuZsOR4t1XvS43g==
+X-Received: by 2002:a05:6000:1143:b0:236:5ede:cdad with SMTP id d3-20020a056000114300b002365edecdadmr5751278wrx.410.1667153848470;
         Sun, 30 Oct 2022 11:17:28 -0700 (PDT)
-Received: from uftrace.. ([14.5.161.231])
-        by smtp.gmail.com with ESMTPSA id nk21-20020a17090b195500b0020af2bab83fsm2704076pjb.23.2022.10.30.11.17.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+Received: from ?IPV6:2003:c7:8f2a:b825:7539:be75:5415:acef? (p200300c78f2ab8257539be755415acef.dip0.t-ipconnect.de. [2003:c7:8f2a:b825:7539:be75:5415:acef])
+        by smtp.gmail.com with ESMTPSA id f18-20020a1cc912000000b003cf5ec79bf9sm4961175wmb.40.2022.10.30.11.17.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Sun, 30 Oct 2022 11:17:28 -0700 (PDT)
-From:   Kang Minchul <tegongkang@gmail.com>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kang Minchul <tegongkang@gmail.com>
-Subject: [PATCH v3] Bluetooth: Use kzalloc instead of kmalloc/memset
-Date:   Mon, 31 Oct 2022 03:17:22 +0900
-Message-Id: <20221030181722.34788-1-tegongkang@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Message-ID: <e032d410-60ed-9e0b-2818-bb849adebc78@gmail.com>
+Date:   Sun, 30 Oct 2022 19:17:26 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 00/13] staging: r8188eu: clean up action frame handlers
+Content-Language: en-US
+To:     Martin Kaiser <martin@kaiser.cx>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20221030173326.1588647-1-martin@kaiser.cx>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20221030173326.1588647-1-martin@kaiser.cx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,48 +79,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace kmalloc+memset by kzalloc
-for better readability and simplicity.
+On 10/30/22 18:33, Martin Kaiser wrote:
+> Clean up the handlers for action frames. Summarize common code, remove
+> unnecessary return values.
+> 
+> Please apply this on top of the "remove the last get_da calls" series.
+> 
+> Changes in v2
+> - remove on_action_public's ret variable in patch 3, not in patch 9
+> 
+> Martin Kaiser (13):
+>    staging: r8188eu: replace a GetAddr1Ptr call
+>    staging: r8188eu: remove duplicate category check
+>    staging: r8188eu: make on_action_public static void
+>    staging: r8188eu: make OnAction_back static void
+>    staging: r8188eu: make OnAction_p2p static void
+>    staging: r8188eu: remove category check in OnAction_p2p
+>    staging: r8188eu: replace switch-case with if
+>    staging: r8188eu: replace GetAddr1Ptr call in OnAction_p2p
+>    staging: r8188eu: clean up on_action_public
+>    staging: r8188eu: remove return value from on_action_public_vendor
+>    staging: r8188eu: remove return value from on_action_public_default
+>    staging: r8188eu: rtw_action_public_decache's token is a u8
+>    staging: r8188eu: check destination address in OnAction
+> 
+>   drivers/staging/r8188eu/core/rtw_mlme_ext.c   | 116 +++++-------------
+>   .../staging/r8188eu/include/rtw_mlme_ext.h    |   7 --
+>   2 files changed, 28 insertions(+), 95 deletions(-)
+> 
 
-This addresses the cocci warning below:
-
-WARNING: kzalloc should be used for d, instead of kmalloc/memset
-
-Signed-off-by: Kang Minchul <tegongkang@gmail.com>
----
- net/bluetooth/hci_conn.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/net/bluetooth/hci_conn.c b/net/bluetooth/hci_conn.c
-index 7a59c4487050..287d313aa312 100644
---- a/net/bluetooth/hci_conn.c
-+++ b/net/bluetooth/hci_conn.c
-@@ -824,11 +824,10 @@ static int hci_le_terminate_big(struct hci_dev *hdev, u8 big, u8 bis)
- 
- 	bt_dev_dbg(hdev, "big 0x%2.2x bis 0x%2.2x", big, bis);
- 
--	d = kmalloc(sizeof(*d), GFP_KERNEL);
-+	d = kzalloc(sizeof(*d), GFP_KERNEL);
- 	if (!d)
- 		return -ENOMEM;
- 
--	memset(d, 0, sizeof(*d));
- 	d->big = big;
- 	d->bis = bis;
- 
-@@ -861,11 +860,10 @@ static int hci_le_big_terminate(struct hci_dev *hdev, u8 big, u16 sync_handle)
- 
- 	bt_dev_dbg(hdev, "big 0x%2.2x sync_handle 0x%4.4x", big, sync_handle);
- 
--	d = kmalloc(sizeof(*d), GFP_KERNEL);
-+	d = kzalloc(sizeof(*d), GFP_KERNEL);
- 	if (!d)
- 		return -ENOMEM;
- 
--	memset(d, 0, sizeof(*d));
- 	d->big = big;
- 	d->sync_handle = sync_handle;
- 
--- 
-2.34.1
-
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
