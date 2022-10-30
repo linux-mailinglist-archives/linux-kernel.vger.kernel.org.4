@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9590612A2C
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 11:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 412E8612A2F
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 11:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiJ3KkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 06:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
+        id S229944AbiJ3KlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 06:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbiJ3KkV (ORCPT
+        with ESMTP id S229651AbiJ3KlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 06:40:21 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4619F2BB
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 03:40:20 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id k2so22980921ejr.2
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 03:40:20 -0700 (PDT)
+        Sun, 30 Oct 2022 06:41:19 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305262BB;
+        Sun, 30 Oct 2022 03:41:18 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id n12so22858218eja.11;
+        Sun, 30 Oct 2022 03:41:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HGFd6yEFbbRiXKkguK7e/PC3bOLVDfqzNL+us0Fp3Nw=;
-        b=k1bbyvERjl2SJ7iZjkPa/XVKDX+KQH1w5Kw2KxyUGtiUo3FHtc1iIAYcP7La6leXmK
-         Jl9wKx2w+iwRYgoNcJjQLCJKc3Y+M+Jpg0+TW7rVodmiP82Tf7r/zP1Hb+f4wft3ePuS
-         A+xMezo1Fk3JewfYq5Z3CGfXbivBpfHkoRDCKNslpj3NSnYUZegN4riDCmRnMm5ojvTx
-         JB4qTKcGsazFomvzEevT0SDQB745r16osIj/Ghbagz8c31k/Ca8vjSn+w0GY/LnOpLyL
-         olxAFD5PTcAtaI34st8Zge3DwCPIRfMQIxrEuaWCs9MBmtqqrZm+unXwYyqqIOW8uFAx
-         kNKA==
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5pcTjlVcCbLXyhugBFvbltydCNqisX8sC5t+otcJDPU=;
+        b=kB9KiBhqiTeOdu6SgwCtrZ7TA2NBZ1bOoFLLkdUe94CmRGLnzrs9CcXN4tLiZZ5vYL
+         nMKqiK1c/nvWgRxhrgG0hm9UkvlLSAc67HMkTpCbw1Ijm6kC9P2RU66tEIe5RFS0nNxG
+         N6ZVryKFY7fqNdLhrabNOwY2gr9XVGjs3ub9xaifodOsiDrzSEUlckO7hUisq+7Bi5q7
+         kKR8yKYxpriG5Z3JhfpT5W+bwH51kQy6wRDh8efG+86aMpZFaakjZ2ctfwGng0h7s45Y
+         Bj6CRHw5KUKDB/PogkmQTaw/NPSoWLJNN35fbPsVAGiobGPiI5swhtbi9vjeo1X5qNbL
+         4ItA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HGFd6yEFbbRiXKkguK7e/PC3bOLVDfqzNL+us0Fp3Nw=;
-        b=s6AG/VOvXM4esxhe2L7LV3QelfvRSjEstboNdLt++qy+fkzdq2+wL2usUUS6Ioy8JI
-         laVJOga2nN/n+bZCMxoNfBmwNs0Xtah2zZrK36fMDffca6D1+t9+cGgilj/MBsbVqHEn
-         IXpbArPzuG/YkS3yYSL9P5PT57U7h5/S//6DRBP7Eeruj4J0sNmSRjvKPVgIauE+y/iP
-         xFBqSKYr2d+HNLwvyuuVeGfnl5WFJssJ0/e+yIsUP5EKdzUOQ8pvsh7sorLFMP333CSk
-         CUv9oaCd9TLyMR+RhV9SkmqTiU8Ku6S39zTO5odishQ0jjdm3JLMFBpBJ+id8+cCd9pz
-         LAgw==
-X-Gm-Message-State: ACrzQf0EX1Pt4A9IKz+onJhZkehsSS+iEQdl+SzWYL1g2UcMDJGn0Mw/
-        X8c+d35OGZznOYA491RJRb0=
-X-Google-Smtp-Source: AMsMyM7Kb7ZzSXTbaaJeHzqj8oZ/v5QY3duAyytKC6PUEv42ZpHcu2spyBVa0eYv34wjauJ2x/w/8g==
-X-Received: by 2002:a17:907:78a:b0:78d:9ac7:b697 with SMTP id xd10-20020a170907078a00b0078d9ac7b697mr7499697ejb.457.1667126418899;
-        Sun, 30 Oct 2022 03:40:18 -0700 (PDT)
-Received: from [192.168.1.102] (p57935738.dip0.t-ipconnect.de. [87.147.87.56])
-        by smtp.gmail.com with ESMTPSA id tx8-20020a1709078e8800b0078175601630sm1711531ejc.79.2022.10.30.03.40.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Oct 2022 03:40:18 -0700 (PDT)
-Message-ID: <cc1c4548-984b-a40e-c93a-7e179d64912f@gmail.com>
-Date:   Sun, 30 Oct 2022 11:40:17 +0100
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5pcTjlVcCbLXyhugBFvbltydCNqisX8sC5t+otcJDPU=;
+        b=Hw2C9lQ2Ci2iHWv7YfUqAaswmR1bkzqkNJXTfPaEsYkRwB6OQrBhzsjmsTJUfX9buo
+         fep/yecOyVX0r/nxkv8djv3BQX2PTZxKU01b81F3LzVEwPIcVTkUFnjqPqeuK6dvP8Iy
+         s/dhRhQN8LPhebgxpigGmsCIWIC92iOa9HNjv7db3r+dtf0AxnRFIFwzvIccB+a+B1eC
+         2SMFg2lD9JeXwwnsjvzoHD/zWFxLIffyE+CKmai6gdXTtcphHosB6LID+ECSX7z1L93/
+         qfPOoE8cYXZTXQ4A3STxMojT64ewCpXcTX8MIcThMlVXut+zInvi5u04HGDF22AEP9dn
+         0IYg==
+X-Gm-Message-State: ACrzQf1pjZ2HFIaJxLL2xD6Nxk0o3kZpGx5Lf5dLsqZ/h+Lf4VpHT5Rm
+        QP0M9Km8S7CUxzYy7rSSu+cGyRqfCxuZCa49CB0=
+X-Google-Smtp-Source: AMsMyM6NCYekgHM9rv/dW387chTV1IB4ry+zxrY9HaV9/N6RLNY/HZ1vgWspcOy3Cq+AW/Pw+HwduLXsuo069p96DGg=
+X-Received: by 2002:a17:907:7f8b:b0:7ad:b45d:4e9a with SMTP id
+ qk11-20020a1709077f8b00b007adb45d4e9amr5646257ejc.421.1667126476654; Sun, 30
+ Oct 2022 03:41:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] staging: r8188eu: use min() instead of ternary operator
-Content-Language: en-US
-To:     Michael Straube <straube.linux@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20221030081020.8533-1-straube.linux@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20221030081020.8533-1-straube.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+From:   Wei Chen <harperchen1110@gmail.com>
+Date:   Sun, 30 Oct 2022 18:40:40 +0800
+Message-ID: <CAO4mrfc3sbZVj3QOdAVFqrZp+mEuPQTtQCQsQy-07W_BEFqZ2Q@mail.gmail.com>
+Subject: INFO: task hung in fscrypt_ioctl_set_policy
+To:     tytso@mit.edu, jaegeuk@kernel.org, ebiggers@kernel.org
+Cc:     linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,27 +63,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/30/22 09:10, Michael Straube wrote:
-> Replace a ternary operator usage with the min() macro to improve
-> readability.
-> 
-> Signed-off-by: Michael Straube <straube.linux@gmail.com>
-> ---
->   drivers/staging/r8188eu/os_dep/ioctl_linux.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-> index 8516e253bb03..22aab3f986b4 100644
-> --- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-> +++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-> @@ -3568,7 +3568,7 @@ static int rtw_wx_set_priv(struct net_device *dev,
->   
->   		if ((_VENDOR_SPECIFIC_IE_ == probereq_wpsie[0]) &&
->   		    (!memcmp(&probereq_wpsie[2], wps_oui, 4))) {
-> -			cp_sz = probereq_wpsie_len > MAX_WPS_IE_LEN ? MAX_WPS_IE_LEN : probereq_wpsie_len;
-> +			cp_sz = min(probereq_wpsie_len, MAX_WPS_IE_LEN);
->   
->   			pmlmepriv->wps_probe_req_ie_len = 0;
->   			kfree(pmlmepriv->wps_probe_req_ie);
+Dear Linux Developer,
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
+Recently when using our tool to fuzz kernel, the following crash was triggered:
+
+HEAD commit: 64570fbc14f8 Linux 5.15-rc5
+git tree: upstream
+compiler: gcc 8.0.1
+console output:
+https://drive.google.com/file/d/1QcXGrdd3Li0ylo1WBfswWukWV__QZS4h/view?usp=share_link
+kernel config: https://drive.google.com/file/d/1uDOeEYgJDcLiSOrx9W8v2bqZ6uOA_55t/view?usp=share_link
+
+Unfortunately, I don't have any reproducer for this crash yet.
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: Wei Chen <harperchen1110@gmail.com>
+
+INFO: task syz-executor.0:29056 blocked for more than 143 seconds.
+      Not tainted 5.15.0-rc5 #1
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.0  state:D stack:14632 pid:29056 ppid:  6574 flags:0x00000004
+Call Trace:
+ __schedule+0x4a1/0x1720
+ schedule+0x36/0xe0
+ rwsem_down_write_slowpath+0x322/0x7a0
+ fscrypt_ioctl_set_policy+0x11f/0x2a0
+ __f2fs_ioctl+0x1a9f/0x5780
+ f2fs_ioctl+0x89/0x3a0
+ __x64_sys_ioctl+0xe8/0x140
+ do_syscall_64+0x34/0xb0
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x4692c9
+RSP: 002b:00007f9fecafbc38 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00000000004692c9
+RDX: 0000000020002900 RSI: 00000000800c6613 RDI: 0000000000000003
+RBP: 000000000119c1d8 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 000000000119c1d4
+R13: 0000000000000000 R14: 000000000119c1c8 R15: 00007fffbfabbc40
+
+Showing all locks held in the system:
+1 lock held by khungtaskd/29:
+ #0: ffffffff8641dee0 (rcu_read_lock){....}-{1:2}, at:
+debug_show_all_locks+0x15/0x17a
+1 lock held by kswapd0/269:
+1 lock held by in:imklog/6194:
+ #0: ffff888100174ef0 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x92/0xa0
+1 lock held by systemd-udevd/16539:
+3 locks held by syz-executor.0/29046:
+2 locks held by syz-executor.0/29056:
+ #0: ffff88811912f460 (sb_writers#22){.+.+}-{0:0}, at:
+fscrypt_ioctl_set_policy+0xfc/0x2a0
+ #1: ffff88810a98e3f8 (&type->i_mutex_dir_key#12){++++}-{3:3}, at:
+fscrypt_ioctl_set_policy+0x11f/0x2a0
+
+=============================================
+
+NMI backtrace for cpu 1
+CPU: 1 PID: 29 Comm: khungtaskd Not tainted 5.15.0-rc5 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+Call Trace:
+ dump_stack_lvl+0xcd/0x134
+ nmi_cpu_backtrace.cold.8+0xf3/0x118
+ nmi_trigger_cpumask_backtrace+0x18f/0x1c0
+ watchdog+0x9a0/0xb10
+ kthread+0x1a6/0x1e0
+ ret_from_fork+0x1f/0x30
+Sending NMI from CPU 1 to CPUs 0:
+NMI backtrace for cpu 0
+CPU: 0 PID: 2973 Comm: systemd-journal Not tainted 5.15.0-rc5 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+RIP: 0010:lock_is_held_type+0xff/0x140
+Code: 10 00 00 ba ff ff ff ff 65 0f c1 15 cb 92 43 7b 83 fa 01 75 28
+9c 58 f6 c4 02 75 3c 41 f7 c7 00 02 00 00 74 01 fb 48 83 c4 08 <44> 89
+e8 5b 5d 41 5c 41 5d 41 5e 41 5f c3 45 31 ed eb ba 0f 0b 48
+RSP: 0018:ffffc9000079bd80 EFLAGS: 00000292
+RAX: 0000000000000046 RBX: 0000000000000000 RCX: 0000000000000001
+RDX: 0000000000000001 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffffffff8641dea0 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff86462280 R11: 0000000000000000 R12: ffff8881050bd280
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000246
+FS:  00007f0a317238c0(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f0a2d3c2000 CR3: 0000000012f8f000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ ___might_sleep+0x21/0x150
+ kmem_cache_alloc+0x279/0x310
+ getname_flags+0x5f/0x2c0
+ do_sys_openat2+0x3c8/0x6a0
+ do_sys_open+0x84/0xe0
+ do_syscall_64+0x34/0xb0
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f0a30cb385d
+Code: bb 20 00 00 75 10 b8 02 00 00 00 0f 05 48 3d 01 f0 ff ff 73 31
+c3 48 83 ec 08 e8 1e f6 ff ff 48 89 04 24 b8 02 00 00 00 0f 05 <48> 8b
+3c 24 48 89 c2 e8 67 f6 ff ff 48 89 d0 48 83 c4 08 48 3d 01
+RSP: 002b:00007fff8f43b630 EFLAGS: 00000293 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00007fff8f43b940 RCX: 00007f0a30cb385d
+RDX: 00000000000001a0 RSI: 0000000000080042 RDI: 0000555919efe460
+RBP: 000000000000000d R08: 000000000000ffc0 R09: 00000000ffffffff
+R10: 0000000000000069 R11: 0000000000000293 R12: 00000000ffffffff
+R13: 0000555919ef1040 R14: 00007fff8f43b900 R15: 0000555919efe280
+----------------
+Code disassembly (best guess):
+   0: 10 00                adc    %al,(%rax)
+   2: 00 ba ff ff ff ff    add    %bh,-0x1(%rdx)
+   8: 65 0f c1 15 cb 92 43 xadd   %edx,%gs:0x7b4392cb(%rip)        # 0x7b4392db
+   f: 7b
+  10: 83 fa 01              cmp    $0x1,%edx
+  13: 75 28                jne    0x3d
+  15: 9c                    pushfq
+  16: 58                    pop    %rax
+  17: f6 c4 02              test   $0x2,%ah
+  1a: 75 3c                jne    0x58
+  1c: 41 f7 c7 00 02 00 00 test   $0x200,%r15d
+  23: 74 01                je     0x26
+  25: fb                    sti
+  26: 48 83 c4 08          add    $0x8,%rsp
+* 2a: 44 89 e8              mov    %r13d,%eax <-- trapping instruction
+  2d: 5b                    pop    %rbx
+  2e: 5d                    pop    %rbp
+  2f: 41 5c                pop    %r12
+  31: 41 5d                pop    %r13
+  33: 41 5e                pop    %r14
+  35: 41 5f                pop    %r15
+  37: c3                    retq
+  38: 45 31 ed              xor    %r13d,%r13d
+  3b: eb ba                jmp    0xfffffff7
+  3d: 0f 0b                ud2
+  3f: 48                    rex.W
+
+Best,
+Wei
