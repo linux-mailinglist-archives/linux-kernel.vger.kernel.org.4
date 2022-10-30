@@ -2,107 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC046129B6
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 10:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CD26129B9
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 10:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiJ3Jrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 05:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45054 "EHLO
+        id S229995AbiJ3Jtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 05:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbiJ3Jrr (ORCPT
+        with ESMTP id S229853AbiJ3Jtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 05:47:47 -0400
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 56D0E211;
-        Sun, 30 Oct 2022 02:47:44 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.14.30.251])
-        by mail-app2 (Coremail) with SMTP id by_KCgBn21gzSF5jiVFMBw--.58770S2;
-        Sun, 30 Oct 2022 17:47:39 +0800 (CST)
-From:   Jinlong Chen <nickyc975@zju.edu.cn>
-To:     axboe@kernel.dk
-Cc:     hch@lst.de, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nickyc975@zju.edu.cn
-Subject: [PATCH] blk-mq: move queue_is_mq out of blk_mq_cancel_work_sync
-Date:   Sun, 30 Oct 2022 17:47:30 +0800
-Message-Id: <20221030094730.1275463-1-nickyc975@zju.edu.cn>
-X-Mailer: git-send-email 2.31.1
+        Sun, 30 Oct 2022 05:49:33 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB6DCE3E;
+        Sun, 30 Oct 2022 02:49:32 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id ud5so22812438ejc.4;
+        Sun, 30 Oct 2022 02:49:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PrESdhTf+ohvD7xti8OA6Uw5cnHRo0bNkMMZkvXzv/4=;
+        b=XCPPldoPImUrN93VgBHvNuASTcusKXWwI3GrzvHSID9zUSdCg2D2FdY1dlvZIqGpQj
+         t51wbjbN9deBfA2Q9Y6F0FjYilLwY1LAZW7jqAHedeSss1wUNUTwS75nBTPFHsKnet3R
+         SjAhI73Ek+p3W72qWN/+VjVb7R2pw978ObKkS9aX995r3/eNyuaA+5GRJ9CwSL0cvJWL
+         ywh2SzcOLIZQVEaU8QvdE3VaRMfikUtTq02cG7qkWDhW8p2UxLyQ7dHqU4dsQvRFdKcB
+         3CaJkdiQjr6RlItkON76VjXpgFs/7YsuZncPWEWiaoia0Bs0lYVey8X8Lfs1c7TX+a1i
+         rk8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PrESdhTf+ohvD7xti8OA6Uw5cnHRo0bNkMMZkvXzv/4=;
+        b=xpIosqOKos771w3k6yhsOZVGH84qOlZAT7UigiglZCqjjN16cbYJFpz98ZqOqi+izt
+         RQ7JU90oBA/iwBNUdbJ/gloroeEYAenlT7RSvBXGKGrq2hk/KKFSzAOOEZuTKIoD6OPW
+         TXxt4M6zlCT+c+ByNM/2QFs9Q3skN6yl1IamnHb5lxTmUJ7DP6LJ9M7fzYcmPoChokWP
+         OZd8jo+yOXE1A+5WqWDMcQJZSc4lMhtEXGlH7bAlJnfLuDNb+yd9AvPs1Cc9ARvulRKq
+         dQMBhfewTWzjGQwp/h8iZ1Cp1ybPz6zOMtCzGDeE4i5ChqMsv5iJnsrO+GeR3D2FrMzk
+         oRcQ==
+X-Gm-Message-State: ACrzQf0QTla3Ab0TOa+p5+3R+LVBHumSlC5jABpqjUUGyrgkFY9RLSdC
+        n8iBVMkmEdVfvs0p3C0NNik=
+X-Google-Smtp-Source: AMsMyM7LXJPbJfwCst2+OBeGHE3sUGrmmMgHlv73Xnbhlcz9oB5xVLivRHIDUAjKFEfx4+i0M6n8Kw==
+X-Received: by 2002:a17:907:7e9a:b0:796:7a21:1520 with SMTP id qb26-20020a1709077e9a00b007967a211520mr7581144ejc.236.1667123371124;
+        Sun, 30 Oct 2022 02:49:31 -0700 (PDT)
+Received: from [10.32.3.204] ([95.183.227.98])
+        by smtp.gmail.com with ESMTPSA id 10-20020a170906328a00b007836d075152sm1672391ejw.187.2022.10.30.02.49.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Oct 2022 02:49:30 -0700 (PDT)
+Date:   Sun, 30 Oct 2022 12:49:16 +0300
+From:   Yassine Oudjana <yassine.oudjana@gmail.com>
+Subject: Re: [PATCH v4 08/13] dt-bindings: pinctrl: mediatek,mt6779-pinctrl:
+ Improve pinctrl subnode and property descriptions
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Andy Teng <andy.teng@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <4M8KKR.ECH2308DQOMN2@gmail.com>
+In-Reply-To: <f5bf36e2-5be2-cec9-510d-bc99bb9b6bda@linaro.org>
+References: <20221028153505.23741-1-y.oudjana@protonmail.com>
+        <20221028153505.23741-9-y.oudjana@protonmail.com>
+        <f5bf36e2-5be2-cec9-510d-bc99bb9b6bda@linaro.org>
+X-Mailer: geary/40.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: by_KCgBn21gzSF5jiVFMBw--.58770S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZF4rtFyUCr1fXFWkKr45KFg_yoW8GrW8pF
-        W3J39rta40qayUXFyqqay7XF17GwnxKr1xJrsxAw4Yvr9rGr17Xr18uFyjgF10qrs3ZF4a
-        vrZxXFWfZr18GwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvv1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24V
-        AvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
-        McIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
-        v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI
-        7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
-        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
-        v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
-        jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73Uj
-        IFyTuYvjfUFYFADUUUU
-X-CM-SenderInfo: qssqjiaqqzq6lmxovvfxof0/1tbiAgYTB1ZdtcKYKQAHsa
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The only caller that needs queue_is_mq check is del_gendisk, so move the
-check into it.
 
-Signed-off-by: Jinlong Chen <nickyc975@zju.edu.cn>
----
- block/blk-mq.c | 12 +++++-------
- block/genhd.c  |  4 +++-
- 2 files changed, 8 insertions(+), 8 deletions(-)
+On Fri, Oct 28 2022 at 15:58:30 -04:00:00, Krzysztof Kozlowski 
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 28/10/2022 11:35, Yassine Oudjana wrote:
+>>  From: Yassine Oudjana <y.oudjana@protonmail.com>
+>> 
+>>  Change "subnodes" to "subnode" in subnode description for better 
+>> grammatical
+>>  accuracy, capitalize pinmux description, wrap all descriptions at 
+>> 80 characters,
+>>  and remove literal style indicators from descriptions that don't 
+>> need their new
+>>  lines preserved.
+>> 
+>>  Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+>>  ---
+> 
+> I propose to squash it with the one changing description here.
 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 8ca49530bdf3..e2a332786ebd 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -4851,15 +4851,13 @@ EXPORT_SYMBOL(blk_mq_rq_cpu);
- 
- void blk_mq_cancel_work_sync(struct request_queue *q)
- {
--	if (queue_is_mq(q)) {
--		struct blk_mq_hw_ctx *hctx;
--		unsigned long i;
-+	struct blk_mq_hw_ctx *hctx;
-+	unsigned long i;
- 
--		cancel_delayed_work_sync(&q->requeue_work);
-+	cancel_delayed_work_sync(&q->requeue_work);
- 
--		queue_for_each_hw_ctx(q, hctx, i)
--			cancel_delayed_work_sync(&hctx->run_work);
--	}
-+	queue_for_each_hw_ctx(q, hctx, i)
-+		cancel_delayed_work_sync(&hctx->run_work);
- }
- 
- static int __init blk_mq_init(void)
-diff --git a/block/genhd.c b/block/genhd.c
-index 17b33c62423d..493b93faee9c 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -638,7 +638,9 @@ void del_gendisk(struct gendisk *disk)
- 
- 	blk_sync_queue(q);
- 	blk_flush_integrity();
--	blk_mq_cancel_work_sync(q);
-+
-+	if (queue_is_mq(q))
-+		blk_mq_cancel_work_sync(q);
- 
- 	blk_mq_quiesce_queue(q);
- 	if (q->elevator) {
--- 
-2.31.1
+You mean patch 6 "dt-bindings: pinctrl: mediatek,pinctrl-mt6795: 
+Improve interrupts description"? If yes, would that mean improving 
+descriptions in mediatek,pinctrl-mt6795.yaml then pulling them into 
+mt6779?
+
+
 
