@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE45612D03
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 22:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 056B6612D02
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 22:31:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiJ3Vbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 17:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
+        id S229752AbiJ3Vbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 17:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiJ3Vb1 (ORCPT
+        with ESMTP id S229785AbiJ3VbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 17:31:27 -0400
+        Sun, 30 Oct 2022 17:31:21 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B183A460
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 14:29:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D263EA45F
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 14:29:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667165391;
+        s=mimecast20190719; t=1667165388;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WBN8D9wCQW9wV7A+8u6L08Ik6RBdolsM1Jhl7A7rc8s=;
-        b=ZhXgywEZckyh/r+RrUqDGLSPPPKpNRQzaTne4j2fbKtwcs6CTh9BRCFjKReRG+97gk/YN6
-        On14FKxHkryyMUxhP8tMJ1BXG8pF7Pw72O1f/11hDHwPwbKXX06vu2c2v1RdxizTlSHXJ5
-        AEu2lZcn9sMIS0Js8PRoFm5wEUwnw5o=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=6JldXIZ0VovVxqs2u1isjA5hu6yU0tGljewUccwkM0U=;
+        b=ZWfAMV31AnIrzdaOb4rmWP1Uph4sW7jnjx2J+58PQTS7/7ZqFZXefJV0ASj2Ln64JwH+W1
+        UVkTT9ozXnEqFZ9+i39uFuJ2bIIkodpQwxPrCnMgV+Mx4v1jisLwYsSh0WaNfFOgp3U/tC
+        a1gaWA/8Nj7d0DFpcsgI9IMib91HWiY=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-329-11DEyvRzPSy2VC0YzWNAuQ-1; Sun, 30 Oct 2022 17:29:42 -0400
-X-MC-Unique: 11DEyvRzPSy2VC0YzWNAuQ-1
-Received: by mail-qt1-f197.google.com with SMTP id i4-20020ac813c4000000b003a5044a818cso4846994qtj.11
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 14:29:42 -0700 (PDT)
+ us-mta-403-avLD5dvBNOyjZvKtLIGT4g-1; Sun, 30 Oct 2022 17:29:45 -0400
+X-MC-Unique: avLD5dvBNOyjZvKtLIGT4g-1
+Received: by mail-qt1-f200.google.com with SMTP id cj6-20020a05622a258600b003a519d02f59so2054879qtb.5
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 14:29:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WBN8D9wCQW9wV7A+8u6L08Ik6RBdolsM1Jhl7A7rc8s=;
-        b=cuUwJid9F63Y3MikCKhQEDEQIYvrgwoEpsPz965MHb8cwz13K2DsE+yUPRhz7eAXz1
-         nBkwnX1Q3/E0VJpya58Njr4QlwBlbphGUnOUU6bdMRNA74jiKoSg6sUkFOUi32Y8U1nP
-         Huq7rBKL4DAmrsg+/3apcQcMED/daYjMGLZVQ/Gb603cGRursZsNEYpgokTcB7skzu4Q
-         2kQc9L7Wao0S0sVHRyQKQ9m0luW7USWWCDQZ+coGx8MrNyKHxix2blUnc24Uo6fOGGF+
-         xywS2xvKH/yoPEU9JvTZNve86Wyh7unKuGkosRokI8SZvAd2S70nlpRxVWdfykaT+1qH
-         ZIWg==
-X-Gm-Message-State: ACrzQf0Qx+KKu+jdSjEPhf5TCbyKY9z7sCQexYfQpDKUFiDeoqVr1cJr
-        9B3Y89hK4CwjoEX6SMRfrtv7wqixLKIOHC1PwjilzYEIIuBnJgLMbyb+x4PcBuMX8fh6/bBHej3
-        y2r+ukztPKmrcFVO5oz1XeTY3az2gm8YimCVl4htRRSvJ1A5loGCl+osgkK7LefF7gHFKPk0B9Q
+        bh=6JldXIZ0VovVxqs2u1isjA5hu6yU0tGljewUccwkM0U=;
+        b=Xy1GfrLV7UFXKExE+0SEL+isZXHJT/z0gZgnimV7rZsp5X0p8AxF1qmIkXoW4vzuuE
+         bkqYPi2xJtAr+jfuV85kRxWg8EhQGy/BculYMlE3zMi9bGfDV6sX+gPZ2sD7qhPuqnfi
+         YAOAIzmrPvF2oDEjB9nw6j2k2gzTxzYoRB+zBUlXSic1yVv2nLCXSHG73unyIBR+Hoe1
+         bBT/QTmi0it8ykulJ7KrdAVZjWy3cVM3Pk6ZV3Ll44799JBpCs3a2t7+I/vt+RbTJb6B
+         f0xf2Y7jZ0k1VAniISk5zSRj3temz4R1adPLv+YusplnDjLesPacytoA16wo/MqiDEpj
+         mzwQ==
+X-Gm-Message-State: ACrzQf399OaEj9q7NPh7iL4LEpn5NnJIQXBZJwYCzpZlGkJGF+3tZx+Q
+        UXUZx+r/hyi129Kei7O/Fym39nJpST8Io5qqu5JsFPvlwTlF8Nm0IPK0ouFX0MQbfhg5hRAoal4
+        TBrxXWgAyVIcaCr8BKb9YD5z1Y9/W9AUp9MhMFXQNmcqymoCdH2bpwejCdSECQo2XjDLG/gmxbA
         ==
-X-Received: by 2002:a05:620a:404d:b0:6da:4b51:2a8f with SMTP id i13-20020a05620a404d00b006da4b512a8fmr6987364qko.421.1667165381984;
-        Sun, 30 Oct 2022 14:29:41 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM42RXOVz0QArfSJMlSE1Zpcejb5AA8L6KVh4LIIheRuXu9MXkBezCcPcA+vujWAM+SNNHsPqw==
-X-Received: by 2002:a05:620a:404d:b0:6da:4b51:2a8f with SMTP id i13-20020a05620a404d00b006da4b512a8fmr6987344qko.421.1667165381708;
-        Sun, 30 Oct 2022 14:29:41 -0700 (PDT)
+X-Received: by 2002:a05:6214:1c09:b0:4b7:f9f6:7d17 with SMTP id u9-20020a0562141c0900b004b7f9f67d17mr8720827qvc.22.1667165383360;
+        Sun, 30 Oct 2022 14:29:43 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5VT0YcB2KUeD0RxKSYpx27URr0maKrp8Ghgz9I1abNoV5z97NF2ZhVFfbknBYsc6tbah94rA==
+X-Received: by 2002:a05:6214:1c09:b0:4b7:f9f6:7d17 with SMTP id u9-20020a0562141c0900b004b7f9f67d17mr8720803qvc.22.1667165383128;
+        Sun, 30 Oct 2022 14:29:43 -0700 (PDT)
 Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id a1-20020ac81081000000b003a4b88b886esm2654781qtj.96.2022.10.30.14.29.40
+        by smtp.gmail.com with ESMTPSA id a1-20020ac81081000000b003a4b88b886esm2654781qtj.96.2022.10.30.14.29.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Oct 2022 14:29:41 -0700 (PDT)
+        Sun, 30 Oct 2022 14:29:42 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -68,9 +68,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Nadav Amit <nadav.amit@gmail.com>,
         Mike Kravetz <mike.kravetz@oracle.com>, peterx@redhat.com,
         Rik van Riel <riel@surriel.com>
-Subject: [PATCH RFC 06/10] mm/hugetlb: Make page_vma_mapped_walk() RCU-safe
-Date:   Sun, 30 Oct 2022 17:29:25 -0400
-Message-Id: <20221030212929.335473-7-peterx@redhat.com>
+Subject: [PATCH RFC 07/10] mm/hugetlb: Make hugetlb_follow_page_mask() RCU-safe
+Date:   Sun, 30 Oct 2022 17:29:26 -0400
+Message-Id: <20221030212929.335473-8-peterx@redhat.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221030212929.335473-1-peterx@redhat.com>
 References: <20221030212929.335473-1-peterx@redhat.com>
@@ -92,45 +92,36 @@ comment above huge_pte_offset() for more information.
 
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- include/linux/rmap.h | 3 +++
- mm/page_vma_mapped.c | 7 ++++++-
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ mm/hugetlb.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/rmap.h b/include/linux/rmap.h
-index bd3504d11b15..d2c5e69a56f2 100644
---- a/include/linux/rmap.h
-+++ b/include/linux/rmap.h
-@@ -408,6 +408,9 @@ static inline void page_vma_mapped_walk_done(struct page_vma_mapped_walk *pvmw)
- 		pte_unmap(pvmw->pte);
- 	if (pvmw->ptl)
- 		spin_unlock(pvmw->ptl);
-+	/* Hugetlb uses RCU lock for safe access of huge_pte_offset() */
-+	if (is_vm_hugetlb_page(pvmw->vma))
-+		rcu_read_unlock();
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 9869c12e6460..85214095fb85 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6229,10 +6229,12 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+ 	if (WARN_ON_ONCE(flags & FOLL_PIN))
+ 		return NULL;
+ 
++	/* For huge_pte_offset() */
++	rcu_read_lock();
+ retry:
+ 	pte = huge_pte_offset(mm, haddr, huge_page_size(h));
+ 	if (!pte)
+-		return NULL;
++		goto out_rcu;
+ 
+ 	ptl = huge_pte_lock(h, mm, pte);
+ 	entry = huge_ptep_get(pte);
+@@ -6266,6 +6268,8 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+ 	}
+ out:
+ 	spin_unlock(ptl);
++out_rcu:
++	rcu_read_unlock();
+ 	return page;
  }
  
- bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw);
-diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
-index 93e13fc17d3c..513210a59d7b 100644
---- a/mm/page_vma_mapped.c
-+++ b/mm/page_vma_mapped.c
-@@ -169,10 +169,15 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
- 		if (pvmw->pte)
- 			return not_found(pvmw);
- 
-+		/* For huge_pte_offset() */
-+		rcu_read_lock();
-+
- 		/* when pud is not present, pte will be NULL */
- 		pvmw->pte = huge_pte_offset(mm, pvmw->address, size);
--		if (!pvmw->pte)
-+		if (!pvmw->pte) {
-+			rcu_read_unlock();
- 			return false;
-+		}
- 
- 		pvmw->ptl = huge_pte_lock(hstate, mm, pvmw->pte);
- 		if (!check_pte(pvmw))
 -- 
 2.37.3
 
