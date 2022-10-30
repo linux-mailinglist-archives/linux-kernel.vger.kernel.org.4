@@ -2,117 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3766612AF5
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 15:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD34612AF8
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 15:25:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbiJ3OYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 10:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
+        id S229719AbiJ3OZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 10:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ3OYi (ORCPT
+        with ESMTP id S229441AbiJ3OZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 10:24:38 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF93B4BB;
-        Sun, 30 Oct 2022 07:24:37 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 29UEJ0eB029315;
-        Sun, 30 Oct 2022 14:24:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=LDUPl7AJWoGiHgR4WjutUPTsZY9o/snrEnz/KgKrF5g=;
- b=k0wXczeyxGiROWoeVqWNRQYePwVtPoNC5eiPWpusSbIaPVJVpM9ZLxkBjCaKFEaV2kA2
- O9ueXMHtexRR5rUTUCvI0TfdCb0HYB7t+mcTBxxosL3S7JpDNS16aRX+fBxY5VA4mzjl
- qZMoU3SCzbpC1sqKNyFz/avlJWcz+zQGKhRQSgcF44rh/8A4cB3expSHtnjwMQF4JisV
- FbxmyRYtrABMpts2/vSNZCYqV3nnr36bgZ6GMwPM7wqCWViMhDIGOBZe4QI9GTR6uRQE
- GRhMebPYpyjkc0/gGThlOwstgW0NnhaoTKxRdFxUXAaGkEWIylF+0LgJxlgKLKPY+ldM 3w== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3khf9krkte-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 30 Oct 2022 14:24:25 +0000
-Received: from pps.filterd (NALASPPMTA02.qualcomm.com [127.0.0.1])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 29UEOO2f025649;
-        Sun, 30 Oct 2022 14:24:24 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 3khdn4hh9h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 30 Oct 2022 14:24:23 +0000
-Received: from NALASPPMTA02.qualcomm.com (NALASPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29UEON25025644;
-        Sun, 30 Oct 2022 14:24:23 GMT
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 29UEONCA025643
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 30 Oct 2022 14:24:23 +0000
-Received: from shazhuss-linux.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Sun, 30 Oct 2022 07:24:20 -0700
-From:   Shazad Hussain <quic_shazhuss@quicinc.com>
-To:     <andersson@kernel.org>
-CC:     <bmasney@redhat.com>, Shazad Hussain <quic_shazhuss@quicinc.com>,
-        "Andy Gross" <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1] clk: qcom: gcc-sc8280xp: add cxo as parent for gcc_ufs_ref_clkref_clk
-Date:   Sun, 30 Oct 2022 19:53:33 +0530
-Message-ID: <20221030142333.31019-1-quic_shazhuss@quicinc.com>
-X-Mailer: git-send-email 2.38.0
+        Sun, 30 Oct 2022 10:25:49 -0400
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4FAB4BB;
+        Sun, 30 Oct 2022 07:25:48 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so3925116pjk.1;
+        Sun, 30 Oct 2022 07:25:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DlUsVXBEKnWSmUCDw//iMFATDePe/mdqp+ek5UTPNEE=;
+        b=hJdbgh6ctGN7mp4ogK32sS4uj4giZxKXtTs+ml1N754c2VXP8Z7MjapNLnkRwurkOl
+         o6J969hNgjTxKsYDDnQtKJNV/VsXXkriB+3H/bH0V7HGJBMtVaHLGFTswhp2qyZOAUJk
+         RDNtkWBJWVP0EgsnGCxem9ix+9kwgMgSjU/L/N5pYe8+ia06MqTWASuAe8Yrm3wwSUdO
+         AFUAacH2ThNWf7z+v8lI/xnhYOutwnrFmjvVNnWvbIbdiHbDgDZWq7WL/Bu8GWDR5Aqi
+         tjWSKR7uCviZlE6YaWSEFZagc3ckuiTSOL3jo06Lvd/nlqsv7JVtm9U5z8XNKUpj7Upi
+         5kxA==
+X-Gm-Message-State: ACrzQf1YxAj4fmHnioYhraNxmI87XgCrCrzkQDZAjcdLYJpv7pa1UTYl
+        gtd6kCEzu4Sxqn6B2ZnAM4XAhr1Bojo=
+X-Google-Smtp-Source: AMsMyM6kbsZX1AjQpVrp9L1PHMcJdfj4whBoZlmlCsbKzzpmVhCS34FDVE6CLk69TeseCfE6bfZMzw==
+X-Received: by 2002:a17:90a:6d22:b0:213:7e1e:9be0 with SMTP id z31-20020a17090a6d2200b002137e1e9be0mr9805926pjj.17.1667139948115;
+        Sun, 30 Oct 2022 07:25:48 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id s4-20020a170903214400b00177e5d83d3esm2789734ple.88.2022.10.30.07.25.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 30 Oct 2022 07:25:47 -0700 (PDT)
+Message-ID: <9a758d91-42c5-d6b3-ddde-9c2b89d741a6@acm.org>
+Date:   Sun, 30 Oct 2022 07:25:45 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: -CXHWSQnbCumlR0LcJXgIvhXYt3QXQrr
-X-Proofpoint-GUID: -CXHWSQnbCumlR0LcJXgIvhXYt3QXQrr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-30_08,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- mlxscore=0 phishscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
- priorityscore=1501 bulkscore=0 malwarescore=0 clxscore=1011
- mlxlogscore=760 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2210300094
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 1/3] blk-mq: remove redundant call to
+ blk_freeze_queue_start in blk_mq_destroy_queue
+Content-Language: en-US
+To:     Jinlong Chen <nickyc975@zju.edu.cn>
+Cc:     axboe@kernel.dk, kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org
+References: <cover.1667035519.git.nickyc975@zju.edu.cn>
+ <ebd3a47a1ebf4ab518c985cdbaa1ac3afd6dfb9f.1667035519.git.nickyc975@zju.edu.cn>
+ <adaea16a-c7cd-5d68-50c8-d56de851061a@acm.org>
+ <42681e4e.15223d.18426b71124.Coremail.nickyc975@zju.edu.cn>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <42681e4e.15223d.18426b71124.Coremail.nickyc975@zju.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since 'commit f3aa975e230e ("arm64: dts: qcom: sc8280xp: correct ref
-clock for ufs_mem_phy")' we need to explicitly make cxo as parent to
-gcc_ufs_ref_clkref_clk to have an independent vote from ufs_mem_phy.
+On 10/29/22 19:27, Jinlong Chen wrote:
+>> I think this patch introduces a hang for every caller of
+>> blk_mq_destroy_queue() other than blk_queue_start_drain().
+ >> I don't see why the patch introduces a hang. The calling relationship in
+> blk_mq_destroy_queue is as follows: [ ... ]
 
-Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
----
- drivers/clk/qcom/gcc-sc8280xp.c | 2 ++
- 1 file changed, 2 insertions(+)
+Agreed - what I wrote is wrong.
 
-diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
-index a18ed88f3b82..72b545121c57 100644
---- a/drivers/clk/qcom/gcc-sc8280xp.c
-+++ b/drivers/clk/qcom/gcc-sc8280xp.c
-@@ -5848,6 +5848,8 @@ static struct clk_branch gcc_ufs_ref_clkref_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(const struct clk_init_data) {
- 			.name = "gcc_ufs_ref_clkref_clk",
-+			.parent_data = &gcc_parent_data_tcxo,
-+			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
--- 
-2.38.0
+> So I think there is a redundant call to blk_freeze_queue_start(), we
+> just need to call blk_mq_freeze_queue_wait() after calling
+> blk_queue_start_drain().
+
+I think it is on purpose that blk_queue_start_drain() freezes the 
+request queue and never unfreezes it. So if you want to change this 
+behavior it's up to you to motivate why you want to change this behavior 
+and also why it is safe to make that change. See also commit 
+d3cfb2a0ac0b ("block: block new I/O just after queue is set as dying").
+
+Bart.
 
