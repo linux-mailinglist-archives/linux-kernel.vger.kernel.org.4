@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC216129CB
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 11:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D1E6129CC
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 11:03:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbiJ3KA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 06:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
+        id S229917AbiJ3KDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 06:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiJ3KAx (ORCPT
+        with ESMTP id S229744AbiJ3KDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 06:00:53 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A011ABC84;
-        Sun, 30 Oct 2022 03:00:51 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id v27so13749582eda.1;
-        Sun, 30 Oct 2022 03:00:51 -0700 (PDT)
+        Sun, 30 Oct 2022 06:03:19 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60DCD128
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 03:03:17 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id q9so22923000ejd.0
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 03:03:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=PD19qtRId0wgZqZC6n5l/nsUISjoing8qSDhC2MYNqw=;
-        b=D7HNuN4f1wLMv/sFwbmean7omz81GmftTJwj9TTIlGim1G5d569wGtwsHjY2HOuLtK
-         DlExIruzXFLmeFyRlnJUePRJSnUPdjCXNDft5jkP5OFVuzI6bIUaTRC8kPNA8bDq2DZv
-         wEJpV+2re9fAED82UcxXS0xilqWvxpaGBP6UkOb6QFgI880uEF2qebTGwJmcMy/jZnGf
-         Oa1H5PjM/Gd6j5Rvxwp3GB2wdyYfcGlWv72IkPImI6rXNBU1oC/Pe7r//G+b+056HF13
-         CWCbPdIcw17e7+K5rl8/btVd3e4ByOhUESapJp8Wd+79IAUGrof2gwYmvYiPxGA2x1Lj
-         KnuQ==
+        bh=aNwOWTPLK1ziE9pEMTwNk9z8pdqw4ROBThVhMZkcLjg=;
+        b=XPjVqTzb96QwvDANy/LZKhsukgmKW93KKL3zDbH6jvmNqTOlNgUkk77n4tpt9eFlOK
+         t+kGsa5AQDB6fAcQ7uul+CtZehBzqXZ0oHjsifxAXAsjBALb1pykOK0abqKEE+cMna5x
+         W1BN8owzHQT7oZNrz5atehn3a+d0SGSBvhqRtJ2C9VxrMtrEy4kaRO9sPkL0JK9LDAQp
+         wpJsKjeSEzDPniyPdqOEmpRPa4WlUQ4OtIPxTDixyRW1JKrZfc1mISxYsjTMfBnrZmab
+         k9n0pcglGNQbi5DsPmCyj0mfw+lb3Zq8dCJ7uQ3+maLl15b2pi5tB3lREoT1OR+Til4d
+         dO/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=PD19qtRId0wgZqZC6n5l/nsUISjoing8qSDhC2MYNqw=;
-        b=PznLZP4odKuw4RG8roQBTZG4LLAqrEipVQQlS2Z92t/CSdn+65g1FDr7oHxeF+T1j9
-         38VhGCAWI8+n6yezhxFQuYULXbZxeWKbr7gMPcq3dvJpUWTILhBDJE6EOhr4roq77Bj0
-         bptnK7KTCtvvcnulFeU02DT8a6Ls/SoXQr7VR52DC9zEwQYEfb+MqJkyqJak73mjpQEX
-         dBPsVp1Yyz2ShhWIFRfwc8gmnbKNOALStKanAjoh8b380pqKp1h93qdZSXd8l+9iCgyu
-         BZIJK5WuiHPJlKwIbkUOJTQzoA4vxAeHACjnz+N5ZWKpYsQhvr+VAe2O6V21P+tDorEk
-         P0UA==
-X-Gm-Message-State: ACrzQf2KgOrKMdw/fHfe01S9aYaYqmwNpxyuWvq6lUcpCOZVFjGkNXsD
-        XEkbkcF0oqT05pMOvMTnJztd7zfxS4BTAywyyOw=
-X-Google-Smtp-Source: AMsMyM5PpPa5JdHAKyUfDfORxVc2MTyXtbhr/mgz1RgVAbN2kKWy0R/912lzmozrlEVscNON9BEIP8YnTpWLKCb084I=
-X-Received: by 2002:aa7:c58a:0:b0:461:fc07:a821 with SMTP id
- g10-20020aa7c58a000000b00461fc07a821mr8311448edq.19.1667124049739; Sun, 30
- Oct 2022 03:00:49 -0700 (PDT)
+        bh=aNwOWTPLK1ziE9pEMTwNk9z8pdqw4ROBThVhMZkcLjg=;
+        b=f7y62+zHRNYFNT+l/N/49At2vC0q3NHnRS45LOn14/Nzhpe/+hj5qAGmFy97I+0KS/
+         sUihohOfReJekCoGaVFEYOXxsJQYFZYKPtULpxfgek3kEiBorM60OddUjxihjXnOMBmX
+         tyz2nuTdeXjJjj2Ltunw3MrC5vwvZFGDwbdFjGh/D9BWDQNheIQY3xpVbyg4+5sy+Fa+
+         oAAL36/lUfovUEiLnQ+oPhnqxdf8Rzc5l+pAoez3NXDCul1/u80ViOYjIJYKs2ZU10ib
+         L1A9QLnx+jfq9h1iYtx8EZohcOK7yIJuU+b6efVafAOtl3gHg+MHr5BekRZfR+rUVVO7
+         xEPw==
+X-Gm-Message-State: ACrzQf0NfnK3aOGfyjsRJftcvjh+OEYrZiLLpEAFM7xgQfULYjXiMfA1
+        8FPko5/fpN9LzfEWcdJ9528aeBKNd9W5d5l4dyf4a+15bX4U2Q==
+X-Google-Smtp-Source: AMsMyM4yOUhFUkWtq/b25kXQR3UBcUxagerbcKNGUHBWFe/4/TFZnDoj97nEFUJ1OuFJU8q4+qGug3wbUXdZOxbZ0s4=
+X-Received: by 2002:a17:907:1041:b0:7ad:a3f8:a733 with SMTP id
+ oy1-20020a170907104100b007ada3f8a733mr7298915ejb.739.1667124196209; Sun, 30
+ Oct 2022 03:03:16 -0700 (PDT)
 MIME-Version: 1.0
 From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Sun, 30 Oct 2022 18:00:13 +0800
-Message-ID: <CAO4mrfd9SRMmB1VWcYh9L61ktiqamJ-QjwOCP+SeFx=08C2MBg@mail.gmail.com>
-Subject: possible deadlock in l2cap_sock_teardown_cb
-To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        davem@davemloft.net, kuba@kernel.org,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
+Date:   Sun, 30 Oct 2022 18:02:40 +0800
+Message-ID: <CAO4mrfc6aCmrBRq=iqNguvQttFsPfa1BKgwVoEThvHBiRWvf9w@mail.gmail.com>
+Subject: BUG: unable to handle kernel paging request in __task_pid_nr_ns
+To:     christian@brauner.io, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
@@ -73,7 +70,7 @@ HEAD commit: 64570fbc14f8 Linux 5.15-rc5
 git tree: upstream
 compiler: gcc 8.0.1
 console output:
-https://drive.google.com/file/d/1Fb6AXVkfZDq0exhIBVf9oUp-dNgzjrHX/view?usp=share_link
+https://drive.google.com/file/d/1TvkFjO_yttSdzHIvGPGgqrmtOIqta6WR/view?usp=share_link
 kernel config: https://drive.google.com/file/d/1uDOeEYgJDcLiSOrx9W8v2bqZ6uOA_55t/view?usp=share_link
 
 Unfortunately, I don't have any reproducer for this crash yet.
@@ -81,211 +78,84 @@ Unfortunately, I don't have any reproducer for this crash yet.
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
 Reported-by: Wei Chen <harperchen1110@gmail.com>
 
-========================================================
-WARNING: possible irq lock inversion dependency detected
-5.15.0-rc5 #1 Not tainted
---------------------------------------------------------
-kworker/1:7/6964 just changed the state of lock:
-ffff8880105f8920 (device_state_lock){+.+.}-{2:2}, at:
-l2cap_sock_teardown_cb+0x37/0x2e0
-but this lock was taken by another, SOFTIRQ-safe lock in the past:
- (hcd_root_hub_lock){..-.}-{2:2}
-
-
-and interrupts could create inverse lock ordering between them.
-
-
-other info that might help us debug this:
- Possible interrupt unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(device_state_lock);
-                               local_irq_disable();
-                               lock(hcd_root_hub_lock);
-                               lock(device_state_lock);
-  <Interrupt>
-    lock(hcd_root_hub_lock);
-
- *** DEADLOCK ***
-
-4 locks held by kworker/1:7/6964:
- #0: ffff888009856738 ((wq_completion)events){+.+.}-{0:0}, at:
-process_one_work+0x327/0x9f0
- #1: ffffc90003b07e68
-((work_completion)(&(&chan->chan_timer)->work)){+.+.}-{0:0}, at:
-process_one_work+0x327/0x9f0
- #2: ffff8880117c3ad8 (&conn->chan_lock){+.+.}-{3:3}, at:
-l2cap_chan_timeout+0x45/0x160
- #3: ffff8880105ff520 (&chan->lock/1){+.+.}-{3:3}, at:
-l2cap_chan_timeout+0x53/0x160
-
-the shortest dependencies between 2nd lock and 1st lock:
- -> (hcd_root_hub_lock){..-.}-{2:2} {
-    IN-SOFTIRQ-W at:
-                      lock_acquire+0xd7/0x330
-                      _raw_spin_lock_irqsave+0x33/0x50
-                      usb_hcd_submit_urb+0x73b/0xf90
-                      usb_submit_urb+0x4dc/0xb80
-                      hub_resubmit_irq_urb+0x4c/0xc0
-                      hub_irq+0x1ef/0x220
-                      __usb_hcd_giveback_urb+0x114/0x240
-                      usb_giveback_urb_bh+0xd2/0x140
-                      tasklet_action_common.isra.15+0xb3/0xf0
-                      __do_softirq+0xe2/0x56b
-                      run_ksoftirqd+0x2d/0x60
-                      smpboot_thread_fn+0x2a5/0x3d0
-                      kthread+0x1a6/0x1e0
-                      ret_from_fork+0x1f/0x30
-    INITIAL USE at:
-                     lock_acquire+0xd7/0x330
-                     _raw_spin_lock_irq+0x32/0x50
-                     usb_hcd_submit_urb+0x1a3/0xf90
-                     usb_submit_urb+0x4dc/0xb80
-                     usb_start_wait_urb+0x65/0x1e0
-                     usb_control_msg+0xec/0x190
-                     usb_get_descriptor+0x98/0x140
-                     usb_get_device_descriptor+0x66/0x120
-                     register_root_hub+0x67/0x297
-                     usb_add_hcd.cold.37+0x588/0x805
-                     dummy_hcd_probe+0xea/0x1d1
-                     platform_probe+0x80/0x100
-                     really_probe+0x12a/0x4d0
-                     __driver_probe_device+0x195/0x220
-                     driver_probe_device+0x2a/0x120
-                     __device_attach_driver+0x102/0x1a0
-                     bus_for_each_drv+0xb8/0x100
-                     __device_attach+0x149/0x220
-                     bus_probe_device+0xdb/0xf0
-                     device_add+0x64f/0xd40
-                     platform_device_add+0x1f0/0x390
-                     init+0x454/0x856
-                     do_one_initcall+0xa9/0x550
-                     kernel_init_freeable+0x3ae/0x42b
-                     kernel_init+0x17/0x1b0
-                     ret_from_fork+0x1f/0x30
-  }
-  ... key      at: [<ffffffff866fc278>] hcd_root_hub_lock+0x18/0x40
-  ... acquired at:
-   _raw_spin_lock_irqsave+0x33/0x50
-   usb_set_device_state+0x1d/0x220
-   hcd_bus_resume+0x221/0x390
-   usb_generic_driver_resume+0x66/0x70
-   usb_resume_both+0x13a/0x280
-   __rpm_callback+0x64/0x1f0
-   rpm_callback+0xa8/0xc0
-   rpm_resume+0x910/0xbf0
-   __pm_runtime_resume+0x8e/0xf0
-   usb_autoresume_device+0x1e/0x60
-   usb_remote_wakeup+0x67/0xb0
-   process_one_work+0x3fa/0x9f0
-   worker_thread+0x42/0x5c0
-   kthread+0x1a6/0x1e0
-   ret_from_fork+0x1f/0x30
-
--> (device_state_lock){+.+.}-{2:2} {
-   HARDIRQ-ON-W at:
-                    lock_acquire+0xd7/0x330
-                    lock_sock_nested+0x2d/0xa0
-                    l2cap_sock_teardown_cb+0x37/0x2e0
-                    l2cap_chan_del+0x5b/0x4a0
-                    l2cap_chan_close+0x1df/0x3f0
-                    l2cap_chan_timeout+0xcf/0x160
-                    process_one_work+0x3fa/0x9f0
-                    worker_thread+0x42/0x5c0
-                    kthread+0x1a6/0x1e0
-                    ret_from_fork+0x1f/0x30
-   SOFTIRQ-ON-W at:
-                    lock_acquire+0xd7/0x330
-                    lock_sock_nested+0x2d/0xa0
-                    l2cap_sock_teardown_cb+0x37/0x2e0
-                    l2cap_chan_del+0x5b/0x4a0
-                    l2cap_chan_close+0x1df/0x3f0
-                    l2cap_chan_timeout+0xcf/0x160
-                    process_one_work+0x3fa/0x9f0
-                    worker_thread+0x42/0x5c0
-                    kthread+0x1a6/0x1e0
-                    ret_from_fork+0x1f/0x30
-   INITIAL USE at:
-                   lock_acquire+0xd7/0x330
-                   _raw_spin_lock_irqsave+0x33/0x50
-                   usb_set_device_state+0x1d/0x220
-                   register_root_hub+0x46/0x297
-                   usb_add_hcd.cold.37+0x588/0x805
-                   dummy_hcd_probe+0xea/0x1d1
-                   platform_probe+0x80/0x100
-                   really_probe+0x12a/0x4d0
-                   __driver_probe_device+0x195/0x220
-                   driver_probe_device+0x2a/0x120
-                   __device_attach_driver+0x102/0x1a0
-                   bus_for_each_drv+0xb8/0x100
-                   __device_attach+0x149/0x220
-                   bus_probe_device+0xdb/0xf0
-                   device_add+0x64f/0xd40
-                   platform_device_add+0x1f0/0x390
-                   init+0x454/0x856
-                   do_one_initcall+0xa9/0x550
-                   kernel_init_freeable+0x3ae/0x42b
-                   kernel_init+0x17/0x1b0
-                   ret_from_fork+0x1f/0x30
- }
- ... key      at: [<ffffffff866fbf18>] device_state_lock+0x18/0x200
- ... acquired at:
-   __lock_acquire+0x3a5/0x1d60
-   lock_acquire+0xd7/0x330
-   lock_sock_nested+0x2d/0xa0
-   l2cap_sock_teardown_cb+0x37/0x2e0
-   l2cap_chan_del+0x5b/0x4a0
-   l2cap_chan_close+0x1df/0x3f0
-   l2cap_chan_timeout+0xcf/0x160
-   process_one_work+0x3fa/0x9f0
-   worker_thread+0x42/0x5c0
-   kthread+0x1a6/0x1e0
-   ret_from_fork+0x1f/0x30
-
-
-stack backtrace:
-CPU: 1 PID: 6964 Comm: kworker/1:7 Not tainted 5.15.0-rc5 #1
+BUG: unable to handle page fault for address: 0000000200000081
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 0 P4D 0
+Oops: 0000 [#1] PREEMPT SMP
+CPU: 1 PID: 15145 Comm: systemd-udevd Not tainted 5.15.0-rc5 #1
 Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
 rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
-Workqueue: events l2cap_chan_timeout
+RIP: 0010:__task_pid_nr_ns+0xc3/0x310
+Code: 1b e8 c1 94 08 00 31 ff 41 89 c5 89 c6 e8 45 1a 13 00 45 85 ed
+0f 84 d0 00 00 00 e8 37 19 13 00 48 85 db 74 23 e8 2d 19 13 00 <41> 8b
+84 24 80 00 00 00 44 8b 6b 04 41 89 c6 89 c7 44 89 ee e8 94
+RSP: 0018:ffffc900037bbf08 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: ffff88811486d400 RCX: ffff888104839b80
+RDX: 0000000000000000 RSI: ffff888104839b80 RDI: 0000000000000002
+RBP: ffffc900037bbf28 R08: ffffffff812a5a33 R09: 0000000000000000
+R10: 0000000000000005 R11: 0000000000000001 R12: 0000000200000001
+R13: 0000000000000001 R14: ffff88800ab84200 R15: 0000000000000000
+FS:  00007f09bf51c8c0(0000) GS:ffff88813dc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000200000081 CR3: 0000000014217000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
- dump_stack_lvl+0xcd/0x134
- mark_lock.part.54+0x32c/0x830
- __lock_acquire+0x3a5/0x1d60
- lock_acquire+0xd7/0x330
- lock_sock_nested+0x2d/0xa0
- l2cap_sock_teardown_cb+0x37/0x2e0
- l2cap_chan_del+0x5b/0x4a0
- l2cap_chan_close+0x1df/0x3f0
- l2cap_chan_timeout+0xcf/0x160
- process_one_work+0x3fa/0x9f0
- worker_thread+0x42/0x5c0
- kthread+0x1a6/0x1e0
- ret_from_fork+0x1f/0x30
-================================================================================
-UBSAN: array-index-out-of-bounds in kernel/locking/qspinlock.c:130:9
-index 1046 is out of range for type 'long unsigned int [8]'
-CPU: 1 PID: 6964 Comm: kworker/1:7 Not tainted 5.15.0-rc5 #1
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
-Workqueue: events l2cap_chan_timeout
-Call Trace:
- dump_stack_lvl+0xcd/0x134
- ubsan_epilogue+0xb/0x5a
- __ubsan_handle_out_of_bounds+0x93/0xa1
- __pv_queued_spin_lock_slowpath+0x30e/0x320
- do_raw_spin_lock+0xb6/0xc0
- lock_sock_nested+0x54/0xa0
- l2cap_sock_teardown_cb+0x37/0x2e0
- l2cap_chan_del+0x5b/0x4a0
- l2cap_chan_close+0x1df/0x3f0
- l2cap_chan_timeout+0xcf/0x160
- process_one_work+0x3fa/0x9f0
- worker_thread+0x42/0x5c0
- kthread+0x1a6/0x1e0
- ret_from_fork+0x1f/0x30
-================================================================================
+ __do_sys_getpid+0x1a/0x20
+ do_syscall_64+0x34/0xb0
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f09be36cf17
+Code: ff ff ff 48 8b 4d a0 0f b7 51 fe 48 8b 4d a8 66 89 54 08 fe e9
+1a ff ff ff 66 2e 0f 1f 84 00 00 00 00 00 b8 27 00 00 00 0f 05 <c3> 0f
+1f 84 00 00 00 00 00 b8 6e 00 00 00 0f 05 c3 0f 1f 84 00 00
+RSP: 002b:00007ffd28a87fe8 EFLAGS: 00000282 ORIG_RAX: 0000000000000027
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f09be36cf17
+RDX: 00000136b6f159e4 RSI: 00002928bb089855 RDI: 000055e10338c4f7
+RBP: 00000136b6f159e4 R08: 000000000000c0c0 R09: 0000000000000030
+R10: 0000000000000000 R11: 0000000000000282 R12: 000055e10338c4f5
+R13: 8421084210842109 R14: 00000000000800c2 R15: 00007f09be41d540
+Modules linked in:
+CR2: 0000000200000081
+---[ end trace 0e559acc68de055e ]---
+RIP: 0010:__task_pid_nr_ns+0xc3/0x310
+Code: 1b e8 c1 94 08 00 31 ff 41 89 c5 89 c6 e8 45 1a 13 00 45 85 ed
+0f 84 d0 00 00 00 e8 37 19 13 00 48 85 db 74 23 e8 2d 19 13 00 <41> 8b
+84 24 80 00 00 00 44 8b 6b 04 41 89 c6 89 c7 44 89 ee e8 94
+RSP: 0018:ffffc900037bbf08 EFLAGS: 00010246
+
+RAX: 0000000000000000 RBX: ffff88811486d400 RCX: ffff888104839b80
+RDX: 0000000000000000 RSI: ffff888104839b80 RDI: 0000000000000002
+RBP: ffffc900037bbf28 R08: ffffffff812a5a33 R09: 0000000000000000
+R10: 0000000000000005 R11: 0000000000000001 R12: 0000000200000001
+R13: 0000000000000001 R14: ffff88800ab84200 R15: 0000000000000000
+FS:  00007f09bf51c8c0(0000) GS:ffff88813dc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000200000081 CR3: 0000000014217000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0: 1b e8                sbb    %eax,%ebp
+   2: c1 94 08 00 31 ff 41 rcll   $0x89,0x41ff3100(%rax,%rcx,1)
+   9: 89
+   a: c5 89 c6 e8 45        vshufpd $0x45,%xmm0,%xmm14,%xmm5
+   f: 1a 13                sbb    (%rbx),%dl
+  11: 00 45 85              add    %al,-0x7b(%rbp)
+  14: ed                    in     (%dx),%eax
+  15: 0f 84 d0 00 00 00    je     0xeb
+  1b: e8 37 19 13 00        callq  0x131957
+  20: 48 85 db              test   %rbx,%rbx
+  23: 74 23                je     0x48
+  25: e8 2d 19 13 00        callq  0x131957
+* 2a: 41 8b 84 24 80 00 00 mov    0x80(%r12),%eax <-- trapping instruction
+  31: 00
+  32: 44 8b 6b 04          mov    0x4(%rbx),%r13d
+  36: 41 89 c6              mov    %eax,%r14d
+  39: 89 c7                mov    %eax,%edi
+  3b: 44 89 ee              mov    %r13d,%esi
+  3e: e8                    .byte 0xe8
+  3f: 94                    xchg   %eax,%esp
 
 Best,
 Wei
