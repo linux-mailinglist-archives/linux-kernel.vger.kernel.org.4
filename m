@@ -2,151 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56FDE612BD8
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 18:23:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F85D612BDE
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 18:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiJ3RXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 13:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
+        id S229767AbiJ3RYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 13:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJ3RXK (ORCPT
+        with ESMTP id S229597AbiJ3RYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 13:23:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178471125
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 10:22:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667150533;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xy7b3nRtAL8M7+VedHsmmAKhtOAAl2XLancWVFWUXlg=;
-        b=hERQqPRw3rgjRfPRxJFM67kj1xVsW2jdNFKvTvy/LETDKJVF/HOEGbp4wsCdFxY3ShG2Xf
-        a7AYB7MYC3ioFx7078H8G0Fa75mpkf66pKHvjH472Nb8J/NheYwRcb1HcdldbHAOPhuPil
-        WZ/8D8aFdKM6qoLPFkS3ZTMGUL6BwtE=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-390-6LMbhghJPs-aKmvEsIAAbA-1; Sun, 30 Oct 2022 13:22:10 -0400
-X-MC-Unique: 6LMbhghJPs-aKmvEsIAAbA-1
-Received: by mail-qt1-f198.google.com with SMTP id y19-20020a05622a121300b003a526e0ff9bso127771qtx.15
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 10:22:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xy7b3nRtAL8M7+VedHsmmAKhtOAAl2XLancWVFWUXlg=;
-        b=x+PuxaaLbz3BlPnJtSKX1qlvhXJdo/YMlSHrpRnlGLnd4q39348GjlnH1XWxkaOk/K
-         jl0YzCPAO6RclAoDR26NCW79CMhFz06sRrjJPoZYTEFzSWq9XKPcnHPCzIzFDSCGf6Ve
-         8rimvz1QKnop3t2urevWKpdxFEBxidmr+6cvAB08GrfRUK+3j7i+K7SBDC9Wsklp+B6A
-         xe4d3JkBb4ZwVASmSVSEEb7/qhDH6RPsGmtYZrZ3WiJ/s8DBT6O2ThIryMWK4NTl9RaY
-         efPiyCcLfh/Y8MDa9Mg3PsOqxE6w+vdhY4FOrOk1oZmDWSa+GNbkNi2L0rJVI4nbGrhb
-         zc7g==
-X-Gm-Message-State: ACrzQf1Ns1iztwCW1eBrdasYkmc2DqyggRagdkMzhmJrfznHGFUi+pNz
-        GWC4sDRvjI2eFRDSaSJpdBJZxeGE1SUHPKpXN1Bmgm5wUV2pnRrQI/TQJ1JZajFyKLW9u3tUpIM
-        bpDUtT247Ih8DhSoub3Waj0PW
-X-Received: by 2002:ac8:598b:0:b0:39d:9b6:69b3 with SMTP id e11-20020ac8598b000000b0039d09b669b3mr7692936qte.39.1667150529822;
-        Sun, 30 Oct 2022 10:22:09 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5Dk+KkOvrrP3MpVWYtppipjk4B4K/I4Euc13541SOxoveysaouQDittrzMAvU/bssh9bNjNA==
-X-Received: by 2002:ac8:598b:0:b0:39d:9b6:69b3 with SMTP id e11-20020ac8598b000000b0039d09b669b3mr7692910qte.39.1667150529468;
-        Sun, 30 Oct 2022 10:22:09 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-106-170.dyn.eolo.it. [146.241.106.170])
-        by smtp.gmail.com with ESMTPSA id s16-20020a05620a255000b006ee7923c187sm3213642qko.42.2022.10.30.10.22.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Oct 2022 10:22:08 -0700 (PDT)
-Message-ID: <27a6a587fee5e9172e41acd16ae1bc1f556fdbd7.camel@redhat.com>
-Subject: Re: [RFC][PATCH v2 19/31] timers: net: Use del_timer_shutdown()
- before freeing timer
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sun, 30 Oct 2022 13:24:11 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2071.outbound.protection.outlook.com [40.107.96.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638EF1BB;
+        Sun, 30 Oct 2022 10:24:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fGjrmHhNp1US7gOI9QoypQ0GasxAjSVAWhe5rhVJ0Kw43IJ5/4ivINt9OZ3bXxZ3/jCNfbYpp2Kyrf0fJubyQLzsLPrRMhDnLS3NYiF3PUGLTYWX8mWIedI7fXqJoJHlgdKlR/yfAhSa9bG3f663RM5aoL5yEEZNSjt2mFS9LXSv/d0JEh5i22TY3+HtSWJjPzuVLJcy7Agx1DKx/6d2p/eT765s62CvYYYabVLbYwHRpl4ka0MRbpb7LqLc5P7whcn8uAfQiFLmVWxuA/L5REUqgHQCA1PFbw5rfNIDg1+TuGvo59edA/BrscrxVJpG9J5dr5tKiHObHzK5HN54xQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=U3qxFaIlt0pnpzQ8dzWSv0gPAkuabZmjssp4AzBhCCg=;
+ b=ZguPOaypIqsNcT69CfiWEWKDNxEQSi5QcCGCiilYgEMJmzeDujXpMY4y04KPQ59SqLmBmPrGlFxytp7GHV9P6E5sFMPJMohUnCDUgg+ImILLwlLIlIoth3niS8T0tf2T+0Id2FY2t8MsFxn+cfvFYa5/gV4X8nxC9UYp1u7AXBcTXVA4OGjoCkIDa2JZAyYwieoaXCZRtmPmZcOdONhUFDxP5OyPVYxOaVo1TMwZyja5plb3bnbokfGO9m8lZogmlvpvKjP5lZd7p8B6yjq1HACbdMVDGDpvRSpxQjVViM3vLLcJabfWI1vf9sukk1YGQvryVH4grC4luYhXl4Cs3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=U3qxFaIlt0pnpzQ8dzWSv0gPAkuabZmjssp4AzBhCCg=;
+ b=KvG8uoWFVOJmHJMLepM4Ys9qtXFVl8qc2zwcTeqS/407A00W/cIFi0UQpTLCgjvwOWWZzCBDMC/l/yZRLJf1Y33oSj8AU2ocCOEDuqSritenPV6y+iOOmWcXbZn4C0tlP7y0KAXwzcCp92v+Ht/ky23GZzW53ZIoCOH7nS6BBakfEfFarCqQv3hIAEoQB3Zl/cQcLSxWBMDDcqVfari12JEcXaAgzZzxIYUrI3tk1jqP1QO7Tg9zMSTkgtEaw8/RYtyCVhLAzCZsheXc10D457VqewqPSQPSyW8/JCYjjBEINsCntWRgi6wovXS6BZcM+eIMKPP+W0SIKXIqD72fNg==
+Received: from BN9PR12MB5381.namprd12.prod.outlook.com (2603:10b6:408:102::24)
+ by PH8PR12MB7207.namprd12.prod.outlook.com (2603:10b6:510:225::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Sun, 30 Oct
+ 2022 17:24:05 +0000
+Received: from BN9PR12MB5381.namprd12.prod.outlook.com
+ ([fe80::baf8:b66f:96f4:41c]) by BN9PR12MB5381.namprd12.prod.outlook.com
+ ([fe80::baf8:b66f:96f4:41c%8]) with mapi id 15.20.5769.019; Sun, 30 Oct 2022
+ 17:24:05 +0000
+From:   Vadim Pasternak <vadimp@nvidia.com>
+To:     Ido Schimmel <idosch@nvidia.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+CC:     "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Petr Machata <petrm@nvidia.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Mirko Lindner <mlindner@marvell.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net
-Date:   Sun, 30 Oct 2022 18:22:03 +0100
-In-Reply-To: <20221028154617.3c63ba68@kernel.org>
-References: <20221027150525.753064657@goodmis.org>
-         <20221027150928.780676863@goodmis.org>
-         <20221027155513.60b211e2@gandalf.local.home>
-         <CAHk-=wjAjW2P5To82+CAM0Rx8RexQBHPTVZBWBPHyEPGm37oFA@mail.gmail.com>
-         <20221027163453.383bbf8e@gandalf.local.home>
-         <CAHk-=whoS+krLU7JNe=hMp2VOcwdcCdTXhdV8qqKoViwzzJWfA@mail.gmail.com>
-         <20221027170720.31497319@gandalf.local.home>
-         <20221027183511.66b058c4@gandalf.local.home>
-         <20221028183149.2882a29b@gandalf.local.home>
-         <20221028154617.3c63ba68@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:MELLANOX ETHERNET SWITCH DRIVERS" <netdev@vger.kernel.org>
+Subject: RE: [PATCH 2/2] thermal/drivers/mellanox: Use generic
+ thermal_zone_get_trip() function
+Thread-Topic: [PATCH 2/2] thermal/drivers/mellanox: Use generic
+ thermal_zone_get_trip() function
+Thread-Index: AQHY4rrj5yTYQO5x8keLlrVA7994K64eugCAgAA6pYCACE5PIA==
+Date:   Sun, 30 Oct 2022 17:24:05 +0000
+Message-ID: <BN9PR12MB53816062FAE98EEFEF319644AF349@BN9PR12MB5381.namprd12.prod.outlook.com>
+References: <20221014073253.3719911-1-daniel.lezcano@linaro.org>
+ <20221014073253.3719911-2-daniel.lezcano@linaro.org>
+ <Y05Hmmz1jKzk3dfk@shredder> <cb44e8f7-92f6-0756-a622-1128d830291c@linaro.org>
+ <Y1e7MRozZYSHgV0V@shredder>
+In-Reply-To: <Y1e7MRozZYSHgV0V@shredder>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR12MB5381:EE_|PH8PR12MB7207:EE_
+x-ms-office365-filtering-correlation-id: 6276f85c-04cd-4027-5af3-08daba9b8bc2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: iRlxYWYqCU00LmM7jARvJu6WCzuaZxXT2vfc1Jtf1F3Nv1kh81JvEUnktoP2ncL1fTRO7CdjmV3d6QC2zD4CkA07qwUL4D1yxL8mHOFpZ2gktDeIRQJ2nTBXvQ/f+YGei49aSeN/cr+fRtoOIxnO+PCASh4mKsJu38sfsx/wjANUVpXlHn+3OIJMT3zfev8MQR3wqdfHc/+CDlziM6oOz3EOD2eowEDBl2+Two8ha6sYZj/45P29OHJuRwWYw840tYTxKETg+/eR9BXIndXVFAJxEtvkVjgPkJbj0oYen2bcViswBiUnhyNZSOBjEcq597tu5+TAXqG2MxfZ4qjyioHKIQWX5tRTh2Uqv82kT0XINhzNtEfC0X/TiRcU6EANup2MvSh4Ihl59WqtyLK08WsyV7HdSKJhEe20Ub+4tgWBrNjSJbTi+J5mghGFLy85KmP9aRgWCpx27ObTnAhO47zo3relYefixUUnrosOCuNsI4yJ29Sz/NM822mqfyCLNG7JenOuvVJ7EnzNdXCIFqrarhHhcRNEP/iftIhSyoGk4PAr9c5vr17YZKbbhzSw/ImR2lfi9TIcWu2jT2iZYv75cy2xHtEjAZeYu9oxSkSX1rZC0P2KUzviaAxgvZg/adnKzbMqK3fTEyG7rpx51oLtbVnRpjjpSQZ0lD2CD6gRiRabEO+iU/HLxXt9EVPSUIKATcS9cN0L0VwnKqAIhOtkRunD0/BQ2lox7sMEqHnslB1wnJOMfx0Y6ui+GlFM7Xc70zblYUPeJtZDZHzknhn+BNzkp6+2n8EWtO6Aubc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5381.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(396003)(366004)(136003)(346002)(451199015)(7696005)(6506007)(26005)(71200400001)(316002)(8676002)(478600001)(9686003)(53546011)(66446008)(76116006)(66946007)(66476007)(66556008)(64756008)(4326008)(186003)(2906002)(5660300002)(83380400001)(8936002)(41300700001)(52536014)(38070700005)(33656002)(55016003)(122000001)(38100700002)(54906003)(86362001)(110136005)(41533002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?alBHS1JiQVd2Y3VrZUN3VHlNc3JGV0lOdStDOVlqZFJQd2l2NGtEVlArNEF1?=
+ =?utf-8?B?cldWM1VzakYwSFdqZFFOSElWMUgyTmxGYXJ1MmgvN3Z6WGwxZnc5bW1mVXdM?=
+ =?utf-8?B?NUpKZTB5alpucE55QnZ0SVJsb3hqcUl3bTlxTXNOcHFQS2RtRWFndEVJbTBm?=
+ =?utf-8?B?RVB5L1NweU16bHFDMzBGR0h0VjJyMkt4L252ei83UTJ2ODJNaXRNQzJvY3Fl?=
+ =?utf-8?B?czNFTnVRWUhNSU9xR2hzbERaZ0FrTU9wVkNWYnJaM29xUDZLdzU0eElBUHg1?=
+ =?utf-8?B?Y0dGeFhVNnpmMHcvczU3ZGtTaVJBSTYxd3AxL2lrVXNGQTVsSjM4K1lTY3BV?=
+ =?utf-8?B?alZQYkNOK1dCVGF1Y3BKV3cwa1VxOXZkZXlTWEZKdjA5WkxjZnlUTmh3NDcr?=
+ =?utf-8?B?dWJqMVVaeDZSODUya0xGd0YzQzN4WkN0YThwbFY1UTludmJsbVhodUV0dWlC?=
+ =?utf-8?B?T2RuZWJVVFA0VkE1ZUxhQldva2FMdkY2UDFud3JIcEpLc1BkRzk2SzRVaXdQ?=
+ =?utf-8?B?NEp1Rm5kSXNNWFpLSXZOV3RlZXRYdHlWVEFsTlpzWlgwVEpiUzhqNG9qZzF2?=
+ =?utf-8?B?aFJuS2MvTGF1RU5UaXE3L3Z5VFJsODFZNDRuSy9iSWFrVEM4ZlNtMldoa200?=
+ =?utf-8?B?eFgvL1pnc1Q1NzR0ZmZhQ01sclVidTBkNEpRaVVtNGVNc3NFemQrZURvMzVJ?=
+ =?utf-8?B?MVdqNC83UU1JTDVyT01yVVh5SE00NFJtMVRXVXlQS0NaeHhnRnE1aldxQzlO?=
+ =?utf-8?B?RE1QZzdJVjRWTHFCbGYxWU82K3d5aTNyakhCL0RZYWpQeEJyek1YaUhMMG1T?=
+ =?utf-8?B?Q2Zlb2psWVJ5MlBkOUJrOUU0WjJmQ3R3cnpPbi9KMzdPRStGWFhtMnFPTGdB?=
+ =?utf-8?B?aGlGME94YUxoVVBJSFlqcUJwd2Z4VDlIVzVrK2lXTlgvRWtzVmRGUVVGUVRo?=
+ =?utf-8?B?T3AwNE43M1VaUzJESEtpZy9IdEpnWG9TQ3QzWTlXdjFrRkU4cHFEUElleW9a?=
+ =?utf-8?B?NzhNRmVsT05ER2psOEpSQVpKZGFMNTV1SUE1cjJpNXZINzY0bU9vSmVNdmps?=
+ =?utf-8?B?TnFuOGY4NjZtSFVJRjRVVDhhQWducC9tanZtWUdaYjFMZFZaVE10V1JjOUs1?=
+ =?utf-8?B?cEdWQTR5TkkyZEdPUVFRYng4SS9FSDhyTnc2amFOK2c1RURKV2l1VWtBV3lG?=
+ =?utf-8?B?MDI3ZFpYUW9uYTR1V05HdWZnT2xsT21oekZUL29MTTEyTy9mRXJPN1YwQ1I4?=
+ =?utf-8?B?R3dxUWFrTkx2MmdQT01mUitwZk9MT0YySnIyL0g1MHNqYUo4Qlp5ekZjNXNK?=
+ =?utf-8?B?RytYb3RwWHczZWY4d0VkWVFSd3J5UTNHa09JRzFVL1ZoMHZSclFicFdPcHFE?=
+ =?utf-8?B?N3dEOTdYTjFZc3V6aEZKZ3dVMEpPZTJvMExjS0hCZjVRR1l6NThXWU0zaVlJ?=
+ =?utf-8?B?M0JFVFRySTFZVUlWK0Z4TmUwekJoYkhPTUhkSGVzRW9YSy9IOC9qWTlQNjhZ?=
+ =?utf-8?B?bk5nczF0a0VnMHkycnlMc0lIVzZLVGxKbWxDYXU1NWVUS29zQmQ1Qm1tQzVw?=
+ =?utf-8?B?VGcycitXc0wyN0R1dkYwTndKc3RSWXZyemprNzFZbm5USWc3VGRQcVpEb1NO?=
+ =?utf-8?B?ZkY3S3ErVXNBczluSWRwS0xGOVkyOG5pQ3UybVJEakRVTWdrMlRNeWdJaTY4?=
+ =?utf-8?B?NFA0V1BZdkxLS0tlR3VxeU1kdzFKUjY1ZVlxbTZvTllaUHJvcjZuVkVIRFVN?=
+ =?utf-8?B?VHZkWWlQQzlMVU11ZFRmdDltN3JmbGNxRW5mVXdtYWlqWGltblJDOVR1QWFN?=
+ =?utf-8?B?K3YvSGpUVFZTSW9BU3I4RmVsSGlJajNURkllMDNFSXE0NUhWYVpncE9TMFlW?=
+ =?utf-8?B?c1ZubUlXR05Gd3g3MUJJY0x4d3llMGt0VzNDYUJzL3U4V2ZWZ29FQkFJTFdo?=
+ =?utf-8?B?SnVzaVBBOUQxcitqQ3JDM1AyZ0RGN0ltY0s4L1p4RjIwcGROcU5YWWZWeWtD?=
+ =?utf-8?B?ZWVYbHdiWUN0TFNzdHNuSThuL3BxeVFtbUsvbXFGTWpnSStmLy92bTVackRp?=
+ =?utf-8?B?Vzdrb3ZrREx5Y3dLZzV1cVVXa0JORXhoV25VTWV6b05nS2EwUkM5djFjaDVO?=
+ =?utf-8?Q?au5pJXe/YCPYGl2Jjb1cWGZcr?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5381.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6276f85c-04cd-4027-5af3-08daba9b8bc2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Oct 2022 17:24:05.3657
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: RcosCaOHri42dcYGnr92vwNsZOfYr83JE3zOveVjlatcnD5hgcQa8l6nS5hbLlY/aoB7GzxffUKjA5uOpONLJg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7207
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-10-28 at 15:46 -0700, Jakub Kicinski wrote:
-> On Fri, 28 Oct 2022 18:31:49 -0400 Steven Rostedt wrote:
-> > Could someone from networking confirm (or deny) that the timer being
-> > removed in sk_stop_timer() will no longer be used even if del_timer()
-> > returns false?
-> > 
-> > net/core/sock.c:
-> > 
-> > void sk_stop_timer(struct sock *sk, struct timer_list* timer)
-> > {
-> > 	if (del_timer(timer))
-> > 		__sock_put(sk);
-> > }
-> > 
-> > If this is the case, then I'll add the following interface:
-> > 
-> >    del_timer_sync_shutdown() // the common case which syncs
-> > 
-> >    del_timer_shutdown() // the uncommon case, that returns immediately
-> >                         // used for those cases that add extra code to
-> >                         // handle it, like sk_stop_timer()
-> 
-> Sorry too many bugs at once :)
-> 
-> FWIW Paolo was saying privately earlier today that he spotted some cases
-> of reuse, he gave an example of ccid2_hc_tx_packet_recv()
-
-For the records, there are other cases, e.g. after sk_stop_timer() in 
-clear_3rdack_retransmission() (mptcp code) the timer can be-rearmed
-without re-initializing. I *think* there are more of such use in the 
-in ax25/rose code.
-
-> So we can't convert all cases of sk_stop_timer() in one fell swoop :(
-
-On the positive side, I think converting the sk_stop_timer in 
-inet_csk_clear_xmit_timers() should be safe and should cover the issue
-reported by Guenter
-
-Cheers,
-
-Paolo
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSWRvIFNjaGltbWVsIDxp
+ZG9zY2hAbnZpZGlhLmNvbT4NCj4gU2VudDogVHVlc2RheSwgMjUgT2N0b2JlciAyMDIyIDEzOjMy
+DQo+IFRvOiBEYW5pZWwgTGV6Y2FubyA8ZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZz47IFZhZGlt
+IFBhc3Rlcm5haw0KPiA8dmFkaW1wQG52aWRpYS5jb20+DQo+IENjOiBWYWRpbSBQYXN0ZXJuYWsg
+PHZhZGltcEBudmlkaWEuY29tPjsgcmFmYWVsQGtlcm5lbC5vcmc7IGxpbnV4LQ0KPiBwbUB2Z2Vy
+Lmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IFBldHIgTWFjaGF0YQ0K
+PiA8cGV0cm1AbnZpZGlhLmNvbT47IERhdmlkIFMuIE1pbGxlciA8ZGF2ZW1AZGF2ZW1sb2Z0Lm5l
+dD47IEVyaWMNCj4gRHVtYXpldCA8ZWR1bWF6ZXRAZ29vZ2xlLmNvbT47IEpha3ViIEtpY2luc2tp
+IDxrdWJhQGtlcm5lbC5vcmc+Ow0KPiBQYW9sbyBBYmVuaSA8cGFiZW5pQHJlZGhhdC5jb20+OyBv
+cGVuIGxpc3Q6TUVMTEFOT1ggRVRIRVJORVQgU1dJVENIDQo+IERSSVZFUlMgPG5ldGRldkB2Z2Vy
+Lmtlcm5lbC5vcmc+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMi8yXSB0aGVybWFsL2RyaXZlcnMv
+bWVsbGFub3g6IFVzZSBnZW5lcmljDQo+IHRoZXJtYWxfem9uZV9nZXRfdHJpcCgpIGZ1bmN0aW9u
+DQo+IA0KPiBPbiBUdWUsIE9jdCAyNSwgMjAyMiBhdCAwOTowMjoyM0FNICswMjAwLCBEYW5pZWwg
+TGV6Y2FubyB3cm90ZToNCj4gPiBCZWNhdXNlIEkgaG9wZSBJIGNhbiByZW1vdmUgdGhlIG9wcy0+
+Z2V0X3RyaXBfIG9wcyBmcm9tIHRoZXJtYWxfb3BzDQo+ID4gc3RydWN0dXJlIGJlZm9yZSB0aGUg
+ZW5kIG9mIHRoaXMgY3ljbGUuDQo+IA0KPiBPSy4gVmFkaW0sIGFueSBjaGFuY2UgeW91IGNhbiBy
+ZXZpZXcgdGhlIHBhdGNoPw0KDQpJdCBzZWVtcyB0byBiZSBPSy4NCkFueXdheSwgSSdsbCB0YWtl
+IHRoaXMgcGF0Y2ggZm9yIHRlc3RpbmcgYnkgdGhlIGVuZCBvZiB0aGlzIHdlZWsgYW5kIHVwZGF0
+ZS4NCg0KPiANCj4gPiBNYXkgYmUgeW91IGNhbiBjb25zaWRlciBtb3ZpbmcgdGhlIHRoZXJtYWwg
+ZHJpdmVyIGludG8gZHJpdmVycy90aGVybWFsPw0KPiANCj4gSSBkb24ndCB0aGluayBpdCdzIHdv
+cnRoIHRoZSBoYXNzbGUgKGlmIHBvc3NpYmxlIGF0IGFsbCkuIEluIHByYWN0aWNlLCB0aGlzIGNv
+ZGUgaXMNCj4gdXBzdHJlYW0gZm9yIGFsbW9zdCBzaXggeWVhcnMgYW5kIElJUkMgd2UgZGlkbid0
+IGhhdmUgYW55IGNvbmZsaWN0cyB3aXRoIHRoZQ0KPiB0aGVybWFsIHRyZWUuIEkgZG9uJ3QgZXhw
+ZWN0IGNvbmZsaWN0cyB0aGlzIGN5Y2xlIGVpdGhlci4NCg==
