@@ -2,183 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D499E612937
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 09:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21CA8612934
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 09:54:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiJ3IyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 04:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38314 "EHLO
+        id S229785AbiJ3IyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 04:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiJ3IyM (ORCPT
+        with ESMTP id S229528AbiJ3IyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 04:54:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE83282
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 01:53:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667119994;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0ug3pxX4HPcbNDxJWRXky7y5LLTOMNoC//3Zjo+CrCY=;
-        b=Pm8TsOCjjFyytVt95fdy2Tvhv2KVo4kO1dkFuHyjCRJhUlYISOmDFN5f9aTnQlV3kn+Uf+
-        LEKxkKWrj9RQTStAgUxfUXFA7eHYHKhnUZc5bP9ZW79FyNjQAPYIIh1n6YfnebkoN7zUc0
-        M+HOgHeckrRoQLqEk2aFW5l9OYr5+Dg=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-88-u-5gKjEMMaKS1bglWca-ig-1; Sun, 30 Oct 2022 04:53:13 -0400
-X-MC-Unique: u-5gKjEMMaKS1bglWca-ig-1
-Received: by mail-wr1-f69.google.com with SMTP id r22-20020adfa156000000b0023660e969ddso1897646wrr.19
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 01:53:12 -0700 (PDT)
+        Sun, 30 Oct 2022 04:54:07 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B06B50
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 01:54:07 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d24so8370482pls.4
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 01:54:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=compal-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rDkvQjMnPy2Fy0mBItWeOo1V6hYUJ0mhKJvHwDCVi2w=;
+        b=bbXRih8TjXzbqHh25uHOxJWFLQw+e1DlCLIq7nhMGQtwji80VAHDq+N4U3++UXV2V3
+         Gtv/VtUzMHdL1OkWJNAu+KJGnQpPD+DN8VV/Sl7ulgdHwvTeko0Dg3vy6HVhMHSa6tZ5
+         UAy9hUSx6ob+N6sVx+UO9Du0G68SC2Nb6oumIyxC2v1mmD3pg3i/IC8KgCqNrmtewVQK
+         TOPm5NQ4hegcpcMOJc9+++rjfnYFlzgowdkhPpjZJfX9fggNcHy7U/kqs8kFOmvffqEL
+         Qj7lV+QsXIBwqztGBmQ4uEAJutXxdXn6nZv+VtvVvd3Yq0qHpKioH+X+s3/FYgZH8c+c
+         mcKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :content-language:references:cc:to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0ug3pxX4HPcbNDxJWRXky7y5LLTOMNoC//3Zjo+CrCY=;
-        b=2rdYYhHIgF8Ucr09rx6NgE+6VyR4osvZ2nlwYwnAzP3oFkYUncx8q8xZMIdwYtV0eO
-         OTEdgqftEsz5ViGRBX28Kzq86fmvVwDNxYv8kgG19so+gptdKM0Y1RnEFtxK7DnFdxE0
-         k7EDto8U4O/QtL2JEBe8iGyADXD5ujbyxbHN497m8md9oXRuaE/BlqyVcw5UsC+OEj3/
-         p2RfYj7+nieDQYDXYGtlQst2vhGPh0E9abJB+IvQE7Ekh28DPq1xBhiJQNvHpIOOrraD
-         /BJ85RUdsoLvx+pERzOqp46Xa9+B7Y5VVwA7TJYa+EnP0KSRrcKAchl7rxsBbAEfDPm3
-         uCeg==
-X-Gm-Message-State: ACrzQf3o3lhRJKOMUh8L6k1hLwlpDerCl8WZ1lAsBl9OKzv0LBhoR2rW
-        kuEjRyx+3K1mNxhhYswAw22ZYayGQDpF6TnMhNzH3771EByHSVSUrdv3+ybHd2GrlFWi0JHqda+
-        efYkaWuativMP1nxEinMl2Xo9
-X-Received: by 2002:a05:600c:1c1e:b0:3c6:fa3c:32a9 with SMTP id j30-20020a05600c1c1e00b003c6fa3c32a9mr14441640wms.203.1667119991858;
-        Sun, 30 Oct 2022 01:53:11 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6lZDMsSed4FBRL/Hmhwu+Bl/MfjZMGqk9SKCEp2LGFbK6UB8TlHAzXk7aWZHqw19d4RXP8OA==
-X-Received: by 2002:a05:600c:1c1e:b0:3c6:fa3c:32a9 with SMTP id j30-20020a05600c1c1e00b003c6fa3c32a9mr14441626wms.203.1667119991534;
-        Sun, 30 Oct 2022 01:53:11 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c72e:3a00:ac1c:31e7:ee53:498d? (p200300cbc72e3a00ac1c31e7ee53498d.dip0.t-ipconnect.de. [2003:cb:c72e:3a00:ac1c:31e7:ee53:498d])
-        by smtp.gmail.com with ESMTPSA id bi22-20020a05600c3d9600b003b31c560a0csm3849232wmb.12.2022.10.30.01.53.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Oct 2022 01:53:11 -0700 (PDT)
-Message-ID: <5a434798-9083-c806-4d3c-f0cb4f27e559@redhat.com>
-Date:   Sun, 30 Oct 2022 09:53:10 +0100
+        bh=rDkvQjMnPy2Fy0mBItWeOo1V6hYUJ0mhKJvHwDCVi2w=;
+        b=xB5zD0s2y8JtqzsScRUbr0iekaybyNxcL9t+Yy/cFbuii70rvj7LaPI1m0Xwp20yNA
+         vkbs84933Bc5ORbjJhcvPi9G7Tc4llBZaLeH+5/qPDawiPKMJIfQLA1AJR1oe5JIYtCh
+         WwZfGqIA1lp167IlLFSpzPz4CvMuCIDSW/NGC8OkGEqAtvxGU6ZLBlq9i/eaMA/eNU87
+         CluKysRD8Ib+laBvh9N9cV72HcdrvbEyH2OOFGrB2MKrEXfpYb0AhXnUw42TX+nMAXD6
+         H4xSVkMKVtiafrNlBFATct+XR8mBEt5X3VdAbbDCSz8uZ4iT6OZV5PAVw6PNZij4LpJp
+         Xssw==
+X-Gm-Message-State: ACrzQf0Jf8J0GDzR9WCvslcNRm50QrJB/mEuL9h1gxwZdgLEchs5lqDy
+        ufny//jl5dmdP3iwnFjFjmmXwyz04ObxGg==
+X-Google-Smtp-Source: AMsMyM5f9T1Rh9DrdO2JxLDorJoTNDYAWA/e2ujdB/uQxvpcNDMnY2R2vO3fkNs5lc6OSJVNq7YJ5Q==
+X-Received: by 2002:a17:903:110f:b0:178:ae31:ab2 with SMTP id n15-20020a170903110f00b00178ae310ab2mr8322365plh.89.1667120046351;
+        Sun, 30 Oct 2022 01:54:06 -0700 (PDT)
+Received: from localhost.localdomain (118-167-185-125.dynamic-ip.hinet.net. [118.167.185.125])
+        by smtp.gmail.com with ESMTPSA id n9-20020a63f809000000b0041ae78c3493sm2054627pgh.52.2022.10.30.01.54.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Oct 2022 01:54:06 -0700 (PDT)
+From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        "chunxu . li" <chunxu.li@mediatek.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: [PATCH v3 0/2] Modify documentation and machine driver for mt8186_rt1019_rt5682s sound card
+Date:   Sun, 30 Oct 2022 16:53:56 +0800
+Message-Id: <20221030085358.1619285-1-ajye_huang@compal.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        syzbot <syzbot+f0b97304ef90f0d0b1dc@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev, nathan@kernel.org,
-        ndesaulniers@google.com, songmuchun@bytedance.com,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com
-References: <000000000000ed009f05ec257623@google.com>
- <Y13GwSF8e6vMyYyY@monkey>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [syzbot] WARNING in hugetlb_wp
-In-Reply-To: <Y13GwSF8e6vMyYyY@monkey>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.10.22 02:35, Mike Kravetz wrote:
-> On 10/28/22 22:15, syzbot wrote:
->> Hello,
->>
->> syzbot found the following issue on:
->>
->> HEAD commit:    247f34f7b803 Linux 6.1-rc2
->> git tree:       upstream
->> console output: https://syzkaller.appspot.com/x/log.txt?x=14a9efd2880000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=a66c6c673fb555e8
->> dashboard link: https://syzkaller.appspot.com/bug?extid=f0b97304ef90f0d0b1dc
->> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=112217b4880000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=105f4616880000
->>
->> Downloadable assets:
->> disk image: https://storage.googleapis.com/syzbot-assets/de212436b09b/disk-247f34f7.raw.xz
->> vmlinux: https://storage.googleapis.com/syzbot-assets/63c4feda220f/vmlinux-247f34f7.xz
->>
->> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->> Reported-by: syzbot+f0b97304ef90f0d0b1dc@syzkaller.appspotmail.com
->>
->> ------------[ cut here ]------------
->> WARNING: CPU: 1 PID: 3612 at mm/hugetlb.c:5313 hugetlb_wp+0x20a/0x1af0 mm/hugetlb.c:5313
-> 
-> This warning was added with commit 1d8d14641fd94 ("mm/hugetlb: support write-faults
-> in shared mappings").  It is there 'by design' as this this specific
-> type of write fault is not supported.
-> 
-> 	/*
-> 	 * hugetlb does not support FOLL_FORCE-style write faults that keep the
-> 	 * PTE mapped R/O such as maybe_mkwrite() would do.
-> 	 */
-> 	if (WARN_ON_ONCE(!unshare && !(vma->vm_flags & VM_WRITE)))
-> 		return VM_FAULT_SIGSEGV;
-> 
-> If there is an actual use case for this support, we can look at adding it.
+v3:
+- Documentation: 
+  - Add an explain example in description.
+  - Add the pinctrl-name and pinctrl id in its example.
 
-Right, it's by design and in retrospective it was the right approach to add this
-check there. We seem to have a way to trigger a hugetlb write
-fault without VM_WRITE set from GUP. We have to fence that.
+v2:
+- dmic codec driver: 
+  - Remove the unnecessary use of_property_read_bool()
 
+v1:
+- Documentation: Add dmic-gpios optional prop for two DMICs case.
+- dmic codec driver: 
+  - "dmic-gpios" property is used for amixer control to switch
+     the dmic signal source between the Front and Rear Dmic.
 
-Interestingly, I thought I tried to trigger that exact scenario.
+Thanks for the review!
 
-a) Have a MAP_PRIVATE, PROT_READ hugetlb mapping
-b) Try writing to it via /proc/self/mem, triggering debug access with FOLL_FORCE
+Ajye Huang (2):
+  ASoC: mediatek: dt-bindings: modify machine bindings for two MICs case
+  ASoC: mediatek: mt8186-rt5682: Modify machine driver for two DMICs
+    case
 
-The expectation is that this will fail with -EFAULT on hugetlb. I could have
-sworn that it did the right thing when I tried :)
-
-
-But staring at follow_hugetlb_page(), I think we will end up triggering a
-write fault (FAULT_FLAG_WRITE) on hugetlb.
-
-
-The easiest fix might be to special-case hugetlb VMA in check_vma_flags():
-
-
- From 39d2a525cae62e7d2766ecfc4337ed4d59555d9d Mon Sep 17 00:00:00 2001
-From: David Hildenbrand <david@redhat.com>
-Date: Sun, 30 Oct 2022 09:45:50 +0100
-Subject: [PATCH] mm/gup: disallow FOLL_FORCE on hugetlb mappings
-
-TODO
-
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
-  mm/gup.c | 3 +++
-  1 file changed, 3 insertions(+)
-
-diff --git a/mm/gup.c b/mm/gup.c
-index fe195d47de74..b934687efdec 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -1076,6 +1076,9 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
-  			 */
-  			if (!is_cow_mapping(vm_flags))
-  				return -EFAULT;
-+			/* hugetlb does not support FOLL_FORCE. */
-+			if (is_vm_hugetlb_page(vma))
-+				return -EFAULT;
-  		}
-  	} else if (!(vm_flags & VM_READ)) {
-  		if (!(gup_flags & FOLL_FORCE))
--- 
-2.37.3
-
-
+ .../sound/mt8186-mt6366-rt1019-rt5682s.yaml   |  13 ++-
+ .../mt8186/mt8186-mt6366-rt1019-rt5682s.c     | 102 +++++++++++++++++-
+ 2 files changed, 113 insertions(+), 2 deletions(-)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.25.1
 
