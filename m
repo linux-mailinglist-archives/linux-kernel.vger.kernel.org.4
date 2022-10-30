@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48255612C3C
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 19:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5908A612C45
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 19:35:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiJ3SdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 14:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
+        id S229948AbiJ3Sey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 14:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiJ3SdJ (ORCPT
+        with ESMTP id S229692AbiJ3Set (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 14:33:09 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FDD626C
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 11:33:08 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id q5so5305317ilt.13
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 11:33:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=pGW6ajbhgaX9OPk/kkYQNCK+YHzDdaJHw80HNWBH7EQnj11o4Bcv+DuEL4tj/VEBb5
-         g8mwPJryXaQvlkiKDDchywe4I2FI8sIj8uEhPdxtvYiyKecBi3gCZtvCdQdyMGk01RL+
-         jJay2OXSDUG+8PhgXePkq77JPYUD4aD3cg8fZuZFtPILDmoonqN6KoEctgfWTejUWTt5
-         NRR5itY3FF1Mp3QT3G0tU8Ha1DlTO3CUYHifrTjL+1yI9D2mUxO0QqM0TRVH6mY1E2f/
-         q3XY4+/3eL93i4q7qBWnRa4G/X3a8vrlysc6jKIDY0bGYBuGnAnROCuqSmnDQYiYqsrJ
-         rW4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=Nu+rMwHgMK3s6IT1KoZCZdq7B26MJ3PeBbE9OAuOSkD/gVlcxogfUDxan2UaOd21+a
-         P7oDGyeCDRlqrN6/RPzGsdTw9uRQYfCNF5RRl+owrm5dBArYkEYUwxahkRoUyUNKu5FF
-         1CLzwgFEHsUraWJJyQZVPWg7DXpD0IFuPIED0u1MmFswKfEcZdhh2Jrd3CllS07Nedyw
-         Mh9whfdmo+0dRNGOT2XmO9j2+kLwSbGIC2k4FWy6m3fjtgY0dBqumO7Zm3K0XNnsKr0a
-         mFRsb1KOxWN0FCFhZrEtQDiHAWM2Nzys8VUmDPSt5lOKHqKCMLBbKaF7TCY8H1S56hte
-         AicQ==
-X-Gm-Message-State: ACrzQf0iwHSD82jqsS64wRmchVrj5HylTwOM9+K/iWM94+SxMNOLzEhv
-        boUbbVfHjzhgX7NMlsgz19EarMga67AJ2rwaaao=
-X-Google-Smtp-Source: AMsMyM4hf/jfcQATn9K9ecPTNNwucJEcAPfcAprisLkQjHtjbkGc+tY7A48hbrijiVl33HmgzWAXGqEx31ldypHY9I8=
-X-Received: by 2002:a05:6e02:156f:b0:2ff:775f:1efd with SMTP id
- k15-20020a056e02156f00b002ff775f1efdmr5099550ilu.140.1667154787818; Sun, 30
- Oct 2022 11:33:07 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6638:16d0:b0:363:fd0d:12d0 with HTTP; Sun, 30 Oct 2022
- 11:33:07 -0700 (PDT)
-Reply-To: davidnelson7702626@gmail.com
-From:   Zekeriya Badou <zekeriyabadou@gmail.com>
-Date:   Sun, 30 Oct 2022 18:33:07 +0000
-Message-ID: <CAKgROLBYedV3=EMg7C0LO7h7-sg1r2wQDCHPtK-Dk69Ss4kO5g@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+        Sun, 30 Oct 2022 14:34:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370DD5FBD;
+        Sun, 30 Oct 2022 11:34:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4283B80E86;
+        Sun, 30 Oct 2022 18:34:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6394CC433D6;
+        Sun, 30 Oct 2022 18:34:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667154885;
+        bh=Kdx/aQdgYf1+FBPYtOWMrOrqkh6NJT68OlABNPE/Wow=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=GYnhGpdM0837slfoJ1UrpV7L4CAu+SVD/Oh455f21wQfB1qAaDXPW4g5eZjRIwyw7
+         p6qUHoO6PrWW52PqRXVNCbBWPxmSXhymWYso1M7rV8pwfYJqcE2uQXngKRmLKcvLaC
+         yfG64y3gGy5MYeQGhYq1Y49KSDVNezecl0WflPRW5bv801nN44WD9C8VWI8cjSGPfz
+         WnIelbfLnATVh4n0XrKK99Bk0UJ8l6s/REb98wvFyw3rgCfw+jQXA/sBrO5VUT+JWF
+         FzbDM1l8CYaklluAn25INqg/bHxrg5wXIx9xylEfK90SOdiLWFLLhu3AsPHB/Bp8Dc
+         IWDTZqIxp6pHQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 51131C4166D;
+        Sun, 30 Oct 2022 18:34:45 +0000 (UTC)
+Subject: Re: [GIT PULL] fbdev fixes for v6.1-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Y16vjgbo+tx6lArZ@ls3530>
+References: <Y16vjgbo+tx6lArZ@ls3530>
+X-PR-Tracked-List-Id: Direct Rendering Infrastructure - Development
+ <dri-devel.lists.freedesktop.org>
+X-PR-Tracked-Message-Id: <Y16vjgbo+tx6lArZ@ls3530>
+X-PR-Tracked-Remote: http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/fbdev-for-6.1-rc3
+X-PR-Tracked-Commit-Id: 3c6bf6bddc84888c0ce163b09dee0ddd23b5172a
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b72018ab8236c3ae427068adeb94bdd3f20454ec
+Message-Id: <166715488532.31922.18039345236961645035.pr-tracker-bot@kernel.org>
+Date:   Sun, 30 Oct 2022 18:34:45 +0000
+To:     Helge Deller <deller@gmx.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello friend, I want to send money to you to enable me invest in your
-country get back to me if you are interested.
+The pull request you sent on Sun, 30 Oct 2022 18:08:30 +0100:
+
+> http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/fbdev-for-6.1-rc3
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b72018ab8236c3ae427068adeb94bdd3f20454ec
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
