@@ -2,67 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C39612C4B
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 19:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC2C612C4D
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 19:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiJ3SgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 14:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S229681AbiJ3ShH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 14:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiJ3SgF (ORCPT
+        with ESMTP id S229441AbiJ3ShE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 14:36:05 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A0F63A1;
-        Sun, 30 Oct 2022 11:36:04 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id z14so13160128wrn.7;
-        Sun, 30 Oct 2022 11:36:04 -0700 (PDT)
+        Sun, 30 Oct 2022 14:37:04 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AEFB1D5;
+        Sun, 30 Oct 2022 11:37:04 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id l14so13196967wrw.2;
+        Sun, 30 Oct 2022 11:37:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lrNDCNfu7ZM4dOdnaJgxpzE77S3pvCYPnM96o3tk4S4=;
-        b=AESNzqeJiKxl1IxfOpqDJ2H1k/FRxBVPKro5eYOHHM7YpejXu7wLw3XOsL4rcocAqt
-         5CBNVZuVo9U9RGv65pOt8JvncjL6DOzu8ewmJgjqYdEITbpmC24ZhA4J2eRj0uMC92oU
-         kKCNJpj9IMx3QJnhwgSuovtvkatUDaylF6zWEP27DBgfsnRTSzraLU04DgTfidfcBFtj
-         aa3bTLTL1b7ZFVRJCmava3N+zAGXEsDEkcqxOe8aqzIa8dvo98G/PMMHQZOZDZXNqjPV
-         Wrr70cJD+JKlPw/jpGogsEbebHhKKy/cXwHi9coZR8wI4znmZ5r7x+Wo0Hh0hG2nQFKe
-         SQTw==
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=J+5BMktAWdfToMJ1hbGNlYZD5Qlu0JfVkC/Za08BZ7c=;
+        b=lZucQFwMUiiqTnckQYk0BtEzg8Tx46FKrrik/n0DlFfqvcr6eKD29Mh+E+GHXaA8jg
+         FT0YsGguBVA/bYI0L4aL4kernwk03SduYoNJxRIcoqAYVbfgZXQoECfFpzery7Ww48az
+         9s0sZ8tlCbYSyNpfPziD8Pog7LepHxTkkeNoQ0S08gIQf4pVe2TYWRb5ru7F4b93NVpz
+         FOUE3HPTDqmkXi5LyC9mdu15MHL9WIbuH1XhJ56QO5NvbcFaSj5wcME/30bw/YxnLJ6t
+         FLe2BTrBl2/OuYNBG998GuXgqY+TWapocl6M6aTobKrpxA8uHSU1UeLHpR/agzFou3ER
+         iRQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lrNDCNfu7ZM4dOdnaJgxpzE77S3pvCYPnM96o3tk4S4=;
-        b=qSMNpvZeZGXXuY62iVZPlc662C2kFoxufRW2wi1aDXip0OloVDbtlPy6BJFA8Nc8sC
-         u/yNQlhvERCmdssv+G0QYdgujcWWnNOyH054GWRIAb46cXoqJm5VibsbkA7ElhxapUfI
-         KWzgPJP4j8dsoMPJznBzKZDlEIKvS+zVAEB6/evFJMmdgeo6++xOexBpZ084ipowzV1K
-         /4EQGWeulwz8A/aT/hACunKpLl/210I0qvp65+j9dNLsYft9USmMXvFDTjvlrfyQlkRZ
-         rKI2XXjAm5Qu5InQfJKm1li3zzOZVEVfU9+F74xGK7aP+oBr/vAuHrdEH2lhfoge6oYB
-         ndyA==
-X-Gm-Message-State: ACrzQf1I7/L9vwHOrz74ARiYXZx3E9Kxru9CMbT6jNb+FzdSz2LXiS/i
-        otAp4QBlJ5gVpx4wY1gq/U9QKEiAh2k=
-X-Google-Smtp-Source: AMsMyM6v15LvKnbZgCTZa8QwRsmiIY1KiecD0neqjsDCxkPUaoE2bVtKJxbo/R4DpSUL7JsqKoUpCg==
-X-Received: by 2002:adf:fc12:0:b0:236:9b2e:4843 with SMTP id i18-20020adffc12000000b002369b2e4843mr5535390wrr.620.1667154963240;
-        Sun, 30 Oct 2022 11:36:03 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J+5BMktAWdfToMJ1hbGNlYZD5Qlu0JfVkC/Za08BZ7c=;
+        b=HTtWB2gxMobPYRXKFLfkAJk/XTgJfZ0h6kKkTVkULo0dK6Nth4SlvxGpWNBPfSFkC8
+         BDQsuSHzt2/absOu7WjUqhlGK+E7VOX/FTuoDogIazABWgCLlUdX2wXRHdhZS9ngCdcd
+         ug7ToxKFBOM++d5NGMDtFnA5ubflpz5y5GGk5k95rSYiFAGLlAGxzTLle1kGiaM8z2wA
+         EwdTn+PIzRQvUi/a/9CMw70r7tuKH8p9E9kTt5KnyS7tF0w4vVvnniOc4/6iQXOID4YP
+         UPfGg9CBU5PAlWwMi5zArzgAzzrKmjtXK8O73VAYN+BxYwKtIAOgo0KqvrwXaCZKlHai
+         iK+A==
+X-Gm-Message-State: ACrzQf0uPeqmsQWLbdNYgPpR9MbTa9ABzKzusmQrPHWge+MPgbT6YKSZ
+        MQJLT0LBkpXSIcKABrlwIeg=
+X-Google-Smtp-Source: AMsMyM6TOuE20NlQk53uFH4Kp3NVKx69kpi8DKy7vPHScvANWSbp858ehjPjFWT1NZKv4p1V9sTu0Q==
+X-Received: by 2002:a5d:498a:0:b0:236:58ef:6796 with SMTP id r10-20020a5d498a000000b0023658ef6796mr5817390wrq.399.1667155022484;
+        Sun, 30 Oct 2022 11:37:02 -0700 (PDT)
 Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id q8-20020a5d5748000000b0023677081f3asm4835322wrw.42.2022.10.30.11.36.02
+        by smtp.gmail.com with ESMTPSA id bx10-20020a5d5b0a000000b0022e47b57735sm4922159wrb.97.2022.10.30.11.37.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Oct 2022 11:36:02 -0700 (PDT)
-Message-ID: <88e93a81-ef9f-adcc-db83-f8b5ba615c47@gmail.com>
-Date:   Sun, 30 Oct 2022 19:36:01 +0100
+        Sun, 30 Oct 2022 11:37:02 -0700 (PDT)
+Message-ID: <903ba85a-75fc-ff9e-e0ba-4a1e6161abc1@gmail.com>
+Date:   Sun, 30 Oct 2022 19:37:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
 From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v1 1/2] arm: rockchip: Kconfig: remove select ARM_GLOBAL_TIMER
+Subject: [PATCH v1 2/2] ARM: dts: rockchip: rk3066a: disable arm_global_timer
 To:     heiko@sntech.de
 Cc:     linux@armlinux.org.uk, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org
+References: <88e93a81-ef9f-adcc-db83-f8b5ba615c47@gmail.com>
 Content-Language: en-US
+In-Reply-To: <88e93a81-ef9f-adcc-db83-f8b5ba615c47@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,8 +87,8 @@ On the other side, the arm_global_timer has a higher rating than the
 rockchip_timer, it will be selected by default by the time framework
 while we want to use the stable rockchip clocksource.
 
-Let's disable the arm_global_timer in order to have the ROCKCHIP_TIMER
-(rk3188) or DW_APB_TIMER (rk3066a) selected by default.
+Let's disable the arm_global_timer in order to have the DW_APB_TIMER
+(rk3066a) selected by default.
 
 Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 ---
@@ -97,22 +99,24 @@ https://lore.kernel.org/linux-rockchip/1492374441-23336-26-git-send-email-daniel
 clocksource: arm_global_timer: implement rate compensation whenever source clock changes
 https://lore.kernel.org/all/20210406130045.15491-2-andrea.merello@gmail.com/
 ---
- arch/arm/mach-rockchip/Kconfig | 2 --
- 1 file changed, 2 deletions(-)
+ arch/arm/boot/dts/rk3066a.dtsi | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm/mach-rockchip/Kconfig b/arch/arm/mach-rockchip/Kconfig
-index b7855cc66..0432a4430 100644
---- a/arch/arm/mach-rockchip/Kconfig
-+++ b/arch/arm/mach-rockchip/Kconfig
-@@ -15,8 +15,6 @@ config ARCH_ROCKCHIP
- 	select DW_APB_TIMER_OF
- 	select REGULATOR if PM
- 	select ROCKCHIP_TIMER
--	select ARM_GLOBAL_TIMER
--	select CLKSRC_ARM_GLOBAL_TIMER_SCHED_CLOCK
- 	select ZONE_DMA if ARM_LPAE
- 	select PM
- 	help
+diff --git a/arch/arm/boot/dts/rk3066a.dtsi b/arch/arm/boot/dts/rk3066a.dtsi
+index de9915d94..cf8045625 100644
+--- a/arch/arm/boot/dts/rk3066a.dtsi
++++ b/arch/arm/boot/dts/rk3066a.dtsi
+@@ -653,6 +653,10 @@
+ 	};
+ };
+
++&global_timer {
++	status = "disabled";
++};
++
+ &gpu {
+ 	compatible = "rockchip,rk3066-mali", "arm,mali-400";
+ 	interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
 --
 2.20.1
 
