@@ -2,237 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAC8612CF7
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 22:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59111612CF8
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 22:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiJ3VVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 17:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40690 "EHLO
+        id S229642AbiJ3VWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 17:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ3VVi (ORCPT
+        with ESMTP id S229441AbiJ3VWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 17:21:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DA4A180
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 14:21:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D442360F5D
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 21:21:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60949C433D6;
-        Sun, 30 Oct 2022 21:21:35 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="L24mU8oj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1667164893;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RGoJZX32mUVfzDj9i6PFc7kArGceGmqK5h8po+wYKYA=;
-        b=L24mU8ojmXkRb8zxnPmu+wfP+vS5Lz/ftm5m9LFonyP6CxNzADwXPZO0dIAC3njhzgnZ3T
-        uWzmWwFl1ix0EwSnRsG5Db/GKG/4rXk89bS6kdWoZ7bll/waHLxCUnUVyuPaedGS2obZjI
-        jbp5u+LJ2jXk3loB9JmFzj2HEgo/Pug=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ea727d60 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sun, 30 Oct 2022 21:21:33 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH v2] random: remove early archrandom abstraction
-Date:   Sun, 30 Oct 2022 22:21:23 +0100
-Message-Id: <20221030212123.1022049-1-Jason@zx2c4.com>
-In-Reply-To: <Y17nqd27jHOkzeOp@zx2c4.com>
-References: <Y17nqd27jHOkzeOp@zx2c4.com>
+        Sun, 30 Oct 2022 17:22:47 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B166DA181
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 14:22:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667164965; x=1698700965;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cXDGfxQdxYC3Gcjn+Tvw93B3HB8q2w/1ISgZO0jd8wk=;
+  b=ZZTuDTAX9t74ThcgIcTeSptlv5GqdmTfDcWAoshd6P1L0n9eRD5eGIqT
+   oZnrnED5S4Y/rv3D70Xtpaq/yfgM4tNmU2ZIoRJf5GvDibqt0H6YZQMi6
+   M/6gfJ/6fC+Nhzw4N7YRDgjehW+zYkgJXjflwx5iQvCiNRnaWxOia7hlb
+   sqyIVVU2l2hRvYxryJuoyT6vXpuEoEPxyH1QMJ++hvIn/kMYbaBe161VY
+   UPqYnC93jKUoezItFIQ6TilK19P1sDWrxpYKXAbOgPQOCPIl6LGg99A4l
+   bmDlIkkrfReXP9uzaYcczubYl8FhSmpaP783XGnnyZ2n1vqMphYdspKKT
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="310472859"
+X-IronPort-AV: E=Sophos;i="5.95,226,1661842800"; 
+   d="scan'208";a="310472859"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2022 14:22:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="584463310"
+X-IronPort-AV: E=Sophos;i="5.95,226,1661842800"; 
+   d="scan'208";a="584463310"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 30 Oct 2022 14:22:44 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1opFlT-000CP7-1O;
+        Sun, 30 Oct 2022 21:22:43 +0000
+Date:   Mon, 31 Oct 2022 05:22:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ b8cc3fc136191e47d864916609865a4fdbbbecf6
+Message-ID: <635eeb15.za59cB8wrPmcwxQl%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The arch_get_random*_early() abstraction is not completely useful and
-adds complexity, because it's not a given that there will be no calls to
-arch_get_random*() between random_init_early(), which uses
-arch_get_random*_early(), and init_cpu_features(). During that gap,
-crng_reseed() might be called, which uses arch_get_random*(), since it's
-mostly not init code.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: b8cc3fc136191e47d864916609865a4fdbbbecf6  Merge branch into tip/master: 'x86/sev'
 
-Instead we can test whether we're in the early phase in
-arch_get_random*() itself, and in doing so avoid all ambiguity about
-where we are. Fortunately, the only architecture that currently
-implements arch_get_random*_early() also has an alternatives-based cpu
-feature system, one flag of which determines whether the other flags
-have been initialized. This makes it possible to do the early check with
-zero cost once the system is initialized.
+elapsed time: 721m
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Jean-Philippe Brucker <jean-philippe@linaro.org>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-Changes v1->v2:
-- Also check early_boot_irqs_disabled, to make sure that the raw
-  capability check only runs during an early stage when we're only
-  running on the boot CPU and with IRQs off. This check disappears once
-  the system is up, because system_capabilities_finalized() is a static
-  branch.
+configs tested: 65
+configs skipped: 2
 
-Catalin - Though this touches arm64's archrandom.h, I intend to take
-this through the random.git tree, if that's okay. I have other patches
-that will build off of this one. -Jason
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
- arch/arm64/include/asm/archrandom.h | 57 ++++++-----------------------
- drivers/char/random.c               |  4 +-
- include/linux/random.h              | 20 ----------
- 3 files changed, 14 insertions(+), 67 deletions(-)
+gcc tested configs:
+um                             i386_defconfig
+i386                                defconfig
+x86_64                              defconfig
+arc                  randconfig-r043-20221030
+um                           x86_64_defconfig
+alpha                               defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+x86_64                        randconfig-a013
+x86_64                           rhel-8.3-kvm
+arm                                 defconfig
+i386                          randconfig-a001
+x86_64                        randconfig-a004
+ia64                             allmodconfig
+arc                                 defconfig
+x86_64                           rhel-8.3-syz
+x86_64                               rhel-8.3
+arc                              allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                           allyesconfig
+i386                          randconfig-a014
+s390                             allmodconfig
+i386                          randconfig-a003
+x86_64                        randconfig-a002
+x86_64                        randconfig-a011
+s390                             allyesconfig
+alpha                            allyesconfig
+i386                             allyesconfig
+powerpc                           allnoconfig
+m68k                             allyesconfig
+i386                          randconfig-a012
+i386                          randconfig-a016
+s390                                defconfig
+powerpc                          allmodconfig
+i386                          randconfig-a005
+m68k                             allmodconfig
+sh                               allmodconfig
+mips                             allyesconfig
+x86_64                        randconfig-a015
+arm                              allyesconfig
+x86_64                        randconfig-a006
+arm64                            allyesconfig
+x86_64               randconfig-k001-20221031
+i386                          randconfig-c001
+arc                        nsimosci_defconfig
+powerpc                  storcenter_defconfig
+riscv             nommu_k210_sdcard_defconfig
+mips                         rt305x_defconfig
 
-diff --git a/arch/arm64/include/asm/archrandom.h b/arch/arm64/include/asm/archrandom.h
-index 109e2a4454be..4a68621078ab 100644
---- a/arch/arm64/include/asm/archrandom.h
-+++ b/arch/arm64/include/asm/archrandom.h
-@@ -58,6 +58,16 @@ static inline bool __arm64_rndrrs(unsigned long *v)
- 	return ok;
- }
- 
-+static __always_inline bool __cpu_has_rng(void)
-+{
-+	if (!system_capabilities_finalized() && early_boot_irqs_disabled) {
-+		/* Open code as we run prior to the first call to cpufeature. */
-+		unsigned long ftr = read_sysreg_s(SYS_ID_AA64ISAR0_EL1);
-+		return (ftr >> ID_AA64ISAR0_EL1_RNDR_SHIFT) & 0xf;
-+	}
-+	return cpus_have_const_cap(ARM64_HAS_RNG);
-+}
-+
- static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t max_longs)
- {
- 	/*
-@@ -66,7 +76,7 @@ static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t
- 	 * cpufeature code and with potential scheduling between CPUs
- 	 * with and without the feature.
- 	 */
--	if (max_longs && cpus_have_const_cap(ARM64_HAS_RNG) && __arm64_rndr(v))
-+	if (max_longs && __cpu_has_rng() && __arm64_rndr(v))
- 		return 1;
- 	return 0;
- }
-@@ -108,53 +118,10 @@ static inline size_t __must_check arch_get_random_seed_longs(unsigned long *v, s
- 	 * reseeded after each invocation. This is not a 100% fit but good
- 	 * enough to implement this API if no other entropy source exists.
- 	 */
--	if (cpus_have_const_cap(ARM64_HAS_RNG) && __arm64_rndrrs(v))
--		return 1;
--
--	return 0;
--}
--
--static inline bool __init __early_cpu_has_rndr(void)
--{
--	/* Open code as we run prior to the first call to cpufeature. */
--	unsigned long ftr = read_sysreg_s(SYS_ID_AA64ISAR0_EL1);
--	return (ftr >> ID_AA64ISAR0_EL1_RNDR_SHIFT) & 0xf;
--}
--
--static inline size_t __init __must_check
--arch_get_random_seed_longs_early(unsigned long *v, size_t max_longs)
--{
--	WARN_ON(system_state != SYSTEM_BOOTING);
--
--	if (!max_longs)
--		return 0;
--
--	if (smccc_trng_available) {
--		struct arm_smccc_res res;
--
--		max_longs = min_t(size_t, 3, max_longs);
--		arm_smccc_1_1_invoke(ARM_SMCCC_TRNG_RND64, max_longs * 64, &res);
--		if ((int)res.a0 >= 0) {
--			switch (max_longs) {
--			case 3:
--				*v++ = res.a1;
--				fallthrough;
--			case 2:
--				*v++ = res.a2;
--				fallthrough;
--			case 1:
--				*v++ = res.a3;
--				break;
--			}
--			return max_longs;
--		}
--	}
--
--	if (__early_cpu_has_rndr() && __arm64_rndr(v))
-+	if (__cpu_has_rng() && __arm64_rndrrs(v))
- 		return 1;
- 
- 	return 0;
- }
--#define arch_get_random_seed_longs_early arch_get_random_seed_longs_early
- 
- #endif /* _ASM_ARCHRANDOM_H */
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 6f323344d0b9..e3cf4f51ed58 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -813,13 +813,13 @@ void __init random_init_early(const char *command_line)
- #endif
- 
- 	for (i = 0, arch_bits = sizeof(entropy) * 8; i < ARRAY_SIZE(entropy);) {
--		longs = arch_get_random_seed_longs_early(entropy, ARRAY_SIZE(entropy) - i);
-+		longs = arch_get_random_seed_longs(entropy, ARRAY_SIZE(entropy) - i);
- 		if (longs) {
- 			_mix_pool_bytes(entropy, sizeof(*entropy) * longs);
- 			i += longs;
- 			continue;
- 		}
--		longs = arch_get_random_longs_early(entropy, ARRAY_SIZE(entropy) - i);
-+		longs = arch_get_random_longs(entropy, ARRAY_SIZE(entropy) - i);
- 		if (longs) {
- 			_mix_pool_bytes(entropy, sizeof(*entropy) * longs);
- 			i += longs;
-diff --git a/include/linux/random.h b/include/linux/random.h
-index 182780cafd45..2bdd3add3400 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -153,26 +153,6 @@ declare_get_random_var_wait(long, unsigned long)
- 
- #include <asm/archrandom.h>
- 
--/*
-- * Called from the boot CPU during startup; not valid to call once
-- * secondary CPUs are up and preemption is possible.
-- */
--#ifndef arch_get_random_seed_longs_early
--static inline size_t __init arch_get_random_seed_longs_early(unsigned long *v, size_t max_longs)
--{
--	WARN_ON(system_state != SYSTEM_BOOTING);
--	return arch_get_random_seed_longs(v, max_longs);
--}
--#endif
--
--#ifndef arch_get_random_longs_early
--static inline bool __init arch_get_random_longs_early(unsigned long *v, size_t max_longs)
--{
--	WARN_ON(system_state != SYSTEM_BOOTING);
--	return arch_get_random_longs(v, max_longs);
--}
--#endif
--
- #ifdef CONFIG_SMP
- int random_prepare_cpu(unsigned int cpu);
- int random_online_cpu(unsigned int cpu);
+clang tested configs:
+hexagon              randconfig-r041-20221030
+hexagon              randconfig-r045-20221030
+s390                 randconfig-r044-20221030
+riscv                randconfig-r042-20221030
+i386                          randconfig-a013
+i386                          randconfig-a015
+i386                          randconfig-a011
+x86_64                        randconfig-a016
+i386                          randconfig-a002
+x86_64                        randconfig-a012
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a001
+x86_64                        randconfig-a014
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+powerpc                    socrates_defconfig
+
 -- 
-2.38.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
