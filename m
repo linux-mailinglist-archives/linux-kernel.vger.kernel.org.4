@@ -2,91 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C295612C55
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 19:52:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4118C612C58
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 19:53:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiJ3SwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 14:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44990 "EHLO
+        id S229721AbiJ3Sw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 14:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJ3SwG (ORCPT
+        with ESMTP id S229497AbiJ3Sw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 14:52:06 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F9895B3
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 11:52:06 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id w10so7239054qvr.3
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 11:52:05 -0700 (PDT)
+        Sun, 30 Oct 2022 14:52:57 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4B595B3;
+        Sun, 30 Oct 2022 11:52:56 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id b29so8914411pfp.13;
+        Sun, 30 Oct 2022 11:52:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sGJoZ3wR3C11xvb7GaIg6baorbhSsKxe2IOKOLyB7c0=;
-        b=eCoZ3hMHphyp8KZRGL74Bxq12EtKF7LycFxetVP38YeAh77jx8lE0W6TIpMSyXgkw3
-         gk95GDzPoo4LNTdqUIaNHzANbkU32txnpbsaYOlLYpC01QCNI/o9G8a2/513H6cNImg5
-         wplL7HkmDP3UbHq9YI3ASdy3oSUO6in9YjJJ4=
+        d=gmail.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8elokwRQaKyAP0dM+0zhrI4gx5N3/CeBtqzPukuUnAw=;
+        b=YUcGwd0QsHpWm5d+rOP1CAI28Pyn+kV7aCrc0+3OM+5XkOTwufAR2n42u8HF7hnyaI
+         jC5RpPKjR51SkhWwgPkoC0dYeQLZo00ObVmsNzX4s74Fp6DkVJnJq85PUD9JnLaLJRVS
+         0weUrPp9RGHpSE7bb/3XvL+E0xyv+I95LDYSh9HIi2+NbubdlEdoiAvFCsDdSeBWhTe8
+         mfPWHjC8Fga8Rl3vtLtWOtwRgFSa973dzYcqET8G0cwQqloY9mqTULWcX2EwylEHWbXd
+         JG50hMNU3R6bZ6fEV0fvkKxsBHTxYrFBo55ANUbWTj2MDirSLDcvd/SB5oAV8i6M5BDK
+         tqSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sGJoZ3wR3C11xvb7GaIg6baorbhSsKxe2IOKOLyB7c0=;
-        b=5d/bf6Y9tvnCkRZSRWU8YeEWKaaeKe4hujHcEMw48ZoG0XEQ1DY0SSyfBbU+amNNcO
-         N3SD2EeI/pJYCOINIg3FLjgt7GNIYuhfP5/37+UgiIDqmtrORhXJ6tRIPuTMxMTDFdSZ
-         8PiUNWH/Gc39o1mD948cX1GuHtRQD2Ma2XxAmv9sQPnSXIlmJ98cJGk5RVvTa4Q3XWRB
-         dLvwp6Hx0rULYkAzcNL63oy5x/g6n2Yq26m8fSLInNgSYm8wmfvrwWJqB95WK34L3jhg
-         xQ8DjLNKe5v4dbYzDNraDiLomMMgZJAB+BisQWIXjjDXyrflydtkSyFjOKkYmyPzERuT
-         PBow==
-X-Gm-Message-State: ACrzQf2YWHwqhZCydS0byusIRdqy4x4u9mivmUHQut9Ui6Q2JzEuUMlY
-        NdtINExtSJXuoZTKBA5bMMXWyUx9EyGsRg==
-X-Google-Smtp-Source: AMsMyM5gKOG34VR2UtLof3RcaVNU7ed0j2K4VBgXV3ivhGtoK4DWICv9feie8O5exN4T0Pkn+lyolQ==
-X-Received: by 2002:a05:6214:2528:b0:4b8:2025:5f6b with SMTP id gg8-20020a056214252800b004b820255f6bmr7937814qvb.47.1667155925219;
-        Sun, 30 Oct 2022 11:52:05 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id q40-20020a05620a2a6800b006cfc9846594sm2576252qkp.93.2022.10.30.11.52.04
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Oct 2022 11:52:05 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-333a4a5d495so90823497b3.10
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 11:52:04 -0700 (PDT)
-X-Received: by 2002:a81:555:0:b0:36b:2d71:5861 with SMTP id
- 82-20020a810555000000b0036b2d715861mr9438354ywf.340.1667155924532; Sun, 30
- Oct 2022 11:52:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221022111403.531902164@infradead.org> <20221022114424.515572025@infradead.org>
- <2c800ed1-d17a-def4-39e1-09281ee78d05@nvidia.com> <Y1ZGNwUEdm15W6Xz@hirez.programming.kicks-ass.net>
- <CAG48ez3fG=WnvbiE5mJaD66_gJj_hohnV8CqBG9eNdjd7pJW3A@mail.gmail.com>
- <Y1fsYwshJ93FT21r@hirez.programming.kicks-ass.net> <CAG48ez3VE+3dVdUMK+Pg_942gR+h_TCcSaFxGwCbNfh3W+mfOA@mail.gmail.com>
- <Y1f7YvKuwOl1XEwU@hirez.programming.kicks-ass.net> <CAG48ez05gBiB2w7bL_3O_OUoBWazmHnRwMiuni_wQyXBUcaxbQ@mail.gmail.com>
- <Y1oub9MvqwGBlHkq@hirez.programming.kicks-ass.net> <CAHk-=wihPdOtXgJ32pLB6Xd-UvnaZW9YvOOjM24JGYRjNHeykA@mail.gmail.com>
- <6C548A9A-3AF3-4EC1-B1E5-47A7FFBEB761@gmail.com> <CAHk-=wh8oi0qQtYDFTfm7d1s5C8mG7ig=NfzGWt4zbjXMzcdqQ@mail.gmail.com>
- <F9E42822-DA1D-4192-8410-3BAE42E9E4A9@gmail.com> <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
- <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
- <47678198-C502-47E1-B7C8-8A12352CDA95@gmail.com> <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
- <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
- <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com> <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
-In-Reply-To: <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 30 Oct 2022 11:51:48 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
-Message-ID: <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
-Subject: Re: [PATCH 01/13] mm: Update ptep_get_lockless()s comment
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Jann Horn <jannh@google.com>,
-        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8elokwRQaKyAP0dM+0zhrI4gx5N3/CeBtqzPukuUnAw=;
+        b=GLiMC6IYFV+BJfh+53N3X35JOkJjEGvMo2RiWLCCkKKSjFWl50mbTuU5dSCfwAgEAZ
+         kIC7goXvixb2CldpJCiIv/0rXuTKzSarYZdxZlVODHFddP0XVq4ZDf6NVJ6+ok/GQYc6
+         AIRvVTt0MCd7JfXJCa+0kh0CpkDk1EEHmo120DhT3sbKy4+/IOeTT8rZ3z4yG3h8zLys
+         hchNnzyV3d2mPAbiFUjmfFsXavmje3AINncbzMZ5PvoyQ5JNhZHfxBgat2QQzIZD56Zs
+         w0z79+UWjhd3GgmieW3gY1+xHb1iPjkZA5FIKatmjIOAth86KtG0UHfPN0RZzTCt6cDo
+         G17Q==
+X-Gm-Message-State: ACrzQf0Y0dMiez3FKJb3stDoH4AQvmL4NZFB6XmZNywxZjFie5RitoFi
+        J+DdLN0HyqohFFlQNboB7yo=
+X-Google-Smtp-Source: AMsMyM6jIFTKWkHx2DeQKawqkSo5aIPaMrRPSIaPPkTGyp+gAAy5hs16vCm9pFqP9WPtnZCljLFS4w==
+X-Received: by 2002:a63:d90c:0:b0:462:cfa2:285b with SMTP id r12-20020a63d90c000000b00462cfa2285bmr9215780pgg.202.1667155975363;
+        Sun, 30 Oct 2022 11:52:55 -0700 (PDT)
+Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
+        by smtp.gmail.com with ESMTPSA id k3-20020a170902ce0300b00176b63535adsm2953022plg.260.2022.10.30.11.52.53
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 30 Oct 2022 11:52:54 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH v2] hugetlb: don't delete vma_lock in hugetlb
+ MADV_DONTNEED processing
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <Y17F50ktT9fZw4do@x1n>
+Date:   Sun, 30 Oct 2022 11:52:52 -0700
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        David Hildenbrand <david@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
         Matthew Wilcox <willy@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        jroedel@suse.de, ubizjak@gmail.com,
-        Alistair Popple <apopple@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        Wei Chen <harperchen1110@gmail.com>,
+        "# 5 . 10+" <stable@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Transfer-Encoding: 7bit
+Message-Id: <3232338E-77BB-42A8-9A25-5A4AD61FD4B2@gmail.com>
+References: <20221023025047.470646-1-mike.kravetz@oracle.com>
+ <Y1mpwKpwsiN6u6r7@x1n> <Y1nImUVseAOpXwPv@monkey> <Y1nbErXmHkyrzt8F@x1n>
+ <Y1vz7VvQ5zg5KTxk@monkey> <Y1v/x5RRpRjU4b/W@x1n> <Y1xGzR/nHQTJxTCj@monkey>
+ <Y1xjyLWNCK7p0XSv@x1n> <Y13CO8iIGfDnV24u@monkey>
+ <7048D2B5-5FA5-4F72-8FDC-A02411CFD71D@gmail.com> <Y17F50ktT9fZw4do@x1n>
+To:     Peter Xu <peterx@redhat.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,63 +91,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 11:19 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> And we'd _like_ to do the TLB flush before the remove_rmap(), but we
-> *really* don't want to do that for every page.
+On Oct 30, 2022, at 11:43 AM, Peter Xu <peterx@redhat.com> wrote:
 
-Hmm. I have yet another crazy idea.
+> The loop comes from 7e027b14d53e ("vm: simplify unmap_vmas() calling
+> convention", 2012-05-06), where zap_page_range() was used to replace a call
+> to unmap_vmas() because the patch wanted to eliminate the zap details
+> pointer for unmap_vmas(), which makes sense.
+> 
+> I didn't check the old code, but from what I can tell (and also as Mike
+> pointed out) I don't think zap_page_range() in the lastest code base is
+> ever used on multi-vma at all.  Otherwise the mmu notifier is already
+> broken - see mmu_notifier_range_init() where the vma pointer is also part
+> of the notification.
+> 
+> Perhaps we should just remove the loop?
 
-We could keep the current placement of the TLB flush, to just before
-we drop the page table lock.
+There is already zap_page_range_single() that does exactly that. Just need
+to export it.
 
-And we could do all the things we do in 'page_remove_rmap()' right now
-*except* for the mapcount stuff.
-
-And only move the mapcount code to the page freeing stage.
-
-Because all the rmap() walk synchronization really needs is that
-'page->_mapcount' is still elevated, and if it is it will serialize
-with the page table lock.
-
-And it turns out that 'page_remove_rmap()' already treats the case we
-care about differently, and all it does is
-
-        lock_page_memcg(page);
-
-        if (!PageAnon(page)) {
-                page_remove_file_rmap(page, compound);
-                goto out;
-        }
-       ...
-out:
-        unlock_page_memcg(page);
-
-        munlock_vma_page(page, vma, compound);
-
-for that case.
-
-And that 'page_remove_file_rmap()' is literally the code that modifies
-the _mapcount.
-
-Annoyingly, this is all complicated by that 'compound' argument, but
-that's always false in that zap_page_range() case.
-
-So what we *could* do, is make a new version of page_remove_rmap(),
-which is specialized for this case: no 'compound' argument (always
-false), and doesn't call 'page_remove_file_rmap()', because we'll do
-that for the !PageAnon(page) case later after the TLB flush.
-
-That would keep the existing TLB flush logic, keep the existing 'mark
-page dirty' and would just make sure that 'folio_mkclean()' ends up
-being serialized with the TLB flush simply because it will take the
-page table lock because we delay the '._mapcount' update until
-afterwards.
-
-Annoyingly, the organization of 'page_remove_rmap()' is a bit ugly,
-and we have several other callers that want the existing logic, so
-while the above sounds conceptually simple, I think the patch would be
-a bit messy.
-
-                  Linus
