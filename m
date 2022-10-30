@@ -2,150 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB20612DB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 00:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0C9612DF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 00:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiJ3XAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 19:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
+        id S229787AbiJ3XCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 19:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiJ3XAe (ORCPT
+        with ESMTP id S229574AbiJ3XCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 19:00:34 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764A4AE6B;
-        Sun, 30 Oct 2022 16:00:33 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29UKl1tj030886;
-        Sun, 30 Oct 2022 23:00:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=dXLIf/taVyg7PloliALSqDqS2P1kGAPwWAtsA/CYDoA=;
- b=KY1eJ8c9cvlQldz/DcBMKRPcgOaVMSM0eMzs//2/xJg4a1+lYZmZI5FTxe4FSc0Ucml4
- 9ywSpTBeYD1W69L7qFaZQu0xXdRQsEWZkOE6RSa+2hU+KXm87ETCsGMC6lpIIapwGBcA
- M+1E8dNFD2XubC+JCzRchSA4+kSSAvvx4MAklzcguLuB7MBnz4MabyhczHsWfz+DLJ8I
- l7hpueNqbSuJI8TZbMrsId1T66Jf4Y5DP90BityedIx2R1kdAi6Dw8yHlTNO9wtI1Pdz
- 8nCEH5OpPkh64NLpWZidzKiDzTyG1ncNU0zLiueGW1QLVfuy0+dnnRw4DlIJi1EaqR7Z dQ== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kgussj1k0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 30 Oct 2022 23:00:14 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29UE0UnX019665;
-        Sun, 30 Oct 2022 23:00:13 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2173.outbound.protection.outlook.com [104.47.56.173])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kgtm8mmj0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 30 Oct 2022 23:00:13 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=agyNU3pVMqf4XEEhHPgiuMTxFGmLI3/RHIiAAnPoQxBUa4Agj4VYBEIxTGKVinN22Cac1pue4147d81RHNhvTMlXI9OzKYUYqQxnLwqdWC6041Z62u+iBX4aJiHxa8rA+ijRnewi4QfU87dJ4rBZNzqGFh+Y7B40FCombRn4CxtkNzUJxNNKfCrE8D1xOfRp60W56CRtHJP8SP9SqGV+gLCt4nS+4bLomvmdsa8Um//b2AVVNhPxf+155/2yaIcPG7kgLUbKp/tR2Q3fXDGoSBkGj+bTmUtoK8NGkqq/ObRdTOsMi6l0sb3V4t6FyySZ+oNrlUN/h88b6ImOcUwkpA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dXLIf/taVyg7PloliALSqDqS2P1kGAPwWAtsA/CYDoA=;
- b=oClYXYHm5ywrO0miPDbihSEWs6Jnxpwf5QqqAMeRbvtxEWbRHtI3yYClM8BtW9DQBjCL2o3y4/fDj2lNV/rMqEXkCg24FefA40DMaf9Tmj/8NDcf+byqeLgznu+1f6u4ob676qZ+WsCEdOxCbOg5G2ARKVSDimaq0q8XS3zDIsNZ4Se8/4IHtluliyPLTyEeEOywptW8IvHRTMj4a8I8K9b5A0+/w/Mgb3WuYyDVtsYLNXFyT+wNVVfzO9o++liQDpDBAFunX04c51IXV5afbU7roIz01NRdVItAud6t3Em8DC7hSiL/j00yBwDqqkiMR1RnZDGXmAGkrrgsQNPNTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Sun, 30 Oct 2022 19:02:09 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D75BC38;
+        Sun, 30 Oct 2022 16:02:08 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id k2so25532034ejr.2;
+        Sun, 30 Oct 2022 16:02:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dXLIf/taVyg7PloliALSqDqS2P1kGAPwWAtsA/CYDoA=;
- b=SuG+hwTQz0iAqTSD9oJuJTuaI0Q2uYw0kJvEMJyT3ZQk5V2OjkdcfDY5vWkdhMbGgwiFAVGRoS9HKEW32Muc2T8kOKIV52wUKOxsGeFw9+NCMJex5LQ4fy4luXjLm5Vn6FxroLjY0sSKruQ3XIzJ7toHlH1+ZL+7q8k3wEO+jdA=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by MN0PR10MB6008.namprd10.prod.outlook.com (2603:10b6:208:3c8::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15; Sun, 30 Oct
- 2022 23:00:11 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::58e9:95ba:d31e:ddd3]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::58e9:95ba:d31e:ddd3%6]) with mapi id 15.20.5769.018; Sun, 30 Oct 2022
- 23:00:11 +0000
-Date:   Sun, 30 Oct 2022 16:00:07 -0700
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-ia64@vger.kernel.org,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        David Hildenbrand <david@redhat.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v4] hugetlb: simplify hugetlb handling in follow_page_mask
-Message-ID: <Y18B9yYTAqrQ9Zvu@monkey>
-References: <20221028181108.119432-1-mike.kravetz@oracle.com>
- <Y17UPk9CBjPumcz6@x1n>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y17UPk9CBjPumcz6@x1n>
-X-ClientProxiedBy: CH0PR08CA0030.namprd08.prod.outlook.com
- (2603:10b6:610:33::35) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gaZUGhF8KbynRhDhu/p6JSGKUF6OSpMhoT/g9ZSUcOw=;
+        b=iTeijkDcEXUW6ozKNbAJYPxQlGhsrIS0iBQ35RDsGVc96Nazhijx6tq5zNN9OIL3qN
+         rXwqAUS+F4C4HfTI+/1D4wW6bzwCzJWUZSyjWUHY6UkvW+NzLvcHMimU6u1H15nAYoyI
+         sguHeEmuFmpsn8ErecjlMjbYqGivQqeC96YHpiWlLsBoWFrhuQMR8ofxPex2y8F2p7/Q
+         OApPUiS2lcYU3FwuzSurmiOL1aOjgBLba5CIP5CgP3SPFKvJDZZ+xjKUbrk4MvZjjHq0
+         mUWS+0jNHr2mrVa9rzIcIbtqzg5JR4dvti7LX5HQN5fUvFXK6n7UW3gD516SF/uqHuLt
+         zPEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gaZUGhF8KbynRhDhu/p6JSGKUF6OSpMhoT/g9ZSUcOw=;
+        b=cmOqVyE2tsVLoSXIApDbfgMnDd2+c5mninNgSBc/1skyeMfn1HH2bncfzZIwtX8bAw
+         iZv/x1iHjE5plsSGObEwqxNbN0GOyc+LZl4PElFE25YWoeFR376VmuPevHh+xwLMrEZi
+         V0BIrjc06rnBiIlw0jX55kGe5m/u73ZYgxxeeJUG9SAWf696KokyP/x1BEwiVEp45Im1
+         O/TxeSlH+rZxMt9HazHHsttXo0o+lDYbo4Wv2BQb06M4uuawbEdgn4EPIJ5X2hL+FJhF
+         8pOpmcQyD9ushiJs11ogulFXtnhwFJtTP/M7PgyM8ypTGz1o9GsR891/OpydhLy1pojr
+         RndA==
+X-Gm-Message-State: ACrzQf2AvKeLANbY25KMEwZXlxus/oo9NIdDP3QIYvA7EbBaGyQMsjmQ
+        R0o4VJp9rkVp8YHAWwhbis69JFmC1n6uUvYJnVA=
+X-Google-Smtp-Source: AMsMyM4Le9JGA4FBUg/iu17NYcoAoHjLMPQLet9oDZjaa/2K6RoqdC2Rp8KM7AQQXP3i3RT27yhw/78TcUXP7Cm1xqI=
+X-Received: by 2002:a17:907:270b:b0:7ad:ae01:e0d9 with SMTP id
+ w11-20020a170907270b00b007adae01e0d9mr9161259ejk.196.1667170926812; Sun, 30
+ Oct 2022 16:02:06 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|MN0PR10MB6008:EE_
-X-MS-Office365-Filtering-Correlation-Id: 04b9a174-f326-4651-faad-08dabaca7f60
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eziJm4f96KRujnphlm48DpeK3808VxiOhbI076fvYdb/GhVSsTM+5cB/XZJzAys1jA09z/DTend+aP7vo6tg88CRFe5/kgtnmk8eT5V7Ng9t8F63yyBqynsqw8bZ1IWAPovZ/dkX7qqACpcwu7rW1C5VWvYNSaAQFKhnaoIDpBFrE27UR3u5UeG3munkcOBNoqFw7gYz5CYiGJtbsgRFAwvxxgZ5MNr8ishnc/REdEN5aJoKJhiOW+vVVgB5VMrzlmCSDzksFb0PUsl9oUqgKp8Wo6VTssjzg8FtPykTAyC0jC+Y5WDSWBd7um1L7hZDUKPKpHf9JG+ieyFkfzolbw03KopXjDn5zu8iTzenYfpTDIkByKDz419Vjpv9P4WdV75/TLxqObIHtdnG9CjJZaZPXZjBfowNdRqGo2uT9w0EsaArluRIICS4hlD0wAKMG0QY4w74jhEodHoHqNkNnG3Ijigi+5UY/oSWoABfZY1OySQuqCa1gmwu9PWXTtk3oSl9bGpvIpAjvwRPUde4Z0VZNOZAv3DsjnAFoKqTWiBvFk+EE8HUzsbrduzdHOxz5HGG177S07dneygIQZyJ/yHQQAgJAXK2iNbvBjip8CxaK9lroZ0RSeOvf4k0Hr4peG/23mJm32qLMQ54VQFRMqlsZnkC5IeOwHRi1FvpMnizXujoUPNhFyhlz76cKxQpX0QOynhDMqLsTveceutCiA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(346002)(366004)(136003)(396003)(376002)(451199015)(478600001)(83380400001)(86362001)(4744005)(38100700002)(2906002)(5660300002)(44832011)(7416002)(6506007)(66556008)(66946007)(4326008)(66476007)(8676002)(186003)(41300700001)(53546011)(6512007)(33716001)(8936002)(9686003)(6666004)(26005)(6486002)(316002)(6916009)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bwEtU5N6xz1kGr5e3kpvrpkugEzHp+7NZu39UwdvMMmvxG76cai8PGinY84n?=
- =?us-ascii?Q?CPErZk8l3Hv40aT0FbbjXPSH5wZKilgeEtl9nwFJ4IMgcdPnr6O4dJdu/45+?=
- =?us-ascii?Q?TrdAKOz5QwSdgnkjyNvKtbfskqC5O8m91l8eG/Tfy/Go+SF/ObNlfwuxvgBb?=
- =?us-ascii?Q?CZ8EZCEcvUg2Z8r26m9kMKuEUX14dT3xoqhmeBHyV8SCnoXKV7idnnvAoWil?=
- =?us-ascii?Q?XiJG2hTg5eY2kS8KT4E34Z1rGHFMdPW6SclFkzb7s5AjoINBJWTpbmRo6Deu?=
- =?us-ascii?Q?fDpfV0Mu5GgIwR5wCYGaMVDkFv2199gwEBBdZQUz5aL98Mm4sbipvzlszCrn?=
- =?us-ascii?Q?VBGaz75WqQGlNo4ihG79Yv0n8lw+iirxTFXIEsCfYOwjH9cavvkoRrxefouf?=
- =?us-ascii?Q?cmF5eyxkhijRGrZ4MCPojLcIXO/CMrPsDrIfEOcgtZ0rbqYfu5WugVr2JJSJ?=
- =?us-ascii?Q?rxxOIAPrV8fmFumQSbm9rfw+5byxqJFJ1V9aeQBAYHsYawoMQfImWcvbPnRS?=
- =?us-ascii?Q?yQFZdbWCHrWMgJqJTnccjCJJN9UTmvIpJ8x54nng2l07j7tRG2OPW0a2Cpu1?=
- =?us-ascii?Q?Z4Ih7YUDRvSmlxU+QVxyY/DlQ6QBiZiug6ZTK2G2o/lLTrCPNMddPDYHccNc?=
- =?us-ascii?Q?qSLZGbuM7KhPD7ZimqsT1j+9O5el4neJESOBTl5PdgqlrzgfOAjnqWsy8oMu?=
- =?us-ascii?Q?v6tc3wBeeKzb4ohUatdN2XLepnRvmUxupO+zzz6CHVCyJA4atzh7Sb9jk7+1?=
- =?us-ascii?Q?lEeHtszDQ5sa+ybnIjMcTXhNlC1zbVo1Ic6DbcIg9Sb3NSo7elbGwmhHl2sh?=
- =?us-ascii?Q?j19pQ4+U6cqySxjWiRxCqjSKapzMbmaonHQI/nht3Ewyly45oXvTaAADDz71?=
- =?us-ascii?Q?zyyFaVoj/Ul1Ev8BucpzYq5svml87J/UhyJIRq6pNhp/4fWhPZ4zN+xTkrDQ?=
- =?us-ascii?Q?vmLZTHSGmX6zeAMv4tcWn0sj9f15l2YgCyCaoJbBi7YdIyfbDrzrK4H3Hw3x?=
- =?us-ascii?Q?KpAR5ZaMkrDP4ZDu5bHjbSyZszVfuPgwywx/YW9YuD1Mwx6NhXVF9LR/x5Us?=
- =?us-ascii?Q?RgFT0H4CNjJl0gDkSIyv853KvCsBRyDeYhN8DNV75gPdD7U4K67JR+7wEtk3?=
- =?us-ascii?Q?n+/ogaAUrH1OYvplPPhiJ6g10QHZSf6RZZPCYFISocJAlr/44ern/+QkVjL3?=
- =?us-ascii?Q?UxbhH0QfCCyoeokoNDbaRKGW+KwGzd00qbGMZwGMGk5Hs2gncRjEPhnwzWB9?=
- =?us-ascii?Q?x9ed31GLKnEPwCrdbsc3st4qbdrWdcih2aUApHV/aucrtYQnPbrMvOV+vNo+?=
- =?us-ascii?Q?q/8AXGhqIbGbEgLu00mqqupfLTXFlYwGU5gp0MoZoDpBt8rIOryeU7rZ4Tlp?=
- =?us-ascii?Q?5v7sbXskr9oJhAuWyK/Zj07E+5l1BrbIsWnxEhpIyKxkJ4gL5egg4b+ZgTyO?=
- =?us-ascii?Q?p4bFq3/OITANVSZRCL2qxEoS77wjq4YnqFFUpBsymjCDayhAZJ0gMTXze2HO?=
- =?us-ascii?Q?XxSyLlV53X4gogQiOd7UEtdfZZMuGDneLcvaXUmlv/jB7155EyTrTcIzDsGT?=
- =?us-ascii?Q?Nu8l1dx9MKXlphQcMldhCTG/X17FdBaRR6eFTRYKRv8EwKOAKlnKOI9/msuS?=
- =?us-ascii?Q?zA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 04b9a174-f326-4651-faad-08dabaca7f60
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2022 23:00:11.0662
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: t6uNHIUYPHrFJ1eIPpRagTOV0dwXRUYAKKT0Xsh3u9maAb0+BPhq00Z14OvtNIpd8/YaQUoP/sDp4TiCtxFNvQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR10MB6008
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-30_16,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0
- suspectscore=0 malwarescore=0 spamscore=0 adultscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2210300156
-X-Proofpoint-ORIG-GUID: WaPlXv2FINOUKjsswUdO2UtED5eiQyYc
-X-Proofpoint-GUID: WaPlXv2FINOUKjsswUdO2UtED5eiQyYc
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221028165921.94487-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Y17BWPuEcmY7Bba3@spud> <CA+V-a8uKQ8QvYi5qLC9O=QAQN5CxNB7cOTmw4vk+ndB2R8d3nQ@mail.gmail.com>
+ <Y17+pHAg/SBJAEXq@spud>
+In-Reply-To: <Y17+pHAg/SBJAEXq@spud>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Sun, 30 Oct 2022 23:01:40 +0000
+Message-ID: <CA+V-a8t-niCHSWo_CSRSkPS4ND12DAkiwxWxOM1vNn=oBKKd_w@mail.gmail.com>
+Subject: Re: [PATCH v5 0/7] Add support for Renesas RZ/Five SoC
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -153,23 +83,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/30/22 15:45, Peter Xu wrote:
-> On Fri, Oct 28, 2022 at 11:11:08AM -0700, Mike Kravetz wrote:
-> > +	} else {
-> > +		if (is_hugetlb_entry_migration(entry)) {
-> > +			spin_unlock(ptl);
-> > +			hugetlb_vma_unlock_read(vma);
-> 
-> Just noticed it when pulled the last mm-unstable: this line seems to be a
-> left-over of v3, while not needed now?
-> 
-> > +			__migration_entry_wait_huge(pte, ptl);
-> > +			goto retry;
-> > +		}
+Hi Conor,
 
-Thanks Peter!
+On Sun, Oct 30, 2022 at 10:46 PM Conor Dooley <conor@kernel.org> wrote:
+>
+> On Sun, Oct 30, 2022 at 10:37:01PM +0000, Lad, Prabhakar wrote:
+> > Hi Conor,
+> >
+> > On Sun, Oct 30, 2022 at 6:24 PM Conor Dooley <conor@kernel.org> wrote:
+> > >
+> > > On Fri, Oct 28, 2022 at 05:59:14PM +0100, Prabhakar wrote:
+> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > >
+> > > > Hi All,
+> > > >
+> > > > The RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP Single)
+> > > > 1.0 GHz, 16-bit DDR3L/DDR4 interface. And it also has many interfaces such
+> > > > as Gbit-Ether, CAN, and USB 2.0, making it ideal for applications such as
+> > > > entry-class social infrastructure gateway control and industrial gateway
+> > > > control.
+> > > >
+> > > > This patch series adds initial SoC DTSi support for Renesas RZ/Five
+> > > > (R9A07G043) SoC. Below is the list of IP blocks enabled in the initial
+> > > > board DTS which can be used to boot via initramfs on RZ/Five SMARC EVK:
+> > > > - AX45MP CPU
+> > > > - CPG
+> > > > - PINCTRL
+> > >
+> > > Hey,
+> > > Looks like you've got a pair of warnings here from dtbs_check. I tested
+> > > this on top of 20221028's next, with the three branches below merged in,
+> > > hopefully my merges aren't the source of them:
+> > >
+> > > linux/arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dtb: pinctrl@11030000: 'interrupt-controller' is a required property
+> > >         From schema: Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
+> > > linux/arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dtb: pinctrl@11030000: '#interrupt-cells' is a required property
+> > >         From schema: linux/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
+> > >
+> > Thanks for the review and test. The warnings above are coming from [0]
+> > as support for IRQC is missing, once that is added the warnings should
+> > go away.
+>
+> Right. I merged in the stuff in Geert's trees & I don't think I saw any
+> pending patches in the cover that I missed. Is there something else that
+> adds the support that's not going to make v6.2? I got rid of all the
+> dtbs_check warnings for v6.1 and I'd really like to keep things that
+> way!
+>
+Sorry that pacth wasn't posted yet so I hadn't mentioned it in the
+cover letter. I'll make sure I get it posted asap and merged for v6.2.
 
-Sent v5 with the that line removed.
-
--- 
-Mike Kravetz
+Cheers,
+Prabhakar
