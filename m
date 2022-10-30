@@ -2,110 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6569461291F
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 09:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0AE612921
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 09:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiJ3Ibn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 04:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
+        id S229816AbiJ3Icj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 04:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiJ3Ibk (ORCPT
+        with ESMTP id S229494AbiJ3Ich (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 04:31:40 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CD9120;
-        Sun, 30 Oct 2022 01:31:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667118696; x=1698654696;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8vFhLuD0S36ME3HvT/tSVLmP1r1ZUW0wiXJ1NfH1yT0=;
-  b=R/YHafDbL4rdypqq7VB+z7X+tN8v6UuVaRFAtuyt5JAZQfEEvDdyPZF5
-   nfd0+yLXMoCInrpfbLxHGtNzRP6EA4J9xJ8WKoKcqM4maMKhv7bZOdFFa
-   QG62kxt/x4D5n0OuAKcMwQLdrJcZLiWqV3moPuXx4CNTwjj4q5ZRMmA9Z
-   pGxyBqNoLPMwCP3uyucQbQRoIjUGtfzmyt75U4zrpk/d+Jm11+h/rSZQu
-   BLslPZV/Kz9+hwYxpg8iuNb5mctM1bqIPL2/8kbvUv2z8zCgqdKHXqp05
-   XnnEcNJdXUSGTWntrz0bhwG0DAmXrvX/rXs1jlrPt2JL3uvgq5PWYm0Fm
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="395044758"
-X-IronPort-AV: E=Sophos;i="5.95,225,1661842800"; 
-   d="scan'208";a="395044758"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2022 01:31:36 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="722495889"
-X-IronPort-AV: E=Sophos;i="5.95,225,1661842800"; 
-   d="scan'208";a="722495889"
-Received: from heyingjx-mobl.ccr.corp.intel.com ([10.254.215.115])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2022 01:31:33 -0700
-Message-ID: <433dcc871ecbee4a2ddd21b3ae23be7100002149.camel@intel.com>
-Subject: Re: [PATCH 2/3] perf/x86/rapl: Use standard Energy Unit for SPR
- Dram RAPL domain
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     peterz@infradead.org, rjw@rjwysocki.net, len.brown@intel.com
-Cc:     mingo@redhat.com, linux-pm@vger.kernel.org, x86@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ak@linux.intel.com, kan.liang@linux.intel.com,
-        artem.bityutskiy@linux.intel.com
-Date:   Sun, 30 Oct 2022 16:31:30 +0800
-In-Reply-To: <20220924054738.12076-3-rui.zhang@intel.com>
-References: <20220924054738.12076-1-rui.zhang@intel.com>
-         <20220924054738.12076-3-rui.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Sun, 30 Oct 2022 04:32:37 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F9081C3;
+        Sun, 30 Oct 2022 01:32:35 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.14.30.251])
+        by mail-app4 (Coremail) with SMTP id cS_KCgAHmtyONl5jK6mfBw--.21945S2;
+        Sun, 30 Oct 2022 16:32:29 +0800 (CST)
+From:   Jinlong Chen <nickyc975@zju.edu.cn>
+To:     axboe@kernel.dk
+Cc:     hch@lst.de, bvanassche@acm.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, nickyc975@zju.edu.cn
+Subject: [PATCH] blk-mq: remove redundant call to blk_freeze_queue_start in blk_mq_destroy_queue
+Date:   Sun, 30 Oct 2022 16:32:12 +0800
+Message-Id: <20221030083212.1251255-1-nickyc975@zju.edu.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cS_KCgAHmtyONl5jK6mfBw--.21945S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7JF48AFW3Gw48trW5Aw13Arb_yoWDGwc_Wa
+        y8A3WqvFs8GF15ur1YkF1rZFn2k348JFy7GFWDW3srJwn5Aan8Z3y7Cr1rCr45W3yUGasr
+        Wr18Gas7Jr10qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbs8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6c
+        xK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij
+        64vIr41l42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI
+        8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
+        xVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
+        8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280
+        aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
+        ZEXa7VU1c4S5UUUUU==
+X-CM-SenderInfo: qssqjiaqqzq6lmxovvfxof0/1tbiAgYTB1ZdtcKYKQACsf
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Peter,
+The calling relationship in blk_mq_destroy_queue() is as follows:
 
-Can you please consider this as tip material?
-This patch series does not get merged altogether. The intel-rapl and
-turbostat fixes have been merged by Rafael and Len respectively.
+blk_mq_destroy_queue()
+    ...
+    -> blk_queue_start_drain()
+        -> blk_freeze_queue_start()  <- called
+        ...
+    -> blk_freeze_queue()
+        -> blk_freeze_queue_start()  <- called again
+        -> blk_mq_freeze_queue_wait()
+    ...
 
-thanks,
-rui
+So there is a redundant call to blk_freeze_queue_start().
 
-On Sat, 2022-09-24 at 13:47 +0800, Zhang Rui wrote:
-> Intel Xeon servers used to use a fixed energy resolution (15.3uj) for
-> Dram RAPL domain. But on SPR, Dram RAPL domain follows the standard
-> energy resolution as described in MSR_RAPL_POWER_UNIT.
-> 
-> Remove the SPR Dram energy unit quirk.
-> 
-> Fixes: bcfd218b6679 ("perf/x86/rapl: Add support for Intel SPR
-> platform")
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> Tested-by: Wang Wendy <wendy.wang@intel.com>
-> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-> ---
->  arch/x86/events/rapl.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
-> index 77e3a47af5ad..7d8db681880d 100644
-> --- a/arch/x86/events/rapl.c
-> +++ b/arch/x86/events/rapl.c
-> @@ -619,12 +619,8 @@ static int rapl_check_hw_unit(struct rapl_model
-> *rm)
->  	case RAPL_UNIT_QUIRK_INTEL_HSW:
->  		rapl_hw_unit[PERF_RAPL_RAM] = 16;
->  		break;
-> -	/*
-> -	 * SPR shares the same DRAM domain energy unit as HSW, plus it
-> -	 * also has a fixed energy unit for Psys domain.
-> -	 */
-> +	/* SPR uses a fixed energy unit for Psys domain. */
->  	case RAPL_UNIT_QUIRK_INTEL_SPR:
-> -		rapl_hw_unit[PERF_RAPL_RAM] = 16;
->  		rapl_hw_unit[PERF_RAPL_PSYS] = 0;
->  		break;
->  	default:
+Replace blk_freeze_queue() with blk_mq_freeze_queue_wait() to avoid the
+redundant call.
+
+Signed-off-by: Jinlong Chen <nickyc975@zju.edu.cn>
+---
+ block/blk-mq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 4cecf281123f..8ca49530bdf3 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -4005,7 +4005,7 @@ void blk_mq_destroy_queue(struct request_queue *q)
+ 
+ 	blk_queue_flag_set(QUEUE_FLAG_DYING, q);
+ 	blk_queue_start_drain(q);
+-	blk_freeze_queue(q);
++	blk_mq_freeze_queue_wait(q);
+ 
+ 	blk_sync_queue(q);
+ 	blk_mq_cancel_work_sync(q);
+-- 
+2.31.1
 
