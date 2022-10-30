@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E17FE612A0E
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 11:24:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94799612A12
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 11:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbiJ3KYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 06:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
+        id S229565AbiJ3K02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 06:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiJ3KYa (ORCPT
+        with ESMTP id S229441AbiJ3K0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 06:24:30 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF913CD4;
-        Sun, 30 Oct 2022 03:24:28 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z97so13718332ede.8;
-        Sun, 30 Oct 2022 03:24:28 -0700 (PDT)
+        Sun, 30 Oct 2022 06:26:25 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6BEB1C2;
+        Sun, 30 Oct 2022 03:26:24 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id t25so22900076ejb.8;
+        Sun, 30 Oct 2022 03:26:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=8p/8WjkchVbCQed4zXY7HB/VcJ2xgbVKLLvtzbgDlkE=;
-        b=B95hzi3zw61zOcJbz2lsiLm3vKa9RhSae1tAvB6KshsqIboeXTpEBGmb32mBt8hsDa
-         ySzGtmOEiB+h6dRVMaPk7BTiIQ8jH4wZZZIU4a0DuecLHZV9lwwLEulLAutG+tfjKxfR
-         TaKY0TXtqc7GcknZ6Yaux+ttAVSo/fsrBwrLO0I312bIWva9w1sBGijR1lcGdZSb2e5F
-         Kw52nOgHdrfkAu1RVEfwfy6JWKSdQG+h8U+shQXlsEpAk3ZKHtu1UoIul+/X42FifYlf
-         9mWu0FVSSNCIvUuoLtFQ5MumP2mXWoAHkzSz8yFqrsSl9Lctk9aNdnVADmWdh3XH3HjE
-         rIww==
+        bh=7c/lGoK+gtbCtySB1gIW7IU67MeJ+XxffhaGzyWdKCg=;
+        b=VQ5aeA+JVfO8fEpnZ9ogGy4zkK3hM+4ZX3ikQM6vGz0zL87nCN5+FuPZEOS5ZE2Amo
+         BeqKRbMn2omK3PzOt+myGQCVtvJ4E5UB6oDLVjQ53fQsS144gzTv8Ii5NJTckzzjF/ns
+         JH70Iw8LJOMW7gpFYUvYwcvJ4fEdNSyI+Piu85Je+1otQKu5HL0E+JjsQ0oM6PN9Ceh1
+         BEnu9LaPqYXpRBhh0Msj53c3FNOJP1QMTX0tZSRJU3pt39ab85JcmrYuxJv3+bUsGRxT
+         cWz0AweSdHolNHmnKVWcZ4IT0Wll40vqGnnIdo/hJJLmVRm3pA6TPkjumIgOUwsjxl4O
+         g31A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=8p/8WjkchVbCQed4zXY7HB/VcJ2xgbVKLLvtzbgDlkE=;
-        b=CugN37fVtOM6hixoOQ0JRpgxsKshWxMy8KpBq3T9jAf0AwejlW/XxcLOYvuhRSkUN9
-         r39MrcP8zEDKv95vqQKD+n3jk+f/0CfVJo8LSFrSme4PeR0b6tLaMqujzgc3odRwY9Cd
-         AS7Awq/OPJAzCAzHdwOm/q5/59G5MLs6Jy6/DfWGgS0EBWxhix0Sr1rvOV3vV7JCfjey
-         2tZYpMVVlwRN1dIeG0xrilibJZS1LOQiMs2B8YAyb/FXLS5wi0pD6O9HJYswVUJv8IsW
-         EymABFV1wT0ZPr06hEI8NpkFRc7X/NLjaVJKV04k08MYHD6O7gsWzgP+BL4qpxm/PTwA
-         1JyQ==
-X-Gm-Message-State: ACrzQf0GdEMlcs9fCyKdl06r9qcMeLp8bukXCI0q9nP+Edu07LFG4LYb
-        nWE4anWJmt+bK91k88cwBpfTeQdcFqwfB4PJIm/4WZMV59I8+g==
-X-Google-Smtp-Source: AMsMyM5svCDvEG+F68rVlzfhptxtspwaLj/f+Xtw3xH+nHQ2D3gvlo1KiOt2HzFnFb3PEyZHkixisf0dpd/hkKk9k+s=
-X-Received: by 2002:a05:6402:5291:b0:45c:3f6a:d4bc with SMTP id
- en17-20020a056402529100b0045c3f6ad4bcmr8150308edb.285.1667125467183; Sun, 30
- Oct 2022 03:24:27 -0700 (PDT)
+        bh=7c/lGoK+gtbCtySB1gIW7IU67MeJ+XxffhaGzyWdKCg=;
+        b=6miFAUaBfymuCwFmtGAlL3lUFG+azlyKO9XiUFGKl1p51cHy/j/u37sUTbbdmI/9J3
+         ISOQLM0sK0AH5YKioKNMrsKfjQFT+rk7lu1cc9wImFAkNqWxMUwCeSyA9ThlqTo+QLM4
+         UJcX+vwD3Dif9hRKbt1l2320TFN2ljtJefW2FOvzVSaB92ap+rBQHdFApfTzuSh/QGEU
+         U8Lgudn9gAmpBZ9p70ksX2Tlht6AvRVBeyNW3S+Oh2ETkeSZibdiJCNIX6GF107UhhVs
+         agBDeHcB57JyoQSVFn7V4LCweQe4dzoauOt1vljxSe7Il6qZ2asnez8nT84+JCgPi704
+         WwcA==
+X-Gm-Message-State: ACrzQf3itPL5AxBc+RzjBohRi2ljXGyQMI59dIAsjnVntLlEDbjdd9WE
+        909Dm9W66nM2T2l45J0YrV2evyp/QFDbGzePZa0fcRTpcRF/Bw==
+X-Google-Smtp-Source: AMsMyM5PVGpn1Kw/lXVDPsPkgsmZ+J4K8AWUNwWIELRZ6g72bdotqWifH0I0yb00Zzwrb4HUewysnCG3slUwd+uTXxQ=
+X-Received: by 2002:a17:907:2d06:b0:78d:50db:130e with SMTP id
+ gs6-20020a1709072d0600b0078d50db130emr7447503ejc.371.1667125583014; Sun, 30
+ Oct 2022 03:26:23 -0700 (PDT)
 MIME-Version: 1.0
 From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Sun, 30 Oct 2022 18:23:49 +0800
-Message-ID: <CAO4mrfeFrYwFEYmULU0DWxG3kOq+M-=uqRJNp8b-RKy6wzvEsw@mail.gmail.com>
-Subject: BUG: unable to handle kernel NULL pointer dereference in tipc_crypto_key_distr
-To:     jmaloy@redhat.com, ying.xue@windriver.com, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     tipc-discussion@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Date:   Sun, 30 Oct 2022 18:25:47 +0800
+Message-ID: <CAO4mrfdwcZx1LPUduO1ycNs-hz0jGmiG+Lbe7VN-ext=aFzYEQ@mail.gmail.com>
+Subject: kernel BUG in reiserfs_update_sd_size
+To:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
@@ -73,7 +70,7 @@ HEAD commit: 64570fbc14f8 Linux 5.15-rc5
 git tree: upstream
 compiler: gcc 8.0.1
 console output:
-https://drive.google.com/file/d/1ZxNXcUkiJiTK6MzVIWCqDpq70QW2-t-b/view?usp=share_link
+https://drive.google.com/file/d/1laVB52iSmAz7ATjvqKgcZw9Qf3pVh50t/view?usp=share_link
 kernel config: https://drive.google.com/file/d/1uDOeEYgJDcLiSOrx9W8v2bqZ6uOA_55t/view?usp=share_link
 
 Unfortunately, I don't have any reproducer for this crash yet.
@@ -81,93 +78,71 @@ Unfortunately, I don't have any reproducer for this crash yet.
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
 Reported-by: Wei Chen <harperchen1110@gmail.com>
 
-RBP: 0000000000000045 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000119bfac
-R13: 0000000000000000 R14: 000000000119bfa0 R15: 00007fffcffa6fe0
-BUG: kernel NULL pointer dereference, address: 0000000000000020
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 2763b067 P4D 2763b067 PUD 27636067 PMD 0
-Oops: 0000 [#1] PREEMPT SMP
-CPU: 0 PID: 12346 Comm: syz-executor.0 Not tainted 5.15.0-rc5 #1
+REISERFS (device loop0): Using rupasov hash to sort names
+REISERFS panic (device loop0): vs-13065 update_stat_data: key [1 2 0x0
+IND], found item *3.6* [1 2 0x0 IND], item_len 44, item_location 4052,
+free_space(entry_count) 0
+------------[ cut here ]------------
+kernel BUG at fs/reiserfs/prints.c:390!
+invalid opcode: 0000 [#1] PREEMPT SMP
+CPU: 0 PID: 12506 Comm: syz-executor.0 Not tainted 5.15.0-rc5 #1
 Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
 rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
-RIP: 0010:tipc_crypto_key_distr+0x121/0x6a0
-Code: 00 48 8b 13 88 85 60 ff ff ff 41 0f b7 44 24 48 48 89 95 68 ff
-ff ff 66 89 85 5c ff ff ff 49 8b 44 24 40 48 89 85 50 ff ff ff <8b> 40
-20 83 c0 24 0f b7 c0 83 c0 28 89 c7 89 85 64 ff ff ff e8 96
-RSP: 0018:ffffc9000d48f8e0 EFLAGS: 00010212
-RAX: 0000000000000000 RBX: ffff888010979a00 RCX: 0000000000040000
-RDX: ffff8880163e0000 RSI: 0000000000000a20 RDI: 0000000000000002
-RBP: ffffc9000d48f998 R08: ffffffff847c7f3d R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000001 R12: ffff88803189eb00
-R13: 0000000000000001 R14: 0000000000000000 R15: 00000000ffffff82
-FS:  00007f54fc3f7700(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+RIP: 0010:__reiserfs_panic.cold.17+0x37/0x8c
+Code: d1 85 74 63 e8 e6 f4 9f fc 4c 89 f1 48 89 da 4c 89 ee 49 c7 c0
+a0 30 29 89 48 c7 c7 04 8f c0 85 e8 f1 60 fe ff e8 c5 f4 9f fc <0f> 0b
+e8 be f4 9f fc 4d 85 ed 49 c7 c4 26 a6 d1 85 74 36 e8 ad f4
+RSP: 0018:ffffc900020b7aa0 EFLAGS: 00010216
+RAX: 0000000000013eb9 RBX: ffff888016c8a000 RCX: 0000000000040000
+RDX: ffffc9000226d000 RSI: ffff888111950000 RDI: 0000000000000002
+RBP: ffffc900020b7b10 R08: ffffffff849d7e9b R09: 0000000000000000
+R10: 0000000000000005 R11: 0000000080000000 R12: ffffffff85d1a626
+R13: ffffffff85c07963 R14: ffffffff85079d30 R15: ffffc900020b7c60
+FS:  00007f3386280700(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000020 CR3: 0000000027638000 CR4: 00000000003526f0
+CR2: 0000000000525b40 CR3: 0000000011cfd000 CR4: 00000000003506f0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
- tipc_nl_node_set_key+0x760/0x930
- genl_family_rcv_msg_doit.isra.16+0x141/0x190
- genl_rcv_msg+0x172/0x2c0
- netlink_rcv_skb+0x87/0x1d0
- genl_rcv+0x24/0x40
- netlink_unicast+0x2b8/0x3d0
- netlink_sendmsg+0x350/0x680
- sock_sendmsg+0x52/0x70
- ____sys_sendmsg+0x35f/0x390
- ___sys_sendmsg+0x95/0xd0
- __sys_sendmsg+0x87/0x100
+ reiserfs_update_sd_size+0x33b/0x450
+ reiserfs_mkdir+0x2db/0x3c0
+ reiserfs_xattr_init+0x1be/0x330
+ reiserfs_fill_super+0x110e/0x1620
+ mount_bdev+0x23d/0x280
+ legacy_get_tree+0x2e/0x90
+ vfs_get_tree+0x29/0x100
+ path_mount+0x58e/0x10a0
+ do_mount+0x9b/0xb0
+ __x64_sys_mount+0x13a/0x150
  do_syscall_64+0x34/0xb0
  entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x4692c9
-Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+RIP: 0033:0x46abda
+Code: 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f
+84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d
 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f54fc3f6c38 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007f54fc3f6c80 RCX: 00000000004692c9
-RDX: 0000000000000000 RSI: 00000000200007c0 RDI: 0000000000000003
-RBP: 0000000000000045 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000119bfac
-R13: 0000000000000000 R14: 000000000119bfa0 R15: 00007fffcffa6fe0
+RSP: 002b:00007f338627fa48 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007f338627faf0 RCX: 000000000046abda
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f338627fab0
+RBP: 0000000020000000 R08: 00007f338627faf0 R09: 0000000020000000
+R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000100
+R13: 00007f338627fab0 R14: 0000000000000001 R15: 0000000020011500
 Modules linked in:
-CR2: 0000000000000020
----[ end trace c7813f5e0b2eeeab ]---
-RIP: 0010:tipc_crypto_key_distr+0x121/0x6a0
-Code: 00 48 8b 13 88 85 60 ff ff ff 41 0f b7 44 24 48 48 89 95 68 ff
-ff ff 66 89 85 5c ff ff ff 49 8b 44 24 40 48 89 85 50 ff ff ff <8b> 40
-20 83 c0 24 0f b7 c0 83 c0 28 89 c7 89 85 64 ff ff ff e8 96
-RSP: 0018:ffffc9000d48f8e0 EFLAGS: 00010212
-RAX: 0000000000000000 RBX: ffff888010979a00 RCX: 0000000000040000
-RDX: ffff8880163e0000 RSI: 0000000000000a20 RDI: 0000000000000002
-RBP: ffffc9000d48f998 R08: ffffffff847c7f3d R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000001 R12: ffff88803189eb00
-R13: 0000000000000001 R14: 0000000000000000 R15: 00000000ffffff82
-FS:  00007f54fc3f7700(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+---[ end trace 15f12b9b91cc8105 ]---
+RIP: 0010:__reiserfs_panic.cold.17+0x37/0x8c
+Code: d1 85 74 63 e8 e6 f4 9f fc 4c 89 f1 48 89 da 4c 89 ee 49 c7 c0
+a0 30 29 89 48 c7 c7 04 8f c0 85 e8 f1 60 fe ff e8 c5 f4 9f fc <0f> 0b
+e8 be f4 9f fc 4d 85 ed 49 c7 c4 26 a6 d1 85 74 36 e8 ad f4
+RSP: 0018:ffffc900020b7aa0 EFLAGS: 00010216
+RAX: 0000000000013eb9 RBX: ffff888016c8a000 RCX: 0000000000040000
+RDX: ffffc9000226d000 RSI: ffff888111950000 RDI: 0000000000000002
+RBP: ffffc900020b7b10 R08: ffffffff849d7e9b R09: 0000000000000000
+R10: 0000000000000005 R11: 0000000080000000 R12: ffffffff85d1a626
+R13: ffffffff85c07963 R14: ffffffff85079d30 R15: ffffc900020b7c60
+FS:  00007f3386280700(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000020 CR3: 0000000027638000 CR4: 00000000003526f0
+CR2: 0000000000525b40 CR3: 0000000011cfd000 CR4: 00000000003506f0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0: 00 48 8b              add    %cl,-0x75(%rax)
-   3: 13 88 85 60 ff ff    adc    -0x9f7b(%rax),%ecx
-   9: ff 41 0f              incl   0xf(%rcx)
-   c: b7 44                mov    $0x44,%bh
-   e: 24 48                and    $0x48,%al
-  10: 48 89 95 68 ff ff ff mov    %rdx,-0x98(%rbp)
-  17: 66 89 85 5c ff ff ff mov    %ax,-0xa4(%rbp)
-  1e: 49 8b 44 24 40        mov    0x40(%r12),%rax
-  23: 48 89 85 50 ff ff ff mov    %rax,-0xb0(%rbp)
-* 2a: 8b 40 20              mov    0x20(%rax),%eax <-- trapping instruction
-  2d: 83 c0 24              add    $0x24,%eax
-  30: 0f b7 c0              movzwl %ax,%eax
-  33: 83 c0 28              add    $0x28,%eax
-  36: 89 c7                mov    %eax,%edi
-  38: 89 85 64 ff ff ff    mov    %eax,-0x9c(%rbp)
-  3e: e8                    .byte 0xe8
-  3f: 96                    xchg   %eax,%esi
 
 Best,
-We
+Wei
