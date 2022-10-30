@@ -2,111 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C94C61291D
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 09:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6569461291F
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 09:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiJ3I3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 04:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
+        id S229608AbiJ3Ibn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 04:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiJ3I3v (ORCPT
+        with ESMTP id S229553AbiJ3Ibk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 04:29:51 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1F1290
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 01:29:47 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id 192so8258311pfx.5
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 01:29:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wn67zjUrvRIAuIt/yH34kPy+6+CbEnri6MP6SVwT/Is=;
-        b=Jr71H3plqD0NcrrYdwq7uz80Jp+rK4So+F/8gfGNz+KeVF+pfuD1Ka2tE14wYNniX/
-         p7kCpQF54u1qeOBmwB4by0DV+zIZ7SxUW4RWggXHhupamH4rgLtobZNIODPexU3IdT28
-         ZmjO3D4jQF2AIyBLSx8DuS1WXjZQY0UeaKU7o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wn67zjUrvRIAuIt/yH34kPy+6+CbEnri6MP6SVwT/Is=;
-        b=dKmpDsLV0sdR0xKQ0ggY5Zc/yV5XNvmxg/g+FxQQ2WRbme1Bo4FVI5mBj+KuEqDzvC
-         3ikYjnYmuAkcnqVAkzD188sGXZ60n6YBf3casf75jZHHCzLdEDAIvYVaYS0Cy6uORXUd
-         BlrfRZgpggmxV0tTUr2p16fqxduGD1ivZ5djAZGSU7OVOOG4Au5LLFr9kpyZ3cZkccnh
-         iMxzjAmgPQJyp4leAVBNut+tBo0wj5pUsA+R0NUopY/ehaBHWGe+x3zdtGgc6hgC++jr
-         mq9Ar3E+0vCZoNFwJ93xjteYSRGlrf/Me30dPjucu3LBiU4vVWvcd3EH4ZVq3gDYl3K9
-         8AkQ==
-X-Gm-Message-State: ACrzQf1YVwMeuB047W5qQqGVd/Z5Qb9QatVXI8bvui14/DRXvqZK4eEe
-        SK/PLIgIsE6wakmed0+8yKujKI4VPGXCJGZF
-X-Google-Smtp-Source: AMsMyM4CsumDtpL/W71VaqyRQAmwnuQbfM0942cbOIosw7sDXzTn02D8QcnFcAzPyo5WgphUJOuwtg==
-X-Received: by 2002:a05:6a00:1810:b0:56b:f29d:cc8e with SMTP id y16-20020a056a00181000b0056bf29dcc8emr8181665pfa.33.1667118586633;
-        Sun, 30 Oct 2022 01:29:46 -0700 (PDT)
-Received: from [192.168.0.168] ([103.99.10.63])
-        by smtp.gmail.com with ESMTPSA id 1-20020a17090a0f0100b00205fafa6768sm2101042pjy.6.2022.10.30.01.29.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Oct 2022 01:29:46 -0700 (PDT)
-Message-ID: <2dc3fbd9-217b-1e7e-1b77-dad14bce91e0@linuxfoundation.org>
-Date:   Sun, 30 Oct 2022 02:29:41 -0600
+        Sun, 30 Oct 2022 04:31:40 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CD9120;
+        Sun, 30 Oct 2022 01:31:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667118696; x=1698654696;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8vFhLuD0S36ME3HvT/tSVLmP1r1ZUW0wiXJ1NfH1yT0=;
+  b=R/YHafDbL4rdypqq7VB+z7X+tN8v6UuVaRFAtuyt5JAZQfEEvDdyPZF5
+   nfd0+yLXMoCInrpfbLxHGtNzRP6EA4J9xJ8WKoKcqM4maMKhv7bZOdFFa
+   QG62kxt/x4D5n0OuAKcMwQLdrJcZLiWqV3moPuXx4CNTwjj4q5ZRMmA9Z
+   pGxyBqNoLPMwCP3uyucQbQRoIjUGtfzmyt75U4zrpk/d+Jm11+h/rSZQu
+   BLslPZV/Kz9+hwYxpg8iuNb5mctM1bqIPL2/8kbvUv2z8zCgqdKHXqp05
+   XnnEcNJdXUSGTWntrz0bhwG0DAmXrvX/rXs1jlrPt2JL3uvgq5PWYm0Fm
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="395044758"
+X-IronPort-AV: E=Sophos;i="5.95,225,1661842800"; 
+   d="scan'208";a="395044758"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2022 01:31:36 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="722495889"
+X-IronPort-AV: E=Sophos;i="5.95,225,1661842800"; 
+   d="scan'208";a="722495889"
+Received: from heyingjx-mobl.ccr.corp.intel.com ([10.254.215.115])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2022 01:31:33 -0700
+Message-ID: <433dcc871ecbee4a2ddd21b3ae23be7100002149.camel@intel.com>
+Subject: Re: [PATCH 2/3] perf/x86/rapl: Use standard Energy Unit for SPR
+ Dram RAPL domain
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     peterz@infradead.org, rjw@rjwysocki.net, len.brown@intel.com
+Cc:     mingo@redhat.com, linux-pm@vger.kernel.org, x86@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ak@linux.intel.com, kan.liang@linux.intel.com,
+        artem.bityutskiy@linux.intel.com
+Date:   Sun, 30 Oct 2022 16:31:30 +0800
+In-Reply-To: <20220924054738.12076-3-rui.zhang@intel.com>
+References: <20220924054738.12076-1-rui.zhang@intel.com>
+         <20220924054738.12076-3-rui.zhang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3] ksefltests: pidfd: Fix wait_states: Test terminated by
- timeout
-Content-Language: en-US
-To:     Li Zhijian <lizhijian@fujitsu.com>, brauner@kernel.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Philip Li <philip.li@intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <1662001807-7-1-git-send-email-lizhijian@fujitsu.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <1662001807-7-1-git-send-email-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/31/22 21:10, Li Zhijian wrote:
-> 0Day/LKP observed that the kselftest blocks forever since one of the
-> pidfd_wait doesn't terminate in 1 of 30 runs. After digging into
-> the source, we found that it blocks at:
-> ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WCONTINUED, NULL), 0);
-> 
-> wait_states has below testing flow:
->    CHILD                 PARENT
->    ---------------+--------------
-> 1 STOP itself
-> 2                   WAIT for CHILD STOPPED
-> 3                   SIGNAL CHILD to CONT
-> 4 CONT
-> 5 STOP itself
-> 5'                  WAIT for CHILD CONT
-> 6                   WAIT for CHILD STOPPED
-> 
-> The problem is that the kernel cannot ensure the order of 5 and 5', once
-> 5 goes first, the test will fail.
-> 
-> we can reproduce it by:
-> $ while true; do make run_tests -C pidfd; done
-> 
-> Introduce a blocking read in child process to make sure the parent can
-> check its WCONTINUED.
-> 
-> CC: Philip Li <philip.li@intel.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
-> ---
+Hi, Peter,
 
-Sorry for the delay. Now applied to linux-kselftest fixes for rc4
+Can you please consider this as tip material?
+This patch series does not get merged altogether. The intel-rapl and
+turbostat fixes have been merged by Rafael and Len respectively.
 
 thanks,
--- Shuah
+rui
+
+On Sat, 2022-09-24 at 13:47 +0800, Zhang Rui wrote:
+> Intel Xeon servers used to use a fixed energy resolution (15.3uj) for
+> Dram RAPL domain. But on SPR, Dram RAPL domain follows the standard
+> energy resolution as described in MSR_RAPL_POWER_UNIT.
+> 
+> Remove the SPR Dram energy unit quirk.
+> 
+> Fixes: bcfd218b6679 ("perf/x86/rapl: Add support for Intel SPR
+> platform")
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> Tested-by: Wang Wendy <wendy.wang@intel.com>
+> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+> ---
+>  arch/x86/events/rapl.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
+> index 77e3a47af5ad..7d8db681880d 100644
+> --- a/arch/x86/events/rapl.c
+> +++ b/arch/x86/events/rapl.c
+> @@ -619,12 +619,8 @@ static int rapl_check_hw_unit(struct rapl_model
+> *rm)
+>  	case RAPL_UNIT_QUIRK_INTEL_HSW:
+>  		rapl_hw_unit[PERF_RAPL_RAM] = 16;
+>  		break;
+> -	/*
+> -	 * SPR shares the same DRAM domain energy unit as HSW, plus it
+> -	 * also has a fixed energy unit for Psys domain.
+> -	 */
+> +	/* SPR uses a fixed energy unit for Psys domain. */
+>  	case RAPL_UNIT_QUIRK_INTEL_SPR:
+> -		rapl_hw_unit[PERF_RAPL_RAM] = 16;
+>  		rapl_hw_unit[PERF_RAPL_PSYS] = 0;
+>  		break;
+>  	default:
+
