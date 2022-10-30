@@ -2,173 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68972612945
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 10:10:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E68F612947
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 10:15:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbiJ3JKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 05:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55064 "EHLO
+        id S229608AbiJ3JPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 05:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiJ3JKi (ORCPT
+        with ESMTP id S229476AbiJ3JPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 05:10:38 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35815F83
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 02:10:33 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id k2so22715775ejr.2
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 02:10:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=y72qm/5pIvjeR0f8Y05KldTYpaZCuldykFLF92i5SRY=;
-        b=pkpBd05JqBjX2QFvUby5p7CL4jEdxA+mBk1L9Xq/C0Mgwhzl3ST2dv9b/aDzr+ZsHn
-         CGT2njgksiJcVkamUkIYJfGy8Tj7Cc+jMsHufoq3FhiqwLCX1fvmt3ncIGcdTRDqCSNC
-         g0dPB4AOwv77rQdIamxLOFTVc7pTJISEXHG6WgsI4bkbwtI+13Xdo7ZZFBUdSMku2Vux
-         KeqUQ5efXk+v1nz8Fz5EoSMwFXN8fJ7mnkOkL4uIRRBTbKkPEEgAw9rq4FSTkKkvrMHJ
-         457mx3f3EO2i7M+P9UG19a8Lb2EOEY86aIWuqzXOczQ05egSEIgiW4cZWjSIDH4OAOvp
-         bxpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y72qm/5pIvjeR0f8Y05KldTYpaZCuldykFLF92i5SRY=;
-        b=nYwyhVSyTXSRNyWO4JZQEtsRCsfIMLCBHpDOOA/N8jRsRvpzid05Z0HThErPP46T1M
-         CSvj06m9VFrlEXOeFGfJK3EO7jmBsGo4nKFBPvP6hPGQMaJWpOYq5MY64jhUft1gI0dN
-         IFOjDIq4zyXVdniUQFRgdPjoGtx4C2L7oFaZstcVGpu1Z8tVXIXEosqAVovARJndcovx
-         n4+9hw/C/7eNkB1lso8mJVe2mmnncM86OZdvJ6VTsXL52GDg5uI7IihHKY1aeMSmbkGl
-         pr90AxDZ2h26G+n6m0M5zIg4LUjli1IZVf99E7ty7wl0amBd8ZIWPYl+sQx15ZfmKDSH
-         ut4Q==
-X-Gm-Message-State: ACrzQf2SgH7AaLeOanDws340RSOKN/+kB/VClciCV08/6kveM5EfgyBr
-        qzKpBaqqnIJLNOcI0rmjS9o4nBLMbTqhaVYuNQBWUqnJmG0=
-X-Google-Smtp-Source: AMsMyM4lcK0krCAY2oO2Z3jJOJpSq6lP+PMGNXfS88yVZ44WJgmv7F0gsudzRXY82Yggh1dc7ShUbu2XOctUjtMeKDM=
-X-Received: by 2002:a17:907:2da6:b0:78d:3cf1:9132 with SMTP id
- gt38-20020a1709072da600b0078d3cf19132mr7406717ejc.299.1667121032196; Sun, 30
- Oct 2022 02:10:32 -0700 (PDT)
+        Sun, 30 Oct 2022 05:15:41 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEDD105
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 02:15:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=eZHBFKGdlyvjUyOtZTxUlT0c0Nkd2MWDN13FYETBKps=; b=jzcCgFmGAhpsVf9TpFX3FZBzO8
+        lLgOTW76i26CufAPzWCOPbQWf5ypSRHq3QbqB4jy9wM5J/BU4MqMQe2/2sP+hH9GVvKlN9qHfkqtT
+        OhG+dGiAgGAQ95f9yUWuuPfvz1Mr9Y0PVGlnf8TGrsTgxv1BU/asarXwK7gbDvl5BY62b7jAhXKwR
+        zxCLNfznPMq93S1MTex+h1oIygdkeAPwpwxHt/j6pD8JkLsPXsPTninPK20vmgrcRMtjkU62So/Tn
+        1nDyCw9X+OZ6t1G15GA9e0CyyB1kTXb3W4vQMZwxjZle0oOfym+mtfK5TThpnNBlo6hLCBhmkDLuZ
+        JIXF2jiQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1op4Ph-002mWJ-95; Sun, 30 Oct 2022 09:15:29 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E659D30017F;
+        Sun, 30 Oct 2022 10:15:22 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CAE9D203DCBE0; Sun, 30 Oct 2022 10:15:22 +0100 (CET)
+Date:   Sun, 30 Oct 2022 10:15:22 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, djwong@kernel.org,
+        yujie.liu@intel.com, tglx@linutronix.de, jpoimboe@kernel.org,
+        joao.moreira@intel.com, samitolvanen@google.com
+Subject: Re: [PATCH 0/5] x86/kallsyms: Fix the call-thunk kallsyms fail
+Message-ID: <Y15AqvPo/JqjVjTx@hirez.programming.kicks-ass.net>
+References: <20221028194022.388521751@infradead.org>
 MIME-Version: 1.0
-From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Sun, 30 Oct 2022 17:09:56 +0800
-Message-ID: <CAO4mrfd4=HRXMrcdZQUorNaFss3AFfrRxuXWMFT3uh+Dvfwb9g@mail.gmail.com>
-Subject: BUG: unable to handle kernel NULL pointer dereference in gfs2_evict_inode
-To:     rpeterso@redhat.com, agruenba@redhat.com, cluster-devel@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221028194022.388521751@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux Developer,
+On Fri, Oct 28, 2022 at 09:40:22PM +0200, Peter Zijlstra wrote:
+> Hi all,
+> 
+> As reported here:
+> 
+>   https://lkml.kernel.org/r/202210241614.2ae4c1f5-yujie.liu@intel.com
+> 
+> The kallsyms change for call-thunks doesn't really work out as expected. These
+> patches revert that change and propose an alternative.
 
-Recently when using our tool to fuzz kernel, the following crash was triggered:
+Robot found it needed the below; have folded back and pushed out again.
 
-HEAD commit: 64570fbc14f8 Linux 5.15-rc5
-git tree: upstream
-compiler: gcc 8.0.1
-console output:
-https://drive.google.com/file/d/1yppAEEN16x0lR3fd5t-NQ1itCoKLFtfP/view?usp=share_link
-kernel config: https://drive.google.com/file/d/1uDOeEYgJDcLiSOrx9W8v2bqZ6uOA_55t/view?usp=share_link
-
-Unfortunately, I don't have any reproducer for this crash yet.
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: Wei Chen <harperchen1110@gmail.com>
-
-RBP: 0000000020000000 R08: 00007f39b7fa3af0 R09: 0000000020000000
-R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000100
-R13: 00007f39b7fa3ab0 R14: 0000000000000001 R15: 0000000020047a20
-gfs2: fsid=syz:syz.0: can't lookup journal index: 0
-BUG: kernel NULL pointer dereference, address: 000000000000008c
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD c1e1067 P4D c1e1067 PUD 1a9e8067 PMD 0
-Oops: 0000 [#1] PREEMPT SMP
-CPU: 0 PID: 11045 Comm: syz-executor.0 Not tainted 5.15.0-rc5 #1
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
-RIP: 0010:gfs2_evict_inode+0x47b/0xb00
-Code: 3b 14 ff be 01 00 00 00 48 89 df e8 af 6f 44 ff 48 8b bb b8 04
-00 00 31 f6 e8 e1 47 fd ff 49 8b 87 00 09 00 00 31 f6 4c 89 ff <8b> 90
-8c 00 00 00 e8 ba 4a 00 00 31 ff 41 89 c5 89 c6 e8 ae 3c 14
-RSP: 0018:ffffc9000df7fb10 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: ffff888016648d10 RCX: 0000000000040000
-RDX: ffffc900013d5000 RSI: 0000000000000000 RDI: ffff88801a800000
-RBP: ffffc9000df7fbc0 R08: ffffffff8229378f R09: 0000000000000000
-R10: 0000000000000005 R11: 0000000000000000 R12: ffff888016648f38
-R13: 0000000000000000 R14: ffff88801a800000 R15: ffff88801a800000
-FS:  00007f39b7fa4700(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000000008c CR3: 0000000017567000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- evict+0x11c/0x230
- iput+0x2e9/0x500
- dentry_unlink_inode+0x111/0x1a0
- __dentry_kill+0x186/0x280
- dput.part.32+0x60d/0x940
- gfs2_fill_super+0x8c1/0x10f0
- get_tree_bdev+0x243/0x340
- gfs2_get_tree+0x24/0xd0
- vfs_get_tree+0x29/0x100
- path_mount+0x58e/0x10a0
- do_mount+0x9b/0xb0
- __x64_sys_mount+0x13a/0x150
- do_syscall_64+0x34/0xb0
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x46abda
-Code: 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f
-84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f39b7fa3a48 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007f39b7fa3af0 RCX: 000000000046abda
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f39b7fa3ab0
-RBP: 0000000020000000 R08: 00007f39b7fa3af0 R09: 0000000020000000
-R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000100
-R13: 00007f39b7fa3ab0 R14: 0000000000000001 R15: 0000000020047a20
-Modules linked in:
-CR2: 000000000000008c
----[ end trace 194497c38992c5b1 ]---
-RIP: 0010:gfs2_evict_inode+0x47b/0xb00
-Code: 3b 14 ff be 01 00 00 00 48 89 df e8 af 6f 44 ff 48 8b bb b8 04
-00 00 31 f6 e8 e1 47 fd ff 49 8b 87 00 09 00 00 31 f6 4c 89 ff <8b> 90
-8c 00 00 00 e8 ba 4a 00 00 31 ff 41 89 c5 89 c6 e8 ae 3c 14
-RSP: 0018:ffffc9000df7fb10 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: ffff888016648d10 RCX: 0000000000040000
-RDX: ffffc900013d5000 RSI: 0000000000000000 RDI: ffff88801a800000
-RBP: ffffc9000df7fbc0 R08: ffffffff8229378f R09: 0000000000000000
-R10: 0000000000000005 R11: 0000000000000000 R12: ffff888016648f38
-R13: 0000000000000000 R14: ffff88801a800000 R15: ffff88801a800000
-FS:  00007f39b7fa4700(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000000008c CR3: 0000000017567000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0: 3b 14 ff              cmp    (%rdi,%rdi,8),%edx
-   3: be 01 00 00 00        mov    $0x1,%esi
-   8: 48 89 df              mov    %rbx,%rdi
-   b: e8 af 6f 44 ff        callq  0xff446fbf
-  10: 48 8b bb b8 04 00 00 mov    0x4b8(%rbx),%rdi
-  17: 31 f6                xor    %esi,%esi
-  19: e8 e1 47 fd ff        callq  0xfffd47ff
-  1e: 49 8b 87 00 09 00 00 mov    0x900(%r15),%rax
-  25: 31 f6                xor    %esi,%esi
-  27: 4c 89 ff              mov    %r15,%rdi
-* 2a: 8b 90 8c 00 00 00    mov    0x8c(%rax),%edx <-- trapping instruction
-  30: e8 ba 4a 00 00        callq  0x4aef
-  35: 31 ff                xor    %edi,%edi
-  37: 41 89 c5              mov    %eax,%r13d
-  3a: 89 c6                mov    %eax,%esi
-  3c: e8                    .byte 0xe8
-  3d: ae                    scas   %es:(%rdi),%al
-  3e: 3c 14                cmp    $0x14,%al
-
-Best,
-Wei
+---
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index cf743520a786..55066c493570 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -3479,7 +3479,8 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
+ 
+ 		if (func && insn_func(insn) && func != insn_func(insn)->pfunc) {
+ 			/* Ignore KCFI type preambles, which always fall through */
+-			if (!strncmp(func->name, "__cfi_", 6))
++			if (!strncmp(func->name, "__cfi_", 6) ||
++			    !strncmp(func->name, "__pfx_", 6))
+ 				return 0;
+ 
+ 			WARN("%s() falls through to next function %s()",
+@@ -4042,6 +4043,7 @@ static int add_prefix_symbol(struct objtool_file *file, struct symbol *func,
+ 
+ 	for (;;) {
+ 		struct instruction *prev = list_prev_entry(insn, list);
++		u64 offset;
+ 
+ 		if (&prev->list == &file->insn_list)
+ 			break;
+@@ -4049,11 +4051,13 @@ static int add_prefix_symbol(struct objtool_file *file, struct symbol *func,
+ 		if (prev->type != INSN_NOP)
+ 			break;
+ 
+-		insn = prev;
+-		if (func->offset - prev->offset == opts.prefix) {
+-			elf_create_prefix_symbol(file->elf, func, -opts.prefix);
++		offset = func->offset - prev->offset;
++		if (offset >= opts.prefix) {
++			if (offset == opts.prefix)
++				elf_create_prefix_symbol(file->elf, func, opts.prefix);
+ 			break;
+ 		}
++		insn = prev;
+ 	}
+ 
+ 	return 0;
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index 9fbdad7a565d..3d636d12d679 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -822,7 +822,7 @@ elf_create_section_symbol(struct elf *elf, struct section *sec)
+ static int elf_add_string(struct elf *elf, struct section *strtab, char *str);
+ 
+ struct symbol *
+-elf_create_prefix_symbol(struct elf *elf, struct symbol *orig, long addend)
++elf_create_prefix_symbol(struct elf *elf, struct symbol *orig, long size)
+ {
+ 	struct symbol *sym = calloc(1, sizeof(*sym));
+ 	size_t namelen = strlen(orig->name) + sizeof("__pfx_");
+@@ -840,7 +840,8 @@ elf_create_prefix_symbol(struct elf *elf, struct symbol *orig, long addend)
+ 
+ 	sym->sym.st_name = elf_add_string(elf, NULL, name);
+ 	sym->sym.st_info = orig->sym.st_info;
+-	sym->sym.st_value = orig->sym.st_value + addend;
++	sym->sym.st_value = orig->sym.st_value - size;
++	sym->sym.st_size = size;
+ 
+ 	sym = __elf_create_symbol(elf, sym);
+ 	if (sym)
+diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
+index 9e3bd4717a11..b6974e3173aa 100644
+--- a/tools/objtool/include/objtool/elf.h
++++ b/tools/objtool/include/objtool/elf.h
+@@ -146,7 +146,7 @@ static inline bool has_multiple_files(struct elf *elf)
+ struct elf *elf_open_read(const char *name, int flags);
+ struct section *elf_create_section(struct elf *elf, const char *name, unsigned int sh_flags, size_t entsize, int nr);
+ 
+-struct symbol *elf_create_prefix_symbol(struct elf *elf, struct symbol *orig, long addend);
++struct symbol *elf_create_prefix_symbol(struct elf *elf, struct symbol *orig, long size);
+ 
+ int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
+ 		  unsigned int type, struct symbol *sym, s64 addend);
