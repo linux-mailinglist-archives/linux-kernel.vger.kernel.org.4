@@ -2,87 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4118C612C58
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 19:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC97612C5C
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 19:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiJ3Sw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 14:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45302 "EHLO
+        id S229670AbiJ3S4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 14:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJ3Sw5 (ORCPT
+        with ESMTP id S229738AbiJ3S4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 14:52:57 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4B595B3;
-        Sun, 30 Oct 2022 11:52:56 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id b29so8914411pfp.13;
-        Sun, 30 Oct 2022 11:52:56 -0700 (PDT)
+        Sun, 30 Oct 2022 14:56:36 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B138BB49A;
+        Sun, 30 Oct 2022 11:56:34 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id p16so482514wmc.3;
+        Sun, 30 Oct 2022 11:56:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8elokwRQaKyAP0dM+0zhrI4gx5N3/CeBtqzPukuUnAw=;
-        b=YUcGwd0QsHpWm5d+rOP1CAI28Pyn+kV7aCrc0+3OM+5XkOTwufAR2n42u8HF7hnyaI
-         jC5RpPKjR51SkhWwgPkoC0dYeQLZo00ObVmsNzX4s74Fp6DkVJnJq85PUD9JnLaLJRVS
-         0weUrPp9RGHpSE7bb/3XvL+E0xyv+I95LDYSh9HIi2+NbubdlEdoiAvFCsDdSeBWhTe8
-         mfPWHjC8Fga8Rl3vtLtWOtwRgFSa973dzYcqET8G0cwQqloY9mqTULWcX2EwylEHWbXd
-         JG50hMNU3R6bZ6fEV0fvkKxsBHTxYrFBo55ANUbWTj2MDirSLDcvd/SB5oAV8i6M5BDK
-         tqSA==
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sRlmF28UGiI8Vzg4eKX2nV3QMVLZdp3/jEuCPwwG//I=;
+        b=hfQYbmL/1J1/3WlQjBKvxIbtKkOxi4IwOypHtL1LVwRedQgc1g1HMXMWFD6ymW6Y73
+         gbbh/OsDvKq4Tvok4gcwfIeLaSsaeHPxB+6sCqCYhFAo2H3fANP4rBzkLgAAE4qm7g65
+         82O4IrY+hCpfXkD7jA0CqlOkW+Nq4WTdE3QpFwookArFOgc1sSFC7eKK45ppcVSyeha6
+         2OXTzz0DaIbKaFxm3XE1L2NzRqdURaBeOAXjLMOxjghW4qwJcZMVw8lF3RSotc0MQBpg
+         bmGmX3i7sn3/jq9+S4Q0ahSmLUGXqwuTaCyGPSgrVimmaKcSr0JGooUycOxQAca8AiNg
+         vw2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8elokwRQaKyAP0dM+0zhrI4gx5N3/CeBtqzPukuUnAw=;
-        b=GLiMC6IYFV+BJfh+53N3X35JOkJjEGvMo2RiWLCCkKKSjFWl50mbTuU5dSCfwAgEAZ
-         kIC7goXvixb2CldpJCiIv/0rXuTKzSarYZdxZlVODHFddP0XVq4ZDf6NVJ6+ok/GQYc6
-         AIRvVTt0MCd7JfXJCa+0kh0CpkDk1EEHmo120DhT3sbKy4+/IOeTT8rZ3z4yG3h8zLys
-         hchNnzyV3d2mPAbiFUjmfFsXavmje3AINncbzMZ5PvoyQ5JNhZHfxBgat2QQzIZD56Zs
-         w0z79+UWjhd3GgmieW3gY1+xHb1iPjkZA5FIKatmjIOAth86KtG0UHfPN0RZzTCt6cDo
-         G17Q==
-X-Gm-Message-State: ACrzQf0Y0dMiez3FKJb3stDoH4AQvmL4NZFB6XmZNywxZjFie5RitoFi
-        J+DdLN0HyqohFFlQNboB7yo=
-X-Google-Smtp-Source: AMsMyM6jIFTKWkHx2DeQKawqkSo5aIPaMrRPSIaPPkTGyp+gAAy5hs16vCm9pFqP9WPtnZCljLFS4w==
-X-Received: by 2002:a63:d90c:0:b0:462:cfa2:285b with SMTP id r12-20020a63d90c000000b00462cfa2285bmr9215780pgg.202.1667155975363;
-        Sun, 30 Oct 2022 11:52:55 -0700 (PDT)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id k3-20020a170902ce0300b00176b63535adsm2953022plg.260.2022.10.30.11.52.53
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 30 Oct 2022 11:52:54 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v2] hugetlb: don't delete vma_lock in hugetlb
- MADV_DONTNEED processing
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <Y17F50ktT9fZw4do@x1n>
-Date:   Sun, 30 Oct 2022 11:52:52 -0700
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        David Hildenbrand <david@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wei Chen <harperchen1110@gmail.com>,
-        "# 5 . 10+" <stable@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sRlmF28UGiI8Vzg4eKX2nV3QMVLZdp3/jEuCPwwG//I=;
+        b=iN+X3g+7B1Jc1DsjKQ8f2Gh5VTKPUrTcBYssRcWALJtj+LYN197yaAxyRPp5zzbuyo
+         L3n8KWeMWkmzDZsMEjbGl9aM2TyRjFHi4/85M7XDCecWpM+117MK0R8AVPcWn/xfjUzg
+         C6FGPQjgg4eJ3UQy+d5Rv+N6FQ7/1Mzq+7bmlATPHvm8hu0phhBh+IeEBI1rXyyqiom5
+         YuJcKWWS/7PpwE2AyEEUFiBZDRSM09Vp4Idp3qSzBnQcfSRhietKbdM5Yhse4+2YM6LQ
+         /pjm/NZaJjtJWWU8+I/Y0vjQkYJlsj8eRygcelhdVyIkSiz0vAaoQwwSa5euCiPFN3fB
+         9OGA==
+X-Gm-Message-State: ACrzQf2D7WH6yT7tfm4Ng6EtHYUGTTeAb2EhMx5nUhzsc/DYs8zbanY9
+        aA+FG1hN0F3QYQZrXvnJiEQ=
+X-Google-Smtp-Source: AMsMyM5TupdZxZQUyg5jxGqOkZ1HikEgb3sgMchC2YJC40hWyOXSRV82cFTpUlJq9ZOPi4VPiWPb3Q==
+X-Received: by 2002:a05:600c:3849:b0:3cf:4d99:fd1f with SMTP id s9-20020a05600c384900b003cf4d99fd1fmr14847358wmr.128.1667156193119;
+        Sun, 30 Oct 2022 11:56:33 -0700 (PDT)
+Received: from [109.186.183.118] (109-186-183-118.bb.netvision.net.il. [109.186.183.118])
+        by smtp.gmail.com with ESMTPSA id bx7-20020a5d5b07000000b00228cbac7a25sm4896685wrb.64.2022.10.30.11.56.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 30 Oct 2022 11:56:32 -0700 (PDT)
+Message-ID: <fc22e139-4eb1-45e0-5314-38f74ce4a643@gmail.com>
+Date:   Sun, 30 Oct 2022 20:55:25 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+From:   Eli Billauer <eli.billauer@gmail.com>
+Subject: Re: [PATCH v2] char: xillybus: Prevent use-after-free due to race
+ condition
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        imv4bel@gmail.com
+References: <20221030094209.65916-1-eli.billauer@gmail.com>
+ <Y16k90Lk2fehKqRC@rowland.harvard.edu>
+Content-Language: en-US
+In-Reply-To: <Y16k90Lk2fehKqRC@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <3232338E-77BB-42A8-9A25-5A4AD61FD4B2@gmail.com>
-References: <20221023025047.470646-1-mike.kravetz@oracle.com>
- <Y1mpwKpwsiN6u6r7@x1n> <Y1nImUVseAOpXwPv@monkey> <Y1nbErXmHkyrzt8F@x1n>
- <Y1vz7VvQ5zg5KTxk@monkey> <Y1v/x5RRpRjU4b/W@x1n> <Y1xGzR/nHQTJxTCj@monkey>
- <Y1xjyLWNCK7p0XSv@x1n> <Y13CO8iIGfDnV24u@monkey>
- <7048D2B5-5FA5-4F72-8FDC-A02411CFD71D@gmail.com> <Y17F50ktT9fZw4do@x1n>
-To:     Peter Xu <peterx@redhat.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,21 +78,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Oct 30, 2022, at 11:43 AM, Peter Xu <peterx@redhat.com> wrote:
+On 30/10/2022 18:23, Alan Stern wrote:
+> It looks like the xillybus driver already has a private mutex that would
+> have been very well suited for this task: unit_mutex defined in
+> xillybus_class.c.
 
-> The loop comes from 7e027b14d53e ("vm: simplify unmap_vmas() calling
-> convention", 2012-05-06), where zap_page_range() was used to replace a call
-> to unmap_vmas() because the patch wanted to eliminate the zap details
-> pointer for unmap_vmas(), which makes sense.
-> 
-> I didn't check the old code, but from what I can tell (and also as Mike
-> pointed out) I don't think zap_page_range() in the lastest code base is
-> ever used on multi-vma at all.  Otherwise the mmu notifier is already
-> broken - see mmu_notifier_range_init() where the vma pointer is also part
-> of the notification.
-> 
-> Perhaps we should just remove the loop?
+Indeed so. The problem is that unit_mutex is global to xillybus_class.c, 
+and I need the mutex to be released in xillyusb.c: The kref counter, 
+which needs to be incremented with a mutex held, is inside a structure 
+that only the XillyUSB driver knows about, so xillybus_class can't do 
+that. Which is why xillybus_find_inode() passed a pointer to unit_mutex 
+  to its caller in the v1 version of this patch. But that turned out to 
+be too odd.
 
-There is already zap_page_range_single() that does exactly that. Just need
-to export it.
+> Of course, there's nothing wrong with using a new
+> mutex instead -- just make sure there aren't any ABBA locking order
+> problems.
 
+The kref_mutex is always taken with no other (Xillybus-related) mutex 
+taken. So the locking order is assured.
+
+But thanks for the reminder. Never hurts checking again.
+
+Regards,
+    Eli
