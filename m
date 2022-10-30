@@ -2,108 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965DB612CF1
+	by mail.lfdr.de (Postfix) with ESMTP id E3645612CF2
 	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 22:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiJ3VFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 17:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
+        id S229668AbiJ3VIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 17:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ3VFG (ORCPT
+        with ESMTP id S229441AbiJ3VIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 17:05:06 -0400
-X-Greylist: delayed 963 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 30 Oct 2022 14:05:00 PDT
-Received: from mailrelay1-1.pub.mailoutpod2-cph3.one.com (mailrelay1-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:400::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C2A6383
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 14:05:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=57sc1zEaPoN7h4A46eYO7m7OBIbwdsJSNErw2oMh2i8=;
-        b=ExNOMhkVFJztTvZcxnvH3h4fqJbsQkgg+bLEfOuaDMvE1gWzf+x03ZVf9gCp8uwhCeU2x+q6nekWi
-         UMfVN39ir3tiH2OPaGvcsXRDQvpmQKHK3UuTp6v916Hd3c9eu8BAnGCKfFv5bGKDF/P9k9eqMzKaz3
-         YyNUCgEBiiyaZe6hupo2tczx7/snZxgERFISe14rqGEF3MLSehcW6uFvCTvTCzATO0Oq2qKub0zu+2
-         134gYtd6AYTmNhA/UKp4zhT678Ud601D0/AsB+uxyLjz/ajF3SKPi0XNAMhnCQdcLYMKT3t0b+QQDh
-         m5xZYu4P+05A45nJ0qf/BSXWMKcZ1Sw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=57sc1zEaPoN7h4A46eYO7m7OBIbwdsJSNErw2oMh2i8=;
-        b=tZrknHN/AT+yPRxITfnWcQoHnGW6VCifdzIareCpE0Xor8DK2nixpgY3yVhJk7aPL6M6bl/Bkor4y
-         vmrkmxMDQ==
-X-HalOne-ID: 43a73db0-5894-11ed-bedf-1b2345786432
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay1 (Halon) with ESMTPSA
-        id 43a73db0-5894-11ed-bedf-1b2345786432;
-        Sun, 30 Oct 2022 20:48:54 +0000 (UTC)
-Date:   Sun, 30 Oct 2022 21:48:53 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     antoniospg <antoniospg100@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Karol Herbst <kherbst@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
-        <nouveau@lists.freedesktop.org>,
-        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
-        <dri-devel@lists.freedesktop.org>, Ben Skeggs <bskeggs@redhat.com>
-Subject: Re: [PATCH] drm/nouveau: Adding support to control backlight using
- bl_power for nva3.
-Message-ID: <Y17jNddKjZNk59EK@ravnborg.org>
-References: <20221029184851.25340-1-antoniospg100@gmail.com>
+        Sun, 30 Oct 2022 17:08:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F38959A
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 14:08:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61764B81055
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 21:08:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26180C433C1;
+        Sun, 30 Oct 2022 21:08:00 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="o/xt56en"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1667164078;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vs1yilsLd6bxIKb8IAJ+0QKQjEQERTtWE9r/YjNtvY4=;
+        b=o/xt56en10FpHW4xzXNR2Jk404BJFH0QdurRCA3ax/byJ98dbvkzL4a1spmGS8ii+HZxXh
+        zlco6HSD2Wpqn4WwBzm9ln/vl35zUmeHidbldXGHUYep0+7DFbaW8xZcBuA1kqz+StkCAR
+        gmVFBnQEl6pR67Hz/O9QWt4kaPes84c=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7321aa22 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sun, 30 Oct 2022 21:07:57 +0000 (UTC)
+Date:   Sun, 30 Oct 2022 22:07:53 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     will@kernel.org, jean-philippe@linaro.org, ardb@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] random: remove early archrandom abstraction
+Message-ID: <Y17nqd27jHOkzeOp@zx2c4.com>
+References: <20221028234025.82222-1-Jason@zx2c4.com>
+ <Y160oanRPF3ZLINw@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221029184851.25340-1-antoniospg100@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y160oanRPF3ZLINw@arm.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 03:48:50PM -0300, antoniospg wrote:
-> Test plan:
-> 
-> * Turn off:
-> echo 1 > /sys/class/backlight/nv_backlight/bl_power
-> 
-> * Turn on:
-> echo 0 > /sys/class/backlight/nv_backlight/bl_power
-> 
-> Signed-off-by: antoniospg <antoniospg100@gmail.com>
-> ---
->  drivers/gpu/drm/nouveau/nouveau_backlight.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/nouveau/nouveau_backlight.c b/drivers/gpu/drm/nouveau/nouveau_backlight.c
-> index a2141d3d9b1d..855d0ce9f7fa 100644
-> --- a/drivers/gpu/drm/nouveau/nouveau_backlight.c
-> +++ b/drivers/gpu/drm/nouveau/nouveau_backlight.c
-> @@ -263,7 +263,16 @@ nva3_set_intensity(struct backlight_device *bd)
->  	u32 div, val;
->  
->  	div = nvif_rd32(device, NV50_PDISP_SOR_PWM_DIV(or));
-> -	val = (bd->props.brightness * div) / 100;
-> +
-> +	switch (bd->props.power) {
-> +	case FB_BLANK_UNBLANK:
-> +		val = (bd->props.brightness * div) / 100;
-> +		break;
-> +	default:
-> +		val = 0;
-> +		break;
-> +	}
-> +
+Hi Catalin,
 
-Consider the following change:
+> > +static __always_inline bool __cpu_has_rng(void)
+> > +{
+> > +	if (!system_capabilities_finalized()) {
+> > +		/* Open code as we run prior to the first call to cpufeature. */
+> > +		unsigned long ftr = read_sysreg_s(SYS_ID_AA64ISAR0_EL1);
+> > +		return (ftr >> ID_AA64ISAR0_EL1_RNDR_SHIFT) & 0xf;
+> > +	}
+> > +	return cpus_have_const_cap(ARM64_HAS_RNG);
+> > +}
+> 
+> We need to be careful with this check as it is only valid on the CPU it
+> was called on. Is the result used only on this CPU and with the
+> preemption disabled? We have big.LITTLE systems where CPUs may differ
+> and the ARM64_HAS_RNG feature may not be enabled once all the CPUs have
+> been initialised (capabilities finalised).
+> 
+> We could make this capability an ARM64_CPUCAP_BOOT_CPU_FEATURE, though
+> I'd have to check whether any systems in the wild have such mixed CPUs.
 
-	val = backlight_get_brightness(bd);
-	if (val)
-		val = (val * dev) / 100;
+This occurred to me too and I wasn't quite sure how the interaction
+worked out. It sounds like system_capabilities_finalized() might still
+be false when SMP brings up other cores? In that case, I guess we just
+have to make sure the system is still booting / in single CPU mode,
+before interrupts have been enabled. This should be straight forward to
+do; I'll send a v2.
 
-Then you avoid hard coding the use of FB_BLANK_UNBLANK.
-
-	Sam
+Jason
