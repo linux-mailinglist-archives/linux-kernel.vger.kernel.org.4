@@ -2,121 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D636126C5
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 02:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A11336126D1
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 02:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiJ3Ayx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Oct 2022 20:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53206 "EHLO
+        id S229571AbiJ3B3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Oct 2022 21:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJ3Ayu (ORCPT
+        with ESMTP id S229739AbiJ3B3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Oct 2022 20:54:50 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD2FF02D;
-        Sat, 29 Oct 2022 17:54:48 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id m2so7638598pjr.3;
-        Sat, 29 Oct 2022 17:54:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=77q2Cu689tqGNFEGpDkfXqQD5HzMzl1ec5TJSSyQvvA=;
-        b=EraN1j/tCpQDZrJ6/ChafeAePu1N6xwqHXnZgFGM2HTEcIYNsfqapOIp9JhcE6f2MJ
-         fwQ8agRAzxeFH4TVG9SmI6vdBwOxt5w2zQOv+rsPY8aSdVl9EZVB/cDI8dUNO5i7/x9Y
-         3uA46NZDyAheIe66Z1sHl9VpS6CGbAZqyWo+eZXtcD/mU8L1LDy6fmXgWW8n3cghu/42
-         AB6kHTo9MNr/ftT8kwMwm4iKNGnvwzspTd+3RoF7WGydt2++63Z64GvHrIZLgiHUBMWa
-         Rw2xo4PXQUsHAEf6y8yjgsm6++4OHrAIT/gwr7WzQRTXOBGOantv8cf04VGJAIo8Kccc
-         8HRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=77q2Cu689tqGNFEGpDkfXqQD5HzMzl1ec5TJSSyQvvA=;
-        b=MnQs/TcoVelGZSgIYmQwZnkUxWIps251q+ORQcJo+iMGWGJMYr+5H01WHxzH//nRcA
-         DY0wlKOrs7PC9+P/lVcpgmeue1vSTl2wJ83ReUY2gXkN9JERi8NG3VZEh+jwUSNCChyK
-         EBR0qJZ7lTQOaHSL7NLTTrVBEai+VJj9kmp0qUNZXZ4A+PL3WoXg+xPRrRrxHw7f7BDz
-         iTMQ2Eb9t7d+5GTJtAelE67pBSHOmBgfFsyUYdW7siV/tocNJAWZvoGOzVNBSFiBkIt9
-         E+uTlNl9Ns8FpPNM0rvHiVFjmQeWjDRcjhws2y9Y7En55x7CeVhzQZCLUG2lTue2kKze
-         KHlA==
-X-Gm-Message-State: ACrzQf1A3iJMe2g24+B3lEZV8Uy8qIB1YrIYgt0e+UTmRF0uHnhWRm2Y
-        MuZmIRs6lvt2u8FTrtK0QbY=
-X-Google-Smtp-Source: AMsMyM6gu09eo3bvtudODSKlspE707KvxJBRdAPtM3xEOdPcKEWu5D0PrHM4NTTxtQHInt1uCrtMgQ==
-X-Received: by 2002:a17:902:bcc4:b0:181:899a:ac9c with SMTP id o4-20020a170902bcc400b00181899aac9cmr6914467pls.124.1667091287610;
-        Sat, 29 Oct 2022 17:54:47 -0700 (PDT)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id 6-20020a631446000000b0046f7e1ca434sm1594012pgu.0.2022.10.29.17.54.45
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 29 Oct 2022 17:54:46 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v2] hugetlb: don't delete vma_lock in hugetlb
- MADV_DONTNEED processing
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <Y13CO8iIGfDnV24u@monkey>
-Date:   Sat, 29 Oct 2022 17:54:44 -0700
-Cc:     Peter Xu <peterx@redhat.com>, Linux-MM <linux-mm@kvack.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        David Hildenbrand <david@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wei Chen <harperchen1110@gmail.com>, stable@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <7048D2B5-5FA5-4F72-8FDC-A02411CFD71D@gmail.com>
-References: <20221023025047.470646-1-mike.kravetz@oracle.com>
- <Y1mpwKpwsiN6u6r7@x1n> <Y1nImUVseAOpXwPv@monkey> <Y1nbErXmHkyrzt8F@x1n>
- <Y1vz7VvQ5zg5KTxk@monkey> <Y1v/x5RRpRjU4b/W@x1n> <Y1xGzR/nHQTJxTCj@monkey>
- <Y1xjyLWNCK7p0XSv@x1n> <Y13CO8iIGfDnV24u@monkey>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 29 Oct 2022 21:29:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4BE6170;
+        Sat, 29 Oct 2022 18:29:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0C4AB80D7F;
+        Sun, 30 Oct 2022 01:29:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8DE48C433C1;
+        Sun, 30 Oct 2022 01:29:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667093381;
+        bh=r6fdiz/ZVgYVFeArTTP+V+XBR2ojwMymNdtXDvODNhU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=qeeg1vHyLf36GTjPbUKuRVXPT8w/cQrDeQTDdOncV9D3lSK2FZyhpNZgLSdwuDS/H
+         vgVORfm0qhjZvFHGvWNipJLtT1/WVNjefzlMlRq3ukJPFgUoVfeP2Zj4yqW1ow8n7o
+         u4aljrETk+qJaz6Hi22q+lHIl6vayfz0rgL9WObc4FxhNImoxr51tizjo65Y+4nZ/M
+         NUeuR69EUDKzSi5Htw+1WaNWEzvugtGd5IsCpbJweeYSY+DBUeSSIwGtDrCEB6phir
+         6AvIflEWULBmL2Yvd4l+4JVXuJDOIXHMTCxIuQ4j0+JqDgvTAAyPlnet8IGbA5aPxK
+         uvbqB0BG2bk1w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7B70FC41672;
+        Sun, 30 Oct 2022 01:29:41 +0000 (UTC)
+Subject: Re: [GIT PULL] hotfixes for 6.1-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221028140612.43605c62db2ecc73f1bcf929@linux-foundation.org>
+References: <20221028140612.43605c62db2ecc73f1bcf929@linux-foundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221028140612.43605c62db2ecc73f1bcf929@linux-foundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-hotfixes-stable-2022-10-28
+X-PR-Tracked-Commit-Id: dda1c41a07b4a4c3f99b5b28c1e8c485205fe860
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3c339dbd139e14c612c521083023eabfcadfd8a5
+Message-Id: <166709338149.23656.8778297671135625640.pr-tracker-bot@kernel.org>
+Date:   Sun, 30 Oct 2022 01:29:41 +0000
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>, linux-mm@kvack.org,
+        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Oct 29, 2022, at 5:15 PM, Mike Kravetz <mike.kravetz@oracle.com> =
-wrote:
+The pull request you sent on Fri, 28 Oct 2022 14:06:12 -0700:
 
-> zap_page_range is a bit confusing.  It appears that the passed range =
-can
-> span multiple vmas.  Otherwise, there would be no do while loop.  Yet, =
-there
-> is only one mmu_notifier_range_init call specifying the passed vma.
->=20
-> It appears all callers pass a range entirely within a single vma.
->=20
-> The modifications above would work for a range within a single vma.  =
-However,
-> things would be more complicated if the range can indeed span multiple =
-vmas.
-> For multiple vmas, we would need to check the first and last vmas for
-> pmd sharing.
->=20
-> Anyone know more about this seeming confusing behavior?  Perhaps, =
-range
-> spanning multiple vmas was left over earlier code?
+> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-hotfixes-stable-2022-10-28
 
-I don=E2=80=99t have personal knowledge, but I noticed that it does not =
-make much
-sense, at least for MADV_DONTNEED. I tried to batch the TLB flushes =
-across
-VMAs for madvise=E2=80=99s. [1]
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3c339dbd139e14c612c521083023eabfcadfd8a5
 
-Need to get to it sometime.
+Thank you!
 
-[1] =
-https://lore.kernel.org/lkml/20210926161259.238054-7-namit@vmware.com/
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
