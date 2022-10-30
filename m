@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2013B612983
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 10:37:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E7F612989
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 10:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiJ3Jhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 05:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
+        id S229949AbiJ3Jkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 05:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJ3Jhj (ORCPT
+        with ESMTP id S229923AbiJ3Jkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 05:37:39 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56DC4C4C;
-        Sun, 30 Oct 2022 02:37:38 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id z97so13636201ede.8;
-        Sun, 30 Oct 2022 02:37:38 -0700 (PDT)
+        Sun, 30 Oct 2022 05:40:39 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5843BC89;
+        Sun, 30 Oct 2022 02:40:36 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id r14so13663160edc.7;
+        Sun, 30 Oct 2022 02:40:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=/hwiuCOoze5MBJHlgoRKvMktr+mDhmLrvDk3mUFONdU=;
-        b=ckCiSQ1eGLiGsH2cUKYiXaXygupPq846v3jcOSm3g2/A0PtMr4T9hGIeywUK2z5WV9
-         d/lYMTigKKRSIX/8Yh1oQt9qNvk2+HIryuVu5dKxp5BHF5ttdVKqUOFM3lZzQrmcQYxl
-         MIsP9zKESg2+hST9ZWvMG/3tGca8Mu/SHEMYnABXd6qB2Q+uBnSWJCcQNU1y5ZqBCjfy
-         8ErKa8swl6NtHL0GvsOSCGEQFnA4lE9A1ZRXr4zL47o/geOg1/Ol7NsUH3z3+LeDlsYt
-         qrRbNJgMOhTq+G25t09bVcPK5whthi25a+lN5hlwQV5xgGTWPXGUPp2zuQk6sio1Xkmq
-         pcIQ==
+        bh=VzvbL7tnM7K6RLTUujC4jQKyKpew0+HWRUgr63xlXaE=;
+        b=WP7Ihx0n0LqOlFvORgOnuSnoQTzlhH+fbuENT+/CCBuQ7TEquYPK3eXMpfP2Zv0ag6
+         qs7xWay+epsN8DmWr+Q0fSZW1ntxLNAtdjy1OWO++uG5CoE4qJYfMAVLVBdA589iGNL8
+         zZdskoT1wpclHUH7X7LjgOcjvNE5ifezx9ldRTKgjb4PrNu+hGGHHGtB2G2NrepVcy1p
+         3+POPYV5s9jBJHfW4uPT58kMkgjizQYj6zzeKGfExftqltnZFYgs37Q6AU2gno7DSgoq
+         M6P8w4Hju0krwVeH7IbmL7frdhVUbsze7y98zSbJTlfAr6yUJFJ8JOv1bOPteNbSrUEW
+         2qGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/hwiuCOoze5MBJHlgoRKvMktr+mDhmLrvDk3mUFONdU=;
-        b=FYKwREn6df+N+R+6P4alHTfNWj22ZjTWOdNWKqY0U4vVShVJY7i2LW89Y3uXdMqfwR
-         gGtxgLttRykeOwV4g30jSMBxP0srKnW0OLwaTk5w8zReEJWN5LqbErLlAfTKwkEvYkSg
-         M7xU8z/ANVCYw22yGzIHcnSyNxpHBppe61XU8Febp/SGI7yhEo1KiUd8DkOckRhEXBd2
-         MXz8gIm9ZlZzQSOAhLbTm2VoCWrpjUyZfI9OnLNV9YrNYMzNpCh7Mz6btSYC87bqb4jC
-         YbkVNLJKsa6hgBaaFULeSilwiSFwMg+4CplD8aco1XEazT9cvRipLhr+Pc9Ir4t9jFV3
-         gTjg==
-X-Gm-Message-State: ACrzQf3Pwg2Ut45UwiNTvymaYVUc51kPoe4OzHu79raRNwAWkN43dKu+
-        5VPMdEkVE0AhKSM/HlJrgq5fu/XjaNifAwh46gjwaqlwgS3Tpg==
-X-Google-Smtp-Source: AMsMyM6KQmew4Cp5SnTJblk3Kus7S2IviuQiJl0RhIXggqulfKXCt7q0cr/UtDrvA6QKKq40vjgF4XOJY1leIzl6lqQ=
-X-Received: by 2002:aa7:c14b:0:b0:461:c47d:48cf with SMTP id
- r11-20020aa7c14b000000b00461c47d48cfmr7752270edp.83.1667122656803; Sun, 30
- Oct 2022 02:37:36 -0700 (PDT)
+        bh=VzvbL7tnM7K6RLTUujC4jQKyKpew0+HWRUgr63xlXaE=;
+        b=SYeOIpiQHwbi9q0yy3zQgcFWJnxFHX47UKtNAtR2aQTpZes5JwU+CMcUnG5RKSZGIs
+         dtBlOrXKI9nfB2I/yM99itcZR6q6KRtx3KiQytG9dA+3uNLCcMNPH5Xo940B5xDxqctS
+         htBjrZInyPULwR8pYJTDyY/3st3ZAkFlTkG79LBEV0ruUv1V2M0LipqhjRaGqQp2tacJ
+         d06rb3hXciedf4XoapJl//sfm9NjhBVR4nIc/xMZOlyyqCVLfRwtenb0VASjL1lfGgv/
+         nWz827b4P8cDDAPToC/37syCmlN6nXQ1Ys9zRJjVMzNo+OMbgdY7YdHchwmilAUiYpMw
+         iDzg==
+X-Gm-Message-State: ACrzQf2P/5EDgdzK7wKB/T2nztBi3dyl2+RnKf8XBlsLVKt5R+XBJam3
+        FmbzSvprTCf8ykcp4RGaWpvlBoPH9fWaYcNPnoc=
+X-Google-Smtp-Source: AMsMyM6W4SNUMzjTz8iwr57ra18ucFeDquQ0p+7PTy65h3VINs8+qgVzBUOM3eGTXdrBSwDfKXKq6eQBrBWnZ56nyPY=
+X-Received: by 2002:a05:6402:5291:b0:45c:3f6a:d4bc with SMTP id
+ en17-20020a056402529100b0045c3f6ad4bcmr8008907edb.285.1667122835140; Sun, 30
+ Oct 2022 02:40:35 -0700 (PDT)
 MIME-Version: 1.0
 From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Sun, 30 Oct 2022 17:37:00 +0800
-Message-ID: <CAO4mrfcorHn-uTvjLUWyfMB6XhMBa6X=M3h-eCexRo0Lw8SLSQ@mail.gmail.com>
-Subject: possible deadlock in btrfs_chunk_alloc
-To:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com
-Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sun, 30 Oct 2022 17:39:59 +0800
+Message-ID: <CAO4mrfdCeFWo4Nq=OYyiOa2qhuu3Jkft3KSosympvrFzxt+iQg@mail.gmail.com>
+Subject: BUG: unable to handle kernel NULL pointer dereference in bio_associate_blkg_from_css
+To:     tj@kernel.org, axboe@kernel.dk
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
@@ -71,7 +72,7 @@ HEAD commit: 64570fbc14f8 Linux 5.15-rc5
 git tree: upstream
 compiler: gcc 8.0.1
 console output:
-https://drive.google.com/file/d/16S-XGN2bCukp9yV3RX3yA4HSLMhaRXn0/view?usp=share_link
+https://drive.google.com/file/d/1ec016fbMgmvittn6-wHxp8V_9adDCRrY/view?usp=share_link
 kernel config: https://drive.google.com/file/d/1uDOeEYgJDcLiSOrx9W8v2bqZ6uOA_55t/view?usp=share_link
 
 Unfortunately, I don't have any reproducer for this crash yet.
@@ -79,133 +80,85 @@ Unfortunately, I don't have any reproducer for this crash yet.
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
 Reported-by: Wei Chen <harperchen1110@gmail.com>
 
-loop0: detected capacity change from 0 to 264192
-======================================================
-WARNING: possible circular locking dependency detected
-5.15.0-rc5 #1 Not tainted
-------------------------------------------------------
-syz-executor.0/3767 is trying to acquire lock:
-ffff8880171388c8 (&fs_info->chunk_mutex){+.+.}-{3:3}, at:
-btrfs_chunk_alloc+0x1d1/0x8c0
-
-but task is already holding lock:
-ffff888013a947b8 (btrfs-chunk-00){++++}-{3:3}, at: __btrfs_tree_lock+0x2e/0x210
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (btrfs-chunk-00){++++}-{3:3}:
-       down_read_nested+0x3e/0x150
-       __btrfs_tree_read_lock+0x2e/0x210
-       btrfs_read_lock_root_node+0x4f/0x230
-       btrfs_search_slot+0xb0c/0x1310
-       btrfs_update_device+0x7a/0x1f0
-       btrfs_chunk_alloc_add_chunk_item+0x14e/0x520
-       btrfs_chunk_alloc+0x4ff/0x8c0
-       find_free_extent+0x1a67/0x25a0
-       btrfs_reserve_extent+0xe2/0x280
-       btrfs_alloc_tree_block+0x103/0x700
-       __btrfs_cow_block+0x1bc/0x900
-       btrfs_cow_block+0x159/0x3d0
-       btrfs_search_slot+0x93b/0x1310
-       btrfs_insert_empty_items+0x8a/0x110
-       btrfs_insert_empty_inode+0x61/0x90
-       create_reloc_inode.isra.34+0x1d3/0x590
-       btrfs_relocate_block_group+0x1af/0x520
-       btrfs_relocate_chunk+0x46/0x190
-       btrfs_balance+0x12d3/0x1f40
-       btrfs_ioctl_balance+0x41a/0x530
-       btrfs_ioctl+0x1230/0x4520
-       __x64_sys_ioctl+0xe8/0x140
-       do_syscall_64+0x34/0xb0
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #0 (&fs_info->chunk_mutex){+.+.}-{3:3}:
-       __lock_acquire+0x126a/0x1d60
-       lock_acquire+0xd7/0x330
-       __mutex_lock+0x96/0x9a0
-       btrfs_chunk_alloc+0x1d1/0x8c0
-       find_free_extent+0x1a67/0x25a0
-       btrfs_reserve_extent+0xe2/0x280
-       btrfs_alloc_tree_block+0x103/0x700
-       __btrfs_cow_block+0x1bc/0x900
-       btrfs_cow_block+0x159/0x3d0
-       btrfs_search_slot+0x93b/0x1310
-       relocate_tree_blocks+0x7e6/0xad0
-       relocate_block_group+0x223/0x620
-       btrfs_relocate_block_group+0x289/0x520
-       btrfs_relocate_chunk+0x46/0x190
-       btrfs_balance+0x12d3/0x1f40
-       btrfs_ioctl_balance+0x41a/0x530
-       btrfs_ioctl+0x1230/0x4520
-       __x64_sys_ioctl+0xe8/0x140
-       do_syscall_64+0x34/0xb0
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(btrfs-chunk-00);
-                               lock(&fs_info->chunk_mutex);
-                               lock(btrfs-chunk-00);
-  lock(&fs_info->chunk_mutex);
-
- *** DEADLOCK ***
-
-5 locks held by syz-executor.0/3767:
- #0: ffff888013cf7460 (sb_writers#18){.+.+}-{0:0}, at:
-btrfs_ioctl_balance+0x57/0x530
- #1: ffff88801713a098 (&fs_info->reclaim_bgs_lock){+.+.}-{3:3}, at:
-btrfs_balance+0xd85/0x1f40
- #2: ffff888017138838 (&fs_info->cleaner_mutex){+.+.}-{3:3}, at:
-btrfs_relocate_block_group+0x281/0x520
- #3: ffff888013cf7650 (sb_internal#2){.+.+}-{0:0}, at:
-relocate_block_group+0xd0/0x620
- #4: ffff888013a947b8 (btrfs-chunk-00){++++}-{3:3}, at:
-__btrfs_tree_lock+0x2e/0x210
-
-stack backtrace:
-CPU: 0 PID: 3767 Comm: syz-executor.0 Not tainted 5.15.0-rc5 #1
+loop0: detected capacity change from 0 to 61456
+BUG: kernel NULL pointer dereference, address: 00000000000005d0
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 107f59067 P4D 107f59067 PUD 109722067 PMD 0
+Oops: 0000 [#1] PREEMPT SMP
+CPU: 1 PID: 17581 Comm: syz-executor.0 Not tainted 5.15.0-rc5 #1
 Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
 rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+RIP: 0010:bio_associate_blkg_from_css+0x331/0xb90
+Code: fe 48 c7 c6 79 f7 54 82 48 c7 c7 e0 de 41 86 e8 75 04 db fe 48
+8b 45 d0 49 89 46 48 e9 ec 00 00 00 e8 b3 7b e8 fe 49 8b 46 08 <48> 8b
+80 d0 05 00 00 48 8b 80 90 00 00 00 4c 8b a0 f0 04 00 00 e8
+RSP: 0018:ffffc90003de7b10 EFLAGS: 00010212
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000040000
+RDX: ffffc9000b9f1000 RSI: ffff88810b5f9b80 RDI: 0000000000000002
+RBP: ffffc90003de7b60 R08: ffffffff8254f7ad R09: 0000000000000000
+R10: 0000000000000005 R11: 0000000000000001 R12: ffffffff892f6f60
+R13: ffff88810717fc00 R14: ffff888107d38700 R15: 0000000000000046
+FS:  00007fc6ebc98700(0000) GS:ffff88813dc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000000005d0 CR3: 000000012f494000 CR4: 00000000003506e0
 Call Trace:
- dump_stack_lvl+0xcd/0x134
- check_noncircular+0xfe/0x110
- __lock_acquire+0x126a/0x1d60
- lock_acquire+0xd7/0x330
- __mutex_lock+0x96/0x9a0
- btrfs_chunk_alloc+0x1d1/0x8c0
- find_free_extent+0x1a67/0x25a0
- btrfs_reserve_extent+0xe2/0x280
- btrfs_alloc_tree_block+0x103/0x700
- __btrfs_cow_block+0x1bc/0x900
- btrfs_cow_block+0x159/0x3d0
- btrfs_search_slot+0x93b/0x1310
- relocate_tree_blocks+0x7e6/0xad0
- relocate_block_group+0x223/0x620
- btrfs_relocate_block_group+0x289/0x520
- btrfs_relocate_chunk+0x46/0x190
- btrfs_balance+0x12d3/0x1f40
- btrfs_ioctl_balance+0x41a/0x530
- btrfs_ioctl+0x1230/0x4520
- __x64_sys_ioctl+0xe8/0x140
+ bio_associate_blkg+0x94/0x2c0
+ lbmStartIO+0xb6/0x160
+ lbmWrite+0x18b/0x210
+ lmNextPage+0xb6/0x1d0
+ lmWriteRecord+0x4ca/0x630
+ lmLog+0x1a3/0x3e0
+ jfs_mount_rw+0x1fb/0x230
+ jfs_fill_super+0x379/0x480
+ mount_bdev+0x23d/0x280
+ legacy_get_tree+0x2e/0x90
+ vfs_get_tree+0x29/0x100
+ path_mount+0x58e/0x10a0
+ do_mount+0x9b/0xb0
+ __x64_sys_mount+0x13a/0x150
  do_syscall_64+0x34/0xb0
  entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x4692c9
-Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+RIP: 0033:0x46abda
+Code: 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f
+84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d
 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fde662c7c38 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00000000004692c9
-RDX: 0000000000000000 RSI: 00000000c4009420 RDI: 0000000000000005
-RBP: 000000000119bfb0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000119bfac
-R13: 0000000000000000 R14: 000000000119bfa0 R15: 00007ffe41266cf0
+RSP: 002b:00007fc6ebc97a48 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007fc6ebc97af0 RCX: 000000000046abda
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007fc6ebc97ab0
+RBP: 0000000020000000 R08: 00007fc6ebc97af0 R09: 0000000020000000
+R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000100
+R13: 00007fc6ebc97ab0 R14: 0000000000000001 R15: 0000000020000140
+Modules linked in:
+CR2: 00000000000005d0
+---[ end trace 00146354a78b09b6 ]---
+RIP: 0010:bio_associate_blkg_from_css+0x331/0xb90
+Code: fe 48 c7 c6 79 f7 54 82 48 c7 c7 e0 de 41 86 e8 75 04 db fe 48
+8b 45 d0 49 89 46 48 e9 ec 00 00 00 e8 b3 7b e8 fe 49 8b 46 08 <48> 8b
+80 d0 05 00 00 48 8b 80 90 00 00 00 4c 8b a0 f0 04 00 00 e8
+RSP: 0018:ffffc90003de7b10 EFLAGS: 00010212
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000040000
+RDX: ffffc9000b9f1000 RSI: ffff88810b5f9b80 RDI: 0000000000000002
+RBP: ffffc90003de7b60 R08: ffffffff8254f7ad R09: 0000000000000000
+R10: 0000000000000005 R11: 0000000000000001 R12: ffffffff892f6f60
+R13: ffff88810717fc00 R14: ffff888107d38700 R15: 0000000000000046
+FS:  00007fc6ebc98700(0000) GS:ffff88813dc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000000005d0 CR3: 000000012f494000 CR4: 00000000003506e0
+----------------
+Code disassembly (best guess), 1 bytes skipped:
+   0: 48 c7 c6 79 f7 54 82 mov    $0xffffffff8254f779,%rsi
+   7: 48 c7 c7 e0 de 41 86 mov    $0xffffffff8641dee0,%rdi
+   e: e8 75 04 db fe        callq  0xfedb0488
+  13: 48 8b 45 d0          mov    -0x30(%rbp),%rax
+  17: 49 89 46 48          mov    %rax,0x48(%r14)
+  1b: e9 ec 00 00 00        jmpq   0x10c
+  20: e8 b3 7b e8 fe        callq  0xfee87bd8
+  25: 49 8b 46 08          mov    0x8(%r14),%rax
+* 29: 48 8b 80 d0 05 00 00 mov    0x5d0(%rax),%rax <-- trapping instruction
+  30: 48 8b 80 90 00 00 00 mov    0x90(%rax),%rax
+  37: 4c 8b a0 f0 04 00 00 mov    0x4f0(%rax),%r12
+  3e: e8                    .byte 0xe8
 
 Best,
 Wei
