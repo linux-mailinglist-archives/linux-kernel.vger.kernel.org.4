@@ -2,93 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570736128AE
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 08:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F0E6128B3
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 08:32:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiJ3H0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 03:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57380 "EHLO
+        id S229720AbiJ3Hcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 03:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiJ3H0q (ORCPT
+        with ESMTP id S229686AbiJ3Hcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 03:26:46 -0400
-Received: from smtp.smtpout.orange.fr (smtp-15.smtpout.orange.fr [80.12.242.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F752C7
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 00:26:43 -0700 (PDT)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id p2iPojcIb94emp2iPo27xg; Sun, 30 Oct 2022 08:26:42 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 30 Oct 2022 08:26:42 +0100
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Dai Ngo <dai.ngo@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-nfs@vger.kernel.org
-Subject: [PATCH] NFSD: Fix the share reservation conflict to courteous server logic in nfs4_upgrade_open()
-Date:   Sun, 30 Oct 2022 08:26:39 +0100
-Message-Id: <7ed2d8f1ee8c441a13b450c5e5c50f13fae3a2b9.1667114760.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 30 Oct 2022 03:32:46 -0400
+Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [5.144.164.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410C72D9
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 00:32:44 -0700 (PDT)
+Received: from localhost.localdomain (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 6A6751F91E;
+        Sun, 30 Oct 2022 08:32:41 +0100 (CET)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/10] arm64: dts: qcom: sm6350: SD Card fixes, pm6350 keys and touchscreen for PDX213
+Date:   Sun, 30 Oct 2022 08:32:22 +0100
+Message-Id: <20221030073232.22726-1-marijn.suijten@somainline.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'status != nfserr_share_denied' is known to be true because we test
-'status == nfs_ok' the line just above.
+Enable SD Card for Sony Lena PDX213 on the sm6350 SoC by providing it
+the necessary IOMMU stream ID(s) and pinctrl in SoC dtsi, and setting up
+the regulators in device/board DT.  Together with regulator support,
+power up the touchscreen and import pm6350 dtsi to enable the power and
+volume up/down keys.
 
-So nfs4_resolve_deny_conflicts_locked() can never be called.
+Marijn Suijten (10):
+  arm64: dts: qcom: sm6350: Add resets for SDHCI 1/2
+  arm64: dts: qcom: sm6350: Add pinctrl for SDHCI 2
+  arm64: dts: qcom: sm6350-lena: Add SD Card Detect to sdc2 on/off
+    pinctrl
+  arm64: dts: qcom: pm6350: Include header for KEY_POWER
+  arm64: dts: qcom: sm6350-lena: Include pm6350 and configure buttons
+  arm64: dts: qcom: sm6350-lena: Define pm6350 and pm6150l regulators
+  arm64: dts: qcom: sm6350-lena: Provide power to SDHCI 2 (SDCard slot)
+  arm64: dts: qcom: sm6350-lena: Enable QUP and GPI DMA
+  arm64: dts: qcom: sm6350-lena: Configure Samsung touchscreen
+  arm64: dts: qcom: sm6350: Add apps_smmu with streamID to SDHCI 1/2
+    nodes
 
-Fix the logic and avoid the dead code.
+ arch/arm64/boot/dts/qcom/pm6350.dtsi          |   1 +
+ .../qcom/sm6350-sony-xperia-lena-pdx213.dts   | 337 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm6350.dtsi          |  48 +++
+ 3 files changed, 386 insertions(+)
 
-Fixes: 3d6942715180 ("NFSD: add support for share reservation conflict to courteous server")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-This patch is speculative.
-It is compile tested only.
-
-REVIEW WITH CARE.
----
- fs/nfsd/nfs4state.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/fs/nfsd/nfs4state.c b/fs/nfsd/nfs4state.c
-index 1ded89235111..de0565e9485c 100644
---- a/fs/nfsd/nfs4state.c
-+++ b/fs/nfsd/nfs4state.c
-@@ -5260,15 +5260,13 @@ nfs4_upgrade_open(struct svc_rqst *rqstp, struct nfs4_file *fp,
- 	spin_lock(&fp->fi_lock);
- 	status = nfs4_file_check_deny(fp, open->op_share_deny);
- 	if (status == nfs_ok) {
--		if (status != nfserr_share_denied) {
--			set_deny(open->op_share_deny, stp);
--			fp->fi_share_deny |=
-+		set_deny(open->op_share_deny, stp);
-+		fp->fi_share_deny |=
- 				(open->op_share_deny & NFS4_SHARE_DENY_BOTH);
--		} else {
--			if (nfs4_resolve_deny_conflicts_locked(fp, false,
--					stp, open->op_share_deny, false))
--				status = nfserr_jukebox;
--		}
-+	} else if (status == nfserr_share_denied) {
-+		if (nfs4_resolve_deny_conflicts_locked(fp, false, stp,
-+				open->op_share_deny, false))
-+			status = nfserr_jukebox;
- 	}
- 	spin_unlock(&fp->fi_lock);
- 
--- 
-2.34.1
+--
+2.38.1
 
