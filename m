@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5C9612AA7
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 14:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E338612AAC
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 14:05:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiJ3NCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 09:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
+        id S229738AbiJ3NF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 09:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ3NB6 (ORCPT
+        with ESMTP id S229441AbiJ3NF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 09:01:58 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADAEB7ED;
-        Sun, 30 Oct 2022 06:01:58 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id b11so8325978pjp.2;
-        Sun, 30 Oct 2022 06:01:58 -0700 (PDT)
+        Sun, 30 Oct 2022 09:05:27 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBCF23B
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 06:05:26 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 78so8583400pgb.13
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 06:05:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CGx9xgGlypD6vVPYmtIKlqqJfCzM1AZBhS44ab9RgX8=;
-        b=jQOTQEKGb+CIG41bB4XJioqsJ7kZmT8CSPy6y7afGzMQSiSUzigjjVXXnzNnGtBpie
-         XDGK4QNV9j0Q5nJ4NwjOopdzQBkRctDKCb5xiG34iK0iK6TASwTKT8z817KUGkgHwogG
-         aENRy8VOAMUJZsMr45PVeLeGxL5S26daCJKmXjkjK8wt3q27kcATyoFHW5EcMNcL5hLb
-         FSHh8zmC9Qc9dw+m9zW3xs8TtRlCw9DkJIbra0x2+LZUJAsNFfflBFcmvidch/zc9e7p
-         QvZg41KE62VJkqCS8IHPLHroI2twY4Dp6MDDFqE6oZ1MAXCiqGC3f4UtadVB0xsTr88T
-         AEiA==
+        bh=WW41LFvv02s6JX5NVuQc7KiMNpSe68lS8g/dJivUNoU=;
+        b=nomg6wFSJ5x/qxj/PihlJa7vo5DnqvOZ39nSi6i5GoFr7DBdT/qdH4Xt+yYWQ1nMnC
+         OHWnTvqHaQQrS/t8WgI4xo0sWstY6LiEFjEYFhdJefKF2AaqdqwAP16syN07opXw1WpY
+         KqRklc2vTGh+vPmDlrkC5EOztZngdDEXtJRSYU0Z9cRLW5lRL6JtAVC215pRq4cZAf57
+         fLhvWjRPGe0RZx8bdij6nbHMX586hHJxa16m7Bsh8seSth5krBSbvqCI7iJncOWmhTxn
+         YjRudbdZk0KPwMWMiCEwn+r6BA3nUNXQ9tJoNFz68lDx4IIEfqwx+xVeeruNKhraGe5T
+         q60A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CGx9xgGlypD6vVPYmtIKlqqJfCzM1AZBhS44ab9RgX8=;
-        b=CwaESYa1EYr7+XCj0/wbhNtDVHG7ajlaX0H+DQyOS/mp9xfOtR9anU+PGlWdpUkkRz
-         WoVQAM6UpgRAbjLu3RbmuRYciok19KDeL0CsimIkTMy53TU/g4M4rbLv5ujJrGY4JkiO
-         6vUaUoOv07Jj6MQCGesWBX6tmmVJ7vGI0GkJD7qc/aq2WpjQImvRTdX0E657BVEOXlyl
-         3A4+JntkpFFSt2qfWqz0PVEEpDO+dqe7PKD+h04KqXXvt+aIi8QE5g2GyMalHMrztbgQ
-         Q4KfEpu0JFw+My3w6HXketyZVIWnVL6fGRNZhv1jMs9BqbTenoKo6YsVhZMJY4cw9T4X
-         Hn8A==
-X-Gm-Message-State: ACrzQf3Y1j3WxDLsCH3RGcLLbcbn683NKCDXV+boXwgD1M8UrHm9r8WY
-        xGiNMyuLyfa8/HYM5/LDLOE=
-X-Google-Smtp-Source: AMsMyM6J9IPO9aGKH/fadSzI48k3nLGW6+R3RdwgRUHwae/Pdt8yZIQLkmzKcmpU8JSR0tMe+4o8CA==
-X-Received: by 2002:a17:90b:3b49:b0:213:854f:f796 with SMTP id ot9-20020a17090b3b4900b00213854ff796mr16181341pjb.216.1667134917921;
-        Sun, 30 Oct 2022 06:01:57 -0700 (PDT)
+        bh=WW41LFvv02s6JX5NVuQc7KiMNpSe68lS8g/dJivUNoU=;
+        b=uwO/DZUtO1IZ1dkbwuuPxM5WzOPPdpMMiU/jIiPkJPdSLR1yuxqJ0h8jv73K1Bw/J2
+         chHUlMs6ONTuGWCIkmWTkkvbG1FbZNFRwhCjf5za1klqS8nwHE46WSYciJn7vxjMkjBc
+         5BpigitEY6rDLN/aVn+eN0BEBfcNCH61vin2InUomXGJp5TOrQsJ3A/+buwtwlJVNuit
+         s1MBRnOnzOuHLx7qFxXySq76yAKcevDr5B6ROBQuxdaNDSOEFoEOg5CA34jFwMMLieF9
+         0fB0UHVMn2IofDQu/XCMrOZfauL05AxQRjYzVIh5z55aPs9MKadL3BBgsoDCg7jCg110
+         tRgA==
+X-Gm-Message-State: ACrzQf2Vrtvfjh6w0hrTP9OOK2bmXMax/jT1z9Rm/SMXNatm/9jTdZMO
+        LObANvg8WJ4iP1IyCPHrSeM=
+X-Google-Smtp-Source: AMsMyM6Vg1M282U7rq1qWngHa7fThDW+JjuXm6gWpQFPfhnBf3DpRaBvnxRenQF98WH5W3A0TcF/9A==
+X-Received: by 2002:aa7:809a:0:b0:567:6e2c:2e2a with SMTP id v26-20020aa7809a000000b005676e2c2e2amr9201502pff.56.1667135125924;
+        Sun, 30 Oct 2022 06:05:25 -0700 (PDT)
 Received: from debian.me (subs03-180-214-233-87.three.co.id. [180.214.233.87])
-        by smtp.gmail.com with ESMTPSA id i2-20020a170902cf0200b0016dbdf7b97bsm2664526plg.266.2022.10.30.06.01.56
+        by smtp.gmail.com with ESMTPSA id k76-20020a62844f000000b0056bbba4302dsm2589533pfd.119.2022.10.30.06.05.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Oct 2022 06:01:57 -0700 (PDT)
+        Sun, 30 Oct 2022 06:05:25 -0700 (PDT)
 Received: by debian.me (Postfix, from userid 1000)
-        id 9B342103D98; Sun, 30 Oct 2022 20:01:52 +0700 (WIB)
-Date:   Sun, 30 Oct 2022 20:01:52 +0700
+        id 6B927103D98; Sun, 30 Oct 2022 20:05:21 +0700 (WIB)
+Date:   Sun, 30 Oct 2022 20:05:21 +0700
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Kang Minchul <tegongkang@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] samples: bpf: fix typo in README
-Message-ID: <Y151wBUkhDHbhzzq@debian.me>
-References: <20221029211520.24033-1-tegongkang@gmail.com>
+To:     antoniospg <antoniospg100@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
+        <dri-devel@lists.freedesktop.org>,
+        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
+        <nouveau@lists.freedesktop.org>
+Subject: Re: [PATCH] drm/nouveau: Adding support to control backlight using
+ bl_power for nva3.
+Message-ID: <Y152kbkeIFnz/cbE@debian.me>
+References: <20221029184851.25340-1-antoniospg100@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="CJGNwHFZsEtqqkbV"
+        protocol="application/pgp-signature"; boundary="zkq+an0wUo19EgpH"
 Content-Disposition: inline
-In-Reply-To: <20221029211520.24033-1-tegongkang@gmail.com>
+In-Reply-To: <20221029184851.25340-1-antoniospg100@gmail.com>
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
@@ -78,35 +82,38 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---CJGNwHFZsEtqqkbV
+--zkq+an0wUo19EgpH
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Oct 30, 2022 at 06:15:20AM +0900, Kang Minchul wrote:
-> This commit fixes a simple typo in samples/bpf/README.rst
+On Sat, Oct 29, 2022 at 03:48:50PM -0300, antoniospg wrote:
+> Test plan:
 >=20
-> changed cofiguration to configuration.
+> * Turn off:
+> echo 1 > /sys/class/backlight/nv_backlight/bl_power
+>=20
+> * Turn on:
+> echo 0 > /sys/class/backlight/nv_backlight/bl_power
+>=20
 
-Better say "Fix 'cofiguration' typo in BPF samples README".
+You sent this patch twice, so I reply to the latest one.
 
-And please write patch description in imperative mood instead of
-descriptive one.
-
-Thanks.
+What is it doing? Please describe the patch. Remember to write the
+description in imperative mood.
 
 --=20
 An old man doll... just what I always wanted! - Clara
 
---CJGNwHFZsEtqqkbV
+--zkq+an0wUo19EgpH
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY151uQAKCRD2uYlJVVFO
-ox/4AP4ni83os89lwGA309i2eGhaLOIJlFiGESqNNRR6bujGMgD/RCkttusAKxXN
-5HuMOkcgMpe7vdD0COjy/M05RHbW1gc=
-=Ljlk
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY152kQAKCRD2uYlJVVFO
+o8dmAP9B8377yd62wSurH1C9reAvl5ipEFFQbVFG+b2Zayub9QEAlnaK7b5XMN4r
+j9L4LEizVKSH/X8VQj5nEP93wM/Oaw0=
+=hrUz
 -----END PGP SIGNATURE-----
 
---CJGNwHFZsEtqqkbV--
+--zkq+an0wUo19EgpH--
