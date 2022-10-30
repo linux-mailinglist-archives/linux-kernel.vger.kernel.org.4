@@ -2,106 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C18612A59
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 12:34:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4560612A5B
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 12:34:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiJ3LeT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 30 Oct 2022 07:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
+        id S229556AbiJ3Le3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 07:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ3LeR (ORCPT
+        with ESMTP id S229494AbiJ3Le1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 07:34:17 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A752EC;
-        Sun, 30 Oct 2022 04:34:13 -0700 (PDT)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 554FCE0005;
-        Sun, 30 Oct 2022 11:34:10 +0000 (UTC)
-Message-ID: <c6ec738617a839a692bc3eb1317c1eb9cae29fe0.camel@hadess.net>
-Subject: Re: [PATCH v2] HID: uclogic: Add support for XP-PEN Deco LW
-From:   Bastien Nocera <hadess@hadess.net>
-To:     =?ISO-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        Mia Kanashi <chad@redpilled.dev>
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com, spbnick@gmail.com,
-        pobrn@protonmail.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andreas Grosse <andig.mail@t-online.de>
-Date:   Sun, 30 Oct 2022 12:34:09 +0100
-In-Reply-To: <20221029145511.GA7941@elementary>
-References: <20221028082348.22386-1-jose.exposito89@gmail.com>
-         <ED1CBF63-A70C-44FF-9F0B-80090EB347EA@redpilled.dev>
-         <20221029075832.GA8790@elementary>
-         <21CA0A00-1B9F-4E97-B942-A3B7CAA2B52E@redpilled.dev>
-         <C7FD0EC0-899A-4D29-8363-D2FAD8E89BBD@redpilled.dev>
-         <20221029145511.GA7941@elementary>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.0 (3.46.0-2.fc37) 
+        Sun, 30 Oct 2022 07:34:27 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF13DDFB;
+        Sun, 30 Oct 2022 04:34:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=e/BysuOQ8Pqp1xaMNqM0pZQkTdtzMo17/V2QpxEOmGs=; b=q9HHcfkGZXfhGa4B2kz/QRodI+
+        tFDUBImYScb13i/uTitJL7d9UXCGXY4MJhZ59/f/fekGuh5v/aR/tjnh1OSMsAgHT7fIc8yVBjI7/
+        9tkYvfidLi1nj6BBPjIkUBDyIGhWkYQaMS/09doMM7RqVImzYVcxPdnYNqz8rOqPhLG/r+bkAAHG1
+        Gck+HFzDb4x0NWa1gG52BwaGqnuw3qWvtgGMFr5Q1skBHITYz7ORIxllR12VOPaKF9rCy51FPZMFJ
+        6VF0mYC7WGjGpoNOi8afG6sbCUr89aDAwLqFq6RwZ4tQDSGqQNuY6enldApuVeer99I5SNhIBoRcP
+        RGvUSmpA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1op6a5-00Fdi0-3g; Sun, 30 Oct 2022 11:34:21 +0000
+Date:   Sun, 30 Oct 2022 04:34:21 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Wei Chen <harperchen1110@gmail.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: INFO: rcu detected stall in blk_mq_requeue_work
+Message-ID: <Y15hPTsbLRdl8cRZ@infradead.org>
+References: <CAO4mrfffEyq9JzT=GJxzf7fUzXa0Pmx4J40qVDUepasnZ2QDgw@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAO4mrfffEyq9JzT=GJxzf7fUzXa0Pmx4J40qVDUepasnZ2QDgw@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-10-29 at 16:55 +0200, José Expósito wrote:
-> Hi!
+On Sun, Oct 30, 2022 at 06:34:35PM +0800, Wei Chen wrote:
+> HEAD commit: 64570fbc14f8 Linux 5.15-rc5
+> git tree: upstream
+> compiler: gcc 8.0.1
+> console output:
+> https://drive.google.com/file/d/1KgH89-sBhQbB2t-kx_ChpMM1F-7leKuo/view?usp=share_link
+> kernel config: https://drive.google.com/file/d/1uDOeEYgJDcLiSOrx9W8v2bqZ6uOA_55t/view?usp=share_link
 > 
-> On Sat, Oct 29, 2022 at 04:55:21PM +0300, Mia Kanashi wrote:
-> > > > [1] Actually it should be set to discharging until this gets
-> > > > merged:
-> > > >   
-> > > > https://lore.kernel.org/linux-input/20221028181849.23157-1-jose.exposito89@gmail.com/T/
-> > > 
-> > > But i also currently applied this ^ patch, i will try testing
-> > > without it and then report.
-> > 
-> > Tested without it, same issue.
-> > So yeah it seems that hid-input driver can set supply status to
-> > discharging before setting a battery capacity? 
-> 
-> Very good catch. I managed to reproduce it using the USB dongle. I
-> didn't notice it before because I was running upower after connecting
-> the device, which isn't fast enough. However, using watch as you
-> suggested makes the issue pretty noticeable.
-> 
-> The problem is that the battery is fetched when the USB dongle is
-> connected. However, the tablet might not be paired at that point.
-> 
-> To explain it with the actual code:
-> 
-> 
->   if (dev->battery_status != HID_BATTERY_REPORTED &&
->       !dev->battery_avoid_query) {
->         value = hidinput_query_battery_capacity(dev);
->                 ^ Here the battery is fetched, but because the tabled
->                   is not paired and this function returns garbage
->         if (value < 0)
->                 return value;
-> 
->         dev->battery_capacity = value;
->         dev->battery_status = HID_BATTERY_QUERIED;
->                             ^ Now the battery is set as queried
->   }
-> 
->   if (dev->battery_status == HID_BATTERY_UNKNOWN)
->         val->intval = POWER_SUPPLY_STATUS_UNKNOWN;
->   else
->         val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
->                     ^ And therefore the battery is reported
-> 
-> 
-> Thankfully, there is already a flag (battery_avoid_query) used to
-> solve
-> the same issue on stylus. The battery percentage is unknown until the
-> stylus is in proximity.
-> 
-> So I guess I could use the same flag to avoid this problem.
-> 
-> I'll add a fix in a second revision of this patch.
+> Unfortunately, I don't have any reproducer for this crash yet.
 
-UPower will also respect the POWER_SUPPLY_PROP_PRESENT property, if
-that's useful.
+Can you please limit your report to linux lists for issues that are:
+
+ a) reproducable
+ b) actually happen on a recent upstream kernel.
+
