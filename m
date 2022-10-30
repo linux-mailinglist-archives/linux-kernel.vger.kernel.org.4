@@ -2,103 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92BCD612C9C
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 21:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1618612CA0
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 21:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbiJ3UTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 16:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
+        id S229649AbiJ3U2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 16:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiJ3UTO (ORCPT
+        with ESMTP id S229476AbiJ3U2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 16:19:14 -0400
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F009A18F;
-        Sun, 30 Oct 2022 13:19:14 -0700 (PDT)
-Received: by mail-pl1-f175.google.com with SMTP id io19so9104715plb.8;
-        Sun, 30 Oct 2022 13:19:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CpcsaYxX2/iZPVTp5DAYjYaAQ7Q9mqzIBJhkkWXT9KI=;
-        b=vu0TPKGcdmlcF9FBWopcH8ixG6IMGpdlC7S5v8eebz5THEQq1TR9rHP0a0O/y/jLZg
-         kDjqwcGe7/Z/esXQdnJg7LuaUCk+UytSg+y+O15aNRKU8Hg1GzQstEGli4urFkffdg2S
-         uk5pb0JfFnuYGie4gkgVzQAIkJHgNtDLfFp4OiX99VKfmeO9Q7whHSPNNqH6IYzxFlvC
-         I8UneGzOtJ+Xs8ctPffo8Ft6sk9OMHuItFiBW8rbR2d6IyGAxFMnYWKChFLNlHq53mtQ
-         FSZeEEdgKXta+2TMxX+qJ0xv6Fv7j1dKM6y8SrM5vgoS3f10aLkWMK13LBwUyEf/fSfV
-         S3LQ==
-X-Gm-Message-State: ACrzQf3FseWQxoditB/avn05kTjupd0TjS1I0CX98xTdo7Oa4J4S7cLS
-        Es3O6rh97yjR9UqGxZl+jJ/+LC+XXAI=
-X-Google-Smtp-Source: AMsMyM6m6X1LDQAhui8BGKPfZ1MNzm6uykXWqEcVPHk/HTI+9TH+KyBI8USgMbD8mUXjQcrwLSY+ZQ==
-X-Received: by 2002:a17:902:f786:b0:180:6f9e:23b with SMTP id q6-20020a170902f78600b001806f9e023bmr10961455pln.37.1667161153435;
-        Sun, 30 Oct 2022 13:19:13 -0700 (PDT)
-Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id w2-20020a623002000000b00561beff1e09sm3010408pfw.164.2022.10.30.13.19.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Oct 2022 13:19:12 -0700 (PDT)
-Message-ID: <036eb44a-fd6a-4460-49d0-5f596452d1e1@acm.org>
-Date:   Sun, 30 Oct 2022 13:19:10 -0700
+        Sun, 30 Oct 2022 16:28:47 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB83A185;
+        Sun, 30 Oct 2022 13:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GjHcp/wdMbwEfGBYGedZOimxPCDQynRkjHeEm6VDjxY=; b=i8A+0CXCpFmEwaRWYLuk3I/7qh
+        4rSg5bGpqNEWlx1autk6G5pN6F7UE6N41M0041G4TRIZKOrZnXCtG5maJ2HluqRWqNCKQ8gdyUR4w
+        Mybf85r8I9Y4rALKoycInK0hKJAeERO+fp/sAKuVFqBe1wzkPq6Bih9bhoIFbXVGo24l+asWjQANM
+        AYWtLsKwLgFZI6d5jYGPx1lo0sFVWXXv5Zt9HuO8U4QJdESYKo8oBkJN9YJ5FEsxmjiOexOnxtgZG
+        mf4iEeOzJhaqj94XRE/cfWW+ALgfWNYemIdKVebNNgDiJkpWpyHEPygr1oQjD9l3iomyxJsrYiADV
+        mKUbYThg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1opEv9-00GPxE-34;
+        Sun, 30 Oct 2022 20:28:40 +0000
+Date:   Sun, 30 Oct 2022 20:28:39 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Dawei Li <set_pte_at@outlook.com>
+Cc:     brauner@kernel.org, neilb@suse.de, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] vfs: Make vfs_get_super() internal
+Message-ID: <Y17edxOrW81EBh1v@ZenIV>
+References: <TYCP286MB23233CC984811CFD38F69BC1CA349@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 1/3] blk-mq: remove redundant call to
- blk_freeze_queue_start in blk_mq_destroy_queue
-Content-Language: en-US
-To:     Jinlong Chen <nickyc975@zju.edu.cn>
-Cc:     axboe@kernel.dk, hch@lst.de, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>
-References: <cover.1667035519.git.nickyc975@zju.edu.cn>
- <ebd3a47a1ebf4ab518c985cdbaa1ac3afd6dfb9f.1667035519.git.nickyc975@zju.edu.cn>
- <adaea16a-c7cd-5d68-50c8-d56de851061a@acm.org>
- <42681e4e.15223d.18426b71124.Coremail.nickyc975@zju.edu.cn>
- <9a758d91-42c5-d6b3-ddde-9c2b89d741a6@acm.org>
- <fb1acbc.15062f.18429642056.Coremail.nickyc975@zju.edu.cn>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <fb1acbc.15062f.18429642056.Coremail.nickyc975@zju.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <TYCP286MB23233CC984811CFD38F69BC1CA349@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/30/22 07:55, Jinlong Chen wrote:
->>> So I think there is a redundant call to blk_freeze_queue_start(), we
->>> just need to call blk_mq_freeze_queue_wait() after calling
->>> blk_queue_start_drain().
->>
->> I think it is on purpose that blk_queue_start_drain() freezes the
->> request queue and never unfreezes it. So if you want to change this
->> behavior it's up to you to motivate why you want to change this behavior
->> and also why it is safe to make that change. See also commit
->> d3cfb2a0ac0b ("block: block new I/O just after queue is set as dying").
+On Sun, Oct 30, 2022 at 09:06:08PM +0800, Dawei Li wrote:
+> For now there are no external callers of vfs_get_super(),
+> so just make it an internal API.
 > 
-> I think there might be some misunderstanding. I didn't touch
-> blk_queue_start_drain(), so its behavior is not changed. What I have done
-> is just replacing blk_freeze_queue() with blk_mq_freeze_queue_wait() in
-> blk_mq_destroy_queue().
+> v1: https://lore.kernel.org/all/TYCP286MB2323D37F4F6400FD07D7C7F7CA319@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM/
+> 
+> v2: move vfs_get_super_keying to super.c, as the suggestion
+> from Christian Brauner.
+> 
+> base-commit: 3aca47127a646165965ff52803e2b269eed91afc
+> 
+> Signed-off-by: Dawei Li <set_pte_at@outlook.com>
+> ---
+>  fs/super.c                 | 13 +++++++++++--
+>  include/linux/fs_context.h | 14 --------------
+>  2 files changed, 11 insertions(+), 16 deletions(-)
+> 
+> diff --git a/fs/super.c b/fs/super.c
+> index 6a82660e1adb..24e31e458552 100644
+> --- a/fs/super.c
+> +++ b/fs/super.c
+> @@ -1111,6 +1111,16 @@ static int test_single_super(struct super_block *s, struct fs_context *fc)
+>  	return 1;
+>  }
+>  
+> +/*
+> + * sget() wrappers to be called from the ->get_tree() op.
+> + */
+> +enum vfs_get_super_keying {
+> +	vfs_get_single_super,	/* Only one such superblock may exist */
+> +	vfs_get_single_reconf_super, /* As above, but reconfigure if it exists */
+> +	vfs_get_keyed_super,	/* Superblocks with different s_fs_info keys may exist */
+> +	vfs_get_independent_super, /* Multiple independent superblocks may exist */
+> +};
 
-Hi Jinlong,
+I would rather kill the "keying" thing completely.
 
-Does this mean that you want me to provide more information about what I 
-wrote? Without this patch, blk_mq_destroy_queue() uses two mechanisms to 
-block future I/O requests:
-1. Set the flag QUEUE_FLAG_DYING.
-2. Freeze the request queue and leave it frozen.
+Seriously, what does it buy us?  Consider e.g.
+        return vfs_get_super(fc, vfs_get_independent_super, fill_super);
+in get_tree_nodev().  If you expand vfs_get_super() there, you'll get
+this:
+{
+        struct super_block *sb = sget_fc(fc, NULL, set_anon_super_fc);
+        if (IS_ERR(sb))
+                return PTR_ERR(sb);
 
-Your patch modifies blk_mq_destroy_queue() such that it unfreezes the 
-request queue after I/O has been quiesced instead of leaving it frozen. 
-I would appreciate it if Ming Lei (Cc-ed) could comment on this change 
-since I think that Ming introduced (2) in blk_mq_destroy_queue() 
-(formerly called blk_cleanup_queue()).
+        if (!sb->s_root) {
+                int err = fill_super(sb, fc);
+                if (unlikely(err)) {
+                        deactivate_locked_super(sb);
+			return err;
+		}
+                sb->s_flags |= SB_ACTIVE;
+        }
+	fc->root = dget(sb->s_root);
+	return 0;
+}
 
-Thanks,
-
-Bart.
+Sure, it's several lines long, but it's much easier to follow than
+vfs_get_super().  And duplication between these vfs_get_super()
+callers is, IMO, not worth eliminating...
