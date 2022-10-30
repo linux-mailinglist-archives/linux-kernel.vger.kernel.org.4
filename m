@@ -2,93 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 818B9612C1A
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 18:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BAAF612C05
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 18:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiJ3R6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 13:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45098 "EHLO
+        id S229718AbiJ3Rsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 13:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiJ3R6Q (ORCPT
+        with ESMTP id S229531AbiJ3Rso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 13:58:16 -0400
-X-Greylist: delayed 903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 30 Oct 2022 10:58:15 PDT
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39733A479;
-        Sun, 30 Oct 2022 10:58:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1667151762; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=LoQgOqNpF8Wwcu6VtLKcO4yYoCvOKAdIVCYF9kaDjStJS7UpaFt6+gdxBlbPtZ3q2AhTueAktG3rTOBOAl/ZlRzWFtKPXQXbP/2Y8hKYsSkJtz5lu8YyAZma6cVn3G3cJ6hUp5vRc+t2RqFvag57ztmd0POErtRJRrdFRJ93how=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1667151762; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=9bbvkGLwb/l1l5DfSEEWjM8y6U4gTUldLMgsN2ZwJHI=; 
-        b=d/INXma4ZfwxCDKG6YckAw79LjrhUW3sxofmHWm6WUj2S1wj4YE80ny6R3T98/xS8/xpkwpPszBjwrqheeet7UVG7YG7HYg95avPUITQZep7aaPzIaPpyuzsOs9OtpE2KLdLHZMFIZWs+OOVVea2V1oRhivHEJ0pGNSgsX04IFc=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1667151762;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=9bbvkGLwb/l1l5DfSEEWjM8y6U4gTUldLMgsN2ZwJHI=;
-        b=BgJlSSBIjCMuklesP4o7xxtQBHELhJLioMpT0uZ/6IziR5QiJ3g7DtK6SY/DK/z8
-        +XNGl1kZovw21Rwa8t4UsBugjGTAzdqGXKLVuUrB1AANgJkKufZi/Fu9qcgAUKdyBQp
-        Zegg27gAXPxIotcEcuusabwUk1eWrnEosEjSdv3Q=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1667151759719557.7288943473982; Sun, 30 Oct 2022 10:42:39 -0700 (PDT)
-Message-ID: <a75564ec-3a9a-1bd6-3f4f-aae28ac933ad@arinc9.com>
-Date:   Sun, 30 Oct 2022 20:42:32 +0300
+        Sun, 30 Oct 2022 13:48:44 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8694AC14
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 10:48:42 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e745329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e745:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 115E41EC02F2;
+        Sun, 30 Oct 2022 18:48:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667152121;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=YlajMgapSk2mwP7YDnDVHVyG5vc0AJY3t+6wwDRwE8w=;
+        b=oqUfRDDb5LJOPecXiy0/SpXpn665HPEMub3cszxCc9spXv70wJred6EbeVRYfMv7WRKNkO
+        4aiaCphBBYtsfcySyJvSFQJDb4at0ZDM1NmhCiCcpcUPsf1NN1un4zx96vLfECIH5hpNHi
+        rvNo4gPGVw4R1MVA02rAmsLnTs16Yso=
+Date:   Sun, 30 Oct 2022 18:48:37 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v4 16/16] x86/mtrr: simplify mtrr_ops initialization
+Message-ID: <Y1649fb9LagjBtYI@zn.tnic>
+References: <20221004081023.32402-1-jgross@suse.com>
+ <20221004081023.32402-17-jgross@suse.com>
+ <Y15o4o8j6zbQuaQJ@zn.tnic>
+ <dbd5861a-aa12-ea4f-c076-974613fba51c@suse.com>
+ <Y16osqK3kbCz8Sf3@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v1 net-next 4/7] dt-bindings: net: dsa: mediatek,mt7530:
- remove unnecessary dsa-port reference
-To:     Colin Foster <colin.foster@in-advantage.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Lee Jones <lee@kernel.org>
-References: <20221025050355.3979380-1-colin.foster@in-advantage.com>
- <20221025050355.3979380-5-colin.foster@in-advantage.com>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20221025050355.3979380-5-colin.foster@in-advantage.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y16osqK3kbCz8Sf3@zn.tnic>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.10.2022 08:03, Colin Foster wrote:
-> dsa.yaml contains a reference to dsa-port.yaml, so a duplicate reference to
-> the binding isn't necessary. Remove this unnecessary reference.
-> 
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> Suggested-by: Vladimir Oltean <olteanv@gmail.com>
+Another randconfig build failure in the meantime. Pretty easy to
+trigger:
 
-Reviewed-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+ld: arch/x86/kernel/cpu/cacheinfo.o: in function `cache_bp_init':
+cacheinfo.c:(.init.text+0x1): undefined reference to `mtrr_bp_init'
+make[1]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 1
+make: *** [Makefile:1236: vmlinux] Error 2
 
-Thanks.
-Arınç
+the reason being:
+
+# CONFIG_MTRR is not set
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
