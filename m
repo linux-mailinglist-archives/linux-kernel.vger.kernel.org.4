@@ -2,112 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1618612CA0
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 21:28:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A74612CA4
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 21:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbiJ3U2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 16:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
+        id S229691AbiJ3U36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 16:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiJ3U2r (ORCPT
+        with ESMTP id S229476AbiJ3U3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 16:28:47 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB83A185;
-        Sun, 30 Oct 2022 13:28:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GjHcp/wdMbwEfGBYGedZOimxPCDQynRkjHeEm6VDjxY=; b=i8A+0CXCpFmEwaRWYLuk3I/7qh
-        4rSg5bGpqNEWlx1autk6G5pN6F7UE6N41M0041G4TRIZKOrZnXCtG5maJ2HluqRWqNCKQ8gdyUR4w
-        Mybf85r8I9Y4rALKoycInK0hKJAeERO+fp/sAKuVFqBe1wzkPq6Bih9bhoIFbXVGo24l+asWjQANM
-        AYWtLsKwLgFZI6d5jYGPx1lo0sFVWXXv5Zt9HuO8U4QJdESYKo8oBkJN9YJ5FEsxmjiOexOnxtgZG
-        mf4iEeOzJhaqj94XRE/cfWW+ALgfWNYemIdKVebNNgDiJkpWpyHEPygr1oQjD9l3iomyxJsrYiADV
-        mKUbYThg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1opEv9-00GPxE-34;
-        Sun, 30 Oct 2022 20:28:40 +0000
-Date:   Sun, 30 Oct 2022 20:28:39 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Dawei Li <set_pte_at@outlook.com>
-Cc:     brauner@kernel.org, neilb@suse.de, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] vfs: Make vfs_get_super() internal
-Message-ID: <Y17edxOrW81EBh1v@ZenIV>
-References: <TYCP286MB23233CC984811CFD38F69BC1CA349@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+        Sun, 30 Oct 2022 16:29:55 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEA2A1A0;
+        Sun, 30 Oct 2022 13:29:52 -0700 (PDT)
+Received: from [185.156.123.69] (helo=phil.sntech)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1opEwI-0005lw-D7; Sun, 30 Oct 2022 21:29:50 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v1 1/2] ARM: dts: rockchip: fix adc-keys sub node names
+Date:   Sun, 30 Oct 2022 21:29:43 +0100
+Message-Id: <166716177915.1683006.10736978390715698837.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <7a0013b1-3a55-a344-e9ea-eacb4b49433c@gmail.com>
+References: <7a0013b1-3a55-a344-e9ea-eacb4b49433c@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <TYCP286MB23233CC984811CFD38F69BC1CA349@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 09:06:08PM +0800, Dawei Li wrote:
-> For now there are no external callers of vfs_get_super(),
-> so just make it an internal API.
+On Thu, 27 Oct 2022 10:37:32 +0200, Johan Jonker wrote:
+> Fix adc-keys sub node names on Rockchip boards,
+> so that they match with regex: '^button-'
 > 
-> v1: https://lore.kernel.org/all/TYCP286MB2323D37F4F6400FD07D7C7F7CA319@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM/
 > 
-> v2: move vfs_get_super_keying to super.c, as the suggestion
-> from Christian Brauner.
-> 
-> base-commit: 3aca47127a646165965ff52803e2b269eed91afc
-> 
-> Signed-off-by: Dawei Li <set_pte_at@outlook.com>
-> ---
->  fs/super.c                 | 13 +++++++++++--
->  include/linux/fs_context.h | 14 --------------
->  2 files changed, 11 insertions(+), 16 deletions(-)
-> 
-> diff --git a/fs/super.c b/fs/super.c
-> index 6a82660e1adb..24e31e458552 100644
-> --- a/fs/super.c
-> +++ b/fs/super.c
-> @@ -1111,6 +1111,16 @@ static int test_single_super(struct super_block *s, struct fs_context *fc)
->  	return 1;
->  }
->  
-> +/*
-> + * sget() wrappers to be called from the ->get_tree() op.
-> + */
-> +enum vfs_get_super_keying {
-> +	vfs_get_single_super,	/* Only one such superblock may exist */
-> +	vfs_get_single_reconf_super, /* As above, but reconfigure if it exists */
-> +	vfs_get_keyed_super,	/* Superblocks with different s_fs_info keys may exist */
-> +	vfs_get_independent_super, /* Multiple independent superblocks may exist */
-> +};
 
-I would rather kill the "keying" thing completely.
+Applied, thanks!
 
-Seriously, what does it buy us?  Consider e.g.
-        return vfs_get_super(fc, vfs_get_independent_super, fill_super);
-in get_tree_nodev().  If you expand vfs_get_super() there, you'll get
-this:
-{
-        struct super_block *sb = sget_fc(fc, NULL, set_anon_super_fc);
-        if (IS_ERR(sb))
-                return PTR_ERR(sb);
+[1/2] ARM: dts: rockchip: fix adc-keys sub node names
+      commit: 942b35de22efeb4f9ded83f1ea7747f3fe5a3bb2
+[2/2] arm64: dts: rockchip: fix adc-keys sub node names
+      commit: f2bd2e76d6ea13e12849975adae46145375532a4
 
-        if (!sb->s_root) {
-                int err = fill_super(sb, fc);
-                if (unlikely(err)) {
-                        deactivate_locked_super(sb);
-			return err;
-		}
-                sb->s_flags |= SB_ACTIVE;
-        }
-	fc->root = dget(sb->s_root);
-	return 0;
-}
-
-Sure, it's several lines long, but it's much easier to follow than
-vfs_get_super().  And duplication between these vfs_get_super()
-callers is, IMO, not worth eliminating...
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>
