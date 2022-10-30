@@ -2,217 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4623F612BB8
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 18:06:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7AF5612BBB
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Oct 2022 18:08:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiJ3RGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 13:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
+        id S229802AbiJ3RIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 13:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiJ3RGB (ORCPT
+        with ESMTP id S229494AbiJ3RIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 13:06:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C950F1E6
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 10:06:00 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1opBju-0002tX-Qd; Sun, 30 Oct 2022 18:04:50 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1opBjm-0000cU-6B; Sun, 30 Oct 2022 18:04:42 +0100
-Date:   Sun, 30 Oct 2022 18:04:42 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Martin Botka <martin.botka@somainline.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        Iskren Chernev <iskren.chernev@gmail.com>,
-        Del Regno <angelogioacchino.delregno@somainline.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Govind Singh <govinds@codeaurora.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: net: constrain number of 'reg' in ethernet
- ports
-Message-ID: <20221030170442.GA7508@pengutronix.de>
-References: <20221028140326.43470-1-krzysztof.kozlowski@linaro.org>
- <20221028140326.43470-2-krzysztof.kozlowski@linaro.org>
+        Sun, 30 Oct 2022 13:08:38 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A1126E;
+        Sun, 30 Oct 2022 10:08:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1667149712; bh=m4+6ruVR07s7ahZkS8XH9ta3361SFT/cMmEre0wtO4Q=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=nwme34/PQphufO6arOpO1RFSpLZTRYYYP+yHO3pnBdr7BOcY78Be2kRNR17AWUMOt
+         vQzD6DJHEyg4KcUcvpHOMCjcorwe2tKfmovjFvKjGAeo1aNRFECG3AR/mdnQfD1qSk
+         B0w4Puz9pFX0WCzXjhffuFqzEyqScYocSrS3JYilqXWRx6Wb3g7Tb6OnLpeUlnTpTe
+         5a+/Wq04kOmM80Bjx2ZDhO+a1urin+raFo4I/0/nzadE8hBuhk6w17lg6MQFVKBu0E
+         GbmqxasHB0H48n+M6lxiWmw2V1SGmNxXyQ0hY1Jpn2OCDydxZjq061nOi5ND0HtS5Z
+         kl7O+MO4j/D7A==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from ls3530 ([92.116.163.166]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MI5UN-1osBoW3qIZ-00F987; Sun, 30
+ Oct 2022 18:08:31 +0100
+Date:   Sun, 30 Oct 2022 18:08:30 +0100
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [GIT PULL] fbdev fixes for v6.1-rc3
+Message-ID: <Y16vjgbo+tx6lArZ@ls3530>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <20221028140326.43470-2-krzysztof.kozlowski@linaro.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:jCjYSj1BZAZ5SxO9ltnwsWqzczM/AH9+S83AxuNMi71su5IdZN4
+ xuJDav/NR9ZyJnfaTjxJOU4uowFyzVh92a3WSwBydwL/ikoUhmiddW7JZQDNPnbR3jLBsgr
+ wbnRNfb0ShSUeT358i4sFyBXGzOyRQss1ZyZ6R7NCn78WDvdru9pHpspydngafOEt8YP5Eq
+ RiG0qlkDsjmq8lvhQvTsQ==
+UI-OutboundReport: notjunk:1;M01:P0:gthlOzLTdcU=;n6pwRJu2pJhizL1XuN0OfVxFpKJ
+ SVMC5RNkfusC4aY7E4708OzEmGDBrF0BW7jlaIhNzAkx46ruSzcNgOvXLIrtNSrDcr85+ePrl
+ xTzsWbZZ8We/DG3zRBlCnSPLsqlY1Qx7XLjeLJgBnJbUw0/PkIJW0YfYR6NkuSbzpc2xC/u75
+ fe6t6f3EpnDpCUSxkZdEsv7gQMnzRPxn6ATXtbsTh/IIETc2/39VVCLJeFyyT0ZZp+TiYl9It
+ 1eVTRV6zJC3Z+7qZT9/NCtVf5hoNumeN6/++Ym/WCkPiQvysX+CfdR+z+yHFtd9WgA8OGUe9J
+ sZpWu8BIFnnxRX1CafHoIKjHENiqJRHPA83RRIOq9v3ITp9haPLaND8M8BOyrPjhkHD0HrWLF
+ x6HrjBzjCykh00UZxxYZx2Qb3UuyT6oofVswBeavW5+hbScYbWpCrV6hjnAOX0DWooYy4rTFQ
+ YUNWWM7RV8ctPobiFcKL0roM2PvNzn/W3gDNBCguP011n57EMbvXi1OGZY9Br0jYKkQUzZNih
+ zAYLa5LHiVd78OCqXjEiIlnuPWeJ1v0fun6ySDsiZN38SpMoWV1vHZNbuH83U3BoEomzuUxBG
+ ALsfKj0WVw3AoGxXxDAk0GeZf/9BR5IWRZntl9+Gw1tJqLBXEulIIaS2266BibwAqAzaOQdK2
+ KeCtxB7lZDywEkGKz7p7k9sPx/xO3Mf4+kEZcptIPT9EmfPfAgzJg43oT6QNrL+jFN1PK9KQu
+ LuwjqYQiLgl3XwYvNyLypjVCpQkRgB1RwL9xNioWTzFaq7MkxEIemKSjxCA9NlX+ix5QXNsoE
+ XSuP6jF4FjW2ICwm4bgQ2tDfdpbZ6ICGIJuwMdLI/lxrfMwCzWCo4WXBuhyevRvI3Qv1JBpbJ
+ SLzZoDEhEWt7NGiAqA3xjBrYKN601ASocUhF2PbkcIDzRwaPFSchcXdwnf9XwXoB+lNVJ+k2u
+ lCaN1Q==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 10:03:25AM -0400, Krzysztof Kozlowski wrote:
-> 'reg' without any constraints allows multiple items which is not the
-> intention for Ethernet controller's port number.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi Linus,
 
-For  asix,ax88178.yaml and microchip,lan95xx.yaml
+please pull some fbdev fixes for kernel 6.1-rc3.
 
-Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
+A use-after-free bugfix in the smscufx driver.
+The other patches are minor.
 
-> 
-> ---
-> 
-> Please give it a time for Rob's bot to process this.
-> ---
->  Documentation/devicetree/bindings/net/asix,ax88178.yaml       | 4 +++-
->  Documentation/devicetree/bindings/net/microchip,lan95xx.yaml  | 4 +++-
->  .../devicetree/bindings/net/microchip,lan966x-switch.yaml     | 4 ++--
->  .../devicetree/bindings/net/microchip,sparx5-switch.yaml      | 3 ++-
->  .../devicetree/bindings/net/mscc,vsc7514-switch.yaml          | 3 ++-
->  .../bindings/net/renesas,r8a779f0-ether-switch.yaml           | 4 ++--
->  6 files changed, 14 insertions(+), 8 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/asix,ax88178.yaml b/Documentation/devicetree/bindings/net/asix,ax88178.yaml
-> index 1af52358de4c..a81dbc4792f6 100644
-> --- a/Documentation/devicetree/bindings/net/asix,ax88178.yaml
-> +++ b/Documentation/devicetree/bindings/net/asix,ax88178.yaml
-> @@ -27,7 +27,9 @@ properties:
->            - usbb95,772b   # ASIX AX88772B
->            - usbb95,7e2b   # ASIX AX88772B
->  
-> -  reg: true
-> +  reg:
-> +    maxItems: 1
-> +
->    local-mac-address: true
->    mac-address: true
->  
-> diff --git a/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml b/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
-> index cf91fecd8909..3715c5f8f0e0 100644
-> --- a/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
-> +++ b/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
-> @@ -39,7 +39,9 @@ properties:
->            - usb424,9e08   # SMSC LAN89530 USB Ethernet Device
->            - usb424,ec00   # SMSC9512/9514 USB Hub & Ethernet Device
->  
-> -  reg: true
-> +  reg:
-> +    maxItems: 1
-> +
->    local-mac-address: true
->    mac-address: true
->  
-> diff --git a/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml b/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
-> index dc116f14750e..583d70c51be6 100644
-> --- a/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
-> +++ b/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
-> @@ -83,8 +83,8 @@ properties:
->              const: 0
->  
->            reg:
-> -            description:
-> -              Switch port number
-> +            items:
-> +              - description: Switch port number
->  
->            phys:
->              description:
-> diff --git a/Documentation/devicetree/bindings/net/microchip,sparx5-switch.yaml b/Documentation/devicetree/bindings/net/microchip,sparx5-switch.yaml
-> index 57ffeb8fc876..ccb912561446 100644
-> --- a/Documentation/devicetree/bindings/net/microchip,sparx5-switch.yaml
-> +++ b/Documentation/devicetree/bindings/net/microchip,sparx5-switch.yaml
-> @@ -89,7 +89,8 @@ properties:
->  
->          properties:
->            reg:
-> -            description: Switch port number
-> +            items:
-> +              - description: Switch port number
->  
->            phys:
->              maxItems: 1
-> diff --git a/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml b/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
-> index ee0a504bdb24..1cf82955d75e 100644
-> --- a/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
-> +++ b/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
-> @@ -109,7 +109,8 @@ properties:
->  
->          properties:
->            reg:
-> -            description: Switch port number
-> +            items:
-> +              - description: Switch port number
->  
->            phy-handle: true
->  
-> diff --git a/Documentation/devicetree/bindings/net/renesas,r8a779f0-ether-switch.yaml b/Documentation/devicetree/bindings/net/renesas,r8a779f0-ether-switch.yaml
-> index 581fff8902f4..0eba66a29c6c 100644
-> --- a/Documentation/devicetree/bindings/net/renesas,r8a779f0-ether-switch.yaml
-> +++ b/Documentation/devicetree/bindings/net/renesas,r8a779f0-ether-switch.yaml
-> @@ -106,8 +106,8 @@ properties:
->  
->          properties:
->            reg:
-> -            description:
-> -              Port number of ETHA (TSNA).
-> +            items:
-> +              - description: Port number of ETHA (TSNA).
->  
->            phys:
->              maxItems: 1
-> -- 
-> 2.34.1
-> 
-> 
+Thanks,
+Helge
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc78=
+0:
+
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git ta=
+gs/fbdev-for-6.1-rc3
+
+for you to fetch changes up to 3c6bf6bddc84888c0ce163b09dee0ddd23b5172a:
+
+  fbdev: cyber2000fb: fix missing pci_disable_device() (2022-10-27 20:29:5=
+9 +0200)
+
+=2D---------------------------------------------------------------
+fbdev fixes for kernel 6.1-rc3:
+
+A use-after-free bugfix in the smscufx driver and various minor
+error path fixes, smaller build fixes, sysfs fixes and
+typos in comments in the stifb, sisfb, da8xxfb, xilinxfb, sm501fb,
+gbefb and cyber2000fb drivers.
+
+=2D---------------------------------------------------------------
+Helge Deller (1):
+      fbdev: stifb: Fall back to cfb_fillrect() on 32-bit HCRX cards
+
+Hyunwoo Kim (1):
+      fbdev: smscufx: Fix several use-after-free bugs
+
+Jason A. Donenfeld (1):
+      fbdev: sisfb: use explicitly signed char
+
+Jilin Yuan (1):
+      fbdev: sisfb: fix repeated word in comment
+
+Kees Cook (1):
+      fbdev: MIPS supports iomem addresses
+
+Uwe Kleine-K=F6nig (2):
+      fbdev: da8xx-fb: Fix error handling in .remove()
+      fbdev: xilinxfb: Make xilinxfb_release() return void
+
+Xuezhi Zhang (2):
+      fbdev: sm501fb: Convert sysfs snprintf to sysfs_emit
+      fbdev: gbefb: Convert sysfs snprintf to sysfs_emit
+
+Yang Yingliang (1):
+      fbdev: cyber2000fb: fix missing pci_disable_device()
+
+ drivers/usb/misc/sisusbvga/sisusb_struct.h |  2 +-
+ drivers/video/fbdev/cyber2000fb.c          |  2 ++
+ drivers/video/fbdev/da8xx-fb.c             |  3 +-
+ drivers/video/fbdev/gbefb.c                |  4 +--
+ drivers/video/fbdev/sis/sis_accel.c        |  2 +-
+ drivers/video/fbdev/sis/vstruct.h          |  2 +-
+ drivers/video/fbdev/sm501fb.c              |  2 +-
+ drivers/video/fbdev/smscufx.c              | 55 ++++++++++++++++---------=
+-----
+ drivers/video/fbdev/stifb.c                |  3 +-
+ drivers/video/fbdev/xilinxfb.c             |  8 ++---
+ include/linux/fb.h                         |  2 +-
+ 11 files changed, 47 insertions(+), 38 deletions(-)
