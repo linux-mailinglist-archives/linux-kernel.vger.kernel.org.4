@@ -2,97 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A08B613E8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 20:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A52613E92
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 20:55:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiJaTtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 15:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58348 "EHLO
+        id S229707AbiJaTzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 15:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbiJaTtG (ORCPT
+        with ESMTP id S229515AbiJaTzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 15:49:06 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A0913D6C
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:49:05 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id m6so11619934pfb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:49:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M6AgIDxQuRAFQ/tU91FvvbPkOXFdK1i7OKUS4QLauwk=;
-        b=qaWqNTVuKg37l/m/NyafX2IUDBwFtHm3CUfvTINS+7dRpsFyXvD1eZmr9+Jy7UViYk
-         h4WcGK6roP3bbErjR6ssXtSrKBf3/fx4vIPv07BtmF8bD00xfckJu+dmWK438rGlP9Kd
-         Fwq5foOevkAiZGwW3lt6DMkru+RFVN4JLQ8uE2svuzu0fDCILsDRy0g5kPWDyvfja08r
-         oPcNU8BQ10FKWWur57J2FUw4+yBX6SsrF6vu1FkJpni3Q/RGQre8w7r9NqKpS41sVk1F
-         FeaDGuqF/EXl5ZpIYRJLTvL3/BgMkoWVOZkBAW2MJmvqvISzhIJkibOEYGL/KXAMRPcy
-         yLKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M6AgIDxQuRAFQ/tU91FvvbPkOXFdK1i7OKUS4QLauwk=;
-        b=TExOm+HuTJgsZiNAT2HJSj+hWeU62aTcwTNE0XXW+Z4LzPFU9tIKvVxyEJ4TgyPVjg
-         cF0DhjB5aGS9KQrHDpRlT4/wenDIoEH3mF1XUFqgdPz/KFHpfWZUvcTqA1MniULiP+uT
-         bpK9/rrjORMBBTTqBReVvfQ58xcGDU9idwdEKq/7IYqmngxemvslpUV1XluhuMdHKy6z
-         o7c8xuln9lRvhTcEgpstX4RMBkHmai6UsLEWUsVwBja8c4YNyZSFy9FsfrPVekkElX+u
-         evpRLpj0Ycz8MLPL1Qc6h8j00wVW4kdt34josMQfYZqYtgu4SNV0K6gDCASKVYhSvaDX
-         YZhg==
-X-Gm-Message-State: ACrzQf2ljStJVLyU4DrqJDwi6Ytj4UeGgfeLiYLE34yT7OZm+VwqeRHK
-        LZ9wUd9FZ5l0uYjP58bG3vY3YA==
-X-Google-Smtp-Source: AMsMyM4OlJqDZkAznxVLJd48CDUG5btL1LdJ6izpa9/p30LOoqCzbzehrGUX+kcrqCOgDLYW/nXm9w==
-X-Received: by 2002:a65:6849:0:b0:461:8779:2452 with SMTP id q9-20020a656849000000b0046187792452mr13707433pgt.383.1667245745143;
-        Mon, 31 Oct 2022 12:49:05 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id n3-20020a17090a73c300b0020063e7d63asm4322330pjk.30.2022.10.31.12.49.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 12:49:04 -0700 (PDT)
-Date:   Mon, 31 Oct 2022 19:49:01 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     pbonzini@redhat.com, dmatlack@google.com, andrew.jones@linux.dev,
-        wei.w.wang@intel.com, kvm@vger.kernel.org,
+        Mon, 31 Oct 2022 15:55:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3AC13F46;
+        Mon, 31 Oct 2022 12:55:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CF0F60BDE;
+        Mon, 31 Oct 2022 19:55:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FE0FC433D6;
+        Mon, 31 Oct 2022 19:55:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667246105;
+        bh=pyVKDV9QrizM1GaBQq4r6UkfjgqRTyFKgmg+DUJEeQU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mW9DeEtixxOapdRHvxfLlxaq8LROL7F1QXfcV+G5uXeMnzoTrGmytiX0uHZI+YNzw
+         xvT0Sw8CjZRBFt/Q7mkklElI9RtFeYIEPTiAMnIxkpwCGXbZLE05jGHBpXzYNj+uAH
+         Jyk6ToZz7whWr+9xodG6dpq4kUxomyK4YvgRy99M8Uq6T94ievbr9ZoMBOO8H+/msf
+         n58dXAT+2VGsnqLz8EcAWGDiagcAPLiiEpt5LzZnQYH36hbj/vTbd04IiA/QiKL4xX
+         FiwIRacDl3ssyae3g6+FA7eNJ+BYnTRY+9ngedNVDycdGhQZpHiiMeYcVLm2+z2po8
+         vSWtzrDwF4nsQ==
+Date:   Mon, 31 Oct 2022 19:55:00 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 5/5] KVM: selftests: Allowing running
- dirty_log_perf_test on specific CPUs
-Message-ID: <Y2AmrZO0UtpU8EDu@google.com>
-References: <20221031173819.1035684-1-vipinsh@google.com>
- <20221031173819.1035684-6-vipinsh@google.com>
+Subject: Re: [PATCH] riscv: dts: microchip: fix memory node unit address for
+ icicle
+Message-ID: <Y2AoFCbQFGnWT48Y@spud>
+References: <20221025195643.1215890-1-conor@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221031173819.1035684-6-vipinsh@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221025195643.1215890-1-conor@kernel.org>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022, Vipin Sharma wrote:
-> Add a command line option, -c, to pin vCPUs to physical CPUs (pCPUs),
-> i.e.  to force vCPUs to run on specific pCPUs.
+On Tue, Oct 25, 2022 at 08:56:44PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Requirement to implement this feature came in discussion on the patch
-> "Make page tables for eager page splitting NUMA aware"
-> https://lore.kernel.org/lkml/YuhPT2drgqL+osLl@google.com/
+> Evidently I forgot to update the unit address for the 38-bit cached
+> memory node when I changed the address in the reg property..
+> Update it to match.
 > 
-> This feature is useful as it provides a way to analyze performance based
-> on the vCPUs and dirty log worker locations, like on the different NUMA
-> nodes or on the same NUMA nodes.
-> 
-> To keep things simple, implementation is intentionally very limited,
-> either all of the vCPUs will be pinned followed by an optional main
-> thread or nothing will be pinned.
-> 
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> Suggested-by: David Matlack <dmatlack@google.com>
-> ---
+> Fixes: 6c1193301791 ("riscv: dts: microchip: update memory configuration for v2022.10")
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+Applied:
+https://git.kernel.org/conor/c/d6105a8b7c160a73ae04054c8921eba80a294146
+
+> ---
+>  arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
+> index ec7b7c2a3ce2..8ced67c3b00b 100644
+> --- a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
+> +++ b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
+> @@ -37,7 +37,7 @@ ddrc_cache_lo: memory@80000000 {
+>  		status = "okay";
+>  	};
+>  
+> -	ddrc_cache_hi: memory@1000000000 {
+> +	ddrc_cache_hi: memory@1040000000 {
+>  		device_type = "memory";
+>  		reg = <0x10 0x40000000 0x0 0x40000000>;
+>  		status = "okay";
+> -- 
+> 2.38.0
+> 
