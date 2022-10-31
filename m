@@ -2,81 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49196135E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 13:20:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 361B5613607
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 13:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbiJaMUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 08:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46626 "EHLO
+        id S231400AbiJaMXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 08:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbiJaMUA (ORCPT
+        with ESMTP id S231293AbiJaMWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 08:20:00 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA94CBE30;
-        Mon, 31 Oct 2022 05:19:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667218799; x=1698754799;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+P60X3IgMg3iYwoWyATV+RqcqI07sfegPr0ApUl2Jbo=;
-  b=bEG0bGCX/jbXUR0YB+aO7Fuk6tI6slwNhJW7KcI6H0xXScX1R/VQQwPR
-   53hwsgBzMWdBJqopUxBMH26BIkdXqcQBJ1A+iB5ohtsry69e3mAJ/60Mn
-   itXNBztPRsXrYxcdoLYvkXaf3vaFulMDAsMgloo5Nw9JWF5fkPLs8vIoO
-   r28RMaDGKirioh5esnmLUKpmwin9jT2oGW6/7CHwk73T0hoe2Thfl15Fn
-   1M/vwAbyJQmzI59jdQ8KisUB58hH7s470K5+XzNZZbX84CqjR64kWA63v
-   MfM/uYtGkchwVSdDvJYkp0ILv971Q6mprUks5SjFqgC8SsonY19zwUUCH
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="373094862"
-X-IronPort-AV: E=Sophos;i="5.95,227,1661842800"; 
-   d="scan'208";a="373094862"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 05:19:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="776114148"
-X-IronPort-AV: E=Sophos;i="5.95,227,1661842800"; 
-   d="scan'208";a="776114148"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 31 Oct 2022 05:19:57 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 00105107; Mon, 31 Oct 2022 14:20:19 +0200 (EET)
-Date:   Mon, 31 Oct 2022 14:20:19 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc:     andreas.noever@gmail.com, linux-kernel@vger.kernel.org,
-        Martin Liska <mliska@suse.cz>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt (gcc13): synchronize
- tb_port_is_clx_enabled()'s 2nd param
-Message-ID: <Y1+9g7jgDY9Opg10@black.fi.intel.com>
-References: <20221031114323.10356-1-jirislaby@kernel.org>
+        Mon, 31 Oct 2022 08:22:50 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3288F59C
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 05:22:32 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so5761388pjk.1
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 05:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=compal-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SIKG/oo700nGZV4lbYvo18YgIVmpoqqm9J9pS6SKop0=;
+        b=pSFqsqmB6iD2hTJHlxCmZ5NN1/0+mRNsNZqEYWat8iEJ87MWgA1PL7adKCzGNIOn0/
+         gkV18E/0rOa4kFsHSC+/iRck53OqhKc1b59DIRt7/9wOlm/GTnsR2muo8FmRLD+CHWMq
+         1/4uin+d0XC8IrToPzg2XjJX0NcRkWSLE0U3fpi70lXp2+7k19kVM7EJd1FaXhtSn3xR
+         oUsPNJywZ842FStSZQoLgUxFVxfPHSz5WbWEjT6lospF5Lu+o/wjom+OMM+77gH8AUOy
+         TBkE7xvdaMHvAm+4fW32ewQ96AoKIRDui1COF6g+u/LFlcJnaRpEcuRFcuUcrgAyuZhY
+         bHYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SIKG/oo700nGZV4lbYvo18YgIVmpoqqm9J9pS6SKop0=;
+        b=k/HDFSEScGnDAOLeP3x5kUNKqHGHNCM2XNVhQ+4k7AjKoie4M8k6Yt1GcWm0Vgt4S0
+         pIy6P50vWVVEDfY7aeV0magvZZSAy1niwjvh+Yr2TdLmmJor65OJVYiaLtWhWN2sAKdw
+         kTEKhHvJuRamZJARFUBY/pFT/SQc0ZcTpT6oybeJTVLgqj0gV/fuF6BtpEvi4w73qJL6
+         d0WrxypJg+H3xCtrKUU+FzAFBizEAI2I/c7F6ZOR/1yPbpka4d/InHK9gKNK1+TYb3wl
+         hxbxKKOCIMOLb0+R5D8SAgl2r8i5qQHbnxByWgwyhmEhAmXSBz1GU00wpm/PHRprIGtf
+         M8Xw==
+X-Gm-Message-State: ACrzQf001uOC7dwnJi84hgGZN0hPE7pq10qPgmdIyi5U6Oc59f4IvH2H
+        pbENBn8k7N2xJFCMyNheqDJG+0MQ8+7vTw==
+X-Google-Smtp-Source: AMsMyM6PT3C30U5ROrwUvLdWSI5V9ryZ2Nt8uqeYCtw+vZNgm+XT+lZF2IX9+s6Dpcss8q3cpVBc0g==
+X-Received: by 2002:a17:90b:305:b0:213:8a6:8bb4 with SMTP id ay5-20020a17090b030500b0021308a68bb4mr32360323pjb.33.1667218951966;
+        Mon, 31 Oct 2022 05:22:31 -0700 (PDT)
+Received: from localhost.localdomain (118-167-185-125.dynamic-ip.hinet.net. [118.167.185.125])
+        by smtp.gmail.com with ESMTPSA id y123-20020a623281000000b0056bf24f0837sm4445483pfy.166.2022.10.31.05.22.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 05:22:31 -0700 (PDT)
+From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        "chunxu . li" <chunxu.li@mediatek.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: [PATCH v5 0/2] Modify documentation and machine driver for mt8186_rt1019_rt5682s sound card
+Date:   Mon, 31 Oct 2022 20:22:22 +0800
+Message-Id: <20221031122224.1846221-1-ajye_huang@compal.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221031114323.10356-1-jirislaby@kernel.org>
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+v5:
+- Documentation: 
+  - Add #include <dt-bindings/gpio/gpio.h> in order to use
+    GPIO_ACTIVE_HIGH.
+  - Remove the change-id in message.
 
-On Mon, Oct 31, 2022 at 12:43:23PM +0100, Jiri Slaby (SUSE) wrote:
-> tb_port_is_clx_enabled() generates a valid warning with gcc-13:
->   drivers/thunderbolt/switch.c:1286:6: error: conflicting types for 'tb_port_is_clx_enabled' due to enum/integer mismatch; have 'bool(struct tb_port *, unsigned int)' ...
->   drivers/thunderbolt/tb.h:1050:6: note: previous declaration of 'tb_port_is_clx_enabled' with type 'bool(struct tb_port *, enum tb_clx)' ...
-> 
-> I.e. the type of the 2nd parameter of tb_port_is_clx_enabled() in the
-> declaration is unsigned int, while the definition spells enum tb_clx.
-> Synchronize them to the latter. And do the same for
-> tb_port_clx_supported() where the enum is propagated.
+v4:
+- Documentation: 
+  - Fix the FATAL ERROR: Unable to parse input tree.
 
-Actually in both places we want to have bitmask of possible states so I
-think unsigned int is the right one here.
+v3:
+- Documentation: 
+  - Add an explain example in description.
+  - Add the pinctrl-name and pinctrl id in its example.
+
+v2:
+- dmic codec driver: 
+  - Remove the unnecessary use of_property_read_bool()
+
+v1:
+- Documentation: Add dmic-gpios optional prop for two DMICs case.
+- dmic codec driver: 
+  - "dmic-gpios" property is used for amixer control to switch
+     the dmic signal source between the Front and Rear Dmic.
+
+Thanks for the review!
+
+Ajye Huang (2):
+  ASoC: mediatek: dt-bindings: modify machine bindings for two MICs case
+  ASoC: mediatek: mt8186-rt5682: Modify machine driver for two DMICs
+    case
+
+ .../sound/mt8186-mt6366-rt1019-rt5682s.yaml   |  14 ++-
+ .../mt8186/mt8186-mt6366-rt1019-rt5682s.c     | 102 +++++++++++++++++-
+ 2 files changed, 114 insertions(+), 2 deletions(-)
+
+-- 
+2.25.1
+
