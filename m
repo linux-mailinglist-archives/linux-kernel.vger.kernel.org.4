@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 836EB612F72
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 05:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E52D3612F73
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 05:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiJaEKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 00:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
+        id S229679AbiJaEKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 00:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiJaEKR (ORCPT
+        with ESMTP id S229566AbiJaEKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 31 Oct 2022 00:10:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F077672;
-        Sun, 30 Oct 2022 21:10:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0333FA1BD;
+        Sun, 30 Oct 2022 21:10:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 291EA60F99;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BC6E60F9A;
         Mon, 31 Oct 2022 04:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 80B05C433D6;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E2F29C433D7;
         Mon, 31 Oct 2022 04:10:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1667189415;
-        bh=mWUC04VwzWceu16syPxNcDe+4fCXuAcJ/FBDTTxD9b4=;
+        bh=98IPoPC1iu1/QYau2t3pixc7zFRlHs5420vy0HvPhfA=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=V34jTBkSWJ6ZAto9O4Pg1UXYxwmqWku7+qIC+sEnHOICyeEGCjSctjsiRFic+d5yd
-         MsIE1eht5pXh8CzxPbSpsLx7T3ZiJkRxa4dgAih3oKaWLcfweCDBzzUfVS98aWRkcU
-         +xExDowfldWAHaWZYwiBQhoKzzhLlb66z2hjgTKLjrklWHB/0+loDKYwXdWO55t/iq
-         SDzqI71jS+gztqWYkR3Pkmtkq7hssKQS8XUVtinYkEEMp3a+HGVuh/K3CUloNUmI1S
-         ARnizyXZ6oq4dwFD42D+eMrj+Fl8AydBFvIh/vS5ArkNkabfXj7EzdesPObfVDbgv+
-         o2MmKJ4m0scRQ==
+        b=ej/GeSJAuF2JVtcADveQ5KUHxFdSWSN1F8/knq3EFnVee+aaOVzEMF3wiHV3sr2N5
+         69Q9gCz4TNzUKu42lJkzxnqr8voSK/9qwDt47Qb/JZP78xdhsxedY1nlOALPyFB4EK
+         GoQR8sb+kuWdpinR0+OXSVPXIBrE0jRzoJzwT+qBLW7BNZgRQp/SHDprWOPnBanVOy
+         MaQxJFQsBik1s5uWx9PC5Z07fBuD/4TZreF7Vxipo+uWMDlIM38LTzBdISiU9htMK2
+         kBVcM8MLh8wSehgPJnCfpBWc0nSpDToU8FBEnaspDnMd2+oL9mE4ni/xRDw8n35S7Z
+         KNpuTUZey2iPA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 624C5E4D03A;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D048EE4D03A;
         Mon, 31 Oct 2022 04:10:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Subject: Re: [PATCH v7 0/2] dt-bindings: cros-ec: Update for fingerprint devices
 From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <166718941539.790.4332712127794687523.git-patchwork-notify@kernel.org>
+Message-Id: <166718941584.790.602379860967156019.git-patchwork-notify@kernel.org>
 Date:   Mon, 31 Oct 2022 04:10:15 +0000
 References: <20221026003641.2688765-1-swboyd@chromium.org>
 In-Reply-To: <20221026003641.2688765-1-swboyd@chromium.org>
@@ -62,7 +62,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This series was applied to chrome-platform/linux.git (for-kernelci)
+This series was applied to chrome-platform/linux.git (for-next)
 by Tzung-Bi Shih <tzungbi@kernel.org>:
 
 On Tue, 25 Oct 2022 17:36:39 -0700 you wrote:
