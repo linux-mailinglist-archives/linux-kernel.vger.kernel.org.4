@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151AA613D88
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 034C8613D8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:40:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiJaSku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 14:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
+        id S229881AbiJaSk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 14:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJaSks (ORCPT
+        with ESMTP id S229912AbiJaSku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 14:40:48 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BF0DF77;
-        Mon, 31 Oct 2022 11:40:46 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so2038961wmb.2;
-        Mon, 31 Oct 2022 11:40:46 -0700 (PDT)
+        Mon, 31 Oct 2022 14:40:50 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27028DF77;
+        Mon, 31 Oct 2022 11:40:49 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so2386703wmg.2;
+        Mon, 31 Oct 2022 11:40:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zMgETaAE4cSZ0k4hJhUAcCXN4b9qeptJfCrItoYYMYI=;
-        b=gu0KikZeI0bIt0XggQjkFqcYoKXY8TXoey1wf6kgwmriaGpLk68bf8r4BJNdJGSw9d
-         a/d5mHoTYv5vGK1vKN6sgbY/eRdxVuHrwq9gIzWO2Gt7ochovMmMxhBLdFHpeyEQhOGI
-         AG0hBNxeclmPenIBhCjh48FVT3jBZVCp8y112ZL/G6i7+dLzm/IJtnUXPcd6MUnzgl0Y
-         2fZK35rSyVip1kRU2zrZ5Efl2vyA9GreVtaigMXDQ1na98/m3Debqnnn7evrj0SDLoMr
-         MFTNsUVmvmFVw3JNHDNiT2+vCbE7IOyin43/yam5p4CRiI58qWxTgeB8WoZ18xG8eRBK
-         5UNg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pf0wqcQ2vn6wyNNf67PgKqcbfJEkj1r+s1XXcU5BuM8=;
+        b=NmkDIJZq65rQJvt5Ev4NdpjlfKKdxZ/IctFvSe9k4vt08hZdRvmgF9h8r08T6mWpcp
+         0UORsSn3m+6jeh6AOlb/wICwElmF+XXvG9ovSpulxf5co5XzMu+Bmh273IGFx763otai
+         yL3ovhZgH6gDCp2ZnvtnKVz7IVqgKnPiCCYpML7+5Sv1Y8SoupeBZFxtmddqDqX8QIxp
+         BtmRlBbBShHC6nnRFvLR0hTzEeGQAYVJ4/F0ZXBaUffxH6jW88WmHXaBhNOWHb2yfJBo
+         e8rAPjBc5PF2BXgQa0zArBUIY/mIG1aDbi0yY5Rmw+7HP3A/Up1hXHjhnApbeTjfg3R+
+         MRrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zMgETaAE4cSZ0k4hJhUAcCXN4b9qeptJfCrItoYYMYI=;
-        b=1tvFfbkR98woGFkVl99vYXr1Ndslz8PmQX8dybbVZbKZn8xPei+MZWpViFjZkTOk+M
-         A0+lHuYeR/4dbYVXGVsn6WpSD6O1IeQUhy+l0FDgpdGRAVUUhLXZhjGRByIIQm7JLP/a
-         aw3A2vQl/AJhmU5XdrmW0NJairRTfcSSC7JDcQpesDMG0BLNF2WAmneJ3UJmptFRupi5
-         O9Fm9Izd7sGO0bDLAqrTEbBJzdsnTFmG9/wX4lzXCKXQrsgmjsmjtboKIQV8v7wuG+7U
-         gvQXcMJnJz5ptp5KnQM0Y4gjDRsyV1xyBll44cJn2/58XoqDhAOItA0vhZLKd93k/6xN
-         B/mA==
-X-Gm-Message-State: ACrzQf1g3uQ/H4D33NavtjwsaubuTq+nf3k/zlACyucAbraRZb2dz3jt
-        0ietxuDcyBUW9c6L7vdOQHs=
-X-Google-Smtp-Source: AMsMyM5sqUekBItN5y+a486TSf5NZ2MkgnKD5heHK2bdojq3gb9fZdANpYFY8qwzfXA82d4a0NhnWg==
-X-Received: by 2002:a05:600c:21c9:b0:3cf:7833:2940 with SMTP id x9-20020a05600c21c900b003cf78332940mr2003113wmj.35.1667241645352;
-        Mon, 31 Oct 2022 11:40:45 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pf0wqcQ2vn6wyNNf67PgKqcbfJEkj1r+s1XXcU5BuM8=;
+        b=i4Na0JKNWH+SKLP5ip/qvwRtMyquP9AH75EOcxeFUG7/BkFXLUSRskZitOe5gsaFg5
+         +o8LSMRir4snpQ/KxrsVgc2cpcC0V5GWtwtmPNP5rqk/k8kzHakE4CkGYvXkbkXg14PX
+         aI+2LHR06O78fZ2Q1ASHwW6MJm9ZkJMBsRd7kdwdTXb5jgWFxJi4sML4nOUUvj4y3LmT
+         qwW+w86EtwxtwInHD6E3amFWKJzPjaHFjj1begD7NdgUnZI/FHnHPBE4tvVeH8aEsgKS
+         N0/mWE72MSmFa8XAun/Q1Hnt3F4L1QKvW4lmNNAXV8v3A/T14dXQJe+heTtrGN+UMSYK
+         WRCg==
+X-Gm-Message-State: ACrzQf1RHnNMGCy4BzrrVaT3NkxtaI2YSPeYLXw3lnZSVxQBQW+Jy/12
+        xWt7DI17tZRkKmKTNPa1wgM=
+X-Google-Smtp-Source: AMsMyM5k5GhmO8jqFpWyZ6NdCr2JYaXaK42Du6mGoaJfiQzZWpnOkX+n0GyTkfrYg8uWLeUddg/KAg==
+X-Received: by 2002:a7b:ce0e:0:b0:3cf:68e1:bd25 with SMTP id m14-20020a7bce0e000000b003cf68e1bd25mr8202966wmc.113.1667241647478;
+        Mon, 31 Oct 2022 11:40:47 -0700 (PDT)
 Received: from hp-power-15.localdomain (mm-167-8-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.8.167])
-        by smtp.gmail.com with ESMTPSA id k18-20020a05600c081200b003b4935f04a4sm8525887wmp.5.2022.10.31.11.40.44
+        by smtp.gmail.com with ESMTPSA id k18-20020a05600c081200b003b4935f04a4sm8525887wmp.5.2022.10.31.11.40.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 11:40:44 -0700 (PDT)
+        Mon, 31 Oct 2022 11:40:47 -0700 (PDT)
 From:   Siarhei Volkau <lis8215@gmail.com>
 Cc:     Siarhei Volkau <lis8215@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -58,10 +60,12 @@ Cc:     Siarhei Volkau <lis8215@gmail.com>,
         Jiri Slaby <jirislaby@kernel.org>,
         linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH v4 0/2] serial: 8250/ingenic: Add support for the JZ4750
-Date:   Mon, 31 Oct 2022 21:40:38 +0300
-Message-Id: <20221031184041.1338129-1-lis8215@gmail.com>
+Subject: [PATCH v4 1/2] dt-bindings: serial: ingenic: Add support for the JZ4750/55 SoCs
+Date:   Mon, 31 Oct 2022 21:40:39 +0300
+Message-Id: <20221031184041.1338129-2-lis8215@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20221031184041.1338129-1-lis8215@gmail.com>
+References: <20221031184041.1338129-1-lis8215@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,29 +79,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-JZ4750 and JZ4755 have an extra clock divisor in CGU called CPCCR.ECS.
-It needs to be handled properly in the early console driver.
+These SoCs UART block are the same as JZ4725b' one, the difference is
+outside of the block - it is in the clock generation unit (CGU).
+The difference requires to make a quirk for early console init.
 
-v4:
- - move duplicate code
- - apply Paul's description for the quirk & commit msg
-v3:
- - fix build errors
-v2:
- - serial moved into separate patchset
- - code refactored to avoid peek in CGU register
- - Krzysztof's ack picked
-v1:
- - big patchset for the whole JZ4755 support
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+---
+ Documentation/devicetree/bindings/serial/ingenic,uart.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Siarhei Volkau (2):
-  dt-bindings: serial: ingenic: Add support for the JZ4750/55 SoCs
-  serial: 8250/ingenic: Add support for the JZ4750/JZ4755
-
- .../bindings/serial/ingenic,uart.yaml         |  4 +++
- drivers/tty/serial/8250/8250_ingenic.c        | 32 +++++++++++++++++--
- 2 files changed, 33 insertions(+), 3 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/serial/ingenic,uart.yaml b/Documentation/devicetree/bindings/serial/ingenic,uart.yaml
+index 9ca7a18ec..315ceb722 100644
+--- a/Documentation/devicetree/bindings/serial/ingenic,uart.yaml
++++ b/Documentation/devicetree/bindings/serial/ingenic,uart.yaml
+@@ -20,6 +20,7 @@ properties:
+     oneOf:
+       - enum:
+           - ingenic,jz4740-uart
++          - ingenic,jz4750-uart
+           - ingenic,jz4760-uart
+           - ingenic,jz4780-uart
+           - ingenic,x1000-uart
+@@ -31,6 +32,9 @@ properties:
+       - items:
+           - const: ingenic,jz4725b-uart
+           - const: ingenic,jz4740-uart
++      - items:
++          - const: ingenic,jz4755-uart
++          - const: ingenic,jz4750-uart
+ 
+   reg:
+     maxItems: 1
 -- 
 2.36.1
 
