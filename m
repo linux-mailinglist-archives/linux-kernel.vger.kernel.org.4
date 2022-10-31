@@ -2,61 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1956C613963
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 15:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07AA461396B
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 15:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbiJaOxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 10:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
+        id S231731AbiJaOyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 10:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231695AbiJaOw4 (ORCPT
+        with ESMTP id S231715AbiJaOyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 10:52:56 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC1C10FEB;
-        Mon, 31 Oct 2022 07:52:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=RC3NrLoErExSxHY+vh+3bdodn0jnitTTF5VCB2jQink=; b=FClJ7IMr0a3VqPvmWo0fQF03WV
-        40X4qWU9Os74/C/rBsrylU6sJSykUUAdeJR/3IUIrAHbwTlk7pOtTVWxvHOWnddr9c3FDYiIX87XM
-        pjPkQIoSMm4OiUtvfp3zmfNsnFOBnV689PWz9Yc4H9lx4l4Jfa9Tuw1E7ZebPzjFB7TPL7bnouzNA
-        IYsuUgYGNLXgnd9gn5vWqsNmFIxu2GAv4z2ZpBnFY7f3mDAaAJNuNue9KUNAVyBNnsPvUUaMTfe+u
-        1dL2L/LR1SDwHsrZucG+LVxg7cqCjZQSgzEeVYc2NS7pvyjn/7HUdwrXhjbNhActm6uJT/Rud0Lvh
-        fvf8zO8g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1opW9o-003l2F-E1; Mon, 31 Oct 2022 14:52:56 +0000
-Date:   Mon, 31 Oct 2022 14:52:56 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     viro@zeniv.linux.org.uk, linux-mm@vger.kernel.org,
-        John Hubbard <jhubbard@nvidia.com>,
-        linux-fsdevel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        smfrench@gmail.com, torvalds@linux-foundation.org,
-        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] iov_iter: Provide a function to extract/pin/get
- pages from an iteraor
-Message-ID: <Y1/hSO+7kAJhGShG@casper.infradead.org>
-References: <166722777223.2555743.162508599131141451.stgit@warthog.procyon.org.uk>
+        Mon, 31 Oct 2022 10:54:10 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732C9BB8;
+        Mon, 31 Oct 2022 07:54:09 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29VEs02U119037;
+        Mon, 31 Oct 2022 09:54:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667228040;
+        bh=zqkm021jtzip3ZkKOZoIGeAQdUu0abXG33GeDfCIKYE=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=Hdby6WqBFbv963vpascjybpM/brO8K5KTmmBJsfSOkSn6RXbRaDp5ZQkWa/OeiyOF
+         8WlBM+AyF3uf2IGkgathQYmPaFz8S7sKDcMvF5/lR1ALkGH+VTvgI18II+osV4ggQe
+         8VosD5PSdnjj1bWGIisgUuhpsHhpk3JYx1SEtB0s=
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29VEs0Is012476
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 31 Oct 2022 09:54:00 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 31
+ Oct 2022 09:54:00 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 31 Oct 2022 09:54:00 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29VEs0Bp014386;
+        Mon, 31 Oct 2022 09:54:00 -0500
+Date:   Mon, 31 Oct 2022 09:54:00 -0500
+From:   Bryan Brattlof <bb@ti.com>
+To:     Andrew Davis <afd@ti.com>
+CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Le Jin <le.jin@siemens.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 00/11] AM65x Disable Incomplete DT Nodes
+Message-ID: <20221031145400.garsliw3nlqgkzcb@bryanbrattlof.com>
+References: <20221028142417.10642-1-afd@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <166722777223.2555743.162508599131141451.stgit@warthog.procyon.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221028142417.10642-1-afd@ti.com>
+X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 02:49:32PM +0000, David Howells wrote:
-> I added a macro by which you can query an iterator to find out how the
-> extraction function will treat the pages (it returns 0, FOLL_GET or FOLL_PIN
-> as appropriate).  Note that it's a macro to avoid #inclusion of linux/mm.h in
-> linux/uio.h.
+On October 28, 2022 thus sayeth Andrew Davis:
+> Hello all,
+> 
+> Same story as for AM64x[0], AM62x[1], and J7x[2].
+> 
+> Last round for AM65x, but there are some boards that I do not have
+> (Simatic IOT2050), so testing very welcome!
+> 
+> Thanks,
+> Andrew
+> 
+> [0] https://www.spinics.net/lists/arm-kernel/msg1018532.html
+> [1] https://www.spinics.net/lists/arm-kernel/msg1018864.html
+> [2] https://www.spinics.net/lists/arm-kernel/msg1019544.html
+> 
+> Andrew Davis (11):
+>   arm64: dts: ti: k3-am65: Enable UART nodes at the board level
+>   arm64: dts: ti: k3-am65: Enable I2C nodes at the board level
+>   arm64: dts: ti: k3-am65: Enable SPI nodes at the board level
+>   arm64: dts: ti: k3-am65: Enable EPWM nodes at the board level
+>   arm64: dts: ti: k3-am65: Enable ECAP nodes at the board level
+>   arm64: dts: ti: k3-am65: MDIO pinmux should belong to the MDIO node
+>   arm64: dts: ti: k3-am65: Enable MDIO nodes at the board level
+>   arm64: dts: ti: k3-am65: Enable MCAN nodes at the board level
+>   arm64: dts: ti: k3-am65: Enable PCIe nodes at the board level
+>   arm64: dts: ti: k3-am65: Enable Mailbox nodes at the board level
+>   arm64: dts: ti: k3-am65: Enable McASP nodes at the board level
 
-I'd support moving FOLL_* definitions to mm_types.h along with
-FAULT_FLAG_* and VM_FAULT_*.
+LGTM! Thanks Andrew!
+
+Reviewed-by: Bryan Brattlof <bb@ti.com>
+
+~Bryan
