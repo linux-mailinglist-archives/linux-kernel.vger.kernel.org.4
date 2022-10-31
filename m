@@ -2,74 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4A561324D
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFB7613250
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbiJaJLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 05:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45942 "EHLO
+        id S229692AbiJaJOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 05:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiJaJKt (ORCPT
+        with ESMTP id S229457AbiJaJOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 05:10:49 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E63DED5;
-        Mon, 31 Oct 2022 02:10:44 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id u24so7250703edd.13;
-        Mon, 31 Oct 2022 02:10:44 -0700 (PDT)
+        Mon, 31 Oct 2022 05:14:16 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97773D2E8;
+        Mon, 31 Oct 2022 02:14:14 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id y72so12953643yby.13;
+        Mon, 31 Oct 2022 02:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o48W/QGPdWIlzJ0mxNkgDcBycjNxJi2Vko9v4xoh1fM=;
-        b=SRBSzrqxXwelI816T9OPBTFhYZwzByI38DmZmROHZ5gQYy7ow69i1Nuiniy32wVZ2M
-         TGVSSNJBjCPtE0wgELBM6J+1La29BEW6lW87cfwqdCGiUzSGYRqqIBUfMIbpY9jtYVgq
-         er8OSMUJxwNGK+hOpLZnVNnhQvK8rpTOweyq4zKmnZiEh5Ko3GCAqdWVWyVIQEILNzMi
-         8ofjMA3mA0CQUa7hhiQnpGiGn8p3OkEIceZgJFDsknSX1Diws3SzeuYFQqjtdw8+sfah
-         7ImNLCa42Wk5rUzv9IPm2u/CxayaB4tLZQqunp1MOC8NCLMkIZ1Hst5464rPI/IJ5qC/
-         Gm+g==
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=S1R1fMBOKcYb7njx4Wi3wo1Rwy9OFYqjtLT3SEE+pGI=;
+        b=aFj+RELCQt0CoycGBHDtevOGPrZKfVd5l1RMxIsqbMkZFPpffzEfVFtV/yTqF44TTH
+         VyAoU0CHyX+jl674PPdWHUHD41DOwAe+ismLAZreSYyUyM2ewL5wp855Ip+NHL7j3aC9
+         uD5zBBHezXL4oXIgBh8tOJsPl3GHygDx4t1rvIuh7kTWEPYjyo+8stNbOTg5rp6vQdyO
+         8gUONfr79u/pIIMqCLBirliq/Acx1jMpp5QJuGHQK0LNDjg7qDecsqYt5Dv6yGNVcp0z
+         MoVlmqxdzZxvAKBuzmvXS49oKmG8nNHdGVpkVKZDwl28Jate5vvwccdSe2V0RLHSz0vf
+         /eVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o48W/QGPdWIlzJ0mxNkgDcBycjNxJi2Vko9v4xoh1fM=;
-        b=5n7cleyw+ZZLrfhJjyzBIQ52SK1qNZ3jYhF7unSV4wPfsWcenNike9gv7rivqf/xkT
-         igNfS/Y1ImKcZ/ekT7ojqoSTBpO1f0FQQldvzVHRzbHylESsKq/YrlDbOzk5jiI3apR6
-         cJCV1EvxU2MqlhkQCa1QTDOG8BM2xdv9iNWyoJhkxE35TomzfXRgMLblkxV0ewxK/aXy
-         PmDJKlSjZRg9ITjqnEge1+oE8CNGH/ed7ilgkim6SGNsDZxl27yjTBAauEbXGplm0LiN
-         N3JkhvW31CTIIKfPkXu848Q43rrX/7SEG0VbxdfC+8sXLIHi1jrmZ/aixGjQCJt4cBCC
-         9m1g==
-X-Gm-Message-State: ACrzQf1ymd0oZzSuiSiuyDatUf1UzEvSDbtxCK9TvYRKZCwQeChxGj5x
-        42Ygo8lqg0Sg0sQL2Cn9LC5JZtfh8/0=
-X-Google-Smtp-Source: AMsMyM7W1MiAWrqsxt403h66Nae6oWchB8b5Le1iuYzwKU9F019jrzSr4RrlDt/Gk7cud1b/vOv8WA==
-X-Received: by 2002:aa7:cf0b:0:b0:461:2271:8559 with SMTP id a11-20020aa7cf0b000000b0046122718559mr12708767edy.92.1667207442723;
-        Mon, 31 Oct 2022 02:10:42 -0700 (PDT)
-Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id y26-20020a1709063a9a00b0078246b1360fsm2725893ejd.131.2022.10.31.02.10.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 02:10:42 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v6 16/43] media: sun6i-csi: Add bridge v4l2 subdev with port management
-Date:   Mon, 31 Oct 2022 10:10:41 +0100
-Message-ID: <5614788.DvuYhMxLoT@kista>
-In-Reply-To: <20220826183240.604834-17-paul.kocialkowski@bootlin.com>
-References: <20220826183240.604834-1-paul.kocialkowski@bootlin.com> <20220826183240.604834-17-paul.kocialkowski@bootlin.com>
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S1R1fMBOKcYb7njx4Wi3wo1Rwy9OFYqjtLT3SEE+pGI=;
+        b=kAT7GFTecs1iF2/6eaRB5o34ov82PiMCVi1urSaYGb9pPBIjJe58bTslpWVRm+xTF/
+         fTX1Y7I4lhVGreIe0zQ77jpYUDAV9sFfMhHoUDdOeUKhUbPIclK5unRY+0Bze4IXoTEA
+         BlN2a+aJVALgWof0/a91/Mbok/78gQKKKotSpxmUG4GyqeUGfjXRdJPwF+jG0ryOg61t
+         gNk7FMbqJyxhmGRYSn08ZYqiEuPRcZbmsONHCikLJT/Hlk8cBLG5VXYbQb8sG5D9fqr2
+         7h+ioVPDinO9VOHEG7rrI0pNC9vTy1mp8VcRrC5z7b0CsS+MRcMAIyFiSgJRV4bp4UzL
+         55Rw==
+X-Gm-Message-State: ACrzQf3uZmD2WxHXgndtp/9y/L5uke6f8EoRVuYgS5x8Bcf+mRD+dU/B
+        38+juoquuD+lvTQpGmzKO3BI1apVsB/pQz6SMKoCkcI25+0=
+X-Google-Smtp-Source: AMsMyM7Ytg5fltw1gCmSbQTde0UToP+AHorUjvASB8eOk31HZcwZ619y/AWTaGtZJ9cSBduqwDEmKjJPqnZ9TqasDMg=
+X-Received: by 2002:a25:3407:0:b0:6ca:88e8:6f63 with SMTP id
+ b7-20020a253407000000b006ca88e86f63mr11827883yba.175.1667207653726; Mon, 31
+ Oct 2022 02:14:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Mon, 31 Oct 2022 10:14:03 +0100
+Message-ID: <CAKXUXMx3cgTA66h_ezNTqyVo_Oa-Q0H=FeBM64zntZ4E0YCT6g@mail.gmail.com>
+Subject: Reference to non-existing CONFIG_X86_FEATURE_CALL_DEPTH
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        X86 ML <x86@kernel.org>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -80,24 +69,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 26. avgust 2022 ob 20:32:13 CET je Paul Kocialkowski napisal(a):
-> Introduce a bridge v4l2 subdev to prepare for separation between the
-> processing part (bridge) and the dma engine, which is required to
-> properly support ths isp workflow later on.
-> 
-> Currently the bridge just manages fwnode mapping to media pads,
-> using an async notifier (which was previously in the main code).
-> The s_stream video op just forwards to the connected v4l2 subdev
-> (sensor or MIPI CSI-2 bridge).
-> 
-> The video capture device is now registered after the bridge and
-> attaches to it with a media link.
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Dear Thomas, dear Peter,
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+in your work on call depth tracking mitigation, commit 5d8213864ade
+("x86/retbleed: Add SKL return thunk") on linux-next references the
+configuration symbol CONFIG_X86_FEATURE_CALL_DEPTH, which is not
+introduced in any Kconfig file.
+
+Is this just some left-over from some previous iteration of this
+feature or is there still a patch to come that will introduce that
+configuration symbol in some Kconfig file?
+
+This issue was identified with ./scripts/checkkconfigsymbols.py.
+
 
 Best regards,
-Jernej
 
-
+Lukas
