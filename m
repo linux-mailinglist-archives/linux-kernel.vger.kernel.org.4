@@ -2,143 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8AA613196
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 09:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 534DF61319E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 09:21:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbiJaITl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 04:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40942 "EHLO
+        id S229828AbiJaIV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 04:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJaITi (ORCPT
+        with ESMTP id S229707AbiJaIVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 04:19:38 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2059FEA;
-        Mon, 31 Oct 2022 01:19:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667204378; x=1698740378;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lbmevJjnjpGGx89wIvYMNqwP6/k7SVFB7D/svXf4f3Q=;
-  b=ZFmgBRtrG/AzYYinGijkyX07wvba3HRqSwiWSVxrXGAnzx0SNHyquXZY
-   Jjn8ugRRuPpN+aUUp9bguQ6dvJSUXxOLWfFHuARvgye41zVb6OH1zoLk8
-   3fLtB7SSltUaZ4Hna75rZmgrCydoS7dEw76PyQ23uGGertUNVJaG2zEsZ
-   3cffd6WI98j0YWrrWDFpwUarjOw0V1YBgFvcZzaMbwYWxLnvPLeF04lXN
-   KPgWkOVfBxfVEl2B7Qoyvur9W9OCaoPHGPPxlTok318wvc2sKwWAlscWm
-   CvihE1llBYOjTax3/dbjWCjI4BeypTGgE5wPUH7ejMLnLHwC2Lp/O7ist
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="335500652"
-X-IronPort-AV: E=Sophos;i="5.95,227,1661842800"; 
-   d="scan'208";a="335500652"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 01:19:37 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="776051657"
-X-IronPort-AV: E=Sophos;i="5.95,227,1661842800"; 
-   d="scan'208";a="776051657"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 01:19:34 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 130C72026C;
-        Mon, 31 Oct 2022 10:19:32 +0200 (EET)
-Date:   Mon, 31 Oct 2022 08:19:32 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v4 4/4] media: platform: Add Renesas RZ/G2L CRU driver
-Message-ID: <Y1+FFD4/XCY8HyYa@paasikivi.fi.intel.com>
-References: <20221027103104.74576-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221027103104.74576-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <Y1qCbUoLrR6qlQwa@paasikivi.fi.intel.com>
- <CA+V-a8seroka4YkyCnSYa2KMPDWMG1Zk8tyiqRntdPUQnc+nrA@mail.gmail.com>
- <Y1vJbJfFjV9jRNzz@paasikivi.fi.intel.com>
- <CA+V-a8tONhJ1_x3T7+6n7tu=xyFBZfsqT2v3iUGd2Jy5_NuZCg@mail.gmail.com>
+        Mon, 31 Oct 2022 04:21:24 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AAEB4BE
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 01:21:22 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id a14so14848812wru.5
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 01:21:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=B6O0yq/kArzQA3EjTthD7t4BqBLyfgCNNdUUmUdG3qU=;
+        b=n2+3G4DwdjxIILUE+TM1kBRvlJ1r5Ef4wwxfEB/z9yEBBjVQ/zvTcveHW9rytFRzZN
+         iVHADrFJWkyY26if4PdWZoAaE0CItMH7Xmg2k2W9Ac59XLxBsyqSegC/t4CnJLX5hHkJ
+         aObwh9I8MtBOJPyx+s9NrarMSicJBG7k4aZ0Hit0+vNkjQddSvkm5uMR1Tb47CGyfbND
+         o0RGKndoy4qEzSCXdIChH1tTDQVcS6+w9R1Lq7HpJEHuuRA7oVLoMc0nQnfUf+hOjRAD
+         GJHmxc0P6ipbwEz+FwcPaBve7R3ajScbNjxOGJ/7X35Kq3M7BMeQw9bN9YK8qkUQ2H3U
+         m6BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B6O0yq/kArzQA3EjTthD7t4BqBLyfgCNNdUUmUdG3qU=;
+        b=Fk+fZKYcslpMxSPwaNmkLbE1OZwg9PYAQy8EmEO+AABGEXNAak2PJhm4XBg/MuGueQ
+         MYRhd5trQoTqqc0O6BOZ/IrB5auJ9DSX0nzJurUxdB+VjQbNW15E6nVBzxV9sNuKjoQi
+         0Pey8R+LjftdwW5paBdSQ80Cd9CnvNkMy+LA2uVBZV29a0I49AMfb7BI4Xt0taJVGRRm
+         jRcfPJwpPZ+N74khq3Anv24UQ+N2lYOR6wdalIruVU20unOaswNKald8/4mJ0HPkb4+g
+         rxD8wV3EBL9KWMz5glu+bK809BlnjQnmZE9MhxVOzQwteA1dBDejtCcdx0ZSFXBl3c9T
+         vvPw==
+X-Gm-Message-State: ACrzQf1JnZrqB7MSv5sRNclbkybEY3ymnW33+MRzpVkgrgjKxIHdzBf8
+        Z8mIc1T9uFfxjsnL4z1LQ97TMQ==
+X-Google-Smtp-Source: AMsMyM57VcVHDP0Am5dwUDQkFQhUoaIjsha3sPb6oMcU0/C65JrHbcwoqHOdZqTThXawgWqT7nV1Dw==
+X-Received: by 2002:adf:f88b:0:b0:236:7134:d4ec with SMTP id u11-20020adff88b000000b002367134d4ecmr6779896wrp.669.1667204481398;
+        Mon, 31 Oct 2022 01:21:21 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:898:f380:f572:21f0:736:a7ca? ([2a01:e0a:898:f380:f572:21f0:736:a7ca])
+        by smtp.gmail.com with ESMTPSA id k3-20020a05600c1c8300b003c6b7f5567csm21814431wms.0.2022.10.31.01.21.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Oct 2022 01:21:21 -0700 (PDT)
+Message-ID: <3ee78024-036d-d459-50a6-9402a79aee89@linaro.org>
+Date:   Mon, 31 Oct 2022 09:21:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+V-a8tONhJ1_x3T7+6n7tu=xyFBZfsqT2v3iUGd2Jy5_NuZCg@mail.gmail.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCHv2 5/6] arm64: dts: meson: remove clock-frequency from rtc
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20221024165549.74574-1-sebastian.reichel@collabora.com>
+ <20221024165549.74574-6-sebastian.reichel@collabora.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20221024165549.74574-6-sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
-
-On Sun, Oct 30, 2022 at 10:32:43PM +0000, Lad, Prabhakar wrote:
-> Hi Sakari,
+On 24/10/2022 18:55, Sebastian Reichel wrote:
+> 'clock-frequency' is not part of the DT binding and not supported by the
+> Linux driver.
 > 
-> On Fri, Oct 28, 2022 at 1:22 PM Sakari Ailus
-> <sakari.ailus@linux.intel.com> wrote:
-> >
-> > Hi Prabhakar,
-> >
-> > On Thu, Oct 27, 2022 at 08:04:40PM +0100, Lad, Prabhakar wrote:
-> > ...
-> > > > > +static int rzg2l_cru_ip_s_stream(struct v4l2_subdev *sd, int enable)
-> > > > > +{
-> > > > > +     struct rzg2l_cru_dev *cru;
-> > > > > +     int ret;
-> > > > > +
-> > > > > +     cru = v4l2_get_subdevdata(sd);
-> > > > > +
-> > > > > +     if (!cru->is_csi)
-> > > > > +             return -EINVAL;
-> > > > > +
-> > > > > +     ret = v4l2_subdev_call(cru->ip.remote, video, s_stream, enable);
-> > > >
-> > > > It's up to the driver how call pre_streamon() and post_streamoff(), as long
-> > > > as it takes place on both sides of s_stream().
-> > > >
-> > > > In other words, as it seems your device doesn't need anything special, you
-> > > > could waive implemeting the callbacks yourself and call pre_streamon() and
-> > > > post_streamoff() here.
-> > > >
-> > > Here the cru->ip.remote = CSI, in the rzg2l_cru_set_stream(1) where we
-> > > are calling pre_streamon()/post_streamoff() callbacks the subdev is
-> > > CRU-IP. So the calls from rzg2l_cru_set_stream() land into
-> > > rzg2l_cru_ip_pre_streamon() and rzg2l_cru_ip_post_streamoff() which
-> > > are calling pre_streamon/post_streamoff for the CSI subdev.
-> >
-> > Again, you should call the source sub-device's pre_streamon and
-> > post_streamoff from the s_stream handler (not from
-> > rzg2l_cru_ip_pre_streamon or rzg2l_cru_ip_post_streamoff).
-> >
-> > Starting streaming takes place link by link. This allows a driver to omit
-> > implementing pre_streamon and post_streamon callbacks if it doesn't need
-> > them.
-> >
-> Thank you for the explanation that makes sense now to me.
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>   arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dts | 1 -
+>   arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dts      | 1 -
+>   arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dts    | 1 -
+>   3 files changed, 3 deletions(-)
 > 
-> Now with this approach the initialization sequence of CSI + CRU won't
-> align as per the HW manual. Unfortunately I'll have to switch back on
-> exporting the functions. I hope that's okay?
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dts b/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dts
+> index 6ab1cc125b96..202deb4e2d63 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dts
+> @@ -140,7 +140,6 @@ rtc: rtc@51 {
+>   		compatible = "haoyu,hym8563";
+>   		reg = <0x51>;
+>   		#clock-cells = <0>;
+> -		clock-frequency = <32768>;
+>   		clock-output-names = "xin32k";
+>   	};
+>   };
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dts b/arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dts
+> index f43c45daf7eb..b21172ece1fa 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dts
+> @@ -270,7 +270,6 @@ rtc: rtc@51 {
+>   		compatible = "haoyu,hym8563";
+>   		reg = <0x51>;
+>   		#clock-cells = <0>;
+> -		clock-frequency = <32768>;
+>   		clock-output-names = "xin32k";
+>   	};
+>   };
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dts b/arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dts
+> index b8ef3bd8b840..1703da3235ea 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dts
+> @@ -89,7 +89,6 @@ rtc: rtc@51 {
+>   		compatible = "haoyu,hym8563";
+>   		reg = <0x51>;
+>   		#clock-cells = <0>;
+> -		clock-frequency = <32768>;
+>   		clock-output-names = "xin32k";
+>   		wakeup-source;
+>   	};
 
-It is not.
 
-What exactly would you like to do that you can't with the
-pre_streamon/post_streamoff callbacks called from s_stream?
-
-In the worst case we can redefine where they are to be called.
-
--- 
-Kind regards,
-
-Sakari Ailus
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
