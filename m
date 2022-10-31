@@ -2,161 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F58C61315D
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 08:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B18C0613160
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 08:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiJaHr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 03:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
+        id S229740AbiJaHtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 03:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiJaHr1 (ORCPT
+        with ESMTP id S229475AbiJaHtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 03:47:27 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F2C65F5;
-        Mon, 31 Oct 2022 00:47:25 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1667202443;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=vu5cjYtWRcK7Wf91MToSPAB96xEe7DBQRa889WmJBic=;
-        b=EFxa+0+DQXEV9CT9wiNM1Iyum7TMo5SmshlxILmptYzRlwB3GVCCJH57/IvWklnNuMoeO1
-        vqy/pNr9CMkOZSoDbPi+R86Jx1J+0yXVdJIO3dQGpPj/sNl/z+/8Q/GoAkMJ3gqD2aGEVN
-        PxZJ3d/NVACgStTsDi+Bf0X9zj+xOVQ=
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     kuba@kernel.org
-Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Qiao Ma <mqaio@linux.alibaba.com>,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] net: hinic: Add support for configuration of rx-vlan-filter by ethtool
-Date:   Mon, 31 Oct 2022 15:47:03 +0800
-Message-Id: <20221031074715.44224-1-cai.huoqing@linux.dev>
+        Mon, 31 Oct 2022 03:49:41 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99596764F;
+        Mon, 31 Oct 2022 00:49:40 -0700 (PDT)
+Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N14wl1JlLzJnMG;
+        Mon, 31 Oct 2022 15:46:47 +0800 (CST)
+Received: from [10.174.176.82] (10.174.176.82) by
+ dggpeml500022.china.huawei.com (7.185.36.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 31 Oct 2022 15:49:38 +0800
+Message-ID: <ccfe9c8d-5dc9-594a-a4c5-d5a9efef4dc9@huawei.com>
+Date:   Mon, 31 Oct 2022 15:49:38 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.1
+Subject: Re: [PATCH RFC] ACPI: container: Add power domain control methods
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     <lenb@kernel.org>, <patchwork@huawei.com>,
+        <wangkefeng.wang@huawei.com>, <linux-acpi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <guohanjun@huawei.com>,
+        <wanghuiqiang@huawei.com>
+References: <20221025061437.17571-1-zhangzekun11@huawei.com>
+ <CAJZ5v0hpYodc_fd1DtBM-VEmhxepq7eQcQkbDXvWn0uMQ_yGNA@mail.gmail.com>
+From:   "zhangzekun (A)" <zhangzekun11@huawei.com>
+In-Reply-To: <CAJZ5v0hpYodc_fd1DtBM-VEmhxepq7eQcQkbDXvWn0uMQ_yGNA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.176.82]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500022.china.huawei.com (7.185.36.66)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When ethtool config rx-vlan-filter: 'ethtool -K ethx rx-vlan-filter on/off'
-to turn on/off the vlan filter, the driver will send control command to firmware,
-then set to hardware in this patch.
+Hi, Rafael J
 
-Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
----
- .../net/ethernet/huawei/hinic/hinic_main.c    | 10 ++++++
- .../net/ethernet/huawei/hinic/hinic_port.c    | 33 +++++++++++++++++++
- .../net/ethernet/huawei/hinic/hinic_port.h    | 12 +++++++
- 3 files changed, 55 insertions(+)
+This patch wants to put some generic control logic in container, and 
+these logic can
+cover a batch of scenarios similar to ours. ACPI power resources 
+interface is not confilct
+with this patch and can be used inside the container for more 
+complicated scenarios.
 
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_main.c b/drivers/net/ethernet/huawei/hinic/hinic_main.c
-index 9d4d795e1081..28729b49af95 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_main.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_main.c
-@@ -1092,6 +1092,16 @@ static int set_features(struct hinic_dev *nic_dev,
- 		}
- 	}
- 
-+	if (changed & NETIF_F_HW_VLAN_CTAG_FILTER) {
-+		ret = hinic_set_vlan_fliter(nic_dev,
-+					    !!(features &
-+					       NETIF_F_HW_VLAN_CTAG_FILTER));
-+		if (ret) {
-+			err = ret;
-+			failed_features |= NETIF_F_HW_VLAN_CTAG_FILTER;
-+		}
-+	}
-+
- 	if (err) {
- 		nic_dev->netdev->features = features ^ failed_features;
- 		return -EIO;
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_port.c b/drivers/net/ethernet/huawei/hinic/hinic_port.c
-index 0a39c3dffa9a..9406237c461e 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_port.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_port.c
-@@ -447,6 +447,39 @@ int hinic_set_rx_vlan_offload(struct hinic_dev *nic_dev, u8 en)
- 	return 0;
- }
- 
-+int hinic_set_vlan_fliter(struct hinic_dev *nic_dev, u32 en)
-+{
-+	struct hinic_hwdev *hwdev = nic_dev->hwdev;
-+	struct hinic_hwif *hwif = hwdev->hwif;
-+	struct pci_dev *pdev = hwif->pdev;
-+	struct hinic_vlan_filter vlan_filter;
-+	u16 out_size = sizeof(vlan_filter);
-+	int err;
-+
-+	if (!hwdev)
-+		return -EINVAL;
-+
-+	vlan_filter.func_idx = HINIC_HWIF_FUNC_IDX(hwif);
-+	vlan_filter.enable = en;
-+
-+	err = hinic_port_msg_cmd(hwdev, HINIC_PORT_CMD_SET_VLAN_FILTER,
-+				 &vlan_filter, sizeof(vlan_filter),
-+				 &vlan_filter, &out_size);
-+	if (vlan_filter.status == HINIC_MGMT_CMD_UNSUPPORTED) {
-+		err = HINIC_MGMT_CMD_UNSUPPORTED;
-+	} else if ((err == HINIC_MBOX_VF_CMD_ERROR) &&
-+			   HINIC_IS_VF(hwif)) {
-+		err = HINIC_MGMT_CMD_UNSUPPORTED;
-+	} else if (err || !out_size || vlan_filter.status) {
-+		dev_err(&pdev->dev,
-+			"Failed to set vlan fliter, err: %d, status: 0x%x, out size: 0x%x\n",
-+			err, vlan_filter.status, out_size);
-+		err = -EINVAL;
-+	}
-+
-+	return err;
-+}
-+
- int hinic_set_max_qnum(struct hinic_dev *nic_dev, u8 num_rqs)
- {
- 	struct hinic_hwdev *hwdev = nic_dev->hwdev;
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_port.h b/drivers/net/ethernet/huawei/hinic/hinic_port.h
-index c9ae3d4dc547..c8694ac7c702 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_port.h
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_port.h
-@@ -351,6 +351,16 @@ struct hinic_vlan_cfg {
- 	u8      rsvd1[5];
- };
- 
-+struct hinic_vlan_filter {
-+	u8	status;
-+	u8	version;
-+	u8	rsvd0[6];
-+
-+	u16	func_idx;
-+	u8	rsvd1[2];
-+	u32	enable;
-+};
-+
- struct hinic_rss_template_mgmt {
- 	u8	status;
- 	u8	version;
-@@ -831,6 +841,8 @@ int hinic_get_vport_stats(struct hinic_dev *nic_dev,
- 
- int hinic_set_rx_vlan_offload(struct hinic_dev *nic_dev, u8 en);
- 
-+int hinic_set_vlan_fliter(struct hinic_dev *nic_dev, u32 en);
-+
- int hinic_get_mgmt_version(struct hinic_dev *nic_dev, u8 *mgmt_ver);
- 
- int hinic_set_link_settings(struct hinic_hwdev *hwdev,
--- 
-2.25.1
+In our secenaio, we need to control the power of some HBM memory device, 
+each of it
+will be configured as a PNP0C80, HBM devices in one socket are in the 
+same power
+domain and need to power on/off together. Every HBM memory device 
+represent a numa
+node and have no cpu on it. The topology in one socket can be simplifed 
+and represented as
+
+         +---------+
+         |  node0  |
+         |  CPUs   |
+         |  DRAM   |
+         +---------+
+              |
+       +------+-------+
+       |              |
+  +---------+    +---------+
+  |  node1  |    |  node2  |
+  |  no-cpu |    |  no-cpu |
+  |  HBM    |    |  HBM    |
+  +---------+    +---------+
+
+To use ACPI power domain management interface, we need to develop a 
+specialized
+driver to maintain the relationship between socket id and numa nodes to 
+tell the
+userspace which socket does this numa node belong to. Note that the numa 
+node in
+the same socket will be power on/off together.
+
+Socket id of a memory device can be reported by BIOS via DSDT or other 
+ACPI tables,
+but we can just skip this step by put all of the devices belongs to the 
+same socket
+in a container. And, we can call each child devices' "_PXM" function to 
+expose numa
+nodes of HBM devices to userspace.
+
+Besides, To power off the devices we need first to offline these ACPI 
+devices, and then
+call the ACPI function "_EJ0" to finally remove it. This are also 
+generic logic that can be
+used to remove ejectable devices.
+
+what we really need is a place to support these generic control logic, 
+rather than the
+interfaces to implement our requirements.
+
+Best Regards,
+Zekun, Zhang
+
+
+在 2022/10/29 1:07, Rafael J. Wysocki 写道:
+> On Tue, Oct 25, 2022 at 8:17 AM Zhang Zekun <zhangzekun11@huawei.com> wrote:
+>> Platform devices which supports power control are often required to be
+>> power off/on together with the devices in the same power domain. However,
+>> there isn't a generic driver that support the power control logic of
+>> these devices.
+> Not true.
+>
+> There is the ACPI power resources interface designed to represent
+> power domains that is well supported and used in the industry.
+>
+> If it doesn't work for you, explain why.
+>
 
