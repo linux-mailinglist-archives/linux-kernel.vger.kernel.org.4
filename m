@@ -2,99 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E39BA613D99
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D298613D9E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiJaSp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 14:45:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
+        id S229838AbiJaSqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 14:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJaSpY (ORCPT
+        with ESMTP id S229626AbiJaSqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 14:45:24 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF38513DFA
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:45:22 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id p3so11530492pld.10
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:45:22 -0700 (PDT)
+        Mon, 31 Oct 2022 14:46:11 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBF312610
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:46:11 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id e15so4074063qts.1
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:46:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AuI5G5ua8vA2tLMhe/g7vr6m23LWsMkCPGvoYh+Cmqo=;
-        b=SeUMOOnRnDMWxcKb3kbS/oLHNJ7ZAosMTuiRZUtpiVQdjO/Xnrwxvi/xga+3OUfNz8
-         i5HW5lXlRdeqFPBNPZTPNGMvnnSuqh44otMDXJqQel1P8L860wHJosb6z72UZiVjF9qE
-         3CzoqKrnxrHDGcZL0gyy5m87WOBsWejDbvo6FzRfBunq9jJfRnSmmaDLVbPia9lmbo2l
-         fO4v0PM+3wjAvGzGMmMymAvCky+nQpvVWRW689P8xj43iWr3i/dSWdCsf2lGOddWm3Oj
-         7IpAnN53ezb6xP2Cs1Xnt8K3uW13aeOEa+595Jykd8ffiMVOhaZENCtA5N+hXo1ujxmA
-         lnFQ==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wbqXepqBr/d+nZhEtmIQjbOd1ibdPmbwm+prkMG2b7c=;
+        b=Jz8Ca0enSFe+lKvvMsvmPfLX3BuPDuiZYUhK6rGyjOoNtKx4TsFn5pBucUpsWlRlPv
+         Tl77uj0agyiPA6Si89dXmpdFFbXsvj2QHwMSMvIsDWLRDizVEsZwjuiGQpGuyU5XPhmA
+         Xu5z5a4RW69o6+/cYgBo5949XF+YCTw1ZCUR4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AuI5G5ua8vA2tLMhe/g7vr6m23LWsMkCPGvoYh+Cmqo=;
-        b=D/2rt/Rpq0wkfCjaErhq5CLAMo1F1n9kw0OmM3iM3h4f4Pu9dvYPcnQuiyvZz5TNTz
-         ABNXsL6HzjCz/6HOTqBs8YX6T1DlvzcOTvRYikINRxHMGPeLw1GwVBNME1nHv7RQQE9Q
-         FIwawtDDQa0Khgs1QCMhmm2Ybw1EFMNnfdg4H699SMauq1j1YS+flsHGkwiWPKp+yVtY
-         bp+UFMtf72DFUnOMpinwG3ZlwlVcoPlEzwO96VdC9FBirfJ4laF0SbhY3tStRDIgO/z9
-         IUv++jYqoDZbiolnBWRCjCKl7jHAtP8jDL4NQixwMNCPUephG9DWZuBn9Njak8qt1BJb
-         EdjA==
-X-Gm-Message-State: ACrzQf0fRVJIlu2QyH9NvgWXynCIiYU8099xyf4wsd0udDVcVQz0xAVZ
-        k5oMo90+tjfiBJVD05oQy/4=
-X-Google-Smtp-Source: AMsMyM5i5atOXlWnqqDDTrP82UdNViKB+ad1+xEZbMtMcKrF1NOWIJ4nPRWTWffcR1v48TRdIGCBOQ==
-X-Received: by 2002:a17:90a:4614:b0:214:219:b2ba with SMTP id w20-20020a17090a461400b002140219b2bamr1835363pjg.0.1667241922010;
-        Mon, 31 Oct 2022 11:45:22 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:ba13])
-        by smtp.gmail.com with ESMTPSA id x2-20020a17090300c200b00186a2dd3ffdsm4782669plc.15.2022.10.31.11.45.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 11:45:21 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 31 Oct 2022 08:45:20 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v4 0/4] workqueue: destroy_worker() vs isolated CPUs
-Message-ID: <Y2AXwPEqqaVi45g/@slm.duckdns.org>
-References: <20221004150521.822266-1-vschneid@redhat.com>
- <xhsmhfsfcw86h.mognet@vschneid.remote.csb>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wbqXepqBr/d+nZhEtmIQjbOd1ibdPmbwm+prkMG2b7c=;
+        b=A45GHOyVj/cPmKDQUkSLyuC5PQYJ1boD4M6HM+rRk0ujxkg7nRM6g+x6rLX0A91XoZ
+         npbermv68gevar/HNUFWonD4eIp147Qw/ZOib6Cf5FS47X1UW/TBiMP9dycN4tfdEbIe
+         4WDyw0nNaPTW8tbCZbJRsChufcrY8Lr0aHV+pjhTBOPHxAedgo5q6gmhfF0YRh0OC8I7
+         8F6RvMrUXRfPVUgBsyVeDDqQU1p323Fh+LlBrx0O86CRNoIA5PjpxBXHJMX8CJL4FuGK
+         RhzOzhwOwl4EVf0nBOGZELJCxbB9621u8/uWT70pOVjWfAxpNjgbImHCbhRtbJjW3xM8
+         R65w==
+X-Gm-Message-State: ACrzQf31u4IdpXwdyXIYKNUgl0SsesWwShHNwy8TpdFtlTzeAYlrdnEz
+        i5WmpjC48ZcnKy7SMjHk1wcEWHfmkRATFg==
+X-Google-Smtp-Source: AMsMyM6ervroAlXZNN2os7X+dpLh5gOr6YzG3arZRMuqWvTrFcL0PnyejRBanPtnYcfDNfM2PMYazg==
+X-Received: by 2002:ac8:7f94:0:b0:39c:dd8f:59f3 with SMTP id z20-20020ac87f94000000b0039cdd8f59f3mr11767532qtj.46.1667241969977;
+        Mon, 31 Oct 2022 11:46:09 -0700 (PDT)
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
+        by smtp.gmail.com with ESMTPSA id n6-20020a05622a040600b003a51e6b6c95sm2826622qtx.14.2022.10.31.11.46.09
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Oct 2022 11:46:09 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-3691e040abaso116232787b3.9
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:46:09 -0700 (PDT)
+X-Received: by 2002:a81:555:0:b0:36b:2d71:5861 with SMTP id
+ 82-20020a810555000000b0036b2d715861mr14455647ywf.340.1667241969081; Mon, 31
+ Oct 2022 11:46:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmhfsfcw86h.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221031175256.2813280-1-jannh@google.com> <Y2APCmYNjYOYLf8G@ZenIV>
+In-Reply-To: <Y2APCmYNjYOYLf8G@ZenIV>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 31 Oct 2022 11:45:53 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi=eaYiBf5JMQRS53=y17N7gvZNhn+kYGZj=2R=8Pc_4Q@mail.gmail.com>
+Message-ID: <CAHk-=wi=eaYiBf5JMQRS53=y17N7gvZNhn+kYGZj=2R=8Pc_4Q@mail.gmail.com>
+Subject: Re: [PATCH v2] fs: use acquire ordering in __fget_light()
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Jann Horn <jannh@google.com>, Miklos Szeredi <mszeredi@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 10:42:46AM +0100, Valentin Schneider wrote:
-> On 04/10/22 16:05, Valentin Schneider wrote:
-> > Hi folks,
-> >
-> > I haven't sent an update for this in a while, but the issue has risen again in
-> > some other environment so I'm getting more reasons to push this out.
-> 
-> Gentle ping.
+On Mon, Oct 31, 2022 at 11:08 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> Looks sane, but looking at the definition of atomic_read_acquire...  ouch.
 
-The approach looks fine to me. I only have minor comments. I'll reply to
-each patch.
+The compiler should sort all that out and the mess shouldn't affect
+any code generation.
 
-Lai, you've been involved in this effort in earlier patch series, how does
-this look to you now?
+But I also wouldn't mind somebody fixing things up, because I do agree
+that checking whether 'atomic_t' is a native word size is kind of
+pointless and probably just makes our build times unnecessarily
+longer.
 
-Thanks.
-
--- 
-tejun
+                Linus
