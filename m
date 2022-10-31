@@ -2,138 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C34613876
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 14:54:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71CB861387B
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 14:56:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbiJaNyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 09:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
+        id S231344AbiJaN4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 09:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231297AbiJaNy3 (ORCPT
+        with ESMTP id S230327AbiJaN4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 09:54:29 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8445F009
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 06:54:28 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id k6-20020a92c246000000b00300a1de59baso2676190ilo.23
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 06:54:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hy0BqrfxXh9AmFKLXonEJ2kEwDj1bZkc3LbrZQE3PYc=;
-        b=V6qQBgys1+xo7nz8AbTb0IzAhUzq8ImNKn0hmqVoxoJUVi9rn3D6OLRHzYovZ0nLYh
-         A0w6bwnF29FjdAzyhpFlKtoMtS8OyDFjTh09/91POVH9ZkBHCpDDY28zlugAgbgGS/Ij
-         UbcUb12vFxiqjIdLU0r0LvGx0XELLd5c/NPCjixXxiTcqaH53UJEcg3G9lZMVIdHCYC1
-         982BL4mIREG5Cq0ynXhk6HymQpD1gpYZ8yZkPcNKoHJjBYw3I7I4ByTKxoYbExUnMgC4
-         eKr0ev+PNtAFjIE+kqQ/0FSHvH3QBXLeeRLYADnF1y9M224jRE0BmzFwqJk5UewNrOgH
-         nCOw==
-X-Gm-Message-State: ACrzQf19OAXAXnLU77jwQ4l+6D605kyd4+UNs10RIoCUduGmwQU1FPfI
-        nJGGt4Jdg+EkoEYNpPIMd8psNw1GCgI3eNK9FRyAy99yKUa+
-X-Google-Smtp-Source: AMsMyM6yGtYUs9DOfAdcSu3r7ETxmyVSOL5JnwqwiTf62mIcEwy41oJ1aK/1/DKl97+DH/Wu9GJpPBGAAAff2r5/CBqPDU3VVtGz
+        Mon, 31 Oct 2022 09:56:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259DE2C4;
+        Mon, 31 Oct 2022 06:56:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8E3461253;
+        Mon, 31 Oct 2022 13:56:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89213C433D6;
+        Mon, 31 Oct 2022 13:56:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667224593;
+        bh=iOmwncQH3Y6yGSTU4hQSdlvIACqmymxsbpgLTMPTEXc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o1HwHqpejoRdZazFe/wHCMougeuGQsGEvil2CCRBhvGFEYwLiNy/lMHZ5ruhOxgt7
+         gtxr4WUQGv9FdirbR1EqGLW/G3JU2zjWh5/N6qM268ISdVk2MwkUKf4qbWSwZ6n03Y
+         M1oG4mHPLYU+ESN2TvpLb456hu3OMrd32THrmbQqHT+OaBKE6oeQPWqR+lffMFqTHe
+         NknKuplIC2G/yb3yTmG2+LVFQK1x22o/QCYKiXz1OkOxZeZmkjnbn3hLoltZi7SfC/
+         zTx/LVo0xVKVgMvXtKIcxR1NMy9e5lTC9RwaEK6S5uUL734R79Q2+t357WNi5yyW6H
+         l+TAGisiuyi0Q==
+Date:   Mon, 31 Oct 2022 13:56:26 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCHv4 07/13] mfd: rk808: split into core and i2c
+Message-ID: <Y1/UCkQQXOb38VW+@google.com>
+References: <20221020204251.108565-1-sebastian.reichel@collabora.com>
+ <20221020204251.108565-8-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:134f:b0:372:8558:1e34 with SMTP id
- u15-20020a056638134f00b0037285581e34mr7375479jad.285.1667224468291; Mon, 31
- Oct 2022 06:54:28 -0700 (PDT)
-Date:   Mon, 31 Oct 2022 06:54:28 -0700
-In-Reply-To: <20221031071038.3704-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000031856505ec54f237@google.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in dbgfs_rm_context_write
-From:   syzbot <syzbot+6087eafb76a94c4ac9eb@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221020204251.108565-8-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, 20 Oct 2022, Sebastian Reichel wrote:
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-general protection fault in dbgfs_rm_context_write
+> Split rk808 into a core and an i2c part in preperation for
+> SPI support.
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  drivers/clk/Kconfig                   |   2 +-
+>  drivers/input/misc/Kconfig            |   2 +-
+>  drivers/mfd/Kconfig                   |   7 +-
+>  drivers/mfd/Makefile                  |   3 +-
+>  drivers/mfd/{rk808.c => rk8xx-core.c} | 210 ++++----------------------
+>  drivers/mfd/rk8xx-i2c.c               | 209 +++++++++++++++++++++++++
+>  drivers/pinctrl/Kconfig               |   2 +-
+>  drivers/power/supply/Kconfig          |   2 +-
+>  drivers/regulator/Kconfig             |   2 +-
+>  drivers/rtc/Kconfig                   |   2 +-
+>  include/linux/mfd/rk808.h             |   6 +
+>  sound/soc/codecs/Kconfig              |   2 +-
+>  12 files changed, 263 insertions(+), 186 deletions(-)
+>  rename drivers/mfd/{rk808.c => rk8xx-core.c} (75%)
+>  create mode 100644 drivers/mfd/rk8xx-i2c.c
+> 
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index d79905f3e174..8448d616b9aa 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -83,7 +83,7 @@ config COMMON_CLK_MAX9485
+>  
+>  config COMMON_CLK_RK808
+>  	tristate "Clock driver for RK805/RK808/RK809/RK817/RK818"
+> -	depends on MFD_RK808
+> +	depends on MFD_RK8XX
+>  	help
+>  	  This driver supports RK805, RK809 and RK817, RK808 and RK818 crystal oscillator clock.
+>  	  These multi-function devices have two fixed-rate oscillators, clocked at 32KHz each.
+> diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
+> index 9f088900f863..1899afeaec47 100644
+> --- a/drivers/input/misc/Kconfig
+> +++ b/drivers/input/misc/Kconfig
+> @@ -588,7 +588,7 @@ config INPUT_PWM_VIBRA
+>  
+>  config INPUT_RK805_PWRKEY
+>  	tristate "Rockchip RK805 PMIC power key support"
+> -	depends on MFD_RK808
+> +	depends on MFD_RK8XX
+>  	help
+>  	  Select this option to enable power key driver for RK805.
+>  
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 8b93856de432..8e3de443cc3d 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -1201,12 +1201,17 @@ config MFD_RC5T583
+>  	  Additional drivers must be enabled in order to use the
+>  	  different functionality of the device.
+>  
+> -config MFD_RK808
+> +config MFD_RK8XX
+> +	bool
+> +	select MFD_CORE
+> +
+> +config MFD_RK8XX_I2C
+>  	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 Power Management Chip"
+>  	depends on I2C && OF
+>  	select MFD_CORE
+>  	select REGMAP_I2C
+>  	select REGMAP_IRQ
+> +	select MFD_RK8XX
+>  	help
+>  	  If you say yes here you get support for the RK805, RK808, RK809,
+>  	  RK817 and RK818 Power Management chips.
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 7ed3ef4a698c..edf84e870f98 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -223,7 +223,8 @@ obj-$(CONFIG_MFD_PALMAS)	+= palmas.o
+>  obj-$(CONFIG_MFD_VIPERBOARD)    += viperboard.o
+>  obj-$(CONFIG_MFD_NTXEC)		+= ntxec.o
+>  obj-$(CONFIG_MFD_RC5T583)	+= rc5t583.o rc5t583-irq.o
+> -obj-$(CONFIG_MFD_RK808)		+= rk808.o
+> +obj-$(CONFIG_MFD_RK8XX)		+= rk8xx-core.o
+> +obj-$(CONFIG_MFD_RK8XX_I2C)	+= rk8xx-i2c.o
+>  obj-$(CONFIG_MFD_RN5T618)	+= rn5t618.o
+>  obj-$(CONFIG_MFD_SEC_CORE)	+= sec-core.o sec-irq.o
+>  obj-$(CONFIG_MFD_SYSCON)	+= syscon.o
+> diff --git a/drivers/mfd/rk808.c b/drivers/mfd/rk8xx-core.c
+> similarity index 75%
+> rename from drivers/mfd/rk808.c
+> rename to drivers/mfd/rk8xx-core.c
+> index b154ca96d812..098506972710 100644
+> --- a/drivers/mfd/rk808.c
+> +++ b/drivers/mfd/rk8xx-core.c
+> @@ -3,16 +3,9 @@
+>   * MFD core driver for Rockchip RK808/RK818
+>   *
+>   * Copyright (c) 2014, Fuzhou Rockchip Electronics Co., Ltd
+> - *
+> - * Author: Chris Zhong <zyw@rock-chips.com>
+> - * Author: Zhang Qing <zhangqing@rock-chips.com>
+> - *
+>   * Copyright (C) 2016 PHYTEC Messtechnik GmbH
+> - *
+> - * Author: Wadim Egorov <w.egorov@phytec.de>
+>   */
 
-general protection fault, probably for non-canonical address 0xdffffc0000000002: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
-CPU: 1 PID: 4159 Comm: syz-executor.0 Not tainted 6.1.0-rc2-syzkaller-00078-g98555239e4c3-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:dbgfs_rm_context mm/damon/dbgfs.c:900 [inline]
-RIP: 0010:dbgfs_rm_context_write+0x155/0x4c0 mm/damon/dbgfs.c:971
-Code: a1 c1 a7 ff 45 85 e4 0f 85 ca 02 00 00 e8 c3 c4 a7 ff 48 8b 1d 5c 86 52 0f 48 b8 00 00 00 00 00 fc ff df 48 89 da 48 c1 ea 03 <80> 3c 02 00 0f 85 1f 03 00 00 48 8b 2b 48 85 ed 0f 84 8e 02 00 00
-RSP: 0018:ffffc9000596fcb0 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: 0000000000000010 RCX: 0000000000000000
-RDX: 0000000000000002 RSI: ffffffff81d4d7bd RDI: 0000000000000005
-RBP: 0000000020000040 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 000000000008c07e R12: 0000000000000000
-R13: ffff88806d41a000 R14: ffffc9000596fec8 R15: ffffffffffffffea
-FS:  00007f469e46e700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f469d7a80c0 CR3: 000000007ebb7000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- full_proxy_write+0x118/0x180 fs/debugfs/file.c:236
- vfs_write+0x2d7/0xdd0 fs/read_write.c:582
- ksys_write+0x127/0x250 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f469d68b5a9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f469e46e168 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00007f469d7abf80 RCX: 00007f469d68b5a9
-RDX: 0000000000000188 RSI: 0000000020000040 RDI: 0000000000000003
-RBP: 00007f469d6e67b0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fffab8c608f R14: 00007f469e46e300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:dbgfs_rm_context mm/damon/dbgfs.c:900 [inline]
-RIP: 0010:dbgfs_rm_context_write+0x155/0x4c0 mm/damon/dbgfs.c:971
-Code: a1 c1 a7 ff 45 85 e4 0f 85 ca 02 00 00 e8 c3 c4 a7 ff 48 8b 1d 5c 86 52 0f 48 b8 00 00 00 00 00 fc ff df 48 89 da 48 c1 ea 03 <80> 3c 02 00 0f 85 1f 03 00 00 48 8b 2b 48 85 ed 0f 84 8e 02 00 00
-RSP: 0018:ffffc9000596fcb0 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: 0000000000000010 RCX: 0000000000000000
-RDX: 0000000000000002 RSI: ffffffff81d4d7bd RDI: 0000000000000005
-RBP: 0000000020000040 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 000000000008c07e R12: 0000000000000000
-R13: ffff88806d41a000 R14: ffffc9000596fec8 R15: ffffffffffffffea
-FS:  00007f469e46e700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f469e44d718 CR3: 000000007ebb7000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 4 bytes skipped:
-   0:	45 85 e4             	test   %r12d,%r12d
-   3:	0f 85 ca 02 00 00    	jne    0x2d3
-   9:	e8 c3 c4 a7 ff       	callq  0xffa7c4d1
-   e:	48 8b 1d 5c 86 52 0f 	mov    0xf52865c(%rip),%rbx        # 0xf528671
-  15:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  1c:	fc ff df
-  1f:	48 89 da             	mov    %rbx,%rdx
-  22:	48 c1 ea 03          	shr    $0x3,%rdx
-* 26:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2a:	0f 85 1f 03 00 00    	jne    0x34f
-  30:	48 8b 2b             	mov    (%rbx),%rbp
-  33:	48 85 ed             	test   %rbp,%rbp
-  36:	0f 84 8e 02 00 00    	je     0x2ca
+The patch and the premise behind it look reasonable.
 
+What's the reason for taking out the Author tags?
 
-Tested on:
-
-commit:         98555239 Merge tag 'arc-6.1-fixes' of git://git.kernel..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=12222096880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a66c6c673fb555e8
-dashboard link: https://syzkaller.appspot.com/bug?extid=6087eafb76a94c4ac9eb
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=15f025ce880000
-
+-- 
+Lee Jones [李琼斯]
