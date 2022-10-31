@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0BFB613D4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8524C613D4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbiJaS0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 14:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57338 "EHLO
+        id S230027AbiJaS0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 14:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiJaS0K (ORCPT
+        with ESMTP id S230007AbiJaS0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 14:26:10 -0400
+        Mon, 31 Oct 2022 14:26:11 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE6110FC8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8AF112AFF;
         Mon, 31 Oct 2022 11:26:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0FFBB819DC;
-        Mon, 31 Oct 2022 18:26:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9C70C433C1;
-        Mon, 31 Oct 2022 18:26:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 72A40B819EB;
+        Mon, 31 Oct 2022 18:26:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 888BEC433D6;
+        Mon, 31 Oct 2022 18:26:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667240763;
-        bh=G91I60Ol4QydHlf0mecqvnzRJ7lAwY37ycd5EgIHiNA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mwkrMkEzxQ2aBJiRdepyeP5t5fLzY4CAtpKfH6JMCnHZ/VQ+dYxFX0iCcFO5gFDix
-         02rFZKQTxdKHR/Lv8Jlcv2w+ShC0DPpVcYM2H876SKCw/B5ufMRO9bzaAQsd7iIpzP
-         gUJ5v/jTtpxcpsrk8tH598uGrOb2BpzHxGQZafU/J2/QqS3D8D97kVy+K0Lt9b7Nf2
-         +A3s1Gu6nonRmiA5N7F+dp5FdSau3BRTLg4JaXOLU3PiDRT7bfDa01vdEK+l8oDm5R
-         C8do+DA6t2WbL0Lq3UMSEOopPedqr40+hIGrdo+LpmjTud6HHXLACzH8+00cNo7dMg
-         h14pnuSkhu3rw==
+        s=k20201202; t=1667240764;
+        bh=EQ6SCcuU+VCGAwnEUYyTpKsgCpaNR+eNW9wxrdFWY7Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YrNr3rYc0LzaAOhzUJyN74HSydG6tFsLGBCF0OlFBlRLQcTIMKXbfU8v0FBvNGLr4
+         +ynvDJhYjT3+sHZjnQMGkYB2I7aDbIUjtx/Q7uxmfZSt9Z0XXmFsCGCQQgsqN1YWNq
+         6g2Cfw/ph3Eiqj40lBkn5tAC4+McSpi8JqLzK1D5WPOQszQRoFsJDQtMG8ytji+JTD
+         Af75o0UweT3zZU0ewPlF/+Pz3FblmqYz6xjlTE0ZcMFqjBKwDf7twSfkiY/AemUHGU
+         jrg6PW0r38LMESgMG7M0Zs0MhcbYXsZJn6uFks9D3z1MkYA2f0FgtHmRMcOU4KQI5r
+         H1J/Rju5qfa+Q==
 From:   SeongJae Park <sj@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     SeongJae Park <sj@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] Fix slab-out-of-bounds Write in dbgfs_rm_context_write
-Date:   Mon, 31 Oct 2022 18:25:52 +0000
-Message-Id: <20221031182554.7882-1-sj@kernel.org>
+Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>,
+        syzbot+6087eafb76a94c4ac9eb@syzkaller.appspotmail.com,
+        stable@vger.kernel.org
+Subject: [PATCH 1/2] mm/damon/dbgfs: check if rm_contexts input is for a real context
+Date:   Mon, 31 Oct 2022 18:25:53 +0000
+Message-Id: <20221031182554.7882-2-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221031182554.7882-1-sj@kernel.org>
+References: <20221031182554.7882-1-sj@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -52,22 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset is for fixing (patch 1) the syzbot-reported
-slab-out-of-bounds write in dbgfs_rm_context_write[1], and adding a
-selftest for the bug (patch 2).
+A user could write a name of a file under 'damon/' debugfs directory,
+which is not a user-created context, to 'rm_contexts' file.  In the
+case, 'dbgfs_rm_context()' just assumes it's the valid DAMON context
+directory only if a file of the name exist.  As a result, invalid memory
+access could happen as below.  Fix the bug by checking if the given
+input is for a directory.  This check can filter out non-context inputs
+because directories under 'damon/' debugfs directory can be created via
+only 'mk_contexts' file.
+
+This bug has found by syzbot[1].
 
 [1] https://lore.kernel.org/damon/000000000000ede3ac05ec4abf8e@google.com/
 
-SeongJae Park (2):
-  mm/damon/dbgfs: check if rm_contexts input is for a real context
-  selftests/damon: test non-context inputs to rm_contexts file
+Reported-by: syzbot+6087eafb76a94c4ac9eb@syzkaller.appspotmail.com
+Fixes: 75c1c2b53c78 ("mm/damon/dbgfs: support multiple contexts")
+Cc: <stable@vger.kernel.org> # 5.15.x
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ mm/damon/dbgfs.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- mm/damon/dbgfs.c                              |  7 +++++++
- tools/testing/selftests/damon/Makefile        |  1 +
- .../damon/debugfs_rm_non_contexts.sh          | 19 +++++++++++++++++++
- 3 files changed, 27 insertions(+)
- create mode 100755 tools/testing/selftests/damon/debugfs_rm_non_contexts.sh
-
+diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
+index 6f0ae7d3ae39..b3f454a5c682 100644
+--- a/mm/damon/dbgfs.c
++++ b/mm/damon/dbgfs.c
+@@ -890,6 +890,7 @@ static ssize_t dbgfs_mk_context_write(struct file *file,
+ static int dbgfs_rm_context(char *name)
+ {
+ 	struct dentry *root, *dir, **new_dirs;
++	struct inode *inode;
+ 	struct damon_ctx **new_ctxs;
+ 	int i, j;
+ 	int ret = 0;
+@@ -905,6 +906,12 @@ static int dbgfs_rm_context(char *name)
+ 	if (!dir)
+ 		return -ENOENT;
+ 
++	inode = d_inode(dir);
++	if (!S_ISDIR(inode->i_mode)) {
++		ret = -EINVAL;
++		goto out_dput;
++	}
++
+ 	new_dirs = kmalloc_array(dbgfs_nr_ctxs - 1, sizeof(*dbgfs_dirs),
+ 			GFP_KERNEL);
+ 	if (!new_dirs) {
 -- 
 2.25.1
 
