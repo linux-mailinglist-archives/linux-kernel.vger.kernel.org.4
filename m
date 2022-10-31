@@ -2,224 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8120D6130DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 08:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3E46130DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 08:02:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiJaHCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 03:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
+        id S229692AbiJaHCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 03:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiJaHCS (ORCPT
+        with ESMTP id S229549AbiJaHCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 03:02:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9E1BC31;
-        Mon, 31 Oct 2022 00:02:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3657AB81151;
-        Mon, 31 Oct 2022 07:02:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6230DC433C1;
-        Mon, 31 Oct 2022 07:02:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667199734;
-        bh=izXUeTAnZYDOq36uQJFHi8H95rgZoH4hxSRBjqOB43k=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WDTZe131H5mBA1z9XM8YMCa0dYryERRsdZOlPzbziKLdoOplI6Ig7x8muFaoe2uKX
-         GjvUrMkAY/MBTyjuskGnQtsL8xxRBgeM4Hal+ORzWOmFHlEXxjFVjrsaV1Xi+c9CXS
-         GS4apyipyzYYS30DEkLUKLNln89sqMYGnIlrJITU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: [PATCH 4.14 00/34] 4.14.297-rc1 review
-Date:   Mon, 31 Oct 2022 08:02:33 +0100
-Message-Id: <20221031070140.108124105@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
+        Mon, 31 Oct 2022 03:02:19 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B03BE25;
+        Mon, 31 Oct 2022 00:02:14 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id F29AD5FD04;
+        Mon, 31 Oct 2022 10:02:10 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1667199731;
+        bh=BKY2cTjdeYEw23ZGX7u2bK3iTwGW6d+R14VKNmLfPW4=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=UcItTpekz0+Ew5myOYjqCL6Jdtz9ioKWmIEWDuTIJr/xgxLQhurNifPD9ehkHe93O
+         QFcGPfYAL4uJT2pPnkPWelvDI3pgiQjNjiymT3mtXRVnoTIe1sEAmYahbcil86TTd9
+         QVPcVH7BforhVNncsL9SEwg+n672poKi8O1F6mGQOpMe9l0JLKsEOmmtwiO1tOZWFT
+         7r8dC61ldp5wuzqbMXwGay2USWG+iT066rM3bheQ57c2iYbEBETWilD1YtYlGPz0QS
+         Id6fcIZnIMgquHW1s96NSupgwdia/UcxPk76Sq2AvLd8ehgt6s+Xa91BTwUasvLJ9s
+         Lvo0psVqR9cww==
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 31 Oct 2022 10:02:10 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Pavel Machek <pavel@ucw.cz>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v1 1/1] leds: support to use own workqueue for each
+ LED
+Thread-Topic: [RFC PATCH v1 1/1] leds: support to use own workqueue for each
+ LED
+Thread-Index: AQHY7CXVXNE+VpHZTEOLMCYP8pPo3a4mqWiAgAAcMYCAAGiDgIAAtIQA
+Date:   Mon, 31 Oct 2022 07:01:28 +0000
+Message-ID: <03bc76b5-4e2e-5d4d-96b5-53a1f95ffd0c@sberdevices.ru>
+References: <9a0a70a8-0886-1115-6151-72d2cba842cf@sberdevices.ru>
+ <33d05330-7c52-e873-bf32-209d40c77632@sberdevices.ru>
+ <20221030122029.GA8017@duo.ucw.cz>
+ <b7304844-a654-2120-2159-29f6134dbadb@sberdevices.ru>
+ <20221030201527.GA23195@duo.ucw.cz>
+In-Reply-To: <20221030201527.GA23195@duo.ucw.cz>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6BF8C2F341EB144FA2DDE82A6596886A@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.297-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.14.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.14.297-rc1
-X-KernelTest-Deadline: 2022-11-02T07:01+00:00
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/10/31 05:11:00 #20539587
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.14.297 release.
-There are 34 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
-
-Responses should be made by Wed, 02 Nov 2022 07:01:32 +0000.
-Anything received after that time might be too late.
-
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.297-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
-and the diffstat can be found below.
-
-thanks,
-
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.14.297-rc1
-
-Daniel Sneddon <daniel.sneddon@linux.intel.com>
-    x86/speculation: Add RSB VM Exit protections
-
-Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-    x86/bugs: Warn when "ibrs" mitigation is selected on Enhanced IBRS parts
-
-Nathan Chancellor <nathan@kernel.org>
-    x86/speculation: Use DECLARE_PER_CPU for x86_spec_ctrl_current
-
-Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-    x86/speculation: Disable RRSBA behavior
-
-Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-    x86/bugs: Add Cannon lake to RETBleed affected CPU list
-
-Andrew Cooper <andrew.cooper3@citrix.com>
-    x86/cpu/amd: Enumerate BTC_NO
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/common: Stamp out the stepping madness
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    x86/speculation: Fill RSB on vmexit for IBRS
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    KVM: VMX: Fix IBRS handling after vmexit
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    KVM: VMX: Prevent guest RSB poisoning attacks with eIBRS
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    x86/speculation: Remove x86_spec_ctrl_mask
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    x86/speculation: Use cached host SPEC_CTRL value for guest entry/exit
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    x86/speculation: Fix SPEC_CTRL write on SMT state change
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    x86/speculation: Fix firmware entry SPEC_CTRL handling
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    x86/speculation: Fix RSB filling with CONFIG_RETPOLINE=n
-
-Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-    x86/speculation: Add LFENCE to RSB fill sequence
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/speculation: Change FILL_RETURN_BUFFER to work with objtool
-
-Peter Zijlstra <peterz@infradead.org>
-    entel_idle: Disable IBRS during long idle
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/bugs: Report Intel retbleed vulnerability
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/bugs: Split spectre_v2_select_mitigation() and spectre_v2_user_select_mitigation()
-
-Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-    x86/speculation: Add spectre_v2=ibrs option to support Kernel IBRS
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/bugs: Optimize SPEC_CTRL MSR writes
-
-Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-    x86/entry: Add kernel IBRS implementation
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/bugs: Keep a per-CPU IA32_SPEC_CTRL value
-
-Alexandre Chartre <alexandre.chartre@oracle.com>
-    x86/bugs: Add AMD retbleed= boot parameter
-
-Alexandre Chartre <alexandre.chartre@oracle.com>
-    x86/bugs: Report AMD retbleed vulnerability
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/cpufeatures: Move RETPOLINE flags to word 11
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/entry: Remove skip_r11rcx
-
-Mark Gross <mgross@linux.intel.com>
-    x86/cpu: Add a steppings field to struct x86_cpu_id
-
-Thomas Gleixner <tglx@linutronix.de>
-    x86/cpu: Add consistent CPU match macros
-
-Thomas Gleixner <tglx@linutronix.de>
-    x86/devicetable: Move x86 specific macro out of generic code
-
-Ingo Molnar <mingo@kernel.org>
-    x86/cpufeature: Fix various quality problems in the <asm/cpu_device_hd.h> header
-
-Kan Liang <kan.liang@linux.intel.com>
-    x86/cpufeature: Add facility to check for min microcode revisions
-
-Suraj Jitindar Singh <surajjs@amazon.com>
-    Revert "x86/cpu: Add a steppings field to struct x86_cpu_id"
-
-
--------------
-
-Diffstat:
-
- Documentation/admin-guide/hw-vuln/spectre.rst   |   8 +
- Documentation/admin-guide/kernel-parameters.txt |  13 +
- Makefile                                        |   4 +-
- arch/x86/entry/calling.h                        |  68 +++-
- arch/x86/entry/entry_32.S                       |   2 -
- arch/x86/entry/entry_64.S                       |  38 ++-
- arch/x86/entry/entry_64_compat.S                |  12 +-
- arch/x86/include/asm/cpu_device_id.h            | 168 +++++++++-
- arch/x86/include/asm/cpufeatures.h              |  16 +-
- arch/x86/include/asm/intel-family.h             |   6 +
- arch/x86/include/asm/msr-index.h                |  14 +
- arch/x86/include/asm/nospec-branch.h            |  48 +--
- arch/x86/kernel/cpu/amd.c                       |  21 +-
- arch/x86/kernel/cpu/bugs.c                      | 415 ++++++++++++++++++++----
- arch/x86/kernel/cpu/common.c                    |  68 ++--
- arch/x86/kernel/cpu/match.c                     |  44 ++-
- arch/x86/kernel/cpu/scattered.c                 |   1 +
- arch/x86/kernel/process.c                       |   2 +-
- arch/x86/kvm/svm.c                              |   1 +
- arch/x86/kvm/vmx.c                              |  51 ++-
- drivers/base/cpu.c                              |   8 +
- drivers/cpufreq/acpi-cpufreq.c                  |   1 +
- drivers/cpufreq/amd_freq_sensitivity.c          |   1 +
- drivers/idle/intel_idle.c                       |  45 ++-
- include/linux/cpu.h                             |   2 +
- include/linux/mod_devicetable.h                 |   4 +-
- tools/arch/x86/include/asm/cpufeatures.h        |   1 +
- 27 files changed, 899 insertions(+), 163 deletions(-)
-
-
+T24gMzAuMTAuMjAyMiAyMzoxNSwgUGF2ZWwgTWFjaGVrIHdyb3RlOg0KPiBIaSENCj4gDQo+Pj4+
+IFRoaXMgYWxsb3dzIHRvIHNldCBvd24gd29ya3F1ZXVlIGZvciBlYWNoIExFRC4gVGhpcyBtYXkg
+YmUgdXNlZnVsLCBiZWNhdXNlDQo+Pj4+IGRlZmF1bHQgJ3N5c3RlbV93cScgZG9lcyBub3QgZ3Vh
+cmFudGVlIGV4ZWN1dGlvbiBvcmRlciBvZiBlYWNoIHdvcmtfc3RydWN0LA0KPj4+PiB0aHVzIGZv
+ciBzZXZlcmFsIGJyaWdodG5lc3MgdXBkYXRlIHJlcXVlc3RzIChmb3IgbXVsdGlwbGUgbGVkcyks
+IHJlYWwNCj4+Pj4gYnJpZ2h0bmVzcyBzd2l0Y2ggY291bGQgYmUgaW4gcmFuZG9tIG9yZGVyLg0K
+Pj4+DQo+Pj4gU28uLiB3aGF0Pw0KPj4+DQo+Pj4gRXZlbiBpZiBleGVjdXRpb24gb3JkZXIgaXMg
+c3dpdGNoZWQsIGh1bWFuIGV5ZSB3aWxsIG5vdCBiZSBhYmxlIHRvDQo+Pj4gdGVsbCB0aGUgZGlm
+ZmVyZW5jZS4NCj4+IEhlbGxvLA0KPj4NCj4+IFByb2JsZW0gYXJpc2VzIG9uIG9uZSBvZiBvdXIg
+Ym9hcmRzIHdoZXJlIHdlIGhhdmUgMTQgdHJpcGxlcyBvZiBsZWRzKGVhY2gNCj4+IHRyaXBsZSBj
+b250YWlucyBSIEcgQikuIFRlc3QgY2FzZSBpcyB0byBwbGF5IGNvbXBsZXggYW5pbWF0aW9uIG9u
+IGFsbCBsZWRzOg0KPj4gc21vb3RoIHN3aXRjaCBmcm9tIG9uIFJHQiBzdGF0ZSB0byBhbm90aGVy
+LiBTb21ldGltZXMgdGhlcmUgYXJlIGdsaXRjaGVzIGluDQo+PiB0aGlzIHByb2Nlc3MgLSBkaXZl
+cmdlbmNlIGZyb20gZXhwZWN0YWJsZSBSR0Igc3RhdGUuIFdlIGZpeGVkIHRoaXMgYnkgdXNpbmcN
+Cj4+IG9yZGVyZWQgd29ya3F1ZXVlLg0KPiANCj4gQXJlIHRoZXJlIG90aGVyIHNvbHV0aW9ucyBw
+b3NzaWJsZT8gTGlrZSBiYXRjaCBhbmQgYWx3YXlzIGFwcGx5IF9hbGxfDQo+IHRoZSB1cGRhdGVz
+IHlvdSBoYXZlIHF1ZXVlZCBmcm9tIHlvdXIgdGhlIHdvcmtlciBjb2RlPw0KDQpJSVVDIFlvdSwg
+aXQgaXMgcG9zc2libGUgdG8gZG8gdGhpcyBpZiBicmlnaHRuZXNzIHVwZGF0ZSByZXF1ZXN0cyBh
+cmUgcGVyZm9ybWVkIHVzaW5nDQp3cml0ZSB0byAiYnJpZ2h0bmVzcyIgZmlsZSBpbiAvc3lzL2Ns
+YXNzL2xlZC8uIEJ1dCBpZiBwYXR0ZXJuIHRyaWdnZXIgbW9kZSBpcyB1c2VkKGluIG15DQpjYXNl
+KSAtIEkgY2FuJ3Qgc3luY2hyb25pemUgdGhlc2UgcmVxdWVzdHMgYXMgdGhleSBhcmUgY3JlYXRl
+ZCBpbnRlcm5hbGx5IGluIGtlcm5lbCBvbg0KdGltZXIgdGljay4NCg0KVGhhbmtzLCBBcnNlbml5
+DQo+IA0KPiBCZXN0IHJlZ2FyZHMsDQo+IAkJCQkJCQkJUGF2ZWwNCj4gDQoNCg==
