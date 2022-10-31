@@ -2,102 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89F9613E11
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 20:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8D00613E12
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 20:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbiJaTON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 15:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
+        id S229974AbiJaTOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 15:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiJaTOK (ORCPT
+        with ESMTP id S229744AbiJaTON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 15:14:10 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB50120BD
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:14:09 -0700 (PDT)
-Received: (Authenticated sender: joao@overdrivepizza.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 52DBF240004;
-        Mon, 31 Oct 2022 19:13:50 +0000 (UTC)
+        Mon, 31 Oct 2022 15:14:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B02C120BD
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:14:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DAFCB61418
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 19:14:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1AB9C433C1;
+        Mon, 31 Oct 2022 19:14:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667243651;
+        bh=80lqoPPKDQ+glCPrCeg2E0gbOPazZmUenJWu7c2v11s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XixhbcpmCWhV7gKONpioTcsPjwo2dubUfERuxu+IC1URA6AThPGAW1QT8pM76DbZc
+         TuL61Mc0yVscRfNbtfO7fxI2Aeel+eKLGOvfmRdbYLHIGrGTsoeXghxXtjbOvNFzwC
+         u+bMsgr6u06r/u3PMYjW6EHQVf+L+e+vKAE1wkqeIsGMjL0097ckG9WYjbZslkJieL
+         l33yQRsao15+j07391m/ub1t8lg3ZkhsAr8cyy/XYlmfFewsWa3btuFAAmuSZ0dEZJ
+         PWjuZiPd7Kf3jFMP3ArpS0tEdzqiH1qeD/K0zn7t9PONKFzB4oqXhYVD+OkAlzW5/a
+         TCEYD90sRgRWA==
+Date:   Mon, 31 Oct 2022 19:14:06 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] riscv: process: fix kernel info leakage
+Message-ID: <Y2AefvfMgZDoQUto@spud>
+References: <20221029113450.4027-1-jszhang@kernel.org>
 MIME-Version: 1.0
-Date:   Mon, 31 Oct 2022 12:13:50 -0700
-From:   Joao Moreira <joao@overdrivepizza.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Sami Tolvanen <samitolvanen@google.com>,
-        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH] x86/ibt: Implement FineIBT
-In-Reply-To: <202210182218.56AD2871@keescook>
-References: <Y06rtoE9BsERG9uv@hirez.programming.kicks-ass.net>
- <202210181020.79AF7F7@keescook>
- <Y08H8zJ5lQ62jel5@hirez.programming.kicks-ass.net>
- <c561dd8ec384bfc77998a6db6ed824e7@overdrivepizza.com>
- <Y08M4+GxoqvuZ+bq@hirez.programming.kicks-ass.net>
- <d219d61420c48a90a2e8bdc29cb8a579@overdrivepizza.com>
- <202210182218.56AD2871@keescook>
-Message-ID: <baced047981ff5fce633156e3e374dfd@overdrivepizza.com>
-X-Sender: joao@overdrivepizza.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221029113450.4027-1-jszhang@kernel.org>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-18 22:19, Kees Cook wrote:
-> On Tue, Oct 18, 2022 at 09:48:42PM -0700, Joao Moreira wrote:
->> > > Is it useful to get the compiler to emit 0xcc with
->> > > -fpatchable-function-entry under any circumstance? I can probably
->> > > change
->> > > that quickly if needed/useful.
->> >
->> > Having it emit 0xcc for the bytes in front of the symbol might be
->> > interesting. It would mean a few kernel changes, but nothing too hard.
-
-Should I push for this within clang? I have the patch semi-ready (below) 
-and would have some cycles this week for polishing it.
-
->> >
->> > That is, -fpatchable-function-entry=N,M gets us N-M bytes in at the
->> > start of the symbol and M bytes in front of it. The N-M bytes at the
->> > start of the function *are* executed and should obviously not become
->> > 0xcc (GCC keeps them 0x90 while LLVM makes them large NOPs).
->> 
->> Uhum, all makes sense. I drafted something here:
->> 
->> https://github.com/lvwr/llvm-project/commits/joao/int3
->> 
->> Let me know if this works for you or if there is something that should 
->> be
->> tweaked, like adding a specific flag and such. This currently emits 
->> 0xcc
->> instead of 0x90 for the nops before the function entry symbol for 
->> kernel
->> code on x86-64. It seems to be working (see generated snippet below), 
->> but
->> let me know otherwise:
->> 
->> Generated with -fpatchable-function-entry=10,5
->> 
->> Disassembly of section .text:
->> 
->> 0000000000000000 <save_processor_state-0x5>:
->>    0:   cc                      int3
->>    1:   cc                      int3
->>    2:   cc                      int3
->>    3:   cc                      int3
->>    4:   cc                      int3
->> 
->> 0000000000000005 <save_processor_state>:
->>    5:   0f 1f 44 00 08          nopl   0x8(%rax,%rax,1)
->>    a:   41 57                   push   %r15
->>    c:   41 56                   push   %r14
+On Sat, Oct 29, 2022 at 07:34:50PM +0800, Jisheng Zhang wrote:
+> thread_struct's s[12] may contain random kernel memory content, which
+> may be finally leaked to userspace. This is a security hole. Fix it
+> by clearing the s[12] array in thread_struct when fork.
 > 
-> Cool! I like that. Assuming objtool doesn't freak out, that seems like 
-> a
-> nice way to go.
+> As for kthread case, it's better to clear the s[12] array as well.
+> 
+> Fixes: 7db91e57a0ac ("RISC-V: Task implementation")
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+> 
+> Previously, it's one of the series of "riscv: entry: further clean up
+> and VMAP_STACK fix". This is a fix, so I move it out of the series and
+> send it separately
+
+Should this not be carrying a R-b from Guo Ren from that series?
+https://lore.kernel.org/linux-riscv/CAJF2gTSdVyAaM12T+7kXAdRPGS4VyuO08X1c7paE-n4Fr8OtRA@mail.gmail.com/
+> 
+>  arch/riscv/kernel/process.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+> index ceb9ebab6558..52002d54b163 100644
+> --- a/arch/riscv/kernel/process.c
+> +++ b/arch/riscv/kernel/process.c
+> @@ -164,6 +164,8 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+>  	unsigned long tls = args->tls;
+>  	struct pt_regs *childregs = task_pt_regs(p);
+>  
+> +	memset(&p->thread.s, 0, sizeof(p->thread.s));
+> +
+>  	/* p->thread holds context to be restored by __switch_to() */
+>  	if (unlikely(args->fn)) {
+>  		/* Kernel thread */
+> -- 
+> 2.37.2
+> 
