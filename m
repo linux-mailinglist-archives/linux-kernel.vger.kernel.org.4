@@ -2,151 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D436132B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9AB16132B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiJaJZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 05:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
+        id S229894AbiJaJ3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 05:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiJaJZ1 (ORCPT
+        with ESMTP id S229670AbiJaJ3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 05:25:27 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D28865C0;
-        Mon, 31 Oct 2022 02:25:26 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id j16so18260312lfe.12;
-        Mon, 31 Oct 2022 02:25:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6WU26MBOt8WJip0LsF+/o2BON0nZWtJO9/skfyzMYys=;
-        b=l9Ec6Z3pCXkd/0PTcwHkH7+fM6BIWq9SSTBElCmHDmP12O19aP/1XUl2kowGBBfSU5
-         SOxQ/i+u9Vgo1beE6pzWMWl3fTxd/ZjV+Yr0Kx8Y80OSmj9Tn1PecncY5g4FDnKqAbxL
-         eM3nqIt+vxJmx1KKet+q7PJY8XH2IZeoUCDYft69i36rS7iL/lstV1faHoQIpIOLolg+
-         OAKeADCXW7ZXzf8JijPKPbptu+c5Kvhmz9D+biGjBxcdo6IvfHZvUaDnD4/2KvWWRjS2
-         BB0Ooas8nyXPXLJ76DjhtD8enNTPyOeQZNhIRVAAhGbjqFNJf3U30CqiXSH6zebSH57j
-         pG+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6WU26MBOt8WJip0LsF+/o2BON0nZWtJO9/skfyzMYys=;
-        b=yANXHbJWDPBt3YZkA2/4a+tWOqeMNPNNDpmye2IgnA5uoefFYV5rSZihtGMglLSvJP
-         hCW22xPOJjN/5QAtCc+qo525448lOkn39HQlen5u6na7irtv3sxM73EkNitmmX6zQIob
-         hHzYk5VUJ+MTBgeGf9/HsehqeQH5GvGDUSaW44YLLW54gm3ilDMvTFxiQZcZ/oC1STuD
-         /khj+UVgzvFXUALtVPD6LM9N2YosSsDWhEQz+/9Cql9GewGFx/OfkCtNouRJWWPoZon2
-         uGaEZ0m/e8f50DcINuH4zJ3ayl1P3z5edOmosy3HhzQWRUoHHnAm6hGwBVc996GQbI4R
-         dTUg==
-X-Gm-Message-State: ACrzQf2oydC2B7HCjo68aN5P/+uRtpY6rk3kZlRdrEHPV7DWHez9KMMl
-        3axdzqgPpJ7N8To05R6julw=
-X-Google-Smtp-Source: AMsMyM4+8FD7UeMjok9pXXcM0gZLvNIuCQiyoXprPxWuWz6Gf31a80EiV+fpLs6m7K9BmQJVvF3j9Q==
-X-Received: by 2002:a05:6512:6d4:b0:4a2:f89:db7d with SMTP id u20-20020a05651206d400b004a20f89db7dmr4718215lff.125.1667208324715;
-        Mon, 31 Oct 2022 02:25:24 -0700 (PDT)
-Received: from dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::2])
-        by smtp.gmail.com with ESMTPSA id 190-20020a2e05c7000000b0026f9cb6d10fsm1239260ljf.45.2022.10.31.02.25.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 02:25:23 -0700 (PDT)
-Date:   Mon, 31 Oct 2022 11:25:00 +0200
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] power: supply: mt6360: Use LINEAR_RANGE_IDX()
-Message-ID: <2c6267efae04a3f64d88baf2e34ea309af438d40.1667208242.git.mazziesaccount@gmail.com>
+        Mon, 31 Oct 2022 05:29:20 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9E0C74
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 02:29:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=m26dbh7SjZHwQm0vw8FQlUAYjNdiwKxLSgQsfeZ1PmE=; b=PspoWzpzdQZwU1bDxNJlFTQCSd
+        BmsCZ5XvRS7VcCAqXfgCqL3jdajhe8rVZieSueir12iklJ2deY2idzmQfnoQegSEWFIzp4PyjxD6u
+        Etimo3Dz5Vb1e8tTJ/ylYS6q1rHd2vu0TLc4JqFuN4t/VaaqvF06yo0dlFF5EVvPLT+Dpvv+3VYxs
+        iPAIgPRHoTUeQEPfkP0D/vjpTs80KtpNFjsYkO1DUuEdHjBY3aO7CwYGcCOWxIVqIZ+QOBWHTvLwz
+        p0Zr6R9GhjokkEM1fa6qiZErP9m+8M/lXn28QEcPRV/a4zrKr68gmFOb0B8EMBYNL0ETBWVnbL/gt
+        lXVV3x5g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1opR6N-003YhK-Uh; Mon, 31 Oct 2022 09:29:04 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F0A1930008D;
+        Mon, 31 Oct 2022 10:28:57 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CD70C20FEEEC2; Mon, 31 Oct 2022 10:28:57 +0100 (CET)
+Date:   Mon, 31 Oct 2022 10:28:57 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Nadav Amit <nadav.amit@gmail.com>, Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        jroedel@suse.de, ubizjak@gmail.com,
+        Alistair Popple <apopple@nvidia.com>
+Subject: Re: [PATCH 01/13] mm: Update ptep_get_lockless()s comment
+Message-ID: <Y1+VWfNC7BvP8Pr2@hirez.programming.kicks-ass.net>
+References: <F9E42822-DA1D-4192-8410-3BAE42E9E4A9@gmail.com>
+ <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
+ <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
+ <47678198-C502-47E1-B7C8-8A12352CDA95@gmail.com>
+ <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
+ <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
+ <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com>
+ <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
+ <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
+ <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="spmfeW7Hd1DSSs/Y"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Oct 30, 2022 at 03:47:36PM -0700, Linus Torvalds wrote:
 
---spmfeW7Hd1DSSs/Y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>  include/linux/rmap.h |  1 +
+>  mm/memory.c          |  3 ++-
+>  mm/rmap.c            | 24 ++++++++++++++++++++++++
+>  3 files changed, 27 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+> index bd3504d11b15..f62af001707c 100644
+> --- a/include/linux/rmap.h
+> +++ b/include/linux/rmap.h
+> @@ -196,6 +196,7 @@ void page_add_new_anon_rmap(struct page *, struct vm_area_struct *,
+>  		unsigned long address);
+>  void page_add_file_rmap(struct page *, struct vm_area_struct *,
+>  		bool compound);
+> +void page_zap_pte_rmap(struct page *);
+>  void page_remove_rmap(struct page *, struct vm_area_struct *,
+>  		bool compound);
+>  
+> diff --git a/mm/memory.c b/mm/memory.c
+> index f88c351aecd4..c893f5ffc5a8 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -1452,8 +1452,9 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+>  				    likely(!(vma->vm_flags & VM_SEQ_READ)))
+>  					mark_page_accessed(page);
+>  			}
+> +			page_zap_pte_rmap(page);
+> +			munlock_vma_page(page, vma, false);
+>  			rss[mm_counter(page)]--;
+> -			page_remove_rmap(page, vma, false);
+>  			if (unlikely(page_mapcount(page) < 0))
+>  				print_bad_pte(vma, addr, ptent, page);
+>  			if (unlikely(__tlb_remove_page(tlb, page))) {
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index 2ec925e5fa6a..28b51a31ebb0 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -1412,6 +1412,30 @@ static void page_remove_anon_compound_rmap(struct page *page)
+>  		__mod_lruvec_page_state(page, NR_ANON_MAPPED, -nr);
+>  }
+>  
+> +/**
+> + * page_zap_pte_rmap - take down a pte mapping from a page
+> + * @page:	page to remove mapping from
+> + *
+> + * This is the simplified form of page_remove_rmap(), that only
+> + * deals with last-level pages, so 'compound' is always false,
+> + * and the caller does 'munlock_vma_page(page, vma, compound)'
+> + * separately.
+> + *
+> + * This allows for a much simpler calling convention and code.
+> + *
+> + * The caller holds the pte lock.
+> + */
+> +void page_zap_pte_rmap(struct page *page)
+> +{
 
-Do minor clean-up by using the newly inroduced LINEAR_RANGE_IDX()
-initialization macro.
+One could consider adding something like:
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
----
-Sorry, this one evaded my original grep so sending an individual patch.
-Would've squashed this with bd99954 one if I spotted it right away.
----
- drivers/power/supply/mt6360_charger.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/power/supply/mt6360_charger.c b/drivers/power/supply/m=
-t6360_charger.c
-index 3abaa72e0668..92e48e3a4853 100644
---- a/drivers/power/supply/mt6360_charger.c
-+++ b/drivers/power/supply/mt6360_charger.c
-@@ -113,16 +113,13 @@ enum {
- 	MT6360_RANGE_MAX,
- };
-=20
--#define MT6360_LINEAR_RANGE(idx, _min, _min_sel, _max_sel, _step) \
--	[idx] =3D REGULATOR_LINEAR_RANGE(_min, _min_sel, _max_sel, _step)
--
- static const struct linear_range mt6360_chg_range[MT6360_RANGE_MAX] =3D {
--	MT6360_LINEAR_RANGE(MT6360_RANGE_VMIVR, 3900000, 0, 0x5F, 100000),
--	MT6360_LINEAR_RANGE(MT6360_RANGE_ICHG, 100000, 0, 0x31, 100000),
--	MT6360_LINEAR_RANGE(MT6360_RANGE_VOREG, 3900000, 0, 0x51, 10000),
--	MT6360_LINEAR_RANGE(MT6360_RANGE_AICR, 100000, 0, 0x3F, 50000),
--	MT6360_LINEAR_RANGE(MT6360_RANGE_IPREC, 100000, 0, 0x0F, 50000),
--	MT6360_LINEAR_RANGE(MT6360_RANGE_IEOC, 100000, 0, 0x0F, 50000),
-+	LINEAR_RANGE_IDX(MT6360_RANGE_VMIVR, 3900000, 0, 0x5F, 100000),
-+	LINEAR_RANGE_IDX(MT6360_RANGE_ICHG, 100000, 0, 0x31, 100000),
-+	LINEAR_RANGE_IDX(MT6360_RANGE_VOREG, 3900000, 0, 0x51, 10000),
-+	LINEAR_RANGE_IDX(MT6360_RANGE_AICR, 100000, 0, 0x3F, 50000),
-+	LINEAR_RANGE_IDX(MT6360_RANGE_IPREC, 100000, 0, 0x0F, 50000),
-+	LINEAR_RANGE_IDX(MT6360_RANGE_IEOC, 100000, 0, 0x0F, 50000),
- };
-=20
- struct mt6360_chg_info {
---=20
-2.37.3
+#ifdef USE_SPLIT_PTE_PTLOCKS
+	lockdep_assert_held(ptlock_ptr(page))
+#endif
 
 
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
+> +	if (!atomic_add_negative(-1, &page->_mapcount))
+> +		return;
+> +
+> +	lock_page_memcg(page);
+> +	__dec_lruvec_page_state(page,
+> +		PageAnon(page) ? NR_ANON_MAPPED : NR_FILE_MAPPED);
+> +	unlock_page_memcg(page);
+> +}
 
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---spmfeW7Hd1DSSs/Y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmNflF8ACgkQeFA3/03a
-ocUITQf/Vr2UgDLY58WdZKQDMEovsWmrPfqqvVaI8lXvunXIoru48z0u5F1LPzev
-X65VfIgyQ4rrH+sbgBpatfqcMP9EsIe0Qu9oDEAu97ycfO4iNiWHHJKxvqqim/D2
-gDu1jgH+zlgtSp/N5QKCH7R1157yQ96JFIP6Ka4Tr7LQcgjQGoygS51wMNF3G41b
-MaMmrXM6ZqDNuaMOOhXMo7MQd1NGO2wAFU6bQt9KoGbHNTMM68NMlowyHIE/pLJc
-5ysNufmSt5NkIEhLO0SkQNkeUYoerb4mBRYfshBlonftVuFkpcLQqyec+KAyMbRo
-6zM/giLvVS8M3NJy2I514PmoEYCENA==
-=KmNS
------END PGP SIGNATURE-----
-
---spmfeW7Hd1DSSs/Y--
+Took me a little while, but yes, .compound=false seems to reduce to
+this.
