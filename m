@@ -2,136 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A66466139EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:21:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6A86139EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:21:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231767AbiJaPVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 11:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48876 "EHLO
+        id S231778AbiJaPVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 11:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbiJaPVs (ORCPT
+        with ESMTP id S231181AbiJaPVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 11:21:48 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192DF11472;
-        Mon, 31 Oct 2022 08:21:46 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29VFLe99008531;
-        Mon, 31 Oct 2022 10:21:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1667229700;
-        bh=ivwd/rVBE3ksKvYI9kBd9lldFarWaNKMhn52QAdm9ck=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=cEA/p5hSql10H8BCNeO6qZ1WWqv2CMamwYww/LhwVjvfvE1NGJFC1dU/qngCVWTzF
-         YBV+wUEc4jpxRModSLKm2auHKzKQWNTAO8m9hPO3LQqy0z6rPDsstrUEbVA3VSaQD7
-         zVRLK4lgOx8B3bqKB8Rv8htKvRa2M/4v8l8gXUPQ=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29VFLeGj018433
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 31 Oct 2022 10:21:40 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 31
- Oct 2022 10:21:39 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 31 Oct 2022 10:21:39 -0500
-Received: from [10.250.35.234] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29VFLdlY036825;
-        Mon, 31 Oct 2022 10:21:39 -0500
-Message-ID: <e855fc1f-ea6d-71b7-db32-5f34b4802f63@ti.com>
-Date:   Mon, 31 Oct 2022 10:21:39 -0500
+        Mon, 31 Oct 2022 11:21:49 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3539BE02F;
+        Mon, 31 Oct 2022 08:21:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=cNNN03pd2FB8JSjSVrRj3rY0J8S0KNTbVJzIxBWL6+U=; b=owxAgzqez1ZywLUgLkuTqsNUZM
+        CLKEVWT5yusuKKn5TV+Z/jVuU8cWTOuRpRLou/8RpqPqEuEcKcVXY/IqvPPyelbg/0dcmto3P7kuu
+        2yNU8bQZYW2r83nxz+S0C1YRREDZa1TqP9xKYmm/zBxzW6dOC1ibU0vZ6tMvriQBA0yZ6EEia2fCw
+        UlVBCF4+NJyab/cgmyzdISbq23n2eaTTnNd7jhzUQt/0fqY757FgGoE3+5Mq3NYhXhg7md0wso2Hx
+        AHFjxt7voxSOKrq50B8mypu+aH3sOQtobxZ7X2QZrTrYgDRT6i4AGGmm0TE0Nf1Oyp5s6oNL0YBz1
+        4a/bfZoA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1opWbf-007tY9-QF; Mon, 31 Oct 2022 15:21:44 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9DC5F3002F1;
+        Mon, 31 Oct 2022 16:21:42 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7D2F2205A8DAD; Mon, 31 Oct 2022 16:21:42 +0100 (CET)
+Date:   Mon, 31 Oct 2022 16:21:42 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: Linux 6.1-rc3 build fail in include/linux/bpf.h
+Message-ID: <Y1/oBlK0yFk5c/Im@hirez.programming.kicks-ass.net>
+References: <439d8dc735bb4858875377df67f1b29a@AcuMS.aculab.com>
+ <Y1+8zIdf8mgQXwHg@krava>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2] arm64: dts: ti: k3-j721s2-main: Enable crypto
- accelerator
-Content-Language: en-US
-To:     Jayesh Choudhary <j-choudhary@ti.com>, <nm@ti.com>,
-        <vigneshr@ti.com>
-CC:     <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221031135416.350010-1-j-choudhary@ti.com>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <20221031135416.350010-1-j-choudhary@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1+8zIdf8mgQXwHg@krava>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/31/22 8:54 AM, Jayesh Choudhary wrote:
-> Add the node for SA2UL for supporting hardware crypto algorithms,
-> including SHA1, SHA256, SHA512, AES, 3DES and AEAD suites.
-> Add rng node for hardware random number generator.
+On Mon, Oct 31, 2022 at 01:17:16PM +0100, Jiri Olsa wrote:
+> On Mon, Oct 31, 2022 at 11:14:31AM +0000, David Laight wrote:
+> > The 6.1-rc3 sources fail to build because bpf.h unconditionally
+> > #define BPF_DISPATCHER_ATTRIBUTES __attribute__((patchable_function_entry(5)))
+> > for X86_64 builds.
+> > 
+> > I'm pretty sure that should depend on some other options
+> > since the compiler isn't required to support it.
+> > (The gcc 7.5.0 on my Ubunti 18.04 system certainly doesn't)
+> > 
+> > The only other reference to that attribute is in the definition
+> > of 'notrace' in compiler.h.
 > 
-> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
-> ---
+> I guess we need to make some __has_attribute check and make all that conditional
 > 
-> Changes have been tested on local j721s2-evm board. Tcrypt tests
-> and crypto self-tests were passing.
-> 
-> Changelog v1 -> v2:
-> - change the TI_SCI flag from shared to exclusive as OP-TEE uses MCU
->    domain SA2UL instance and not the main domain instance
-> - remove the 'dma-coherent' property (Binding changes are merged)
-> - add the rng node which can be used as well for hwrng along with
->    optee-rng
->    
-> v1 patch: https://lore.kernel.org/all/20220628054518.350717-1-j-choudhary@ti.com/
-> 
-> Testing log: https://gist.github.com/Jayesh2000/26acf0e63f7edcd4b267122e4c73b9a8
-> 
->   arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 20 ++++++++++++++++++++
->   1 file changed, 20 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> index d1ec26110376..7b828afc9280 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> @@ -72,6 +72,26 @@ main_pmx0: pinctrl@11c000 {
->   		pinctrl-single,function-mask = <0xffffffff>;
->   	};
->   
-> +	main_crypto: crypto@4e00000 {
-> +		compatible = "ti,j721e-sa2ul";
-> +		reg = <0x00 0x4e00000 0x00 0x1200>;
-> +		power-domains = <&k3_pds 297 TI_SCI_PD_EXCLUSIVE>;
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges = <0x00 0x04e00000 0x00 0x04e00000 0x00 0x30000>;
-> +
-> +		dmas = <&main_udmap 0xca40>, <&main_udmap 0x4a40>,
-> +				<&main_udmap 0x4a41>;
-> +		dma-names = "tx", "rx1", "rx2";
-> +
-> +		rng: rng@4e10000 {
-> +			compatible = "inside-secure,safexcel-eip76";
-> +			reg = <0x0 0x4e10000 0x0 0x7d>;
-> +			interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&k3_clks 297 1>;
+> cc-ing Peter
 
-This "clocks" property can be dropped now [0].
+Does something crazy like the below work? It compiles but is otherwise
+totally untested.
 
-Otherwise, LGTM
-
-Acked-by: Andrew Davis <afd@ti.com>
-
-[0] d7e8c41016471 dt-bindings: rng: omap_rng: Drop requirement for clocks
-
-> +		};
-> +	};
-> +
->   	main_uart0: serial@2800000 {
->   		compatible = "ti,j721e-uart", "ti,am654-uart";
->   		reg = <0x00 0x02800000 0x00 0x200>;
+---
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 9e7d46d16032..7d7a00306d19 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -953,6 +953,10 @@ struct bpf_dispatcher {
+ 	void *rw_image;
+ 	u32 image_off;
+ 	struct bpf_ksym ksym;
++#ifdef CONFIG_HAVE_STATIC_CALL
++	struct static_call_key *sc_key;
++	void *sc_tramp;
++#endif
+ };
+ 
+ static __always_inline __nocfi unsigned int bpf_dispatcher_nop_func(
+@@ -970,6 +974,20 @@ struct bpf_trampoline *bpf_trampoline_get(u64 key,
+ 					  struct bpf_attach_target_info *tgt_info);
+ void bpf_trampoline_put(struct bpf_trampoline *tr);
+ int arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int num_funcs);
++
++
++#ifdef CONFIG_HAVE_STATIC_CALL
++#define BPF_DISPATCH_CALL(name)	static_call(bpf_dispatcher_##name##_call)(ctx, insnsi, bpf_func)
++
++#define __BPF_DISPATCHER_SC_INIT(_name)				\
++	.sc_key = &STATIC_CALL_KEY(_name),			\
++	.sc_tramp = STATIC_CALL_TRAMP_ADDR(_name),
++
++#else
++#define BPF_DISPATCH_CALL(name)	bpf_func(ctx, insnsi)
++#define __BPF_DISPATCHER_SC_INIT(name)
++#endif
++
+ #define BPF_DISPATCHER_INIT(_name) {				\
+ 	.mutex = __MUTEX_INITIALIZER(_name.mutex),		\
+ 	.func = &_name##_func,					\
+@@ -981,32 +999,29 @@ int arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int num_func
+ 		.name  = #_name,				\
+ 		.lnode = LIST_HEAD_INIT(_name.ksym.lnode),	\
+ 	},							\
++	__BPF_DISPATCHER_SC_INIT(_name##_call)			\
+ }
+ 
+-#ifdef CONFIG_X86_64
+-#define BPF_DISPATCHER_ATTRIBUTES __attribute__((patchable_function_entry(5)))
+-#else
+-#define BPF_DISPATCHER_ATTRIBUTES
+-#endif
+-
+ #define DEFINE_BPF_DISPATCHER(name)					\
+-	notrace BPF_DISPATCHER_ATTRIBUTES				\
++	DEFINE_STATIC_CALL(bpf_dispatcher_##name##_call, bpf_dispatcher_nop_func); \
+ 	noinline __nocfi unsigned int bpf_dispatcher_##name##_func(	\
+ 		const void *ctx,					\
+ 		const struct bpf_insn *insnsi,				\
+ 		bpf_func_t bpf_func)					\
+ 	{								\
+-		return bpf_func(ctx, insnsi);				\
++		return BPF_DISPATCH_CALL(name);				\
+ 	}								\
+ 	EXPORT_SYMBOL(bpf_dispatcher_##name##_func);			\
+ 	struct bpf_dispatcher bpf_dispatcher_##name =			\
+ 		BPF_DISPATCHER_INIT(bpf_dispatcher_##name);
++
+ #define DECLARE_BPF_DISPATCHER(name)					\
+ 	unsigned int bpf_dispatcher_##name##_func(			\
+ 		const void *ctx,					\
+ 		const struct bpf_insn *insnsi,				\
+ 		bpf_func_t bpf_func);					\
+ 	extern struct bpf_dispatcher bpf_dispatcher_##name;
++
+ #define BPF_DISPATCHER_FUNC(name) bpf_dispatcher_##name##_func
+ #define BPF_DISPATCHER_PTR(name) (&bpf_dispatcher_##name)
+ void bpf_dispatcher_change_prog(struct bpf_dispatcher *d, struct bpf_prog *from,
+diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
+index fa64b80b8bca..1ca8bd6da6bb 100644
+--- a/kernel/bpf/dispatcher.c
++++ b/kernel/bpf/dispatcher.c
+@@ -4,6 +4,7 @@
+ #include <linux/hash.h>
+ #include <linux/bpf.h>
+ #include <linux/filter.h>
++#include <linux/static_call.h>
+ 
+ /* The BPF dispatcher is a multiway branch code generator. The
+  * dispatcher is a mechanism to avoid the performance penalty of an
+@@ -106,7 +107,6 @@ static void bpf_dispatcher_update(struct bpf_dispatcher *d, int prev_num_progs)
+ {
+ 	void *old, *new, *tmp;
+ 	u32 noff;
+-	int err;
+ 
+ 	if (!prev_num_progs) {
+ 		old = NULL;
+@@ -128,11 +128,10 @@ static void bpf_dispatcher_update(struct bpf_dispatcher *d, int prev_num_progs)
+ 			return;
+ 	}
+ 
+-	err = bpf_arch_text_poke(d->func, BPF_MOD_JUMP, old, new);
+-	if (err || !new)
+-		return;
++	__static_call_update(d->sc_key, d->sc_tramp, new ?: &bpf_dispatcher_nop_func);
+ 
+-	d->image_off = noff;
++	if (new)
++		d->image_off = noff;
+ }
+ 
+ void bpf_dispatcher_change_prog(struct bpf_dispatcher *d, struct bpf_prog *from,
