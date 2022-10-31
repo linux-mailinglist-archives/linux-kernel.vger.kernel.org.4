@@ -2,84 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF93C613B8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFA7613B98
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:44:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbiJaQnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 12:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35536 "EHLO
+        id S231405AbiJaQoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 12:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbiJaQm5 (ORCPT
+        with ESMTP id S230000AbiJaQov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 12:42:57 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0162AE0
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:42:57 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so1057202pjl.3
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:42:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6g3n64WcsjZVHXYVU68pvzZtWqYwSldKDwzmXxyYkJA=;
-        b=fA9yAllLtZLJNw2JbRf/dS5uD+i/e+/FarZbYdku20l2kVtuORZy/jQ56FKKwCj82N
-         mDJXDXOJCv5Qek98ZrbkDjMgJFpzZPaPkCSs3ndmjDJloEcpNIiTFaeZ78sCspOs0PDf
-         +r+zhN5R933+znf6VxuGJCx8ioJiN+53oLpNA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6g3n64WcsjZVHXYVU68pvzZtWqYwSldKDwzmXxyYkJA=;
-        b=BO/xLfCrPzQuPsY9XVxkl7DbAmIJTiAuvyLBAJ1v1654aOrIl2/bhf/R6yB+/AENjX
-         ly982dxPDay3s4INRYOQ8dgsTPPF1MJu4EERuKfZIIwaFMn2aMJ7kdpHtrj0NuSiTwHC
-         /nJ63ebydvcTuuUWduUJf3wj5PwUhNqdFrtxbuxCXHQVgZYiAa0vAYOOejIFXVghzquO
-         ZQfBq+3y/0S4TJTYAAVcIsjs9o7EAf94scIwc+gmWko2ehwwSvSV+2vAkMkz3CCupx9L
-         9kJ8vIqpzra4FkJpiYZygbLdhYgZolReCmPSfnkt6oFAAQ0+TveOJBLe27XUTMBPpXq9
-         af2Q==
-X-Gm-Message-State: ACrzQf2cFXem7N299oIkjNE7nOCLBZz7bQ3lK4QJMuQzbIneQ6J7MwZn
-        IqDwlWrbLg9aM64/ix6HVrILcw==
-X-Google-Smtp-Source: AMsMyM6tta40nq8js1+lXIr/1axqWGfpbLfIlkZWbJY2upYOJ/Thil/osd9WGMNz18e1zYsamRJ6JQ==
-X-Received: by 2002:a17:902:f602:b0:178:9818:48a4 with SMTP id n2-20020a170902f60200b00178981848a4mr15116183plg.148.1667234576715;
-        Mon, 31 Oct 2022 09:42:56 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:cf9d:6561:637d:2194])
-        by smtp.gmail.com with ESMTPSA id l20-20020a170902e2d400b0018689e2c9dfsm4654744plc.153.2022.10.31.09.42.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 09:42:56 -0700 (PDT)
-Date:   Mon, 31 Oct 2022 09:42:54 -0700
-From:   Brian Norris <briannorris@chromium.org>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] platform/chrome: cros_ec_lpc: Move mec_init/destroy
- to device probe/remove
-Message-ID: <Y1/7DgHiWLqbrDIi@google.com>
-References: <20221028141411.1.I0728421299079b104710c202d5d7095b2674fd8c@changeid>
- <Y19VXaB1531V64EI@google.com>
+        Mon, 31 Oct 2022 12:44:51 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B843360FE;
+        Mon, 31 Oct 2022 09:44:50 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7cf329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7cf:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1EEB11EC0391;
+        Mon, 31 Oct 2022 17:44:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667234689;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=7wmDNEFHKG8uskSGWw9dqDy6mNpU/vVuiAiPzGtPboU=;
+        b=asD9pX3Sgpb3MLnzSUrkDc/6lAJV+QTraPR1tqM0PYv4SA9+8SJRljINApDH0E0j6aspdE
+        chqiXFe3OQC39AcC0cZ+rAIdhYTfElIucRifTon61REBj3Y4GVh7k5bw8UpitlBMrGNSs5
+        sLhicnh8O+nL0r5ZgHqmCeRqGQQ9qc0=
+Date:   Mon, 31 Oct 2022 17:44:43 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        Carlos Bilbao <carlos.bilbao@amd.com>, x86@kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] x86/mce: Dump the stack for recoverable machine
+ checks in kernel context
+Message-ID: <Y1/7ewEgVZ56KlJp@zn.tnic>
+References: <20220922195136.54575-1-tony.luck@intel.com>
+ <20220922195136.54575-3-tony.luck@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y19VXaB1531V64EI@google.com>
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220922195136.54575-3-tony.luck@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 12:55:57PM +0800, Tzung-Bi Shih wrote:
-> There are 2 more cros_ec_lpc_mec_destroy()s need to be removed [2][3] though.
-> 
-> [2]: https://elixir.bootlin.com/linux/v6.0/source/drivers/platform/chrome/cros_ec_lpc.c#L596
-> [3]: https://elixir.bootlin.com/linux/v6.0/source/drivers/platform/chrome/cros_ec_lpc.c#L606
+On Thu, Sep 22, 2022 at 12:51:36PM -0700, Tony Luck wrote:
+> @@ -254,6 +255,9 @@ static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
+>  			wait_for_panic();
+>  		barrier();
+>  
+> +		if (final->severity == MCE_PANIC_STACKDUMP_SEVERITY)
+> +			show_stack(NULL, NULL, KERN_DEFAULT);
 
-Your links / line numbers don't make sense, but I see your point. That
-was a bad oversight on my part, sorry.
+So this is kinda weird, IMO:
 
-I see you're probably dropping the destroy() function, so I guess I'll
-send v2 without this problem.
+1. If the error has raised a MCE, then we will dump stack anyway.
 
-Brian
+2. If the error is the result of consuming poison or some other deferred
+type which doesn't raise an exception immediately, then we have missed
+it because we don't have the stack at the time the error got detected by
+the hardware.
+
+3. If all you wanna do is avoid useless stack traces, you can simply
+ignore them. :)
+
+IOW, it will dump stack in the cases we're interested in and it will
+dump stack in a couple of other PANIC cases. So? We simply ignore the
+latter.
+
+But I don't see the point of adding code just so that we can suppress
+the uninteresting ones...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
