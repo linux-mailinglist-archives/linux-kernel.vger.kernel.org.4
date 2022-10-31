@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC14613C52
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E62E9613C55
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:40:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbiJaRkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 13:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
+        id S231855AbiJaRkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 13:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231942AbiJaRkJ (ORCPT
+        with ESMTP id S229626AbiJaRkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 13:40:09 -0400
+        Mon, 31 Oct 2022 13:40:19 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2266613D73;
-        Mon, 31 Oct 2022 10:39:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E1610554;
+        Mon, 31 Oct 2022 10:40:19 -0700 (PDT)
 Received: from g550jk.arnhem.chello.nl (31-151-115-246.dynamic.upc.nl [31.151.115.246])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 325DED019C;
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id ABBB2D01B5;
         Mon, 31 Oct 2022 17:39:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1667237987; bh=2Gi0EKJdVgf4UQs0CB/NSQnG2y/0R6oOHuiW0D9biC8=;
-        h=From:To:Cc:Subject:Date;
-        b=KXmF94VbM5DR089XGQaH3c2n6/JW657iwEtLEGFAwaRlFPQrt/lVVSqKjYCg7y2H6
-         kmyBUYFh7t1TzdfRZBglmCeThI583SQtPUQDwlubPNhgtOMi/u4FpHpS1KBXZ9ADZT
-         bLScWcHmHGRPRUXHcd3oKZUYe1nvhxqzGDT8QUbU=
+        t=1667237987; bh=GDhGOeBuz53WBcObyjQCoYK9JeJOabBRag+IKc2FGBI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=JoSqj/1W/uDUg2GQrW5U0IcaduRAVV2IIybMw2Q0K3xncFjfNry+DXhvploM3T1rv
+         UWIxFDcoV6w/He1lSk5Q17aA6t4PZd+Vs8SKDmlZ3Ma/2PZ0YzKsnKwlw8XDG+UBco
+         2HmUxGqyUykXfbhXa7aJ8e09zxP0Q3CHmU6wRDlA=
 From:   Luca Weiss <luca@z3ntu.xyz>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -31,84 +31,54 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/3] dt-bindings: mfd: qcom,spmi-pmic: support more types
-Date:   Mon, 31 Oct 2022 18:39:31 +0100
-Message-Id: <20221031173933.936147-1-luca@z3ntu.xyz>
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v2 2/3] regulator: dt-bindings: qcom,usb-vbus-regulator: change node name
+Date:   Mon, 31 Oct 2022 18:39:32 +0100
+Message-Id: <20221031173933.936147-2-luca@z3ntu.xyz>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221031173933.936147-1-luca@z3ntu.xyz>
+References: <20221031173933.936147-1-luca@z3ntu.xyz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* 'adc@' is either spmi-iadc or spmi-vadc
-* 'charger@' is either pm8941-charger or pm8941-coincell
-* 'usb-vbus-regulator@' is usb-vbus-regulator
-* 'vibrator@' is now in yaml format, so add it
+usb-vbus-regulator is a better generic node name than dcdc to change the
+example to match.
 
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
-Changes since v1:
-* Change dcdc@ to usb-vbus-regulator@
-* Link to pm8xxx-vib.yaml
+Changes in v2:
+* New patch
 
- .../devicetree/bindings/mfd/qcom,spmi-pmic.yaml  | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml  | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-index 777f2da52f1e..cf10d62ace54 100644
---- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-+++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-@@ -105,7 +105,9 @@ properties:
- patternProperties:
-   "^adc@[0-9a-f]+$":
-     type: object
--    $ref: /schemas/iio/adc/qcom,spmi-vadc.yaml#
-+    oneOf:
-+      - $ref: /schemas/iio/adc/qcom,spmi-iadc.yaml#
-+      - $ref: /schemas/iio/adc/qcom,spmi-vadc.yaml#
- 
-   "^adc-tm@[0-9a-f]+$":
-     type: object
-@@ -115,6 +117,12 @@ patternProperties:
-     type: object
-     additionalProperties: true # FIXME qcom,pm8916-wcd-analog-codec binding not converted yet
- 
-+  "^charger@[0-9a-f]+$":
-+    type: object
-+    oneOf:
-+      - $ref: /schemas/power/supply/qcom,pm8941-charger.yaml#
-+      - $ref: /schemas/power/supply/qcom,pm8941-coincell.yaml#
-+
-   "extcon@[0-9a-f]+$":
-     type: object
-     $ref: /schemas/extcon/qcom,pm8941-misc.yaml#
-@@ -135,9 +143,13 @@ patternProperties:
-     type: object
-     $ref: /schemas/thermal/qcom,spmi-temp-alarm.yaml#
- 
-+  "^usb-vbus-regulator@[0-9a-f]+$":
-+    type: object
-+    $ref: /schemas/regulator/qcom,usb-vbus-regulator.yaml#
-+
-   "^vibrator@[0-9a-f]+$":
-     type: object
--    additionalProperties: true # FIXME qcom,pm8916-vib binding not converted yet
-+    $ref: /schemas/input/qcom,pm8xxx-vib.yaml#
- 
-   "^mpps@[0-9a-f]+$":
-     type: object
+diff --git a/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+index dbe78cd4adba..b1cff3adb21b 100644
+--- a/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+@@ -33,7 +33,7 @@ examples:
+      pm8150b {
+         #address-cells = <1>;
+         #size-cells = <0>;
+-        pm8150b_vbus: dcdc@1100 {
++        pm8150b_vbus: usb-vbus-regulator@1100 {
+             compatible = "qcom,pm8150b-vbus-reg";
+             reg = <0x1100>;
+         };
 -- 
 2.38.1
 
