@@ -2,126 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62657613CB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:57:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA94613CB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiJaR5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 13:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
+        id S229619AbiJaR5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 13:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiJaR5m (ORCPT
+        with ESMTP id S229819AbiJaR5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 13:57:42 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F68C63A8
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:57:38 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id c65so7043787iof.1
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:57:38 -0700 (PDT)
+        Mon, 31 Oct 2022 13:57:09 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9A9101E7;
+        Mon, 31 Oct 2022 10:57:07 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso16588511pjg.5;
+        Mon, 31 Oct 2022 10:57:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YPhKQoj326GDzQlpnATdi3QTN2ODDVoVrBVz75un/+Q=;
-        b=sYhCXj1H3jsEvNOxWVGQJ+afX+j7LSp//QRFn83qUscI4Eep1oum3gEorgso/be61X
-         ajUR+t2AHGLP7unbb9SEG4GCzpn7VMEt6fVz3yMCR+4ZJ2k3N8stJM6//h4FEAJbIubJ
-         MOOT43YiJCNfV80lePj7IvdInQ56gfiODzSNIvTFqKsEvfjmwnVlO3+L5O5Y3nhWI6O9
-         K0momkWkmHHQDU03ZdNfJPII5w9jSCVvXNB82RukQlzW01UlJ4B1/V2Qp7oeIwej2Rl7
-         PL3/vaZkjrV+KbyrAUGu7zMuleUc1H3ioPDhznC7VYrfu9Cw6tC8fzAUPh9zYrRX+7ci
-         ga9g==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oc04HoeSDvyZ00MBhetf0mLZqQi+t7KUCqjcURmh3jw=;
+        b=jQlWLfja+D7d4A9Ytn7AA5c2SFo8aoOuU1Y/iuH5dqmpB7L2WpenUoZwgEhkhQJKpM
+         rmfidvSjKdJu39KNzdOvPi5sCF8O3MWHCDs+6scuYyxo677vuN9UcAc9j0cmrfZq8tu+
+         MU/ZdmUHZEI0Z2QO4hVcdxRZ1N5BKiBmDu76ViwKpVab6tl09FkylvVAUSKVy9Tk49aH
+         LK2lixcaFn8/QVi7vPwHU2Pb9W7L337sd/G+3AbwRvRrhZKfstcL+/4mKhXg5il/n0tv
+         cvhEfobQr07ErMCtNF4yNklmm2lTTJSEs6I+ishnlXDxpR7BhssFcyYDyBpjXEkK0u/a
+         yZCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YPhKQoj326GDzQlpnATdi3QTN2ODDVoVrBVz75un/+Q=;
-        b=klSlfD82tE7/77wsBaCrk2ZeF/8/xqyQs7+EIuLYr5OQI65sqI8WOnajXdqd0CahKn
-         cK5eNPJ3vIkYrtYi2B6veSGUj/URdOKn4HuW0TCWi/soChgB1n8AYu36hsIVPMxJvzd5
-         h2fsEecm8QRocHXXruNoNCesHLXMIMmNjgRi1uWuOdjfjmRLcGn1830Zv2BJGnl9KZOh
-         cQlOg6nTsfyG537G1vepI5Fm0Sxr3n5CmtL8/l97aghaLiMrClf2v+XRjQuNQydpC6j+
-         KZuap7kg7Q/MrII+Bi4+uYaZm/jIjIJamtxNUt0k/cbe/25fd+Grx0YlFLz/uhgtTEXQ
-         /dTg==
-X-Gm-Message-State: ACrzQf1IjEcYFNGtJ5JYgK+GLGGgA4X5ESxSatTsTUSUBUc78V5ky9YT
-        N/7uQ7AbumKek8dnoAwJ8B2tmpyiDS/b3jwVtbXLkw==
-X-Google-Smtp-Source: AMsMyM67XExll5UMwgggCXPKhjzVkZsaaGn9qC5GldyBHD5Q2MvvxO4lzgg49TL6tCvFB/QDf6Wp9kYI9i6MgOY9SQ8=
-X-Received: by 2002:a02:a30c:0:b0:375:3a7a:de7e with SMTP id
- q12-20020a02a30c000000b003753a7ade7emr7890398jai.246.1667239057308; Mon, 31
- Oct 2022 10:57:37 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oc04HoeSDvyZ00MBhetf0mLZqQi+t7KUCqjcURmh3jw=;
+        b=dP2jfUZkG1IefxpCFXT6VLG+5j3HtbUuKEf9ZKfIiSLPSdmJJoxk2DPZ7vaYvh+gia
+         J3wsfU/4tySsDqAM2WBZDvkKFJBI5ig9oaLjmkC6Am6c6WBMP30LUlfkspl8z4PgmA/m
+         VNC7/mI2dTfZXCde2BiJym8jHIBm7wCzkBPK1rSqZmXTeHW6D25fhf+qglVXDTJKPFGO
+         3aHkzO+89kB2qju63bJl94ELp/fUAvMkyY0/nUE2v4xw8Ikgiel0b2w5xY8kdGn7R/1n
+         42jPaEAFSrMaIFA4rIE77RuY5E2F/+mQTd0DwndOoTHAzLbzFSQg3n5hw9LmZHH6qTfm
+         DJOw==
+X-Gm-Message-State: ACrzQf0zcrNTaz9E8iZ2vtLi43oDzTSW81nh1m94pHh2DNupFI0BMnvt
+        9CPwN9KdmN3bR0uwjEaO9dw=
+X-Google-Smtp-Source: AMsMyM5dvCT/impuB0g5b/LaE1mQEgVuKLyFRrRiJ1Ky5Wkw5zJ8tbHDjRCc3Y1ttCI1aD4LoJ+rmA==
+X-Received: by 2002:a17:903:2283:b0:187:21f6:fde2 with SMTP id b3-20020a170903228300b0018721f6fde2mr6297961plh.49.1667239027195;
+        Mon, 31 Oct 2022 10:57:07 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:ba13])
+        by smtp.gmail.com with ESMTPSA id e15-20020a056a0000cf00b00550724f8ea0sm4888641pfj.128.2022.10.31.10.57.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 10:57:06 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 31 Oct 2022 07:57:05 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org, Martin Liska <mliska@suse.cz>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org
+Subject: Re: [PATCH] block/blk-iocost (gcc13): cast enum members to int in
+ prints
+Message-ID: <Y2AMcSPAJpj6obSA@slm.duckdns.org>
+References: <20221031114520.10518-1-jirislaby@kernel.org>
+ <Y1++fLJXkeZgtXR2@infradead.org>
 MIME-Version: 1.0
-References: <CAG48ez3a_35R48khgW8D1MxokEqmYP3mBsUwhMq5Vfi5BiyYCQ@mail.gmail.com>
- <425617d8-3d36-f50e-e582-826a4c6da32d@amd.com>
-In-Reply-To: <425617d8-3d36-f50e-e582-826a4c6da32d@amd.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Mon, 31 Oct 2022 18:57:01 +0100
-Message-ID: <CAG48ez1Bkk0b6HtSnWcRPfYV0zxYJO_2kuC6s9jmRNwfYcXAiQ@mail.gmail.com>
-Subject: Re: [BUG] AMDKFD: criu_checkpoint() error path treats userspace
- pointer as kernel pointer
-To:     Felix Kuehling <felix.kuehling@amd.com>
-Cc:     Rajneesh Bhardwaj <rajneesh.bhardwaj@amd.com>,
-        David Yat Sin <david.yatsin@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1++fLJXkeZgtXR2@infradead.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 6:54 PM Felix Kuehling <felix.kuehling@amd.com> wrote:
-> Am 2022-10-31 um 10:20 schrieb Jann Horn:
-> > be072b06c73970 ("drm/amdkfd: CRIU export BOs as prime dmabuf objects")
-> > added an error path in criu_checkpoint() that (unless I'm completely
-> > misreading this) treats the userspace-supplied args->bos (which was
-> > previously used as a userspace pointer when passed to
-> > criu_checkpoint_bos()) as a kernel pointer:
-> >
-> >    ret = criu_checkpoint_bos(p, num_bos, (uint8_t __user *)args->bos,
-> >        (uint8_t __user *)args->priv_data, &priv_offset);
-> >    if (ret)
-> >      goto exit_unlock;
-> >    [...]
-> > close_bo_fds:
-> >    if (ret) {
-> >      /* If IOCTL returns err, user assumes all FDs opened in
-> > criu_dump_bos are closed */
-> >      uint32_t i;
-> >      struct kfd_criu_bo_bucket *bo_buckets = (struct kfd_criu_bo_bucket
-> > *) args->bos;
-> >
-> >      for (i = 0; i < num_bos; i++) {
-> >        if (bo_buckets[i].alloc_flags & KFD_IOC_ALLOC_MEM_FLAGS_VRAM)
-> >          close_fd(bo_buckets[i].dmabuf_fd);
-> >      }
-> >    }
-> >
-> > This seems very wrong, and also like it's guaranteed to blow up as
-> > soon as it runs on a machine with SMAP, which makes me think that this
-> > codepath was probably never exercised?
-> >
-> > (Also note that just changing this to copy_from_user() instead would
-> > still be wrong, because malicious/bogus userspace could change the FD
-> > number to the KFD device's FD, and the VFS assumes that an FD can't be
-> > closed while it's being accessed in a single-threaded process.)
->
-> Thank you for catching this, and thank you for the advice. In other
-> words, we need to store a copy of the FDs in a kernel mode buffer that
-> is not accessibly by usermode, so we can reliably close the correct FDs
-> in the error handling code path.
+On Mon, Oct 31, 2022 at 05:24:28AM -0700, Christoph Hellwig wrote:
+> On Mon, Oct 31, 2022 at 12:45:20PM +0100, Jiri Slaby (SUSE) wrote:
+> > Cast the enum members to int when printing them.
+> > 
+> > Alternatively, we can cast them to ulong (to silence gcc < 12) and use %lu.
+> > Alternatively, we can move VTIME_PER_SEC away from the enum.
+> 
+> Yes, either split the enum or just use a define.  But casts are a big
+> code smell and should be avoided if there is a reasonable alternative.
 
-Sounds good to me.
+enums are so much better for debugging and other instrumentation stuff. The
+only requirement for the enum types is that they're big enough to express
+all the members and we can use whatever printf format letter which matches
+the type in use. The problem here is that the compiler behavior is different
+depending on the compiler version, which kinda sucks.
 
-> Rajneesh and I will fix this ASAP.
->
-> Do you think we should also avoid copying the FDs to usermode before
-> we're sure that we'll return success? I don't think it would make a big
-> difference because user mode could try to guess the FDs and use them
-> before we return from the ioctl either way.
+I suppose the most reasonable thing to do here is just splitting them into
+separate enum definitions. Does anyone know how this behavior change came to
+be? Do we know whether clang is gonna be changed the same way?
 
-Yeah, that shouldn't matter - as you said, userspace can guess the FDs.
+Thanks.
+
+-- 
+tejun
