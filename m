@@ -2,269 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B3F613B0B
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A32613B0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbiJaQPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 12:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
+        id S231465AbiJaQQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 12:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiJaQPe (ORCPT
+        with ESMTP id S229875AbiJaQP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 12:15:34 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EDE12095
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:15:31 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id d26so30615700eje.10
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:15:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hr1TaCp5+0WwKThBbE8Q7EfPsA0Hkr+C7iUAWCV7sho=;
-        b=G+lXQWVBrDtIQokUa2jGIFnIkByNRGlA/23v9nVn+TUO+EGj/rkjgtEGwx/p3r5SGz
-         k0wpCfJiwcmV4Anm92Y2fyuSSJAgBQF6QAwxq7TQc/5/Y10lp5J0cwnWyrVWU5aR6Zl2
-         nlQ4D6zoUlkG7j7BbMAnJPSmkjGWX56C1uxdk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hr1TaCp5+0WwKThBbE8Q7EfPsA0Hkr+C7iUAWCV7sho=;
-        b=dKgOv+evBy1IkfFeauz2TcNdoYeoojYGiLGRCsLWHOn/dLSiQvyT0J1gWxolzZwKJc
-         abaaDQxtYr5a0of3SZLaJm/hd9oMU/M9L1bWwEGkH/V6G9lU98dttm89yEChXXhgwKrK
-         WKWFgbvNYZgSSP9h/xHWhcMu6b1bNYFg9VbZobieY8OEM8y0R++JT6dgU8L18KCIWjOX
-         bcIGUCSd1P570doxHsSFMuPU5GyQNC4jpZRot7ozZR9vuB1kPOM6Em/jHoLLWlhBCoSU
-         hYdhcUtzod6xmIGJeK1K7v1hJAD4QQUB6nYX83e35nMls2PnLIVcwiBxUMWravWVDtB5
-         YV8Q==
-X-Gm-Message-State: ACrzQf1xQGBGE8wqr5c2LeWNLFrw9BQw2lM1q0EwBVhWCRTYsyaLoihi
-        9Cjy7f6qy+RW5nh1DFX/wcMKn8SHOa3Iu4rmq1LdEQ==
-X-Google-Smtp-Source: AMsMyM4f5QoJRX4s8RGR/9kX+oxpsFeUb76uCE6kv6ze3NxkSPZxDueIAW5NeXzVHBSSh/k3osSjPrp7wE6W++f2RDM=
-X-Received: by 2002:a17:906:5daa:b0:791:8933:f9f0 with SMTP id
- n10-20020a1709065daa00b007918933f9f0mr13551871ejv.335.1667232930133; Mon, 31
- Oct 2022 09:15:30 -0700 (PDT)
+        Mon, 31 Oct 2022 12:15:58 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C8711158;
+        Mon, 31 Oct 2022 09:15:57 -0700 (PDT)
+Date:   Mon, 31 Oct 2022 16:15:53 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667232956;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zA73xcDWFZhtNZg9/6CkneYyLOUaAXtkq8I2ETRFB48=;
+        b=rCwNiCcyv8gApg8QGfVc1O12RctcIthU7YxM0qtrNCdzeqX94+mTWyK8fXAnfHh1vdi2YB
+        xeL1qnG/cdyEXT0UypjJmft0afn3Fel3l/cm+Clh3WFwqSc2FMaN1JH2GAbDpSZc7p7D+x
+        s7syW4S7x5opoWIN6R5NZX6MDZ4NE5pf4BzjN7bOvzaYPeXnl2KNuNJ1MCnD1kGdszc5ZT
+        ehO6kpcTqvDANyz4vrid1YJmDPXbI23nKCSHR+rtKL3PCy9gVt8fVUYwdRsTMk2rJu9WmE
+        4XIPGPKtIkN1DXaMRNILoXQxlxTcdPC1vgktRwZdYXfkca4nt+nMbIe87cMN1A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667232956;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zA73xcDWFZhtNZg9/6CkneYyLOUaAXtkq8I2ETRFB48=;
+        b=O1CT8q2gtpZL33dORPyLThN62+03VrPo6boVDn7Y5mGE9e3lDYMn216VJndUs/HjZriRHv
+        5RoDgSOB7hColGBw==
+From:   "tip-bot2 for Tony Luck" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: ras/core] x86/mce: Use severity table to handle uncorrected
+ errors in kernel
+Cc:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@suse.de>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220922195136.54575-2-tony.luck@intel.com>
+References: <20220922195136.54575-2-tony.luck@intel.com>
 MIME-Version: 1.0
-References: <20221027135711.24425-1-marcan@marcan.st>
-In-Reply-To: <20221027135711.24425-1-marcan@marcan.st>
-From:   Justin Forbes <jmforbes@linuxtx.org>
-Date:   Mon, 31 Oct 2022 11:15:18 -0500
-Message-ID: <CAFxkdAqjdonoEgOm4Nv-mbyw3OJuuO1=3dXYyn2+yszUp13Bbg@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/format-helper: Only advertise supported formats
- for conversion
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Pekka Paalanen <pekka.paalanen@collabora.com>,
-        dri-devel@lists.freedesktop.org, asahi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <166723295340.7716.5561469678054696498.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 8:57 AM Hector Martin <marcan@marcan.st> wrote:
->
-> drm_fb_build_fourcc_list() currently returns all emulated formats
-> unconditionally as long as the native format is among them, even though
-> not all combinations have conversion helpers. Although the list is
-> arguably provided to userspace in precedence order, userspace can pick
-> something out-of-order (and thus break when it shouldn't), or simply
-> only support a format that is unsupported (and thus think it can work,
-> which results in the appearance of a hang as FB blits fail later on,
-> instead of the initialization error you'd expect in this case).
->
-> Add checks to filter the list of emulated formats to only those
-> supported for conversion to the native format. This presumes that there
-> is a single native format (only the first is checked, if there are
-> multiple). Refactoring this API to drop the native list or support it
-> properly (by returning the appropriate emulated->native mapping table)
-> is left for a future patch.
->
-> The simpledrm driver is left as-is with a full table of emulated
-> formats. This keeps all currently working conversions available and
-> drops all the broken ones (i.e. this a strict bugfix patch, adding no
-> new supported formats nor removing any actually working ones). In order
-> to avoid proliferation of emulated formats, future drivers should
-> advertise only XRGB8888 as the sole emulated format (since some
-> userspace assumes its presence).
->
-> This fixes a real user regression where the ?RGB2101010 support commit
-> started advertising it unconditionally where not supported, and KWin
-> decided to start to use it over the native format and broke, but also
-> the fixes the spurious RGB565/RGB888 formats which have been wrongly
-> unconditionally advertised since the dawn of simpledrm.
->
-> Fixes: 6ea966fca084 ("drm/simpledrm: Add [AX]RGB210101
+The following commit has been merged into the ras/core branch of tip:
 
+Commit-ID:     a51cbd0d86d3fa9ecc6ddf186dd1cb66a4fefa87
+Gitweb:        https://git.kernel.org/tip/a51cbd0d86d3fa9ecc6ddf186dd1cb66a4fefa87
+Author:        Tony Luck <tony.luck@intel.com>
+AuthorDate:    Thu, 22 Sep 2022 12:51:35 -07:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Mon, 31 Oct 2022 17:01:19 +01:00
 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+x86/mce: Use severity table to handle uncorrected errors in kernel
 
-There is a CC for stable on here, but this patch does not apply in any
-way on 6.0 or older kernels as the fourcc bits and considerable churn
-came in with the 6.1 merge window.  You don't happen to have a
-backport of this to 6.0 do you?
+mce_severity_intel() has a special case to promote UC and AR errors
+in kernel context to PANIC severity.
 
-Thanks,
-Justin
+The "AR" case is already handled with separate entries in the severity
+table for all instruction fetch errors, and those data fetch errors that
+are not in a recoverable area of the kernel (i.e. have an extable fixup
+entry).
 
-> ---
-> I'm proposing this alternative approach after a heated discussion on
-> IRC. I'm out of ideas, if y'all don't like this one you can figure it
-> out for yourseves :-)
->
-> Changes since v1:
-> This v2 moves all the changes to the helper (so they will apply to
-> the upcoming ofdrm, though ofdrm also needs to be fixed to trim its
-> format table to only formats that should be emulated, probably only
-> XRGB8888, to avoid further proliferating the use of conversions),
-> and avoids touching more than one file. The API still needs cleanup
-> as mentioned (supporting more than one native format is fundamentally
-> broken, since the helper would need to tell the driver *what* native
-> format to use for *each* emulated format somehow), but all current and
-> planned users only pass in one native format, so this can (and should)
-> be fixed later.
->
-> Aside: After other IRC discussion, I'm testing nuking the
-> XRGB2101010 <-> ARGB2101010 advertisement (which does not involve
-> conversion) by removing those entries from simpledrm in the Asahi Linux
-> downstream tree. As far as I'm concerned, it can be removed if nobody
-> complains (by removing those entries from the simpledrm array), if
-> maintainers are generally okay with removing advertised formats at all.
-> If so, there might be other opportunities for further trimming the list
-> non-native formats advertised to userspace.
->
-> Tested with KWin-X11, KWin-Wayland, GNOME-X11, GNOME-Wayland, and Weston
-> on both XRGB2101010 and RGB8888 simpledrm framebuffers.
->
->  drivers/gpu/drm/drm_format_helper.c | 66 ++++++++++++++++++++---------
->  1 file changed, 47 insertions(+), 19 deletions(-)
->
-> diff --git a/drivers/gpu/drm/drm_format_helper.c b/drivers/gpu/drm/drm_format_helper.c
-> index e2f76621453c..3ee59bae9d2f 100644
-> --- a/drivers/gpu/drm/drm_format_helper.c
-> +++ b/drivers/gpu/drm/drm_format_helper.c
-> @@ -807,6 +807,38 @@ static bool is_listed_fourcc(const uint32_t *fourccs, size_t nfourccs, uint32_t
->         return false;
->  }
->
-> +static const uint32_t conv_from_xrgb8888[] = {
-> +       DRM_FORMAT_XRGB8888,
-> +       DRM_FORMAT_ARGB8888,
-> +       DRM_FORMAT_XRGB2101010,
-> +       DRM_FORMAT_ARGB2101010,
-> +       DRM_FORMAT_RGB565,
-> +       DRM_FORMAT_RGB888,
-> +};
-> +
-> +static const uint32_t conv_from_rgb565_888[] = {
-> +       DRM_FORMAT_XRGB8888,
-> +       DRM_FORMAT_ARGB8888,
-> +};
-> +
-> +static bool is_conversion_supported(uint32_t from, uint32_t to)
-> +{
-> +       switch (from) {
-> +       case DRM_FORMAT_XRGB8888:
-> +       case DRM_FORMAT_ARGB8888:
-> +               return is_listed_fourcc(conv_from_xrgb8888, ARRAY_SIZE(conv_from_xrgb8888), to);
-> +       case DRM_FORMAT_RGB565:
-> +       case DRM_FORMAT_RGB888:
-> +               return is_listed_fourcc(conv_from_rgb565_888, ARRAY_SIZE(conv_from_rgb565_888), to);
-> +       case DRM_FORMAT_XRGB2101010:
-> +               return to == DRM_FORMAT_ARGB2101010;
-> +       case DRM_FORMAT_ARGB2101010:
-> +               return to == DRM_FORMAT_XRGB2101010;
-> +       default:
-> +               return false;
-> +       }
-> +}
-> +
->  /**
->   * drm_fb_build_fourcc_list - Filters a list of supported color formats against
->   *                            the device's native formats
-> @@ -827,7 +859,9 @@ static bool is_listed_fourcc(const uint32_t *fourccs, size_t nfourccs, uint32_t
->   * be handed over to drm_universal_plane_init() et al. Native formats
->   * will go before emulated formats. Other heuristics might be applied
->   * to optimize the order. Formats near the beginning of the list are
-> - * usually preferred over formats near the end of the list.
-> + * usually preferred over formats near the end of the list. Formats
-> + * without conversion helpers will be skipped. New drivers should only
-> + * pass in XRGB8888 and avoid exposing additional emulated formats.
->   *
->   * Returns:
->   * The number of color-formats 4CC codes returned in @fourccs_out.
-> @@ -839,7 +873,7 @@ size_t drm_fb_build_fourcc_list(struct drm_device *dev,
->  {
->         u32 *fourccs = fourccs_out;
->         const u32 *fourccs_end = fourccs_out + nfourccs_out;
-> -       bool found_native = false;
-> +       uint32_t native_format = 0;
->         size_t i;
->
->         /*
-> @@ -858,26 +892,18 @@ size_t drm_fb_build_fourcc_list(struct drm_device *dev,
->
->                 drm_dbg_kms(dev, "adding native format %p4cc\n", &fourcc);
->
-> -               if (!found_native)
-> -                       found_native = is_listed_fourcc(driver_fourccs, driver_nfourccs, fourcc);
-> +               /*
-> +                * There should only be one native format with the current API.
-> +                * This API needs to be refactored to correctly support arbitrary
-> +                * sets of native formats, since it needs to report which native
-> +                * format to use for each emulated format.
-> +                */
-> +               if (!native_format)
-> +                       native_format = fourcc;
->                 *fourccs = fourcc;
->                 ++fourccs;
->         }
->
-> -       /*
-> -        * The plane's atomic_update helper converts the framebuffer's color format
-> -        * to a native format when copying to device memory.
-> -        *
-> -        * If there is not a single format supported by both, device and
-> -        * driver, the native formats are likely not supported by the conversion
-> -        * helpers. Therefore *only* support the native formats and add a
-> -        * conversion helper ASAP.
-> -        */
-> -       if (!found_native) {
-> -               drm_warn(dev, "Format conversion helpers required to add extra formats.\n");
-> -               goto out;
-> -       }
-> -
->         /*
->          * The extra formats, emulated by the driver, go second.
->          */
-> @@ -890,6 +916,9 @@ size_t drm_fb_build_fourcc_list(struct drm_device *dev,
->                 } else if (fourccs == fourccs_end) {
->                         drm_warn(dev, "Ignoring emulated format %p4cc\n", &fourcc);
->                         continue; /* end of available output buffer */
-> +               } else if (!is_conversion_supported(fourcc, native_format)) {
-> +                       drm_dbg_kms(dev, "Unsupported emulated format %p4cc\n", &fourcc);
-> +                       continue; /* format is not supported for conversion */
->                 }
->
->                 drm_dbg_kms(dev, "adding emulated format %p4cc\n", &fourcc);
-> @@ -898,7 +927,6 @@ size_t drm_fb_build_fourcc_list(struct drm_device *dev,
->                 ++fourccs;
->         }
->
-> -out:
->         return fourccs - fourccs_out;
->  }
->  EXPORT_SYMBOL(drm_fb_build_fourcc_list);
-> --
-> 2.35.1
->
+Add an entry to the severity table for UC errors in kernel context that
+reports severity = PANIC. Delete the special case code from
+mce_severity_intel().
+
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220922195136.54575-2-tony.luck@intel.com
+---
+ arch/x86/kernel/cpu/mce/severity.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
+index 00483d1..c447716 100644
+--- a/arch/x86/kernel/cpu/mce/severity.c
++++ b/arch/x86/kernel/cpu/mce/severity.c
+@@ -203,6 +203,11 @@ static struct severity {
+ 		BITSET(MCI_STATUS_OVER|MCI_STATUS_UC)
+ 		),
+ 	MCESEV(
++		PANIC, "Uncorrected in kernel",
++		BITSET(MCI_STATUS_UC),
++		KERNEL
++		),
++	MCESEV(
+ 		UC, "Uncorrected",
+ 		BITSET(MCI_STATUS_UC)
+ 		),
+@@ -391,9 +396,6 @@ static noinstr int mce_severity_intel(struct mce *m, struct pt_regs *regs, char 
+ 			*msg = s->msg;
+ 		s->covered = 1;
+ 
+-		if (s->sev >= MCE_UC_SEVERITY && ctx == IN_KERNEL)
+-			return MCE_PANIC_SEVERITY;
+-
+ 		return s->sev;
+ 	}
+ }
