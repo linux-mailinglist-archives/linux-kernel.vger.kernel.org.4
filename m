@@ -2,180 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A30613BCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8481613BD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:59:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232007AbiJaQ6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 12:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
+        id S232027AbiJaQ64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 12:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231991AbiJaQ6m (ORCPT
+        with ESMTP id S232006AbiJaQ6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 12:58:42 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2079.outbound.protection.outlook.com [40.107.104.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BAB11A08;
-        Mon, 31 Oct 2022 09:58:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CNqzhBeeSBeE3WoJHNC9AqhGAPYU/73G3tEPjtct35ZghXB0/j//k/0TBljiBg65sVfX0f47ppqD7S/DLZb9+Hbl/NQ1KGcPxUYa9M7KYs4vCXLStMi83s2kJPWP/BvJVuvoOrEvcLIA2GgHdJmfG05eOKlmMaj0PwvsAAwBcPVMqGznsViy9fR/cfddKM4GuiJCSAJUmqhowdJm9dmjRfqmYX/sws6vnrc4+Xod18WTxVYlOaJ8VyIQjPbEK8c3g9sGuxm0CsxyBSrfE/tu4oGIvrS12vwByp1sbTzFx4msAOoo7zOJO8m3uEI+yOb05RS3zrpr088xk5qGziRJug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qjdmRa4hwfk1IW36GLjw5p1LKOlQHLRRwhelWoKcgg8=;
- b=nBHAKVXMETZp4yN67stjDQXrJbhh/VIDkmE8rGfdCjVv4Q+DO0gMqoP1dDdKWuP0covbn6tj/5/bT0SjWbL6ONfRur8B/+2ECb7MHOvXril5NohCYYLoAqwJ0+ER01sVjiSy/Oyw1pAnT8sJAo+wOEf4bCoTbkV3E5wHPN2csPjv8qTGRR7KgItdX4KUlLn2wHe2EwktqJkRn/xkdgGNEQl4U2YVXH1OBfjl80i1DkVyWO8VbuEku7mMXTriplLuM7JgUm4mov+mdZuWRH71LvH1pIJBKrHd/41vhvTKIdEFjoWo6Vjq3fD7PjPVIYwpsNDavqScK+qa2lxycjORtQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qjdmRa4hwfk1IW36GLjw5p1LKOlQHLRRwhelWoKcgg8=;
- b=ff6BweGlVyhrd9T/u4oYQ2NMCaY2E3CM+2AoaU553rrq2xIjeyd195cI9SX8QQMZKh/CHXefhzw5fMoAcfHfxy0LmkGvsm2Vx1vdM+CoIKhzsXXnmQ2aE+qHpBRP7A081KP/8RRSSA5ib/Vt928yqQAuo7G/BBJRMTa1dhU7+Z4=
-Received: from VI1PR04MB5967.eurprd04.prod.outlook.com (2603:10a6:803:cc::27)
- by AM8PR04MB7377.eurprd04.prod.outlook.com (2603:10a6:20b:1de::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.16; Mon, 31 Oct
- 2022 16:58:38 +0000
-Received: from VI1PR04MB5967.eurprd04.prod.outlook.com
- ([fe80::8bad:8bfc:e078:f403]) by VI1PR04MB5967.eurprd04.prod.outlook.com
- ([fe80::8bad:8bfc:e078:f403%4]) with mapi id 15.20.5769.019; Mon, 31 Oct 2022
- 16:58:38 +0000
-From:   Roy Zang <roy.zang@nxp.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-CC:     Kishon Vijay Abraham I <kishon@kernel.org>,
-        Tom Joseph <tjoseph@cadence.com>,
-        Rob Herring <robh@kernel.org>,
-        =?iso-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
-        "M.H. Lian" <minghuan.lian@nxp.com>,
-        Mingkai Hu <mingkai.hu@nxp.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Toan Le <toan@os.amperecomputing.com>,
-        Joyce Ooi <joyce.ooi@intel.com>, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>,
-        Michal Simek <michal.simek@amd.com>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-rockchip@lists.infradead.org" 
-        <linux-rockchip@lists.infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: RE: [PATCH v3 5/5] PCI: Remove unnecessary <linux/of_irq.h> includes
-Thread-Topic: [PATCH v3 5/5] PCI: Remove unnecessary <linux/of_irq.h> includes
-Thread-Index: AQHY7T8RqoJVzoqIkkOemdfdOjjY4a4ouT/A
-Date:   Mon, 31 Oct 2022 16:58:38 +0000
-Message-ID: <VI1PR04MB596765E30FEC4F2E867FEE878B379@VI1PR04MB5967.eurprd04.prod.outlook.com>
-References: <20221031153954.1163623-1-helgaas@kernel.org>
- <20221031153954.1163623-6-helgaas@kernel.org>
-In-Reply-To: <20221031153954.1163623-6-helgaas@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1PR04MB5967:EE_|AM8PR04MB7377:EE_
-x-ms-office365-filtering-correlation-id: 8d730c5c-f8ee-4355-0201-08dabb612822
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pUAHJWR2lfXf43QnvJJ3kN9oR6uAE9FBorIsryB1mccwGlFpWDT8HWCjBqhKL69lBPxVKk/+HJjIPyfJ3xJ7Vqz1O5HrrT7kYVybwgAIdsABO90NmbbDoKd7yPqMQz23KRa+yqUTdMHKAU4/AhxlabxhlA5aGwZ78tIXskC2r8sAnu6U7CBDUQV/YG3KZDnaYvZGqPlPyF2ZJp9ACuPBeR1pFNxPwGLIyaPogiNAaB49xY0W9L8LQErHEAHhV5MLvYkz0M3eXgN/gHa04GLPqcTbPQdGFSZ6MHMyC73eLcOsgWVoZ25S9n2QVq8M0PzkfVRtisnNAQKyrWdWLoKGiQUpdsBtfUlaVIos94ZLzQHEGiuXzvwN81pWhGhAmM19a1W11a0TvTc79FBaSB1VsdbB5dHwqdOPRLtXB+ltqUZyx8j6Al2Q8O5tEi2Zy3tdHb8PZ38W5EzXqMlY/rhfrrR9feZillPrHa9xxdBeShMVLEOwq51+7DLvQUGty/pJ9NdxRTAo1ANXL+ZL6cUZyip+1druf5CTTwZpv2txpBgsYPsvZMYkYoOpRemTxj6HvL/ZlNLu3Pk9ZDKXEtSVNF23Tzz3CMHNMXH4EJyqdf2wTtkaquRT7N4EPqHuFKB9nC3jpUp42Y3aa7llJL62cm+YoWEyGJBnLgAkkjugQk4ZemAtAfiG9wpBSiVIPJoE335FZPScjXyMteBSVDQI29U2xcwND4UuWb0bu1qjH7SwwZYsfE+TxuPbEdZlGYqpJuRRJaiOrhQl72ZcpT9h3w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5967.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(346002)(366004)(396003)(451199015)(38070700005)(44832011)(66556008)(66476007)(55016003)(4326008)(64756008)(8676002)(66946007)(66446008)(76116006)(316002)(33656002)(110136005)(54906003)(7416002)(8936002)(9686003)(7406005)(52536014)(5660300002)(7696005)(26005)(55236004)(86362001)(41300700001)(186003)(6506007)(71200400001)(38100700002)(2906002)(83380400001)(122000001)(478600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?0pIHWk4Xst9MAiv65H1Y7FFSVfBr3vARzlWeupsbsTpq7OK9cb7ecPPtpC?=
- =?iso-8859-2?Q?dcQN0QFld8RLXNerRqwVE3KeSvDmyc//ATx27A3ZTRk5DANuz82zysbJj4?=
- =?iso-8859-2?Q?rsl16B4xB9MkYIbDL3SodGN5p/qExAl6Vfqne8rtPWt9T+3FPMwsfgflNr?=
- =?iso-8859-2?Q?n3n+VeZAiaUyXbxIMVnTlcWydm4BTRfUEsYKya+/r6AaX+xBiy3gHbF0pK?=
- =?iso-8859-2?Q?HUG2w1N5/QKmnsngtF5UiMHkUqgTR6NYDAeM14XYjIhrECmYNODv5uVIbv?=
- =?iso-8859-2?Q?diXoTWHuLP3Cql/dkn3xOaNfy7rCIYZOzi5REa++OaMfIxe+CpEjtA/Ecl?=
- =?iso-8859-2?Q?S11cMv37mADxrj8udc7N89zG4PTNtHG7eHke65ecnwQM69dDv5B8arZLS/?=
- =?iso-8859-2?Q?IZQBXRJXm8HOegGe2+Ps/zMKrTcdBj5NUGYR/fNmyKuQ5X/MXeAxj2wGEu?=
- =?iso-8859-2?Q?bDARFdociO7QJve9IBbjFEtqtgtTXMiP47N5+SVohwplYw1nS8qaAUaDHW?=
- =?iso-8859-2?Q?5Z//YIbupGaAYDgzUvQySqxDbu36MboEhTWAfc/NVVM1yfoLCb+1mnKhuA?=
- =?iso-8859-2?Q?VMSlgbYO05likKU1eIpLMdXB4iagSWZrPsit6jjXc7SDRJTU04iZrndx6z?=
- =?iso-8859-2?Q?DxWmA8TzTlMxqQzj6WQnGKrCsQwJDxB2eKn/aTGzmKZN2oT04AHQJgsmKQ?=
- =?iso-8859-2?Q?fiek6qqtrqXKWp8vDTVkb5ho69t9dLmDHXQmn2N3Sdkr62Oq10C7mqzpsj?=
- =?iso-8859-2?Q?kvTCWUm9yv/3K4dsxBijkUBrrn6XP1GqiZxMSlMB2luSsOEe/Jpr3y4LGS?=
- =?iso-8859-2?Q?EjqUpCwXbJhp/w8P/EFv4rFZ7j1QczViW7XChwXclvURCASwaeTZD92OBB?=
- =?iso-8859-2?Q?X9K/PxFcPKjlo9ut6kvOppwK1CKzAO3szFeu4lv4PApDxCkytUGT+XatlZ?=
- =?iso-8859-2?Q?hGjbTkyXUaPrn7vMUB7FQRQYrgeXxwT6q+4aCh2UPMwaa2mrdLcz2WX+5p?=
- =?iso-8859-2?Q?ZU8gKFzPJOXShmde+krvJmCAU2XfejnQ/FQZbzQ+KLsL2xKw3dYoe0hG2y?=
- =?iso-8859-2?Q?Z90j76yqVYHWb7lU87esugDOlSl6RYDgJwJmmnOYZxVFjHn1hT2asU0gxN?=
- =?iso-8859-2?Q?dyQ+N8YuSxrt034/JzcCx6wAJPV8N4nHVbNDVQ6x41ssPrnt1z5yB0LMGL?=
- =?iso-8859-2?Q?z549AeWuP1nuEjTXPpFYkAFliVvpXJprhd4OCGSjDqA7xl4PHn0qXeBVAi?=
- =?iso-8859-2?Q?R6JjYfo5GOh6A3XW8/s0GCe7V1GG7iiF/P8kCQeLCe/qcP3lh3IBay5IBs?=
- =?iso-8859-2?Q?5zuVlgQNL4WQjthaHgFeelh3g+g1TpmZjcHvHBLyWxXjBYgCp9CTTMBp6g?=
- =?iso-8859-2?Q?YlrD2O6D8bpaIeLxMfKrTT8ECOaEtJJWYAKzUmvokIX7it0hdtI1Bm7w14?=
- =?iso-8859-2?Q?nFw4gnYNugFIm4XVJwzvBDx+Z+bavIFLPwuYvC8J4bUmnun5dSDfQZNhBq?=
- =?iso-8859-2?Q?1eOnFWJgl7KA0tcrjIMqFvKHNsHRUTM3fyzEAdQtGHxK51h4rT5XnnGQRe?=
- =?iso-8859-2?Q?lSjdvY3Rq/wHUrWUZwAk0icHYBvtbIBnGKaX02VRMkOl7PRulTCquePk5B?=
- =?iso-8859-2?Q?c4PqcG6IrlMhY=3D?=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 31 Oct 2022 12:58:48 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16296DFB0;
+        Mon, 31 Oct 2022 09:58:47 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.50.127])
+        by linux.microsoft.com (Postfix) with ESMTPSA id A1AB620B9F80;
+        Mon, 31 Oct 2022 09:58:46 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A1AB620B9F80
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1667235526;
+        bh=WCeWx4JsP2/hoZYvwwN1qjJP0udG2YITWUcVCXmsFuQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N/psBIZq1k58WvtXr5Pvp1oCsCWQPxUFLtlycs3HZjIIKGWPn1ctZJU5L02N+aUsc
+         JiJ/Y1P1VKcBOBCptNvycvQZTtPDJL5KZFNvmhvitYps1SPvz3nnhDTu56uQAeiNre
+         aawgHMFCVs1KJJktuNpf02+3HMJ/GAYAcOYtKsZk=
+Date:   Mon, 31 Oct 2022 09:58:41 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     rostedt@goodmis.org, mhiramat@kernel.org,
+        dcook@linux.microsoft.com, alanau@linux.microsoft.com,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 2/2] tracing/user_events: Fixup enable faults asyncly
+Message-ID: <20221031165841.GA149@W11-BEAU-MD.localdomain>
+References: <20221027224011.2075-1-beaub@linux.microsoft.com>
+ <20221027224011.2075-3-beaub@linux.microsoft.com>
+ <7697b674-1dab-4995-9589-9dfb2a65bb73@efficios.com>
+ <20221028223545.GA182@W11-BEAU-MD.localdomain>
+ <c6799933-d84b-e4dc-433c-bf1acc9ba03a@efficios.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5967.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d730c5c-f8ee-4355-0201-08dabb612822
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Oct 2022 16:58:38.5260
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /1BSGBupK0MCKDCpeljjAj/ma0ZlTYiJ8kDab7CmiNjRxVfhVFmwQrklYdCYSfjAnF+iVFYYXrFBfYvT+VXVUg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7377
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c6799933-d84b-e4dc-433c-bf1acc9ba03a@efficios.com>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Oct 29, 2022 at 10:23:02AM -0400, Mathieu Desnoyers wrote:
+> On 2022-10-28 18:35, Beau Belgrave wrote:
+> > On Fri, Oct 28, 2022 at 06:07:34PM -0400, Mathieu Desnoyers wrote:
+> > > On 2022-10-27 18:40, Beau Belgrave wrote:
+> 
+> [...]
+> 
+> > 
+> > > I'm still slightly unsure about using "uint32_t" for enable check, or going
+> > > for "unsigned long". The core question there is whether a 32-bit word test
+> > > would cause partial register stalls on 64-bit architectures. Going for
+> > > unsigned long would require that user events receives information about the
+> > > bitness of the word as input from userspace. (bit=63 rather than 31).
+> > > Perhaps this is something the user events ABI should accommodate by
+> > > reserving more than 5 bits to express the target bit ?
+> > > 
+> > 
+> > Yeah, I thought about this. From the user side you can actually use any
+> > arbitrary bits you want by passing a 32-bit aligned value. So you could
+> > take the lower or top half of a 64-bit value. The reason I limit to 0-31
+> > bits is to ensure no page straddling occurs. Futex also does this, check
+> > out get_futex_key() in kernel/futex/core.c.
+> 
+> We can ensure no page straddling by checking the address alignment compared
+> to the size of the integer (4 or 8 bytes) also received as input.
+> 
 
-> -----Original Message-----
-> From: Bjorn Helgaas <helgaas@kernel.org>
-> Subject: [PATCH v3 5/5] PCI: Remove unnecessary <linux/of_irq.h> includes
->=20
-> From: Bjorn Helgaas <bhelgaas@google.com>
->=20
-> Many host controller drivers #include <linux/of_irq.h> even though they
-> don't need it.  Remove the unnecessary #includes.
->=20
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> ---
->  drivers/pci/controller/cadence/pci-j721e.c   | 1 -
->  drivers/pci/controller/dwc/pci-layerscape.c  | 1 -
->  drivers/pci/controller/dwc/pcie-armada8k.c   | 1 -
->  drivers/pci/controller/dwc/pcie-tegra194.c   | 1 -
->  drivers/pci/controller/pci-v3-semi.c         | 1 -
->  drivers/pci/controller/pci-xgene-msi.c       | 1 -
->  drivers/pci/controller/pci-xgene.c           | 1 -
->  drivers/pci/controller/pcie-altera-msi.c     | 1 -
->  drivers/pci/controller/pcie-iproc-platform.c | 1 -
->  drivers/pci/controller/pcie-iproc.c          | 1 -
->  drivers/pci/controller/pcie-microchip-host.c | 1 -  drivers/pci/controll=
-er/pcie-
-> rockchip-host.c  | 1 -
->  drivers/pci/controller/pcie-xilinx-cpm.c     | 1 -
->  drivers/pci/controller/pcie-xilinx-nwl.c     | 1 -
->  14 files changed, 14 deletions(-)
-Acked-by: Roy Zang <roy.zang@nxp.com>
+Ok.
 
--R
+> > 
+> > I would recommend trying out uint64 but give the upper half to
+> > user_events ABI and checking if that works for you if you want say 63
+> > bits to user space. You'd tell the ABI bit 31, but in user space it
+> > would be bit 63.
+> 
+> That's tricky because Linux supports both big and little endian, which will
+> make the ABI tricky to use if we try to be too clever about this.
+> 
+> Also, just stating a "pointer" and "bits offset" is not enough if we want to
+> support 32-bit and 64-bit integer types, because the bit offset does not
+> consider endianness.
+> 
+> I would recommend to get the following information through the user events
+> registration:
+> 
+> - pointer address,
+> - size of integer type (4 or 8 bytes),
+> - bit offset (currently 31 or 63).
+> 
+> This way we have all the information we need to set the right bit in both
+> little and big endian. We also have all the information we need to validate
+> natural alignment, e.g.:
+> 
+> /* Check alignment */
+> if (addr & (type_size - 1))
+> 	return -EINVAL;
+> /* Check bit offset range */
+> if (bit_offset > (type_size * CHAR_BIT) - 1)
+> 	return -EINVAL;
+> switch (type_size) {
+> case 4:
+> 	/* Update 32-bit integer */
+> 	break;
+> #if BITS_PER_LONG >= 64
+> case 8:
+> 	/* Update 64-bit integer */
+> 	break;
+> #endif
+> default:
+> 	return -EINVAL;
+> }
+> 
+
+Sounds good, I'll update this.
+
+> 
+> > 
+> > > > 
+> > > > The enable address is disabled while the async fault-in occurs. This
+> > > > ensures that we don't attempt fault-in more than is necessary. Once the
+> > > > page has been faulted in, the address write is attempted again. If the
+> > > > page couldn't fault-in, then we wait until the next time the event is
+> > > > enabled to prevent any potential infinite loops.
+> > > 
+> > > So if the page is removed from the page cache between the point where it is
+> > > faulted in and the moment the write is re-attempted, that will not trigger
+> > > another attempt at paging in the page, am I correct ?
+> > > 
+> > 
+> > If we fault and the fixup user fault fails still with retries, then we
+> > give up until the next enablement of that site.
+> > 
+> > However, if we fault and the fixup user fault with retries works, and
+> > then we fault again trying to write, that will retry.
+> > 
+> > > I would think this is unexpected. I would expect that failing to fault in
+> > > the page would stop any further attempts, but simply failing to pin the page
+> > > after faulting it in should simply try again.
+> > > 
+> > 
+> > The issue I repro is mmap() register the enable at that location, then
+> > unmap(). All the faulting errors just tell you -EFAULT in this case,
+> > even though it was maliciously removed. In this case you could get the
+> > kernel to infinite loop trying to page it in.
+> > 
+> > > Thoughts ?
+> > > 
+> > 
+> > We need to have some sanity toward giving up faulting in data that never
+> > will make it. The code currently assigns that line to if
+> > fixup_user_fault with retries fails, we give up. pin_user_pages_remote
+> > will not stop it from being attempted again.
+> 
+> What are the legitimate cases that can make fixup_user_fault fail ? If there
+> are none, and the only case that can make this fail is userspace unmapping
+> memory, then we should very well kill the offending process.
+> 
+
+I believe only VM_FAULT_ERROR:
+#define VM_FAULT_ERROR (VM_FAULT_OOM | VM_FAULT_SIGBUS |	\
+			VM_FAULT_SIGSEGV | VM_FAULT_HWPOISON |	\
+			VM_FAULT_HWPOISON_LARGE | VM_FAULT_FALLBACK)
+
+I don't believe in any of the above cases we should retry indefinitely
+for.
+
+> An example here is futex fault_in_user_writeable(). When it fails, it
+> appears that the futex_wake_op simply returns -EFAULT to the caller.
+> 
+
+fault_in_user_writeable() calls fixup_user_fault(), so it should be the
+same scenario / failures as above.
+
+> Thanks,
+> 
+> Mathieu
+> 
+> > 
+> > > Thanks,
+> > > 
+> > > Mathieu
+> > > 
+> > 
+> > Thanks,
+> > -Beau
+> 
+> -- 
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> https://www.efficios.com
+
+Thanks,
+-Beau
