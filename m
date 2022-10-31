@@ -2,52 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED84615BA5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 05:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8DC4615BC6
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 06:23:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiKBE61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 00:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55800 "EHLO
+        id S229742AbiKBFXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 01:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKBE6W (ORCPT
+        with ESMTP id S229457AbiKBFXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 00:58:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B886E10E6;
-        Tue,  1 Nov 2022 21:58:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A09AB820BB;
-        Wed,  2 Nov 2022 04:58:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB326C433C1;
-        Wed,  2 Nov 2022 04:58:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667365098;
-        bh=kOzIq9EyC4fDMAzs4YGklmDZT3mFY3v1MqN1V44mblQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=y2JAyjY85RDwqxFFeIveaG0L96n1uLOz0pLF3nd4r3u0yMm1BE4qJGRuVjg9kgodd
-         Y24Wk8YPy7UNGZ5ZVMWTsFuRLv7rL28Kvo5zlmbcOEdGQLjcSKmPl3efG9tmcktndC
-         sjlXeaH60OH4Xici4Uv9WiIow94e0vOkH7ZShvk8=
-Date:   Wed, 2 Nov 2022 05:59:10 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     stable@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@denx.de>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH] Documentation: process: Describe kernel version prefix
- for third option
-Message-ID: <Y2H5Hs7UQJw8T2IX@kroah.com>
-References: <20221101131743.371340-1-bagasdotme@gmail.com>
- <Y2EfhWxk0j/oVLJx@kroah.com>
- <b1914779-0303-3d37-a504-e1715f7ee0af@gmail.com>
+        Wed, 2 Nov 2022 01:23:43 -0400
+Received: from omta037.useast.a.cloudfilter.net (omta037.useast.a.cloudfilter.net [44.202.169.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9A82409F;
+        Tue,  1 Nov 2022 22:23:42 -0700 (PDT)
+Received: from eig-obgw-5011a.ext.cloudfilter.net ([10.0.29.161])
+        by cmsmtp with ESMTP
+        id phouobCb77krOq6E1odTck; Wed, 02 Nov 2022 05:23:41 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with ESMTP
+        id q6DzoG578bE09q6E0olbhu; Wed, 02 Nov 2022 05:23:40 +0000
+X-Authority-Analysis: v=2.4 cv=V6xubMri c=1 sm=1 tr=0 ts=6361fedc
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=wTog8WU66it3cfrESHnF4A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=Qawa6l4ZSaYA:10
+ a=wYkD_t78qR0A:10 a=VwQbUJbxAAAA:8 a=cm27Pg_UAAAA:8 a=Twlkf-z8AAAA:8
+ a=Ajr8Ya8xPWvAgL_sw0AA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
+ a=xmb-EsYY8bH0VWELuYED:22 a=-74SuR6ZdpOK_LpdRCUo:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=NrXbbGcVenpDWuMVBTnZqZTgRIfDXJVj9AsuNMNu/ac=; b=rxDYabtC4yFlIKvJZrzMTCtL9G
+        yzmT8CVs65TAajvtCrKJccTM55ieXMGzE2ToKKDdUfdsoGeFt7Iy45KtxwGIwYGnIoRlujQGPFkqC
+        rDnI0kqdID5eZkr6llOqnKsgfQ/QpKDgTkIkY5FwRQg2Jiog/QDzacrfrkcAsAH5kb67x+q2A6L0S
+        fGy46jKMtWQTNw/G5k/eDFQFbbh+ttct6U9ORm6taA8k0bzQih1LpQxWB4xY86W1d/iI7zdMPvmD4
+        SaYYEFg3z7wVMJYA1F9VhulYXE47s9WQ7JWuEJAZoYp6sYJMyIe7r5oNmO8JBjVo3HKosHfteBA7X
+        VD+wY8gQ==;
+Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:38738 helo=[192.168.15.7])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1opZI6-003AiS-Gi;
+        Mon, 31 Oct 2022 13:13:42 -0500
+Message-ID: <f31ea73f-143c-ef24-8637-6d68430953bf@embeddedor.com>
+Date:   Mon, 31 Oct 2022 12:13:25 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b1914779-0303-3d37-a504-e1715f7ee0af@gmail.com>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 5/6] bna: Avoid clashing function prototypes
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Sudarsana Kalluru <skalluru@marvell.com>,
+        GR-Linux-NIC-Dev@marvell.com, Rasesh Mody <rmody@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <cover.1666894751.git.gustavoars@kernel.org>
+ <2812afc0de278b97413a142d39d939a08ac74025.1666894751.git.gustavoars@kernel.org>
+ <202210290009.C42E731@keescook>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <202210290009.C42E731@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.31.110
+X-Source-L: No
+X-Exim-ID: 1opZI6-003AiS-Gi
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.7]) [187.162.31.110]:38738
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 0
+X-Org:  HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfDpNrm1HbivHzY8qNfAFAOOjIAw2i7zeiRkQ10Awb/0JNRbVHg/Jl3G1Y/aaZrD8Uv8feSTVHeZ2C6qT+6P/BzSZWljVpq79ZPq15vZXX90zNTQYE/w9
+ g9OOBH37QbJ8tsUG9TZziY3vhZb1DZfTXDbhXJOuaobjiKKVEP02y5I0G/6beX+HbOPbQzgy5JWZ4OQN9QEH0cLeu09F9U5jU2Evov89YXi+EMoLHZ/mkwvo
+ UflH4maDaDAXU5phiEkIeLD4dBs53elLEC3EfFcct1yNQMvLkLXdRrGt2cNjB65M
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,31 +98,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 11:19:44AM +0700, Bagas Sanjaya wrote:
-> On 11/1/22 20:30, Greg Kroah-Hartman wrote:
-> > 
-> > No, sorry, this is not needed and does not have to be in the subject
-> > line at all.
-> > 
-> > The current wording is fine, it's just that people don't always read it.
-> > 
-> > so consider this a NAK.
-> > 
-> 
-> Hi Greg,
-> 
-> There was a case when a submitter submitted multiple backports (which
-> qualified for third option) without specifying the prefix, hence a
-> reviewer complained [1].
-> 
-> [1]: https://lore.kernel.org/all/20221101074351.GA8310@amd/
 
-Yes, and as I said on that thread, to you directly:
-	https://lore.kernel.org/all/Y2Ef0hK4rTmAoEUs@kroah.com/
-the submission was done correctly, no one should have complained, and
-the patches were applied by me to the correct branches without any
-problems at all.
 
-This is not an issue, this change is not needed at all.
+On 10/29/22 02:12, Kees Cook wrote:
+> On Thu, Oct 27, 2022 at 03:20:47PM -0500, Gustavo A. R. Silva wrote:
+>> When built with Control Flow Integrity, function prototypes between
+>> caller and function declaration must match. These mismatches are visible
+>> at compile time with the new -Wcast-function-type-strict in Clang[1].
+>>
+>> Fix a total of 227 warnings like these:
+>>
+>> drivers/net/ethernet/brocade/bna/bna_enet.c:519:3: warning: cast from 'void (*)(struct bna_ethport *, enum bna_ethport_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+>>                  bfa_fsm_set_state(ethport, bna_ethport_sm_down);
+>>                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>
+>> The bna state machine code heavily overloads its state machine functions,
+>> so these have been separated into their own sets of structs, enums,
+>> typedefs, and helper functions. There are almost zero binary code changes,
+>> all seem to be related to header file line numbers changing, or the
+>> addition of the new stats helper.
+> 
+> This looks like it borrowed from
+> https://lore.kernel.org/linux-hardening/20220929230334.2109344-1-keescook@chromium.org/
+> Nice to get a couple hundred more fixed. :)
 
-greg k-h
+Yep; you're right. That's exactly the patch I was staring at
+while doing these changes. :)
+
+> 
+>> [1] https://reviews.llvm.org/D134831
+>> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+>> ---
+>> Changes in v2:
+>>   - None. This patch is new in the series.
+> 
+> This is relatively stand-alone (not an iw_handler patch), so it could
+> also go separately too.
+
+My criteria here was that all these patches avoid clashing function
+prototypes. So, they could be put together into a series, regardless
+if they are "iw_handler" related patches.
+
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+
+Thanks!
+--
+Gustavo
+
