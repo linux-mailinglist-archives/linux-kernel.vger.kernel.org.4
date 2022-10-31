@@ -2,55 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3788612E96
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 02:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3AAC612EA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 02:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiJaBSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 21:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
+        id S229742AbiJaBdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 21:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJaBSP (ORCPT
+        with ESMTP id S229528AbiJaBdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 21:18:15 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5348E9FDA;
-        Sun, 30 Oct 2022 18:18:14 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N0wBd1smlzmVbK;
-        Mon, 31 Oct 2022 09:13:13 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 31 Oct 2022 09:17:57 +0800
-Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 31 Oct
- 2022 09:17:57 +0800
-Message-ID: <09aa678e-b072-d567-5e8a-fdd58d761871@huawei.com>
-Date:   Mon, 31 Oct 2022 09:17:53 +0800
+        Sun, 30 Oct 2022 21:33:13 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955BB764A;
+        Sun, 30 Oct 2022 18:33:11 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4N0wZk6h4gz6PfPp;
+        Mon, 31 Oct 2022 09:30:38 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP1 (Coremail) with SMTP id cCh0CgDHoHnUJV9jAnVABA--.34626S3;
+        Mon, 31 Oct 2022 09:33:09 +0800 (CST)
+Subject: Re: [PATCH -next 4/5] blk-iocost: fix sleeping in atomic context
+ warnning in ioc_qos_write()
+To:     Christoph Hellwig <hch@infradead.org>,
+        Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20221028101056.1971715-1-yukuai1@huaweicloud.com>
+ <20221028101056.1971715-5-yukuai1@huaweicloud.com>
+ <Y15KC8Zb3rHlfTPu@infradead.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <aa7cb8f2-0398-aff9-f572-fcb48271d20f@huaweicloud.com>
+Date:   Mon, 31 Oct 2022 09:33:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: linux-next: build warning after merge of the sound-asoc-fixes
- tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Linux Next Mailing List" <linux-next@vger.kernel.org>
-References: <20221031083917.6944b95b@canb.auug.org.au>
-Content-Language: en-US
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <20221031083917.6944b95b@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+In-Reply-To: <Y15KC8Zb3rHlfTPu@infradead.org>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500013.china.huawei.com (7.185.36.172)
+X-CM-TRANSID: cCh0CgDHoHnUJV9jAnVABA--.34626S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYk7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4II
+        rI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr4
+        1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
+        67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
+        8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAv
+        wI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,43 +68,18 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 2022/10/31 5:39, Stephen Rothwell wrote:
-> Hi all,
->
-> After merging the sound-asoc-fixes tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
->
-> WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in reference: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
->
-> Introduced by commit
->
->    6ec27c53886c ("ASoC: core: Fix use-after-free in snd_soc_exit()")
-It's because I called "_exit snd_soc_util_exit()" inside "_init 
-snd_soc_init()".
+�� 2022/10/30 17:55, Christoph Hellwig д��:
+> This seems a little convoluted to me.  I'd suggest to add a new
+> sleeping lock that protects the updates, then you just take the
+> spinlock after parsing without much other changes.
+> 
+> (The same comment also applies to patch 5).
 
-Since snd_soc_util_exit is only used in snd_soc_init() and 
-snd_soc_exit(), I think it's fine to remove _exit for snd_soc_util_exit().
+Yes, add a new sleeping lock is ok, and changes will be much simpler.
 
-Could you please add this change for the patch?
+Thanks for the suggestion, I'll send a new verion soon.
 
+Kuai
+> .
+> 
 
-diff --git a/sound/soc/soc-utils.c b/sound/soc/soc-utils.c
-index a3b6df2378b4..a4dba0b751e7 100644
---- a/sound/soc/soc-utils.c
-+++ b/sound/soc/soc-utils.c
-@@ -264,7 +264,7 @@ int __init snd_soc_util_init(void)
-         return ret;
-  }
-
--void __exit snd_soc_util_exit(void)
-+void snd_soc_util_exit(void)
-  {
-         platform_driver_unregister(&soc_dummy_driver);
-         platform_device_unregister(soc_dummy_dev);
-
-
-Thanks!
-
-Best,
-
-Chen
