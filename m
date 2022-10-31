@@ -2,127 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE898613431
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 12:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA143613436
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 12:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbiJaLK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 07:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
+        id S230188AbiJaLLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 07:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiJaLK5 (ORCPT
+        with ESMTP id S230107AbiJaLLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 07:10:57 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD87B847;
-        Mon, 31 Oct 2022 04:10:55 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id b62so22288pgc.0;
-        Mon, 31 Oct 2022 04:10:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4mWOQo3IJMa6w4l4DyN4HDxOpIlWrRJ/XZKR3C/nOGs=;
-        b=lSn9Onz4PxN1cJWKkcid5fopQHGtPF7Xutp9xqdwSl58r0Hv/ReabwAK0DyQMaEvxP
-         9HbIo4HSlNM5p5zVgStKBUt1r6a9Hzni0hHIACHf4JczMhHixIFn/SeseOTMpR0u+iKs
-         K6yqUKlsmfa5jGVGnymLJ5GcuYpl1KJ9zOvAp+0JxctY7t47W5tkX/i6XFrjS8THCxzK
-         Ql/6Cqtj99XDesgAhgvb6/vShowJ16njwUndk8kwFxGrUmQRn513lmAmK+ir//078wLy
-         hhDSPx08amePjr0bzM50X5Nk+5AuSyOI60N76pnIpHyas+RwY3tS8vVFZByZBNmND6YM
-         LtZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4mWOQo3IJMa6w4l4DyN4HDxOpIlWrRJ/XZKR3C/nOGs=;
-        b=xIUjZGOcGP7HF0Zu9aJnFOyWy3m3e90VtXhlJzr79YKWuqlchsqBwcYo3zroiOvN1i
-         KzpzA98PqEqCNl43cxNoLR7Pt811d9BR+3OmHneqDih2D0O/hKQB0RKISP7fjIlaWKp6
-         oH3YWaeyA2Uu4mspig+nAkF0cy5zGaIU+PGdwDSq4LvPhXpL7P4C8cYahBgoESyysoJj
-         GjJl4RiBWo3ZTj5oYHoYuV5JnyeHUkRGgymB9rqWpWSu3NgUJbhBfg1SCHosF7lFCT7x
-         +5DFOfQ0SfEU9d6zAKduGY0TWK7LgwoEEE1jUb9LMjwi2dmM/gAV2Lpi3x6YbndtyHct
-         YbyQ==
-X-Gm-Message-State: ACrzQf2lcXWJvVFO6VYXnumd+JoCsiP3PRqQD7DKw3MMSzoFv5XxtCbH
-        C9VcCbBjaaxNbLbIIYq2qQE0tqwnhoY=
-X-Google-Smtp-Source: AMsMyM4qv86X/fOjd4pkWRvVfl5ojF09gKgeEQU8i3SCMhXgN7pSWnN+bFX5KJHGkGtnMwdtk+pPWw==
-X-Received: by 2002:a05:6a00:2446:b0:528:5f22:5b6f with SMTP id d6-20020a056a00244600b005285f225b6fmr13893404pfj.73.1667214655397;
-        Mon, 31 Oct 2022 04:10:55 -0700 (PDT)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id u16-20020a170902e5d000b001767f6f04efsm4234538plf.242.2022.10.31.04.10.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 04:10:54 -0700 (PDT)
-Date:   Mon, 31 Oct 2022 20:10:48 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Kees Cook <keescook@chromium.org>, linux-mm@kvack.org,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/slab_common: repair kernel-doc for __ksize()
-Message-ID: <Y1+tOByatY9w8MKc@hyeyoo>
-References: <20221031092920.976-1-lukas.bulwahn@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221031092920.976-1-lukas.bulwahn@gmail.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Mon, 31 Oct 2022 07:11:45 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B03BE12;
+        Mon, 31 Oct 2022 04:11:43 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0VTVxoG-_1667214695;
+Received: from j66e01291.sqa.eu95.tbsite.net(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VTVxoG-_1667214695)
+          by smtp.aliyun-inc.com;
+          Mon, 31 Oct 2022 19:11:41 +0800
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+To:     linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+Subject: [PATCH RFC 0/6] Add metrics for neoverse-n2
+Date:   Mon, 31 Oct 2022 19:11:28 +0800
+Message-Id: <1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 10:29:20AM +0100, Lukas Bulwahn wrote:
-> Commit 445d41d7a7c1 ("Merge branch 'slab/for-6.1/kmalloc_size_roundup' into
-> slab/for-next") resolved a conflict of two concurrent changes to __ksize().
-> 
-> However, it did not adjust the kernel-doc comment of __ksize(), while the
-> name of the argument to __ksize() was renamed.
-> 
-> Hence, ./scripts/ kernel-doc -none mm/slab_common.c warns about it.
-> 
-> Adjust the kernel-doc comment for __ksize() for make W=1 happiness.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  mm/slab_common.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/slab_common.c b/mm/slab_common.c
-> index 33b1886b06eb..74a991fd9d31 100644
-> --- a/mm/slab_common.c
-> +++ b/mm/slab_common.c
-> @@ -1010,7 +1010,7 @@ EXPORT_SYMBOL(kfree);
->  
->  /**
->   * __ksize -- Report full size of underlying allocation
-> - * @objp: pointer to the object
-> + * @object: pointer to the object
->   *
->   * This should only be used internally to query the true size of allocations.
->   * It is not meant to be a way to discover the usable size of an allocation
-> @@ -1018,7 +1018,7 @@ EXPORT_SYMBOL(kfree);
->   * the originally requested allocation size may trigger KASAN, UBSAN_BOUNDS,
->   * and/or FORTIFY_SOURCE.
->   *
-> - * Return: size of the actual memory used by @objp in bytes
-> + * Return: size of the actual memory used by @object in bytes
->   */
->  size_t __ksize(const void *object)
->  {
-> -- 
-> 2.17.1
+This series add six metricgroups for neoverse-n2, among which, the
+formula of topdown L1 is from the document:
+https://documentation-service.arm.com/static/60250c7395978b529036da86?token=
 
-Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Since neoverse-n2 does not yet support topdown L2, metricgroups such
+as Cache, TLB, Branch, InstructionsMix, and PEutilization are added to
+help further analysis of performance bottlenecks.
 
-Thanks!
+with this series on neoverse-n2:
+
+$./perf list metricgroup
+
+List of pre-defined events (to be used in -e):
+
+
+Metric Groups:
+
+Branch
+Cache
+InstructionMix
+PEutilization
+TLB
+TopDownL1
+
+
+$./perf list
+
+...
+Metric Groups:
+
+Branch:
+  branch_miss_pred_rate
+       [The rate of branches mis-predited to the overall branches]
+  branch_mpki
+       [The rate of branches mis-predicted per kilo instructions]
+  branch_pki
+       [The rate of branches retired per kilo instructions]
+Cache:
+  l1d_cache_miss_rate
+       [The rate of L1 D-Cache misses to the overall L1 D-Cache]
+  l1d_cache_mpki
+       [The rate of L1 D-Cache misses per kilo instructions]
+...
+
+
+$sudo ./perf stat -a -M TLB sleep 1
+
+ Performance counter stats for 'system wide':
+
+        35,861,936      L1I_TLB                          #     0.00 itlb_walk_rate           (74.91%)
+             5,661      ITLB_WALK                                                            (74.91%)
+        97,279,240      INST_RETIRED                     #     0.07 itlb_mpki                (74.91%)
+             6,851      ITLB_WALK                                                            (74.91%)
+            26,391      DTLB_WALK                        #     0.00 dtlb_walk_rate           (75.07%)
+        35,585,545      L1D_TLB                                                              (75.07%)
+        85,923,244      INST_RETIRED                     #     0.35 dtlb_mpki                (75.11%)
+            29,992      DTLB_WALK                                                            (75.11%)
+
+       1.003450755 seconds time elapsed
+       
+
+Jing Zhang (6):
+  perf vendor events arm64: Add topdown L1 metrics for neoverse-n2
+  perf vendor events arm64: Add TLB metrics for neoverse-n2
+  perf vendor events arm64: Add cache metrics for neoverse-n2
+  perf vendor events arm64: Add branch metrics for neoverse-n2
+  perf vendor events arm64: Add PE utilization metrics for neoverse-n2
+  perf vendor events arm64: Add instruction mix metrics for neoverse-n2
+
+ .../arch/arm64/arm/neoverse-n2/metrics.json        | 247 +++++++++++++++++++++
+ 1 file changed, 247 insertions(+)
+ create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
 
 -- 
-Thanks,
-Hyeonggon
+1.8.3.1
+
