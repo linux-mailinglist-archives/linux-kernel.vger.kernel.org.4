@@ -2,67 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB18613BD1
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 751A5613CCE
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232032AbiJaQ7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 12:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47874 "EHLO
+        id S229799AbiJaSCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 14:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231951AbiJaQ7J (ORCPT
+        with ESMTP id S229500AbiJaSCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 12:59:09 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B9D12D05
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:59:07 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id b22so2185708qtr.12
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:59:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VdLGdG8ecpCPiRxQ3vcPFkgCyzaEnHg5Ky957Nfa+rA=;
-        b=Kqcb89AGHtjCOi4RVPMU03ECoVqM759Z5LLPtY8Yb/Id7hFNaoC0kpqJ41eEGWZy2J
-         Ma8dvtC23dgYIwZd7NgsLNU/YBeeAMT03Xaj0hQQWajsRKqPmIO1d4CeDBDsWVOLcIuH
-         zfoY/HMLcU+VkKZS1H+6lEo5hHjX/j4UHusdBAnfPGC38qE3SIfGsWKp7wftJxSvjDAM
-         1XdY8gcv38Kaax2yTMZyDNicQC2WKddXlQSJnOe8iUej4C1QtMvRpUVJmZDCOLGOiyHc
-         7J7whff4658tJxUWHs1tYOJikIHA07eKFnH1872oK1J0WTMIDAhDb1LBonAYLMosbCy+
-         gYHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VdLGdG8ecpCPiRxQ3vcPFkgCyzaEnHg5Ky957Nfa+rA=;
-        b=tZTA3caUlMmFNHra+IpkJEj2UmBAqE5cMm2v9nGSJO5Dm9c7/MK9kLoYqGqQ7siM1t
-         18a5380yBVasasB6TLWVt2UUTM3W2U/R5NEkDXpgdKAfY5fNXLDWwsbzTCqu+RA/Tk/C
-         gCt8KmJeyxmUYUKUfKGFolzEbUkOLIvs/PYglHTY4stHj6oXZvYbFNMmhq/LVA5Hzk8W
-         t5UztUq7YLC/j7vCfW3UtmX6LcNhzgMH0B60Hm/neo7Wt8cb1rppWiFPlaE6wxH2t1fU
-         yI717jYQFRLlIinfH6YvinQZDiBuBfGAle+/UU79ip/wIa6A+zuHe7CjmCuGaEjWHAq1
-         +6WQ==
-X-Gm-Message-State: ACrzQf15oQaniDgglvcqN8b4eg6eAUja2hNMmAX5DbKWP3KADrEinwvo
-        7CVX8xyPnJWKL91JgPljhZkS0g==
-X-Google-Smtp-Source: AMsMyM5APjmeKu6/PEtkwFyKsTp5fWQcPioOBJb/ouiwws7I25mvLzEsItuKTJPZga+hxggpGYn9Iw==
-X-Received: by 2002:a05:622a:1452:b0:39d:9de:171c with SMTP id v18-20020a05622a145200b0039d09de171cmr11264029qtx.294.1667235547154;
-        Mon, 31 Oct 2022 09:59:07 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::25f1])
-        by smtp.gmail.com with ESMTPSA id t1-20020a05620a450100b006cbcdc6efedsm5047858qkp.41.2022.10.31.09.59.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 09:59:06 -0700 (PDT)
-Date:   Mon, 31 Oct 2022 12:59:08 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Zefan Li <lizefan.x@bytedance.com>, kernel-team@meta.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH cgroup/for-6.1-fixes] cgroup: Implement DEBUG_CGROUP_REF
-Message-ID: <Y1/+3I2mJ+uAlAYc@cmpxchg.org>
-References: <Y1w9EKH/CZhNGLJj@slm.duckdns.org>
+        Mon, 31 Oct 2022 14:02:16 -0400
+Received: from omta35.uswest2.a.cloudfilter.net (omta35.uswest2.a.cloudfilter.net [35.89.44.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C91413D2A
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:02:16 -0700 (PDT)
+Received: from eig-obgw-6015a.ext.cloudfilter.net ([10.0.30.134])
+        by cmsmtp with ESMTP
+        id pXtaopQjMlI84pZ71o9odk; Mon, 31 Oct 2022 18:02:15 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with ESMTP
+        id pZ70oZv1hnQ2apZ70oW1oB; Mon, 31 Oct 2022 18:02:14 +0000
+X-Authority-Analysis: v=2.4 cv=frvP2X0f c=1 sm=1 tr=0 ts=63600da6
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=wTog8WU66it3cfrESHnF4A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=Qawa6l4ZSaYA:10
+ a=wYkD_t78qR0A:10 a=XPDCPBHLajm3aRFYHAUA:9 a=QEXdDO2ut3YA:10
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=4M+EkqO2JIQhdRROs6iO5knFvCzc2rYBZdIfB6LFo1M=; b=eYQmoSDCBMmgeFFVkQtGqxSpu6
+        VbhdOaE5Q6z1ta4Y4WbtONilXDaXlCi7bvqUp8/lBqNx3816DhW7waQaBPrFYo8iL6kIxedBrjOH/
+        jy9CgKAef2zrh7WR3I/lKcQ53sXf5Of1HnTWJZFr4xfyO9CbMtYVD4yD5xvLMRjZ5J2DEq5BgDRjc
+        Nn/C6ck/0lGwUdTO81d7vAqLMQZUfRuqN6ooq3H9vgDYkCjV30tD7evQn4amKnGbjPgzJM1dmNs3G
+        AwaJd2eIAZIIcJ2KrPdjC3v1jf9dcM/cj1vdI3Sgnd8kpkl9vxnClkoDV2kPABGgGES8vtrNo24uB
+        wi3lTTag==;
+Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:60834 helo=[192.168.15.7])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1opZ6x-002ncA-Um;
+        Mon, 31 Oct 2022 13:02:12 -0500
+Message-ID: <fb504b1e-e558-c3ed-61ed-220a24299599@embeddedor.com>
+Date:   Mon, 31 Oct 2022 12:01:51 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1w9EKH/CZhNGLJj@slm.duckdns.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 1/6] cfg80211: Avoid clashing function prototypes
+Content-Language: en-US
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Stanislav Yakovlev <stas.yakovlev@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org
+References: <cover.1666894751.git.gustavoars@kernel.org>
+ <c8239f5813dec6e5cfb554ca92b1783a18ac5537.1666894751.git.gustavoars@kernel.org>
+ <a92ffa8db8228b5cb41939dc37d6ee677aef0619.camel@sipsolutions.net>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <a92ffa8db8228b5cb41939dc37d6ee677aef0619.camel@sipsolutions.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.31.110
+X-Source-L: No
+X-Exim-ID: 1opZ6x-002ncA-Um
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.7]) [187.162.31.110]:60834
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 3
+X-Org:  HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfNGIoX4U4/TzhdNa4pbj9QFifKxxCrZjRxuTeweAep8XHdQmEpeyeOmMs13rg6tNtcTPb2Siriip0lzs1lgBR6znPJuDFKAkhtyjIsJ/HtW/ZvNf1u1w
+ 4t0HqwneFEd19I3quDfpOyCgAyfrjPwovfRw4kB8h2Air/h2+pDiTK3VXQ5aIJ4xBUwK0HynovQ1QYY3L8exv9SZC8YioU8OTxEz3blOhL0977uE1pViXNSf
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,14 +98,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 10:35:28AM -1000, Tejun Heo wrote:
-> It's really difficult to debug when cgroup or css refs leak. Let's add a
-> debug option to force the refcnt function to not be inlined so that they can
-> be kprobed for debugging.
-> 
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> ---
-> Applying this to for-6.1-fixes. Holler for any objections.
 
-The out-of-line versions need EXPORT_SYMBOL as they're used by modules
-(loop e.g.). Otherwise it looks good to me.
+
+On 10/28/22 03:22, Johannes Berg wrote:
+> Hm.
+> 
+> If you're splitting out per driver,
+> 
+>> +++ b/drivers/net/wireless/intel/ipw2x00/ipw2200.c
+>> @@ -9870,7 +9870,7 @@ static int ipw_wx_sw_reset(struct net_device *dev,
+>>   
+>>   /* Rebase the WE IOCTLs to zero for the handler array */
+>>   static iw_handler ipw_wx_handlers[] = {
+>> -	IW_HANDLER(SIOCGIWNAME, (iw_handler)cfg80211_wext_giwname),
+>> +	IW_HANDLER(SIOCGIWNAME, cfg80211_wext_giwname),
+> 
+> I can see how this (and similar) still belongs into this patch since
+> it's related to the cfg80211 change, but
+> 
+>> +++ b/drivers/net/wireless/intersil/orinoco/wext.c
+>> @@ -154,9 +154,10 @@ static struct iw_statistics *orinoco_get_wireless_stats(struct net_device *dev)
+>>   
+>>   static int orinoco_ioctl_setwap(struct net_device *dev,
+>>   				struct iw_request_info *info,
+>> -				struct sockaddr *ap_addr,
+>> +				union iwreq_data *wrqu,
+>>   				char *extra)
+>>   {
+>> +	struct sockaddr *ap_addr = &wrqu->ap_addr;
+> 
+> why this (and similar) too?
+
+mmh... yeah; orinoco should be a separate patch. :)
+
+Thanks
+--
+Gustavo
+
+
