@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD29613A33
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 536D6613A38
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbiJaPgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 11:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
+        id S231547AbiJaPhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 11:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231882AbiJaPgf (ORCPT
+        with ESMTP id S231187AbiJaPhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 11:36:35 -0400
+        Mon, 31 Oct 2022 11:37:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E8B11A02;
-        Mon, 31 Oct 2022 08:36:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA09BF7C;
+        Mon, 31 Oct 2022 08:37:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 651A0612DA;
-        Mon, 31 Oct 2022 15:36:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88A10C43140;
-        Mon, 31 Oct 2022 15:36:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7815C6127D;
+        Mon, 31 Oct 2022 15:37:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D2D4C433C1;
+        Mon, 31 Oct 2022 15:37:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667230582;
-        bh=hQTeoRIMnGPp9UdgDT08Aavn4R9xt6+Q4i1tH0XNAtE=;
+        s=k20201202; t=1667230641;
+        bh=htosT9j3prhic4OCFKTn+cYnB6WGmmVROgs2Id5cou0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XTouMncDtMEck6F3hpEnv5HTI5FxTrknmp7Hw+WJKidcVfbyNHJdYHjmRRLvQ1NMi
-         79k6ew61nkE5JUU/R+H8Y4UkCM20ONTgi5IvomLie4xhwbM01zKP+BP1cqNj41B9je
-         sLE2SObyNqVO4v93GRBtNDBDS1YoRyjPj1/UmGcrG3SCxctMAeXaLiGn9k43iyOphl
-         OD9LKi73/RdJWgcEKIBGJaisJJ7orl49E0Azz9nIM82iK8Ztons+syGXtHWUhfTqMH
-         gFNoIxoQRefbmGC7wkvpFacJV+m4GepDRdg8aa0Qzqxqd72bVQhwRsLd5G8iJPOxg2
-         vLf/O4qQ+5HyQ==
-Date:   Mon, 31 Oct 2022 15:36:14 +0000
+        b=ujWCtT6kGi/oxXQiRwuxyVSzSYLo/pusgj3E7kSwP+U2mjtPYV0ba5Dnb4KLO64hq
+         LwqaQqbWAtd9mZbhLpc0xOWHvh3AfJeoi2awo6yFLD83l0EXhlyiA3CqsIRs8mYfuD
+         js7xB3kYBeWGZPj4TTF9stcgePR29RYLGsO0agWHGn0dzGNH7paSqFbMhxe+LI5VRr
+         Pem5QjvEfjt9D/oRZrL1jrxWzThrfop6xCd1uFvDZSFadLSpkP24I6+1+opzA2Qou/
+         Qy/48tE+u28mPPrmvrVyVwNeFsSi9Kls8At2fM5IOVYAD/GMfWGzzz5aX2cNFgGFz5
+         oN6OS1m8Yaflg==
+Date:   Mon, 31 Oct 2022 15:37:13 +0000
 From:   Lee Jones <lee@kernel.org>
 To:     Colin Foster <colin.foster@in-advantage.com>
 Cc:     linux-mediatek@lists.infradead.org,
@@ -57,16 +57,16 @@ Cc:     linux-mediatek@lists.infradead.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v1 net-next 1/7] dt-bindings: mfd: ocelot: remove
- spi-max-frequency from required properties
-Message-ID: <Y1/rbgXwUZZXY3JK@google.com>
+Subject: Re: [PATCH v1 net-next 2/7] dt-bindings: mfd: ocelot: remove
+ unnecessary driver wording
+Message-ID: <Y1/rqW8kP4Yk/len@google.com>
 References: <20221025050355.3979380-1-colin.foster@in-advantage.com>
- <20221025050355.3979380-2-colin.foster@in-advantage.com>
+ <20221025050355.3979380-3-colin.foster@in-advantage.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221025050355.3979380-2-colin.foster@in-advantage.com>
+In-Reply-To: <20221025050355.3979380-3-colin.foster@in-advantage.com>
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -78,17 +78,16 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Mon, 24 Oct 2022, Colin Foster wrote:
 
-> The property spi-max-frequency was initially documented as a required
-> property. It is not actually required, and will break bindings validation
-> if other control mediums (e.g. PCIe) are used.
-> 
-> Remove this property from the required arguments.
+> Initially there was unnecessary verbage around "this driver" in the
+> documentation. It was unnecessary. Remove self references about it being a
+> "driver" documentation and replace it with a more detailed description
+> about external interfaces that are supported.
 > 
 > Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  Documentation/devicetree/bindings/mfd/mscc,ocelot.yaml | 1 -
->  1 file changed, 1 deletion(-)
+>  Documentation/devicetree/bindings/mfd/mscc,ocelot.yaml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
 Applied, thanks.
 
