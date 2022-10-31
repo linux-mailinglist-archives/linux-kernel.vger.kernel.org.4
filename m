@@ -2,170 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F72613BF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:11:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D93613BF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbiJaRLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 13:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52644 "EHLO
+        id S231523AbiJaRLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 13:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232031AbiJaRK5 (ORCPT
+        with ESMTP id S232090AbiJaRLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 13:10:57 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDAA12D19;
-        Mon, 31 Oct 2022 10:10:56 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6884DE0002;
-        Mon, 31 Oct 2022 17:10:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667236254;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FgnIkLL5dyFKRnBzwzNF+5kYDu1pg2dCQ9DQnUjuYL4=;
-        b=cXyxrAcSoiJ34UrklxH5AJJxY81WhU8qyP2wx5SzdmiuLch2GUoc/VeVOvoWD3YQEY05Kp
-        ww8cyHVWfY6/Rcezc0b2S3pG/KqAXzXCT8mbfjdAU6rur2FQIOrltmN0OE4MWdltKaXKn/
-        FJl6p2eAd0V6Q6MV4WgJRJ3i314uwWkP/6IsDVItdbkhdutWyct/8OFlhs99FnildXFdQs
-        1q8thvMmx0WmxcQnk6RuYfKfFw9rcjI4IklTFSfDkw4eWycR+1Soyi6OsBBo1z9FxxPKwC
-        FS6LSQZ+IDu0RLRf6kALr8/WVOd2jbvwZ04V7S6ylU5txsGGGYLlDByuLl0zew==
-Date:   Mon, 31 Oct 2022 18:10:53 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Benson Leung <bleung@chromium.org>, linux-rtc@vger.kernel.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>
-Subject: Re: [PATCH] rtc: cros-ec: Limit RTC alarm range if needed
-Message-ID: <Y2ABnbBGSJGM3gSS@mail.local>
-References: <20221029005400.2712577-1-linux@roeck-us.net>
+        Mon, 31 Oct 2022 13:11:16 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41A413CD1
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:11:14 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id 17so6969276pfv.4
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:11:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CkUMnMVKvzE+p/CRDEzav12+PQBdsh0ERBJzkQePF9Q=;
+        b=cn9lSzDjeAimVb8ApMPS7mI3xEZyntNjDjGnRDQD4aANEi0Z7iFJWxPclfigiXZBvb
+         MssYz75PElmDx1Ojh7yPu2ZdwDPS3yDQNegQDM8hwHDUbGLkmwLKmLpoK3ipVkLnxRqY
+         MhAWeo64f17EfwGKlN1cCzALx3BnNcB0fod+4AUEnaTnPOPHtLq8JrggLG1oEZAA7hIe
+         fmIqX7VPx2qXuYmURYD8HDDR3nal7EohCaHqKIXb3SLJXSuAYgNvp9xHB1ffkjvknsKa
+         dUU5e/F8aLsC64bR3iqe1/0f9JcPQFuCjCpV6gtK+qNoJi6Gkfn0Insy7zNDxBHyb4XA
+         JTlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CkUMnMVKvzE+p/CRDEzav12+PQBdsh0ERBJzkQePF9Q=;
+        b=f5cbbN5O+agHXpjUMEGCDEYL4kF5yZe7bNHLHIYja/i1q9IsfRGRRbKLmtX/3tX91U
+         CErAsQYqQWBdyGTYpgvIGKYANTE6/T3cxZ8bKNDGsfEQDqQj0Z4a5m5rJ9MtGhiVyELI
+         HxtraOrcDNbGToaaJOFvvTQ8vaeBeskjcGt6/K+IYoURYrE/i9fCSwrzdual+OeGyVne
+         HHmsTTrGFHddLo5JHERy1pSzAPmDT2ABI/WA+nPnhrwcJRlBys6YX6C3CnbixDZL4EvD
+         CQZVdG4NPHTQlDAVHGlwA8+1ViMdGYmHMPf58OloC5oQpLtS3a2YG/sLgyFwDjGB/5KE
+         MPzQ==
+X-Gm-Message-State: ACrzQf3NOwN0OwZI9zugkPlx5hUYhxwLgJPoFoDxCnqF5MMEs5h5VGVk
+        arx16sxwj0S9pmZtYFyLAszC6g==
+X-Google-Smtp-Source: AMsMyM4Q1Y7F8REea+pQ9CB2GCAgjQ+aGMVaeNlbucBqRkoWq2c74ZBmf4HZgUC4sTnXXalbvoL/Uw==
+X-Received: by 2002:a63:242:0:b0:46f:357f:ac75 with SMTP id 63-20020a630242000000b0046f357fac75mr13694507pgc.575.1667236274122;
+        Mon, 31 Oct 2022 10:11:14 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id d16-20020a170903231000b00177efb56475sm4749198plh.85.2022.10.31.10.11.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 10:11:13 -0700 (PDT)
+Date:   Mon, 31 Oct 2022 17:11:10 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yu Zhang <yu.c.zhang@linux.intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Eric Li <ercli@ucdavis.edu>,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH v5 05/15] KVM: nVMX: Let userspace set nVMX MSR to any
+ _host_ supported value
+Message-ID: <Y2ABrnRzg729ZZNI@google.com>
+References: <20220607213604.3346000-1-seanjc@google.com>
+ <20220607213604.3346000-6-seanjc@google.com>
+ <20221031163907.w64vyg5twzvv2nho@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221029005400.2712577-1-linux@roeck-us.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221031163907.w64vyg5twzvv2nho@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Nov 01, 2022, Yu Zhang wrote:
+> Hi Sean & Paolo,
+> 
+> On Tue, Jun 07, 2022 at 09:35:54PM +0000, Sean Christopherson wrote:
+> > Restrict the nVMX MSRs based on KVM's config, not based on the guest's
+> > current config.  Using the guest's config to audit the new config
+> > prevents userspace from restoring the original config (KVM's config) if
+> > at any point in the past the guest's config was restricted in any way.
+> 
+> May I ask for an example here, to explain why we use the KVM config
+> here, instead of the guest's? I mean, the guest's config can be
+> adjusted after cpuid updates by vmx_vcpu_after_set_cpuid(). Yet the
+> msr settings in vmcs_config.nested might be outdated by then.
 
-On 28/10/2022 17:54:00-0700, Guenter Roeck wrote:
-> RTC chips on some older Chromebooks can only handle alarms less than 24
-> hours in the future. Attempts to set an alarm beyond that range fails.
-> The most severe impact of this limitation is that suspend requests fail
-> if alarmtimer_suspend() tries to set an alarm for more than 24 hours
-> in the future.
-> 
-> Try to set the real-time alarm to just below 24 hours if setting it to
-> a larger value fails to work around the problem. While not perfect, it
-> is better than just failing the call. A similar workaround is already
-> implemented in the rtc-tps6586x driver.
+vmcs_config.nested never becomes out-of-date, it's read-only after __init (not
+currently marked as such, that will be remedied soon).
 
-I'm not super convinced this is actually better than failing the call
-because your are implementing policy in the driver which is bad from a
-user point of view. It would be way better to return -ERANGE and let
-userspace select a better alarm time.
-Do you have to know in advance which are the "older" chromebooks that
-are affected?
+The auditing performed by KVM is purely to guard against userspace enabling
+features that KVM doesn't support.  KVM is not responsible for ensuring that the
+vCPU's CPUID model match the VMX MSR model.
 
-> 
-> Drop error messages in cros_ec_rtc_get() and cros_ec_rtc_set() since the
-> calling code also logs an error and to avoid spurious error messages if
-> setting the alarm ultimately succeeds.
-> 
-> Cc: Brian Norris <briannorris@chromium.org>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  drivers/rtc/rtc-cros-ec.c | 35 ++++++++++++++++++++---------------
->  1 file changed, 20 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-cros-ec.c b/drivers/rtc/rtc-cros-ec.c
-> index 887f5193e253..a3ec066d8066 100644
-> --- a/drivers/rtc/rtc-cros-ec.c
-> +++ b/drivers/rtc/rtc-cros-ec.c
-> @@ -14,6 +14,8 @@
->  
->  #define DRV_NAME	"cros-ec-rtc"
->  
-> +#define SECS_PER_DAY	(24 * 60 * 60)
-> +
->  /**
->   * struct cros_ec_rtc - Driver data for EC RTC
->   *
-> @@ -43,13 +45,8 @@ static int cros_ec_rtc_get(struct cros_ec_device *cros_ec, u32 command,
->  	msg.msg.insize = sizeof(msg.data);
->  
->  	ret = cros_ec_cmd_xfer_status(cros_ec, &msg.msg);
-> -	if (ret < 0) {
-> -		dev_err(cros_ec->dev,
-> -			"error getting %s from EC: %d\n",
-> -			command == EC_CMD_RTC_GET_VALUE ? "time" : "alarm",
-> -			ret);
-> +	if (ret < 0)
->  		return ret;
-> -	}
->  
->  	*response = msg.data.time;
->  
-> @@ -59,7 +56,7 @@ static int cros_ec_rtc_get(struct cros_ec_device *cros_ec, u32 command,
->  static int cros_ec_rtc_set(struct cros_ec_device *cros_ec, u32 command,
->  			   u32 param)
->  {
-> -	int ret = 0;
-> +	int ret;
->  	struct {
->  		struct cros_ec_command msg;
->  		struct ec_response_rtc data;
-> @@ -71,13 +68,8 @@ static int cros_ec_rtc_set(struct cros_ec_device *cros_ec, u32 command,
->  	msg.data.time = param;
->  
->  	ret = cros_ec_cmd_xfer_status(cros_ec, &msg.msg);
-> -	if (ret < 0) {
-> -		dev_err(cros_ec->dev, "error setting %s on EC: %d\n",
-> -			command == EC_CMD_RTC_SET_VALUE ? "time" : "alarm",
-> -			ret);
-> +	if (ret < 0)
->  		return ret;
-> -	}
-> -
->  	return 0;
->  }
->  
-> @@ -190,8 +182,21 @@ static int cros_ec_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
->  
->  	ret = cros_ec_rtc_set(cros_ec, EC_CMD_RTC_SET_ALARM, alarm_offset);
->  	if (ret < 0) {
-> -		dev_err(dev, "error setting alarm: %d\n", ret);
-> -		return ret;
-> +		if (ret == -EINVAL && alarm_offset >= SECS_PER_DAY) {
-> +			/*
-> +			 * RTC chips on some older Chromebooks can only handle
-> +			 * alarms up to 24h in the future. Try to set an alarm
-> +			 * below that limit to avoid suspend failures.
-> +			 */
-> +			ret = cros_ec_rtc_set(cros_ec, EC_CMD_RTC_SET_ALARM,
-> +					      SECS_PER_DAY - 1);
-> +		}
-> +
-> +		if (ret < 0) {
-> +			dev_err(dev, "error setting alarm in %u seconds: %d\n",
-> +				alarm_offset, ret);
-> +			return ret;
-> +		}
->  	}
->  
->  	return 0;
-> -- 
-> 2.36.2
-> 
+An example would be if userspace loaded the VMX MSRs with a default model, and
+then enabled features one-by-one.  In practice this doesn't happen because it's
+more performant to gather all features and do a single KVM_SET_MSRS, but it's a
+legitimate approach that KVM should allow.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Another question is about the setting of secondary_ctls_high in
+> nested_vmx_setup_ctls_msrs().  I saw there's a comment saying:
+> 	"Do not include those that depend on CPUID bits, they are
+> 	added later by vmx_vcpu_after_set_cpuid.".
+
+That's a stale comment, see the very next commit, 8805875aa473 ("Revert "KVM: nVMX:
+Do not expose MPX VMX controls when guest MPX disabled""), as well as the slightly
+later commit 9389d5774aca ("Revert "KVM: nVMX: Expose load IA32_PERF_GLOBAL_CTRL
+VM-{Entry,Exit} control"").
+
+> But since cpuid updates can adjust the vmx->nested.msrs.secondary_ctls_high,
+> do we really need to clear those flags for secondary_ctls_high in this
+> global config?
+
+As above, the comment is stale, KVM should not manipulate the VMX MSRs in response
+to guest CPUID changes.  The one exception to this is reserved CR0/CR4 bits.  We
+discussed quirking that behavior, but ultimately decided not to because (a) no
+userspace actually cares and and (b) KVM would effectively need to make up behavior
+if userspace allowed the guest to load CR4 bits via VM-Enter or VM-Exit that are
+disallowed by CPUID, e.g. L1 could end up running with a CR4 that is supposed to
+be impossible according to CPUID.
+
+> Could we just set 
+> 	msrs->secondary_ctls_high = vmcs_conf->cpu_based_2nd_exec_ctrl?
+
+KVM already does that in upstream (with further sanitization).  See commit
+bcdf201f8a4d ("KVM: nVMX: Use sanitized allowed-1 bits for VMX control MSRs").
+
+> If yes, code(in nested_vmx_setup_ctls_msrs()) such as
+> 	if (enable_ept) {
+> 		/* nested EPT: emulate EPT also to L1 */
+> 		msrs->secondary_ctls_high |=
+> 			SECONDARY_EXEC_ENABLE_EPT;
+
+This can't be completely removed, though unless I'm missing something, it can and
+should be shifted to the sanitization code, e.g.
+
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index 8f67a9c4a287..0c41d5808413 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -6800,6 +6800,7 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
+ 
+        msrs->secondary_ctls_high = vmcs_conf->cpu_based_2nd_exec_ctrl;
+        msrs->secondary_ctls_high &=
++               SECONDARY_EXEC_ENABLE_EPT |
+                SECONDARY_EXEC_DESC |
+                SECONDARY_EXEC_ENABLE_RDTSCP |
+                SECONDARY_EXEC_VIRTUALIZE_X2APIC_MODE |
+@@ -6820,9 +6821,6 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
+                SECONDARY_EXEC_SHADOW_VMCS;
+ 
+        if (enable_ept) {
+-               /* nested EPT: emulate EPT also to L1 */
+-               msrs->secondary_ctls_high |=
+-                       SECONDARY_EXEC_ENABLE_EPT;
+                msrs->ept_caps =
+                        VMX_EPT_PAGE_WALK_4_BIT |
+                        VMX_EPT_PAGE_WALK_5_BIT |
+
+
+> or 
+> 	if (cpu_has_vmx_vmfunc()) {
+> 		msrs->secondary_ctls_high |=
+> 			SECONDARY_EXEC_ENABLE_VMFUNC;
+
+This one is still required.  KVM never enables VMFUNC for itself, i.e. it won't
+be set in KVM's VMCS configuration.
+
+> and other similar ones may also be uncessary.
+
+
