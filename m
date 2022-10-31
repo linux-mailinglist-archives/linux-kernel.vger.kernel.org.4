@@ -2,117 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4851613C02
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7A6613C05
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:18:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231631AbiJaRQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 13:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56230 "EHLO
+        id S231775AbiJaRSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 13:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbiJaRQK (ORCPT
+        with ESMTP id S230502AbiJaRR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 13:16:10 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8DE13CCC
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:16:09 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id q71so11239082pgq.8
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:16:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ew7SqTPEFFhxu7/hKrNbrME/m/ofSkUv4YYTUxK9hTE=;
-        b=LNy0wlk54NXx0XGRLGJLTGHN4ywvxf5ommsqE1Fdvkb3oQxH48emeDOhk5HgzYYP5i
-         D6Idhh6Iw5QX1O0N/ayHK9u2K512PuftFkYPlMpLOP7ZAjKaGvggrvDwGBhXal3Q86yb
-         19ek7qCAUe4SKIA9ct7LeonTh+0TQdvtmnfXY=
+        Mon, 31 Oct 2022 13:17:59 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B5C12D21;
+        Mon, 31 Oct 2022 10:17:54 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id g10so13426847oif.10;
+        Mon, 31 Oct 2022 10:17:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ew7SqTPEFFhxu7/hKrNbrME/m/ofSkUv4YYTUxK9hTE=;
-        b=7EIL3xJC9N6b6HgP4NsQjtyB1uI6ScaBX9aq5TnSuA8BENxdkq9sFDHBDh/zThiVzn
-         iblH4XWbaJYTB7sshTmkVCMghCbt/UWHBmu0Q91JQD449Lig1AQKI2tQcjq3Gnv7Gvxg
-         6gU28ko1mYqFaR/f2XhwVw47TS6Cbj6Xy0UhTH4Yh8lvPa4yHlD0QI7DqofUf9XG2GrG
-         SPLYx/XLfaN5ppkr0FR2cHRMnMpBy2DxElYw/p4J8hrhLar7pgvSLN4SdA4g+kJytm38
-         4GkGt+OIAZ7V29NOa5fnOAuU0bf1/aZyk5ph/BReIybjL9cyrNMxMEpWbHQn4Ml/lIoh
-         7BYA==
-X-Gm-Message-State: ACrzQf3i0EqTGr1CtLFBYP2xRJmH4tpl4O+RVBOxnABLWBjiCgp3ueL2
-        0mhSK0EnUx4yAmR98EwQLwwCQLWB7rqb2g==
-X-Google-Smtp-Source: AMsMyM4cDfw2gQpzV2vuUo36o86Uf/NDWo6Qa/wbI4r1jWqZL9p4/hZK2btJIj/1sXglXJX0VgmwHw==
-X-Received: by 2002:a63:69c2:0:b0:46a:eeb1:e784 with SMTP id e185-20020a6369c2000000b0046aeeb1e784mr13351654pgc.589.1667236569518;
-        Mon, 31 Oct 2022 10:16:09 -0700 (PDT)
-Received: from localhost ([2620:15c:9d:2:cf9d:6561:637d:2194])
-        by smtp.gmail.com with UTF8SMTPSA id f15-20020a170902684f00b0017d97d13b18sm4679040pln.65.2022.10.31.10.16.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Oct 2022 10:16:09 -0700 (PDT)
-From:   Brian Norris <briannorris@chromium.org>
-To:     =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>
-Cc:     Sandy Huang <hjc@rock-chips.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Brian Norris <briannorris@chromium.org>
-Subject: [PATCH] drm/rockchip: vop: Quiet always-warning AFBC log
-Date:   Mon, 31 Oct 2022 10:16:01 -0700
-Message-Id: <20221031101557.1.Ic1569d394173c1c3016142fee4bb87a09753db94@changeid>
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7pOvyjw1Chc1Qo3mwyQQ5nSHExlsUwet1RU0yznC5TE=;
+        b=qtok1QkASuKYkBZcuHxPIExREvb20ggT+gYFxZtraL/ULjL3eUrOhYa8PCfZVfuB/S
+         5Dheo0oqzOUnRATcwuD9pCwxbcjAoci2YhNi2wkBotszt8/GXyDESEIgtkLwf2419IxE
+         PvQfWyNGl2u0oZCvuB5MkEXvYSvU0yB0UrHwrEeAeOkT9MJ+PNlPphyK02bNGFqZflHy
+         6OuOkbFVYR5E3tF13WRxU4HAdVSmZWLvte+jQYYKHEhYlB74Ez2ahlwVv1csM/VRq/FO
+         KO/XmKurnt7hqoBp+OF9JfL4HUJ/+fO0m5iyLk/E9s06D217B+WbqxMVzrnh79w2ogft
+         QNkQ==
+X-Gm-Message-State: ACrzQf2ApQ+iUgeJqU7T00YjPjYSIAYXF/UiVRyYYwUT60TwOUk/viF8
+        4mgwUrwjHTR4ECT4NabkMmUmGPKX9g==
+X-Google-Smtp-Source: AMsMyM4hwSJ/t/sMgz8pe9Mn/V17zTjGPM4dJIHLWsN4XqhLFE8N5tkSwNmUpwHLALXTF9rtwNPhfQ==
+X-Received: by 2002:a05:6808:1992:b0:359:d863:e870 with SMTP id bj18-20020a056808199200b00359d863e870mr6990457oib.289.1667236674184;
+        Mon, 31 Oct 2022 10:17:54 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t9-20020a4adbc9000000b004768f725b7csm2567227oou.23.2022.10.31.10.17.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 10:17:53 -0700 (PDT)
+Received: (nullmailer pid 3025675 invoked by uid 1000);
+        Mon, 31 Oct 2022 17:17:55 -0000
+Date:   Mon, 31 Oct 2022 12:17:55 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Chancel Liu <chancel.liu@nxp.com>
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        lgirdwood@gmail.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, broonie@kernel.org, tiwai@suse.com,
+        perex@perex.cz, shengjiu.wang@gmail.com, nicoleotsuka@gmail.com,
+        festevam@gmail.com, linuxppc-dev@lists.ozlabs.org,
+        krzysztof.kozlowski+dt@linaro.org, Xiubo.Lee@gmail.com
+Subject: Re: [PATCH 1/3] ASoC: dt-bindings: fsl,micfil: Add compatible string
+ for i.MX93 platform
+Message-ID: <166723667417.3025615.2589955186893152938.robh@kernel.org>
+References: <20221028082750.991822-1-chancel.liu@nxp.com>
+ <20221028082750.991822-2-chancel.liu@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221028082750.991822-2-chancel.liu@nxp.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The downstream code from which this was derived didn't ever run through
-this 'switch' block with non-AFBC formats, but the upstream code does --
-we use this function to probe whether a given format is supported.
 
-Demote the warning to eliminate this sort of warning seen on every
-boot:
+On Fri, 28 Oct 2022 16:27:48 +0800, Chancel Liu wrote:
+> Add compatible string "fsl,imx93-micfil" for i.MX93 platform
+> 
+> Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/sound/fsl,micfil.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-  [drm] unsupported AFBC format[3231564e]
-
-And make it warn more than once, because if we *actually* care to see
-what formats we're probing/rejecting and for what reasons, we probably
-care about more than just the first message.
-
-Drop the comment, because one of the two *is* commonly reachable.
-
-And lastly, drop the unreachable return; we'd do better to let the
-compiler complain if we start hitting this unexpectedly.
-
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
-
- drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-index fa1f4ee6d195..aab77eb6caa3 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-@@ -316,13 +316,10 @@ static int vop_convert_afbc_format(uint32_t format)
- 	case DRM_FORMAT_RGB565:
- 	case DRM_FORMAT_BGR565:
- 		return AFBC_FMT_RGB565;
--	/* either of the below should not be reachable */
- 	default:
--		DRM_WARN_ONCE("unsupported AFBC format[%08x]\n", format);
-+		DRM_DEBUG_KMS("unsupported AFBC format[%08x]\n", format);
- 		return -EINVAL;
- 	}
--
--	return -EINVAL;
- }
- 
- static uint16_t scl_vop_cal_scale(enum scale_mode mode, uint32_t src,
--- 
-2.38.1.273.g43a17bfeac-goog
-
+Acked-by: Rob Herring <robh@kernel.org>
