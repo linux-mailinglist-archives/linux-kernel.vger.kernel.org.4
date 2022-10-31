@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B15161343A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 12:12:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0559261343C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 12:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiJaLMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 07:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53462 "EHLO
+        id S230428AbiJaLMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 07:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbiJaLLt (ORCPT
+        with ESMTP id S230236AbiJaLLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 07:11:49 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1705BE12;
-        Mon, 31 Oct 2022 04:11:47 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0VTVxoIV_1667214704;
-Received: from j66e01291.sqa.eu95.tbsite.net(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VTVxoIV_1667214704)
+        Mon, 31 Oct 2022 07:11:50 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6848D131;
+        Mon, 31 Oct 2022 04:11:49 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0VTVxoIw_1667214705;
+Received: from j66e01291.sqa.eu95.tbsite.net(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VTVxoIw_1667214705)
           by smtp.aliyun-inc.com;
-          Mon, 31 Oct 2022 19:11:45 +0800
+          Mon, 31 Oct 2022 19:11:46 +0800
 From:   Jing Zhang <renyu.zj@linux.alibaba.com>
 To:     linux-arm-kernel@lists.infradead.org,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -36,9 +36,9 @@ Cc:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
         Andrew Kilroy <andrew.kilroy@arm.com>,
         Shuai Xue <xueshuai@linux.alibaba.com>,
         Zhuo Song <zhuo.song@linux.alibaba.com>
-Subject: [PATCH RFC 4/6] perf vendor events arm64: Add branch metrics for neoverse-n2
-Date:   Mon, 31 Oct 2022 19:11:32 +0800
-Message-Id: <1667214694-89839-5-git-send-email-renyu.zj@linux.alibaba.com>
+Subject: [PATCH RFC 5/6] perf vendor events arm64: Add PE utilization metrics for neoverse-n2
+Date:   Mon, 31 Oct 2022 19:11:33 +0800
+Message-Id: <1667214694-89839-6-git-send-email-renyu.zj@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com>
 References: <1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com>
@@ -52,42 +52,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add branch related metrics.
+Add PE utilization related metrics.
 
 Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
 ---
- .../arch/arm64/arm/neoverse-n2/metrics.json         | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ .../arch/arm64/arm/neoverse-n2/metrics.json        | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
 diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
-index 2dc6d9e..6b5aaf7 100644
+index 6b5aaf7..230e93a 100644
 --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
 +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
-@@ -131,5 +131,26 @@
-         "BriefDescription": "The rate of LL Cache read hit to the overall LL Cache read",
-         "MetricGroup": "Cache",
-         "MetricName": "ll_cache_read_hit_rate"
+@@ -152,5 +152,33 @@
+         "BriefDescription": "The rate of branches mis-predited to the overall branches",
+         "MetricGroup": "Branch",
+         "MetricName": "branch_miss_pred_rate"
 +    },
 +    {
-+        "MetricExpr": "BR_MIS_PRED / INST_RETIRED * 1000",
-+        "PublicDescription": "The rate of branches mis-predicted per kilo instructions",
-+        "BriefDescription": "The rate of branches mis-predicted per kilo instructions",
-+        "MetricGroup": "Branch",
-+        "MetricName": "branch_mpki"
++        "MetricExpr": "instructions / CPU_CYCLES",
++        "PublicDescription": "The average number of instructions executed for each cycle.",
++        "BriefDescription": "Instructions per cycle",
++        "MetricGroup": "PEutilization",
++        "MetricName": "ipc"
 +    },
 +    {
-+        "MetricExpr": "(BR_PRED - BR_MIS_PRED) / INST_RETIRED * 1000",
-+        "PublicDescription": "The rate of branches retired per kilo instructions",
-+        "BriefDescription": "The rate of branches retired per kilo instructions",
-+        "MetricGroup": "Branch",
-+        "MetricName": "branch_pki"
++        "MetricExpr": "OP_RETIRED / OP_SPEC",
++        "PublicDescription": "Fraction of operations retired",
++        "BriefDescription": "Fraction of operations retired",
++        "MetricGroup": "PEutilization",
++        "MetricName": "retired_rate"
 +    },
 +    {
-+        "MetricExpr": "BR_MIS_PRED / BR_PRED",
-+        "PublicDescription": "The rate of branches mis-predited to the overall branches",
-+        "BriefDescription": "The rate of branches mis-predited to the overall branches",
-+        "MetricGroup": "Branch",
-+        "MetricName": "branch_miss_pred_rate"
++        "MetricExpr": "1 - OP_RETIRED / OP_SPEC",
++        "PublicDescription": "Fraction of operations wasted",
++        "BriefDescription": "Fraction of operations wasted",
++        "MetricGroup": "PEutilization",
++        "MetricName": "wasted_rate"
++    },
++    {
++        "MetricExpr": "(1 - STALL_SLOT / (CPU_CYCLES * 5)) * OP_RETIRED / OP_SPEC",
++        "PublicDescription": "Utilization of CPU",
++        "BriefDescription": "Utilization of CPU",
++        "MetricGroup": "PEutilization",
++        "MetricName": "cpu_utilization"
      }
  ]
 \ No newline at end of file
