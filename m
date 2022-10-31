@@ -2,348 +2,340 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B42DC613FD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 22:20:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C98B2613FDA
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 22:21:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiJaVT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 17:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
+        id S229933AbiJaVVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 17:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiJaVT5 (ORCPT
+        with ESMTP id S229816AbiJaVVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 17:19:57 -0400
-Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFFB26F0
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 14:19:55 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id pcCGohU9eKOP1pcCGo2QVs; Mon, 31 Oct 2022 22:19:53 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 31 Oct 2022 22:19:53 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <a9b7d97e-88f8-711d-541c-e0c0802d0178@wanadoo.fr>
-Date:   Mon, 31 Oct 2022 22:19:52 +0100
+        Mon, 31 Oct 2022 17:21:34 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FEAD13FA2;
+        Mon, 31 Oct 2022 14:21:32 -0700 (PDT)
+Received: from [192.168.1.101] (95.49.29.156.neoplus.adsl.tpnet.pl [95.49.29.156])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 0FB463EAF3;
+        Mon, 31 Oct 2022 22:21:30 +0100 (CET)
+Message-ID: <c6d23544-bd12-63f3-f37d-1d66cba43196@somainline.org>
+Date:   Mon, 31 Oct 2022 22:21:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 2/2] mfd: max597x: Add support for MAX5970 and MAX5978
-Content-Language: fr
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v5 8/8] arm64: dts: qcom: sm4250: Add support for
+ oneplus-billie2
+Content-Language: en-US
+To:     Iskren Chernev <iskren.chernev@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>
-References: <20221031204129.1434059-1-Naresh.Solanki@9elements.com>
- <20221031204129.1434059-3-Naresh.Solanki@9elements.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20221031204129.1434059-3-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20221030094258.486428-1-iskren.chernev@gmail.com>
+ <20221030094258.486428-9-iskren.chernev@gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20221030094258.486428-9-iskren.chernev@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 31/10/2022 à 21:41, Naresh Solanki a écrit :
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
-> 
-> Implement a regulator driver with IRQ support for fault management.
-> Written against documentation [1] and [2] and tested on real hardware.
-> 
-> Every channel has its own regulator supplies nammed 'vss1-supply' and
-> 'vss2-supply'. The regulator supply is used to determine the output
-> voltage, as the smart switch provides no output regulation.
-> The driver requires the 'shunt-resistor-micro-ohms' property to be
-> present in Device Tree to properly calculate current related
-> values.
-> 
-> Datasheet links:
-> 1: https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
-> 2: https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 
-Hi,
-a few nits below.
 
+On 30.10.2022 10:42, Iskren Chernev wrote:
+> Add initial support for OnePlus Nord N100, based on SM4250. Currently
+> working:
+> - boots
+> - usb
+> - built-in flash storage (UFS)
+> - SD card reader
+> 
+> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
 > ---
->   drivers/mfd/Kconfig         |  12 +++++
->   drivers/mfd/Makefile        |   1 +
->   drivers/mfd/max597x.c       |  87 ++++++++++++++++++++++++++++++
->   include/linux/mfd/max597x.h | 102 ++++++++++++++++++++++++++++++++++++
->   4 files changed, 202 insertions(+)
->   create mode 100644 drivers/mfd/max597x.c
->   create mode 100644 include/linux/mfd/max597x.h
+>  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>  .../boot/dts/qcom/sm4250-oneplus-billie2.dts  | 241 ++++++++++++++++++
+>  2 files changed, 242 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
 > 
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 8b93856de432..416fe7986b7b 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -253,6 +253,18 @@ config MFD_MADERA_SPI
->   	  Support for the Cirrus Logic Madera platform audio SoC
->   	  core functionality controlled via SPI.
->   
-> +config MFD_MAX597X
-> +	tristate "Maxim 597x Power Switch and Monitor"
-> +	depends on I2C
-> +	depends on OF
-> +	select MFD_CORE
-> +	select REGMAP_I2C
-> +	help
-> +	  This driver controls a Maxim 5970/5978 switch via I2C bus.
-> +	  The MAX5970/5978 is a smart switch with no output regulation, but
-> +	  fault protection and voltage and current monitoring capabilities.
-> +	  Also it supports upto 4 indication LEDs.
-> +
->   config MFD_CS47L15
->   	bool "Cirrus Logic CS47L15"
->   	select PINCTRL_CS47L15
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 7ed3ef4a698c..819d711fa748 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -161,6 +161,7 @@ obj-$(CONFIG_MFD_DA9063)	+= da9063.o
->   obj-$(CONFIG_MFD_DA9150)	+= da9150-core.o
->   
->   obj-$(CONFIG_MFD_MAX14577)	+= max14577.o
-> +obj-$(CONFIG_MFD_MAX597X)	+= max597x.o
->   obj-$(CONFIG_MFD_MAX77620)	+= max77620.o
->   obj-$(CONFIG_MFD_MAX77650)	+= max77650.o
->   obj-$(CONFIG_MFD_MAX77686)	+= max77686.o
-> diff --git a/drivers/mfd/max597x.c b/drivers/mfd/max597x.c
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index b0558d3389e5..eb2a58b8af5f 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -142,6 +142,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-xiaomi-polaris.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-shift-axolotl.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-lenovo-yoga-c630.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-samsung-w737.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= sm4250-oneplus-billie2.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sm6125-sony-xperia-seine-pdx201.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sm6350-sony-xperia-lena-pdx213.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sm7225-fairphone-fp4.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
 > new file mode 100644
-> index 000000000000..68a4e7755f21
+> index 000000000000..a3f1c7c41fd7
 > --- /dev/null
-> +++ b/drivers/mfd/max597x.c
-> @@ -0,0 +1,87 @@
-> +// SPDX-License-Identifier: GPL-2.0
+> +++ b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+> @@ -0,0 +1,241 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 > +/*
-> + * Maxim MAX5970/MAX5978 MFD Driver
-> + *
-> + * Copyright (c) 2022 9elements GmbH
-> + *
-> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
+> + * Copyright (c) 2021, Iskren Chernev <iskren.chernev@gmail.com>
 > + */
 > +
-> +#include <linux/i2c.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/mfd/max597x.h>
-> +#include <linux/regmap.h>
+> +/dts-v1/;
 > +
-> +static const struct regmap_config max597x_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.max_register = MAX_REGISTERS,
+> +#include "sm4250.dtsi"
+> +
+> +/ {
+> +	model = "OnePlus Nord N100";
+> +	compatible = "oneplus,billie2", "qcom,sm4250";
+> +
+> +	/* required for bootloader to select correct board */
+> +	qcom,msm-id = <0x1a1 0x10000 0x1bc 0x10000>;
+> +	qcom,board-id = <0x1000b 0x00>;
+> +
+> +	aliases {
+> +	};
+> +
+> +	chosen {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		stdout-path = "framebuffer0";
+> +
+> +		framebuffer0: framebuffer@9d400000 {
+> +			compatible = "simple-framebuffer";
+> +			reg = <0 0x5c000000 0 (1600 * 720 * 4)>;
+> +			width = <720>;
+> +			height = <1600>;
+> +			stride = <(720 * 4)>;
+> +			format = "a8r8g8b8";
+> +		};
+> +	};
 > +};
 > +
-> +static const struct mfd_cell max597x_cells[] = {
-> +	{ .name = "max597x-regulator", },
-> +	{ .name = "max597x-iio", },
-> +	{ .name = "max597x-led", },
+> +&reserved_memory {
+> +	bootloader_log_mem: memory@5fff7000 {
+> +		reg = <0x0 0x5fff7000 0x0 0x8000>;
+> +		no-map;
+> +	};
+> +
+> +	ramoops@cbe00000 {
+> +		compatible = "ramoops";
+> +		reg = <0x0 0xcbe00000 0x0 0x400000>;
+> +		record-size = <0x40000>;
+> +		pmsg-size = <0x200000>;
+> +		console-size = <0x40000>;
+> +		ftrace-size = <0x40000>;
+> +	};
+> +
+> +	param_mem: memory@cc200000 {
+> +		reg = <0x0 0xcc200000 0x0 0x100000>;
+> +		no-map;
+> +	};
+> +
+> +	mtp_mem: memory@cc300000 {
+> +		reg = <0x00 0xcc300000 0x00 0xb00000>;
+0x00 -> 0x0 for consistency?
+
+Other than that, lgtm
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+
+Konrad
+> +		no-map;
+> +	};
 > +};
 > +
-> +static int max597x_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
-> +{
-> +	struct max597x_data *ddata;
-> +	enum max597x_chip_type chip = id->driver_data;
+> +&rpm_requests {
+> +	regulators-0 {
+> +		compatible = "qcom,rpm-pm6125-regulators";
 > +
-> +	ddata = devm_kzalloc(&i2c->dev, sizeof(*ddata),
-> +			GFP_KERNEL);
-
-if (!ddata)
-	return -ENOMEM;
-
-GFP_KERNEL should be aligned with the ( on the previous line.
-
+> +		vreg_s6a: s6 {
+> +			regulator-min-microvolt = <320000>;
+> +			regulator-max-microvolt = <1456000>;
+> +		};
 > +
-> +	switch (chip) {
-> +	case MAX597x_TYPE_MAX5970:
-> +		ddata->num_switches = 2;
-> +		break;
-> +	case MAX597x_TYPE_MAX5978:
-> +		ddata->num_switches = 1;
-> +		break;
-> +	}
-
-ddata->num_switches looks unused.
-Is it needed? Maybe for future use?
-
-Should MAX5970_NUM_SWITCHES and MAX5979_NUM_SWITCHES be used instead of 
-hard coding 1 and 2?
-
+> +		vreg_s7a: s7 {
+> +			regulator-min-microvolt = <1280000>;
+> +			regulator-max-microvolt = <2040000>;
+> +		};
 > +
-> +	ddata->regmap = devm_regmap_init_i2c(i2c, &max597x_regmap_config);
-> +	if (IS_ERR(ddata->regmap)) {
-> +		dev_err(&i2c->dev, "Failed to initialise regmap");
-> +		return -EINVAL;
-> +	}
+> +		vreg_s8a: s8 {
+> +			regulator-min-microvolt = <1064000>;
+> +			regulator-max-microvolt = <1304000>;
+> +		};
 > +
-> +	/* IRQ used by regulator cell */
-> +	ddata->irq = i2c->irq;
-> +	ddata->dev = &i2c->dev;
-> +	i2c_set_clientdata(i2c, ddata);
+> +		vreg_l1a: l1 {
+> +			regulator-min-microvolt = <952000>;
+> +			regulator-max-microvolt = <1152000>;
+> +		};
 > +
-> +	return devm_mfd_add_devices(ddata->dev, PLATFORM_DEVID_AUTO,
-> +				    max597x_cells, ARRAY_SIZE(max597x_cells),
-> +				    NULL, 0, NULL);
-> +}
+> +		vreg_l4a: l4 {
+> +			regulator-min-microvolt = <488000>;
+> +			regulator-max-microvolt = <1000000>;
+> +		};
 > +
-> +static const struct i2c_device_id max597x_table[] = {
-> +	{ .name = "max5970", MAX597x_TYPE_MAX5970 },
-> +	{ .name = "max5978", MAX597x_TYPE_MAX5978 },
+> +		vreg_l5a: l5 {
+> +			regulator-min-microvolt = <1648000>;
+> +			regulator-max-microvolt = <3056000>;
+> +		};
+> +
+> +		vreg_l6a: l6 {
+> +			regulator-min-microvolt = <576000>;
+> +			regulator-max-microvolt = <656000>;
+> +		};
+> +
+> +		vreg_l7a: l7 {
+> +			regulator-min-microvolt = <1200000>;
+> +			regulator-max-microvolt = <1304000>;
+> +		};
+> +
+> +		vreg_l8a: l8 {
+> +			regulator-min-microvolt = <400000>;
+> +			regulator-max-microvolt = <728000>;
+> +		};
+> +
+> +		vreg_l9a: l9 {
+> +			regulator-min-microvolt = <1800000>;
+> +			regulator-max-microvolt = <2000000>;
+> +		};
+> +
+> +		vreg_l10a: l10 {
+> +			regulator-min-microvolt = <1704000>;
+> +			regulator-max-microvolt = <1904000>;
+> +		};
+> +
+> +		vreg_l11a: l11 {
+> +			regulator-min-microvolt = <1704000>;
+> +			regulator-max-microvolt = <1952000>;
+> +		};
+> +
+> +		vreg_l12a: l12 {
+> +			regulator-min-microvolt = <1624000>;
+> +			regulator-max-microvolt = <1984000>;
+> +		};
+> +
+> +		vreg_l13a: l13 {
+> +			regulator-min-microvolt = <1504000>;
+> +			regulator-max-microvolt = <1952000>;
+> +		};
+> +
+> +		vreg_l14a: l14 {
+> +			regulator-min-microvolt = <1704000>;
+> +			regulator-max-microvolt = <1904000>;
+> +		};
+> +
+> +		vreg_l15a: l15 {
+> +			regulator-min-microvolt = <2920000>;
+> +			regulator-max-microvolt = <3232000>;
+> +		};
+> +
+> +		vreg_l16a: l16 {
+> +			regulator-min-microvolt = <1704000>;
+> +			regulator-max-microvolt = <1904000>;
+> +		};
+> +
+> +		vreg_l17a: l17 {
+> +			regulator-min-microvolt = <1152000>;
+> +			regulator-max-microvolt = <1304000>;
+> +		};
+> +
+> +		vreg_l18a: l18 {
+> +			regulator-min-microvolt = <1104000>;
+> +			regulator-max-microvolt = <1304000>;
+> +		};
+> +
+> +		vreg_l19a: l19 {
+> +			regulator-min-microvolt = <1624000>;
+> +			regulator-max-microvolt = <3304000>;
+> +		};
+> +
+> +		vreg_l20a: l20 {
+> +			regulator-min-microvolt = <1624000>;
+> +			regulator-max-microvolt = <3304000>;
+> +		};
+> +
+> +		vreg_l21a: l21 {
+> +			regulator-min-microvolt = <2400000>;
+> +			regulator-max-microvolt = <3544000>;
+> +		};
+> +
+> +		vreg_l22a: l22 {
+> +			regulator-min-microvolt = <2952000>;
+> +			regulator-max-microvolt = <3304000>;
+> +		};
+> +
+> +		vreg_l23a: l23 {
+> +			regulator-min-microvolt = <3296000>;
+> +			regulator-max-microvolt = <3304000>;
+> +		};
+> +
+> +		vreg_l24a: l24 {
+> +			regulator-min-microvolt = <2704000>;
+> +			regulator-max-microvolt = <3544000>;
+> +		};
+> +	};
 > +};
 > +
-> +MODULE_DEVICE_TABLE(i2c, max597x_table);
-> +
-> +static const struct of_device_id max597x_of_match[] = {
-> +	{ .compatible = "maxim,max5970", .data = (void *)MAX597x_TYPE_MAX5970 },
-> +	{ .compatible = "maxim,max5978", .data = (void *)MAX597x_TYPE_MAX5978 },
+> +&sleep_clk {
+> +	clock-frequency = <32764>;
 > +};
 > +
-> +MODULE_DEVICE_TABLE(of, max597x_of_match);
+> +&sdhc_2 {
+> +	vmmc-supply = <&vreg_l22a>;
+> +	vqmmc-supply = <&vreg_l5a>;
 > +
-> +static struct i2c_driver max597x_driver = {
-> +	.id_table = max597x_table,
-> +	.driver = {
-> +		.name = "max597x",
-> +		.of_match_table = of_match_ptr(max597x_of_match),
-> +		},
-> +	.probe = max597x_probe,
+> +	cd-gpios = <&tlmm 88 GPIO_ACTIVE_HIGH>;
+> +
+> +	status = "okay";
 > +};
 > +
-> +module_i2c_driver(max597x_driver);
-> +
-> +MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
-> +MODULE_DESCRIPTION("MAX597X Power Switch and Monitor");
-> +MODULE_LICENSE("GPL v2");
-> diff --git a/include/linux/mfd/max597x.h b/include/linux/mfd/max597x.h
-> new file mode 100644
-> index 000000000000..ae7f38f0aee2
-> --- /dev/null
-> +++ b/include/linux/mfd/max597x.h
-> @@ -0,0 +1,102 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Maxim MAX5970/MAX5978 MFD Driver
-> + *
-> + * Copyright (c) 2022 9elements GmbH
-> + *
-> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
-> + */
-> +
-> +#ifndef MFD_MAX597X_H
-> +#define MFD_MAX597X_H
-> +
-> +#include <linux/device.h>
-> +#include <linux/regmap.h>
-> +
-> +#define MAX5970_NUM_SWITCHES 2
-> +#define MAX5978_NUM_SWITCHES 1
-> +#define MAX597X_NUM_LEDS     4
-
-Unused?
-Maybe the "4" below (or elsewhere) should be MAX597X_NUM_LEDS?
-
-> +
-> +enum max597x_chip_type {
-> +	MAX597x_TYPE_MAX5978 = 1,
-> +	MAX597x_TYPE_MAX5970,
+> +&tlmm {
+> +	gpio-reserved-ranges = <14 4>;
 > +};
 > +
-> +#define MAX5970_REG_CURRENT_L(ch)		(0x01 + (ch) * 4)
-> +#define MAX5970_REG_CURRENT_H(ch)		(0x00 + (ch) * 4)
-> +#define MAX5970_REG_VOLTAGE_L(ch)		(0x03 + (ch) * 4)
-> +#define MAX5970_REG_VOLTAGE_H(ch)		(0x02 + (ch) * 4)
-> +#define MAX5970_REG_MON_RANGE			0x18
-> +#define  MAX5970_MON_MASK				0x3
-> +#define  MAX5970_MON(reg, ch) \
-> +						(((reg) >> ((ch) * 2)) & MAX5970_MON_MASK)
-
-Why a line break here?
-
-> +#define  MAX5970_MON_MAX_RANGE_UV		16000000
-> +
-> +#define MAX5970_REG_CH_UV_WARN_H(ch)	(0x1A + (ch) * 10)
-> +#define MAX5970_REG_CH_UV_WARN_L(ch)	(0x1B + (ch) * 10)
-> +#define MAX5970_REG_CH_UV_CRIT_H(ch)	(0x1C + (ch) * 10)
-> +#define MAX5970_REG_CH_UV_CRIT_L(ch)	(0x1D + (ch) * 10)
-> +#define MAX5970_REG_CH_OV_WARN_H(ch)	(0x1E + (ch) * 10)
-> +#define MAX5970_REG_CH_OV_WARN_L(ch)	(0x1F + (ch) * 10)
-> +#define MAX5970_REG_CH_OV_CRIT_H(ch)	(0x20 + (ch) * 10)
-> +#define MAX5970_REG_CH_OV_CRIT_L(ch)	(0x21 + (ch) * 10)
-> +
-> +#define  MAX5970_VAL2REG_H(x)			(((x) >> 2) & 0xFF)
-> +#define  MAX5970_VAL2REG_L(x)			((x) & 0x3)
-> +
-> +#define MAX5970_REG_DAC_FAST(ch)		(0x2E + (ch))
-> +
-> +#define MAX5970_FAST2SLOW_RATIO			200
-> +
-> +#define MAX5970_REG_STATUS0				0x31
-> +#define  MAX5970_CB_IFAULTF(ch)			(1 << (ch))
-> +#define  MAX5970_CB_IFAULTS(ch)			(1 << ((ch) + 4))
-> +
-> +#define MAX5970_REG_STATUS1				0x32
-> +#define  STATUS1_PROT_MASK				0x3
-> +#define  STATUS1_PROT(reg) \
-> +	(((reg) >> 6) & STATUS1_PROT_MASK)
-> +#define  STATUS1_PROT_SHUTDOWN			0
-> +#define  STATUS1_PROT_CLEAR_PG			1
-> +#define  STATUS1_PROT_ALERT_ONLY		2
-> +
-> +#define MAX5970_REG_STATUS2				0x33
-> +#define  MAX5970_IRNG_MASK				0x3
-> +#define  MAX5970_IRNG(reg, ch)	\
-> +						(((reg) >> ((ch) * 2)) & MAX5970_IRNG_MASK)
-> +
-> +#define MAX5970_REG_STATUS3				0x34
-> +#define  MAX5970_STATUS3_ALERT			BIT(4)
-> +#define  MAX5970_STATUS3_PG(ch)			BIT(ch)
-> +
-> +#define MAX5970_REG_FAULT0				0x35
-> +#define  UV_STATUS_WARN(ch)				BIT(ch)
-> +#define  UV_STATUS_CRIT(ch)				BIT(ch + 4)
-> +
-> +#define MAX5970_REG_FAULT1				0x36
-> +#define  OV_STATUS_WARN(ch)				BIT(ch)
-> +#define  OV_STATUS_CRIT(ch)				BIT(ch + 4)
-> +
-> +#define MAX5970_REG_FAULT2				0x37
-> +#define  OC_STATUS_WARN(ch)				BIT(ch)
-> +
-> +#define MAX5970_REG_CHXEN				0x3b
-> +#define  CHXEN(ch)						(3 << (ch * 2))
-> +
-> +#define MAX5970_REG_LED_FLASH			0x43
-> +
-> +#define MAX_REGISTERS					0x49
-> +#define ADC_MASK						0x3FF
-> +
-> +struct max597x_data {
-> +	struct device *dev;
-> +	int irq;
-> +	int num_switches;
-> +	struct regmap *regmap;
-> +	/* Chip specific parameters needed by regulator & iio cells */
-> +	u32 irng[MAX5970_NUM_SWITCHES];
-> +	u32 mon_rng[MAX5970_NUM_SWITCHES];
-> +	u32 shunt_micro_ohms[MAX5970_NUM_SWITCHES];
-
-mon_rng and shunt_micro_ohms look unused.
-Are they needed? Maybe for future use?
-
+> +&ufs_mem_hc {
+> +	vcc-supply = <&vreg_l24a>;
+> +	vcc-max-microamp = <600000>;
+> +	vccq2-supply = <&vreg_l11a>;
+> +	vccq2-max-microamp = <600000>;
+> +	status = "okay";
 > +};
 > +
-> +#endif				/* _MAX597X_H */
-
-MFD_MAX597X_H
-
-CJ
+> +&ufs_mem_phy {
+> +	vdda-phy-supply = <&vreg_l4a>;
+> +	vdda-pll-supply = <&vreg_l12a>;
+> +	vddp-ref-clk-supply = <&vreg_l18a>;
+> +	status = "okay";
+> +};
+> +
+> +&usb_1 {
+> +	status = "okay";
+> +};
+> +
+> +&usb_1_hsphy {
+> +	vdd-supply = <&vreg_l4a>;
+> +	vdda-pll-supply = <&vreg_l12a>;
+> +	vdda-phy-dpdm-supply = <&vreg_l15a>;
+> +	status = "okay";
+> +};
+> +
+> +&xo_board {
+> +	clock-frequency = <19200000>;
+> +};
