@@ -2,200 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9749B613F2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 21:45:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CE9613F33
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 21:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbiJaUpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 16:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
+        id S230123AbiJaUq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 16:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiJaUpE (ORCPT
+        with ESMTP id S229894AbiJaUqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 16:45:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49F1DF65;
-        Mon, 31 Oct 2022 13:45:02 -0700 (PDT)
-Date:   Mon, 31 Oct 2022 20:44:59 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667249100;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=XkDdGu72/P40astMLGgkv09ig0AakkD+rRXnY9q8B1M=;
-        b=E5uS4jAOQJx1nnAbdA1bYBIDsIbhVVtVH4SGAqZ10yeAk6kov5r4MMsKEBN9hBcl+S6Yux
-        0jOj1PdavRh4Tv95Li16e2RQurEextr3bD9V8lYWeqCxZ4PzioaGH141PrDyN7rSYEPD+i
-        uJBVzME0LGXdohA0N96hKvHkzC6FFDlyPxbW2ujqaFprCbIaPvbXrFQ/i+IGm7W7RUajVM
-        ydCFSQW5b7AeyYq4GNQDIcPCgVynmr8CX4UtjlsL1gM2/iYEbA9ACNOoeI7V2sURasSH2V
-        6KJu/LMMc7/iPzGG/ExRWn7Tl4aSjPtWLqlHGKADKw7g6d2Em4MqQH8X+ysM/A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667249100;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=XkDdGu72/P40astMLGgkv09ig0AakkD+rRXnY9q8B1M=;
-        b=oI96AXTdJQxnYfCj3hfVbTTVvEk+3NOXBGp6BH5kT7HSbeS6BXeY/38zg9Y4w6FI9TGMQc
-        OX3dmSwFfiDnqpAQ==
-From:   "tip-bot2 for Reinette Chatre" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sgx] x86/sgx: Reduce delay and interference of enclave release
-Cc:     Md Iqbal Hossain <md.iqbal.hossain@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Mon, 31 Oct 2022 16:46:23 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2050.outbound.protection.outlook.com [40.107.244.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B23A12AC9;
+        Mon, 31 Oct 2022 13:46:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IieUE7mQ1okaOYeTQHP9EiF6iVKm2SHGedupPlttH3SpqwMy58WUIkDRES7F8Jst9Iy4jAqN+5zqEDLRVAGt0IXz6AC/H1AlEkeHH5TrETxxYUc+Fra2ZwVnw8lIbCFF2ZsfUcZWNQaiN6wcKRDPTWl46FpS2a4mNSVZFExi/ILPHK389TKpMfSfRSUgollIC+2RDxpjSg+6W1U/TP5LodguxcdnXzD2lAKMaMjPh9DIwM3NjM5w/9dYDKq6zNcJSLHMxc2iWM+KJsUCdDJssPgtCzZjHn41IP6lbM/4sLN57bO3+kWNAVqCIg1jDHNttJlFux2MQxGi9I6TY7KAQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GMQ/maLueqLebjkcaSryhozMqUAdICMFcpHGf9wDFIg=;
+ b=EiVZ6OhbbvTjXabyN7o70nAQ5ViO9lvAGDfqrquaGaB7CwR2dQvtZudWLJVsokkxP93AsNoVb4UJSmjgeFh1Dl8Eo9GrA7Qy+SXKTwz1jUuZugTjIDWgZcxMx9T0OFczg5WqAw7Gm6nNE2Ygfgt3IYE7n2jTrhxnjhqeFocZQfG2duUDZhV4Yt42eFr5LEU8Ll1QwWGF4j+q5xvD/SoGntgCd0ykgsIUw9Y8bj28r2qONKSYFQ2bVPXXGFON0P+ogXhtTQKqd/ZzxXqcIu1p0gVnLIbWTqis9pohgONRCUfi2XotERmbcR3EbRuT3AwSAIbvc60iMTEiIKmmHJ/V1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=infradead.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GMQ/maLueqLebjkcaSryhozMqUAdICMFcpHGf9wDFIg=;
+ b=Wnes3hrUfMlCrCYBZv7zuLbHn7SDGVQHVM+b/hFf0coXxa6clUWPZn+Pjs7zLr5IRf9v0LbPRgNTYW5bSXsbFDgsw1V0baV1LlInvsfgm24h5RoZKYcWaqGDuls8TfefDvFBjI6cgN5WoOl3zEVICcN0A2LbMKHQL4mr7Bre+RQVa+O9/lTDJ91wtQU9oyZlZVYuxkt+R03YTEg3W+Zz28NqSVtbdamUWtbnZ5C0SiTz/onRgXF1Cb0rDTmNJSeoTmXSiOYAf9F5a6GyNlzFcbZSaGr9X7XwvTl6YpBoi6sKU42HsdRx98k4nHfC23WtDsyBoa4pn50MG2GEisc9vQ==
+Received: from DS7PR03CA0226.namprd03.prod.outlook.com (2603:10b6:5:3ba::21)
+ by SJ0PR12MB6902.namprd12.prod.outlook.com (2603:10b6:a03:484::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Mon, 31 Oct
+ 2022 20:46:21 +0000
+Received: from DM6NAM11FT074.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3ba:cafe::e2) by DS7PR03CA0226.outlook.office365.com
+ (2603:10b6:5:3ba::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19 via Frontend
+ Transport; Mon, 31 Oct 2022 20:46:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT074.mail.protection.outlook.com (10.13.173.203) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5769.14 via Frontend Transport; Mon, 31 Oct 2022 20:46:20 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 31 Oct
+ 2022 13:46:08 -0700
+Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 31 Oct
+ 2022 13:46:08 -0700
+Message-ID: <61e7810f-97e2-1185-312a-d096b5b2bced@nvidia.com>
+Date:   Mon, 31 Oct 2022 13:46:07 -0700
 MIME-Version: 1.0
-Message-ID: <166724909921.7716.18230627806708514201.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [RFC PATCH 0/2] iov_iter: Provide a function to extract/pin/get
+ pages from an iteraor
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>,
+        David Howells <dhowells@redhat.com>
+CC:     <viro@zeniv.linux.org.uk>, <linux-mm@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, Christoph Hellwig <hch@lst.de>,
+        <smfrench@gmail.com>, <torvalds@linux-foundation.org>,
+        <linux-cifs@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <166722777223.2555743.162508599131141451.stgit@warthog.procyon.org.uk>
+ <Y1/hSO+7kAJhGShG@casper.infradead.org>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <Y1/hSO+7kAJhGShG@casper.infradead.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT074:EE_|SJ0PR12MB6902:EE_
+X-MS-Office365-Filtering-Correlation-Id: b3f57956-bd88-4a5d-b789-08dabb80f757
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: L3FCBZWxu1rdySWGq1ozj1kG66DgGElXhTXH+dqLFM2z4FDud0l3n/aDuNhZzWbVblIfahJTjXGmI38UeZqJYRQQlJd+S3pYDrcQ9YpbbUevcAE0LpF3nd9oXU2s5HNcWpFHgTvDvOOhUG7sKbE1HxVF2kt+t4dRREBO2x2bZ4r+4dps9Z7znXAER8wNYGyPWfD5WQ6fBVrjWz6x7Mn0YCvIgGIbUCW59RfroyFRT+M30hKvlyMBJZjs2HBBsbBA4BNTcJqmc4CxlXfF99yQiEYx+PybG/EiJ0r7ZhX9JNJOY4yvBGUI0IAPCM/m5NZzFFvuith7zroXKea/04ykvNi8+mgo0YthQpIThZFlR9JHCN28RXv7JHz6xRX1UXdG3DBrNbG6oxP5ybI1eCAJ3nt5QJPBtrut3JIAx92o6W9XaNAPhHecRMgzhygaa9mnn6/bSWZvz8uV4Er5B3Eux8SXTm1KehlTjZJ3eCViBteQSMtmhUifPBVr1QET7C3zgqlyxXw1d+4C/VEoWjTfjkxNUdcLI70eiro0ra5YOSlrrjR7MMSb+MZ6WshdBEWbP7ZKx9e2HZBilEhx5UVQDYE01OCWZw8sH2XgonqhljKWBmwbbM5zjmfbr5SDJqdLoHre87GamenwspwgRRTdOi6kfqDSaj4BMnkeqat4c9sxsKaE0VovGdT/VgXlYNZBa+NUHIEKG50ubPKLjFLa8o0cjgPORtvpMFh+pjRwYqvNGZF9DdGM3YOBYKTj6oD0ElfzegaSl5qCGmZ0Mvmpqj76gsxF5m3f5owF7NRPvFg=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(376002)(39860400002)(346002)(451199015)(36840700001)(46966006)(40470700004)(82310400005)(31686004)(36756003)(47076005)(2906002)(31696002)(86362001)(336012)(40480700001)(316002)(426003)(4744005)(8936002)(7636003)(7416002)(356005)(41300700001)(5660300002)(186003)(36860700001)(70206006)(8676002)(70586007)(82740400003)(54906003)(110136005)(4326008)(16576012)(26005)(53546011)(40460700003)(2616005)(478600001)(16526019)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2022 20:46:20.4713
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3f57956-bd88-4a5d-b789-08dabb80f757
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT074.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6902
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/sgx branch of tip:
+On 10/31/22 07:52, Matthew Wilcox wrote:
+> On Mon, Oct 31, 2022 at 02:49:32PM +0000, David Howells wrote:
+>> I added a macro by which you can query an iterator to find out how the
+>> extraction function will treat the pages (it returns 0, FOLL_GET or FOLL_PIN
+>> as appropriate).  Note that it's a macro to avoid #inclusion of linux/mm.h in
+>> linux/uio.h.
+> 
+> I'd support moving FOLL_* definitions to mm_types.h along with
+> FAULT_FLAG_* and VM_FAULT_*.
 
-Commit-ID:     7b72c823ddf8aaaec4e9fb28e6fbe4d511e7dad1
-Gitweb:        https://git.kernel.org/tip/7b72c823ddf8aaaec4e9fb28e6fbe4d511e7dad1
-Author:        Reinette Chatre <reinette.chatre@intel.com>
-AuthorDate:    Mon, 31 Oct 2022 10:29:58 -07:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Mon, 31 Oct 2022 13:40:35 -07:00
++1, great idea. The use of FOLL_* without including it's .h directly was
+the first thing that jumped out at me when I just started looking at
+this. And these really are mm types, so yes.
 
-x86/sgx: Reduce delay and interference of enclave release
-
-commit 8795359e35bc ("x86/sgx: Silence softlockup detection when
-releasing large enclaves") introduced a cond_resched() during enclave
-release where the EREMOVE instruction is applied to every 4k enclave
-page. Giving other tasks an opportunity to run while tearing down a
-large enclave placates the soft lockup detector but Iqbal found
-that the fix causes a 25% performance degradation of a workload
-run using Gramine.
-
-Gramine maintains a 1:1 mapping between processes and SGX enclaves.
-That means if a workload in an enclave creates a subprocess then
-Gramine creates a duplicate enclave for that subprocess to run in.
-The consequence is that the release of the enclave used to run
-the subprocess can impact the performance of the workload that is
-run in the original enclave, especially in large enclaves when
-SGX2 is not in use.
-
-The workload run by Iqbal behaves as follows:
-Create enclave (enclave "A")
-/* Initialize workload in enclave "A" */
-Create enclave (enclave "B")
-/* Run subprocess in enclave "B" and send result to enclave "A" */
-Release enclave (enclave "B")
-/* Run workload in enclave "A" */
-Release enclave (enclave "A")
-
-The performance impact of releasing enclave "B" in the above scenario
-is amplified when there is a lot of SGX memory and the enclave size
-matches the SGX memory. When there is 128GB SGX memory and an enclave
-size of 128GB, from the time enclave "B" starts the 128GB SGX memory
-is oversubscribed with a combined demand for 256GB from the two
-enclaves.
-
-Before commit 8795359e35bc ("x86/sgx: Silence softlockup detection when
-releasing large enclaves") enclave release was done in a tight loop
-without giving other tasks a chance to run. Even though the system
-experienced soft lockups the workload (run in enclave "A") obtained
-good performance numbers because when the workload started running
-there was no interference.
-
-Commit 8795359e35bc ("x86/sgx: Silence softlockup detection when
-releasing large enclaves") gave other tasks opportunity to run while an
-enclave is released. The impact of this in this scenario is that while
-enclave "B" is released and needing to access each page that belongs
-to it in order to run the SGX EREMOVE instruction on it, enclave "A"
-is attempting to run the workload needing to access the enclave
-pages that belong to it. This causes a lot of swapping due to the
-demand for the oversubscribed SGX memory. Longer latencies are
-experienced by the workload in enclave "A" while enclave "B" is
-released.
-
-Improve the performance of enclave release while still avoiding the
-soft lockup detector with two enhancements:
-- Only call cond_resched() after XA_CHECK_SCHED iterations.
-- Use the xarray advanced API to keep the xarray locked for
-  XA_CHECK_SCHED iterations instead of locking and unlocking
-  at every iteration.
-
-This batching solution is copied from sgx_encl_may_map() that
-also iterates through all enclave pages using this technique.
-
-With this enhancement the workload experiences a 5%
-performance degradation when compared to a kernel without
-commit 8795359e35bc ("x86/sgx: Silence softlockup detection when
-releasing large enclaves"), an improvement to the reported 25%
-degradation, while still placating the soft lockup detector.
-
-Scenarios with poor performance are still possible even with these
-enhancements. For example, short workloads creating sub processes
-while running in large enclaves. Further performance improvements
-are pursued in user space through avoiding to create duplicate enclaves
-for certain sub processes, and using SGX2 that will do lazy allocation
-of pages as needed so enclaves created for sub processes start quickly
-and release quickly.
-
-Fixes: 8795359e35bc ("x86/sgx: Silence softlockup detection when releasing large enclaves")
-Reported-by: Md Iqbal Hossain <md.iqbal.hossain@intel.com>
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Tested-by: Md Iqbal Hossain <md.iqbal.hossain@intel.com>
-Link: https://lore.kernel.org/all/00efa80dd9e35dc85753e1c5edb0344ac07bb1f0.1667236485.git.reinette.chatre%40intel.com
----
- arch/x86/kernel/cpu/sgx/encl.c | 23 +++++++++++++++++++----
- 1 file changed, 19 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-index 1ec2080..2c25825 100644
---- a/arch/x86/kernel/cpu/sgx/encl.c
-+++ b/arch/x86/kernel/cpu/sgx/encl.c
-@@ -680,11 +680,15 @@ const struct vm_operations_struct sgx_vm_ops = {
- void sgx_encl_release(struct kref *ref)
- {
- 	struct sgx_encl *encl = container_of(ref, struct sgx_encl, refcount);
-+	unsigned long max_page_index = PFN_DOWN(encl->base + encl->size - 1);
- 	struct sgx_va_page *va_page;
- 	struct sgx_encl_page *entry;
--	unsigned long index;
-+	unsigned long count = 0;
-+
-+	XA_STATE(xas, &encl->page_array, PFN_DOWN(encl->base));
- 
--	xa_for_each(&encl->page_array, index, entry) {
-+	xas_lock(&xas);
-+	xas_for_each(&xas, entry, max_page_index) {
- 		if (entry->epc_page) {
- 			/*
- 			 * The page and its radix tree entry cannot be freed
-@@ -699,9 +703,20 @@ void sgx_encl_release(struct kref *ref)
- 		}
- 
- 		kfree(entry);
--		/* Invoke scheduler to prevent soft lockups. */
--		cond_resched();
-+		/*
-+		 * Invoke scheduler on every XA_CHECK_SCHED iteration
-+		 * to prevent soft lockups.
-+		 */
-+		if (!(++count % XA_CHECK_SCHED)) {
-+			xas_pause(&xas);
-+			xas_unlock(&xas);
-+
-+			cond_resched();
-+
-+			xas_lock(&xas);
-+		}
- 	}
-+	xas_unlock(&xas);
- 
- 	xa_destroy(&encl->page_array);
- 
+thanks,
+-- 
+John Hubbard
+NVIDIA
