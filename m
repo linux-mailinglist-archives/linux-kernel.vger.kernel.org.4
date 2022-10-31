@@ -2,103 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BC5613C79
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C113E613C7B
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbiJaRul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 13:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
+        id S231658AbiJaRu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 13:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiJaRuh (ORCPT
+        with ESMTP id S229695AbiJaRuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 13:50:37 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EC762D0;
-        Mon, 31 Oct 2022 10:50:34 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id r187so13521218oia.8;
-        Mon, 31 Oct 2022 10:50:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O/OrJUaYHRoEPjInfDVcIfVomfgyPlGqEkIKHsEo9lU=;
-        b=Sws3S79oK2W9WoRcOxfaCrGsPty2JHx5XcO65A+e0fWM2FKfMaHcjfJ/Qp58SqjD/9
-         7ODZHr+lJ/mVHO+5toB87jlYwT+l+w4e55owQK6TZL9q/WtEjdZjdopNs2sNX5SdnqV1
-         tRMaJ0htltJ4KLd797qW5X1Pjym8F6RALR/yYQMEO23S4zmC/KzegNBGNOzM8SMkIbEH
-         WM7ywfEu6Am7DeOy6U9CnM0QK6BwVLUnNRPAIAO8IL+fZe34bnXF6cn1CyJwqLp68qW+
-         jEqSF6O4r9zaN9sKdWELQ/RpffuHJWzv7Hb+YXnv1Sk0dr7Pd/WMKII18cQLIICdXFSp
-         pumQ==
-X-Gm-Message-State: ACrzQf0MHyvzyg66zjG2XxYzuPd72pSUpuqk//B3cMTu0ALra2t0K5wW
-        UOjPfsgOzPYxf2BR+FKHnA==
-X-Google-Smtp-Source: AMsMyM4T6altTaqeOLsV6UcilL4G7P8IlDieSR1hoSqarcTXk4QF07+B3xUWgV1CPbP1TirWAooEhQ==
-X-Received: by 2002:a05:6808:14c1:b0:354:d3bf:67b with SMTP id f1-20020a05680814c100b00354d3bf067bmr16249885oiw.160.1667238633807;
-        Mon, 31 Oct 2022 10:50:33 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bk32-20020a0568081a2000b003595494e293sm2532518oib.32.2022.10.31.10.50.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 10:50:33 -0700 (PDT)
-Received: (nullmailer pid 3060092 invoked by uid 1000);
-        Mon, 31 Oct 2022 17:50:34 -0000
-Date:   Mon, 31 Oct 2022 12:50:34 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     devicetree@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Marcin Wojtas <mw@semihalf.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Michael Walle <michael@walle.cc>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        netdev@vger.kernel.org, Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH 1/5] dt-bindings: vendor-prefixes: Add ONIE
-Message-ID: <166723863431.3060035.12852650709794600644.robh@kernel.org>
-References: <20221028092337.822840-1-miquel.raynal@bootlin.com>
- <20221028092337.822840-2-miquel.raynal@bootlin.com>
+        Mon, 31 Oct 2022 13:50:54 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A360632F;
+        Mon, 31 Oct 2022 10:50:53 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9E2C81F45B;
+        Mon, 31 Oct 2022 17:50:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1667238651; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fGaXAxz7CkwLQu/39IaO5T1EcfCXLRmGolaSbwQbtTI=;
+        b=NvwlYs4xa/YUsKy+ffJtq9E/5zltj04v6GSbXqmET3FPakxT1u/YkIHNJ9pa0IEG2Rc+sg
+        jAJoT4GIRFHHyKOu8JVIOM/TeQwfFmjx0Lw9DGw5d/BPUC8wTycfzwA3HdfknxqAWzfnGR
+        2NuZXXs6wY/xrvZHKD0v52UXrhT7do8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1667238651;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fGaXAxz7CkwLQu/39IaO5T1EcfCXLRmGolaSbwQbtTI=;
+        b=SI+64C3q91ppKQfwnJXTA5Dp4vET8w57dZyf5ybaOzTLV7u4xm4f9cVvuz2CW+G9KvHUnu
+        ZzXT4uZ9AGCfxhBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8F61E13AAD;
+        Mon, 31 Oct 2022 17:50:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id EOr2IvsKYGN0YgAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 31 Oct 2022 17:50:51 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id CCC68A070B; Mon, 31 Oct 2022 18:50:50 +0100 (CET)
+Date:   Mon, 31 Oct 2022 18:50:50 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     syzbot <syzbot+06cc05ddc896f12b7ec5@syzkaller.appspotmail.com>
+Cc:     amir73il@gmail.com, jack@suse.cz, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        ntfs3@lists.linux.dev,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        Al Viro <viro@ZenIV.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>
+Subject: Re: [syzbot] kernel BUG in dnotify_free_mark
+Message-ID: <20221031175050.xmhub66b6d4dvpcb@quack3>
+References: <0000000000008b529305ec20dacc@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221028092337.822840-2-miquel.raynal@bootlin.com>
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <0000000000008b529305ec20dacc@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello!
 
-On Fri, 28 Oct 2022 11:23:33 +0200, Miquel Raynal wrote:
-> As described on their website (see link below),
-> 
->    "The Open Network Install Environment (ONIE) is an open source
->     initiative that defines an open “install environment” for modern
->     networking hardware."
-> 
-> It is not a proper corporation per-se but rather more a group which
-> tries to spread the use of open source standards in the networking
-> hardware world.
-> 
-> Link: https://opencomputeproject.github.io/onie/
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
-> 
-> Please note ONIE is not a "company" but rather more an open source
-> group. I don't know if there will be other uses of this prefix but I
-> figured out it would be best to describe it to avoid warnings, but I'm
-> open to other solutions otherwise.
-> 
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+[added some CCs to gather more ideas]
 
-Acked-by: Rob Herring <robh@kernel.org>
+On Fri 28-10-22 16:45:33, syzbot wrote:
+> syzbot found the following issue on:
+> 
+> HEAD commit:    247f34f7b803 Linux 6.1-rc2
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=157f594a880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
+> dashboard link: https://syzkaller.appspot.com/bug?extid=06cc05ddc896f12b7ec5
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15585936880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14ec85ba880000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/a5f39164dea4/disk-247f34f7.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/8d1b92f5a01f/vmlinux-247f34f7.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/1a4d2943796c/mount_0.gz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+06cc05ddc896f12b7ec5@syzkaller.appspotmail.com
+> 
+> ------------[ cut here ]------------
+> kernel BUG at fs/notify/dnotify/dnotify.c:136!
+
+OK, I've tracked this down to the problem in ntfs3 driver or maybe more
+exactly in bad inode handling. What the reproducer does is that it mounts
+ntfs3 image, places dnotify mark on filesystem's /, then accesses something
+which finds that / is corrupted.  This calls ntfs_bad_inode() which calls
+make_bad_inode() which sets inode->i_mode to S_IFREG. So when the file
+descriptor is closed, dnotify doesn't get properly shutdown because it
+works only on directories. Now calling make_bad_inode() on live inode is
+problematic because it can change inode type (e.g. from directory to
+regular file) and that tends to confuse things - dnotify in this case.
+
+Now it is easy to blame filesystem driver for calling make_bad_inode() on
+live inode but given it seems to be relatively widespread maybe
+make_bad_inode() should be more careful not to screw VFS? What do other
+people think?
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
