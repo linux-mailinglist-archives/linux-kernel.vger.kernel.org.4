@@ -2,154 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC8A6131FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 09:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8029613202
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 09:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbiJaIzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 04:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38612 "EHLO
+        id S230041AbiJaIzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 04:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiJaIzO (ORCPT
+        with ESMTP id S230002AbiJaIzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 04:55:14 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE4165EA;
-        Mon, 31 Oct 2022 01:55:13 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 29V8fUT5022303;
-        Mon, 31 Oct 2022 08:55:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=2xOEgN8I2ys1RzJQHHjkg8jjAObptFGMUZWOGEDm02A=;
- b=Pkrq+Eq7mSoCx3SlVMyhTmb+8VlX7lUuKT2FyVWHJTZ08uAwJQk8ckcvqzIpTa9CTLUr
- hAkGKA8s0HHxld3UEz4z2fO36F2CqszuCuOc7TBIOj+kftDv/DG61wfmnzzSkbu3UkK4
- DR48qaYnZLfTT/rMJa7DzU7ynPUV84rAbCKaSlZk0kRGbE3RhVOepCOLGZJVIH6nkYJI
- 3rthmEvyRLCoj2LLsoMqib2oOTMf35dQNRokgsybVx/0mzBVRoKILwvoHmX+CTgFRf17
- StHhLvujo1B6ZZSL9iTZ72WGdYlbZGUxzRBoLgrS/MtGuNBfe+do4sYcKscgNqEMjgvj Jw== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kj7msrfev-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 31 Oct 2022 08:55:01 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29V8t0rL006660
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 31 Oct 2022 08:55:00 GMT
-Received: from [10.253.15.131] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 31 Oct
- 2022 01:54:57 -0700
-Message-ID: <7dc5b87a-1413-f7cb-4fdc-93828252c4f1@quicinc.com>
-Date:   Mon, 31 Oct 2022 16:54:55 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] bus: mhi: host: Add session ID to MHI controller
-Content-Language: en-US
-To:     Manivannan Sadhasivam <mani@kernel.org>
-CC:     <quic_hemantk@quicinc.com>, <loic.poulain@linaro.org>,
-        <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_cang@quicinc.com>,
-        <mrana@quicinc.com>
-References: <1665376870-60668-1-git-send-email-quic_qianyu@quicinc.com>
- <20221028172022.GC13880@thinkpad>
-From:   Qiang Yu <quic_qianyu@quicinc.com>
-In-Reply-To: <20221028172022.GC13880@thinkpad>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: z7WyHsPObml9g3lJeo6Hmw9O55Sh9jZU
-X-Proofpoint-ORIG-GUID: z7WyHsPObml9g3lJeo6Hmw9O55Sh9jZU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-31_06,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- spamscore=0 mlxlogscore=999 lowpriorityscore=0 phishscore=0 suspectscore=0
- impostorscore=0 priorityscore=1501 mlxscore=0 clxscore=1015 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2210310056
+        Mon, 31 Oct 2022 04:55:17 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A7FD91
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 01:55:16 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id n12so27567922eja.11
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 01:55:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=07p05AvXxhhg9Ebj2EYm3CyzIzK358DNeUTZctR79PI=;
+        b=GZQfWLfmnuI5l9MZYGnSAYveWIFMxE58j8f5hvgoMp7eyitHBtHWTEb+uZ+QCz7+D1
+         ILQ/sB5+dYeaXHTh7U1MpS4agInDcsNNxKDXqNBhMAMVqf85Jgy6MMmIJvG52bbiCjbv
+         PH0QEasMd1paHeqr/fkeziXfGflPhjGFgceyifgvZvHID29F1mypW/14MCuLRfr12/9b
+         Sz5zXmuJu0ZS0d0uPHgdMrx+p/O5GJtXvtYatWNjBn8UM6BxBe3EJikeoa1Y72ueELZf
+         rPWQz94f4GI2hM3DCJh7ko7IcmZU6PnxUiSLPfcvSJ597QgAGBAljb8dnx9hcIslfdet
+         zTfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=07p05AvXxhhg9Ebj2EYm3CyzIzK358DNeUTZctR79PI=;
+        b=7SACS3lmkgZqcVlCUyB4KNrUZ1vqX1a1nH4q7xxfuOBbkFc9/ymjJeBksEH4EtY8T1
+         r7l7o+Tu5qykqMYzDTOlecpYxe21bVgQaowVoWzXmp7apKUfnm23gWLyNk8kYSpSEkT7
+         2yx7usjRV6B2sZCvW+7L63vFROP1tAei96yv58gg+LwGEzNIirkhls4PQmgPm/R6P70Q
+         Y7tzNukeNJGJtHGSufz8eludMonlboFuSxs5x4DUF4MOs97lUhia0tQ990swGk5vqG5c
+         ViQHUJitw3/IKf8I4X2oTbu6AIw/bNKOFm58i7KjvTgzegKlOMzBBK10U/w5wd6CzU0d
+         94Cw==
+X-Gm-Message-State: ACrzQf23a5N4rnTY7qD8F61B0eQR6Ke6LYX/zFxtWTYVGi0Jh2odHMRI
+        pv1DaVUVy4v2ofKN2e1omCwL6Q==
+X-Google-Smtp-Source: AMsMyM6Ls3q3a245kOnbwO75tFYa02f6fAzk6wJP3W3KapAsowgtoEDHccbyuuTIyj3GPqs4TX4UrQ==
+X-Received: by 2002:a17:907:271b:b0:7ad:b748:63df with SMTP id w27-20020a170907271b00b007adb74863dfmr9258436ejk.639.1667206514690;
+        Mon, 31 Oct 2022 01:55:14 -0700 (PDT)
+Received: from localhost (31-151-115-246.dynamic.upc.nl. [31.151.115.246])
+        by smtp.gmail.com with ESMTPSA id hw20-20020a170907a0d400b007aacfce2a91sm2713110ejc.27.2022.10.31.01.55.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Oct 2022 01:55:14 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 31 Oct 2022 09:55:13 +0100
+Message-Id: <CNZZDUY2NAEQ.2MTXWFKUSHNA7@otso>
+Subject: Re: [PATCH 01/10] arm64: dts: qcom: sm6350: Add resets for SDHCI
+ 1/2
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Marijn Suijten" <marijn.suijten@somainline.org>,
+        <phone-devel@vger.kernel.org>
+Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@somainline.org>,
+        "Konrad Dybcio" <konrad.dybcio@somainline.org>,
+        "Martin Botka" <martin.botka@somainline.org>,
+        "Jami Kettunen" <jami.kettunen@somainline.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Luca Weiss" <luca@z3ntu.xyz>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.12.0
+References: <20221030073232.22726-1-marijn.suijten@somainline.org>
+ <20221030073232.22726-2-marijn.suijten@somainline.org>
+In-Reply-To: <20221030073232.22726-2-marijn.suijten@somainline.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun Oct 30, 2022 at 8:32 AM CET, Marijn Suijten wrote:
+> Make sure the SDHCI hardware is properly reset before interacting with
+> it, to protect against any possibly indeterminate state left by the
+> bootloader.
+>
+> Suggested-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 
-On 10/29/2022 1:20 AM, Manivannan Sadhasivam wrote:
-> On Mon, Oct 10, 2022 at 12:41:10PM +0800, Qiang Yu wrote:
->> Session ID to be used during BHI transfers to recognize a
->> particular session are currently not being stored in the MHI
->> controller structure. Store them to allow for tracking and other
->> future usage.
->>
->> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
-> Who/what is going to use this session id?
-Sometimes, we may find some error logs and want to see what happens on 
-device when host is printing these error logs.
-Session id can help us find the logs we want.
+Reviewed-by: Luca Weiss <luca.weiss@fairphone.com>
+Tested-by: Luca Weiss <luca.weiss@fairphone.com> # sm7225-fairphone-fp4
+
+Regards
+Luca
+
+> ---
+>  arch/arm64/boot/dts/qcom/sm6350.dtsi | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> Thanks,
-> Mani
->
->> ---
->>   drivers/bus/mhi/host/boot.c | 8 ++++----
->>   include/linux/mhi.h         | 1 +
->>   2 files changed, 5 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/bus/mhi/host/boot.c b/drivers/bus/mhi/host/boot.c
->> index 26d0edd..5bed8b51 100644
->> --- a/drivers/bus/mhi/host/boot.c
->> +++ b/drivers/bus/mhi/host/boot.c
->> @@ -231,7 +231,7 @@ static int mhi_fw_load_bhi(struct mhi_controller *mhi_cntrl,
->>   			   dma_addr_t dma_addr,
->>   			   size_t size)
->>   {
->> -	u32 tx_status, val, session_id;
->> +	u32 tx_status, val;
->>   	int i, ret;
->>   	void __iomem *base = mhi_cntrl->bhi;
->>   	rwlock_t *pm_lock = &mhi_cntrl->pm_lock;
->> @@ -253,16 +253,16 @@ static int mhi_fw_load_bhi(struct mhi_controller *mhi_cntrl,
->>   		goto invalid_pm_state;
->>   	}
->>   
->> -	session_id = MHI_RANDOM_U32_NONZERO(BHI_TXDB_SEQNUM_BMSK);
->> +	mhi_cntrl->session_id = MHI_RANDOM_U32_NONZERO(BHI_TXDB_SEQNUM_BMSK);
->>   	dev_dbg(dev, "Starting image download via BHI. Session ID: %u\n",
->> -		session_id);
->> +		mhi_cntrl->session_id);
->>   	mhi_write_reg(mhi_cntrl, base, BHI_STATUS, 0);
->>   	mhi_write_reg(mhi_cntrl, base, BHI_IMGADDR_HIGH,
->>   		      upper_32_bits(dma_addr));
->>   	mhi_write_reg(mhi_cntrl, base, BHI_IMGADDR_LOW,
->>   		      lower_32_bits(dma_addr));
->>   	mhi_write_reg(mhi_cntrl, base, BHI_IMGSIZE, size);
->> -	mhi_write_reg(mhi_cntrl, base, BHI_IMGTXDB, session_id);
->> +	mhi_write_reg(mhi_cntrl, base, BHI_IMGTXDB, mhi_cntrl->session_id);
->>   	read_unlock_bh(pm_lock);
->>   
->>   	/* Wait for the image download to complete */
->> diff --git a/include/linux/mhi.h b/include/linux/mhi.h
->> index a5441ad..8b3c934 100644
->> --- a/include/linux/mhi.h
->> +++ b/include/linux/mhi.h
->> @@ -405,6 +405,7 @@ struct mhi_controller {
->>   	u32 minor_version;
->>   	u32 serial_number;
->>   	u32 oem_pk_hash[MHI_MAX_OEM_PK_HASH_SEGMENTS];
->> +	u32 session_id;
->>   
->>   	struct mhi_event *mhi_event;
->>   	struct mhi_cmd *mhi_cmd;
->> -- 
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> a Linux Foundation Collaborative Project
->>
->>
+> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/q=
+com/sm6350.dtsi
+> index c39de7d3ace0..a3ae765d9781 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> @@ -490,6 +490,7 @@ sdhc_1: mmc@7c4000 {
+>  				 <&gcc GCC_SDCC1_APPS_CLK>,
+>  				 <&rpmhcc RPMH_CXO_CLK>;
+>  			clock-names =3D "iface", "core", "xo";
+> +			resets =3D <&gcc GCC_SDCC1_BCR>;
+>  			qcom,dll-config =3D <0x000f642c>;
+>  			qcom,ddr-config =3D <0x80040868>;
+>  			power-domains =3D <&rpmhpd SM6350_CX>;
+> @@ -1068,6 +1069,7 @@ sdhc_2: mmc@8804000 {
+>  				 <&gcc GCC_SDCC2_APPS_CLK>,
+>  				 <&rpmhcc RPMH_CXO_CLK>;
+>  			clock-names =3D "iface", "core", "xo";
+> +			resets =3D <&gcc GCC_SDCC2_BCR>;
+>  			interconnects =3D <&aggre2_noc MASTER_SDCC_2 0 &clk_virt SLAVE_EBI_CH=
+0 0>,
+>  					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_SDCC_2 0>;
+>  			interconnect-names =3D "sdhc-ddr", "cpu-sdhc";
+> --=20
+> 2.38.1
+
