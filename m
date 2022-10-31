@@ -2,96 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63CE6613726
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 13:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DDFD61372C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 13:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbiJaM5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 08:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
+        id S230297AbiJaM6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 08:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230297AbiJaM5n (ORCPT
+        with ESMTP id S230049AbiJaM6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 08:57:43 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCA3F5B5
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 05:57:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9aBywTwEBQKb2gzcgaRgyZsi2EZSM4ZEWUFJjjtFqMs=; b=gdz2pKtgNOiMLJL3AfPt64lx87
-        3ZiKv0c9OvAxLl/oxXAgGaVQS/KOfxjApfZTdRvZ5X6uqY0B/PvmUeFykRRKN6/4hZiLT87fhli1k
-        IGOu7BhNs+uI3aUSNn6aKK+t81baGEP53Tx6bC6dtqJLg47u5Wn4uaB0A/KvlQMte1jUSZAUHDhcv
-        fv3qNJjENZBvXTeKHsQ/Oue5zvp3/aWFtRwuT9GauKCuU+B/oSvdeO/+1pLVvUV885aisrLqBVvHZ
-        gQJ5TndC0sU6wWK6Qz5fgeYdZuge0er/x3guh9zXEmsAfSe3yznTT0dE46NUUZSoBlUFoLCUk7Ksv
-        2Ff4eNuA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1opUM8-007sDe-RH; Mon, 31 Oct 2022 12:57:33 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+        Mon, 31 Oct 2022 08:58:47 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E69E0BE;
+        Mon, 31 Oct 2022 05:58:46 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 28CA130029C;
-        Mon, 31 Oct 2022 13:57:32 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E4DAF2C74B23D; Mon, 31 Oct 2022 13:57:31 +0100 (CET)
-Date:   Mon, 31 Oct 2022 13:57:31 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Andrei Vagin <avagin@google.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org, Andrei Vagin <avagin@gmail.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Subject: Re: [PATCH] sched: consider WF_SYNC to find idle siblings
-Message-ID: <Y1/GO1eWt+oTNA24@hirez.programming.kicks-ass.net>
-References: <20221027202603.670616-1-avagin@google.com>
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9852D6602387;
+        Mon, 31 Oct 2022 12:58:44 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667221125;
+        bh=BeO+oKNCameH1zwWU+wvsYFCN/BzRO3hzCcri9HM8Ts=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=UyCAja/GRKvLpVKSbz7anu0DQ+8wfifs86/5lOQgb/e0PNtobNTqmWJn0yZ2ZpWmb
+         Ydy+npxCpco9Vg5RxZBiLe8obCwipmCEN0WF9K0Q04IFCkbSvu7cSl7F7uqpZMQdEE
+         eWWr4fbXAAjhkGNIciwGGrXYnRymzMcOzip0zqVxhQWqiB4c/0ivI0Yy8owLatja68
+         VZ8ZDGBves4YliS4lJ1RWfKEZikmKZysMoornAAPba44vbL7qxIKSZvRvcwQk8Ueta
+         SfoANlKgBQR6102N9tPyTPu7qijUx0UESyby8qSEbdCzDGHbqhfC92JDBJuDvjbC/L
+         fB7ysKlhc3rhg==
+Message-ID: <270b6269-0d5d-752a-c59f-44a7d28baae7@collabora.com>
+Date:   Mon, 31 Oct 2022 13:58:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221027202603.670616-1-avagin@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v3 1/3] dt-bindings: soc: mediatek: pwrap: add MT8365 SoC
+ bindings
+Content-Language: en-US
+To:     fchiby@baylibre.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        "Zhiyong . Tao" <zhiyong.tao@mediatek.com>
+Cc:     Fabien Parent <fparent@baylibre.com>,
+        Rob Herring <robh@kernel.org>, Sen Chu <sen.chu@mediatek.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20221031093401.22916-1-fchiby@baylibre.com>
+ <20221031093401.22916-2-fchiby@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221031093401.22916-2-fchiby@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 01:26:03PM -0700, Andrei Vagin wrote:
-> From: Andrei Vagin <avagin@gmail.com>
+Il 31/10/22 10:33, fchiby@baylibre.com ha scritto:
+> From: Fabien Parent <fparent@baylibre.com>
 > 
-> WF_SYNC means that the waker goes to sleep after wakeup, so the current
-> cpu can be considered idle if the waker is the only process that is
-> running on it.
+> Add pwrap binding documentation for
 > 
-> The perf pipe benchmark shows that this change reduces the average time
-> per operation from 8.8 usecs/op to 3.7 usecs/op.
-> 
-> Before:
->  $ ./tools/perf/perf bench sched pipe
->  # Running 'sched/pipe' benchmark:
->  # Executed 1000000 pipe operations between two processes
-> 
->      Total time: 8.813 [sec]
-> 
->        8.813985 usecs/op
->          113456 ops/sec
-> 
-> After:
->  $ ./tools/perf/perf bench sched pipe
->  # Running 'sched/pipe' benchmark:
->  # Executed 1000000 pipe operations between two processes
-> 
->      Total time: 3.743 [sec]
-> 
->        3.743971 usecs/op
->          267096 ops/sec
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Fadwa CHIBY <fchiby@baylibre.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-But what; if anything, does it do for the myrad of other benchmarks we
-run?
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+
