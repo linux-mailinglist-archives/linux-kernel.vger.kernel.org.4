@@ -2,84 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879F86131C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 09:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E036131C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 09:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbiJaIfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 04:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58566 "EHLO
+        id S229877AbiJaIey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 04:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbiJaIfE (ORCPT
+        with ESMTP id S229517AbiJaIev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 04:35:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B80F60DB;
-        Mon, 31 Oct 2022 01:35:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B95DB8118A;
-        Mon, 31 Oct 2022 08:35:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFCA2C433D6;
-        Mon, 31 Oct 2022 08:35:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667205300;
-        bh=ASH/N1PVIAa5px2h9gfzwh2e654dPXGg/S3FbL5wbv4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XI6nb058S4gn/MfB1GMCiXnCkhiurD4TA1q6ITQAL3PS2bd8X6l2V7RUBQ+TntPzN
-         MS9intDVVcO9DcbYqIlUM8zdBn0D2tDgyzfvVtzYIQUUlIEMkxg9qug3fRwxcOEdds
-         Qi2qJx2aMrMVMDLNyC14FZJtree3RUvhiOyl9jk594kjORjMoVM78VG3+iZ0fTqhZM
-         vJVUT5wyaKh2eHAIvPVN3kjCAuxL4OnDAgpFp7LaolO8NGq7aEqmQhgAaMPzhAyktZ
-         nmwXWf8i37fJ5JpkoSNwc4VCkYRLpsZB98hs4SmEjpSANNifXqNf1s2sh6bZAAgTn7
-         iSUIRT92PdtSQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1opQFq-0004wG-G3; Mon, 31 Oct 2022 09:34:46 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Hemant Kumar <quic_hemantk@quicinc.com>, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH] mhi: pci_generic: add support for sc8280xp-crd SDX55 variant
-Date:   Mon, 31 Oct 2022 09:34:29 +0100
-Message-Id: <20221031083429.18971-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.37.3
+        Mon, 31 Oct 2022 04:34:51 -0400
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CA65FDD
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 01:34:50 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id j15so14898860wrq.3
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 01:34:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cBpYw5hM1LXIqvvaSMOXxY2X0Rxx3iDl+/6c5V3MbsE=;
+        b=tZBnCnJLc+g2Bt30cba4dd3vjN6vzgub12Tb4/EqB9WBvQl7pFjnU+bA2iM21i7Q6K
+         5S6DcIu21a/y0/Spfobh70t0Em4ys3svVkvtednm6KEdgiARJMs7Typm24/qM33bCZjI
+         +BCFBeoXPJNPTfdxba2R5yjPINj5XxSod+07pHxlNvL/cW2OPIDLPbz7VMncioza2wDf
+         OltgYacplD1h/nK9mX5yfxtWmQniTZPd3o4ju7NYTZeqLwDvtTYHQ3WS26jLpUCRFkne
+         A0OOudTI6IyOgi7hj4iOZFr2+dngQyDUbnhwOqEVjRBVXBSVRNtJKGmoyFrI+lXpE0rX
+         wliw==
+X-Gm-Message-State: ACrzQf1hKmoYDWVAe7aEuEZqcktMJF0KJ6GMUDLOYvpWSnaLZ+lf1xRw
+        SX6otOi3u7ber668rpWB1ordVIObHZk265NW
+X-Google-Smtp-Source: AMsMyM6V8vx3NrObv5+5Sf/e7yIjKU7D9jDzgliPNKecxvkbq1cNLSbmpVzyHgpVPucltil+sysBpg==
+X-Received: by 2002:a5d:5111:0:b0:235:849f:f132 with SMTP id s17-20020a5d5111000000b00235849ff132mr7294190wrt.5.1667205288608;
+        Mon, 31 Oct 2022 01:34:48 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id r10-20020a05600c35ca00b003c6f1732f65sm4127185wmq.38.2022.10.31.01.34.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Oct 2022 01:34:48 -0700 (PDT)
+Message-ID: <36a08c1a-b675-84ec-ce08-2ada7223bd33@kernel.org>
+Date:   Mon, 31 Oct 2022 09:34:46 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [RFC][PATCH v2 26/31] timers: tty: Use del_timer_shutdown()
+ before freeing timer
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20221027150525.753064657@goodmis.org>
+ <20221027150930.128814334@goodmis.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20221027150930.128814334@goodmis.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SC8280XP Compute Reference Design (CRD) has an on-PCB SDX55 modem
-which uses MBIM.
+On 27. 10. 22, 17:05, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> Before a timer is freed, del_timer_shutdown() must be called.
+> 
+> Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
+> 
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Jiri Slaby <jirislaby@kernel.org>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-The exact channel configuration is not known but the Foxconn SDX55
-configuration allows the modem to be used so reuse that one for now.
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/bus/mhi/host/pci_generic.c | 3 +++
- 1 file changed, 3 insertions(+)
+> ---
+>   drivers/tty/n_gsm.c | 2 +-
+>   drivers/tty/sysrq.c | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+> index 5e516f5cac5a..1d167469a700 100644
+> --- a/drivers/tty/n_gsm.c
+> +++ b/drivers/tty/n_gsm.c
+> @@ -2098,7 +2098,7 @@ static void gsm_dlci_free(struct tty_port *port)
+>   {
+>   	struct gsm_dlci *dlci = container_of(port, struct gsm_dlci, port);
+>   
+> -	del_timer_sync(&dlci->t1);
+> +	del_timer_shutdown(&dlci->t1);
+>   	dlci->gsm->dlci[dlci->addr] = NULL;
+>   	kfifo_free(&dlci->fifo);
+>   	while ((dlci->skb = skb_dequeue(&dlci->skb_list)))
+> diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
+> index d2b2720db6ca..20b1c9802506 100644
+> --- a/drivers/tty/sysrq.c
+> +++ b/drivers/tty/sysrq.c
+> @@ -1003,7 +1003,7 @@ static void sysrq_disconnect(struct input_handle *handle)
+>   
+>   	input_close_device(handle);
+>   	cancel_work_sync(&sysrq->reinject_work);
+> -	del_timer_sync(&sysrq->keyreset_timer);
+> +	del_timer_shutdown(&sysrq->keyreset_timer);
+>   	input_unregister_handle(handle);
+>   	kfree(sysrq);
+>   }
 
-diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
-index caa4ce28cf9e..f9f4345d472d 100644
---- a/drivers/bus/mhi/host/pci_generic.c
-+++ b/drivers/bus/mhi/host/pci_generic.c
-@@ -542,6 +542,9 @@ static const struct mhi_pci_dev_info mhi_telit_fn990_info = {
- static const struct pci_device_id mhi_pci_id_table[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0304),
- 		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx24_info },
-+	/* SC8280XP-CRD (sdx55) */
-+	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_QCOM, 0x0306, PCI_VENDOR_ID_QCOM, 0x010c),
-+		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx55_info },
- 	/* EM919x (sdx55), use the same vid:pid as qcom-sdx55m */
- 	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_QCOM, 0x0306, 0x18d7, 0x0200),
- 		.driver_data = (kernel_ulong_t) &mhi_sierra_em919x_info },
+thanks,
 -- 
-2.37.3
+js
+suse labs
 
