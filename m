@@ -2,90 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59500613FF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 22:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8131613FF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 22:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiJaVc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 17:32:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
+        id S230078AbiJaVdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 17:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiJaVcx (ORCPT
+        with ESMTP id S230178AbiJaVdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 17:32:53 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF4C13F9E;
-        Mon, 31 Oct 2022 14:32:52 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29VLWlaT037564;
-        Mon, 31 Oct 2022 16:32:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1667251967;
-        bh=okYAQNocPOrf/mnmbnOvbn2QALnYi6N0RA5PevMFYv0=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Qw2E+1yyHOi8MCfNbt0uBMXSvQjghDEe7EprO1QuoWPfB2Qwu4w1Lk0YV56h8fSqn
-         h15jWh3+2EGMbMGeAqwKbi3sH+DrbE1RYknG4MPZk0LHtiPKMiKyOxo5hd34y2fkC5
-         0Ll7vZI05M9oalxSnP9H2mk6TsBr/ddHkBRFHR0E=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29VLWlkh023894
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 31 Oct 2022 16:32:47 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 31
- Oct 2022 16:32:47 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 31 Oct 2022 16:32:47 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29VLWjso095050;
-        Mon, 31 Oct 2022 16:32:46 -0500
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-To:     <nm@ti.com>, <vigneshr@ti.com>
-CC:     <kristo@kernel.org>, <robh+dt@kernel.org>, <afd@ti.com>,
-        <j-keerthy@ti.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <s-anna@ti.com>, <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <j-choudhary@ti.com>
-Subject: [PATCH 3/3] arm64: dts: ti: k3-am64-main: drop RNG clock
-Date:   Tue, 1 Nov 2022 03:02:37 +0530
-Message-ID: <20221031213237.52275-4-j-choudhary@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221031213237.52275-1-j-choudhary@ti.com>
-References: <20221031213237.52275-1-j-choudhary@ti.com>
+        Mon, 31 Oct 2022 17:33:15 -0400
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DD7140D0;
+        Mon, 31 Oct 2022 14:33:14 -0700 (PDT)
+Received: by mail-ot1-f41.google.com with SMTP id d18-20020a05683025d200b00661c6f1b6a4so7497446otu.1;
+        Mon, 31 Oct 2022 14:33:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OtN0R9c3Xw+alqszrD54ZcT//h0HTwxiHDtbi57TVvU=;
+        b=tjNs0X1hheNKFaIsP8L7h+ppWELY3qBwzf5jYrlts0gwKeXVnlM/dsbcl9TdLynmKw
+         qOxJuyxM2/eAPOx042DxysiVcDTi0vUuOS2eDgOWIlQyS6S3y5lahphitdohTIPBMy+O
+         tGcVddiBfcwajL0MVy2HFCuR1T3eDpQaHbI5mi9ZzwSm30Rn0pqwsTRyHH8LKsKLjCoe
+         A4hTcN8EsoGynh8BOOZHcNVdgatvA9cuTkLCEm6L84RdI7hqLs0L0EQrlnrRzMqNcuRF
+         hgRndrw20ZlSOeDkZ1BySzdUVbrG0VHtSA+tB+s5GgldI6VG6L6eIH6Dzd+G1XCLI3lS
+         9XRA==
+X-Gm-Message-State: ACrzQf0FDqfpnY7MTeZlD3PuboH2lXHKNAwJvIfRSg/YdkQAL6FC19Ll
+        86hN+fF4e2THr7ilQe3yVCtJtGPRkQ==
+X-Google-Smtp-Source: AMsMyM5em5XhVyWzZqhH1B658EIMHFWbI8owAlvqnwExSY0lbeyGKyYhZ8e+Sajuri6YVf3PjGG6rQ==
+X-Received: by 2002:a05:6830:1452:b0:66c:46e9:762d with SMTP id w18-20020a056830145200b0066c46e9762dmr5054864otp.258.1667251993271;
+        Mon, 31 Oct 2022 14:33:13 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l18-20020aca1912000000b003544822f725sm2762718oii.8.2022.10.31.14.33.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 14:33:12 -0700 (PDT)
+Received: (nullmailer pid 3609482 invoked by uid 1000);
+        Mon, 31 Oct 2022 21:33:14 -0000
+Date:   Mon, 31 Oct 2022 16:33:14 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     steev@kali.org, andersson@kernel.org, johan+linaro@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        quic_jprakash@quicinc.com, krzysztof.kozlowski+dt@linaro.org,
+        konrad.dybcio@somainline.org
+Subject: Re: [PATCH v2 01/12] dt-bindings: iio: qcom: adc7-pm8350: Allow
+ specifying SID for channels
+Message-ID: <166725199395.3609425.1566851123468053953.robh@kernel.org>
+References: <20221029051449.30678-1-manivannan.sadhasivam@linaro.org>
+ <20221029051449.30678-2-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221029051449.30678-2-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop RNG clock property as it is not controlled by rng-driver.
 
-Fixes: e170ae6dd67a ("arm64: dts: ti: k3-am64-main: Enable crypto accelerator")
-Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
----
- arch/arm64/boot/dts/ti/k3-am64-main.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+On Sat, 29 Oct 2022 10:44:38 +0530, Manivannan Sadhasivam wrote:
+> As per the new ADC7 architecture used by the Qualcomm PMICs, each PMIC
+> has the static Slave ID (SID) assigned by default. The primary PMIC
+> PMK8350 is responsible for collecting the temperature/voltage data from
+> the slave PMICs and exposing them via it's registers.
+> 
+> For getting the measurements from the slave PMICs, PMK8350 uses the
+> channel ID encoded with the SID of the relevant PMIC. So far, the
+> dt-binding for the slave PMIC PM8350 assumed that there will be only
+> one PM8350 in a system. So it harcoded SID 1 with channel IDs.
+> 
+> But this got changed in platforms such as Lenovo X13s where there are a
+> couple of PM8350 PMICs available. So to address multiple PM8350s, change
+> the binding to accept the SID specified by the user and use it for
+> encoding the channel ID.
+> 
+> It should be noted that, even though the SID is static it is not
+> globally unique. Only the primary PMIC has the unique SID id 0.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  .../bindings/thermal/qcom-spmi-adc-tm5.yaml   |  6 +-
+>  .../dt-bindings/iio/qcom,spmi-adc7-pm8350.h   | 90 +++++++++----------
+>  2 files changed, 46 insertions(+), 50 deletions(-)
+> 
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-index c96df4b9b3d7..ac04cf1d9c3e 100644
---- a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-@@ -1359,7 +1359,6 @@ rng: rng@40910000 {
- 			compatible = "inside-secure,safexcel-eip76";
- 			reg = <0x00 0x40910000 0x00 0x7d>;
- 			interrupts = <GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&k3_clks 133 1>;
- 			status = "disabled"; /* Used by OP-TEE */
- 		};
- 	};
--- 
-2.25.1
-
+Acked-by: Rob Herring <robh@kernel.org>
