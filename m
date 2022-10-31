@@ -2,61 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F763613BEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:10:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A45C1613BF0
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:10:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbiJaRKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 13:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
+        id S232030AbiJaRK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 13:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231552AbiJaRKH (ORCPT
+        with ESMTP id S231867AbiJaRKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 13:10:07 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD9B12D2B
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:10:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667236206; x=1698772206;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=SAXQrfesOB3YLTPAk7qxauA2Uhq6ODe+CXHF5a+y0Aw=;
-  b=i31BrzAKA1b/3lbq8C8WH/jgToIoek8nc/xtDH28MtRZrI4N2neJ81iT
-   TLbzsOz6kOwrEbz3S17fRzCgaCeRQdjM27zL1xvqyLIBYdU1O9xx6e4IV
-   cvA2/pRmNiN0WDinpT44/mWt4wX393SL5hqd7mxN4AF6n5RtA3WBhDgnC
-   qpSWuEu2JdrfXftQLw/tKFPJkC5NGQrOkxeyL3nwlpfFYmvw38Sy+FwP7
-   Yap6N50ElKwwurfeE6EnXSJMqTA9xpBlMQBf/KDS7XwW7IeeWiltkSSrc
-   w9wcHjaw2DqtncyI3spHuJ7K4pHK0gCqKFePhnqzVWfBQhJdpFDiAnj72
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="310041339"
-X-IronPort-AV: E=Sophos;i="5.95,228,1661842800"; 
-   d="scan'208";a="310041339"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 10:10:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="697099364"
-X-IronPort-AV: E=Sophos;i="5.95,228,1661842800"; 
-   d="scan'208";a="697099364"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
-  by fmsmga008.fm.intel.com with SMTP; 31 Oct 2022 10:10:02 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Mon, 31 Oct 2022 19:10:02 +0200
-Date:   Mon, 31 Oct 2022 19:10:02 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     airlied@redhat.com, dri-devel@lists.freedesktop.org,
-        daniel@ffwll.ch, kernel list <linux-kernel@vger.kernel.org>
-Subject: Re: 6.1-rc: names of video outputs changed?
-Message-ID: <Y2ABatgNLVAAjpSW@intel.com>
-References: <20221031165834.GA10150@duo.ucw.cz>
+        Mon, 31 Oct 2022 13:10:52 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6CD12D28;
+        Mon, 31 Oct 2022 10:10:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=6vzHxEAPqVfIR65YIpx9t4I4izpmXEj2rkIyxRK348E=; b=3dHLv00PYewsTy8LuMrCq/Bk6/
+        Erh0z8QowWmrxBI7wEcl+Hh5gljmTEw0el8eqthgQS3irtAAFOqwG+ehcaldnWBiRLhvMEU/jQM+d
+        2sREW0EMdntpV7QWs1rfFPG70A3rBg2XIw4AbiPwDYcI/4F0g6d4R1g3sTdFYMEIP7FI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1opYIZ-0012Yw-Ce; Mon, 31 Oct 2022 18:10:07 +0100
+Date:   Mon, 31 Oct 2022 18:10:07 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Shenwei Wang <shenwei.wang@nxp.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        imx@lists.linux.dev, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2 1/1] net: fec: add initial XDP support
+Message-ID: <Y2ABb+G+ykcUd413@lunn.ch>
+References: <20221031162200.1997788-1-shenwei.wang@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221031165834.GA10150@duo.ucw.cz>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <20221031162200.1997788-1-shenwei.wang@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,29 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 05:58:34PM +0100, Pavel Machek wrote:
-> Hi!
-> 
-> I used to be able to do:
-> 
-> pavel@duo:~$     xrandr --output HDMI1 --mode 1920x1080 --primary
-> warning: output HDMI1 not found; ignoring
-> pavel@duo:~$     xrandr --output VGA1 --mode 1280x1024 --below HDMI1
-> warning: output VGA1 not found; ignoring
-> 
-> ...but now I have to do:
-> 
-> pavel@duo:~$     xrandr --output VGA-1 --mode 1280x1024 --below HDMI-1
-> xrandr: cannot find crtc for output VGA-1
-> pavel@duo:~$     xrandr --output LVDS-1 --off
-> pavel@duo:~$     xrandr --output VGA-1 --mode 1280x1024 --below HDMI-1
-> 
-> Notice the change from HDMI1 to HDMI-1. I believe that's new in 6.1 or
-> so. Who did it and why? Hardware is thinkpad x220, and this breaks my
-> scripts :-(.
+> +static int fec_enet_bpf(struct net_device *dev, struct netdev_bpf *bpf)
+> +{
+> +	struct fec_enet_private *fep = netdev_priv(dev);
+> +	bool is_run = netif_running(dev);
+> +	struct bpf_prog *old_prog;
+> +	unsigned int dsize;
+> +	int i;
+> +
+> +	switch (bpf->command) {
+> +	case XDP_SETUP_PROG:
+> +		if (is_run) {
+> +			napi_disable(&fep->napi);
+> +			netif_tx_disable(dev);
+> +		}
+> +
+> +		old_prog = xchg(&fep->xdp_prog, bpf->prog);
+> +
+> +		/* Update RX ring size */
+> +		dsize = fep->bufdesc_ex ? sizeof(struct bufdesc_ex) :
+> +			sizeof(struct bufdesc);
+> +		for (i = 0; i < fep->num_rx_queues; i++) {
+> +			struct fec_enet_priv_rx_q *rxq = fep->rx_queue[i];
+> +			struct bufdesc *cbd_base;
+> +			unsigned int size;
+> +
+> +			cbd_base = rxq->bd.base;
+> +			if (bpf->prog)
+> +				rxq->bd.ring_size = XDP_RX_RING_SIZE;
+> +			else
+> +				rxq->bd.ring_size = RX_RING_SIZE;
+> +			size = dsize * rxq->bd.ring_size;
+> +			cbd_base = (struct bufdesc *)(((void *)cbd_base) + size);
+> +			rxq->bd.last = (struct bufdesc *)(((void *)cbd_base) - dsize);
 
-Are you sure you didn't just switch from intel ddx to modesetting ddx?
+This does not look safe. netif_tx_disable(dev) will stop new
+transmissions, but the hardware can be busy receiving, DMAing frames,
+using the descriptors, etc. Modifying rxq->bd.last in particular seems
+risky. I think you need to disable the receiver, wait for it to
+indicate it really has stopped, and only then make these
+modifications.
 
--- 
-Ville Syrjälä
-Intel
+	Andrew
