@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC856132BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D95BE6132C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:30:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbiJaJaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 05:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        id S230220AbiJaJa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 05:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbiJaJaU (ORCPT
+        with ESMTP id S230153AbiJaJay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 05:30:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8534DE8D;
-        Mon, 31 Oct 2022 02:30:18 -0700 (PDT)
+        Mon, 31 Oct 2022 05:30:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E2DDEA4
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 02:30:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ACAB7B812A4;
-        Mon, 31 Oct 2022 09:30:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 60162C433B5;
-        Mon, 31 Oct 2022 09:30:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1483BB812A4
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:30:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA16EC433D7;
+        Mon, 31 Oct 2022 09:30:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667208616;
-        bh=2hirn8oZToaPOo0zJF6+I7mD28CkBLy+ib/GNfmyPpU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=OHSqXBoFM5oIKe8gpAqgjpIbMANpYAfSjNAmA6AUUpllHmIwYtKK2nrneGaUAqys0
-         mYJK+tg8mHW9Oa9D13b634mXvbpVweYdmBqbf42smPTFLVklEc9INDaDnGowuHMnI7
-         ZeE5RbksG4xlO/Ya3HiXBJyqjr9+Uktj79lwrEk7cEVaZN55M7+l2fITvLxk+RdlY+
-         T4x0Wi6zxutFyCsbRa30y9xV0SlVVbG7jmzq1UUfA2ijFCpTPwa1hRbms4gAyMRTRy
-         +C6f7MIdu/D1xJ1TpaQiTaqNa7+gwth4GC9JzudYnRvFgQJVqiF55/hlGvRKEhHEXL
-         sM+umoTnlpCDQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 39D9DC41621;
-        Mon, 31 Oct 2022 09:30:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1667208649;
+        bh=YUaMUT+y1DS8GEe/2s5XYv+66QzbLrUvEAKg+RlLAas=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KcyLFXzEzb51ObBFj5edtmJIMhemVpWqNdFLb5Vrco53qC6L2JJlJPRQZMts6qDyF
+         OZJ+2R5amzFUvaYgWDUlLPGffKvkOIwIiGen7yQ8xoAYGqE4BPCnbpkoNfF2D/nvIk
+         5N6Lp7vts4XeR8xqaXrrel6waJ2h2jJL0Rte4nr71oUXf5Vw1KjEDMS4qlTdr3IqwF
+         +IE0REc7yPqaf2yuEFMzb9i/BgSXdAifCyphCcTg2Ykg2KX2kR8+80c4vgW8v8E1F4
+         I+ZG06yoZprOSS0pRsTVZ8YKkFv5gSL5Z8vEvaX5Y1C6vUI2vSQ4Pzj7dEdVa342Ys
+         nty91idJVoOXA==
+Date:   Mon, 31 Oct 2022 09:30:44 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Liu Ying <victor.liu@nxp.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com
+Subject: Re: [PATCH RESEND] mfd: Add Freescale i.MX8qxp Control and Status
+ Registers (CSR) module driver
+Message-ID: <Y1+VxDIyGlwClP5U@google.com>
+References: <20221017075702.4182846-1-victor.liu@nxp.com>
+ <c7114aed1e21a6903137ba9288c4d6f6c429fded.camel@nxp.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: fec: fix improper use of NETDEV_TX_BUSY
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166720861622.19318.350956641724128666.git-patchwork-notify@kernel.org>
-Date:   Mon, 31 Oct 2022 09:30:16 +0000
-References: <1666922951-1645-1-git-send-email-zhangchangzhong@huawei.com>
-In-Reply-To: <1666922951-1645-1-git-send-email-zhangchangzhong@huawei.com>
-To:     Zhang Changzhong <zhangchangzhong@huawei.com>
-Cc:     qiangqing.zhang@nxp.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, B38611@freescale.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <c7114aed1e21a6903137ba9288c4d6f6c429fded.camel@nxp.com>
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,29 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Mon, 31 Oct 2022, Liu Ying wrote:
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri, 28 Oct 2022 10:09:11 +0800 you wrote:
-> The ndo_start_xmit() method must not free skb when returning
-> NETDEV_TX_BUSY, since caller is going to requeue freed skb.
-> 
-> Fix it by returning NETDEV_TX_OK in case of dma_map_single() fails.
-> 
-> Fixes: 79f339125ea3 ("net: fec: Add software TSO support")
-> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+> On Mon, 2022-10-17 at 15:57 +0800, Liu Ying wrote:
+> > Freescale i.MX8qxp Control and Status Registers (CSR) module is a system
+> > controller. It represents a set of miscellaneous registers of a specific
+> > subsystem. It may provide control and/or status report interfaces to a
+> > mix of standalone hardware devices within that subsystem.
+> > 
+> > The CSR module in i.MX8qm/qxp SoCs is a child node of a simple power-managed
+> > bus(i.MX8qxp pixel link MSI bus). To propagate power management operations
+> > of the CSR module's child devices to that simple power-managed bus, add a
+> > dedicated driver for the CSR module. Also, the driver would populate the CSR
+> > module's child devices.
+> > 
+> > Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> > ---
+> > The Freescale i.MX8qxp CSR DT bindings is at
+> > Documentation/devicetree/bindings/mfd/fsl,imx8qxp-csr.yaml.
+> > 
+> > Resend the patch based on v6.1-rc1.
+> > 
+> >  drivers/mfd/Kconfig           | 10 +++++++
+> >  drivers/mfd/Makefile          |  1 +
+> >  drivers/mfd/fsl-imx8qxp-csr.c | 53 +++++++++++++++++++++++++++++++++++
+> >  3 files changed, 64 insertions(+)
+> >  create mode 100644 drivers/mfd/fsl-imx8qxp-csr.c
 > 
 > [...]
+> 
+> Gentle ping...
 
-Here is the summary with links:
-  - [net] net: fec: fix improper use of NETDEV_TX_BUSY
-    https://git.kernel.org/netdev/net/c/06a4df5863f7
+Content-less pings will never be received well.
 
-You are awesome, thank you!
+> Any comments please?
+
+You're in the queue.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Lee Jones [李琼斯]
