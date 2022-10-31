@@ -2,108 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487496138FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 15:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1096138FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 15:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbiJaObO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 10:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
+        id S231144AbiJaOcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 10:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231608AbiJaObL (ORCPT
+        with ESMTP id S229556AbiJaOch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 10:31:11 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541DA65B1
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 07:31:09 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id h193so2154074pgc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 07:31:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UxCaUCeOv04svZ2y77cTIK0oMsYuJugdQM+dBKql0sI=;
-        b=IRZ7eArpvlGdYkmcQnoG9wRJvZZRYTOjv+75+y7qrqJKP2eRSqTED0/2qbTkhBWLQW
-         qn6F2oOnAkXe27Mlw/oX0MzgGhHNnKSSeUVp1LwXVkfASc9oJmR9NUJDoZLNK/A3QG1B
-         GmbS7ns5SNp/q1n+LLOfa64KEfp0iHYPXHbvbaCa9ITNIC1pR/x7eGt/GQF2iXVRZSqA
-         qomXVk0ErCe9GL1yOpI0pfSEa6Mxrkb4r8R8yFhVatklAs3hKVhzpxNSUak7jLw2GCqM
-         aeScFdmz9vKOOVTOm5EL0jHJ1+f6j4vYA5SoJm/ZacGiQQNgyROHfnSxjZHBastsJFPd
-         +Kag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UxCaUCeOv04svZ2y77cTIK0oMsYuJugdQM+dBKql0sI=;
-        b=KmduG7vxT+yLil39I3OSUTPSj35esJBqZiJO7Ybln0ZxIy7ADw0Sfd81k7F00L5l27
-         wUmpZAfsRSuYLXO6hffFGKBRmCbz2qUbjLcJ+QRxtrjYz2dseowa1Wgh0SD8pFgi9Uy9
-         lS1YzRZPKFSRAYXG3vy4ruF2PLoouLgTmd2IvqW6A0NcfSAQ/yQxjn+h+v4qz/mR74Jx
-         zrTWGZfChs9620Wyi4t+KgClG/OvpO8ouki2xCoPtAzueoZ8sH2ZahnSiPeVsJOVkwsH
-         aZ5i4RhgScgrbp6RaruDFUh207YbG9PGqlggOQCjhaxqKwKMWv8MSgSo7jFsNHATt+jl
-         1S4A==
-X-Gm-Message-State: ACrzQf3ywWpcOCGpXMlCZyC4iq3iN0CYDR3fftnAqx0FkQ5pfRMHPiF5
-        yIRh+SgJMMVarI3Mn8jBAVjuCgM9H7PiMsUk
-X-Google-Smtp-Source: AMsMyM6k2sHCrwoWqguXpQcWH+977dJthW1xU3lPj4RysM6XzuN+9vHs092ZksVUjGHPd1nUx3Gv5w==
-X-Received: by 2002:a05:6a00:16c4:b0:535:890:d4a with SMTP id l4-20020a056a0016c400b0053508900d4amr14795660pfc.0.1667226668625;
-        Mon, 31 Oct 2022 07:31:08 -0700 (PDT)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id c12-20020a170902d48c00b0017f36638010sm4552508plg.276.2022.10.31.07.31.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 07:31:08 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Chen Jun <chenjun102@huawei.com>, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, will@kernel.org, ming.lei@redhat.com
-Cc:     xuqiang36@huawei.com
-In-Reply-To: <20221031031242.94107-1-chenjun102@huawei.com>
-References: <20221031031242.94107-1-chenjun102@huawei.com>
-Subject: Re: [PATCH] blk-mq: Fix kmemleak in blk_mq_init_allocated_queue
-Message-Id: <166722666769.125558.7022234189834891609.b4-ty@kernel.dk>
-Date:   Mon, 31 Oct 2022 08:31:07 -0600
+        Mon, 31 Oct 2022 10:32:37 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F89A65A6;
+        Mon, 31 Oct 2022 07:32:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D944E1F893;
+        Mon, 31 Oct 2022 14:32:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667226754; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wVoDxS6PUHIpxcricZG+zBeWGoABJesgtPBdPuIWxgs=;
+        b=ADVD/L1pGDvFfcekCmppTqkmXcU+rjMdYyhg8mHnsMS8svmtsz6Elc3Var2Zm60DaTjzoz
+        6VshnsOVVIjhaLCLy9tavEkU8kFcf/5vobuAXe9oB1vvFXbqCdLYKQHoHXV6HPx6Go37d8
+        /dHwaSMM3TO2m2wVYZeeokpupX5y/hs=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BACA213451;
+        Mon, 31 Oct 2022 14:32:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6UZZK4LcX2MhfQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 31 Oct 2022 14:32:34 +0000
+Date:   Mon, 31 Oct 2022 15:32:34 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     "Huang, Ying" <ying.huang@intel.com>,
+        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Waiman Long <longman@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Chen, Tim C" <tim.c.chen@intel.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>
+Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
+Message-ID: <Y1/cgrgdVP+KdYzf@dhcp22.suse.cz>
+References: <Y1lZV6qHp3gIINGc@dhcp22.suse.cz>
+ <87wn8lkbk5.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <Y1ou5DGHrEsKnhri@dhcp22.suse.cz>
+ <87o7txk963.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <Y1o63SWD2KmQkT3v@dhcp22.suse.cz>
+ <87fsf9k3yg.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <Y1p5vaN1AWhpNWZx@dhcp22.suse.cz>
+ <87bkpwkg24.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <Y1+J7+1V1nJXF+3b@dhcp22.suse.cz>
+ <Y1/XC+witPxFj04T@feng-clx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-d9ed3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1/XC+witPxFj04T@feng-clx>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Oct 2022 03:12:42 +0000, Chen Jun wrote:
-> There is a kmemleak caused by modprobe null_blk.ko
+On Mon 31-10-22 22:09:15, Feng Tang wrote:
+> On Mon, Oct 31, 2022 at 04:40:15PM +0800, Michal Hocko wrote:
+> > On Fri 28-10-22 07:22:27, Huang, Ying wrote:
+> > > Michal Hocko <mhocko@suse.com> writes:
+> > > 
+> > > > On Thu 27-10-22 17:31:35, Huang, Ying wrote:
+> > [...]
+> > > >> I think that it's possible for different processes have different
+> > > >> requirements.
+> > > >> 
+> > > >> - Some processes don't care about where the memory is placed, prefer
+> > > >>   local, then fall back to remote if no free space.
+> > > >> 
+> > > >> - Some processes want to avoid cross-socket traffic, bind to nodes of
+> > > >>   local socket.
+> > > >> 
+> > > >> - Some processes want to avoid to use slow memory, bind to fast memory
+> > > >>   node only.
+> > > >
+> > > > Yes, I do understand that. Do you have any specific examples in mind?
+> > > > [...]
+> > > 
+> > > Sorry, I don't have specific examples.
+> > 
+> > OK, then let's stop any complicated solution right here then. Let's
+> > start simple with a per-mm flag to disable demotion of an address space.
+> > Should there ever be a real demand for a more fine grained solution
+> > let's go further but I do not think we want a half baked solution
+> > without real usecases.
 > 
-> unreferenced object 0xffff8881acb1f000 (size 1024):
->   comm "modprobe", pid 836, jiffies 4294971190 (age 27.068s)
->   hex dump (first 32 bytes):
->     00 00 00 00 ad 4e ad de ff ff ff ff 00 00 00 00  .....N..........
->     ff ff ff ff ff ff ff ff 00 53 99 9e ff ff ff ff  .........S......
->   backtrace:
->     [<000000004a10c249>] kmalloc_node_trace+0x22/0x60
->     [<00000000648f7950>] blk_mq_alloc_and_init_hctx+0x289/0x350
->     [<00000000af06de0e>] blk_mq_realloc_hw_ctxs+0x2fe/0x3d0
->     [<00000000e00c1872>] blk_mq_init_allocated_queue+0x48c/0x1440
->     [<00000000d16b4e68>] __blk_mq_alloc_disk+0xc8/0x1c0
->     [<00000000d10c98c3>] 0xffffffffc450d69d
->     [<00000000b9299f48>] 0xffffffffc4538392
->     [<0000000061c39ed6>] do_one_initcall+0xd0/0x4f0
->     [<00000000b389383b>] do_init_module+0x1a4/0x680
->     [<0000000087cf3542>] load_module+0x6249/0x7110
->     [<00000000beba61b8>] __do_sys_finit_module+0x140/0x200
->     [<00000000fdcfff51>] do_syscall_64+0x35/0x80
->     [<000000003c0f1f71>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> Yes, the concern about the high cost for mempolicy from you and Yang is
+> valid. 
 > 
-> [...]
+> How about the cpuset part?
 
-Applied, thanks!
+Cpusets fall into the same bucket as per task mempolicies wrt costs. Geting a
+cpuset requires knowing all tasks associated with a page. Or am I just
+missing any magic? And no memcg->cpuset association is not a proper
+solution at all.
 
-[1/1] blk-mq: Fix kmemleak in blk_mq_init_allocated_queue
-      commit: 943f45b9399ed8b2b5190cbc797995edaa97f58f
+> We've got bug reports from different channels
+> about using cpuset+docker to control meomry placement in memory tiering
+> system, leading to 2 commits solving them:
+> 
+> 2685027fca38 ("cgroup/cpuset: Remove cpus_allowed/mems_allowed setup in
+> cpuset_init_smp()") 
+> https://lore.kernel.org/all/20220419020958.40419-1-feng.tang@intel.com/
+> 
+> 8ca1b5a49885 ("mm/page_alloc: detect allocation forbidden by cpuset and
+> bail out early")
+> https://lore.kernel.org/all/1632481657-68112-1-git-send-email-feng.tang@intel.com/
+> 
+> >From these bug reports, I think it's reasonable to say there are quite
+> some real world users using cpuset+docker+memory-tiering-system.
 
-Best regards,
+I don't think anybody is questioning existence of those usecases. The
+primary question is whether any of them really require any non-trivial
+(read nodemask aware) demotion policies. In other words do we know of
+cpuset policy setups where demotion fallbacks are (partially) excluded?
 -- 
-Jens Axboe
-
-
+Michal Hocko
+SUSE Labs
