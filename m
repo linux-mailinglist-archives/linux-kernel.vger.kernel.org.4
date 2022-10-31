@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 112F7613E05
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 20:08:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ECD7613E08
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 20:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiJaTH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 15:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35948 "EHLO
+        id S229682AbiJaTJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 15:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJaTH4 (ORCPT
+        with ESMTP id S229468AbiJaTJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 15:07:56 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFDA11C2F
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:07:55 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id o8so8945233qvw.5
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:07:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RIRCeB57mif3WLLjzHJdENrFUL9U/TfVQ593vGFl6q4=;
-        b=PzRtrjqO02eaWa33Zq3luOuXf6b8F5IN//bl0BoITVBRXmcMh7nbJhnqTYWRRryu5y
-         8iDxEI/HfGaS1+1tz8lnXx3Ny5EVlFEYhPErbdEJhiUGODUQeS5CyUWmCheYQW971isr
-         K+Mc3Us7oEuRSM2JN/G6i+LXwzXpZEIcmSr+o=
+        Mon, 31 Oct 2022 15:09:39 -0400
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F105511170
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:09:37 -0700 (PDT)
+Received: by mail-oo1-f45.google.com with SMTP id g15-20020a4a894f000000b0047f8e899623so1767281ooi.5
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:09:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RIRCeB57mif3WLLjzHJdENrFUL9U/TfVQ593vGFl6q4=;
-        b=hRo3O1eG0ih4hkXhPYcxJgB/6b8hdHGEWVyQnc/5PTshqGwsKgNPSigsbUifMNnvTx
-         Hk9DMqke7fqCbwBggEEd5dAhH2xt0gY1rvvS1y7ANMY5e4atI7Rquc7GOl9WXxdo4qlN
-         PJ8CjPXW5ENGux8tdiBWLgeiasFtqBhOc12my+8R+KsHxoYAq6BAC1L/4wvgpyGKPAiF
-         9kr2H2eTN2cYnPgGwCOZod5upXgNVV4eGdm4141hLGTk0npBNJmqjOhuXCbaTYpdyqcb
-         rEFMde6tjcIU81YpL4+DP5nJx7x3ciGRCZvs4xxZyvoA1xB1bazb9omIOXeGVCuVqzHT
-         Q0CA==
-X-Gm-Message-State: ACrzQf2epp5BQH0hpiw3tnCWdoo5GtHy4nMtsTKvICRpTzD3Uv2US+BE
-        efNd8MwFOfTDPH5GWqfXuFRTJd13kxZFZQ==
-X-Google-Smtp-Source: AMsMyM4Ee+TZhvFESxifDL5ZbYRMf3zJ0lb6HTgKveEGgF8voG8drknnCpgUM2yOpEkJV7laSI1VRw==
-X-Received: by 2002:a0c:e18f:0:b0:4bb:5b84:fb2c with SMTP id p15-20020a0ce18f000000b004bb5b84fb2cmr12651354qvl.28.1667243274274;
-        Mon, 31 Oct 2022 12:07:54 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id c17-20020ac853d1000000b0039cc944ebdasm4023765qtq.54.2022.10.31.12.07.53
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Oct 2022 12:07:53 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id 63so14813677ybq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:07:53 -0700 (PDT)
-X-Received: by 2002:a25:bb02:0:b0:6ca:9345:b2ee with SMTP id
- z2-20020a25bb02000000b006ca9345b2eemr2992665ybg.362.1667243272872; Mon, 31
- Oct 2022 12:07:52 -0700 (PDT)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hD4xU0q6YbZ6CRjJUPNp1E0zHiqSDa4ieXvjdTrdlqI=;
+        b=ESyloqwZRaeiSzDIT+o134cBYHvil6ep7JGcqijFvoki6zqN/w8gZ6CY8hzCb7aeZ+
+         FhUzHm83qwHv0h1fCAgcSYuPgqE2nqlA71yNo4eoIiRn3E/AigO1xuGXtKYA0JEFdRvk
+         MM1NiabBXmMjhcfj3XkTioBpOrpP5PHQzPF3Q9lp0aeiCzv/iotoXk/rPWBU5C1JdWlA
+         yKDDwjVB/PXg3qd6uat30bMIRgUI9v3nXxUIa+Cd6oWG7J653hHdhVIj73XDIn0pSRol
+         aot1Ti+irwl1+IahohHIW8cMr8OYeMy/bxTdYunhuWoEmWPjiikj3SWMv9CU7CtvRQHM
+         FA0Q==
+X-Gm-Message-State: ACrzQf0n2ty8B4DCmB8uaxLFx6iLyrvyKXPkheY9qVQScY5neDxsLDsV
+        wHdM3maOhXP4wDp/zsZG8A==
+X-Google-Smtp-Source: AMsMyM6MQNPx72Ni8lRQ9ixoikyghtIS0crG//ltDCgjvCEwBcx7OTcxdQuiLtGHd8N+KHOACVosZA==
+X-Received: by 2002:a4a:b14d:0:b0:480:fd94:1317 with SMTP id e13-20020a4ab14d000000b00480fd941317mr6158234ooo.54.1667243377175;
+        Mon, 31 Oct 2022 12:09:37 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f66-20020a9d03c8000000b0066756fdd916sm3036705otf.68.2022.10.31.12.09.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 12:09:36 -0700 (PDT)
+Received: (nullmailer pid 3268773 invoked by uid 1000);
+        Mon, 31 Oct 2022 19:09:38 -0000
+Date:   Mon, 31 Oct 2022 14:09:38 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Oder Chiou <oder_chiou@realtek.com>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/8] ASoC: rt5682: Support dbvdd and ldo1-in supplies
+Message-ID: <20221031190938.GA3264845-robh@kernel.org>
+References: <20221028205540.3197304-1-nfraprado@collabora.com>
+ <20221028205540.3197304-7-nfraprado@collabora.com>
+ <Y1/JCN+mtlT0r/rw@sirena.org.uk>
+ <20221031163140.h63kjpivwg7xpvs3@notapiano>
 MIME-Version: 1.0
-References: <20221031175256.2813280-1-jannh@google.com> <Y2APCmYNjYOYLf8G@ZenIV>
- <CAG48ez094n05c3QJMy7vZ5U=z87MzqYeKU97Na_R9O36_LJSXw@mail.gmail.com> <Y2AYecOnLTkhmZB1@ZenIV>
-In-Reply-To: <Y2AYecOnLTkhmZB1@ZenIV>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 31 Oct 2022 12:07:36 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whynVDmGUG0qNLhGboUKXbTCnKudEr4R=GN5mH-Bz9gLg@mail.gmail.com>
-Message-ID: <CAHk-=whynVDmGUG0qNLhGboUKXbTCnKudEr4R=GN5mH-Bz9gLg@mail.gmail.com>
-Subject: Re: [PATCH v2] fs: use acquire ordering in __fget_light()
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Jann Horn <jannh@google.com>, Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221031163140.h63kjpivwg7xpvs3@notapiano>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,30 +75,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 11:48 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> Anyway, it's unrelated to the patch itself.  I'm fine with it in the current
-> form.  Will apply for the next merge window, unless Linus wants it in right
-> now.
+On Mon, Oct 31, 2022 at 12:31:40PM -0400, Nícolas F. R. A. Prado wrote:
+> On Mon, Oct 31, 2022 at 01:09:28PM +0000, Mark Brown wrote:
+> > On Fri, Oct 28, 2022 at 04:55:38PM -0400, Nícolas F. R. A. Prado wrote:
+> > 
+> > > @@ -35,6 +35,8 @@ const char *rt5682_supply_names[RT5682_NUM_SUPPLIES] = {
+> > >  	"AVDD",
+> > >  	"MICVDD",
+> > >  	"VBAT",
+> > > +	"dbvdd",
+> > > +	"ldo1-in",
+> > 
+> > Why are we making these inconsistent in style with the other supplies?
+> 
+> In short because the other supplies already have users while these are new ones.
+> My understanding was that new supplies should have lowercase names, following DT
+> convention. But I do see the argument on having them all be consistent for a
+> single driver/binding. If there are no remarks from Rob or Krzysztof I can
+> change it in the next version.
 
-It doesn't strike me as hugely critical, so I'm fine with it being put
-in any random pile of "fixes to be applied" as long as it doesn't get
-lost entirely. But if y ou have a "fixes" branch that may end up
-coming to me before this release is over, that's not the wrong place
-either.
+We want lowercase and consistency... Between the 2, I pick consistency.
 
-I would tend to agree with Jann that the re-ordering doesn't look very
-likely because it's the same cacheline, so even an aggressively
-out-of-order core really doesn't seem to be very likely to trigger any
-issues. So you have a really unlikely situation to begin with, and
-even less reason for it then triggering the re-ordering.
-
-The "original situation is unlikely" can probably be made quite likely
-with an active attack, but that active attacker would then also also
-have to rely on "that re-ordering looks sketchy", and actively hunt
-for hardware where it can happen.
-
-And said hardware may simply not exist, even if the race is certainly
-theoretically possible on any weakly ordered CPU.
-
-             Linus
+Rob
