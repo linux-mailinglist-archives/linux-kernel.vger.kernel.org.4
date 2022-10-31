@@ -2,114 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE20612E9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 02:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3788612E96
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 02:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiJaBZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 21:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49030 "EHLO
+        id S229795AbiJaBSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 21:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiJaBZd (ORCPT
+        with ESMTP id S229544AbiJaBSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 21:25:33 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C1565FD;
-        Sun, 30 Oct 2022 18:25:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667179533; x=1698715533;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=f640Ubf/vnDK3++Ta0iClrJQA/SD0Rx+i4b2hr4OLDs=;
-  b=i/vbMTZ7b6Mg7OZ/8GroZAwk/BJzYtHe7/nF3z4ZlmreCKQT0TS9fxWK
-   h9uGfaMzeHmSGa4Jl3/gP7K7Gh2//Cbro3bg7hsp7S2PtgCSXiInREriK
-   zCD5iH5JVso8p67hnP+BrI3j1S6HMcx7dMGxQ9OHELTA1opcyCQf+DnXY
-   EoZR8q2/lxI7Dhb6gKVzTDg5DUqIxPfwc3IDmI+Wb1s1xW0em0ND556qy
-   qvXDRVv866rCq/jLYpQbj4Rr63N1zwQj49QivahRbvNRceA0NTwusIwyV
-   v8dza5S39Y/z9qapkm/jsE5gGkN6BKTcqQFF/HAxZYdDrNmbRrA/XUfg6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="288509865"
-X-IronPort-AV: E=Sophos;i="5.95,227,1661842800"; 
-   d="scan'208";a="288509865"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2022 18:25:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="611326587"
-X-IronPort-AV: E=Sophos;i="5.95,227,1661842800"; 
-   d="scan'208";a="611326587"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga006.jf.intel.com with ESMTP; 30 Oct 2022 18:25:28 -0700
-Date:   Mon, 31 Oct 2022 09:16:19 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     matthew.gerlach@linux.intel.com, hao.wu@intel.com,
-        russell.h.weight@intel.com, basheer.ahmed.muddebihal@intel.com,
-        trix@redhat.com, mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net, jirislaby@kernel.org,
-        geert+renesas@glider.be, niklas.soderlund+renesas@ragnatech.se,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de,
-        ilpo.jarvinen@linux.intel.com, marpagan@redhat.com
-Subject: Re: [PATCH v4 3/4] fpga: dfl: add basic support DFHv1
-Message-ID: <Y18h4+ESJo+NQnOu@yilunxu-OptiPlex-7050>
-References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com>
- <20221020212610.697729-4-matthew.gerlach@linux.intel.com>
- <Y10l3NkIn0gsdVZq@yilunxu-OptiPlex-7050>
- <Y171ZEHpOydtR4dW@smile.fi.intel.com>
+        Sun, 30 Oct 2022 21:18:15 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5348E9FDA;
+        Sun, 30 Oct 2022 18:18:14 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N0wBd1smlzmVbK;
+        Mon, 31 Oct 2022 09:13:13 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 31 Oct 2022 09:17:57 +0800
+Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 31 Oct
+ 2022 09:17:57 +0800
+Message-ID: <09aa678e-b072-d567-5e8a-fdd58d761871@huawei.com>
+Date:   Mon, 31 Oct 2022 09:17:53 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y171ZEHpOydtR4dW@smile.fi.intel.com>
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: linux-next: build warning after merge of the sound-asoc-fixes
+ tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>
+References: <20221031083917.6944b95b@canb.auug.org.au>
+Content-Language: en-US
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <20221031083917.6944b95b@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-31 at 00:06:28 +0200, Andy Shevchenko wrote:
-> On Sat, Oct 29, 2022 at 09:08:44PM +0800, Xu Yilun wrote:
-> > On 2022-10-20 at 14:26:09 -0700, matthew.gerlach@linux.intel.com wrote:
-> 
-> > >  struct dfl_feature_info {
-> > >  	u16 fid;
-> > >  	u8 revision;
-> > > +	u8 dfh_version;
-> > >  	struct resource mmio_res;
-> > >  	void __iomem *ioaddr;
-> > >  	struct list_head node;
-> > >  	unsigned int irq_base;
-> > >  	unsigned int nr_irqs;
-> > > +	unsigned int param_size;
-> > > +	u64 params[];
-> > >  };
-> 
-> ...
-> 
-> > > +	finfo = kzalloc(sizeof(*finfo) + dfh_psize, GFP_KERNEL);
-> 
-> 
-> This probably may use something from overflow.h.
-> 
-> > The u64 flexible array in the structure, but seems dfh_get_psize could
-> > not garantee 64bit aligned size.
-> > 
-> > What's the mandatory alignment of param data? If 64bit aligned, bit 33-34
-> > of PARAM_HDR should be reserved. If 32bit aligned, finfo:params should be
-> > u32[].
-> 
-> Isn't it guaranteed by the C standard / architecture ABI?
+Hi,
 
-I'm referring to the malloc size of the structure. It reserved dfh_psize
-bytes for this u64 array, but there is no garantee dfh_psize should be a
-multiple of 8. So there may be memory leak when accessing the last
-array element?
+On 2022/10/31 5:39, Stephen Rothwell wrote:
+> Hi all,
+>
+> After merging the sound-asoc-fixes tree, today's linux-next build (arm
+> multi_v7_defconfig) produced this warning:
+>
+> WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in reference: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+>
+> Introduced by commit
+>
+>    6ec27c53886c ("ASoC: core: Fix use-after-free in snd_soc_exit()")
+It's because I called "_exit snd_soc_util_exit()" inside "_init 
+snd_soc_init()".
 
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+Since snd_soc_util_exit is only used in snd_soc_init() and 
+snd_soc_exit(), I think it's fine to remove _exit for snd_soc_util_exit().
+
+Could you please add this change for the patch?
+
+
+diff --git a/sound/soc/soc-utils.c b/sound/soc/soc-utils.c
+index a3b6df2378b4..a4dba0b751e7 100644
+--- a/sound/soc/soc-utils.c
++++ b/sound/soc/soc-utils.c
+@@ -264,7 +264,7 @@ int __init snd_soc_util_init(void)
+         return ret;
+  }
+
+-void __exit snd_soc_util_exit(void)
++void snd_soc_util_exit(void)
+  {
+         platform_driver_unregister(&soc_dummy_driver);
+         platform_device_unregister(soc_dummy_dev);
+
+
+Thanks!
+
+Best,
+
+Chen
