@@ -2,127 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72137613FDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 22:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A291B613FE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 22:29:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiJaVW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 17:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
+        id S230056AbiJaV33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 17:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiJaVW5 (ORCPT
+        with ESMTP id S229528AbiJaV31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 17:22:57 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADF81163
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 14:22:55 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id d3so18360743ljl.1
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 14:22:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DFK676x3FEk6RbPboSTijjACbO8bnzzHJh+h7Usxze4=;
-        b=rIVWeYtEcrMCgiUEgkdpn86mpWaJ1JVEaBwh5Zhvs+WQIiqoVYjYsYKE5Cq1vKGbHa
-         nMrTlJxn0ZiKau/FxUWo3QNTYjktFHPW1NYG20d6TCdoz4cUHjiCe0kgaCxjqdYHQfF5
-         KfmNb6OWOnPyU1vRsYjsoO5Tf/9/PsXeY4/g6aUOgMxmZEm4pQ+xXOmu20YHf3FD2RZj
-         WbaMx2JbbuuzELJhuHLieIZx8HYHPdEtLit+d6s4iVLOryZFW2T5cM34jNIywyH86iuO
-         rqn1dFfNXUoLpLbfb4Yw3amLw1hfYvCqLVfGmmioHLeoRbrLKrkNdqfYT1cs2a0EyzrA
-         rfjA==
+        Mon, 31 Oct 2022 17:29:27 -0400
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842BD101C8;
+        Mon, 31 Oct 2022 14:29:26 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id c129so2302080oia.0;
+        Mon, 31 Oct 2022 14:29:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DFK676x3FEk6RbPboSTijjACbO8bnzzHJh+h7Usxze4=;
-        b=ufa5VItwR5jJnD125ewRRKSIax8Ngw9Ei2POGYVpHzzGSf8LBTShfulgCU0NX80QWO
-         3YBMy6WnGKn2JqIJ8UAQEAPcHaCdoHsxCdXrsZiBsvvFiKFIOnBvRXwi8nsjvXnvgxdG
-         NJ1sDXYp7Jzx19xoNS9R0nUVHNyIdYD2nlZLkE9QFX+8XA5LZkdyaraNC02Q4/iALOwN
-         r2DACf2pbCwiNhtaHtUKqD4lZfvh4+9CWpwgkQgU5ud/ADUkdMM3FyeraoCAj6nwy3lV
-         vpM+KPfII7b8uVdtOmEa614mZRNqKWuiGzJIQCPOpeMl/y4lPaAg0eR92RR+5zLAnQwl
-         JaHg==
-X-Gm-Message-State: ACrzQf37oZDlR/Y6yR9NNfiHmwE+Y9D5uwMWZzEjlqYEmu6Wvi1+02XN
-        MisMAHdwoRVcglE0gzppyOCbwwiwGbEWabqJklCXgA==
-X-Google-Smtp-Source: AMsMyM7PtHElb6XApUa/IYc91bMcM9jgeSMXvtWkNR+YmWU23wt6uW0EPAuCXNRUiMv+9GF5LBsiJHS5cmldf2FRMBI=
-X-Received: by 2002:a05:651c:1073:b0:277:35ca:5eef with SMTP id
- y19-20020a05651c107300b0027735ca5eefmr6154643ljm.150.1667251373957; Mon, 31
- Oct 2022 14:22:53 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HeSIifTj6jENNWHhoSdY8aooxwuhS3bnKLvqLnQk6FM=;
+        b=O83JXc6Q7pEhEROwz1F1BwmKMNJoTK8Z38y+/8iWnMZGE0jzAwo+2txea5EUM4iKFv
+         6Z4F6/oMDKoYr7Qyoiy3OsIpUr4rREWIto8kWVyZLIEkhM4hYcSZcAoX9e5EVspdqaY8
+         7t0YTOdow/WydNEZKasBpGMvRIWHCLuxYl5sxlsn649H29/hCIcL84osz+4vNmuX4IDb
+         JXT/zMiSbwp6yNFmnZXh3qbLZM98KPsCLr9wsNDKzEkwEly43XaXJ6o7Ij8zMA3yf8D8
+         zCCVhcrODvCgsYzU5I8S47oqowTAwRJYz1GGveY5kpAbHr9fXr4kIJ4ruGOg09JTNDmn
+         WIgQ==
+X-Gm-Message-State: ACrzQf2pKzL+5PHuBQZ21ysnXOXcHxFx8JDi5bR7oXF9OijXdfomcyfF
+        XjCU3n6i0Xr3Fp3qCm8fJg==
+X-Google-Smtp-Source: AMsMyM6qEAaLeVn+yiCeyAv+duU6sO1sRWSWr15BGUoIMpYIzx+CIJrKX3SETaVHnmAJegD3ilgQ4A==
+X-Received: by 2002:a05:6808:2387:b0:355:2641:aff5 with SMTP id bp7-20020a056808238700b003552641aff5mr7687183oib.44.1667251765670;
+        Mon, 31 Oct 2022 14:29:25 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bx12-20020a0568081b0c00b003539686cb7bsm2733852oib.53.2022.10.31.14.29.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 14:29:25 -0700 (PDT)
+Received: (nullmailer pid 3605416 invoked by uid 1000);
+        Mon, 31 Oct 2022 21:29:27 -0000
+Date:   Mon, 31 Oct 2022 16:29:27 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-gpio@vger.kernel.org,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v5 2/2] dt-bindings: pinctrl: add loongson-2 pinctrl
+Message-ID: <166725176639.3605360.416860963509021396.robh@kernel.org>
+References: <20221029022130.19914-1-zhuyinbo@loongson.cn>
+ <20221029022130.19914-2-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
-References: <20221026224449.214839-1-joshdon@google.com> <Y1/HzzA1FIawYM11@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y1/HzzA1FIawYM11@hirez.programming.kicks-ass.net>
-From:   Josh Don <joshdon@google.com>
-Date:   Mon, 31 Oct 2022 14:22:42 -0700
-Message-ID: <CABk29Nu=XcjwRxnGBtKHfknxnDPpspghou06+W0fufnkGF6NkA@mail.gmail.com>
-Subject: Re: [PATCH v2] sched: async unthrottling for cfs bandwidth
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221029022130.19914-2-zhuyinbo@loongson.cn>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Peter,
 
+On Sat, 29 Oct 2022 10:21:30 +0800, Yinbo Zhu wrote:
+> Add the Loongson-2 pinctrl binding with DT schema format using
+> json-schema.
+> 
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+> Change in v5:
+> 		1. Drop dependencies.
+> 		2. Add spaces after '='.
+> 		3. Replace string loongson2 with loongson-2 in title.
+> 
+>  .../pinctrl/loongson,ls2k-pinctrl.yaml        | 125 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  2 files changed, 126 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
+> 
 
-On Mon, Oct 31, 2022 at 6:04 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Wed, Oct 26, 2022 at 03:44:49PM -0700, Josh Don wrote:
-> > CFS bandwidth currently distributes new runtime and unthrottles cfs_rq's
-> > inline in an hrtimer callback. Runtime distribution is a per-cpu
-> > operation, and unthrottling is a per-cgroup operation, since a tg walk
-> > is required. On machines with a large number of cpus and large cgroup
-> > hierarchies, this cpus*cgroups work can be too much to do in a single
-> > hrtimer callback: since IRQ are disabled, hard lockups may easily occur.
-> > Specifically, we've found this scalability issue on configurations with
-> > 256 cpus, O(1000) cgroups in the hierarchy being throttled, and high
-> > memory bandwidth usage.
-> >
-> > To fix this, we can instead unthrottle cfs_rq's asynchronously via a
-> > CSD. Each cpu is responsible for unthrottling itself, thus sharding the
-> > total work more fairly across the system, and avoiding hard lockups.
->
-> So, TJ has been complaining about us throttling in kernel-space, causing
-> grief when we also happen to hold a mutex or some other resource and has
-> been prodding us to only throttle at the return-to-user boundary.
-
-Yea, we've been having similar priority inversion issues. It isn't
-limited to CFS bandwidth though, such problems are also pretty easy to
-hit with configurations of shares, cpumasks, and SCHED_IDLE. I've
-chatted with the folks working on the proxy execution patch series,
-and it seems like that could be a better generic solution to these
-types of issues.
-
-Throttle at return-to-user seems only mildly beneficial, and then only
-really with preemptive kernels. Still pretty easy to get inversion
-issues, e.g. a thread holding a kernel mutex wake back up into a
-hierarchy that is currently throttled, or a thread holding a kernel
-mutex exists in the hierarchy being throttled but is currently waiting
-to run.
-
-> Would this be an opportune moment to do this? That is, what if we
-> replace this CSD with a task_work that's ran on the return-to-user path
-> instead?
-
-The above comment is about when we throttle, whereas this patch is
-about the unthrottle case. I think you're asking why don't we
-unthrottle using e.g. task_work assigned to whatever the current task
-is? That would work around the issue of keeping IRQ disabled for long
-periods, but still forces one cpu to process everything, which can
-take quite a while.
-
-Thanks,
-Josh
+Reviewed-by: Rob Herring <robh@kernel.org>
