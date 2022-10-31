@@ -2,70 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4990613C19
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F272D613C20
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbiJaRZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 13:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60018 "EHLO
+        id S231867AbiJaR1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 13:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbiJaRY7 (ORCPT
+        with ESMTP id S230505AbiJaR1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 13:24:59 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259E21000;
-        Mon, 31 Oct 2022 10:24:58 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7cf329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7cf:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6464F1EC042F;
-        Mon, 31 Oct 2022 18:24:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1667237096;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KM4MlHYEPBibXJYMyGsoFqqbcjeyXylp9uhEPTyVtk8=;
-        b=fqkPucJXDEbQwppgyrMobp5sbCAfvbFCHlkyyinEdrOw7FQhPPiDbdIaP4hUcwsTPXziIh
-        rXFXJKQvkC4RzC+1a/qYO5/ujWncYk0+xTP35N6wRwniLkOv3eCN4AOdCMuSKetwvs+ahe
-        6BptN4fsOJ6Tos2PFnpHjFSr9TptluE=
-Date:   Mon, 31 Oct 2022 18:24:52 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Michal Simek <michal.simek@xilinx.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sherry Sun <sherry.sun@nxp.com>,
-        Shubhrajyoti Datta <Shubhrajyoti.datta@xilinx.com>
-Subject: Re: [PATCH RESEND v3 01/17] EDAC/synopsys: Fix native uMCTL2 IRQs
- handling procedure
-Message-ID: <Y2AE5A74TIZwJ/7Q@zn.tnic>
-References: <20220929232712.12202-1-Sergey.Semin@baikalelectronics.ru>
- <20220929232712.12202-2-Sergey.Semin@baikalelectronics.ru>
+        Mon, 31 Oct 2022 13:27:15 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1FEC313CEF;
+        Mon, 31 Oct 2022 10:27:15 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.50.127])
+        by linux.microsoft.com (Postfix) with ESMTPSA id B11FF20B9F80;
+        Mon, 31 Oct 2022 10:27:14 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B11FF20B9F80
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1667237234;
+        bh=L4bcpwHfvSCyNSoIiW3sfiEU7KvCeBel420vDpIzx7E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MLvO/EijXBb8yr9IPgjsOOirRr1jqXh/el0POirCQY4K5yn/sZ2NPxZEP5kZKcj3D
+         EJzYlxyNeoykWcsD2Z9Vfteg1smWtj83X4gHHuzHRfHq/7Nv+oTUT93SqO778m21Xy
+         ggl6qpaVKmoG/6aRx21d3r9dSOjHb9yLbyKMUN+I=
+Date:   Mon, 31 Oct 2022 10:27:06 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
+        dcook@linux.microsoft.com, alanau@linux.microsoft.com,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] tracing/user_events: Remote write ABI
+Message-ID: <20221031172706.GA196@W11-BEAU-MD.localdomain>
+References: <20221027224011.2075-1-beaub@linux.microsoft.com>
+ <20221031231556.a15846fd3513641d48820d5b@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220929232712.12202-2-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <20221031231556.a15846fd3513641d48820d5b@kernel.org>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,180 +50,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 02:26:56AM +0300, Serge Semin wrote:
-> The generic DW uMCTL2 DDRC v3.x support was added in commit f7824ded4149
-> ("EDAC/synopsys: Add support for version 3 of the Synopsys EDAC DDR"). It
-> hasn't been done quiet well there with respect to the IRQs handling
-> procedure. An attempt to fix that was introduced in the recent commit
-> 4bcffe941758 ("EDAC/synopsys: Re-enable the error interrupts on v3 hw").
-> Alas again it didn't provide quite complete solution.
-
-Because?
-
-Btw, for the future, you should make sure you add those commit authors
-to Cc so that they can get a chance to comment. Adding the folks from
-that commit to Cc.
-
-> First of all the commit f7824ded4149 ("EDAC/synopsys: Add support for
-> version 3 of the Synopsys EDAC DDR") log says that v3.80a "has UE/CE auto
-> cleared". They aren't in none of the IP-core versions.
-	    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-What does that sentence mean exactly? The UE/CE auto clearing
-functionality is not in that silicon?
-
-> The IRQ status can be cleared by means of setting the ECCCLR/ECCCTL
-> register self-cleared flags 0-3.
-
-I'm guessing that's this reg:
-
-/* ECC control register */
-#define ECC_CTRL_OFST                   0xC4
-
-?
-
-> The pending IRQ clearance is done in the respective get_error_info()
-> method of the driver. Thus defining a quirk flag with the
-> "DDR_ECC_INTR_SELF_CLEAR" name was at least very inaccurate if not to
-> say misleading.
->
-> So was adding the comments about the "ce/ue bits automatically
-> cleared".
-
-Aah, you mean that the ->get_error_info() functions are doing the
-clearing even if something should be doing self clearing. And that
-DDR_ECC_INTR_SELF_CLEAR thing is queried when enabling the error
-interrupt which is just bad naming because it looks like that quirk
-controls what register to write/read.
-
-> Second, disabling the being handled IRQ in the handler doesn't make sense
-> in Linux since the IC line is masked during that procedure anyway. So
-> disabling the IRQ in one part of the handler and enabling it at the end of
-> the method is simply redundant. (See, the ZynqMP-specific code with the
-> QoS IRQ CSR didn't do that originally.)
-
-So what is this commit message of
-
-  4bcffe941758 ("EDAC/synopsys: Re-enable the error interrupts on v3 hw")
-
-then talking about:
-
-"Then the interrupt handler will be called only once."
-
-How is that interrupt supposed to be reenabled?
-
-> Finally calling the zynqmp_get_error_info() method concurrently with the
-> enable_irq()/disable_irq() functions causes the IRQs mask state race
-> condition. Starting from DW uMCTL2 DDRC IP-core v3.10a [1] the ECCCLR
-> register has been renamed to ECCCTL and has been equipped with CE/UE IRQs
-> enable/disable flags [2].
-
-Aha, that sounds like the right thing to toggle.
-
-> So the CSR now serves for the IRQ status and control functions used
-> concurrently during the IRQ handling and the IRQ disabling/enabling.
-> Thus the corresponding critical section must be protected with the
-> IRQ-safe spin-lock.
-
-> So let's fix all the problems noted above. First the
-> DDR_ECC_INTR_SELF_CLEAR flag is renamed to SYNPS_ZYNQMP_IRQ_REGS.
-
-"Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
-instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy to
-do frotz", as if you are giving orders to the codebase to change its
-behaviour."
-
-In this case, pls formulate it something like this:
-
-"So fix all these problems noted above: rename DDR_ECC_INTR_SELF_CLEAR
-to SYNPS_ZYNQMP_IRQ_REGS to denote that, ..."
-
-And so on.
-
-> Its semantic is now the opposite: the quirk means having the ZynqMP
-> IRQ CSRs available on the platform.
-
-Yes, that makes more sense.
-
-> Second the DDR_UE_MASK and DDR_CE_MASK macros
-> are renamed to imply being used in the framework of the ECCCLR/ECCCTL CSRs
-> accesses. Third all the misleading comments are removed. Finally the
-> ECC_CLR_OFST register IOs are now protected with the IRQ-safe spin-lock
-> taken in order to prevent the IRQ status clearance and IRQ enable/disable
-> race condition.
+On Mon, Oct 31, 2022 at 11:15:56PM +0900, Masami Hiramatsu wrote:
+> Hi Beau,
 > 
-> [1] DesignWare Cores Enhanced Universal DDR Memory and Protocol
-> Controllers (uMCTL2/uPCTL2), Release Notes, Version 3.91a, October 2020,
-> p. 27.
-> [2] DesignWare® Cores Enhanced Universal DDR Memory Controller (uMCTL2),
-> Databook Version 3.91a, October 2020, p.818-819.
+> On Thu, 27 Oct 2022 15:40:09 -0700
+> Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> 
+> > As part of the discussions for user_events aligned with user space
+> > tracers, it was determined that user programs should register a 32-bit
+> > value to set or clear a bit when an event becomes enabled. Currently a
+> > shared page is being used that requires mmap().
+> > 
+> > In this new model during the event registration from user programs 2 new
+> > values are specified. The first is the address to update when the event
+> > is either enabled or disabled. The second is the bit to set/clear to
+> > reflect the event being enabled. This allows for a local 32-bit value in
+> > user programs to support both kernel and user tracers. As an example,
+> > setting bit 31 for kernel tracers when the event becomes enabled allows
+> > for user tracers to use the other bits for ref counts or other flags.
+> > The kernel side updates the bit atomically, user programs need to also
+> > update these values atomically.
+> 
+> I think you means the kernel tracer (ftrace/perf) and user tracers (e.g. 
+> LTTng) use the same 32bit data so that traced user-application only checks
+> that data for checking an event is enabled, right?
+> 
 
-If those are not publicly accessible, then there's no point to put them
-in here.
+Yes, exactly, user code can just check a single uint32 or uint64 to tell
+if anything is enabled (kernel or user tracer).
 
-> Fixes: f7824ded4149 ("EDAC/synopsys: Add support for version 3 of the Synopsys EDAC DDR")
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> If so, who the user tracer threads updates the data bit? Is that thread
+> safe to update both kernel tracer and user tracers at the same time?
+> 
 
-Does this need to go to stable@ and thus older kernels?
+This is why atomics are used to set the bit on the kernel side. The user
+side should do the same. This is like the futex code. Do you see a
+problem with atomics being used between user and kernel space on a
+shared 32/64-bit address?
 
-> ---
->  drivers/edac/synopsys_edac.c | 76 +++++++++++++++++++++++-------------
->  1 file changed, 48 insertions(+), 28 deletions(-)
+> And what is the actual advantage of this change? Are there any issue
+> to use mmaped page? I would like to know more background of this
+> change.
+> 
 
-> @@ -300,6 +299,7 @@ struct synps_ecc_status {
->  /**
->   * struct synps_edac_priv - DDR memory controller private instance data.
->   * @baseaddr:		Base address of the DDR controller.
-> + * @lock:		Concurrent CSRs access lock.
->   * @message:		Buffer for framing the event specific info.
->   * @stat:		ECC status information.
->   * @p_data:		Platform data.
-> @@ -314,6 +314,7 @@ struct synps_ecc_status {
->   */
->  struct synps_edac_priv {
->  	void __iomem *baseaddr;
-> +	spinlock_t lock;
+Without this change user tracers like LTTng will have to check 2 values
+instead of 1 to tell if the kernel tracer is enabled or not. Mathieu is
+working on a user side tracing library in an effort to align writing
+tracing code in user processes that works well for both kernel and user
+tracers without much effort.
 
-That lock needs to be named properly and have a comment above it what it
-protects.
+See here:
+https://github.com/compudj/side
 
->  	char message[SYNPS_EDAC_MSG_SIZE];
->  	struct synps_ecc_status stat;
->  	const struct synps_platform_data *p_data;
+Are you proposing we keep the bitmap approach and have side library just
+hook another branch? Mathieu had issues with that approach during our
+talks.
 
-...
+> Could you also provide any sample program which I can play it? :)
+> 
 
-> @@ -516,24 +523,42 @@ static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
->  
->  static void enable_intr(struct synps_edac_priv *priv)
->  {
-> +	unsigned long flags;
-> +
->  	/* Enable UE/CE Interrupts */
-> -	if (priv->p_data->quirks & DDR_ECC_INTR_SELF_CLEAR)
-> -		writel(DDR_UE_MASK | DDR_CE_MASK,
-> -		       priv->baseaddr + ECC_CLR_OFST);
-> -	else
-> +	if (priv->p_data->quirks & SYNPS_ZYNQMP_IRQ_REGS) {
->  		writel(DDR_QOSUE_MASK | DDR_QOSCE_MASK,
->  		       priv->baseaddr + DDR_QOS_IRQ_EN_OFST);
->  
-> +		return;
-> +	}
-> +
-> +	/* IRQs Enable/Disable feature has been available since v3.10a */
+When I make the next patch version, I will update the user_events sample
+so you'll have something to try out.
 
-How does this comment help here?
+> > User provided addresses must be aligned on a 32-bit boundary, this
+> > allows for single page checking and prevents odd behaviors such as a
+> > 32-bit value straddling 2 pages instead of a single page.
+> > 
+> > When page faults are encountered they are done asyncly via a workqueue.
+> > If the page faults back in, the write update is attempted again. If the
+> > page cannot fault-in, then we log and wait until the next time the event
+> > is enabled/disabled. This is to prevent possible infinite loops resulting
+> > from bad user processes unmapping or changing protection values after
+> > registering the address.
+> > 
+> > NOTE:
+> > User programs that wish to have the enable bit shared across forks
+> > either need to use a MAP_SHARED allocated address or register a new
+> > address and file descriptor. If MAP_SHARED cannot be used or new
+> > registrations cannot be done, then it's allowable to use MAP_PRIVATE
+> > as long as the forked children never update the page themselves. Once
+> > the page has been updated, the page from the parent will be copied over
+> > to the child. This new copy-on-write page will not receive updates from
+> > the kernel until another registration has been performed with this new
+> > address.
+> > 
+> > Beau Belgrave (2):
+> >   tracing/user_events: Use remote writes for event enablement
+> >   tracing/user_events: Fixup enable faults asyncly
+> > 
+> >  include/linux/user_events.h      |  10 +-
+> >  kernel/trace/trace_events_user.c | 396 ++++++++++++++++++++-----------
+> >  2 files changed, 270 insertions(+), 136 deletions(-)
+> > 
+> > 
+> > base-commit: 23758867219c8d84c8363316e6dd2f9fd7ae3049
+> > -- 
+> > 2.25.1
+> > 
+> 
+> 
+> -- 
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-If it is available since a version number, why doesn't the below check a
-version number? IOW, what is the relevance of that comment here?
-
-In any case, I need to hear from this driver's maintainer too.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+-Beau
