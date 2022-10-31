@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97979614169
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 00:10:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9549614167
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 00:10:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiJaXKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 19:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
+        id S229881AbiJaXKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 19:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiJaXKR (ORCPT
+        with ESMTP id S229588AbiJaXKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 19:10:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F91515806;
-        Mon, 31 Oct 2022 16:10:17 -0700 (PDT)
+        Mon, 31 Oct 2022 19:10:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90D315710;
+        Mon, 31 Oct 2022 16:10:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3621614E5;
-        Mon, 31 Oct 2022 23:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 23108C433D7;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F1AEB81AEA;
+        Mon, 31 Oct 2022 23:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2E865C43470;
         Mon, 31 Oct 2022 23:10:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1667257816;
-        bh=ZMIoRfYnbzb46WivSxsiGy2a3pilLAniv/pIUSFDcbU=;
+        bh=I88aCbyP69hwIDMukb7IOu2lsmzSfOurQ1fV5M9/mR0=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=qwBWUMLd/Pamb+UDwLlYZDcbcfob3QjcZpmhcZJCcCTwg3iTUHp5SW2NPtWg9Hc1l
-         f9hT2I5dhOxaes94JSJuwBt0zq9PAN6d6fTUSwg5fRIXp7mnLxqiP70qRhebY0UZY8
-         gAWKsssZo3BRm52XNaMx7LJ/vi91xx1dJK5sy9kEtYloCQNKaMECBzyJw1CzxHMewc
-         A5XjTBU+dh3dhGmBhJYfkjIjsZFXmTsWDuFwxcCeOKRN90AtowYX4DR0WODSvLis7h
-         U6psO4+4ZJLpqAUEj/QAmDlpLqN/WowpgNVHs7Rf5Egq6RTHHZHO9ujs46+2v4MajG
-         QqLsS7ssOluCg==
+        b=SGWCxjkQcyT/jyTkIClGjSt4IElc/dhV8iennjKybrYwBsIL6corg4R+JMaRAsXYo
+         DAhGm1KimawyIBx3ZeGKVbuI057nPIbxx416qurdcJNQne9n4bB2higV7Kd1IDKMDX
+         YDfBeeILfyWxz6XdxLlchnOoTPPEBiCi0Hr/uL0mjFnUdy63gI0eq+esWD/Ly5X6Yv
+         qgIni66tLdXHjEhjPkMmaJgj3sUJhESAotbqGyB+s+YaLiQ1WkC4RDi9wwsB80FRPL
+         pVutDr3Tr/mboPDjuUjHJyBL7ymoIGasanK9FTMT2b8ripFvlKNW2wcPVvuXExTg2f
+         qFX0tlfBYvfIQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 05D84E5629A;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 11612E5250E;
         Mon, 31 Oct 2022 23:10:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] Bluetooth: Use kzalloc instead of kmalloc/memset
+Subject: Re: [RESEND PATCH v3] Bluetooth: btusb: Add more device IDs for WCN6855
 From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <166725781601.15466.8966753850530203194.git-patchwork-notify@kernel.org>
+Message-Id: <166725781606.15466.15373655080241803473.git-patchwork-notify@kernel.org>
 Date:   Mon, 31 Oct 2022 23:10:16 +0000
-References: <20221030181722.34788-1-tegongkang@gmail.com>
-In-Reply-To: <20221030181722.34788-1-tegongkang@gmail.com>
-To:     Kang Minchul <tegongkang@gmail.com>
+References: <OS3P286MB2597E5DC0322DE5839B85D7698359@OS3P286MB2597.JPNP286.PROD.OUTLOOK.COM>
+In-Reply-To: <OS3P286MB2597E5DC0322DE5839B85D7698359@OS3P286MB2597.JPNP286.PROD.OUTLOOK.COM>
+To:     Shengyu Qu <wiagn233@outlook.com>
 Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-bluetooth@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,19 +61,20 @@ Hello:
 This patch was applied to bluetooth/bluetooth-next.git (master)
 by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-On Mon, 31 Oct 2022 03:17:22 +0900 you wrote:
-> Replace kmalloc+memset by kzalloc
-> for better readability and simplicity.
+On Sun, 30 Oct 2022 01:22:54 +0800 you wrote:
+> Add IDs to usb_device_id table for WCN6855. IDs are extracted from Windows
+> driver of Lenovo Thinkpad T14 Gen 2(Driver version 1.0.0.1205 Windows 10)
 > 
-> This addresses the cocci warning below:
-> 
-> WARNING: kzalloc should be used for d, instead of kmalloc/memset
+> Windows driver download address:
+> https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/
+> thinkpad-t-series-laptops/thinkpad-t14-gen-2-type-20xk-20xl/downloads
+> /driver-list/
 > 
 > [...]
 
 Here is the summary with links:
-  - [v3] Bluetooth: Use kzalloc instead of kmalloc/memset
-    https://git.kernel.org/bluetooth/bluetooth-next/c/214c507d87cc
+  - [RESEND,v3] Bluetooth: btusb: Add more device IDs for WCN6855
+    https://git.kernel.org/bluetooth/bluetooth-next/c/81dc22339cda
 
 You are awesome, thank you!
 -- 
