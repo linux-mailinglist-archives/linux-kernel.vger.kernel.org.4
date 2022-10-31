@@ -2,129 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 847AF613B52
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DBFE613B55
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbiJaQcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 12:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
+        id S231766AbiJaQc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 12:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231556AbiJaQcF (ORCPT
+        with ESMTP id S231556AbiJaQcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 12:32:05 -0400
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B726212761;
-        Mon, 31 Oct 2022 09:32:04 -0700 (PDT)
-Received: by mail-pj1-f52.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso16384790pjg.5;
-        Mon, 31 Oct 2022 09:32:04 -0700 (PDT)
+        Mon, 31 Oct 2022 12:32:25 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1211312761
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:32:25 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id l5so13304818oif.7
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wt/WR1Gmjk2D9GnfY1ZcaSEw9Q+GFqctU1oYIXCvdkk=;
+        b=QUWIYopeB0UZaW/Dv5KZ2rxinkrGWUERLDC9wEH1krFqq/rXZu+Kj+MAQPmS/sHcq9
+         WDgyMC7MgQBzSlm10f8WQ3MtxpthmTHe0DwIlueWPM1HQbPCtuz+mou7XsDwyL2P0Mnz
+         D0jx9ZgP/J+OjSijEVyG6du7VE4eI6Gr97Pu8eIKUxw0p+aPhfMLAaAhV+NTXPsHEG9W
+         SDYp2Hi7K+Oa6TVJyTP+vWDJ0nNH91JSgUWSNBhwrUrdGc4P/0oNEKeEZGvBFrxuL9YH
+         lpzxS7wT/StIJImvUJZ2rfylv0C/yrd7X2ir7umu1HtCMtgWP2Q0fLevcAqTfg6J81va
+         di+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oqq3jqLTWRS4cM2iifoZtLovQibgnAW+PBZWmfixbMM=;
-        b=7YV15WtWhgSmzXdfYyg9l+Y5J0l2em+qi34mWo9rH6q3pXzUnFvUFdnUEQv4NWt4eJ
-         v5Nqw1IqSd3fSKdSeP4iPcthGoeiTEpKp9GWjNj8cIfObVMrr/ZWF+aiv3di4RFAo8xd
-         bJ0h7UYKz8/TXqs+gjwUJsJArsPZF3meOMl89dPZBUoN92kF05DRAC4TkGTXnaUb4e1p
-         E+WYMQxGBZjksaJ0F7aUf591g56GNxeFJuSCa/0Honl+70WioxwRpkLiw4d+oXcntzzr
-         zC/uHzytnjbCxBKbjuj0JxoMUKgtXjmXma0KhtPdSFCKTaCaAelwDQS4EldM0dE15uT/
-         I/HA==
-X-Gm-Message-State: ACrzQf01B2sRLXRVfr14iFYl57SfLoWFhumkctOUPVMppmtYAPJAIoew
-        zZREnEwi/Q6TtFuB055K0tU=
-X-Google-Smtp-Source: AMsMyM6TS5ZL5TaM1SaOfdHUtz0N7r9Ae3RiNzHWf2h7Z2RKFD1mMOf3CZraVgWmobJCwn9WSMjPmg==
-X-Received: by 2002:a17:902:64c1:b0:186:827e:a0da with SMTP id y1-20020a17090264c100b00186827ea0damr15401249pli.94.1667233923736;
-        Mon, 31 Oct 2022 09:32:03 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:f781:cff2:5c46:49bd? ([2620:15c:211:201:f781:cff2:5c46:49bd])
-        by smtp.gmail.com with ESMTPSA id o8-20020a1709026b0800b00172ea8ff334sm4696343plk.7.2022.10.31.09.32.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Oct 2022 09:32:01 -0700 (PDT)
-Message-ID: <b406b5d8-284d-2af3-e37b-44fadd4fb34c@acm.org>
-Date:   Mon, 31 Oct 2022 09:32:00 -0700
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wt/WR1Gmjk2D9GnfY1ZcaSEw9Q+GFqctU1oYIXCvdkk=;
+        b=X1xF3fR6s0IxCeW1Jz8Xldpd+FQitRCnjDtkVZle5vHcMTyGjQpP4Q/8SdRY77QEm/
+         f7jt3YgrPUQE0v6qR3oPL4ZtPOYGRDCSblCQoYvNuAkXmsuco9Pb9yHkywNMpNWPACLy
+         EXkNtvfnduiFx2re4JxPKxBEtbeJEbzTmPJQrm2EDxSgIcx8aTf//7OqxabdUpyyPKwl
+         pD1wdDMM3ibA5cVZFHE94+nnMwAo9dyvpU+6FfF2ktYCPefe4FIFhROhBb2RsliNMh2o
+         Y6mdboGZdMbm//jvPrFSe/5Pkk5ZpRgK2NrvjOA8B2lmsYnA7LjYGY68ieNFHdoCZ0j3
+         afyg==
+X-Gm-Message-State: ACrzQf0Ip9neEZiQjbMaJudq33gMTzzmVOZSu8vnlU23lvKMg4vcfpSB
+        QoAfRtRjzQSSa1MGMjm9pPofNqhebEAvLDX9
+X-Google-Smtp-Source: AMsMyM6vONEEf7VjwL5TUau766cjtN/1V1RvxWagUODwX7I/kWb2Ovz4ymQB4e25WrRPTws8zBMCpg==
+X-Received: by 2002:a05:6808:171b:b0:34d:444a:fc1e with SMTP id bc27-20020a056808171b00b0034d444afc1emr15366187oib.85.1667233944276;
+        Mon, 31 Oct 2022 09:32:24 -0700 (PDT)
+Received: from antonio-Lenovo-Legion-5-15IMH05H.multilaserwifi.com.br ([45.163.246.1])
+        by smtp.googlemail.com with ESMTPSA id x6-20020a05680801c600b00359ad661d3csm2477558oic.30.2022.10.31.09.32.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 09:32:23 -0700 (PDT)
+From:   antoniospg <antoniospg100@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     bagasdotme@gmail.com, sam@ravnborg.org,
+        antoniospg <antoniospg100@gmail.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org
+Subject: [PATCH] drm/nouveau: Add support to control backlight using bl_power for nva3.
+Date:   Mon, 31 Oct 2022 13:32:11 -0300
+Message-Id: <20221031163211.13228-1-antoniospg100@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221029184851.25340-1-antoniospg100@gmail.com>
+References: <20221029184851.25340-1-antoniospg100@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] RDMA/srp (gcc13): force int types for max_send_sge and
- can_queue
-Content-Language: en-US
-To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Martin Liska <mliska@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org
-References: <20221031114506.10501-1-jirislaby@kernel.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20221031114506.10501-1-jirislaby@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/31/22 04:45, Jiri Slaby (SUSE) wrote:
-> Since gcc13, each member of an enum has the same type as the enum [1]. And
-> that is inherited from its members. Provided "SRP_TAG_TSK_MGMT = 1U << 31",
-> SRP_MAX_SGE and SRP_TSK_MGMT_SQ_SIZE are unsigned ints.
-> 
-> This results in the following warnings:
->    include/linux/minmax.h:20:35: error: comparison of distinct pointer types lacks a cast
->    drivers/infiniband/ulp/srp/ib_srp.c:563:42: note: in expansion of macro 'min'
-> 
->    include/linux/minmax.h:20:35: error: comparison of distinct pointer types lacks a cast
->    drivers/infiniband/ulp/srp/ib_srp.c:2369:27: note: in expansion of macro 'min'
-> 
-> Force the use of min_t() instead of min() to use int for all those, as
-> this is what both targets
->    target->scsi_host->can_queue
-> and
->    init_attr->cap.max_send_sge
-> are.
-> 
-> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=36113
-> 
-> Cc: Martin Liska <mliska@suse.cz>
-> Cc: Bart Van Assche <bvanassche@acm.org>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Leon Romanovsky <leon@kernel.org>
-> Cc: linux-rdma@vger.kernel.org
-> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-> ---
->   drivers/infiniband/ulp/srp/ib_srp.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/infiniband/ulp/srp/ib_srp.c b/drivers/infiniband/ulp/srp/ib_srp.c
-> index 1075c2ac8fe2..7db487da8293 100644
-> --- a/drivers/infiniband/ulp/srp/ib_srp.c
-> +++ b/drivers/infiniband/ulp/srp/ib_srp.c
-> @@ -560,7 +560,8 @@ static int srp_create_ch_ib(struct srp_rdma_ch *ch)
->   	init_attr->cap.max_send_wr     = m * target->queue_size;
->   	init_attr->cap.max_recv_wr     = target->queue_size + 1;
->   	init_attr->cap.max_recv_sge    = 1;
-> -	init_attr->cap.max_send_sge    = min(SRP_MAX_SGE, attr->max_send_sge);
-> +	init_attr->cap.max_send_sge    = min_t(int, SRP_MAX_SGE,
-> +			attr->max_send_sge);
->   	init_attr->sq_sig_type         = IB_SIGNAL_REQ_WR;
->   	init_attr->qp_type             = IB_QPT_RC;
->   	init_attr->send_cq             = send_cq;
-> @@ -2366,7 +2367,7 @@ static void srp_cm_rep_handler(struct ib_cm_id *cm_id,
->   		 * bounce requests back to the SCSI mid-layer.
->   		 */
->   		target->scsi_host->can_queue
-> -			= min(ch->req_lim - SRP_TSK_MGMT_SQ_SIZE,
-> +			= min_t(int, ch->req_lim - SRP_TSK_MGMT_SQ_SIZE,
->   			      target->scsi_host->can_queue);
->   		target->scsi_host->cmd_per_lun
->   			= min_t(int, target->scsi_host->can_queue,
+Summary:
 
-I don't like this patch because it changes min() into min_t(). The 
-former checks its arguments types while the latter uses casts and hence 
-ignores most information that is present in the argument types. Please 
-split the enum in ib_srp.h instead of changing min() into min_t().
+* Add support to turn on/off backlight when changing values in bl_power
+  file. This is achieved by using function backlight_get_brightness()
+  in nva3_set_intensity to get current brightness.
 
-Thanks,
+Test plan:
 
-Bart.
+* Turn off:
+echo 1 > /sys/class/backlight/nv_backlight/bl_power
+
+* Turn on:
+echo 0 > /sys/class/backlight/nv_backlight/bl_power
+
+Signed-off-by: antoniospg <antoniospg100@gmail.com>
+---
+ drivers/gpu/drm/nouveau/nouveau_backlight.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/nouveau/nouveau_backlight.c b/drivers/gpu/drm/nouveau/nouveau_backlight.c
+index a2141d3d9b1d..5c82f5189b79 100644
+--- a/drivers/gpu/drm/nouveau/nouveau_backlight.c
++++ b/drivers/gpu/drm/nouveau/nouveau_backlight.c
+@@ -263,7 +263,11 @@ nva3_set_intensity(struct backlight_device *bd)
+ 	u32 div, val;
+ 
+ 	div = nvif_rd32(device, NV50_PDISP_SOR_PWM_DIV(or));
+-	val = (bd->props.brightness * div) / 100;
++
++	val = backlight_get_brightness(bd);
++	if (val)
++		val = (val * div) / 100;
++
+ 	if (div) {
+ 		nvif_wr32(device, NV50_PDISP_SOR_PWM_CTL(or),
+ 			  val |
+-- 
+2.25.1
+
